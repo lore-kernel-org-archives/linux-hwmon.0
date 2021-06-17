@@ -2,101 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFC93C48BE8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Jun 2021 19:09:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8C92C48BE6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 00:12:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A1D5611CE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Jun 2021 19:09:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 847A660E0C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 00:12:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbhFPTLo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Jun 2021 15:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S230045AbhFQAOy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Jun 2021 20:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbhFPTLf (ORCPT
+        with ESMTP id S229575AbhFQAOy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Jun 2021 15:11:35 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B98EC061574;
-        Wed, 16 Jun 2021 12:09:29 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id n17so5360951ljg.2;
-        Wed, 16 Jun 2021 12:09:29 -0700 (PDT)
+        Wed, 16 Jun 2021 20:14:54 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A432AC061574;
+        Wed, 16 Jun 2021 17:12:46 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id j11-20020a9d738b0000b02903ea3c02ded8so4371511otk.5;
+        Wed, 16 Jun 2021 17:12:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qP0j6DhiUJIr/VXjNb28HuyGZ1YtPyQsbTbi/lJTwQs=;
-        b=l/qBch27c62h4HHWiBlWC7/jJQU1idyXByXYYcrkPzcb8PyGzB5g6C7Zu6O3epPIVz
-         SqvEe61LscB3tREgPgn9JttwDeY7Q30CDvFkugD/79ZU+w07FloRl/WC9gWC7F5P13ES
-         SIouCMKh3UW9q8KBxoU1PL+e/pGVn0DwpXbXHw1a/soUawYae0eirijF7VKGT6xHKUkZ
-         g5f34ehZIGHbcAheYWWBtxEKY9yl+sP0cOlg8RVLjtwrScgnI4ddBAVN9G2dRpRgPh6i
-         C+KAnO4oTpLo5YziVTvirhVEplNQhWAV/4eF59iQflHtydE0Jg8nyE2zISU0IWFA0eW3
-         QPUA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=c1QRfJ3FQUjszVpJw97vQrskX9QRXSSLNiih/kSbDYI=;
+        b=ZhGHRq2ULz+JOedfCh0u88xzLZyZDF2DxIF3kyWi8hR3zIVUuPvenaKGKllRQjFyWb
+         bEUPSoN1B9sB8PgPUj0v7TxNJZi8fYaoDIrQ7Jd/nnW0XMz+swuLh0cyoLj8NDS4Jj3R
+         7zk4RzpoLsq07WwF84JqDZqAvrT+C+6KStgVusjLAYlcMD6VjcqS+NIcRBqGKCDI48/U
+         Xd4y1y4NaUAr0sePFLyRc/HjenWFPYPu5TKPkmnzUWJcCsoNwNDm/nqxLO6c/q+Haynm
+         AKYleSAYu8ZlIe8cH+vKbTi0ZFnQInCKb04KsBmJs5ASZI3LVyydPaQLB8ocbEQIELjW
+         zlpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qP0j6DhiUJIr/VXjNb28HuyGZ1YtPyQsbTbi/lJTwQs=;
-        b=FYf5thrCoemN/xDiVM9a6xI4JRTD3JMaRnTuu3VI9tPiG//tWQE1jBILl8M2nwBFWg
-         a07exKLSRSssMd4RjlAW404cO0iP3dmB/qxWryi0E6tlMspgAvOeiMkAYIdff6pmANNX
-         whWsSoiVAJe24jRSpcU5EkcBIabdSqmwhBiY7htgxM/lTJLn/rVRwR+aUKxhw9YW0ZdI
-         /kuNfI7/HhTQ5dDVOjnHFaap37m/298hGy6y4PuHZdUZzyuttiHa7PDzFtw4XjpHEweU
-         67LGAGAEz6MM6nLv2SYPJO3BzosgZCEBilMLpN2hOcHWRZv2jHRJuIetB7zj+EywEBS9
-         nCcQ==
-X-Gm-Message-State: AOAM5338wyE1yLbjunDUpvpAw6WxPsr57oLxkyd3+8rc/E60scll2aiQ
-        VT3Gd492CmzbF6yMnusJqrk=
-X-Google-Smtp-Source: ABdhPJwEM8TpfK6uV5py9JzlJH8sHbzPoVRWVf6/qmmbJ5mKZ88TEgg2UYn9UHtzFZN53SwQU/RQUQ==
-X-Received: by 2002:a2e:a7c4:: with SMTP id x4mr1196810ljp.420.1623870567633;
-        Wed, 16 Jun 2021 12:09:27 -0700 (PDT)
-Received: from localhost.localdomain (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.gmail.com with ESMTPSA id 9sm333126lfy.41.2021.06.16.12.09.27
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=c1QRfJ3FQUjszVpJw97vQrskX9QRXSSLNiih/kSbDYI=;
+        b=c+D/b+6Jz2MkFTocmhypYAtfrMuNiURs8cnYSge8+iGl3NXc8G8oqAwfMNuPeqkApG
+         RVJ5fj9rG7RLdxQzCtZZPm+0Jz3DIO4mdsE2ntVtSjTtG3WeEpw8qDqxBodgHxC6XXZJ
+         9FI4cB7zLeYvUnwUXZlDgKKx4t3qIsR1iMmzpSFsenwd7gzHShqTI1n8ZSBZfwozaosK
+         Qg2y/1EoFbPqNdCWPfrz8ojTMd2lwyf802cTp7HxxkKcvo7Qe4prcLlxB3NtBgEhnSgV
+         PSwaGbA1j8PnvIJip8NlPrUEZqAkMcoPHnkIOjN/0pL4cWSWp3eU17ch1DFfDtvQhAJO
+         oc6w==
+X-Gm-Message-State: AOAM532UE4td2Y/285bGyfzbmTBBeDD6196gEmLTFKXBdhO/INcHXyHc
+        DDc87fG/50PyAX/YTr/FKWE=
+X-Google-Smtp-Source: ABdhPJxA/NzbyZFEhopTCXIpREDwYBfU9OKAhkDRw7BP4Y9E4B9WVvojCamGtcXnwoXk4GuHMXd+8w==
+X-Received: by 2002:a9d:bc4:: with SMTP id 62mr2037024oth.253.1623888766030;
+        Wed, 16 Jun 2021 17:12:46 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v10sm794271ool.45.2021.06.16.17.12.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 12:09:27 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v1] hwmon: (lm90) Use edge-triggered interrupt
-Date:   Wed, 16 Jun 2021 22:07:08 +0300
-Message-Id: <20210616190708.1220-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 16 Jun 2021 17:12:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 16 Jun 2021 17:12:43 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v1] hwmon: (lm90) Use edge-triggered interrupt
+Message-ID: <20210617001243.GA3211292@roeck-us.net>
+References: <20210616190708.1220-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210616190708.1220-1-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The LM90 driver uses level-based interrupt triggering. The interrupt
-handler prints a warning message about the breached temperature and
-quits. There is no way to stop interrupt from re-triggering since it's
-level-based, thus thousands of warning messages are printed per second
-once interrupt is triggered. Use edge-triggered interrupt in order to
-fix this trouble.
+On Wed, Jun 16, 2021 at 10:07:08PM +0300, Dmitry Osipenko wrote:
+> The LM90 driver uses level-based interrupt triggering. The interrupt
+> handler prints a warning message about the breached temperature and
+> quits. There is no way to stop interrupt from re-triggering since it's
+> level-based, thus thousands of warning messages are printed per second
+> once interrupt is triggered. Use edge-triggered interrupt in order to
+> fix this trouble.
+> 
+> Fixes: 109b1283fb532 ("hwmon: (lm90) Add support to handle IRQ")
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/hwmon/lm90.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> index ebbfd5f352c0..ce8ebe60fcdc 100644
+> --- a/drivers/hwmon/lm90.c
+> +++ b/drivers/hwmon/lm90.c
+> @@ -1908,7 +1908,7 @@ static int lm90_probe(struct i2c_client *client)
+>  		dev_dbg(dev, "IRQ: %d\n", client->irq);
+>  		err = devm_request_threaded_irq(dev, client->irq,
+>  						NULL, lm90_irq_thread,
+> -						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+> +						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+>  						"lm90", client);
 
-Fixes: 109b1283fb532 ("hwmon: (lm90) Add support to handle IRQ")
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/hwmon/lm90.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We can't do that. Problem is that many of the devices supported by this driver
+behave differently when it comes to interrupts. Specifically, the interrupt
+handler is supposed to reset the interrupt condition (ie reading the status
+register should reset it). If that is the not the case for a specific chip,
+we'll have to update the code to address the problem for that specific chip.
+The above code would probably just generate a single interrupt while never
+resetting the interrupt condition, which is obviously not what we want to
+happen.
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index ebbfd5f352c0..ce8ebe60fcdc 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -1908,7 +1908,7 @@ static int lm90_probe(struct i2c_client *client)
- 		dev_dbg(dev, "IRQ: %d\n", client->irq);
- 		err = devm_request_threaded_irq(dev, client->irq,
- 						NULL, lm90_irq_thread,
--						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
- 						"lm90", client);
- 		if (err < 0) {
- 			dev_err(dev, "cannot request IRQ %d\n", client->irq);
--- 
-2.30.2
+Guenter
 
+>  		if (err < 0) {
+>  			dev_err(dev, "cannot request IRQ %d\n", client->irq);
+> -- 
+> 2.30.2
+> 
