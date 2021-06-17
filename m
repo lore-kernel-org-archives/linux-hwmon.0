@@ -2,193 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB2ADC2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 07:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F080EC49361
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 07:11:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95321613B9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 07:11:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D334960FDA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 07:11:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbhFQHNg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jun 2021 03:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S229671AbhFQHN7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jun 2021 03:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbhFQHNd (ORCPT
+        with ESMTP id S229599AbhFQHN7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jun 2021 03:13:33 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D60C061574;
-        Thu, 17 Jun 2021 00:11:22 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 131so7489520ljj.3;
-        Thu, 17 Jun 2021 00:11:22 -0700 (PDT)
+        Thu, 17 Jun 2021 03:13:59 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DB2C061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jun 2021 00:11:50 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id i13so8679926lfc.7
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jun 2021 00:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=trEw8oJfAjxZTRGG7mdA+4VI5+cMXe8fpatm3oLv2NI=;
-        b=aEZyEQwotgR9grkuzgNuhofJjnauKzkVhfGlf/ogELeqNMw/4lIZ310ckLKRAT6ITj
-         SL8potw+vkubWyQ9ttWLHWjRh+CmNdBxCL+UkOcliQPJo0VgugUVZHYJax0elj1AZMJQ
-         fefcXyeM6MVow02zShY0Rs97xVEOqMBz5i9jpZB1rg36jCCrqWHmHDLV8Z9T+vK+uZJi
-         MceBECNF074qC1pkZSkkZ6XHX4/jYBPtnlkJ/1PokjfHzUPHvOC9jpNM8IgCz1aDQZdL
-         4iTSTzcg7GoPraddxHOatR7e4o4bwvr75d+GwtwVUkPFlfl1HCED1RaPhBLRvcShrkxy
-         whCw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BUANB8Ee/CiplzPG/ian6MzVAYJFTlcp32RtRLboIy4=;
+        b=TGh9lnwDRC4r2D/SXwalB+Qf43EBz5MPNVlfiopHbfE+VtLWnyijziYqh/ajtlgxY0
+         65X+odx4dCkWUDFB5IUaLV7kmyPfkEgJ7N4GQVnBie19xjOmqqSMmU+PgsgLOe/ufo6E
+         xRSgr31teSeOu+0uDmmJGIY57mlONbfHk/ZpeE8GRo9LtyQCfXX3U/jqmoYic/w4xHIt
+         2McLApRKWS2JAbE949QLeYaBLd/0G5O3ZhoKo0kmKoU5l6VTeJ1UTKk6vaJTIb1owFSk
+         g7PnEp3YPNW3ib/U9tAfZAFwvINsOigDJr0PHr9RDkGmfUjBH0+utekSM2T9f59mKkc8
+         TKsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=trEw8oJfAjxZTRGG7mdA+4VI5+cMXe8fpatm3oLv2NI=;
-        b=YRn0/NRRzPllpqkjAyO+JNmd16D+mxx9s2B8j3CF3+7+KatH3IO9RFCKmp7sPGcjCi
-         rRyI+2KFKsvAF/QoNA5lfmQRZNDBNp/QeZ1+bpQxz4NeGo6VLyFfT+S9r25IxC40asxz
-         cy63HnxU4ZiPn6VssJsKhI3bRjASYyFEVkZRzFqMAor5J66GPZycEZjAKxou69hgbRzj
-         eg4GVGImCjNsfJ05/7fPPvlyNCVmhs4YpAcC7q1TAAYIptGD+zK+Q0AyF3kVK+O2Z1sH
-         4JfrB8/obDHOexj+Dacm7syPaCVp6Cf6So3f4QxaoGH1rOSbTaM7/AO9y/2eHpV994wv
-         2FTQ==
-X-Gm-Message-State: AOAM530+HygaNq56YVLhrVt8b/4bPp6OSo74DQrWMLcT04f95rEQVCjz
-        MdRJyw2zESXGvAHmD0PC5SpKBrL5Jsg=
-X-Google-Smtp-Source: ABdhPJwUQmheprcsngvyOYA1NQYv25ZoAKbuDm6XNl54fxBlWMaa+oIdxHeZU6thYgHwl37R5Vh1Xw==
-X-Received: by 2002:a2e:86c6:: with SMTP id n6mr3373346ljj.15.1623913880110;
-        Thu, 17 Jun 2021 00:11:20 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.googlemail.com with ESMTPSA id l12sm528365lfk.10.2021.06.17.00.11.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jun 2021 00:11:19 -0700 (PDT)
-Subject: Re: [PATCH v1] hwmon: (lm90) Use edge-triggered interrupt
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20210616190708.1220-1-digetx@gmail.com>
- <20210617001243.GA3211292@roeck-us.net>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3c6cbaf3-187b-1682-69b8-a2b34f23b928@gmail.com>
-Date:   Thu, 17 Jun 2021 10:11:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BUANB8Ee/CiplzPG/ian6MzVAYJFTlcp32RtRLboIy4=;
+        b=ieeUC0d8xeba1vitSYcj500dbMbe4Q8l9lO5UfLTjDYgsMJ0fnWQaLZAC+Du9r/5m+
+         RN0iDegZT+d80PddXP8DVU/FsjCoyIKMKs5q2NFRI72sIzi2+ow4QNJ8kUpIxMfJp6Jh
+         K/fwBxkvNTP+1FRRVcckg11PFfp6GFcat5DE9V+yDo4/XlQKu0pAynjCBsuDZyzVdh7A
+         QyKPzC9f8qenISbhXHGsc1OFHQ3UFOg2z3ttoMInamKJsolwXWGJx39sdp9R4UiPtnwJ
+         8W+ycQfhbIIM+aFZ+NfSDoFfSvPjvrAFRk1mpUfpeEXJHmz5FjLqVZzCY464xSNJprRV
+         NadA==
+X-Gm-Message-State: AOAM5300vbnxU/v14uQD9ekJd7IU8et5vS/09pHz8vCEBi15git3KdLe
+        QTPQg0YPHnml23WZXuX5ex5y/qF57MFQEwZ6hEs=
+X-Google-Smtp-Source: ABdhPJxvEgVLuUJ9+zB8ZTdIEp7r6U6Xqgs0/9WB/LLVxXYZQXuxnjw2Q4XCOdWke8nDHrEcIzxYd+psjtckdek8v84=
+X-Received: by 2002:a05:6512:31c4:: with SMTP id j4mr2889130lfe.493.1623913909401;
+ Thu, 17 Jun 2021 00:11:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210617001243.GA3211292@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CADnvcf+LhxZoZk9eRUahSWZ3xVJLkxcAt3+4dS-JCjV8gZE_0A@mail.gmail.com>
+ <2199169.9u6qy3EJ5v@marius>
+In-Reply-To: <2199169.9u6qy3EJ5v@marius>
+From:   Aleksandr Mezin <mezin.alexander@gmail.com>
+Date:   Thu, 17 Jun 2021 13:11:38 +0600
+Message-ID: <CADnvcfK1EzyXY83wd7CJYpZ=S9+KnT0ftF9CiYhJScBGXKmm5A@mail.gmail.com>
+Subject: Re: corsair-cpro and hidraw
+To:     Marius Zachmann <mail@mariuszachmann.de>
+Cc:     linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-17.06.2021 03:12, Guenter Roeck пишет:
-> On Wed, Jun 16, 2021 at 10:07:08PM +0300, Dmitry Osipenko wrote:
->> The LM90 driver uses level-based interrupt triggering. The interrupt
->> handler prints a warning message about the breached temperature and
->> quits. There is no way to stop interrupt from re-triggering since it's
->> level-based, thus thousands of warning messages are printed per second
->> once interrupt is triggered. Use edge-triggered interrupt in order to
->> fix this trouble.
->>
->> Fixes: 109b1283fb532 ("hwmon: (lm90) Add support to handle IRQ")
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/hwmon/lm90.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
->> index ebbfd5f352c0..ce8ebe60fcdc 100644
->> --- a/drivers/hwmon/lm90.c
->> +++ b/drivers/hwmon/lm90.c
->> @@ -1908,7 +1908,7 @@ static int lm90_probe(struct i2c_client *client)
->>  		dev_dbg(dev, "IRQ: %d\n", client->irq);
->>  		err = devm_request_threaded_irq(dev, client->irq,
->>  						NULL, lm90_irq_thread,
->> -						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
->> +						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
->>  						"lm90", client);
-> 
-> We can't do that. Problem is that many of the devices supported by this driver
-> behave differently when it comes to interrupts. Specifically, the interrupt
-> handler is supposed to reset the interrupt condition (ie reading the status
-> register should reset it). If that is the not the case for a specific chip,
-> we'll have to update the code to address the problem for that specific chip.
-> The above code would probably just generate a single interrupt while never
-> resetting the interrupt condition, which is obviously not what we want to
-> happen.
-
-The nct1008/72 datasheet [1] says that reading the status register
-doesn't reset interrupt until temperature is returned back into normal
-state, which is what I'm witnessing.
-
-[1] https://www.onsemi.com/pdf/datasheet/nct1008-d.pdf
-
-Page 10 "Status Register":
-
-"Reading the status register clears the five flags, Bit 6 to Bit 2,
-provided the error conditions causing the flags to beset  have  gone
-away.  A  flag  bit  can  be  reset  only  if  the corresponding
-value    register    contains    an    in-limit measurement or if the
-sensor is good."
-
-So the interrupt handler doesn't actually stop interrupt from
-reoccurring and the whole KMSG is instantly spammed with:
-
+On Thu, Jun 17, 2021 at 12:27 PM Marius Zachmann <mail@mariuszachmann.de> wrote:
 ...
-[  217.484034] lm90 0-004c: temp2 out of range, please check!
-[  217.484569] lm90 0-004c: temp2 out of range, please check!
-[  217.485006] systemd-journald[179]: /dev/kmsg buffer overrun, some
-messages lost.
-[  217.485109] lm90 0-004c: temp2 out of range, please check!
-[  217.485699] lm90 0-004c: temp2 out of range, please check!
-[  217.486235] lm90 0-004c: temp2 out of range, please check!
-[  217.486776] lm90 0-004c: temp2 out of range, please check!
-[  217.486874] systemd-journald[179]: /dev/kmsg buffer overrun, ...
+> I do not know, what your device is doing
 
-It's interesting that the very first version of the nct1008-support
-patch used edge-triggered interrupt flags [2].
+Actually, NZXT devices (at least grid/"smart device" and "smart device
+v2"/rgb&fan controller) don't have such issues - they use report ids,
+and don't even expect request-reply communication pattern. I've just
+noticed that something seems to be wrong with corsair-cpro (but
+somehow didn't notice the comment) and decided to ask.
 
-[2] http://lkml.iu.edu/hypermail/linux/kernel/1104.1/01669.html
+> This device uses an echo of the command
+> in the answer and if they don't match it returns an error. This could
+> maybe lead to a false error when the replies are switched, but is
+> probably preferable.
 
-Limiting the interrupt rate could be an alternative solution.
-
-What do you think about something like this:
-
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index ce8ebe60fcdc..74886b8066ab 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -79,6 +79,7 @@
-  * concern all supported chipsets, unless mentioned otherwise.
-  */
-
-+#include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/slab.h>
-@@ -201,6 +202,9 @@ enum chips { lm90, adm1032, lm99, lm86, max6657,
-max6659, adt7461, max6680,
- #define MAX6696_STATUS2_R2OT2	(1 << 6) /* remote2 emergency limit
-tripped */
- #define MAX6696_STATUS2_LOT2	(1 << 7) /* local emergency limit tripped */
-
-+/* Prevent instant interrupt re-triggering */
-+#define LM90_IRQ_DELAY		(15 * MSEC_PER_SEC)
-+
- /*
-  * Driver data (common to all clients)
-  */
-@@ -1756,10 +1760,12 @@ static irqreturn_t lm90_irq_thread(int irq, void
-*dev_id)
- 	struct i2c_client *client = dev_id;
- 	u16 status;
-
--	if (lm90_is_tripped(client, &status))
--		return IRQ_HANDLED;
--	else
-+	if (!lm90_is_tripped(client, &status))
- 		return IRQ_NONE;
-+
-+	msleep(LM90_IRQ_DELAY);
-+
-+	return IRQ_HANDLED;
- }
-
- static void lm90_remove_pec(void *dev)
+Hm... If the response includes the id of the request, it should be
+possible to filter reports in raw_event, i. e. don't signal completion
+if the report doesn't match, and wait more. Yes, there is a corner
+case, "if a command is not supported, the length value in the reply is
+okay, but the command value is set to 0". But timing out (250 ms) in
+this case should probably be fine... Actually I have a compatible
+Corsair PSU so maybe I'll send a patch.
