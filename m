@@ -2,68 +2,65 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B10AFC2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0154FC2B9F4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:28:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9108B61405
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:12:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D79B6611CE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:27:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbhFQPOr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jun 2021 11:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S233152AbhFQPaD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jun 2021 11:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbhFQPOr (ORCPT
+        with ESMTP id S233130AbhFQPaC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jun 2021 11:14:47 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A70C061574;
-        Thu, 17 Jun 2021 08:12:39 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id i8-20020a4aa1080000b0290201edd785e7so1676038ool.1;
-        Thu, 17 Jun 2021 08:12:39 -0700 (PDT)
+        Thu, 17 Jun 2021 11:30:02 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02120C061574;
+        Thu, 17 Jun 2021 08:27:53 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id k8so9528043lja.4;
+        Thu, 17 Jun 2021 08:27:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=tC24+pOMac4To09F5eTA/4RPnsOweW0hc6BAA6YoMnQ=;
-        b=nfdW0YeVWdjSUYyB1QdDtOIkMgLIcyXIgaCbmVm0QNd02N18EysBAPAZVS0Y00W8Io
-         v58Ms5itK3EwlYgaA2+hbdWamVl+v0RxVJLl8HaF590nSiywo+e1ptFgo0eutIq2tYpk
-         EyKgtefeB9h3op9njcrE2k813gvyGx0yc0hsGyuTLSZhGb8kcBm24UOQrDuF0E2dBFlh
-         fJPBUEfGkKpWm1U/2LbY67MFOS5oCBGU/cp1RJxbvuxxas7cCLSe8gumB89G4U9GLXud
-         okRLvVeVbBu9+AcJjkhWnXGzq9HiuKo93TpR04+C+TifxL1+ai1zgSSjNb6iv0RqWT/Y
-         j9ww==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=c2e7kNsCGT85GsTUjiDwru6wY3UfFbgVKt2c+k6Ksis=;
+        b=mBmvA+aak/sfdxRTB9RvZIlo/zFa91SejUS4yQcpOmO3tp7YtLqdS2sl0orVa571cL
+         SJKYU6AV1aK/4MxsHa10IjnmZdMbLme1oHAKUDJLvo9AYwc0lLlgYzY0JIYMGvd5ZnE6
+         CrULLpNUBIx+hYI11Cyj8LEyHeb9r/mknWzC4Fw5JH+sK85wQQuY4nrM/AktlzRAls5G
+         EpuMyhcJe2JgAKeS4umdjFk2pqi487kmiZltL5ynwBMhh7ptZzU6TEkJQl5lo0ZXNb/q
+         N5lS4Y7wBTA+RpwJEylf55acqMAgFziIG+Ao0wtxXzJ+XD9Wv1t9YEY3PlTCexZgyZuk
+         gSZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=tC24+pOMac4To09F5eTA/4RPnsOweW0hc6BAA6YoMnQ=;
-        b=RYcKRR1Mm+ZZjtBSTBexZchBi5+jG2xKpEVvRz5KXtLUMxeyJJuzyXjTq6C3oNS1Ch
-         TLcPYBftaVCXdA+8y8rxLAELTa/hk3OSKC7gpwCRf4vywYp0aagkGcQfhDwK2IyaH3nl
-         wUXuWdnVc84/S0L32vnFIvFjBRGW2ZWPOYMQdXn0KrCeKxWF+T9oPhQu15VVRU/xvQhQ
-         OnZotrtcxqLVSW8q2f8pCuQk9p1EAnwjzzVXZ4mf2/Al0utzLhkyoywNjfErmXmoKFdQ
-         Edfeu2INzPeALKMgWrcot/wDuJKoHoG1Zu9WKCiwo/MYJIMxEvueNr7slvkAhgSXlB1R
-         LqVQ==
-X-Gm-Message-State: AOAM530SCeiETDmnuRce7NCaLkKdGp8EPGTPCSoAQJuPY9lr/+wbzmSU
-        5JNDd9KORTbELwiu3jJ6o/0=
-X-Google-Smtp-Source: ABdhPJwxvDzV5BxEOinFYI/F3uUaXXWyUCdGvnrSUcc2CnbllyTqgykS/87aVytNWz3Vi0XliNzxfA==
-X-Received: by 2002:a4a:9c8a:: with SMTP id z10mr4903692ooj.56.1623942757913;
-        Thu, 17 Jun 2021 08:12:37 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j132sm1154974oih.11.2021.06.17.08.12.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 08:12:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 17 Jun 2021 08:12:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Osipenko <digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=c2e7kNsCGT85GsTUjiDwru6wY3UfFbgVKt2c+k6Ksis=;
+        b=LDWpClSWp6FwSVfLCOce5tSuKvSGD7aa8Uch4oEfy8hdNWnxeikbHJj8A+zmxYWujN
+         7c2fHE6i+Z02PlRMR5BAHyqA9XEvzpkPQqPMi9hLnr6yRPWagKdT6MQiI+YEp421eOul
+         akKEWCHWefD7VgJNHWxxFZoT9HUF8InkviKZaTERFpYw9gU6AkHfZVGJUbdF54BMniLV
+         hkHETP4p863gRnlhcFJGHvsxcfX4UpjA7/3lsLGW+ck/pJsrk1xGlGCb2qoKjXp/yz7g
+         /xurYxldwUXVoXTwKHILuec4wop8Mo7qOmjvi6rZtugRjlv5PkT/7hz/8tm0Wf/w1bxi
+         vzFQ==
+X-Gm-Message-State: AOAM532ljFyzkNq4KyWV6Cndv2g6Ci1dZ8ttp+KAUwwXkJJuaAl+Amlk
+        8+wJPLLbuEuZi5QGI0a3Z2NNiF/DtAw=
+X-Google-Smtp-Source: ABdhPJwxXY0YliY/v8QKwNZZ13AJaFFOGuYA0LobGWU/S5Or2aVdHYPIjW0s6+zlecbCVNV/m4QTQg==
+X-Received: by 2002:a05:651c:3dc:: with SMTP id f28mr5180858ljp.294.1623943671133;
+        Thu, 17 Jun 2021 08:27:51 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
+        by smtp.googlemail.com with ESMTPSA id o14sm610933lfg.34.2021.06.17.08.27.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jun 2021 08:27:50 -0700 (PDT)
+Subject: Re: [PATCH v1] hwmon: (lm90) Use edge-triggered interrupt
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1] hwmon: (lm90) Use edge-triggered interrupt
-Message-ID: <20210617151236.GB2676642@roeck-us.net>
 References: <20210616190708.1220-1-digetx@gmail.com>
  <20210617001243.GA3211292@roeck-us.net>
  <3c6cbaf3-187b-1682-69b8-a2b34f23b928@gmail.com>
@@ -71,69 +68,43 @@ References: <20210616190708.1220-1-digetx@gmail.com>
  <de7682c2-ae34-c594-d237-330ea33cbc78@gmail.com>
  <20210617141300.GA1366442@roeck-us.net>
  <bc3e3595-fe10-c7ae-9560-0c7676facba2@gmail.com>
+ <20210617151236.GB2676642@roeck-us.net>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b97e3a75-f1aa-95a4-187d-97dc95e57e2b@gmail.com>
+Date:   Thu, 17 Jun 2021 18:27:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210617151236.GB2676642@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bc3e3595-fe10-c7ae-9560-0c7676facba2@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 05:46:33PM +0300, Dmitry Osipenko wrote:
-> 17.06.2021 17:13, Guenter Roeck пишет:
-> ...
-> >> This is a device-tree based system, in particular it's NVIDIA Tegra30
-> >> Nexus 7. The interrupt support was originally added to the lm90 driver
-> >> by Wei Ni who works at NVIDIA and did it for the Tegra boards. The Tegra
-> >> device-trees are specifying the trigger mask and apparently they all are
-> >> cargo-culted and wrong because they use IRQ_TYPE_LEVEL_HIGH, while it
-> > 
-> > Be fair, no one is perfect.
-> 
-> This is a very minor problem, so no wonder that nobody noticed or
-> bothered to fix it yet. I'm just clarifying the status here.
-> 
-> >> should be IRQ_TYPE_EDGE_FALLING.
-> > 
-> > It should probably be both IRQ_TYPE_EDGE_FALLING and IRQ_TYPE_EDGE_RISING,
-> 
-> For now I see that the rising edge isn't needed, the TEMP_ALERT goes
-> HIGH by itself when temperature backs to normal. But I will try to
-> double check.
-> 
-The point is that a sysfs event should be sent to userspace on both
-edges, not only when an alarm is raised. But, you are correct,
-IRQ_TYPE_EDGE_RISING is currently not needed since sysfs events
-are not generated.
+17.06.2021 18:12, Guenter Roeck пишет:
+>> For now I see that the rising edge isn't needed, the TEMP_ALERT goes
+>> HIGH by itself when temperature backs to normal. But I will try to
+>> double check.
+>>
+> The point is that a sysfs event should be sent to userspace on both
+> edges, not only when an alarm is raised. But, you are correct,
+> IRQ_TYPE_EDGE_RISING is currently not needed since sysfs events
+> are not generated.
 
-> > and the interrupt handler should call hwmon_notify_event() instead of
-> > clogging the kernel log, but that should be done in a separate patch.
-> 
-> Thank you for suggestion, I will take a look.
-> 
-> > Anyway, the tegra30 dts files in the upstream kernel either use
-> > IRQ_TYPE_LEVEL_LOW or no interrupts for nct1008. The Nexus 7 dts file
-> > in the upstream kernel has no interrupt configured (and coincidentally
-> > it was you who added that entry). Where do you see IRQ_TYPE_LEVEL_HIGH ?
-> 
-> I have a patch that will add the interrupt property, it's stashed
-> locally for the next kernel release.
-> 
-> IIUC, it's not only the Tegra30 dts, but all the TegraXXX boards that
-> use IRQ_TYPE_LEVEL_LOW are in the same position.
+Ok, thank you for the clarification.
 
-I still don't see a IRQ_TYPE_LEVEL_HIGH, though.
+>>> Anyway, the tegra30 dts files in the upstream kernel either use
+>>> IRQ_TYPE_LEVEL_LOW or no interrupts for nct1008. The Nexus 7 dts file
+>>> in the upstream kernel has no interrupt configured (and coincidentally
+>>> it was you who added that entry). Where do you see IRQ_TYPE_LEVEL_HIGH ?
+>> I have a patch that will add the interrupt property, it's stashed
+>> locally for the next kernel release.
+>>
+>> IIUC, it's not only the Tegra30 dts, but all the TegraXXX boards that
+>> use IRQ_TYPE_LEVEL_LOW are in the same position.
+> I still don't see a IRQ_TYPE_LEVEL_HIGH, though.
 
-Thanks,
-Guenter
-
-> 
-> >> The IRQF flag in devm_request_threaded_irq() overrides the trigger mask
-> >> specified in a device-tree. IIUC, the interrupt is used only by OF-based
-> >> devices, hence I think we could simply remove the IRQF flag from the
-> >> code and fix the device-trees. Does it sound good to you?
-> > 
-> > Yes, that is a better approach.
-> 
-> Thank you for reviewing this patch. I'll prepare v2.
+Could you please clarify why you're looking for HIGH and not for LOW?
+The TEMP_ALERT is active-low.
