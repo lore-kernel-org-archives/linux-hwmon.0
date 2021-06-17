@@ -2,109 +2,485 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0154FC2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 530D9C48BE5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:36:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D79B6611CE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:27:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25BFE613EC
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 15:36:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbhFQPaD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jun 2021 11:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233130AbhFQPaC (ORCPT
+        id S232131AbhFQPib convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jun 2021 11:38:31 -0400
+Received: from mail-yb1-f169.google.com ([209.85.219.169]:46642 "EHLO
+        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231661AbhFQPib (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jun 2021 11:30:02 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02120C061574;
-        Thu, 17 Jun 2021 08:27:53 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id k8so9528043lja.4;
-        Thu, 17 Jun 2021 08:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=c2e7kNsCGT85GsTUjiDwru6wY3UfFbgVKt2c+k6Ksis=;
-        b=mBmvA+aak/sfdxRTB9RvZIlo/zFa91SejUS4yQcpOmO3tp7YtLqdS2sl0orVa571cL
-         SJKYU6AV1aK/4MxsHa10IjnmZdMbLme1oHAKUDJLvo9AYwc0lLlgYzY0JIYMGvd5ZnE6
-         CrULLpNUBIx+hYI11Cyj8LEyHeb9r/mknWzC4Fw5JH+sK85wQQuY4nrM/AktlzRAls5G
-         EpuMyhcJe2JgAKeS4umdjFk2pqi487kmiZltL5ynwBMhh7ptZzU6TEkJQl5lo0ZXNb/q
-         N5lS4Y7wBTA+RpwJEylf55acqMAgFziIG+Ao0wtxXzJ+XD9Wv1t9YEY3PlTCexZgyZuk
-         gSZw==
+        Thu, 17 Jun 2021 11:38:31 -0400
+Received: by mail-yb1-f169.google.com with SMTP id h15so8790878ybm.13;
+        Thu, 17 Jun 2021 08:36:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=c2e7kNsCGT85GsTUjiDwru6wY3UfFbgVKt2c+k6Ksis=;
-        b=LDWpClSWp6FwSVfLCOce5tSuKvSGD7aa8Uch4oEfy8hdNWnxeikbHJj8A+zmxYWujN
-         7c2fHE6i+Z02PlRMR5BAHyqA9XEvzpkPQqPMi9hLnr6yRPWagKdT6MQiI+YEp421eOul
-         akKEWCHWefD7VgJNHWxxFZoT9HUF8InkviKZaTERFpYw9gU6AkHfZVGJUbdF54BMniLV
-         hkHETP4p863gRnlhcFJGHvsxcfX4UpjA7/3lsLGW+ck/pJsrk1xGlGCb2qoKjXp/yz7g
-         /xurYxldwUXVoXTwKHILuec4wop8Mo7qOmjvi6rZtugRjlv5PkT/7hz/8tm0Wf/w1bxi
-         vzFQ==
-X-Gm-Message-State: AOAM532ljFyzkNq4KyWV6Cndv2g6Ci1dZ8ttp+KAUwwXkJJuaAl+Amlk
-        8+wJPLLbuEuZi5QGI0a3Z2NNiF/DtAw=
-X-Google-Smtp-Source: ABdhPJwxXY0YliY/v8QKwNZZ13AJaFFOGuYA0LobGWU/S5Or2aVdHYPIjW0s6+zlecbCVNV/m4QTQg==
-X-Received: by 2002:a05:651c:3dc:: with SMTP id f28mr5180858ljp.294.1623943671133;
-        Thu, 17 Jun 2021 08:27:51 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.googlemail.com with ESMTPSA id o14sm610933lfg.34.2021.06.17.08.27.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jun 2021 08:27:50 -0700 (PDT)
-Subject: Re: [PATCH v1] hwmon: (lm90) Use edge-triggered interrupt
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20210616190708.1220-1-digetx@gmail.com>
- <20210617001243.GA3211292@roeck-us.net>
- <3c6cbaf3-187b-1682-69b8-a2b34f23b928@gmail.com>
- <20210617131205.GA59767@roeck-us.net>
- <de7682c2-ae34-c594-d237-330ea33cbc78@gmail.com>
- <20210617141300.GA1366442@roeck-us.net>
- <bc3e3595-fe10-c7ae-9560-0c7676facba2@gmail.com>
- <20210617151236.GB2676642@roeck-us.net>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b97e3a75-f1aa-95a4-187d-97dc95e57e2b@gmail.com>
-Date:   Thu, 17 Jun 2021 18:27:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bdQuWeQt6RjtSg4ZgCNzfCdi542ckNbGHKSYlXEGyqc=;
+        b=CmbZl1Amn6alLwaP39jIztg2dD9wT5HYaMH0vmRGifBh4O9nlTVntZ/dRdTsXIHCy5
+         aTh2DRVNXfiWAqANtD/pUERXjkAtIdW1dGoHl49GRR5vG2itgJNC1weZctaLxKzhKh/x
+         H3oHthJ94nO9WtDnJyduIpOvaS3S+XsAHZEBK96FH/vMfire943t0vEXNU3PewttYvWN
+         eOUf2T5OiCAvROVOw/+IyOw+FZgjMux7RBZw5FHDLyCEACzztoaxEvbvBNIA6rRzDbaU
+         BRblfCX+ibq4xPvyvcW69lLhwifffygdpTYKyOQgexWCCMms3ih56dlQi7wbbuB7Zs8K
+         +1Vw==
+X-Gm-Message-State: AOAM532x2SksKqr62l8MSLO6wY/n52uNJfLjksCrkhhZs4q/iX+GBNOi
+        TbJP9BsPmXiGgAa+AgXNyozdfUdcKybWT3hytqY=
+X-Google-Smtp-Source: ABdhPJxoPYfA3myfATBHrxyD3e4u4v3B9+ji5LUHFHCGi4wP9+vD9SA5XsaTpiL8O+ftIHM/TIJOdgJDp988HdsjugA=
+X-Received: by 2002:a25:3d41:: with SMTP id k62mr6597424yba.479.1623944183284;
+ Thu, 17 Jun 2021 08:36:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210617151236.GB2676642@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210616181545.496149-1-kernel@esmil.dk> <20210616181545.496149-3-kernel@esmil.dk>
+ <20210617150740.GA2676642@roeck-us.net>
+In-Reply-To: <20210617150740.GA2676642@roeck-us.net>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Thu, 17 Jun 2021 17:36:12 +0200
+Message-ID: <CANBLGczCSosEP-aRCs_arfS_DRx15XRZsCZp0+TxXQNX33svvg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] hwmon: (sfctemp) Add StarFive JH7100 temperature sensor
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-17.06.2021 18:12, Guenter Roeck пишет:
->> For now I see that the rising edge isn't needed, the TEMP_ALERT goes
->> HIGH by itself when temperature backs to normal. But I will try to
->> double check.
->>
-> The point is that a sysfs event should be sent to userspace on both
-> edges, not only when an alarm is raised. But, you are correct,
-> IRQ_TYPE_EDGE_RISING is currently not needed since sysfs events
-> are not generated.
+On Thu, 17 Jun 2021 at 17:07, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Wed, Jun 16, 2021 at 08:15:45PM +0200, Emil Renner Berthing wrote:
+> > Register definitions based on sfctemp driver in the StarFive
+> > 5.10 kernel by Samin Guo <samin.guo@starfivetech.com>.
+> >
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > ---
+> >
+> > @Samin: Only the register definitions and conversion constants are left
+> > from your driver, but still it would be really nice if you could reply
+> > to this mail with your Signed-off-by. Thanks!
+> >
+> >
+> >  drivers/hwmon/Kconfig   |   9 ++
+> >  drivers/hwmon/Makefile  |   1 +
+> >  drivers/hwmon/sfctemp.c | 309 ++++++++++++++++++++++++++++++++++++++++
+>
+> Documentation/hwmon/sfctemp is missing.
+>
+> >  3 files changed, 319 insertions(+)
+> >  create mode 100644 drivers/hwmon/sfctemp.c
+> >
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 87624902ea80..fa7562920dfa 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -1751,6 +1751,15 @@ config SENSORS_STTS751
+> >         This driver can also be built as a module. If so, the module
+> >         will be called stts751.
+> >
+> > +config SENSORS_SFCTEMP
+> > +     tristate "Starfive JH7100 temperature sensor"
+> > +     help
+> > +       If you say yes here you get support for temperature sensor
+> > +       on the Starfive JH7100 SoC.
+> > +
+> > +       This driver can also be built as a module.  If so, the module
+> > +       will be called sfctemp.
+> > +
+> >  config SENSORS_SMM665
+> >       tristate "Summit Microelectronics SMM665"
+> >       depends on I2C
+> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> > index 59e78bc212cf..3723eb580bf3 100644
+> > --- a/drivers/hwmon/Makefile
+> > +++ b/drivers/hwmon/Makefile
+> > @@ -167,6 +167,7 @@ obj-$(CONFIG_SENSORS_SBTSI)       += sbtsi_temp.o
+> >  obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
+> >  obj-$(CONFIG_SENSORS_SCH5627)        += sch5627.o
+> >  obj-$(CONFIG_SENSORS_SCH5636)        += sch5636.o
+> > +obj-$(CONFIG_SENSORS_SFCTEMP)        += sfctemp.o
+> >  obj-$(CONFIG_SENSORS_SL28CPLD)       += sl28cpld-hwmon.o
+> >  obj-$(CONFIG_SENSORS_SHT15)  += sht15.o
+> >  obj-$(CONFIG_SENSORS_SHT21)  += sht21.o
+> > diff --git a/drivers/hwmon/sfctemp.c b/drivers/hwmon/sfctemp.c
+> > new file mode 100644
+> > index 000000000000..62a838063e4e
+> > --- /dev/null
+> > +++ b/drivers/hwmon/sfctemp.c
+> > @@ -0,0 +1,309 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
+> > + * Copyright (C) 2021 Samin Guo <samin.guo@starfivetech.com>
+> > + */
+> > +#include <linux/completion.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/hwmon.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/module.h>
+> > +#include <linux/mutex.h>
+> > +#include <linux/of.h>
+> > +#include <linux/platform_device.h>
+>
+> This may work on some systems, but on others it will result in:
+>
+> drivers/hwmon/sfctemp.c: In function ‘sfctemp_power_up’:
+> drivers/hwmon/sfctemp.c:76:2: error: implicit declaration of function ‘writel’
+>
+> drivers/hwmon/sfctemp.c: In function ‘sfctemp_convert’:
+> drivers/hwmon/sfctemp.c:144:17: error: implicit declaration of function ‘readl’
+>
+> It is necessary to include <linux/io.h>.
+>
+> > +
+> > +/* TempSensor reset. The RSTN can be de-asserted once the analog core has
+> > + * powered up. Trst(min 100ns)
+> > + * 0:reset  1:de-assert */
+>
+> /*
+>  * Please use standard multi-line comments.
+>  * checkpatch would tell you, plus it has other complaints.
+>  * Please run checkpatch --strict and fix what it reports.
+>  */
+> > +#define SFCTEMP_RSTN     BIT(0)
+> > +
+> > +/* TempSensor analog core power down. The analog core will be powered up
+> > + * Tpu(min 50us) after PD is de-asserted. RSTN should be held low until the
+> > + * analog core is powered up.
+> > + * 0:power up  1:power down */
+> > +#define SFCTEMP_PD       BIT(1)
+> > +
+> > +/* TempSensor start conversion enable.
+> > + * 0:disable  1:enable */
+> > +#define SFCTEMP_RUN      BIT(2)
+> > +
+> > +/* TempSensor calibration mode enable.
+> > + * 0:disable  1:enable */
+> > +#define SFCTEMP_CAL      BIT(4)
+> > +
+> > +/* TempSensor signature enable. Generate a toggle value outputting on DOUT for
+> > + * test purpose.
+> > + * 0:disable  1:enable */
+> > +#define SFCTEMP_SGN      BIT(5)
+> > +
+> > +/* TempSensor test access control.
+> > + * 0000:normal 0001:Test1  0010:Test2  0011:Test3
+> > + * 0100:Test4  1000:Test8  1001:Test9 */
+> > +#define SFCTEMP_TM_Pos   12
+> > +#define SFCTEMP_TM_Msk   GENMASK(15, 12)
+>
+> Defines should upper case. Besides, the above defines are not
+> used. Please remove unused defines, and please rename the others
+> to be upper case only.
+>
+> > +
+> > +/* TempSensor conversion value output.
+> > + * Temp(c)=DOUT*Y/4094 - K */
+> > +#define SFCTEMP_DOUT_Pos 16
+> > +#define SFCTEMP_DOUT_Msk GENMASK(27, 16)
+> > +
+> > +/* TempSensor digital test output. */
+> > +#define SFCTEMP_DIGO     BIT(31)
+> > +
+> > +/* DOUT to Celcius conversion constants */
+> > +#define SFCTEMP_Y1000 237500L
+> > +#define SFCTEMP_Z       4094L
+>
+> Please use
+>
+> #define<space><definition><tab><value>, eg
+>
+> #define SFCTEMP_Y1000   237500L
+> #define SFCTEMP_Z       4094L
+>
+> for all defines.
+>
+> > +#define SFCTEMP_K1000  81100L
+> > +
+> > +struct sfctemp {
+> > +     struct mutex lock;
+> > +     struct completion conversion_done;
+> > +     void __iomem *regs;
+> > +     bool enabled;
+> > +};
+> > +
+> > +static irqreturn_t sfctemp_isr(int irq, void *data)
+> > +{
+> > +     struct sfctemp *sfctemp = data;
+> > +
+> > +     complete(&sfctemp->conversion_done);
+> > +     return IRQ_HANDLED;
+> > +}
+> > +
+> > +static void sfctemp_power_up(struct sfctemp *sfctemp)
+> > +{
+> > +     /* make sure we're powered down first */
+> > +     writel(SFCTEMP_PD, sfctemp->regs);
+> > +     udelay(1);
+> > +
+> > +     writel(0, sfctemp->regs);
+> > +     /* wait t_pu(50us) + t_rst(100ns) */
+> > +     usleep_range(60, 200);
+> > +
+> > +     /* de-assert reset */
+> > +     writel(SFCTEMP_RSTN, sfctemp->regs);
+> > +     udelay(1); /* wait t_su(500ps) */
+> > +}
+> > +
+> > +static void sfctemp_power_down(struct sfctemp *sfctemp)
+> > +{
+> > +     writel(SFCTEMP_PD, sfctemp->regs);
+> > +}
+> > +
+> > +static void sfctemp_run_single(struct sfctemp *sfctemp)
+> > +{
+> > +     writel(SFCTEMP_RSTN | SFCTEMP_RUN, sfctemp->regs);
+> > +     udelay(1);
+> > +     writel(SFCTEMP_RSTN, sfctemp->regs);
+> > +}
+> > +
+> > +static int sfctemp_enable(struct sfctemp *sfctemp)
+> > +{
+> > +     mutex_lock(&sfctemp->lock);
+> > +     if (sfctemp->enabled)
+> > +             goto done;
+> > +
+> > +     sfctemp_power_up(sfctemp);
+> > +     sfctemp->enabled = true;
+> > +done:
+> > +     mutex_unlock(&sfctemp->lock);
+> > +     return 0;
+> > +}
+> > +
+> > +static int sfctemp_disable(struct sfctemp *sfctemp)
+> > +{
+> > +     mutex_lock(&sfctemp->lock);
+> > +     if (!sfctemp->enabled)
+> > +             goto done;
+> > +
+> > +     sfctemp_power_down(sfctemp);
+> > +     sfctemp->enabled = false;
+> > +done:
+> > +     mutex_unlock(&sfctemp->lock);
+> > +     return 0;
+> > +}
+> > +
+> > +static int sfctemp_convert(struct sfctemp *sfctemp, long *val)
+> > +{
+> > +     long ret;
+>
+> Why long ? Sure, wait_for_completion_interruptible_timeout()
+> returns a long, but it will never return a value large enough to warrant
+> a long here.
+>
+> > +
+> > +     mutex_lock(&sfctemp->lock);
+> > +     if (!sfctemp->enabled) {
+> > +             ret = -ENODATA;
+> > +             goto out;
+> > +     }
+> > +
+> > +     sfctemp_run_single(sfctemp);
+> > +
+> > +     ret = wait_for_completion_interruptible_timeout(&sfctemp->conversion_done,
+> > +                                                     msecs_to_jiffies(10));
+> > +     if (ret < 0)
+> > +             goto out;
+> > +
+> > +     /* calculate temperature in milli Celcius */
+> > +     *val = (long)((readl(sfctemp->regs) & SFCTEMP_DOUT_Msk) >> SFCTEMP_DOUT_Pos)
+> > +             * SFCTEMP_Y1000 / SFCTEMP_Z - SFCTEMP_K1000;
+> > +
+> > +     ret = 0;
+> > +out:
+> > +     mutex_unlock(&sfctemp->lock);
+> > +     return ret;
+> > +}
+> > +
+> > +static umode_t sfctemp_is_visible(const void *data, enum hwmon_sensor_types type,
+> > +                               u32 attr, int channel)
+> > +{
+> > +     switch (type) {
+> > +     case hwmon_temp:
+> > +             switch (attr) {
+> > +             case hwmon_temp_enable:
+> > +                     return 0644;
+> > +             case hwmon_temp_input:
+> > +                     return 0444;
+> > +             }
+> > +             return 0;
+> > +     default:
+> > +             return 0;
+> > +     }
+> > +}
+> > +
+> > +static int sfctemp_read(struct device *dev, enum hwmon_sensor_types type,
+> > +                     u32 attr, int channel, long *val)
+> > +{
+> > +     struct sfctemp *sfctemp = dev_get_drvdata(dev);
+> > +
+> > +     switch (type) {
+> > +     case hwmon_temp:
+> > +             switch (attr) {
+> > +             case hwmon_temp_enable:
+> > +                     *val = sfctemp->enabled;
+> > +                     return 0;
+> > +             case hwmon_temp_input:
+> > +                     return sfctemp_convert(sfctemp, val);
+> > +             }
+> > +             return -EINVAL;
+> > +     default:
+> > +             return -EINVAL;
+> > +     }
+> > +}
+> > +
+> > +static int sfctemp_write(struct device *dev, enum hwmon_sensor_types type,
+> > +                      u32 attr, int channel, long val)
+> > +{
+> > +     struct sfctemp *sfctemp = dev_get_drvdata(dev);
+> > +
+> > +     switch (type) {
+> > +     case hwmon_temp:
+> > +             switch (attr) {
+> > +             case hwmon_temp_enable:
+> > +                     if (val == 0)
+> > +                             return sfctemp_disable(sfctemp);
+> > +                     if (val == 1)
+> > +                             return sfctemp_enable(sfctemp);
+> > +                     break;
+> > +             }
+> > +             return -EINVAL;
+> > +     default:
+> > +             return -EINVAL;
+> > +     }
+> > +}
+> > +
+> > +static const struct hwmon_channel_info *sfctemp_info[] = {
+> > +     HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+> > +     HWMON_CHANNEL_INFO(temp, HWMON_T_ENABLE | HWMON_T_INPUT),
+> > +     NULL
+> > +};
+> > +
+> > +static const struct hwmon_ops sfctemp_hwmon_ops = {
+> > +     .is_visible = sfctemp_is_visible,
+> > +     .read = sfctemp_read,
+> > +     .write = sfctemp_write,
+> > +};
+> > +
+> > +static const struct hwmon_chip_info sfctemp_chip_info = {
+> > +     .ops = &sfctemp_hwmon_ops,
+> > +     .info = sfctemp_info,
+> > +};
+> > +
+> > +static int sfctemp_probe(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev = &pdev->dev;
+> > +     struct device *hwmon_dev;
+> > +     struct resource *mem;
+> > +     struct sfctemp *sfctemp;
+> > +     long val;
+> > +     int ret;
+> > +
+> > +     sfctemp = devm_kzalloc(dev, sizeof(*sfctemp), GFP_KERNEL);
+> > +     if (!sfctemp)
+> > +             return -ENOMEM;
+> > +
+> > +     dev_set_drvdata(dev, sfctemp);
+> > +     mutex_init(&sfctemp->lock);
+> > +     init_completion(&sfctemp->conversion_done);
+> > +
+> > +     mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > +     sfctemp->regs = devm_ioremap_resource(dev, mem);
+> > +     if (IS_ERR(sfctemp->regs))
+> > +             return PTR_ERR(sfctemp->regs);
+> > +
+> > +     ret = platform_get_irq(pdev, 0);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     ret = devm_request_irq(dev, ret, sfctemp_isr,
+> > +                            IRQF_SHARED, pdev->name, sfctemp);
+> > +     if (ret) {
+> > +             dev_err(dev, "request irq failed: %d\n", ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     ret = sfctemp_enable(sfctemp);
+> > +     if (ret)
+> > +             return ret;
+>
+> Please consider adding devm_add_action_or_reset() to disable the sensor.
+> Then you can use devm_hwmon_device_register_with_info(), and there is
+> no need for a remove function.
+> > +
+> > +     hwmon_dev = hwmon_device_register_with_info(dev, pdev->name, sfctemp,
+> > +                                                 &sfctemp_chip_info, NULL);
+> > +     if (IS_ERR(hwmon_dev))
+> > +             return PTR_ERR(hwmon_dev);
+> > +
+> > +     /* do a conversion to check everything works */
+> > +     ret = sfctemp_convert(sfctemp, &val);
+>
+> Please drop this check; it will result in substantial boot delays.
+> The assumption is the the hardware works; the system should not be
+> optimized (slowed down) to handle a potential and hopefully rare
+> failure case.
+>
+> > +     if (ret) {
+> > +             hwmon_device_unregister(hwmon_dev);
+> > +             return ret;
+> > +     }
+> > +
+> > +     dev_info(dev, "%ld.%03ld C\n", val / 1000, val % 1000);
+>
+> Please drop this message. Anyone interested in boot-time temperature
+> readings can add a script and get it from sysfs attributes as needed.
+>
+> > +     return 0;
+> > +}
+> > +
+> > +static int sfctemp_remove(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev = &pdev->dev;
+> > +     struct sfctemp *sfctemp = dev_get_drvdata(dev);
+> > +
+> > +     hwmon_device_unregister(dev);
+> > +     return sfctemp_disable(sfctemp);
+> > +}
+> > +
+> > +static const struct of_device_id sfctemp_of_match[] = {
+> > +     { .compatible = "starfive,jh7100-temp" },
+> > +     { /* sentinel */ }
+> > +};
+> > +
+> > +MODULE_DEVICE_TABLE(of, sfctemp_of_match);
+> > +
+> > +static struct platform_driver sfctemp_driver = {
+> > +     .driver = {
+> > +             .name = "sfctemp",
+> > +             .of_match_table = of_match_ptr(sfctemp_of_match),
+> > +     },
+> > +     .probe  = sfctemp_probe,
+> > +     .remove = sfctemp_remove,
+> > +};
+> > +module_platform_driver(sfctemp_driver);
+> > +
+> > +MODULE_AUTHOR("Emil Renner Berthing");
+> > +MODULE_DESCRIPTION("StarFive JH7100 temperature sensor driver");
+> > +MODULE_LICENSE("GPL");
 
-Ok, thank you for the clarification.
+Hi Guenter,
 
->>> Anyway, the tegra30 dts files in the upstream kernel either use
->>> IRQ_TYPE_LEVEL_LOW or no interrupts for nct1008. The Nexus 7 dts file
->>> in the upstream kernel has no interrupt configured (and coincidentally
->>> it was you who added that entry). Where do you see IRQ_TYPE_LEVEL_HIGH ?
->> I have a patch that will add the interrupt property, it's stashed
->> locally for the next kernel release.
->>
->> IIUC, it's not only the Tegra30 dts, but all the TegraXXX boards that
->> use IRQ_TYPE_LEVEL_LOW are in the same position.
-> I still don't see a IRQ_TYPE_LEVEL_HIGH, though.
+Thanks for the review. It all sounds reasonable. I'll address it all in v2.
 
-Could you please clarify why you're looking for HIGH and not for LOW?
-The TEMP_ALERT is active-low.
+/Emil
