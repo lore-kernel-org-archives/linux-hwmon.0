@@ -2,104 +2,172 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AD10C2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 13:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B33B5C2B9F4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 13:48:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 411E86100B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 13:14:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B41D61059
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jun 2021 13:48:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbhFQNQM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jun 2021 09:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S232564AbhFQNuU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jun 2021 09:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbhFQNQM (ORCPT
+        with ESMTP id S232559AbhFQNuU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jun 2021 09:16:12 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9759FC061574
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jun 2021 06:14:04 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 5-20020a9d01050000b02903c700c45721so6063988otu.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jun 2021 06:14:04 -0700 (PDT)
+        Thu, 17 Jun 2021 09:50:20 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B93DC061574;
+        Thu, 17 Jun 2021 06:48:11 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id f30so10690871lfj.1;
+        Thu, 17 Jun 2021 06:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KaVyuEQYC4RRRunggcCeQecE8bs5FXpwFN3gaH39q9g=;
-        b=tiC4qKRHAmREQGk0tvIG5enZ9t6uIPNe8pfRInJ5/MU0ybVcJ0EUYNTk98fUGBF6da
-         GaGhHqaCqqZYHxJmR4VxH23ejwLQjEioYTKn81Z5U3p1WpT7TEHl5yewLq52DMPiqdgh
-         Mm480xjCyAp9+Lz3DCYO/RbfPK0n39v6aEkUz1xCO2xEDEGq73/Kjpy3awpv0ahmswfO
-         p1pAQaigciRVwLAunQAQtq8VzPMBOHpQDRQrKYl7H7RD+Ia1i7hlVeRNj3AmHNKUpob4
-         iZdMxabPjjT0jJKSEszETUUnG+Q4o1mZdoeSHlMem9ZQ9d9nIGq/H+YaWOAgNHwTdRrB
-         8zUA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=r+WSgPEpOCcz2ZWxrp9FCsB4CB9DuPrqyD11wi3qMmo=;
+        b=XkWn9gYDAKkfWlGpxGGJ59Qsp7+izVtH8LBds7sYhfG2Io2jbO+IiuYdAn7/YNA0J5
+         yLqeYLy03BpjPLb/5e+62h7xKB4oWxrpuqdO6ecrIi21Uttar8TsGFgkXuHEpTaNzBW5
+         JB3+/vxPp2A1oO+P7DnkYFqxAIhQKltCnYaDIbRQ4C46xOL0zL89iGCZcC2vq9AskD4+
+         HFRdFyn9TPVLkkfw7xIfDKvTaVzIsh6Z1vhxfYAv+0sEQ7QQ4MZRb7Pa6RJjzWpLEV8E
+         nanfDOV5Fy6s4PGfMCAFW/MwNkpwClwv12cGL4kWNejyezQ11ek0DMmCIq93yInKzTS1
+         VuDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=KaVyuEQYC4RRRunggcCeQecE8bs5FXpwFN3gaH39q9g=;
-        b=uFBAd+O9mF+ytmloyEXPgCbeNG1sdHSz3eEoNvdTTrniwF7iuJj0z4BYjUySR4+dNO
-         hbPVrBzPU37IOv8l2wUtkCzYu8M0j02N/P5F84YjAiMJVujO0A4vGYcufwIAGRmdZClk
-         /wxl/oxvVdUlKwkZwxS//jaVheB5iG5CVqg+YEzyASHaQn2x0nwKBfYcOfAVM0vfW/6e
-         zp/aCr4WTsfU+I36vEbpDh3prl+Ha/t3buKoWD3cy3qlvl5jNLp+EczEvRFeu11lm1L8
-         kki8pFdblc2mq2gGrmWRddEhTytKXxPyrJm1Pq1ZZA9ax3bnOPx1pR/MXLY51KQzl/ch
-         JGKw==
-X-Gm-Message-State: AOAM532iyZD4BYenLlpo9IGPtVgWEJxOm5LMqPMc3TCp1fFTjiKFsHW2
-        KI/CILkJ7aCf3HjEC6zTbnM=
-X-Google-Smtp-Source: ABdhPJyJ/Ypvdk4ql8JPq/j7LtRvrqyl7NLydjLF9PXyLeO6QFetQQAhf7xAu+iqqRcHsVLX1L3rkw==
-X-Received: by 2002:a05:6830:19f4:: with SMTP id t20mr4635889ott.103.1623935643968;
-        Thu, 17 Jun 2021 06:14:03 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3sm1278765otu.52.2021.06.17.06.14.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 06:14:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 17 Jun 2021 06:14:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksandr Mezin <mezin.alexander@gmail.com>
-Cc:     Marius Zachmann <mail@mariuszachmann.de>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=r+WSgPEpOCcz2ZWxrp9FCsB4CB9DuPrqyD11wi3qMmo=;
+        b=kVPxGndZ6P0SNp3yvxAyNSUcIm4n4pJzbscRBiDYXPxQONCffd3fmAy4O9I2NwD5YQ
+         Uos07MUU5/1ttxRB+Rg+y11rUN2DarrnLWcxPS2S8sYkQ0WH1sio/yyCVuT4/7qGRlxS
+         +20wyVHMIcC5Fs2l367dP8pwWkXnAm7Lk3qZ8Tr9FUGQyM+26svxZutGpnE2Ab8UfiLI
+         95DXAvzrSYlrWIWtMSJCP2Rf5sOKieH1O9O754AYLcnf9MAbvcCjeE0gvfsoyj99rTSD
+         qedJtrJGCd3j/9Z4cjFuEjBLpm69Yj2bJnh+mbq4MosvPbCbEdG4HQl035TZ+hu2D/I2
+         VNeA==
+X-Gm-Message-State: AOAM533DchaYiUi29WeUR4oz8XaQqKrMxiAMwE61HoszYSptoIdVHuWK
+        ybsWcvt+EJOZaxZbmbxlQiWOjD6yDaQ=
+X-Google-Smtp-Source: ABdhPJyFPRzHnR84XKOyXT8nH8X4PQbctGQpx0x7WgQ033Up6jZz2wBqEtTi+5sGciWF6LjX0yeucw==
+X-Received: by 2002:ac2:42c2:: with SMTP id n2mr4171088lfl.0.1623937689804;
+        Thu, 17 Jun 2021 06:48:09 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
+        by smtp.googlemail.com with ESMTPSA id p4sm588029lfr.87.2021.06.17.06.48.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jun 2021 06:48:09 -0700 (PDT)
+Subject: Re: [PATCH v1] hwmon: (lm90) Use edge-triggered interrupt
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org
-Subject: Re: corsair-cpro and hidraw
-Message-ID: <20210617131402.GB59767@roeck-us.net>
-References: <CADnvcf+LhxZoZk9eRUahSWZ3xVJLkxcAt3+4dS-JCjV8gZE_0A@mail.gmail.com>
- <2199169.9u6qy3EJ5v@marius>
- <CADnvcfK1EzyXY83wd7CJYpZ=S9+KnT0ftF9CiYhJScBGXKmm5A@mail.gmail.com>
+References: <20210616190708.1220-1-digetx@gmail.com>
+ <20210617001243.GA3211292@roeck-us.net>
+ <3c6cbaf3-187b-1682-69b8-a2b34f23b928@gmail.com>
+ <20210617131205.GA59767@roeck-us.net>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <de7682c2-ae34-c594-d237-330ea33cbc78@gmail.com>
+Date:   Thu, 17 Jun 2021 16:48:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADnvcfK1EzyXY83wd7CJYpZ=S9+KnT0ftF9CiYhJScBGXKmm5A@mail.gmail.com>
+In-Reply-To: <20210617131205.GA59767@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 01:11:38PM +0600, Aleksandr Mezin wrote:
-> On Thu, Jun 17, 2021 at 12:27 PM Marius Zachmann <mail@mariuszachmann.de> wrote:
-> ...
-> > I do not know, what your device is doing
-> 
-> Actually, NZXT devices (at least grid/"smart device" and "smart device
-> v2"/rgb&fan controller) don't have such issues - they use report ids,
-> and don't even expect request-reply communication pattern. I've just
-> noticed that something seems to be wrong with corsair-cpro (but
-> somehow didn't notice the comment) and decided to ask.
-> 
-> > This device uses an echo of the command
-> > in the answer and if they don't match it returns an error. This could
-> > maybe lead to a false error when the replies are switched, but is
-> > probably preferable.
-> 
-> Hm... If the response includes the id of the request, it should be
-> possible to filter reports in raw_event, i. e. don't signal completion
-> if the report doesn't match, and wait more. Yes, there is a corner
-> case, "if a command is not supported, the length value in the reply is
-> okay, but the command value is set to 0". But timing out (250 ms) in
-> this case should probably be fine... Actually I have a compatible
-> Corsair PSU so maybe I'll send a patch.
+17.06.2021 16:12, Guenter Roeck пишет:
+> On Thu, Jun 17, 2021 at 10:11:19AM +0300, Dmitry Osipenko wrote:
+>> 17.06.2021 03:12, Guenter Roeck пишет:
+>>> On Wed, Jun 16, 2021 at 10:07:08PM +0300, Dmitry Osipenko wrote:
+>>>> The LM90 driver uses level-based interrupt triggering. The interrupt
+>>>> handler prints a warning message about the breached temperature and
+>>>> quits. There is no way to stop interrupt from re-triggering since it's
+>>>> level-based, thus thousands of warning messages are printed per second
+>>>> once interrupt is triggered. Use edge-triggered interrupt in order to
+>>>> fix this trouble.
+>>>>
+>>>> Fixes: 109b1283fb532 ("hwmon: (lm90) Add support to handle IRQ")
+>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>> ---
+>>>>  drivers/hwmon/lm90.c | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+>>>> index ebbfd5f352c0..ce8ebe60fcdc 100644
+>>>> --- a/drivers/hwmon/lm90.c
+>>>> +++ b/drivers/hwmon/lm90.c
+>>>> @@ -1908,7 +1908,7 @@ static int lm90_probe(struct i2c_client *client)
+>>>>  		dev_dbg(dev, "IRQ: %d\n", client->irq);
+>>>>  		err = devm_request_threaded_irq(dev, client->irq,
+>>>>  						NULL, lm90_irq_thread,
+>>>> -						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+>>>> +						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+>>>>  						"lm90", client);
+>>>
+>>> We can't do that. Problem is that many of the devices supported by this driver
+>>> behave differently when it comes to interrupts. Specifically, the interrupt
+>>> handler is supposed to reset the interrupt condition (ie reading the status
+>>> register should reset it). If that is the not the case for a specific chip,
+>>> we'll have to update the code to address the problem for that specific chip.
+>>> The above code would probably just generate a single interrupt while never
+>>> resetting the interrupt condition, which is obviously not what we want to
+>>> happen.
+>>
+>> The nct1008/72 datasheet [1] says that reading the status register
+>> doesn't reset interrupt until temperature is returned back into normal
+>> state, which is what I'm witnessing.
+>>
+>> [1] https://www.onsemi.com/pdf/datasheet/nct1008-d.pdf
+>>
+>> Page 10 "Status Register":
+>>
+>> "Reading the status register clears the five flags, Bit 6 to Bit 2,
+>> provided the error conditions causing the flags to beset  have  gone
+>> away.  A  flag  bit  can  be  reset  only  if  the corresponding
+>> value    register    contains    an    in-limit measurement or if the
+>> sensor is good."
+>>
+>> So the interrupt handler doesn't actually stop interrupt from
+>> reoccurring and the whole KMSG is instantly spammed with:
+>>
+>> ...
+>> [  217.484034] lm90 0-004c: temp2 out of range, please check!
+>> [  217.484569] lm90 0-004c: temp2 out of range, please check!
+>> [  217.485006] systemd-journald[179]: /dev/kmsg buffer overrun, some
+>> messages lost.
+>> [  217.485109] lm90 0-004c: temp2 out of range, please check!
+>> [  217.485699] lm90 0-004c: temp2 out of range, please check!
+>> [  217.486235] lm90 0-004c: temp2 out of range, please check!
+>> [  217.486776] lm90 0-004c: temp2 out of range, please check!
+>> [  217.486874] systemd-journald[179]: /dev/kmsg buffer overrun, ...
+>>
+>> It's interesting that the very first version of the nct1008-support
+>> patch used edge-triggered interrupt flags [2].
+>>
+>> [2] http://lkml.iu.edu/hypermail/linux/kernel/1104.1/01669.html
+>>
+> A lot of this depends on the chip and its wiring, as well as on chip
+> configuration. Even for a specific chip there may be configuration
+> dependencies. The interrupt configuration in situations like this
+> should really be determined by devicetree configuration, and not
+> be hardcoded. Is this a devicetree based system ? If so, there should
+> be an entry for this chip pointing to the interrupt, and that entry
+> should include a trigger mask. That mask should be set to edge
+> triggered.
 
-Patches to improve the situation are welcome. My understanding is
-that with the current driver users should disable the kernel driver
-if they plan to use userspace tools to access the device.
+This is a device-tree based system, in particular it's NVIDIA Tegra30
+Nexus 7. The interrupt support was originally added to the lm90 driver
+by Wei Ni who works at NVIDIA and did it for the Tegra boards. The Tegra
+device-trees are specifying the trigger mask and apparently they all are
+cargo-culted and wrong because they use IRQ_TYPE_LEVEL_HIGH, while it
+should be IRQ_TYPE_EDGE_FALLING.
 
-Guenter
+The IRQF flag in devm_request_threaded_irq() overrides the trigger mask
+specified in a device-tree. IIUC, the interrupt is used only by OF-based
+devices, hence I think we could simply remove the IRQF flag from the
+code and fix the device-trees. Does it sound good to you?
