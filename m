@@ -2,108 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 816A0C48BE8
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 19:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 885DFC48BE8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 19:57:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 589B761279
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 19:47:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64C8C613E2
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 19:57:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbhFRTtR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Jun 2021 15:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
+        id S230433AbhFRT7t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Jun 2021 15:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbhFRTtR (ORCPT
+        with ESMTP id S230136AbhFRT7s (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Jun 2021 15:49:17 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D43BC061574;
-        Fri, 18 Jun 2021 12:47:06 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id d19so11738057oic.7;
-        Fri, 18 Jun 2021 12:47:06 -0700 (PDT)
+        Fri, 18 Jun 2021 15:59:48 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3475BC061574;
+        Fri, 18 Jun 2021 12:57:39 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id f5so4169156qvu.8;
+        Fri, 18 Jun 2021 12:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J2h/rtErddJtuwrYdyLo1SQwC1ntbYiJsiSR6HTN2Og=;
-        b=NQCE/gZocnMZcvq8elnPGBJBPteCqw+j5NMJkwvZGaywf4fnqM+DHpRyWBhw3fxOdk
-         kUf5eDB4fnwnQTiCKKL3P0Fka2T9gjFLLnd23ThJ27tpsc4mkCx8at/XyAaEv964FljA
-         /Kjs5Ad/9R/JtS0Oj7nYJ9DIlrBIzScOetvP17xegQjejFZP6099nGoNqAw+EHHhBvVw
-         IkKC0EAzamiMDT+KSJkp/+WZplr2VWguLiOl27rFY9Sou2efBGfUNZJaCL9COicI0rAn
-         HSw3+f5GtdVRTs3j8iz5b9MqBauMCMJJII5IHz2Jlwrw84zSVxBF+ohqoC5ynX5z8ZNM
-         53qw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C7EJEdD4t44D/JXomia6XzLDMkDQTa0QGymZbz46VVU=;
+        b=iRFBGqOhtmYr2gGcozlyLfVZbxJpNLg5N2U+3Xj6O7liQWVYnfyPCGR/nNGUTy9/th
+         K5jOnP/qtO9QsIC0PhmucEFXrUySBo+TR4ppLIZZJinOLF7Yg6L0lruM/pFEVp4y1aA2
+         7igA+rJu4KkQlSy8f/P3D/8SYxloP4DPHpLwHSoZ4auiz+++P7EiWr691hfhg9J7DW/t
+         TTJ8t+iKxfrFO4uCUMPcpFEWTASYzgSN8XHif1TZ8mpnTM5TRqzwsqMwQGLrC2FZue98
+         I07gpIevRgvarpGUKQD/llNN8eHi0BZpYs3yWR+foLat2bq2TYmcfSbWscjPqQZx7F+C
+         5dGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=J2h/rtErddJtuwrYdyLo1SQwC1ntbYiJsiSR6HTN2Og=;
-        b=TCEAULAoqRRiihQyndxThvyohmeUKCV2NMIjohWGujL3qzIZDibTUZOWqnlgna9Jg9
-         qUfA1ueJtrPOC5/fblsxUUBlm8FwSXczl3s4zRYpxq8oMVMNTd5N1DUd5V56T2W2bKqD
-         pqDamwqXdr23j9yXrv3A5gJldt/2+brNcMemJYRbY2oFveMUrOisvfcRqwRkLJmdGALe
-         B7Rzy4SzD5MfrzkTm4nVGWzmhlx49QLtm+9sie3YT00ueTn0sZ2QBFvSkVQNtUIs5gcG
-         x/i+ULnFFGYCXgFc66FAXNiVYxlf9ebO5NN9H2UGheFaiJPpvNK5xDglIpFyZzRRWNf/
-         /rbg==
-X-Gm-Message-State: AOAM5325jsrZMazvJBpuVk6sS6dfESRlY+nq3ugufIDyZ/rKM5Vy0/7B
-        f+derCneEkEy22IqQ18Au4M=
-X-Google-Smtp-Source: ABdhPJy/xWdCw8eQDigk1I4QrsBJKp+amnflfMZHsUPuGB3phbXrPgbaYhdb56ZOGvgL+x5oUB/SXA==
-X-Received: by 2002:aca:acd3:: with SMTP id v202mr15889329oie.176.1624045625885;
-        Fri, 18 Jun 2021 12:47:05 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s187sm2012770oig.6.2021.06.18.12.47.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C7EJEdD4t44D/JXomia6XzLDMkDQTa0QGymZbz46VVU=;
+        b=Luy+x6sRe+C6DU25odIcGgofB9FRQa5nCG6wHQy6lRoO34LfJcBTYX+RkNv9nYVEEQ
+         Prgx9knbAaqMAihFQAwhsjLSGDRiEeMV+2JTqCDu0EaNhLV3JtUAWGpHU7WAeJ68IVff
+         Ug1zP+6SUWcn1W2f8D9qPt6IonVPyv86JhmSWD6/Wgf48OVipkZAVjUiZUQHJaNO8rYO
+         yelLKoi4VsdPvnbQ7clGKSYbZxMX7nXutsB0pnx3Dxpj9bpHQVbyjW9SUV6kMEtN7k+8
+         1DjYXRP7SF6Ruh6oFculNJrWS2MilV73s7CvrXr155huqoHJIkuRRhYzgvCWiRz60X6F
+         lKBw==
+X-Gm-Message-State: AOAM531fBgdS+8kKCfFIHChFL5lZPslgMLI70/vatiyNKJPM7kKQuhY8
+        0i+LLgeWwZXJHAdm5dtQ+/U=
+X-Google-Smtp-Source: ABdhPJyIUyQDxz2UY0b7qp2wXD/+ssfkJ79/j/7N/t8FSsiZad6mriv6DGGePeCP5WLb8DKxfk+8aA==
+X-Received: by 2002:ad4:5042:: with SMTP id m2mr7417541qvq.29.1624046257839;
+        Fri, 18 Jun 2021 12:57:37 -0700 (PDT)
+Received: from localhost ([207.98.216.60])
+        by smtp.gmail.com with ESMTPSA id z6sm4628404qke.24.2021.06.18.12.57.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jun 2021 12:47:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 18 Jun 2021 12:47:04 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Robert Marko <robert.marko@sartura.hr>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus/dps920ab) Delete some dead code
-Message-ID: <20210618194704.GC1664689@roeck-us.net>
-References: <YMyjmR54ErLtc1sH@mwanda>
+        Fri, 18 Jun 2021 12:57:37 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Marc Zyngier <maz@kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexey Klimov <aklimov@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH 0/3] for_each_*_bit: move to find.h and reconsider
+Date:   Fri, 18 Jun 2021 12:57:32 -0700
+Message-Id: <20210618195735.55933-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMyjmR54ErLtc1sH@mwanda>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 04:46:01PM +0300, Dan Carpenter wrote:
-> The debugfs_create_dir() function returns error pointers, it doesn't
-> return NULL.  But debugfs functions don't need to be checked in normal
-> situations and we can just delete this code.
-> 
-> Fixes: 1f442e213ce5 ("hwmon: (pmbus) Add driver for Delta DPS-920AB PSU")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+for_each_bit() macro family uses find_bit() functions, so it's better
+to have for_each_bit() and find_bit() functions in the same header. 
 
-Applied.
+This series puts for_each_bit() to a proper place and optimizes its
+usage over the kernel.
 
-Thanks,
-Guenter
+The series is based on this:
+https://lore.kernel.org/linux-arch/20210612123639.329047-1-yury.norov@gmail.com/
 
-> ---
->  drivers/hwmon/pmbus/dps920ab.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
-> index bd2df2a3c8e3..d3941f6eb29a 100644
-> --- a/drivers/hwmon/pmbus/dps920ab.c
-> +++ b/drivers/hwmon/pmbus/dps920ab.c
-> @@ -119,8 +119,6 @@ static void dps920ab_init_debugfs(struct dps920ab_data *data, struct i2c_client
->  		return;
->  
->  	debugfs_dir = debugfs_create_dir(client->name, root);
-> -	if (!debugfs_dir)
-> -		return;
->  
->  	debugfs_create_file("mfr_id",
->  			    0400,
-> -- 
-> 2.30.2
-> 
+The full series can be found here:
+https://github.com/norov/linux/commits/bm-final
+
+Yury Norov (3):
+  include/linux: move for_each_bit() macros from bitops.h to find.h
+  find: micro-optimize for_each_{set,clear}_bit()
+  Replace for_each_*_bit_from() with for_each_*_bit() where appropriate
+
+ arch/x86/kernel/apic/vector.c         |  4 ++--
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c |  4 ++--
+ drivers/hwmon/ltc2992.c               |  3 +--
+ include/linux/bitops.h                | 34 ---------------------------
+ include/linux/find.h                  | 34 +++++++++++++++++++++++++++
+ 5 files changed, 39 insertions(+), 40 deletions(-)
+
+-- 
+2.30.2
+
