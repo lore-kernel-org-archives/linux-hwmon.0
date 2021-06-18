@@ -2,125 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B5CDC48BE8
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 12:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97592C48BDF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 13:46:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E00B16113E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 12:23:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80FC361222
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jun 2021 13:46:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbhFRMZK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Jun 2021 08:25:10 -0400
-Received: from ms-10.1blu.de ([178.254.4.101]:48844 "EHLO ms-10.1blu.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231474AbhFRMZK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Jun 2021 08:25:10 -0400
-Received: from [37.209.98.109] (helo=marius.localnet)
-        by ms-10.1blu.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <mail@mariuszachmann.de>)
-        id 1luDWU-00025I-6U; Fri, 18 Jun 2021 14:22:58 +0200
-From:   Marius Zachmann <mail@mariuszachmann.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        Aleksandr Mezin <mezin.alexander@gmail.com>,
-        linux-hwmon@vger.kernel.org, Jiri Kosina <jikos@kernel.org>
-Subject: Re: corsair-cpro and hidraw
-Date:   Fri, 18 Jun 2021 14:22:57 +0200
-Message-ID: <36091016.oId77RFrrH@marius>
-In-Reply-To: <20210618121300.GB1202484@roeck-us.net>
-References: <CADnvcf+LhxZoZk9eRUahSWZ3xVJLkxcAt3+4dS-JCjV8gZE_0A@mail.gmail.com> <27527118.vr9HtJ8RzA@marius> <20210618121300.GB1202484@roeck-us.net>
+        id S231855AbhFRNsf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Jun 2021 09:48:35 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:4664 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229782AbhFRNse (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 18 Jun 2021 09:48:34 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15IDhuWW017244;
+        Fri, 18 Jun 2021 13:46:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=9raDCdunyKVJWbeCbttvLe3JNktRfAi9rmwb3NHQ8EY=;
+ b=RiCoe3Gwu3ODAGVanV7vd9PItQa6NrGAJBlgTO5hJIEWnF/fYlNKaAxhvAtgS9KjIwUX
+ TlAZlDFF5zHxvRbh6pP0Cj09AnNULwhGtEegyWGB5EO8jVDu4MNKT1WH1/VrjzWjJWFw
+ NQPttD3LljZGntTBj8ty++bRY/b85yeXDauK89xjh1WJG2XDly1iqCHIY4qqGKc10Gjm
+ TLOkQpbOF+TIXBg4Pa9fL2970pB0QHYE6Yw0Wk9J+AO3VLshNIFH/TQhiyZZHyAV4jsc
+ Gb5bmL9DsRTiP8tjReyilabdQhiLnQTSca4xYHGKfhJBik1t/sRsb7dfKtDbHCFvO2Yw yA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 39893qswy8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Jun 2021 13:46:11 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 15IDfQg8150446;
+        Fri, 18 Jun 2021 13:46:10 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3030.oracle.com with ESMTP id 396wawrfn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Jun 2021 13:46:10 +0000
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 15IDkAme164152;
+        Fri, 18 Jun 2021 13:46:10 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 396wawrfn2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Jun 2021 13:46:10 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 15IDk849017872;
+        Fri, 18 Jun 2021 13:46:08 GMT
+Received: from mwanda (/102.222.70.252)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 18 Jun 2021 13:46:07 +0000
+Date:   Fri, 18 Jun 2021 16:46:01 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus/dps920ab) Delete some dead code
+Message-ID: <YMyjmR54ErLtc1sH@mwanda>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Con-Id: 241080
-X-Con-U: 0-mail
-X-Originating-IP: 37.209.98.109
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-ORIG-GUID: b1ZdGEb3FyCqpBmr2hOzcTI5uVE6jMrD
+X-Proofpoint-GUID: b1ZdGEb3FyCqpBmr2hOzcTI5uVE6jMrD
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 18.06.21 at 14:13:00 CEST, Guenter Roeck wrote
-> On Fri, Jun 18, 2021 at 09:06:02AM +0200, Marius Zachmann wrote:
-> > On 18.06.21 at 08:47:37 CEST, Wilken Gottwalt wrote
-> > > On Fri, 18 Jun 2021 08:18:23 +0200
-> > > Marius Zachmann <mail@mariuszachmann.de> wrote:
-> > > 
-> > > > On 18.06.21 at 07:45:00 CEST, Wilken Gottwalt wrote
-> > > > > On Fri, 18 Jun 2021 05:56:29 +0600
-> > > > > Aleksandr Mezin <mezin.alexander@gmail.com> wrote:
-> > > > > 
-> > > > > > I've looked through corsair-psu sources, and I think filtering in
-> > > > > > raw_event won't be enough.
-> > > > > > 
-> > > > > > For example, in corsairpsu_request, there are 2 commands, and they
-> > > > > > should be executed consecutively:
-> > > > > > 1) corsairpsu_usb_cmd(priv, 2, PSU_CMD_SELECT_RAIL, rail, NULL);
-> > > > > > 2) corsairpsu_usb_cmd(priv, 3, cmd, 0, data);
-> > > > > > 
-> > > > > > If the userspace will squeeze another PSU_CMD_SELECT_RAIL between (1)
-> > > > > > and (2), the driver will get data for a wrong rail (and with the
-> > > > > > current code won't even notice it).
-> > > > > > 
-> > > > > > So unless there is a way to "lock" hidraw (and it seems that there
-> > > > > > isn't - looking at the code, hidraw calls the low-level hid driver
-> > > > > > directly, as far as I understand), it won't work correctly.
-> > > > > > 
-> > > > > > And if a driver can't work correctly with hidraw enabled - maybe it
-> > > > > > shouldn't enable hidraw? So that the user can 1) notice that something
-> > > > > > is wrong 2) blacklist or unbind the driver (or userspace tools that
-> > > > > > use hidraw can unbind automatically). Otherwise everything seems to be
-> > > > > > silently broken.
-> > > > > > 
-> > > > > > On the other hand, maybe races between the kernel driver and userspace
-> > > > > > tools are unlikely, because the driver doesn't talk to the device
-> > > > > > continuously - only when sysfs reads happen.
-> > > > > 
-> > > > > I never noticed any issues of that kind. I actually did quite a lot of
-> > > > > userspace testing. A result of this a userspace tool you can find here:
-> > > > > https://github.com/wgottwalt/corsair-psu/tree/main/tools/rmi-hxi-query
-> > > > > 
-> > > > > Though, if you find a way to trigger such a race condition I have no
-> > > > > problem to remove the hidraw part.
-> > > > > 
-> > > > > greetings
-> > > > > Will
-> > > > 
-> > > > It is possible. Making a userspace tool with just a loop of read/writes
-> > > > will get you wrong readings in the driver sometimes.
-> > > 
-> > > Hmm, did you read the comments in the driver? I warn about writing nonsense
-> > > values to the micro-controller because you can make it stall. If I let you
-> > > access the device by hidraw I assume you know what you are doing. You
-> > > actually can damage your PSU by this, something I also warn about. I even
-> > > mention that I may remove the hidraw feature in future versions.
-> > 
-> > Sorry for the confusion. I did not test with corsair-psu. (Do not have
-> > the hardware) I tested with corsair-cpro. Reading temps with userspace and
-> > reading fan speed with the driver simultaneously.
-> > But you are right. This is also not, what a userspace tool should do this
-> > fast and if it doesn't, races are really unlikely.
-> > 
-> 
-> Same there: Make userspace and kernel mutually exclusive if parallel access
-> is shown to be problematic. "Mutually exclusive" means disable userspace
-> access completely while the driver is loaded, not some cross-subsystem
-> mutex.
-> 
-> Guenter
-> 
+The debugfs_create_dir() function returns error pointers, it doesn't
+return NULL.  But debugfs functions don't need to be checked in normal
+situations and we can just delete this code.
 
-For now I did not get a bug report nor did anyone seem to have a real problem.
-It is mostly a theoretical issue.
-I am not unhappy about how it is.
-Maybe until a real problem occurs, we should just do nothing?
+Fixes: 1f442e213ce5 ("hwmon: (pmbus) Add driver for Delta DPS-920AB PSU")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/hwmon/pmbus/dps920ab.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Greetings
-Marius
-
-
+diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+index bd2df2a3c8e3..d3941f6eb29a 100644
+--- a/drivers/hwmon/pmbus/dps920ab.c
++++ b/drivers/hwmon/pmbus/dps920ab.c
+@@ -119,8 +119,6 @@ static void dps920ab_init_debugfs(struct dps920ab_data *data, struct i2c_client
+ 		return;
+ 
+ 	debugfs_dir = debugfs_create_dir(client->name, root);
+-	if (!debugfs_dir)
+-		return;
+ 
+ 	debugfs_create_file("mfr_id",
+ 			    0400,
+-- 
+2.30.2
 
