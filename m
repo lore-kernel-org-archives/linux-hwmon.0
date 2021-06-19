@@ -6,42 +6,42 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 482FEC49361
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 08:37:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1483C2B9F4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 08:37:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2149D610FB
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 08:37:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC8456120D
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 08:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbhFSIjO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S234307AbhFSIjO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sat, 19 Jun 2021 04:39:14 -0400
-Received: from mga06.intel.com ([134.134.136.31]:4216 "EHLO mga06.intel.com"
+Received: from mga02.intel.com ([134.134.136.20]:55762 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234202AbhFSIjO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S234299AbhFSIjO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Sat, 19 Jun 2021 04:39:14 -0400
-IronPort-SDR: hU6evSC+PWHviOlxelotCzUqbfz3iw64SvKb3Xa31Q0eBnxTWOp2sQ9JGwVh6R2msBfxFKjv+z
- KvM1j2zsiF1A==
-X-IronPort-AV: E=McAfee;i="6200,9189,10019"; a="267802367"
+IronPort-SDR: M1CWPHygt5dC1aBildCPK23T1a7Tc7OUv/UKBaNvsM1rurWTXoARVDCznOsC8UvCRXoRAEGHNY
+ jPlj9vlEvv/g==
+X-IronPort-AV: E=McAfee;i="6200,9189,10019"; a="193790187"
 X-IronPort-AV: E=Sophos;i="5.83,285,1616482800"; 
-   d="scan'208";a="267802367"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2021 01:37:03 -0700
-IronPort-SDR: Ju7M027JPPNcf3SGrUho2HTZVSslnlAfGciCRuF6AyyzCr8WhaK+M8T14CKwQrBkxW5+nFFwOj
- v20LGR07C3Tg==
+   d="scan'208";a="193790187"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2021 01:37:03 -0700
+IronPort-SDR: ode2gFqxmqiWftEo2F99yzEcMUhGvQBZvGRov5TPQccdKW2naTmvmWFJO85DJEhr2cusjYJxBc
+ X4z+0/GL0AUA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,285,1616482800"; 
-   d="scan'208";a="472983010"
+   d="scan'208";a="489337659"
 Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Jun 2021 01:37:02 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jun 2021 01:37:02 -0700
 Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1luWTN-0003SF-Fz; Sat, 19 Jun 2021 08:37:01 +0000
-Date:   Sat, 19 Jun 2021 16:36:42 +0800
+        id 1luWTN-0003SC-F7; Sat, 19 Jun 2021 08:37:01 +0000
+Date:   Sat, 19 Jun 2021 16:36:44 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- 6e9ef8ca687e69e9d4cc89033d98e06350b0f3e0
-Message-ID: <60cdac9a.27sZnwaqAhgt0t2J%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 9e25f01b5f529d397be2e3f595b0b54ae9e80c58
+Message-ID: <60cdac9c.OOGDHEMuo78tDxfd%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -50,13 +50,13 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 6e9ef8ca687e69e9d4cc89033d98e06350b0f3e0  hwmon: (pmbus/bpa-rs600) Handle Vin readings >= 256V
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 9e25f01b5f529d397be2e3f595b0b54ae9e80c58  hwmon: (pmbus/dps920ab) Delete some dead code
 
 elapsed time: 720m
 
-configs tested: 83
-configs skipped: 3
+configs tested: 82
+configs skipped: 2
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -67,10 +67,9 @@ arm64                            allyesconfig
 arm64                               defconfig
 arm                              allyesconfig
 arm                              allmodconfig
-powerpc                 mpc834x_itx_defconfig
-sh                          polaris_defconfig
-xtensa                       common_defconfig
-arm                          pxa168_defconfig
+nios2                         3c120_defconfig
+powerpc64                           defconfig
+arm                      pxa255-idp_defconfig
 ia64                             allmodconfig
 ia64                                defconfig
 ia64                             allyesconfig
