@@ -2,111 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F46C2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 11:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D6AFC2B9F4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 16:24:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B33061222
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 11:10:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2758661222
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 16:24:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbhFSLM3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 19 Jun 2021 07:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbhFSLM2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 19 Jun 2021 07:12:28 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C608C061574;
-        Sat, 19 Jun 2021 04:10:18 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id x22-20020a4a62160000b0290245cf6b7feeso3163220ooc.13;
-        Sat, 19 Jun 2021 04:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jGT3JoRbOKhxxTLocr8dP2N6w63SdfEBqzsNI5J17gw=;
-        b=RBzJvnEVWK1LtFiWxScAQn6nzT0Sk5L6qO25QaDXS0rVdnGk1WFArCdAosrmR3MJnA
-         1ljimPzii8/mYU287XUObiHlFm/T/d8PrymYmnfG7nN1bcVzvF1yea86YRJw4nM/Zx2A
-         POkNmZVrd2VNnWtgFr3lxUo94T5EqGuZ4DcLJd1nZjRjEtVd6t+rEdiXMpHR5WR8Qb1f
-         k0mMaoKx1nKlTFgs+EA+PdP82pxnBmP5F2s3A6LRxqNfEAEa8LvxlgmGHQAOIky8q6Bv
-         vr6QrTpcyAPz481g9166zi0Q8qkl7bTTbANoXieGJZYWjCqMOtqOlnWkl5wg1sB7qCES
-         OT7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=jGT3JoRbOKhxxTLocr8dP2N6w63SdfEBqzsNI5J17gw=;
-        b=PykxzQCdcWD1eg5OCRN01k96MChktpyIa7msKBk067dzqBigvDcJugDoGiubgfbJkr
-         vZfjxolrpr0Z5tN/vs0gcDeoI2UoNFJ0UB2Z13gk36HSz93SqybJWL1sGW9JAO+ijybM
-         CBMbYie0Vw2ILAZqvgDlUqE0pIe1u3fRfAiyjDErpK6jYlBDvHKU8ntiIP5aAbwrF8ep
-         5Ys1OGueg9yndnJEVfyZ16cF1D7H8sHUTvj3vGuaRR/xE0yVtv7mBKBP+1NnCPGYM+dV
-         5JNLSB1mZwbcyNzsi8Xic+XkkaM4B7d0NdGfJc5FXNaJw/+EsKkLuUmWuInb007BGx6W
-         FAVg==
-X-Gm-Message-State: AOAM530fczIx+oJL1+0Syg5p7lVgmaOMRZM+QibrtH8Io79JplrhwONq
-        /VVG2dXUYqudxuxrL76qXc8=
-X-Google-Smtp-Source: ABdhPJwXppZizYY6AC+p7d4cJtypRmsh1F1i0wyhnzY0E5EvdZVCOiblZthNHLTtn8GA1jEJUfknWg==
-X-Received: by 2002:a05:6820:23c:: with SMTP id j28mr12949720oob.88.1624101017470;
-        Sat, 19 Jun 2021 04:10:17 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 111sm2620855otg.25.2021.06.19.04.10.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jun 2021 04:10:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 19 Jun 2021 04:10:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] HWMON LM90 interrupt fixes and improvements
-Message-ID: <20210619111014.GA1042635@roeck-us.net>
-References: <20210618215455.19986-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210618215455.19986-1-digetx@gmail.com>
+        id S234437AbhFSQ0a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 19 Jun 2021 12:26:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45026 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232640AbhFSQ03 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 19 Jun 2021 12:26:29 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5BE6761208;
+        Sat, 19 Jun 2021 16:24:18 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ludlY-008chF-A9; Sat, 19 Jun 2021 17:24:16 +0100
+Date:   Sat, 19 Jun 2021 17:24:15 +0100
+Message-ID: <87bl81ddqo.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexey Klimov <aklimov@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/3] find: micro-optimize for_each_{set,clear}_bit()
+In-Reply-To: <20210618195735.55933-3-yury.norov@gmail.com>
+References: <20210618195735.55933-1-yury.norov@gmail.com>
+        <20210618195735.55933-3-yury.norov@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: yury.norov@gmail.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, l.stach@pengutronix.de, linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com, airlied@linux.ie, daniel@ffwll.ch, jdelvare@suse.com, linux@roeck-us.net, andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk, dwmw@amazon.co.uk, akpm@linux-foundation.org, richard.weiyang@linux.alibaba.com, geert+renesas@glider.be, aklimov@redhat.com, x86@kernel.org, linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jun 19, 2021 at 12:54:51AM +0300, Dmitry Osipenko wrote:
-> Hi,
+On Fri, 18 Jun 2021 20:57:34 +0100,
+Yury Norov <yury.norov@gmail.com> wrote:
 > 
-> This series makes interrupt usable on NVIDIA Tegra devices, it also
-> switches LM90 driver to use hwmon_notify_event().
+> The macros iterate thru all set/clear bits in a bitmap. They search a
+> first bit using find_first_bit(), and the rest bits using find_next_bit().
 > 
+> Since find_next_bit() is called shortly after find_first_bit(), we can
+> save few lines of I-cache by not using find_first_bit().
 
-Series applied.
+Really?
+
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  include/linux/find.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/find.h b/include/linux/find.h
+> index 4500e8ab93e2..ae9ed52b52b8 100644
+> --- a/include/linux/find.h
+> +++ b/include/linux/find.h
+> @@ -280,7 +280,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
+>  #endif
+>  
+>  #define for_each_set_bit(bit, addr, size) \
+> -	for ((bit) = find_first_bit((addr), (size));		\
+> +	for ((bit) = find_next_bit((addr), (size), 0);		\
+
+On which architecture do you observe a gain? Only 32bit ARM and m68k
+implement their own version of find_first_bit(), and everyone else
+uses the canonical implementation:
+
+#ifndef find_first_bit
+#define find_first_bit(addr, size) find_next_bit((addr), (size), 0)
+#endif
+
+These architectures explicitly have different implementations for
+find_first_bit() and find_next_bit() because they can do better
+(whether that is true or not is another debate). I don't think you
+should remove this optimisation until it has been measured on these
+two architectures.
 
 Thanks,
-Guenter
 
-> Changelog:
-> 
-> v3: - No code changes. Added changelog.
-> 
-> v2: - Dropped "hwmon: (lm90) Use edge-triggered interrupt" patch
->       and replaced it with "hwmon: (lm90) Don't override interrupt
->       trigger type", as was discussed during review of v1.
-> 
->     - Added these new patches:
-> 
->         hwmon: (lm90) Use hwmon_notify_event()
->         hwmon: (lm90) Unmask hardware interrupt
->         hwmon: (lm90) Disable interrupt on suspend
-> 
-> Dmitry Osipenko (4):
->   hwmon: (lm90) Don't override interrupt trigger type
->   hwmon: (lm90) Use hwmon_notify_event()
->   hwmon: (lm90) Unmask hardware interrupt
->   hwmon: (lm90) Disable interrupt on suspend
-> 
->  drivers/hwmon/lm90.c | 79 ++++++++++++++++++++++++++++++++++++--------
->  1 file changed, 66 insertions(+), 13 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
