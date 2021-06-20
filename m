@@ -2,150 +2,235 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F452C2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 17:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39452C48BE5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Jun 2021 00:18:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 417C7610CA
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Jun 2021 17:28:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1636461183
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Jun 2021 00:18:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234912AbhFSRaU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 19 Jun 2021 13:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234900AbhFSRaT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 19 Jun 2021 13:30:19 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE4AC061574;
-        Sat, 19 Jun 2021 10:28:08 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id im10so5309662qvb.3;
-        Sat, 19 Jun 2021 10:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2fuqk2Uq9ZlnrXPo4v18ajx4HA0ZizExc9F16VvNLus=;
-        b=qxauMLGYdJHmLOE9NAzDcQ4rSL85U6WRsaTxi4imvMzlgh5aaGSsVHCMoZjKDWfc1Z
-         Cubw6ucf2e5ThDITSXLpj8lXuA/QAGwzzQ5Nfy2UWCVIL8wE1U47Ul27IyhLywGouc2E
-         SpcL+ZJD+4x3oQz1b8wjCLWq7L+xnBbhIyykl5NAD6zvpj0RngxFgatT/NhHugR1HVhl
-         O1TWLIqVpFeDGMV+lzAODOWEFdTqjgTofcG41PaNfAMZyIJE2XoNGsfURSyrLyt/pIoC
-         ruqZLiAf7f4icv3fFwdK1wv3xRo+6QEfXO1I+87XozfQ2wLyzoDdx1Gv6qfKHYTYIsxe
-         ISNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2fuqk2Uq9ZlnrXPo4v18ajx4HA0ZizExc9F16VvNLus=;
-        b=lu7If7699HpDnFxYT7PY/+augD3i82anxHfRaKzYvcqNv56XK+RdU1eSKNxiTL3JIe
-         PwkOiUXvl4NbS2kb5PCjhHHt5AO3Pn0rMit7RZLm2anCWtI1TXYCt0LHg86MQ7fNbcWc
-         xCpPqIG/60SrJiEXhZ9ruhmAxt4mJVGpiDSLt8oIVPXMyxf5IZAR73ZgqbPdaCBFIVCM
-         9qtALHFpIDCCr4CuBXhbXsC6FZAeLDYeDViRyLbIfMC7thQVfVH0lto0PxZM0xqf8ER3
-         rclDPhMCoe8ywPvIuG20h1mUMy5IqKhUowMchJq/3iqJS6u1lC2vQvaDrCslmWT11xmV
-         PlJw==
-X-Gm-Message-State: AOAM533l3RS/MoiX+ZqeHs1MDuvG2AjYrgYUDM33E11Cvwt8nC/5lyEy
-        Q6E5AeqBqx5riK5rcwrqgcI=
-X-Google-Smtp-Source: ABdhPJysdpI6MAT1dIYZqEk3e1RnK3iKjOdCfxTZEgVQY//BnW2jEuzNa1kYw342QMQlR/jxfpPjbw==
-X-Received: by 2002:ad4:5f0e:: with SMTP id fo14mr11491351qvb.16.1624123687363;
-        Sat, 19 Jun 2021 10:28:07 -0700 (PDT)
-Received: from localhost ([207.98.216.60])
-        by smtp.gmail.com with ESMTPSA id 186sm877814qkf.29.2021.06.19.10.28.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jun 2021 10:28:07 -0700 (PDT)
-Date:   Sat, 19 Jun 2021 10:28:06 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alexey Klimov <aklimov@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/3] find: micro-optimize for_each_{set,clear}_bit()
-Message-ID: <YM4pJpNphEwvUF2F@yury-ThinkPad>
-References: <20210618195735.55933-1-yury.norov@gmail.com>
- <20210618195735.55933-3-yury.norov@gmail.com>
- <87bl81ddqo.wl-maz@kernel.org>
+        id S229591AbhFTAUq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 19 Jun 2021 20:20:46 -0400
+Received: from mga03.intel.com ([134.134.136.65]:1055 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229584AbhFTAUp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 19 Jun 2021 20:20:45 -0400
+IronPort-SDR: nGwPTk2VEyO3Q2FpbX3kYZ2mxHm4JyHUVvLYu3OgUJKIHhbsg/+ExkaGMRTVfujV53HN5Vy8q6
+ OOO9e/j9wgHA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10020"; a="206733955"
+X-IronPort-AV: E=Sophos;i="5.83,285,1616482800"; 
+   d="scan'208";a="206733955"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2021 17:18:33 -0700
+IronPort-SDR: cH3qKJ/zdA9Eb99KvtG6THdaaJpVXFWRY6vz8+b5O0ytUrKOqkUuoVDOfdR31F/TnSWKW7+x7a
+ pOHa+FaPkcJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,285,1616482800"; 
+   d="scan'208";a="422577580"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Jun 2021 17:18:32 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lulAV-0003qn-I0; Sun, 20 Jun 2021 00:18:31 +0000
+Date:   Sun, 20 Jun 2021 08:17:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 4c7f85a321a1ac265159c22a6998ef4f2a60c21d
+Message-ID: <60ce8930.7+dtY2gAQkrj3bUf%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bl81ddqo.wl-maz@kernel.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jun 19, 2021 at 05:24:15PM +0100, Marc Zyngier wrote:
-> On Fri, 18 Jun 2021 20:57:34 +0100,
-> Yury Norov <yury.norov@gmail.com> wrote:
-> > 
-> > The macros iterate thru all set/clear bits in a bitmap. They search a
-> > first bit using find_first_bit(), and the rest bits using find_next_bit().
-> > 
-> > Since find_next_bit() is called shortly after find_first_bit(), we can
-> > save few lines of I-cache by not using find_first_bit().
-> 
-> Really?
-> 
-> > 
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  include/linux/find.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/find.h b/include/linux/find.h
-> > index 4500e8ab93e2..ae9ed52b52b8 100644
-> > --- a/include/linux/find.h
-> > +++ b/include/linux/find.h
-> > @@ -280,7 +280,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
-> >  #endif
-> >  
-> >  #define for_each_set_bit(bit, addr, size) \
-> > -	for ((bit) = find_first_bit((addr), (size));		\
-> > +	for ((bit) = find_next_bit((addr), (size), 0);		\
-> 
-> On which architecture do you observe a gain? Only 32bit ARM and m68k
-> implement their own version of find_first_bit(), and everyone else
-> uses the canonical implementation:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 4c7f85a321a1ac265159c22a6998ef4f2a60c21d  hwmon: (lm90) Disable interrupt on suspend
 
-And those who enable GENERIC_FIND_FIRST_BIT - x86, arm64, arc, mips
-and s390.
+elapsed time: 721m
 
-> #ifndef find_first_bit
-> #define find_first_bit(addr, size) find_next_bit((addr), (size), 0)
-> #endif
-> 
-> These architectures explicitly have different implementations for
-> find_first_bit() and find_next_bit() because they can do better
-> (whether that is true or not is another debate). I don't think you
-> should remove this optimisation until it has been measured on these
-> two architectures.
+configs tested: 165
+configs skipped: 2
 
-This patch is based on a series that enables separate implementation
-of find_first_bit() for all architectures; according to my tests,
-find_first* is ~ twice faster than find_next* on arm64 and x86.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-https://lore.kernel.org/lkml/20210612123639.329047-1-yury.norov@gmail.com/T/#t
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                 mpc834x_itx_defconfig
+mips                     loongson2k_defconfig
+powerpc                     ep8248e_defconfig
+sh                             espt_defconfig
+mips                          ath79_defconfig
+um                            kunit_defconfig
+powerpc                     taishan_defconfig
+riscv             nommu_k210_sdcard_defconfig
+powerpc                   currituck_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                   sh7724_generic_defconfig
+sh                        sh7763rdp_defconfig
+mips                    maltaup_xpa_defconfig
+arm                         palmz72_defconfig
+sh                            hp6xx_defconfig
+powerpc                      ep88xc_defconfig
+powerpc                 mpc832x_rdb_defconfig
+mips                           rs90_defconfig
+m68k                        m5272c3_defconfig
+mips                         cobalt_defconfig
+mips                malta_qemu_32r6_defconfig
+sh                   secureedge5410_defconfig
+csky                                defconfig
+powerpc                        cell_defconfig
+arc                          axs101_defconfig
+sh                          sdk7786_defconfig
+powerpc                     pseries_defconfig
+m68k                         amcore_defconfig
+arm                          pxa3xx_defconfig
+powerpc                     tqm5200_defconfig
+x86_64                            allnoconfig
+arm                           sunxi_defconfig
+powerpc                           allnoconfig
+sh                          urquell_defconfig
+x86_64                           allyesconfig
+arm                       imx_v6_v7_defconfig
+arm                          pxa168_defconfig
+mips                 decstation_r4k_defconfig
+arm                  colibri_pxa300_defconfig
+nds32                             allnoconfig
+powerpc                       ebony_defconfig
+mips                            ar7_defconfig
+um                             i386_defconfig
+powerpc                     mpc512x_defconfig
+sh                          landisk_defconfig
+powerpc                      ppc6xx_defconfig
+arm                     davinci_all_defconfig
+powerpc                     redwood_defconfig
+ia64                         bigsur_defconfig
+powerpc                 mpc834x_mds_defconfig
+mips                        nlm_xlp_defconfig
+powerpc                    socrates_defconfig
+m68k                       m5249evb_defconfig
+arm                       cns3420vb_defconfig
+mips                  decstation_64_defconfig
+arm                         s3c2410_defconfig
+s390                                defconfig
+powerpc                   bluestone_defconfig
+powerpc                        warp_defconfig
+arm                         assabet_defconfig
+mips                      loongson3_defconfig
+mips                         db1xxx_defconfig
+powerpc                          g5_defconfig
+arm                            hisi_defconfig
+mips                        nlm_xlr_defconfig
+arm                        clps711x_defconfig
+arm                     am200epdkit_defconfig
+powerpc                 mpc8540_ads_defconfig
+parisc                generic-64bit_defconfig
+m68k                             allyesconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+i386                 randconfig-a001-20210620
+i386                 randconfig-a002-20210620
+i386                 randconfig-a003-20210620
+i386                 randconfig-a006-20210620
+i386                 randconfig-a005-20210620
+i386                 randconfig-a004-20210620
+i386                 randconfig-a002-20210618
+i386                 randconfig-a006-20210618
+i386                 randconfig-a004-20210618
+i386                 randconfig-a001-20210618
+i386                 randconfig-a005-20210618
+i386                 randconfig-a003-20210618
+x86_64               randconfig-a012-20210620
+x86_64               randconfig-a016-20210620
+x86_64               randconfig-a015-20210620
+x86_64               randconfig-a014-20210620
+x86_64               randconfig-a013-20210620
+x86_64               randconfig-a011-20210620
+x86_64               randconfig-a015-20210618
+x86_64               randconfig-a011-20210618
+x86_64               randconfig-a012-20210618
+x86_64               randconfig-a014-20210618
+x86_64               randconfig-a016-20210618
+x86_64               randconfig-a013-20210618
+i386                 randconfig-a011-20210620
+i386                 randconfig-a014-20210620
+i386                 randconfig-a013-20210620
+i386                 randconfig-a015-20210620
+i386                 randconfig-a012-20210620
+i386                 randconfig-a016-20210620
+i386                 randconfig-a015-20210618
+i386                 randconfig-a016-20210618
+i386                 randconfig-a013-20210618
+i386                 randconfig-a014-20210618
+i386                 randconfig-a012-20210618
+i386                 randconfig-a011-20210618
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-After applying the series, I noticed that my small kernel module that
-calls for_each_set_bit() is now using find_first_bit() to just find
-one bit, and find_next_bit() for all others. I think it's better to
-always use find_next_bit() in this case to minimize the chance of
-cache miss. But if it's not that obvious, I'll try to write some test.
+clang tested configs:
+x86_64               randconfig-b001-20210620
+x86_64               randconfig-b001-20210618
+x86_64               randconfig-a002-20210618
+x86_64               randconfig-a001-20210618
+x86_64               randconfig-a004-20210618
+x86_64               randconfig-a003-20210618
+x86_64               randconfig-a006-20210618
+x86_64               randconfig-a005-20210618
+x86_64               randconfig-a002-20210620
+x86_64               randconfig-a001-20210620
+x86_64               randconfig-a005-20210620
+x86_64               randconfig-a003-20210620
+x86_64               randconfig-a004-20210620
+x86_64               randconfig-a006-20210620
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
