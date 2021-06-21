@@ -2,145 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FF61C4743C
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 21:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B0EAC4743C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 21:34:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D2D06128E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 21:33:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4342561164
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 21:34:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbhFUVfe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Jun 2021 17:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S231279AbhFUVgj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Jun 2021 17:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbhFUVfc (ORCPT
+        with ESMTP id S231249AbhFUVgi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Jun 2021 17:35:32 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3804C061574;
-        Mon, 21 Jun 2021 14:33:16 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id k8so4183052ljk.7;
-        Mon, 21 Jun 2021 14:33:16 -0700 (PDT)
+        Mon, 21 Jun 2021 17:36:38 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5592C061574;
+        Mon, 21 Jun 2021 14:34:22 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id u2so1812387qvp.13;
+        Mon, 21 Jun 2021 14:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LwLiDvKh+SYknHvIUl9sZJTxK3M1sxYb6xuIBop9DcM=;
-        b=CGENMLH4FOKUotexatotqZrpSnrbqA4qPnOp5TuH0n6mWIHe64R1nJKEF5w6TJMnYV
-         boWZlAOumdzJOeNlpjwWA+gW9s2xjU1TdQVWXvfkjlrhxXuuT6D3M7lgK5WW9D4KZcCo
-         BtvhljYxplt9UAjTjXD/80UvQzyRsvBd7Pzn/nK1KXl9zS8KY/BiwypeWYmgcyurJMOd
-         iIQuJGttsmtHaNt/CeSePAVAbOkSgD1A9OS/Y4BZG9XhzmJiheG1PD8F/aoH4Kz91Aca
-         nseH7Rw7WL6tyKdxQO9xCqSZiw6iYycSCTv7G+J18/eDHBUNqUaXQ8hYp8WIM879zxlf
-         ygvg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d3c9VDld9cVll7jiOE4VaogdRPw6AneLM9bO2IMc2sk=;
+        b=p3Z4oBwaAf/CzqFKoFIM1M8KmY7Wg7f2bqib/s4ROzYjlXDlqA2rz0QR5ZEx6T24dY
+         vVydPJdvK1u1wwF+3pG/LB+K26EdnKi4YKQ+2vZN5lG40wdLdgNmlvlrlW8hhEyvrROo
+         okXNlwoArj2NCzH6BAYUge9UF0rv3tk+YTX7bgutc12+FW4JiELD81lKx7lgQsyCZtu8
+         F+5VYTsVjvuuwXQ+1hOOJTaVOpyJzHlvXH6CieHCPUcMM/CkE72pjOcQtBP/7EGn0am9
+         sOtj05167/GWBgvUDxGuGnTp7oumSo5/CKSny7oiTk0wl/NyOAGxyx0SvnHPVuhY+HPb
+         nh7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LwLiDvKh+SYknHvIUl9sZJTxK3M1sxYb6xuIBop9DcM=;
-        b=G0yIra/1DIgK4/Bil2Al+4LXdJrAGPVOaIYEkhaxrScGdc84IU5t5ThW7GgPxCpDAL
-         y8H8qvL2vumwNvKhviTXNrab8Iep/Ss39meLToFw4/AJoWEveV2i7sup0HSs/ZV15dPG
-         kEQwaA3jJjSUG3He8Eu191YXmZlQZ2trCli7rzJeDsEhpzUkjDmUagJpec7On7pEWCpW
-         w2ASJzVgGfiFv2F1Jvx79fW4T2WpSBbzXs+91WpaGdQI2ZD8Z0iS68fcKoDq/eWgY7xR
-         xUpuQY4ISrEQWufVFvS3CweXsiu7PQULR7yIcGTHQJZAJJfqxfj/1xa531YQhKR7Fq9P
-         xlSA==
-X-Gm-Message-State: AOAM53274EKOn99hL/gn9g9zaO5N0K2jLlRpjq0NdwqgQszlsmDSaI1H
-        9urkwAK++pwO7xJMGfpThBM=
-X-Google-Smtp-Source: ABdhPJzYpGk8aMYTdwETyUthyvjaqalAG3POwWNtEPPFWfh3BtaoZ68RIC1fNdTnARTZwtFEAqKQvQ==
-X-Received: by 2002:a2e:9009:: with SMTP id h9mr206916ljg.213.1624311195066;
-        Mon, 21 Jun 2021 14:33:15 -0700 (PDT)
-Received: from localhost.localdomain (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
-        by smtp.gmail.com with ESMTPSA id u10sm1074722lfg.240.2021.06.21.14.33.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d3c9VDld9cVll7jiOE4VaogdRPw6AneLM9bO2IMc2sk=;
+        b=qZC6P7h47vCtJilffL8dGMpdx3xSg/TLfq0l2sW7DEzPosDfNZgpD01P10ri1cAzOc
+         bYeiBYbyF5Q0uYBhV+8YxJMrykvCLgx5c6oBH16i87cUxz9p48ryJNfZNuhDxvMAd03/
+         LIA+1JNXArnCrQHxcjytayn4HWwiYs9/xZaqdFjAlxA/KGAMShjkjz0Kd3NuF+IRxhgF
+         Zs7IPShEjpOLr/BQTHL7N9DpOvdhz1PJbl+xiKccAhTzxaKHAhzs+boFcpvHh9frBtnu
+         NxBM58bRtobVdhz1Ow6XQ2Mee9nIBUE+tgn+bdpqodlFGqAUzc8ZLXS4Ng7jNKdHt8bV
+         QVig==
+X-Gm-Message-State: AOAM532qB00+ipwjsSeEbOUxgEloKgxmzOogRuOZXrJBLDhWum9a+rRa
+        MoS0RHZz1IlZVvTQbJKEQoA=
+X-Google-Smtp-Source: ABdhPJyCWCfKmaUbhmrlNJ383qFx661DD98xr7rhC6QmgPxeKOjV5GXLx1pVQN95O1tQew7FlRzhJQ==
+X-Received: by 2002:a0c:e912:: with SMTP id a18mr18884264qvo.39.1624311261786;
+        Mon, 21 Jun 2021 14:34:21 -0700 (PDT)
+Received: from localhost ([207.98.216.60])
+        by smtp.gmail.com with ESMTPSA id h17sm237580qtk.23.2021.06.21.14.34.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 14:33:14 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
+        Mon, 21 Jun 2021 14:34:21 -0700 (PDT)
+Date:   Mon, 21 Jun 2021 14:34:19 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v4 2/2] hwmon: Support set_trips() of thermal device ops
-Date:   Tue, 22 Jun 2021 00:31:53 +0300
-Message-Id: <20210621213153.28247-3-digetx@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210621213153.28247-1-digetx@gmail.com>
-References: <20210621213153.28247-1-digetx@gmail.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Marc Zyngier <maz@kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexey Klimov <aklimov@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 3/3] Replace for_each_*_bit_from() with for_each_*_bit()
+ where appropriate
+Message-ID: <YNEF2w/bTLWIG8M2@yury-ThinkPad>
+References: <20210618195735.55933-1-yury.norov@gmail.com>
+ <20210618195735.55933-4-yury.norov@gmail.com>
+ <20210621201711.GA631547@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210621201711.GA631547@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Support set_trips() callback of thermal device ops. This allows HWMON
-device to operatively notify thermal core about temperature changes, which
-is very handy to have in a case where HWMON sensor is used by CPU thermal
-zone that performs passive cooling and emergency shutdown on overheat.
-Thermal core will be able to react faster to temperature changes.
+On Mon, Jun 21, 2021 at 01:17:11PM -0700, Guenter Roeck wrote:
+> On Fri, Jun 18, 2021 at 12:57:35PM -0700, Yury Norov wrote:
+> > A couple of kernel functions call for_each_*_bit_from() with start
+> > bit equal to 0. Replace them with for_each_*_bit().
+> > 
+> > No functional changes, but might improve on readability.
+> > 
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  arch/x86/kernel/apic/vector.c         | 4 ++--
+> >  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 4 ++--
+> >  drivers/hwmon/ltc2992.c               | 3 +--
+> 
+> This should be three different patches, one per subsystem.
 
-The set_trips() callback is entirely optional. If HWMON sensor doesn't
-support setting thermal trips, then the callback is a NO-OP. The dummy
-callback has no effect on the thermal core. The temperature trips are
-either complement the temperature polling mechanism of thermal core or
-replace the polling if sensor can set the trips and polling is disabled
-by a particular device in a device-tree.
-
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/hwmon/hwmon.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index fd47ab4e6892..9cb9d814cb88 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -153,8 +153,41 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
- 	return 0;
- }
- 
-+static int hwmon_thermal_set_trips(void *data, int low, int high)
-+{
-+	struct hwmon_thermal_data *tdata = data;
-+	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
-+	const struct hwmon_chip_info *chip = hwdev->chip;
-+	const struct hwmon_channel_info **info = chip->info;
-+	unsigned int i;
-+	int err;
-+
-+	if (!chip->ops->write)
-+		return 0;
-+
-+	for (i = 0; info[i] && info[i]->type != hwmon_temp; i++)
-+		continue;
-+
-+	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MIN) {
-+		err = chip->ops->write(tdata->dev, hwmon_temp,
-+				       hwmon_temp_min, tdata->index, low);
-+		if (err && err != -EOPNOTSUPP)
-+			return err;
-+	}
-+
-+	if (info[i] && info[i]->config[tdata->index] & HWMON_T_MAX) {
-+		err = chip->ops->write(tdata->dev, hwmon_temp,
-+				       hwmon_temp_max, tdata->index, high);
-+		if (err && err != -EOPNOTSUPP)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
- 	.get_temp = hwmon_thermal_get_temp,
-+	.set_trips = hwmon_thermal_set_trips,
- };
- 
- static void hwmon_thermal_remove_sensor(void *data)
--- 
-2.30.2
-
+It was discussed recently.
+https://lore.kernel.org/linux-arch/20210614180706.1e8564854bfed648dd4c039b@linux-foundation.org/
