@@ -2,109 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D8BC4743C
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 15:32:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 128A2C4743C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 15:36:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADCA16113E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 15:32:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAE9861059
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 15:36:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbhFUPeP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Jun 2021 11:34:15 -0400
-Received: from mga04.intel.com ([192.55.52.120]:20677 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230311AbhFUPeO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Jun 2021 11:34:14 -0400
-IronPort-SDR: qMTkAZ8sxh6QVcKB62b2e7QnrdZo9eV+edSWRUo+0qUEvIGC9bdGcQ2UxcKhPeOYYJYWQXaLdd
- 6m1FpmG61sqQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10022"; a="205043508"
-X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="205043508"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2021 08:32:00 -0700
-IronPort-SDR: GqPy5gAMEATWp+3kVxyawtHRICMqrpM6qxhAYmb3LHj9iEtZ8QRXG/M0/e4ZsnY3yDljdaVe1+
- w5Vifa+bM70w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="641355390"
-Received: from pl-dbox.sh.intel.com (HELO pl-dbox) ([10.239.159.39])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Jun 2021 08:31:58 -0700
-Date:   Mon, 21 Jun 2021 23:24:30 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>, kbuild-all@lists.01.org,
-        clang-built-linux@googlegroups.com, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [kbuild-all] [hwmon:hwmon-next 47/47] make[2]: *** No rule to
- make target
- '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/crypto/cmac.ko',
- needed by '__modinst'.
-Message-ID: <20210621152430.GI158568@pl-dbox>
-References: <202106212044.6cWpzKdG-lkp@intel.com>
+        id S230118AbhFUPil (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Jun 2021 11:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229747AbhFUPil (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 21 Jun 2021 11:38:41 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA84C061574;
+        Mon, 21 Jun 2021 08:36:25 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id j2so30946385lfg.9;
+        Mon, 21 Jun 2021 08:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=eZm8zZbaVXs8SDuUBCinObEMuZP/+XNNAcVwyswH7lY=;
+        b=aXD5UxUlEodrQYRBS9ddtWkRy09zqoRQKErfxaPb0WCVUQ2edBB7/BluWZB4xPghvm
+         Xl4mDXd4aDfEDoV2ctBdDuS2al7WQiou775gcnVqwyqQ9TJ4dUXgprxquqp9w+e7SGdU
+         5Ic9n87Ii23a635nXi5Q3N7AOJCsTLELbiRs4Bg4yZb8x03CUKWbERbGcO5omGIhnQsu
+         Fdpps9I/BYs4bS5Enb7FZmgpqiuXTij1+pcGaapKk6FDcDMZxWAyYzFUaAJscfE7wW3f
+         7BQTMjQx/DnsgBGBCo7b+E/Xvjik2Wil1anGHxwxNiOtqcRzqghqJCy6a8GSfU+m3kqw
+         nn1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eZm8zZbaVXs8SDuUBCinObEMuZP/+XNNAcVwyswH7lY=;
+        b=lmcj+8B7hK9H0E+mIx067WCJBwu9Y5Nxe4RAdtwV4tZmM2CIoKZQSK7jK0PTRC0sxa
+         LjhJGfrlB42BMRaAFn3iXTM23mRTRzfKrsO0JGP8m7YJPIPITv+twWhlwgDA42kNTDHL
+         Rkt1NlqMh53dlyJt+pBQnrGzoA3XQOECbWkWlQDdDN7KR4VVhuH8sOoOiKFHHYgt1EUb
+         O20oSXtacIK0lFQ4PQ0ovp1X8txr+qRg2v+lPAmpd5VDcKjJ0Ps1sE8e74jkUgT46fCl
+         AoQFIsMFDmNanYvt7k5f7khuGSuUIgVqqRtiC18eXSfwXLfcgTq5dvk/LO/SAyroTHI4
+         tGcQ==
+X-Gm-Message-State: AOAM5303Pu7cin1pGRiwPuDTX4px/yf2k8+sLfgubgR7TRHgJsLyyzRf
+        K6sko0NnFBsm0RpGTxXXY7PnUheccBk=
+X-Google-Smtp-Source: ABdhPJxXi5tvtZ3lWXr4E1t/FgsW6Qpm7a109AvW6YcGqGwDIaYsLVT1gwAxLpna/5/Uw4PDHaQtYA==
+X-Received: by 2002:a05:6512:13a8:: with SMTP id p40mr14791103lfa.14.1624289783693;
+        Mon, 21 Jun 2021 08:36:23 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-29-31.dynamic.spd-mgts.ru. [94.29.29.31])
+        by smtp.googlemail.com with ESMTPSA id x1sm2219464lji.19.2021.06.21.08.36.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jun 2021 08:36:23 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] hwmon: (lm90) Prevent integer overflow of
+ temperature calculations
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20210620211408.3893-1-digetx@gmail.com>
+ <20210620211408.3893-2-digetx@gmail.com>
+ <20210621121229.GB116119@roeck-us.net>
+ <ac1c4350-687e-7999-633c-6b7354ef9b8c@gmail.com>
+ <20210621142415.GA3604789@roeck-us.net>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <ffedf276-245b-1be6-4182-5d7a117eedd4@gmail.com>
+Date:   Mon, 21 Jun 2021 18:35:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202106212044.6cWpzKdG-lkp@intel.com>
+In-Reply-To: <20210621142415.GA3604789@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 08:37:51PM +0800, kernel test robot wrote:
-> Hi Dmitry,
+21.06.2021 17:24, Guenter Roeck пишет:
+> On Mon, Jun 21, 2021 at 03:14:40PM +0300, Dmitry Osipenko wrote:
+>> 21.06.2021 15:12, Guenter Roeck пишет:
+>>> On Mon, Jun 21, 2021 at 12:14:07AM +0300, Dmitry Osipenko wrote:
+>>>> The minimum temperature value that is passed to the driver is unlimited
+>>>> and value that is close to INT_MIN results in integer overflow of
+>>>> temperature calculations made by the driver. Limit the value in order
+>>>> to prevent the overflow. For now the overflow condition is harmless,
+>>>> but thermal framework won't work properly once we will support the
+>>>> set_trips() callback because it will pass INT_MIN value to the driver.
+>>>>
+>>> AFAICS that should only happen for lm99 because all other values
+>>> are bound in the temp_to_xxx functions. Where else do you see an
+>>> overflow (or underflow) ?
+>>
+>> You're correct that the overflow affects only lm99. But why we should
+>> ignore it?
 > 
-> First bad commit (maybe != root cause):
+> That isn't the point. The point is that you claimed there would be a
+> generic underflow, which is not the case. That means we'll only need
+> to apply the fix to the lm99 specific code (which unconditionally
+> subtracts an offset from the provided value, causing the underflow).
 > 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-> head:   4c7f85a321a1ac265159c22a6998ef4f2a60c21d
-> commit: 4c7f85a321a1ac265159c22a6998ef4f2a60c21d [47/47] hwmon: (lm90) Disable interrupt on suspend
-> config: x86_64-randconfig-a012-20210621 (attached as .config)
-> compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project e1adf90826a57b674eee79b071fb46c1f5683cd0)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install x86_64 cross compiling tool for clang build
->         # apt-get install binutils-x86-64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=4c7f85a321a1ac265159c22a6998ef4f2a60c21d
->         git remote add hwmon https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
->         git fetch --no-tags hwmon hwmon-next
->         git checkout 4c7f85a321a1ac265159c22a6998ef4f2a60c21d
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 
+> Anyway, thanks for alerting me to the issue. As it turns out, there are
+> other underflow issues in the driver. With improved module test scripts,
+> I get:
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> Testing lm90 ...
+> temp1_crit_hyst: Suspected underflow: [min=54000, read 85000, written -9223372036854775808]
+> Testing lm99 ...
+> temp1_crit_hyst: Suspected underflow: [min=96000, read 127000, written -9223372036854775808]
+> temp2_crit: Suspected underflow: [min=-112000, read 143000, written -9223372036854775808]
+> temp2_min: Suspected underflow: [min=-112000, read 143875, written -9223372036854775808]
+> temp2_max: Suspected underflow: [min=-112000, read 143875, written -9223372036854775808]
 > 
-> All errors (new ones prefixed by >>):
-Sorry for the broken report, kindly ignore this, we will fix
-this asap.
+> So we'll need fixes for lm99 temp2_{min/max/crit} and for temp1_crit_hyst
+> (the latter affects all chips supported by the driver).
 
-> 
->    arch/x86/Makefile:148: CONFIG_X86_X32 enabled but no binutils support
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/crypto/cmac.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/crypto/md5.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/crypto/sha512_generic.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/drivers/net/net_failover.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/drivers/net/virtio_net.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/fs/cifs/cifs.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/fs/nfs/nfsv4.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/lib/crypto/libarc4.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/net/core/failover.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/net/dns_resolver/dns_resolver.ko', needed by '__modinst'.
-> >> make[2]: *** No rule to make target '/tmp/kernel/x86_64-randconfig-a012-20210621/clang-13/4c7f85a321a1ac265159c22a6998ef4f2a60c21d/lib/modules/5.13.0-rc6+/kernel/net/sunrpc/auth_gss/auth_rpcgss.ko', needed by '__modinst'.
->    make[2]: Target '__modinst' not remade because of errors.
->    make[1]: *** [Makefile:1770: modules_install] Error 2
->    make: *** [Makefile:215: __sub-make] Error 2
->    make: Target 'modules_install' not remade because of errors.
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
-
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-
+I'll prepare v3 with the updated commit message and fixed
+temp1_crit_hyst, thank you.
