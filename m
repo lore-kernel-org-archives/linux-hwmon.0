@@ -2,260 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEAF3C48BE5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 13:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1274C48BC2
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 14:24:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97B9961261
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 13:56:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C980E6112D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jun 2021 14:24:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbhFUN6s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Jun 2021 09:58:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47491 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230014AbhFUN6s (ORCPT
+        id S230212AbhFUO0f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Jun 2021 10:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230174AbhFUO0e (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Jun 2021 09:58:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624283794;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sUBa+f7Xm4t96iN+NkBqJ45lC6Lh0RQpTYf0i6UvBWU=;
-        b=NKhWvN120MYpwFUp1C9h22fZUEINez3PA8dF/arSr0WjdXBWDNJL/dxFguzTmaq/KrmJit
-        H/k0MXgMXK53iYRaYaHHwp2I4KiloYNxceJ66E1DU1GlDz7csv+dV8FSbyu0Xt9if+y3Xs
-        fy++AvsqrrpHlrM1ChNaGUx6NUBRU0s=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-421-ayEK7g_FPRe5Xn5rv86koA-1; Mon, 21 Jun 2021 09:56:32 -0400
-X-MC-Unique: ayEK7g_FPRe5Xn5rv86koA-1
-Received: by mail-oo1-f72.google.com with SMTP id c3-20020a4ad8c30000b029024ada3391fdso583697oov.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Jun 2021 06:56:32 -0700 (PDT)
+        Mon, 21 Jun 2021 10:26:34 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184D9C061574;
+        Mon, 21 Jun 2021 07:24:18 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id o17-20020a9d76510000b02903eabfc221a9so17942595otl.0;
+        Mon, 21 Jun 2021 07:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=3Q+u88A7OlP4119QDatD7v4G6DTIYfrxqaTT3udWXs0=;
+        b=MHcCFhvCFi2AUQLLfNm4Gz8dP6cDRu9Oz7pok0hkt6k3YwXB97Fe8B9I8nhTmW8yaJ
+         Lzy+qQpMpnkNyZZm+Y1Xaw/CuRedX7LfNSkJLrxTjKahp4Ux9eVpX/eKnfl5e4ar40Yh
+         JWSBCVcZRY/o25f19utVuzIjWoM1ZhbWNjy1PyLXvuZ9WTKxijFb2iTxL8q/AzjRjmpy
+         nlzD4r6fW9Mied6xsF+AsJelfChfhNCIvalCJ8dLdW2IN0ZRFhUKMAYotnBt2ya0fZMi
+         6Hnv/c7iuC0LHe65HdA3njJYsj60f/V9BPlmQRunSyEd6LgHD+zA7mHNHQrkDWaM8n60
+         jegw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=sUBa+f7Xm4t96iN+NkBqJ45lC6Lh0RQpTYf0i6UvBWU=;
-        b=lI3Rt3iLpJKFqFezHs4eyfdPGDYS8VW7XxVoFHUjrMv847+/DO4aSLB460CTDMs/r+
-         VmZiIWNWx9+CTCQT15cDrUzroLhfPHCDAor/7yp4WEMOm6n9Pjljq/Vln5qPksWxJGDd
-         pBWs+u07P4RDPlp3UEQc33c4PXH/o3v4c7aVETSg5xN1z0qDU4BpJe1CBt+egThpg9EY
-         2bl8klka35h9XfPo5PPe57Xp7gyLc9xGkkaUkgjrcmzHrLiJx8AfBqKY3DeVnW8USZsP
-         UfHd8CkVUeEMJR9YQPA5ano00filaTqnF7XaGXGKHbjlP0Re9MYJYgmvuju9J1EHNGjU
-         5CIA==
-X-Gm-Message-State: AOAM533O+ddW3yW1jvkQ1IXcoccibpZLYese6ixTtK+eB4D0kLnxklox
-        bE8/mrXR1NscZdBxXuk7kP+ZMwbbNoWqrnDFj+FaiKRdDGvlwKW2rpIJFviIiVfzpYlXZt6UgOp
-        Y753Z6LQ5jl/pIF81DB6I5ok=
-X-Received: by 2002:a4a:d312:: with SMTP id g18mr15767763oos.7.1624283791939;
-        Mon, 21 Jun 2021 06:56:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxUdV8x76NSb4XfefxGAso3zUzJOfUNExo/qTPFL//uOjZSUAN1XtrfwvndilmzVFrGCpdbGA==
-X-Received: by 2002:a4a:d312:: with SMTP id g18mr15767744oos.7.1624283791724;
-        Mon, 21 Jun 2021 06:56:31 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 68sm2918121otx.4.2021.06.21.06.56.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 06:56:31 -0700 (PDT)
-Subject: Re: [PATCH 2/4] fpga: dfl: Move DFH header register macros to
- linux/dfl.h
-To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
-        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@geanix.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
-        Debarati Biswas <debaratix.biswas@intel.com>,
-        Russ Weight <russell.h.weight@intel.com>
-References: <20210621070621.431482-1-mhu@silicom.dk>
- <20210621070621.431482-3-mhu@silicom.dk>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <81975a85-e9d6-bd4b-7666-56d1d1d581bc@redhat.com>
-Date:   Mon, 21 Jun 2021 06:56:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=3Q+u88A7OlP4119QDatD7v4G6DTIYfrxqaTT3udWXs0=;
+        b=Eyp2ib9J7CSaZ0OyxADVdkm0+BAlvOVNFOmlak9YzFbmRHh519AX57xR9ND7TLKFYD
+         fphPeG2Nld1TSKkC5qqP2vJ73wI4MfwnwdCGk6DNDBQ6hTO1dhj0VNjm0mtrQoicVKp8
+         HEFGVVllzbpehoKEfjNrrrLH+EKgQt61POcDXfCACn2jLIhzI7OuCVGrueJm25AY93u2
+         b5nHgZvpKdfZtcVByVseLEoYju0esS16m+L1il+gGP8zbAOKk59ftInHPk4lj2/fCyUo
+         5lUsqMZIF25UgZNVg/6GMWIbTCSmlcL9QSSRAlOliFR4QTLal+yREJhHF/V0MjfZzc1f
+         /lIA==
+X-Gm-Message-State: AOAM532++l20Y3v/3i1lrXdGXbyf4BMdwhqZ7wv8IOCiwml2fP8HD81M
+        QNGKdnMJk/4fLfJsMlo9xuw=
+X-Google-Smtp-Source: ABdhPJzziQmTYrhT5+C5sJae+4MxEqAvQf20R5dIwCsKV39qiv5T4OqlNdLUM94Avsj8z/HtBxwUEA==
+X-Received: by 2002:a9d:7516:: with SMTP id r22mr18218752otk.332.1624285457445;
+        Mon, 21 Jun 2021 07:24:17 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o5sm1877249oti.53.2021.06.21.07.24.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 07:24:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 21 Jun 2021 07:24:15 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] hwmon: (lm90) Prevent integer overflow of
+ temperature calculations
+Message-ID: <20210621142415.GA3604789@roeck-us.net>
+References: <20210620211408.3893-1-digetx@gmail.com>
+ <20210620211408.3893-2-digetx@gmail.com>
+ <20210621121229.GB116119@roeck-us.net>
+ <ac1c4350-687e-7999-633c-6b7354ef9b8c@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210621070621.431482-3-mhu@silicom.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <ac1c4350-687e-7999-633c-6b7354ef9b8c@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Mon, Jun 21, 2021 at 03:14:40PM +0300, Dmitry Osipenko wrote:
+> 21.06.2021 15:12, Guenter Roeck пишет:
+> > On Mon, Jun 21, 2021 at 12:14:07AM +0300, Dmitry Osipenko wrote:
+> >> The minimum temperature value that is passed to the driver is unlimited
+> >> and value that is close to INT_MIN results in integer overflow of
+> >> temperature calculations made by the driver. Limit the value in order
+> >> to prevent the overflow. For now the overflow condition is harmless,
+> >> but thermal framework won't work properly once we will support the
+> >> set_trips() callback because it will pass INT_MIN value to the driver.
+> >>
+> > AFAICS that should only happen for lm99 because all other values
+> > are bound in the temp_to_xxx functions. Where else do you see an
+> > overflow (or underflow) ?
+> 
+> You're correct that the overflow affects only lm99. But why we should
+> ignore it?
 
-On 6/21/21 12:06 AM, Martin Hundebøll wrote:
-> From: Debarati Biswas <debaratix.biswas@intel.com>
->
-> Device Feature List (DFL) drivers may be defined in subdirectories other
-> than drivers/fpga, and each DFL driver should have access to the Device
-> Feature Header (DFH) register, which contains revision and type
-> information. This change moves the macros specific to the DFH register
-> from drivers/fpga/dfl.h to include/linux/dfl.h.
->
-> Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> ---
->   drivers/fpga/dfl.h  | 48 +----------------------------------------
->   include/linux/dfl.h | 52 +++++++++++++++++++++++++++++++++++++++++++++
->   2 files changed, 53 insertions(+), 47 deletions(-)
->
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 2b82c96ba56c..6ed0353e9a99 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -17,6 +17,7 @@
->   #include <linux/bitfield.h>
+That isn't the point. The point is that you claimed there would be a
+generic underflow, which is not the case. That means we'll only need
+to apply the fix to the lm99 specific code (which unconditionally
+subtracts an offset from the provided value, causing the underflow).
 
-bitfield.h was added to linux/dfl.h
+Anyway, thanks for alerting me to the issue. As it turns out, there are
+other underflow issues in the driver. With improved module test scripts,
+I get:
 
-Likely both aren't needed, try removing this one.
+Testing lm90 ...
+temp1_crit_hyst: Suspected underflow: [min=54000, read 85000, written -9223372036854775808]
+Testing lm99 ...
+temp1_crit_hyst: Suspected underflow: [min=96000, read 127000, written -9223372036854775808]
+temp2_crit: Suspected underflow: [min=-112000, read 143000, written -9223372036854775808]
+temp2_min: Suspected underflow: [min=-112000, read 143875, written -9223372036854775808]
+temp2_max: Suspected underflow: [min=-112000, read 143875, written -9223372036854775808]
 
-Tom
+So we'll need fixes for lm99 temp2_{min/max/crit} and for temp1_crit_hyst
+(the latter affects all chips supported by the driver).
 
->   #include <linux/cdev.h>
->   #include <linux/delay.h>
-> +#include <linux/dfl.h>
->   #include <linux/eventfd.h>
->   #include <linux/fs.h>
->   #include <linux/interrupt.h>
-> @@ -53,32 +54,6 @@
->   #define PORT_FEATURE_ID_UINT		0x12
->   #define PORT_FEATURE_ID_STP		0x13
->   
-> -/*
-> - * Device Feature Header Register Set
-> - *
-> - * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
-> - * For AFUs, they have DFH + GUID as common header registers.
-> - * For private features, they only have DFH register as common header.
-> - */
-> -#define DFH			0x0
-> -#define GUID_L			0x8
-> -#define GUID_H			0x10
-> -#define NEXT_AFU		0x18
-> -
-> -#define DFH_SIZE		0x8
-> -
-> -/* Device Feature Header Register Bitfield */
-> -#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
-> -#define DFH_ID_FIU_FME		0
-> -#define DFH_ID_FIU_PORT		1
-> -#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
-> -#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
-> -#define DFH_EOL			BIT_ULL(40)		/* End of list */
-> -#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
-> -#define DFH_TYPE_AFU		1
-> -#define DFH_TYPE_PRIVATE	3
-> -#define DFH_TYPE_FIU		4
-> -
->   /* Next AFU Register Bitfield */
->   #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
->   
-> @@ -403,27 +378,6 @@ struct device *dfl_fpga_pdata_to_parent(struct dfl_feature_platform_data *pdata)
->   	return pdata->dev->dev.parent->parent;
->   }
->   
-> -static inline bool dfl_feature_is_fme(void __iomem *base)
-> -{
-> -	u64 v = readq(base + DFH);
-> -
-> -	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> -		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
-> -}
-> -
-> -static inline bool dfl_feature_is_port(void __iomem *base)
-> -{
-> -	u64 v = readq(base + DFH);
-> -
-> -	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> -		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
-> -}
-> -
-> -static inline u8 dfl_feature_revision(void __iomem *base)
-> -{
-> -	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
-> -}
-> -
->   /**
->    * struct dfl_fpga_enum_info - DFL FPGA enumeration information
->    *
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 6cc10982351a..1cd86b2e7cb1 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -8,7 +8,9 @@
->   #ifndef __LINUX_DFL_H
->   #define __LINUX_DFL_H
->   
-> +#include <linux/bitfield.h>
->   #include <linux/device.h>
-> +#include <linux/io.h>
->   #include <linux/mod_devicetable.h>
->   
->   /**
-> @@ -83,4 +85,54 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
->   	module_driver(__dfl_driver, dfl_driver_register, \
->   		      dfl_driver_unregister)
->   
-> +/*
-> + * Device Feature Header Register Set
-> + *
-> + * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
-> + * For AFUs, they have DFH + GUID as common header registers.
-> + * For private features, they only have DFH register as common header.
-> + */
-> +#define DFH                     0x0
-> +#define GUID_L                  0x8
-> +#define GUID_H                  0x10
-> +#define NEXT_AFU                0x18
-> +
-> +#define DFH_SIZE                0x8
-> +
-> +/* Device Feature Header Register Bitfield */
-> +#define DFH_ID                  GENMASK_ULL(11, 0)      /* Feature ID */
-> +#define DFH_ID_FIU_FME          0
-> +#define DFH_ID_FIU_PORT         1
-> +#define DFH_REVISION            GENMASK_ULL(15, 12)
-> +#define DFH_NEXT_HDR_OFST       GENMASK_ULL(39, 16)     /* Offset to next DFH */
-> +#define DFH_EOL                 BIT_ULL(40)             /* End of list */
-> +#define DFH_TYPE                GENMASK_ULL(63, 60)     /* Feature type */
-> +#define DFH_TYPE_AFU            1
-> +#define DFH_TYPE_PRIVATE        3
-> +#define DFH_TYPE_FIU            4
-> +
-> +/* Function to read from DFH and check if the Feature type is FME */
-> +static inline bool dfl_feature_is_fme(void __iomem *base)
-> +{
-> +	u64 v = readq(base + DFH);
-> +
-> +	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> +		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
-> +}
-> +
-> +/* Function to read from DFH and check if the Feature type is port*/
-> +static inline bool dfl_feature_is_port(void __iomem *base)
-> +{
-> +	u64 v = readq(base + DFH);
-> +
-> +	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> +		 (FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
-> +}
-> +
-> +/* Function to read feature revision from DFH */
-> +static inline u8 dfl_feature_revision(void __iomem *base)
-> +{
-> +	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
-> +}
-> +
->   #endif /* __LINUX_DFL_H */
-
+Thanks,
+Guenter
