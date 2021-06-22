@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E872C48BE5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 09:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F6F8C2B9F4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 09:17:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 738F561353
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 09:04:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E706D61042
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 09:17:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbhFVJGc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Jun 2021 05:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S229668AbhFVJTx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Jun 2021 05:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbhFVJGb (ORCPT
+        with ESMTP id S229486AbhFVJTx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Jun 2021 05:06:31 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A71C061574;
-        Tue, 22 Jun 2021 02:04:16 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id b7so2660175ioq.12;
-        Tue, 22 Jun 2021 02:04:16 -0700 (PDT)
+        Tue, 22 Jun 2021 05:19:53 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F78C061574;
+        Tue, 22 Jun 2021 02:17:36 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id k16so19062693ios.10;
+        Tue, 22 Jun 2021 02:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aVuGiaAOgcXSP7UILLbgCHjnLH3MJHxmRnG2zF1rBr8=;
-        b=aQiVfAkHow7Wm/JvcnrBRdT0fteZ7P/Rnhp/BCPuWUmaF/fitwO91/3bE7OAdB1MW+
-         f/i5hDYOQ4VVEecCtZmaFrQs6+QFtq0iKNL5BAZV/Gg7kKaEEFFBslu3bO8fyNUAT4EK
-         euktlwqrjoI3pfcoUhuRsjz43VtST3aAcorEjueTFbUTrSpInG3nsxAsMlNegbGQSF06
-         F977LXrEdzSMKma9cM2oFuSBB8kk7hIVhkRKSGCZuQfsr5iI7nO+/ZgE2ocBiBXRpU11
-         ZPzQUXK7yvaDbx8Ai3A+s1TPK0XmODo5te/zmUoLGvYek9kqCTmEI5zkdMZK60J3/T4J
-         cPcw==
+        bh=JfGGm3A0osvaWjVUXnJuD0zVkoSqPf/CdaQhYVovLJw=;
+        b=s8wiHnrhnNsy03Nqc2tTrf60sXuAsJZd3ZIaaLyl+jgT+EYZpodabGnTr51ZzLJ+5Q
+         1APqi13xjPWrgQVmmVDGBKwJGrHJ4XQMIsbSQAmK9X5aZgUoFrfSg/tZh3aVD2lTUXh1
+         Pf6nV4CuxjAPHGZRrVi4BmxRCGOJrHAbpPGH0tWFScmURuJ9Fhy+rGw1wANKGv39pGcE
+         5IbSz+uVJgjka8/7iISwUvApVKFTyTb2XUncshzihBAMG1KtF9vUAkgcTgeQlvpKje9Q
+         2hFfpAxaXTbpOY6V/+SwzReMTRhsI/0uIm5L6BtiEu8hbKUe7/5zX9lC9K8C81serfu7
+         KQvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aVuGiaAOgcXSP7UILLbgCHjnLH3MJHxmRnG2zF1rBr8=;
-        b=to06nYvA2MLEh/wA1dCR3gwH6GIovPoz4waKW21cPGvtkZkHtl5Q8xN95LvreMTFMt
-         ZJKHt9I1z9IkzIO5Px83rEdhiPtzmUnCqoMLSgQE+KE2kKp88V3p4DHarj2657OMu9aI
-         ZHywg0tQ3A+yaSrzCjyie7pUjYl54xeTHahxpS2W73wZXIVvieoPzwAzLFERzykuGrql
-         2UMHCLCNhnuf2skhOoIDEA+ftBz53X+mbwq/rHCQnBXkvs/i9M9N3srbCRqWeZvhHzws
-         e7DpEypJ69ocLbGDLIYbIUiDcCSNtcXW8QBBupGUFeb00tuVxKjkcIpy8l1GHUhc0wql
-         Xmww==
-X-Gm-Message-State: AOAM533uU83tMl316n9zRlbSt3NvDuYeyai9VRBoAJ5Ol5o4tjKzAaEW
-        h05H7LOoqZgHhwSGzQl/VKbbJwYX+YcLfjBF58Y=
-X-Google-Smtp-Source: ABdhPJxxnVrf210/KgvkwdXqYGpAHzy4imrWt1STJ6QhzWpgVVKpDzjzr198XgqUkh1lf+P5pCiPifIOrWW4A0+8rWo=
-X-Received: by 2002:a5e:dd08:: with SMTP id t8mr2035966iop.173.1624352655651;
- Tue, 22 Jun 2021 02:04:15 -0700 (PDT)
+        bh=JfGGm3A0osvaWjVUXnJuD0zVkoSqPf/CdaQhYVovLJw=;
+        b=AYY5F7qe8dDSDOxyz6WnJ6pfbWviLyaP69ewEC9wRFMwGxEEN6cS/R4nfVaoDSXO2a
+         xAg8T280XDQs8jMYtAHNk2HTLVpggGzSnbpmfoHJEAGl35U34b3OCavN1PFrTh8m6dxS
+         pfj6CAP5FZwT+IVi3ShWlR0F9rGWuQHJN3u93ayHlUaeAyVUZMjQ7IwP/r0KC1b9CfxO
+         6TqVHlTvs0EZdYUuBDG+w8t+NGVLvrOyGGFGvMPaWDhGYUjsyDmkLXJ5aZSUVDxqPINT
+         wps73JG1vB4ZK+Q+Ycaw5lBlTeSGg1Iq5kFRWkCn162Y+jqhtq75s/aJGGQ7jiQchewv
+         ub3g==
+X-Gm-Message-State: AOAM53192jWGdrEDpQQf78gNCBKdWeFXcc73bMW0AWEup78iNEkV0ixy
+        YZtFFBQpP4kqp+c9ttm5fBAbjMorcb9Nwf2k96E=
+X-Google-Smtp-Source: ABdhPJwRMEwBjH5ZAnx1/AgqocIGBntSPbCgNJufPKMqFt7zTV26W1WP3IL4RJhu+nx2CZyEV+vO3/Q3YxewaTG1YhM=
+X-Received: by 2002:a6b:c707:: with SMTP id x7mr620726iof.160.1624353456226;
+ Tue, 22 Jun 2021 02:17:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210622085826.39200-1-ainux.wang@gmail.com>
-In-Reply-To: <20210622085826.39200-1-ainux.wang@gmail.com>
+References: <20210622090025.39313-1-ainux.wang@gmail.com>
+In-Reply-To: <20210622090025.39313-1-ainux.wang@gmail.com>
 From:   Ainux Wang <ainux.wang@gmail.com>
-Date:   Tue, 22 Jun 2021 17:03:38 +0800
-Message-ID: <CAPWE4_yd0rEo5LSPtJy6PjgAtoNe_6pQiAuoH=+HaMBbZ7sqhw@mail.gmail.com>
-Subject: Re: [PATCH v3] hwmon: (pmbus) Add support for MPS MP2949A
+Date:   Tue, 22 Jun 2021 17:16:58 +0800
+Message-ID: <CAPWE4_wxqOS0VsW9gkh+w9vTyYjzH-q5_Vw=S6hQHQYwVs2YbA@mail.gmail.com>
+Subject: Re: [PATCH v4] hwmon: (pmbus) Add support for MPS MP2949A
 To:     jdelvare@suse.com, Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>,
         Ainux Wang <ainux.wang@gmail.com>
@@ -73,11 +73,12 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Hi, Guenter and others,
-    I'm sorry, it's the wrong subject.
+    This is right subject, [PATCH v4] hwmon: (pmbus) Add support for
+MPS MP2949A.
 Best regards,
 Ainux Wang.
 
-On Tue, 22 Jun 2021 at 16:58, <ainux.wang@gmail.com> wrote:
+On Tue, 22 Jun 2021 at 17:00, <ainux.wang@gmail.com> wrote:
 >
 > From: "Ainux.Wang" <ainux.wang@gmail.com>
 >
