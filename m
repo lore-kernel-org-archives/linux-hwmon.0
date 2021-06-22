@@ -8,62 +8,62 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE3D8C2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 08:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5729C2B9F4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 09:00:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2E6461353
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 08:58:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7792961353
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jun 2021 09:00:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhFVJA6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Jun 2021 05:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
+        id S229754AbhFVJCz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Jun 2021 05:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbhFVJA6 (ORCPT
+        with ESMTP id S229656AbhFVJCy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Jun 2021 05:00:58 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129D0C061574;
-        Tue, 22 Jun 2021 01:58:43 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m15-20020a17090a5a4fb029016f385ffad0so1878301pji.0;
-        Tue, 22 Jun 2021 01:58:43 -0700 (PDT)
+        Tue, 22 Jun 2021 05:02:54 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43353C061574;
+        Tue, 22 Jun 2021 02:00:39 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id pf4-20020a17090b1d84b029016f6699c3f2so1356291pjb.0;
+        Tue, 22 Jun 2021 02:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
         bh=6Mqqiap7OqY7EcC+PfOBHfbTf5fZKhKlcAO/HMfCXIo=;
-        b=gFKKSo89gJoHwhm3m0195mtF5rhhyPqpxs+tO3uyjGy65MKhZogTbMPo2zwKZC3mIC
-         IdxJvP5zmX/5jthnr68CrJSSRaoomveykP0p0a11D9eDBK56ZjhXoYm3xPAjU54ZRued
-         FBxrKoVsnuDwoZyHdFtf4LFrCZv9qsuPdcXdCxlAhcJNZstiFpH24UDHxfsAtE7MgaMe
-         TCTLQ/HKxrH2trK320uwibJRv1TrkEZSFNsfDx4J/xhGpH+wP/CwQ+Ng/rC2G9tYHcs1
-         mdk9r5RfwVjPyHwVKu9vx6EekiAx4qwzDHA5ta8yP9J1a8NvzJtNjJ89xaOEhhPDMJNP
-         2/Ng==
+        b=Si4J0R3i4+Yq0m9PtJjZS8heoS2tiWJSKJiCwOijpYJsEzlOhWQ5/+9VYNChvQM6pF
+         PpOvaHesIoXXpTRHdAC6CqIygXPhyfIDfL+bVllVKprNOarcTl0KoX3nbBRUT8zGMBGO
+         j+rU9d7oKu/+rbvC1xtYXQ/z0DRnV4vlqTeteIjWbPSAey5e+6XxPweVDoeiYkAMqyDX
+         xnDhXR90i2qmvWuEYUC4jj+knYdjuF0XELkT5/6iyZT9s1gVSkVMYoxzIIm2i1o5Q2BE
+         FT0+CwrxtqGRhro02YsygHGJaIMPV/mUcr8RDLi5Q2o/qM507GR5fLPJ0J0RTgEcihAV
+         Hjnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
         bh=6Mqqiap7OqY7EcC+PfOBHfbTf5fZKhKlcAO/HMfCXIo=;
-        b=byz7q11uxR8rMSoxB1eLvlVawxs91w1M9RHyuEKpV4gQnFjIqy0Gko6uqfF9W7rLrn
-         A400V4K09OjN3mLDPWKIT0tdNvw99Muvgq4RYucv8CJA5PYETB1c9usZ781ZmFvMxb2i
-         IUVPBYYZ7f3BeNfCJxxERop+nJjXwWHnJs9AZwYfpChvPSzz8DienRzAij3TaZMPY0wr
-         1ZX9kKJyLaudIios8tKWmKFE23TZAAAGrqAPvwtDg0F+z+/I6C3VHaBM6r/h42Bs9Bdc
-         x3TvdxIpw1PodjkITSS5oLf/bLqN2JWS4kBGwN9c/gsCiBoXpbJivVEPJw0aQtGdR7Qf
-         +aXA==
-X-Gm-Message-State: AOAM531n1di5nK/1GBSo2rbVyXhW0ekVlt0Hubyn+tPjP5IOMz43kXvv
-        eiLDejRCvC3jL2t4VWBWm3ZCZ5SXfqWKNA==
-X-Google-Smtp-Source: ABdhPJwuhtAk+0TgIw1rjVwPu2fDhwIjoj4wxXK3P7VeXGsB4gSPTyybrqFcZgeSn3Zjwm+azpRC1A==
-X-Received: by 2002:a17:90a:ab96:: with SMTP id n22mr2768664pjq.92.1624352322532;
-        Tue, 22 Jun 2021 01:58:42 -0700 (PDT)
+        b=TE2LoMhgZ/v4XyXDrNOMBCJTtKeKizueYH8IRamE8xv7OFds+eCe35vGtdBVmV6EJ0
+         VX+a4nlHus+zpGC6N5xWs0Gfb3qRRqVxxUtetGmoSH+YnTLPYMwW1IEMFRgci40no+iE
+         APEsuxJ2VPc79+9oKRkOKlk2wfaesPmqf5ZGTJnCe2N0fprYC1URtEXZ4eCOzN933kt0
+         qhWCXj9kes5Nck8oZfaWo/9Aev/zxZaLqTDIzSmWy8ek5VyD4mhFqNvIhpIHrLlgcGBa
+         2AjrtW+qilCr7RaKzget+6h2JmR2XrOvtfRoeTqXydf+oargW86AddtkZUy7voFWy4AK
+         1SiA==
+X-Gm-Message-State: AOAM533EoTxj0NXaVbmQ21xmRa9daN9mwGY4aU6suGgiUlV8kPeNqdQv
+        CgKwP2mSstz5YxA9Gax9PYM=
+X-Google-Smtp-Source: ABdhPJytS7B6rJbfARfqR0GgqMBbK1qBoECUdPdJuNcCn3jv0au3608KEbNtMukUt1w3CBwtUYhGlg==
+X-Received: by 2002:a17:90a:1109:: with SMTP id d9mr2748692pja.183.1624352438781;
+        Tue, 22 Jun 2021 02:00:38 -0700 (PDT)
 Received: from localhost.localdomain ([52.184.54.196])
-        by smtp.gmail.com with ESMTPSA id t193sm10298421pfc.166.2021.06.22.01.58.39
+        by smtp.gmail.com with ESMTPSA id o1sm1686151pjf.56.2021.06.22.02.00.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jun 2021 01:58:42 -0700 (PDT)
+        Tue, 22 Jun 2021 02:00:38 -0700 (PDT)
 From:   ainux.wang@gmail.com
 To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
         ainux.wang@gmail.com
 Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         sterlingteng@gmail.com, chenhuacai@kernel.org,
         chenhuacai@loongson.cn
-Subject: [PATCH v3] hwmon: (pmbus) Add support for MPS MP2949A
-Date:   Tue, 22 Jun 2021 16:58:26 +0800
-Message-Id: <20210622085826.39200-1-ainux.wang@gmail.com>
+Subject: [PATCH v4] hwmon: (pmbus) Add support for MPS MP2949A
+Date:   Tue, 22 Jun 2021 17:00:25 +0800
+Message-Id: <20210622090025.39313-1-ainux.wang@gmail.com>
 X-Mailer: git-send-email 2.18.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
