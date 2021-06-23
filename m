@@ -2,254 +2,169 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D441C4743C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Jun 2021 06:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D767C49EA4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Jun 2021 11:44:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40F026120D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Jun 2021 06:42:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC5C260249
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Jun 2021 11:44:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbhFWGox (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Jun 2021 02:44:53 -0400
-Received: from mga06.intel.com ([134.134.136.31]:52864 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229918AbhFWGox (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Jun 2021 02:44:53 -0400
-IronPort-SDR: 6SRehAL2ecJy8jcxc2K3jOaaRlMnZ9U9xjKqwF7L49Pxum1OhuNjr+yPhxj+WBw0gBlCfKspCA
- 8WF2iK7lQSXA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10023"; a="268344038"
-X-IronPort-AV: E=Sophos;i="5.83,293,1616482800"; 
-   d="scan'208";a="268344038"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2021 23:42:35 -0700
-IronPort-SDR: Sgv9Dj7G8eC05E6w8K+SJ33FjUsJhGlrK/pDEfD+Zj8LMMotml/haBNPZ7LiDkoR0Tc075XtT9
- dKS0VoEbO0ng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,293,1616482800"; 
-   d="scan'208";a="487193444"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2021 23:42:31 -0700
-Date:   Wed, 23 Jun 2021 14:37:18 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
-        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        id S230239AbhFWLqX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Jun 2021 07:46:23 -0400
+Received: from mail-eopbgr150097.outbound.protection.outlook.com ([40.107.15.97]:49543
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230071AbhFWLqW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 23 Jun 2021 07:46:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MPlI7EE3e5rF1LAQmUEeB6gDWAcvgfSiJeRnAl78LTvZULV1KzCwdbKDKeXJ07oJX6W8TIUF6Q0dxVzJ/NKKb+YoZpQ3n7+4AI0cZ8jmQS/a8eJRZ8+WYbQ2XDB0YuAJTc1PQCZASk+pXh9+JIKMJlo4623ZN1yZBPn2E1XvejhxMT9xd1Py+44O+ps22wiKCxzcmcqefyyUa/Mcu7SCggE8D9J8I1xLw3nlExsfZUM3yg8R1LTJjiOirPE4EAqvVCZT83nDokeyLT6dAwoosf8ArUK+PMqMjZnZtdloD4foyZGc2jzXpuL/CdxlJaMX9xy4MFGz8R42wvRlRrqKpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FavaVzVQZv9eKmUuf0yOn/+Dt/jcvndz4ltLhQcbp9U=;
+ b=MBOA8zIM0jQ4WxhK6DTOtt9GnULgvayxf46q0jOpr5Ov+3XcvOmfSCPPtt2c9jejmq4DzGsvpabzhyy3KRrTSbx+1jLvrGccHWoXXVlquMf9eUb7BQ8CXvJZd7QT011RRuLgTGQqUbu/otHVDy2A3eyqNhNTMQZLBmvKCzN/mGY9+R8rkg92h9l7phiE0pSu1QQE+in2WNJy9bO77sCvnn+5VJjaqcJTa554rpBYoTM3G5d+tDACEj9ig01svwgN1OSPmZVE3AT3uxxlJXZQJFAEmETvlO+K06nLReo9i8v+HyERDfghRHpypShbpQTBGNwaZx3YIUVMGEZNtx+b+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silicom.dk; dmarc=pass action=none header.from=silicom.dk;
+ dkim=pass header.d=silicom.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FavaVzVQZv9eKmUuf0yOn/+Dt/jcvndz4ltLhQcbp9U=;
+ b=rEQ+LyQI6QnoOZPk0iy85nRCT8Hkyj8IfgcRGFewh8XX1NNmtCTjPBzn+LtabcE9U/UX/o7eZKtUQj5E5oFFUBdolCi0TKs/BvkV6GObxjd3gDLjJgQoI74wGr+aUsR7zMZz85yU52YqToXaFdvLdPBatikIA8tu0P7S7mwDoHI=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=silicom.dk;
+Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
+ (2603:10a6:208:22::15) by AM8PR04MB7347.eurprd04.prod.outlook.com
+ (2603:10a6:20b:1d0::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19; Wed, 23 Jun
+ 2021 11:44:03 +0000
+Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
+ ([fe80::50fd:f133:3592:292e]) by AM0PR0402MB3426.eurprd04.prod.outlook.com
+ ([fe80::50fd:f133:3592:292e%7]) with mapi id 15.20.4242.023; Wed, 23 Jun 2021
+ 11:44:03 +0000
+Subject: Re: [PATCH 2/4] fpga: dfl: Move DFH header register macros to
+ linux/dfl.h
+To:     Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@geanix.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@geanix.com>,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
         Debarati Biswas <debaratix.biswas@intel.com>,
         Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH 2/4] fpga: dfl: Move DFH header register macros to
-  linux/dfl.h
-Message-ID: <20210623063718.GA35761@yilunxu-OptiPlex-7050>
 References: <20210621070621.431482-1-mhu@silicom.dk>
  <20210621070621.431482-3-mhu@silicom.dk>
  <81975a85-e9d6-bd4b-7666-56d1d1d581bc@redhat.com>
- <20210622045613.GA27046@yilunxu-OptiPlex-7050>
- <d74f6e17-0fe2-bd18-de53-18181424db82@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+From:   =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>
+Message-ID: <7c6021cc-69c5-7c3f-9e37-30c933535835@silicom.dk>
+Date:   Wed, 23 Jun 2021 13:44:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <81975a85-e9d6-bd4b-7666-56d1d1d581bc@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d74f6e17-0fe2-bd18-de53-18181424db82@redhat.com>
+X-Originating-IP: [185.17.218.86]
+X-ClientProxiedBy: AM5PR1001CA0017.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:206:2::30) To AM0PR0402MB3426.eurprd04.prod.outlook.com
+ (2603:10a6:208:22::15)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.64.70] (185.17.218.86) by AM5PR1001CA0017.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:206:2::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18 via Frontend Transport; Wed, 23 Jun 2021 11:44:02 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2f2e0478-d7e1-477b-1b86-08d9363c32d6
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7347:
+X-Microsoft-Antispam-PRVS: <AM8PR04MB7347AEACB62E419715C73CC1D5089@AM8PR04MB7347.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GVD/tn9sNQqzYzdHuUAOih96QCpdLdjaGVix86kpVAHBAcEb06rsulFJkcUgzrriTcFpPuk3C7yXXWAYNx+4vGNnmk6jUEcRy1BT8WSKF/NSGIahAdakPyBcbCwDwFFdIb0Ytaw2uMLuojVxmgIT6EZ733zbDLJKngGkfShGNIkoiODZwLSB/cQAdTfG1tswX4TPuK14M5B9hiuSUIabn+zpbQUSyJ1MM7lWNP0EWsH7ZSOsbbWwGtJyYrp2muzvj+TWsZndnWT8edCfd9rlZ0SHVSRIwfEq1lYB3wj3ZnG4t/cjwW5ka8gPnZMy6XlQLCYqb/P+wT5wV0oVQq8nYZRqkmHgIPCghL5rVIzR4YwlEnnJbJ7xTPhoKcCBGzjNDuN9W6cv0ipIUp7yifVe5EIfwtsj+XJCVoPmUeSCdllnf4Slu4kkb6B4+DQCq+tYXpNgRIzy0/XQtaMNiVMKwAdQJD5jf77c0SxA0fb2nPrMxFspVY4nFvkoUAfsAOqNHzmKvtyMARsJhpAmL/4YkvNHDAVk0Zfk8KPywQC34T1fnIGkBVPpJ0xB74aERFnzA5PK0kt7ogK6Pg2UHmPN/xFaEJwEOENlTcFZABq6DsI5SE9cWvLzXTAXPW73/gg3XBXP+wKJXgfN9teoZjrpNKDKdE21SWGuEgOCDTYv9d067PwknbW05Wr/MfTyLA1B
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3426.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(136003)(376002)(366004)(39850400004)(2906002)(6486002)(31686004)(53546011)(66476007)(66556008)(4326008)(66946007)(26005)(36756003)(5660300002)(186003)(110136005)(16576012)(54906003)(316002)(38100700002)(66574015)(8676002)(478600001)(956004)(2616005)(7416002)(8936002)(8976002)(83380400001)(16526019)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGNqZnRVR2xORU5HYkh5dlNkTHlqYnQ2b29hbkxuSUhZb0tSaERiaktTQ1Y3?=
+ =?utf-8?B?dHp5dmJaZFBtYmRNM3R5eUUrVm1RbGhrQTRXMUF2TkNPdldsQVpFNGZnUlRF?=
+ =?utf-8?B?K1B2UVhvU21JRUx2ZlNPMjhKdUlkTk1jNWJEOU9EK3U3QkJyK25OdkI2M3dk?=
+ =?utf-8?B?Uk9YSmM4ZWx0aEFHNVJDUGtDNXVyR3Bxalc0ek1XTG1mU1NkTVZjUDF1eGh6?=
+ =?utf-8?B?ZDVyOXpJbTVtQUVNQ1V0M2F2VlVQWlVtVFhtTlNFUm9kMDg3Vm9IY3F5bkZ6?=
+ =?utf-8?B?OFJhbVlrY0oyRm55dXF6aDZJMDRsMTVEVnNCeHBlMExnQzQzTXkreG8yUXpN?=
+ =?utf-8?B?RWkzZ05INDlTeUpWT2RhR0RER28zdUdkckRkVGs2RHJqRkkxKzdIQUZ1UFJH?=
+ =?utf-8?B?dkF0YUV0QVREUGdwb2FEZGxsNnA3NzNpOG1MaG9ZaEJNMUlNbXY4RHFiWi9w?=
+ =?utf-8?B?K1NmVElrSWF3YmcrNVVrcjhLRHdsc0phV21WQk1iVEFNNjJYb0NWSy9BZTFr?=
+ =?utf-8?B?b053d1Z3U1ZEeWxRS0hTcFNkQk5zT1ZWNVdoS1hocXJzRUg0MFRydWEydUYv?=
+ =?utf-8?B?aWFtOGU5VlA5VE1TSDFmWjR1MVpRdUpiY2dOangzMWtKQ2RPZDM1cFFCSERv?=
+ =?utf-8?B?WHYxdGo1bTRGT0lkS0RCV214WXAxckZ2ZG5qWXRzQnErWndEMXlmeG1pQytU?=
+ =?utf-8?B?QXNZdUlka3hLaTEvbVlNQTIxWCs3dHhqbktVclFhdENrSW9RSjNOc0lBcysv?=
+ =?utf-8?B?VGhUSVE3a2ZkMlp4R3dmZ0xiYkU2WE9wd2VCS3dkOXltUWZpZEIzL2JkL1A4?=
+ =?utf-8?B?V1ZvRCtZVmVRSjVWY3ZWdi9QTWJ4aS9uQXNERlk2MWIzWW4xaUZtdFBtSlgr?=
+ =?utf-8?B?aTg0eVRUY1FQSm5tcmhqZHR5Wm5YNk1rMzRxa1YvUEoxSzBPK0RWeGs3ZmZF?=
+ =?utf-8?B?MVY5R0Yxd0N2YlN4M0xtV3VUYWgyV1UrVG54MEJDNklBeEtNd1B4M2NHakRl?=
+ =?utf-8?B?MHI3MlJ6RlV6Q1NWL2JPbERQZG0zMVFvV1k0VEZka285VDViK3E1cTRYQkUr?=
+ =?utf-8?B?K3QvSW9uYXF3b0pXbjZyU1BpaGMycFdTT2ZoWnErMnNzL1RGV3R6TkoxcGJZ?=
+ =?utf-8?B?cXhNOWJWcWluVlkrQmVYdUVSQm9aeUlqNTdSTkppUDRzRFgyMSt6R25lNnMz?=
+ =?utf-8?B?NUdicXExS3hQSG5naE53NTI5dGhFME9tZzR6VlZnc09MNjFUMUorOURkTlgy?=
+ =?utf-8?B?RlpjSEt0NDBOTnNDeU91RE9FSE9mMHBPNmEyZk1BMkpFc2JMTTh1UjdXaGxC?=
+ =?utf-8?B?SEtueGQ0b0VQam9vc3FWYklhaGtSOUdWOEMvaDRvUFBxVEhPNTFiSnpWMm5X?=
+ =?utf-8?B?MlZXT3dEb0ZESXpMVVRVMzU0WEdzMzlIUGp1d29hRFZ5cmQzdHpxd01KUXBv?=
+ =?utf-8?B?aU5QcEN4eVFuYWNHWHFPOVZXbVIxRi9vcENnNzVqcU1OWE9iSEoyOGtjbTZD?=
+ =?utf-8?B?d3hCdHFNOUhwUi9La2hXZkJhUlRRVUZpQ1REeVEvVFJTR1BtbWNVZ1hIQ3Nq?=
+ =?utf-8?B?Wlc3cElncU1BRmxCQ0M3S1V3MmY1MG5ESnh4Z2VpYnZzOE5scHQ2aXEvdjRq?=
+ =?utf-8?B?aEVSblIxdnpzV0IwcEVVTzd4a0g4MHNQN2pyRFpMWHFHWnFJc1RBU1JxeElj?=
+ =?utf-8?B?TmR2alpibXM5S0R0TUFmSEJ0UEE2UFBWMkp3YXZEN29ISzE2YW1GRkpMMU9E?=
+ =?utf-8?Q?qVnl/0mNURct/DzzHPtjsTarwpfEoynf9dUM9ZA?=
+X-OriginatorOrg: silicom.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f2e0478-d7e1-477b-1b86-08d9363c32d6
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3426.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 11:44:02.9845
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: seH3ZVAnmGJaCzDzKb4K7vdIselbxKhBbynldFJK2rGQPoVJWKzcAjGNvoPYAYAt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7347
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 05:31:57AM -0700, Tom Rix wrote:
+On 21/06/2021 15.56, Tom Rix wrote:
 > 
-> On 6/21/21 9:56 PM, Xu Yilun wrote:
-> > On Mon, Jun 21, 2021 at 06:56:28AM -0700, Tom Rix wrote:
-> > > On 6/21/21 12:06 AM, Martin Hundeb�ll wrote:
-> > > > From: Debarati Biswas <debaratix.biswas@intel.com>
-> > > > 
-> > > > Device Feature List (DFL) drivers may be defined in subdirectories other
-> > > > than drivers/fpga, and each DFL driver should have access to the Device
-> > > > Feature Header (DFH) register, which contains revision and type
-> > > > information. This change moves the macros specific to the DFH register
-> > > > from drivers/fpga/dfl.h to include/linux/dfl.h.
-> > > > 
-> > > > Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
-> > > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > > Signed-off-by: Martin Hundeb�ll <mhu@silicom.dk>
-> > > > ---
-> > > >    drivers/fpga/dfl.h  | 48 +----------------------------------------
-> > > >    include/linux/dfl.h | 52 +++++++++++++++++++++++++++++++++++++++++++++
-> > > >    2 files changed, 53 insertions(+), 47 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> > > > index 2b82c96ba56c..6ed0353e9a99 100644
-> > > > --- a/drivers/fpga/dfl.h
-> > > > +++ b/drivers/fpga/dfl.h
-> > > > @@ -17,6 +17,7 @@
-> > > >    #include <linux/bitfield.h>
-> > > bitfield.h was added to linux/dfl.h
-> > > 
-> > > Likely both aren't needed, try removing this one.
-> > The DFL register definitions are in dfl.h, and Source files which include
-> > dfl.h are likely to use bitfield ops for DFL register access, so could we
-> > keep it here?
+> On 6/21/21 12:06 AM, Martin Hundebøll wrote:
+>> From: Debarati Biswas <debaratix.biswas@intel.com>
+>>
+>> Device Feature List (DFL) drivers may be defined in subdirectories other
+>> than drivers/fpga, and each DFL driver should have access to the Device
+>> Feature Header (DFH) register, which contains revision and type
+>> information. This change moves the macros specific to the DFH register
+>> from drivers/fpga/dfl.h to include/linux/dfl.h.
+>>
+>> Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
+>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+>> ---
+>>   drivers/fpga/dfl.h  | 48 +----------------------------------------
+>>   include/linux/dfl.h | 52 +++++++++++++++++++++++++++++++++++++++++++++
+>>   2 files changed, 53 insertions(+), 47 deletions(-)
+>>
+>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+>> index 2b82c96ba56c..6ed0353e9a99 100644
+>> --- a/drivers/fpga/dfl.h
+>> +++ b/drivers/fpga/dfl.h
+>> @@ -17,6 +17,7 @@
+>>   #include <linux/bitfield.h>
 > 
-> Not sure which dfl.h you mean.
+> bitfield.h was added to linux/dfl.h
 > 
-> It looks like you are copying header includes in both files and including
-> the one file in the other.
-> 
-> So it is likely you are including headers you don't need.
+> Likely both aren't needed, try removing this one.
 
-Maybe I misunderstand, I thought you suggest remove the headers in both
-drivers/fpga/dfl.h and linux/dfl.h.
+After this patch both headers use GENMASK_ULL() and BIT_ULL(), which are both defined in linux/bits.h, so I would expect both to include that instead. A lot of the users of dfl.h uses FIELD_GET(), which is defined in linux/bitfield.h, so I would expect that to be included there instead.
 
-Move the bitfield.h from drivers/fpga/dfl.h to linux/dfl.h is good to
-me.
+I can prepare a patch to fix that up, if you like?
 
-Thanks,
-Yilun
-
-> 
-> Tom
-> 
-> > 
-> > Thanks,
-> > Yilun
-> > 
-> > > Tom
-> > > 
-> > > >    #include <linux/cdev.h>
-> > > >    #include <linux/delay.h>
-> > > > +#include <linux/dfl.h>
-> > > >    #include <linux/eventfd.h>
-> > > >    #include <linux/fs.h>
-> > > >    #include <linux/interrupt.h>
-> > > > @@ -53,32 +54,6 @@
-> > > >    #define PORT_FEATURE_ID_UINT		0x12
-> > > >    #define PORT_FEATURE_ID_STP		0x13
-> > > > -/*
-> > > > - * Device Feature Header Register Set
-> > > > - *
-> > > > - * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
-> > > > - * For AFUs, they have DFH + GUID as common header registers.
-> > > > - * For private features, they only have DFH register as common header.
-> > > > - */
-> > > > -#define DFH			0x0
-> > > > -#define GUID_L			0x8
-> > > > -#define GUID_H			0x10
-> > > > -#define NEXT_AFU		0x18
-> > > > -
-> > > > -#define DFH_SIZE		0x8
-> > > > -
-> > > > -/* Device Feature Header Register Bitfield */
-> > > > -#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
-> > > > -#define DFH_ID_FIU_FME		0
-> > > > -#define DFH_ID_FIU_PORT		1
-> > > > -#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
-> > > > -#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
-> > > > -#define DFH_EOL			BIT_ULL(40)		/* End of list */
-> > > > -#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
-> > > > -#define DFH_TYPE_AFU		1
-> > > > -#define DFH_TYPE_PRIVATE	3
-> > > > -#define DFH_TYPE_FIU		4
-> > > > -
-> > > >    /* Next AFU Register Bitfield */
-> > > >    #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
-> > > > @@ -403,27 +378,6 @@ struct device *dfl_fpga_pdata_to_parent(struct dfl_feature_platform_data *pdata)
-> > > >    	return pdata->dev->dev.parent->parent;
-> > > >    }
-> > > > -static inline bool dfl_feature_is_fme(void __iomem *base)
-> > > > -{
-> > > > -	u64 v = readq(base + DFH);
-> > > > -
-> > > > -	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> > > > -		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
-> > > > -}
-> > > > -
-> > > > -static inline bool dfl_feature_is_port(void __iomem *base)
-> > > > -{
-> > > > -	u64 v = readq(base + DFH);
-> > > > -
-> > > > -	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> > > > -		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
-> > > > -}
-> > > > -
-> > > > -static inline u8 dfl_feature_revision(void __iomem *base)
-> > > > -{
-> > > > -	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
-> > > > -}
-> > > > -
-> > > >    /**
-> > > >     * struct dfl_fpga_enum_info - DFL FPGA enumeration information
-> > > >     *
-> > > > diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> > > > index 6cc10982351a..1cd86b2e7cb1 100644
-> > > > --- a/include/linux/dfl.h
-> > > > +++ b/include/linux/dfl.h
-> > > > @@ -8,7 +8,9 @@
-> > > >    #ifndef __LINUX_DFL_H
-> > > >    #define __LINUX_DFL_H
-> > > > +#include <linux/bitfield.h>
-> > > >    #include <linux/device.h>
-> > > > +#include <linux/io.h>
-> > > >    #include <linux/mod_devicetable.h>
-> > > >    /**
-> > > > @@ -83,4 +85,54 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
-> > > >    	module_driver(__dfl_driver, dfl_driver_register, \
-> > > >    		      dfl_driver_unregister)
-> > > > +/*
-> > > > + * Device Feature Header Register Set
-> > > > + *
-> > > > + * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
-> > > > + * For AFUs, they have DFH + GUID as common header registers.
-> > > > + * For private features, they only have DFH register as common header.
-> > > > + */
-> > > > +#define DFH                     0x0
-> > > > +#define GUID_L                  0x8
-> > > > +#define GUID_H                  0x10
-> > > > +#define NEXT_AFU                0x18
-> > > > +
-> > > > +#define DFH_SIZE                0x8
-> > > > +
-> > > > +/* Device Feature Header Register Bitfield */
-> > > > +#define DFH_ID                  GENMASK_ULL(11, 0)      /* Feature ID */
-> > > > +#define DFH_ID_FIU_FME          0
-> > > > +#define DFH_ID_FIU_PORT         1
-> > > > +#define DFH_REVISION            GENMASK_ULL(15, 12)
-> > > > +#define DFH_NEXT_HDR_OFST       GENMASK_ULL(39, 16)     /* Offset to next DFH */
-> > > > +#define DFH_EOL                 BIT_ULL(40)             /* End of list */
-> > > > +#define DFH_TYPE                GENMASK_ULL(63, 60)     /* Feature type */
-> > > > +#define DFH_TYPE_AFU            1
-> > > > +#define DFH_TYPE_PRIVATE        3
-> > > > +#define DFH_TYPE_FIU            4
-> > > > +
-> > > > +/* Function to read from DFH and check if the Feature type is FME */
-> > > > +static inline bool dfl_feature_is_fme(void __iomem *base)
-> > > > +{
-> > > > +	u64 v = readq(base + DFH);
-> > > > +
-> > > > +	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> > > > +		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
-> > > > +}
-> > > > +
-> > > > +/* Function to read from DFH and check if the Feature type is port*/
-> > > > +static inline bool dfl_feature_is_port(void __iomem *base)
-> > > > +{
-> > > > +	u64 v = readq(base + DFH);
-> > > > +
-> > > > +	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
-> > > > +		 (FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
-> > > > +}
-> > > > +
-> > > > +/* Function to read feature revision from DFH */
-> > > > +static inline u8 dfl_feature_revision(void __iomem *base)
-> > > > +{
-> > > > +	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
-> > > > +}
-> > > > +
-> > > >    #endif /* __LINUX_DFL_H */
+// Martin
