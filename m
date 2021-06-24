@@ -2,116 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99C2FC48BC2
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 03:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE154C48BDF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 04:30:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66A0E613B2
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 03:06:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8294613CF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 04:30:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbhFXDJE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Jun 2021 23:09:04 -0400
-Received: from mga11.intel.com ([192.55.52.93]:50860 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229759AbhFXDJE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Jun 2021 23:09:04 -0400
-IronPort-SDR: NKEkMgnOEX6gyctcOxl4TGnGGDOx6qtiSEty7Qd1xhzuoCxEs0bWUDAE4Td7IfovEUaUAjdRve
- n8i5yev8N1fw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10024"; a="204377637"
-X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
-   d="scan'208";a="204377637"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2021 20:06:38 -0700
-IronPort-SDR: MFTPXEUqxZsu4NobG6Xruu3TraKUQ1MD94yXs+uRuPlLtq+KoQorhUweEgiBnFMZZLvbO8A/tm
- /2bluF/uriBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
-   d="scan'208";a="423920156"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
-  by orsmga002.jf.intel.com with ESMTP; 23 Jun 2021 20:06:34 -0700
-Date:   Thu, 24 Jun 2021 11:01:20 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>
-Cc:     "Wu, Hao" <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@geanix.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Debarati Biswas <debaratix.biswas@intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>
-Subject: Re: [PATCH 2/4] fpga: dfl: Move DFH header register macros to
-  linux/dfl.h
-Message-ID: <20210624030120.GA42039@yilunxu-OptiPlex-7050>
-References: <20210621070621.431482-1-mhu@silicom.dk>
- <20210621070621.431482-3-mhu@silicom.dk>
- <DM6PR11MB3819FE54D2C399DDBBC38FBA850A9@DM6PR11MB3819.namprd11.prod.outlook.com>
- <20210622052205.GB27046@yilunxu-OptiPlex-7050>
- <DM6PR11MB3819B9B2F357B9B03F7707B685099@DM6PR11MB3819.namprd11.prod.outlook.com>
- <0257dcaf-348a-375d-6ed8-657974208e30@silicom.dk>
+        id S229772AbhFXEcS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Jun 2021 00:32:18 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:55163 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229465AbhFXEcR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 24 Jun 2021 00:32:17 -0400
+X-Greylist: delayed 1901 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Jun 2021 00:32:17 EDT
+Received: from twspam01.aspeedtech.com (localhost [127.0.0.2] (may be forged))
+        by twspam01.aspeedtech.com with ESMTP id 15O3hWRa076794
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Jun 2021 11:43:32 +0800 (GMT-8)
+        (envelope-from billy_tsai@aspeedtech.com)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 15O3gSQj076749;
+        Thu, 24 Jun 2021 11:42:28 +0800 (GMT-8)
+        (envelope-from billy_tsai@aspeedtech.com)
+Received: from BillyTsai-pc.aspeed.com (192.168.2.149) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 24 Jun
+ 2021 11:57:15 +0800
+From:   Billy Tsai <billy_tsai@aspeedtech.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-hwmon@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+CC:     <BMC-SW@aspeedtech.com>
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho) Using falling edge.
+Date:   Thu, 24 Jun 2021 11:58:21 +0800
+Message-ID: <20210624035821.25375-1-billy_tsai@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0257dcaf-348a-375d-6ed8-657974208e30@silicom.dk>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.149]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 15O3gSQj076749
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 01:56:59PM +0200, Martin Hundebøll wrote:
-> 
-> 
-> On 22/06/2021 09.39, Wu, Hao wrote:
-> > > On Mon, Jun 21, 2021 at 06:19:15PM +0800, Wu, Hao wrote:
-> > > > > Subject: [PATCH 2/4] fpga: dfl: Move DFH header register macros to
-> > > linux/dfl.h
-> > > > > 
-> > > > > From: Debarati Biswas <debaratix.biswas@intel.com>
-> > > > > 
-> > > > > Device Feature List (DFL) drivers may be defined in subdirectories other
-> > > > > than drivers/fpga, and each DFL driver should have access to the Device
-> > > > > Feature Header (DFH) register, which contains revision and type
-> > > > > information. This change moves the macros specific to the DFH register
-> > > > > from drivers/fpga/dfl.h to include/linux/dfl.h.
-> > > > 
-> > > > Looks like it requires to access the revision info in the next patch, because
-> > > > current dfl_device doesn't expose related information.
-> > > > 
-> > > > @Yilun, do you have any concern to expose those info via dfl_device?
-> > > 
-> > > Exposing these header register definitions are good to me. These registers
-> > > are in DFL device's MMIO region, so it is good to share these info with
-> > > all DFL drivers.
-> > 
-> > I mean expose revision via dfl_device, as dfl core already reads the DFL
-> > header, it sounds duplicate read in each dfl device driver. And if we
-> > consider this as a common need from dfl device driver, then the code
-> > can be moved to a common place as well.
-> > 
-> > I hope from dfl device driver side, it doesn't need to know details of
-> > how DFH register is defined, only simple way from dfl device data
-> > structure or some simple helper function, then dfl device driver could
-> > know all common information from DFH.
-> > 
-> > How do you think?
+The tach shouldn't use both edges to measure. When the tach input
+duty cycle isn't 50% the return value will inaccurate.
 
-It's good idea.
+Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> struct dfl_device {} already has "u16 type" and "u16 feature_id", so it would make sense to add "u8 feature_rev" as well?
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 3d8239fd66ed..0a70a0e22acf 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -158,7 +158,7 @@
+  * 10: both
+  * 11: reserved.
+  */
+-#define M_TACH_MODE 0x02 /* 10b */
++#define M_TACH_MODE 0x00 /* 10b */
+ #define M_TACH_UNIT 0x0210
+ #define INIT_FAN_CTRL 0xFF
+ 
+-- 
+2.25.1
 
-I think we may name it "u8 revision".
-
-Thanks,
-Yilun
-
-> 
-> // Martin
