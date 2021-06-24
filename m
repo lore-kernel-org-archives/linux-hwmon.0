@@ -2,143 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E51C49EA5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 12:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13605C48BDF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 12:44:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28D51613B1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 12:32:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF7CA61220
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 12:44:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbhFXMe1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Jun 2021 08:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
+        id S231432AbhFXMqu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Jun 2021 08:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhFXMe0 (ORCPT
+        with ESMTP id S231405AbhFXMqt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Jun 2021 08:34:26 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B46C061574;
-        Thu, 24 Jun 2021 05:32:07 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id v5-20020a0568301bc5b029045c06b14f83so5338543ota.13;
-        Thu, 24 Jun 2021 05:32:07 -0700 (PDT)
+        Thu, 24 Jun 2021 08:46:49 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C7CC061574;
+        Thu, 24 Jun 2021 05:44:30 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id v5-20020a0568301bc5b029045c06b14f83so5374889ota.13;
+        Thu, 24 Jun 2021 05:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=544/8df+bmPFH+cWBj59xOz69dHyhs3v7jqO6mT7lUE=;
-        b=HVA1pAfBwnLo32ReUkni8iP8wc1Yw681MdrU0HGTZbO/3FBpPYofsU29k3BtUTd0mm
-         ONlly1krZscSIzfl5HEqUgPWQJetG8RcjGoEFx5COUpVcmY55cwmiIrdalFVguCMfSmp
-         BDJDryzBp/HugnPLwBtyMRQUbh7l05wMdJ91k87ZFScN6wTN0U5y12mInuxDSkWgBN+t
-         YXOrlRTiFFLPsaV4F4ZRLERyThv4lPi5UXp3CRXR8dSW3LiWVi/n9rmhfjJm5m0ua0gx
-         bfVWZ1vbrhp7WK7vTjxrkdVznntuEKB7xcb1MinaKYnVYi2JXd1m5W8nFabaA+TwqNxY
-         wHvg==
+        bh=Q3gvZmypEjLXLqsFmPmNg0fnsAU683BrMuDR/uus3S8=;
+        b=TUytgdOpb5Dh7U9LBK+OVwUmgXNPe/LpMGCGsLMVUVefURAC/FGHmidrYT3x56hMlv
+         kUOiDdl+iw+9OiLKEue02u+DwW//WcvApLPcvEzBhZ+N3oLYkX7gMEhRV/yav4NvgsiN
+         K0EFn3fWEKCQNBwlCYzzat8iK7cBbEmS0rVBmSoGoxTonFxC3kLa+PkbWsC5ITeCqWVT
+         MjDmZrxd3X0tvMk27+Chkb/jQ9HrHLP0qK1elHqVuOPQvN5JvKvXuZ3BNh1bcF4LYLxe
+         ZoC1u3wgfRs6SEmzFrG0ZEn07yYcQvcpMbGIuA7oK+x20vdgCwgWurHLuMWc9GlNgzPJ
+         HKfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=544/8df+bmPFH+cWBj59xOz69dHyhs3v7jqO6mT7lUE=;
-        b=LSMwHEmuOOsL8cHjPrZC3F6PQWFDDWUmw1OEE2WUygOsPXPoNbFx9Y/Mn8rw2oIwnm
-         QC0Kre46FwsB+E5I92RE7Y4ekxqx8i7uk1phbqaC5CXUrbnEZf1CxAAb+M8BrSqDoux8
-         BsA5SzDWqV8ylijO4DlqhyhEVdxSNidZLBQ0DMCRZRlvSpsaZyzTmilZ2uAIUW1KCIQ8
-         EUmhO+Vq6L7IWOQk8LhZDIKjN9V71WyB9F9+PPqvezLpydCq9n/zkrHQtK/dqmFVlngk
-         IUMUT6T612xKqIM66unotMGK6Sh2UvUXqPzPmGg2kUUG7FCFJ8MBS01jTexngDk1/oeA
-         pqnQ==
-X-Gm-Message-State: AOAM533ScnWy9cgEf5cmNEVh5ZH6SUSLAUkHDhAxBqxCnPUBev0h0x2s
-        HlwE2/o16Jyu/nEkFf37aheVZ78Vt/8=
-X-Google-Smtp-Source: ABdhPJxILzRWvP568GHRBBRCRceiYeOH3loqWG3cuQelodzyoWakcZSrnlFTzban8jw6/SRgQ0260Q==
-X-Received: by 2002:a9d:4d87:: with SMTP id u7mr4449938otk.131.1624537926748;
-        Thu, 24 Jun 2021 05:32:06 -0700 (PDT)
+        bh=Q3gvZmypEjLXLqsFmPmNg0fnsAU683BrMuDR/uus3S8=;
+        b=IBSGO6ManwFXQOQHe53ldZzEOzfhdyRaL48mvOpNOUyqTQNPTIIsuW9Qr33J8obkfa
+         bKg2Hs29QpFK8xhpbQ7z1cSStXRQeItM/u1tFJbJtkfhBHPJUIvBn92YjRoXtk/rokED
+         4kf2vxu2lAcZw/DrIacaLWnhu5qhQYUXlJiHZbQiF7oz02hF+VuSfFn5n70VrPJEOs6D
+         SOi2QvKGPEY0Z7QncsfG3SRzZ6Gcpmh+gGp5MWtbp+WGxbuyNGcLGX/LFlniGxBKpmtC
+         xd3SGwX2MfWLq3KfLrm+gxtSTx4hVtaAVm4O8E1Qm75kg2yvkUOrgSZIHGEpenPVqoV3
+         eQwQ==
+X-Gm-Message-State: AOAM531aU4pW8qOs+94hAwY2Q7q4VYMvBxXMa4xu3BYnz317eZnZ03bw
+        E9Af2OGxl7i7q+XP45xrM1aVCsaDEYo=
+X-Google-Smtp-Source: ABdhPJyGU8PRH2pP3pbdqSGcc0Y7/MlzY7Ggy4CwdK//7tZYzApvAnUs/5/Br9kykr9JEZOqHdR5hA==
+X-Received: by 2002:a05:6830:154b:: with SMTP id l11mr4598072otp.66.1624538669960;
+        Thu, 24 Jun 2021 05:44:29 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w20sm662124otl.51.2021.06.24.05.32.05
+        by smtp.gmail.com with ESMTPSA id h27sm642857ote.79.2021.06.24.05.44.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 05:32:05 -0700 (PDT)
+        Thu, 24 Jun 2021 05:44:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 24 Jun 2021 05:32:04 -0700
+Date:   Thu, 24 Jun 2021 05:44:28 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     ainux.wang@gmail.com
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterlingteng@gmail.com,
-        chenhuacai@kernel.org, chenhuacai@loongson.cn
-Subject: Re: [RFC] hwmon: (pmbus) Some questions about PMBUS_STATUS
-Message-ID: <20210624123204.GA1670703@roeck-us.net>
-References: <20210624022327.6192-1-ainux.wang@gmail.com>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     jdelvare@suse.com, joel@jms.id.au, andrew@aj.id.au,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        BMC-SW@aspeedtech.com
+Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho) Using falling edge.
+Message-ID: <20210624124428.GB1670703@roeck-us.net>
+References: <20210624035821.25375-1-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210624022327.6192-1-ainux.wang@gmail.com>
+In-Reply-To: <20210624035821.25375-1-billy_tsai@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 24, 2021 at 10:23:27AM +0800, ainux.wang@gmail.com wrote:
-> From: "Ainux.Wang" <ainux.wang@gmail.com>
+On Thu, Jun 24, 2021 at 11:58:21AM +0800, Billy Tsai wrote:
+> The tach shouldn't use both edges to measure. When the tach input
+> duty cycle isn't 50% the return value will inaccurate.
 > 
-> There are some questions about PMBUS_STATUS in core.
-> 
-I am curious - why do you think such questions would be appropriate as
-comment in the code ?
+A tachometer doesn't have a duty cycle. A pwm has a duty cycle, but that
+is completely independent of the pwm duty cycle used to set the fan speed.
+So this patch does not really make sense with the above explanation.
 
-> Signed-off-by: Ainux.Wang <ainux.wang@gmail.com>
+The impact of this patch is likely that the reported fan speed is reduced
+by 50%. It may well be that the driver currently reports twice the real fan
+speed. I have no idea if that is the case, but if it is it should not be
+conditional. The description above states "when the tach input cycle isn't
+50%", suggesting that this is conditional on some other configuration.
+I don't know what that might be either.
+
+So, sorry, I can't accept this patch without a more detailed and accurate
+description and explanation why it is needed.
+
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index bbd745178147..e16c85997148 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2200,6 +2200,19 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->  	 * Some PMBus chips don't support PMBUS_STATUS_WORD, so try
->  	 * to use PMBUS_STATUS_BYTE instead if that is the case.
->  	 * Bail out if both registers are not supported.
-> +	 *
-> +	 * Question 1:
-> +	 *  Why bail out if both registers are not supported?
-> +	 *  MP2949A both registers are not supported.
-> +	 *
+> diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+> index 3d8239fd66ed..0a70a0e22acf 100644
+> --- a/drivers/hwmon/aspeed-pwm-tacho.c
+> +++ b/drivers/hwmon/aspeed-pwm-tacho.c
+> @@ -158,7 +158,7 @@
+>   * 10: both
+>   * 11: reserved.
+>   */
+> -#define M_TACH_MODE 0x02 /* 10b */
+> +#define M_TACH_MODE 0x00 /* 10b */
 
-The status registers are essential for chip operation.
+That comment is now wrong.
 
-_Normally_ the chip should return an error when trying to access an
-unsupported command/register, and it should set an error bit in the
-status register. Obviusly the second part won't work here.
+Guenter
 
-> +	 * Question 2:
-> +	 *  Use i2c_smbus_read_word_data() or i2c_smbus_read_byte_data
-> +	 *  to read, the MP2949A will return undetermined value, although
-> +	 *  we already known this chip do not support both registers.
-> +	 *  What should we do?
-
-PMBus drivers should never call those functions directly but use the functions
-provided by the PMBUs core.
-
-> +	 *  Can we use pmbus_read_status_byte() or pmbus_read_status_word()?
-> +	 *  and in MP2949A driver's .read_byte_data and .read_word_data to
-> +	 *  filter out both registers?
-
-You would use those functions, but not to filter out both commands but to
-simulate one of them and filter out the other.
-
-In general, it is acceptable to simulate or filter out a command if a chip
-doesn't support it but does not return an error when accessing it. If you
-may recall, I asked you several times why you wanted to filter out the
-PMBUS_VOUT_MODE command. You always answered with "the chip does not
-support it". Again, that is not a reason to filter out a command. However,
-if a chip does not support a command but does not return an error when
-accessing it either, it is perfectly valid (and even necessary) to filter
-out or simulate such unsupported commands. This is, however, only
-acceptable if a chip does not return an error when trying to access the
-unsupported registers. Such situations need to be documented in the code,
-which should include a comment such as "This chip does not support the
-following command(s) and returns random data when reading from them/it".
-
->  	 */
->  	data->read_status = pmbus_read_status_word;
->  	ret = i2c_smbus_read_word_data(client, PMBUS_STATUS_WORD);
+>  #define M_TACH_UNIT 0x0210
+>  #define INIT_FAN_CTRL 0xFF
+>  
 > -- 
-> 2.18.1
+> 2.25.1
 > 
