@@ -2,153 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 825CEC49EA5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 14:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15BA4C49EA6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 16:21:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62DE5613EB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 14:15:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7CA1613DC
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Jun 2021 16:21:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbhFXOSE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Jun 2021 10:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S231321AbhFXQXt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Jun 2021 12:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbhFXOSE (ORCPT
+        with ESMTP id S230480AbhFXQXs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Jun 2021 10:18:04 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C873C061574;
-        Thu, 24 Jun 2021 07:15:44 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id d21-20020a9d72d50000b02904604cda7e66so3925435otk.7;
-        Thu, 24 Jun 2021 07:15:44 -0700 (PDT)
+        Thu, 24 Jun 2021 12:23:48 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D1BC061574;
+        Thu, 24 Jun 2021 09:21:29 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id hz1so10474315ejc.1;
+        Thu, 24 Jun 2021 09:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nZjVyzZsb81wztakP7Xrxylxn59FboylSwahYy/4064=;
-        b=sY+1LZiod5ob1CQgRJB49BxZQt5g2B77cLoV3iMQxICp1nnaVf8oxKjngOrjsyWZ3z
-         rUGnAOSRVwdaLMMXdQlAQK7DSb/IF+r9BXtlfS8oAtNnZ7JJUubjKT3HSMfIQevmAU1G
-         dDpivzr2g3iyUhCBKwBBzRyNkiEXnUh99SEWPoXB2tLgq66EnL3fuOoQWkXNsaJTyuli
-         HWJhJ2FBaGGvXpAtxs1QaFQdcF17CLjK1FERXD0xqFDukik5gF9F1vlqPibrsBnHWx+/
-         R4Zl/ETxWJisg0MV4BnBAzCV1oUxytzlKMhU+ITxS6RoDl/BcqVzvYS+baeqgyebHU84
-         d5Vw==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NuMe55P+TSN90iFcn8h08HfAcManWaQKAl9XfEn/uQE=;
+        b=SZ6LvCUG3OX627cXClI5uJbOeJoJwfiOwRvsofhO740Abe2n2MC49LxNInzn/M4QLo
+         MKI5RqzblyGSNDylXAPCeyaGPDlLEgIIa1AiQOBle7IHbD1avIHlYxjjiUdcowYVpg1e
+         LggzDQngZIXFxr8gOATwDHzPUjhgyR/GjD30WzEv4lZBP1p7UN3fHeixo0LRc5JVlNUL
+         OddmNX0a3hxstQL7SzE0Gegl91q0f3oKiYWnhpx2ez1JyVsIXcgH9PCcprw9xBB4qrAV
+         p7HalKtKQwudgikbOQt2RrJRUkf//4xPR4QH1MaTmm6zD2/ti67PX4azbwG5ecPbGzLM
+         98Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=nZjVyzZsb81wztakP7Xrxylxn59FboylSwahYy/4064=;
-        b=IgVZNJ595K9u8+hcW2HUzGt/MWic3sm3dv4OlifJdk0fBHdvDPqEiElYyLru4iWpYM
-         tr46Ml/S9EFib7DjrodVoYN9VzPwH0XuicO+A7Zh/D7/OXmtZY4VCi28uLP2ihhAKQEV
-         9saa40HTtnBqtQP58L+LknpR2YHnsptcGzeoXivV/n5epa8FXsANOtAw1OLROgJ4ItO2
-         B9Mm8tvOQaifnD++qDHjZfoem+Vlx6xlHTgvcQVHqXx/HuoXMMVXARt5BTAcvN9nNcXw
-         1zlnnTpYgX8AbLbZYYaQamtZS6q2dcVoyiN/o+rupSoYPIshvUvFmhaA6aoZJBJgEKJU
-         CTag==
-X-Gm-Message-State: AOAM531Tg9uiknpIW0O8ZC9376kqByEMrfPG+2fjyPtP0BWYs9cE30qy
-        WvT0xP5d3vnfN5GHD31rPHI=
-X-Google-Smtp-Source: ABdhPJyOYwSFZ9SagWIpjFLYG7gIV01mU7gqgRWWiAKmJAFo2SFbLpyPScHulTrk8tZi5uVy9kG5Kg==
-X-Received: by 2002:a9d:6508:: with SMTP id i8mr4596161otl.368.1624544143599;
-        Thu, 24 Jun 2021 07:15:43 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l2sm726900otl.27.2021.06.24.07.15.42
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=NuMe55P+TSN90iFcn8h08HfAcManWaQKAl9XfEn/uQE=;
+        b=UIp5JBDCvApPZESp4ElEIIS9QC4OcedTqZR+RAfJ1z5XcdodaNC8Sx+RsiQ61pCXys
+         UQeeksDGgfls2Zxl4j4hPznoUvea9j4TGQcymi45x7hpGqiQ1HZTQaAX6ZcOQ8NIzARr
+         nrizuWfbPWHHP+cTO1HqI+iBx+5SnO2S3MLcsdCTz8PkGnS5AcwoP2a5CKJpC9CeFBxn
+         zm7wvy0XLQOXgeywnb8fc2ycYPu43YGvKp5oXWp5OAHDS4tQ4pG0wdpFFjwu3ekpEfnt
+         ZyxuDIi709mJ+t1wdNC0LcaiTgZZodSruCcoe89dIRyUVlgR3fqgReycz3dJ5te3O/aD
+         U89A==
+X-Gm-Message-State: AOAM532PNaK7BdHnMHyJQGkL8gfjo4+dPyR2f2jUJUO7HsLnkEbLLspJ
+        cz7pEE2D6TSaGgJRYmmevBKUZBrbJFvo4A==
+X-Google-Smtp-Source: ABdhPJwOFIzd6fHW1kJLsiuz7iDdx4PyJmlXzjBpKRA7k2yfodo30VC7JyWWAJ25NYKbmPzl8Jq/ww==
+X-Received: by 2002:a17:906:6c97:: with SMTP id s23mr6094625ejr.248.1624551687584;
+        Thu, 24 Jun 2021 09:21:27 -0700 (PDT)
+Received: from stitch.. ([82.192.166.82])
+        by smtp.gmail.com with ESMTPSA id p18sm1332832edu.8.2021.06.24.09.21.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 07:15:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 24 Jun 2021 07:15:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] hwmon: Support set_trips() of thermal device ops
-Message-ID: <20210624141541.GA3709721@roeck-us.net>
-References: <20210623042231.16008-1-digetx@gmail.com>
- <20210623042231.16008-3-digetx@gmail.com>
+        Thu, 24 Jun 2021 09:21:27 -0700 (PDT)
+Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
+From:   Emil Renner Berthing <esmil@mailme.dk>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Samin Guo <samin.guo@starfivetech.com>
+Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: Add StarFive JH7100 temperature sensor
+Date:   Thu, 24 Jun 2021 18:21:06 +0200
+Message-Id: <20210624162108.832518-1-esmil@mailme.dk>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210623042231.16008-3-digetx@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 07:22:31AM +0300, Dmitry Osipenko wrote:
-> Support set_trips() callback of thermal device ops. This allows HWMON
-> device to operatively notify thermal core about temperature changes, which
-> is very handy to have in a case where HWMON sensor is used by CPU thermal
-> zone that performs passive cooling and emergency shutdown on overheat.
-> Thermal core will be able to react faster to temperature changes.
-> 
-> The set_trips() callback is entirely optional. If HWMON sensor doesn't
-> support setting thermal trips, then the callback is a NO-OP. The dummy
-> callback has no effect on the thermal core. The temperature trips are
-> either complement the temperature polling mechanism of thermal core or
-> replace the polling if sensor can set the trips and polling is disabled
-> by a particular device in a device-tree.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+From: Emil Renner Berthing <kernel@esmil.dk>
 
-Applied.
+This adds a driver for the temperature sensor on the JH7100, a RISC-V
+SoC by StarFive Technology Co. Ltd., and most likely also the upcoming
+JH7110 version.
 
-Thanks,
-Guenter
+The SoC is used on the BeagleV Starlight board:
+https://github.com/beagleboard/beaglev-starlight
 
-> ---
->  drivers/hwmon/hwmon.c | 36 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index fd47ab4e6892..8d3b1dae31df 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -153,8 +153,44 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
->  	return 0;
->  }
->  
-> +static int hwmon_thermal_set_trips(void *data, int low, int high)
-> +{
-> +	struct hwmon_thermal_data *tdata = data;
-> +	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
-> +	const struct hwmon_chip_info *chip = hwdev->chip;
-> +	const struct hwmon_channel_info **info = chip->info;
-> +	unsigned int i;
-> +	int err;
-> +
-> +	if (!chip->ops->write)
-> +		return 0;
-> +
-> +	for (i = 0; info[i] && info[i]->type != hwmon_temp; i++)
-> +		continue;
-> +
-> +	if (!info[i])
-> +		return 0;
-> +
-> +	if (info[i]->config[tdata->index] & HWMON_T_MIN) {
-> +		err = chip->ops->write(tdata->dev, hwmon_temp,
-> +				       hwmon_temp_min, tdata->index, low);
-> +		if (err && err != -EOPNOTSUPP)
-> +			return err;
-> +	}
-> +
-> +	if (info[i]->config[tdata->index] & HWMON_T_MAX) {
-> +		err = chip->ops->write(tdata->dev, hwmon_temp,
-> +				       hwmon_temp_max, tdata->index, high);
-> +		if (err && err != -EOPNOTSUPP)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
->  	.get_temp = hwmon_thermal_get_temp,
-> +	.set_trips = hwmon_thermal_set_trips,
->  };
->  
->  static void hwmon_thermal_remove_sensor(void *data)
+Support for this SoC is not yet upstreamed, but is actively worked on,
+so it should only be a matter of time before that happens.
+
+v2:
+* Fix checkpatch.pl --strict warnings
+  - Add myself to MAINTAINERS
+  - Fix multiline comments
+  - Use proper case and whitespace for #defines
+  - Add comment to sfctemp::lock mutex.
+* Remaining comments by Guenter Roeck
+  - Add Documentation/hwmon/sfctemp.rst
+  - Use devm_add_action() and devm_hwmon_device_register_with_info()
+    instead of a driver .remove function.
+  - Don't do test conversion at probe time.
+  - #include <linux/io.h>
+  - Remove unused #defines
+  - Use int return variable in sfctemp_convert().
+* Add Samin's Signed-off-by to patch 2/2
+
+Emil Renner Berthing (2):
+  dt-bindings: hwmon: add starfive,jh7100-temp bindings
+  hwmon: (sfctemp) Add StarFive JH7100 temperature sensor
+
+ .../bindings/hwmon/starfive,jh7100-temp.yaml  |  43 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sfctemp.rst               |  32 ++
+ MAINTAINERS                                   |   8 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sfctemp.c                       | 288 ++++++++++++++++++
+ 7 files changed, 383 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh7100-temp.yaml
+ create mode 100644 Documentation/hwmon/sfctemp.rst
+ create mode 100644 drivers/hwmon/sfctemp.c
+
+-- 
+2.32.0
+
