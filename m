@@ -2,208 +2,261 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 206D4C49EA7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Jun 2021 19:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1D0EC48BC2
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Jun 2021 16:47:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01AA16197C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Jun 2021 19:26:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBB90619F1
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Jun 2021 16:47:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbhFYT3L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Jun 2021 15:29:11 -0400
-Received: from mail-pg1-f181.google.com ([209.85.215.181]:42635 "EHLO
-        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhFYT3L (ORCPT
+        id S231139AbhF0Qtx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Jun 2021 12:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229820AbhF0Qtx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Jun 2021 15:29:11 -0400
-Received: by mail-pg1-f181.google.com with SMTP id d12so8770845pgd.9;
-        Fri, 25 Jun 2021 12:26:50 -0700 (PDT)
+        Sun, 27 Jun 2021 12:49:53 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA11C061574;
+        Sun, 27 Jun 2021 09:47:28 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d5so11718325qtd.5;
+        Sun, 27 Jun 2021 09:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IGinKwiNSfxrJd+RUlITcVgWE2FaXzN4ff0xutRXDaU=;
+        b=DeEb2ecHoc+9I/oFeMO1TfS4y4+YwjybIHliznobdI/nxpUlDavt/JLpost/dY8G3R
+         8cJOtmQqUlYDxeTfYaNQ1/1g1TYrdNZ/A32GllgnS0hha2/HadzrYR0ZR/tRkdZpbxH8
+         IzXE19/om+0BCtDEh+5G/TinS7EBlwCBx9XnhCN27I7baiLvgEtBOZ5RxX86Pt8qGGrL
+         ti6MAYW24ozYHGBBcO1pRe0GOzYwFWDEmrfrVRXyBEeul012dxIt8kEK88EQW2k3Go1b
+         IUG+ysf0WhcqHZpAScjamKwVwTjwtbeNNXEkL9mP8x8n8wShaIzm/RqO9jBhmSlRJ8kA
+         7pag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=h1GdoT+CpTe+GaIuEBpH8gMshMEuLSCbkgQ3nh1A9HQ=;
-        b=jjzJSgpcpLZRT2zsaBKgw8AOLGnmAKDA1G/SyEEPDcwxbAM8NUjjtSnmGMoO/9cqFs
-         7lnGBeXKN8xPAQVgj/zrcZ7XldqU3hmRbEp8gUQ9T+EPmwsjraNEHjRAzeu69b3KfxNl
-         hpQcjyIEKDO0NFI4+DSc9iCk0hkqpoqyWz+GFSJaVytZAbslrFzDPAJED7fCfKDOlAjJ
-         HDaHGmZbwk626LMccW0xiIxb7nTp/CS9678K8rlmaQWMwlBrah7qEq+6lIlg0x7vu7pM
-         YsgavzRcCIcyqga+Qzge8qh1hsyMPKd+Ep1qibUz231lqSR5uYtyaRCrpyiAalGSI0qw
-         trhQ==
-X-Gm-Message-State: AOAM533gZvITPeDkOkmmjczH9k/+pYmwaziwog2O0wD+GR14gtku4nFW
-        FD9vAKaPMSUf+FXYWeAbJSo=
-X-Google-Smtp-Source: ABdhPJwTEEzENLi2KqgrCM7qoAwDS8vgHBE3F82EOEjnj7s+DoBBdlOy15DkQ0bU5Jj9FxbxmBMcAw==
-X-Received: by 2002:a63:e958:: with SMTP id q24mr10982182pgj.438.1624649210126;
-        Fri, 25 Jun 2021 12:26:50 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id a15sm6507385pff.128.2021.06.25.12.26.49
+         :mime-version:content-disposition:in-reply-to;
+        bh=IGinKwiNSfxrJd+RUlITcVgWE2FaXzN4ff0xutRXDaU=;
+        b=e3LpLYkSR+04tXSLRo8Bpz1Yn61xqdA83l4ZT0YEwJhSm/q8FfM9A7b0x/4SW3Ld4X
+         DBXA2Lg8lrG/veUwANwu+zlMJzC8hBklgCb0Lzik0nMBM6avT9iYZIWtPJWtKjFt040n
+         Hllusz+IzsxzFXu79Ti5/VOPMDfsBZcVhM4+a3BnYeETFuYuJx07lTC/S0B4kfipTahl
+         mC10cELeMTDGwK2Pu4ELDaV0k65Oa6nvJ/Ch+fb3JLShsvPZLhYsBGhpWsgkgv00ntOz
+         T9+KwDdnvOQS5pWg5osfP7esASDaUVIPLl4KaxoYFhPn7RQCEGiChVW+sYendkRp4huF
+         aDgg==
+X-Gm-Message-State: AOAM531bUtiCWbCERNhrdnHiNJUFxHQt8lw9cRAoll+BqsWKtdx/cK5A
+        dq0xeGk1EcAdrHdl0Baw17k=
+X-Google-Smtp-Source: ABdhPJzXp6YlfGmAUiYHzOtD1PJTSLr3XCovAHLZvis1ouC9/p4U2/5jfgoQakO2n+2S85GDybfXYQ==
+X-Received: by 2002:a05:622a:11cd:: with SMTP id n13mr18281355qtk.233.1624812447049;
+        Sun, 27 Jun 2021 09:47:27 -0700 (PDT)
+Received: from localhost ([207.98.216.60])
+        by smtp.gmail.com with ESMTPSA id 202sm7563423qki.83.2021.06.27.09.47.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Jun 2021 12:26:49 -0700 (PDT)
-Date:   Fri, 25 Jun 2021 12:26:48 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Sun, 27 Jun 2021 09:47:26 -0700 (PDT)
+Date:   Sun, 27 Jun 2021 09:47:25 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] fpga: dfl: expose feature revision from struct
- dfl_device
-Message-ID: <YNYt+Dl43zhkjIhI@epycbox.lan>
-References: <20210625074213.654274-1-martin@geanix.com>
- <20210625074213.654274-3-martin@geanix.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexey Klimov <aklimov@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/3] find: micro-optimize for_each_{set,clear}_bit()
+Message-ID: <YNirnaYw1GSxg1jK@yury-ThinkPad>
+References: <20210618195735.55933-1-yury.norov@gmail.com>
+ <20210618195735.55933-3-yury.norov@gmail.com>
+ <87bl81ddqo.wl-maz@kernel.org>
+ <YM4pJpNphEwvUF2F@yury-ThinkPad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210625074213.654274-3-martin@geanix.com>
+In-Reply-To: <YM4pJpNphEwvUF2F@yury-ThinkPad>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 09:42:10AM +0200, Martin Hundebøll wrote:
-> From: Martin Hundebøll <mhu@silicom.dk>
+On Sat, Jun 19, 2021 at 10:28:07AM -0700, Yury Norov wrote:
+> On Sat, Jun 19, 2021 at 05:24:15PM +0100, Marc Zyngier wrote:
+> > On Fri, 18 Jun 2021 20:57:34 +0100,
+> > Yury Norov <yury.norov@gmail.com> wrote:
+> > > 
+> > > The macros iterate thru all set/clear bits in a bitmap. They search a
+> > > first bit using find_first_bit(), and the rest bits using find_next_bit().
+> > > 
+> > > Since find_next_bit() is called shortly after find_first_bit(), we can
+> > > save few lines of I-cache by not using find_first_bit().
+> > 
+> > Really?
+> > 
+> > > 
+> > > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > > ---
+> > >  include/linux/find.h | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/linux/find.h b/include/linux/find.h
+> > > index 4500e8ab93e2..ae9ed52b52b8 100644
+> > > --- a/include/linux/find.h
+> > > +++ b/include/linux/find.h
+> > > @@ -280,7 +280,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
+> > >  #endif
+> > >  
+> > >  #define for_each_set_bit(bit, addr, size) \
+> > > -	for ((bit) = find_first_bit((addr), (size));		\
+> > > +	for ((bit) = find_next_bit((addr), (size), 0);		\
+> > 
+> > On which architecture do you observe a gain? Only 32bit ARM and m68k
+> > implement their own version of find_first_bit(), and everyone else
+> > uses the canonical implementation:
 > 
-> Drivers can make use of the feature field from the DFL header, but
-> shouldn't know about the header structure. To avoid exposing such info,
-> and to reduce the number of reads from the io-mem, the revision is added
-> to struct dfl_device.
+> And those who enable GENERIC_FIND_FIRST_BIT - x86, arm64, arc, mips
+> and s390.
 > 
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> ---
+> > #ifndef find_first_bit
+> > #define find_first_bit(addr, size) find_next_bit((addr), (size), 0)
+> > #endif
+> > 
+> > These architectures explicitly have different implementations for
+> > find_first_bit() and find_next_bit() because they can do better
+> > (whether that is true or not is another debate). I don't think you
+> > should remove this optimisation until it has been measured on these
+> > two architectures.
 > 
-> Changes since v1:
->  * This patch replaces the previous patch 2 and exposes the feature
->    revision through struct dfl_device instead of a helper reading from
->    io-mem
+> This patch is based on a series that enables separate implementation
+> of find_first_bit() for all architectures; according to my tests,
+> find_first* is ~ twice faster than find_next* on arm64 and x86.
 > 
->  drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
->  drivers/fpga/dfl.h  |  1 +
->  include/linux/dfl.h |  1 +
->  3 files changed, 19 insertions(+), 10 deletions(-)
+> https://lore.kernel.org/lkml/20210612123639.329047-1-yury.norov@gmail.com/T/#t
 > 
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 511b20ff35a3..9381c579d1cd 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
->  
->  	ddev->type = feature_dev_id_type(pdev);
->  	ddev->feature_id = feature->id;
-> +	ddev->revision = feature->revision;
->  	ddev->cdev = pdata->dfl_cdev;
->  
->  	/* add mmio resource */
-> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
->   */
->  struct dfl_feature_info {
->  	u16 fid;
-> +	u8 rev;
->  	struct resource mmio_res;
->  	void __iomem *ioaddr;
->  	struct list_head node;
-> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
->  		/* save resource information for each feature */
->  		feature->dev = fdev;
->  		feature->id = finfo->fid;
-> +		feature->revision = finfo->rev;
->  
->  		/*
->  		 * the FIU header feature has some fundamental functions (sriov
-> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
->  	devm_kfree(binfo->dev, binfo);
->  }
->  
-> -static inline u32 feature_size(void __iomem *start)
-> +static inline u32 feature_size(u64 value)
->  {
-> -	u64 v = readq(start + DFH);
-> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
-> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
->  	/* workaround for private features with invalid size, use 4K instead */
->  	return ofst ? ofst : 4096;
->  }
->  
-> -static u16 feature_id(void __iomem *start)
-> +static u16 feature_id(u64 value)
->  {
-> -	u64 v = readq(start + DFH);
-> -	u16 id = FIELD_GET(DFH_ID, v);
-> -	u8 type = FIELD_GET(DFH_TYPE, v);
-> +	u16 id = FIELD_GET(DFH_ID, value);
-> +	u8 type = FIELD_GET(DFH_TYPE, value);
->  
->  	if (type == DFH_TYPE_FIU)
->  		return FEATURE_ID_FIU_HEADER;
-> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  	unsigned int irq_base, nr_irqs;
->  	struct dfl_feature_info *finfo;
->  	int ret;
-> +	u8 rev;
-> +	u64 v;
-> +
-> +	v = readq(binfo->ioaddr + ofst);
-> +	rev = FIELD_GET(DFH_REVISION, v);
->  
->  	/* read feature size and id if inputs are invalid */
-> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
-> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
-> +	size = size ? size : feature_size(v);
-> +	fid = fid ? fid : feature_id(v);
->  
->  	if (binfo->len - ofst < size)
->  		return -EINVAL;
-> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  		return -ENOMEM;
->  
->  	finfo->fid = fid;
-> +	finfo->rev = rev;
->  	finfo->mmio_res.start = binfo->start + ofst;
->  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->  	finfo->mmio_res.flags = IORESOURCE_MEM;
-> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
->  {
->  	if (!is_feature_dev_detected(binfo)) {
->  		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
-> -			feature_id(binfo->ioaddr + ofst));
-> +			feature_id(readq(binfo->ioaddr + ofst)));
->  		return -EINVAL;
->  	}
->  
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 2b82c96ba56c..422157cfd742 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
->  struct dfl_feature {
->  	struct platform_device *dev;
->  	u16 id;
-> +	u8 revision;
->  	int resource_index;
->  	void __iomem *ioaddr;
->  	struct dfl_feature_irq_ctx *irq_ctx;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 6cc10982351a..431636a0dc78 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -38,6 +38,7 @@ struct dfl_device {
->  	int id;
->  	u16 type;
->  	u16 feature_id;
-> +	u8 revision;
->  	struct resource mmio_res;
->  	int *irqs;
->  	unsigned int num_irqs;
-> -- 
-> 2.31.0
-> 
-Looks good to me, any concerns from Intel folks?
+> After applying the series, I noticed that my small kernel module that
+> calls for_each_set_bit() is now using find_first_bit() to just find
+> one bit, and find_next_bit() for all others. I think it's better to
+> always use find_next_bit() in this case to minimize the chance of
+> cache miss. But if it's not that obvious, I'll try to write some test.
 
-- Moritz
+This test measures the difference between for_each_set_bit() and
+for_each_set_bit_from().
+
+diff --git a/lib/find_bit_benchmark.c b/lib/find_bit_benchmark.c
+index 5637c5711db9..1f37e99090b0 100644
+--- a/lib/find_bit_benchmark.c
++++ b/lib/find_bit_benchmark.c
+@@ -111,6 +111,59 @@ static int __init test_find_next_and_bit(const void *bitmap,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_X86_64
++#define flush_cache_all() wbinvd()
++#endif
++
++static int __init test_for_each_set_bit(int flags)
++{
++#ifdef flush_cache_all
++	DECLARE_BITMAP(bm, BITS_PER_LONG * 2);
++	unsigned long i, cnt = 0;
++	ktime_t time;
++
++	bm[0] = 1; bm[1] = 0;
++
++	time = ktime_get();
++	while (cnt < 1000) {
++		if (flags)
++			flush_cache_all();
++		for_each_set_bit(i, bm, BITS_PER_LONG * 2)
++			cnt++;
++	}
++
++	time = ktime_get() - time;
++
++	pr_err("for_each_set_bit:   %18llu ns, %6ld iterations\n",  time, cnt);
++#endif
++	return 0;
++}
++
++static int __init test_for_each_set_bit_from(int flags)
++{
++#ifdef flush_cache_all
++	DECLARE_BITMAP(bm, BITS_PER_LONG * 2);
++	unsigned long i, cnt = 0;
++	ktime_t time;
++
++	bm[0] = 1; bm[1] = 0;
++
++	time = ktime_get();
++	while (cnt < 1000) {
++		if (flags)
++			flush_cache_all();
++		i = 0;
++		for_each_set_bit_from(i, bm, BITS_PER_LONG * 2)
++			cnt++;
++	}
++
++	time = ktime_get() - time;
++
++	pr_err("for_each_set_bit_from:%16llu ns, %6ld iterations\n", time, cnt);
++#endif
++	return 0;
++}
++
+ static int __init find_bit_test(void)
+ {
+ 	unsigned long nbits = BITMAP_LEN / SPARSE;
+@@ -147,6 +200,16 @@ static int __init find_bit_test(void)
+ 	test_find_first_bit(bitmap, BITMAP_LEN);
+ 	test_find_next_and_bit(bitmap, bitmap2, BITMAP_LEN);
+ 
++	pr_err("\nStart testing for_each_bit()\n");
++
++	test_for_each_set_bit(0);
++	test_for_each_set_bit_from(0);
++
++	pr_err("\nStart testing for_each_bit() with cash flushing\n");
++
++	test_for_each_set_bit(1);
++	test_for_each_set_bit_from(1);
++
+ 	/*
+ 	 * Everything is OK. Return error just to let user run benchmark
+ 	 * again without annoying rmmod.
+
+Here on each iteration: 
+ - for_each_set_bit() calls find_first_bit() once, and find_next_bit() once.
+ - for_each_set_bit_from() calls  find_next_bit() twice.
+
+On my AMD Ryzen 7 4700U, the result is like this:
+
+Start testing for_each_bit()
+for_each_set_bit:                15296 ns,   1000 iterations
+for_each_set_bit_from:           15225 ns,   1000 iterations
+
+Start testing for_each_bit() with cash flushing
+for_each_set_bit:               547626 ns,   1000 iterations
+for_each_set_bit_from:          497899 ns,   1000 iterations
+
+for_each_set_bit_from() is ~10% faster than for_each_set_bit() in
+case of cold caches, and no significant difference was observed if
+flush_cache_all() is not called.
+
+So, it looks reasonable to switch for_each_set_bit() to use
+find_next_bit() only.
+
+Thanks,
+Yury
