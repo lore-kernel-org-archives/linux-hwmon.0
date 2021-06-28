@@ -2,83 +2,83 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02F14C2B9F4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jun 2021 13:56:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF703C2B9F4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jun 2021 14:11:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF79F61C71
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jun 2021 13:56:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B228A61C75
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jun 2021 14:11:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbhF1N6w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Jun 2021 09:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S232307AbhF1ONp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Jun 2021 10:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbhF1N6w (ORCPT
+        with ESMTP id S230033AbhF1ONl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Jun 2021 09:58:52 -0400
+        Mon, 28 Jun 2021 10:13:41 -0400
 Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8130C061574;
-        Mon, 28 Jun 2021 06:56:26 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id o13-20020a9d404d0000b0290466630039caso3625974oti.6;
-        Mon, 28 Jun 2021 06:56:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDEFC061574;
+        Mon, 28 Jun 2021 07:11:14 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id g19-20020a9d12930000b0290457fde18ad0so18880082otg.1;
+        Mon, 28 Jun 2021 07:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MlExkp7hP/ylcrzSxL7T+dFTODfyxl0iT59Y7w//6AI=;
-        b=PNCFkZdjcjZ3XtS8w2YFVrtLgcKI/EFdDyvCxgjOS+ctap0ccxNMlhF4Cy+YRzm+GX
-         qApU/qgxnokyePZEhsKCUuRjwXPD0gmHmh5l3v/OJVoUNEbr7n4Ufn001SgBJl7TVw2z
-         1/29AAY/A29+WhFvFeX1biGb71YYdwq412ZJB+/dNGIT6+Zey5l4ecqrezi3JNQ6xOwe
-         nlMdcqlmoWobYRas1Ge1zr9V/GIymXSB9yQ9aJI0xC1XOl8O4Z+KzZuwvZ7lBYQIyslh
-         wAOWmTnAPpevqNBHw1tPfDXyiqPDIA2ekQJlAnLkQ3DT/YsH5SryerD7phAX9DZGSo0m
-         kt6Q==
+        bh=NCy8SzHtVsTms8W2cCZWxIt9IklFt3RTVjERxFKBJRU=;
+        b=QTI2Djox7MRIV5xmVdooXf1riXKjlPe55adOU+BbFPijCaVTewXZ5ie4xVJsUrdcBD
+         cJlaDQ0G3jnRQLLI4ucg9LiqJXoFUL6UF2TdwnGnGtzNPK8lFvgToLswQ41VZ24yv2nQ
+         APiWED5RrVS3FU+JaP99TaMMnWbx8swi1+T9I0Lzqyuw36K+MEEdXeqT+yN1Kbe+8u+q
+         Nvw+TC7qW+mR340aPPwnhXKV/asgsrjefMugWibYblLQo+twZx0UsIDpXi6EuogG+xfL
+         dTLM/fXncBQegCh1l/jxYY4BheYzmt3HHt6EhczL8on3MfoCQ1m6Yu56FxKx5ukPt4Fc
+         1DyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=MlExkp7hP/ylcrzSxL7T+dFTODfyxl0iT59Y7w//6AI=;
-        b=eW/Kbt5u23uPzTC79xA2RU7E76d5JNZxkbMEoEBsMSLFRnNj9guWTRzlr/2caCIQji
-         kudcWDlWKJ070pUlVOXWIw96iQgSxWzjunSgGzUlGOMC+NSVuTDcdF184crS1HcKRfpw
-         OjWx265BjNin8bLYSEfoGKvDtgmlZM/hbsVAWP18jLCsoSv/TBgdKnGFzhUmJZM2QCCj
-         Uc64uMDAn1clp37/T5bCkcnGapN3j3PbKzAMwfEZYDJxd+Vytaw2idJqc6oYNBCpwluP
-         tWHPH5akZZWPExzfEF57JvFtbTUQJvuzkTOjNE8jfg+EDgvm4i5oJ9EXjdDvyPXrtl6C
-         Xcuw==
-X-Gm-Message-State: AOAM532C6UdPB1BQInwlFn0oLZDKRXgpK2fhkHvjZ/gKExtNqi6cfJ62
-        l5KjvzG1099Iu542n8XNzk8=
-X-Google-Smtp-Source: ABdhPJz7CrhyeVBx+daUx8mvU1U+EBy6hdRC8vefO5jyXcZa8GFDHCgAnMmsF0F6kyEPv3CbPjFwjA==
-X-Received: by 2002:a9d:6545:: with SMTP id q5mr22048969otl.268.1624888586144;
-        Mon, 28 Jun 2021 06:56:26 -0700 (PDT)
+        bh=NCy8SzHtVsTms8W2cCZWxIt9IklFt3RTVjERxFKBJRU=;
+        b=WPjwoopFWCThGGc2zUtG1I+/X9nzblPj89TLdmFbB1c/j+4s1/Esb6SnTxRCbbaYgH
+         dfgfQBHVNh/FRY66RogItNnKDrNPoAEM+gU+k3jiAhT3ZYOeLST27S1ok+Pekfs907ho
+         IUp7mTNDmzjTeIHmkKquf1LezmUjtrDNK0h7TqVoDEZ46wQ5j+Ux21mt3pQguVBDST74
+         DXQqDGtZfD5iMUM5Zeta2bYt6qDtsy19aeV2ob0YfG8DB2tlNJ1L4k7+r86coyYnItES
+         J0cKlwFvtx5fgSptByg8hzWhxYcar2onSAi351RLoJjoBEW6ZrZKOwiFvVvTC2njaInR
+         VOeA==
+X-Gm-Message-State: AOAM532mZSzD+F47bE8Y71L7dmjX9GI9Yb6NCgUC+VLYVyn3TUlVK6u3
+        jCDFCkKssggICvSK8d1LV2qDGRP14X0=
+X-Google-Smtp-Source: ABdhPJz/RXKT8x97KI9wifUr08T/FRV419WzdifSJDubUxN/tao0sXxCDyEYw9FcL+YvC+iV0ip2Tw==
+X-Received: by 2002:a9d:5c14:: with SMTP id o20mr20880765otk.328.1624889472363;
+        Mon, 28 Jun 2021 07:11:12 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j14sm3447071otn.18.2021.06.28.06.56.24
+        by smtp.gmail.com with ESMTPSA id r204sm3120937oih.11.2021.06.28.07.11.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jun 2021 06:56:25 -0700 (PDT)
+        Mon, 28 Jun 2021 07:11:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-References: <20210624035821.25375-1-billy_tsai@aspeedtech.com>
- <20210624124428.GB1670703@roeck-us.net>
- <51093C5F-61E2-4155-9C9A-035E330AEA1E@aspeedtech.com>
+Subject: Re: [PATCH v2 5/5] hwmon: intel-m10-bmc-hwmon: add n5010 sensors
+To:     Xu Yilun <yilun.xu@intel.com>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20210625074213.654274-1-martin@geanix.com>
+ <20210625074213.654274-6-martin@geanix.com>
+ <20210628060019.GE72330@yilunxu-OptiPlex-7050>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho) Using falling edge.
-Message-ID: <43b0c30c-949a-8a6f-268f-c2a550fca30d@roeck-us.net>
-Date:   Mon, 28 Jun 2021 06:56:23 -0700
+Message-ID: <6cb3b8cb-35dc-7279-cda2-0a2300aa959a@roeck-us.net>
+Date:   Mon, 28 Jun 2021 07:11:09 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <51093C5F-61E2-4155-9C9A-035E330AEA1E@aspeedtech.com>
+In-Reply-To: <20210628060019.GE72330@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -86,62 +86,165 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/24/21 8:35 PM, Billy Tsai wrote:
-> On 2021/6/24, 8:44 PM, "Guenter Roeck" <groeck7@gmail.com on behalf of linux@roeck-us.net> wrote:
-> 
->      On Thu, Jun 24, 2021 at 11:58:21AM +0800, Billy Tsai wrote:
->      >> The tach shouldn't use both edges to measure. When the tach input
->      >> duty cycle isn't 50% the return value will inaccurate.
->      >>
->      > A tachometer doesn't have a duty cycle. A pwm has a duty cycle, but that
->      > is completely independent of the pwm duty cycle used to set the fan speed.
->      > So this patch does not really make sense with the above explanation.
-> 
-> The duty cycle means the waveform that reported from the fan tach pin not pwm signal.
-> 
->      > The impact of this patch is likely that the reported fan speed is reduced
->      > by 50%. It may well be that the driver currently reports twice the real fan
->      > speed. I have no idea if that is the case, but if it is it should not be
->      > conditional. The description above states "when the tach input cycle isn't
->      > 50%", suggesting that this is conditional on some other configuration.
->      > I don't know what that might be either.
-> 
-> According to the tach mode, our tach controller will sample the time of once conditional meet and translate it to tach value.
-> When the tach signal duty cycle isn't 50%, using both edges mode will get the tach value with error rate.
-> In addition, the current report value of both edges will twice the result which will enlarge the error rate.
-> Actually, the tach signal won't be a complete 50% duty cycle, so both edges mode isn't recommanded for the fan usage.
-> With rising-to-rising mode the skew time of tach signal will also effect the accuracy.
-> Thus, using the falling-to-falling mode is the better way for a fan tach monitor.
-> But for flexibility, I think using dts property to control the tach mode is better the user can change the mode to adapter the monitor device.
+On 6/27/21 11:00 PM, Xu Yilun wrote:
+> It is good to me.
 > 
 
-Trying again, using my own words.
+As already pointed out, please don't top-post, and provide a
+formal Reviewed-by: or Acked-by: tag.
 
-A fan normally provides two short pulses per revolution. Those are short
-puleses, and one does not typically talk about "duty cycle" or "waveform"
-in this context. The driver currently counts both edges of those pulses.
-Assuming that a fan reports, say, 1,000 pulses per minute, the hardware
-would report a edle count of 2,000. This should translate into 500 RPM.
-I don't know if this is currently the case in the driver; if not, it would
-be a bug. Either case, the suggested change would reduce the pulse count
-reported by the hardware to 1,000. If we assume that the driver currently
-translates this correctly to 500 RPM, the suggested change would result
-in the driver reporting 250 RPM, which would be wrong.
-
-So there are two possibilities:
-1) The driver currently reports 1,000 RPM in this situation. This would be a bug
-    which needs to get fixed.
-2) The driver currently correctly reports 500 RPM. In this case, the suggested
-    patch would introduce a bug because the code is not adjusted for the reduced
-    pulse count.
-
-The problem is that the patch does not address either of the situations above.
-In case 1), it should state that the code currently reports twice the real
-fan speed, and that the patch fixes that problem. In case 2), the patch should
-also fix the arithmetic used to calculate RPM from the pulse count.
-
-Either case, I disagree that this should be handled in devicetree. It has
-nothing to do with hardware description or configuration but is in the
-discretion of the driver author/implementer.
-
+Thanks,
 Guenter
+
+> On Fri, Jun 25, 2021 at 09:42:13AM +0200, Martin Hundebøll wrote:
+>> From: Martin Hundebøll <mhu@silicom.dk>
+>>
+>> Add the list of sensors supported by the Silicom n5010 PAC, and enable
+>> the drivers as a subtype of the intel-m10-bmc multi-function driver.
+>>
+>> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+>> ---
+>>
+>> Changes since v1:
+>>   * Patch split out to separate hwmon changes
+>>
+>>   drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
+>>   1 file changed, 116 insertions(+)
+>>
+>> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
+>> index bd7ed2ed3a1e..7a08e4c44a4b 100644
+>> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
+>> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
+>> @@ -228,6 +228,118 @@ static const struct m10bmc_hwmon_board_data d5005bmc_hwmon_bdata = {
+>>   	.hinfo = d5005bmc_hinfo,
+>>   };
+>>   
+>> +static const struct m10bmc_sdata n5010bmc_temp_tbl[] = {
+>> +	{ 0x100, 0x0, 0x104, 0x0, 0x0, 1000, "Board Local Temperature" },
+>> +	{ 0x108, 0x0, 0x10c, 0x0, 0x0, 1000, "FPGA 1 Temperature" },
+>> +	{ 0x110, 0x0, 0x114, 0x0, 0x0, 1000, "FPGA 2 Temperature" },
+>> +	{ 0x118, 0x0, 0x0, 0x0, 0x0, 1000, "Card Top Temperature" },
+>> +	{ 0x11c, 0x0, 0x0, 0x0, 0x0, 1000, "Card Bottom Temperature" },
+>> +	{ 0x128, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 1.2V Temperature" },
+>> +	{ 0x134, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 5V Temperature" },
+>> +	{ 0x140, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 0.9V Temperature" },
+>> +	{ 0x14c, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 0.85V Temperature" },
+>> +	{ 0x158, 0x0, 0x0, 0x0, 0x0, 1000, "AUX 12V Temperature" },
+>> +	{ 0x164, 0x0, 0x0, 0x0, 0x0, 1000, "Backplane 12V Temperature" },
+>> +	{ 0x1a8, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-1 Temperature" },
+>> +	{ 0x1ac, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-2 Temperature" },
+>> +	{ 0x1b0, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-3 Temperature" },
+>> +	{ 0x1b4, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-4 Temperature" },
+>> +	{ 0x1b8, 0x0, 0x0, 0x0, 0x0, 1000, "CVL1 Internal Temperature" },
+>> +	{ 0x1bc, 0x0, 0x0, 0x0, 0x0, 1000, "CVL2 Internal Temperature" },
+>> +};
+>> +
+>> +static const struct m10bmc_sdata n5010bmc_in_tbl[] = {
+>> +	{ 0x120, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.2V Voltage" },
+>> +	{ 0x12c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 5V Voltage" },
+>> +	{ 0x138, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.9V Voltage" },
+>> +	{ 0x144, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.85V Voltage" },
+>> +	{ 0x150, 0x0, 0x0, 0x0, 0x0, 1, "AUX 12V Voltage" },
+>> +	{ 0x15c, 0x0, 0x0, 0x0, 0x0, 1, "Backplane 12V Voltage" },
+>> +	{ 0x16c, 0x0, 0x0, 0x0, 0x0, 1, "DDR4 1.2V Voltage" },
+>> +	{ 0x17c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.8V Voltage" },
+>> +	{ 0x184, 0x0, 0x0, 0x0, 0x0, 1, "QDR 1.3V Voltage" },
+>> +	{ 0x18c, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 0.8V Voltage" },
+>> +	{ 0x194, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 1.05V Voltage" },
+>> +	{ 0x19c, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 1.05V Voltage" },
+>> +	{ 0x1a4, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 0.8V Voltage" },
+>> +};
+>> +
+>> +static const struct m10bmc_sdata n5010bmc_curr_tbl[] = {
+>> +	{ 0x124, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.2V Current" },
+>> +	{ 0x130, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 5V Current" },
+>> +	{ 0x13c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.9V Current" },
+>> +	{ 0x148, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.85V Current" },
+>> +	{ 0x154, 0x0, 0x0, 0x0, 0x0, 1, "AUX 12V Current" },
+>> +	{ 0x160, 0x0, 0x0, 0x0, 0x0, 1, "Backplane 12V Current" },
+>> +	{ 0x168, 0x0, 0x0, 0x0, 0x0, 1, "DDR4 1.2V Current" },
+>> +	{ 0x178, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.8V Current" },
+>> +	{ 0x180, 0x0, 0x0, 0x0, 0x0, 1, "QDR 1.3V Current" },
+>> +	{ 0x188, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 0.8V Current" },
+>> +	{ 0x190, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 1.05V Current" },
+>> +	{ 0x198, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 1.05V Current" },
+>> +	{ 0x1a0, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 0.8V Current" },
+>> +};
+>> +
+>> +static const struct hwmon_channel_info *n5010bmc_hinfo[] = {
+>> +	HWMON_CHANNEL_INFO(temp,
+>> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+>> +	HWMON_CHANNEL_INFO(in,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL),
+>> +	HWMON_CHANNEL_INFO(curr,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL),
+>> +	NULL
+>> +};
+>> +
+>> +static const struct m10bmc_hwmon_board_data n5010bmc_hwmon_bdata = {
+>> +	.tables = {
+>> +		[hwmon_temp] = n5010bmc_temp_tbl,
+>> +		[hwmon_in] = n5010bmc_in_tbl,
+>> +		[hwmon_curr] = n5010bmc_curr_tbl,
+>> +	},
+>> +
+>> +	.hinfo = n5010bmc_hinfo,
+>> +};
+>> +
+>>   static umode_t
+>>   m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
+>>   			u32 attr, int channel)
+>> @@ -438,6 +550,10 @@ static const struct platform_device_id intel_m10bmc_hwmon_ids[] = {
+>>   		.name = "d5005bmc-hwmon",
+>>   		.driver_data = (unsigned long)&d5005bmc_hwmon_bdata,
+>>   	},
+>> +	{
+>> +		.name = "n5010bmc-hwmon",
+>> +		.driver_data = (unsigned long)&n5010bmc_hwmon_bdata,
+>> +	},
+>>   	{ }
+>>   };
+>>   
+>> -- 
+>> 2.31.0
+
