@@ -2,164 +2,213 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8866FC11F65
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Jun 2021 02:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 095C6C11F66
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Jun 2021 05:16:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60ADB61CEF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Jun 2021 02:49:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E235361DC5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Jun 2021 05:16:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbhF2Cvj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Jun 2021 22:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbhF2Cvj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Jun 2021 22:51:39 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31989C061574;
-        Mon, 28 Jun 2021 19:49:12 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id k11so24867976ioa.5;
-        Mon, 28 Jun 2021 19:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4pGYnfbKQETEAKdXNWRGKa4i4FYZw839aiP9K57DQKI=;
-        b=OVFmIZPDk6KlNwyhu7E63CFwZOYklW0CSM0oYNCKgqOmt/AC3edk0PtdHL8gr0PITS
-         h/hOSOXcLTy2SDbwEXKwjMQByVuhdmwqxSamQy4s1MXhl/12IMQkfLIuCzFGjHiEwdYH
-         rSv+DzBmKMPkFAoIZKyP1pDBIHlejYErQZ7GrhRjhhtQJcVDfLGKWVVBfQVOlXkmxbb6
-         GOHUHwPZzcxpWpLGqxuzcfj5hPnv6F+4jY1GRxyy7fLKV6fISTY+EWBNxMj87CWl6aTW
-         1+Zttz490ua2bcKI/2h2pjPB1J97thXdmlh6W89hIhRfH7Qb4M0d6a4hspMkOsAHA0e2
-         G8ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4pGYnfbKQETEAKdXNWRGKa4i4FYZw839aiP9K57DQKI=;
-        b=VylcDNBC4cKmMEcCHa/2TyggK76fzRtnIe5y7y56G2RO29cbta3iz/0ON+2lzWMn7V
-         hTcmHqZWMDPslKlYwOnR1QXA4G0jMebU9O6dzKNZiairFFGEMoDCVRmlmi1vOaXsL6rP
-         0X4V6OpuprIcLPZg/EnnRuDPTIpZhDWkgivv6aUYyGxocEWelLWvomPscf15YONqXVkV
-         0ML98M8vTU0pn8eSHS9DKVE0JaRsmvb1g/VkMJgAcW/nUdEKTimmLFXsCpP1uwzKGai+
-         NUhEMagrbEtcKOAarzM1vEUeTKxYLSLzMsju02dwxIe8DkZ8u/gm/8I/5ZU/34sbierr
-         UEKA==
-X-Gm-Message-State: AOAM5322fiotrZTsjY9hbbANFDoOfd+yqgdSU/oTCkjuauCQZBsJp8Lw
-        mQkCJ9isPD8e8KToP9Pfz3rTTCj/THnmS64+HTc=
-X-Google-Smtp-Source: ABdhPJx9811AFz4O4szBF1T/od4Nhnh3j/LT+KAqZzs/XIJR6AFBugpc7N1jDz/UbqN7XF5NhymXfeIc8TC/PC/tB70=
-X-Received: by 2002:a6b:490d:: with SMTP id u13mr2063866iob.176.1624934951615;
- Mon, 28 Jun 2021 19:49:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210623005426.15731-1-ainux.wang@gmail.com> <20210624131752.GA2788536@roeck-us.net>
- <CAPWE4_xsY0ZAwm5g=Ujm_63WiS-sYMV42cpMD=cr65QNWLZaGQ@mail.gmail.com> <a55cde2b-ce51-fc7c-6b73-e4394d584ee4@roeck-us.net>
-In-Reply-To: <a55cde2b-ce51-fc7c-6b73-e4394d584ee4@roeck-us.net>
-From:   Ainux Wang <ainux.wang@gmail.com>
-Date:   Tue, 29 Jun 2021 10:48:36 +0800
-Message-ID: <CAPWE4_y4wsY596RK_U2r1ZaGtfAAxxs=wR0OkvBP_PSgsgXcPA@mail.gmail.com>
-Subject: Re: [PATCH v5] hwmon: (pmbus) Add support for MPS MP2949A
+        id S229634AbhF2FTX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Jun 2021 01:19:23 -0400
+Received: from mga01.intel.com ([192.55.52.88]:43609 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229480AbhF2FTW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 29 Jun 2021 01:19:22 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10029"; a="229710149"
+X-IronPort-AV: E=Sophos;i="5.83,308,1616482800"; 
+   d="scan'208";a="229710149"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 22:16:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,308,1616482800"; 
+   d="scan'208";a="446893279"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Jun 2021 22:16:42 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ly670-0008uq-9t; Tue, 29 Jun 2021 05:16:42 +0000
+Date:   Tue, 29 Jun 2021 13:16:03 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        teng sterling <sterlingteng@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ 4085a54cef04dbc121b0af7cd06f79df9c9f6a44
+Message-ID: <60daac93.SYxwsbjbGstDSKeS%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 29 Jun 2021 at 10:20, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 6/28/21 6:26 PM, Ainux Wang wrote:
-> > On Thu, 24 Jun 2021 at 21:17, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On Wed, Jun 23, 2021 at 08:54:26AM +0800, ainux.wang@gmail.com wrote:
-> >>> From: "Ainux.Wang" <ainux.wang@gmail.com>
-> >>>
-> >>> Add support for MP2949A device from Monolithic Power Systems, Inc. (MPS).
-> >>> This is a triple-loop, digital, multi-phase controller.
-> >>> This device:
-> >>> - Supports up to three power rail.
-> >>> - Provides 6 pulse-width modulations (PWMs), and can be configured up
-> >>>    to 6-phase operation for Rail A , up to 2-phase operation for Rail B
-> >>>    and up to 1-phase operation for Rail C.
-> >>> - The PMBus registers are distributed into three pages: Page 0, Page 1,
-> >>>    Page 2. Page 0 contains the registers for Rail A and most of the common
-> >>>    settings for all of the rails. Page 1 contains register information for
-> >>>    Rail B. Page 2 contains register information for Rail C.
-> >>> - The MP2949A supports both 5mV VID step and 10mv VID step for IMVP8 and
-> >>>    IMVP9.
-> >>>
-> >>> Signed-off-by: Ainux.Wang <ainux.wang@gmail.com>
-> >>> ---
-> >>> v5:
-> >>> - Moved change log to right here.
-> >>> v4:
-> >>> - Removed mp2949a_read_byte_data().
-> >>
-> >> Your other question left me confused. I had previously asked to provide
-> >> a rationale for filtering out the PMBUS_VOUT_MODE command, and I had
-> >> stated that "the chip does not support it" is not a valid reason. However,
-> >> "the chip does not support it but does not report an error when reading
-> >> it" _is_ a valid reason. So what happens when the PMBus core reads
-> >> PMBUS_VOUT_MODE ? Does the chip return an error, or some random data ?
-> >>
-> >> Thanks,
-> >> Guenter
-> >>
-> > Hi, Guenter
-> >
-> > I have not been clear about the cause of this problem that
-> > "the chip does not support it is not a valid reason".
-> >
-> > However, i have added some "printk", i found the chip will return some
-> > random data,
-> > when the PMbus core reads PMBUS_STATUS and PMBUS_VOUT_MODE.
-> >
-> > So, I do not known what should i do, when the PMbus core reads PMBUS_STATUS.
-> > and i have knwon that use "This chip do not support the VOUT_MODE command,
-> > the chip does not support it but return some random data when reading
-> > " instead of
-> > "
-> >                 /*
-> >                  * This chip do not support the VOUT_MODE command.
-> >                  * There is not VOUT_MODE command in MP2949A datasheet P29~P31.
-> >                  * So this is EINVAL in here.
-> >                 */
-> > "
-> > Now, there is only one question left, what should the PMbus do, the
-> > chip return random data,
-> > when it reads PMBUS_STATUS by i2c_smbus_read_word_data() or
-> > i2c_smbus_read_byte_data()?
-> > Can the PMbus core use  pmbus_read_status_byte() and
-> > pmbus_read_status_word() instead of
-> > i2c_smbus_read_byte_data() and i2c_smbus_read_word_data() ?
-> >
->
-> The driver should implement a read_byte_data() function and either
-> simulate PMBUS_VOUT_MODE and let it return whatever makes sense for
-> the driver, or have it return -EINVAL.
->
-> For the status register, handling is a bit more difficult. For this, we will
-> need an introductory patch. That patch needs to change pmbus_init_common()
-> to call pmbus_read_status_word() and pmbus_read_status_byte() instead
-> of i2c_smbus_read_word_data() and i2c_smbus_read_byte_data() (with page set
-> to -1).
-> The driver patch then needs to implement a read_word_data() function and
-> have it simulate the PMBUS_STATUS_WORD command. Or, alternatively,
-> have the read_word_data() function return -EINVAL for PMBUS_STATUS_WORD,
-> and simulate PMBUS_STATUS_BYTE in the read_byte_data callback.
->
-> Thanks,
-> Guenter
-Hi, Guenter
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 4085a54cef04dbc121b0af7cd06f79df9c9f6a44  watchdog: bcm2835_wdt: consider system-power-controller property
 
-Very nice, that is what i mean, we have the same idea, I am going to
-revise pmbus_init_common(),
-pmbus_check_register and so on.
+elapsed time: 728m
 
-Best regards,
-Ainux Wang.
+configs tested: 148
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                           se7750_defconfig
+arm                         palmz72_defconfig
+powerpc                         wii_defconfig
+m68k                        stmark2_defconfig
+powerpc                     akebono_defconfig
+m68k                       m5249evb_defconfig
+powerpc                     sbc8548_defconfig
+mips                           ip22_defconfig
+powerpc                      pasemi_defconfig
+sh                          r7780mp_defconfig
+m68k                            mac_defconfig
+mips                           ci20_defconfig
+arm                           sunxi_defconfig
+arc                          axs101_defconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                    gamecube_defconfig
+mips                     loongson2k_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                      obs600_defconfig
+mips                           ip27_defconfig
+mips                           jazz_defconfig
+arm                          pcm027_defconfig
+mips                     loongson1c_defconfig
+arm                       netwinder_defconfig
+arm                        oxnas_v6_defconfig
+sh                          urquell_defconfig
+powerpc                    socrates_defconfig
+powerpc                       ppc64_defconfig
+arm                          pxa910_defconfig
+arm                         lpc18xx_defconfig
+arm                             ezx_defconfig
+m68k                          multi_defconfig
+sh                      rts7751r2d1_defconfig
+powerpc                     tqm8541_defconfig
+mips                        omega2p_defconfig
+microblaze                      mmu_defconfig
+arc                 nsimosci_hs_smp_defconfig
+mips                  decstation_64_defconfig
+arm                          collie_defconfig
+mips                      maltaaprp_defconfig
+mips                           ip28_defconfig
+nios2                         3c120_defconfig
+arm                          moxart_defconfig
+arm                        keystone_defconfig
+x86_64                            allnoconfig
+h8300                    h8300h-sim_defconfig
+powerpc                      chrp32_defconfig
+mips                         tb0226_defconfig
+h8300                            alldefconfig
+um                           x86_64_defconfig
+mips                  maltasmvp_eva_defconfig
+powerpc                     sequoia_defconfig
+mips                          ath79_defconfig
+powerpc                     skiroot_defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                      mgcoge_defconfig
+sh                            hp6xx_defconfig
+mips                       lemote2f_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                 mpc836x_rdk_defconfig
+sh                         microdev_defconfig
+powerpc                      ppc6xx_defconfig
+mips                         mpc30x_defconfig
+m68k                        mvme147_defconfig
+mips                      loongson3_defconfig
+arm                         socfpga_defconfig
+arm                           h3600_defconfig
+s390                             alldefconfig
+arm                  colibri_pxa270_defconfig
+arm                          lpd270_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210628
+i386                 randconfig-a002-20210628
+i386                 randconfig-a003-20210628
+i386                 randconfig-a006-20210628
+i386                 randconfig-a005-20210628
+i386                 randconfig-a004-20210628
+x86_64               randconfig-a012-20210628
+x86_64               randconfig-a016-20210628
+x86_64               randconfig-a015-20210628
+x86_64               randconfig-a013-20210628
+x86_64               randconfig-a014-20210628
+x86_64               randconfig-a011-20210628
+i386                 randconfig-a011-20210628
+i386                 randconfig-a014-20210628
+i386                 randconfig-a013-20210628
+i386                 randconfig-a015-20210628
+i386                 randconfig-a016-20210628
+i386                 randconfig-a012-20210628
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210628
+x86_64               randconfig-a002-20210628
+x86_64               randconfig-a005-20210628
+x86_64               randconfig-a001-20210628
+x86_64               randconfig-a003-20210628
+x86_64               randconfig-a004-20210628
+x86_64               randconfig-a006-20210628
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
