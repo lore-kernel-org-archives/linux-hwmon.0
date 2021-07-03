@@ -5,69 +5,69 @@ X-Spam-Level:
 X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB0CC07E95
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Jul 2021 23:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96874C07E97
+	for <linux-hwmon@archiver.kernel.org>; Sat,  3 Jul 2021 17:37:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 33ABE61410
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Jul 2021 23:47:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 682E861934
+	for <linux-hwmon@archiver.kernel.org>; Sat,  3 Jul 2021 17:37:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhGBXth (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 2 Jul 2021 19:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
+        id S229732AbhGCRjg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 3 Jul 2021 13:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhGBXtg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Jul 2021 19:49:36 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8694C061762
-        for <linux-hwmon@vger.kernel.org>; Fri,  2 Jul 2021 16:47:02 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id q4so15516064ljp.13
-        for <linux-hwmon@vger.kernel.org>; Fri, 02 Jul 2021 16:47:02 -0700 (PDT)
+        with ESMTP id S229613AbhGCRjf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Jul 2021 13:39:35 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E11BC061762
+        for <linux-hwmon@vger.kernel.org>; Sat,  3 Jul 2021 10:37:01 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id u20so18127519ljo.12
+        for <linux-hwmon@vger.kernel.org>; Sat, 03 Jul 2021 10:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QaUQUW3FZVI6IicXvq3kQ7seQEU5FyLrNqSQSjuN7h0=;
-        b=S4MlVXSFACHF/E/XFXXssEu/ZVEfVwQmN5CWJVc94/KMhFmBlKxT8Uk65FZ91plAHE
-         PVLE0O6+41zMr3mKPguRc2kiR//dfoLioUGS86CdJiCy5xfLFu4LRmkP20pNaySlW+3z
-         1e+J4QW1CIS2f9ZF4gk3xT1pXtZXSH5HBNt73KGJ22gQwwvY9ve7nHovtdo3Bs06DFjE
-         1csAZj8nt3znxbgNYXEZRkVD84OqTahd+EUuLXf8QqUsrvH2ccN+HAhPhlLuG/OxgU4/
-         Q3i1VGB41JbHceCqdbl1p3a36mWM9887gqtWsSrkDAO4pLRPEGtDygJh+eEDkHcAK5AF
-         K3EA==
+        bh=3/wv+TFcotobDhEtS8rWg6Z26WEl2LawwW76VsOFomQ=;
+        b=CrCfL+Tbr58valehPb0t0SWI1DRhi7efBslrwr6Olb5ygLf+Jtp+IqeidGtMbifgM0
+         c13ML5+QjnM0zLd+bUJ1rRf18BvuSPU1IW1DexuzpvZuvA03GeuTAcnuXs/ddfe4iciW
+         NwH1MNDjNxxfaImktK6Hdfdyb2iwfZCaBiiBdFFrV27z9KsCO7bof8ikSRg3hp37V7S7
+         wlGqRO9FGcT5Gg42sh4X+aZefybyX3BtUNcj+yxQPJSipz+T5wwZvuAuh+vsoQeRFag+
+         8OYEkGZNJzniErt4XBeR5q/djdfHXzEzWJNvnuDRkof1MQVLQi2AByZWPe0KY6alpx4H
+         8tBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QaUQUW3FZVI6IicXvq3kQ7seQEU5FyLrNqSQSjuN7h0=;
-        b=XGHrIe2BFy7amUPYKuFMxtajCxeC6CkSf3RMqKNfnBCrXmA6r/n1SEGmsSTHD5QChj
-         +Ji9m2Vi2LdSw2PNnTmUKq1cLVy0IBCTCO0yPYvvx4jtjI5YD12eFIrDQs+4mLKL8xyH
-         6AJmgKbJ5UzNO1rlXxSObTp3hhOPPQlFQNH/MIPkjBT4whgdBeys3uE8N04p/jCbREgE
-         clY8sdzp4fsTPKbOcj/3WzZxqfb98KyFtlrWXjTVMwtlOHalA35jxGsSYOGB55L1RioM
-         et+MLEabQWoMwD6cJ4MhjEgNqesRA6jB/vFtJOpNO/Yo40uVKd/78tEPKXcjq7QM/6zV
-         K3LA==
-X-Gm-Message-State: AOAM531jozeHMARM3DzqYEqKv2nosG2wNvsuDHNfnaQAFWUfpH6l79vV
-        8D7Fg2hH0Yvke/V/PJPWD7aBag==
-X-Google-Smtp-Source: ABdhPJwbKMQ3QkQQU9elaw1fTvStjDwGqWAi7oX3UAHQ7yTu9CbFLdCejZke1uhumOpDjkbeYUD42A==
-X-Received: by 2002:a2e:84cc:: with SMTP id q12mr1508188ljh.274.1625269621113;
-        Fri, 02 Jul 2021 16:47:01 -0700 (PDT)
+        bh=3/wv+TFcotobDhEtS8rWg6Z26WEl2LawwW76VsOFomQ=;
+        b=ldA8FX7571RAN1dNZz1Cy+kqlw1oH1XM99wCLvtQBuMbHJfZcY+eCGKwC04UfTbrQW
+         zAPF8vehtjbxN4zFp7k1cjiwDk42yZKAiLU2x09Vt9DfM7PeHcsefWxh35znRzKfbm8o
+         kYo4h7pwyEVfFINFdoBhJw/JZYMt7BUJDv3ODLTq2MCVZVSmfjCOGCYcnVKSdOKqneF4
+         NRvnGACIOsU58uDw3uMqfVc5V5SGyfUp8Fi33tjjly6xPZLRuh+n0WOyfJqzqjND+Uis
+         Tv9LdEZpbSj3xh4fMm18Y1aO39OcwcBFA0U2vXCEhp1/29U/YdMpXgOAHtrxpVRCGGG6
+         ODAg==
+X-Gm-Message-State: AOAM533aDkbpMgD0qXQoyF5jNpFSz7YSZlcLaJeqgmsUKuzOxq7OmNj9
+        hPtjAzKxnc9f/bwLXgVfDxm14Q==
+X-Google-Smtp-Source: ABdhPJxB+tC21k3LQrjWnktbbanGbW8sQM4BYgl54Pn01so877tG4Hh68tDwgzGAWVGn2qo7+oZFbA==
+X-Received: by 2002:a2e:9e8e:: with SMTP id f14mr4244839ljk.468.1625333819552;
+        Sat, 03 Jul 2021 10:36:59 -0700 (PDT)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id b23sm45758ljh.69.2021.07.02.16.47.00
+        by smtp.gmail.com with ESMTPSA id p18sm751166ljj.56.2021.07.03.10.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jul 2021 16:47:00 -0700 (PDT)
+        Sat, 03 Jul 2021 10:36:59 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        Naveen Krishna Chatradhi <ch.naveen@samsung.com>,
-        Javier Martinez Canillas <javier.martinez@collabora.co.uk>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
         Johannes Pointner <johannes.pointner@gmail.com>,
         Peter Rosin <peda@axentia.se>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH] dt-bindings: hwmon: Convert NTC thermistor to YAML
-Date:   Sat,  3 Jul 2021 01:44:54 +0200
-Message-Id: <20210702234454.3982216-1-linus.walleij@linaro.org>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: hwmon: Convert NTC thermistor to YAML
+Date:   Sat,  3 Jul 2021 19:34:56 +0200
+Message-Id: <20210703173456.4002549-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,12 +79,17 @@ This converts the NTC thermistor DT bindings to YAML. Some care had to
 be taken since I had to add some illustrations to make the connection
 layouts graspable.
 
-Cc: Naveen Krishna Chatradhi <ch.naveen@samsung.com>
-Cc: Javier Martinez Canillas <javier.martinez@collabora.co.uk>
+Cc: Javier Martinez Canillas <javier@dowhile0.org>
 Cc: Johannes Pointner <johannes.pointner@gmail.com>
 Cc: Peter Rosin <peda@axentia.se>
 Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: devicetree@vger.kernel.org
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Realize I need to CC devicetree@vger.kernel.org on this.
+- Fix Javier's mail address.
+- Drop Naveen's mail (bouncing)
 ---
  .../bindings/hwmon/ntc-thermistor.yaml        | 142 ++++++++++++++++++
  .../bindings/hwmon/ntc_thermistor.txt         |  44 ------
