@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3930C07E96
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09D8CC07E9A
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:17:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DBA306135D
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:15:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBB6A6135D
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:17:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbhGDXS3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:18:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50862 "EHLO mail.kernel.org"
+        id S230504AbhGDXUT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:20:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233775AbhGDXOj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:14:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 83E376198B;
-        Sun,  4 Jul 2021 23:10:25 +0000 (UTC)
+        id S232496AbhGDXNU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:13:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6693861971;
+        Sun,  4 Jul 2021 23:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440226;
-        bh=n6MpmgUXNWsu6xA0uvnJ+r5B7hHXAqqRfNebCagcEIs=;
+        s=k20201202; t=1625440158;
+        bh=eTrAhuEnhf1jwS563QR50Re9w5Dovg9QzGL1lL+ozPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cFEoCNg8gatkGg00Mn5gdR166bFpgFNWanM/tsnYJ4tcc/mOrlM2zU7FDD3hTVHzT
-         lOAu0PJfgZES5vI17ahKRjS5AGxjJBIbmC0ERXJYPHhQJZyMcDy/tGzvmwDcOucpQG
-         /dqsal2ZxGsDIzp/mIlTCtyz8tFUp+R0B+AtVwHYgT0TI1bqi24bbs4AGGGgWpOvjw
-         8fTgHesgQpOudrRIo4a0St7nvTFOCDEmfZQWyHiQDOP5+4XuFUAB3wdECA0NeTo6nS
-         eEExr2K/89uttUd3vheR/2cz3alY0pdxMrinVwCWiliAlTvORAe7/eqAueiZhWAmdw
-         f8eS3AJq9Snvg==
+        b=a594L1MkaFh4g8w5f8pKFIhmHxYLEJjghZRo6ucJgM7Wba/UgfmdIaVCjZbEZ117b
+         Onn5hlJ1+whJc7U3q2OC8IEtFi5rK7pnF8ZrH+oW28UNCTrR5LC75Da/s1kNCf6lMq
+         5AziMuoXHXnXUzAEBEbUYxWwDXO3htYm6bEdoM+6UGZF5/PcsM0HiHuSR9O2HXgjDl
+         CS/unGcqRgs0OV9ay4MhiS75GgCaP/LDBQ6BKx+bw6VjQMM15Hxm+QXyNivcx3Tw59
+         SnkArMfneAscdMqGw8+6yCyebvfpXSZtFpllv1VhtYjjXTEH2OzZMzscs7zQHIb33f
+         Gzf7V5KG53now==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
@@ -38,12 +38,12 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 37/50] hwmon: (max31790) Fix pwmX_enable attributes
-Date:   Sun,  4 Jul 2021 19:09:25 -0400
-Message-Id: <20210704230938.1490742-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 55/70] hwmon: (max31790) Fix pwmX_enable attributes
+Date:   Sun,  4 Jul 2021 19:07:48 -0400
+Message-Id: <20210704230804.1490078-55-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704230938.1490742-1-sashal@kernel.org>
-References: <20210704230938.1490742-1-sashal@kernel.org>
+In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
+References: <20210704230804.1490078-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -96,7 +96,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 27 insertions(+), 16 deletions(-)
 
 diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-index 9f12aac4fab5..f4749c44cfb8 100644
+index 54ff0f49e28f..7b097c3b9b90 100644
 --- a/Documentation/hwmon/max31790.rst
 +++ b/Documentation/hwmon/max31790.rst
 @@ -38,7 +38,7 @@ Sysfs entries
@@ -109,7 +109,7 @@ index 9f12aac4fab5..f4749c44cfb8 100644
                         write: target pwm duty cycle (0-255)
  ================== === =======================================================
 diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 344be7829d58..21b6b63b1c07 100644
+index 8ad7a45bfe68..76aa96f5b984 100644
 --- a/drivers/hwmon/max31790.c
 +++ b/drivers/hwmon/max31790.c
 @@ -27,6 +27,7 @@
