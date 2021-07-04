@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0629C07E9C
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10920C07E9D
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA398613F7
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:06:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F00EE611ED
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbhGDXIp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:08:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
+        id S232164AbhGDXLN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:11:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50590 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231260AbhGDXIY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:08:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B1A3613E9;
-        Sun,  4 Jul 2021 23:05:47 +0000 (UTC)
+        id S230350AbhGDXKQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:10:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA5A7613F3;
+        Sun,  4 Jul 2021 23:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625439948;
+        s=k20201202; t=1625440058;
         bh=eTrAhuEnhf1jwS563QR50Re9w5Dovg9QzGL1lL+ozPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vRKF8z6eaV5VdKr9rrbJ94Smxe+vuuK9bQn78TbJVTcQLb+VDOj699sxBonzKPVNB
-         Pbk52NlzQ4Rj+covVjpAMXBf3VyDmyf3HD9SVc4rsfU92AWymhyO3CW8BlqNL7PNvi
-         VVWTg5QeADMUI7JFlDxGVRFRZnQeVRlfhYprnrFA5tTAfAP88gEHsexcm9tGfWj/We
-         c2uluk4O2M2T2Hu7ztKRZKWg+z2MykD2BrHruw9pkFWlF/+tTAMGs6dN9V2X4jmpAq
-         0X2OXAF/WjqI3wGeryKGjdKWzEHLRMzyNTOjWUT+IYdIy/AbYbyFxWG/Zw913U9+SA
-         uk1KkJ0uEiEpg==
+        b=OvOB7QoUTG/nrc1DtjGD1mxjaFBF25L2wBr7MMLYwnB4QpN5nknqOMeokRtEQ2XeT
+         tljpCEWJ0hgir3xT70BS6NuF3xgtHx8dK968FYqYuzC2X7Z6HN+sGr3TTYpz9C1G7O
+         oJbGW3l6fD4xfa/QJGlPdJZySwzQxjXe9885OECbmbWLQjxjOxMzQQ+61w/r81MXNC
+         mSlE/sA3NCf6AVJ7O+z4B/XSsMNPGR2+AdFgXsS2aDunwrkp3Mdbeeq+wHkTOnGyx0
+         fZEXNsQFDXGMvg0Pz7tt/H0eWCK95jb9fYRPXp0pJLBSlNRE4NExsLJhAmi+yb4Rf2
+         +PaIInuUfhcVQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
@@ -38,12 +38,12 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 64/85] hwmon: (max31790) Fix pwmX_enable attributes
-Date:   Sun,  4 Jul 2021 19:03:59 -0400
-Message-Id: <20210704230420.1488358-64-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.12 61/80] hwmon: (max31790) Fix pwmX_enable attributes
+Date:   Sun,  4 Jul 2021 19:05:57 -0400
+Message-Id: <20210704230616.1489200-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704230420.1488358-1-sashal@kernel.org>
-References: <20210704230420.1488358-1-sashal@kernel.org>
+In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
+References: <20210704230616.1489200-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
