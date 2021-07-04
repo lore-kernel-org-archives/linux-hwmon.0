@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D05F0C11F6A
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A982C07E9A
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:15:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD772613E5
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:08:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5867360234
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:15:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbhGDXLO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:11:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47610 "EHLO mail.kernel.org"
+        id S232055AbhGDXS1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Jul 2021 19:18:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48260 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232391AbhGDXKO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:10:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 530BD61283;
-        Sun,  4 Jul 2021 23:07:36 +0000 (UTC)
+        id S232807AbhGDXNT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:13:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E2F2961970;
+        Sun,  4 Jul 2021 23:09:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440057;
+        s=k20201202; t=1625440156;
         bh=VuBZkuYORyCKJqQ3ug2x8UyRbKpNijoZunM6p8muHn4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SdWL3FTGhB7PsiPOCgTS1GVbzdLCQcI3Ci77Ql6v6g+osfFDeM/xnKGc/Y9zjlWNL
-         SOdtYUjt0+UOnqufeARy0aw7HMiygCIFfs4yU5DtungBszTBsZWFWGq3WmSw3rz+PF
-         S7uexF1wTaYINXOjMh7KUMHVGtko6UHm31k8Qr2gr9DdYj6bTjhYkV3FCclgq7GLEz
-         k9WoSZV807QSd4gjeLjnWmUbdy2ipNDr+88CUlBTz9wX2bTe+TFDeaeyUGc4DX9+e5
-         Fqc+nQLv78I8Fd9C9C8Xxb4Hk8HjZuGtO6C7SyUO+WeyUC7ZpBfMVesorGyBzwuzLB
-         WvfteTU4pD6BQ==
+        b=dY+AOugLzww6NlPKHX3sa8VkNzu0see5e9OvigLQb4BY+bfMWgMGgA9H+h1OLUGQE
+         8G1oHx4l8wyBXhtNjEnrZbikkHH2s6NXeYn096BoPekVkmKYOii1lKT004wF/p5epF
+         n5fVFM0flB0tSsl5D4RFycPZjNq8mRaF1XCkoxsaahIJzSp2W5ednc3AX0Osx9uQpr
+         lNm1wW+9A+HQPc63t/9colFVT7YEx+PbJxxlDDhO2zZP3m9BCv2MscYu5oGg/p8Vir
+         BYzhiGDBTRjS4/H88IqfLVdHHiXE0wkpLcL05ywi1W7WCkyDNzogMQqN01SpB0fdvI
+         FVvM16mV3gUaA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
@@ -39,12 +39,12 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@ceesnet.cz>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 60/80] hwmon: (max31790) Report correct current pwm duty cycles
-Date:   Sun,  4 Jul 2021 19:05:56 -0400
-Message-Id: <20210704230616.1489200-60-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 54/70] hwmon: (max31790) Report correct current pwm duty cycles
+Date:   Sun,  4 Jul 2021 19:07:47 -0400
+Message-Id: <20210704230804.1490078-54-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704230616.1489200-1-sashal@kernel.org>
-References: <20210704230616.1489200-1-sashal@kernel.org>
+In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
+References: <20210704230804.1490078-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
