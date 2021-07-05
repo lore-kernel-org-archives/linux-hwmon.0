@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F948C11F6E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B8BC11F76
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:48:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45BCC6192E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:48:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D17561956
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:48:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbhGENvB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Jul 2021 09:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S231332AbhGENvD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Jul 2021 09:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbhGENus (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jul 2021 09:50:48 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96455C06175F
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Jul 2021 06:48:10 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id bu12so29239487ejb.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Jul 2021 06:48:10 -0700 (PDT)
+        with ESMTP id S231355AbhGENuu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jul 2021 09:50:50 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E3BC0613DC
+        for <linux-hwmon@vger.kernel.org>; Mon,  5 Jul 2021 06:48:13 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y40so8608752ede.4
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 Jul 2021 06:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PDXNeIlgEF5rXgCgnEfoqWrZcJ4/okqK6cSz5M/BpB8=;
-        b=jHrIAnF/KGMolmPQdhTKxMr5MV60qeaudoLFm198lqf+3OB0gpysMsPIDmDYXbws5j
-         SpIv5Cf84SJKBaMJSB5yiI379IZMU5UvVDJZrpGFRcBvYz3Z/cWA9IniYKv9LKWBXaZ2
-         WMssZC+yvGb9tD3Os3nwmn7/GSzAh307s1rAXziMhB86b4SRHxlh+c1rtdmM3B7q8RAi
-         LWJ5ZwWmi3SfeQornhcs6Y9mQjyDBc+39DuJ1oMpgODyejzGdCR4BpMuC08AmL8s3QmC
-         UKfgztbOUnzSFalQ9S9YM6lbUPBRfB8tpaLbLxKqaPdLtppVs4v2oJKqU7jU9yWnrnU4
-         oAzw==
+        bh=ui4OX7zEaEpk32zY0N3dU0jHLTiYG4/oQgFcD9aIY1g=;
+        b=1ue/FRCJEySE+haMzE4ujk7GRILWt3AZux6wn1QDiQccii+ESAEVeYizUqms4et9LT
+         FXxAVudqA7QHbT4tNurj4b/k3Q+dLJr5E6Tua281Bu9GzS3M6fCUAu1zq6aaL4OEaIOk
+         N50MvhNLcp0YEpHeuUi/fO6e/h69TKvoveuMiDrG5l6vKyBlBUomk/L9xDq8I/vGPIxA
+         RBv8E3fEkJUFtc+nXVTdz1meElIzdnynOaFV2oyvI1eBbULE8glD33Ec+RWh3CAX3rdW
+         nOEWktNdFcHfTkC9p/tS4RgRvMU5Jbbrp/Ml6YvxwkOT8NlntJE9AnGy/V1Tt/t5tty+
+         Q27Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PDXNeIlgEF5rXgCgnEfoqWrZcJ4/okqK6cSz5M/BpB8=;
-        b=EC8s3U7GSNS/Vp70nRu1tswSfdJRIb6OGmX5YsHuuzWyyuodJjCW0cY3U7YhacYRY5
-         WEzf12gtHsQJkzm9YTK02Akkxi+odN+PKmmW/FqFd5V66HYSGXVn7OpW22bqsUZqS9Dt
-         DSH2K+Rop5RQl5yimODxZwzte45W2b369f2kndu1+r8P3oIzllrZlYPE5vYo8YlRyDs1
-         Edo6nwsBZQNlUenL0DtADxz/a7dYbJDogwgwqK5Jo2424w7MNjozagv6+zNjYZb6zq85
-         ihooBMO8NcJAQUZe5RrCppgrPkEZDoSFpSj0wEiiZ510v3Vdp20THNaObEauTsIPvylD
-         rf3Q==
-X-Gm-Message-State: AOAM531sF/VmVERsNHGDz6dZwgE2bslGMBD63M3EPO1vCap4jWU8Uayf
-        SK7HQ594RkweR5bOkGfgJeYokQ==
-X-Google-Smtp-Source: ABdhPJyzFsc3Z8TQS/D0B30SPATyCpAb01gqS+SG05wduR839yRjkBJ9WsaZUrSd4cZ46R/GlrEkpQ==
-X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr14045009ejc.188.1625492889134;
-        Mon, 05 Jul 2021 06:48:09 -0700 (PDT)
+        bh=ui4OX7zEaEpk32zY0N3dU0jHLTiYG4/oQgFcD9aIY1g=;
+        b=BxKIDzwiKUF4uNciCd14ztS9bn6WtPAcgjmkSvGrD6KoMFNLIxoFMKTRoIPa+Nyvfa
+         C5va4z2X0jJtpRRTs8bY6wPzer3gd7Ic/uce6i29pJ7cpifPeNlHPaFwt9qSHIKMfA5w
+         joa0GYdEfYDNO9BbpwYktIvfCefrIbT+v+pw4rkSfrynxYWgJCxDMhHgAn3AwBenya/a
+         sDkmKLJKBkope0qbBTm1Nv2abg3esVAMXhTv3NTOB4Y3EvrxKZj33j2RNqR6vtPyvwZt
+         Qy+fHRAKOHf2p5KWI4BYTTYNkZHqGGAQdqIaGaJIM1HJ+gsCLvLSN5Qr3jKaDWhJJcwS
+         48YA==
+X-Gm-Message-State: AOAM532jnS42XUH4CSGKZBVZV2BbGCceAjub1Oa1WjONbRuhheXUqkWE
+        DF2Dq0X8DFuocI1hBRd42W1nAg==
+X-Google-Smtp-Source: ABdhPJzz7nncHpMjlS2uYVwcpGFLambv/jbseLCEW3RMKLqzBfqB6CagVKURVrJAUG4hVnlyzi6x6Q==
+X-Received: by 2002:a05:6402:d60:: with SMTP id ec32mr16230423edb.215.1625492891828;
+        Mon, 05 Jul 2021 06:48:11 -0700 (PDT)
 Received: from localhost.localdomain ([89.18.44.40])
-        by smtp.gmail.com with ESMTPSA id cf29sm1557637edb.14.2021.07.05.06.48.07
+        by smtp.gmail.com with ESMTPSA id cf29sm1557637edb.14.2021.07.05.06.48.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jul 2021 06:48:08 -0700 (PDT)
+        Mon, 05 Jul 2021 06:48:11 -0700 (PDT)
 From:   Pavo Banicevic <pavo.banicevic@sartura.hr>
 To:     linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
         devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -67,9 +67,9 @@ To:     linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
         goran.medic@sartura.hr, luka.perkov@sartura.hr,
         luka.kovacic@sartura.hr
 Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH v8 1/7] dt-bindings: Add IEI vendor prefix and IEI WT61P803 PUZZLE driver bindings
-Date:   Mon,  5 Jul 2021 15:49:33 +0200
-Message-Id: <20210705134939.28691-2-pavo.banicevic@sartura.hr>
+Subject: [PATCH v8 3/7] drivers: hwmon: Add the IEI WT61P803 PUZZLE HWMON driver
+Date:   Mon,  5 Jul 2021 15:49:35 +0200
+Message-Id: <20210705134939.28691-4-pavo.banicevic@sartura.hr>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210705134939.28691-1-pavo.banicevic@sartura.hr>
 References: <20210705134939.28691-1-pavo.banicevic@sartura.hr>
@@ -81,234 +81,476 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Luka Kovacic <luka.kovacic@sartura.hr>
 
-Add the IEI WT61P803 PUZZLE Device Tree bindings for MFD, HWMON and LED
-drivers. A new vendor prefix is also added accordingly for
-IEI Integration Corp.
+Add the IEI WT61P803 PUZZLE HWMON driver, that handles the fan speed
+control via PWM, reading fan speed and reading on-board temperature
+sensors.
+
+The driver registers a HWMON device and a simple thermal cooling device to
+enable in-kernel fan management.
+
+This driver depends on the IEI WT61P803 PUZZLE MFD driver.
 
 Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
 Signed-off-by: Pavo Banicevic <pavo.banicevic@sartura.hr>
 Cc: Luka Perkov <luka.perkov@sartura.hr>
 Cc: Robert Marko <robert.marko@sartura.hr>
 ---
- .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      | 53 ++++++++++++
- .../leds/iei,wt61p803-puzzle-leds.yaml        | 44 ++++++++++
- .../bindings/mfd/iei,wt61p803-puzzle.yaml     | 82 +++++++++++++++++++
- .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
- 4 files changed, 181 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
- create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
+ drivers/hwmon/Kconfig                     |   8 +
+ drivers/hwmon/Makefile                    |   1 +
+ drivers/hwmon/iei-wt61p803-puzzle-hwmon.c | 413 ++++++++++++++++++++++
+ 3 files changed, 422 insertions(+)
+ create mode 100644 drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
 
-diff --git a/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 87624902ea80..2c4f9c7821c6 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -722,6 +722,14 @@ config SENSORS_IBMPOWERNV
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called ibmpowernv.
+ 
++config SENSORS_IEI_WT61P803_PUZZLE_HWMON
++	tristate "IEI WT61P803 PUZZLE MFD HWMON Driver"
++	depends on MFD_IEI_WT61P803_PUZZLE
++	help
++	  The IEI WT61P803 PUZZLE MFD HWMON Driver handles reading fan speed
++	  and writing fan PWM values. It also supports reading on-board
++	  temperature sensors.
++
+ config SENSORS_IIO_HWMON
+ 	tristate "Hwmon driver that uses channels specified via iio maps"
+ 	depends on IIO
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 59e78bc212cf..efb9f9826c6d 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -84,6 +84,7 @@ obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
+ obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
+ obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
+ obj-$(CONFIG_SENSORS_I5K_AMB)	+= i5k_amb.o
++obj-$(CONFIG_SENSORS_IEI_WT61P803_PUZZLE_HWMON) += iei-wt61p803-puzzle-hwmon.o
+ obj-$(CONFIG_SENSORS_IBMAEM)	+= ibmaem.o
+ obj-$(CONFIG_SENSORS_IBMPEX)	+= ibmpex.o
+ obj-$(CONFIG_SENSORS_IBMPOWERNV)+= ibmpowernv.o
+diff --git a/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c b/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
 new file mode 100644
-index 000000000000..c24a24e90495
+index 000000000000..3a895ca08474
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/iei,wt61p803-puzzle-hwmon.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+@@ -0,0 +1,413 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* IEI WT61P803 PUZZLE MCU HWMON Driver
++ *
++ * Copyright (C) 2020 Sartura Ltd.
++ * Author: Luka Kovacic <luka.kovacic@sartura.hr>
++ */
 +
-+title: IEI WT61P803 PUZZLE MCU HWMON module from IEI Integration Corp.
++#include <linux/err.h>
++#include <linux/hwmon.h>
++#include <linux/interrupt.h>
++#include <linux/irq.h>
++#include <linux/math64.h>
++#include <linux/mfd/iei-wt61p803-puzzle.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/slab.h>
++#include <linux/thermal.h>
 +
-+maintainers:
-+  - Luka Kovacic <luka.kovacic@sartura.hr>
++#define IEI_WT61P803_PUZZLE_HWMON_MAX_PWM	2
++#define IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL	255
 +
-+description: |
-+  This module is a part of the IEI WT61P803 PUZZLE MFD device. For more details
-+  see Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml.
++/**
++ * struct iei_wt61p803_puzzle_thermal_cooling_device - Thermal cooling device instance
++ * @mcu_hwmon:		Parent driver struct pointer
++ * @tcdev:		Thermal cooling device pointer
++ * @name:		Thermal cooling device name
++ * @pwm_channel:	Controlled PWM channel (0 or 1)
++ * @cooling_levels:	Thermal cooling device cooling levels (DT)
++ */
++struct iei_wt61p803_puzzle_thermal_cooling_device {
++	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon;
++	struct thermal_cooling_device *tcdev;
++	char name[THERMAL_NAME_LENGTH];
++	int pwm_channel;
++	u8 *cooling_levels;
++};
 +
-+  The HWMON module is a sub-node of the MCU node in the Device Tree.
++/**
++ * struct iei_wt61p803_puzzle_hwmon - MCU HWMON Driver
++ * @mcu:				MCU struct pointer
++ * @response_buffer			Global MCU response buffer
++ * @thermal_cooling_dev_present:	Per-channel thermal cooling device control indicator
++ * @cdev:				Per-channel thermal cooling device private structure
++ */
++struct iei_wt61p803_puzzle_hwmon {
++	struct iei_wt61p803_puzzle *mcu;
++	unsigned char response_buffer[IEI_WT61P803_PUZZLE_BUF_SIZE];
++	bool thermal_cooling_dev_present[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM];
++	struct iei_wt61p803_puzzle_thermal_cooling_device
++		*cdev[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM];
++	struct mutex lock; /* mutex to protect response_buffer array */
++};
 +
-+properties:
-+  compatible:
-+    const: iei,wt61p803-puzzle-hwmon
++#define raw_temp_to_milidegree_celsius(x) (((x) - 0x80) * 1000)
++static int iei_wt61p803_puzzle_read_temp_sensor(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon,
++						int channel, long *value)
++{
++	unsigned char *resp_buf = mcu_hwmon->response_buffer;
++	unsigned char temp_sensor_ntc_cmd[4] = {
++		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
++		IEI_WT61P803_PUZZLE_CMD_TEMP,
++		IEI_WT61P803_PUZZLE_CMD_TEMP_ALL,
++	};
++	size_t reply_size;
++	int ret;
 +
-+  "#address-cells":
-+    const: 1
++	mutex_lock(&mcu_hwmon->lock);
++	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, temp_sensor_ntc_cmd,
++						sizeof(temp_sensor_ntc_cmd), resp_buf,
++						&reply_size);
++	if (ret)
++		goto exit;
 +
-+  "#size-cells":
-+    const: 0
++	if (reply_size != 7) {
++		ret = -EIO;
++		goto exit;
++	}
 +
-+patternProperties:
-+  "^fan-group@[0-1]$":
-+    type: object
-+    properties:
-+      reg:
-+        minimum: 0
-+        maximum: 1
-+        description:
-+          Fan group ID
++	/* Check the number of NTC values */
++	if (resp_buf[3] != '2') {
++		ret = -EIO;
++		goto exit;
++	}
 +
-+      cooling-levels:
-+        minItems: 1
-+        maxItems: 255
-+        description:
-+          Cooling levels for the fans (PWM value mapping)
-+    description: |
-+      Properties for each fan group.
-+    required:
-+      - reg
++	*value = raw_temp_to_milidegree_celsius(resp_buf[4 + channel]);
++exit:
++	mutex_unlock(&mcu_hwmon->lock);
++	return ret;
++}
 +
-+required:
-+  - compatible
-+  - "#address-cells"
-+  - "#size-cells"
++#define raw_fan_val_to_rpm(x, y) ((((x) << 8 | (y)) / 2) * 60)
++static int iei_wt61p803_puzzle_read_fan_speed(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon,
++					      int channel, long *value)
++{
++	unsigned char *resp_buf = mcu_hwmon->response_buffer;
++	unsigned char fan_speed_cmd[4] = {};
++	size_t reply_size;
++	int ret;
 +
-+additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml b/Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
-new file mode 100644
-index 000000000000..dc3e39aafd3e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/iei,wt61p803-puzzle-leds.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++	fan_speed_cmd[0] = IEI_WT61P803_PUZZLE_CMD_HEADER_START;
++	fan_speed_cmd[1] = IEI_WT61P803_PUZZLE_CMD_FAN;
++	fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM(channel);
 +
-+title: IEI WT61P803 PUZZLE MCU LED module from IEI Integration Corp.
++	mutex_lock(&mcu_hwmon->lock);
++	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, fan_speed_cmd,
++						sizeof(fan_speed_cmd), resp_buf,
++						&reply_size);
++	if (ret)
++		goto exit;
 +
-+maintainers:
-+  - Luka Kovacic <luka.kovacic@sartura.hr>
++	if (reply_size != 7) {
++		ret = -EIO;
++		goto exit;
++	}
 +
-+description: |
-+  This module is a part of the IEI WT61P803 PUZZLE MFD device. For more details
-+  see Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml.
++	*value = raw_fan_val_to_rpm(resp_buf[3], resp_buf[4]);
++exit:
++	mutex_unlock(&mcu_hwmon->lock);
++	return ret;
++}
 +
-+  The LED module is a sub-node of the MCU node in the Device Tree.
++static int iei_wt61p803_puzzle_write_pwm_channel(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon,
++						 int channel, long pwm_set_val)
++{
++	unsigned char *resp_buf = mcu_hwmon->response_buffer;
++	unsigned char pwm_set_cmd[6] = {};
++	size_t reply_size;
++	int ret;
 +
-+properties:
-+  compatible:
-+    const: iei,wt61p803-puzzle-leds
++	pwm_set_cmd[0] = IEI_WT61P803_PUZZLE_CMD_HEADER_START;
++	pwm_set_cmd[1] = IEI_WT61P803_PUZZLE_CMD_FAN;
++	pwm_set_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_WRITE;
++	pwm_set_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM(channel);
++	pwm_set_cmd[4] = pwm_set_val;
 +
-+  "#address-cells":
-+    const: 1
++	mutex_lock(&mcu_hwmon->lock);
++	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, pwm_set_cmd,
++						sizeof(pwm_set_cmd), resp_buf,
++						&reply_size);
++	if (ret)
++		goto exit;
 +
-+  "#size-cells":
-+    const: 0
++	if (reply_size != 3) {
++		ret = -EIO;
++		goto exit;
++	}
 +
-+  "led@0":
-+    type: object
-+    $ref: common.yaml
-+    description: |
-+      Properties for a single LED.
-+    properties:
-+      reg:
-+        description:
-+          Index of the LED. Only one LED is supported at the moment.
-+        const: 0
++	if (!(resp_buf[0] == IEI_WT61P803_PUZZLE_CMD_HEADER_START &&
++	      resp_buf[1] == IEI_WT61P803_PUZZLE_CMD_RESPONSE_OK &&
++	      resp_buf[2] == IEI_WT61P803_PUZZLE_CHECKSUM_RESPONSE_OK)) {
++		ret = -EIO;
++		goto exit;
++	}
++exit:
++	mutex_unlock(&mcu_hwmon->lock);
++	return ret;
++}
 +
-+required:
-+  - compatible
-+  - "#address-cells"
-+  - "#size-cells"
++static int iei_wt61p803_puzzle_read_pwm_channel(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon,
++						int channel, long *value)
++{
++	unsigned char *resp_buf = mcu_hwmon->response_buffer;
++	unsigned char pwm_get_cmd[5] = {};
++	size_t reply_size;
++	int ret;
 +
-+additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml b/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
-new file mode 100644
-index 000000000000..2452631505cc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/iei,wt61p803-puzzle.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++	pwm_get_cmd[0] = IEI_WT61P803_PUZZLE_CMD_HEADER_START;
++	pwm_get_cmd[1] = IEI_WT61P803_PUZZLE_CMD_FAN;
++	pwm_get_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_READ;
++	pwm_get_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM(channel);
 +
-+title: IEI WT61P803 PUZZLE MCU from IEI Integration Corp.
++	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, pwm_get_cmd,
++						sizeof(pwm_get_cmd), resp_buf,
++						&reply_size);
++	if (ret)
++		return ret;
 +
-+maintainers:
-+  - Luka Kovacic <luka.kovacic@sartura.hr>
++	if (reply_size != 5)
++		return -EIO;
 +
-+description: |
-+  IEI WT61P803 PUZZLE MCU is embedded in some IEI Puzzle series boards.
-+  It's used for controlling system power states, fans, LEDs and temperature
-+  sensors.
++	if (resp_buf[2] != IEI_WT61P803_PUZZLE_CMD_FAN_PWM_READ)
++		return -EIO;
 +
-+  For Device Tree bindings of other sub-modules (HWMON, LEDs) refer to the
-+  binding documents under the respective subsystem directories.
++	*value = resp_buf[3];
 +
-+properties:
-+  compatible:
-+    const: iei,wt61p803-puzzle
++	return 0;
++}
 +
-+  current-speed:
-+    description:
-+      Serial bus speed in bps
-+    maxItems: 1
++static int iei_wt61p803_puzzle_read(struct device *dev, enum hwmon_sensor_types type,
++				    u32 attr, int channel, long *val)
++{
++	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = dev_get_drvdata(dev->parent);
 +
-+  enable-beep: true
++	switch (type) {
++	case hwmon_pwm:
++		return iei_wt61p803_puzzle_read_pwm_channel(mcu_hwmon, channel, val);
++	case hwmon_fan:
++		return iei_wt61p803_puzzle_read_fan_speed(mcu_hwmon, channel, val);
++	case hwmon_temp:
++		return iei_wt61p803_puzzle_read_temp_sensor(mcu_hwmon, channel, val);
++	default:
++		return -EINVAL;
++	}
++}
 +
-+  hwmon:
-+    $ref: ../hwmon/iei,wt61p803-puzzle-hwmon.yaml
++static int iei_wt61p803_puzzle_write(struct device *dev, enum hwmon_sensor_types type,
++				     u32 attr, int channel, long val)
++{
++	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = dev_get_drvdata(dev->parent);
 +
-+  leds:
-+    $ref: ../leds/iei,wt61p803-puzzle-leds.yaml
++	return iei_wt61p803_puzzle_write_pwm_channel(mcu_hwmon, channel, val);
++}
 +
-+required:
-+  - compatible
-+  - current-speed
++static umode_t iei_wt61p803_puzzle_is_visible(const void *data, enum hwmon_sensor_types type,
++					      u32 attr, int channel)
++{
++	const struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = data;
 +
-+additionalProperties: false
++	switch (type) {
++	case hwmon_pwm:
++		if (mcu_hwmon->thermal_cooling_dev_present[channel])
++			return 0444;
++		if (attr == hwmon_pwm_input)
++			return 0644;
++		break;
++	case hwmon_fan:
++		if (attr == hwmon_fan_input)
++			return 0444;
++		break;
++	case hwmon_temp:
++		if (attr == hwmon_temp_input)
++			return 0444;
++		break;
++	default:
++		return 0;
++	}
 +
-+examples:
-+  - |
-+    #include <dt-bindings/leds/common.h>
-+    serial {
-+        mcu {
-+            compatible = "iei,wt61p803-puzzle";
-+            current-speed = <115200>;
-+            enable-beep;
++	return 0;
++}
 +
-+            leds {
-+                compatible = "iei,wt61p803-puzzle-leds";
-+                #address-cells = <1>;
-+                #size-cells = <0>;
++static const struct hwmon_ops iei_wt61p803_puzzle_hwmon_ops = {
++	.is_visible = iei_wt61p803_puzzle_is_visible,
++	.read = iei_wt61p803_puzzle_read,
++	.write = iei_wt61p803_puzzle_write,
++};
 +
-+                led@0 {
-+                    reg = <0>;
-+                    function = LED_FUNCTION_POWER;
-+                    color = <LED_COLOR_ID_BLUE>;
-+                };
-+            };
++static const struct hwmon_channel_info *iei_wt61p803_puzzle_info[] = {
++	HWMON_CHANNEL_INFO(pwm,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT),
++	HWMON_CHANNEL_INFO(fan,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT),
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_INPUT,
++			   HWMON_T_INPUT),
++	NULL
++};
 +
-+            hwmon {
-+                compatible = "iei,wt61p803-puzzle-hwmon";
-+                #address-cells = <1>;
-+                #size-cells = <0>;
++static const struct hwmon_chip_info iei_wt61p803_puzzle_chip_info = {
++	.ops = &iei_wt61p803_puzzle_hwmon_ops,
++	.info = iei_wt61p803_puzzle_info,
++};
 +
-+                fan-group@0 {
-+                    #cooling-cells = <2>;
-+                    reg = <0x00>;
-+                    cooling-levels = <64 102 170 230 250>;
-+                };
++static int iei_wt61p803_puzzle_get_max_state(struct thermal_cooling_device *tcdev,
++					     unsigned long *state)
++{
++	*state = IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL;
 +
-+                fan-group@1 {
-+                    #cooling-cells = <2>;
-+                    reg = <0x01>;
-+                    cooling-levels = <64 102 170 230 250>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index b868cefc7c55..e02b6d6eb568 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -509,6 +509,8 @@ patternProperties:
-     description: IC Plus Corp.
-   "^idt,.*":
-     description: Integrated Device Technologies, Inc.
-+  "^iei,.*":
-+    description: IEI Integration Corp.
-   "^ifi,.*":
-     description: Ingenieurburo Fur Ic-Technologie (I/F/I)
-   "^ilitek,.*":
++	return 0;
++}
++
++static int iei_wt61p803_puzzle_get_cur_state(struct thermal_cooling_device *tcdev,
++					     unsigned long *state)
++{
++	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev = tcdev->devdata;
++	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = cdev->mcu_hwmon;
++	long value;
++	int ret;
++
++	ret = iei_wt61p803_puzzle_read_pwm_channel(mcu_hwmon, cdev->pwm_channel, &value);
++	if (ret)
++		return ret;
++	*state = value;
++	return 0;
++}
++
++static int iei_wt61p803_puzzle_set_cur_state(struct thermal_cooling_device *tcdev,
++					     unsigned long state)
++{
++	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev = tcdev->devdata;
++	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = cdev->mcu_hwmon;
++
++	return iei_wt61p803_puzzle_write_pwm_channel(mcu_hwmon, cdev->pwm_channel, state);
++}
++
++static const struct thermal_cooling_device_ops iei_wt61p803_puzzle_cooling_ops = {
++	.get_max_state = iei_wt61p803_puzzle_get_max_state,
++	.get_cur_state = iei_wt61p803_puzzle_get_cur_state,
++	.set_cur_state = iei_wt61p803_puzzle_set_cur_state,
++};
++
++static int
++iei_wt61p803_puzzle_enable_thermal_cooling_dev(struct device *dev,
++					       struct fwnode_handle *child,
++					       struct iei_wt61p803_puzzle_hwmon *mcu_hwmon)
++{
++	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev;
++	u32 pwm_channel;
++	u8 num_levels;
++	int ret;
++
++	ret = fwnode_property_read_u32(child, "reg", &pwm_channel);
++	if (ret)
++		return ret;
++
++	mcu_hwmon->thermal_cooling_dev_present[pwm_channel] = true;
++
++	num_levels = fwnode_property_count_u8(child, "cooling-levels");
++	if (!num_levels)
++		return -EINVAL;
++
++	cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
++	if (!cdev)
++		return -ENOMEM;
++
++	cdev->cooling_levels = devm_kmalloc_array(dev, num_levels, sizeof(u8), GFP_KERNEL);
++	if (!cdev->cooling_levels)
++		return -ENOMEM;
++
++	ret = fwnode_property_read_u8_array(child, "cooling-levels",
++					    cdev->cooling_levels,
++					    num_levels);
++	if (ret) {
++		dev_err(dev, "Couldn't read property 'cooling-levels'\n");
++		return ret;
++	}
++
++	snprintf(cdev->name, THERMAL_NAME_LENGTH, "wt61p803_puzzle_%d", pwm_channel);
++	cdev->tcdev = devm_thermal_of_cooling_device_register(dev, NULL, cdev->name, cdev,
++							      &iei_wt61p803_puzzle_cooling_ops);
++	if (IS_ERR(cdev->tcdev))
++		return PTR_ERR(cdev->tcdev);
++
++	cdev->mcu_hwmon = mcu_hwmon;
++	cdev->pwm_channel = pwm_channel;
++	mcu_hwmon->cdev[pwm_channel] = cdev;
++
++	return 0;
++}
++
++static int iei_wt61p803_puzzle_hwmon_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct iei_wt61p803_puzzle *mcu = dev_get_drvdata(dev->parent);
++	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon;
++	struct fwnode_handle *child;
++	struct device *hwmon_dev;
++	int ret;
++
++	mcu_hwmon = devm_kzalloc(dev, sizeof(*mcu_hwmon), GFP_KERNEL);
++	if (!mcu_hwmon)
++		return -ENOMEM;
++
++	mcu_hwmon->mcu = mcu;
++	platform_set_drvdata(pdev, mcu_hwmon);
++	mutex_init(&mcu_hwmon->lock);
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, "iei_wt61p803_puzzle",
++							 mcu_hwmon,
++							 &iei_wt61p803_puzzle_chip_info,
++							 NULL);
++	if (IS_ERR(hwmon_dev))
++		return PTR_ERR(hwmon_dev);
++
++	/* Control fans via PWM lines via Linux Kernel */
++	if (IS_ENABLED(CONFIG_THERMAL)) {
++		device_for_each_child_node(dev, child) {
++			ret = iei_wt61p803_puzzle_enable_thermal_cooling_dev(dev, child, mcu_hwmon);
++			if (ret) {
++				dev_err(dev, "Enabling the PWM fan failed\n");
++				fwnode_handle_put(child);
++				return ret;
++			}
++		}
++	}
++	return 0;
++}
++
++static const struct of_device_id iei_wt61p803_puzzle_hwmon_id_table[] = {
++	{ .compatible = "iei,wt61p803-puzzle-hwmon" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, iei_wt61p803_puzzle_hwmon_id_table);
++
++static struct platform_driver iei_wt61p803_puzzle_hwmon_driver = {
++	.driver = {
++		.name = "iei-wt61p803-puzzle-hwmon",
++		.of_match_table = iei_wt61p803_puzzle_hwmon_id_table,
++	},
++	.probe = iei_wt61p803_puzzle_hwmon_probe,
++};
++
++module_platform_driver(iei_wt61p803_puzzle_hwmon_driver);
++
++MODULE_DESCRIPTION("IEI WT61P803 PUZZLE MCU HWMON Driver");
++MODULE_AUTHOR("Luka Kovacic <luka.kovacic@sartura.hr>");
++MODULE_LICENSE("GPL v2");
 -- 
 2.31.1
 
