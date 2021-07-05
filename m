@@ -2,186 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09D8CC07E9A
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08C34C07E99
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 10:17:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBB6A6135D
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Jul 2021 23:17:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D57FD613E1
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 10:17:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbhGDXUT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Jul 2021 19:20:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48966 "EHLO mail.kernel.org"
+        id S230474AbhGEKTk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Jul 2021 06:19:40 -0400
+Received: from first.geanix.com ([116.203.34.67]:59018 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232496AbhGDXNU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:13:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6693861971;
-        Sun,  4 Jul 2021 23:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440158;
-        bh=eTrAhuEnhf1jwS563QR50Re9w5Dovg9QzGL1lL+ozPY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a594L1MkaFh4g8w5f8pKFIhmHxYLEJjghZRo6ucJgM7Wba/UgfmdIaVCjZbEZ117b
-         Onn5hlJ1+whJc7U3q2OC8IEtFi5rK7pnF8ZrH+oW28UNCTrR5LC75Da/s1kNCf6lMq
-         5AziMuoXHXnXUzAEBEbUYxWwDXO3htYm6bEdoM+6UGZF5/PcsM0HiHuSR9O2HXgjDl
-         CS/unGcqRgs0OV9ay4MhiS75GgCaP/LDBQ6BKx+bw6VjQMM15Hxm+QXyNivcx3Tw59
-         SnkArMfneAscdMqGw8+6yCyebvfpXSZtFpllv1VhtYjjXTEH2OzZMzscs7zQHIb33f
-         Gzf7V5KG53now==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
-        =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
-        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 55/70] hwmon: (max31790) Fix pwmX_enable attributes
-Date:   Sun,  4 Jul 2021 19:07:48 -0400
-Message-Id: <20210704230804.1490078-55-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
-References: <20210704230804.1490078-1-sashal@kernel.org>
+        id S230355AbhGEKTj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 5 Jul 2021 06:19:39 -0400
+Received: from zen.. (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id ACAD64C5381;
+        Mon,  5 Jul 2021 10:16:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1625480219; bh=rvFgEeXnI9vkm2Fu4+wIha0lvYvPjxqtonLZHLSIF8g=;
+        h=From:To:Cc:Subject:Date;
+        b=Tdwqs3LNrodRopK8al7EB4SDJIjHtHQKf4vY5C2JFCpEaGlXPnlfQxCz718xWmN3Y
+         3t22ZFvtUfI0Nvze24gxQwQ6huARXx7Tou/BwaREFcWRk/6z9H6nEIniHyjuL7SzAV
+         HqS/vXzutGVgFACuBBJs2pE8D8GxZyrq51LPiXe1/6MvgAvcA27dWZSoD478a/Hk8d
+         j86wWZeC8Hb4tcVSWuchWHuXZwPEBDK0D2XVsAFY4/+aUACMQcRV3KwkkCEUCJbah3
+         43HUi/voSZk4Rc8+4vWEVBo/LE6mriSSKupFfw7wrQSKl6Jr6UDXpIMz3s0vLsg7eK
+         KHIWmM1nkwjBQ==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH v4 0/4] fpga/mfd/hwmon: Initial support for Silicom N5010 PAC
+Date:   Mon,  5 Jul 2021 12:16:41 +0200
+Message-Id: <20210705101645.2040106-1-martin@geanix.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Martin Hundebøll <mhu@silicom.dk>
 
-[ Upstream commit 148c847c9e5a54b99850617bf9c143af9a344f92 ]
+This is an initial set of patches for the Silciom N5010 programmable
+accelerated card adding support for reading out sensors.
 
-pwmX_enable supports three possible values:
+Based on v5.13
 
-0: Fan control disabled. Duty cycle is fixed to 0%
-1: Fan control enabled, pwm mode. Duty cycle is determined by
-   values written into Target Duty Cycle registers.
-2: Fan control enabled, rpm mode
-   Duty cycle is adjusted such that fan speed matches
-   the values in Target Count registers
+Changes since v3:
+ * Added Hao's Acked-by to patch 1/4
+ * Added Matthew's Acked-by to patch 1/4
+ * Changed "BMC's" to "BMCs" in patch 2/4
+ * Added Moritz' Reviewed-by to patch 2/4
+ * Added Matthew's Reviewed-by to patch 3/4
+ * Added Lee's Acked-for-MFD-by to patch 3/4
 
-The current code does not do this; instead, it mixes pwm control
-configuration with fan speed monitoring configuration. Worse, it
-reports that pwm control would be disabled (pwmX_enable==0) when
-it is in fact enabled in pwm mode. Part of the problem may be that
-the chip sets the "TACH input enable" bit on its own whenever the
-mode bit is set to RPM mode, but that doesn't mean that "TACH input
-enable" accurately reflects the pwm mode.
+Changes since v2:
+ * Removed patch 1/5 from v2 already in fpga/for-next
+ * Reworded commit message in patch 1/4 as per Hao's suggestion
+ * Added Yilun's Reviewed-by to patch 3/4 and 4/4
+ * Added Moritz' Acked-by to patch 3/4
+ * Added Moritz' Reviewed-by to patch 4/4
+ * Added Guenter's Reviewed-by to patch 4/4
 
-Fix it up and only handle pwm control with the pwmX_enable attributes.
-In the documentation, clarify that disabling pwm control (pwmX_enable=0)
-sets the pwm duty cycle to 0%. In the code, explain why TACH_INPUT_EN
-is set together with RPM_MODE.
+Changes since v1:
+ * Commit message in patch 1 is updated with card description
+ * Added Hao's Acked-by to patch 1
+ * Patch 2 is replaced with a new patch to carry feature revision info
+   in struct dfl_device
+ * Patch 3 is updated to use feature revision from struct dfl_device
+ * Patch 4 from v0 is split into separate patches for hwmon and mfd
 
-While at it, only update the configuration register if the configuration
-has changed, and only update the cached configuration if updating the
-chip configuration was successful.
+Martin Hundebøll (4):
+  fpga: dfl: expose feature revision from struct dfl_device
+  spi: spi-altera-dfl: support n5010 feature revision
+  mfd: intel-m10-bmc: add n5010 variant
+  hwmon: intel-m10-bmc-hwmon: add n5010 sensors
 
-Cc: Jan Kundrát <jan.kundrat@cesnet.cz>
-Cc: Václav Kubernát <kubernat@cesnet.cz>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Václav Kubernát <kubernat@cesnet.cz>
-Reviewed-by: Jan Kundrát <jan.kundrat@cesnet.cz>
-Link: https://lore.kernel.org/r/20210526154022.3223012-4-linux@roeck-us.net
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/hwmon/max31790.rst |  2 +-
- drivers/hwmon/max31790.c         | 41 ++++++++++++++++++++------------
- 2 files changed, 27 insertions(+), 16 deletions(-)
+ drivers/fpga/dfl.c                  |  27 ++++---
+ drivers/fpga/dfl.h                  |   1 +
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c         |  12 ++-
+ drivers/spi/spi-altera-dfl.c        |  15 +++-
+ include/linux/dfl.h                 |   1 +
+ 6 files changed, 159 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-index 54ff0f49e28f..7b097c3b9b90 100644
---- a/Documentation/hwmon/max31790.rst
-+++ b/Documentation/hwmon/max31790.rst
-@@ -38,7 +38,7 @@ Sysfs entries
- fan[1-12]_input    RO  fan tachometer speed in RPM
- fan[1-12]_fault    RO  fan experienced fault
- fan[1-6]_target    RW  desired fan speed in RPM
--pwm[1-6]_enable    RW  regulator mode, 0=disabled, 1=manual mode, 2=rpm mode
-+pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
- pwm[1-6]           RW  read: current pwm duty cycle,
-                        write: target pwm duty cycle (0-255)
- ================== === =======================================================
-diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 8ad7a45bfe68..76aa96f5b984 100644
---- a/drivers/hwmon/max31790.c
-+++ b/drivers/hwmon/max31790.c
-@@ -27,6 +27,7 @@
- 
- /* Fan Config register bits */
- #define MAX31790_FAN_CFG_RPM_MODE	0x80
-+#define MAX31790_FAN_CFG_CTRL_MON	0x10
- #define MAX31790_FAN_CFG_TACH_INPUT_EN	0x08
- #define MAX31790_FAN_CFG_TACH_INPUT	0x01
- 
-@@ -271,12 +272,12 @@ static int max31790_read_pwm(struct device *dev, u32 attr, int channel,
- 		*val = data->pwm[channel] >> 8;
- 		return 0;
- 	case hwmon_pwm_enable:
--		if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
-+		if (fan_config & MAX31790_FAN_CFG_CTRL_MON)
-+			*val = 0;
-+		else if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
- 			*val = 2;
--		else if (fan_config & MAX31790_FAN_CFG_TACH_INPUT_EN)
--			*val = 1;
- 		else
--			*val = 0;
-+			*val = 1;
- 		return 0;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -307,23 +308,33 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
- 	case hwmon_pwm_enable:
- 		fan_config = data->fan_config[channel];
- 		if (val == 0) {
--			fan_config &= ~(MAX31790_FAN_CFG_TACH_INPUT_EN |
--					MAX31790_FAN_CFG_RPM_MODE);
-+			fan_config |= MAX31790_FAN_CFG_CTRL_MON;
-+			/*
-+			 * Disable RPM mode; otherwise disabling fan speed
-+			 * monitoring is not possible.
-+			 */
-+			fan_config &= ~MAX31790_FAN_CFG_RPM_MODE;
- 		} else if (val == 1) {
--			fan_config = (fan_config |
--				      MAX31790_FAN_CFG_TACH_INPUT_EN) &
--				     ~MAX31790_FAN_CFG_RPM_MODE;
-+			fan_config &= ~(MAX31790_FAN_CFG_CTRL_MON | MAX31790_FAN_CFG_RPM_MODE);
- 		} else if (val == 2) {
--			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN |
--				      MAX31790_FAN_CFG_RPM_MODE;
-+			fan_config &= ~MAX31790_FAN_CFG_CTRL_MON;
-+			/*
-+			 * The chip sets MAX31790_FAN_CFG_TACH_INPUT_EN on its
-+			 * own if MAX31790_FAN_CFG_RPM_MODE is set.
-+			 * Do it here as well to reflect the actual register
-+			 * value in the cache.
-+			 */
-+			fan_config |= (MAX31790_FAN_CFG_RPM_MODE | MAX31790_FAN_CFG_TACH_INPUT_EN);
- 		} else {
- 			err = -EINVAL;
- 			break;
- 		}
--		data->fan_config[channel] = fan_config;
--		err = i2c_smbus_write_byte_data(client,
--					MAX31790_REG_FAN_CONFIG(channel),
--					fan_config);
-+		if (fan_config != data->fan_config[channel]) {
-+			err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
-+							fan_config);
-+			if (!err)
-+				data->fan_config[channel] = fan_config;
-+		}
- 		break;
- 	default:
- 		err = -EOPNOTSUPP;
 -- 
-2.30.2
+2.31.0
 
