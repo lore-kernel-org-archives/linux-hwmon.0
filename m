@@ -2,217 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EE99C07E9B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 10:17:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68C78C07E99
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:29:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A9E2613D1
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 10:17:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D7F161447
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:29:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbhGEKTr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Jul 2021 06:19:47 -0400
-Received: from first.geanix.com ([116.203.34.67]:59054 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231214AbhGEKTp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 5 Jul 2021 06:19:45 -0400
-Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 226944C5386;
-        Mon,  5 Jul 2021 10:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1625480226; bh=QejlbPoiPZ0OSrT0zXTzjy2ScAhbXGepOshMzNFsHEM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hNltMy3Vcnt3RaKLoqZ5T+5BAi3d4OiENumn4upV4ifqFVsfypnpbXC8IdvniDBL9
-         NIZTdJnjsbF50mAyQk0rK2sYrcXuyVww/QZwEs2+rXMPhVKeJYZ+3mHxR4XsIJloMd
-         4Wjow/vK5Kgl+MNzU82kqc0lRpCki6gxCu03grqXybqNw4wZm31uY4IDPcTS6ZRGHJ
-         g3hyzyYSCwfa8mMO7i/pfvJJCIT57xFQHAla91RsHuVnT6FN/0xOgb6TfcpMI2JbWT
-         VpCBzmGjVBThh2iNZTs8nnlvM8UwML/Ca6Jsju0LvplUTdiSPzuIfNYVXejT0M4x8Y
-         qXTXz7PkqHMMg==
-From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v4 4/4] hwmon: intel-m10-bmc-hwmon: add n5010 sensors
-Date:   Mon,  5 Jul 2021 12:16:45 +0200
-Message-Id: <20210705101645.2040106-5-martin@geanix.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210705101645.2040106-1-martin@geanix.com>
-References: <20210705101645.2040106-1-martin@geanix.com>
+        id S230333AbhGENbu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Jul 2021 09:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230188AbhGENbu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jul 2021 09:31:50 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421DCC061574
+        for <linux-hwmon@vger.kernel.org>; Mon,  5 Jul 2021 06:29:13 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id n14so32520106lfu.8
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 Jul 2021 06:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=dR9LiIgfnzZ0+KmNfL65EzO8kKw35EKF5+zzRX3jLYM=;
+        b=FNMu2pILHYYPJEZPpZBzi9SjtLcI33/9B1Y6+KcF0wrMuCtpf6EBrn17/e8csjTu+i
+         0ySWV6lBtBtuwmU3s7jIHYUjTmiDC7BdfZdJpOgoPelU6dc1tB0ZTkHRARLC6JH27VK7
+         mb/F1j9krbJ1pjb6td0rk2l9EEopBlPCZ6VB8Ki18tiwkEVWl/VuUf/7jsk6mmopKINf
+         FHJ202LUBaBaiDqKGbbIJ3X9gMQwL10QUBHMrtpAPK241ZkAUg9XLOfgcqJwWRDxzyOa
+         OWMz2J1rnf7IejJXvmjC6bXnqB49JYMfZA/YRNbUXVYYWK8iHABierA3yD8JkNZFtyZb
+         JUTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=dR9LiIgfnzZ0+KmNfL65EzO8kKw35EKF5+zzRX3jLYM=;
+        b=oRqEDYodXKW1YdVhmcPnNhm+Tz2VyPUjhfkztfKaWoViHKwFeBAitwZXG9pfkUm3OG
+         zc7EfcUIOGYT36QLfVLSupv6Nw8Dzw2/WHJZIrCZGsQ2dKleezbqGIub5ne76NF77LMX
+         pvTUCOXXGfdXazOS1G3CDaKILVBeOoCMghZmlS5BJOZdAC7Bq8MDfSSRkQCIfgaPC3nA
+         WhCCh3HlcftYNRC9da41jNluy8hlxyBtLAf7p9KusD0UohgRxwn2+wR6VEe6vsc76rWq
+         jXWfOIYjMhxmeZ+34hk3RTmu30mU2jr6OC9aJY7US6/ACTt9YPC3DpjpLxGhfzX211PP
+         B/vg==
+X-Gm-Message-State: AOAM5333Nwj+jCqokG5TJXJ+SE1YvKNUyUgcWYNKSUoPo/JDgqiitqHF
+        42QEbocjpc5rdkNLVQCCuQ2JjHuxkeqC5myLdHHvMEhUMmY=
+X-Google-Smtp-Source: ABdhPJx3Fu8MG8uVkWia2IULGs5LmV5b/m785PTGQ/5ZPzJh5RO6qWEGn+Cte7MYq/6jAN8b+aqd029mikw3yjNgTUk=
+X-Received: by 2002:a05:6512:695:: with SMTP id t21mr10580976lfe.140.1625491751613;
+ Mon, 05 Jul 2021 06:29:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From:   Henk <henk.vergonet@gmail.com>
+Date:   Mon, 5 Jul 2021 15:29:00 +0200
+Message-ID: <CAMFK4TN_xh8_vfRu5vsPRfdsekcYgLXABPX5+jTBz5HTWSgimA@mail.gmail.com>
+Subject: HWMON: (nct6775) Correct number of inputs on NCT6796D
+To:     linux-hwmon@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>
+Content-Type: multipart/mixed; boundary="00000000000070cd5a05c6604a69"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Martin Hundebøll <mhu@silicom.dk>
+--00000000000070cd5a05c6604a69
+Content-Type: text/plain; charset="UTF-8"
 
-Add the list of sensors supported by the Silicom n5010 PAC, and enable
-the drivers as a subtype of the intel-m10-bmc multi-function driver.
+Noticed in the documentation that the NCT6796D actually has 16 analog
+voltage inputs, where only 15 are configured.
 
-Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Moritz Fischer <mdf@kernel.org>
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
----
+See: https://www.nuvoton.com/resource-files/NCT6796D_Datasheet_V0_6.pdf
+page 59-60:
 
-Changes since v3:
- * None
+8.6.2.1. Voltage Reading
+NCT6796D has 16 voltage reading:
+.....
+and the missing one in the driver:
+VIN9: Voltage reading Bank 4, Index 8F
 
-Changes since v2:
- * Added Yilun's Reviewed-by
- * Added Moritz' Reviewed-by
- * Added Guenter's Reviewed-by
+This patch adds support for in15 on the NCT6796D.
 
-Changes since v1:
- * Patch split out to separate hwmon changes
+Signed-off-by: Henk Vergonet <henk.vergonet@gmail.com>
 
- drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+--00000000000070cd5a05c6604a69
+Content-Type: text/x-patch; charset="US-ASCII"; name="nct6775.patch"
+Content-Disposition: attachment; filename="nct6775.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kqqnt7t10>
+X-Attachment-Id: f_kqqnt7t10
 
-diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-index bd7ed2ed3a1e..7a08e4c44a4b 100644
---- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-+++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-@@ -228,6 +228,118 @@ static const struct m10bmc_hwmon_board_data d5005bmc_hwmon_bdata = {
- 	.hinfo = d5005bmc_hinfo,
- };
- 
-+static const struct m10bmc_sdata n5010bmc_temp_tbl[] = {
-+	{ 0x100, 0x0, 0x104, 0x0, 0x0, 1000, "Board Local Temperature" },
-+	{ 0x108, 0x0, 0x10c, 0x0, 0x0, 1000, "FPGA 1 Temperature" },
-+	{ 0x110, 0x0, 0x114, 0x0, 0x0, 1000, "FPGA 2 Temperature" },
-+	{ 0x118, 0x0, 0x0, 0x0, 0x0, 1000, "Card Top Temperature" },
-+	{ 0x11c, 0x0, 0x0, 0x0, 0x0, 1000, "Card Bottom Temperature" },
-+	{ 0x128, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 1.2V Temperature" },
-+	{ 0x134, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 5V Temperature" },
-+	{ 0x140, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 0.9V Temperature" },
-+	{ 0x14c, 0x0, 0x0, 0x0, 0x0, 1000, "FPGA 0.85V Temperature" },
-+	{ 0x158, 0x0, 0x0, 0x0, 0x0, 1000, "AUX 12V Temperature" },
-+	{ 0x164, 0x0, 0x0, 0x0, 0x0, 1000, "Backplane 12V Temperature" },
-+	{ 0x1a8, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-1 Temperature" },
-+	{ 0x1ac, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-2 Temperature" },
-+	{ 0x1b0, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-3 Temperature" },
-+	{ 0x1b4, 0x0, 0x0, 0x0, 0x0, 1000, "QSFP28-4 Temperature" },
-+	{ 0x1b8, 0x0, 0x0, 0x0, 0x0, 1000, "CVL1 Internal Temperature" },
-+	{ 0x1bc, 0x0, 0x0, 0x0, 0x0, 1000, "CVL2 Internal Temperature" },
-+};
-+
-+static const struct m10bmc_sdata n5010bmc_in_tbl[] = {
-+	{ 0x120, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.2V Voltage" },
-+	{ 0x12c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 5V Voltage" },
-+	{ 0x138, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.9V Voltage" },
-+	{ 0x144, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.85V Voltage" },
-+	{ 0x150, 0x0, 0x0, 0x0, 0x0, 1, "AUX 12V Voltage" },
-+	{ 0x15c, 0x0, 0x0, 0x0, 0x0, 1, "Backplane 12V Voltage" },
-+	{ 0x16c, 0x0, 0x0, 0x0, 0x0, 1, "DDR4 1.2V Voltage" },
-+	{ 0x17c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.8V Voltage" },
-+	{ 0x184, 0x0, 0x0, 0x0, 0x0, 1, "QDR 1.3V Voltage" },
-+	{ 0x18c, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 0.8V Voltage" },
-+	{ 0x194, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 1.05V Voltage" },
-+	{ 0x19c, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 1.05V Voltage" },
-+	{ 0x1a4, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 0.8V Voltage" },
-+};
-+
-+static const struct m10bmc_sdata n5010bmc_curr_tbl[] = {
-+	{ 0x124, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.2V Current" },
-+	{ 0x130, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 5V Current" },
-+	{ 0x13c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.9V Current" },
-+	{ 0x148, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 0.85V Current" },
-+	{ 0x154, 0x0, 0x0, 0x0, 0x0, 1, "AUX 12V Current" },
-+	{ 0x160, 0x0, 0x0, 0x0, 0x0, 1, "Backplane 12V Current" },
-+	{ 0x168, 0x0, 0x0, 0x0, 0x0, 1, "DDR4 1.2V Current" },
-+	{ 0x178, 0x0, 0x0, 0x0, 0x0, 1, "FPGA 1.8V Current" },
-+	{ 0x180, 0x0, 0x0, 0x0, 0x0, 1, "QDR 1.3V Current" },
-+	{ 0x188, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 0.8V Current" },
-+	{ 0x190, 0x0, 0x0, 0x0, 0x0, 1, "CVL1 1.05V Current" },
-+	{ 0x198, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 1.05V Current" },
-+	{ 0x1a0, 0x0, 0x0, 0x0, 0x0, 1, "CVL2 0.8V Current" },
-+};
-+
-+static const struct hwmon_channel_info *n5010bmc_hinfo[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL),
-+	NULL
-+};
-+
-+static const struct m10bmc_hwmon_board_data n5010bmc_hwmon_bdata = {
-+	.tables = {
-+		[hwmon_temp] = n5010bmc_temp_tbl,
-+		[hwmon_in] = n5010bmc_in_tbl,
-+		[hwmon_curr] = n5010bmc_curr_tbl,
-+	},
-+
-+	.hinfo = n5010bmc_hinfo,
-+};
-+
- static umode_t
- m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
- 			u32 attr, int channel)
-@@ -438,6 +550,10 @@ static const struct platform_device_id intel_m10bmc_hwmon_ids[] = {
- 		.name = "d5005bmc-hwmon",
- 		.driver_data = (unsigned long)&d5005bmc_hwmon_bdata,
- 	},
-+	{
-+		.name = "n5010bmc-hwmon",
-+		.driver_data = (unsigned long)&n5010bmc_hwmon_bdata,
-+	},
- 	{ }
- };
- 
--- 
-2.31.0
-
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vbmN0Njc3NS5jIGIvZHJpdmVycy9od21vbi9uY3Q2
+Nzc1LmMKaW5kZXggZTdlMWRkYzFkNjMxLi5hODBkZjBiYmMxOTcgMTAwNjQ0Ci0tLSBhL2RyaXZl
+cnMvaHdtb24vbmN0Njc3NS5jCisrKyBiL2RyaXZlcnMvaHdtb24vbmN0Njc3NS5jCkBAIC0yOCw3
+ICsyOCw3IEBACiAgKiBuY3Q2NzkyZCAgICAxNSAgICAgIDYgICAgICAgNiAgICAgICAyKzYgICAg
+MHhjOTEwIDB4YzEgICAgMHg1Y2EzCiAgKiBuY3Q2NzkzZCAgICAxNSAgICAgIDYgICAgICAgNiAg
+ICAgICAyKzYgICAgMHhkMTIwIDB4YzEgICAgMHg1Y2EzCiAgKiBuY3Q2Nzk1ZCAgICAxNCAgICAg
+IDYgICAgICAgNiAgICAgICAyKzYgICAgMHhkMzUwIDB4YzEgICAgMHg1Y2EzCi0gKiBuY3Q2Nzk2
+ZCAgICAxNCAgICAgIDcgICAgICAgNyAgICAgICAyKzYgICAgMHhkNDIwIDB4YzEgICAgMHg1Y2Ez
+CisgKiBuY3Q2Nzk2ZCAgICAxNiAgICAgIDcgICAgICAgNyAgICAgICAyKzYgICAgMHhkNDIwIDB4
+YzEgICAgMHg1Y2EzCiAgKiBuY3Q2Nzk3ZCAgICAxNCAgICAgIDcgICAgICAgNyAgICAgICAyKzYg
+ICAgMHhkNDUwIDB4YzEgICAgMHg1Y2EzCiAgKiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAoMHhkNDUxKQogICogbmN0Njc5OGQgICAgMTQgICAgICA3ICAgICAgIDcg
+ICAgICAgMis2ICAgIDB4ZDQyOCAweGMxICAgIDB4NWNhMwpAQCAtMTA0Nyw5ICsxMDQ3LDkgQEAg
+ZGl2X2Zyb21fcmVnKHU4IHJlZykKICAqIFNvbWUgb2YgdGhlIHZvbHRhZ2UgaW5wdXRzIGhhdmUg
+aW50ZXJuYWwgc2NhbGluZywgdGhlIHRhYmxlcyBiZWxvdwogICogY29udGFpbiA4ICh0aGUgQURD
+IExTQiBpbiBtVikgKiBzY2FsaW5nIGZhY3RvciAqIDEwMAogICovCi1zdGF0aWMgY29uc3QgdTE2
+IHNjYWxlX2luWzE1XSA9IHsKK3N0YXRpYyBjb25zdCB1MTYgc2NhbGVfaW5bMTZdID0gewogCTgw
+MCwgODAwLCAxNjAwLCAxNjAwLCA4MDAsIDgwMCwgODAwLCAxNjAwLCAxNjAwLCA4MDAsIDgwMCwg
+ODAwLCA4MDAsCi0JODAwLCA4MDAKKwk4MDAsIDgwMCwgODAwCiB9OwogCiBzdGF0aWMgaW5saW5l
+IGxvbmcgaW5fZnJvbV9yZWcodTggcmVnLCB1OCBucikKQEAgLTExNDMsNyArMTE0Myw3IEBAIHN0
+cnVjdCBuY3Q2Nzc1X2RhdGEgewogCS8qIFJlZ2lzdGVyIHZhbHVlcyAqLwogCXU4IGJhbms7CQkv
+KiBjdXJyZW50IHJlZ2lzdGVyIGJhbmsgKi8KIAl1OCBpbl9udW07CQkvKiBudW1iZXIgb2YgaW4g
+aW5wdXRzIHdlIGhhdmUgKi8KLQl1OCBpblsxNV1bM107CQkvKiBbMF09aW4sIFsxXT1pbl9tYXgs
+IFsyXT1pbl9taW4gKi8KKwl1OCBpblsxNl1bM107CQkvKiBbMF09aW4sIFsxXT1pbl9tYXgsIFsy
+XT1pbl9taW4gKi8KIAl1bnNpZ25lZCBpbnQgcnBtW05VTV9GQU5dOwogCXUxNiBmYW5fbWluW05V
+TV9GQU5dOwogCXU4IGZhbl9wdWxzZXNbTlVNX0ZBTl07CkBAIC00MjAwLDcgKzQyMDAsNyBAQCBz
+dGF0aWMgaW50IG5jdDY3NzVfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKIAlj
+YXNlIG5jdDY3OTY6CiAJY2FzZSBuY3Q2Nzk3OgogCWNhc2UgbmN0Njc5ODoKLQkJZGF0YS0+aW5f
+bnVtID0gMTU7CisJCWRhdGEtPmluX251bSA9IChkYXRhLT5raW5kID09IG5jdDY3OTYpID8gMTYg
+OiAxNTsKIAkJZGF0YS0+cHdtX251bSA9IChkYXRhLT5raW5kID09IG5jdDY3OTYgfHwKIAkJCQkg
+ZGF0YS0+a2luZCA9PSBuY3Q2Nzk3IHx8CiAJCQkJIGRhdGEtPmtpbmQgPT0gbmN0Njc5OCkgPyA3
+IDogNjsK
+--00000000000070cd5a05c6604a69--
