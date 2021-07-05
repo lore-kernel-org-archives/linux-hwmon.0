@@ -2,156 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D9F4C07E9C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 16:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F4AC07E99
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 17:27:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 564AD6196C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 16:14:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C963A61220
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 17:27:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbhGEQRR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Jul 2021 12:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S229714AbhGER34 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Jul 2021 13:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbhGEQRQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jul 2021 12:17:16 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4180C061574;
-        Mon,  5 Jul 2021 09:14:38 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id u11so21275587oiv.1;
-        Mon, 05 Jul 2021 09:14:38 -0700 (PDT)
+        with ESMTP id S229686AbhGER34 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jul 2021 13:29:56 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E08CC061574;
+        Mon,  5 Jul 2021 10:27:18 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id s24so6418774oiw.2;
+        Mon, 05 Jul 2021 10:27:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PZe1w/0fw0ad7aMWKSuUHt6WMQscH3aipXU3FvsS3BQ=;
-        b=kR0L3xd0J9OaDzxyB9hwRrXkG39MPTZUMMQ8Buo1Glq0/kRgC5wVlIGDHLF4xx90v5
-         qqSDRCU72+H6q3EUxqJJa2ILSXXimGt8q9IBWuXorqKc0LXFhZFOboEZI12SXtB06VGZ
-         WTEiT6IUnZ46YcWWXBCpk2bgvF3t2eSlAHcP1MyUM9b7XMYv0KDEA0Z0/R8sbCb3zcO6
-         Scqh1SNX1I2s8CkCKrzjr+GRD/haCBA9R7y87+ruJkmTp6+EUDmSLw1B8etLCsoK8Jel
-         sE3Rf0lmvjJttT1moMuwN9Iarn11SJQgC6D/XtVaX24vzXwW/uO/YlBG2C5RSmNQaSta
-         MdPw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ua8aVhFSui7G1CyS6GAefRwrM5riv0Skd4YlAgOT16Q=;
+        b=l2dX9nazMOEZeo10Zi/0uPfJFFvceTHMN8aC5iOaL8MAwkY+0beZxW722TMCdAbFO2
+         MedKTP6R+aGJfIK+28zUbAMoypMUpiBZ0+Oefu5UUagVFHthlIc3vPYuF33G2RPzoK0i
+         /X4DZgRIoGB2JQFTKnVkE9hMHJGrLndyxdKg8xeV7jB7Dx4R4gU3A5jFTAuutxWemOTk
+         +jfwdKGlB52QCPSawfI+k4JtWhL4MiHpQ9RDwTUBv9+U1sZA4bAiX19tYekQ2qPXPOL2
+         Y4vx6eZoiNGc7kuxcUpmeUL8c2iM98hwXAXyUKt/Iuke8j3M9rp1CVz3SSuy+j1ao8CM
+         9z0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PZe1w/0fw0ad7aMWKSuUHt6WMQscH3aipXU3FvsS3BQ=;
-        b=RyapEa7AYXGKXPrwk9fg4K6pJck2PX9Kyd+PSK+IjJYUMxzhsi9LOP8e1rQ6APuSAN
-         jltFK5dpHaPLrJZxYChXAzhLog7D6oOSopzg2f1n+sEKZDPpWz+VTnhXD3Tjc9zrPprk
-         9fKlBVfBBTzQQLo72TXbVk43IdyYsgMI34PfW3wcW7AUd4tFXHxJukmsjexKEj5nbRbg
-         aAxIA2+A/n1o4loh0jyMEZwb6CLLN0jKTwebqqJUMgv4Z/vWzdPFFGB9n4E2Y6GMV9Du
-         VeoYXuBWu1lTa+QFQLO5H65uAlMUBDLJrXkkl670AdvpDTnDvVriL1fP0X19waS+e0gL
-         TKmA==
-X-Gm-Message-State: AOAM532ds0HMHDCC2QtS8WaxTKVjcifucXjrBbeMUWy5sSzowprwBeRi
-        K1xKuwTJmAu59rto1x68ipA=
-X-Google-Smtp-Source: ABdhPJyLe4DcnjZTq9fBZ9ZAYMzpVZ0ARCrMBKcMajfTPirfG9t8r1vxHGyMkvxlUbB8OLHkqNDl7w==
-X-Received: by 2002:a05:6808:6cf:: with SMTP id m15mr10759511oih.39.1625501678373;
-        Mon, 05 Jul 2021 09:14:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w15sm838276oie.21.2021.07.05.09.14.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jul 2021 09:14:37 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ua8aVhFSui7G1CyS6GAefRwrM5riv0Skd4YlAgOT16Q=;
+        b=i+2bTLE498owTtpOeZN0PI6uirXGfmkh4nK76q35LNuVq0rRsxYxfeWh7FZ1m5OUEd
+         vCmzesV9Qh3p/6nd6SJVsS7Ui98aM/WSBU4Ooi9sWcD6vMrAxJX/l7ZRE7p4dADcz0BY
+         q2sCXD4sIuhKEgo/WvT9lAKjR4LzQUxXqoCqS7AlxXGycR4O9WwPHQKlfdICzKDEhao8
+         eYEqN0gxQMCBve4MhS0Bz6Z3pNTv2FellWESWXkbIAtrbAcD2kzMK9pXoWheh6JtRkwH
+         r7x+QM0JdKoecT2tdfIls7OTeJe6ni6jOxwih5+5VyRgIEs/cwpNBe8F2PxZx7rwXvDt
+         JNOA==
+X-Gm-Message-State: AOAM532gsprNi9OB6kOBXBTPuu4FOk3AgUyhjjiluLomncFH9JX2mHOj
+        PcDz2TR6eVJDGYn6paqyqY4=
+X-Google-Smtp-Source: ABdhPJw38bLW7qI7p7gvlPSSox++C8SVEwo7w/6CQZymDiYbga5ixekTEjPq0s6GDd1/ynigh57bJQ==
+X-Received: by 2002:a05:6808:10c7:: with SMTP id s7mr10929434ois.122.1625506037515;
+        Mon, 05 Jul 2021 10:27:17 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l7sm2701822otu.76.2021.07.05.10.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jul 2021 10:27:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v8 6/7] Documentation/hwmon: Add iei-wt61p803-puzzle hwmon
- driver documentation
-To:     Pavo Banicevic <pavo.banicevic@sartura.hr>,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
-        Max.Merchel@tq-group.com, linux@rempel-privat.de, daniel@0x0f.com,
-        shawnguo@kernel.org, sam@ravnborg.org, arnd@arndb.de,
-        krzysztof.kozlowski@canonical.com, corbet@lwn.net,
-        lee.jones@linaro.org, pavel@ucw.cz, robh+dt@kernel.org,
-        jdelvare@suse.com, goran.medic@sartura.hr, luka.perkov@sartura.hr,
-        luka.kovacic@sartura.hr
-Cc:     Robert Marko <robert.marko@sartura.hr>
-References: <20210705134939.28691-1-pavo.banicevic@sartura.hr>
- <20210705134939.28691-7-pavo.banicevic@sartura.hr>
+Date:   Mon, 5 Jul 2021 10:27:15 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <7f1e783f-1049-ebe0-23c4-cf3a92d4f623@roeck-us.net>
-Date:   Mon, 5 Jul 2021 09:14:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Chris Lesiak <chris.lesiak@licor.com>,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (ntc_thermistor): Use library interpolation
+Message-ID: <20210705172715.GA253538@roeck-us.net>
+References: <20210704222014.12058-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20210705134939.28691-7-pavo.banicevic@sartura.hr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210704222014.12058-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/5/21 6:49 AM, Pavo Banicevic wrote:
-> From: Luka Kovacic <luka.kovacic@sartura.hr>
+On Mon, Jul 05, 2021 at 12:20:14AM +0200, Linus Walleij wrote:
+> The kernel has a helper function for linear interpolation so
+> use it. It incidentally makes the code easier to read as well.
 > 
-> Add the iei-wt61p803-puzzle driver hwmon driver interface documentation.
+> Tested on the ST-Ericsson HREFv60plus hardware reference design
+> with two thermistors forming a thermal zone.
 > 
-> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
-> Signed-off-by: Pavo Banicevic <pavo.banicevic@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> Cc: Robert Marko <robert.marko@sartura.hr>
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Chris Lesiak <chris.lesiak@licor.com>
+> Cc: linux-iio@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+
+Applied.
+
+Thanks,
+Guenter
+
 > ---
->   .../hwmon/iei-wt61p803-puzzle-hwmon.rst       | 42 +++++++++++++++++++
-
-Needs to be added to index.rst.
-
->   1 file changed, 42 insertions(+)
->   create mode 100644 Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
+> ChangeLog v1->v2:
+> - Drop the check for low == high as the linear interpolation
+>   library function does this for us.
+> - Multiply the temperatures in the table with 1000 *before*
+>   interpolating instead of *after* so we increase precision
+>   in the interpolation.
+> ---
+>  drivers/hwmon/ntc_thermistor.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
 > 
-> diff --git a/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst b/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
-> new file mode 100644
-> index 000000000000..04b01e53760c
-> --- /dev/null
-> +++ b/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst > @@ -0,0 +1,42 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Kernel driver iei-wt61p803-puzzle-hwmon
-> +=======================================
-> +
-> +Supported chips:
-> + * IEI WT61P803 PUZZLE for IEI Puzzle M801
-> +
-> +   Prefix: 'iei-wt61p803-puzzle-hwmon'
-> +
-> +Author: Luka Kovacic <luka.kovacic@sartura.hr>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver adds fan and temperature sensor reading for some IEI Puzzle
-> +series boards.
-> +
-> +Sysfs attributes
-> +----------------
-> +
-> +The following attributes are supported:
-> +
-> +- IEI WT61P803 PUZZLE for IEI Puzzle M801
-> +
-> +/sys files in hwmon subsystem
-> +-----------------------------
-> +
-> +================= == ===================================================
-> +fan[1-5]_input    RO files for fan speed (in RPM)
-> +pwm[1-2]          RW files for fan[1-2] target duty cycle (0..255)
-
-There are also temperature sensors.
-
-> +================= == ===================================================
-> +
-> +/sys files in thermal subsystem
-> +-------------------------------
-> +
-> +================= == ====================================================
-> +cur_state         RW file for current cooling state of the cooling device
-> +                     (0..max_state)
-> +max_state         RO file for maximum cooling state of the cooling device
-> +================= == ====================================================
-> 
-
+> diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
+> index 8587189c7f15..4c26db6738f9 100644
+> --- a/drivers/hwmon/ntc_thermistor.c
+> +++ b/drivers/hwmon/ntc_thermistor.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/err.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/fixp-arith.h>
+>  
+>  #include <linux/platform_data/ntc_thermistor.h>
+>  
+> @@ -553,15 +554,16 @@ static int get_temp_mc(struct ntc_data *data, unsigned int ohm)
+>  	int temp;
+>  
+>  	lookup_comp(data, ohm, &low, &high);
+> -	if (low == high) {
+> -		/* Unable to use linear approximation */
+> -		temp = data->comp[low].temp_c * 1000;
+> -	} else {
+> -		temp = data->comp[low].temp_c * 1000 +
+> -			((data->comp[high].temp_c - data->comp[low].temp_c) *
+> -			 1000 * ((int)ohm - (int)data->comp[low].ohm)) /
+> -			((int)data->comp[high].ohm - (int)data->comp[low].ohm);
+> -	}
+> +	/*
+> +	 * First multiplying the table temperatures with 1000 to get to
+> +	 * millicentigrades (which is what we want) and then interpolating
+> +	 * will give the best precision.
+> +	 */
+> +	temp = fixp_linear_interpolate(data->comp[low].ohm,
+> +				       data->comp[low].temp_c * 1000,
+> +				       data->comp[high].ohm,
+> +				       data->comp[high].temp_c * 1000,
+> +				       ohm);
+>  	return temp;
+>  }
+>  
