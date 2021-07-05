@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAFDFC07E9C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8978FC11F66
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:50:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9B21613FC
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:50:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C8AD613FC
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jul 2021 13:50:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbhGENwv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Jul 2021 09:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S231315AbhGENww (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Jul 2021 09:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbhGENuz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jul 2021 09:50:55 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93016C06175F
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Jul 2021 06:48:18 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id gb6so12505669ejc.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Jul 2021 06:48:18 -0700 (PDT)
+        with ESMTP id S231438AbhGENuy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jul 2021 09:50:54 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCDEC061764
+        for <linux-hwmon@vger.kernel.org>; Mon,  5 Jul 2021 06:48:17 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x2so5312177edr.10
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 Jul 2021 06:48:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kP18nSL4yfHQv9ME+MUCjrKTP7rxaCdOPNmhAXPVmKI=;
-        b=fmuGE1ysYO+Mobo+K0Vpwv/ccyW+mypGyqI4DtGOr0/IiAgkGTMK83a7ofHQ6tmwx5
-         Bmp6ZDJxJlnczf2chLMXtYfkKMtIVVUsRLf9uVLUdjCPxK08fPXE58ty7SeOmnsi1Dwi
-         Y7qcWjbEdM4wVXgnOlkLgx3kjlgdIi6NoGoBNlmf9cihxGDO4fo1DB69rd4nOx+A/SGU
-         xAfM5nz9qCvWCZmlXwiuS/KmDPh4k29X8J0re7uGrga0eO31KjRnlxaykNdMDDX1CWs0
-         ya9voAPuiBxwQW+UnC/3Ix1aiayVIwEVeYbxFqEvdrrpgW4+r7WBhLp8a/k4WijL8MOd
-         zqcw==
+        bh=vcvOaG0J/hZEczmyOwGpCy0AJMuPctlmDRDv7xjG04M=;
+        b=fPkN13W88SOfEr4WLra8q3YpaKyak9VFrZRiBPEtvbvFEnJS+VjSyssQo0U/dlBslM
+         yZ4d4bzHiTahYxKdYteEHrFb8T9JQYyqpt66uhLLWNcFZk8fyFjSM1ssAM5+jAByS4KW
+         sha+rTjwSnDIBR0hCwSbOlLZtzSnamuG2zMkeAG1353cmu1nQiTJBDo5giSzL4HMijQF
+         3R974UEVm5Bt+cWlgufd0wC1oIMRWNSlgISXMtsdwnPN7ApP1FzKC+4vLEWuQS6j3/KK
+         CxEV8UzG3RbR0jq5mPn60WtyST6S26BG+yNteHl0XrUmFjO0BDooQ42QbSIIZBX7rapA
+         gxYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kP18nSL4yfHQv9ME+MUCjrKTP7rxaCdOPNmhAXPVmKI=;
-        b=ZGkOqqE50cAWmZsl0hqpac7LQJV3t5/tMEObsoDdTsJ3LCAYa4qYeK42yulp6MaJYa
-         16VvGeyJ4JWXFtYVGKi/o//oVknuaTc91TO5bVnWNxPHIx9xPlulEpUGIraBl1iO98vi
-         Y+cBF1sxrAz9N0njozZJEFyMS2MhShYqZkdJG0fvYqsVtY/0ViCCDoXwt/X3dVxdWKi3
-         zFnzyFCmfuY8bQLt2/CkQUtHeVqtpsH8PCOH7O/p7at/Sv4IdaksaDy0P8idw/h2gdKy
-         XksaAyXWJaRf4AVzwtofxw4I3v6rbli9PIA2uvCx7NCoDBCfCrMsxlwyfgwuRxifRxzM
-         y7Kg==
-X-Gm-Message-State: AOAM531tcKeC90BGU9cqTng4NmFpv/WjXWnD+yLHJCsSWS+GxEIXALOT
-        gwYrg7EPHQTsgMmRQiq+mMUkUw==
-X-Google-Smtp-Source: ABdhPJxOhUS/fzy6YFFQmmWBdtQBVL8CVb03J52vY3k50zkwhi3g6jx3Ay48ggohYp5kAbAaIVAo/w==
-X-Received: by 2002:a17:906:b10e:: with SMTP id u14mr3867154ejy.522.1625492897197;
-        Mon, 05 Jul 2021 06:48:17 -0700 (PDT)
+        bh=vcvOaG0J/hZEczmyOwGpCy0AJMuPctlmDRDv7xjG04M=;
+        b=fnuyhxj2DPMTbveTLlXDePi6XTamSlctdBe5m8uLl1vs/L9mOI9JCbyIiPuPkSdDTr
+         y98Hx3SqiMFEDvQWgVZWZpjl4xRbizDmz//oGkRJ1FU2k1/BJVIQg+bCBbzFHcU46WqJ
+         XXWUzyv7LH7cTPeETgDYER992ZJBQKg/a8+Bj+87Q1VGdxq3XjhwlQ22SxkpHp47FJrj
+         FCqHwq6cDSRQfsrf7huanC9msaXsR0ghx5phnv8r4tVcmIRS7jnJlzgK4x6ba0do1vzN
+         IxKsTj6YgZwn4MDIbsRrDIVILB04Xwh0W04JT6KSDkZ07F5CD6Cc1w0N470MKWiUg0zv
+         TTMg==
+X-Gm-Message-State: AOAM531mqp6BEmIK6OA8WCgpKJD+MxKOdmqUVKUztZrCn1WejsyXlv8g
+        xHYyzDnprhTN4jhuhm5AMSMOMQ==
+X-Google-Smtp-Source: ABdhPJxyU7URfuIYdS/ISsgwZ/de5lyrioYlRyrVpglihitQVVbcdfHO5l4BdSPHFvNgggmVDjgUMA==
+X-Received: by 2002:a05:6402:1357:: with SMTP id y23mr14463677edw.244.1625492895897;
+        Mon, 05 Jul 2021 06:48:15 -0700 (PDT)
 Received: from localhost.localdomain ([89.18.44.40])
-        by smtp.gmail.com with ESMTPSA id cf29sm1557637edb.14.2021.07.05.06.48.15
+        by smtp.gmail.com with ESMTPSA id cf29sm1557637edb.14.2021.07.05.06.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jul 2021 06:48:16 -0700 (PDT)
+        Mon, 05 Jul 2021 06:48:15 -0700 (PDT)
 From:   Pavo Banicevic <pavo.banicevic@sartura.hr>
 To:     linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
         devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -67,9 +67,9 @@ To:     linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
         goran.medic@sartura.hr, luka.perkov@sartura.hr,
         luka.kovacic@sartura.hr
 Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH v8 7/7] MAINTAINERS: Add an entry for the IEI WT61P803 PUZZLE driver
-Date:   Mon,  5 Jul 2021 15:49:39 +0200
-Message-Id: <20210705134939.28691-8-pavo.banicevic@sartura.hr>
+Subject: [PATCH v8 6/7] Documentation/hwmon: Add iei-wt61p803-puzzle hwmon driver documentation
+Date:   Mon,  5 Jul 2021 15:49:38 +0200
+Message-Id: <20210705134939.28691-7-pavo.banicevic@sartura.hr>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210705134939.28691-1-pavo.banicevic@sartura.hr>
 References: <20210705134939.28691-1-pavo.banicevic@sartura.hr>
@@ -81,43 +81,65 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Luka Kovacic <luka.kovacic@sartura.hr>
 
-Add an entry for the IEI WT61P803 PUZZLE driver (MFD, HWMON, LED drivers).
+Add the iei-wt61p803-puzzle driver hwmon driver interface documentation.
 
 Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
 Signed-off-by: Pavo Banicevic <pavo.banicevic@sartura.hr>
 Cc: Luka Perkov <luka.perkov@sartura.hr>
 Cc: Robert Marko <robert.marko@sartura.hr>
 ---
- MAINTAINERS | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../hwmon/iei-wt61p803-puzzle-hwmon.rst       | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0cce91cd5624..bc6d0a23658d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8827,6 +8827,22 @@ F:	include/net/nl802154.h
- F:	net/ieee802154/
- F:	net/mac802154/
- 
-+IEI WT61P803 M801 MFD DRIVER
-+M:	Luka Kovacic <luka.kovacic@sartura.hr>
-+M:	Luka Perkov <luka.perkov@sartura.hr>
-+M:	Goran Medic <goran.medic@sartura.hr>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/stable/sysfs-driver-iei-wt61p803-puzzle
-+F:	Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
-+F:	Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
-+F:	Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
-+F:	Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
-+F:	drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
-+F:	drivers/leds/leds-iei-wt61p803-puzzle.c
-+F:	drivers/mfd/iei-wt61p803-puzzle.c
-+F:	include/linux/mfd/iei-wt61p803-puzzle.h
+diff --git a/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst b/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
+new file mode 100644
+index 000000000000..04b01e53760c
+--- /dev/null
++++ b/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
+@@ -0,0 +1,42 @@
++.. SPDX-License-Identifier: GPL-2.0-only
 +
- IFE PROTOCOL
- M:	Yotam Gigi <yotam.gi@gmail.com>
- M:	Jamal Hadi Salim <jhs@mojatatu.com>
++Kernel driver iei-wt61p803-puzzle-hwmon
++=======================================
++
++Supported chips:
++ * IEI WT61P803 PUZZLE for IEI Puzzle M801
++
++   Prefix: 'iei-wt61p803-puzzle-hwmon'
++
++Author: Luka Kovacic <luka.kovacic@sartura.hr>
++
++
++Description
++-----------
++
++This driver adds fan and temperature sensor reading for some IEI Puzzle
++series boards.
++
++Sysfs attributes
++----------------
++
++The following attributes are supported:
++
++- IEI WT61P803 PUZZLE for IEI Puzzle M801
++
++/sys files in hwmon subsystem
++-----------------------------
++
++================= == ===================================================
++fan[1-5]_input    RO files for fan speed (in RPM)
++pwm[1-2]          RW files for fan[1-2] target duty cycle (0..255)
++================= == ===================================================
++
++/sys files in thermal subsystem
++-------------------------------
++
++================= == ====================================================
++cur_state         RW file for current cooling state of the cooling device
++                     (0..max_state)
++max_state         RO file for maximum cooling state of the cooling device
++================= == ====================================================
 -- 
 2.31.1
 
