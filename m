@@ -2,253 +2,209 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B39EC07E96
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB788C07E9C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:43:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6038261380
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:40:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A12EF619B4
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:43:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbhGFOnR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jul 2021 10:43:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45749 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232632AbhGFOnN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 6 Jul 2021 10:43:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625582434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
-        b=RwXqnYt15F/GAhocoXVF+k8KvBQQ/cgJyn3Kyr1at91Fg2QK/o71OAdJTv7FBbigxYoQgB
-        T+FduNmQoGvdUO1lwtm8KLPdwB3xj/gugL3hSNqI0Tbf2aV17x3w/UASf9LwF1nGrNhi0K
-        MOwya1ZWODBriw8jddwDfP7BjJkY5ZM=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-8-bew1PxKCOwuNKj7vM0YCRQ-1; Tue, 06 Jul 2021 10:10:24 -0400
-X-MC-Unique: bew1PxKCOwuNKj7vM0YCRQ-1
-Received: by mail-oi1-f200.google.com with SMTP id w18-20020a0568080d52b029023e3c1124c9so14477767oik.11
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
+        id S232960AbhGFOqM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jul 2021 10:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232909AbhGFOqC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jul 2021 10:46:02 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43359C05BD13;
+        Tue,  6 Jul 2021 07:34:56 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id u14so21544480pga.11;
+        Tue, 06 Jul 2021 07:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mARFh6+7tn007k6JVuJELUR7h4Zv3keBjqK+Epxvigc=;
+        b=R//2YuHT/dHU6CRVRht4GHW2zLFpZFpbmaofQan8eke06UMAr0gqHkf5W3RqFX77Mj
+         OGKy0Kt8NlahKfqlF/yc1Q7VxTkpXrHtkMGhGl5reGGzBFF5fmWU+CVc37IWrDQWuNCv
+         WdEfA0zH9UHW41r0uQyK46paZFfJ7zHiHOH5Bh1Fhjm0xBnY/1iFUQSEyhXCPlXZxfB5
+         7vxvY3EgrhR8D3p5y+62at7kxDDeAS4ZWLPyGY1iYrbmCA6WMsry0K7s1QuBlIEWSdz7
+         663pP5ZMkHW20WbpqXLkgaM10AK3J0SR284B9agVT0ZphQi/3DijH7wKw6YMrHXpg2bM
+         +gtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
-        b=ru+R2U057XUpzIfJBs8FoZs/TqQ9+qHvS5YpKotX+yXMCVOp0paGt2yD3tO7QbnTw7
-         o4Am0QJyqwak01tAIklSSHuK1gHR7R34AP7irepnSYIMqodvMRA/Qq+HV6olk1tJYJWl
-         9nu8tXo1xxSF6pmcUV/uDLxH8ta0H2e3XUiV4Yt5DYSlvz2Z5sr3VmmQuqznCcRuqQd/
-         2ZbsAD4HiWJSSElsuBjQFq3ywZVQSTMDSZ175Jzraix0ugQuSU9NmJzIrGLqcu8DH3vl
-         ZBgYU9Qp8nbIf7KdmmZi7/O/xuy6haoFb4hLZb1gzm7me92aGKF0bsp5iEwjA82uSpZg
-         bbkA==
-X-Gm-Message-State: AOAM530W43GHcBUo8m/++tQrCbNPY3erNHkMlxMcApFmbGWNDNxnjETJ
-        N4P1y2xIRCjE5kUp3vMos/zSPkXGsBDQ3Sg2VsYWc59c/KNvhpXy4Z0TF29U5Wgp/Ul850w7AwS
-        pXQzGyHy4qeiwwlUPkU3ugTQ=
-X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464522oig.93.1625580624132;
-        Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJydwYnoxxkt+tI3dKHZhxx+PKB9tAQtQwvI7A11IgHI60BOdfFuzpvLSzk2QkjyMCcJT8KvOQ==
-X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464502oig.93.1625580623944;
-        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id x29sm2811045ooj.10.2021.07.06.07.10.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
-Subject: Re: [PATCH v4 1/4] fpga: dfl: expose feature revision from struct
- dfl_device
-To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
-        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mARFh6+7tn007k6JVuJELUR7h4Zv3keBjqK+Epxvigc=;
+        b=pfS+C8SiL++x1Y3451jIxZb1pRah++DOUaxfyJ9C8l/df0G2Mti4Nj9N3jkxIkxHeU
+         z0GMQydxC7S72gXHmWK7UhygE+NUJxb56RNoo0EhMZPpvSZV9z0Xa18yMmK3/1LEOsey
+         in1ip1sTupkJ+XFE93FPb99hwp9BbtMyNepmMNS1NI4SFbJfJDJQAz0VfZZTJKU5UlTW
+         3u4kb3JWUjFjUyS1fVL+Cr1IF1tD3GPsRR1nGMZMqn/y/W1O7QVQWVV6t5G0M3v8Ctu6
+         +9dMossgLXsaCblGXPreCiYC3wlQSlJwqYfvVyAUUpLqrp6+XLKypxU9ZXhG18lDibkj
+         k7dw==
+X-Gm-Message-State: AOAM532krdTUQLoJIdN8mHb0HR3YZkVsRllLaiqvY5wleG5v5j0mu+my
+        IkUjrLlqMcFyJQrhsg+9SGNQ1So/dkZJ1w==
+X-Google-Smtp-Source: ABdhPJyK77XLAqQvpf6bTNIYIMaJ+t/cKqv1bFbVE28bpXc73I5rkI9L22JXByqBKB98fjDpaFHJ4A==
+X-Received: by 2002:a63:d511:: with SMTP id c17mr21273492pgg.219.1625582095691;
+        Tue, 06 Jul 2021 07:34:55 -0700 (PDT)
+Received: from localhost.lan (p1284205-ipngn14601marunouchi.tokyo.ocn.ne.jp. [153.205.193.205])
+        by smtp.gmail.com with ESMTPSA id b18sm3314789pjq.2.2021.07.06.07.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jul 2021 07:34:54 -0700 (PDT)
+Received: from x2.lan (localhost [127.0.0.1])
+        by localhost.lan (Postfix) with ESMTPSA id 6BD16900904;
+        Tue,  6 Jul 2021 14:34:52 +0000 (GMT)
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20210705101645.2040106-1-martin@geanix.com>
- <20210705101645.2040106-2-martin@geanix.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <93a8e949-ec25-d00d-4740-72d9e18ebb68@redhat.com>
-Date:   Tue, 6 Jul 2021 07:10:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Jonathan Corbet <corbet@lwn.net>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
+Subject: [PATCH 1/3] mfd: da9063: Add HWMON dependencies
+Date:   Tue,  6 Jul 2021 14:34:47 +0000
+Message-Id: <850a353432cd676f96889cede291232abf58918d.1625581991.git.plr.vincent@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20210705101645.2040106-2-martin@geanix.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+From: "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
 
-On 7/5/21 3:16 AM, Martin Hundebøll wrote:
-> From: Martin Hundebøll <mhu@silicom.dk>
->
-> DFL device drivers have a common need for checking feature revision
-> information from the DFL header, as well as other common DFL information
-> like the already exposed feature id and type.
->
-> This patch exposes the feature revision information directly via the DFL
-> device data structure.
->
-> Since the DFL core code has already read the DFL header, this this patch
-> saves additional mmio reads from DFL device drivers too.
->
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> Acked-by: Wu Hao <hao.wu@intel.com>
-> Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->
-> Changes since v3:
->   * Added Hao's Acked-by
->   * Added Matthew's Acked-by
->
-> Changes since v2:
->   * Reworded commit message as per Hao's suggestion
->
-> Changes since v1:
->   * This patch replaces the previous patch 2 and exposes the feature
->     revision through struct dfl_device instead of a helper reading from
->     io-mem
->
->   drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
->   drivers/fpga/dfl.h  |  1 +
->   include/linux/dfl.h |  1 +
->   3 files changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 511b20ff35a3..9381c579d1cd 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
->   
->   	ddev->type = feature_dev_id_type(pdev);
->   	ddev->feature_id = feature->id;
-> +	ddev->revision = feature->revision;
->   	ddev->cdev = pdata->dfl_cdev;
->   
->   	/* add mmio resource */
-> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
->    */
->   struct dfl_feature_info {
->   	u16 fid;
-> +	u8 rev;
+Dependencies required for DA9063 HWMON support.
 
-In other places 'revision' is the element name.
+Signed-off-by: Opensource [Steve Twiss] <stwiss.opensource@diasemi.com>
 
-For consistency, change rev to revision
+Directly set da9063->t_offset.
+Let MFD probe succeed even if DA9063_REG_T_OFFSET cannot be read.
 
->   	struct resource mmio_res;
->   	void __iomem *ioaddr;
->   	struct list_head node;
-> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
->   		/* save resource information for each feature */
->   		feature->dev = fdev;
->   		feature->id = finfo->fid;
-> +		feature->revision = finfo->rev;
->   
->   		/*
->   		 * the FIU header feature has some fundamental functions (sriov
-> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
->   	devm_kfree(binfo->dev, binfo);
->   }
->   
-> -static inline u32 feature_size(void __iomem *start)
-> +static inline u32 feature_size(u64 value)
+Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
+---
+Changes in v2:
+- registers.h changes moved from patch 2
 
-The return type should match its use in create_feature_instance 
-'resource_size_t'
+Originally submitted by Steve Twiss in 2014:
+  https://marc.info/?l=linux-kernel&m=139560864709852&w=2
 
-change u32 to resource_size_t
+ drivers/mfd/da9063-core.c            |  8 +++++++
+ include/linux/mfd/da9063/core.h      |  3 +++
+ include/linux/mfd/da9063/registers.h | 34 ++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+)
 
-Tom
-
->   {
-> -	u64 v = readq(start + DFH);
-> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
-> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
->   	/* workaround for private features with invalid size, use 4K instead */
->   	return ofst ? ofst : 4096;
->   }
->   
-> -static u16 feature_id(void __iomem *start)
-> +static u16 feature_id(u64 value)
->   {
-> -	u64 v = readq(start + DFH);
-> -	u16 id = FIELD_GET(DFH_ID, v);
-> -	u8 type = FIELD_GET(DFH_TYPE, v);
-> +	u16 id = FIELD_GET(DFH_ID, value);
-> +	u8 type = FIELD_GET(DFH_TYPE, value);
->   
->   	if (type == DFH_TYPE_FIU)
->   		return FEATURE_ID_FIU_HEADER;
-> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->   	unsigned int irq_base, nr_irqs;
->   	struct dfl_feature_info *finfo;
->   	int ret;
-> +	u8 rev;
-> +	u64 v;
-> +
-> +	v = readq(binfo->ioaddr + ofst);
-> +	rev = FIELD_GET(DFH_REVISION, v);
->   
->   	/* read feature size and id if inputs are invalid */
-> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
-> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
-> +	size = size ? size : feature_size(v);
-> +	fid = fid ? fid : feature_id(v);
->   
->   	if (binfo->len - ofst < size)
->   		return -EINVAL;
-> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->   		return -ENOMEM;
->   
->   	finfo->fid = fid;
-> +	finfo->rev = rev;
->   	finfo->mmio_res.start = binfo->start + ofst;
->   	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->   	finfo->mmio_res.flags = IORESOURCE_MEM;
-> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
->   {
->   	if (!is_feature_dev_detected(binfo)) {
->   		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
-> -			feature_id(binfo->ioaddr + ofst));
-> +			feature_id(readq(binfo->ioaddr + ofst)));
->   		return -EINVAL;
->   	}
->   
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 2b82c96ba56c..422157cfd742 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
->   struct dfl_feature {
->   	struct platform_device *dev;
->   	u16 id;
-> +	u8 revision;
->   	int resource_index;
->   	void __iomem *ioaddr;
->   	struct dfl_feature_irq_ctx *irq_ctx;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 6cc10982351a..431636a0dc78 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -38,6 +38,7 @@ struct dfl_device {
->   	int id;
->   	u16 type;
->   	u16 feature_id;
-> +	u8 revision;
->   	struct resource mmio_res;
->   	int *irqs;
->   	unsigned int num_irqs;
+diff --git a/drivers/mfd/da9063-core.c b/drivers/mfd/da9063-core.c
+index df407c3afce3..14c2a8df9ae3 100644
+--- a/drivers/mfd/da9063-core.c
++++ b/drivers/mfd/da9063-core.c
+@@ -197,6 +197,14 @@ int da9063_device_init(struct da9063 *da9063, unsigned int irq)
+ 		}
+ 	}
+ 
++	ret = regmap_read(da9063->regmap, DA9063_REG_T_OFFSET, &da9063->t_offset);
++	if (ret < 0) {
++		da9063->t_offset = 0;
++		dev_warn(da9063->dev,
++			 "Temperature trimming value cannot be read (defaulting to 0)\n");
++		ret = 0;
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/mfd/da9063/core.h b/include/linux/mfd/da9063/core.h
+index fa7a43f02f27..c0c57c6f6230 100644
+--- a/include/linux/mfd/da9063/core.h
++++ b/include/linux/mfd/da9063/core.h
+@@ -85,6 +85,9 @@ struct da9063 {
+ 	int		chip_irq;
+ 	unsigned int	irq_base;
+ 	struct regmap_irq_chip_data *regmap_irq;
++
++	/* Trimming */
++	int		t_offset;
+ };
+ 
+ int da9063_device_init(struct da9063 *da9063, unsigned int irq);
+diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
+index 6e0f66a2e727..297631ddda39 100644
+--- a/include/linux/mfd/da9063/registers.h
++++ b/include/linux/mfd/da9063/registers.h
+@@ -512,6 +512,7 @@
+ 
+ /* DA9063_REG_GPIO_0_1 (addr=0x15) */
+ #define	DA9063_GPIO0_PIN_MASK			0x03
++#define	DA9063_GPIO0_PIN_MASK_SHIFT		0
+ #define		DA9063_GPIO0_PIN_ADCIN1		0x00
+ #define		DA9063_GPIO0_PIN_GPI		0x01
+ #define		DA9063_GPIO0_PIN_GPO_OD		0x02
+@@ -523,6 +524,7 @@
+ #define		DA9063_GPIO0_TYPE_GPO_VDD_IO2	0x04
+ #define	DA9063_GPIO0_NO_WAKEUP			0x08
+ #define	DA9063_GPIO1_PIN_MASK			0x30
++#define	DA9063_GPIO1_PIN_MASK_SHIFT		4
+ #define		DA9063_GPIO1_PIN_ADCIN2_COMP	0x00
+ #define		DA9063_GPIO1_PIN_GPI		0x10
+ #define		DA9063_GPIO1_PIN_GPO_OD		0x20
+@@ -536,6 +538,7 @@
+ 
+ /* DA9063_REG_GPIO_2_3 (addr=0x16) */
+ #define	DA9063_GPIO2_PIN_MASK			0x03
++#define	DA9063_GPIO2_PIN_MASK_SHIFT		0
+ #define		DA9063_GPIO2_PIN_ADCIN3		0x00
+ #define		DA9063_GPIO2_PIN_GPI		0x01
+ #define		DA9063_GPIO2_PIN_GPO_PSS	0x02
+@@ -851,6 +854,7 @@
+ #define	DA9063_VSYS_VAL_BASE			0x00
+ 
+ /* DA9063_REG_ADC_RES_L (addr=0x37) */
++#define	DA9063_ADC_RES_L_SHIFT			6
+ #define	DA9063_ADC_RES_L_BITS			2
+ #define	DA9063_ADC_RES_L_MASK			0xC0
+ 
+@@ -1014,6 +1018,36 @@
+ #define DA9063_GPIO_DIM				0x80
+ #define DA9063_GPIO_PWM_MASK			0x7F
+ 
++/* DA9063_REG_ADC_CFG (addr=0xC9) */
++#define DA9063_REG_ADCIN1_CUR_MASK		0x03
++#define DA9063_REG_ADCIN1_CUR_SHIFT		0
++#define		DA9063_ADCIN1_CUR_1UA		0x00
++#define		DA9063_ADCIN1_CUR_2UA		0x01
++#define		DA9063_ADCIN1_CUR_10UA		0x02
++#define		DA9063_ADCIN1_CUR_40UA		0x03
++#define DA9063_REG_ADCIN2_CUR_MASK		0x0C
++#define DA9063_REG_ADCIN2_CUR_SHIFT		2
++#define		DA9063_ADCIN2_CUR_1UA		0x00
++#define		DA9063_ADCIN2_CUR_2UA		0x01
++#define		DA9063_ADCIN2_CUR_10UA		0x02
++#define		DA9063_ADCIN2_CUR_40UA		0x03
++#define DA9063_REG_ADCIN3_CUR_MASK		0x10
++#define DA9063_REG_ADCIN3_CUR_SHIFT		4
++#define		DA9063_ADCIN3_CUR_10UA		0x00
++#define		DA9063_ADCIN3_CUR_40UA		0x01
++#define DA9063_REG_ADCIN1_DEB_MASK		0x20
++#define DA9063_REG_ADCIN1_DEB_SHIFT		5
++#define		DA9063_ADCIN1_DEB_OFF		0x00
++#define		DA9063_ADCIN1_DEB_ON		0x01
++#define DA9063_REG_ADCIN2_DEB_MASK		0x40
++#define DA9063_REG_ADCIN2_DEB_SHIFT		6
++#define		DA9063_ADCIN2_DEB_OFF		0x00
++#define		DA9063_ADCIN2_DEB_ON		0x01
++#define DA9063_REG_ADCIN3_DEB_MASK		0x80
++#define DA9063_REG_ADCIN3_DEB_SHIFT		7
++#define		DA9063_ADCIN3_DEB_OFF		0x00
++#define		DA9063_ADCIN3_DEB_ON		0x01
++
+ /* DA9063_REG_CONFIG_H (addr=0x10D) */
+ #define DA9063_PWM_CLK_MASK			0x01
+ #define		DA9063_PWM_CLK_PWM2MHZ		0x00
+-- 
+2.32.0
 
