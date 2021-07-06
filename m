@@ -2,428 +2,178 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A729C07E96
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:44:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28878C11F67
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:56:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31DB3619FE
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:44:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E6A661107
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:56:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbhGFOrF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jul 2021 10:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbhGFOqz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jul 2021 10:46:55 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAC6C05BD15;
-        Tue,  6 Jul 2021 07:34:56 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id in17-20020a17090b4391b0290170ba0ec7fcso1617794pjb.4;
-        Tue, 06 Jul 2021 07:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=eNF9oLx4kExTiaLBg2YNFpP2TX4DRf3vplo9WVWF7eY=;
-        b=WHXZ49ydnWLrfNjX8TuLD9hdH5mspFA7k/Po3Mr6ojp5XqWnajQX6fnn4X0aCEOZXy
-         jEk8kUJyutHkBFOCIPFJZhIR2cWlezDOKEVe0hY74rFnk/eCma/llrpOAZ12QT0uzXxn
-         K+vx0fJebwZjUJ4S4svkM28u5av7JkeAEVnlTaIXlzUTPIbRaa7W3r9kFQDNQG+Fj6GC
-         Ow6MTF7aFIxizVrgwoeHRxKtKIHB8nbkaG41m1tyIXi6HTCNEjE43IHFqdSZRSo1CnNg
-         04Luoz2MWVjKwg9n+KzBLcY/w9y7q5IUTX42bwJXLuYB48MxdhWh4OaKiWHnk1Mo4Cz7
-         j1hg==
+        id S232244AbhGFO71 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jul 2021 10:59:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32190 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232215AbhGFO7J (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 6 Jul 2021 10:59:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625583389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bmTD9d3ct3Nzqp4lHcZstPNwokD1nD5SFrbRvU2bNOw=;
+        b=ZqU4PVBIKdstIHVLcG75qRN4pQP/kSm1HvjW08kcO/dN+pcG9S1OX4aF09IR9sOG5twXMT
+        tjL3R1miIKmycEH/Yy51qYl30kAfZ4WDYE43MbJIiJAhKKF8QarCpSevwF1mAW04p1toiS
+        4wohB3dgQzIhcCl21Irl2X+JhsgQUKI=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-499-azwdxy8iOrWf4fNC4T1v6A-1; Tue, 06 Jul 2021 10:56:27 -0400
+X-MC-Unique: azwdxy8iOrWf4fNC4T1v6A-1
+Received: by mail-oo1-f72.google.com with SMTP id c25-20020a4ad7990000b029020e67cc1879so10612712oou.18
+        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jul 2021 07:56:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eNF9oLx4kExTiaLBg2YNFpP2TX4DRf3vplo9WVWF7eY=;
-        b=r0TMy8wCfxsEC3CQ49KHoF81tSqiv5NL5OVSp0naIIszel1VsvEj0sBPJfWVtiQeQ8
-         ldVnFUECj1ZXPE8BxH9a7syEvL6L2+0cHsYxwKkI31YcvmjEdfKnmQLDnlAdlztxL/99
-         ylJQW6Jdn+cHidHQPBmc9csCzQ6EpCDh3ZoegM91pyUkQmdBcF3PI2PrDb9S4dixn5tm
-         0kTcD+/sCfvfaSDdYoh5G5X75PNaAYK+JgNWZh1NP33Qv5PnB/WiMiEJ9sPIci+ZBrqT
-         3equc8oVOxOc22kKlnBmmMdTxjOBA8Efvr/vCQ1LSf7EW4KOtiuyZvy8jsL0rs6bV36l
-         eISA==
-X-Gm-Message-State: AOAM530xbEBJz+DftcsjGlXbK98pfC7ctHS/r2g/gugdy7r2vxtQT8JX
-        U7c3vDN0m2UtLrlYVosn2dQ=
-X-Google-Smtp-Source: ABdhPJzeEs+VDyKty9PqyICHj2TywJv/nH1jHqGx2LOEnSamdxbGnqVra9GNH0gDBf8iiFvHU8ewDg==
-X-Received: by 2002:a17:90a:7546:: with SMTP id q64mr851863pjk.174.1625582096252;
-        Tue, 06 Jul 2021 07:34:56 -0700 (PDT)
-Received: from localhost.lan (p1284205-ipngn14601marunouchi.tokyo.ocn.ne.jp. [153.205.193.205])
-        by smtp.gmail.com with ESMTPSA id w17sm14761636pjh.54.2021.07.06.07.34.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jul 2021 07:34:54 -0700 (PDT)
-Received: from x2.lan (localhost [127.0.0.1])
-        by localhost.lan (Postfix) with ESMTPSA id 7C3899029DE;
-        Tue,  6 Jul 2021 14:34:52 +0000 (GMT)
-From:   Vincent Pelletier <plr.vincent@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=bmTD9d3ct3Nzqp4lHcZstPNwokD1nD5SFrbRvU2bNOw=;
+        b=eNBNK8XEw8dffUwXkndel0CVqn/0NFptNDjE/MyFNHMztvFxbzLatt4iDDzYfjzsVU
+         p2Wm0I0ij8GHFyYEuUDax0Vlqh4UfWucQM8bOqcCJSB8jcF7Qrx8/Al0iQQXQH2NTsKA
+         zP6RJXf4HcABu5DMe5KUIEMXaY7s1lEfVToL8q3W4BCROGQ8C8/SJ8WFF7ZtRIN7QdTs
+         k1YeqN77ASd4gpwajiL8d3Iiny4EpAtze5rBll0N3VVjwtnaJdgBIQYoN78JPHmsyjQJ
+         4d2GVQW8IR0U1fDEGdXBWINvN06W53mxzKpnqM0eYMgg7BaaVuOpFXfvBy1HDqp+5tV0
+         dkqQ==
+X-Gm-Message-State: AOAM5320dsSJqLPaM5gZ4Bikr5n9R6aR8tGEu1cNNDP6yx9fVcnag8OA
+        7SIx5SC+3Pnlsnrr6wBGViPt6Fc19u4Fq9Me0xiHi/kcboeH+4tUdgwQTWhnuKb4cCPFYA5nADo
+        C/KdAKcyvMNs7/KPKFWlb0Oo=
+X-Received: by 2002:a9d:39e3:: with SMTP id y90mr15636566otb.257.1625583386897;
+        Tue, 06 Jul 2021 07:56:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz5dETXDuVxi+74WVF9c6JzTEDL9DAQXIGplmTSwxU4guGmmD+27n0PY+BPl3Ej51FuHkIPvA==
+X-Received: by 2002:a9d:39e3:: with SMTP id y90mr15636547otb.257.1625583386688;
+        Tue, 06 Jul 2021 07:56:26 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id t5sm3289348otk.39.2021.07.06.07.56.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jul 2021 07:56:26 -0700 (PDT)
+Subject: Re: [PATCH v4 2/4] spi: spi-altera-dfl: support n5010 feature
+ revision
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
-Subject: [PATCH 2/3] hwmon: da9063: HWMON driver
-Date:   Tue,  6 Jul 2021 14:34:48 +0000
-Message-Id: <dff04323fc1b0177c1c08d3670333a839af4c268.1625581991.git.plr.vincent@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <850a353432cd676f96889cede291232abf58918d.1625581991.git.plr.vincent@gmail.com>
-References: <850a353432cd676f96889cede291232abf58918d.1625581991.git.plr.vincent@gmail.com>
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20210705101645.2040106-1-martin@geanix.com>
+ <20210705101645.2040106-3-martin@geanix.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <d6250f86-db93-bcc2-d46e-6dba30976cc4@redhat.com>
+Date:   Tue, 6 Jul 2021 07:56:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210705101645.2040106-3-martin@geanix.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
 
-Add the HWMON driver for DA9063
+On 7/5/21 3:16 AM, Martin Hundebøll wrote:
+> From: Martin Hundebøll <mhu@silicom.dk>
+>
+> The Max10 BMC on the Silicom n5010 PAC is slightly different than the
+> existing BMCs, so use a dedicated feature revision detect it.
+>
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Reviewed-by: Moritz Fischer <mdf@kernel.org>
+> ---
+>
+> Changes since v3:
+>   * Changed "BMC's" to "BMCs"
+>   * Added Moritz' Reviewed-by
+>
+> Changes since v2:
+>   * None
+>
+> Changes since v1:
+>   * use feature revision from struct dfl_device instead of reading it
+>     from io-mem
+>
+>   drivers/spi/spi-altera-dfl.c | 15 +++++++++++++--
+>   1 file changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/spi/spi-altera-dfl.c b/drivers/spi/spi-altera-dfl.c
+> index 3e32e4fe5895..f6cf7c8d9dac 100644
+> --- a/drivers/spi/spi-altera-dfl.c
+> +++ b/drivers/spi/spi-altera-dfl.c
+> @@ -111,6 +111,13 @@ static struct spi_board_info m10_bmc_info = {
+>   	.chip_select = 0,
+>   };
+>   
+> +static struct spi_board_info m10_n5010_bmc_info = {
+> +	.modalias = "m10-n5010",
+> +	.max_speed_hz = 12500000,
+> +	.bus_num = 0,
+> +	.chip_select = 0,
+> +};
 
-Signed-off-by: Opensource [Steve Twiss] <stwiss.opensource@diasemi.com>
+Other then the modalias, this is exactly the same as m10_bmc_info.
 
-Simplify and modernise the code a bit.
-Fix logic inversion in detecting conversion end.
-Drop support for ADCIN: these are multi-purpose channels and must not
-be reconfigured unless explicitly authorised by the board description.
+Why not set platform_data?
 
-Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
----
-Changes in v2:
-- drop of_match_table: this should be meaningless in such sub-function
-  driver (at least judging by other sub-function drivers for the da9063)
-- sort includes
-- switch to devm_hwmon_device_register_with_info
-- registers.h changes moved to patch 1
-- add SPDX header
+> +
+>   static void config_spi_master(void __iomem *base, struct spi_master *master)
+>   {
+>   	u64 v;
+> @@ -130,6 +137,7 @@ static void config_spi_master(void __iomem *base, struct spi_master *master)
+>   
+>   static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
+>   {
+> +	struct spi_board_info *board_info = &m10_bmc_info;
+>   	struct device *dev = &dfl_dev->dev;
+>   	struct spi_master *master;
+>   	struct altera_spi *hw;
+> @@ -172,9 +180,12 @@ static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
+>   		goto exit;
+>   	}
+>   
+> -	if (!spi_new_device(master,  &m10_bmc_info)) {
+> +	if (dfl_dev->revision == FME_FEATURE_REV_MAX10_SPI_N5010)
+> +		board_info = &m10_n5010_bmc_info;
 
-This patch depends on patch 1/3.
-Originally submitted by Steve Twiss in 2014:
-  https://marc.info/?l=linux-kernel&m=139560868309857&w=2
+The revision is board parameter, I think this check could be improved.
 
- drivers/hwmon/Kconfig        |  10 ++
- drivers/hwmon/Makefile       |   1 +
- drivers/hwmon/da9063-hwmon.c | 275 +++++++++++++++++++++++++++++++++++
- 3 files changed, 286 insertions(+)
- create mode 100644 drivers/hwmon/da9063-hwmon.c
+There should be a
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 87624902ea80..17244cfaa855 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -515,6 +515,16 @@ config SENSORS_DA9055
- 	  This driver can also be built as a module. If so, the module
- 	  will be called da9055-hwmon.
- 
-+config SENSORS_DA9063
-+	tristate "Dialog Semiconductor DA9063"
-+	depends on MFD_DA9063
-+	help
-+	  If you say yes here you get support for the hardware
-+	  monitoring features of the DA9063 Power Management IC.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called da9063-hwmon.
-+
- config SENSORS_I5K_AMB
- 	tristate "FB-DIMM AMB temperature sensor on Intel 5000 series chipsets"
- 	depends on PCI
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 59e78bc212cf..6855711ed9ec 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -60,6 +60,7 @@ obj-$(CONFIG_SENSORS_CORSAIR_CPRO) += corsair-cpro.o
- obj-$(CONFIG_SENSORS_CORSAIR_PSU) += corsair-psu.o
- obj-$(CONFIG_SENSORS_DA9052_ADC)+= da9052-hwmon.o
- obj-$(CONFIG_SENSORS_DA9055)+= da9055-hwmon.o
-+obj-$(CONFIG_SENSORS_DA9063)	+= da9063-hwmon.o
- obj-$(CONFIG_SENSORS_DELL_SMM)	+= dell-smm-hwmon.o
- obj-$(CONFIG_SENSORS_DME1737)	+= dme1737.o
- obj-$(CONFIG_SENSORS_DRIVETEMP)	+= drivetemp.o
-diff --git a/drivers/hwmon/da9063-hwmon.c b/drivers/hwmon/da9063-hwmon.c
-new file mode 100644
-index 000000000000..f020be5d5d6b
---- /dev/null
-+++ b/drivers/hwmon/da9063-hwmon.c
-@@ -0,0 +1,275 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* da9063-hwmon.c - Hardware monitor support for DA9063
-+ * Copyright (C) 2014 Dialog Semiconductor Ltd.
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Library General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Library General Public License for more details.
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/da9063/core.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+
-+#define DA9063_ADC_RES	(1 << (DA9063_ADC_RES_L_BITS + DA9063_ADC_RES_M_BITS))
-+#define DA9063_ADC_MAX	(DA9063_ADC_RES - 1)
-+#define DA9063_2V5	2500
-+#define DA9063_5V0	5000
-+#define DA9063_5V5	5500
-+#define DA9063_TJUNC_M	-398
-+#define DA9063_TJUNC_O	330000
-+#define DA9063_VBBAT_M	2048
-+
-+enum da9063_adc {
-+	DA9063_CHAN_VSYS = DA9063_ADC_MUX_VSYS,
-+	DA9063_CHAN_ADCIN1 = DA9063_ADC_MUX_ADCIN1,
-+	DA9063_CHAN_ADCIN2 = DA9063_ADC_MUX_ADCIN2,
-+	DA9063_CHAN_ADCIN3 = DA9063_ADC_MUX_ADCIN3,
-+	DA9063_CHAN_TJUNC = DA9063_ADC_MUX_T_SENSE,
-+	DA9063_CHAN_VBBAT = DA9063_ADC_MUX_VBBAT,
-+	DA9063_CHAN_LDO_G1 = DA9063_ADC_MUX_LDO_G1,
-+	DA9063_CHAN_LDO_G2 = DA9063_ADC_MUX_LDO_G2,
-+	DA9063_CHAN_LDO_G3 = DA9063_ADC_MUX_LDO_G3
-+};
-+
-+struct da9063_hwmon {
-+	struct da9063 *da9063;
-+	struct mutex hwmon_mutex;
-+	struct completion adc_ready;
-+	signed char tjunc_offset;
-+};
-+
-+static int da9063_adc_manual_read(struct da9063_hwmon *hwmon, int channel)
-+{
-+	int ret;
-+	unsigned char val;
-+	unsigned char data[2];
-+	int adc_man;
-+
-+	mutex_lock(&hwmon->hwmon_mutex);
-+
-+	init_completion(&hwmon->adc_ready);
-+
-+	val = (channel & DA9063_ADC_MUX_MASK) | DA9063_ADC_MAN;
-+	ret = regmap_update_bits(hwmon->da9063->regmap, DA9063_REG_ADC_MAN,
-+				 DA9063_ADC_MUX_MASK | DA9063_ADC_MAN, val);
-+	if (ret < 0)
-+		goto err_mread;
-+
-+	ret = wait_for_completion_timeout(&hwmon->adc_ready,
-+					  msecs_to_jiffies(1000));
-+	if (ret == 0) {
-+		ret = -ETIMEDOUT;
-+		goto err_mread;
-+	}
-+
-+	ret = regmap_read(hwmon->da9063->regmap, DA9063_REG_ADC_MAN, &adc_man);
-+	if (ret < 0)
-+		goto err_mread;
-+
-+	/* data value is not ready */
-+	if (adc_man & DA9063_ADC_MAN) {
-+		ret = -EINVAL;
-+		goto err_mread;
-+	}
-+
-+	ret = regmap_bulk_read(hwmon->da9063->regmap,
-+			       DA9063_REG_ADC_RES_L, data, 2);
-+	if (ret < 0)
-+		goto err_mread;
-+
-+	ret = (data[0] & DA9063_ADC_RES_L_MASK) >> DA9063_ADC_RES_L_SHIFT;
-+	ret |= data[1] << DA9063_ADC_RES_L_BITS;
-+err_mread:
-+	mutex_unlock(&hwmon->hwmon_mutex);
-+	return ret;
-+}
-+
-+static irqreturn_t da9063_hwmon_irq_handler(int irq, void *irq_data)
-+{
-+	struct da9063_hwmon *hwmon = irq_data;
-+
-+	complete(&hwmon->adc_ready);
-+	return IRQ_HANDLED;
-+}
-+
-+static umode_t da9063_is_visible(const void *drvdata, enum
-+				 hwmon_sensor_types type, u32 attr, int channel)
-+{
-+	return 0444;
-+}
-+
-+static const enum da9063_adc da9063_in_index[] = {
-+	DA9063_CHAN_VSYS, DA9063_CHAN_VBBAT
-+};
-+
-+static const enum da9063_adc da9063_temp_index[] = {
-+	DA9063_CHAN_TJUNC
-+};
-+
-+static int da9063_read(struct device *dev, enum hwmon_sensor_types type,
-+		       u32 attr, int channel, long *val)
-+{
-+	struct da9063_hwmon *hwmon = dev_get_drvdata(dev);
-+	enum da9063_adc adc_channel;
-+	int tmp;
-+
-+	switch (type) {
-+	case hwmon_in:
-+		if (attr != hwmon_in_input)
-+			return -EOPNOTSUPP;
-+		adc_channel = da9063_in_index[channel];
-+		break;
-+	case hwmon_temp:
-+		if (attr != hwmon_temp_input)
-+			return -EOPNOTSUPP;
-+		adc_channel = da9063_temp_index[channel];
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	tmp = da9063_adc_manual_read(hwmon, adc_channel);
-+	if (tmp < 0)
-+		return tmp;
-+
-+	switch (adc_channel) {
-+	case DA9063_CHAN_VSYS:
-+		*val = ((DA9063_5V5 - DA9063_2V5) * tmp) / DA9063_ADC_MAX +
-+			DA9063_2V5;
-+		break;
-+	case DA9063_CHAN_TJUNC:
-+		tmp -= hwmon->tjunc_offset;
-+		*val = DA9063_TJUNC_M * tmp + DA9063_TJUNC_O;
-+		break;
-+	case DA9063_CHAN_VBBAT:
-+		*val = (DA9063_5V0 * tmp) / DA9063_ADC_MAX;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const char * const da9063_in_name[] = {
-+	"VSYS", "VBBAT"
-+};
-+
-+static const char * const da9063_temp_name[] = {
-+	"TJUNC"
-+};
-+
-+static int da9063_read_string(struct device *dev, enum hwmon_sensor_types type,
-+			      u32 attr, int channel, const char **str)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		if (attr != hwmon_in_label)
-+			return -EOPNOTSUPP;
-+		*str = da9063_in_name[channel];
-+		break;
-+	case hwmon_temp:
-+		if (attr != hwmon_temp_label)
-+			return -EOPNOTSUPP;
-+		*str = da9063_temp_name[channel];
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops da9063_ops = {
-+	.is_visible = da9063_is_visible,
-+	.read = da9063_read,
-+	.read_string = da9063_read_string,
-+};
-+
-+static const struct hwmon_channel_info *da9063_channel_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info da9063_chip_info = {
-+	.ops = &da9063_ops,
-+	.info = da9063_channel_info,
-+};
-+
-+static int da9063_hwmon_probe(struct platform_device *pdev)
-+{
-+	struct da9063 *da9063 = dev_get_drvdata(pdev->dev.parent);
-+	struct da9063_hwmon *hwmon;
-+	struct device *hwmon_dev;
-+	int irq;
-+	int ret;
-+
-+	hwmon = devm_kzalloc(&pdev->dev, sizeof(struct da9063_hwmon),
-+			     GFP_KERNEL);
-+	if (!hwmon)
-+		return -ENOMEM;
-+
-+	mutex_init(&hwmon->hwmon_mutex);
-+	init_completion(&hwmon->adc_ready);
-+	hwmon->da9063 = da9063;
-+
-+	irq = platform_get_irq_byname(pdev, DA9063_DRVNAME_HWMON);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+					da9063_hwmon_irq_handler,
-+					IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+					"HWMON", hwmon);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to request IRQ.\n");
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, hwmon);
-+
-+	/* set trim temperature offset to value read at startup */
-+	hwmon->tjunc_offset = (signed char)hwmon->da9063->t_offset;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "da9063",
-+							 hwmon,
-+							 &da9063_chip_info,
-+							 NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static struct platform_driver da9063_hwmon_driver = {
-+	.probe = da9063_hwmon_probe,
-+	.driver = {
-+		.name = DA9063_DRVNAME_HWMON,
-+	},
-+};
-+module_platform_driver(da9063_hwmon_driver);
-+
-+MODULE_DESCRIPTION("Hardware monitor support device driver for Dialog DA9063");
-+MODULE_AUTHOR("S Twiss <stwiss.opensource@diasemi.com>");
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:" DA9063_DRVNAME_HWMON);
--- 
-2.32.0
+#define FME_FATURE_REV_MAX10_SPI_D5005 0
+
+And it checked here instead of setting above.
+
+And -EINVAL returned if the revision is not known.
+
+> +
+> +	if (!spi_new_device(master, board_info)) {
+>   		dev_err(dev, "%s failed to create SPI device: %s\n",
+> -			__func__, m10_bmc_info.modalias);
+> +			__func__, board_info->modalias);
+
+Why isn't this error handled ?
+
+Tom
+
+>   	}
+>   
+>   	return 0;
 
