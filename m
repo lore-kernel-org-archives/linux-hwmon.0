@@ -2,111 +2,253 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE48EC07E96
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 13:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B39EC07E96
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:40:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8879261C2F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 13:12:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6038261380
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:40:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbhGFNOs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jul 2021 09:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbhGFNOs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jul 2021 09:14:48 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02E9C061574
-        for <linux-hwmon@vger.kernel.org>; Tue,  6 Jul 2021 06:12:09 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id n99-20020a9d206c0000b029045d4f996e62so21513809ota.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jul 2021 06:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Aow6ck76kYplLFJO8lYAKWyD1oN7PHbAGmlZEOibdbA=;
-        b=B34H7Jns30YDyaTjpEbryfbC+7iBGPjKvBb23ucldYtno6c2qnj/hFRG5F+MmwAYCE
-         bOJldpYfF/W2/t8iwQ7rSl/dBq9TyEEwWs7l2VtHf50UrG1ieFbvjXBNUNzJlzm/T7SK
-         OTxzKRiWtB/AHm0vLE2KxXtngwgOiS+bvX1X9efyAd7EnEOPs50kE749l7sPmVANv2ww
-         A2ExTd7TvroF+ZYZBrMUWMWOJlWF/j9ouIf1gO4Sx9ybiAmhupzuk4dCt9wVXhbrz8we
-         JSYruKzCOaKzE08irSUhw5CS6WEroQTeeTgLF+FEqnKW9t5JazvBvXOs22h3E5T3w00S
-         ux5w==
+        id S231544AbhGFOnR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jul 2021 10:43:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45749 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232632AbhGFOnN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 6 Jul 2021 10:43:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625582434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
+        b=RwXqnYt15F/GAhocoXVF+k8KvBQQ/cgJyn3Kyr1at91Fg2QK/o71OAdJTv7FBbigxYoQgB
+        T+FduNmQoGvdUO1lwtm8KLPdwB3xj/gugL3hSNqI0Tbf2aV17x3w/UASf9LwF1nGrNhi0K
+        MOwya1ZWODBriw8jddwDfP7BjJkY5ZM=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-8-bew1PxKCOwuNKj7vM0YCRQ-1; Tue, 06 Jul 2021 10:10:24 -0400
+X-MC-Unique: bew1PxKCOwuNKj7vM0YCRQ-1
+Received: by mail-oi1-f200.google.com with SMTP id w18-20020a0568080d52b029023e3c1124c9so14477767oik.11
+        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Aow6ck76kYplLFJO8lYAKWyD1oN7PHbAGmlZEOibdbA=;
-        b=Qtse4S1BExvrEQ7xOonbBeKL3yeCMX5nfejq6fJ6GY+o0/XZDvCCuSiJuuMSb7auaJ
-         S8qQpk4xeLdrXhMTc0OqDwgyYFtFvjjjA/RYpbKGJ3eut/No7iG+oqV4T9Flo3tyNru7
-         632Hz9YsxxzR7JNOuWZuWtfUXZBQzVvBMIcAz9i/EnAq5IRY0iS5cWgJkrtMwfkJ22d1
-         wSJRp9YNS2VRKLr8/loV1UWioLJ5cYL0Acvn580g6fJHTC1k0e2QjXQ/LOFXHm+ugCVJ
-         yqC7j+BWj1n65HOxDdRDhdehDwp7Lt0C5YMzUn/blUKcsbliRM2HIlTdgPOn3Ro0umYS
-         5FvQ==
-X-Gm-Message-State: AOAM532n84Z1l2dvMjBhBKfrZeNio94dMJL3I7IY96ZaALsDjqlyM4rx
-        ztdetOHSgB4bu7fxJ4TuFjprf8E2nQg=
-X-Google-Smtp-Source: ABdhPJzateAHHGK5K8yGYTsOBuwdZcIa4HYTV3NAuIDVSMT7nqlZ0J7I/dBWwkXl3Rzmr/HGAV6tRA==
-X-Received: by 2002:a05:6830:2316:: with SMTP id u22mr11585234ote.90.1625577128269;
-        Tue, 06 Jul 2021 06:12:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b8sm474528ooa.16.2021.07.06.06.11.36
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
+        b=ru+R2U057XUpzIfJBs8FoZs/TqQ9+qHvS5YpKotX+yXMCVOp0paGt2yD3tO7QbnTw7
+         o4Am0QJyqwak01tAIklSSHuK1gHR7R34AP7irepnSYIMqodvMRA/Qq+HV6olk1tJYJWl
+         9nu8tXo1xxSF6pmcUV/uDLxH8ta0H2e3XUiV4Yt5DYSlvz2Z5sr3VmmQuqznCcRuqQd/
+         2ZbsAD4HiWJSSElsuBjQFq3ywZVQSTMDSZ175Jzraix0ugQuSU9NmJzIrGLqcu8DH3vl
+         ZBgYU9Qp8nbIf7KdmmZi7/O/xuy6haoFb4hLZb1gzm7me92aGKF0bsp5iEwjA82uSpZg
+         bbkA==
+X-Gm-Message-State: AOAM530W43GHcBUo8m/++tQrCbNPY3erNHkMlxMcApFmbGWNDNxnjETJ
+        N4P1y2xIRCjE5kUp3vMos/zSPkXGsBDQ3Sg2VsYWc59c/KNvhpXy4Z0TF29U5Wgp/Ul850w7AwS
+        pXQzGyHy4qeiwwlUPkU3ugTQ=
+X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464522oig.93.1625580624132;
+        Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJydwYnoxxkt+tI3dKHZhxx+PKB9tAQtQwvI7A11IgHI60BOdfFuzpvLSzk2QkjyMCcJT8KvOQ==
+X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464502oig.93.1625580623944;
+        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id x29sm2811045ooj.10.2021.07.06.07.10.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jul 2021 06:11:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 0/5] hwmon: Add driver for MAX6620 Fan controller
-To:     "Balac, Arun Saravanan" <ArunSaravanan.Balach@Dell.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <MW2PR1901MB20287B190088EC2608094AF2A61B9@MW2PR1901MB2028.namprd19.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c058d3c0-2977-00cc-fba8-2eb81b28095a@roeck-us.net>
-Date:   Tue, 6 Jul 2021 06:11:31 -0700
+        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
+Subject: Re: [PATCH v4 1/4] fpga: dfl: expose feature revision from struct
+ dfl_device
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+References: <20210705101645.2040106-1-martin@geanix.com>
+ <20210705101645.2040106-2-martin@geanix.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <93a8e949-ec25-d00d-4740-72d9e18ebb68@redhat.com>
+Date:   Tue, 6 Jul 2021 07:10:21 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <MW2PR1901MB20287B190088EC2608094AF2A61B9@MW2PR1901MB2028.namprd19.prod.outlook.com>
+In-Reply-To: <20210705101645.2040106-2-martin@geanix.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/6/21 6:01 AM, Balac, Arun Saravanan wrote:
-> From: Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
-> 
-> Add driver for MAX6620 Fan controller
-> 
-> Arun Saravanan Balachandran (2):
->    Add attributes in MAX6620 driver to retrieve fan fault status
->    Update MAX6620 driver as per linux code guidelines
-> 
-> Cumulus Networks (2):
->    Driver for MAX6620 Fan sensor
->    MAX6620 fix rpm calculation accuracy
+
+On 7/5/21 3:16 AM, Martin Hundebøll wrote:
+> From: Martin Hundebøll <mhu@silicom.dk>
+>
+> DFL device drivers have a common need for checking feature revision
+> information from the DFL header, as well as other common DFL information
+> like the already exposed feature id and type.
+>
+> This patch exposes the feature revision information directly via the DFL
+> device data structure.
+>
+> Since the DFL core code has already read the DFL header, this this patch
+> saves additional mmio reads from DFL device drivers too.
+>
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Wu Hao <hao.wu@intel.com>
+> Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>
+> Changes since v3:
+>   * Added Hao's Acked-by
+>   * Added Matthew's Acked-by
+>
+> Changes since v2:
+>   * Reworded commit message as per Hao's suggestion
+>
+> Changes since v1:
+>   * This patch replaces the previous patch 2 and exposes the feature
+>     revision through struct dfl_device instead of a helper reading from
+>     io-mem
+>
+>   drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
+>   drivers/fpga/dfl.h  |  1 +
+>   include/linux/dfl.h |  1 +
+>   3 files changed, 19 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index 511b20ff35a3..9381c579d1cd 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
 >   
-> Shuotian Cheng (1):
->    Update MAX6620 driver to support newer kernel version
-> 
->   drivers/hwmon/Kconfig   |  10 +
->   drivers/hwmon/Makefile  |   1 +
->   drivers/hwmon/max6620.c | 625 ++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 636 insertions(+)
->   create mode 100644 drivers/hwmon/max6620.c
-> 
-> 
-> base-commit: 303392fd5c160822bf778270b28ec5ea50cab2b4
-> 
-Please squash all patches into one, and please use
-devm_hwmon_device_register_with_info to register the hardware
-monitoring device.
+>   	ddev->type = feature_dev_id_type(pdev);
+>   	ddev->feature_id = feature->id;
+> +	ddev->revision = feature->revision;
+>   	ddev->cdev = pdata->dfl_cdev;
+>   
+>   	/* add mmio resource */
+> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
+>    */
+>   struct dfl_feature_info {
+>   	u16 fid;
+> +	u8 rev;
 
-Also please follow the guidelines in
-Documentation/hwmon/submitting-patches.rst.
+In other places 'revision' is the element name.
 
-Thanks,
-Guenter
+For consistency, change rev to revision
+
+>   	struct resource mmio_res;
+>   	void __iomem *ioaddr;
+>   	struct list_head node;
+> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
+>   		/* save resource information for each feature */
+>   		feature->dev = fdev;
+>   		feature->id = finfo->fid;
+> +		feature->revision = finfo->rev;
+>   
+>   		/*
+>   		 * the FIU header feature has some fundamental functions (sriov
+> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
+>   	devm_kfree(binfo->dev, binfo);
+>   }
+>   
+> -static inline u32 feature_size(void __iomem *start)
+> +static inline u32 feature_size(u64 value)
+
+The return type should match its use in create_feature_instance 
+'resource_size_t'
+
+change u32 to resource_size_t
+
+Tom
+
+>   {
+> -	u64 v = readq(start + DFH);
+> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
+> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
+>   	/* workaround for private features with invalid size, use 4K instead */
+>   	return ofst ? ofst : 4096;
+>   }
+>   
+> -static u16 feature_id(void __iomem *start)
+> +static u16 feature_id(u64 value)
+>   {
+> -	u64 v = readq(start + DFH);
+> -	u16 id = FIELD_GET(DFH_ID, v);
+> -	u8 type = FIELD_GET(DFH_TYPE, v);
+> +	u16 id = FIELD_GET(DFH_ID, value);
+> +	u8 type = FIELD_GET(DFH_TYPE, value);
+>   
+>   	if (type == DFH_TYPE_FIU)
+>   		return FEATURE_ID_FIU_HEADER;
+> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>   	unsigned int irq_base, nr_irqs;
+>   	struct dfl_feature_info *finfo;
+>   	int ret;
+> +	u8 rev;
+> +	u64 v;
+> +
+> +	v = readq(binfo->ioaddr + ofst);
+> +	rev = FIELD_GET(DFH_REVISION, v);
+>   
+>   	/* read feature size and id if inputs are invalid */
+> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
+> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
+> +	size = size ? size : feature_size(v);
+> +	fid = fid ? fid : feature_id(v);
+>   
+>   	if (binfo->len - ofst < size)
+>   		return -EINVAL;
+> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>   		return -ENOMEM;
+>   
+>   	finfo->fid = fid;
+> +	finfo->rev = rev;
+>   	finfo->mmio_res.start = binfo->start + ofst;
+>   	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>   	finfo->mmio_res.flags = IORESOURCE_MEM;
+> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
+>   {
+>   	if (!is_feature_dev_detected(binfo)) {
+>   		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
+> -			feature_id(binfo->ioaddr + ofst));
+> +			feature_id(readq(binfo->ioaddr + ofst)));
+>   		return -EINVAL;
+>   	}
+>   
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 2b82c96ba56c..422157cfd742 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
+>   struct dfl_feature {
+>   	struct platform_device *dev;
+>   	u16 id;
+> +	u8 revision;
+>   	int resource_index;
+>   	void __iomem *ioaddr;
+>   	struct dfl_feature_irq_ctx *irq_ctx;
+> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+> index 6cc10982351a..431636a0dc78 100644
+> --- a/include/linux/dfl.h
+> +++ b/include/linux/dfl.h
+> @@ -38,6 +38,7 @@ struct dfl_device {
+>   	int id;
+>   	u16 type;
+>   	u16 feature_id;
+> +	u8 revision;
+>   	struct resource mmio_res;
+>   	int *irqs;
+>   	unsigned int num_irqs;
+
