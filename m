@@ -2,178 +2,211 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28878C11F67
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:56:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26C29C07E96
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 17:28:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E6A661107
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 14:56:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2D91619D2
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jul 2021 17:28:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbhGFO71 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jul 2021 10:59:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32190 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232215AbhGFO7J (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 6 Jul 2021 10:59:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625583389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bmTD9d3ct3Nzqp4lHcZstPNwokD1nD5SFrbRvU2bNOw=;
-        b=ZqU4PVBIKdstIHVLcG75qRN4pQP/kSm1HvjW08kcO/dN+pcG9S1OX4aF09IR9sOG5twXMT
-        tjL3R1miIKmycEH/Yy51qYl30kAfZ4WDYE43MbJIiJAhKKF8QarCpSevwF1mAW04p1toiS
-        4wohB3dgQzIhcCl21Irl2X+JhsgQUKI=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-499-azwdxy8iOrWf4fNC4T1v6A-1; Tue, 06 Jul 2021 10:56:27 -0400
-X-MC-Unique: azwdxy8iOrWf4fNC4T1v6A-1
-Received: by mail-oo1-f72.google.com with SMTP id c25-20020a4ad7990000b029020e67cc1879so10612712oou.18
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jul 2021 07:56:27 -0700 (PDT)
+        id S230382AbhGFRbE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jul 2021 13:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229879AbhGFRbD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jul 2021 13:31:03 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFAFC061574;
+        Tue,  6 Jul 2021 10:28:23 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w74so78429oiw.8;
+        Tue, 06 Jul 2021 10:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pjXT6P96MgHuIttwz8cgGLmOjMu+HL6XnL6K6LaGWKc=;
+        b=R4SuCmWMSQmrVPUJPXC6txDxYVP/RsCcGjGgsd5nYPKiVQMOvFPmf8K6CiejnAbvQB
+         nGV4v6sovQyBo4huAfxfs5vpjou3Mnb9F5G4/Ss1Y5DKhrl6hghLgHPVZbYdbqdbl9ua
+         M5J9UgtgWBvV/bZ7VHWNTQJvX5TlQOyaiRSQBTxPs6t3POAc12x4ptUpOmw0x+rvwuAH
+         DGCksfOhsQOoEkQtS4qjej4iVA3Tyd9mh5ZKAgldsQ8bciqS9LqBvE/2f3y930Z9+Hzv
+         yVVhJgjteAqMGEgyC96eZBJe5Yxma8xGbXL+Rke+LmUzN7FKCKSpl8JtSZZ8G2UfVYTf
+         0VYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=bmTD9d3ct3Nzqp4lHcZstPNwokD1nD5SFrbRvU2bNOw=;
-        b=eNBNK8XEw8dffUwXkndel0CVqn/0NFptNDjE/MyFNHMztvFxbzLatt4iDDzYfjzsVU
-         p2Wm0I0ij8GHFyYEuUDax0Vlqh4UfWucQM8bOqcCJSB8jcF7Qrx8/Al0iQQXQH2NTsKA
-         zP6RJXf4HcABu5DMe5KUIEMXaY7s1lEfVToL8q3W4BCROGQ8C8/SJ8WFF7ZtRIN7QdTs
-         k1YeqN77ASd4gpwajiL8d3Iiny4EpAtze5rBll0N3VVjwtnaJdgBIQYoN78JPHmsyjQJ
-         4d2GVQW8IR0U1fDEGdXBWINvN06W53mxzKpnqM0eYMgg7BaaVuOpFXfvBy1HDqp+5tV0
-         dkqQ==
-X-Gm-Message-State: AOAM5320dsSJqLPaM5gZ4Bikr5n9R6aR8tGEu1cNNDP6yx9fVcnag8OA
-        7SIx5SC+3Pnlsnrr6wBGViPt6Fc19u4Fq9Me0xiHi/kcboeH+4tUdgwQTWhnuKb4cCPFYA5nADo
-        C/KdAKcyvMNs7/KPKFWlb0Oo=
-X-Received: by 2002:a9d:39e3:: with SMTP id y90mr15636566otb.257.1625583386897;
-        Tue, 06 Jul 2021 07:56:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz5dETXDuVxi+74WVF9c6JzTEDL9DAQXIGplmTSwxU4guGmmD+27n0PY+BPl3Ej51FuHkIPvA==
-X-Received: by 2002:a9d:39e3:: with SMTP id y90mr15636547otb.257.1625583386688;
-        Tue, 06 Jul 2021 07:56:26 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id t5sm3289348otk.39.2021.07.06.07.56.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jul 2021 07:56:26 -0700 (PDT)
-Subject: Re: [PATCH v4 2/4] spi: spi-altera-dfl: support n5010 feature
- revision
-To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
-        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20210705101645.2040106-1-martin@geanix.com>
- <20210705101645.2040106-3-martin@geanix.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <d6250f86-db93-bcc2-d46e-6dba30976cc4@redhat.com>
-Date:   Tue, 6 Jul 2021 07:56:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=pjXT6P96MgHuIttwz8cgGLmOjMu+HL6XnL6K6LaGWKc=;
+        b=FtmOb2qQhHVaM7yxBtBuDzOmrWTSq73zf4FDNRfX40LX+OIITbbJZWiTQ6sloWYeb1
+         55nlf3KZ77Zu4r6YVzdmnf4TlTfooqVtXj3cYo7CKgO/JEqT1UCMakGQPiCCJPKgXpw/
+         0w6K1qoe8PV3pli4EQA/Pu/qRAPTlTZDMUfz2fib9q1MMq2Jn5buKe892Dx8+lfCSipG
+         oM0Dqpb4NHV5RPyLHG4KxtLFP1RgNNhB8i/tvvDkf+DP7DuLw1DtlUp+MEULafY8E/Bd
+         p1j0AhxAoF8zC8tuWQOOqpYRSak1N9z2T+AJftSMSrYfu9eSfNVJ09j6kYJIRRk4DT8z
+         F3sQ==
+X-Gm-Message-State: AOAM530T3duRUgAzQMbKnMqPX9kF5EdmnqzDEkZR7PtEkoWF9qUWDgwM
+        /PJBXBwRtRlFeOnnYDtT2kk=
+X-Google-Smtp-Source: ABdhPJzuGUNHvhnU/A09hJaDWrEAuxtai92S+J6ZGJA9v+YioF5bpU7mPSVODZFOkre9q8HiQkRzkw==
+X-Received: by 2002:a54:488b:: with SMTP id r11mr12811645oic.116.1625592503305;
+        Tue, 06 Jul 2021 10:28:23 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x43sm1881830otr.38.2021.07.06.10.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jul 2021 10:28:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 6 Jul 2021 10:28:21 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Vincent Pelletier <plr.vincent@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
+Subject: Re: [PATCH 1/3] mfd: da9063: Add HWMON dependencies
+Message-ID: <20210706172821.GA943349@roeck-us.net>
+References: <850a353432cd676f96889cede291232abf58918d.1625581991.git.plr.vincent@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210705101645.2040106-3-martin@geanix.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <850a353432cd676f96889cede291232abf58918d.1625581991.git.plr.vincent@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On 7/5/21 3:16 AM, Martin Hundebøll wrote:
-> From: Martin Hundebøll <mhu@silicom.dk>
->
-> The Max10 BMC on the Silicom n5010 PAC is slightly different than the
-> existing BMCs, so use a dedicated feature revision detect it.
->
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> Reviewed-by: Moritz Fischer <mdf@kernel.org>
+On Tue, Jul 06, 2021 at 02:34:47PM +0000, Vincent Pelletier wrote:
+> From: "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
+> 
+> Dependencies required for DA9063 HWMON support.
+> 
+> Signed-off-by: Opensource [Steve Twiss] <stwiss.opensource@diasemi.com>
+> 
+> Directly set da9063->t_offset.
+> Let MFD probe succeed even if DA9063_REG_T_OFFSET cannot be read.
+> 
+> Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
 > ---
->
-> Changes since v3:
->   * Changed "BMC's" to "BMCs"
->   * Added Moritz' Reviewed-by
->
-> Changes since v2:
->   * None
->
-> Changes since v1:
->   * use feature revision from struct dfl_device instead of reading it
->     from io-mem
->
->   drivers/spi/spi-altera-dfl.c | 15 +++++++++++++--
->   1 file changed, 13 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/spi/spi-altera-dfl.c b/drivers/spi/spi-altera-dfl.c
-> index 3e32e4fe5895..f6cf7c8d9dac 100644
-> --- a/drivers/spi/spi-altera-dfl.c
-> +++ b/drivers/spi/spi-altera-dfl.c
-> @@ -111,6 +111,13 @@ static struct spi_board_info m10_bmc_info = {
->   	.chip_select = 0,
->   };
->   
-> +static struct spi_board_info m10_n5010_bmc_info = {
-> +	.modalias = "m10-n5010",
-> +	.max_speed_hz = 12500000,
-> +	.bus_num = 0,
-> +	.chip_select = 0,
-> +};
+> Changes in v2:
+> - registers.h changes moved from patch 2
 
-Other then the modalias, this is exactly the same as m10_bmc_info.
+Please version your patch series.
 
-Why not set platform_data?
-
+> 
+> Originally submitted by Steve Twiss in 2014:
+>   https://marc.info/?l=linux-kernel&m=139560864709852&w=2
+> 
+>  drivers/mfd/da9063-core.c            |  8 +++++++
+>  include/linux/mfd/da9063/core.h      |  3 +++
+>  include/linux/mfd/da9063/registers.h | 34 ++++++++++++++++++++++++++++
+>  3 files changed, 45 insertions(+)
+> 
+> diff --git a/drivers/mfd/da9063-core.c b/drivers/mfd/da9063-core.c
+> index df407c3afce3..14c2a8df9ae3 100644
+> --- a/drivers/mfd/da9063-core.c
+> +++ b/drivers/mfd/da9063-core.c
+> @@ -197,6 +197,14 @@ int da9063_device_init(struct da9063 *da9063, unsigned int irq)
+>  		}
+>  	}
+>  
+> +	ret = regmap_read(da9063->regmap, DA9063_REG_T_OFFSET, &da9063->t_offset);
+> +	if (ret < 0) {
+> +		da9063->t_offset = 0;
+> +		dev_warn(da9063->dev,
+> +			 "Temperature trimming value cannot be read (defaulting to 0)\n");
+> +		ret = 0;
+> +	}
 > +
->   static void config_spi_master(void __iomem *base, struct spi_master *master)
->   {
->   	u64 v;
-> @@ -130,6 +137,7 @@ static void config_spi_master(void __iomem *base, struct spi_master *master)
->   
->   static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
->   {
-> +	struct spi_board_info *board_info = &m10_bmc_info;
->   	struct device *dev = &dfl_dev->dev;
->   	struct spi_master *master;
->   	struct altera_spi *hw;
-> @@ -172,9 +180,12 @@ static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
->   		goto exit;
->   	}
->   
-> -	if (!spi_new_device(master,  &m10_bmc_info)) {
-> +	if (dfl_dev->revision == FME_FEATURE_REV_MAX10_SPI_N5010)
-> +		board_info = &m10_n5010_bmc_info;
-
-The revision is board parameter, I think this check could be improved.
-
-There should be a
-
-#define FME_FATURE_REV_MAX10_SPI_D5005 0
-
-And it checked here instead of setting above.
-
-And -EINVAL returned if the revision is not known.
-
+>  	return ret;
+>  }
+>  
+> diff --git a/include/linux/mfd/da9063/core.h b/include/linux/mfd/da9063/core.h
+> index fa7a43f02f27..c0c57c6f6230 100644
+> --- a/include/linux/mfd/da9063/core.h
+> +++ b/include/linux/mfd/da9063/core.h
+> @@ -85,6 +85,9 @@ struct da9063 {
+>  	int		chip_irq;
+>  	unsigned int	irq_base;
+>  	struct regmap_irq_chip_data *regmap_irq;
 > +
-> +	if (!spi_new_device(master, board_info)) {
->   		dev_err(dev, "%s failed to create SPI device: %s\n",
-> -			__func__, m10_bmc_info.modalias);
-> +			__func__, board_info->modalias);
-
-Why isn't this error handled ?
-
-Tom
-
->   	}
->   
->   	return 0;
-
+> +	/* Trimming */
+> +	int		t_offset;
+>  };
+>  
+>  int da9063_device_init(struct da9063 *da9063, unsigned int irq);
+> diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
+> index 6e0f66a2e727..297631ddda39 100644
+> --- a/include/linux/mfd/da9063/registers.h
+> +++ b/include/linux/mfd/da9063/registers.h
+> @@ -512,6 +512,7 @@
+>  
+>  /* DA9063_REG_GPIO_0_1 (addr=0x15) */
+>  #define	DA9063_GPIO0_PIN_MASK			0x03
+> +#define	DA9063_GPIO0_PIN_MASK_SHIFT		0
+>  #define		DA9063_GPIO0_PIN_ADCIN1		0x00
+>  #define		DA9063_GPIO0_PIN_GPI		0x01
+>  #define		DA9063_GPIO0_PIN_GPO_OD		0x02
+> @@ -523,6 +524,7 @@
+>  #define		DA9063_GPIO0_TYPE_GPO_VDD_IO2	0x04
+>  #define	DA9063_GPIO0_NO_WAKEUP			0x08
+>  #define	DA9063_GPIO1_PIN_MASK			0x30
+> +#define	DA9063_GPIO1_PIN_MASK_SHIFT		4
+>  #define		DA9063_GPIO1_PIN_ADCIN2_COMP	0x00
+>  #define		DA9063_GPIO1_PIN_GPI		0x10
+>  #define		DA9063_GPIO1_PIN_GPO_OD		0x20
+> @@ -536,6 +538,7 @@
+>  
+>  /* DA9063_REG_GPIO_2_3 (addr=0x16) */
+>  #define	DA9063_GPIO2_PIN_MASK			0x03
+> +#define	DA9063_GPIO2_PIN_MASK_SHIFT		0
+>  #define		DA9063_GPIO2_PIN_ADCIN3		0x00
+>  #define		DA9063_GPIO2_PIN_GPI		0x01
+>  #define		DA9063_GPIO2_PIN_GPO_PSS	0x02
+> @@ -851,6 +854,7 @@
+>  #define	DA9063_VSYS_VAL_BASE			0x00
+>  
+>  /* DA9063_REG_ADC_RES_L (addr=0x37) */
+> +#define	DA9063_ADC_RES_L_SHIFT			6
+>  #define	DA9063_ADC_RES_L_BITS			2
+>  #define	DA9063_ADC_RES_L_MASK			0xC0
+>  
+> @@ -1014,6 +1018,36 @@
+>  #define DA9063_GPIO_DIM				0x80
+>  #define DA9063_GPIO_PWM_MASK			0x7F
+>  
+> +/* DA9063_REG_ADC_CFG (addr=0xC9) */
+> +#define DA9063_REG_ADCIN1_CUR_MASK		0x03
+> +#define DA9063_REG_ADCIN1_CUR_SHIFT		0
+> +#define		DA9063_ADCIN1_CUR_1UA		0x00
+> +#define		DA9063_ADCIN1_CUR_2UA		0x01
+> +#define		DA9063_ADCIN1_CUR_10UA		0x02
+> +#define		DA9063_ADCIN1_CUR_40UA		0x03
+> +#define DA9063_REG_ADCIN2_CUR_MASK		0x0C
+> +#define DA9063_REG_ADCIN2_CUR_SHIFT		2
+> +#define		DA9063_ADCIN2_CUR_1UA		0x00
+> +#define		DA9063_ADCIN2_CUR_2UA		0x01
+> +#define		DA9063_ADCIN2_CUR_10UA		0x02
+> +#define		DA9063_ADCIN2_CUR_40UA		0x03
+> +#define DA9063_REG_ADCIN3_CUR_MASK		0x10
+> +#define DA9063_REG_ADCIN3_CUR_SHIFT		4
+> +#define		DA9063_ADCIN3_CUR_10UA		0x00
+> +#define		DA9063_ADCIN3_CUR_40UA		0x01
+> +#define DA9063_REG_ADCIN1_DEB_MASK		0x20
+> +#define DA9063_REG_ADCIN1_DEB_SHIFT		5
+> +#define		DA9063_ADCIN1_DEB_OFF		0x00
+> +#define		DA9063_ADCIN1_DEB_ON		0x01
+> +#define DA9063_REG_ADCIN2_DEB_MASK		0x40
+> +#define DA9063_REG_ADCIN2_DEB_SHIFT		6
+> +#define		DA9063_ADCIN2_DEB_OFF		0x00
+> +#define		DA9063_ADCIN2_DEB_ON		0x01
+> +#define DA9063_REG_ADCIN3_DEB_MASK		0x80
+> +#define DA9063_REG_ADCIN3_DEB_SHIFT		7
+> +#define		DA9063_ADCIN3_DEB_OFF		0x00
+> +#define		DA9063_ADCIN3_DEB_ON		0x01
+> +
+>  /* DA9063_REG_CONFIG_H (addr=0x10D) */
+>  #define DA9063_PWM_CLK_MASK			0x01
+>  #define		DA9063_PWM_CLK_PWM2MHZ		0x00
+> -- 
+> 2.32.0
+> 
