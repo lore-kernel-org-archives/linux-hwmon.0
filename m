@@ -2,188 +2,199 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABDB5C07E95
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 04:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB58EC07E95
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 13:29:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D91360FDC
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 04:14:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AED8461C6F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 13:29:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhGGER2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Jul 2021 00:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S231528AbhGGNbt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Jul 2021 09:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbhGGER2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jul 2021 00:17:28 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A98C061574
-        for <linux-hwmon@vger.kernel.org>; Tue,  6 Jul 2021 21:14:47 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id z3so1068382oib.9
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jul 2021 21:14:47 -0700 (PDT)
+        with ESMTP id S231493AbhGGNbs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jul 2021 09:31:48 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D9EC061574;
+        Wed,  7 Jul 2021 06:29:08 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id y2so1058231plc.8;
+        Wed, 07 Jul 2021 06:29:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fX/hr5KKXEsTsySp4n1R0XI3yeQeWgdL4sdtlR+KA00=;
-        b=qQaOSJmM/A10m1AlSBPIsweWUcUBLH5k7EdDSO3Xgoy1OgmWOUrgqhes/TNCkCC7sH
-         9XS/IZNCvVj8y8pzCBHJm1QLCVZ3r5tgDcdhumY23UlXf96+SikxU2wh706J3I0uQdny
-         TemcChal1TJuao2aH7IjGLbxPVQ142NSiZN9Dq4uGkF0tZAx0z5FaCockMAU6FcGRXT8
-         t8cr8VNFCsZr6ZgFFZyppRnihDm60ibID2L/c7CWJO9s3P7Rg4cY4Q04Y+uKR+uJmO7j
-         wMheayQKLkbR0SEnYurL8jJDifQznUVGLILuw8M3XAqTSKneSv1Cn/Ow7h4KXvyNmaT5
-         YL0w==
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=GWETO3gmH4q+0KXXO1NcIFMA0qtQJbq8/KhChR8fUrU=;
+        b=uTTXOQSRBEespNz2yCt2rcI/bIciRKnW/P/EM0AnHcXZyPH3XJBmrZHj/a6rnbMMHs
+         XC52hHvtoFXdsHcrMdyfyxQbs7oDMsdwK4blnnmtNkfnfrpVc9iDik/ySSmi6ZVzXU7m
+         Eeeox2gGwoWDWAoY4NNTWEm+OvHJ/kxWeNIRsKEyGOc3zIdXkpjcqdKwOiiHyTcHLDUt
+         1cifUkss0dwXLmTysBOVU/B2k/+CP5zoyvGIiN/c6k6iND3dcuILMQ0r69TtxRkrrjNw
+         lR8oDbL62nji/Ge/Nws/vMj1OC4HEsbBkFjGMjzF4FoFPU6gCDnO59fAQzI+QEv9EXrk
+         Lg1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fX/hr5KKXEsTsySp4n1R0XI3yeQeWgdL4sdtlR+KA00=;
-        b=mqFsrbu0kkCpqb0IzI860bhCybxpfJR5++rBu0KoP0l3tGTh5o1BjDuy+s0c0aghi8
-         xHo180NmRNd8jiWvYAxXRdVFhkxeiIeW6NGXcT8FrMlBZ9tRjXDSvVTEHKY3y3dbu16h
-         CpTIIA/h8yXbIlkGTrHatzmiqC/LqK8/usBfMOkroPBnkluPn4Z8PfcKI/bLZmjJSAZP
-         kMZdHaqfhI7XcStnJdPjXGisU/N8DHpYJn0jzv/56vPPRdxYyypEABnLsw7oveLMpeIm
-         mnVxC+YKtQqQAOnTvp/BhhPhF/CV/5BSef0Yc0hzP4aFBJkxoGo5h7J/Gmos3mW5USaw
-         zkYQ==
-X-Gm-Message-State: AOAM53313wEanv6zahrdAmCoZ/kpE4icNk1DAjQhfzohiUHejt7asQkh
-        WRD9cNdchTkZSXFFDXHezmphW0iTSd8=
-X-Google-Smtp-Source: ABdhPJwmmNy0DhzNUJ1LWtp+h1RJ2yQIrtMMwRrp8p4/KaoFJ6/B7iRY/qRviHqDmsnznbo4Cpay5Q==
-X-Received: by 2002:aca:4082:: with SMTP id n124mr16456544oia.95.1625631286624;
-        Tue, 06 Jul 2021 21:14:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b25sm3790022otk.6.2021.07.06.21.14.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jul 2021 21:14:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3]: hwmon: nct6775: Fix some issues with NCT6796D
-To:     Henk <henk.vergonet@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org
-References: <CAMFK4TN9jcvwkdBdX1E4zH2NzS0LbCFqGW+MUzCKXor=4UwoBw@mail.gmail.com>
- <f3106f6d-1fa0-129f-28a2-9a85b5f9c453@roeck-us.net>
- <CAMFK4TMzZVAKdbJRMvUHdO3m+V1pNk59PyLXSxPkPFCsgr-rPg@mail.gmail.com>
- <e46d1215-121a-7480-cfa7-38d3f4bc0444@roeck-us.net>
- <CAMFK4TMb+aUVKtcWZkCcpjbeEOP7f=Nh2bOW9nAYZOymUvTA-w@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <10b4c4aa-febb-70e0-b653-67ff2c2841ba@roeck-us.net>
-Date:   Tue, 6 Jul 2021 21:14:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GWETO3gmH4q+0KXXO1NcIFMA0qtQJbq8/KhChR8fUrU=;
+        b=mKUebBQ/zFt1LzJCDg49c22hV7A3H3SOuabXGfgz9WrqioHLuVMncWHhEW/islj0vg
+         NT+z7q5N6j2wp+yQ6YXcz4RgNlcStmA5E2EjESs8tTF09v7E7M3Ah08WV89QCbToeXuW
+         l5U2Gh9vG4VzLXHxRFxmVHsuhjP04GQYLjN6VwfACyLxLhZ4FSJuddthQMBXeT7cOOqc
+         ab9JbQX1FqBSJpkUsT+7nWaef2jI6ABEc/S15Yf6aVB3pZGTNRtj9MH2mHMwI3UkYowG
+         eED5EGyxMHyFevvgdQ3EIjuP3r/R16uqmHYdTQONtuuXyRd8KFaT2jMEtAO4jgS3jW4K
+         oRFw==
+X-Gm-Message-State: AOAM530BR2RkuBKiISvzO9pJPbY/8bGvOOmegJau27Lt6rDbeiQhWq9T
+        M2PUk3fWDU3iG6KlrZ+OqA0J3aYNXNXa0Q==
+X-Google-Smtp-Source: ABdhPJwdsQoMcL9nzWeDvHCgKpKy/BmrOjNtdNANPdGbNG4OWxHCRdDfmU7m4cbqLU8NTE1ndxl3SA==
+X-Received: by 2002:a17:902:d890:b029:129:1282:fd3b with SMTP id b16-20020a170902d890b02901291282fd3bmr21629485plz.84.1625664548132;
+        Wed, 07 Jul 2021 06:29:08 -0700 (PDT)
+Received: from localhost.lan (p1284205-ipngn14601marunouchi.tokyo.ocn.ne.jp. [153.205.193.205])
+        by smtp.gmail.com with ESMTPSA id r29sm19577810pfq.177.2021.07.07.06.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jul 2021 06:29:07 -0700 (PDT)
+Received: from x2.lan (localhost [127.0.0.1])
+        by localhost.lan (Postfix) with ESMTPSA id 76A4D902A2B;
+        Wed,  7 Jul 2021 13:29:05 +0000 (GMT)
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
+Subject: [PATCH v3 3/3] Documentation: hwmon: New information for DA9063
+Date:   Wed,  7 Jul 2021 13:25:04 +0000
+Message-Id: <31e410523358f7069c36eb981ab96613346ffe37.1625662290.git.plr.vincent@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
+References: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMFK4TMb+aUVKtcWZkCcpjbeEOP7f=Nh2bOW9nAYZOymUvTA-w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/6/21 7:42 PM, Henk wrote:
-> Is it the attchment format?
-> 
-Please read and follow Documentation/process/submitting-patches.rst.
+From: "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
 
-Guenter
+Addition of HWMON documentation for the DA9063 driver.
 
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index e7e1ddc1d631..385ef79d79c4 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -28,7 +28,7 @@
->    * nct6792d    15      6       6       2+6    0xc910 0xc1    0x5ca3
->    * nct6793d    15      6       6       2+6    0xd120 0xc1    0x5ca3
->    * nct6795d    14      6       6       2+6    0xd350 0xc1    0x5ca3
-> - * nct6796d    14      7       7       2+6    0xd420 0xc1    0x5ca3
-> + * nct6796d    16      7       7       2+6    0xd420 0xc1    0x5ca3
->    * nct6797d    14      7       7       2+6    0xd450 0xc1    0x5ca3
->    *                                           (0xd451)
->    * nct6798d    14      7       7       2+6    0xd428 0xc1    0x5ca3
-> @@ -209,14 +209,14 @@ superio_exit(int ioreg)
-> 
->   /* Common and NCT6775 specific data */
-> 
-> -/* Voltage min/max registers for nr=7..14 are in bank 5 */
-> +/* Voltage min/max registers for nr=7..15 are in bank 5 */
-> 
->   static const u16 NCT6775_REG_IN_MAX[] = {
->       0x2b, 0x2d, 0x2f, 0x31, 0x33, 0x35, 0x37, 0x554, 0x556, 0x558, 0x55a,
-> -    0x55c, 0x55e, 0x560, 0x562 };
-> +    0x55c, 0x55e, 0x560, 0x562, 0x564 };
->   static const u16 NCT6775_REG_IN_MIN[] = {
->       0x2c, 0x2e, 0x30, 0x32, 0x34, 0x36, 0x38, 0x555, 0x557, 0x559, 0x55b,
-> -    0x55d, 0x55f, 0x561, 0x563 };
-> +    0x55d, 0x55f, 0x561, 0x563, 0x565 };
->   static const u16 NCT6775_REG_IN[] = {
->       0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x550, 0x551, 0x552
->   };
-> @@ -478,7 +478,7 @@ static const u16 NCT6776_REG_TEMP_CRIT[32] = {
-> 
->   static const u16 NCT6779_REG_IN[] = {
->       0x480, 0x481, 0x482, 0x483, 0x484, 0x485, 0x486, 0x487,
-> -    0x488, 0x489, 0x48a, 0x48b, 0x48c, 0x48d, 0x48e };
-> +    0x488, 0x489, 0x48a, 0x48b, 0x48c, 0x48d, 0x48e, 0x48f };
-> 
->   static const u16 NCT6779_REG_ALARM[NUM_REG_ALARM] = {
->       0x459, 0x45A, 0x45B, 0x568 };
-> @@ -1047,9 +1047,9 @@ div_from_reg(u8 reg)
->    * Some of the voltage inputs have internal scaling, the tables below
->    * contain 8 (the ADC LSB in mV) * scaling factor * 100
->    */
-> -static const u16 scale_in[15] = {
-> +static const u16 scale_in[16] = {
->       800, 800, 1600, 1600, 800, 800, 800, 1600, 1600, 800, 800, 800, 800,
-> -    800, 800
-> +    800, 800, 800
->   };
-> 
->   static inline long in_from_reg(u8 reg, u8 nr)
-> @@ -1143,7 +1143,7 @@ struct nct6775_data {
->       /* Register values */
->       u8 bank;        /* current register bank */
->       u8 in_num;        /* number of in inputs we have */
-> -    u8 in[15][3];        /* [0]=in, [1]=in_max, [2]=in_min */
-> +    u8 in[16][3];        /* [0]=in, [1]=in_max, [2]=in_min */
->       unsigned int rpm[NUM_FAN];
->       u16 fan_min[NUM_FAN];
->       u8 fan_pulses[NUM_FAN];
-> @@ -4200,7 +4200,7 @@ static int nct6775_probe(struct platform_device *pdev)
->       case nct6796:
->       case nct6797:
->       case nct6798:
-> -        data->in_num = 15;
-> +        data->in_num = (data->kind == nct6796) ? 16 : 15;
->           data->pwm_num = (data->kind == nct6796 ||
->                    data->kind == nct6797 ||
->                    data->kind == nct6798) ? 7 : 6;
-> 
-> 
-> Op wo 7 jul. 2021 om 03:51 schreef Guenter Roeck <linux@roeck-us.net>:
->>
->> On 7/6/21 6:40 PM, Henk wrote:
->>> Thank you Guenter,
->>>
->>> This should be fixed now, here is a reading from the sensors output
->>> without any scaling done:
->>>
->>> $ sensors
->>> nct6796-isa-0290
->>> Adapter: ISA adapter
->>> ...
->>> in15 VIN9:   840.00 mV
->>> ...
->>>
->>> Changes available on: https://github.com/hvegh/linux.git
->>>
->>> Op ma 5 jul. 2021 om 16:47 schreef Guenter Roeck <linux@roeck-us.net>:
->>>>
->>>> As for the patch itself, it doesn't define the limit register addresses
->>>> in NCT6775_REG_IN_MAX[] and NCT6775_REG_IN_MIN[], and it doesn't define
->>>> the register address itself in NCT6779_REG_IN[]. That means it won't work.
->>>>
->>>> Guenter
->>
->> This is not an acceptable patch format.
->>
->> Guenter
+Signed-off-by: Opensource [Steve Twiss] <stwiss.opensource@diasemi.com>
+
+Updated temperature formula, as of datasheet rev 2.3.
+Converted to ReStructuredText.
+
+Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
+---
+Changes in v3:
+- Reference added to index.rst
+
+Changes in v2:
+- ReST-ified
+
+Originally submitted by Steve Twiss in 2014:
+  https://marc.info/?l=linux-kernel&m=139560868209856&w=2
+
+ Documentation/hwmon/da9063.rst | 73 ++++++++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst  |  1 +
+ 2 files changed, 74 insertions(+)
+ create mode 100644 Documentation/hwmon/da9063.rst
+
+diff --git a/Documentation/hwmon/da9063.rst b/Documentation/hwmon/da9063.rst
+new file mode 100644
+index 000000000000..aae69c58a5d6
+--- /dev/null
++++ b/Documentation/hwmon/da9063.rst
+@@ -0,0 +1,73 @@
++Kernel driver da9063-hwmon
++==========================
++
++Supported chips:
++
++  * Dialog Semiconductor DA9063 PMIC
++
++    Prefix: 'da9063'
++
++    Datasheet: Publicly available at the Dialog Semiconductor website:
++
++	http://www.dialog-semiconductor.com/products/power-management/DA9063
++
++Authors:
++	- S Twiss <stwiss.opensource@diasemi.com>
++	- Vincent Pelletier <plr.vincent@gmail.com>
++
++Description
++-----------
++
++The DA9063 PMIC provides a general purpose ADC with 10 bits of resolution.
++It uses track and hold circuitry with an analogue input multiplexer which
++allows the conversion of up to 9 different inputs:
++
++- Channel  0: VSYS_RES	measurement of the system VDD (2.5 - 5.5V)
++- Channel  1: ADCIN1_RES	high impedance input (0 - 2.5V)
++- Channel  2: ADCIN2_RES	high impedance input (0 - 2.5V)
++- Channel  3: ADCIN3_RES	high impedance input (0 - 2.5V)
++- Channel  4: Tjunc	measurement of internal temperature sensor
++- Channel  5: VBBAT	measurement of the backup battery voltage (0 - 5.0V)
++- Channel  6: N/A	Reserved
++- Channel  7: N/A	Reserved
++- Channel  8: MON1_RES	group 1 internal regulators voltage (0 - 5.0V)
++- Channel  9: MON2_RES	group 2 internal regulators voltage (0 - 5.0V)
++- Channel 10: MON3_RES	group 3 internal regulators voltage (0 - 5.0V)
++
++The MUX selects from and isolates the 9 inputs and presents the channel to
++be measured to the ADC input. When selected, an input amplifier on the VSYS
++channel subtracts the VDDCORE reference voltage and scales the signal to the
++correct value for the ADC.
++
++The analog ADC includes current sources at ADC_IN1, ADC_IN2 and ADC_IN3 to
++support resistive measurements.
++
++Channels 1, 2 and 3 current source capability can be set through the ADC
++thresholds ADC_CFG register and values for ADCIN1_CUR, ADCIN2_CUR and
++ADCIN3_CUR. Settings for ADCIN1_CUR and ADCIN2_CUR are 1.0, 2.0, 10 and
++40 micro Amps. The setting for ADCIN3_CUR is 10 micro Amps.
++
++Voltage Monitoring
++------------------
++
++The manual measurement allows monitoring of the system voltage VSYS, the
++auxiliary channels ADCIN1, ADCIN2 and ADCIN3, and a VBBAT measurement of
++the backup battery voltage (0 - 5.0V). The manual measurements store 10
++bits of ADC resolution.
++
++The manual ADC measurements attributes described above are supported by
++the driver.
++
++The automatic ADC measurement is not supported by the driver.
++
++Temperature Monitoring
++----------------------
++
++Temperatures are sampled by a 10 bit ADC.  Junction temperatures
++are monitored by the ADC channels.
++
++The junction temperature is calculated:
++
++	Degrees celsius = -0.398 * (ADC_RES - T_OFFSET) + 330;
++
++The junction temperature attribute is supported by the driver.
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 9ed60fa84cbe..b3aba6525157 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -51,6 +51,7 @@ Hardware Monitoring Kernel Drivers
+    corsair-psu
+    da9052
+    da9055
++   da9063
+    dell-smm-hwmon
+    dme1737
+    drivetemp
+-- 
+2.32.0
 
