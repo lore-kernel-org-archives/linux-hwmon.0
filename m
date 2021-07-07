@@ -2,165 +2,153 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E540FC07E96
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 00:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C27BFC07E96
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 01:40:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF33A61C3A
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 00:58:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C40561CB3
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 01:40:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhGGBAn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jul 2021 21:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S229954AbhGGBne (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jul 2021 21:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbhGGBAn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jul 2021 21:00:43 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36579C061574;
-        Tue,  6 Jul 2021 17:58:03 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 7-20020a9d0d070000b0290439abcef697so656136oti.2;
-        Tue, 06 Jul 2021 17:58:03 -0700 (PDT)
+        with ESMTP id S229949AbhGGBne (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jul 2021 21:43:34 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C08C061574
+        for <linux-hwmon@vger.kernel.org>; Tue,  6 Jul 2021 18:40:53 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id t30so575446ljo.5
+        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jul 2021 18:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fybc0l0BejJcIFY8fwu+SVn+voPfUoUte83g/+XuDRw=;
-        b=fFdeea/u0a8L+8LfgEpEdj4I5NpEYA7Iv6zTbi2dhOkCly6uY8eBQrbqwn1qPVHOoJ
-         cIp5QMkC+WU853+FM6yZURWyn6xRYYnhd1CcI/Hx4mdIMRS5BR4fJgd+DsA+YQsYuvAB
-         VUvFcrDGY2TfFUikuq6tpkBroSc8z+lPYvqfPveNs+yJAOwotHZPZcLm3ECIOhZaNfeC
-         odCtIyTSqIwWHg2DbI1ruF1uUPidBvqP379GkYhcP1HxW4ToNIXgoo6QKHZ5SdTWCgoJ
-         6EznXm4aflerqKAjXYD2xBlE2g+bjXv7sG2iLPh6BRWOswZrj4meeiF9oZtcGdU5bhTu
-         ztRA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Iu1i4rdl3jiKDp54PewqP0Rgb0vc3gWyw4FESdpQ3gs=;
+        b=jIRbeDuvPPr/f1Swkwh21evkm7by6W7w1eWz6/8r/uHjX2Vn7oafJMlE9khuLtRVC8
+         9wri1IXTS4/2AqlPqYX/UHiLOcnbHdvI7y8tjmHVnVBjtQZwhar2HpgZzfY7Cbno0m+Q
+         SKUTId+lPbhb/u9XTap+RKoh+UhG7Ajh9tdflfdEvcyHliKpXn4Ir9mJEm5H1ZoAmLCN
+         1W9oP8PLA/in95aajKIPDYh6Y2KUmArbfbRNz8wz7sHMUaASr84MRt6KwZjDxxCUEEff
+         CGreGqZxI61fpuvzVTWtWJWhj2qAKGwRN0dpXnxqXOLMfhQbpCosEWjBQBGWzgVmnMgE
+         C80w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Fybc0l0BejJcIFY8fwu+SVn+voPfUoUte83g/+XuDRw=;
-        b=X3abiVWjqmD62UNDdtlYmpiewFMNE4URw/xmmM9v94VEvMbC5UMvvRKl1hrygxI/L6
-         6dzhoFwNvz8f073ESrCCmqGYkyp82+JkwuC+9y3RT5qvERtABuh7MZMmx8nt2TIUbhoF
-         MX+iNTyRzf8t5D8p4SFYREBo7Sdc+Upw3BzQmvBDCHPOG7gG4FqWxi/RFvIiCGgBdwih
-         q7KdGmUBHP1pHI5mFdD2KKjREpkM4PKaPHVLj6tAw+WDtzvsIcS5PLcxSlue1UXETtvW
-         XNFNUowX5Jvj2IeKITRN6vd/MpA8CMQWU++z1izIPQ6NAAwitlKPK5bajhnhSbpyLtjj
-         6eig==
-X-Gm-Message-State: AOAM531/vD7wnOrUqJvypKUzaFEnZ41AIOtomzQUQVAS/bdaCTX0ESf0
-        neAxzeTwVOWfUnP3hER293s=
-X-Google-Smtp-Source: ABdhPJyG3or29pjedbdSe1M8jdSs12vndtOgNQg+JdVFcoY04Ysbndjg7L00DU/+3DOJbEMOVZFtnQ==
-X-Received: by 2002:a05:6830:4022:: with SMTP id i2mr12363346ots.9.1625619482567;
-        Tue, 06 Jul 2021 17:58:02 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q5sm1247891otm.1.2021.07.06.17.58.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jul 2021 17:58:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Jul 2021 17:58:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
-Subject: Re: [PATCH 2/3] hwmon: da9063: HWMON driver
-Message-ID: <20210707005800.GA2221519@roeck-us.net>
-References: <850a353432cd676f96889cede291232abf58918d.1625581991.git.plr.vincent@gmail.com>
- <dff04323fc1b0177c1c08d3670333a839af4c268.1625581991.git.plr.vincent@gmail.com>
- <20210706174201.GC943349@roeck-us.net>
- <20210707002045.571694b2@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Iu1i4rdl3jiKDp54PewqP0Rgb0vc3gWyw4FESdpQ3gs=;
+        b=j8stUFQ4uT26qq7JL7Nuey4Vvl2TZpzP8KSEbKgd6hUVgw8d0YI9yvso5OY8HZ30XB
+         KAdUbCDxPTXj9cdyODZyrKl411QOagE7kMB+s0HErUej9HPK8j7L3GdX0WwWFwaA7DOH
+         q2eqt7+S2EwGPWbAIcnV2NAgMU5xQ6zxz9FuRKiDw+TlpWcX2dgi2i5Cfj6uymf+79bq
+         IGprN6Eg6G6muc9Y/c+oNATVyH+znjpx/mBQQYv4cY4srrwXCxzUhysvUh5h8l2AkfVx
+         w8AIzEUnUsQolqQDy4eCwmt2Oqf0eaR4oWBj59XdVmHBGwQh+yUXYH5iRrd1qg7jFD3t
+         WOJw==
+X-Gm-Message-State: AOAM531ZIfGBEPw4XKc3qH/nn+gOe3Xu56WVKmPktiA4ZUS702Y8G2vU
+        UCv5rKqKHZEw5UOrzRgjg12/okBvLme8CeN9QY2uCms0MeU=
+X-Google-Smtp-Source: ABdhPJyKECcQZFgLTI4qooa19aOfLhuwzVqYMnlInQzcj1OeYMaHi5MUCzWW44hNcBjLFk6jDiuMBlZ/q5aau/AQHt0=
+X-Received: by 2002:a2e:6c09:: with SMTP id h9mr569441ljc.69.1625622052099;
+ Tue, 06 Jul 2021 18:40:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210707002045.571694b2@gmail.com>
+References: <CAMFK4TN9jcvwkdBdX1E4zH2NzS0LbCFqGW+MUzCKXor=4UwoBw@mail.gmail.com>
+ <f3106f6d-1fa0-129f-28a2-9a85b5f9c453@roeck-us.net>
+In-Reply-To: <f3106f6d-1fa0-129f-28a2-9a85b5f9c453@roeck-us.net>
+From:   Henk <henk.vergonet@gmail.com>
+Date:   Wed, 7 Jul 2021 03:40:41 +0200
+Message-ID: <CAMFK4TMzZVAKdbJRMvUHdO3m+V1pNk59PyLXSxPkPFCsgr-rPg@mail.gmail.com>
+Subject: PATCH: HWMON: (nct6775) Correct number of inputs on NCT6796D
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000f473e305c67ea0e1"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 07, 2021 at 12:20:45AM +0000, Vincent Pelletier wrote:
-> Hello,
-> 
-> Thanks a lot for your reviews.
-> 
-> On Tue, 6 Jul 2021 10:42:01 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
-> > -EINVAL seems wrong. Maybe -EIO or -ETIMEDOUT.
-> 
-> On this topic, I've been hesitating to change this code to the
-> following. Would it be acceptable ?
-> 
->   ret = wait_for_completion_timeout(...)
->   if (ret == 0)
->     warn[_once](...)
->   ...
->   if (adc_man & DA9063_ADC_MAN) {
->     ret = -ETIMEDOUT;
->     goto err_mread;
->   }
-> 
-> The warn is to make it easier to debug in case of IRQ issue. The reason
+--000000000000f473e305c67ea0e1
+Content-Type: text/plain; charset="UTF-8"
 
-"to debug". Then make it a debug message.
+Thank you Guenter,
 
-> I'm caring is that I happen to have triggered such issue while testing
-> this driver, as the GPIO and PLIC on the hifive-unmatched seem to
-> disagree with each other. I debugged this and reported to linux-riscv,
-> and I believe the issue is not in da9063-hwmon: it also affects
-> da9063-onkey, and my GPIO-level workaround fixes both.
-> 
-> On a tangential topic: this chip is supposed to complete an ADC cycle
-> in 10ms, so 1s timeout seems a lot to me. On the one hand it made the
-> IRQ issue obvious, but on the other hand a safety factor of 100 seems
-> enormous to me. What would be a usual/reasonable safety factor ? 10 ?
-> 2 ?
+This should be fixed now, here is a reading from the sensors output
+without any scaling done:
 
-Your call, really.
+$ sensors
+nct6796-isa-0290
+Adapter: ISA adapter
+...
+in15 VIN9:   840.00 mV
+...
 
-Guenter
+Changes available on: https://github.com/hvegh/linux.git
 
-> 
-> > > +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> > > +					da9063_hwmon_irq_handler,
-> > > +					IRQF_TRIGGER_LOW | IRQF_ONESHOT,  
-> > 
-> > Is that correct ? The trigger condition is normally provided by
-> > devicetree.
-> 
-> At least it is consistent with the existing and related da9063-onkey:
-> 
-> 	irq = platform_get_irq_byname(pdev, "ONKEY");
-> 	if (irq < 0)
-> 		return irq;
-> 
-> 	error = devm_request_threaded_irq(&pdev->dev, irq,
-> 					  NULL, da9063_onkey_irq_handler,
-> 					  IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-> 					  "ONKEY", onkey);
-> 
-> I am not familiar enough with IRQ handling to tell if IRQF_TRIGGER_LOW
-> has an actual meaning here: in my understanding the regmap handler
-> decides how to clear an interrupt based on regmap_irq_chip content, and
-> this is coming from mfd/da9063-irq.c .
-> 
-> Are both devm_request_threaded_irq() equally wrong ?
-> 
-No idea. My understanding is that devicetree data is used unless
-an explicit method is specified. That is why I was asking _if_ this
-is correct, and did not claim that it is wrong.
+Op ma 5 jul. 2021 om 16:47 schreef Guenter Roeck <linux@roeck-us.net>:
+>
+> As for the patch itself, it doesn't define the limit register addresses
+> in NCT6775_REG_IN_MAX[] and NCT6775_REG_IN_MIN[], and it doesn't define
+> the register address itself in NCT6779_REG_IN[]. That means it won't work.
+>
+> Guenter
 
-> > > +	/* set trim temperature offset to value read at startup */
-> > > +	hwmon->tjunc_offset = (signed char)hwmon->da9063->t_offset;  
-> > 
-> > Can you explain why this is read in and passed from the mfd driver
-> > and not here ?
-> 
-> I cannot, at least not with something other than "this is how I found
-> the code", which I realise is not satisfactory.
-> I've been holding back on changes as I felt constrained by preserving
-> the original author's name on the changes (both Author and
-> Signed-off-by), but this split was indeed bothering me.
-> 
-Sorry, that is not a good argument. On the contrary, if I have to assume
-that the code has non-technical constraints, I am inclined to just reject
-it for that very reason.
+--000000000000f473e305c67ea0e1
+Content-Type: application/x-patch; name="nct6775.patch"
+Content-Disposition: attachment; filename="nct6775.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kqssv4jn0>
+X-Attachment-Id: f_kqssv4jn0
 
-Guenter
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vbmN0Njc3NS5jIGIvZHJpdmVycy9od21vbi9uY3Q2
+Nzc1LmMKaW5kZXggZTdlMWRkYzFkNjMxLi5hODBkZjBiYmMxOTcgMTAwNjQ0Ci0tLSBhL2RyaXZl
+cnMvaHdtb24vbmN0Njc3NS5jCisrKyBiL2RyaXZlcnMvaHdtb24vbmN0Njc3NS5jCkBAIC0yOCw3
+ICsyOCw3IEBACiAgKiBuY3Q2NzkyZCAgICAxNSAgICAgIDYgICAgICAgNiAgICAgICAyKzYgICAg
+MHhjOTEwIDB4YzEgICAgMHg1Y2EzCiAgKiBuY3Q2NzkzZCAgICAxNSAgICAgIDYgICAgICAgNiAg
+ICAgICAyKzYgICAgMHhkMTIwIDB4YzEgICAgMHg1Y2EzCiAgKiBuY3Q2Nzk1ZCAgICAxNCAgICAg
+IDYgICAgICAgNiAgICAgICAyKzYgICAgMHhkMzUwIDB4YzEgICAgMHg1Y2EzCi0gKiBuY3Q2Nzk2
+ZCAgICAxNCAgICAgIDcgICAgICAgNyAgICAgICAyKzYgICAgMHhkNDIwIDB4YzEgICAgMHg1Y2Ez
+CisgKiBuY3Q2Nzk2ZCAgICAxNiAgICAgIDcgICAgICAgNyAgICAgICAyKzYgICAgMHhkNDIwIDB4
+YzEgICAgMHg1Y2EzCiAgKiBuY3Q2Nzk3ZCAgICAxNCAgICAgIDcgICAgICAgNyAgICAgICAyKzYg
+ICAgMHhkNDUwIDB4YzEgICAgMHg1Y2EzCiAgKiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAoMHhkNDUxKQogICogbmN0Njc5OGQgICAgMTQgICAgICA3ICAgICAgIDcg
+ICAgICAgMis2ICAgIDB4ZDQyOCAweGMxICAgIDB4NWNhMwpAQCAtMTA0Nyw5ICsxMDQ3LDkgQEAg
+ZGl2X2Zyb21fcmVnKHU4IHJlZykKICAqIFNvbWUgb2YgdGhlIHZvbHRhZ2UgaW5wdXRzIGhhdmUg
+aW50ZXJuYWwgc2NhbGluZywgdGhlIHRhYmxlcyBiZWxvdwogICogY29udGFpbiA4ICh0aGUgQURD
+IExTQiBpbiBtVikgKiBzY2FsaW5nIGZhY3RvciAqIDEwMAogICovCi1zdGF0aWMgY29uc3QgdTE2
+IHNjYWxlX2luWzE1XSA9IHsKK3N0YXRpYyBjb25zdCB1MTYgc2NhbGVfaW5bMTZdID0gewogCTgw
+MCwgODAwLCAxNjAwLCAxNjAwLCA4MDAsIDgwMCwgODAwLCAxNjAwLCAxNjAwLCA4MDAsIDgwMCwg
+ODAwLCA4MDAsCi0JODAwLCA4MDAKKwk4MDAsIDgwMCwgODAwCiB9OwogCiBzdGF0aWMgaW5saW5l
+IGxvbmcgaW5fZnJvbV9yZWcodTggcmVnLCB1OCBucikKQEAgLTExNDMsNyArMTE0Myw3IEBAIHN0
+cnVjdCBuY3Q2Nzc1X2RhdGEgewogCS8qIFJlZ2lzdGVyIHZhbHVlcyAqLwogCXU4IGJhbms7CQkv
+KiBjdXJyZW50IHJlZ2lzdGVyIGJhbmsgKi8KIAl1OCBpbl9udW07CQkvKiBudW1iZXIgb2YgaW4g
+aW5wdXRzIHdlIGhhdmUgKi8KLQl1OCBpblsxNV1bM107CQkvKiBbMF09aW4sIFsxXT1pbl9tYXgs
+IFsyXT1pbl9taW4gKi8KKwl1OCBpblsxNl1bM107CQkvKiBbMF09aW4sIFsxXT1pbl9tYXgsIFsy
+XT1pbl9taW4gKi8KIAl1bnNpZ25lZCBpbnQgcnBtW05VTV9GQU5dOwogCXUxNiBmYW5fbWluW05V
+TV9GQU5dOwogCXU4IGZhbl9wdWxzZXNbTlVNX0ZBTl07CkBAIC00MjAwLDcgKzQyMDAsNyBAQCBz
+dGF0aWMgaW50IG5jdDY3NzVfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKIAlj
+YXNlIG5jdDY3OTY6CiAJY2FzZSBuY3Q2Nzk3OgogCWNhc2UgbmN0Njc5ODoKLQkJZGF0YS0+aW5f
+bnVtID0gMTU7CisJCWRhdGEtPmluX251bSA9IChkYXRhLT5raW5kID09IG5jdDY3OTYpID8gMTYg
+OiAxNTsKIAkJZGF0YS0+cHdtX251bSA9IChkYXRhLT5raW5kID09IG5jdDY3OTYgfHwKIAkJCQkg
+ZGF0YS0+a2luZCA9PSBuY3Q2Nzk3IHx8CiAJCQkJIGRhdGEtPmtpbmQgPT0gbmN0Njc5OCkgPyA3
+IDogNjsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vbmN0Njc3NS5jIGIvZHJpdmVycy9od21v
+bi9uY3Q2Nzc1LmMKaW5kZXggYTgwZGYwYmJjMTk3Li4zODVlZjc5ZDc5YzQgMTAwNjQ0Ci0tLSBh
+L2RyaXZlcnMvaHdtb24vbmN0Njc3NS5jCisrKyBiL2RyaXZlcnMvaHdtb24vbmN0Njc3NS5jCkBA
+IC0yMDksMTQgKzIwOSwxNCBAQCBzdXBlcmlvX2V4aXQoaW50IGlvcmVnKQogCiAvKiBDb21tb24g
+YW5kIE5DVDY3NzUgc3BlY2lmaWMgZGF0YSAqLwogCi0vKiBWb2x0YWdlIG1pbi9tYXggcmVnaXN0
+ZXJzIGZvciBucj03Li4xNCBhcmUgaW4gYmFuayA1ICovCisvKiBWb2x0YWdlIG1pbi9tYXggcmVn
+aXN0ZXJzIGZvciBucj03Li4xNSBhcmUgaW4gYmFuayA1ICovCiAKIHN0YXRpYyBjb25zdCB1MTYg
+TkNUNjc3NV9SRUdfSU5fTUFYW10gPSB7CiAJMHgyYiwgMHgyZCwgMHgyZiwgMHgzMSwgMHgzMywg
+MHgzNSwgMHgzNywgMHg1NTQsIDB4NTU2LCAweDU1OCwgMHg1NWEsCi0JMHg1NWMsIDB4NTVlLCAw
+eDU2MCwgMHg1NjIgfTsKKwkweDU1YywgMHg1NWUsIDB4NTYwLCAweDU2MiwgMHg1NjQgfTsKIHN0
+YXRpYyBjb25zdCB1MTYgTkNUNjc3NV9SRUdfSU5fTUlOW10gPSB7CiAJMHgyYywgMHgyZSwgMHgz
+MCwgMHgzMiwgMHgzNCwgMHgzNiwgMHgzOCwgMHg1NTUsIDB4NTU3LCAweDU1OSwgMHg1NWIsCi0J
+MHg1NWQsIDB4NTVmLCAweDU2MSwgMHg1NjMgfTsKKwkweDU1ZCwgMHg1NWYsIDB4NTYxLCAweDU2
+MywgMHg1NjUgfTsKIHN0YXRpYyBjb25zdCB1MTYgTkNUNjc3NV9SRUdfSU5bXSA9IHsKIAkweDIw
+LCAweDIxLCAweDIyLCAweDIzLCAweDI0LCAweDI1LCAweDI2LCAweDU1MCwgMHg1NTEsIDB4NTUy
+CiB9OwpAQCAtNDc4LDcgKzQ3OCw3IEBAIHN0YXRpYyBjb25zdCB1MTYgTkNUNjc3Nl9SRUdfVEVN
+UF9DUklUWzMyXSA9IHsKIAogc3RhdGljIGNvbnN0IHUxNiBOQ1Q2Nzc5X1JFR19JTltdID0gewog
+CTB4NDgwLCAweDQ4MSwgMHg0ODIsIDB4NDgzLCAweDQ4NCwgMHg0ODUsIDB4NDg2LCAweDQ4NywK
+LQkweDQ4OCwgMHg0ODksIDB4NDhhLCAweDQ4YiwgMHg0OGMsIDB4NDhkLCAweDQ4ZSB9OworCTB4
+NDg4LCAweDQ4OSwgMHg0OGEsIDB4NDhiLCAweDQ4YywgMHg0OGQsIDB4NDhlLCAweDQ4ZiB9Owog
+CiBzdGF0aWMgY29uc3QgdTE2IE5DVDY3NzlfUkVHX0FMQVJNW05VTV9SRUdfQUxBUk1dID0gewog
+CTB4NDU5LCAweDQ1QSwgMHg0NUIsIDB4NTY4IH07Cg==
+--000000000000f473e305c67ea0e1--
