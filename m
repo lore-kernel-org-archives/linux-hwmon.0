@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB58EC07E95
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 13:29:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FFD8C07E9C
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 13:29:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AED8461C6F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 13:29:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CA7761CBE
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jul 2021 13:29:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbhGGNbt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Jul 2021 09:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S231665AbhGGNbu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Jul 2021 09:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbhGGNbs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jul 2021 09:31:48 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D9EC061574;
-        Wed,  7 Jul 2021 06:29:08 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id y2so1058231plc.8;
-        Wed, 07 Jul 2021 06:29:08 -0700 (PDT)
+        with ESMTP id S231590AbhGGNbt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jul 2021 09:31:49 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8E0C061574;
+        Wed,  7 Jul 2021 06:29:09 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 62so2267439pgf.1;
+        Wed, 07 Jul 2021 06:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+        h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GWETO3gmH4q+0KXXO1NcIFMA0qtQJbq8/KhChR8fUrU=;
-        b=uTTXOQSRBEespNz2yCt2rcI/bIciRKnW/P/EM0AnHcXZyPH3XJBmrZHj/a6rnbMMHs
-         XC52hHvtoFXdsHcrMdyfyxQbs7oDMsdwK4blnnmtNkfnfrpVc9iDik/ySSmi6ZVzXU7m
-         Eeeox2gGwoWDWAoY4NNTWEm+OvHJ/kxWeNIRsKEyGOc3zIdXkpjcqdKwOiiHyTcHLDUt
-         1cifUkss0dwXLmTysBOVU/B2k/+CP5zoyvGIiN/c6k6iND3dcuILMQ0r69TtxRkrrjNw
-         lR8oDbL62nji/Ge/Nws/vMj1OC4HEsbBkFjGMjzF4FoFPU6gCDnO59fAQzI+QEv9EXrk
-         Lg1Q==
+        bh=23ZatZSetSOL/bCz9HGawdO9/WPF019AoV+UlfiewDc=;
+        b=GbH38pebjALyFptmNAFB9QTEAbeOQeQspIBpBWjgSkl+CW6F20Y5XQAVIYzN4vccwK
+         VHbL/NpiG5da9crIk3GRk1XYTgo9Zb7BHItF4IiUQaC0ithw90ZRDkXEBEyTctKhAvfX
+         Txhz4TkDL2PeVxD43wCLVwXnHPDRp2MiYyf4YtNvYnlsLLiVTNz30byB+VJhZNGW6CIa
+         STO+WBDFur5iPZPTZBEXJCOT8YGOWqTp7mGFXsyBDm0ytvO/KhC3e3xLU04Q0W+QQu6q
+         pFDLEN8lP+Qw0JbTLmLqGxBDK6UtYKdhbAoJT0cr956GsnEpBvYJJXrPAQf7eHQQg732
+         ssMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GWETO3gmH4q+0KXXO1NcIFMA0qtQJbq8/KhChR8fUrU=;
-        b=mKUebBQ/zFt1LzJCDg49c22hV7A3H3SOuabXGfgz9WrqioHLuVMncWHhEW/islj0vg
-         NT+z7q5N6j2wp+yQ6YXcz4RgNlcStmA5E2EjESs8tTF09v7E7M3Ah08WV89QCbToeXuW
-         l5U2Gh9vG4VzLXHxRFxmVHsuhjP04GQYLjN6VwfACyLxLhZ4FSJuddthQMBXeT7cOOqc
-         ab9JbQX1FqBSJpkUsT+7nWaef2jI6ABEc/S15Yf6aVB3pZGTNRtj9MH2mHMwI3UkYowG
-         eED5EGyxMHyFevvgdQ3EIjuP3r/R16uqmHYdTQONtuuXyRd8KFaT2jMEtAO4jgS3jW4K
-         oRFw==
-X-Gm-Message-State: AOAM530BR2RkuBKiISvzO9pJPbY/8bGvOOmegJau27Lt6rDbeiQhWq9T
-        M2PUk3fWDU3iG6KlrZ+OqA0J3aYNXNXa0Q==
-X-Google-Smtp-Source: ABdhPJwdsQoMcL9nzWeDvHCgKpKy/BmrOjNtdNANPdGbNG4OWxHCRdDfmU7m4cbqLU8NTE1ndxl3SA==
-X-Received: by 2002:a17:902:d890:b029:129:1282:fd3b with SMTP id b16-20020a170902d890b02901291282fd3bmr21629485plz.84.1625664548132;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=23ZatZSetSOL/bCz9HGawdO9/WPF019AoV+UlfiewDc=;
+        b=Kb7bTzbPf/07h2hPtRhYf2FVXnfIs0eoNTMyqEiVsxIKlXxgGn4cDhFhcNmcd6mfdR
+         miUebMyeCRJMmDN+HcBhsCTT7jdaudpkEHQIShSlbNcfka7B7vscGRgZReUawQ36J1fg
+         xXedQEyo+tZdCcw4KkggWaf7ObtqliE90fxENYbrNUgechYmP/CsIawGDlWkhj+H7vPs
+         t4NQAH92cpavqhc2smxlcEPnWjB+QP/0az63D2078N+LgpDvdracF83a7GcauXTxyvtH
+         7ZEjg/2+9l5EfkU53VyeyOSwUOOZRiN0Ne7G+0wTVl++YmXT+KZlgXRRO9GqnwMdOJ9z
+         HGNA==
+X-Gm-Message-State: AOAM5301PCEHF0CMNppBfk0+2XvpGr32NkYmQe2J1c0BtpIK2A/VSekr
+        7ojx40hRgE4Os0GCZcItGdk=
+X-Google-Smtp-Source: ABdhPJxd1MQP3Ek4cAIq6Dw8dtk4Ye3VyRtnMui2yCxJ0Wq+TRVzMzFBz5VzmMECnzYS8Bzc56OhOA==
+X-Received: by 2002:a63:dc04:: with SMTP id s4mr26298239pgg.75.1625664548602;
         Wed, 07 Jul 2021 06:29:08 -0700 (PDT)
 Received: from localhost.lan (p1284205-ipngn14601marunouchi.tokyo.ocn.ne.jp. [153.205.193.205])
-        by smtp.gmail.com with ESMTPSA id r29sm19577810pfq.177.2021.07.07.06.29.07
+        by smtp.gmail.com with ESMTPSA id q3sm20125059pfj.89.2021.07.07.06.29.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 07 Jul 2021 06:29:07 -0700 (PDT)
 Received: from x2.lan (localhost [127.0.0.1])
-        by localhost.lan (Postfix) with ESMTPSA id 76A4D902A2B;
+        by localhost.lan (Postfix) with ESMTPSA id 52314900853;
         Wed,  7 Jul 2021 13:29:05 +0000 (GMT)
 From:   Vincent Pelletier <plr.vincent@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
@@ -67,12 +67,10 @@ To:     Jean Delvare <jdelvare@suse.com>,
         Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
-Subject: [PATCH v3 3/3] Documentation: hwmon: New information for DA9063
-Date:   Wed,  7 Jul 2021 13:25:04 +0000
-Message-Id: <31e410523358f7069c36eb981ab96613346ffe37.1625662290.git.plr.vincent@gmail.com>
+Subject: [PATCH v3 1/3] mfd: da9063: Add HWMON dependencies
+Date:   Wed,  7 Jul 2021 13:25:02 +0000
+Message-Id: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
-References: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -81,120 +79,99 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
 
-Addition of HWMON documentation for the DA9063 driver.
+Dependencies required for DA9063 HWMON support.
 
 Signed-off-by: Opensource [Steve Twiss] <stwiss.opensource@diasemi.com>
 
-Updated temperature formula, as of datasheet rev 2.3.
-Converted to ReStructuredText.
+Moved temperature offset reading to hwmon driver.
 
 Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
 ---
 Changes in v3:
-- Reference added to index.rst
+- moved temperature offset reading to hwmon driver
 
 Changes in v2:
-- ReST-ified
+- registers.h changes moved from patch 2
 
 Originally submitted by Steve Twiss in 2014:
-  https://marc.info/?l=linux-kernel&m=139560868209856&w=2
+  https://marc.info/?l=linux-kernel&m=139560864709852&w=2
 
- Documentation/hwmon/da9063.rst | 73 ++++++++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst  |  1 +
- 2 files changed, 74 insertions(+)
- create mode 100644 Documentation/hwmon/da9063.rst
+ include/linux/mfd/da9063/registers.h | 34 ++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/Documentation/hwmon/da9063.rst b/Documentation/hwmon/da9063.rst
-new file mode 100644
-index 000000000000..aae69c58a5d6
---- /dev/null
-+++ b/Documentation/hwmon/da9063.rst
-@@ -0,0 +1,73 @@
-+Kernel driver da9063-hwmon
-+==========================
+diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
+index 6e0f66a2e727..297631ddda39 100644
+--- a/include/linux/mfd/da9063/registers.h
++++ b/include/linux/mfd/da9063/registers.h
+@@ -512,6 +512,7 @@
+ 
+ /* DA9063_REG_GPIO_0_1 (addr=0x15) */
+ #define	DA9063_GPIO0_PIN_MASK			0x03
++#define	DA9063_GPIO0_PIN_MASK_SHIFT		0
+ #define		DA9063_GPIO0_PIN_ADCIN1		0x00
+ #define		DA9063_GPIO0_PIN_GPI		0x01
+ #define		DA9063_GPIO0_PIN_GPO_OD		0x02
+@@ -523,6 +524,7 @@
+ #define		DA9063_GPIO0_TYPE_GPO_VDD_IO2	0x04
+ #define	DA9063_GPIO0_NO_WAKEUP			0x08
+ #define	DA9063_GPIO1_PIN_MASK			0x30
++#define	DA9063_GPIO1_PIN_MASK_SHIFT		4
+ #define		DA9063_GPIO1_PIN_ADCIN2_COMP	0x00
+ #define		DA9063_GPIO1_PIN_GPI		0x10
+ #define		DA9063_GPIO1_PIN_GPO_OD		0x20
+@@ -536,6 +538,7 @@
+ 
+ /* DA9063_REG_GPIO_2_3 (addr=0x16) */
+ #define	DA9063_GPIO2_PIN_MASK			0x03
++#define	DA9063_GPIO2_PIN_MASK_SHIFT		0
+ #define		DA9063_GPIO2_PIN_ADCIN3		0x00
+ #define		DA9063_GPIO2_PIN_GPI		0x01
+ #define		DA9063_GPIO2_PIN_GPO_PSS	0x02
+@@ -851,6 +854,7 @@
+ #define	DA9063_VSYS_VAL_BASE			0x00
+ 
+ /* DA9063_REG_ADC_RES_L (addr=0x37) */
++#define	DA9063_ADC_RES_L_SHIFT			6
+ #define	DA9063_ADC_RES_L_BITS			2
+ #define	DA9063_ADC_RES_L_MASK			0xC0
+ 
+@@ -1014,6 +1018,36 @@
+ #define DA9063_GPIO_DIM				0x80
+ #define DA9063_GPIO_PWM_MASK			0x7F
+ 
++/* DA9063_REG_ADC_CFG (addr=0xC9) */
++#define DA9063_REG_ADCIN1_CUR_MASK		0x03
++#define DA9063_REG_ADCIN1_CUR_SHIFT		0
++#define		DA9063_ADCIN1_CUR_1UA		0x00
++#define		DA9063_ADCIN1_CUR_2UA		0x01
++#define		DA9063_ADCIN1_CUR_10UA		0x02
++#define		DA9063_ADCIN1_CUR_40UA		0x03
++#define DA9063_REG_ADCIN2_CUR_MASK		0x0C
++#define DA9063_REG_ADCIN2_CUR_SHIFT		2
++#define		DA9063_ADCIN2_CUR_1UA		0x00
++#define		DA9063_ADCIN2_CUR_2UA		0x01
++#define		DA9063_ADCIN2_CUR_10UA		0x02
++#define		DA9063_ADCIN2_CUR_40UA		0x03
++#define DA9063_REG_ADCIN3_CUR_MASK		0x10
++#define DA9063_REG_ADCIN3_CUR_SHIFT		4
++#define		DA9063_ADCIN3_CUR_10UA		0x00
++#define		DA9063_ADCIN3_CUR_40UA		0x01
++#define DA9063_REG_ADCIN1_DEB_MASK		0x20
++#define DA9063_REG_ADCIN1_DEB_SHIFT		5
++#define		DA9063_ADCIN1_DEB_OFF		0x00
++#define		DA9063_ADCIN1_DEB_ON		0x01
++#define DA9063_REG_ADCIN2_DEB_MASK		0x40
++#define DA9063_REG_ADCIN2_DEB_SHIFT		6
++#define		DA9063_ADCIN2_DEB_OFF		0x00
++#define		DA9063_ADCIN2_DEB_ON		0x01
++#define DA9063_REG_ADCIN3_DEB_MASK		0x80
++#define DA9063_REG_ADCIN3_DEB_SHIFT		7
++#define		DA9063_ADCIN3_DEB_OFF		0x00
++#define		DA9063_ADCIN3_DEB_ON		0x01
 +
-+Supported chips:
-+
-+  * Dialog Semiconductor DA9063 PMIC
-+
-+    Prefix: 'da9063'
-+
-+    Datasheet: Publicly available at the Dialog Semiconductor website:
-+
-+	http://www.dialog-semiconductor.com/products/power-management/DA9063
-+
-+Authors:
-+	- S Twiss <stwiss.opensource@diasemi.com>
-+	- Vincent Pelletier <plr.vincent@gmail.com>
-+
-+Description
-+-----------
-+
-+The DA9063 PMIC provides a general purpose ADC with 10 bits of resolution.
-+It uses track and hold circuitry with an analogue input multiplexer which
-+allows the conversion of up to 9 different inputs:
-+
-+- Channel  0: VSYS_RES	measurement of the system VDD (2.5 - 5.5V)
-+- Channel  1: ADCIN1_RES	high impedance input (0 - 2.5V)
-+- Channel  2: ADCIN2_RES	high impedance input (0 - 2.5V)
-+- Channel  3: ADCIN3_RES	high impedance input (0 - 2.5V)
-+- Channel  4: Tjunc	measurement of internal temperature sensor
-+- Channel  5: VBBAT	measurement of the backup battery voltage (0 - 5.0V)
-+- Channel  6: N/A	Reserved
-+- Channel  7: N/A	Reserved
-+- Channel  8: MON1_RES	group 1 internal regulators voltage (0 - 5.0V)
-+- Channel  9: MON2_RES	group 2 internal regulators voltage (0 - 5.0V)
-+- Channel 10: MON3_RES	group 3 internal regulators voltage (0 - 5.0V)
-+
-+The MUX selects from and isolates the 9 inputs and presents the channel to
-+be measured to the ADC input. When selected, an input amplifier on the VSYS
-+channel subtracts the VDDCORE reference voltage and scales the signal to the
-+correct value for the ADC.
-+
-+The analog ADC includes current sources at ADC_IN1, ADC_IN2 and ADC_IN3 to
-+support resistive measurements.
-+
-+Channels 1, 2 and 3 current source capability can be set through the ADC
-+thresholds ADC_CFG register and values for ADCIN1_CUR, ADCIN2_CUR and
-+ADCIN3_CUR. Settings for ADCIN1_CUR and ADCIN2_CUR are 1.0, 2.0, 10 and
-+40 micro Amps. The setting for ADCIN3_CUR is 10 micro Amps.
-+
-+Voltage Monitoring
-+------------------
-+
-+The manual measurement allows monitoring of the system voltage VSYS, the
-+auxiliary channels ADCIN1, ADCIN2 and ADCIN3, and a VBBAT measurement of
-+the backup battery voltage (0 - 5.0V). The manual measurements store 10
-+bits of ADC resolution.
-+
-+The manual ADC measurements attributes described above are supported by
-+the driver.
-+
-+The automatic ADC measurement is not supported by the driver.
-+
-+Temperature Monitoring
-+----------------------
-+
-+Temperatures are sampled by a 10 bit ADC.  Junction temperatures
-+are monitored by the ADC channels.
-+
-+The junction temperature is calculated:
-+
-+	Degrees celsius = -0.398 * (ADC_RES - T_OFFSET) + 330;
-+
-+The junction temperature attribute is supported by the driver.
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 9ed60fa84cbe..b3aba6525157 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -51,6 +51,7 @@ Hardware Monitoring Kernel Drivers
-    corsair-psu
-    da9052
-    da9055
-+   da9063
-    dell-smm-hwmon
-    dme1737
-    drivetemp
+ /* DA9063_REG_CONFIG_H (addr=0x10D) */
+ #define DA9063_PWM_CLK_MASK			0x01
+ #define		DA9063_PWM_CLK_PWM2MHZ		0x00
 -- 
 2.32.0
 
