@@ -8,184 +8,156 @@ X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F038C07E9B
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 18:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD2D7C07E99
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 18:45:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 124CA613B7
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 18:45:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B60E5613B7
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 18:45:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbhGISsN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Jul 2021 14:48:13 -0400
-Received: from mout.gmx.net ([212.227.17.20]:53069 "EHLO mout.gmx.net"
+        id S230166AbhGISsP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Jul 2021 14:48:15 -0400
+Received: from mout.gmx.net ([212.227.17.22]:56805 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230166AbhGISsM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 9 Jul 2021 14:48:12 -0400
+        id S230129AbhGISsO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 9 Jul 2021 14:48:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1625856315;
-        bh=9LcQpp3m/ahJecdV0AqlluddWgR2Iqf01zcdksGKoUc=;
+        s=badeba3b8450; t=1625856316;
+        bh=qXmLFM8Vc7mghqmZtcQPTuBtbivBqqPwG+BFTUVKu4I=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=a+qKKTTQePnTwOj1h4gtNO8xF5mucFYY1+vOoPFeD5lC1Y5zU96WPbrAHr9SjouX+
-         RXhATML/T/LpvuSuRgcWyHqF33rVsVETiIC0/jfXU2TD/QdWe66jwT8fezIx5DFei3
-         T+tPfrdhMo8PyC8cae7R2jjLOzdqsMWrBOzbWHQU=
+        b=bMlVABXc6N6owUZiC1AGPW4NhSZs7O1Ql754qQy7HkSKH77P6dFTqRz1cyG1P+HlQ
+         EspkgjZis/a2WdBcC+yXpZdJ1SVZIH8wO/PgB0PJvZ8YUVNMYuLVLwk0bHPQLBpxsu
+         AilrsyOm4UgM62Q9f2lkssPiczJAimnrAS6ZspP0=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([79.242.181.110]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Mqb1c-1lOD183QYa-00mZOs; Fri, 09 Jul 2021 20:45:14 +0200
+ 1MgvrB-1lW8yf1Mkf-00hKRk; Fri, 09 Jul 2021 20:45:16 +0200
 From:   W_Armin@gmx.de
 To:     linux@roeck-us.net
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH 1/3] hwmon: (w83627ehf) Use platform_create_bundle
-Date:   Fri,  9 Jul 2021 20:44:59 +0200
-Message-Id: <20210709184501.6546-2-W_Armin@gmx.de>
+Subject: [PATCH 2/3] hwmon: (w83627ehf) Remove w83627ehf_remove()
+Date:   Fri,  9 Jul 2021 20:45:00 +0200
+Message-Id: <20210709184501.6546-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210709184501.6546-1-W_Armin@gmx.de>
 References: <20210709184501.6546-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:mmeigJTo1DgUToqxfEjzd3hB/fLZvhNU+c/6VrP02ycb+hWb79m
- Dj4VvzSSHsMMsZsspE1BIx5KlhEfxNTvtZAQZJrXh0l74ARYTObgU3VfxPYM/kh/VQo0gIX
- xZI1K+CTSQJBE1BGpQ5gjAqGZywXjirTdkTU9lgCWb7uLTskcasurmVA8RPNicsFr6PzPo1
- EJ8C9DzuJJeUA1Vmh4Z9A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vuRYiIHDh0Q=:A5MBgr6EcDVwQezMEY5sMM
- LJ8ssweqU29rBdK37UpGk1l3+J/4tTPfi1ccGzKdiCMZesz4zyI3CKtip3t9L5N+46p+QI63E
- eG4PxaCds0XMBNDE2BWXCwfX9r2wD2P86Oxrv/ytP2jllYmCQsaP6fsD+KGJODcK9I/FFhkZm
- Rqc2A0UFO9PfNk0hsLoBJFWCbHLGjME9wTOqf0BZws2zSuTiBNbA0ZUg4UJ/MNTvS4YCDeIT1
- ndI4n/SSUGkcgWKAtIcYr0FLhfli4rdmO+F6h00nltKkpf4fP/iRQthCGTzsJGyE1TL5oJ3DA
- zRjIMN6ncbOSNLdzmeGwlUYEyOzN4dpRSP+87YawGgSOeCmG1LeUYPt/zMNc/ODWS4kzoqqaF
- DkwTETWpK2JI2qYokyUXs4JWfmsVrdOqk7gva3T7tezFDUOU2BRsEaMl6ovoUPQqReiA93RxP
- 702nTbl6RCqTYVWAAksE35vLDVts670l0lX2E1/ZeuBU8uUByf3e6wWYSVTMEvuFVj9NMXGXu
- J1fOWqO66Cgh2fTwmZaQUTBLIUqzCiJA3esuYBWvWA0hseqPk4CE1MMUTeYxG7CeVAlA7iJbw
- YFOpH9xDHvZba3ZSVknnrMPwbV8HJ3iqOAvKW51WezUarPMaHKMkqyV64YKhasFpG7Lf1oVmO
- VajONqNm6c/GWmGCuQs6tSsspoVkf8hYQa0XHIualRpsNZE/A4D2sncQZT49AI2ahJnUyJqcA
- Y015pTn41Od1/GU0vXnoR70u8wiyT0oDJA/Ndk8jsoZEIje8DWTj2PXxwckOoH9EY6WnFoqLo
- 5PhSXPNT+BiO5uMkLWJSUCqj8/5Ovr10CYMxs7DGtsNYjtcfMnV7YShJeiX+gVF9uxi9gb4QS
- SJCC3VQw2+XEwIeNncDq+iHeIucWrO+ClTW+YQKqf55HA0X6QVsoUuVQkHwa12pBYrQ3E4SCY
- ln4fNYr/258ZpKiAmmtECs6XYOEZOm9nCSCSnIAVIuRKb6/DPkbePEU+gFRwVQVJY4THWSoBF
- S+4IQfey+3bKlvhf8iIz1QtEABo4E8sm926jGAtyXwgrXvc48lmcoH/I1aNJDXnPpcLXdUie1
- iy+oGsblhUcgFjta+3R5H7xvL/JHhfFHz76
+X-Provags-ID: V03:K1:yuAfjSpuC/YcdjPHLTkzrqoykPrKTjcgRBPDASJdHx7pJibwfV9
+ /7UGomFYFMzuR2XbHUTC0S5CcG6c/OnnIq5rkQUBs/1Ix21+z2n5lwW8akoUuD5LKIjarAN
+ BbTgmka5xyv+CZna6n/FtYO+ksDCjVeBm4ZpruPf11vpbHrUu0Y9zJTD92daDtBlladKnuD
+ vyjqamAd+QPEBVlDD+QqA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZTeBKDttopk=:lylYpCZO/D+6PGVwZVoxhY
+ 4RTu+7qVDXgGx0rrfWgKiApNvfuUtq0jyqHmNakw/w/60V6YAy6hRfXsfuJtyDsbBtyPTVpAm
+ /sBN9fH6ZBgGkprXpwLsNRaZ14BNqA8lvJoRUwfbBbRDxWmKBQQctlQS2xCa/AmL1NxvKm7X8
+ bAPH7De6FvWh0rm/FtOzw3G2srnFDlS6UQiuS72GnMmiIzAg7qWZVF9Xr4CvMFQTlbHkS1fTV
+ yH4gVGnwQxhQ8zycBgMHsPHJJwa4+r16rJZYRKarbHOYPAmEuG+rwZu0GbvFYb7A8tLCH6dTv
+ Oh3nSgkz8hbyeUwy0LHJHw1z4LcVlg0TaEPfw6lDLtAN2RhrcrgEEYrMeOp3Mk3J9i0od+CiP
+ LaOO1ILyu9q/MrPu6tkTJVzzeACgcdhHOXW0w62sR2sHOpKY7BKzDCTVK0u/f6W7IzLxEx/cI
+ +06NrUZf3Of6ikhpJW21lQLyqexUwwko4ke0uY622gZ8baUrmeQk2sHuXQ1Jv38NrZJUzODOP
+ ZINPAuHU7merOoJ8XQLTXipsFk8ai/rMWaggA1gdSDiJyWPe/ysNEokbp5inwG7b03DzRdVio
+ rOEPzyYkHxfg1q+kIs0w8R+lp0n2ABZRGpKbG3Ag8iYwrCnxGrqq54ECiW8spzrwcWzJaP3Aw
+ JzPuOY7aRWjA8RpIa7i0ofDxH3cIsUpbdWwxrkLgqRhyLg6q7gAfwFaWjZV3ZOI+Yto2CqPD0
+ P00xl3D/DO+SjjQWxQtETvR5AhoH3lkLJrpmYSeaw5pHdGamw9fSHhFH+F/Q1zMo9WHzK/VxM
+ iJTud0zWcfWQEH1nSqtF8+yfL3NXwOMluJx26zYG0WwK9cn/po8ea2/e4YxUOdLkRICwi+DBM
+ iKkEtR+xOdduEqOCXRMgC2txK8DkDki+FbAd+dpWG+qVW0X4fnQqeQs+X209AQ/OCj6Xuojrz
+ YTJSTgzkLQ9HTth9Jt1zA8+Oykb57IpyvkhH1kCiaHHfm2S9veyuyN/L/7tdRcfBFd0comqv6
+ fsLBjOzK/fE81HyFcUfJsxSef6mVq3c34slkFL7rWQ3oPv+wsSq54AoWARzNUla5il6znbMF0
+ momAhKCpH3WOnbfjsWl0mBw8t3t3ZCvu2Rc
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Armin Wolf <W_Armin@gmx.de>
 
-Using platform_create_bundle() simplifies the module
-init code and allows w83627ehf_probe() to be marked
-as __init, lowering the runtime memory footprint.
+Using devm_request_region() allows us to omit
+w83627ehf_remove() and also simplifies error
+handling during probe.
+Also fixed a checkpatch issue.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/w83627ehf.c | 57 +++++++--------------------------------
- 1 file changed, 10 insertions(+), 47 deletions(-)
+ drivers/hwmon/w83627ehf.c | 42 +++++++--------------------------------
+ 1 file changed, 7 insertions(+), 35 deletions(-)
 
 diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 8618aaf32350..16aed90ca2ec 100644
+index 16aed90ca2ec..19af84574324 100644
 =2D-- a/drivers/hwmon/w83627ehf.c
 +++ b/drivers/hwmon/w83627ehf.c
-@@ -1694,7 +1694,7 @@ static const struct hwmon_chip_info w83627ehf_chip_i=
-nfo =3D {
- 	.info =3D w83627ehf_info,
- };
+@@ -1705,20 +1705,12 @@ static int __init w83627ehf_probe(struct platform_=
+device *pdev)
+ 	struct device *hwmon_dev;
 
--static int w83627ehf_probe(struct platform_device *pdev)
-+static int __init w83627ehf_probe(struct platform_device *pdev)
- {
- 	struct device *dev =3D &pdev->dev;
- 	struct w83627ehf_sio_data *sio_data =3D dev_get_platdata(dev);
-@@ -2057,7 +2057,6 @@ static struct platform_driver w83627ehf_driver =3D {
- 		.name	=3D DRVNAME,
- 		.pm	=3D W83627EHF_DEV_PM_OPS,
- 	},
--	.probe		=3D w83627ehf_probe,
- 	.remove		=3D w83627ehf_remove,
- };
-
-@@ -2150,8 +2149,7 @@ static int __init w83627ehf_find(int sioaddr, unsign=
-ed short *addr,
- /*
-  * when Super-I/O functions move to a separate file, the Super-I/O
-  * bus will manage the lifetime of the device and this module will only k=
-eep
-- * track of the w83627ehf driver. But since we platform_device_alloc(), w=
-e
-- * must keep track of the device
-+ * track of the w83627ehf driver.
-  */
- static struct platform_device *pdev;
-
-@@ -2159,7 +2157,10 @@ static int __init sensors_w83627ehf_init(void)
- {
- 	int err;
- 	unsigned short address;
--	struct resource res;
-+	struct resource res =3D {
-+		.name	=3D DRVNAME,
-+		.flags	=3D IORESOURCE_IO,
-+	};
- 	struct w83627ehf_sio_data sio_data;
-
- 	/*
-@@ -2173,55 +2174,17 @@ static int __init sensors_w83627ehf_init(void)
- 	    w83627ehf_find(0x4e, &address, &sio_data))
- 		return -ENODEV;
-
--	err =3D platform_driver_register(&w83627ehf_driver);
--	if (err)
+ 	res =3D platform_get_resource(pdev, IORESOURCE_IO, 0);
+-	if (!request_region(res->start, IOREGION_LENGTH, DRVNAME)) {
+-		err =3D -EBUSY;
+-		dev_err(dev, "Failed to request region 0x%lx-0x%lx\n",
+-			(unsigned long)res->start,
+-			(unsigned long)res->start + IOREGION_LENGTH - 1);
 -		goto exit;
--
--	pdev =3D platform_device_alloc(DRVNAME, address);
--	if (!pdev) {
--		err =3D -ENOMEM;
--		pr_err("Device allocation failed\n");
--		goto exit_unregister;
 -	}
--
--	err =3D platform_device_add_data(pdev, &sio_data,
--				       sizeof(struct w83627ehf_sio_data));
--	if (err) {
--		pr_err("Platform data allocation failed\n");
--		goto exit_device_put;
--	}
--
--	memset(&res, 0, sizeof(res));
--	res.name =3D DRVNAME;
- 	res.start =3D address + IOREGION_OFFSET;
- 	res.end =3D address + IOREGION_OFFSET + IOREGION_LENGTH - 1;
--	res.flags =3D IORESOURCE_IO;
++	if (!devm_request_region(dev, res->start, IOREGION_LENGTH, DRVNAME))
++		return -EBUSY;
 
- 	err =3D acpi_check_resource_conflict(&res);
+-	data =3D devm_kzalloc(&pdev->dev, sizeof(struct w83627ehf_data),
+-			    GFP_KERNEL);
+-	if (!data) {
+-		err =3D -ENOMEM;
+-		goto exit_release;
+-	}
++	data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
+
+ 	data->addr =3D res->start;
+ 	mutex_init(&data->lock);
+@@ -1882,7 +1874,7 @@ static int __init w83627ehf_probe(struct platform_de=
+vice *pdev)
+
+ 	err =3D superio_enter(sio_data->sioreg);
  	if (err)
--		goto exit_device_put;
+-		goto exit_release;
 +		return err;
 
--	err =3D platform_device_add_resources(pdev, &res, 1);
--	if (err) {
--		pr_err("Device resource addition failed (%d)\n", err);
--		goto exit_device_put;
--	}
-+	pdev =3D platform_create_bundle(&w83627ehf_driver, w83627ehf_probe, &res=
-, 1, &sio_data,
-+				      sizeof(struct w83627ehf_sio_data));
-
--	/* platform_device_add calls probe() */
--	err =3D platform_device_add(pdev);
--	if (err) {
--		pr_err("Device addition failed (%d)\n", err);
--		goto exit_device_put;
+ 	/* Read VID value */
+ 	if (sio_data->kind =3D=3D w83667hg || sio_data->kind =3D=3D w83667hg_b) =
+{
+@@ -1951,26 +1943,7 @@ static int __init w83627ehf_probe(struct platform_d=
+evice *pdev)
+ 							 data,
+ 							 &w83627ehf_chip_info,
+ 							 w83627ehf_groups);
+-	if (IS_ERR(hwmon_dev)) {
+-		err =3D PTR_ERR(hwmon_dev);
+-		goto exit_release;
 -	}
 -
 -	return 0;
 -
--exit_device_put:
--	platform_device_put(pdev);
--exit_unregister:
--	platform_driver_unregister(&w83627ehf_driver);
+-exit_release:
+-	release_region(res->start, IOREGION_LENGTH);
 -exit:
 -	return err;
-+	return PTR_ERR_OR_ZERO(pdev);
+-}
+-
+-static int w83627ehf_remove(struct platform_device *pdev)
+-{
+-	struct w83627ehf_data *data =3D platform_get_drvdata(pdev);
+-
+-	release_region(data->addr, IOREGION_LENGTH);
+-
+-	return 0;
++	return PTR_ERR_OR_ZERO(hwmon_dev);
  }
 
- static void __exit sensors_w83627ehf_exit(void)
+ #ifdef CONFIG_PM
+@@ -2057,7 +2030,6 @@ static struct platform_driver w83627ehf_driver =3D {
+ 		.name	=3D DRVNAME,
+ 		.pm	=3D W83627EHF_DEV_PM_OPS,
+ 	},
+-	.remove		=3D w83627ehf_remove,
+ };
+
+ /* w83627ehf_find() looks for a '627 in the Super-I/O config space */
 =2D-
 2.20.1
 
