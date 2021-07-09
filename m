@@ -2,132 +2,148 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F3F0C07E9B
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 18:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F03BFC07E99
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 20:55:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68A48613BE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 18:45:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7368613BF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jul 2021 20:55:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbhGISsQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Jul 2021 14:48:16 -0400
-Received: from mout.gmx.net ([212.227.17.21]:35043 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230173AbhGISsQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 9 Jul 2021 14:48:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1625856318;
-        bh=rGLVj4vDXRp4MVHS59LdfVoW4hm1SeuEwY8sZVvP+4Q=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=MrSWWngFufwe+IgRhDapEJu6eG16drr4SxYqny3Oi6n+HiNEjvBjSvMWbs1DVg4Kv
-         y18XWtrdAwKMmeaKhxMPez9NGTQ+ruBmsxBQULgkFbfc26aAohMBusgwMxMlARmGwI
-         JPWSgVOLdMHJEfBsele5ClUfbIti/uFYCaSLz4Nw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([79.242.181.110]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M5wPb-1m4vV03Xi7-007YQv; Fri, 09 Jul 2021 20:45:17 +0200
-From:   W_Armin@gmx.de
-To:     linux@roeck-us.net
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH 3/3] hwmon: (w83627ehf) Switch to SIMPLE_DEV_PM_OPS
-Date:   Fri,  9 Jul 2021 20:45:01 +0200
-Message-Id: <20210709184501.6546-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210709184501.6546-1-W_Armin@gmx.de>
-References: <20210709184501.6546-1-W_Armin@gmx.de>
+        id S230116AbhGIU6X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Jul 2021 16:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbhGIU6W (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jul 2021 16:58:22 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83B9C0613DD;
+        Fri,  9 Jul 2021 13:55:37 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 53-20020a9d0eb80000b02904b6c4d33e84so2096852otj.13;
+        Fri, 09 Jul 2021 13:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tvcIHr6YH3zNc1GXtO/udnQUIauq93syHMnkj2AT5yo=;
+        b=t6mHzxxtqy0vJAmL6L+f/Ht3qrCAA0aIREZl9tHbj2WWwfQuqj9LcfZrfRjHCX/GML
+         yxhefakOoCRweoOhwtqHcuutkEhBNLlZBFWPEJiubfjnHEWzns1aL1tVBpFN8zLYAQ4I
+         eC7j6TEMDsBrvPxhxp39JnFhFR3pBDh2JgAdjhj6F22Xm8N0dt7VDDXZsFAw4/EBMt+W
+         RLsL4GrE3liR3l0kvLk0AHHHz58R1idcxtiF/UW6lgGWN1ok4+JTAac0cUxUxk4ihexY
+         nwYYL1M0GUBKeojqOhu7TeWPLCtjaoSYfAb9U/Ek2iomHGG4p4xWhSzB1WtwQFgd8X5f
+         4raw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=tvcIHr6YH3zNc1GXtO/udnQUIauq93syHMnkj2AT5yo=;
+        b=WLcroy3L4VPH4K54ZCxfT3LMmBAYaniV8lgFvhz8y+BS1tPgoa05WdHNg7s61Vh4CH
+         Et4MtjTRD/lVrqDN9drDnu43beOsr3tv6jsz8YOsl2Jg2aSWzyk5U57IB8LeVoz9JRHA
+         LvwAbB1omZH1MRSCXF/r3CFc1x2WE8N8uJ2m4Shbi8dbhAeQWofnYAlEzM8UPcX1zlqY
+         p4cPuTCQFs/XIQ6FTbcSMEZkZ2ZEExCZgHSrnmz9FESIoVOG9Am+At25mqgyDo0CltD3
+         ylKwpAOKGm1fTKahLZBK0p2aW5t/RixBm+LJJKYSNufvEsV7PUWGWfapy104ZpHU4Gqs
+         BJwQ==
+X-Gm-Message-State: AOAM532lvDV5/ZOC/0lOo4UXirrm50KVJ1dGPxd31xFsyBsjFswbPiy8
+        qE4UnmQFwOt+GVQ7e4UqPIRGMn8L6wU=
+X-Google-Smtp-Source: ABdhPJy1JnE/4SHLBkptcotSgu7WjVfaOEmaGy+bwO8LwwsUWebyQZVQUXyv3lXjyUMijKPiHSRGaw==
+X-Received: by 2002:a05:6830:1e6d:: with SMTP id m13mr18788758otr.186.1625864137331;
+        Fri, 09 Jul 2021 13:55:37 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u132sm1036990oib.29.2021.07.09.13.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jul 2021 13:55:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 9 Jul 2021 13:55:32 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus/bpa-rs600): Support BPD-RS600
+Message-ID: <20210709205532.GA2995848@roeck-us.net>
+References: <20210708220618.23576-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:y6mHfLEhfV1wAFF7fPTMY4HjMDWwq+0GKBeP74p/3iA2CRdwfOl
- hrQnlFTEi6E/6wQ9eDPYZCNV48zBQox7mprTjoKuuKatVSPKB87MWFftatkZzWTNJIOIwnL
- fRlHz9BZwI9T4FUiMcOWTj9o8Bj3jTnsRrLPBAC3Jnvo0CcaF68QGlWaymAt56m9qIEYcgn
- sEU7M4Gh04iaI0CEfwOKw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MiDXUwkujIA=:GWmaa6qnwWnDshKO2nVOzl
- CAbrHYRnUtEJCcdbPmPDYWfycDBcSeBo08/Y+YAvVuPKZmJA1p8EHUBRpskc+5ZLvWBbRkYRl
- 6B2mni7Yo0mZW3mhC71aqSoXjrSCkIYwPldmUoRHpr5pGOUTtNF8SDOLy48cWi2aTqA5fP/YA
- +InKTIJ5CdEZTporZgRSd7xtZAtQCoJIkAaBGLUtToEKhnAnvIkXowC6AR28v4bblgFgOxwHj
- fKNvtMNzmW94lkPaKHX9mQevO1M9sc3BmXJgap2KqIJeD1Jmm1jFhI8tdOz1+x7puBIr+JhFq
- cPTTa/lWy8pI2Mu3EOaelH15wOxHMG2/6MV4d449rT/uXG5x2fTJwpTVJ22xReoSK/5Sw2wZX
- 0S8F/hQUE+u+5YnWWIlIVNgMUbslLr4TgS++eZYmi4+lCq7MTFZJ4obih6YES8WJemecWlWA+
- qeK02CLUjTTVQIZtRJIO4SDsAwuGLJKP4OPS7m9L4lB7VdDP5hTDIoQVh0t6t3ZwlzrClKWeH
- 87wAKRPKIpf0bEKKblwzJRD2f4NOVqkrM1Re8CojOjfW7W0+szer2Da79KkTaUCXdQfqpsfgd
- xgpamqntAoAPfAnQHaLONVbQVSohHyq3FrvYHPEGe7zNd4gic9zMPRbHQbv7x8Js2OwUKhMgu
- qaNVH6WkCEsJKQyyE9rerfmk9uFff+ILJC06yXulkilEONQg42JH38USoHcJQsCfjem6eoOsq
- pULtKxA7ucoZ3skzxecHpeBIgGhjV6By2od1tEpsTUwpW53IttQDNkza5ZKViTIm9Q/jrhHU2
- JqOTWP+NGpx8JXsPFLlf/dNc0KmUZk9kYGM0hyov+FKp0j6v9GYRqBG1q1xCUmaQ1H354fsoA
- n70JpHhNL0itg3TXr1P/cdmMd2GQ3i9YkiWQGTOgTnTSuT9PRgX9A1JDfuvAjxmWovQsTv4HT
- nSSBnZ6fwG0QaAmCS+y+Ej7hNeQMimvJk/KWIqTi+rR+bVg6eG180FPVw+wB3J3HJpf+jCvdN
- GF3cMXfSikCqYEwHrYPye1VS2XRg8DlRUI185Q1ePSmFvcQWPML1/cXONKHjjPLIFr6I1aB1K
- tdZNcF9V8MpEF1Y9NDwtbBqp1yn0vGUPAQz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210708220618.23576-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+On Fri, Jul 09, 2021 at 10:06:18AM +1200, Chris Packham wrote:
+> The BPD-RS600 is the DC version of the BPA-RS600. The PMBUS interface is
+> the same between the two models. Keep the same compatible string but
+> accept either BPA-RS600 or BPD-RS600 in the PMBUS_MFR_MODEL.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Use SIMPLE_DEV_PM_OPS() to also assign poweroff
-and thaw callbacks. Remove the now obsolete checking
-of CONFIG_PM too.
+Applied.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/w83627ehf.c | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 19af84574324..243b9bd8d64f 100644
-=2D-- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1946,8 +1946,7 @@ static int __init w83627ehf_probe(struct platform_de=
-vice *pdev)
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
-
--#ifdef CONFIG_PM
--static int w83627ehf_suspend(struct device *dev)
-+static int __maybe_unused w83627ehf_suspend(struct device *dev)
- {
- 	struct w83627ehf_data *data =3D w83627ehf_update_device(dev);
-
-@@ -1958,7 +1957,7 @@ static int w83627ehf_suspend(struct device *dev)
- 	return 0;
- }
-
--static int w83627ehf_resume(struct device *dev)
-+static int __maybe_unused w83627ehf_resume(struct device *dev)
- {
- 	struct w83627ehf_data *data =3D dev_get_drvdata(dev);
- 	int i;
-@@ -2013,22 +2012,12 @@ static int w83627ehf_resume(struct device *dev)
- 	return 0;
- }
-
--static const struct dev_pm_ops w83627ehf_dev_pm_ops =3D {
--	.suspend =3D w83627ehf_suspend,
--	.resume =3D w83627ehf_resume,
--	.freeze =3D w83627ehf_suspend,
--	.restore =3D w83627ehf_resume,
--};
--
--#define W83627EHF_DEV_PM_OPS	(&w83627ehf_dev_pm_ops)
--#else
--#define W83627EHF_DEV_PM_OPS	NULL
--#endif /* CONFIG_PM */
-+static SIMPLE_DEV_PM_OPS(w83627ehf_dev_pm_ops, w83627ehf_suspend, w83627e=
-hf_resume);
-
- static struct platform_driver w83627ehf_driver =3D {
- 	.driver =3D {
- 		.name	=3D DRVNAME,
--		.pm	=3D W83627EHF_DEV_PM_OPS,
-+		.pm	=3D &w83627ehf_dev_pm_ops,
- 	},
- };
-
-=2D-
-2.20.1
-
+> ---
+>  drivers/hwmon/pmbus/bpa-rs600.c | 22 +++++++++++++++-------
+>  1 file changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/bpa-rs600.c b/drivers/hwmon/pmbus/bpa-rs600.c
+> index 2be69fedfa36..d205b41540ce 100644
+> --- a/drivers/hwmon/pmbus/bpa-rs600.c
+> +++ b/drivers/hwmon/pmbus/bpa-rs600.c
+> @@ -21,6 +21,8 @@
+>  #define BPARS600_MFR_IOUT_MAX	0xa6
+>  #define BPARS600_MFR_POUT_MAX	0xa7
+>  
+> +enum chips { bpa_rs600, bpd_rs600 };
+> +
+>  static int bpa_rs600_read_byte_data(struct i2c_client *client, int page, int reg)
+>  {
+>  	int ret;
+> @@ -146,11 +148,19 @@ static struct pmbus_driver_info bpa_rs600_info = {
+>  	.read_word_data = bpa_rs600_read_word_data,
+>  };
+>  
+> +static const struct i2c_device_id bpa_rs600_id[] = {
+> +	{ "bpa-rs600", bpa_rs600 },
+> +	{ "bpd-rs600", bpd_rs600 },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(i2c, bpa_rs600_id);
+> +
+>  static int bpa_rs600_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+>  	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
+>  	int ret;
+> +	const struct i2c_device_id *mid;
+>  
+>  	if (!i2c_check_functionality(client->adapter,
+>  				     I2C_FUNC_SMBUS_READ_BYTE_DATA
+> @@ -164,7 +174,11 @@ static int bpa_rs600_probe(struct i2c_client *client)
+>  		return ret;
+>  	}
+>  
+> -	if (strncmp(buf, "BPA-RS600", 8)) {
+> +	for (mid = bpa_rs600_id; mid->name[0]; mid++) {
+> +		if (!strncasecmp(buf, mid->name, strlen(mid->name)))
+> +			break;
+> +	}
+> +	if (!mid->name[0]) {
+>  		buf[ret] = '\0';
+>  		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
+>  		return -ENODEV;
+> @@ -173,12 +187,6 @@ static int bpa_rs600_probe(struct i2c_client *client)
+>  	return pmbus_do_probe(client, &bpa_rs600_info);
+>  }
+>  
+> -static const struct i2c_device_id bpa_rs600_id[] = {
+> -	{ "bpars600", 0 },
+> -	{},
+> -};
+> -MODULE_DEVICE_TABLE(i2c, bpa_rs600_id);
+> -
+>  static const struct of_device_id __maybe_unused bpa_rs600_of_match[] = {
+>  	{ .compatible = "blutek,bpa-rs600" },
+>  	{},
