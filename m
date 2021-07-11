@@ -2,118 +2,124 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22AC8C07E96
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Jul 2021 04:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A777AC07E96
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Jul 2021 05:22:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0DAC6127C
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Jul 2021 04:58:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 828C461242
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Jul 2021 05:22:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbhGKFBX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Jul 2021 01:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
+        id S229660AbhGKFZl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Jul 2021 01:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbhGKFBX (ORCPT
+        with ESMTP id S229523AbhGKFZl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Jul 2021 01:01:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12062C0613DD;
-        Sat, 10 Jul 2021 21:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=UxQ2dIQx/zfnKbmU0OxyUOKsymrLJGr1c/xiyGR4OGM=; b=npej3SVbfKj9hGliI+29YjHDDk
-        CHyP4kh+IWGy3lrtzDExa6t8RFqr7ohRqjPcpsOhLu/ydlDTPU/Zr5C03rzKyoE4xyvQ1jd7KYGZ4
-        wZkdtv6AoM3Nlm8z35OeVgExUvRMvMU3bnGofsaf0wvy4XLSfI4Frd0swX+B2GJwnbKiTPzwwh1Ew
-        loDcYV0rDrMYdqabubTaA9xKmTh0PytgNTxhMz5hgZa40Pg+ItJuvbFjBZknJFdOv/CYqWi1vDrO9
-        Bpf1Zm5hMvf40WpcaghlVUPaRY/dDtZB97FeHMfbH9+vC7SPTUWk97I2VOvFYnyCDopXTKHiQImCG
-        LqsKQkAw==;
-Received: from [2601:1c0:6280:3f0::a22f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m2RY2-004ZiS-Ja; Sun, 11 Jul 2021 04:58:34 +0000
-Subject: Re: [PATCH v3 2/3] hwmon: da9063: HWMON driver
-To:     Vincent Pelletier <plr.vincent@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Sun, 11 Jul 2021 01:25:41 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82481C0613DD;
+        Sat, 10 Jul 2021 22:22:54 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id j199so12955856pfd.7;
+        Sat, 10 Jul 2021 22:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BK/4WU3GBFs/AezFO+adsAQBSfHNPz3jea6eZYOYCV0=;
+        b=aaZZ6G7WyxGsbXr/hkPwSt/e4rCg3qu7dJwG7RaAEuoQ8nT69oLTEdg9ShpsuM/ZlQ
+         W5m5y9nlq+MrqN7Pthfh6lMhjAZLpzzTV0mcapIycXPU+mVP4o7Q4uW2bG5QoEJmUpwM
+         P5vC2SPqlcQadlgJ/Nt6YEqgZMwpiicI+CfKBCJOrpCUWwIUP+h14XCNXRxR/YWFU3cD
+         8o+4s9zRA1cJ/ZSCZ0f3ZBPs0qa2lz54HQyYu5Oead3YRqOa0AB4ITyLe3ywTYJBARG/
+         RIKIaMZg1gc2LKDOY4LrEQ+5X/GiP8C1IGRVwYToz2HXtABvmDRyMGE/mHvoZS9fJftv
+         2uGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BK/4WU3GBFs/AezFO+adsAQBSfHNPz3jea6eZYOYCV0=;
+        b=PqV4pIEKaKisUPGBPiRb+1u2VXLR1zhzOpn2vRPCXg4U/h+Gvt3BjAqPqeXbIemSYf
+         TdjfKOM/6mjEWagSP1EdvowzUF7jX9SkxsXgWm57g95+SXcHcclot86zTDIKTpRsICzp
+         v2cAHlUv1YVuDlNPOCYac8IJSJosIgqplO2Dg7ykuZU/1qpchoX4BVwcxsVbLjZvyyhL
+         73Jr7I0uikVnrPHeqe12nPXKXSyrskjAF/MQTQUIic5CgpaHaDnazKn9Qoc0gIsPao84
+         ZbqOs6CGWgNa2rDw3Xc8/78RDEHQbvPH0sG4+93kZJ6WhjnEmX5UgtaYe5Ic2gnoKa56
+         ga9A==
+X-Gm-Message-State: AOAM5337FTtKHQEpJHJvnTtnQ24PLitMR/aJXemsoXwebHrI2VufoCB7
+        VV1d4jW8T2NEm9HtChvI+0E=
+X-Google-Smtp-Source: ABdhPJzo7wfN70TYuqCqvFuNZ81jgFX1XnridM4He4othQLsZ6OVjMSqMdcennKW1HgrILwQqY6UbQ==
+X-Received: by 2002:a63:450e:: with SMTP id s14mr37600136pga.312.1625980973763;
+        Sat, 10 Jul 2021 22:22:53 -0700 (PDT)
+Received: from localhost.lan (p1284205-ipngn14601marunouchi.tokyo.ocn.ne.jp. [153.205.193.205])
+        by smtp.gmail.com with ESMTPSA id l20sm16780941pjq.24.2021.07.10.22.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jul 2021 22:22:53 -0700 (PDT)
+Received: from localhost (localhost [IPv6:::1])
+        by localhost.lan (Postfix) with ESMTPSA id 09E66902A99;
+        Sun, 11 Jul 2021 05:22:51 +0000 (GMT)
+Date:   Sun, 11 Jul 2021 05:22:50 +0000
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Support Opensource <support.opensource@diasemi.com>,
         Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
+Subject: Re: [PATCH v3 2/3] hwmon: da9063: HWMON driver
+Message-ID: <20210711052250.09828831@gmail.com>
+In-Reply-To: <f9113bf9-ab00-d0b1-cbc2-f4107b93e727@infradead.org>
 References: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
- <2c24ef5953401e80d92c907704bffeff1d024de0.1625662290.git.plr.vincent@gmail.com>
- <20210710160813.GA3560663@roeck-us.net> <20210711025502.347af8ff@gmail.com>
- <20210711044419.7b1c00f8@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <f9113bf9-ab00-d0b1-cbc2-f4107b93e727@infradead.org>
-Date:   Sat, 10 Jul 2021 21:58:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        <2c24ef5953401e80d92c907704bffeff1d024de0.1625662290.git.plr.vincent@gmail.com>
+        <20210710160813.GA3560663@roeck-us.net>
+        <20210711025502.347af8ff@gmail.com>
+        <20210711044419.7b1c00f8@gmail.com>
+        <f9113bf9-ab00-d0b1-cbc2-f4107b93e727@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20210711044419.7b1c00f8@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/10/21 9:44 PM, Vincent Pelletier wrote:
-> On Sun, 11 Jul 2021 02:55:02 +0000, Vincent Pelletier <plr.vincent@gmail.com> wrote:
->> On Sat, 10 Jul 2021 09:08:13 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
->>> Unnecessary include.
->> [...]
->>> I don't immediately see where this include is needed. Is this a
->>> leftover ?
->> [...]
->>> Same here.
->>
->> Are there ways to systematically tell which includes are useless
->> besides commenting them out all and uncommenting until it compiles ?
->> (if that is even a good idea)
+Hello,
+
+On Sat, 10 Jul 2021 21:58:33 -0700, Randy Dunlap <rdunlap@infradead.org> wrote:
+> > Beyond what you suggested this also gets rid of:
+> > - seems reasonable:
+> >    - linux/delay.h
+> >    - linux/init.h
+> >    - linux/slab.h
+> > - looks suspicious to me:
+> >    - linux/err.h, which means the error constants are indirectly
+> >      imported. Removing it feels brittle.
+> >    - linux/kernel.h, although to my surprise a lot of c files do not
+> >      include it.
+> > 
+> > By default I'll drop the former and keep the latter in the
+> > next version, please let me know if another combination is preferred.
+> >   
 > 
-> I tried this, just to get a baseline: the module compiles with just
->    linux/hwmon.h
->    linux/mfd/da9063/core.h
->    linux/module.h
->    linux/platform_device.h
->    linux/regmap.h
+> Hi,
 > 
-> Beyond what you suggested this also gets rid of:
-> - seems reasonable:
->    - linux/delay.h
->    - linux/init.h
->    - linux/slab.h
-> - looks suspicious to me:
->    - linux/err.h, which means the error constants are indirectly
->      imported. Removing it feels brittle.
->    - linux/kernel.h, although to my surprise a lot of c files do not
->      include it.
+> Please use Rule #1 from Documentation/process/submit-checklist.rst:
 > 
-> By default I'll drop the former and keep the latter in the
-> next version, please let me know if another combination is preferred.
+> 1) If you use a facility then #include the file that defines/declares
+>     that facility.  Don't depend on other header files pulling in ones
+>     that you use.
 > 
+> so if Enumbers (error numbers) are used, then #include the header file
+> for that.
 
-Hi,
+My mail was poorly phrased, sorry.
+I meant that I intend to drop the includes from the "seems reasonable"
+group, and to keep those from the "looks suspicious" group.
 
-Please use Rule #1 from Documentation/process/submit-checklist.rst:
-
-1) If you use a facility then #include the file that defines/declares
-    that facility.  Don't depend on other header files pulling in ones
-    that you use.
-
-
-so if Enumbers (error numbers) are used, then #include the header file
-for that.
-
-etc.
-
-thanks.
-
+Regards,
 -- 
-~Randy
-
+Vincent Pelletier
+GPG fingerprint 983A E8B7 3B91 1598 7A92 3845 CAC9 3691 4257 B0C1
