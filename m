@@ -2,128 +2,182 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21491C07E9C
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 06:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FCD7C11F66
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 11:59:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AAC861167
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 06:42:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34289610FA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 11:59:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbhGLGpG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Jul 2021 02:45:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41192 "EHLO mail.kernel.org"
+        id S232274AbhGLMB4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Jul 2021 08:01:56 -0400
+Received: from mga03.intel.com ([134.134.136.65]:40624 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236234AbhGLGm7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Jul 2021 02:42:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 568A361152;
-        Mon, 12 Jul 2021 06:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626071957;
-        bh=7/pLmnF+YKhsWzr6da5C8DpZEqIIGHYTU3pVCkbcCSw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lrdSp4TwaSP4Y1HVgTJoMBdeQlCZ7K9zY61twBKYj0LDSzTHg4ddtpalQ0Fpbngss
-         e/EhCCZU8Khuwcb7RdHlEGUWoc26yYE7zF3SGBD5QxZ7wgK5EfS7vb8qT87qdCOToq
-         zVn6IiPEqPrvX1KHgvXo9JdSeZNvZ7+x/3vpb3A4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 250/593] hwmon: (lm70) Use device_get_match_data()
-Date:   Mon, 12 Jul 2021 08:06:50 +0200
-Message-Id: <20210712060910.433390433@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210712060843.180606720@linuxfoundation.org>
-References: <20210712060843.180606720@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S231326AbhGLMBz (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 12 Jul 2021 08:01:55 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10042"; a="210007234"
+X-IronPort-AV: E=Sophos;i="5.84,232,1620716400"; 
+   d="scan'208";a="210007234"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 04:59:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,232,1620716400"; 
+   d="scan'208";a="652924401"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Jul 2021 04:59:05 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1m2uaX-000H0G-1z; Mon, 12 Jul 2021 11:59:05 +0000
+Date:   Mon, 12 Jul 2021 19:58:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ 00962bee9671c7bafb3d8c52c5b30a90449e33ba
+Message-ID: <60ec2e6a.wG6Xy9w15bNNj7dY%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 00962bee9671c7bafb3d8c52c5b30a90449e33ba  watchdog: bcm2835_wdt: consider system-power-controller property
 
-[ Upstream commit 6e09d75513d2670b7ab91ab3584fc5bcf2675a75 ]
+elapsed time: 725m
 
-Use the more modern API to get the match data out of the of match table.
-This saves some code, lines, and nicely avoids referencing the match
-table when it is undefined with configurations where CONFIG_OF=n.
+configs tested: 116
+configs skipped: 3
 
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: <linux-hwmon@vger.kernel.org>
-[robh: rework to use device_get_match_data()]
-Signed-off-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                             allmodconfig
+sh                           se7206_defconfig
+mips                      bmips_stb_defconfig
+powerpc                         wii_defconfig
+arm                         assabet_defconfig
+mips                        vocore2_defconfig
+nios2                               defconfig
+powerpc                 mpc8313_rdb_defconfig
+xtensa                          iss_defconfig
+sh                           se7343_defconfig
+powerpc                     akebono_defconfig
+ia64                                defconfig
+m68k                        mvme16x_defconfig
+mips                    maltaup_xpa_defconfig
+sh                   sh7724_generic_defconfig
+nios2                         10m50_defconfig
+mips                        bcm47xx_defconfig
+m68k                        mvme147_defconfig
+powerpc                      pmac32_defconfig
+powerpc                     powernv_defconfig
+powerpc                     ep8248e_defconfig
+powerpc                      arches_defconfig
+powerpc                      cm5200_defconfig
+x86_64                            allnoconfig
+xtensa                  cadence_csp_defconfig
+m68k                       m5208evb_defconfig
+powerpc                      walnut_defconfig
+sh                   sh7770_generic_defconfig
+csky                                defconfig
+arm                           viper_defconfig
+sh                     magicpanelr2_defconfig
+m68k                            q40_defconfig
+sh                               j2_defconfig
+arm                        realview_defconfig
+xtensa                           allyesconfig
+powerpc                 mpc836x_rdk_defconfig
+openrisc                            defconfig
+xtensa                  audio_kc705_defconfig
+mips                          rb532_defconfig
+powerpc                     kilauea_defconfig
+powerpc                        fsp2_defconfig
+arm                             rpc_defconfig
+mips                           ip32_defconfig
+m68k                          multi_defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210712
+i386                 randconfig-a004-20210712
+i386                 randconfig-a006-20210712
+i386                 randconfig-a001-20210712
+i386                 randconfig-a002-20210712
+i386                 randconfig-a003-20210712
+x86_64               randconfig-a005-20210712
+x86_64               randconfig-a004-20210712
+x86_64               randconfig-a003-20210712
+x86_64               randconfig-a002-20210712
+x86_64               randconfig-a006-20210712
+x86_64               randconfig-a001-20210712
+x86_64               randconfig-a013-20210711
+x86_64               randconfig-a012-20210711
+x86_64               randconfig-a015-20210711
+x86_64               randconfig-a014-20210711
+x86_64               randconfig-a016-20210711
+x86_64               randconfig-a011-20210711
+i386                 randconfig-a015-20210712
+i386                 randconfig-a014-20210712
+i386                 randconfig-a011-20210712
+i386                 randconfig-a013-20210712
+i386                 randconfig-a012-20210712
+i386                 randconfig-a016-20210712
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210712
+
 ---
- drivers/hwmon/lm70.c | 20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/hwmon/lm70.c b/drivers/hwmon/lm70.c
-index ae2b84263a44..40eab3349904 100644
---- a/drivers/hwmon/lm70.c
-+++ b/drivers/hwmon/lm70.c
-@@ -22,9 +22,9 @@
- #include <linux/hwmon.h>
- #include <linux/mutex.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/property.h>
- #include <linux/spi/spi.h>
- #include <linux/slab.h>
--#include <linux/of_device.h>
- #include <linux/acpi.h>
- 
- #define DRVNAME		"lm70"
-@@ -173,25 +173,15 @@ MODULE_DEVICE_TABLE(acpi, lm70_acpi_ids);
- 
- static int lm70_probe(struct spi_device *spi)
- {
--	const struct of_device_id *of_match;
- 	struct device *hwmon_dev;
- 	struct lm70 *p_lm70;
- 	int chip;
- 
--	of_match = of_match_device(lm70_of_ids, &spi->dev);
--	if (of_match)
--		chip = (int)(uintptr_t)of_match->data;
--	else {
--#ifdef CONFIG_ACPI
--		const struct acpi_device_id *acpi_match;
-+	if (dev_fwnode(&spi->dev))
-+		chip = (int)(uintptr_t)device_get_match_data(&spi->dev);
-+	else
-+		chip = spi_get_device_id(spi)->driver_data;
- 
--		acpi_match = acpi_match_device(lm70_acpi_ids, &spi->dev);
--		if (acpi_match)
--			chip = (int)(uintptr_t)acpi_match->driver_data;
--		else
--#endif
--			chip = spi_get_device_id(spi)->driver_data;
--	}
- 
- 	/* signaling is SPI_MODE_0 */
- 	if (spi->mode & (SPI_CPOL | SPI_CPHA))
--- 
-2.30.2
-
-
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
