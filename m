@@ -2,208 +2,247 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9872C07E99
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 14:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D58D9C07E99
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 14:57:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C724F61167
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 14:54:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF10961167
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 14:57:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbhGLO5X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Jul 2021 10:57:23 -0400
-Received: from mga14.intel.com ([192.55.52.115]:63695 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235268AbhGLO5X (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Jul 2021 10:57:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10043"; a="209809841"
-X-IronPort-AV: E=Sophos;i="5.84,234,1620716400"; 
-   d="scan'208";a="209809841"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 07:54:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,234,1620716400"; 
-   d="scan'208";a="629688553"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 12 Jul 2021 07:54:32 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1m2xKK-000H66-20; Mon, 12 Jul 2021 14:54:32 +0000
-Date:   Mon, 12 Jul 2021 22:54:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 3352a33e7f9c9b41e7f19b7386ce6e1cb2b7d77d
-Message-ID: <60ec5799.Tn+4ColP0K8oZJFE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S235194AbhGLPAm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Jul 2021 11:00:42 -0400
+Received: from mail-il1-f170.google.com ([209.85.166.170]:46031 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233784AbhGLPAm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 12 Jul 2021 11:00:42 -0400
+Received: by mail-il1-f170.google.com with SMTP id b6so10235193iln.12;
+        Mon, 12 Jul 2021 07:57:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WVxRJEnC1GdQvhchP0t++AaKpXBj2Uta5gjvaVcQ8l0=;
+        b=VWBFVgKqV7SrK3ZfhRciuI8UMbvjzmIEhF7dhUSiVDNI4a1o/wsovYG+/vVUZzwX/o
+         U+9ZDhvMyDnHX3i5B+cZLgPKPlpJ6CQE6i8z5bQGLYin45zrd7ZzpJXqn7c/lMfAWl0f
+         EiNnvj/9LRkwp8o1UDddzgqtglQiCmUgpyNM1taaJs7lGZzU1I0KBvz+fm85ebHX+dPS
+         MX1/CrAjvtb9xtyaIlYgmaJav3AAkGJxzhGIlbE5TD1jlR8ZMUB5i1gvcTR933niVrYh
+         /dak3CF/48UgxsYJz08lMFHuJmVLme8/iU94zPdM+XbVoEzYal9+I8D5A7iIEkRM84PR
+         GJNg==
+X-Gm-Message-State: AOAM531yQM4yQ7s+KZTVI2lTIA766r6GO7zmEcPuQVO8NlWIMsWdxee+
+        3eoGdjALJsBOcQmV9PB7921HLkE/OQ==
+X-Google-Smtp-Source: ABdhPJwTWG2XzaqVCYwc/OPCbgG1nfl/Hw3uzMQNldk0we+DPR76FQ6tAycpo/NEcC/HzOrTOHZPfA==
+X-Received: by 2002:a05:6e02:1a24:: with SMTP id g4mr4417167ile.260.1626101872563;
+        Mon, 12 Jul 2021 07:57:52 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id 15sm8238197ilt.66.2021.07.12.07.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jul 2021 07:57:51 -0700 (PDT)
+Received: (nullmailer pid 1919318 invoked by uid 1000);
+        Mon, 12 Jul 2021 14:57:49 -0000
+Date:   Mon, 12 Jul 2021 08:57:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Johannes Pointner <johannes.pointner@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: hwmon: Convert NTC thermistor to YAML
+Message-ID: <20210712145749.GA1911897@robh.at.kernel.org>
+References: <20210703173456.4002549-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210703173456.4002549-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 3352a33e7f9c9b41e7f19b7386ce6e1cb2b7d77d  hwmon: (w83627ehf) Remove w83627ehf_remove()
+On Sat, Jul 03, 2021 at 07:34:56PM +0200, Linus Walleij wrote:
+> This converts the NTC thermistor DT bindings to YAML. Some care had to
+> be taken since I had to add some illustrations to make the connection
+> layouts graspable.
+> 
+> Cc: Javier Martinez Canillas <javier@dowhile0.org>
+> Cc: Johannes Pointner <johannes.pointner@gmail.com>
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - Realize I need to CC devicetree@vger.kernel.org on this.
+> - Fix Javier's mail address.
+> - Drop Naveen's mail (bouncing)
+> ---
+>  .../bindings/hwmon/ntc-thermistor.yaml        | 142 ++++++++++++++++++
+>  .../bindings/hwmon/ntc_thermistor.txt         |  44 ------
+>  2 files changed, 142 insertions(+), 44 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml b/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
+> new file mode 100644
+> index 000000000000..87589da631c9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
+> @@ -0,0 +1,142 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ntc-thermistor.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NTC thermistor temperature sensors
+> +
+> +maintainers:
+> +  - Naveen Krishna Chatradhi <ch.naveen@samsung.com>
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +
+> +description: |
+> +  Thermistors with negative temperature coefficient (NTC) are resistors that
+> +  vary in resistance in an often non-linear way in relation to temperature.
+> +  The negative temperature coefficient means that the resistance decreases
+> +  as the temperature rises. Since the relationship between resistance and
+> +  temperature is non-linear, software drivers most often need to use a look
+> +  up table and interpolation to get from resistance to temperature.
+> +
+> +  When used in practice, a thermistor is often connected between ground, a
+> +  pull-up resistor or/and a pull-down resistor and a fixed voltage like this:
+> +
+> +      + e.g. 5V = pull-up voltage (puv)
+> +      |
+> +     +-+
+> +     | |
+> +     | | Pull-up resistor
+> +     | | (puo)
+> +     +-+
+> +      |-------------------------o
+> +     +-+ |                      ^
+> +     | |/                       |
+> +     | /                        |
+> +     |/| Thermistor             | Measured voltage (mv)
+> +     / |                        | "connected ground"
+> +    /| |                        |
+> +     +-+                        |
+> +      |-------------------------o
+> +     +-+                        ^
+> +     | |                        |
+> +     | | Pull-down resistor     | Measured voltage (mv)
+> +     | | (pdo)                  | "connected positive"
+> +     +-+                        |
+> +      |                         |
+> +      |                         v
+> +      + GND                     GND
+> +
+> +  The arrangements of where we measure the voltage over the thermistor are
+> +  called "connected ground" and "connected positive" and shall be understood as
+> +  the cases when either pull-up or pull-down resistance is zero.
+> +
+> +  If the pull-up resistance is 0 one end of the thermistor is connected to the
+> +  positive voltage and we get the thermistor on top of a pull-down resistor
+> +  and we take the measure between the thermistor and the pull-down resistor.
+> +
+> +  Conversely if the pull-down resistance is zero, one end of the thermistor is
+> +  connected to ground and we get the thermistor under the pull-up resistor
+> +  and we take the measure between the pull-up resistor and the thermistor.
+> +
+> +  We can use both pull-up and pull-down resistors at the same time, and then
+> +  the figure illustrates where the voltage will be measured for the "connected
+> +  ground" and "connected positive" cases.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^thermistor(.*)?$"
+> +
+> +  compatible:
+> +    oneOf:
+> +      - const: epcos,b57330v2103
+> +      - const: epcos,b57891s0103
+> +      - const: murata,ncp15wb473
+> +      - const: murata,ncp18wb473
+> +      - const: murata,ncp21wb473
+> +      - const: murata,ncp03wb473
+> +      - const: murata,ncp15wl333
+> +      - const: murata,ncp03wf104
+> +      - const: murata,ncp15xh103
 
-elapsed time: 720m
+All these can be 1 enum.
 
-configs tested: 142
-configs skipped: 3
+> +      # Deprecated "ntp," compatible strings
+> +      - const: ntc,ncp15wb473
+> +        deprecated: true
+> +      - const: ntc,ncp18wb473
+> +        deprecated: true
+> +      - const: ntc,ncp21wb473
+> +        deprecated: true
+> +      - const: ntc,ncp03wb473
+> +        deprecated: true
+> +      - const: ntc,ncp15wl333
+> +        deprecated: true
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+And these too.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                     cu1830-neo_defconfig
-m68k                        mvme16x_defconfig
-powerpc                      ppc40x_defconfig
-ia64                             alldefconfig
-s390                                defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                      malta_kvm_defconfig
-mips                           jazz_defconfig
-ia64                          tiger_defconfig
-mips                        qi_lb60_defconfig
-powerpc                    ge_imp3a_defconfig
-sh                          polaris_defconfig
-sparc                            alldefconfig
-i386                                defconfig
-arm                  colibri_pxa270_defconfig
-sh                   sh7724_generic_defconfig
-nios2                         10m50_defconfig
-mips                        bcm47xx_defconfig
-m68k                        mvme147_defconfig
-powerpc                      pmac32_defconfig
-arm                        clps711x_defconfig
-powerpc                    klondike_defconfig
-arm                           omap1_defconfig
-arm                           spitz_defconfig
-sh                   rts7751r2dplus_defconfig
-powerpc                     powernv_defconfig
-powerpc                     ep8248e_defconfig
-powerpc                      arches_defconfig
-powerpc                      cm5200_defconfig
-x86_64                            allnoconfig
-xtensa                  cadence_csp_defconfig
-m68k                       m5208evb_defconfig
-powerpc                      walnut_defconfig
-sh                   sh7770_generic_defconfig
-arm                           viper_defconfig
-sh                     magicpanelr2_defconfig
-m68k                            q40_defconfig
-sh                               j2_defconfig
-arm                        realview_defconfig
-i386                             alldefconfig
-powerpc                 mpc8540_ads_defconfig
-m68k                         apollo_defconfig
-arm                          pcm027_defconfig
-csky                                defconfig
-openrisc                  or1klitex_defconfig
-mips                        nlm_xlr_defconfig
-arm                        spear3xx_defconfig
-powerpc                        fsp2_defconfig
-arm                             rpc_defconfig
-mips                          rb532_defconfig
-mips                           ip32_defconfig
-m68k                          multi_defconfig
-arm                          gemini_defconfig
-sparc                               defconfig
-sh                             espt_defconfig
-um                                  defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210712
-i386                 randconfig-a004-20210712
-i386                 randconfig-a006-20210712
-i386                 randconfig-a001-20210712
-i386                 randconfig-a002-20210712
-i386                 randconfig-a003-20210712
-x86_64               randconfig-a013-20210711
-x86_64               randconfig-a012-20210711
-x86_64               randconfig-a015-20210711
-x86_64               randconfig-a014-20210711
-x86_64               randconfig-a016-20210711
-x86_64               randconfig-a011-20210711
-i386                 randconfig-a015-20210712
-i386                 randconfig-a014-20210712
-i386                 randconfig-a011-20210712
-i386                 randconfig-a013-20210712
-i386                 randconfig-a012-20210712
-i386                 randconfig-a016-20210712
-x86_64               randconfig-a005-20210712
-x86_64               randconfig-a004-20210712
-x86_64               randconfig-a003-20210712
-x86_64               randconfig-a002-20210712
-x86_64               randconfig-a006-20210712
-x86_64               randconfig-a001-20210712
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-x86_64                    rhel-8.3-kselftests
+> +
+> +  # See /schemas/thermal/thermal-sensor.yaml for details
 
-clang tested configs:
-x86_64               randconfig-b001-20210712
-x86_64               randconfig-a005-20210711
-x86_64               randconfig-a004-20210711
-x86_64               randconfig-a002-20210711
-x86_64               randconfig-a003-20210711
-x86_64               randconfig-a006-20210711
-x86_64               randconfig-a001-20210711
-x86_64               randconfig-a013-20210712
-x86_64               randconfig-a014-20210712
-x86_64               randconfig-a015-20210712
-x86_64               randconfig-a012-20210712
-x86_64               randconfig-a016-20210712
-x86_64               randconfig-a011-20210712
+Drop. (I hope to generate documentation from the schema and 
+automagically create references/links.)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +  "#thermal-sensor-cells":
+> +    description: Thermal sensor cells if used for thermal sensoring.
+> +    const: 0
+> +
+> +  pullup-uv:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Pull-up voltage in micro volts. Must always be specified.
+> +
+> +  pullup-ohm:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Pull-up resistance in ohms. Must always be specified, even
+> +      if zero.
+> +
+> +  pulldown-ohm:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Pull-down resistance in ohms. Must always be specified, even
+> +      if zero.
+> +
+> +  connected-positive:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: Indicates how the thermistor is connected in series with
+> +      a pull-up and/or a pull-down resistor. See the description above for
+> +      an illustration. If this flag is NOT specified, the thermistor is assumed
+> +      to be connected-ground, which usually means a pull-down resistance of
+> +      zero but complex arrangements are possible.
+> +
+> +  # See /schemas/iio/adc/adc.yaml
+> +  io-channels:
+> +    maxItems: 1
+> +    description: IIO ADC channel to read the voltage over the resistor. Must
+> +      always be specified.
+> +
+> +required:
+> +  - compatible
+> +  - pullup-uv
+> +  - pullup-ohm
+> +  - pulldown-ohm
+> +  - io-channels
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    thermistor0 {
+> +      compatible = "murata,ncp18wb473";
+> +      io-channels = <&gpadc 0x06>;
+> +      pullup-uv = <1800000>;
+> +      pullup-ohm = <220000>;
+> +      pulldown-ohm = <0>;
+> +      #thermal-sensor-cells = <0>;
+> +    };
