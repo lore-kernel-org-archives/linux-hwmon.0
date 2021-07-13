@@ -2,34 +2,43 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA8D0C07E99
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 22:12:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7BFDC07E96
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Jul 2021 05:02:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D465161206
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jul 2021 22:12:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6BFB61249
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Jul 2021 05:02:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbhGLWOu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Jul 2021 18:14:50 -0400
-Received: from mga04.intel.com ([192.55.52.120]:34416 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232163AbhGLWOu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Jul 2021 18:14:50 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10043"; a="208244010"
-X-IronPort-AV: E=Sophos;i="5.84,235,1620716400"; 
-   d="scan'208";a="208244010"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 15:12:01 -0700
-X-IronPort-AV: E=Sophos;i="5.84,235,1620716400"; 
-   d="scan'208";a="464414983"
-Received: from jzloch-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.136.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 15:11:55 -0700
-From:   Iwona Winiarska <iwona.winiarska@intel.com>
-To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+        id S229913AbhGMFFm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Jul 2021 01:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhGMFFm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 13 Jul 2021 01:05:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C344C0613DD;
+        Mon, 12 Jul 2021 22:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Y9SCFUFvDiiwNKATD/MeNeTY42rYD5q8ZmhhYCeG3N4=; b=nS2M2lPZSduOe3g5f4fbr8Y9Jz
+        Wgt3kMyZg2plfxTU8lGiFrHllqm4+ayu+ZsaAoSJ1jaOE1fL18lpVXBOmPbe8XWmcUoErZzTy43/q
+        1ZhwoXphWOilbDlGZXkEbYSgfnGsYG9dv9Bk7qpKul/zK4Cr9mhakYmQuxI2eh0s+1G0M8IQkSrCg
+        VahLxPcl5b3Tc/gJm0nNI0biEiQXOhTqenY6pR9gyaiSeXiKWI0jqFPLdkWi5rpinPv+UEUqIZEB8
+        4XZAoZaH2uJvxlzNMHzP79nT0U7K/Oipe5lu2GeOru970nnmzR1uTDxcLzYjPWXm96OJgfLfvagBA
+        okQLXZNg==;
+Received: from [2601:1c0:6280:3f0::aefb]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m3AYd-0097z2-JX; Tue, 13 Jul 2021 05:02:11 +0000
+Subject: Re: [PATCH 07/14] peci: Add peci-aspeed controller driver
+To:     Iwona Winiarska <iwona.winiarska@intel.com>,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
 Cc:     x86@kernel.org, devicetree@vger.kernel.org,
         linux-aspeed@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
@@ -49,135 +58,47 @@ Cc:     x86@kernel.org, devicetree@vger.kernel.org,
         Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH 14/14] docs: Add PECI documentation
-Date:   Tue, 13 Jul 2021 00:04:47 +0200
-Message-Id: <20210712220447.957418-15-iwona.winiarska@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210712220447.957418-1-iwona.winiarska@intel.com>
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 References: <20210712220447.957418-1-iwona.winiarska@intel.com>
+ <20210712220447.957418-8-iwona.winiarska@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <b894ba5e-e1ae-e5dd-87be-dc33912dd5c0@infradead.org>
+Date:   Mon, 12 Jul 2021 22:02:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210712220447.957418-8-iwona.winiarska@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add a brief overview of PECI and PECI wire interface.
-The documentation also contains kernel-doc for PECI subsystem internals
-and PECI CPU Driver API.
+On 7/12/21 3:04 PM, Iwona Winiarska wrote:
+> diff --git a/drivers/peci/controller/Kconfig b/drivers/peci/controller/Kconfig
+> new file mode 100644
+> index 000000000000..8ddbe494677f
+> --- /dev/null
+> +++ b/drivers/peci/controller/Kconfig
+> @@ -0,0 +1,12 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config PECI_ASPEED
+> +	tristate "ASPEED PECI support"
+> +	depends on ARCH_ASPEED || COMPILE_TEST
+> +	depends on OF
+> +	depends on HAS_IOMEM
+> +	help
+> +	  Enable this driver if you want to support ASPEED PECI controller.
+> +
+> +	  This driver can be also build as a module. If so, the module
 
-Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
----
- Documentation/index.rst      |  1 +
- Documentation/peci/index.rst | 16 ++++++++++++
- Documentation/peci/peci.rst  | 48 ++++++++++++++++++++++++++++++++++++
- MAINTAINERS                  |  1 +
- 4 files changed, 66 insertions(+)
- create mode 100644 Documentation/peci/index.rst
- create mode 100644 Documentation/peci/peci.rst
+	              can also be built as a module.
 
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index 54ce34fd6fbd..7671f2cd474f 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -137,6 +137,7 @@ needed).
-    misc-devices/index
-    scheduler/index
-    mhi/index
-+   peci/index
- 
- Architecture-agnostic documentation
- -----------------------------------
-diff --git a/Documentation/peci/index.rst b/Documentation/peci/index.rst
-new file mode 100644
-index 000000000000..989de10416e7
---- /dev/null
-+++ b/Documentation/peci/index.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+====================
-+Linux PECI Subsystem
-+====================
-+
-+.. toctree::
-+
-+   peci
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
-diff --git a/Documentation/peci/peci.rst b/Documentation/peci/peci.rst
-new file mode 100644
-index 000000000000..a12c8e10c4a9
---- /dev/null
-+++ b/Documentation/peci/peci.rst
-@@ -0,0 +1,48 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+========
-+Overview
-+========
-+
-+The Platform Environment Control Interface (PECI) is a communication
-+interface between Intel processor and management controllers
-+(e.g. Baseboard Management Controller, BMC).
-+PECI provides services that allow the management controller to
-+configure, monitor and debug platform by accessing various registers.
-+It defines a dedicated command protocol, where the management
-+controller is acting as a PECI originator and the processor - as
-+a PECI responder.
-+PECI can be used in both single processor and multiple-processor based
-+systems.
-+
-+NOTE:
-+Intel PECI specification is not released as a dedicated document,
-+instead it is a part of External Design Specification (EDS) for given
-+Intel CPU. External Design Specifications are usually not publicly
-+available.
-+
-+PECI Wire
-+---------
-+
-+PECI Wire interface uses a single wire for self-clocking and data
-+transfer. It does not require any additional control lines - the
-+physical layer is a self-clocked one-wire bus signal that begins each
-+bit with a driven, rising edge from an idle near zero volts. The
-+duration of the signal driven high allows to determine whether the bit
-+value is logic '0' or logic '1'. PECI Wire also includes variable data
-+rate established with every message.
-+
-+For PECI Wire, each processor package will utilize unique, fixed
-+addresses within a defined range and that address should
-+have a fixed relationship with the processor socket ID - if one of the
-+processors is removed, it does not affect addresses of remaining
-+processors.
-+
-+PECI subsystem internals
-+------------------------
-+
-+.. kernel-doc:: include/linux/peci.h
-+
-+PECI CPU Driver API
-+-------------------
-+.. kernel-doc:: include/linux/peci-cpu.h
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d16da127bbdc..a596453db003 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14519,6 +14519,7 @@ R:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
- L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/peci/
-+F:	Documentation/peci/
- F:	drivers/peci/
- F:	include/linux/peci-cpu.h
- F:	include/linux/peci.h
+> +	  will be called peci-aspeed.
+
+
 -- 
-2.31.1
+~Randy
 
