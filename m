@@ -2,55 +2,66 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EF06C07E96
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Jul 2021 06:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4800C11F66
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Jul 2021 09:11:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5AFF860FEE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Jul 2021 06:01:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC35C61380
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Jul 2021 09:11:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbhGMGEF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Jul 2021 02:04:05 -0400
-Received: from mail-dm6nam08on2131.outbound.protection.outlook.com ([40.107.102.131]:2912
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233887AbhGMGEE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Jul 2021 02:04:04 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hCOpk1rUqx4zeelDYOK0mlxfFQWv5pqnprKysrkpHtp48G49Khp4vp7vuLGlFMaXim71KpUOVO6cYWJ9mIfgkY8l+YVnEVFbkEht+57b+lm0LzYhJQG7eZTJdzYaQvDmAN/xtA7EQemUJw57kKmHUK2043hQkgj2ZVDmruASowcqegcf1VWIK3Aor50bjX2MOL+sgfkeJ/npRh/MMBmnDVV3Zvr9gEriz/dLhb0eFi/Uwwpr3d2YrOXzGlS5k2x5VeW2XBxoLYLna6eFlXYBf5qVTTZVXSFf32Go/QOuUq7y3NA0OJJlv1Id8my6A/im4McCbIycbzYGrykKvxq5TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lBQREZWovQNCc9Is2Jae8kyMwstggOes3QZqJ2XU5vw=;
- b=GQPhQN/V8Co/FjwekxEJne2gK+DAfp4UJZTsCi1J6TntANt/Ul93PWynwCAV57wOu78tYe14k0YDdybS6PU4gq52qUG8Jn09u7mwfiiD9l0smGO8T+yy6qFBk3boQ0Ta8C0xvCUxyWsex54njV873gC/e5EMim58tXa3/m2cwkrvWJplAlW4TyMOhjjTwZTk4n11MMp/Le2nrVkDmVU9mdlzP3RLZezKGnczVaUkKS1Dnsj+Taj5kYc7hgQzR7o3+flWoHkcnS8GjM+eP19Pc+58Jzipjslj0FKuExqKNseIXl13ESskwUDN/bL3cIgsKvokxH9FOY9toxwUDhy8OA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        id S234947AbhGMJOQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Jul 2021 05:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234397AbhGMJOP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 13 Jul 2021 05:14:15 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A0FC0613DD;
+        Tue, 13 Jul 2021 02:11:25 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id e1-20020a9d63c10000b02904b8b87ecc43so7880603otl.4;
+        Tue, 13 Jul 2021 02:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lBQREZWovQNCc9Is2Jae8kyMwstggOes3QZqJ2XU5vw=;
- b=rhCC5qPAdBCtewB7nPQokl+QPW32vqRBkiyFIbs7kFj1deDRxpeCF7x2LdXAdfD3HC63pAmpJBiGq8a+MaHoBu7pN0s7cfuxw/PoOAukZM7p8QgeBLTC7TqYVL5A4AH977NDkMSzpRvETjndiS4bDkIV3EMHslChI3h+PizT9Eo=
-Authentication-Results: jms.id.au; dkim=none (message not signed)
- header.d=none;jms.id.au; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- MWHPR01MB2592.prod.exchangelabs.com (2603:10b6:300:3e::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4308.20; Tue, 13 Jul 2021 06:01:12 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::452a:24fb:12cb:9d7e]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::452a:24fb:12cb:9d7e%5]) with mapi id 15.20.4308.027; Tue, 13 Jul 2021
- 06:01:12 +0000
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        d=gmail.com; s=20161025;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=N8tVkCLIOHC8tQlM3lOUmxEAnRAXk6f8wcRyPngBfC0=;
+        b=DaNwZfuJzvql2YKziqG8YfpN4KPtiVMPqYzBCf11ALP9JTqB83GqsWfpaC+nlvQxbm
+         TIdbsdcoG/Sk++nwf8HCAL7fATfkc9FGJQAon/WuvQJKpA5dlpCmCIMM/Uau09Q6VE8C
+         zGATYXnBEQEEqBuISbspXz6QWstmB+3vyfGE4KvbSRHN1emNToWdLhymEawxPCpTmlzv
+         A5i278jmONI5ICGx9iFhGo1UPOqLrHbVfNZ7gGHmZov7HlvVOoJtdX0SBcnXS/+3dtRD
+         CPT5S0Jwg7lYLnjqCzaa2tzSsXXamGjlzVxZa9EAq21uEDS9zsMlX3YDWUZoXJZEsgHB
+         6CuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N8tVkCLIOHC8tQlM3lOUmxEAnRAXk6f8wcRyPngBfC0=;
+        b=SdAYI4uxA16lkS79uw2Nrt3ZsD6XWcY45E9ER3iFBRMZMKtSZMc/iDZ6GZQqEzdabs
+         D2Y+qg6/X2L07NkcueZr42IPWmiauVyoWgvzWCSeZkeBEfPZFTaLf+CJjlKoM9D4fBqE
+         +q5m31eIK7rbYTVfrzyCCBb9BZV6FZjawa1gGDPjHetfg2Kq+zIFJV8wEX8t6My/RNaN
+         0WWoMBdHEzudWtotJteXov4DWwAMdGPs20RL1FJKZ6GNGMh5Tg9lI4YEbzt7ys3xcxc0
+         tG6IO3OdJ8D1SJ/Zyhi1g5PvZMtLD1wW9AisU1nt/ZdECddKtCSdrU/uoktxNY3b0SpT
+         sp2w==
+X-Gm-Message-State: AOAM531uJfySEjvdbaiQP6U+4xjoZWhODy6Op3gseH716Ns4M1KP0ZbT
+        Wxel2vHrHD0CuVks1SZw7Ao=
+X-Google-Smtp-Source: ABdhPJyEmJ54iiMXDtCHbs5J4YChfUo2Bfa8JGRGajy7bwU6lXC2GsoItE6uqAeoa722QK5xCu2pag==
+X-Received: by 2002:a05:6830:1495:: with SMTP id s21mr2721116otq.86.1626167484975;
+        Tue, 13 Jul 2021 02:11:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n20sm3680323otj.11.2021.07.13.02.11.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jul 2021 02:11:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
@@ -60,217 +71,177 @@ To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
 Cc:     Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v5 4/4] docs: hwmon: (smpro-hwmon) Add documentation
-Date:   Tue, 13 Jul 2021 13:00:31 +0700
-Message-Id: <20210713060031.31568-5-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210713060031.31568-1-quan@os.amperecomputing.com>
 References: <20210713060031.31568-1-quan@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR03CA0052.apcprd03.prod.outlook.com
- (2603:1096:202:17::22) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+ <20210713060031.31568-3-quan@os.amperecomputing.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v5 2/4] mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD
+ driver
+Message-ID: <4e251a34-5c0f-da9d-e471-517c1d581fa4@roeck-us.net>
+Date:   Tue, 13 Jul 2021 02:11:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HK2PR03CA0052.apcprd03.prod.outlook.com (2603:1096:202:17::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.10 via Frontend Transport; Tue, 13 Jul 2021 06:01:09 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 43451686-dcf4-454a-e413-08d945c39e06
-X-MS-TrafficTypeDiagnostic: MWHPR01MB2592:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR01MB25925A47CF176E7E3EAF89D6F2149@MWHPR01MB2592.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ngABFzCSVXpF1C48gkIo+YpMZw1nT9BIGjhe6C6gOaBzswQCKhc3p5k/UY029T5COU1z0w6wkOaJFNTrJT8F38VEq4Nu6ZufD9yOmEJK9GDhPGQqJ6VEEToAKiiUAaBQi8hI6TPwBhDrXngXANs/lKqE2pnSnsqPgIVWx068hAZBwSNhpFtzxyFxk5Mtry/4ktqxSN807UmFtZu0ICqWqPW4vaElglRQRAO9TfDE8ber0Gejm/m17aAMyk+KXbCICf7W+Ph3v7fBh6pXpz2F8bONJHsJtJseRk8K4GGj/O1ANQ8HwbyLZftyDwtQ00bgsGwMq87vFALozUWsa8pN3I7GlffNwBHGiYxNO8xWkxCR0xl1VRpDTtNQAp84z18dTv3tE1kY3CiWUed32tT9ENGEofSbUgqmpIUCtqYZ2TmjBR8LfcLkE6jHEyLkCWth4MfrzI5p265mcAQsXrQgyGQoyl0+RAiikCY/7fNA9NR/er78kwEoWfA0wMzrWo9JsbIIbYo71g/c3GX4pjnvfvYdiJjPnYmH/UpbScG4POxcthpr54QV8aULga4zZOjiSEeGEAQTOCG0nmpFIhR2aiddHWwiG/sbeJDb5PAmzfs047vu+UjyleYTeuB6kKK21sS5voLYCHiPi/NUXGx6QQGqKw5qyMxie5qOoxV3OV7sJve2DlM25NxeZNzt4q8rbFYKtfH3Z0boSa6P/BNpfZiUu5EAmU+L+7p1EfsDKJM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39850400004)(376002)(136003)(396003)(366004)(2616005)(86362001)(110136005)(956004)(316002)(5660300002)(107886003)(66946007)(54906003)(66556008)(66476007)(4326008)(478600001)(38100700002)(38350700002)(6666004)(921005)(6512007)(52116002)(6506007)(83380400001)(26005)(2906002)(8676002)(7416002)(8936002)(186003)(1076003)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5hpEjD6H4Lg6vH7khlo83nWCYadxF+9CLbC9GTWTQqqhaTvzc4Zd6h26qNQX?=
- =?us-ascii?Q?sAWbDrKZitwmovNYuC94zGQLQR/Ca//v8SM0iuw8nR+6zpheiB+Mc6xo1Xgk?=
- =?us-ascii?Q?fdBx9FJjrIKUSGQFcL3ppBli2hS0ebQHsf2rUFdYcsZ4RI4PUR7nljwaK5NK?=
- =?us-ascii?Q?aER6sJFnlfiNoRzWx+HgnB9iammq+4se2970+8LOnO+aCI7/pSrLgrOBQ6iG?=
- =?us-ascii?Q?nzL9ape4lfE2NrfelnuNXZeorz56XMYXtGNdeLoGzwcGaM1YrS+eh5TEQyqw?=
- =?us-ascii?Q?OzWDpzgnk2wvuvgYG7ew+7ikqGUkTxlq+X40oaXldRXcu5BmzPYDOIMJ2ouy?=
- =?us-ascii?Q?CnLwrUhiTUt4Rc1HtSrisBsk1gZD9hAZbXO6IDgiZrnua9Ru7sqEmGc8NjIU?=
- =?us-ascii?Q?YF+GymvffaPw+YxeT/85RANiZ/zdjiAROYp40Tl7PJVh7dRw0k1ARLWwrTiF?=
- =?us-ascii?Q?d+EfochLF2ayX11zRbehPGsjJ68dtgUukJ8ZmwCTWdD+47rDgnNN2yBlsWzS?=
- =?us-ascii?Q?IttGUjdVlhXNG+22P6HaRiTJgkQ0cdjcCvAmeD2XgFda5XHe6XhWLpA9Azg+?=
- =?us-ascii?Q?W+eS7eE4gWfSGMiHYXLr3kS5OQaWpEZ7jflfovmUMm4j9WznIJX7Wm8p8I3K?=
- =?us-ascii?Q?bnUJPS3mpGL+MEBjj7CHmBIgC2vRsfhHxSzgden7Ciupe3jZoZm3WChvG1YI?=
- =?us-ascii?Q?sVZEthpuLLI5X8XxGow8AjGHj6ql2/dDvpthGZnWnmmbBLC0ed3JwRa5jlVv?=
- =?us-ascii?Q?ZtdjRZGnj3Ndl9HOKvWO9yynXnxY/alw4jUVL0IQCGGWupmf6V0uslYOlSfj?=
- =?us-ascii?Q?2lsicBCkOZ0BLckyoMurO6yrU9doI3ckP4vGfTJIW1N5D3s4UGmxpx/kfjOA?=
- =?us-ascii?Q?zpS9NUIGimLrjFNYzqBnrayon3+vUhobw2UMCqKvNT66BM/McBty1zOWY2WW?=
- =?us-ascii?Q?+m3U8OW/EMQTow3FNZRrF3Y4VkoLv0x5wauygb6gqiW9oWMmHWJaVg110TbG?=
- =?us-ascii?Q?J6IfJ+W+0Xj8mCXAEv82Ndwf/cXoXS4jLR434MhrnHSYy5LsGdjA8xTpb+BN?=
- =?us-ascii?Q?gg0ClCcZMNNi+dXekUCHdNBPQE0rIFG7nlsmue162mEtRYMcTa/dwfTZPomU?=
- =?us-ascii?Q?yttapewBT0QpL5ioat4JI3roq766PTCdTUZ6ZbyyPgfAEHy3eCG+id1S0BVN?=
- =?us-ascii?Q?o9yGiNEwMoNUX9NukaO/ygpO5vUaZyeoz5oM5W6GbPwd3buUubiG1y5m20Ut?=
- =?us-ascii?Q?A58ZirKfWtG5GNyEZztlFr0Cjy9anfwXoYCUkl6TLF1KP4apA854BE03bb3H?=
- =?us-ascii?Q?PRr4fVIX+v4rSb1VEYvt7V9C?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43451686-dcf4-454a-e413-08d945c39e06
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2021 06:01:12.5324
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vZg56d0yq6LySWPCm0/58v+Bc20f6ZrxKactSTLZ3KtG9mBBFg8ztbDupGW5iGOj+rFhDeDYaG85KdJFir0V2wQeD7YfQA+r0CgTJt0BzVc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR01MB2592
+In-Reply-To: <20210713060031.31568-3-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation for the Ampere(R)'s Altra(R) SMpro hwmon driver.
+On 7/12/21 11:00 PM, Quan Nguyen wrote:
+> Adds Multi-function devices driver for SMpro co-processor found on the
+> Mt.Jade hardware reference platform with Ampere's Altra processor family.
+> 
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 
-Signed-off-by: Thu Nguyen <thu@os.amperecomputing.com>
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
-Changes in v5:
-  + None
+Maybe that has been discussed, but is there anything else besides
+hardware monitoring connected to this i2c interface, and are there
+more child drivers coming ? I don't find the BMC Interface Specification
+mentioned in the documentation patch, but the hardware specification
+seems to suggest that the i2c bus is dedicated for hardware monitoring.
+If there is no other child driver, an mfd driver would not make sense.
 
-Changes in v4:
-  + None
+Thanks,
+Guenter
 
-Changes in v3:
-  + None
-
-Changes in v2:
-  + Removed "virtual" sensors [Guenter]
-  + Fixed typo "mili" to "milli", "nanoWatt" to "microWatt" [Guenter]
-  + Reported SOC_TDP as "Socket TDP" using max attributes [Guenter]
-  + Clarified "highest" meaning in documentation [Guenter]
-  + Reported MEM HOT Threshold for all DIMMs as temp*_crit [Guenter]
-  + Removed Socket TDP sensor [Quan]
-  + Included sensor type and channel in labels [Quan]
-
- Documentation/hwmon/index.rst       |   1 +
- Documentation/hwmon/smpro-hwmon.rst | 101 ++++++++++++++++++++++++++++
- 2 files changed, 102 insertions(+)
- create mode 100644 Documentation/hwmon/smpro-hwmon.rst
-
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index bc01601ea81a..b6579882f51b 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -172,6 +172,7 @@ Hardware Monitoring Kernel Drivers
-    sis5595
-    sl28cpld
-    smm665
-+   smpro-hwmon
-    smsc47b397
-    smsc47m192
-    smsc47m1
-diff --git a/Documentation/hwmon/smpro-hwmon.rst b/Documentation/hwmon/smpro-hwmon.rst
-new file mode 100644
-index 000000000000..f978b1370e16
---- /dev/null
-+++ b/Documentation/hwmon/smpro-hwmon.rst
-@@ -0,0 +1,101 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver Ampere(R)'s Altra(R) SMpro hwmon
-+==============================================
-+
-+Supported chips:
-+
-+  * Ampere(R) Altra(R)
-+
-+    Prefix: 'smpro'
-+
-+    Reference: Altra SoC BMC Interface Specification
-+
-+Author: Thu Nguyen <thu@os.amperecomputing.com>
-+
-+Description
-+-----------
-+This driver supports hardware monitoring for Ampere(R) Altra(R) SoC's based on the
-+SMpro co-processor (SMpro).
-+The following sensor types are supported by the driver:
-+
-+  * temperature
-+  * voltage
-+  * current
-+  * power
-+
-+The SMpro interface provides the registers to query the various sensors and
-+their values which are then exported to userspace by this driver.
-+
-+Usage Notes
-+-----------
-+
-+SMpro hwmon driver creates at least two sysfs files for each sensor.
-+
-+* File ``<sensor_type><idx>_label`` reports the sensor label.
-+* File ``<sensor_type><idx>_input`` returns the sensor value.
-+
-+The sysfs files are allocated in the SMpro root fs folder.
-+There is one root folder for each SMpro instance.
-+
-+When the SoC is turned off, the driver will fail to read registers
-+and return -ENXIO.
-+
-+Sysfs entries
-+-------------
-+
-+The following sysfs files are supported:
-+
-+* Ampere(R) Altra(R):
-+
-+============    =============   ======  ===============================================
-+Name            Unit            Perm    Description
-+temp1_input     milli Celsius   RO      SoC temperature
-+temp2_input     milli Celsius   RO      Max temperature reported among SoC VRDs
-+temp2_crit      milli Celsius   RO      SoC VRD HOT Threshold temperature
-+temp3_input     milli Celsius   RO      Max temperature reported among DIMM VRDs
-+temp4_input     milli Celsius   RO      Max temperature reported among Core VRDs
-+temp5_input     milli Celsius   RO      Temperature of DIMM0 on CH0
-+temp5_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp6_input     milli Celsius   RO      Temperature of DIMM0 on CH1
-+temp6_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp7_input     milli Celsius   RO      Temperature of DIMM0 on CH2
-+temp7_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp8_input     milli Celsius   RO      Temperature of DIMM0 on CH3
-+temp8_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp9_input     milli Celsius   RO      Temperature of DIMM0 on CH4
-+temp9_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp10_input    milli Celsius   RO      Temperature of DIMM0 on CH5
-+temp10_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp11_input    milli Celsius   RO      Temperature of DIMM0 on CH6
-+temp11_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp12_input    milli Celsius   RO      Temperature of DIMM0 on CH7
-+temp12_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp13_input    milli Celsius   RO      Max temperature reported among RCA VRDs
-+in0_input       milli Volts     RO      Core voltage
-+in1_input       milli Volts     RO      SoC voltage
-+in2_input       milli Volts     RO      DIMM VRD1 voltage
-+in3_input       milli Volts     RO      DIMM VRD2 voltage
-+in4_input       milli Volts     RO      RCA VRD voltage
-+cur1_input      milli Amperes   RO      Core VRD current
-+cur2_input      milli Amperes   RO      SoC VRD current
-+cur3_input      milli Amperes   RO      DIMM VRD1 current
-+cur4_input      milli Amperes   RO      DIMM VRD2 current
-+cur5_input      milli Amperes   RO      RCA VRD current
-+power1_input    micro Watts     RO      Core VRD power
-+power2_input    micro Watts     RO      SoC VRD power
-+power3_input    micro Watts     RO      DIMM VRD1 power
-+power4_input    micro Watts     RO      DIMM VRD2 power
-+power5_input    micro Watts     RO      RCA VRD power
-+============    =============   ======  ===============================================
-+
-+Example::
-+
-+    # cat in0_input
-+    830
-+    # cat temp1_input
-+    37000
-+    # cat curr1_input
-+    9000
-+    # cat power5_input
-+    19500000
--- 
-2.28.0
+> ---
+> Changes in v5:
+>    + Dropped the use of simple-mfd-i2c driver [Quan]
+>    + Introduced drivers/mfd/smpro-mfd.c driver to instantiate
+>    sub-devices. This is to avoid DT nodes without resource issue [Quan]
+>    + Revised commit message [Quan]
+> 
+> Changes in v4:
+>    + Add "depends on I2C" to fix build issue found by kernel test
+>    robot [Guenter]
+> 
+> Changes in v3:
+>    + None
+> 
+> Changes in v2:
+>    + Used 'struct of_device_id's .data attribute [Lee Jones]
+> 
+>   drivers/mfd/Kconfig     | 12 +++++++
+>   drivers/mfd/Makefile    |  1 +
+>   drivers/mfd/smpro-mfd.c | 74 +++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 87 insertions(+)
+>   create mode 100644 drivers/mfd/smpro-mfd.c
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 6a3fd2d75f96..25e502cca32f 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -77,6 +77,18 @@ config MFD_AS3711
+>   	help
+>   	  Support for the AS3711 PMIC from AMS
+>   
+> +config MFD_SMPRO
+> +	tristate "Ampere Computing MFD SMpro core driver"
+> +	depends on I2C
+> +	select MFD_CORE
+> +	select REGMAP_I2C
+> +	help
+> +	  Say yes here to enable SMpro driver support for Ampere's Altra
+> +	  processor family.
+> +
+> +	  Ampere's Altra SMpro exposes an I2C regmap interface that can
+> +	  be accessed by child devices.
+> +
+>   config MFD_AS3722
+>   	tristate "ams AS3722 Power Management IC"
+>   	select MFD_CORE
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 8116c19d5fd4..046fd36de85a 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -268,6 +268,7 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+>   
+>   obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+>   obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+> +obj-$(CONFIG_MFD_SMPRO)		+= smpro-mfd.o
+>   obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
+>   
+>   obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+> diff --git a/drivers/mfd/smpro-mfd.c b/drivers/mfd/smpro-mfd.c
+> new file mode 100644
+> index 000000000000..b0cd3c248507
+> --- /dev/null
+> +++ b/drivers/mfd/smpro-mfd.c
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Ampere Altra Family SMPro MFD - I2C
+> + *
+> + * Copyright (c) 2021, Ampere Computing LLC
+> + *
+> + * Author: Quan Nguyen <quan@os.amperecomputing..com>
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/regmap.h>
+> +
+> +/* Identification Registers */
+> +#define MANUFACTURER_ID_REG     0x02
+> +#define AMPERE_MANUFACTURER_ID  0xCD3A
+> +
+> +static const struct regmap_config simple_word_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 16,
+> +};
+> +
+> +static const struct mfd_cell smpro_devs[] = {
+> +	MFD_CELL_NAME("smpro-hwmon"),
+> +};
+> +
+> +static int smpro_mfd_probe(struct i2c_client *i2c)
+> +{
+> +	const struct regmap_config *config;
+> +	struct regmap *regmap;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	config = device_get_match_data(&i2c->dev);
+> +	if (!config)
+> +		config = &simple_word_regmap_config;
+> +
+> +	regmap = devm_regmap_init_i2c(i2c, config);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	/* Check for valid ID */
+> +	ret = regmap_read(regmap, MANUFACTURER_ID_REG, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val != AMPERE_MANUFACTURER_ID)
+> +		return -ENODEV;
+> +
+> +	return devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
+> +				    smpro_devs, ARRAY_SIZE(smpro_devs), NULL, 0, NULL);
+> +}
+> +
+> +static const struct of_device_id smpro_mfd_of_match[] = {
+> +	{ .compatible = "ampere,smpro", .data = &simple_word_regmap_config },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, smpro_mfd_of_match);
+> +
+> +static struct i2c_driver smpro_mfd_driver = {
+> +	.probe_new = smpro_mfd_probe,
+> +	.driver = {
+> +		.name = "smpro-mfd-i2c",
+> +		.of_match_table = smpro_mfd_of_match,
+> +	},
+> +};
+> +module_i2c_driver(smpro_mfd_driver);
+> +
+> +MODULE_AUTHOR("Quan Nguyen <quan@os.amperecomputing.com>");
+> +MODULE_DESCRIPTION("SMPRO MFD - I2C driver");
+> +MODULE_LICENSE("GPL v2");
+> 
 
