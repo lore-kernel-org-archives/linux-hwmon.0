@@ -2,169 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 123CFC07E9A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 09:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA16C07E9A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 11:00:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7545613C5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 09:48:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA44361374
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 11:00:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbhGNJvo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jul 2021 05:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S231127AbhGNLDj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jul 2021 07:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238337AbhGNJvo (ORCPT
+        with ESMTP id S229836AbhGNLDi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jul 2021 05:51:44 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35C3C06175F
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jul 2021 02:48:52 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id bn5so2095128ljb.10
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jul 2021 02:48:52 -0700 (PDT)
+        Wed, 14 Jul 2021 07:03:38 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93039C06175F
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jul 2021 04:00:47 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id s23so1863851oij.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jul 2021 04:00:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=tLPia/JvDmfSBss+c22zamSy+WTSWu17A9qMJLYq21I=;
-        b=RpRQmzImKV/InzSvJZpEUvsGpVhB3y9t3ZHqYabm6LbJRNuiOuH2AI5rTinjLbkWUU
-         558F0BPt8POfxnNmwQVni7rGpVBXW3ACOJlaUJVrE+ze5jOkauyQ6fTD+KbISu61B4tC
-         Rt/YjwPQ/4tSmNWy/cuWK2GPT+lAz1LBSEUlOF1/mIZTIXbscKIW87SxCxJ3UFK074fa
-         N8m2ZBBBHn35A2H2kpVLPpfCwv9JbrynLVyxaf6jzULaSlKEcsS1R2z2qEeIGTlgGcPy
-         hd3hvOoKz2A5gEdqbd7/PrerZjRBHr+PCxRxzLMFTNyvN+j+rvMvWWBAs3qJwtl+onhZ
-         ODOw==
+        h=sender:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IjP+VO9HlCryLY9YYTWKHnfSwx0XT8FG1QsYRajAPPo=;
+        b=Yzc0vi1Az4QNbdiJDnXVTuMC4O680j8OYlTZc2rjd09J12n+8ggVBRkZBup4oEfCvg
+         9CDjaLjrAbf9NjR4X1HbNLm3lGl9EeMvlwBoADa+E7+GOJchSFSFWTg6DlEyyV6KNah0
+         pqTIXy6/gO61y0mIhYk7vJHLnAZXEvcFXpCMOKjyCgCrhUCTc4sDPAYxm6BrZkvjYfF3
+         fDmEX37m0m1wN6cxCpqPiNpNR6FazBrG0PThyf1c2fhWRswNAkaaTnh045LlgTzzw+aR
+         2qAu/MMrFqG8D/LjbSlEny304BkLTzh7B4SR08VqovPn2wb5on0bI63zgdCxkRBuPjtz
+         eb3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=tLPia/JvDmfSBss+c22zamSy+WTSWu17A9qMJLYq21I=;
-        b=j7XeCgub8yKk1MDjXN3R+KsW5BCTrNlQg/hfrUdXEl4O3d9G1+g2uuYoIE/t++o4Kj
-         oHWdNovcum3PRDxdi2WB6PdqXu78dWoYlJizGe3kxbEtU1njWx5ncRGOxtcJOpbRWbBJ
-         7Vfu6r51FDd1UyyeEv7nXNiHOP0YwiSY1866m43p60aUspCtTgl0BGUSCmFuxxMv4OJG
-         W6DrVibFc8oNyB6sZxK9fmOTZpdXvrKvPioNOGfV3lzzVdpFmOmMWGXtu6jTAk2SpYKy
-         m0h4Opl92Flew7kxTZHzXoDX7sFYYKE7FRJp0Br7eq5l3TiXiwwB+G9j6P7JdBL4B26C
-         JBzA==
-X-Gm-Message-State: AOAM532UL/ZKxYsMmsdxt/GbQH+Kimtt6uHWIuquu2Qq3+8hS1F5C+m4
-        omuzEAboYFSrVtnqCv3+e8d5a6ZIY9JxHPdLpzjDf0Pq+x0=
-X-Google-Smtp-Source: ABdhPJwtEfVJzGPQoF55vZgz65BZHkxwVLYH4X39Nz7Okv98rMHbDiwQc/4pjVoYTpPiq0PxdpjSDlTMMDF6cjZWy7c=
-X-Received: by 2002:a2e:8049:: with SMTP id p9mr8300465ljg.505.1626256131071;
- Wed, 14 Jul 2021 02:48:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <202107080039.1680d7Eo018443@systol.god.lan> <CAMFK4TPNYJeEJdfu5Wti7G34m+-tcZvA2wv0N87aPsGq2eygvw@mail.gmail.com>
-In-Reply-To: <CAMFK4TPNYJeEJdfu5Wti7G34m+-tcZvA2wv0N87aPsGq2eygvw@mail.gmail.com>
-From:   Henk <henk.vergonet@gmail.com>
-Date:   Wed, 14 Jul 2021 11:48:40 +0200
-Message-ID: <CAMFK4TM0MCEGWs=zCJZLsdnUJKqvM+-0fxZTDhJd864SAG8=ng@mail.gmail.com>
+        h=x-gm-message-state:sender:subject:to:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IjP+VO9HlCryLY9YYTWKHnfSwx0XT8FG1QsYRajAPPo=;
+        b=Uj3Pq2FQCc04L0ybfmA58O7p/dVyP0lOT2aAI0ujryH6B7mDBuj8/1AlS/I1gcG82q
+         tuuvrlC1QLJ0lG208J9OwpKr0bag7AOUXmvwt92IyNXyY1UoIlrJFwKXEnabr6kV4fo6
+         YN5JDSxQfJPwnXdW0CglYxMPGH/H/V4kjMbNlA8Rx9HlB0KnwfxME5FPxtaFNe2L8vms
+         22W/Ez/a+Sp1N74EuPJ3UZP6I+fzBzTEOtGsuBg+Dhe6i/UOMmb3oZcY1iPu6KWqGBPf
+         IpmF/kqO9QFWnkNCwitcboVY50idmVEX+XZPM3MEcj7kUEuWYIMjnJmMqvo+TiVBqBRy
+         YUXQ==
+X-Gm-Message-State: AOAM533BJFgs2Z2AijNDEeHlnUN2xef+oHA8PqMXBZAFYJ3l6BvPNHOP
+        8LQ5kEuj1k/j3PDewGh9ldsX8tNTxi0=
+X-Google-Smtp-Source: ABdhPJxebnF7tXqJsidmGJmYrMSkjhBWRUGCKztskDz8Me7STto2AwCklgVlWDOnKeDklgW7dqs8Tg==
+X-Received: by 2002:aca:1111:: with SMTP id 17mr781583oir.53.1626260446725;
+        Wed, 14 Jul 2021 04:00:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 2sm415272ota.58.2021.07.14.04.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jul 2021 04:00:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH] hwmon: nct6775: Add missing voltage reading NCT6796D
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To:     Henk <henk.vergonet@gmail.com>, linux-hwmon@vger.kernel.org
+References: <202107080039.1680d7Eo018443@systol.god.lan>
+ <CAMFK4TPNYJeEJdfu5Wti7G34m+-tcZvA2wv0N87aPsGq2eygvw@mail.gmail.com>
+ <CAMFK4TM0MCEGWs=zCJZLsdnUJKqvM+-0fxZTDhJd864SAG8=ng@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <545ad722-d2de-21bb-21c5-7104097c76c4@roeck-us.net>
+Date:   Wed, 14 Jul 2021 04:00:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <CAMFK4TM0MCEGWs=zCJZLsdnUJKqvM+-0fxZTDhJd864SAG8=ng@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The nuvoton driver has quite some longstanding issues, as far as I can
-tell the alarm bits and input registers are not properly configured
-for a bunch of the chips.
-And this patch only addresses a tiny proportion of the issues.
+On 7/14/21 2:48 AM, Henk wrote:
+> The nuvoton driver has quite some longstanding issues, as far as I can
+> tell the alarm bits and input registers are not properly configured
+> for a bunch of the chips.
+> And this patch only addresses a tiny proportion of the issues.
+> 
+> It would be helpful to get some meaningful feedback.
+> 
+> Is there at least any interest in solving this issue?
+> 
 
-It would be helpful to get some meaningful feedback.
+There is a lot of interest, but you'll have to do your part and send
+patches in an acceptable form. So far you have not done that.
 
-Is there at least any interest in solving this issue?
-
-Op do 8 jul. 2021 om 02:42 schreef Henk <henk.vergonet@gmail.com>:
->
-> Retry with sendmail  hope this helps...
->
-> ---
->
-> Noticed in the documentation that the NCT6796D actually has 16 analog
-> voltage inputs, where only 15 are configured.
->
-> See: https://www.nuvoton.com/resource-files/NCT6796D_Datasheet_V0_6.pdf
-> page 59-60:
->
-> 8.6.2.1. Voltage Reading
-> NCT6796D has 16 voltage reading:
-> ....
-> and the missing one in the driver:
-> VIN9: Voltage reading Bank 4, Index 8F
->
-> This patch adds support for in15 on the NCT6796D.
-> ---
->  drivers/hwmon/nct6775.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index 5bd15622a85f..385ef79d79c4 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -28,7 +28,7 @@
->   * nct6792d    15      6       6       2+6    0xc910 0xc1    0x5ca3
->   * nct6793d    15      6       6       2+6    0xd120 0xc1    0x5ca3
->   * nct6795d    14      6       6       2+6    0xd350 0xc1    0x5ca3
-> - * nct6796d    14      7       7       2+6    0xd420 0xc1    0x5ca3
-> + * nct6796d    16      7       7       2+6    0xd420 0xc1    0x5ca3
->   * nct6797d    14      7       7       2+6    0xd450 0xc1    0x5ca3
->   *                                           (0xd451)
->   * nct6798d    14      7       7       2+6    0xd428 0xc1    0x5ca3
-> @@ -209,14 +209,14 @@ superio_exit(int ioreg)
->
->  /* Common and NCT6775 specific data */
->
-> -/* Voltage min/max registers for nr=7..14 are in bank 5 */
-> +/* Voltage min/max registers for nr=7..15 are in bank 5 */
->
->  static const u16 NCT6775_REG_IN_MAX[] = {
->         0x2b, 0x2d, 0x2f, 0x31, 0x33, 0x35, 0x37, 0x554, 0x556, 0x558, 0x55a,
-> -       0x55c, 0x55e, 0x560, 0x562 };
-> +       0x55c, 0x55e, 0x560, 0x562, 0x564 };
->  static const u16 NCT6775_REG_IN_MIN[] = {
->         0x2c, 0x2e, 0x30, 0x32, 0x34, 0x36, 0x38, 0x555, 0x557, 0x559, 0x55b,
-> -       0x55d, 0x55f, 0x561, 0x563 };
-> +       0x55d, 0x55f, 0x561, 0x563, 0x565 };
->  static const u16 NCT6775_REG_IN[] = {
->         0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x550, 0x551, 0x552
->  };
-> @@ -478,7 +478,7 @@ static const u16 NCT6776_REG_TEMP_CRIT[32] = {
->
->  static const u16 NCT6779_REG_IN[] = {
->         0x480, 0x481, 0x482, 0x483, 0x484, 0x485, 0x486, 0x487,
-> -       0x488, 0x489, 0x48a, 0x48b, 0x48c, 0x48d, 0x48e };
-> +       0x488, 0x489, 0x48a, 0x48b, 0x48c, 0x48d, 0x48e, 0x48f };
->
->  static const u16 NCT6779_REG_ALARM[NUM_REG_ALARM] = {
->         0x459, 0x45A, 0x45B, 0x568 };
-> @@ -1047,9 +1047,9 @@ div_from_reg(u8 reg)
->   * Some of the voltage inputs have internal scaling, the tables below
->   * contain 8 (the ADC LSB in mV) * scaling factor * 100
->   */
-> -static const u16 scale_in[15] = {
-> +static const u16 scale_in[16] = {
->         800, 800, 1600, 1600, 800, 800, 800, 1600, 1600, 800, 800, 800, 800,
-> -       800, 800
-> +       800, 800, 800
->  };
->
->  static inline long in_from_reg(u8 reg, u8 nr)
-> @@ -1143,7 +1143,7 @@ struct nct6775_data {
->         /* Register values */
->         u8 bank;                /* current register bank */
->         u8 in_num;              /* number of in inputs we have */
-> -       u8 in[15][3];           /* [0]=in, [1]=in_max, [2]=in_min */
-> +       u8 in[16][3];           /* [0]=in, [1]=in_max, [2]=in_min */
->         unsigned int rpm[NUM_FAN];
->         u16 fan_min[NUM_FAN];
->         u8 fan_pulses[NUM_FAN];
-> @@ -4200,7 +4200,7 @@ static int nct6775_probe(struct platform_device *pdev)
->         case nct6796:
->         case nct6797:
->         case nct6798:
-> -               data->in_num = 15;
-> +               data->in_num = (data->kind == nct6796) ? 16 : 15;
->                 data->pwm_num = (data->kind == nct6796 ||
->                                  data->kind == nct6797 ||
->                                  data->kind == nct6798) ? 7 : 6;
-> --
-> 2.26.2
+Guenter
