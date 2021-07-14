@@ -2,81 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F9EC12002
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 19:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1116C1B08C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 19:37:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E16D613C8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 19:32:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A48A461370
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jul 2021 19:37:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbhGNTfm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jul 2021 15:35:42 -0400
-Received: from mail-il1-f169.google.com ([209.85.166.169]:35746 "EHLO
-        mail-il1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbhGNTfm (ORCPT
+        id S229735AbhGNTkQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jul 2021 15:40:16 -0400
+Received: from mail-yb1-f169.google.com ([209.85.219.169]:46832 "EHLO
+        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229650AbhGNTkQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jul 2021 15:35:42 -0400
-Received: by mail-il1-f169.google.com with SMTP id a11so2736405ilf.2;
-        Wed, 14 Jul 2021 12:32:50 -0700 (PDT)
+        Wed, 14 Jul 2021 15:40:16 -0400
+Received: by mail-yb1-f169.google.com with SMTP id i18so5014648yba.13;
+        Wed, 14 Jul 2021 12:37:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P1VAUlEyjs73Bx47V1Jfiky3UvvDoViqJHQRhTR3K1Y=;
-        b=MYajywoqu0VgFENOec/EEM2+kK7yrViJIa74y+hiOPvUhLxDByzjtNQDU31nreQLd/
-         u8xS/cZ/Y8bH8nS/kXoz2pAohDLR+bb6m+3hBIwKYVHfvN0hkHQejCKdkp/KAJSjxQrL
-         7xcK73XABRRluEOW7YwKCAXTZkUZPxHCFSTGZS5G1gpr9kPKdNBeVvbeU8EMV/9awEzK
-         lHwB6DkySQEVLSkyf19diAyFL+Vm9nAub09Kp3T640UPG8tdMrhcJTZDsnuP6x/xothu
-         48WKgmN2wMT2wT5LoZZ1KEJ/sakaDfD95KPlcZ2DvRsfWwTf3u+sV5FS0/exDrgFXAW6
-         zXjQ==
-X-Gm-Message-State: AOAM531rsYkEYDjdwEhYw279GFRQxfwD4vVgYQjeVQTjfG99jxAmRcvC
-        C/rsIk/sE/Mo+Mggb+uaUNZ9TcIGhg==
-X-Google-Smtp-Source: ABdhPJwHzjzD0JWdrl/v0E+7zAdqUT9uQ+9746AJrdOx7rukqDaUTh2BferopKTZdNflJ33syc3Q/A==
-X-Received: by 2002:a92:3302:: with SMTP id a2mr7790789ilf.62.1626291169718;
-        Wed, 14 Jul 2021 12:32:49 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id p19sm1726825iob.7.2021.07.14.12.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 12:32:48 -0700 (PDT)
-Received: (nullmailer pid 3134962 invoked by uid 1000);
-        Wed, 14 Jul 2021 19:32:46 -0000
-Date:   Wed, 14 Jul 2021 13:32:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Emil Renner Berthing <esmil@mailme.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dfg6v8U+e94N9MYk6+AqPP4xfh304fF8ksCvTr/cIag=;
+        b=cApeQgwIWStrsy98JwtT2zLaEs55Ii1ZPlgtLeg6zLukHIRA3fbgrfQY/sOXfzVwGb
+         co0dU2o9otjlJpskApk7Dybi5cryuuK555pHC4l7vfFOKro3BwtDkju4SKXS4AVCgVZN
+         yOAmB0K5NZ9x/etSUV6cKb1gguv+Rf7H8ItoQVEiR5Ci7tBPLTqG5gMYysFP8uoSm7DB
+         JrZmNg5uvlPh6XsZUVzyU3Vh3iHsWpaq4gSKamnBY8av2hnN8tsMKbXDyr+O07/Mi1Qn
+         WT3wGCEa8B1y3wLL3JJJkhzfaIvzfzFy5vJ4t5YhMZlNIZGdrvgBT8fMd4Df3rxXYH6k
+         Y87g==
+X-Gm-Message-State: AOAM530Fwontt1v9NxlG6SuucI5wtoYqW5flw9LGWnT8XmpBzz69zFmb
+        UB8CXHC3X06C8jGgU4GdZqRSS0VETjqeyOP0eRQ=
+X-Google-Smtp-Source: ABdhPJyUZ8N52pS5NpkhNdSd7dw7L4cwUfs6AS5py8VjBZ4AAZt9nUOJ5DSR7XxK3u1Ol1cvvSA45OmRsordlLFIn0s=
+X-Received: by 2002:a25:b093:: with SMTP id f19mr15903363ybj.90.1626291444162;
+ Wed, 14 Jul 2021 12:37:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210624162108.832518-1-esmil@mailme.dk> <20210624162108.832518-2-esmil@mailme.dk>
+ <20210714193246.GA3134908@robh.at.kernel.org>
+In-Reply-To: <20210714193246.GA3134908@robh.at.kernel.org>
+From:   Esmil <esmil@mailme.dk>
+Date:   Wed, 14 Jul 2021 21:37:13 +0200
+Message-ID: <CANBLGcwb-Z9OPM2q7nZY218gPXuwv80Xstu1FXre4ZFhXHHeAw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: add starfive,jh7100-temp bindings
+To:     Rob Herring <robh@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>,
         Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: add starfive,jh7100-temp
- bindings
-Message-ID: <20210714193246.GA3134908@robh.at.kernel.org>
-References: <20210624162108.832518-1-esmil@mailme.dk>
- <20210624162108.832518-2-esmil@mailme.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210624162108.832518-2-esmil@mailme.dk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 24 Jun 2021 18:21:07 +0200, Emil Renner Berthing wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
-> 
-> Add bindings for the temperature sensor on the StarFive JH7100 SoC.
-> 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> ---
->  .../bindings/hwmon/starfive,jh7100-temp.yaml  | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh7100-temp.yaml
-> 
+On Wed, 14 Jul 2021 at 21:32, Rob Herring <robh@kernel.org> wrote:
+> On Thu, 24 Jun 2021 18:21:07 +0200, Emil Renner Berthing wrote:
+> > From: Emil Renner Berthing <kernel@esmil.dk>
+> >
+> > Add bindings for the temperature sensor on the StarFive JH7100 SoC.
+> >
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > ---
+> >  .../bindings/hwmon/starfive,jh7100-temp.yaml  | 43 +++++++++++++++++++
+> >  1 file changed, 43 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh7100-temp.yaml
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thank you!
