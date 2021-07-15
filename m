@@ -2,255 +2,218 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8495C07E96
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 10:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 905C4C47E48
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 16:28:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B719F61360
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 10:38:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F129613F9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 16:28:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbhGOKlp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Jul 2021 06:41:45 -0400
-Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:27104 "EHLO
-        mx0b-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234408AbhGOKlo (ORCPT
+        id S231325AbhGOQbk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Jul 2021 12:31:40 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:42639 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231313AbhGOQbk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Jul 2021 06:41:44 -0400
-X-Greylist: delayed 750 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Jul 2021 06:41:44 EDT
-Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
-        by mx0b-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16FAGjEj024180;
-        Thu, 15 Jul 2021 06:26:07 -0400
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2043.outbound.protection.outlook.com [104.47.56.43])
-        by mx0b-00128a01.pphosted.com with ESMTP id 39tday8yc2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jul 2021 06:26:06 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PFFRoobTLf7gezwK27Dn5CewAEQq44+f5fM+dBv5acRku+lQgJ+jJgV1GovCLaiXUFU3Imq/pVztnDpbtn4ZA+OUk06mG2nN0CHWnrxtkuDLJW4XQxs82DBPrqiQkqSyJfFDOHy41cobfBEO9/MTCSdas2UL0yE5mSvDFS9y9u63wJpGE1dfYL9B3RmYD8mH8W/1jmYkTr2m4VK/8Q3Rk2BSbRZ+avg7Z4Gt+WHw+lFdcS7YlPTCk+fC2UvoT9kMmOyC4XKsFDXQgpvhpN46YUfFD8Q5oFbwpMGQ3yU5pF1zrVuxNeY5NdQRbkq/A53HBQlcruq5jFjSk1ObKGAbTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xWcPlPhuDtWr1XeqSRzVfn/AFuKCqmKAZzIgBUgHI9k=;
- b=chRLqc/tg5+c+oELXo6Ow0avRk20WeB37SEnqY4OBTkNEsxAvJk8bGY0yri8QOh8zw7TFxy7FzyVtkb0Yb3ajsbsZzqtM1iY61DZ0w7CNvgHzFfv3G5Ma/mxOF+ykG2uf+Z9KFHGUv7y5u4sKfPvyA+IRunK95x8+mr/OuiMwZT3xv2Y7OCjgHiEAvd09p2B1w7NzPy68ne6qKMaPjByK3u/aREY6qwcvNkBVq03sFCVWtoJ1ADLR5FApmVzAODIT7amLqM0obBdPfvvzCaEADSYfTxua5BihcVk1kl33PuKD+Yb9RxDDzGU8iV/0DgeUEL+KblebwBkzjDU61DfOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xWcPlPhuDtWr1XeqSRzVfn/AFuKCqmKAZzIgBUgHI9k=;
- b=iq1iFis3Q3BhkvVW+U94Vq6wJpFSHhF6DQxf437egkNNdK1RNUXLfZIkfj9QOJIz7JWHptsN0Km9EvhD0qmeX4wd2BfoG7GqT3MXKC62amH66wKGLwLfcksjbcecjKvcOrtjDyMDYFtHmJAoWvha2Q78Yuhv99T+Uu2SVVV6Zl0=
-Received: from PH0PR03MB6366.namprd03.prod.outlook.com (2603:10b6:510:ab::22)
- by PH0PR03MB5862.namprd03.prod.outlook.com (2603:10b6:510:42::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.22; Thu, 15 Jul
- 2021 10:26:05 +0000
-Received: from PH0PR03MB6366.namprd03.prod.outlook.com
- ([fe80::54ff:7b16:5fc7:38ca]) by PH0PR03MB6366.namprd03.prod.outlook.com
- ([fe80::54ff:7b16:5fc7:38ca%4]) with mapi id 15.20.4308.027; Thu, 15 Jul 2021
- 10:26:05 +0000
-From:   "Sa, Nuno" <Nuno.Sa@analog.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Thu, 15 Jul 2021 12:31:40 -0400
+Received: by mail-io1-f54.google.com with SMTP id x10so7133683ion.9;
+        Thu, 15 Jul 2021 09:28:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DU/pjsNZXYd/mflQi0Kfu+Fvn8JWm+lHh6CuqP6iNvc=;
+        b=JIXY0Owi76ZQ/JRznR/HBbA2yATjQTiKax6wg/GZ8YzN/cBnuWaRIIjPbS3N0am6w1
+         YZA0lAK0vTfnQAeLfUlGOyNtdMsvLmUm6DL56pvr/Qz3P4S+I6IW6l/xzNxX9Za4Ox3w
+         0kuOR9LUngxFgBGJ9XdEHh8eehCiYSd+6/ntjOMFIsmRIcC4UUMN1GKzYxnAGkL8zRe0
+         QluzykRdNhXN39pbKHBGDjVuYFWFS0ZBFNt5EIABTrC5EwvFXFljRrYNw2IpZWk9lk+Z
+         5mTY12D3x6ntKygV/0+zDLcndOzV/cufjBCsk0FeVMUxZI9rXX9WHG36ytpdzN1Fhd3x
+         NoJA==
+X-Gm-Message-State: AOAM530yIYwhk2xqx7Jl2rxCsyC2C3ulQlh2iNngsJeNLwvYkdMTKVss
+        karZ2dPg6TzmhV1XXnv/2g==
+X-Google-Smtp-Source: ABdhPJyfCdrhjQU34aG9qE+M9t/V6VN32ihTfjbCf3Coc++/H9jqzMpmnWxNQkGbjUo/KkWnF+pVcw==
+X-Received: by 2002:a6b:4e02:: with SMTP id c2mr3883015iob.166.1626366526415;
+        Thu, 15 Jul 2021 09:28:46 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a11sm3368502ilf.79.2021.07.15.09.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jul 2021 09:28:45 -0700 (PDT)
+Received: (nullmailer pid 1194569 invoked by uid 1000);
+        Thu, 15 Jul 2021 16:28:40 -0000
+Date:   Thu, 15 Jul 2021 10:28:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        x86@kernel.org, devicetree@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: RE: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
- properties
-Thread-Topic: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
- properties
-Thread-Index: AQHXc/CftWRp4pYREEulee6AuCq4has/nlgAgAQ89UA=
-Date:   Thu, 15 Jul 2021 10:26:05 +0000
-Message-ID: <PH0PR03MB63668564A9A7B8F5D6E5F8D499129@PH0PR03MB6366.namprd03.prod.outlook.com>
-References: <20210708120111.519444-1-nuno.sa@analog.com>
- <20210708120111.519444-4-nuno.sa@analog.com>
- <20210712172656.GA2142233@robh.at.kernel.org>
-In-Reply-To: <20210712172656.GA2142233@robh.at.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?iso-8859-1?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbnNhXGFwcG?=
- =?iso-8859-1?Q?RhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
- =?iso-8859-1?Q?OWUzNWJcbXNnc1xtc2ctMGRjNzViYzMtZTU1Ny0xMWViLThiNzQtZTRiOT?=
- =?iso-8859-1?Q?dhN2NjNzEwXGFtZS10ZXN0XDBkYzc1YmM0LWU1NTctMTFlYi04Yjc0LWU0?=
- =?iso-8859-1?Q?Yjk3YTdjYzcxMGJvZHkudHh0IiBzej0iMzM0NyIgdD0iMTMyNzA4MTgzNj?=
- =?iso-8859-1?Q?M1NTQ3OTU1IiBoPSJPZkhFN1FTYlh3UVRnZUVLYkswd2kzN3hMeTg9IiBp?=
- =?iso-8859-1?Q?ZD0iIiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQU?=
- =?iso-8859-1?Q?FJWURBQUF6VjJMUVkzblhBUzNoalVycU54WUxMZUdOU3VvM0Znc0ZBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBSEFBQUFBV0F3QUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBRUFBUUFCQUFBQUJPWUdjZ0FBQUFBQUFBQUFBQUFBQUo0?=
- =?iso-8859-1?Q?QUFBQmhBR1FBYVFCZkFITUFaUUJqQUhVQWNnQmxBRjhBY0FCeUFHOEFhZ0?=
- =?iso-8859-1?Q?JsQUdNQWRBQnpBRjhBWmdCaEFHd0Fjd0JsQUY4QVpnQnZBSE1BYVFCMEFH?=
- =?iso-8859-1?Q?a0FkZ0JsQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdFQV?=
- =?iso-8859-1?Q?pBQnBBRjhBY3dCbEFHTUFkUUJ5QUdVQVh3QndBSElBYndCcUFHVUFZd0Iw?=
- =?iso-8859-1?Q?QUhNQVh3QjBBR2tBWlFCeUFERUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFZUUJrQUdrQVh3?=
- =?iso-8859-1?Q?QnpBR1VBWXdCMUFISUFaUUJmQUhBQWNnQnZBR29BWlFCakFIUUFjd0JmQU?=
- =?iso-8859-1?Q?hRQWFRQmxBSElBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCaEFISUFhUUJoQUY4QVpBQn?=
- =?iso-8859-1?Q?BBR01BZEFCcEFHOEFiZ0JoQUhJQWVRQmZBSFFBYVFCbEFISUFNUUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBZ0FBQUFBQW5nQUFBR0VBY2dCcEFHRUFYd0JrQUdrQVl3QjBB?=
- =?iso-8859-1?Q?R2tBYndCdUFHRUFjZ0I1QUY4QWRBQnBBR1VBY2dBeUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFB?=
- =?iso-8859-1?Q?Q0FBQUFBQUE9Ii8+PC9tZXRhPg=3D=3D?=
-x-dg-rorf: true
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=analog.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3c4cc516-62a3-410d-5a7f-08d9477af401
-x-ms-traffictypediagnostic: PH0PR03MB5862:
-x-microsoft-antispam-prvs: <PH0PR03MB5862D9AD2C05B5A8F372A27D99129@PH0PR03MB5862.namprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t7rw1IDngjU6vJklB/mNk6BLU5++z2u1E5wMZ1KnMIKNwfgI5cvZbzR6RmfGvRkxbf7Qq9GWEmlITV8gizxKsMhIH2/UXc61XnUBtKZfCRzYsMKfZdTxa1KHKt1iihCfflw8FbJ4TTda1zzVlNVHZtwl7XOV5F6I1VhI+Bbk0g7HJ3kvWnBJmditIr8zU6m0fVNDUYPUA2o6YjiniuUVvS6qJqav+obD0IXE2PKg4maHPQ4c+zooQEz4KY6d+4WPYh2Gm8CPs9WWKoe5OwbWsd/A28RLKf4TCI42cThSVDK3ZWYAHXg+J1qGwlZ8CoaEYPWvwfy2Ljw5ynOo4VUe5UEUiHIWYUvDP+VcZ0Nqgazh9xWlK3pUf9rPosuU9ACU7nYR9EQwRrbIPBmi7z5PXMm/rlkXvv5C3kfGrAG9Ye5X1iXZzrzYfzH13lTxMTzKOnT6/fF2hoh6WHKkTUvAcoiGNopC3oS6hAkf1rIjpK6BiRTKjOPyMwWf5LAAC12UTZOuAqNHWgKj7yw2ErfyUmQGoqZTYN6M20JU6jMXTCqT29gfLqfBmkipwh16SOOzcQZ8B24Fed7B6vboauqGQ9EhjT5err+MbRqoOPw8KnR+6pOPf9C138hQBX2NRVgF/WGBWoETrM3c0X0VD907VBJOEpNH4tC+7ISc8H4ay1ETRg7WGGvEus6MymWyLRUXgzP1giC3j09n3AQE6yPD5w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6366.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(396003)(366004)(136003)(346002)(76116006)(6916009)(66476007)(55016002)(122000001)(38100700002)(5660300002)(71200400001)(66946007)(9686003)(4326008)(86362001)(33656002)(66556008)(64756008)(186003)(26005)(478600001)(66446008)(316002)(53546011)(6506007)(83380400001)(8936002)(8676002)(52536014)(7696005)(54906003)(2906002)(38070700004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?+5jWUyJPxoG4/yc7qidZCfEbNY5cPJJKQqtddywBWWhx+sVBPtMjA5ZFpM?=
- =?iso-8859-1?Q?X3XP16wh3ppzF/eQQal/2rZ6Xf9N/lAKXYSnwwkR2DcSLpW+NZkjP+P1xg?=
- =?iso-8859-1?Q?AO9/qHlsha2+0g8LvB6J5tHgvBliOj90cykQYcru4S9RQibxPPJuJyO5C4?=
- =?iso-8859-1?Q?qN+VEFFSJs0WWZNdRCIBXjL9NWo0MtHkGq6dGwVSro5dvLKA24BKbLRhnX?=
- =?iso-8859-1?Q?4TzkLCSm9SKbYWTKvp6J9CW+Y5QY0QeRGoH+pz3ezbRAZgdQXIE4TfE0Jh?=
- =?iso-8859-1?Q?snNfC00qGwQr2gd4mtfk7iLKrL3AwNgm5cL5COata3/zcXA2B7nO+rsc/e?=
- =?iso-8859-1?Q?naqOkTdmCa3VdXJNVp9H5pn12OUstBE8CiqBbFqiSY9LF+PDZmqPdUQHzn?=
- =?iso-8859-1?Q?iW44V11wz+Th0Fup2/FMqhqZeBB3fkxlZXGbC/ctIQpXRALv5NfhU3RDfa?=
- =?iso-8859-1?Q?FOe+MFEbJ/gC0mNghi7KfW+qMdhbesqberHRmAyKVAc1x1fCjwJXNPvdlD?=
- =?iso-8859-1?Q?O7d40nD1K08GF/AP1YF4hD+cWhRXhlWvnB1LG+rYZ5N8s/UE2FBQ8rREdB?=
- =?iso-8859-1?Q?3VgX2QNTzeEeMsvcbZRdNatyWYTXGofXyVB/zSiAgFVCNsah1bX9Ld3Pot?=
- =?iso-8859-1?Q?2SocnUABsGn7JbcTChUqhbLnGPWmtkNlLtZLUDFNtmu7IZQlKLfKrkE8vD?=
- =?iso-8859-1?Q?BJDj2HAl+iHYN5H7RAuIBpyS8Vb681F5w39E/jlLq9kiVkF1XY9JvMxYF/?=
- =?iso-8859-1?Q?5y/GK0V+f8JZ/jHfCpKc4LefHlzTKmxwuHhl01lEkG6lY0v/dXrxnco6nz?=
- =?iso-8859-1?Q?RLb46/rdHiJG3D7ByPGvM+15SvjOcf36p64Vjn8KMcZC8ELIsvmBMcdxDN?=
- =?iso-8859-1?Q?53vJC6MkqvzrApc3t5Ojkcm87zGesnZHpmDyrn1AvzPb/TdXoFxwJgfYN5?=
- =?iso-8859-1?Q?Uo9LDYqZsKVeoUxYvqG52IcwjRGjAzeqNU69aQuwOGyWuS61uPadGNjeQH?=
- =?iso-8859-1?Q?9Wk8b10RCJR502wxP/vaEWpgE2YQE88bPupnhSxovAdei20U9ENCLCreRm?=
- =?iso-8859-1?Q?b98EEZcFc6jr83ajFUWUlqVBRp/M4ZzQvv03TEIRbdE0Xi4+P01G6md7tf?=
- =?iso-8859-1?Q?cUgSo2EB1PJVD+Y7kFFydbmLjXB5J51lItY30EOPRqJJ/6XCHp8bRelHqE?=
- =?iso-8859-1?Q?b/xcqKzbnaiEFxa/g2sravPV0cTooFZDyldc7q8mxWMF9zmxPW/szVMmCR?=
- =?iso-8859-1?Q?Z9tZ+T2qTGLyRQ4nyFT6qhA17so0ngLPqSgiwdfkaHFoYwRDrMYCcEdwZY?=
- =?iso-8859-1?Q?lOLBnc4SX1Imnw2atEmsQWPumBU0kFMg5kEH+D5lalVzvP63lu0z/9AQMA?=
- =?iso-8859-1?Q?2BLdd5xE7G?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: Re: [PATCH 04/14] dt-bindings: Add bindings for peci-aspeed
+Message-ID: <20210715162840.GA1187226@robh.at.kernel.org>
+References: <20210712220447.957418-1-iwona.winiarska@intel.com>
+ <20210712220447.957418-5-iwona.winiarska@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6366.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c4cc516-62a3-410d-5a7f-08d9477af401
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2021 10:26:05.3633
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h9jJ0tnWOFiLkWlPOatZ47qXnhJdK7FWR6iuRW8Yzi6ltz/B1/V86GRkFm4m+rVIWGTH/cth0uZCD/zKRs9YAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR03MB5862
-X-Proofpoint-ORIG-GUID: bntmIuZI6Q4UkpaEe9CKxWSnh2SfnE8X
-X-Proofpoint-GUID: bntmIuZI6Q4UkpaEe9CKxWSnh2SfnE8X
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-15_07:2021-07-14,2021-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 clxscore=1015 suspectscore=0 mlxscore=0 adultscore=0
- malwarescore=0 spamscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107150076
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210712220447.957418-5-iwona.winiarska@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> From: Rob Herring <robh@kernel.org>
-> Sent: Monday, July 12, 2021 7:27 PM
-> To: Sa, Nuno <Nuno.Sa@analog.com>
-> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
-> Guenter Roeck <linux@roeck-us.net>; Jean Delvare
-> <jdelvare@suse.com>
-> Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
-> properties
->=20
-> [External]
->=20
-> On Thu, Jul 08, 2021 at 02:01:08PM +0200, Nuno S=E1 wrote:
-> > Add the bindings for the tacho signal evaluation parameters which
-> depend
-> > on the FAN being used.
-> >
-> > Signed-off-by: Nuno S=E1 <nuno.sa@analog.com>
-> > ---
-> >  .../bindings/hwmon/adi,axi-fan-control.yaml          | 12
-> ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
-> control.yaml b/Documentation/devicetree/bindings/hwmon/adi,axi-
-> fan-control.yaml
-> > index 6747b870f297..0481eb34d9f1 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
-> control.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
-> control.yaml
-> > @@ -37,6 +37,18 @@ properties:
-> >      $ref: /schemas/types.yaml#/definitions/uint32
-> >      enum: [1, 2, 4]
-> >
-> > +  adi,tacho-25-us:
-> > +    description: Expected tacho signal when the PWM is at 25%.
-> > +
-> > +  adi,tacho-50-us:
-> > +    description: Expected tacho signal when the PWM is at 50%.
-> > +
-> > +  adi,tacho-75-us:
-> > +    description: Expected tacho signal when the PWM is at 75%.
-> > +
-> > +  adi,tacho-100-us:
-> > +    description: Expected tacho signal when the PWM is at 100%.
->=20
-> This looks like it should be common. But having PWM percents in the
-> property names doesn't scale. This is also a property of the fan, not
-> the fan controller.
+On Tue, Jul 13, 2021 at 12:04:37AM +0200, Iwona Winiarska wrote:
+> Add device tree bindings for the peci-aspeed controller driver.
+> 
+> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+> ---
+>  .../devicetree/bindings/peci/peci-aspeed.yaml | 111 ++++++++++++++++++
+>  1 file changed, 111 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/peci/peci-aspeed.yaml b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+> new file mode 100644
+> index 000000000000..6061e06009fb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+> @@ -0,0 +1,111 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/peci/peci-aspeed.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed PECI Bus Device Tree Bindings
+> +
+> +maintainers:
+> +  - Iwona Winiarska <iwona.winiarska@intel.com>
+> +  - Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> +
+> +allOf:
+> +  - $ref: peci-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2400-peci
+> +      - aspeed,ast2500-peci
+> +      - aspeed,ast2600-peci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: |
+> +      Clock source for PECI controller. Should reference the external
+> +      oscillator clock.
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clock-divider:
+> +    description: This value determines PECI controller internal clock
+> +      dividing rate. The divider will be calculated as 2 raised to the
+> +      power of the given value.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 7
+> +    default: 0
+> +
 
-Yes, I see that these parameters are definitely a property of the attached
-fan but the evaluation of these timings are very specific to this controlle=
-r
-(I think). The way it works is that the HW can fully operate without any
-runtime SW configuration. In this case, it will use the values in these
-registers to evaluate the tacho signal coming from the FAN. And the HW
-really uses the evaluation points like this (0, 25%, 50% and 100%). It has
-some predefined values that work for the FAN that was used to develop
-the IP but naturally the evaluation will fail as soon as other FAN is attac=
-hed
-(resulting in fan fault interrupts). And yes, writing these parameters is=20
-already SW configuration but what I mean with "runtime" is after probe :).=
-=20
+> +  msg-timing:
+> +    description: |
+> +      Message timing negotiation period. This value will determine the period
+> +      of message timing negotiation to be issued by PECI controller. The unit
+> +      of the programmed value is four times of PECI clock period.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 255
+> +    default: 1
+> +
+> +  addr-timing:
+> +    description: |
+> +      Address timing negotiation period. This value will determine the period
+> +      of address timing negotiation to be issued by PECI controller. The unit
+> +      of the programmed value is four times of PECI clock period.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 255
+> +    default: 1
+> +
+> +  rd-sampling-point:
+> +    description: |
+> +      Read sampling point selection. The whole period of a bit time will be
+> +      divided into 16 time frames. This value will determine the time frame
+> +      in which the controller will sample PECI signal for data read back.
+> +      Usually in the middle of a bit time is the best.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 15
+> +    default: 8
+> +
+> +  cmd-timeout-ms:
+> +    description: |
+> +      Command timeout in units of ms.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +    maximum: 1000
+> +    default: 1000
 
-So, I honestly do not know how we could name this better... Maybe a
-'tacho-eval-points-us' array? The question would be the min/max
-elements? Do you have any suggestion for a more generic property?
+Are all of these properties common for PECI or specific to this 
+controller? The former needs to go into the common schema. The latter 
+need vendor prefixes.
 
-> There's only so many ways a fan can be controlled and I'm going to
-> keep
-> telling folks to make a common fan binding. There's some start to it,
-> but it needs some work.
 
-You mean the pwm-fan.txt? I gave a look to the driver and I don't think
-it fully fits this controller. I'm ok in sending an fan.yaml binding if you
-prefer it but I'm just not sure what we would need there... Maybe
-pulses-per-revolution and the above property
-(whatever the decided name) would be a starting point?=20
-
-- Nuno S=E1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +    peci-controller@1e78b000 {
+> +      compatible = "aspeed,ast2600-peci";
+> +      reg = <0x1e78b000 0x100>;
+> +      interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+> +      clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
+> +      resets = <&syscon ASPEED_RESET_PECI>;
+> +      clock-divider = <0>;
+> +      msg-timing = <1>;
+> +      addr-timing = <1>;
+> +      rd-sampling-point = <8>;
+> +      cmd-timeout-ms = <1000>;
+> +    };
+> +...
+> -- 
+> 2.31.1
+> 
+> 
