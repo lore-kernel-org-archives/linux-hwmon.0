@@ -2,218 +2,196 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 905C4C47E48
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 16:28:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0917CC1B08C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 16:42:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F129613F9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 16:28:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5E2C613F8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 16:42:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbhGOQbk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Jul 2021 12:31:40 -0400
-Received: from mail-io1-f54.google.com ([209.85.166.54]:42639 "EHLO
-        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbhGOQbk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Jul 2021 12:31:40 -0400
-Received: by mail-io1-f54.google.com with SMTP id x10so7133683ion.9;
-        Thu, 15 Jul 2021 09:28:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DU/pjsNZXYd/mflQi0Kfu+Fvn8JWm+lHh6CuqP6iNvc=;
-        b=JIXY0Owi76ZQ/JRznR/HBbA2yATjQTiKax6wg/GZ8YzN/cBnuWaRIIjPbS3N0am6w1
-         YZA0lAK0vTfnQAeLfUlGOyNtdMsvLmUm6DL56pvr/Qz3P4S+I6IW6l/xzNxX9Za4Ox3w
-         0kuOR9LUngxFgBGJ9XdEHh8eehCiYSd+6/ntjOMFIsmRIcC4UUMN1GKzYxnAGkL8zRe0
-         QluzykRdNhXN39pbKHBGDjVuYFWFS0ZBFNt5EIABTrC5EwvFXFljRrYNw2IpZWk9lk+Z
-         5mTY12D3x6ntKygV/0+zDLcndOzV/cufjBCsk0FeVMUxZI9rXX9WHG36ytpdzN1Fhd3x
-         NoJA==
-X-Gm-Message-State: AOAM530yIYwhk2xqx7Jl2rxCsyC2C3ulQlh2iNngsJeNLwvYkdMTKVss
-        karZ2dPg6TzmhV1XXnv/2g==
-X-Google-Smtp-Source: ABdhPJyfCdrhjQU34aG9qE+M9t/V6VN32ihTfjbCf3Coc++/H9jqzMpmnWxNQkGbjUo/KkWnF+pVcw==
-X-Received: by 2002:a6b:4e02:: with SMTP id c2mr3883015iob.166.1626366526415;
-        Thu, 15 Jul 2021 09:28:46 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a11sm3368502ilf.79.2021.07.15.09.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jul 2021 09:28:45 -0700 (PDT)
-Received: (nullmailer pid 1194569 invoked by uid 1000);
-        Thu, 15 Jul 2021 16:28:40 -0000
-Date:   Thu, 15 Jul 2021 10:28:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Iwona Winiarska <iwona.winiarska@intel.com>
-Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        x86@kernel.org, devicetree@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH 04/14] dt-bindings: Add bindings for peci-aspeed
-Message-ID: <20210715162840.GA1187226@robh.at.kernel.org>
+        id S232133AbhGOQpL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Jul 2021 12:45:11 -0400
+Received: from mga17.intel.com ([192.55.52.151]:51413 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229635AbhGOQpK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Jul 2021 12:45:10 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="190958698"
+X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
+   d="scan'208";a="190958698"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2021 09:42:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
+   d="scan'208";a="428859618"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Jul 2021 09:42:11 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Thu, 15 Jul 2021 09:42:11 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Thu, 15 Jul 2021 09:42:10 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10 via Frontend Transport; Thu, 15 Jul 2021 09:42:10 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.10; Thu, 15 Jul 2021 09:42:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RGQQrUSP/t2S520O1CC4gDLXMzLhzpFMHgc/Oa4sP2IomBE3d6cMv+piEvK+xVNhxebCWcLW0i1mZw7UqVzvPAb6D7/DBWpr5h7J4HuEb75+cJ0zg5mjT5Ts8Tx4lc6ibb2O1eXVRgvsA8Aw81fTPNG9Lye6EE0kzJRmA5lpGGNn43vf3YJt4Gzfug/mjlQb6rtJaWvYGqhfzO7W6QI5y9jBfPZZapRJHx3bnEwt290Aj4ukXP1bXwFyR/DYOT4fIcau94bg7hZokOCusu5lfSwwN/vySmnJgfNNsAwo2SMCdTrRSAL6oHazWSKtUWPf7bri9YVAC4ix7OGWypktAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jFpBaYLaVSYZ/nY23JZd6mgFX6YxX+kBbVunJNceDuk=;
+ b=XxrY12CXjx+v6AS8AeOySzEkrKVibl/exgjxS8DCHlSRiI2Qmmgz6Jhm56a0cu+BAXzgQv7Yrqxnm9eP89pRe2wrvvGo+h4mARUtbZl1Tg4e5mTHk7uU7e/dmJv6neAP8mX9sPFtkbS8YG1XchKD3SX2fvLZvJMoV3KOIKa8Q0VHZliFU7NInYIeh5QlcdjQfoliZW3GzN0boRm/SgJBOqjBVqbi77Z/ekPQV0tZdTrBd5xqVYkH166P52pVtlaSfjFDUkeYIck1AZBnooqbWz6OWJXLB7A8FtIrbSxkvKHo0H8ZBDj794QDfJT/Xb6HtXMVXCFcnAHUiMgOmX05+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jFpBaYLaVSYZ/nY23JZd6mgFX6YxX+kBbVunJNceDuk=;
+ b=gCCqYstAV+OdXu5DfCWGZZBErlvqeb0Omsqk7rWaNmwqY4BLiS18EivqwssYC6o8kx/OhwBeBE+L1dkM8rVouL6Ui3NJEHtyF/EI925SYqZmskJfdlB839eqE8DM7T6arD7bzw196CpOvWE3z6ab5+eWro5p8v340n+VZcXDr7g=
+Received: from SN6PR11MB2589.namprd11.prod.outlook.com (2603:10b6:805:53::12)
+ by SA2PR11MB4971.namprd11.prod.outlook.com (2603:10b6:806:118::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Thu, 15 Jul
+ 2021 16:42:05 +0000
+Received: from SN6PR11MB2589.namprd11.prod.outlook.com
+ ([fe80::357a:ba5:ee4f:d5f1]) by SN6PR11MB2589.namprd11.prod.outlook.com
+ ([fe80::357a:ba5:ee4f:d5f1%7]) with mapi id 15.20.4331.022; Thu, 15 Jul 2021
+ 16:42:05 +0000
+From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
+To:     "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>
+Subject: Re: [PATCH 07/14] peci: Add peci-aspeed controller driver
+Thread-Topic: [PATCH 07/14] peci: Add peci-aspeed controller driver
+Thread-Index: AQHXd2rgJ2vtBAF9sEOGUwpyjZOFA6tAWaGAgAPoOAA=
+Date:   Thu, 15 Jul 2021 16:42:05 +0000
+Message-ID: <787288238eba562e1e1927469c7e8dbb2b4912df.camel@intel.com>
 References: <20210712220447.957418-1-iwona.winiarska@intel.com>
- <20210712220447.957418-5-iwona.winiarska@intel.com>
+         <20210712220447.957418-8-iwona.winiarska@intel.com>
+         <b894ba5e-e1ae-e5dd-87be-dc33912dd5c0@infradead.org>
+In-Reply-To: <b894ba5e-e1ae-e5dd-87be-dc33912dd5c0@infradead.org>
+Accept-Language: en-US, pl-PL
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+authentication-results: infradead.org; dkim=none (message not signed)
+ header.d=none;infradead.org; dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1fd327b6-2fab-4858-555d-08d947af7b03
+x-ms-traffictypediagnostic: SA2PR11MB4971:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SA2PR11MB4971FE592B1B7F0622AEF02DEC129@SA2PR11MB4971.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gyxKdI7QMvk0+6w7NUHnDBn2JaXeNoqiufa40DMoqAyZHBQaFExPM6FvcGs8eAxxxPfD3ooDgIYnlPlHVR24si/hia/ZJad7XISv90pUoxQPho7WUmaiU7/AkncoJVTi89xQv8VemoUnBQF60oI5WJLgVSs5TSw8g8QHy4PyAlZRTHpWQq32rJQp8obiuTYNshukUWRiEaUVv7L5lE59zc9+mvqRF/F7jnCfliOQ7/zrjtfLkZhVjGZNE0XXPyMI4HLICLSOa6GlrSAcRA1RLe6LkUDBWiYEhwci+ha0207sQ3wXuA4XJizh+m/KXTH+TmIy6vRqlPm8QV4ZuZFXOPvhmvqz0tXWjtfQ4PBrH3x1E2JIG7mdpQGIyO/zJsFNGY6baLaIpw/pzg6IUVvVxDGdDsB5FXQQqln3UjoYP2t/I0/7sMHDikuhe5TK4yTfcULY/18tiZBDB4kkIqGz1JA51pXxNJAOWE/eFugn1iqAyTiUDbbusPPXBOD0EA827TOKZnl2YolvbohNO/rwmPnqt73D9ruz+ZWXK0QfeHd8wfatA7lwDcEW+iXuGsGBnjXZeNXdtsbgcL8BRXhoDH3V/LgTUNaWwNiPYr+aGpRQ75wh5bknt3MQ92/KnqaOmRNmZPH/fHUl2jn0eBIWlKl5Di2Xwvu/74gJsWhR57zdknyxknrqsKGKq3tqci831CAiHRhhAaoViHaeS+NlgA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB2589.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(366004)(136003)(39860400002)(346002)(53546011)(6506007)(7416002)(26005)(5660300002)(186003)(64756008)(66556008)(66476007)(91956017)(2616005)(316002)(66446008)(478600001)(66946007)(76116006)(8936002)(54906003)(8676002)(2906002)(38100700002)(122000001)(36756003)(6512007)(6486002)(86362001)(110136005)(4326008)(4744005)(71200400001)(38070700004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VTcvZmJMOCtnOG15ajhrMXJtUzVQdWdHZVBKZlVtRENmdkJvNHFoZHUydnRU?=
+ =?utf-8?B?ODVHTmdDZjdsT1FaNXltNmJQcWI3eWhOOHBScUF6MXF2Wm41a2t5UG96ZVNS?=
+ =?utf-8?B?SUpDNXQ2OEQ2M1Fvd1E1Z3h3Q0hpQ01rcFF1WVBmQUtQQ2dVZzFPM2NxR1V5?=
+ =?utf-8?B?Z0J2Q0lINjNLTit4bmg1eVhlNXlMazcraS9oeVUrbGVJcS9aUEF0VUpkVXkr?=
+ =?utf-8?B?eUdISFAySlVOU0srUTRrdmpZd1kyT2UybElSSVB0eUhLUkprNkl5Mncybmhu?=
+ =?utf-8?B?ajNZTVJ0OTI0SE9WaElyTmlXcTZpRkJ1cjBpblFZbmt4d1RnKzF6dkVKcGZP?=
+ =?utf-8?B?RTFiMEtaQUdkOTVWS0F4c1o2MzVHU1pjV1pqcXluckJHK1lBY0FEM2kwZkdI?=
+ =?utf-8?B?ejJScHE0b3lrbFZmWUZqQk9HMVJPbzFUSklmL005WWpiVVN6Ylk2akEwZWY0?=
+ =?utf-8?B?KzBGVUVpcENTbE4zSXRpejcybWRwejNraHBybEQwcEJsejVEWDgrMEZBTEJm?=
+ =?utf-8?B?NnJJMFpYbW0rdWsxY2ZHM043UzhTVjE4QjB6ZmgzNUpBQXpDZndkcEEzZ0hV?=
+ =?utf-8?B?RC94YjU2Zjc3SVAvREtQdDRSWEs0enpTTFFUUHZxRmxCMHNZaTFlNVVLc05G?=
+ =?utf-8?B?MW92ZGV6eWx4RUtVQUxOMnJDTHdhbjhLWTF1eG9WTDg3cmNESTNMdVo2c0dW?=
+ =?utf-8?B?ckZGQXVzbDhkSUVDSndhRnZ1cXBoRVpQb1Y0Ynl3dVR6NHVkSWxLYmhCN2tu?=
+ =?utf-8?B?bXFsZUJoWVg5RlFKSEtmVXYrWWdmRnk0VW85MjZURUw3WTJTekU2RlFUVUFj?=
+ =?utf-8?B?YXNqMklLY1NIRmpUNWRiRitpc1VnbTRKaEJJRmNYWndxYkdxM1dZRmlxdnJ3?=
+ =?utf-8?B?SlRoK0J2S3RCTWZOL0dzSUF5bUJpVkUyVkZaVitvdXBqL09GT0JiOWk2a0tk?=
+ =?utf-8?B?L29oNUs1MDFUdm95bVBrNGtNMlJCZnZWYVM0MUlhOWxicjh4bGF6YkdUd0dq?=
+ =?utf-8?B?dzRveVhoZ0IxcUR3Tzc1WW9Db1p3TUE1WTE3bWwrM2ZDZkhjU3Q2bEZpaXBm?=
+ =?utf-8?B?NDg3R3ZSV252c1gwZUR6aGEwR0NQOGRPWElFWnZ2cDVQcGFKZlNCakdXRGU0?=
+ =?utf-8?B?OTRZYjRYQnh4N2JxVGFseWtqRXpMVWN2SmxoN3FrS3FQNkRnTVEwWVFOMWJF?=
+ =?utf-8?B?NVRtU1poYmZzaFBhZUR5Mzl2bWxCczVuV0J3d0xmOHhBQ0NKb1JJVW1vOVRE?=
+ =?utf-8?B?L0ZvbW4vY2Fsa3dtRldIbERLWFhCbkpxQklmTUxMclp6SDF4cXBTTXdpQkVX?=
+ =?utf-8?B?d1FuQW1RZ2EvODYydjN6OHBONjFkL1MzZVYrTUZWMXBGUXFQOFVzdkhZTnRH?=
+ =?utf-8?B?Rm9DTnpMbjBHRkRLUEdVWmVrZGMvMXhZU2JHVEwrU0N6MG9YV01LZ0dlN3E4?=
+ =?utf-8?B?R2wzVm1ENElTREx4c1NxTmZVckV6NDFOQ0ZSeDlNTTV0OWg2aXBhbHRNdlpJ?=
+ =?utf-8?B?bm1IdW96M3lMQ1l2eUxQRnNKaDdyM25vbXpkUDZpNTNUVytIbWkrc3hueXcx?=
+ =?utf-8?B?N2NHMGhwK0VWdHo1enBVRkxNbDV1U3NKVTI1elpoUUxJUFFTZmY4cGJyY0x5?=
+ =?utf-8?B?NFZnVUJIaFp6VGQ4ejI0cTM0c294RTJuVTM5cHA1MlVIN2E5VjdYdUtMMUtX?=
+ =?utf-8?B?YVJONHB5Z0ZxUkdyTnF2UnFhRTRDbS9zajN3KzRtQkNhQk1kZnZMekZlU1li?=
+ =?utf-8?B?ZXZ2ZGxaanpVMXcvWXVueFArbVdIYkdDYmR0Q285ZjRYU3RQV0ZuRnlrYzNk?=
+ =?utf-8?B?S3FIVTN4SjhTTzBobGNpZz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2B787E8B3692894BA90BD5E7C6604444@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210712220447.957418-5-iwona.winiarska@intel.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB2589.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fd327b6-2fab-4858-555d-08d947af7b03
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2021 16:42:05.6751
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 856WZrpK8XFTVVYUCiM/uvi03hI5YI5C3i9zitx6vqqBia77bK6P7YinZ1JF/PdL7XkKfoZFkPKbiYNfiGnm35OSDCMeJNcSo635QNOO/l4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4971
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 12:04:37AM +0200, Iwona Winiarska wrote:
-> Add device tree bindings for the peci-aspeed controller driver.
-> 
-> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-> ---
->  .../devicetree/bindings/peci/peci-aspeed.yaml | 111 ++++++++++++++++++
->  1 file changed, 111 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/peci/peci-aspeed.yaml b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
-> new file mode 100644
-> index 000000000000..6061e06009fb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
-> @@ -0,0 +1,111 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/peci/peci-aspeed.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Aspeed PECI Bus Device Tree Bindings
-> +
-> +maintainers:
-> +  - Iwona Winiarska <iwona.winiarska@intel.com>
-> +  - Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> +
-> +allOf:
-> +  - $ref: peci-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2400-peci
-> +      - aspeed,ast2500-peci
-> +      - aspeed,ast2600-peci
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: |
-> +      Clock source for PECI controller. Should reference the external
-> +      oscillator clock.
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clock-divider:
-> +    description: This value determines PECI controller internal clock
-> +      dividing rate. The divider will be calculated as 2 raised to the
-> +      power of the given value.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 7
-> +    default: 0
-> +
-
-> +  msg-timing:
-> +    description: |
-> +      Message timing negotiation period. This value will determine the period
-> +      of message timing negotiation to be issued by PECI controller. The unit
-> +      of the programmed value is four times of PECI clock period.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 255
-> +    default: 1
-> +
-> +  addr-timing:
-> +    description: |
-> +      Address timing negotiation period. This value will determine the period
-> +      of address timing negotiation to be issued by PECI controller. The unit
-> +      of the programmed value is four times of PECI clock period.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 255
-> +    default: 1
-> +
-> +  rd-sampling-point:
-> +    description: |
-> +      Read sampling point selection. The whole period of a bit time will be
-> +      divided into 16 time frames. This value will determine the time frame
-> +      in which the controller will sample PECI signal for data read back.
-> +      Usually in the middle of a bit time is the best.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 15
-> +    default: 8
-> +
-> +  cmd-timeout-ms:
-> +    description: |
-> +      Command timeout in units of ms.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 1000
-> +    default: 1000
-
-Are all of these properties common for PECI or specific to this 
-controller? The former needs to go into the common schema. The latter 
-need vendor prefixes.
-
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - resets
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/ast2600-clock.h>
-> +    peci-controller@1e78b000 {
-> +      compatible = "aspeed,ast2600-peci";
-> +      reg = <0x1e78b000 0x100>;
-> +      interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-> +      clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
-> +      resets = <&syscon ASPEED_RESET_PECI>;
-> +      clock-divider = <0>;
-> +      msg-timing = <1>;
-> +      addr-timing = <1>;
-> +      rd-sampling-point = <8>;
-> +      cmd-timeout-ms = <1000>;
-> +    };
-> +...
-> -- 
-> 2.31.1
-> 
-> 
+T24gTW9uLCAyMDIxLTA3LTEyIGF0IDIyOjAyIC0wNzAwLCBSYW5keSBEdW5sYXAgd3JvdGU6DQo+
+IE9uIDcvMTIvMjEgMzowNCBQTSwgSXdvbmEgV2luaWFyc2thIHdyb3RlOg0KPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3BlY2kvY29udHJvbGxlci9LY29uZmlnDQo+ID4gYi9kcml2ZXJzL3BlY2kv
+Y29udHJvbGxlci9LY29uZmlnDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAw
+MDAwMDAwMDAwMDAuLjhkZGJlNDk0Njc3Zg0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9k
+cml2ZXJzL3BlY2kvY29udHJvbGxlci9LY29uZmlnDQo+ID4gQEAgLTAsMCArMSwxMiBAQA0KPiA+
+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkNCj4gPiArDQo+ID4gK2Nv
+bmZpZyBQRUNJX0FTUEVFRA0KPiA+ICvCoMKgwqDCoMKgwqDCoHRyaXN0YXRlICJBU1BFRUQgUEVD
+SSBzdXBwb3J0Ig0KPiA+ICvCoMKgwqDCoMKgwqDCoGRlcGVuZHMgb24gQVJDSF9BU1BFRUQgfHwg
+Q09NUElMRV9URVNUDQo+ID4gK8KgwqDCoMKgwqDCoMKgZGVwZW5kcyBvbiBPRg0KPiA+ICvCoMKg
+wqDCoMKgwqDCoGRlcGVuZHMgb24gSEFTX0lPTUVNDQo+ID4gK8KgwqDCoMKgwqDCoMKgaGVscA0K
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgIEVuYWJsZSB0aGlzIGRyaXZlciBpZiB5b3Ugd2FudCB0byBz
+dXBwb3J0IEFTUEVFRCBQRUNJDQo+ID4gY29udHJvbGxlci4NCj4gPiArDQo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqAgVGhpcyBkcml2ZXIgY2FuIGJlIGFsc28gYnVpbGQgYXMgYSBtb2R1bGUuIElmIHNv
+LCB0aGUNCj4gPiBtb2R1bGUNCj4gDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBjYW4gYWxzbyBiZSBidWlsdCBhcyBhIG1vZHVsZS4NCg0KVGhhbmsgeW91IFJh
+bmR5IC0gSSdsbCBmaXggdGhpcyBpbiB2Mi4NCg0KLUl3b25hDQoNCj4gDQo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqAgd2lsbCBiZSBjYWxsZWQgcGVjaS1hc3BlZWQuDQo+IA0KPiANCj4gLS0gDQo+IH5S
+YW5keQ0KPiANCg0K
