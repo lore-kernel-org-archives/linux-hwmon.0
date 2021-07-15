@@ -2,73 +2,52 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A97DC636C8
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 18:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7694FC636C8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 18:29:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18F11613D3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 18:14:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D123613BB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 18:29:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237840AbhGOSRE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Jul 2021 14:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbhGOSRE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Jul 2021 14:17:04 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4437C061762
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Jul 2021 11:14:10 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 37so7424156pgq.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Jul 2021 11:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g1tDxoChGH3w0kigxd3IgaB4MUIWFPWVdk27j3deTtI=;
-        b=PArv2XUHuoFYYCNw26nHq9CwvzbG6nQeD1+W+9tuw9CIHjCo25QmlzXLEWaMHwiePY
-         B0+9F+qBna6V/l+aVhYdvCOlVYeSr48eboGpBqsRhS4hKxxlqNIveIbIa3FbekNhoW/G
-         ysdTPrACubN0IGKcL+j5ccg+VqLRAYzDmeTC3Fqp2jH1Jca2RhTTVSuvMvHa8YdcoUXq
-         V9iFuS+L4Jp6sxfskiooURy9HmVNrXb8EFmyuonce8+EheWU8z5IVBpnZ6Ol1Mz1tBRT
-         0RsL3/EoAhhE56GegAW6xdgn+9U6BE0oRAuTlm9BDFcZp4DrNPoH6coz6B1nHF1/wDCH
-         lrrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g1tDxoChGH3w0kigxd3IgaB4MUIWFPWVdk27j3deTtI=;
-        b=eg9WSHyCuPRbZYd/tVUX4gPcqnKZOM+7oa3UXR1xckIIkuz06trCtH8wbVB+FKzGD1
-         +WwicvH5R2W1WqF4zTso5H2qfwnhi143WklvWWZRuGjgZeLhK21E1yhvGG8OEYOKp6ig
-         npFbTh0Apxgwn3fJ6t+0728RaorsfGI4DZoGS1ChJMKkxnoX3eCG7Q+awm+z2r3FYFDE
-         XxL2LW9ihh5hVDaiWdZxeAzxT2wvJFmwv6QzfW9AWavUi4nlfceaSXJW1rXX8eCXO/Ed
-         cw2aoymC9UCMRad+hzXQvE1z4PPAZZVK1Dh1XkZCT1hhoQWyLUWkqiTyy4/dd+7/diDB
-         z8ug==
-X-Gm-Message-State: AOAM530DYeXa3ToxosP82r+glfgXzaP7LMXxZQAlhZdmpndBvikiMB9y
-        Kikt+BuzDLufLL2pqeC9cpC9r864VYbDe3mqYv6PBA==
-X-Google-Smtp-Source: ABdhPJzIVasCNJ7rJeEzQm5uupieN3jepRTz4sM8N5N3G60Bq6IfkDzVYeZSTnZGA/3H1k+u+xq6BQI7KYL3gEOPU8E=
-X-Received: by 2002:a05:6a00:d53:b029:32a:2db6:1be3 with SMTP id
- n19-20020a056a000d53b029032a2db61be3mr5733775pfv.71.1626372850317; Thu, 15
- Jul 2021 11:14:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210712220447.957418-1-iwona.winiarska@intel.com>
- <20210712220447.957418-2-iwona.winiarska@intel.com> <32c71687f11fb418dafa45ecf15f7c6b50dd0397.camel@intel.com>
- <218ef97a68491e88d8012799385ee244544a157a.camel@intel.com>
-In-Reply-To: <218ef97a68491e88d8012799385ee244544a157a.camel@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 15 Jul 2021 11:13:59 -0700
-Message-ID: <CAPcyv4hxsjKjLkEgGuG6tHvYxUa69315OvhYRORvCtXv6vu2nw@mail.gmail.com>
-Subject: Re: [PATCH 01/14] x86/cpu: Move intel-family to arch-independent headers
-To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S229556AbhGOScv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Jul 2021 14:32:51 -0400
+Received: from mga05.intel.com ([192.55.52.43]:47045 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229506AbhGOScu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Jul 2021 14:32:50 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="296248668"
+X-IronPort-AV: E=Sophos;i="5.84,243,1620716400"; 
+   d="scan'208";a="296248668"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2021 11:29:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,243,1620716400"; 
+   d="scan'208";a="413725599"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga003.jf.intel.com with ESMTP; 15 Jul 2021 11:29:47 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Thu, 15 Jul 2021 11:29:47 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Thu, 15 Jul 2021 11:29:46 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2242.010;
+ Thu, 15 Jul 2021 11:29:46 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Winiarska, Iwona" <iwona.winiarska@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
         "corbet@lwn.net" <corbet@lwn.net>,
         "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
         "Lutomirski, Andy" <luto@kernel.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
         "andrew@aj.id.au" <andrew@aj.id.au>,
         "mchehab@kernel.org" <mchehab@kernel.org>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
@@ -90,69 +69,44 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "x86@kernel.org" <x86@kernel.org>,
         "pierre-louis.bossart@linux.intel.com" 
         <pierre-louis.bossart@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [PATCH 01/14] x86/cpu: Move intel-family to arch-independent
+ headers
+Thread-Topic: [PATCH 01/14] x86/cpu: Move intel-family to arch-independent
+ headers
+Thread-Index: AQHXd2pbzZadhIqqdEqWEklQPBy5PKtDKGuAgAGQOwCAABg7gP//jU5Q
+Date:   Thu, 15 Jul 2021 18:29:46 +0000
+Message-ID: <475c3f70da104d4bac6a902cc41e48d8@intel.com>
+References: <20210712220447.957418-1-iwona.winiarska@intel.com>
+ <20210712220447.957418-2-iwona.winiarska@intel.com>
+ <32c71687f11fb418dafa45ecf15f7c6b50dd0397.camel@intel.com>
+ <218ef97a68491e88d8012799385ee244544a157a.camel@intel.com>
+ <CAPcyv4hxsjKjLkEgGuG6tHvYxUa69315OvhYRORvCtXv6vu2nw@mail.gmail.com>
+In-Reply-To: <CAPcyv4hxsjKjLkEgGuG6tHvYxUa69315OvhYRORvCtXv6vu2nw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 15, 2021 at 9:47 AM Winiarska, Iwona
-<iwona.winiarska@intel.com> wrote:
->
-> On Wed, 2021-07-14 at 16:54 +0000, Williams, Dan J wrote:
-> > On Tue, 2021-07-13 at 00:04 +0200, Iwona Winiarska wrote:
-> > > Baseboard management controllers (BMC) often run Linux but are
-> > > usually
-> > > implemented with non-X86 processors. They can use PECI to access
-> > > package
-> > > config space (PCS) registers on the host CPU and since some
-> > > information,
-> > > e.g. figuring out the core count, can be obtained using different
-> > > registers on different CPU generations, they need to decode the
-> > > family
-> > > and model.
-> > >
-> > > Move the data from arch/x86/include/asm/intel-family.h into a new
-> > > file
-> > > include/linux/x86/intel-family.h so that it can be used by other
-> > > architectures.
-> >
-> > At least it would make the diffstat smaller to allow for rename
-> > detection when the old file is deleted in the same patch:
-> >
-> >  MAINTAINERS                                                | 1 +
-> >  {arch/x86/include/asm => include/linux/x86}/intel-family.h | 6 +++---
-> >  2 files changed, 4 insertions(+), 3 deletions(-)
-> >
-> > ...one thing people have done in the past is include a conversion
-> > script in the changelog that produced the diff. That way if a
-> > maintainer wants to be sure to catch any new usage of the header at
-> > the old location they just run the script.
->
-> You mean like a simple s#asm/intel-family.h#linux/x86/intel-family.h#g
-> ?
-> Operating on kernel tree? Or individual patches?
-
-Whole kernel tree, something like this patch is a good example:
-
-58c1a35cd522 btrfs: convert kmap to kmap_local_page, simple cases
-
-In this one, Ira generated a patch from a script, and the maintainer
-could re-run it if new development added more of the "old way" before
-applying Ira's patch.
-
-> Is including "old" header in new code that big of a deal?
-
-I was proposing ripping the band-aid off and deleting the old header,
-in which case it would cause compile breakage if someone added a new
-instance of the old include before the conversion patch was applied.
-
-> I guess it
-> could break grepability (looking for users of the header, now that it
-> can be pulled from two different places).
-> It would be worse if someone decided to add new content to old header,
-> but this should be easier to catch during review.
-
-Having 2 potential places for the same definition causes a small
-ongoing maintenance / review burden, so I vote moving the file rather
-than leaving a place holder, but it's ultimately an x86 maintainer
-call.
+PiBIYXZpbmcgMiBwb3RlbnRpYWwgcGxhY2VzIGZvciB0aGUgc2FtZSBkZWZpbml0aW9uIGNhdXNl
+cyBhIHNtYWxsDQo+IG9uZ29pbmcgbWFpbnRlbmFuY2UgLyByZXZpZXcgYnVyZGVuLCBzbyBJIHZv
+dGUgbW92aW5nIHRoZSBmaWxlIHJhdGhlcg0KPiB0aGFuIGxlYXZpbmcgYSBwbGFjZSBob2xkZXIs
+IGJ1dCBpdCdzIHVsdGltYXRlbHkgYW4geDg2IG1haW50YWluZXINCj4gY2FsbC4NCg0KSSB0aG91
+Z2h0IHRoZSBwYXRjaCBrZXB0IHRoZSBvbGQgZmlsZSBhcyBhIHN0dWIgd2l0aCBqdXN0IG9uZSBs
+aW5lOg0KDQojaW5jbHVkZSA8bGludXgveDg2L2ludGVsLWZhbWlseS5oPg0KDQp0byBncmFiIHRo
+ZSByZWFsIGRhdGEgZnJvbSB0aGUgbmV3IGxvY2F0aW9uLiAgU28gdGhlIGluZm9ybWF0aW9uIGlz
+bid0DQppbiB0d28gcGxhY2VzLg0KDQokIGdpdCBncmVwIC1sIGFzbS9pbnRlbC1mYW1pbHkuaCB8
+IHdjIC1sDQo1Mw0KDQpEYW5nLiBXZSBzZWVtIHRvIGxvdmUgc3ByYXlpbmcgbW9kZWwgc3BlY2lm
+aWMgY29kZSBhbGwgb3ZlciB0aGUgcGxhY2UgOi0oDQoNCk15IG9waW5pb24gaXMgdG8gcG9zdCBh
+cyBJd29uYSB3cm90ZSBpdCAuLi4gYnV0IGJlIHByZXBhcmVkIGZvciB0aGUgbWFpbnRhaW5lcnMN
+CnRvIHNheSAiSXQncyBvbmx5IDUzIGZpbGVzIC4uLiBqdXN0IGZpeCB0aGVtIGFsbCINCg0KLVRv
+bnkNCg0K
