@@ -2,131 +2,196 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A9A8C636CA
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 19:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F67C636CA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 20:39:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83410613CA
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 19:50:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F0AB613DA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jul 2021 20:39:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245176AbhGOTxC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Jul 2021 15:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S237986AbhGOUmg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Jul 2021 16:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245058AbhGOTw1 (ORCPT
+        with ESMTP id S237791AbhGOUmf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Jul 2021 15:52:27 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F166C094248
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Jul 2021 12:35:09 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id c15so3941334pls.13
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Jul 2021 12:35:09 -0700 (PDT)
+        Thu, 15 Jul 2021 16:42:35 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB0C06175F;
+        Thu, 15 Jul 2021 13:39:40 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id w127so8185367oig.12;
+        Thu, 15 Jul 2021 13:39:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tWQzYFArmX7BK0KtHhu7qCMLH8EpJJltCicUZnmhozs=;
-        b=x+X7r/05mLeYMY5IOOQXqOPlH4+7oeO79bZ5YPDJ++PHDQKt0r4FcvE/lkq15akq7B
-         Ce5RF/y77x9dJasWX7jMdKXiDyCRNfCPc0xcdgmMO0nH9GJ8PcKjDkDCNNwh88V3I8q+
-         DVd8W4UyeBtFOTbd2yOFKy6XhIXfiUb4cjWvUYZNsBW6xRsYQlKKhDyHMQ8HR13L0zF5
-         yJn4825mzOpNHdMV2eZ72kAoCCdIieowUKQvUmzKFsCD1CehD3TdyOBZuq4PFKBRFYvE
-         J7XyrEX7xMecHu4TmiRqBc6ToIEqTL1RABDWAcgFcJqtXWCwwkUwT8cTATLu+1RfuxFH
-         zOzw==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6GrzBOhEP/rKQsfiKe/lYqagaaJewUMHIHq98v+iXOE=;
+        b=PiEIvel9NDa4E+z3Eq9OqHnpM1XR1c0d/Ok3/7JZbxo5cwk5CWwETi5i/q3dz5XYNu
+         ezQI0IQK+ZOLhuFNB8WEzogx+Vv4rcg0f1v95+sYz5eCbQ6GCHyW9E3mtbgSvDmvfJkB
+         RyZWxD2PDYvjPpWjHxXwMl4HUYGZOwPGsh9El1EC/5fF3kPA4zw4NaUKgDEGqjYPvdOg
+         CY60ORsj9HJ1mDnGmSmnwXSPwMzjh8XKDYL9MasFt3fy4RBtVJZqseoWZC4aD4H+GXIy
+         gErg2qLN2a+sRz39bQfHbpo9KYkMeQwDHrNE4+zjrfdKkzd6FGatlQizwgw5BVyvimKy
+         /9Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tWQzYFArmX7BK0KtHhu7qCMLH8EpJJltCicUZnmhozs=;
-        b=rXfzC6F6VASxc/xcddXMV0PD7T0u0O2R6t+W+rqsdbKA8D5vki4uXD8YYLWTGusCjr
-         49OEvgrm4HjchosIfQZwiCoF4Y30zKqXIgKdnNn3Ceroehsm9VC3+ZHlT88JL5QGuT3j
-         tE5QjwSzeKPbE4dRASG6tT1lyziuikt9GojVuRmg5IQnudyerFuWgcs2qr7T7QvrPF0B
-         Ly62KgkZoViw8euzyqcyvU+2OFrxppW5MD+NbuJdKD/JZm+CDa3RIwd+scu0xubXTOgo
-         P3tEAGfU1PvC7tA0SuCUEkrKRgk0/O66q6gBh5KSc+a3OAn7rEdogTzm3XpXSm58JTj1
-         4RMg==
-X-Gm-Message-State: AOAM531lFun+A3zEornGFKzm68uWQli+bZiRj0oR/f/i/tMIURv6Bx8s
-        b58a6UmdABMgoNwUBg6ilHvBHG8bbV43VKD7jd7Skg==
-X-Google-Smtp-Source: ABdhPJwxNVyUFsXl8r6NxD+c6uWM8R2fmbcCrxfwX4wABHvVgCgyv6hXJdQx4qtT/3WKROCvcTTm94Gam5hqhrB02Do=
-X-Received: by 2002:a17:90a:8407:: with SMTP id j7mr11756922pjn.13.1626377708767;
- Thu, 15 Jul 2021 12:35:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210712220447.957418-1-iwona.winiarska@intel.com>
- <3b9cfe5f728c40c473a22070029c8790b452daf4.camel@intel.com> <fe9a5191e401b38325aaff11365b5970034d26cc.camel@intel.com>
-In-Reply-To: <fe9a5191e401b38325aaff11365b5970034d26cc.camel@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 15 Jul 2021 12:34:58 -0700
-Message-ID: <CAPcyv4h-PrBhPU7FcuKwk++o5unKY03H85M-inpDGvmDh-ybGQ@mail.gmail.com>
-Subject: Re: [PATCH 00/14] Introduce PECI subsystem
-To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=6GrzBOhEP/rKQsfiKe/lYqagaaJewUMHIHq98v+iXOE=;
+        b=EGJV+TejFwmEegFpABN3qLOXiuIf/ILPKvuC00YTl+1kGxd+3jPyEKkxhYjCXQgJS+
+         oEQjjdaR4aiym9Y3/z51zZeqCA6sJzKPiu55T8f7DhkB+20ioO57vd96KlyiVpSSwJjf
+         jUkLnE4rh81aI7agjzb/DnCWeFLK4udVL7D4BSRFmW20Sg3bJiGy0MPYjlM4K/cVQE3c
+         GDcuI0urPJDcWuCvjKHu76PRJp9QRfNIzN9ccSESvdF6voOO1WILM8RXn5Z/IKB9LMsB
+         DS7gzDaXpFz4ry5lpvhuCNhTqc9sBFX+/82UWVVYSFlAgy3L3wCTxyfhEH4bp9y7UIlJ
+         davQ==
+X-Gm-Message-State: AOAM532uzjSn5heUARgM9dGVPXAxh3PcI84q8cdg3VjHbTcLO6opzddE
+        OxyDdtLebUXJyeVrQhFUWdQ=
+X-Google-Smtp-Source: ABdhPJwrtD+RNgHELbFwtsgdIGXxVqASFNruF3W2lCmWjY0yk18KBkzQL4Xqa+fQQRoUbVG958sQaw==
+X-Received: by 2002:aca:1101:: with SMTP id 1mr5070311oir.53.1626381579766;
+        Thu, 15 Jul 2021 13:39:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m1sm1332322otl.0.2021.07.15.13.39.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jul 2021 13:39:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 15 Jul 2021 13:39:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     Rob Herring <robh@kernel.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
+ properties
+Message-ID: <20210715203937.GA3182741@roeck-us.net>
+References: <20210708120111.519444-1-nuno.sa@analog.com>
+ <20210708120111.519444-4-nuno.sa@analog.com>
+ <20210712172656.GA2142233@robh.at.kernel.org>
+ <PH0PR03MB63668564A9A7B8F5D6E5F8D499129@PH0PR03MB6366.namprd03.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR03MB63668564A9A7B8F5D6E5F8D499129@PH0PR03MB6366.namprd03.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 15, 2021 at 10:33 AM Winiarska, Iwona
-<iwona.winiarska@intel.com> wrote:
->
-> On Wed, 2021-07-14 at 16:51 +0000, Williams, Dan J wrote:
-> > On Tue, 2021-07-13 at 00:04 +0200, Iwona Winiarska wrote:
-> > > Note: All changes to arch/x86 are contained within patches 01-02.
-> >
-> > Hi Iwona,
-> >
-> > One meta question first, who is this submission "To:"? Is there an
-> > existing upstream maintainer path for OpenBMC changes? Are you
-> > expecting contributions to this subsystem from others? While Greg
-> > sometimes ends up as default maintainer for new stuff, I wonder if
-> > someone from the OpenBMC commnuity should step up to fill this role?
-> >
->
-> The intention was to direct it to Greg, but I guess I didn't express
-> that through the mail headers.
+On Thu, Jul 15, 2021 at 10:26:05AM +0000, Sa, Nuno wrote:
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Monday, July 12, 2021 7:27 PM
+> > To: Sa, Nuno <Nuno.Sa@analog.com>
+> > Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
+> > Guenter Roeck <linux@roeck-us.net>; Jean Delvare
+> > <jdelvare@suse.com>
+> > Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
+> > properties
+> > 
+> > [External]
+> > 
+> > On Thu, Jul 08, 2021 at 02:01:08PM +0200, Nuno Sá wrote:
+> > > Add the bindings for the tacho signal evaluation parameters which
+> > depend
+> > > on the FAN being used.
+> > >
+> > > Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+> > > ---
+> > >  .../bindings/hwmon/adi,axi-fan-control.yaml          | 12
+> > ++++++++++++
+> > >  1 file changed, 12 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
+> > control.yaml b/Documentation/devicetree/bindings/hwmon/adi,axi-
+> > fan-control.yaml
+> > > index 6747b870f297..0481eb34d9f1 100644
+> > > --- a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
+> > control.yaml
+> > > +++ b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
+> > control.yaml
+> > > @@ -37,6 +37,18 @@ properties:
+> > >      $ref: /schemas/types.yaml#/definitions/uint32
+> > >      enum: [1, 2, 4]
+> > >
+> > > +  adi,tacho-25-us:
+> > > +    description: Expected tacho signal when the PWM is at 25%.
+> > > +
+> > > +  adi,tacho-50-us:
+> > > +    description: Expected tacho signal when the PWM is at 50%.
+> > > +
+> > > +  adi,tacho-75-us:
+> > > +    description: Expected tacho signal when the PWM is at 75%.
+> > > +
+> > > +  adi,tacho-100-us:
+> > > +    description: Expected tacho signal when the PWM is at 100%.
+> > 
+> > This looks like it should be common. But having PWM percents in the
+> > property names doesn't scale. This is also a property of the fan, not
+> > the fan controller.
+> 
+> Yes, I see that these parameters are definitely a property of the attached
+> fan but the evaluation of these timings are very specific to this controller
+> (I think). The way it works is that the HW can fully operate without any
+> runtime SW configuration. In this case, it will use the values in these
+> registers to evaluate the tacho signal coming from the FAN. And the HW
+> really uses the evaluation points like this (0, 25%, 50% and 100%). It has
+> some predefined values that work for the FAN that was used to develop
+> the IP but naturally the evaluation will fail as soon as other FAN is attached
+> (resulting in fan fault interrupts). And yes, writing these parameters is 
+> already SW configuration but what I mean with "runtime" is after probe :). 
+> 
 
-Usually something like a "Hey Greg, please consider applying..." in
-the cover letter lets people know who the upstream path is for the
-series.
+Are you sure you can ever get this stable ? Each fan has its own properties
+and tolerances. If you replace a fan in a given system, you might get
+different RPM numbers. The RPM will differ widely from system to system
+and from fan to fan. Anything that assumes a specific RPM in devicetree
+data seems to be quite vulnerable to failures. I have experienced that
+recently with a different chip which also tries to correlate RPM and PWM
+and fails quite miserably.
 
-> I am expecting contributions - for example there is at least one other
-> major BMC vendor which also ships PECI controllers.
+In my experience, anything other than minimum fan speed is really a recipe
+for instability and sporadic false failures. Even setting a minimum fan speed
+is tricky because it depends a lot on the fan.
 
-You're expecting to take patches from them and you'll forward them to
-Greg, or they'll go to Greg directly?
+> So, I honestly do not know how we could name this better... Maybe a
+> 'tacho-eval-points-us' array? The question would be the min/max
+> elements? Do you have any suggestion for a more generic property?
+> 
+I am guessing that the "us" refers to the time between pulses from the
+fan. I think this is a bad value to start with - anything fan speed
+related should really be expressed in RPM, not in time between pulses.
 
->
-> From my perspective, the pieces that make up a BMC are pretty loosely
-> connected (at least from the kernel perspective - scattered all over
-> the kernel tree), so I don't see how that would work in practice.
+Overall I don't think this should be handled as generic set of properties.
+Whatever we come up with as standard set of pwm or fan related properties
+should not be an expected correlation between pwm and rpm. Assuming such
+a property is needed here (after all, the controller is what it is),
+maybe a set of tuples makes sense, such as
 
-No worries, Greg continues to scale more than other mere mortals for
-these kinds of things. I was more asking because it was not clear from
-these patches, nor MAINTAINERS, and it's healthy for Linux to grow new
-patch wranglers from time to time.
+	adi,pwm-rpm-map = <
+		25, 250,
+		50, 500,
+		75, 750,
+		100, 1000
+	>;
+
+though I think that each of those should also include the tolerance
+instead of just assuming that a 25% tolerance (as implemented in patch
+2/6) would work for all fans.
+
+Guenter
+
+> > There's only so many ways a fan can be controlled and I'm going to
+> > keep
+> > telling folks to make a common fan binding. There's some start to it,
+> > but it needs some work.
+> 
+> You mean the pwm-fan.txt? I gave a look to the driver and I don't think
+> it fully fits this controller. I'm ok in sending an fan.yaml binding if you
+> prefer it but I'm just not sure what we would need there... Maybe
+> pulses-per-revolution and the above property
+> (whatever the decided name) would be a starting point? 
+> 
+> - Nuno Sá
