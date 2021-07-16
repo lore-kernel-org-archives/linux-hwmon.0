@@ -2,88 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0746C636CA
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 17:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C213C12002
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 17:34:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA50E61400
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 17:33:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49336613F9
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 17:34:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbhGPRgd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Jul 2021 13:36:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60288 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229803AbhGPRgd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Jul 2021 13:36:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B3381613FB;
-        Fri, 16 Jul 2021 17:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626456818;
-        bh=cf8WxUiyJPqIMeZaZvs8bmw2NGyFNYO33dlQ1WqpQrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QhDbbSYvSCyTW3hYRZhJQb/Q8R13s9FjRMH/XFprr/6AMpWEjgsCoXhgZOxuhHzon
-         hyLnOsdx8fmBUHnicBp4dlktJuQnUaBO4BFl8A1bzRv9LcjNyXkwablWOj5cHuXNgf
-         tBxbbNQ893BphhUEtEZO8l8IgHosM9sRvKqey02Vp9zso+WmZPqsZejVl4epuEdM3y
-         aOoF/QPqXBHVZj/KCuUCv5z2WgMCPGepGSNZqBVkXPz2vVDLUpLRuq8hAlUElxyvXI
-         TSIlSSMACzMcU1SQWiIu2xPfhGR31fBDbzTaQDXcCDjnWTmTcUCB1vXTDDT8WbJ+IF
-         rUk+zSj4f5dFA==
-Date:   Fri, 16 Jul 2021 18:33:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S231501AbhGPRhp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Jul 2021 13:37:45 -0400
+Received: from mail-il1-f176.google.com ([209.85.166.176]:45807 "EHLO
+        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231485AbhGPRho (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 16 Jul 2021 13:37:44 -0400
+Received: by mail-il1-f176.google.com with SMTP id b6so8966382iln.12;
+        Fri, 16 Jul 2021 10:34:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iPb7ckziK4kV9zNM6d9iK4b7roci6qqd+Gv92I6XJVU=;
+        b=tbgB/gC3RvWJ50XEdAA9hml3skG0957cBgZybHREB4YZJ2GKKGdna5KQdhvgb9jXi9
+         DzP37qkyWMIPvHTlatMcibFcg4Ky2FEm//RYsnLRaTMX5jhT/JKW0HiuzT/FsA+5lstq
+         s2lSqWmxBcfSvGvo6uXHhLVDCSfthy1akfNt96B/QVcoJvnMWt6VS+Z/gIDp1fIn2BQT
+         6eXWyK15KuDsr86/wApAXTIX+37gSk0lvCdIVb3YCPLEpRZ/62lt7YJw4arJGG85A7Ur
+         CIiji1FGN5M4UtPjDYPlEOmMagQzmMBvXTkfoAmGxzspMkRNzdULINEn4pwnJqHV5T3f
+         zbEA==
+X-Gm-Message-State: AOAM531C9xp3VmOso4yru1dhtIf4F/zi3HkxZkGtSJMLdJvL+t1EX/j7
+        GGpJm9NAHlF5ZbdTWrUay4LjWkqw0g==
+X-Google-Smtp-Source: ABdhPJyKVjf0100xt5UQ7F9dhFRP/lQhHl+nq9gAbSXPcH5nkSAeXz19sGCDD/0YQ2ZJLRqjQla1Qw==
+X-Received: by 2002:a92:c504:: with SMTP id r4mr7106583ilg.131.1626456888668;
+        Fri, 16 Jul 2021 10:34:48 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a11sm5100043ilf.79.2021.07.16.10.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jul 2021 10:34:47 -0700 (PDT)
+Received: (nullmailer pid 3643640 invoked by uid 1000);
+        Fri, 16 Jul 2021 17:34:43 -0000
+Date:   Fri, 16 Jul 2021 11:34:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] spi: spi-altera-dfl: support n5010 feature
- revision
-Message-ID: <20210716173335.GC4137@sirena.org.uk>
-References: <20210716135441.3235863-1-martin@geanix.com>
- <20210716135441.3235863-3-martin@geanix.com>
+        Joel Stanley <joel@jms.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Open Source Submission <patches@amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        openbmc@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
+        Phong Vo <phong@os.amperecomputing.com>,
+        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v5 1/4] dt-bindings: mfd: Add bindings for Ampere Altra
+ SMPro MFD driver
+Message-ID: <20210716173443.GA3643583@robh.at.kernel.org>
+References: <20210713060031.31568-1-quan@os.amperecomputing.com>
+ <20210713060031.31568-2-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="raC6veAxrt5nqIoY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210716135441.3235863-3-martin@geanix.com>
-X-Cookie: do {
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210713060031.31568-2-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Tue, 13 Jul 2021 13:00:28 +0700, Quan Nguyen wrote:
+> Adds device tree bindings for SMPro MFD driver found on the Mt.Jade
+> hardware reference platform with Ampere's Altra Processor family.
+> 
+> The SMpro co-processor on Ampere Altra processor family is to monitor
+> and report various data included hwmon-related info, RAS errors, and
+> other miscellaneous information.
+> 
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+> Changes in v5:
+>   + Dropped ../bindings/hwmon/ampere,ac01-hwmon.yaml file [Quan]
+>   + Removed patternProperties section and child DT nodes in example
+>   section [Quan]
+>   + Revised commit message [Quan]
+> 
+> Changes in v4:
+>   + Revised the commit message to clarify how the specific info will
+>     be handled commented by Rob.
+> 
+> Changes in v3:
+>   + Supported list of compatible string [Rob]
+>   + Introduced reg property in DT to specify reg offset [Rob]
+>   + Updated description and other minor changes in yaml file [Rob]
+> 
+> Changes in v2:
+>   + Changed "ampere,ac01-smpro" to "ampere,smpro" [Quan]
+> 
+>  .../devicetree/bindings/mfd/ampere,smpro.yaml | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+> 
 
---raC6veAxrt5nqIoY
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jul 16, 2021 at 03:54:40PM +0200, Martin Hundeb=F8ll wrote:
-> From: Martin Hundeb=F8ll <mhu@silicom.dk>
->=20
-> The Max10 BMC on the Silicom n5010 PAC is slightly different than the
-> existing BMCs, so use a dedicated feature revision detect it.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---raC6veAxrt5nqIoY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDxwu4ACgkQJNaLcl1U
-h9DndAf+IqeWflVSPxKlrQ2Z+7ext9oSMMuq5l/EIJZmwdXPKSImWc8J0uocAxHw
-+eWOQoyg6h96X3SyocivzrmsrVMUMmRvUZqT3tLIBqN4ihciC2HMCloVXpZpO8f5
-N5Rg6IMsYqpV03IaRERfLtVt/jmXNF7SVL+1H/wdCFYJVywJDcG8XYF/Z3dtmvhW
-kmOmGYimOAejLycEEZARLBD/zrRgOJ4fxgVAlHLEdT1gzYUJRhC6mpokpxtpH3fg
-QJpNf9HNKF7r7E2jGAsC5CUjWE0KwPR9OI9E9+R2A8hEk2Nqdon+hfieZyYyhCiJ
-w7oP4OEHfZEiPJZ46zTnkN4KhHyX5A==
-=1O5g
------END PGP SIGNATURE-----
-
---raC6veAxrt5nqIoY--
+Reviewed-by: Rob Herring <robh@kernel.org>
