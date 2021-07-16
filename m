@@ -2,127 +2,250 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2F9AC07E95
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF81DC12002
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 984AC60FF3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:03:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7E98613D0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240514AbhGPPGt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Jul 2021 11:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbhGPPGs (ORCPT
+        id S240717AbhGPPWZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Jul 2021 11:22:25 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:21484 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239803AbhGPPWY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Jul 2021 11:06:48 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3937C06175F;
-        Fri, 16 Jul 2021 08:03:52 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id t25so11170505oiw.13;
-        Fri, 16 Jul 2021 08:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i3KfiPtO0D3+NC1eT2ingGYsCONu0cw8923pwjmhYSQ=;
-        b=u451MZ2w1rN0BBPzCDk0boPfHl0L5+K3zNMzLxmpZUEk2VLbW9jiV5doUQ09oV3H+N
-         tfbE5dso8hBZ/yQ97EkZzp0P2xgGdJTPpVz9OtrLSt8tDXqSutH9iP0SZ0NJKhxxkS1K
-         WJ7NqXADoU2h9eOJoGHdn9VSOKBbgoVVTVHTNf0pl7NfjIgQPQHz0S5S30f0MgQdgfPk
-         WfF1yCIz0Jaa4eEWK9m7VkoHINKF4xVNTbj5oe50TLSIOuEsL7eP3YX46VViEW1j6g2Q
-         m/BJpHMq9beKUsDoo9S8ypFk1Aev8/o6RkySatnvZ6higOngqBfNJsU05ZAjInlVQZdT
-         pTyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=i3KfiPtO0D3+NC1eT2ingGYsCONu0cw8923pwjmhYSQ=;
-        b=tn+Ap9LERvxlwluSqmvY9Z5iWkHFEJtEbqtQTBPx36z3ONy/zZBkuxJWHCGDt1vx62
-         9QRwV2TJrRmTqKtpYWZupUL8CsBOj6tpzPvsAmspjsQfZQUKP2UVyvYV5c0VJfOipz7C
-         tgdnCmYhVFBAnwQS9upWr9U/x747fqhf/pIzhK5Y1Gchf1wO5/IpQXIk3G2SsBreQhSB
-         lrWz8XMaKDsfabMK0gc1lIgu/UOWpsgvLllLa9EsAnjl51lsED8IWvecFO9QhZ5/9JWh
-         9tXdILFbUuxkw4vcL7nMHpsMhieMU1nNHiR7xLXMak/qshAhY62b8tw9s7kJ3xHRbcNm
-         E1ow==
-X-Gm-Message-State: AOAM531l6+ZDgdK4SC0bxU9KdH1cJxB2Ig5XXGwml0C3X3sC1Q3aofrc
-        PQD8ks7jUiEpbCcU9W0VpVPMeG5i/eQ=
-X-Google-Smtp-Source: ABdhPJwecearIW6I2rzBiXgSYYFG80tvHnkIHUCY7FQPgN2JmoF9av1QqpKjCNrVv+iZ0ggn0U4gkQ==
-X-Received: by 2002:aca:1112:: with SMTP id 18mr3902062oir.168.1626447832075;
-        Fri, 16 Jul 2021 08:03:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z7sm2081846oih.31.2021.07.16.08.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jul 2021 08:03:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-References: <20210708120111.519444-1-nuno.sa@analog.com>
- <20210708120111.519444-4-nuno.sa@analog.com>
- <20210712172656.GA2142233@robh.at.kernel.org>
- <PH0PR03MB63668564A9A7B8F5D6E5F8D499129@PH0PR03MB6366.namprd03.prod.outlook.com>
- <20210715203937.GA3182741@roeck-us.net>
- <PH0PR03MB636641D09289D1F696A64C9299119@PH0PR03MB6366.namprd03.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
- properties
-Message-ID: <f6d415a7-e113-1dda-727e-0d645c8114cb@roeck-us.net>
-Date:   Fri, 16 Jul 2021 08:03:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 16 Jul 2021 11:22:24 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GFJ51u109546;
+        Fri, 16 Jul 2021 11:19:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=QEHYKodf8ZaZaIP+SS+nDoaBFiwQBDIEqz2HvYA1sLg=;
+ b=kRPQO3uLHXiN+AQePKcQHGn7IIDeGQB4Tq4Vrkd5QONMyd6JDpIiUpjxtiJ+6FD7IqcT
+ oFLXfIKt+Z7EAHBRH8p0GsUNxiz+FMk/qL7bcxis0teRkvIzLGgTdhZ0dA90y+3M8ZM/
+ Z8ivHnrsYSOqmhFKnZvOiwp4OYnAJFTbGH0rNh+zxgDHjJWyAZFTFFioSrVV72jYHhHT
+ Nsb2x6igA0O3sFHCvNHfzXXP8//sNGffgP6LNnGr8HmgV5jLGOj8KExMFTJVkQCqR5dI
+ zZhb2pGr5mpka0Wgg1beEHjdewpRLB4YgeOoG9ij53dZh5Zifj7zuyg9/oTjp2Av3mhe hQ== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39tyncnbep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jul 2021 11:19:05 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16GFI157012325;
+        Fri, 16 Jul 2021 15:19:02 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma03dal.us.ibm.com with ESMTP id 39rkgy1f1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jul 2021 15:19:02 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16GFJ1Ow34537804
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jul 2021 15:19:01 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F2E7C6055;
+        Fri, 16 Jul 2021 15:19:01 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D85F8C605F;
+        Fri, 16 Jul 2021 15:19:00 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.92.96])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Jul 2021 15:19:00 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        linux@roeck-us.net, jdelvare@suse.com, jk@ozlabs.org,
+        joel@jms.id.au, alistair@popple.id.au, openbmc@lists.ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH 2/3] hwmon: (occ) Remove sequence numbering and checksum calculation
+Date:   Fri, 16 Jul 2021 10:18:49 -0500
+Message-Id: <20210716151850.28973-3-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210716151850.28973-1-eajames@linux.ibm.com>
+References: <20210716151850.28973-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <PH0PR03MB636641D09289D1F696A64C9299119@PH0PR03MB6366.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1HlkeQb6RQ-v-OdW932wlBdaiTsjj0zC
+X-Proofpoint-ORIG-GUID: 1HlkeQb6RQ-v-OdW932wlBdaiTsjj0zC
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-16_05:2021-07-16,2021-07-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0
+ bulkscore=0 mlxlogscore=999 phishscore=0 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107160092
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/16/21 12:44 AM, Sa, Nuno wrote:
-[ ... ]
->>
->> Are you sure you can ever get this stable ? Each fan has its own
->> properties
->> and tolerances. If you replace a fan in a given system, you might get
->> different RPM numbers. The RPM will differ widely from system to
->> system
->> and from fan to fan. Anything that assumes a specific RPM in
->> devicetree
->> data seems to be quite vulnerable to failures. I have experienced that
->> recently with a different chip which also tries to correlate RPM and
->> PWM
->> and fails quite miserably.
->>
->> In my experience, anything other than minimum fan speed is really a
->> recipe
->> for instability and sporadic false failures. Even setting a minimum fan
->> speed
->> is tricky because it depends a lot on the fan.
-> 
-> I see what you mean. So, I had to go through this process when testing
-> this changes because the fan I'm using is different from the default one
-> used to develop and stablish the default values in the IP core. The core
+Checksumming of the request and sequence numbering is now done in the
+OCC interface driver in order to keep unique sequence numbers. So
+remove those in the hwmon driver.
 
-Exactly my point.
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/hwmon/occ/common.c | 30 ++++++++++++------------------
+ drivers/hwmon/occ/common.h |  3 +--
+ drivers/hwmon/occ/p8_i2c.c | 15 +++++++++------
+ drivers/hwmon/occ/p9_sbe.c |  4 ++--
+ 4 files changed, 24 insertions(+), 28 deletions(-)
 
-> provides you with a register which contains the tacho measurements in
-> clock cycles. You can read that for all the PWM points of interest
-> (with devmem2 for example) and make your own "calibration". I assume
-> that people have to go through this process before putting some values
-> in the devicetree. I'm aware this is not the neatest process but I guess it's
-> acceptable...
-> 
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index 0d68a78be980..fc298268c89e 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -132,22 +132,20 @@ struct extended_sensor {
+ static int occ_poll(struct occ *occ)
+ {
+ 	int rc;
+-	u16 checksum = occ->poll_cmd_data + occ->seq_no + 1;
+-	u8 cmd[8];
++	u8 cmd[7];
+ 	struct occ_poll_response_header *header;
+ 
+ 	/* big endian */
+-	cmd[0] = occ->seq_no++;		/* sequence number */
++	cmd[0] = 0;			/* sequence number */
+ 	cmd[1] = 0;			/* cmd type */
+ 	cmd[2] = 0;			/* data length msb */
+ 	cmd[3] = 1;			/* data length lsb */
+ 	cmd[4] = occ->poll_cmd_data;	/* data */
+-	cmd[5] = checksum >> 8;		/* checksum msb */
+-	cmd[6] = checksum & 0xFF;	/* checksum lsb */
+-	cmd[7] = 0;
++	cmd[5] = 0;			/* checksum msb */
++	cmd[6] = 0;			/* checksum lsb */
+ 
+ 	/* mutex should already be locked if necessary */
+-	rc = occ->send_cmd(occ, cmd);
++	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
+ 	if (rc) {
+ 		occ->last_error = rc;
+ 		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
+@@ -184,25 +182,23 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+ {
+ 	int rc;
+ 	u8 cmd[8];
+-	u16 checksum = 0x24;
+ 	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
+ 
+-	cmd[0] = 0;
+-	cmd[1] = 0x22;
+-	cmd[2] = 0;
+-	cmd[3] = 2;
++	cmd[0] = 0;	/* sequence number */
++	cmd[1] = 0x22;	/* cmd type */
++	cmd[2] = 0;	/* data length msb */
++	cmd[3] = 2;	/* data length lsb */
+ 
+ 	memcpy(&cmd[4], &user_power_cap_be, 2);
+ 
+-	checksum += cmd[4] + cmd[5];
+-	cmd[6] = checksum >> 8;
+-	cmd[7] = checksum & 0xFF;
++	cmd[6] = 0;	/* checksum msb */
++	cmd[7] = 0;	/* checksum lsb */
+ 
+ 	rc = mutex_lock_interruptible(&occ->lock);
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = occ->send_cmd(occ, cmd);
++	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
+ 
+ 	mutex_unlock(&occ->lock);
+ 
+@@ -1151,8 +1147,6 @@ int occ_setup(struct occ *occ, const char *name)
+ {
+ 	int rc;
+ 
+-	/* start with 1 to avoid false match with zero-initialized SRAM buffer */
+-	occ->seq_no = 1;
+ 	mutex_init(&occ->lock);
+ 	occ->groups[0] = &occ->group;
+ 
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index e6df719770e8..5020117be740 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -95,9 +95,8 @@ struct occ {
+ 	struct occ_sensors sensors;
+ 
+ 	int powr_sample_time_us;	/* average power sample time */
+-	u8 seq_no;
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+-	int (*send_cmd)(struct occ *occ, u8 *cmd);
++	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len);
+ 
+ 	unsigned long next_update;
+ 	struct mutex lock;		/* lock OCC access */
+diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+index 0cf8588be35a..22af189eafa6 100644
+--- a/drivers/hwmon/occ/p8_i2c.c
++++ b/drivers/hwmon/occ/p8_i2c.c
+@@ -97,18 +97,21 @@ static int p8_i2c_occ_putscom_u32(struct i2c_client *client, u32 address,
+ }
+ 
+ static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
+-				 u8 *data)
++				 u8 *data, size_t len)
+ {
+-	__be32 data0, data1;
++	__be32 data0 = 0, data1 = 0;
+ 
+-	memcpy(&data0, data, 4);
+-	memcpy(&data1, data + 4, 4);
++	memcpy(&data0, data, min(len, 4UL));
++	if (len > 4UL) {
++		len -= 4;
++		memcpy(&data1, data + 4, min(len, 4UL));
++	}
+ 
+ 	return p8_i2c_occ_putscom_u32(client, address, be32_to_cpu(data0),
+ 				      be32_to_cpu(data1));
+ }
+ 
+-static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
++static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ {
+ 	int i, rc;
+ 	unsigned long start;
+@@ -127,7 +130,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
+ 		return rc;
+ 
+ 	/* write command (expected to already be BE), we need bus-endian... */
+-	rc = p8_i2c_occ_putscom_be(client, OCB_DATA3, cmd);
++	rc = p8_i2c_occ_putscom_be(client, OCB_DATA3, cmd, len);
+ 	if (rc)
+ 		return rc;
+ 
+diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+index f6387cc0b754..9709f2b9c052 100644
+--- a/drivers/hwmon/occ/p9_sbe.c
++++ b/drivers/hwmon/occ/p9_sbe.c
+@@ -16,14 +16,14 @@ struct p9_sbe_occ {
+ 
+ #define to_p9_sbe_occ(x)	container_of((x), struct p9_sbe_occ, occ)
+ 
+-static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd)
++static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ {
+ 	struct occ_response *resp = &occ->resp;
+ 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+ 	size_t resp_len = sizeof(*resp);
+ 	int rc;
+ 
+-	rc = fsi_occ_submit(ctx->sbe, cmd, 8, resp, &resp_len);
++	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+ 	if (rc < 0)
+ 		return rc;
+ 
+-- 
+2.27.0
 
-Do you really expect everyone using a system with this chip to go through
-this process and update its devicetree configuration, and then repeat it
-whenever a fan is changed ? Given how dynamic this is, I really wonder
-if that information should be in devicetree in the first place.
-
-Guenter
