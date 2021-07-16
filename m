@@ -7,538 +7,325 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 295D1C636CD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 05:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C677C07E95
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 07:44:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 148A9613F1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 05:58:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BC27613BB
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 07:44:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbhGPGBL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Jul 2021 02:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234468AbhGPGBK (ORCPT
+        id S236342AbhGPHrr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Jul 2021 03:47:47 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:40842 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236294AbhGPHrr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Jul 2021 02:01:10 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC50C06175F
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Jul 2021 22:58:15 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 128-20020a4a11860000b029024b19a4d98eso2163626ooc.5
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Jul 2021 22:58:15 -0700 (PDT)
+        Fri, 16 Jul 2021 03:47:47 -0400
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16G7Z1CX026047;
+        Fri, 16 Jul 2021 03:44:36 -0400
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2177.outbound.protection.outlook.com [104.47.73.177])
+        by mx0a-00128a01.pphosted.com with ESMTP id 39tw2r9mcp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jul 2021 03:44:36 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C+1j7aWGYx+82Nazr2guTjf1q54AbxNM/jxG5cqMKGsPXfKgqKvBPK82qATkco6l8b4uzhVWoNZRiuDQrD8BeuwkS3L6EFn9lnDTIKcpFxbu4blN7NWdYtVncNRnHgbIhOXx/u/qpTfRO6Uuxd/jGTqIm1ACR+AUBcdS03LGpZfA1kh+xuGTAs1DT/3BK2oaX9pdbXr8d+ZPimpvI3MfPxGrISx8kdy1wGijcO5Z4f9UYh2IUqwPk+6EsJuhihGnI4NnyCIJecfaV5MTtjcDY2ZfZns8/fYMyD5CEsXKpUtK6+EugLsuEVNYBesEX3oxBN88pjaSS1+gTh3zwz55aQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UmTGO+hskm85NWV8Pb7TG9laMZkfOzetFOSISM8a4qs=;
+ b=ezkcP12FvYSIwWfQQDqjkKfY5EC8Ss9S3goJTi3I9RC1U5LKJiI7AS/IJdcABA3cCNfzm/oKN+NjcV7Y+cW9LvTXwPv2W9PTwkIIGl8xUEloiaGBeD6hbB74Hy7Vyx0VnctfOgpKcuExDxvewdEk8+QNurhjztj1LkAt9Nr+959rPCKk+WGWquj6sbL2by+vi7+0+RU2m0lvFLIObtMUd67adNwjliaeE/sIvLN0jZocHavF6pBJltrvfkDAwitO+9nYBQ2qi1AVEMBjcaQcHjpW7I+hTDoAlI2IujZJouuE/tvkLGm6C5M2dQHJP1JqwNFybSsDCn8cu/EOJrhv0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
+ dkim=pass header.d=analog.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OewSUFxy1KZiv8bxzyE+nD8DbyrwY7w4wIpjIQ/zZMM=;
-        b=SKA7hSOv3e2BCT8UYnRCgLDwTZQAPdF7xZko2pqPyuR/A2/E6ehvb4bS2dZQ0koPED
-         vg0vDtyc/JLZDoc/+yA0g8xxsr7zOXFhgqm6rlk3GCrpJsqylioICByIzPzvk7MniFH9
-         z+x7HU9/wMiQsN1yur+8BLr45qK9AXDzvxs0LbPSdsilCZ5SCS83QCE8+TKF53v+pAiK
-         7FSIq+XPKW6Ag/Z/OPXKPYUy+QQ4a8ISpGQ6sxAro83I3e86FIIOW+jRqFyR4nxOUWyX
-         1yq9vxywjwiTe7RIoEOGfMu+NFguln3Bxxg3CT6bJKHw03/fir6//P26q0ty8TEOoTMd
-         AYZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=OewSUFxy1KZiv8bxzyE+nD8DbyrwY7w4wIpjIQ/zZMM=;
-        b=WTaQVKRFend3sVMH3c9ca7yx5m3Z6z6a2YDXdaRdV5FK482bNGe62wmB6b43xSBeXd
-         OtuAxlUDaoSXFjFAqG3lphnapads3uJJZ97PnMzbRs7sJCLshnrQySOFJ3IoXJn1TQ/o
-         67lZ5EXaspG/Q1l7LtGgrj6sL0oCBGfEbd4G8pSkNhIJFzQ1Ksjok2tPARBsz3mBwOJA
-         UNpYQYkvB/Z6Ig5xbKbvk/Re2JRsvu35oePEiHjGQXt2tgV2bJuleycOVUGgtCuAogSq
-         iay80dEGNv0xh/o1ZtFIlVsnja+JnQzqqaAYdpBzoPn14btRKQvwBXEqn6dMnyiGChHA
-         hcpw==
-X-Gm-Message-State: AOAM531Py2JSsjROuJXDkBZ8SdZMuVymreO/j0RvpB4ssv+iZGa7xrgh
-        dGr4+lyLKYJZAkLISmc4UcU=
-X-Google-Smtp-Source: ABdhPJyXw3OnpPgZMg0aCHLRuUuimYEhIG0rCcn6TO7Hj4BNaXFezvJt4TXB1nz8iEsgOjxlUYxkEA==
-X-Received: by 2002:a05:6820:161f:: with SMTP id bb31mr360728oob.44.1626415094323;
-        Thu, 15 Jul 2021 22:58:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y5sm1011976otu.27.2021.07.15.22.58.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jul 2021 22:58:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 15 Jul 2021 22:58:12 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-hwmon@vger.kernel.org, Akshay Gupta <Akshay.Gupta@amd.com>
-Subject: Re: [PATCH v2 1/3] hwmon: sbrmi: Add support for sbrmi power module
-Message-ID: <20210716055812.GA717674@roeck-us.net>
-References: <20210625132544.18094-1-nchatrad@amd.com>
- <20210707155859.86240-1-nchatrad@amd.com>
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UmTGO+hskm85NWV8Pb7TG9laMZkfOzetFOSISM8a4qs=;
+ b=1fEWQhTCzcgSeSElVHeXwiORIG8kwH+lk4QRfucyX8tTK7gLvumycaCf00aDnXFytQ05OcUJSHlGCAq1PvMCtmsunQf/4/wNlY58iunT0HgZL1isi9mekZ5u8qjBg+4a6jKfaYTkTWAfXAAkcJZxFpLW/WknW5lFKD5e8zGVQ/8=
+Received: from PH0PR03MB6366.namprd03.prod.outlook.com (2603:10b6:510:ab::22)
+ by PH0PR03MB5831.namprd03.prod.outlook.com (2603:10b6:510:40::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.22; Fri, 16 Jul
+ 2021 07:44:35 +0000
+Received: from PH0PR03MB6366.namprd03.prod.outlook.com
+ ([fe80::54ff:7b16:5fc7:38ca]) by PH0PR03MB6366.namprd03.prod.outlook.com
+ ([fe80::54ff:7b16:5fc7:38ca%4]) with mapi id 15.20.4331.026; Fri, 16 Jul 2021
+ 07:44:35 +0000
+From:   "Sa, Nuno" <Nuno.Sa@analog.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Rob Herring <robh@kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: RE: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
+ properties
+Thread-Topic: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
+ properties
+Thread-Index: AQHXc/CftWRp4pYREEulee6AuCq4has/nlgAgAQ89UCAAK/fgIAAtKIg
+Date:   Fri, 16 Jul 2021 07:44:35 +0000
+Message-ID: <PH0PR03MB636641D09289D1F696A64C9299119@PH0PR03MB6366.namprd03.prod.outlook.com>
+References: <20210708120111.519444-1-nuno.sa@analog.com>
+ <20210708120111.519444-4-nuno.sa@analog.com>
+ <20210712172656.GA2142233@robh.at.kernel.org>
+ <PH0PR03MB63668564A9A7B8F5D6E5F8D499129@PH0PR03MB6366.namprd03.prod.outlook.com>
+ <20210715203937.GA3182741@roeck-us.net>
+In-Reply-To: <20210715203937.GA3182741@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?iso-8859-1?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbnNhXGFwcG?=
+ =?iso-8859-1?Q?RhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
+ =?iso-8859-1?Q?OWUzNWJcbXNnc1xtc2ctYTdmYjI0MGEtZTYwOS0xMWViLThiNzQtZTRiOT?=
+ =?iso-8859-1?Q?dhN2NjNzEwXGFtZS10ZXN0XGE3ZmIyNDBiLWU2MDktMTFlYi04Yjc0LWU0?=
+ =?iso-8859-1?Q?Yjk3YTdjYzcxMGJvZHkudHh0IiBzej0iNjExMyIgdD0iMTMyNzA4OTUwNz?=
+ =?iso-8859-1?Q?IzNTU3NTQ0IiBoPSIyS29KbzVHOW42TmRyMWkrTUFFejBITUc0eUk9IiBp?=
+ =?iso-8859-1?Q?ZD0iIiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQU?=
+ =?iso-8859-1?Q?FJWURBQUNvZUdScUZuclhBVTAxRzR5OWo5ai9UVFViakwyUDJQOEZBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBSEFBQUFBV0F3QUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBRUFBUUFCQUFBQUJPWUdjZ0FBQUFBQUFBQUFBQUFBQUo0?=
+ =?iso-8859-1?Q?QUFBQmhBR1FBYVFCZkFITUFaUUJqQUhVQWNnQmxBRjhBY0FCeUFHOEFhZ0?=
+ =?iso-8859-1?Q?JsQUdNQWRBQnpBRjhBWmdCaEFHd0Fjd0JsQUY4QVpnQnZBSE1BYVFCMEFH?=
+ =?iso-8859-1?Q?a0FkZ0JsQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdFQV?=
+ =?iso-8859-1?Q?pBQnBBRjhBY3dCbEFHTUFkUUJ5QUdVQVh3QndBSElBYndCcUFHVUFZd0Iw?=
+ =?iso-8859-1?Q?QUhNQVh3QjBBR2tBWlFCeUFERUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFZUUJrQUdrQVh3?=
+ =?iso-8859-1?Q?QnpBR1VBWXdCMUFISUFaUUJmQUhBQWNnQnZBR29BWlFCakFIUUFjd0JmQU?=
+ =?iso-8859-1?Q?hRQWFRQmxBSElBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCaEFISUFhUUJoQUY4QVpBQn?=
+ =?iso-8859-1?Q?BBR01BZEFCcEFHOEFiZ0JoQUhJQWVRQmZBSFFBYVFCbEFISUFNUUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBZ0FBQUFBQW5nQUFBR0VBY2dCcEFHRUFYd0JrQUdrQVl3QjBB?=
+ =?iso-8859-1?Q?R2tBYndCdUFHRUFjZ0I1QUY4QWRBQnBBR1VBY2dBeUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?Q0FBQUFBQUE9Ii8+PC9tZXRhPg=3D=3D?=
+x-dg-rorf: true
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=analog.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 80b3cac6-008d-4d87-4ef2-08d9482d8e9e
+x-ms-traffictypediagnostic: PH0PR03MB5831:
+x-microsoft-antispam-prvs: <PH0PR03MB5831CFAE1F0F1548F0DB0FBC99119@PH0PR03MB5831.namprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tqf/c/7bKKYL42VpkmOpUIMwX6prkxqwDr0eIHlYzm1cM69sjn2WKXTaz/TDiy5L8umOy8L/rbHY65pQvnWolrtjn8WiMntVL1WkHPLam6aI39K2e1Z9dkShigoUGEkM3/h/53j3thXqdX3VI4UYO3WNiCje2LIVXfx/R0hJ3l9f0isep3O/uW1CJeZ21aEXLU85uQZgXzM2qmroWvFFvy7jkv69TwXiirxO2IjaesNUyYjKJWR0r42uagC1poXwUdt9h4KM/1jWxVEPYZjzOZ95uXFxspqsEIXbfi10/TbMzyUExAnTQmnMQoAd30e/5CV6KyHDAEaVyOpC3sUwFJWjk6M8BRaozaDz3CMjgmKbCk/4opbdkE9xU6nCrQWl2aCIgvVNLVqsa769Hoe7fjFBbpdqVt/Pj/R0S2uGSUr0wSrKT4qnBbTBKV4I9KjIatqsbpCNBBhjr7rIcwgupmEP7vB3OSOIiAS73itlxhrAGl/pWJLTTyc+dZfaxqQ3LOmiePFTE7Qrigmd803Te6YRjcBoKwyisOwfWG/t+WPDw61TiVNBidODxKIDuhrA+KcGw4T/F87xSLqUZA2IQiRqM45ikdZgRtXLqPLEw6nabF5amtfPj+8SdCltePr0QTTMOac0qeINmnW3Pz5xEhcRarRBtuLIWXj2ypHMOMtdvGkIR6OUCwq24zNZ0ROo/XAZMmaYMh7LKOHtdIv/Vg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6366.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(346002)(136003)(39860400002)(376002)(52536014)(55016002)(76116006)(4326008)(86362001)(66946007)(9686003)(64756008)(66556008)(66476007)(8676002)(8936002)(66446008)(6916009)(5660300002)(186003)(26005)(7696005)(6506007)(53546011)(122000001)(38100700002)(478600001)(2906002)(71200400001)(54906003)(316002)(83380400001)(33656002)(38070700004);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?/VuViS9iEur9CfUybLXy95kdVQ+NxF1T2r2b54oXKFw6QJmWVAhJLJ1oeD?=
+ =?iso-8859-1?Q?I3BROeGeyJLRpbeBNp3G+S8xkVy1ECs0d+9jAeILx5uvgSEScWaon9kVxt?=
+ =?iso-8859-1?Q?ArCt3xv41Xkn7KhI94B5oJ79/kGAjiXWUFBKQ4Vtp7bSjWDgbak7vPyD/q?=
+ =?iso-8859-1?Q?zRE762gwqg/6a0g+w3TBLHbU+cJXxGQSUzBSQ90T7XAbSbflCnUpeutz60?=
+ =?iso-8859-1?Q?3yumMRqYpEfmzuGAff0Ur1wQ5CmULflZlzUlcMSobEHO9DGvZ5lKidw2wA?=
+ =?iso-8859-1?Q?bjREFHeR8jBnkgZy1ZUbmKoU08g2nlgaZWt2ItvQIuJnUVcR9qGM0SNs2a?=
+ =?iso-8859-1?Q?UotrM01iU+nFOEdp7kaWBYnujLhjfip9WsKQbx8E6flHKmHDPKsqWQn1hA?=
+ =?iso-8859-1?Q?Uu7dWRQNnhT+scj7OMzxd5foYlpH2MrkZWLsAzNqI81VYjLCPvl0chCezX?=
+ =?iso-8859-1?Q?afNYv7vutqvyiE9L2bM0+Ap3IeMzHP6tlAL/vcS0mCKsMUQfO2pPWYUl3w?=
+ =?iso-8859-1?Q?URNdy5jcq8SyHQTyiaFotyoSdiRL4Yr80IlIMA+CyzZkWLFkkvtcLrRNWk?=
+ =?iso-8859-1?Q?Zr/Xr8BMe7kidetbjKVo0ymlSBGZMDZiJ2JyNWFLfzlRG0Hv8MUvPxZOP5?=
+ =?iso-8859-1?Q?kEIIVgDBG2nCE/vJYBTNi7qZC29LAHZFGrSFUcp3k8W5PwqiQTm7G7t8hP?=
+ =?iso-8859-1?Q?Slo3PM7UqCuSvUWn/IU3wQiRUSXwZcTpJh/xUuQlMQxp0egiuXq4tGw8wg?=
+ =?iso-8859-1?Q?n0TncfW6wmmtCWZ1fSBZK+AGdbEPdl6o01BuD4j4ftRsM4oja6DB8+C8cd?=
+ =?iso-8859-1?Q?2v5F9rUGa+5j+9ecTBgsqKNztjjbI93sPKZXjhaXd1R9lG5vCv0Ggm+MGt?=
+ =?iso-8859-1?Q?Do5lnUklkyRrKJi8lAw1EHFf85av6Oy2OwjnwVm98elwow2iAJov13d8B9?=
+ =?iso-8859-1?Q?ZhZKFkx5q+DOQOaP5Q0Pag7JTyHOkOU36Nw1CcmchqLCJurR2W6JkkJ4I1?=
+ =?iso-8859-1?Q?jm+Q3yYG58LNIOTHMMSjP5AO1lvLQ5LUrEuFJwos2aUL+CaGhqjoR2RYw3?=
+ =?iso-8859-1?Q?kjgbe0FuOfKZfSLe/xpaJwDWgSukAITc4aG7zjRkmirbHNbuITcA7MLUa/?=
+ =?iso-8859-1?Q?aD8UxYbFWp7LNMO4faquiQRhAfckfrD+npj2jsolsj5aSUpwNKrboA1jf+?=
+ =?iso-8859-1?Q?LQXs1hNnuwK5MrDM7X7eMSuAKvcMyaxVIXhbT5mNb2/abLl+5w8xCqQYOo?=
+ =?iso-8859-1?Q?nPwANbTLhHLheo/ovJL6ZuJz7sZ0k/Xah7vJMndX2lT/WERaXdm+bBvZ2Q?=
+ =?iso-8859-1?Q?Eo4fDCABrx8XZOerE0M80lkc20HaKe7rHtmVJbw+BGxcp1OTj3X1fLG9vM?=
+ =?iso-8859-1?Q?nW7n0+ECRr?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210707155859.86240-1-nchatrad@amd.com>
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6366.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80b3cac6-008d-4d87-4ef2-08d9482d8e9e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2021 07:44:35.2058
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OWi9Ds3qns4VR7yG9/tIGhiXydIev38ts5f4pl3X0CXXh626Z4dUwSQit83zIIW5bWedkCRvVGdycjbztZ4NPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR03MB5831
+X-Proofpoint-ORIG-GUID: PxTsomnDIgs5gbqyJZfGHosHWxajyoQ_
+X-Proofpoint-GUID: PxTsomnDIgs5gbqyJZfGHosHWxajyoQ_
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-16_02:2021-07-16,2021-07-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ bulkscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 priorityscore=1501
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2107160044
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 07, 2021 at 09:28:57PM +0530, Naveen Krishna Chatradhi wrote:
-> From: Akshay Gupta <Akshay.Gupta@amd.com>
-> 
-> On AMD platforms the Out-of-band access is provided by
-> Advanced Platform Management Link (APML), APML is a
-> SMBus v2.0 compatible 2-wire processor client interface.
-> APML is also referred as the sideband interface (SBI).
-> 
-> APML is used to communicate with the
-> Side-Band Remote Management Interface (SB-RMI) which provides
-> Soft Mailbox messages to manage power consumption and
-> power limits of the CPU socket.
-> 
-> - This module add support to read power consumption,
->   power limit & max power limit and write power limit.
-> - To instantiate this driver on a Board Management Controller (BMC)
->   connected to an AMD CPU with SB-RMI support, the i2c bus number
->   would be the bus connected from the BMC to the CPU.
-> 
-> Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
-> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> ---
-> 
-> Changes since v1:
-> 1. remove header file and move in alphabetical order
-> 2. make all comments multiline
-> 3. remove the pr_err, needed for debugging only
-> 4. fix #define tab issue
-> 5. uninitailize err,
->   - correct spelling & remove extra ()
->   - remove extra i2c functionality check
-> 6. reduce call to data->client
-> 7. remove usage of union
-> 
->  drivers/hwmon/Kconfig  |  10 ++
->  drivers/hwmon/Makefile |   1 +
->  drivers/hwmon/sbrmi.c  | 341 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 352 insertions(+)
->  create mode 100644 drivers/hwmon/sbrmi.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 87624902ea80..f489972a6309 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1551,6 +1551,16 @@ config SENSORS_SBTSI
->  	  This driver can also be built as a module. If so, the module will
->  	  be called sbtsi_temp.
->  
-> +config SENSORS_SBRMI
-> +	tristate "Emulated SB-RMI sensor"
-> +	depends on I2C
-> +	help
-> +	  If you say yes here you get support for emulated RMI
-> +	  sensors on AMD SoCs with APML interface connected to a BMC device.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called sbrmi.
-> +
->  config SENSORS_SHT15
->  	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
->  	depends on GPIOLIB || COMPILE_TEST
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 59e78bc212cf..8031acf58936 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -164,6 +164,7 @@ obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
->  obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
->  obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
->  obj-$(CONFIG_SENSORS_SBTSI)	+= sbtsi_temp.o
-> +obj-$(CONFIG_SENSORS_SBRMI)	+= sbrmi.o
->  obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
->  obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
->  obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
-> diff --git a/drivers/hwmon/sbrmi.c b/drivers/hwmon/sbrmi.c
-> new file mode 100644
-> index 000000000000..10622b1f23f2
-> --- /dev/null
-> +++ b/drivers/hwmon/sbrmi.c
-> @@ -0,0 +1,341 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * sbrmi.c - hwmon driver for a SB-RMI mailbox
-> + *           compliant AMD SoC device.
-> + *
-> + * Copyright (C) 2020-2021 Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of.h>
-> +
-> +/* Do not allow setting negative power limit */
-> +#define SBRMI_PWR_MIN	0
-> +/* Mask for Status Register bit[1] */
-> +#define SW_ALERT_MASK	0x2
-> +
-> +/* Software Interrupt for triggering */
-> +#define START_CMD	0x80
-> +#define TRIGGER_MAILBOX	0x01
-> +
-> +/*
-> + * SB-RMI supports soft mailbox service request to MP1 (power management
-> + * firmware) through SBRMI inbound/outbound message registers.
-> + * SB-RMI message IDs
-> + */
-> +enum sbrmi_msg_id {
-> +	SBRMI_READ_PKG_PWR_CONSUMPTION = 0x1,
-> +	SBRMI_WRITE_PKG_PWR_LIMIT,
-> +	SBRMI_READ_PKG_PWR_LIMIT,
-> +	SBRMI_READ_PKG_MAX_PWR_LIMIT,
-> +};
-> +
-> +/* SB-RMI registers */
-> +enum sbrmi_reg {
-> +	SBRMI_CTRL		= 0x01,
-> +	SBRMI_STATUS,
-> +	SBRMI_OUTBNDMSG0	= 0x30,
-> +	SBRMI_OUTBNDMSG1,
-> +	SBRMI_OUTBNDMSG2,
-> +	SBRMI_OUTBNDMSG3,
-> +	SBRMI_OUTBNDMSG4,
-> +	SBRMI_OUTBNDMSG5,
-> +	SBRMI_OUTBNDMSG6,
-> +	SBRMI_OUTBNDMSG7,
-> +	SBRMI_INBNDMSG0,
-> +	SBRMI_INBNDMSG1,
-> +	SBRMI_INBNDMSG2,
-> +	SBRMI_INBNDMSG3,
-> +	SBRMI_INBNDMSG4,
-> +	SBRMI_INBNDMSG5,
-> +	SBRMI_INBNDMSG6,
-> +	SBRMI_INBNDMSG7,
-> +	SBRMI_SW_INTERRUPT,
-> +};
-> +
-> +/* Each client has this additional data */
-> +struct sbrmi_data {
-> +	struct i2c_client *client;
-> +	struct mutex lock;
-> +};
-> +
-> +struct sbrmi_mailbox_msg {
-> +	u8 cmd;
-> +	bool read;
-> +	u32 data_in;
-> +	u32 data_out;
-> +};
-> +
-> +static int sbrmi_enable_alert(struct i2c_client *client)
-> +{
-> +	int ctrl;
-> +
-> +	/*
-> +	 * Enable the SB-RMI Software alert status
-> +	 * by writing 0 to bit 4 of Control register(0x1)
-> +	 */
-> +	ctrl = i2c_smbus_read_byte_data(client, SBRMI_CTRL);
-> +	if (ctrl < 0)
-> +		return ctrl;
-> +
-> +	if (ctrl & 0x10) {
-> +		ctrl &= ~0x10;
-> +		return i2c_smbus_write_byte_data(client,
-> +						 SBRMI_CTRL, ctrl);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int rmi_mailbox_xfer(struct sbrmi_data *data,
-> +			    struct sbrmi_mailbox_msg *msg)
-> +{
-> +	int i, ret, retry = 10;
-> +	int sw_status;
-> +	u8 byte;
-> +
-> +	mutex_lock(&data->lock);
-> +
-> +	ret = sbrmi_enable_alert(data->client);
-> +	if (ret < 0)
-> +		goto exit_unlock;
-> +
+> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
+> Roeck
+> Sent: Thursday, July 15, 2021 10:40 PM
+> To: Sa, Nuno <Nuno.Sa@analog.com>
+> Cc: Rob Herring <robh@kernel.org>; linux-hwmon@vger.kernel.org;
+> devicetree@vger.kernel.org; Jean Delvare <jdelvare@suse.com>
+> Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
+> properties
+>=20
+> On Thu, Jul 15, 2021 at 10:26:05AM +0000, Sa, Nuno wrote:
+> > > From: Rob Herring <robh@kernel.org>
+> > > Sent: Monday, July 12, 2021 7:27 PM
+> > > To: Sa, Nuno <Nuno.Sa@analog.com>
+> > > Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
+> > > Guenter Roeck <linux@roeck-us.net>; Jean Delvare
+> > > <jdelvare@suse.com>
+> > > Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add
+> tacho
+> > > properties
+> > >
+> > > [External]
+> > >
+> > > On Thu, Jul 08, 2021 at 02:01:08PM +0200, Nuno S=E1 wrote:
+> > > > Add the bindings for the tacho signal evaluation parameters
+> which
+> > > depend
+> > > > on the FAN being used.
+> > > >
+> > > > Signed-off-by: Nuno S=E1 <nuno.sa@analog.com>
+> > > > ---
+> > > >  .../bindings/hwmon/adi,axi-fan-control.yaml          | 12
+> > > ++++++++++++
+> > > >  1 file changed, 12 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/hwmon/adi,axi-
+> fan-
+> > > control.yaml
+> b/Documentation/devicetree/bindings/hwmon/adi,axi-
+> > > fan-control.yaml
+> > > > index 6747b870f297..0481eb34d9f1 100644
+> > > > --- a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
+> > > control.yaml
+> > > > +++ b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-
+> > > control.yaml
+> > > > @@ -37,6 +37,18 @@ properties:
+> > > >      $ref: /schemas/types.yaml#/definitions/uint32
+> > > >      enum: [1, 2, 4]
+> > > >
+> > > > +  adi,tacho-25-us:
+> > > > +    description: Expected tacho signal when the PWM is at 25%.
+> > > > +
+> > > > +  adi,tacho-50-us:
+> > > > +    description: Expected tacho signal when the PWM is at 50%.
+> > > > +
+> > > > +  adi,tacho-75-us:
+> > > > +    description: Expected tacho signal when the PWM is at 75%.
+> > > > +
+> > > > +  adi,tacho-100-us:
+> > > > +    description: Expected tacho signal when the PWM is at 100%.
+> > >
+> > > This looks like it should be common. But having PWM percents in
+> the
+> > > property names doesn't scale. This is also a property of the fan, not
+> > > the fan controller.
+> >
+> > Yes, I see that these parameters are definitely a property of the
+> attached
+> > fan but the evaluation of these timings are very specific to this
+> controller
+> > (I think). The way it works is that the HW can fully operate without
+> any
+> > runtime SW configuration. In this case, it will use the values in these
+> > registers to evaluate the tacho signal coming from the FAN. And the
+> HW
+> > really uses the evaluation points like this (0, 25%, 50% and 100%). It
+> has
+> > some predefined values that work for the FAN that was used to
+> develop
+> > the IP but naturally the evaluation will fail as soon as other FAN is
+> attached
+> > (resulting in fan fault interrupts). And yes, writing these parameters
+> is
+> > already SW configuration but what I mean with "runtime" is after
+> probe :).
+> >
+>=20
+> Are you sure you can ever get this stable ? Each fan has its own
+> properties
+> and tolerances. If you replace a fan in a given system, you might get
+> different RPM numbers. The RPM will differ widely from system to
+> system
+> and from fan to fan. Anything that assumes a specific RPM in
+> devicetree
+> data seems to be quite vulnerable to failures. I have experienced that
+> recently with a different chip which also tries to correlate RPM and
+> PWM
+> and fails quite miserably.
+>=20
+> In my experience, anything other than minimum fan speed is really a
+> recipe
+> for instability and sporadic false failures. Even setting a minimum fan
+> speed
+> is tricky because it depends a lot on the fan.
 
-Is it really necessary to call this for every command (instead
-of once during probe) ?
+I see what you mean. So, I had to go through this process when testing
+this changes because the fan I'm using is different from the default one
+used to develop and stablish the default values in the IP core. The core
+provides you with a register which contains the tacho measurements in
+clock cycles. You can read that for all the PWM points of interest
+(with devmem2 for example) and make your own "calibration". I assume
+that people have to go through this process before putting some values
+in the devicetree. I'm aware this is not the neatest process but I guess it=
+'s
+acceptable...
 
-> +	/* Indicate firmware a command is to be serviced */
-> +	ret = i2c_smbus_write_byte_data(data->client,
-> +					SBRMI_INBNDMSG7, START_CMD);
-> +	if (ret < 0)
-> +		goto exit_unlock;
-> +
-> +	/* Write the command to SBRMI::InBndMsg_inst0 */
-> +	ret = i2c_smbus_write_byte_data(data->client,
-> +					SBRMI_INBNDMSG0, msg->cmd);
-> +	if (ret < 0)
-> +		goto exit_unlock;
-> +
-> +	/*
-> +	 * For both read and write the initiator (BMC) writes
-> +	 * Command Data In[31:0] to SBRMI::InBndMsg_inst[4:1]
-> +	 * SBRMI_x3C(MSB):SBRMI_x39(LSB)
-> +	 */
-> +	for (i = 0; i < 4; i++) {
-> +		byte = (msg->data_in >> i * 8) & 0xff;
-> +		ret = i2c_smbus_write_byte_data(data->client,
-> +						SBRMI_INBNDMSG1 + i, byte);
-> +		if (ret < 0)
-> +			goto exit_unlock;
-> +	}
-> +
-> +	/*
-> +	 * Write 0x01 to SBRMI::SoftwareInterrupt to notify firmware to
-> +	 * perform the requested read or write command
-> +	 */
-> +	ret = i2c_smbus_write_byte_data(data->client,
-> +					SBRMI_SW_INTERRUPT, TRIGGER_MAILBOX);
-> +	if (ret < 0)
-> +		goto exit_unlock;
-> +
-> +	/*
-> +	 * Firmware will write SBRMI::Status[SwAlertSts]=1 to generate
-> +	 * an ALERT (if enabled) to initiator (BMC) to indicate completion
-> +	 * of the requested command
-> +	 */
-> +	do {
-> +		sw_status = i2c_smbus_read_byte_data(data->client,
-> +						     SBRMI_STATUS);
-> +		if (sw_status < 0) {
-> +			ret = sw_status;
-> +			goto exit_unlock;
-> +		}
-> +		if (sw_status & SW_ALERT_MASK)
-> +			break;
-> +		usleep_range(50, 100);
+> > So, I honestly do not know how we could name this better... Maybe
+> a
+> > 'tacho-eval-points-us' array? The question would be the min/max
+> > elements? Do you have any suggestion for a more generic property?
+> >
+> I am guessing that the "us" refers to the time between pulses from the
+> fan. I think this is a bad value to start with - anything fan speed
+> related should really be expressed in RPM, not in time between
+> pulses.
+>=20
+> Overall I don't think this should be handled as generic set of
+> properties.
+> Whatever we come up with as standard set of pwm or fan related
+> properties
+> should not be an expected correlation between pwm and rpm.
+> Assuming such
+> a property is needed here (after all, the controller is what it is),
+> maybe a set of tuples makes sense, such as
+>=20
+> 	adi,pwm-rpm-map =3D <
+> 		25, 250,
+> 		50, 500,
+> 		75, 750,
+> 		100, 1000
+> 	>;
+>=20
+> though I think that each of those should also include the tolerance
+> instead of just assuming that a 25% tolerance (as implemented in patch
+> 2/6) would work for all fans.
 
-I don't have the interface specification, but is ~600 uS guaranteed
-to be sufficient time for the firmware to respond ?
+Yes, this makes sense thanks. As the HW default tolerance is 25% I was=20
+somehow attached to that. Since all these values are correlated it makes
+complete sense to also give the tolerance here as it makes things more
+flexible. The map is also a good tip, I just have to see if there is a nice
+way to specify that the pwm column is constant...
 
-> +	} while (retry--);
-> +
-> +	if (retry < 0) {
-> +		pr_err("Firmware fail to indicate command completion\n");
+Thanks!
+- Nuno S=E1
 
-Please use dev_err(). Also, does this really warrant an error message ?
-I am concerned that it may fill up the log if there is an issue with
-the client, eg if it hangs. On top of that, there is already an error
-message below. Please no more than one message per error.
-
-> +		ret = -1;
-
-Please use standard error codes (-ETIMEDOUT ? -EIO ? -EPROTO ?).
--1 translates to -EPERM which is presumably not what you want.
-
-> +		goto exit_unlock;
-> +	}
-> +
-> +	/*
-> +	 * For a read operation, the initiator (BMC) reads the firmware
-> +	 * response Command Data Out[31:0] from SBRMI::OutBndMsg_inst[4:1]
-> +	 * {SBRMI_x34(MSB):SBRMI_x31(LSB)}.
-> +	 */
-> +	if (msg->read) {
-> +		for (i = 0; i < 4; i++) {
-> +			ret = i2c_smbus_read_byte_data(data->client,
-> +						       SBRMI_OUTBNDMSG1 + i);
-> +			if (ret < 0)
-> +				goto exit_unlock;
-
-This is a concern in conjunction with the ignored error in sbrmi_write().
-If there is an error after reading a number of bytes, the returned
-value will be partial/random.
-
-> +			msg->data_out |= (ret & 0xff) << i * 8;
-
-The mask is unnecessary here. A byte read will never return a value > 0xff.
-
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * BMC must write 1'b1 to SBRMI::Status[SwAlertSts] to clear the
-> +	 * ALERT to initiator
-> +	 */
-> +	ret = i2c_smbus_write_byte_data(data->client, SBRMI_STATUS,
-> +					sw_status | SW_ALERT_MASK);
-> +
-> +exit_unlock:
-> +	if (ret < 0)
-> +		pr_err("SMBUS translation failed\n");
-
-dev_err(). Also, please consider that this may fill the log
-if the client or the i2c controller/bus has a problem.
-
-> +
-> +	mutex_unlock(&data->lock);
-> +	return ret;
-> +}
-> +
-> +static int sbrmi_read(struct device *dev, enum hwmon_sensor_types type,
-> +		      u32 attr, int channel, long *val)
-> +{
-> +	struct sbrmi_data *data = dev_get_drvdata(dev);
-> +	struct sbrmi_mailbox_msg msg = { 0 };
-> +	int ret;
-> +
-> +	if (type != hwmon_power)
-> +		return -EINVAL;
-> +
-> +	msg.read = true;
-> +	switch (attr) {
-> +	case hwmon_power_input:
-> +		msg.cmd = SBRMI_READ_PKG_PWR_CONSUMPTION;
-> +		ret = rmi_mailbox_xfer(data, &msg);
-> +		break;
-> +	case hwmon_power_cap:
-> +		msg.cmd = SBRMI_READ_PKG_PWR_LIMIT;
-> +		ret = rmi_mailbox_xfer(data, &msg);
-> +		break;
-> +	case hwmon_power_cap_max:
-> +		msg.cmd = SBRMI_READ_PKG_MAX_PWR_LIMIT;
-> +		ret = rmi_mailbox_xfer(data, &msg);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	/* hwmon power attributes are in microWatt */
-> +	*val = (long)msg.data_out * 1000;
-> +	return ret;
-> +}
-> +
-> +static int sbrmi_write(struct device *dev, enum hwmon_sensor_types type,
-> +		       u32 attr, int channel, long val)
-> +{
-> +	struct sbrmi_data *data = dev_get_drvdata(dev);
-> +	struct sbrmi_mailbox_msg msg = { 0 };
-> +
-> +	if (type != hwmon_power && attr != hwmon_power_cap)
-> +		return -EINVAL;
-> +	/*
-> +	 * hwmon power attributes are in microWatt
-> +	 * mailbox read/write is in mWatt
-> +	 */
-> +	val /= 1000;
-> +
-> +	msg.cmd = SBRMI_READ_PKG_MAX_PWR_LIMIT;
-> +	msg.data_in = 0;
-
-Unnecessary (already initialized above).
-
-> +	msg.read = true;
-> +	rmi_mailbox_xfer(data, &msg);
-
-Not sure if it is a good idea to ignore an error return here.
-As far as I can see in rmi_mailbox_xfer(), the returned value
-is more or less random if there is an error.
-
-If the maximum power limit is static, it might make sense
-to read it only once in the prob function and cache the
-limit in struct sbrmi_data instead of reading it repeatedly.
-
-If the limit is not static and it is indeed necessary to re-read
-the limit, isn't this racy if there are multiple write requests
-in parallel ?
-
-> +
-> +	val = clamp_val(val, SBRMI_PWR_MIN, msg.data_out);
-> +
-> +	msg.cmd = SBRMI_WRITE_PKG_PWR_LIMIT;
-> +	msg.data_in = val;
-> +	msg.read = false;
-> +
-> +	return rmi_mailbox_xfer(data, &msg);
-> +}
-> +
-> +static umode_t sbrmi_is_visible(const void *data,
-> +				enum hwmon_sensor_types type,
-> +				u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_power:
-> +		switch (attr) {
-> +		case hwmon_power_input:
-> +		case hwmon_power_cap_max:
-> +			return 0444;
-> +		case hwmon_power_cap:
-> +			return 0644;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info *sbrmi_info[] = {
-> +	HWMON_CHANNEL_INFO(power,
-> +			   HWMON_P_INPUT | HWMON_P_CAP | HWMON_P_CAP_MAX),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops sbrmi_hwmon_ops = {
-> +	.is_visible = sbrmi_is_visible,
-> +	.read = sbrmi_read,
-> +	.write = sbrmi_write,
-> +};
-> +
-> +static const struct hwmon_chip_info sbrmi_chip_info = {
-> +	.ops = &sbrmi_hwmon_ops,
-> +	.info = sbrmi_info,
-> +};
-> +
-> +static int sbrmi_probe(struct i2c_client *client,
-> +		       const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct device *hwmon_dev;
-> +	struct sbrmi_data *data;
-> +
-> +	data = devm_kzalloc(dev, sizeof(struct sbrmi_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +	mutex_init(&data->lock);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
-> +							 &sbrmi_chip_info, NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct i2c_device_id sbrmi_id[] = {
-> +	{"sbrmi", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, sbrmi_id);
-> +
-> +static const struct of_device_id __maybe_unused sbrmi_of_match[] = {
-> +	{
-> +		.compatible = "amd,sbrmi",
-> +	},
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, sbrmi_of_match);
-> +
-> +static struct i2c_driver sbrmi_driver = {
-> +	.class = I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name = "sbrmi",
-> +		.of_match_table = of_match_ptr(sbrmi_of_match),
-> +	},
-> +	.probe = sbrmi_probe,
-> +	.id_table = sbrmi_id,
-> +};
-> +
-> +module_i2c_driver(sbrmi_driver);
-> +
-> +MODULE_AUTHOR("Akshay Gupta <akshay.gupta@amd.com>");
-> +MODULE_DESCRIPTION("Hwmon driver for AMD SB-RMI emulated sensor");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.17.1
-> 
