@@ -2,138 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE186C636CD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 10:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD81BC12002
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 13:54:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96440613F7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 10:21:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5CF1613F6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 13:54:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238392AbhGPKXy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Jul 2021 06:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238560AbhGPKXx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Jul 2021 06:23:53 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1526C06175F
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Jul 2021 03:20:58 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id h4so12125974ljo.6
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Jul 2021 03:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QCPElWuEa8w9XYuBr8O3jsy3/amnNkihPKbRSdW0wgs=;
-        b=cHMMiBAJmp6/cyeiYGTgxmR3wcUCQ+tFsAvAHnOB2o9PoESScJHJaYcPS7nMmYYRMq
-         aQVd4P7f4uO4kwKcWaFC5YlPa/D/rtoxF48Db25jhD1zqvzeNVsO2A4fZL9n03mCr8rD
-         WGKIPSmSpUsw31X1eVNVQc3I7w3W1ykafZtPkzVqXSCmYtUAHvyE6Qtf43qbCeP9YzMm
-         MbgqupbxXcPjOPp9bHl9FC84SAhvsa/mwwVcRgP5yikXTBJrOxAKqeC4zmIcPlXz9F1Y
-         ySTL2BRMqsBc+lCLPOULUpDGRTT0OxeMHLdQic117MdmaybrvNqD1wz78xYBBsnbOebg
-         4MoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QCPElWuEa8w9XYuBr8O3jsy3/amnNkihPKbRSdW0wgs=;
-        b=R95P+cJbGDjkAuXzCbM/4D6vYw0aHyWNa+jNyBkCZ0IoHxSrbEWSWowFrA69JdrTqk
-         nCsAAjjAH975ChniejpzenGSYpSLqx87tpkIEYbIuHbpQ24jIwSfL/6zKumzj/froOcf
-         xyVj8TBDGCig0/nIASZYsudEB3fXW7NweRXFO3Gk+vV8d8eVZV6IyRV8IiMYlwtAlXo7
-         4W549bzbqbkmFHAyNEkvaW65gfWyoOtgB7FWrOUO7sclnnCXx2RZ3DWLkyZ3+VPFDAVz
-         QUhLN1n1P7gAjDt45+TW5LZM+hMO8OzlrVgUwbN8GBZNzSHNduTrIjH6lKhEBUNKsA1r
-         5ekQ==
-X-Gm-Message-State: AOAM533rj3XqNpIqej3bWGkD8uioXB75DYOheK954rswsE/lu/O5gLz+
-        /yo0GN2LDFaF2laU72bPmJxIgkP9m/z4Ohi24XA8Yj08fF0=
-X-Google-Smtp-Source: ABdhPJx89XzzQN7X+eh312K00RYM03ZzDBNYbs41wT6kl55jytpR6zW5S7cLnaVDCj/WE59ockOo8Fl8sE1bSvDbbi4=
-X-Received: by 2002:a05:651c:2103:: with SMTP id a3mr8299888ljq.192.1626430857143;
- Fri, 16 Jul 2021 03:20:57 -0700 (PDT)
+        id S233040AbhGPN5w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Jul 2021 09:57:52 -0400
+Received: from first.geanix.com ([116.203.34.67]:35038 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232088AbhGPN5w (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 16 Jul 2021 09:57:52 -0400
+Received: from zen.. (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id 982994C7135;
+        Fri, 16 Jul 2021 13:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1626443694; bh=Em7PjSoXenIt5zoQnSrFagVO2cjkXgWtRzWVFLohT04=;
+        h=From:To:Cc:Subject:Date;
+        b=cxjcHJVTVzaI3TWfDG2Xdvr4hYzCnl82pIjxLw+PYsRY0ZZaNWNXnSTBDXBaNC2YL
+         /F1lhd0fCp6Az5Z2BvvpbUsQo4grxWy4BCqMibs5aKP0D2RWYJGAI+d5Aa5v0B6TdA
+         +Jj9NyBACG1sv2q2LAW25io1jg4MZz8kEiKaExXuIwi9g/LO3h8JyILqMhWX0hOsxO
+         DevSsNp/0cWBmEvzfhPSmx8UBSHz5OrikgkShqsJYIRMZg/GYiPQ1dG5g0Zvkjjy7X
+         cE7lhyheq9TH/Zzr3H10cmS3hrFPtOZOSCR/GgFEGcx7Xzz9V/z3EhLJyN3N6/bhQ8
+         lFLQppRTK6NqQ==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH v5 0/3] fpga/spi/hwmon: Initial support for Silicom N5010 PAC
+Date:   Fri, 16 Jul 2021 15:54:38 +0200
+Message-Id: <20210716135441.3235863-1-martin@geanix.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-References: <202107080039.1680d7Eo018443@systol.god.lan> <CAMFK4TPNYJeEJdfu5Wti7G34m+-tcZvA2wv0N87aPsGq2eygvw@mail.gmail.com>
- <CAMFK4TM0MCEGWs=zCJZLsdnUJKqvM+-0fxZTDhJd864SAG8=ng@mail.gmail.com>
- <545ad722-d2de-21bb-21c5-7104097c76c4@roeck-us.net> <CAMFK4TMKt3myPKrLYU_vvC=PxxbdohyePZA9Qy0ygdtTmAZU6w@mail.gmail.com>
- <497f1c35-6334-7bf3-d72c-6f0db16bad4e@roeck-us.net>
-In-Reply-To: <497f1c35-6334-7bf3-d72c-6f0db16bad4e@roeck-us.net>
-From:   Henk <henk.vergonet@gmail.com>
-Date:   Fri, 16 Jul 2021 12:20:46 +0200
-Message-ID: <CAMFK4TM0gxEx=s0fRy2EaCsWqGLsRRt-bdYzSdjrfmK8vZBPCQ@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: nct6775: Add missing voltage reading NCT6796D
-To:     Guenter Roeck <linux@roeck-us.net>, info@linuxfoundation.org
-Cc:     linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Op wo 14 jul. 2021 om 17:26 schreef Guenter Roeck <linux@roeck-us.net>:
->
-> On 7/14/21 7:28 AM, Henk wrote:
-> > Can you be more specific?
-> >
->
-> Not a single one of your patch submissions followed the guidelines in
-> Documentation/process/submitting-patches.rst. Most common violations are:
->
-> - No or insufficient patch description
->    See 'Describe your changes'
-> - Patch sent as attachment
->    See 'No MIME, no links, no compression, no attachments.  Just plain text'
-> - Instead of sending a patch, sent pointer to github location
->
-> You could just set up git send-email and use it to send your patches,
-> as suggested in submitting-patches.rst. Not doing that has cost both
-> of us a lot of time, for no good reason. I don't know about your time,
-> but I am not getting paid for my work as Linux kernel maintainer,
-> and my time is limited.
->
-> You for sure have accomplished one thing: A new formletter.
->
-> <Formletter>
-> Please follow the guidelines in
->      Documentation/hwmon/submitting-patches.rst
->      Documentation/process/submitting-patches.rst
-> when submitting patches into the hardware monitoring subsystem.
-> Patches not following those guidelines will be ignored.
-> </Formletter>
->
-> Guenter
->
-Hi Guenter,
+From: Martin Hundebøll <mhu@silicom.dk>
 
-I am in similar position as you, my Linux work is unpaid and voluntary
-and not subsidized as some of the other contributions are.
+This is an initial set of patches for the Silciom N5010 programmable
+accelerated card adding support for reading out sensors.
 
-I am extremely grateful of the work that maintainers do and apologize
-for the inconvenience that I may have caused.
-Also I wish to thank you for the new form letter. I would have send a
-pointer to my github location at first impulse however:
+Based on v5.14-rc1
 
-I forked torvalds/linux from github in the understanding that it would
-allow me to create a proper documented pull request that could be
-routed trough the proper channels.
-However then i discovered after patching the file that I was not
-allowed to create a pull request, which is quite annoying.
-So I am looping in the Linuxfoundation in this mail in order to ask
-them to please reconsider their current policy and allow the creation
-of pull requests on gitgub/torvalds/linux . This would greatly reduce
-the amount of overhead.
-I would also argue that the github commenting system, the automated
-build system, and the review system are quite good, and we have
-definitely made some progress in that area since the invention of the
-mailing-list.
+Changes since v4:
+ * Removed the mfd patch that has been applied by Lee
+ * Renamed 'rev' to 'revision' in patch 1/3 as per Tom's suggestion
+ * Moved spi board_info structure in patch 2/3 from global/static scope
+   to function/stack scope
 
-I understand the master repositories should reside on kernel.org but
-bringing in some of the feedback to the kernel via github could be
-quite beneficial!
+Changes since v3:
+ * Added Hao's Acked-by to patch 1/4
+ * Added Matthew's Acked-by to patch 1/4
+ * Changed "BMC's" to "BMCs" in patch 2/4
+ * Added Moritz' Reviewed-by to patch 2/4
+ * Added Matthew's Reviewed-by to patch 3/4
+ * Added Lee's Acked-for-MFD-by to patch 3/4
 
-(Just occurred to me I can send a pointer to my own commit :
-https://github.com/hvegh/linux/commit/00b3427269f731becbc10e9fe92046a6ad91eee8
- )
+Changes since v2:
+ * Removed patch 1/5 from v2 already in fpga/for-next
+ * Reworded commit message in patch 1/4 as per Hao's suggestion
+ * Added Yilun's Reviewed-by to patch 3/4 and 4/4
+ * Added Moritz' Acked-by to patch 3/4
+ * Added Moritz' Reviewed-by to patch 4/4
+ * Added Guenter's Reviewed-by to patch 4/4
 
+Changes since v1:
+ * Commit message in patch 1 is updated with card description
+ * Added Hao's Acked-by to patch 1
+ * Patch 2 is replaced with a new patch to carry feature revision info
+   in struct dfl_device
+ * Patch 3 is updated to use feature revision from struct dfl_device
+ * Patch 4 from v0 is split into separate patches for hwmon and mfd
 
-Kind regards,
-Henk Vergonet
+Martin Hundebøll (3):
+  fpga: dfl: expose feature revision from struct dfl_device
+  spi: spi-altera-dfl: support n5010 feature revision
+  hwmon: intel-m10-bmc-hwmon: add n5010 sensors
+
+ drivers/fpga/dfl.c                  |  27 ++++---
+ drivers/fpga/dfl.h                  |   1 +
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
+ drivers/spi/spi-altera-dfl.c        |  21 ++---
+ include/linux/dfl.h                 |   1 +
+ 5 files changed, 147 insertions(+), 19 deletions(-)
+
+-- 
+2.31.0
+
