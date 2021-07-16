@@ -2,230 +2,165 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A83DFC07E95
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04C52C636CA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E04F61357
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7AD2613D0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240665AbhGPPWZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Jul 2021 11:22:25 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5278 "EHLO
+        id S240736AbhGPPW1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Jul 2021 11:22:27 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28024 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233094AbhGPPWY (ORCPT
+        by vger.kernel.org with ESMTP id S240251AbhGPPWY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Fri, 16 Jul 2021 11:22:24 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GFJ4bC024536;
-        Fri, 16 Jul 2021 11:19:08 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GFJ3Bh108840;
+        Fri, 16 Jul 2021 11:19:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=41Q8ygsUEknL9hYXACCQxRpsfIskznG//w5W3efVH6c=;
- b=ArgqhHyGDc8Dj+dr68AYYt9CImW8b++5Oi1OOQSFBUltTLXReBhtjdh3aJStyFN9SphL
- aICJBDJNXTjhcuJl/qDy2VJ5+qGnU9zDd+MCQ8xoZuaZmVhHpV7aTXYG128+vcDLTHaV
- EKgshSMtNueZyvgUBmKLMtqO/mFv3xllkLZvGe4YY5lg8fyD53M2viN35BjhsLyumg9A
- crQhld8cFAkF0VpNwnfuA+sRddtksF0aBwuGwGMyqCbwmvSTywWHvF1YTPTCyodNgPgW
- OFWiTvXfXJEv3Inqi4Om4+1aUMfPsbdCP+YM7aTTGuqwIi38f+loLvX72pO3SyYxo8+e jg== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39twha8n29-1
+ bh=NaztiW8y0zbEM5BnHti1Gp6mOCctl7zpEXezAiyDpPc=;
+ b=fzu/Nx2U9BMGyPnIa5m9PUkNRS/ptVWjxq96+EcYZyB+eB6n4SACTqPkEauTOUaAcatt
+ JrecwOy38LkCjUxVdeaDX2FoWvAKBYJkML25P50wDnzfzYCqzW94NwyVRp3Fe4BmXnh/
+ Lc0KOfrhf7r4keDvHOuCiy+KUb8nb00SF93dJFFGqa4x6O3cVWl/UtbXUM43C2CENtmK
+ +WUATWNidsajWk2Zxg6K+4ot4y/nQx+OFSNyoOcuDELXQbzYZZvHeq1ENm9R3u8JrNmb
+ aK9lc9UDTPiWGDyNPlecXuBqhuKop7/bNCvYu3hfM4X4qIXa0vxQ4dvI3bKqYCtVr5hw 1A== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39tyncnbfr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 16 Jul 2021 11:19:07 -0400
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16GFGhhu000796;
-        Fri, 16 Jul 2021 15:19:00 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04wdc.us.ibm.com with ESMTP id 39q36ef827-1
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16GFGfJS023509;
+        Fri, 16 Jul 2021 15:19:04 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma02dal.us.ibm.com with ESMTP id 39qt3ewur7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jul 2021 15:19:00 +0000
+        Fri, 16 Jul 2021 15:19:04 +0000
 Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16GFIxSZ48693742
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16GFJ3Gi10027486
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 15:18:59 GMT
+        Fri, 16 Jul 2021 15:19:03 GMT
 Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34A0AC6057;
-        Fri, 16 Jul 2021 15:18:59 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 32B5BC6059;
+        Fri, 16 Jul 2021 15:19:03 +0000 (GMT)
 Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB87FC605F;
-        Fri, 16 Jul 2021 15:18:58 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id BB58CC605D;
+        Fri, 16 Jul 2021 15:19:02 +0000 (GMT)
 Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.92.96])
         by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 16 Jul 2021 15:18:58 +0000 (GMT)
+        Fri, 16 Jul 2021 15:19:02 +0000 (GMT)
 From:   Eddie James <eajames@linux.ibm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
         linux@roeck-us.net, jdelvare@suse.com, jk@ozlabs.org,
         joel@jms.id.au, alistair@popple.id.au, openbmc@lists.ozlabs.org,
         Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH 1/3] fsi: occ: Force sequence numbering per OCC
-Date:   Fri, 16 Jul 2021 10:18:48 -0500
-Message-Id: <20210716151850.28973-2-eajames@linux.ibm.com>
+Subject: [PATCH 3/3] fsi: occ: Add dynamic debug to dump command and response
+Date:   Fri, 16 Jul 2021 10:18:50 -0500
+Message-Id: <20210716151850.28973-4-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210716151850.28973-1-eajames@linux.ibm.com>
 References: <20210716151850.28973-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hD8Pqiz4lZO1kkv_Tzc7KoFA1ebrp4il
-X-Proofpoint-GUID: hD8Pqiz4lZO1kkv_Tzc7KoFA1ebrp4il
+X-Proofpoint-GUID: 3ZpwZuyjX5mctZig_Fom-bhIZ3K76wJ3
+X-Proofpoint-ORIG-GUID: 3ZpwZuyjX5mctZig_Fom-bhIZ3K76wJ3
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-07-16_05:2021-07-16,2021-07-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- bulkscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0 adultscore=0
- phishscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107160092
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0
+ bulkscore=0 mlxlogscore=999 phishscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107160092
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Set and increment the sequence number during the submit operation.
-This prevents sequence number conflicts between different users of
-the interface. A sequence number conflict may result in a user
-getting an OCC response meant for a different command. Since the
-sequence number is now modified, the checksum must be calculated and
-set before submitting the command.
+Use the dynamic branching capability of the dynamic debug subsystem
+to dump the command and response with the correct OCC device name.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/fsi/fsi-occ.c | 54 +++++++++++++++++++++++++++++--------------
- 1 file changed, 37 insertions(+), 17 deletions(-)
+ drivers/fsi/fsi-occ.c | 44 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
 diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index b223f0ef337b..ecf738411fe2 100644
+index ecf738411fe2..641a6869b9df 100644
 --- a/drivers/fsi/fsi-occ.c
 +++ b/drivers/fsi/fsi-occ.c
-@@ -50,6 +50,7 @@ struct occ {
- 	struct device *sbefifo;
- 	char name[32];
- 	int idx;
-+	u8 sequence_number;
- 	enum versions version;
- 	struct miscdevice mdev;
- 	struct mutex occ_lock;
-@@ -141,8 +142,7 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
- {
- 	struct occ_client *client = file->private_data;
- 	size_t rlen, data_length;
--	u16 checksum = 0;
--	ssize_t rc, i;
-+	ssize_t rc;
- 	u8 *cmd;
+@@ -21,6 +21,15 @@
+ #include <linux/uaccess.h>
+ #include <asm/unaligned.h>
  
- 	if (!client)
-@@ -156,9 +156,6 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
- 	/* Construct the command */
- 	cmd = client->buffer;
++#if !defined(CONFIG_DYNAMIC_DEBUG_CORE)
++#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
++#if defined(DEBUG)
++#define DYNAMIC_DEBUG_BRANCH(descriptor) true
++#else /* DEBUG */
++#define DYNAMIC_DEBUG_BRANCH(descriptor) false
++#endif /* DEBUG */
++#endif /* CONFIG_DYNAMIC_DEBUG_CORE */
++
+ #define OCC_SRAM_BYTES		4096
+ #define OCC_CMD_DATA_BYTES	4090
+ #define OCC_RESP_DATA_BYTES	4089
+@@ -359,6 +368,20 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
+ 	byte_buf[len - 2] = checksum >> 8;
+ 	byte_buf[len - 1] = checksum & 0xff;
  
--	/* Sequence number (we could increment and compare with response) */
--	cmd[0] = 1;
--
- 	/*
- 	 * Copy the user command (assume user data follows the occ command
- 	 * format)
-@@ -178,14 +175,7 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
- 		goto done;
- 	}
- 
--	/* Calculate checksum */
--	for (i = 0; i < data_length + 4; ++i)
--		checksum += cmd[i];
--
--	cmd[data_length + 4] = checksum >> 8;
--	cmd[data_length + 5] = checksum & 0xFF;
--
--	/* Submit command */
-+	/* Submit command; 4 bytes before the data and 2 bytes after */
- 	rlen = PAGE_SIZE;
- 	rc = fsi_occ_submit(client->occ->dev, cmd, data_length + 6, cmd,
- 			    &rlen);
-@@ -314,11 +304,13 @@ static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
- 	return rc;
- }
- 
--static int occ_putsram(struct occ *occ, const void *data, ssize_t len)
-+static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
-+		       u8 seq_no, u16 checksum)
- {
- 	size_t cmd_len, buf_len, resp_len, resp_data_len;
- 	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
- 	__be32 *buf;
-+	u8 *byte_buf;
- 	int idx = 0, rc;
- 
- 	cmd_len = (occ->version == occ_p10) ? 6 : 5;
-@@ -358,6 +350,15 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len)
- 	buf[4 + idx] = cpu_to_be32(data_len);
- 	memcpy(&buf[5 + idx], data, len);
- 
-+	byte_buf = (u8 *)&buf[5 + idx];
-+	/*
-+	 * Overwrite the first byte with our sequence number and the last two
-+	 * bytes with the checksum.
-+	 */
-+	byte_buf[0] = seq_no;
-+	byte_buf[len - 2] = checksum >> 8;
-+	byte_buf[len - 1] = checksum & 0xff;
++	{
++		DEFINE_DYNAMIC_DEBUG_METADATA(ddm_occ_cmd, "OCC command");
++
++		if (DYNAMIC_DEBUG_BRANCH(ddm_occ_cmd)) {
++			char prefix[64];
++
++			snprintf(prefix, sizeof(prefix), "%s %s: cmd ",
++				 dev_driver_string(occ->dev),
++				 dev_name(occ->dev));
++			print_hex_dump(KERN_DEBUG, prefix, DUMP_PREFIX_OFFSET,
++				       16, 4, byte_buf, len, false);
++		}
++	}
 +
  	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
  	if (rc)
  		goto free;
-@@ -467,9 +468,12 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 	struct occ *occ = dev_get_drvdata(dev);
- 	struct occ_response *resp = response;
- 	u8 seq_no;
-+	u16 checksum = 0;
- 	u16 resp_data_length;
-+	const u8 *byte_request = (const u8 *)request;
- 	unsigned long start;
- 	int rc;
-+	size_t i;
- 
- 	if (!occ)
- 		return -ENODEV;
-@@ -479,11 +483,26 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 		return -EINVAL;
+@@ -556,6 +579,27 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
  	}
  
-+	/* Checksum the request, ignoring first byte (sequence number). */
-+	for (i = 1; i < req_len - 2; ++i)
-+		checksum += byte_request[i];
+ 	*resp_len = resp_data_length + 7;
 +
- 	mutex_lock(&occ->occ_lock);
- 
--	/* Extract the seq_no from the command (first byte) */
--	seq_no = *(const u8 *)request;
--	rc = occ_putsram(occ, request, req_len);
-+	/*
-+	 * Get a sequence number and update the counter. Avoid a sequence
-+	 * number of 0 which would pass the response check below even if the
-+	 * OCC response is uninitialized. Any sequence number the user is
-+	 * trying to send is overwritten since this function is the only common
-+	 * interface to the OCC and therefore the only place we can guarantee
-+	 * unique sequence numbers.
-+	 */
-+	seq_no = occ->sequence_number++;
-+	if (!occ->sequence_number)
-+		occ->sequence_number = 1;
-+	checksum += seq_no;
++	{
++		DEFINE_DYNAMIC_DEBUG_METADATA(ddm_occ_rsp,
++					      "OCC response");
++		DEFINE_DYNAMIC_DEBUG_METADATA(ddm_occ_full_rsp,
++					      "OCC full response");
 +
-+	rc = occ_putsram(occ, request, req_len, seq_no, checksum);
- 	if (rc)
- 		goto done;
++		if (DYNAMIC_DEBUG_BRANCH(ddm_occ_full_rsp) ||
++		    DYNAMIC_DEBUG_BRANCH(ddm_occ_rsp)) {
++			char prefix[64];
++			size_t l = DYNAMIC_DEBUG_BRANCH(ddm_occ_full_rsp) ?
++				*resp_len : 16;
++
++			snprintf(prefix, sizeof(prefix), "%s %s: rsp ",
++				 dev_driver_string(occ->dev),
++				 dev_name(occ->dev));
++			print_hex_dump(KERN_DEBUG, prefix, DUMP_PREFIX_OFFSET,
++				       16, 4, resp, l, false);
++		}
++	}
++
+ 	rc = occ_verify_checksum(occ, resp, resp_data_length);
  
-@@ -574,6 +593,7 @@ static int occ_probe(struct platform_device *pdev)
- 	occ->version = (uintptr_t)of_device_get_match_data(dev);
- 	occ->dev = dev;
- 	occ->sbefifo = dev->parent;
-+	occ->sequence_number = 1;
- 	mutex_init(&occ->occ_lock);
- 
- 	if (dev->of_node) {
+  done:
 -- 
 2.27.0
 
