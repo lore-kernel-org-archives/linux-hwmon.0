@@ -2,107 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 389EDC07E95
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0746C636CA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 17:33:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23338613DF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 15:19:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA50E61400
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jul 2021 17:33:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbhGPPWa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Jul 2021 11:22:30 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9094 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240662AbhGPPWZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Jul 2021 11:22:25 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GFJ7lv044354;
-        Fri, 16 Jul 2021 11:19:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=0QVlcMY1gAfIISVAPvHh34Y1TfGpWj4HRFD2XYrOwRA=;
- b=XiGclKh/s2TG9RrL+Ho2GcVydfo/EQwFye7efm3AGxDTP20BJV52i1XNI4aUrtmaLZVj
- UqRXDCxB2/VkjViGUGHZ/S80fddbv7AXT+GAdJEJWJre+Q7Ug9ayx0mw8LHwFqz949pA
- AZ2itmpRExDf8Z3e9rjA2uEwvEtvFY2AQSKtFmOxzJqLJuY/PMW1je55M+SbJ40UWbJJ
- v4kFBrTWtDY2c42T/+y7K1F0pqvJI00VymjO3LMqBjriXRhn9tSQyEW47yjR7Q2wq841
- JCGskb9MMorvxD6lNI6NSxdHj9waLTM6q2gDUCIK+rBWChKnPdNa9NbqYMUeqR6R/vcS XA== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39tw6bgduv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jul 2021 11:19:07 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16GFHgtY017641;
-        Fri, 16 Jul 2021 15:18:58 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma05wdc.us.ibm.com with ESMTP id 39q36f71pr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jul 2021 15:18:58 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16GFIvo831523160
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 15:18:57 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16CE2C605D;
-        Fri, 16 Jul 2021 15:18:57 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 943FFC6057;
-        Fri, 16 Jul 2021 15:18:56 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.92.96])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 16 Jul 2021 15:18:56 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        linux@roeck-us.net, jdelvare@suse.com, jk@ozlabs.org,
-        joel@jms.id.au, alistair@popple.id.au, openbmc@lists.ozlabs.org,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH 0/3] OCC: fsi and hwmon: Set sequence number in submit interface
-Date:   Fri, 16 Jul 2021 10:18:47 -0500
-Message-Id: <20210716151850.28973-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        id S230256AbhGPRgd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Jul 2021 13:36:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60288 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229803AbhGPRgd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 16 Jul 2021 13:36:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3381613FB;
+        Fri, 16 Jul 2021 17:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626456818;
+        bh=cf8WxUiyJPqIMeZaZvs8bmw2NGyFNYO33dlQ1WqpQrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QhDbbSYvSCyTW3hYRZhJQb/Q8R13s9FjRMH/XFprr/6AMpWEjgsCoXhgZOxuhHzon
+         hyLnOsdx8fmBUHnicBp4dlktJuQnUaBO4BFl8A1bzRv9LcjNyXkwablWOj5cHuXNgf
+         tBxbbNQ893BphhUEtEZO8l8IgHosM9sRvKqey02Vp9zso+WmZPqsZejVl4epuEdM3y
+         aOoF/QPqXBHVZj/KCuUCv5z2WgMCPGepGSNZqBVkXPz2vVDLUpLRuq8hAlUElxyvXI
+         TSIlSSMACzMcU1SQWiIu2xPfhGR31fBDbzTaQDXcCDjnWTmTcUCB1vXTDDT8WbJ+IF
+         rUk+zSj4f5dFA==
+Date:   Fri, 16 Jul 2021 18:33:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] spi: spi-altera-dfl: support n5010 feature
+ revision
+Message-ID: <20210716173335.GC4137@sirena.org.uk>
+References: <20210716135441.3235863-1-martin@geanix.com>
+ <20210716135441.3235863-3-martin@geanix.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uzbyxn0zbHVSz9zdEq9wLFhQ-OlU1hCK
-X-Proofpoint-ORIG-GUID: uzbyxn0zbHVSz9zdEq9wLFhQ-OlU1hCK
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-16_05:2021-07-16,2021-07-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxlogscore=921 spamscore=0 adultscore=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 clxscore=1015 mlxscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107160092
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="raC6veAxrt5nqIoY"
+Content-Disposition: inline
+In-Reply-To: <20210716135441.3235863-3-martin@geanix.com>
+X-Cookie: do {
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Conflicting sequence numbers have resulted in users of the OCC interface
-getting the wrong response. For example, both the hwmon driver and an
-application might send a transfer near the same time with the same sequence
-number, and then one or both will get an incorrect respnse, but cannot tell
-because the sequence number looks correct.
-Perform the sequence numbering in the submit interface to make sure each
-transfer has a unique sequence number. This also requires that the submit
-interface perform the checksum calculation for the command. Adjust the hwmon
-driver accordingly too.
 
-Eddie James (3):
-  fsi: occ: Force sequence numbering per OCC
-  hwmon: (occ) Remove sequence numbering and checksum calculation
-  fsi: occ: Add dynamic debug to dump command and response
+--raC6veAxrt5nqIoY
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/fsi/fsi-occ.c      | 98 +++++++++++++++++++++++++++++++-------
- drivers/hwmon/occ/common.c | 30 +++++-------
- drivers/hwmon/occ/common.h |  3 +-
- drivers/hwmon/occ/p8_i2c.c | 15 +++---
- drivers/hwmon/occ/p9_sbe.c |  4 +-
- 5 files changed, 105 insertions(+), 45 deletions(-)
+On Fri, Jul 16, 2021 at 03:54:40PM +0200, Martin Hundeb=F8ll wrote:
+> From: Martin Hundeb=F8ll <mhu@silicom.dk>
+>=20
+> The Max10 BMC on the Silicom n5010 PAC is slightly different than the
+> existing BMCs, so use a dedicated feature revision detect it.
 
--- 
-2.27.0
+Acked-by: Mark Brown <broonie@kernel.org>
 
+--raC6veAxrt5nqIoY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDxwu4ACgkQJNaLcl1U
+h9DndAf+IqeWflVSPxKlrQ2Z+7ext9oSMMuq5l/EIJZmwdXPKSImWc8J0uocAxHw
++eWOQoyg6h96X3SyocivzrmsrVMUMmRvUZqT3tLIBqN4ihciC2HMCloVXpZpO8f5
+N5Rg6IMsYqpV03IaRERfLtVt/jmXNF7SVL+1H/wdCFYJVywJDcG8XYF/Z3dtmvhW
+kmOmGYimOAejLycEEZARLBD/zrRgOJ4fxgVAlHLEdT1gzYUJRhC6mpokpxtpH3fg
+QJpNf9HNKF7r7E2jGAsC5CUjWE0KwPR9OI9E9+R2A8hEk2Nqdon+hfieZyYyhCiJ
+w7oP4OEHfZEiPJZ46zTnkN4KhHyX5A==
+=1O5g
+-----END PGP SIGNATURE-----
+
+--raC6veAxrt5nqIoY--
