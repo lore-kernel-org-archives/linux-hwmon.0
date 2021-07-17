@@ -2,243 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB3E8C636C9
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Jul 2021 14:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11E32C636CA
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Jul 2021 17:22:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBED66120A
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Jul 2021 14:04:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC76461002
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Jul 2021 17:22:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbhGQOHs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 17 Jul 2021 10:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S232935AbhGQRZt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 17 Jul 2021 13:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbhGQOHr (ORCPT
+        with ESMTP id S232010AbhGQRZt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 17 Jul 2021 10:07:47 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B02BC06175F;
-        Sat, 17 Jul 2021 07:04:51 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id z25so9356043qto.12;
-        Sat, 17 Jul 2021 07:04:51 -0700 (PDT)
+        Sat, 17 Jul 2021 13:25:49 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B890BC06175F;
+        Sat, 17 Jul 2021 10:22:52 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id z9so12151124qkg.5;
+        Sat, 17 Jul 2021 10:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uU5y8nZLYxaj4LFOjlhepM5vk5aGA4uqxvcznWYEcEs=;
-        b=iPGfR4aSARgZaiD+uKa5Puk+ePyZOfJv2BgBIUl2qE9ECUY27fxoTuGAYSlgGKLsH9
-         aLmDiqVtaA0ntxH1krwzV85QekRTpFewEoLn/Xtr+GOR0cnboK8ZunGndeVLg/1/p4Kc
-         d1HoEwujKR3J9VSOox7GyieV1FsQUlsXnp0pxEiuzcuqZFLwBgsnV9irz5TLFUS/nWbf
-         wm5M29buQpGhar+bQz3lmfuRJI2msMpjRlAQ95we9A7QdOtawf4kjdk5Q6opvWAmsHz+
-         m5biKT+ba8hZrPowK3ft23/uk77WtdPStWy3tb/oqhn8DEKty7PrVPhf7C3mMoToSfe7
-         yIog==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=mOKHiePdlVhlno5ie5pDrbQHEPlO/eC6Zv3NO6pPid8=;
+        b=r4UYKwGNMHhgua40EJgtsOLzEnsg1x0ToSS83IVrmt9apIOd1+U5/3fq0aNO52CTGf
+         osoIpXn0gYir001we15F6BSDlpKuEhUALuTVIDgpvfmgro+m9+8VVhhPclz4ZcGHsjVQ
+         yQ92fkGxhJ2jFZ73skuxqJxrr1ovk8NSpbvYp/pybUB1Kegn8AfAGmTgIk5klRE7VQbJ
+         R8iQqGetJQ16n+GfImmqr5qiLtoRFBoh+5dTH0Yo+wyBZKTfIJ9vTa9vRsGDBK0j6HE9
+         QxeN3qd5GJJQR42LSC9+LhHEAu2abSG1b75t/D/xwndcL+CNzbs7nEHrMpXWd9di1ujo
+         v9IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=uU5y8nZLYxaj4LFOjlhepM5vk5aGA4uqxvcznWYEcEs=;
-        b=BqQ9JMQq4aas1385b1z5Ie3Mj2b+9/nWcEpY4a8jtPjV+J/UvIckFAEQ2/zAf1fIeL
-         hkUN0kbCMcvZGaQg2RNP4XhCFrY5x8s5h7Sekn5aphGnUKpcgd/NZSbveek1VZfUkb+H
-         SxAc+wRzMfJxXHoxiN3bjgWYUz9BrHcZYAgwbur2CO/tG0lsjDq8EIBMEbA1eAa7t+rW
-         ywp5KGAWJ91JVbkCQhTU5ZuVymTEJUM7Z+l8A1gwuva4TT1ctDhJtaOEBwK8Y4TxEuS+
-         MXosv83aRLSfw814gUCF1YlP1/Ilx8D6iApEjFgbKvk1B5d4/yeC76FW68V/LtlbybzZ
-         NZEg==
-X-Gm-Message-State: AOAM533KfCFs3FGHZzBIi7GNhlQBArZq4tUIm2w1JqjwecRt2fUANu0G
-        ddMQ3GCVLpLGIIWgFaI/dOc=
-X-Google-Smtp-Source: ABdhPJwFYvuuuB/a5eqzYMYHCMb8XXye+hKtya8vbdNjK7AbGw3b4zv8g0xbDCtnV+R6yoHmsHd/qg==
-X-Received: by 2002:ac8:7087:: with SMTP id y7mr5979528qto.91.1626530690440;
-        Sat, 17 Jul 2021 07:04:50 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=mOKHiePdlVhlno5ie5pDrbQHEPlO/eC6Zv3NO6pPid8=;
+        b=azCOvHcjnKXfNCEWK3W3qxD8xeMgkUc4Aku4GB+R5e/o0ab5yrFbX3hRgc1kvtzKh5
+         hRyAm1Yw4RSEpUjE8qdRufPtkeigJX6ytQhoXEjCosPf4T3x3jO0c/zjr4zFVu81aaLN
+         pNtuGqAIt0QtOqpPQtwLU8ggXFYn4r9if2fmXOl4XV8fJbQs7/OZq7ICs0+wX0ifcjzc
+         R7HdMH1MR6Uy5dFUzfq4VQfbS2yXfTlNdTo2j6B5i995s5KTbfMAtZaFIOYCSBNOcXJ+
+         a5eDY6m0JWVoDaYCFknlBVEo+QkcunKgZ6xEFexGm2EdQBBYLvKkZg5F4V9NG6LMrjrB
+         wGzA==
+X-Gm-Message-State: AOAM5314gWmuRU1KBno9JvajSq6Kq7ZhOv4qozR80Em7kuo0kmeZps7H
+        0wuK3Nph7SIh9VK+jqZ5nr4=
+X-Google-Smtp-Source: ABdhPJwp4j8Tfd/udYmz9WV4R+JNEj4Lg19Ewgy7AwiS2umeezwwhGcGb/T7ochucA+gAvCTryaXBQ==
+X-Received: by 2002:ae9:ddc2:: with SMTP id r185mr16084413qkf.107.1626542571924;
+        Sat, 17 Jul 2021 10:22:51 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 67sm5192911qkm.134.2021.07.17.07.04.49
+        by smtp.gmail.com with ESMTPSA id d4sm1703970qty.15.2021.07.17.10.22.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 07:04:50 -0700 (PDT)
+        Sat, 17 Jul 2021 10:22:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 17 Jul 2021 07:04:48 -0700
+Date:   Sat, 17 Jul 2021 10:22:49 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org, jdelvare@suse.com, jk@ozlabs.org,
-        joel@jms.id.au, alistair@popple.id.au, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH 2/3] hwmon: (occ) Remove sequence numbering and checksum
- calculation
-Message-ID: <20210717140448.GA800975@roeck-us.net>
-References: <20210716151850.28973-1-eajames@linux.ibm.com>
- <20210716151850.28973-3-eajames@linux.ibm.com>
+To:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [RFC PATCH 6/6] hwmon: axi-fan-control: support temperature vs
+ pwm points
+Message-ID: <20210717172249.GA158182@roeck-us.net>
+References: <20210708120111.519444-1-nuno.sa@analog.com>
+ <20210708120111.519444-7-nuno.sa@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210716151850.28973-3-eajames@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210708120111.519444-7-nuno.sa@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 10:18:49AM -0500, Eddie James wrote:
-> Checksumming of the request and sequence numbering is now done in the
-> OCC interface driver in order to keep unique sequence numbers. So
-> remove those in the hwmon driver.
+On Thu, Jul 08, 2021 at 02:01:11PM +0200, Nuno Sá wrote:
+> The HW has some predefined points where it will associate a PWM value.
+> However some users might want to better set these points to their
+> usecases. This patch exposes these points as pwm auto_points:
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/hwmon/occ/common.c | 30 ++++++++++++------------------
->  drivers/hwmon/occ/common.h |  3 +--
->  drivers/hwmon/occ/p8_i2c.c | 15 +++++++++------
->  drivers/hwmon/occ/p9_sbe.c |  4 ++--
->  4 files changed, 24 insertions(+), 28 deletions(-)
+>  * pwm1_auto_point1_temp: temperature threshold below which PWM should be
+>    0%;
+>  * pwm1_auto_point2_temp: temperature threshold above which PWM should be
+>    25%;
+>  * pwm1_auto_point3_temp: temperature threshold below which PWM should be
+>    25%;
+>  * pwm1_auto_point4_temp: temperature threshold above which PWM should be
+>    50%;
+>  * pwm1_auto_point5_temp: temperature threshold below which PWM should be
+>    50%;
+>  * pwm1_auto_point6_temp: temperature threshold above which PWM should be
+>    75%;
+>  * pwm1_auto_point7_temp: temperature threshold below which PWM should be
+>    75%;
+>  * pwm1_auto_point8_temp: temperature threshold above which PWM should be
+>    100%;
 > 
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index 0d68a78be980..fc298268c89e 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -132,22 +132,20 @@ struct extended_sensor {
->  static int occ_poll(struct occ *occ)
->  {
->  	int rc;
-> -	u16 checksum = occ->poll_cmd_data + occ->seq_no + 1;
-> -	u8 cmd[8];
-> +	u8 cmd[7];
->  	struct occ_poll_response_header *header;
->  
->  	/* big endian */
-> -	cmd[0] = occ->seq_no++;		/* sequence number */
-> +	cmd[0] = 0;			/* sequence number */
->  	cmd[1] = 0;			/* cmd type */
->  	cmd[2] = 0;			/* data length msb */
->  	cmd[3] = 1;			/* data length lsb */
->  	cmd[4] = occ->poll_cmd_data;	/* data */
-> -	cmd[5] = checksum >> 8;		/* checksum msb */
-> -	cmd[6] = checksum & 0xFF;	/* checksum lsb */
-> -	cmd[7] = 0;
-> +	cmd[5] = 0;			/* checksum msb */
-> +	cmd[6] = 0;			/* checksum lsb */
->  
->  	/* mutex should already be locked if necessary */
-> -	rc = occ->send_cmd(occ, cmd);
-> +	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
->  	if (rc) {
->  		occ->last_error = rc;
->  		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
-> @@ -184,25 +182,23 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
->  {
->  	int rc;
->  	u8 cmd[8];
-> -	u16 checksum = 0x24;
->  	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
->  
-> -	cmd[0] = 0;
-> -	cmd[1] = 0x22;
-> -	cmd[2] = 0;
-> -	cmd[3] = 2;
-> +	cmd[0] = 0;	/* sequence number */
-> +	cmd[1] = 0x22;	/* cmd type */
-> +	cmd[2] = 0;	/* data length msb */
-> +	cmd[3] = 2;	/* data length lsb */
->  
->  	memcpy(&cmd[4], &user_power_cap_be, 2);
->  
-> -	checksum += cmd[4] + cmd[5];
-> -	cmd[6] = checksum >> 8;
-> -	cmd[7] = checksum & 0xFF;
-> +	cmd[6] = 0;	/* checksum msb */
-> +	cmd[7] = 0;	/* checksum lsb */
->  
->  	rc = mutex_lock_interruptible(&occ->lock);
->  	if (rc)
->  		return rc;
->  
-> -	rc = occ->send_cmd(occ, cmd);
-> +	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
->  
->  	mutex_unlock(&occ->lock);
->  
-> @@ -1151,8 +1147,6 @@ int occ_setup(struct occ *occ, const char *name)
->  {
->  	int rc;
->  
-> -	/* start with 1 to avoid false match with zero-initialized SRAM buffer */
-> -	occ->seq_no = 1;
->  	mutex_init(&occ->lock);
->  	occ->groups[0] = &occ->group;
->  
-> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-> index e6df719770e8..5020117be740 100644
-> --- a/drivers/hwmon/occ/common.h
-> +++ b/drivers/hwmon/occ/common.h
-> @@ -95,9 +95,8 @@ struct occ {
->  	struct occ_sensors sensors;
->  
->  	int powr_sample_time_us;	/* average power sample time */
-> -	u8 seq_no;
->  	u8 poll_cmd_data;		/* to perform OCC poll command */
-> -	int (*send_cmd)(struct occ *occ, u8 *cmd);
-> +	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len);
->  
->  	unsigned long next_update;
->  	struct mutex lock;		/* lock OCC access */
-> diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
-> index 0cf8588be35a..22af189eafa6 100644
-> --- a/drivers/hwmon/occ/p8_i2c.c
-> +++ b/drivers/hwmon/occ/p8_i2c.c
-> @@ -97,18 +97,21 @@ static int p8_i2c_occ_putscom_u32(struct i2c_client *client, u32 address,
->  }
->  
->  static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
-> -				 u8 *data)
-> +				 u8 *data, size_t len)
->  {
-> -	__be32 data0, data1;
-> +	__be32 data0 = 0, data1 = 0;
->  
-> -	memcpy(&data0, data, 4);
-> -	memcpy(&data1, data + 4, 4);
-> +	memcpy(&data0, data, min(len, 4UL));
-> +	if (len > 4UL) {
-> +		len -= 4;
-> +		memcpy(&data1, data + 4, min(len, 4UL));
-> +	}
->  
->  	return p8_i2c_occ_putscom_u32(client, address, be32_to_cpu(data0),
->  				      be32_to_cpu(data1));
->  }
->  
-> -static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
-> +static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
->  {
->  	int i, rc;
->  	unsigned long start;
-> @@ -127,7 +130,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
->  		return rc;
->  
->  	/* write command (expected to already be BE), we need bus-endian... */
-> -	rc = p8_i2c_occ_putscom_be(client, OCB_DATA3, cmd);
-> +	rc = p8_i2c_occ_putscom_be(client, OCB_DATA3, cmd, len);
->  	if (rc)
->  		return rc;
->  
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index f6387cc0b754..9709f2b9c052 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -16,14 +16,14 @@ struct p9_sbe_occ {
->  
->  #define to_p9_sbe_occ(x)	container_of((x), struct p9_sbe_occ, occ)
->  
-> -static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd)
-> +static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
->  {
->  	struct occ_response *resp = &occ->resp;
->  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
->  	size_t resp_len = sizeof(*resp);
->  	int rc;
->  
-> -	rc = fsi_occ_submit(ctx->sbe, cmd, 8, resp, &resp_len);
-> +	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
->  	if (rc < 0)
->  		return rc;
->  
+
+If I understand those correctly, half of those are really hysteresis points.
+I think it would be better to express this with
+	pwm1_auto_pointX_temp
+	pwm1_auto_pointX_temp_hyst
+
+where the hysteresis point is the temperature where the previous pwm value
+is activated. In other words, change attribute names as follows:
+    for 25%:
+	pwm1_auto_point1_temp -> pwm1_auto_point1_temp_hyst
+	pwm1_auto_point2_temp -> pwm1_auto_point1_temp
+    for 50%:
+	pwm1_auto_point3_temp -> pwm1_auto_point2_temp_hyst
+	pwm1_auto_point4_temp -> pwm1_auto_point2_temp
+    for 75%:
+	pwm1_auto_point5_temp -> pwm1_auto_point3_temp_hyst
+	pwm1_auto_point6_temp -> pwm1_auto_point3_temp
+    for 100%:
+	pwm1_auto_point7_temp -> pwm1_auto_point4_temp_hyst
+	pwm1_auto_point8_temp -> pwm1_auto_point4_temp
+
+Thanks,
+Guenter
