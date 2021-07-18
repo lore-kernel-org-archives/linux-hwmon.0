@@ -2,83 +2,202 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5413C636CA
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Jul 2021 23:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 819BBC636C8
+	for <linux-hwmon@archiver.kernel.org>; Sun, 18 Jul 2021 14:25:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B95CF60E0C
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Jul 2021 23:56:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6133861186
+	for <linux-hwmon@archiver.kernel.org>; Sun, 18 Jul 2021 14:25:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbhGQX7E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 17 Jul 2021 19:59:04 -0400
-Received: from mail-pg1-f182.google.com ([209.85.215.182]:46799 "EHLO
-        mail-pg1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbhGQX7E (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 17 Jul 2021 19:59:04 -0400
-Received: by mail-pg1-f182.google.com with SMTP id w15so14672658pgk.13;
-        Sat, 17 Jul 2021 16:56:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=QBPwPehfJNZ2LsnsANIrsrlPDWfZeZDsGvfQK0F94As=;
-        b=S0PaLnwSYGufGz78bspThIaR3flxvTT42VFinQ5EJQ5XcUW1Je8N5l1jVDKgFHHOpr
-         F/m5Ty5TXlEDRXa9FOkSURjDiH6oe0AznJVyx1YuFTaZx7onP5LTcqKcrAmu4YBPP9aF
-         9z72Qlnrl/NddYsoY0dB66OOteQVd1Rd3B5n9+8VVtZW4BEnXURLSiqf8cRT7IIf1/SY
-         zFZwWFkg/TltI9JY/Gn4bGjoA1uGHFNhOuqDlM+GRoD+aVDKjwHYrqMR5A+FUFfwMnsa
-         EZw7LIXSF/dD5n5YZCyzvLBer6xTWpOxOgQsBdCDMehX1CCjWNU08E+SSYzuJAE9PZ2z
-         dwwA==
-X-Gm-Message-State: AOAM530qiMOHE1IsAKb/EdmgRjEc3UYSffllLXk7c1SlOlNX13/6hWZU
-        trsbsCK3FOxfg+DIZy1LVG8=
-X-Google-Smtp-Source: ABdhPJyCGy2eEB94sfSOMS2sxY2uL1l2UjzA/JuHNafcDXLUC8Tuce2jhHchh+W2EkQMQWbo+UKyjA==
-X-Received: by 2002:a65:6248:: with SMTP id q8mr17609947pgv.279.1626566166808;
-        Sat, 17 Jul 2021 16:56:06 -0700 (PDT)
-Received: from localhost ([24.4.24.239])
-        by smtp.gmail.com with ESMTPSA id h5sm14030558pfv.145.2021.07.17.16.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 16:56:06 -0700 (PDT)
-Date:   Sat, 17 Jul 2021 16:56:05 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] spi: spi-altera-dfl: support n5010 feature
- revision
-Message-ID: <YPNuFX4ZfwJoOlMk@epycbox.lan>
-References: <20210716135441.3235863-1-martin@geanix.com>
- <20210716135441.3235863-3-martin@geanix.com>
- <20210716173335.GC4137@sirena.org.uk>
+        id S233759AbhGRO2t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 18 Jul 2021 10:28:49 -0400
+Received: from mga02.intel.com ([134.134.136.20]:13931 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230307AbhGRO2t (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 18 Jul 2021 10:28:49 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10049"; a="198147364"
+X-IronPort-AV: E=Sophos;i="5.84,249,1620716400"; 
+   d="scan'208";a="198147364"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2021 07:25:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,249,1620716400"; 
+   d="scan'208";a="453477789"
+Received: from lkp-server01.sh.intel.com (HELO a467b34d8c10) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 18 Jul 2021 07:25:44 -0700
+Received: from kbuild by a467b34d8c10 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1m57jk-0000KP-3N; Sun, 18 Jul 2021 14:25:44 +0000
+Date:   Sun, 18 Jul 2021 22:24:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 47f53972ca1553c9ef6d6e422a0ab61824bbcb40
+Message-ID: <60f439ac.iQ4o67OzXVxNA6PP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210716173335.GC4137@sirena.org.uk>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 06:33:35PM +0100, Mark Brown wrote:
-> On Fri, Jul 16, 2021 at 03:54:40PM +0200, Martin Hundebøll wrote:
-> > From: Martin Hundebøll <mhu@silicom.dk>
-> > 
-> > The Max10 BMC on the Silicom n5010 PAC is slightly different than the
-> > existing BMCs, so use a dedicated feature revision detect it.
-> 
-> Acked-by: Mark Brown <broonie@kernel.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 47f53972ca1553c9ef6d6e422a0ab61824bbcb40  hwmon: intel-m10-bmc-hwmon: add n5010 sensors
 
-Mark do you want me to provide a tag for this and the previous commit to
-avoid conflicts for other FPGA changes or do you think it's easier to
-just pick both of them up through FPGA or SPI tree?
+elapsed time: 736m
 
-- Moritz
+configs tested: 136
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                       mainstone_defconfig
+sh                          landisk_defconfig
+arm                            lart_defconfig
+mips                            ar7_defconfig
+sh                               allmodconfig
+arm                  colibri_pxa300_defconfig
+powerpc                       ebony_defconfig
+arm                         s3c6400_defconfig
+arm                      footbridge_defconfig
+arm                            hisi_defconfig
+arm                       versatile_defconfig
+nios2                         3c120_defconfig
+arc                        vdk_hs38_defconfig
+sh                            shmin_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                        cell_defconfig
+microblaze                      mmu_defconfig
+h8300                     edosk2674_defconfig
+mips                     cu1830-neo_defconfig
+arm                         lpc18xx_defconfig
+sh                          rsk7203_defconfig
+arm                         at91_dt_defconfig
+mips                           rs90_defconfig
+powerpc                   bluestone_defconfig
+powerpc                    amigaone_defconfig
+m68k                       m5208evb_defconfig
+powerpc                  storcenter_defconfig
+um                                  defconfig
+sh                          urquell_defconfig
+powerpc                 mpc8313_rdb_defconfig
+xtensa                  audio_kc705_defconfig
+m68k                        m5272c3_defconfig
+arm                          collie_defconfig
+mips                  maltasmvp_eva_defconfig
+arm                        spear6xx_defconfig
+sh                        dreamcast_defconfig
+m68k                           sun3_defconfig
+microblaze                          defconfig
+powerpc                      chrp32_defconfig
+sh                           se7206_defconfig
+arm                        mini2440_defconfig
+powerpc                 mpc837x_mds_defconfig
+sh                      rts7751r2d1_defconfig
+arc                    vdk_hs38_smp_defconfig
+mips                            gpr_defconfig
+ia64                            zx1_defconfig
+arm                         cm_x300_defconfig
+riscv                            alldefconfig
+arm                        realview_defconfig
+powerpc                      ppc64e_defconfig
+arm                         palmz72_defconfig
+arm                     davinci_all_defconfig
+sh                           se7751_defconfig
+arm                           h5000_defconfig
+sh                           se7780_defconfig
+sh                          polaris_defconfig
+powerpc                      ep88xc_defconfig
+mips                          rb532_defconfig
+powerpc                     tqm8560_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a005-20210718
+x86_64               randconfig-a004-20210718
+x86_64               randconfig-a002-20210718
+x86_64               randconfig-a003-20210718
+x86_64               randconfig-a006-20210718
+x86_64               randconfig-a001-20210718
+i386                 randconfig-a005-20210718
+i386                 randconfig-a004-20210718
+i386                 randconfig-a006-20210718
+i386                 randconfig-a001-20210718
+i386                 randconfig-a003-20210718
+i386                 randconfig-a002-20210718
+i386                 randconfig-a014-20210718
+i386                 randconfig-a015-20210718
+i386                 randconfig-a011-20210718
+i386                 randconfig-a013-20210718
+i386                 randconfig-a016-20210718
+i386                 randconfig-a012-20210718
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210718
+x86_64               randconfig-a013-20210718
+x86_64               randconfig-a015-20210718
+x86_64               randconfig-a012-20210718
+x86_64               randconfig-a014-20210718
+x86_64               randconfig-a011-20210718
+x86_64               randconfig-a016-20210718
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
