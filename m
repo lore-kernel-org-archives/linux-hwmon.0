@@ -2,83 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89DC5C12002
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jul 2021 07:23:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05EC9C12002
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jul 2021 07:28:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6405F6100B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jul 2021 07:23:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB3CE611AF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jul 2021 07:27:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234822AbhGSH0m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Jul 2021 03:26:42 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:2136 "EHLO
+        id S234853AbhGSHa6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Jul 2021 03:30:58 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:9930 "EHLO
         mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234559AbhGSH0l (ORCPT
+        by vger.kernel.org with ESMTP id S233759AbhGSHax (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Jul 2021 03:26:41 -0400
+        Mon, 19 Jul 2021 03:30:53 -0400
 Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16J7AY3L011397;
-        Mon, 19 Jul 2021 03:23:27 -0400
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by mx0a-00128a01.pphosted.com with ESMTP id 39uv48ngsm-1
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16J7AbIU011565;
+        Mon, 19 Jul 2021 03:27:35 -0400
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2049.outbound.protection.outlook.com [104.47.51.49])
+        by mx0a-00128a01.pphosted.com with ESMTP id 39uv48nh48-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jul 2021 03:23:26 -0400
+        Mon, 19 Jul 2021 03:27:35 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RxWC/My+JiPMR82gKL31E5ZFHNRKkJnFuw+f+ng7sI9ULqf4nVKYttHo+rLplkrxz1fwQ6JXvKFpmowKhVLINc4A2lulx+Rzn+ysPZgSfGvHaoBXZK2ucUPiEsQrRxwVzyfv08KTWGCSIsjs+KpG9FEPCAM+Fs/vOzlJ0O+4yaOM4Hjpyt7IK/SRezlizaMhZwew8SsrFVzttoFvOetCR3HIomTEmof5Iijse25Z72z1T1vNsASLGM2DYb451mnV+zonC7r8v1yKsN6ztIsOlWON22Zq32lzsNkQuUPL3oeTSkZd/z5looaVm053N2hwoTPmhmGm9SV+MtwG19i/mQ==
+ b=KoREGVjDcNOc6kBBTjqq8Mqmp5vlY4Qh44mD61pLexcUqj9KcjDadLwNUq+5FBu+UWjog5LSXJDrTACLAQ5I1P0+J/RCfb4CRowm+jeauhZec6oAPE0wKLh4VOQDptZKDoOjrTIKuzw4VljhqWwqRyGobE/GR/3GZYfFBZf+zhMNOseiX2JWY89c8e8tMKl+jHKXHMsinGLYlVKSO8o5Oo0MnHj5J61gcGqRyiuLaaO7QGmymrMTI2IveFtgsZlz87k8gWaazm1WLY3Uz3XrxToUtjufGRErtcTdD9zboe/HbOoo088mZLwY+cDoaMHj2fSbs4Zm/KSI7R1+DUo4OA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N/Ptb26/F34R500FJH0HwZQKl+c19xEsNLVbni2QtPM=;
- b=c3KqRMaAvWVaMuFZw9nCdq/UQNdPTSMvtxOx0KAum4LpaL0OMUQRNToAhB2HcJn0T6pBA1S5tZrF88/O56gnCMvEfyDm/62NUd/ay5wxWP/h+YDDfpMbkpZUIoQbx8u5CSF4spFsd/SpT62ulPCbiuInRp/XIICnKRuumBZMnOYvX0DCCBg+V8bYGK9avfavNAfGxyduFRcpDbhhZkFGgKmtQGVyFEx4lRyG1HC0O/BNFjeOIqIMa9SGJQJApOTKB/QlYyYPjtq6LeFoRo18g/ICpwDxcy/0tqVm2YsXXdEC1aCBsUZ/Itcxds/jBnZ93XACKDCFxXyJY83ma/RceQ==
+ bh=ldsjBd3fhfCPhqOL2CfAgNTYeZKC8iXcXjpy3vZ2b20=;
+ b=PHv3Tk1oOgzDRt1AWEUNgXKOTn9V4oz2kIF2ajDIebtIVyAdtM2ZEhxM+8AeVHyEzKZIWN0OFtQduVGfx4b9DnP7oZ09PZSmqmpTqS3HutK9IlDF6e98fRIAhUKMDS2tJ6iNz8aV+E9Ym71Fv2FmTVauwxnOLyOGVXtGCe4WYaMh8r8T4myaS4ThdLEJxx7dQiXAkOQQvGakMF+bRiDvBeCGrXk+S+pIJpL69ZInwhBAlX/S6C/3lxnya0A8Ky+ltaC6yYBX6HC67PDtpnyVThUH4cp7KJlXO8E4r2+FhmQeIFVYgaXyBDnw4+YN5bHO6WtqChZb38u46NMeS/KM7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
  dkim=pass header.d=analog.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N/Ptb26/F34R500FJH0HwZQKl+c19xEsNLVbni2QtPM=;
- b=D3jjtoIOR5fOBxO1b3MPZ9MVXOylSzOKyT01h323/03VOSHfD+W92vzgT62CNGusB7GxrQ26PekflNCCYdRzMP2eWjRuo91WF9vfX5UM89kD12kxY8DgmohJu5sKNCBcocr/mrLHP0wnP+vOvHnGW9fJ1g8bebXqNhd+o6PlDa0=
+ bh=ldsjBd3fhfCPhqOL2CfAgNTYeZKC8iXcXjpy3vZ2b20=;
+ b=U+VF4JyxvIV+RvlZ7eojMCMRJxkl2BEHmn7zmf6MicjNGzDMhbvv3CO7TF9G2nN3R8BXuQeoPX2bNNuc1bebY3XGeQS9yxI2DMRHvWslyzI/r6sONkeBsHKAqQ/x47ikxWR6VtslVqxmtrjklcaEwNa5CdNuHi4NjM36tuMHKg0=
 Received: from PH0PR03MB6366.namprd03.prod.outlook.com (2603:10b6:510:ab::22)
- by PH0PR03MB5880.namprd03.prod.outlook.com (2603:10b6:510:32::19) with
+ by PH0PR03MB6366.namprd03.prod.outlook.com (2603:10b6:510:ab::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.25; Mon, 19 Jul
- 2021 07:23:25 +0000
+ 2021 07:27:32 +0000
 Received: from PH0PR03MB6366.namprd03.prod.outlook.com
  ([fe80::54ff:7b16:5fc7:38ca]) by PH0PR03MB6366.namprd03.prod.outlook.com
  ([fe80::54ff:7b16:5fc7:38ca%4]) with mapi id 15.20.4331.032; Mon, 19 Jul 2021
- 07:23:25 +0000
+ 07:27:32 +0000
 From:   "Sa, Nuno" <Nuno.Sa@analog.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>
-Subject: RE: [RFC PATCH 6/6] hwmon: axi-fan-control: support temperature vs
- pwm points
-Thread-Topic: [RFC PATCH 6/6] hwmon: axi-fan-control: support temperature vs
- pwm points
-Thread-Index: AQHXc/DWZPSBv17ydEqvW0XR9aKxs6tHeNmAgAJ846A=
-Date:   Mon, 19 Jul 2021 07:23:24 +0000
-Message-ID: <PH0PR03MB63661256CFF2A93E99D38B1299E19@PH0PR03MB6366.namprd03.prod.outlook.com>
+Subject: RE: [RFC PATCH 1/6] hwmon: axi-fan-control: make sure the clock is
+ enabled
+Thread-Topic: [RFC PATCH 1/6] hwmon: axi-fan-control: make sure the clock is
+ enabled
+Thread-Index: AQHXc/CeSQLv+vZQ/EKPPxmp1qbub6tHeXSAgAJ81rA=
+Date:   Mon, 19 Jul 2021 07:27:32 +0000
+Message-ID: <PH0PR03MB6366F9E904C0D43F11231D9C99E19@PH0PR03MB6366.namprd03.prod.outlook.com>
 References: <20210708120111.519444-1-nuno.sa@analog.com>
- <20210708120111.519444-7-nuno.sa@analog.com>
- <20210717172249.GA158182@roeck-us.net>
-In-Reply-To: <20210717172249.GA158182@roeck-us.net>
+ <20210708120111.519444-2-nuno.sa@analog.com>
+ <20210717172459.GA416538@roeck-us.net>
+In-Reply-To: <20210717172459.GA416538@roeck-us.net>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-dg-ref: =?iso-8859-1?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbnNhXGFwcG?=
  =?iso-8859-1?Q?RhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
- =?iso-8859-1?Q?OWUzNWJcbXNnc1xtc2ctMzFlN2ExMjYtZTg2Mi0xMWViLThiNzUtZTRiOT?=
- =?iso-8859-1?Q?dhN2NjNzEwXGFtZS10ZXN0XDMxZTdhMTI4LWU4NjItMTFlYi04Yjc1LWU0?=
- =?iso-8859-1?Q?Yjk3YTdjYzcxMGJvZHkudHh0IiBzej0iMjQzOCIgdD0iMTMyNzExNTMwMD?=
- =?iso-8859-1?Q?E2NzkxMzYxIiBoPSJKcDdQQ3BnbUIvZzZJL2krcEtRbXpla3gzT3M9IiBp?=
+ =?iso-8859-1?Q?OWUzNWJcbXNnc1xtc2ctYzY2Y2ZkZGUtZTg2Mi0xMWViLThiNzUtZTRiOT?=
+ =?iso-8859-1?Q?dhN2NjNzEwXGFtZS10ZXN0XGM2NmNmZGUwLWU4NjItMTFlYi04Yjc1LWU0?=
+ =?iso-8859-1?Q?Yjk3YTdjYzcxMGJvZHkudHh0IiBzej0iMTA2MSIgdD0iMTMyNzExNTMyNT?=
+ =?iso-8859-1?Q?A4NDI1NDEyIiBoPSIwSEtOVXpTMFg3QmJySU1DVno3YjErT2U5Wjg9IiBp?=
  =?iso-8859-1?Q?ZD0iIiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQU?=
- =?iso-8859-1?Q?FJWURBQUJCMnovMGJuelhBWmlLYzRjMjRHYzJtSXB6aHpiZ1p6WUZBQUFB?=
+ =?iso-8859-1?Q?FJWURBQURFTE1PSWIzelhBUXlCSGROelNxVjdESUVkMDNOS3BYc0ZBQUFB?=
  =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBSEFBQUFBV0F3QUFBQUFBQUFBQUFBQU?=
  =?iso-8859-1?Q?FBQUFBQUFBQUFBRUFBUUFCQUFBQUJPWUdjZ0FBQUFBQUFBQUFBQUFBQUo0?=
  =?iso-8859-1?Q?QUFBQmhBR1FBYVFCZkFITUFaUUJqQUhVQWNnQmxBRjhBY0FCeUFHOEFhZ0?=
@@ -110,40 +111,40 @@ x-dg-rorf: true
 authentication-results: roeck-us.net; dkim=none (message not signed)
  header.d=none;roeck-us.net; dmarc=none action=none header.from=analog.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 57860114-a0c8-4c2f-c914-08d94a8618bb
-x-ms-traffictypediagnostic: PH0PR03MB5880:
-x-microsoft-antispam-prvs: <PH0PR03MB58805EDBA6A5F06F3268683699E19@PH0PR03MB5880.namprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-office365-filtering-correlation-id: 4b08775b-64c0-426d-33a8-08d94a86ac73
+x-ms-traffictypediagnostic: PH0PR03MB6366:
+x-microsoft-antispam-prvs: <PH0PR03MB63666BA692FD758A9536A60999E19@PH0PR03MB6366.namprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1vr9OnaiHmgtB5miBWbwt2xZKgMP6jFY5spVQzhXtK7cnUwR6+yONQZ0xGfNKgxGJxBNaAdVUxnksG2FZRvoebjvRvgJXdcnzFjEwtyWnTDDUvzmfJtkefMcWM8Mxu65seRZWH4gwc72NkIcLeHqlO7oAzh8n8C2gBpAm3r3FCWhA4FjSPxN/AwLPjBZJqsUW4t/IB+hnFLugbjpIgM64OPQokPtZ/L2bUO+J6U2Tvc75lxjP5cfeXUPJgGeGzURHqU3ph3j0++F5hWK1grSTz3WuAAViQ6ih08NoMxP5gJXpzwytMfn7R8e+CkD5cbaV24pnTHuhD7JVng4QT0kchatZDtL8H3hZhG04qLmVLTAs1j0SaXNLI5wvb/UjUjARUyDdKW3UQKOgF0vuTgvWqseJXp/7H6GCax+ESDJRlq+kDVqMf/82JSOm2KTcCtQMyUK2MoNMHNR3kyDMB4drAR3wUTYoeXNqdAqA5kWWSqBpibrPeFOgf0EgYfnIk5xC05vqeTJ73jPwLa60uLtH0Z6fFZZ7CJ0Xw8zIlThH6qSFfuMj2WOt3ZgoMRzd+SoP6FJGk9D5kg26URfigwoRjjJZqZnSvI5cth0aq/+VRnVgJD+JE9tzyN56MfBQVTJ6lhqFqlVz9wwqKUg9VIwc5jHEY8Cd6S2DAVFZ2t5x3Ag0yyfBV2VjXtb7j5TWL9kzlgijErPCO4tPnO2o56Oow==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6366.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(346002)(366004)(136003)(376002)(83380400001)(26005)(186003)(76116006)(33656002)(66946007)(66556008)(55016002)(9686003)(64756008)(66446008)(52536014)(66476007)(53546011)(6506007)(8676002)(7696005)(316002)(122000001)(8936002)(86362001)(478600001)(38100700002)(54906003)(71200400001)(5660300002)(4326008)(6916009)(2906002)(38070700004);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: LkFtQZtLEYps8RXnFtI483PvcVY9LUhlHiJwzJujES8z7Qr7KSsuY4ZCc+HO1oQZCWiLOdnCnYOlraYTGa83tcXuipiU46WcmF+l9eordRJ5P0TGd4cpJ9uApT8NSEpiLtzcifFhyKWRd1qhYIm26miGOtAxTv08gjs8BT+3FaAFToNvCzDOz7m9w3tm6jhSfkbr7YcmqtHSPWJ7++nDIGzOa7+vjbhsNQzBKp4Jt4c/p0tGaR4uLHO071wHi02klyC+e0slc4AnYu7dQus50A3Nx7sJyHQ9roNYCf+mdEId7ASIaEs6I3BlRZt9tCrJg05XYxLfUJmeZENDlUPRKokDFsRF7XnqObWOzBYmqI3GLn3gs/5JFgJbh8sOGBfsmSrEhxIqRyfO6x7Qar2zyC4em2m34m+PJ/rDoJ6YSIBpIG9GsnRBatjNqWbUW+ogWJneZ6B8fcOuJGNd0KONTSvj/EBawSUBfMlA+1Hpax9zz3jwKTfkJneJX/hP2UDw7qiRdD0QPN2d62qXKJAsyGkW2og6YVgyAczEMJDs2iKUk+KtNUWc6G5cxliPlmew+ISUrpZuiarcl0LTld+aS4uXF7ZkgtJ30TqDzBcd218GujY2QKK4nIRkrAOdQb5/3hBTLay9bcjrdviubl7cpVRgSO56vih7I96F6pY7zLRCwA1tGaw09uR+OcGNJWCMBtH7ub/fObn6T9gdgpVDlg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6366.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(8936002)(64756008)(122000001)(38100700002)(66446008)(6506007)(33656002)(52536014)(53546011)(55016002)(83380400001)(66556008)(9686003)(76116006)(66476007)(66946007)(71200400001)(86362001)(478600001)(6916009)(2906002)(4326008)(7696005)(54906003)(26005)(4744005)(5660300002)(186003)(8676002)(316002)(38070700004);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?f/BhWM/GY9zoucZlMkrmPKM5kMOdCdHtdMDuHsHbVXwJ/Kv5KaBnxtRJXl?=
- =?iso-8859-1?Q?ZsrM8Xbdw/1RzKT71rQ/iuJBLjXGnCWN4/BHWUZ0VzyXDAWErk97DH93q/?=
- =?iso-8859-1?Q?606mu+u7FVGo1XbMWkwWdtHE/yauTMn/+4Q7Sm9gvyzAOmis7cBHwqd2Nh?=
- =?iso-8859-1?Q?6iuitkn5vE/FT9JMmdTCT/RFrI4Y/frLLbEVGN39n/LT08fZCMb5Bjg3ta?=
- =?iso-8859-1?Q?y/bJ4ZpIii7frSCwlwtYXV2eUWDfbrUxS1MY4g6zJbli5ZLsOK6qxdePo6?=
- =?iso-8859-1?Q?LlJNp+SfIDqTHp0sqhYanwndcxux6DPKoqCDwbJlCwdFPD1Os0rnA5VbSy?=
- =?iso-8859-1?Q?U6Obqzt3Lt5jVQHKzkmzMMYAthGXK0HFuWfVtOpA76irvry0MiLxCt0FkX?=
- =?iso-8859-1?Q?NqMHcRojRWIOE+QoUWMhNRCHFSpgZbm4AHlG9SOYNfAV5hNCxRItv4jkm6?=
- =?iso-8859-1?Q?EHnmk3m/hyDJ9KpbNmqUqDkdyOqG740sSbCzAgcNQvUezrerrj6k379WWF?=
- =?iso-8859-1?Q?Av47cKqgTie1K4/Xg9D2cvXV9Dwl3GGtcYDfGzTPALU//aopY+YeRWFOSF?=
- =?iso-8859-1?Q?RyYbcevmk5z/2ee0132fU5shXmo1cjOWekS09PTtejd1WMFzGbHEX/HWhV?=
- =?iso-8859-1?Q?LkCu33oRQKlXc5a+aNhBllOHIxYXFo1o9xii4SM5PJK2th+M5KBjN63+9/?=
- =?iso-8859-1?Q?eXwzstrf6wcSDeyLZvIyVD6mxx9s1D9wQd923cdvoG5NL6/4S+vDVcpyh8?=
- =?iso-8859-1?Q?drOU5OPkLfLitl9ylkRR5OAcipAs64BcSMFG9SEt0bqTte9GKwrs4/7r4k?=
- =?iso-8859-1?Q?ky5sXuCEuY+DvR9y4jKKpZZKdkBPpLfFWa+jiHSMDeAmPYPO2rriIXhJPG?=
- =?iso-8859-1?Q?K6qYy/WhAKtPACbk7oZ1eMFCR6i/P1khPqW6cNeKcuuHuZV6L2Z1nCeu0I?=
- =?iso-8859-1?Q?DznyiQV6wETbrebAeo+PDOKj40uUQpAbsuH4dL8rBAx5LARqs6wsbhN7rl?=
- =?iso-8859-1?Q?RKfhotDashqUvlIDt5Qwg4TwvGI+ZKjUhxmYrlQ9fSeFurWRrKpDw203ax?=
- =?iso-8859-1?Q?PcDBFu4OLx9r1KNgauBqNtWYv/qaHP6Z2XC2oxCZeYpvueDbyyXWGbV1Il?=
- =?iso-8859-1?Q?gE5YP4NCl3MSyN+nrMO/rHwSMzQQ96Gkd2FQ13z5tDvPPlcSviDze/Qxo1?=
- =?iso-8859-1?Q?5uIAeZGGHA7CnP0+Ahf+CFHaLJ49iQ8VPa0bC287YK5Qd44WeVjPUVrxWD?=
- =?iso-8859-1?Q?PLvuSFZ5b6rYa612kYq5/2Q+qYrsR7xPLCoXft4Zspqj9EQAQkhgjI1zAi?=
- =?iso-8859-1?Q?e52hNoMznGlm2QgN7U+Guct5UACW0Mf/MAKRkdYBxyQCnGlmL4YsVwCXEQ?=
- =?iso-8859-1?Q?aFPbiuBqrM?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Mw8UttP5hzNQdR82DGpPxkppsHI/Up6wxc6BSUwZnv34c/ibtm1U/wGsT4?=
+ =?iso-8859-1?Q?NC8YmQwruFvd2I5DAj3BpITxRsQfP+ugiFxMNNRoZhscwfG6lgR2UFEqFE?=
+ =?iso-8859-1?Q?ukOz3hlC3fdAx3fJIxmUC00s3GdUgpLxdVOPgERhp25rN32n8solTqCAhJ?=
+ =?iso-8859-1?Q?fLKJpZ86/c+SSc9Buhk4NWohwdFkZqzu6sGqp9r/7gngL3ZES/gOI2kcxA?=
+ =?iso-8859-1?Q?YrrMqEt95iZyYwH2uGFhxwZYE6KTdmyNq9aIj7jKhgodqzEMIKmUmUsUaa?=
+ =?iso-8859-1?Q?gzWxHDXwg2RJrVUIdNSEeXSrF9C0Y08ghx4/s6ZdPo4qIjhspDwQUXVvIl?=
+ =?iso-8859-1?Q?jD9Y0y72t2Y6Hwv6SSOg3gghTTtqIfHgMITfW+UqkJ0c+03+x+Pt7Jx1Kw?=
+ =?iso-8859-1?Q?iEexw0kuOsERnZ9nhxrJGtAritjKji/y8X0UYYCTeumQz5NpbvUBBfCKnN?=
+ =?iso-8859-1?Q?tWRmnxaxhFwBCJFF02ODxq7TVp/EFS4xSBOvpdSLMLjs4qCdaa6pNpoM2q?=
+ =?iso-8859-1?Q?XC48WYyuxEsFRUhJujDyV4Vi8oW9vvOPOHfIV3PJ/FKmWR00F3YaeBAeEm?=
+ =?iso-8859-1?Q?Bu+w5B0hobJgB2yoXTD6SRtUvy1FoGlfr0I3sGvfi1n+vgFuIP1GVRScz6?=
+ =?iso-8859-1?Q?1ApqZQglpY8rT4/Lp/dIQf3X3N4kgYHcjWdV2mosfjw4YfJ2ASi63DzuYF?=
+ =?iso-8859-1?Q?nMBECxDadrU9/SI9rrCVl8ykeMHVMEL1x3+KH2QqTdsGJ++A/pLiR8fiGr?=
+ =?iso-8859-1?Q?mjFi0ucj1sEuwFty2R1PvORqIaI6NXn2GMA3ICp2ciN9mDF2xZMrRG4hTW?=
+ =?iso-8859-1?Q?LLdbU2ZcouycbvwTlY7ymKnFelr7UtHtrx1JCQALLtK63fAV73YZO39pAs?=
+ =?iso-8859-1?Q?KeNHfhci6BYLmXSO9+xLLuqM+YWFOxd/3DGK0qGxNtk1RjQZP3MA1fxT0d?=
+ =?iso-8859-1?Q?WZwFvvyO5/3I4Y7hubtKZ3IOLrQffCdSnH5adfbV7KQtfJYi92l2aWIsud?=
+ =?iso-8859-1?Q?4aZkG0R4+6mhf2wuuz0S7kvXdlaXcOBjDomVGW1QuL0w5sA+V8Khl/tEPc?=
+ =?iso-8859-1?Q?NIE+HHNO1hvak9noT6XcUT3NdBhuGrnO90xB3IrclK8T02nVz1l9Ptqmx9?=
+ =?iso-8859-1?Q?ItvEzwodxQJS44r6jMr1/BPVEfhH0iD8Zi0pSZ+cK7DUHsIFgmLQl7cS7q?=
+ =?iso-8859-1?Q?3IenW9ucLU3zj4q8pExJ6oMush+E3it96gn1XNuNCltbDQmU1a5rxRVa7a?=
+ =?iso-8859-1?Q?gw0hKZTav+cWpnDh+UNnZMcacqzYNKirEkbIM6issv4y9Ngtng9p/Ouax2?=
+ =?iso-8859-1?Q?NX2vS6EFBcbr/MF3PohvwaESlhfEloFC2olZn8M+jRTmypL9EdLCzSIDrN?=
+ =?iso-8859-1?Q?i1oGefNowr?=
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -151,16 +152,16 @@ MIME-Version: 1.0
 X-OriginatorOrg: analog.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6366.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57860114-a0c8-4c2f-c914-08d94a8618bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2021 07:23:24.9832
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b08775b-64c0-426d-33a8-08d94a86ac73
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2021 07:27:32.8063
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +0prEqDe5DNJe9yCu0jtaYqGVM0iBtgCXGCLkwWQrO7s07+MCC+7MO6aSCpGU7AMpUA9P9CbH1UsQy9U1jsE2g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR03MB5880
-X-Proofpoint-GUID: VFClB-yPeQXYxCagfiwiODSXbP51vE_z
-X-Proofpoint-ORIG-GUID: VFClB-yPeQXYxCagfiwiODSXbP51vE_z
+X-MS-Exchange-CrossTenant-userprincipalname: vhhv2Gg5aE3y5EGsBYT4ptYr+hSdZTtYjTg+FFAk6Kv1dy54YiOkWPv4oaY8AwBXMZmykAfqBtQY0yMDr1MBnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR03MB6366
+X-Proofpoint-GUID: G3EtWiN3GLgceL0jL-UmRywbpwHlETNp
+X-Proofpoint-ORIG-GUID: G3EtWiN3GLgceL0jL-UmRywbpwHlETNp
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-07-19_02:2021-07-16,2021-07-19 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
@@ -172,72 +173,33 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+
+
+> -----Original Message-----
 > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
 > Roeck
-> Sent: Saturday, July 17, 2021 7:23 PM
+> Sent: Saturday, July 17, 2021 7:25 PM
 > To: Sa, Nuno <Nuno.Sa@analog.com>
 > Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org; Rob
 > Herring <robh+dt@kernel.org>; Jean Delvare <jdelvare@suse.com>
-> Subject: Re: [RFC PATCH 6/6] hwmon: axi-fan-control: support
-> temperature vs pwm points
+> Subject: Re: [RFC PATCH 1/6] hwmon: axi-fan-control: make sure the
+> clock is enabled
 >=20
-> [External]
 >=20
-> On Thu, Jul 08, 2021 at 02:01:11PM +0200, Nuno S=E1 wrote:
-> > The HW has some predefined points where it will associate a PWM
-> value.
-> > However some users might want to better set these points to their
-> > usecases. This patch exposes these points as pwm auto_points:
+> On Thu, Jul 08, 2021 at 02:01:06PM +0200, Nuno S=E1 wrote:
+> > The core will only work if it's clock is enabled. This patch is a
+> > minor enhancement to make sure that's the case.
 > >
-> >  * pwm1_auto_point1_temp: temperature threshold below which
-> PWM should be
-> >    0%;
-> >  * pwm1_auto_point2_temp: temperature threshold above which
-> PWM should be
-> >    25%;
-> >  * pwm1_auto_point3_temp: temperature threshold below which
-> PWM should be
-> >    25%;
-> >  * pwm1_auto_point4_temp: temperature threshold above which
-> PWM should be
-> >    50%;
-> >  * pwm1_auto_point5_temp: temperature threshold below which
-> PWM should be
-> >    50%;
-> >  * pwm1_auto_point6_temp: temperature threshold above which
-> PWM should be
-> >    75%;
-> >  * pwm1_auto_point7_temp: temperature threshold below which
-> PWM should be
-> >    75%;
-> >  * pwm1_auto_point8_temp: temperature threshold above which
-> PWM should be
-> >    100%;
-> >
+> > Signed-off-by: Nuno S=E1 <nuno.sa@analog.com>
 >=20
-> If I understand those correctly, half of those are really hysteresis
-> points.
-> I think it would be better to express this with
-> 	pwm1_auto_pointX_temp
-> 	pwm1_auto_pointX_temp_hyst
+> Can I apply this patch as well as patches 4/6 and 5/6 as-is, or
+> do they depend on patches 2/6 and 3/6 ?
 >=20
-> where the hysteresis point is the temperature where the previous
-> pwm value
-> is activated. In other words, change attribute names as follows:
->     for 25%:
-> 	pwm1_auto_point1_temp -> pwm1_auto_point1_temp_hyst
-> 	pwm1_auto_point2_temp -> pwm1_auto_point1_temp
->     for 50%:
-> 	pwm1_auto_point3_temp -> pwm1_auto_point2_temp_hyst
-> 	pwm1_auto_point4_temp -> pwm1_auto_point2_temp
->     for 75%:
-> 	pwm1_auto_point5_temp -> pwm1_auto_point3_temp_hyst
-> 	pwm1_auto_point6_temp -> pwm1_auto_point3_temp
->     for 100%:
-> 	pwm1_auto_point7_temp -> pwm1_auto_point4_temp_hyst
-> 	pwm1_auto_point8_temp -> pwm1_auto_point4_temp
->=20
+> Thanks,
+> Guenter
 
-Agree, it makes sense.
+I think patch 5/6 only makes sense with patch 2/6. If we do not set
+the tacho evaluation parameters, clearing the fan fault irq has no effect..=
+.
 
 - Nuno S=E1
