@@ -2,202 +2,231 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E1B4C636C9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 15:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DED47C636CE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 19:02:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E44576120E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 15:03:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5FF361245
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 19:02:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238276AbhGUOW1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Jul 2021 10:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239449AbhGUOTt (ORCPT
+        id S231740AbhGUSWW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Jul 2021 14:22:22 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61076 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239605AbhGUSWW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Jul 2021 10:19:49 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7338C061575;
-        Wed, 21 Jul 2021 08:00:21 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id p67so3163102oig.2;
-        Wed, 21 Jul 2021 08:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yTeMlK56on+N1AKCtW09hkY78OxnEuhc6VvA4N3SswE=;
-        b=NuV5UESBaVxYqNvnAzivNi70I2pwZDfecm4WU9iBjiJaXkPGFThXEVSmru6jQS/p7g
-         UdXrAZm4v6zkc9rM0PgXJ52cCa4VGNXMSArWQDiRVvL4KaxCAhWMwIQmWoN7b9xt6i1V
-         z7ZKb4qyTJt/rCTq4jAllzl988yprwTea6YbiWKHCjLuc0ISMuJuZT8SjB7y9BTCPsDl
-         d8AbrbfVljuodt/w18WjNaNQWF3wC94cdDcIT/2yhhYcBFatytRPBebbPWrs8V7K9yIy
-         pOeGC4p38OXD6k9WubkuVS0VdIOeLVg2XpjeUibiFtbuVn3NcZ2rMJ6n/ak/fM4lHL2z
-         TvaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=yTeMlK56on+N1AKCtW09hkY78OxnEuhc6VvA4N3SswE=;
-        b=IpzdPj8zfaOQYi5dOadY2umbLwpprETnlXF2F7+UaMAnoumxzRxWmd28dUE71rxraR
-         bc1AkmSCiyrDxTeMa2+vFFIiKJAx7HLFvIi54nRAPx+vSXop7fkVK3jfly/+vWr2+cNZ
-         229ov++R6uk7x0upoh5gOOtUYSne5lclApW998mKEXrImvZAIPSvY6KpcXEudp8LOE8b
-         KbVK07a13NrBaIsY2fM3JA3v0r1cGSSt9ltvr4+r6EK7hQwAXB88co9eMAv6Kd7+HY5b
-         wAZhyFWK7vZX0IIqaKbGXJ7ha/1LwY2HtWRucgSZYeCkffjaG+cXdsGpQdzZLuAS5huR
-         F6uQ==
-X-Gm-Message-State: AOAM532jWfYEIskuKk6sljDc9I4eYeTRAG6rgFaQYW0QIlxUvfxVJj2u
-        XX3C9cg8mqewIbAGZItv7iA=
-X-Google-Smtp-Source: ABdhPJwNoIfp/c5dt4n0ucmz2RFGS3nnmNLUNjiuHzt7fCM8ZKuTwkg9K0bcaW7k0blwvmdTveqQdg==
-X-Received: by 2002:aca:4406:: with SMTP id r6mr20151282oia.50.1626879621139;
-        Wed, 21 Jul 2021 08:00:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a192sm372006ooc.10.2021.07.21.08.00.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jul 2021 08:00:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 21 Jul 2021 08:00:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
- properties
-Message-ID: <20210721150018.GA3446170@roeck-us.net>
-References: <20210708120111.519444-1-nuno.sa@analog.com>
- <20210708120111.519444-4-nuno.sa@analog.com>
- <20210712172656.GA2142233@robh.at.kernel.org>
- <PH0PR03MB63668564A9A7B8F5D6E5F8D499129@PH0PR03MB6366.namprd03.prod.outlook.com>
- <20210715203937.GA3182741@roeck-us.net>
- <PH0PR03MB636641D09289D1F696A64C9299119@PH0PR03MB6366.namprd03.prod.outlook.com>
- <f6d415a7-e113-1dda-727e-0d645c8114cb@roeck-us.net>
- <PH0PR03MB636618FE5E821669E224960199E19@PH0PR03MB6366.namprd03.prod.outlook.com>
+        Wed, 21 Jul 2021 14:22:22 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16LIXe15092860;
+        Wed, 21 Jul 2021 15:02:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=JkaL/JZG5JdE8NPIujIP07oAiEl0EvFgsEgD+KQUXQA=;
+ b=XX2Gv/FMJVOGttKpW6uU/ZPiXZlhRxNF1qOA+Nt8QqEhxD1T7wJvPkt5PNE13edOWC68
+ Aw3HEEwKsJ23HXNPlChFylUDKzPXoxyo1emE+nIRd9NDyIfLKu252+pkBX2zlw6TGknb
+ +TM0tDEGJIDF4a2cDHphZTWewJ2czmMXkfZYHFNyGL9LyB6xEPUtY5YrT0pVZ0O9r6G/
+ m3QtVKGhZ+3+g53oMgYAJ3McTzxZXGcTzCS22AVpHXTn6291+KmjLvQN9ceeywtOCIwG
+ Lq1FZQLx6OiGVlLdV0qFROWLK7TtyuFxEOq113XAUOvSD2JCTW69msbNcfjWBAgGB0op 3w== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39xn8g8532-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jul 2021 15:02:35 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16LIumDj006161;
+        Wed, 21 Jul 2021 19:02:34 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma01wdc.us.ibm.com with ESMTP id 39upucy7q8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jul 2021 19:02:34 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16LJ2X7q16908794
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jul 2021 19:02:33 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEBF628060;
+        Wed, 21 Jul 2021 19:02:33 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF8902807A;
+        Wed, 21 Jul 2021 19:02:32 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.68.240])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 21 Jul 2021 19:02:32 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net, jk@ozlabs.org,
+        alistair@popple.id.au, joel@jms.id.au, openbmc@lists.ozlabs.org,
+        eajames@linux.ibm.com
+Subject: [PATCH v2 1/3] fsi: occ: Force sequence numbering per OCC
+Date:   Wed, 21 Jul 2021 14:02:29 -0500
+Message-Id: <20210721190231.117185-2-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210721190231.117185-1-eajames@linux.ibm.com>
+References: <20210721190231.117185-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR03MB636618FE5E821669E224960199E19@PH0PR03MB6366.namprd03.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: EY0zGZyQ0GosRnS8WPci4r6nypz3H425
+X-Proofpoint-ORIG-GUID: EY0zGZyQ0GosRnS8WPci4r6nypz3H425
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-21_10:2021-07-21,2021-07-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 spamscore=0 adultscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107210109
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 07:46:41AM +0000, Sa, Nuno wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
-> > Roeck
-> > Sent: Friday, July 16, 2021 5:04 PM
-> > To: Sa, Nuno <Nuno.Sa@analog.com>
-> > Cc: Rob Herring <robh@kernel.org>; linux-hwmon@vger.kernel.org;
-> > devicetree@vger.kernel.org; Jean Delvare <jdelvare@suse.com>
-> > Subject: Re: [RFC PATCH 3/6] dt-bindings: axi-fan-control: add tacho
-> > properties
-> > 
-> > [External]
-> > 
-> > On 7/16/21 12:44 AM, Sa, Nuno wrote:
-> > [ ... ]
-> > >>
-> > >> Are you sure you can ever get this stable ? Each fan has its own
-> > >> properties
-> > >> and tolerances. If you replace a fan in a given system, you might get
-> > >> different RPM numbers. The RPM will differ widely from system to
-> > >> system
-> > >> and from fan to fan. Anything that assumes a specific RPM in
-> > >> devicetree
-> > >> data seems to be quite vulnerable to failures. I have experienced
-> > that
-> > >> recently with a different chip which also tries to correlate RPM and
-> > >> PWM
-> > >> and fails quite miserably.
-> > >>
-> > >> In my experience, anything other than minimum fan speed is really
-> > a
-> > >> recipe
-> > >> for instability and sporadic false failures. Even setting a minimum
-> > fan
-> > >> speed
-> > >> is tricky because it depends a lot on the fan.
-> > >
-> > > I see what you mean. So, I had to go through this process when
-> > testing
-> > > this changes because the fan I'm using is different from the default
-> > one
-> > > used to develop and stablish the default values in the IP core. The
-> > core
-> > 
-> > Exactly my point.
-> > 
-> > > provides you with a register which contains the tacho measurements
-> > in
-> > > clock cycles. You can read that for all the PWM points of interest
-> > > (with devmem2 for example) and make your own "calibration". I
-> > assume
-> > > that people have to go through this process before putting some
-> > values
-> > > in the devicetree. I'm aware this is not the neatest process but I
-> > guess it's
-> > > acceptable...
-> > >
-> > 
-> > Do you really expect everyone using a system with this chip to go
-> > through
-> > this process and update its devicetree configuration, and then repeat it
-> > whenever a fan is changed ? Given how dynamic this is, I really wonder
-> > if that information should be in devicetree in the first place.
-> > 
-> 
-> My naive assumption was that we would only do this work at evaluation
-> time. After that and after we settled with a fan for some system, I expected
-> that changing to a different fan is not that likely. From your inputs, I guess
-> this is not really the case which makes this process more cumbersome (as it
-> also implies recompiling the devicetree for your system).
-> 
-> However, even if we export these as runtime parameters, services/daemons
-> will also have an hard time doing this "calibration" in a dynamic way. The reason
-> is because the way the controller works is that it only accepts a new PWM
-> request if it is an higher value than whatever the HW has at that moment. Thus,
-> going through the calibration points might be very cumbersome. I can see some
-> ways of handling this though but not very neat...
-> 
-> Since this is a FPGA core, we might have some flexibility here. Something that
-> came to my mind would be to have a calibration mode in the HW that would
-> allow us to freely control the PWM values. In that way we could go freely over
-> the calibration points. I guess, for safety reasons, this calibration mode would
-> expire after some reasonable time (that give us enough time for doing the whole
-> thing). The best place for doing the calibration, I guess it would be directly in the
-> driver since we do receive the interrupts about new tacho measurements making
-> things easier to sync and handle. However, given the time that takes for a new
-> PWM to settle + new tacho measurements, it would not be very acceptable to do this 
-> during probe which is definitely also not ideal (we could defer this to a worker/timer).
-> 
-> I'm not sure if the above makes much sense to you and it also depends on the HW
-> guys being on board with this mechanism.
-> 
+Set and increment the sequence number during the submit operation.
+This prevents sequence number conflicts between different users of
+the interface. A sequence number conflict may result in a user
+getting an OCC response meant for a different command. Since the
+sequence number is now modified, the checksum must be calculated and
+set before submitting the command.
 
-I don't really know what to say or recommend here. Personally I think any
-attempt to tie PWM values to RPM are doomed to fail. Here are a couple of
-examples:
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+---
+ drivers/fsi/fsi-occ.c | 54 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 37 insertions(+), 17 deletions(-)
 
-Take your test system and move the fan to a restricted place (eg close to a
-wall). You'll see the fan RPM change, potentially significantly. Put it into
-some place with airflow towards or away from the system (eg blow air into
-the system from another place, which may happen if the system is installed
-in a lab), and again you'll see fan speed changes. Open the chassis, and
-the fan speed will change. I have seen fan speeds vary by up to 50% when
-changing airflow.
+diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
+index b223f0ef337b..ecf738411fe2 100644
+--- a/drivers/fsi/fsi-occ.c
++++ b/drivers/fsi/fsi-occ.c
+@@ -50,6 +50,7 @@ struct occ {
+ 	struct device *sbefifo;
+ 	char name[32];
+ 	int idx;
++	u8 sequence_number;
+ 	enum versions version;
+ 	struct miscdevice mdev;
+ 	struct mutex occ_lock;
+@@ -141,8 +142,7 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
+ {
+ 	struct occ_client *client = file->private_data;
+ 	size_t rlen, data_length;
+-	u16 checksum = 0;
+-	ssize_t rc, i;
++	ssize_t rc;
+ 	u8 *cmd;
+ 
+ 	if (!client)
+@@ -156,9 +156,6 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
+ 	/* Construct the command */
+ 	cmd = client->buffer;
+ 
+-	/* Sequence number (we could increment and compare with response) */
+-	cmd[0] = 1;
+-
+ 	/*
+ 	 * Copy the user command (assume user data follows the occ command
+ 	 * format)
+@@ -178,14 +175,7 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
+ 		goto done;
+ 	}
+ 
+-	/* Calculate checksum */
+-	for (i = 0; i < data_length + 4; ++i)
+-		checksum += cmd[i];
+-
+-	cmd[data_length + 4] = checksum >> 8;
+-	cmd[data_length + 5] = checksum & 0xFF;
+-
+-	/* Submit command */
++	/* Submit command; 4 bytes before the data and 2 bytes after */
+ 	rlen = PAGE_SIZE;
+ 	rc = fsi_occ_submit(client->occ->dev, cmd, data_length + 6, cmd,
+ 			    &rlen);
+@@ -314,11 +304,13 @@ static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
+ 	return rc;
+ }
+ 
+-static int occ_putsram(struct occ *occ, const void *data, ssize_t len)
++static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
++		       u8 seq_no, u16 checksum)
+ {
+ 	size_t cmd_len, buf_len, resp_len, resp_data_len;
+ 	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
+ 	__be32 *buf;
++	u8 *byte_buf;
+ 	int idx = 0, rc;
+ 
+ 	cmd_len = (occ->version == occ_p10) ? 6 : 5;
+@@ -358,6 +350,15 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len)
+ 	buf[4 + idx] = cpu_to_be32(data_len);
+ 	memcpy(&buf[5 + idx], data, len);
+ 
++	byte_buf = (u8 *)&buf[5 + idx];
++	/*
++	 * Overwrite the first byte with our sequence number and the last two
++	 * bytes with the checksum.
++	 */
++	byte_buf[0] = seq_no;
++	byte_buf[len - 2] = checksum >> 8;
++	byte_buf[len - 1] = checksum & 0xff;
++
+ 	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
+ 	if (rc)
+ 		goto free;
+@@ -467,9 +468,12 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
+ 	struct occ *occ = dev_get_drvdata(dev);
+ 	struct occ_response *resp = response;
+ 	u8 seq_no;
++	u16 checksum = 0;
+ 	u16 resp_data_length;
++	const u8 *byte_request = (const u8 *)request;
+ 	unsigned long start;
+ 	int rc;
++	size_t i;
+ 
+ 	if (!occ)
+ 		return -ENODEV;
+@@ -479,11 +483,26 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
+ 		return -EINVAL;
+ 	}
+ 
++	/* Checksum the request, ignoring first byte (sequence number). */
++	for (i = 1; i < req_len - 2; ++i)
++		checksum += byte_request[i];
++
+ 	mutex_lock(&occ->occ_lock);
+ 
+-	/* Extract the seq_no from the command (first byte) */
+-	seq_no = *(const u8 *)request;
+-	rc = occ_putsram(occ, request, req_len);
++	/*
++	 * Get a sequence number and update the counter. Avoid a sequence
++	 * number of 0 which would pass the response check below even if the
++	 * OCC response is uninitialized. Any sequence number the user is
++	 * trying to send is overwritten since this function is the only common
++	 * interface to the OCC and therefore the only place we can guarantee
++	 * unique sequence numbers.
++	 */
++	seq_no = occ->sequence_number++;
++	if (!occ->sequence_number)
++		occ->sequence_number = 1;
++	checksum += seq_no;
++
++	rc = occ_putsram(occ, request, req_len, seq_no, checksum);
+ 	if (rc)
+ 		goto done;
+ 
+@@ -574,6 +593,7 @@ static int occ_probe(struct platform_device *pdev)
+ 	occ->version = (uintptr_t)of_device_get_match_data(dev);
+ 	occ->dev = dev;
+ 	occ->sbefifo = dev->parent;
++	occ->sequence_number = 1;
+ 	mutex_init(&occ->occ_lock);
+ 
+ 	if (dev->of_node) {
+-- 
+2.27.0
 
-That doesn't even take into account that replacing a fan even with a similar
-model (eg after a fan failed) will likely result in potentially significant
-rpm changes.
-
-Ultimately, anything that does more than determine if a fan is still running
-is potentially unstable.
-
-Having said all that, it is really your call to decide how you want to detect
-fan failures. 
-
-Thanks,
-Guenter
