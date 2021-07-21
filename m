@@ -2,177 +2,146 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADD28C6377A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 19:03:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C11EC12002
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 19:25:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95F6E60FE7
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 19:03:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D2EB610F7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 19:25:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239751AbhGUSWZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Jul 2021 14:22:25 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19064 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239648AbhGUSWX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Jul 2021 14:22:23 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16LIiaVf161742;
-        Wed, 21 Jul 2021 15:02:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=5IvjcOj259HEtQZTVgIU1isdo2v0xtwkHBcRBlTVp94=;
- b=Zqj0t/LTxtzdxPhV+rKBamHSDN92XfK5BL7jqG5AvJeQo/fgTdUgFYqHyEPp8xrH6DP3
- xpSdsXz5WgBXRV0z6gEjWCoe87mkaVxwSCRoX+5L3zm9uC0V3uEZYWireH+ZnLNXUQoq
- gtE/6dgVEao7oozflVlNRsx866M9DuIziFmeJBJnrit01mstEb7hS6m/ZU2xVwLmAPhJ
- RKcEVW8e1kHI5wUuMEp3YXtem5ZexecaZEfZIwjPQ6VVbJgyZSm4drXvjsdRfUHbi4DT
- Fat1GuUBSbXNP52bFN/oJ6p6GNQ/XrkHZTpJSfxN/3OI7orjvjoRhYMwOqtK2fBNjlnn yw== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 39xs4j8e8e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jul 2021 15:02:37 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16LIvJOf024665;
-        Wed, 21 Jul 2021 19:02:36 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma03dal.us.ibm.com with ESMTP id 39upue3tnh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jul 2021 19:02:36 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16LJ2aiE42533216
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Jul 2021 19:02:36 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E538228068;
-        Wed, 21 Jul 2021 19:02:35 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 005082805A;
-        Wed, 21 Jul 2021 19:02:35 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.68.240])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 21 Jul 2021 19:02:34 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net, jk@ozlabs.org,
-        alistair@popple.id.au, joel@jms.id.au, openbmc@lists.ozlabs.org,
-        eajames@linux.ibm.com
-Subject: [PATCH v2 3/3] fsi: occ: Add dynamic debug to dump command and response
-Date:   Wed, 21 Jul 2021 14:02:31 -0500
-Message-Id: <20210721190231.117185-4-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210721190231.117185-1-eajames@linux.ibm.com>
-References: <20210721190231.117185-1-eajames@linux.ibm.com>
+        id S231766AbhGUSpV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Jul 2021 14:45:21 -0400
+Received: from mout.gmx.net ([212.227.15.18]:44595 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230480AbhGUSpU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 21 Jul 2021 14:45:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1626895538;
+        bh=dcrBClpRan1Ye4+0cOhzJWKTCgZhAAq1ZwV6S5zACAM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=fRByreJ5mppaKXWYZDBqRsSpdohAJ5mmPsu0i4BRaqV3z6LP8keQuVQb0+acZSAeG
+         JMIQVaET+djPSE4OC0nOK1DIWXZ0zHS4IOo+WUYO4z8lT75qewwNJP+KKOhHoUDoSH
+         n8p2HB1576jI6aX+esavptgsOu8r4SbA73ojwXxQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([79.242.182.54]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1M1poA-1m45zW0x0S-002D1m; Wed, 21 Jul 2021 21:25:38 +0200
+From:   W_Armin@gmx.de
+To:     linux@roeck-us.net
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH v2] hwmon: (w83627ehf) Switch to SIMPLE_DEV_PM_OPS
+Date:   Wed, 21 Jul 2021 21:25:19 +0200
+Message-Id: <20210721192519.28784-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -CO4dprFmbMcVejaZhyFrI-q1z96Zcey
-X-Proofpoint-ORIG-GUID: -CO4dprFmbMcVejaZhyFrI-q1z96Zcey
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-21_10:2021-07-21,2021-07-21 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- clxscore=1015 malwarescore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- impostorscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107210109
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:d9HF+txI8Pgx/eiI5gWdK6THBWxN3mg0bsFeZeRLaquy+HPXC04
+ CKoNKb6YhBeDB4GOkZI6nAZxRePylNk24GMib4iqoy8H6zX59HyXhWvReboqze69rqvxMnv
+ M41dq1WPrkPkeP3XCQcvNPkgfl4xHaVMNI161YuvX93QA9D/CP589JriKD29mAEyyr2uNMX
+ B1DHRSc/aEUbajS51nvaA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xmzt2F9MfBU=:carSt70bcQG7FAXCJGM/w6
+ vHFJ3MadHJMVOfiEPW8Eavd/dmfphbGA+vc5tIW0MmLF8j/z+RPWj7O0bd9NabKJ81llx9FEA
+ wCPzAbPZY64XQppEweLhB5o3WaCrY4JaGJZUtEsAIAKR+SQ/o3kLBXgAmvmTDBDuPCcjpBCje
+ /m4+qawiVdH1WxLTwO6dxXK5IVsxIkiV27nPrrPzcWbmChw1vu0mxwNpugt4StMHZzuwMcAe0
+ oztUY5kSg73Aosl1fZCKE8w3BYPPKOjbVkLmE3eDV5bdDVcjLpgqglpxYPZXrTFtQoj7UW01j
+ vKn5/p5WKBLer81nr2mUYV56RTYrjj09zKTGhG/qb1CgbAGEd3PARrS7ZLqyVjpVEjBo/sC68
+ SLpgecxhIeqPRLjUM+RdxwIknq6HfXK98b0cy1dPkb0DptZkXChVR5cteFYnmRDV2I1qNWgjB
+ dbPggo827gwgfmfgYa39CKvg8dKUO+yJANAURNzVAE8tIO4DysfT5+pG5rRvA090f9520qmRA
+ cHQPJ0iqWUwPsFrItv923SaY3jSXk5NnXEYAkBytZOF2cjpvTjQZAg+Hr53brV//jQ6sVxrT4
+ /KqoR/4tQPp1gyTgtfy7WS2YG+UIZuKfC4K1BhGc708hrkM/aR9mJQmKqEdjDMrv4aio46qrs
+ jx+x/oXFmGGY8GOYZi1Y+ktNqiv+H/3LBCdfkLbIGye5cx1ya0X1Ad0/R2jWHxaYbap6ryeyG
+ Fm7ufEhCIDB3AhwX2x4oT8EDPnNT8AyILAmtFaZqXE2PiUFcDIdGdUnMF8c39J8xtHrxc5wdw
+ UajVcelhEPxeGZOc3RXzVwM6lz+KrzhZdoiEBGiG0vZv4oHKyGDH2aclyByvAjPk8Gp+jfqZW
+ H+d/x+HHV04PXbaUa+aimMWQIsMZsAbgchF3JrFVVa39Yj1eFuiMeRTc97YJ7lPW3p/0apfXM
+ GnT3iwP9j2gOnVvOYesffis5P6WbIUkF2MYWdeb58TUcMe9feHPzqXXjLlnNVKPK1Tdj0+YIj
+ NfQ/Q4dBmVHpBNWQX2zWKfVP3HHnAHOLMMarhYvkcHth96U3ScPRbRt83fQWMLaeju4vdNGeD
+ ChEZpDecW4jmUOklGDVE0idA59IPCjFnRhh
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use the dynamic branching capability of the dynamic debug subsystem
-to dump the command and response with the correct OCC device name.
+From: Armin Wolf <W_Armin@gmx.de>
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
-Changes since v1:
- - include dynamic_debug to make sure the dynamic branching stuff is
-   included on all platforms/configs
+Use SIMPLE_DEV_PM_OPS() to also assign poweroff
+and thaw callbacks. Remove the now obsolete checking
+of CONFIG_PM too.
 
- drivers/fsi/fsi-occ.c | 45 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+changes in v2:
+- remove last check of CONFIG_PM
+=2D--
+ drivers/hwmon/w83627ehf.c | 21 ++++-----------------
+ 1 file changed, 4 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index ecf738411fe2..2bc53ea8f54f 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <linux/device.h>
-+#include <linux/dynamic_debug.h>
- #include <linux/err.h>
- #include <linux/errno.h>
- #include <linux/fs.h>
-@@ -21,6 +22,15 @@
- #include <linux/uaccess.h>
- #include <asm/unaligned.h>
- 
-+#if !defined(CONFIG_DYNAMIC_DEBUG_CORE)
-+#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
-+#if defined(DEBUG)
-+#define DYNAMIC_DEBUG_BRANCH(descriptor) true
-+#else /* DEBUG */
-+#define DYNAMIC_DEBUG_BRANCH(descriptor) false
-+#endif /* DEBUG */
-+#endif /* CONFIG_DYNAMIC_DEBUG_CORE */
-+
- #define OCC_SRAM_BYTES		4096
- #define OCC_CMD_DATA_BYTES	4090
- #define OCC_RESP_DATA_BYTES	4089
-@@ -359,6 +369,20 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
- 	byte_buf[len - 2] = checksum >> 8;
- 	byte_buf[len - 1] = checksum & 0xff;
- 
-+	{
-+		DEFINE_DYNAMIC_DEBUG_METADATA(ddm_occ_cmd, "OCC command");
-+
-+		if (DYNAMIC_DEBUG_BRANCH(ddm_occ_cmd)) {
-+			char prefix[64];
-+
-+			snprintf(prefix, sizeof(prefix), "%s %s: cmd ",
-+				 dev_driver_string(occ->dev),
-+				 dev_name(occ->dev));
-+			print_hex_dump(KERN_DEBUG, prefix, DUMP_PREFIX_OFFSET,
-+				       16, 4, byte_buf, len, false);
-+		}
-+	}
-+
- 	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
- 	if (rc)
- 		goto free;
-@@ -556,6 +580,27 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 	}
- 
- 	*resp_len = resp_data_length + 7;
-+
-+	{
-+		DEFINE_DYNAMIC_DEBUG_METADATA(ddm_occ_rsp,
-+					      "OCC response");
-+		DEFINE_DYNAMIC_DEBUG_METADATA(ddm_occ_full_rsp,
-+					      "OCC full response");
-+
-+		if (DYNAMIC_DEBUG_BRANCH(ddm_occ_full_rsp) ||
-+		    DYNAMIC_DEBUG_BRANCH(ddm_occ_rsp)) {
-+			char prefix[64];
-+			size_t l = DYNAMIC_DEBUG_BRANCH(ddm_occ_full_rsp) ?
-+				*resp_len : 16;
-+
-+			snprintf(prefix, sizeof(prefix), "%s %s: rsp ",
-+				 dev_driver_string(occ->dev),
-+				 dev_name(occ->dev));
-+			print_hex_dump(KERN_DEBUG, prefix, DUMP_PREFIX_OFFSET,
-+				       16, 4, resp, l, false);
-+		}
-+	}
-+
- 	rc = occ_verify_checksum(occ, resp, resp_data_length);
- 
-  done:
--- 
-2.27.0
+diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
+index 19af84574324..3cea66c58c25 100644
+=2D-- a/drivers/hwmon/w83627ehf.c
++++ b/drivers/hwmon/w83627ehf.c
+@@ -372,12 +372,10 @@ struct w83627ehf_data {
+ 	u8 temp3_val_only:1;
+ 	u8 have_vid:1;
+
+-#ifdef CONFIG_PM
+ 	/* Remember extra register values over suspend/resume */
+ 	u8 vbat;
+ 	u8 fandiv1;
+ 	u8 fandiv2;
+-#endif
+ };
+
+ struct w83627ehf_sio_data {
+@@ -1946,8 +1944,7 @@ static int __init w83627ehf_probe(struct platform_de=
+vice *pdev)
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
+ }
+
+-#ifdef CONFIG_PM
+-static int w83627ehf_suspend(struct device *dev)
++static int __maybe_unused w83627ehf_suspend(struct device *dev)
+ {
+ 	struct w83627ehf_data *data =3D w83627ehf_update_device(dev);
+
+@@ -1958,7 +1955,7 @@ static int w83627ehf_suspend(struct device *dev)
+ 	return 0;
+ }
+
+-static int w83627ehf_resume(struct device *dev)
++static int __maybe_unused w83627ehf_resume(struct device *dev)
+ {
+ 	struct w83627ehf_data *data =3D dev_get_drvdata(dev);
+ 	int i;
+@@ -2013,22 +2010,12 @@ static int w83627ehf_resume(struct device *dev)
+ 	return 0;
+ }
+
+-static const struct dev_pm_ops w83627ehf_dev_pm_ops =3D {
+-	.suspend =3D w83627ehf_suspend,
+-	.resume =3D w83627ehf_resume,
+-	.freeze =3D w83627ehf_suspend,
+-	.restore =3D w83627ehf_resume,
+-};
+-
+-#define W83627EHF_DEV_PM_OPS	(&w83627ehf_dev_pm_ops)
+-#else
+-#define W83627EHF_DEV_PM_OPS	NULL
+-#endif /* CONFIG_PM */
++static SIMPLE_DEV_PM_OPS(w83627ehf_dev_pm_ops, w83627ehf_suspend, w83627e=
+hf_resume);
+
+ static struct platform_driver w83627ehf_driver =3D {
+ 	.driver =3D {
+ 		.name	=3D DRVNAME,
+-		.pm	=3D W83627EHF_DEV_PM_OPS,
++		.pm	=3D &w83627ehf_dev_pm_ops,
+ 	},
+ };
+
+=2D-
+2.20.1
 
