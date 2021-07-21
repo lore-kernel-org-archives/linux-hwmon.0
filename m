@@ -2,143 +2,167 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1930AC636C8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 02:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59A03C12002
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 13:29:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFB526120F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 02:43:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3132961245
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 13:29:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbhGUCCt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Jul 2021 22:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbhGUCCq (ORCPT
+        id S232628AbhGUMsd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Jul 2021 08:48:33 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12784 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232079AbhGUMsd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Jul 2021 22:02:46 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E83C061574;
-        Tue, 20 Jul 2021 19:43:22 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id c68so806224qkf.9;
-        Tue, 20 Jul 2021 19:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pBE5exiuCrDCx7ColZNpX2FjRqVvNIpBf5nUfYEkrIA=;
-        b=SB3u7/fhvpu+LlaxdIPXmvmT7FgNnfYk43t/NGSfLjeReFhz1w54Q6A/0UG/kI8KIw
-         kz3dVLzJr2UmHeX9GVkF7kG7ZJPWcpANs1WsJg9eUGatuNc5BMhypavNHEfeEON6PwGM
-         P99HM3t8lL2SGSfTKU/kxfEAoAlk/X8aJ2mB0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pBE5exiuCrDCx7ColZNpX2FjRqVvNIpBf5nUfYEkrIA=;
-        b=fb4QlhnIcRd+oee3xrAjw/4PAbhkXB4PyiMipZAuwLEwaiTZZhDpwUvt7hm5est2kg
-         EUPJ79WNspZ7ePla0G0LPIV/57UtK+6PH8v+3/9p5Ctxxy/soEP1JB5pdIA9QZENY+/8
-         IncYpBA9WIrE6S2jV3h+PBdBSXxvVEliE7reDtcEekvw7n6b9Yn8I/EhqCPMY8FH/yQO
-         WZTKavN5eUZIWBc0PU1DE3JfRBr+bzXAmhsLMEpLAUpMy9laMijE/oYsWU65rSpAQ2Nf
-         XkhKCpHXeBERg+6HKA6ipDzwP9oK56lrWajZI+RoCplprtDtSAAaoJuCgOUvX7gQMD13
-         QTGg==
-X-Gm-Message-State: AOAM5336Jszlu7L/oPlJ69MsaE4YIp1cf250KndOoZq54+iIsqi+RPDB
-        4Osrhub7z+CGgEKFhYBDF1fZu2VQpKKholQ9T5w=
-X-Google-Smtp-Source: ABdhPJwoJzwZ4xiNcedHkvGHqVMmsjyctAH0RgdeojBVYudaowQhskoAnvek8zoFYjo9JJ+ERWJbzw0IcH3VzeBjQMs=
-X-Received: by 2002:a05:620a:56b:: with SMTP id p11mr31361136qkp.66.1626835400754;
- Tue, 20 Jul 2021 19:43:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210716151850.28973-1-eajames@linux.ibm.com> <20210716151850.28973-3-eajames@linux.ibm.com>
-In-Reply-To: <20210716151850.28973-3-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 21 Jul 2021 02:43:08 +0000
-Message-ID: <CACPK8XcgF7i+b8P1AUDRYtWZeMDwG7Mjw74pFpVKVx6ZdJJKzw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] hwmon: (occ) Remove sequence numbering and checksum calculation
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, Jeremy Kerr <jk@ozlabs.org>,
-        Alistair Popple <alistair@popple.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+        Wed, 21 Jul 2021 08:48:33 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16LD4SVg188787;
+        Wed, 21 Jul 2021 09:28:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=1/UqFbGMruDo3Q0vGuZwQjLuoMkBdQ71Br6XNAeVCaQ=;
+ b=FwPLJVaStv0j9I+wdLUA/VQPmHLN4jGnfyjE4JCKPJFvAwKFpRfE9Afsg9EOswQ4VzBi
+ APV/ndDSowzA3VlROOXNX/FUdQ3ChlB1eBuVsbJb9yroLnJtVVs7perwefkiHgV3+Z8G
+ ogklqScJ9RGJ/nbO9wyHButKY3+7FPFHN5uKwjYJuGbN8qCcyynMJoFEHAQHenO3yJp/
+ bqnxffnIKBNvsnQlGxUMTkvjg+2nxLFAtgmrg3GUX2NgFMrtDNzqhRtukWM5P1lXqnfW
+ 9HDL2cmOy1JIJ1v4zWD8uSZJ/zFWtRGTyodEY9zFlc5jzdurlLDVA817eR66nGrN+lKy +g== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39xja3byf3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jul 2021 09:28:51 -0400
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16LDHVKL020260;
+        Wed, 21 Jul 2021 13:28:50 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma03wdc.us.ibm.com with ESMTP id 39vqdvc540-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jul 2021 13:28:50 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16LDRok130147048
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jul 2021 13:27:50 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E359124053;
+        Wed, 21 Jul 2021 13:27:50 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C99D124062;
+        Wed, 21 Jul 2021 13:27:49 +0000 (GMT)
+Received: from v0005c16 (unknown [9.211.68.240])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 21 Jul 2021 13:27:49 +0000 (GMT)
+Message-ID: <b482a658da7d6488e8b84c20db2efbe098052814.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/3] fsi: occ: Force sequence numbering per OCC
+From:   Eddie James <eajames@linux.ibm.com>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-fsi@lists.ozlabs.org
+Date:   Wed, 21 Jul 2021 08:27:48 -0500
+In-Reply-To: <CACPK8XcBHGsFu0VoNPutC8HYbLcf0WV-KWNixCdGXxWsf1PDVg@mail.gmail.com>
+References: <20210716151850.28973-1-eajames@linux.ibm.com>
+         <20210716151850.28973-2-eajames@linux.ibm.com>
+         <CACPK8XcBHGsFu0VoNPutC8HYbLcf0WV-KWNixCdGXxWsf1PDVg@mail.gmail.com>
+Organization: IBM
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4fvz68dvuIAlPOY2zffvQDIwk87o7CjD
+X-Proofpoint-ORIG-GUID: 4fvz68dvuIAlPOY2zffvQDIwk87o7CjD
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-21_08:2021-07-21,2021-07-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107210075
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 16 Jul 2021 at 15:19, Eddie James <eajames@linux.ibm.com> wrote:
->
-> Checksumming of the request and sequence numbering is now done in the
-> OCC interface driver in order to keep unique sequence numbers. So
-> remove those in the hwmon driver.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/hwmon/occ/common.c | 30 ++++++++++++------------------
->  drivers/hwmon/occ/common.h |  3 +--
->  drivers/hwmon/occ/p8_i2c.c | 15 +++++++++------
->  drivers/hwmon/occ/p9_sbe.c |  4 ++--
->  4 files changed, 24 insertions(+), 28 deletions(-)
->
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index 0d68a78be980..fc298268c89e 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -132,22 +132,20 @@ struct extended_sensor {
->  static int occ_poll(struct occ *occ)
->  {
->         int rc;
-> -       u16 checksum = occ->poll_cmd_data + occ->seq_no + 1;
-> -       u8 cmd[8];
-> +       u8 cmd[7];
+On Wed, 2021-07-21 at 02:37 +0000, Joel Stanley wrote:
+> On Fri, 16 Jul 2021 at 15:19, Eddie James <eajames@linux.ibm.com>
+> wrote:
+> > Set and increment the sequence number during the submit operation.
+> > This prevents sequence number conflicts between different users of
+> > the interface. A sequence number conflict may result in a user
+> > getting an OCC response meant for a different command. Since the
+> > sequence number is now modified, the checksum must be calculated
+> > and
+> > set before submitting the command.
+> > 
+> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> 
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> 
+> > @@ -479,11 +483,26 @@ int fsi_occ_submit(struct device *dev, const
+> > void *request, size_t req_len,
+> >                 return -EINVAL;
+> >         }
+> > 
+> > +       /* Checksum the request, ignoring first byte (sequence
+> > number). */
+> > +       for (i = 1; i < req_len - 2; ++i)
+> > +               checksum += byte_request[i];
+> > +
+> 
+> This could go below, after you've got the sequence number, so the
+> checksumming all happens in the same spot?
 
-The shortening of the command seems unrelated?
+It definitely could, I had the idea to do the checksumming outside the
+mutex in case it took a long time? Probably not worth it though.
 
-If you leave it at 8 then you avoid the special casing below. Is there
-any downside to sending the extra 0 byte at the end?
+> 
+> The driver has become a bit of a maze, I can't tell how you're
+> deciding what goes in fsi_occ_submit vs occ_write vs occ_putsram. If
+> oyu have some ideas on how to simplify it then I would welcome those
+> changes.
 
->         struct occ_poll_response_header *header;
->
->         /* big endian */
-> -       cmd[0] = occ->seq_no++;         /* sequence number */
-> +       cmd[0] = 0;                     /* sequence number */
->         cmd[1] = 0;                     /* cmd type */
->         cmd[2] = 0;                     /* data length msb */
->         cmd[3] = 1;                     /* data length lsb */
->         cmd[4] = occ->poll_cmd_data;    /* data */
-> -       cmd[5] = checksum >> 8;         /* checksum msb */
-> -       cmd[6] = checksum & 0xFF;       /* checksum lsb */
-> -       cmd[7] = 0;
-> +       cmd[5] = 0;                     /* checksum msb */
-> +       cmd[6] = 0;                     /* checksum lsb */
+Well, it doesn't really matter in fsi_occ_submit vs occ_putsram, as the
+latter is only called in the former. occ_write wouldn't be used by the
+hwmon interface, which is why we're moving some of that to
+fsi_occ_submit, to have more in common. Agree it could probably be
+organized better but I don't immediately have a good idea how to do
+that.
 
-> --- a/drivers/hwmon/occ/p8_i2c.c> +++ b/drivers/hwmon/occ/p8_i2c.c
-> @@ -97,18 +97,21 @@ static int p8_i2c_occ_putscom_u32(struct i2c_client *client, u32 address,
->  }
->
->  static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
-> -                                u8 *data)
-> +                                u8 *data, size_t len)
->  {
-> -       __be32 data0, data1;
-> +       __be32 data0 = 0, data1 = 0;
->
-> -       memcpy(&data0, data, 4);
-> -       memcpy(&data1, data + 4, 4);
-> +       memcpy(&data0, data, min(len, 4UL));
+Thanks for the review!
+Eddie
 
-The UL here seems unnecessary (and dropping it should fix your 0day
-bot warnings).
+> 
+> 
+> 
+> >         mutex_lock(&occ->occ_lock);
+> > 
+> > -       /* Extract the seq_no from the command (first byte) */
+> > -       seq_no = *(const u8 *)request;
+> > -       rc = occ_putsram(occ, request, req_len);
+> > +       /*
+> > +        * Get a sequence number and update the counter. Avoid a
+> > sequence
+> > +        * number of 0 which would pass the response check below
+> > even if the
+> > +        * OCC response is uninitialized. Any sequence number the
+> > user is
+> > +        * trying to send is overwritten since this function is the
+> > only common
+> > +        * interface to the OCC and therefore the only place we can
+> > guarantee
+> > +        * unique sequence numbers.
+> > +        */
+> > +       seq_no = occ->sequence_number++;
+> > +       if (!occ->sequence_number)
+> > +               occ->sequence_number = 1;
+> > +       checksum += seq_no;
+> > +
+> > +       rc = occ_putsram(occ, request, req_len, seq_no, checksum);
+> >         if (rc)
+> >                 goto done;
 
-But I think it would be simpler to go back to a fixed length of 8.
-
-> +       if (len > 4UL) {
-> +               len -= 4;
-> +               memcpy(&data1, data + 4, min(len, 4UL));
-> +       }
->
->         return p8_i2c_occ_putscom_u32(client, address, be32_to_cpu(data0),
->                                       be32_to_cpu(data1));
->  }
