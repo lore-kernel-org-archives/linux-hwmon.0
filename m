@@ -2,74 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AF56C6377C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 23:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E8BBC6377D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Jul 2021 09:20:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D9766108B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jul 2021 23:28:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54DF96109F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Jul 2021 09:20:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhGUWsC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Jul 2021 18:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbhGUWsC (ORCPT
+        id S231288AbhGVIkU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 22 Jul 2021 04:40:20 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3446 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231280AbhGVIkU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Jul 2021 18:48:02 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB01C061575;
-        Wed, 21 Jul 2021 16:28:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GVWwx0lfNz9sV8;
-        Thu, 22 Jul 2021 09:28:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ozlabs.org; s=201707;
-        t=1626910114; bh=GoKHY31AUl/WmIbrWvstEpC6nwWnu/aYYQ5eVh88pmQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FA5Ym+Gs70MifbuFfkuM8sCA6mPXNMq4AZgTsP743W2eJikolBaegABYpt7ziNCX0
-         YpbZ741z/evpIlqL0SNxLPw0AS5PEC0fMzizB5sG4pk7CscPu4KzNFlHg1OHNrKZwo
-         wkOPAxugW5aO8km38+a3cmYqrWg5x5Da6PW4D9IHTXK0qi46nu/zj+Eg6OtIo7yQeR
-         hOB+s8+o5p9RGW7ebPM2LQ/Qt305lDSU6dZ4v5aV6gUSCyVklP9F+G9wHbnK+pD+x8
-         oDIXfKB6LbMNExnTOnUJCeyIPs0tXjbw4k8UR1Jj7/LBdpIh+7w23MeXjc573Os2zg
-         VNwEbve7Xomag==
-Message-ID: <de6a55a881eae463014af0fe165b60a378773d1d.camel@ozlabs.org>
-Subject: Re: [PATCH 3/3] fsi: occ: Add dynamic debug to dump command and
- response
-From:   Jeremy Kerr <jk@ozlabs.org>
-To:     Eddie James <eajames@linux.ibm.com>, linux-kernel@vger.kernel.org
-Cc:     linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        linux@roeck-us.net, jdelvare@suse.com, joel@jms.id.au,
-        alistair@popple.id.au, openbmc@lists.ozlabs.org
-Date:   Thu, 22 Jul 2021 07:28:27 +0800
-In-Reply-To: <20210716151850.28973-4-eajames@linux.ibm.com>
-References: <20210716151850.28973-1-eajames@linux.ibm.com>
-         <20210716151850.28973-4-eajames@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 22 Jul 2021 04:40:20 -0400
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GVmq36qH6z6H7jw;
+        Thu, 22 Jul 2021 17:09:19 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 22 Jul 2021 11:20:53 +0200
+Received: from localhost (10.47.4.50) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 22 Jul
+ 2021 10:20:52 +0100
+Date:   Thu, 22 Jul 2021 10:20:27 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+CC:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@googlegroups.com>, Guenter Roeck <linux@roeck-us.net>,
+        "Jean Delvare" <jdelvare@suse.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH 14/54] dt-bindings: hwmon: Add IIO HWMON binding
+Message-ID: <20210722102027.000035a5@Huawei.com>
+In-Reply-To: <20210721140424.725744-15-maxime@cerno.tech>
+References: <20210721140424.725744-1-maxime@cerno.tech>
+        <20210721140424.725744-15-maxime@cerno.tech>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
 MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.4.50]
+X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Eddie,
+On Wed, 21 Jul 2021 16:03:44 +0200
+Maxime Ripard <maxime@cerno.tech> wrote:
 
-> Use the dynamic branching capability of the dynamic debug subsystem
-> to dump the command and response with the correct OCC device name.
+> Even though we had the iio-hwmon driver for some time and a number of
+> boards using it already, we never had a binding for it. Let's add it
+> based on what the driver expects and the boards are providing.
+> 
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  .../devicetree/bindings/hwmon/iio-hwmon.yaml  | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml
+> new file mode 100644
+> index 000000000000..49dd40f663a6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/hwmon/iio-hwmon.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: ADC-attached Hardware Sensor Device Tree Bindings
+> +
+> +maintainers:
+> +  - Jonathan Cameron <jic23@kernel.org>
 
-Would this be better done with a tracepoint? Given it's a fairly
-well-defined pair of events, and there's data to dump in both cases.
+I'd like to share the blame for this one.  Binding was originally added
+by Guenter.
 
-We have a couple of existing tracepoionts in the core code if that
-helps...
+https://lore.kernel.org/linux-iio/1359668588-13678-4-git-send-email-linux@roeck-us.net/
+https://lore.kernel.org/linux-iio/1359668588-13678-11-git-send-email-linux@roeck-us.net/
+:)
 
-Cheers,
+As bindings go this one has always been controversial because
+it's mapping between linux subsystems rather than really describing
+hardware.  We've had various discussions over the years on how to do
+this differently, but perhaps just documenting the current state is the
+way to go.  That doesn't stop us moving to something better in the
+future.
 
+> +
+> +description: >
+> +  Bindings for hardware monitoring devices connected to ADC controllers
+> +  supporting the Industrial I/O bindings.
+> +
+> +properties:
+> +  compatible:
+> +    const: iio-hwmon
+> +
+> +  io-channels:
+> +    minItems: 1
+> +    maxItems: 1024
 
-Jeremy
+Why 1024?
+
+> +    description: >
+> +      List of phandles to ADC channels to read the monitoring values
+> +
+> +required:
+> +  - compatible
+> +  - io-channels
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +      iio-hwmon {
+> +          compatible = "iio-hwmon";
+> +          io-channels = <&adc 1>, <&adc 2>;
+> +      };
 
