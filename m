@@ -2,123 +2,187 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89CB7C432BE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Jul 2021 06:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A148C4338F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Jul 2021 08:17:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70F0A60EE2
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Jul 2021 06:27:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56C1C60EE6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Jul 2021 08:17:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbhGWFrL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Jul 2021 01:47:11 -0400
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:59618
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234001AbhGWFrJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Jul 2021 01:47:09 -0400
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPS id F3D623F34A
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jul 2021 06:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1627021663;
-        bh=ScM5eUXjBnVPe8LbBTYSW47mZlMEZMzsEaWNVZaNkWQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=jtwpKgCHgeeIwVDNX0/2tHKzGo3qN1ydck+/aEU3kBG7b4d1W9/f2NpamD2MeLH2f
-         HOdZq8uvkaI29zJ8IvlmGblL4sZ0CTmrKnjcwbk6oKp4u61oqxWdB4idDx/3NTSqCy
-         kFh31fua1tb64882x5MfyjA5ewOzUM6E0YUPLhCDWFzRBqyvHSzJsFkq9tei7ZP3hV
-         M7X+CPm86aoiOHR3PyZnqpWwJnzQTuoYa2hTqQyZk/cSTxwl94G4QGhOXvTZM4kRmW
-         jqGsnS/nhasHPRVvL2QUYOvsuRKIWfVCJYlPKgpM1PrcBmxGlYrZZgsvR6UEQF2TQ5
-         AjqcsAa1K7QIA==
-Received: by mail-ed1-f72.google.com with SMTP id dn8-20020a05640222e8b029039ef9536577so224589edb.5
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jul 2021 23:27:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ScM5eUXjBnVPe8LbBTYSW47mZlMEZMzsEaWNVZaNkWQ=;
-        b=DlNewezgxC6ma/8gJv/vl9H3dDw+Ct1SaXp5vj9+c0a308rVHJywfnHWL1syYBEkZ8
-         DUJ5vwZXJjaI3G4aM6dV03Le8IQMgzUDNWptzaJZ7fAXeFUnT0qoDuE1LfdO0989V09O
-         F9ihpc/Ib7KG0QDse6rvIMOv2nsq1IAUyUlIN5DPsGsfz1JkeCAhcObHSKR9ukzB4EGJ
-         XIce3qrLlZF8UyA5r9x8TQpsMEBXZ1y1NkI7JMv4HimdHsEfamJLNnont7nil+gW1VBB
-         PrvsleL/8nM0UA33JqdqBaIK3Ana7MnuZXkKRxvjknNjFdbODLkTM9a1lZEcAB8Yu1ZT
-         R79w==
-X-Gm-Message-State: AOAM530zd038Zq3hRZ78SX9aII/Pj45eXS8giSvTE6Iavd1YCCc7py4l
-        s5Erk7fzMQxRUgNN2Amm014JNL62HY2MqFtxiOpeJGU14OPYUneuE338/825v47xCeNfiUET+Uf
-        EN/IHN1b6HeZbmOmCJqB+qFmlby/dPKmY4rWWhP8V
-X-Received: by 2002:a17:906:e0e:: with SMTP id l14mr3313191eji.501.1627021662758;
-        Thu, 22 Jul 2021 23:27:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxZ+nyDEENcrVRLwr6YxB1sHYJA1zCxcGsDlpGPB37Ly4NJOfWs4Dn45abWgrRNkKKGjwgnGw==
-X-Received: by 2002:a17:906:e0e:: with SMTP id l14mr3313181eji.501.1627021662625;
-        Thu, 22 Jul 2021 23:27:42 -0700 (PDT)
-Received: from localhost.localdomain ([86.32.47.9])
-        by smtp.gmail.com with ESMTPSA id u5sm13449844edv.64.2021.07.22.23.27.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jul 2021 23:27:42 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: (subset) [PATCH 00/15] Fix some DT binding references at next-20210722
-Date:   Fri, 23 Jul 2021 08:27:18 +0200
-Message-Id: <162702163038.6229.12663832282139727924.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1626947923.git.mchehab+huawei@kernel.org>
-References: <cover.1626947923.git.mchehab+huawei@kernel.org>
+        id S229907AbhGWHhQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Jul 2021 03:37:16 -0400
+Received: from mga01.intel.com ([192.55.52.88]:44766 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234387AbhGWHhQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 23 Jul 2021 03:37:16 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="233673471"
+X-IronPort-AV: E=Sophos;i="5.84,263,1620716400"; 
+   d="scan'208";a="233673471"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2021 01:17:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,263,1620716400"; 
+   d="scan'208";a="434041571"
+Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Jul 2021 01:17:49 -0700
+Received: from kbuild by d053b881505b with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1m6qNQ-0001RZ-Gj; Fri, 23 Jul 2021 08:17:48 +0000
+Date:   Fri, 23 Jul 2021 16:16:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ e2c744af9cd3f1949a01a11ca97bd76b455ce3a9
+Message-ID: <60fa7af2.OzBaWu2ggw124o90%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 22 Jul 2021 11:59:57 +0200, Mauro Carvalho Chehab wrote:
-> Due to DT schema conversion to yaml, several references to dt-bindings got
-> broken.
-> 
-> Update them.
-> 
-> Mauro Carvalho Chehab (15):
->   dt-bindings: mtd: update mtd-physmap.yaml reference
->   dt-bindings: firmware: update arm,scpi.yaml reference
->   dt-bindings: net: dsa: sja1105: update nxp,sja1105.yaml reference
->   MAINTAINERS: update mtd-physmap.yaml reference
->   MAINTAINERS: update arm,vic.yaml reference
->   MAINTAINERS: update aspeed,i2c.yaml reference
->   MAINTAINERS: update faraday,ftrtc010.yaml reference
->   MAINTAINERS: update fsl,fec.yaml reference
->   MAINTAINERS: update mtd-physmap.yaml reference
->   MAINTAINERS: update ti,am654-hbmc.yaml reference
->   MAINTAINERS: update ti,sci.yaml reference
->   MAINTAINERS: update gpio-zynq.yaml reference
->   MAINTAINERS: update arm,pl353-smc.yaml reference
->   MAINTAINERS: update intel,ixp46x-rng.yaml reference
->   MAINTAINERS: update nxp,imx8-jpeg.yaml reference
-> 
-> [...]
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: e2c744af9cd3f1949a01a11ca97bd76b455ce3a9  hwmon: (w83627ehf) Switch to SIMPLE_DEV_PM_OPS
 
-Applied, thanks!
+elapsed time: 722m
 
-[13/15] MAINTAINERS: update arm,pl353-smc.yaml reference
-        commit: e460a86aab669e00c5952a7643665f3096fbfe27
+configs tested: 121
+configs skipped: 3
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210722
+i386                 randconfig-c001-20210723
+mips                      pic32mzda_defconfig
+arm                          iop32x_defconfig
+sh                              ul2_defconfig
+arm                              alldefconfig
+powerpc                      ep88xc_defconfig
+powerpc                    mvme5100_defconfig
+arm                     am200epdkit_defconfig
+powerpc                   currituck_defconfig
+mips                          ath79_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                    ge_imp3a_defconfig
+ia64                        generic_defconfig
+arm                         orion5x_defconfig
+m68k                          atari_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                           u8500_defconfig
+mips                           ci20_defconfig
+m68k                            q40_defconfig
+powerpc                      obs600_defconfig
+sh                          sdk7780_defconfig
+mips                           rs90_defconfig
+powerpc                     tqm8540_defconfig
+powerpc                     powernv_defconfig
+mips                    maltaup_xpa_defconfig
+arm                      integrator_defconfig
+arm                            mps2_defconfig
+powerpc                 mpc837x_rdb_defconfig
+powerpc                     pq2fads_defconfig
+openrisc                    or1ksim_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210722
+x86_64               randconfig-a006-20210722
+x86_64               randconfig-a001-20210722
+x86_64               randconfig-a005-20210722
+x86_64               randconfig-a004-20210722
+x86_64               randconfig-a002-20210722
+i386                 randconfig-a005-20210722
+i386                 randconfig-a003-20210722
+i386                 randconfig-a004-20210722
+i386                 randconfig-a002-20210722
+i386                 randconfig-a001-20210722
+i386                 randconfig-a006-20210722
+i386                 randconfig-a005-20210723
+i386                 randconfig-a003-20210723
+i386                 randconfig-a004-20210723
+i386                 randconfig-a002-20210723
+i386                 randconfig-a001-20210723
+i386                 randconfig-a006-20210723
+i386                 randconfig-a016-20210722
+i386                 randconfig-a013-20210722
+i386                 randconfig-a012-20210722
+i386                 randconfig-a011-20210722
+i386                 randconfig-a014-20210722
+i386                 randconfig-a015-20210722
+i386                 randconfig-a016-20210723
+i386                 randconfig-a013-20210723
+i386                 randconfig-a012-20210723
+i386                 randconfig-a011-20210723
+i386                 randconfig-a014-20210723
+i386                 randconfig-a015-20210723
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-c001-20210722
+x86_64               randconfig-b001-20210722
+x86_64               randconfig-a011-20210722
+x86_64               randconfig-a016-20210722
+x86_64               randconfig-a013-20210722
+x86_64               randconfig-a014-20210722
+x86_64               randconfig-a012-20210722
+x86_64               randconfig-a015-20210722
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
