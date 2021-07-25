@@ -3,92 +3,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF36CC4338F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Jul 2021 15:48:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F43FC4338F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jul 2021 03:21:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B19A860E8E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Jul 2021 15:48:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5587F60E8C
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jul 2021 03:21:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbhGXPIS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 24 Jul 2021 11:08:18 -0400
-Received: from mout.gmx.net ([212.227.17.22]:43233 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229545AbhGXPIS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 24 Jul 2021 11:08:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1627141715;
-        bh=rdiEGAiCxODFyndwGnt071tqh3DLNwLoJ4wo1Hk+vkg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=MzwUaGZm1k4nCi266ElmRhyVysufwWvDEWeD/HtwdjpMdB33tX8BlFLMjz40Ans3L
-         C2LHmSUupde1mR+E1rDlb6eIwkBnyk8uFBIOW8/icbZEethon3mMTllh9pMdWbjHgv
-         t6DBSci2XElmHLUMX+An1UlWQJB/s2x2VGM4MLAI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.0.103.117]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXp5Q-1lZF9D1Tjg-00Y9T0; Sat, 24
- Jul 2021 17:48:35 +0200
-From:   W_Armin@gmx.de
-To:     linux@roeck-us.net
+        id S229689AbhGYCkk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 24 Jul 2021 22:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhGYCkk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 24 Jul 2021 22:40:40 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F157C061757
+        for <linux-hwmon@vger.kernel.org>; Sat, 24 Jul 2021 20:21:10 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id v8-20020a0568301bc8b02904d5b4e5ca3aso5528548ota.13
+        for <linux-hwmon@vger.kernel.org>; Sat, 24 Jul 2021 20:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WAj+3AGzADVS9UyBtij09Oj1eiOYd4mlGYAyhsLZKms=;
+        b=DPId0KqCKbSFaCZ/j1Rsr371QVhj6U2huBELsTV64S+EAX7SBlpOe5n2FBE8V/6hjh
+         oDC1H6JpraJCzrbwfaQMgznmZLwrXUXwQUsVceo5pCUxieHyWkkzgR3B5/Tmn6B6InqV
+         kStLT5S0e244lQjPA/q+nL1r/2sAf/wdysSYs+bUSi/ily8Y97zx0MipkpV0dyczp2Yc
+         yc3UVCK02yPvBlxVG6wzW3oWtom2ieof7qM4sYQBFr6iPBA8Z7ojKskSnNXsRDVmL7jN
+         dCu5iObSEXtGFIx7PNe/XS3on7E7BQGqlJqBdtcVeedVx8DoAL/8Tt4U9V/MGf6NBeym
+         Bpqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=WAj+3AGzADVS9UyBtij09Oj1eiOYd4mlGYAyhsLZKms=;
+        b=JaxD2bIw+YRPwjsERtBLTwGJk/KB2Df3XVBAO9mwm54gfFz+qhZxy+IpwLX40zeuC5
+         ROdsEV39dI360Ps/RXSAe/M2u7vMGFxlmp1tfWRnUhjtdqQpWd07LDMQTXqamBn5/CAh
+         1nu/os1+yeIKpeT8r749XzEugY8gk7w0CL+RGvZ9dHLwnzom4beAfm8LB3N6J4S4GRVg
+         jJr4UIJcV8vPye9JWCvIS6vtyqOKPXVMRRaknR7DrgnRNubizeqIn+0LiMQaVygOplK+
+         PMknKiCXDZ9niPi2XJoNNM2ZCWJJ784aqw/6EPtY32udxzwqnq63Qp42s3YTnhhEhBWu
+         EpDw==
+X-Gm-Message-State: AOAM532iVvknEKGUfFK2L8xyJtkgeotdoiK0erHRo4mZxRgpiUJI3Gat
+        Dafrffycm70ZxwxlxlXLxek=
+X-Google-Smtp-Source: ABdhPJw0IkSNpCcyr35/nMDKOvKRThu1yZgGu9jWIGm38M9jGmL10NlK6+rH7DgyAa9AOXW7QnR1fQ==
+X-Received: by 2002:a9d:2c61:: with SMTP id f88mr7849582otb.62.1627183269575;
+        Sat, 24 Jul 2021 20:21:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t207sm6979095oif.27.2021.07.24.20.21.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jul 2021 20:21:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 24 Jul 2021 20:21:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     W_Armin@gmx.de
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (w83627ehf) Make DEVICE_ATTR_RO static
-Date:   Sat, 24 Jul 2021 17:48:17 +0200
-Message-Id: <20210724154817.18796-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH] hwmon: (w83627ehf) Make DEVICE_ATTR_RO static
+Message-ID: <20210725032107.GA2294115@roeck-us.net>
+References: <20210724154817.18796-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZsG0fMJG+hStbfV5g9W559/+NtCK04VTdozlAdmRZ3EOYPz3Op7
- y68KtFcYV+z1HqcgqOjvUDnVtW8hB8f9M3ARGDYaQSvW225q1C2YdeM4/ISICoERm1srzp7
- eVncKwDBPJHCPZmN3rSmwA5swi8AGGMLENJIX095hAiMJCtsK5LGiZ3me0XJDqjHo87scfX
- W8+BHbeXJUpgLxRxI+W6Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mtrQs7hPM/8=:BumPYA76IX8e+9bIDurWS6
- dox57tPT+Hio55vMCXDZTQGhZM8QRyz7J9dytxWdH9hPU7ogbaW2k2U9+ynSWkuyR75r3oStx
- VuZp0W69HJq/IctLfb1L/19wI1HtS00hblbMIzZlWPhjHDHK00s4u9KfrNEQtseiteBKS/pgN
- 3P/udMhjP/IE8cauRaDLjTzjPCZ+14B3nTvdyxNjGHpNjTnaazSWJz5gbkR8UTSdWnL7VkqqO
- CW3c/x/zomSd8p+Gzy42zjVD4AUt4LFTmXDEIt/wI7FpE9FIhEp62XMHUeYJW5FKMU7svQrpV
- ytyZGklreJ19GTwRWGiP03/oXbtP6G60LmWY5YpUg5WPMDL2wyLFytIwyAePs0q1PkbC50U2O
- HZXJ089Of2pWrv+zmS7IT0O5BdUdTD6jF5my21GhimeapVbWkp4+QpqCH8+J94slw2bR+zgk5
- g3eNp3TSdr6s4ZNkeFScu4XoO5OFtjxj96i9/z1fidRzfIDiC1Eldm6UR42FQ4WWD5mHvsbND
- EMytrMUthMLB48zp/xKen+00bGdJnLjSH/fC00E5oDNeyq6bzTS2+bVsW4Y6YNgAKeAW+1QXC
- Q2zgJn/CKCGt9Qy8dnFTtuhFn3JjPDMULveh0FATfcrwJM0W3GsPuGUCpKY5g0qCfobIM3RPD
- hQpYMJF1yeYlwiUiPlQL/ZeXOpWbIjOvS3bqcjkIZK5/kwmCY5Y4W7/mLmRk+MGIbcKe66RqY
- SCIY7TQtJX7D0sb2NUpie2WO9b/0rwjmKlCOGgqeUi/niKPobJ+KELZs5n5qvk//mn7vMY7k1
- 8ZjBtlAB+MC3K5i7WNShK90kDbw+SVkID4qYAejjQgsDN9TwDTrjM123phoAsHcspcHMAifBA
- 5dC6tCSP+4nYb/bCe4ofTKnyp4BWtheIhkBkcK3kBWfChk1wMOeFdh9M5U2C3evEfFLIwE/J0
- lAdV4jHoY4BfGUz62YN6Ksm36EWDs0kRUNsIkz4TcKxbd6Fp2adaWAhhME1MISSqdy/tpBG+8
- gwGCxaasmahJ8jCNxBc39JpGvLVRYpklXQli7w8tVuu/UL1jbnZYvlvoN6f+nSWi8Fz99IgY1
- 9whuwdzPMknkB+oSBTDFNWSXZ1XHtacAFQc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210724154817.18796-1-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+On Sat, Jul 24, 2021 at 05:48:17PM +0200, W_Armin@gmx.de wrote:
+> From: Armin Wolf <W_Armin@gmx.de>
+> 
+> Make DEVICE_ATTR_RO static to fix sparse warning:
+> warning: symbol 'dev_attr_cpu0_vid' was not declared. Should it be static?
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Make DEVICE_ATTR_RO static to fix sparse warning:
-warning: symbol 'dev_attr_cpu0_vid' was not declared. Should it be static?
+Applied.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/w83627ehf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 3cea66c58c25..705a59663d42 100644
-=2D-- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1081,7 +1081,7 @@ cpu0_vid_show(struct device *dev, struct device_attr=
-ibute *attr, char *buf)
- 	struct w83627ehf_data *data =3D dev_get_drvdata(dev);
- 	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
- }
--DEVICE_ATTR_RO(cpu0_vid);
-+static DEVICE_ATTR_RO(cpu0_vid);
-
-
- /* Case open detection */
-=2D-
-2.20.1
-
+> ---
+>  drivers/hwmon/w83627ehf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --
+> 2.20.1
+> 
+> diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
+> index 3cea66c58c25..705a59663d42 100644
+> --- a/drivers/hwmon/w83627ehf.c
+> +++ b/drivers/hwmon/w83627ehf.c
+> @@ -1081,7 +1081,7 @@ cpu0_vid_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  	struct w83627ehf_data *data = dev_get_drvdata(dev);
+>  	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
+>  }
+> -DEVICE_ATTR_RO(cpu0_vid);
+> +static DEVICE_ATTR_RO(cpu0_vid);
+> 
+> 
+>  /* Case open detection */
