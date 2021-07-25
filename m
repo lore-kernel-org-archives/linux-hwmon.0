@@ -7,72 +7,70 @@ X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F2F0C4338F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jul 2021 21:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEA51C4338F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jul 2021 21:38:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FBDF60231
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jul 2021 21:37:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC74C60F11
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jul 2021 21:38:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbhGYU4b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Jul 2021 16:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S229685AbhGYU6Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 25 Jul 2021 16:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbhGYU4a (ORCPT
+        with ESMTP id S229543AbhGYU6Z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Jul 2021 16:56:30 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572C4C061757
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Jul 2021 14:36:59 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id d17so4109846qvn.13
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Jul 2021 14:36:59 -0700 (PDT)
+        Sun, 25 Jul 2021 16:58:25 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1403C061757
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Jul 2021 14:38:53 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d9so5698734qty.12
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Jul 2021 14:38:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GWUQ0fckLy2ZE5UqfxdFyP7HRQWXas6YvoyLXmwlqkY=;
-        b=cRZocdt7tpNiYF31/zFKBOicoXUmFLQpngFNCeWn+TVFENpjFrRN/lW0DNN8I/pLLM
-         0qj/cFRlXqRPwFMgSv8Stv+6OgC9anlgt2rR07V1GbZNEc/PsjqD1K7IjUesDbbReNUV
-         VuBdp/BmSYXHs8bZATZaRulQoGfxdMJOUUZM6mMy43ocFiY7nHpdFFyT+PaPtC4YcrtN
-         LjrB6fUySYnltVxtC4xYROny7012+wOWza2QBVw5xpvgIkT89ESW8rMHBcAu5D0MXI2X
-         /AltvdTF49whBYrgFeHJZXWvYjxIn6oGES1aHe8qZpLOJ++GTX7hpFQ9iZqE2yE5CIt5
-         GWew==
+        bh=mnsNxK1zOi4uaI0gmIXOBgk4XNYPRw0OXnRRUzen7XE=;
+        b=ITO/L1RFJyz8JoeyfB7na/TH5zExK3P67PNdzvFCUPXAB+oatb8LABRyp83z0wO/OP
+         1LZ07r2Q254P9VdU5pvlRUCywlQmVJDKzjkD95koaizpRH3rgLsW7VkDhPdswi3HWS4p
+         5vNVQ3ewzZc+dLeHIlLr+ti/KcLqNsNVeJEsBvmjdDGr65Qu/OuJcOXdEVpwi5LH7VtC
+         UTNc66akCfkvC86D4EFvKwW49J79cafDhP2/zCTB5sVNylIEG6RmzrDB8jGFdhFeKU2A
+         AJ6gQv8OKuEEATog/y0UFjt+xbPCwIKBbrip/DtRDtjKkEVwR6qfj4dJGJve7MedsxaB
+         suHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=GWUQ0fckLy2ZE5UqfxdFyP7HRQWXas6YvoyLXmwlqkY=;
-        b=QMmyACprij/p+amvNpGjyuTZRCe2L9O7R8uB5sP1IrYUvxTHPzBxSCGPgSgIjfqPYt
-         YYredkpZJv/KCBmvRQt2NrdDByThY+vmbpOUF8lVGxluWxxehkrHfvNuWpewdo/m+aqy
-         O+CiPOv27QbXdDKjq2zT8fJ4EEJHiwgGSRSau4Tik2beB8TVA0sqjeH4ES7TP6p7tnpy
-         ij32FFriuHt8XcpL9OdmCfrFwFZtjFc5t0MPdCNNxP+2Dd32r+2TWZSi0JWF+YVAEI00
-         UzT8mBPh2NxReTbXdtLq2nFT9CyebR3aAPxHVnLRAbErm9CHf0SrQoqkFsrvyv/Vcwlw
-         hNQg==
-X-Gm-Message-State: AOAM5302rGzkBcy4TbaxW8bpXMZ2k6L99P6IOT7LOjjWQyleOz5ud3mr
-        3J55xOwrrZV+/d/oWZw2+fc=
-X-Google-Smtp-Source: ABdhPJyg4u9kSPNigvzUJ4cca6HLxligipmCvCfj8zqLnteZpZ0C6FpAriQc0t5GTTFXTHK2w4NdOA==
-X-Received: by 2002:a0c:d68f:: with SMTP id k15mr14954869qvi.14.1627249018515;
-        Sun, 25 Jul 2021 14:36:58 -0700 (PDT)
+        bh=mnsNxK1zOi4uaI0gmIXOBgk4XNYPRw0OXnRRUzen7XE=;
+        b=TEmeiFhholAeBa0edWEs3QTZlQCJy1xxQosdCwRiDnUpBRhFTVXBnGIDsrF8g6HitG
+         h7WCp2daE3oumnbGcfFW1EOPTAjuYkZPZ7pFKE3cjwbw6w9XDjd//BPzTs6a/87WTQDA
+         Ue97B++u3yWFepKGDzQ8oiU2IHzvKK8NxcGf0U0eCj1nkdpQt01lLSOJlqLu1YoRqQkt
+         FOrgdAAnftPhzuMtdP5DDrgwEmZ1C8svcgjEptCcYqYnJyj2yGp+BsTnOgZMsfdQsSca
+         9A80imvUfFMXouQxhGBxXeueHkAFnZ2k1n++DRfoWiYbhiMQUiihF7fx+EsIHeJzOb9+
+         oz1g==
+X-Gm-Message-State: AOAM533XyKDmF+Zz4uiWQkctwqwv3ysaO/ZD6a8MaysmUT5Hg9BTEo43
+        tbpwLKKTPix9s84usw+M/Gw=
+X-Google-Smtp-Source: ABdhPJwJOkk14ahZNV/14ZxTZUpo4QfYXt82XT4VqXJEiUJ4/YgK7rbZUds3NwkFmL5nJKUIopO4WQ==
+X-Received: by 2002:ac8:7ee6:: with SMTP id r6mr13023233qtc.199.1627249133046;
+        Sun, 25 Jul 2021 14:38:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i67sm18166011qkd.90.2021.07.25.14.36.57
+        by smtp.gmail.com with ESMTPSA id g10sm2702860qtp.67.2021.07.25.14.38.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jul 2021 14:36:58 -0700 (PDT)
+        Sun, 25 Jul 2021 14:38:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 3/3] dt-bindings: sbrmi: Add SB-RMI hwmon driver
- bindings
+Subject: Re: [PATCH v3 1/3] hwmon: sbrmi: Add support for sbrmi power module
 To:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
         linux-hwmon@vger.kernel.org
 Cc:     Akshay Gupta <Akshay.Gupta@amd.com>
 References: <20210625132544.18094-1-nchatrad@amd.com>
  <20210720055737.8666-1-nchatrad@amd.com>
- <20210720055737.8666-3-nchatrad@amd.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a56d3b58-06cf-6d4e-0858-31d658746396@roeck-us.net>
-Date:   Sun, 25 Jul 2021 14:36:56 -0700
+Message-ID: <143b29d5-7782-a8a3-4039-dc26982d88d8@roeck-us.net>
+Date:   Sun, 25 Jul 2021 14:38:51 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210720055737.8666-3-nchatrad@amd.com>
+In-Reply-To: <20210720055737.8666-1-nchatrad@amd.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -83,82 +81,444 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 On 7/19/21 10:57 PM, Naveen Krishna Chatradhi wrote:
 > From: Akshay Gupta <Akshay.Gupta@amd.com>
 > 
-> - Document device tree bindings for AMD SB-RMI emulated service.
+> On AMD platforms the Out-of-band access is provided by
+> Advanced Platform Management Link (APML), APML is a
+> SMBus v2.0 compatible 2-wire processor client interface.
+> APML is also referred as the sideband interface (SBI).
+> 
+> APML is used to communicate with the
+> Side-Band Remote Management Interface (SB-RMI) which provides
+> Soft Mailbox messages to manage power consumption and
+> power limits of the CPU socket.
+> 
+> - This module add support to read power consumption,
+>    power limit & max power limit and write power limit.
+> - To instantiate this driver on a Board Management Controller (BMC)
+>    connected to an AMD CPU with SB-RMI support, the i2c bus number
+>    would be the bus connected from the BMC to the CPU.
 > 
 > Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
 > Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 
-Devicetree files need to be approved by a dt maintainer.
-They can't do that if they are not copied on devicetree patches.
+For my reference:
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+I can only apply the patch series after the bindings have been approved
+by a devicetree maintainer.
 
 Guenter
 
 > ---
 > Changes since v2:
-> None
+> 1. Modify to cache the power_limi_max during probe
+> 2. Enable alert during probe
+> 3. Use dev_err instead of pr_err
+> 4. Remove unnecessry bit mask
+> 5. Checking rmi_mailbox_xfer retrun value
 > 
->   .../devicetree/bindings/hwmon/amd,sbrmi.yaml  | 53 +++++++++++++++++++
->   1 file changed, 53 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
+>   drivers/hwmon/Kconfig  |  10 ++
+>   drivers/hwmon/Makefile |   1 +
+>   drivers/hwmon/sbrmi.c  | 358 +++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 369 insertions(+)
+>   create mode 100644 drivers/hwmon/sbrmi.c
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml b/Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 87624902ea80..f489972a6309 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1551,6 +1551,16 @@ config SENSORS_SBTSI
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called sbtsi_temp.
+>   
+> +config SENSORS_SBRMI
+> +	tristate "Emulated SB-RMI sensor"
+> +	depends on I2C
+> +	help
+> +	  If you say yes here you get support for emulated RMI
+> +	  sensors on AMD SoCs with APML interface connected to a BMC device.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called sbrmi.
+> +
+>   config SENSORS_SHT15
+>   	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
+>   	depends on GPIOLIB || COMPILE_TEST
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 59e78bc212cf..8031acf58936 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -164,6 +164,7 @@ obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
+>   obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
+>   obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
+>   obj-$(CONFIG_SENSORS_SBTSI)	+= sbtsi_temp.o
+> +obj-$(CONFIG_SENSORS_SBRMI)	+= sbrmi.o
+>   obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
+>   obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
+>   obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
+> diff --git a/drivers/hwmon/sbrmi.c b/drivers/hwmon/sbrmi.c
 > new file mode 100644
-> index 000000000000..7598b083979c
+> index 000000000000..372b099c04a0
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/amd,sbrmi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/hwmon/sbrmi.c
+> @@ -0,0 +1,358 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * sbrmi.c - hwmon driver for a SB-RMI mailbox
+> + *           compliant AMD SoC device.
+> + *
+> + * Copyright (C) 2020-2021 Advanced Micro Devices, Inc.
+> + */
 > +
-> +title: >
-> +  Sideband Remote Management Interface (SB-RMI) compliant
-> +  AMD SoC power device.
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
 > +
-> +maintainers:
-> +  - Akshay Gupta <Akshay.Gupta@amd.com>
+> +/* Do not allow setting negative power limit */
+> +#define SBRMI_PWR_MIN	0
+> +/* Mask for Status Register bit[1] */
+> +#define SW_ALERT_MASK	0x2
 > +
-> +description: |
-> +  SB Remote Management Interface (SB-RMI) is an SMBus compatible
-> +  interface that reports AMD SoC's Power (normalized Power) using,
-> +  Mailbox Service Request and resembles a typical 8-pin remote power
-> +  sensor's I2C interface to BMC. The power attributes in hwmon
-> +  reports power in microwatts.
+> +/* Software Interrupt for triggering */
+> +#define START_CMD	0x80
+> +#define TRIGGER_MAILBOX	0x01
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amd,sbrmi
+> +/*
+> + * SB-RMI supports soft mailbox service request to MP1 (power management
+> + * firmware) through SBRMI inbound/outbound message registers.
+> + * SB-RMI message IDs
+> + */
+> +enum sbrmi_msg_id {
+> +	SBRMI_READ_PKG_PWR_CONSUMPTION = 0x1,
+> +	SBRMI_WRITE_PKG_PWR_LIMIT,
+> +	SBRMI_READ_PKG_PWR_LIMIT,
+> +	SBRMI_READ_PKG_MAX_PWR_LIMIT,
+> +};
 > +
-> +  reg:
-> +    maxItems: 1
-> +    description: |
-> +      I2C bus address of the device as specified in Section SBI SMBus Address
-> +      of the SoC register reference. The SB-RMI address is normally 78h for
-> +      socket 0 and 70h for socket 1, but it could vary based on hardware
-> +      address select pins.
-> +      \[open source SoC register reference\]
-> +        https://www.amd.com/en/support/tech-docs?keyword=55898
+> +/* SB-RMI registers */
+> +enum sbrmi_reg {
+> +	SBRMI_CTRL		= 0x01,
+> +	SBRMI_STATUS,
+> +	SBRMI_OUTBNDMSG0	= 0x30,
+> +	SBRMI_OUTBNDMSG1,
+> +	SBRMI_OUTBNDMSG2,
+> +	SBRMI_OUTBNDMSG3,
+> +	SBRMI_OUTBNDMSG4,
+> +	SBRMI_OUTBNDMSG5,
+> +	SBRMI_OUTBNDMSG6,
+> +	SBRMI_OUTBNDMSG7,
+> +	SBRMI_INBNDMSG0,
+> +	SBRMI_INBNDMSG1,
+> +	SBRMI_INBNDMSG2,
+> +	SBRMI_INBNDMSG3,
+> +	SBRMI_INBNDMSG4,
+> +	SBRMI_INBNDMSG5,
+> +	SBRMI_INBNDMSG6,
+> +	SBRMI_INBNDMSG7,
+> +	SBRMI_SW_INTERRUPT,
+> +};
 > +
-> +required:
-> +  - compatible
-> +  - reg
+> +/* Each client has this additional data */
+> +struct sbrmi_data {
+> +	struct i2c_client *client;
+> +	struct mutex lock;
+> +	u32 pwr_limit_max;
+> +};
 > +
-> +additionalProperties: false
+> +struct sbrmi_mailbox_msg {
+> +	u8 cmd;
+> +	bool read;
+> +	u32 data_in;
+> +	u32 data_out;
+> +};
 > +
-> +examples:
-> +  - |
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
+> +static int sbrmi_enable_alert(struct i2c_client *client)
+> +{
+> +	int ctrl;
 > +
-> +        sbrmi@3c {
-> +                compatible = "amd,sbrmi";
-> +                reg = <0x3c>;
-> +        };
-> +    };
-> +...
+> +	/*
+> +	 * Enable the SB-RMI Software alert status
+> +	 * by writing 0 to bit 4 of Control register(0x1)
+> +	 */
+> +	ctrl = i2c_smbus_read_byte_data(client, SBRMI_CTRL);
+> +	if (ctrl < 0)
+> +		return ctrl;
+> +
+> +	if (ctrl & 0x10) {
+> +		ctrl &= ~0x10;
+> +		return i2c_smbus_write_byte_data(client,
+> +						 SBRMI_CTRL, ctrl);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int rmi_mailbox_xfer(struct sbrmi_data *data,
+> +			    struct sbrmi_mailbox_msg *msg)
+> +{
+> +	int i, ret, retry = 10;
+> +	int sw_status;
+> +	u8 byte;
+> +
+> +	mutex_lock(&data->lock);
+> +
+> +	/* Indicate firmware a command is to be serviced */
+> +	ret = i2c_smbus_write_byte_data(data->client,
+> +					SBRMI_INBNDMSG7, START_CMD);
+> +	if (ret < 0)
+> +		goto exit_unlock;
+> +
+> +	/* Write the command to SBRMI::InBndMsg_inst0 */
+> +	ret = i2c_smbus_write_byte_data(data->client,
+> +					SBRMI_INBNDMSG0, msg->cmd);
+> +	if (ret < 0)
+> +		goto exit_unlock;
+> +
+> +	/*
+> +	 * For both read and write the initiator (BMC) writes
+> +	 * Command Data In[31:0] to SBRMI::InBndMsg_inst[4:1]
+> +	 * SBRMI_x3C(MSB):SBRMI_x39(LSB)
+> +	 */
+> +	for (i = 0; i < 4; i++) {
+> +		byte = (msg->data_in >> i * 8) & 0xff;
+> +		ret = i2c_smbus_write_byte_data(data->client,
+> +						SBRMI_INBNDMSG1 + i, byte);
+> +		if (ret < 0)
+> +			goto exit_unlock;
+> +	}
+> +
+> +	/*
+> +	 * Write 0x01 to SBRMI::SoftwareInterrupt to notify firmware to
+> +	 * perform the requested read or write command
+> +	 */
+> +	ret = i2c_smbus_write_byte_data(data->client,
+> +					SBRMI_SW_INTERRUPT, TRIGGER_MAILBOX);
+> +	if (ret < 0)
+> +		goto exit_unlock;
+> +
+> +	/*
+> +	 * Firmware will write SBRMI::Status[SwAlertSts]=1 to generate
+> +	 * an ALERT (if enabled) to initiator (BMC) to indicate completion
+> +	 * of the requested command
+> +	 */
+> +	do {
+> +		sw_status = i2c_smbus_read_byte_data(data->client,
+> +						     SBRMI_STATUS);
+> +		if (sw_status < 0) {
+> +			ret = sw_status;
+> +			goto exit_unlock;
+> +		}
+> +		if (sw_status & SW_ALERT_MASK)
+> +			break;
+> +		usleep_range(50, 100);
+> +	} while (retry--);
+> +
+> +	if (retry < 0) {
+> +		dev_err(&data->client->dev,
+> +			"Firmware fail to indicate command completion\n");
+> +		ret = -EIO;
+> +		goto exit_unlock;
+> +	}
+> +
+> +	/*
+> +	 * For a read operation, the initiator (BMC) reads the firmware
+> +	 * response Command Data Out[31:0] from SBRMI::OutBndMsg_inst[4:1]
+> +	 * {SBRMI_x34(MSB):SBRMI_x31(LSB)}.
+> +	 */
+> +	if (msg->read) {
+> +		for (i = 0; i < 4; i++) {
+> +			ret = i2c_smbus_read_byte_data(data->client,
+> +						       SBRMI_OUTBNDMSG1 + i);
+> +			if (ret < 0)
+> +				goto exit_unlock;
+> +			msg->data_out |= ret << i * 8;
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * BMC must write 1'b1 to SBRMI::Status[SwAlertSts] to clear the
+> +	 * ALERT to initiator
+> +	 */
+> +	ret = i2c_smbus_write_byte_data(data->client, SBRMI_STATUS,
+> +					sw_status | SW_ALERT_MASK);
+> +
+> +exit_unlock:
+> +	mutex_unlock(&data->lock);
+> +	return ret;
+> +}
+> +
+> +static int sbrmi_read(struct device *dev, enum hwmon_sensor_types type,
+> +		      u32 attr, int channel, long *val)
+> +{
+> +	struct sbrmi_data *data = dev_get_drvdata(dev);
+> +	struct sbrmi_mailbox_msg msg = { 0 };
+> +	int ret;
+> +
+> +	if (type != hwmon_power)
+> +		return -EINVAL;
+> +
+> +	msg.read = true;
+> +	switch (attr) {
+> +	case hwmon_power_input:
+> +		msg.cmd = SBRMI_READ_PKG_PWR_CONSUMPTION;
+> +		ret = rmi_mailbox_xfer(data, &msg);
+> +		break;
+> +	case hwmon_power_cap:
+> +		msg.cmd = SBRMI_READ_PKG_PWR_LIMIT;
+> +		ret = rmi_mailbox_xfer(data, &msg);
+> +		break;
+> +	case hwmon_power_cap_max:
+> +		msg.data_out = data->pwr_limit_max;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	if (ret < 0)
+> +		return ret;
+> +	/* hwmon power attributes are in microWatt */
+> +	*val = (long)msg.data_out * 1000;
+> +	return ret;
+> +}
+> +
+> +static int sbrmi_write(struct device *dev, enum hwmon_sensor_types type,
+> +		       u32 attr, int channel, long val)
+> +{
+> +	struct sbrmi_data *data = dev_get_drvdata(dev);
+> +	struct sbrmi_mailbox_msg msg = { 0 };
+> +
+> +	if (type != hwmon_power && attr != hwmon_power_cap)
+> +		return -EINVAL;
+> +	/*
+> +	 * hwmon power attributes are in microWatt
+> +	 * mailbox read/write is in mWatt
+> +	 */
+> +	val /= 1000;
+> +
+> +	val = clamp_val(val, SBRMI_PWR_MIN, data->pwr_limit_max);
+> +
+> +	msg.cmd = SBRMI_WRITE_PKG_PWR_LIMIT;
+> +	msg.data_in = val;
+> +	msg.read = false;
+> +
+> +	return rmi_mailbox_xfer(data, &msg);
+> +}
+> +
+> +static umode_t sbrmi_is_visible(const void *data,
+> +				enum hwmon_sensor_types type,
+> +				u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_power:
+> +		switch (attr) {
+> +		case hwmon_power_input:
+> +		case hwmon_power_cap_max:
+> +			return 0444;
+> +		case hwmon_power_cap:
+> +			return 0644;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_channel_info *sbrmi_info[] = {
+> +	HWMON_CHANNEL_INFO(power,
+> +			   HWMON_P_INPUT | HWMON_P_CAP | HWMON_P_CAP_MAX),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops sbrmi_hwmon_ops = {
+> +	.is_visible = sbrmi_is_visible,
+> +	.read = sbrmi_read,
+> +	.write = sbrmi_write,
+> +};
+> +
+> +static const struct hwmon_chip_info sbrmi_chip_info = {
+> +	.ops = &sbrmi_hwmon_ops,
+> +	.info = sbrmi_info,
+> +};
+> +
+> +static int sbrmi_get_max_pwr_limit(struct sbrmi_data *data)
+> +{
+> +	struct sbrmi_mailbox_msg msg = { 0 };
+> +	int ret;
+> +
+> +	msg.cmd = SBRMI_READ_PKG_MAX_PWR_LIMIT;
+> +	msg.read = true;
+> +	ret = rmi_mailbox_xfer(data, &msg);
+> +	if (ret < 0)
+> +		return ret;
+> +	data->pwr_limit_max = msg.data_out;
+> +
+> +	return ret;
+> +}
+> +
+> +static int sbrmi_probe(struct i2c_client *client,
+> +		       const struct i2c_device_id *id)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct device *hwmon_dev;
+> +	struct sbrmi_data *data;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(struct sbrmi_data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->client = client;
+> +	mutex_init(&data->lock);
+> +
+> +	/* Enable alert for SB-RMI sequence */
+> +	ret = sbrmi_enable_alert(client);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Cache maximum power limit */
+> +	ret = sbrmi_get_max_pwr_limit(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
+> +							 &sbrmi_chip_info, NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static const struct i2c_device_id sbrmi_id[] = {
+> +	{"sbrmi", 0},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, sbrmi_id);
+> +
+> +static const struct of_device_id __maybe_unused sbrmi_of_match[] = {
+> +	{
+> +		.compatible = "amd,sbrmi",
+> +	},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, sbrmi_of_match);
+> +
+> +static struct i2c_driver sbrmi_driver = {
+> +	.class = I2C_CLASS_HWMON,
+> +	.driver = {
+> +		.name = "sbrmi",
+> +		.of_match_table = of_match_ptr(sbrmi_of_match),
+> +	},
+> +	.probe = sbrmi_probe,
+> +	.id_table = sbrmi_id,
+> +};
+> +
+> +module_i2c_driver(sbrmi_driver);
+> +
+> +MODULE_AUTHOR("Akshay Gupta <akshay.gupta@amd.com>");
+> +MODULE_DESCRIPTION("Hwmon driver for AMD SB-RMI emulated sensor");
+> +MODULE_LICENSE("GPL");
 > 
 
