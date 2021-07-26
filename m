@@ -2,178 +2,139 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC747C432BE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jul 2021 13:36:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1CA9C4338F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jul 2021 13:42:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6AB260C51
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jul 2021 13:36:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C9BC60E08
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jul 2021 13:42:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbhGZM4Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Jul 2021 08:56:16 -0400
-Received: from mail-dm6nam12on2058.outbound.protection.outlook.com ([40.107.243.58]:36160
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232527AbhGZM4P (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Jul 2021 08:56:15 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Srx5/xfyb06XVycsuWWHhnz/4k3CWuEkpoKddQiKN5l9+kCXHJaHyMXgcM/UAzBb/F0Ab8G7o6Y54PkCPrsxp2ZUTnM/w0bwoU48Q+gJq6K/OuHNqdhmzPwhBHi2yaG1GR77myK1PVLLbtWtdJGPkFm2b1YowyUCR/qc6V4cULEJWNqwkxdoIR5Ca3Z/w+A4M+gYOPLgdX3qWn/NGD1TT33QIs+m7MGVs4r495NO+unkqGpP3zR9vIXkdYs2WCDqqWnGQ+tx9RScd6lL/a9TtPKue9dspwy+560agZn+fHSNK9i7Ew0XJxPPnpARxECX8q9Siq1B0xe7lxjaeAYU8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RyTJOZHOhVaO+t4MTcz5G7me7LAA0+sQ4qQYFzQXi4w=;
- b=A2ghZD6rPeYsYvSFBjbPkO81ftVKZMOG1tpNZ1tye06hnWItphEungcqjXQiouBzhZh8v34o3Xjpl2hd+mRNU51J4NbsoTec0EPm8EH3hAOXk8KI/l0WgYsfxZFcm8S7gKMm25gJ9RPU0j+FYCM3kvqndzeyjbBoqURH+q5pR4jcCevGgf5gPH6HUhM5dKnQnrEcOceoAiLYnN0MzDatFfbDYDx/+wLJEDEKgA9ttWEZaCeCfDvb0DbS3N/OZWFSI+GlB4BUzc+On6nHxjxtmzre+XsSb511BwkdbjqyFjH4rRDs7qaMMc6PqlSvLNe6rW7ESYUyvfCZwfPZ6JaPUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RyTJOZHOhVaO+t4MTcz5G7me7LAA0+sQ4qQYFzQXi4w=;
- b=RJVQnuaueOpz2oCICowkoiYnaPrX4rJJ3ZJ6lOoXBZuAgljfacRkqAcGXxyUnq810NgPDEec9A67ibpWcf9zx9kdgpmyYEZeDzAYcVGHGeRSmtsG3Li0+ooy4T9Gj7phkhL3+YwAe53ZjqEZiuf5QFxbjuzQ9b0C8Y6e4IMsisk=
-Received: from MWHPR10CA0049.namprd10.prod.outlook.com (2603:10b6:300:2c::11)
- by SN6PR12MB2605.namprd12.prod.outlook.com (2603:10b6:805:6a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.25; Mon, 26 Jul
- 2021 13:36:42 +0000
-Received: from CO1NAM11FT047.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:2c:cafe::c3) by MWHPR10CA0049.outlook.office365.com
- (2603:10b6:300:2c::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.26 via Frontend
- Transport; Mon, 26 Jul 2021 13:36:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT047.mail.protection.outlook.com (10.13.174.132) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4352.24 via Frontend Transport; Mon, 26 Jul 2021 13:36:41 +0000
-Received: from milan-ETHANOL-X.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Mon, 26 Jul
- 2021 08:36:39 -0500
-From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
-To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <linux@roeck-us.net>, <robh@kernel.org>, <jdelvare@suse.com>,
-        <broonie@kernel.org>, Akshay Gupta <Akshay.Gupta@amd.com>,
-        "Naveen Krishna Chatradhi" <nchatrad@amd.com>
-Subject: [PATCH v4 3/3] dt-bindings: sbrmi: Add SB-RMI hwmon driver bindings
-Date:   Mon, 26 Jul 2021 19:06:15 +0530
-Message-ID: <20210726133615.9709-3-nchatrad@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210726133615.9709-1-nchatrad@amd.com>
-References: <20210625132544.18094-1-nchatrad@amd.com>
- <20210726133615.9709-1-nchatrad@amd.com>
+        id S234272AbhGZNCT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Jul 2021 09:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234307AbhGZNBl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 26 Jul 2021 09:01:41 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A006C061760
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Jul 2021 06:42:06 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id p38so5045705qvp.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Jul 2021 06:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=s/McWaaWhTc4FDUYmmf7GC4U+4W8IHxKcvTXe2ZT1/I=;
+        b=PbdqbkqXibXY5QdM4jnVCtl6+FcU2QkNCMwchlvmTmeu8gJu1W6nHWQhr2vSqu335n
+         gm8ZCxnPJOPJNUV0o2IFFvbFC71s9JTOMX6v4peK3Nt5KNEbpRBCHkHIyR8N0x0BTar0
+         SKSWur+TzcaoWCuUsmxIbJuVdijIADWRi71Kh6VGgPEpW+CLoGhhCzPyXMXfR/co03/H
+         ZCC3TDibtdeX07hitNnpeZCtD7LZPEtCrgmiZEcYqXPqFRPHBhoLV0b8rfueEH8IHWSd
+         ol7CPZVbzVpxSQp49bB1DrlIu49/8e+9RsgRIOGduDtmETbYCSZjtzxC2IqlSWssAjNr
+         Jzkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=s/McWaaWhTc4FDUYmmf7GC4U+4W8IHxKcvTXe2ZT1/I=;
+        b=sN52tSLiigFo36l1uC+k7wWCesJhRW4GlVbCuXMvxOE76ueudSyyGIbJVvGLy/K0s2
+         Kvn6hzyKXKrhL32R5SM+X0d3VOBnZNF5hGueaauo9MENicej1QfqoDcCgEnzL0aCIPJG
+         LecHybEcBXD3v33NPcd9imaRMpefKcLL98+6MO9e18veGmH3v+w9UGAlQdilPBPFeXFf
+         dqWFc3oQHLEQh3JVh9dvKCoY/lWBI3hiWKW7wWy3XD+FDewXm7sxK6nYP0IEUg8NnOdJ
+         37alvTWoKkKGyLFoe9921X56UYXj/Fajk46C9mi7fX5Jy7CEjL9fEp/ZcQmlHyss6upY
+         YWdw==
+X-Gm-Message-State: AOAM530c5VWxC3GFK41hDn/wPG+uTBtpU1j5z6chcf4m6lfidBY/TD74
+        nn9W4CO4rYF5KHiTlT9i6o/dQ6viefI=
+X-Google-Smtp-Source: ABdhPJyEhOhtvMy/jWMXiGEEJ+UNqfpHOT02mV+r1YgrrsYevn3dOHqA7R5dFprpltPZHSypPjt1nQ==
+X-Received: by 2002:a05:6214:29c7:: with SMTP id gh7mr17901991qvb.36.1627306925451;
+        Mon, 26 Jul 2021 06:42:05 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b23sm16117395qkl.113.2021.07.26.06.42.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jul 2021 06:42:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 0/5] hwmon: Add driver for MAX6620 Fan controller
+To:     "Balac, Arun Saravanan" <ArunSaravanan.Balach@Dell.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <MW2PR1901MB20287B190088EC2608094AF2A61B9@MW2PR1901MB2028.namprd19.prod.outlook.com>
+ <c058d3c0-2977-00cc-fba8-2eb81b28095a@roeck-us.net>
+ <MW2PR1901MB2028749607502C9E63FC25AEA6E89@MW2PR1901MB2028.namprd19.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <324a2bad-81b6-422d-d327-4969755363b6@roeck-us.net>
+Date:   Mon, 26 Jul 2021 06:42:03 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 163f18e9-395f-46fc-0c9d-08d9503a674f
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2605:
-X-Microsoft-Antispam-PRVS: <SN6PR12MB2605B97C13FB7370626E34D3E8E89@SN6PR12MB2605.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2iNh5i8Is9OQlM7j10omxcrc9aQWgRc15BdR8Q/VQVKxGIjdvJanFGmh9HLP32NIqIFG2t+CXGy4ojnpw4fAE8UXlNn0EecrY9SEpkjPG6cHyYhamX+d1diVhzKIjHczZB7uO3wlpAE50SkDszBcz+Kv9E7l9t+E7Vfs4BZbhyRLk5Nfkc89xPjK91nN+Lf+40hM4BDKAGJMOFWoWBOlbskhThl9HXajUi2XYimGkfZG49ujCVpj6Pm7fXrYuj//q8vDhYqD4uZ8/3nwULBkOSGBAt6DvZMvwiZNdB8wuAgFRkJrE+KhTnXhW+A7sMzIdmen1+DvNz4+OasGH0yU/yujRXHAnLI1xkVQK7PbstmKWKaKaicDf+TtOrl2RZHlFf7Wwjx97r4fFnfE+41J7YSVyXuBAA9JvbVVdCiGBSRXAXaXYjmQ+xrllYVG+gZczFPyAjbu3NEEWqgV75ntQml2SaFracAr+KEfLXWez8/hYQpScqsM4cWCD1VxtSayKrnkAsLR44OmCAN1hsfFXtJxWBto/mV2wKu265uIOB7HI295tsFW5rZXyw/P/q6JMYSibI55jsXngugGMF5jrzDyuyXAR+BA6Mgvjpk8V/yWI+uNT7it/CKopyWLvXfE89/L8rKBcs/lNpyC8BqYCDFAR2SMRMfjUV2bVvdXYqyudlA9crpor5c0UA3oen+A9o4FKTg1GB4HbUgcuAJIz6Q/Jt+K9II/1JAVnu+psSqRAL6b2+t83WjuaLtHKl6I3VSdvokm2E77ecb/diW+HEc27MzZqwla08FV+MOJqcMA8/gdlEzoF0AZ/bUISjU1
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(396003)(346002)(136003)(376002)(39860400002)(46966006)(36840700001)(6666004)(36860700001)(82310400003)(336012)(426003)(70206006)(54906003)(47076005)(83380400001)(81166007)(36756003)(82740400003)(966005)(478600001)(2616005)(110136005)(7696005)(8936002)(316002)(5660300002)(186003)(1076003)(356005)(26005)(2906002)(4326008)(16526019)(70586007)(8676002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2021 13:36:41.9535
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 163f18e9-395f-46fc-0c9d-08d9503a674f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT047.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2605
+In-Reply-To: <MW2PR1901MB2028749607502C9E63FC25AEA6E89@MW2PR1901MB2028.namprd19.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Akshay Gupta <Akshay.Gupta@amd.com>
+On 7/26/21 12:47 AM, Balac, Arun Saravanan wrote:
+> Thank you for the review comments.
+> Am currently working on the suggested changes and will submit the same for your review.
+> 
+> Request your insights on the recommended method to include the author information of the earlier patches,
+> in the commit message while squashing them into one.
+> 
 
-- Document device tree bindings for AMD SB-RMI emulated service.
+Either "based on ..." in the commit description or, more formally, "Originally-from:".
 
-Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
-Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
----
-Changes since v3:
-None
+Guenter
 
- .../devicetree/bindings/hwmon/amd,sbrmi.yaml  | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
-
-diff --git a/Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml b/Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
-new file mode 100644
-index 000000000000..7598b083979c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/amd,sbrmi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: >
-+  Sideband Remote Management Interface (SB-RMI) compliant
-+  AMD SoC power device.
-+
-+maintainers:
-+  - Akshay Gupta <Akshay.Gupta@amd.com>
-+
-+description: |
-+  SB Remote Management Interface (SB-RMI) is an SMBus compatible
-+  interface that reports AMD SoC's Power (normalized Power) using,
-+  Mailbox Service Request and resembles a typical 8-pin remote power
-+  sensor's I2C interface to BMC. The power attributes in hwmon
-+  reports power in microwatts.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - amd,sbrmi
-+
-+  reg:
-+    maxItems: 1
-+    description: |
-+      I2C bus address of the device as specified in Section SBI SMBus Address
-+      of the SoC register reference. The SB-RMI address is normally 78h for
-+      socket 0 and 70h for socket 1, but it could vary based on hardware
-+      address select pins.
-+      \[open source SoC register reference\]
-+        https://www.amd.com/en/support/tech-docs?keyword=55898
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sbrmi@3c {
-+                compatible = "amd,sbrmi";
-+                reg = <0x3c>;
-+        };
-+    };
-+...
--- 
-2.17.1
+> Regards,
+> Arun Saravanan
+> 
+> -----Original Message-----
+> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> Sent: Tuesday, July 6, 2021 6:42 PM
+> To: Balac, Arun Saravanan; jdelvare@suse.com
+> Cc: linux-hwmon@vger.kernel.org
+> Subject: Re: [PATCH 0/5] hwmon: Add driver for MAX6620 Fan controller
+> 
+> 
+> On 7/6/21 6:01 AM, Balac, Arun Saravanan wrote:
+>> From: Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
+>>
+>> Add driver for MAX6620 Fan controller
+>>
+>> Arun Saravanan Balachandran (2):
+>>     Add attributes in MAX6620 driver to retrieve fan fault status
+>>     Update MAX6620 driver as per linux code guidelines
+>>
+>> Cumulus Networks (2):
+>>     Driver for MAX6620 Fan sensor
+>>     MAX6620 fix rpm calculation accuracy
+>>    
+>> Shuotian Cheng (1):
+>>     Update MAX6620 driver to support newer kernel version
+>>
+>>    drivers/hwmon/Kconfig   |  10 +
+>>    drivers/hwmon/Makefile  |   1 +
+>>    drivers/hwmon/max6620.c | 625 ++++++++++++++++++++++++++++++++++++++++
+>>    3 files changed, 636 insertions(+)
+>>    create mode 100644 drivers/hwmon/max6620.c
+>>
+>>
+>> base-commit: 303392fd5c160822bf778270b28ec5ea50cab2b4
+>>
+> Please squash all patches into one, and please use
+> devm_hwmon_device_register_with_info to register the hardware
+> monitoring device.
+> 
+> Also please follow the guidelines in
+> Documentation/hwmon/submitting-patches.rst.
+> 
+> Thanks,
+> Guenter
+> 
 
