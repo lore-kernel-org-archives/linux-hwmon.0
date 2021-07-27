@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 793E8C4320A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jul 2021 08:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C52BC4338F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jul 2021 08:49:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 569656056B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jul 2021 08:46:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32C366124F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jul 2021 08:49:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235954AbhG0IqI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 27 Jul 2021 04:46:08 -0400
-Received: from mx0a-00268f01.pphosted.com ([148.163.148.236]:43232 "EHLO
+        id S236014AbhG0Itq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Jul 2021 04:49:46 -0400
+Received: from mx0a-00268f01.pphosted.com ([148.163.148.236]:43934 "EHLO
         mx0a-00268f01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235920AbhG0IqH (ORCPT
+        by vger.kernel.org with ESMTP id S236011AbhG0Itp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Jul 2021 04:46:07 -0400
-X-Greylist: delayed 5894 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Jul 2021 04:46:06 EDT
+        Tue, 27 Jul 2021 04:49:45 -0400
 Received: from pps.filterd (m0165118.ppops.net [127.0.0.1])
-        by mx0a-00268f01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16R6wPui017422;
-        Tue, 27 Jul 2021 07:06:54 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
-        by mx0a-00268f01.pphosted.com with ESMTP id 3a236m1nq0-1
+        by mx0a-00268f01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16R8msco003843;
+        Tue, 27 Jul 2021 08:49:05 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
+        by mx0a-00268f01.pphosted.com with ESMTP id 3a236m1x5g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 07:06:54 +0000
+        Tue, 27 Jul 2021 08:49:04 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gmfPNYx4/VH2AwNEgj/09tgn3ij74KhJhFU8fBko+IOphZOdenT1vL0tKiJ4Ml7wgDatFrl6AMwi1SO10L97AGv3nzP6WgMjPAr4clP2h1A/a5LY4eWX7OOYI8Z8p1SRiAwEl8a3CPkONYt9RLms/j8Oc+lIG0362aQdXqGxZaXltiYoes8/MVNW0l3v3XZGA7KAIPucMDQgkFr9qLf5I6ZgI87phOdAw7/gxVk1U/Gl4q43PvszgiTDHpufSiepQBrG+Qct17VK4RnoOi6JbWQlq/plqp1PsvNBvB+f+qBvdUzAqofNM4h4A53p7OzyLKPfq95emNWQH/O/ZmUTtg==
+ b=OAWinKmnOMy0zrz/+2h0x8yPaM+witIimarcRI0qK1NuTJo4I2ZCLLPThSgiFtzDkx0doly79KTlFf3MV9nMZK5MRoB7+9CM2+l9Fk4w3U3IZ/rdwhcrS7k8OCQ2JBarkJbnSPan5JQAbV/A8WvktV4THpd5vpCcI9H9o0qLQxvF7O3bXtlX6WFvbk67WF0Zo0oxuve0GbA54UHRjTtvpKv9aBSAULF5fJRxKhUJkUwg3h1yFDlpA25/kL0fCCtALySSZtiD9U1BnWR+78/YLghXMTASPY8CoQF3cuF4jDe9tk3ihdn4NxJG1w+SKCXANzqOGDQD6MbHg4LRIAq41Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=18AoYT96Id4iJvpupvxFOeN2xtBlvC66J5gLiODTbGk=;
- b=JapmFeZ0bmD65XrU21g436yo6JRGgcOAxXT+fCZkf5ai52rmc0qabym0mzMtwSnPKVBB9/9FqcChH1j62HF8LyyM1ZOAxCxbvhPoOkwIN3zVlhVl9R9urV4NY9fAUAgXWCALlr5nb7auvw+I+v0jZw5iQhZ2kVYYtLQn6pcpXDnqGd0Rt48EBmHfdlhGO4tt84JuSBeSL/ScIBETUtMgjIxK3dtDs5g2b9nV1uANXeycOZwbanVTmkEsPswv6kzG9GqO1q6p9SAJdJOGNs7p2sbfKNA7NvR0odRkLJmIhBOqZZt9vrkg3e8h+Edzdw0U+++7hW0N5keVi49XAj7hNg==
+ bh=SIeekmVmkH348BhDDh6Kfp4FY9cuKoIki7VwUO7hGJc=;
+ b=IQJyidUEZJ7Wc5mBqLpCLpSAJGc3hwX5KjhjTGtlSHk4JV6C+/L6FrOu/+wh3Y+adhGJb7weAqGNwnL2pN7BzXfUursjgR7CULKKK1sNLV6GoUAb3Ad/cY7zFaMFNK1q7b98tDIXXsBklJnblgajwac0E2En3BeuMnWCIkwavCsqwwXTapArM8QAf79eAuScjkWRXxFfbFKZy1I/3ldh7/Cai2IY+R3eFWHA07NbHBTItiHUZR0z+HAWgyXOobRThDDaoubxAtuEQUHHcXXg5h4BXeiNpP/DHSpZxOVS+cnkhX/OCt0GvJ+Fyt/dK0mHoIBjO4Yxg1OBA0CvP6vY7w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=equinix.com; dmarc=pass action=none header.from=equinix.com;
  dkim=pass header.d=equinix.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=equinixinc.onmicrosoft.com; s=selector2-equinixinc-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=18AoYT96Id4iJvpupvxFOeN2xtBlvC66J5gLiODTbGk=;
- b=COusa5iY14sbDDwmqwNDOFXEGE4kcOCMvvRjHPfg0mXUVzRw3MRQSA2d74aMnX4y9mCjs/AeSMya8DaP6KzOa+bqPe8Jblhj2smaALMfphzPxNueWC1KLf90scB0e0Cea79sTBnEt5Aa7+VE6pBJ88jwaE4DZeM8tGJj1ckXXWI=
-Received: from DM8PR04MB8007.namprd04.prod.outlook.com (2603:10b6:5:314::20)
- by DM8PR04MB7797.namprd04.prod.outlook.com (2603:10b6:8:3f::21) with
+ bh=SIeekmVmkH348BhDDh6Kfp4FY9cuKoIki7VwUO7hGJc=;
+ b=fajAAeWQtxXWO4nbT30s2/7kpAqmG7Zi5GLhAjKKhUp/PqqTbFdT8zsUI8tLmvNteG4uJ9aEmYIi6h12zt2NLkIYTLI034zktExCQFCMtgHJGwTfqQjy9XRtYkuWgtRRibaJ7eZBnfIbIqlJrGxlr042Eco/IJTPpcZ9rQfXJ9s=
+Received: from CH0PR04MB8002.namprd04.prod.outlook.com (2603:10b6:610:f8::16)
+ by CH0PR04MB8131.namprd04.prod.outlook.com (2603:10b6:610:fc::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18; Tue, 27 Jul
- 2021 07:06:52 +0000
-Received: from DM8PR04MB8007.namprd04.prod.outlook.com
- ([fe80::953d:f9ec:b2cc:ca2b]) by DM8PR04MB8007.namprd04.prod.outlook.com
- ([fe80::953d:f9ec:b2cc:ca2b%6]) with mapi id 15.20.4352.032; Tue, 27 Jul 2021
- 07:06:52 +0000
+ 2021 08:49:02 +0000
+Received: from CH0PR04MB8002.namprd04.prod.outlook.com
+ ([fe80::d4d9:64f0:a6bf:9968]) by CH0PR04MB8002.namprd04.prod.outlook.com
+ ([fe80::d4d9:64f0:a6bf:9968%8]) with mapi id 15.20.4352.031; Tue, 27 Jul 2021
+ 08:49:01 +0000
 From:   Zev Weiss <zweiss@equinix.com>
 To:     Iwona Winiarska <iwona.winiarska@intel.com>
 CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -79,14 +78,14 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH 11/14] hwmon: peci: Add cputemp driver
-Thread-Topic: [PATCH 11/14] hwmon: peci: Add cputemp driver
-Thread-Index: AQHXgrX5rzpUzdTFsE2/Bu/x34QZOw==
-Date:   Tue, 27 Jul 2021 07:06:52 +0000
-Message-ID: <20210727070651.GP8018@packtop>
+Subject: Re: [PATCH 07/14] peci: Add peci-aspeed controller driver
+Thread-Topic: [PATCH 07/14] peci: Add peci-aspeed controller driver
+Thread-Index: AQHXgsQ/2U+11kOJzUGhN2GLpjgplA==
+Date:   Tue, 27 Jul 2021 08:49:01 +0000
+Message-ID: <20210727084901.GQ8018@packtop>
 References: <20210712220447.957418-1-iwona.winiarska@intel.com>
- <20210712220447.957418-12-iwona.winiarska@intel.com>
-In-Reply-To: <20210712220447.957418-12-iwona.winiarska@intel.com>
+ <20210712220447.957418-8-iwona.winiarska@intel.com>
+In-Reply-To: <20210712220447.957418-8-iwona.winiarska@intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -94,784 +93,738 @@ X-MS-TNEF-Correlator:
 authentication-results: intel.com; dkim=none (message not signed)
  header.d=none;intel.com; dmarc=none action=none header.from=equinix.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 768376fd-8800-459c-053c-08d950cd1c8f
-x-ms-traffictypediagnostic: DM8PR04MB7797:
-x-microsoft-antispam-prvs: <DM8PR04MB7797FDAD575784E65B4B9FA4C3E99@DM8PR04MB7797.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-office365-filtering-correlation-id: 63f5aeb2-0be1-49ae-328c-08d950db61dd
+x-ms-traffictypediagnostic: CH0PR04MB8131:
+x-microsoft-antispam-prvs: <CH0PR04MB8131FE0371CE452F6CACA6F1C3E99@CH0PR04MB8131.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3631;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +eqQsES9Q8xdhxtmbzoiHFSnjiGgPbfo6eWOHXJQInfbrMovzlmnwJBIyLlEjim1vf/xJID72GzGlnpFlQ3npyQbG1KlMmC1bG6yQXqNnQZJbnyp4dwaRsuY/ow7HsjDk6aHPVmncLtDq18rEzKVcrFpr/QXAWywsaQmM8e4DfE0H8MtOaAF9A5KKFcMKTjn43lIdUVScFY9UgwyY7TlH1QDShFEqd7fqn1g2Ofe1Nc2tbP+6FUof2XAcmo3m8CcR0zxOZQcS8kMr7tLwQrKdZWDop3++BvbNrz/CllMDLpYgEpqd7vK8NZidcfHX3M2Z/A0/DWDdxQgyCu2sZCpzdIL7iRtFpZLYsTkYQdnJ+9ODzJ6g7OKGR3x1zdd1IkiUDGQBud0eezew0t9gth0ko+ZOe9kXIpBDVYRuEjM1wTDJSPcXfooLxM+2Wle0vucO8LjPD2EEU2jmi7N/P6KYbFxNKQY7ev7+u/QNelunjrvJdHmKboQ2fFtd5uIjw9HQZK90yA4iM4Zy4XIp2IRGQwmkfjmIGw8IHw3hbSv+tR1DJ/56SmfIq854SlYEcrbAnR+aK9NolaJXtscd+UB/gbQ4l0SewFnwONGide2dd9mTvuUYusN9tycEhXW+7U/JJ6jsrKtIbzdZ3eJpFM50ZwqNUAsObyeVEVXH8L/lsYjmuaEGPVxfhyOUlBi7Ld+GtNT0zE0LxBdX4P25Q5L2w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8007.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(136003)(376002)(346002)(366004)(39860400002)(396003)(7416002)(122000001)(478600001)(38100700002)(2906002)(6486002)(30864003)(186003)(9686003)(6512007)(71200400001)(26005)(1076003)(8936002)(8676002)(33656002)(83380400001)(6506007)(5660300002)(6916009)(54906003)(86362001)(316002)(33716001)(64756008)(66556008)(66946007)(66476007)(4326008)(66446008)(76116006)(38070700004)(579004);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: kEqcpmqZYX3gxEsoee/QLp0QyW6yU3C5NoJzg+3ATY2UcjuNnuYE0OcahCmZcD8kdnJ6giofF5xYBbu53gO0DZX2yUkKtXxlaF3T7kLKz0crGpJLXpL9FJqMbh7IqOwL+EkDIMcMgnXPPSYDuHPD5zrA9Z6v/cWUC3qPtO7Dc7q1YAPEjInmjlYGiSpy4BtDtpPzcDWMxN0Hy7DPHjv+nGcBB0PtG5ZX3LrtNlyihT4sHtsIYi/Y+d6EyXoAz7uaM9LjNVMNRlgNe9m+9DRZI/ktEpu6pt4kfD9KGp/hNjwH1dkyHLuhUVMgeMJ0/uFQfKenA7kVU6f1sTd/7a3NFhXBzihO23Oc7sRhfirKpVoCyXAmGZdvbstCGAX25im8koZnQBzgMWrKpJtoe3osfne5bLOexlKRPsQNZABydQAxcSN3Jlwa2d0/J0xPTxvuZw6dL5GOBDusAnU+RDQc4ga0RVJjSutLcYW52BsyiBMq6c2E12iyzD/hJJ4KgVTJOZvZCbSG5upfbj4dj4m7puwUZiFJwXKtk6nCS+Yy6m6hqh1NIqSsVMaqQZfzwV2r7KirwQvHvtQzKnoD3GYbCywfmzkagA20utGIjPvhSo8GZPGPt08die7O/vvMQ2kt11FBHopGZSwhnOJ1m+oP7Wn+Q+I2qk6HxMp+Moji9p3vjee4NWJ32dOGTlnmNn7EQWvGVCFX1sheW5pqO6QwMnfWWHodHwe/DDf2jx+5UhM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR04MB8002.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(376002)(366004)(346002)(39860400002)(396003)(136003)(7416002)(122000001)(478600001)(66476007)(38100700002)(2906002)(6486002)(30864003)(186003)(9686003)(71200400001)(6512007)(1076003)(26005)(19627235002)(8936002)(8676002)(83380400001)(6506007)(5660300002)(54906003)(6916009)(33656002)(86362001)(316002)(33716001)(64756008)(66556008)(66946007)(91956017)(66446008)(4326008)(76116006)(87944003)(38070700004)(579004);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OWWmOaJi3fbm8yjUoHbP/jhldml/qDw+Ot8EukcxfRYWetmexUHjEq5XBYIv?=
- =?us-ascii?Q?MFD/qJgTQWx6uQVAmKrTN5V3DhyDYhRFnBWdr5Y3LJAIJ/2NL+tPGoiDOCtu?=
- =?us-ascii?Q?dlACXZFYWg3kigFE/rt5OlXzAU1QtCZL2AGLp0HIqZLLtwIbRWdEXwIbJ+Tj?=
- =?us-ascii?Q?3her+a0zOJrMllsK72IMmeoyB/A/iZZP9o4xAZGcJhT1YhTYNifBeO79AKc4?=
- =?us-ascii?Q?K1Yw+6nnwRwFEm6zoMoF1LRDyVxiEI/aE6i6ouknWHVSbtN/SaPztNfIRLoY?=
- =?us-ascii?Q?vgu7zRoD3VgKCgqQ41mUbm9Ym2u90mPI0dswB59o5u4/RDUcDnBEVywF/6+I?=
- =?us-ascii?Q?/47GJFKDdObJKTfjmWjAG5ef9dCfeS92+D2E8r8NWoCVr5VeiAK2LTZapfV5?=
- =?us-ascii?Q?8DJMn5On8TrUyF0geNl8LP0LCGSn/gXASPvxQYIis/iJTF72E0MdeCpL4t9N?=
- =?us-ascii?Q?d641ovnYKGs+1ErC5j3ZYzLhxAYE4KtxZc2UMehymYycCBunRwQHC/LF780p?=
- =?us-ascii?Q?l7aC4f9wRvrQvTfhPE0EvuMQnaHvye4LzBG4y+9b3fQq+XCBo52HUDGFXSL0?=
- =?us-ascii?Q?K+H23YVgzpahPLZbg2LdfVCOJlndxWYuiLgdXWa8lQwdeh7k3OBTBI0Szr1U?=
- =?us-ascii?Q?s4MJg7i/HgVnL12pAbJ6FfUr1hThxal2UFF0yBuigPGrPGL+Iclz5oSbzGAo?=
- =?us-ascii?Q?TC7RtivcegFYusifte8Ex/x2vrbB+BqDTKr2BpPdioFic+z4z2ITZJqlbmn7?=
- =?us-ascii?Q?TJ6kft8ICENnq/tjEgFM2NgN8aVZk16iIji+52gTxktYBysvZTbmHr/ckPub?=
- =?us-ascii?Q?ZbmsURAw4tgcfawhjVGL8N17qe9LNNkZ8DMjgweiD+jQ1uRRS4n/pFlg9SKX?=
- =?us-ascii?Q?wdLeNNfBhSA26mf65r4LIfhXUOgVTF1bcN4+aNjjT72IP+ZdZXgUkcZVWik3?=
- =?us-ascii?Q?AIhuGhGGpKxXNRsa0b4jxR5bhcvbJUO4VGDcWXkrcYWyn08mkvqKWV7dVYai?=
- =?us-ascii?Q?Gfj9zVkZoIZQRSveOX4P8t8XnbPvFFawjqrWk29mVGskP/JSc7jqyRzp+FFq?=
- =?us-ascii?Q?T2L7UhxSPMrJLesyPODT4ICEhv8QRimer/GkoHim4xcawrbUKecRz6paIDWJ?=
- =?us-ascii?Q?BjWydmsHMpxO5FLvKpVn3r+vOnflw7TEDfdG04y9ryCpC0Y6hfi9wJz8Rznx?=
- =?us-ascii?Q?Vz4HUoPCOMTfGd8YDi0FCOb/PKSYqwfGfeKE6DqayFPcmPI9Pf5PRApZB4Xr?=
- =?us-ascii?Q?bscmQlWkIOkMyw9Wt156FQt2L6IsB0HZvsTd9WB2qgSmO5dmgU3SjN6o0gqS?=
- =?us-ascii?Q?UFYH4evgsVib9t0rJdfURagR?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4BO7me0KFX002Ah1U69QX+RMNgrJije1Lhbtb1bjqTc/VQUSxZABPUu9BFiV?=
+ =?us-ascii?Q?iD5FXuu3/DFliiRmDudC+FH0OFmMd1ODcXjWKkuPlr8CmI5zJYlwHVEvBqHr?=
+ =?us-ascii?Q?cL+rBwNm9F3AmJYndTIRl15L21EcxlSpwMwNH9HYD3Bk27tP0zU1BK/Ct4oH?=
+ =?us-ascii?Q?+tckB7yfaeUGNg63VDEg0ohBLaceCGUH3/Fj/UHvXSkM1TOl+PE/+X7dY56O?=
+ =?us-ascii?Q?sRefhF7EjBcGvJfON9c9tiJXVcswLK8OHGlYuNdg/uvNviK+zEKvrbJyo9Um?=
+ =?us-ascii?Q?Wlegng2O424JuoYk6va51jWpi7aJvTGAhfN0KXUb2uTdB+o1dPuxc9jNx2Qi?=
+ =?us-ascii?Q?Eg7y50ClzT765zvYIxRmP8ryw8U7KYN6GYOfqQwhMopwX3ARphkuhi2AwpG8?=
+ =?us-ascii?Q?wbN/jn+HxhnYOoH0YOw6oulkTFmIoQbrr5SqGgArO3325PrgffqOy0YA2YyU?=
+ =?us-ascii?Q?IDf303jAKSI9tUVKX9ONeNCXKTwc5fVrlbqGWMZenO8lLJqnMOGnjMYVccGl?=
+ =?us-ascii?Q?hlUtbVsBtSECbhSm46p8wxviR9pUJHnXzwLW37H6chE8Uyx81LHW8HQ7RlQc?=
+ =?us-ascii?Q?90JxN9S0CBPC9rredOu5pRSnz4+C/zoSDoLym2CmGrSaPGD8vq3F5Hw8aBZg?=
+ =?us-ascii?Q?dZVECwuMsLOkTLFw+2DVIrtDr4dE7/L0fzjH7C5YfwarVCEbJnyjUf6sM5Bp?=
+ =?us-ascii?Q?Kg6+uMZVVRgBHtS7e7CgYgBG1h2FJlxyNfIt0L4JLyaiIsBjou2jC17tFJXZ?=
+ =?us-ascii?Q?gRX5Fq/iJsryXvppnPMjrUlH/8i8fMRZYeUx6e3rx3cWDlM2e2P/LJiPe5w/?=
+ =?us-ascii?Q?+8/55t2Asxi0fLqPbwE7H8K2vJkMQAFExKdLSOV59EC7e6wsLRGKbTuVvDcl?=
+ =?us-ascii?Q?6DwELbdCe4dAdtIHtpiPhguTQWAYd/zxTAGhz8QsDGm0cf3qedUb3wvozejU?=
+ =?us-ascii?Q?SbtPuElIoJbA6fzIkNTEZn+GFNYFhdWag3tFmMpUIYYp58YA4KvTlsEb3YUh?=
+ =?us-ascii?Q?Qvy5lrvKvA4RszSVuiScLCpAgEoryjRrawYesle9SU0X4BKcgDc2J7ug+i2M?=
+ =?us-ascii?Q?HOot/oD/oLDXbl3EosxKMtIPsQAh0TZuyQnAUNwXaOaqGfCtqCkh6gx9GLow?=
+ =?us-ascii?Q?GtbiowewvdoqDilUqTPezonc8z8yX6WiMnkOzfFwWWI/0tsMreEUxqPxDbNS?=
+ =?us-ascii?Q?UQlWBu4bbyXysomTPPAZa36dV31Yk/78kDYYesAnnOk+gswrKhkgmfEK1PoO?=
+ =?us-ascii?Q?WRuuOQlZ29Fs0tcZR34bgNps1XklE1qfyQwl9NOu62CAsRpzhbRcfx1u+83w?=
+ =?us-ascii?Q?2lv+6HFPxLYN8MpufYyAz/2X?=
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8E9F04616B01BE47A3F0FD586ABB4F53@namprd04.prod.outlook.com>
+Content-ID: <8F04666415CBFC43A8559B6DB1011E30@namprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: equinix.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8007.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 768376fd-8800-459c-053c-08d950cd1c8f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2021 07:06:52.5172
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR04MB8002.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63f5aeb2-0be1-49ae-328c-08d950db61dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2021 08:49:01.8188
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72adb271-2fc7-4afe-a5ee-9de6a59f6bfb
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nZuu2jqbYhlW4fIWBLtgKVJ1SFtjUJpqBusPEhsyjWO6ft7fh1Sw55vYXzOVD5N8+wf41Tixjkc0nECtfmLF9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR04MB7797
-X-Proofpoint-ORIG-GUID: UOE7OGRKfVwWBdTd8FxbX8G2peGexglu
-X-Proofpoint-GUID: UOE7OGRKfVwWBdTd8FxbX8G2peGexglu
+X-MS-Exchange-CrossTenant-userprincipalname: MdUwRAtSfZAwGQnoS0olmJGKJWn0FdTAdszd5ybim5e3TNjhFbql3qU3WmXq+YB87ebLLu8oa3OZqWBcJ0RztQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR04MB8131
+X-Proofpoint-ORIG-GUID: m4U15aQFdElmqq4RsdSiXX7fKhlssCuV
+X-Proofpoint-GUID: m4U15aQFdElmqq4RsdSiXX7fKhlssCuV
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-27_05:2021-07-27,2021-07-27 signatures=0
+ definitions=2021-07-27_06:2021-07-27,2021-07-27 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
  impostorscore=0 mlxscore=0 clxscore=1015 phishscore=0 priorityscore=1501
  spamscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0 adultscore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107270039
+ engine=8.12.0-2107140000 definitions=main-2107270050
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 12, 2021 at 05:04:44PM CDT, Iwona Winiarska wrote:
->Add peci-cputemp driver for Digital Thermal Sensor (DTS) thermal
->readings of the processor package and processor cores that are
->accessible via the PECI interface.
+On Mon, Jul 12, 2021 at 05:04:40PM CDT, Iwona Winiarska wrote:
+>From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 >
->The main use case for the driver (and PECI interface) is out-of-band
->management, where we're able to obtain the DTS readings from an external
->entity connected with PECI, e.g. BMC on server platforms.
+>ASPEED AST24xx/AST25xx/AST26xx SoCs supports the PECI electrical
+>interface (a.k.a PECI wire).
 >
->Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 >Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+>Co-developed-by: Iwona Winiarska <iwona.winiarska@intel.com>
 >Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 >Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 >---
-> MAINTAINERS                  |   7 +
-> drivers/hwmon/Kconfig        |   2 +
-> drivers/hwmon/Makefile       |   1 +
-> drivers/hwmon/peci/Kconfig   |  18 ++
-> drivers/hwmon/peci/Makefile  |   5 +
-> drivers/hwmon/peci/common.h  |  46 ++++
-> drivers/hwmon/peci/cputemp.c | 503 +++++++++++++++++++++++++++++++++++
-> 7 files changed, 582 insertions(+)
-> create mode 100644 drivers/hwmon/peci/Kconfig
-> create mode 100644 drivers/hwmon/peci/Makefile
-> create mode 100644 drivers/hwmon/peci/common.h
-> create mode 100644 drivers/hwmon/peci/cputemp.c
+> MAINTAINERS                           |   9 +
+> drivers/peci/Kconfig                  |   6 +
+> drivers/peci/Makefile                 |   3 +
+> drivers/peci/controller/Kconfig       |  12 +
+> drivers/peci/controller/Makefile      |   3 +
+> drivers/peci/controller/peci-aspeed.c | 501 ++++++++++++++++++++++++++
+> 6 files changed, 534 insertions(+)
+> create mode 100644 drivers/peci/controller/Kconfig
+> create mode 100644 drivers/peci/controller/Makefile
+> create mode 100644 drivers/peci/controller/peci-aspeed.c
 >
 >diff --git a/MAINTAINERS b/MAINTAINERS
->index f47b5f634293..35ba9e3646bd 100644
+>index 47411e2b6336..4ba874afa2fa 100644
 >--- a/MAINTAINERS
 >+++ b/MAINTAINERS
->@@ -14504,6 +14504,13 @@ L:	platform-driver-x86@vger.kernel.org
-> S:	Maintained
-> F:	drivers/platform/x86/peaq-wmi.c
+>@@ -2865,6 +2865,15 @@ S:	Maintained
+> F:	Documentation/hwmon/asc7621.rst
+> F:	drivers/hwmon/asc7621.c
 >
->+PECI HARDWARE MONITORING DRIVERS
+>+ASPEED PECI CONTROLLER
 >+M:	Iwona Winiarska <iwona.winiarska@intel.com>
->+R:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->+L:	linux-hwmon@vger.kernel.org
+>+M:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+>+L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+>+L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
 >+S:	Supported
->+F:	drivers/hwmon/peci/
+>+F:	Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+>+F:	drivers/peci/controller/peci-aspeed.c
 >+
-> PECI SUBSYSTEM
-> M:	Iwona Winiarska <iwona.winiarska@intel.com>
-> R:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->index e3675377bc5d..61c0e3404415 100644
->--- a/drivers/hwmon/Kconfig
->+++ b/drivers/hwmon/Kconfig
->@@ -1507,6 +1507,8 @@ config SENSORS_PCF8591
-> 	  These devices are hard to detect and rarely found on mainstream
-> 	  hardware. If unsure, say N.
+> ASPEED PINCTRL DRIVERS
+> M:	Andrew Jeffery <andrew@aj.id.au>
+> L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+>diff --git a/drivers/peci/Kconfig b/drivers/peci/Kconfig
+>index 601cc3c3c852..0d0ee8009713 100644
+>--- a/drivers/peci/Kconfig
+>+++ b/drivers/peci/Kconfig
+>@@ -12,3 +12,9 @@ menuconfig PECI
 >
->+source "drivers/hwmon/peci/Kconfig"
+> 	  This support is also available as a module. If so, the module
+> 	  will be called peci.
 >+
-> source "drivers/hwmon/pmbus/Kconfig"
->
-> config SENSORS_PWM_FAN
->diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->index d712c61c1f5e..f52331f212ed 100644
->--- a/drivers/hwmon/Makefile
->+++ b/drivers/hwmon/Makefile
->@@ -202,6 +202,7 @@ obj-$(CONFIG_SENSORS_WM8350)	+=3D wm8350-hwmon.o
-> obj-$(CONFIG_SENSORS_XGENE)	+=3D xgene-hwmon.o
->
-> obj-$(CONFIG_SENSORS_OCC)	+=3D occ/
->+obj-$(CONFIG_SENSORS_PECI)	+=3D peci/
-> obj-$(CONFIG_PMBUS)		+=3D pmbus/
->
-> ccflags-$(CONFIG_HWMON_DEBUG_CHIP) :=3D -DDEBUG
->diff --git a/drivers/hwmon/peci/Kconfig b/drivers/hwmon/peci/Kconfig
+>+if PECI
+>+
+>+source "drivers/peci/controller/Kconfig"
+>+
+>+endif # PECI
+>diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
+>index 2bb2f51bcda7..621a993e306a 100644
+>--- a/drivers/peci/Makefile
+>+++ b/drivers/peci/Makefile
+>@@ -3,3 +3,6 @@
+> # Core functionality
+> peci-y :=3D core.o sysfs.o
+> obj-$(CONFIG_PECI) +=3D peci.o
+>+
+>+# Hardware specific bus drivers
+>+obj-y +=3D controller/
+>diff --git a/drivers/peci/controller/Kconfig b/drivers/peci/controller/Kco=
+nfig
 >new file mode 100644
->index 000000000000..e10eed68d70a
+>index 000000000000..8ddbe494677f
 >--- /dev/null
->+++ b/drivers/hwmon/peci/Kconfig
->@@ -0,0 +1,18 @@
+>+++ b/drivers/peci/controller/Kconfig
+>@@ -0,0 +1,12 @@
 >+# SPDX-License-Identifier: GPL-2.0-only
 >+
->+config SENSORS_PECI_CPUTEMP
->+	tristate "PECI CPU temperature monitoring client"
->+	depends on PECI
->+	select SENSORS_PECI
->+	select PECI_CPU
+>+config PECI_ASPEED
+>+	tristate "ASPEED PECI support"
+>+	depends on ARCH_ASPEED || COMPILE_TEST
+>+	depends on OF
+>+	depends on HAS_IOMEM
 >+	help
->+	  If you say yes here you get support for the generic Intel PECI
->+	  cputemp driver which provides Digital Thermal Sensor (DTS) thermal
->+	  readings of the CPU package and CPU cores that are accessible via
->+	  the processor PECI interface.
+>+	  Enable this driver if you want to support ASPEED PECI controller.
 >+
->+	  This driver can also be built as a module. If so, the module
->+	  will be called peci-cputemp.
->+
->+config SENSORS_PECI
->+	tristate
->diff --git a/drivers/hwmon/peci/Makefile b/drivers/hwmon/peci/Makefile
+>+	  This driver can be also build as a module. If so, the module
+>+	  will be called peci-aspeed.
+>diff --git a/drivers/peci/controller/Makefile b/drivers/peci/controller/Ma=
+kefile
 >new file mode 100644
->index 000000000000..e8a0ada5ab1f
+>index 000000000000..022c28ef1bf0
 >--- /dev/null
->+++ b/drivers/hwmon/peci/Makefile
->@@ -0,0 +1,5 @@
+>+++ b/drivers/peci/controller/Makefile
+>@@ -0,0 +1,3 @@
 >+# SPDX-License-Identifier: GPL-2.0-only
 >+
->+peci-cputemp-y :=3D cputemp.o
->+
->+obj-$(CONFIG_SENSORS_PECI_CPUTEMP)	+=3D peci-cputemp.o
->diff --git a/drivers/hwmon/peci/common.h b/drivers/hwmon/peci/common.h
+>+obj-$(CONFIG_PECI_ASPEED)	+=3D peci-aspeed.o
+>diff --git a/drivers/peci/controller/peci-aspeed.c b/drivers/peci/controll=
+er/peci-aspeed.c
 >new file mode 100644
->index 000000000000..54580c100d06
+>index 000000000000..888b46383ea4
 >--- /dev/null
->+++ b/drivers/hwmon/peci/common.h
->@@ -0,0 +1,46 @@
->+/* SPDX-License-Identifier: GPL-2.0-only */
->+/* Copyright (c) 2021 Intel Corporation */
->+
->+#include <linux/types.h>
->+
->+#ifndef __PECI_HWMON_COMMON_H
->+#define __PECI_HWMON_COMMON_H
->+
->+#define UPDATE_INTERVAL_DEFAULT		HZ
->+
->+/**
->+ * struct peci_sensor_data - PECI sensor information
->+ * @valid: flag to indicate the sensor value is valid
->+ * @value: sensor value in milli units
->+ * @last_updated: time of the last update in jiffies
->+ */
->+struct peci_sensor_data {
->+	unsigned int valid;
-
-From what I can see it looks like the 'valid' member here is strictly a
-one-shot has-this-value-ever-been-set indicator, which seems a bit
-wasteful to keep around forever post initialization; couldn't the same
-information be inferred from checking last_updated !=3D 0 or something?
-
->+	s32 value;
->+	unsigned long last_updated;
->+};
->+
->+/**
->+ * peci_sensor_need_update() - check whether sensor update is needed or n=
-ot
->+ * @sensor: pointer to sensor data struct
->+ *
->+ * Return: true if update is needed, false if not.
->+ */
->+
->+static inline bool peci_sensor_need_update(struct peci_sensor_data *senso=
-r)
->+{
->+	return !sensor->valid ||
->+	       time_after(jiffies, sensor->last_updated + UPDATE_INTERVAL_DEFAUL=
-T);
->+}
->+
->+/**
->+ * peci_sensor_mark_updated() - mark the sensor is updated
->+ * @sensor: pointer to sensor data struct
->+ */
->+static inline void peci_sensor_mark_updated(struct peci_sensor_data *sens=
-or)
->+{
->+	sensor->valid =3D 1;
->+	sensor->last_updated =3D jiffies;
->+}
->+
->+#endif /* __PECI_HWMON_COMMON_H */
->diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
->new file mode 100644
->index 000000000000..56a526471687
->--- /dev/null
->+++ b/drivers/hwmon/peci/cputemp.c
->@@ -0,0 +1,503 @@
+>+++ b/drivers/peci/controller/peci-aspeed.c
+>@@ -0,0 +1,501 @@
 >+// SPDX-License-Identifier: GPL-2.0-only
+>+// Copyright (C) 2012-2017 ASPEED Technology Inc.
 >+// Copyright (c) 2018-2021 Intel Corporation
 >+
->+#include <linux/auxiliary_bus.h>
 >+#include <linux/bitfield.h>
->+#include <linux/bitops.h>
->+#include <linux/hwmon.h>
+>+#include <linux/clk.h>
+>+#include <linux/delay.h>
+>+#include <linux/interrupt.h>
+>+#include <linux/io.h>
+>+#include <linux/iopoll.h>
 >+#include <linux/jiffies.h>
 >+#include <linux/module.h>
+>+#include <linux/of.h>
 >+#include <linux/peci.h>
->+#include <linux/peci-cpu.h>
->+#include <linux/units.h>
->+#include <linux/x86/intel-family.h>
+>+#include <linux/platform_device.h>
+>+#include <linux/reset.h>
 >+
->+#include "common.h"
+>+#include <asm/unaligned.h>
 >+
->+#define CORE_NUMS_MAX		64
->+
->+#define DEFAULT_CHANNEL_NUMS	5
+>+/* ASPEED PECI Registers */
+>+/* Control Register */
+>+#define ASPEED_PECI_CTRL			0x00
+>+#define   ASPEED_PECI_CTRL_SAMPLING_MASK	GENMASK(19, 16)
+>+#define   ASPEED_PECI_CTRL_READ_MODE_MASK	GENMASK(13, 12)
+>+#define   ASPEED_PECI_CTRL_READ_MODE_COUNT	BIT(12)
+>+#define   ASPEED_PECI_CTRL_READ_MODE_DBG	BIT(13)
 
-DEFAULT_ seems like a slightly odd prefix for this (it's not something
-that can really be overridden or anything); would BASE_ perhaps be a bit
-more appropriate?
+Nitpick: might be nice to keep things in a consistent descending order
+here (13 then 12).
 
->+#define CORETEMP_CHANNEL_NUMS	CORE_NUMS_MAX
->+#define CPUTEMP_CHANNEL_NUMS	(DEFAULT_CHANNEL_NUMS + CORETEMP_CHANNEL_NUM=
-S)
->+
->+#define TEMP_TARGET_FAN_TEMP_MASK	GENMASK(15, 8)
->+#define TEMP_TARGET_REF_TEMP_MASK	GENMASK(23, 16)
->+#define TEMP_TARGET_TJ_OFFSET_MASK	GENMASK(29, 24)
->+
->+#define DTS_MARGIN_MASK		GENMASK(15, 0)
->+#define PCS_MODULE_TEMP_MASK	GENMASK(15, 0)
->+
->+#define DTS_FIXED_POINT_FRACTION	64
->+
->+struct resolved_cores_reg {
->+	u8 bus;
->+	u8 dev;
->+	u8 func;
->+	u8 offset;
->+};
->+
->+struct cpu_info {
->+	struct resolved_cores_reg *reg;
->+	u8 min_peci_revision;
+>+#define   ASPEED_PECI_CTRL_CLK_SOURCE_MASK	BIT(11)
 
-As with the dimmtemp driver, min_peci_revision appears unused here,
-though in this case if it were removed there'd only be one (pointer)
-member left in struct cpu_info, so we could perhaps remove it as well
-and then also a level of indirection in peci_cputemp_ids/cpu_{hsx,icx}
-too?
+_MASK suffix seems out of place on this one.
 
->+};
+>+#define   ASPEED_PECI_CTRL_CLK_DIV_MASK		GENMASK(10, 8)
+>+#define   ASPEED_PECI_CTRL_INVERT_OUT		BIT(7)
+>+#define   ASPEED_PECI_CTRL_INVERT_IN		BIT(6)
+>+#define   ASPEED_PECI_CTRL_BUS_CONTENT_EN	BIT(5)
+
+It *is* already kind of a long macro name, but abbreviating "contention"
+to "content" seems a bit confusing; I'd suggest keeping the extra three
+characters (or maybe drop the _EN suffix if you want to avoid making it
+even longer).
+
+>+#define   ASPEED_PECI_CTRL_PECI_EN		BIT(4)
+>+#define   ASPEED_PECI_CTRL_PECI_CLK_EN		BIT(0)
 >+
->+struct peci_cputemp {
->+	struct peci_device *peci_dev;
+>+/* Timing Negotiation Register */
+>+#define ASPEED_PECI_TIMING_NEGOTIATION		0x04
+>+#define   ASPEED_PECI_TIMING_MESSAGE_MASK	GENMASK(15, 8)
+>+#define   ASPEED_PECI_TIMING_ADDRESS_MASK	GENMASK(7, 0)
+>+
+>+/* Command Register */
+>+#define ASPEED_PECI_CMD				0x08
+>+#define   ASPEED_PECI_CMD_PIN_MON		BIT(31)
+>+#define   ASPEED_PECI_CMD_STS_MASK		GENMASK(27, 24)
+>+#define     ASPEED_PECI_CMD_STS_ADDR_T_NEGO	0x3
+>+#define   ASPEED_PECI_CMD_IDLE_MASK		\
+>+	  (ASPEED_PECI_CMD_STS_MASK | ASPEED_PECI_CMD_PIN_MON)
+>+#define   ASPEED_PECI_CMD_FIRE			BIT(0)
+>+
+>+/* Read/Write Length Register */
+>+#define ASPEED_PECI_RW_LENGTH			0x0c
+>+#define   ASPEED_PECI_AW_FCS_EN			BIT(31)
+>+#define   ASPEED_PECI_READ_LEN_MASK		GENMASK(23, 16)
+>+#define   ASPEED_PECI_WRITE_LEN_MASK		GENMASK(15, 8)
+>+#define   ASPEED_PECI_TAGET_ADDR_MASK		GENMASK(7, 0)
+
+s/TAGET/TARGET/
+
+>+
+>+/* Expected FCS Data Register */
+>+#define ASPEED_PECI_EXP_FCS			0x10
+>+#define   ASPEED_PECI_EXP_READ_FCS_MASK		GENMASK(23, 16)
+>+#define   ASPEED_PECI_EXP_AW_FCS_AUTO_MASK	GENMASK(15, 8)
+>+#define   ASPEED_PECI_EXP_WRITE_FCS_MASK	GENMASK(7, 0)
+>+
+>+/* Captured FCS Data Register */
+>+#define ASPEED_PECI_CAP_FCS			0x14
+>+#define   ASPEED_PECI_CAP_READ_FCS_MASK		GENMASK(23, 16)
+>+#define   ASPEED_PECI_CAP_WRITE_FCS_MASK	GENMASK(7, 0)
+>+
+>+/* Interrupt Register */
+>+#define ASPEED_PECI_INT_CTRL			0x18
+>+#define   ASPEED_PECI_TIMING_NEGO_SEL_MASK	GENMASK(31, 30)
+>+#define     ASPEED_PECI_1ST_BIT_OF_ADDR_NEGO	0
+>+#define     ASPEED_PECI_2ND_BIT_OF_ADDR_NEGO	1
+>+#define     ASPEED_PECI_MESSAGE_NEGO		2
+>+#define   ASPEED_PECI_INT_MASK			GENMASK(4, 0)
+>+#define   ASPEED_PECI_INT_BUS_TIMEOUT		BIT(4)
+>+#define   ASPEED_PECI_INT_BUS_CONNECT		BIT(3)
+
+s/CONNECT/CONTENTION/
+
+>+#define   ASPEED_PECI_INT_W_FCS_BAD		BIT(2)
+>+#define   ASPEED_PECI_INT_W_FCS_ABORT		BIT(1)
+>+#define   ASPEED_PECI_INT_CMD_DONE		BIT(0)
+>+
+>+/* Interrupt Status Register */
+>+#define ASPEED_PECI_INT_STS			0x1c
+>+#define   ASPEED_PECI_INT_TIMING_RESULT_MASK	GENMASK(29, 16)
+>+	  /* bits[4..0]: Same bit fields in the 'Interrupt Register' */
+>+
+>+/* Rx/Tx Data Buffer Registers */
+>+#define ASPEED_PECI_W_DATA0			0x20
+>+#define ASPEED_PECI_W_DATA1			0x24
+>+#define ASPEED_PECI_W_DATA2			0x28
+>+#define ASPEED_PECI_W_DATA3			0x2c
+>+#define ASPEED_PECI_R_DATA0			0x30
+>+#define ASPEED_PECI_R_DATA1			0x34
+>+#define ASPEED_PECI_R_DATA2			0x38
+>+#define ASPEED_PECI_R_DATA3			0x3c
+>+#define ASPEED_PECI_W_DATA4			0x40
+>+#define ASPEED_PECI_W_DATA5			0x44
+>+#define ASPEED_PECI_W_DATA6			0x48
+>+#define ASPEED_PECI_W_DATA7			0x4c
+>+#define ASPEED_PECI_R_DATA4			0x50
+>+#define ASPEED_PECI_R_DATA5			0x54
+>+#define ASPEED_PECI_R_DATA6			0x58
+>+#define ASPEED_PECI_R_DATA7			0x5c
+>+#define   ASPEED_PECI_DATA_BUF_SIZE_MAX		32
+>+
+>+/* Timing Negotiation */
+>+#define ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT	8
+>+#define ASPEED_PECI_RD_SAMPLING_POINT_MAX	(BIT(4) - 1)
+>+#define ASPEED_PECI_CLK_DIV_DEFAULT		0
+>+#define ASPEED_PECI_CLK_DIV_MAX			(BIT(3) - 1)
+>+#define ASPEED_PECI_MSG_TIMING_DEFAULT		1
+>+#define ASPEED_PECI_MSG_TIMING_MAX		(BIT(8) - 1)
+>+#define ASPEED_PECI_ADDR_TIMING_DEFAULT		1
+>+#define ASPEED_PECI_ADDR_TIMING_MAX		(BIT(8) - 1)
+>+
+>+/* Timeout */
+>+#define ASPEED_PECI_IDLE_CHECK_TIMEOUT_US	(50 * USEC_PER_MSEC)
+>+#define ASPEED_PECI_IDLE_CHECK_INTERVAL_US	(10 * USEC_PER_MSEC)
+>+#define ASPEED_PECI_CMD_TIMEOUT_MS_DEFAULT	(1000)
+>+#define ASPEED_PECI_CMD_TIMEOUT_MS_MAX		(1000)
+>+
+>+struct aspeed_peci {
+>+	struct peci_controller controller;
 >+	struct device *dev;
->+	const char *name;
->+	const struct cpu_info *gen_info;
->+	struct {
->+		struct peci_sensor_data die;
->+		struct peci_sensor_data dts;
->+		struct peci_sensor_data tcontrol;
->+		struct peci_sensor_data tthrottle;
->+		struct peci_sensor_data tjmax;
->+		struct peci_sensor_data core[CORETEMP_CHANNEL_NUMS];
->+	} temp;
->+	const char **coretemp_label;
->+	DECLARE_BITMAP(core_mask, CORE_NUMS_MAX);
+>+	void __iomem *base;
+>+	struct clk *clk;
+>+	struct reset_control *rst;
+>+	int irq;
+>+	spinlock_t lock; /* to sync completion status handling */
+>+	struct completion xfer_complete;
+>+	u32 status;
+>+	u32 cmd_timeout_ms;
+>+	u32 msg_timing;
+>+	u32 addr_timing;
+>+	u32 rd_sampling_point;
+>+	u32 clk_div;
 >+};
 >+
->+enum cputemp_channels {
->+	channel_die,
->+	channel_dts,
->+	channel_tcontrol,
->+	channel_tthrottle,
->+	channel_tjmax,
->+	channel_core,
->+};
->+
->+static const char *cputemp_label[DEFAULT_CHANNEL_NUMS] =3D {
-
-static const char * const cputemp_label?  (That is, const pointer to
-const char, rather than non-const pointer to const char.)
-
->+	"Die",
->+	"DTS",
->+	"Tcontrol",
->+	"Tthrottle",
->+	"Tjmax",
->+};
->+
->+static int get_temp_targets(struct peci_cputemp *priv)
+>+static inline struct aspeed_peci *to_aspeed_peci(struct peci_controller *=
+a)
 >+{
->+	s32 tthrottle_offset, tcontrol_margin;
->+	u32 pcs;
+>+	return container_of(a, struct aspeed_peci, controller);
+>+}
+>+
+>+static void aspeed_peci_init_regs(struct aspeed_peci *priv)
+>+{
+>+	u32 val;
+>+
+>+	val =3D FIELD_PREP(ASPEED_PECI_CTRL_CLK_DIV_MASK, ASPEED_PECI_CLK_DIV_DE=
+FAULT);
+>+	val |=3D ASPEED_PECI_CTRL_PECI_CLK_EN;
+>+	writel(val, priv->base + ASPEED_PECI_CTRL);
+>+	/*
+>+	 * Timing negotiation period setting.
+>+	 * The unit of the programmed value is 4 times of PECI clock period.
+>+	 */
+>+	val =3D FIELD_PREP(ASPEED_PECI_TIMING_MESSAGE_MASK, priv->msg_timing);
+>+	val |=3D FIELD_PREP(ASPEED_PECI_TIMING_ADDRESS_MASK, priv->addr_timing);
+>+	writel(val, priv->base + ASPEED_PECI_TIMING_NEGOTIATION);
+>+
+>+	/* Clear interrupts */
+>+	val =3D readl(priv->base + ASPEED_PECI_INT_STS) | ASPEED_PECI_INT_MASK;
+
+This should be & instead of |, I'm guessing?
+
+>+	writel(val, priv->base + ASPEED_PECI_INT_STS);
+>+
+>+	/* Set timing negotiation mode and enable interrupts */
+>+	val =3D FIELD_PREP(ASPEED_PECI_TIMING_NEGO_SEL_MASK, ASPEED_PECI_1ST_BIT=
+_OF_ADDR_NEGO);
+>+	val |=3D ASPEED_PECI_INT_MASK;
+>+	writel(val, priv->base + ASPEED_PECI_INT_CTRL);
+>+
+>+	val =3D FIELD_PREP(ASPEED_PECI_CTRL_SAMPLING_MASK, priv->rd_sampling_poi=
+nt);
+>+	val |=3D FIELD_PREP(ASPEED_PECI_CTRL_CLK_DIV_MASK, priv->clk_div);
+>+	val |=3D ASPEED_PECI_CTRL_PECI_EN;
+>+	val |=3D ASPEED_PECI_CTRL_PECI_CLK_EN;
+>+	writel(val, priv->base + ASPEED_PECI_CTRL);
+>+}
+>+
+>+static inline int aspeed_peci_check_idle(struct aspeed_peci *priv)
+>+{
+>+	u32 cmd_sts =3D readl(priv->base + ASPEED_PECI_CMD);
+>+
+>+	if (FIELD_GET(ASPEED_PECI_CMD_STS_MASK, cmd_sts) =3D=3D ASPEED_PECI_CMD_=
+STS_ADDR_T_NEGO)
+>+		aspeed_peci_init_regs(priv);
+>+
+>+	return readl_poll_timeout(priv->base + ASPEED_PECI_CMD,
+>+				  cmd_sts,
+>+				  !(cmd_sts & ASPEED_PECI_CMD_IDLE_MASK),
+>+				  ASPEED_PECI_IDLE_CHECK_INTERVAL_US,
+>+				  ASPEED_PECI_IDLE_CHECK_TIMEOUT_US);
+>+}
+>+
+>+static int aspeed_peci_xfer(struct peci_controller *controller,
+>+			    u8 addr, struct peci_request *req)
+>+{
+>+	struct aspeed_peci *priv =3D to_aspeed_peci(controller);
+>+	unsigned long flags, timeout =3D msecs_to_jiffies(priv->cmd_timeout_ms);
+>+	u32 peci_head;
 >+	int ret;
+>+
+>+	if (req->tx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX ||
+>+	    req->rx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX)
+>+		return -EINVAL;
+>+
+>+	/* Check command sts and bus idle state */
+>+	ret =3D aspeed_peci_check_idle(priv);
+>+	if (ret)
+>+		return ret; /* -ETIMEDOUT */
+>+
+>+	spin_lock_irqsave(&priv->lock, flags);
+>+	reinit_completion(&priv->xfer_complete);
+>+
+>+	peci_head =3D FIELD_PREP(ASPEED_PECI_TAGET_ADDR_MASK, addr) |
+>+		    FIELD_PREP(ASPEED_PECI_WRITE_LEN_MASK, req->tx.len) |
+>+		    FIELD_PREP(ASPEED_PECI_READ_LEN_MASK, req->rx.len);
+>+
+>+	writel(peci_head, priv->base + ASPEED_PECI_RW_LENGTH);
+>+
+>+	memcpy_toio(priv->base + ASPEED_PECI_W_DATA0, req->tx.buf,
+>+		    req->tx.len > 16 ? 16 : req->tx.len);
+
+min(req->tx.len, 16) for the third argument there might be a bit
+clearer.
+
+>+	if (req->tx.len > 16)
+>+		memcpy_toio(priv->base + ASPEED_PECI_W_DATA4, req->tx.buf + 16,
+>+			    req->tx.len - 16);
+>+
+>+	dev_dbg(priv->dev, "HEAD : 0x%08x\n", peci_head);
+>+	print_hex_dump_bytes("TX : ", DUMP_PREFIX_NONE, req->tx.buf, req->tx.len=
+);
+>+
+>+	priv->status =3D 0;
+>+	writel(ASPEED_PECI_CMD_FIRE, priv->base + ASPEED_PECI_CMD);
+>+	spin_unlock_irqrestore(&priv->lock, flags);
+>+
+>+	ret =3D wait_for_completion_interruptible_timeout(&priv->xfer_complete, =
+timeout);
+>+	if (ret < 0)
+>+		return ret;
+>+
+>+	if (ret =3D=3D 0) {
+>+		dev_dbg(priv->dev, "Timeout waiting for a response!\n");
+>+		return -ETIMEDOUT;
+>+	}
+>+
+>+	spin_lock_irqsave(&priv->lock, flags);
+>+
+>+	writel(0, priv->base + ASPEED_PECI_CMD);
+>+
+>+	if (priv->status !=3D ASPEED_PECI_INT_CMD_DONE) {
+>+		spin_unlock_irqrestore(&priv->lock, flags);
+>+		dev_dbg(priv->dev, "No valid response!\n");
+>+		return -EIO;
+>+	}
+>+
+>+	spin_unlock_irqrestore(&priv->lock, flags);
+>+
+>+	memcpy_fromio(req->rx.buf, priv->base + ASPEED_PECI_R_DATA0,
+>+		      req->rx.len > 16 ? 16 : req->rx.len);
+
+Likewise, min(req->rx.len, 16) here.
+
+>+	if (req->rx.len > 16)
+>+		memcpy_fromio(req->rx.buf + 16, priv->base + ASPEED_PECI_R_DATA4,
+>+			      req->rx.len - 16);
+>+
+>+	print_hex_dump_bytes("RX : ", DUMP_PREFIX_NONE, req->rx.buf, req->rx.len=
+);
+>+
+>+	return 0;
+>+}
+>+
+>+static irqreturn_t aspeed_peci_irq_handler(int irq, void *arg)
+>+{
+>+	struct aspeed_peci *priv =3D arg;
+>+	u32 status;
+>+
+>+	spin_lock(&priv->lock);
+>+	status =3D readl(priv->base + ASPEED_PECI_INT_STS);
+>+	writel(status, priv->base + ASPEED_PECI_INT_STS);
+>+	priv->status |=3D (status & ASPEED_PECI_INT_MASK);
 >+
 >+	/*
->+	 * Just use only the tcontrol marker to determine if target values need
->+	 * update.
+>+	 * In most cases, interrupt bits will be set one by one but also note
+>+	 * that multiple interrupt bits could be set at the same time.
 >+	 */
->+	if (!peci_sensor_need_update(&priv->temp.tcontrol))
->+		return 0;
+>+	if (status & ASPEED_PECI_INT_BUS_TIMEOUT)
+>+		dev_dbg_ratelimited(priv->dev, "ASPEED_PECI_INT_BUS_TIMEOUT\n");
 >+
->+	ret =3D peci_pcs_read(priv->peci_dev, PECI_PCS_TEMP_TARGET, 0, &pcs);
->+	if (ret)
->+		return ret;
->+
->+	priv->temp.tjmax.value =3D FIELD_GET(TEMP_TARGET_REF_TEMP_MASK, pcs) * M=
-ILLIDEGREE_PER_DEGREE;
->+
->+	tcontrol_margin =3D FIELD_GET(TEMP_TARGET_FAN_TEMP_MASK, pcs);
->+	tcontrol_margin =3D sign_extend32(tcontrol_margin, 7) * MILLIDEGREE_PER_=
-DEGREE;
->+	priv->temp.tcontrol.value =3D priv->temp.tjmax.value - tcontrol_margin;
->+
->+	tthrottle_offset =3D FIELD_GET(TEMP_TARGET_TJ_OFFSET_MASK, pcs) * MILLID=
-EGREE_PER_DEGREE;
->+	priv->temp.tthrottle.value =3D priv->temp.tjmax.value - tthrottle_offset=
-;
->+
->+	peci_sensor_mark_updated(&priv->temp.tcontrol);
->+
->+	return 0;
->+}
->+
->+/*
->+ * Processors return a value of DTS reading in S10.6 fixed point format
->+ * (sign, 10 bits signed integer value, 6 bits fractional).
+>+	if (status & ASPEED_PECI_INT_BUS_CONNECT)
+>+		dev_dbg_ratelimited(priv->dev, "ASPEED_PECI_INT_BUS_CONNECT\n");
 
-This parenthetical reads to me like it's describing 17 bits -- I'm not a
-PECI expert, but from my reading of the (somewhat skimpy) docs I've got
-on it I'd suggest a description more like "sign, 9-bit magnitude, 6-bit
-fraction".
+s/CONNECT/CONTENTION/ here too (in the message string).
 
->+ * Error codes:
->+ *   0x8000: General sensor error
->+ *   0x8001: Reserved
->+ *   0x8002: Underflow on reading value
->+ *   0x8003-0x81ff: Reserved
->+ */
->+static bool dts_valid(s32 val)
->+{
->+	return val < 0x8000 || val > 0x81ff;
+>+
+>+	if (status & ASPEED_PECI_INT_W_FCS_BAD)
+>+		dev_dbg_ratelimited(priv->dev, "ASPEED_PECI_INT_W_FCS_BAD\n");
+>+
+>+	if (status & ASPEED_PECI_INT_W_FCS_ABORT)
+>+		dev_dbg_ratelimited(priv->dev, "ASPEED_PECI_INT_W_FCS_ABORT\n");
+
+Bus contention can of course arise legitimately, and I suppose an
+offline host CPU might result in a timeout, so dbg seems fine for those
+(though as Dan suggests, making some counters available seems like a
+good idea, especially for contention).  Are the FCS error cases
+significant enough to warrant something less likely to go unnoticed
+though?  (e.g. dev_warn_ratelimited() or something?)
+
+>+
+>+	/*
+>+	 * All commands should be ended up with a ASPEED_PECI_INT_CMD_DONE bit
+>+	 * set even in an error case.
+>+	 */
+>+	if (status & ASPEED_PECI_INT_CMD_DONE)
+>+		complete(&priv->xfer_complete);
+>+
+>+	spin_unlock(&priv->lock);
+>+
+>+	return IRQ_HANDLED;
 >+}
 >+
->+static s32 dts_to_millidegree(s32 val)
+>+static void __sanitize_clock_divider(struct aspeed_peci *priv)
 >+{
->+	return sign_extend32(val, 15) * MILLIDEGREE_PER_DEGREE / DTS_FIXED_POINT=
-_FRACTION;
->+}
->+
->+static int get_die_temp(struct peci_cputemp *priv)
->+{
->+	s16 temp;
+>+	u32 clk_div;
 >+	int ret;
 >+
->+	if (!peci_sensor_need_update(&priv->temp.die))
->+		return 0;
+>+	ret =3D device_property_read_u32(priv->dev, "clock-divider", &clk_div);
+>+	if (ret) {
+>+		clk_div =3D ASPEED_PECI_CLK_DIV_DEFAULT;
+>+	} else if (clk_div > ASPEED_PECI_CLK_DIV_MAX) {
+>+		dev_warn(priv->dev, "Invalid clock-divider: %u, Using default: %u\n",
+>+			 clk_div, ASPEED_PECI_CLK_DIV_DEFAULT);
 >+
->+	ret =3D peci_temp_read(priv->peci_dev, &temp);
->+	if (ret)
->+		return ret;
->+
->+	if (!dts_valid(temp))
->+		return -EIO;
->+
->+	/* Note that the tjmax should be available before calling it */
->+	priv->temp.die.value =3D priv->temp.tjmax.value + dts_to_millidegree(tem=
-p);
->+
->+	peci_sensor_mark_updated(&priv->temp.die);
->+
->+	return 0;
->+}
->+
->+static int get_dts(struct peci_cputemp *priv)
->+{
->+	s32 dts_margin;
->+	u32 pcs;
->+	int ret;
->+
->+	if (!peci_sensor_need_update(&priv->temp.dts))
->+		return 0;
->+
->+	ret =3D peci_pcs_read(priv->peci_dev, PECI_PCS_THERMAL_MARGIN, 0, &pcs);
->+	if (ret)
->+		return ret;
->+
->+	dts_margin =3D FIELD_GET(DTS_MARGIN_MASK, pcs);
->+	if (!dts_valid(dts_margin))
->+		return -EIO;
->+
->+	/* Note that the tcontrol should be available before calling it */
->+	priv->temp.dts.value =3D priv->temp.tcontrol.value - dts_to_millidegree(=
-dts_margin);
->+
->+	peci_sensor_mark_updated(&priv->temp.dts);
->+
->+	return 0;
->+}
->+
->+static int get_core_temp(struct peci_cputemp *priv, int core_index)
->+{
->+	s32 core_dts_margin;
->+	u32 pcs;
->+	int ret;
->+
->+	if (!peci_sensor_need_update(&priv->temp.core[core_index]))
->+		return 0;
->+
->+	ret =3D peci_pcs_read(priv->peci_dev, PECI_PCS_MODULE_TEMP, core_index, =
-&pcs);
->+	if (ret)
->+		return ret;
->+
->+	core_dts_margin =3D FIELD_GET(PCS_MODULE_TEMP_MASK, pcs);
->+	if (!dts_valid(core_dts_margin))
->+		return -EIO;
->+
->+	/* Note that the tjmax should be available before calling it */
->+	priv->temp.core[core_index].value =3D
->+		priv->temp.tjmax.value + dts_to_millidegree(core_dts_margin);
->+
->+	peci_sensor_mark_updated(&priv->temp.core[core_index]);
->+
->+	return 0;
->+}
->+
->+static int cputemp_read_string(struct device *dev, enum hwmon_sensor_type=
-s type,
->+			       u32 attr, int channel, const char **str)
->+{
->+	struct peci_cputemp *priv =3D dev_get_drvdata(dev);
->+
->+	if (attr !=3D hwmon_temp_label)
->+		return -EOPNOTSUPP;
->+
->+	*str =3D channel < channel_core ?
->+		cputemp_label[channel] : priv->coretemp_label[channel - channel_core];
->+
->+	return 0;
->+}
->+
->+static int cputemp_read(struct device *dev, enum hwmon_sensor_types type,
->+			u32 attr, int channel, long *val)
->+{
->+	struct peci_cputemp *priv =3D dev_get_drvdata(dev);
->+	int ret, core_index;
->+
->+	ret =3D get_temp_targets(priv);
->+	if (ret)
->+		return ret;
->+
->+	switch (attr) {
->+	case hwmon_temp_input:
->+		switch (channel) {
->+		case channel_die:
->+			ret =3D get_die_temp(priv);
->+			if (ret)
->+				return ret;
->+
->+			*val =3D priv->temp.die.value;
->+			break;
->+		case channel_dts:
->+			ret =3D get_dts(priv);
->+			if (ret)
->+				return ret;
->+
->+			*val =3D priv->temp.dts.value;
->+			break;
->+		case channel_tcontrol:
->+			*val =3D priv->temp.tcontrol.value;
->+			break;
->+		case channel_tthrottle:
->+			*val =3D priv->temp.tthrottle.value;
->+			break;
->+		case channel_tjmax:
->+			*val =3D priv->temp.tjmax.value;
->+			break;
->+		default:
->+			core_index =3D channel - channel_core;
->+			ret =3D get_core_temp(priv, core_index);
->+			if (ret)
->+				return ret;
->+
->+			*val =3D priv->temp.core[core_index].value;
->+			break;
->+		}
->+		break;
->+	case hwmon_temp_max:
->+		*val =3D priv->temp.tcontrol.value;
->+		break;
->+	case hwmon_temp_crit:
->+		*val =3D priv->temp.tjmax.value;
->+		break;
->+	case hwmon_temp_crit_hyst:
->+		*val =3D priv->temp.tjmax.value - priv->temp.tcontrol.value;
->+		break;
->+	default:
->+		return -EOPNOTSUPP;
+>+		clk_div =3D ASPEED_PECI_CLK_DIV_DEFAULT;
 >+	}
 >+
->+	return 0;
+>+	priv->clk_div =3D clk_div;
 >+}
 >+
->+static umode_t cputemp_is_visible(const void *data, enum hwmon_sensor_typ=
-es type,
->+				  u32 attr, int channel)
+
+The naming of these __sanitize_*() functions is a bit inconsistent with
+the rest of the driver -- though given how similar they all look, could
+they instead be refactored into a single helper function taking
+property-name, default-value, and max-value parameters?
+
+>+static void __sanitize_msg_timing(struct aspeed_peci *priv)
 >+{
->+	const struct peci_cputemp *priv =3D data;
->+
->+	if (channel > CPUTEMP_CHANNEL_NUMS)
->+		return 0;
->+
->+	if (channel < channel_core)
->+		return 0444;
->+
->+	if (test_bit(channel - channel_core, priv->core_mask))
->+		return 0444;
->+
->+	return 0;
->+}
->+
->+static int init_core_mask(struct peci_cputemp *priv)
->+{
->+	struct peci_device *peci_dev =3D priv->peci_dev;
->+	struct resolved_cores_reg *reg =3D priv->gen_info->reg;
->+	u64 core_mask;
->+	u32 data;
+>+	u32 msg_timing;
 >+	int ret;
 >+
->+	/* Get the RESOLVED_CORES register value */
->+	switch (peci_dev->info.model) {
->+	case INTEL_FAM6_ICELAKE_X:
->+	case INTEL_FAM6_ICELAKE_D:
->+		ret =3D peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
->+					     reg->func, reg->offset + 4, &data);
->+		if (ret)
->+			return ret;
+>+	ret =3D device_property_read_u32(priv->dev, "msg-timing", &msg_timing);
+>+	if (ret) {
+>+		msg_timing =3D ASPEED_PECI_MSG_TIMING_DEFAULT;
+>+	} else if (msg_timing > ASPEED_PECI_MSG_TIMING_MAX) {
+>+		dev_warn(priv->dev, "Invalid msg-timing : %u, Use default : %u\n",
+>+			 msg_timing, ASPEED_PECI_MSG_TIMING_DEFAULT);
 >+
->+		core_mask =3D (u64)data << 32;
->+
->+		ret =3D peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
->+					     reg->func, reg->offset, &data);
->+		if (ret)
->+			return ret;
->+
->+		core_mask |=3D data;
->+
->+		break;
->+	default:
->+		ret =3D peci_pci_local_read(peci_dev, reg->bus, reg->dev,
->+					  reg->func, reg->offset, &data);
->+		if (ret)
->+			return ret;
->+
->+		core_mask =3D data;
->+
->+		break;
+>+		msg_timing =3D ASPEED_PECI_MSG_TIMING_DEFAULT;
 >+	}
 >+
->+	if (!core_mask)
->+		return -EIO;
->+
->+	bitmap_from_u64(priv->core_mask, core_mask);
->+
->+	return 0;
+>+	priv->msg_timing =3D msg_timing;
 >+}
 >+
->+static int create_temp_label(struct peci_cputemp *priv)
+>+static void __sanitize_addr_timing(struct aspeed_peci *priv)
 >+{
->+	unsigned long core_max =3D find_last_bit(priv->core_mask, CORE_NUMS_MAX)=
+>+	u32 addr_timing;
+>+	int ret;
+>+
+>+	ret =3D device_property_read_u32(priv->dev, "addr-timing", &addr_timing)=
 ;
->+	int i;
+>+	if (ret) {
+>+		addr_timing =3D ASPEED_PECI_ADDR_TIMING_DEFAULT;
+>+	} else if (addr_timing > ASPEED_PECI_ADDR_TIMING_MAX) {
+>+		dev_warn(priv->dev, "Invalid addr-timing : %u, Use default : %u\n",
+>+			 addr_timing, ASPEED_PECI_ADDR_TIMING_DEFAULT);
 >+
->+	priv->coretemp_label =3D devm_kzalloc(priv->dev, core_max * sizeof(char =
-*), GFP_KERNEL);
->+	if (!priv->coretemp_label)
->+		return -ENOMEM;
->+
->+	for_each_set_bit(i, priv->core_mask, CORE_NUMS_MAX) {
->+		priv->coretemp_label[i] =3D devm_kasprintf(priv->dev, GFP_KERNEL, "Core=
- %d", i);
->+		if (!priv->coretemp_label[i])
->+			return -ENOMEM;
+>+		addr_timing =3D ASPEED_PECI_ADDR_TIMING_DEFAULT;
 >+	}
+>+
+>+	priv->addr_timing =3D addr_timing;
+>+}
+>+
+>+static void __sanitize_rd_sampling_point(struct aspeed_peci *priv)
+>+{
+>+	u32 rd_sampling_point;
+>+	int ret;
+>+
+>+	ret =3D device_property_read_u32(priv->dev, "rd-sampling-point", &rd_sam=
+pling_point);
+>+	if (ret) {
+>+		rd_sampling_point =3D ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT;
+>+	} else if (rd_sampling_point > ASPEED_PECI_RD_SAMPLING_POINT_MAX) {
+>+		dev_warn(priv->dev, "Invalid rd-sampling-point: %u, Use default : %u\n"=
+,
+>+			 rd_sampling_point, ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT);
+>+
+>+		rd_sampling_point =3D ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT;
+>+	}
+>+
+>+	priv->rd_sampling_point =3D rd_sampling_point;
+>+}
+>+
+>+static void __sanitize_cmd_timeout(struct aspeed_peci *priv)
+>+{
+>+	u32 timeout;
+>+	int ret;
+>+
+>+	ret =3D device_property_read_u32(priv->dev, "cmd-timeout-ms", &timeout);
+>+	if (ret) {
+>+		timeout =3D ASPEED_PECI_CMD_TIMEOUT_MS_DEFAULT;
+>+	} else if (timeout > ASPEED_PECI_CMD_TIMEOUT_MS_MAX || timeout =3D=3D 0)=
+ {
+>+		dev_warn(priv->dev, "Invalid cmd-timeout-ms: %u, Use default: %u\n",
+>+			 timeout, ASPEED_PECI_CMD_TIMEOUT_MS_DEFAULT);
+>+
+>+		timeout =3D ASPEED_PECI_CMD_TIMEOUT_MS_DEFAULT;
+>+	}
+>+
+>+	priv->cmd_timeout_ms =3D timeout;
+>+}
+>+
+>+static void aspeed_peci_device_property_sanitize(struct aspeed_peci *priv=
+)
+>+{
+>+	__sanitize_clock_divider(priv);
+>+	__sanitize_msg_timing(priv);
+>+	__sanitize_addr_timing(priv);
+>+	__sanitize_rd_sampling_point(priv);
+>+	__sanitize_cmd_timeout(priv);
+>+}
+>+
+>+static void aspeed_peci_disable_clk(void *data)
+>+{
+>+	clk_disable_unprepare(data);
+>+}
+>+
+>+static int aspeed_peci_init_ctrl(struct aspeed_peci *priv)
+>+{
+>+	int ret;
+>+
+>+	priv->clk =3D devm_clk_get(priv->dev, NULL);
+>+	if (IS_ERR(priv->clk))
+>+		return dev_err_probe(priv->dev, PTR_ERR(priv->clk), "Failed to get clk =
+source\n");
+>+
+>+	ret =3D clk_prepare_enable(priv->clk);
+>+	if (ret) {
+>+		dev_err(priv->dev, "Failed to enable clock\n");
+>+		return ret;
+>+	}
+>+
+>+	ret =3D devm_add_action_or_reset(priv->dev, aspeed_peci_disable_clk, pri=
+v->clk);
+>+	if (ret)
+>+		return ret;
+>+
+>+	aspeed_peci_device_property_sanitize(priv);
+>+
+>+	aspeed_peci_init_regs(priv);
 >+
 >+	return 0;
 >+}
 >+
->+static void check_resolved_cores(struct peci_cputemp *priv)
+>+static int aspeed_peci_probe(struct platform_device *pdev)
 >+{
+>+	struct aspeed_peci *priv;
 >+	int ret;
 >+
->+	ret =3D init_core_mask(priv);
->+	if (ret)
->+		return;
->+
->+	ret =3D create_temp_label(priv);
->+	if (ret)
->+		bitmap_zero(priv->core_mask, CORE_NUMS_MAX);
->+}
->+
->+static const struct hwmon_ops peci_cputemp_ops =3D {
->+	.is_visible =3D cputemp_is_visible,
->+	.read_string =3D cputemp_read_string,
->+	.read =3D cputemp_read,
->+};
->+
->+static const u32 peci_cputemp_temp_channel_config[] =3D {
->+	/* Die temperature */
->+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRI=
-T_HYST,
->+	/* DTS margin */
->+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRI=
-T_HYST,
->+	/* Tcontrol temperature */
->+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_CRIT,
->+	/* Tthrottle temperature */
->+	HWMON_T_LABEL | HWMON_T_INPUT,
->+	/* Tjmax temperature */
->+	HWMON_T_LABEL | HWMON_T_INPUT,
->+	/* Core temperature - for all core channels */
->+	[channel_core ... CPUTEMP_CHANNEL_NUMS - 1] =3D HWMON_T_LABEL | HWMON_T_=
-INPUT,
->+	0
->+};
->+
->+static const struct hwmon_channel_info peci_cputemp_temp_channel =3D {
->+	.type =3D hwmon_temp,
->+	.config =3D peci_cputemp_temp_channel_config,
->+};
->+
->+static const struct hwmon_channel_info *peci_cputemp_info[] =3D {
->+	&peci_cputemp_temp_channel,
->+	NULL
->+};
->+
->+static const struct hwmon_chip_info peci_cputemp_chip_info =3D {
->+	.ops =3D &peci_cputemp_ops,
->+	.info =3D peci_cputemp_info,
->+};
->+
->+static int peci_cputemp_probe(struct auxiliary_device *adev,
->+			      const struct auxiliary_device_id *id)
->+{
->+	struct device *dev =3D &adev->dev;
->+	struct peci_device *peci_dev =3D to_peci_device(dev->parent);
->+	struct peci_cputemp *priv;
->+	struct device *hwmon_dev;
->+
->+	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>+	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
 >+	if (!priv)
 >+		return -ENOMEM;
 >+
->+	priv->name =3D devm_kasprintf(dev, GFP_KERNEL, "peci_cputemp.cpu%d",
->+				    peci_dev->info.socket_id);
->+	if (!priv->name)
->+		return -ENOMEM;
+>+	priv->dev =3D &pdev->dev;
+>+	dev_set_drvdata(priv->dev, priv);
 >+
->+	dev_set_drvdata(dev, priv);
->+	priv->dev =3D dev;
->+	priv->peci_dev =3D peci_dev;
->+	priv->gen_info =3D (const struct cpu_info *)id->driver_data;
+>+	priv->base =3D devm_platform_ioremap_resource(pdev, 0);
+>+	if (IS_ERR(priv->base))
+>+		return PTR_ERR(priv->base);
 >+
->+	check_resolved_cores(priv);
+>+	priv->irq =3D platform_get_irq(pdev, 0);
+>+	if (!priv->irq)
+>+		return priv->irq;
 >+
->+	hwmon_dev =3D devm_hwmon_device_register_with_info(priv->dev, priv->name=
-,
->+							 priv, &peci_cputemp_chip_info, NULL);
+>+	ret =3D devm_request_irq(&pdev->dev, priv->irq, aspeed_peci_irq_handler,
+>+			       0, "peci-aspeed-irq", priv);
+
+Might as well drop the "-irq" suffix here?  (Seems a bit redundant, and
+a quick glance through /proc/interrupts on the systems I have at hand
+doesn't show anything else following that convention.)
+
+>+	if (ret)
+>+		return ret;
 >+
->+	return PTR_ERR_OR_ZERO(hwmon_dev);
+>+	init_completion(&priv->xfer_complete);
+>+	spin_lock_init(&priv->lock);
+>+
+>+	priv->controller.xfer =3D aspeed_peci_xfer;
+>+
+>+	priv->rst =3D devm_reset_control_get(&pdev->dev, NULL);
+>+	if (IS_ERR(priv->rst)) {
+>+		dev_err(&pdev->dev, "Missing or invalid reset controller entry\n");
+>+		return PTR_ERR(priv->rst);
+>+	}
+>+	reset_control_deassert(priv->rst);
+>+
+>+	ret =3D aspeed_peci_init_ctrl(priv);
+>+	if (ret)
+>+		return ret;
+>+
+>+	return peci_controller_add(&priv->controller, priv->dev);
 >+}
 >+
->+static struct resolved_cores_reg resolved_cores_reg_hsx =3D {
->+	.bus =3D 1,
->+	.dev =3D 30,
->+	.func =3D 3,
->+	.offset =3D 0xb4,
->+};
+>+static int aspeed_peci_remove(struct platform_device *pdev)
+>+{
+>+	struct aspeed_peci *priv =3D dev_get_drvdata(&pdev->dev);
 >+
->+static struct resolved_cores_reg resolved_cores_reg_icx =3D {
->+	.bus =3D 14,
->+	.dev =3D 30,
->+	.func =3D 3,
->+	.offset =3D 0xd0,
->+};
+>+	peci_controller_remove(&priv->controller);
+>+	reset_control_assert(priv->rst);
 >+
->+static const struct cpu_info cpu_hsx =3D {
->+	.reg		=3D &resolved_cores_reg_hsx,
->+	.min_peci_revision =3D 0x30,
->+};
+>+	return 0;
+>+}
 >+
->+static const struct cpu_info cpu_icx =3D {
->+	.reg		=3D &resolved_cores_reg_icx,
->+	.min_peci_revision =3D 0x40,
->+};
->+
->+static const struct auxiliary_device_id peci_cputemp_ids[] =3D {
->+	{
->+		.name =3D "peci_cpu.cputemp.hsx",
->+		.driver_data =3D (kernel_ulong_t)&cpu_hsx,
->+	},
->+	{
->+		.name =3D "peci_cpu.cputemp.bdx",
->+		.driver_data =3D (kernel_ulong_t)&cpu_hsx,
->+	},
->+	{
->+		.name =3D "peci_cpu.cputemp.bdxd",
->+		.driver_data =3D (kernel_ulong_t)&cpu_hsx,
->+	},
->+	{
->+		.name =3D "peci_cpu.cputemp.skx",
->+		.driver_data =3D (kernel_ulong_t)&cpu_hsx,
->+	},
->+	{
->+		.name =3D "peci_cpu.cputemp.icx",
->+		.driver_data =3D (kernel_ulong_t)&cpu_icx,
->+	},
->+	{
->+		.name =3D "peci_cpu.cputemp.icxd",
->+		.driver_data =3D (kernel_ulong_t)&cpu_icx,
->+	},
+>+static const struct of_device_id aspeed_peci_of_table[] =3D {
+>+	{ .compatible =3D "aspeed,ast2400-peci", },
+>+	{ .compatible =3D "aspeed,ast2500-peci", },
+>+	{ .compatible =3D "aspeed,ast2600-peci", },
 >+	{ }
 >+};
->+MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
+>+MODULE_DEVICE_TABLE(of, aspeed_peci_of_table);
 >+
->+static struct auxiliary_driver peci_cputemp_driver =3D {
->+	.probe		=3D peci_cputemp_probe,
->+	.id_table	=3D peci_cputemp_ids,
+>+static struct platform_driver aspeed_peci_driver =3D {
+>+	.probe  =3D aspeed_peci_probe,
+>+	.remove =3D aspeed_peci_remove,
+>+	.driver =3D {
+>+		.name           =3D "peci-aspeed",
+>+		.of_match_table =3D aspeed_peci_of_table,
+>+	},
 >+};
+>+module_platform_driver(aspeed_peci_driver);
 >+
->+module_auxiliary_driver(peci_cputemp_driver);
->+
+>+MODULE_AUTHOR("Ryan Chen <ryan_chen@aspeedtech.com>");
 >+MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
->+MODULE_AUTHOR("Iwona Winiarska <iwona.winiarska@intel.com>");
->+MODULE_DESCRIPTION("PECI cputemp driver");
+>+MODULE_DESCRIPTION("ASPEED PECI driver");
 >+MODULE_LICENSE("GPL");
->+MODULE_IMPORT_NS(PECI_CPU);
+>+MODULE_IMPORT_NS(PECI);
 >--=20
 >2.31.1
 >=
