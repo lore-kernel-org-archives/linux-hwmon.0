@@ -2,81 +2,219 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 831A1C4338F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jul 2021 22:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B2DFC4338F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jul 2021 06:31:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 663B860F6E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jul 2021 22:43:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DA9860F4F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jul 2021 06:31:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233797AbhGZWC4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Jul 2021 18:02:56 -0400
-Received: from mail-il1-f175.google.com ([209.85.166.175]:38555 "EHLO
-        mail-il1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbhGZWCz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Jul 2021 18:02:55 -0400
-Received: by mail-il1-f175.google.com with SMTP id h18so10473775ilc.5;
-        Mon, 26 Jul 2021 15:43:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i7W+OmniO0n+yFAm2mpkHoKuWj91dOMIPVrO2iqKr3s=;
-        b=OW89SAgwGC2/y5lT+rA6jYcEW9ny1nEZHDV7dA5sQ+F/ygmAMzW1aYtbqO8f3on+Ei
-         0wgEiGKbMfr5mDBXE+a9lZLEWVm8DCsKBDlc8e9Lzlk3vq5W6t9uyKyD4eDtv4UVvuS5
-         wT105cSIHHauq7SyHGrO+LOKKD/E19+SfngTxEjx6tx4PWFJbJMVS6A8DpzGy74ONalN
-         2xUHRTMalDqOJ0EQoNrpvjSYCxpy/QT3d5ggf0jXxXPnQ7ImBsbEqCG4Sx9xrniyUl9k
-         GEe+r16ku5jaAOUOAOmrukgfYKmV2PhqdUgqu6SQWBMlm9u+CMk9tu4zdvjINV1nIEvn
-         J+5A==
-X-Gm-Message-State: AOAM533RRAx0MMANL7LFaY2OTo8UMI776fQ3qS7m2LLTDD2E6JeHG36k
-        8+7H8v4P8RGfSVrMu+wQLQ==
-X-Google-Smtp-Source: ABdhPJxLb0vkmfm3yZD46Ugp2iWjnCSCJbj5zOl/HDGf1iJ7if7H2PMNmik0W1L0sZmcYz7kOx9dqQ==
-X-Received: by 2002:a05:6e02:13e2:: with SMTP id w2mr14703915ilj.308.1627339402660;
-        Mon, 26 Jul 2021 15:43:22 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id 125sm843773iow.9.2021.07.26.15.43.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 15:43:21 -0700 (PDT)
-Received: (nullmailer pid 1010994 invoked by uid 1000);
-        Mon, 26 Jul 2021 22:43:18 -0000
-Date:   Mon, 26 Jul 2021 16:43:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     devicetree@vger.kernel.org, jdelvare@suse.com,
-        Akshay Gupta <Akshay.Gupta@amd.com>, broonie@kernel.org,
-        linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] dt-bindings: sbrmi: Add SB-RMI hwmon driver
- bindings
-Message-ID: <20210726224318.GA1009398@robh.at.kernel.org>
-References: <20210625132544.18094-1-nchatrad@amd.com>
- <20210726133615.9709-1-nchatrad@amd.com>
- <20210726133615.9709-3-nchatrad@amd.com>
+        id S235103AbhG0Ga6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Jul 2021 02:30:58 -0400
+Received: from mga01.intel.com ([192.55.52.88]:25116 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234226AbhG0Ga6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 27 Jul 2021 02:30:58 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="234243679"
+X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
+   d="scan'208";a="234243679"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2021 23:30:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
+   d="scan'208";a="664981000"
+Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Jul 2021 23:30:57 -0700
+Received: from kbuild by d053b881505b with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1m8GcC-0006ZG-7F; Tue, 27 Jul 2021 06:30:56 +0000
+Date:   Tue, 27 Jul 2021 14:29:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ ac48f3b2773e7725ae9f41a068725ea56882df44
+Message-ID: <60ffa7e6.p2qs4Ta4zzf8PeBq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210726133615.9709-3-nchatrad@amd.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 26 Jul 2021 19:06:15 +0530, Naveen Krishna Chatradhi wrote:
-> From: Akshay Gupta <Akshay.Gupta@amd.com>
-> 
-> - Document device tree bindings for AMD SB-RMI emulated service.
-> 
-> Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
-> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> ---
-> Changes since v3:
-> None
-> 
->  .../devicetree/bindings/hwmon/amd,sbrmi.yaml  | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: ac48f3b2773e7725ae9f41a068725ea56882df44  watchdog: iTCO_wdt: Fix detection of SMI-off case
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+elapsed time: 726m
+
+configs tested: 153
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210726
+i386                 randconfig-c001-20210727
+arm                         lpc18xx_defconfig
+powerpc                    socrates_defconfig
+powerpc                       holly_defconfig
+xtensa                          iss_defconfig
+sh                        dreamcast_defconfig
+xtensa                              defconfig
+sh                           se7722_defconfig
+arm                            qcom_defconfig
+powerpc                   lite5200b_defconfig
+arm                          pcm027_defconfig
+mips                            gpr_defconfig
+arm                            mps2_defconfig
+mips                     loongson2k_defconfig
+m68k                          atari_defconfig
+sh                         microdev_defconfig
+powerpc                          g5_defconfig
+mips                             allmodconfig
+arm                        oxnas_v6_defconfig
+arm64                            alldefconfig
+parisc                generic-64bit_defconfig
+arm                           omap1_defconfig
+arm                             ezx_defconfig
+arc                          axs103_defconfig
+arc                        vdk_hs38_defconfig
+m68k                       m5249evb_defconfig
+sh                          sdk7786_defconfig
+arm                         mv78xx0_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                 mpc8313_rdb_defconfig
+mips                           rs90_defconfig
+riscv                    nommu_virt_defconfig
+m68k                        mvme147_defconfig
+sh                     magicpanelr2_defconfig
+powerpc                 linkstation_defconfig
+sparc                               defconfig
+sh                          r7785rp_defconfig
+ia64                          tiger_defconfig
+arm                           spitz_defconfig
+ia64                             alldefconfig
+parisc                              defconfig
+mips                      pic32mzda_defconfig
+xtensa                  audio_kc705_defconfig
+mips                           ci20_defconfig
+arm                      jornada720_defconfig
+mips                     cu1830-neo_defconfig
+sh                          urquell_defconfig
+mips                        bcm47xx_defconfig
+arm                          exynos_defconfig
+powerpc                     stx_gp3_defconfig
+um                             i386_defconfig
+sh                   sh7770_generic_defconfig
+sh                              ul2_defconfig
+openrisc                  or1klitex_defconfig
+sh                             espt_defconfig
+mips                        nlm_xlp_defconfig
+x86_64                            allnoconfig
+ia64                                defconfig
+ia64                             allyesconfig
+ia64                             allmodconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210726
+i386                 randconfig-a003-20210726
+i386                 randconfig-a004-20210726
+i386                 randconfig-a002-20210726
+i386                 randconfig-a001-20210726
+i386                 randconfig-a006-20210726
+i386                 randconfig-a005-20210727
+i386                 randconfig-a003-20210727
+i386                 randconfig-a004-20210727
+i386                 randconfig-a002-20210727
+i386                 randconfig-a001-20210727
+i386                 randconfig-a006-20210727
+x86_64               randconfig-a011-20210727
+x86_64               randconfig-a016-20210727
+x86_64               randconfig-a013-20210727
+x86_64               randconfig-a014-20210727
+x86_64               randconfig-a012-20210727
+x86_64               randconfig-a015-20210727
+i386                 randconfig-a016-20210727
+i386                 randconfig-a013-20210727
+i386                 randconfig-a012-20210727
+i386                 randconfig-a011-20210727
+i386                 randconfig-a014-20210727
+i386                 randconfig-a015-20210727
+i386                 randconfig-a016-20210726
+i386                 randconfig-a013-20210726
+i386                 randconfig-a012-20210726
+i386                 randconfig-a011-20210726
+i386                 randconfig-a014-20210726
+i386                 randconfig-a015-20210726
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-c001-20210726
+x86_64               randconfig-a003-20210725
+x86_64               randconfig-a006-20210725
+x86_64               randconfig-a001-20210725
+x86_64               randconfig-a005-20210725
+x86_64               randconfig-a004-20210725
+x86_64               randconfig-a002-20210725
+x86_64               randconfig-a003-20210727
+x86_64               randconfig-a006-20210727
+x86_64               randconfig-a001-20210727
+x86_64               randconfig-a005-20210727
+x86_64               randconfig-a004-20210727
+x86_64               randconfig-a002-20210727
+x86_64               randconfig-a011-20210726
+x86_64               randconfig-a016-20210726
+x86_64               randconfig-a013-20210726
+x86_64               randconfig-a014-20210726
+x86_64               randconfig-a012-20210726
+x86_64               randconfig-a015-20210726
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
