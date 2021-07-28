@@ -2,62 +2,237 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF4B3C432BE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 12:36:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53E34C4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 13:06:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B019860F9D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 12:36:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3931760EB2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 13:06:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234869AbhG1MgD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Jul 2021 08:36:03 -0400
-Received: from todd.t-8ch.de ([159.69.126.157]:51791 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234683AbhG1MgD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jul 2021 08:36:03 -0400
-Date:   Wed, 28 Jul 2021 14:35:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1627475757;
-        bh=TvHYmPpZwPVftzAxkx91mGu8M+DltKnGumbfjAWcsF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gD/jBPkxO3umiOH8mUZWDecHKAivY8jFaRpEsJgtJs8ZqQTmGtX2A9UMSnXY8Tw1p
-         iKkNJIO7PtvytYtxIWCGyQTL1c9RFNIyPQsq/+p0ZnvtiKTs43MDI0lMjk5GhyBMfG
-         O1yqBYgKYplMhCh1KNOWkunpNDmck5wASYZuWMHk=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] platform/x86: gigabyte-wmi: add support for B550 Aorus
- Elite V2
-Message-ID: <087f704d-1cc0-4035-9561-74a0d569f2b9@t-8ch.de>
-References: <20210726153630.65213-1-linux@weissschuh.net>
- <bba2f992-d392-4087-c32d-ae60bf05d9ff@redhat.com>
+        id S236235AbhG1NGH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Jul 2021 09:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233315AbhG1NGG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 28 Jul 2021 09:06:06 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587C0C061757;
+        Wed, 28 Jul 2021 06:06:04 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id m12so826036qvt.1;
+        Wed, 28 Jul 2021 06:06:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=liy1+POCmEryPVpmPmrmHopIO/HPXODplF/9XMKXZ5Q=;
+        b=iP8gp7c9e3RzxIW5/IIMlF0rrR33MhgrGm/S57hzaThgM7aX5IQpKmwcOPGI4W3r+N
+         PUWxm10HCPYM7kz1KtFjbo+CdsL11WfZ17pttdDJ8zaHejJi/WHKQfih7ZRTWOjgcEuX
+         rE5r3tN6U5HwsBON/rlSpmdnPkb2SRuS0SF6G5TdDAtPxZe60DDEKSYSj+ePgcFWHML7
+         gZHz0APUYslVfJ6lw6YZXx94+eEdSdyr/kGyaJ72KOg4MwImW/mq2dzqnIQMK4vCoBqY
+         CodwZjKgPwybtSULcumX1vSR205UyW0HFoaaz+rsCYhEKEhQBPLOgDUPFO7puo6Q7TPX
+         +OKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=liy1+POCmEryPVpmPmrmHopIO/HPXODplF/9XMKXZ5Q=;
+        b=YpLoAVUQEfl17KnftDLP5wkLCyVq0ZlF5QjXo5EfiR3UPI07RHQ2hT0eP3Q1mHBUN8
+         JXS7xJ5t/HDAw8G20nJMriZVKnXNGdQ1/P/R8FEe2GIogcUs7G1oXgVawyrV1R8oYrV7
+         dsGAPfLcuc19rqshYx9MnExqNfeSvGJp7SU1KhKbtz6Pl9R0xogKhz+1Zs61qaaCBnw8
+         sHWt2tmKUYV3sWEdS7NeMscw/us17INtsM8430erKXtJsi6QvxFq2SqVVNBke+wyMo0p
+         oEx5cUMDmkY+96p6X2nKaW8wtdhF/AjW78uGi0953B/br6t+QPvES4RpRmUfPacCR92t
+         vSMg==
+X-Gm-Message-State: AOAM531dHXd/CSSXKClgt7P21F+PZhDlb1otMRbq5Zxm/gKxwYSFrXZk
+        T4b+rqx++HbYrinH7vpC168OhdR+diY=
+X-Google-Smtp-Source: ABdhPJxgsrrQSD8I/v7OW2tLKm14CfEXN+NDhyNxsppk9b26bcolFwgiL8VFfo/vLr+bQ9rgD4EluQ==
+X-Received: by 2002:ad4:5d6e:: with SMTP id fn14mr11564973qvb.35.1627477563138;
+        Wed, 28 Jul 2021 06:06:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r13sm2729431qtt.38.2021.07.28.06.06.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jul 2021 06:06:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Guohan Lu <lguohan@gmail.com>,
+        Madhava Reddy Siddareddygari <msiddare@cisco.com>,
+        Venkat Garigipati <venkatg@cisco.com>,
+        Billie Alsup <balsup@cisco.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210728093815.8395-1-pmenzel@molgen.mpg.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC][PATCH] hwmon: (pmbus) Support 4th PSU temperature sensor
+Message-ID: <423c6095-52c3-c245-c186-44e936b56cde@roeck-us.net>
+Date:   Wed, 28 Jul 2021 06:05:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20210728093815.8395-1-pmenzel@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bba2f992-d392-4087-c32d-ae60bf05d9ff@redhat.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mi, 2021-07-28T12:01+0200, Hans de Goede wrote:
-> On 7/26/21 5:36 PM, Thomas Weißschuh wrote:
-> > Reported as working here:
-> > https://github.com/t-8ch/linux-gigabyte-wmi-driver/issues/1#issuecomment-879398883
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+On 7/28/21 2:38 AM, Paul Menzel wrote:
+> From: Madhava Reddy Siddareddygari <msiddare@cisco.com>
 > 
-> Thank you for your patch, I've applied this patch to my review-hans 
-> branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+> PSU650W has four temperature sensors, while the pmbus driver currently
+> only support three temperature sensors.
 > 
-> I will also add this to the pdx86/fixes branch and include it in
-> the pdx86 fixes pull-req for 5.14 which I plan to send to Linus soon.
+> So, support a fourth temp sensor, i. e. PSU outlet temperature sensor,
+> by copying what is done for temperature sensor 3, and use register 0xDF.
+> 
+> PSU650W is based on LITE-ON vendor.
+> LITE-ON MFG part numbers for the PSU are PS-2651-3SB5 Z and PS-2651-3SA5 Z.
+> 
+> Signed-off-by: Madhava Reddy Siddareddygari <msiddare@cisco.com>
+> Signed-off-by: Venkat Garigipati <venkatg@cisco.com>
+> Cc: Billie Alsup <balsup@cisco.com>
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+> This as a RFC, as we know 0xDF is a manufacturer specific register, and
+> cannot be added to the PMBus core driver. It was submitted to SONiC [1]
+> by Cisco engineers.
+> 
+> It’d be great if the maintainers good suggest how to easily implement a
+> custom driver for that PSU?
+> 
 
-Thanks!
+Implement a chip driver with a set of read/write functions.
+Claim it has two pages, with the second page only implementing a single
+temperature sensor. In the read/write functions, handle page 0 normally,
+and access the second sensor whenever page 1 is accessed.
+
+> [1]: https://github.com/Azure/sonic-linux-kernel/pull/214
+
+The comments there are a bit concerning.
+
+"* Virtual registers.
+  * Useful to support attributes which are not supported by standard PMBus
+  * registers but exist as manufacturer specific registers on individual chips.
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  * Must be mapped to real registers in device specific code.
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"
+
+Then,
+
+"... is Manufacturer specific command. These are not Virtual registers."
+
+Isn't that exactly what the "Virtual registers" description states ?
+How can that be explained better ?
+
+Either case, I see no need to define a virtual register for a 4th temperature
+sensor. This can easily be implemented with the mechanism described above.
+
+Guenter
+
+> 
+>   drivers/hwmon/pmbus/pmbus.c      |  4 +++-
+>   drivers/hwmon/pmbus/pmbus.h      |  3 +++
+>   drivers/hwmon/pmbus/pmbus_core.c | 38 ++++++++++++++++++++++++++++++++
+>   3 files changed, 44 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+> index d0d386990af5..df2a782a1105 100644
+> --- a/drivers/hwmon/pmbus/pmbus.c
+> +++ b/drivers/hwmon/pmbus/pmbus.c
+> @@ -60,8 +60,10 @@ static void pmbus_find_sensor_groups(struct i2c_client *client,
+>   		info->func[0] |= PMBUS_HAVE_TEMP2;
+>   	if (pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_3))
+>   		info->func[0] |= PMBUS_HAVE_TEMP3;
+> +	if (pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_4))
+> +		info->func[0] |= PMBUS_HAVE_TEMP4;
+>   	if (info->func[0] & (PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
+> -			     | PMBUS_HAVE_TEMP3)
+> +			     | PMBUS_HAVE_TEMP3 | PMBUS_HAVE_TEMP4)
+>   	    && pmbus_check_byte_register(client, 0,
+>   					 PMBUS_STATUS_TEMPERATURE))
+>   			info->func[0] |= PMBUS_HAVE_STATUS_TEMP;
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index e0aa8aa46d8c..1522c8c7cade 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -135,6 +135,8 @@ enum pmbus_regs {
+>   	PMBUS_MFR_MAX_TEMP_2		= 0xC1,
+>   	PMBUS_MFR_MAX_TEMP_3		= 0xC2,
+>   
+> +	PMBUS_READ_TEMPERATURE_4	= 0xDF,
+> +
+>   /*
+>    * Virtual registers.
+>    * Useful to support attributes which are not supported by standard PMBus
+> @@ -401,6 +403,7 @@ enum pmbus_sensor_classes {
+>   #define PMBUS_HAVE_PWM12	BIT(20)
+>   #define PMBUS_HAVE_PWM34	BIT(21)
+>   #define PMBUS_HAVE_SAMPLES	BIT(22)
+> +#define PMBUS_HAVE_TEMP4	BIT(23)
+>   
+>   #define PMBUS_PHASE_VIRTUAL	BIT(30)	/* Phases on this page are virtual */
+>   #define PMBUS_PAGE_VIRTUAL	BIT(31)	/* Page is virtual */
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 776ee2237be2..b084b5ba6d45 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -1810,6 +1810,32 @@ static const struct pmbus_limit_attr temp_limit_attrs3[] = {
+>   	},
+>   };
+>   
+> +static const struct pmbus_limit_attr temp_limit_attrs4[] = {
+> +	{
+> +		.reg = PMBUS_UT_WARN_LIMIT,
+> +		.low = true,
+> +		.attr = "min",
+> +		.alarm = "min_alarm",
+> +		.sbit = PB_TEMP_UT_WARNING,
+> +	}, {
+> +		.reg = PMBUS_UT_FAULT_LIMIT,
+> +		.low = true,
+> +		.attr = "lcrit",
+> +		.alarm = "lcrit_alarm",
+> +		.sbit = PB_TEMP_UT_FAULT,
+> +	}, {
+> +		.reg = PMBUS_OT_WARN_LIMIT,
+> +		.attr = "max",
+> +		.alarm = "max_alarm",
+> +		.sbit = PB_TEMP_OT_WARNING,
+> +	}, {
+> +		.reg = PMBUS_OT_FAULT_LIMIT,
+> +		.attr = "crit",
+> +		.alarm = "crit_alarm",
+> +		.sbit = PB_TEMP_OT_FAULT,
+> +	}
+> +};
+> +
+>   static const struct pmbus_sensor_attr temp_attributes[] = {
+>   	{
+>   		.reg = PMBUS_READ_TEMPERATURE_1,
+> @@ -1847,6 +1873,18 @@ static const struct pmbus_sensor_attr temp_attributes[] = {
+>   		.gbit = PB_STATUS_TEMPERATURE,
+>   		.limit = temp_limit_attrs3,
+>   		.nlimit = ARRAY_SIZE(temp_limit_attrs3),
+> +	}, {
+> +		.reg = PMBUS_READ_TEMPERATURE_4,
+> +		.class = PSC_TEMPERATURE,
+> +		.paged = true,
+> +		.update = true,
+> +		.compare = true,
+> +		.func = PMBUS_HAVE_TEMP4,
+> +		.sfunc = PMBUS_HAVE_STATUS_TEMP,
+> +		.sbase = PB_STATUS_TEMP_BASE,
+> +		.gbit = PB_STATUS_TEMPERATURE,
+> +		.limit = temp_limit_attrs4,
+> +		.nlimit = ARRAY_SIZE(temp_limit_attrs4),
+>   	}
+>   };
+>   
+> 
+
