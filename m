@@ -2,122 +2,274 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21F03C432BE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0327BC4320A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:16:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0636560FED
+	by mail.kernel.org (Postfix) with ESMTP id DB9806103C
 	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:16:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbhG1WQT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Jul 2021 18:16:19 -0400
-Received: from mout.gmx.net ([212.227.15.15]:35655 "EHLO mout.gmx.net"
+        id S231982AbhG1WQU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Jul 2021 18:16:20 -0400
+Received: from mout.gmx.net ([212.227.15.15]:52155 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231982AbhG1WQT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jul 2021 18:16:19 -0400
+        id S232110AbhG1WQU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 28 Jul 2021 18:16:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1627510560;
-        bh=5bMzPjeyijVAj4wj9GMDCHQTmRHHiM1RekFoQNFxu6o=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=MEZjBinxGoNU7fpw6Kx7NmSoMMjbeYjEdfYb2yxsq7gSGune8ffSbSe155mMe1bnC
-         cA1WNFP3Aas+6YJFrNuoy2AdL8TAmDXEWvQuDfYtMczDLAnv2cF7b7ME/DgXxyOl57
-         RzCKk+AJW25oAKZfEOr5DUNDUwuGcxcR9mSFKydQ=
+        s=badeba3b8450; t=1627510561;
+        bh=DhSFe+P3rPaWUNqUAqEdNMpsMXOakE4UTWSA3BpWl8A=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TwtDo0ElqIIcoCOe1E1mCTvRnfIX7kWJHX1DQy/7SQ8icep5XxWCSuLb12wJCb0/g
+         QNW7tj8A6HD5t7bvB8OW43IgQxL7yuc7QJwgcDIk5HT1jWWVw4v2eVWXQBdCLFSDrT
+         TpSyvZNAFVk3a9HhjhEVGSbfvibhrNQLhtPRYVRw=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([79.242.190.212]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MIwzA-1mT9cQ04kM-00KTqD; Thu, 29 Jul 2021 00:16:00 +0200
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N8GQs-1nCfuD2IBE-014FfU; Thu, 29 Jul 2021 00:16:01 +0200
 From:   W_Armin@gmx.de
 To:     pali@kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH v7 0/6] hwmon: (dell-smm-hwmon) Convert to new hwmon registration api
-Date:   Thu, 29 Jul 2021 00:15:51 +0200
-Message-Id: <20210728221557.8891-1-W_Armin@gmx.de>
+Subject: [PATCH v7 1/6] hwmon: (dell-smm-hwmon) Use platform device
+Date:   Thu, 29 Jul 2021 00:15:52 +0200
+Message-Id: <20210728221557.8891-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210728221557.8891-1-W_Armin@gmx.de>
+References: <20210728221557.8891-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MG/3tgQikatThyr4zr3XnHsPnuPQHsIOQ3PHfiHP9gw6TlHp3iA
- 5f96Eq6b2nDU4LlS6Y59TWHYhAPrXqK5TObFUOQuRES5Fxqj41o/feeOnzbMeAArJZsJRWC
- Pnv6tmUfk3OXAGrcAwPq8iBZa7ScQaU8uhHuNKPzxwh3YxqZxhwhKDZq+Xq+YmEy+kbkPMU
- 5Tynm0Aq68KP0hra7UnTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2ZPo5QcESbY=:F4+w9rep3CWMUDSxhiCwJ7
- 2CPogw8nw4hTyyIjJrS8d0dFCdJxwnLqzMfWmm2h4OpUMVEJ+Kx4sSGUeIRDF+XrIcf+msjU6
- XbMB/yrCZ/mTKOlp7QIk12Mob8HbQVOniiNAVAynYVFRUEide4uPJmY8lq48jspRid2s1WlHc
- Am7KwhHEyZQuwYOoRqR/ntvSrO/EgBYchGqUwm9tZKIPO5CqaHJ2JZffVOmbJQu75iNgSAV97
- FMZUqGqjESyBozusyVoE4e35mVNzX/Ge9qA8rnyNk35x6NPqYlmw2duq5OEzQko2PM45fI8hH
- iLQO11AwPuWoLnzRXDO59zEtqx3eXHiUQnEDs5GF/NKxRNBqhssfgu47s1gUXCUNyfcRtj+Q8
- aH+FczR8VarTFXK9Ol1RFUm+tx+EKQfSHcpM+JhEZ0n4gkR5d4nfdntVA/UU5JriwOb37NBlc
- meixQ4yehzICUoHvIvQK6XkroasYoLhFsGYQZtOdMv36JM41GP4aTHwWU6SxsH8MUPpINjCbR
- 3hJ9pU2d2eHKDmUl5/5yM5rzcmPJg5GKKOp5A9wcKkgKIiZ/TTo40tgC7G7zyRSvraW2bMv4Y
- z/kaZ/66FB8axq85fhKJekCjGFtZnEWv0szKYqXlgeQrh96axx4nqn8ohuH4lxnEEndir6NHX
- l5vO72svEY7wX1q17kGyEW2kxLH4dFYkpQ7wex3JLczU7StkJjhwigjb3IJe92gN1cXVCnOFn
- cqTHQR0kPuoOvClfHj3IEN0eBQyYCoyj07/SFphjKFMAm5W95VUwBGhBEjuJEcHrQg9RnwpZi
- zYdCU940kQdqpwrdA5hIdZu++Lo69zNoA5jF4mqiSgwHq0nlgBZcmJrGP6uItStdQxYd3O97s
- I8XOlLut5vWgb9wjrQZ+JIus6cYZx/LWt+quwpcwbFsyrjWxRWuwhj06dgvjQeUULkmI1BoxE
- jsoC//Lu83e+olgz7WAjhgfckDYMtNgr/5/fm+JJQvxenGPRONkUMYTsBaNjX74fY+anDxeG2
- hYnxTjwqFq+cZRnH2ytB9v+wIv3aj6cYMb4NxtIM+zrrc/KF9os3daRUXZG/KbQvQLON8Uaa9
- 1O47EC9YKf//8hen49i6isqP1xrkThA/6g4
+X-Provags-ID: V03:K1:aCWsbTmxBFo0PwNrHjMoCFnfcgZ/d97NpsrN4G/JONh5kzF31dV
+ ShkU2W9R70RqkicQAJjimy71IHrB0pmAixKqxKkWndYMb+ju7bSz/ITLcJ5C5W+wqGndqfj
+ VHrvYKCW58VxhiHHRW5WYs2EdFW7MuAXjgmMpaDnjrLmBM4pT+r2wXX0c0YMBvcKoDlJBgb
+ 9aP/rsyrtPQNuFR47ocGw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5CWntbjaHhs=:xt1Fz+utgq1OsBMSzMlmPS
+ +8j7sl50LccYCsEoyAJncobbG28DfjsfWCHShMe5Dn8y+B5rkMS2T1n95OyPTrj83B/h2odx3
+ YLWPJnxyMRC2+n9f28vqWkMdzOzxr+NH5vvAM3qLQyvZ/nGhNg0916vUZlDAmy4TbXsAm5oQL
+ zB49c0zjiAuepTavvVKXiGcT8Ugby56VWxr1ovSds1x5+tXtQeNrDAmSzVblsNi7kIKtJm2JU
+ aNYhOO9bCxd+12oK4ap+UAc3XbPr6Y3BSCiDg3X5zikNaQrAX+sMaCGja8P51i0pbJQJGpyVn
+ DjfCXcYRP/IHxr8qSrg/rEoNCBcab86alE1kAr56tdlAtoeoBcjn3VvDmweITyjmaqactMn/q
+ IMpndy3VR69OFRdhmk+4M1gXx1Z8BZsDCoL7+b8QQW1D6HMYdUzEynW2QAtJairLKc7ybyCga
+ 2lbBk/Z2BxKkqjRXrUUK0PJJuHS7NdDIa0eqXqw326r2aKaQfUN6goaESQs6guKpwKxPnLvDJ
+ kVs6VLdclNChi4MY76NqTa2IDoMO3jvqOoVn6yLylgx5O6lSE901WMBdUsZHZOoPCRbi8j5PS
+ HqP05qH1+snZqVqsodQzPVSaTbjN/eXuZiJ01ckv4QyLU1bOK6CNanWusTG5YrkhGtY5PFOTS
+ yO96ojMfhDUspKrm9/s0zY7im2THlaiNrIh6FtxQPRQjn14sNL70vi45QtSoas0goLOIjZyTO
+ diwj8+oSN/Ha+Xm/7bR7K01V3Q2Pg3iOPSoX74ehB3EZM86JJi7p7zBEIoaz5rWibPFmv/jqt
+ qevGgGBnrV2Wnm+RY1nB/c/FjT8DqkaWOnZtuSx184CVoAPV9alp8fG7hVhhuFi8DL3gGnQYX
+ E/3pguH2/7Drk/V+McBz2rc9K98JwSD+iH4AiVDs3EhDiRd3WycLJcZSIw8HPZFwTBpHT3u8I
+ lI/5TQu3Q7PA3pWY0X9vokEWtW7pUtnri5hrH9Lc9QHchdwupDNH1tXZ6RZxsZlT/jTrokVij
+ EDNf9KGiTjR6RXxsgnEyDTn8dl68cuQQ0UftTf8BYHIwa+9C+CFFwWwMiLyhpVfxiKtKMZkk4
+ J0xgDI2o3hKUTpydfr6meZ/V4tZosJpSLh1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Armin Wolf <W_Armin@gmx.de>
 
-This patch series is converting the dell-smm-hwmon driver
-to the new hwmon registration API. In order to do so,
-it introduces a platform device in the first patch, and
-applies some optimisations in the next three patches.
-The switch to the new hwmon registration API is done in
-the next patch. The last patch is fixing a small bug.
+Register a platform device for usage with
+devm_hwmon_device_register_with_groups since
+the platform device is necessary for future
+changes.
+Also fix some checkpatch warnings.
 
-The caching of the fan/temp values was modified to better fit
-the new hwmon API.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 113 ++++++++++++++++++---------------
+ 1 file changed, 62 insertions(+), 51 deletions(-)
 
-The patches work fine for my Dell Latitude C600, but i whould
-appreciate someone testing the code on another model too.
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index f2221ca0aa7b..f06873413aea 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -14,7 +14,9 @@
 
-Changes in v7:
-- Add commit explaining why pwm1_enable has to be write-only
+ #include <linux/cpu.h>
+ #include <linux/delay.h>
++#include <linux/err.h>
+ #include <linux/module.h>
++#include <linux/platform_device.h>
+ #include <linux/types.h>
+ #include <linux/init.h>
+ #include <linux/proc_fs.h>
+@@ -896,7 +898,7 @@ static const struct attribute_group i8k_group =3D {
+ };
+ __ATTRIBUTE_GROUPS(i8k);
 
-Changes in v6:
-- Make pwm1_enable permissions write-only
-- Do not test fan speed in dell_smm_is_visible()
+-static int __init i8k_init_hwmon(void)
++static int __init dell_smm_init_hwmon(struct device *dev)
+ {
+ 	int err;
 
-Changes in v5:
-- Fix checkpatch warning after patch 5/6
-- Hide fanX_label if fan type calls are disallowed
+@@ -956,15 +958,9 @@ static int __init i8k_init_hwmon(void)
+ 	if (err >=3D 0)
+ 		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_FAN3;
 
-Changes in v4:
-- Make fan detection behave like before patch 5/6
-- Update coverletter title
+-	i8k_hwmon_dev =3D hwmon_device_register_with_groups(NULL, "dell_smm",
+-							  NULL, i8k_groups);
+-	if (IS_ERR(i8k_hwmon_dev)) {
+-		err =3D PTR_ERR(i8k_hwmon_dev);
+-		i8k_hwmon_dev =3D NULL;
+-		pr_err("hwmon registration failed (%d)\n", err);
+-		return err;
+-	}
+-	return 0;
++	i8k_hwmon_dev =3D devm_hwmon_device_register_with_groups(dev, "dell_smm"=
+, NULL, i8k_groups);
++
++	return PTR_ERR_OR_ZERO(i8k_hwmon_dev);
+ }
 
-Changes in v3:
-- Update description of patch 1/6 and remove empty change
-- Let pwm1_enable remain write-only
-- Include a small bugfix
+ struct i8k_config_data {
+@@ -1221,28 +1217,11 @@ static struct dmi_system_id i8k_whitelist_fan_cont=
+rol[] __initdata =3D {
+ 	{ }
+ };
 
-Changes in v2:
-- Fix coverletter title
-- Update docs regarding pwm1_enable
+-/*
+- * Probe for the presence of a supported laptop.
+- */
+-static int __init i8k_probe(void)
++static int __init dell_smm_probe(struct platform_device *pdev)
+ {
+ 	const struct dmi_system_id *id, *fan_control;
+ 	int fan, ret;
 
-Armin Wolf (6):
-  hwmon: (dell-smm-hwmon) Use platform device
-  hwmon: (dell-smm-hwmon) Mark functions as __init
-  hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
-  hwmon: (dell-smm-hwmon) Move variables into a driver private data
-    structure
-  hwmon: (dell-smm-hwmon) Convert to
-    devm_hwmon_device_register_with_info()
-  hwmon: (dell-smm-hwmon) Fix fan mutliplier detection for 3rd fan
+-	/*
+-	 * Get DMI information
+-	 */
+-	if (!dmi_check_system(i8k_dmi_table)) {
+-		if (!ignore_dmi && !force)
+-			return -ENODEV;
+-
+-		pr_info("not running on a supported Dell system.\n");
+-		pr_info("vendor=3D%s, model=3D%s, version=3D%s\n",
+-			i8k_get_dmi_data(DMI_SYS_VENDOR),
+-			i8k_get_dmi_data(DMI_PRODUCT_NAME),
+-			i8k_get_dmi_data(DMI_BIOS_VERSION));
+-	}
+-
+ 	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
+ 		pr_warn("broken Dell BIOS detected, disallow fan support\n");
+ 		if (!force)
+@@ -1255,21 +1234,11 @@ static int __init i8k_probe(void)
+ 			disallow_fan_type_call =3D true;
+ 	}
 
- drivers/hwmon/dell-smm-hwmon.c | 853 ++++++++++++++++-----------------
- 1 file changed, 425 insertions(+), 428 deletions(-)
+-	strlcpy(bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
++	strscpy(bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
+ 		sizeof(bios_version));
+-	strlcpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
++	strscpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
+ 		sizeof(bios_machineid));
 
+-	/*
+-	 * Get SMM Dell signature
+-	 */
+-	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
+-	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
+-		pr_err("unable to get SMM Dell signature\n");
+-		if (!force)
+-			return -ENODEV;
+-	}
+-
+ 	/*
+ 	 * Set fan multiplier and maximal fan speed from dmi config
+ 	 * Values specified in module parameters override values from dmi
+@@ -1277,6 +1246,7 @@ static int __init i8k_probe(void)
+ 	id =3D dmi_first_match(i8k_dmi_table);
+ 	if (id && id->driver_data) {
+ 		const struct i8k_config_data *conf =3D id->driver_data;
++
+ 		if (!fan_mult && conf->fan_mult)
+ 			fan_mult =3D conf->fan_mult;
+ 		if (!fan_max && conf->fan_max)
+@@ -1313,29 +1283,70 @@ static int __init i8k_probe(void)
+ 		i8k_fan_mult =3D fan_mult;
+ 	}
+
++	ret =3D dell_smm_init_hwmon(&pdev->dev);
++	if (ret)
++		return ret;
++
++	i8k_init_procfs();
++
+ 	return 0;
+ }
+
++static int dell_smm_remove(struct platform_device *pdev)
++{
++	i8k_exit_procfs();
++
++	return 0;
++}
++
++static struct platform_driver dell_smm_driver =3D {
++	.driver		=3D {
++		.name	=3D KBUILD_MODNAME,
++	},
++	.remove		=3D dell_smm_remove,
++};
++
++static struct platform_device *dell_smm_device;
++
++/*
++ * Probe for the presence of a supported laptop.
++ */
+ static int __init i8k_init(void)
+ {
+-	int err;
++	/*
++	 * Get DMI information
++	 */
++	if (!dmi_check_system(i8k_dmi_table)) {
++		if (!ignore_dmi && !force)
++			return -ENODEV;
+
+-	/* Are we running on an supported laptop? */
+-	if (i8k_probe())
+-		return -ENODEV;
++		pr_info("not running on a supported Dell system.\n");
++		pr_info("vendor=3D%s, model=3D%s, version=3D%s\n",
++			i8k_get_dmi_data(DMI_SYS_VENDOR),
++			i8k_get_dmi_data(DMI_PRODUCT_NAME),
++			i8k_get_dmi_data(DMI_BIOS_VERSION));
++	}
+
+-	err =3D i8k_init_hwmon();
+-	if (err)
+-		return err;
++	/*
++	 * Get SMM Dell signature
++	 */
++	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
++	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
++		pr_err("unable to get SMM Dell signature\n");
++		if (!force)
++			return -ENODEV;
++	}
+
+-	i8k_init_procfs();
+-	return 0;
++	dell_smm_device =3D platform_create_bundle(&dell_smm_driver, dell_smm_pr=
+obe, NULL, 0, NULL,
++						 0);
++
++	return PTR_ERR_OR_ZERO(dell_smm_device);
+ }
+
+ static void __exit i8k_exit(void)
+ {
+-	hwmon_device_unregister(i8k_hwmon_dev);
+-	i8k_exit_procfs();
++	platform_device_unregister(dell_smm_device);
++	platform_driver_unregister(&dell_smm_driver);
+ }
+
+ module_init(i8k_init);
 =2D-
 2.20.1
 
