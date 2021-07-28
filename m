@@ -8,104 +8,141 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AEF1C4338F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A588C4320A
 	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:16:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 309526103C
+	by mail.kernel.org (Postfix) with ESMTP id 7D63461040
 	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:16:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbhG1WQX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S232075AbhG1WQX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 28 Jul 2021 18:16:23 -0400
-Received: from mout.gmx.net ([212.227.15.18]:43563 "EHLO mout.gmx.net"
+Received: from mout.gmx.net ([212.227.15.15]:38239 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232075AbhG1WQW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jul 2021 18:16:22 -0400
+        id S231998AbhG1WQX (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 28 Jul 2021 18:16:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1627510563;
-        bh=Er6k5tLiUJPuW1WNmYTS1PUHAIWkMV1+c3yIe+8Tf8E=;
+        s=badeba3b8450; t=1627510564;
+        bh=fno1fA+0keQwzzK9v/Ru4/C9g+Om8P+dCHByA/X0ohM=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=AVTqfH/7bOV18Pg34DB+GBaCWOCbIDaXLAkYr4PaBmtTgQPSFPXzfUlym8RXt5Bex
-         gqQTOux6nxl+mebwF58gChp8MJMm3Dg79h9Hgmc4XPrBrtdS/XdUHxXubtAyeeUBYq
-         kgP1GWI3lbMwMEmdnpT7y8ho9VM6xz57I0vp0OtY=
+        b=R8e3YZXHzJZggMXIElxo2RYAaArqMRbD89Ek7M+3TMrNkbvzjWpMJVu/j6GA3Arom
+         +EvDypXLzPpF/fI8tOdylS8HVuVGfsqQurUbGYOQJp5AL/5kySfPbOerV0Kz3Pxz7Q
+         LCswRqB9CvLgbeFI/LsIc3aGIS+rMgEyzV6jXqPM=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([79.242.190.212]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MuDc7-1n2UEp3lwT-00udsx; Thu, 29 Jul 2021 00:16:03 +0200
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MKbkM-1mThaC1Ijc-00KzJ1; Thu, 29 Jul 2021 00:16:04 +0200
 From:   W_Armin@gmx.de
 To:     pali@kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH v7 2/6] hwmon: (dell-smm-hwmon) Mark functions as __init
-Date:   Thu, 29 Jul 2021 00:15:53 +0200
-Message-Id: <20210728221557.8891-3-W_Armin@gmx.de>
+Subject: [PATCH v7 3/6] hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
+Date:   Thu, 29 Jul 2021 00:15:54 +0200
+Message-Id: <20210728221557.8891-4-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210728221557.8891-1-W_Armin@gmx.de>
 References: <20210728221557.8891-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:S4ZdK8O5FNh7q7Z36yDNMTzq+PZEs+66RZ3u10mLL2WU0W0KMx9
- QsV6eos9npOh0rNI4d2xjmdE/+mkP3/rkO4mN5Mu8fOlOPAjpb4VDcAE76B7MAWS4nORhiL
- xO6YnCjt/EuCdqmnWLK9UNz0hQCsW5eJDevrYyRCciFGUE+tMrWh0Xu4kFP/ICSndHh5hp7
- sFXbf5/HEcq9acIitOs3g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cEt6rXN2QYg=:uR6r5+4Y9On5C4/sb48Zqx
- v7R+7B884GtjdhsdPEkqSSLXZljRwcxgS+wmBd1Im75bu82VDkRNKWh5F1ysVZIEioOQBgAmq
- 4hPimpAtcfngMCuo15vQRY/A7FUzoceE/UOgQgyJyoa1fFRpLPA3wBBdYTz4wqdxa00d2bwlo
- Ho8Dn9Rl5bhsJVJMRSKRnb18H12RcgKzr4SF65V9W1KbtMaIO3mofqyUeOHzgIZg2UfudiCrN
- FdMuPLhaL/tGOr3uW99SQAkpCnlEPjFzLh/TY8vF+uhbyFJ5UjhkZLnmqlF9VE1aoSIgaERnd
- TlQT4nLe0IcyT4gkFMSzaDPrqwIO8V9LikU/maqIwThScI7PgZSPUFie5DtraDQ1J1zXPyFjk
- GeenOLvXJXUMDlRWzMwzpJ+fqJEIHx5yKNqd9Sz8wf5gcqdjNeboQvoBTOL0BvrOvlMoCz1SI
- WuEv4IB/1NI+cIS4ra4YkHPxuWI0m1FOCjqnoOQrJjKfWcjNMdCjX+Vq1orznKZASHAw9COfw
- LbSpwGuPhayPudPVpUvWx1LJiPW66gvm9xoHe5kKGLIHIFpPWBRTJo05fwzN97PrGFC7Oi4+G
- tty3QvOMVrPywTI9yCPy3Ks1Vpzq68XpiE7NvErJbSxYdxd7QpuQ1FaGaGMqPtKfYaDYfcXrz
- RT92qpDQCIVtIMlvzav4h5t+QO32t6tNxyj2Ybs5e/u1+cX9jt98/NaknelfUU95PNsri8dT9
- cBC7U5moQNowx/5px9cYFhiATxBKKIJY5YoTUBrv3NVwAD/klpwVa2vCtBFY1nSdC0kUBxCGk
- UwXKrYeUBVhtHjHSM/txvlxwWosW7ar79RVcvPA3D/lGkEwBCFSepUkQk8s5XCeho0M52b4ig
- o4MrUWX3T+H2OObgn1oODIr361BQrZhfvNJsY3zjZDGxnFkIrK+A+HPxK+df6000Oqtlt2ezY
- /j0RNHFglCx1YpklWAZQe61tClqm/cjAXs6Beu95FkoZ0WpJAcWx/x2c/81XYgJeJlB2XIidD
- B0IwBQlOICd1D4N/9iSh2JTJP8V7Dy6bz8veZSNKcxnYaV//Zuj6cxgKv/eJZNfEe3Srmn+Rm
- /4RW1f2xQDRbOYk2FqVzMqg+P8+VViitI0L
+X-Provags-ID: V03:K1:QX11wyHZy4g3YRyyieTeUmk2eR+NS82HJO6BdDSkwjkHakQ1RZC
+ V/jbBDKYRSYZ4suLjku7aLNGb9Epe6ual9GPu9e3pQw+EHkL1xipMnfoJuLINgKhtUi8/1Q
+ 5Bcji2tbKfOkD38UZtR2Le1i4xCl0yjrxDT4MKiffT8yqfxryH8UDzKF9+smynaRoRQY6qO
+ OcVcUrBqu2Mo2JHRoYumA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WMMRVC+D0dM=:MS1N02MWWS3ppq0CH196lL
+ QMno5gr1ElZnFXXRsFHEMdDYscHGPxVy84o1lxWpCev+yB6vAPfkfEJxb056y0226R5sgQ6tp
+ BqV9P+rnXYuNgt8g3rQt/v0PZY9+w9D+mIFQoIkIbLMXrhrlXxoMnOsl2AVzkOPOuFWsHZw4I
+ TiS2n+inCoSlDn7lPAzwqjAX2BYCe3mEnV/hAxmEBRLGmrczNapGmR1hgiII81oIZAkQRF/pi
+ MjU2olKcNeIEvZ1dZN0828LK1HP4v6xxWXEbPI60407MbJA812k0wvdIE73NOR6JwJDnF/p6t
+ RwKp8S0qXcmwxO8aYAmvfvjCsK5F+kJSCEC3mYsbWCas+9KbZMUpi+Z+rwATxgipnpm2ZiZRB
+ 3eHREF0/kBxtsAKuHf9GVVTQP0W/0/46aNf3bxeBaAsvrLjitpst4OPpJMzkKGg+2qxCJgBPh
+ o7bxyAh9ynVZ8NLca5Cu3IkC43LKiLKzP29y1wijSwwz7ycZhNxO8Hv3/YAqhhfKS1LFzZcXd
+ 1NvUSOlCnvqDMAKPei4fsD8P2yu055lDNkuiIZD6PFOsVOUzJjK3SaXFNsKwmYxpaj+mBWkMX
+ RgRkJpmtxo4RpzxwhKVur2tTGi77l8ivozQUnlssXL04BP5iuqE2pnVJfnYaTIINA+57KrmXi
+ hYO1usK8ngzh3XkRmrSYWjjIdjG2Izob/9sHIAJansMsUnIjSGB5TetfIx24PrpDSUtCib1Wg
+ jDyZdw3xPcnqJDTJiLYWA8iiyK3ShDX45clvjXDrACdH3BcCKUw1RBUA3YMxnmCfjXbXLu6Rs
+ U1bB2JfldAgw+qPkMg05Efgyf48fiFuqZIQBH9RAflYbGqjL7wUPeWP0aUxSjNk0D2LQ9oZ5H
+ JorwTSy5r6zA51frUilZkozRL+WL7VnQR9QQhGzKsUVXhUM9OMZ5i4NvknyDnbzseZKGErpzL
+ fIg4ABhWMaXC4N6jFCRvB7kUeR7jENj6/ZiY0XNqIRV7C086mcX8/riTNZ7mP216ddajAqpa3
+ 6JROdDXXYIvrrcqE7+UgE6TTiHar/+qf+caBjTBhPtR7xZQ1KjO+wFG/0p3ZT/mIKQnxDBgJy
+ zWl7a4QVFbV0yzWbuqFd6W7maEU/mT9aZe/
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Armin Wolf <W_Armin@gmx.de>
 
-i8k_get_dmi_data() and i8k_get_dell_signature() are
-only called during module init and probe, which both
-are marked as __init.
-Also mark these function as __init to lower the runtime
-memory footprint.
+Use devm_add_action_or_reset() for calling i8k_exit_procfs()
+so the remove() function in dell_smm_driver can be omitted.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 Reviewed-by: Pali Roh=C3=A1r <pali@kernel.org>
 Tested-by: Pali Roh=C3=A1r <pali@kernel.org>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 28 +++++++++-------------------
+ 1 file changed, 9 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index f06873413aea..c898d6bd6a18 100644
+index c898d6bd6a18..da7040f2442e 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -128,7 +128,7 @@ struct smm_regs {
- 	unsigned int edi __packed;
+@@ -605,24 +605,22 @@ static const struct proc_ops i8k_proc_ops =3D {
+ 	.proc_ioctl	=3D i8k_ioctl,
  };
 
--static inline const char *i8k_get_dmi_data(int field)
-+static inline const char __init *i8k_get_dmi_data(int field)
+-static void __init i8k_init_procfs(void)
++static void i8k_exit_procfs(void *param)
  {
- 	const char *dmi_data =3D dmi_get_system_info(field);
-
-@@ -384,7 +384,7 @@ static int i8k_get_temp(int sensor)
- 	return temp;
+-	/* Register the proc entry */
+-	proc_create("i8k", 0, NULL, &i8k_proc_ops);
++	remove_proc_entry("i8k", NULL);
  }
 
--static int i8k_get_dell_signature(int req_fn)
-+static int __init i8k_get_dell_signature(int req_fn)
+-static void __exit i8k_exit_procfs(void)
++static void __init i8k_init_procfs(struct device *dev)
  {
- 	struct smm_regs regs =3D { .eax =3D req_fn, };
- 	int rc;
+-	remove_proc_entry("i8k", NULL);
++	/* Register the proc entry */
++	proc_create("i8k", 0, NULL, &i8k_proc_ops);
++
++	devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
+ }
+
+ #else
+
+-static inline void __init i8k_init_procfs(void)
+-{
+-}
+-
+-static inline void __exit i8k_exit_procfs(void)
++static void __init i8k_init_procfs(struct device *dev)
+ {
+ }
+
+@@ -1287,14 +1285,7 @@ static int __init dell_smm_probe(struct platform_de=
+vice *pdev)
+ 	if (ret)
+ 		return ret;
+
+-	i8k_init_procfs();
+-
+-	return 0;
+-}
+-
+-static int dell_smm_remove(struct platform_device *pdev)
+-{
+-	i8k_exit_procfs();
++	i8k_init_procfs(&pdev->dev);
+
+ 	return 0;
+ }
+@@ -1303,7 +1294,6 @@ static struct platform_driver dell_smm_driver =3D {
+ 	.driver		=3D {
+ 		.name	=3D KBUILD_MODNAME,
+ 	},
+-	.remove		=3D dell_smm_remove,
+ };
+
+ static struct platform_device *dell_smm_device;
 =2D-
 2.20.1
 
