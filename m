@@ -2,106 +2,143 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75851C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:42:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE726C4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:43:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42DA560FED
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:42:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A95C461019
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:43:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbhG1WmE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Jul 2021 18:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S232327AbhG1WnZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Jul 2021 18:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbhG1WmE (ORCPT
+        with ESMTP id S232073AbhG1WnZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jul 2021 18:42:04 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC46C061757;
-        Wed, 28 Jul 2021 15:42:01 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id k13so2561562qth.10;
-        Wed, 28 Jul 2021 15:42:00 -0700 (PDT)
+        Wed, 28 Jul 2021 18:43:25 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A19C061757
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Jul 2021 15:43:23 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 184so3964846qkh.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Jul 2021 15:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lo6hJcKFoOWYBZDIf76dR7Ki7GsgeuexsbCvJNO4vMw=;
-        b=ijl2ObOh8q3fsDwVG6VXe2+FaZvZ8bSlsu54YntjpMDRxWU3USvH88HwEma8gSvuCL
-         nBECTfLcG2r9bmA9iFOzLRsu6+qocLm5hsVe0YkWrKKfZTkzaYZMCyhPfBYc5MSm/Xbk
-         hd7zX31XSHvcmGD8Ltd+gDjCkVaTvvuAP8QUgDNsHLjdva4rz0wvUp5eLpw8pnooOs3C
-         eHTm5d/SxCJppKzW/4pjOVuucuePEqrZcep637yjbXIIvKVtZtIXlOEDTVuwT6fm5B13
-         kOfX8k2TaZ7hZdRh46J2bdS4BGg+VWEpzpXxxUAHHWkSUsfdDKxxZZFPz159ZmXADKQ6
-         i+3Q==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mrqHhigs3BEPW27K8W09HkhywYLyiNqpZRn4PUhcLo8=;
+        b=TQCo9W6aSEIYH32wkyiUCBkiKUrsm+1g5DZzGQEsFt3+K2xULk2AiuZaSbi4igSKkL
+         grYTz5G8IIUgvy/Jw8iNTjGi8Gna3la0Veim0j2o2kBUmVHOKkV+KxY5fauh6v0e5ddh
+         Z7LTk+o9O7r9Fy/ipkG6dyabjCZqYqZRuXZ3gjuDH6h3Tljmn48WrTAHDuSdM8HmnJG+
+         GR5K26rYg0rDWyRHU9FFxF980LjcKix/sreL2laI3R0tGQEA6WPNXrY1fcTZ1Cam01LB
+         6uwDDrV4UKoJUW5bV8WKtvUQwTDMPrL5QBlO1eHz/r/frC2Et0hjK2MuwW16WfgjrqZy
+         /hLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Lo6hJcKFoOWYBZDIf76dR7Ki7GsgeuexsbCvJNO4vMw=;
-        b=LMXtFxnaW4+TTolUoYnw5enIbqTiub9TPj4gr7/5xbujf5Z8TCV/L2Y6zjnC5UEf+X
-         OzLGqo36UASTZKH/2EpO4Ia6GcvFxNjCpfJlrliq72kC5VdBbjbO+EZg1P6klcGi9OB+
-         CjQ8Pgodbdi6dT+B7cnryQQPGg+tmG+vyArZUgJrZmoixMkStKcjbXc6SLG0AfgtE++p
-         OPhNHBUtU6gtTLXwH9cg48D/NGmtvjbTCnyCKq1dcVzhkEtKtWyco2uypDinKNZMynwT
-         uhf8NMqZITEiVcooUIBhGiKHIrnkBLxiXGzDMc/agszeiDYMHje4c9o1E0HixSov28kT
-         mgGA==
-X-Gm-Message-State: AOAM533Z3zV8/FpDtYr6bNho/s+RDv1VuRRGfKIaLXLLDJZ96PzO98iN
-        +9F85/pRlBvY4DW5acby9Ws=
-X-Google-Smtp-Source: ABdhPJx2vFHhf1ktZr9V68JrQiQ8eh4jMSsWuU7O5laqLi7ZQ9dRsiGF/++ftGz8nbKzPIzXHyUF3g==
-X-Received: by 2002:ac8:7d52:: with SMTP id h18mr1692658qtb.179.1627512120031;
-        Wed, 28 Jul 2021 15:42:00 -0700 (PDT)
-Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
-        by smtp.gmail.com with ESMTPSA id u11sm730297qkk.72.2021.07.28.15.41.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 15:41:59 -0700 (PDT)
-From:   Brandon Wyman <bjwyman@gmail.com>
-To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Cc:     "B. J. Wyman" <bjwyman@gmail.com>
-Subject: [PATCH] hwmon: (pmbus/ibm-cffps) Fix write bits for LED control
-Date:   Wed, 28 Jul 2021 22:41:40 +0000
-Message-Id: <20210728224140.3672294-1-bjwyman@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=mrqHhigs3BEPW27K8W09HkhywYLyiNqpZRn4PUhcLo8=;
+        b=B3RCeHMyLLdN7iGIP4seAXGMRs+nsB6G9YqvfsbNlmWjU59AmZr3P5ZHwvMEvmc1XZ
+         zfQ4NqRyC9jqrNvzlt5NodV4V6U8ggTJoSWZ1lkmHNe+wLbYcfnDVKUllOTuNZoLCxwP
+         7/b9+tEmVleu9XT9nCJumj0NphYkE/WU6CRq/k93IP+PE0T+HfNpChQvDWxC/1sLNELm
+         EM/G+DjvPQTjrayWGvnDSQTL9ROlwwwtB6pc7bYcueMgBMplWWy1j7/NCXbKaBAQeOPw
+         1hcvP47ryRdee31tBK/u9QxpmMDj3kTvpTzOVvUeDSPbk1lPrsFndtmgVri042vT7XF7
+         9pdA==
+X-Gm-Message-State: AOAM531IW68/ouw7rvzn7SE56vtLFtZf0i4kok6SKr7V+vlpcvBgbIop
+        9+Ub1p/jVl9VCPm0DEi7zxPhMr8BNIQ=
+X-Google-Smtp-Source: ABdhPJxhMTaokiqbPWAZEjSmci5WE9lhLOP+1qRUFSjUyeVFApUW5PAi38eGfCKJEXQe48lOrrGK/w==
+X-Received: by 2002:a05:620a:448c:: with SMTP id x12mr2088055qkp.39.1627512202147;
+        Wed, 28 Jul 2021 15:43:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k7sm722509qkj.79.2021.07.28.15.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jul 2021 15:43:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v7 0/6] hwmon: (dell-smm-hwmon) Convert to new hwmon
+ registration api
+To:     W_Armin@gmx.de, pali@kernel.org
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+References: <20210728221557.8891-1-W_Armin@gmx.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <fb82b50e-fa7d-c735-262b-0ac930c4d8ee@roeck-us.net>
+Date:   Wed, 28 Jul 2021 15:43:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210728221557.8891-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "B. J. Wyman" <bjwyman@gmail.com>
+On 7/28/21 3:15 PM, W_Armin@gmx.de wrote:
+> From: Armin Wolf <W_Armin@gmx.de>
+> 
+> This patch series is converting the dell-smm-hwmon driver
+> to the new hwmon registration API. In order to do so,
+> it introduces a platform device in the first patch, and
+> applies some optimisations in the next three patches.
+> The switch to the new hwmon registration API is done in
+> the next patch. The last patch is fixing a small bug.
+> 
+> The caching of the fan/temp values was modified to better fit
+> the new hwmon API.
+> 
+> The patches work fine for my Dell Latitude C600, but i whould
+> appreciate someone testing the code on another model too.
+> 
 
-When doing a PMBus write for the LED control on the IBM Common Form
-Factor Power Supplies (ibm-cffps), the DAh command requires that bit 7
-be low and bit 6 be high in order to indicate that you are truly
-attempting to do a write.
+At this point I'd suggest to queue the series up in -next and see
+what happens. I don't think we'll get additional feedback.
 
-Signed-off-by: B. J. Wyman <bjwyman@gmail.com>
----
- drivers/hwmon/pmbus/ibm-cffps.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thought ? Objections ?
 
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index 5668d8305b78..df712ce4b164 100644
---- a/drivers/hwmon/pmbus/ibm-cffps.c
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -50,9 +50,9 @@
- #define CFFPS_MFR_VAUX_FAULT			BIT(6)
- #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
- 
--#define CFFPS_LED_BLINK				BIT(0)
--#define CFFPS_LED_ON				BIT(1)
--#define CFFPS_LED_OFF				BIT(2)
-+#define CFFPS_LED_BLINK				(BIT(0) | BIT(6))
-+#define CFFPS_LED_ON				(BIT(1) | BIT(6))
-+#define CFFPS_LED_OFF				(BIT(2) | BIT(6))
- #define CFFPS_BLINK_RATE_MS			250
- 
- enum {
--- 
-2.25.1
+Guenter
+
+> Changes in v7:
+> - Add commit explaining why pwm1_enable has to be write-only
+> 
+> Changes in v6:
+> - Make pwm1_enable permissions write-only
+> - Do not test fan speed in dell_smm_is_visible()
+> 
+> Changes in v5:
+> - Fix checkpatch warning after patch 5/6
+> - Hide fanX_label if fan type calls are disallowed
+> 
+> Changes in v4:
+> - Make fan detection behave like before patch 5/6
+> - Update coverletter title
+> 
+> Changes in v3:
+> - Update description of patch 1/6 and remove empty change
+> - Let pwm1_enable remain write-only
+> - Include a small bugfix
+> 
+> Changes in v2:
+> - Fix coverletter title
+> - Update docs regarding pwm1_enable
+> 
+> Armin Wolf (6):
+>    hwmon: (dell-smm-hwmon) Use platform device
+>    hwmon: (dell-smm-hwmon) Mark functions as __init
+>    hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
+>    hwmon: (dell-smm-hwmon) Move variables into a driver private data
+>      structure
+>    hwmon: (dell-smm-hwmon) Convert to
+>      devm_hwmon_device_register_with_info()
+>    hwmon: (dell-smm-hwmon) Fix fan mutliplier detection for 3rd fan
+> 
+>   drivers/hwmon/dell-smm-hwmon.c | 853 ++++++++++++++++-----------------
+>   1 file changed, 425 insertions(+), 428 deletions(-)
+> 
+> --
+> 2.20.1
+> 
 
