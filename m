@@ -2,107 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE650C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 16:49:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 446BBC432BE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 16:54:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BC2A60EB9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 16:49:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0BA2860F9D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 16:54:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbhG1Qta (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Jul 2021 12:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S229567AbhG1QyW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Jul 2021 12:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhG1Qt2 (ORCPT
+        with ESMTP id S229515AbhG1QyV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jul 2021 12:49:28 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832ABC061757;
-        Wed, 28 Jul 2021 09:49:26 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id x3so2844554qkl.6;
-        Wed, 28 Jul 2021 09:49:26 -0700 (PDT)
+        Wed, 28 Jul 2021 12:54:21 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBC0C061757;
+        Wed, 28 Jul 2021 09:54:19 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d2so1826783qto.6;
+        Wed, 28 Jul 2021 09:54:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LeWyV5Hvjaj4WOnnvngdvVRWMOHLBfih9OtkOnTI1z8=;
-        b=m6pv6jW/27Q3dD+d92ObHIKtmjZeqyQ2c/7m7Bk6dRtN2oEYjl+9tLoxIYD/VE2EAz
-         AGc6RND3GdY7tDhPDTEN8gyZveNVuqLTMNgnFsNEG0+SFzpV66qKkIB4WQmCnE4UFHC+
-         rHn3aGQLiSfDvjElh16L9NKZeOv+W7IlRo257PP+ZgY3mnJYQAOX90Rvz3fA3xWFkcH/
-         WFOj1pplHshep4uLnOj4w2SjYSC8SXXquAcA0tszz8EqBF66BGhcsMXIwVvO38Vrj6wn
-         +7b5RrnF8IzOG6Q12uis5AJFKKXMt201zKe9qPNmHd6kugr2t0zpR3Gx2VLqaCl6Fpgp
-         oDLA==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5WRc7NZsG224KMOLzT6MF0xtQDYlQYQ+sE4yZrsGKwI=;
+        b=pBbZcC8qkw1M+SzXsZgZ5rDmHtG5kHyuGt7FeWdqYfewy8ozYb23OuFRnZl27Ig3Gq
+         8nJRAv0WeA7zY3g96vIf1jKVCOaGmPnwL4AEMbZ3WEWzUXO0v8m7zmMijhJReAkJgK+w
+         zIAf0ffeQOEHQDLHuRBs8C0C9Ya1+Y1oPhQqjhYsPGioMYhpwItCppl8GgSVdk/XOH60
+         C4teyvrMbxJBXCut4FzlKDhHJT4b+hpnZRxKEd1pUdr3gUTBdpfbQXx8a5Db9wwermez
+         FQsIfy7NSl6FJJX0KAXmcKsiqoDjlVAbiT4r9M2yYTp5pZbPzzxTp/iSBy35T3fyCTUX
+         sjdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LeWyV5Hvjaj4WOnnvngdvVRWMOHLBfih9OtkOnTI1z8=;
-        b=r76lz6PCTEg3oNbHobH2sjQ7+ICzJYdu/uPRCUXz6GYHOhFmAI0cwT6gIuUWOnZs0Q
-         a0mLugvm2G6Y0yUqa0Vx8yPGUIzslOlKTR6IoVY2HA2Gl9cJYKm8PvGDdogMoybIm6au
-         wnHEt0EYe30hpr+UOxN0h9l+T8Y28ULXNkBq/dia/pWIoWa0NWAONxfgFzGdHbOphLR/
-         +OjKrrDNN1UScky7RzFUWTv1TUiDaJY7/cDidzrzNzVNAR0m/KFvTo0lYshBNHpGoYBn
-         J5kNwHxTO4EVHpZhll/hnkNqHLOFf7M+JyO+S76lmCQbb7c0xULR4k5biPVNdGz7Clrr
-         7Bbg==
-X-Gm-Message-State: AOAM533wMcU/WhJPJg25QxaJUyevsZreMHqKLJjddIXBvcQtHng0/OFX
-        gkG78HqEPK8Xej5EwSWbuVs=
-X-Google-Smtp-Source: ABdhPJySjYSARMewUPhmoEjLk/WUz2g0xxHATHGntoq6omxh909G00JlSe0G+vHbIYKnZIV3fJoVIg==
-X-Received: by 2002:ae9:ebd5:: with SMTP id b204mr572143qkg.183.1627490965712;
-        Wed, 28 Jul 2021 09:49:25 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5WRc7NZsG224KMOLzT6MF0xtQDYlQYQ+sE4yZrsGKwI=;
+        b=B40N3FTHGresIcadDsizX8sY++iqSI0h4XgKKjZkyNpUHljdFrK8ofxjDd1ElB+C5w
+         MMnhQSbnmxcBYTxpg/sHp6iSpcTSbJiNbpi3fMGXSz3YlqIAVUd9g1ohotGxr7p8O/Xv
+         3Q0YwCaSf+w4p2LgxJWDw2TQhY7DGXPKOU6Hv0WFtq1SJ7n3jCDr1pKS3umWzCRJ3c0N
+         Di6z06HSXR+12M/NNRcnE2eGsRNVghM75nBqYgQzq0Dp0mpm1cDyYuTpUwp9Hrjo85Zw
+         2RgtemnVVf/Eo7jKAMdIa8dVWgdoH8SnnLIzNJVfo2x9H8wC49oCQMd/fDY9gkMrvMvI
+         Vh9w==
+X-Gm-Message-State: AOAM532zBGIXda1/1sjECdHeTK11A0yAq/zowEXKRbWF6/ytGIsEePRk
+        7qoRHX3S+mmH3FtL+PZhPE4p5jNmw6Y=
+X-Google-Smtp-Source: ABdhPJwVA0b4E2zT2rdSCKwbX9fTqBQ5wfZz9pIwBnO5KXoem83v2RNfPRnRMaXGRn7rUPQceKS1Zw==
+X-Received: by 2002:a05:622a:283:: with SMTP id z3mr459040qtw.312.1627491258155;
+        Wed, 28 Jul 2021 09:54:18 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j24sm161387qtr.52.2021.07.28.09.49.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 09:49:25 -0700 (PDT)
+        by smtp.gmail.com with ESMTPSA id m17sm169167qtu.34.2021.07.28.09.54.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jul 2021 09:54:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Jul 2021 09:49:23 -0700
+Subject: Re: [PATCH v3 0/2] hwmon: Add StarFive JH7100 temperature sensor
+To:     Emil Renner Berthing <kernel@esmil.dk>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210726171802.1052716-1-kernel@esmil.dk>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Navin Sankar Velliangiri <navin@linumiz.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: sht4x: update Documentation for Malformed table
-Message-ID: <20210728164923.GA1084966@roeck-us.net>
-References: <20210727232054.7426-1-rdunlap@infradead.org>
+Message-ID: <bcc9de67-f006-0a81-8c3f-2ae5188dca48@roeck-us.net>
+Date:   Wed, 28 Jul 2021 09:54:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210727232054.7426-1-rdunlap@infradead.org>
+In-Reply-To: <20210726171802.1052716-1-kernel@esmil.dk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 04:20:54PM -0700, Randy Dunlap wrote:
-> Make top and bottom border lines match.
+On 7/26/21 10:18 AM, Emil Renner Berthing wrote:
+> This adds a driver for the temperature sensor on the JH7100, a RISC-V
+> SoC by StarFive Technology Co. Ltd., and most likely also the upcoming
+> JH7110 version.
 > 
-> Documentation/hwmon/sht4x.rst:42: WARNING: Malformed table.
-> Text in column margin in table line 4.
+> The SoC is used on the BeagleV Starlight board:
+> https://github.com/beagleboard/beaglev-starlight
 > 
-> Fixes: 505c2549373f ("hwmon: Add sht4x Temperature and Humidity Sensor Driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Navin Sankar Velliangiri <navin@linumiz.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
+> Support for this SoC is not yet upstreamed, but is actively worked on,
+> so it should only be a matter of time before that happens.
+> 
 
-Applied.
+Hmm, makes me wonder if I should apply the series now or later,
+when the chip is actually supported by the kernel. Comments/thoughts ?
 
-Thanks,
 Guenter
 
-> Applies to mainline.
+> v3:
+> * Handle timeouts from wait_for_completion_interruptible_timeout
+>    properly.
 > 
->  Documentation/hwmon/sht4x.rst |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v2:
+> * Fix checkpatch.pl --strict warnings
+>    - Add myself to MAINTAINERS
+>    - Fix multiline comments
+>    - Use proper case and whitespace for #defines
+>    - Add comment to sfctemp::lock mutex.
+> * Remaining comments by Guenter Roeck
+>    - Add Documentation/hwmon/sfctemp.rst
+>    - Use devm_add_action() and devm_hwmon_device_register_with_info()
+>      instead of a driver .remove function.
+>    - Don't do test conversion at probe time.
+>    - #include <linux/io.h>
+>    - Remove unused #defines
+>    - Use int return variable in sfctemp_convert().
+> * Add Samin's Signed-off-by to patch 2/2
 > 
-> --- linext-20210727.orig/Documentation/hwmon/sht4x.rst
-> +++ linext-20210727/Documentation/hwmon/sht4x.rst
-> @@ -42,4 +42,4 @@ humidity1_input Measured humidity in %H
->  update_interval The minimum interval for polling the sensor,
->                  in milliseconds. Writable. Must be at least
->                  2000.
-> -============== =============================================
-> +=============== ============================================
+> Emil Renner Berthing (2):
+>    dt-bindings: hwmon: add starfive,jh7100-temp bindings
+>    hwmon: (sfctemp) Add StarFive JH7100 temperature sensor
+> 
+>   .../bindings/hwmon/starfive,jh7100-temp.yaml  |  43 +++
+>   Documentation/hwmon/index.rst                 |   1 +
+>   Documentation/hwmon/sfctemp.rst               |  32 ++
+>   MAINTAINERS                                   |   8 +
+>   drivers/hwmon/Kconfig                         |  10 +
+>   drivers/hwmon/Makefile                        |   1 +
+>   drivers/hwmon/sfctemp.c                       | 291 ++++++++++++++++++
+>   7 files changed, 386 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh7100-temp.yaml
+>   create mode 100644 Documentation/hwmon/sfctemp.rst
+>   create mode 100644 drivers/hwmon/sfctemp.c
+> 
+
