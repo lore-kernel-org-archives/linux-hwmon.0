@@ -2,132 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 798B0C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 21:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21F03C432BE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:16:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FB9C60F5E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 21:54:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0636560FED
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Jul 2021 22:16:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbhG1Vyj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Jul 2021 17:54:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43858 "EHLO mail.kernel.org"
+        id S232113AbhG1WQT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Jul 2021 18:16:19 -0400
+Received: from mout.gmx.net ([212.227.15.15]:35655 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231668AbhG1Vyi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jul 2021 17:54:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DD9996103E;
-        Wed, 28 Jul 2021 21:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627509276;
-        bh=ztqK5CmU1wxcdYsDe+kr4lWl0t5kyCRnf4z52Pk7fgM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GOVV6Y+lxSdN7wHDJ3R2gLGbe0oT+2rkYiyZGo9R/uARq9q34/Bs62L9NYcgbglCQ
-         HBXs1zaPk3WqJ+wwRn6H71zzjzm+xD6jaf4211ym4voG9pKBpLE6NtFQ07fLVRcRRv
-         XhqPvF5PpboGDQSPM+F8gLbY+k6tuq0tOsCYD3rtbYtWXytAqH80tY8jXJTjDC7P70
-         b7M9nvutnQLRYvJ6q0ZlEMgnb5E3F9rINRSRqomqeqWWidvW4s/X0vZ2J+znKXT2+v
-         7LR3X7pEMzwJNDnLB6/JitdEDVsulbJkhHAH7uWiE3IozraEzqnKgAYxbtKCwTMBe9
-         iqlDF9++G1j3w==
-Received: by pali.im (Postfix)
-        id A398996B; Wed, 28 Jul 2021 23:54:33 +0200 (CEST)
-Date:   Wed, 28 Jul 2021 23:54:33 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v6 0/6] hwmon: (dell-smm-hwmon) Convert to new hwmon
- registration api
-Message-ID: <20210728215433.yelg3y2ll7evnxba@pali>
-References: <20210728205142.8959-1-W_Armin@gmx.de>
- <cb393f4a-44c6-4f67-6c1e-ba04c48a59e5@roeck-us.net>
- <340a960b-3031-77de-8e62-5fd933ec9a62@gmx.de>
- <0500dd39-c82c-8268-91a3-0a97103ab3d0@roeck-us.net>
- <cac1b3ef-b51c-4514-cc7b-000b0d48ac8e@gmx.de>
- <938db8a5-3199-d468-5979-9978171bb138@roeck-us.net>
- <db21294b-48cf-65ad-77dd-494a779650dc@gmx.de>
+        id S231982AbhG1WQT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 28 Jul 2021 18:16:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1627510560;
+        bh=5bMzPjeyijVAj4wj9GMDCHQTmRHHiM1RekFoQNFxu6o=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=MEZjBinxGoNU7fpw6Kx7NmSoMMjbeYjEdfYb2yxsq7gSGune8ffSbSe155mMe1bnC
+         cA1WNFP3Aas+6YJFrNuoy2AdL8TAmDXEWvQuDfYtMczDLAnv2cF7b7ME/DgXxyOl57
+         RzCKk+AJW25oAKZfEOr5DUNDUwuGcxcR9mSFKydQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([79.242.190.212]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MIwzA-1mT9cQ04kM-00KTqD; Thu, 29 Jul 2021 00:16:00 +0200
+From:   W_Armin@gmx.de
+To:     pali@kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH v7 0/6] hwmon: (dell-smm-hwmon) Convert to new hwmon registration api
+Date:   Thu, 29 Jul 2021 00:15:51 +0200
+Message-Id: <20210728221557.8891-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db21294b-48cf-65ad-77dd-494a779650dc@gmx.de>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:MG/3tgQikatThyr4zr3XnHsPnuPQHsIOQ3PHfiHP9gw6TlHp3iA
+ 5f96Eq6b2nDU4LlS6Y59TWHYhAPrXqK5TObFUOQuRES5Fxqj41o/feeOnzbMeAArJZsJRWC
+ Pnv6tmUfk3OXAGrcAwPq8iBZa7ScQaU8uhHuNKPzxwh3YxqZxhwhKDZq+Xq+YmEy+kbkPMU
+ 5Tynm0Aq68KP0hra7UnTg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2ZPo5QcESbY=:F4+w9rep3CWMUDSxhiCwJ7
+ 2CPogw8nw4hTyyIjJrS8d0dFCdJxwnLqzMfWmm2h4OpUMVEJ+Kx4sSGUeIRDF+XrIcf+msjU6
+ XbMB/yrCZ/mTKOlp7QIk12Mob8HbQVOniiNAVAynYVFRUEide4uPJmY8lq48jspRid2s1WlHc
+ Am7KwhHEyZQuwYOoRqR/ntvSrO/EgBYchGqUwm9tZKIPO5CqaHJ2JZffVOmbJQu75iNgSAV97
+ FMZUqGqjESyBozusyVoE4e35mVNzX/Ge9qA8rnyNk35x6NPqYlmw2duq5OEzQko2PM45fI8hH
+ iLQO11AwPuWoLnzRXDO59zEtqx3eXHiUQnEDs5GF/NKxRNBqhssfgu47s1gUXCUNyfcRtj+Q8
+ aH+FczR8VarTFXK9Ol1RFUm+tx+EKQfSHcpM+JhEZ0n4gkR5d4nfdntVA/UU5JriwOb37NBlc
+ meixQ4yehzICUoHvIvQK6XkroasYoLhFsGYQZtOdMv36JM41GP4aTHwWU6SxsH8MUPpINjCbR
+ 3hJ9pU2d2eHKDmUl5/5yM5rzcmPJg5GKKOp5A9wcKkgKIiZ/TTo40tgC7G7zyRSvraW2bMv4Y
+ z/kaZ/66FB8axq85fhKJekCjGFtZnEWv0szKYqXlgeQrh96axx4nqn8ohuH4lxnEEndir6NHX
+ l5vO72svEY7wX1q17kGyEW2kxLH4dFYkpQ7wex3JLczU7StkJjhwigjb3IJe92gN1cXVCnOFn
+ cqTHQR0kPuoOvClfHj3IEN0eBQyYCoyj07/SFphjKFMAm5W95VUwBGhBEjuJEcHrQg9RnwpZi
+ zYdCU940kQdqpwrdA5hIdZu++Lo69zNoA5jF4mqiSgwHq0nlgBZcmJrGP6uItStdQxYd3O97s
+ I8XOlLut5vWgb9wjrQZ+JIus6cYZx/LWt+quwpcwbFsyrjWxRWuwhj06dgvjQeUULkmI1BoxE
+ jsoC//Lu83e+olgz7WAjhgfckDYMtNgr/5/fm+JJQvxenGPRONkUMYTsBaNjX74fY+anDxeG2
+ hYnxTjwqFq+cZRnH2ytB9v+wIv3aj6cYMb4NxtIM+zrrc/KF9os3daRUXZG/KbQvQLON8Uaa9
+ 1O47EC9YKf//8hen49i6isqP1xrkThA/6g4
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wednesday 28 July 2021 23:40:21 Armin Wolf wrote:
-> Am 28.07.21 um 23:37 schrieb Guenter Roeck:
-> > On 7/28/21 2:34 PM, Armin Wolf wrote:
-> > > Am 28.07.21 um 23:28 schrieb Guenter Roeck:
-> > > > On 7/28/21 2:19 PM, Armin Wolf wrote:
-> > > > > On 28.07.21 23:07 Guenter Roeck wrote:
-> > > > > > On 7/28/21 1:51 PM, W_Armin@gmx.de wrote:
-> > > > > > > From: Armin Wolf <W_Armin@gmx.de>
-> > > > > > > 
-> > > > > > > This patch series is converting the dell-smm-hwmon driver
-> > > > > > > to the new hwmon registration API. In order to do so,
-> > > > > > > it introduces a platform device in the first patch, and
-> > > > > > > applies some optimisations in the next three patches.
-> > > > > > > The switch to the new hwmon registration API is done in
-> > > > > > > the next patch. The last patch is fixing a small bug.
-> > > > > > > 
-> > > > > > > The caching of the fan/temp values was modified to better fit
-> > > > > > > the new hwmon API.
-> > > > > > > 
-> > > > > > > The patches work fine for my Dell Latitude C600, but i whould
-> > > > > > > appreciate someone testing the code on another model too.
-> > > > > > > 
-> > > > > > > Changes in v6:
-> > > > > > > - Make pwm1_enable permissions write-only
-> > > > > > 
-> > > > > > Sorry, guess I am missing something. Why ?
-> > > > > > 
-> > > > > > Guenter
-> > > > > > 
-> > > > > pwm1_enable used SENSOR_DEVICE_ATTR_WO before the patch, so the file
-> > > > > permissions where 0200.
-> > > > > In the v5 patch series however, the file permission where not 0200,
-> > > > > so i
-> > > > > changed that.
-> > > > > 
-> > > > 
-> > > > Is there a _reason_ for declaring this attribute write only, other than
-> > > > "it used to be that way" ?
-> > > > 
-> > > > Guenter
-> > > 
-> > > I dont think so, dell_smm_read will just return -EOPNOTSUPP if
-> > > someone tries to read pwm1_enable.
-> > > 
-> > > Armin
-> > > 
-> > That is not what I meant. Is there a reason to not report
-> > the current status of pwm1_enable to the user ? In other
-> > words, does the firmware not report its current status ?
-> > 
-> > Guenter
-> 
-> Pali said the driver cannot query the state of pwm1_enable from the BIOS, and with userspace tools being able to change
-> the state of BIOS fan control behind our back, we cannot simply return the last set value.
+From: Armin Wolf <W_Armin@gmx.de>
 
-We have already discussed this problem years ago, see:
-https://lore.kernel.org/linux-hwmon/20160522152823.GA18331@roeck-us.net/
+This patch series is converting the dell-smm-hwmon driver
+to the new hwmon registration API. In order to do so,
+it introduces a platform device in the first patch, and
+applies some optimisations in the next three patches.
+The switch to the new hwmon registration API is done in
+the next patch. The last patch is fixing a small bug.
 
-And also again this year:
-https://lore.kernel.org/linux-hwmon/20210528211037.2tnblovgb3rkcwnq@pali/
+The caching of the fan/temp values was modified to better fit
+the new hwmon API.
 
-Basically there is no known firmware command to retrieve current status
-yet. And both userspace and SMM/firmware itself can change state. So
-kernel has no way how to retrieve current status and caching last value
-cannot be used (due to userspace and firmware can change it).
+The patches work fine for my Dell Latitude C600, but i whould
+appreciate someone testing the code on another model too.
 
-Whole SMM API is undocumented and seems that Dell does not want to
-provide any documentation for it.
+Changes in v7:
+- Add commit explaining why pwm1_enable has to be write-only
 
-I know that it is pity that we have no read functionality, but we have
-to deal with it...
+Changes in v6:
+- Make pwm1_enable permissions write-only
+- Do not test fan speed in dell_smm_is_visible()
 
-Maybe it would make sense to add comment into driver code, why attribute
-is write-only...
+Changes in v5:
+- Fix checkpatch warning after patch 5/6
+- Hide fanX_label if fan type calls are disallowed
+
+Changes in v4:
+- Make fan detection behave like before patch 5/6
+- Update coverletter title
+
+Changes in v3:
+- Update description of patch 1/6 and remove empty change
+- Let pwm1_enable remain write-only
+- Include a small bugfix
+
+Changes in v2:
+- Fix coverletter title
+- Update docs regarding pwm1_enable
+
+Armin Wolf (6):
+  hwmon: (dell-smm-hwmon) Use platform device
+  hwmon: (dell-smm-hwmon) Mark functions as __init
+  hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
+  hwmon: (dell-smm-hwmon) Move variables into a driver private data
+    structure
+  hwmon: (dell-smm-hwmon) Convert to
+    devm_hwmon_device_register_with_info()
+  hwmon: (dell-smm-hwmon) Fix fan mutliplier detection for 3rd fan
+
+ drivers/hwmon/dell-smm-hwmon.c | 853 ++++++++++++++++-----------------
+ 1 file changed, 425 insertions(+), 428 deletions(-)
+
+=2D-
+2.20.1
+
