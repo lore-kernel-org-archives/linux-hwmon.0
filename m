@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60466C4338F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916AFC4320A
 	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Jul 2021 06:32:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40CB260F6F
+	by mail.kernel.org (Postfix) with ESMTP id 6C9BC60EFD
 	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Jul 2021 06:32:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbhG2GcJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S233934AbhG2GcJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Thu, 29 Jul 2021 02:32:09 -0400
-Received: from mga17.intel.com ([192.55.52.151]:17578 "EHLO mga17.intel.com"
+Received: from mga14.intel.com ([192.55.52.115]:11553 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233934AbhG2GcI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S234079AbhG2GcI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 29 Jul 2021 02:32:08 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10059"; a="193092850"
+X-IronPort-AV: E=McAfee;i="6200,9189,10059"; a="212540330"
 X-IronPort-AV: E=Sophos;i="5.84,278,1620716400"; 
-   d="scan'208";a="193092850"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 23:32:05 -0700
+   d="scan'208";a="212540330"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 23:32:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,278,1620716400"; 
-   d="scan'208";a="499640506"
+   d="scan'208";a="518064130"
 Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jul 2021 23:32:04 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 28 Jul 2021 23:32:04 -0700
 Received: from kbuild by d053b881505b with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1m8zaN-0008wN-Kk; Thu, 29 Jul 2021 06:32:03 +0000
-Date:   Thu, 29 Jul 2021 14:31:28 +0800
+        id 1m8zaN-0008wT-S9; Thu, 29 Jul 2021 06:32:03 +0000
+Date:   Thu, 29 Jul 2021 14:31:26 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 36c4d19d52b01d8dec42d0bb27c03d9f28774462
-Message-ID: <61024b40.JxHDxw3ph02zhcIz%lkp@intel.com>
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 03726fd90f4bc4ea309f9bf6faf24960d6d2e986
+Message-ID: <61024b3e.GEkXrXVg69wUaBWq%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -47,12 +47,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 36c4d19d52b01d8dec42d0bb27c03d9f28774462  dt-bindings: sbrmi: Add SB-RMI hwmon driver bindings
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 03726fd90f4bc4ea309f9bf6faf24960d6d2e986  hwmon: sht4x: update Documentation for Malformed table
 
 elapsed time: 723m
 
-configs tested: 94
+configs tested: 100
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -65,6 +65,12 @@ arm64                               defconfig
 arm                              allyesconfig
 arm                              allmodconfig
 i386                 randconfig-c001-20210728
+powerpc                         ps3_defconfig
+powerpc                      chrp32_defconfig
+sparc64                          alldefconfig
+mips                       rbtx49xx_defconfig
+m68k                            mac_defconfig
+sh                     sh7710voipgw_defconfig
 powerpc                     kilauea_defconfig
 m68k                          multi_defconfig
 sh                          polaris_defconfig
