@@ -2,49 +2,63 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81124C4338F
-	for <linux-hwmon@archiver.kernel.org>; Sun,  1 Aug 2021 20:20:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97F2BC4338F
+	for <linux-hwmon@archiver.kernel.org>; Sun,  1 Aug 2021 20:29:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CF6261059
-	for <linux-hwmon@archiver.kernel.org>; Sun,  1 Aug 2021 20:20:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72B8060EFD
+	for <linux-hwmon@archiver.kernel.org>; Sun,  1 Aug 2021 20:29:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbhHAUUO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 1 Aug 2021 16:20:14 -0400
-Received: from mail-yb1-f171.google.com ([209.85.219.171]:47076 "EHLO
-        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbhHAUUN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 1 Aug 2021 16:20:13 -0400
-Received: by mail-yb1-f171.google.com with SMTP id k65so3488825yba.13;
-        Sun, 01 Aug 2021 13:20:04 -0700 (PDT)
+        id S231426AbhHAUaC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 1 Aug 2021 16:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230104AbhHAUaC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 1 Aug 2021 16:30:02 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376B9C06175F;
+        Sun,  1 Aug 2021 13:29:54 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id t1-20020a4a54010000b02902638ef0f883so3924854ooa.11;
+        Sun, 01 Aug 2021 13:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yRa+8nfsAlC+BDrCiBgWd6QSuRUaWhatjBxWVMsk2Ws=;
+        b=KkY1OGN8uI/P+a7a+GD3fcV6/GZqPNwZveus7pEhhp4qjTAyh7xwVNt1Bp8/KY9K27
+         lkABJJAD5vKgCcDJHj9QBIeVAXyY8urdhjWc1fPQts0Sn4vadbs0xGzStXGHLiQGBmjh
+         HkgPdRMxLkKb338/DU29rorBdIFStxsBbyFdKwG0KilfDB7zFJk4UZW4beOXxPI/SOsR
+         C+hJyp8BAavl6Nl/6j3890xzX2goaWkhN8RZ8eZZLJf2HmwMM0P7kfbQdcD7XOT9xwWY
+         At5Wd06c4kc34iqDvadUHhpmBDPigOeN7pfMXXIC1L1I8hQTSK7phbHTHYVlYecD9QPP
+         1xHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eTzcaASLfYxMeVh/o9ndu1xjmQQug01BHbzROqKqzyU=;
-        b=px0lZQ/5SmYNXnwopKJT+0YZ7T1+yi8bKTXF/b2whzGFAfiQX0MworM9xeicikk2A4
-         rNPKpeP4YHROpCJdSYniXQ+dd9/tsfxkgpoL7ETubsAtiDcbq24iAFJ36wBuhAaD8nJ6
-         NGXydDXzWQqBE7iUr3lurzKMiKrGetcZPGYcJqO6ip6Mh3gOL/TyhoANvdfvE8fmVxyU
-         JsTI/AzEdaOU1VPNOjp2x0kh4Lz5aRMQUyqM/ep3L0VDyeryfHWeVq5H0ER8EeI9nCxj
-         8gek+hhMKKd6DHFTUyp83Io3zz2Lc2znaOx9Hw/eL+yhrnLsD+ebn5HaHttuuvTf/hXX
-         9yNw==
-X-Gm-Message-State: AOAM533PMalQavBQ4NkWQ0pwvzBqybWqIQwY24OsXiVDdy7+1EhsltTv
-        IZhwGk1QUHlc7ZYu6NIL/i43CTO6fCPeCuxR3TaajYOB19k=
-X-Google-Smtp-Source: ABdhPJw0qoZXs8yZhg9+B4MNZyQ9bGkX2cF86w6GcxDmRB+ZAk9qShy77Ng5GpqnTbA8RXQe0fpo0yKpG9QEuNRHeGM=
-X-Received: by 2002:a25:aad2:: with SMTP id t76mr16609902ybi.18.1627849202760;
- Sun, 01 Aug 2021 13:20:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210726171802.1052716-1-kernel@esmil.dk> <bcc9de67-f006-0a81-8c3f-2ae5188dca48@roeck-us.net>
- <CANBLGcxpaFt-bokq8=Tie-bJnWk5AqLyr-1Ns-+Xtobxs5bYQQ@mail.gmail.com>
-In-Reply-To: <CANBLGcxpaFt-bokq8=Tie-bJnWk5AqLyr-1Ns-+Xtobxs5bYQQ@mail.gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Sun, 1 Aug 2021 22:19:51 +0200
-Message-ID: <CANBLGcyhKYwsLOwaO=BOhaCzP0T2CqKruJZexypRAY3HmEJUMA@mail.gmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yRa+8nfsAlC+BDrCiBgWd6QSuRUaWhatjBxWVMsk2Ws=;
+        b=VcTYCppBTuJ2crcdvTActKpBXip5eXgtiXeRcWkoPn5qPOneZPUqqRReOpwBFh+rsh
+         HoZ0zheIf5asjzEfCMulkiZ3rEihISFQ5U0dhdv0rKtuWNvZsWpDSumC4h+qsYr0g401
+         Fjeo1dXecZGtOtXyGnbcET/uZAekbRiw8wpBUArQtLq0kcTJFPpPPuIA7csQKZeWCmHh
+         wsL+mJs47TimxQC6NcrVufk2yG7fUycs8xQepSOVZjpw88u25PPKGUH8lMK98FFNhsor
+         6ZG0fN1kuWEezx10TZlFTKE3A23TOpsvpR/WzZXL3rLO6MxOcTrCpOT1+XGDvrJhCGAo
+         m+Iw==
+X-Gm-Message-State: AOAM532tidLb3w4SIgd5ZIa8kHBSoAUzTYS7DlZno377Hcv60QWuZoFo
+        81pH9VVOsNq9bENNkeR6f0T0/m9wljk=
+X-Google-Smtp-Source: ABdhPJwrQoKb31KnmW9JbnFu5E1LVxfynz7kqyd4XHz4RvxsUJlby484ubfYOpX1v83Y1tyritlmRg==
+X-Received: by 2002:a4a:e8cd:: with SMTP id h13mr8634903ooe.26.1627849793356;
+        Sun, 01 Aug 2021 13:29:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 89sm1561391ott.19.2021.08.01.13.29.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Aug 2021 13:29:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH v3 0/2] hwmon: Add StarFive JH7100 temperature sensor
-To:     Guenter Roeck <linux@roeck-us.net>,
+To:     Emil Renner Berthing <kernel@esmil.dk>,
         Drew Fustini <drew@beagleboard.org>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -53,45 +67,63 @@ Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>, linux-doc@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20210726171802.1052716-1-kernel@esmil.dk>
+ <bcc9de67-f006-0a81-8c3f-2ae5188dca48@roeck-us.net>
+ <CANBLGcxpaFt-bokq8=Tie-bJnWk5AqLyr-1Ns-+Xtobxs5bYQQ@mail.gmail.com>
+ <CANBLGcyhKYwsLOwaO=BOhaCzP0T2CqKruJZexypRAY3HmEJUMA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <f09e323b-90f3-8fd6-e5ba-e3c5ac823dc6@roeck-us.net>
+Date:   Sun, 1 Aug 2021 13:29:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <CANBLGcyhKYwsLOwaO=BOhaCzP0T2CqKruJZexypRAY3HmEJUMA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 28 Jul 2021 at 19:05, Emil Renner Berthing <kernel@esmil.dk> wrote:
-> On Wed, 28 Jul 2021 at 18:54, Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 7/26/21 10:18 AM, Emil Renner Berthing wrote:
-> > > This adds a driver for the temperature sensor on the JH7100, a RISC-V
-> > > SoC by StarFive Technology Co. Ltd., and most likely also the upcoming
-> > > JH7110 version.
-> > >
-> > > The SoC is used on the BeagleV Starlight board:
-> > > https://github.com/beagleboard/beaglev-starlight
-> > >
-> > > Support for this SoC is not yet upstreamed, but is actively worked on,
-> > > so it should only be a matter of time before that happens.
-> > >
-> >
-> > Hmm, makes me wonder if I should apply the series now or later,
-> > when the chip is actually supported by the kernel. Comments/thoughts ?
-> >
-> > Guenter
->
-> I'd of course love if it was applied now. That would at least mean
-> fewer patches to rebase when keeping the beaglev patches [1] up to
-> date, and I'd be very surprised if SoC support doesn't make it
-> upstream eventually. But I'd also fully understand the position that
-> this only makes sense to add when support for the SoC is upstream too.
-> I'm adding Drew, as he might have something to say about this.
+On 8/1/21 1:19 PM, Emil Renner Berthing wrote:
+> On Wed, 28 Jul 2021 at 19:05, Emil Renner Berthing <kernel@esmil.dk> wrote:
+>> On Wed, 28 Jul 2021 at 18:54, Guenter Roeck <linux@roeck-us.net> wrote:
+>>> On 7/26/21 10:18 AM, Emil Renner Berthing wrote:
+>>>> This adds a driver for the temperature sensor on the JH7100, a RISC-V
+>>>> SoC by StarFive Technology Co. Ltd., and most likely also the upcoming
+>>>> JH7110 version.
+>>>>
+>>>> The SoC is used on the BeagleV Starlight board:
+>>>> https://github.com/beagleboard/beaglev-starlight
+>>>>
+>>>> Support for this SoC is not yet upstreamed, but is actively worked on,
+>>>> so it should only be a matter of time before that happens.
+>>>>
+>>>
+>>> Hmm, makes me wonder if I should apply the series now or later,
+>>> when the chip is actually supported by the kernel. Comments/thoughts ?
+>>>
+>>> Guenter
+>>
+>> I'd of course love if it was applied now. That would at least mean
+>> fewer patches to rebase when keeping the beaglev patches [1] up to
+>> date, and I'd be very surprised if SoC support doesn't make it
+>> upstream eventually. But I'd also fully understand the position that
+>> this only makes sense to add when support for the SoC is upstream too.
+>> I'm adding Drew, as he might have something to say about this.
+> 
+> Hi Guenter,
+> 
+> Things have changed. The BeagleBoard.org foundation is no longer
+> planning to make any further boards using the JH7100 or upcoming
+> JH7110 SoCs from StarFive. I still think support for the JH7100 will
+> make it upstream eventually, but I'm no longer confident enough to
+> recommend merging this before there are more concrete plans for the
+> SoC. So thanks for the reviews. I'll repost it when I think it's time
+> to consider it for upstream again.
+> 
 
-Hi Guenter,
+Thanks for the update.
 
-Things have changed. The BeagleBoard.org foundation is no longer
-planning to make any further boards using the JH7100 or upcoming
-JH7110 SoCs from StarFive. I still think support for the JH7100 will
-make it upstream eventually, but I'm no longer confident enough to
-recommend merging this before there are more concrete plans for the
-SoC. So thanks for the reviews. I'll repost it when I think it's time
-to consider it for upstream again.
+Guenter
 
-/Emil
