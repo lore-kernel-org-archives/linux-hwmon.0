@@ -2,135 +2,253 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E11C4338F
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Aug 2021 22:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3336BC4338F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Aug 2021 11:32:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5847160EB5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Aug 2021 22:51:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 137CB60EBC
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Aug 2021 11:32:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbhHBWwE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Aug 2021 18:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbhHBWwE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Aug 2021 18:52:04 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494C5C06175F;
-        Mon,  2 Aug 2021 15:51:53 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id o185so25940619oih.13;
-        Mon, 02 Aug 2021 15:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Gc7O31W9o/ImGg2xRSYFF5T9hdypGeqEYgTYqohoq0k=;
-        b=Oyd8OU0NqfFZPvv6vbZ/1gCZ06byBJNjjqj5k6R0A1LC0tTLUAJRGbxdId+r10d/L4
-         wFGsOTihTxkItKcPc/gVv4mTCPnB6yqk+JKtKYbKGIdsng6rdPHt1kfdRwe3rxa2CD2S
-         Q4YQUJyPVni0r/jVOaDjaIQRWHFf08N7+BUwM3eHXJJm/k9txsgeitsuLUvCpS2iKOj4
-         V0J6wbS8I8RYAPNrt1Me+TiVHmk1r0tji7pRj+eK5vzUgsznn4tfLGwampV19VW+OxB7
-         qRmiLu7MOCC5tpPQ4Exi3egcJ64WAO5yFq9gIZ3hcWuStjFEzgIOG14WwQ/0Zyi1eP8v
-         /rYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Gc7O31W9o/ImGg2xRSYFF5T9hdypGeqEYgTYqohoq0k=;
-        b=oYIVIv0P0myU71XBXdB7zAUX2YAnmOM6FR2WbCWJbt6gGuKc15JhPaBdZePgtvx+Sg
-         LVXnqdFuq4IEA5aGz5jgUyffCAg3epL8tu9oY+QsnS1V7cJ7i5f0d+HAwSc6MoUWFix1
-         2Qq1//3V1Z0SKPiDo7pS3GfqQmIXYzCSmB2UiNclK/lya9g6kzT0QJ6GXNzQ7INQq3Gu
-         tKp64qViHQAxswe5+14kEUb7DxaomZ8pFjJLTV787Xgi8g7p3RajSmtmzkBxh8w/MKMi
-         5Y0/9q1wF5QwmMaeABRsx1qv5hC02JbrWiqUeG4FfJ5YFIscKWzKLIAblBeROwUM5f8w
-         oVLw==
-X-Gm-Message-State: AOAM5317PAXCJd+4w/ptm3aNs+P4QgoC0tmc3wnX/zX+u26Q9Fr76vcW
-        bUstn9OU2CEIJgXXku/LBiQ=
-X-Google-Smtp-Source: ABdhPJzaeWHyE8wIYgnLy1P8X5cZdb9wecQgbe2joW39eEe7VB9o+YQTblkontFfbwYs7qBBfPYclQ==
-X-Received: by 2002:a54:4806:: with SMTP id j6mr12526276oij.66.1627944712738;
-        Mon, 02 Aug 2021 15:51:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r1sm1967921ooc.16.2021.08.02.15.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 15:51:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 2 Aug 2021 15:51:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Carlos Alberto Lopez Perez <clopez@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, Pali Rohar <pali@kernel.org>
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell Precision 7510 to fan control
- whitelist
-Message-ID: <20210802225150.GA2134522@roeck-us.net>
-References: <20210802131538.8660-1-clopez@igalia.com>
+        id S235527AbhHCLdC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Aug 2021 07:33:02 -0400
+Received: from mga06.intel.com ([134.134.136.31]:18035 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235329AbhHCLdB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 3 Aug 2021 07:33:01 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="274715825"
+X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
+   d="scan'208";a="274715825"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 04:32:50 -0700
+X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
+   d="scan'208";a="511166743"
+Received: from jdanieck-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.128.99])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 04:32:43 -0700
+From:   Iwona Winiarska <iwona.winiarska@intel.com>
+To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     x86@kernel.org, devicetree@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>,
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH v2 00/15] Introduce PECI subsystem
+Date:   Tue,  3 Aug 2021 13:31:19 +0200
+Message-Id: <20210803113134.2262882-1-iwona.winiarska@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210802131538.8660-1-clopez@igalia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 02, 2021 at 02:15:38PM +0100, Carlos Alberto Lopez Perez wrote:
-> This allows manual PWM control without the BIOS fighting back on Dell
-> Precision 7510. Meanwhile at it, also sort alphabetically the entries
-> of the i8k_whitelist_fan_control struct.
-> 
-> Signed-off-by: Carlos Alberto Lopez Perez <clopez@igalia.com>
-> Acked-by: Pali Rohár <pali@kernel.org>
+Hi Greg,
 
-Applied.
+This is a second round of patches introducing PECI subsystem.
+I don't think it is ready to be applied right away (we're still
+missing r-b's), but I hope we have chance to complete discussion in
+the 5.15 development cycle. I would appreciate if you could take
+a look.
 
-Thanks,
-Guenter
+Note: All changes to arch/x86 are contained within patches 01-02, plus
+small Kconfig change adding "depends on PECI" to GENERIC_LIB_X86
+Kconfig in patch 10.
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 24 ++++++++++++++++--------
->  1 file changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index f2221ca0aa7b..a677c8a4ef29 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1186,14 +1186,6 @@ static const struct i8k_fan_control_data i8k_fan_control_data[] = {
->  };
->  
->  static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
-> -	{
-> -		.ident = "Dell Precision 5530",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 5530"),
-> -		},
-> -		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> -	},
->  	{
->  		.ident = "Dell Latitude 5480",
->  		.matches = {
-> @@ -1218,6 +1210,22 @@ static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
->  		},
->  		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
->  	},
-> +	{
-> +		.ident = "Dell Precision 5530",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 5530"),
-> +		},
-> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> +	},
-> +	{
-> +		.ident = "Dell Precision 7510",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 7510"),
-> +		},
-> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> +	},
->  	{ }
->  };
->  
+The Platform Environment Control Interface (PECI) is a communication
+interface between Intel processors and management controllers (e.g.
+Baseboard Management Controller, BMC).
+
+This series adds a PECI subsystem and introduces drivers which run in
+the Linux instance on the management controller (not the main Intel
+processor) and is intended to be used by the OpenBMC [1], a Linux
+distribution for BMC devices.
+The information exposed over PECI (like processor and DIMM
+temperature) refers to the Intel processor and can be consumed by
+daemons running on the BMC to, for example, display the processor
+temperature in its web interface.
+
+The PECI bus is collection of code that provides interface support
+between PECI devices (that actually represent processors) and PECI
+controllers (such as the "peci-aspeed" controller) that allow to
+access physical PECI interface. PECI devices are bound to PECI
+drivers that provides access to PECI services. This series introduces
+a generic "peci-cpu" driver that exposes hardware monitoring "cputemp"
+and "dimmtemp" using the auxiliary bus.
+
+Exposing "raw" PECI to userspace, either to write userspace drivers or
+for debug/testing purpose was left out of this series to encourage
+writing kernel drivers instead, but may be pursued in the future.
+
+Introducing PECI to upstream Linux was already attempted before [2].
+Since it's been over a year since last revision, and the series
+changed quite a bit in the meantime, I've decided to start from v1.
+
+I would also like to give credit to everyone who helped me with
+different aspects of preliminary review:
+- Pierre-Louis Bossart,
+- Tony Luck, 
+- Andy Shevchenko,
+- Dave Hansen.
+
+[1] https://github.com/openbmc/openbmc
+[2] https://lore.kernel.org/openbmc/20191211194624.2872-1-jae.hyun.yoo@linux.intel.com/
+
+Changes v1 -> v2:
+
+Biggest changes when it comes to diffstat are locking in HWMON
+(I decided to clean things up a bit while adding it), switching to
+devres usage in more places and exposing sysfs interface in separate patch.
+
+* Moved extending X86 ARCHITECTURE MAINTAINERS earlier in series (Dan)
+* Removed "default n" for GENERIC_LIB_X86 (Dan)
+* Added vendor prefix for peci-aspeed specific properties (Rob)
+* Refactored PECI to use devres consistently (Dan)
+* Added missing sysfs documentation and excluded adding peci-sysfs to
+  separate patch (Dan)
+* Used module_init() instead of subsys_init() for peci module initialization (Dan)
+* Removed redundant struct peci_device member (Dan)
+* Improved PECI Kconfig help (Randy/Dan)
+* Fixed/removed log messages (Dan, Guenter)
+* Refactored peci-cputemp and peci-dimmtemp and added missing locks (Guenter)
+* Removed unused dev_set_drvdata() in peci-cputemp and peci-dimmtemp (Guenter)
+* Fixed used types, names, fixed broken and added additional comments
+  to peci-hwmon (Guenter, Zev)
+* Refactored peci-dimmtemp to not return -ETIMEDOUT (Guenter)
+* Added sanity check for min_peci_revision in peci-hwmon drivers (Zev)
+* Added assert for DIMM_NUMS_MAX and additional warning in peci-dimmtemp (Zev)
+* Fixed macro names in peci-aspeed (Zev)
+* Refactored peci-aspeed sanitizing properties to a single helper function (Zev)
+* Fixed peci_cpu_device_ids definition for Broadwell Xeon D (David)
+* Refactor peci_request to use a single allocation (Zev)
+* Used min_t() to improve code readability (Zev)
+* Added macro for PECI_RDENDPTCFG_MMIO_WR_LEN_BASE and fixed adev type
+  array name to more descriptive (Zev)
+* Fixed peci-hwmon commit-msg and documentation (Zev)
+
+Thanks
+-Iwona
+
+Iwona Winiarska (13):
+  x86/cpu: Move intel-family to arch-independent headers
+  x86/cpu: Extract cpuid helpers to arch-independent
+  dt-bindings: Add generic bindings for PECI
+  dt-bindings: Add bindings for peci-aspeed
+  ARM: dts: aspeed: Add PECI controller nodes
+  peci: Add core infrastructure
+  peci: Add device detection
+  peci: Add sysfs interface for PECI bus
+  peci: Add support for PECI device drivers
+  peci: Add peci-cpu driver
+  hwmon: peci: Add cputemp driver
+  hwmon: peci: Add dimmtemp driver
+  docs: Add PECI documentation
+
+Jae Hyun Yoo (2):
+  peci: Add peci-aspeed controller driver
+  docs: hwmon: Document PECI drivers
+
+ Documentation/ABI/testing/sysfs-bus-peci      |  16 +
+ .../devicetree/bindings/peci/peci-aspeed.yaml | 109 ++++
+ .../bindings/peci/peci-controller.yaml        |  33 +
+ Documentation/hwmon/index.rst                 |   2 +
+ Documentation/hwmon/peci-cputemp.rst          |  90 +++
+ Documentation/hwmon/peci-dimmtemp.rst         |  57 ++
+ Documentation/index.rst                       |   1 +
+ Documentation/peci/index.rst                  |  16 +
+ Documentation/peci/peci.rst                   |  48 ++
+ MAINTAINERS                                   |  32 +
+ arch/arm/boot/dts/aspeed-g4.dtsi              |  14 +
+ arch/arm/boot/dts/aspeed-g5.dtsi              |  14 +
+ arch/arm/boot/dts/aspeed-g6.dtsi              |  14 +
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/include/asm/cpu.h                    |   3 -
+ arch/x86/include/asm/intel-family.h           | 141 +---
+ arch/x86/include/asm/microcode.h              |   2 +-
+ arch/x86/kvm/cpuid.h                          |   3 +-
+ arch/x86/lib/Makefile                         |   2 +-
+ drivers/Kconfig                               |   3 +
+ drivers/Makefile                              |   1 +
+ drivers/edac/mce_amd.c                        |   3 +-
+ drivers/hwmon/Kconfig                         |   2 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/peci/Kconfig                    |  31 +
+ drivers/hwmon/peci/Makefile                   |   7 +
+ drivers/hwmon/peci/common.h                   |  58 ++
+ drivers/hwmon/peci/cputemp.c                  | 591 +++++++++++++++++
+ drivers/hwmon/peci/dimmtemp.c                 | 614 ++++++++++++++++++
+ drivers/peci/Kconfig                          |  37 ++
+ drivers/peci/Makefile                         |  10 +
+ drivers/peci/controller/Kconfig               |  16 +
+ drivers/peci/controller/Makefile              |   3 +
+ drivers/peci/controller/peci-aspeed.c         | 445 +++++++++++++
+ drivers/peci/core.c                           | 238 +++++++
+ drivers/peci/cpu.c                            | 344 ++++++++++
+ drivers/peci/device.c                         | 221 +++++++
+ drivers/peci/internal.h                       | 137 ++++
+ drivers/peci/request.c                        | 477 ++++++++++++++
+ drivers/peci/sysfs.c                          |  82 +++
+ include/linux/peci-cpu.h                      |  38 ++
+ include/linux/peci.h                          | 110 ++++
+ include/linux/x86/cpu.h                       |   9 +
+ include/linux/x86/intel-family.h              | 146 +++++
+ lib/Kconfig                                   |   4 +
+ lib/Makefile                                  |   2 +
+ lib/x86/Makefile                              |   3 +
+ {arch/x86/lib => lib/x86}/cpu.c               |   2 +-
+ 48 files changed, 4084 insertions(+), 149 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-peci
+ create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+ create mode 100644 Documentation/devicetree/bindings/peci/peci-controller.yaml
+ create mode 100644 Documentation/hwmon/peci-cputemp.rst
+ create mode 100644 Documentation/hwmon/peci-dimmtemp.rst
+ create mode 100644 Documentation/peci/index.rst
+ create mode 100644 Documentation/peci/peci.rst
+ create mode 100644 drivers/hwmon/peci/Kconfig
+ create mode 100644 drivers/hwmon/peci/Makefile
+ create mode 100644 drivers/hwmon/peci/common.h
+ create mode 100644 drivers/hwmon/peci/cputemp.c
+ create mode 100644 drivers/hwmon/peci/dimmtemp.c
+ create mode 100644 drivers/peci/Kconfig
+ create mode 100644 drivers/peci/Makefile
+ create mode 100644 drivers/peci/controller/Kconfig
+ create mode 100644 drivers/peci/controller/Makefile
+ create mode 100644 drivers/peci/controller/peci-aspeed.c
+ create mode 100644 drivers/peci/core.c
+ create mode 100644 drivers/peci/cpu.c
+ create mode 100644 drivers/peci/device.c
+ create mode 100644 drivers/peci/internal.h
+ create mode 100644 drivers/peci/request.c
+ create mode 100644 drivers/peci/sysfs.c
+ create mode 100644 include/linux/peci-cpu.h
+ create mode 100644 include/linux/peci.h
+ create mode 100644 include/linux/x86/cpu.h
+ create mode 100644 include/linux/x86/intel-family.h
+ create mode 100644 lib/x86/Makefile
+ rename {arch/x86/lib => lib/x86}/cpu.c (95%)
+
+-- 
+2.31.1
+
