@@ -2,206 +2,251 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BD1CC432BE
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Aug 2021 14:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB16C43214
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Aug 2021 14:16:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10CF660F58
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Aug 2021 14:00:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95A9660BD3
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Aug 2021 14:16:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbhHCOAs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Aug 2021 10:00:48 -0400
-Received: from mga02.intel.com ([134.134.136.20]:40050 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236252AbhHCOAq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 3 Aug 2021 10:00:46 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="200863437"
-X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
-   d="scan'208";a="200863437"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 07:00:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
-   d="scan'208";a="479521134"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Aug 2021 07:00:31 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mAuy6-000DxW-HB; Tue, 03 Aug 2021 14:00:30 +0000
-Date:   Tue, 03 Aug 2021 22:00:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- b3ffffdb86b9d09185ace6a7daaf8c4e8bb61317
-Message-ID: <61094bf1.tJYg1LC2R33RxwHL%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236331AbhHCOQt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Aug 2021 10:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236205AbhHCOQs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Aug 2021 10:16:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3671AC061757;
+        Tue,  3 Aug 2021 07:16:37 -0700 (PDT)
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1628000193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Qkfc7lxCqn4p3B20wjfjiLsyLpuZIa2kIlbDitBY8sw=;
+        b=fStBYY9cDOofnMkMc6JUcZVYcNWx/eg2N05Pb/o7ef6JJTcTG48t+GioJgBl+eXKMJGEgi
+        TVCeDR+EwHJjgdulnpLwVy12sseYnaixefw5o14vk+2PAOm/LUlJHLssIOZ+nJyuRxaM3r
+        fCCG5ZeBAdz/Q3kIzOJQstWW7ST+mFehWQwEJk+hKZizcoepZD/zOgz+f7GO7oZ2MtK2DY
+        wm7slubFVtLqvtY6o7cEl9ZIw3mvJ35go7HuaiPxyi+ESejsT+e0qaP6D0Fis4EUqsKcRu
+        JGNGT0BYA9PAUGHVfsb3cVOtZwFCr59O6V6ObVy+T4OF395mknhLgwpLJFiGUg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1628000193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Qkfc7lxCqn4p3B20wjfjiLsyLpuZIa2kIlbDitBY8sw=;
+        b=pGmFmcj1u+vX59p9gWCClfCslb9a1WxY2Pwa8q+HwkfzdAY6X/r9JgYaxIXaCJOpPNDW2W
+        rceMZSe2cSwuwVDA==
+To:     linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>, cgroups@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        coresight@lists.linaro.org,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gonglei <arei.gonglei@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Karsten Graul <kgraul@linux.ibm.com>, kvm-ppc@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, Len Brown <len.brown@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, live-patching@vger.kernel.org,
+        Mark Gross <mgross@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Mike Travis <mike.travis@hpe.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Namhyung Kim <namhyung@kernel.org>, netdev@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
+        Robin Holt <robinmholt@gmail.com>, Song Liu <song@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 00/38] Replace deprecated CPU-hotplug
+Date:   Tue,  3 Aug 2021 16:15:43 +0200
+Message-Id: <20210803141621.780504-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: b3ffffdb86b9d09185ace6a7daaf8c4e8bb61317  dt-bindings: watchdog: Add compatible for Mediatek MT7986
+This is a tree wide replacement of the deprecated CPU hotplug functions
+which are only wrappers around the actual functions.
 
-elapsed time: 731m
+Each patch is independent and can be picked up by the relevant maintainer.
 
-configs tested: 141
-configs skipped: 3
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: cgroups@vger.kernel.org
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: coresight@lists.linaro.org
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Gonglei <arei.gonglei@huawei.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jason Wang <jasowang@redhat.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: John Stultz <john.stultz@linaro.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Julian Wiedmann <jwi@linux.ibm.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Karol Herbst <karolherbst@gmail.com>
+Cc: Karsten Graul <kgraul@linux.ibm.com>
+Cc: kvm-ppc@vger.kernel.org
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: linux-acpi@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-pm@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-raid@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: live-patching@vger.kernel.org
+Cc: Mark Gross <mgross@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Mike Travis <mike.travis@hpe.com>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: nouveau@lists.freedesktop.org
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Pekka Paalanen <ppaalanen@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: platform-driver-x86@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: rcu@vger.kernel.org
+Cc: Robin Holt <robinmholt@gmail.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Steve Wahl <steve.wahl@hpe.com>
+Cc: Stuart Hayes <stuart.w.hayes@gmail.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: virtualization@lists.linux-foundation.org
+Cc: x86@kernel.org
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Sebastian
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210803
-sh                           se7751_defconfig
-arc                    vdk_hs38_smp_defconfig
-m68k                       bvme6000_defconfig
-arm                         mv78xx0_defconfig
-powerpc                     kmeter1_defconfig
-sh                     sh7710voipgw_defconfig
-arm                          pxa3xx_defconfig
-arm                         assabet_defconfig
-arm                          pxa910_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                  colibri_pxa300_defconfig
-arm                     davinci_all_defconfig
-sh                           se7750_defconfig
-sh                         apsh4a3a_defconfig
-riscv                            allyesconfig
-powerpc                     powernv_defconfig
-mips                         bigsur_defconfig
-openrisc                 simple_smp_defconfig
-arm                        spear3xx_defconfig
-arc                          axs103_defconfig
-sh                           se7724_defconfig
-m68k                         apollo_defconfig
-arm                       cns3420vb_defconfig
-arm                          iop32x_defconfig
-mips                 decstation_r4k_defconfig
-arm                        trizeps4_defconfig
-sh                           se7722_defconfig
-arm                     eseries_pxa_defconfig
-sh                          r7780mp_defconfig
-sh                            titan_defconfig
-arm                       mainstone_defconfig
-parisc                generic-64bit_defconfig
-arm                        multi_v5_defconfig
-arm                            mps2_defconfig
-openrisc                    or1ksim_defconfig
-mips                        bcm63xx_defconfig
-powerpc                    socrates_defconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-sh                        sh7763rdp_defconfig
-sh                          sdk7786_defconfig
-powerpc                      walnut_defconfig
-mips                            ar7_defconfig
-m68k                       m5275evb_defconfig
-riscv                    nommu_k210_defconfig
-arm                          badge4_defconfig
-arm                              alldefconfig
-arm                       imx_v6_v7_defconfig
-powerpc                      bamboo_defconfig
-arm                          ixp4xx_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                  iss476-smp_defconfig
-m68k                             allyesconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210803
-x86_64               randconfig-a004-20210803
-x86_64               randconfig-a006-20210803
-x86_64               randconfig-a003-20210803
-x86_64               randconfig-a001-20210803
-x86_64               randconfig-a005-20210803
-i386                 randconfig-a004-20210803
-i386                 randconfig-a005-20210803
-i386                 randconfig-a002-20210803
-i386                 randconfig-a006-20210803
-i386                 randconfig-a001-20210803
-i386                 randconfig-a003-20210803
-x86_64               randconfig-a012-20210802
-x86_64               randconfig-a016-20210802
-x86_64               randconfig-a013-20210802
-x86_64               randconfig-a011-20210802
-x86_64               randconfig-a014-20210802
-x86_64               randconfig-a015-20210802
-i386                 randconfig-a012-20210803
-i386                 randconfig-a011-20210803
-i386                 randconfig-a015-20210803
-i386                 randconfig-a013-20210803
-i386                 randconfig-a014-20210803
-i386                 randconfig-a016-20210803
-i386                 randconfig-a012-20210802
-i386                 randconfig-a011-20210802
-i386                 randconfig-a015-20210802
-i386                 randconfig-a013-20210802
-i386                 randconfig-a014-20210802
-i386                 randconfig-a016-20210802
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-c001-20210803
-x86_64               randconfig-c001-20210802
-x86_64               randconfig-a012-20210803
-x86_64               randconfig-a016-20210803
-x86_64               randconfig-a013-20210803
-x86_64               randconfig-a011-20210803
-x86_64               randconfig-a014-20210803
-x86_64               randconfig-a015-20210803
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
