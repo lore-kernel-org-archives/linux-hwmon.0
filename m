@@ -2,120 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 995CDC4338F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Aug 2021 11:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C08C4338F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Aug 2021 12:18:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75B8861102
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Aug 2021 11:40:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7ECB261132
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Aug 2021 12:18:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbhHELkb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Aug 2021 07:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238127AbhHELkb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Aug 2021 07:40:31 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ACDC0613D5
-        for <linux-hwmon@vger.kernel.org>; Thu,  5 Aug 2021 04:40:17 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id j2so6090663wrx.9
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Aug 2021 04:40:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=+nlth2m2/8vEMrI+L6F6FH19lBWEC80x5zsmEulcRdg=;
-        b=S59FAiqlqHkiyKe+HX/Y/AwMG03IFpd+AoQDLucqSXzXwnHWZ/iC0VztQ7OIZWFher
-         K93Pc2O5O/jTdRON3ndmTxnbzUZ9mcRHvTl2EmnDez4bIlcdRbIPDLySFvFN530iaapU
-         FE4vZHhEoaGO/hbZ09VaEXxQQp/oG+4t6Qpe+dTwph2VdtT+vRcl2O0kAwWlB6duk8Ty
-         hcWzLBoIbHMOiTbq9Diix/vBTx+yaPK3oy3APIPjcc3QKrAqxqiL9LE/Z/9XbXp/2KPg
-         XKzv7VbE8qrn1iJZVzNc/ZCZj6sRqOIrmVkpVY4bqSwSUKnO2S/jnNecvLeCo1PvwCVF
-         PIwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=+nlth2m2/8vEMrI+L6F6FH19lBWEC80x5zsmEulcRdg=;
-        b=MyRTgnXNLBcG3eplyd1d9cjvZF9rUYQbm0XnuhYOYYBPIQTqU3h3fFoGZraiv0qsHN
-         KlobtsSV/LCOFmryT2LogIQQkEGWKnBSEttjO6PEkH4q3VxnIJcswWmBir0epAfBNvDc
-         ydyJOU4aC+UPwiGmD+zOaa67fIl4q66s2Bjb6zNTnmH+MtPCQk/umWi6B0zUGJygrVVx
-         PgLQBLnI9x6IlkKBiht9WXbajxRwBfGULKm6BgBaU8gHLtsfw03n4xFr0oaJ8J18kjk4
-         WCEmBEdATAr4y9X/Vsk+EAr9zKO/DF+KPb8Bf7HExCKs3yDOjnpgjkb4LycUGV84zooT
-         CXjg==
-X-Gm-Message-State: AOAM531mBp4niwkQjk9FLPXfUsAhTfLUPzKJp+xdi9ffsLYYm0DcK2Hp
-        Avlps5RBzUz/AnZDjrq4Bfi1VA==
-X-Google-Smtp-Source: ABdhPJzSmpuPIP2d34jUR2jqTDBFOBvYKrEVvvPQKSyNt2dSiaVP/k3rv6EG6BE3se58Rqfv/meEbw==
-X-Received: by 2002:adf:f74f:: with SMTP id z15mr4775150wrp.54.1628163615719;
-        Thu, 05 Aug 2021 04:40:15 -0700 (PDT)
-Received: from google.com ([109.180.115.228])
-        by smtp.gmail.com with ESMTPSA id y197sm9290958wmc.7.2021.08.05.04.40.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 04:40:15 -0700 (PDT)
-Date:   Thu, 5 Aug 2021 12:40:13 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        id S241287AbhHEMSR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Aug 2021 08:18:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46832 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241273AbhHEMSO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 5 Aug 2021 08:18:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B0D8760F02;
+        Thu,  5 Aug 2021 12:17:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1628165880;
+        bh=SnZyEDwSCGcMILVNay8kJLylO4dxnvZ30uP6PD40vys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pq8JnAHT0Nj6CCvb6OWE7mZTidN+sS03OJueS/j2ORg4/13bAzKPlhFvdYox8K1SK
+         g/+gUCNoRLLQAHIjX195xj/llPbClQTbV+ewbEh9g0Es0c4wcBuQwf5mJoTVnGOlRo
+         7LKvcavL2oHs7S6k6KFfEgkyqHxJlloXQK7G36mM=
+Date:   Thu, 5 Aug 2021 14:17:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        x86@kernel.org, devicetree@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Jonathan Corbet <corbet@lwn.net>,
-        Support Opensource <support.opensource@diasemi.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
-Subject: Re: [PATCH v3 1/3] mfd: da9063: Add HWMON dependencies
-Message-ID: <YQvOHWAwG2xTIWMy@google.com>
-References: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>
+Subject: Re: [PATCH v2 00/15] Introduce PECI subsystem
+Message-ID: <YQvW9Ua2PpuDQnji@kroah.com>
+References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c06db13bb5076a8ee48e38a74caf3b81e4a2d1f8.1625662290.git.plr.vincent@gmail.com>
+In-Reply-To: <20210803113134.2262882-1-iwona.winiarska@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 07 Jul 2021, Vincent Pelletier wrote:
-
-> From: "Opensource [Steve Twiss]" <stwiss.opensource@diasemi.com>
+On Tue, Aug 03, 2021 at 01:31:19PM +0200, Iwona Winiarska wrote:
+> Hi Greg,
 > 
-> Dependencies required for DA9063 HWMON support.
-> 
-> Signed-off-by: Opensource [Steve Twiss] <stwiss.opensource@diasemi.com>
-> 
-> Moved temperature offset reading to hwmon driver.
-> 
-> Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
+> This is a second round of patches introducing PECI subsystem.
+> I don't think it is ready to be applied right away (we're still
+> missing r-b's), but I hope we have chance to complete discussion in
+> the 5.15 development cycle. I would appreciate if you could take
+> a look.
 
+I will wait to review this when you all feel it is ready so as to not
+waste my time finding things that you already know need to be resolved.
 
-Nit: Please remove the empty lines between tags.
+thanks,
 
-And format like this please:
-
-[vincent: Moved temperature offset reading to hwmon driver]
-
-> ---
-> Changes in v3:
-> - moved temperature offset reading to hwmon driver
-> 
-> Changes in v2:
-> - registers.h changes moved from patch 2
-> 
-> Originally submitted by Steve Twiss in 2014:
->   https://marc.info/?l=linux-kernel&m=139560864709852&w=2
-> 
->  include/linux/mfd/da9063/registers.h | 34 ++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-
-Once fixed:
-
-Acked-by: Lee Jones <lee.jones@linaro.org>
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+greg k-h
