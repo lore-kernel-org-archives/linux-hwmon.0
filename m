@@ -2,107 +2,147 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21D7FC4338F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Aug 2021 22:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B2F6C4338F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Aug 2021 12:56:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E8B88610CB
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Aug 2021 22:51:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 130FC60FC4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Aug 2021 12:56:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245609AbhHFWwH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Aug 2021 18:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S240971AbhHJM5D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Aug 2021 08:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244611AbhHFWwH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Aug 2021 18:52:07 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072E4C0613CF;
-        Fri,  6 Aug 2021 15:51:50 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id s21-20020a4ae5550000b02902667598672bso2620435oot.12;
-        Fri, 06 Aug 2021 15:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mxn7llJ5mZ0hc2ANTwcNCtoQg7U/UkmI/LGIHOAc8EE=;
-        b=U3oMmwKAQziuR7DJ97t0wQ0+qI2imBrqiFWvdXM0cBnNVVlRy/jfZJvUaKQjUnEwUl
-         aD2lAarJtc2qGWZHpFDjKwL+tEdPXUOB3PlSqrhTDRq0+tvVfd8IzgSDgWX9IE4+TKRS
-         xF/fk5nlTN15q/S8nhLRH/ZS7f7SJqe9BRzXkGXz5I9CAnzWKPJdL75akvyipojo5M2O
-         psLE9dq5Di0H9h+Fds5z5ZDl9FuNOcFPSu938dx1zUytGSqCWW4VSNyxolZjzcWusm4u
-         bzPJ2UxU/A77wKPQvnYFOTy3DooDqoYU55NHMe5VEXr5fBHzt1Oz+kHcsqVVNjhoUJ54
-         1ppg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mxn7llJ5mZ0hc2ANTwcNCtoQg7U/UkmI/LGIHOAc8EE=;
-        b=DHA0C/ssJCEt1GVYHwwleGsYzO55+wlNb3OxhMREcgT5b3jyWCr1BWGpsNuIO2q0ut
-         9THQHik9F7ybMI5YHpq32uORBjBvyFy7ohwEI5UTK6l8eur0xwJgmMhSHXNbI3FyGbR+
-         1KpPVNVyMIIs8AEP/88RmRXeBR6HCPNwdRoESvAl1Ewj315R0IdZ7KAKFPNzX4ATuqkI
-         w+p9Ebmn9ENcc5fi5YkhUetm6j5/Yz0EDOJsx7E8omK6lj31vpdg9X+gTVrJolotq2X3
-         xKfkYQVrk4cY3whWGN9XJrkvG5MqNACWW9Bns9dimarXVXRb/+9JJbZ6YerrPBne0DvY
-         rUTQ==
-X-Gm-Message-State: AOAM533YGsM6IKXJ5Nebsi6wqaJGS7JslLotlAe9aiR0NMx+qoQcSZj1
-        ueoTndtPxEcS0kLfhRvio76gS8QSPuE=
-X-Google-Smtp-Source: ABdhPJzEiY/mdoLGpKdu+X5ieV7KcHPjb6jgu4o6xwcrppAhlvDaotoMJjqXIn3H8Ta4eO6R7PWrKA==
-X-Received: by 2002:a4a:6507:: with SMTP id y7mr5598750ooc.38.1628290309336;
-        Fri, 06 Aug 2021 15:51:49 -0700 (PDT)
-Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
-        by smtp.gmail.com with ESMTPSA id g1sm1783966otk.21.2021.08.06.15.51.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Aug 2021 15:51:48 -0700 (PDT)
-From:   Brandon Wyman <bjwyman@gmail.com>
-To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Cc:     "B. J. Wyman" <bjwyman@gmail.com>
-Subject: [PATCH v2] hwmon: (pmbus/ibm-cffps) Fix write bits for LED control
-Date:   Fri,  6 Aug 2021 22:51:31 +0000
-Message-Id: <20210806225131.1808759-1-bjwyman@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S241003AbhHJM5D (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 10 Aug 2021 08:57:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103D8C0613D3
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Aug 2021 05:56:40 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mDRIs-0004SR-8w; Tue, 10 Aug 2021 14:56:22 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mDRIp-0005Hh-Qu; Tue, 10 Aug 2021 14:56:19 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Marek Vasut <marex@denx.de>, David Jander <david@protonic.nl>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH net-next v1] net: phy: nxp-tja11xx: log critical health state
+Date:   Tue, 10 Aug 2021 14:56:18 +0200
+Message-Id: <20210810125618.20255-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "B. J. Wyman" <bjwyman@gmail.com>
+TJA1102 provides interrupt notification for the critical health states
+like overtemperature and undervoltage.
 
-When doing a PMBus write for the LED control on the IBM Common Form
-Factor Power Supplies (ibm-cffps), the DAh command requires that bit 7
-be low and bit 6 be high in order to indicate that you are truly
-attempting to do a write.
+The overtemperature bit is set if package temperature is beyond 155C°.
+This functionality was tested by heating the package up to 200C°
 
-Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+The undervoltage bit is set if supply voltage drops beyond some critical
+threshold. Currently not tested.
+
+In a typical use case, both of this events should be logged and stored
+(or send to some remote system) for further investigations.
+
+To make testing and troubleshooting more easier, other bits are exported
+over the ethtool phy stats interface:
+- level of overtemperature. There is no access to thermal sensor.
+- power supply line where undervoltage was detected
+
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
-V1 -> V2: Use full name instead of initials in Signed-off-by line.
----
- drivers/hwmon/pmbus/ibm-cffps.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/phy/nxp-tja11xx.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index 5668d8305b78..df712ce4b164 100644
---- a/drivers/hwmon/pmbus/ibm-cffps.c
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -50,9 +50,9 @@
- #define CFFPS_MFR_VAUX_FAULT			BIT(6)
- #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
+diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
+index afd7afa1f498..4c37b427a53b 100644
+--- a/drivers/net/phy/nxp-tja11xx.c
++++ b/drivers/net/phy/nxp-tja11xx.c
+@@ -47,12 +47,14 @@
+ #define MII_INTSRC_LINK_FAIL		BIT(10)
+ #define MII_INTSRC_LINK_UP		BIT(9)
+ #define MII_INTSRC_MASK			(MII_INTSRC_LINK_FAIL | MII_INTSRC_LINK_UP)
+-#define MII_INTSRC_TEMP_ERR		BIT(1)
+ #define MII_INTSRC_UV_ERR		BIT(3)
++#define MII_INTSRC_TEMP_ERR		BIT(1)
  
--#define CFFPS_LED_BLINK				BIT(0)
--#define CFFPS_LED_ON				BIT(1)
--#define CFFPS_LED_OFF				BIT(2)
-+#define CFFPS_LED_BLINK				(BIT(0) | BIT(6))
-+#define CFFPS_LED_ON				(BIT(1) | BIT(6))
-+#define CFFPS_LED_OFF				(BIT(2) | BIT(6))
- #define CFFPS_BLINK_RATE_MS			250
+ #define MII_INTEN			22
+ #define MII_INTEN_LINK_FAIL		BIT(10)
+ #define MII_INTEN_LINK_UP		BIT(9)
++#define MII_INTEN_UV_ERR		BIT(3)
++#define MII_INTEN_TEMP_ERR		BIT(1)
  
- enum {
+ #define MII_COMMSTAT			23
+ #define MII_COMMSTAT_LINK_UP		BIT(15)
+@@ -89,6 +91,12 @@ static struct tja11xx_phy_stats tja11xx_hw_stats[] = {
+ 	{ "phy_polarity_detect", 25, 6, BIT(6) },
+ 	{ "phy_open_detect", 25, 7, BIT(7) },
+ 	{ "phy_short_detect", 25, 8, BIT(8) },
++	{ "phy_temp_warn (temp > 155C°)", 25, 9, BIT(9) },
++	{ "phy_temp_high (temp > 180C°)", 25, 10, BIT(10) },
++	{ "phy_uv_vddio", 25, 11, BIT(11) },
++	{ "phy_uv_vddd_1v8", 25, 13, BIT(13) },
++	{ "phy_uv_vdda_3v3", 25, 14, BIT(14) },
++	{ "phy_uv_vddd_3v3", 25, 15, BIT(15) },
+ 	{ "phy_rem_rcvr_count", 26, 0, GENMASK(7, 0) },
+ 	{ "phy_loc_rcvr_count", 26, 8, GENMASK(15, 8) },
+ };
+@@ -607,7 +615,8 @@ static int tja11xx_config_intr(struct phy_device *phydev)
+ 		if (err)
+ 			return err;
+ 
+-		value = MII_INTEN_LINK_FAIL | MII_INTEN_LINK_UP;
++		value = MII_INTEN_LINK_FAIL | MII_INTEN_LINK_UP |
++			MII_INTEN_UV_ERR | MII_INTEN_TEMP_ERR;
+ 		err = phy_write(phydev, MII_INTEN, value);
+ 	} else {
+ 		err = phy_write(phydev, MII_INTEN, value);
+@@ -622,6 +631,7 @@ static int tja11xx_config_intr(struct phy_device *phydev)
+ 
+ static irqreturn_t tja11xx_handle_interrupt(struct phy_device *phydev)
+ {
++	struct device *dev = &phydev->mdio.dev;
+ 	int irq_status;
+ 
+ 	irq_status = phy_read(phydev, MII_INTSRC);
+@@ -630,6 +640,11 @@ static irqreturn_t tja11xx_handle_interrupt(struct phy_device *phydev)
+ 		return IRQ_NONE;
+ 	}
+ 
++	if (irq_status & MII_INTSRC_TEMP_ERR)
++		dev_err(dev, "Overtemperature error detected (temp > 155C°).\n");
++	if (irq_status & MII_INTSRC_UV_ERR)
++		dev_err(dev, "Undervoltage error detected.\n");
++
+ 	if (!(irq_status & MII_INTSRC_MASK))
+ 		return IRQ_NONE;
+ 
 -- 
-2.25.1
+2.30.2
 
