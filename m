@@ -2,96 +2,157 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90B69C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E889FC4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:18:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 657C560FE6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:11:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C927860E78
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:18:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbhHKSMV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Aug 2021 14:12:21 -0400
-Received: from mail-pl1-f181.google.com ([209.85.214.181]:35418 "EHLO
-        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbhHKSMU (ORCPT
+        id S230027AbhHKSTN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Aug 2021 14:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230102AbhHKSTM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Aug 2021 14:12:20 -0400
-Received: by mail-pl1-f181.google.com with SMTP id u15so1595938ple.2;
-        Wed, 11 Aug 2021 11:11:56 -0700 (PDT)
+        Wed, 11 Aug 2021 14:19:12 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7FEC061765;
+        Wed, 11 Aug 2021 11:18:48 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id a19so3408689qkg.2;
+        Wed, 11 Aug 2021 11:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rZYFM6BHngnFsPGNhAbnKTFOUCE/Asghmc63IAp/FP0=;
+        b=Uuuhy3BIg0gDS15tG6DfBn0P3pwgvaAk4KEqvxuVHEIuFsbJdyciqYXOK1Z/5qdGAi
+         1sKKc7uEfmjOliGsRJxQXKjRRQ6n0Ty+tUybRjFkLdbJMpp+SreYh3klDZQDwAVBw/Hr
+         cnWBpSoSWjjx53l2UqpX6eLh5u4nw1ZoCPO+cw7opSXZJ9fwX0RgjdPebRFs53b2SgEh
+         DMf6fZGvmUpyf9PMO46Lu4IIeCJ/Yfccx76eDfzV4CUs9W/p97IImft0jnfZlzvLDl3Z
+         TD6ZArnvsKBqlLaOflavgQObvUcJkQ1Aly3gIHTRXUeefe6iTHZONEQn+x+lDLB4wp2B
+         tmCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tbuRYB4uyFYBA1QXdZzfZOeTruC0CprKZZMaGFDPs34=;
-        b=BtFjxq2TTLJlhXwBdwRjdseB91VycmLxM+HFFfB2jy1szky35Lm2wXUniJjGsL9KPu
-         1CCzl17vEogNnSATYvXXSQiO2KDGXERm/ohkS1qQ4MxRkHre53utnzHq1zlPkuDbnPzw
-         ZRua23ieW1lWA9GdF/zspoZR3Cq36akjLBnMbb8H8kZly8yimzPIBk31xJKmxgaA8Kj8
-         qhUHRNJJE2g3/cuhnri9jd6FSlG2eWRIHZldquDL8h7xqekXoyG5YQHS3kqc3BDmHs7E
-         3Ikm27M7OiGYb1e2jPCuxz3IC9nfm4Z7UTMAsOL69LtqBQWgqmkrRHwLWSMbQs+HNyf/
-         /Kag==
-X-Gm-Message-State: AOAM533OZsSlwP0feixhD3jsEsveIYG6zzuGs5xq381xjgb/hUCsgHRy
-        zzrb9yK5NxF85TzZUEGE3A==
-X-Google-Smtp-Source: ABdhPJx9VQykQ/6lrhYIHShi0cEVtld5ix0mGjvSn4jKASC9Y8ePHOmDGI6rN8ZRav52N3T1ZBpkAw==
-X-Received: by 2002:aa7:9828:0:b029:3bd:dc3d:de5f with SMTP id q8-20020aa798280000b02903bddc3dde5fmr62738pfl.47.1628705516576;
-        Wed, 11 Aug 2021 11:11:56 -0700 (PDT)
-Received: from robh.at.kernel.org ([208.184.162.215])
-        by smtp.gmail.com with ESMTPSA id 23sm73377pgk.89.2021.08.11.11.11.50
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=rZYFM6BHngnFsPGNhAbnKTFOUCE/Asghmc63IAp/FP0=;
+        b=MqXhapUhDy1M+a6nN7x59KaCkBl46NSWXhiMGMkv8tbpaC3UmS78mfizRXHH5JF4P6
+         BRLem5Gb7JE4duRhcPlSvoz6YpZP1Voqc4Yg/7WFvFC/yt26ByJr0e1+7tdHldmdwJqH
+         cd7YEyYEgnHaE1i0pHj1GGW413pskb810FiS2jN0gANiwwengdkMbbK3zr0JWyZVgLcd
+         rdOfkNwm5PyGEmXASikUp4rwBdQcn/3p8cym7wBuioz1hV20PRPIR4rI1ivm9QmXWMVR
+         U4Sl60bZxhlBg5pLsxU5LMbdPLBuQ3hcXADeOLXyOJ+Yap3ih2GMUsZ1RsTx/XMOdI8g
+         o8tQ==
+X-Gm-Message-State: AOAM5322GUKI5crMYLQ8WEfWRJoEj3uXjN6mGHs8RHCTDb1tbJAEQ3OI
+        6es9ro/flf8GGGU/HXLvRSI=
+X-Google-Smtp-Source: ABdhPJw/24GiKcD/GrBitbjjOD70/EuhMEinHuuyE/rslqrTEQFeX6LcpvvcqCDb5lILjZuv1K37Mw==
+X-Received: by 2002:a37:a053:: with SMTP id j80mr310671qke.422.1628705927231;
+        Wed, 11 Aug 2021 11:18:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o63sm13052385qkf.4.2021.08.11.11.18.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 11:11:55 -0700 (PDT)
-Received: (nullmailer pid 16794 invoked by uid 1000);
-        Wed, 11 Aug 2021 18:11:48 -0000
-Date:   Wed, 11 Aug 2021 12:11:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Iwona Winiarska <iwona.winiarska@intel.com>
-Cc:     linux-aspeed@lists.ozlabs.org, Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Olof Johansson <olof@lixom.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Joel Stanley <joel@jms.id.au>,
+        Wed, 11 Aug 2021 11:18:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 11 Aug 2021 11:18:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Nadezda Lutovinova <lutovinova@ispras.ru>
+Cc:     Marc Hulsman <m.hulsman@tudelft.nl>,
         Jean Delvare <jdelvare@suse.com>,
-        Zev Weiss <zweiss@equinix.com>, openbmc@lists.ozlabs.org,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        David Muller <d.mueller@elsoft.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2 04/15] dt-bindings: Add bindings for peci-aspeed
-Message-ID: <YRQS5IigFxo5DVCH@robh.at.kernel.org>
-References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
- <20210803113134.2262882-5-iwona.winiarska@intel.com>
+        Rudolf Marek <r.marek@assembler.cz>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: Re: [PATCH] hwmon: Correct the error handling in w83793.c,
+ w83791d.c, w83792d.c
+Message-ID: <20210811181844.GB3138792@roeck-us.net>
+References: <20210811161515.17842-1-lutovinova@ispras.ru>
+ <20210811161515.17842-2-lutovinova@ispras.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210803113134.2262882-5-iwona.winiarska@intel.com>
+In-Reply-To: <20210811161515.17842-2-lutovinova@ispras.ru>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 03 Aug 2021 13:31:23 +0200, Iwona Winiarska wrote:
-> Add device tree bindings for the peci-aspeed controller driver.
+On Wed, Aug 11, 2021 at 07:15:15PM +0300, Nadezda Lutovinova wrote:
+> If driver read tmp (or val) value sufficient for 
+> (tmp & 0x08) && (!(tmp & 0x80)) && ((tmp & 0x7) == ((tmp >> 4) & 0x7))
+> from device then Null pointer dereference occurs. 
+> (It is possible if tmp = 0b0xyz1xyz, where same literals mean same numbers)
 > 
-> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-> ---
->  .../devicetree/bindings/peci/peci-aspeed.yaml | 109 ++++++++++++++++++
->  1 file changed, 109 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+> The patch adds checking if data->lm75[0] is NULL.
+> 
+> Found by Linux Driver Verification project (linuxtesting.org).
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+One patch per driver, please.
+
+> Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+> ---
+>  drivers/hwmon/w83791d.c | 2 +-
+>  drivers/hwmon/w83792d.c | 2 +-
+>  drivers/hwmon/w83793.c  | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+> index 37b25a1474c4..8b30bbfafaa7 100644
+> --- a/drivers/hwmon/w83791d.c
+> +++ b/drivers/hwmon/w83791d.c
+> @@ -1284,7 +1284,7 @@ static int w83791d_detect_subclients(struct i2c_client *client)
+>  		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
+>  							  0x48 + (val & 0x7));
+>  	if (!(val & 0x80)) {
+> -		if (!IS_ERR(data->lm75[0]) &&
+> +		if (!IS_ERR_OR_NULL(data->lm75[0]) &&
+>  				((val & 0x7) == ((val >> 4) & 0x7))) {
+>  			dev_err(&client->dev,
+>  				"duplicate addresses 0x%x, "
+
+As you pointed out in te other e-mail, lm75[] does not really serve 
+a purpose anymore. It might be much better to replace this code with
+something like
+
+	if (!(val & 0x88) && (val & 0x7) == ((val >> 4) & 0x7)) {
+		dev_err(&new_client->dev,
+		        "duplicate addresses 0x%x, use force_subclient\n",
+                        0x48 + (val & 0x7));
+		return -ENODEV;
+	}
+
+Same for the other chips.
+
+Guenter
+
+> diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
+> index abd5c3a722b9..85ae12d950e1 100644
+> --- a/drivers/hwmon/w83792d.c
+> +++ b/drivers/hwmon/w83792d.c
+> @@ -950,7 +950,7 @@ w83792d_detect_subclients(struct i2c_client *new_client)
+>  		data->lm75[0] = devm_i2c_new_dummy_device(&new_client->dev, adapter,
+>  							  0x48 + (val & 0x7));
+>  	if (!(val & 0x80)) {
+> -		if (!IS_ERR(data->lm75[0]) &&
+> +		if (!IS_ERR_OR_NULL(data->lm75[0]) &&
+>  			((val & 0x7) == ((val >> 4) & 0x7))) {
+>  			dev_err(&new_client->dev,
+>  				"duplicate addresses 0x%x, use force_subclient\n",
+> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
+> index e7d0484eabe4..9d8c44e2fa6e 100644
+> --- a/drivers/hwmon/w83793.c
+> +++ b/drivers/hwmon/w83793.c
+> @@ -1590,7 +1590,7 @@ w83793_detect_subclients(struct i2c_client *client)
+>  		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
+>  							  0x48 + (tmp & 0x7));
+>  	if (!(tmp & 0x80)) {
+> -		if (!IS_ERR(data->lm75[0])
+> +		if (!IS_ERR_OR_NULL(data->lm75[0])
+>  		    && ((tmp & 0x7) == ((tmp >> 4) & 0x7))) {
+>  			dev_err(&client->dev,
+>  				"duplicate addresses 0x%x, "
+> -- 
+> 2.17.1
+> 
