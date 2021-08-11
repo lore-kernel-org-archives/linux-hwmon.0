@@ -2,153 +2,144 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 705A8C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 19:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81BD7C4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 21:58:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5335861019
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 19:53:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 632AB60F11
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 21:58:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbhHKTyN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Aug 2021 15:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbhHKTyN (ORCPT
+        id S232318AbhHKV6g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Aug 2021 17:58:36 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:53865 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232196AbhHKV6g (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Aug 2021 15:54:13 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DCBC061765;
-        Wed, 11 Aug 2021 12:53:49 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id e15so3102790qtx.1;
-        Wed, 11 Aug 2021 12:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7Rj3jowo4rLKTb5DL/a/sgrAp1nwTAibErIjLWBeFZM=;
-        b=gBrqComJtE/krGIQfEmDF6IG7fhP+pnMLgmJfkWv/TcSv09Pl+014rGDGTCT6Mp1GR
-         NbMmQdiR0ue4BZDMNzE+ElVX5GJZGxeEBonVQ/m8/t09QhCF/1BPymL356VL9qGp+yS8
-         sQUhRK7m6BzlU7rbZH4QKdiGJ5wxCy+VRazapd+wT1/zNAuu/SRy5pkFbhcHUw5FoTfr
-         O3H7+2e3xCq8TZk4oWylKIC2Zxz7IR4j5DGnriBOb3dUZMNATtn2/pGFLqp5GbGrHEtC
-         3Timawg7v+zSncVtMq8GsS1lLKZ0iQg8wcx6KYwnQD+ShRj1cLoL9rOMC6dzdRBF66YQ
-         HhUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=7Rj3jowo4rLKTb5DL/a/sgrAp1nwTAibErIjLWBeFZM=;
-        b=NEcXLszGL69T4HZXNCe5KG9/8+k3BgMStBunOajU88WXLWSRKWrCJ7D7qrhgH90N3G
-         MhdfkJQRcZFKVKFP0Ajoo/Tho5iodnMlFp3FTG2aKdoNiwnDy5OMCZvQuXb0EpEfzprU
-         bgwHsux3MQfuzDlfO+zlLdXXxYXZ/HhZo6T0bscgLpHyTTM7ekLpakxTODYADndRXy4d
-         ObdnkTIktRfQiRZPDvhWnRDgNXGJRuWVz/+0MaWJSHnAI4EiIUIM+ict1FPPrkXIOGUM
-         DtZ5DRvTNQEEGe23BTas7rCGyNrYbqlm0YDuD/lJFRZV9iNT+F3fRwRTMUsofbqC+dUk
-         1HtQ==
-X-Gm-Message-State: AOAM531jJcfpN+oWVL2+YwgdopGDF3w5DnIIgqoEyaa6V7PXV88Qivc6
-        gwH9HGVQ6hINEbuL/aLaVMI=
-X-Google-Smtp-Source: ABdhPJzv3si9poBiguRuyMRL0g21rM7yQcqGtXv5Hm/jQnebhhsTvuQGmnp1hsEA2vyCbVTmcZ4Org==
-X-Received: by 2002:a05:622a:170f:: with SMTP id h15mr398490qtk.378.1628711628482;
-        Wed, 11 Aug 2021 12:53:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z5sm100619qkj.16.2021.08.11.12.53.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 12:53:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Aug 2021 12:53:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 11 Aug 2021 17:58:36 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 180FC806B5;
+        Thu, 12 Aug 2021 09:58:10 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1628719090;
+        bh=2g69oJmhKIbZmryHEfSzcMtai9c7zzuRwWygMPy9p8A=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=107jsKrgzbViQNOEj9DuvenB2rlct0ZMSOBQH0mIh80FSmQ26Anc3REiTjt0US96w
+         3D33hw4MeibnrGSO0VmAvcBxP+R05KHDxFgE2LBWCVR1ZFNtl4IlhTXRHCgiZy4RAE
+         hEpUkaB3UigfDoU/npSqKgckbOmj2rAVksEioZbRyiheHEanQWkswLcFHLlORDqflg
+         jYstWZkDQa8Wa46gW2mx3nZCpiEH1XXUkXhEj+F6RVw+xiTj1ADggaqfTNHA1cgoax
+         irjto6mKF12/D1SZRIB89XxgaoD9qb/dWjnNm0QGQtaCbeUPZ3kPdR6BVF3/XvIgJm
+         Ap2gI4C4nrGVA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B611447f20000>; Thu, 12 Aug 2021 09:58:10 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.23; Thu, 12 Aug 2021 09:58:09 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.023; Thu, 12 Aug 2021 09:58:09 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 1/2] hwmon: (pmbus/bpa-rs600) Remove duplicate
  defininitions
-Message-ID: <20210811195346.GA966404@roeck-us.net>
+Thread-Topic: [PATCH 1/2] hwmon: (pmbus/bpa-rs600) Remove duplicate
+ defininitions
+Thread-Index: AQHXjmfUYfzSIYG02k2lCOoSaoUyGqtt7zYAgAAiwYA=
+Date:   Wed, 11 Aug 2021 21:58:09 +0000
+Message-ID: <0c6673a3-d364-d677-d711-2062285633c6@alliedtelesis.co.nz>
 References: <20210811041738.15061-1-chris.packham@alliedtelesis.co.nz>
  <20210811041738.15061-2-chris.packham@alliedtelesis.co.nz>
+ <20210811195346.GA966404@roeck-us.net>
+In-Reply-To: <20210811195346.GA966404@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8D38980DFD9F1D4DB0EB1CECA3A4E2F1@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210811041738.15061-2-chris.packham@alliedtelesis.co.nz>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=aqTM9hRV c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=MhDmnRu9jo8A:10 a=XTs4swXrssY7E7n5E2MA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 04:17:37PM +1200, Chris Packham wrote:
-> Commit 787c095edaa9 ("hwmon: (pmbus/core) Add support for rated
-> attributes") added definitions for MFR_VIN_MIN etc so we can remove the
-> local definitions of these from the bpa-rs600 driver.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  drivers/hwmon/pmbus/bpa-rs600.c | 25 ++++++++-----------------
->  1 file changed, 8 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/bpa-rs600.c b/drivers/hwmon/pmbus/bpa-rs600.c
-> index d205b41540ce..d495faa89799 100644
-> --- a/drivers/hwmon/pmbus/bpa-rs600.c
-> +++ b/drivers/hwmon/pmbus/bpa-rs600.c
-> @@ -12,15 +12,6 @@
->  #include <linux/pmbus.h>
->  #include "pmbus.h"
->  
-> -#define BPARS600_MFR_VIN_MIN	0xa0
-> -#define BPARS600_MFR_VIN_MAX	0xa1
-> -#define BPARS600_MFR_IIN_MAX	0xa2
-> -#define BPARS600_MFR_PIN_MAX	0xa3
-> -#define BPARS600_MFR_VOUT_MIN	0xa4
-> -#define BPARS600_MFR_VOUT_MAX	0xa5
-> -#define BPARS600_MFR_IOUT_MAX	0xa6
-> -#define BPARS600_MFR_POUT_MAX	0xa7
-> -
->  enum chips { bpa_rs600, bpd_rs600 };
->  
->  static int bpa_rs600_read_byte_data(struct i2c_client *client, int page, int reg)
-> @@ -83,28 +74,28 @@ static int bpa_rs600_read_word_data(struct i2c_client *client, int page, int pha
->  
->  	switch (reg) {
->  	case PMBUS_VIN_UV_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_VIN_MIN);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_VIN_MIN);
->  		break;
->  	case PMBUS_VIN_OV_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_VIN_MAX);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_VIN_MAX);
->  		break;
->  	case PMBUS_VOUT_UV_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_VOUT_MIN);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_VOUT_MIN);
->  		break;
->  	case PMBUS_VOUT_OV_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_VOUT_MAX);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_VOUT_MAX);
->  		break;
->  	case PMBUS_IIN_OC_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_IIN_MAX);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_IIN_MAX);
->  		break;
->  	case PMBUS_IOUT_OC_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_IOUT_MAX);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_IOUT_MAX);
->  		break;
->  	case PMBUS_PIN_OP_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_PIN_MAX);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_PIN_MAX);
->  		break;
->  	case PMBUS_POUT_OP_WARN_LIMIT:
-> -		ret = pmbus_read_word_data(client, 0, 0xff, BPARS600_MFR_POUT_MAX);
-> +		ret = pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_POUT_MAX);
-
-If the above is correct, the driver reports the wrong attributes. For example,
-PMBUS_MFR_PIN_MAX is supposed to report the rated limit, not the warning limit.
-What does the datasheet say ?
-
-Guenter
-
->  		break;
->  	case PMBUS_VIN_UV_FAULT_LIMIT:
->  	case PMBUS_VIN_OV_FAULT_LIMIT:
-> -- 
-> 2.32.0
-> 
+DQpPbiAxMi8wOC8yMSA3OjUzIGFtLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiBPbiBXZWQsIEF1
+ZyAxMSwgMjAyMSBhdCAwNDoxNzozN1BNICsxMjAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4g
+Q29tbWl0IDc4N2MwOTVlZGFhOSAoImh3bW9uOiAocG1idXMvY29yZSkgQWRkIHN1cHBvcnQgZm9y
+IHJhdGVkDQo+PiBhdHRyaWJ1dGVzIikgYWRkZWQgZGVmaW5pdGlvbnMgZm9yIE1GUl9WSU5fTUlO
+IGV0YyBzbyB3ZSBjYW4gcmVtb3ZlIHRoZQ0KPj4gbG9jYWwgZGVmaW5pdGlvbnMgb2YgdGhlc2Ug
+ZnJvbSB0aGUgYnBhLXJzNjAwIGRyaXZlci4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQ
+YWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQo+PiAtLS0NCj4+ICAg
+ZHJpdmVycy9od21vbi9wbWJ1cy9icGEtcnM2MDAuYyB8IDI1ICsrKysrKysrLS0tLS0tLS0tLS0t
+LS0tLS0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMTcgZGVsZXRpb25z
+KC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vcG1idXMvYnBhLXJzNjAwLmMg
+Yi9kcml2ZXJzL2h3bW9uL3BtYnVzL2JwYS1yczYwMC5jDQo+PiBpbmRleCBkMjA1YjQxNTQwY2Uu
+LmQ0OTVmYWE4OTc5OSAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvaHdtb24vcG1idXMvYnBhLXJz
+NjAwLmMNCj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vcG1idXMvYnBhLXJzNjAwLmMNCj4+IEBAIC0x
+MiwxNSArMTIsNiBAQA0KPj4gICAjaW5jbHVkZSA8bGludXgvcG1idXMuaD4NCj4+ICAgI2luY2x1
+ZGUgInBtYnVzLmgiDQo+PiAgIA0KPj4gLSNkZWZpbmUgQlBBUlM2MDBfTUZSX1ZJTl9NSU4JMHhh
+MA0KPj4gLSNkZWZpbmUgQlBBUlM2MDBfTUZSX1ZJTl9NQVgJMHhhMQ0KPj4gLSNkZWZpbmUgQlBB
+UlM2MDBfTUZSX0lJTl9NQVgJMHhhMg0KPj4gLSNkZWZpbmUgQlBBUlM2MDBfTUZSX1BJTl9NQVgJ
+MHhhMw0KPj4gLSNkZWZpbmUgQlBBUlM2MDBfTUZSX1ZPVVRfTUlOCTB4YTQNCj4+IC0jZGVmaW5l
+IEJQQVJTNjAwX01GUl9WT1VUX01BWAkweGE1DQo+PiAtI2RlZmluZSBCUEFSUzYwMF9NRlJfSU9V
+VF9NQVgJMHhhNg0KPj4gLSNkZWZpbmUgQlBBUlM2MDBfTUZSX1BPVVRfTUFYCTB4YTcNCj4+IC0N
+Cj4+ICAgZW51bSBjaGlwcyB7IGJwYV9yczYwMCwgYnBkX3JzNjAwIH07DQo+PiAgIA0KPj4gICBz
+dGF0aWMgaW50IGJwYV9yczYwMF9yZWFkX2J5dGVfZGF0YShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xp
+ZW50LCBpbnQgcGFnZSwgaW50IHJlZykNCj4+IEBAIC04MywyOCArNzQsMjggQEAgc3RhdGljIGlu
+dCBicGFfcnM2MDBfcmVhZF93b3JkX2RhdGEoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgaW50
+IHBhZ2UsIGludCBwaGENCj4+ICAgDQo+PiAgIAlzd2l0Y2ggKHJlZykgew0KPj4gICAJY2FzZSBQ
+TUJVU19WSU5fVVZfV0FSTl9MSU1JVDoNCj4+IC0JCXJldCA9IHBtYnVzX3JlYWRfd29yZF9kYXRh
+KGNsaWVudCwgMCwgMHhmZiwgQlBBUlM2MDBfTUZSX1ZJTl9NSU4pOw0KPj4gKwkJcmV0ID0gcG1i
+dXNfcmVhZF93b3JkX2RhdGEoY2xpZW50LCAwLCAweGZmLCBQTUJVU19NRlJfVklOX01JTik7DQo+
+PiAgIAkJYnJlYWs7DQo+PiAgIAljYXNlIFBNQlVTX1ZJTl9PVl9XQVJOX0xJTUlUOg0KPj4gLQkJ
+cmV0ID0gcG1idXNfcmVhZF93b3JkX2RhdGEoY2xpZW50LCAwLCAweGZmLCBCUEFSUzYwMF9NRlJf
+VklOX01BWCk7DQo+PiArCQlyZXQgPSBwbWJ1c19yZWFkX3dvcmRfZGF0YShjbGllbnQsIDAsIDB4
+ZmYsIFBNQlVTX01GUl9WSU5fTUFYKTsNCj4+ICAgCQlicmVhazsNCj4+ICAgCWNhc2UgUE1CVVNf
+Vk9VVF9VVl9XQVJOX0xJTUlUOg0KPj4gLQkJcmV0ID0gcG1idXNfcmVhZF93b3JkX2RhdGEoY2xp
+ZW50LCAwLCAweGZmLCBCUEFSUzYwMF9NRlJfVk9VVF9NSU4pOw0KPj4gKwkJcmV0ID0gcG1idXNf
+cmVhZF93b3JkX2RhdGEoY2xpZW50LCAwLCAweGZmLCBQTUJVU19NRlJfVk9VVF9NSU4pOw0KPj4g
+ICAJCWJyZWFrOw0KPj4gICAJY2FzZSBQTUJVU19WT1VUX09WX1dBUk5fTElNSVQ6DQo+PiAtCQly
+ZXQgPSBwbWJ1c19yZWFkX3dvcmRfZGF0YShjbGllbnQsIDAsIDB4ZmYsIEJQQVJTNjAwX01GUl9W
+T1VUX01BWCk7DQo+PiArCQlyZXQgPSBwbWJ1c19yZWFkX3dvcmRfZGF0YShjbGllbnQsIDAsIDB4
+ZmYsIFBNQlVTX01GUl9WT1VUX01BWCk7DQo+PiAgIAkJYnJlYWs7DQo+PiAgIAljYXNlIFBNQlVT
+X0lJTl9PQ19XQVJOX0xJTUlUOg0KPj4gLQkJcmV0ID0gcG1idXNfcmVhZF93b3JkX2RhdGEoY2xp
+ZW50LCAwLCAweGZmLCBCUEFSUzYwMF9NRlJfSUlOX01BWCk7DQo+PiArCQlyZXQgPSBwbWJ1c19y
+ZWFkX3dvcmRfZGF0YShjbGllbnQsIDAsIDB4ZmYsIFBNQlVTX01GUl9JSU5fTUFYKTsNCj4+ICAg
+CQlicmVhazsNCj4+ICAgCWNhc2UgUE1CVVNfSU9VVF9PQ19XQVJOX0xJTUlUOg0KPj4gLQkJcmV0
+ID0gcG1idXNfcmVhZF93b3JkX2RhdGEoY2xpZW50LCAwLCAweGZmLCBCUEFSUzYwMF9NRlJfSU9V
+VF9NQVgpOw0KPj4gKwkJcmV0ID0gcG1idXNfcmVhZF93b3JkX2RhdGEoY2xpZW50LCAwLCAweGZm
+LCBQTUJVU19NRlJfSU9VVF9NQVgpOw0KPj4gICAJCWJyZWFrOw0KPj4gICAJY2FzZSBQTUJVU19Q
+SU5fT1BfV0FSTl9MSU1JVDoNCj4+IC0JCXJldCA9IHBtYnVzX3JlYWRfd29yZF9kYXRhKGNsaWVu
+dCwgMCwgMHhmZiwgQlBBUlM2MDBfTUZSX1BJTl9NQVgpOw0KPj4gKwkJcmV0ID0gcG1idXNfcmVh
+ZF93b3JkX2RhdGEoY2xpZW50LCAwLCAweGZmLCBQTUJVU19NRlJfUElOX01BWCk7DQo+PiAgIAkJ
+YnJlYWs7DQo+PiAgIAljYXNlIFBNQlVTX1BPVVRfT1BfV0FSTl9MSU1JVDoNCj4+IC0JCXJldCA9
+IHBtYnVzX3JlYWRfd29yZF9kYXRhKGNsaWVudCwgMCwgMHhmZiwgQlBBUlM2MDBfTUZSX1BPVVRf
+TUFYKTsNCj4+ICsJCXJldCA9IHBtYnVzX3JlYWRfd29yZF9kYXRhKGNsaWVudCwgMCwgMHhmZiwg
+UE1CVVNfTUZSX1BPVVRfTUFYKTsNCj4gSWYgdGhlIGFib3ZlIGlzIGNvcnJlY3QsIHRoZSBkcml2
+ZXIgcmVwb3J0cyB0aGUgd3JvbmcgYXR0cmlidXRlcy4gRm9yIGV4YW1wbGUsDQo+IFBNQlVTX01G
+Ul9QSU5fTUFYIGlzIHN1cHBvc2VkIHRvIHJlcG9ydCB0aGUgcmF0ZWQgbGltaXQsIG5vdCB0aGUg
+d2FybmluZyBsaW1pdC4NCj4gV2hhdCBkb2VzIHRoZSBkYXRhc2hlZXQgc2F5ID8NCg0KVGhlIGRh
+dGFzaGVldCBkb2Vzbid0IGxpc3QgUE1CVVNfVklOX1VWX1dBUk5fTElNSVQgZXRjIGF0IGFsbC4g
+SXQgZG9lcyANCnNheSB0aGF0IE1GUl9WSU5feHh4IGlzIHRoZSAicmF0ZWQiIHZhbHVlIGJ1dCBp
+biBteSB0ZXN0aW5nIHRoaXMgYWxzbyANCmFwcGVhcnMgdGhhdCB0aGlzIGlzIHRoZSBzYW1lIHRo
+cmVzaG9sZCBhdCB3aGljaCB0aGUgQUxFUlQgcGluIGlzIGFzc2VydGVkLg0KDQpXaGVuIEkgZGlk
+IHRoZSBpbml0aWFsIGltcGxlbWVudGF0aW9uIEkgZGVjaWRlZCB0byBtYXAgdGhlIFdBUk5fTElN
+SVRzIA0KdG8gd2hhdCBJIHRob3VnaHQgd2VyZSByZWFzb25hYmxlIG1hbnVmYWN0dXJlciBzcGVj
+aWZpYyBlcXVpdmFsZW50cy4gDQpUaGlzIGFsc28gbWVhbnMgdGhhdCB0aGUgdGhyZXNob2xkcyBj
+YW4gYmUgZGlzcGxheWVkIGJ5IGV4aXN0aW5nIA0KdXNlcnNwYWNlIHRvb2xzIHRoYXQgY29uc3Vt
+ZSB0aGUgc3lzZnMgQUJJLg0KDQo+IEd1ZW50ZXINCj4NCj4+ICAgCQlicmVhazsNCj4+ICAgCWNh
+c2UgUE1CVVNfVklOX1VWX0ZBVUxUX0xJTUlUOg0KPj4gICAJY2FzZSBQTUJVU19WSU5fT1ZfRkFV
+TFRfTElNSVQ6DQo+PiAtLSANCj4+IDIuMzIuMA0KPj4=
