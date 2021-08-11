@@ -2,105 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A22C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 17:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92E80C4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:11:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F3706104F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 17:52:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FC9560D07
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:11:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbhHKRw2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Aug 2021 13:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbhHKRw1 (ORCPT
+        id S229869AbhHKSLy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Aug 2021 14:11:54 -0400
+Received: from mail-pl1-f180.google.com ([209.85.214.180]:34697 "EHLO
+        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhHKSLy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Aug 2021 13:52:27 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DF8C061765;
-        Wed, 11 Aug 2021 10:52:03 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id a19so3311966qkg.2;
-        Wed, 11 Aug 2021 10:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lyYMz9VU8jhHpPHC9xSYBkshKOGS2weo/TTB2R2B10c=;
-        b=fAP3m2EMQqDx+Hp8c9T2UITQUIdKD2RoBs+vwB5N7F+5pKL7lZBh5+XC5HacAKNYtN
-         FxnFx3NOdB0nuqH9TEEJefwaTR3SsIOv2pBGST3sTLsxDzcgJ7aC2TO3S7iz6emCu9GJ
-         vTK77J3q9w4cMhgHA05C2LP7EbbbuOkmprFNydHvSnffZIdeMIhYBpoBBAuGYIL36FXa
-         Lf77eo9pl/Dp/1ZVstRf9py2rLFtDgIJqMXYQHzJGdlbcrJxnngIk/DY1lclbwilO3S4
-         +d9+Eotpeket4SZOuj2Zkd7yS0gc/GEXIzZ9sTWnvWS+ISdb5kMY6humtmzb+307hQgR
-         IsSQ==
+        Wed, 11 Aug 2021 14:11:54 -0400
+Received: by mail-pl1-f180.google.com with SMTP id d1so3757759pll.1;
+        Wed, 11 Aug 2021 11:11:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=lyYMz9VU8jhHpPHC9xSYBkshKOGS2weo/TTB2R2B10c=;
-        b=Yas0TZw5sxIO1VHOHZD1p/+nQSjstJeQG2Erq8kfoDSOiQbPnTD3cAK04/hNyA2HYw
-         GYFS+S2Pwrl7PwfWoK7TVsIeZkI3j4eLz5/cJFz5zr5AWtmcfJeDoAguCARumADFZKps
-         amNQIkQLoHT7313P+ANxXpOZeXDcxNZU8PuaSiSLZ+s6slh0QbXH9MmFCM5rrM0M2rsb
-         DhHosi50K9tL+d/dqtUWi5U2jZv/GdwA/E8Eta06ubezB8gnW7O+kt7LyU6Go/309TU9
-         q2UL8Hf1LzFpr1uIVDWH/1MLP3Yr+1mnaVaUjpJb+vHHD9XdnL8R+ZoLf8SwEch/WGBD
-         cBpA==
-X-Gm-Message-State: AOAM532WI+IWrhkZM4tYwsyfFWo6cQ+jiWWf3Df3wp4iAirpJzxJRK1i
-        5POVMp6l0m74k+aHZHljmNWcuvmIN+U=
-X-Google-Smtp-Source: ABdhPJzB2Q9RepcfZQEtR5vCMuF6PzNROO/pcQqypGex1cAUlf4K5PmHc48jLnL6J6oh4dvpLeyXmg==
-X-Received: by 2002:a05:620a:c0c:: with SMTP id l12mr206532qki.318.1628704323032;
-        Wed, 11 Aug 2021 10:52:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m16sm4728506qki.19.2021.08.11.10.51.24
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1A9gzdbnn58lRehU+hUclDHaFNwYQNoEsi8rcFLZjN8=;
+        b=O90UncPSkx8NEIc6958yp4hBRpwY/4VgbhrFlAfHaK/VehU6aj2lsGtuC7KHqGunEF
+         WjXwbVz6wXeZYjrikuURARkiT69fsOe9ZVeUA/AI7nAA5liqCnCqXaFoLLtSW51xFoPo
+         daVbPmdcQxJjb4frqe6dkUzVJsMKC8e1Ib0d/b7bhO9cBsQV4GTQhzmR2LIX84j19UBi
+         BWcgD34MWlpH7/zaVnpPzzJf4ya1lhvTni//faQZ4eWY7tvuGqpobJjERDUj0FhwNvdf
+         cIgdwLH7nIHF47q5jM1KeppPXI82u/J+PDr29gccDN/75/sGxroo0Ech/VPVtnbNxGG4
+         kjRw==
+X-Gm-Message-State: AOAM533O7LK1h+gzwSJIj7S1ILg68kyZmofzRctm4Zgk7xpkPA2KMJ8Q
+        b0psq9+ZtokymKnujmXapw==
+X-Google-Smtp-Source: ABdhPJylZYCNsi7aLdnU5BXGhlWKKRwa0qCJ5LYDWJSxKrWZNnd2izzg5emDhPlR1+rNNPVyexC6GA==
+X-Received: by 2002:a63:a902:: with SMTP id u2mr174837pge.123.1628705489665;
+        Wed, 11 Aug 2021 11:11:29 -0700 (PDT)
+Received: from robh.at.kernel.org ([208.184.162.215])
+        by smtp.gmail.com with ESMTPSA id 66sm196425pfu.67.2021.08.11.11.11.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 10:51:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Aug 2021 10:51:20 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nadezda Lutovinova <lutovinova@ispras.ru>
-Cc:     Marc Hulsman <m.hulsman@tudelft.nl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Subject: Re: hwmon: Error handling in w83793.c, w83791d.c, w83792d.c
-Message-ID: <20210811175120.GA3138792@roeck-us.net>
-References: <20210811161515.17842-1-lutovinova@ispras.ru>
+        Wed, 11 Aug 2021 11:11:28 -0700 (PDT)
+Received: (nullmailer pid 15921 invoked by uid 1000);
+        Wed, 11 Aug 2021 18:11:22 -0000
+Date:   Wed, 11 Aug 2021 12:11:22 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        David Muller <d.mueller@elsoft.ch>, x86@kernel.org,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>, linux-doc@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Zev Weiss <zweiss@equinix.com>, Ingo Molnar <mingo@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH v2 03/15] dt-bindings: Add generic bindings for PECI
+Message-ID: <YRQSyjFcS8bAfqDU@robh.at.kernel.org>
+References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
+ <20210803113134.2262882-4-iwona.winiarska@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210811161515.17842-1-lutovinova@ispras.ru>
+In-Reply-To: <20210803113134.2262882-4-iwona.winiarska@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 07:15:14PM +0300, Nadezda Lutovinova wrote:
-> In w83793_detect_subclients(): if driver read tmp value sufficient for 
-> (tmp & 0x08) && (!(tmp & 0x80)) && ((tmp & 0x7) == ((tmp >> 4) & 0x7))
-> from device then Null pointer dereference occurs.
-> (It is possible if tmp = 0b0xyz1xyz, where same chars mean same numbers).
+On Tue, 03 Aug 2021 13:31:22 +0200, Iwona Winiarska wrote:
+> Add device tree bindings for the PECI controller.
 > 
-> It can be fixed just by adding a checking for null pointer, patch for 
-> this is in the next letter. But a question arised:
-> The array w83793_data->lm75 is used once in this function after switching 
-> to devm_i2c_new_dummy_device() instead of i2c_new_dummy(). And this 
-> function is called once (from w83793_probe()). Maybe this array should be 
-> deleted from struct w83793_data?
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+> ---
+>  .../bindings/peci/peci-controller.yaml        | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-controller.yaml
 > 
 
-That is part of it. However, the entire code is wrong. There is no need
-to check for I2C address overlap in the first place, and the i2c address
-for the second 'virtual' chip should start with 0x4c, not with 0x48.
-See w83793g/w83793ag datasheet, section 8.3.2.2.
-I assume the code was copied from w83791d and w83792d, where the addresses
-can indeed overlap.
-
-Guenter
-
-> The same situation in w83791d.c and in w83792d.
-> 
-> Found by Linux Driver Verification project (linuxtesting.org).
-> 
-> Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+Reviewed-by: Rob Herring <robh@kernel.org>
