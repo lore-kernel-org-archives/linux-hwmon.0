@@ -2,75 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F9E5C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 15:00:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1608DC4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 16:15:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 626EE60FC3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 15:00:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE96560243
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 16:15:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbhHKPAb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Aug 2021 11:00:31 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:45304 "EHLO vps0.lunn.ch"
+        id S229589AbhHKQQO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Aug 2021 12:16:14 -0400
+Received: from mail.ispras.ru ([83.149.199.84]:32874 "EHLO mail.ispras.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232855AbhHKPA3 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Aug 2021 11:00:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=7bQV05XnMWhdDuuxH7FMFpb9864KxRDn5zp0OhtPXvw=; b=kH
-        zTplGIEv9C7x/ovp/yn1HMn6dH3E1cwlN77Me/7Y3zrALRYHqiqHk3jNxgY99o/p57/VUj47jh0Wq
-        LMy8isa1wTtGmuSRh367mEsjqm5h6x4IcoaN7jyIiGcYUdO51ljenhlUUvAi2Mlpc3kPH/tYZs2B7
-        ham3wL0W8myUpVg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mDphw-00H8Ni-3h; Wed, 11 Aug 2021 16:59:52 +0200
-Date:   Wed, 11 Aug 2021 16:59:52 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S229473AbhHKQQO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Aug 2021 12:16:14 -0400
+Received: from kleverstation.intra.ispras.ru (unknown [10.10.2.220])
+        by mail.ispras.ru (Postfix) with ESMTPS id 359C2407625F;
+        Wed, 11 Aug 2021 16:15:49 +0000 (UTC)
+From:   Nadezda Lutovinova <lutovinova@ispras.ru>
+To:     Marc Hulsman <m.hulsman@tudelft.nl>
+Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Marek Vasut <marex@denx.de>, David Jander <david@protonic.nl>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/1] net: phy: nxp-tja11xx: log critical
- health state
-Message-ID: <YRPl6NVyxU9q98AS@lunn.ch>
-References: <20210811063712.19695-1-o.rempel@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210811063712.19695-1-o.rempel@pengutronix.de>
+        Rudolf Marek <r.marek@assembler.cz>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: [PATCH] hwmon: Correct the error handling in w83793.c, w83791d.c, w83792d.c
+Date:   Wed, 11 Aug 2021 19:15:15 +0300
+Message-Id: <20210811161515.17842-2-lutovinova@ispras.ru>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210811161515.17842-1-lutovinova@ispras.ru>
+References: <20210811161515.17842-1-lutovinova@ispras.ru>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 08:37:12AM +0200, Oleksij Rempel wrote:
-> TJA1102 provides interrupt notification for the critical health states
-> like overtemperature and undervoltage.
-> 
-> The overtemperature bit is set if package temperature is beyond 155C°.
-> This functionality was tested by heating the package up to 200C°
-> 
-> The undervoltage bit is set if supply voltage drops beyond some critical
-> threshold. Currently not tested.
-> 
-> In a typical use case, both of this events should be logged and stored
-> (or send to some remote system) for further investigations.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+If driver read tmp (or val) value sufficient for 
+(tmp & 0x08) && (!(tmp & 0x80)) && ((tmp & 0x7) == ((tmp >> 4) & 0x7))
+from device then Null pointer dereference occurs. 
+(It is possible if tmp = 0b0xyz1xyz, where same literals mean same numbers)
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+The patch adds checking if data->lm75[0] is NULL.
 
-    Andrew
+Found by Linux Driver Verification project (linuxtesting.org).
+
+Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+---
+ drivers/hwmon/w83791d.c | 2 +-
+ drivers/hwmon/w83792d.c | 2 +-
+ drivers/hwmon/w83793.c  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+index 37b25a1474c4..8b30bbfafaa7 100644
+--- a/drivers/hwmon/w83791d.c
++++ b/drivers/hwmon/w83791d.c
+@@ -1284,7 +1284,7 @@ static int w83791d_detect_subclients(struct i2c_client *client)
+ 		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
+ 							  0x48 + (val & 0x7));
+ 	if (!(val & 0x80)) {
+-		if (!IS_ERR(data->lm75[0]) &&
++		if (!IS_ERR_OR_NULL(data->lm75[0]) &&
+ 				((val & 0x7) == ((val >> 4) & 0x7))) {
+ 			dev_err(&client->dev,
+ 				"duplicate addresses 0x%x, "
+diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
+index abd5c3a722b9..85ae12d950e1 100644
+--- a/drivers/hwmon/w83792d.c
++++ b/drivers/hwmon/w83792d.c
+@@ -950,7 +950,7 @@ w83792d_detect_subclients(struct i2c_client *new_client)
+ 		data->lm75[0] = devm_i2c_new_dummy_device(&new_client->dev, adapter,
+ 							  0x48 + (val & 0x7));
+ 	if (!(val & 0x80)) {
+-		if (!IS_ERR(data->lm75[0]) &&
++		if (!IS_ERR_OR_NULL(data->lm75[0]) &&
+ 			((val & 0x7) == ((val >> 4) & 0x7))) {
+ 			dev_err(&new_client->dev,
+ 				"duplicate addresses 0x%x, use force_subclient\n",
+diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
+index e7d0484eabe4..9d8c44e2fa6e 100644
+--- a/drivers/hwmon/w83793.c
++++ b/drivers/hwmon/w83793.c
+@@ -1590,7 +1590,7 @@ w83793_detect_subclients(struct i2c_client *client)
+ 		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
+ 							  0x48 + (tmp & 0x7));
+ 	if (!(tmp & 0x80)) {
+-		if (!IS_ERR(data->lm75[0])
++		if (!IS_ERR_OR_NULL(data->lm75[0])
+ 		    && ((tmp & 0x7) == ((tmp >> 4) & 0x7))) {
+ 			dev_err(&client->dev,
+ 				"duplicate addresses 0x%x, "
+-- 
+2.17.1
+
