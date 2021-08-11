@@ -2,62 +2,62 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E889FC4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F113C4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:20:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C927860E78
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:18:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F118A60E78
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 18:20:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbhHKSTN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Aug 2021 14:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S231259AbhHKSU0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Aug 2021 14:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbhHKSTM (ORCPT
+        with ESMTP id S230189AbhHKSUU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Aug 2021 14:19:12 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7FEC061765;
-        Wed, 11 Aug 2021 11:18:48 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id a19so3408689qkg.2;
-        Wed, 11 Aug 2021 11:18:48 -0700 (PDT)
+        Wed, 11 Aug 2021 14:20:20 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860E2C061765;
+        Wed, 11 Aug 2021 11:19:55 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id f23so3347413qkk.13;
+        Wed, 11 Aug 2021 11:19:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=rZYFM6BHngnFsPGNhAbnKTFOUCE/Asghmc63IAp/FP0=;
-        b=Uuuhy3BIg0gDS15tG6DfBn0P3pwgvaAk4KEqvxuVHEIuFsbJdyciqYXOK1Z/5qdGAi
-         1sKKc7uEfmjOliGsRJxQXKjRRQ6n0Ty+tUybRjFkLdbJMpp+SreYh3klDZQDwAVBw/Hr
-         cnWBpSoSWjjx53l2UqpX6eLh5u4nw1ZoCPO+cw7opSXZJ9fwX0RgjdPebRFs53b2SgEh
-         DMf6fZGvmUpyf9PMO46Lu4IIeCJ/Yfccx76eDfzV4CUs9W/p97IImft0jnfZlzvLDl3Z
-         TD6ZArnvsKBqlLaOflavgQObvUcJkQ1Aly3gIHTRXUeefe6iTHZONEQn+x+lDLB4wp2B
-         tmCg==
+        bh=nXzVpyij1ZNQ2Jytic1y9iKjfHsLQUQIKsqqIrPJxhA=;
+        b=rnHu4E+PQlPlVp0uMPW/pul3vdmZh78miXqPsl2EBz8w7MC/5V4b0vcsE+dkG/0g0T
+         hi1h8KcBxq+Jl6x/NChwUoMnTWWHNdz6e9ervTXmX0Q0IG0k8RzRKumXRtPK19/87CPV
+         Kr437NrIxuIpeVXiDEBtKizCD97pmkkN37S+pTLwmP3guEcnbhCfMbQ7ey4/8A7pGKkb
+         y6yVPdJVahNIROaAj41K8ZzxBAvLsDj4Px2aEXdo0AY6z69AZEyB1vqaOM2T4ntuwnCA
+         lltgoWS0bU7xviD8HMhxROC9mSdDjmZtk1FDQKXYXAFL/nZ9SqebFv6dbvctA1C2XGAh
+         rZgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=rZYFM6BHngnFsPGNhAbnKTFOUCE/Asghmc63IAp/FP0=;
-        b=MqXhapUhDy1M+a6nN7x59KaCkBl46NSWXhiMGMkv8tbpaC3UmS78mfizRXHH5JF4P6
-         BRLem5Gb7JE4duRhcPlSvoz6YpZP1Voqc4Yg/7WFvFC/yt26ByJr0e1+7tdHldmdwJqH
-         cd7YEyYEgnHaE1i0pHj1GGW413pskb810FiS2jN0gANiwwengdkMbbK3zr0JWyZVgLcd
-         rdOfkNwm5PyGEmXASikUp4rwBdQcn/3p8cym7wBuioz1hV20PRPIR4rI1ivm9QmXWMVR
-         U4Sl60bZxhlBg5pLsxU5LMbdPLBuQ3hcXADeOLXyOJ+Yap3ih2GMUsZ1RsTx/XMOdI8g
-         o8tQ==
-X-Gm-Message-State: AOAM5322GUKI5crMYLQ8WEfWRJoEj3uXjN6mGHs8RHCTDb1tbJAEQ3OI
-        6es9ro/flf8GGGU/HXLvRSI=
-X-Google-Smtp-Source: ABdhPJw/24GiKcD/GrBitbjjOD70/EuhMEinHuuyE/rslqrTEQFeX6LcpvvcqCDb5lILjZuv1K37Mw==
-X-Received: by 2002:a37:a053:: with SMTP id j80mr310671qke.422.1628705927231;
-        Wed, 11 Aug 2021 11:18:47 -0700 (PDT)
+        bh=nXzVpyij1ZNQ2Jytic1y9iKjfHsLQUQIKsqqIrPJxhA=;
+        b=BayeF3PC6PXZjPz6zPQdeW/AM9d/xodUfmOBVy+6MbeeH+/VGa2mbeQw1ifhvdpSim
+         BII+iT1heK415RhCZ3SWxczy8YDbx1ms3EPgiTwMhCV792lX+gtm/B6STe+tydjwKiCF
+         Rs4dtkPnL3746lmKCoROZNOsU17LXu40xhr21IZ+TZxY9r47Iqhep9ggvzf86fnCmmpB
+         QRYZrTGFnQqLtSrS4wovmb6p1LoCXknXQ4aBBNnVZbx7cNzKZ9buQ9NHRLbO8f9Mz192
+         BjGfhJ3BIWfKFzdp7Zz5urW3h2pjLhh8z+CbAzsthsm1CxfmJEGGEniOSf7qQP68esC4
+         2ZSg==
+X-Gm-Message-State: AOAM530E3E5uDdHcv6uCNWE3p5TriceLxYXPEfSJC6iOgE4l8h30dIsy
+        3YLZ5Vju9SIFocmQ0hfgQAI=
+X-Google-Smtp-Source: ABdhPJw+btSMcpcGz2MbjdsBF3HMosEM+0Kb2NIXpBzeNZx9IKkq3p9OthkgmZ/wWHqUpmxpCjvNig==
+X-Received: by 2002:a37:9401:: with SMTP id w1mr353500qkd.166.1628705994692;
+        Wed, 11 Aug 2021 11:19:54 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o63sm13052385qkf.4.2021.08.11.11.18.45
+        by smtp.gmail.com with ESMTPSA id y199sm13474573qkb.36.2021.08.11.11.19.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 11:18:46 -0700 (PDT)
+        Wed, 11 Aug 2021 11:19:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Aug 2021 11:18:44 -0700
+Date:   Wed, 11 Aug 2021 11:19:52 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Nadezda Lutovinova <lutovinova@ispras.ru>
 Cc:     Marc Hulsman <m.hulsman@tudelft.nl>,
@@ -65,94 +65,50 @@ Cc:     Marc Hulsman <m.hulsman@tudelft.nl>,
         Rudolf Marek <r.marek@assembler.cz>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         ldv-project@linuxtesting.org
-Subject: Re: [PATCH] hwmon: Correct the error handling in w83793.c,
- w83791d.c, w83792d.c
-Message-ID: <20210811181844.GB3138792@roeck-us.net>
+Subject: Re: hwmon: Error handling in w83793.c, w83791d.c, w83792d.c
+Message-ID: <20210811181952.GA3833613@roeck-us.net>
 References: <20210811161515.17842-1-lutovinova@ispras.ru>
- <20210811161515.17842-2-lutovinova@ispras.ru>
+ <20210811175120.GA3138792@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210811161515.17842-2-lutovinova@ispras.ru>
+In-Reply-To: <20210811175120.GA3138792@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 07:15:15PM +0300, Nadezda Lutovinova wrote:
-> If driver read tmp (or val) value sufficient for 
-> (tmp & 0x08) && (!(tmp & 0x80)) && ((tmp & 0x7) == ((tmp >> 4) & 0x7))
-> from device then Null pointer dereference occurs. 
-> (It is possible if tmp = 0b0xyz1xyz, where same literals mean same numbers)
+On Wed, Aug 11, 2021 at 10:52:03AM -0700, Guenter Roeck wrote:
+> On Wed, Aug 11, 2021 at 07:15:14PM +0300, Nadezda Lutovinova wrote:
+> > In w83793_detect_subclients(): if driver read tmp value sufficient for 
+> > (tmp & 0x08) && (!(tmp & 0x80)) && ((tmp & 0x7) == ((tmp >> 4) & 0x7))
+> > from device then Null pointer dereference occurs.
+> > (It is possible if tmp = 0b0xyz1xyz, where same chars mean same numbers).
+> > 
+> > It can be fixed just by adding a checking for null pointer, patch for 
+> > this is in the next letter. But a question arised:
+> > The array w83793_data->lm75 is used once in this function after switching 
+> > to devm_i2c_new_dummy_device() instead of i2c_new_dummy(). And this 
+> > function is called once (from w83793_probe()). Maybe this array should be 
+> > deleted from struct w83793_data?
+> > 
 > 
-> The patch adds checking if data->lm75[0] is NULL.
-> 
-> Found by Linux Driver Verification project (linuxtesting.org).
-> 
+> That is part of it. However, the entire code is wrong. There is no need
+> to check for I2C address overlap in the first place, and the i2c address
+> for the second 'virtual' chip should start with 0x4c, not with 0x48.
+> See w83793g/w83793ag datasheet, section 8.3.2.2.
 
-One patch per driver, please.
-
-> Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
-> ---
->  drivers/hwmon/w83791d.c | 2 +-
->  drivers/hwmon/w83792d.c | 2 +-
->  drivers/hwmon/w83793.c  | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
-> index 37b25a1474c4..8b30bbfafaa7 100644
-> --- a/drivers/hwmon/w83791d.c
-> +++ b/drivers/hwmon/w83791d.c
-> @@ -1284,7 +1284,7 @@ static int w83791d_detect_subclients(struct i2c_client *client)
->  		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
->  							  0x48 + (val & 0x7));
->  	if (!(val & 0x80)) {
-> -		if (!IS_ERR(data->lm75[0]) &&
-> +		if (!IS_ERR_OR_NULL(data->lm75[0]) &&
->  				((val & 0x7) == ((val >> 4) & 0x7))) {
->  			dev_err(&client->dev,
->  				"duplicate addresses 0x%x, "
-
-As you pointed out in te other e-mail, lm75[] does not really serve 
-a purpose anymore. It might be much better to replace this code with
-something like
-
-	if (!(val & 0x88) && (val & 0x7) == ((val >> 4) & 0x7)) {
-		dev_err(&new_client->dev,
-		        "duplicate addresses 0x%x, use force_subclient\n",
-                        0x48 + (val & 0x7));
-		return -ENODEV;
-	}
-
-Same for the other chips.
+Wait, that is wrong. Those are just the initial register values.
+Forget the noise above; sorry for the confusion.
 
 Guenter
 
-> diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
-> index abd5c3a722b9..85ae12d950e1 100644
-> --- a/drivers/hwmon/w83792d.c
-> +++ b/drivers/hwmon/w83792d.c
-> @@ -950,7 +950,7 @@ w83792d_detect_subclients(struct i2c_client *new_client)
->  		data->lm75[0] = devm_i2c_new_dummy_device(&new_client->dev, adapter,
->  							  0x48 + (val & 0x7));
->  	if (!(val & 0x80)) {
-> -		if (!IS_ERR(data->lm75[0]) &&
-> +		if (!IS_ERR_OR_NULL(data->lm75[0]) &&
->  			((val & 0x7) == ((val >> 4) & 0x7))) {
->  			dev_err(&new_client->dev,
->  				"duplicate addresses 0x%x, use force_subclient\n",
-> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-> index e7d0484eabe4..9d8c44e2fa6e 100644
-> --- a/drivers/hwmon/w83793.c
-> +++ b/drivers/hwmon/w83793.c
-> @@ -1590,7 +1590,7 @@ w83793_detect_subclients(struct i2c_client *client)
->  		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
->  							  0x48 + (tmp & 0x7));
->  	if (!(tmp & 0x80)) {
-> -		if (!IS_ERR(data->lm75[0])
-> +		if (!IS_ERR_OR_NULL(data->lm75[0])
->  		    && ((tmp & 0x7) == ((tmp >> 4) & 0x7))) {
->  			dev_err(&client->dev,
->  				"duplicate addresses 0x%x, "
-> -- 
-> 2.17.1
+> I assume the code was copied from w83791d and w83792d, where the addresses
+> can indeed overlap.
 > 
+> Guenter
+> 
+> > The same situation in w83791d.c and in w83792d.
+> > 
+> > Found by Linux Driver Verification project (linuxtesting.org).
+> > 
+> > Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
