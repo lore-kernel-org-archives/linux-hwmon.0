@@ -2,83 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3395CC4338F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Aug 2021 18:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16357C4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 04:17:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0541C60EB2
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Aug 2021 18:43:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF5F260E09
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Aug 2021 04:17:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhHJSnb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Aug 2021 14:43:31 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:43368 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229480AbhHJSna (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Aug 2021 14:43:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=vuY4CU2wqTh4MiNOaeRz1+bUXIW8uOlvfPoVeU/k6qY=; b=b7DMOqREteJbMkdZnjrSvBb+i/
-        kW+1wtYwdvcdmYrcehORUYKTu3xXLeYgTg0X8imZx2IZvFh4XxZ6h2YmJg75FknEdRWRDS9YN4YXk
-        8ULqbKcKkqG1MwuX8NsAYDVB/BKcIHRaD3kblDoU/nTXfziLorKDDfFu/pjKqghsSUlM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mDWi5-00GxZx-R1; Tue, 10 Aug 2021 20:42:45 +0200
-Date:   Tue, 10 Aug 2021 20:42:45 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Marek Vasut <marex@denx.de>, David Jander <david@protonic.nl>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH net-next v1] net: phy: nxp-tja11xx: log critical health
- state
-Message-ID: <YRLIpQIVgieYo1yc@lunn.ch>
-References: <20210810125618.20255-1-o.rempel@pengutronix.de>
- <YRKV05IoqtJYr6Cj@lunn.ch>
- <04df44d9-f049-e87b-81de-5a9fe888a49b@roeck-us.net>
+        id S229588AbhHKESJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Aug 2021 00:18:09 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:53190 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbhHKESI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Aug 2021 00:18:08 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D22E1806B6;
+        Wed, 11 Aug 2021 16:17:42 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1628655462;
+        bh=BEuPhmjjovy2ZrSiYCSp5bi3NVx+Dvendg0uKXkTPQg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ynr/YgWyr2celmWyJ4f3LHk3fQb/NlOlwPSoGbzx0XFs/N/0Uotvj8+J71/xdaxVt
+         S3ZlBgxyCLLPr+Sh90kfdalakmHTLHzoEloL5RwqGT8dtrfVIrr9iuT++/oGDonYjH
+         Sq9X6k2vMu52tT12JFn75PTaiUG48BpSq2BSe26dZv467Xu+JvvqYVhcF+DWPj09YD
+         rnidzefpKNW+8MnvmiIX4ntLt/xvYFDxlDH+AtjIWaUci3zQ9lsrYBklm8Pu+jPbXk
+         uX4hDfyelJOU9Ubgxy+qNDYLambLnb9icbGT4E6gXlEpR/RBj77xnPybn9p7Te2ZjD
+         OQAAbYSGIzHtw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B61134f660002>; Wed, 11 Aug 2021 16:17:42 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by pat.atlnz.lc (Postfix) with ESMTP id A4C4513EEBA;
+        Wed, 11 Aug 2021 16:17:42 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id A3302280E9D; Wed, 11 Aug 2021 16:17:42 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 2/2] hwmon: (pmbus/bpa-rs600) Add workaround for incorrect Pin max
+Date:   Wed, 11 Aug 2021 16:17:38 +1200
+Message-Id: <20210811041738.15061-3-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210811041738.15061-1-chris.packham@alliedtelesis.co.nz>
+References: <20210811041738.15061-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <04df44d9-f049-e87b-81de-5a9fe888a49b@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=aqTM9hRV c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=MhDmnRu9jo8A:10 a=abd1TrhZvCHtb7_ZMfQA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> > I'm not so happy abusing the statistic counters like this. Especially
-> > when we have a better API for temperature and voltage: hwmon.
-> > 
-> > phy_temp_warn maps to hwmon_temp_max_alarm. phy_temp_high maps to
-> > either hwmon_temp_crit_alarm or hwmon_temp_emergency_alarm.
-> > 
-> > The under voltage maps to hwmon_in_lcrit_alarm.
-> > 
-> 
-> FWIW, the statistics counters in this driver are already abused
-> (phy_polarity_detect, phy_open_detect, phy_short_detect), so
-> I am not sure if adding more abuse makes a difference (and/or
-> if such abuse is common for phy drivers in general).
+BPD-RS600 modules running firmware v5.70 misreport the MFR_PIN_MAX.
+The indicate a maximum of 1640W instead of 700W. Detect the invalid
+reading and return a sensible value instead.
 
-Hi Guenter
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ drivers/hwmon/pmbus/bpa-rs600.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-Abuse is not common in general. I think this is the only driver
-abusing stats to return flags.  At the time those where added, we did
-not have phy cable test support. Now we do, i would also suggest that
-the driver makes use of that infrastructure to issue a cable test
-report. These 'stats' need to stay, since they are ABI, but we should
-not add more.
-
-That is also why i said "Especially when we have a better API".
-
-     Andrew
+diff --git a/drivers/hwmon/pmbus/bpa-rs600.c b/drivers/hwmon/pmbus/bpa-rs=
+600.c
+index d495faa89799..f4baed9ce8a4 100644
+--- a/drivers/hwmon/pmbus/bpa-rs600.c
++++ b/drivers/hwmon/pmbus/bpa-rs600.c
+@@ -65,6 +65,24 @@ static int bpa_rs600_read_vin(struct i2c_client *clien=
+t)
+ 	return ret;
+ }
+=20
++/*
++ * The firmware on some BPD-RS600 models incorrectly reports 1640W
++ * for MFR_PIN_MAX. Deal with this by returning a sensible value.
++ */
++static int bpa_rs600_read_pin_max(struct i2c_client *client)
++{
++	int ret;
++
++	ret =3D pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_PIN_MAX);
++	if (ret < 0)
++		return ret;
++
++	if (ret =3D=3D 0x0b34)
++		return 0x095e;
++
++	return ret;
++}
++
+ static int bpa_rs600_read_word_data(struct i2c_client *client, int page,=
+ int phase, int reg)
+ {
+ 	int ret;
+@@ -92,7 +110,8 @@ static int bpa_rs600_read_word_data(struct i2c_client =
+*client, int page, int pha
+ 		ret =3D pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_IOUT_MAX);
+ 		break;
+ 	case PMBUS_PIN_OP_WARN_LIMIT:
+-		ret =3D pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_PIN_MAX);
++	case PMBUS_MFR_PIN_MAX:
++		ret =3D bpa_rs600_read_pin_max(client);
+ 		break;
+ 	case PMBUS_POUT_OP_WARN_LIMIT:
+ 		ret =3D pmbus_read_word_data(client, 0, 0xff, PMBUS_MFR_POUT_MAX);
+--=20
+2.32.0
 
