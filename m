@@ -2,84 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FBA6C432BE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 01:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B3EC4338F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 03:15:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61C9D60EE5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 01:40:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADEB560ED5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 03:15:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbhHLBka (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Aug 2021 21:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbhHLBka (ORCPT
+        id S233640AbhHLDQM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Aug 2021 23:16:12 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:54491 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbhHLDQM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Aug 2021 21:40:30 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBADC0613D3
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Aug 2021 18:40:05 -0700 (PDT)
+        Wed, 11 Aug 2021 23:16:12 -0400
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 09767806B6;
-        Thu, 12 Aug 2021 13:40:02 +1200 (NZST)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 67393806B5;
+        Thu, 12 Aug 2021 15:15:45 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1628732402;
-        bh=dftXrHA1Nb4OOp2kk3B2WS3OMgeEL0M1qiZccxQChds=;
-        h=From:To:Cc:Subject:Date;
-        b=yp5WTbSprPaV9uQiSdfgMjBEhc8Vt+Tr3TBrBwSsjS9ytipfr12iciedzGvMukr1N
-         Dwt8s5Hc54YNAnN+gqoHj2rcSa7gQKIVc9yic/0/+iKPFkxpMg9IoYuusb4un8R2u8
-         o2nCMDGeJdnj1EPsITWG5CxxTSXsbkwPDcg0lXrqrFJVspW7i7NfByiGmX//32Jnch
-         JVpxb2wbcCru5/UoIVs+gngKcwOAiB3epqTEDs4SL+F+6owezHL7ghhzm6pukR6JWC
-         TQ9nYIP4JGtM55jSIl44PIhVY42EvIw6vf/1cuycTr30VDh/63ldwSjeyukHp+Rlf4
-         ngcJxrwgtmjzA==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B61147bf10000>; Thu, 12 Aug 2021 13:40:01 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by pat.atlnz.lc (Postfix) with ESMTP id C535A13EE8E;
-        Thu, 12 Aug 2021 13:40:01 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id C899B280E9D; Thu, 12 Aug 2021 13:40:01 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     linux@roeck-us.net, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2 0/2] hwmon: (pmbus/bpa-rs600) cleanup and workaround
-Date:   Thu, 12 Aug 2021 13:39:58 +1200
-Message-Id: <20210812014000.26293-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.32.0
+        s=mail181024; t=1628738145;
+        bh=+aeRJE8lBBEpOv4Yz590FcNPGDPhOZJQuB70ZkeBZCA=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=GV4pbBUbQnPFmxS0F/1+5HH0wXWEGAPU73pUJ+VBHQ0LO0qJERW1uCiGPGj1LCXP8
+         x3XiX6yvXMGo+nOXdIMBG7WwXJFrC/st21kzEOZHsUd4S/q3JtJxHmAc/qJR9Rcaqe
+         VVOh/DvfKe2Wo0rg8X9o+g4wRBwj6BXktWrU8e3HNl1r6NwrYIfMbxlnsG53Rt+g5H
+         xUqOEMc66aAPtFyZy4TES6u46Za0IZ+wsc3p3jEPiK7U//8gKpLQ3tFmTqyB0/ZK29
+         1TzQrIpHWcyvXfd0hY64i2Z8ONL2/c3hX/M6V0/mx4gfbylMEzTKLf8lKvx+ogAUiw
+         Vv6qPfBPnNNzQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B611492610001>; Thu, 12 Aug 2021 15:15:45 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 12 Aug 2021 15:15:45 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.023; Thu, 12 Aug 2021 15:15:45 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] hwmon: (pmbus/bpa-rs600) cleanup and workaround
+Thread-Topic: [PATCH 0/2] hwmon: (pmbus/bpa-rs600) cleanup and workaround
+Thread-Index: AQHXjmfUhftEq+42BUuRDDpemCFUEKtuarIA
+Date:   Thu, 12 Aug 2021 03:15:44 +0000
+Message-ID: <a181b3a5-41f7-fa49-e7fe-ab32dc39ff39@alliedtelesis.co.nz>
+References: <20210811041738.15061-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20210811041738.15061-1-chris.packham@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8383F7ECAB3E344A93114472F017971F@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=aqTM9hRV c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=MhDmnRu9jo8A:10 a=VwQbUJbxAAAA:8 a=D5RLDSlNI1LxkMvazOUA:9 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=aqTM9hRV c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=MhDmnRu9jo8A:10 a=VwQbUJbxAAAA:8 a=U6DuVk5YAAAA:20 a=gbS8T0rqnHn9gnFFVREA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
 X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This series should apply cleanly without the BPD-RS600 support[1] which i=
-s in
-Guenter's tree by hasn't made it to Linus' yet. Patch 2/2 technically fix=
-es a
-problem that is only present on the BPD-RS600. Patch 1/2 might need to he=
-ad to
-stable but it's probably not the end of the world if it doesn't.
-
-[1] - https://lore.kernel.org/linux-hwmon/20210708220618.23576-1-chris.pa=
-ckham@alliedtelesis.co.nz/
-
-Chris Packham (2):
-  hwmon: (pmbus/bpa-rs600) Don't use rated limits as warn limits
-  hwmon: (pmbus/bpa-rs600) Add workaround for incorrect Pin max
-
- drivers/hwmon/pmbus/bpa-rs600.c | 48 ++++++++++++++++-----------------
- 1 file changed, 23 insertions(+), 25 deletions(-)
-
---=20
-2.32.0
-
+DQpPbiAxMS8wOC8yMSA0OjE3IHBtLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBUaGlzIHNlcmll
+cyBidWlsZHMgb24gdG9wIG9mIHRoZSBCUEQtUlM2MDAgc3VwcG9ydFsxXSB3aGljaCBpcyBpbiBH
+dWVudGVyJ3MNCj4gdHJlZSBieSBoYXNuJ3QgbWFkZSBpdCB0byBMaW51cycgeWV0LiBUaGV5IG1p
+Z2h0IGFjdHVhbGx5IGNsZWFubHkgYXBwbHkgd2l0aG91dA0KPiBpdCBzaW5jZSB0aGV5IHRvdWNo
+IGRpZmZlcmVudCBwYXJ0cyBvZiB0aGUgZmlsZS4NCj4NCj4gWzFdIC0gaHR0cHM6Ly9sb3JlLmtl
+cm5lbC5vcmcvbGludXgtaHdtb24vMjAyMTA3MDgyMjA2MTguMjM1NzYtMS1jaHJpcy5wYWNraGFt
+QGFsbGllZHRlbGVzaXMuY28ubnovDQo+DQo+IENocmlzIFBhY2toYW0gKDIpOg0KPiAgICBod21v
+bjogKHBtYnVzL2JwYS1yczYwMCkgUmVtb3ZlIGR1cGxpY2F0ZSBkZWZpbmluaXRpb25zDQo+ICAg
+IGh3bW9uOiAocG1idXMvYnBhLXJzNjAwKSBBZGQgd29ya2Fyb3VuZCBmb3IgaW5jb3JyZWN0IFBp
+biBtYXgNCj4NCj4gICBkcml2ZXJzL2h3bW9uL3BtYnVzL2JwYS1yczYwMC5jIHwgNDQgKysrKysr
+KysrKysrKysrKysrKystLS0tLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDI3IGluc2Vy
+dGlvbnMoKyksIDE3IGRlbGV0aW9ucygtKQ0KDQpJJ3ZlIGFsc28gc2VudCBhIFBSIGZvciBhZGRp
+bmcgZGlzcGxheSBvZiB0aGUgcmF0ZWQgdmFsdWVzIHRvIGxtLXNlbnNvcnMNCg0KaHR0cHM6Ly9n
+aXRodWIuY29tL2xtLXNlbnNvcnMvbG0tc2Vuc29ycy9wdWxsLzM1OA0K
