@@ -4,84 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC6BC4338F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E42C4338F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:37:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4898860FD7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:36:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9F0260F21
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:37:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbhHLEgu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Aug 2021 00:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S233944AbhHLEiD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Aug 2021 00:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234098AbhHLEgs (ORCPT
+        with ESMTP id S233659AbhHLEiD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Aug 2021 00:36:48 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3D5C061799;
-        Wed, 11 Aug 2021 21:36:23 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id e1so2431294qvs.13;
-        Wed, 11 Aug 2021 21:36:23 -0700 (PDT)
+        Thu, 12 Aug 2021 00:38:03 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F39C061765
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Aug 2021 21:37:38 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id m12so2464612qvt.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Aug 2021 21:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jpZ0477C5cf3o49NC+s1PqZcr5VpzD9GwW2JUzF4Esc=;
-        b=VIGNX7lXtRH+fbiLDv8GZQsTQBtM61/hRQB4WlWwIfHR5v+z4adEzVbAwmF2ZJRdQp
-         0TafmiJceYrSr1J1uh8qb18PiVpKRMujCQruk6D7f+M+NO5aoElMRd7OM8dX+jTwIVOy
-         JL3medSFGsSxjSPTP5O3YIVaBb2pymmAdNizhGdBAwo6etys79jzF33xm06YKrjouy5D
-         25yKAWus9tOf6UnYVKIpPdXgw1K7zcaUM0tOPy/abZkM7kCaKbDo1lV+R44SyKf36qNz
-         HHVBvDBTlVVrKZdrpl/KvBTQ1m0rO39p17isoqf1e2T/hBuLS64em5GHrZJsbxiSO4lq
-         aiXg==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=bfEEufsIAwc24ABU2C9IMwZ9tCZKq2i2TMr+wUz54JU=;
+        b=KLaZeuF2pbwi/SuGpl/LgMhmO3sPvjS+f1JFVzoyIbhoKd6IqsE2IjFZ3PqzRc6ALb
+         Jhd2Oob8ntCKgh0i3BoQP/FG8/8PncWKeyw3Qu+7eUkeeN3E0GVcMGKpQissMJ1xSJgj
+         /Xt9zBRfVG/zRKNFx5EHcNsf/y4Y770bk6Imj7DVTyLRu0Um1FBwY9zldM9uJMgNEnw3
+         MDxMNIM45Z/sEdNWxPz1awRDDTHZk+Q1Qc2KoSRdHcOWb+JH55+skXB8eBAJgY/myTNX
+         oocIDKVCtbIB402HOWmCffhINdHA42wRIGKAWMis0oOkfVYWHyLXLlMhgfJwMTEB356I
+         vB5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=jpZ0477C5cf3o49NC+s1PqZcr5VpzD9GwW2JUzF4Esc=;
-        b=S9FG+Hv0AvWZQ0aWExberG4T8HopbxftK0ew8dMYW0Z5EPKSgqSrZqmPxbU1RQ2uB8
-         LD99I6rnZDkwmFVTngUitmFhkfXrmqeJo17fphkAWHl8EfmFq67bRjyB2PrHqFMTt376
-         C5xQzNd2c6JTpvsCZpwUqQ3D6rOqSXxdxrPhzEbixE7iSXMlsuI9w1NjV32w9Jb+SnIq
-         EVmSwSuc4FPT/aLHdCUSoTbpcOys7mdYqJxMHJ+nSsjMI0Xu1nGT0WAO+vz83Itgw8sn
-         SfBJPILYS6kd1ftiFq75ML/gEhAm/wDvratrgA755Ni7qe1shpO69ov7hs0SUs9fepr3
-         bbTA==
-X-Gm-Message-State: AOAM532nLmGs191HVJSz2d3nW3z+rk0+6LKxGQ7MjizMDzrgPyC0LLFe
-        LjuKpWXcDP1LFwAD21IE0U0=
-X-Google-Smtp-Source: ABdhPJxXTmu10YgComYrKxSwN+Azc2Fes+HG7vUAU4AW67kaceFtqrErJyaRenVQ7lIAyFB3Pt5mfA==
-X-Received: by 2002:a0c:e883:: with SMTP id b3mr2178998qvo.23.1628742983133;
-        Wed, 11 Aug 2021 21:36:23 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=bfEEufsIAwc24ABU2C9IMwZ9tCZKq2i2TMr+wUz54JU=;
+        b=efQiXg31dMy6P+BUBB+agtgcRdif0viBIIoo8qDdRFt0N/pEycfVNTqvv6JhMcMEw8
+         gIZtVAucOdem1pXfjAvmNV1vo2n9Kn8vKe4D77JWMOJ3fYmyYFy8gRl6NGmhUEIG1WJS
+         v+8ugtMGrfbBvZzR8xuL4yoMrFFVHdK2FdUZUqyi5v8xIoEAGPJ3eZyrodzQb1+KR/yN
+         PtqhoIeLVft+St4O5Onr/YsNFNop50AFTYwuKSh2bDFxhM7bMU2NX3bQeu4PY5ywqPwA
+         Blg7KqCj81PWykoj2ZGmiiTtQcirYsCIUKeVdGVm8FoYOSECQaKJGD+jN5ZGWKDsOrML
+         G3GA==
+X-Gm-Message-State: AOAM530gDGNOKlwm60YJfrmTqkqCIOn1CiPayLJKPqywukdxks9a4YSA
+        lvlmtlaQCadg9C52P91SQDY=
+X-Google-Smtp-Source: ABdhPJzk14MkYofD76j9NQfnd6jjBZ7Gd8vhw0WotFW62lLJfLFBg3A+HEF3rSvW7IFLPyHjRQx6BQ==
+X-Received: by 2002:a05:6214:20e4:: with SMTP id 4mr2204681qvk.18.1628743058096;
+        Wed, 11 Aug 2021 21:37:38 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 18sm683769qkm.128.2021.08.11.21.36.22
+        by smtp.gmail.com with ESMTPSA id g20sm698153qki.73.2021.08.11.21.37.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 21:36:22 -0700 (PDT)
+        Wed, 11 Aug 2021 21:37:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Aug 2021 21:36:21 -0700
+Date:   Wed, 11 Aug 2021 21:37:36 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Brandon Wyman <bjwyman@gmail.com>
-Cc:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Fix write bits for LED
- control
-Message-ID: <20210812043621.GA1115124@roeck-us.net>
-References: <20210806225131.1808759-1-bjwyman@gmail.com>
+To:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH 1/3] hwmon: axi-fan-control: make sure the clock is
+ enabled
+Message-ID: <20210812043736.GA1115377@roeck-us.net>
+References: <20210811114853.159298-1-nuno.sa@analog.com>
+ <20210811114853.159298-2-nuno.sa@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210806225131.1808759-1-bjwyman@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210811114853.159298-2-nuno.sa@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 06, 2021 at 10:51:31PM +0000, Brandon Wyman wrote:
-> When doing a PMBus write for the LED control on the IBM Common Form
-> Factor Power Supplies (ibm-cffps), the DAh command requires that bit 7
-> be low and bit 6 be high in order to indicate that you are truly
-> attempting to do a write.
+On Wed, Aug 11, 2021 at 01:48:51PM +0200, Nuno Sá wrote:
+> The core will only work if it's clock is enabled. This patch is a
+> minor enhancement to make sure that's the case.
 > 
-> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 
 Applied.
 
@@ -89,25 +88,37 @@ Thanks,
 Guenter
 
 > ---
-> V1 -> V2: Use full name instead of initials in Signed-off-by line.
-> ---
->  drivers/hwmon/pmbus/ibm-cffps.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/hwmon/axi-fan-control.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index 5668d8305b78..df712ce4b164 100644
-> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -50,9 +50,9 @@
->  #define CFFPS_MFR_VAUX_FAULT			BIT(6)
->  #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
+> diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
+> index e3f6b03e6764..901d1588234d 100644
+> --- a/drivers/hwmon/axi-fan-control.c
+> +++ b/drivers/hwmon/axi-fan-control.c
+> @@ -351,6 +351,11 @@ static int axi_fan_control_init(struct axi_fan_control_data *ctl,
+>  	return ret;
+>  }
 >  
-> -#define CFFPS_LED_BLINK				BIT(0)
-> -#define CFFPS_LED_ON				BIT(1)
-> -#define CFFPS_LED_OFF				BIT(2)
-> +#define CFFPS_LED_BLINK				(BIT(0) | BIT(6))
-> +#define CFFPS_LED_ON				(BIT(1) | BIT(6))
-> +#define CFFPS_LED_OFF				(BIT(2) | BIT(6))
->  #define CFFPS_BLINK_RATE_MS			250
+> +static void axi_fan_control_clk_disable(void *clk)
+> +{
+> +	clk_disable_unprepare(clk);
+> +}
+> +
+>  static const struct hwmon_channel_info *axi_fan_control_info[] = {
+>  	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT),
+>  	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_LABEL),
+> @@ -406,6 +411,14 @@ static int axi_fan_control_probe(struct platform_device *pdev)
+>  		return PTR_ERR(clk);
+>  	}
 >  
->  enum {
+> +	ret = clk_prepare_enable(clk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_add_action_or_reset(&pdev->dev, axi_fan_control_clk_disable, clk);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ctl->clk_rate = clk_get_rate(clk);
+>  	if (!ctl->clk_rate)
+>  		return -EINVAL;
