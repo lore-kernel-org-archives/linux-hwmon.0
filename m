@@ -7,78 +7,81 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E42C4338F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AC27C4338F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:38:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9F0260F21
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:37:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57D8960F21
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:38:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbhHLEiD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Aug 2021 00:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S233659AbhHLEjJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Aug 2021 00:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbhHLEiD (ORCPT
+        with ESMTP id S229531AbhHLEjI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Aug 2021 00:38:03 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F39C061765
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Aug 2021 21:37:38 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id m12so2464612qvt.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Aug 2021 21:37:38 -0700 (PDT)
+        Thu, 12 Aug 2021 00:39:08 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4FBC061765
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Aug 2021 21:38:44 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id n123so5088933qkn.12
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Aug 2021 21:38:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=bfEEufsIAwc24ABU2C9IMwZ9tCZKq2i2TMr+wUz54JU=;
-        b=KLaZeuF2pbwi/SuGpl/LgMhmO3sPvjS+f1JFVzoyIbhoKd6IqsE2IjFZ3PqzRc6ALb
-         Jhd2Oob8ntCKgh0i3BoQP/FG8/8PncWKeyw3Qu+7eUkeeN3E0GVcMGKpQissMJ1xSJgj
-         /Xt9zBRfVG/zRKNFx5EHcNsf/y4Y770bk6Imj7DVTyLRu0Um1FBwY9zldM9uJMgNEnw3
-         MDxMNIM45Z/sEdNWxPz1awRDDTHZk+Q1Qc2KoSRdHcOWb+JH55+skXB8eBAJgY/myTNX
-         oocIDKVCtbIB402HOWmCffhINdHA42wRIGKAWMis0oOkfVYWHyLXLlMhgfJwMTEB356I
-         vB5w==
+        bh=BRzgfA1hIuL2r3Df76Yk1rNjh11gvSAdXCHfYEkZkYY=;
+        b=N2kafuaVThTRPhZGqVbzXd1u4uv2cVNoP27YEnaAcRFADEKQtyqRB+rxr2OAP4miA5
+         WxrVqW/3evz2VnAbjoPts1qgCr/vmxPJ5FW2CUY22DelgtUQrIJ0UZkD/u7Om8WnOLHN
+         xV6lbWQI4xmJgBtQcOfdmVcGBndAV2AozZcNns/E6BUURxMVB3c+nAizB3P/oJZNcALE
+         W9rvumUZgwZRvxshRyR1yEkOOYn9QFRSLTyL+pVRzedhefRnpcWoOuvp8EdPIxy/iKY/
+         cfN4VjbfXOqcgZvc3yQab/joVL5j2ur7zG273zkMlYVeO37N3QGWjQ4NayNh1he5OJC6
+         pdIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition
          :content-transfer-encoding:in-reply-to;
-        bh=bfEEufsIAwc24ABU2C9IMwZ9tCZKq2i2TMr+wUz54JU=;
-        b=efQiXg31dMy6P+BUBB+agtgcRdif0viBIIoo8qDdRFt0N/pEycfVNTqvv6JhMcMEw8
-         gIZtVAucOdem1pXfjAvmNV1vo2n9Kn8vKe4D77JWMOJ3fYmyYFy8gRl6NGmhUEIG1WJS
-         v+8ugtMGrfbBvZzR8xuL4yoMrFFVHdK2FdUZUqyi5v8xIoEAGPJ3eZyrodzQb1+KR/yN
-         PtqhoIeLVft+St4O5Onr/YsNFNop50AFTYwuKSh2bDFxhM7bMU2NX3bQeu4PY5ywqPwA
-         Blg7KqCj81PWykoj2ZGmiiTtQcirYsCIUKeVdGVm8FoYOSECQaKJGD+jN5ZGWKDsOrML
-         G3GA==
-X-Gm-Message-State: AOAM530gDGNOKlwm60YJfrmTqkqCIOn1CiPayLJKPqywukdxks9a4YSA
-        lvlmtlaQCadg9C52P91SQDY=
-X-Google-Smtp-Source: ABdhPJzk14MkYofD76j9NQfnd6jjBZ7Gd8vhw0WotFW62lLJfLFBg3A+HEF3rSvW7IFLPyHjRQx6BQ==
-X-Received: by 2002:a05:6214:20e4:: with SMTP id 4mr2204681qvk.18.1628743058096;
-        Wed, 11 Aug 2021 21:37:38 -0700 (PDT)
+        bh=BRzgfA1hIuL2r3Df76Yk1rNjh11gvSAdXCHfYEkZkYY=;
+        b=TufOTM7dXUtkW5ZsDCoJO0daEVgbPGJvAEZ2CSLnysb6xZ/1qjgy1Jr8yGMe0js4wy
+         Y99qOxznxo3eSN91pPg2Zto2DwXpKzMays/cc2kI0CPAqXnLY+xTOdrgsR0Q80WSHmKc
+         c/cNL6whCZEhHgSZzNbJCsgg7zIE+7QCC8+rm7SNOPHqd/fcebbdBk7MAHKJC4LfcAFe
+         3n0Bm+0OPF74HlmSlKyRSkYwFcbMjZe0/Ed3XSICUUgfesJHHhzVqJ4EfGfpHHTv/1Kn
+         UR0kqLvSU85ewzuFUE/7vTytzgnkajZwxtONoZFx8voLEnxJIE3iwLO6AUpI5rfPiIF/
+         QkIw==
+X-Gm-Message-State: AOAM532ekLLo9WNm9Z0SIQ6K0TQxPcYc07F7hHESXI0P6ZSes2fDcWXM
+        bZ/ROy3GH7orGLvsOvMXHlg=
+X-Google-Smtp-Source: ABdhPJw+p5r6pmNB1nzUygZmJmmFqeoEvpqwKjqDnoI+Ebw7q2Pgh+Te0RhH5fNPuzo86rIkePOmLQ==
+X-Received: by 2002:a37:6615:: with SMTP id a21mr2671793qkc.364.1628743123509;
+        Wed, 11 Aug 2021 21:38:43 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g20sm698153qki.73.2021.08.11.21.37.37
+        by smtp.gmail.com with ESMTPSA id c1sm638292qtj.36.2021.08.11.21.38.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 21:37:37 -0700 (PDT)
+        Wed, 11 Aug 2021 21:38:43 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Aug 2021 21:37:36 -0700
+Date:   Wed, 11 Aug 2021 21:38:41 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH 1/3] hwmon: axi-fan-control: make sure the clock is
- enabled
-Message-ID: <20210812043736.GA1115377@roeck-us.net>
+Subject: Re: [PATCH 2/3] hwmon: axi-fan-control: handle irqs in natural order
+Message-ID: <20210812043841.GA1115561@roeck-us.net>
 References: <20210811114853.159298-1-nuno.sa@analog.com>
- <20210811114853.159298-2-nuno.sa@analog.com>
+ <20210811114853.159298-3-nuno.sa@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210811114853.159298-2-nuno.sa@analog.com>
+In-Reply-To: <20210811114853.159298-3-nuno.sa@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 01:48:51PM +0200, Nuno Sá wrote:
-> The core will only work if it's clock is enabled. This patch is a
-> minor enhancement to make sure that's the case.
+On Wed, Aug 11, 2021 at 01:48:52PM +0200, Nuno Sá wrote:
+> The core will now start out of reset at boot as soon as clocking is
+> available. Hence, by the time we unmask the interrupts we already might
+> have some of them set. Thus, it's important to handle them in the
+> natural order the core generates them. Otherwise, we could process
+> 'ADI_IRQ_SRC_PWM_CHANGED' before 'ADI_IRQ_SRC_TEMP_INCREASE' and
+> erroneously set 'update_tacho_params' to true.
 > 
 > Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 
@@ -88,37 +91,54 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/axi-fan-control.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  drivers/hwmon/axi-fan-control.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
 > 
 > diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
-> index e3f6b03e6764..901d1588234d 100644
+> index 901d1588234d..c898ad121dc7 100644
 > --- a/drivers/hwmon/axi-fan-control.c
 > +++ b/drivers/hwmon/axi-fan-control.c
-> @@ -351,6 +351,11 @@ static int axi_fan_control_init(struct axi_fan_control_data *ctl,
->  	return ret;
->  }
+> @@ -283,18 +283,9 @@ static irqreturn_t axi_fan_control_irq_handler(int irq, void *data)
+>  	u32 irq_pending = axi_ioread(ADI_REG_IRQ_PENDING, ctl);
+>  	u32 clear_mask;
 >  
-> +static void axi_fan_control_clk_disable(void *clk)
-> +{
-> +	clk_disable_unprepare(clk);
-> +}
-> +
->  static const struct hwmon_channel_info *axi_fan_control_info[] = {
->  	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT),
->  	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_LABEL),
-> @@ -406,6 +411,14 @@ static int axi_fan_control_probe(struct platform_device *pdev)
->  		return PTR_ERR(clk);
+> -	if (irq_pending & ADI_IRQ_SRC_NEW_MEASUR) {
+> -		if (ctl->update_tacho_params) {
+> -			u32 new_tach = axi_ioread(ADI_REG_TACH_MEASUR, ctl);
+> -
+> -			/* get 25% tolerance */
+> -			u32 tach_tol = DIV_ROUND_CLOSEST(new_tach * 25, 100);
+> -			/* set new tacho parameters */
+> -			axi_iowrite(new_tach, ADI_REG_TACH_PERIOD, ctl);
+> -			axi_iowrite(tach_tol, ADI_REG_TACH_TOLERANCE, ctl);
+> -			ctl->update_tacho_params = false;
+> -		}
+> -	}
+> +	if (irq_pending & ADI_IRQ_SRC_TEMP_INCREASE)
+> +		/* hardware requested a new pwm */
+> +		ctl->hw_pwm_req = true;
+>  
+>  	if (irq_pending & ADI_IRQ_SRC_PWM_CHANGED) {
+>  		/*
+> @@ -310,9 +301,18 @@ static irqreturn_t axi_fan_control_irq_handler(int irq, void *data)
+>  		}
 >  	}
 >  
-> +	ret = clk_prepare_enable(clk);
-> +	if (ret)
-> +		return ret;
+> -	if (irq_pending & ADI_IRQ_SRC_TEMP_INCREASE)
+> -		/* hardware requested a new pwm */
+> -		ctl->hw_pwm_req = true;
+> +	if (irq_pending & ADI_IRQ_SRC_NEW_MEASUR) {
+> +		if (ctl->update_tacho_params) {
+> +			u32 new_tach = axi_ioread(ADI_REG_TACH_MEASUR, ctl);
+> +			/* get 25% tolerance */
+> +			u32 tach_tol = DIV_ROUND_CLOSEST(new_tach * 25, 100);
 > +
-> +	ret = devm_add_action_or_reset(&pdev->dev, axi_fan_control_clk_disable, clk);
-> +	if (ret)
-> +		return ret;
-> +
->  	ctl->clk_rate = clk_get_rate(clk);
->  	if (!ctl->clk_rate)
->  		return -EINVAL;
+> +			/* set new tacho parameters */
+> +			axi_iowrite(new_tach, ADI_REG_TACH_PERIOD, ctl);
+> +			axi_iowrite(tach_tol, ADI_REG_TACH_TOLERANCE, ctl);
+> +			ctl->update_tacho_params = false;
+> +		}
+> +	}
+>  
+>  	if (irq_pending & ADI_IRQ_SRC_TACH_ERR)
+>  		ctl->fan_fault = 1;
