@@ -2,87 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B3EC4338F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 03:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC88C4338F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:29:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADEB560ED5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 03:15:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66D1C60F57
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Aug 2021 04:29:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbhHLDQM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Aug 2021 23:16:12 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:54491 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbhHLDQM (ORCPT
+        id S233659AbhHLE3m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Aug 2021 00:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhHLE3l (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Aug 2021 23:16:12 -0400
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 67393806B5;
-        Thu, 12 Aug 2021 15:15:45 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1628738145;
-        bh=+aeRJE8lBBEpOv4Yz590FcNPGDPhOZJQuB70ZkeBZCA=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=GV4pbBUbQnPFmxS0F/1+5HH0wXWEGAPU73pUJ+VBHQ0LO0qJERW1uCiGPGj1LCXP8
-         x3XiX6yvXMGo+nOXdIMBG7WwXJFrC/st21kzEOZHsUd4S/q3JtJxHmAc/qJR9Rcaqe
-         VVOh/DvfKe2Wo0rg8X9o+g4wRBwj6BXktWrU8e3HNl1r6NwrYIfMbxlnsG53Rt+g5H
-         xUqOEMc66aAPtFyZy4TES6u46Za0IZ+wsc3p3jEPiK7U//8gKpLQ3tFmTqyB0/ZK29
-         1TzQrIpHWcyvXfd0hY64i2Z8ONL2/c3hX/M6V0/mx4gfbylMEzTKLf8lKvx+ogAUiw
-         Vv6qPfBPnNNzQ==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B611492610001>; Thu, 12 Aug 2021 15:15:45 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Thu, 12 Aug 2021 15:15:45 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.023; Thu, 12 Aug 2021 15:15:45 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        Thu, 12 Aug 2021 00:29:41 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8617C061765;
+        Wed, 11 Aug 2021 21:29:16 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id p22so3916998qki.10;
+        Wed, 11 Aug 2021 21:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7crB6ut1oFmTFNo8HvKM85WBKFVQGpST+6t0/W+ZBVU=;
+        b=mXfuFunSLUfRZ8+6697aQg2iBIcnsk+VZrFjuxyHJAjURoOiMgA+iEq4FzXMQMq9be
+         32UcAwJKS2cF1PCqSad8XBxiC3gniWc3WWFyK3A3lqBCxcHybJH8kLt1XRinQOT8oUZD
+         ykjK6/5qCeWp4dn8s88P1/FZijFBOALby6GvrAvCufQSTvcP3XsHMM1K4HxsxkbGH01D
+         cGkq0Y1HzG3OH8cM4WorjKTVBJZWnSWDsgkeLo8RlU1UWtJoiauIwG1aB+E8mHAhzGWO
+         pTcQkLYI/BOtsVNrj7zWnVMQ6UxHAtTrPVaCgkwkf52MxqaaOl4IjhyZ0Ekt7c86h354
+         6ETQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7crB6ut1oFmTFNo8HvKM85WBKFVQGpST+6t0/W+ZBVU=;
+        b=OvVJG7ZDUvH8GEqJ1WlV8k2mf77WCbhzBm1lRg+tSQCHpX1DnVAYWvftzXEyNo5m41
+         kmZ+HtxhRSb1bjniDKISWroqE1Izht0HXDHiFcCq8zM3tDg7bVTqqWFDsL938mqsToYA
+         NomU+FOWM5NovWCyb0SH9K8NlqkHdASfj9KlGdwd8+mObad6zw6CR7PnBpp/vxjZ9R2I
+         iR8rbRRYpCeSQudRKyZ6MTU5KcZJd80iUhejfst955X1h8vF7kQ1mQ0L+ulMFVIUUn9Z
+         abVRRieehwFi3WkuoWXfajjwRZ8AEbAh6RqLdwQWoHn0QNpxhn+Q2H1L2mLNjKe6cwio
+         46qg==
+X-Gm-Message-State: AOAM533e1LuFd3uyZ8q11ryp5FwZ0uCTS3NJCjHqFrFy+hyD/XusspnR
+        OXUwTy8DS0dk8ad5GwKB/N1aF6HuzjM=
+X-Google-Smtp-Source: ABdhPJxlpZ71SpJrRywihvbJFUMksa371VcklVh19YS84G/lBvW7XavSbPlXSAx03uHltYreiPnODg==
+X-Received: by 2002:a37:8387:: with SMTP id f129mr2640582qkd.79.1628742555907;
+        Wed, 11 Aug 2021 21:29:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i6sm624662qtj.21.2021.08.11.21.29.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Aug 2021 21:29:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH 0/2] hwmon: (pmbus/bpa-rs600) cleanup and workaround
-Thread-Topic: [PATCH 0/2] hwmon: (pmbus/bpa-rs600) cleanup and workaround
-Thread-Index: AQHXjmfUhftEq+42BUuRDDpemCFUEKtuarIA
-Date:   Thu, 12 Aug 2021 03:15:44 +0000
-Message-ID: <a181b3a5-41f7-fa49-e7fe-ab32dc39ff39@alliedtelesis.co.nz>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 References: <20210811041738.15061-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20210811041738.15061-1-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8383F7ECAB3E344A93114472F017971F@atlnz.lc>
-Content-Transfer-Encoding: base64
+ <a181b3a5-41f7-fa49-e7fe-ab32dc39ff39@alliedtelesis.co.nz>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <1f197bab-f7b1-d3c3-6d01-531364c88ca3@roeck-us.net>
+Date:   Wed, 11 Aug 2021 21:29:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=aqTM9hRV c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=MhDmnRu9jo8A:10 a=VwQbUJbxAAAA:8 a=U6DuVk5YAAAA:20 a=gbS8T0rqnHn9gnFFVREA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
+In-Reply-To: <a181b3a5-41f7-fa49-e7fe-ab32dc39ff39@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQpPbiAxMS8wOC8yMSA0OjE3IHBtLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBUaGlzIHNlcmll
-cyBidWlsZHMgb24gdG9wIG9mIHRoZSBCUEQtUlM2MDAgc3VwcG9ydFsxXSB3aGljaCBpcyBpbiBH
-dWVudGVyJ3MNCj4gdHJlZSBieSBoYXNuJ3QgbWFkZSBpdCB0byBMaW51cycgeWV0LiBUaGV5IG1p
-Z2h0IGFjdHVhbGx5IGNsZWFubHkgYXBwbHkgd2l0aG91dA0KPiBpdCBzaW5jZSB0aGV5IHRvdWNo
-IGRpZmZlcmVudCBwYXJ0cyBvZiB0aGUgZmlsZS4NCj4NCj4gWzFdIC0gaHR0cHM6Ly9sb3JlLmtl
-cm5lbC5vcmcvbGludXgtaHdtb24vMjAyMTA3MDgyMjA2MTguMjM1NzYtMS1jaHJpcy5wYWNraGFt
-QGFsbGllZHRlbGVzaXMuY28ubnovDQo+DQo+IENocmlzIFBhY2toYW0gKDIpOg0KPiAgICBod21v
-bjogKHBtYnVzL2JwYS1yczYwMCkgUmVtb3ZlIGR1cGxpY2F0ZSBkZWZpbmluaXRpb25zDQo+ICAg
-IGh3bW9uOiAocG1idXMvYnBhLXJzNjAwKSBBZGQgd29ya2Fyb3VuZCBmb3IgaW5jb3JyZWN0IFBp
-biBtYXgNCj4NCj4gICBkcml2ZXJzL2h3bW9uL3BtYnVzL2JwYS1yczYwMC5jIHwgNDQgKysrKysr
-KysrKysrKysrKysrKystLS0tLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDI3IGluc2Vy
-dGlvbnMoKyksIDE3IGRlbGV0aW9ucygtKQ0KDQpJJ3ZlIGFsc28gc2VudCBhIFBSIGZvciBhZGRp
-bmcgZGlzcGxheSBvZiB0aGUgcmF0ZWQgdmFsdWVzIHRvIGxtLXNlbnNvcnMNCg0KaHR0cHM6Ly9n
-aXRodWIuY29tL2xtLXNlbnNvcnMvbG0tc2Vuc29ycy9wdWxsLzM1OA0K
+On 8/11/21 8:15 PM, Chris Packham wrote:
+> 
+> On 11/08/21 4:17 pm, Chris Packham wrote:
+>> This series builds on top of the BPD-RS600 support[1] which is in Guenter's
+>> tree by hasn't made it to Linus' yet. They might actually cleanly apply without
+>> it since they touch different parts of the file.
+>>
+>> [1] - https://lore.kernel.org/linux-hwmon/20210708220618.23576-1-chris.packham@alliedtelesis.co.nz/
+>>
+>> Chris Packham (2):
+>>     hwmon: (pmbus/bpa-rs600) Remove duplicate defininitions
+>>     hwmon: (pmbus/bpa-rs600) Add workaround for incorrect Pin max
+>>
+>>    drivers/hwmon/pmbus/bpa-rs600.c | 44 ++++++++++++++++++++-------------
+>>    1 file changed, 27 insertions(+), 17 deletions(-)
+> 
+> I've also sent a PR for adding display of the rated values to lm-sensors
+> 
+> https://github.com/lm-sensors/lm-sensors/pull/358
+> 
+Excellent, thanks!
+
+Guenter
+
