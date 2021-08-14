@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D495C4338F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 19:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68E95C4338F
+	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 19:05:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0BEB560EB5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 19:02:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F89360EB5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 19:05:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbhHNTCZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 14 Aug 2021 15:02:25 -0400
-Received: from mout.gmx.net ([212.227.17.21]:60297 "EHLO mout.gmx.net"
+        id S233870AbhHNTGF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 14 Aug 2021 15:06:05 -0400
+Received: from mout.gmx.net ([212.227.17.20]:59931 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233256AbhHNTCY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 14 Aug 2021 15:02:24 -0400
+        id S233256AbhHNTGE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 14 Aug 2021 15:06:04 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1628967694;
-        bh=U0bWsRIOij814hoy8fV+SZ6Maf5t763frP78yvsYRO8=;
+        s=badeba3b8450; t=1628967919;
+        bh=djI90wVGhLPIl81UPPj01yiEBahd1DXPwpMbe8xGPMc=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=NhOFeN6AUNJ0cEgtV+VA4fYqzP1iYhBpB0dfJ2l4epYNQrxqJ1wTJBvysKVaybaw+
-         kblVMHi9hKo/znu41qWVkJFutOObHo458DlkrSWwAhptFixf7tPQWo98ybZPOY1fxU
-         FS/E+PKCSf/QeIH7H4dvFYV7cC0iFC68ToPYHyto=
+        b=AIsrOXVuxpdUTze7CRf/K8UhV7w5iUuSOXb4tawv+Cr7T2CzVMGEvnX1yO7YVcLI/
+         pGX6d6zaJijS15wyYLLvbcc8YYRPnZQa1FuhYBAA6lGB2Hz+mQ3l/GPjoGINIQILnQ
+         SwVQNfJDwtHLK6dkVFLWLJJE9g8tiYvphsVxZpOc=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([91.0.96.234]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGQnF-1mIaLz2Yqj-00Grad; Sat, 14
- Aug 2021 21:01:34 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzhnN-1n1qEZ3yjJ-00vfP0; Sat, 14
+ Aug 2021 21:05:19 +0200
 From:   W_Armin@gmx.de
 To:     pali@kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH v2] hwmon: (dell-smm) Rework SMM function debugging
-Date:   Sat, 14 Aug 2021 21:01:27 +0200
-Message-Id: <20210814190127.26456-1-W_Armin@gmx.de>
+Subject: [PATCH RESEND v2] hwmon: (dell-smm) Rework SMM function debugging
+Date:   Sat, 14 Aug 2021 21:05:16 +0200
+Message-Id: <20210814190516.26718-1-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FeHvJ5CqUTTiTmJI5xeamQ8EA9/aqHBTjPPCXUvOoGYrU0fkbzH
- gTQSCWrzozlmLssN8GJsAbjFux3u5AOICBzEnest0a+FGGoHiyQur7nMiNOZSpswki9R3+Q
- xzIZY/TIKj9l2NTKdoHiDQdH/sEgDXdVbNeWgPfWhSCNnrtWWhTIhb6X4eZ19e/6qSTTJXE
- 9G23Aa6S/xJyNDwLgxp2Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:k0B7WwRqVjo=:/zYf5fb5H7s6xXoHVXemzu
- lQr7l7OPIxVxWEkUzlKBjKZ7yyHxHCIRWS/V7pUwl+tWvxQEm3vUy6wkHmpIod5iw379iPGP1
- wi/Rsq4hszn424VHKJEyqQoW7YjzJtx3LJUg9DgZmINTLZjGea6tgrbRYOnWL2WDDOEtGjxTe
- BdhfHmbdu1YdRvfAWMiiOSUxl+QlJ9Dq9jtdnVdbCtLUF6xQvfVCznsTM2lRZOuFg3wZe4XTj
- 8M3ojQCSq65jyLAQZzvaxr/OXYf4mhOGUlH/3qyMHYhTievtigkq/naqNcRmwSl38Etkqr/hb
- nRsHw5jzS+xtnbGDxcIWOZsr/SE/u44Io7U5/0QXP3yIh9L16EcsacQyJzn7Mb8kVCZyr2XbI
- YJYGiYG0E448jKqsmSi8cKRzMZOxUmAuoshk7y44eGWAJxujRfpw9vFBmrvX+OEpiG6Cgimt2
- mDZMrJrVbD0dTPWIb7SnmcY5+Od1NsdykCw0skZGlBohcwbZpqDIuNT3ZIhfa0fCBgbgJj0hD
- sU36pQuItWT9QBz6JfiFGvSooxHnu76UmLn804hidPZ7juvIbtSZ0h+/fW2jP3wulSi30zrvU
- 8ghL9Bc9xlgpzlO/WnHzTcnNxzUCip1POw58Q/aJH4U0N9ELtTIV4WHQ9yCgKF/gOFRkFxy1g
- N5TZ9tNpuT6Cp06kx1+6tRmyJZVR1UB7rep7ODvp/fv50DWvAJHXgqaCUnsD6TtBbOYY+PEDx
- mfVg/1w2ljd0BL+PGV9xlj1oKnxvIiNnWxt32uV3ITsLzN7aei/CYzabm7KThbhoKIhyemDo/
- e99ZmdntAAGkq+0XSNia2mhQ3lsHRsjz9ucFVDX03qE7jMqSZqjsGuIIHP6yhUrvWHAHdCdEn
- jtF7ge2MjVtMsGFerIelrjVj93DaCsK9jIL5pJTrCiZ8Erdn8UqgWCbYWgz9ZFQfQXyDKOpAm
- NcLIrf6dTwvsQIL0WWljfcMG9FCSclO1r98PI2V9eqdjNh4IAkouKDhYg3++rXljYFWrh0kGw
- 6hO2IfdDmawTEhNhbjexhWCcvdraKuvJ6kMVMT08MMqvWYwwK6DOCUHPtW0+ONb/yUv+ycHHZ
- plShTnwy5+AlxXuHli0QHaO5/LbXj4LJ504VFnS2R4jghE5BaG25ofSwA==
+X-Provags-ID: V03:K1:0pfgeZ5FNqgf0dJHiNXVnzaGH5hiXaVU4k0FY7W2l7VsOnP+Rzm
+ UfvQJS6wavvouVoIGsWFaBKgVPDv9Vz1Rf7uZPHXziwExSrbFHx6dgQR60fk6dVKWCOAS1B
+ W9bBBR2wAUsntvvBCHrPoGtd5wE1fvNi8CrQd1edyaDbRtJnwXn6zRiPUbIhICc/LAQ6Tx/
+ K9Iso65heajSKCVYHhR8A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:njb5o3O4XRE=:zcdtD78ekFNS4+8tV5dgoX
+ ZuabTbrzDmVipDg4aH4/Ff4FkN3+8aJ98GKOhifxnU2BFJYNQH9M7sYz3hPJpi4LF8hwksgMF
+ qSIFZDbG25agWK5MPOsfjcUwnkdlxdhNpEftf783uatw9deIfPweoGgwldYsjoYpOLv6abhAi
+ GhMuWVKojOvpnQw3H9aZDkIgq+L+DghGiL2rxzaFFePpEqjecFQRCNtXPVrGwVhDpj0D30lmV
+ f2iqWXwyusEtYP1ip54SdTwSHeo6KHCXuam81ss5zQXNP0BvzG5hZDg4xLa6Ys3tvukyhOvRR
+ uPQ/f9bDZi27NfZij1TQfz4A681VIadExGT7IbOf+jUH5GZmFv1orHvmYJUDjzDFNXbme3iFK
+ ULoNtjBrFFI3e5XSCfrF5HIMb3mcWTahCkRM3mFxxIQWgn6gGAtxgoDOVwsHt/6wqQlJc+cIw
+ olXpQLVpEsPfU4kr/OPcQUAru/IfeHWzjpS0CkADbJw1Ygmx7FxFkArQxHFWr/ee7vdbKSsLN
+ F3yNOdQmDtWlFjN4RmvT3M8vrIZ1W8PI0PDxESJGaG37dA9H9NN02OWVuUaP2pghGb8NZzpL3
+ zydyNG6vjvH5F9t4fX651hSsDVUtrzPP+zUmf95ROQ90czmsqHbH44qdZ58wHeVwbnQV9Y/Mu
+ RmuQ4RARCU9HxsLB01XbTCBwU9MrLtakmiA25QCUd9e4rTY9OIOLq+2N6wiLL8zAvWaH5xdhu
+ W0KR+V+YLc8ZDwGU98rH42tGTfVkpgynEJwSv7gElG52Iixr6akEvXpc4xNZDJTvMHuR0rDcl
+ 2D1r6gO0KF8/umUpCUVOxUb3mk2xRA5qWmKnuNGaEIs/lstPIJQA6FpltZ0vRknAjUcEBXe+P
+ ppU+haXXhssLl2RH5af9gtyuUkPVcu1w8EycKXMvZwuBYA9Cg8fKM0Lfvl1PMuxnE/DH1qv2W
+ wCOLzPlp439CM8NaSnNdKcWrFVQEZTY60FzJOq2AJava1rCzv3Gy2ENIBEbMno8rvyD0gxjWe
+ PI3b//rMud5eP5ccKnoct34osDyIDTBbcYSMZtWit2S3zn6XSCwqMpLUp2rUhrQh5dBhIEYlz
+ BnaxFK09OfYVagA6o6hJyK2Q7FT3Q3RyEtPxuAbj6ky6w3GoGc6RpIzLQ==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -71,6 +71,10 @@ Drop #ifdef DEBUG and use ktime_us_delta()
 for improved precision.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+Changes in v2:
+- remove #ifdef DEBUG completly
+- init each variable at one line
 =2D--
  drivers/hwmon/dell-smm-hwmon.c | 21 ++++++---------------
  1 file changed, 6 insertions(+), 15 deletions(-)
