@@ -2,160 +2,139 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09C32C4338F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 15:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D26BC4338F
+	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 17:49:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D78EA608FC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 15:39:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C961460F11
+	for <linux-hwmon@archiver.kernel.org>; Sat, 14 Aug 2021 17:49:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238725AbhHNPji (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 14 Aug 2021 11:39:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56550 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238712AbhHNPji (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 14 Aug 2021 11:39:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 76CC760F92;
-        Sat, 14 Aug 2021 15:39:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628955549;
-        bh=4xxEksIBJd79dgeTEeRz01S15xMNX6B44JtNFFgWpE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l6neUcfobCgsewpvx4KLcsGUceOs06o9qy2fwZrDCvQis+V48TZn0p16MZKhcCJnT
-         X2CwxUAPmBxaCNwD+Lhc+nk2dXDSLODnJrTKhtPd8hK+mvoYxQlXOKRHkQAhL3uGNn
-         jgX3wfGi77aMSzeLp05sqzVyOkRdmxXBu25h2gJCc93SX+a26xMr0vW+YkQwTvbkQt
-         lj8kYemRAUD1E6aCJag6Ekpk5a5Ndmbd/FBP1A3g+/CcLIDKWXF2WS9gyDFBJXXuW0
-         SFvbL68oRDMuEnez4V4XlegJUQHgF2CC3Mznt+REzTYjAjpkAOiCwXfLr+Uq9jqFPf
-         23/DSdVOrytMQ==
-Received: by pali.im (Postfix)
-        id 450B59CA; Sat, 14 Aug 2021 17:39:07 +0200 (CEST)
-Date:   Sat, 14 Aug 2021 17:39:07 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     W_Armin@gmx.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/4] hwmon: (dell-smm) Rework SMM function debugging
-Message-ID: <20210814153907.jsql726cp4lef6nl@pali>
+        id S238803AbhHNRuB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 14 Aug 2021 13:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238690AbhHNRuB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 14 Aug 2021 13:50:01 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEC3C061764
+        for <linux-hwmon@vger.kernel.org>; Sat, 14 Aug 2021 10:49:32 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id r19-20020a0568301353b029050aa53c3801so15989717otq.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 14 Aug 2021 10:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=JqtyRxmDHUdVNwpJwp4yp6qvZzlAUcYMVJ9thBQJG+4=;
+        b=fVSZKilBzSkv1ZQgk402wubfdgLqhtdWr9Fa872wjF1KaCNzND7uOWaMCIcSoNBXvr
+         lhtmuz0LuQZO6FybGKaCoQyoLzE2XCu3U9hCog/agvM/1VyIIolXifMbimjHbtD/484B
+         ghOBs6qCIzsj+nmEDjbBdRoLwaiIL9q6LA199W1YrWhLSJTM4VYG8324g/XH0GufUr8A
+         3TrUIcV8ids5H0Y//1FDEDLyLMP96+XUOoVAS0HkQTr1BQeAUwVS88zFxEnS4OBJrl3c
+         HNT4zkIdZsi2oopM6D3ZWyk5ugjwoqa9IUx/C43yROaGMIEZcGc14DEUjj5/1JaSq1CC
+         SQng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=JqtyRxmDHUdVNwpJwp4yp6qvZzlAUcYMVJ9thBQJG+4=;
+        b=mLYl077N10JMWEidanTk/79MfSXIAfqXFxIH6gdAOj9hgrBX1qZVkrDVMeUX3awtRu
+         qozWyK7ZQGB7uIz50Awcqx5JCNnSb8Bg2oAZ+Dl1zvxybcyKouLtW7SYRHujEDisLXFT
+         FtnV62YDXX+ikMJCOogk5bQLK5wf7F3XA3hnnV5tVoEyIH4ZgPB04BspboglNSMOolCq
+         hOS3Kidn3QedSPtrTMDpVG7kyn5IPQGto2xSX1Z2Yyt9gyK/u2hiNhBbdBxOnGugh2Jd
+         xLCYXOdikycfUDUpo9M9yD4g7k5JzdxcwOivX8ngF/JuVpimb9jNoV0dSdrh64MG39SI
+         rUFQ==
+X-Gm-Message-State: AOAM531bJk4FIb2D8dCrxfnWwnnhheFxgvn4RAdKUcqXIV0CrKvgsES/
+        0f6qg2iyIEMPXGclOFNbcYU=
+X-Google-Smtp-Source: ABdhPJzU89Xc2x4kUzSpcAMNKaxO7zjr+Wgrp4s+iDmJW7xRpe36B4LnJWihEaZg+aYwp2ojH/tm/g==
+X-Received: by 2002:a05:6830:43a8:: with SMTP id s40mr2466387otv.209.1628963371167;
+        Sat, 14 Aug 2021 10:49:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 65sm1019138ooc.2.2021.08.14.10.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Aug 2021 10:49:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 14 Aug 2021 10:49:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     W_Armin@gmx.de
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/4] hwmon: (dell-smm) Mark tables as __initconst
+Message-ID: <20210814174929.GA2769052@roeck-us.net>
 References: <20210814143637.11922-1-W_Armin@gmx.de>
- <20210814143637.11922-3-W_Armin@gmx.de>
- <20210814150531.3ssa6dc22tqtmbdn@pali>
- <8df3b639-2fa6-43d6-6555-7f93f5fd300c@roeck-us.net>
+ <20210814143637.11922-2-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8df3b639-2fa6-43d6-6555-7f93f5fd300c@roeck-us.net>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20210814143637.11922-2-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Saturday 14 August 2021 08:29:56 Guenter Roeck wrote:
-> On 8/14/21 8:05 AM, Pali RohÃ¡r wrote:
-> > On Saturday 14 August 2021 16:36:35 W_Armin@gmx.de wrote:
-> > > From: Armin Wolf <W_Armin@gmx.de>
-> > > 
-> > > Use IS_ENABLED() instead of #ifdef and use ktime_us_delta()
-> > > for improved precision.
-> > > 
-> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> > > ---
-> > >   drivers/hwmon/dell-smm-hwmon.c | 26 ++++++++++----------------
-> > >   1 file changed, 10 insertions(+), 16 deletions(-)
-> > > 
-> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > > index 68af95c1d90c..3aa09c1e4b1d 100644
-> > > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > > @@ -158,17 +158,13 @@ static inline const char __init *i8k_get_dmi_data(int field)
-> > >    */
-> > >   static int i8k_smm_func(void *par)
-> > >   {
-> > > -	int rc;
-> > >   	struct smm_regs *regs = par;
-> > > -	int eax = regs->eax;
-> > > -
-> > > -#ifdef DEBUG
-> > > -	int ebx = regs->ebx;
-> > > -	unsigned long duration;
-> > > -	ktime_t calltime, delta, rettime;
-> > > +	int rc, eax = regs->eax, __maybe_unused ebx = regs->ebx;
-> > > +	long long __maybe_unused duration;
-> > > +	ktime_t __maybe_unused calltime;
-> > 
-> > I think that new coding style for declaring variables is
-> > "reverse christmas tree", longer line before shorted line.
-> > 
-> > But here, I'm not sure if initializing more variables with its default
-> > values should be at one line...
-> > 
-> > Also I'm not sure if usage of __maybe_unused is better than hiding
-> > variable behind #ifdef. #ifdef guards variable to not be used when it
-> > should not be.
-> > 
+On Sat, Aug 14, 2021 at 04:36:34PM +0200, W_Armin@gmx.de wrote:
+> From: Armin Wolf <W_Armin@gmx.de>
 > 
-> I prefer reverse christmas tree because I think it looks nicer, but
-> I don't usually enforce it because I think it is at least somewhat POV.
-> One initialization per line makes sense, though.
+> Both the config and the DMI tables never change and
+> are only used during module init for setting up
+> the device data struct.
+> Mark all of them as const and __initconst for a
+> smaller runtime memory footprint.
 > 
-> As for __maybe_unused and IS_ENABLED(), it is better because it ensures
-> that the code compiles. Otherwise, especially with debug code like this,
-> there is always the danger that other changes cause compile errors
-> if the flag is enabled ... but that isn't found because the flag isn't
-> enabled.
-> 
-> There is a significant difference here, though: The "#ifdef DEBUG" is replaced
-> with "IS_ENABLED(CONFIG_DEBUG)". So a local DEBUG define is replaced with
-> a global one (CONFIG_DEBUG). But there is no "config DEBUG" in any Kconfig file.
-> So, no, that doesn't work. We can't have local CONFIG_xxx defines because that
-> might end up conflicting with Kconfig defines.
-> 
-> I would suggest to just drop the #ifdef. The added cost is marginal compared
-> to the cost of the bios calls, and it may be useful to be able to use debug
-> output without having to recompile the code.
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Reviewed-by: Pali Rohár <pali@kernel.org>
 
-Make sense. Drop #if DEBUG. pr_debug can be already enabled / disabled
-and runtime measuring time is not problematic. Also these smm calls are
-not too frequent and I guess that smm call itself (when CPU is in SMM
-mode) is much more longer than time measurement around.
+Applied.
 
-> Guenter
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> > > 
-> > > -	calltime = ktime_get();
-> > > -#endif
-> > > +	if (IS_ENABLED(CONFIG_DEBUG))
-> > > +		calltime = ktime_get();
-> > > 
-> > >   	/* SMM requires CPU 0 */
-> > >   	if (smp_processor_id() != 0)
-> > > @@ -230,13 +226,11 @@ static int i8k_smm_func(void *par)
-> > >   	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-> > >   		rc = -EINVAL;
-> > > 
-> > > -#ifdef DEBUG
-> > > -	rettime = ktime_get();
-> > > -	delta = ktime_sub(rettime, calltime);
-> > > -	duration = ktime_to_ns(delta) >> 10;
-> > > -	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lu usecs)\n", eax, ebx,
-> > > -		(rc ? 0xffff : regs->eax & 0xffff), duration);
-> > > -#endif
-> > > +	if (IS_ENABLED(CONFIG_DEBUG)) {
-> > > +		duration = ktime_us_delta(ktime_get(), calltime);
-> > 
-> > But I like this ktime_us_delta() as it fixed conversion from ns to us!
-> > Current conversion is incorrect (>>10 is /1024; but it should be /1000).
-> > 
-> > > +		pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
-> > > +			 (rc ? 0xffff : regs->eax & 0xffff), duration);
-> > > +	}
-> > > 
-> > >   	return rc;
-> > >   }
-> > > --
-> > > 2.20.1
-> > > 
+> --
+> 2.20.1
 > 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 43da32ad2dce..68af95c1d90c 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -957,7 +957,7 @@ enum i8k_configs {
+>  	DELL_XPS,
+>  };
+> 
+> -static const struct i8k_config_data i8k_config_data[] = {
+> +static const struct i8k_config_data i8k_config_data[] __initconst = {
+>  	[DELL_LATITUDE_D520] = {
+>  		.fan_mult = 1,
+>  		.fan_max = I8K_FAN_TURBO,
+> @@ -1115,7 +1115,7 @@ static const struct dmi_system_id i8k_blacklist_fan_type_dmi_table[] __initconst
+>   * support for affected blacklisted Dell machines stay disabled.
+>   * See bug: https://bugzilla.kernel.org/show_bug.cgi?id=195751
+>   */
+> -static struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initdata = {
+> +static const struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initconst = {
+>  	{
+>  		.ident = "Dell Inspiron 7720",
+>  		.matches = {
+> @@ -1156,14 +1156,14 @@ enum i8k_fan_controls {
+>  	I8K_FAN_34A3_35A3,
+>  };
+> 
+> -static const struct i8k_fan_control_data i8k_fan_control_data[] = {
+> +static const struct i8k_fan_control_data i8k_fan_control_data[] __initconst = {
+>  	[I8K_FAN_34A3_35A3] = {
+>  		.manual_fan = 0x34a3,
+>  		.auto_fan = 0x35a3,
+>  	},
+>  };
+> 
+> -static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
+> +static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
+>  	{
+>  		.ident = "Dell Latitude 5480",
+>  		.matches = {
