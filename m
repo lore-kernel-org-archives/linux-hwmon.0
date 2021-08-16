@@ -7,68 +7,68 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61948C432BE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Aug 2021 18:16:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15DB0C432BE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Aug 2021 18:16:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4146260F11
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Aug 2021 18:16:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F255C60F11
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Aug 2021 18:16:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbhHPSRT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 Aug 2021 14:17:19 -0400
-Received: from mail-dm6nam11on2054.outbound.protection.outlook.com ([40.107.223.54]:22048
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S229481AbhHPSRW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 Aug 2021 14:17:22 -0400
+Received: from mail-dm6nam08on2052.outbound.protection.outlook.com ([40.107.102.52]:54163
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229481AbhHPSRS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 Aug 2021 14:17:18 -0400
+        id S229959AbhHPSRV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 16 Aug 2021 14:17:21 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RD+UU9WpZJ5m+h2lFrWXnTdSJpAL3FseMbGJLI8pLFTxQLC1971T4Ao9q6MFGuC5SvG+a2qj5lK7P+uu9U4eYmIdXZYBULXw7uQBc9Plt3jD+VH+V6xjSe4y61knfJ0saF9gnPwIrz2TjC3UN/m7ulvjGRAqYLgrCc2dhixMHrD3Yu6r38jiz7gz/cNZjZzNFScyaM3x+f8ROHpa2qab0DMBN1UJ6ch2ZhVW1YqYevo5Tjdt1IKDFd+8oCShIue5qP4xrctTrBQDgwnv9g71p4HlE+JIUZ8qpswBuAwnI22LVNd77DXFEr4D+IzQ3Nw/X2zZd3TiuKWgEixe0u2LEQ==
+ b=SboMDRdbs1myAafDszyllYM00FIJk4Uouy3mABL+DRHUgV1VddXlG9OjwoH7rhBN8/cKil3j3BmwVNU63yZAlOQ3EVr58uvVS6+9ICnSnLi/DZGgCvEJ3mZjPR+2nSBtnrXAlzmg2RuqKKeeF+yGXG33yfsiFKrd9H7OuX/GVbMRvM0nTLpBzhzer6ZxdkNzXBVxnwyPveQ4HlPl8ujsv55G2A6P5cF7JyUjJAn/wOJrQ7RinBxh317zxh3ccuOJruVtLNkVz5gAKtsh1KbID6rwOzbW4l+l2c25EWLXaA+FYyu+NAvKT37tQGnoykihO+3CWqjAo7mk3VOrBb9IzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=brskK6KkJLd7GMYWJYj9QFsecBFsQyHMV4VYCwbPnvE=;
- b=eX4TeSpo8GJiEndRQwpWB4LLQdKFXsCSd9yXalHYG9iI3C0b9P5SgxIXiE5+qohGw0npg7SJneb1+1a5gZ+OeSD7czGVLUfuOzhAEqV6G7hs4K9VV+filxhdqKlRaQci8ALkhBykmCC2nyYbArYNMkqjgf8Tmm+Lv6+hAOuLoEQIUGtA49r9MjgvUfoWD4p07i1BmM/QHlvM5fsrFqircK0XgWQw2j8dbwkYuXw+S1tb9HaTKmaAUDqcgp2albGEZ6UefXI6IUkisLKhcBh4tRpG4Mo7cEP9gEmMpRzhTZ+URILhMbbpS4tbhSl4HZI6rTmq7FTNS9qAD+cskPs1xA==
+ bh=3/fofUa81Qq+ZSwd4Jv2n5dNPZC1KIm88eNRKKMsnhw=;
+ b=epANa2qpvZHs1gx7Md7H9tLvdoMBEZ+slslCJG6wHTrf/05sXMwZyKBrVhTDsBF5e5EjOHfqQIHYXgA3yTlIASlQ5seYXP+mdO2M1Jkn/gzeOhENzTe0gdBlZlsbMhUYFCmF0KvhaFSgi4SJ9oxxNefwcnoWu9985ac8tGBUd7e5KvLwyitVcwW5sd8eO/p3nSoThgESxTk6YwDVMlb53I+5b6/ygULlYSFBS/Togat/4lonle+YAaX9DOXu3rISzHDI3Z8wMGamlW+T+9bAeW6X8kPlcka8Mmw/sohoeVreKLziNHNjGn4O4ghWh/Mqaix5HBzb0eLVEF0YfIXlgg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.34) smtp.rcpttodomain=axentia.se smtp.mailfrom=nvidia.com;
+ 216.228.112.36) smtp.rcpttodomain=axentia.se smtp.mailfrom=nvidia.com;
  dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=brskK6KkJLd7GMYWJYj9QFsecBFsQyHMV4VYCwbPnvE=;
- b=FccAZ35csxX9NF+3V+LUPa/ZcpnnvSd/TzO7t8lQlqr6Wu4xEVri7t+1z7+Om8oejDyHAI/xAj9UBmnFYi1eYHg0+laAsl31ErASu2OzLujgxKvp00ETSC9kfrwWbiU5dugqE3gOHlxA7W+kCH1VGaJiqCITWkPjMg+TdTCXkp6y124jWc7flRLjhIHYwrA0R1r8l5N0pXnvR+3s6aR1z+nltKD3luDtYlO6xIBoVGtXnOKLh0wKhw0LzTXGUen7nyFnlkUaDzKlqW1gUaozpkjvpTtwjV8pcBWbQM9NgVoV5WCLM6lyQWrOdzXL9+8568nC35gFLILr8iijNJG18w==
-Received: from DS7PR07CA0003.namprd07.prod.outlook.com (2603:10b6:5:3af::11)
- by BN8PR12MB3059.namprd12.prod.outlook.com (2603:10b6:408:42::20) with
+ bh=3/fofUa81Qq+ZSwd4Jv2n5dNPZC1KIm88eNRKKMsnhw=;
+ b=C4xAkpWVD17bNZ9WkIYcw+xWDg4wkyIPPWRMmEfkNrzN2nhPHv3vHcem9Y0nKL7OlVCdefoAFbxceXEl/8gixL9Kuy2jRshxn741ktsWYOo0aAqwLpBrXh9NwrXc6zutkyMbBMOFqdF5V0Oe6AO+Xkk3XFOu9UG9xepv7ko+zFeJGT3iB4arvMVdmUCSZtvXskcr5Ap6QHs/mYF5IismR8surq3nL3e0jfyfO8mOvfXx8vgL2pJ2RYnTbOHj0nkT7vwL0uuVLYqus7akciYrMXfexptZC9qhAdB4laiYgzmdkmdrkcKly9GLzg7PCu8KgU4lg1D6GnaTBBncgnXVOw==
+Received: from BN9PR03CA0190.namprd03.prod.outlook.com (2603:10b6:408:f9::15)
+ by MN2PR12MB4782.namprd12.prod.outlook.com (2603:10b6:208:a3::33) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.16; Mon, 16 Aug
- 2021 18:16:45 +0000
-Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3af:cafe::21) by DS7PR07CA0003.outlook.office365.com
- (2603:10b6:5:3af::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.22 via Frontend
- Transport; Mon, 16 Aug 2021 18:16:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.18; Mon, 16 Aug
+ 2021 18:16:48 +0000
+Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f9:cafe::ed) by BN9PR03CA0190.outlook.office365.com
+ (2603:10b6:408:f9::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.14 via Frontend
+ Transport; Mon, 16 Aug 2021 18:16:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.36)
  smtp.mailfrom=nvidia.com; axentia.se; dkim=none (message not signed)
  header.d=none;axentia.se; dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.34; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.34) by
- DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
+ 216.228.112.36 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.36; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.36) by
+ BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4415.16 via Frontend Transport; Mon, 16 Aug 2021 18:16:45 +0000
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 16 Aug
- 2021 18:16:44 +0000
+ 15.20.4415.16 via Frontend Transport; Mon, 16 Aug 2021 18:16:48 +0000
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 16 Aug
+ 2021 18:16:47 +0000
 Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.187.6) by
  DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 16 Aug 2021 18:16:43 +0000
+ 15.0.1497.2; Mon, 16 Aug 2021 18:16:45 +0000
 From:   Vadim Pasternak <vadimp@nvidia.com>
 To:     <wsa@the-dreams.de>
 CC:     <peda@axentia.se>, <linux-hwmon@vger.kernel.org>,
         Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH i2c-next 2/4] i2c: mlxcpld: Modify register setting for 400KHz frequency
-Date:   Mon, 16 Aug 2021 21:16:13 +0300
-Message-ID: <20210816181615.2625662-3-vadimp@nvidia.com>
+Subject: [PATCH i2c-next 3/4] i2c: mlxcpld: Reduce polling time for performance improvement
+Date:   Mon, 16 Aug 2021 21:16:14 +0300
+Message-ID: <20210816181615.2625662-4-vadimp@nvidia.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210816181615.2625662-1-vadimp@nvidia.com>
 References: <20210816181615.2625662-1-vadimp@nvidia.com>
@@ -80,50 +80,53 @@ X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
  DRHQMAIL107.nvidia.com (10.27.9.16)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ec787cae-3ced-4da0-4d25-08d960e20182
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3059:
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3059B742D896AAC2F24AB751AFFD9@BN8PR12MB3059.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
+X-MS-Office365-Filtering-Correlation-Id: eee4bae3-0cb4-4f95-ee2f-08d960e20332
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4782:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB478218D936441A69D07FEE26AFFD9@MN2PR12MB4782.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1303;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +ta0RPdtaoyRG40EcGNdRB6mY1zqr3Zl2YNcLfCfMtC5IreDlD2yqM6+XFzwUzNL08Enj1pT77X6CyHUeAzQZVTlrIvWwpNk6+X4CujiBZiqbhsp9Tx7I0EaopgjavKYucLLTE7yw+LlbtYpg/So7J1msY1RZHY9oWiw+NBc6GnVbJJq+qjzSVAip4Qda5UWn4ElEmppY5BIuN+R8vlZIEtsAQMuextBy4TkPHMS0YTiBbPcfAv7btncTYElaKbQs4vaf8UfM3FQ71ilEq/OLyDc2GlSOnJ0fWf0iWZIhNnUNW+1W0KiJBDHaeHNSQ+okTT3bi/V6ywPSFZFKYV981BEFkWL4SaS4VN6/dBizUVlQdQKIPfBjHgmgJzAL5sssHp16seTWO+WIQ3eFFb05nnX9RUR+X+jGAOEPDv/H/gjjP9gb31f9NgxI/IGf30SHm++IJ53Xs2QRzaKmPo5R0OA2dmRaaJa03nadi2l8Gw8f4YWxpO7KbCHtqus+H3+WNa6I8EyGOFXH8bYUhiKX3KgqRCAJ94m5bxABoWKagOhVdcu2Kb/XOJ3NZNgDFBjtH502p+kt2dLghQQoRivbNP5tx3AfIVNEyTEQmMLyLiIAHuJccNyjYm4Ax9xVXLzsW1H+sJy76KMTIVLSahmfFOUovUGHu70kOSo010qgFqtjjIvEYSqW3uaCdI6itvXoEWNARCp8GFRt8TfWjRpmmP7bK8HB23qt9kj+XGTUYQ=
-X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(346002)(136003)(396003)(39860400002)(376002)(36840700001)(46966006)(186003)(70206006)(26005)(82310400003)(336012)(86362001)(478600001)(16526019)(6666004)(107886003)(6916009)(2616005)(5660300002)(1076003)(36756003)(36906005)(2906002)(70586007)(36860700001)(54906003)(82740400003)(8676002)(47076005)(4326008)(7636003)(426003)(356005)(8936002)(83380400001)(316002)(4744005)(133343001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: H9UySd+R/CBWFX1P0p/ULn9z2LNi1zvTcykN8Fb2wORT5v40Wo+IHyG/VXLaqNK3x6wz4F+JnXS9NSfG5p48WSQfqCn7jXR0pKQ5BAQOo1K9ifNwCY5j7RloVDsADGzfJCfKXJ214b5P4WFDPop7kikYoC/6HnBMgTgQckgawwOlYqrRnTJSRpMrG6WctwJWZcgKCY8PVsz+q88JktCqOtJnNE+d49Bj8XAurjOcPHrxeYmoU8ZGP/DYInvYGyCVQwsl1BntRWrHZHzwZWWpir2medLSpIfa1pqNQbvN8FPTwq7//MWZfFVOrXt/QgVEQjMKtmjSGv1xa2z9kYWXPJoNLeouTu4TfXj6EksWKIcoE1hVvDOeBnz+pQaLsDniiGyIQDROnTJz5Ec2GF74bAEnPfsOu5i1psb/fYrFXoYVi5uHcFQtcL8jamp3mq7CY37Nt7LeJGiWT8LKcLsLzyWLkRTOrPGvhUm63pSoQ3JeDh+Uv+++Yx6aQDYGYebAM61Pkpi5EGT35uUVknWx1nESBrEQZ8yZJZNxE44nO6Hr2yMX533mu2FThG5qHwcoDBsp13NbuSXQFgP8s9mHITzw1Ab2NgZ5id69Jv8+tzwFJ+8xadiXP6HCte3XX2SdzMDehaooblXgWqo137hryT7A9/VkzD77+PE3E6m78wWlX0Ic9W4chOeRv7kRsuVM0GOjf0Ra8jFgHS1SDpk+7ssOFzW04+NXu2dvvufS/wU=
+X-Forefront-Antispam-Report: CIP:216.228.112.36;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid05.nvidia.com;CAT:NONE;SFS:(4636009)(136003)(39860400002)(396003)(346002)(376002)(46966006)(36840700001)(70586007)(82740400003)(36906005)(16526019)(186003)(70206006)(316002)(8936002)(107886003)(26005)(426003)(36756003)(356005)(5660300002)(8676002)(336012)(4326008)(2616005)(54906003)(82310400003)(7636003)(478600001)(86362001)(6666004)(83380400001)(47076005)(1076003)(36860700001)(4744005)(2906002)(6916009)(133343001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2021 18:16:45.2488
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2021 18:16:48.0401
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec787cae-3ced-4da0-4d25-08d960e20182
+X-MS-Exchange-CrossTenant-Network-Message-Id: eee4bae3-0cb4-4f95-ee2f-08d960e20332
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.36];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3059
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4782
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Change setting for 400KHz frequency support by more accurate value.
+Decrease polling time 'MLXCPLD_I2C_POLL_TIME' from 400 usec to 200
+usec. It improves performance of I2C transactions.
 
-Fixes: 66b0c2846ba8 ("i2c: mlxcpld: Add support for I2C bus frequency setting")
+Reliability of setting polling time to 200 usec has been validated
+across all the supported systems.
+
 Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
  drivers/i2c/busses/i2c-mlxcpld.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-mlxcpld.c b/drivers/i2c/busses/i2c-mlxcpld.c
-index 6d41c3db8a2b..015e11c4663f 100644
+index 015e11c4663f..615f0a98640e 100644
 --- a/drivers/i2c/busses/i2c-mlxcpld.c
 +++ b/drivers/i2c/busses/i2c-mlxcpld.c
-@@ -49,7 +49,7 @@
- #define MLXCPLD_LPCI2C_NACK_IND		2
+@@ -27,7 +27,7 @@
+ #define MLXCPLD_I2C_MAX_ADDR_LEN	4
+ #define MLXCPLD_I2C_RETR_NUM		2
+ #define MLXCPLD_I2C_XFER_TO		500000 /* usec */
+-#define MLXCPLD_I2C_POLL_TIME		400   /* usec */
++#define MLXCPLD_I2C_POLL_TIME		200   /* usec */
  
- #define MLXCPLD_I2C_FREQ_1000KHZ_SET	0x04
--#define MLXCPLD_I2C_FREQ_400KHZ_SET	0x0f
-+#define MLXCPLD_I2C_FREQ_400KHZ_SET	0x0c
- #define MLXCPLD_I2C_FREQ_100KHZ_SET	0x42
- 
- enum mlxcpld_i2c_frequency {
+ /* LPC I2C registers */
+ #define MLXCPLD_LPCI2C_CPBLTY_REG	0x0
 -- 
 2.20.1
 
