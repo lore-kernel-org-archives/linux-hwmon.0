@@ -2,105 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13CE9C4338F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Aug 2021 08:48:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B29AC4338F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Aug 2021 21:55:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE03E60EFE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Aug 2021 08:48:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BB0160240
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Aug 2021 21:55:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239101AbhHQIst (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Aug 2021 04:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        id S235410AbhHQV4I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Aug 2021 17:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234880AbhHQIst (ORCPT
+        with ESMTP id S233928AbhHQV4I (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Aug 2021 04:48:49 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A18C061764;
-        Tue, 17 Aug 2021 01:48:16 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id q10so27448930wro.2;
-        Tue, 17 Aug 2021 01:48:16 -0700 (PDT)
+        Tue, 17 Aug 2021 17:56:08 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B08C061764;
+        Tue, 17 Aug 2021 14:55:35 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id c19-20020a9d6153000000b0051829acbfc7so219555otk.9;
+        Tue, 17 Aug 2021 14:55:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UvsOH8jtQe+4Kanh6E/MrBCjFWLS1TOh5zSyYH4PboQ=;
-        b=LbR8LaJuOhBakcLFAAFQ2PSM/njYxfneXxDeDQYlanx3FENXuAF6gIa2xv7Wo1X2c2
-         R9OvMZUC5T3QXMdttlxfunjDSmS0SpioQKYCVIkhzwtq3u4dP8lMsia9ZL9A8x0102Nr
-         oim0c7sOWji/ztnYQeIzF18NgS9SkJtTLWsAqYrJd22trjBcZtNyJplcdFZrXqv/OkX3
-         HVgg4pi0RVbrICIsacxYUOjtNVCTWRfOdE53LABlXoMXTYZav5Cu1iN/mahqaUmtJ27E
-         4a9/JyDuXPfQWqt3DUcIe9xwZTDPxR+b2hNiao1jTATo1UFeXqaApMu09Tz5Nryua+eK
-         7/dw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rAW4lU/RJvKOFz0SR+OmypjLALjP6fD0yLpDz8M0/vE=;
+        b=rLfwX9mAQGzSs2M5Vri3NNozYyJTwOYNfC+vfvhgAw+36QDDelZNtABBDv6RZEpvbI
+         6WW0rCEDemJ2bT1tQFG45JUTqIBG8TfEv5SHWvacACOIkces337g4zkUGrz5jX1AtB/F
+         vqjRP7L9ciJts/cxIKWDj3NyRO4vJFUakzpDRMhLlctEQ6rBjNxenhglBwwy7zeh7M+2
+         gacNfgP7wahNgMYBPuMGzsJbhcVv0yj7yjf3fXDhVsNs+rLyHQ3CaOEbNpkJpVTmEejS
+         ynvOLGl1SiZuwcQ8hP/hdiMFqXhLwKV0C/0Sf6b57RBoQAFhfkv0iaeaa4gmp4+hO3nT
+         MAMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UvsOH8jtQe+4Kanh6E/MrBCjFWLS1TOh5zSyYH4PboQ=;
-        b=N8e7XF24i6EK9S2VSQU/j6jNf5gmsPaZd2Ynp7Z78NSY/O5w6CpBXkI3ThqP8xsQGN
-         fNIgL4maG5A5DG4hAMX0Kzil1SbpZJj0LjvrZ1EjJpDjNs4xnN/jILsA/gAx0Vcu5V7Q
-         6aoNQeyfyJQtziZQnoZWFLwnAdLbq1jaNW5aU30827A7/aCTMydzaQMBPx7rtq/+2oVt
-         yPnn/9D7otfghAaxD/w/AoHZDkxK4pbeAc602jgiU3+gXStajPTHTs09v5t2iVTJnaeE
-         UDFRK8zHfL6mH96vbKLybc3fKJoCQp7d5HwB0X+8HeE9ZJgx6qM3p7TgRRRkHh/t6K0D
-         8qIg==
-X-Gm-Message-State: AOAM532aCkSg33iCcXRhPIjp3ptl2hBkyN3E1/t5khJMzRVlwd2NCJSt
-        g+iv+VfQxWroXfK9sO6OEMo=
-X-Google-Smtp-Source: ABdhPJy2o8VurqIMFUNktoLextNJhp00f0HEhzkQIq8R2VbnLDV0HaQAeUr+eat2ZRGeJzfbzYVdIw==
-X-Received: by 2002:adf:f741:: with SMTP id z1mr2597669wrp.201.1629190095036;
-        Tue, 17 Aug 2021 01:48:15 -0700 (PDT)
-Received: from localhost.localdomain (arl-84-90-178-246.netvisao.pt. [84.90.178.246])
-        by smtp.gmail.com with ESMTPSA id o14sm1302899wms.2.2021.08.17.01.48.13
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=rAW4lU/RJvKOFz0SR+OmypjLALjP6fD0yLpDz8M0/vE=;
+        b=DTZ6RffUC2MaqTq9ip6H/okciqT4EuFMJr2Gk4UjhprjdmzVR5HuVvRhcdxpbrmXmb
+         mqDVjj+KEeFNMPWz/EG+7cSq2SKqlrT+GQusuJ4wHlRS6kGOfnaDueUCqYLjlQ0SDLSC
+         B8++TT7BKyrqJC9kSq8paxBy35+6xt+s43CWlUJTbm/QfM2zbM7nYMVeT9sLMASfZ3Jw
+         EtfdcEZGevM9hPtDbVM4pLoWPhqFZzfD6ob2GSNiRXibY+19iQBA0cAvHA2XBKC00gl6
+         mNE5Xy04UqY5A6rmxm6/0XtIwLd/qHT+bzxk7q1ecD1xD3R+uHlaLsDAKhTCMKSpHBir
+         erRA==
+X-Gm-Message-State: AOAM531PRdpjtCz2aEV7PY0vgr6PCAyF4IFEAGetVi30xSZtaQoD3nEe
+        5DIPdS3LriiOnTXTAHRxjsU=
+X-Google-Smtp-Source: ABdhPJyXlMiFqSZFkfwoB7TTrvIk/perMWhdiWzRtwiL0zCZgay8BQOmbKt+t6CyHvvYIRYGEdD3Iw==
+X-Received: by 2002:a05:6830:2a06:: with SMTP id y6mr4088503otu.134.1629237334432;
+        Tue, 17 Aug 2021 14:55:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z25sm771568oic.24.2021.08.17.14.55.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 01:48:14 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] hwmon: remove amd_energy driver in Makefile
-Date:   Tue, 17 Aug 2021 10:48:11 +0200
-Message-Id: <20210817084811.10673-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        Tue, 17 Aug 2021 14:55:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 17 Aug 2021 14:55:32 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: remove amd_energy driver in Makefile
+Message-ID: <20210817215532.GA471009@roeck-us.net>
+References: <20210817084811.10673-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210817084811.10673-1-lukas.bulwahn@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Commit 9049572fb145 ("hwmon: Remove amd_energy driver") removes the driver,
-but misses to adjust the Makefile.
+On Tue, Aug 17, 2021 at 10:48:11AM +0200, Lukas Bulwahn wrote:
+> Commit 9049572fb145 ("hwmon: Remove amd_energy driver") removes the driver,
+> but misses to adjust the Makefile.
+> 
+> Hence, ./scripts/checkkconfigsymbols.py warns:
+> 
+> SENSORS_AMD_ENERGY
+> Referencing files: drivers/hwmon/Makefile
+> 
+> Remove the missing piece of this driver removal.
+> 
+> Fixes: 9049572fb145 ("hwmon: Remove amd_energy driver")
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Hence, ./scripts/checkkconfigsymbols.py warns:
+Applied.
 
-SENSORS_AMD_ENERGY
-Referencing files: drivers/hwmon/Makefile
+Thanks,
+Guenter
 
-Remove the missing piece of this driver removal.
-
-Fixes: 9049572fb145 ("hwmon: Remove amd_energy driver")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/hwmon/Makefile | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 53a8f4b500b8..4b33421746c0 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -45,7 +45,6 @@ obj-$(CONFIG_SENSORS_ADT7462)	+= adt7462.o
- obj-$(CONFIG_SENSORS_ADT7470)	+= adt7470.o
- obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
- obj-$(CONFIG_SENSORS_AHT10)	+= aht10.o
--obj-$(CONFIG_SENSORS_AMD_ENERGY) += amd_energy.o
- obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
- obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
- obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
--- 
-2.26.2
-
+> ---
+>  drivers/hwmon/Makefile | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 53a8f4b500b8..4b33421746c0 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -45,7 +45,6 @@ obj-$(CONFIG_SENSORS_ADT7462)	+= adt7462.o
+>  obj-$(CONFIG_SENSORS_ADT7470)	+= adt7470.o
+>  obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
+>  obj-$(CONFIG_SENSORS_AHT10)	+= aht10.o
+> -obj-$(CONFIG_SENSORS_AMD_ENERGY) += amd_energy.o
+>  obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
+>  obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
+>  obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
