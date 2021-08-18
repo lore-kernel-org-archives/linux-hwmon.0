@@ -3,246 +3,284 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7267C4338F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Aug 2021 03:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0673C4338F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Aug 2021 16:40:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9BC8F61051
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Aug 2021 03:26:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A141F60F11
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Aug 2021 16:40:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbhHRD10 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Aug 2021 23:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbhHRD1X (ORCPT
+        id S230253AbhHRQk4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Aug 2021 12:40:56 -0400
+Received: from mx0d-0054df01.pphosted.com ([67.231.150.19]:11758 "EHLO
+        mx0d-0054df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229517AbhHRQkz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Aug 2021 23:27:23 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2087C061764
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 Aug 2021 20:26:49 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id w6so2470027oiv.11
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 Aug 2021 20:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LBWmsawcNwj9qzivs5gBabwJEmrBhDRAatb40ngvfew=;
-        b=Gp85fp0wXpZ93G8oKXiwtRsj63Ci42CvevFPr60Ut0jZURMdGPvm2A7FIU47A2rHk1
-         zAQrInLT9B2hZm22Xgl84KYPXX1rkOnCMjMULxX57eVIZAujmNUeuDykdYoFEngsWOhN
-         Fup2Gq6snN4V3rnuIx6XosavklHa4VTC3h+wockFJXXBpwlmM2oICIpJ7+O51kLeVIAt
-         TX6RZVN/A3vU56f84abbvQWNcY1WjUIJf3Q/VtS4Bm6ZCVpWHEp/ls1iiOtu44cffA1S
-         yV27y63+Tc5MM/8jDTL2E5NNiIhL27PT/PWae6hCcZRLo7n8+l52wsTwoTY3+cOya4C8
-         HEVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LBWmsawcNwj9qzivs5gBabwJEmrBhDRAatb40ngvfew=;
-        b=p27Nd1YuKcVtc4dt6etvQ07sA+GyiNpGxz5KoWgsRnx58ygwJB64qFqQwB5xpxCZHT
-         tfQ7IQEhfIj2lsthvnX9OMDP6QADMccyLpVKoVoyMiuZ8Trej24Zy6IVuG/5K/h/SMHB
-         DHnoK4VWRcieJNEHYsNbWjfNG667N69e9er4qkldCBSQ1/4gFkym6jRfiWmQDa+9wqUj
-         iwaBXJP0W2SlsiR/YSkh56BNzQxJvzCx7t3kLt97Z5dRlP/RPQ1DQCIYJgY/XkvwpsXH
-         kxcE41uF3yW52c4erVABavhbapsCL93cAEAKWyJJ/v/rFvpv7VeXKdvrxdfeZomoFWFn
-         X3fg==
-X-Gm-Message-State: AOAM531PFPjSji07cX2hFxcs9Ql1bOQITNckD1OrFGxBRnds8LvnAhgD
-        JMaZ+7rmDWaIHpSGfZoLJiykDHEEmsg=
-X-Google-Smtp-Source: ABdhPJxYfegi2y3HM3TCGTcZm3osexYiJDCcgQvpbLk8wfBjaeI9LyeeoSwlCsjmrEYD5Py1ASzQQA==
-X-Received: by 2002:aca:eb0f:: with SMTP id j15mr5167013oih.7.1629257209117;
-        Tue, 17 Aug 2021 20:26:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v77sm669792oie.5.2021.08.17.20.26.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Aug 2021 20:26:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Robert Hancock <robert.hancock@calian.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org
-References: <20210816203547.257403-1-robert.hancock@calian.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+        Wed, 18 Aug 2021 12:40:55 -0400
+X-Greylist: delayed 319 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Aug 2021 12:40:55 EDT
+Received: from pps.filterd (m0209000.ppops.net [127.0.0.1])
+        by mx0c-0054df01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 17IAxYkH017245;
+        Wed, 18 Aug 2021 12:34:46 -0400
+Received: from can01-qb1-obe.outbound.protection.outlook.com (mail-qb1can01lp2056.outbound.protection.outlook.com [104.47.60.56])
+        by mx0c-0054df01.pphosted.com with ESMTP id 3agmd2rbrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Aug 2021 12:34:46 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mE1o/K9PGAEzU6uKzGEqLqk2/0fp5Q+xQRpfooT+qTTGBAGkn5tNydj9sQp7IuwhdmruoiagOyAYufh1A3SNVS1sHlh8BiBmT5lapNU9zvPThgurZbX1v7F4ZLVJ0+80ahwx8du3Bq22SBKvdQpT0JE7LyVzJX0+3HdDy7NQQzza2eT4VQmvnY8zvdbXc29mNOTLcWHPbeiuIChvvHZZo5/ELZkHKiypfhOnQ3CaiqsPNAL8wrLejiRjZhY98JftnRlT4cTyXcN9+xIIfPLIvCNBllgchasGUqP5mIKoWX0RpL2R0QTPCKukyQzRX4VzyiSE0aLNYiyE1Yo4Z073sA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k9sKEHPEAWOfl3mN/uuEDZa9SaBC+9kd9DL0sugK8rs=;
+ b=l76CCaGHRREkUhfrj3c3jQ2NlMJ8uYJ0Pu4zHDXWDHi565k+GCEAG4r1YTi4Z/dm+3fWjSp76rpoXWaww+37Y7+zqu0P4afHMwCH7X0bHOAd/BaavOyOrw+U3NvbfkjE/ferZnf9zTgcIoKOZe8mliRuEeGzozDgrLNZ/W37WKi468luV+Lvjo+7F33QxFxG3VFeZPfZVVVnkrPh1Vv1AxJiec3RGIuwnLaJrN/9m+jBgDwdvBQOGyhjqyBk5fAERgQDbZAzJgyShy39Q9FlAWCFp2uNemSN6GPdOwEC5M+7h/atNtScllhMB4YmxBduWwMCetq1nASNeWMpH0yjvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
+ dkim=pass header.d=calian.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k9sKEHPEAWOfl3mN/uuEDZa9SaBC+9kd9DL0sugK8rs=;
+ b=YwhnRmq2bnGII7D2MW1bRApNnPStCDsjxPg8lVChW0tIZTCk0Z29enWX5TxNyUfPLv04DUr92f8r07Qpgt3mHZY+VgGIV9GCZkTvJ2C9TrFDWWSIV4nfZHT1TDnBhhLo0AawGJQY9YaQjA+N0HxnLXsb8XrAyu5d2Icw+qIbvVE=
+Received: from YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:27::23)
+ by YQXPR01MB5052.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:27::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19; Wed, 18 Aug
+ 2021 16:34:45 +0000
+Received: from YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::29c8:ab4d:96e2:df8b]) by YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::29c8:ab4d:96e2:df8b%6]) with mapi id 15.20.4436.019; Wed, 18 Aug 2021
+ 16:34:45 +0000
+From:   Robert Hancock <robert.hancock@calian.com>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 Subject: Re: [PATCH] hwmon: (adt7470) Add support for PWM inversion
-Message-ID: <9e79f343-c81d-9c0c-621c-00f9ee030cf0@roeck-us.net>
-Date:   Tue, 17 Aug 2021 20:26:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210816203547.257403-1-robert.hancock@calian.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Thread-Topic: [PATCH] hwmon: (adt7470) Add support for PWM inversion
+Thread-Index: AQHXkt5r8Ox2wnRe4UqxCGT+CZPEJ6t4nAOAgADcJgA=
+Date:   Wed, 18 Aug 2021 16:34:44 +0000
+Message-ID: <095c32600b3648edd017277888099e4ae422a35e.camel@calian.com>
+References: <20210816203547.257403-1-robert.hancock@calian.com>
+         <9e79f343-c81d-9c0c-621c-00f9ee030cf0@roeck-us.net>
+In-Reply-To: <9e79f343-c81d-9c0c-621c-00f9ee030cf0@roeck-us.net>
+Accept-Language: en-CA, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=calian.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8f92a73a-6363-4785-ab7b-08d962661660
+x-ms-traffictypediagnostic: YQXPR01MB5052:
+x-microsoft-antispam-prvs: <YQXPR01MB505287574EAB1BB8ECF1C1DBECFF9@YQXPR01MB5052.CANPRD01.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vV307cNDzhMfwtL/3DoTBbpdBokTDrdZXmHsaY2uhxc2UpZtJN/HokxuRt4KXF5cT5oYx/dKFC4D/tRAFzMBLitD2eygtkX+JA7v/pdkdvg5cGdQNfyvrfKFShDMmXxm3FCV1nXDNeT7xMaZCsdC1btWobLgxbFKjIMvT6kzB8QLG61d7aBq2hYK8u8efTNXZzvRuZkJ3AEFQDn1pRhyvWFHYenclfpk2fU6y+XZ0I7xFfhF0X0/3BKrj8UiNJHCHEe7XrHsTqsayp0l6kUfL6GMLpoa+qP9wOWZFAcMy9V3/pyeDpeQEKWKHsNbLtU9jFaYmY8J7GwU/pvT4gQpUyw+7or8cG77YdAR1VSIpwudxTmrA96bbXsV1+UUNVMcYGNm7TapiWSUKnCIXbHqXNqfAMO4DctjukoX0PqVG+4bAHzB2tX1bgMzmfH9czORrk7mjVbZZ3gq5hP0UFqvsHftjd2469vgC9y6PRPNbvD6zYXB4dOvNYRgN7dEY+qjE3bRlkMdPOF1eyk8l4Cehi6Xr5rUpoZzwasKS1lr4RslryN86qWwIGZw5YaqNP4/RWv1y7ta8kbwPBfe+y5+C68YQhyNLVSxDp+uux8qynJQUQd+DjihCuALmdkH+7kVV8WU8IkAoms4rgNkp9AQM5MPn3NEX1F2viNJfY+3U9wDcvzZL9Ym1Po4FbND5jvUZCQfO/uNmHqd0/JYUwislUUjGGaSiN/DEaPJralmBye3ttzUM18duRP+G6PpOigr+wn1a8Sqc3UPapLtoPJMzas0tc7J5eP0m3LFnHS4WOwj3pEvHKSb54J7Z7jGVpXVGOk/iLRvdlnZyejHnx5jXg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(396003)(366004)(39850400004)(376002)(478600001)(66556008)(26005)(66476007)(76116006)(66946007)(91956017)(186003)(66446008)(36756003)(2906002)(8676002)(38070700005)(53546011)(110136005)(6506007)(15974865002)(6486002)(6512007)(64756008)(83380400001)(5660300002)(38100700002)(122000001)(71200400001)(4326008)(316002)(8936002)(44832011)(2616005)(86362001)(99106002)(18886075002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RXNVa3lLMmRHbVczbW5Nb0F2SjZyN0dQdHppa1pZdi9tRk5SRjcrT0VUWHcv?=
+ =?utf-8?B?ZGxRc3VFVHV0WDNLc0poNU93M3ZyR3lpN0tXUE5jSFlucWsySjBRejFqbXpO?=
+ =?utf-8?B?Q3ZPSzREa3RwYW5ia2Q1MWtVTDZSRmhDcDBmdXdZVHR3eS9PMlVNdnBDeEFQ?=
+ =?utf-8?B?cWszeTlLWXJob2lhYkc0aW1VK1dBQjA1WGcyQnBqbkRva1p4RG9hWDBXWHY5?=
+ =?utf-8?B?NG5EY3NNaFU4VStKODNkOE1HTXdhemM1THZIUWVoK0NINnpZb0RzMWpPaTh6?=
+ =?utf-8?B?S2crTGxjalBFdzJmTk43K0s1T2FYc25Jd3duTnVXZndMczM4cEZCdStHOGdZ?=
+ =?utf-8?B?Szd6OW9hb0VoUG1GLzhtT1N0MkJBVTJ4Q1pXWWF2MS8yTmcxVnA1UHAzMTAr?=
+ =?utf-8?B?Q0FDZmFVd2ZlbU5VQUFhQ01YeDVqRlYvam9aK3ZTRmd5SnpLb1o5Mk9yNUpQ?=
+ =?utf-8?B?ck45NS9aWTZieW9Sdzc1bk9xVTVMZ0lOMkxGaDkycU4rM1ROak9hZkYzeWMv?=
+ =?utf-8?B?QnphT3dsK0VSNTdhMVJndUNRQ2VQQUxjWVcrL0xzQ2huaHRKemtlSVYzTkdN?=
+ =?utf-8?B?VGdaS0JjTk1USFpUMEdTaXlicEhrZDVLZUhJQVN4UzdIK3M0QUNiRVh5T1dK?=
+ =?utf-8?B?cUtvNWNSNk85UVBPTlA5UEZxbHR0RGdwYUJFMStQK0k2NklmVlRIb3V2NVNx?=
+ =?utf-8?B?dG5JRHdneWhENmdaSmNDUU1oQ0dGQ2Z5eGI1MEVLNUZ6S1JpdTV6SmNkMFAv?=
+ =?utf-8?B?WlZCZHljS3kzVDFUcENFSGhmTlJjSE5lKzVkWHFkdE9LRHZ6bFVKcHNlcG1S?=
+ =?utf-8?B?VnVTRXhneDZnbWduSWMwZytYcjFBRHlPeHRDQmxrVm80VlZxQWVpU2JhT3Iv?=
+ =?utf-8?B?UlNjOXhQbDVoOEJyejFVWVhraUk5L2VXUGFGOFlENnRSQURUM2ZKb2R5SWw4?=
+ =?utf-8?B?OGZvMHFDM2RWTDIzSVZlVkFYOXl5Um0raDNtaFhCNUI3NUZKK2Nqd0tZQnJu?=
+ =?utf-8?B?S3pHR01zL1BtaWxlQkV2bkFlT1VUOWRFL1ZZVFRPSGNqdHErdldRcDlJUXpp?=
+ =?utf-8?B?U2I1R2pmd1NOR1E4QU5KeVpnaFVaNGhtb1N2NzRPR0lXSjVvc01CM1JVNHFO?=
+ =?utf-8?B?Mlhoc2p5a0hHckRpNklHMVVad0xONEoyMHJuMjhENXI4Z3dvTFJzTzJFcDdo?=
+ =?utf-8?B?bGc3K0tmcG1iQitmVDZaN2tCM0hBRzVWV1FKZHVkNkNxYzd2ZmFoYlpGOXgw?=
+ =?utf-8?B?VGZQVWxVb285aWpQc3BQWXVrdXN5a1ovMFdBTjNzdkZEcnovU3dUSmdTMndv?=
+ =?utf-8?B?RjBvM3FuSmZBSDkzNFJ6dU9NMEV5U1c5VUtxQkZWTFJnV28xUEtmWE01V3NB?=
+ =?utf-8?B?cERtM3BrZXJTeGI4ZTZ4NG5iSytTbEs2R3ZFOHZvaC82bldNc2tzTjZldk1K?=
+ =?utf-8?B?dFBHMjJQMnVhRDhmVHlNVWx2aDRJb2llZ1phZGdIektEMnNyNjVsaVVEZjBI?=
+ =?utf-8?B?S0FDWk5JVzRWUjl2UjBPVlFyZU9NRlVtMXJkQkFtcWZjeVNxQlNKenVCNzVF?=
+ =?utf-8?B?K2xrNThoSm5QczBMaCtMSnhyVXcwQ3JVMC9aY0c5LzVNWlRuMVRJTWlxeldP?=
+ =?utf-8?B?ajZZMFl6QXZ4MGk5aDRvZCtGMUhQMjU3Ym1SdUhHaDd6S0pEbFJKVkg4QjBH?=
+ =?utf-8?B?VzNOT2lObGRzQnM4ZUVrc2sydExsY3pWNTVkUmVHcGJFZVBHZzBTbFJjZjlj?=
+ =?utf-8?Q?bdxBcgOhw7EgRGrh6mYIl9lPmdQOkUzkpjtoV6Q?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <15413AF82AB9E34994404F906C53AFF0@CANPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: calian.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f92a73a-6363-4785-ab7b-08d962661660
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2021 16:34:45.0818
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fgORiHXdnrgwaur+NZWA58TuBqWmjq7+RbSYB5p06TQCDEQ3fyPU8RqmelzhmbTFg/9mFVHkdjM8/MZnxO/I7cvFtn3D3OvXZyOtKtfVB44=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQXPR01MB5052
+X-Proofpoint-GUID: HL2K1D-_-oFcn9hB6CZLd-YLTTkmEGei
+X-Proofpoint-ORIG-GUID: HL2K1D-_-oFcn9hB6CZLd-YLTTkmEGei
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-08-18_06,2021-08-17_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501 mlxscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108180104
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/16/21 1:35 PM, Robert Hancock wrote:
-> Add sysfs attributes to control whether the PWM output signal from the
-> device is inverted (i.e. active-low rather than active-high).
-> 
-
-We would normally call that "polarity".
-
-Anyway, what is the use case ? The pwm polarity is not a fan property but
-a system property. While many of the hwmon sysfs attributes describe system
-properties, that is for the most part a leftover from times when PCs
-did not provide the necessary information, and it was necessary to
-configure hwmon devices from userspace.
-
-Nowadays, system properties are typically provided with devicetree
-properties or with the ACPI equivalent. A good example is the driver
-for adt7575. Would that solve your problem ?
-
-Thanks,
-Guenter
-
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-> ---
->   Documentation/hwmon/adt7470.rst |  5 ++-
->   drivers/hwmon/adt7470.c         | 72 ++++++++++++++++++++++++++++++++-
->   2 files changed, 75 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/adt7470.rst b/Documentation/hwmon/adt7470.rst
-> index d225f816e992..8293f93d6cd5 100644
-> --- a/Documentation/hwmon/adt7470.rst
-> +++ b/Documentation/hwmon/adt7470.rst
-> @@ -69,7 +69,10 @@ from 0 (off) to 255 (full speed).  Fan speed will be set to maximum when the
->   temperature sensor associated with the PWM control exceeds
->   pwm#_auto_point2_temp.
->   
-> -The driver also allows control of the PWM frequency:
-> +The driver also allows control of the PWM inversion and frequency:
-> +
-> +* pwm#_invert: Controls whether the PWM output signal is inverted
-> +  (i.e. low when active rather than high).
->   
->   * pwm1_freq
->   
-> diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index 2e8feacccf84..f0863a6e1560 100644
-> --- a/drivers/hwmon/adt7470.c
-> +++ b/drivers/hwmon/adt7470.c
-> @@ -61,10 +61,14 @@ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
->   #define ADT7470_REG_FAN_MAX_MAX_ADDR		0x67
->   #define ADT7470_REG_PWM_CFG_BASE_ADDR		0x68
->   #define ADT7470_REG_PWM12_CFG			0x68
-> +#define		ADT7470_PWM2_INVERT_MASK	0x10
-> +#define		ADT7470_PWM1_INVERT_MASK	0x20
->   #define		ADT7470_PWM2_AUTO_MASK		0x40
->   #define		ADT7470_PWM1_AUTO_MASK		0x80
->   #define		ADT7470_PWM_AUTO_MASK		0xC0
->   #define ADT7470_REG_PWM34_CFG			0x69
-> +#define		ADT7470_PWM4_INVERT_MASK	0x10
-> +#define		ADT7470_PWM3_INVERT_MASK	0x20
->   #define		ADT7470_PWM3_AUTO_MASK		0x40
->   #define		ADT7470_PWM4_AUTO_MASK		0x80
->   #define	ADT7470_REG_PWM_MIN_BASE_ADDR		0x6A
-> @@ -162,6 +166,7 @@ struct adt7470_data {
->   	u8			pwm_min[ADT7470_PWM_COUNT];
->   	s8			pwm_tmin[ADT7470_PWM_COUNT];
->   	u8			pwm_auto_temp[ADT7470_PWM_COUNT];
-> +	u8			pwm_invert[ADT7470_PWM_COUNT];
->   
->   	struct task_struct	*auto_update;
->   	unsigned int		auto_update_interval;
-> @@ -300,11 +305,22 @@ static int adt7470_update_sensors(struct adt7470_data *data)
->   			reg_mask = ADT7470_PWM1_AUTO_MASK;
->   
->   		reg = ADT7470_REG_PWM_CFG(i);
-> -		if (i2c_smbus_read_byte_data(client, reg) & reg_mask)
-> +		cfg = i2c_smbus_read_byte_data(client, reg);
-> +		if (cfg & reg_mask)
->   			data->pwm_automatic[i] = 1;
->   		else
->   			data->pwm_automatic[i] = 0;
->   
-> +		if (i % 2)
-> +			reg_mask = ADT7470_PWM2_INVERT_MASK;
-> +		else
-> +			reg_mask = ADT7470_PWM1_INVERT_MASK;
-> +
-> +		if (cfg & reg_mask)
-> +			data->pwm_invert[i] = 1;
-> +		else
-> +			data->pwm_invert[i] = 0;
-> +
->   		reg = ADT7470_REG_PWM_AUTO_TEMP(i);
->   		cfg = i2c_smbus_read_byte_data(client, reg);
->   		if (!(i % 2))
-> @@ -935,6 +951,51 @@ static ssize_t pwm_tmin_store(struct device *dev,
->   	return count;
->   }
->   
-> +static ssize_t pwm_invert_show(struct device *dev,
-> +			       struct device_attribute *devattr, char *buf)
-> +{
-> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> +	struct adt7470_data *data = adt7470_update_device(dev);
-> +
-> +	return sprintf(buf, "%d\n", (int)data->pwm_invert[attr->index]);
-> +}
-> +
-> +static ssize_t pwm_invert_store(struct device *dev,
-> +				struct device_attribute *devattr,
-> +				const char *buf, size_t count)
-> +{
-> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> +	struct adt7470_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	int pwm_invert_reg = ADT7470_REG_PWM_CFG(attr->index);
-> +	int pwm_invert_reg_mask;
-> +	long temp;
-> +	u8 reg;
-> +
-> +	if (kstrtol(buf, 10, &temp))
-> +		return -EINVAL;
-> +
-> +	if (attr->index % 2)
-> +		pwm_invert_reg_mask = ADT7470_PWM2_INVERT_MASK;
-> +	else
-> +		pwm_invert_reg_mask = ADT7470_PWM1_INVERT_MASK;
-> +
-> +	if (temp != 1 && temp != 0)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&data->lock);
-> +	data->pwm_invert[attr->index] = temp;
-> +	reg = i2c_smbus_read_byte_data(client, pwm_invert_reg);
-> +	if (temp)
-> +		reg |= pwm_invert_reg_mask;
-> +	else
-> +		reg &= ~pwm_invert_reg_mask;
-> +	i2c_smbus_write_byte_data(client, pwm_invert_reg, reg);
-> +	mutex_unlock(&data->lock);
-> +
-> +	return count;
-> +}
-> +
->   static ssize_t pwm_auto_show(struct device *dev,
->   			     struct device_attribute *devattr, char *buf)
->   {
-> @@ -1135,6 +1196,11 @@ static SENSOR_DEVICE_ATTR_RW(pwm4, pwm, 3);
->   
->   static DEVICE_ATTR_RW(pwm1_freq);
->   
-> +static SENSOR_DEVICE_ATTR_RW(pwm1_invert, pwm_invert, 0);
-> +static SENSOR_DEVICE_ATTR_RW(pwm2_invert, pwm_invert, 1);
-> +static SENSOR_DEVICE_ATTR_RW(pwm3_invert, pwm_invert, 2);
-> +static SENSOR_DEVICE_ATTR_RW(pwm4_invert, pwm_invert, 3);
-> +
->   static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point1_pwm, pwm_min, 0);
->   static SENSOR_DEVICE_ATTR_RW(pwm2_auto_point1_pwm, pwm_min, 1);
->   static SENSOR_DEVICE_ATTR_RW(pwm3_auto_point1_pwm, pwm_min, 2);
-> @@ -1231,6 +1297,10 @@ static struct attribute *adt7470_attrs[] = {
->   	&sensor_dev_attr_pwm2.dev_attr.attr,
->   	&sensor_dev_attr_pwm3.dev_attr.attr,
->   	&sensor_dev_attr_pwm4.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_invert.dev_attr.attr,
-> +	&sensor_dev_attr_pwm2_invert.dev_attr.attr,
-> +	&sensor_dev_attr_pwm3_invert.dev_attr.attr,
-> +	&sensor_dev_attr_pwm4_invert.dev_attr.attr,
->   	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
->   	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
->   	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
-> 
-
+T24gVHVlLCAyMDIxLTA4LTE3IGF0IDIwOjI2IC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
+PiBPbiA4LzE2LzIxIDE6MzUgUE0sIFJvYmVydCBIYW5jb2NrIHdyb3RlOg0KPiA+IEFkZCBzeXNm
+cyBhdHRyaWJ1dGVzIHRvIGNvbnRyb2wgd2hldGhlciB0aGUgUFdNIG91dHB1dCBzaWduYWwgZnJv
+bSB0aGUNCj4gPiBkZXZpY2UgaXMgaW52ZXJ0ZWQgKGkuZS4gYWN0aXZlLWxvdyByYXRoZXIgdGhh
+biBhY3RpdmUtaGlnaCkuDQo+ID4gDQo+IA0KPiBXZSB3b3VsZCBub3JtYWxseSBjYWxsIHRoYXQg
+InBvbGFyaXR5Ii4NCj4gDQo+IEFueXdheSwgd2hhdCBpcyB0aGUgdXNlIGNhc2UgPyBUaGUgcHdt
+IHBvbGFyaXR5IGlzIG5vdCBhIGZhbiBwcm9wZXJ0eSBidXQNCj4gYSBzeXN0ZW0gcHJvcGVydHku
+IFdoaWxlIG1hbnkgb2YgdGhlIGh3bW9uIHN5c2ZzIGF0dHJpYnV0ZXMgZGVzY3JpYmUgc3lzdGVt
+DQo+IHByb3BlcnRpZXMsIHRoYXQgaXMgZm9yIHRoZSBtb3N0IHBhcnQgYSBsZWZ0b3ZlciBmcm9t
+IHRpbWVzIHdoZW4gUENzDQo+IGRpZCBub3QgcHJvdmlkZSB0aGUgbmVjZXNzYXJ5IGluZm9ybWF0
+aW9uLCBhbmQgaXQgd2FzIG5lY2Vzc2FyeSB0bw0KPiBjb25maWd1cmUgaHdtb24gZGV2aWNlcyBm
+cm9tIHVzZXJzcGFjZS4NCj4gDQo+IE5vd2FkYXlzLCBzeXN0ZW0gcHJvcGVydGllcyBhcmUgdHlw
+aWNhbGx5IHByb3ZpZGVkIHdpdGggZGV2aWNldHJlZQ0KPiBwcm9wZXJ0aWVzIG9yIHdpdGggdGhl
+IEFDUEkgZXF1aXZhbGVudC4gQSBnb29kIGV4YW1wbGUgaXMgdGhlIGRyaXZlcg0KPiBmb3IgYWR0
+NzU3NS4gV291bGQgdGhhdCBzb2x2ZSB5b3VyIHByb2JsZW0gPw0KDQpJbiBvdXIgY2FzZSB0aGUg
+Ym9hcmQgd2UgYXJlIHVzaW5nIHdpdGggdGhpcyBkZXZpY2UgaGFzIGEgdHJhbnNpc3RvciBiZXR3
+ZWVuDQp0aGUgQURUNzQ3MCBQV00gb3V0cHV0IGFuZCB0aGUgZmFuIFBXTSBpbnB1dCwgd2hpY2gg
+cmVzdWx0cyBpbiB0aGUgc2lnbmFsIGJlaW5nDQppbnZlcnRlZC4gU28gdGhpcyBpcyBlZmZlY3Rp
+dmVseSBhIGhhcmR3YXJlIHByb3BlcnR5LCB3aGljaCBjb3VsZCBiZWxvbmcgaW4gdGhlDQpkZXZp
+Y2UgdHJlZS4gVGhlIFBXTSBmcmVxdWVuY3kgaXMgYW5vdGhlciBwcm9wZXJ0eSB3ZSBhcmUgc2V0
+dGluZyB0aGF0IGNvdWxkDQpiZWxvbmcgdGhlcmUgYXMgd2VsbC4NCg0KUmlnaHQgbm93IHRoZSBB
+RFQ3NDcwIGRyaXZlciBkb2Vzbid0IGRvIGFueXRoaW5nIHdpdGggdGhlIGRldmljZSB0cmVlIGF0
+IGFsbCwNCnRoZSBlbnRyeSBpbiB0aGUgRFQgZm9yIHRoZSBkZXZpY2UgaXMgb25seSB1c2VmdWwg
+Zm9yIHByb2JpbmcuIEkgc3VwcG9zZSBpdA0KY291bGQgZ2V0IHNvbWUgY29kZSB0byBpbml0aWFs
+aXplIHRoZSBkZWZhdWx0IHNldHRpbmdzIGZvciBzb21lIG9mIHRoZXNlIHZhbHVlcw0KZnJvbSB0
+aGUgZGV2aWNlIHRyZWUgaWYgdGhleSBhcmUgcHJlc2VudCBhbmQgc3RpbGwgcHJvdmlkZSB0aGUg
+c3lzZnMgaW50ZXJmYWNlDQpmb3IgYmFja3dhcmQgY29tcGF0aWJpbGl0eT8NCg0KWW91IG1lbnRp
+b25lZCBhZHQ3NTc1LCBJIGFzc3VtZSB5b3UgbWVhbnQgYWR0NzQ3NSAtIGl0IGhhcyBhbiBhZGks
+cHdtLWFjdGl2ZS0NCnN0YXRlIHZhbHVlIHRoYXQgY2FuIGJlIGRlZmluZWQgdG8gc2V0IHRoZSBQ
+V00gYXMgYWN0aXZlIGxvdyBvciBhY3RpdmUgaGlnaCBmb3INCmVhY2ggb3V0cHV0LiBXZSBjb3Vs
+ZCBkbyBzb21ldGhpbmcgc2ltaWxhciBoZXJlLiBOb3Qgc3VyZSBpZiBhbnl0aGluZyBlbHNlIGlz
+DQpzZXR0aW5nIFBXTSBmcmVxdWVuY2llcyBpbiB0aGUgZGV2aWNlIHRyZWUgcmlnaHQgbm93PyBJ
+IHNlZSBzb21lIGluLXRyZWUgRFRTZXMNCndoaWNoIHNldCBhIG1heGltLGZhbi1wd20tZnJlcSBw
+cm9wZXJ0eSBidXQgSSBkb24ndCBzZWUgYW55IGRyaXZlciBpbiB0cmVlIHRoYXQNCnJlYWRzIHRo
+YXQgcHJvcGVydHkuDQoNCj4gDQo+IFRoYW5rcywNCj4gR3VlbnRlcg0KPiANCj4gPiBTaWduZWQt
+b2ZmLWJ5OiBSb2JlcnQgSGFuY29jayA8cm9iZXJ0LmhhbmNvY2tAY2FsaWFuLmNvbT4NCj4gPiAt
+LS0NCj4gPiAgIERvY3VtZW50YXRpb24vaHdtb24vYWR0NzQ3MC5yc3QgfCAgNSArKy0NCj4gPiAg
+IGRyaXZlcnMvaHdtb24vYWR0NzQ3MC5jICAgICAgICAgfCA3MiArKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKy0NCj4gPiAgIDIgZmlsZXMgY2hhbmdlZCwgNzUgaW5zZXJ0aW9ucygrKSwg
+MiBkZWxldGlvbnMoLSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9od21v
+bi9hZHQ3NDcwLnJzdA0KPiA+IGIvRG9jdW1lbnRhdGlvbi9od21vbi9hZHQ3NDcwLnJzdA0KPiA+
+IGluZGV4IGQyMjVmODE2ZTk5Mi4uODI5M2Y5M2Q2Y2Q1IDEwMDY0NA0KPiA+IC0tLSBhL0RvY3Vt
+ZW50YXRpb24vaHdtb24vYWR0NzQ3MC5yc3QNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2h3bW9u
+L2FkdDc0NzAucnN0DQo+ID4gQEAgLTY5LDcgKzY5LDEwIEBAIGZyb20gMCAob2ZmKSB0byAyNTUg
+KGZ1bGwgc3BlZWQpLiAgRmFuIHNwZWVkIHdpbGwgYmUgc2V0DQo+ID4gdG8gbWF4aW11bSB3aGVu
+IHRoZQ0KPiA+ICAgdGVtcGVyYXR1cmUgc2Vuc29yIGFzc29jaWF0ZWQgd2l0aCB0aGUgUFdNIGNv
+bnRyb2wgZXhjZWVkcw0KPiA+ICAgcHdtI19hdXRvX3BvaW50Ml90ZW1wLg0KPiA+ICAgDQo+ID4g
+LVRoZSBkcml2ZXIgYWxzbyBhbGxvd3MgY29udHJvbCBvZiB0aGUgUFdNIGZyZXF1ZW5jeToNCj4g
+PiArVGhlIGRyaXZlciBhbHNvIGFsbG93cyBjb250cm9sIG9mIHRoZSBQV00gaW52ZXJzaW9uIGFu
+ZCBmcmVxdWVuY3k6DQo+ID4gKw0KPiA+ICsqIHB3bSNfaW52ZXJ0OiBDb250cm9scyB3aGV0aGVy
+IHRoZSBQV00gb3V0cHV0IHNpZ25hbCBpcyBpbnZlcnRlZA0KPiA+ICsgIChpLmUuIGxvdyB3aGVu
+IGFjdGl2ZSByYXRoZXIgdGhhbiBoaWdoKS4NCj4gPiAgIA0KPiA+ICAgKiBwd20xX2ZyZXENCj4g
+PiAgIA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzAuYyBiL2RyaXZlcnMv
+aHdtb24vYWR0NzQ3MC5jDQo+ID4gaW5kZXggMmU4ZmVhY2NjZjg0Li5mMDg2M2E2ZTE1NjAgMTAw
+NjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9od21vbi9hZHQ3NDcwLmMNCj4gPiArKysgYi9kcml2ZXJz
+L2h3bW9uL2FkdDc0NzAuYw0KPiA+IEBAIC02MSwxMCArNjEsMTQgQEAgc3RhdGljIGNvbnN0IHVu
+c2lnbmVkIHNob3J0IG5vcm1hbF9pMmNbXSA9IHsgMHgyQywNCj4gPiAweDJFLCAweDJGLCBJMkNf
+Q0xJRU5UX0VORCB9Ow0KPiA+ICAgI2RlZmluZSBBRFQ3NDcwX1JFR19GQU5fTUFYX01BWF9BRERS
+CQkweDY3DQo+ID4gICAjZGVmaW5lIEFEVDc0NzBfUkVHX1BXTV9DRkdfQkFTRV9BRERSCQkweDY4
+DQo+ID4gICAjZGVmaW5lIEFEVDc0NzBfUkVHX1BXTTEyX0NGRwkJCTB4NjgNCj4gPiArI2RlZmlu
+ZQkJQURUNzQ3MF9QV00yX0lOVkVSVF9NQVNLCTB4MTANCj4gPiArI2RlZmluZQkJQURUNzQ3MF9Q
+V00xX0lOVkVSVF9NQVNLCTB4MjANCj4gPiAgICNkZWZpbmUJCUFEVDc0NzBfUFdNMl9BVVRPX01B
+U0sJCTB4NDANCj4gPiAgICNkZWZpbmUJCUFEVDc0NzBfUFdNMV9BVVRPX01BU0sJCTB4ODANCj4g
+PiAgICNkZWZpbmUJCUFEVDc0NzBfUFdNX0FVVE9fTUFTSwkJMHhDMA0KPiA+ICAgI2RlZmluZSBB
+RFQ3NDcwX1JFR19QV00zNF9DRkcJCQkweDY5DQo+ID4gKyNkZWZpbmUJCUFEVDc0NzBfUFdNNF9J
+TlZFUlRfTUFTSwkweDEwDQo+ID4gKyNkZWZpbmUJCUFEVDc0NzBfUFdNM19JTlZFUlRfTUFTSwkw
+eDIwDQo+ID4gICAjZGVmaW5lCQlBRFQ3NDcwX1BXTTNfQVVUT19NQVNLCQkweDQwDQo+ID4gICAj
+ZGVmaW5lCQlBRFQ3NDcwX1BXTTRfQVVUT19NQVNLCQkweDgwDQo+ID4gICAjZGVmaW5lCUFEVDc0
+NzBfUkVHX1BXTV9NSU5fQkFTRV9BRERSCQkweDZBDQo+ID4gQEAgLTE2Miw2ICsxNjYsNyBAQCBz
+dHJ1Y3QgYWR0NzQ3MF9kYXRhIHsNCj4gPiAgIAl1OAkJCXB3bV9taW5bQURUNzQ3MF9QV01fQ09V
+TlRdOw0KPiA+ICAgCXM4CQkJcHdtX3RtaW5bQURUNzQ3MF9QV01fQ09VTlRdOw0KPiA+ICAgCXU4
+CQkJcHdtX2F1dG9fdGVtcFtBRFQ3NDcwX1BXTV9DT1VOVF07DQo+ID4gKwl1OAkJCXB3bV9pbnZl
+cnRbQURUNzQ3MF9QV01fQ09VTlRdOw0KPiA+ICAgDQo+ID4gICAJc3RydWN0IHRhc2tfc3RydWN0
+CSphdXRvX3VwZGF0ZTsNCj4gPiAgIAl1bnNpZ25lZCBpbnQJCWF1dG9fdXBkYXRlX2ludGVydmFs
+Ow0KPiA+IEBAIC0zMDAsMTEgKzMwNSwyMiBAQCBzdGF0aWMgaW50IGFkdDc0NzBfdXBkYXRlX3Nl
+bnNvcnMoc3RydWN0IGFkdDc0NzBfZGF0YQ0KPiA+ICpkYXRhKQ0KPiA+ICAgCQkJcmVnX21hc2sg
+PSBBRFQ3NDcwX1BXTTFfQVVUT19NQVNLOw0KPiA+ICAgDQo+ID4gICAJCXJlZyA9IEFEVDc0NzBf
+UkVHX1BXTV9DRkcoaSk7DQo+ID4gLQkJaWYgKGkyY19zbWJ1c19yZWFkX2J5dGVfZGF0YShjbGll
+bnQsIHJlZykgJiByZWdfbWFzaykNCj4gPiArCQljZmcgPSBpMmNfc21idXNfcmVhZF9ieXRlX2Rh
+dGEoY2xpZW50LCByZWcpOw0KPiA+ICsJCWlmIChjZmcgJiByZWdfbWFzaykNCj4gPiAgIAkJCWRh
+dGEtPnB3bV9hdXRvbWF0aWNbaV0gPSAxOw0KPiA+ICAgCQllbHNlDQo+ID4gICAJCQlkYXRhLT5w
+d21fYXV0b21hdGljW2ldID0gMDsNCj4gPiAgIA0KPiA+ICsJCWlmIChpICUgMikNCj4gPiArCQkJ
+cmVnX21hc2sgPSBBRFQ3NDcwX1BXTTJfSU5WRVJUX01BU0s7DQo+ID4gKwkJZWxzZQ0KPiA+ICsJ
+CQlyZWdfbWFzayA9IEFEVDc0NzBfUFdNMV9JTlZFUlRfTUFTSzsNCj4gPiArDQo+ID4gKwkJaWYg
+KGNmZyAmIHJlZ19tYXNrKQ0KPiA+ICsJCQlkYXRhLT5wd21faW52ZXJ0W2ldID0gMTsNCj4gPiAr
+CQllbHNlDQo+ID4gKwkJCWRhdGEtPnB3bV9pbnZlcnRbaV0gPSAwOw0KPiA+ICsNCj4gPiAgIAkJ
+cmVnID0gQURUNzQ3MF9SRUdfUFdNX0FVVE9fVEVNUChpKTsNCj4gPiAgIAkJY2ZnID0gaTJjX3Nt
+YnVzX3JlYWRfYnl0ZV9kYXRhKGNsaWVudCwgcmVnKTsNCj4gPiAgIAkJaWYgKCEoaSAlIDIpKQ0K
+PiA+IEBAIC05MzUsNiArOTUxLDUxIEBAIHN0YXRpYyBzc2l6ZV90IHB3bV90bWluX3N0b3JlKHN0
+cnVjdCBkZXZpY2UgKmRldiwNCj4gPiAgIAlyZXR1cm4gY291bnQ7DQo+ID4gICB9DQo+ID4gICAN
+Cj4gPiArc3RhdGljIHNzaXplX3QgcHdtX2ludmVydF9zaG93KHN0cnVjdCBkZXZpY2UgKmRldiwN
+Cj4gPiArCQkJICAgICAgIHN0cnVjdCBkZXZpY2VfYXR0cmlidXRlICpkZXZhdHRyLCBjaGFyICpi
+dWYpDQo+ID4gK3sNCj4gPiArCXN0cnVjdCBzZW5zb3JfZGV2aWNlX2F0dHJpYnV0ZSAqYXR0ciA9
+IHRvX3NlbnNvcl9kZXZfYXR0cihkZXZhdHRyKTsNCj4gPiArCXN0cnVjdCBhZHQ3NDcwX2RhdGEg
+KmRhdGEgPSBhZHQ3NDcwX3VwZGF0ZV9kZXZpY2UoZGV2KTsNCj4gPiArDQo+ID4gKwlyZXR1cm4g
+c3ByaW50ZihidWYsICIlZFxuIiwgKGludClkYXRhLT5wd21faW52ZXJ0W2F0dHItPmluZGV4XSk7
+DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBzc2l6ZV90IHB3bV9pbnZlcnRfc3RvcmUoc3Ry
+dWN0IGRldmljZSAqZGV2LA0KPiA+ICsJCQkJc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgKmRldmF0
+dHIsDQo+ID4gKwkJCQljb25zdCBjaGFyICpidWYsIHNpemVfdCBjb3VudCkNCj4gPiArew0KPiA+
+ICsJc3RydWN0IHNlbnNvcl9kZXZpY2VfYXR0cmlidXRlICphdHRyID0gdG9fc2Vuc29yX2Rldl9h
+dHRyKGRldmF0dHIpOw0KPiA+ICsJc3RydWN0IGFkdDc0NzBfZGF0YSAqZGF0YSA9IGRldl9nZXRf
+ZHJ2ZGF0YShkZXYpOw0KPiA+ICsJc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCA9IGRhdGEtPmNs
+aWVudDsNCj4gPiArCWludCBwd21faW52ZXJ0X3JlZyA9IEFEVDc0NzBfUkVHX1BXTV9DRkcoYXR0
+ci0+aW5kZXgpOw0KPiA+ICsJaW50IHB3bV9pbnZlcnRfcmVnX21hc2s7DQo+ID4gKwlsb25nIHRl
+bXA7DQo+ID4gKwl1OCByZWc7DQo+ID4gKw0KPiA+ICsJaWYgKGtzdHJ0b2woYnVmLCAxMCwgJnRl
+bXApKQ0KPiA+ICsJCXJldHVybiAtRUlOVkFMOw0KPiA+ICsNCj4gPiArCWlmIChhdHRyLT5pbmRl
+eCAlIDIpDQo+ID4gKwkJcHdtX2ludmVydF9yZWdfbWFzayA9IEFEVDc0NzBfUFdNMl9JTlZFUlRf
+TUFTSzsNCj4gPiArCWVsc2UNCj4gPiArCQlwd21faW52ZXJ0X3JlZ19tYXNrID0gQURUNzQ3MF9Q
+V00xX0lOVkVSVF9NQVNLOw0KPiA+ICsNCj4gPiArCWlmICh0ZW1wICE9IDEgJiYgdGVtcCAhPSAw
+KQ0KPiA+ICsJCXJldHVybiAtRUlOVkFMOw0KPiA+ICsNCj4gPiArCW11dGV4X2xvY2soJmRhdGEt
+PmxvY2spOw0KPiA+ICsJZGF0YS0+cHdtX2ludmVydFthdHRyLT5pbmRleF0gPSB0ZW1wOw0KPiA+
+ICsJcmVnID0gaTJjX3NtYnVzX3JlYWRfYnl0ZV9kYXRhKGNsaWVudCwgcHdtX2ludmVydF9yZWcp
+Ow0KPiA+ICsJaWYgKHRlbXApDQo+ID4gKwkJcmVnIHw9IHB3bV9pbnZlcnRfcmVnX21hc2s7DQo+
+ID4gKwllbHNlDQo+ID4gKwkJcmVnICY9IH5wd21faW52ZXJ0X3JlZ19tYXNrOw0KPiA+ICsJaTJj
+X3NtYnVzX3dyaXRlX2J5dGVfZGF0YShjbGllbnQsIHB3bV9pbnZlcnRfcmVnLCByZWcpOw0KPiA+
+ICsJbXV0ZXhfdW5sb2NrKCZkYXRhLT5sb2NrKTsNCj4gPiArDQo+ID4gKwlyZXR1cm4gY291bnQ7
+DQo+ID4gK30NCj4gPiArDQo+ID4gICBzdGF0aWMgc3NpemVfdCBwd21fYXV0b19zaG93KHN0cnVj
+dCBkZXZpY2UgKmRldiwNCj4gPiAgIAkJCSAgICAgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgKmRl
+dmF0dHIsIGNoYXIgKmJ1ZikNCj4gPiAgIHsNCj4gPiBAQCAtMTEzNSw2ICsxMTk2LDExIEBAIHN0
+YXRpYyBTRU5TT1JfREVWSUNFX0FUVFJfUlcocHdtNCwgcHdtLCAzKTsNCj4gPiAgIA0KPiA+ICAg
+c3RhdGljIERFVklDRV9BVFRSX1JXKHB3bTFfZnJlcSk7DQo+ID4gICANCj4gPiArc3RhdGljIFNF
+TlNPUl9ERVZJQ0VfQVRUUl9SVyhwd20xX2ludmVydCwgcHdtX2ludmVydCwgMCk7DQo+ID4gK3N0
+YXRpYyBTRU5TT1JfREVWSUNFX0FUVFJfUlcocHdtMl9pbnZlcnQsIHB3bV9pbnZlcnQsIDEpOw0K
+PiA+ICtzdGF0aWMgU0VOU09SX0RFVklDRV9BVFRSX1JXKHB3bTNfaW52ZXJ0LCBwd21faW52ZXJ0
+LCAyKTsNCj4gPiArc3RhdGljIFNFTlNPUl9ERVZJQ0VfQVRUUl9SVyhwd200X2ludmVydCwgcHdt
+X2ludmVydCwgMyk7DQo+ID4gKw0KPiA+ICAgc3RhdGljIFNFTlNPUl9ERVZJQ0VfQVRUUl9SVyhw
+d20xX2F1dG9fcG9pbnQxX3B3bSwgcHdtX21pbiwgMCk7DQo+ID4gICBzdGF0aWMgU0VOU09SX0RF
+VklDRV9BVFRSX1JXKHB3bTJfYXV0b19wb2ludDFfcHdtLCBwd21fbWluLCAxKTsNCj4gPiAgIHN0
+YXRpYyBTRU5TT1JfREVWSUNFX0FUVFJfUlcocHdtM19hdXRvX3BvaW50MV9wd20sIHB3bV9taW4s
+IDIpOw0KPiA+IEBAIC0xMjMxLDYgKzEyOTcsMTAgQEAgc3RhdGljIHN0cnVjdCBhdHRyaWJ1dGUg
+KmFkdDc0NzBfYXR0cnNbXSA9IHsNCj4gPiAgIAkmc2Vuc29yX2Rldl9hdHRyX3B3bTIuZGV2X2F0
+dHIuYXR0ciwNCj4gPiAgIAkmc2Vuc29yX2Rldl9hdHRyX3B3bTMuZGV2X2F0dHIuYXR0ciwNCj4g
+PiAgIAkmc2Vuc29yX2Rldl9hdHRyX3B3bTQuZGV2X2F0dHIuYXR0ciwNCj4gPiArCSZzZW5zb3Jf
+ZGV2X2F0dHJfcHdtMV9pbnZlcnQuZGV2X2F0dHIuYXR0ciwNCj4gPiArCSZzZW5zb3JfZGV2X2F0
+dHJfcHdtMl9pbnZlcnQuZGV2X2F0dHIuYXR0ciwNCj4gPiArCSZzZW5zb3JfZGV2X2F0dHJfcHdt
+M19pbnZlcnQuZGV2X2F0dHIuYXR0ciwNCj4gPiArCSZzZW5zb3JfZGV2X2F0dHJfcHdtNF9pbnZl
+cnQuZGV2X2F0dHIuYXR0ciwNCj4gPiAgIAkmc2Vuc29yX2Rldl9hdHRyX3B3bTFfYXV0b19wb2lu
+dDFfcHdtLmRldl9hdHRyLmF0dHIsDQo+ID4gICAJJnNlbnNvcl9kZXZfYXR0cl9wd20yX2F1dG9f
+cG9pbnQxX3B3bS5kZXZfYXR0ci5hdHRyLA0KPiA+ICAgCSZzZW5zb3JfZGV2X2F0dHJfcHdtM19h
+dXRvX3BvaW50MV9wd20uZGV2X2F0dHIuYXR0ciwNCj4gPiANCi0tIA0KUm9iZXJ0IEhhbmNvY2sN
+ClNlbmlvciBIYXJkd2FyZSBEZXNpZ25lciwgQ2FsaWFuIEFkdmFuY2VkIFRlY2hub2xvZ2llcw0K
+d3d3LmNhbGlhbi5jb20NCg==
