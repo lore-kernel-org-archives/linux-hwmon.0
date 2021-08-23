@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44638C4338F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 17:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E26AC4338F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 17:07:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F9C461073
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 17:06:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D76060EE0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 17:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbhHWRGr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Aug 2021 13:06:47 -0400
-Received: from mout.gmx.net ([212.227.17.20]:59379 "EHLO mout.gmx.net"
+        id S230439AbhHWRIY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Aug 2021 13:08:24 -0400
+Received: from mout.gmx.net ([212.227.17.21]:39821 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229623AbhHWRGq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Aug 2021 13:06:46 -0400
+        id S230360AbhHWRIY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 23 Aug 2021 13:08:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1629738349;
-        bh=1+m0lmnu0GScjU7Om/tVPOtTeGorLS3AnMqDcbkkGfw=;
+        s=badeba3b8450; t=1629738446;
+        bh=X+XQ3kV8QU8uG+TpfCYMUzi52iRxsv90Tn71sE67y3M=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=XUo5J6Cb+mUIuacaRohJEbSbstACY6qmX6KOVHsQsfh7NNJXGwDOQS5s0CIsEESuF
-         dZZ1g2Z+9HKBhgLklquA5rOMkwunARi4NUclo8W1X/Bd36OaHsdr7Np2Lklu0qYmYn
-         AlASj7ekbcYNvDv5PsXlLCfyMlU+v0WICxzFK3ek=
+        b=COr++V0a32FnOH2HcmIIEtM3uTp5l9xq7+rSvdHF6aqfNhvk+7u71eSLlZVY8OOLG
+         VSfCxkLo+v03A+O0NpaFWOuozJFfAdcF/i9d3bmAhPnW/K9Rnki6hltJewiryV4wR/
+         fWIbJeD8iBK4vPDxNDUIHxgcDcde/19JwKiAqV0s=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MTABT-1mTSZW1YOV-00UemO; Mon, 23 Aug 2021 19:05:49 +0200
+ 1MyKHc-1nGUXi1BVs-00yiRV; Mon, 23 Aug 2021 19:07:26 +0200
 From:   W_Armin@gmx.de
 To:     jdelvare@suse.com
 Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (i5500_temp) Convert to devm_hwmon_device_register_with_info
-Date:   Mon, 23 Aug 2021 19:05:43 +0200
-Message-Id: <20210823170543.7451-1-W_Armin@gmx.de>
+Subject: [PATCH RESEND] hwmon: (i5500_temp) Convert to devm_hwmon_device_register_with_info
+Date:   Mon, 23 Aug 2021 19:07:24 +0200
+Message-Id: <20210823170724.7662-1-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:j2Fihm1xyV/hxLQ2xefQdfJ6448pLjbvDN6p9Fa5rtT9v55doHN
- qH9JKOF3jHypsWvCICeIfXaNrSugLDWQ8ht34MPEvsmQKei/BSkMJbU7I8lP81WdJprh7c9
- 3IVUHogFtbs38L7g7b7Vej0ZCi9Jsxeumf9CTHW1S0XvOoiefxjRUgB5xFV11pZXEZ8KfnF
- JVLYEc+Gajuk+VU/2Ezfg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yIWx4iHatMU=:mdyvZCpUmaZ8QGKcAPV9OW
- IYlWo4Gh48sW6B2jjBwjCwOjhKDpIcj0Ts5FRP9GaXQcC5kBnXUE718Mpci8ceOQ9cF2Gtwu8
- 9OaeD8Urr78VNgIZU+yxQsG3JqtedqJNmf6yNh+Qe+RU+IdbV3asude+KgP0dd0/8Dh89jn1V
- ziD3boq8ul16O0BSeFvp2xBaVCG3zk7/kNSwmw0wqrlGXtyrmbj2uOc+shX8RhHCXnb0F1FGo
- YiJa3u4CnPNDEIvM+HEpwJJJAy/H4KJwBXgHT2SCdUfKHEn+ULkX4Tm8OPIJY/CWaqGQrzHoV
- FWw9YVGfvGEFmTXKTIx1rdoUffd0UVha+GbiOA2M1fJW2hH00NBVCYN9bFVhyYum3vohsgr26
- EjIcz4GaatvhnOlV7+hmvYfWOe0lqhXiXCJbZrEiy02HITEq0r2/nmO/5ylzpnoew8G3bCO7j
- C3iPkV6sqDUeeeaQILmnxoQjnNN4R48khp/kowpTamzRfuJnAXxxOjJFQTpYglZLAYbIVPMK8
- r2y2+S0J9r/p6ODaA56wmL0as7NyhahUnPifY8i1JcosD2A+fZGr8Azw0JEoHeOddwDu1nHOk
- yjJWbXdsIL2yUAUi4x/Y0mUNgFaLyPusCbcx+x6xFEw4y0t7LfVQEX0qu83cnSlysjc7bx7RL
- y5ZVl7igCHThVAhptxqPNN0drKjEW0jqKVF/lq/ZCq4EIGg+0J/NjLvlhjzs3+Q/1w3ciYmyz
- ZxnF7Fuqj1c7aIeo+blLCJNDU8giLMnv+PzHfRHg92Ky3Av4B1Sxp+kR5K25ZJCVRzk8S40S4
- zoQqiCqR9fYhaUvekqrrLFwfNNKv4nITTAdVYUdoyd8cSEd/C7DDdf6AvJ+iGAghiZQYunzFV
- ksaTzjfyVx0nq93YXMhREcwKOwArN22K2X+pf5bwBoV9z9Y6DBT4WNtVt7viKm/6W/HNZjuKv
- 158hSOv5UjK3TwX5d8+RWl+J9z7fTq80od3gIjrfxdoickAwdQF0SL4EX2OTR6ehK1Lc3hvm6
- WXqvFDpe29kGXPd+YPU5o4P0XVrf6aP2RHnLtWCzGMDqz93MiEdm9Sc/QvAB/D/u0uhQyk5Oq
- KGDwxA8uB8P6lMF2gyC3T/goi8W4Oy0k2cL/fkvhde6BCw/dSWfpSiB2Q==
+X-Provags-ID: V03:K1:1jflLXkBffU0muYsm1eZ/VAPLfzd5fGhtnklhmtb9Y0TQBe+ePF
+ ni/zKeKAWg1kLPgkkV59ADC0ax4F2ROiUvGuTksFPX1H7KrfOCWSg+aSOOEvMrhZMT/kkcE
+ z+b1kBPMfVz5Ny148z+akpEe/oynT0djqymDoX//E8VXQHcwdHJTUV3G1rssTQXG9c6F9dz
+ QUexXahcBPCRhq3RYPnNg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XHOvLlArKw8=:Ybzo22GClES8sRBx6xIdTl
+ FIH/4g1UAdYnPIiYfJHLNlst6eUaFqTIwshPYIDY6FL9VLl3G59TvcJN8t9FRnHmmHZfUfoOb
+ pn7jHXK7YeoWAegow0ASKjvaGbYXmMnuVEizrbXhDgXiP4v2LvYMAWkVhFX0s9ZViH2ZIRKMS
+ q6kjv3QKKAiDvkwH056P41sCVUDTsAlCVqCdm89vpKoO9reih8YUi2A3gk26lGCK0YtYrBlQ+
+ Zron32Je9GYBl+ZUcgHy4CpK9ScsdX93mkPSS90PQZfRmwMo+mBDzg29dpfgjkoaSl5EVZv1m
+ ubIqpRMg/y7CZvsYS8qlxLjRCcCiH+GCSZtZwAuA+U4uRgcpWIHBgoHLwk0uRp+LCiP3FxpMw
+ 0MbG98SIzn+C3pobGkim2mHuOWJFd9A1jVOMwGjYuMOw0UaEa9DKtrNAE52nkVEWEoJr6anRJ
+ nqKu/ia8gskcc6cm2psE0ydKmd85D2ivqy65MH/R8HqVi1WkxhwAjcFLit7tX3BgD+TP30y5y
+ eGV+xFMPkoTDNeYDzvZiJhq0iZEbpkoYwysrx32HWZV7Q2WHLgeKYsmgPX6JF0Ycst+jqHbK1
+ GNZUOjL5uuI/jcOj9hV7g8nLBHq4B9JzvU3L/0CS0yptndyWEfT6mCm99iH4hOUO5Y1MAJDWf
+ wtS6aGhZF1S78o9580uDi4neztrFWPD1qKvWmWnQscw9bXNKYkvMSA6B+hykoZK+uFaChUDXe
+ 8vg/hIE0tumei8BTAp9c4jmp7EX3KXywphVxFHoqsgba9LTuJMTLjF6hUJSxcU1M4vc1AAHcw
+ jWp5pYamAejXsTe7Il46K2KVnRTyGGFXYKqTkgP0k4uiO41G4BQ4NioKF6ZJCGx9evrsdG8vY
+ 5efs01VoLzWkMmP02XB8PttDp1sWvgwEm1fu/42m9Il6/zMFQryuT2EK0cpIkpxBIKepPlBbc
+ nXfidaTJwKa3z27Pvtb9vUexsiBrsaA1sgAeA2A0RciWMZ79JjjwMTdsZBfm+z6KSd1yIbqjg
+ EojJCjD5PJwgE1QwIgWStq1s3ffP7b6R1SJ0L2zubN79xx9OxALuFN4VukuIvPeIquKvEOUg2
+ Tl+P0K1XncqsZE+1UONsIUPQR4Wb+T6C1ZTjeoJ1Eb+w27fbN6FbL7Ofg==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -70,6 +70,8 @@ From: Armin Wolf <W_Armin@gmx.de>
 Use devm_hwmon_device_register_with_info() to simplify code
 and use register defines instead of hardcoded values.
 Also use the BIT() macro for the alarms.
+
+Only compile-tested.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
