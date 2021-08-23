@@ -2,54 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99DDCC4338F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 21:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4283C4338F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 21:20:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F4EE613A8
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 21:12:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADBA6613AD
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Aug 2021 21:20:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbhHWVNS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Aug 2021 17:13:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42014 "EHLO mail.kernel.org"
+        id S232760AbhHWVUn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Aug 2021 17:20:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43182 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232712AbhHWVNS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Aug 2021 17:13:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DE918613A8;
-        Mon, 23 Aug 2021 21:12:34 +0000 (UTC)
+        id S232724AbhHWVUn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 23 Aug 2021 17:20:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 253C2613D5;
+        Mon, 23 Aug 2021 21:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629753154;
-        bh=FO5V+VvVNyFCl7iIUHP7YYXHV+zjbkZDH/GJy0SP/MY=;
+        s=k20201202; t=1629753600;
+        bh=2OGkwzJxQay8Lrkj6GAAwN64s4e0d3mH+a/eXPiSdIo=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QxKdriVB0R+F8JZKpRqrmIRvpaNmLjZ6pns3DFxGf+1MivtWY3/95+gGIGAik068D
-         ekiRbdeWC5O6yV4R7cSwK9KJeeef+g9179ktK63zOfRGo8663N4HRCwt5nPKtF+h01
-         QiPVjPebnfMiWXxdZnL8cmDdkMVxr08GJrV85u0JRLZZ4+CsIUnKqHj3aTtOJIThGs
-         pPV2UTbiTH3avy+F5lJC5X9dl9v7rfxP74HO+FS5sYAMGkNq832lmz9M1/0WsPKBnY
-         8igt/ggGhSS0XSJguLQx0jFiO+y2sGfYVkrZJIWA6NmrAUwy4QbccOmh/qauZIzvUk
-         M5a1AwL4YhAHg==
-Received: by mail-ej1-f49.google.com with SMTP id x11so39882227ejv.0;
-        Mon, 23 Aug 2021 14:12:34 -0700 (PDT)
-X-Gm-Message-State: AOAM530gqtdaLsD9j4kFm5yJTKBqrhgEpdcIYhgliP6gHLRdCijtkdf4
-        gTSMrDi1sG5G4HGm+Rx+WZYGc01ZHn2vBFfjFA==
-X-Google-Smtp-Source: ABdhPJyFFpTaNQ8lP7elawiHjryXjUyNIjLJbOKH1rXHXIM1ruMxr0K30c8RNAyuz0Af6ey+tZYmAW6/6Ul8sjBE9wU=
-X-Received: by 2002:a17:906:8cd:: with SMTP id o13mr37973428eje.341.1629753153543;
- Mon, 23 Aug 2021 14:12:33 -0700 (PDT)
+        b=REAzUuz8JUQv76UNOUUdxBzoQiHtLjpr+QP7bb+GoUhwblAIE21Lizevfzrr3i9++
+         iBnsIkC14x34wt3NErXeHFx8+1J1lbafVlCLBL1QY44yaXIhCkcLWdt4nQeeWBhSvN
+         WMDKNzCzwH91AqKSywwijGIUCw69PEk9856PjgV2rBC0PQNyLcU0+1PM43yk09gBfe
+         d2dNFKhhpLNR0sqhMl22dGT9DRzqBaHbGiwJ9ZS1gz+dQZnLAqByYyJuiJM5BtUiAQ
+         7ENtmso2Q3WsbSb5ydlmsXrmcQtPgLIzWggwI9gDZQKA1VaFBd8sNHh0NGRGYrKTbB
+         Pt1ojrqSlKQ7w==
+Received: by mail-ed1-f47.google.com with SMTP id i6so28311296edu.1;
+        Mon, 23 Aug 2021 14:20:00 -0700 (PDT)
+X-Gm-Message-State: AOAM531UVMGjY7URxhpXIpHTMrypfshNAij2eyM664McPRj/8TlEZtGw
+        oaxdRU9EhPRZoaJ+dhM3Tk1pGgPRR6TsOIglaQ==
+X-Google-Smtp-Source: ABdhPJy4qwuP7eNEgB8CJGomnX/HXxW3WFg0te7Ac41HlE2QIYEXWyJAKf8Zc93OtPb+2pnel9vzNAwYWqhXnj8+YJ8=
+X-Received: by 2002:aa7:d1d3:: with SMTP id g19mr2747076edp.373.1629753598411;
+ Mon, 23 Aug 2021 14:19:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210819182544.224121-1-krzysztof.kozlowski@canonical.com>
- <20210819182544.224121-2-krzysztof.kozlowski@canonical.com> <fffdaaad-ac75-5c2f-6a31-7cdc3e57de20@roeck-us.net>
-In-Reply-To: <fffdaaad-ac75-5c2f-6a31-7cdc3e57de20@roeck-us.net>
+References: <20210819182544.224121-1-krzysztof.kozlowski@canonical.com> <441b28c9-a997-7143-825f-f272e399d60f@roeck-us.net>
+In-Reply-To: <441b28c9-a997-7143-825f-f272e399d60f@roeck-us.net>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 23 Aug 2021 16:12:22 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+EXrMRFSwQKW2SOO2fgB48ACD6yXaujat9AbgxdG0_BA@mail.gmail.com>
-Message-ID: <CAL_Jsq+EXrMRFSwQKW2SOO2fgB48ACD6yXaujat9AbgxdG0_BA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: merge max31785 into trivial devices
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jiri Kosina <trivial@kernel.org>,
+Date:   Mon, 23 Aug 2021 16:19:47 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKJgvK8g+zbzLCBxnKbgAioBcdHWNAvqe4Z9BzkNMwPpA@mail.gmail.com>
+Message-ID: <CAL_JsqKJgvK8g+zbzLCBxnKbgAioBcdHWNAvqe4Z9BzkNMwPpA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: merge max1619 into trivial devices
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jiri Kosina <trivial@kernel.org>,
         Linux HWMON List <linux-hwmon@vger.kernel.org>,
         devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
@@ -58,22 +57,26 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 9:23 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On Fri, Aug 20, 2021 at 9:26 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
 > On 8/19/21 11:25 AM, Krzysztof Kozlowski wrote:
-> > Ther Maxim max31785 bindings are trivial, so simply merge it into
+> > Ther Maxim max1619 bindings are trivial, so simply merge it into
 > > trivial-devices.yaml.
 > >
 > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > ---
-> >   .../devicetree/bindings/hwmon/max31785.txt    | 22 -------------------
 >
-> Not sure if that is a good idea. It would make more sense to standardize the
-> properties needed by the driver/chip instead (see existing dts files in the kernel).
+> Do we have a general guideline on how to handle such trivial bindings ?
 
-This device is certainly not trivial, the binding is just incomplete.
+Not really. I debate (with myself) just getting rid of it as I suspect
+lots of bindings are just incomplete. Like should supplies be
+required? But it's convenient to have and not duplicate a bunch of
+boilerplate.
 
-Device specific fan controller bindings are something I'm just going
-to reject until someone comes up with something common.
+> I normally leave it up to the driver author to decide one way or another.
+
+Me too.
+
+This one looks simple enough to be in trivial-devices, so I'll take
+having a schema over not.
 
 Rob
