@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5655FC19F3D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Aug 2021 12:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F305FC19F39
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Aug 2021 12:46:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 43A4361401
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Aug 2021 12:46:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DEEE761373
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Aug 2021 12:46:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237375AbhHXMrl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S237340AbhHXMrl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 24 Aug 2021 08:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237414AbhHXMri (ORCPT
+        with ESMTP id S237406AbhHXMrg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Aug 2021 08:47:38 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD95C0617A8
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Aug 2021 05:46:54 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id f9-20020a05600c1549b029025b0f5d8c6cso1788037wmg.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Aug 2021 05:46:54 -0700 (PDT)
+        Tue, 24 Aug 2021 08:47:36 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D2FC0613CF
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Aug 2021 05:46:52 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id l7-20020a1c2507000000b002e6be5d86b3so2231471wml.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Aug 2021 05:46:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+jIDIEPGUtwtN5J2uvflNRJK63YXRHWuv3BgcHNxva8=;
-        b=RgocWkgV6oNUTc6g8DAGPi8BVvHL+2Rn4ytJK6kWqkt6OVd0nd4Pw0xPYOLQiHlFMX
-         OtV5mx1teKUYOBoqtXtMfWzziQgRt8LL/Y0lW06o7eJc3AW9oPwU3H54xnl1mpBPzStk
-         xfmSriS7h/cWQ9pyJJJDd85BNltoeQgqHAFbKVsn8Dn5TxZ2rLhL8XpdptJFXq8S/NRO
-         N943NGW1Kr3zL0osclrJj2vT7ZDV+iC4S7eOIJcUuBQkAzYInSjFJa55D8g8i38HbX3d
-         lDcl2jM0g870QLuhMltjcwV/feVYhi5OS9ITVlZPE8utfhAgiewVnAbmbyaZHw+xhH7C
-         F6kQ==
+        bh=sV5bi/8/32uQJ63ILt7SV8uftT10eHMjtOEaunuG05M=;
+        b=D4xeZ6Il7/TpovSdp6cBhIlgzF733gXgiHdK1AR2sEMG6GUdL8fZgop5meYE0aoupN
+         FewCon2JtctS0mfG2zfLVWMAjUKldRRw3aVPERwzc/M/RWIOZfjEbpF4r1WnaAxpML7B
+         qAejV7rQtR9g+hBZgy4G5Ml8K+GzxfFYQqTwnIuqYZZBejB1JMiSSQxJVrfri2g+LusL
+         KfDtkYMdE5yrIaeu5johxOJM0dZdXeZ6H+yjIgoVZmWH464jJezCcifSpP+mnI60g5eQ
+         wpdYycHnAT2lhf2BPz6VLZHI/hlDhUchgNXa85Ty7DdXu6T7E4IkEQAWxWgwsC1pYI7m
+         0EHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+jIDIEPGUtwtN5J2uvflNRJK63YXRHWuv3BgcHNxva8=;
-        b=FPF1ysKu4c16N/vd62MO/qsVlioovOJBaGXAE7T6/fhnnhQ2fr1pX/i/KxiTisHetw
-         1S3vasfiDkWN4kPpIP77RxV9YupsPbwDOSWNaKCTw9I6xJjoGmxMtvJeIEVcSTrln4Zs
-         fzbw0TiG6CfKlfbnfmcWdby4ssmznIygSilqyd87Qs6/SzQd1TM1u/ZvIC+TMv3W3abY
-         r9Az/ErnMc8/rDvsg7qEYDazaVzNpK4cXACWhj9sJcOIp5/F7Rn1Z3kAKJGXQwB1Lzxa
-         Dz5JEXidtZfgeg7/5JH/2D3yHIc0k44B5QpRWuHW3lNlL3sitYDs0+ZQrp68HX3WSZR4
-         L3ug==
-X-Gm-Message-State: AOAM530TjB7jq/jMYtAqBekamFsMi03g+/+XRyX7htfED85HiJPx1OzC
-        x+DQtDRLnmvv60MV4sV/uIGVrQ==
-X-Google-Smtp-Source: ABdhPJzqcG7L8tY5Ok3wh6qGkQq3AZ/iXN4weZPo9JxWaa0OJLRGlGwMIiSpjsDShx710OJPmIM6kQ==
-X-Received: by 2002:a7b:cd83:: with SMTP id y3mr3973991wmj.126.1629809213048;
-        Tue, 24 Aug 2021 05:46:53 -0700 (PDT)
+        bh=sV5bi/8/32uQJ63ILt7SV8uftT10eHMjtOEaunuG05M=;
+        b=Hk0st/G8tx4Y1TIfruOSL15vj/91DMb6ohK/3f/8839+0rbrnJh3UUD+TV9X9HHaww
+         swxdtME0+sYHdpCJp/H3izqbfa+unoM2H5WLZZS7blT9jWBXOQHH0Xl8ADCk8Oz9NcdD
+         K3lrDh1WeflVDgF0Hh9ZRfiI+nYW1jPTbu+cQdDkesi4SIU2OvJXWad78OT84vGuqMD2
+         4KcBHnxxDnvpV3mJGOzDYp06DDJ/BftbZbX4gwYLH3y5YlzrXhYpA09gesw+nTq7IQbs
+         DyxmBFUlhUnYQCcspGx/Fktv9NQ71t+tT8ise65HmyzH/T78dp1lUfHMDxuDCWdfmR9B
+         HJ6w==
+X-Gm-Message-State: AOAM5300PGp4UBVY1ahCsTQOqyCnrsQPUR2YKRsVsYRIG94D0ZYBdj22
+        LS/0XK7+V8I1+jtRL0/0jqp1Qw==
+X-Google-Smtp-Source: ABdhPJyqY7PyhaU2K6nD0+z86vfEI4jeY/625pXpBJpDoe77q7569uA8pCW7P86FiH1hvhjVjZYnbQ==
+X-Received: by 2002:a05:600c:1c9c:: with SMTP id k28mr4041526wms.148.1629809211135;
+        Tue, 24 Aug 2021 05:46:51 -0700 (PDT)
 Received: from localhost.localdomain ([2a00:ee2:4b0d:3001:fe74:75c8:e909:251b])
-        by smtp.gmail.com with ESMTPSA id i14sm2255454wmq.40.2021.08.24.05.46.51
+        by smtp.gmail.com with ESMTPSA id i14sm2255454wmq.40.2021.08.24.05.46.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 05:46:52 -0700 (PDT)
+        Tue, 24 Aug 2021 05:46:50 -0700 (PDT)
 From:   Luka Kovacic <luka.kovacic@sartura.hr>
 To:     linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
         devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -68,9 +68,9 @@ To:     linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
         goran.medic@sartura.hr, luka.perkov@sartura.hr,
         robert.marko@sartura.hr
 Cc:     Luka Kovacic <luka.kovacic@sartura.hr>
-Subject: [PATCH v9 6/7] Documentation/hwmon: Add iei-wt61p803-puzzle hwmon driver documentation
-Date:   Tue, 24 Aug 2021 14:44:37 +0200
-Message-Id: <20210824124438.14519-7-luka.kovacic@sartura.hr>
+Subject: [PATCH v9 5/7] Documentation/ABI: Add iei-wt61p803-puzzle driver sysfs interface documentation
+Date:   Tue, 24 Aug 2021 14:44:36 +0200
+Message-Id: <20210824124438.14519-6-luka.kovacic@sartura.hr>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210824124438.14519-1-luka.kovacic@sartura.hr>
 References: <20210824124438.14519-1-luka.kovacic@sartura.hr>
@@ -80,79 +80,85 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add the iei-wt61p803-puzzle driver hwmon driver interface documentation.
+Add the iei-wt61p803-puzzle driver sysfs interface documentation to allow
+monitoring and control of the microcontroller from user space.
 
 Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
 Signed-off-by: Pavo Banicevic <pavo.banicevic@sartura.hr>
 Cc: Luka Perkov <luka.perkov@sartura.hr>
 Cc: Robert Marko <robert.marko@sartura.hr>
 ---
- .../hwmon/iei-wt61p803-puzzle-hwmon.rst       | 43 +++++++++++++++++++
- Documentation/hwmon/index.rst                 |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
+ .../testing/sysfs-driver-iei-wt61p803-puzzle  | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-iei-wt61p803-puzzle
 
-diff --git a/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst b/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
+diff --git a/Documentation/ABI/testing/sysfs-driver-iei-wt61p803-puzzle b/Documentation/ABI/testing/sysfs-driver-iei-wt61p803-puzzle
 new file mode 100644
-index 000000000000..bbbe97645965
+index 000000000000..ab4415587f67
 --- /dev/null
-+++ b/Documentation/hwmon/iei-wt61p803-puzzle-hwmon.rst
-@@ -0,0 +1,43 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
++++ b/Documentation/ABI/testing/sysfs-driver-iei-wt61p803-puzzle
+@@ -0,0 +1,61 @@
++What:		/sys/bus/serial/devices/.../mac_address_*
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RW) Internal factory assigned MAC address values
 +
-+Kernel driver iei-wt61p803-puzzle-hwmon
-+=======================================
++What:		/sys/bus/serial/devices/.../serial_number
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RW) Internal factory assigned serial number
 +
-+Supported chips:
-+ * IEI WT61P803 PUZZLE for IEI Puzzle M801
++What:		/sys/bus/serial/devices/.../version
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RO) Internal MCU firmware version
 +
-+   Prefix: 'iei-wt61p803-puzzle-hwmon'
++What:		/sys/bus/serial/devices/.../protocol_version
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RO) Internal MCU communication protocol version
 +
-+Author: Luka Kovacic <luka.kovacic@sartura.hr>
++What:		/sys/bus/serial/devices/.../power_loss_recovery
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RW) Host platform power loss recovery settings
++		Value mapping: 0 - Always-On, 1 - Always-Off, 2 - Always-AC, 3 - Always-WA
 +
++What:		/sys/bus/serial/devices/.../bootloader_mode
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RO) Internal MCU bootloader mode status
++		Value mapping:
++		0 - normal mode
++		1 - bootloader mode
 +
-+Description
-+-----------
++What:		/sys/bus/serial/devices/.../power_status
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RO) Power status indicates the host platform power on method.
++		Value mapping (bitwise list):
++		0x80 - Null
++		0x40 - Firmware flag
++		0x20 - Power loss detection flag (powered off)
++		0x10 - Power loss detection flag (AC mode)
++		0x08 - Button power on
++		0x04 - Wake-on-LAN power on
++		0x02 - RTC alarm power on
++		0x01 - AC recover power on
 +
-+This driver adds fan and temperature sensor reading for some IEI Puzzle
-+series boards.
++What:		/sys/bus/serial/devices/.../build_info
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RO) Internal MCU firmware build date
++		Format: yyyy/mm/dd hh:mm
 +
-+Sysfs attributes
-+----------------
-+
-+The following attributes are supported:
-+
-+- IEI WT61P803 PUZZLE for IEI Puzzle M801
-+
-+/sys files in hwmon subsystem
-+-----------------------------
-+
-+================= == =====================================================
-+fan[1-5]_input    RO files for fan speed (in RPM)
-+pwm[1-2]          RW files for fan[1-2] target duty cycle (0..255)
-+temp[1-2]_input   RO files for temperature sensors, in millidegree Celsius
-+================= == =====================================================
-+
-+/sys files in thermal subsystem
-+-------------------------------
-+
-+================= == =====================================================
-+cur_state         RW file for current cooling state of the cooling device
-+                     (0..max_state)
-+max_state         RO file for maximum cooling state of the cooling device
-+================= == =====================================================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index bc01601ea81a..4a050a5bc1f8 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -73,6 +73,7 @@ Hardware Monitoring Kernel Drivers
-    ibmaem
-    ibm-cffps
-    ibmpowernv
-+   iei-wt61p803-puzzle-hwmon
-    ina209
-    ina2xx
-    ina3221
++What:		/sys/bus/serial/devices/.../ac_recovery_status
++Date:		September 2020
++Contact:	Luka Kovacic <luka.kovacic@sartura.hr>
++Description:	(RO) Host platform AC recovery status value
++		Value mapping:
++		0 - board has not been recovered from power down
++		1 - board has been recovered from power down
 -- 
 2.31.1
 
