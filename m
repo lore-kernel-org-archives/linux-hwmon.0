@@ -2,50 +2,50 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C3C9C43214
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Aug 2021 18:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE83C00143
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Aug 2021 18:41:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3E0F60F44
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Aug 2021 18:41:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44DB560F44
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Aug 2021 18:41:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243342AbhHZSmS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Aug 2021 14:42:18 -0400
-Received: from mail-bn8nam12on2079.outbound.protection.outlook.com ([40.107.237.79]:56913
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S243300AbhHZSmU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Aug 2021 14:42:20 -0400
+Received: from mail-mw2nam08on2061.outbound.protection.outlook.com ([40.107.101.61]:41761
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243319AbhHZSmS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S243337AbhHZSmS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 26 Aug 2021 14:42:18 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BDUYcTvwHpbhH4N/lHXW3KF56+ggBIn2anspY4DJrkvjTgdPgV1ermo2ysRDCETukl6BVaxRJKC3ITPXsdx+Zu668T/X+xUVKmnohJXjT/dPgjzL9UNRSUM9yeywrcNYAaj3GDT8e/nX4iB79G+jiVYnDVohwe2+RetfCmfYWMdS2GXXm1lT4V0lD3+sLnmN0wCYw2Qn8aDIlB0NHqrdoLrmdN4EULOBRtRKzOCT8jah3lnDbOqs2Se+3AxpaS6ysr38QI9XytYuw+OwuDeeX+yJtIqGDRFD3jcjo4Jgbe3O4RZ+iRv+aHZ+J+Wx6YL5rwJ8crHmJho4uUs8yKLJKA==
+ b=iER21YlpHvxBG4jPaIkhhJvqA86KKqz9ysCTm1gI0yyUsdhvc47s7sBwfQofpoM+icxBOrjL45YNH00RQS2xxI8FGE4lVlaICGfRYSWsX9652Y3mjMyjJAUB59xrjlTEEKja1Rw45FVLj4L4+6UZ60Zj2RWH3ChGURj9sObnQZORWX6Tki8EAcUKYd32byPk3Z/EUPYD31Leow0qQj/413m1xKU9SzgeEoOOCJ5QBsxdpPNVWOdlNaP7ZN6Zgbg5QM8XuhMehiQ3GvyJdnRls8OJpvm4sbYQExBZZ6Oj22WoL0j+WYng588viUFOmGT9he3llAQWoAlbdLNN6W+/OA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1/WoGUZPK0oxiyC+WPciXQmn6uT2fiv4no/ddIKwzTo=;
- b=Ia8rDVvYZuVZ3KUGaJG0if3GZDMZd/1KKHBRZh7gxTj/GfccmqD/gamCTwA9L0T3o89CKdpWbh6B2G5JYbBKbD19Z+IG9oZ2sL+oLdGkCr4JPP4E6BosC2KSzT2g4aTYNPnrbhL7T/9rInel3ObgZo9dTLBTzk+4jhrsY7W8BU7ttMj0dhU8OsBTVmvatkCgCDmZwvLtjarrJtMMWDZTO+lYs4K+AoQGW9riipsBc2SYA0zjlqTL8Ekqi6grDwKzPWtGHzkzS0bwT1F3Kqj9KHDYbtCgW17aFWhXApNIgcXNzl0sNPu2cFxOD1oMpoqjY44Xr8dmtn4LefU2xk9aSQ==
+ bh=1VY4KglMCpRkjs0EZ/60pt0Jw7v0If1JVhni+Y2qRnY=;
+ b=RyLeRTndYjL76KOusDQ4ZLvwTQVi0Nm4IjYPwUmzpQnadBLFEdpef1XT9/lbTjQmSRqk5mOSCjTXfk+zYVLNAJs940860k2ExKyifMWf3eqOw9WPdC+hu1HIJPewnAXl7bDwLawl3YLHMIoUPSSvFrb5eG47jMKHsC/CjVUg9n/7OJGxN4hvttPMYtBiwzmFzTlSPZXpNrYpo42Ya4OM4bxzqlFxgBVeek+taywJylU3z+ED/KxGNyA/1wCdhCnUHwxXbIRRcvmSeN0LSV7P3W41qYB6d4RELmSM8qUIFE+UP3jgo78eZM8TnzyWGGpZbtL6qcfz+jPymgK0+7khbQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1/WoGUZPK0oxiyC+WPciXQmn6uT2fiv4no/ddIKwzTo=;
- b=PZtp7XKsnl8Djt1q5CoCpTaKHKjxGtSVNqWA2N/ifElMKqNIRmAwU2TSylM8NNFE2bhh5LALI8lbnbhY2v2idnJMjfYLj/Rb/r+h/ME5KJicIBukybsdNy1glZ1zoVyhURxrVFEoUvO5to7DmDufLVoDwQS5gj8LAkp+zuR+D8s=
+ bh=1VY4KglMCpRkjs0EZ/60pt0Jw7v0If1JVhni+Y2qRnY=;
+ b=W+X23zdnA6XOI00yA2cUv1BAMbiRAvEjx4VrKTXYR5ku2y4Ww0FL4dyFCbWLyLgApu5v827nKE8woZM+Sf5S604TIgYcQY7L0/4Fd98+1NSgHl1fW139ZslqjKdvgFgJfXbGu/Lvh3Urt7S/3+bkGc6Pbs4njVnbXnse2rDfNso=
 Authentication-Results: ladisch.de; dkim=none (message not signed)
  header.d=none;ladisch.de; dmarc=none action=none header.from=amd.com;
 Received: from SA0PR12MB4510.namprd12.prod.outlook.com (2603:10b6:806:94::8)
- by SN6PR12MB2782.namprd12.prod.outlook.com (2603:10b6:805:73::19) with
+ by SA0PR12MB4573.namprd12.prod.outlook.com (2603:10b6:806:9c::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.17; Thu, 26 Aug
- 2021 18:41:28 +0000
+ 2021 18:41:29 +0000
 Received: from SA0PR12MB4510.namprd12.prod.outlook.com
  ([fe80::f909:b733:33ff:e3b1]) by SA0PR12MB4510.namprd12.prod.outlook.com
  ([fe80::f909:b733:33ff:e3b1%4]) with mapi id 15.20.4457.019; Thu, 26 Aug 2021
- 18:41:28 +0000
+ 18:41:29 +0000
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Clemens Ladisch <clemens@ladisch.de>
 Cc:     linux-hwmon@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc:     linux-hwmon@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         Wei Huang <wei.huang2@amd.com>,
         Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 5/6] hwmon: (k10temp): Don't show Tdie for all Zen/Zen2/Zen3 CPU/APU
-Date:   Thu, 26 Aug 2021 13:40:56 -0500
-Message-Id: <20210826184057.26428-6-mario.limonciello@amd.com>
+Subject: [PATCH 6/6] hwmon: (k10temp): Add support for yellow carp
+Date:   Thu, 26 Aug 2021 13:40:57 -0500
+Message-Id: <20210826184057.26428-7-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210826184057.26428-1-mario.limonciello@amd.com>
 References: <20210826184057.26428-1-mario.limonciello@amd.com>
@@ -66,94 +66,140 @@ X-ClientProxiedBy: SA9P223CA0012.NAMP223.PROD.OUTLOOK.COM
  (2603:10b6:806:94::8)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from AUS-LX-MLIMONCI.amd.com (165.204.77.11) by SA9P223CA0012.NAMP223.PROD.OUTLOOK.COM (2603:10b6:806:26::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.20 via Frontend Transport; Thu, 26 Aug 2021 18:41:27 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (165.204.77.11) by SA9P223CA0012.NAMP223.PROD.OUTLOOK.COM (2603:10b6:806:26::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.20 via Frontend Transport; Thu, 26 Aug 2021 18:41:28 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d4defc85-c833-4f60-6c97-08d968c11daa
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2782:
+X-MS-Office365-Filtering-Correlation-Id: f2c841fe-c73d-4c2a-24e3-08d968c11e46
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4573:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SN6PR12MB27827E593556A13044240B6CE2C79@SN6PR12MB2782.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
+X-Microsoft-Antispam-PRVS: <SA0PR12MB45736874C81B544BDD914EB7E2C79@SA0PR12MB4573.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3e0uAOh5KyjUrrgYBiEFrhe82QRD+0B+Oy5QBujV15WYmbF8G6j9Y5Ayg38bJ7NVLTQY0Ius7GUcus5HTBjUIz2hty+5KSv2lrBbuhxLRz/5B+g9i21tlBYRnvevSJdzFJBl4F+/AHvL159X7oOxMIOkBTGYVeyM4K0dTCo1xlrv3quuRK36fkc3krqD5kGebPjlHy3oKmNm+n/etmu8pmFfBjYRzHTn9xPDgZHfVgQZL+vs0dV4p6AXS6/rTj1ruT1KgyLpgsnbqTvvG5Q17DWbldYP6F/qbQ733r6DtU5Fa93zLfTnvbtfhbYmWcNWM36lP2LV3RHherjiQWhul2EPkhfWwmtIAWK/cPHsEvZo6kKErY53gT2yXQ3P2joL0SnQjb9+yCre2dEE5mUSLYKHoC+S8agV41zNqWM2Ov2Uzit7hSCfPRvrKrUvJV56YCjMIR7DCyNifXgQCu5EAF1ZNCOYpSAukl/EHPVmigzuO1vwxKNbjun9jg1xc88CvklimUOQAbzSFG8xaFZWV88J0s8AxxjqShHgBRHGO9yiclgMAf79qrIKqa4t1aFLRi0ah5S5QkTGMIr9PpBYWUYwHJxI5j46P8KBC4HQx4d7VFKmHosMfjavZoaPn1ZkW1g1PyL/BwcxUI99iKTKBGUdN6SrWt8+SylPYT/ezURGRobFTnlJL+hHWckowD2jQhudAedYmfaCjLF5TbA3bA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4510.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(8676002)(26005)(54906003)(4326008)(38350700002)(186003)(8936002)(6486002)(5660300002)(38100700002)(1076003)(83380400001)(2616005)(956004)(36756003)(316002)(478600001)(66556008)(66946007)(2906002)(66476007)(6916009)(86362001)(6666004)(44832011)(7696005)(52116002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: IFGDgiauooKOKZxWZoQ6ebghKLaQ7Oh6XglJaCxM4TrHV16J4VFMGCkb3dHx0/ckN1wQOt8yKx/9/LeJDKKQubuJ8sK5s9x5VL/TJVesv16sCMiRpCgw1PiKP9ervZzp4vejB3TAF9IPSOiZ8GtypmZgsYu8paEPJILsooZcPrllWTsy8DvBVKt1k+tKVCqTFaGhWNB6mzdIIml4g6riGQmzcJcgRbdj7oinsY3cT6JK92iFDxnAy7toZtYr2z9atYmgXPdZrIaOf+uqRBUbi7FP1xGtt8ZFz3kg4pSsRZBr6qK9V9Hb1omhvvArNqGt4ua2BUCl/mKNHcpu/Y/5HAEXtmLXkaKPP0pF5smCrV/maeo9fMxR35aeORLth577258nV24uPYRE35UYP+7ObzQFN+I4dCH04ygLRoM+0Q3NEnRPfzyE0GOQH1m22gNGhhy17oNb2DRN4C1EXihhO3wX5IsvxLDhy5Xbb8oitebBmvFnawQ+rK3PBoEm/aPP4ph2BhrY0HIuZJF7mFhw792jmDWgKyPC0NKWkywoW17NGL7CHz5flSXkWTHjUSk7oy28w3zydbJrN8Kqfgb+shFMwQwnSSfeG5bex+rb6pzNo58KLIa6/D7VPVLa2zrRIjay1RZkLFnGHxQRCNE8Cn0kJ9btLlW2Kx2s1/Q3PAopParmGOK8LNUeT2pnNRg4RzoujpYGMHFDwOFH/0sn6w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4510.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(36756003)(38350700002)(66556008)(5660300002)(38100700002)(66946007)(6916009)(66476007)(8936002)(478600001)(86362001)(2906002)(4326008)(956004)(26005)(6486002)(186003)(7696005)(54906003)(52116002)(1076003)(316002)(83380400001)(2616005)(6666004)(8676002)(44832011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J1mcBZDQPim1qBpVVK5kLkMDU02Tzn7da2i0tk2BC4zO+mYDesFxZFaMN9ro?=
- =?us-ascii?Q?MLBMDm0va0O3kRwwJIa8XrJ6vtb3WXt9UFDlXco1/fIU6HTATPdGnoOKgZ9l?=
- =?us-ascii?Q?vuQ9zgzRnMWJKmyA+zT2yt2unlLecI8yIHd7tTSjiRZFmDTN6fHLYotiUVU6?=
- =?us-ascii?Q?+sxSt7rGY9hTmysayjUeoTBBtrul40GuFB8/F1PVjVoobLcUqczkCaKJSb4e?=
- =?us-ascii?Q?F2a+H4q9zrGEcvApcJIzaZcibOayrfCKeb2P1OIOUCJY7RpZN7p5k3eaj4uQ?=
- =?us-ascii?Q?/s10POmLwTMY5APWn/3pZlV50wJmWMYHf6UCK98uQYhhlHRFkrZCoQI2ax5e?=
- =?us-ascii?Q?+Ixs7vR55rL4TGMgam4gefswV/8L62RYAjOg8lk9cH2VRskJscGXxTrliv2j?=
- =?us-ascii?Q?Nt4dgijKMckanIdBdvjRrbBifYWYQGMUhYoDQF73uWtlWTcPC1ARVAEe38gu?=
- =?us-ascii?Q?DniGvMyoJ2+MWpka8EWJGYV/EVxgvHtx/9LAj7YPQ54crS0XqtF96WNkDysP?=
- =?us-ascii?Q?q9vZagdFxJ/sFzkmbdOPjG2A4q8y/OcypEFV2DyzFgDJdBpe2DhBlnDrOzlk?=
- =?us-ascii?Q?CX6ywVvIbsVDiSLNqexRb1iV9FapQXWZefGP74LDy4ZlxuSPbdvTMuefl81s?=
- =?us-ascii?Q?9FBQUKvURCE+EVIO58SfBi+8J8tNM+VtYN2hrCXCuVmLCor894nRdNhE4YBq?=
- =?us-ascii?Q?RjOrwR59lbefGPc8kNR+06lpISAnN5dfr09GiYUGTMTSe7x+/ysrMkqiGXZI?=
- =?us-ascii?Q?Saq3G2Bh1aCMx/KDDWMVTZgX/g7EkT81cgl/CH1AcX4UmhEQMIr3n025Y0oa?=
- =?us-ascii?Q?LD1gWBhODJgBVS0Mm72ta1LLJ/Ec1up/B6Jf5TbxUY+J+JEFzwKGJTmXCNDq?=
- =?us-ascii?Q?yiO13jB5oCgfUNwa41cbZYPFX/cJ+8if8DO9p1KXGO9dgM55i0ZgG0c2OQvf?=
- =?us-ascii?Q?V4tP9A8Ku5n0J1xBQos2ApVY14wXt6SggxBR+VJSPhD+cRUUaVGAEfNvdA5v?=
- =?us-ascii?Q?CXBSU3VEggL3KvZ5Ur+UWNz1xiZCusX9kU0hJLbueOpiul6l3hSHsYJARBaS?=
- =?us-ascii?Q?AZqa4+Xns2lLvt3nSkovQDkQ9ShreGbHukrYhe4nY3w/7aiT2//AJhuwlYlE?=
- =?us-ascii?Q?qBy/FIoBrpqtY1caUh4hoHTEusCZeNGYZxfAgpTMTJ6Y5LdgKXiryCepZc95?=
- =?us-ascii?Q?obIZHT1LqQ/cqT59frAwD79bKL1cboZrgmYmEk+LBdDlnS2NYanqixTF7wyE?=
- =?us-ascii?Q?bEdlQ6zC7MrP9jglwkFdWfiaYKYSpaGHAwAuvzkptepPdSXVTEqsOVLXJv/n?=
- =?us-ascii?Q?W3ZTqC3F8LCexQ2sl+q84rV8?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WsbVOgGbe1+y+v0snU+esjTCXnSW7Hjrt4Tm4WFPLunUJwb4pLXORP+brmDB?=
+ =?us-ascii?Q?FON0tJ4eHcOW0akQpJ79TwmaMR8k0ynMvZ7XBAlh6Mc3xJdtGjFAjnp468Qr?=
+ =?us-ascii?Q?ecPRU6koe0og7+54Gwi09+e3I1inqVi2BGXca/zei1+j/WRDx+vuQwXIGd4m?=
+ =?us-ascii?Q?zOX8iyjnvRe6zcksRg4Qmz9nesAu5lkZ0yViFWZGu5pxJ+TxUPTa3ZJd6LSP?=
+ =?us-ascii?Q?jEOb5q1JUzZKAPlvRFpM91gXSbjJjCfFLPg0t4WVbm143BPmTuW1c0NmeUjS?=
+ =?us-ascii?Q?s0EjEyH7XUF8cqT1A5cR6b0Vcq5g8PJ1aXbzzsffjScDp6k3ekcKPxlCbXkI?=
+ =?us-ascii?Q?sctev8A1wzhOmDgYEzp/HaQ36ATAR3wpnaQb45unsuhBlJtvwK6j0lijvzI4?=
+ =?us-ascii?Q?zqX0PrG8oYCw2CEfzb5AdAkgjEau+3dXb2dvgjSlyQpaxz35fRGYUEYHvA9u?=
+ =?us-ascii?Q?6aPU0ikb1TR3v+2ctGD+R/vVTEL3IGc3Byor5fcmj3eOxPTephC0h4HmoGD4?=
+ =?us-ascii?Q?ml/x7ryTwFDqGLyKyj+8G36HYSZOliP3VuvrHccfqshAOsCvIadS2Y7tvp1h?=
+ =?us-ascii?Q?tjrrw/IxFh9DS0qvZbW6H1afMvwLIE3KJDrh4W3iXkC0i9R2yX9Ap0sv1Ic/?=
+ =?us-ascii?Q?yHJL6ipV7mnyX8KtrjXVGp0bpnm3XzMz6h+2aaD0ExLJvPUYsLV6RHIgoTLq?=
+ =?us-ascii?Q?c9JsF9D0mNZmirBghY/T+5LBQa98mdF6fEXsujbvpljUuIiEDt+ktVy51mT7?=
+ =?us-ascii?Q?2wFBiFBpo1ssYm890wTMgP5T8ZTBGxtW885Xwoo180N+jZa9JbMAVUDQj+p3?=
+ =?us-ascii?Q?9HUpwtXA8EZ8VIsYi7Y0zXfrJ/Ma9Q3c3wtgiwvrDl8D6miEbiPl6aeKbvrx?=
+ =?us-ascii?Q?8tBJNAj0DVjkYPLar3pSaKoXWpKRWtSQGfJNB5PQHQgcnonfQdPn4DUqRpxw?=
+ =?us-ascii?Q?Je/oFKRHPAxqHSeZcOn0qWVhnMowCPoVaNQvxQs3ukWamms1LVexj/5Rg8dF?=
+ =?us-ascii?Q?4NrxX0lKiaOEISknSv/vW9Fs/KIDSyv52p/EcD0p65Cl/kllGFMzc7Rj/1RE?=
+ =?us-ascii?Q?7YV4nY5xiuxbUggcTmK+kJH+P6bgzbZNQPanVPvJi9SKacAhtj0dufpwzzIt?=
+ =?us-ascii?Q?8iqxXUdksG8LrB5qTfEhOwijneDtOz89RHCsuuJ+WSr0nCIAVbJeCV9Q2Gsg?=
+ =?us-ascii?Q?nty0WuB+WvIsz5dDaT9FDKVlSY6RSc/IuCiEO2YGYAqfgihFsFaF22HTFVf/?=
+ =?us-ascii?Q?4pzUGr9LHX6ppIduCDFGiKJNsE/ElLltzE5/BCkS4pPDEH6NNrzGmZOBLx4v?=
+ =?us-ascii?Q?7osj8muUn6K+Krox2Ez/DGBk?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4defc85-c833-4f60-6c97-08d968c11daa
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2c841fe-c73d-4c2a-24e3-08d968c11e46
 X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4510.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2021 18:41:28.6784
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2021 18:41:29.7228
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GHYGVa5tH15HPDxUp9RWWI70DwrBAWsTk88bQ4i48pUn1nBl3tJd0cIXiXaWDyTcFMP8Npn+aNgiAKG8x8hUig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2782
+X-MS-Exchange-CrossTenant-UserPrincipalName: wCZMjsG3bNm2lZO8ANL+j6s4kvowb8e2D5/KpSXGFAmjlDM2NT1M9WkGpD9Zdb7/QLb5gom2l/4B8nkUF/PDfg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4573
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Tdie is an offset calculation that should only be shown when temp_offset
-is actually put into a table.  This is useless to show for all CPU/APU.
-Show it only when necessary.
+Yellow carp matches same behavior as green sardine and other Zen3
+products, but have different CCD offsets.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/hwmon/k10temp.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/kernel/amd_nb.c | 5 +++++
+ drivers/hwmon/k10temp.c  | 5 +++++
+ include/linux/pci_ids.h  | 1 +
+ 3 files changed, 11 insertions(+)
 
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index cf41fd7faad7..ba768fe1d0ae 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -24,7 +24,9 @@
+ #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
+ #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
++#define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
+ #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
++#define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
+ #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
+ 
+ /* Protect the PCI config register pairs used for SMN and DF indirect access. */
+@@ -37,6 +39,7 @@ static const struct pci_device_id amd_root_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
+ 	{}
+ };
+ 
+@@ -58,6 +61,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M01H_DF_F3) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
+ 	{}
+ };
+@@ -74,6 +78,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F4) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+ 	{}
 diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 41d9c0c0a1f1..e8ec0e36fc3b 100644
+index e8ec0e36fc3b..cd3d30b6237c 100644
 --- a/drivers/hwmon/k10temp.c
 +++ b/drivers/hwmon/k10temp.c
-@@ -435,7 +435,6 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	} else if (boot_cpu_data.x86 == 0x17 || boot_cpu_data.x86 == 0x18) {
- 		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
- 		data->read_tempreg = read_tempreg_nb_zen;
--		data->show_temp |= BIT(TDIE_BIT);	/* show Tdie */
- 		data->is_zen = true;
- 
- 		switch (boot_cpu_data.x86_model) {
-@@ -457,7 +456,6 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	} else if (boot_cpu_data.x86 == 0x19) {
- 		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
- 		data->read_tempreg = read_tempreg_nb_zen;
--		data->show_temp |= BIT(TDIE_BIT);
- 		data->is_zen = true;
- 
- 		switch (boot_cpu_data.x86_model) {
-@@ -478,6 +476,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 		if (boot_cpu_data.x86 == entry->model &&
- 		    strstr(boot_cpu_data.x86_model_id, entry->id)) {
-+			data->show_temp |= BIT(TDIE_BIT);	/* show Tdie */
- 			data->temp_offset = entry->offset;
+@@ -465,6 +465,10 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 			data->ccd_offset = 0x154;
+ 			k10temp_get_ccd_support(pdev, data, 8);
  			break;
++		case 0x40 ... 0x4f:	/* Yellow Carp */
++			data->ccd_offset = 0x300;
++			k10temp_get_ccd_support(pdev, data, 8);
++			break;
  		}
+ 	} else {
+ 		data->read_htcreg = read_htcreg_pci;
+@@ -505,6 +509,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M01H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
+ 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{}
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index b2425a1574c7..f84ffa154db1 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -555,6 +555,7 @@
+ #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
+ #define PCI_DEVICE_ID_AMD_19H_M01H_DF_F3 0x1653
++#define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3 0x167c
+ #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3 0x166d
+ #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
+ #define PCI_DEVICE_ID_AMD_LANCE		0x2000
 -- 
 2.25.1
 
