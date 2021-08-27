@@ -2,309 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6637C432BE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 16:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D230C432BE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 16:44:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB9B460EE4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 16:25:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 570CE60F14
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 16:44:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbhH0QZv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Aug 2021 12:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S230007AbhH0Qpd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Aug 2021 12:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbhH0QZu (ORCPT
+        with ESMTP id S229562AbhH0Qpd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Aug 2021 12:25:50 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E5DC0613D9
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 09:25:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id q21so4260957plq.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 09:25:01 -0700 (PDT)
+        Fri, 27 Aug 2021 12:45:33 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E2EC061757
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 09:44:44 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id q11-20020a9d4b0b000000b0051acbdb2869so3684772otf.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 09:44:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=olUZYI52FUW5gVkrVAMR5duictYeHKMMzQr6nXakedQ=;
-        b=aNaHRKsiD+SM+Lu9zvZtUAsPhN72aJZEO5ggEUbd+9i2E2zx+tYCvMVsH57GRkwHdf
-         TEaqxgEcVqpk2OQ9H7VyX1+9BLBU1szPxLHX49NuTsQbgdwMV28fkCyIXIQW5Xd+QD3R
-         WQ8/mhACDBZ1RuZyFTGtQQEZWkuERfp+C3Hd1pWoNSnZkvtdCCCdX43x97hoWme9ZdEO
-         45oFzDbvZXtq0iWx7LSdO55FY2oYiiyByKOWYg3IoUUbV30sBk3aaucbioyl2Cd8PO6k
-         bo+KZEykhRVe2BTh/XS6P2KQyoHNyAxEkUHVXaf1/Vmq1vtUC/5rzUkbwFKRZBjsF7bZ
-         26nA==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=CT59uNSuzYfeNo3EgjlVASYA+oI+29Lr1USkS0J8RjY=;
+        b=qEr9N9FkEkFj3r6wPGDED45t3zzbTRXzQDS2f+L8nWPS1kJ9EMijXJZvrXFAt7iXj9
+         1Q8eZyKsrnhkKwSJE6F5ZS778apvkhDJg86sGQEACwCmhUBwZfBLQ6hMjNqjKZzh057L
+         5y8Lfo+lChoFi1Rg5PBY9rnotp3LQ1sEGJYwF2ku8/qFxBkU4S7oLcbSp5IzKRFaH+Ev
+         pMJTUWdtPh7gWEMhCKrhBPL+Tw7B1bOaVdbSM9u0lJJB2+Uj4wMl8qJWGklamb+LlJDE
+         gWM6XLQ9GRI7rpcNSJiu6/xaLEoNzrJjdCW1UCeengdhSgv+UTvgLO/QYu75saAuWhVA
+         npSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=olUZYI52FUW5gVkrVAMR5duictYeHKMMzQr6nXakedQ=;
-        b=YptALpCptRDu08co8UBqdTAD4vr6WQFcp2VrMHpzIdAhN+s7SgQD1CpKIqWt3EW8RI
-         gCm9mTe8u+jn0zBMIh2pzov/h63zbignQR5fwwhTyfyNoTDVM1+oULwJtpL46vWA2/by
-         pqqxGE4Q7O3WRar2PEI5If50lJV7YxmH/FRrPCChsCqMDqZdgYh55YWUjHxW+GSGbIyP
-         P8ogn3DdykUbSNAb2VeB+fE4/HW5ERhyiNnwVzEcqT4na46oWBnxHe2S+VrpkhvJcN8o
-         5Q5bBwIUAyS9B2i1e83UPZnKsW9rUEMn2MpydBA832eXLAQJdRvLB/j9ENN7gq6gXfNZ
-         90DA==
-X-Gm-Message-State: AOAM532R8Oc/A99d+XfBLGQ22MhwQM7bqFEnsJxqX06ggPyHqVGUJnOM
-        +X0vVfQ8snxD2rHI585eQWs7kmSJv8cIl/AQcpT+ug==
-X-Google-Smtp-Source: ABdhPJy9Fys2MKe+4NKONrWKg51ffmdsBaOmd1A6Uev8PSTHXgB2mLpKO7Fg2ktC2vZ1DnSMGf/U9PYBzR/IUsq76cs=
-X-Received: by 2002:a17:90a:708c:: with SMTP id g12mr24462608pjk.13.1630081500678;
- Fri, 27 Aug 2021 09:25:00 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=CT59uNSuzYfeNo3EgjlVASYA+oI+29Lr1USkS0J8RjY=;
+        b=fGv0rr4ZONRhmsMjYc7r4GB/b4dHTwyRGK30oHnOeA0vtFpJB+TS/6uweWMfb0V7zG
+         T0ZxsEGIztzsL55dP3oboV5cXwHFJw3IRnxigMZAweU+bYksqnly/eERFNsxScBpDZ83
+         R2BmlfDSptwMiIgVZORi7HR1wwTARSTjl8xMH4sKQxfseel6X0zdZM0cSXSMiT6QYLDk
+         MZCsVWRmXett5tdxBrBNjuhigMCVHeD4Ek6LpMoSOtAiQj5ah4Uw3+BfVGjjnWq95Wl2
+         I1K14th1SBQyaSGlgGiah7AGDcAZBgZw+F7PFF9x+3QZIZDpKVVfwmTAMvlj4kbl4vC3
+         DUlg==
+X-Gm-Message-State: AOAM532BPiaRHx9w4j303d0HWwaDdeIQdRnGOymQ7EpDxvbogg0JPr1p
+        S9iJYjB7ilkAfLpoh+WP+68=
+X-Google-Smtp-Source: ABdhPJxOMruFphbJK5UF9+egXpQrax6HUO6L++8ESMgKeX8tFp6gHG6xS/d1gIEfZ4o++XVFRv4rbw==
+X-Received: by 2002:a05:6830:2904:: with SMTP id z4mr8739087otu.121.1630082683753;
+        Fri, 27 Aug 2021 09:44:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r1sm1294167ooi.21.2021.08.27.09.44.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Aug 2021 09:44:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 27 Aug 2021 09:44:40 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Clemens Ladisch <clemens@ladisch.de>, linux-hwmon@vger.kernel.org,
+        Gabriel Craciunescu <nix.or.die@googlemail.com>,
+        Wei Huang <wei.huang2@amd.com>
+Subject: Re: [PATCH 1/6] hwmon: (k10temp): Add additional missing Zen2 and
+ Zen3 APUs
+Message-ID: <20210827164440.GA1751163@roeck-us.net>
 MIME-Version: 1.0
-References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
- <20210803113134.2262882-8-iwona.winiarska@intel.com> <CAPcyv4jPVSt9Wr2TkDActFVLP+ygaDwBnsKG410Nf1qfP_MB9A@mail.gmail.com>
- <b26ee278838698289869964fe59578f0d5f7b19c.camel@intel.com>
-In-Reply-To: <b26ee278838698289869964fe59578f0d5f7b19c.camel@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 27 Aug 2021 09:24:49 -0700
-Message-ID: <CAPcyv4hUm0Ec1+_n0PZ+S0A9Tt1=8oLdeYtEiEnAmntm8PtmKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 07/15] peci: Add peci-aspeed controller driver
-To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
-        "d.mueller@elsoft.ch" <d.mueller@elsoft.ch>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "zweiss@equinix.com" <zweiss@equinix.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 26, 2021 at 4:55 PM Winiarska, Iwona
-<iwona.winiarska@intel.com> wrote:
->
-> On Wed, 2021-08-25 at 18:35 -0700, Dan Williams wrote:
-> > On Tue, Aug 3, 2021 at 4:35 AM Iwona Winiarska
-> > <iwona.winiarska@intel.com> wrote:
-> > >
-> > > From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> > >
-> > > ASPEED AST24xx/AST25xx/AST26xx SoCs supports the PECI electrical
-> > > interface (a.k.a PECI wire).
-> >
-> > Maybe a one sentence blurb here and in the Kconfig reminding people
-> > why they should care if they have a PECI driver or not?
->
-> Ok, I'll expand it a bit.
-[..]
-> > > +static int aspeed_peci_xfer(struct peci_controller *controller,
-> > > +                           u8 addr, struct peci_request *req)
-> > > +{
-> > > +       struct aspeed_peci *priv = dev_get_drvdata(controller->dev.parent);
-> > > +       unsigned long flags, timeout = msecs_to_jiffies(priv-
-> > > >cmd_timeout_ms);
-> > > +       u32 peci_head;
-> > > +       int ret;
-> > > +
-> > > +       if (req->tx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX ||
-> > > +           req->rx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX)
-> > > +               return -EINVAL;
-> > > +
-> > > +       /* Check command sts and bus idle state */
-> > > +       ret = aspeed_peci_check_idle(priv);
-> > > +       if (ret)
-> > > +               return ret; /* -ETIMEDOUT */
-> > > +
-> > > +       spin_lock_irqsave(&priv->lock, flags);
-> > > +       reinit_completion(&priv->xfer_complete);
-> > > +
-> > > +       peci_head = FIELD_PREP(ASPEED_PECI_TARGET_ADDR_MASK, addr) |
-> > > +                   FIELD_PREP(ASPEED_PECI_WR_LEN_MASK, req->tx.len) |
-> > > +                   FIELD_PREP(ASPEED_PECI_RD_LEN_MASK, req->rx.len);
-> > > +
-> > > +       writel(peci_head, priv->base + ASPEED_PECI_RW_LENGTH);
-> > > +
-> > > +       memcpy_toio(priv->base + ASPEED_PECI_WR_DATA0, req->tx.buf,
-> > > min_t(u8, req->tx.len, 16));
-> > > +       if (req->tx.len > 16)
-> > > +               memcpy_toio(priv->base + ASPEED_PECI_WR_DATA4, req->tx.buf +
-> > > 16,
-> > > +                           req->tx.len - 16);
-> > > +
-> > > +       dev_dbg(priv->dev, "HEAD : 0x%08x\n", peci_head);
-> > > +       print_hex_dump_bytes("TX : ", DUMP_PREFIX_NONE, req->tx.buf, req-
-> > > >tx.len);
-> >
-> > On CONFIG_DYNAMIC_DEBUG=n builds the kernel will do all the work of
-> > reading through this buffer, but skip emitting it. Are you sure you
-> > want to pay that overhead for every transaction?
->
-> I can remove it or I can add something like:
->
-> #if IS_ENABLED(CONFIG_PECI_DEBUG)
-> #define peci_debug(fmt, ...) pr_debug(fmt, ##__VA_ARGS__)
-> #else
-> #define peci_debug(...) do { } while (0)
-> #endif
+On Thu, Aug 26, 2021 at 01:40:52PM -0500, Mario Limonciello wrote:
+> These follow the rest of the existing codepaths for families
+> 17h and 19h.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-It's the hex dump I'm worried about, not the debug statements as much.
+Applied.
 
-I think the choices are remove the print_hex_dump_bytes(), put it
-behind an IS_ENABLED(CONFIG_DYNAMIC_DEBUG) to ensure the overhead is
-skipped in the CONFIG_DYNAMIC_DEBUG=n case, or live with the overhead
-if this is not a fast path / infrequently used.
+Thanks,
+Guenter
 
->
-> (and similar peci_trace with trace_printk for usage in IRQ handlers and such).
->
-> What do you think?
-
-In general, no, don't wrap the base level print routines with
-driver-specific ones. Also, trace_printk() is only for debug builds.
-Note that trace points are built to be even less overhead than
-dev_dbg(), so there's no overhead concern with disabled tracepoints,
-they literally translate to nops when disabled.
-
->
-> >
-> > > +
-> > > +       priv->status = 0;
-> > > +       writel(ASPEED_PECI_CMD_FIRE, priv->base + ASPEED_PECI_CMD);
-> > > +       spin_unlock_irqrestore(&priv->lock, flags);
-> > > +
-> > > +       ret = wait_for_completion_interruptible_timeout(&priv-
-> > > >xfer_complete, timeout);
-> >
-> > spin_lock_irqsave() says "I don't know if interrupts are disabled
-> > already, so I'll save the state, whatever it is, and restore later"
-> >
-> > wait_for_completion_interruptible_timeout() says "I know I am in a
-> > sleepable context where interrupts are enabled"
-> >
-> > So, one of those is wrong, i.e. should it be spin_{lock,unlock}_irq()?
->
-> You're right - I'll fix it.
->
-> >
-> >
-> > > +       if (ret < 0)
-> > > +               return ret;
-> > > +
-> > > +       if (ret == 0) {
-> > > +               dev_dbg(priv->dev, "Timeout waiting for a response!\n");
-> > > +               return -ETIMEDOUT;
-> > > +       }
-> > > +
-> > > +       spin_lock_irqsave(&priv->lock, flags);
-> > > +
-> > > +       writel(0, priv->base + ASPEED_PECI_CMD);
-> > > +
-> > > +       if (priv->status != ASPEED_PECI_INT_CMD_DONE) {
-> > > +               spin_unlock_irqrestore(&priv->lock, flags);
-> > > +               dev_dbg(priv->dev, "No valid response!\n");
-> > > +               return -EIO;
-> > > +       }
-> > > +
-> > > +       spin_unlock_irqrestore(&priv->lock, flags);
-> > > +
-> > > +       memcpy_fromio(req->rx.buf, priv->base + ASPEED_PECI_RD_DATA0,
-> > > min_t(u8, req->rx.len, 16));
-> > > +       if (req->rx.len > 16)
-> > > +               memcpy_fromio(req->rx.buf + 16, priv->base +
-> > > ASPEED_PECI_RD_DATA4,
-> > > +                             req->rx.len - 16);
-> > > +
-> > > +       print_hex_dump_bytes("RX : ", DUMP_PREFIX_NONE, req->rx.buf, req-
-> > > >rx.len);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static irqreturn_t aspeed_peci_irq_handler(int irq, void *arg)
-> > > +{
-> > > +       struct aspeed_peci *priv = arg;
-> > > +       u32 status;
-> > > +
-> > > +       spin_lock(&priv->lock);
-> > > +       status = readl(priv->base + ASPEED_PECI_INT_STS);
-> > > +       writel(status, priv->base + ASPEED_PECI_INT_STS);
-> > > +       priv->status |= (status & ASPEED_PECI_INT_MASK);
-> > > +
-> > > +       /*
-> > > +        * In most cases, interrupt bits will be set one by one but also
-> > > note
-> > > +        * that multiple interrupt bits could be set at the same time.
-> > > +        */
-> > > +       if (status & ASPEED_PECI_INT_BUS_TIMEOUT)
-> > > +               dev_dbg_ratelimited(priv->dev,
-> > > "ASPEED_PECI_INT_BUS_TIMEOUT\n");
-> > > +
-> > > +       if (status & ASPEED_PECI_INT_BUS_CONTENTION)
-> > > +               dev_dbg_ratelimited(priv->dev,
-> > > "ASPEED_PECI_INT_BUS_CONTENTION\n");
-> > > +
-> > > +       if (status & ASPEED_PECI_INT_WR_FCS_BAD)
-> > > +               dev_dbg_ratelimited(priv->dev,
-> > > "ASPEED_PECI_INT_WR_FCS_BAD\n");
-> > > +
-> > > +       if (status & ASPEED_PECI_INT_WR_FCS_ABORT)
-> > > +               dev_dbg_ratelimited(priv->dev,
-> > > "ASPEED_PECI_INT_WR_FCS_ABORT\n");
-> >
-> > Are you sure these would not be better as tracepoints? If you're
-> > debugging an interrupt related failure, the ratelimiting might get in
-> > your way when you really need to know when one of these error
-> > interrupts fire relative to another event.
->
-> Tracepoints are ABI(ish), and using a full blown tracepoint just for IRQ status
-> would probably be too much.
-
-Tracepoints become ABI once someone ships tooling that depends on them
-being there. These don't look  attractive for a tool, and they don't
-look difficult to maintain if the interrupt handler needs to be
-reworked. I.e. it would be trivial to keep a dead tracepoint around if
-worse came to worse to keep a tool from failing to load.
-
-> I was thinking about something like trace_printk hidden under a
-> "CONFIG_PECI_DEBUG" (see above), but perhaps that's something for the future
-> improvement?
-
-Again trace_printk() is only for private builds.
-
->
-> >
-> > > +
-> > > +       /*
-> > > +        * All commands should be ended up with a ASPEED_PECI_INT_CMD_DONE
-> > > bit
-> > > +        * set even in an error case.
-> > > +        */
-> > > +       if (status & ASPEED_PECI_INT_CMD_DONE)
-> > > +               complete(&priv->xfer_complete);
-> >
-> > Hmm, no need to check if there was a sequencing error, like a command
-> > was never submitted?
->
-> It's handled by checking if HW is idle in xfer before a command is sent, where
-> we just expect a single interrupt per command.
-
-I'm asking how do you determine if this status was spurious, or there
-was a sequencing error in the driver?
+> ---
+>  drivers/hwmon/k10temp.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index fe3d92152e35..1d3c8d319941 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -437,6 +437,8 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  			k10temp_get_ccd_support(pdev, data, 4);
+>  			break;
+>  		case 0x31:	/* Zen2 Threadripper */
+> +		case 0x60:	/* Renoir */
+> +		case 0x68:	/* Lucienne */
+>  		case 0x71:	/* Zen2 */
+>  			k10temp_get_ccd_support(pdev, data, 8);
+>  			break;
+> @@ -450,7 +452,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		switch (boot_cpu_data.x86_model) {
+>  		case 0x0 ... 0x1:	/* Zen3 SP3/TR */
+>  		case 0x21:		/* Zen3 Ryzen Desktop */
+> -		case 0x50:		/* Zen3 Ryzen APU */
+> +		case 0x50 ... 0x5f:	/* Green Sardine */
+>  			k10temp_get_ccd_support(pdev, data, 8);
+>  			break;
+>  		}
+> -- 
+> 2.25.1
+> 
