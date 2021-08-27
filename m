@@ -4,127 +4,395 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C16C432BE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 16:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE705C4320A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 19:01:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6875D60F35
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 16:48:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9907B608FB
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 19:01:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbhH0Qt0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Aug 2021 12:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
+        id S230371AbhH0TCL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Aug 2021 15:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbhH0Qt0 (ORCPT
+        with ESMTP id S230329AbhH0TCG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Aug 2021 12:49:26 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AABC061757
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 09:48:37 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id q39so10285017oiw.12
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 09:48:37 -0700 (PDT)
+        Fri, 27 Aug 2021 15:02:06 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C06C061796
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 12:01:17 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id q3so4517482plx.4
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 12:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=YrtmyI0qBKGV52TQK4NPfOaak1LrQJMv2nkkcBjxzDs=;
-        b=m2BxHvu6jl6dEHLTe4G96BD8be5FtK7+Hr+qoGnu3rE3knedA2v0E1LJSCWyU1lxl1
-         tv/bNvZMYPFvzkKXjWeVLcgjdmJ11GlCQSiZ2riXQ260hqcIjtsUoQfN2pLM2XKsppQG
-         JFEc5yCD3G08yQaQT3tYPlTfCDMGyGMHHzJyefMKCq8pvMAYHCrOSB+I35rg35FX6jY5
-         DEiyKXkMDBve07ofD5slI4/e5sZLtFFtiVJ9hHLHOr9NV3MxaNcl8n5g2M8Z+f/l1nyh
-         58+3CDagef4lx9aEdWFf7ROfqHv2guCy/XSzLVb4FpyEpHDvM9H8P3/ptz6A0clAmM3+
-         VflA==
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x/U7J2zbHihSdDWyMksV/TtPa1+B5X6iFwKDUZ4o7Zw=;
+        b=sNiLRr0jnkRhT0wgY8kV7FUDGk9UCmwtOo4CLz4mVmrUvRZQ1k66UkBAaWVrf05Pf8
+         SidchKjAWmO5yBjR3lsgVTfcfRVxHsuBcVJZ2EETSlxr8GqGehoDyG7mmX+69YR5nBCf
+         UPBEcajkZB1mkw2BNgnhBSOvBNh9gxFqAozC7nbTpCvzSbNEgrgiHj4F1m8HwIDGE3JJ
+         aewbwFkDW1E8r78472WlBd9AoO0zutKNwJI+S7M3TUUxUpyubMeQPR5Ry7NSVZxXK32A
+         8BVGTGjzDFculpRZeheVLC7E5i1R2SxEtUNyn2wqpMBdBkUxFH3cIM9p8hpOd0avFJjK
+         dk4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=YrtmyI0qBKGV52TQK4NPfOaak1LrQJMv2nkkcBjxzDs=;
-        b=cF75ZvrUPdEU4QZbAeXBVve4NsNWF1tqCTQ+gcYo4E36poW1dU+KkUHYtXA/eWKRYZ
-         qSHki1k5zngDHmK3sRCp7bToQXJrna098LhTv8BZuqJ8teJHChJDnWm7t1H7whbAfD+P
-         ++ynxLVd2HOZWDFoQiQ9EdoBVvL59B29qCzl9RVil04Fux+wyLAQ3HqayouJrwaIRCSj
-         vBqmWyQlF9ZRGfjjkNeCZ82QbqsplYN5xDDUahjLtQ6jah0tfBtqRDjgXYdVjmpZuQwT
-         W3LKDMJ8kwV/ev/r01H7JSL2STa32M9H627+FygJQtSn+o//JkTbxv/XcNr4AIhmAxOf
-         /rRw==
-X-Gm-Message-State: AOAM531uiSM7xd9a/PjkNsVSrJhk/XjxgRgLYrOv5SDDJiGwu/u/PSqO
-        ++vZRR2dTDYBG64Yc0Oix6Y=
-X-Google-Smtp-Source: ABdhPJxtj7xGl9Uxu6T+k0/L8Z2OhWQIFjpv4O/NYBxR7Qz6GMao9g/LKA99IGCeXxxKHlF0YCtehw==
-X-Received: by 2002:a05:6808:46:: with SMTP id v6mr6931944oic.61.1630082916906;
-        Fri, 27 Aug 2021 09:48:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 14sm1383258otl.78.2021.08.27.09.48.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 09:48:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 27 Aug 2021 09:48:35 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Clemens Ladisch <clemens@ladisch.de>, linux-hwmon@vger.kernel.org,
-        Gabriel Craciunescu <nix.or.die@googlemail.com>,
-        Wei Huang <wei.huang2@amd.com>
-Subject: Re: [PATCH 5/6] hwmon: (k10temp): Don't show Tdie for all
- Zen/Zen2/Zen3 CPU/APU
-Message-ID: <20210827164835.GA1754417@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x/U7J2zbHihSdDWyMksV/TtPa1+B5X6iFwKDUZ4o7Zw=;
+        b=Txy0WFs6Si8a/VFXCopGBeIPPHmyz8qyW9Lfq8Yx+7TswUabTPSFNvqDYstWPmi+Ih
+         MkAbmJc7zvCKCPI53dKX65MZM4kCPbcq2Wgu6iVNhzNuUC9M2JTTChKgUfGrTQEsbpAx
+         kODGvDdS4Q2ZbkQtI7yuX/UVu5YRwuql3dKgGJFxnTPs+s4sooMVE5Wqt11GY2YQLAYB
+         CmEvWgp4IASK+9cgUnIBLf4VO10CCJb55EedFNdpD+HBAGJO9cqM9JsCPc9pPS9hNt6y
+         ddrsC6GZNKGQ7sGtQp2avsLl8zLXvcJSztThylMjsYQX2RuWMHe2pgzo55e32O8FnJze
+         nquA==
+X-Gm-Message-State: AOAM531CCzcjTIPES9obJuo+XsvgfPOR08KdImfE92gBugHKQvMiGvRW
+        vCaz1ttpF680Fi/H6rOVc5Zar4Lr1uY2TZwNhsDEEQ==
+X-Google-Smtp-Source: ABdhPJyDHGtcUmamBi1VJ/OEE/F574NsPBSWaCUCkgBo2sbiTYmr6i2tzPq3PLz1T1+kWen10Mmg+phyLSrOwyeHzHE=
+X-Received: by 2002:a17:902:ba90:b0:135:6709:705 with SMTP id
+ k16-20020a170902ba9000b0013567090705mr9825009pls.79.1630090877059; Fri, 27
+ Aug 2021 12:01:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20210803113134.2262882-1-iwona.winiarska@intel.com> <20210803113134.2262882-9-iwona.winiarska@intel.com>
+In-Reply-To: <20210803113134.2262882-9-iwona.winiarska@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 27 Aug 2021 12:01:06 -0700
+Message-ID: <CAPcyv4hPLReB6wGTDBM_tnqRUXxNASFCtgCw0=aDW+PPfSJ57A@mail.gmail.com>
+Subject: Re: [PATCH v2 08/15] peci: Add device detection
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        X86 ML <x86@kernel.org>,
+        Device Tree <devicetree@vger.kernel.org>,
+        linux-aspeed@lists.ozlabs.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 26, 2021 at 01:40:56PM -0500, Mario Limonciello wrote:
-> Tdie is an offset calculation that should only be shown when temp_offset
-> is actually put into a table.  This is useless to show for all CPU/APU.
-> Show it only when necessary.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Applied.
-
-I won't apply the other patches of the series because they either have issues
-or need approval from x86/pci maintainers. No reason to hold up this one
-or the first patch of the series, though.
-
-Side note: I accepted this patch because it _seems_ like hwinfo64
-does something similar. I do hope, though, that the assertion made
-in the patch description is correct and that this doesn't miss CPUs
-where there is a (logical or real) difference between Tctl and Tdie.
-
-Guenter
-
+On Tue, Aug 3, 2021 at 4:35 AM Iwona Winiarska
+<iwona.winiarska@intel.com> wrote:
+>
+> Since PECI devices are discoverable, we can dynamically detect devices
+> that are actually available in the system.
+>
+> This change complements the earlier implementation by rescanning PECI
+> bus to detect available devices. For this purpose, it also introduces the
+> minimal API for PECI requests.
+>
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 > ---
->  drivers/hwmon/k10temp.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 41d9c0c0a1f1..e8ec0e36fc3b 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -435,7 +435,6 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	} else if (boot_cpu_data.x86 == 0x17 || boot_cpu_data.x86 == 0x18) {
->  		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
->  		data->read_tempreg = read_tempreg_nb_zen;
-> -		data->show_temp |= BIT(TDIE_BIT);	/* show Tdie */
->  		data->is_zen = true;
->  
->  		switch (boot_cpu_data.x86_model) {
-> @@ -457,7 +456,6 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	} else if (boot_cpu_data.x86 == 0x19) {
->  		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
->  		data->read_tempreg = read_tempreg_nb_zen;
-> -		data->show_temp |= BIT(TDIE_BIT);
->  		data->is_zen = true;
->  
->  		switch (boot_cpu_data.x86_model) {
-> @@ -478,6 +476,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  
->  		if (boot_cpu_data.x86 == entry->model &&
->  		    strstr(boot_cpu_data.x86_model_id, entry->id)) {
-> +			data->show_temp |= BIT(TDIE_BIT);	/* show Tdie */
->  			data->temp_offset = entry->offset;
->  			break;
->  		}
-> -- 
-> 2.25.1
-> 
+>  drivers/peci/Makefile   |   2 +-
+>  drivers/peci/core.c     |  33 ++++++++++++
+>  drivers/peci/device.c   | 114 ++++++++++++++++++++++++++++++++++++++++
+>  drivers/peci/internal.h |  14 +++++
+>  drivers/peci/request.c  |  50 ++++++++++++++++++
+>  5 files changed, 212 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/peci/device.c
+>  create mode 100644 drivers/peci/request.c
+>
+> diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
+> index 926d8df15cbd..c5f9d3fe21bb 100644
+> --- a/drivers/peci/Makefile
+> +++ b/drivers/peci/Makefile
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>
+>  # Core functionality
+> -peci-y := core.o
+> +peci-y := core.o request.o device.o
+>  obj-$(CONFIG_PECI) += peci.o
+>
+>  # Hardware specific bus drivers
+> diff --git a/drivers/peci/core.c b/drivers/peci/core.c
+> index 7b3938af0396..d143f1a7fe98 100644
+> --- a/drivers/peci/core.c
+> +++ b/drivers/peci/core.c
+> @@ -34,6 +34,20 @@ struct device_type peci_controller_type = {
+>         .release        = peci_controller_dev_release,
+>  };
+>
+> +static int peci_controller_scan_devices(struct peci_controller *controller)
+> +{
+> +       int ret;
+> +       u8 addr;
+> +
+> +       for (addr = PECI_BASE_ADDR; addr < PECI_BASE_ADDR + PECI_DEVICE_NUM_MAX; addr++) {
+> +               ret = peci_device_create(controller, addr);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static struct peci_controller *peci_controller_alloc(struct device *dev,
+>                                                      struct peci_controller_ops *ops)
+>  {
+> @@ -76,10 +90,23 @@ static struct peci_controller *peci_controller_alloc(struct device *dev,
+>         return ERR_PTR(ret);
+>  }
+>
+> +static int unregister_child(struct device *dev, void *dummy)
+> +{
+> +       peci_device_destroy(to_peci_device(dev));
+> +
+> +       return 0;
+> +}
+> +
+>  static void unregister_controller(void *_controller)
+>  {
+>         struct peci_controller *controller = _controller;
+>
+> +       /*
+> +        * Detach any active PECI devices. This can't fail, thus we do not
+> +        * check the returned value.
+> +        */
+> +       device_for_each_child_reverse(&controller->dev, NULL, unregister_child);
+> +
+>         device_unregister(&controller->dev);
+>  }
+>
+> @@ -115,6 +142,12 @@ struct peci_controller *devm_peci_controller_add(struct device *dev,
+>         if (ret)
+>                 return ERR_PTR(ret);
+>
+> +       /*
+> +        * Ignoring retval since failures during scan are non-critical for
+> +        * controller itself.
+> +        */
+> +       peci_controller_scan_devices(controller);
+> +
+>         return controller;
+>
+>  err:
+> diff --git a/drivers/peci/device.c b/drivers/peci/device.c
+> new file mode 100644
+> index 000000000000..32811248997b
+> --- /dev/null
+> +++ b/drivers/peci/device.c
+> @@ -0,0 +1,114 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +// Copyright (c) 2018-2021 Intel Corporation
+> +
+> +#include <linux/peci.h>
+> +#include <linux/slab.h>
+> +
+> +#include "internal.h"
+> +
+> +static int peci_detect(struct peci_controller *controller, u8 addr)
+> +{
+> +       struct peci_request *req;
+> +       int ret;
+> +
+> +       /*
+> +        * PECI Ping is a command encoded by tx_len = 0, rx_len = 0.
+> +        * We expect correct Write FCS if the device at the target address
+> +        * is able to respond.
+> +        */
+> +       req = peci_request_alloc(NULL, 0, 0);
+> +       if (!req)
+> +               return -ENOMEM;
+
+Seems a waste to do a heap allocation for this routine. Why not:
+
+       /*
+        * PECI Ping is a command encoded by tx_len = 0, rx_len = 0.
+        * We expect correct Write FCS if the device at the target address
+        * is able to respond.
+        */
+       struct peci_request req = { 0 };
+
+> +
+> +       mutex_lock(&controller->bus_lock);
+> +       ret = controller->ops->xfer(controller, addr, req);
+> +       mutex_unlock(&controller->bus_lock);
+> +
+> +       peci_request_free(req);
+> +
+> +       return ret;
+> +}
+> +
+> +static bool peci_addr_valid(u8 addr)
+> +{
+> +       return addr >= PECI_BASE_ADDR && addr < PECI_BASE_ADDR + PECI_DEVICE_NUM_MAX;
+> +}
+> +
+> +static int peci_dev_exists(struct device *dev, void *data)
+> +{
+> +       struct peci_device *device = to_peci_device(dev);
+> +       u8 *addr = data;
+> +
+> +       if (device->addr == *addr)
+> +               return -EBUSY;
+> +
+> +       return 0;
+> +}
+> +
+> +int peci_device_create(struct peci_controller *controller, u8 addr)
+> +{
+> +       struct peci_device *device;
+> +       int ret;
+> +
+> +       if (WARN_ON(!peci_addr_valid(addr)))
+
+The WARN_ON is overkill, especially as there is only one caller of
+this and it loops through valid addresses.
+
+> +               return -EINVAL;
+> +
+> +       /* Check if we have already detected this device before. */
+> +       ret = device_for_each_child(&controller->dev, &addr, peci_dev_exists);
+> +       if (ret)
+> +               return 0;
+> +
+> +       ret = peci_detect(controller, addr);
+> +       if (ret) {
+> +               /*
+> +                * Device not present or host state doesn't allow successful
+> +                * detection at this time.
+> +                */
+> +               if (ret == -EIO || ret == -ETIMEDOUT)
+> +                       return 0;
+> +
+> +               return ret;
+> +       }
+> +
+> +       device = kzalloc(sizeof(*device), GFP_KERNEL);
+> +       if (!device)
+> +               return -ENOMEM;
+> +
+> +       device->addr = addr;
+> +       device->dev.parent = &controller->dev;
+> +       device->dev.bus = &peci_bus_type;
+> +       device->dev.type = &peci_device_type;
+> +
+> +       ret = dev_set_name(&device->dev, "%d-%02x", controller->id, device->addr);
+> +       if (ret)
+> +               goto err_free;
+
+It's cleaner to just have one unified error exit using put_device().
+Use the device_initialize() + device_add() pattern, not
+device_register().
+
+
+> +
+> +       ret = device_register(&device->dev);
+> +       if (ret)
+> +               goto err_put;
+> +
+> +       return 0;
+> +
+> +err_put:
+> +       put_device(&device->dev);
+> +err_free:
+> +       kfree(device);
+> +
+> +       return ret;
+> +}
+> +
+> +void peci_device_destroy(struct peci_device *device)
+> +{
+> +       device_unregister(&device->dev);
+
+No clear value for this wrapper, in fact in one caller it causes it to
+do a to_peci_device() just this helper can undo that up-cast.
+
+> +}
+> +
+> +static void peci_device_release(struct device *dev)
+> +{
+> +       struct peci_device *device = to_peci_device(dev);
+> +
+> +       kfree(device);
+> +}
+> +
+> +struct device_type peci_device_type = {
+> +       .release        = peci_device_release,
+> +};
+> diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
+> index 918dea745a86..57d11a902c5d 100644
+> --- a/drivers/peci/internal.h
+> +++ b/drivers/peci/internal.h
+> @@ -8,6 +8,20 @@
+>  #include <linux/types.h>
+>
+>  struct peci_controller;
+> +struct peci_device;
+> +struct peci_request;
+> +
+> +/* PECI CPU address range 0x30-0x37 */
+> +#define PECI_BASE_ADDR         0x30
+> +#define PECI_DEVICE_NUM_MAX    8
+> +
+> +struct peci_request *peci_request_alloc(struct peci_device *device, u8 tx_len, u8 rx_len);
+> +void peci_request_free(struct peci_request *req);
+> +
+> +extern struct device_type peci_device_type;
+> +
+> +int peci_device_create(struct peci_controller *controller, u8 addr);
+> +void peci_device_destroy(struct peci_device *device);
+>
+>  extern struct bus_type peci_bus_type;
+>
+> diff --git a/drivers/peci/request.c b/drivers/peci/request.c
+> new file mode 100644
+> index 000000000000..81b567bc7b87
+> --- /dev/null
+> +++ b/drivers/peci/request.c
+> @@ -0,0 +1,50 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +// Copyright (c) 2021 Intel Corporation
+> +
+> +#include <linux/export.h>
+> +#include <linux/peci.h>
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
+> +
+> +#include "internal.h"
+> +
+> +/**
+> + * peci_request_alloc() - allocate &struct peci_requests
+> + * @device: PECI device to which request is going to be sent
+> + * @tx_len: TX length
+> + * @rx_len: RX length
+> + *
+> + * Return: A pointer to a newly allocated &struct peci_request on success or NULL otherwise.
+> + */
+> +struct peci_request *peci_request_alloc(struct peci_device *device, u8 tx_len, u8 rx_len)
+> +{
+> +       struct peci_request *req;
+> +
+> +       if (WARN_ON_ONCE(tx_len > PECI_REQUEST_MAX_BUF_SIZE || rx_len > PECI_REQUEST_MAX_BUF_SIZE))
+
+WARN_ON_ONCE() should only be here to help other kernel developers not
+make this mistake However, another way to enforce this is to stop
+exporting peci_request_alloc() and instead export helpers for specific
+command types, and keep this detail internal to the core. If you keep
+this, it needs a comment that it is only here to warn other
+peci-client developers of their bug before it goes upstream.
