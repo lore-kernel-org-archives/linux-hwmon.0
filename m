@@ -2,912 +2,750 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B12DC432BE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 21:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57EB8C432BE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 21:20:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E604C60F58
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 21:17:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39F3F60F58
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 21:20:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbhH0VSi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Aug 2021 17:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S231883AbhH0VVA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Aug 2021 17:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbhH0VSi (ORCPT
+        with ESMTP id S231803AbhH0VVA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Aug 2021 17:18:38 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCBAC0613D9;
-        Fri, 27 Aug 2021 14:17:48 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id h133so11298576oib.7;
-        Fri, 27 Aug 2021 14:17:48 -0700 (PDT)
+        Fri, 27 Aug 2021 17:21:00 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC0AC0617A8
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 14:20:11 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id u15so4692515plg.13
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Aug 2021 14:20:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QA0XqvZPCifytY2PE9UKhpkQ8QBD49Ke9HlQduRdrKQ=;
-        b=mjUKH4Avo02XmICIHGOfutPjyc7Mn5GWOzzngXNJ0llTbAwb3YLvBvKg1MNjEQ3EKU
-         szCcINMqDLqJ2ftK3B7yoi50AmOCRtP9oZHlf2XR3RXwgHdJvDBemUyDPSaUYqdfmMq5
-         xtwGYseUOlvDdbtVcljPuQ71x1ZNXMbWAye3VxJY53LVU7MCP7LCoy+l1r3U1cq9Zl0b
-         DsIsX6pYlUk2lgfpHMOTCLuP6iI8pWIUIjNH+tUcKE86QygLmLLBPTn/ULBkc8p50s6l
-         4LI+qzgNGAXhphVglOR79MqvhmStqgmZm/jDdBmys29aXfgV4P2XUfTVHHevKrhw1acH
-         SijQ==
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wqgtu0fo78tTbFLa5g3kBypVgmQWrVEWPa/MRUzF38U=;
+        b=UJtVJtucbpHfphYzXjJSYVP39A5n9b46PPbkfDLKVCer+iSKqR1CpkXX5pQg4H2dT/
+         SWcjZICihrb5YjlXh62o+g+MqBeQiHMXtLMwcaaLr1VoDjh7eZehAPosryi8BsLAZYYD
+         6g2/tVvSs7NaYNG1TalZ+VP8sniEsAL+YCipKW68LfK+3CZiKAGNtrpffmT4pKD2HZ+L
+         NeF4sJ7YSxFpD40rM1uRcqaA+Ts+IiKiFC1KDml5QUePNUtvOGBk565qy34+S+LPTzrk
+         gipT049DAq0bmIn/O8uUzFM6zUmOa6788ekmMjv8jVJaE2vR6ZPTSBUvUcKP4O9tBpU5
+         NtpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=QA0XqvZPCifytY2PE9UKhpkQ8QBD49Ke9HlQduRdrKQ=;
-        b=LjACdOJ9S2hgM1BZYj7pmmyqb9YPnmGjobdwXXydKcnJUkTw5TR3wn0BoSbUZcvaGf
-         hLBvBWQqKy75tNec43AYgTQxsZe/fTwTAw3xO8jOdsbQyzV0gKNXdbb5yCnIPtjmsvFC
-         rTuEbGFK1pHaRJ1jwcPnRRNea6xWvLzEzihVgQKkda6Tmg9a8KI4PR6iESBFRBocLpGK
-         BICaef5PLz4joykqZAgHCQstMsNFmsPVTSTuEg0VsbK4UFvl5YYL05WfphVXohh7m47j
-         4z1MfWHMP2tvjyDfzVAk0FjEpZ+9afDvgkg20NRTJNw/Gq5JRUP/rGtxOyd7NtgIIHav
-         dWmQ==
-X-Gm-Message-State: AOAM533feXMzxp2dlCMXRwYRED0ZsKpmhAVEaNDbvDPsTl6dP5mVJbCN
-        TJVRHSXD5R4GyMwUo1C7c88MA5Rei6I=
-X-Google-Smtp-Source: ABdhPJzw6NJUX9fNdnHvImVDTWLzgQ3yLP7dBhGPmgd1kTBJOiE+J7U79RtETOLYJS6lVnG4/XlCvQ==
-X-Received: by 2002:aca:4557:: with SMTP id s84mr15912601oia.77.1630099067905;
-        Fri, 27 Aug 2021 14:17:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q7sm1443485otl.68.2021.08.27.14.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 14:17:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 27 Aug 2021 14:17:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: (adt7470) Convert to use regmap
-Message-ID: <20210827211746.GA706743@roeck-us.net>
-References: <20210826024121.15665-1-chris.packham@alliedtelesis.co.nz>
- <20210826024121.15665-3-chris.packham@alliedtelesis.co.nz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wqgtu0fo78tTbFLa5g3kBypVgmQWrVEWPa/MRUzF38U=;
+        b=bmo7H1ZaYbvPAcFEeghXW9YpY29MZNFi3i0EqAF43OKZ+IxqD3Ichciqh/NFV6DYqK
+         TA+8p1nOoM1NC9VIOWJbCD7ph0A9KR68a/w55w6CAXaOQ0fYFYpDP8NWjpEK2wkRHQY8
+         mOEg9XlcVWTWWfGYiGuVZpOoN4kLVphB3SWg7eA3lg3QYYGXrBDgjuYcL/fC76vU8xL5
+         wVr+bxGOt078n5vt6RiUAVQLmX5hA5KjrgoO81EOK3J0Zp3Vvf1kUZ7VPWZ5fkBfW2Yv
+         w8Pccdn9w9Gsk/GNXzmAe8w0mwq6glH5WcS22RKlM89x4UUsSR2i2ogchXjwNnyW399/
+         Paiw==
+X-Gm-Message-State: AOAM533H//pFc2+eQaEKobBV+f7ovFitutPSqgZ16/JOqDMWfuNp8ILU
+        g30AC0v7QxzjtIqLMrgjmF5GQviO2CgRoiiFITcxFA==
+X-Google-Smtp-Source: ABdhPJwRi0QtorHi+AX9UQYITlr/w1GAU0DNrnIED5VZ8uTFziJJrhJ4KN2ezkbc5nvJWQ/qI2vqlunAvmAbE0qgqPc=
+X-Received: by 2002:a17:902:edd0:b0:135:b351:bd5a with SMTP id
+ q16-20020a170902edd000b00135b351bd5amr10561526plk.52.1630099210365; Fri, 27
+ Aug 2021 14:20:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210826024121.15665-3-chris.packham@alliedtelesis.co.nz>
+References: <20210803113134.2262882-1-iwona.winiarska@intel.com> <20210803113134.2262882-11-iwona.winiarska@intel.com>
+In-Reply-To: <20210803113134.2262882-11-iwona.winiarska@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 27 Aug 2021 14:19:59 -0700
+Message-ID: <CAPcyv4iUeCcBuMk8WskLnP6K_FRKPSN3N45cyey=H-R5X08M4g@mail.gmail.com>
+Subject: Re: [PATCH v2 10/15] peci: Add support for PECI device drivers
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        X86 ML <x86@kernel.org>,
+        Device Tree <devicetree@vger.kernel.org>,
+        linux-aspeed@lists.ozlabs.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 26, 2021 at 02:41:19PM +1200, Chris Packham wrote:
-> Convert the adt7470 to using regmap which allows better error handling.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+On Tue, Aug 3, 2021 at 4:36 AM Iwona Winiarska
+<iwona.winiarska@intel.com> wrote:
+>
+> Here we're adding support for PECI device drivers, which unlike PECI
 
-Applied.
+s/Here we're adding/Add/
 
-Thanks,
-Guenter
+> controller drivers are actually able to provide functionalities to
+> userspace.
 
+>
+> We're also extending peci_request API to allow querying more details
+
+s/We're also extending/Also, extend/
+
+...for the most part imperative tense is the preferred tense, by
+upstream maintainers, for changelogs.
+
+> about PECI device (e.g. model/family), that's going to be used to find
+> a compatible peci_driver.
+>
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 > ---
-> Change in v2:
-> - split regmap and devm_hwmon_device_register_with_info into separate
->   patches to aid review
-> 
->  drivers/hwmon/adt7470.c | 430 +++++++++++++++++++++++-----------------
->  1 file changed, 249 insertions(+), 181 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index 3358ec58b977..ad3e46667be8 100644
-> --- a/drivers/hwmon/adt7470.c
-> +++ b/drivers/hwmon/adt7470.c
-> @@ -18,6 +18,7 @@
->  #include <linux/delay.h>
->  #include <linux/log2.h>
->  #include <linux/kthread.h>
-> +#include <linux/regmap.h>
+>  drivers/peci/Kconfig    |   1 +
+>  drivers/peci/core.c     |  49 +++++++++
+>  drivers/peci/device.c   | 105 ++++++++++++++++++++
+>  drivers/peci/internal.h |  75 ++++++++++++++
+>  drivers/peci/request.c  | 214 ++++++++++++++++++++++++++++++++++++++++
+>  include/linux/peci.h    |  19 ++++
+>  lib/Kconfig             |   2 +-
+>  7 files changed, 464 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/peci/Kconfig b/drivers/peci/Kconfig
+> index 99279df97a78..1d0532e3a801 100644
+> --- a/drivers/peci/Kconfig
+> +++ b/drivers/peci/Kconfig
+> @@ -2,6 +2,7 @@
+>
+>  menuconfig PECI
+>         tristate "PECI support"
+> +       select GENERIC_LIB_X86
+
+GENERIC_LIB_X86 has dependencies, so this 'select' will make kbuild
+unhappy when that dependency is not met. Given that this symbol
+already selected by X86, it seems this just wants a "depends on
+GENERIC_LIB_X86".
+
+>         help
+>           The Platform Environment Control Interface (PECI) is an interface
+>           that provides a communication channel to Intel processors and
+> diff --git a/drivers/peci/core.c b/drivers/peci/core.c
+> index c473acb3c2a0..33c07920493d 100644
+> --- a/drivers/peci/core.c
+> +++ b/drivers/peci/core.c
+> @@ -157,8 +157,57 @@ struct peci_controller *devm_peci_controller_add(struct device *dev,
+>  }
+>  EXPORT_SYMBOL_NS_GPL(devm_peci_controller_add, PECI);
+>
+> +static const struct peci_device_id *
+> +peci_bus_match_device_id(const struct peci_device_id *id, struct peci_device *device)
+> +{
+> +       while (id->family != 0) {
+> +               if (id->family == device->info.family &&
+> +                   id->model == device->info.model)
+> +                       return id;
+> +               id++;
+> +       }
+> +
+> +       return NULL;
+> +}
+> +
+> +static int peci_bus_device_match(struct device *dev, struct device_driver *drv)
+> +{
+> +       struct peci_device *device = to_peci_device(dev);
+> +       struct peci_driver *peci_drv = to_peci_driver(drv);
+> +
+> +       if (dev->type != &peci_device_type)
+> +               return 0;
+> +
+> +       if (peci_bus_match_device_id(peci_drv->id_table, device))
+> +               return 1;
+
+Save a couple lines and do:
+
+    return peci_bus_match_device_id(...)
+
+> +
+> +       return 0;
+> +}
+> +
+> +static int peci_bus_device_probe(struct device *dev)
+> +{
+> +       struct peci_device *device = to_peci_device(dev);
+> +       struct peci_driver *driver = to_peci_driver(dev->driver);
+> +
+> +       return driver->probe(device, peci_bus_match_device_id(driver->id_table, device));
+> +}
+> +
+> +static int peci_bus_device_remove(struct device *dev)
+
+Note, in linux-next this prototype has changed to:
+
+    void (*remove)(struct device *dev);
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/include/linux/device/bus.h
+
+
+> +{
+> +       struct peci_device *device = to_peci_device(dev);
+> +       struct peci_driver *driver = to_peci_driver(dev->driver);
+> +
+> +       if (driver->remove)
+> +               driver->remove(device);
+> +
+> +       return 0;
+> +}
+> +
+>  struct bus_type peci_bus_type = {
+>         .name           = "peci",
+> +       .match          = peci_bus_device_match,
+> +       .probe          = peci_bus_device_probe,
+> +       .remove         = peci_bus_device_remove,
+>         .bus_groups     = peci_bus_groups,
+>  };
+>
+> diff --git a/drivers/peci/device.c b/drivers/peci/device.c
+> index d77d9dabd51e..a78c02399574 100644
+> --- a/drivers/peci/device.c
+> +++ b/drivers/peci/device.c
+> @@ -1,11 +1,85 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  // Copyright (c) 2018-2021 Intel Corporation
+>
+> +#include <linux/bitfield.h>
+>  #include <linux/peci.h>
 >  #include <linux/slab.h>
->  #include <linux/util_macros.h>
->  
-> @@ -35,7 +36,10 @@ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
->  #define ADT7470_REG_PWM_MAX_BASE_ADDR		0x38
->  #define ADT7470_REG_PWM_MAX_MAX_ADDR		0x3B
->  #define ADT7470_REG_CFG				0x40
-> +#define		ADT7470_STRT_MASK		0x01
-> +#define		ADT7470_TEST_MASK		0x02
->  #define		ADT7470_FSPD_MASK		0x04
-> +#define		ADT7470_T05_STB_MASK		0x80
->  #define ADT7470_REG_ALARM1			0x41
->  #define		ADT7470_R1T_ALARM		0x01
->  #define		ADT7470_R2T_ALARM		0x02
-> @@ -137,7 +141,7 @@ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
->  #define ADT7470_FREQ_SHIFT	4
->  
->  struct adt7470_data {
-> -	struct i2c_client	*client;
-> +	struct regmap		*regmap;
->  	struct mutex		lock;
->  	char			sensors_valid;
->  	char			limits_valid;
-> @@ -171,52 +175,76 @@ struct adt7470_data {
->   * 16-bit registers on the ADT7470 are low-byte first.  The data sheet says
->   * that the low byte must be read before the high byte.
->   */
-> -static inline int adt7470_read_word_data(struct i2c_client *client, u8 reg)
-> +static inline int adt7470_read_word_data(struct adt7470_data *data, unsigned int reg,
-> +					 unsigned int *val)
->  {
-> -	u16 foo;
-> +	u8 regval[2];
-> +	int err;
->  
-> -	foo = i2c_smbus_read_byte_data(client, reg);
-> -	foo |= ((u16)i2c_smbus_read_byte_data(client, reg + 1) << 8);
-> -	return foo;
-> +	err = regmap_bulk_read(data->regmap, reg, &regval, 2);
-> +	if (err < 0)
-> +		return err;
+> +#include <linux/x86/cpu.h>
+>
+>  #include "internal.h"
+>
+> +#define REVISION_NUM_MASK GENMASK(15, 8)
+> +static int peci_get_revision(struct peci_device *device, u8 *revision)
+> +{
+> +       struct peci_request *req;
+> +       u64 dib;
 > +
-> +	*val = regval[0] | (regval[1] << 8);
+> +       req = peci_get_dib(device);
+
+I would expect peci_get_dib() to return @dib.
+
+> +       if (IS_ERR(req))
+> +               return PTR_ERR(req);
 > +
-> +	return 0;
->  }
->  
-> -static inline int adt7470_write_word_data(struct i2c_client *client, u8 reg,
-> -					  u16 value)
-> +static inline int adt7470_write_word_data(struct adt7470_data *data, unsigned int reg,
-> +					  unsigned int val)
->  {
-> -	return i2c_smbus_write_byte_data(client, reg, value & 0xFF)
-> -	       || i2c_smbus_write_byte_data(client, reg + 1, value >> 8);
-> +	u8 regval[2];
+> +       /*
+> +        * PECI device may be in a state where it is unable to return a proper
+> +        * DIB, in which case it returns 0 as DIB value.
+> +        * Let's treat this as an error to avoid carrying on with the detection
+> +        * using invalid revision.
+> +        */
+> +       dib = peci_request_data_dib(req);
+
+I would expect peci_request_data_dib() to make a request.
+
+A stack allocated peci_request passed to peci_get_dib() that returns
+an error code would seem to be cleaner than this current organization.
+
+> +       if (dib == 0) {
+> +               peci_request_free(req);
+> +               return -EIO;
+> +       }
 > +
-> +	regval[0] = val & 0xFF;
-> +	regval[1] = val >> 8;
+> +       *revision = FIELD_GET(REVISION_NUM_MASK, dib);
 > +
-> +	return regmap_bulk_write(data->regmap, reg, &regval, 2);
->  }
->  
->  /* Probe for temperature sensors.  Assumes lock is held */
-> -static int adt7470_read_temperatures(struct i2c_client *client,
-> -				     struct adt7470_data *data)
-> +static int adt7470_read_temperatures(struct adt7470_data *data)
->  {
->  	unsigned long res;
-> +	unsigned int pwm_cfg[2];
-> +	int err;
->  	int i;
-> -	u8 cfg, pwm[4], pwm_cfg[2];
-> +	u8 pwm[ADT7470_FAN_COUNT];
->  
->  	/* save pwm[1-4] config register */
-> -	pwm_cfg[0] = i2c_smbus_read_byte_data(client, ADT7470_REG_PWM_CFG(0));
-> -	pwm_cfg[1] = i2c_smbus_read_byte_data(client, ADT7470_REG_PWM_CFG(2));
-> +	err = regmap_read(data->regmap, ADT7470_REG_PWM_CFG(0), &pwm_cfg[0]);
-> +	if (err < 0)
-> +		return err;
-> +	err = regmap_read(data->regmap, ADT7470_REG_PWM_CFG(2), &pwm_cfg[1]);
-> +	if (err < 0)
-> +		return err;
->  
->  	/* set manual pwm to whatever it is set to now */
-> -	for (i = 0; i < ADT7470_FAN_COUNT; i++)
-> -		pwm[i] = i2c_smbus_read_byte_data(client, ADT7470_REG_PWM(i));
-> +	err = regmap_bulk_read(data->regmap, ADT7470_REG_PWM(0), &pwm[0],
-> +			       ADT7470_PWM_COUNT);
-> +	if (err < 0)
-> +		return err;
->  
->  	/* put pwm in manual mode */
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM_CFG(0),
-> -		pwm_cfg[0] & ~(ADT7470_PWM_AUTO_MASK));
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM_CFG(2),
-> -		pwm_cfg[1] & ~(ADT7470_PWM_AUTO_MASK));
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_PWM_CFG(0),
-> +				 ADT7470_PWM_AUTO_MASK, 0);
-> +	if (err < 0)
-> +		return err;
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_PWM_CFG(2),
-> +				 ADT7470_PWM_AUTO_MASK, 0);
-> +	if (err < 0)
-> +		return err;
->  
->  	/* write pwm control to whatever it was */
-> -	for (i = 0; i < ADT7470_FAN_COUNT; i++)
-> -		i2c_smbus_write_byte_data(client, ADT7470_REG_PWM(i), pwm[i]);
-> +	err = regmap_bulk_write(data->regmap, ADT7470_REG_PWM(0), &pwm[0],
-> +				ADT7470_PWM_COUNT);
-> +	if (err < 0)
-> +		return err;
->  
->  	/* start reading temperature sensors */
-> -	cfg = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG);
-> -	cfg |= 0x80;
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG, cfg);
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG,
-> +				 ADT7470_T05_STB_MASK, ADT7470_T05_STB_MASK);
-> +	if (err < 0)
-> +		return err;
->  
->  	/* Delay is 200ms * number of temp sensors. */
->  	res = msleep_interruptible((data->num_temp_sensors >= 0 ?
-> @@ -224,26 +252,31 @@ static int adt7470_read_temperatures(struct i2c_client *client,
->  				    TEMP_COLLECTION_TIME));
->  
->  	/* done reading temperature sensors */
-> -	cfg = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG);
-> -	cfg &= ~0x80;
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG, cfg);
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG,
-> +				 ADT7470_T05_STB_MASK, 0);
-> +	if (err < 0)
-> +		return err;
->  
->  	/* restore pwm[1-4] config registers */
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM_CFG(0), pwm_cfg[0]);
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM_CFG(2), pwm_cfg[1]);
-> +	err = regmap_write(data->regmap, ADT7470_REG_PWM_CFG(0), pwm_cfg[0]);
-> +	if (err < 0)
-> +		return err;
-> +	err = regmap_write(data->regmap, ADT7470_REG_PWM_CFG(2), pwm_cfg[1]);
-> +	if (err < 0)
-> +		return err;
->  
-> -	if (res) {
-> -		pr_err("ha ha, interrupted\n");
-> +	if (res)
->  		return -EAGAIN;
-> -	}
->  
->  	/* Only count fans if we have to */
->  	if (data->num_temp_sensors >= 0)
->  		return 0;
->  
-> +	err = regmap_bulk_read(data->regmap, ADT7470_TEMP_REG(0), &data->temp[0],
-> +			       ADT7470_TEMP_COUNT);
-> +	if (err < 0)
-> +		return err;
->  	for (i = 0; i < ADT7470_TEMP_COUNT; i++) {
-> -		data->temp[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_TEMP_REG(i));
->  		if (data->temp[i])
->  			data->num_temp_sensors = i + 1;
->  	}
-> @@ -258,7 +291,7 @@ static int adt7470_update_thread(void *p)
->  
->  	while (!kthread_should_stop()) {
->  		mutex_lock(&data->lock);
-> -		adt7470_read_temperatures(client, data);
-> +		adt7470_read_temperatures(data);
->  		mutex_unlock(&data->lock);
->  
->  		set_current_state(TASK_INTERRUPTIBLE);
-> @@ -273,89 +306,116 @@ static int adt7470_update_thread(void *p)
->  
->  static int adt7470_update_sensors(struct adt7470_data *data)
->  {
-> -	struct i2c_client *client = data->client;
-> -	u8 cfg;
-> +	unsigned int val;
-> +	int err;
->  	int i;
->  
->  	if (!data->temperatures_probed)
-> -		adt7470_read_temperatures(client, data);
-> +		err = adt7470_read_temperatures(data);
->  	else
-> -		for (i = 0; i < ADT7470_TEMP_COUNT; i++)
-> -			data->temp[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_TEMP_REG(i));
-> +		err = regmap_bulk_read(data->regmap, ADT7470_TEMP_REG(0), &data->temp[0],
-> +				       ADT7470_TEMP_COUNT);
-> +	if (err < 0)
-> +		return err;
->  
-> -	for (i = 0; i < ADT7470_FAN_COUNT; i++)
-> -		data->fan[i] = adt7470_read_word_data(client,
-> -						ADT7470_REG_FAN(i));
-> -
-> -	for (i = 0; i < ADT7470_PWM_COUNT; i++) {
-> -		int reg;
-> -		int reg_mask;
-> -
-> -		data->pwm[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_REG_PWM(i));
-> -
-> -		if (i % 2)
-> -			reg_mask = ADT7470_PWM2_AUTO_MASK;
-> -		else
-> -			reg_mask = ADT7470_PWM1_AUTO_MASK;
-> -
-> -		reg = ADT7470_REG_PWM_CFG(i);
-> -		if (i2c_smbus_read_byte_data(client, reg) & reg_mask)
-> -			data->pwm_automatic[i] = 1;
-> -		else
-> -			data->pwm_automatic[i] = 0;
-> -
-> -		reg = ADT7470_REG_PWM_AUTO_TEMP(i);
-> -		cfg = i2c_smbus_read_byte_data(client, reg);
-> -		if (!(i % 2))
-> -			data->pwm_auto_temp[i] = cfg >> 4;
-> -		else
-> -			data->pwm_auto_temp[i] = cfg & 0xF;
-> +	for (i = 0; i < ADT7470_FAN_COUNT; i++) {
-> +		err = adt7470_read_word_data(data, ADT7470_REG_FAN(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->fan[i] =	val;
->  	}
->  
-> -	if (i2c_smbus_read_byte_data(client, ADT7470_REG_CFG) &
-> -	    ADT7470_FSPD_MASK)
-> -		data->force_pwm_max = 1;
-> -	else
-> -		data->force_pwm_max = 0;
-> +	err = regmap_bulk_read(data->regmap, ADT7470_REG_PWM(0), &data->pwm[0], ADT7470_PWM_COUNT);
-> +	if (err < 0)
-> +		return err;
->  
-> -	data->alarm = i2c_smbus_read_byte_data(client, ADT7470_REG_ALARM1);
-> -	if (data->alarm & ADT7470_OOL_ALARM)
-> -		data->alarm |= ALARM2(i2c_smbus_read_byte_data(client,
-> -							ADT7470_REG_ALARM2));
-> -	data->alarms_mask = adt7470_read_word_data(client,
-> -						   ADT7470_REG_ALARM1_MASK);
-> +	for (i = 0; i < ADT7470_PWM_COUNT; i++) {
-> +		unsigned int mask;
+> +       peci_request_free(req);
 > +
-> +		if (i % 2)
-> +			mask = ADT7470_PWM2_AUTO_MASK;
-> +		else
-> +			mask = ADT7470_PWM1_AUTO_MASK;
+> +       return 0;
+> +}
 > +
-> +		err = regmap_read(data->regmap, ADT7470_REG_PWM_CFG(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->pwm_automatic[i] = !!(val & mask);
+> +static int peci_get_cpu_id(struct peci_device *device, u32 *cpu_id)
+> +{
+> +       struct peci_request *req;
+> +       int ret;
 > +
-> +		err = regmap_read(data->regmap, ADT7470_REG_PWM_AUTO_TEMP(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		if (!(i % 2))
-> +			data->pwm_auto_temp[i] = val >> 4;
-> +		else
-> +			data->pwm_auto_temp[i] = val & 0xF;
-> +	}
+> +       req = peci_pkg_cfg_readl(device, PECI_PCS_PKG_ID, PECI_PKG_ID_CPU_ID);
+> +       if (IS_ERR(req))
+> +               return PTR_ERR(req);
 > +
-> +	err = regmap_read(data->regmap, ADT7470_REG_CFG, &val);
-> +	if (err < 0)
-> +		return err;
-> +	data->force_pwm_max = !!(val & ADT7470_FSPD_MASK);
+> +       ret = peci_request_status(req);
+> +       if (ret)
+> +               goto out_req_free;
 > +
-> +	err = regmap_read(data->regmap, ADT7470_REG_ALARM1, &val);
-> +	if (err < 0)
-> +		return err;
-> +	data->alarm = val;
-> +	if (data->alarm & ADT7470_OOL_ALARM) {
-> +		err = regmap_read(data->regmap, ADT7470_REG_ALARM2, &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->alarm |= ALARM2(val);
-> +	}
+> +       *cpu_id = peci_request_data_readl(req);
+> +out_req_free:
+> +       peci_request_free(req);
 > +
-> +	err = adt7470_read_word_data(data, ADT7470_REG_ALARM1_MASK, &val);
-> +	if (err < 0)
-> +		return err;
-> +	data->alarms_mask = val;
->  
->  	return 0;
->  }
->  
->  static int adt7470_update_limits(struct adt7470_data *data)
->  {
-> -	struct i2c_client *client = data->client;
-> +	unsigned int val;
-> +	int err;
->  	int i;
->  
->  	for (i = 0; i < ADT7470_TEMP_COUNT; i++) {
-> -		data->temp_min[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_TEMP_MIN_REG(i));
-> -		data->temp_max[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_TEMP_MAX_REG(i));
-> +		err = regmap_read(data->regmap, ADT7470_TEMP_MIN_REG(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->temp_min[i] = (s8)val;
-> +		err = regmap_read(data->regmap, ADT7470_TEMP_MAX_REG(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->temp_max[i] = (s8)val;
->  	}
->  
->  	for (i = 0; i < ADT7470_FAN_COUNT; i++) {
-> -		data->fan_min[i] = adt7470_read_word_data(client,
-> -						ADT7470_REG_FAN_MIN(i));
-> -		data->fan_max[i] = adt7470_read_word_data(client,
-> -						ADT7470_REG_FAN_MAX(i));
-> +		err = adt7470_read_word_data(data, ADT7470_REG_FAN_MIN(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->fan_min[i] = val;
-> +		err = adt7470_read_word_data(data, ADT7470_REG_FAN_MAX(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->fan_max[i] = val;
->  	}
->  
->  	for (i = 0; i < ADT7470_PWM_COUNT; i++) {
-> -		data->pwm_max[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_REG_PWM_MAX(i));
-> -		data->pwm_min[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_REG_PWM_MIN(i));
-> -		data->pwm_tmin[i] = i2c_smbus_read_byte_data(client,
-> -						ADT7470_REG_PWM_TMIN(i));
-> +		err = regmap_read(data->regmap, ADT7470_REG_PWM_MAX(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->pwm_max[i] = val;
-> +		err = regmap_read(data->regmap, ADT7470_REG_PWM_MIN(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->pwm_min[i] = val;
-> +		err = regmap_read(data->regmap, ADT7470_REG_PWM_TMIN(i), &val);
-> +		if (err < 0)
-> +			return err;
-> +		data->pwm_tmin[i] = (s8)val;
->  	}
->  
->  	return 0;
-> @@ -491,8 +551,8 @@ static ssize_t temp_min_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -502,11 +562,11 @@ static ssize_t temp_min_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->temp_min[attr->index] = temp;
-> -	i2c_smbus_write_byte_data(client, ADT7470_TEMP_MIN_REG(attr->index),
-> +	err = regmap_write(data->regmap, ADT7470_TEMP_MIN_REG(attr->index),
->  				  temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t temp_max_show(struct device *dev,
-> @@ -527,8 +587,8 @@ static ssize_t temp_max_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -538,11 +598,10 @@ static ssize_t temp_max_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->temp_max[attr->index] = temp;
-> -	i2c_smbus_write_byte_data(client, ADT7470_TEMP_MAX_REG(attr->index),
-> -				  temp);
-> +	err = regmap_write(data->regmap, ADT7470_TEMP_MAX_REG(attr->index), temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
-> @@ -575,6 +634,7 @@ static ssize_t alarm_mask_store(struct device *dev,
->  {
->  	struct adt7470_data *data = dev_get_drvdata(dev);
->  	long mask;
-> +	int err;
->  
->  	if (kstrtoul(buf, 0, &mask))
->  		return -EINVAL;
-> @@ -584,10 +644,10 @@ static ssize_t alarm_mask_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->alarms_mask = mask;
-> -	adt7470_write_word_data(data->client, ADT7470_REG_ALARM1_MASK, mask);
-> +	err = adt7470_write_word_data(data, ADT7470_REG_ALARM1_MASK, mask);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t fan_max_show(struct device *dev,
-> @@ -612,8 +672,8 @@ static ssize_t fan_max_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp) || !temp)
->  		return -EINVAL;
-> @@ -623,10 +683,10 @@ static ssize_t fan_max_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->fan_max[attr->index] = temp;
-> -	adt7470_write_word_data(client, ADT7470_REG_FAN_MAX(attr->index), temp);
-> +	err = adt7470_write_word_data(data, ADT7470_REG_FAN_MAX(attr->index), temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t fan_min_show(struct device *dev,
-> @@ -651,8 +711,8 @@ static ssize_t fan_min_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp) || !temp)
->  		return -EINVAL;
-> @@ -662,10 +722,10 @@ static ssize_t fan_min_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->fan_min[attr->index] = temp;
-> -	adt7470_write_word_data(client, ADT7470_REG_FAN_MIN(attr->index), temp);
-> +	err = adt7470_write_word_data(data, ADT7470_REG_FAN_MIN(attr->index), temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t fan_show(struct device *dev, struct device_attribute *devattr,
-> @@ -700,24 +760,20 @@ static ssize_t force_pwm_max_store(struct device *dev,
->  				   const char *buf, size_t count)
->  {
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> -	u8 reg;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
->  
->  	mutex_lock(&data->lock);
->  	data->force_pwm_max = temp;
-> -	reg = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG);
-> -	if (temp)
-> -		reg |= ADT7470_FSPD_MASK;
-> -	else
-> -		reg &= ~ADT7470_FSPD_MASK;
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG, reg);
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG,
-> +				 ADT7470_FSPD_MASK,
-> +				 temp ? ADT7470_FSPD_MASK : 0);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t pwm_show(struct device *dev, struct device_attribute *devattr,
-> @@ -737,8 +793,8 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *devattr,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -747,10 +803,10 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *devattr,
->  
->  	mutex_lock(&data->lock);
->  	data->pwm[attr->index] = temp;
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM(attr->index), temp);
-> +	err = regmap_write(data->regmap, ADT7470_REG_PWM(attr->index), temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  /* These are the valid PWM frequencies to the nearest Hz */
-> @@ -762,13 +818,20 @@ static ssize_t pwm1_freq_show(struct device *dev,
->  			      struct device_attribute *devattr, char *buf)
->  {
->  	struct adt7470_data *data = adt7470_update_device(dev);
-> -	unsigned char cfg_reg_1;
-> -	unsigned char cfg_reg_2;
-> +	unsigned int cfg_reg_1, cfg_reg_2;
->  	int index;
-> +	int err;
+> +       return ret;
+> +}
 > +
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
->  
->  	mutex_lock(&data->lock);
-> -	cfg_reg_1 = i2c_smbus_read_byte_data(data->client, ADT7470_REG_CFG);
-> -	cfg_reg_2 = i2c_smbus_read_byte_data(data->client, ADT7470_REG_CFG_2);
-> +	err = regmap_read(data->regmap, ADT7470_REG_CFG, &cfg_reg_1);
-> +	if (err < 0)
-> +		goto out;
-> +	err = regmap_read(data->regmap, ADT7470_REG_CFG_2, &cfg_reg_2);
-> +	if (err < 0)
-> +		goto out;
->  	mutex_unlock(&data->lock);
->  
->  	index = (cfg_reg_2 & ADT7470_FREQ_MASK) >> ADT7470_FREQ_SHIFT;
-> @@ -778,6 +841,10 @@ static ssize_t pwm1_freq_show(struct device *dev,
->  		index = ARRAY_SIZE(adt7470_freq_map) - 1;
->  
->  	return scnprintf(buf, PAGE_SIZE, "%d\n", adt7470_freq_map[index]);
+> +static int peci_device_info_init(struct peci_device *device)
+> +{
+> +       u8 revision;
+> +       u32 cpu_id;
+> +       int ret;
 > +
-> +out:
-> +	mutex_unlock(&data->lock);
-> +	return err;
->  }
->  
->  static ssize_t pwm1_freq_store(struct device *dev,
-> @@ -785,11 +852,10 @@ static ssize_t pwm1_freq_store(struct device *dev,
->  			       const char *buf, size_t count)
->  {
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long freq;
->  	int index;
->  	int low_freq = ADT7470_CFG_LF;
-> -	unsigned char val;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &freq))
->  		return -EINVAL;
-> @@ -805,16 +871,19 @@ static ssize_t pwm1_freq_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	/* Configuration Register 1 */
-> -	val = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG);
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG,
-> -				  (val & ~ADT7470_CFG_LF) | low_freq);
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG,
-> +				 ADT7470_CFG_LF, low_freq);
-> +	if (err < 0)
-> +		goto out;
+> +       ret = peci_get_cpu_id(device, &cpu_id);
+> +       if (ret)
+> +               return ret;
 > +
->  	/* Configuration Register 2 */
-> -	val = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG_2);
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG_2,
-> -		(val & ~ADT7470_FREQ_MASK) | (index << ADT7470_FREQ_SHIFT));
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG_2,
-> +				 ADT7470_FREQ_MASK,
-> +				 index << ADT7470_FREQ_SHIFT);
-> +out:
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t pwm_max_show(struct device *dev,
-> @@ -835,8 +904,8 @@ static ssize_t pwm_max_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -845,11 +914,11 @@ static ssize_t pwm_max_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->pwm_max[attr->index] = temp;
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM_MAX(attr->index),
-> -				  temp);
-> +	err = regmap_write(data->regmap, ADT7470_REG_PWM_MAX(attr->index),
-> +			   temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t pwm_min_show(struct device *dev,
-> @@ -870,8 +939,8 @@ static ssize_t pwm_min_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -880,11 +949,11 @@ static ssize_t pwm_min_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->pwm_min[attr->index] = temp;
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM_MIN(attr->index),
-> -				  temp);
-> +	err = regmap_write(data->regmap, ADT7470_REG_PWM_MIN(attr->index),
-> +			   temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t pwm_tmax_show(struct device *dev,
-> @@ -918,8 +987,8 @@ static ssize_t pwm_tmin_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	long temp;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -929,11 +998,11 @@ static ssize_t pwm_tmin_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->pwm_tmin[attr->index] = temp;
-> -	i2c_smbus_write_byte_data(client, ADT7470_REG_PWM_TMIN(attr->index),
-> -				  temp);
-> +	err = regmap_write(data->regmap, ADT7470_REG_PWM_TMIN(attr->index),
-> +			   temp);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t pwm_auto_show(struct device *dev,
-> @@ -954,11 +1023,9 @@ static ssize_t pwm_auto_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
-> -	int pwm_auto_reg = ADT7470_REG_PWM_CFG(attr->index);
->  	int pwm_auto_reg_mask;
->  	long temp;
-> -	u8 reg;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -974,15 +1041,12 @@ static ssize_t pwm_auto_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->pwm_automatic[attr->index] = temp;
-> -	reg = i2c_smbus_read_byte_data(client, pwm_auto_reg);
-> -	if (temp)
-> -		reg |= pwm_auto_reg_mask;
-> -	else
-> -		reg &= ~pwm_auto_reg_mask;
-> -	i2c_smbus_write_byte_data(client, pwm_auto_reg, reg);
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_PWM_CFG(attr->index),
-> +				 pwm_auto_reg_mask,
-> +				 temp ? pwm_auto_reg_mask : 0);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t pwm_auto_temp_show(struct device *dev,
-> @@ -1017,10 +1081,10 @@ static ssize_t pwm_auto_temp_store(struct device *dev,
->  {
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
->  	int pwm_auto_reg = ADT7470_REG_PWM_AUTO_TEMP(attr->index);
-> +	unsigned int mask, val;
->  	long temp;
-> -	u8 reg;
-> +	int err;
->  
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
-> @@ -1031,20 +1095,19 @@ static ssize_t pwm_auto_temp_store(struct device *dev,
->  
->  	mutex_lock(&data->lock);
->  	data->pwm_automatic[attr->index] = temp;
-> -	reg = i2c_smbus_read_byte_data(client, pwm_auto_reg);
->  
->  	if (!(attr->index % 2)) {
-> -		reg &= 0xF;
-> -		reg |= (temp << 4) & 0xF0;
-> +		mask = 0xF0;
-> +		val = (temp << 4) & 0xF0;
->  	} else {
-> -		reg &= 0xF0;
-> -		reg |= temp & 0xF;
-> +		mask = 0x0F;
-> +		val = temp & 0x0F;
->  	}
->  
-> -	i2c_smbus_write_byte_data(client, pwm_auto_reg, reg);
-> +	err = regmap_update_bits(data->regmap, pwm_auto_reg, mask, val);
->  	mutex_unlock(&data->lock);
->  
-> -	return count;
-> +	return err < 0 ? err : count;
->  }
->  
->  static ssize_t alarm_show(struct device *dev,
-> @@ -1053,6 +1116,9 @@ static ssize_t alarm_show(struct device *dev,
->  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->  	struct adt7470_data *data = adt7470_update_device(dev);
->  
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
+> +       device->info.family = x86_family(cpu_id);
+> +       device->info.model = x86_model(cpu_id);
 > +
->  	if (data->alarm & attr->index)
->  		return sprintf(buf, "1\n");
->  	else
-> @@ -1288,23 +1354,19 @@ static int adt7470_detect(struct i2c_client *client,
->  	return 0;
+> +       ret = peci_get_revision(device, &revision);
+> +       if (ret)
+> +               return ret;
+> +       device->info.peci_revision = revision;
+> +
+> +       device->info.socket_id = device->addr - PECI_BASE_ADDR;
+> +
+> +       return 0;
+> +}
+> +
+>  static int peci_detect(struct peci_controller *controller, u8 addr)
+>  {
+>         struct peci_request *req;
+> @@ -79,6 +153,10 @@ int peci_device_create(struct peci_controller *controller, u8 addr)
+>         device->dev.bus = &peci_bus_type;
+>         device->dev.type = &peci_device_type;
+>
+> +       ret = peci_device_info_init(device);
+> +       if (ret)
+> +               goto err_free;
+> +
+>         ret = dev_set_name(&device->dev, "%d-%02x", controller->id, device->addr);
+>         if (ret)
+>                 goto err_free;
+> @@ -102,6 +180,33 @@ void peci_device_destroy(struct peci_device *device)
+>         device_unregister(&device->dev);
 >  }
->  
-> -static void adt7470_init_client(struct i2c_client *client)
-> -{
-> -	int reg = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG);
-> -
-> -	if (reg < 0) {
-> -		dev_err(&client->dev, "cannot read configuration register\n");
-> -	} else {
-> -		/* start monitoring (and do a self-test) */
-> -		i2c_smbus_write_byte_data(client, ADT7470_REG_CFG, reg | 3);
-> -	}
-> -}
-> +static const struct regmap_config adt7470_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.use_single_read = true,
-> +	.use_single_write = true,
+>
+> +int __peci_driver_register(struct peci_driver *driver, struct module *owner,
+> +                          const char *mod_name)
+> +{
+> +       driver->driver.bus = &peci_bus_type;
+> +       driver->driver.owner = owner;
+> +       driver->driver.mod_name = mod_name;
+> +
+> +       if (!driver->probe) {
+> +               pr_err("peci: trying to register driver without probe callback\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (!driver->id_table) {
+> +               pr_err("peci: trying to register driver without device id table\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       return driver_register(&driver->driver);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(__peci_driver_register, PECI);
+> +
+> +void peci_driver_unregister(struct peci_driver *driver)
+> +{
+> +       driver_unregister(&driver->driver);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_driver_unregister, PECI);
+> +
+>  static void peci_device_release(struct device *dev)
+>  {
+>         struct peci_device *device = to_peci_device(dev);
+> diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
+> index 978e12c8e1d3..d661e1b65694 100644
+> --- a/drivers/peci/internal.h
+> +++ b/drivers/peci/internal.h
+> @@ -19,6 +19,34 @@ struct peci_request;
+>  struct peci_request *peci_request_alloc(struct peci_device *device, u8 tx_len, u8 rx_len);
+>  void peci_request_free(struct peci_request *req);
+>
+> +int peci_request_status(struct peci_request *req);
+> +u64 peci_request_data_dib(struct peci_request *req);
+> +
+> +u8 peci_request_data_readb(struct peci_request *req);
+> +u16 peci_request_data_readw(struct peci_request *req);
+> +u32 peci_request_data_readl(struct peci_request *req);
+> +u64 peci_request_data_readq(struct peci_request *req);
+> +
+> +struct peci_request *peci_get_dib(struct peci_device *device);
+> +struct peci_request *peci_get_temp(struct peci_device *device);
+> +
+> +struct peci_request *peci_pkg_cfg_readb(struct peci_device *device, u8 index, u16 param);
+> +struct peci_request *peci_pkg_cfg_readw(struct peci_device *device, u8 index, u16 param);
+> +struct peci_request *peci_pkg_cfg_readl(struct peci_device *device, u8 index, u16 param);
+> +struct peci_request *peci_pkg_cfg_readq(struct peci_device *device, u8 index, u16 param);
+> +
+> +/**
+> + * struct peci_device_id - PECI device data to match
+> + * @data: pointer to driver private data specific to device
+> + * @family: device family
+> + * @model: device model
+> + */
+> +struct peci_device_id {
+> +       const void *data;
+> +       u16 family;
+> +       u8 model;
 > +};
->  
->  static int adt7470_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
->  	struct adt7470_data *data;
->  	struct device *hwmon_dev;
-> +	int err;
->  
->  	data = devm_kzalloc(dev, sizeof(struct adt7470_data), GFP_KERNEL);
->  	if (!data)
-> @@ -1312,15 +1374,21 @@ static int adt7470_probe(struct i2c_client *client)
->  
->  	data->num_temp_sensors = -1;
->  	data->auto_update_interval = AUTO_UPDATE_INTERVAL;
-> +	data->regmap = devm_regmap_init_i2c(client, &adt7470_regmap_config);
-> +	if (IS_ERR(data->regmap))
-> +		return PTR_ERR(data->regmap);
->  
->  	i2c_set_clientdata(client, data);
-> -	data->client = client;
->  	mutex_init(&data->lock);
->  
->  	dev_info(&client->dev, "%s chip found\n", client->name);
->  
->  	/* Initialize the ADT7470 chip */
-> -	adt7470_init_client(client);
-> +	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG,
-> +				 ADT7470_STRT_MASK | ADT7470_TEST_MASK,
-> +				 ADT7470_STRT_MASK | ADT7470_TEST_MASK);
-> +	if (err < 0)
-> +		return err;
->  
->  	/* Register sysfs hooks */
->  	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+> +
+>  extern struct device_type peci_device_type;
+>  extern const struct attribute_group *peci_device_groups[];
+>
+> @@ -28,6 +56,53 @@ void peci_device_destroy(struct peci_device *device);
+>  extern struct bus_type peci_bus_type;
+>  extern const struct attribute_group *peci_bus_groups[];
+>
+> +/**
+> + * struct peci_driver - PECI driver
+> + * @driver: inherit device driver
+> + * @probe: probe callback
+> + * @remove: remove callback
+> + * @id_table: PECI device match table to decide which device to bind
+> + */
+> +struct peci_driver {
+> +       struct device_driver driver;
+> +       int (*probe)(struct peci_device *device, const struct peci_device_id *id);
+> +       void (*remove)(struct peci_device *device);
+> +       const struct peci_device_id *id_table;
+> +};
+> +
+> +static inline struct peci_driver *to_peci_driver(struct device_driver *d)
+> +{
+> +       return container_of(d, struct peci_driver, driver);
+> +}
+> +
+> +int __peci_driver_register(struct peci_driver *driver, struct module *owner,
+> +                          const char *mod_name);
+> +/**
+> + * peci_driver_register() - register PECI driver
+> + * @driver: the driver to be registered
+> + * @owner: owner module of the driver being registered
+> + * @mod_name: module name string
+> + *
+> + * PECI drivers that don't need to do anything special in module init should
+> + * use the convenience "module_peci_driver" macro instead
+> + *
+> + * Return: zero on success, else a negative error code.
+> + */
+> +#define peci_driver_register(driver) \
+> +       __peci_driver_register(driver, THIS_MODULE, KBUILD_MODNAME)
+> +void peci_driver_unregister(struct peci_driver *driver);
+> +
+> +/**
+> + * module_peci_driver() - helper macro for registering a modular PECI driver
+> + * @__peci_driver: peci_driver struct
+> + *
+> + * Helper macro for PECI drivers which do not do anything special in module
+> + * init/exit. This eliminates a lot of boilerplate. Each module may only
+> + * use this macro once, and calling it replaces module_init() and module_exit()
+> + */
+> +#define module_peci_driver(__peci_driver) \
+> +       module_driver(__peci_driver, peci_driver_register, peci_driver_unregister)
+> +
+>  extern struct device_type peci_controller_type;
+>
+>  int peci_controller_scan_devices(struct peci_controller *controller);
+> diff --git a/drivers/peci/request.c b/drivers/peci/request.c
+> index 81b567bc7b87..fe032d5a5e1b 100644
+> --- a/drivers/peci/request.c
+> +++ b/drivers/peci/request.c
+> @@ -1,13 +1,140 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  // Copyright (c) 2021 Intel Corporation
+>
+> +#include <linux/bug.h>
+>  #include <linux/export.h>
+>  #include <linux/peci.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+>
+> +#include <asm/unaligned.h>
+> +
+>  #include "internal.h"
+>
+> +#define PECI_GET_DIB_CMD               0xf7
+> +#define  PECI_GET_DIB_WR_LEN           1
+> +#define  PECI_GET_DIB_RD_LEN           8
+> +
+> +#define PECI_RDPKGCFG_CMD              0xa1
+> +#define  PECI_RDPKGCFG_WR_LEN          5
+> +#define  PECI_RDPKGCFG_RD_LEN_BASE     1
+> +#define PECI_WRPKGCFG_CMD              0xa5
+> +#define  PECI_WRPKGCFG_WR_LEN_BASE     6
+> +#define  PECI_WRPKGCFG_RD_LEN          1
+> +
+> +/* Device Specific Completion Code (CC) Definition */
+> +#define PECI_CC_SUCCESS                                0x40
+> +#define PECI_CC_NEED_RETRY                     0x80
+> +#define PECI_CC_OUT_OF_RESOURCE                        0x81
+> +#define PECI_CC_UNAVAIL_RESOURCE               0x82
+> +#define PECI_CC_INVALID_REQ                    0x90
+> +#define PECI_CC_MCA_ERROR                      0x91
+> +#define PECI_CC_CATASTROPHIC_MCA_ERROR         0x93
+> +#define PECI_CC_FATAL_MCA_ERROR                        0x94
+> +#define PECI_CC_PARITY_ERR_GPSB_OR_PMSB                0x98
+> +#define PECI_CC_PARITY_ERR_GPSB_OR_PMSB_IERR   0x9B
+> +#define PECI_CC_PARITY_ERR_GPSB_OR_PMSB_MCA    0x9C
+> +
+> +#define PECI_RETRY_BIT                 BIT(0)
+> +
+> +#define PECI_RETRY_TIMEOUT             msecs_to_jiffies(700)
+> +#define PECI_RETRY_INTERVAL_MIN                msecs_to_jiffies(1)
+> +#define PECI_RETRY_INTERVAL_MAX                msecs_to_jiffies(128)
+> +
+> +static u8 peci_request_data_cc(struct peci_request *req)
+> +{
+> +       return req->rx.buf[0];
+> +}
+> +
+> +/**
+> + * peci_request_status() - return -errno based on PECI completion code
+> + * @req: the PECI request that contains response data with completion code
+> + *
+> + * It can't be used for Ping(), GetDIB() and GetTemp() - for those commands we
+> + * don't expect completion code in the response.
+> + *
+> + * Return: -errno
+> + */
+> +int peci_request_status(struct peci_request *req)
+> +{
+> +       u8 cc = peci_request_data_cc(req);
+> +
+> +       if (cc != PECI_CC_SUCCESS)
+> +               dev_dbg(&req->device->dev, "ret: %#02x\n", cc);
+> +
+> +       switch (cc) {
+> +       case PECI_CC_SUCCESS:
+> +               return 0;
+> +       case PECI_CC_NEED_RETRY:
+> +       case PECI_CC_OUT_OF_RESOURCE:
+> +       case PECI_CC_UNAVAIL_RESOURCE:
+> +               return -EAGAIN;
+> +       case PECI_CC_INVALID_REQ:
+> +               return -EINVAL;
+> +       case PECI_CC_MCA_ERROR:
+> +       case PECI_CC_CATASTROPHIC_MCA_ERROR:
+> +       case PECI_CC_FATAL_MCA_ERROR:
+> +       case PECI_CC_PARITY_ERR_GPSB_OR_PMSB:
+> +       case PECI_CC_PARITY_ERR_GPSB_OR_PMSB_IERR:
+> +       case PECI_CC_PARITY_ERR_GPSB_OR_PMSB_MCA:
+> +               return -EIO;
+> +       }
+> +
+> +       WARN_ONCE(1, "Unknown PECI completion code: %#02x\n", cc);
+> +
+> +       return -EIO;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_request_status, PECI);
+> +
+> +static int peci_request_xfer(struct peci_request *req)
+> +{
+> +       struct peci_device *device = req->device;
+> +       struct peci_controller *controller = to_peci_controller(device->dev.parent);
+> +       int ret;
+> +
+> +       mutex_lock(&controller->bus_lock);
+> +       ret = controller->ops->xfer(controller, device->addr, req);
+> +       mutex_unlock(&controller->bus_lock);
+> +
+> +       return ret;
+> +}
+> +
+> +static int peci_request_xfer_retry(struct peci_request *req)
+> +{
+> +       long wait_interval = PECI_RETRY_INTERVAL_MIN;
+> +       struct peci_device *device = req->device;
+> +       struct peci_controller *controller = to_peci_controller(device->dev.parent);
+> +       unsigned long start = jiffies;
+> +       int ret;
+> +
+> +       /* Don't try to use it for ping */
+> +       if (WARN_ON(!req->rx.buf))
+> +               return 0;
+> +
+> +       do {
+> +               ret = peci_request_xfer(req);
+> +               if (ret) {
+> +                       dev_dbg(&controller->dev, "xfer error: %d\n", ret);
+> +                       return ret;
+> +               }
+> +
+> +               if (peci_request_status(req) != -EAGAIN)
+> +                       return 0;
+> +
+> +               /* Set the retry bit to indicate a retry attempt */
+> +               req->tx.buf[1] |= PECI_RETRY_BIT;
+> +
+> +               if (schedule_timeout_interruptible(wait_interval))
+> +                       return -ERESTARTSYS;
+> +
+> +               wait_interval = min_t(long, wait_interval * 2, PECI_RETRY_INTERVAL_MAX);
+> +       } while (time_before(jiffies, start + PECI_RETRY_TIMEOUT));
+> +
+> +       dev_dbg(&controller->dev, "request timed out\n");
+> +
+> +       return -ETIMEDOUT;
+> +}
+> +
+>  /**
+>   * peci_request_alloc() - allocate &struct peci_requests
+>   * @device: PECI device to which request is going to be sent
+> @@ -48,3 +175,90 @@ void peci_request_free(struct peci_request *req)
+>         kfree(req);
+>  }
+>  EXPORT_SYMBOL_NS_GPL(peci_request_free, PECI);
+> +
+> +struct peci_request *peci_get_dib(struct peci_device *device)
+> +{
+> +       struct peci_request *req;
+> +       int ret;
+> +
+> +       req = peci_request_alloc(device, PECI_GET_DIB_WR_LEN, PECI_GET_DIB_RD_LEN);
+> +       if (!req)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       req->tx.buf[0] = PECI_GET_DIB_CMD;
+> +
+> +       ret = peci_request_xfer(req);
+> +       if (ret) {
+> +               peci_request_free(req);
+> +               return ERR_PTR(ret);
+> +       }
+> +
+> +       return req;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_get_dib, PECI);
+> +
+> +static struct peci_request *
+> +__pkg_cfg_read(struct peci_device *device, u8 index, u16 param, u8 len)
+> +{
+> +       struct peci_request *req;
+> +       int ret;
+> +
+> +       req = peci_request_alloc(device, PECI_RDPKGCFG_WR_LEN, PECI_RDPKGCFG_RD_LEN_BASE + len);
+> +       if (!req)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       req->tx.buf[0] = PECI_RDPKGCFG_CMD;
+> +       req->tx.buf[1] = 0;
+> +       req->tx.buf[2] = index;
+> +       put_unaligned_le16(param, &req->tx.buf[3]);
+> +
+> +       ret = peci_request_xfer_retry(req);
+> +       if (ret) {
+> +               peci_request_free(req);
+> +               return ERR_PTR(ret);
+> +       }
+> +
+> +       return req;
+> +}
+> +
+> +u8 peci_request_data_readb(struct peci_request *req)
+> +{
+> +       return req->rx.buf[1];
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_request_data_readb, PECI);
+> +
+> +u16 peci_request_data_readw(struct peci_request *req)
+> +{
+> +       return get_unaligned_le16(&req->rx.buf[1]);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_request_data_readw, PECI);
+> +
+> +u32 peci_request_data_readl(struct peci_request *req)
+> +{
+> +       return get_unaligned_le32(&req->rx.buf[1]);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_request_data_readl, PECI);
+> +
+> +u64 peci_request_data_readq(struct peci_request *req)
+> +{
+> +       return get_unaligned_le64(&req->rx.buf[1]);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_request_data_readq, PECI);
+> +
+> +u64 peci_request_data_dib(struct peci_request *req)
+> +{
+> +       return get_unaligned_le64(&req->rx.buf[0]);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(peci_request_data_dib, PECI);
+> +
+> +#define __read_pkg_config(x, type) \
+> +struct peci_request *peci_pkg_cfg_##x(struct peci_device *device, u8 index, u16 param) \
+> +{ \
+> +       return __pkg_cfg_read(device, index, param, sizeof(type)); \
+> +} \
+> +EXPORT_SYMBOL_NS_GPL(peci_pkg_cfg_##x, PECI)
+> +
+> +__read_pkg_config(readb, u8);
+> +__read_pkg_config(readw, u16);
+> +__read_pkg_config(readl, u32);
+> +__read_pkg_config(readq, u64);
+> diff --git a/include/linux/peci.h b/include/linux/peci.h
+> index 26e0a4e73b50..dcf1c53f4e40 100644
+> --- a/include/linux/peci.h
+> +++ b/include/linux/peci.h
+> @@ -14,6 +14,14 @@
+>   */
+>  #define PECI_REQUEST_MAX_BUF_SIZE 32
+>
+> +#define PECI_PCS_PKG_ID                        0  /* Package Identifier Read */
+> +#define  PECI_PKG_ID_CPU_ID            0x0000  /* CPUID Info */
+> +#define  PECI_PKG_ID_PLATFORM_ID       0x0001  /* Platform ID */
+> +#define  PECI_PKG_ID_DEVICE_ID         0x0002  /* Uncore Device ID */
+> +#define  PECI_PKG_ID_MAX_THREAD_ID     0x0003  /* Max Thread ID */
+> +#define  PECI_PKG_ID_MICROCODE_REV     0x0004  /* CPU Microcode Update Revision */
+> +#define  PECI_PKG_ID_MCA_ERROR_LOG     0x0005  /* Machine Check Status */
+> +
+>  struct peci_controller;
+>  struct peci_request;
+>
+> @@ -59,6 +67,11 @@ static inline struct peci_controller *to_peci_controller(void *d)
+>   * struct peci_device - PECI device
+>   * @dev: device object to register PECI device to the device model
+>   * @controller: manages the bus segment hosting this PECI device
+> + * @info: PECI device characteristics
+> + * @info.family: device family
+> + * @info.model: device model
+> + * @info.peci_revision: PECI revision supported by the PECI device
+> + * @info.socket_id: the socket ID represented by the PECI device
+>   * @addr: address used on the PECI bus connected to the parent controller
+>   *
+>   * A peci_device identifies a single device (i.e. CPU) connected to a PECI bus.
+> @@ -67,6 +80,12 @@ static inline struct peci_controller *to_peci_controller(void *d)
+>   */
+>  struct peci_device {
+>         struct device dev;
+> +       struct {
+> +               u16 family;
+> +               u8 model;
+> +               u8 peci_revision;
+> +               u8 socket_id;
+> +       } info;
+>         u8 addr;
+>  };
+>
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index e538d4d773bd..7f7972d357c2 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -718,4 +718,4 @@ config ASN1_ENCODER
+>
+>  config GENERIC_LIB_X86
+>         bool
+> -       depends on X86
+> +       depends on X86 || PECI
+
+This looks broken, what in the GENERIC_LIB_X86 implementation depends on peci?
