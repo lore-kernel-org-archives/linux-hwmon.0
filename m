@@ -2,235 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B421C432BE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 21:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B87C432BE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 23:04:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 663CB60F35
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 21:45:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11FE560EE5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Aug 2021 23:04:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbhH0VqR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Aug 2021 17:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S232376AbhH0XFm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Aug 2021 19:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbhH0VqQ (ORCPT
+        with ESMTP id S232252AbhH0XFm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Aug 2021 17:46:16 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB65C0613D9;
-        Fri, 27 Aug 2021 14:45:27 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id g66-20020a9d12c8000000b0051aeba607f1so9664529otg.11;
-        Fri, 27 Aug 2021 14:45:27 -0700 (PDT)
+        Fri, 27 Aug 2021 19:05:42 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04486C0613D9;
+        Fri, 27 Aug 2021 16:04:52 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id a10so8858775qka.12;
+        Fri, 27 Aug 2021 16:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7ouZTg4zsFx0uMVk4ebH+S61geCrhsSVEPoyVZAJgaQ=;
-        b=Cof9235zkIdizb3baMDkhJmYgicHTyasHHeKSbkwcGPwTN6+6CuNuX3SoBqhDwTczf
-         +/6P/O+31vN/UrYF9kQvtHehfZgmvGY6l1k+TEy813hG+pInhBXsrg3dA98ShzDCYGzQ
-         A/ZMSoExgb9Thyxw4Vou8BxaJVmNS1DYn4tdFczMERJPMnz5rPnIY2AcsGrUIdCi+JMV
-         d4q/oS3bUXb0zsZUpvEGWLbs9pqhlw31nP+VMVQnl7Z8xw9E7nEhPzFa8mlEnHxPYfme
-         CHCcmufEQ52bi2Yym5gYxzEvoLgcOY7ZFfvkYEmmbV+3X329+8k+AqZFh+WXOar9xQQS
-         zC/Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=01hGhTEykF0Oen+PehMw35YekmoQ4ZCTAgo08P6ZyM0=;
+        b=VXHVnFW4X99IfoeL1Osga+0QOlK7SZcSfSTCQoYalwMggX1m4+IQFr8j842mLXzirK
+         8YIDt5Cym/8mL3i/9yLGVKCt3pUKLyWqoC/cEg/o/Ysht17g+p6ZErp2ihIW0Co6mGuK
+         tfEpsL8Ta6i5ygGrPNMbHKWdRHB6gnS+0CvytsFpricDcq7YDWHJpdswFsDICnwzRq+8
+         xq91UuJRcOWOm8LL1kqdzzAIRkZaGiwgPSlQETmXipHkalvjdSIrSRm2qoJgZAskykcb
+         SJGw9B7iaQMJejgNIcHBzDtyE50vEb8BZd4NVWh0HloRB8BGaoanDBrYkybv3irugFBE
+         u5EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7ouZTg4zsFx0uMVk4ebH+S61geCrhsSVEPoyVZAJgaQ=;
-        b=eDAHhOBAuxKChLS2uqemn902Hxika19E9btFMFBd0mcHwFC+PUKVnfw9iKr2GEW4bI
-         9loEg/V/afVECTDiZG3jbmcBP1S7koG84NriynwyIqtopbrDFqTFf0P63kRvsXeuBdkL
-         dM8eGtMqlE9y+TxSC88EGCEmKs0hmrqWydo7k2naGM51+vcogpfY/TXFH0xYmurDWuHB
-         mPQ7AEqPHuskZy1OnPhy8fa1dnuOwAvUTrhVpwUvp2lN7lT8eo86GFugNnVOdnN1iWts
-         ZwJlUMFiObSAqM6BHazEh/vPLbjFnS2Fb732gMgxuaYO7xNB45vRPz2kM0wiprtepuxS
-         Ir1A==
-X-Gm-Message-State: AOAM5331pAK0mc/jT1pVwW6feba72Hrwayb1DqnnoWPeZGLmSURyxGFC
-        BGSG7JK2eS+5e936PTdl1hS/cJaD9d4=
-X-Google-Smtp-Source: ABdhPJyzDnRWqTspGlf7kEb23/DrG5O8uEQibg9lWAsqsjcmMWndEQ4Jc3T0HI0nFqDdXwFijHCReA==
-X-Received: by 2002:a05:6830:2151:: with SMTP id r17mr10034408otd.141.1630100726509;
-        Fri, 27 Aug 2021 14:45:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m16sm1440768oop.3.2021.08.27.14.45.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Aug 2021 14:45:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Clemens Ladisch <clemens@ladisch.de>, linux-hwmon@vger.kernel.org,
-        Gabriel Craciunescu <nix.or.die@googlemail.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20210827201527.24454-1-mario.limonciello@amd.com>
- <20210827201527.24454-4-mario.limonciello@amd.com>
- <20210827210648.GA678755@roeck-us.net>
- <90d283d0-06f6-baa5-b41b-fcd2f4b3ba99@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 3/3] hwmon: (k10temp): Show errors failing to read
-Message-ID: <ebdfd938-d381-3c8f-8b7f-accfd90f4169@roeck-us.net>
-Date:   Fri, 27 Aug 2021 14:45:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        bh=01hGhTEykF0Oen+PehMw35YekmoQ4ZCTAgo08P6ZyM0=;
+        b=GkbNSnUBgCHJV4Ii/WwCsdY8Nwik6pVm/JVd0AvufikRZFv5wxluDB2WeIOIRA9FAl
+         wV+1Zgbw7uRG/Tbsd1D6Dm0zXrjlZAVj2Mgg4jTGIZEYg7Loutv5bQP7Hq8irVlQ0SN0
+         icwISb1j01dE1IoTFCLB78KzaPxUoPhiSJ9YjfrtRLkNtnbBLmjLlr0UUvjvvARRt7ED
+         ySlteWG7zMAn6trilLLyp1gudfPm12LgEhSirttoAXqHnSxk4Sx27mcZT1oGnHICwl17
+         Gyzw4vanc8aZ1oWYqrHqRpXY0BptPg6rK88yLGnnctJSjYz2QfQ85xU5VF1kn3evCC45
+         JKng==
+X-Gm-Message-State: AOAM533b65K0qn1k5kCeLXJofbbZAtRx5rRzQJQ45a+uktRRXNJPLwQa
+        ZF2EsRntLXLQ72FXk7O7Qlo=
+X-Google-Smtp-Source: ABdhPJyaBfKBb7GEWJZ8qyNK3DpPQ8kfFHQrTmVYwd3GlY2LhCQhDmAaxnzD9iRm3gq6oMi5oTO6Zg==
+X-Received: by 2002:ae9:e017:: with SMTP id m23mr11681862qkk.8.1630105492020;
+        Fri, 27 Aug 2021 16:04:52 -0700 (PDT)
+Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
+        by smtp.gmail.com with ESMTPSA id p22sm5588552qkj.16.2021.08.27.16.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Aug 2021 16:04:51 -0700 (PDT)
+From:   Brandon Wyman <bjwyman@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Cc:     Brandon Wyman <bjwyman@gmail.com>
+Subject: [PATCH] hwmon: (pmbus/ibm-cffps) Do not swap max_power_out
+Date:   Fri, 27 Aug 2021 23:04:33 +0000
+Message-Id: <20210827230433.3596370-1-bjwyman@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <90d283d0-06f6-baa5-b41b-fcd2f4b3ba99@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/27/21 2:10 PM, Limonciello, Mario wrote:
-> On 8/27/2021 16:06, Guenter Roeck wrote:
->> On Fri, Aug 27, 2021 at 03:15:27PM -0500, Mario Limonciello wrote:
->>> Enabling Yellow Carp was initially not working "properly"
->>> because extra IDs were needed, but this wasn't obvious because fail values
->>> from `amd_smn_read` were ignored.
->>>
->>> Don't discard errors from any functions providing them, instead pass up
->>> to the caller.
->>>
->>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>> ---
->>>   drivers/hwmon/k10temp.c | 87 ++++++++++++++++++++++++-----------------
->>>   1 file changed, 52 insertions(+), 35 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
->>> index 38bc35ac8135..2edb49d39d22 100644
->>> --- a/drivers/hwmon/k10temp.c
->>> +++ b/drivers/hwmon/k10temp.c
->>> @@ -98,8 +98,8 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
->>>   struct k10temp_data {
->>>       struct pci_dev *pdev;
->>> -    void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
->>> -    void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
->>> +    int (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
->>> +    int (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
->>>       int temp_offset;
->>>       u32 temp_adjust_mask;
->>>       u32 show_temp;
->>> @@ -129,55 +129,65 @@ static const struct tctl_offset tctl_offset_table[] = {
->>>       { 0x17, "AMD Ryzen Threadripper 29", 27000 }, /* 29{20,50,70,90}[W]X */
->>>   };
->>> -static void read_htcreg_pci(struct pci_dev *pdev, u32 *regval)
->>> +static int read_htcreg_pci(struct pci_dev *pdev, u32 *regval)
->>>   {
->>> -    pci_read_config_dword(pdev, REG_HARDWARE_THERMAL_CONTROL, regval);
->>> +    return pci_read_config_dword(pdev, REG_HARDWARE_THERMAL_CONTROL, regval);
->>>   }
->>> -static void read_tempreg_pci(struct pci_dev *pdev, u32 *regval)
->>> +static int read_tempreg_pci(struct pci_dev *pdev, u32 *regval)
->>>   {
->>> -    pci_read_config_dword(pdev, REG_REPORTED_TEMPERATURE, regval);
->>> +    return pci_read_config_dword(pdev, REG_REPORTED_TEMPERATURE, regval);
->>>   }
->>> -static void amd_nb_index_read(struct pci_dev *pdev, unsigned int devfn,
->>> +static int amd_nb_index_read(struct pci_dev *pdev, unsigned int devfn,
->>>                     unsigned int base, int offset, u32 *val)
->>>   {
->>> +    int ret;
->>> +
->>>       mutex_lock(&nb_smu_ind_mutex);
->>> -    pci_bus_write_config_dword(pdev->bus, devfn,
->>> -                   base, offset);
->>> -    pci_bus_read_config_dword(pdev->bus, devfn,
->>> -                  base + 4, val);
->>> +    ret = pci_bus_write_config_dword(pdev->bus, devfn,
->>> +                     base, offset);
->>> +    if (ret)
->>> +        goto out;
->>> +    ret = pci_bus_read_config_dword(pdev->bus, devfn,
->>> +                    base + 4, val);
->>> +out:
->>>       mutex_unlock(&nb_smu_ind_mutex);
->>> +    return ret;
->>>   }
->>> -static void read_htcreg_nb_f15(struct pci_dev *pdev, u32 *regval)
->>> +static int read_htcreg_nb_f15(struct pci_dev *pdev, u32 *regval)
->>>   {
->>> -    amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
->>> -              F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET, regval);
->>> +    return amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
->>> +                F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET, regval);
->>>   }
->>> -static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
->>> +static int read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
->>>   {
->>> -    amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
->>> -              F15H_M60H_REPORTED_TEMP_CTRL_OFFSET, regval);
->>> +    return amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
->>> +                F15H_M60H_REPORTED_TEMP_CTRL_OFFSET, regval);
->>>   }
->>> -static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
->>> +static int read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
->>>   {
->>> -    amd_smn_read(amd_pci_dev_to_node_id(pdev),
->>> -             ZEN_REPORTED_TEMP_CTRL_BASE, regval);
->>> +    return amd_smn_read(amd_pci_dev_to_node_id(pdev),
->>> +                ZEN_REPORTED_TEMP_CTRL_BASE, regval);
->>>   }
->>> -static long get_raw_temp(struct k10temp_data *data)
->>> +static int get_raw_temp(struct k10temp_data *data, long *val)
->>>   {
->>>       u32 regval;
->>> -    long temp;
->>> +    int ret;
->>> -    data->read_tempreg(data->pdev, &regval);
->>> -    temp = (regval >> ZEN_CUR_TEMP_SHIFT) * 125;
->>> +    ret = data->read_tempreg(data->pdev, &regval);
->>> +    if (ret)
->>> +        return ret;
->>> +    *val = (regval >> ZEN_CUR_TEMP_SHIFT) * 125;
->>>       if (regval & data->temp_adjust_mask)
->>> -        temp -= 49000;
->>> -    return temp;
->>> +        *val -= 49000;
->>> +    if (*val < 0)
->>> +        return -EINVAL;
->>
->> Please don't do that. More on that see below.
->>
->>> +    return 0;
->>>   }
->>>   static const char *k10temp_temp_label[] = {
->>> @@ -212,24 +222,27 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->>>   {
->>>       struct k10temp_data *data = dev_get_drvdata(dev);
->>>       u32 regval;
->>> +    int ret;
->>>       switch (attr) {
->>>       case hwmon_temp_input:
->>>           switch (channel) {
->>>           case 0:        /* Tctl */
->>> -            *val = get_raw_temp(data);
->>> -            if (*val < 0)
->>> -                *val = 0;
->>
->> We have to take the history into account here. A negative value
->> is not an error per se, but it suggests that the chip returns wrong
->> data. See commit aef17ca12719 ("hwmon: (k10temp) Only apply temperature
->> offset if result is positive") for some of the background. I don't really
->> want to change that into an error return just because we don't know
->> what the chip is doing. Please retain the above code, either by fixing
->> the values up here or in get_raw_temp().
-> 
-> Actually I thought what I was doing *was* making it a lot less ambiguous.
-> 
-> The caller getting -EINVAL from get_raw_tempt will indicate that the data shouldn't be trusted rather than a surely wrong "0".
-> 
+The bytes for max_power_out from the ibm-cffps devices do not need to be
+swapped.
 
-First, EINVAL is "Invalid argument" and thus most definitely the wrong
-error.
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+---
+ drivers/hwmon/pmbus/ibm-cffps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Second, this is a logically different change and violates "one logical
-change per patch". You can try to argue this in a separate patch,
-but do not try sneak it in with an unrelated change.
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index df712ce4b164..29b77f192c9e 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -171,7 +171,7 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+ 		cmd = CFFPS_SN_CMD;
+ 		break;
+ 	case CFFPS_DEBUGFS_MAX_POWER_OUT:
+-		rc = i2c_smbus_read_word_swapped(psu->client,
++		rc = i2c_smbus_read_word_data(psu->client,
+ 						 CFFPS_MAX_POWER_OUT_CMD);
+ 		if (rc < 0)
+ 			return rc;
+-- 
+2.25.1
 
-Plus, of course, I'd rather get code from AMD that does the right thing
-and reports the correct temperature in the observed situation.
-
-Thanks,
-Guenter
