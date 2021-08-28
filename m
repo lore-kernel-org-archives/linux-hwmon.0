@@ -2,106 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BCEEC432BE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 15:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D74C432BE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 15:54:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1BB1160E77
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 15:52:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 514C36054E
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 15:54:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbhH1Pxn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Aug 2021 11:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S234492AbhH1Pze (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Aug 2021 11:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhH1Pxn (ORCPT
+        with ESMTP id S229813AbhH1Pzd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Aug 2021 11:53:43 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65F1C061756;
-        Sat, 28 Aug 2021 08:52:52 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id y3-20020a4ab403000000b00290e2a52c71so330971oon.2;
-        Sat, 28 Aug 2021 08:52:52 -0700 (PDT)
+        Sat, 28 Aug 2021 11:55:33 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E742C061756;
+        Sat, 28 Aug 2021 08:54:43 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id i3-20020a056830210300b0051af5666070so12070990otc.4;
+        Sat, 28 Aug 2021 08:54:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q+Ocg9t6n66QWfzQb63Nyh3M8znI6gaQbrcqs3sFG/4=;
-        b=f4ulNnMg+aI9qV4pCNJZC7VZQtHA93fzhZVWNgpAzJ/i6sW7sRa56cCDHjpgKYtKKn
-         6+k9LLk+2w1OR0VFRkZfW57W4WXvS3PPiMXTUkLPsV6etbFZhE7o1qu0uAZ7sWQDPr1R
-         SyOpQ5celoypcz9BG2EE/POllienjPY1dGwjS8ugihZt0lzMB0eqJMNL5PgMNSiy59ya
-         dj6HtkH4UYDWOa0URFq6c+FZCGZ4rZbHpGP3K8Cu3UMJemLF4tsrW/BXLXGPjXPteDNd
-         wC2oexf4VgA8+vEm8wDEkcmQHTwE4i8xmTZ9qTThoV53njGqREodbXUdyJyezvJoWMYg
-         69+g==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=e4TSKtefWHgQZdSiBJs6Tav40y6+gqilbiq5J43BUIw=;
+        b=nFROXdNBrxSlGnuA5utpR0mhMT+0n6ucfU8Qpu1kdrBXnWscx5Ub/IQHf+92Z9WVdN
+         lLS0Dnc6FtM6Z/TZRfD81m4dWXT0fArhfTw4LWhNC/SsQiyN95ZXitQ38ds2rjechkAB
+         RmqpoTUa3M2vrpCXwuB5aAeWg4qlslU+jG/aGRefBXH0iXa4LHDDqNmSZFjwUHHD6Kuj
+         ys3uy+OGE4tNnOiXwASLtm9rWI+NPyx5dMp3M3rkI7MIIEFky4Yc7+njJCqetwupwvLr
+         3dsPYtOV8zd3tn+/b999xYgo5CSu/Y1fv17s7TxM6eUUtq6pVuCyyVMqMFNBiOiRdsjE
+         7rKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=q+Ocg9t6n66QWfzQb63Nyh3M8znI6gaQbrcqs3sFG/4=;
-        b=Xu9WG2wyFCaAmXZfyyDTPNCQspV87Z1B6YjlfY0oky/bTH0ZKCD8/qzxMe45dE58XD
-         UApFQYwQGxXdP18EoqKI9GKj2XPnFmXFqDjPHsEn0WfMx9pez4P4bEztxHkwC48zsAK1
-         N4LR0F08XQGlG7KPoepCyQYNQJ4+PIoVXs8bfssBBpaeb0nk97PXqEc297rvK1X+OC6F
-         uZbYD3Wi6uuCVT0D+lpGFw3s1KtHggY1h50uOfDzNcghEkG/CXa5Y8UxsX2ReywZK9I0
-         HYn+p/vg7bwYifkHLRb9YZgEx73HSNo9zQtf0AWI6vRl9UYXBcrZi0G+Z9sVgAuatWoY
-         RPGA==
-X-Gm-Message-State: AOAM530MTPcyDcYoW702N73/46d9lxbNCE4+7TNmvIGiGP2RHkBfXx1Q
-        aXzTkPr7//cB4qeUHIRHY5KHW380Sr4=
-X-Google-Smtp-Source: ABdhPJxHlYAg1s4un4jIGGBmp8Yg6VwhNOlYd1jxnpZgBIJcRkdBmH0NrUhf4L4FyoIl7rugyFsyDw==
-X-Received: by 2002:a4a:ba0f:: with SMTP id b15mr3739989oop.31.1630165972124;
-        Sat, 28 Aug 2021 08:52:52 -0700 (PDT)
+         :mime-version:content-disposition;
+        bh=e4TSKtefWHgQZdSiBJs6Tav40y6+gqilbiq5J43BUIw=;
+        b=pxPcYZUT+kB0wtOg1M0xnee0ODdxX/K6FLhbBAtnOfETCOCHljgr+l4NfOZV5xvmay
+         S3YQkfL0rIq6dSm/a4PgIOR4UkueO+oy3av/Yh3hSNby6YYLUgt/+JrT5cKeeExwXl3I
+         evRk1VqysEga6O+83QJ8bAkHSUeLTuWh3jmBm/GSK0DonVqjPAoX7M150c0vdkWL/fUq
+         Ooni4w6sN2cfFYJhR4HJBw/t+aif3i8tz5NAiPdSCrWoLUJ+qGM0jH7f8mmGS68zXiC+
+         hHJi9xPMVunhqAhEUiTI5xiSu2NweXoK4msOksYQCH1lTEKoiFv3aWoKKGPgz+/D2tKL
+         whsA==
+X-Gm-Message-State: AOAM530jPHJ3pKXzrtW5eu56OGB+QMQpC9Uqh7f1jUpDyjb9OsHanFOl
+        BXsjosVEfLACpTQNLeTLt4hl9tgxIrk=
+X-Google-Smtp-Source: ABdhPJzvfO+otutJpyPVfF9fgAPnQdVfC70ML1OfN4ahmqpyvxFnOY4dSZsijiMT/xxxqFyxyXPxng==
+X-Received: by 2002:a9d:70cc:: with SMTP id w12mr12356628otj.306.1630166082642;
+        Sat, 28 Aug 2021 08:54:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a4sm354649otv.49.2021.08.28.08.52.51
+        by smtp.gmail.com with ESMTPSA id x4sm34010ood.2.2021.08.28.08.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Aug 2021 08:52:51 -0700 (PDT)
+        Sat, 28 Aug 2021 08:54:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 28 Aug 2021 08:52:50 -0700
+Date:   Sat, 28 Aug 2021 08:54:41 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Brandon Wyman <bjwyman@gmail.com>
-Cc:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH] hwmon: (pmbus/ibm-cffps) Do not swap max_power_out
-Message-ID: <20210828155250.GA820265@roeck-us.net>
-References: <20210827230433.3596370-1-bjwyman@gmail.com>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: add driver for Aquacomputer D5 Next
+Message-ID: <20210828155441.GA820794@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210827230433.3596370-1-bjwyman@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 11:04:33PM +0000, Brandon Wyman wrote:
-> The bytes for max_power_out from the ibm-cffps devices do not need to be
-> swapped.
+On Sat, Aug 28, 2021 at 07:26:28AM +0200, Aleksa Savic wrote:
+> This driver exposes hardware sensors of the Aquacomputer D5 Next
+> watercooling pump, which communicates through a proprietary USB HID
+> protocol.
 > 
-> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+> Available sensors are pump and fan speed, power, voltage and current, as
+> well as coolant temperature. Also available through debugfs are the serial
+> number, firmware version and power-on count.
+> 
+> Attaching a fan is optional and allows it to be controlled using
+> temperature curves directly from the pump. If it's not connected,
+> the fan-related sensors will report zeroes.
+> 
+> The pump can be configured either through software or via its physical
+> interface. Configuring the pump through this driver is not implemented,
+> as it seems to require sending it a complete configuration. That
+> includes addressable RGB LEDs, for which there is no standard sysfs
+> interface. Thus, that task is better suited for userspace tools.
+> 
+> This driver has been tested on x86_64, both in-kernel and as a module.
+> 
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-Eddie, can you confirm this ?
+Applied.
 
 Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/pmbus/ibm-cffps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index df712ce4b164..29b77f192c9e 100644
-> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -171,7 +171,7 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
->  		cmd = CFFPS_SN_CMD;
->  		break;
->  	case CFFPS_DEBUGFS_MAX_POWER_OUT:
-> -		rc = i2c_smbus_read_word_swapped(psu->client,
-> +		rc = i2c_smbus_read_word_data(psu->client,
->  						 CFFPS_MAX_POWER_OUT_CMD);
->  		if (rc < 0)
->  			return rc;
-> -- 
-> 2.25.1
-> 
