@@ -2,100 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D74C432BE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 15:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AB58C432BE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 17:04:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 514C36054E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 15:54:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61B3660E97
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Aug 2021 17:04:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbhH1Pze (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Aug 2021 11:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S234557AbhH1RFq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Aug 2021 13:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbhH1Pzd (ORCPT
+        with ESMTP id S234357AbhH1RFp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Aug 2021 11:55:33 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E742C061756;
-        Sat, 28 Aug 2021 08:54:43 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id i3-20020a056830210300b0051af5666070so12070990otc.4;
-        Sat, 28 Aug 2021 08:54:43 -0700 (PDT)
+        Sat, 28 Aug 2021 13:05:45 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F8BC061756;
+        Sat, 28 Aug 2021 10:04:55 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id bt14so21024739ejb.3;
+        Sat, 28 Aug 2021 10:04:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=e4TSKtefWHgQZdSiBJs6Tav40y6+gqilbiq5J43BUIw=;
-        b=nFROXdNBrxSlGnuA5utpR0mhMT+0n6ucfU8Qpu1kdrBXnWscx5Ub/IQHf+92Z9WVdN
-         lLS0Dnc6FtM6Z/TZRfD81m4dWXT0fArhfTw4LWhNC/SsQiyN95ZXitQ38ds2rjechkAB
-         RmqpoTUa3M2vrpCXwuB5aAeWg4qlslU+jG/aGRefBXH0iXa4LHDDqNmSZFjwUHHD6Kuj
-         ys3uy+OGE4tNnOiXwASLtm9rWI+NPyx5dMp3M3rkI7MIIEFky4Yc7+njJCqetwupwvLr
-         3dsPYtOV8zd3tn+/b999xYgo5CSu/Y1fv17s7TxM6eUUtq6pVuCyyVMqMFNBiOiRdsjE
-         7rKg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w86O53R0J9hPAmoMxLqD9PUEU69iy1C6zXa6K7LrGPI=;
+        b=tBbxa08M5/VPnFYR/fRRU2HTgiMaRnWmPpYIu9p9xu4RjenmHk+md/NRFDHqIHESH9
+         NwVuWCVd421jvPydzefGSgsnVE9aGQU0HWgC5cycZ7Fx4RkSM9xOpL+hOtQfDv9bcYEJ
+         0tmUK+Hqr+AE1NRgpTjpwG/hrp+3RYWe0dI/SPqWedGE5qf7tSHfACBpry6XZx4dEA88
+         gK7gmco7c7zxu9aYKVHIgphuenONlHDdM+V/S0Uo6wzlw6D09wfNrfOtKJ3Sphz6sOew
+         DHKrYbBVQL2a47WAHN0R2CuaAAP2MJ6ByeFgFaRKHg7wF4dvSSr7WZ5IsvhkP5lfSxDv
+         qiAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=e4TSKtefWHgQZdSiBJs6Tav40y6+gqilbiq5J43BUIw=;
-        b=pxPcYZUT+kB0wtOg1M0xnee0ODdxX/K6FLhbBAtnOfETCOCHljgr+l4NfOZV5xvmay
-         S3YQkfL0rIq6dSm/a4PgIOR4UkueO+oy3av/Yh3hSNby6YYLUgt/+JrT5cKeeExwXl3I
-         evRk1VqysEga6O+83QJ8bAkHSUeLTuWh3jmBm/GSK0DonVqjPAoX7M150c0vdkWL/fUq
-         Ooni4w6sN2cfFYJhR4HJBw/t+aif3i8tz5NAiPdSCrWoLUJ+qGM0jH7f8mmGS68zXiC+
-         hHJi9xPMVunhqAhEUiTI5xiSu2NweXoK4msOksYQCH1lTEKoiFv3aWoKKGPgz+/D2tKL
-         whsA==
-X-Gm-Message-State: AOAM530jPHJ3pKXzrtW5eu56OGB+QMQpC9Uqh7f1jUpDyjb9OsHanFOl
-        BXsjosVEfLACpTQNLeTLt4hl9tgxIrk=
-X-Google-Smtp-Source: ABdhPJzvfO+otutJpyPVfF9fgAPnQdVfC70ML1OfN4ahmqpyvxFnOY4dSZsijiMT/xxxqFyxyXPxng==
-X-Received: by 2002:a9d:70cc:: with SMTP id w12mr12356628otj.306.1630166082642;
-        Sat, 28 Aug 2021 08:54:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x4sm34010ood.2.2021.08.28.08.54.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w86O53R0J9hPAmoMxLqD9PUEU69iy1C6zXa6K7LrGPI=;
+        b=KqT1hgP/fP3qCDaheN4qZ93447OwV4XI/kA4C/bEaoYll+THyDsseoNKlAmnPmNb7z
+         FdFWeofG4MfL/mpZoNv4WOL5SXMsTearV6Ehd1JSV7CruzGzAmQSLWQ+kfvmdfKDKKSz
+         qQCe3xaR8+k/+PG+wzScrkx4QUKBH2ZR3a8JMoME8xy9vus+9VLSVw/9/NFlQ/XGqc+d
+         YwBurSzTzo4F9c2JKZZc/4QiqlFjFZfRAoHBBuo7eqlHOJGBYnA7nwFNHOwroTpr1gHm
+         EqTC03M8aj3ufKTPyE02p2eBy1JmrdUEaN1gaoSoxL6ElNvZMoSnvT1F+VFuVSaXNvsE
+         MF2g==
+X-Gm-Message-State: AOAM532Phs8V8n09yCsgw0+h7+2Dbq2KeuVOj3oJklKEMAssfBph2oA9
+        86MmPLnakasUiZXqQ7sCkjjvKzEwyUji2L/L59s=
+X-Google-Smtp-Source: ABdhPJyzSQfA/Xqemm3AqsLNOWUIM10kvcUovjp0GttH/+y7Wm9S5+vX2S9WWNyyCG2N6dytdtR5wQ==
+X-Received: by 2002:a17:907:75d9:: with SMTP id jl25mr16224777ejc.4.1630170293607;
+        Sat, 28 Aug 2021 10:04:53 -0700 (PDT)
+Received: from fedora (cable-178-148-241-131.dynamic.sbb.rs. [178.148.241.131])
+        by smtp.gmail.com with ESMTPSA id v10sm5102658edt.25.2021.08.28.10.04.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Aug 2021 08:54:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 28 Aug 2021 08:54:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
+        Sat, 28 Aug 2021 10:04:53 -0700 (PDT)
+Date:   Sat, 28 Aug 2021 19:04:50 +0200
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] hwmon: add driver for Aquacomputer D5 Next
-Message-ID: <20210828155441.GA820794@roeck-us.net>
+Message-ID: <YSpssm0+rN6nr2Yi@fedora>
+References: <20210828155441.GA820794@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20210828155441.GA820794@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Aug 28, 2021 at 07:26:28AM +0200, Aleksa Savic wrote:
-> This driver exposes hardware sensors of the Aquacomputer D5 Next
-> watercooling pump, which communicates through a proprietary USB HID
-> protocol.
+On Sat, Aug 28, 2021 at 08:54:41AM -0700, Guenter Roeck wrote:
+> On Sat, Aug 28, 2021 at 07:26:28AM +0200, Aleksa Savic wrote:
+> > This driver exposes hardware sensors of the Aquacomputer D5 Next
+> > watercooling pump, which communicates through a proprietary USB HID
+> > protocol.
+> > 
+> > Available sensors are pump and fan speed, power, voltage and current, as
+> > well as coolant temperature. Also available through debugfs are the serial
+> > number, firmware version and power-on count.
+> > 
+> > Attaching a fan is optional and allows it to be controlled using
+> > temperature curves directly from the pump. If it's not connected,
+> > the fan-related sensors will report zeroes.
+> > 
+> > The pump can be configured either through software or via its physical
+> > interface. Configuring the pump through this driver is not implemented,
+> > as it seems to require sending it a complete configuration. That
+> > includes addressable RGB LEDs, for which there is no standard sysfs
+> > interface. Thus, that task is better suited for userspace tools.
+> > 
+> > This driver has been tested on x86_64, both in-kernel and as a module.
+> > 
+> > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 > 
-> Available sensors are pump and fan speed, power, voltage and current, as
-> well as coolant temperature. Also available through debugfs are the serial
-> number, firmware version and power-on count.
+> Applied.
 > 
-> Attaching a fan is optional and allows it to be controlled using
-> temperature curves directly from the pump. If it's not connected,
-> the fan-related sensors will report zeroes.
-> 
-> The pump can be configured either through software or via its physical
-> interface. Configuring the pump through this driver is not implemented,
-> as it seems to require sending it a complete configuration. That
-> includes addressable RGB LEDs, for which there is no standard sysfs
-> interface. Thus, that task is better suited for userspace tools.
-> 
-> This driver has been tested on x86_64, both in-kernel and as a module.
-> 
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> Thanks,
+> Guenter
 
-Applied.
+Thanks.
 
-Thanks,
-Guenter
+Aleksa
