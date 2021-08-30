@@ -2,112 +2,119 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22D79C432BE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 20:59:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E56C432BE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 21:05:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C31860FA0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 20:59:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1F2960724
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 21:05:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236036AbhH3VA1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Aug 2021 17:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S236451AbhH3VGu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Aug 2021 17:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236673AbhH3VA0 (ORCPT
+        with ESMTP id S236431AbhH3VGu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Aug 2021 17:00:26 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94466C061575
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Aug 2021 13:59:30 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EC747806A8;
-        Tue, 31 Aug 2021 08:59:24 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1630357164;
-        bh=Cj1HC74r2MPnEw4CyvStNz4uRXJHeNzHPBcHLUfpNZE=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=T8Xc44Z//GszkNCuXlwN0Irp4bnzGh2E2ndOw5cmbn9wFZANJdRz2WzBYPiFJerbQ
-         cug2FKJA6j7vaQzflpPZR9nXQG7BvTJC3t2cqikyKBGlClR3ZFAYC6PdyV9yZO6xza
-         BLhAi1jmw22NL7of+OXjn/Ak1E8NyBEFVX4ZTugDS0Esg9YfaOkbvZGT7H0vc3UxdC
-         V4w1u2RVngFwS1gyHOcDfj7BuZVY/t5qPIUucvPf34aDS8SXWjmBrs2gGhUcXWJSjI
-         CFOvRwL+T06HY+7xK6GRSO1qI+5qnXPURie7Gglhd5h8d+64rC06HkIDqquuHMnpgo
-         tnm3mMDt9HUTQ==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B612d46ac0001>; Tue, 31 Aug 2021 08:59:24 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Tue, 31 Aug 2021 08:59:24 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.023; Tue, 31 Aug 2021 08:59:24 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/4] hwmon: (adt7470) Use standard update_interval
- property
-Thread-Topic: [PATCH v2 4/4] hwmon: (adt7470) Use standard update_interval
- property
-Thread-Index: AQHXmiPcXguJzdIxPU+IRgUO+WiCqKuHF9kAgAMe8gCAATVTgIAAWkGA
-Date:   Mon, 30 Aug 2021 20:59:24 +0000
-Message-ID: <dace3f40-8038-2867-dc20-596f8bc0ebe2@alliedtelesis.co.nz>
-References: <20210826024121.15665-1-chris.packham@alliedtelesis.co.nz>
- <20210826024121.15665-5-chris.packham@alliedtelesis.co.nz>
- <20210827212942.GA716764@roeck-us.net>
- <fe6cf9f3-f15e-065c-aaf8-cc018edf12e8@alliedtelesis.co.nz>
- <e467a3b2-d7c7-0920-9287-fb3e7abd5fae@roeck-us.net>
-In-Reply-To: <e467a3b2-d7c7-0920-9287-fb3e7abd5fae@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CAE07E19B1FDC048B04C68A1D8B96635@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Mon, 30 Aug 2021 17:06:50 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE47C061575;
+        Mon, 30 Aug 2021 14:05:56 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id s20so21731545oiw.3;
+        Mon, 30 Aug 2021 14:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hQMbf1CRju8iVpBFQxPXC0LnaB1HOCwD51tLl7euPGg=;
+        b=qNRni3mkoHbKSNIaGvV/2dQggN9ND0Kt+JHpWIMld/Jay0FiCAENHMdpuJR2NMq5EM
+         orVk3PwYq3T81iVSVNo3meTZ+YGBBPYIA1x7Epm1nqdZnH7WZQGsy7pD9IVRcZIEQGet
+         cQ1LNl8y/v61QZc5cXlWqLFI9CJKfrBwSQFSpF1LA/zginm6QMDWOEjYG5PiUAn48ib2
+         avXpNErArz2lSj5XOiYcC+xdvoJy+CxS+c9au+SE8oD2CIdRgtD6iHz4WBPlzZ7Ui66G
+         Ob+eeQy27uPuoNeIRPKNdorePjgbeyIPIncn9YsL6IGYC58rgFsXAFsf+sAPbsMfcuaq
+         vstg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hQMbf1CRju8iVpBFQxPXC0LnaB1HOCwD51tLl7euPGg=;
+        b=POcg8NR75IfNFz/KSdQRU0NKV6S46EfQuvlMMQwHeZFm7ENeJ+933SAHoieWem4o5j
+         410+3teAacAA5LD14uOScIL+AbQdYhLfFPara+Tzk7DMVDzaCFR1HgMi11As51NOdKiL
+         imv+bY4uq+v5pIy8uJdk8Wl+M16abKzsCyPMS9Kd8k5pJWrylkIVxldMGEDHhK02qiyK
+         HlBskTzeqb3dMNoZpIuKqpzzoDJF9XjmJV9aCz0gCD1ukKN60Q+CXk2QL8n7AaBXlx/b
+         4/tr2lKbARIuaiNISWHDdVgiPUaK94Oqyb3g1Ri36reUC6rq6u8l9YLtKlLPTkuwNwpv
+         5+aw==
+X-Gm-Message-State: AOAM533SFlzk3OLqCdJDVhj1Iw0kRqRmljitNrddOYeaxZN4kvXw1vEo
+        j10nSB+UcO3bfAOp5/Csnv8xRndRulc=
+X-Google-Smtp-Source: ABdhPJxdlMcqsUyXUl6I2ETT9KqFy+FXMxBBJoVGXqDuuDNN7z2v+xJ6Q7gff+etnrk1/eUks+VRwA==
+X-Received: by 2002:a54:438a:: with SMTP id u10mr845979oiv.131.1630357555620;
+        Mon, 30 Aug 2021 14:05:55 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x4sm1362875ood.2.2021.08.30.14.05.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Aug 2021 14:05:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus/ibm-cffps) Do not swap max_power_out
+To:     Eddie James <eajames@linux.ibm.com>,
+        Brandon Wyman <bjwyman@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+References: <20210827230433.3596370-1-bjwyman@gmail.com>
+ <20210828155250.GA820265@roeck-us.net>
+ <e9de99d88fb9e2e34552806fa47efa488332325c.camel@linux.ibm.com>
+ <e5916b33-8898-a483-bc69-49a08913672c@roeck-us.net>
+ <e329beeb2b8efa272d2660fcd253ad5c98a37c50.camel@linux.ibm.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <8433a40f-abbb-a0a9-9227-85363c2a9201@roeck-us.net>
+Date:   Mon, 30 Aug 2021 14:05:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=aqTM9hRV c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=MhDmnRu9jo8A:10 a=IuYHxPiwz1Cm0btsGcYA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+In-Reply-To: <e329beeb2b8efa272d2660fcd253ad5c98a37c50.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQpPbiAzMS8wOC8yMSAzOjM2IGFtLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiBPbiA4LzI5LzIx
-IDI6MDkgUE0sIENocmlzIFBhY2toYW0gd3JvdGU6DQo+Pg0KPj4gT24gMjgvMDgvMjEgOToyOSBh
-bSwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4+PiBPbiBUaHUsIEF1ZyAyNiwgMjAyMSBhdCAwMjo0
-MToyMVBNICsxMjAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4+PiBJbnN0ZWFkIG9mIHRoZSBu
-b24tc3RhbmRhcmQgYXV0b191cGRhdGVfaW50ZXJ2YWwgbWFrZSB1c2Ugb2YgdGhlDQo+Pj4+IHVw
-ZGF0ZV9pbnRlcnZhbCBwcm9wZXJ0eSB0aGF0IGlzIHN1cHBvcnRlZCBieSB0aGUgaHdtb24gY29y
-ZS4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hh
-bUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4+PiAtLS0NCj4+Pj4NCj4+Pj4gTm90ZXM6DQo+Pj4+
-IMKgwqDCoMKgwqAgSSBraW5kIG9mIGFudGljaXBhdGUgYSBOQUsgb24gdGhpcyBiZWNhdXNlIGl0
-IGFmZmVjdHMgdGhlIA0KPj4+PiBBQkkuIEJ1dCBJIGZpZ3VyZWQNCj4+Pj4gwqDCoMKgwqDCoCBJ
-J2QgcnVuIGl0IHBhc3QgdGhlIE1MIHRvIHNlZSBpZiBtb3ZpbmcgdG93YXJkcyB0aGUgaHdtb24g
-DQo+Pj4+IGNvcmUgaXMgd29ydGggdGhlIGhpdA0KPj4+PiDCoMKgwqDCoMKgIGluIEFCSSBjb21w
-YXRpYmlsaXR5Lg0KPj4+IEkgcGVyc29uYWxseSBkb24ndCBtaW5kIChtb3N0IGxpa2VseSBubyBv
-bmUgaXMgdXNpbmcgaXQgYW55d2F5KSwgYnV0IA0KPj4+IGxldCdzDQo+Pj4gd2FpdCB1bnRpbCBh
-ZnRlciB0aGUgdXBjb21pbmcgY29tbWl0IHdpbmRvdyBjbG9zZXMgdG8gZ2l2ZSBwZW9wbGUgDQo+
-Pj4gdGltZSB0bw0KPj4+IGNvbXBsYWluLg0KPj4NCj4+IEkga25vdyBvZiBvbmUgYXBwbGljYXRp
-b24gdXNpbmcgdGhpcyBzeXNmcyBlbnRyeS4gQnV0IGl0J3Mgb3VyIGluLWhvdXNlDQo+PiBlbnZp
-cm9ubWVudGFsIG1vbml0b3JpbmcgY29kZSBzbyBpZiB0aGlzIGdldHMgbWVyZ2VkIEknbGwganVz
-dCB1cGRhdGUgaXQNCj4+IHRvIHVzZSB0aGUgbmV3IHBhdGguDQo+Pg0KPj4gT25lIHRob3VnaHQg
-SSBoYWQgd2FzIHdlIGNvdWxkIGRvIGJvdGguIGkuZS4gaGF2ZSBhbiBlbnRyeSB0aGF0IGNvbmZv
-cm1zDQo+PiB0byB0aGUgaHdtb24gY29yZSBhbmQgYSBiYWNrd2FyZHMgY29tcGF0aWJsZSBlbnRy
-eSB0aGF0IGp1c3QgYWxpYXNlcyB0aGUNCj4+IG5ldyBwYXRoLg0KPj4NCj4gTm93IHlvdSBhbG1v
-c3QgY29udmluY2VkIG1lIHRvIGluZGVlZCByZWplY3QgdGhpcyBwYXRjaC4gVGhlIGlkZWEgb2Yg
-DQo+IHRoZSBuZXcgQVBJDQo+IGlzIHRvIHNpbXBsaWZ5IGRyaXZlciBjb2RlLCBub3QgdG8gbWFr
-ZSBpdCBtb3JlIGNvbXBsaWNhdGVkLiBJZiB3ZSANCj4gY2FuJ3Qgc2ltcGxpZnkNCj4gdGhlIGNv
-ZGUsIGl0IGlzIGJldHRlciB0byBsZWF2ZSBpdCBhbG9uZS4NClNvbGQuIEkgYWdyZWUgd2hhdCBJ
-J3ZlIGp1c3Qgc3VnZ2VzdGVkIGlzIGFkZGluZyBtb3JlIGNvbXBsZXhpdHkgd2l0aG91dCANCm11
-Y2ggZ2Fpbi4gSWYgc29tZXRoaW5nIGRvZXMgc3RhcnQgdG8gY2FyZSBhYm91dCBoYXZpbmcgYSBz
-dGFuZGFyZCANCnVwZGF0ZV9pbnRlcnZhbCBwcm9wZXJ0eSB3ZSBjb3VsZCByZXN1cnJlY3QgdGhp
-cy4NCj4NCj4gR3VlbnRlcg==
+On 8/30/21 1:11 PM, Eddie James wrote:
+> On Mon, 2021-08-30 at 08:34 -0700, Guenter Roeck wrote:
+>> On 8/30/21 6:50 AM, Eddie James wrote:
+>>> On Sat, 2021-08-28 at 08:52 -0700, Guenter Roeck wrote:
+>>>> On Fri, Aug 27, 2021 at 11:04:33PM +0000, Brandon Wyman wrote:
+>>>>> The bytes for max_power_out from the ibm-cffps devices do not
+>>>>> need
+>>>>> to be
+>>>>> swapped.
+>>>>>
+>>>>> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+>>>>
+>>>> Eddie, can you confirm this ?
+>>>
+>>> This can't be true for all the power supplies supported by this
+>>> driver,
+>>> no. I think we need to check the version first. Brandon, I tested
+>>> this
+>>> on witherspoon (which is psu version 1) and get 3148 watts. If it's
+>>> not
+>>> swapped, that would be 19468 watts...
+>>>
+>>
+>> Hmm. Eddie, can you also have a look at commit 9fed8fa99334 ("hwmon:
+>> (pmbus/ibm-cffps) Fix write bits for LED control") ?
+>> We need to make sure that it doesn't mess up some versions of this
+>> PS.
+> 
+> That one looks correct to me. I believe older PSUs didn't enforce this
+> so I didn't catch it, but I do see that the older specifications
+> mention setting bit 6 to "allow write".
+> 
+
+Great, thanks a lot for checking.
+
+Guenter
