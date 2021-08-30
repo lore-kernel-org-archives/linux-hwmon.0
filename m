@@ -2,133 +2,222 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8ACBC432BE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 21:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA91C43214
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 21:26:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C060260E98
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 21:07:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2995860FA0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Aug 2021 21:26:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236451AbhH3VIh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Aug 2021 17:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S238447AbhH3V1U (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Aug 2021 17:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235412AbhH3VIh (ORCPT
+        with ESMTP id S237632AbhH3V1F (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Aug 2021 17:08:37 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86566C061575;
-        Mon, 30 Aug 2021 14:07:43 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id j18so21830274ioj.8;
-        Mon, 30 Aug 2021 14:07:43 -0700 (PDT)
+        Mon, 30 Aug 2021 17:27:05 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBEFC061764;
+        Mon, 30 Aug 2021 14:26:11 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id v33-20020a0568300921b0290517cd06302dso20156620ott.13;
+        Mon, 30 Aug 2021 14:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=g5yL003HMqaHRo5YL2Nf3KKbD13P3l8kcGs2AKGZYpU=;
-        b=ne5M+gmNn5PcZlSCwY8qx+B1r3x/aMhF5+tk4L36/MsSzTr3CGARYRr1tsJgJGpXpW
-         NjrWiOWa3A+DGrGCqvqOLVY/639iQIP1X9ErnP8XVLWtrIgyK7skDbttJ3Uz2prvdccC
-         Ji/vbZ7cfy8AtUCdPUJwqFNWbCotzkaEqRRnDhxYW+UlCzRw+xheESBu6APh+4IShKrl
-         g5l3SGieySjJB6INSaP6K36wQz+iupSrfvzsY08t36TJj8NzZ/TtpeWc+sOv8BrH702/
-         fpDOvw0ek826WbTCxeIy1VLr2TCrPGLb8pkspCNOK1zHNNUzKr+iMownqMZo3P1s087w
-         tFwA==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=katyI+KQhr/PPLVDQX7rP4KnaiR/MitSJ5yqkwZuCwA=;
+        b=kDhcgjKNnjwnuWRyIt+9WK5apvWPgIxrKKuW2Yv8e0DRtarziMsdJxa1alMXGKNewm
+         yqwGR3GW4g2uRUsgr1froBBhQVytRe9SBljEox3Lj6zk6Y4yn03i4pnKxhqocXeoaSEK
+         gF63YFiaDPJ31pv7TZQAs/qIwmqTsHXxJeVbCH3aDFZioCOunoB5tte4/CjWakK1KwPn
+         5gg+rB2mi3Z0TDESeIthE9XKr66Mv5CMGVgNnZVWMu8IrZvlXFCVqRdF0VkWP6zGDoDv
+         eCqvS1TsvKhsiyDPdA/0Od8iEYjSYlh2D8XpzkarWIKqOmQbR6OrmhJJl0nDMFncSxtO
+         A4pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=g5yL003HMqaHRo5YL2Nf3KKbD13P3l8kcGs2AKGZYpU=;
-        b=OzS9E4N0iFGwBI689kt7NeXlSYMJGvxGjeOAup2qGhIATcRajdZbP8dho49nlS7AI3
-         4D9OcoLDv+J8t6ejRCOmgRn0GyaiF+G9e+u9nha7CVVjbdaXsdbkixhGtZ+HdRXd+P3u
-         5quHREfw/SGliXXESzKSXB80a0+RwhXHuiRQens9yac1O5S5pAMSK1EBjmzjn9rCNXHF
-         guGdWanqtc5CBZi+WpABurMjXE5FvEUg2oLDucHVRLlXQIoufgUTyuqFHbnn61giiIF1
-         TokSxSHnXAEAf+CwhMyKkfKrGWhiMu3v/0E8UunbsdwEh7aXDyzfq/v/4PK6JE3pwgyr
-         mrzA==
-X-Gm-Message-State: AOAM532h/Ltgle52rAr/KxXySBQWLPLcUab5+jsXrLp3D+4Ni0CDjwSq
-        oSu/BoBVwTq5iTtn7cdiu0SYorSscJL3bA==
-X-Google-Smtp-Source: ABdhPJyY/fXXZi//wASNXGJl8Ch8FW63ZZ4b1Fkl9cJohC1YS/+m4kBZW8Neyxb8M3NZi0WOr/bjQw==
-X-Received: by 2002:a05:6638:d85:: with SMTP id l5mr342434jaj.2.1630357662375;
-        Mon, 30 Aug 2021 14:07:42 -0700 (PDT)
-Received: from [192.168.4.31] (199-48-94-117.rochmnaa.metronetinc.net. [199.48.94.117])
-        by smtp.gmail.com with ESMTPSA id b10sm8947921ils.13.2021.08.30.14.07.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Aug 2021 14:07:41 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: (pmbus/ibm-cffps) Do not swap max_power_out
-To:     Eddie James <eajames@linux.ibm.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210827230433.3596370-1-bjwyman@gmail.com>
- <20210828155250.GA820265@roeck-us.net>
- <e9de99d88fb9e2e34552806fa47efa488332325c.camel@linux.ibm.com>
-From:   Brandon Wyman <bjwyman@gmail.com>
-Message-ID: <cac545d4-3840-898c-4950-8262fea9e2ab@gmail.com>
-Date:   Mon, 30 Aug 2021 16:07:41 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=katyI+KQhr/PPLVDQX7rP4KnaiR/MitSJ5yqkwZuCwA=;
+        b=qPWepdn8HlGt1b3aN/y40cK8b0JsN5nJ0pY6+qBOxp0ePrLS11iA9qS5cPsQOBzcA8
+         3p1pJAizcxhT7y6iGPxYvYg3dVcz061JeUEEAKcz6NJ6CqfI257vOz0D8wVpHEGhgrt3
+         E2lFKEXSB4MSyhZ97gtSltL9cn6sDkKIZac9q75ZDOLySVaL+p8nKiTwt6/smrV/yCgD
+         /fBJHw74M+D0jeDPARTQK9nrxQOiF68dKxaaTNnIswk+EyQzl3fhtbynCSLNBpHeOdCt
+         wIOEsOjhMtYl+vrfHHmIDKHvUStJS8DdDMXeMTmirNc8HquaYeYLUeDbA9uc04M/uV5E
+         /6yg==
+X-Gm-Message-State: AOAM533/HDZOoCr2gWJUqjTC+vMCn41jUlZTtFu5drGSMHuBzY+LEkav
+        AyGyA3phCex/KzmxCnjvBcCXxzVcwZ4=
+X-Google-Smtp-Source: ABdhPJxq3XNqe2J4hCi9PeolR1cElQcrZyFjmqZ0uKScrRa+vfGuJMYKs2cnVbfIl145BozjOLvrVQ==
+X-Received: by 2002:a9d:4c89:: with SMTP id m9mr22160652otf.255.1630358770912;
+        Mon, 30 Aug 2021 14:26:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b25sm3127494ooq.6.2021.08.30.14.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Aug 2021 14:26:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for v5.15
+Date:   Mon, 30 Aug 2021 14:26:08 -0700
+Message-Id: <20210830212608.2704628-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <e9de99d88fb9e2e34552806fa47efa488332325c.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Linus,
 
-On 2021-08-30 08:50, Eddie James wrote:
-> On Sat, 2021-08-28 at 08:52 -0700, Guenter Roeck wrote:
->> On Fri, Aug 27, 2021 at 11:04:33PM +0000, Brandon Wyman wrote:
->>> The bytes for max_power_out from the ibm-cffps devices do not need
->>> to be
->>> swapped.
->>>
->>> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
->> Eddie, can you confirm this ?
-> This can't be true for all the power supplies supported by this driver,
-> no. I think we need to check the version first. Brandon, I tested this
-> on witherspoon (which is psu version 1) and get 3148 watts. If it's not
-> swapped, that would be 19468 watts...
->
-> Thanks,
-> Eddie
-I had tested this on a variety of systems with a variety of different 
-power supplies, but I did *NOT* test this on the Witherspoon power supplies.
+Please pull hwmon updates for Linux v5.15 from signed tag:
 
-This apparently requires a bit more thought to figure out how to handle 
-the other types and also not get Witherspoon wrong.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.15
 
-Thanks for checking Eddie.
+Thanks,
+Guenter
+------
 
->> Thanks,
->> Guenter
->>
->>> ---
->>>   drivers/hwmon/pmbus/ibm-cffps.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c
->>> b/drivers/hwmon/pmbus/ibm-cffps.c
->>> index df712ce4b164..29b77f192c9e 100644
->>> --- a/drivers/hwmon/pmbus/ibm-cffps.c
->>> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
->>> @@ -171,7 +171,7 @@ static ssize_t ibm_cffps_debugfs_read(struct
->>> file *file, char __user *buf,
->>>   		cmd = CFFPS_SN_CMD;
->>>   		break;
->>>   	case CFFPS_DEBUGFS_MAX_POWER_OUT:
->>> -		rc = i2c_smbus_read_word_swapped(psu->client,
->>> +		rc = i2c_smbus_read_word_data(psu->client,
->>>   						 CFFPS_MAX_POWER_OUT_CM
->>> D);
->>>   		if (rc < 0)
->>>   			return rc;
->>> -- 
->>> 2.25.1
->>>
+The following changes since commit c500bee1c5b2f1d59b1081ac879d73268ab0ff17:
+
+  Linux 5.14-rc4 (2021-08-01 17:04:17 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.15
+
+for you to fetch changes up to 0e35f63f7f4eebd268ec236fd1bbf4e561ce8de5:
+
+  hwmon: add driver for Aquacomputer D5 Next (2021-08-28 08:53:30 -0700)
+
+----------------------------------------------------------------
+hwmon updates for v5.15
+
+New drivers for:
+- Aquacomputer D5 Next
+- SB-RMI power module
+
+Added chip support t oexisting drivers:
+- Support for various Zen2 and Zen3 APUs and for Yellow Carp
+  (SMU v13) added to k10temp driver
+- Support for Silicom n5010 PAC added to intel-m10-bmc driver
+- Support for BPD-RS600 added to pmbus/bpa-rs600 driver
+
+Other notable changes:
+- In k10temp, do not display Tdie on Zen CPUs if there is no
+  difference between Tdie and Tctl
+- Converted adt7470 and dell-smm drivers to use
+  devm_hwmon_device_register_with_info API
+- Support for temperature/pwm tables added to axi-fan-control
+  driver
+- Enabled fan control for Dell Precision 7510 in dell-smm driver
+
+Various other minor improvements and fixes in several drivers.
+
+----------------------------------------------------------------
+Akshay Gupta (3):
+      hwmon: Add support for SB-RMI power module
+      hwmon: (sbrmi) Add Documentation
+      dt-bindings: sbrmi: Add SB-RMI hwmon driver bindings
+
+Aleksa Savic (1):
+      hwmon: add driver for Aquacomputer D5 Next
+
+Armin Wolf (13):
+      hwmon: (w83627ehf) Use platform_create_bundle
+      hwmon: (w83627ehf) Remove w83627ehf_remove()
+      hwmon: (w83627ehf) Switch to SIMPLE_DEV_PM_OPS
+      hwmon: (w83627ehf) Make DEVICE_ATTR_RO static
+      hwmon: (dell-smm-hwmon) Use platform device
+      hwmon: (dell-smm-hwmon) Mark functions as __init
+      hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
+      hwmon: (dell-smm-hwmon) Move variables into a driver private data structure
+      hwmon: (dell-smm-hwmon) Convert to devm_hwmon_device_register_with_info()
+      hwmon: (dell-smm-hwmon) Fix fan mutliplier detection for 3rd fan
+      hwmon: (dell-smm) Mark tables as __initconst
+      hwmon: (dell-smm) Mark i8k_get_fan_nominal_speed as __init
+      hwmon: (dell-smm) Rework SMM function debugging
+
+Brandon Wyman (1):
+      hwmon: (pmbus/ibm-cffps) Fix write bits for LED control
+
+Carlos Alberto Lopez Perez (1):
+      hwmon: (dell-smm) Add Dell Precision 7510 to fan control whitelist
+
+Chris Packham (6):
+      hwmon: (pmbus/bpa-rs600) Support BPD-RS600
+      hwmon: (pmbus/bpa-rs600) Don't use rated limits as warn limits
+      hwmon: (pmbus/bpa-rs600) Add workaround for incorrect Pin max
+      hwmon: (adt7470) Fix some style issues
+      hwmon: (adt7470) Convert to use regmap
+      hwmon: (adt7470) Convert to devm_hwmon_device_register_with_info API
+
+David Bartley (1):
+      hwmon: (k10temp) support Zen3 APUs
+
+Linus Walleij (3):
+      hwmon: (ntc_thermistor) Use library interpolation
+      dt-bindings: hwmon: Add bindings for Winbond W83781D
+      hwmon: (w83781d) Match on device tree compatibles
+
+Lukas Bulwahn (1):
+      hwmon: remove amd_energy driver in Makefile
+
+Mario Limonciello (4):
+      hwmon: (k10temp) Add additional missing Zen2 and Zen3 APUs
+      hwmon: (k10temp) Don't show Tdie for all Zen/Zen2/Zen3 CPU/APU
+      hwmon: (k10temp) Rework the temperature offset calculation
+      hwmon: (k10temp) Add support for yellow carp
+
+Martin Hundebøll (1):
+      hwmon: intel-m10-bmc-hwmon: add n5010 sensors
+
+Mauro Carvalho Chehab (1):
+      dt-bindings: firmware: update arm,scpi.yaml reference
+
+Nuno Sá (3):
+      hwmon: (axi-fan-control) Make sure the clock is enabled
+      hwmon: (axi-fan-control) Handle irqs in natural order
+      hwmon: (axi-fan-control) Support temperature vs pwm points
+
+Randy Dunlap (1):
+      hwmon: sht4x: update Documentation for Malformed table
+
+Sebastian Andrzej Siewior (1):
+      hwmon: Replace deprecated CPU-hotplug functions.
+
+ .../devicetree/bindings/hwmon/amd,sbrmi.yaml       |   53 +
+ .../devicetree/bindings/hwmon/winbond,w83781d.yaml |   41 +
+ Documentation/hwmon/aquacomputer_d5next.rst        |   61 ++
+ Documentation/hwmon/index.rst                      |    2 +
+ Documentation/hwmon/sbrmi.rst                      |   79 ++
+ Documentation/hwmon/scpi-hwmon.rst                 |    2 +-
+ Documentation/hwmon/sht4x.rst                      |    2 +-
+ MAINTAINERS                                        |    7 +
+ arch/x86/kernel/amd_nb.c                           |    5 +
+ drivers/hwmon/Kconfig                              |   20 +
+ drivers/hwmon/Makefile                             |    3 +-
+ drivers/hwmon/adt7470.c                            | 1051 ++++++++++----------
+ drivers/hwmon/aquacomputer_d5next.c                |  363 +++++++
+ drivers/hwmon/axi-fan-control.c                    |  117 ++-
+ drivers/hwmon/dell-smm-hwmon.c                     |  910 +++++++++--------
+ drivers/hwmon/fam15h_power.c                       |    4 +-
+ drivers/hwmon/intel-m10-bmc-hwmon.c                |  116 +++
+ drivers/hwmon/k10temp.c                            |   30 +-
+ drivers/hwmon/ntc_thermistor.c                     |   20 +-
+ drivers/hwmon/pmbus/bpa-rs600.c                    |   68 +-
+ drivers/hwmon/pmbus/ibm-cffps.c                    |    6 +-
+ drivers/hwmon/sbrmi.c                              |  359 +++++++
+ drivers/hwmon/w83627ehf.c                          |  122 +--
+ drivers/hwmon/w83781d.c                            |   11 +
+ include/linux/pci_ids.h                            |    1 +
+ 25 files changed, 2276 insertions(+), 1177 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/amd,sbrmi.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/winbond,w83781d.yaml
+ create mode 100644 Documentation/hwmon/aquacomputer_d5next.rst
+ create mode 100644 Documentation/hwmon/sbrmi.rst
+ create mode 100644 drivers/hwmon/aquacomputer_d5next.c
+ create mode 100644 drivers/hwmon/sbrmi.c
