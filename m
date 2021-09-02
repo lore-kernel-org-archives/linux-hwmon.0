@@ -2,781 +2,447 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AFAEC432BE
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 13:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 118E8C83029
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 17:42:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F07E60525
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 13:49:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC5EF610FF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 17:42:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbhIBNuL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Sep 2021 09:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234188AbhIBNuL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Sep 2021 09:50:11 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6C2C061575
-        for <linux-hwmon@vger.kernel.org>; Thu,  2 Sep 2021 06:49:12 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 6so2587650oiy.8
-        for <linux-hwmon@vger.kernel.org>; Thu, 02 Sep 2021 06:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bsjqZfBBmVoekeKXu8N4Ygaf5uusS5LON5qVxQlvVmc=;
-        b=GhbniSJi6VJMSOJEy4qDskBuOtpZLX8uW2z0ImmzRBAWGw0QEtrzuBKWbP6c2lG7m/
-         ltZijvWouE9CVDQ7Rl0Jg+kHFAHFCaIISvscwF0dOSHES7xZAE26VBXh9GnGrNIPL9i4
-         I2TQyZtZ1AEMuZu9y6lzX1UwcgjwZ5NUbj6y9bWMBlBvqYwEJ2Y34d0I4QfUJUdDs8h+
-         I4HgQjG5+fg+ZO7jG3XJ/0p5/tfImd8EM2gOm9IMCAlwP2gkjDY4quXu6sWG+e3Sx23W
-         oB+6W+3hThHrwoWICVzRztTWZScJqA1vwMwnD3/c9OaP+j4bEB3rX7i44DVqaWRgX56d
-         H6Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bsjqZfBBmVoekeKXu8N4Ygaf5uusS5LON5qVxQlvVmc=;
-        b=FIurM0713T0QnX64LllVxnU6JHJkLhd9nquLTSmUBsCYjsN5ZoXyD9Ly3QpPaE2vBB
-         rZCiEGGHiBBDe9MH3xvpI8Nv3M07ryphoDA0W0/cqfK6apSWWr+xKDPQm6tC9LZ9toOQ
-         pMF5qWR6zk6jXI4fmrS9Oe3/J8Bx9f0NbcNDmtmoQ0kJVfl0fF5bpMykR0U0jPRRnRan
-         OAk43jMJmYqqwI7t5OMWv4AASjj6NWNydaoBT9WYNHRfTzRbnrnynGtlTDVbyLQxEVcv
-         y2tmqhzBEX7AadxAT+2xSBjdhF3e4Lv9X/Voq5UjYZ3Nh3lTrmdXsr9XPlmtZxNOvKI3
-         +5bg==
-X-Gm-Message-State: AOAM531YU/Dh4wrG+fyDYDMYe6JaxKhyhm6DvZvlSax/pFzWVveskkVp
-        pSvH2lbRg/l/Of+q7HV1kZ6n8L1sFiw=
-X-Google-Smtp-Source: ABdhPJyImZaHVpbOAoEsA/bTWDHXkqlgiKxtSLV8+hkXDldnsMTmV7uc97wxkE0z+DpyJZKbBQz7hg==
-X-Received: by 2002:a05:6808:17a6:: with SMTP id bg38mr2311793oib.88.1630590551884;
-        Thu, 02 Sep 2021 06:49:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 8sm387478oix.7.2021.09.02.06.49.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Sep 2021 06:49:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3] hwmon: Add Maxim MAX6620 hardware monitoring driver
-To:     "Balac, Arun Saravanan" <ArunSaravanan.Balach@Dell.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <MW2PR1901MB20282C7BCF058732B6357661A6C59@MW2PR1901MB2028.namprd19.prod.outlook.com>
- <20210824205528.GA3417735@roeck-us.net>
- <MW2PR1901MB202860B0CFCEF7D6B2C719B7A6CE9@MW2PR1901MB2028.namprd19.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <67873a1f-1ae0-1f42-7ce5-b3799d0f2e8a@roeck-us.net>
-Date:   Thu, 2 Sep 2021 06:49:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S1347137AbhIBRnz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Sep 2021 13:43:55 -0400
+Received: from mail-dm6nam12on2056.outbound.protection.outlook.com ([40.107.243.56]:9440
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347182AbhIBRnS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 2 Sep 2021 13:43:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V/fZGzm/t6giAXnPQjjR7PCs0S1EIswJCMU8GRbK+u42Z78+3Gk+da26WfSN2Nzg9p9P2zgTN9wR5GIg9RAU50HqAsAhCQiF1XPC1ZEojo6pNttAPD2V4XU2k7EEkPU9Ynt8L9vQuvEECydWvn49tK2yKBOeRoOSO1p79aBbA0w9VlsnGG0vNmiQ9Nkd0w33b4+ZAPCMxEggzGzj7+1gRY/8bOt468pxwU3mD3WJubckUCXSkpPd+lXEakGrMDiIVkchE4kGBeTOxqWHncDnJNW1wODS3CJJ3E5Zy2pyKcdlOR3EK1uKgJDzZiPqt40KPaFIiUj2V2oxWJ3jcMpJJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=4A5muJOFLivcI6L2xL2DFd7r1aQpYh/q6Zd4iG53ZmU=;
+ b=ZMiKD/Q9d4puOUBGe5Dhh8Qaz0tvijxww6x2torYfN/G6qOjyrRcWekc9VJ5Vs9KxHj1flsINRXZu7XatofdfAhMMSNVpPHgDacK8jbP2vb1fV8q5lXELDXyLN7eVjG8PwW9SBeVHrlruws5omUlKx1zvsAkwLyFHEhMQOd0aE7BJ1xxsKyA7pihmp9UfRhaneeA6ZtuwNgBIG+8zyAyJS0Xe2tsWrbuOCk5iQnWNwTjIOF6vO9mors9q6EnGy9GSXmN5Uuteixgc2HD6F3flfGgb9VMKuEJwRFSQSHDR8Vq8861z36KFDP58nLm9I7I67INOdg8BjOHYflrGK6asQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4A5muJOFLivcI6L2xL2DFd7r1aQpYh/q6Zd4iG53ZmU=;
+ b=jjSxI1SsqvvXQewT84wluIx5X376qNsy11Ew30eXYs55GUIWLKmurAQou4TwLSK5Ye9z/zzXYpuiODg8Ln/8xUC2rMFKHOws8EUP1RXiGSAvwb9eoYnDVZG1um9ouTRATHw58ifwlfprrqL7dABlJ6lKe/JcjGYarE/iNVr1RFI=
+Received: from MW3PR05CA0021.namprd05.prod.outlook.com (2603:10b6:303:2b::26)
+ by MN2PR12MB3487.namprd12.prod.outlook.com (2603:10b6:208:c7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.21; Thu, 2 Sep
+ 2021 17:42:15 +0000
+Received: from CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:2b:cafe::78) by MW3PR05CA0021.outlook.office365.com
+ (2603:10b6:303:2b::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.4 via Frontend
+ Transport; Thu, 2 Sep 2021 17:42:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT006.mail.protection.outlook.com (10.13.174.246) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4478.19 via Frontend Transport; Thu, 2 Sep 2021 17:42:14 +0000
+Received: from milan-ETHANOL-X.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Thu, 2 Sep
+ 2021 12:42:09 -0500
+From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
+To:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>
+CC:     <linux@roeck-us.net>, <bp@alien8.de>, <yazen.ghannam@amd.com>,
+        <mingo@redhat.com>, <nathan.fontenot@amd.com>,
+        <lewis.carroll@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: [PATCH 1/3] x86/amd_nb: Add support for HSMP mailbox access
+Date:   Thu, 2 Sep 2021 23:11:53 +0530
+Message-ID: <20210902174155.7365-1-nchatrad@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <MW2PR1901MB202860B0CFCEF7D6B2C719B7A6CE9@MW2PR1901MB2028.namprd19.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dba29508-60db-47a5-c40b-08d96e390075
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3487:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3487810246F20BA3B716834FE8CE9@MN2PR12MB3487.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:454;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2HbLBNahsu/xPhtYtELwJmp4+aE+7TQk7/gymuG8X/ZzaJulyAZ2mevDkC8ttaBQ43PADUOcNGtfucuyumrwV2g2AnGz7riya12C5w4HGzsTyzuyrI3nfcZHJ3+eZIR6muq4pNULbwAsEIsBZoG7DybH1T4xoa7VI5oul7JcvszFL9Sju0/byF2lKnjqjUHPVEJhnZQl3isgo1SjWZTU/nrUNAzAGdlxpBy174AnUJoTh6JWtFHA4fUTgAcGIeqa/rZmMutcY2bHwC5Z7CBFthfmUbTZ8wAAZsyM0dOLWyT8h1wY1UJX3RhTQM3SgU2tdGNhtqpxUvQzef4LMD8RDcuAa1gbgQtSbFtey7TgQ8LJcmnbiqWWSD5oQJTfe5AzE323Rc5gF9JUpXW4yZ/4GV0I5B2OvJFql8hGmqQ4/9njxrJ/PMlniiWpe+B7Z7Oe85JEs6g6FKKJOvLGDPxnvLR8XK3l+oIZkQ2rVyODF1eJ4/AO4GuqH9m6B5GeKArnduWD3u0UbaAAGnBBDiAh4wg0C+I66atahGzf9cmGX9SQG/SVemHt1XuW/U0rzeYSeN8i3e9hoAiYZh2hEblcp84ozlClZITfZFb6bDi/nvp+bHhiPw1kfuTiNw4EOgZd/40X6v5wMzIC6glGV5Fqk256AxfyrneYmCpSUCfjrYV20Ix4c6C/vTXbK4CIk0/MiWlET0hvZHMs6f4mWcsb12WRceLUn1Qy0XtpEC8GSAw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(82310400003)(316002)(15650500001)(336012)(4326008)(110136005)(54906003)(16526019)(186003)(47076005)(36756003)(83380400001)(6666004)(2616005)(26005)(426003)(70586007)(36860700001)(5660300002)(8936002)(1076003)(8676002)(508600001)(356005)(7696005)(2906002)(70206006)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2021 17:42:14.7725
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dba29508-60db-47a5-c40b-08d96e390075
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3487
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/2/21 5:59 AM, Balac, Arun Saravanan wrote:
-> Thanks for the review comments. Will resolve them and send the updated version for review.
-> 
->>> +++ b/drivers/hwmon/max6620.c
->>> @@ -0,0 +1,507 @@
->>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>> +/*
->>> + * Hardware monitoring driver for Maxim MAX6620
->>> + *
->>> + * (C) 2012 by L. Grunenberg <contact@lgrunenberg.de>
->>
->> Is this intentional, or was it supposed to be 2021 ?
->>
->>> + *
-> 
-> The copyright statement was the one present in initial version from the above author and has not been modified.
-> Request you to let me know if it has to be changed to 2021.
-> 
+On Fam19h server CPUs from AMD an HSMP (Host System Management Port)
+mailbox interface is added to monitor and manage the CPU parameters.
 
-In that case it should be 2012, but it should probably say something like
+Export hsmp_send_message() function which takes a socket number and
+a messages structure as inputs, returns 0 on success and negative
+error otherwise. The API can be used by other kernel components to
+access system management features.
 
-"Originally from L. Grunenberg.
-  (C) 2012 by L. Grunenberg <contact@lgrunenberg.de>
+Eg: hwmon based k10temp driver can be modified to report power metrics
 
-  (c) 2021 (your or Dell's copyright)
+Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: x86-ml <x86@kernel.org>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+---
+ arch/x86/include/asm/amd_nb.h |  40 +++++++
+ arch/x86/kernel/amd_nb.c      | 217 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 257 insertions(+)
 
-Guenter
-
-> 
-> Regards,
-> Arun Saravanan
-> 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Wednesday, August 25, 2021 2:25 AM
-> To: Balac, Arun Saravanan
-> Cc: jdelvare@suse.com; linux-hwmon@vger.kernel.org
-> Subject: Re: [PATCH v3] hwmon: Add Maxim MAX6620 hardware monitoring driver
-> 
-> 
-> [EXTERNAL EMAIL]
-> 
-> On Tue, Aug 24, 2021 at 11:59:26AM +0000, Balac, Arun Saravanan wrote:
->> From: Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
->>
->> Add hardware monitoring driver for Maxim MAX6620 Fan controller
->>
->> Originally-from: L. Grunenberg <contact@lgrunenberg.de>
->> Originally-from: Cumulus Networks <support@cumulusnetworks.com>
->> Originally-from: Shuotian Cheng <shuche@microsoft.com>
->> Signed-off-by: Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
->> ---
->>
->> <Formletter>
->> Changelog:
->> - Include '<linux/bits.h>'.
->> - Use BIT() macro in 'max6620_fan_div_from_reg'.
->> - Define functions 'max6620_fan_rpm_to_tach' , 'max6620_fan_tach_to_rpm'
->>     for RPM to tach conversion and vice versa.
->> - Drop 'reg' variable and use only variable 'ret' for validation and use of value
->>     returned by i2c_smbus_read_byte_data in 'max6620_update_device'.
->> - Remove unnecessary enclosing parentheses.
->> </Formletter>
->>
-> 
-> <Formletter> and </Formletter> were intended to show that the text in between
-> was auto-generated, not supposed to be includes in the actual change log.
-> 
->>   Documentation/hwmon/max6620.rst |  46 +++
-> 
-> Needs to be added to Documentation/hwmon/index.rst
-> 
->>   drivers/hwmon/Kconfig           |  10 +
->>   drivers/hwmon/Makefile          |   1 +
->>   drivers/hwmon/max6620.c         | 507 ++++++++++++++++++++++++++++++++
->>   4 files changed, 564 insertions(+)
->>   create mode 100644 Documentation/hwmon/max6620.rst
->>   create mode 100644 drivers/hwmon/max6620.c
->>
->>
->> base-commit: ff1176468d368232b684f75e82563369208bc371
->>
->> diff --git a/Documentation/hwmon/max6620.rst b/Documentation/hwmon/max6620.rst
->> new file mode 100644
->> index 000000000000..84c1c44d3de4
->> --- /dev/null
->> +++ b/Documentation/hwmon/max6620.rst
->> @@ -0,0 +1,46 @@
->> +.. SPDX-License-Identifier: GPL-2.0-or-later
->> +
->> +Kernel driver max6620
->> +=====================
->> +
->> +Supported chips:
->> +
->> +    Maxim MAX6620
->> +
->> +    Prefix: 'max6620'
->> +
->> +    Addresses scanned: none
->> +
->> +    Datasheet: https://urldefense.com/v3/__http://pdfserv.maxim-ic.com/en/ds/MAX6620.pdf__;!!LpKI!2F_9PYXKGKcU2EVLtM4q-fFP1VkDADkUBkRoeet8KfrP1t3jVCOVDCdzlkNKQYKmHwK5UQ$ [pdfserv[.]maxim-ic[.]com]
->> +
->> +Authors:
->> +    - L\. Grunenberg <contact@lgrunenberg.de>
->> +    - Cumulus Networks <support@cumulusnetworks.com>
->> +    - Shuotian Cheng <shuche@microsoft.com>
->> +    - Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
->> +
->> +Description
->> +-----------
->> +
->> +This driver implements support for Maxim MAX6620 fan controller.
->> +
->> +The driver configures the fan controller in RPM mode. To give the readings more
->> +range or accuracy, the desired value can be set by a programmable register
->> +(1, 2, 4, 8, 16 or 32). Set higher values for larger speeds.
->> +
->> +The driver provides the following sensor access in sysfs:
->> +
->> +================ ======= =====================================================
->> +fan[1-4]_alarm   ro      Fan alarm.
->> +fan[1-4]_div     rw      Sets the nominal RPM range of the fan. Valid values
->> +                         are 1, 2, 4, 8, 16 and 32.
->> +fan[1-4]_input   ro      Fan speed in RPM.
->> +fan[1-4]_target  rw      Desired fan speed in RPM.
->> +================ ======= =====================================================
->> +
->> +Usage notes
->> +-----------
->> +
->> +This driver does not auto-detect devices. You will have to instantiate the
->> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
->> +details.
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index e3675377bc5d..74811fbaa266 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -1022,6 +1022,16 @@ config SENSORS_MAX31730
->>   	  This driver can also be built as a module. If so, the module
->>   	  will be called max31730.
->>   
->> +config SENSORS_MAX6620
->> +	tristate "Maxim MAX6620 fan controller"
->> +	depends on I2C
->> +	help
->> +	  If you say yes here you get support for the MAX6620
->> +	  fan controller.
->> +
->> +	  This driver can also be built as a module. If so, the module
->> +	  will be called max6620.
->> +
->>   config SENSORS_MAX6621
->>   	tristate "Maxim MAX6621 sensor chip"
->>   	depends on I2C
->> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->> index d712c61c1f5e..9e50ff903931 100644
->> --- a/drivers/hwmon/Makefile
->> +++ b/drivers/hwmon/Makefile
->> @@ -135,6 +135,7 @@ obj-$(CONFIG_SENSORS_MAX1668)	+= max1668.o
->>   obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
->>   obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
->>   obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
->> +obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
->>   obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
->>   obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
->>   obj-$(CONFIG_SENSORS_MAX6642)	+= max6642.o
->> diff --git a/drivers/hwmon/max6620.c b/drivers/hwmon/max6620.c
->> new file mode 100644
->> index 000000000000..af2301ac9513
->> --- /dev/null
->> +++ b/drivers/hwmon/max6620.c
->> @@ -0,0 +1,507 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * Hardware monitoring driver for Maxim MAX6620
->> + *
->> + * (C) 2012 by L. Grunenberg <contact@lgrunenberg.de>
-> 
-> Is this intentional, or was it supposed to be 2021 ?
-> 
->> + *
->> + * based on code written by :
->> + * 2007 by Hans J. Koch <hjk@hansjkoch.de>
->> + * John Morris <john.morris@spirentcom.com>
->> + * Copyright (c) 2003 Spirent Communications
->> + * and Claus Gindhart <claus.gindhart@kontron.com>
->> + *
->> + * This module has only been tested with the MAX6620 chip.
->> + *
->> + * The datasheet was last seen at:
->> + *
->> + *        https://urldefense.com/v3/__http://pdfserv.maxim-ic.com/en/ds/MAX6620.pdf__;!!LpKI!2F_9PYXKGKcU2EVLtM4q-fFP1VkDADkUBkRoeet8KfrP1t3jVCOVDCdzlkNKQYKmHwK5UQ$ [pdfserv[.]maxim-ic[.]com]
->> + *
->> + */
->> +
->> +#include <linux/bits.h>
->> +#include <linux/err.h>
->> +#include <linux/hwmon.h>
->> +#include <linux/i2c.h>
->> +#include <linux/init.h>
->> +#include <linux/jiffies.h>
->> +#include <linux/module.h>
->> +#include <linux/slab.h>
->> +
->> +/*
->> + * MAX 6620 registers
->> + */
->> +
->> +#define MAX6620_REG_CONFIG	0x00
->> +#define MAX6620_REG_FAULT	0x01
->> +#define MAX6620_REG_CONF_FAN0	0x02
->> +#define MAX6620_REG_CONF_FAN1	0x03
->> +#define MAX6620_REG_CONF_FAN2	0x04
->> +#define MAX6620_REG_CONF_FAN3	0x05
->> +#define MAX6620_REG_DYN_FAN0	0x06
->> +#define MAX6620_REG_DYN_FAN1	0x07
->> +#define MAX6620_REG_DYN_FAN2	0x08
->> +#define MAX6620_REG_DYN_FAN3	0x09
->> +#define MAX6620_REG_TACH0	0x10
->> +#define MAX6620_REG_TACH1	0x12
->> +#define MAX6620_REG_TACH2	0x14
->> +#define MAX6620_REG_TACH3	0x16
->> +#define MAX6620_REG_VOLT0	0x18
->> +#define MAX6620_REG_VOLT1	0x1A
->> +#define MAX6620_REG_VOLT2	0x1C
->> +#define MAX6620_REG_VOLT3	0x1E
->> +#define MAX6620_REG_TAR0	0x20
->> +#define MAX6620_REG_TAR1	0x22
->> +#define MAX6620_REG_TAR2	0x24
->> +#define MAX6620_REG_TAR3	0x26
->> +#define MAX6620_REG_DAC0	0x28
->> +#define MAX6620_REG_DAC1	0x2A
->> +#define MAX6620_REG_DAC2	0x2C
->> +#define MAX6620_REG_DAC3	0x2E
->> +
->> +/*
->> + * Config register bits
->> + */
->> +
->> +#define MAX6620_CFG_RUN		BIT(7)
->> +#define MAX6620_CFG_POR		BIT(6)
->> +#define MAX6620_CFG_TIMEOUT	BIT(5)
->> +#define MAX6620_CFG_FULLFAN	BIT(4)
->> +#define MAX6620_CFG_OSC		BIT(3)
->> +#define MAX6620_CFG_WD_MASK	(BIT(2) | BIT(1))
->> +#define MAX6620_CFG_WD_2	BIT(1)
->> +#define MAX6620_CFG_WD_6	BIT(2)
->> +#define MAX6620_CFG_WD10	(BIT(2) | BIT(1))
->> +#define MAX6620_CFG_WD		BIT(0)
->> +
->> +/*
->> + * Failure status register bits
->> + */
->> +
->> +#define MAX6620_FAIL_TACH0	BIT(4)
->> +#define MAX6620_FAIL_TACH1	BIT(5)
->> +#define MAX6620_FAIL_TACH2	BIT(6)
->> +#define MAX6620_FAIL_TACH3	BIT(7)
->> +#define MAX6620_FAIL_MASK0	BIT(0)
->> +#define MAX6620_FAIL_MASK1	BIT(1)
->> +#define MAX6620_FAIL_MASK2	BIT(2)
->> +#define MAX6620_FAIL_MASK3	BIT(3)
->> +
->> +#define MAX6620_CLOCK_FREQ	8192 /* Clock frequency in Hz */
->> +#define MAX6620_PULSE_PER_REV	2 /* Tachometer pulses per revolution */
->> +
->> +/* Minimum and maximum values of the FAN-RPM */
->> +#define FAN_RPM_MIN	240
->> +#define FAN_RPM_MAX	30000
->> +
->> +static const u8 config_reg[] = {
->> +	MAX6620_REG_CONF_FAN0,
->> +	MAX6620_REG_CONF_FAN1,
->> +	MAX6620_REG_CONF_FAN2,
->> +	MAX6620_REG_CONF_FAN3,
->> +};
->> +
->> +static const u8 dyn_reg[] = {
->> +	MAX6620_REG_DYN_FAN0,
->> +	MAX6620_REG_DYN_FAN1,
->> +	MAX6620_REG_DYN_FAN2,
->> +	MAX6620_REG_DYN_FAN3,
->> +};
->> +
->> +static const u8 tach_reg[] = {
->> +	MAX6620_REG_TACH0,
->> +	MAX6620_REG_TACH1,
->> +	MAX6620_REG_TACH2,
->> +	MAX6620_REG_TACH3,
->> +};
->> +
->> +static const u8 target_reg[] = {
->> +	MAX6620_REG_TAR0,
->> +	MAX6620_REG_TAR1,
->> +	MAX6620_REG_TAR2,
->> +	MAX6620_REG_TAR3,
->> +};
->> +
->> +/*
->> + * Client data (each client gets its own)
->> + */
->> +
->> +struct max6620_data {
->> +	struct i2c_client *client;
->> +	struct mutex update_lock;
->> +	bool valid; /* false until following fields are valid */
->> +	unsigned long last_updated; /* in jiffies */
->> +
->> +	/* register values */
->> +	u8 fancfg[4];
->> +	u8 fandyn[4];
->> +	u8 fault;
->> +	u16 tach[4];
->> +	u16 target[4];
->> +};
->> +
->> +static u8 max6620_fan_div_from_reg(u8 val)
->> +{
->> +	return BIT((val & 0xE0) >> 5);
->> +}
->> +
->> +static u16 max6620_fan_rpm_to_tach(u8 div, int rpm)
->> +{
->> +	return (60 * div * MAX6620_CLOCK_FREQ) / (rpm * MAX6620_PULSE_PER_REV);
->> +}
->> +
->> +static int max6620_fan_tach_to_rpm(u8 div, u16 tach)
->> +{
->> +	return (60 * div * MAX6620_CLOCK_FREQ) / (tach * MAX6620_PULSE_PER_REV);
->> +}
->> +
->> +static int max6620_update_device(struct device *dev)
->> +{
->> +	struct max6620_data *data = dev_get_drvdata(dev);
->> +	struct i2c_client *client = data->client;
->> +	int i;
->> +	int ret = 0;
->> +
->> +	mutex_lock(&data->update_lock);
->> +
->> +	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
->> +		for (i = 0; i < 4; i++) {
->> +			ret = i2c_smbus_read_byte_data(client, config_reg[i]);
->> +			if (ret < 0)
->> +				goto error;
->> +			data->fancfg[i] = ret;
->> +
->> +			ret = i2c_smbus_read_byte_data(client, dyn_reg[i]);
->> +			if (ret < 0)
->> +				goto error;
->> +			data->fandyn[i] = ret;
->> +
->> +			ret = i2c_smbus_read_byte_data(client, tach_reg[i]);
->> +			if (ret < 0)
->> +				goto error;
->> +			data->tach[i] = (ret << 3) & 0x7f8;
->> +			ret = i2c_smbus_read_byte_data(client, tach_reg[i] + 1);
->> +			if (ret < 0)
->> +				goto error;
->> +			data->tach[i] |= (ret >> 5) & 0x7;
->> +
->> +			ret = i2c_smbus_read_byte_data(client, target_reg[i]);
->> +			if (ret < 0)
->> +				goto error;
->> +			data->target[i] = (ret << 3) & 0x7f8;
->> +			ret = i2c_smbus_read_byte_data(client, target_reg[i] + 1);
->> +			if (ret < 0)
->> +				goto error;
->> +			data->target[i] |= (ret >> 5) & 0x7;
->> +		}
->> +
->> +		/*
->> +		 * Alarms are cleared on read in case the condition that
->> +		 * caused the alarm is removed. Keep the value latched here
->> +		 * for providing the register through different alarm files.
->> +		 */
->> +		ret = i2c_smbus_read_byte_data(client, MAX6620_REG_FAULT);
->> +		if (ret < 0)
->> +			goto error;
->> +		data->fault |= (ret >> 4) & (ret & 0x0F);
->> +
->> +		data->last_updated = jiffies;
->> +		data->valid = true;
->> +	}
->> +
->> +error:
->> +	mutex_unlock(&data->update_lock);
->> +	return ret;
->> +}
->> +
->> +static umode_t
->> +max6620_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
->> +		   int channel)
->> +{
->> +	switch (type) {
->> +	case hwmon_fan:
->> +		switch (attr) {
->> +		case hwmon_fan_alarm:
->> +		case hwmon_fan_input:
->> +			return 0444;
->> +		case hwmon_fan_div:
->> +		case hwmon_fan_target:
->> +			return 0644;
->> +		default:
->> +			break;
->> +		}
->> +
->> +	default:
->> +		break;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int
->> +max6620_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->> +	     int channel, long *val)
->> +{
->> +	struct max6620_data *data;
->> +	struct i2c_client *client;
->> +	int ret = 0;
-> 
-> Unnecessary initialization.
-> 
->> +	u8 div;
->> +	u8 val1;
->> +	u8 val2;
->> +
->> +	ret = max6620_update_device(dev);
->> +	if (ret < 0)
->> +		return ret;
->> +	data = dev_get_drvdata(dev);
->> +	client = data->client;
-> 
-> It might be easier to assign those above, with the variable declaration,
-> but that is just a suggestion.
-> 
->> +
->> +	switch (type) {
->> +	case hwmon_fan:
->> +		switch (attr) {
->> +		case hwmon_fan_alarm:
->> +			*val = !!(data->fault & BIT(channel));
->> +
->> +			/* Setting TACH count to re-enable fan fault detection */
->> +			if (*val == 1) {
->> +				val1 = (data->target[channel] >> 3) & 0xff;
->> +				val2 = (data->target[channel] << 5) & 0xe0;
->> +				ret = i2c_smbus_write_byte_data(client,
->> +								target_reg[channel], val1);
->> +				if (ret < 0)
->> +					return ret;
->> +				ret = i2c_smbus_write_byte_data(client,
->> +								target_reg[channel] + 1, val2);
->> +				if (ret < 0)
->> +					return ret;
->> +
->> +				mutex_lock(&data->update_lock);
->> +				data->fault &= ~BIT(channel);
->> +				mutex_unlock(&data->update_lock);
-> 
-> The lock needs to be extended across the write operations above and the
-> assignment to *val. Otherwise multiple read operations in parallel could
-> create random return values.
-> 
->> +			}
->> +
->> +			break;
->> +		case hwmon_fan_div:
->> +			*val = max6620_fan_div_from_reg(data->fandyn[channel]);
->> +			break;
->> +		case hwmon_fan_input:
->> +			if (data->tach[channel] == 0) {
->> +				*val = 0;
->> +			} else {
->> +				div = max6620_fan_div_from_reg(data->fandyn[channel]);
->> +				*val = max6620_fan_tach_to_rpm(div, data->tach[channel]);
->> +			}
->> +			break;
->> +		case hwmon_fan_target:
->> +			if (data->target[channel] == 0) {
->> +				*val = 0;
->> +			} else {
->> +				div = max6620_fan_div_from_reg(data->fandyn[channel]);
->> +				*val = max6620_fan_tach_to_rpm(div, data->target[channel]);
->> +			}
->> +			break;
->> +		default:
->> +			return -EOPNOTSUPP;
->> +		}
->> +		break;
->> +
->> +	default:
->> +		return -EOPNOTSUPP;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int
->> +max6620_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->> +	      int channel, long val)
->> +{
->> +	struct max6620_data *data;
->> +	struct i2c_client *client;
->> +	int ret = 0;
-> 
-> Unnecessary initialization.
-> 
->> +	u8 div;
->> +	u16 tach;
->> +	u8 val1;
->> +	u8 val2;
->> +
->> +	ret = max6620_update_device(dev);
->> +	if (ret < 0)
->> +		return ret;
->> +	data = dev_get_drvdata(dev);
->> +	client = data->client;
-> 
-> As above.
-> 
->> +	mutex_lock(&data->update_lock);
->> +
->> +	switch (type) {
->> +	case hwmon_fan:
->> +		switch (attr) {
->> +		case hwmon_fan_div:
->> +			switch (val) {
->> +			case 1:
->> +				div = 0;
->> +				break;
->> +			case 2:
->> +				div = 1;
->> +				break;
->> +			case 4:
->> +				div = 2;
->> +				break;
->> +			case 8:
->> +				div = 3;
->> +				break;
->> +			case 16:
->> +				div = 4;
->> +				break;
->> +			case 32:
->> +				div = 5;
->> +				break;
->> +			default:
->> +				ret = -EINVAL;
->> +				goto error;
->> +			}
->> +			data->fandyn[channel] &= 0x1F;
->> +			data->fandyn[channel] |= div << 5;
->> +			ret = i2c_smbus_write_byte_data(client, dyn_reg[channel],
->> +							data->fandyn[channel]);
->> +			break;
->> +		case hwmon_fan_target:
->> +			val = clamp_val(val, FAN_RPM_MIN, FAN_RPM_MAX);
->> +			div = max6620_fan_div_from_reg(data->fandyn[channel]);
->> +			tach = max6620_fan_rpm_to_tach(div, val);
->> +			val1 = (tach >> 3) & 0xff;
->> +			val2 = (tach << 5) & 0xe0;
->> +			ret = i2c_smbus_write_byte_data(client, target_reg[channel], val1);
->> +			if (ret < 0)
->> +				break;
->> +			ret = i2c_smbus_write_byte_data(client, target_reg[channel] + 1, val2);
->> +			if (ret < 0)
->> +				break;
->> +
->> +			/* Setting TACH count re-enables fan fault detection */
->> +			data->fault &= ~BIT(channel);
->> +
->> +			break;
->> +		default:
->> +			ret = -EOPNOTSUPP;
->> +			break;
->> +		}
->> +		break;
->> +
->> +	default:
->> +		ret = -EOPNOTSUPP;
->> +		break;
->> +	}
->> +
->> +error:
->> +	mutex_unlock(&data->update_lock);
->> +	return ret;
->> +}
->> +
->> +static const struct hwmon_channel_info *max6620_info[] = {
->> +	HWMON_CHANNEL_INFO(fan,
->> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM,
->> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM,
->> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM,
->> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM),
->> +	NULL
->> +};
->> +
->> +static const struct hwmon_ops max6620_hwmon_ops = {
->> +	.read = max6620_read,
->> +	.write = max6620_write,
->> +	.is_visible = max6620_is_visible,
->> +};
->> +
->> +static const struct hwmon_chip_info max6620_chip_info = {
->> +	.ops = &max6620_hwmon_ops,
->> +	.info = max6620_info,
->> +};
->> +
->> +static int max6620_init_client(struct max6620_data *data)
->> +{
->> +	struct i2c_client *client = data->client;
->> +	int config;
->> +	int err;
->> +	int i;
->> +	int reg;
->> +
->> +	config = i2c_smbus_read_byte_data(client, MAX6620_REG_CONFIG);
->> +	if (config < 0) {
->> +		dev_err(&client->dev, "Error reading config, aborting.\n");
->> +		return config;
->> +	}
->> +
->> +	/*
->> +	 * Set bit 4, disable other fans from going full speed on a fail
->> +	 * failure.
->> +	 */
->> +	err = i2c_smbus_write_byte_data(client, MAX6620_REG_CONFIG, config | 0x10);
->> +	if (err < 0) {
->> +		dev_err(&client->dev, "Config write error, aborting.\n");
->> +		return err;
->> +	}
->> +
->> +	for (i = 0; i < 4; i++) {
->> +		reg = i2c_smbus_read_byte_data(client, config_reg[i]);
->> +		if (reg < 0)
->> +			return reg;
->> +		data->fancfg[i] = reg;
->> +
->> +		/* Enable RPM mode */
->> +		data->fancfg[i] |= 0xa8;
->> +		err = i2c_smbus_write_byte_data(client, config_reg[i], data->fancfg[i]);
->> +		if (err < 0)
->> +			return err;
->> +
->> +		/* 2 counts (001) and Rate change 100 (0.125 secs) */
->> +		data->fandyn[i] = 0x30;
->> +		err = i2c_smbus_write_byte_data(client, dyn_reg[i], data->fandyn[i]);
->> +		if (err < 0)
->> +			return err;
->> +	}
->> +	return 0;
->> +}
->> +
->> +static int max6620_probe(struct i2c_client *client)
->> +{
->> +	struct device *dev = &client->dev;
->> +	struct max6620_data *data;
->> +	struct device *hwmon_dev;
->> +	int err;
->> +
->> +	data = devm_kzalloc(dev, sizeof(struct max6620_data), GFP_KERNEL);
->> +	if (!data)
->> +		return -ENOMEM;
->> +
->> +	data->client = client;
->> +	mutex_init(&data->update_lock);
->> +
->> +	err = max6620_init_client(data);
->> +	if (err)
->> +		return err;
->> +
->> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
->> +							 data,
->> +							 &max6620_chip_info,
->> +							 NULL);
->> +
->> +	return PTR_ERR_OR_ZERO(hwmon_dev);
->> +}
->> +
->> +static const struct i2c_device_id max6620_id[] = {
->> +	{ "max6620", 0 },
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(i2c, max6620_id);
->> +
->> +static struct i2c_driver max6620_driver = {
->> +	.class		= I2C_CLASS_HWMON,
->> +	.driver = {
->> +		.name	= "max6620",
->> +	},
->> +	.probe_new	= max6620_probe,
->> +	.id_table	= max6620_id,
->> +};
->> +
->> +module_i2c_driver(max6620_driver);
->> +
->> +MODULE_AUTHOR("Lucas Grunenberg");
->> +MODULE_DESCRIPTION("MAX6620 sensor driver");
->> +MODULE_LICENSE("GPL");
+diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
+index 455066a06f60..2640429114ee 100644
+--- a/arch/x86/include/asm/amd_nb.h
++++ b/arch/x86/include/asm/amd_nb.h
+@@ -66,6 +66,7 @@ struct amd_northbridge {
+ 	struct pci_dev *link;
+ 	struct amd_l3_cache l3_cache;
+ 	struct threshold_bank *bank4;
++	struct semaphore hsmp_sem_lock;
+ };
+ 
+ struct amd_northbridge_info {
+@@ -77,6 +78,7 @@ struct amd_northbridge_info {
+ #define AMD_NB_GART			BIT(0)
+ #define AMD_NB_L3_INDEX_DISABLE		BIT(1)
+ #define AMD_NB_L3_PARTITIONING		BIT(2)
++#define AMD_NB_HSMP			BIT(3)
+ 
+ #ifdef CONFIG_AMD_NB
+ 
+@@ -123,5 +125,43 @@ static inline bool amd_gart_present(void)
+ 
+ #endif
+ 
++/*
++ * HSMP Message types supported
++ */
++enum hsmp_message_ids {
++	HSMP_TEST = 1,
++	HSMP_GET_SMU_VER,
++	HSMP_GET_PROTO_VER,
++	HSMP_GET_SOCKET_POWER,
++	HSMP_SET_SOCKET_POWER_LIMIT,
++	HSMP_GET_SOCKET_POWER_LIMIT,
++	HSMP_GET_SOCKET_POWER_LIMIT_MAX,
++	HSMP_SET_BOOST_LIMIT,
++	HSMP_SET_BOOST_LIMIT_SOCKET,
++	HSMP_GET_BOOST_LIMIT,
++	HSMP_GET_PROC_HOT,
++	HSMP_SET_XGMI_LINK_WIDTH,
++	HSMP_SET_DF_PSTATE,
++	HSMP_AUTO_DF_PSTATE,
++	HSMP_GET_FCLK_MCLK,
++	HSMP_GET_CCLK_THROTTLE_LIMIT,
++	HSMP_GET_C0_PERCENT,
++	HSMP_SET_NBIO_DPM_LEVEL,
++	HSMP_RESERVED,
++	HSMP_GET_DDR_BANDWIDTH,
++	HSMP_MSG_ID_MAX,
++};
++
++#define HSMP_MAX_MSG_LEN	8
++
++struct hsmp_message {
++	u32	msg_id;			/* Message ID */
++	u16	num_args;		/* Number of arguments in message */
++	u16	response_sz;		/* Number of expected response words */
++	u32	args[HSMP_MAX_MSG_LEN];	/* Argument(s) */
++	u32	response[HSMP_MAX_MSG_LEN];	/* Response word(s) */
++};
++
++int hsmp_send_message(int socket_id, struct hsmp_message *msg);
+ 
+ #endif /* _ASM_X86_AMD_NB_H */
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index c92c9c774c0e..2bba59c1350e 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -6,6 +6,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/delay.h>
+ #include <linux/types.h>
+ #include <linux/slab.h>
+ #include <linux/init.h>
+@@ -29,6 +30,22 @@
+ #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
+ #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
+ 
++/*
++ * HSMP Status / Error codes
++ */
++#define HSMP_STATUS_NOT_READY	0x00
++#define HSMP_STATUS_OK		0x01
++#define HSMP_ERR_INVALID_MSG	0xFE
++#define HSMP_ERR_INVALID_INPUT	0xFF
++
++/* To access specific HSMP mailbox register, s/w writes the SMN address of HSMP mailbox
++ * register into the SMN_INDEX register, and reads/writes the SMN_DATA reg.
++ * Below are required SMN address for HSMP Mailbox register offsets in SMU address space
++ */
++#define SMN_HSMP_MSG_ID	0x3B10534
++#define SMN_HSMP_MSG_RESP	0x3B10980
++#define SMN_HSMP_MSG_DATA	0x3B109E0
++
+ /* Protect the PCI config register pairs used for SMN and DF indirect access. */
+ static DEFINE_MUTEX(smn_mutex);
+ 
+@@ -108,6 +125,9 @@ const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[] __initconst = {
+ 
+ static struct amd_northbridge_info amd_northbridges;
+ 
++/* Timeout in millsec */
++#define HSMP_MSG_TIMEOUT	100
++
+ u16 amd_nb_num(void)
+ {
+ 	return amd_northbridges.num;
+@@ -182,6 +202,194 @@ int amd_smn_write(u16 node, u32 address, u32 value)
+ }
+ EXPORT_SYMBOL_GPL(amd_smn_write);
+ 
++#define HSMP_WR true
++#define HSMP_RD false
++
++static int __amd_hsmp_rdwr(struct pci_dev *root, u32 address,
++			   u32 *value, bool write)
++{
++	int err;
++
++	err = pci_write_config_dword(root, 0xc4, address);
++	if (err) {
++		pr_warn("Error programming SMN address 0x%x.\n", address);
++		return err;
++	}
++
++	err = (write ? pci_write_config_dword(root, 0xc8, *value)
++		     : pci_read_config_dword(root, 0xc8, value));
++	if (err)
++		pr_warn("Error %s SMN address 0x%x.\n",
++			(write ? "writing to" : "reading from"), address);
++
++	return err;
++}
++
++/*
++ * Send a message to the HSMP port via PCI-e config space registers.
++ *
++ * The caller is expected to zero out any unused arguments.
++ * If a response is expected, the number of response words should be greater than 0.
++ *
++ * Returns 0 for success and populates the requested number of arguments.
++ * Returns a negative error code for failure.
++ */
++static int __hsmp_send_message(struct pci_dev *root, struct hsmp_message *msg)
++{
++	u64 timeout = HSMP_MSG_TIMEOUT;
++	u32 mbox_status;
++	u32 arg_num;
++	int err;
++
++	/* Clear the status register */
++	mbox_status = HSMP_STATUS_NOT_READY;
++	err = __amd_hsmp_rdwr(root, SMN_HSMP_MSG_RESP, &mbox_status, HSMP_WR);
++	if (err) {
++		pr_err("Error %d clearing mailbox status register.\n", err);
++		return err;
++	}
++
++	arg_num = 0;
++	/* Write any message arguments */
++	while (arg_num < msg->num_args) {
++		err = __amd_hsmp_rdwr(root, SMN_HSMP_MSG_DATA + (arg_num << 2),
++				      &msg->args[arg_num], HSMP_WR);
++		if (err) {
++			pr_err("Error %d writing message argument %d\n",
++			       err, arg_num);
++			return err;
++		}
++		arg_num++;
++	}
++
++	/* Write the message ID which starts the operation */
++	err = __amd_hsmp_rdwr(root, SMN_HSMP_MSG_ID, &msg->msg_id, HSMP_WR);
++	if (err) {
++		pr_err("Error %d writing message ID %u\n", err, msg->msg_id);
++		return err;
++	}
++
++	/*
++	 * Depending on when the trigger write completes relative to the SMU
++	 * firmware 1 ms cycle, the operation may take from tens of us to 1 ms
++	 * to complete. Some operations may take more. Therefore we will try
++	 * a few short duration sleeps and switch to long sleeps if we don't
++	 * succeed quickly.
++	 */
++	do {
++		if (likely(timeout > 90))
++			usleep_range(50, 100);
++		else
++			usleep_range(100, 500);
++
++		err = __amd_hsmp_rdwr(root, SMN_HSMP_MSG_RESP, &mbox_status, HSMP_RD);
++		if (err) {
++			pr_err("Error %d reading mailbox status\n", err);
++			return err;
++		}
++
++		if (mbox_status != HSMP_STATUS_NOT_READY)
++			break;
++
++	} while (--timeout);
++
++	if (unlikely(mbox_status == HSMP_ERR_INVALID_MSG)) {
++		pr_err("Invalid message ID %u\n", msg->msg_id);
++		err = -ENOMSG;
++		return err;
++	} else if (unlikely(mbox_status == HSMP_ERR_INVALID_INPUT)) {
++		pr_err("Invalid arguments for %d\n", msg->msg_id);
++		err = -EINVAL;
++		return err;
++	} else if (unlikely(mbox_status != HSMP_STATUS_OK)) {
++		pr_err("Message ID %u unknown failure (status = 0x%X), timedout\n",
++		       msg->msg_id, mbox_status);
++		err = -ETIMEDOUT;
++		return err;
++	}
++
++	/* SMU has responded OK. Read response data */
++	arg_num = 0;
++	while (arg_num < msg->response_sz) {
++		err = __amd_hsmp_rdwr(root, SMN_HSMP_MSG_DATA + (arg_num << 2),
++				      &msg->response[arg_num], HSMP_RD);
++		if (err) {
++			pr_err("Error %d reading response %u for message ID:%u\n",
++			       err, arg_num, msg->msg_id);
++			break;
++		}
++		arg_num++;
++	}
++
++	return err;
++}
++
++/* Verify the HSMP test message */
++static bool amd_hsmp_support(void)
++{
++	struct hsmp_message msg = { 0 };
++	int err = 0;
++	struct pci_dev *root;
++
++	/*
++	 * Check HSMP support on socket 0. the test message takes one argument
++	 * and returns the value of that argument + 1.
++	 */
++	root = node_to_amd_nb(0)->root;
++	if (!root)
++		return false;
++
++	msg.args[0]     = 0xDEADBEEF;
++	msg.response_sz = 1;
++	msg.msg_id	= HSMP_TEST;
++	msg.num_args	= 1;
++
++	err = __hsmp_send_message(root, &msg);
++	if (err)
++		return false;
++
++	if (msg.response[0] != msg.args[0] + 1)
++		return false;
++
++	return true;
++}
++
++int hsmp_send_message(int node, struct hsmp_message *msg)
++{
++	struct pci_dev *root;
++	int err;
++
++	if (!amd_nb_has_feature(AMD_NB_HSMP))
++		return -ENODEV;
++
++	root = node_to_amd_nb(node)->root;
++	if (!root || !msg)
++		return -ENODEV;
++
++	if (msg->msg_id < HSMP_TEST || msg->msg_id >= HSMP_MSG_ID_MAX)
++		return -EINVAL;
++
++	if (msg->num_args > HSMP_MAX_MSG_LEN || msg->response_sz > HSMP_MAX_MSG_LEN)
++		return -EINVAL;
++
++	/*
++	 * The time taken by smu operation to complete is between
++	 * 10us to 1ms. Sometime it may take more time.
++	 * In SMP system timeout of 100 millisecs should
++	 * be enough for the previous thread to finish the operation
++	 */
++	err = down_timeout(&(node_to_amd_nb(node)->hsmp_sem_lock),
++			   msecs_to_jiffies(HSMP_MSG_TIMEOUT));
++	if (err < 0)
++		return err;
++
++	err = __hsmp_send_message(root, msg);
++	up(&(node_to_amd_nb(node)->hsmp_sem_lock));
++
++	return err;
++}
++EXPORT_SYMBOL_GPL(hsmp_send_message);
++
+ /*
+  * Data Fabric Indirect Access uses FICAA/FICAD.
+  *
+@@ -307,6 +515,15 @@ int amd_cache_northbridges(void)
+ 	if (amd_gart_present())
+ 		amd_northbridges.flags |= AMD_NB_GART;
+ 
++	if (boot_cpu_data.x86 >= 0x19 && amd_hsmp_support()) {
++		amd_northbridges.flags |= AMD_NB_HSMP;
++
++		/* Protect the PCI config register pairs used for HSMP mailbox access, */
++		/* by initialising  semaphore for each socket */
++		for (i = 0; i < amd_northbridges.num; i++)
++			sema_init(&(node_to_amd_nb(i)->hsmp_sem_lock), 1);
++	}
++
+ 	/*
+ 	 * Check for L3 cache presence.
+ 	 */
+-- 
+2.17.1
 
