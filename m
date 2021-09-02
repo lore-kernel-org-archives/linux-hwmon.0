@@ -2,80 +2,148 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 238E2C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 17:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37C81C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 19:15:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0491F6109E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 17:58:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1600D610CF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Sep 2021 19:15:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbhIBR7F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Sep 2021 13:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S1347145AbhIBTQN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Sep 2021 15:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbhIBR7E (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Sep 2021 13:59:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA4BC061575;
-        Thu,  2 Sep 2021 10:58:06 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0ed100e05ac297e005b15d.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:d100:e05a:c297:e005:b15d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5E7F71EC0501;
-        Thu,  2 Sep 2021 19:58:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1630605480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ozQt5Gy4kayvtL83tQlAaKIfBj0i9OvDuHoGy4V3BhE=;
-        b=Uyt9r2OYmO6wmftAvs1nGd9Bs3kL4dTBQRnTLTuXC3RZik4kqXb8A/izQI0tWiJ5ZcauWG
-        b57c8jnYks6ivdYjJhpU4Ix1kal59u/hSKBr6OKG7pYgM7HDs/kkjyDbqLG2gEJIFJGW1V
-        3ZaO7n9biQg7bMYsINnCAma4CfypDX4=
-Date:   Thu, 2 Sep 2021 19:58:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
+        with ESMTP id S243525AbhIBTQM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Sep 2021 15:16:12 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D163C061575;
+        Thu,  2 Sep 2021 12:15:14 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id 107-20020a9d0bf4000000b0051b8be1192fso3867382oth.7;
+        Thu, 02 Sep 2021 12:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2PHzwL7w/TXZhLdMTKwznQCN6/znjMeKZ/ixaiuLA0E=;
+        b=eT4hcfknQSnLb8CAelm9EJ3gz+TQxqLhE2fLG4nSGcLrIwfhq7cyL5X3wZpBAeTfwG
+         ur11NYfygInfw7+BaKOx7lPATgv//Dkcz/ksQrcGYW5K6R2ViFSY4K0Aqk5z0rGNh8Xk
+         fADQQZn218LmudEWvlzztzp4KCEz00hmTfAgPfeIzmYQyZwmcgFmtHeJSiiF+tH++hlt
+         4BqsCV5b+VXw7RdPyZM9UQhcfXHgL8cq3YpqnkJIJx6q14+2kAV5GkuQDk7DXU83gv4I
+         z3VO5HsSo9JT59zELAZZJH2I2q4PSQ+ldaBqFc9Xg+nCUFb+Xfb5CKLE9oPmx/LiCsWy
+         Kb8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=2PHzwL7w/TXZhLdMTKwznQCN6/znjMeKZ/ixaiuLA0E=;
+        b=PBvDlHfpGo6/c5y2XmKeOadsDsJxJUdey+fLa/Gd01RGGk/KMTugfSzN9A33EGxegB
+         eqUuGXOyxNWcHRH86QNKytHnTr4cz4WcVpkVd8cl5OVOVnnLerL54dMshxtBsl7imIc9
+         LubHWxUjWPnOPUhOM9yYDWiBBEd/1eNxMxk64O7aCZ/XNeCW6VrkVL1pYbmw+N/4nRJB
+         aWkbSxPlH/8wpYNjwvRDcU9paL2PCRD/9F5sivomzaAryUcA/rtttqWpLNRhz6bNLGJ8
+         jNf4AO0AaN3FKvjyy4jLgV/X3RT8k+Pb9/Qsk7entd6mUbmjcfBKD6bcMdoUb3ubYsyD
+         ErGA==
+X-Gm-Message-State: AOAM5301lCFUC0QPGR7slDdWRRnAVAo4kRVRejH8uje46bUHdk7qp3uf
+        TUZJU6uMFrBm0Wl0ucdODXs=
+X-Google-Smtp-Source: ABdhPJzpR9WvJsa+I/KVFDvkAyxQ7094Jo5q4faWfdaBZ8/Ckft9vvWAblaml/ktcISq31+mGdI9xA==
+X-Received: by 2002:a9d:309:: with SMTP id 9mr4070215otv.365.1630610113546;
+        Thu, 02 Sep 2021 12:15:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k1sm511866otr.43.2021.09.02.12.15.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Sep 2021 12:15:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 2 Sep 2021 12:15:11 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux@roeck-us.net, yazen.ghannam@amd.com,
+        x86@kernel.org, bp@alien8.de, yazen.ghannam@amd.com,
         mingo@redhat.com, nathan.fontenot@amd.com, lewis.carroll@amd.com,
-        Ingo Molnar <mingo@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH 1/3] x86/amd_nb: Add support for HSMP mailbox access
-Message-ID: <YTEQzIVfY/A1uy32@zn.tnic>
+        suma hegde <suma.hegde@amd.com>
+Subject: Re: [PATCH 2/3] k10temp: Remove residues of current and voltage
+Message-ID: <20210902191511.GA1754521@roeck-us.net>
 References: <20210902174155.7365-1-nchatrad@amd.com>
+ <20210902174155.7365-2-nchatrad@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210902174155.7365-1-nchatrad@amd.com>
+In-Reply-To: <20210902174155.7365-2-nchatrad@amd.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 02, 2021 at 11:11:53PM +0530, Naveen Krishna Chatradhi wrote:
-> On Fam19h server CPUs from AMD an HSMP (Host System Management Port)
-> mailbox interface is added to monitor and manage the CPU parameters.
+On Thu, Sep 02, 2021 at 11:11:54PM +0530, Naveen Krishna Chatradhi wrote:
+> From: suma hegde <suma.hegde@amd.com>
+> 
+> Commit id "b00647c46c9d7f6ee1ff6aaf335906101755e614",
+> adds reporting current and voltage to k10temp.c
+> 
+> The commit id "0a4e668b5d52eed8026f5d717196b02b55fb2dc6",
+> removed reporting current and voltage from k10temp.c
+> 
+> The curr and in(voltage) entries are not removed from
+> "k10temp_info" structure. Removing those residue entries.
+> while at it, update k10temp driver documentation
+> 
+> Signed-off-by: suma hegde <suma.hegde@amd.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
 
-Mailbox? Hmm, that rings a bell. There's drivers/mailbox/ with a bunch
-of drivers in there. Those are
+Applied.
 
-"Mailbox is a framework to control hardware communication between
-on-chip processors through queued messages and interrupt driven
-signals."
+> ---
+> This is an unrelated change, should we submit this seperately or drop this for now?
+> 
+Guess the above answers your question.
 
-I wonder if that HSMP thing can be wrapped like a mailbox driver...
+Thanks,
+Guenter
 
-If not, I still don't like it being slapped in amd_nb.c where it would
-be built in on *all* AMD hardware which is kinda too much.
-
-You could make it a separate driver module called amd_hsmp.ko which
-loads only on the appropriate hw and uses amd_nb.c for detection only
-like the other drivers, for example.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>  Documentation/hwmon/k10temp.rst | 17 -----------------
+>  drivers/hwmon/k10temp.c         |  6 ------
+>  2 files changed, 23 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/k10temp.rst b/Documentation/hwmon/k10temp.rst
+> index 8557e26281c3..91b99adc6c48 100644
+> --- a/Documentation/hwmon/k10temp.rst
+> +++ b/Documentation/hwmon/k10temp.rst
+> @@ -132,20 +132,3 @@ On Family 17h and Family 18h CPUs, additional temperature sensors may report
+>  Core Complex Die (CCD) temperatures. Up to 8 such temperatures are reported
+>  as temp{3..10}_input, labeled Tccd{1..8}. Actual support depends on the CPU
+>  variant.
+> -
+> -Various Family 17h and 18h CPUs report voltage and current telemetry
+> -information. The following attributes may be reported.
+> -
+> -Attribute	Label	Description
+> -===============	=======	================
+> -in0_input	Vcore	Core voltage
+> -in1_input	Vsoc	SoC voltage
+> -curr1_input	Icore	Core current
+> -curr2_input	Isoc	SoC current
+> -===============	=======	================
+> -
+> -Current values are raw (unscaled) as reported by the CPU. Core current is
+> -reported as multiples of 1A / LSB. SoC is reported as multiples of 0.25A
+> -/ LSB. The real current is board specific. Reported currents should be seen
+> -as rough guidance, and should be scaled using sensors3.conf as appropriate
+> -for a given board.
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 38bc35ac8135..3618a924e78e 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -362,12 +362,6 @@ static const struct hwmon_channel_info *k10temp_info[] = {
+>  			   HWMON_T_INPUT | HWMON_T_LABEL,
+>  			   HWMON_T_INPUT | HWMON_T_LABEL,
+>  			   HWMON_T_INPUT | HWMON_T_LABEL),
+> -	HWMON_CHANNEL_INFO(in,
+> -			   HWMON_I_INPUT | HWMON_I_LABEL,
+> -			   HWMON_I_INPUT | HWMON_I_LABEL),
+> -	HWMON_CHANNEL_INFO(curr,
+> -			   HWMON_C_INPUT | HWMON_C_LABEL,
+> -			   HWMON_C_INPUT | HWMON_C_LABEL),
+>  	NULL
+>  };
+>  
