@@ -2,94 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B40CBC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Sep 2021 19:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E32EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Sep 2021 20:33:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 889D86054F
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Sep 2021 19:01:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C29460F5E
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Sep 2021 20:33:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbhIETCN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Sep 2021 15:02:13 -0400
-Received: from mout.gmx.net ([212.227.17.22]:59081 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229865AbhIETCN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 5 Sep 2021 15:02:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1630868454;
-        bh=nKgOg7zBqomEAg24LOizqssVyDmD1P43TzhYqtaOFQ0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=ERNmaKOvSZHwy/hvQbCIcgUuiZx8OdfT8fEGLBibMakJvq9VVNcO5iDhRRO2wus3n
-         fT+PcsJo3UQH8eW8+meE3YFuMeOxPwdiltroKWUviwnv6R4IXjoz/tPqoHRueo+eRZ
-         3I0ZfFaUCPC8C/AuI8N98wDBCCOF1gnNU58puZtI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MgvvJ-1msiAl322n-00hPZC; Sun, 05 Sep 2021 21:00:54 +0200
-From:   W_Armin@gmx.de
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (raspberrypi) Use generic notification mechanism
-Date:   Sun,  5 Sep 2021 21:00:49 +0200
-Message-Id: <20210905190049.11381-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.20.1
+        id S233435AbhIEUeS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 5 Sep 2021 16:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230217AbhIEUeR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Sep 2021 16:34:17 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C79CC061575
+        for <linux-hwmon@vger.kernel.org>; Sun,  5 Sep 2021 13:33:13 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id w19so6341769oik.10
+        for <linux-hwmon@vger.kernel.org>; Sun, 05 Sep 2021 13:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GJ3/2s7zctlD/w3cz/y7AFDFJRWPV+yOSf2EnA09VXg=;
+        b=WRnJc86ItzPN4toirfv1U3uEGqIGghre1kbQ9sSsQCp+zWq2KVMszukrNMT2Px2sVA
+         FOEzUDtoligfvMetps9/PR7BV9eUvMRuZ/GeGhiWQBIc5I5Aki0M+VVm/PCdmKb/lFYg
+         tvPR6Mizk40wrEIoZoEoAnH9gLMl8BRux54qZ0TEIHQxhUY/nxrJUhn4NLGOTJ/wcrJT
+         4D/v4WIywElWm4GFZZ+3CE7o9ueG5CwyfbIKUpmBcS08WdMsYZ48VT/pTFa+moLQQaEk
+         L4RqIqZV1UleDxVpDotRy0M6cmJZr1XFJQZd0VFp3glEFS+39ltp3gzWoihB+IS/a3l7
+         8vDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=GJ3/2s7zctlD/w3cz/y7AFDFJRWPV+yOSf2EnA09VXg=;
+        b=eYeXcHncpASmk17W+nNGEJw91sjn1D68AaQcGUXvJlfVXOjY2+33tV6jN8qLVpWLPV
+         kw6dGLcqIjZNzG0c6h/LaJ/HN70vHSEBkzVh6zMoQWFro9mGnTyOitAgXFvkPXLVNGsj
+         CCRAetLl62micxlDf3a2FTKgxvOqFnO1Arso+SV/BXOqjL6Rfon/vHyPdEJmWbFsPZ8l
+         SfvMwItLZDhGz873/VlXMOko/RJznDNM0xLGFEgvycUYKN5IHY67vbvMvFuJ1paQji2B
+         JsI+gHQuNzwpkSpWfBHDr+fv0e2NwsALHZ1Uzp7veuoL+FeuiVKdEGPNJ+9LCQsjsDNV
+         B7yg==
+X-Gm-Message-State: AOAM5305+6RzO1HiG2M/Fe2sAvLqv8efkAn24jFnRvbyYSM0kyyLIAoq
+        hq8Q8E3w4gmN6GoUXaPhC3To91hZQE0=
+X-Google-Smtp-Source: ABdhPJxx8cPCkFC7GIKIXsozyYSu3ft+wknbw3VKT9PToVpOaZD27ObpH+s1X6gDmPtsi9uNf4wDWA==
+X-Received: by 2002:aca:b2c4:: with SMTP id b187mr6679186oif.90.1630873992463;
+        Sun, 05 Sep 2021 13:33:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b3sm1109132oie.1.2021.09.05.13.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Sep 2021 13:33:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 5 Sep 2021 13:33:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     W_Armin@gmx.de
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (raspberrypi) Use generic notification mechanism
+Message-ID: <20210905203310.GA3080894@roeck-us.net>
+References: <20210905190049.11381-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:78fX9w7Wfpiq8UbU3EsaiTfz+446chjOCOUoFxay8t41GwWyba/
- AKGJANmmbcOmw9OPNtAbTtVAPBbRFWVkZMAS+LBb1w6uIeTNylRVZ6BeJSxiA0VgOr7+kaG
- V3GLIK+fpq03Yi6qMGuvXWYSThe+WlT42PXyZt1khT5gMrGK+2uupmovZlDtznKpd1yRr4A
- zvDfMUe+vxmgVjl0DmELQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:68eClvW/uRU=:wOLypsupnL6c8fUzLgbADE
- urEoRCAKEdD4cycWXz7VoD4KbSNA2Oq6lCCGXT0d60Lx5Vr210pBVyusXNBufP7Dl2b3lCtrb
- BGMooeCMcBxm/H/bAxodKHUP/2KINdSP408vzIZ4KW1h4dSBAPDee1BGQ+BUdO1qVrMANxt/q
- cOu5FP5lzijWrYYXp1LDQzy1wEZBAYXpr8nI0PIh9jYREk8aPr1IN3+1In6r/gIpeCnf1gXIN
- ttDrLrx0GCwRFsPArOt8AnCsQt7H1Yd7qZU/g7dftk6ds2S6trATmFOe+mIjb0OcabwTv8xwu
- IGgOfZA6xH/xfEpgEObQfjgwQ4jCRoVuIZhnXMq+EgUvBLNj/hy5TXIt0NgwG/5Nz4tunkZv5
- qX70o+6M3RmEKzSd5+TCcDRdqhpS8/V+wVAzeCbPSdGXbNeRf/ugAXvZRzKw88GOvyzLfegks
- r/ZVcrbM7xFAAH4wkVnAW83Oti3EKdLafkP+awQCkLBJvkgFstZE0kupWXIeQ9S4J/3qhsbke
- u9aHPFKR2FfslDQwIDKPL7eHBDLBigT88j1pbd0DsVG0hUy3jkNe7sD3KObwPBbSXIH/iuG6+
- 6GYn4Wd4RXw4tsd125i7ZOd52D5+t0YG9FNXqNfddusj0I0I2hwIH0/Wnq1+BW9Io2UavcpxA
- 2Fn/siJirIE1Qa5B55OZvEJYfKbSE9/eSr7/naKjejYDEfxrfz7dcO+Idhu2YNgjLTLfHe10v
- dueOyJq2yKOBPkFroFWi3RvDX1iuG5uyOU5Yc9RtvMCzQW9SFFwWbP2fePXLgKLbvMkGF2pQl
- g2eqJ8rbC4l0e1giAAXZXMt/kZVXlon/XK/gw5x7vmL8u8lHm2vU6YzmIm83VGPO2P99r0Sdu
- k3Jv3jpXB9omPd5P7YL2AYvQSAKrzrl1Vu9kPFNkAsWYoQ/eBCfH6l8rjNaommmIQc8jEA565
- lDJzY39sv7Xc8YEKJW2wvd3lrpFWdvLVen4lmF5WdDcnUQtuQBwOV+lzDnf3fXPwKyhVsl4uW
- K+KbQwTWqO6x3870YBkUQLYPpzfPCqRIdeHY7VukGqTGxjDLtNkz1+8jS1gC4ruHmLVDA/Kva
- xDSu4XjRTUsrDIilfslkmaxmaSo+Eso/0t2eZcYpWgYSeO5912flseX+g==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210905190049.11381-1-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+On Sun, Sep 05, 2021 at 09:00:49PM +0200, W_Armin@gmx.de wrote:
+> From: Armin Wolf <W_Armin@gmx.de>
+> 
+> Use hwmon_notify_event() to make the code easier to
+> understand and to also generate udev events.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Use hwmon_notify_event() to make the code easier to
-understand and to also generate udev events.
+Applied to hwmon-next.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/raspberrypi-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi=
--hwmon.c
-index 805d396aa81b..573f53d52912 100644
-=2D-- a/drivers/hwmon/raspberrypi-hwmon.c
-+++ b/drivers/hwmon/raspberrypi-hwmon.c
-@@ -53,7 +53,7 @@ static void rpi_firmware_get_throttled(struct rpi_hwmon_=
-data *data)
- 	else
- 		dev_info(data->hwmon_dev, "Voltage normalised\n");
-
--	sysfs_notify(&data->hwmon_dev->kobj, NULL, "in0_lcrit_alarm");
-+	hwmon_notify_event(data->hwmon_dev, hwmon_in, hwmon_in_lcrit_alarm, 0);
- }
-
- static void get_values_poll(struct work_struct *work)
-=2D-
-2.20.1
-
+Thanks,
+Guenter
