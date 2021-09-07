@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFF00C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 18:29:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13468C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 19:53:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCE69610A3
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 18:29:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC93861132
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 19:53:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345891AbhIGSbB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Sep 2021 14:31:01 -0400
-Received: from mga12.intel.com ([192.55.52.136]:12082 "EHLO mga12.intel.com"
+        id S1346040AbhIGTyK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Sep 2021 15:54:10 -0400
+Received: from mga02.intel.com ([134.134.136.20]:43041 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236461AbhIGSbB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 7 Sep 2021 14:31:01 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10100"; a="199817296"
-X-IronPort-AV: E=Sophos;i="5.85,274,1624345200"; 
-   d="gz'50?scan'50,208,50";a="199817296"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 11:29:53 -0700
+        id S231560AbhIGTyJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 7 Sep 2021 15:54:09 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10100"; a="207527993"
+X-IronPort-AV: E=Sophos;i="5.85,276,1624345200"; 
+   d="gz'50?scan'50,208,50";a="207527993"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2021 12:53:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,274,1624345200"; 
-   d="gz'50?scan'50,208,50";a="547064870"
+X-IronPort-AV: E=Sophos;i="5.85,276,1624345200"; 
+   d="gz'50?scan'50,208,50";a="503208141"
 Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Sep 2021 11:29:51 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 07 Sep 2021 12:52:58 -0700
 Received: from kbuild by 730d49888f40 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mNfqw-0001AZ-Gj; Tue, 07 Sep 2021 18:29:50 +0000
-Date:   Wed, 8 Sep 2021 02:28:48 +0800
+        id 1mNh9O-0001FC-6a; Tue, 07 Sep 2021 19:52:58 +0000
+Date:   Wed, 8 Sep 2021 03:52:46 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -40,21 +40,20 @@ To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/8] hwmon: (tmp421) add support for defining labels from
- DT
-Message-ID: <202109080211.FT4fZ6YM-lkp@intel.com>
-References: <22639314543a98b4c24e55b7e5a803325ad9e568.1631021349.git.krzysztof.adamski@nokia.com>
+Subject: Re: [PATCH 7/8] hwmon: (tmp421) really disable channels
+Message-ID: <202109080328.Tg83iw5t-lkp@intel.com>
+References: <d0a1be24701dcf19a2f7501a9bc7fddf2b739792.1631021349.git.krzysztof.adamski@nokia.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="ew6BAiZeqk4r7MaW"
+Content-Type: multipart/mixed; boundary="pf9I7BMVVzbSWLtt"
 Content-Disposition: inline
-In-Reply-To: <22639314543a98b4c24e55b7e5a803325ad9e568.1631021349.git.krzysztof.adamski@nokia.com>
+In-Reply-To: <d0a1be24701dcf19a2f7501a9bc7fddf2b739792.1631021349.git.krzysztof.adamski@nokia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---ew6BAiZeqk4r7MaW
+--pf9I7BMVVzbSWLtt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -77,10 +76,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install mips cross compiling tool for clang build
         # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/50e1eb6bf222a2fb0df304033f2aaed075fd76b2
+        # https://github.com/0day-ci/linux/commit/56fe3c49ca67e9ea9c4f8a40438b5adc58c417f1
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Krzysztof-Adamski/Add-per-channel-properies-support-in-tmp421/20210907-214724
-        git checkout 50e1eb6bf222a2fb0df304033f2aaed075fd76b2
+        git checkout 56fe3c49ca67e9ea9c4f8a40438b5adc58c417f1
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips 
 
@@ -89,72 +88,63 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hwmon/tmp421.c:295:6: warning: no previous prototype for function 'tmp421_probe_child_from_dt' [-Wmissing-prototypes]
+   drivers/hwmon/tmp421.c:301:6: warning: no previous prototype for function 'tmp421_probe_child_from_dt' [-Wmissing-prototypes]
    void tmp421_probe_child_from_dt(struct i2c_client *client,
         ^
-   drivers/hwmon/tmp421.c:295:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   drivers/hwmon/tmp421.c:301:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    void tmp421_probe_child_from_dt(struct i2c_client *client,
    ^
    static 
->> drivers/hwmon/tmp421.c:319:6: warning: no previous prototype for function 'tmp421_probe_from_dt' [-Wmissing-prototypes]
+   drivers/hwmon/tmp421.c:345:6: warning: no previous prototype for function 'tmp421_probe_from_dt' [-Wmissing-prototypes]
    void tmp421_probe_from_dt(struct i2c_client *client, struct tmp421_data *data)
         ^
-   drivers/hwmon/tmp421.c:319:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   drivers/hwmon/tmp421.c:345:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    void tmp421_probe_from_dt(struct i2c_client *client, struct tmp421_data *data)
    ^
    static 
-   2 warnings generated.
+>> drivers/hwmon/tmp421.c:356:6: warning: no previous prototype for function 'tmp421_disable_channels' [-Wmissing-prototypes]
+   void tmp421_disable_channels(struct i2c_client *client, uint8_t mask)
+        ^
+   drivers/hwmon/tmp421.c:356:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tmp421_disable_channels(struct i2c_client *client, uint8_t mask)
+   ^
+   static 
+   3 warnings generated.
 
 
-vim +/tmp421_probe_child_from_dt +295 drivers/hwmon/tmp421.c
+vim +/tmp421_disable_channels +356 drivers/hwmon/tmp421.c
 
-   294	
- > 295	void tmp421_probe_child_from_dt(struct i2c_client *client,
-   296					struct device_node *child,
-   297					struct tmp421_data *data)
-   298	
-   299	{
-   300		struct device *dev = &client->dev;
-   301		u32 i;
-   302		int err;
-   303	
-   304		err = of_property_read_u32(child, "reg", &i);
-   305		if (err) {
-   306			dev_err(dev, "missing reg property of %pOFn\n", child);
-   307			return;
-   308		} else if (i > MAX_CHANNELS) {
-   309			dev_err(dev, "invalid reg %d of %pOFn\n", i, child);
-   310			return;
-   311		}
-   312	
-   313		of_property_read_string(child, "label", &data->channel[i].label);
-   314		if (data->channel[i].label)
-   315			data->temp_config[i] |= HWMON_T_LABEL;
-   316	
-   317	}
-   318	
- > 319	void tmp421_probe_from_dt(struct i2c_client *client, struct tmp421_data *data)
-   320	{
-   321		struct device *dev = &client->dev;
-   322		const struct device_node *np = dev->of_node;
-   323		struct device_node *child;
-   324	
-   325		for_each_child_of_node(np, child) {
-   326			tmp421_probe_child_from_dt(client, child, data);
-   327		}
-   328	}
-   329	
+   355	
+ > 356	void tmp421_disable_channels(struct i2c_client *client, uint8_t mask)
+   357	{
+   358		int err;
+   359		int cfg = i2c_smbus_read_byte_data(client, TMP421_CONFIG_REG_2);
+   360	
+   361		if (cfg < 0) {
+   362			dev_err(&client->dev,
+   363				"error reading register, can't disable channels\n");
+   364			return;
+   365		}
+   366	
+   367		cfg &= ~mask;
+   368	
+   369		err = i2c_smbus_write_byte_data(client, TMP421_CONFIG_REG_2, cfg);
+   370		if (err < 0)
+   371			dev_err(&client->dev,
+   372				"error writing register, can't disable channels\n");
+   373	}
+   374	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---ew6BAiZeqk4r7MaW
+--pf9I7BMVVzbSWLtt
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICF2hN2EAAy5jb25maWcAnDxdd9u2ku/9FTrtS+85N40ly06ye/wAgaCEiiRoAJQlv+Ao
+H4sICGm1N2EAAy5jb25maWcAnDxdd9u2ku/9FTrtS+85N40ly06ye/wAgaCEiiRoAJQlv+Ao
 tpxqryP7ynZ78+93BvwCSFDubh+aaGYADAaD+cIwv/z0y4i8vT59377u77aPjz9G33aH3XH7
 ursfPewfd/89isQoE3rEIq5/A+Jkf3j7z8fv++eX0cVv4+lvZ6Pl7njYPY7o0+Fh/+0Nhu6f
 Dj/98hMVWcznhlKzYlJxkRnN1vrq57vH7eHb6M/d8QXoRjgDzPHrt/3rf338CP//vj8en44f
@@ -757,4 +747,4 @@ lMTyg2pZXZAI7Q8xZmSwwqPaZabzVM5EjDDqPuGkc+JG8ob+oiC5oI4CrNvb4AQPxGlqGWfH
 WdvMQ4er1a/1IltMxFvNJEoGHOElJL/E0rv1mMn3zpl/EKhdpJQDa6DF26EtIDZg3NTEX4++
 KEptz1FWT5MqsgapCbapSZi+xDmOKF2LDGZIU8dJvGfP/QJOtDBmzhECAA==
 
---ew6BAiZeqk4r7MaW--
+--pf9I7BMVVzbSWLtt--
