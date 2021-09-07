@@ -2,730 +2,147 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F04F6C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 17:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 855A7C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 17:49:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB505610C9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 17:16:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 626D161100
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Sep 2021 17:49:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345665AbhIGRR7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Sep 2021 13:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345662AbhIGRRz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Sep 2021 13:17:55 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06CAC061575
-        for <linux-hwmon@vger.kernel.org>; Tue,  7 Sep 2021 10:16:48 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id x10-20020a056830408a00b004f26cead745so13637150ott.10
-        for <linux-hwmon@vger.kernel.org>; Tue, 07 Sep 2021 10:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RMlEhw7M/C8bbcggyj9MG9JQQHmUvfH6sy64xc6GHc4=;
-        b=N/QWNWXUJrK8v1IvXa8vdTIWwlksGhU/RcghL/47RzIHXcnIcgVc5F2xqsLDPZ8PCw
-         agBMLkssmY7NJ2w9ckeq7eQ0kdYur0gjYLdGqB+yDOv5LfiP9VeFoMBtuf3fpr/hH87J
-         N43Yu3Dkm6C5sbN0+sQnoP1RA6D1ehPV8GbsTzSrRSUmd8LTHdTggnyvqWKKZwLOz7np
-         igDOy8fbAJcSUtv1Bp4ezebEmM7NCInEMFuNG1yMyZEX+sMg3b7eZx1MngQytYwDMkOC
-         wpnS1JjLoWeBoytSw7ojdtGUE5RYn7ZcrXoaHdXmR1RX9DWCVWsc81odhQ7EjZ3301NJ
-         SBEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RMlEhw7M/C8bbcggyj9MG9JQQHmUvfH6sy64xc6GHc4=;
-        b=k1Z434DHWPZOtgD2Pqk2kcwR21/cCMudp//c4tQA/L9vbIcFV+nTlmdNG1Uxa/9+Dl
-         3384dlQ2enHfga7+1mwWYs8UjD3OLocJANZPJ1dsArHdAUir4gcYZJKooUmSuPLNaJa3
-         P4kPl95diL7Tku5PlYRVxdoW0wj55YkDVWllz/5qMNUbr+yT93Jahf4n3ZeyHTFJy3E4
-         8dUfqF9rxmQ+OwuSlaE6dByyCcRj9R0A25Kt65hqPnNemB1376hR6luDkJfLxZtwPHLU
-         27+T7W9XK/RdxWPUX+TMWeFDzoxz9JDAvllXTBoISHTZhfvZ6D6Uw94j1zSALjzjBtK8
-         8pzg==
-X-Gm-Message-State: AOAM531/Mh99CAJhVLfjHH0eMFn5yKSwS/HHGzRRzXbZrAAUmPKFvHbg
-        kg1X5qaO++nOcsiQQ4fWeKNJrG+0Hk8=
-X-Google-Smtp-Source: ABdhPJxTGFDwwh2P180n+1bq5seBLwjnktq8A1co8CnfFn+VV6Q56485Q68pb1tgl3WuMyb29BNXwQ==
-X-Received: by 2002:a05:6830:2098:: with SMTP id y24mr16435149otq.137.1631035007733;
-        Tue, 07 Sep 2021 10:16:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r20sm2375835oot.16.2021.09.07.10.16.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Sep 2021 10:16:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v4] hwmon: Add Maxim MAX6620 hardware monitoring driver
-To:     "Balac, Arun Saravanan" <ArunSaravanan.Balach@Dell.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <DM5PR1901MB2023D0270020469F854E879DA6D39@DM5PR1901MB2023.namprd19.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <3230756b-2f56-e1cd-d7f0-57a60ed4740d@roeck-us.net>
-Date:   Tue, 7 Sep 2021 10:16:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <DM5PR1901MB2023D0270020469F854E879DA6D39@DM5PR1901MB2023.namprd19.prod.outlook.com>
+        id S234449AbhIGRuv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Sep 2021 13:50:51 -0400
+Received: from mail-eopbgr50138.outbound.protection.outlook.com ([40.107.5.138]:28547
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242931AbhIGRuu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 7 Sep 2021 13:50:50 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W9VD8iDhmJlPUe6FAoO/2vDpYW4/cwdmYIpUiVUmuSatE78aYM57iHES3keDANG8OkcRMC+B8a/A3Q4NbSqRE/Wf69HvT9C3ta8B5k04SB16mufTARDDvqtK1K51Eg6oZ+xdCrCWhp4wQgLPuB7Xmw971p33jdWEjvdFr2eONe3KVMcvmXi5+tLXqSDKFbj1a2S+NtrtJn7PMMEOCLB8wUMnI8ytQnPpdWRlNoPbE/VZTDHc0ZXQcvsVfzRF4aw6+aL8mHjHGLOMKIO17cZCUaj5OoIxuDT70pSpRxIzKmq+y5RCiqu2MdmKDOSBuBNWzR3NRUBSiQvGXklHY6G3UQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=Pmn//LAF0w13NKmS9GscYQ6dIzjhHzrea5KNDw9UhyI=;
+ b=GLf3L8sRdeZ509tbk7/6E/Ilq9TOYkNn8IH3dqPBZ8TRiFe8DHwcrzc7YRKhTHmYVD6mTwu48ba/xtSMFOpmiWKr4rnYGkpUB3qblUw+mUAIcVy2KJdmXFjemFdS2brUXRvL7r8fJ6ZWngma6LdUO2IMn009zO2Fi8kvXx6ogdi/jrylFAFCqTQibgBoJ0AAua5zXErp4fWY9jqUImcCnPBmbulUvppYGiG+275IK5h38bhDCKCe58g/rBc4/AGwYtznfQzhpDdCzY7ZLu5Nxhrw9k24UDOGq8dHDsBKLKLpUtmJCBDNFLwsVZtXwiN66fwdyGN26KNySsyp7YUtWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pmn//LAF0w13NKmS9GscYQ6dIzjhHzrea5KNDw9UhyI=;
+ b=qBwWj++rx+s4nKJPhKmqMXORZklJ9s3ojreudnad2piHTblOl8I3Ntbo7vCiPqCUa1rXjcQ+fFV6aiU3R7FVe60Z9n6YiJvgxeLNuM3qCaD+JhNh724jFeVqKCxF2QfjfDsPEhb+vICMfcLx8zBqozUkoZE4NzhAis55m6oC7lg=
+Authentication-Results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by DU2PR07MB8149.eurprd07.prod.outlook.com (2603:10a6:10:272::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.12; Tue, 7 Sep
+ 2021 17:49:42 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::c47f:b569:ac76:9feb%6]) with mapi id 15.20.4478.014; Tue, 7 Sep 2021
+ 17:49:42 +0000
+Date:   Tue, 7 Sep 2021 19:49:36 +0200
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 4/8] hwmon: (tmp421) add support for defining labels from
+ DT
+Message-ID: <YTemMLjCVMsbteOm@localhost.localdomain>
+References: <cover.1631021349.git.krzysztof.adamski@nokia.com>
+ <22639314543a98b4c24e55b7e5a803325ad9e568.1631021349.git.krzysztof.adamski@nokia.com>
+ <30814a02-10f1-2590-26a5-b3f6ff367be1@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <30814a02-10f1-2590-26a5-b3f6ff367be1@roeck-us.net>
+X-ClientProxiedBy: HE1P18901CA0002.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:3:8b::12) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
+MIME-Version: 1.0
+Received: from localhost.localdomain (131.228.2.20) by HE1P18901CA0002.EURP189.PROD.OUTLOOK.COM (2603:10a6:3:8b::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Tue, 7 Sep 2021 17:49:40 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bb096bce-e6d3-4428-71d0-08d97227def6
+X-MS-TrafficTypeDiagnostic: DU2PR07MB8149:
+X-Microsoft-Antispam-PRVS: <DU2PR07MB8149AFE9D4793E39CCDF56A3EFD39@DU2PR07MB8149.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6WoZvy4Oq6ieNiCSkf9OGx1Wd0zf060bGhZfZC/6sy1YCxSG7C+Cop1wlCgoaDKJaAsnmafJ7vUNzB8UZKUCr8GzMLne4eihhLZIeQ1DWeu8xhD92lUjijy7SqT93y+3/m7bwPQm8At/jSi1c3z0NSFSSWKmcYjWem73oEaEYv6vq8NDZailp262AJ4+LLn7b0VEJI/ms3CCGijPF0alHh5eyPhn060obn6ZwdIZvofRouUuG/7gY3JeTnXeukmADHTr7y9/IjMbqtLLTFp37IKoXygJEZxgd1UOqCh5kZ3Ks+u71zTMiWR+RYO2Zc9Y+R96Y+fRCxDPVqR3cgo8ks8RKVyIOCqxh+xUy5S5Z4FpPptiy1MMmciXXgOsptiO3JftYamEGjegEZDpvnzHhjxxwLEhmpE9mrBKh7/sErq63a7Pp5oRltCkh1HSJlGWBJ3mC0zw4XaVt0nDTyxmY9GQ/VgmqZJYxteKc5+KCV2ek2ZVo8KKg+ZiSTXjLSGC7gtVgMv2qGZa5IXo0GQiPxYquzzbcD2P8Zu3l6p2QLgKQdHikjb/KqSQre09UZ4K3lHL2+YIMWKqgytZVEt/uxIvKIRtzjO2xow9TksOIhKYOSLizO4Svs40wZfh9FWqbqu6upG5evDfYGsCZWGJmljFDmDY4HThk0Ao93e1sa1mVUbAcl6mvU5p8XuDusbbPCVGGT2TfIyYTwjagFXCMA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(8676002)(5660300002)(956004)(44832011)(6666004)(2906002)(55016002)(38350700002)(66556008)(66946007)(6916009)(6506007)(4744005)(4326008)(186003)(9686003)(83380400001)(8936002)(52116002)(7696005)(66476007)(508600001)(38100700002)(316002)(54906003)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S291TXkyOTJtWlJHZzkvRzFhUDNOUzc1dWQ0YmxDZXhwemhoV3BLNko0dWdP?=
+ =?utf-8?B?RkYzK1J6czg5aEdnSU9rU3FrUk4rdVVqcStVU254NTZ3SC9RcWNQMGw1c1hn?=
+ =?utf-8?B?SjM2UGMvQitZTitDazBiaENHZ2h3MHdvU1J5NGVjMndublpUMXlNQnFRYjBT?=
+ =?utf-8?B?bDRYYmtXZy9yalVWUzV3OFBpTXFZYjVjMytRZ3ZuWW1yZDRJL3FxKzhjclZu?=
+ =?utf-8?B?b0d3eW9tV0toWnBsMlZYM2dEQVllRFFzNS9XUDBGMU4xUlFpeDJjZTEzUFdv?=
+ =?utf-8?B?SGFsYWJzWEV1dW14aytKdDdlZVlDZnkwSjJyNWdiUkJRbzZtbC9YaDVOR0Rx?=
+ =?utf-8?B?VS8rS2lYcXQvRFZyM29JaFFtQ2JzcUlGbXJtWFpqZzIyUU96V0JlM0J5WjQ3?=
+ =?utf-8?B?VlBqTXRRU3M4dlRvdnpWS0lwMlNXQm1KWWh6clcvckcxd0d4ei9FblN1c0hG?=
+ =?utf-8?B?WlJ4cVZIRTM4c2svWEJnRTFEM0toOXVKSC9MQTBHRnh4Rk1BZFRHdGZuTTN6?=
+ =?utf-8?B?aXh6d2pNL20xZmJPcmF6NEdlT3BHbDV4ZkJpV01nZ21Icys1V1RkUktzb2VM?=
+ =?utf-8?B?SytlL1FPSlNKTVNzMWtoVm1JcHJsN1FQUUNyemJJTDJzS0crcUZLRmZNK05v?=
+ =?utf-8?B?MEd3ZjVRMnRCbjIyMUZNNlFrcmRweUQ0TjVGTG4vRlFQOEdZbG13a0JuamxI?=
+ =?utf-8?B?VTkrZ29EcEZLNy85OTZOL1NOUXVSNlcrMk1NR2ttYklqVWNOSXNwUnFHNzJq?=
+ =?utf-8?B?aG1TTHh3ZUkvT0UxMUM5VExqSEdDTExxWUZNU1p6YmZyKzBaL3NwYzRwV0U4?=
+ =?utf-8?B?a2l1cTkrSGM0SWtYZWk0SllZemdiR2I5OTNMVkJxeGc3YXF2VmJ3UUwrZ05q?=
+ =?utf-8?B?VVZTVHU4aWJvRllpVmUySHYzVmdmRjhqcWZxWE9JVkJMRG40aExjTWtzRFcy?=
+ =?utf-8?B?UjFNZFlwUFA4YXZqZDQ1ZkNhMHBSbmxGMHFqbjg2b1M3bHRiYkhIVC9qUngw?=
+ =?utf-8?B?ZVhvdkkxRm4xemNYWmhjN0k1bDlSR0EyUG0vZGNCekpjZ1J4RFdmODRFRk1w?=
+ =?utf-8?B?ejZXN0grNjFoVWZubWhLSktmeU5kTkJCWm5wbEFNZzYxOWhhNysxNk16TTM0?=
+ =?utf-8?B?NGJoNWhqeTFtbG5YRVNnN0E5dzFCWUROa1lzZkFSNWRCcFRyRk1KME5ReTFq?=
+ =?utf-8?B?cmJUWkNsblJoV1N1TU5HWWRVSnlNa0tLeE9Fd20yZElWRlJBcWNqVG9HanRL?=
+ =?utf-8?B?ODBmSlJPdU1OaHU0UWZJR3BsOVc2RWk1YzAvT1hxaVJaT0VKL25BWFhxUjVa?=
+ =?utf-8?B?MlhJQlUxVHBPR2t0cHpHb3Z2M0hFaUYwdndzRkNldmJKOE0xNFBGemZCR09D?=
+ =?utf-8?B?cFpxYW00bWd1Y1E2cWlLbit1VS9rd2JhZ3NUTmRDTFpBTjNEYWJjWWZoNzZN?=
+ =?utf-8?B?T1FlL2tIOUd2cFhwWFF1d2dobUtSdlRZOHdVeHN4ZFY1eWZFclZFTDRrQ2VD?=
+ =?utf-8?B?cVpXL05MWUJlNWxRSXRPclZYZEpkVEU2TlZBR2VsbXVWNUxHWXlWUEJta2Vl?=
+ =?utf-8?B?cnp1R3pNN1RQZ2dGU0NHK2x5QmdKWEYwYjZPY2s1bUREMWcvZCtOcHlGRWNC?=
+ =?utf-8?B?aUR1SUtaaWVxdXNORlFrZmpEcFdtOS9LVW1lT0ovSU5rcVBWVnBtdDlnWkdE?=
+ =?utf-8?B?NHd2RlN6a2ZkOUxocXpOTmsyeWtucWJDRG1ZaEhKYVZReklNWm5qYVZUYkR4?=
+ =?utf-8?Q?m7zH1X2yLQ6on5NyFQyP04VpD25hHRxhxjFMXYN?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb096bce-e6d3-4428-71d0-08d97227def6
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2021 17:49:42.1023
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qjqPeTP1eKeW08GNytRnCCOf0iSGcTwtwnKsc5HTG5ySNK3eNyDTucRh0ms0K7xWKxCXIUhKiSBQmIHikaP/hK/Q82k25vxg+TiR9NT1wwA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8149
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/7/21 5:28 AM, Balac, Arun Saravanan wrote:
-> From: Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
-> 
-> Add hardware monitoring driver for Maxim MAX6620 Fan controller
-> 
-> Originally-from: L. Grunenberg <contact@lgrunenberg.de>
-> Originally-from: Cumulus Networks <support@cumulusnetworks.com>
-> Originally-from: Shuotian Cheng <shuche@microsoft.com>
-> Signed-off-by: Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
-> ---
-> 
-> Changelog:
-> - Add max6620 in Documentation/hwmon/index.rst.
-> - Update copyright statement in max6620.c
-> - Move update_lock to enclose complete fan*_alarm read.
-> - Remove unnecessary initialization of ret in max6620_read and
->     max6620_write.
-> 
->   Documentation/hwmon/index.rst   |   1 +
->   Documentation/hwmon/max6620.rst |  46 +++
->   drivers/hwmon/Kconfig           |  10 +
->   drivers/hwmon/Makefile          |   1 +
->   drivers/hwmon/max6620.c         | 510 ++++++++++++++++++++++++++++++++
->   5 files changed, 568 insertions(+)
->   create mode 100644 Documentation/hwmon/max6620.rst
->   create mode 100644 drivers/hwmon/max6620.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index bc01601ea81a..2bd8761326c2 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -129,6 +129,7 @@ Hardware Monitoring Kernel Drivers
->      max31785
->      max31790
->      max34440
-> +   max6620
->      max6639
->      max6642
->      max6650
-> diff --git a/Documentation/hwmon/max6620.rst b/Documentation/hwmon/max6620.rst
-> new file mode 100644
-> index 000000000000..84c1c44d3de4
-> --- /dev/null
-> +++ b/Documentation/hwmon/max6620.rst
-> @@ -0,0 +1,46 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver max6620
-> +=====================
-> +
-> +Supported chips:
-> +
-> +    Maxim MAX6620
-> +
-> +    Prefix: 'max6620'
-> +
-> +    Addresses scanned: none
-> +
-> +    Datasheet: http://pdfserv.maxim-ic.com/en/ds/MAX6620.pdf
-> +
-> +Authors:
-> +    - L\. Grunenberg <contact@lgrunenberg.de>
-> +    - Cumulus Networks <support@cumulusnetworks.com>
-> +    - Shuotian Cheng <shuche@microsoft.com>
-> +    - Arun Saravanan Balachandran <Arun_Saravanan_Balac@dell.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Maxim MAX6620 fan controller.
-> +
-> +The driver configures the fan controller in RPM mode. To give the readings more
-> +range or accuracy, the desired value can be set by a programmable register
-> +(1, 2, 4, 8, 16 or 32). Set higher values for larger speeds.
-> +
-> +The driver provides the following sensor access in sysfs:
-> +
-> +================ ======= =====================================================
-> +fan[1-4]_alarm   ro      Fan alarm.
-> +fan[1-4]_div     rw      Sets the nominal RPM range of the fan. Valid values
-> +                         are 1, 2, 4, 8, 16 and 32.
-> +fan[1-4]_input   ro      Fan speed in RPM.
-> +fan[1-4]_target  rw      Desired fan speed in RPM.
-> +================ ======= =====================================================
-> +
-> +Usage notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate the
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-> +details.
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index e3675377bc5d..74811fbaa266 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1022,6 +1022,16 @@ config SENSORS_MAX31730
->   	  This driver can also be built as a module. If so, the module
->   	  will be called max31730.
->   
-> +config SENSORS_MAX6620
-> +	tristate "Maxim MAX6620 fan controller"
-> +	depends on I2C
-> +	help
-> +	  If you say yes here you get support for the MAX6620
-> +	  fan controller.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called max6620.
-> +
->   config SENSORS_MAX6621
->   	tristate "Maxim MAX6621 sensor chip"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index d712c61c1f5e..9e50ff903931 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -135,6 +135,7 @@ obj-$(CONFIG_SENSORS_MAX1668)	+= max1668.o
->   obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
->   obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
->   obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
-> +obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
->   obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
->   obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
->   obj-$(CONFIG_SENSORS_MAX6642)	+= max6642.o
-> diff --git a/drivers/hwmon/max6620.c b/drivers/hwmon/max6620.c
-> new file mode 100644
-> index 000000000000..1f645282ce8e
-> --- /dev/null
-> +++ b/drivers/hwmon/max6620.c
-> @@ -0,0 +1,510 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for Maxim MAX6620
-> + *
-> + * Originally from L. Grunenberg.
-> + * (C) 2012 by L. Grunenberg <contact@lgrunenberg.de>
-> + *
-> + * Copyright (c) 2021 Dell Inc. or its subsidiaries. All Rights Reserved.
-> + *
-> + * based on code written by :
-> + * 2007 by Hans J. Koch <hjk@hansjkoch.de>
-> + * John Morris <john.morris@spirentcom.com>
-> + * Copyright (c) 2003 Spirent Communications
-> + * and Claus Gindhart <claus.gindhart@kontron.com>
-> + *
-> + * This module has only been tested with the MAX6620 chip.
-> + *
-> + * The datasheet was last seen at:
-> + *
-> + *        http://pdfserv.maxim-ic.com/en/ds/MAX6620.pdf
-> + *
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +
-> +/*
-> + * MAX 6620 registers
-> + */
-> +
-> +#define MAX6620_REG_CONFIG	0x00
-> +#define MAX6620_REG_FAULT	0x01
-> +#define MAX6620_REG_CONF_FAN0	0x02
-> +#define MAX6620_REG_CONF_FAN1	0x03
-> +#define MAX6620_REG_CONF_FAN2	0x04
-> +#define MAX6620_REG_CONF_FAN3	0x05
-> +#define MAX6620_REG_DYN_FAN0	0x06
-> +#define MAX6620_REG_DYN_FAN1	0x07
-> +#define MAX6620_REG_DYN_FAN2	0x08
-> +#define MAX6620_REG_DYN_FAN3	0x09
-> +#define MAX6620_REG_TACH0	0x10
-> +#define MAX6620_REG_TACH1	0x12
-> +#define MAX6620_REG_TACH2	0x14
-> +#define MAX6620_REG_TACH3	0x16
-> +#define MAX6620_REG_VOLT0	0x18
-> +#define MAX6620_REG_VOLT1	0x1A
-> +#define MAX6620_REG_VOLT2	0x1C
-> +#define MAX6620_REG_VOLT3	0x1E
-> +#define MAX6620_REG_TAR0	0x20
-> +#define MAX6620_REG_TAR1	0x22
-> +#define MAX6620_REG_TAR2	0x24
-> +#define MAX6620_REG_TAR3	0x26
-> +#define MAX6620_REG_DAC0	0x28
-> +#define MAX6620_REG_DAC1	0x2A
-> +#define MAX6620_REG_DAC2	0x2C
-> +#define MAX6620_REG_DAC3	0x2E
-> +
-> +/*
-> + * Config register bits
-> + */
-> +
-> +#define MAX6620_CFG_RUN		BIT(7)
-> +#define MAX6620_CFG_POR		BIT(6)
-> +#define MAX6620_CFG_TIMEOUT	BIT(5)
-> +#define MAX6620_CFG_FULLFAN	BIT(4)
-> +#define MAX6620_CFG_OSC		BIT(3)
-> +#define MAX6620_CFG_WD_MASK	(BIT(2) | BIT(1))
-> +#define MAX6620_CFG_WD_2	BIT(1)
-> +#define MAX6620_CFG_WD_6	BIT(2)
-> +#define MAX6620_CFG_WD10	(BIT(2) | BIT(1))
-> +#define MAX6620_CFG_WD		BIT(0)
-> +
-> +/*
-> + * Failure status register bits
-> + */
-> +
-> +#define MAX6620_FAIL_TACH0	BIT(4)
-> +#define MAX6620_FAIL_TACH1	BIT(5)
-> +#define MAX6620_FAIL_TACH2	BIT(6)
-> +#define MAX6620_FAIL_TACH3	BIT(7)
-> +#define MAX6620_FAIL_MASK0	BIT(0)
-> +#define MAX6620_FAIL_MASK1	BIT(1)
-> +#define MAX6620_FAIL_MASK2	BIT(2)
-> +#define MAX6620_FAIL_MASK3	BIT(3)
-> +
-> +#define MAX6620_CLOCK_FREQ	8192 /* Clock frequency in Hz */
-> +#define MAX6620_PULSE_PER_REV	2 /* Tachometer pulses per revolution */
-> +
-> +/* Minimum and maximum values of the FAN-RPM */
-> +#define FAN_RPM_MIN	240
-> +#define FAN_RPM_MAX	30000
-> +
-> +static const u8 config_reg[] = {
-> +	MAX6620_REG_CONF_FAN0,
-> +	MAX6620_REG_CONF_FAN1,
-> +	MAX6620_REG_CONF_FAN2,
-> +	MAX6620_REG_CONF_FAN3,
-> +};
-> +
-> +static const u8 dyn_reg[] = {
-> +	MAX6620_REG_DYN_FAN0,
-> +	MAX6620_REG_DYN_FAN1,
-> +	MAX6620_REG_DYN_FAN2,
-> +	MAX6620_REG_DYN_FAN3,
-> +};
-> +
-> +static const u8 tach_reg[] = {
-> +	MAX6620_REG_TACH0,
-> +	MAX6620_REG_TACH1,
-> +	MAX6620_REG_TACH2,
-> +	MAX6620_REG_TACH3,
-> +};
-> +
-> +static const u8 target_reg[] = {
-> +	MAX6620_REG_TAR0,
-> +	MAX6620_REG_TAR1,
-> +	MAX6620_REG_TAR2,
-> +	MAX6620_REG_TAR3,
-> +};
-> +
-> +/*
-> + * Client data (each client gets its own)
-> + */
-> +
-> +struct max6620_data {
-> +	struct i2c_client *client;
-> +	struct mutex update_lock;
-> +	bool valid; /* false until following fields are valid */
-> +	unsigned long last_updated; /* in jiffies */
-> +
-> +	/* register values */
-> +	u8 fancfg[4];
-> +	u8 fandyn[4];
-> +	u8 fault;
-> +	u16 tach[4];
-> +	u16 target[4];
-> +};
-> +
-> +static u8 max6620_fan_div_from_reg(u8 val)
-> +{
-> +	return BIT((val & 0xE0) >> 5);
-> +}
-> +
-> +static u16 max6620_fan_rpm_to_tach(u8 div, int rpm)
-> +{
-> +	return (60 * div * MAX6620_CLOCK_FREQ) / (rpm * MAX6620_PULSE_PER_REV);
-> +}
-> +
-> +static int max6620_fan_tach_to_rpm(u8 div, u16 tach)
-> +{
-> +	return (60 * div * MAX6620_CLOCK_FREQ) / (tach * MAX6620_PULSE_PER_REV);
-> +}
-> +
-> +static int max6620_update_device(struct device *dev)
-> +{
-> +	struct max6620_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	int i;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&data->update_lock);
-> +
-> +	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
-> +		for (i = 0; i < 4; i++) {
-> +			ret = i2c_smbus_read_byte_data(client, config_reg[i]);
-> +			if (ret < 0)
-> +				goto error;
-> +			data->fancfg[i] = ret;
-> +
-> +			ret = i2c_smbus_read_byte_data(client, dyn_reg[i]);
-> +			if (ret < 0)
-> +				goto error;
-> +			data->fandyn[i] = ret;
-> +
-> +			ret = i2c_smbus_read_byte_data(client, tach_reg[i]);
-> +			if (ret < 0)
-> +				goto error;
-> +			data->tach[i] = (ret << 3) & 0x7f8;
-> +			ret = i2c_smbus_read_byte_data(client, tach_reg[i] + 1);
-> +			if (ret < 0)
-> +				goto error;
-> +			data->tach[i] |= (ret >> 5) & 0x7;
-> +
-> +			ret = i2c_smbus_read_byte_data(client, target_reg[i]);
-> +			if (ret < 0)
-> +				goto error;
-> +			data->target[i] = (ret << 3) & 0x7f8;
-> +			ret = i2c_smbus_read_byte_data(client, target_reg[i] + 1);
-> +			if (ret < 0)
-> +				goto error;
-> +			data->target[i] |= (ret >> 5) & 0x7;
-> +		}
-> +
-> +		/*
-> +		 * Alarms are cleared on read in case the condition that
-> +		 * caused the alarm is removed. Keep the value latched here
-> +		 * for providing the register through different alarm files.
-> +		 */
-> +		ret = i2c_smbus_read_byte_data(client, MAX6620_REG_FAULT);
-> +		if (ret < 0)
-> +			goto error;
-> +		data->fault |= (ret >> 4) & (ret & 0x0F);
-> +
-> +		data->last_updated = jiffies;
-> +		data->valid = true;
-> +	}
-> +
-> +error:
-> +	mutex_unlock(&data->update_lock);
-> +	return ret;
-> +}
-> +
-> +static umode_t
-> +max6620_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
-> +		   int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_alarm:
-> +		case hwmon_fan_input:
-> +			return 0444;
-> +		case hwmon_fan_div:
-> +		case hwmon_fan_target:
-> +			return 0644;
-> +		default:
-> +			break;
-> +		}
-> +
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +max6620_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	     int channel, long *val)
-> +{
-> +	struct max6620_data *data;
-> +	struct i2c_client *client;
-> +	int ret;
-> +	u8 div;
-> +	u8 val1;
-> +	u8 val2;
-> +
-> +	ret = max6620_update_device(dev);
-> +	if (ret < 0)
-> +		return ret;
-> +	data = dev_get_drvdata(dev);
-> +	client = data->client;
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_alarm:
-> +			mutex_lock(&data->update_lock);
-> +			*val = !!(data->fault & BIT(channel));
-> +
-> +			/* Setting TACH count to re-enable fan fault detection */
-> +			if (*val == 1) {
-> +				val1 = (data->target[channel] >> 3) & 0xff;
-> +				val2 = (data->target[channel] << 5) & 0xe0;
-> +				ret = i2c_smbus_write_byte_data(client,
-> +								target_reg[channel], val1);
-> +				if (ret < 0)
-> +					return ret;
+Dnia Tue, Sep 07, 2021 at 08:46:22AM -0700, Guenter Roeck napisał(a):
+>>+void tmp421_probe_child_from_dt(struct i2c_client *client,
+>>+				struct device_node *child,
+>>+				struct tmp421_data *data)
+>>+
+>>+{
+>>+	struct device *dev = &client->dev;
+>>+	u32 i;
+>>+	int err;
+>>+
+>>+	err = of_property_read_u32(child, "reg", &i);
+>>+	if (err) {
+>>+		dev_err(dev, "missing reg property of %pOFn\n", child);
+>>+		return;
+>
+>Report to caller
+>
 
-Needs unlock.
+My idea was to make those errors in DT non-critical. I.e. if one of the
+child nodes is not well structured, I just skip it but continue the
+probing. Do you think it should be considered critical and I should
+abort the whole probe function as soon as I detect such DT errors,
+instead?
 
-> +				ret = i2c_smbus_write_byte_data(client,
-> +								target_reg[channel] + 1, val2);
-> +				if (ret < 0)
-> +					return ret;
-
-Needs unlock.
-
-> +
-> +				data->fault &= ~BIT(channel);
-> +			}
-> +			mutex_unlock(&data->update_lock);
-> +
-> +			break;
-> +		case hwmon_fan_div:
-> +			*val = max6620_fan_div_from_reg(data->fandyn[channel]);
-> +			break;
-> +		case hwmon_fan_input:
-> +			if (data->tach[channel] == 0) {
-> +				*val = 0;
-> +			} else {
-> +				div = max6620_fan_div_from_reg(data->fandyn[channel]);
-> +				*val = max6620_fan_tach_to_rpm(div, data->tach[channel]);
-> +			}
-> +			break;
-> +		case hwmon_fan_target:
-> +			if (data->target[channel] == 0) {
-> +				*val = 0;
-> +			} else {
-> +				div = max6620_fan_div_from_reg(data->fandyn[channel]);
-> +				*val = max6620_fan_tach_to_rpm(div, data->target[channel]);
-> +			}
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		break;
-> +
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +max6620_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	      int channel, long val)
-> +{
-> +	struct max6620_data *data;
-> +	struct i2c_client *client;
-> +	int ret;
-> +	u8 div;
-> +	u16 tach;
-> +	u8 val1;
-> +	u8 val2;
-> +
-> +	ret = max6620_update_device(dev);
-> +	if (ret < 0)
-> +		return ret;
-> +	data = dev_get_drvdata(dev);
-> +	client = data->client;
-> +	mutex_lock(&data->update_lock);
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_div:
-> +			switch (val) {
-> +			case 1:
-> +				div = 0;
-> +				break;
-> +			case 2:
-> +				div = 1;
-> +				break;
-> +			case 4:
-> +				div = 2;
-> +				break;
-> +			case 8:
-> +				div = 3;
-> +				break;
-> +			case 16:
-> +				div = 4;
-> +				break;
-> +			case 32:
-> +				div = 5;
-> +				break;
-> +			default:
-> +				ret = -EINVAL;
-> +				goto error;
-> +			}
-> +			data->fandyn[channel] &= 0x1F;
-> +			data->fandyn[channel] |= div << 5;
-> +			ret = i2c_smbus_write_byte_data(client, dyn_reg[channel],
-> +							data->fandyn[channel]);
-> +			break;
-> +		case hwmon_fan_target:
-> +			val = clamp_val(val, FAN_RPM_MIN, FAN_RPM_MAX);
-> +			div = max6620_fan_div_from_reg(data->fandyn[channel]);
-> +			tach = max6620_fan_rpm_to_tach(div, val);
-> +			val1 = (tach >> 3) & 0xff;
-> +			val2 = (tach << 5) & 0xe0;
-> +			ret = i2c_smbus_write_byte_data(client, target_reg[channel], val1);
-> +			if (ret < 0)
-> +				break;
-> +			ret = i2c_smbus_write_byte_data(client, target_reg[channel] + 1, val2);
-> +			if (ret < 0)
-> +				break;
-> +
-> +			/* Setting TACH count re-enables fan fault detection */
-> +			data->fault &= ~BIT(channel);
-> +
-> +			break;
-> +		default:
-> +			ret = -EOPNOTSUPP;
-> +			break;
-> +		}
-> +		break;
-> +
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +		break;
-> +	}
-> +
-> +error:
-> +	mutex_unlock(&data->update_lock);
-> +	return ret;
-> +}
-> +
-> +static const struct hwmon_channel_info *max6620_info[] = {
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM,
-> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM,
-> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM,
-> +			   HWMON_F_INPUT | HWMON_F_DIV | HWMON_F_TARGET | HWMON_F_ALARM),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops max6620_hwmon_ops = {
-> +	.read = max6620_read,
-> +	.write = max6620_write,
-> +	.is_visible = max6620_is_visible,
-> +};
-> +
-> +static const struct hwmon_chip_info max6620_chip_info = {
-> +	.ops = &max6620_hwmon_ops,
-> +	.info = max6620_info,
-> +};
-> +
-> +static int max6620_init_client(struct max6620_data *data)
-> +{
-> +	struct i2c_client *client = data->client;
-> +	int config;
-> +	int err;
-> +	int i;
-> +	int reg;
-> +
-> +	config = i2c_smbus_read_byte_data(client, MAX6620_REG_CONFIG);
-> +	if (config < 0) {
-> +		dev_err(&client->dev, "Error reading config, aborting.\n");
-> +		return config;
-> +	}
-> +
-> +	/*
-> +	 * Set bit 4, disable other fans from going full speed on a fail
-> +	 * failure.
-
-Nit: ... on a failure (not fail failure)
-
-> +	 */
-> +	err = i2c_smbus_write_byte_data(client, MAX6620_REG_CONFIG, config | 0x10);
-> +	if (err < 0) {
-> +		dev_err(&client->dev, "Config write error, aborting.\n");
-> +		return err;
-> +	}
-> +
-> +	for (i = 0; i < 4; i++) {
-> +		reg = i2c_smbus_read_byte_data(client, config_reg[i]);
-> +		if (reg < 0)
-> +			return reg;
-> +		data->fancfg[i] = reg;
-> +
-> +		/* Enable RPM mode */
-> +		data->fancfg[i] |= 0xa8;
-> +		err = i2c_smbus_write_byte_data(client, config_reg[i], data->fancfg[i]);
-> +		if (err < 0)
-> +			return err;
-> +
-> +		/* 2 counts (001) and Rate change 100 (0.125 secs) */
-> +		data->fandyn[i] = 0x30;
-> +		err = i2c_smbus_write_byte_data(client, dyn_reg[i], data->fandyn[i]);
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int max6620_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct max6620_data *data;
-> +	struct device *hwmon_dev;
-> +	int err;
-> +
-> +	data = devm_kzalloc(dev, sizeof(struct max6620_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +	mutex_init(&data->update_lock);
-> +
-> +	err = max6620_init_client(data);
-> +	if (err)
-> +		return err;
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-> +							 data,
-> +							 &max6620_chip_info,
-> +							 NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct i2c_device_id max6620_id[] = {
-> +	{ "max6620", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max6620_id);
-> +
-> +static struct i2c_driver max6620_driver = {
-> +	.class		= I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name	= "max6620",
-> +	},
-> +	.probe_new	= max6620_probe,
-> +	.id_table	= max6620_id,
-> +};
-> +
-> +module_i2c_driver(max6620_driver);
-> +
-> +MODULE_AUTHOR("Lucas Grunenberg");
-> +MODULE_DESCRIPTION("MAX6620 sensor driver");
-> +MODULE_LICENSE("GPL");
-> 
-> base-commit: ff1176468d368232b684f75e82563369208bc371
-> 
-
+Krzysztof
