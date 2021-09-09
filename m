@@ -2,98 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BC7FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 00:39:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CDC2C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 11:55:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CC96610E9
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 00:39:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CF9061BD3
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 11:55:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348694AbhIIAku (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Sep 2021 20:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348667AbhIIAku (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Sep 2021 20:40:50 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDE8C061575
-        for <linux-hwmon@vger.kernel.org>; Wed,  8 Sep 2021 17:39:41 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id j12so114952ljg.10
-        for <linux-hwmon@vger.kernel.org>; Wed, 08 Sep 2021 17:39:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=UjvvEx6yF1AQxTQG4EMxzKpe7NmWg9PIFU25rfEWiic=;
-        b=QuESLzBkI0I7W+bXx20ppjzWBMBzIkBkzdq1nJsR8lKX8RijFBcpSXfKCZh+b0kufk
-         2grHI3rf5Tr5NM4FDoWI8hTCBRJjTMgNtp/JoF010f+p5SFuAYmSPaEYEneZZ6hkMd3S
-         2EOljyb2MlViWjxzUkJcFiJO+33tZIMwXju4o19Qvt0W2LbLD/0kBaf7V/9ex2WbAf6/
-         FZ2Rmqozv1+x+Y8nzGHAN0AG2DNKiYisaMPCprwUrup/QHiI/M+bzGmn5cxgz9l+nr6U
-         lApoZl30Hfn1dL90wfbn7qs4la0hyTbf8l7TMTIHdcmDkNw/UmqDo+7moUfv2TbHQJDs
-         H1AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=UjvvEx6yF1AQxTQG4EMxzKpe7NmWg9PIFU25rfEWiic=;
-        b=HAEHS9C5gCSYZlxttdYMh1Hw5F9n4ewlXgW+f1cQYtelGBZYNsPl3S7qBLozZEf12d
-         vdCOWWmbp04FPBmMUBNzfhm8c/Ndn6AUxoWZFARwcDXiVryBQE6hWskQjvFWXOAGIdC6
-         owgvFPWG5Pc5mkc2C8Gzot9mUTX1igU6awkXjfwK9x2JQoXrU1e606HpnMXMdoZyhfpN
-         cs/niQhFWbJEsqUaIlnky4457Ys8+X/3LBXOLmOSp4k/S5ccNAyVSaGJskfaI1w9lE/0
-         t4oiEVZ52bfSNx0b+K+X8oornd5EEcEieHGx+C9H1vG2wB8gwx38Lb6oQg2nOPDT+GeO
-         GEkA==
-X-Gm-Message-State: AOAM533Ajlmh9UjAZMVkJHJlhd/XraGMsrJ1/d25Xqq8sagR9nRVeu4R
-        Utxv826ueBQOly5TyCc5sKWMQ6FsVT0JVboWQp7pnCjKR3vqayMh
-X-Google-Smtp-Source: ABdhPJzSXE9JReraPdAybDs8Ylf69v0UDsHDuZ4mssnuBVEmzI1XNnLWHMYfLZkGZvfEBx45pCUvO+cSwFAxBTCMvDY=
-X-Received: by 2002:a05:651c:1209:: with SMTP id i9mr124299lja.85.1631147978924;
- Wed, 08 Sep 2021 17:39:38 -0700 (PDT)
+        id S240507AbhIIL4i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Sep 2021 07:56:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34406 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244321AbhIILyc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:54:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F9EA611C3;
+        Thu,  9 Sep 2021 11:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631187891;
+        bh=ZMGrjSMZimhJuSbuiJ/hE2EWyRHaKnHeNyrA6L3KprY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JH4tjT1U6IH7LKoZFDlveoqjLM9sydAz4Pb7bPaH1BZs+90mLmg4k0zOZfYVvW/it
+         ll8tL313XNp/xitWpoMsKkDQ27EUF8guhP5B5EMqTrsplSvf0jmb1c1G6fw+0K7bU5
+         KoRVESeSQnJbpm1JKBK3oJlESHpnJLkIfaQ7EF6JpLl1jwBstdTF6j7oYfaptCeS3B
+         ldtg1WgS4Sg2EjyXU2pArBymJysVs0426zxhwC6OxPX5KK4kqSg8iN4ozBCt1GfNZU
+         0WacOb6scSBpgWFyoSJQq2F4+I3mgtSFBUyAem5XiEfV16ozzD93o4Uou88FWVHJXn
+         a/HAPhu7lp5qw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Brandon Wyman <bjwyman@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 172/252] hwmon: (pmbus/ibm-cffps) Fix write bits for LED control
+Date:   Thu,  9 Sep 2021 07:39:46 -0400
+Message-Id: <20210909114106.141462-172-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
+References: <20210909114106.141462-1-sashal@kernel.org>
 MIME-Version: 1.0
-From:   Oskar Senft <osk@google.com>
-Date:   Wed, 8 Sep 2021 20:39:23 -0400
-Message-ID: <CABoTLcTEjKYwnFS1dB+-rGCM9BYvFBY1T1_M0OpdjqAy+M8SCQ@mail.gmail.com>
-Subject: nct7802 mode selection for RTD1,2,3 via device tree?
-To:     linux-hwmon@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi everyone
+From: Brandon Wyman <bjwyman@gmail.com>
 
-We're successfully using the nct7802 driver on a TYAN S7106 mainboard
-connected to an Aspeed AST2500 BMC running OpenBMC. However, on this
-board the NCT7802Y has 3 thermistors connected. For that to work, we
-reconfigured the "Mode Selection Register" (0x22) to have RTD1_MD,
-RTD2_MD and RTD3_MD set as 0x2 (Thermistor mode). So far we simply had
-a one line patch in our internal kernel repo, but we'd like to
-upstream it and make it configurable.
+[ Upstream commit 76b72736f574ec38b3e94603ea5f74b1853f26b0 ]
 
-We explicitly reference the nct7802 in our device tree. Example:
+When doing a PMBus write for the LED control on the IBM Common Form
+Factor Power Supplies (ibm-cffps), the DAh command requires that bit 7
+be low and bit 6 be high in order to indicate that you are truly
+attempting to do a write.
 
-&i2c0 {
-    status = "okay";
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+Link: https://lore.kernel.org/r/20210806225131.1808759-1-bjwyman@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/pmbus/ibm-cffps.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-    /* Hardware monitor with temperature sensors */
-    nct7802@28 {
-        compatible = "nuvoton,nct7802";
-        reg = <0x28>;
-    };
-};
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index 5668d8305b78..df712ce4b164 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -50,9 +50,9 @@
+ #define CFFPS_MFR_VAUX_FAULT			BIT(6)
+ #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
+ 
+-#define CFFPS_LED_BLINK				BIT(0)
+-#define CFFPS_LED_ON				BIT(1)
+-#define CFFPS_LED_OFF				BIT(2)
++#define CFFPS_LED_BLINK				(BIT(0) | BIT(6))
++#define CFFPS_LED_ON				(BIT(1) | BIT(6))
++#define CFFPS_LED_OFF				(BIT(2) | BIT(6))
+ #define CFFPS_BLINK_RATE_MS			250
+ 
+ enum {
+-- 
+2.30.2
 
-Note that the DTS validator complains about not knowing about
-"nuvoton,nct7802". Is that because the driver doesn't specify a
-MODULE_DEVICE_TABLE of type "struct of_device_id"? I'd be happy to fix
-that, too!
-
-Anyway, I was wondering if there would be a nice way to set the
-configuration for RTD1,2,3 from the device tree. I'll be happy to make
-the necessary changes (there are plenty of examples), but I wanted to
-check with the community and maintainers before going down any such
-road.
-
-Thanks
-Oskar.
