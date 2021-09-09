@@ -5,43 +5,43 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8E8C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 12:20:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9580EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 12:40:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDAAE60FE3
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 12:20:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81EAD61167
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Sep 2021 12:40:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344702AbhIIMVT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:21:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56662 "EHLO mail.kernel.org"
+        id S1353720AbhIIMlM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:41:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347874AbhIIMRL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:17:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EDCC361A82;
-        Thu,  9 Sep 2021 11:49:51 +0000 (UTC)
+        id S1354564AbhIIMfe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:35:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 88BA16138D;
+        Thu,  9 Sep 2021 11:53:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188192;
-        bh=ZMGrjSMZimhJuSbuiJ/hE2EWyRHaKnHeNyrA6L3KprY=;
+        s=k20201202; t=1631188436;
+        bh=tJx5Me14Up6H331wYl0tEsLU0NwA6R6MkytkCBcxx38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VMB5c/FSSAQOKzvozxONUbb9i0SMdzwJmgS0Dbo+KrTsvq5mJtrd/XOnPbrKYaxDW
-         Tr5r66lWjRJOaXdguDZthT0VaokDHm0Lia4dxth7Vs9o0cciWvC5hZBuCZqe6tDsJ+
-         ffyyqyahBMaPoW//vIxhXGf5VlX1oBOjFQP/HBFb4KAINWXVjkMnp8pLtbbGTZcOXW
-         yDHRlnC488dBsGA16WWI9RRDN1f7pKs/MY6aoXb3ZIpbSsZuDadPTmVnqS1+Jk6Hbf
-         Dkjy/MznMxyZ5zSdQVRdjTS8cSP0DiVN3TgmnfYPv0BxMOo+2sfZ2WBO/StNQyUbjT
-         unZLLm8DX2sUg==
+        b=kt7ajq/E25s4RTzaTTidyeBQGenVZUPt2eGOv/18hp4/araqn+KAvC7wg+o1zMUnf
+         SEFYpCRCNHnJObjXF+eVDRKfsoCJ0j9oREdCRQAswhmzIm2wnf3jXDNBA7Lq4EFV0i
+         /ijhcvmmhcR9lK41aghHjynim100PNfBKvEejRfZTShcX5AB2hZQeZSKylHQG/dhHa
+         V/aXabqeksnRdRbw1v3HKjW5it9myYp709bpzgQ+MsmZ96ir+821pDXwQCD3k1LHCI
+         PZ9ERQBnNBsDcajWGYqnKqX/MaRm00CB4nciVE4VWLjBK/YVd9slz9VQU984+1mBIh
+         9KELMZR+UOGYQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Brandon Wyman <bjwyman@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 152/219] hwmon: (pmbus/ibm-cffps) Fix write bits for LED control
-Date:   Thu,  9 Sep 2021 07:45:28 -0400
-Message-Id: <20210909114635.143983-152-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 122/176] hwmon: (pmbus/ibm-cffps) Fix write bits for LED control
+Date:   Thu,  9 Sep 2021 07:50:24 -0400
+Message-Id: <20210909115118.146181-122-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
-References: <20210909114635.143983-1-sashal@kernel.org>
+In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
+References: <20210909115118.146181-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -68,7 +68,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index 5668d8305b78..df712ce4b164 100644
+index 2fb7540ee952..79bc2032dcb2 100644
 --- a/drivers/hwmon/pmbus/ibm-cffps.c
 +++ b/drivers/hwmon/pmbus/ibm-cffps.c
 @@ -50,9 +50,9 @@
