@@ -8,147 +8,222 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A398C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Sep 2021 13:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A93FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Sep 2021 13:08:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2C3061059
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Sep 2021 13:03:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46CA56103D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Sep 2021 13:08:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbhIJNFG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Sep 2021 09:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
+        id S233440AbhIJNJP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Sep 2021 09:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233253AbhIJNFF (ORCPT
+        with ESMTP id S233445AbhIJNJP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Sep 2021 09:05:05 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03D9C061757
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Sep 2021 06:03:54 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 63-20020a250d42000000b0059dc43162c9so2204012ybn.23
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Sep 2021 06:03:54 -0700 (PDT)
+        Fri, 10 Sep 2021 09:09:15 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29135C061756
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Sep 2021 06:08:04 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id c22-20020ac80096000000b0029f6809300eso10385488qtg.6
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Sep 2021 06:08:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=IeHMnwyPlntJ+9Kovc0kz68pxDiDtqq0mND+q+dKmuM=;
-        b=sKgWvVagldMOdNDEECLqCwWve1jCCoinf+jkuI0uSKKaw87CwABTpCgJMa08G1sBog
-         GSoQo7X+ohCUaprKgAFsuGvCHDI96KQu7rxQcNvWNqFrGSXJKZe7lJyWFxmL6vmF4+64
-         Hj4ktl/1e/DfaF2imiRHWX5M7iZuzOKLTyJDZAG5AwI0AVsBTu1PTYGlNE7kwevibGMq
-         uBhjxsfdfI7EIkYa/iBLYNO5qtn9/7maIqwssW3QGjfs5uuTt4C564oVC8elXz+IgtxR
-         UUfxt/ZTl8ta6/TeBn6DX3X2C4yUoM/O4mtrgL7T6gO74ZZ9qrlX8E56fENOEZwAFPcs
-         baKQ==
+        bh=VlEvmbNQwy3WmS2EQy0HYXvO2GX3J+VeN2uTtXQzNEw=;
+        b=aEty1M6v3onP/TzNYUjjg8fLjsuTPY1KpFNe+CUE9lAe3xc5TMCSj0e/mFsNJnnJzS
+         +VV5cr15Bf962XUkzeYcKNZkwBKvEzSv1T2BQzy34NAc19DXx3J3BoLZX+D+fGbf5nVf
+         Mq68wY7eXNSg3/QSjkHmdXEhqwBmR3vgwqz+wBXrf40NSdcpqMXuk4mI5rKejWmwWtr2
+         GqOhYdyHHcPWG2IknAZx5b2LXQxV+5TUnL4sLt3lsmvGXl3Ciigtg5joQxCGcm80zMCI
+         m9/SfnxTayY80iSAXk1QpoGg4Xwl4UC2UexFuOtZiOQloPva6BWOwFRcXNa7DRboYnnB
+         UgyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=IeHMnwyPlntJ+9Kovc0kz68pxDiDtqq0mND+q+dKmuM=;
-        b=sanTInakzIl1KUWUD61ODhC49BqyLWifsuukWHXRAmMfqwg+lRCm8N3Wgc04hnXHA1
-         3L2hZ7g6FBCkytrTd7N/BTjpQndMH/aZTSZ6bkVgTAQxGIXje6+yT5bsSeYUXECRpDKr
-         /N01riJhSZksEfXJY8zJF8JC1lLw1CoekM762OrWddL045YtBrvULMWVR/H5qmdJ4Ftx
-         6TKOJ/ACYBUfi8SZWx0yDI1RrMByjlKHhSgd/EdtVmX4FEc59uUsOM19jn///uPh3v23
-         5BUZX02M7FOF9TuEoSISqgjPWDSFj4xvhVV81e8ZvGCFG7bwDsVd1ybmtZ/i5e6fW7cQ
-         k1bA==
-X-Gm-Message-State: AOAM531uc8fR85i1DFU7x83FQDENtherXIpDv+yo52Rkfw2UZ+xlRyh8
-        7o5Yry2r1C6HmWxgBglo6+9eeci/a7JuV8aFa9EZCW3SrDNxWsiZ1tSOcuhvemSUe8nRX77VhnV
-        CKDI13l43KCSVTw4hIni2VJAXNylIv6mnnKhltBXF8NjDEJOTdoK1cMCX7hlz
-X-Google-Smtp-Source: ABdhPJxECZOcpBv/gTuYUDejgHhSKgS8eXKrifNj6j6UICA9ZTxdVUE4iSeud8Rg6KKovjhPkNFB1hA=
+        bh=VlEvmbNQwy3WmS2EQy0HYXvO2GX3J+VeN2uTtXQzNEw=;
+        b=oMxsAFGL5Bkz5eM3w9u34z/Ap9Xwb6Bzbs4Aokgvo0dOPKVjOa0txiRZqkDwzyhJfl
+         KiK4JzTqArM3EWx6pVbs5wYCtKqlP8i/QQs6Hwk3wC1TKayrQ6ihqbQLsHUMgH/WCAl1
+         rJGPAS1avEnCXDftlQaflX7oybyH9gPdqRpdwqR/7ieCEst5qsXd8A9TmWdxV8m3OvCk
+         wC6bk3zgWV8DvN15ap7t8Fj5DhLHJFYWFamzVwoxKHZIMEDI2jXnSo9jW+YoB8g6VMV2
+         7OUskj4WDjSUv2atp15gloHvkSct0RVb1BN77AZNN3r/3M/jbfKf8rc8ZJeRm4EtXIBL
+         vRRg==
+X-Gm-Message-State: AOAM533IElwgMkTlG1Mc1svgKm7HEKgJap+qiDaH6MEm3qvgvIDUOAeu
+        Pjwkg1QJ8ojwpDF0AzJbslJch11StTuu3h4nQtQW2AOHAu+0zrQaRMjWN11cFhs7a8d1vDmTvpy
+        QcWZz/QZG7I+y41qySnxewZ3Z7XLInXAFFc0n1qgbskgQjMtB2yE4VQtc9riE
+X-Google-Smtp-Source: ABdhPJyPD1ADed2h+UH2uHbGSNgQPP9rRBimuBwL5GIjA4u65O9GzOBu380ZblAyXQlDe5mqIMjFA78=
 X-Received: from osk.cam.corp.google.com ([2620:0:1004:1a:42c6:8506:76cb:83dc])
- (user=osk job=sendgmr) by 2002:a5b:9c9:: with SMTP id y9mr11340666ybq.460.1631279033973;
- Fri, 10 Sep 2021 06:03:53 -0700 (PDT)
-Date:   Fri, 10 Sep 2021 09:03:37 -0400
-Message-Id: <20210910130337.2025426-1-osk@google.com>
+ (user=osk job=sendgmr) by 2002:a05:6214:1a05:: with SMTP id
+ fh5mr8382352qvb.45.1631279283253; Fri, 10 Sep 2021 06:08:03 -0700 (PDT)
+Date:   Fri, 10 Sep 2021 09:07:55 -0400
+Message-Id: <20210910130755.2027995-1-osk@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.33.0.309.g3052b89438-goog
-Subject: [PATCH] dt-bindings: hwmon: Add nct7802 bindings
+Subject: [PATCH] hwmon: (nct7802) Make RTD modes configurable.
 From:   Oskar Senft <osk@google.com>
-To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>, Oskar Senft <osk@google.com>
+        Oskar Senft <osk@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Document bindings for the Nuvoton NCT7802Y driver.
+This change allows the RTD modes to be configurable via device tree
+bindings. When the setting is not present via device tree, the driver
+still defaults to the previous behavior where the RTD modes are left
+alone.
 
 Signed-off-by: Oskar Senft <osk@google.com>
 ---
- .../bindings/hwmon/nuvoton,nct7802.yaml       | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+ drivers/hwmon/nct7802.c | 94 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 92 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
-new file mode 100644
-index 000000000000..bc4b69aeb116
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
+diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+index 604af2f6103a..6a6ab529bdd3 100644
+--- a/drivers/hwmon/nct7802.c
++++ b/drivers/hwmon/nct7802.c
+@@ -51,6 +51,24 @@ static const u8 REG_VOLTAGE_LIMIT_MSB_SHIFT[2][5] = {
+ #define REG_CHIP_ID		0xfe
+ #define REG_VERSION_ID		0xff
+ 
++/*
++ * Sensor modes according to 7.2.32 Mode Selection Register
++ */
++#define RTD_MODE_CLOSED		0x0
++#define RTD_MODE_CURRENT	0x1
++#define RTD_MODE_THERMISTOR	0x2
++#define RTD_MODE_VOLTAGE	0x3
++#define RTD_MODE_UNDEFINED	0xf
 +
-+$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7802.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++#define MODE_BITS_MASK		0x3
 +
-+title: Nuvoton NCT7802Y Hardware Monitoring IC
++/*
++ * Bit offsets for sensors modes in REG_MODE
++ */
++#define MODE_OFFSET_RTD1	0
++#define MODE_OFFSET_RTD2	2
++#define MODE_OFFSET_RTD3	4
 +
-+maintainers:
-+  - Guenter Roeck <linux@roeck-us.net>
+ /*
+  * Data structures and manipulation thereof
+  */
+@@ -1038,7 +1056,9 @@ static const struct regmap_config nct7802_regmap_config = {
+ 	.volatile_reg = nct7802_regmap_is_volatile,
+ };
+ 
+-static int nct7802_init_chip(struct nct7802_data *data)
++static int nct7802_init_chip(struct nct7802_data *data,
++	unsigned char rtd1_mode, unsigned char rtd2_mode,
++	unsigned char rtd3_mode)
+ {
+ 	int err;
+ 
+@@ -1052,15 +1072,57 @@ static int nct7802_init_chip(struct nct7802_data *data)
+ 	if (err)
+ 		return err;
+ 
++	/* Configure sensor modes */
++	if ((rtd1_mode & MODE_BITS_MASK) == rtd1_mode) {
++		err = regmap_update_bits(data->regmap, REG_MODE,
++			MODE_BITS_MASK << MODE_OFFSET_RTD1,
++			rtd1_mode << MODE_OFFSET_RTD1);
++		if (err)
++			return err;
++	}
++	if ((rtd2_mode & MODE_BITS_MASK) == rtd2_mode) {
++		err = regmap_update_bits(data->regmap, REG_MODE,
++			MODE_BITS_MASK << MODE_OFFSET_RTD2,
++			rtd2_mode << MODE_OFFSET_RTD2);
++		if (err)
++			return err;
++	}
++	if ((rtd3_mode & MODE_BITS_MASK) == rtd3_mode) {
++		err = regmap_update_bits(data->regmap, REG_MODE,
++			MODE_BITS_MASK << MODE_OFFSET_RTD3,
++			rtd3_mode << MODE_OFFSET_RTD3);
++		if (err)
++			return err;
++	}
 +
-+description: |
-+  The NCT7802Y is a hardware monitor IC which supports one on-die and up to
-+  5 remote temperature sensors with SMBus interface.
+ 	/* Enable Vcore and VCC voltage monitoring */
+ 	return regmap_update_bits(data->regmap, REG_VMON_ENABLE, 0x03, 0x03);
+ }
+ 
++static unsigned char rtd_mode_from_string(const char *value)
++{
++	if (!strcmp(value, "closed"))
++		return RTD_MODE_CLOSED;
++	if (!strcmp(value, "current"))
++		return RTD_MODE_CURRENT;
++	if (!strcmp(value, "thermistor"))
++		return RTD_MODE_THERMISTOR;
++	if (!strcmp(value, "voltage"))
++		return RTD_MODE_VOLTAGE;
 +
-+  Datasheets:
-+    https://www.nuvoton.com/export/resource-files/Nuvoton_NCT7802Y_Datasheet_V12.pdf
++	return RTD_MODE_UNDEFINED;
++}
 +
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,nct7802
+ static int nct7802_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct nct7802_data *data;
+ 	struct device *hwmon_dev;
++	int rtd_mode_count;
++	unsigned char rtd1_mode = RTD_MODE_UNDEFINED;
++	unsigned char rtd2_mode = RTD_MODE_UNDEFINED;
++	unsigned char rtd3_mode = RTD_MODE_UNDEFINED;
++	const char *prop_value;
+ 	int ret;
+ 
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+@@ -1074,7 +1136,25 @@ static int nct7802_probe(struct i2c_client *client)
+ 	mutex_init(&data->access_lock);
+ 	mutex_init(&data->in_alarm_lock);
+ 
+-	ret = nct7802_init_chip(data);
++	if (dev->of_node) {
++		rtd_mode_count = of_property_count_strings(dev->of_node,
++			"nuvoton,rtd-modes");
 +
-+  reg:
-+    maxItems: 1
++		if (rtd_mode_count > 0)
++			if (!of_property_read_string_index(dev->of_node,
++				"nuvoton,rtd-modes", 0, &prop_value))
++				rtd1_mode = rtd_mode_from_string(prop_value);
++		if (rtd_mode_count > 1)
++			if (!of_property_read_string_index(dev->of_node,
++				"nuvoton,rtd-modes", 1, &prop_value))
++				rtd2_mode = rtd_mode_from_string(prop_value);
++		if (rtd_mode_count > 2)
++			if (!of_property_read_string_index(dev->of_node,
++				"nuvoton,rtd-modes", 2, &prop_value))
++				rtd3_mode = rtd_mode_from_string(prop_value);
++	}
 +
-+  nuvoton,rtd-modes:
-+    description: |
-+      Select modes for the three RTDs.
++	ret = nct7802_init_chip(data, rtd1_mode, rtd2_mode, rtd3_mode);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1094,10 +1174,20 @@ static const struct i2c_device_id nct7802_idtable[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, nct7802_idtable);
+ 
++static const struct of_device_id __maybe_unused nct7802_of_match[] = {
++	{
++		.compatible = "nuvoton,nct7802",
++		.data = 0
++	},
++	{ },
++};
++MODULE_DEVICE_TABLE(of, nct7802_of_match);
 +
-+      The order is RTD1, RTD2, RTD3.
-+
-+      Valid values for RTD1 and RTD2 are:
-+        "closed",
-+        "current",
-+        "thermistor",
-+        "voltage"
-+
-+      Valid values for RTD3 are:
-+        "closed",
-+        "thermistor",
-+        "voltage"
-+    type: stringlist
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        nct7802@28 {
-+            compatible = "nuvoton,nct7802";
-+            reg = <0x28>;
-+            nuvoton,sensor-modes =
-+              /* RTD1 */ "thermistor",
-+              /* RTD2 */ "voltage",
-+              /* RTD3 */ "closed";
-+        };
-+    };
+ static struct i2c_driver nct7802_driver = {
+ 	.class = I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name = DRVNAME,
++		.of_match_table = of_match_ptr(nct7802_of_match),
+ 	},
+ 	.detect = nct7802_detect,
+ 	.probe_new = nct7802_probe,
 -- 
 2.33.0.309.g3052b89438-goog
 
