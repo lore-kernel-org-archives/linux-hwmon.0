@@ -2,226 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A11ACC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Sep 2021 19:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF18C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Sep 2021 22:24:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BE4E6108B
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Sep 2021 19:13:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7691F60FDC
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Sep 2021 22:24:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbhIKTOg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Sep 2021 15:14:36 -0400
-Received: from mga01.intel.com ([192.55.52.88]:39177 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233412AbhIKTOe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Sep 2021 15:14:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10104"; a="243659537"
-X-IronPort-AV: E=Sophos;i="5.85,285,1624345200"; 
-   d="scan'208";a="243659537"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2021 12:13:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,285,1624345200"; 
-   d="scan'208";a="526847292"
-Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Sep 2021 12:13:20 -0700
-Received: from kbuild by 730d49888f40 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mP8RD-0005lH-Cx; Sat, 11 Sep 2021 19:13:19 +0000
-Date:   Sun, 12 Sep 2021 03:13:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog] BUILD SUCCESS
- d7be450435347c51ab5753480121f0475f1a8b02
-Message-ID: <613cffc3.Y9YkxtmDcUj+EaIr%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233567AbhIKW0M (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Sep 2021 18:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229800AbhIKW0L (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Sep 2021 18:26:11 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ADCC061574;
+        Sat, 11 Sep 2021 15:24:58 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id ho42so12035655ejc.9;
+        Sat, 11 Sep 2021 15:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=IKgPzy/67n6BT3xHjjT0ui5Gqa0qr/xXiXCBRQ1Nyf8=;
+        b=Ia91sqZ2JrabhXZ4LCNaeUf3uovXznKabEQ4kOrTKXiz1QNzwULL/mhKU0/b9hnvCa
+         IAbeUY5bHGY64PGWxP7LlIZW6DqZG8vGi6kIA/F0q2gLY7kYi2dgbAg6RC+LRi+z49Y/
+         e2Kmn/AMQpwJmBbChUNDxDRVXKAePW+ifILCgXO+JMmDiG20ILxj3vacHT0UrrENYG5s
+         /fJFPkfhZUgUf/AAzIJY9fwHS2FYDbhTXsNohhD/QVZUTv0RG5RY7L1X/e40AcX4xflb
+         UTd0H8VUTbgyJIKFw/vogB/U9UqM/mtAeT+9d5/wDqmKYVTYJriGAWrx8/Xw+7VsxBmW
+         C0Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=IKgPzy/67n6BT3xHjjT0ui5Gqa0qr/xXiXCBRQ1Nyf8=;
+        b=7ttnMpi7QCz9BSMHfGcT4C/DGXUOugRhokT3iWgWd8/k/y6l75d3pEJ2H3roScAzHP
+         GIy4J9LD/rOrTOI0DlSQJM2e0m+7hcrBKpfwo104CxHFSVRP8Q8y2iyfeRCPYjTTzjBL
+         DjbGT7wqdFxyIWL+KweNdfc76EeIdYrFuPIgPRF6cDt0Ca77EoF/DaPJmDGrKobZ2tFA
+         oqN7vw7mekN2WGhS9W3ac3JnR0amlln+eJmUWB7s9R5I2SlUahI1O83nlikqoOqswOVB
+         sN9pFiVmomh3VcVc0Ifn8j+ORCHvmJ4iPL2l7jEkiSzCwbIgr26zzm7r5pjoVQA4UitE
+         JS0A==
+X-Gm-Message-State: AOAM530/JcOrrjwA8UgHrgkwmz/CGP2JE5gY4+W1OPRg/EmLFzQ0QNTr
+        wtjJwJBFOdB6SxWxhIWAcAI=
+X-Google-Smtp-Source: ABdhPJyeRGGM78H7dl9lFz+0f9yopOjKuNICK/14ylAPdI5OSnN//hulBog9p0YZFdAunsl9WFgpww==
+X-Received: by 2002:a17:906:39cb:: with SMTP id i11mr3644119eje.168.1631399096748;
+        Sat, 11 Sep 2021 15:24:56 -0700 (PDT)
+Received: from penguin.lxd (151-22-179-94.pool.ukrtel.net. [94.179.22.151])
+        by smtp.gmail.com with ESMTPSA id z15sm1481230edr.80.2021.09.11.15.24.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Sep 2021 15:24:56 -0700 (PDT)
+Date:   Sun, 12 Sep 2021 01:24:51 +0300
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Bernhard Seibold <mail@bernhard-seibold.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (nct6775) Use sio_data in superio_* (v2)
+Message-ID: <20210912012451.60a8ef04@penguin.lxd>
+In-Reply-To: <YTo7OnzCRDZuveHN@smile.fi.intel.com>
+References: <08262b12-4345-76a9-87be-66d630af3a59@roeck-us.net>
+        <20210908213605.9929-1-pauk.denis@gmail.com>
+        <YTo7OnzCRDZuveHN@smile.fi.intel.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog
-branch HEAD: d7be450435347c51ab5753480121f0475f1a8b02  watchdog: ixp4xx_wdt: Fix address space warning
+Thanks for the feedback!
 
-elapsed time: 878m
+On Thu, 9 Sep 2021 19:50:02 +0300
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 
-configs tested: 157
-configs skipped: 3
+> On Thu, Sep 09, 2021 at 12:36:02AM +0300, Denis Pauk wrote:
+> 
+> Thanks for your contribution!
+> My comments below.
+> 
+> > Rearrange code for directly use struct nct6775_sio_data in superio_*
+> > functions  
+> 
+> Missed period.
+> 
+> We refer to the functions as superio_*().
+> 
+> The commit message may need more elaboration (why you are doing this).
+> 
+> > v2: split changes to separate patches  
+> 
+> This should go after '---' (cutter) line below. But entire series
+> needs: 1) a proper versioning (use `git format-patch -v<n> ...`)
+> 2) to NOT be a continuation of the previous one (start a new thread!)
+> 3) to have a cover letter (use `git format-patch --cover-letter`)
+> 
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807  
+> 
+> BugLink
+> 
+> > Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
+> > Signed-off-by: Denis Pauk <pauk.denis@gmail.com>  
+> 
+> This is wrong. My understanding that you have to preserve Bernhard's
+> authorship and add yourself as Co-developer (see Submitting Patches on
+> how to properly use tags).
+> 
+> ...
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc              randconfig-c003-20210911
-i386                 randconfig-c001-20210911
-i386                 randconfig-c001-20210910
-powerpc                   bluestone_defconfig
-um                             i386_defconfig
-arm                         s5pv210_defconfig
-powerpc                 mpc837x_rdb_defconfig
-i386                             allyesconfig
-openrisc                  or1klitex_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                     sequoia_defconfig
-arm                      integrator_defconfig
-arm                         s3c6400_defconfig
-xtensa                    smp_lx200_defconfig
-powerpc                    gamecube_defconfig
-sh                            migor_defconfig
-microblaze                      mmu_defconfig
-s390                       zfcpdump_defconfig
-mips                      pic32mzda_defconfig
-mips                         db1xxx_defconfig
-xtensa                  cadence_csp_defconfig
-arm                        multi_v7_defconfig
-sh                          urquell_defconfig
-mips                          malta_defconfig
-mips                 decstation_r4k_defconfig
-arm                          lpd270_defconfig
-mips                         tb0287_defconfig
-sh                           se7712_defconfig
-mips                        bcm47xx_defconfig
-powerpc                     tqm8541_defconfig
-m68k                             alldefconfig
-m68k                       m5475evb_defconfig
-powerpc                   microwatt_defconfig
-mips                          ath25_defconfig
-arm                          badge4_defconfig
-powerpc                     ksi8560_defconfig
-ia64                             alldefconfig
-mips                      maltasmvp_defconfig
-arm                          collie_defconfig
-x86_64               randconfig-c001-20210910
-arm                  randconfig-c002-20210910
-x86_64               randconfig-c001-20210911
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-parisc                              defconfig
-s390                                defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-arc                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210911
-x86_64               randconfig-a003-20210911
-x86_64               randconfig-a004-20210911
-x86_64               randconfig-a006-20210911
-x86_64               randconfig-a005-20210911
-x86_64               randconfig-a001-20210911
-i386                 randconfig-a004-20210911
-i386                 randconfig-a005-20210911
-i386                 randconfig-a002-20210911
-i386                 randconfig-a006-20210911
-i386                 randconfig-a001-20210911
-i386                 randconfig-a003-20210911
-x86_64               randconfig-a013-20210910
-x86_64               randconfig-a016-20210910
-x86_64               randconfig-a012-20210910
-x86_64               randconfig-a011-20210910
-x86_64               randconfig-a014-20210910
-x86_64               randconfig-a015-20210910
-i386                 randconfig-a016-20210910
-i386                 randconfig-a011-20210910
-i386                 randconfig-a015-20210910
-i386                 randconfig-a012-20210910
-i386                 randconfig-a013-20210910
-i386                 randconfig-a014-20210910
-riscv                randconfig-r042-20210910
-s390                 randconfig-r044-20210910
-arc                  randconfig-r043-20210910
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Should it be such ?
 
-clang tested configs:
-x86_64               randconfig-c007-20210910
-mips                 randconfig-c004-20210910
-powerpc              randconfig-c003-20210910
-i386                 randconfig-c001-20210910
-s390                 randconfig-c005-20210910
-x86_64               randconfig-c007-20210911
-mips                 randconfig-c004-20210911
-powerpc              randconfig-c003-20210911
-i386                 randconfig-c001-20210911
-s390                 randconfig-c005-20210911
-x86_64               randconfig-a002-20210910
-x86_64               randconfig-a003-20210910
-x86_64               randconfig-a004-20210910
-x86_64               randconfig-a006-20210910
-x86_64               randconfig-a001-20210910
-x86_64               randconfig-a002-20210912
-x86_64               randconfig-a003-20210912
-x86_64               randconfig-a006-20210912
-x86_64               randconfig-a004-20210912
-x86_64               randconfig-a005-20210912
-x86_64               randconfig-a001-20210912
-i386                 randconfig-a004-20210910
-i386                 randconfig-a005-20210910
-i386                 randconfig-a002-20210910
-i386                 randconfig-a006-20210910
-i386                 randconfig-a001-20210910
-i386                 randconfig-a003-20210910
-x86_64               randconfig-a013-20210911
-x86_64               randconfig-a016-20210911
-x86_64               randconfig-a012-20210911
-x86_64               randconfig-a011-20210911
-x86_64               randconfig-a014-20210911
-x86_64               randconfig-a015-20210911
-i386                 randconfig-a016-20210911
-i386                 randconfig-a011-20210911
-i386                 randconfig-a015-20210911
-i386                 randconfig-a012-20210911
-i386                 randconfig-a013-20210911
-i386                 randconfig-a014-20210911
-hexagon              randconfig-r045-20210910
-hexagon              randconfig-r041-20210910
+----
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Co-Developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
+----
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+> 
+> > +struct nct6775_sio_data {  
+> 
+> > +	int sioreg;  
+> 
+> It should be unsigned short.
+> 
+> > +	enum kinds kind;
+> > +};  
+> 
+
+Should I change all occurrences of sioreg to unsigned short?
+Before my patch it was integer. 
+
+--
+Best regards,
+                  Denis.
