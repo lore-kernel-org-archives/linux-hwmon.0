@@ -2,100 +2,226 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58135C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Sep 2021 23:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A11ACC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Sep 2021 19:13:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E10961206
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Sep 2021 23:14:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BE4E6108B
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Sep 2021 19:13:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbhIJXPw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Sep 2021 19:15:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59296 "EHLO mail.kernel.org"
+        id S233539AbhIKTOg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Sep 2021 15:14:36 -0400
+Received: from mga01.intel.com ([192.55.52.88]:39177 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231742AbhIJXPv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Sep 2021 19:15:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B078E611AD;
-        Fri, 10 Sep 2021 23:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631315679;
-        bh=zQ+USSdtVq3YPexHfl3leCZXEF0GEF17q+rx40pNFVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i+q6VcNIqaRvtjK+Ic4yzNIWB8GYk0wtTLzhcEY6rfnU6oxpQvzn4YQWoKY6MjDTB
-         dEYZhfvBZW/ivJSYKDst0IyvzfWWMgG5tCMS5rIGIiZdXm9L3dTRt4xEnEwFV2z9zR
-         gs/ktHtcSPt+qHe14GYNWcKVSHsseKZVuX9vSys6ov25yHqAiUhAlNgdOZ0ROrTfjQ
-         VKDkw6v9kXFXeZMhZbYRlHNwRS8L13AqFcJezIPnGt9E5V0nGpPr1lpKLGrHc4VJPD
-         LnbypL6mJOcqth9akc8kq529leZyCXw/EEP538Su8FQs+gwspY/ToIq69e58KLAsWO
-         mzfIp233LeKSA==
-Received: by pali.im (Postfix)
-        id F41D02828; Sat, 11 Sep 2021 01:14:37 +0200 (CEST)
-Date:   Sat, 11 Sep 2021 01:14:37 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        Armin Wolf <W_Armin@gmx.de>
-Subject: Re: [PATCH] hwmon: dell-smm-hwmon: fix unused variable error
-Message-ID: <20210910231437.vsfnsgn2a2wmcexp@pali>
-References: <20210910071921.16777-1-rdunlap@infradead.org>
+        id S233412AbhIKTOe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Sep 2021 15:14:34 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10104"; a="243659537"
+X-IronPort-AV: E=Sophos;i="5.85,285,1624345200"; 
+   d="scan'208";a="243659537"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2021 12:13:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,285,1624345200"; 
+   d="scan'208";a="526847292"
+Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Sep 2021 12:13:20 -0700
+Received: from kbuild by 730d49888f40 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mP8RD-0005lH-Cx; Sat, 11 Sep 2021 19:13:19 +0000
+Date:   Sun, 12 Sep 2021 03:13:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog] BUILD SUCCESS
+ d7be450435347c51ab5753480121f0475f1a8b02
+Message-ID: <613cffc3.Y9YkxtmDcUj+EaIr%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210910071921.16777-1-rdunlap@infradead.org>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Friday 10 September 2021 00:19:21 Randy Dunlap wrote:
-> When CONFIG_PROC_FS is not set, there is a build warning (turned
-> into an error):
-> 
-> ../drivers/hwmon/dell-smm-hwmon.c: In function 'i8k_init_procfs':
-> ../drivers/hwmon/dell-smm-hwmon.c:624:24: error: unused variable 'data' [-Werror=unused-variable]
->   struct dell_smm_data *data = dev_get_drvdata(dev);
-> 
-> Fix this by making I8K depend on PROC_FS and HWMON (instead of
-> selecting HWMON -- we prefer and try hard not to select entire
-> subsystems).
-> 
-> Build tested in all possible combinations of SENSORS_DELL_SMM,
-> I8K, and PROC_FS.
-> 
-> Fixes: 039ae58503f3 ("hwmon: Allow to compile dell-smm-hwmon driver without /proc/i8k")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Pali Rohár <pali@kernel.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog
+branch HEAD: d7be450435347c51ab5753480121f0475f1a8b02  watchdog: ixp4xx_wdt: Fix address space warning
 
-Acked-by: Pali Rohár <pali@kernel.org>
+elapsed time: 878m
 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: x86@kernel.org
-> Cc: Armin Wolf <W_Armin@gmx.de>
-> ---
->  arch/x86/Kconfig |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> --- linux-next-20210910.orig/arch/x86/Kconfig
-> +++ linux-next-20210910/arch/x86/Kconfig
-> @@ -1255,7 +1255,8 @@ config TOSHIBA
->  
->  config I8K
->  	tristate "Dell i8k legacy laptop support"
-> -	select HWMON
-> +	depends on HWMON
-> +	depends on PROC_FS
->  	select SENSORS_DELL_SMM
->  	help
->  	  This option enables legacy /proc/i8k userspace interface in hwmon
+configs tested: 157
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc              randconfig-c003-20210911
+i386                 randconfig-c001-20210911
+i386                 randconfig-c001-20210910
+powerpc                   bluestone_defconfig
+um                             i386_defconfig
+arm                         s5pv210_defconfig
+powerpc                 mpc837x_rdb_defconfig
+i386                             allyesconfig
+openrisc                  or1klitex_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                     sequoia_defconfig
+arm                      integrator_defconfig
+arm                         s3c6400_defconfig
+xtensa                    smp_lx200_defconfig
+powerpc                    gamecube_defconfig
+sh                            migor_defconfig
+microblaze                      mmu_defconfig
+s390                       zfcpdump_defconfig
+mips                      pic32mzda_defconfig
+mips                         db1xxx_defconfig
+xtensa                  cadence_csp_defconfig
+arm                        multi_v7_defconfig
+sh                          urquell_defconfig
+mips                          malta_defconfig
+mips                 decstation_r4k_defconfig
+arm                          lpd270_defconfig
+mips                         tb0287_defconfig
+sh                           se7712_defconfig
+mips                        bcm47xx_defconfig
+powerpc                     tqm8541_defconfig
+m68k                             alldefconfig
+m68k                       m5475evb_defconfig
+powerpc                   microwatt_defconfig
+mips                          ath25_defconfig
+arm                          badge4_defconfig
+powerpc                     ksi8560_defconfig
+ia64                             alldefconfig
+mips                      maltasmvp_defconfig
+arm                          collie_defconfig
+x86_64               randconfig-c001-20210910
+arm                  randconfig-c002-20210910
+x86_64               randconfig-c001-20210911
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+parisc                              defconfig
+s390                                defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20210911
+x86_64               randconfig-a003-20210911
+x86_64               randconfig-a004-20210911
+x86_64               randconfig-a006-20210911
+x86_64               randconfig-a005-20210911
+x86_64               randconfig-a001-20210911
+i386                 randconfig-a004-20210911
+i386                 randconfig-a005-20210911
+i386                 randconfig-a002-20210911
+i386                 randconfig-a006-20210911
+i386                 randconfig-a001-20210911
+i386                 randconfig-a003-20210911
+x86_64               randconfig-a013-20210910
+x86_64               randconfig-a016-20210910
+x86_64               randconfig-a012-20210910
+x86_64               randconfig-a011-20210910
+x86_64               randconfig-a014-20210910
+x86_64               randconfig-a015-20210910
+i386                 randconfig-a016-20210910
+i386                 randconfig-a011-20210910
+i386                 randconfig-a015-20210910
+i386                 randconfig-a012-20210910
+i386                 randconfig-a013-20210910
+i386                 randconfig-a014-20210910
+riscv                randconfig-r042-20210910
+s390                 randconfig-r044-20210910
+arc                  randconfig-r043-20210910
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-c007-20210910
+mips                 randconfig-c004-20210910
+powerpc              randconfig-c003-20210910
+i386                 randconfig-c001-20210910
+s390                 randconfig-c005-20210910
+x86_64               randconfig-c007-20210911
+mips                 randconfig-c004-20210911
+powerpc              randconfig-c003-20210911
+i386                 randconfig-c001-20210911
+s390                 randconfig-c005-20210911
+x86_64               randconfig-a002-20210910
+x86_64               randconfig-a003-20210910
+x86_64               randconfig-a004-20210910
+x86_64               randconfig-a006-20210910
+x86_64               randconfig-a001-20210910
+x86_64               randconfig-a002-20210912
+x86_64               randconfig-a003-20210912
+x86_64               randconfig-a006-20210912
+x86_64               randconfig-a004-20210912
+x86_64               randconfig-a005-20210912
+x86_64               randconfig-a001-20210912
+i386                 randconfig-a004-20210910
+i386                 randconfig-a005-20210910
+i386                 randconfig-a002-20210910
+i386                 randconfig-a006-20210910
+i386                 randconfig-a001-20210910
+i386                 randconfig-a003-20210910
+x86_64               randconfig-a013-20210911
+x86_64               randconfig-a016-20210911
+x86_64               randconfig-a012-20210911
+x86_64               randconfig-a011-20210911
+x86_64               randconfig-a014-20210911
+x86_64               randconfig-a015-20210911
+i386                 randconfig-a016-20210911
+i386                 randconfig-a011-20210911
+i386                 randconfig-a015-20210911
+i386                 randconfig-a012-20210911
+i386                 randconfig-a013-20210911
+i386                 randconfig-a014-20210911
+hexagon              randconfig-r045-20210910
+hexagon              randconfig-r041-20210910
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
