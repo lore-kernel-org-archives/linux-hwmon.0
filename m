@@ -2,323 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4069CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 04:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86873C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 11:06:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1699061211
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 04:26:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B01760F43
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 11:06:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhILE16 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Sep 2021 00:27:58 -0400
-Received: from mga02.intel.com ([134.134.136.20]:13831 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229500AbhILE15 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Sep 2021 00:27:57 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10104"; a="208632681"
-X-IronPort-AV: E=Sophos;i="5.85,285,1624345200"; 
-   d="scan'208";a="208632681"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2021 21:26:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,285,1624345200"; 
-   d="scan'208";a="608280703"
-Received: from lkp-server01.sh.intel.com (HELO 730d49888f40) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Sep 2021 21:26:42 -0700
-Received: from kbuild by 730d49888f40 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mPH4j-0006G9-PZ; Sun, 12 Sep 2021 04:26:41 +0000
-Date:   Sun, 12 Sep 2021 12:25:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- 73f91cb3556726c38d236a9c9c3d36da06413da6
-Message-ID: <613d8153.XR5e/SAVBrxtjW4X%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229635AbhILLHa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Sep 2021 07:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229597AbhILLH3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 12 Sep 2021 07:07:29 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F61C061574;
+        Sun, 12 Sep 2021 04:06:15 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ho42so14239337ejc.9;
+        Sun, 12 Sep 2021 04:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+UfvEOtjioQWVktblVI2sPPJ7S0UBV4zPEFt3Z3OQXY=;
+        b=frhV4LAWf9blX1seYqBEofLsAVHvcOQT7iErgMHfbETtDR/T/N39c/zbTpTtURygmU
+         AgTqoCbuwc8ISTOxYYWeXDmyalW3ncRI+dk5WfOo3xh4pfGKccDlzTQTnxbu1q68KoiR
+         7qwQqvuG3y9+2HlCGmnVdIOpnusV6193+gLJqJqRls7bndQPOngKgJqjoi2NYkCA/q6f
+         ucFllwf4HKSz8PyZ5Lg4lGrP80a3cRRq5VYMW4YrcZ1csgxfKXqCJ/b6KB1a/ky3W1Nl
+         /ZOrC8Us94IBXRJtgN784uU0XSJUzzpaYbsdvUQXnEBR/qxeWyLUGZ4/O5NGHyS8fqXt
+         i2Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+UfvEOtjioQWVktblVI2sPPJ7S0UBV4zPEFt3Z3OQXY=;
+        b=moKE/P6B6PfLBYiR45oQGqpLqCAXgBnlVn6bDwKctop2hqwjDKMa6CXtF9d0ApgjaR
+         QuV4cwelNa3cu3/WnAwr4mJVnOordeX97o+nZL+RDjxF/6CnKnjYVKumaBdA/+Hk+bMv
+         I1V5xPScCnAUgCliS+vuWkoeH4+YQ8pazNb0i1RuCdAhNNwez3OJvcPL3Xq6/uXxw5EF
+         57Sb2qewxWLVDUjwHabCV/6Qegw14xDy1hEGKxvJ3E/cIlnT0J7BPBAhBqcUpy8vMV4i
+         nnPU8ChcJPkz/pcJQfZkZIIhi+kjq7mq3Dh0QdXjo1h70Qf7rCKP3WjgAawk7WStvay6
+         4oXQ==
+X-Gm-Message-State: AOAM530WcNjRPOS642ND8W/+wkvnAqcsrApFf8Hmj0sNHxmht/pKO4Lm
+        XK7Ze26Jqhf5Nydt9Mg1EOY=
+X-Google-Smtp-Source: ABdhPJwA70G4zPgJLn91RREzrTaIS11B6bqrc+7+AsrjTWlGVR/0BbmUEtQq/6WGwdtzr/4Wuv6VNA==
+X-Received: by 2002:a17:907:7f29:: with SMTP id qf41mr7208272ejc.211.1631444773806;
+        Sun, 12 Sep 2021 04:06:13 -0700 (PDT)
+Received: from localhost.localdomain (151-22-179-94.pool.ukrtel.net. [94.179.22.151])
+        by smtp.gmail.com with ESMTPSA id qx18sm1896216ejb.75.2021.09.12.04.06.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Sep 2021 04:06:13 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     pauk.denis@gmail.com, Bernhard Seibold <mail@bernhard-seibold.de>,
+        =?UTF-8?q?P=C3=A4r=20Ekholm?= <pehlm@pekholm.org>,
+        to.eivind@gmail.com, "Artem S . Tashkinov" <aros@gmx.com>,
+        Vittorio Roberto Alfieri <me@rebtoor.com>,
+        Sahan Fernando <sahan.h.fernando@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] hwmon: (nct6775) Support access via Asus WMI
+Date:   Sun, 12 Sep 2021 14:05:55 +0300
+Message-Id: <20210912110557.41346-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 73f91cb3556726c38d236a9c9c3d36da06413da6  watchdog: sb_wdog: Remove COMPILE_TEST support
+Support accessing the NCT677x via Asus WMI functions.
 
-elapsed time: 3361m
+On mainboards that support this way of accessing the chip,
+the driver will usually not work without this option since
+in these mainboards, ACPI will mark the I/O port as used.
 
-configs tested: 256
-configs skipped: 3
+@Andy Shevchenko, I have left type of sioreg, in other places
+sioreg has same integer type, should I change all occurrences
+of usage?
+@Guenter Roeck, I have left nct6775_*_set_back() call without
+changes as its always called from platform specific callbacks.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Could you please review?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210910
-i386                 randconfig-c001-20210912
-i386                 randconfig-c001-20210911
-mips                     cu1830-neo_defconfig
-sh                          kfr2r09_defconfig
-sh                        apsh4ad0a_defconfig
-xtensa                    xip_kc705_defconfig
-mips                        bcm47xx_defconfig
-powerpc                     tqm8548_defconfig
-arm                      jornada720_defconfig
-arm                          imote2_defconfig
-sh                                  defconfig
-ia64                         bigsur_defconfig
-powerpc                     kmeter1_defconfig
-powerpc                   bluestone_defconfig
-um                             i386_defconfig
-arm                         s5pv210_defconfig
-powerpc                 mpc837x_rdb_defconfig
-i386                             allyesconfig
-openrisc                  or1klitex_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                     sequoia_defconfig
-arm                      integrator_defconfig
-nios2                         3c120_defconfig
-arm                          moxart_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                          pxa168_defconfig
-microblaze                          defconfig
-nios2                            alldefconfig
-arm                         bcm2835_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                         mv78xx0_defconfig
-arc                          axs103_defconfig
-nds32                               defconfig
-powerpc                     akebono_defconfig
-sh                         ap325rxa_defconfig
-m68k                          atari_defconfig
-h8300                    h8300h-sim_defconfig
-m68k                          multi_defconfig
-arm                         axm55xx_defconfig
-mips                     loongson2k_defconfig
-mips                      fuloong2e_defconfig
-ia64                            zx1_defconfig
-openrisc                 simple_smp_defconfig
-arm                         s3c6400_defconfig
-xtensa                    smp_lx200_defconfig
-powerpc                    gamecube_defconfig
-sh                            migor_defconfig
-microblaze                      mmu_defconfig
-mips                      pic32mzda_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                     asp8347_defconfig
-powerpc                       ppc64_defconfig
-xtensa                           alldefconfig
-sh                           se7206_defconfig
-arm                          ep93xx_defconfig
-arm                        oxnas_v6_defconfig
-arm                         at91_dt_defconfig
-nios2                         10m50_defconfig
-powerpc                     ppa8548_defconfig
-mips                        nlm_xlp_defconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                     mpc5200_defconfig
-arm                        mini2440_defconfig
-arm                        cerfcube_defconfig
-mips                         tb0226_defconfig
-sh                            hp6xx_defconfig
-mips                           ip28_defconfig
-powerpc                      bamboo_defconfig
-mips                           ci20_defconfig
-sh                          rsk7264_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                           stm32_defconfig
-arm                         assabet_defconfig
-mips                       rbtx49xx_defconfig
-s390                       zfcpdump_defconfig
-mips                         db1xxx_defconfig
-xtensa                  cadence_csp_defconfig
-arm                        multi_v7_defconfig
-arc                          axs101_defconfig
-parisc                generic-32bit_defconfig
-arm                       versatile_defconfig
-m68k                       m5475evb_defconfig
-powerpc                          g5_defconfig
-arm                         lubbock_defconfig
-sh                   sh7770_generic_defconfig
-arm                          pxa910_defconfig
-sh                          urquell_defconfig
-mips                          malta_defconfig
-mips                 decstation_r4k_defconfig
-arm                          lpd270_defconfig
-powerpc                    sam440ep_defconfig
-mips                        workpad_defconfig
-sh                             espt_defconfig
-arm                         nhk8815_defconfig
-mips                         tb0287_defconfig
-h8300                       h8s-sim_defconfig
-mips                           ip27_defconfig
-powerpc                     ksi8560_defconfig
-sh                           se7712_defconfig
-parisc                              defconfig
-sh                          r7785rp_defconfig
-m68k                       m5275evb_defconfig
-h8300                            alldefconfig
-powerpc                     tqm8541_defconfig
-m68k                             alldefconfig
-powerpc                   microwatt_defconfig
-mips                          ath25_defconfig
-mips                         tb0219_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                         palmz72_defconfig
-powerpc                mpc7448_hpc2_defconfig
-powerpc                  iss476-smp_defconfig
-sh                          polaris_defconfig
-m68k                        mvme16x_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                     taishan_defconfig
-mips                           ip22_defconfig
-sh                           se7721_defconfig
-arm                      tct_hammer_defconfig
-arm                          ixp4xx_defconfig
-ia64                             allyesconfig
-powerpc                      pmac32_defconfig
-m68k                       m5208evb_defconfig
-powerpc                 canyonlands_defconfig
-alpha                            alldefconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                           se7724_defconfig
-parisc                generic-64bit_defconfig
-csky                             alldefconfig
-powerpc                 mpc834x_itx_defconfig
-sh                        edosk7760_defconfig
-arm                           h5000_defconfig
-openrisc                    or1ksim_defconfig
-x86_64               randconfig-c001-20210912
-arm                  randconfig-c002-20210912
-x86_64               randconfig-c001-20210910
-arm                  randconfig-c002-20210910
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-xtensa                           allyesconfig
-sh                               allmodconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-i386                 randconfig-a004-20210911
-i386                 randconfig-a005-20210911
-i386                 randconfig-a002-20210911
-i386                 randconfig-a006-20210911
-i386                 randconfig-a001-20210911
-i386                 randconfig-a003-20210911
-i386                 randconfig-a005-20210908
-i386                 randconfig-a004-20210908
-i386                 randconfig-a006-20210908
-i386                 randconfig-a002-20210908
-i386                 randconfig-a001-20210908
-i386                 randconfig-a003-20210908
-x86_64               randconfig-a002-20210911
-x86_64               randconfig-a003-20210911
-x86_64               randconfig-a004-20210911
-x86_64               randconfig-a006-20210911
-x86_64               randconfig-a005-20210911
-x86_64               randconfig-a001-20210911
-x86_64               randconfig-a013-20210910
-x86_64               randconfig-a016-20210910
-x86_64               randconfig-a012-20210910
-x86_64               randconfig-a011-20210910
-x86_64               randconfig-a014-20210910
-x86_64               randconfig-a015-20210910
-i386                 randconfig-a016-20210910
-i386                 randconfig-a011-20210910
-i386                 randconfig-a012-20210910
-i386                 randconfig-a013-20210910
-i386                 randconfig-a014-20210910
-x86_64               randconfig-a004-20210908
-x86_64               randconfig-a006-20210908
-x86_64               randconfig-a003-20210908
-x86_64               randconfig-a001-20210908
-x86_64               randconfig-a005-20210908
-x86_64               randconfig-a002-20210908
-arc                  randconfig-r043-20210908
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64               randconfig-c007-20210910
-mips                 randconfig-c004-20210910
-powerpc              randconfig-c003-20210910
-i386                 randconfig-c001-20210910
-s390                 randconfig-c005-20210910
-riscv                randconfig-c006-20210911
-x86_64               randconfig-c007-20210911
-mips                 randconfig-c004-20210911
-powerpc              randconfig-c003-20210911
-i386                 randconfig-c001-20210911
-s390                 randconfig-c005-20210911
-x86_64               randconfig-a002-20210910
-x86_64               randconfig-a003-20210910
-x86_64               randconfig-a004-20210910
-x86_64               randconfig-a006-20210910
-x86_64               randconfig-a001-20210910
-i386                 randconfig-a004-20210910
-i386                 randconfig-a005-20210910
-i386                 randconfig-a002-20210910
-i386                 randconfig-a006-20210910
-i386                 randconfig-a001-20210910
-i386                 randconfig-a003-20210910
-x86_64               randconfig-a013-20210911
-x86_64               randconfig-a016-20210911
-x86_64               randconfig-a012-20210911
-x86_64               randconfig-a011-20210911
-x86_64               randconfig-a014-20210911
-x86_64               randconfig-a015-20210911
-i386                 randconfig-a016-20210911
-i386                 randconfig-a011-20210911
-i386                 randconfig-a015-20210911
-i386                 randconfig-a012-20210911
-i386                 randconfig-a013-20210911
-i386                 randconfig-a014-20210911
-s390                 randconfig-r044-20210908
-riscv                randconfig-r042-20210908
-hexagon              randconfig-r045-20210908
-hexagon              randconfig-r041-20210908
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Co-developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
+Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
+Tested-by: Pär Ekholm <pehlm@pekholm.org>
+Tested-by: <to.eivind@gmail.com>
+Tested-by: Artem S. Tashkinov <aros@gmx.com>
+Tested-by: Vittorio Roberto Alfieri <me@rebtoor.com>
+Tested-by: Sahan Fernando <sahan.h.fernando@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes in v3:
+  - Remove unrequired type conversions.
+  - Make function declarations one line.
+  - Use nct6775 function pointers in struct nct6775_data instead direct calls.
+
+Changes in v2:
+  - Split changes to separate patches.
+  - Limit WMI usage by DMI_BOARD_NAME in checked ASUS motherboards.
+  - Rearrange code for directly use struct nct6775_sio_data in superio_*()
+    functions.
+
+
+Denis Pauk (2):
+  hwmon: (nct6775) Use sio_data in superio_*().
+  hwmon: (nct6775) Support access via Asus WMI
+
+ drivers/hwmon/nct6775.c | 687 ++++++++++++++++++++++++++--------------
+ 1 file changed, 450 insertions(+), 237 deletions(-)
+
+-- 
+2.33.0
+
