@@ -2,98 +2,134 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2FF6C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 15:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7357C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 21:02:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 907DD6108F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 15:14:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0A9D60F9F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Sep 2021 21:02:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbhILPPp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Sep 2021 11:15:45 -0400
-Received: from mga14.intel.com ([192.55.52.115]:17570 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229653AbhILPPo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Sep 2021 11:15:44 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10105"; a="221136470"
-X-IronPort-AV: E=Sophos;i="5.85,287,1624345200"; 
-   d="scan'208";a="221136470"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2021 08:14:30 -0700
-X-IronPort-AV: E=Sophos;i="5.85,287,1624345200"; 
-   d="scan'208";a="480974769"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2021 08:14:26 -0700
-Received: from andy by smile with local (Exim 4.95-RC2)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mPRBX-002xN0-KE;
-        Sun, 12 Sep 2021 18:14:23 +0300
-Date:   Sun, 12 Sep 2021 18:14:23 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Bernhard Seibold <mail@bernhard-seibold.de>,
-        =?iso-8859-1?B?UORy?= Ekholm <pehlm@pekholm.org>,
+        id S235668AbhILVEL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Sep 2021 17:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229930AbhILVEK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 12 Sep 2021 17:04:10 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FF9C061574;
+        Sun, 12 Sep 2021 14:02:56 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id c22so9798422edn.12;
+        Sun, 12 Sep 2021 14:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WUjkt5tqxJNwJpj1rH5M8VTbLi4zFaSrxlPVzEoZ9iQ=;
+        b=IroTDtlg/R8fwCDZ9Y39i3Xm20k/XhtmkKrZkzuLJqMo23zWePF6gDGoNV0UHchD/h
+         iM0JPHCzyhMPWnsI5rHzW4CpesX0svbkL/PLpU04IrzGUT5cZVbq/OoJuon/zTiU940d
+         sDLc/QveRCL1ChqbNXSUqEkTcT/rYZC+4+hIDRnoc87+SQfmJECFaN8Nhtkf/iA3THqQ
+         +NV++vqeA/hih0s3BYaD2w9/fRldXLq1zXIOkwTy1ISxTLnuXAx97G+HHdbOXKnUT3lF
+         S3QltItUMREJafG9ymr5Y0Phkqy2Q6mZ4+GqTecUhfKi8U3ZkAnVEYT9hijewVBDpN6r
+         AP5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WUjkt5tqxJNwJpj1rH5M8VTbLi4zFaSrxlPVzEoZ9iQ=;
+        b=tbvY8brLCtBKz/qgo8gfN4YWGnJZARwQ+H8X55LUusIerFRwHKGdxLpYuvJxDxUP7y
+         ZBSqb2uB5lFCuqfjWQl60chwtp3usOMxZSkXYf+lIqoZPNfvtX1CNZm8nGG0Yvj2xzNG
+         Qm8BV3de4Z/jkx5qOZQMqMV66xMKHC+JwrpMW2Jp2+vVu1ZTVXOWXC9KO2LymtrjCZhg
+         rvfXZWO4d+o0Oy6t0psWAjDpUGtejULBMmHE7QdEgE1kOwgqh+e3Sl4lrIkfrCzCsxuj
+         UmnmogRfJGSzXkQTZiCQvnaxPbIM6fY4q1XK4B9aBYXyYCa3AtYDne2xB5g84Nevcci/
+         t1aA==
+X-Gm-Message-State: AOAM533UAa2gIgjUWkaWa3WF1chAyHdExiFrygDPS49iMQgChPsB0kqI
+        sTiXPgI9yeFZlOxcStMtgv8=
+X-Google-Smtp-Source: ABdhPJxVARRCBe4mlbGw/hbIOW1bu8ui0r3otvsqZCimM8WOoIoJf90vTbkhOw+MJXjpKIY/UOL1IQ==
+X-Received: by 2002:a05:6402:440f:: with SMTP id y15mr9817558eda.205.1631480574702;
+        Sun, 12 Sep 2021 14:02:54 -0700 (PDT)
+Received: from localhost.localdomain (146-25-94-178.pool.ukrtel.net. [178.94.25.146])
+        by smtp.gmail.com with ESMTPSA id z97sm2821140ede.72.2021.09.12.14.02.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Sep 2021 14:02:54 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     pauk.denis@gmail.com, Bernhard Seibold <mail@bernhard-seibold.de>,
+        =?UTF-8?q?P=C3=A4r=20Ekholm?= <pehlm@pekholm.org>,
         to.eivind@gmail.com, "Artem S . Tashkinov" <aros@gmx.com>,
         Vittorio Roberto Alfieri <me@rebtoor.com>,
         Sahan Fernando <sahan.h.fernando@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] hwmon: (nct6775) Support access via Asus WMI
-Message-ID: <YT4ZT18e1NtM4T5C@smile.fi.intel.com>
-References: <20210912110557.41346-1-pauk.denis@gmail.com>
+Subject: [PATCH v4 0/2] hwmon: (nct6775) Support access via Asus WMI
+Date:   Mon, 13 Sep 2021 00:02:41 +0300
+Message-Id: <20210912210244.184521-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210912110557.41346-1-pauk.denis@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Sep 12, 2021 at 02:05:55PM +0300, Denis Pauk wrote:
-> Support accessing the NCT677x via Asus WMI functions.
-> 
-> On mainboards that support this way of accessing the chip,
-> the driver will usually not work without this option since
-> in these mainboards, ACPI will mark the I/O port as used.
-> 
-> @Andy Shevchenko, I have left type of sioreg, in other places
-> sioreg has same integer type, should I change all occurrences
-> of usage?
-> @Guenter Roeck, I have left nct6775_*_set_back() call without
-> changes as its always called from platform specific callbacks.
-> 
-> Could you please review?
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Co-developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
-> Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
-> Tested-by: Pär Ekholm <pehlm@pekholm.org>
-> Tested-by: <to.eivind@gmail.com>
-> Tested-by: Artem S. Tashkinov <aros@gmx.com>
-> Tested-by: Vittorio Roberto Alfieri <me@rebtoor.com>
-> Tested-by: Sahan Fernando <sahan.h.fernando@gmail.com>
+Support accessing the NCT677x via Asus WMI functions.
 
-This should go to the actual patch that makes it work (preparatory patches may
-or may not have all above be listed).
+On mainboards that support this way of accessing the chip,
+the driver will usually not work without this option since
+in these mainboards, ACPI will mark the I/O port as used.
 
-As kbuild bot rightfully noted, the series has to be bisectable.
+@Andy Shevchenko, I have added check for ACPI WMI config enabled 
+for prevent issues with non x86 platforms.
 
-Compile time bisectability means: each patch should compile incrementally.
-And run-time bisectability means: the device should work with each patch
-applied incrementally.
+@Guenter Roeck, I have left nct6775_*_set_back() call without
+changes as its always called from platform specific callbacks.
 
-I.o.w. you have to compile and boot kernel as many times as patches in your
-series + 1 (the clean build of the base).
+Could you please review?
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Co-developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
+Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
+Tested-by: PÃ¤r Ekholm <pehlm@pekholm.org>
+Tested-by: <to.eivind@gmail.com>
+Tested-by: Artem S. Tashkinov <aros@gmx.com>
+Tested-by: Vittorio Roberto Alfieri <me@rebtoor.com>
+Tested-by: Sahan Fernando <sahan.h.fernando@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+
+---
+Changes in v4:
+  - Fix naming conflict with inb, outb by add sio prefix to callbacks in
+    nct6775_sio_data.
+  - Fix build without ACPI WMI.    
+    
+Changes in v3:
+  - Remove unrequired type conversions.
+  - Make function declarations one line.
+  - Use nct6775 function pointers in struct nct6775_data instead direct calls.
+
+Changes in v2:
+  - Split changes to separate patches.
+  - Limit WMI usage by DMI_BOARD_NAME in checked ASUS motherboards.
+  - Rearrange code for directly use struct nct6775_sio_data in superio_*()
+    functions.
+
+
+Denis Pauk (2):
+  hwmon: (nct6775) Use sio_data in superio_*().
+  hwmon: (nct6775) Support access via Asus WMI
+
+ drivers/hwmon/nct6775.c | 701 ++++++++++++++++++++++++++--------------
+ 1 file changed, 464 insertions(+), 237 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.33.0
 
