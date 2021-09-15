@@ -2,483 +2,338 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14FF7C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Sep 2021 20:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2676C433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Sep 2021 21:12:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F383A60E08
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Sep 2021 20:43:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AC8560FBF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Sep 2021 21:12:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbhIOUod (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Sep 2021 16:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbhIOUob (ORCPT
+        id S232971AbhIOVOM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Sep 2021 17:14:12 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47404 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232760AbhIOVNl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Sep 2021 16:44:31 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BF2C061575;
-        Wed, 15 Sep 2021 13:43:11 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id g19-20020a1c9d13000000b003075062d4daso2997505wme.0;
-        Wed, 15 Sep 2021 13:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=e/dS8CPAJ784nUrkgnNrxffpCwbiYf1f3nAUAJs3PRs=;
-        b=ZVnxx1ftLN5ZNbPvEu9xyW0dOJSKGa/NPC15UA1seAfRqD/VlQQXTnUivLxXV3+4gw
-         AcOlYKNF62vaIsA6UYUYN2SZqyZd3X+AduxUM7mx/Jx2IypstTQ+qJDV4n9VqCE3xi2r
-         z0UEn3X7Fj+jUOpFGMBTUBNeW3OoS7G6ztNmqDZXUa5PIQQi+UEjD56fSlbeQBrJXaZI
-         KyXlLnzAzZ8EwMrE9vb6CZWhjBCGH1dF21a/q5ZALtOo/63a+BMYe+nPQru2hiJPkKr4
-         wVYm7/a0rzGV1kOQMPrcxyLztd5okF28dXlj2NE37x46UDR23br1hBfKltxc8CvnFBMQ
-         V9SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=e/dS8CPAJ784nUrkgnNrxffpCwbiYf1f3nAUAJs3PRs=;
-        b=fJ+RxeDAycOZ0evpLCKLHHzd/7corlV9eViPHv86JPZdIE8UwwB3XTz8yURHOKilvD
-         763G4JzvB7+cLTbrw8VdeTgTibJUM6OEm7TaY1DJdUUzzNRUISVg6EafxueWQPF7dRuU
-         Bh+lIW11tZWyQ8gnZXj/C2QDgoW84fMcp0S+niJOg2cAVIfI7HhHhgVuBiK3LhamcSzD
-         yLsDHgxs2fAVtTHPwRujjabEm2QoaZM1KqIek/mAzbsEFqFtPni1UVUNb92524D2x1xr
-         +OIu+pFV4QZ6XtU3gdMMk02LH0KsAMOowfHki/dJhpL3IWBlxnfp7zjbseAwIVurLUxA
-         nDEw==
-X-Gm-Message-State: AOAM531Wy7eXnRHRPLteWok8igveX0I1yJSo6hexqKvZTXMjciluOC8/
-        igmUeMtfxmBdhRTzBuFvnjY=
-X-Google-Smtp-Source: ABdhPJzeUBmfgsm20p35IjA13PHTB0+kIjk/azi85bBHDfoN9RLKOgsSr/JLatDOSciI4dFNtGhbNw==
-X-Received: by 2002:a7b:cf0b:: with SMTP id l11mr1591859wmg.176.1631738589853;
-        Wed, 15 Sep 2021 13:43:09 -0700 (PDT)
-Received: from localhost.localdomain (15-40-179-94.pool.ukrtel.net. [94.179.40.15])
-        by smtp.gmail.com with ESMTPSA id j4sm1080509wrt.67.2021.09.15.13.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Sep 2021 13:43:09 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     pauk.denis@gmail.com, Bernhard Seibold <mail@bernhard-seibold.de>,
-        =?UTF-8?q?P=C3=A4r=20Ekholm?= <pehlm@pekholm.org>,
-        to.eivind@gmail.com, "Artem S . Tashkinov" <aros@gmx.com>,
-        Vittorio Roberto Alfieri <me@rebtoor.com>,
-        Sahan Fernando <sahan.h.fernando@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/3] hwmon: (nct6775) Support access via Asus WMI.
-Date:   Wed, 15 Sep 2021 23:42:51 +0300
-Message-Id: <20210915204251.26081-4-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210915204251.26081-1-pauk.denis@gmail.com>
-References: <20210915204251.26081-1-pauk.denis@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        Wed, 15 Sep 2021 17:13:41 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18FIgMfw003228;
+        Wed, 15 Sep 2021 17:11:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=LsQZc/VaDEkUhYmxVD4r3oz4fRVG/JeSgvVFMFDWv9c=;
+ b=b6UrA8WR1EVbYudR5Fe8U+I3pC9EIYmfq3WGwAmX8zrCxYqO2H23xYocHo96+AXuCezN
+ hQ5oxrl+8XNYqV1aoEIGs6p/dNR2IpILLGfBa+cjP65mu4CGoeUQmYn0HlggZ601eiRa
+ n+znGs+Cy3AbIe081MZoyXdJggaxA8HKIivrAjA/wvr88SL6H87+ck4LpZQAU6YORdkh
+ ENwjb9z7BP3f7jNNi1pYuTFv7k/puQHhmRhYG6TZng0uIg6V47KmIGkxz+dAYsx1X9hh
+ nKj/LpazCFr4NlBjYq/50mnCyRjKcwrgVMViEKdeLZ/uPjCtGxfY/c4BJSvW2XTrBmHO IQ== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b3p60tuvc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 17:11:53 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18FL6ssO020495;
+        Wed, 15 Sep 2021 21:11:52 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01dal.us.ibm.com with ESMTP id 3b0m3e1ffy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 21:11:52 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18FLBpMx8782340
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Sep 2021 21:11:51 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5ED1A6E058;
+        Wed, 15 Sep 2021 21:11:51 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB2456E050;
+        Wed, 15 Sep 2021 21:11:50 +0000 (GMT)
+Received: from v0005c16 (unknown [9.211.152.249])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Sep 2021 21:11:50 +0000 (GMT)
+Message-ID: <ac8d30e988ab6cc16d4c7446d259b87deb734910.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary
+ sysfs
+From:   Eddie James <eajames@linux.ibm.com>
+To:     Guenter Roeck <linux@roeck-us.net>, joel@jms.id.au
+Cc:     linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        alistair@popple.id.au, jk@ozlabs.org
+Date:   Wed, 15 Sep 2021 16:11:50 -0500
+In-Reply-To: <20210915161333.GA3712393@roeck-us.net>
+References: <20210914213543.73351-1-eajames@linux.ibm.com>
+         <20210914213543.73351-4-eajames@linux.ibm.com>
+         <20210915161333.GA3712393@roeck-us.net>
+Organization: IBM
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UQO9fl-rjOiohgIRRn4ZoEFvuPM2np_y
+X-Proofpoint-ORIG-GUID: UQO9fl-rjOiohgIRRn4ZoEFvuPM2np_y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.687,Hydra:6.0.235,FMLib:17.0.607.475
+ definitions=2020-10-13_15,2020-10-13_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109030001 definitions=main-2109150103
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Support accessing the NCT677x via Asus WMI functions.
+On Wed, 2021-09-15 at 09:13 -0700, Guenter Roeck wrote:
+> On Tue, Sep 14, 2021 at 04:35:43PM -0500, Eddie James wrote:
+> > Save any FFDC provided by the OCC driver, and provide it to
+> > userspace
+> > through a binary sysfs entry. Do some basic state management to
+> > ensure that userspace can always collect the data if there was an
+> > error. Notify polling userspace when there is an error too.
+> > 
+> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> 
+> This is now the 2nd series that we have pending, and the first series
+> (from July) still didn't make it into the upstream kernel because the
+> fsi code
+> seems to go nowhere. Any chance to address that ?
 
-On mainboards that support this way of accessing the chip, the driver will
-usually not work without this option since in these mainboards, ACPI will
-mark the I/O port as used.
+Yes... Joel, can we merge that? I don't have any comments to address.
 
-Code uses ACPI firmware interface to commucate with sensors with ASUS
-motherboards:
-* PRIME B460-PLUS,
-* ROG CROSSHAIR VIII IMPACT,
-* ROG STRIX B550-E GAMING,
-* ROG STRIX B550-F GAMING,
-* ROG STRIX B550-F GAMING (WI-FI),
-* ROG STRIX Z490-I GAMING,
-* TUF GAMING B550M-PLUS,
-* TUF GAMING B550M-PLUS (WI-FI),
-* TUF GAMING B550-PLUS,
-* TUF GAMING X570-PLUS,
-* TUF GAMING X570-PRO (WI-FI).
+> 
+> Additional comment inline.
+> 
+> Thanks,
+> Guenter
+> 
+> > ---
+> >  drivers/hwmon/occ/p9_sbe.c | 98
+> > +++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 97 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/hwmon/occ/p9_sbe.c
+> > b/drivers/hwmon/occ/p9_sbe.c
+> > index 9709f2b9c052..505f489832a4 100644
+> > --- a/drivers/hwmon/occ/p9_sbe.c
+> > +++ b/drivers/hwmon/occ/p9_sbe.c
+> > @@ -4,18 +4,54 @@
+> >  #include <linux/device.h>
+> >  #include <linux/errno.h>
+> >  #include <linux/fsi-occ.h>
+> > +#include <linux/mm.h>
+> >  #include <linux/module.h>
+> > +#include <linux/mutex.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/string.h>
+> > +#include <linux/sysfs.h>
+> >  
+> >  #include "common.h"
+> >  
+> > +enum sbe_error_state {
+> > +	SBE_ERROR_NONE = 0,
+> > +	SBE_ERROR_PENDING,
+> > +	SBE_ERROR_COLLECTED
+> > +};
+> > +
+> >  struct p9_sbe_occ {
+> >  	struct occ occ;
+> > +	int sbe_error;
+> > +	void *ffdc;
+> > +	size_t ffdc_len;
+> > +	size_t ffdc_size;
+> > +	struct mutex sbe_error_lock;	/* lock access to ffdc data
+> > */
+> > +	u32 no_ffdc_magic;
+> >  	struct device *sbe;
+> >  };
+> >  
+> >  #define to_p9_sbe_occ(x)	container_of((x), struct p9_sbe_occ,
+> > occ)
+> >  
+> > +static ssize_t sbe_error_read(struct file *filp, struct kobject
+> > *kobj,
+> > +			      struct bin_attribute *battr, char *buf,
+> > +			      loff_t pos, size_t count)
+> > +{
+> > +	ssize_t rc = 0;
+> > +	struct occ *occ = dev_get_drvdata(kobj_to_dev(kobj));
+> > +	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+> > +
+> > +	mutex_lock(&ctx->sbe_error_lock);
+> > +	if (ctx->sbe_error == SBE_ERROR_PENDING) {
+> > +		rc = memory_read_from_buffer(buf, count, &pos, ctx-
+> > >ffdc,
+> > +					     ctx->ffdc_len);
+> > +		ctx->sbe_error = SBE_ERROR_COLLECTED;
+> > +	}
+> > +	mutex_unlock(&ctx->sbe_error_lock);
+> > +
+> > +	return rc;
+> > +}
+> > +static BIN_ATTR_RO(sbe_error, OCC_MAX_RESP_WORDS * 4);
+> > +
+> >  static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t
+> > len)
+> >  {
+> >  	struct occ_response *resp = &occ->resp;
+> > @@ -24,8 +60,47 @@ static int p9_sbe_occ_send_cmd(struct occ *occ,
+> > u8 *cmd, size_t len)
+> >  	int rc;
+> >  
+> >  	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> > -	if (rc < 0)
+> > +	if (rc < 0) {
+> > +		if (resp_len) {
+> > +			bool notify = false;
+> > +
+> > +			mutex_lock(&ctx->sbe_error_lock);
+> > +			if (ctx->sbe_error != SBE_ERROR_PENDING)
+> > +				notify = true;
+> > +			ctx->sbe_error = SBE_ERROR_PENDING;
+> > +
+> > +			if (resp_len > ctx->ffdc_size) {
+> > +				if (ctx->ffdc_size)
+> > +					kvfree(ctx->ffdc);
+> > +				ctx->ffdc = kvmalloc(resp_len,
+> > GFP_KERNEL);
+> > +				if (!ctx->ffdc) {
+> > +					ctx->ffdc_size = 0;
+> > +					ctx->ffdc_len = sizeof(u32);
+> > +					ctx->ffdc = &ctx-
+> > >no_ffdc_magic;
+> > +					goto unlock;
+> > +				}
+> > +
+> > +				ctx->ffdc_size = resp_len;
+> > +			}
+> > +
+> > +			ctx->ffdc_len = resp_len;
+> > +			memcpy(ctx->ffdc, resp, resp_len);
+> > +
+> > +unlock:
+> > +			mutex_unlock(&ctx->sbe_error_lock);
+> > +
+> > +			if (notify)
+> > +				sysfs_notify(&occ->bus_dev->kobj, NULL,
+> > +					     bin_attr_sbe_error.attr.na
+> > me);
+> > +		}
+> > +
+> >  		return rc;
+> > +	}
+> > +
+> > +	mutex_lock(&ctx->sbe_error_lock);
+> > +	if (ctx->sbe_error == SBE_ERROR_COLLECTED)
+> > +		ctx->sbe_error = SBE_ERROR_NONE;
+> > +	mutex_unlock(&ctx->sbe_error_lock);
+> 
+> I am not entirely sure I understand the benefit of
+> SBE_ERROR_COLLECTED.
+> Can you explain why it is needed, and why the status is not just set
+> to SBE_ERROR_NONE after the error data was collected ?
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Co-developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
-Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
-Tested-by: Pär Ekholm <pehlm@pekholm.org>
-Tested-by: <to.eivind@gmail.com>
-Tested-by: Artem S. Tashkinov <aros@gmx.com>
-Tested-by: Vittorio Roberto Alfieri <me@rebtoor.com>
-Tested-by: Sahan Fernando <sahan.h.fernando@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
+The purpose was to make sure the data can be collected even if a
+successful transfer (which clears the flag) comes through before the
+user comes and reads the file. If the error is just set to NONE, then
+the user might never see it, with the current implementation. I think I
+will drop the state management though and just return the last error
+data.
 
----
-Changes in v6:
-  - Minimaze codes inside code inside defined(CONFIG_ACPI_WMI).
+> 
+> >  
+> >  	switch (resp->return_status) {
+> >  	case OCC_RESP_CMD_IN_PRG:
+> > @@ -65,6 +140,13 @@ static int p9_sbe_occ_probe(struct
+> > platform_device *pdev)
+> >  	if (!ctx)
+> >  		return -ENOMEM;
+> >  
+> > +	ctx->no_ffdc_magic = OCC_NO_FFDC_MAGIC;
+> 
+> This is ... odd. Why not just return a file size of 0 if there is no
+> data ?
+> The binary file is an ABI and needs to be documented, including the
+> use
+> of this "magic". The use of that magic needs to be explained because
+> it
+> does add a lot of what sems to be unnecessary complexity to the code.
+> 
+> Besides, most of that complexity seems unnecessary: If the magic is
+> really
+> needed, the read code could just write it into the buffer if ctx-
+> >ffdc
+> is NULL. There is a lot of complexity just to avoid an if statement
+> in
+> sbe_error_read().
 
-Changes in v5:
-  - Use IS_ENABLED(CONFIG_ACPI_WMI) instead defined(CONFIG_ACPI_WMI)
+Yea, I will admit this is pretty awkward. The reason for all this is
+because I was trying to use a single sysfs entry to communicate both
+whether or not there is an error at all, and the data from the error.
+So returning  file size 0 means "no error" and then we can't capture
+the case where there is an error but there is no data.
 
-Changes in v4:
-  - Fix build without ACPI WMI.
+So on second thought, I should probably use two sysfs entries: one to
+indicate if there is an error, and the other to report the data (if
+there is any). There is the existing OCC error file of course, but
+that's supposed to be for actual OCC response errors, so I will have to
+investigate if it can serve both purposes.
 
-Changes in v3:
-  - Remove unrequired type conversions.
-  - Save result of match_string before check.
+Thanks for the review, Guenter!
+Eddie
 
-Changes in v2:
-  - Split changes to separate patches.
-  - Limit WMI usage by DMI_BOARD_NAME in checked ASUS motherboards.
----
- drivers/hwmon/Kconfig   |   1 +
- drivers/hwmon/nct6775.c | 232 ++++++++++++++++++++++++++++++++++++----
- 2 files changed, 212 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index e3675377bc5d..9eefb1014b53 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1423,6 +1423,7 @@ config SENSORS_NCT6683
- config SENSORS_NCT6775
- 	tristate "Nuvoton NCT6775F and compatibles"
- 	depends on !PPC
-+	depends on ACPI_WMI || ACPI_WMI=n
- 	select HWMON_VID
- 	help
- 	  If you say yes here you get support for the hardware monitoring
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 4253eed7f5b0..b577381beb45 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -55,6 +55,7 @@
- #include <linux/dmi.h>
- #include <linux/io.h>
- #include <linux/nospec.h>
-+#include <linux/wmi.h>
- #include "lm75.h"
- 
- #define USE_ALTERNATE
-@@ -132,10 +133,13 @@ MODULE_PARM_DESC(fan_debounce, "Enable debouncing for fan RPM signal");
- #define SIO_ID_MASK		0xFFF8
- 
- enum pwm_enable { off, manual, thermal_cruise, speed_cruise, sf3, sf4 };
-+enum sensor_access { access_direct, access_asuswmi };
- 
- struct nct6775_sio_data {
- 	int sioreg;
-+	int ld;
- 	enum kinds kind;
-+	enum sensor_access access;
- 
- 	/* superio_() callbacks  */
- 	void (*sio_outb)(struct nct6775_sio_data *sio_data, int reg, int val);
-@@ -145,6 +149,90 @@ struct nct6775_sio_data {
- 	void (*sio_exit)(struct nct6775_sio_data *sio_data);
- };
- 
-+#define ASUSWMI_MGMT2_GUID		"466747A0-70EC-11DE-8A39-0800200C9A66"
-+#define ASUSWMI_METHODID_RSIO		0x5253494F
-+#define ASUSWMI_METHODID_WSIO		0x5753494F
-+#define ASUSWMI_METHODID_RHWM		0x5248574D
-+#define ASUSWMI_METHODID_WHWM		0x5748574D
-+#define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
-+
-+static int asuswmi_evaluate_method(u32 method_id, u8 bank, u8 reg, u8 val, u32 *retval)
-+{
-+#if IS_ENABLED(CONFIG_ACPI_WMI)
-+	u32 args = bank | (reg << 8) | (val << 16);
-+	struct acpi_buffer input = { (acpi_size) sizeof(args), &args };
-+	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-+	acpi_status status;
-+	union acpi_object *obj;
-+	u32 tmp = 0;
-+
-+	status = wmi_evaluate_method(ASUSWMI_MGMT2_GUID, 0,
-+				     method_id, &input, &output);
-+
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	obj = output.pointer;
-+	if (obj && obj->type == ACPI_TYPE_INTEGER)
-+		tmp = obj->integer.value;
-+
-+	if (retval)
-+		*retval = tmp;
-+
-+	kfree(obj);
-+
-+	if (tmp == ASUSWMI_UNSUPPORTED_METHOD)
-+		return -ENODEV;
-+	return 0;
-+#else
-+	return -EOPNOTSUPP;
-+#endif
-+}
-+
-+static inline int nct6775_asuswmi_write(u8 bank, u8 reg, u8 val)
-+{
-+	return asuswmi_evaluate_method(ASUSWMI_METHODID_WHWM, bank,
-+							      reg, val, NULL);
-+}
-+
-+static inline int nct6775_asuswmi_read(u8 bank, u8 reg, u8 *val)
-+{
-+	u32 tmp;
-+	int ret = asuswmi_evaluate_method(ASUSWMI_METHODID_RHWM, bank,
-+				     reg, 0, &tmp);
-+	*val = tmp;
-+	return ret;
-+}
-+
-+static int superio_wmi_inb(struct nct6775_sio_data *sio_data, int reg)
-+{
-+	int tmp;
-+
-+	asuswmi_evaluate_method(ASUSWMI_METHODID_RSIO, sio_data->ld,
-+				reg, 0, &tmp);
-+	return tmp;
-+}
-+
-+static void superio_wmi_outb(struct nct6775_sio_data *sio_data, int reg, int val)
-+{
-+	asuswmi_evaluate_method(ASUSWMI_METHODID_WSIO, sio_data->ld,
-+				reg, val, NULL);
-+}
-+
-+static void superio_wmi_select(struct nct6775_sio_data *sio_data, int ld)
-+{
-+	sio_data->ld = ld;
-+}
-+
-+static int superio_wmi_enter(struct nct6775_sio_data *sio_data)
-+{
-+	return 0;
-+}
-+
-+static void superio_wmi_exit(struct nct6775_sio_data *sio_data)
-+{
-+}
-+
- static void superio_outb(struct nct6775_sio_data *sio_data, int reg, int val)
- {
- 	int ioreg = sio_data->sioreg;
-@@ -207,6 +295,7 @@ static void superio_exit(struct nct6775_sio_data *sio_data)
- 
- #define NCT6775_REG_BANK	0x4E
- #define NCT6775_REG_CONFIG	0x40
-+#define NCT6775_PORT_CHIPID	0x58
- 
- /*
-  * Not currently used:
-@@ -1423,6 +1512,47 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
- 	return false;
- }
- 
-+static inline void nct6775_wmi_set_bank(struct nct6775_data *data, u16 reg)
-+{
-+	u8 bank = reg >> 8;
-+
-+	data->bank = bank;
-+}
-+
-+static u16 nct6775_wmi_read_value(struct nct6775_data *data, u16 reg)
-+{
-+	int res, word_sized = is_word_sized(data, reg);
-+	u8 tmp;
-+
-+	nct6775_wmi_set_bank(data, reg);
-+
-+	nct6775_asuswmi_read(data->bank, reg, &tmp);
-+	res = (tmp & 0xff);
-+	if (word_sized) {
-+		nct6775_asuswmi_read(data->bank, (reg & 0xff) + 1, &tmp);
-+		res = (res << 8) + (tmp & 0xff);
-+	}
-+	return res;
-+}
-+
-+static int nct6775_wmi_write_value(struct nct6775_data *data, u16 reg, u16 value)
-+{
-+	int word_sized = is_word_sized(data, reg);
-+
-+	nct6775_wmi_set_bank(data, reg);
-+
-+	if (word_sized) {
-+		nct6775_asuswmi_write(data->bank, (reg & 0xff),
-+				      (value >> 8) & 0xff);
-+		nct6775_asuswmi_write(data->bank, (reg & 0xff) + 1,
-+				      value & 0xff);
-+	} else {
-+		nct6775_asuswmi_write(data->bank, (reg & 0xff), value);
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * On older chips, only registers 0x50-0x5f are banked.
-  * On more recent chips, all registers are banked.
-@@ -3818,10 +3948,12 @@ static int nct6775_probe(struct platform_device *pdev)
- 	struct device *hwmon_dev;
- 	int num_attr_groups = 0;
- 
--	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
--	if (!devm_request_region(&pdev->dev, res->start, IOREGION_LENGTH,
--				 DRVNAME))
--		return -EBUSY;
-+	if (sio_data->access == access_direct) {
-+		res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-+		if (!devm_request_region(&pdev->dev, res->start, IOREGION_LENGTH,
-+					 DRVNAME))
-+			return -EBUSY;
-+	}
- 
- 	data = devm_kzalloc(&pdev->dev, sizeof(struct nct6775_data),
- 			    GFP_KERNEL);
-@@ -3830,9 +3962,16 @@ static int nct6775_probe(struct platform_device *pdev)
- 
- 	data->kind = sio_data->kind;
- 	data->sioreg = sio_data->sioreg;
--	data->addr = res->start;
--	data->read_value = nct6775_read_value;
--	data->write_value = nct6775_write_value;
-+
-+	if (sio_data->access == access_direct) {
-+		data->addr = res->start;
-+		data->read_value = nct6775_read_value;
-+		data->write_value = nct6775_write_value;
-+	} else {
-+		data->read_value = nct6775_wmi_read_value;
-+		data->write_value = nct6775_wmi_write_value;
-+	}
-+
- 	mutex_init(&data->update_lock);
- 	data->name = nct6775_device_names[data->kind];
- 	data->bank = 0xff;		/* Force initial bank selection */
-@@ -4743,6 +4882,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- 	int err;
- 	int addr;
- 
-+	sio_data->access = access_direct;
- 	sio_data->sioreg = sioaddr;
- 
- 	err = sio_data->sio_enter(sio_data);
-@@ -4837,6 +4977,23 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
-  */
- static struct platform_device *pdev[2];
- 
-+static const char * const asus_wmi_boards[] = {
-+	"PRIME B460-PLUS",
-+	"ROG CROSSHAIR VIII DARK HERO",
-+	"ROG CROSSHAIR VIII HERO",
-+	"ROG CROSSHAIR VIII IMPACT",
-+	"ROG STRIX B550-E GAMING",
-+	"ROG STRIX B550-F GAMING",
-+	"ROG STRIX B550-F GAMING (WI-FI)",
-+	"ROG STRIX Z490-I GAMING",
-+	"TUF GAMING B550M-PLUS",
-+	"TUF GAMING B550M-PLUS (WI-FI)",
-+	"TUF GAMING B550-PLUS",
-+	"TUF GAMING X570-PLUS",
-+	"TUF GAMING X570-PLUS (WI-FI)",
-+	"TUF GAMING X570-PRO (WI-FI)",
-+};
-+
- static int __init sensors_nct6775_init(void)
- {
- 	int i, err;
-@@ -4845,11 +5002,32 @@ static int __init sensors_nct6775_init(void)
- 	struct resource res;
- 	struct nct6775_sio_data sio_data;
- 	int sioaddr[2] = { 0x2e, 0x4e };
-+	enum sensor_access access = access_direct;
-+	const char *board_vendor, *board_name;
-+	u8 tmp;
- 
- 	err = platform_driver_register(&nct6775_driver);
- 	if (err)
- 		return err;
- 
-+	board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
-+	board_name = dmi_get_system_info(DMI_BOARD_NAME);
-+
-+	if (board_name && board_vendor &&
-+	    !strcmp(board_vendor, "ASUSTeK COMPUTER INC.")) {
-+		err = match_string(asus_wmi_boards, ARRAY_SIZE(asus_wmi_boards),
-+				   board_name);
-+		if (err != -EINVAL) {
-+			/* if reading chip id via WMI succeeds, use WMI */
-+			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
-+				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
-+				access = access_asuswmi;
-+			} else {
-+				pr_err("Can't read ChipID by Asus WMI.\n");
-+			}
-+		}
-+	}
-+
- 	/*
- 	 * initialize sio_data->kind and sio_data->sioreg.
- 	 *
-@@ -4870,6 +5048,16 @@ static int __init sensors_nct6775_init(void)
- 
- 		found = true;
- 
-+		sio_data.access = access;
-+
-+		if (access == access_asuswmi) {
-+			sio_data.sio_outb = superio_wmi_outb;
-+			sio_data.sio_inb = superio_wmi_inb;
-+			sio_data.sio_select = superio_wmi_select;
-+			sio_data.sio_enter = superio_wmi_enter;
-+			sio_data.sio_exit = superio_wmi_exit;
-+		}
-+
- 		pdev[i] = platform_device_alloc(DRVNAME, address);
- 		if (!pdev[i]) {
- 			err = -ENOMEM;
-@@ -4881,23 +5069,25 @@ static int __init sensors_nct6775_init(void)
- 		if (err)
- 			goto exit_device_put;
- 
--		memset(&res, 0, sizeof(res));
--		res.name = DRVNAME;
--		res.start = address + IOREGION_OFFSET;
--		res.end = address + IOREGION_OFFSET + IOREGION_LENGTH - 1;
--		res.flags = IORESOURCE_IO;
-+		if (sio_data.access == access_direct) {
-+			memset(&res, 0, sizeof(res));
-+			res.name = DRVNAME;
-+			res.start = address + IOREGION_OFFSET;
-+			res.end = address + IOREGION_OFFSET + IOREGION_LENGTH - 1;
-+			res.flags = IORESOURCE_IO;
-+
-+			err = acpi_check_resource_conflict(&res);
-+			if (err) {
-+				platform_device_put(pdev[i]);
-+				pdev[i] = NULL;
-+				continue;
-+			}
- 
--		err = acpi_check_resource_conflict(&res);
--		if (err) {
--			platform_device_put(pdev[i]);
--			pdev[i] = NULL;
--			continue;
-+			err = platform_device_add_resources(pdev[i], &res, 1);
-+			if (err)
-+				goto exit_device_put;
- 		}
- 
--		err = platform_device_add_resources(pdev[i], &res, 1);
--		if (err)
--			goto exit_device_put;
--
- 		/* platform_device_add calls probe() */
- 		err = platform_device_add(pdev[i]);
- 		if (err)
--- 
-2.33.0
+> 
+> > +	ctx->sbe_error = SBE_ERROR_NONE;
+> > +	ctx->ffdc = &ctx->no_ffdc_magic;
+> > +	ctx->ffdc_len = sizeof(u32);
+> > +	ctx->ffdc_size = 0;
+> > +	mutex_init(&ctx->sbe_error_lock);
+> > +
+> >  	ctx->sbe = pdev->dev.parent;
+> >  	occ = &ctx->occ;
+> >  	occ->bus_dev = &pdev->dev;
+> > @@ -78,6 +160,15 @@ static int p9_sbe_occ_probe(struct
+> > platform_device *pdev)
+> >  	if (rc == -ESHUTDOWN)
+> >  		rc = -ENODEV;	/* Host is shutdown, don't spew
+> > errors */
+> >  
+> > +	if (!rc) {
+> > +		rc = device_create_bin_file(occ->bus_dev,
+> > &bin_attr_sbe_error);
+> > +		if (rc) {
+> > +			dev_warn(occ->bus_dev,
+> > +				 "failed to create SBE error ffdc
+> > file\n");
+> > +			rc = 0;
+> > +		}
+> > +	}
+> > +
+> >  	return rc;
+> >  }
+> >  
+> > @@ -86,9 +177,14 @@ static int p9_sbe_occ_remove(struct
+> > platform_device *pdev)
+> >  	struct occ *occ = platform_get_drvdata(pdev);
+> >  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+> >  
+> > +	device_remove_bin_file(occ->bus_dev, &bin_attr_sbe_error);
+> > +
+> >  	ctx->sbe = NULL;
+> >  	occ_shutdown(occ);
+> >  
+> > +	if (ctx->ffdc_size)
+> > +		kvfree(ctx->ffdc);
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > -- 
+> > 2.27.0
+> > 
 
