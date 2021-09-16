@@ -2,126 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0131DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 00:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9192CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 07:28:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D350760F46
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 00:17:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E67361185
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 07:28:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbhIPATK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Sep 2021 20:19:10 -0400
-Received: from pi.codeconstruct.com.au ([203.29.241.158]:57538 "EHLO
-        codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbhIPATI (ORCPT
+        id S234729AbhIPH3V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Sep 2021 03:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234708AbhIPH3V (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Sep 2021 20:19:08 -0400
-Received: from pecola.lan (unknown [159.196.93.152])
-        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id AAC722012D;
-        Thu, 16 Sep 2021 08:17:41 +0800 (AWST)
-Message-ID: <ad29d1d9743799ffd770330af6ad174bdfe7c3a0.camel@codeconstruct.com.au>
-Subject: Re: [PATCH 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary
- sysfs
-From:   Jeremy Kerr <jk@codeconstruct.com.au>
-To:     Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joel@jms.id.au, linux@roeck-us.net, jdelvare@suse.com,
-        alistair@popple.id.au
-Date:   Thu, 16 Sep 2021 08:17:41 +0800
-In-Reply-To: <20210914213543.73351-4-eajames@linux.ibm.com>
-References: <20210914213543.73351-1-eajames@linux.ibm.com>
-         <20210914213543.73351-4-eajames@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 16 Sep 2021 03:29:21 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A544C061574;
+        Thu, 16 Sep 2021 00:28:01 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id g11so4747132qtk.5;
+        Thu, 16 Sep 2021 00:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pVbyhvmeHGYeGOFh7qjQY4cFr9i92ZBaof0BazQUorI=;
+        b=hOKvbfNdu+GhgoP1GNbaEScCzXmyTWBWgdYBhb5l8fstFGaqVohSBlYUQJmQlFdd10
+         7/AT/hWvHODQNjcP1ij+cWi0UtdJYXMB+uxKm3dwk9CLaIygKK9PlF3KWSiXERJWi5ku
+         qf3g6KdrqLRx7T0+CVDKk6QZ9b8jvw5+88YNA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pVbyhvmeHGYeGOFh7qjQY4cFr9i92ZBaof0BazQUorI=;
+        b=DjTrifoZBiTdCS4SuZ1mC3mFzXHh2SneO704z1OUD43TL9B1TM46jX8zX4O5VeI/OB
+         fhUadqPv27RVcK1rMJyp5YpxygyiNfWs+xK6T2IrywISWO8VOJghjXYVeVpzbLNFAOBQ
+         r6S26UC4WhH9cQ2gnftmtrQFTUUDToBm35m+hwOpPquq+PPpvjvrPtiZnb3nfEAo10Y5
+         OVK6GmpDWSD3vD1YcTglcN51pKkAhnXRabrvivftQhq8HMOEOqZt1xaGkGtnH8xGvuJc
+         sCFq9zDBYZE2RDyc66xVX/uL9Suj8vrvgcV8dUYeOLynP1By64ZQI1xqDITYe/IlF4s0
+         Fnrw==
+X-Gm-Message-State: AOAM530pRucRnpdQGWGf0jVm4Z/aVBARIvpXtOcTvNVq0jY6m6ZtQ6Uj
+        vUjfzrYAUYucx18/qyme15Ufu3zWWgsakPfgC9E=
+X-Google-Smtp-Source: ABdhPJxcKmaCp7WgCIndqSTIhP31PNoyITQMAxTDCqB49y2c4oqobHacueUm6hYd6oIICTiHiNkLmYbi1LF+89qnlV4=
+X-Received: by 2002:a05:622a:15d2:: with SMTP id d18mr3628592qty.145.1631777280136;
+ Thu, 16 Sep 2021 00:28:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210914213543.73351-1-eajames@linux.ibm.com> <20210914213543.73351-4-eajames@linux.ibm.com>
+ <20210915161333.GA3712393@roeck-us.net> <ac8d30e988ab6cc16d4c7446d259b87deb734910.camel@linux.ibm.com>
+In-Reply-To: <ac8d30e988ab6cc16d4c7446d259b87deb734910.camel@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Thu, 16 Sep 2021 07:27:48 +0000
+Message-ID: <CACPK8Xfqf7siS9jtQbrd5mDNmCURS2==B3wGXpHibB8546o60g@mail.gmail.com>
+Subject: Re: [PATCH 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-fsi@lists.ozlabs.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alistair Popple <alistair@popple.id.au>,
+        Jeremy Kerr <jk@ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Eddie,
+On Wed, 15 Sept 2021 at 21:11, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> On Wed, 2021-09-15 at 09:13 -0700, Guenter Roeck wrote:
+> > On Tue, Sep 14, 2021 at 04:35:43PM -0500, Eddie James wrote:
+> > > Save any FFDC provided by the OCC driver, and provide it to
+> > > userspace
+> > > through a binary sysfs entry. Do some basic state management to
+> > > ensure that userspace can always collect the data if there was an
+> > > error. Notify polling userspace when there is an error too.
+> > >
+> > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> >
+> > This is now the 2nd series that we have pending, and the first series
+> > (from July) still didn't make it into the upstream kernel because the
+> > fsi code
+> > seems to go nowhere. Any chance to address that ?
+>
+> Yes... Joel, can we merge that? I don't have any comments to address.
 
-> Save any FFDC provided by the OCC driver, and provide it to userspace
-> through a binary sysfs entry. Do some basic state management to
-> ensure that userspace can always collect the data if there was an
-> error. Notify polling userspace when there is an error too.
-
-Super! Some comments inline:
-
-> +enum sbe_error_state {
-> +       SBE_ERROR_NONE = 0,
-> +       SBE_ERROR_PENDING,
-> +       SBE_ERROR_COLLECTED
-> +};
-> +
->  struct p9_sbe_occ {
->         struct occ occ;
-> +       int sbe_error;
-
-Use the enum here?
-
-> +       void *ffdc;
-> +       size_t ffdc_len;
-> +       size_t ffdc_size;
-> +       struct mutex sbe_error_lock;    /* lock access to ffdc data */
-> +       u32 no_ffdc_magic;
->         struct device *sbe;
->  };
->  
->  #define to_p9_sbe_occ(x)       container_of((x), struct p9_sbe_occ, occ)
->  
-> +static ssize_t sbe_error_read(struct file *filp, struct kobject *kobj,
-> +                             struct bin_attribute *battr, char *buf,
-> +                             loff_t pos, size_t count)
-> +{
-> +       ssize_t rc = 0;
-> +       struct occ *occ = dev_get_drvdata(kobj_to_dev(kobj));
-> +       struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
-> +
-> +       mutex_lock(&ctx->sbe_error_lock);
-> +       if (ctx->sbe_error == SBE_ERROR_PENDING) {
-> +               rc = memory_read_from_buffer(buf, count, &pos, ctx->ffdc,
-> +                                            ctx->ffdc_len);
-> +               ctx->sbe_error = SBE_ERROR_COLLECTED;
-> +       }
-> +       mutex_unlock(&ctx->sbe_error_lock);
-> +
-> +       return rc;
-> +}
-
-So any read from this file will clear out the FFDC data, making partial
-reads impossible. As a least-intrusive change, could we set
-SBE_ERROR_COLLECTED on write instead?
-
-Or is there a better interface (a pipe?) that allows multiple FFDC
-captures, destroyed on full consume, without odd read/write side
-effects?
-
->         rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> -       if (rc < 0)
-> +       if (rc < 0) {
-> +               if (resp_len) {
-> +                       bool notify = false;
-> +
-> +                       mutex_lock(&ctx->sbe_error_lock);
-> +                       if (ctx->sbe_error != SBE_ERROR_PENDING)
-> +                               notify = true;
-> +                       ctx->sbe_error = SBE_ERROR_PENDING;
-
-                          [...]
-
-> +                       ctx->ffdc_len = resp_len;
-> +                       memcpy(ctx->ffdc, resp, resp_len);
-
-This will clear out the previous error it if hasn't been collected by
-userspace. Is that really what you want for *first* fail data capture?
-:)
+Thanks for the reminder. We have a queue of FSI patches to send out. I
+hope to get that done this coming merge window.
 
 Cheers,
 
-
-Jeremy
-
+Joel
