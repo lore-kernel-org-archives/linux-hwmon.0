@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9346AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 17:52:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AEA9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 18:32:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7FA106108F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 17:52:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69B3561108
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 18:32:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241347AbhIPRxr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Sep 2021 13:53:47 -0400
-Received: from mail-bn8nam12on2048.outbound.protection.outlook.com ([40.107.237.48]:45477
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S238226AbhIPSeI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Sep 2021 14:34:08 -0400
+Received: from mail-co1nam11on2086.outbound.protection.outlook.com ([40.107.220.86]:54784
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1345906AbhIPRr0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Sep 2021 13:47:26 -0400
+        id S240656AbhIPSdi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Sep 2021 14:33:38 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K7+eE0DOVutFDqNnCeU5H4vYVjSQ9D9PK2XBZScX+viwrW85vkB1coflqW8WkvLilg75vDEbW+oqQuAc6bPevpINzIhDupuytBF1mlI2GF6XoydcqV4pWT3ZAca21Tet6/wi4zbSDDfjKNtRuVEQFxXqpbIkiatvmuBxaqWe0QjE/DR407/6RCrPexx3rzJoS2/MI0ZGMl8UAWPnilUH5ILH/3/4EpRrqSncGVfYEfkVFFdi4+ENtDx08B2n/AuPoi45TSZjZbnLpkT1vR9hrPK+LeCYxBqpO55hUOiBoDYI8Fis79df8X44T2rVsaqclUyiiUH/sZomnima/jErDw==
+ b=PNrF7l4G8PbfAOLtBITqc4NB9hALlFREQNkc6W25n86k+nccnJ/0Yp7ab6Y7RuORr/Pimn58ULS5F9/8i64qEnqiPVBN2JP+2vmkZjoiCsM7EaNNXdqRYTZnea/oNrPs86fIxz+0V17j7droiAlN+eaxWVSo1s2olcMXJNXigVcRRTiSPTMRFM4ZxU97u9cWpjmyNdJUD5zGB7ejLQaAnMYO0wBE2XT5ylNRxeIFQJqRwvlTuBl5xsd5JxMhCe/T+nYjJ13+xHkMZ2NK35+zHpN8pNlBoLvSBqOBEPqcoCTH/jOTJciBMP/PncGCpVOMUkdie2b4PSb3MwaX8zReMg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=a8c6uleDn4hiqOPVwSJBk4vaoQJnlcFPrzg04Uvf49U=;
- b=jjPUHUekucvDfrrKbbe/AUwMzIAoqaN9EdkCo3Cx/j/YlD7MTXbQNEEFMxAnRCWqFEKjh9lYKZGOOUCZI5TBHbl3rLgVbKnwLdJ2TNEg90SXVAUvMP5dWzwK9pjB/zt9gJGd9+uK6JwnfX1DMS9dhaVqygon+noOsM+OWgoBWECq0ku9VUMxwQfFoTi/VsYlM3CRMJgWQmHAkQj0Tz5pJ1YJYn/gD+03ITbAMo7mMKIZO+VG8+HXPi81x/sSDWoEKAJAtw5nVMjxJhJZf/zqK1NbpIOhQWV62vJQNZ/pZ6ePjhz4Ni6m0yZ/BcrUun5Vta+854TV00gL2VhiYoc+nA==
+ bh=sEfAbn0gfPyyNIY+emBW+AFLZ8pGw8om4gnA/utAIjo=;
+ b=mm+N7iglrGbK0K7uZbvSknV+gwr6H5cZVlHGf2FrvtD4hzAehx9L1j1I9SvZ++aQSRrB8ushs11k9B2LG6CQhmBxTuvIkauhsxseXR4XCO+O8NOHhOZ68ee8i30q5FZES43utudgowVfazu12fCslWZDaOHMKoLhTG6QITfVFaPUvCShVv5RAWOhpN/nxZH3tFWYQV9zc6cvGuhYzGDWLe5ac6XODZsvFTl8MwkJWb0YFX7Gy0E85vledP6bVmPdUqApxll/Vq789n9NFJhE7Qg+tDXCw0CaI7K+keIbX5K5Oh90SKkH3fkjTb6+DkpoJ51lo8c8ght3EgRK8tUF6Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.112.34) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
@@ -33,18 +33,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a8c6uleDn4hiqOPVwSJBk4vaoQJnlcFPrzg04Uvf49U=;
- b=Y6dUW81ckzJO7T7yUQkZNaE43eP7B5nYvZiscYjKiUNBJVqpTmkhC426YLd3DxHOtegJHBvAAv6fUAHfdImj/47uE6q6I6OueVFscp8I+Fz6r1tc8OK5XmOQBUPyCxKDWwZv5Bj7PgHALj4sAg/B0eUXxl/Og5QMCSP3NdMS0Q33gOxOz/pw6SY43GMySTmPSIXV5ra4ZOloge7qMgpjv54hpx6pzWkdj3TY3XUkMm6ZhImVr6dzSR46QNoEzjqkWj35LodRjqCRCyQChhNrKUvPV1T0BEf7xclIHffqtDKHs9WLTc0nkzHyxC62feZwfFjCyPUoOEhEK22+iLJ9gA==
-Received: from BN0PR03CA0016.namprd03.prod.outlook.com (2603:10b6:408:e6::21)
- by MWHPR1201MB0175.namprd12.prod.outlook.com (2603:10b6:301:50::10) with
+ bh=sEfAbn0gfPyyNIY+emBW+AFLZ8pGw8om4gnA/utAIjo=;
+ b=NpuTWgnniEWBB7QgCbmsGySkl2Tb5kvaoc+WHut0ArTo3BkR4jiaLNFXqW9uqFnv92NhUIaimS2bAt9428JDQ4voI1Mdy0g/MUSNjLuqCvtIuCwHOWEfPHF1E+L82ZNaWXCxCynxrYZufj3yYz3NBdsXBs0ddgl/+b4GezMjQjURtZIMoBlws1TpO8ocwVFJfFIYyv1zPN1WqaKd1it3FOXPO+nZaE9R8I75KqOr6wJWjmph6yFJYN4Ui7YAOi0CkpsQaG1ar92i1BIKpCtUCDx9EyKkc48b1mvGKRtCHvBSgz/UxC8FHOQjNRwzYktKAlNJGHxzVFVWclsUfmEw9w==
+Received: from BN9PR03CA0653.namprd03.prod.outlook.com (2603:10b6:408:13b::28)
+ by DM6PR12MB3561.namprd12.prod.outlook.com (2603:10b6:5:3e::26) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.16; Thu, 16 Sep
- 2021 17:46:04 +0000
-Received: from BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e6:cafe::d7) by BN0PR03CA0016.outlook.office365.com
- (2603:10b6:408:e6::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Thu, 16 Sep
+ 2021 18:32:16 +0000
+Received: from BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13b:cafe::f2) by BN9PR03CA0653.outlook.office365.com
+ (2603:10b6:408:13b::28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend
- Transport; Thu, 16 Sep 2021 17:46:03 +0000
+ Transport; Thu, 16 Sep 2021 18:32:16 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
  smtp.mailfrom=nvidia.com; roeck-us.net; dkim=none (message not signed)
  header.d=none;roeck-us.net; dmarc=pass action=none header.from=nvidia.com;
@@ -52,49 +52,49 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.112.34 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.112.34; helo=mail.nvidia.com;
 Received: from mail.nvidia.com (216.228.112.34) by
- BN8NAM11FT024.mail.protection.outlook.com (10.13.177.38) with Microsoft SMTP
+ BN8NAM11FT068.mail.protection.outlook.com (10.13.177.69) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 17:46:03 +0000
+ 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 18:32:16 +0000
 Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 16 Sep
- 2021 17:46:02 +0000
+ 2021 18:32:15 +0000
 Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.187.6) by
  DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.18; Thu, 16 Sep 2021 17:46:01 +0000
+ 15.0.1497.18; Thu, 16 Sep 2021 18:32:13 +0000
 From:   Vadim Pasternak <vadimp@nvidia.com>
 To:     <linux@roeck-us.net>
 CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH hwmon v2 1/1] hwmon: (mlxreg-fan) Return non-zero value when fan current state is enforced from sysfs
-Date:   Thu, 16 Sep 2021 20:44:45 +0300
-Message-ID: <20210916174445.868196-1-vadimp@nvidia.com>
+Subject: [PATCH hwmon v3 1/1] hwmon: (mlxreg-fan) Return non-zero value when fan current state is enforced from sysfs
+Date:   Thu, 16 Sep 2021 21:31:51 +0300
+Message-ID: <20210916183151.869427-1-vadimp@nvidia.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [172.20.187.6]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
  DRHQMAIL107.nvidia.com (10.27.9.16)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 92db3d6a-bfe4-41c1-b19b-08d97939da70
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0175:
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB0175DC820D8905E2858DC53CAFDC9@MWHPR1201MB0175.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 2e6ea1d6-bb0f-4fdf-47dd-08d979404f26
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3561:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3561663F7E0D0573C6AE360FAFDC9@DM6PR12MB3561.namprd12.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IhW6syKo7P/cNUDPxMdev5jTdPA6s3RF/tTbf70FmOIeMp89hUzR8N7RxMFJbaDoocQe4u7e3s1CkHlcBNbyb/OznA+B9JU+Qsa5hQCmZxRQrnFPdYOuUXlrBRLFANEk/qJCOdgysLzL6AARo5UtDg+zuiJAIGsWe+1eoXFU4tPXexbCA93E7NGeICTEVqwhFfGkV3pyxLTTsDQkbm0fnmCIzdKs2/4v+R4E3llKGXvX5poGHzTf99zz9iDoo5eEXBuSZWYMuAXw8kUspCZhBg0hvJv6+DRRSHQgMAPYxey7mWaZULNJrUy37UFv9pq7boEKGD5gZwwynokxLOGqwjZQPyIKOJ2Fm/zOE+IaiiZd7bPQdeRm53WEw2I0Pr4EiEuJLpXBnhRqgTW9syP3+dnJ3GscrTv5dFCZAWBS1raOC9L1x2VcbKEwMLuCxdmKyGNhY1n9Vh13NSwDzpYT7v3EhI3lT6707S6RHwxmrUWWM5K/8zHjr+wAQqMiCuXFC3rD8CzPtKkHDNy6p+SnhS7Rx3M7KT63t2IfidrWWmSUtU7LiV8pnJpTMcfMsdpQNvuRgsd+M0VsbFxh0nQW/IhmoMAdlP88apVdedmMhpbwBPV9H+q5jFAmfuFMazktsN7MFWvejEiIgi8kAVAaOQyv3HvSeGgGEK5nQ6EemWO+4hkxK+0w1/bDyxsAeRi9CWm2ejyB+uRrUbUZMORGJw==
-X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(2616005)(54906003)(316002)(356005)(7636003)(36756003)(70206006)(86362001)(82310400003)(47076005)(36860700001)(6916009)(508600001)(1076003)(6666004)(107886003)(8936002)(8676002)(26005)(5660300002)(16526019)(186003)(83380400001)(4326008)(2906002)(336012)(70586007)(426003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dAvHmXpdQRSBiVmOW29wAY7pRCTSVC8p77U1v8hCHB8qRBT/MIA+sy/UiLwXoDgjL1iyTuimoO3TeJNJhWMCu985iAj9UMhDyUne0g7XI+Nlo8x3xXzl6aLcrzTiUruG7xCBbNZ9aS7MfaATTWx3kzo/agVWIgCgMZPcm1c7K78y+L37COtVvDStIwIKsVbpkYNzB2ve8KKyKJwyMEaheE8JI/kiZ3YuXCTeglzr728xKnAdNsImp8dxguGtkbXa5Jc6j9xGjEXGm+mM8XElT4LOkOFH3dDGw9Q/kzsEemXPzhJkE7fzlikhXMszIuONTwFht42aLY3hxHkbUHkogUu8yAH2nqw8s2tEyvHgLtM6bRxim60rzJ9wbBqe5Bx7dnjh1N1JmZbdwn2xAi9aGr2ors8cn454tFoJozt1U7I76neSSO9mrQPrbmEEKKZP+575zauVXDtUttFLSy148ia8ss00UklFasQasYqm7zjuIWjXD7mGmw7mZ5g7f2q+TaVG6/++iQqMLTwBtyDuVJolLHoZeQDEroAnlxMNa3nxq4UaPsidoX305bING+DqFG89gUx0yNawg8yWiwNJS+8r5a3brNlSWTwqnkDrjTuEHpyZjvi9uY7UGlp33H3vwoqAie3qRhHaM+WRqqrKjINOnHrEe1Cnkj18W0996ItO8syTqDFw/g440N9+gwQhruyIGwvfynG3drMbz3Or5Q==
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(336012)(47076005)(316002)(6916009)(16526019)(186003)(8676002)(107886003)(508600001)(2906002)(70206006)(70586007)(36756003)(426003)(7636003)(86362001)(356005)(54906003)(82310400003)(8936002)(4326008)(83380400001)(2616005)(36860700001)(1076003)(6666004)(26005)(5660300002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 17:46:03.2932
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 18:32:16.0813
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92db3d6a-bfe4-41c1-b19b-08d97939da70
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e6ea1d6-bb0f-4fdf-47dd-08d979404f26
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0175
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3561
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -163,19 +163,32 @@ Here is the trace from KASAN:
 Fixes: 65afb4c8e7e4: (hwmon: (mlxreg-fan) Add support for Mellanox FAN driver)
 Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
+v2->v3:
+ Comments pointed out by Guenter:
+ - Fix error code handling.
 v0->v2:
  Comments pointed out by Guenter:
  - Fix comment.
  - Drop boolean variable 'config'.
  - Drop conversion in 'return' in mlxreg_fan_set_cur_state().
 ---
- drivers/hwmon/mlxreg-fan.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/hwmon/mlxreg-fan.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index 116681fde33d..adcf6cdbf53c 100644
+index 116681fde33d..89fe7b9fe26b 100644
 --- a/drivers/hwmon/mlxreg-fan.c
 +++ b/drivers/hwmon/mlxreg-fan.c
+@@ -315,8 +315,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ {
+ 	struct mlxreg_fan *fan = cdev->devdata;
+ 	unsigned long cur_state;
++	int i, config = 0;
+ 	u32 regval;
+-	int i;
+ 	int err;
+ 
+ 	/*
 @@ -329,6 +329,12 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
  	 * overwritten.
  	 */
@@ -185,7 +198,7 @@ index 116681fde33d..adcf6cdbf53c 100644
 +		 * For configuration non-zero value is to be returned to avoid thermal
 +		 * statistics update.
 +		 */
-+		err = 1;
++		config = 1;
  		state -= MLXREG_FAN_MAX_STATE;
  		for (i = 0; i < state; i++)
  			fan->cooling_levels[i] = state;
@@ -194,7 +207,7 @@ index 116681fde33d..adcf6cdbf53c 100644
  		cur_state = MLXREG_FAN_PWM_DUTY2STATE(regval);
  		if (state < cur_state)
 -			return 0;
-+			return err;
++			return config;
  
  		state = cur_state;
  	}
@@ -203,7 +216,7 @@ index 116681fde33d..adcf6cdbf53c 100644
  		return err;
  	}
 -	return 0;
-+	return err;
++	return config;
  }
  
  static const struct thermal_cooling_device_ops mlxreg_fan_cooling_ops = {
