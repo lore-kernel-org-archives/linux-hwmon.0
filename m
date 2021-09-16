@@ -2,100 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37D4AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 20:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6509DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 20:13:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1BC45611CA
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 20:11:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AC26611EE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 20:13:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237759AbhIPUMi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Sep 2021 16:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S235196AbhIPUO7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Sep 2021 16:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbhIPUMh (ORCPT
+        with ESMTP id S229456AbhIPUO7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Sep 2021 16:12:37 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6E6C061756
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 13:11:16 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p29so23191296lfa.11
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 13:11:16 -0700 (PDT)
+        Thu, 16 Sep 2021 16:14:59 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA17C061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 13:13:38 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id n2-20020a9d6f02000000b0054455dae485so4612070otq.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 13:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zu9vDGjBH/c1GwA4DO06e/FELXSh704ia9MKIbXI+tY=;
-        b=QqV/TSyvqEuFfRPRashNipb7Miu6y/Wx05ntrOUCB291k+AIWICHSrTP7t+zvRjdJt
-         cDms/iQwDgJW3WXM659EyUCTt5q66hrNYKGb/ft8t0R8WN/S7vTfeI5mEpkDc4lGYtTA
-         snTXX+mj4HVUJiSjxCXItu5SvxsVLib9TZZhjkVXNhz/Ce7F6vGdkCExEptDyFAWtsYN
-         gZz1sRoziih7R2Okh8ZK6MsjjFCEaAcpa26tBhRKdmwT/JeD8kbFIzp6wmxg0xPXQUxu
-         YzKHcW+7yWqzXKBsakqGlQgSWAJGnSX80gRvos2uxOxgtm+s7DHhy2O9zD0WAp9K5CCP
-         ClCw==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WSi2TxvGMpqzFS5/ngCUTvFwz2rlcORIGd+cgG+Y/Ko=;
+        b=hKoMg04XBDQWtylX5X+Jr23tJv8EakDjp8UC0mz5+WPP/oZSCNo5ohymsNEM/Dp6F4
+         5AGEZhF7juIVF+sWVCBIu9hhBbhtceAt11xaOJLfZsm7d/f1CYGqTuyd+2q0OXN8U5s8
+         bi+rI1lzYKKy9o9vMKN8gYTzEOoJ6vyru9gmNgjrb1SCclTT7YMAT1TBGt6sFzpm60e8
+         7EkxBt8WgO/x2mDKssdixSd7QAnQF3puQsdWPtZ1SBesB3PdRMlz5umie4pB6/xwf14D
+         1/GY93aB4/AW0HjnOksqmd9DjYCpUOXEl+1K4EZbxCUW+bYv7d0IUqvFyZ9EZI7R/C1E
+         bIcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zu9vDGjBH/c1GwA4DO06e/FELXSh704ia9MKIbXI+tY=;
-        b=Gmi00w73eCT6QGJoFHSfxpTo5OEJZrGq2iaFg/y4fZ5hdfSNH0N9hMRpq0hNPkH6eW
-         0M/N9VDP1LL9FJ9eBg7yPJVwzkayYlYrH94zrbT6Pm66TYWMO0Ie1g4wBGS/4OQ0cyce
-         QU9XevMs3tkPVNXn8/AXSFuEf762wiHK+NVKWzxF4YKXYKh1/vbf2Iz/E89t/pbfT1go
-         gqNkovyXaMECchrh0Zi7btJgX2lsScD1bzJ/IS8ivaWTrA9H+8natoUdJyMV7OHniBzB
-         dUavNFyWJrFd+kIwHS27EQwciBf6S5CAek1mPvbiI5ZDpkQX9dOPkBk9NpkIlRsd0ici
-         8XlA==
-X-Gm-Message-State: AOAM533Uz6uQ6yei+VZ9Pib1Yn3F7+HqM+ogwGp0LbQQbAL7ktKo+OpN
-        LgItBTMtLEE+qsji29Xl0+kh46rrIXtKzcZLANB2U/krcjsHKA==
-X-Google-Smtp-Source: ABdhPJzbK8PRHhLqc5IVMBPRDMMMgXkc/UjRCEL24yCbtWAuWLaBUpDzRhwlaHm11W0oTfcD+0Z7CqasqhTMYjSiFP8=
-X-Received: by 2002:a05:651c:178e:: with SMTP id bn14mr6693269ljb.521.1631823074554;
- Thu, 16 Sep 2021 13:11:14 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=WSi2TxvGMpqzFS5/ngCUTvFwz2rlcORIGd+cgG+Y/Ko=;
+        b=LzFmk4BFI22SjmpzpLllGgpnQQQA85DpxVUWZqtp+wuSdnzkxmFnCfN2NUjJ9pyXWz
+         UGGw8bTUdXUaZnRHfGseEAoaCRVa7fUMlKbXY8On0krdpVYVLt+FQ7W03so2oYH3Nzpr
+         8gQ9Ji5cVO1h8e+Zi69pOVugmAy76gROxupIn0wK5zpMJ/5xIOoxNSWU6xjUxe4zuZec
+         ADezcNZjRGLZG3C6LzhV4/MKu0rveYA8f5vUGknqfwEJ0w27dlSrkHAzZhrCiWih4IIl
+         bExDLDeDIrX/lFTzM+y8Rz0hlgNL6UiysR/MZan9IHxZ+BigsX9fsy4bQPUWIYwy11+V
+         +/Ng==
+X-Gm-Message-State: AOAM531ZT8OMKwNk03yDhdSZO3rG9qbiAmgjAL+QTp0ArjDDRejBIBAC
+        uR1nzfGV4/nFMv5jtZX+Jdk=
+X-Google-Smtp-Source: ABdhPJxYU7+oXR29Lnxgqt07vl1l1ptU0MrSYa1q+wJ4PjDbFaqwGQs5gTM1mL2rY7PSEqZ/1x/gtw==
+X-Received: by 2002:a9d:3e08:: with SMTP id a8mr6386693otd.155.1631823217729;
+        Thu, 16 Sep 2021 13:13:37 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j8sm897071ooc.21.2021.09.16.13.13.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 13:13:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 16 Sep 2021 13:13:35 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH hwmon v3 1/1] hwmon: (mlxreg-fan) Return non-zero value
+ when fan current state is enforced from sysfs
+Message-ID: <20210916201335.GA1942947@roeck-us.net>
+References: <20210916183151.869427-1-vadimp@nvidia.com>
 MIME-Version: 1.0
-References: <20210910130337.2025426-1-osk@google.com> <71c17c47-ca9e-e9d2-7b89-cc25b512c06a@roeck-us.net>
- <CABoTLcRZ43EUVzbqWniu64PkB7Yx4RMYKjaBxaSihk+k0Ca-gA@mail.gmail.com>
- <722b27f6-4390-9b5b-f6f2-75ce9e967d12@roeck-us.net> <CABoTLcSdkmuBxd5Yh6z2Oqm1-_Vd4J5Ni1i1qq5s07mWu7Ndew@mail.gmail.com>
- <20210914150859.GB3457579@roeck-us.net> <CABoTLcQfS5-UL92NR9vbc2YrGJv3oQPYCqAm-diNoq-tkHP_hQ@mail.gmail.com>
- <c410eba9-f6cf-4dbf-797f-48afde9c1898@roeck-us.net> <CABoTLcQWXerMWPvWUqjykiNcx9oGoP8aEcuDwcQ36yu-CBc0pA@mail.gmail.com>
- <382858f5-e833-d4b9-f189-449671992ba5@roeck-us.net> <CABoTLcST=74wRbtMA2SdmeHd0WmU7id05ouSfw4PFw2nJt_gLw@mail.gmail.com>
- <9869ed19-b8ab-d9e5-e791-a02eeb2c5eed@roeck-us.net>
-In-Reply-To: <9869ed19-b8ab-d9e5-e791-a02eeb2c5eed@roeck-us.net>
-From:   Oskar Senft <osk@google.com>
-Date:   Thu, 16 Sep 2021 16:10:58 -0400
-Message-ID: <CABoTLcS6krUnqDU7=1+_wBPoGN==VfmZHDQ4rWVZUv7c3ExNkQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: hwmon: Add nct7802 bindings
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210916183151.869427-1-vadimp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> I think there was a reason for "sensors", because there can be other
-> bindings on the same level. Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> lists "regulators", for example.
->
-> Where did you find the "sensors" example for ltc2978 ? I don't see it
-> in the upstream kernel. Or was that derived from the official "regulators"
-> bindings ?
+On Thu, Sep 16, 2021 at 09:31:51PM +0300, Vadim Pasternak wrote:
+> Fan speed minimum can be enforced from sysfs. For example, setting
+> current fan speed to 20 is used to enforce fan speed to be at 100%
+> speed, 19 - to be not below 90% speed, etcetera. This feature provides
+> ability to limit fan speed according to some system wise
+> considerations, like absence of some replaceable units or high system
+> ambient temperature.
+> 
+[ ... ]
+> 
+> Fixes: 65afb4c8e7e4: (hwmon: (mlxreg-fan) Add support for Mellanox FAN driver)
+> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 
-Yes, I just followed the structure from there, renaming "regulators"
-as "sensors".
+Applied.
 
-
-> Yes, let's do that. I'd like us to keep the "sensors" subnode to have a clear
-> association and differentiator to other sub-nodes such as "regulators".
-> Open is if we can use "temperature-sensor@0" or if it would have to be
-> a chip specific "ltd", but I think we can sort that out after suggesting
-> an initial set of bindings to Rob.
-Makes sense, I'll do that. Now I just need to figure out how to
-express that in YAML ...
-
-I'll send a new patch as soon as I figured that out and got it to work.
-
-Thanks for your input!
-
-Oskar.
+Thanks,
+Guenter
