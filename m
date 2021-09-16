@@ -7,69 +7,70 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A6EDC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 13:33:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 744D2C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 13:41:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F53460F12
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 13:33:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 586196120F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 13:41:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240153AbhIPNeV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Sep 2021 09:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S240324AbhIPNmg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Sep 2021 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbhIPNeE (ORCPT
+        with ESMTP id S240272AbhIPNmf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Sep 2021 09:34:04 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F142C061574
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 06:32:43 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id t2-20020a4ae9a2000000b0028c7144f106so2065463ood.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 06:32:43 -0700 (PDT)
+        Thu, 16 Sep 2021 09:42:35 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B456C061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 06:41:15 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id s69so1565678oie.13
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 06:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Us4cvlsT2U+9Ma9yMo8IaVrbkG+xmBqHdD4KAvjv3as=;
-        b=DElKDokMnw39EUKZl9ur8CoI7JnL4bNmdKbHXxuB44j6ZFtlwlu1mD5XVr0/vleLPF
-         Z+SWMuEL8S9cAQt1RrRW3kLZ3taGz1NwR8Xqnp97e2HMe8Zihf2rMkn3daKVIOE5S0Cp
-         EI3bFVuDEpqRjYUoTPWIW6TF9UzOrrp8vIByzC06+TGKgRudaa7XRxbpjZ0HtZ6OTTDh
-         AH7I9hdTtcnfN1XV+GpMoBZQA9KP6kj4/2uEszbn4G5ll3P01R69zLFK6U3LdZCs+AjQ
-         913hRYECgnfDibpRNY9s/9mSbKJe8y6KjkMFOQzzUcOos+MoMyDP3rhZ7tNmTEgNEGwZ
-         GRqw==
+        bh=1S0+DbDxU199O+AKJ02IJcghGrb1eGXaA/1C+J+bFso=;
+        b=OzFEOykkDqzUvLx24cIbZWpbX+utN+7hzE6mTVhehfsrwNADKv2H2lKe1IIdQmjlIZ
+         i8oxMJTsexdOWoD8+9C1et1S2RvjCU+7hrQz9aCFj8uI/BxBE7p0sjx7+zCtyVTrZ/bU
+         RCPPfkXlvJfc3qOjurtmPlYtyh/h/RGfvUuGI13hapN7FF1E4d+BNNgM5U7eecTqySMG
+         dce+xy8klRLIkMHqayWlHMMep4Jh+gM6HL2qAaygQjbLM3f16qgXHFXyJvVNJYm9/3d0
+         Ohrj+cYTJODN27kK7QU+2njDisWVfSNXaG3X+Ump0OtTbhJrtpwgX9zBSI9CEcUCAF+B
+         /nBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Us4cvlsT2U+9Ma9yMo8IaVrbkG+xmBqHdD4KAvjv3as=;
-        b=uCp4yw+NtgKjVIUREnRhDdmN02LIdA8uXYD3/Slh+21xFTG6TmTN+PCOlbl5CfU9Ah
-         D5HX0j5vUBo5DfCh3Aq+U9KTL2FVpE2fAvOX9hqaBRkdWgo12YSj1iTbKhlnRUHcjdPD
-         SX8WjQ2547e3xKMKN0Bv+DVSyDmq9ZSgUare/NopGpUwiksPZ3L8DazjpZE5+l6oDGsI
-         rWSGs8TsDTu7jzxr8MOPfqgbj0WlzoxlOZYRI84woonaN0LttFPLVFAkdUMe07dtX40x
-         tNBVY6u9kcz6EH9BMui50AF2hvLVx/BYnirc5Zl3+rvPAo2E5+qYa8TJV9rYMljO1JUQ
-         i8rQ==
-X-Gm-Message-State: AOAM533yPgkClyKp1CHx2+0coJx/KSZM43Y69p4OZ7m0PS3UDSsf8r2h
-        1dJzJh2p/oFYG30IgT+pPV0VLjKxRyc=
-X-Google-Smtp-Source: ABdhPJyIwe1piMysWtdvN48KP8MlJDtA7UR2y7IS8d59Ef4CNEdZTPH6G+ltkg2bFmc/9/wk13J7KA==
-X-Received: by 2002:a4a:e942:: with SMTP id v2mr4334319ood.96.1631799162285;
-        Thu, 16 Sep 2021 06:32:42 -0700 (PDT)
+        bh=1S0+DbDxU199O+AKJ02IJcghGrb1eGXaA/1C+J+bFso=;
+        b=7X36VZR5ujlfTLj+1U/vnBxThygC4B8ppH4pBUUPH5xqWJit7EuibMCtB/AQW75+gO
+         PyZ2EihXhEOFSTWc4Z4ns7uGuCbhLisRvskgniEN7GOmEjYFdGOA6inPUYJOlMnk+V0i
+         Y5Fdk8ZABXu8MajVNevr8aFtxpm1M46eGUTBR6JUyOWBAsjbcyubOk0piVsVnEfYSfxG
+         D2jmTG7y+3rFbJpfR4DS+OVi9P7B/ISJ8ouPk0GAV9rGi7azLdRlWxVu4AHS1xU6+w2Y
+         yjW9vV/taOIRZVglsXQJTD0HpGSp2zCNWuuEPgx5waRmVJrqiWyJpquP2AoO011eKwkb
+         BsRA==
+X-Gm-Message-State: AOAM53001BTvr6m0FEnucB0O8ipdtikvrv779+KzGupO1NAiNGHMYlav
+        f8x7ATybD6lULgAq2cAglFNltWG2NfU=
+X-Google-Smtp-Source: ABdhPJwOaIvkFSpRHaUGdUPluS1pJWy8GNTg6IDfBtGX6aNVsO2YUL1lq2rMWtA/g31Zu6soWCaSRA==
+X-Received: by 2002:aca:670c:: with SMTP id z12mr3802773oix.14.1631799674420;
+        Thu, 16 Sep 2021 06:41:14 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c10sm812914ots.48.2021.09.16.06.32.41
+        by smtp.gmail.com with ESMTPSA id y24sm822810oto.40.2021.09.16.06.41.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Sep 2021 06:32:41 -0700 (PDT)
+        Thu, 16 Sep 2021 06:41:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH hwmon 1/1] hwmon: (mlxreg-fan) Return non-zero value when
- fan current state is enforced from sysfs
+Subject: Re: [PATCH hwmon-next 2/3] hwmon: (mlxreg-fan) Extend driver to
+ support multiply PWM
 To:     Vadim Pasternak <vadimp@nvidia.com>
 Cc:     linux-hwmon@vger.kernel.org
-References: <20210916132153.831099-1-vadimp@nvidia.com>
+References: <20210916132254.831200-1-vadimp@nvidia.com>
+ <20210916132254.831200-3-vadimp@nvidia.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <41984583-663d-79bd-9cbb-de3a93e0c1e3@roeck-us.net>
-Date:   Thu, 16 Sep 2021 06:32:40 -0700
+Message-ID: <9020e080-39d4-d365-c587-93da76ec2ea3@roeck-us.net>
+Date:   Thu, 16 Sep 2021 06:41:12 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210916132153.831099-1-vadimp@nvidia.com>
+In-Reply-To: <20210916132254.831200-3-vadimp@nvidia.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,124 +78,184 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/16/21 6:21 AM, Vadim Pasternak wrote:
-> Fan speed minimum can be enforced from sysfs. For example, setting
-> current fan speed to 20 is used to enforce fan speed to be at 100%
-> speed, 19 - to be not below 90% speed, etcetera. This feature provides
-> ability to limit fan speed according to some system wise
-> considerations, like absence of some replaceable units or high system
-> ambient temperature.
+On 9/16/21 6:22 AM, Vadim Pasternak wrote:
+> Add additional PWM attributes in order to support the systems, which
+> can be equipped with up-to four PWM controllers. System capability of
+> additional PWM support is validated through the reading of relevant
+> registers.
 > 
-> Request for changing fan minimum speed is configuration request and can
-> be set only through 'sysfs' write procedure. In this situation value of
-> argument 'state' is above nominal fan speed maximum.
-> 
-> Return non-zero code in this case to avoid
-> thermal_cooling_device_stats_update() call, because in this case
-> statistics update violates thermal statistics table range.
-> The issues is observed in case kernel is configured with option
-> CONFIG_THERMAL_STATISTICS.
-> 
-> Here is the trace from KASAN:
-> [  159.506659] BUG: KASAN: slab-out-of-bounds in thermal_cooling_device_stats_update+0x7d/0xb0
-> [  159.516016] Read of size 4 at addr ffff888116163840 by task hw-management.s/7444
-> [  159.545625] Call Trace:
-> [  159.548366]  dump_stack+0x92/0xc1
-> [  159.552084]  ? thermal_cooling_device_stats_update+0x7d/0xb0
-> [  159.635869]  thermal_zone_device_update+0x345/0x780
-> [  159.688711]  thermal_zone_device_set_mode+0x7d/0xc0
-> [  159.694174]  mlxsw_thermal_modules_init+0x48f/0x590 [mlxsw_core]
-> [  159.700972]  ? mlxsw_thermal_set_cur_state+0x5a0/0x5a0 [mlxsw_core]
-> [  159.731827]  mlxsw_thermal_init+0x763/0x880 [mlxsw_core]
-> [  160.070233] RIP: 0033:0x7fd995909970
-> [  160.074239] Code: 73 01 c3 48 8b 0d 28 d5 2b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 99 2d 2c 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0 ff ..
-> [  160.095242] RSP: 002b:00007fff54f5d938 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> [  160.103722] RAX: ffffffffffffffda RBX: 0000000000000013 RCX: 00007fd995909970
-> [  160.111710] RDX: 0000000000000013 RSI: 0000000001906008 RDI: 0000000000000001
-> [  160.119699] RBP: 0000000001906008 R08: 00007fd995bc9760 R09: 00007fd996210700
-> [  160.127687] R10: 0000000000000073 R11: 0000000000000246 R12: 0000000000000013
-> [  160.135673] R13: 0000000000000001 R14: 00007fd995bc8600 R15: 0000000000000013
-> [  160.143671]
-> [  160.145338] Allocated by task 2924:
-> [  160.149242]  kasan_save_stack+0x19/0x40
-> [  160.153541]  __kasan_kmalloc+0x7f/0xa0
-> [  160.157743]  __kmalloc+0x1a2/0x2b0
-> [  160.161552]  thermal_cooling_device_setup_sysfs+0xf9/0x1a0
-> [  160.167687]  __thermal_cooling_device_register+0x1b5/0x500
-> [  160.173833]  devm_thermal_of_cooling_device_register+0x60/0xa0
-> [  160.180356]  mlxreg_fan_probe+0x474/0x5e0 [mlxreg_fan]
-> [  160.248140]
-> [  160.249807] The buggy address belongs to the object at ffff888116163400
-> [  160.249807]  which belongs to the cache kmalloc-1k of size 1024
-> [  160.263814] The buggy address is located 64 bytes to the right of
-> [  160.263814]  1024-byte region [ffff888116163400, ffff888116163800)
-> [  160.277536] The buggy address belongs to the page:
-> [  160.282898] page:0000000012275840 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888116167000 pfn:0x116160
-> [  160.294872] head:0000000012275840 order:3 compound_mapcount:0 compound_pincount:0
-> [  160.303251] flags: 0x200000000010200(slab|head|node=0|zone=2)
-> [  160.309694] raw: 0200000000010200 ffffea00046f7208 ffffea0004928208 ffff88810004dbc0
-> [  160.318367] raw: ffff888116167000 00000000000a0006 00000001ffffffff 0000000000000000
-> [  160.327033] page dumped because: kasan: bad access detected
-> [  160.333270]
-> [  160.334937] Memory state around the buggy address:
-> [  160.356469] >ffff888116163800: fc ..
-> 
-> Fixes: 65afb4c8e7e4: (hwmon: (mlxreg-fan) Add support for Mellanox FAN driver)
 > Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 > ---
->   drivers/hwmon/mlxreg-fan.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
+>   drivers/hwmon/mlxreg-fan.c | 55 +++++++++++++++++++++++++++++---------
+>   1 file changed, 43 insertions(+), 12 deletions(-)
 > 
 > diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-> index 116681fde33d..13e73f05b9cb 100644
+> index 6e6c7437db94..930636868ef5 100644
 > --- a/drivers/hwmon/mlxreg-fan.c
 > +++ b/drivers/hwmon/mlxreg-fan.c
-> @@ -315,6 +315,7 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+> @@ -13,6 +13,8 @@
+>   #include <linux/thermal.h>
+>   
+>   #define MLXREG_FAN_MAX_TACHO		14
+> +#define MLXREG_FAN_MAX_PWM		4
+> +#define MLXREG_FAN_PWM_NOT_CONNECTED	0xff
+>   #define MLXREG_FAN_MAX_STATE		10
+>   #define MLXREG_FAN_MIN_DUTY		51	/* 20% */
+>   #define MLXREG_FAN_MAX_DUTY		255	/* 100% */
+> @@ -105,7 +107,7 @@ struct mlxreg_fan {
+>   	void *regmap;
+>   	struct mlxreg_core_platform_data *pdata;
+>   	struct mlxreg_fan_tacho tacho[MLXREG_FAN_MAX_TACHO];
+> -	struct mlxreg_fan_pwm pwm;
+> +	struct mlxreg_fan_pwm pwm[MLXREG_FAN_MAX_PWM];
+>   	int tachos_per_drwr;
+>   	int samples;
+>   	int divider;
+> @@ -119,6 +121,7 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
 >   {
->   	struct mlxreg_fan *fan = cdev->devdata;
->   	unsigned long cur_state;
-> +	bool config = false;
+>   	struct mlxreg_fan *fan = dev_get_drvdata(dev);
+>   	struct mlxreg_fan_tacho *tacho;
+> +	struct mlxreg_fan_pwm *pwm;
 >   	u32 regval;
->   	int i;
 >   	int err;
-> @@ -329,6 +330,7 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
->   	 * overwritten.
->   	 */
->   	if (state >= MLXREG_FAN_SPEED_MIN && state <= MLXREG_FAN_SPEED_MAX) {
-> +		config = true;
->   		state -= MLXREG_FAN_MAX_STATE;
->   		for (i = 0; i < state; i++)
->   			fan->cooling_levels[i] = state;
-> @@ -342,8 +344,9 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+>   
+> @@ -169,9 +172,10 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   		break;
+>   
+>   	case hwmon_pwm:
+> +		pwm = &fan->pwm[channel];
+>   		switch (attr) {
+>   		case hwmon_pwm_input:
+> -			err = regmap_read(fan->regmap, fan->pwm.reg, &regval);
+> +			err = regmap_read(fan->regmap, pwm->reg, &regval);
+>   			if (err)
+>   				return err;
+>   
+> @@ -195,6 +199,7 @@ mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   		 int channel, long val)
+>   {
+>   	struct mlxreg_fan *fan = dev_get_drvdata(dev);
+> +	struct mlxreg_fan_pwm *pwm;
+>   
+>   	switch (type) {
+>   	case hwmon_pwm:
+> @@ -203,7 +208,8 @@ mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   			if (val < MLXREG_FAN_MIN_DUTY ||
+>   			    val > MLXREG_FAN_MAX_DUTY)
+>   				return -EINVAL;
+> -			return regmap_write(fan->regmap, fan->pwm.reg, val);
+> +			pwm = &fan->pwm[channel];
+> +			return regmap_write(fan->regmap, pwm->reg, val);
+>   		default:
+>   			return -EOPNOTSUPP;
 >   		}
+> @@ -235,7 +241,7 @@ mlxreg_fan_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+>   		break;
 >   
->   		cur_state = MLXREG_FAN_PWM_DUTY2STATE(regval);
-> +		/* Return non-zero value in case only configuration is perfromed through sysfs. */
-
-performed.
-
-I am having difficulty parsing the comment. Should it say "configuration is only supported ..." ?
-
->   		if (state < cur_state)
-> -			return 0;
-> +			return 1;
+>   	case hwmon_pwm:
+> -		if (!(((struct mlxreg_fan *)data)->pwm.connected))
+> +		if (!(((struct mlxreg_fan *)data)->pwm[channel].connected))
+>   			return 0;
 >   
->   		state = cur_state;
->   	}
-> @@ -359,7 +362,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
->   		dev_err(fan->dev, "Failed to write PWM duty\n");
+>   		switch (attr) {
+> @@ -270,6 +276,9 @@ static const struct hwmon_channel_info *mlxreg_fan_hwmon_info[] = {
+>   			   HWMON_F_INPUT | HWMON_F_FAULT,
+>   			   HWMON_F_INPUT | HWMON_F_FAULT),
+>   	HWMON_CHANNEL_INFO(pwm,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+>   			   HWMON_PWM_INPUT),
+>   	NULL
+>   };
+> @@ -300,7 +309,7 @@ static int mlxreg_fan_get_cur_state(struct thermal_cooling_device *cdev,
+>   	u32 regval;
+>   	int err;
+>   
+> -	err = regmap_read(fan->regmap, fan->pwm.reg, &regval);
+> +	err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
+>   	if (err) {
+>   		dev_err(fan->dev, "Failed to query PWM duty\n");
 >   		return err;
->   	}
-> -	return 0;
-> +	/* Return non-zero value if current state has been enforced through sysfs. */
-> +	return (config) ? 1 : 0;
-
-Unnecessary conversion, and unnecessary (). C automatically converts bool true/false
-to 1/0. If you want to avoid the automatic conversion for some reason, please don't
-use a bool variable to start with.
-
+> @@ -339,7 +348,7 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+>   		for (i = state; i <= MLXREG_FAN_MAX_STATE; i++)
+>   			fan->cooling_levels[i] = i;
+>   
+> -		err = regmap_read(fan->regmap, fan->pwm.reg, &regval);
+> +		err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
+>   		if (err) {
+>   			dev_err(fan->dev, "Failed to query PWM duty\n");
+>   			return err;
+> @@ -358,7 +367,7 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+>   
+>   	/* Normalize the state to the valid speed range. */
+>   	state = fan->cooling_levels[state];
+> -	err = regmap_write(fan->regmap, fan->pwm.reg,
+> +	err = regmap_write(fan->regmap, fan->pwm[0].reg,
+>   			   MLXREG_FAN_PWM_STATE2DUTY(state));
+>   	if (err) {
+>   		dev_err(fan->dev, "Failed to write PWM duty\n");
+> @@ -390,6 +399,22 @@ static int mlxreg_fan_connect_verify(struct mlxreg_fan *fan,
+>   	return !!(regval & data->bit);
 >   }
 >   
->   static const struct thermal_cooling_device_ops mlxreg_fan_cooling_ops = {
+> +static int mlxreg_pwm_connect_verify(struct mlxreg_fan *fan,
+> +				     struct mlxreg_core_data *data)
+> +{
+> +	u32 regval;
+> +	int err;
+> +
+> +	err = regmap_read(fan->regmap, data->reg, &regval);
+> +	if (err) {
+> +		dev_err(fan->dev, "Failed to query pwm register 0x%08x\n",
+> +			data->reg);
+> +		return err;
+> +	}
+> +
+> +	return regval != MLXREG_FAN_PWM_NOT_CONNECTED;
+> +}
+> +
+>   static int mlxreg_fan_speed_divider_get(struct mlxreg_fan *fan,
+>   					struct mlxreg_core_data *data)
+>   {
+> @@ -418,8 +443,8 @@ static int mlxreg_fan_speed_divider_get(struct mlxreg_fan *fan,
+>   static int mlxreg_fan_config(struct mlxreg_fan *fan,
+>   			     struct mlxreg_core_platform_data *pdata)
+>   {
+> +	int tacho_num = 0, tacho_avail = 0, pwm_num = 0, pwm_avail = 0, i;
+>   	struct mlxreg_core_data *data = pdata->data;
+> -	int tacho_num = 0, tacho_avail = 0, i;
+>   	bool configured = false;
+>   	int err;
+>   
+> @@ -449,13 +474,19 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
+>   			fan->tacho[tacho_num++].connected = true;
+>   			tacho_avail++;
+>   		} else if (strnstr(data->label, "pwm", sizeof(data->label))) {
+> -			if (fan->pwm.connected) {
+> -				dev_err(fan->dev, "duplicate pwm entry: %s\n",
+> +			if (pwm_num == MLXREG_FAN_MAX_TACHO) {
+> +				dev_err(fan->dev, "too many pwm entries: %s\n",
+>   					data->label);
+>   				return -EINVAL;
+>   			}
+> -			fan->pwm.reg = data->reg;
+> -			fan->pwm.connected = true;
+> +
+> +			err = mlxreg_pwm_connect_verify(fan, data);
+> +			if (err)
+> +				return err;
+> +
+> +			fan->pwm[pwm_num].reg = data->reg;
+> +			fan->pwm[pwm_num].connected = true;
+
+I don't see where pwm_num is ever increased. Also, given the context,
+don't see why pwm_avail would be necessary. This is different to the
+tacho code, which distinguishes between num and avail.
+
+> +			pwm_avail++;
+>   		} else if (strnstr(data->label, "conf", sizeof(data->label))) {
+>   			if (configured) {
+>   				dev_err(fan->dev, "duplicate conf entry: %s\n",
 > 
 
