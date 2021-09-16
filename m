@@ -2,279 +2,218 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7C9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 21:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED81FC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 22:24:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 836F861209
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 21:31:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC43B61130
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 22:24:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbhIPVdN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Sep 2021 17:33:13 -0400
-Received: from mail-bn8nam11on2044.outbound.protection.outlook.com ([40.107.236.44]:57274
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240560AbhIPVdN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Sep 2021 17:33:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oLQJEsKvmF5Lz+uxlj8wssDWQdEs9LxW9Q64Pbx7pj3IK6hQF6MRmFmBqy7FGONcHzF/uMrseKu1VTV+Ovnlg9HBhi7ji5yboXEn8WL2BUKdgd41qIjkYpFoxdgEzl7aNu8kLk1NQK8HsbpqNTRdnk58sL8KqcC7rmo079VJQz7fiN3TE/uqlQjTDrZGt20Wztzrl+mlem/6e76NSwcReRnrhQWGWdgWh1nmYG5560xpf2r2ZK0aSCEQpuQU3qAa3qapXtsOFTL60C+rvW/lOfY4B9ygywvL4xGFKY3h9TovNyuXCnYLL+xu6cg7HWa7X/onZ+OzSq6KvEg386aVHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=scl83DYKJYn6LgicXNoaXlTqSPQY7wxAnOMqaZtkxH4=;
- b=Bdi3Z7L6vVshC8/E7jSDBL99VT4id/aABBR+bAaoQUBwUxZUsHWzVa5gohKXQXZsHlb0RyP7G4JturWfVQqP9x6yEZiOcwWPdau06Pw6vYs2LQ4e6bWxohpGhsgcfqD6sxunBwSl/AyYWDsDEetX70cdM0iUnelG7YkZLy6MtlS35cjgDpNutIcxdjPote3AAj25IT+0etptngHSyjILWUbcXeW8MeWhiRb2h/lqstj4ipZCdDarlSyA3IF1ISwgnIy4ndBtAICvkNism2ztIIE9RGAibDlmi529tUVcFsO5x69JDVudQMAs/+Hea7g8XRHCoNf/dnYXHAstVaVaOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.34) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=scl83DYKJYn6LgicXNoaXlTqSPQY7wxAnOMqaZtkxH4=;
- b=p6/pzEQ4acQ1EetydWnNZh7gGD316tUbJQHCj3zaqCL+pntFN1zJ0p94LJs+9v1tHVKSnEpGqplQPMbJqLie3SPO5Dwh/BDVYdeMnuR8ZqZoo98IkRuFZTbkkN9xll9TKOgunmxiDeLxmwhxIuJzHbIOOlI7QqFjlrKUh5+aiF5oJo4AGPDwg7hNhC0u7i5Y3Ao82d34Ymj7gYrE4Txx20QoR3euHtWYD9WeO/TvWpq0cj21Zm6xAP/wTQ/HX8f/J/SY83SWRn/JPmlUSGiCvEjuRATVCz6T6idFzOXwOmN5RBOZsnURGXScFmqtXxYB4EnV1O6IsoSQiTAyamyVIw==
-Received: from DM5PR2001CA0003.namprd20.prod.outlook.com (2603:10b6:4:16::13)
- by CY4PR12MB1654.namprd12.prod.outlook.com (2603:10b6:910:3::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.15; Thu, 16 Sep
- 2021 21:31:50 +0000
-Received: from DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:16:cafe::7a) by DM5PR2001CA0003.outlook.office365.com
- (2603:10b6:4:16::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend
- Transport; Thu, 16 Sep 2021 21:31:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
- smtp.mailfrom=nvidia.com; roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.34; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.34) by
- DM6NAM11FT039.mail.protection.outlook.com (10.13.172.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 21:31:50 +0000
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 16 Sep
- 2021 21:31:49 +0000
-Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.187.6) by
- DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.18; Thu, 16 Sep 2021 21:31:47 +0000
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH hwmon-next v3 1/1] hwmon: (mlxreg-fan) Extend driver to support multiply cooling devices
-Date:   Fri, 17 Sep 2021 00:31:28 +0300
-Message-ID: <20210916213128.874990-1-vadimp@nvidia.com>
-X-Mailer: git-send-email 2.31.1
+        id S240983AbhIPWZ4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Sep 2021 18:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240710AbhIPWZz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Sep 2021 18:25:55 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA65C061574;
+        Thu, 16 Sep 2021 15:24:34 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so10300003otf.6;
+        Thu, 16 Sep 2021 15:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=horqbrKKBh5EaYsFSZBjjI5vv+f1TueHYQcsHmdV28A=;
+        b=VvvaGVnSbWz4dIiKBfloJ6w2mPPFDBHtlLPBh5yuGtFJx+JEHzgWzGAGsZH6rzHqmw
+         esYp7J40BOoP8eDALEnCqrvgfEaxENWhwHSAtxJJemkAT+RSPbhiZiZ4WGVQU1j4bUbE
+         Q9OLiTr/3MFBDUhSrkQhNJD3AbKzPkwk3C+jHAOiiSrzI6szrzOmwKTL66C4tkHupfc0
+         U6TPVYpCOWtIYJCCIgSg+QmoCexDsyw3xmqjOs8NjmO61YkGlVUJjujEssRFDlDaiMOD
+         dYUWx7tNE4NUyL06H7fHH0lkljq8oEJCsxF9A3Uy2AQzSi7hbrnEhMph9AwUb2Xs8wvT
+         MxEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=horqbrKKBh5EaYsFSZBjjI5vv+f1TueHYQcsHmdV28A=;
+        b=wpcSHfuX7j5CV2BTpbC0WNgDHZP4I10YEAp4Kabzl9tqqX54Clr7aV5oy/TF4OnBVn
+         /LJ0N2Zrljg6i2vSy+VszCBKZD4s6SkPvb/FluEsd6gyLoIwreayz6PrOtEd/nfS3m/p
+         bcZrjahR/dS22Rx6h4S8vMhnjmr2UbzjBLlypjIlB2BT8x0GBtw8dG3WNc2JWnUmhM8a
+         FLNXoWRyzz5l69g3UM2znL2FaMemKIDrY4LKj3p+6LoCsRNlEaaaqSbOIAok8pD/6++S
+         0K3CZ1ZBEVje47hJdS4ZP1YyhqUBM67XrPGoEMm7Lh4f+daZevoFRF7hGO9GIDVrPOrs
+         f1bg==
+X-Gm-Message-State: AOAM5329fVbWOA+Pg+TPqEqi84Zu+6GOJ30D82rD3WcXERQnrKdHpHht
+        iIdmGgiQapXqNnNn2f6W9BHluMsGbDs=
+X-Google-Smtp-Source: ABdhPJwgEnPqFTwxlO83sbDnELvvxpXn6gR+u1hwhUqZvD2YuvVzqp1QRuH/bGyzj+d4GcggKZsZNQ==
+X-Received: by 2002:a05:6830:18c7:: with SMTP id v7mr6709934ote.126.1631831073222;
+        Thu, 16 Sep 2021 15:24:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w6sm1005228otp.3.2021.09.16.15.24.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Sep 2021 15:24:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     Bernhard Seibold <mail@bernhard-seibold.de>,
+        =?UTF-8?Q?P=c3=a4r_Ekholm?= <pehlm@pekholm.org>,
+        to.eivind@gmail.com, "Artem S . Tashkinov" <aros@gmx.com>,
+        Vittorio Roberto Alfieri <me@rebtoor.com>,
+        Sahan Fernando <sahan.h.fernando@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210916202233.40334-1-pauk.denis@gmail.com>
+ <20210916202233.40334-5-pauk.denis@gmail.com>
+ <78a08749-5094-b7a6-1672-6087f33c62e3@roeck-us.net>
+ <20210917002433.27226146@penguin.lxd>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v7 3/3] hwmon: (nct6775) Support access via Asus WMI
+Message-ID: <e2329d97-3d9f-3579-f24f-b1e3d9660f9f@roeck-us.net>
+Date:   Thu, 16 Sep 2021 15:24:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20210917002433.27226146@penguin.lxd>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.20.187.6]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c4171c15-ef65-4043-9ba5-08d979596513
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1654:
-X-Microsoft-Antispam-PRVS: <CY4PR12MB1654F4AE4390D632087D3CC6AFDC9@CY4PR12MB1654.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gy1LliEtDCJcUF7LfSRWnVPVDBpiVyRgZab553buqgIvt8CNUU30g2YLVvgsE+SN8ge0eJF/vjWiZRl56suU7+J8g/nM4Crym6Bzd2Dad0KbgCrb/Zc0gy69wGewi9s3PoSkNq0AoPPc/y1uzYtM//88POFkLrQRK8tqTdyD0OPiCfI+SuoPHjCMcctTjr9D0ZhcgYyT+8NyHGQq4597GWqBsDsCrupk5u1b9lAvab7u/DotkhlrjQnw7M0ncYZh5Hc4cGF+FkYQ93/szEctj43NKZU4FnTI801jfyYaLAEr4vDDmfOvlTIpcjBn41+hKI8ZT/IeHMsjy2EhvU3AaPS+PHi+8ObhJjxBn16MJQM44iZ82P9B6mh8JqRZN7znZJo6lELaf8zRboSAUyEMw7RMh+QYCh4rQQGZewxV5X19MmddWvYd69+z6li6truY3QtqnpVpIZdtfuPYvw5mERyu9GZ4a5YfNjsyd73bfMmpPpzGU2CHsOAQ2NNSvzfPtyGECxgvon5betyzo6JJdn55SSIiKtenqb3VBCAVRtGZy0i8Vl5U13bxn+oDiAPPgJ9r7nVqBmi506EOUHxAJLljELDYwBXijoYbyiPoQoFlrGuWGxM+YTcPGtP+3yIs59KATPS0S8Noe/0w1JKdfGqVyDtk3kDJKsP4XfE87qNA/3N4NBABVraw5I/vHmZ7D9+0wGHpI74ZGEN66erfzg==
-X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(39860400002)(396003)(36840700001)(46966006)(336012)(8676002)(83380400001)(70206006)(6666004)(6916009)(54906003)(4326008)(26005)(86362001)(70586007)(186003)(82740400003)(426003)(478600001)(5660300002)(36860700001)(356005)(1076003)(16526019)(107886003)(7636003)(47076005)(2616005)(8936002)(316002)(36756003)(2906002)(82310400003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 21:31:50.3370
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4171c15-ef65-4043-9ba5-08d979596513
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1654
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for additional cooling devices in order to support the
-systems, which can be equipped with up-to four PWM controllers.
+On 9/16/21 2:24 PM, Denis Pauk wrote:
+> On Thu, 16 Sep 2021 14:10:49 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> On 9/16/21 1:22 PM, Denis Pauk wrote:
+>>> Support accessing the NCT677x via Asus WMI functions.
+>>>
+>>> On mainboards that support this way of accessing the chip, the
+>>> driver will usually not work without this option since in these
+>>> mainboards, ACPI will mark the I/O port as used.
+>>>
+>>> Code uses ACPI firmware interface to communicate with sensors with
+>>> ASUS motherboards:
+>>> * PRIME B460-PLUS,
+>>> * ROG CROSSHAIR VIII IMPACT,
+>>> * ROG STRIX B550-E GAMING,
+>>> * ROG STRIX B550-F GAMING,
+>>> * ROG STRIX B550-F GAMING (WI-FI),
+>>> * ROG STRIX Z490-I GAMING,
+>>> * TUF GAMING B550M-PLUS,
+>>> * TUF GAMING B550M-PLUS (WI-FI),
+>>> * TUF GAMING B550-PLUS,
+>>> * TUF GAMING X570-PLUS,
+>>> * TUF GAMING X570-PRO (WI-FI).
+>>>
+>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+>>> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+>>> Co-developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
+>>> Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
+>>> Tested-by: Pär Ekholm <pehlm@pekholm.org>
+>>> Tested-by: <to.eivind@gmail.com>
+>>> Tested-by: Artem S. Tashkinov <aros@gmx.com>
+>>> Tested-by: Vittorio Roberto Alfieri <me@rebtoor.com>
+>>> Tested-by: Sahan Fernando <sahan.h.fernando@gmail.com>
+>>> Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+>>> Cc: Guenter Roeck <linux@roeck-us.net>
+>>>
+>>> ---
+>>> Changes in v7:
+>>>     - Remove unrequred & 0xff with int8 variables.
+>>>     - Make ASUSWMI_UNSUPPORTED_METHOD as default value for WMI
+>>> responce, before run wmi_evaluate_method().
+>>>     - Rename ASUSWMI_MGMT2_GUID to ASUSWMI_MONITORING_GUID.
+>>>     - Replace checks of 'err != -EINVAL' with 'err >= 0' for
+>>> match_string result.
+>>>
+>>> Changes in v6:
+>>>     - Minimaze codes inside code inside defined(CONFIG_ACPI_WMI).
+>>>
+>>> Changes in v5:
+>>>     - Use IS_ENABLED(CONFIG_ACPI_WMI) instead
+>>> defined(CONFIG_ACPI_WMI)
+>>>
+>>> Changes in v4:
+>>>     - Fix build without ACPI WMI.
+>>>
+>>> Changes in v3:
+>>>     - Remove unrequired type conversions.
+>>>     - Save result of match_string before check.
+>>>
+>>> Changes in v2:
+>>>     - Split changes to separate patches.
+>>>     - Limit WMI usage by DMI_BOARD_NAME in checked ASUS motherboards.
+>>> ---
+>>>    drivers/hwmon/Kconfig   |   1 +
+>>>    drivers/hwmon/nct6775.c | 230
+>>> ++++++++++++++++++++++++++++++++++++---- 2 files changed, 210
+>>> insertions(+), 21 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>> index e3675377bc5d..9eefb1014b53 100644
+>>> --- a/drivers/hwmon/Kconfig
+>>> +++ b/drivers/hwmon/Kconfig
+>>> @@ -1423,6 +1423,7 @@ config SENSORS_NCT6683
+>>>    config SENSORS_NCT6775
+>>>    	tristate "Nuvoton NCT6775F and compatibles"
+>>>    	depends on !PPC
+>>> +	depends on ACPI_WMI || ACPI_WMI=n
+>>>    	select HWMON_VID
+>>>    	help
+>>>    	  If you say yes here you get support for the hardware
+>>> monitoring diff --git a/drivers/hwmon/nct6775.c
+>>> b/drivers/hwmon/nct6775.c index 4253eed7f5b0..46262d9d3bd9 100644
+>>> --- a/drivers/hwmon/nct6775.c
+>>> +++ b/drivers/hwmon/nct6775.c
+>>> @@ -55,6 +55,7 @@
+>>>    #include <linux/dmi.h>
+>>>    #include <linux/io.h>
+>>>    #include <linux/nospec.h>
+>>> +#include <linux/wmi.h>
+>>>    #include "lm75.h"
+>>>    
+>>>    #define USE_ALTERNATE
+>>> @@ -132,10 +133,13 @@ MODULE_PARM_DESC(fan_debounce, "Enable
+>>> debouncing for fan RPM signal"); #define SIO_ID_MASK
+>>> 0xFFF8
+>>>    enum pwm_enable { off, manual, thermal_cruise, speed_cruise, sf3,
+>>> sf4 }; +enum sensor_access { access_direct, access_asuswmi };
+>>>    
+>>>    struct nct6775_sio_data {
+>>>    	int sioreg;
+>>> +	int ld;
+>>>    	enum kinds kind;
+>>> +	enum sensor_access access;
+>>>    
+>>>    	/* superio_() callbacks  */
+>>>    	void (*sio_outb)(struct nct6775_sio_data *sio_data, int
+>>> reg, int val); @@ -145,6 +149,90 @@ struct nct6775_sio_data {
+>>>    	void (*sio_exit)(struct nct6775_sio_data *sio_data);
+>>>    };
+>>>    
+>>> +#define ASUSWMI_MONITORING_GUID
+>>> "466747A0-70EC-11DE-8A39-0800200C9A66" +#define
+>>> ASUSWMI_METHODID_RSIO		0x5253494F +#define
+>>> ASUSWMI_METHODID_WSIO		0x5753494F +#define
+>>> ASUSWMI_METHODID_RHWM		0x5248574D +#define
+>>> ASUSWMI_METHODID_WHWM		0x5748574D +#define
+>>> ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE +
+>>> +static int asuswmi_evaluate_method(u32 method_id, u8 bank, u8 reg,
+>>> u8 val, u32 *retval) +{
+> What do you thin about rename asuswmi_evaluate_method() to
+> asuswmi_monitoring_method()? I have found that kernel already have
+> asus_wmi_evaluate_method() that has used different method GUID, so
+> looks as make sense to use different function name. It uses different
+> constants with different names/values and does not intersect with this
+> one.
 
-Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
----
-v2->v3:
- Comments pointed out by Guenter:
- - Drop label "devm_thermal_of_cooling_device_register_fail".
-v0->v2:
- Comments pointed out by Guenter:
- - Drop call to thermal_cooling_device_unregister() in error flow,
-   devices registered by devm_thermal_of_cooling_device_register()
-   should be cleaned automatically.
----
- drivers/hwmon/mlxreg-fan.c | 73 ++++++++++++++++++++++++--------------
- 1 file changed, 47 insertions(+), 26 deletions(-)
+nct6775_asuswmi_evaluate_method or similar, maybe, if you really
+want to rename it.
 
-diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index 1a146cc4b0fd..35228ed112d7 100644
---- a/drivers/hwmon/mlxreg-fan.c
-+++ b/drivers/hwmon/mlxreg-fan.c
-@@ -63,6 +63,8 @@
- 					 MLXREG_FAN_MAX_DUTY,		\
- 					 MLXREG_FAN_MAX_STATE))
- 
-+struct mlxreg_fan;
-+
- /*
-  * struct mlxreg_fan_tacho - tachometer data (internal use):
-  *
-@@ -81,12 +83,18 @@ struct mlxreg_fan_tacho {
- /*
-  * struct mlxreg_fan_pwm - PWM data (internal use):
-  *
-+ * @fan: private data;
-  * @connected: indicates if PWM is connected;
-  * @reg: register offset;
-+ * @cooling: cooling device levels;
-+ * @cdev: cooling device;
-  */
- struct mlxreg_fan_pwm {
-+	struct mlxreg_fan *fan;
- 	bool connected;
- 	u32 reg;
-+	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
-+	struct thermal_cooling_device *cdev;
- };
- 
- /*
-@@ -99,8 +107,6 @@ struct mlxreg_fan_pwm {
-  * @tachos_per_drwr - number of tachometers per drawer;
-  * @samples: minimum allowed samples per pulse;
-  * @divider: divider value for tachometer RPM calculation;
-- * @cooling: cooling device levels;
-- * @cdev: cooling device;
-  */
- struct mlxreg_fan {
- 	struct device *dev;
-@@ -111,8 +117,6 @@ struct mlxreg_fan {
- 	int tachos_per_drwr;
- 	int samples;
- 	int divider;
--	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
--	struct thermal_cooling_device *cdev;
- };
- 
- static int
-@@ -305,11 +309,12 @@ static int mlxreg_fan_get_cur_state(struct thermal_cooling_device *cdev,
- 				    unsigned long *state)
- 
- {
--	struct mlxreg_fan *fan = cdev->devdata;
-+	struct mlxreg_fan_pwm *pwm = cdev->devdata;
-+	struct mlxreg_fan *fan = pwm->fan;
- 	u32 regval;
- 	int err;
- 
--	err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
-+	err = regmap_read(fan->regmap, pwm->reg, &regval);
- 	if (err) {
- 		dev_err(fan->dev, "Failed to query PWM duty\n");
- 		return err;
-@@ -324,7 +329,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
- 				    unsigned long state)
- 
- {
--	struct mlxreg_fan *fan = cdev->devdata;
-+	struct mlxreg_fan_pwm *pwm = cdev->devdata;
-+	struct mlxreg_fan *fan = pwm->fan;
- 	unsigned long cur_state;
- 	int i, config = 0;
- 	u32 regval;
-@@ -348,11 +354,11 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
- 		config = 1;
- 		state -= MLXREG_FAN_MAX_STATE;
- 		for (i = 0; i < state; i++)
--			fan->cooling_levels[i] = state;
-+			pwm->cooling_levels[i] = state;
- 		for (i = state; i <= MLXREG_FAN_MAX_STATE; i++)
--			fan->cooling_levels[i] = i;
-+			pwm->cooling_levels[i] = i;
- 
--		err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
-+		err = regmap_read(fan->regmap, pwm->reg, &regval);
- 		if (err) {
- 			dev_err(fan->dev, "Failed to query PWM duty\n");
- 			return err;
-@@ -369,8 +375,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
- 		return -EINVAL;
- 
- 	/* Normalize the state to the valid speed range. */
--	state = fan->cooling_levels[state];
--	err = regmap_write(fan->regmap, fan->pwm[0].reg,
-+	state = pwm->cooling_levels[state];
-+	err = regmap_write(fan->regmap, pwm->reg,
- 			   MLXREG_FAN_PWM_STATE2DUTY(state));
- 	if (err) {
- 		dev_err(fan->dev, "Failed to write PWM duty\n");
-@@ -541,11 +547,32 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
- 		fan->tachos_per_drwr = tacho_avail / drwr_avail;
- 	}
- 
--	/* Init cooling levels per PWM state. */
--	for (i = 0; i < MLXREG_FAN_SPEED_MIN_LEVEL; i++)
--		fan->cooling_levels[i] = MLXREG_FAN_SPEED_MIN_LEVEL;
--	for (i = MLXREG_FAN_SPEED_MIN_LEVEL; i <= MLXREG_FAN_MAX_STATE; i++)
--		fan->cooling_levels[i] = i;
-+	return 0;
-+}
-+
-+static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
-+{
-+	int i, j;
-+
-+	for (i = 0; i <= MLXREG_FAN_MAX_PWM; i++) {
-+		struct mlxreg_fan_pwm *pwm = &fan->pwm[i];
-+
-+		if (!pwm->connected)
-+			continue;
-+		pwm->fan = fan;
-+		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, "mlxreg_fan", pwm,
-+								    &mlxreg_fan_cooling_ops);
-+		if (IS_ERR(pwm->cdev)) {
-+			dev_err(dev, "Failed to register cooling device\n");
-+			return PTR_ERR(pwm->cdev);
-+		}
-+
-+		/* Init cooling levels per PWM state. */
-+		for (j = 0; j < MLXREG_FAN_SPEED_MIN_LEVEL; j++)
-+			pwm->cooling_levels[j] = MLXREG_FAN_SPEED_MIN_LEVEL;
-+		for (j = MLXREG_FAN_SPEED_MIN_LEVEL; j <= MLXREG_FAN_MAX_STATE; j++)
-+			pwm->cooling_levels[j] = j;
-+	}
- 
- 	return 0;
- }
-@@ -584,16 +611,10 @@ static int mlxreg_fan_probe(struct platform_device *pdev)
- 		return PTR_ERR(hwm);
- 	}
- 
--	if (IS_REACHABLE(CONFIG_THERMAL)) {
--		fan->cdev = devm_thermal_of_cooling_device_register(dev,
--			NULL, "mlxreg_fan", fan, &mlxreg_fan_cooling_ops);
--		if (IS_ERR(fan->cdev)) {
--			dev_err(dev, "Failed to register cooling device\n");
--			return PTR_ERR(fan->cdev);
--		}
--	}
-+	if (IS_REACHABLE(CONFIG_THERMAL))
-+		err = mlxreg_fan_cooling_config(dev, fan);
- 
--	return 0;
-+	return err;
- }
- 
- static struct platform_driver mlxreg_fan_driver = {
--- 
-2.20.1
-
+Guenter
