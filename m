@@ -7,66 +7,66 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A875C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 19:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A12BC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 19:47:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 545CB60F6C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 19:47:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E319560F6C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 19:47:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbhIPTtG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Sep 2021 15:49:06 -0400
-Received: from mail-bn8nam11on2040.outbound.protection.outlook.com ([40.107.236.40]:15072
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S234616AbhIPTtI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Sep 2021 15:49:08 -0400
+Received: from mail-mw2nam10on2057.outbound.protection.outlook.com ([40.107.94.57]:3553
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234616AbhIPTtF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Sep 2021 15:49:05 -0400
+        id S234580AbhIPTtI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Sep 2021 15:49:08 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RElUaLr1JFUkYbB3IRuZ2dGYekzPetPOUV9yUAUmo0c+olViqVijEQ2sCLlYEuIaEQDSVKl98HFOwCvvaA7Zkl1fbTokWVF6Zsq5grEiPTAJF49Xb5V4qMVgwHDli2GjJ9S0Tpgjc4S3WD573dIc4tAQgkDl2Y+Y9mQJJzOgoMg1gfj7nx9EXbREukCJiSsn7z5R19gcsj5koSXTOoMzMvUZyFkb8XXL+fArBwkEySyDLUZpGGvUg/yM95dUt4dQLuP+tbVnmfV5weVrDfUIDfv4mniTUGFikILtBQ+BtnOu4Wibicu7Y3MG8xNexRvdN/5RSLQKdLs2EkZJwz6QHg==
+ b=IyckDZhIY3WVrm1ilhbb0sVR8UpQoGHP9ffnonpD+C/kQYKROa1Byad9TRVU39KyPZ/4amB3347AhsFUyr4E4CvA/VignuhWFzLp1fLRQ3iolq7Qu2XRSxkwkbNQRwcVt9GTMspUz7zfFyr3kOltFU4vGYHotL+8/ZXedqk3Aq+oFc6iFVOTxYMeEHmBN/aOHUS1Uct1kC8wSI+QI7pKM0kuItzKuaSoAyjL4ranj8pHQhB1/6icDcZ6qx3C+tdksYDh8TQv140eZgVgYPWg3S6g5aMQpLmujfgzWqX2Lr7vN1/2Z/Tq//lJ8ZCoM0B7ieiZRO0VLDzUQKZdN105ug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=CrUwt4baDZoKgOyC3vYhLkxIyiqJSpoDgMzpNhoxPaM=;
- b=ElYNqmDjmhHkG2eP78323t3+sDlHS4D21qGhCubOmIAO9RafiNWI9UlN87MdGRKeR7QYuDciHdA7D1vDjgL9CXVmojdnhc13u+9SlQ/ppZrIC0TSUk0NUn3T06gwcuftzonOylq3t2aes8DtYAIOYsTbYRqjhQXa4y7Icl4VaUBfQ3DGXmej226McLWMyBmUoYGMyMl/aUC5Od4i/ENhO9xMtXLpZWbU+Z04lWAJhL9+j9i7iwpYWzDUX26KYGMwimmrevHoJbM2N+2+mN83RslMxOy9wsht6AlLwE+8wkeBkQl9pdUSvnHHRVk468B0Yk1cBJ9kyKVD41uym9SxmA==
+ bh=ZBd14Nb0+qO8oshTNkjvLOZYT+IyjcnywDXaIDlP05k=;
+ b=EZrN5bMIWVN0t2tyf7mUL08yABCY+cJbh7VaP7EloPM3eeQRgShDatReTwMLk/L2/OK96iFH43sK9yO8G/tQZYLOcyGZzwXtXU+L7v5BhzbkajE060jnibY2G4anxZCs3M35Jm5sR++L9Ta77qJZeHUse29LNK9J6AOJ1oJ5VVPgW/hqBcp3KweliFB13DLitaMESZxqDvt8+KUerFozfXvRWNoc9VELCmZVgOxbp1OjVxHrmkrvPYZ6doXuOOcwVKrPFM+w9nm/7K/fAcd0XgBsPFdB9HWmrxUkc0c8PPw/4NIsZuZ5SCnNQxw8JGNNOiXfA/DSaPGF3BlLxUPNaQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.32) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ 216.228.112.34) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CrUwt4baDZoKgOyC3vYhLkxIyiqJSpoDgMzpNhoxPaM=;
- b=mk11Ln4kCUc6a3mnc7DlaJUNAcI6nc22eXUUNi9x/UdUfZZjHgDGUi6Ml1PA88T/DJ4aD3TmagkChEN+PsdVWUBGLKJGjlPB9dN9ydLd3Z+UjqWQ02uQlgsxFZUxD4H8qB6cEgypH5bIN7Pi5nt7iKqV1/j2ooIoYh+999L/iyWZtca+lRf9zwlLa6ptrfQKnC4ZoNj0NTosIyNax+IztRkWcq4G3XBFIXHrdwGpQ2d4kxIZQKAWBM76zqUeV29xYKC98+tiit8iyGPg1zc2Yv/fEFgtJYXihiBRMnCNir468Wht3qDsnOSu6kzd0v5C6qiu5rXrbcbUGrmX7JME+w==
-Received: from BN9P222CA0007.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::12)
- by BY5PR12MB4917.namprd12.prod.outlook.com (2603:10b6:a03:1d1::8) with
+ bh=ZBd14Nb0+qO8oshTNkjvLOZYT+IyjcnywDXaIDlP05k=;
+ b=j8LEpOjVKmqP7lmXbQ4Kn/v9OUcsiVdW9hpQWdGlzW1dUS3bOaU9e+NF+vWQKE5ASoitAX7uGjnBwpvtUvlv7YNJ6Mmb0AyOitBzlnd45bAiHkD4Nernn0AQVG9ckHjRBqK76JgBsnsTNREKaUREF2aWJeZ5tXDqthgBzGbeQI+IhC0CVZ1fBrpoZT+tw3GsHJatkN8VWsvDhqa3vSUPQp9MGddgXUnw0Z2FiFWFddCRYva1YYFkOCQ6rAnNXk5WLulLvZKRChMoDGTivqfkWi5Nv7vcwBeJgEumXLRSLxlS0x04rEr2SYzSlK61Q+AjV7JXBLmUn2b/sxf1yDrA0Q==
+Received: from BN6PR11CA0001.namprd11.prod.outlook.com (2603:10b6:405:2::11)
+ by SN6PR12MB2669.namprd12.prod.outlook.com (2603:10b6:805:70::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Thu, 16 Sep
- 2021 19:47:43 +0000
-Received: from BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10c:cafe::bf) by BN9P222CA0007.outlook.office365.com
- (2603:10b6:408:10c::12) with Microsoft SMTP Server (version=TLS1_2,
+ 2021 19:47:45 +0000
+Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:2:cafe::21) by BN6PR11CA0001.outlook.office365.com
+ (2603:10b6:405:2::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend
- Transport; Thu, 16 Sep 2021 19:47:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.32)
+ Transport; Thu, 16 Sep 2021 19:47:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
  smtp.mailfrom=nvidia.com; roeck-us.net; dkim=none (message not signed)
  header.d=none;roeck-us.net; dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.32 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.32; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.32) by
- BN8NAM11FT009.mail.protection.outlook.com (10.13.176.65) with Microsoft SMTP
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 19:47:42 +0000
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 16 Sep
- 2021 12:47:41 -0700
+ 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 19:47:45 +0000
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 16 Sep
+ 2021 19:47:44 +0000
 Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.187.6) by
  DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.18; Thu, 16 Sep 2021 19:47:40 +0000
+ 15.0.1497.18; Thu, 16 Sep 2021 19:47:42 +0000
 From:   Vadim Pasternak <vadimp@nvidia.com>
 To:     <linux@roeck-us.net>
 CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH hwmon-next v2 2/3] hwmon: (mlxreg-fan) Extend driver to support multiply PWM
-Date:   Thu, 16 Sep 2021 22:47:18 +0300
-Message-ID: <20210916194719.871413-3-vadimp@nvidia.com>
+Subject: [PATCH hwmon-next v2 3/3] hwmon: (mlxreg-fan) Extend driver to support multiply cooling devices
+Date:   Thu, 16 Sep 2021 22:47:19 +0300
+Message-ID: <20210916194719.871413-4-vadimp@nvidia.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210916194719.871413-1-vadimp@nvidia.com>
 References: <20210916194719.871413-1-vadimp@nvidia.com>
@@ -78,206 +78,207 @@ X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
  DRHQMAIL107.nvidia.com (10.27.9.16)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a717cc9a-482c-431a-b252-08d9794ad955
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4917:
-X-Microsoft-Antispam-PRVS: <BY5PR12MB491778DE034CE931F36CFB83AFDC9@BY5PR12MB4917.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-MS-Office365-Filtering-Correlation-Id: 9e6cdb92-b78a-459c-9f63-08d9794adac0
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2669:
+X-Microsoft-Antispam-PRVS: <SN6PR12MB26691421C67F85A7AD11205EAFDC9@SN6PR12MB2669.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z1vASturAcvPOECgFusFJwAEPUQey/bFISr+9ROHXdywOe5fE9tU/711mJl6J7RqoyIAfC38sTR1upM6GuWWORTgH3VZ7eNvkb1EOVRPkI5ffEUEw0FNExz+sOSRTWiwYsz/n1BTz3sskb7GIvNBFuRw/NlpbFeupQxcC2RBi4EP0u5HHjm2X0Prl7054iEaDyVkuIdjHKEe3qocPxDFl88nVTSRNIYC9XVSAUDoB+hHgKC+9KSFksa+OtJKlFTD9GYJpzPl9lRvsUsDv7WOFQRmu0hBxAdjPaKAAxP0SJFHz714GRY5+HhU9i6ZU2771H5+CLAp3vIS7+97mmnZ6lz8CjEjQuVAoVFzWgSS2gFbxQZChgQnFdY5CxTsDywPMbr2eyyUGpUCx5hEDR4H3nk/6PXe1qPEghoBclU89mnqqPGbBHALQ1Ukrvv1vwIyUWOTpqjKXbc3n+gA97eSv5zaZ4oOEmhm0RhfM94ROCRKc3lgO7ng1vNohpkW2f5GJyozVaER/2ZTLsW6PEhC3vkygMghPr4ln9hFSkEU6wBT61sHcok+rXVlAq0TkaA6318ndb2qOkgIdh4IaGZaWB6PS8BPHQdB+fa2215loO1ELE78B6MS57Nx7hC0dO1Uk3BRQEnsPk3EDTe8BNyntOArwhKbzp9iWYx6GghOi0GIvbmNRAkAa1J6W2v184fmhIREIWqLifYxOgI5/mYWXQ==
-X-Forefront-Antispam-Report: CIP:216.228.112.32;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(346002)(136003)(39860400002)(396003)(376002)(36840700001)(46966006)(8936002)(6666004)(2906002)(6916009)(70586007)(70206006)(83380400001)(1076003)(356005)(82740400003)(26005)(16526019)(186003)(7636003)(36756003)(47076005)(316002)(36860700001)(478600001)(86362001)(4326008)(8676002)(336012)(5660300002)(2616005)(426003)(54906003)(82310400003)(107886003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: F0U+/M+4Q6rMSe61qCXPOkRXKbpzE+ahVP3rDp+Vq3cJnJ9FDKjZ9hcoUnV7BsC4mhJslPjd7W9qQSu4hw1p4R4EBRW5DDOLVoMuS78wClNwdkX33cb2N6zAnaK2cMxBRAbJ694/l0LJ+IurqIgikfNtq5SSguV7tEmbgZL4eix4bbEOu/wKRPxSfuloSOx2L8pOZtB9soBuCNowqDj1cBXIl0yEq5yQKjcoUy5hff81rzWWBYCAfp0HtrBdeVgrInmMXhpATxOcdac0keRMAOsDtx8D6lnlRgbbEKe0TmWWznDuJtb9TJTpLoZbZK1HvEvyFUs9L0cbrQcnMBB5sNfQfhVrS7qU22JErG6iS0O2NQ+J15BA5f1s4BTWyqmYGpT1xU3ouDQRcmm3I81kFQPjQh0fqD6ZlQZ9eaBijGBPepG7qlzD8wfixJiiV+5qltyhSdqTorfPdkeBV6NmM9rq6A56E5tbiTajvlhlQsb5EfPUCf9NkpKkARJ1hBJqTL6yU4zZjSSDnAAYJauM0PYP/wNYyEosXCf6ei0jupCJAf0RWwsUhgjYv/xzogvaThicbEAXWdRxiJbAI8/LPqy6GY3itpzYP+/qB0SPV0Vs3wV90s6MNMB1oxR66YDCseCSMBNkpQakl4QUUOdh8TuqESAkIVGLDJ18cFKJ3/vRiS752OPxDoTYozEpNAIfnm4jxyFlm/WY3287//ftEA==
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(8936002)(82310400003)(6666004)(86362001)(47076005)(26005)(5660300002)(36860700001)(54906003)(4326008)(1076003)(2906002)(316002)(107886003)(7636003)(6916009)(36756003)(16526019)(186003)(336012)(356005)(70206006)(426003)(70586007)(83380400001)(8676002)(2616005)(508600001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 19:47:42.8799
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 19:47:45.2584
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a717cc9a-482c-431a-b252-08d9794ad955
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e6cdb92-b78a-459c-9f63-08d9794adac0
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.32];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4917
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2669
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add additional PWM attributes in order to support the systems, which
-can be equipped with up-to four PWM controllers. System capability of
-additional PWM support is validated through the reading of relevant
-registers.
+Add support for additional cooling devices in order to support the
+systems, which can be equipped with up-to four PWM controllers.
 
 Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
 v0->v2:
  Comments pointed out by Guenter:
- - Fix handling of PWM counter, increment 'pwm_num', drop 'pwm_avail'.
+ - Drop call to thermal_cooling_device_unregister() in error flow,
+   devices registered by devm_thermal_of_cooling_device_register()
+   should be cleaned automatically.
 ---
- drivers/hwmon/mlxreg-fan.c | 55 +++++++++++++++++++++++++++++---------
- 1 file changed, 43 insertions(+), 12 deletions(-)
+ drivers/hwmon/mlxreg-fan.c | 76 +++++++++++++++++++++++++-------------
+ 1 file changed, 50 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index 0f5b109817a7..1a146cc4b0fd 100644
+index 1a146cc4b0fd..566bee333c3c 100644
 --- a/drivers/hwmon/mlxreg-fan.c
 +++ b/drivers/hwmon/mlxreg-fan.c
-@@ -13,6 +13,8 @@
- #include <linux/thermal.h>
+@@ -63,6 +63,8 @@
+ 					 MLXREG_FAN_MAX_DUTY,		\
+ 					 MLXREG_FAN_MAX_STATE))
  
- #define MLXREG_FAN_MAX_TACHO		14
-+#define MLXREG_FAN_MAX_PWM		4
-+#define MLXREG_FAN_PWM_NOT_CONNECTED	0xff
- #define MLXREG_FAN_MAX_STATE		10
- #define MLXREG_FAN_MIN_DUTY		51	/* 20% */
- #define MLXREG_FAN_MAX_DUTY		255	/* 100% */
-@@ -105,7 +107,7 @@ struct mlxreg_fan {
- 	void *regmap;
- 	struct mlxreg_core_platform_data *pdata;
- 	struct mlxreg_fan_tacho tacho[MLXREG_FAN_MAX_TACHO];
--	struct mlxreg_fan_pwm pwm;
-+	struct mlxreg_fan_pwm pwm[MLXREG_FAN_MAX_PWM];
++struct mlxreg_fan;
++
+ /*
+  * struct mlxreg_fan_tacho - tachometer data (internal use):
+  *
+@@ -81,12 +83,18 @@ struct mlxreg_fan_tacho {
+ /*
+  * struct mlxreg_fan_pwm - PWM data (internal use):
+  *
++ * @fan: private data;
+  * @connected: indicates if PWM is connected;
+  * @reg: register offset;
++ * @cooling: cooling device levels;
++ * @cdev: cooling device;
+  */
+ struct mlxreg_fan_pwm {
++	struct mlxreg_fan *fan;
+ 	bool connected;
+ 	u32 reg;
++	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
++	struct thermal_cooling_device *cdev;
+ };
+ 
+ /*
+@@ -99,8 +107,6 @@ struct mlxreg_fan_pwm {
+  * @tachos_per_drwr - number of tachometers per drawer;
+  * @samples: minimum allowed samples per pulse;
+  * @divider: divider value for tachometer RPM calculation;
+- * @cooling: cooling device levels;
+- * @cdev: cooling device;
+  */
+ struct mlxreg_fan {
+ 	struct device *dev;
+@@ -111,8 +117,6 @@ struct mlxreg_fan {
  	int tachos_per_drwr;
  	int samples;
  	int divider;
-@@ -119,6 +121,7 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- {
- 	struct mlxreg_fan *fan = dev_get_drvdata(dev);
- 	struct mlxreg_fan_tacho *tacho;
-+	struct mlxreg_fan_pwm *pwm;
- 	u32 regval;
- 	int err;
- 
-@@ -169,9 +172,10 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		break;
- 
- 	case hwmon_pwm:
-+		pwm = &fan->pwm[channel];
- 		switch (attr) {
- 		case hwmon_pwm_input:
--			err = regmap_read(fan->regmap, fan->pwm.reg, &regval);
-+			err = regmap_read(fan->regmap, pwm->reg, &regval);
- 			if (err)
- 				return err;
- 
-@@ -195,6 +199,7 @@ mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		 int channel, long val)
- {
- 	struct mlxreg_fan *fan = dev_get_drvdata(dev);
-+	struct mlxreg_fan_pwm *pwm;
- 
- 	switch (type) {
- 	case hwmon_pwm:
-@@ -203,7 +208,8 @@ mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 			if (val < MLXREG_FAN_MIN_DUTY ||
- 			    val > MLXREG_FAN_MAX_DUTY)
- 				return -EINVAL;
--			return regmap_write(fan->regmap, fan->pwm.reg, val);
-+			pwm = &fan->pwm[channel];
-+			return regmap_write(fan->regmap, pwm->reg, val);
- 		default:
- 			return -EOPNOTSUPP;
- 		}
-@@ -235,7 +241,7 @@ mlxreg_fan_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
- 		break;
- 
- 	case hwmon_pwm:
--		if (!(((struct mlxreg_fan *)data)->pwm.connected))
-+		if (!(((struct mlxreg_fan *)data)->pwm[channel].connected))
- 			return 0;
- 
- 		switch (attr) {
-@@ -270,6 +276,9 @@ static const struct hwmon_channel_info *mlxreg_fan_hwmon_info[] = {
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
- 			   HWMON_F_INPUT | HWMON_F_FAULT),
- 	HWMON_CHANNEL_INFO(pwm,
-+			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
- 			   HWMON_PWM_INPUT),
- 	NULL
+-	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
+-	struct thermal_cooling_device *cdev;
  };
-@@ -300,7 +309,7 @@ static int mlxreg_fan_get_cur_state(struct thermal_cooling_device *cdev,
+ 
+ static int
+@@ -305,11 +309,12 @@ static int mlxreg_fan_get_cur_state(struct thermal_cooling_device *cdev,
+ 				    unsigned long *state)
+ 
+ {
+-	struct mlxreg_fan *fan = cdev->devdata;
++	struct mlxreg_fan_pwm *pwm = cdev->devdata;
++	struct mlxreg_fan *fan = pwm->fan;
  	u32 regval;
  	int err;
  
--	err = regmap_read(fan->regmap, fan->pwm.reg, &regval);
-+	err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
+-	err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
++	err = regmap_read(fan->regmap, pwm->reg, &regval);
  	if (err) {
  		dev_err(fan->dev, "Failed to query PWM duty\n");
  		return err;
-@@ -343,7 +352,7 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
- 		for (i = state; i <= MLXREG_FAN_MAX_STATE; i++)
- 			fan->cooling_levels[i] = i;
+@@ -324,7 +329,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 				    unsigned long state)
  
--		err = regmap_read(fan->regmap, fan->pwm.reg, &regval);
-+		err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
+ {
+-	struct mlxreg_fan *fan = cdev->devdata;
++	struct mlxreg_fan_pwm *pwm = cdev->devdata;
++	struct mlxreg_fan *fan = pwm->fan;
+ 	unsigned long cur_state;
+ 	int i, config = 0;
+ 	u32 regval;
+@@ -348,11 +354,11 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 		config = 1;
+ 		state -= MLXREG_FAN_MAX_STATE;
+ 		for (i = 0; i < state; i++)
+-			fan->cooling_levels[i] = state;
++			pwm->cooling_levels[i] = state;
+ 		for (i = state; i <= MLXREG_FAN_MAX_STATE; i++)
+-			fan->cooling_levels[i] = i;
++			pwm->cooling_levels[i] = i;
+ 
+-		err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
++		err = regmap_read(fan->regmap, pwm->reg, &regval);
  		if (err) {
  			dev_err(fan->dev, "Failed to query PWM duty\n");
  			return err;
-@@ -361,7 +370,7 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+@@ -369,8 +375,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 		return -EINVAL;
  
  	/* Normalize the state to the valid speed range. */
- 	state = fan->cooling_levels[state];
--	err = regmap_write(fan->regmap, fan->pwm.reg,
-+	err = regmap_write(fan->regmap, fan->pwm[0].reg,
+-	state = fan->cooling_levels[state];
+-	err = regmap_write(fan->regmap, fan->pwm[0].reg,
++	state = pwm->cooling_levels[state];
++	err = regmap_write(fan->regmap, pwm->reg,
  			   MLXREG_FAN_PWM_STATE2DUTY(state));
  	if (err) {
  		dev_err(fan->dev, "Failed to write PWM duty\n");
-@@ -392,6 +401,22 @@ static int mlxreg_fan_connect_verify(struct mlxreg_fan *fan,
- 	return !!(regval & data->bit);
- }
+@@ -541,13 +547,37 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
+ 		fan->tachos_per_drwr = tacho_avail / drwr_avail;
+ 	}
  
-+static int mlxreg_pwm_connect_verify(struct mlxreg_fan *fan,
-+				     struct mlxreg_core_data *data)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_read(fan->regmap, data->reg, &regval);
-+	if (err) {
-+		dev_err(fan->dev, "Failed to query pwm register 0x%08x\n",
-+			data->reg);
-+		return err;
-+	}
-+
-+	return regval != MLXREG_FAN_PWM_NOT_CONNECTED;
+-	/* Init cooling levels per PWM state. */
+-	for (i = 0; i < MLXREG_FAN_SPEED_MIN_LEVEL; i++)
+-		fan->cooling_levels[i] = MLXREG_FAN_SPEED_MIN_LEVEL;
+-	for (i = MLXREG_FAN_SPEED_MIN_LEVEL; i <= MLXREG_FAN_MAX_STATE; i++)
+-		fan->cooling_levels[i] = i;
++	return 0;
 +}
 +
- static int mlxreg_fan_speed_divider_get(struct mlxreg_fan *fan,
- 					struct mlxreg_core_data *data)
- {
-@@ -420,8 +445,8 @@ static int mlxreg_fan_speed_divider_get(struct mlxreg_fan *fan,
- static int mlxreg_fan_config(struct mlxreg_fan *fan,
- 			     struct mlxreg_core_platform_data *pdata)
- {
-+	int tacho_num = 0, tacho_avail = 0, pwm_num = 0, i;
- 	struct mlxreg_core_data *data = pdata->data;
--	int tacho_num = 0, tacho_avail = 0, i;
- 	bool configured = false;
- 	int err;
++static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
++{
++	int i, j, err;
++
++	for (i = 0; i <= MLXREG_FAN_MAX_PWM; i++) {
++		struct mlxreg_fan_pwm *pwm = &fan->pwm[i];
++
++		if (!pwm->connected)
++			continue;
++		pwm->fan = fan;
++		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, "mlxreg_fan", pwm,
++								    &mlxreg_fan_cooling_ops);
++		if (IS_ERR(pwm->cdev)) {
++			dev_err(dev, "Failed to register cooling device\n");
++			err = PTR_ERR(pwm->cdev);
++			goto devm_thermal_of_cooling_device_register_fail;
++		}
++
++		/* Init cooling levels per PWM state. */
++		for (j = 0; j < MLXREG_FAN_SPEED_MIN_LEVEL; j++)
++			pwm->cooling_levels[j] = MLXREG_FAN_SPEED_MIN_LEVEL;
++		for (j = MLXREG_FAN_SPEED_MIN_LEVEL; j <= MLXREG_FAN_MAX_STATE; j++)
++			pwm->cooling_levels[j] = j;
++	}
  
-@@ -451,13 +476,19 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
- 			fan->tacho[tacho_num++].connected = true;
- 			tacho_avail++;
- 		} else if (strnstr(data->label, "pwm", sizeof(data->label))) {
--			if (fan->pwm.connected) {
--				dev_err(fan->dev, "duplicate pwm entry: %s\n",
-+			if (pwm_num == MLXREG_FAN_MAX_TACHO) {
-+				dev_err(fan->dev, "too many pwm entries: %s\n",
- 					data->label);
- 				return -EINVAL;
- 			}
--			fan->pwm.reg = data->reg;
--			fan->pwm.connected = true;
-+
-+			err = mlxreg_pwm_connect_verify(fan, data);
-+			if (err)
-+				return err;
-+
-+			fan->pwm[pwm_num].reg = data->reg;
-+			fan->pwm[pwm_num].connected = true;
-+			pwm_num++;
- 		} else if (strnstr(data->label, "conf", sizeof(data->label))) {
- 			if (configured) {
- 				dev_err(fan->dev, "duplicate conf entry: %s\n",
+ 	return 0;
++devm_thermal_of_cooling_device_register_fail:
++	return err;
+ }
+ 
+ static int mlxreg_fan_probe(struct platform_device *pdev)
+@@ -584,16 +614,10 @@ static int mlxreg_fan_probe(struct platform_device *pdev)
+ 		return PTR_ERR(hwm);
+ 	}
+ 
+-	if (IS_REACHABLE(CONFIG_THERMAL)) {
+-		fan->cdev = devm_thermal_of_cooling_device_register(dev,
+-			NULL, "mlxreg_fan", fan, &mlxreg_fan_cooling_ops);
+-		if (IS_ERR(fan->cdev)) {
+-			dev_err(dev, "Failed to register cooling device\n");
+-			return PTR_ERR(fan->cdev);
+-		}
+-	}
++	if (IS_REACHABLE(CONFIG_THERMAL))
++		err = mlxreg_fan_cooling_config(dev, fan);
+ 
+-	return 0;
++	return err;
+ }
+ 
+ static struct platform_driver mlxreg_fan_driver = {
 -- 
 2.20.1
 
