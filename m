@@ -2,209 +2,158 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0AD3C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 18:44:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15B5DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 21:18:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97DDD60F4A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 18:44:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E379061155
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 21:18:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242557AbhIQSqD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Sep 2021 14:46:03 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44166 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242488AbhIQSpx (ORCPT
+        id S236137AbhIQVUM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Sep 2021 17:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229861AbhIQVUM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Sep 2021 14:45:53 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18HHTwat021947;
-        Fri, 17 Sep 2021 14:44:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Cu15NbkF8XCdYMaWhSe53yZzJsAWowt8+l6QazcJZNo=;
- b=EyWbQgraP/K7m+gWE1cBSBSq3lkKpWPmJw4h7wvEJq9WqrGlNwz+PN+HX/zijvjZVadE
- JJZF04SeKNDXzp275UT+7gM9tL2AhiqF9fXcJdkiQfyY1zx+SXC/z4ACwPD02rb3FakD
- ttsn3hQmvCpvxQa0grIRXDMFEJ5t7C4PQR5TAps0jIy67nMptkie22mew0HGY9tJWS8A
- /NFvz+cwsiFLecEXsPXOIkWdNYAIrz5+s2f2piJmaObMkcorBBs2U9U1oXnbse2NwQZX
- Kmlio6xHzas581J9QOdiWvojg1al7LziPzM4tFfbJiZaZrGZLHO43tEkBIqweWEb908m Jg== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3b4hdddvdw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Sep 2021 14:44:05 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18HIHvT8025067;
-        Fri, 17 Sep 2021 18:44:03 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01dal.us.ibm.com with ESMTP id 3b4m7ptj73-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Sep 2021 18:44:03 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18HIi24144302716
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Sep 2021 18:44:02 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8079AE062;
-        Fri, 17 Sep 2021 18:44:02 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DF46AE05F;
-        Fri, 17 Sep 2021 18:44:02 +0000 (GMT)
-Received: from v0005c16 (unknown [9.211.95.114])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Sep 2021 18:44:01 +0000 (GMT)
-Message-ID: <24039f18c446432064cf1dfcd59992ba7d4e9973.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary
- sysfs
-From:   Eddie James <eajames@linux.ibm.com>
-To:     Jeremy Kerr <jk@codeconstruct.com.au>, linux-fsi@lists.ozlabs.org
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joel@jms.id.au, linux@roeck-us.net, jdelvare@suse.com,
-        alistair@popple.id.au
-Date:   Fri, 17 Sep 2021 13:44:01 -0500
-In-Reply-To: <ad29d1d9743799ffd770330af6ad174bdfe7c3a0.camel@codeconstruct.com.au>
-References: <20210914213543.73351-1-eajames@linux.ibm.com>
-         <20210914213543.73351-4-eajames@linux.ibm.com>
-         <ad29d1d9743799ffd770330af6ad174bdfe7c3a0.camel@codeconstruct.com.au>
-Organization: IBM
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BaMSJvgU7cT0tdKrrutyp7DqLrUjzNOS
-X-Proofpoint-ORIG-GUID: BaMSJvgU7cT0tdKrrutyp7DqLrUjzNOS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-17_07,2021-09-17_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109030001 definitions=main-2109170110
+        Fri, 17 Sep 2021 17:20:12 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514FDC061574;
+        Fri, 17 Sep 2021 14:18:49 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bq5so38371725lfb.9;
+        Fri, 17 Sep 2021 14:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7x9Mf1nsbfFuOkzeXvxz9R901v90JLdCe3TVldsY/hU=;
+        b=c3evz0QwYHVDcVxisfXFAvO8RICUiC4PjjasrtiFxEpkQQ6gon1LyEYq0ZWOk/7jXV
+         5idg0CFf3f0KNNWAZfRinqAjXTSDrP4sgDgB7G1gurcEGiPaf0UdrdoKdfSvUSJ4Pdkp
+         pLzxoZujRGcMhA3EW8kQPzN8qrms1pniCzmW7Qph2WfezGNJvhbu2HiZdcrwnXZYgtaE
+         A4xkPBwtGh40CsoePMKIKleMANE65d2FcjvTv7XfovjwAze1LLv/lvxMIfXLGMZkyyVH
+         hzGnZHx3elG66MMrGfpxc/GdkJCGXc+jy5EjBwEuMp+VJG5abGJC4bxeALlNosyMebZY
+         RB7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7x9Mf1nsbfFuOkzeXvxz9R901v90JLdCe3TVldsY/hU=;
+        b=56sj8VmuPYjfvP/KCsoYNbd//phf6AhMAv9FPg1yTxX1BIcSB9piHoPkoEmtSB5prS
+         dxV5Qgs/Joz+hJzULaynE9/F+7c0jDQDBMWvVZKaoBR3TG0kUGf7xP6mR1c1NfpWN4Uk
+         SYMQ5TYDr6bR6g1Z8MPqoPx2SJb0e90Vyd2ZmhOIm1sCqQZPDhnGGkNP6ySxXLW4fokb
+         dnfftWomhs3QYcIC9nCWkjJRv6OCeXi8cNshHH3eAYSdzqChKTKOEAN0QP+Hhd2y+1AK
+         WYFaZQWSzdft9oHjszU0mTtuMUG5UEMkzer1MgNfEWQMUhgL7qVBiysfmPbqq0C4aVPj
+         ru2Q==
+X-Gm-Message-State: AOAM5301eMAYqCwQi4M6uU+3eACESzIGCB4Gr0f5A4Q1MqVKkglLC56/
+        OPxNrV9zFloD08/7bBoNByE=
+X-Google-Smtp-Source: ABdhPJw2z7ZatxQWJDsgwRqmquTnN5fBRanLsAp1Ydi6yR8s1qtLGAuP16zuHwQNLYxtSVG1lfs0VQ==
+X-Received: by 2002:a2e:141d:: with SMTP id u29mr4991753ljd.49.1631913527539;
+        Fri, 17 Sep 2021 14:18:47 -0700 (PDT)
+Received: from localhost.localdomain (95-42-179-94.pool.ukrtel.net. [94.179.42.95])
+        by smtp.gmail.com with ESMTPSA id h17sm196037lfg.258.2021.09.17.14.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Sep 2021 14:18:20 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     pauk.denis@gmail.com, Bernhard Seibold <mail@bernhard-seibold.de>,
+        =?UTF-8?q?P=C3=A4r=20Ekholm?= <pehlm@pekholm.org>,
+        to.eivind@gmail.com, "Artem S . Tashkinov" <aros@gmx.com>,
+        Vittorio Roberto Alfieri <me@rebtoor.com>,
+        Sahan Fernando <sahan.h.fernando@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v8 0/3] hwmon: Support access to the NCT677x via Asus WMI.
+Date:   Sat, 18 Sep 2021 00:18:07 +0300
+Message-Id: <20210917211811.39271-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 2021-09-16 at 08:17 +0800, Jeremy Kerr wrote:
-> Hi Eddie,
-> 
-> > Save any FFDC provided by the OCC driver, and provide it to
-> > userspace
-> > through a binary sysfs entry. Do some basic state management to
-> > ensure that userspace can always collect the data if there was an
-> > error. Notify polling userspace when there is an error too.
-> 
-> Super! Some comments inline:
-> 
-> > +enum sbe_error_state {
-> > +       SBE_ERROR_NONE = 0,
-> > +       SBE_ERROR_PENDING,
-> > +       SBE_ERROR_COLLECTED
-> > +};
-> > +
-> >  struct p9_sbe_occ {
-> >         struct occ occ;
-> > +       int sbe_error;
-> 
-> Use the enum here?
+Support accessing the NCT677x via Asus WMI functions.
 
-Yep :) Though I think I will switch to a bool; as I wrote to Guenter,
-the extra "collected" state isn't necessary if I stop trying to report
-two things (the FFDC itself and whether or not there is an error at
-all) with one interface.
+On mainboards that support this way of accessing the chip,
+the driver will usually not work without this option since
+in these mainboards, ACPI will mark the I/O port as used.
 
-> 
-> > +       void *ffdc;
-> > +       size_t ffdc_len;
-> > +       size_t ffdc_size;
-> > +       struct mutex sbe_error_lock;    /* lock access to ffdc data
-> > */
-> > +       u32 no_ffdc_magic;
-> >         struct device *sbe;
-> >  };
-> >  
-> >  #define to_p9_sbe_occ(x)       container_of((x), struct
-> > p9_sbe_occ, occ)
-> >  
-> > +static ssize_t sbe_error_read(struct file *filp, struct kobject
-> > *kobj,
-> > +                             struct bin_attribute *battr, char
-> > *buf,
-> > +                             loff_t pos, size_t count)
-> > +{
-> > +       ssize_t rc = 0;
-> > +       struct occ *occ = dev_get_drvdata(kobj_to_dev(kobj));
-> > +       struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
-> > +
-> > +       mutex_lock(&ctx->sbe_error_lock);
-> > +       if (ctx->sbe_error == SBE_ERROR_PENDING) {
-> > +               rc = memory_read_from_buffer(buf, count, &pos, ctx-
-> > >ffdc,
-> > +                                            ctx->ffdc_len);
-> > +               ctx->sbe_error = SBE_ERROR_COLLECTED;
-> > +       }
-> > +       mutex_unlock(&ctx->sbe_error_lock);
-> > +
-> > +       return rc;
-> > +}
-> 
-> So any read from this file will clear out the FFDC data, making
-> partial
-> reads impossible. As a least-intrusive change, could we set
-> SBE_ERROR_COLLECTED on write instead?
+Could you please review?
 
-Good point. Write would work. How about resetting the error flag once
-pos >= size though, for the sake of simplicity?
+@Guenter Roeck, I have renamed asuswmi_evaluate_method() to 
+nct6775_asuswmi_evaluate_method(). Also i have checked why results of 
+WMI calls are ignored. In most of case initial caller also ignored resuls 
+of the write operation, so i have added logic for stop futher operation 
+after the error and write to logs errors if any in call. 
+I have marked that first two patches are reviewed by you.
 
-> 
-> Or is there a better interface (a pipe?) that allows multiple FFDC
-> captures, destroyed on full consume, without odd read/write side
-> effects?
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Co-developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
+Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
+Tested-by: Pär Ekholm <pehlm@pekholm.org>
+Tested-by: <to.eivind@gmail.com>
+Tested-by: Artem S. Tashkinov <aros@gmx.com>
+Tested-by: Vittorio Roberto Alfieri <me@rebtoor.com>
+Tested-by: Sahan Fernando <sahan.h.fernando@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
 
-I tried to look into pipes, but I'm pretty unclear on how to set one
-up. Doesn't appear as though they are used in kernel much, especially
-as an interface to userspace.
-I'm just not sure its worth having more than one FFDC packet available.
-There would always have to be a maximum number of them anyway to put a
-bound on memory usage. We're somewhat helped here by the fact that OCC
-operations will go out a maximum of once a second, so that's hopefully
-plenty of time for userspace to notice the error and pick up the FFDC.
+---
+Changes in v8:
+  - Rename asuswmi_evaluate_method() to nct6775_asuswmi_evaluate_method().
+  - Add out error message if WMI method is failed.
+  - Stop futher read/write if first operation is failed.
 
-> 
-> >         rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> > -       if (rc < 0)
-> > +       if (rc < 0) {
-> > +               if (resp_len) {
-> > +                       bool notify = false;
-> > +
-> > +                       mutex_lock(&ctx->sbe_error_lock);
-> > +                       if (ctx->sbe_error != SBE_ERROR_PENDING)
-> > +                               notify = true;
-> > +                       ctx->sbe_error = SBE_ERROR_PENDING;
-> 
->                           [...]
-> 
-> > +                       ctx->ffdc_len = resp_len;
-> > +                       memcpy(ctx->ffdc, resp, resp_len);
-> 
-> This will clear out the previous error it if hasn't been collected by
-> userspace. Is that really what you want for *first* fail data
-> capture?
-> :)
+Changes in v7:
+  - Remove unrequred & 0xff with i8 variables.
+  - Make ASUSWMI_UNSUPPORTED_METHOD as default value for WMI responce,
+    before run wmi_evaluate_method().
+  - Rename ASUSWMI_MGMT2_GUID to ASUSWMI_MONITORING_GUID.
+  - Replace checks of 'err != -EINVAL' with 'err >= 0' for match_string result.
+  
+Changes in v6:
+ - Add dependency "ACPI_WMI || ACPI_WMI=n" to Kconfig, 
+ - Minimize size of code under IS_ENABLED(CONFIG_ACPI_WMI),
+ - Remove not requred check of platform_get_resource result,
+ - Split function pointers patch to two separate patches,
+ - Add more board ROG CROSSHAIR * names from bugzilla.
+ 
+Changes in v5:
+  - Use IS_ENABLED(CONFIG_ACPI_WMI) instead defined(CONFIG_ACPI_WMI)
 
-Ah, good point. I will fix that!
+Changes in v4:
+  - Fix naming conflict with inb, outb by add sio prefix to callbacks in
+    nct6775_sio_data.
+  - Fix build without ACPI WMI.    
+    
+Changes in v3:
+  - Remove unrequired type conversions.
+  - Make function declarations one line.
+  - Use nct6775 function pointers in struct nct6775_data instead direct calls.
 
-Thanks for the review Jeremy!
+Changes in v2:
+  - Split changes to separate patches.
+  - Limit WMI usage by DMI_BOARD_NAME in checked ASUS motherboards.
+  - Rearrange code for directly use struct nct6775_sio_data in superio_*()
+    functions.
 
-Eddie
+Denis Pauk (3):
+  hwmon: (nct6775) Use superio_*() function pointers in sio_data.
+  hwmon: (nct6775) Use nct6775_*() function pointers in nct6775_data.
+  hwmon: (nct6775) Support access via Asus WMI
 
-> 
-> Cheers,
-> 
-> 
-> Jeremy
-> 
+ drivers/hwmon/Kconfig   |   1 +
+ drivers/hwmon/nct6775.c | 722 ++++++++++++++++++++++++++--------------
+ 2 files changed, 480 insertions(+), 243 deletions(-)
+
+-- 
+2.33.0
 
