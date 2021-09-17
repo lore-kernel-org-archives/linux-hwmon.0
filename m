@@ -2,218 +2,258 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED81FC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 22:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B03CBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 01:07:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC43B61130
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Sep 2021 22:24:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71C75611EE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 01:07:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240983AbhIPWZ4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Sep 2021 18:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S242049AbhIQBIW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Sep 2021 21:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240710AbhIPWZz (ORCPT
+        with ESMTP id S230435AbhIQBIV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Sep 2021 18:25:55 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA65C061574;
-        Thu, 16 Sep 2021 15:24:34 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so10300003otf.6;
-        Thu, 16 Sep 2021 15:24:34 -0700 (PDT)
+        Thu, 16 Sep 2021 21:08:21 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87770C061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 18:06:57 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id i8-20020a056830402800b0051afc3e373aso10739888ots.5
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Sep 2021 18:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=horqbrKKBh5EaYsFSZBjjI5vv+f1TueHYQcsHmdV28A=;
-        b=VvvaGVnSbWz4dIiKBfloJ6w2mPPFDBHtlLPBh5yuGtFJx+JEHzgWzGAGsZH6rzHqmw
-         esYp7J40BOoP8eDALEnCqrvgfEaxENWhwHSAtxJJemkAT+RSPbhiZiZ4WGVQU1j4bUbE
-         Q9OLiTr/3MFBDUhSrkQhNJD3AbKzPkwk3C+jHAOiiSrzI6szrzOmwKTL66C4tkHupfc0
-         U6TPVYpCOWtIYJCCIgSg+QmoCexDsyw3xmqjOs8NjmO61YkGlVUJjujEssRFDlDaiMOD
-         dYUWx7tNE4NUyL06H7fHH0lkljq8oEJCsxF9A3Uy2AQzSi7hbrnEhMph9AwUb2Xs8wvT
-         MxEw==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=bNHBcVHocStoHk1ud7mIf3+yeha4NcrFFdE10gED03I=;
+        b=CKmjpvddUgJ4FqdYVMhTNBF87W+Fo1lPMMR2n4OUpiY6MNWhGy5OKXIxdXKdwaaPDA
+         G8BZAcPgw7JFEKHy+gWWOJv1q7CXAcQeun+8idui+XsMH9AlDrbK6FPCoveKr2H7vP/F
+         KWYDNlRS44vb9oScU/bNU5HePqybKB9DB2vaubRXkCO27FDwZBG8jA55wr2pHqtw0Lyt
+         hpXQYBQzJwAgzUDvu2FN8Q1VtpMNDeZ8rCfaOFmC1btlFLPy8FNQDje2YWTHlAm9umff
+         dF/WxBXJG+NNHce4abgFIKitdrQPkUg4+WH6b6njIQaaopqm4FbDx9g5Go1inhLirQSG
+         qzVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=horqbrKKBh5EaYsFSZBjjI5vv+f1TueHYQcsHmdV28A=;
-        b=wpcSHfuX7j5CV2BTpbC0WNgDHZP4I10YEAp4Kabzl9tqqX54Clr7aV5oy/TF4OnBVn
-         /LJ0N2Zrljg6i2vSy+VszCBKZD4s6SkPvb/FluEsd6gyLoIwreayz6PrOtEd/nfS3m/p
-         bcZrjahR/dS22Rx6h4S8vMhnjmr2UbzjBLlypjIlB2BT8x0GBtw8dG3WNc2JWnUmhM8a
-         FLNXoWRyzz5l69g3UM2znL2FaMemKIDrY4LKj3p+6LoCsRNlEaaaqSbOIAok8pD/6++S
-         0K3CZ1ZBEVje47hJdS4ZP1YyhqUBM67XrPGoEMm7Lh4f+daZevoFRF7hGO9GIDVrPOrs
-         f1bg==
-X-Gm-Message-State: AOAM5329fVbWOA+Pg+TPqEqi84Zu+6GOJ30D82rD3WcXERQnrKdHpHht
-        iIdmGgiQapXqNnNn2f6W9BHluMsGbDs=
-X-Google-Smtp-Source: ABdhPJwgEnPqFTwxlO83sbDnELvvxpXn6gR+u1hwhUqZvD2YuvVzqp1QRuH/bGyzj+d4GcggKZsZNQ==
-X-Received: by 2002:a05:6830:18c7:: with SMTP id v7mr6709934ote.126.1631831073222;
-        Thu, 16 Sep 2021 15:24:33 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=bNHBcVHocStoHk1ud7mIf3+yeha4NcrFFdE10gED03I=;
+        b=HdiD4/l79W/vlOJioX/FaS8gObderI0+G2kki/b7/o01nQkGx8QXxwBe2xQntXBui2
+         qzp+HcWNFDrDuW5p/DumVfM7QSEFOu5bOYhRmIcF+w3V3kIGWnuI2PEYa+NfTP6z24a0
+         2SYmR939DWrkm4wl72YIZDVzghJvPubXHmK9+GYUbqavR3o7yoNR3FY7IFNJPPAqGDrO
+         yO2mzwqoOOeYw8ZhRxhHttXmyZYRlkMQxk69crk6F5fqQP+t+tJiNMdem34MESDXcq+n
+         FX1PL6+fKn4hg+h4Zl7zeTH9m6xqJ0GDVw467azmS5iTvBpZfHR0+WBTlH2Q4MnjpM7e
+         DPkA==
+X-Gm-Message-State: AOAM532BwsnPRLcYy771VU3dlSVT5SNvmVc2ricMeExaCcI7B/SwUHE7
+        7stj301ebLLjz7T2jynKR1xxZ9w4MaA=
+X-Google-Smtp-Source: ABdhPJyNRqwuurENRQo1voBclh8HvuGcoc4h1T2deF4prJ3z+XcBOnl7Mfw22wH9qNo2napTnI6IdA==
+X-Received: by 2002:a9d:7019:: with SMTP id k25mr7265756otj.350.1631840816746;
+        Thu, 16 Sep 2021 18:06:56 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w6sm1005228otp.3.2021.09.16.15.24.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Sep 2021 15:24:32 -0700 (PDT)
+        by smtp.gmail.com with ESMTPSA id e2sm1047937ooh.40.2021.09.16.18.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 18:06:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Bernhard Seibold <mail@bernhard-seibold.de>,
-        =?UTF-8?Q?P=c3=a4r_Ekholm?= <pehlm@pekholm.org>,
-        to.eivind@gmail.com, "Artem S . Tashkinov" <aros@gmx.com>,
-        Vittorio Roberto Alfieri <me@rebtoor.com>,
-        Sahan Fernando <sahan.h.fernando@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210916202233.40334-1-pauk.denis@gmail.com>
- <20210916202233.40334-5-pauk.denis@gmail.com>
- <78a08749-5094-b7a6-1672-6087f33c62e3@roeck-us.net>
- <20210917002433.27226146@penguin.lxd>
+Date:   Thu, 16 Sep 2021 18:06:54 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v7 3/3] hwmon: (nct6775) Support access via Asus WMI
-Message-ID: <e2329d97-3d9f-3579-f24f-b1e3d9660f9f@roeck-us.net>
-Date:   Thu, 16 Sep 2021 15:24:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH hwmon-next v3 1/1] hwmon: (mlxreg-fan) Extend driver to
+ support multiply cooling devices
+Message-ID: <20210917010654.GA2518068@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20210917002433.27226146@penguin.lxd>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/16/21 2:24 PM, Denis Pauk wrote:
-> On Thu, 16 Sep 2021 14:10:49 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
+On Fri, Sep 17, 2021 at 12:31:28AM +0300, Vadim Pasternak wrote:
+> Add support for additional cooling devices in order to support the
+> systems, which can be equipped with up-to four PWM controllers.
 > 
->> On 9/16/21 1:22 PM, Denis Pauk wrote:
->>> Support accessing the NCT677x via Asus WMI functions.
->>>
->>> On mainboards that support this way of accessing the chip, the
->>> driver will usually not work without this option since in these
->>> mainboards, ACPI will mark the I/O port as used.
->>>
->>> Code uses ACPI firmware interface to communicate with sensors with
->>> ASUS motherboards:
->>> * PRIME B460-PLUS,
->>> * ROG CROSSHAIR VIII IMPACT,
->>> * ROG STRIX B550-E GAMING,
->>> * ROG STRIX B550-F GAMING,
->>> * ROG STRIX B550-F GAMING (WI-FI),
->>> * ROG STRIX Z490-I GAMING,
->>> * TUF GAMING B550M-PLUS,
->>> * TUF GAMING B550M-PLUS (WI-FI),
->>> * TUF GAMING B550-PLUS,
->>> * TUF GAMING X570-PLUS,
->>> * TUF GAMING X570-PRO (WI-FI).
->>>
->>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
->>> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
->>> Co-developed-by: Bernhard Seibold <mail@bernhard-seibold.de>
->>> Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
->>> Tested-by: Pär Ekholm <pehlm@pekholm.org>
->>> Tested-by: <to.eivind@gmail.com>
->>> Tested-by: Artem S. Tashkinov <aros@gmx.com>
->>> Tested-by: Vittorio Roberto Alfieri <me@rebtoor.com>
->>> Tested-by: Sahan Fernando <sahan.h.fernando@gmail.com>
->>> Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
->>> Cc: Guenter Roeck <linux@roeck-us.net>
->>>
->>> ---
->>> Changes in v7:
->>>     - Remove unrequred & 0xff with int8 variables.
->>>     - Make ASUSWMI_UNSUPPORTED_METHOD as default value for WMI
->>> responce, before run wmi_evaluate_method().
->>>     - Rename ASUSWMI_MGMT2_GUID to ASUSWMI_MONITORING_GUID.
->>>     - Replace checks of 'err != -EINVAL' with 'err >= 0' for
->>> match_string result.
->>>
->>> Changes in v6:
->>>     - Minimaze codes inside code inside defined(CONFIG_ACPI_WMI).
->>>
->>> Changes in v5:
->>>     - Use IS_ENABLED(CONFIG_ACPI_WMI) instead
->>> defined(CONFIG_ACPI_WMI)
->>>
->>> Changes in v4:
->>>     - Fix build without ACPI WMI.
->>>
->>> Changes in v3:
->>>     - Remove unrequired type conversions.
->>>     - Save result of match_string before check.
->>>
->>> Changes in v2:
->>>     - Split changes to separate patches.
->>>     - Limit WMI usage by DMI_BOARD_NAME in checked ASUS motherboards.
->>> ---
->>>    drivers/hwmon/Kconfig   |   1 +
->>>    drivers/hwmon/nct6775.c | 230
->>> ++++++++++++++++++++++++++++++++++++---- 2 files changed, 210
->>> insertions(+), 21 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>> index e3675377bc5d..9eefb1014b53 100644
->>> --- a/drivers/hwmon/Kconfig
->>> +++ b/drivers/hwmon/Kconfig
->>> @@ -1423,6 +1423,7 @@ config SENSORS_NCT6683
->>>    config SENSORS_NCT6775
->>>    	tristate "Nuvoton NCT6775F and compatibles"
->>>    	depends on !PPC
->>> +	depends on ACPI_WMI || ACPI_WMI=n
->>>    	select HWMON_VID
->>>    	help
->>>    	  If you say yes here you get support for the hardware
->>> monitoring diff --git a/drivers/hwmon/nct6775.c
->>> b/drivers/hwmon/nct6775.c index 4253eed7f5b0..46262d9d3bd9 100644
->>> --- a/drivers/hwmon/nct6775.c
->>> +++ b/drivers/hwmon/nct6775.c
->>> @@ -55,6 +55,7 @@
->>>    #include <linux/dmi.h>
->>>    #include <linux/io.h>
->>>    #include <linux/nospec.h>
->>> +#include <linux/wmi.h>
->>>    #include "lm75.h"
->>>    
->>>    #define USE_ALTERNATE
->>> @@ -132,10 +133,13 @@ MODULE_PARM_DESC(fan_debounce, "Enable
->>> debouncing for fan RPM signal"); #define SIO_ID_MASK
->>> 0xFFF8
->>>    enum pwm_enable { off, manual, thermal_cruise, speed_cruise, sf3,
->>> sf4 }; +enum sensor_access { access_direct, access_asuswmi };
->>>    
->>>    struct nct6775_sio_data {
->>>    	int sioreg;
->>> +	int ld;
->>>    	enum kinds kind;
->>> +	enum sensor_access access;
->>>    
->>>    	/* superio_() callbacks  */
->>>    	void (*sio_outb)(struct nct6775_sio_data *sio_data, int
->>> reg, int val); @@ -145,6 +149,90 @@ struct nct6775_sio_data {
->>>    	void (*sio_exit)(struct nct6775_sio_data *sio_data);
->>>    };
->>>    
->>> +#define ASUSWMI_MONITORING_GUID
->>> "466747A0-70EC-11DE-8A39-0800200C9A66" +#define
->>> ASUSWMI_METHODID_RSIO		0x5253494F +#define
->>> ASUSWMI_METHODID_WSIO		0x5753494F +#define
->>> ASUSWMI_METHODID_RHWM		0x5248574D +#define
->>> ASUSWMI_METHODID_WHWM		0x5748574D +#define
->>> ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE +
->>> +static int asuswmi_evaluate_method(u32 method_id, u8 bank, u8 reg,
->>> u8 val, u32 *retval) +{
-> What do you thin about rename asuswmi_evaluate_method() to
-> asuswmi_monitoring_method()? I have found that kernel already have
-> asus_wmi_evaluate_method() that has used different method GUID, so
-> looks as make sense to use different function name. It uses different
-> constants with different names/values and does not intersect with this
-> one.
+> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 
-nct6775_asuswmi_evaluate_method or similar, maybe, if you really
-want to rename it.
+Applied.
 
+Thanks,
 Guenter
+
+> ---
+> v2->v3:
+>  Comments pointed out by Guenter:
+>  - Drop label "devm_thermal_of_cooling_device_register_fail".
+> v0->v2:
+>  Comments pointed out by Guenter:
+>  - Drop call to thermal_cooling_device_unregister() in error flow,
+>    devices registered by devm_thermal_of_cooling_device_register()
+>    should be cleaned automatically.
+> ---
+>  drivers/hwmon/mlxreg-fan.c | 73 ++++++++++++++++++++++++--------------
+>  1 file changed, 47 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+> index 1a146cc4b0fd..35228ed112d7 100644
+> --- a/drivers/hwmon/mlxreg-fan.c
+> +++ b/drivers/hwmon/mlxreg-fan.c
+> @@ -63,6 +63,8 @@
+>  					 MLXREG_FAN_MAX_DUTY,		\
+>  					 MLXREG_FAN_MAX_STATE))
+>  
+> +struct mlxreg_fan;
+> +
+>  /*
+>   * struct mlxreg_fan_tacho - tachometer data (internal use):
+>   *
+> @@ -81,12 +83,18 @@ struct mlxreg_fan_tacho {
+>  /*
+>   * struct mlxreg_fan_pwm - PWM data (internal use):
+>   *
+> + * @fan: private data;
+>   * @connected: indicates if PWM is connected;
+>   * @reg: register offset;
+> + * @cooling: cooling device levels;
+> + * @cdev: cooling device;
+>   */
+>  struct mlxreg_fan_pwm {
+> +	struct mlxreg_fan *fan;
+>  	bool connected;
+>  	u32 reg;
+> +	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
+> +	struct thermal_cooling_device *cdev;
+>  };
+>  
+>  /*
+> @@ -99,8 +107,6 @@ struct mlxreg_fan_pwm {
+>   * @tachos_per_drwr - number of tachometers per drawer;
+>   * @samples: minimum allowed samples per pulse;
+>   * @divider: divider value for tachometer RPM calculation;
+> - * @cooling: cooling device levels;
+> - * @cdev: cooling device;
+>   */
+>  struct mlxreg_fan {
+>  	struct device *dev;
+> @@ -111,8 +117,6 @@ struct mlxreg_fan {
+>  	int tachos_per_drwr;
+>  	int samples;
+>  	int divider;
+> -	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
+> -	struct thermal_cooling_device *cdev;
+>  };
+>  
+>  static int
+> @@ -305,11 +309,12 @@ static int mlxreg_fan_get_cur_state(struct thermal_cooling_device *cdev,
+>  				    unsigned long *state)
+>  
+>  {
+> -	struct mlxreg_fan *fan = cdev->devdata;
+> +	struct mlxreg_fan_pwm *pwm = cdev->devdata;
+> +	struct mlxreg_fan *fan = pwm->fan;
+>  	u32 regval;
+>  	int err;
+>  
+> -	err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
+> +	err = regmap_read(fan->regmap, pwm->reg, &regval);
+>  	if (err) {
+>  		dev_err(fan->dev, "Failed to query PWM duty\n");
+>  		return err;
+> @@ -324,7 +329,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+>  				    unsigned long state)
+>  
+>  {
+> -	struct mlxreg_fan *fan = cdev->devdata;
+> +	struct mlxreg_fan_pwm *pwm = cdev->devdata;
+> +	struct mlxreg_fan *fan = pwm->fan;
+>  	unsigned long cur_state;
+>  	int i, config = 0;
+>  	u32 regval;
+> @@ -348,11 +354,11 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+>  		config = 1;
+>  		state -= MLXREG_FAN_MAX_STATE;
+>  		for (i = 0; i < state; i++)
+> -			fan->cooling_levels[i] = state;
+> +			pwm->cooling_levels[i] = state;
+>  		for (i = state; i <= MLXREG_FAN_MAX_STATE; i++)
+> -			fan->cooling_levels[i] = i;
+> +			pwm->cooling_levels[i] = i;
+>  
+> -		err = regmap_read(fan->regmap, fan->pwm[0].reg, &regval);
+> +		err = regmap_read(fan->regmap, pwm->reg, &regval);
+>  		if (err) {
+>  			dev_err(fan->dev, "Failed to query PWM duty\n");
+>  			return err;
+> @@ -369,8 +375,8 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
+>  		return -EINVAL;
+>  
+>  	/* Normalize the state to the valid speed range. */
+> -	state = fan->cooling_levels[state];
+> -	err = regmap_write(fan->regmap, fan->pwm[0].reg,
+> +	state = pwm->cooling_levels[state];
+> +	err = regmap_write(fan->regmap, pwm->reg,
+>  			   MLXREG_FAN_PWM_STATE2DUTY(state));
+>  	if (err) {
+>  		dev_err(fan->dev, "Failed to write PWM duty\n");
+> @@ -541,11 +547,32 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
+>  		fan->tachos_per_drwr = tacho_avail / drwr_avail;
+>  	}
+>  
+> -	/* Init cooling levels per PWM state. */
+> -	for (i = 0; i < MLXREG_FAN_SPEED_MIN_LEVEL; i++)
+> -		fan->cooling_levels[i] = MLXREG_FAN_SPEED_MIN_LEVEL;
+> -	for (i = MLXREG_FAN_SPEED_MIN_LEVEL; i <= MLXREG_FAN_MAX_STATE; i++)
+> -		fan->cooling_levels[i] = i;
+> +	return 0;
+> +}
+> +
+> +static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
+> +{
+> +	int i, j;
+> +
+> +	for (i = 0; i <= MLXREG_FAN_MAX_PWM; i++) {
+> +		struct mlxreg_fan_pwm *pwm = &fan->pwm[i];
+> +
+> +		if (!pwm->connected)
+> +			continue;
+> +		pwm->fan = fan;
+> +		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, "mlxreg_fan", pwm,
+> +								    &mlxreg_fan_cooling_ops);
+> +		if (IS_ERR(pwm->cdev)) {
+> +			dev_err(dev, "Failed to register cooling device\n");
+> +			return PTR_ERR(pwm->cdev);
+> +		}
+> +
+> +		/* Init cooling levels per PWM state. */
+> +		for (j = 0; j < MLXREG_FAN_SPEED_MIN_LEVEL; j++)
+> +			pwm->cooling_levels[j] = MLXREG_FAN_SPEED_MIN_LEVEL;
+> +		for (j = MLXREG_FAN_SPEED_MIN_LEVEL; j <= MLXREG_FAN_MAX_STATE; j++)
+> +			pwm->cooling_levels[j] = j;
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -584,16 +611,10 @@ static int mlxreg_fan_probe(struct platform_device *pdev)
+>  		return PTR_ERR(hwm);
+>  	}
+>  
+> -	if (IS_REACHABLE(CONFIG_THERMAL)) {
+> -		fan->cdev = devm_thermal_of_cooling_device_register(dev,
+> -			NULL, "mlxreg_fan", fan, &mlxreg_fan_cooling_ops);
+> -		if (IS_ERR(fan->cdev)) {
+> -			dev_err(dev, "Failed to register cooling device\n");
+> -			return PTR_ERR(fan->cdev);
+> -		}
+> -	}
+> +	if (IS_REACHABLE(CONFIG_THERMAL))
+> +		err = mlxreg_fan_cooling_config(dev, fan);
+>  
+> -	return 0;
+> +	return err;
+>  }
+>  
+>  static struct platform_driver mlxreg_fan_driver = {
+> -- 
+> 2.20.1
+> 
