@@ -2,511 +2,209 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92854C433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 13:34:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0AD3C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 18:44:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A05E6112E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 13:34:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97DDD60F4A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 18:44:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245434AbhIQNft (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Sep 2021 09:35:49 -0400
-Received: from foss.arm.com ([217.140.110.172]:53302 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244821AbhIQNfj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Sep 2021 09:35:39 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 218B61063;
-        Fri, 17 Sep 2021 06:34:15 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 914413F719;
-        Fri, 17 Sep 2021 06:34:13 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH v2 07/14] mailbox: pcc: Use PCC mailbox channel pointer instead of standard
-Date:   Fri, 17 Sep 2021 14:33:50 +0100
-Message-Id: <20210917133357.1911092-8-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210917133357.1911092-1-sudeep.holla@arm.com>
-References: <20210917133357.1911092-1-sudeep.holla@arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S242557AbhIQSqD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Sep 2021 14:46:03 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44166 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242488AbhIQSpx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 17 Sep 2021 14:45:53 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18HHTwat021947;
+        Fri, 17 Sep 2021 14:44:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Cu15NbkF8XCdYMaWhSe53yZzJsAWowt8+l6QazcJZNo=;
+ b=EyWbQgraP/K7m+gWE1cBSBSq3lkKpWPmJw4h7wvEJq9WqrGlNwz+PN+HX/zijvjZVadE
+ JJZF04SeKNDXzp275UT+7gM9tL2AhiqF9fXcJdkiQfyY1zx+SXC/z4ACwPD02rb3FakD
+ ttsn3hQmvCpvxQa0grIRXDMFEJ5t7C4PQR5TAps0jIy67nMptkie22mew0HGY9tJWS8A
+ /NFvz+cwsiFLecEXsPXOIkWdNYAIrz5+s2f2piJmaObMkcorBBs2U9U1oXnbse2NwQZX
+ Kmlio6xHzas581J9QOdiWvojg1al7LziPzM4tFfbJiZaZrGZLHO43tEkBIqweWEb908m Jg== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b4hdddvdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Sep 2021 14:44:05 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18HIHvT8025067;
+        Fri, 17 Sep 2021 18:44:03 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01dal.us.ibm.com with ESMTP id 3b4m7ptj73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Sep 2021 18:44:03 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18HIi24144302716
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Sep 2021 18:44:02 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8079AE062;
+        Fri, 17 Sep 2021 18:44:02 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DF46AE05F;
+        Fri, 17 Sep 2021 18:44:02 +0000 (GMT)
+Received: from v0005c16 (unknown [9.211.95.114])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Sep 2021 18:44:01 +0000 (GMT)
+Message-ID: <24039f18c446432064cf1dfcd59992ba7d4e9973.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary
+ sysfs
+From:   Eddie James <eajames@linux.ibm.com>
+To:     Jeremy Kerr <jk@codeconstruct.com.au>, linux-fsi@lists.ozlabs.org
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joel@jms.id.au, linux@roeck-us.net, jdelvare@suse.com,
+        alistair@popple.id.au
+Date:   Fri, 17 Sep 2021 13:44:01 -0500
+In-Reply-To: <ad29d1d9743799ffd770330af6ad174bdfe7c3a0.camel@codeconstruct.com.au>
+References: <20210914213543.73351-1-eajames@linux.ibm.com>
+         <20210914213543.73351-4-eajames@linux.ibm.com>
+         <ad29d1d9743799ffd770330af6ad174bdfe7c3a0.camel@codeconstruct.com.au>
+Organization: IBM
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BaMSJvgU7cT0tdKrrutyp7DqLrUjzNOS
+X-Proofpoint-ORIG-GUID: BaMSJvgU7cT0tdKrrutyp7DqLrUjzNOS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-17_07,2021-09-17_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0
+ impostorscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109170110
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Now that we have all the shared memory region information populated in
-the pcc_mbox_chan, let us propagate the pointer to the same as the
-return value to pcc_mbox_request channel.
+On Thu, 2021-09-16 at 08:17 +0800, Jeremy Kerr wrote:
+> Hi Eddie,
+> 
+> > Save any FFDC provided by the OCC driver, and provide it to
+> > userspace
+> > through a binary sysfs entry. Do some basic state management to
+> > ensure that userspace can always collect the data if there was an
+> > error. Notify polling userspace when there is an error too.
+> 
+> Super! Some comments inline:
+> 
+> > +enum sbe_error_state {
+> > +       SBE_ERROR_NONE = 0,
+> > +       SBE_ERROR_PENDING,
+> > +       SBE_ERROR_COLLECTED
+> > +};
+> > +
+> >  struct p9_sbe_occ {
+> >         struct occ occ;
+> > +       int sbe_error;
+> 
+> Use the enum here?
 
-This eliminates the need for the individual users of PCC mailbox to
-parse the PCCT subspace entries and fetch the shmem information. This
-also eliminates the need for PCC mailbox controller to set con_priv to
-PCCT subspace entries. This is required as con_priv is private to the
-controller driver to attach private data associated with the channel and
-not meant to be used by the mailbox client/users.
+Yep :) Though I think I will switch to a bool; as I wrote to Guenter,
+the extra "collected" state isn't necessary if I stop trying to report
+two things (the FFDC itself and whether or not there is an error at
+all) with one interface.
 
-Let us convert all the users of pcc_mbox_{request,free}_channel to use
-new interface.
+> 
+> > +       void *ffdc;
+> > +       size_t ffdc_len;
+> > +       size_t ffdc_size;
+> > +       struct mutex sbe_error_lock;    /* lock access to ffdc data
+> > */
+> > +       u32 no_ffdc_magic;
+> >         struct device *sbe;
+> >  };
+> >  
+> >  #define to_p9_sbe_occ(x)       container_of((x), struct
+> > p9_sbe_occ, occ)
+> >  
+> > +static ssize_t sbe_error_read(struct file *filp, struct kobject
+> > *kobj,
+> > +                             struct bin_attribute *battr, char
+> > *buf,
+> > +                             loff_t pos, size_t count)
+> > +{
+> > +       ssize_t rc = 0;
+> > +       struct occ *occ = dev_get_drvdata(kobj_to_dev(kobj));
+> > +       struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+> > +
+> > +       mutex_lock(&ctx->sbe_error_lock);
+> > +       if (ctx->sbe_error == SBE_ERROR_PENDING) {
+> > +               rc = memory_read_from_buffer(buf, count, &pos, ctx-
+> > >ffdc,
+> > +                                            ctx->ffdc_len);
+> > +               ctx->sbe_error = SBE_ERROR_COLLECTED;
+> > +       }
+> > +       mutex_unlock(&ctx->sbe_error_lock);
+> > +
+> > +       return rc;
+> > +}
+> 
+> So any read from this file will clear out the FFDC data, making
+> partial
+> reads impossible. As a least-intrusive change, could we set
+> SBE_ERROR_COLLECTED on write instead?
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Wolfram Sang <wsa@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/acpi/cppc_acpi.c               | 43 ++++++------------
- drivers/hwmon/xgene-hwmon.c            | 35 ++++++--------
- drivers/i2c/busses/i2c-xgene-slimpro.c | 33 +++++---------
- drivers/mailbox/pcc.c                  | 63 ++++++++------------------
- include/acpi/pcc.h                     | 12 ++---
- 5 files changed, 64 insertions(+), 122 deletions(-)
+Good point. Write would work. How about resetting the error flag once
+pos >= size though, for the sake of simplicity?
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index e195123e26c0..aa6623bd3f00 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -43,7 +43,7 @@
- #include <acpi/cppc_acpi.h>
- 
- struct cppc_pcc_data {
--	struct mbox_chan *pcc_channel;
-+	struct pcc_mbox_chan *pcc_channel;
- 	void __iomem *pcc_comm_addr;
- 	bool pcc_channel_acquired;
- 	unsigned int deadline_us;
-@@ -295,7 +295,7 @@ static int send_pcc_cmd(int pcc_ss_id, u16 cmd)
- 	pcc_ss_data->platform_owns_pcc = true;
- 
- 	/* Ring doorbell */
--	ret = mbox_send_message(pcc_ss_data->pcc_channel, &cmd);
-+	ret = mbox_send_message(pcc_ss_data->pcc_channel->mchan, &cmd);
- 	if (ret < 0) {
- 		pr_err("Err sending PCC mbox message. ss: %d cmd:%d, ret:%d\n",
- 		       pcc_ss_id, cmd, ret);
-@@ -308,10 +308,10 @@ static int send_pcc_cmd(int pcc_ss_id, u16 cmd)
- 	if (pcc_ss_data->pcc_mrtt)
- 		pcc_ss_data->last_cmd_cmpl_time = ktime_get();
- 
--	if (pcc_ss_data->pcc_channel->mbox->txdone_irq)
--		mbox_chan_txdone(pcc_ss_data->pcc_channel, ret);
-+	if (pcc_ss_data->pcc_channel->mchan->mbox->txdone_irq)
-+		mbox_chan_txdone(pcc_ss_data->pcc_channel->mchan, ret);
- 	else
--		mbox_client_txdone(pcc_ss_data->pcc_channel, ret);
-+		mbox_client_txdone(pcc_ss_data->pcc_channel->mchan, ret);
- 
- end:
- 	if (cmd == CMD_WRITE) {
-@@ -493,46 +493,33 @@ EXPORT_SYMBOL_GPL(acpi_get_psd_map);
- 
- static int register_pcc_channel(int pcc_ss_idx)
- {
--	struct acpi_pcct_hw_reduced *cppc_ss;
-+	struct pcc_mbox_chan *pcc_chan;
- 	u64 usecs_lat;
- 
- 	if (pcc_ss_idx >= 0) {
--		pcc_data[pcc_ss_idx]->pcc_channel =
--			pcc_mbox_request_channel(&cppc_mbox_cl,	pcc_ss_idx);
-+		pcc_chan = pcc_mbox_request_channel(&cppc_mbox_cl, pcc_ss_idx);
- 
--		if (IS_ERR(pcc_data[pcc_ss_idx]->pcc_channel)) {
-+		if (IS_ERR(pcc_chan)) {
- 			pr_err("Failed to find PCC channel for subspace %d\n",
- 			       pcc_ss_idx);
- 			return -ENODEV;
- 		}
- 
--		/*
--		 * The PCC mailbox controller driver should
--		 * have parsed the PCCT (global table of all
--		 * PCC channels) and stored pointers to the
--		 * subspace communication region in con_priv.
--		 */
--		cppc_ss = (pcc_data[pcc_ss_idx]->pcc_channel)->con_priv;
--
--		if (!cppc_ss) {
--			pr_err("No PCC subspace found for %d CPPC\n",
--			       pcc_ss_idx);
--			return -ENODEV;
--		}
--
-+		pcc_data[pcc_ss_idx]->pcc_channel = pcc_chan;
- 		/*
- 		 * cppc_ss->latency is just a Nominal value. In reality
- 		 * the remote processor could be much slower to reply.
- 		 * So add an arbitrary amount of wait on top of Nominal.
- 		 */
--		usecs_lat = NUM_RETRIES * cppc_ss->latency;
-+		usecs_lat = NUM_RETRIES * pcc_chan->latency;
- 		pcc_data[pcc_ss_idx]->deadline_us = usecs_lat;
--		pcc_data[pcc_ss_idx]->pcc_mrtt = cppc_ss->min_turnaround_time;
--		pcc_data[pcc_ss_idx]->pcc_mpar = cppc_ss->max_access_rate;
--		pcc_data[pcc_ss_idx]->pcc_nominal = cppc_ss->latency;
-+		pcc_data[pcc_ss_idx]->pcc_mrtt = pcc_chan->min_turnaround_time;
-+		pcc_data[pcc_ss_idx]->pcc_mpar = pcc_chan->max_access_rate;
-+		pcc_data[pcc_ss_idx]->pcc_nominal = pcc_chan->latency;
- 
- 		pcc_data[pcc_ss_idx]->pcc_comm_addr =
--			acpi_os_ioremap(cppc_ss->base_address, cppc_ss->length);
-+			acpi_os_ioremap(pcc_chan->shmem_base_addr,
-+					pcc_chan->shmem_size);
- 		if (!pcc_data[pcc_ss_idx]->pcc_comm_addr) {
- 			pr_err("Failed to ioremap PCC comm region mem for %d\n",
- 			       pcc_ss_idx);
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 382ef0395d8e..30aae8642069 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -93,6 +93,7 @@ struct slimpro_resp_msg {
- struct xgene_hwmon_dev {
- 	struct device		*dev;
- 	struct mbox_chan	*mbox_chan;
-+	struct pcc_mbox_chan	*pcc_chan;
- 	struct mbox_client	mbox_client;
- 	int			mbox_idx;
- 
-@@ -652,7 +653,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 			goto out_mbox_free;
- 		}
- 	} else {
--		struct acpi_pcct_hw_reduced *cppc_ss;
-+		struct pcc_mbox_chan *pcc_chan;
- 		const struct acpi_device_id *acpi_id;
- 		int version;
- 
-@@ -671,26 +672,16 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		}
- 
- 		cl->rx_callback = xgene_hwmon_pcc_rx_cb;
--		ctx->mbox_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
--		if (IS_ERR(ctx->mbox_chan)) {
-+		pcc_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
-+		if (IS_ERR(pcc_chan)) {
- 			dev_err(&pdev->dev,
- 				"PPC channel request failed\n");
- 			rc = -ENODEV;
- 			goto out_mbox_free;
- 		}
- 
--		/*
--		 * The PCC mailbox controller driver should
--		 * have parsed the PCCT (global table of all
--		 * PCC channels) and stored pointers to the
--		 * subspace communication region in con_priv.
--		 */
--		cppc_ss = ctx->mbox_chan->con_priv;
--		if (!cppc_ss) {
--			dev_err(&pdev->dev, "PPC subspace not found\n");
--			rc = -ENODEV;
--			goto out;
--		}
-+		ctx->pcc_chan = pcc_chan;
-+		ctx->mbox_chan = pcc_chan->mchan;
- 
- 		if (!ctx->mbox_chan->mbox->txdone_irq) {
- 			dev_err(&pdev->dev, "PCC IRQ not supported\n");
-@@ -702,16 +693,16 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		 * This is the shared communication region
- 		 * for the OS and Platform to communicate over.
- 		 */
--		ctx->comm_base_addr = cppc_ss->base_address;
-+		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
- 		if (ctx->comm_base_addr) {
- 			if (version == XGENE_HWMON_V2)
- 				ctx->pcc_comm_addr = (void __force *)ioremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length);
-+							pcc_chan->shmem_size);
- 			else
- 				ctx->pcc_comm_addr = memremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length,
-+							pcc_chan->shmem_size,
- 							MEMREMAP_WB);
- 		} else {
- 			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
-@@ -727,11 +718,11 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		}
- 
- 		/*
--		 * cppc_ss->latency is just a Nominal value. In reality
-+		 * pcc_chan->latency is just a Nominal value. In reality
- 		 * the remote processor could be much slower to reply.
- 		 * So add an arbitrary amount of wait on top of Nominal.
- 		 */
--		ctx->usecs_lat = PCC_NUM_RETRIES * cppc_ss->latency;
-+		ctx->usecs_lat = PCC_NUM_RETRIES * pcc_chan->latency;
- 	}
- 
- 	ctx->hwmon_dev = hwmon_device_register_with_groups(ctx->dev,
-@@ -757,7 +748,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- out_mbox_free:
- 	kfifo_free(&ctx->async_msg_fifo);
- 
-@@ -773,7 +764,7 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- 
- 	return 0;
- }
-diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
-index bba08cbce6e1..1a19ebad60ad 100644
---- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-+++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-@@ -103,6 +103,7 @@ struct slimpro_i2c_dev {
- 	struct i2c_adapter adapter;
- 	struct device *dev;
- 	struct mbox_chan *mbox_chan;
-+	struct pcc_mbox_chan *pcc_chan;
- 	struct mbox_client mbox_client;
- 	int mbox_idx;
- 	struct completion rd_complete;
-@@ -466,7 +467,7 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 			return PTR_ERR(ctx->mbox_chan);
- 		}
- 	} else {
--		struct acpi_pcct_hw_reduced *cppc_ss;
-+		struct pcc_mbox_chan *pcc_chan;
- 		const struct acpi_device_id *acpi_id;
- 		int version = XGENE_SLIMPRO_I2C_V1;
- 
-@@ -483,24 +484,14 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 
- 		cl->tx_block = false;
- 		cl->rx_callback = slimpro_i2c_pcc_rx_cb;
--		ctx->mbox_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
--		if (IS_ERR(ctx->mbox_chan)) {
-+		pcc_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
-+		if (IS_ERR(pcc_chan)) {
- 			dev_err(&pdev->dev, "PCC mailbox channel request failed\n");
--			return PTR_ERR(ctx->mbox_chan);
-+			return PTR_ERR(ctx->pcc_chan);
- 		}
- 
--		/*
--		 * The PCC mailbox controller driver should
--		 * have parsed the PCCT (global table of all
--		 * PCC channels) and stored pointers to the
--		 * subspace communication region in con_priv.
--		 */
--		cppc_ss = ctx->mbox_chan->con_priv;
--		if (!cppc_ss) {
--			dev_err(&pdev->dev, "PPC subspace not found\n");
--			rc = -ENOENT;
--			goto mbox_err;
--		}
-+		ctx->pcc_chan = pcc_chan;
-+		ctx->mbox_chan = pcc_chan->mchan;
- 
- 		if (!ctx->mbox_chan->mbox->txdone_irq) {
- 			dev_err(&pdev->dev, "PCC IRQ not supported\n");
-@@ -512,17 +503,17 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 		 * This is the shared communication region
- 		 * for the OS and Platform to communicate over.
- 		 */
--		ctx->comm_base_addr = cppc_ss->base_address;
-+		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
- 		if (ctx->comm_base_addr) {
- 			if (version == XGENE_SLIMPRO_I2C_V2)
- 				ctx->pcc_comm_addr = memremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length,
-+							pcc_chan->shmem_size,
- 							MEMREMAP_WT);
- 			else
- 				ctx->pcc_comm_addr = memremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length,
-+							pcc_chan->shmem_size,
- 							MEMREMAP_WB);
- 		} else {
- 			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
-@@ -561,7 +552,7 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- 
- 	return rc;
- }
-@@ -575,7 +566,7 @@ static int xgene_slimpro_i2c_remove(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- 
- 	return 0;
- }
-diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-index f358ced827f2..453a58fda3a4 100644
---- a/drivers/mailbox/pcc.c
-+++ b/drivers/mailbox/pcc.c
-@@ -79,24 +79,9 @@ struct pcc_chan_info {
- 	int db_irq;
- };
- 
-+#define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
- static struct pcc_chan_info *chan_info;
--
- static struct mbox_controller pcc_mbox_ctrl = {};
--/**
-- * get_pcc_channel - Given a PCC subspace idx, get
-- *	the respective mbox_channel.
-- * @id: PCC subspace index.
-- *
-- * Return: ERR_PTR(errno) if error, else pointer
-- *	to mbox channel.
-- */
--static struct mbox_chan *get_pcc_channel(int id)
--{
--	if (id < 0 || id >= pcc_mbox_ctrl.num_chans)
--		return ERR_PTR(-ENOENT);
--
--	return &pcc_mbox_channels[id];
--}
- 
- /*
-  * PCC can be used with perf critical drivers such as CPPC
-@@ -239,31 +224,25 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
-  *		ACPI package. This is used to lookup the array of PCC
-  *		subspaces as parsed by the PCC Mailbox controller.
-  *
-- * Return: Pointer to the Mailbox Channel if successful or
-- *		ERR_PTR.
-+ * Return: Pointer to the PCC Mailbox Channel if successful or ERR_PTR.
-  */
--struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
--					   int subspace_id)
-+struct pcc_mbox_chan *
-+pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
- {
- 	struct pcc_chan_info *pchan;
- 	struct device *dev = pcc_mbox_ctrl.dev;
- 	struct mbox_chan *chan;
- 	unsigned long flags;
- 
--	/*
--	 * Each PCC Subspace is a Mailbox Channel.
--	 * The PCC Clients get their PCC Subspace ID
--	 * from their own tables and pass it here.
--	 * This returns a pointer to the PCC subspace
--	 * for the Client to operate on.
--	 */
--	chan = get_pcc_channel(subspace_id);
-+	if (subspace_id < 0 || subspace_id >= pcc_mbox_ctrl.num_chans)
-+		return ERR_PTR(-ENOENT);
- 
-+	pchan = chan_info + subspace_id;
-+	chan = pchan->chan.mchan;
- 	if (IS_ERR(chan) || chan->cl) {
- 		dev_err(dev, "Channel not found for idx: %d\n", subspace_id);
- 		return ERR_PTR(-EBUSY);
- 	}
--	pchan = chan_info + subspace_id;
- 
- 	spin_lock_irqsave(&chan->lock, flags);
- 	chan->msg_free = 0;
-@@ -285,38 +264,32 @@ struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
- 		if (unlikely(rc)) {
- 			dev_err(dev, "failed to register PCC interrupt %d\n",
- 				pchan->db_irq);
--			pcc_mbox_free_channel(chan);
--			chan = ERR_PTR(rc);
-+			pcc_mbox_free_channel(&pchan->chan);
-+			return ERR_PTR(rc);
- 		}
- 	}
- 
--	return chan;
-+	return &pchan->chan;
- }
- EXPORT_SYMBOL_GPL(pcc_mbox_request_channel);
- 
- /**
-  * pcc_mbox_free_channel - Clients call this to free their Channel.
-  *
-- * @chan: Pointer to the mailbox channel as returned by
-- *		pcc_mbox_request_channel()
-+ * @pchan: Pointer to the PCC mailbox channel as returned by
-+ *	   pcc_mbox_request_channel()
-  */
--void pcc_mbox_free_channel(struct mbox_chan *chan)
-+void pcc_mbox_free_channel(struct pcc_mbox_chan *pchan)
- {
--	u32 id = chan - pcc_mbox_channels;
--	struct pcc_chan_info *pchan;
-+	struct pcc_chan_info *pchan_info = to_pcc_chan_info(pchan);
-+	struct mbox_chan *chan = pchan->mchan;
- 	unsigned long flags;
- 
- 	if (!chan || !chan->cl)
- 		return;
- 
--	if (id >= pcc_mbox_ctrl.num_chans) {
--		pr_debug("pcc_mbox_free_channel: Invalid mbox_chan passed\n");
--		return;
--	}
--
--	pchan = chan_info + id;
--	if (pchan->db_irq > 0)
--		devm_free_irq(chan->mbox->dev, pchan->db_irq, chan);
-+	if (pchan_info->db_irq > 0)
-+		devm_free_irq(chan->mbox->dev, pchan_info->db_irq, chan);
- 
- 	spin_lock_irqsave(&chan->lock, flags);
- 	chan->cl = NULL;
-diff --git a/include/acpi/pcc.h b/include/acpi/pcc.h
-index 5e510a6b8052..73e806fe7ce7 100644
---- a/include/acpi/pcc.h
-+++ b/include/acpi/pcc.h
-@@ -20,16 +20,16 @@ struct pcc_mbox_chan {
- 
- #define MAX_PCC_SUBSPACES	256
- #ifdef CONFIG_PCC
--extern struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
--						  int subspace_id);
--extern void pcc_mbox_free_channel(struct mbox_chan *chan);
-+extern struct pcc_mbox_chan *
-+pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id);
-+extern void pcc_mbox_free_channel(struct pcc_mbox_chan *chan);
- #else
--static inline struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
--							 int subspace_id)
-+static inline struct pcc_mbox_chan *
-+pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
- {
- 	return ERR_PTR(-ENODEV);
- }
--static inline void pcc_mbox_free_channel(struct mbox_chan *chan) { }
-+static inline void pcc_mbox_free_channel(struct pcc_mbox_chan *chan) { }
- #endif
- 
- #endif /* _PCC_H */
--- 
-2.25.1
+> 
+> Or is there a better interface (a pipe?) that allows multiple FFDC
+> captures, destroyed on full consume, without odd read/write side
+> effects?
+
+I tried to look into pipes, but I'm pretty unclear on how to set one
+up. Doesn't appear as though they are used in kernel much, especially
+as an interface to userspace.
+I'm just not sure its worth having more than one FFDC packet available.
+There would always have to be a maximum number of them anyway to put a
+bound on memory usage. We're somewhat helped here by the fact that OCC
+operations will go out a maximum of once a second, so that's hopefully
+plenty of time for userspace to notice the error and pick up the FFDC.
+
+> 
+> >         rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> > -       if (rc < 0)
+> > +       if (rc < 0) {
+> > +               if (resp_len) {
+> > +                       bool notify = false;
+> > +
+> > +                       mutex_lock(&ctx->sbe_error_lock);
+> > +                       if (ctx->sbe_error != SBE_ERROR_PENDING)
+> > +                               notify = true;
+> > +                       ctx->sbe_error = SBE_ERROR_PENDING;
+> 
+>                           [...]
+> 
+> > +                       ctx->ffdc_len = resp_len;
+> > +                       memcpy(ctx->ffdc, resp, resp_len);
+> 
+> This will clear out the previous error it if hasn't been collected by
+> userspace. Is that really what you want for *first* fail data
+> capture?
+> :)
+
+Ah, good point. I will fix that!
+
+Thanks for the review Jeremy!
+
+Eddie
+
+> 
+> Cheers,
+> 
+> 
+> Jeremy
+> 
 
