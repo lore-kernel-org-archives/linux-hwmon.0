@@ -2,89 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63DE1C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 22:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BDB9C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Sep 2021 05:13:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C66A61076
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Sep 2021 22:09:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D099761244
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Sep 2021 05:13:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbhIQWKx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Sep 2021 18:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S231542AbhIRFOz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Sep 2021 01:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241373AbhIQWKw (ORCPT
+        with ESMTP id S229956AbhIRFOz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Sep 2021 18:10:52 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFDDC061574;
-        Fri, 17 Sep 2021 15:09:30 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id bi4so15908051oib.9;
-        Fri, 17 Sep 2021 15:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8Cx0qBSaOKIf1+QlRCt1cPztoQCTEygYonUUg7sAxaY=;
-        b=l1HdWhiffeQWqNzSml/cVySYU+pImMNkrCD2ydYIQGOJsNcGGn+q3f9FllN+X74WrR
-         paBnNd+pdrekqjvzTYWfR0ghsbFlYSm6QLJ/RvbFLU0VHzK5/z+tIrXWPzFBadUYtSCE
-         MFNdxHBF4jePit079FH5lB9nKltggvOKkbLs8x+9x/WbFxRkl8F/UPrtO5UCGrhHlCyt
-         8vOKKXPoczEQAm11xRFDsxYnO/1CR6W5KzmRNnlzRns/y00nF2z0CWJKwAZ81JkQz6o1
-         RlSE8q3yPu/IBFY1k/b2CwTEZ6yZEQYIq5xulY2TI01vt38M0LBrHKvVvwlFYuRmg2+t
-         V2SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8Cx0qBSaOKIf1+QlRCt1cPztoQCTEygYonUUg7sAxaY=;
-        b=k0KFN8P37Zo39DElR0pjoc9nK4EBREfPG6IV9cXW5VVu+OZHUiWgAAWNXt4tHHlQkm
-         2Ree3t9OhPho5auDQedLUQcAJb7JgRhcUdd/D4WDJ8n1QTvf15mqyPrjNek+rlPzbsVE
-         KlG/FqxxAHz+/FqTY/PZhtiQSC4SYIqsofsIBld1+XXZiaOB4OYSF6XsmhU9/57RVvxy
-         1ceUK77JfQLYWWAxFn6gV09v65bHsF/FDzi4b2lRSVT+8fuNpmyrvLQnVXzb1idlh3vg
-         RiWiU0AiLFeR+xPfePN8sHu3vug4Y/TQIaBxsSeNmt0m62UKAkNp09bonTHlivNyKxJm
-         asWw==
-X-Gm-Message-State: AOAM5323fPr/jtHzVSj3CrrNvzhNTtmqcp0E673Rhej9W+3aA19ue8tP
-        jyiice06JEam3MuXAFyQdgGiSvkDu38=
-X-Google-Smtp-Source: ABdhPJzFQ/0sKjRh/cyE3mcdklyy/m8maFBKrQuPrqi2KwRgWl5vcx/69r4p+/K0XzZDJub9ikLgRw==
-X-Received: by 2002:a05:6808:642:: with SMTP id z2mr5732135oih.26.1631916569566;
-        Fri, 17 Sep 2021 15:09:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y24sm1940032oto.40.2021.09.17.15.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 15:09:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 17 Sep 2021 15:09:27 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 0/3] hwmon: Support access to the NCT677x via Asus WMI.
-Message-ID: <20210917220927.GA455190@roeck-us.net>
-References: <20210917220240.56553-1-pauk.denis@gmail.com>
+        Sat, 18 Sep 2021 01:14:55 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A00FC061574
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Sep 2021 22:13:32 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1631942010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=au2jCHVR8jssj4sYJIcjNlES/Ci6oiJOsbutoFYq8+Y=;
+        b=ofX3V+ISIhAO2ZMNppM0pKjX+vV0ei9FkoHnT31MHDB7JkkVmJFnaDERhHtjdBOlek8+j+
+        8qkq29eR7RT4tkGHuaBpBRFj+I9X1uDdCqT74ZXIRhsJeWA4x3Q9ZMy4Gx26+x2b3slvP+
+        Ay3c0n5VkjmklVwEFjz4lSfhKgBcXmU=
+From:   Jackie Liu <liu.yun@linux.dev>
+To:     pali@kernel.org, jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, liu.yun@linux.dev, W_Armin@gmx.de
+Subject: [PATCH] hwmon: (dell-smm): make struct dell_smm_data *data __maybe_unused
+Date:   Sat, 18 Sep 2021 13:13:00 +0800
+Message-Id: <20210918051300.1171578-1-liu.yun@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210917220240.56553-1-pauk.denis@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: liu.yun@linux.dev
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Sep 18, 2021 at 01:02:37AM +0300, Denis Pauk wrote:
-> Support accessing the NCT677x via Asus WMI functions.
-> 
-> On mainboards that support this way of accessing the chip,
-> the driver will usually not work without this option since
-> in these mainboards, ACPI will mark the I/O port as used.
-> 
-> Could you please review?
-> 
-> @Guenter Roeck, I have removed unrequired error messages.
-> 
+From: Jackie Liu <liuyun01@kylinos.cn>
 
-Series applied.
+The compiler warns when the data are actually unused:
 
-Thanks,
-Guenter
+  drivers/hwmon/dell-smm-hwmon.c: In function ‘i8k_init_procfs’:
+  drivers/hwmon/dell-smm-hwmon.c:624:24: error: unused variable ‘data’ [-Werror=unused-variable]
+    624 |  struct dell_smm_data *data = dev_get_drvdata(dev);
+        |                        ^~~~
+
+[Why]
+If CONFIG_PROC_FS=n, proc_create_data is NULL, data is unused.
+
+[Fix]
+Mark them __maybe_unused to suppress that warning as well.
+
+Fixes: ba04d73c26ed ("hwmon: (dell-smm-hwmon) Move variables into a driver private data structure")
+Cc: Armin Wolf <W_Armin@gmx.de>
+Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+---
+ drivers/hwmon/dell-smm-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index 774c1b0715d9..d73f4a4bd96e 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -621,7 +621,7 @@ static void i8k_exit_procfs(void *param)
+ 
+ static void __init i8k_init_procfs(struct device *dev)
+ {
+-	struct dell_smm_data *data = dev_get_drvdata(dev);
++	struct dell_smm_data __maybe_unused *data = dev_get_drvdata(dev);
+ 
+ 	/* Register the proc entry */
+ 	proc_create_data("i8k", 0, NULL, &i8k_proc_ops, data);
+-- 
+2.25.1
+
