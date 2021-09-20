@@ -2,89 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D620DC4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 12:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72DE4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 12:31:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD8E36109E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 12:14:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FC3560F58
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 12:31:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbhITMQB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Sep 2021 08:16:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45206 "EHLO mail.kernel.org"
+        id S238325AbhITMdB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Sep 2021 08:33:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55370 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237516AbhITMPw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Sep 2021 08:15:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DCA5361040;
-        Mon, 20 Sep 2021 12:14:23 +0000 (UTC)
+        id S238142AbhITMdB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 20 Sep 2021 08:33:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 337C060235;
+        Mon, 20 Sep 2021 12:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632140065;
-        bh=73TrFucuxNlW8vlWVi6GfOpJwgFjp9pH7dqbOl/p7wo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lxiDFh5VQoEKNTJARE7WiT6/ejxjLbbskFbG3sXsmNfWJVwEFIj3bnU33Alohu/l8
-         x+hMbIxne+bbna/eyKBT+mcGcIOuUXp8rU4BznUpvKUt3Nl+Cm/cQbSxTeg/qoVxzu
-         uEFOKAUxPm7rGrbBK2Pg/cK1PrpLVpclhKSKs3Rg+HCt0i2gvm+D0HHx07ERgaRI6x
-         KOnM0LPkvJ4RJNnKU1G7dZxoxZJrrvQWeIg7ByhC+RqL4hGgEttL4OVUIopIHuHPwg
-         4+HqngtfBa1IaN67IHBz9frokL31Y9dCsQU+V1ck2Kgu0cYZbS4PVuQTEDysB4aiBu
-         JhQnSF2xpxf0Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        s=k20201202; t=1632141094;
+        bh=vsZTv3R71Ln0hfEmYbHtKmLwlBEwmNvUaCnfeaLo3ls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r+tULOJ3T/W8zOlFPGdPMx1gJDFJ/WExC8em3Xx7udmZ7Ebq/2VYFaVao395j3hSs
+         DJCRdDRAsCwCKtk9LQsDnAI4yoXjSCqaHn8WHMsoJVf3Lb6lMifeo7prC5lz/5wiZF
+         tXQEZ2rO8gAnpMUz2k9nHOZxn6SKcmiLCZS2zOWnsE8h7M2pyjf82fMwikJg2zEVuT
+         ZK4SLO4yMDvtvEv/z6HI3edPqsDno3mETFqTvV6FuirJMezl0KCs3ld0CRBCmCBOgZ
+         MZADSOCp0eJ/sSEv3wj79EXzwx4B7NOMU254m0XLtLgHIg9mTDliDq7w5bGmVYTCZl
+         n6SLuBsiLdPTQ==
+Received: by pali.im (Postfix)
+        id E4597855; Mon, 20 Sep 2021 14:31:31 +0200 (CEST)
+Date:   Mon, 20 Sep 2021 14:31:31 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Armin Wolf <W_Armin@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
         Carlos Alberto Lopez Perez <clopez@igalia.com>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Sebastian Oechsle <setboolean@icloud.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: dell-smm-hwmon: remove unused variable warning
-Date:   Mon, 20 Sep 2021 14:14:16 +0200
-Message-Id: <20210920121421.93297-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+Subject: Re: [PATCH] hwmon: dell-smm-hwmon: remove unused variable warning
+Message-ID: <20210920123131.6kpv3ffxvm7xeqga@pali>
+References: <20210920121421.93297-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210920121421.93297-1-arnd@kernel.org>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello!
 
-When procfs is disabled, the code produces a warning
-for an unused variable:
+On Monday 20 September 2021 14:14:16 Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> When procfs is disabled
 
-drivers/hwmon/dell-smm-hwmon.c: In function 'i8k_init_procfs':
-drivers/hwmon/dell-smm-hwmon.c:624:31: error: unused variable 'data' [-Werror=unused-variable]
-  624 |         struct dell_smm_data *data = dev_get_drvdata(dev);
-      |                               ^~~~
+... then the i8k_init_procfs function should not be called as the
+purpose of I8K code / config option is to export functionality over
+procfs. So when procfs is disabled then this i8k is noop.
 
-Remove that local variable and just pass dev_get_drvdata(dev)
-directly.
+Patch which do not allow compilation of I8K when procfs is not enabled
+is pending here:
 
-Fixes: ba04d73c26ed ("hwmon: (dell-smm-hwmon) Move variables into a driver private data structure")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/hwmon/dell-smm-hwmon.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+https://lore.kernel.org/linux-hwmon/20210910071921.16777-1-rdunlap@infradead.org/
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 774c1b0715d9..0a3ce22c78e6 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -621,10 +621,8 @@ static void i8k_exit_procfs(void *param)
- 
- static void __init i8k_init_procfs(struct device *dev)
- {
--	struct dell_smm_data *data = dev_get_drvdata(dev);
--
- 	/* Register the proc entry */
--	proc_create_data("i8k", 0, NULL, &i8k_proc_ops, data);
-+	proc_create_data("i8k", 0, NULL, &i8k_proc_ops, dev_get_drvdata(dev));
- 
- 	devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
- }
--- 
-2.29.2
+Ideally please test or review it. As you are not the first one who
+spotted -Werror problems with i8k and tried to workaround it.
 
+https://lore.kernel.org/linux-hwmon/20210915151759.cxcbzxd74weg4qw6@pali/
+
+For compatibility reasons I still have I8K enabled, so I have not
+triggered this issue yet.
+
+Anyway, do you know if somebody on desktop / laptop (which is the only
+option where this i8k driver makes sense to be enabled) really using
+kernel without procfs? I would like to know if this warning / error is
+just artificial configuration generated by test scripts (and cannot be
+hit by any user) or if there is a real user who will be affected by this
+issue.
+
+> the code produces a warning
+> for an unused variable:
+> 
+> drivers/hwmon/dell-smm-hwmon.c: In function 'i8k_init_procfs':
+> drivers/hwmon/dell-smm-hwmon.c:624:31: error: unused variable 'data' [-Werror=unused-variable]
+>   624 |         struct dell_smm_data *data = dev_get_drvdata(dev);
+>       |                               ^~~~
+
+I'm starting to hate this -Werror decision... but seems that we have to
+deal with it and together cleanup code as much as possible.
+
+> Remove that local variable and just pass dev_get_drvdata(dev)
+> directly.
+> 
+> Fixes: ba04d73c26ed ("hwmon: (dell-smm-hwmon) Move variables into a driver private data structure")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 774c1b0715d9..0a3ce22c78e6 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -621,10 +621,8 @@ static void i8k_exit_procfs(void *param)
+>  
+>  static void __init i8k_init_procfs(struct device *dev)
+>  {
+> -	struct dell_smm_data *data = dev_get_drvdata(dev);
+> -
+>  	/* Register the proc entry */
+> -	proc_create_data("i8k", 0, NULL, &i8k_proc_ops, data);
+> +	proc_create_data("i8k", 0, NULL, &i8k_proc_ops, dev_get_drvdata(dev));
+>  
+>  	devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
+>  }
+> -- 
+> 2.29.2
+> 
