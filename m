@@ -7,71 +7,72 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FE37C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:21:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 380F9C43217
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:23:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B77061A70
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:21:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 249B6613D3
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:23:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378086AbhITSWq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Sep 2021 14:22:46 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:50930
+        id S1352456AbhITSZL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Sep 2021 14:25:11 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51028
         "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351820AbhITSUp (ORCPT
+        by vger.kernel.org with ESMTP id S1378090AbhITSWs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Sep 2021 14:20:45 -0400
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        Mon, 20 Sep 2021 14:22:48 -0400
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0111E3F31B
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 18:19:18 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8E5A93FE05
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 18:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632161958;
-        bh=IpPIuwvUbTgzHyTe+fBxia//tw9/orKJf90Kejz8OkM=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=ICCEjlvWaj2l676K7JAg30HcL/rny9lMuC0cswOxhUO5AU6tsnu5zWZccNHyE9u3m
-         5s3aAHNM39Fg5IMwlHZwKNizSAuC8YGYRef8BhJ4inENvkDJKw0exZz9y9nS/FKHWw
-         yFM713PHK416BNKx9/nJ5zuibBJEkdUjGYl6UwK2PqILTnh1nQBii/dM87ACSWsmgx
-         /yabxZde9/Oy0pHw9NxBHu0nMj5vJEvcnUqXfgwwwlL8kWJ3ZWxxRJwIKHztHC30/V
-         W7P1dnDS/gzTcgwGUGn3eX5pkNtICAXYcZFt1YFu0nOfSBDkiVwdja/ZK7OVE/870i
-         7hYyQpz610OAg==
-Received: by mail-wr1-f72.google.com with SMTP id i4-20020a5d5224000000b0015b14db14deso6787005wra.23
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 11:19:17 -0700 (PDT)
+        s=20210705; t=1632162080;
+        bh=eGQQ7dYmcpFV9zW7MpsysSvE4mW3gJe5kyomQB9AukM=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=K/64nZ0PiwYpxiH9h2GRkJ4ZSbg3sQExAk94L6ZfJNd5kDjix5blH2JQsCTlps7jW
+         T++7c1FKwu6dKg92LuSwbEeR50q4QUTykWtsYEyJyPk1IAyAd/+8uxpsD/uL1A1IPx
+         wgrRWUUNsSInIorVBVTQbF4GEQ51+lRdTCgJH2ldK2dQpeZJGMXfHGO1ZZERPPCdOq
+         l5tmRopdXvN7NK2LGd+r72b4at5l1e8qDJ+lvizDFZTXu62aMS0p+Ky7O0qx2q3b+i
+         UdBro0T1Vz74LDi6g7YtviJtarMqkQNcYrHpo9IyvSHQFOavps/HWjGFbzgAC8cbfs
+         m8hXklSjh5YsA==
+Received: by mail-wr1-f69.google.com with SMTP id c2-20020adfa302000000b0015e4260febdso5469661wrb.20
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 11:21:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IpPIuwvUbTgzHyTe+fBxia//tw9/orKJf90Kejz8OkM=;
-        b=41qLnpQ8hy5ejf+9u7AIIzlR064mibhi1HRHM0puI/kGZ7Smr/fCetLy7X9mhuLnex
-         uV9ec1ztLLbQt6W8CqQK67u+KE/1spafZtN85k63cbLpRPEKmmZs+Jevyy8d+91N4fAe
-         i3FL1iCqI5L+nAQbKyIjSVKA2UufnnNpMPUdXQd3ax7RGjWxZjfJq0aVhoZzjzk54nhX
-         IjQNpj89R5Waz0Q/vBv+kRZbh0CRuOODc3vq1gF6/h4152PG0kpNtuoK8SQ+GINGaxGU
-         xqFXn1tCV+kSLN4i176kYXbi1wf1BNRAsDMoZ8h/hSvR8xeupL4yOaGMd3IsQpuM2vdr
-         XdMQ==
-X-Gm-Message-State: AOAM533SHmNUGa/O4vJqFF/UbRGjX2EUeUtG5wIsAZhnN8X2kC7YUk3H
-        1wXCySfMn1QMskH4U+ojlRdIjar7zMDBlRVpkZXSav4eu1NnA6dNuLRI5OMR+W31KgoKeRkQDSe
-        RYpfxzKbCe8zyY/WV29cbJQV5aWJsOI0vLUZwyCAR
-X-Received: by 2002:a1c:a942:: with SMTP id s63mr415420wme.45.1632161957597;
-        Mon, 20 Sep 2021 11:19:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzk3ndi0x9YmEkaswh9wkxZ0jfLmzGnCgJTsvCobsHFor57aOQOFUNbyDw0BoCKMIAZZuiWTg==
-X-Received: by 2002:a1c:a942:: with SMTP id s63mr415406wme.45.1632161957432;
-        Mon, 20 Sep 2021 11:19:17 -0700 (PDT)
+        bh=eGQQ7dYmcpFV9zW7MpsysSvE4mW3gJe5kyomQB9AukM=;
+        b=CVGNPpVIdQ8YONPJiYJn9BcdouMiQujpqonebPM5hfiAZBV1SK1J3A3WBqdXRbjcol
+         PGlS5O2+Eb2iJmnSPEN8c03Q1gfh1g7+lJi343nCKwViyuZs3l/+8fENnxX8/K94ICmB
+         DtYbuTuJXGANYVmZX0w6q7p7T7uEyspRCYkha8iaLOqpsMs39LbjZspMD9S+iqv8Goie
+         iWTIcf0VXI4t1itl6t5exguS4rWrL2+U+M17voHUPD4/lYUTKxkVlXd/JO6CJoD9cVEk
+         erJuREZFLts+MCHhBFOU8ztI9EBsU7qSrFyrM5On/M5fG3o2jdNz+ETukJfvcj4/HwQf
+         PCVg==
+X-Gm-Message-State: AOAM532gknc4Nuk/5pC50HOwRALz2UeAwE+5G9oGP5e/NTr2leeLnRtu
+        SJYnR4/r0EghDEU29G2Pw2uiE7KHs/t3WndZHY5wmiKTFIzKbrTWCADorMI/wY1c+apBiVLarh8
+        O6QOUbgRK9YmQ44qvtx8VP04vd04n+4vXRrIzl8xw
+X-Received: by 2002:a5d:46cb:: with SMTP id g11mr30487395wrs.60.1632162080275;
+        Mon, 20 Sep 2021 11:21:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy9QLB/vF0OW+no2KLoWsLNenmxvOnOmtn3xw4taGpu+PChddhW0z+WzdSWDWSPaX0pjC+NYQ==
+X-Received: by 2002:a5d:46cb:: with SMTP id g11mr30487376wrs.60.1632162080081;
+        Mon, 20 Sep 2021 11:21:20 -0700 (PDT)
 Received: from kozik-lap.lan (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id i27sm253134wmb.40.2021.09.20.11.19.16
+        by smtp.gmail.com with ESMTPSA id e5sm10515285wrd.1.2021.09.20.11.21.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Sep 2021 11:19:17 -0700 (PDT)
+        Mon, 20 Sep 2021 11:21:19 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: lm90: convert to dtschema
-Date:   Mon, 20 Sep 2021 20:19:12 +0200
-Message-Id: <20210920181913.338772-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 1/6] dt-bindings: hwmon: lm70: move to trivial devices
+Date:   Mon, 20 Sep 2021 20:21:09 +0200
+Message-Id: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,193 +80,72 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert the National LM90 hwmon sensor bindings to DT schema format.
+The lm70 thermometer bindings are trivial, so like many other I2C/SPI
+temperature sensors can be integrated into trivial devices bindings.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
 ---
+ .../devicetree/bindings/hwmon/lm70.txt        | 22 -------------------
+ .../devicetree/bindings/trivial-devices.yaml  |  8 +++++++
+ 2 files changed, 8 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/lm70.txt
 
-Changes since v1:
-1. Drop adi,adt7461 from trivial-devices.
----
- .../devicetree/bindings/hwmon/lm90.txt        | 51 ------------
- .../bindings/hwmon/national,lm90.yaml         | 79 +++++++++++++++++++
- .../devicetree/bindings/trivial-devices.yaml  |  4 -
- MAINTAINERS                                   |  2 +-
- 4 files changed, 80 insertions(+), 56 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/lm90.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-
-diff --git a/Documentation/devicetree/bindings/hwmon/lm90.txt b/Documentation/devicetree/bindings/hwmon/lm90.txt
+diff --git a/Documentation/devicetree/bindings/hwmon/lm70.txt b/Documentation/devicetree/bindings/hwmon/lm70.txt
 deleted file mode 100644
-index 398dcb965751..000000000000
---- a/Documentation/devicetree/bindings/hwmon/lm90.txt
+index ea417a0d32af..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/lm70.txt
 +++ /dev/null
-@@ -1,51 +0,0 @@
--* LM90 series thermometer.
+@@ -1,22 +0,0 @@
+-* LM70/TMP121/LM71/LM74 thermometer.
 -
--Required node properties:
--- compatible: manufacturer and chip name, one of
--		"adi,adm1032"
--		"adi,adt7461"
--		"adi,adt7461a"
--		"gmt,g781"
--		"national,lm90"
--		"national,lm86"
--		"national,lm89"
--		"national,lm99"
--		"dallas,max6646"
--		"dallas,max6647"
--		"dallas,max6649"
--		"dallas,max6657"
--		"dallas,max6658"
--		"dallas,max6659"
--		"dallas,max6680"
--		"dallas,max6681"
--		"dallas,max6695"
--		"dallas,max6696"
--		"onnn,nct1008"
--		"winbond,w83l771"
--		"nxp,sa56004"
--		"ti,tmp451"
+-Required properties:
+-- compatible: one of
+-		"ti,lm70"
+-		"ti,tmp121"
+-		"ti,tmp122"
+-		"ti,lm71"
+-		"ti,lm74"
 -
--- reg: I2C bus address of the device
+-See Documentation/devicetree/bindings/spi/spi-bus.txt for more required and
+-optional properties.
 -
--- vcc-supply: vcc regulator for the supply voltage.
+-Example:
 -
--Optional properties:
--- interrupts: Contains a single interrupt specifier which describes the
--              LM90 "-ALERT" pin output.
--              See interrupt-controller/interrupts.txt for the format.
--
--- #thermal-sensor-cells: should be set to 1. See thermal/thermal-sensor.yaml
--	      for details. See <include/dt-bindings/thermal/lm90.h> for the
--	      definition of the local, remote and 2nd remote sensor index
--	      constants.
--
--Example LM90 node:
--
--temp-sensor {
--	compatible = "onnn,nct1008";
--	reg = <0x4c>;
--	vcc-supply = <&palmas_ldo6_reg>;
--	interrupt-parent = <&gpio>;
--	interrupts = <TEGRA_GPIO(O, 4) IRQ_TYPE_LEVEL_LOW>;
--	#thermal-sensor-cells = <1>;
--}
-diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-new file mode 100644
-index 000000000000..e712117da3df
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/national,lm90.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LM90 series thermometer
-+
-+maintainers:
-+  - Jean Delvare <jdelvare@suse.com>
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,adm1032
-+      - adi,adt7461
-+      - adi,adt7461a
-+      - dallas,max6646
-+      - dallas,max6647
-+      - dallas,max6649
-+      - dallas,max6657
-+      - dallas,max6658
-+      - dallas,max6659
-+      - dallas,max6680
-+      - dallas,max6681
-+      - dallas,max6695
-+      - dallas,max6696
-+      - gmt,g781
-+      - national,lm86
-+      - national,lm89
-+      - national,lm90
-+      - national,lm99
-+      - nxp,sa56004
-+      - onnn,nct1008
-+      - ti,tmp451
-+      - winbond,w83l771
-+
-+
-+  interrupts:
-+    items:
-+      - description: |
-+          Single interrupt specifier which describes the LM90 "-ALERT" pin
-+          output.
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+  vcc-supply:
-+    description: phandle to the regulator that provides the +VCC supply
-+
-+required:
-+  - compatible
-+  - reg
-+  - vcc-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/tegra-gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@4c {
-+            compatible = "onnn,nct1008";
-+            reg = <0x4c>;
-+            vcc-supply = <&palmas_ldo6_reg>;
-+            interrupt-parent = <&gpio>;
-+            interrupts = <TEGRA_GPIO(O, 4) IRQ_TYPE_LEVEL_LOW>;
-+            #thermal-sensor-cells = <1>;
-+        };
-+    };
+-spi_master {
+-	temperature-sensor@0 {
+-		compatible = "ti,lm70";
+-		reg = <0>;
+-		spi-max-frequency = <1000000>;
+-	};
+-};
 diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 1e4b3464d734..1eb4ce7dcdfd 100644
+index 1eb4ce7dcdfd..183ee0da22c6 100644
 --- a/Documentation/devicetree/bindings/trivial-devices.yaml
 +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -41,10 +41,6 @@ properties:
-           - adi,adp5585-02
-             # Analog Devices ADP5589 Keypad Decoder and I/O Expansion
-           - adi,adp5589
--            # +/-1C TDM Extended Temp Range I.C
--          - adi,adt7461
--            # +/-1C TDM Extended Temp Range I.C
--          - adt7461
-             # AMS iAQ-Core VOC Sensor
-           - ams,iaq-core
-             # i2c serial eeprom  (24cxx)
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2b990794ec35..b07679009af2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10928,7 +10928,7 @@ LM90 HARDWARE MONITOR DRIVER
- M:	Jean Delvare <jdelvare@suse.com>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/hwmon/lm90.txt
-+F:	Documentation/devicetree/bindings/hwmon/national,lm90.yaml
- F:	Documentation/hwmon/lm90.rst
- F:	drivers/hwmon/lm90.c
- F:	include/dt-bindings/thermal/lm90.h
+@@ -303,8 +303,13 @@ properties:
+           - ti,hdc1050
+             # Temperature and humidity sensor with i2c interface
+           - ti,hdc1080
++            # Thermometer with SPI interface
++          - ti,lm70
++          - ti,lm71
+             # Temperature sensor with 2-wire interface
+           - ti,lm73
++            # Thermometer with SPI interface
++          - ti,lm74
+             # Temperature sensor with integrated fan control
+           - ti,lm96000
+             # I2C Touch-Screen Controller
+@@ -313,6 +318,9 @@ properties:
+           - ti,tmp102
+             # Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
+           - ti,tmp103
++            # Thermometer with SPI interface
++          - ti,tmp121
++          - ti,tmp122
+             # Digital Temperature Sensor
+           - ti,tmp275
+             # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
 -- 
 2.30.2
 
