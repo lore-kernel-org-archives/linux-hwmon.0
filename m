@@ -2,131 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AF46C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0B12C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:59:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4325361B26
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:43:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9D1C61252
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:59:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347047AbhITRpE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Sep 2021 13:45:04 -0400
-Received: from mail-co1nam11on2075.outbound.protection.outlook.com ([40.107.220.75]:13857
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1352991AbhITRnJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Sep 2021 13:43:09 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LXDRn4JWvb+tDb6/3IEmSDD4HgmYmfjemJs3/VmdsuK42gvTBpwZYc3xuyl1iiot9QiCqjHifODYNPL8UPmi7QdNNZDhpTZ4b+0b8aZ1VLHWiFlLXRY5w8ZW5dYceVGA7pM0M8JWAqaspcsC/RKrKURnooIgS9pGUUGZuhktViCgTpcfJLxMX+70m/5JvqwrWx51bK5cQVRagTWkzFw2HMOzS1d7+rLmnDImy1AnqVuF9Nea9HnwOEtBlWldat0YnvrHt6mq1qkNikoBDFBMd9EnZtm2ky/s3ejZgDIPppCghnUIOxfiTEVpMj7DZ507Cn44Q3yfloWVRCwFehbVgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=AS736bP8LXZARr7YP9lSqenTq9n5SUOHRby4BDmaqUY=;
- b=l51m4xoodX0tk10awbYTQJeLoK1Bf6dBbzdZiLOkS2Kqftl7Za3ADirsyfpwhpur3B12kENH8Nob4EBsE5mzydkpJJq4nvs8ag+ZifDGX256WtlH2SCwuR+i7L5lhgm54EzSuOgSGIfSEPso/xnZbg8G4ZcRXRPxXiQ0rT9K2Dzh9mKXoaMdIdo1jXUJp/tF/twrcNFC+vXXw3lrFCyEnvowKFkCNEO6WG13uu0Pn5MZRuvES1WR9gbBfOyKk77ApPBU7OryO99xJrOJOb512N8zwIj57QrjXmqR4AfW3DP5X8Bo6AO5ZPiqAmPGdLxqTxnvNNb4zVxzXBM6DuR8BQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.32) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AS736bP8LXZARr7YP9lSqenTq9n5SUOHRby4BDmaqUY=;
- b=TbvZ8LBUJwi51lwOggtM9Na8L7J9ztGa4VdFswpsfHn58QudSM0u7TO4SVWpYC0AfApXzlZI86S9FIkRZnwgp/ycxdMYj7/xn7E/2L36m14U2Tmh5XyiuDeq5ywNhqy1ejNGVJpJOflbHMqeEC50lwxIOHyE3avloi5iXMJ95aJNzTziOfk1GYHnCzEU11u5dzKnJNNfgzBHqvIyW9e25vSqjR/ouYOSimqgc5LzoAJkgcFqlV/fEPwFlb/24o5BDtBXBwbPNiYl1n45rZuXKDjQcXuuMyK84EWcbm+//Yr9lEDbof+0S6s0Yz+YKS+VqqL83BPT2syWg44h6p6pzQ==
-Received: from BN6PR21CA0018.namprd21.prod.outlook.com (2603:10b6:404:8e::28)
- by MN2PR12MB3440.namprd12.prod.outlook.com (2603:10b6:208:d0::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Mon, 20 Sep
- 2021 17:41:39 +0000
-Received: from BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:8e:cafe::b4) by BN6PR21CA0018.outlook.office365.com
- (2603:10b6:404:8e::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.4 via Frontend
- Transport; Mon, 20 Sep 2021 17:41:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.32)
- smtp.mailfrom=nvidia.com; roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.32 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.32; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.32) by
- BN8NAM11FT027.mail.protection.outlook.com (10.13.177.96) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4523.14 via Frontend Transport; Mon, 20 Sep 2021 17:41:38 +0000
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Sep
- 2021 10:41:37 -0700
-Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.187.5) by
- DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.18; Mon, 20 Sep 2021 17:41:36 +0000
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH hwmon-next 1/1] hwmon: (mlxreg-fan) Fix defect reported by Coverity Scan for linux-next
-Date:   Mon, 20 Sep 2021 20:41:18 +0300
-Message-ID: <20210920174119.1080488-1-vadimp@nvidia.com>
-X-Mailer: git-send-email 2.31.1
+        id S1356718AbhITSBK convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Sep 2021 14:01:10 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:60401 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349765AbhITR7J (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 20 Sep 2021 13:59:09 -0400
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MNKqC-1mDT3e1Rf8-00OnLa for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep
+ 2021 19:57:40 +0200
+Received: by mail-wr1-f49.google.com with SMTP id q11so32119684wrr.9
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 10:57:40 -0700 (PDT)
+X-Gm-Message-State: AOAM5313IUwstCe7w7dFP68yV0zI9mKKZBhOOYes5QXNoxeom+ahkadb
+        t0cgD6uFo/LsrU9onyOYsAFts9vIQ8W9ePIzpMA=
+X-Google-Smtp-Source: ABdhPJzc+jdmOu307h9oYylcyqhGJvkKcOjVAyCg8sN0wYB7IEeLKAE2XeBmCKph4yP0sYHzsQxREy66fBeYmR5zWWE=
+X-Received: by 2002:a05:6000:1561:: with SMTP id 1mr20180787wrz.369.1632160659999;
+ Mon, 20 Sep 2021 10:57:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.20.187.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1d347c0b-9730-4186-345b-08d97c5de66f
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3440:
-X-Microsoft-Antispam-PRVS: <MN2PR12MB344059C70D6AF5E5B12BEFCAAFA09@MN2PR12MB3440.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: weeY39i7o7CbmP4K5zyDEHu01v5oZ9g0xlTGQ9A/1yuGGguRagVW1Q0WS46lffh7BINb9jcGi3KEbXucFBOnHqK5QUbGRWg5lCGgrDKbQ1b/XJS7VPXSlyhOraW3lW7/GbZ3TfnMupeKM6Wg7uNby6oOUL5gZM8i5z+ZDd74iuo/fnDudXl/777fW/kLNq8LA6tZ6+UwxNI8DhduV7/BLCrj6GeZrG25kGgTM0brVItYohrWqNXeJ/XnhkLX9lfY0rFINVadCQb/jUwowZt0UwRydnRd4bwIfJwXDPa5R7IuzTzrCls5ssskKL9VwW+J7Q0XBbIgsRrRDbbZtB5dSdamHP2RISY5wJMdvq8lbpBvK1zM9kn9SM3f+v7tisHoG5YpggX5bL1P0+HhEIbuXLpItSifr2ao0CZ91E4yS+fSyOSMAOxmJ6O1swlagjRe5xmeOyZI7tod9qkDx6r6H9bYku1bCF8JBIVW5JknibCepqUW7zxrwTBcLO5oA4tU7vxIYUilB1XPUyn1SjD/jhj1x5nAcWjrsjBP41jgcCvDNYmWGjAtW07fROmbFVzs2V87Bxm368JdtJ1qT+54Ezdmti6ldNq6CpTduCHpEwnQeC0WWtPjhouyn3wSVmitXU1Zq2gallKphC4zHsf4rIU/D3Nl1juDN83uJvsEGKUadX/Az6vRQed08+kS/bk0IhxHMPwR5FhjnLCO5KiwuA==
-X-Forefront-Antispam-Report: CIP:216.228.112.32;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(396003)(376002)(346002)(136003)(39860400002)(46966006)(36840700001)(4326008)(8936002)(2616005)(356005)(47076005)(36860700001)(83380400001)(7636003)(1076003)(70206006)(4744005)(6666004)(316002)(54906003)(107886003)(82740400003)(6916009)(8676002)(186003)(16526019)(26005)(82310400003)(5660300002)(2906002)(36756003)(478600001)(70586007)(426003)(336012)(86362001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2021 17:41:38.7597
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d347c0b-9730-4186-345b-08d97c5de66f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.32];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3440
+References: <20210910071921.16777-1-rdunlap@infradead.org>
+In-Reply-To: <20210910071921.16777-1-rdunlap@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 20 Sep 2021 19:57:24 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1o5gQCofMfHJHBXPemhGskOpEgj7f5pXbPF=8U-nwQSA@mail.gmail.com>
+Message-ID: <CAK8P3a1o5gQCofMfHJHBXPemhGskOpEgj7f5pXbPF=8U-nwQSA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: dell-smm-hwmon: fix unused variable error
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Armin Wolf <W_Armin@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:UU8t2b+LCSjYNPQSLjny7VJ3cBiHNcqQpCrXA1rBQbcWLssX0cj
+ bQSma2IsQVT12L5ip0E307BnykBd9PpSmX8vMkfG6lv4KsRCDA8jlssu3RcGBEUqoejDjQn
+ OyyYqmgK7Ssqy3SkJP4Go5KrDzzJgvV54s7xbudDKuRvHjYbYLMeiYuCOIXvNKYKdjSHA5n
+ Gz71cnGnCz1BO6QV3LwBw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xj5b/hxNJE0=:HsBd70qMJkgk/ZreJRjKAY
+ 4zkZ5agUwZoQn+cEOCY4MOdB3yoopQkX8Rq5lUs0ISKOFFcgh/mteoWczYOQwETaDoCxV3aZf
+ bCcX9255PKf4cZ43Mr2l+hRqj88mbHP2DqKkjfoSBUnkFKe954rxJEXt5uY3NKWK3wCyjQ5+8
+ H7Zjg3RvItycvWPtzd1h3AY7RqAYFdKMpYGWcLXMsn3TErWNkj2yY/OVCqJVMrzQQP88aPI98
+ V6NMHu5BYgEpzLPERTVrrn1UN+GZoz5Sp54tJKyJoCZtKp3Tb0Jj5olh+Bu+/2kALSN1C4vei
+ gMVXbW3zHpWW7uS9pqjS2Ez2/0P7+ooBxqUeCRHxPbldWOwQmDqXslVblQqnCMZJvDbxrtu7l
+ SDthre4aIBbLJg80TU9s3S05s+M+0pkQgS3d+OeUbsESb0oUhQeTS/jQsiVH3dQNK6H3Q5BTG
+ TXUu9cY4aHgHJpk0yRPElZVozkR+/TOj2dGwovtfe6XR2hMq4wfjJsPJ7yf8anDxUrVjw31TJ
+ oPzUPixTSrNOaRZ67/Mp+e4lIIG4WJhH3HLtS2ITJwLiAbbI4T8nPA0sDPagFF8JAXGLSE9Es
+ OhaoS1/iKttDKNhnErgMU6c+69g6FLrpqMwhyy3kF+oNllnSpAfHw6UApuqdUlnUyfibSThiL
+ y9DzmhmRRfLJHi5Qo3yHyzyhtiEHejLibEhAyG4uW+X+AeE3Sqm545tBEadFwjsmJ7rmSUYEu
+ GALTGn0Jol7HXjADWz/zFtQ2E1b8GAUP+uY0pg==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix counter limit in 'for' loop in mlxreg_fan_cooling_config().
-The issue found in the report on new defect(s) introduced to linux-next
-weekly scan found with Coverity Scan - memory access violation.
+On Fri, Sep 10, 2021 at 9:19 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> When CONFIG_PROC_FS is not set, there is a build warning (turned
+> into an error):
+>
+> ../drivers/hwmon/dell-smm-hwmon.c: In function 'i8k_init_procfs':
+> ../drivers/hwmon/dell-smm-hwmon.c:624:24: error: unused variable 'data' [-Werror=unused-variable]
+>   struct dell_smm_data *data = dev_get_drvdata(dev);
+>
+> Fix this by making I8K depend on PROC_FS and HWMON (instead of
+> selecting HWMON -- we prefer and try hard not to select entire
+> subsystems).
+>
+> Build tested in all possible combinations of SENSORS_DELL_SMM,
+> I8K, and PROC_FS.
+>
+> Fixes: 039ae58503f3 ("hwmon: Allow to compile dell-smm-hwmon driver without /proc/i8k")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Pali Rohár <pali@kernel.org>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: x86@kernel.org
+> Cc: Armin Wolf <W_Armin@gmx.de>
 
-** CID 1507571:  Memory - illegal accesses  (OVERRUN)
-/drivers/hwmon/mlxreg-fan.c: 560 in mlxreg_fan_cooling_config()
+I submitted a different patch today after noticing the same issue but
+your patch is better:
 
->>> Overrunning array of 160 bytes at byte offset 160 by dereferencing
-	pointer "pwm".
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
----
- drivers/hwmon/mlxreg-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index 35228ed112d7..feab9ec6a6ca 100644
---- a/drivers/hwmon/mlxreg-fan.c
-+++ b/drivers/hwmon/mlxreg-fan.c
-@@ -554,7 +554,7 @@ static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
- {
- 	int i, j;
- 
--	for (i = 0; i <= MLXREG_FAN_MAX_PWM; i++) {
-+	for (i = 0; i < MLXREG_FAN_MAX_PWM; i++) {
- 		struct mlxreg_fan_pwm *pwm = &fan->pwm[i];
- 
- 		if (!pwm->connected)
--- 
-2.20.1
-
+      Arnd
