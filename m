@@ -2,101 +2,131 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BEBCC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AF46C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:43:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68385613A2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:25:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4325361B26
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:43:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347611AbhITR0Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Sep 2021 13:26:25 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45556
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349748AbhITRYY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Sep 2021 13:24:24 -0400
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 789E340257
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 17:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632158574;
-        bh=Ib/7vEzqwK2uprJcTl5mNvdNQqfYMGseImnegUnlZu8=;
-        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=dLd8MA/vlcqNC3HrAtrI875zKeCi8Bj5TyKfQVMlOmehYclCpJFvYHT8iOU45/ZOw
-         +V85cFy1AePUZHdw96MT4YAe+8TWd/IlFW3qhSSe3Dmih2cJL5g12vKNdNi7gm9QNV
-         zQul0PZTa3iCxu/AqFoDOiKK9IEXdms4TI/lu6dGb/KQo5hR4jd6gC8QFGky77fFDe
-         vN8lRitT8/jcl/ynUCs+/eUGwfvP4Vf98hnC3w/i19x3sQeOCqmEaLwHx+FhLi1WUD
-         eOF8tpXqH3TGpWl9hDtClFGJoYRcl/3NSoEb/9eF4X3sPa/EtMb/tmASTPzNd/Wngf
-         biLCJ3ACbQqjg==
-Received: by mail-wr1-f69.google.com with SMTP id m1-20020a056000180100b0015e1ec30ac3so6679427wrh.8
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 10:22:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ib/7vEzqwK2uprJcTl5mNvdNQqfYMGseImnegUnlZu8=;
-        b=dY+JibibHlbB4rzBpCSgSXnXneywpu07ZDLHQwF7g60E9wvqCPekxfja3yzFyouexd
-         FoLC/JomjIPEjZiGXRca09+t/32ayKDhwr7HVV7OKYZbM/sXL8eGYKuD7FRXYDvh+HF5
-         nPvdOSDeXjZMO8N/sMqW6IFe2cYNP5kVq5tnjl4nHftnTrqbShpU37CGOgOefEeuRbaZ
-         vFICDpkSCRo7YO4JVhBkGMyPkH/QC8g7bh/o4ei6yzVV+OyfUv8Kozr/0258al/9UVxF
-         iozoFrFCAN+UbFv9ccOTmR3/yhCyLETCymVV9qfsezKJodqXzqRP3YRb7f84jqnkeZ6G
-         vgpg==
-X-Gm-Message-State: AOAM532iqJYlNgBry9hZMwJlmJ2G8ZXbGBj69jxmPkawuEqGX/g/nwPh
-        QR+9ebOoZVP1u1cGGlAAl6bgc6RvcOrCOnOftBhVmNmgzYeyH6rE8wSOZ2lorjs4hxEPdgGL1Gf
-        9HVEkF9K0sW6rOIO9WlgRZ26yu+LSLlWVUIZKSG7O
-X-Received: by 2002:adf:9dc6:: with SMTP id q6mr29119909wre.161.1632158574154;
-        Mon, 20 Sep 2021 10:22:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxwOXR3BGLGuHRY1saUVMJLa6t51fTX3CzldWDDLLRnhlJnRQKhpE+RtKpocM9bhIwyrYYE3Q==
-X-Received: by 2002:adf:9dc6:: with SMTP id q6mr29119894wre.161.1632158573938;
-        Mon, 20 Sep 2021 10:22:53 -0700 (PDT)
-Received: from [192.168.2.20] (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id 4sm92158wmv.42.2021.09.20.10.22.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Sep 2021 10:22:53 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: hwmon: lm90: convert to dtschema
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210920140525.157013-1-krzysztof.kozlowski@canonical.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <9bd8a400-86da-04bf-8205-725794e62108@canonical.com>
-Date:   Mon, 20 Sep 2021 19:22:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1347047AbhITRpE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Sep 2021 13:45:04 -0400
+Received: from mail-co1nam11on2075.outbound.protection.outlook.com ([40.107.220.75]:13857
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1352991AbhITRnJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 20 Sep 2021 13:43:09 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LXDRn4JWvb+tDb6/3IEmSDD4HgmYmfjemJs3/VmdsuK42gvTBpwZYc3xuyl1iiot9QiCqjHifODYNPL8UPmi7QdNNZDhpTZ4b+0b8aZ1VLHWiFlLXRY5w8ZW5dYceVGA7pM0M8JWAqaspcsC/RKrKURnooIgS9pGUUGZuhktViCgTpcfJLxMX+70m/5JvqwrWx51bK5cQVRagTWkzFw2HMOzS1d7+rLmnDImy1AnqVuF9Nea9HnwOEtBlWldat0YnvrHt6mq1qkNikoBDFBMd9EnZtm2ky/s3ejZgDIPppCghnUIOxfiTEVpMj7DZ507Cn44Q3yfloWVRCwFehbVgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=AS736bP8LXZARr7YP9lSqenTq9n5SUOHRby4BDmaqUY=;
+ b=l51m4xoodX0tk10awbYTQJeLoK1Bf6dBbzdZiLOkS2Kqftl7Za3ADirsyfpwhpur3B12kENH8Nob4EBsE5mzydkpJJq4nvs8ag+ZifDGX256WtlH2SCwuR+i7L5lhgm54EzSuOgSGIfSEPso/xnZbg8G4ZcRXRPxXiQ0rT9K2Dzh9mKXoaMdIdo1jXUJp/tF/twrcNFC+vXXw3lrFCyEnvowKFkCNEO6WG13uu0Pn5MZRuvES1WR9gbBfOyKk77ApPBU7OryO99xJrOJOb512N8zwIj57QrjXmqR4AfW3DP5X8Bo6AO5ZPiqAmPGdLxqTxnvNNb4zVxzXBM6DuR8BQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.32) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AS736bP8LXZARr7YP9lSqenTq9n5SUOHRby4BDmaqUY=;
+ b=TbvZ8LBUJwi51lwOggtM9Na8L7J9ztGa4VdFswpsfHn58QudSM0u7TO4SVWpYC0AfApXzlZI86S9FIkRZnwgp/ycxdMYj7/xn7E/2L36m14U2Tmh5XyiuDeq5ywNhqy1ejNGVJpJOflbHMqeEC50lwxIOHyE3avloi5iXMJ95aJNzTziOfk1GYHnCzEU11u5dzKnJNNfgzBHqvIyW9e25vSqjR/ouYOSimqgc5LzoAJkgcFqlV/fEPwFlb/24o5BDtBXBwbPNiYl1n45rZuXKDjQcXuuMyK84EWcbm+//Yr9lEDbof+0S6s0Yz+YKS+VqqL83BPT2syWg44h6p6pzQ==
+Received: from BN6PR21CA0018.namprd21.prod.outlook.com (2603:10b6:404:8e::28)
+ by MN2PR12MB3440.namprd12.prod.outlook.com (2603:10b6:208:d0::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Mon, 20 Sep
+ 2021 17:41:39 +0000
+Received: from BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:8e:cafe::b4) by BN6PR21CA0018.outlook.office365.com
+ (2603:10b6:404:8e::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.4 via Frontend
+ Transport; Mon, 20 Sep 2021 17:41:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.32)
+ smtp.mailfrom=nvidia.com; roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.32 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.32; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.32) by
+ BN8NAM11FT027.mail.protection.outlook.com (10.13.177.96) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4523.14 via Frontend Transport; Mon, 20 Sep 2021 17:41:38 +0000
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Sep
+ 2021 10:41:37 -0700
+Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.187.5) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.18; Mon, 20 Sep 2021 17:41:36 +0000
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH hwmon-next 1/1] hwmon: (mlxreg-fan) Fix defect reported by Coverity Scan for linux-next
+Date:   Mon, 20 Sep 2021 20:41:18 +0300
+Message-ID: <20210920174119.1080488-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210920140525.157013-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.20.187.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1d347c0b-9730-4186-345b-08d97c5de66f
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3440:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB344059C70D6AF5E5B12BEFCAAFA09@MN2PR12MB3440.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: weeY39i7o7CbmP4K5zyDEHu01v5oZ9g0xlTGQ9A/1yuGGguRagVW1Q0WS46lffh7BINb9jcGi3KEbXucFBOnHqK5QUbGRWg5lCGgrDKbQ1b/XJS7VPXSlyhOraW3lW7/GbZ3TfnMupeKM6Wg7uNby6oOUL5gZM8i5z+ZDd74iuo/fnDudXl/777fW/kLNq8LA6tZ6+UwxNI8DhduV7/BLCrj6GeZrG25kGgTM0brVItYohrWqNXeJ/XnhkLX9lfY0rFINVadCQb/jUwowZt0UwRydnRd4bwIfJwXDPa5R7IuzTzrCls5ssskKL9VwW+J7Q0XBbIgsRrRDbbZtB5dSdamHP2RISY5wJMdvq8lbpBvK1zM9kn9SM3f+v7tisHoG5YpggX5bL1P0+HhEIbuXLpItSifr2ao0CZ91E4yS+fSyOSMAOxmJ6O1swlagjRe5xmeOyZI7tod9qkDx6r6H9bYku1bCF8JBIVW5JknibCepqUW7zxrwTBcLO5oA4tU7vxIYUilB1XPUyn1SjD/jhj1x5nAcWjrsjBP41jgcCvDNYmWGjAtW07fROmbFVzs2V87Bxm368JdtJ1qT+54Ezdmti6ldNq6CpTduCHpEwnQeC0WWtPjhouyn3wSVmitXU1Zq2gallKphC4zHsf4rIU/D3Nl1juDN83uJvsEGKUadX/Az6vRQed08+kS/bk0IhxHMPwR5FhjnLCO5KiwuA==
+X-Forefront-Antispam-Report: CIP:216.228.112.32;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(396003)(376002)(346002)(136003)(39860400002)(46966006)(36840700001)(4326008)(8936002)(2616005)(356005)(47076005)(36860700001)(83380400001)(7636003)(1076003)(70206006)(4744005)(6666004)(316002)(54906003)(107886003)(82740400003)(6916009)(8676002)(186003)(16526019)(26005)(82310400003)(5660300002)(2906002)(36756003)(478600001)(70586007)(426003)(336012)(86362001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2021 17:41:38.7597
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d347c0b-9730-4186-345b-08d97c5de66f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.32];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3440
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 20/09/2021 16:05, Krzysztof Kozlowski wrote:
-> Convert the National LM90 hwmon sensor bindings to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/hwmon/lm90.txt        | 51 ------------
->  .../bindings/hwmon/national,lm90.yaml         | 79 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 80 insertions(+), 52 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/lm90.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> 
+Fix counter limit in 'for' loop in mlxreg_fan_cooling_config().
+The issue found in the report on new defect(s) introduced to linux-next
+weekly scan found with Coverity Scan - memory access violation.
 
-I will send a v2 because few devices are on trivial-devices list.
+** CID 1507571:  Memory - illegal accesses  (OVERRUN)
+/drivers/hwmon/mlxreg-fan.c: 560 in mlxreg_fan_cooling_config()
 
-Best regards,
-Krzysztof
+>>> Overrunning array of 160 bytes at byte offset 160 by dereferencing
+	pointer "pwm".
+
+Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/hwmon/mlxreg-fan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index 35228ed112d7..feab9ec6a6ca 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -554,7 +554,7 @@ static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
+ {
+ 	int i, j;
+ 
+-	for (i = 0; i <= MLXREG_FAN_MAX_PWM; i++) {
++	for (i = 0; i < MLXREG_FAN_MAX_PWM; i++) {
+ 		struct mlxreg_fan_pwm *pwm = &fan->pwm[i];
+ 
+ 		if (!pwm->connected)
+-- 
+2.20.1
+
