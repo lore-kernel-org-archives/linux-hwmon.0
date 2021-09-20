@@ -7,339 +7,237 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6694AC4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2088C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5295D606A5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AD22606A5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383720AbhITSpk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Sep 2021 14:45:40 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39746 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1344524AbhITSnj (ORCPT
+        id S1383741AbhITSpm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Sep 2021 14:45:42 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26390 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349414AbhITSnl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Sep 2021 14:43:39 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KIZf2d019137;
-        Mon, 20 Sep 2021 14:41:47 -0400
+        Mon, 20 Sep 2021 14:43:41 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KHT7Jt012980;
+        Mon, 20 Sep 2021 14:41:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=5Gh8S5FvyeFMEokeXe/PXEHPNy8luH1zsbM4fj9ZU3A=;
- b=CFsP5geg18I7LCAUEvVJbxzPe/tuHnQHWgmNRPZhH6dHSxfsTUhUF7zbf0orHfhN/R10
- /LjdxJQIe91JGTxoYU4XGRene7qfukmvLXnYmiJ+lO3y5PAcJNx3QfyhUKrybJjMDfA/
- amTdEv/654A2ruxomIk6kXbF6tT+T74q5HxE+3AYqKd9ZWWfmJnxYPhl9lo1QbRByoau
- x8shbAHqTmweK+IyVF034XUBmYWeoBxslNv3pw0YtrrHkRVssk+SuG3kHxUdisO9ZcwG
- wSxsTzTlMLXvN2p3AWxIPsAaAzKxiMaYwBMh751/jHiEkVESx2gFMrNaz1H13xA80zbA DQ== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3b5wmc6wur-1
+ bh=a9ufpbxwEB93Rn+evVK2qSH25LhjJC8Oxp/tJUbJp5A=;
+ b=lPwL+tWm12iM21ZhKZWS0738Sbd8trqqbfA2qsJYdLr4QTroxVVpXvbL3Q1VhwTll9Bc
+ 8J6BkFQt/Ps4/nIxQTIBxACxXpHzV1so7NmIytK9lzkmfX3C8PkpSK9S0bHf0IuwlKbb
+ Z0HDr0kKBiM59qkSG230aklulGwT+rGQG374M+ShZc4pL607ot0OIwYhaI5GfLZSRhpy
+ yFQwhNcEnEkuqBGM101QqNpAPf7PMYB7i7lm6bP8BfTqb8BjjOBpgVkvS1Z2zwSGmUa3
+ VjC7G3CFXejo3DSwgT/IgnJGMfB8w7IZYvSnwvHvuOLQE4h4V7on3uwvA2CEaS8V6uQg zw== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b5w3g3asf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Sep 2021 14:41:47 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18KIb6f3023862;
-        Mon, 20 Sep 2021 18:41:46 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma01wdc.us.ibm.com with ESMTP id 3b57r9xfrd-1
+        Mon, 20 Sep 2021 14:41:50 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18KIb7vY012356;
+        Mon, 20 Sep 2021 18:41:49 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03dal.us.ibm.com with ESMTP id 3b57ra7qsb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Sep 2021 18:41:46 +0000
+        Mon, 20 Sep 2021 18:41:49 +0000
 Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18KIfja328311992
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18KIfmXB23790018
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Sep 2021 18:41:45 GMT
+        Mon, 20 Sep 2021 18:41:48 GMT
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40D7B12405C;
-        Mon, 20 Sep 2021 18:41:45 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 8514E12405C;
+        Mon, 20 Sep 2021 18:41:48 +0000 (GMT)
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D7890124053;
-        Mon, 20 Sep 2021 18:41:43 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 28751124054;
+        Mon, 20 Sep 2021 18:41:47 +0000 (GMT)
 Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.87.144])
         by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Sep 2021 18:41:43 +0000 (GMT)
+        Mon, 20 Sep 2021 18:41:46 +0000 (GMT)
 From:   Eddie James <eajames@linux.ibm.com>
 To:     linux-fsi@lists.ozlabs.org
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         jk@ozlabs.org, joel@jms.id.au, alistair@popple.id.au,
         linux@roeck-us.net, jdelvare@suse.com, eajames@linux.ibm.com
-Subject: [PATCH v2 1/3] fsi: occ: Use a large buffer for responses
-Date:   Mon, 20 Sep 2021 13:41:39 -0500
-Message-Id: <20210920184141.21358-2-eajames@linux.ibm.com>
+Subject: [PATCH v2 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs
+Date:   Mon, 20 Sep 2021 13:41:41 -0500
+Message-Id: <20210920184141.21358-4-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210920184141.21358-1-eajames@linux.ibm.com>
 References: <20210920184141.21358-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: r5LvbLiC9cGjJ37l5k0Bisq3ngjT6-TG
-X-Proofpoint-GUID: r5LvbLiC9cGjJ37l5k0Bisq3ngjT6-TG
+X-Proofpoint-ORIG-GUID: nvoHkBTVQorBoBWdQaKi26XSQ-NLmFya
+X-Proofpoint-GUID: nvoHkBTVQorBoBWdQaKi26XSQ-NLmFya
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-20_07,2021-09-20_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 mlxscore=0 phishscore=0 impostorscore=0 mlxlogscore=999
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxscore=0 bulkscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ clxscore=1015 adultscore=0 malwarescore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109030001 definitions=main-2109200109
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Allocate a large buffer for each OCC to handle response data. This
-removes memory allocation during an operation, and also allows for
-the maximum amount of SBE FFDC.
+Save any FFDC provided by the OCC driver, and provide it to userspace
+through a binary sysfs entry. Notify userspace pollers when there is an
+error too.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/fsi/fsi-occ.c   | 109 ++++++++++++++++------------------------
- include/linux/fsi-occ.h |   2 +
- 2 files changed, 45 insertions(+), 66 deletions(-)
+Changes since v1:
+ - Remove "collected" error state in favor of a boolean
+ - Clear the error flag once the FFDC has been completely read once
+ - Only store FFDC if there is no FFDC waiting to be retrieved
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index b0c9322078a1..ace3ec7767e5 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/miscdevice.h>
+ drivers/hwmon/occ/p9_sbe.c | 86 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 85 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+index 9709f2b9c052..e50243580269 100644
+--- a/drivers/hwmon/occ/p9_sbe.c
++++ b/drivers/hwmon/occ/p9_sbe.c
+@@ -4,18 +4,79 @@
+ #include <linux/device.h>
+ #include <linux/errno.h>
+ #include <linux/fsi-occ.h>
 +#include <linux/mm.h>
  #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/fsi-occ.h>
-@@ -42,13 +43,6 @@
++#include <linux/mutex.h>
+ #include <linux/platform_device.h>
++#include <linux/string.h>
++#include <linux/sysfs.h>
  
- #define OCC_P10_SRAM_MODE	0x58	/* Normal mode, OCB channel 2 */
+ #include "common.h"
  
--/*
-- * Assume we don't have much FFDC, if we do we'll overflow and
-- * fail the command. This needs to be big enough for simple
-- * commands as well.
-- */
--#define OCC_SBE_STATUS_WORDS	32
--
- #define OCC_TIMEOUT_MS		1000
- #define OCC_CMD_IN_PRG_WAIT_MS	50
+ struct p9_sbe_occ {
+ 	struct occ occ;
++	bool sbe_error;
++	void *ffdc;
++	size_t ffdc_len;
++	size_t ffdc_size;
++	struct mutex sbe_error_lock;	/* lock access to ffdc data */
+ 	struct device *sbe;
+ };
  
-@@ -60,6 +54,7 @@ struct occ {
- 	char name[32];
- 	int idx;
- 	u8 sequence_number;
-+	void *buffer;
- 	enum versions version;
- 	struct miscdevice mdev;
- 	struct mutex occ_lock;
-@@ -250,8 +245,10 @@ static int occ_verify_checksum(struct occ *occ, struct occ_response *resp,
- static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
+ #define to_p9_sbe_occ(x)	container_of((x), struct p9_sbe_occ, occ)
+ 
++static ssize_t ffdc_read(struct file *filp, struct kobject *kobj,
++			 struct bin_attribute *battr, char *buf, loff_t pos,
++			 size_t count)
++{
++	ssize_t rc = 0;
++	struct occ *occ = dev_get_drvdata(kobj_to_dev(kobj));
++	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
++
++	mutex_lock(&ctx->sbe_error_lock);
++	if (ctx->sbe_error) {
++		rc = memory_read_from_buffer(buf, count, &pos, ctx->ffdc,
++					     ctx->ffdc_len);
++		if (pos >= ctx->ffdc_len)
++			ctx->sbe_error = false;
++	}
++	mutex_unlock(&ctx->sbe_error_lock);
++
++	return rc;
++}
++static BIN_ATTR_RO(ffdc, OCC_MAX_RESP_WORDS * 4);
++
++static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
++				 size_t resp_len)
++{
++	bool notify = false;
++
++	mutex_lock(&ctx->sbe_error_lock);
++	if (!ctx->sbe_error) {
++		if (resp_len > ctx->ffdc_size) {
++			if (ctx->ffdc)
++				kvfree(ctx->ffdc);
++			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
++			if (!ctx->ffdc) {
++				ctx->ffdc_len = 0;
++				ctx->ffdc_size = 0;
++				goto done;
++			}
++
++			ctx->ffdc_size = resp_len;
++		}
++
++		notify = true;
++		ctx->sbe_error = true;
++		ctx->ffdc_len = resp_len;
++		memcpy(ctx->ffdc, resp, resp_len);
++	}
++
++done:
++	mutex_unlock(&ctx->sbe_error_lock);
++	return notify;
++}
++
+ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
  {
- 	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
--	size_t cmd_len, resp_len, resp_data_len;
--	__be32 *resp, cmd[6];
-+	size_t cmd_len, resp_data_len;
-+	size_t resp_len = OCC_MAX_RESP_WORDS;
-+	__be32 *resp = occ->buffer;
-+	__be32 cmd[6];
- 	int idx = 0, rc;
+ 	struct occ_response *resp = &occ->resp;
+@@ -24,8 +85,15 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ 	int rc;
  
- 	/*
-@@ -278,19 +275,19 @@ static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
- 	cmd[1] = cpu_to_be32(SBEFIFO_CMD_GET_OCC_SRAM);
- 	cmd[4 + idx] = cpu_to_be32(data_len);
- 
--	resp_len = (data_len >> 2) + OCC_SBE_STATUS_WORDS;
--	resp = kzalloc(resp_len << 2, GFP_KERNEL);
--	if (!resp)
--		return -ENOMEM;
--
- 	rc = sbefifo_submit(occ->sbefifo, cmd, cmd_len, resp, &resp_len);
- 	if (rc)
--		goto free;
-+		return rc;
- 
- 	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_GET_OCC_SRAM,
- 				  resp, resp_len, &resp_len);
--	if (rc)
--		goto free;
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM read returned failure status: %08x\n",
-+			rc);
-+		return -EBADMSG;
-+	} else if (rc) {
-+		return rc;
+ 	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+-	if (rc < 0)
++	if (rc < 0) {
++		if (resp_len) {
++			if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
++				sysfs_notify(&occ->bus_dev->kobj, NULL,
++					     bin_attr_ffdc.attr.name);
++		}
++
+ 		return rc;
 +	}
  
- 	resp_data_len = be32_to_cpu(resp[resp_len - 1]);
- 	if (resp_data_len != data_len) {
-@@ -301,39 +298,21 @@ static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
- 		memcpy(data, resp, len);
- 	}
- 
--free:
--	/* Convert positive SBEI status */
--	if (rc > 0) {
--		dev_err(occ->dev, "SRAM read returned failure status: %08x\n",
--			rc);
--		rc = -EBADMSG;
--	}
--
--	kfree(resp);
- 	return rc;
- }
- 
- static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
- 		       u8 seq_no, u16 checksum)
- {
--	size_t cmd_len, buf_len, resp_len, resp_data_len;
- 	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
--	__be32 *buf;
-+	size_t cmd_len, resp_data_len;
-+	size_t resp_len = OCC_MAX_RESP_WORDS;
-+	__be32 *buf = occ->buffer;
- 	u8 *byte_buf;
- 	int idx = 0, rc;
- 
- 	cmd_len = (occ->version == occ_p10) ? 6 : 5;
--
--	/*
--	 * We use the same buffer for command and response, make
--	 * sure it's big enough
--	 */
--	resp_len = OCC_SBE_STATUS_WORDS;
- 	cmd_len += data_len >> 2;
--	buf_len = max(cmd_len, resp_len);
--	buf = kzalloc(buf_len << 2, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
- 
- 	/*
- 	 * Magic sequence to do SBE putsram command. SBE will transfer
-@@ -384,12 +363,17 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
- 
- 	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
- 	if (rc)
--		goto free;
-+		return rc;
- 
- 	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_PUT_OCC_SRAM,
- 				  buf, resp_len, &resp_len);
--	if (rc)
--		goto free;
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM write returned failure status: %08x\n",
-+			rc);
-+		return -EBADMSG;
-+	} else if (rc) {
-+		return rc;
-+	}
- 
- 	if (resp_len != 1) {
- 		dev_err(occ->dev, "SRAM write response length invalid: %zd\n",
-@@ -405,27 +389,16 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
- 		}
- 	}
- 
--free:
--	/* Convert positive SBEI status */
--	if (rc > 0) {
--		dev_err(occ->dev, "SRAM write returned failure status: %08x\n",
--			rc);
--		rc = -EBADMSG;
--	}
--
--	kfree(buf);
- 	return rc;
- }
- 
- static int occ_trigger_attn(struct occ *occ)
- {
--	__be32 buf[OCC_SBE_STATUS_WORDS];
--	size_t cmd_len, resp_len, resp_data_len;
-+	__be32 *buf = occ->buffer;
-+	size_t cmd_len, resp_data_len;
-+	size_t resp_len = OCC_MAX_RESP_WORDS;
- 	int idx = 0, rc;
- 
--	BUILD_BUG_ON(OCC_SBE_STATUS_WORDS < 8);
--	resp_len = OCC_SBE_STATUS_WORDS;
--
- 	switch (occ->version) {
- 	default:
- 	case occ_p9:
-@@ -450,12 +423,17 @@ static int occ_trigger_attn(struct occ *occ)
- 
- 	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
- 	if (rc)
--		goto error;
-+		return rc;
- 
- 	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_PUT_OCC_SRAM,
- 				  buf, resp_len, &resp_len);
--	if (rc)
--		goto error;
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM attn returned failure status: %08x\n",
-+			rc);
-+		return -EBADMSG;
-+	} else if (rc) {
-+		return rc;
-+	}
- 
- 	if (resp_len != 1) {
- 		dev_err(occ->dev, "SRAM attn response length invalid: %zd\n",
-@@ -471,14 +449,6 @@ static int occ_trigger_attn(struct occ *occ)
- 		}
- 	}
- 
-- error:
--	/* Convert positive SBEI status */
--	if (rc > 0) {
--		dev_err(occ->dev, "SRAM attn returned failure status: %08x\n",
--			rc);
--		rc = -EBADMSG;
--	}
--
- 	return rc;
- }
- 
-@@ -635,6 +605,10 @@ static int occ_probe(struct platform_device *pdev)
- 	if (!occ)
+ 	switch (resp->return_status) {
+ 	case OCC_RESP_CMD_IN_PRG:
+@@ -65,6 +133,8 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+ 	if (!ctx)
  		return -ENOMEM;
  
-+	occ->buffer = kvmalloc(OCC_MAX_RESP_WORDS * 4, GFP_KERNEL);
-+	if (!occ->buffer)
-+		return -ENOMEM;
++	mutex_init(&ctx->sbe_error_lock);
 +
- 	occ->version = (enum versions)md;
- 	occ->dev = dev;
- 	occ->sbefifo = dev->parent;
-@@ -670,6 +644,7 @@ static int occ_probe(struct platform_device *pdev)
- 	if (rc) {
- 		dev_err(dev, "failed to register miscdevice: %d\n", rc);
- 		ida_simple_remove(&occ_ida, occ->idx);
-+		kvfree(occ->buffer);
- 		return rc;
- 	}
+ 	ctx->sbe = pdev->dev.parent;
+ 	occ = &ctx->occ;
+ 	occ->bus_dev = &pdev->dev;
+@@ -78,6 +148,15 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+ 	if (rc == -ESHUTDOWN)
+ 		rc = -ENODEV;	/* Host is shutdown, don't spew errors */
  
-@@ -685,6 +660,8 @@ static int occ_remove(struct platform_device *pdev)
- {
++	if (!rc) {
++		rc = device_create_bin_file(occ->bus_dev, &bin_attr_ffdc);
++		if (rc) {
++			dev_warn(occ->bus_dev,
++				 "failed to create SBE error ffdc file\n");
++			rc = 0;
++		}
++	}
++
+ 	return rc;
+ }
+ 
+@@ -86,9 +165,14 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
  	struct occ *occ = platform_get_drvdata(pdev);
+ 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
  
-+	kvfree(occ->buffer);
++	device_remove_bin_file(occ->bus_dev, &bin_attr_ffdc);
 +
- 	misc_deregister(&occ->mdev);
+ 	ctx->sbe = NULL;
+ 	occ_shutdown(occ);
  
- 	device_for_each_child(&pdev->dev, NULL, occ_unregister_child);
-diff --git a/include/linux/fsi-occ.h b/include/linux/fsi-occ.h
-index d4cdc2aa6e33..7ee3dbd7f4b3 100644
---- a/include/linux/fsi-occ.h
-+++ b/include/linux/fsi-occ.h
-@@ -19,6 +19,8 @@ struct device;
- #define OCC_RESP_CRIT_OCB		0xE3
- #define OCC_RESP_CRIT_HW		0xE4
- 
-+#define OCC_MAX_RESP_WORDS		2048
++	if (ctx->ffdc)
++		kvfree(ctx->ffdc);
 +
- int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 		   void *response, size_t *resp_len);
+ 	return 0;
+ }
  
 -- 
 2.27.0
