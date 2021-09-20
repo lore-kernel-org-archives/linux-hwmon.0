@@ -2,118 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B46ACC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 14:19:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BEBCC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:25:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99BDA6109E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 14:19:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68385613A2
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Sep 2021 17:25:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhITOUt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Sep 2021 10:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbhITOUs (ORCPT
+        id S1347611AbhITR0Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Sep 2021 13:26:25 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45556
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349748AbhITRYY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Sep 2021 10:20:48 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003D2C061574;
-        Mon, 20 Sep 2021 07:19:21 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id w64-20020a9d3646000000b0054716b40005so2707097otb.4;
-        Mon, 20 Sep 2021 07:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=TGJZKePWk6V5bQ7AolMRjxyNeUDWXB62svjnYHFj36E=;
-        b=iuHa0j9MGeSWOUmfIRo5yfOor70np5fxhkWf+ISAvKv/mzz0FvxosqszUoC0fmUvcZ
-         6xZq6mSLoLlWoMsQ4HsGq6xiW1mDo1dhz5GOw6qN0zjQyX7laraKP3UUe/agVJqFB+sD
-         DMRKABhye9J4vp2vzQfkDWO8KS0m7s5UO+sHeJGwuwnBc6ajHavxEgmKVNZQ888/RyM9
-         Ps1V+XeTVk0uZ+Is/AZDvbsxjyMGShR0+JRBj6CdvxEemZfHfB3TiHqNEn7Q0vMLWmg4
-         kfOQ5XPnVnhS+/0JQoXvCq5WYXyH9lR4OgO3KITXcV6UNMWyrpbxRF1nmlBP186ov58X
-         e1sw==
+        Mon, 20 Sep 2021 13:24:24 -0400
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 789E340257
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 17:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1632158574;
+        bh=Ib/7vEzqwK2uprJcTl5mNvdNQqfYMGseImnegUnlZu8=;
+        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=dLd8MA/vlcqNC3HrAtrI875zKeCi8Bj5TyKfQVMlOmehYclCpJFvYHT8iOU45/ZOw
+         +V85cFy1AePUZHdw96MT4YAe+8TWd/IlFW3qhSSe3Dmih2cJL5g12vKNdNi7gm9QNV
+         zQul0PZTa3iCxu/AqFoDOiKK9IEXdms4TI/lu6dGb/KQo5hR4jd6gC8QFGky77fFDe
+         vN8lRitT8/jcl/ynUCs+/eUGwfvP4Vf98hnC3w/i19x3sQeOCqmEaLwHx+FhLi1WUD
+         eOF8tpXqH3TGpWl9hDtClFGJoYRcl/3NSoEb/9eF4X3sPa/EtMb/tmASTPzNd/Wngf
+         biLCJ3ACbQqjg==
+Received: by mail-wr1-f69.google.com with SMTP id m1-20020a056000180100b0015e1ec30ac3so6679427wrh.8
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Sep 2021 10:22:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=TGJZKePWk6V5bQ7AolMRjxyNeUDWXB62svjnYHFj36E=;
-        b=rLHkVjbyNxmLp4hXYbD9N/k2JTqH54sUgVGg5IMJqstVe1KKAKcEZ2VSgwJpYphTZ0
-         Au+PNpfUUUH7F+ZhQ9CmGfFd4qRaSZpnLj20w4FDv+wkSnys3evTriraAPpyDIYicGLQ
-         y3MtKKInBvsKrbNByu1fXLJuYUc3lK0817qazfqTtt98oqA5dt5KvzMVc+uzbOU5iO1r
-         wjuXrsTMpikBufTyuLGhuQ/GnYez+unaSZK60o8VOl1poit36LzbQQwC4SM49opwogkX
-         xHPfaTz3OGKxBFTAqhR0WrsV9BE3eaVnidWfxs5keB6gYKnsksp+04qa4mJ6ZcOeUiWJ
-         rZuA==
-X-Gm-Message-State: AOAM531ZaFUcIj7T7ye0HuWY/xu73C1dgRSe8jhxWVb9tLWgPXvPanfc
-        Pnzs6Avp1TVPAtpjfOSn1as=
-X-Google-Smtp-Source: ABdhPJxWQIKhkU+kxtKlyz0dBj+IR+CIno5/RKXKFs0insDTtKVB0tP7IHhgR5EXvAFp+hCbwxZEnw==
-X-Received: by 2002:a9d:3e54:: with SMTP id h20mr4410770otg.236.1632147561267;
-        Mon, 20 Sep 2021 07:19:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x28sm484462ote.24.2021.09.20.07.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Sep 2021 07:19:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 20 Sep 2021 07:19:19 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Armin Wolf <W_Armin@gmx.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Carlos Alberto Lopez Perez <clopez@igalia.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sebastian Oechsle <setboolean@icloud.com>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: dell-smm-hwmon: remove unused variable warning
-Message-ID: <20210920141919.GA1639673@roeck-us.net>
-References: <20210920121421.93297-1-arnd@kernel.org>
- <20210920123131.6kpv3ffxvm7xeqga@pali>
- <CAK8P3a10NR5CqoTxtjyrx5g6kO-hEkhaw7psEJHSSOZM9S+JXQ@mail.gmail.com>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ib/7vEzqwK2uprJcTl5mNvdNQqfYMGseImnegUnlZu8=;
+        b=dY+JibibHlbB4rzBpCSgSXnXneywpu07ZDLHQwF7g60E9wvqCPekxfja3yzFyouexd
+         FoLC/JomjIPEjZiGXRca09+t/32ayKDhwr7HVV7OKYZbM/sXL8eGYKuD7FRXYDvh+HF5
+         nPvdOSDeXjZMO8N/sMqW6IFe2cYNP5kVq5tnjl4nHftnTrqbShpU37CGOgOefEeuRbaZ
+         vFICDpkSCRo7YO4JVhBkGMyPkH/QC8g7bh/o4ei6yzVV+OyfUv8Kozr/0258al/9UVxF
+         iozoFrFCAN+UbFv9ccOTmR3/yhCyLETCymVV9qfsezKJodqXzqRP3YRb7f84jqnkeZ6G
+         vgpg==
+X-Gm-Message-State: AOAM532iqJYlNgBry9hZMwJlmJ2G8ZXbGBj69jxmPkawuEqGX/g/nwPh
+        QR+9ebOoZVP1u1cGGlAAl6bgc6RvcOrCOnOftBhVmNmgzYeyH6rE8wSOZ2lorjs4hxEPdgGL1Gf
+        9HVEkF9K0sW6rOIO9WlgRZ26yu+LSLlWVUIZKSG7O
+X-Received: by 2002:adf:9dc6:: with SMTP id q6mr29119909wre.161.1632158574154;
+        Mon, 20 Sep 2021 10:22:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxwOXR3BGLGuHRY1saUVMJLa6t51fTX3CzldWDDLLRnhlJnRQKhpE+RtKpocM9bhIwyrYYE3Q==
+X-Received: by 2002:adf:9dc6:: with SMTP id q6mr29119894wre.161.1632158573938;
+        Mon, 20 Sep 2021 10:22:53 -0700 (PDT)
+Received: from [192.168.2.20] (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
+        by smtp.gmail.com with ESMTPSA id 4sm92158wmv.42.2021.09.20.10.22.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Sep 2021 10:22:53 -0700 (PDT)
+Subject: Re: [PATCH] dt-bindings: hwmon: lm90: convert to dtschema
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210920140525.157013-1-krzysztof.kozlowski@canonical.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <9bd8a400-86da-04bf-8205-725794e62108@canonical.com>
+Date:   Mon, 20 Sep 2021 19:22:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a10NR5CqoTxtjyrx5g6kO-hEkhaw7psEJHSSOZM9S+JXQ@mail.gmail.com>
+In-Reply-To: <20210920140525.157013-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 03:14:40PM +0200, Arnd Bergmann wrote:
-> On Mon, Sep 20, 2021 at 2:31 PM Pali Rohár <pali@kernel.org> wrote:
-> > On Monday 20 September 2021 14:14:16 Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > When procfs is disabled
-> >
-> > ... then the i8k_init_procfs function should not be called as the
-> > purpose of I8K code / config option is to export functionality over
-> > procfs. So when procfs is disabled then this i8k is noop.
-> >
-> > Patch which do not allow compilation of I8K when procfs is not enabled
-> > is pending here:
-> >
-> > https://lore.kernel.org/linux-hwmon/20210910071921.16777-1-rdunlap@infradead.org/
-> >
-> > Ideally please test or review it. As you are not the first one who
-> > spotted -Werror problems with i8k and tried to workaround it.
+On 20/09/2021 16:05, Krzysztof Kozlowski wrote:
+> Convert the National LM90 hwmon sensor bindings to DT schema format.
 > 
-> Ok, I'm now using that version in my randconfig tree, it looks sensible
-> and it addresses another problem. I'll let you know if something else
-> comes up with that patch applied, but I'm sure it fixes the issue
-> I reported. Feel free to add
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../devicetree/bindings/hwmon/lm90.txt        | 51 ------------
+>  .../bindings/hwmon/national,lm90.yaml         | 79 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 80 insertions(+), 52 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/lm90.txt
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/national,lm90.yaml
 > 
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> to Randy's patch if you like.
-> 
-You'd have to reply to the patch. This is in x86 world and I can not apply
-it, or at least not without Ack from an x86 maintainer. They went ballistic
-on me once for doing that, and I won't do it again.
 
-Guenter
+I will send a v2 because few devices are on trivial-devices list.
+
+Best regards,
+Krzysztof
