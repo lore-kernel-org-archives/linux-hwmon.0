@@ -2,119 +2,124 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB67C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:53:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0583BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:57:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98314611BD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:53:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D575560E94
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:57:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234289AbhIUPyc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Sep 2021 11:54:32 -0400
-Received: from mail.ispras.ru ([83.149.199.84]:50732 "EHLO mail.ispras.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234319AbhIUPyO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Sep 2021 11:54:14 -0400
-Received: from kleverstation.intra.ispras.ru (unknown [10.10.2.220])
-        by mail.ispras.ru (Postfix) with ESMTPS id 40BFC40755E9;
-        Tue, 21 Sep 2021 15:52:44 +0000 (UTC)
-From:   Nadezda Lutovinova <lutovinova@ispras.ru>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
-        Marc Hulsman <m.hulsman@tudelft.nl>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
-Subject: [PATCH v2 3/3] hwmon: (w83793) Fix NULL pointer dereference by removing unnecessary structure field
-Date:   Tue, 21 Sep 2021 18:51:53 +0300
-Message-Id: <20210921155153.28098-3-lutovinova@ispras.ru>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210921155153.28098-1-lutovinova@ispras.ru>
-References: <20210921155153.28098-1-lutovinova@ispras.ru>
-In-Reply-To: <20210811181844.GB3138792@roeck-us.net>
+        id S231842AbhIUP7F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Sep 2021 11:59:05 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25080 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234155AbhIUP7F (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 21 Sep 2021 11:59:05 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18LFAbpb001486;
+        Tue, 21 Sep 2021 11:57:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7Lpkn/u5xGsMYp+J1oFAP+wMpssgRZ41XS56R0aByXE=;
+ b=LZcmfahfTR/T+uAWCPY/9PsGBwQ7Liy8c6LPDVrxK/e8lFFaAWKUUaxjTHzcwgpKR8w3
+ 3rOI82JBUgAuIjZYjMI319qvhauRspR1RZRe2JKIUve55MfmbaTsuIaaCImnciVtRKgP
+ HtfHpG7bBynNk3RQSWXqpKLTA65qyDUrPCzkFaNSVQA4yogafjsuLZfgzpIzQXG9uq8W
+ DPJDMd3vfGr2DGvd559cfdS7d78XwNQPFbEsBeDIoyoyFdvSlWoEfR+RbbJwrBBFoaeA
+ YLxuHEh1DFxXj5u/gCh1FY85+aQCBAkRON8Uu6EMVQ5DL0cvNgohvBjZxP1VPrG6i3EA MQ== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b75vb2cw9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Sep 2021 11:57:10 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18LFmFOH002133;
+        Tue, 21 Sep 2021 15:57:10 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma02dal.us.ibm.com with ESMTP id 3b57rb2j3j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Sep 2021 15:57:09 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18LFv8uc50135306
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Sep 2021 15:57:08 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A680C6A05A;
+        Tue, 21 Sep 2021 15:57:08 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 492A26A04D;
+        Tue, 21 Sep 2021 15:57:08 +0000 (GMT)
+Received: from [9.211.74.125] (unknown [9.211.74.125])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Sep 2021 15:57:08 +0000 (GMT)
+Subject: Re: [PATCH 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, linux@roeck-us.net,
+        jdelvare@suse.com, alistair@popple.id.au, jk@ozlabs.org
+References: <20210914213543.73351-1-eajames@linux.ibm.com>
+ <20210914213543.73351-4-eajames@linux.ibm.com> <YUn8JcqBQVy2Nwd3@kroah.com>
+From:   Eddie James <eajames@linux.ibm.com>
+Message-ID: <990b5434-ed3e-7fe0-488f-f3ad55d48cee@linux.ibm.com>
+Date:   Tue, 21 Sep 2021 10:57:07 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <YUn8JcqBQVy2Nwd3@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vRqr_UXAwPZYQQaa9zdf0EpRlzWS1MNe
+X-Proofpoint-ORIG-GUID: vRqr_UXAwPZYQQaa9zdf0EpRlzWS1MNe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-21_04,2021-09-20_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=705 spamscore=0
+ malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0
+ lowpriorityscore=0 suspectscore=0 impostorscore=0 clxscore=1011
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109210095
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If driver read tmp value sufficient for 
-(tmp & 0x08) && (!(tmp & 0x80)) && ((tmp & 0x7) == ((tmp >> 4) & 0x7))
-from device then Null pointer dereference occurs. 
-(It is possible if tmp = 0b0xyz1xyz, where same literals mean same numbers)
-Also lm75[] does not serve a purpose anymore after switching to
-devm_i2c_new_dummy_device() in w83791d_detect_subclients().
 
-The patch fixes possible NULL pointer dereference by removing lm75[].
+On 9/21/21 10:37 AM, Greg KH wrote:
+> On Tue, Sep 14, 2021 at 04:35:43PM -0500, Eddie James wrote:
+>> Save any FFDC provided by the OCC driver, and provide it to userspace
+>> through a binary sysfs entry. Do some basic state management to
+>> ensure that userspace can always collect the data if there was an
+>> error. Notify polling userspace when there is an error too.
+>>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/hwmon/occ/p9_sbe.c | 98 +++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 97 insertions(+), 1 deletion(-)
+> You forgot a Documentation/ABI/ entry :(
+>
+> Binary sysfs files are for "pass through to the hardware" only, you
+> should not be dumping kernel data to userspace through them.  I can't
+> really determine if this is the case here or not, as there's no
+> documentation saying what you are trying to represent here...
 
-Found by Linux Driver Verification project (linuxtesting.org).
 
-Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
----
-v2: 
- - split one file per patch 
- - remove lm75[] instead of adding checking  
----
- drivers/hwmon/w83793.c | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+Ok oops. I will add an entry, thanks.
 
-diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-index e7d0484eabe4..4ee96756ed49 100644
---- a/drivers/hwmon/w83793.c
-+++ b/drivers/hwmon/w83793.c
-@@ -202,7 +202,6 @@ static inline s8 TEMP_TO_REG(long val, s8 min, s8 max)
- }
- 
- struct w83793_data {
--	struct i2c_client *lm75[2];
- 	struct device *hwmon_dev;
- 	struct mutex update_lock;
- 	char valid;			/* !=0 if following fields are valid */
-@@ -1566,7 +1565,6 @@ w83793_detect_subclients(struct i2c_client *client)
- 	int address = client->addr;
- 	u8 tmp;
- 	struct i2c_adapter *adapter = client->adapter;
--	struct w83793_data *data = i2c_get_clientdata(client);
- 
- 	id = i2c_adapter_id(adapter);
- 	if (force_subclients[0] == id && force_subclients[1] == address) {
-@@ -1586,20 +1584,21 @@ w83793_detect_subclients(struct i2c_client *client)
- 	}
- 
- 	tmp = w83793_read_value(client, W83793_REG_I2C_SUBADDR);
-+
-+	if (!(tmp & 0x88) && (tmp & 0x7) == ((tmp >> 4) & 0x7)) {
-+		dev_err(&client->dev,
-+			"duplicate addresses 0x%x, use force_subclient\n",
-+				0x48 + (tmp & 0x7));
-+		return -ENODEV;
-+	}
-+
- 	if (!(tmp & 0x08))
--		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
--							  0x48 + (tmp & 0x7));
--	if (!(tmp & 0x80)) {
--		if (!IS_ERR(data->lm75[0])
--		    && ((tmp & 0x7) == ((tmp >> 4) & 0x7))) {
--			dev_err(&client->dev,
--				"duplicate addresses 0x%x, "
--				"use force_subclients\n", data->lm75[0]->addr);
--			return -ENODEV;
--		}
--		data->lm75[1] = devm_i2c_new_dummy_device(&client->dev, adapter,
--							  0x48 + ((tmp >> 4) & 0x7));
--	}
-+		devm_i2c_new_dummy_device(&client->dev, adapter,
-+						0x48 + (tmp & 0x7));
-+
-+	if (!(tmp & 0x80))
-+		devm_i2c_new_dummy_device(&client->dev, adapter,
-+						0x48 + ((tmp >> 4) & 0x7));
- 
- 	return 0;
- }
--- 
-2.17.1
+I believe this qualifies for binary sysfs then, since the data is an 
+error response from the hardware directly.
 
+
+Thanks,
+
+Eddie
+
+
+>
+> thanks,
+>
+> greg k-h
