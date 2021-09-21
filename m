@@ -7,87 +7,81 @@ X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38AFCC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 21:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFD78C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 22:03:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D4B160F38
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 21:21:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF46E60F9E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 22:03:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbhIUVXJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Sep 2021 17:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S235857AbhIUWFK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Sep 2021 18:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhIUVXI (ORCPT
+        with ESMTP id S235729AbhIUWFK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Sep 2021 17:23:08 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A79C061575
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Sep 2021 14:21:39 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id b20so3102149lfv.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Sep 2021 14:21:38 -0700 (PDT)
+        Tue, 21 Sep 2021 18:05:10 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31652C061575
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Sep 2021 15:03:41 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id t10so3321954lfd.8
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Sep 2021 15:03:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=F5/6yk3bA4ZtAQhszFbIeecMs6OvspCWgR3vbaET4+Q=;
-        b=lLoRTNIwSbGGWZt6mWms0SyQCt8fR4wHbUp6H3PiG3lZ9P72e44etlAeaSl660sg7/
-         LyWLs8/IhHfl2n4Djw6Ok/bomHtm+QRTRQBFyRBVTenWAshQ6T+vVU48J5Y6hIGjFUif
-         NKCo8MiEN096dTUxmX0eAl+m98lKioMWCrJeLgPfBmYWv0pR0VxnftJ1lWQ9JYjPYfev
-         nCZILIT9zi6lmtTtFTr45ujb+Guup0gN1iLijAVJjsOA7oi6MLc2ihZp6yYl+qPuKI9Q
-         XsDpImY4J2JbfOwDu3vC1OBUDn4898VGnRiz9+P6lhaF32VutgGY7lmOSyGf431uZaLk
-         auaA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3XNrN73gADSI7mOjilUcf947Qv8Mlwuoxr5Ui0NoXJc=;
+        b=OWj8Af0YyfiYyi4VGX9bDEuWcnZdEPeX/Lp0Kh2oOfcn8g9ZdwAB02qmDtQtls57ie
+         Ib0/aXpeju7/xyh4yywzQnMIER4uWSkXG40GU57rtJBfqQnUkYEJuS0aqfbpuHVcHjGc
+         iHh1CguSnrHaHh12VU87N+HuLXp/0KYimWc3CQwDS7CCZv/Tur0KqLbS6hmwikJuIJDP
+         BuSnY35/1cbMIlBW4iaujWcP18o9bMurkvqjRJSdhNVqL/qw+gx+XnWqDCao60Ol5+x6
+         eAUdmKrnzL+rn2TPYWs8ve3HjLJ5LfW6Sa+2tbX71rYy9gDKc1lHzi6gH8oMOyEZY8i3
+         WZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=F5/6yk3bA4ZtAQhszFbIeecMs6OvspCWgR3vbaET4+Q=;
-        b=HKmzuP7MiIyQEdQZmPGqO9XqeuJAxhDwJEYNvReITF2sUAcXMjJjVtZuSGqS3YfOrh
-         ttpXELFD9jRnuKmHB8ESFnJDTtIrabqU80Dq17FIXeOh5CotCpZ0uo6UBQx0ASUaADiu
-         KO4fLgEQ5SVNV0+bvbTaRI9eYGgi5v2nel7FgO+IX/dgMpvVv05itw7Ne6z1299Nvafx
-         8vwI6ywXMWEStngfhYkSGb2SWaG5bkViM9iWNdot8TwxJnRNmI4wJ2rxgvjwnxSm7gQ1
-         TlTizvAXwOatMGrpMaDzvT4SQVvjxAXgS+2AanmvbchWmwtiYbXST5InTz5u/55yr2j7
-         Nmzg==
-X-Gm-Message-State: AOAM533uYGrKMc2vdPnPGgjhsRjnOZg2RkAE4ZU3IRbelGPAqUTiHjKp
-        La5LSv1JdVS+Uso6tpsqiovFm0mMjj75mM16G9Hg/A==
-X-Google-Smtp-Source: ABdhPJyMdUbIh89MeY7Ny6Ll/yrl+HU+tUEAYTd6yW2P9M1xmauRxkyeoBdFZ1hL199mCvYLNrLhrYM4Q0/i+qUxKiQ=
-X-Received: by 2002:a05:651c:1408:: with SMTP id u8mr6243341lje.253.1632259297056;
- Tue, 21 Sep 2021 14:21:37 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3XNrN73gADSI7mOjilUcf947Qv8Mlwuoxr5Ui0NoXJc=;
+        b=WiKa0FVzRBRTG8PM/jiDJEJ8gACaE/Qd0ZiJN0HE83uA6pOFgdVVUrYjIyoggpMH5h
+         vOmolS/YDfddVi+5lBK6zp9u9gjIWxOodNydJ7AEXIl5JnYtriiJB/qdHoQxzavuIuUV
+         xYPeH6GriKDv6mUR/Kj2qWWADvB5XcIalIAqIVwE8fCqxdTvTXMbheG0veWlh7KTiaX9
+         4KXLHEH6+CtJByoIVMYoz145SrX63AxgIoVvbopwEsaaz35z0gOvADFr6iX6vob+7YWB
+         zvYqKxYyd8bQNYZKewQki5Y2uggguZgL1CSHk+SxvnCnQrVwFkFlCpk4bjCEDntot5M4
+         EQkg==
+X-Gm-Message-State: AOAM531LTIA35l709+9vupUjRyWHwO79y3HmyZCECExSPH1JHbqYXTw/
+        uMGTOW9QPZdQIyo0NZkZVi3+rpCDIPrckwXg649asw==
+X-Google-Smtp-Source: ABdhPJy6FZaPttUotreE8q28PJYOwpbn07MmoEuf53wHMliLPSolvex9NmYzfcV/65CxXhI74w99CkkQVf26N+Llc/M=
+X-Received: by 2002:a2e:9c43:: with SMTP id t3mr19429726ljj.198.1632261819095;
+ Tue, 21 Sep 2021 15:03:39 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6504:507a:0:0:0:0 with HTTP; Tue, 21 Sep 2021 14:21:36
- -0700 (PDT)
-In-Reply-To: <20210921205247.GA2363535@roeck-us.net>
 References: <cover.1631021349.git.krzysztof.adamski@nokia.com>
  <12984255aac11a3edfc0e6278e1a1cac70ce97ec.1631021349.git.krzysztof.adamski@nokia.com>
  <YUkKCe7845uCqoy5@robh.at.kernel.org> <20210921125831.GB1864238@roeck-us.net>
  <CAL_JsqLo=inkKVKSU8N=_h90RfpDk6NNWPKdKyTXh-VvqXDCag@mail.gmail.com> <20210921205247.GA2363535@roeck-us.net>
+In-Reply-To: <20210921205247.GA2363535@roeck-us.net>
 From:   Oskar Senft <osk@google.com>
-Date:   Tue, 21 Sep 2021 17:21:36 -0400
-Message-ID: <CABoTLcSt9TnmyC4uQOQU4Y563pF-Nhbt2NfZvK+c0FKwAJEMeQ@mail.gmail.com>
+Date:   Tue, 21 Sep 2021 18:03:22 -0400
+Message-ID: <CABoTLcQfOByG5VmhTKQ3ZCZ5NtPfFU49abtE-Zr7BDCNphThSg@mail.gmail.com>
 Subject: Re: [PATCH 8/8] dt-bindings: hwmon: allow specifying channels for tmp421
-To:     Guenter Roeck <linux@roeck-us.net>, rob@kernel.org
+To:     Guenter Roeck <linux@roeck-us.net>, robh@kernel.org
 Cc:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
         Jean Delvare <jdelvare@suse.com>,
         Linux HWMON List <linux-hwmon@vger.kernel.org>,
         devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi
+Resend to Rob's correct email address. I'm sorry.
 
-> > > +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 temperature-sensors {
-> > > +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ltd {
-> > > +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 statu=
-s =3D "disabled";
-> > > +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 };
+> > > + temperature-sensors {
+> > > + ltd {
+> > > + status = "disabled";
+> > > + };
 > > > +
-> > > +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 rtd1 {
-> > > +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 statu=
-s =3D "okay";
-> > > +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 type =
-=3D <4> /* thermistor */;
+> > > + rtd1 {
+> > > + status = "okay";
+> > > + type = <4> /* thermistor */;
 > >
 > > 'type' is a bit generic. We don't want the same property name to
 > > possibly have multiple definitions.
@@ -103,7 +97,7 @@ tempX_type in sysfs and I wanted to stay in sync with that.
 
 The reason I didn't do that is because you'd effectively have to
 duplicate the ID in both the name (e.g. sensor@1) and the reg property
-(e.g. reg =3D <1>). But maybe that's just what is is in device tree, I
+(e.g. reg = <1>). But maybe that's just what is is in device tree, I
 can live with that.
 
 However, we'd also have to find out whether the "local" sensor ("LTD")
