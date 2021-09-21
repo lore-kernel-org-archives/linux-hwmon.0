@@ -2,165 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C88CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 12:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C77A6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 12:45:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67C8E61166
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 12:30:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A317061168
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 12:45:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbhIUMb4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Sep 2021 08:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbhIUMbz (ORCPT
+        id S232725AbhIUMrP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Sep 2021 08:47:15 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46820
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232667AbhIUMrO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Sep 2021 08:31:55 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B09C061574;
-        Tue, 21 Sep 2021 05:30:27 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 5-20020a9d0685000000b0054706d7b8e5so9224230otx.3;
-        Tue, 21 Sep 2021 05:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oYESg9U9RMvSLNwayzuL4e38Fp6KeUi0J2LalGvWZ4k=;
-        b=pCclqY0K2IZDX7pr49+vMHvODMvdBbXoNWO8ndIkP8bw1WcAIzJ33IUu9NsazExddn
-         3344t9cwq+5FUjTkiAEqeX2RE/Vv7EhIF+XeFE6pE7eXRzaHHjDAlifgL2Tzb540ynbw
-         d20xk7IXdSgGbsfyRJWsEA5iWxr5a/iwPmyxlwtftzvcS2UnOHum9nHJL5H2Huxp3WIf
-         OAHSKQCW3f1FMPsbwIrLKgTyB6w/arDwqKEtZsx28MOJOBHBaugnu3nKCPUdemuzNz4L
-         JH9Aul+ih3Ca4cCNXHdh91SaphkOmpq6AlRyQe2lvV9S3a6zaytehzLEXQd+aFAs3fjf
-         FmjQ==
+        Tue, 21 Sep 2021 08:47:14 -0400
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CF96A40265
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Sep 2021 12:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1632228344;
+        bh=x+m58rfACSvR6iQfy7mRWz1qBo1Tu3pMG+mU6G2XjQQ=;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=c0uzjxBjho4oJqVHsuHSrHHEDTP6VZaTmoQBor+n7TnxQIBYnFeWAFxj7fBw08kSG
+         ej9JDjfqdd9bSrq0Ju9HPZU03SJsjPolt7ZnDIb4qoKnSsjj407Ym9qXovUICQwFul
+         R6czjCeXaPJvjEIPArXId7kFK01m8bp8gopRoYm5TkKRXnpWET2yH6wAOFSAGvWiLf
+         lfmEh3YsgEEaGJPTL3RAw+ZsnTjC/40+tSrlzfbo2+xuk9MZzUKpv77pOxHeAGycqB
+         Wz3FQt35f4zAgcHN4LLsK7WTX4dRKVFFh3qzmRYw47HViwFbnu/TmU9CKhHR0QD0h/
+         fOFL7FO9W5RMA==
+Received: by mail-wr1-f70.google.com with SMTP id r15-20020adfce8f000000b0015df1098ccbso8727248wrn.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Sep 2021 05:45:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=oYESg9U9RMvSLNwayzuL4e38Fp6KeUi0J2LalGvWZ4k=;
-        b=4k/oqAhWNlt7LEz/+5HZ5wcgxPL/NZ1vKhlMkqeOu30G1Cz4Xi7/zlIJuEfkby8Zfg
-         03EnRhJB5SHxSDuPROAwjJyDW+tOYzdmr1P0oWJHWqNyLsqa8EQbVbqEFB3sV60UdGEk
-         pYuRTpSQhsmyNt+whQ31WN4Kx1ZoEqJTRMUV31E4Y10gcWmvQLfiICgWx9lTIt9BjNHH
-         bmIZBfWhWnXnqrQN8bxSCMZ/HwgNzSbMVkVk2/D5tsJ2FGHT/h8MVYOVxqL7bcKNU8js
-         NxhQFOcS2mXLLkS9wUjafwEB43lpqXLkIAroVT2b+LbKX5FFxBOg2hUbZKl3pRy1nkgh
-         dXmg==
-X-Gm-Message-State: AOAM532Wl0FXY8YUmv9dc3vd5866jCFEcXUQq6DcwSawWMBrflXnW2vU
-        X/36A9fKqGuLXy4WLzU/lKs=
-X-Google-Smtp-Source: ABdhPJyUr1ZZjPsW5xB1nXxuo95XtHGWLo+lZv4AmduPM6mtW0E0fbo9OrOdRnRIdGMLLKBojIrc7Q==
-X-Received: by 2002:a05:6830:10c7:: with SMTP id z7mr9112393oto.192.1632227427082;
-        Tue, 21 Sep 2021 05:30:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e17sm733543oog.42.2021.09.21.05.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Sep 2021 05:30:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 21 Sep 2021 05:30:25 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=x+m58rfACSvR6iQfy7mRWz1qBo1Tu3pMG+mU6G2XjQQ=;
+        b=5qzflMhkermFkcJolRfwgqzIk2SEhr1cUKjHeBzgJ/vYLsO5QI1NkKCVXiIu/GfV2f
+         0KH3g94y4ttbID00HYUhD22Nvdo//YYByQqz3A43g7T4VDqcjNqif12eGFOJ+mAaD3Lh
+         G3BSFXHxjE3VUh7pNRLxU6mFWNOeI3EaW5aWgv/Lq2KbdZgG89sQZ8X8wIbDXnfWdJF5
+         fWTCbu5yRFwiPSIzFlMkADiHcpyP9OM7J697LG+AKzHZAjCsXLFTyRZ/q612tA/7Dk/K
+         ttZKyAuu/JVRumseCqEKFHN4nJPKmO2FH50O+xxC+uMm50B3OTg8BNO7NvOLnhwIgnNw
+         J3Kw==
+X-Gm-Message-State: AOAM533yN47GW4wAM6M1u8Pmwt7fvd3pEBMuGMqujzeE1ap5hU+FTiYE
+        ytBy9CgpbyaWoR/m29uUs9IqfTQQMObtDlaZ9TNdDuF1NgL+lIXwUMOu4EU39h9jKd+Ytdyh5m4
+        +d+wjpyOxNs5ClegWApLnssGDuAf45pJvpTLJWvwB
+X-Received: by 2002:a5d:5241:: with SMTP id k1mr3414709wrc.227.1632228344494;
+        Tue, 21 Sep 2021 05:45:44 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxsq8DcEHNcAQrcIhXF4twIUhJPCUEGGHedfLeapLf2ovbo5mKFT3yWsUISrtvdOhTPrtjt7Q==
+X-Received: by 2002:a5d:5241:: with SMTP id k1mr3414694wrc.227.1632228344328;
+        Tue, 21 Sep 2021 05:45:44 -0700 (PDT)
+Received: from [192.168.0.134] (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
+        by smtp.gmail.com with ESMTPSA id s3sm17665260wra.72.2021.09.21.05.45.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Sep 2021 05:45:43 -0700 (PDT)
+Subject: Re: [PATCH 3/6] dt-bindings: hwmon: ibm,cffps: move to trivial
+ devices
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Jiri Kosina <trivial@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] dt-bindings: hwmon: ibm,cffps: move to trivial
- devices
-Message-ID: <20210921123025.GC1043608@roeck-us.net>
 References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
  <20210921102832.143352-3-krzysztof.kozlowski@canonical.com>
+ <20210921123025.GC1043608@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <68fa27ae-4704-181f-e2f6-92635865798b@canonical.com>
+Date:   Tue, 21 Sep 2021 14:45:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210921102832.143352-3-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210921123025.GC1043608@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 12:28:29PM +0200, Krzysztof Kozlowski wrote:
-> The IBM Common Form Factor Power Supply Versions 1 and 2 bindings are
-> trivial, so they can be integrated into trivial devices bindings.
+On 21/09/2021 14:30, Guenter Roeck wrote:
+> On Tue, Sep 21, 2021 at 12:28:29PM +0200, Krzysztof Kozlowski wrote:
+>> The IBM Common Form Factor Power Supply Versions 1 and 2 bindings are
+>> trivial, so they can be integrated into trivial devices bindings.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-I won't accept any of those "move to trivial devices" patches. In many cases
-the bindings are simply incomplete. I can not and will not make that call,
-and I always did and will leave it up to driver authors to decide if they
-want to add a device to trivial devices or provide explicit bindings.
-
-Please stop sending those patches.
-
-Guenter
-
-> ---
->  .../devicetree/bindings/hwmon/ibm,cffps1.txt  | 26 -------------------
->  .../devicetree/bindings/trivial-devices.yaml  |  6 +++++
->  MAINTAINERS                                   |  1 -
->  3 files changed, 6 insertions(+), 27 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
+> I won't accept any of those "move to trivial devices" patches. In many cases
+> the bindings are simply incomplete. I can not and will not make that call,
+> and I always did and will leave it up to driver authors to decide if they
+> want to add a device to trivial devices or provide explicit bindings.
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt b/Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
-> deleted file mode 100644
-> index d9a2719f9243..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -Device-tree bindings for IBM Common Form Factor Power Supply Versions 1 and 2
-> ------------------------------------------------------------------------------
-> -
-> -Required properties:
-> - - compatible				: Must be one of the following:
-> -						"ibm,cffps1"
-> -						"ibm,cffps2"
-> -						or "ibm,cffps" if the system
-> -						must support any version of the
-> -						power supply
-> - - reg = < I2C bus address >;		: Address of the power supply on the
-> -					  I2C bus.
-> -
-> -Example:
-> -
-> -    i2c-bus@100 {
-> -        #address-cells = <1>;
-> -        #size-cells = <0>;
-> -        #interrupt-cells = <1>;
-> -        < more properties >
-> -
-> -        power-supply@68 {
-> -            compatible = "ibm,cffps1";
-> -            reg = <0x68>;
-> -        };
-> -    };
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 6ad0628741cf..791079021f1b 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -113,6 +113,12 @@ properties:
->            - mps,mp2975
->              # Honeywell Humidicon HIH-6130 humidity/temperature sensor
->            - honeywell,hi6130
-> +            # IBM Common Form Factor Power Supply Versions (all versions)
-> +          - ibm,cffps
-> +            # IBM Common Form Factor Power Supply Versions 1
-> +          - ibm,cffps1
-> +            # IBM Common Form Factor Power Supply Versions 2
-> +          - ibm,cffps2
->              # Infineon IR36021 digital POL buck controller
->            - infineon,ir36021
->              # Infineon IR38064 Voltage Regulator
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 15c4d3c809e8..cc5df54bdc51 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14956,7 +14956,6 @@ S:	Maintained
->  W:	http://hwmon.wiki.kernel.org/
->  W:	http://www.roeck-us.net/linux/drivers/
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-> -F:	Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
->  F:	Documentation/devicetree/bindings/hwmon/ltc2978.txt
->  F:	Documentation/devicetree/bindings/hwmon/max31785.txt
->  F:	Documentation/hwmon/adm1275.rst
-> -- 
-> 2.30.2
+> Please stop sending those patches.
 > 
+
+Back in the older times, there were no trivial-devices and checkpatch
+plus maintainers required documenting compatibles, so some of such
+simple bindings were created.
+
+I understand however your point, fair enough. I'll stop sending such
+patches.
+
+Best regards,
+Krzysztof
