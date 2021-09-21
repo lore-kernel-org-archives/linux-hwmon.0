@@ -2,68 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D765C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F2BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:53:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5202160F44
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:37:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A50E96120A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Sep 2021 15:53:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbhIUPil (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Sep 2021 11:38:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60794 "EHLO mail.kernel.org"
+        id S231727AbhIUPy3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Sep 2021 11:54:29 -0400
+Received: from mail.ispras.ru ([83.149.199.84]:50686 "EHLO mail.ispras.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233860AbhIUPik (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Sep 2021 11:38:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6985660E08;
-        Tue, 21 Sep 2021 15:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1632238631;
-        bh=1L59Qf8dZlUk3zyJnpg6Mrmzjp8u5lw/A8gCnR4hqtA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aawSD7LvOO0CmvE94phTcMeCNI0F76yi1WFd7TKgEA+Fs58sGjRbMyS1f1lBmo2iV
-         +bGV42SQqB+0dVvhHIsU6CkeWEoNKhtqcR4w0ePBB6Jnm4h/lnpfVzRJB2eF2HUo3G
-         tY9QKgkZPRSogClE8X8GfB43KzfDHOGq5QTmHDEI=
-Date:   Tue, 21 Sep 2021 17:37:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au, linux@roeck-us.net,
-        jdelvare@suse.com, alistair@popple.id.au, jk@ozlabs.org
-Subject: Re: [PATCH 3/3] hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs
-Message-ID: <YUn8JcqBQVy2Nwd3@kroah.com>
-References: <20210914213543.73351-1-eajames@linux.ibm.com>
- <20210914213543.73351-4-eajames@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210914213543.73351-4-eajames@linux.ibm.com>
+        id S234231AbhIUPyJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 21 Sep 2021 11:54:09 -0400
+Received: from kleverstation.intra.ispras.ru (unknown [10.10.2.220])
+        by mail.ispras.ru (Postfix) with ESMTPS id E5DCC40D3BFF;
+        Tue, 21 Sep 2021 15:52:34 +0000 (UTC)
+From:   Nadezda Lutovinova <lutovinova@ispras.ru>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
+        Marc Hulsman <m.hulsman@tudelft.nl>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
+Subject: [PATCH v2 1/3] hwmon: (w83791d) Fix NULL pointer dereference by removing unnecessary structure field
+Date:   Tue, 21 Sep 2021 18:51:51 +0300
+Message-Id: <20210921155153.28098-1-lutovinova@ispras.ru>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210811181844.GB3138792@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 14, 2021 at 04:35:43PM -0500, Eddie James wrote:
-> Save any FFDC provided by the OCC driver, and provide it to userspace
-> through a binary sysfs entry. Do some basic state management to
-> ensure that userspace can always collect the data if there was an
-> error. Notify polling userspace when there is an error too.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/hwmon/occ/p9_sbe.c | 98 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 97 insertions(+), 1 deletion(-)
+If driver read val value sufficient for 
+(val & 0x08) && (!(val & 0x80)) && ((val & 0x7) == ((val >> 4) & 0x7))
+from device then Null pointer dereference occurs. 
+(It is possible if tmp = 0b0xyz1xyz, where same literals mean same numbers)
+Also lm75[] does not serve a purpose anymore after switching to
+devm_i2c_new_dummy_device() in w83791d_detect_subclients().
 
-You forgot a Documentation/ABI/ entry :(
+The patch fixes possible NULL pointer dereference by removing lm75[].
 
-Binary sysfs files are for "pass through to the hardware" only, you
-should not be dumping kernel data to userspace through them.  I can't
-really determine if this is the case here or not, as there's no
-documentation saying what you are trying to represent here...
+Found by Linux Driver Verification project (linuxtesting.org).
 
-thanks,
+Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+---
+v2: 
+ - split one file per patch 
+ - remove lm75[] instead of adding checking  
+---
+ drivers/hwmon/w83791d.c | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
 
-greg k-h
+diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+index 37b25a1474c4..b4eae45859c1 100644
+--- a/drivers/hwmon/w83791d.c
++++ b/drivers/hwmon/w83791d.c
+@@ -273,9 +273,6 @@ struct w83791d_data {
+ 	char valid;			/* !=0 if following fields are valid */
+ 	unsigned long last_updated;	/* In jiffies */
+ 
+-	/* array of 2 pointers to subclients */
+-	struct i2c_client *lm75[2];
+-
+ 	/* volts */
+ 	u8 in[NUMBER_OF_VIN];		/* Register value */
+ 	u8 in_max[NUMBER_OF_VIN];	/* Register value */
+@@ -1257,7 +1254,6 @@ static const struct attribute_group w83791d_group_fanpwm45 = {
+ static int w83791d_detect_subclients(struct i2c_client *client)
+ {
+ 	struct i2c_adapter *adapter = client->adapter;
+-	struct w83791d_data *data = i2c_get_clientdata(client);
+ 	int address = client->addr;
+ 	int i, id;
+ 	u8 val;
+@@ -1280,21 +1276,21 @@ static int w83791d_detect_subclients(struct i2c_client *client)
+ 	}
+ 
+ 	val = w83791d_read(client, W83791D_REG_I2C_SUBADDR);
++
++	if (!(val & 0x88) && (val & 0x7) == ((val >> 4) & 0x7)) {
++		dev_err(&client->dev,
++			"duplicate addresses 0x%x, use force_subclient\n",
++				0x48 + (val & 0x7));
++		return -ENODEV;
++	}
++
+ 	if (!(val & 0x08))
+-		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
+-							  0x48 + (val & 0x7));
+-	if (!(val & 0x80)) {
+-		if (!IS_ERR(data->lm75[0]) &&
+-				((val & 0x7) == ((val >> 4) & 0x7))) {
+-			dev_err(&client->dev,
+-				"duplicate addresses 0x%x, "
+-				"use force_subclient\n",
+-				data->lm75[0]->addr);
+-			return -ENODEV;
+-		}
+-		data->lm75[1] = devm_i2c_new_dummy_device(&client->dev, adapter,
+-							  0x48 + ((val >> 4) & 0x7));
+-	}
++		devm_i2c_new_dummy_device(&client->dev, adapter,
++						0x48 + (val & 0x7));
++
++	if (!(val & 0x80))
++		devm_i2c_new_dummy_device(&client->dev, adapter,
++						0x48 + ((val >> 4) & 0x7));
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
+
