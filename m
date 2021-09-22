@@ -2,122 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01ABEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 12:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C81FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 13:04:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C887560F9D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 12:39:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1BBC2611B0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 13:04:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbhIVMk7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Sep 2021 08:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S230413AbhIVNGO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Sep 2021 09:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235834AbhIVMk6 (ORCPT
+        with ESMTP id S230089AbhIVNGN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Sep 2021 08:40:58 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB63EC061574;
-        Wed, 22 Sep 2021 05:39:28 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id z11so4248580oih.1;
-        Wed, 22 Sep 2021 05:39:28 -0700 (PDT)
+        Wed, 22 Sep 2021 09:06:13 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B032C061756
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Sep 2021 06:04:43 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d6so6491126wrc.11
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Sep 2021 06:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ATJeqTXclVnaTU6OlYKqpRsa99iDhu9c6SozT+medwI=;
-        b=G8q/gUm8xQW7IedlOjatTLgy3ls1E5RNm5KOrpb+goJ5Xk4YX3jkWnwEk4/BE8d9lI
-         yW03lXGwYnQoHw6o0m+s4teSD61iHXyio6vEgigWbFqLOIdWVVhxh9wIn/+N200eN8HT
-         D7CsHjnCrj4VXekkDBBAiz8Oec1IwNpDFxG+rTqJUSLhmaEvnfjUUWboK+HojPew/Rgl
-         kraWFLWYMp97bZhz0VOrxbhkiDmVPBj+Rh+wTlTPEZWvIvZqCXOCeE6E91wB2YjRPr/I
-         NqLuigF3/aO0juptgrjV4lL/pd+DtDJQAnTagZHWwiKcSpBv2Y7YWVQ3vHpLKI4KxyJp
-         x+3A==
+        bh=R31ccu0TqMlPUtNKv5VmcQXqknWHvbIakXTHd3Nf1E8=;
+        b=tA4DSQblSR3RKPn+ISUdkVPmzNZzjCbkoIjpxxxIyLTpzAFYgN8HabuOWo/KW+q8km
+         3BA/dG5HxKUerkwzoo3VTYqDPy2eM52AxioKrQAQoNuFGj/cqeR8uVwLgxR0dwygdocK
+         0jjXFbCHxeeWhsZbgvAsFNdq/ikb8CBv4h1vSrVe4FnBVVFpFZppQkdelru3RUCc763/
+         DLEktcOKr21OeD+Oj3nT2y3dx16lx8jz2YtLD3c39SaKHrjB955/lcFwgx1nxt9Y0r+v
+         fkNTOy1So7xX3pstdfp6zv+tOCNrkr64EKAZXq5LTmfgAE1Pgbl4n5lTcQ16QsGADTO4
+         /UPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=ATJeqTXclVnaTU6OlYKqpRsa99iDhu9c6SozT+medwI=;
-        b=QaQF7quJ7zFJjjK5mLjgXXGxY4USMWKKEPgAIwLYUT2NOh0RHqpU9/gmQBoGclCJ2d
-         F5dI+pTBNA/vZ+WlRknEphdpnfNeuCA06U+eqf1Z7kd7hMhIlxKfqvy+tHaaWr0AwU/o
-         aiwC8mYqyDEEikMtTS4CUwrhgzCKDRMGqPpp522JPIFGzhSp8wpvh6nNGlUWoosMnA5O
-         2AzZg41landaDKX32NRfO7V8B92XRLibq0AbenoJk1cM4Rp4Wlfpumbbfitabkntdf/X
-         tplRX79RI/R7cU/VE1pQDBBOV4Co0Fer4OCwsiFke6Xc8chwGOVOYDg4LPl9JF48WAVJ
-         V6vA==
-X-Gm-Message-State: AOAM531EmlyjwOnDtTMHP5KIDuF+HDlScd9+RAkk+8J/uH8BCrZ1yHo5
-        dkhyek9vqTN4Tq9b8PUXATM=
-X-Google-Smtp-Source: ABdhPJxCm2PqeuEockuno6TIwl4nNORCwKB5Nnok6mZwsib7VZKpW+7JgEb2Rf3DGhiK8ufUgZWvAg==
-X-Received: by 2002:a05:6808:169f:: with SMTP id bb31mr8193671oib.18.1632314368122;
-        Wed, 22 Sep 2021 05:39:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l4sm456926oth.4.2021.09.22.05.39.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=R31ccu0TqMlPUtNKv5VmcQXqknWHvbIakXTHd3Nf1E8=;
+        b=QJ6CAS4tuVKq2bgrP21H1Tj45OteMH3G3gdqEJbYyxh0qcRKt0DdILV+dNq/oddgck
+         8MN105UnrbDw3wlSAM+YFNWowt63+Y5GIJrnNBccFI4vDrhiTtSew3VKiS+Ter5Dya3C
+         PrufhqFj/O+ZBYjsuv0MYQoG6l0ux5z/Yq/48mVKLNPmOaAKMTNrlaSb/tPfbT8IB5Zz
+         E5XR7rHJczDATlVnndf1daiMJTyBfcjkZkT1DjCzmCPIxL3UxwEoZEwhvSff20W8pzqp
+         r606UMBv++M8oyBAUMBm+c4d3i+XemTcHpi5YL+mO9SW2osRbCVE5JIbKS9HMZKekSLf
+         1C8g==
+X-Gm-Message-State: AOAM531sDDCP8q11Meoo+6zT6tkFpI+itaTVF267DD+DTFADcwk2G7hK
+        ofL1ZXuijH1DDlW9VX7F4/ISvQ==
+X-Google-Smtp-Source: ABdhPJx7nfxx48lTrlx0zSN6H1eWSFs448sEbZ0sH9EwWy9Cd3ht3NXMzXIEC1MB940/lPxUw1wAgQ==
+X-Received: by 2002:a1c:f606:: with SMTP id w6mr10495911wmc.42.1632315882125;
+        Wed, 22 Sep 2021 06:04:42 -0700 (PDT)
+Received: from google.com ([95.148.6.233])
+        by smtp.gmail.com with ESMTPSA id q3sm860236wmc.25.2021.09.22.06.04.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Sep 2021 05:39:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 22 Sep 2021 05:39:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Oskar Senft <osk@google.com>
-Subject: Re: [PATCH 8/8] dt-bindings: hwmon: allow specifying channels for
- tmp421
-Message-ID: <20210922123926.GB3201379@roeck-us.net>
-References: <cover.1631021349.git.krzysztof.adamski@nokia.com>
- <12984255aac11a3edfc0e6278e1a1cac70ce97ec.1631021349.git.krzysztof.adamski@nokia.com>
- <YUkKCe7845uCqoy5@robh.at.kernel.org>
- <20210921125831.GB1864238@roeck-us.net>
- <YUrRd3kTyLoCkLAt@localhost.localdomain>
+        Wed, 22 Sep 2021 06:04:41 -0700 (PDT)
+Date:   Wed, 22 Sep 2021 14:04:39 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Luka Kovacic <luka.kovacic@sartura.hr>, linux-doc@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, Max.Merchel@tq-group.com,
+        linux@rempel-privat.de, daniel@0x0f.com, shawnguo@kernel.org,
+        sam@ravnborg.org, arnd@arndb.de, krzysztof.kozlowski@canonical.com,
+        pavo.banicevic@sartura.hr, corbet@lwn.net, pavel@ucw.cz,
+        robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        goran.medic@sartura.hr, luka.perkov@sartura.hr,
+        robert.marko@sartura.hr
+Subject: Re: [PATCH v9 2/7] drivers: mfd: Add a driver for IEI WT61P803
+ PUZZLE MCU
+Message-ID: <YUsp58sJATzVHrzn@google.com>
+References: <20210824124438.14519-1-luka.kovacic@sartura.hr>
+ <20210824124438.14519-3-luka.kovacic@sartura.hr>
+ <YUsLfZrnX2hq4FGV@google.com>
+ <YUsWjUWBwW8OYBAr@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YUrRd3kTyLoCkLAt@localhost.localdomain>
+In-Reply-To: <YUsWjUWBwW8OYBAr@kroah.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 22, 2021 at 09:22:33AM +0200, Krzysztof Adamski wrote:
-> Dnia Tue, Sep 21, 2021 at 05:58:31AM -0700, Guenter Roeck napisał(a):
-> > > 
-> > > ti,n-factor
+On Wed, 22 Sep 2021, Greg KH wrote:
+
+> On Wed, Sep 22, 2021 at 11:54:53AM +0100, Lee Jones wrote:
+> > Greg,
 > > 
-> > n-factor isn't just supported by TI sensors, though it isn't always called
-> > n-factor. Maxim (eg MAX6581) uses the term "ideality factor", though they
-> > also refer to the factor as "N" in the datasheet.
-> > 
-> > So question is if we make this ti,n-factor and maxim,n-factor, or if we make
-> > it generic and define some kind of generic units. Thoughts ? My personal
-> > preference would be a generic definition, but is not a strong preference.
+> > Would you be kind enough to take a look at the SYS imp. please?
 > 
-> That was exactly my way of thinking here - many sensors have n-factor
-> parameter and this is the name I see most often.
-> 
-> That being said, maybe it should be "nfactor" instead of "n-factor", as
-> this is what tmp513 is using?
-> 
-> > In regard to units, the n-factor is, as the name says, a factor. Default
-> > value is 1.008. The value range for MAX6581 is 0.999 to 1.030. For TMP421
-> > it is 0.706542 to 1.747977. So the scondary question is if the value
-> > written should be the register value (as proposed here) or the absolute
-> > factor (eg in micro-units).
-> 
-> Since expressing the fractional values in DT isn't well supported and
-> (at least here) hardware guys like to think in terms of register values
-> so this is what I proposed. Also, I just noticed that, for example,
-> TMP531 is using register values as well.
-> 
+> /me hands Lee some extra characters...
 
-I never see "someone else does that" as valid argument. Also, DT does
-support fractional values, via units. It is perfectly valid to describe
-a voltage as micro-volt, for example.
+Fingers faster than brain!
 
-If the agreement is to use raw register values, I think the property name
-should be prefixed with the vendor name, since it won't be a standard
-property. I'll defer on Rob for that, though.
-
-Thanks,
-Guenter
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
