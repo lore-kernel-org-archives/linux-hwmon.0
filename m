@@ -2,101 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2678C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 12:19:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCACAC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 12:28:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 888CD60E73
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 12:19:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92A5861131
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Sep 2021 12:28:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbhIVMUh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Sep 2021 08:20:37 -0400
-Received: from mail-vs1-f47.google.com ([209.85.217.47]:37637 "EHLO
-        mail-vs1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235506AbhIVMUb (ORCPT
+        id S235787AbhIVM3u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Sep 2021 08:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234294AbhIVM3t (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Sep 2021 08:20:31 -0400
-Received: by mail-vs1-f47.google.com with SMTP id q66so2741739vsa.4;
-        Wed, 22 Sep 2021 05:19:00 -0700 (PDT)
+        Wed, 22 Sep 2021 08:29:49 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C17C061574;
+        Wed, 22 Sep 2021 05:28:19 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so3195770ota.6;
+        Wed, 22 Sep 2021 05:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2nkbp5/UFa0WAzqKc+jcXuQDGHNDbtOZlLm7JPrAkR0=;
+        b=YFtLnPU56V4/ke+9OMaOBewTo0hUg987s4PvTaBxFL5FsFa4eAZIe9w7wBPk64uf8B
+         9pL4S6xnV5WQLp369ii8/aBoN+ZmmVRjdsSyoomDs9w2g1bVgOas8CX78hrSCn7rWNJx
+         1acw7TAdMzlWkKvpxIbClqwR8QVU6clrIZKQxcb5YHSq+Z8Qrw+K3vgMzV0GfKAYNEv7
+         CgEvKU3u600+Of8KVCFM11oPgm+Slfa0F+Ka/x7l0jATo6f9hPnh7HcEWf+aSUGtWHBD
+         nxLsDOVQ3DtnpipL9+kptPIiVSv4S4cHNI3A+0oP8uHchRL9pUCj4DWK+cDHTkDA+wRZ
+         7iHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vrikb9Ho8VzljCpQHp0jCgoGt0Y/EwUBxEGEgOiz9Qs=;
-        b=pkZkZlUZqAp97A0cfHL59k1jzK0onWZCuOxF+SWoRqYPilHCrIvtuhL6n+IcX37uw2
-         DR6Y6WU4tEUi/ZWPN3sm5zBoRNDQ5FjBn3a4WjH1mFYu61Ph1+iPmn2pB6aiWxopCaTE
-         tzZHDLh5htiwxL/bf8Q64XF3CzE+rBnH/gTYC0vgwC+xBNjQjWNY4/eoRYCe+PTb9eqp
-         3qh+Gv2NasXVIoEYzKsoEf6ZQrEVcKamrnJPqZktTx2ihY3eI/E7cbnUoh2DzqNMs9zk
-         99O1u3jamw7BNawtlVYaAqaVm1AP8/CGQoeOP9eqJNkBnonbbQ7zY1gxQv5d95f8W7Mw
-         axyA==
-X-Gm-Message-State: AOAM530oV/hTfKM7bLzXIlbOUOCv0cDC+Zik5F0dMSvvxac4RMX2gy4X
-        6G/JnyOgldb0Le57o8JOpk6rFo2xnzfzjb0Eor0=
-X-Google-Smtp-Source: ABdhPJxkZMXzJnL39+Tvgy5FhIT6q5LXs0mqYPFDXOdsIrdfgkix7qdxUDpf6ZFzMVMx8gXnR3iwylK5SkOBpjnbfY0=
-X-Received: by 2002:a67:cc1c:: with SMTP id q28mr24720980vsl.37.1632313140297;
- Wed, 22 Sep 2021 05:19:00 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=2nkbp5/UFa0WAzqKc+jcXuQDGHNDbtOZlLm7JPrAkR0=;
+        b=7ibSsbgg6CYczMVu/7tCN5/dl/TYXj0yd6+q3SUPWHMNkGX30UWzXzbb91AlCbouGm
+         ae7Nl8LkQBQIzf8TceYeCPirGyZU8flTkqi2lZIkJyw9n+nw6r7x5jN0wv5PKRuRYmvM
+         R0wr7cUphWEuDn7FjiNT4Nq0XcuZrjmuMpVJgKFqZl2n/C1zZiDLDuFjU/e/s9Q50l8x
+         oBu31JqseNR31GIs6lyAfXu+hKUMRuGt17xZHz5aETePXTrI4SMEt3goDBnNUtEnGULZ
+         0kjdxtvH/EeFvFM+7ockp/U+Knra5ecM6BWiH3QoSThBvZLKOb4A5UcMXOKRnmy8Y4At
+         xgsw==
+X-Gm-Message-State: AOAM5304dXRwU+dFtUhsV0tBuqeQ6EEaDdZKDYrP00tAt0BzJ6CycdxC
+        eGlGG6Y+8BaF4XDpE5h3GQA=
+X-Google-Smtp-Source: ABdhPJyaLELfrhqDSyfOysDSbvs4nNZCzGIx0aZ5djZAzLKJMd1WFq+GPUkRsXUjDQYqT7l7HgTtDg==
+X-Received: by 2002:a05:6830:82b:: with SMTP id t11mr2736762ots.319.1632313698268;
+        Wed, 22 Sep 2021 05:28:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t4sm458135otj.18.2021.09.22.05.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Sep 2021 05:28:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 22 Sep 2021 05:28:16 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] dt-bindings: hwmon: ibm,cffps: move to trivial
+ devices
+Message-ID: <20210922122816.GA3201379@roeck-us.net>
+References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
+ <20210921102832.143352-3-krzysztof.kozlowski@canonical.com>
+ <20210921123025.GC1043608@roeck-us.net>
+ <68fa27ae-4704-181f-e2f6-92635865798b@canonical.com>
+ <20210921131804.GC1864238@roeck-us.net>
+ <1a8cfa30-769d-d0aa-ffef-1eda42e3a84d@canonical.com>
 MIME-Version: 1.0
-References: <20210824124438.14519-1-luka.kovacic@sartura.hr>
- <20210824124438.14519-3-luka.kovacic@sartura.hr> <YUsWeWlfanGMCpT8@kroah.com>
-In-Reply-To: <YUsWeWlfanGMCpT8@kroah.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Sep 2021 14:18:49 +0200
-Message-ID: <CAMuHMdU9Mes_kyOeRbgzcvCRLLj0_N_na88REEqejdrhSuzByA@mail.gmail.com>
-Subject: Re: [PATCH v9 2/7] drivers: mfd: Add a driver for IEI WT61P803 PUZZLE MCU
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Luka Kovacic <luka.kovacic@sartura.hr>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Max.Merchel@tq-group.com, Oleksij Rempel <linux@rempel-privat.de>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        pavo.banicevic@sartura.hr, Jonathan Corbet <corbet@lwn.net>,
-        Lee Jones <lee.jones@linaro.org>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, goran.medic@sartura.hr,
-        luka.perkov@sartura.hr, robert.marko@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a8cfa30-769d-d0aa-ffef-1eda42e3a84d@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Greg,
+On Tue, Sep 21, 2021 at 04:40:32PM +0200, Krzysztof Kozlowski wrote:
+> 
+> I hope this won't stop from reviewing the few other patches in the set
+> adding separate bindings.
+> 
+I don't actively review dt patches, but rely on Rob to do that.
+Reason for that is that I almost always get something wrong.
+So let's wait for Rob's feedback.
 
-On Wed, Sep 22, 2021 at 1:41 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> On Tue, Aug 24, 2021 at 02:44:33PM +0200, Luka Kovacic wrote:
-> > +++ b/drivers/mfd/iei-wt61p803-puzzle.c
-> > @@ -0,0 +1,908 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* IEI WT61P803 PUZZLE MCU Driver
-> > + * System management microcontroller for fan control, temperature sensor reading,
-> > + * LED control and system identification on IEI Puzzle series ARM-based appliances.
-> > + *
-> > + * Copyright (C) 2020 Sartura Ltd.
->
-> It is 2021 now :(
-
-IANAL, but if the driver was published first in 2020 (v1 of the patch),
-"2020" should be fine.
-
-It's not that Disney is allowed to increase the copyright year every time
-Snowy White is played in a movie theatre ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Guenter
