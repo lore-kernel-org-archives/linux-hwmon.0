@@ -4,80 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA00AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BEE9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:11:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A96C260F70
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:11:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 181B361029
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:11:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243224AbhIWVMm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 17:12:42 -0400
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:42732 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243189AbhIWVMl (ORCPT
+        id S243263AbhIWVMw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 17:12:52 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:39532 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243209AbhIWVMw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 17:12:41 -0400
-Received: by mail-oi1-f172.google.com with SMTP id x124so11546367oix.9;
-        Thu, 23 Sep 2021 14:11:09 -0700 (PDT)
+        Thu, 23 Sep 2021 17:12:52 -0400
+Received: by mail-ot1-f45.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so10400055ota.6;
+        Thu, 23 Sep 2021 14:11:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=r/+C4RWfXuf4J4PV+1A5NzCm+2F6V6un9scbYMc9KVM=;
-        b=MFumNC9W2x9EoAVGU1xXPsDmsx62KFMMNGRPw1wH4P1futGVReHq6Pi3Gc4q7qPDIF
-         FzrIg07hNHd2MPxwEtYLCSaAUNOsRipCuUZk54qEoah66WKcLUjJL7jZRQmRHyqisF5D
-         o3s5WT6mdQcJJWjRk6G6EEpOkw35MthPH9OWomCMLTBzorTDEPlEE6arMRPKcQ2/4Lx9
-         LaVlIixgMi0BIVtHK5RY8oHDBAF4c1HyS3P1z4Pfio1mT4TdymKmsHuzzdCaEf4yfwCw
-         cBIO86UDJbyW5O2VOWZnYpuOBfo4h7lBdlIo+u3iuH+OExox6cYBMT6eaabN+qSbIHmv
-         9d1g==
-X-Gm-Message-State: AOAM530USWWrAVKhZi8Shxco4G4PlquwnUmRdeYj40q4z9w8yXwD0kdq
-        /o+gsT/mxv4rBVi6OSCpc3WaYGfDsw==
-X-Google-Smtp-Source: ABdhPJx4blJeDBUA0kv+vZLi6rvu+cXm1eK7P8e/5xXdDDWK068ZBGzVfg/UJl1LM3nPNi29EzYZYQ==
-X-Received: by 2002:a05:6808:287:: with SMTP id z7mr5436354oic.8.1632431469304;
-        Thu, 23 Sep 2021 14:11:09 -0700 (PDT)
+        bh=kk2pWIp+ZoWPPzM2mCzEpeKek3uLHU+wVdCODnRG/3s=;
+        b=rk12b3FgMfSeHGqAXYWSdqKP4Vtshpr/S0SWN0suYsjEKxUxQvSXsFWamUk/nskPk1
+         gG67BMtbPixHWyQzxUwnPR9jbNPDCMMRvXY6FHSHXlaQfP6Kg9pZNKK0WZrwg1tQpCjR
+         PWHUYx8FWW7+mbJBrlRsVvdBz6rVobjmJd2zynjp0VyhD7IkJrguQTjXbuf29Z73w/E0
+         f9qHmUh5RGcGWj5vJ0EwyFBg+uvBftTL2hEbLdZ8QTLm1dig9Po6G+hQS4El84CQmXfS
+         wnOxdhgY3J/oLYUGCf210fHrJn5XU2xPmXL6qDi/X2G7Jf5QFWyxnRFIK8E4hJvmWdiw
+         d4pQ==
+X-Gm-Message-State: AOAM530P0GruAJ1MP/zecnM86vL1ygBkCasulYOh8blXRSwKK5UaU36Y
+        LzzUywiEYL7RblUmPIIJcfTpGHTMyg==
+X-Google-Smtp-Source: ABdhPJwEk6UYHxJutkDB2d7g5wDFFS5qCPolOoSlY4R6tgoeX1XA06QFRPtyZHZMo83BaeFgO3LF/A==
+X-Received: by 2002:a9d:1902:: with SMTP id j2mr736469ota.34.1632431480130;
+        Thu, 23 Sep 2021 14:11:20 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id u12sm1609760otq.20.2021.09.23.14.11.08
+        by smtp.gmail.com with ESMTPSA id 12sm1333988otg.69.2021.09.23.14.11.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 14:11:08 -0700 (PDT)
-Received: (nullmailer pid 3529913 invoked by uid 1000);
-        Thu, 23 Sep 2021 21:11:08 -0000
-Date:   Thu, 23 Sep 2021 16:11:08 -0500
+        Thu, 23 Sep 2021 14:11:19 -0700 (PDT)
+Received: (nullmailer pid 3530309 invoked by uid 1000);
+        Thu, 23 Sep 2021 21:11:18 -0000
+Date:   Thu, 23 Sep 2021 16:11:18 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: lm90: convert to dtschema
-Message-ID: <YUztbEMVqAFGyWER@robh.at.kernel.org>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: lm90: do not require VCC
+ supply
+Message-ID: <YUztdj3R95c1E1ZY@robh.at.kernel.org>
 References: <20210920181913.338772-1-krzysztof.kozlowski@canonical.com>
+ <20210920181913.338772-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210920181913.338772-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210920181913.338772-2-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 20 Sep 2021 20:19:12 +0200, Krzysztof Kozlowski wrote:
-> Convert the National LM90 hwmon sensor bindings to DT schema format.
+On Mon, 20 Sep 2021 20:19:13 +0200, Krzysztof Kozlowski wrote:
+> The LM90-like sensors usually need VCC supply, however this can be
+> hard-wired to the board main supply (like in SiFive HiFive Unmatched
+> RISC-V board).  Original bindings made VCC supply as required but in
+> practice several other boards skipped it.  Make it optional.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > 
 > ---
 > 
 > Changes since v1:
-> 1. Drop adi,adt7461 from trivial-devices.
+> 1. New patch
 > ---
->  .../devicetree/bindings/hwmon/lm90.txt        | 51 ------------
->  .../bindings/hwmon/national,lm90.yaml         | 79 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  4 -
->  MAINTAINERS                                   |  2 +-
->  4 files changed, 80 insertions(+), 56 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/lm90.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>  Documentation/devicetree/bindings/hwmon/national,lm90.yaml | 1 -
+>  1 file changed, 1 deletion(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
