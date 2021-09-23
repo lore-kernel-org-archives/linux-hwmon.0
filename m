@@ -2,98 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23D5CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 16:41:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9B3CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 16:59:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D38160F41
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 16:41:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BB29610C8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 16:59:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbhIWQnH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 12:43:07 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:34772 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233541AbhIWQnG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 12:43:06 -0400
-Received: by mail-ot1-f45.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so3635560otb.1;
-        Thu, 23 Sep 2021 09:41:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zK5aaLbOqNMgD2uk1mXBXU6R8gwUSZbuznuqk9+2icg=;
-        b=O3mklFipkvgF51IoqotauVmpWfGw/fGG1pbgCybvmdFwVf7Vm2wMq/RpXpLN7mJWI5
-         M3JTdTJ5fAzmzbHN5xopGCQZ5KwRdBeTu0/IKFl1tqmEK2NCNm7+D8QM7gbiEiZOkwdf
-         o8fa8lj8lUk4m2UAVQy8Unl6Nq8k1Ihaw8TZkKMaC4LlNOFNeD2cOlVblIyI4UZFw8Vk
-         wSygeXWJ9CxZoqVmTl6zqR0/REAaM8modx/AbKOQmxXePS+4og7DG3VlOxz5iMyVjO3l
-         YPX2JJM6PIliP2RjDpt40cbKsVsyktSd/Kh8mgKFgp1DIhaBIVrifZPqQc9Avu3NZrED
-         ddMQ==
-X-Gm-Message-State: AOAM531HTTcFQYp+ZRSdxkKrYSW6WD78GGzuxss1Cmxn/EPBA1oSwG0B
-        5IQTjCyIZIGDtKperiVGgYKf6Wsckg==
-X-Google-Smtp-Source: ABdhPJykutT3S7hJsCKtUdgjGNccAYmpHCljPRxKL8uru8G+C+53Utn+lr7BXt3QmNSQQ1/Dz01zlQ==
-X-Received: by 2002:a9d:4694:: with SMTP id z20mr5233830ote.379.1632415294458;
-        Thu, 23 Sep 2021 09:41:34 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 14sm1424571otl.50.2021.09.23.09.41.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 09:41:33 -0700 (PDT)
-Received: (nullmailer pid 3140814 invoked by uid 1000);
-        Thu, 23 Sep 2021 16:41:32 -0000
-Date:   Thu, 23 Sep 2021 11:41:32 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     devicetree@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Johannes Pointner <johannes.pointner@gmail.com>,
-        linux-hwmon@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v3] dt-bindings: hwmon: Convert NTC thermistor to YAML
-Message-ID: <YUyuPAfE2Jb5qBQZ@robh.at.kernel.org>
-References: <20210922233901.1871274-1-linus.walleij@linaro.org>
+        id S235165AbhIWRB3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 13:01:29 -0400
+Received: from mout.gmx.net ([212.227.15.18]:48649 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233396AbhIWRB3 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 23 Sep 2021 13:01:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+        s=badeba3b8450; t=1632416380;
+        bh=wl4ZRzJP3ywC6eUIcw1x1zMTCyFXx48n3CbhakLGXR0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=YNxHZtvrd2bEausoFNCY7Vb/7jO1sd6iB6hY0vK02Kw+fi+/2flWCgPlb2rtX6U13
+         WFQ902UK4rwCFyJ6Adv/IRsL5Nn/fCE7DRAoUlQl9llkru0/S16OW/jj2tLHT+yn3P
+         rlgL4ac72MSncdLNle/rkB9/JeXmL2mpiyy/6kUs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1M59C2-1mSM8m2PZs-0017Op; Thu, 23 Sep 2021 18:59:40 +0200
+From:   W_Armin@gmx.de
+To:     pali@kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: (dell-smm) Support additional attributes
+Date:   Thu, 23 Sep 2021 18:59:31 +0200
+Message-Id: <20210923165933.24132-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210922233901.1871274-1-linus.walleij@linaro.org>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Zjs/ZGbJas5t75j83ldBeqm+DrXeqMJHzhQY3rpFhAG4wThaAzc
+ NjOA5DB8NW64pZglTnJIikRsGTfIbqhtPQT3oHk2KtV7jpTPHR2hslf7TE6JtmS5vIG2+HE
+ 7/yVGajFlsDmzCTMQu10PT2aSVdSi74ydnUYjb9E+xlz+nRXT1osOO0xgTX90ZveHtjUaua
+ bJANm5fl1dZcyc3J/Oh/w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7B3azGf/Nkg=:LFHJ0Lg1ugomEuk5cfn6a1
+ 6RkQFR5xCP5+YlkZYX+Z06Jc34YgCiOtIZ6Z66lj3QHxxwlCJgt0zZxBcalGb84ErhwiEE5k4
+ qLU8RWrpclJntvW7qQxGIepd7w7jxp2CSjApEITrehS7cDV71AaopHeJ6asCU0r2PboZsP2DL
+ ZgMhpRd9KaZlAXrYh7MErSBPmSblLAPslNvyAx7hZAOwLBm3LFM1gMa7ng8jGkJkkSJhMIV36
+ jHtUIFG/CqtBX6je3L6Fu1FSFR1NUT7yTjRhbzvi1dol2xvznDsOQGYxpWQdDpdurn5CXyDh/
+ KbFjWONBfSIU46l86aX5/b4vtI59yBl/iKg+B+lXflTa8F3vOHWp1Ul7k5L4napck4d41RKfe
+ Zbpoe3t9exbUN+IfD0mj5NIKENkHp+4g1Eq+08cVUa8TMRbtuPQQTM5kb1qbbX6nkVDkX1eZn
+ GZtAweiCFtQx5pNxlA8tfm30Vp7Dt4qS3zCArS4STvq+YnSSlw7KyFbzZ1PyJWJcGbWBTm+Au
+ NHbbIQywFqv6zlU6dpcphehmQ3qMOFfD2VSeUzO+oAt2eq4QPScmTwhoJhXmsNiE6zINKILq6
+ d3kPkXDVut/CPl8eTz1krXHSICje/8o0xBJ0eTAMOqNMjzSnsHXUNOLVLJxChy2beXSaTYf1g
+ PzrQWcrlUhji8md9kzwIDuvwBOin8CkmDsTsrn6PRmDyDYoR38EBplLFnGShruhlZbHnIaJt/
+ NhRgKJqm0eyk1P/t/ay0rc8gh/gP49a6WSYVcBqYPCbVmofgqdNFqFnpgBh16i43nI9gpS29E
+ +o7aqye80RwNk8hsihkjSHd4yYQje5iW0RhIoIkhPGmLrya4vbociHK3wPSBUvi6/mcRFbSl8
+ 5e5ftDY/v7YnGwmm5hfsj05iEGSUcO8F2ZO3BmqCoT5WTiGxrSEZGm44E1ZXolxN9RKDGqmCw
+ 3wJONRnXTMqfc6gAlZ7VyfBTEIpZZgZRUILZJild5qFuhWIUvQeD2pmAjtutNl7ezbDeUYxRh
+ pZo/YUQkflBqZddUWD0SSOivlyB07eVHNJV+W131+iLUsDQQnibwFWcPcwd0QxhelF5WJabAx
+ 3mz+CCE9jR7Cz8=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 23 Sep 2021 01:39:01 +0200, Linus Walleij wrote:
-> This converts the NTC thermistor DT bindings to YAML. Some care had to
-> be taken since I had to add some illustrations to make the connection
-> layouts graspable.
-> 
-> Cc: Javier Martinez Canillas <javier@dowhile0.org>
-> Cc: Johannes Pointner <johannes.pointner@gmail.com>
-> Cc: Peter Rosin <peda@axentia.se>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v2->v3:
-> - Rebase on v5.15-rc1
-> - Drop comment reference to thermal-sensor.yaml
-> - Keep the oneOf rather than using an enum for the compatible:
->   I can't figure out how to make deprecated work for enums?
->   https://lore.kernel.org/linux-hwmon/CACRpkdZDLSA5YJtc3XCkfPZUNqo1MOWLBwVDGQ4vN8cDXD3aYg@mail.gmail.com/
-> ChangeLog v1->v2:
-> - Realize I need to CC devicetree@vger.kernel.org on this.
-> - Fix Javier's mail address.
-> - Drop Naveen's mail (bouncing)
-> ---
->  .../bindings/hwmon/ntc-thermistor.yaml        | 141 ++++++++++++++++++
->  .../bindings/hwmon/ntc_thermistor.txt         |  44 ------
->  2 files changed, 141 insertions(+), 44 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
-> 
+From: Armin Wolf <W_Armin@gmx.de>
 
-The error introduced can be fixed in a separate patch, so:
+This patch series adds support for fanX_min, fanX_max and fanX_target.
+A second patch also removes some unnecessary includes.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Both patches where tested on a Dell Inspiron 3505 and
+a Dell Latitude C600.
+
+Armin Wolf (2):
+  hwmon: (dell-smm) Add support for fanX_max and fanX_target
+  hwmon: (dell-smm) Remove unnecessary includes
+
+ drivers/hwmon/dell-smm-hwmon.c | 54 +++++++++++++++++++++++++++++-----
+ 1 file changed, 47 insertions(+), 7 deletions(-)
+
+=2D-
+2.20.1
+
