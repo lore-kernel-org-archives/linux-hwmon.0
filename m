@@ -2,152 +2,130 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11030C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 00:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB63C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 02:35:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E90C760187
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 00:38:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4B0461090
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 02:35:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238706AbhIWAkL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Sep 2021 20:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
+        id S238899AbhIWCgd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Sep 2021 22:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238631AbhIWAkK (ORCPT
+        with ESMTP id S238859AbhIWCgd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Sep 2021 20:40:10 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E235EC061574;
-        Wed, 22 Sep 2021 17:38:39 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id o66so7176535oib.11;
-        Wed, 22 Sep 2021 17:38:39 -0700 (PDT)
+        Wed, 22 Sep 2021 22:36:33 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F948C061574
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Sep 2021 19:35:02 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id t20so3408881pju.5
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Sep 2021 19:35:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=i6zSFlSggOZgk0+XF49/fBLOG6TWufrBNoMVsILPLYs=;
-        b=A74/UzKAG7wYWTCp7sX4yVcKOp3wdHnRrBYRT/xUGymi4URYEcO++JbX+LjbLzmIa9
-         8IFtgTZS+vxvSWLETzN/BkuWvNzcOvaI3DDdZhVj6TTXZ6m6WkVfXYdjZKLw5cxhZkwH
-         E3eD8d73ksoCuT1SAwg8oJfRxTSFHZmtjHoJg3NVY95V+N2UXSIMbYCQ/o0IthJEuwuM
-         YrsMC+SrpROKf617tKkFMWxyw8NLNzIKLjp28Dv3f93PvUDgFONW2X7PyJhTmiJ4zcOp
-         NgSDoWp6EaCwZ2F9YUDPxsd5fYeAf4pCumzi9uutSb+mVRyMBY6AJtaMJeKyzFtAbPje
-         TqjQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JysQTf2f7UTKyoMlI8yE3byPldMU73yOnyr+IFIYsn0=;
+        b=jGy+4y/RCPpgOOulCPQ5Ug5VUeJK1EU2pPKqAQ8QEWl8hN9GxgBqv/o7YAriGGWp/U
+         cOcb1sxBEGABcymF9sR2BPe/1PPl5HEU4Nlljoaz/wry5vpCGK0J5y+KH3IjbhA47uku
+         hk+cZRtOKLx67/+L4Hk0eDXEgt0vSMfn5NGDv95BQSX0I80jv0lYBXHfMCzD+z5FLw4h
+         INxHWLXPHMUWr4k9mJcEqZDJZPcon7pFtCo2hsaDMcl5gn4deNcPnLynGIa+1RF4Xoc4
+         rAWJMr2TRlKcb/aoYRCDVPXysBD3X2V394etLQjEQV/WotXVecm8tOxvjMY1S0VBjmw9
+         kbfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=i6zSFlSggOZgk0+XF49/fBLOG6TWufrBNoMVsILPLYs=;
-        b=Xa0qMYfzf49rECA37dHXIN7dfNNRXeImQQUQq3h+UHqCxHf0E0ewgwUdjQ/026NSJ0
-         Bx+k8kQngOZDEaljRjH/noACHcwYWpdpNt7VcB4v13gg3wBxqC/nLl/Q8qo7BUXuoY6d
-         FKGHrcIwu8PkTNSS6rZSnelcFeqGLNC6Y4kvDCDqn5uT8108hL6nAe9dRVE6bwMQ7NHS
-         p37Ihy9T8tFpUtCFVmzBVJxh+vWlxSAG1kUqdnz4hVdm3YStpFI+GxIZ5pbC6eXLt888
-         dWHN3BtJv2Mu2O0f3H/Cy9X+uq6DIHyZ7PTOR75Vc6FV8XSnYvhmkOP8/psMi9Tu2rP7
-         nawA==
-X-Gm-Message-State: AOAM531fDp6k2kLabYOcbC4JBBKp/FnDCFrddVyJHTH7Z6JhIKoF8JG0
-        8MNgtb4dxIWm+avG8JIiobE=
-X-Google-Smtp-Source: ABdhPJz21Alh38vFhDTHuXa2gbiCmlogP1ppbWw2wTYPOyeXQVBdNfTzLF0maypnG/enK4QUEZx7Yw==
-X-Received: by 2002:a05:6808:107:: with SMTP id b7mr1613262oie.146.1632357519230;
-        Wed, 22 Sep 2021 17:38:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i25sm920708oto.26.2021.09.22.17.38.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JysQTf2f7UTKyoMlI8yE3byPldMU73yOnyr+IFIYsn0=;
+        b=X0u87dEkbTqkuOwpadrmNWJ61SmvsAWb6t1pgSDj4haOvaS8riy3VnwE2pcqOe1TAu
+         FxW7RNX80j8U+73AnEA+aTyump7OiHohZ6cJkJuUHpfwGWkTLBhwdlnqbws9VukGwXDb
+         k5Y1ssTxdrkpV4r42qLF3ZYgFEypd1KUG3l+8lgCPe2OshzZ7M6viLFKZ82Px5s4lxKl
+         en5PHRfq4UGwY1JyIxLKMuUvEFRpnyvDkEazWGvAppCfK/XGnnGA9vmr8dB4d/ZnQmKG
+         gfRmLp6y6TjOJP88CksuTyQIDsyywsAw7CDRq+IJ1zXvy7a2E4cCG0qK/bD6Nuw7OGkm
+         wNUw==
+X-Gm-Message-State: AOAM533n6QtZlEkzZAhn8BzR2I8gvTydDukizbE23cMutZiXCNko/oPR
+        DlhYKhvjMQhi2Mdd0VayJUsFxKrsNYEp3g==
+X-Google-Smtp-Source: ABdhPJxOYY+7Q4/RDfFoqcFaxOp+E+SFmSU5tE0Fq4QozZFupgbdIWIMZBDoyq97nNwCC9eXEj9BzQ==
+X-Received: by 2002:a17:902:8b86:b0:13d:d600:789f with SMTP id ay6-20020a1709028b8600b0013dd600789fmr2014476plb.73.1632364501424;
+        Wed, 22 Sep 2021 19:35:01 -0700 (PDT)
+Received: from localhost.localdomain ([240f:34:212d:1:2ece:a59:43d1:a357])
+        by smtp.gmail.com with ESMTPSA id j123sm3856042pgc.77.2021.09.22.19.34.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Sep 2021 17:38:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 22 Sep 2021 17:38:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Oskar Senft <osk@google.com>
-Subject: Re: [PATCH 8/8] dt-bindings: hwmon: allow specifying channels for
- tmp421
-Message-ID: <20210923003836.GA3214968@roeck-us.net>
-References: <cover.1631021349.git.krzysztof.adamski@nokia.com>
- <12984255aac11a3edfc0e6278e1a1cac70ce97ec.1631021349.git.krzysztof.adamski@nokia.com>
- <YUkKCe7845uCqoy5@robh.at.kernel.org>
- <20210921125831.GB1864238@roeck-us.net>
- <YUrRd3kTyLoCkLAt@localhost.localdomain>
- <20210922123926.GB3201379@roeck-us.net>
- <YUt2oD6sUKYvZLDB@localhost.localdomain>
+        Wed, 22 Sep 2021 19:35:01 -0700 (PDT)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Billy Tsai <billy_tsai@aspeedtech.com>
+Subject: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
+Date:   Thu, 23 Sep 2021 11:34:47 +0900
+Message-Id: <20210923023448.4190-1-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YUt2oD6sUKYvZLDB@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 22, 2021 at 08:32:00PM +0200, Krzysztof Adamski wrote:
-> Dnia Wed, Sep 22, 2021 at 05:39:26AM -0700, Guenter Roeck napisał(a):
-> > On Wed, Sep 22, 2021 at 09:22:33AM +0200, Krzysztof Adamski wrote:
-> > > Dnia Tue, Sep 21, 2021 at 05:58:31AM -0700, Guenter Roeck napisał(a):
-> > > > >
-> > > > > ti,n-factor
-> > > >
-> > > > n-factor isn't just supported by TI sensors, though it isn't always called
-> > > > n-factor. Maxim (eg MAX6581) uses the term "ideality factor", though they
-> > > > also refer to the factor as "N" in the datasheet.
-> > > >
-> > > > So question is if we make this ti,n-factor and maxim,n-factor, or if we make
-> > > > it generic and define some kind of generic units. Thoughts ? My personal
-> > > > preference would be a generic definition, but is not a strong preference.
-> > > 
-> > > That was exactly my way of thinking here - many sensors have n-factor
-> > > parameter and this is the name I see most often.
-> > > 
-> > > That being said, maybe it should be "nfactor" instead of "n-factor", as
-> > > this is what tmp513 is using?
-> > > 
-> > > > In regard to units, the n-factor is, as the name says, a factor. Default
-> > > > value is 1.008. The value range for MAX6581 is 0.999 to 1.030. For TMP421
-> > > > it is 0.706542 to 1.747977. So the scondary question is if the value
-> > > > written should be the register value (as proposed here) or the absolute
-> > > > factor (eg in micro-units).
-> > > 
-> > > Since expressing the fractional values in DT isn't well supported and
-> > > (at least here) hardware guys like to think in terms of register values
-> > > so this is what I proposed. Also, I just noticed that, for example,
-> > > TMP531 is using register values as well.
-> > > 
-> > 
-> > I never see "someone else does that" as valid argument.
-> 
-> It is not an argument for "so I should be allowed too" but more like "so
-> it is generic enough to make sense for more than a single case" :)
-> 
-> > Also, DT does support fractional values, via units. It is perfectly
-> > valid to describe a voltage as micro-volt, for example.
-> 
-> True. But doing so for unit-less values isn't as obvious. For real
-> fractions we don't even know what the resolution should be and then we
-> also may have those rounding errors etc (while with register values we
-> know precisely what we get). As usual, we have some pros and
-> cons of both approaches. While I agree raw values are not perfect, I
-> still think it makes more sense so I vote for them. But my vote,
-> obviously, isn't that important here so I'll let you guys decide.
-> 
+This adds an optional property "retain-state-shutdown" as requested by
+Billy Tsai.
 
-I really have to pass on this one, and leave it up to Rob to decide.
-Personally I really really really dislike raw values, but I understand
-that this makes me biased. I do realize that converting from a fractional
-value to a register value is inherently complex and open to interpretation.
-For example. if we define fractional values, what should 1.007000 translate
-to ? It would either be 1.008 or 1.004641. Using the register value (0xff,
-or -1 for 1.004641) would definitely be simpler and avoid calculations and
-rounding.
+Billy said:
+ "Our platform is BMC that will use a PWM-FAN driver to control the fan
+ on the managed host. In our case, we do not want to stop the fan when
+ the BMC is reboot, which may cause the temperature of the managed host
+ not to be lowered."
 
-Guenter
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Billy Tsai <billy_tsai@aspeedtech.com>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+---
+ drivers/hwmon/pwm-fan.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-> > If the agreement is to use raw register values, I think the property name
-> > should be prefixed with the vendor name, since it won't be a standard
-> > property. I'll defer on Rob for that, though.
-> 
-> Fair enough. If we go that route, we should use "ti,nfactor" (without
-> dash) to be consistent with ti513?
-> 
-> Krzysztof
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 17518b4cab1b..1ea0d0562c28 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -38,6 +38,7 @@ struct pwm_fan_ctx {
+ 	struct pwm_fan_tach *tachs;
+ 	ktime_t sample_start;
+ 	struct timer_list rpm_timer;
++	bool retain_state_shutdown;
+ 
+ 	unsigned int pwm_value;
+ 	unsigned int pwm_fan_state;
+@@ -312,6 +313,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 
+ 	mutex_init(&ctx->lock);
+ 
++	ctx->retain_state_shutdown =
++		of_property_read_bool(dev->of_node, "retain-state-shutdown");
++
+ 	ctx->pwm = devm_of_pwm_get(dev, dev->of_node, NULL);
+ 	if (IS_ERR(ctx->pwm))
+ 		return dev_err_probe(dev, PTR_ERR(ctx->pwm), "Could not get PWM\n");
+@@ -492,7 +496,10 @@ static int pwm_fan_disable(struct device *dev)
+ 
+ static void pwm_fan_shutdown(struct platform_device *pdev)
+ {
+-	pwm_fan_disable(&pdev->dev);
++	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
++
++	if (!ctx->retain_state_shutdown)
++		pwm_fan_disable(&pdev->dev);
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+-- 
+2.25.1
+
