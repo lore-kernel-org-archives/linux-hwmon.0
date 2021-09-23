@@ -6,74 +6,74 @@ X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA818C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6105AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:28:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BA23960F56
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:25:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 405DF60F70
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:28:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243492AbhIWW1I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 18:27:08 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:38643 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243491AbhIWW1I (ORCPT
+        id S243443AbhIWWa1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 18:30:27 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:45949 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239507AbhIWWa0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 18:27:08 -0400
-Received: by mail-oi1-f180.google.com with SMTP id u22so11839802oie.5;
-        Thu, 23 Sep 2021 15:25:36 -0700 (PDT)
+        Thu, 23 Sep 2021 18:30:26 -0400
+Received: by mail-ot1-f46.google.com with SMTP id l7-20020a0568302b0700b0051c0181deebso10579874otv.12;
+        Thu, 23 Sep 2021 15:28:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HhFMiNAtzktgelDJMRh6J8mQ6oa3kr8f3NRqH7OdArE=;
-        b=wEYMeodNLbLi6Dv5hIuiVpX7s7brRGJv7s8EaYP62yWuWhgY/wIT7bT0CUySRTe69u
-         ycWq2Y9W27qRtmPmhmOjhiq7CqFV1ZfKU22akH0rfWtB93jFhg/dxsh7Ry7kWsjkmjKv
-         ++YxC+yJQ7UCxRlt+NFd3F2v8jdIzSdiDWauCN4IGKmFg/MICxNC93cPnx35bLgvfsMt
-         i9kW1OuyvGTQ0yBa1MSpnJIvvjJ6K1zotQf7JGk9lEzN4PZhUE8UULT2rO7k1EZPwSxJ
-         /FpuOPYWh5/XXB2xBONO35PNzauOhO9zTwmf6Fg6adatBTJQ9qwNJSl0SwM4f5Z2Dd16
-         TR5g==
-X-Gm-Message-State: AOAM5329e8Lw4NnKt0btm8XFb3+9vh9gU7gIYspKGSkdLMoapJlSjGyt
-        2k1cH+7aCbkI9RnFj+WyAw==
-X-Google-Smtp-Source: ABdhPJwTRFCrH3tw93X5LfDSYDM9V7ydA4B+oWGaoBg+c0kqA8ojDuZo30BX87QDIVyZ5PlLkmxrKA==
-X-Received: by 2002:a54:489a:: with SMTP id r26mr2738379oic.158.1632435935864;
-        Thu, 23 Sep 2021 15:25:35 -0700 (PDT)
+        bh=8LuhT+hwUfGfKsdp2p0Zj6c1iUcRHgKSeaQyIG39eWk=;
+        b=hgrc9nO7t8PxN7REWHfEHHinOmGiwJhVkun0Vivqwt9X+l6UUzRKqsnugVw3A7SkV/
+         U+aii75N7+x47lu3SBw8rgTViyEsXQ0WugTS8y2JJw+0U1kKqpykJqgxmS0DzX4fZbYp
+         QdzidUmTdSp2snbxfDTYjAVSKqm+4o5DLcT1vWjpO7C82RV+q4M9vHb34XF7lGMKyzxI
+         B2ad2GzF9yecBfhmYeV1stAvVNDNSWD0xEhKaXPEdCz6bE4QG5aulUW4ImFYiElfW4CA
+         DyGgUkPLhnMiP/PxsNo+MBEye44U1KUzC0Yba5lMFt89z9ehqOmoBSMewe5pdqcNcI/j
+         iolg==
+X-Gm-Message-State: AOAM531xObr7L+xyhkNQoUCqVRTu8p6XHMsz5CFVxQBEXluqmr1XuvaC
+        vY+DHkiVYa/TOrjuyiOE4g==
+X-Google-Smtp-Source: ABdhPJwQtmUke5bqMoNe/7yPXWnQlFibQPHA+ia3CLW7T2vLndFGguShmCzGzj0aYdzujx03U9qVXA==
+X-Received: by 2002:a05:6830:40cb:: with SMTP id h11mr1019749otu.176.1632436134235;
+        Thu, 23 Sep 2021 15:28:54 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v2sm1700100ooh.28.2021.09.23.15.25.35
+        by smtp.gmail.com with ESMTPSA id y12sm1562748otu.11.2021.09.23.15.28.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 15:25:35 -0700 (PDT)
-Received: (nullmailer pid 3635421 invoked by uid 1000);
-        Thu, 23 Sep 2021 22:25:34 -0000
-Date:   Thu, 23 Sep 2021 17:25:34 -0500
+        Thu, 23 Sep 2021 15:28:53 -0700 (PDT)
+Received: (nullmailer pid 3639888 invoked by uid 1000);
+        Thu, 23 Sep 2021 22:28:52 -0000
+Date:   Thu, 23 Sep 2021 17:28:52 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Kosina <trivial@kernel.org>
-Subject: Re: [PATCH 2/6] dt-bindings: hwmon: ti,tmp102: add bindings and
- remove from trivial devices
-Message-ID: <YUz+3uoaoSlu0xaq@robh.at.kernel.org>
+        linux-kernel@vger.kernel.org, Jiri Kosina <trivial@kernel.org>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 4/6] dt-bindings: hwmon: lltc,ltc4151: convert to dtschema
+Message-ID: <YUz/pI2Nn7pEEqVP@robh.at.kernel.org>
 References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
- <20210921102832.143352-2-krzysztof.kozlowski@canonical.com>
+ <20210921102832.143352-4-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210921102832.143352-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210921102832.143352-4-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 21 Sep 2021 12:28:28 +0200, Krzysztof Kozlowski wrote:
-> The TI TMP102 temperature sensor does not fit into trivial devices
-> bindings due to additional properties.  Add separate bindings for it.
+On Tue, 21 Sep 2021 12:28:30 +0200, Krzysztof Kozlowski wrote:
+> Convert the LTC4151 current and voltage sensor bindings to DT schema
+> format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../devicetree/bindings/hwmon/ti,tmp102.yaml  | 47 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  2 -
->  2 files changed, 47 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
+>  .../bindings/hwmon/lltc,ltc4151.yaml          | 41 +++++++++++++++++++
+>  .../devicetree/bindings/hwmon/ltc4151.txt     | 18 --------
+>  2 files changed, 41 insertions(+), 18 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/ltc4151.txt
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
