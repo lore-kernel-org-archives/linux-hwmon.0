@@ -2,93 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FDCBC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 20:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA00AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:11:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BDAF6124D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 20:11:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A96C260F70
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:11:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhIWUM6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 16:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243037AbhIWUM6 (ORCPT
+        id S243224AbhIWVMm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 17:12:42 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:42732 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243189AbhIWVMl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 16:12:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099E3C061574
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Sep 2021 13:11:26 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mTV3x-0002pI-C8; Thu, 23 Sep 2021 22:11:21 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mTV3t-0007Wk-IN; Thu, 23 Sep 2021 22:11:17 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mTV3t-0004jg-HS; Thu, 23 Sep 2021 22:11:17 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] hwmon: ltc2947: Properly handle errors when looking for the external clock
-Date:   Thu, 23 Sep 2021 22:11:13 +0200
-Message-Id: <20210923201113.398932-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Thu, 23 Sep 2021 17:12:41 -0400
+Received: by mail-oi1-f172.google.com with SMTP id x124so11546367oix.9;
+        Thu, 23 Sep 2021 14:11:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r/+C4RWfXuf4J4PV+1A5NzCm+2F6V6un9scbYMc9KVM=;
+        b=MFumNC9W2x9EoAVGU1xXPsDmsx62KFMMNGRPw1wH4P1futGVReHq6Pi3Gc4q7qPDIF
+         FzrIg07hNHd2MPxwEtYLCSaAUNOsRipCuUZk54qEoah66WKcLUjJL7jZRQmRHyqisF5D
+         o3s5WT6mdQcJJWjRk6G6EEpOkw35MthPH9OWomCMLTBzorTDEPlEE6arMRPKcQ2/4Lx9
+         LaVlIixgMi0BIVtHK5RY8oHDBAF4c1HyS3P1z4Pfio1mT4TdymKmsHuzzdCaEf4yfwCw
+         cBIO86UDJbyW5O2VOWZnYpuOBfo4h7lBdlIo+u3iuH+OExox6cYBMT6eaabN+qSbIHmv
+         9d1g==
+X-Gm-Message-State: AOAM530USWWrAVKhZi8Shxco4G4PlquwnUmRdeYj40q4z9w8yXwD0kdq
+        /o+gsT/mxv4rBVi6OSCpc3WaYGfDsw==
+X-Google-Smtp-Source: ABdhPJx4blJeDBUA0kv+vZLi6rvu+cXm1eK7P8e/5xXdDDWK068ZBGzVfg/UJl1LM3nPNi29EzYZYQ==
+X-Received: by 2002:a05:6808:287:: with SMTP id z7mr5436354oic.8.1632431469304;
+        Thu, 23 Sep 2021 14:11:09 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u12sm1609760otq.20.2021.09.23.14.11.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Sep 2021 14:11:08 -0700 (PDT)
+Received: (nullmailer pid 3529913 invoked by uid 1000);
+        Thu, 23 Sep 2021 21:11:08 -0000
+Date:   Thu, 23 Sep 2021 16:11:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: lm90: convert to dtschema
+Message-ID: <YUztbEMVqAFGyWER@robh.at.kernel.org>
+References: <20210920181913.338772-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=HJozn2Pw9VxQocmeJfdm4LvOU1pw0vKTR6PWVDY1h6s=; m=2b1YvCAun5FF3xo8KjFLCItckf2+jvmS6yQkvEJtp/0=; p=Yhp8gbXY66yMzqSmAbShiEVQtL08ZkRpTiJ0U5IN1tI=; g=34b6a1bc12c6c666d11cae8561cd5c1d9e0b3a1a
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFM31wACgkQwfwUeK3K7Anp8wf/XHM 6WYFvQDCfnQubn+sUNYaF3jXJUuhlv4D0euut3HzI14rVUaBloHawRgXxYBE+3NZw4buB1gdVkGfJ 1Id3NINhTheb8RTWpO+KlD4HTJCgIlfaB8wg6JuNMuLzul1Mo6Q8bTM4c9dqYESF/lsgaa2RNWd2K BqSd/ncOeXk9kY10ebcmBcqBWHL22F3gF0ncrzN6SsOk2L0xvkNE1M8WNbSlt8XvhF8T/crpQyq7e RTIiYyGiELmqIb/kNr7rtDjknzHuLx6sAxmdn9nFYkBilwnZPPLZSSLJ6Pj0Ft/NpNZzYjl/kaxNI YDXsBqhgRMicpV/FLV0tBnijsNsjnAA==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210920181913.338772-1-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The return value of devm_clk_get should in general be propagated to
-upper layer. In this case the clk is optional, use the appropriate
-wrapper instead of interpreting all errors as "The optional clk is not
-available".
+On Mon, 20 Sep 2021 20:19:12 +0200, Krzysztof Kozlowski wrote:
+> Convert the National LM90 hwmon sensor bindings to DT schema format.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Drop adi,adt7461 from trivial-devices.
+> ---
+>  .../devicetree/bindings/hwmon/lm90.txt        | 51 ------------
+>  .../bindings/hwmon/national,lm90.yaml         | 79 +++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml  |  4 -
+>  MAINTAINERS                                   |  2 +-
+>  4 files changed, 80 insertions(+), 56 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/lm90.txt
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+> 
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/hwmon/ltc2947-core.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
-index bb3f7749a0b0..5423466de697 100644
---- a/drivers/hwmon/ltc2947-core.c
-+++ b/drivers/hwmon/ltc2947-core.c
-@@ -989,8 +989,12 @@ static int ltc2947_setup(struct ltc2947_data *st)
- 		return ret;
- 
- 	/* check external clock presence */
--	extclk = devm_clk_get(st->dev, NULL);
--	if (!IS_ERR(extclk)) {
-+	extclk = devm_clk_get_optional(st->dev, NULL);
-+	if (IS_ERR(extclk))
-+		return dev_err_probe(st->dev, PTR_ERR(extclk),
-+				     "Failed to get external clock\n");
-+
-+	if (extclk) {
- 		unsigned long rate_hz;
- 		u8 pre = 0, div, tbctl;
- 		u64 aux;
-
-base-commit: 7d2a07b769330c34b4deabeed939325c77a7ec2f
--- 
-2.30.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>
