@@ -4,77 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BE3FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 199A4C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5846B60F94
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:29:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E898760F70
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243472AbhIWWbA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 18:31:00 -0400
-Received: from mail-oo1-f43.google.com ([209.85.161.43]:40901 "EHLO
-        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243475AbhIWWbA (ORCPT
+        id S243500AbhIWWbk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 18:31:40 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:46701 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243423AbhIWWbj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 18:31:00 -0400
-Received: by mail-oo1-f43.google.com with SMTP id j11-20020a4a92cb000000b002902ae8cb10so2659071ooh.7;
-        Thu, 23 Sep 2021 15:29:28 -0700 (PDT)
+        Thu, 23 Sep 2021 18:31:39 -0400
+Received: by mail-ot1-f43.google.com with SMTP id o59-20020a9d2241000000b0054745f28c69so8578145ota.13;
+        Thu, 23 Sep 2021 15:30:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=skzmqDVj+AYYg0qqfqSYSfj5gw5GdEUyGDWIBsc6lAk=;
-        b=6tJHNs05tpC7Xq6SKIimuP5XWTd8N5TW9pDzbvn06oEHW3avYVe/VwBOAmhilmRZHf
-         267CCgc0ygaKQKoVcWo4XgLVFeTR6ORFB3GrFcSD0fmoGjwfUXysZQdgLuU/cfgvPr7n
-         g+eXgsOfiCFxqLnOUs+qHIv8LMlXcQjQ91p0YlOnd5G1N76bWNZ1ovDiR7u/wr/eUXXE
-         qMcGsx2OliGGHRSTtHy2OvYIS6EtnyLOCtkqyFY74bconL/eOTrDlbebtmgxx3UXVegE
-         KRXK1wCGm7tRRdR4Kv6DnFWYjHRYxsZBJMhL6L9PYS1h88VpT5bzpLm9BvG86Ql/cYY9
-         MbVA==
-X-Gm-Message-State: AOAM531H8FPaK8mtaD1XtAx1/uTA+IO5QyH9m5xIRdSMSQ4Z95u2JSBT
-        SIGgyjrDrpPMw8YoopIfUw==
-X-Google-Smtp-Source: ABdhPJyYVpQ0X9ed7tshlxsOpcUXJwN90gmjXMk37nqZyfYnx4nhdU+DMgEkDWSNhFVzqUXflD6XwQ==
-X-Received: by 2002:a4a:d9c6:: with SMTP id l6mr5932233oou.0.1632436167854;
-        Thu, 23 Sep 2021 15:29:27 -0700 (PDT)
+        bh=0wd54PgFVno+JC/HFzigQaGj1doCQQ9u26dCzaiPks4=;
+        b=h8Be6D3zolXdPZODaOA/fCI1VSZ9SvQnRTvUddlIvQOAXCLl/T6kgTIcd3jPWfDKTO
+         dIKhaozOq029c+K7cFCSO1qwol4pLeIMqD7PcQF+rMYM07r6gP15Bn4eLhwrsWVXXc1E
+         7JwSYbSVdGBb8xbq6fvdqBipTSZgGOCLYM2RZbcmmj97/i9q1wqPrZ9X3r43MftqYL6D
+         waZpteIsoyWlSLt9IaSWulN1ESqSbgj/dH+BxHdedxGSOs4qM0tBv8h3AjR5pEvy/1gV
+         xhfJ9M7EOEXl0zU8gv2VryrImf+2B7D48owBupLAcXoFLmcdzqFadckDBVGu9HUqz9Jh
+         98Kw==
+X-Gm-Message-State: AOAM532OvJAQq1HEwLR/cvo+mamHQSUdo0IOR8F0SikUVTAuXuEo3/V0
+        We53cSAQlG1+hLJ38i2Dmg==
+X-Google-Smtp-Source: ABdhPJzB7OzB8hZjggiv41iY+eUtHtfwDS5i4q/vbmTXNgxcAOrie4BF9o+EfM/7B8sGqlTp2vWScg==
+X-Received: by 2002:a9d:470b:: with SMTP id a11mr955838otf.337.1632436207380;
+        Thu, 23 Sep 2021 15:30:07 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 12sm1377475otg.69.2021.09.23.15.29.26
+        by smtp.gmail.com with ESMTPSA id 14sm1616929oiy.53.2021.09.23.15.30.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 15:29:27 -0700 (PDT)
-Received: (nullmailer pid 3640755 invoked by uid 1000);
-        Thu, 23 Sep 2021 22:29:26 -0000
-Date:   Thu, 23 Sep 2021 17:29:26 -0500
+        Thu, 23 Sep 2021 15:30:06 -0700 (PDT)
+Received: (nullmailer pid 3641740 invoked by uid 1000);
+        Thu, 23 Sep 2021 22:30:06 -0000
+Date:   Thu, 23 Sep 2021 17:30:06 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jiri Kosina <trivial@kernel.org>, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 5/6] dt-bindings: hwmon: microchip,mcp3021: convert to
+        Jiri Kosina <trivial@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH 6/6] dt-bindings: hwmon: sensirion,sht15: convert to
  dtschema
-Message-ID: <YUz/xlpJzCOr3Z0I@robh.at.kernel.org>
+Message-ID: <YUz/7qprAGbh7fu9@robh.at.kernel.org>
 References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
- <20210921102832.143352-5-krzysztof.kozlowski@canonical.com>
+ <20210921102832.143352-6-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210921102832.143352-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210921102832.143352-6-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 21 Sep 2021 12:28:31 +0200, Krzysztof Kozlowski wrote:
-> Convert the Microchip MCP3021 ADC bindings to DT schema format.
+On Tue, 21 Sep 2021 12:28:32 +0200, Krzysztof Kozlowski wrote:
+> Convert the Sensirion SHT15 humidity sensor to DT schema format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../devicetree/bindings/hwmon/mcp3021.txt     | 21 ---------
->  .../bindings/hwmon/microchip,mcp3021.yaml     | 43 +++++++++++++++++++
->  2 files changed, 43 insertions(+), 21 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/mcp3021.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml
+>  .../bindings/hwmon/sensirion,sht15.yaml       | 43 +++++++++++++++++++
+>  .../devicetree/bindings/hwmon/sht15.txt       | 19 --------
+>  2 files changed, 43 insertions(+), 19 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/sht15.txt
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
