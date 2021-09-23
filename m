@@ -2,198 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B22F1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF8B1C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:24:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9498F61019
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 21:37:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6ED060F70
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Sep 2021 22:24:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243343AbhIWViy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 17:38:54 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:39615 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243232AbhIWViv (ORCPT
+        id S243458AbhIWW0N (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 18:26:13 -0400
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:34404 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243436AbhIWW0N (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 17:38:51 -0400
-Received: by mail-ot1-f43.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so10487347ota.6;
-        Thu, 23 Sep 2021 14:37:19 -0700 (PDT)
+        Thu, 23 Sep 2021 18:26:13 -0400
+Received: by mail-ot1-f50.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so4933665otb.1;
+        Thu, 23 Sep 2021 15:24:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=hbjFCOlJlbx4SbaGurKbZs2byZ6bHJqMjwDwtqafseo=;
-        b=FlLKG9X+eqjM7P9iLB+tI6i0KXrlSf+XjUs0PhprNvY1faNiVQcmkz8kebju821Jai
-         W76nJaQdBinXWH8DQKRQlYHB7hMTWqy0lwMIC2A+/uzkg0JxLxXo75A52Ga3JA6oKFJ3
-         pdiPEqxy+YU1n3nyLM08RZ2VrXSVZG0TLaoagTX337/uJoK29r542X/2GZHEnFvzlxeW
-         AL/LHDVTqMIj6mTZx/PDA2gkeeKfFuvcJGbtgwusmpnpFKKYhBEEze/BtuetA+Mj3g1I
-         zQRAGpS9KjOs3yXvmXfLhka5xICQjAiLdqI1dOO/KnurPcqk7PX4ylG8AJOrpVa4Dp8v
-         2xWQ==
-X-Gm-Message-State: AOAM533MXikHI8IF9DIDa15i1NsOlAuAvHdaiRcXtfM7KGdjRWAY/CJd
-        wnjTtq7VulfxBYJLuwiqTA==
-X-Google-Smtp-Source: ABdhPJw9O910RBB8A8n+sNR/MsA9Mhom39GmnQpb8UhkS6Adr5dy3tU9MjBf9Q4AZZ6ab2VkDe4ejA==
-X-Received: by 2002:a9d:615c:: with SMTP id c28mr768898otk.381.1632433039231;
-        Thu, 23 Sep 2021 14:37:19 -0700 (PDT)
+        bh=Mb587nGf0voR/Ax95mATSV+fC/nr8Rr1/llTyc2fCdg=;
+        b=OUDRObaWr2dP1CaUHxO2IK+s9QJyoTd3QJWJZgTsW2k7Y+VhU6d7r8HwOYYNzgKGeB
+         TVLC7eUhmihiXVpVSr8hB+wPDE9LIEZri8EOyiBLBj9OMtH6rqG8Luue61JI2nXNcPYc
+         iWOjb7Nbk+Ty8NFQrYO08Us97Zay0iFFSUe6b2E7NXYIlE22uRV1czCNnmYl7B6B0+85
+         If+WaPXc9hdSKprM9BwIbBbNs+m6hBBIOf1UQwmkQT0LKUFJ66YwSnpcEE7DCvYmnQvs
+         43nUwEraDD/yhGgwkBdRxnf1H918DJoJTzQgq3P4AAyypzf+1Q+6jobD9FEKiPmSL5rs
+         4bTg==
+X-Gm-Message-State: AOAM533YlwZW29hA1A8GHk0Ncco817vxgfNG0o2UhhGYeu0VJKNk3I2U
+        9rM+yX18o7WYFHpKEZF8mQ==
+X-Google-Smtp-Source: ABdhPJyK5AkfcoxcdUx/qdVtfEdGVdXMSEbvuYeuL1VZkTBuHnfC586+HY3jM+CBAcMYp22wu+ryxw==
+X-Received: by 2002:a05:6830:1512:: with SMTP id k18mr968033otp.31.1632435880696;
+        Thu, 23 Sep 2021 15:24:40 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id y12sm1536267otu.11.2021.09.23.14.37.18
+        by smtp.gmail.com with ESMTPSA id p64sm1647430oih.29.2021.09.23.15.24.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 14:37:18 -0700 (PDT)
-Received: (nullmailer pid 3568677 invoked by uid 1000);
-        Thu, 23 Sep 2021 21:37:17 -0000
-Date:   Thu, 23 Sep 2021 16:37:17 -0500
+        Thu, 23 Sep 2021 15:24:40 -0700 (PDT)
+Received: (nullmailer pid 3633988 invoked by uid 1000);
+        Thu, 23 Sep 2021 22:24:39 -0000
+Date:   Thu, 23 Sep 2021 17:24:38 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Oskar Senft <osk@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add nct7802 bindings
-Message-ID: <YUzzjYMwNKwMFGSr@robh.at.kernel.org>
-References: <20210921004627.2786132-1-osk@google.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jiri Kosina <trivial@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] dt-bindings: hwmon: ibm,cffps: move to trivial
+ devices
+Message-ID: <YUz+psAILnF5L5GH@robh.at.kernel.org>
+References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
+ <20210921102832.143352-3-krzysztof.kozlowski@canonical.com>
+ <20210921123025.GC1043608@roeck-us.net>
+ <68fa27ae-4704-181f-e2f6-92635865798b@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210921004627.2786132-1-osk@google.com>
+In-Reply-To: <68fa27ae-4704-181f-e2f6-92635865798b@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 08:46:26PM -0400, Oskar Senft wrote:
-> Document bindings for the Nuvoton NCT7802Y driver.
+On Tue, Sep 21, 2021 at 02:45:42PM +0200, Krzysztof Kozlowski wrote:
+> On 21/09/2021 14:30, Guenter Roeck wrote:
+> > On Tue, Sep 21, 2021 at 12:28:29PM +0200, Krzysztof Kozlowski wrote:
+> >> The IBM Common Form Factor Power Supply Versions 1 and 2 bindings are
+> >> trivial, so they can be integrated into trivial devices bindings.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > 
+> > I won't accept any of those "move to trivial devices" patches. In many cases
+> > the bindings are simply incomplete. I can not and will not make that call,
+> > and I always did and will leave it up to driver authors to decide if they
+> > want to add a device to trivial devices or provide explicit bindings.
+> > 
+> > Please stop sending those patches.
+> > 
 > 
-> Signed-off-by: Oskar Senft <osk@google.com>
-> ---
->  .../bindings/hwmon/nuvoton,nct7802.yaml       | 92 +++++++++++++++++++
->  1 file changed, 92 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+> Back in the older times, there were no trivial-devices and checkpatch
+> plus maintainers required documenting compatibles, so some of such
+> simple bindings were created.
+
+We've had trivial-devices since at least 2011, but it was under i2c 
+until 2017. Many existed before we had clock, regulator, etc. bindings, 
+so they may have been complete at the time.
+
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
-> new file mode 100644
-> index 000000000000..7512acbc9d1a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
-> @@ -0,0 +1,92 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7802.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NCT7802Y Hardware Monitoring IC
-> +
-> +maintainers:
-> +  - Guenter Roeck <linux@roeck-us.net>
+> I understand however your point, fair enough. I'll stop sending such
+> patches.
 
-Should be someone that cares about this h/w, not who applies patches.
+Just about every device has a power supply which would not fall in the 
+current definition of trivial-devices, though maybe that could be 
+extended. I do sometimes wonder if we should just get rid of 
+trivial-devices.yaml.
 
-> +
-> +description: |
-> +  The NCT7802Y is a hardware monitor IC which supports one on-die and up to
-> +  5 remote temperature sensors with SMBus interface.
-> +
-> +  Datasheets:
-> +    https://www.nuvoton.com/export/resource-files/Nuvoton_NCT7802Y_Datasheet_V12.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,nct7802
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  temperature-sensors:
-> +    type: object
-> +    description:
-> +      |
+On the flip side, I'd much rather have a schema for these than wait on 
+someone to decide to convert them. That could mean a device.txt -> 
+trivial-devices.yaml -> device.yaml trip, but that doesn't seem that 
+terrible to me. Then we at least are running schema checks on the 
+devices and know if actual users have more undocumented properties. 
+We still have ~2000 free form binding docs to convert. I'm looking for 
+whatever ways we can speed that up and this looks like one of them to 
+me (both Krzysztof's great job doing all these conversions and utilizing 
+trivial-devices.yaml).
 
-Drop. Not needed if formatting is not needed to be maintained. (Also 
-belongs on the prior line.)
-
-> +      Configuration for temperature sensors. If temperature-sensors
-> +      is not provided at all, the internal temperature sensor will be
-> +      enabled. If temperature-sensors is provided, only the listed
-> +      sensors will be configured as specified. The runtime configuration
-> +      for un-listed sensors will not be touched in the chip. This allows
-> +      sensors to be configured at power-up time from an EEPROM connected
-> +      to the chip and at the sime time allows to override these settings
-> +      using device tree configuration.
-> +
-> +    properties:
-> +      ltd:
-> +        type: object
-> +        description: Internal Temperature Sensor ("LTD")
-
-No child properties?
-
-> +
-> +      rtd3:
-> +        type: object
-> +        description:
-> +          |
-> +          Remote Temperature Sensor ("RTD3"). This sensor only supports
-> +          thermistor mode.
-
-No child properties?
-
-> +
-> +    patternProperties:
-> +      "^rtd[1-2]$":
-> +        type: object
-> +        description: Remote Temperature Sensor ("RTDx")
-> +        properties:
-> +          "type":
-
-Don't need quotes.
-
-> +            description: Sensor type (3=thermal diode, 4=thermistor).
-
-2nd time I've seen this property this week[1]. Needs to be more specific 
-than just 'type'.
-
-> +            allOf:
-
-Don't need allOf.
-
-> +              - $ref: "http://devicetree.org/schemas/types.yaml#/definitions/uint32"
-> +              - items:
-> +                  - enum: [ 3, 4 ]
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        nct7802@28 {
-> +            compatible = "nuvoton,nct7802";
-> +            reg = <0x28>;
-> +
-> +            temperature-sensors {
-> +                ltd {
-> +                  status = "disabled";
-
-Don't show status in examples.
-
-> +                };
-> +
-> +                rtd1 {
-> +                  status = "okay";
-> +                  type = <4> /* thermistor */;
-> +                };
-> +            };
-> +        };
-> +    };
-> -- 
-
-[1] https://lore.kernel.org/all/CAL_Jsq+NXuF+F7OE3vyEbTUj6sxyMHVWHXbCuPPoFaKjpyZREQ@mail.gmail.com/
+Rob
