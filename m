@@ -4,235 +4,192 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 246B5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CFA4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:20:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0640F60EE0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:08:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA49061039
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:20:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243879AbhIXCJt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 22:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
+        id S243879AbhIXCVz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 22:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243874AbhIXCJt (ORCPT
+        with ESMTP id S243886AbhIXCVy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 22:09:49 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC732C061574;
-        Thu, 23 Sep 2021 19:08:16 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id r43-20020a05683044ab00b0054716b40005so4299325otv.4;
-        Thu, 23 Sep 2021 19:08:16 -0700 (PDT)
+        Thu, 23 Sep 2021 22:21:54 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0988C061574;
+        Thu, 23 Sep 2021 19:20:22 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id l7-20020a0568302b0700b0051c0181deebso11159879otv.12;
+        Thu, 23 Sep 2021 19:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=AMAmYVrWAHvl2rx0+S+khopG5lyTmrN8QbDyPOk2GQY=;
-        b=gkZdengo36l8eJRckb6gDuaWN2pIXS72aLAZZlYVSS/hqgC3Wzu6zcEmyrHPpyhZBe
-         SXtjAv1t2xf3Hu3fCglr9IAddOfgY7tUuiyuzmFTxQgj1lfz1RfOFSEaL/UskzCgbo5G
-         FYG7MHSI7cJQLQ91RfyD7qV5nUlHJRz5nZINp38Fj08kGcAy/Y7EdLQxQnF8owCttR0+
-         l6ls3/Z8g7KPfv2AOAUrv8qmtNZMdRcUlyI3N9sNQLXOOjWKGlx+ncVUJ0t4V7o6Ujf3
-         Un+zQwckqN9Tsj6I4XoRq6I6k5SjjEVjsmrymWp+c+6lJ/9jxhljLpso2OLla7eMkPjY
-         b54g==
+        bh=Jdsethjb96VrfX0B8dehAWdCPM+BLbxwVqJO37f21O4=;
+        b=CdHeE7DbKhH90unyBajR8RYDCas0BKr+ukS7IRiAh0QNdTY19x3wmyEb1mSweX5aQf
+         o6aVTMATdrLPjyh6y8aZnCfowJq8F8KVyRCpwgbL6UFpJyr9jniKjVqXO/c2aQh0slQH
+         /E7Yy9BVEE03IIQxFBEKq31IeK1dICAtOJufnRKNxigVXPrjG+xuxBU+Jp3o1jc8BH4t
+         T2fMSNHgemvOBXn9xRpxU4LfkBzY/wM49y7hwWzgjz0AXoG7kew8OZoCaZKyp/OvPCUD
+         VaAK5INmJDqjEbYUcIogQzlxhcTNX4MV10u1Y2/bqhrHDB0z2gS2/e2bWDZBCQd/SGF6
+         cY7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=AMAmYVrWAHvl2rx0+S+khopG5lyTmrN8QbDyPOk2GQY=;
-        b=VcY8lOEQi2/ghkBCktgcNYJjt8s1GQAhNjmE0ZgLmw5lVgUD7/Fs1NORBejzmpaMbX
-         KkWQMk3kPZw8LpvTq7HWjOo9rmVd/8JwWfjiRpOv89wM2MWaEY4D9y/ECNNbkIdmYh9y
-         YWNkToRJ1LEyJ637nDapfJZgfBDkv1pw75lQjGS4EK9LjzES/EnfnOx1GI4+jEsIFRBW
-         hoiLYbcLUuWhukl6AzrFVshan6bhaERTJByG59sQ6YIslK7hdHKx860CMc4tH54DlTO8
-         81O3d/tCtCleaYaBeqcqd8YWKPvvNkDwqec/9QQUE12zIbdMRLoMXTHX5qFDP6K5prko
-         oFxw==
-X-Gm-Message-State: AOAM532PVu+/nXEYbLvjrnrjuVQvpjySC1sXQpJhqsT1trlUsiUuOuv0
-        /YkF/MY6ybp7nMqfkm8obiA=
-X-Google-Smtp-Source: ABdhPJwftgmQ8LKyKB0exPdsgV+qXsaDjNZdLIQAsZMPC7vkr6c0XKApHtBsZMZi8Io1rfM3TGmyeQ==
-X-Received: by 2002:a9d:332:: with SMTP id 47mr1716789otv.333.1632449296386;
-        Thu, 23 Sep 2021 19:08:16 -0700 (PDT)
+        bh=Jdsethjb96VrfX0B8dehAWdCPM+BLbxwVqJO37f21O4=;
+        b=NEJ+YjuNJfDHlgmdAIY8FoOBGIT9ZCjByPylR8RIcuVzYQ98gM5108a7xTpfN8Dy9X
+         xadfJzGRUsreS8f7ujlzht/+MnZpcI/+XCJmAUWe/r/DnBLnZ7+rxyF5ePetBfzXJcQJ
+         S6UfbkQpPbSYYhxdr4sSEzsomvz5s24BXcfDAhueq9LC8k3LdJ/7342RojrUHwZ70z91
+         Sinqz2pFwebzlMOTe2LMO2/GeLu05ToAZaxnRFPWig9rCtvaqOQx+AHHaRAV1tWkm53V
+         tozSU36W9mzIW94FLMtoSUyaIEXN1AoQqRLUbz3f7pjJ5IOwwBEchybM4G5G3B/iqVIy
+         WsRg==
+X-Gm-Message-State: AOAM531lERzkSX0Nx4ugwlgfzTTzOut8yzf2yXwlCQbga/qxpSAzHBsE
+        oA1Ielf4NZO+poBWWgbRzyU=
+X-Google-Smtp-Source: ABdhPJzvvNlbmcgykXlN6tKEe/SE9It58iC/kHENu4A0IXC7t+OXk1kEHsRn7zsgPlR+AF3xeBhTRQ==
+X-Received: by 2002:a05:6830:452:: with SMTP id d18mr1804351otc.364.1632450021975;
+        Thu, 23 Sep 2021 19:20:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h26sm355609otn.67.2021.09.23.19.08.15
+        by smtp.gmail.com with ESMTPSA id n33sm1749388ota.8.2021.09.23.19.20.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 19:08:15 -0700 (PDT)
+        Thu, 23 Sep 2021 19:20:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 23 Sep 2021 19:08:14 -0700
+Date:   Thu, 23 Sep 2021 19:20:20 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] dt-bindings: hwmon: jedec,jc42: convert to dtschema
-Message-ID: <20210924020814.GA3032194@roeck-us.net>
-References: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
- <20210920182114.339419-5-krzysztof.kozlowski@canonical.com>
+To:     Paul Fertser <fercerpav@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] hwmon: tmp421: handle I2C errors
+Message-ID: <20210924022020.GA3032273@roeck-us.net>
+References: <20210922155323.GA3205709@roeck-us.net>
+ <20210923094801.23332-1-fercerpav@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210920182114.339419-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210923094801.23332-1-fercerpav@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 08:21:13PM +0200, Krzysztof Kozlowski wrote:
-> Convert the Jedec JC-42.4 temperature sensor bindings to DT schema
-> format.
+On Thu, Sep 23, 2021 at 12:47:59PM +0300, Paul Fertser wrote:
+> Function i2c_smbus_read_byte_data() can return a negative error number
+> instead of the data read if I2C transaction failed for whatever reason.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> I consider this fix to be stable material as lack of error checking here
+> leads to serious issues on production hardware. Errors treated as
+> temperatures produce spurious critical temperature-crossed-threshold
+> errors in BMC logs for OCP server hardware. The patch was tested with
+> Mellanox OCP Mezzanine card emulating TMP421 protocol for temperature
+> sensing which sometimes leads to I2C protocol error during early boot up
+> stage.
 
-Applied.
+Possibly, but this doesn't belong into the commit log but after --- as
+written. I'd suggest to leave the "I consider this fix to be stable
+material" off, rephrase to "Lack of error checking can lead to serious..."
+which does belong in the commit description, and add a Fixes: tag which
+marks the patch for stable releases. Also, drop the char -> bool change
+from the bug fix; it is unrelated and should be a separate cleanup patch.
 
-Thanks,
-Guenter
-
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paul Fertser <fercerpav@gmail.com>
 > ---
->  .../devicetree/bindings/hwmon/jc42.txt        | 46 -------------
->  .../devicetree/bindings/hwmon/jedec,jc42.yaml | 69 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  3 files changed, 70 insertions(+), 46 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/jc42.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/jc42.txt b/Documentation/devicetree/bindings/hwmon/jc42.txt
-> deleted file mode 100644
-> index f569db58f64a..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/jc42.txt
-> +++ /dev/null
-> @@ -1,46 +0,0 @@
-> -Properties for Jedec JC-42.4 compatible temperature sensors
-> -
-> -Required properties:
-> -- compatible: May include a device-specific string consisting of the
-> -	      manufacturer and the name of the chip. A list of supported
-> -	      chip names follows.
-> -	      Must include "jedec,jc-42.4-temp" for any Jedec JC-42.4
-> -	      compatible temperature sensor.
-> -
-> -	      Supported chip names:
-> -		adi,adt7408
-> -		atmel,at30ts00
-> -		atmel,at30tse004
-> -		onnn,cat6095
-> -		onnn,cat34ts02
-> -		maxim,max6604
-> -		microchip,mcp9804
-> -		microchip,mcp9805
-> -		microchip,mcp9808
-> -		microchip,mcp98243
-> -		microchip,mcp98244
-> -		microchip,mcp9843
-> -		nxp,se97
-> -		nxp,se98
-> -		st,stts2002
-> -		st,stts2004
-> -		st,stts3000
-> -		st,stts424
-> -		st,stts424e
-> -		idt,tse2002
-> -		idt,tse2004
-> -		idt,ts3000
-> -		idt,ts3001
-> -
-> -- reg: I2C address
-> -
-> -Optional properties:
-> -- smbus-timeout-disable: When set, the smbus timeout function will be disabled.
-> -			 This is not supported on all chips.
-> -
-> -Example:
-> -
-> -temp-sensor@1a {
-> -	compatible = "jedec,jc-42.4-temp";
-> -	reg = <0x1a>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> new file mode 100644
-> index 000000000000..a7bb4e3a1c46
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/jedec,jc42.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Jedec JC-42.4 compatible temperature sensors
-> +
-> +maintainers:
-> +  - Jean Delvare <jdelvare@suse.com>
-> +  - Guenter Roeck <linux@roeck-us.net>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: jedec,jc-42.4-temp
-> +      - items:
-> +          - enum:
-> +              - adi,adt7408
-> +              - atmel,at30ts00
-> +              - atmel,at30tse004
-> +              - idt,tse2002
-> +              - idt,tse2004
-> +              - idt,ts3000
-> +              - idt,ts3001
-> +              - maxim,max6604
-> +              - microchip,mcp9804
-> +              - microchip,mcp9805
-> +              - microchip,mcp9808
-> +              - microchip,mcp98243
-> +              - microchip,mcp98244
-> +              - microchip,mcp9843
-> +              - nxp,se97
-> +              - nxp,se98
-> +              - onnn,cat6095
-> +              - onnn,cat34ts02
-> +              - st,stts2002
-> +              - st,stts2004
-> +              - st,stts3000
-> +              - st,stts424
-> +              - st,stts424e
-> +          - const: jedec,jc-42.4-temp
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  smbus-timeout-disable:
-> +    description: |
-> +      When set, the smbus timeout function will be disabled. This is not
-> +      supported on all chips.
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        temp-sensor@1a {
-> +            compatible = "jedec,jc-42.4-temp";
-> +            reg = <0x1a>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b07679009af2..15c4d3c809e8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10033,6 +10033,7 @@ JC42.4 TEMPERATURE SENSOR DRIVER
->  M:	Guenter Roeck <linux@roeck-us.net>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
->  F:	Documentation/hwmon/jc42.rst
->  F:	drivers/hwmon/jc42.c
+> Changes from v1:
+>  - Reorganise code following excellent suggestion by Guenter Roeck
+>    to use tagged errors consistently
+> 
+>  drivers/hwmon/tmp421.c | 45 +++++++++++++++++++++++++++++++-----------
+>  1 file changed, 33 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+> index ede66ea6a730..63cb6badb478 100644
+> --- a/drivers/hwmon/tmp421.c
+> +++ b/drivers/hwmon/tmp421.c
+> @@ -93,7 +93,7 @@ struct tmp421_data {
+>  	struct hwmon_channel_info temp_info;
+>  	const struct hwmon_channel_info *info[2];
+>  	struct hwmon_chip_info chip;
+> -	char valid;
+> +	bool valid;
+
+This is a cleanup, not a bug fix, and it isn't even mentioned
+in the patch description.
+
+>  	unsigned long last_updated;
+>  	unsigned long channels;
+>  	u8 config;
+> @@ -119,38 +119,59 @@ static int temp_from_u16(u16 reg)
+>  	return (temp * 1000 + 128) / 256;
+>  }
 >  
+> -static struct tmp421_data *tmp421_update_device(struct device *dev)
+> +static int tmp421_update_device(struct tmp421_data *data)
+>  {
+> -	struct tmp421_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+> +	int ret = 0;
+>  	int i;
+>  
+>  	mutex_lock(&data->update_lock);
+>  
+>  	if (time_after(jiffies, data->last_updated + (HZ / 2)) ||
+>  	    !data->valid) {
+> -		data->config = i2c_smbus_read_byte_data(client,
+> -			TMP421_CONFIG_REG_1);
+> +		ret = i2c_smbus_read_byte_data(client,
+> +					       TMP421_CONFIG_REG_1);
+> +		if (ret < 0)
+> +			goto exit;
+> +		data->config = ret;
+>  
+>  		for (i = 0; i < data->channels; i++) {
+> -			data->temp[i] = i2c_smbus_read_byte_data(client,
+> -				TMP421_TEMP_MSB[i]) << 8;
+> -			data->temp[i] |= i2c_smbus_read_byte_data(client,
+> -				TMP421_TEMP_LSB[i]);
+> +			ret = i2c_smbus_read_byte_data(client,
+> +						       TMP421_TEMP_MSB[i]);
+> +			if (ret < 0)
+> +				goto exit;
+> +			data->temp[i] = ret << 8;
+> +
+> +			ret = i2c_smbus_read_byte_data(client,
+> +						       TMP421_TEMP_LSB[i]);
+> +			if (ret < 0)
+> +				goto exit;
+> +			data->temp[i] |= ret;
+>  		}
+>  		data->last_updated = jiffies;
+> -		data->valid = 1;
+> +		data->valid = true;
+>  	}
+>  
+> +exit:
+>  	mutex_unlock(&data->update_lock);
+>  
+> -	return data;
+> +	if (ret < 0) {
+> +		data->valid = false;
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
+>  		       u32 attr, int channel, long *val)
+>  {
+> -	struct tmp421_data *tmp421 = tmp421_update_device(dev);
+> +	struct tmp421_data *tmp421 = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +
+> +	ret = tmp421_update_device(tmp421);
+> +	if (ret)
+> +		return ret;
+>  
+>  	switch (attr) {
+>  	case hwmon_temp_input:
