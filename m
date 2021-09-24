@@ -2,214 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ADABC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC4D8C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 11:35:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C0A360238
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:45:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C560461241
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 11:35:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245306AbhIXJqf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Sep 2021 05:46:35 -0400
-Received: from mail-eopbgr80110.outbound.protection.outlook.com ([40.107.8.110]:7294
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245228AbhIXJqe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Sep 2021 05:46:34 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LJM9AeogeRxu9sANW/yw5ewuSDQH0C6XnmtZDqnaKHghGPW2s3DGUOeZq25MvWlTFVyKfSdO3PLafdXhxvNZb2Lo7tqQNR071f5a29/LzLFVbNdrYF4UU7xWZWCKo67RLkJ0uFrmcxwsgIST8MpyByZ0nKT1MCGwPS854T3qJ2dGd5bYuXdwaIJZXRzhtx3CeQS0gR6VJJ11W3G9d7sEuhK2rerpu4NsUGpTvFEZtqM0MH3U36ePSdLFeN2BNqMOuPJgwUl0b+aB2TXeDEMMNwzdHI/eRQOTToUVNyFIoobRb/7PppQNWSuSs38cz4u1Ay7Ja1N2C/WnhXgo2VZuug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xFwXBbyk7KPlXQGiYvswXycuWcxwp+jDEbZnCLi9muc=;
- b=WfX4UYZR0bHnKDzH77bbtjI34C46OXSi79blKeagDImjbb+BdgeJmDZo1jliIB392UXSMcujApXrJFv1M0Q4knHN4vCSltoef5ZR1Y6kGfPmVqxRDFPtqZcLZd0bH0mMTVqwAUDi9m0RJ+SYDlWY449sxKCzLNZe6dDL78zjQ5S2w0fFGkiB50pgHikWy0uZaqt0yaRviehYzYCmTiDs75dr2lQi8/EWKeCb09DZOocI1qtnCn3KB1H92Ws+nHu55TPlyx5Qn0P2G+Gexi1JBA45zsuMVUgy8p5u/oIXYUX7nPwH5s2OYCnpC33KLxtpci3/vRxVDl+s640xf3LL0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xFwXBbyk7KPlXQGiYvswXycuWcxwp+jDEbZnCLi9muc=;
- b=xXmdeq3ifax4wna8DQQXjdObRp9yCtYPp/R6KRcqQHq6lQYk1iuMaGosexzsEnZDdJIPgEDhrWH2lCX+MhhpXc2NLKwRu4Kb7/3LAxLbQAoKkuHtwsLaVkFIMNDA45398HyPT4+tKgLEn4sZLNd0KK0loePfHJXW85cp8FCilig=
-Authentication-Results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by DU2PR07MB8151.eurprd07.prod.outlook.com (2603:10a6:10:274::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.14; Fri, 24 Sep
- 2021 09:44:59 +0000
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::c47f:b569:ac76:9feb%6]) with mapi id 15.20.4478.014; Fri, 24 Sep 2021
- 09:44:59 +0000
-Date:   Fri, 24 Sep 2021 11:44:40 +0200
-From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Przemyslaw Cencner <przemyslaw.cencner@nokia.com>
-Subject: [PATCH v2 10/10] dt-bindings: hwmon: allow specifying channels for
- tmp421
-Message-ID: <582639597503c27409b432a5ed9576cc1b447480.1632473318.git.krzysztof.adamski@nokia.com>
-References: <cover.1632473318.git.krzysztof.adamski@nokia.com>
+        id S1343504AbhIXLhX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Sep 2021 07:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244439AbhIXLhW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 Sep 2021 07:37:22 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAACC061574;
+        Fri, 24 Sep 2021 04:35:49 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id z11so14101023oih.1;
+        Fri, 24 Sep 2021 04:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+p9pHwAPxHd43foSyMEwPagB9wdIt/zyt+VQKZNP3eo=;
+        b=HiS/u+H/HjibyGwJGxTwjkT/5swlq0yD6RKI9t4ifff3qzcryhxbleZrcRwwUuYxRU
+         Eh7rsp4/yqcbD1Ix67m20OpQeeoxF7XesDtG3d6UxMpFM+KD2C+7C0WnZLlvCioffEhY
+         b+F7c5bkF06WortTmjJZsrtOCA42GcSlnz2JcEC+gdrQ9e8cLCRyhwR+phSzFXnimF+P
+         e/v5cOKha5eEFbvSSHKb48401wB5jf4dDqwSiwb/dLOuRRvdhq7pDrhFb0am3P0QixZk
+         k1FAvhnKoQhkxTmFVkuAu/7go+Pih6ftUd9cImjOgPRHqMP75WnRSkIgG2m10wviyhyx
+         F0PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=+p9pHwAPxHd43foSyMEwPagB9wdIt/zyt+VQKZNP3eo=;
+        b=wCtSPW6XjeH8Yoxy5ehYUhdBNroPTtKaFvXCcKBcTfv+3jTVWj+Kl6h/0ymS3ueEat
+         a9xUufLNWNtnGQUh9ufCT8rpi25SN6eNA15uy9A8P+VbQd7h3rWwgovwVAKAEv5aDshf
+         VUawGkeqUfJt4zkxTjt7Lx1GXL4LEnvouV6djCDDWCg9vlGzbsniCYXNDhTkHqYrJuI1
+         jH97hbW/30wz8v5UtTkP5ED5gk3KqC5sXgPM6znUikFV/M9quFAFGj2g3eT/v3z4mT9J
+         jMs9u22k7mUzebvmcF9nY1XpHpPIYwUNDixfVczwN8A9fpu+auxZdT8ZfLhcf5j88ni3
+         CD0w==
+X-Gm-Message-State: AOAM533iiAiBIaVI8reTj0+ovACZ8wU5VuxCVG3m+oTYviK0TzDx3Uqf
+        O42IzcFOtou/6TU2k9Pr0oI=
+X-Google-Smtp-Source: ABdhPJyDv5lNvZ1B0LRfq0GzhzA+sDXj1A9UQyLBF43PemuwWhnvajJ+w2RTk+/u1th75aeeIEwFqQ==
+X-Received: by 2002:aca:be56:: with SMTP id o83mr1040562oif.51.1632483349201;
+        Fri, 24 Sep 2021 04:35:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w1sm1985794ote.41.2021.09.24.04.35.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Sep 2021 04:35:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 24 Sep 2021 04:35:47 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Paul Fertser <fercerpav@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] hwmon: tmp421: handle I2C errors
+Message-ID: <20210924113547.GA2694238@roeck-us.net>
+References: <20210922155323.GA3205709@roeck-us.net>
+ <20210923094801.23332-1-fercerpav@gmail.com>
+ <20210924022020.GA3032273@roeck-us.net>
+ <20210924074450.GU23326@home.paul.comp>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1632473318.git.krzysztof.adamski@nokia.com>
-X-ClientProxiedBy: HE1PR05CA0133.eurprd05.prod.outlook.com
- (2603:10a6:7:28::20) To DU2PR07MB8110.eurprd07.prod.outlook.com
- (2603:10a6:10:239::15)
-MIME-Version: 1.0
-Received: from localhost.localdomain (131.228.2.1) by HE1PR05CA0133.eurprd05.prod.outlook.com (2603:10a6:7:28::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend Transport; Fri, 24 Sep 2021 09:44:58 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d0273b0e-5c7b-48a8-58b0-08d97f3ff973
-X-MS-TrafficTypeDiagnostic: DU2PR07MB8151:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DU2PR07MB815190C145BDD3E0CE87C918EFA49@DU2PR07MB8151.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G6b48GlZJq43jltR6j2iYv95faW0XvwnE1KUDCPvTRRdTVMQNh+dhSDNXkJW5EGC7A/RCwxs24kmCbWl1J0wZ14wYmyfmFfPaHeo6nowP5tCuH3IMFVVnD2UN2liupl9EPMmhrD5prHw/iQ7x636k+g4souy4A5qnSCu7egL1XcaMitKq3mkppIBoG3Wb07L6oBmMvP/1HKxYgrnEsloXN5Yc0BFqAHVKmKd7DlM0fpJ5bzWtabp9kQpQ5WZnekHUQWWpEKbQvyvxcQtGgBIK4weizq4Q0ifYFNaNvmBOoUZp/59FO0gEMr6ggqfaMW8doHCe8qKxGtxPB5gbPX03Ir95V3ikpwTfdQLmNZkSQGRMVONlA0VRwISyKaFiPxa23DdsdKLiHtViqgARhokdSmGav3EHpRGJTrxicrzFun9ujTUoS16lRcawL6qAHbpOyWSBWP2YC+pyA/E2ZhHe/PJ6qObZZbkWQuvYf2ABibHUJDzX/cvmJekBHv2Uv0qr5JdFWZa+UbI6vMke95bhcQfB6dCdbY9sVakFc4fcus+Uakj5EKqewoUz1Wkx3Uj3zTn2FXJFgQqpIzTmbi7Fy6FZhlap5VH8UP/YdmTUfbUC7YS7fjKueyjaS9v5yHi5DvY3VOaV52O9kH3K9sZjCODRE71eLyfv9YVHDNwcbeiWRJvihCHc03tyPosDVmwZTvZYmgDQyNWiHXqu9dDlw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(6486002)(52116002)(66946007)(4326008)(107886003)(8676002)(66476007)(508600001)(8936002)(5660300002)(316002)(54906003)(110136005)(6512007)(2906002)(956004)(66556008)(44832011)(26005)(186003)(86362001)(36756003)(38350700002)(6506007)(83380400001)(38100700002)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h2SBYVeCCy54uArFQ32wJssSz5tHNMcc7C3SrGilpIPZl7nMXP3Tfh8ZSDcu?=
- =?us-ascii?Q?X2IbG+vO8en1HycaDVpqL17yYvU8EzYBe6NI3ERYT1WbyxbmMuBd3o7fnlgb?=
- =?us-ascii?Q?r1SxFg6o014A58lHdCrZtC6xGBPiGWllg778lxsEUFKsBQbY/c8biiY7b7PT?=
- =?us-ascii?Q?Dww3C1fmX7zN0f/cNPtKI8Zt7OvNEJJb1yx3KfKGBV8cFMx2g9CvAP5UoqQj?=
- =?us-ascii?Q?EDyM84CmMDhkssO7wMbMvQNXJqJIi2YK1iVmKOuY6x7TqqOUWxjpHdN+WLsQ?=
- =?us-ascii?Q?BV2shPpnnE1VjOdHoU81UfyYIwHC6ZijerkBTExgS9XyASVobwIuSusVpWwo?=
- =?us-ascii?Q?e2aMfCIYTqWtc23BZ6Rj7NAzquRP7ng0T/Mv/Frox4e3HSZSfy/I2xExu/DM?=
- =?us-ascii?Q?pTHFX1o7ztGNJsy/GfANnhagUHKXv0Zj8oCjaFNpOsd6lO73tR39lA2ZG+6T?=
- =?us-ascii?Q?RuAr9GqJJI9HAG8xqysqgiab6n86gW9Wg20i65gMXuDRAnan5y9FfhW8jR6g?=
- =?us-ascii?Q?sdN5ZAI4gxdjBMsbibeX+DgQ2PHqAlM2ds7ecH4tUnHqRFvj16vqcbVILSrE?=
- =?us-ascii?Q?mcdWF168z+u5MwsBvrQRnRxvgEOz1xOneAa6VXACLEW6pugS8Ry2LiSxmqXr?=
- =?us-ascii?Q?dcT0KH81+wxOMTNxQY9EewED+F0wfMsfxvke+REkzYfLVSPz0KeinUZkMyux?=
- =?us-ascii?Q?AfRsjVYHLHpJoNEW6AGZOO+W5Zjg9h7gvUHHYB6tXcUMC6nhs83LrXRsF651?=
- =?us-ascii?Q?w40JQe7SN3NrHTBLLtOSp8sbAiL2k+JovlOHALJcMPcEyftscPCiZoqVnldx?=
- =?us-ascii?Q?lDpLq2Nv9HC7Lczcvti1sZlky3TUb+X+/z96bMws/YqiOcv5U1CbLQJ1sauA?=
- =?us-ascii?Q?dn9p/+xL4MhRGds9MpBIDr93KpI/75Q9AeA8fX1CVSKJQartBBET2oHB2P3F?=
- =?us-ascii?Q?RRbPvPML8CcbwQrF1MfuYheoRHhyeHcNETzVnzRmFhXcUl/iDOiXRhqtDb4L?=
- =?us-ascii?Q?bVRPiDy+K5zYbMfjUw8FQMLY41ccimmeW5XYYeH9hJVTSe1jyu+XLlQCPaP7?=
- =?us-ascii?Q?AQqj5G+5o5lorivuSgpZOgCmNiF5dporaxKpZUKRUMoVDgfmEAzlG1Ex9IMO?=
- =?us-ascii?Q?VqoTv627YoOxjrwI61glxoqMCmd5XC8y+rTnGTmsqwpcipQGsF2EFbpHaBDO?=
- =?us-ascii?Q?pmrjt5anaCTcowzaJS0LdpIJlIohYPJPeC0U2xW6vDvLDqy/W/MczI+2kFHh?=
- =?us-ascii?Q?c5zX4UG7Ny0Z12lT+o+dF7WmwqZxpMG3ntJAgqfbUE+pl4FTMzREvE0cds69?=
- =?us-ascii?Q?iOsvcytuUDTIexrYdWmpzUCL?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0273b0e-5c7b-48a8-58b0-08d97f3ff973
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 09:44:59.7575
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FapOQAsVFLBkY/NemZqjxQ3C2acCgTGI+wX3Tpwx1HSZH3ID4DxVID5FPHYNHIrrwVKLn4BnOzSiy8K+8lWDxOVbg9R7/DapHCbYI98EALE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8151
+In-Reply-To: <20210924074450.GU23326@home.paul.comp>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add binding description for the per temperature channel configuration
-like labels and n-factor.
+On Fri, Sep 24, 2021 at 10:44:50AM +0300, Paul Fertser wrote:
+> Hello Guenter,
+> 
+> On Thu, Sep 23, 2021 at 07:20:20PM -0700, Guenter Roeck wrote:
+> > > --- a/drivers/hwmon/tmp421.c
+> > > +++ b/drivers/hwmon/tmp421.c
+> > > @@ -93,7 +93,7 @@ struct tmp421_data {
+> > >  	struct hwmon_channel_info temp_info;
+> > >  	const struct hwmon_channel_info *info[2];
+> > >  	struct hwmon_chip_info chip;
+> > > -	char valid;
+> > > +	bool valid;
+> > 
+> > This is a cleanup, not a bug fix, and it isn't even mentioned
+> > in the patch description.
+> 
+> For the bug fix I needed to add a line setting data->valid to false
+> and was reluctant to assign 0 instead as it would be adding more wrong
+> (type-wise) code. But since you say that's the way to go, sure, will
+> do.
 
-Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
----
- .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
+I figured that much, but it is still an unrelated change. I don't object
+to making that change, but it should still be a separate patch. FWIW,
+I don't mind if it is in a single patch if the code won't be applied
+to stable releases, but it should still be mentioned in the description
+(eg: while at it, convert 'valid' to boolean).
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-index 53940e146ee6..56085fdf1b57 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-@@ -24,12 +24,49 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
- required:
-   - compatible
-   - reg
- 
- additionalProperties: false
- 
-+patternProperties:
-+  "^input@([0-4])$":
-+    type: object
-+    description: |
-+      Represents channels of the device and their specific configuration.
-+
-+    properties:
-+      reg:
-+        description: |
-+          The channel number. 0 is local channel, 1-4 are remote channels
-+        items:
-+          minimum: 0
-+          maximum: 4
-+
-+      label:
-+        description: |
-+          A descriptive name for this channel, like "ambient" or "psu".
-+
-+      n-factor:
-+        description: |
-+          The value (two's complement) to be programmed in the channel specific N correction register.
-+          For remote channels only.
-+        items:
-+          minimum: 0
-+          maximum: 1
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
- examples:
-   - |
-     i2c {
-@@ -41,3 +78,32 @@ examples:
-         reg = <0x4c>;
-       };
-     };
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      sensor@4c {
-+        compatible = "ti,tmp422";
-+        reg = <0x4c>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        input@0 {
-+          reg = <0x0>;
-+          n-factor = <0x1>;
-+          label = "local";
-+        };
-+
-+        input@1 {
-+          reg = <0x1>;
-+          n-factor = <0x0>;
-+          label = "somelabel";
-+        };
-+
-+        input@2 {
-+          reg = <0x2>;
-+          status = "disabled";
-+        };
-+      };
-+    };
--- 
-2.31.1
+> 
+> Regarding the cleanup, I see hwmon has many examples of "char valid"
+> and so it might make sense to do them all at once. What would be the
+> procedure here, is that a desired change at all and if yes, how to
+> approach doing it? 
 
+You could write a coccinelle script to detect and convert all uses,
+then submit a single patch to convert all drivers, with the cocconelle
+script as reference in the commit log.
+
+Guenter
