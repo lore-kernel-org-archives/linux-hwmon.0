@@ -5,170 +5,185 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F72EC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA26DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:42:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1084860041
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:41:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91D9760238
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:42:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245280AbhIXJnF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Sep 2021 05:43:05 -0400
-Received: from mail-db8eur05on2111.outbound.protection.outlook.com ([40.107.20.111]:32480
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        id S245289AbhIXJoX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Sep 2021 05:44:23 -0400
+Received: from mail-eopbgr150113.outbound.protection.outlook.com ([40.107.15.113]:46389
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244969AbhIXJnD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Sep 2021 05:43:03 -0400
+        id S245260AbhIXJoW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 Sep 2021 05:44:22 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y8UcWpwSsSM4+jC+yXbf2g4kntuHA1tn9bNBy/I5ypc/KZF9+Ysx+Ela+Ri++/KlEBAsantn52DsrKmQG1GiDH34fLZaH1Wr/Fx24NMiCeFZZDisGfkSFLWthifWXOXvbR7SVZ/QBPdgT4KhCD2V09XjCuIzLkIhvv7GlJ96bUz2Rh+RIZ9Znsyfn/8qNxTW+cihGhqymqLdCRwxEnRq5H+DdHLO3cVh8buvk7z7G2dVJC9uuKTcJrdZMQz5uDPjnY/4tYezQ0szhaatHgfCKGdT9RrsUwjDuhUxsRXwEFj/PMFjjY6ARiIDc9gmTTwcLoapDHq6vHjFxMWJGnUplw==
+ b=awTIDCUMFzasid0V3FAPyiREL7nNj4OXPbi3lsHrJ8W9Xpu201K5mj2bM86BV9TaAeINemP/ICgCuk1CktT58c++OA7xDnQver+ZKzQ+cLb3vyEiVQled1eYIVioYsaVgE9TFE6xEMklOvlsosq7BRHSJ8Ge5oEBTIF9Hbpcc7hGkim4O2xg8uccFN71FlRskYKEDuH+eh10QPSDWLsr/CxABFIFZ/VkSda2O2mi+CeOLdWFwpn2NxwZ7R4UZ/bcUdEsF/wE2Fmq3nUHOKlyIJc3lFMTrn+bIa7rNyKVzCXvTfEkQmuMMCzgKCg8ZWv5eE0Jrxd/MIwdjt2P02gLSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B7Y3eW2xgWwSzpMXG5z5fvIG90RibD8Urwf56CwEsJk=;
- b=S037hADjo1q1wABiJiepMaA4MUIjnUCb0WwGYmCzW2buIJIggzhd7NhhOpjnFb9F63228km/Y6vBvOGKCT6krgXPDlKtOJMNGYkh35SkXJ1Pm8hXkaucRRmjr7zQdr8r81fA04Na8WFRRwBTwwWyCGENXLGqn4gmQIrIpsl6xiHBdUP9FU77RS5xmWfnLVwfldSgQZBD3kZuQZVQ1L8BpWIySbNwOobKtT1kZf4kl47uZro/Ys5bFqfVJ9rvlzFnobu4tQkDAf5z5xE6FKBm6z0qvtd8gP+qgMlOzyrnFFrNq8eiTFa/fXQ8iAPowfD/rIgHsmfkedyCkNnBMEaAiQ==
+ bh=nyeXUqfKkxEw0gdcRk86zPDjngvrsXWj/KdV8Fy45Xc=;
+ b=m1Wl8LVDW3VJehL+n2xrHLfcmgGizNOLB1engESYiDMuwOjbElApCXPrOSgKcdcp8BUj+MqGeej6DksF09BS9jAWSn8mrgiIhYLgoMtuL/WYUHBWG6XQVF4F0Nf9MV6g5Edp6nO7DATomCi29CXRhX6HsuNqCHtBxdUIAU03FugA4aDLqV04yQ+OX/0v+EkHrTKp391gxbsXk9exYarjkrdZVuJnvr5NvNJq0ZUNnU3w8LsxSMGxvo3ieR+9cQNuNBSjqdEpLuuM0CtMrPOXkiz/RmmVKAT8dT2nLgmfMOsroNQvCjGzpANMIqm8lyru4D0/iEfYV7wCUxLvq5FwBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B7Y3eW2xgWwSzpMXG5z5fvIG90RibD8Urwf56CwEsJk=;
- b=V2PBndnrFNwhiDdJxssCwKXcKSg9YhNbLn2uGoXb7mb1dHHmAEaCJON/EBG8roqyGXjLhFXEhgXdePknJJk2zgcdc847/SYak5NWcBgZ6yNu+CjWI5GBqtq8jIPXNryS6xedIKKny+Abg+SmJyWdCqdbhjocqPK6GgCpM7uunGE=
+ bh=nyeXUqfKkxEw0gdcRk86zPDjngvrsXWj/KdV8Fy45Xc=;
+ b=h+GxHQuZ9aJIdPVsBV5zXbEpDvOaC3F5IHUKoGLLBuhVxxnddNLmMLErn/mytv9mXEUBb3jp7ebjGs9PqDO4NpQgRm4Hs2bVojMSm75JfLoTtaJNsBtWsVu7diYKWR9rwmACz0bd2IxsOFvgb6RjIYH2VGj1othVz2d7EeW8lSU=
 Authentication-Results: roeck-us.net; dkim=none (message not signed)
  header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by DU2PR07MB8111.eurprd07.prod.outlook.com (2603:10a6:10:270::7) with
+ by DU2PR07MB8272.eurprd07.prod.outlook.com (2603:10a6:10:279::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.17; Fri, 24 Sep
- 2021 09:41:29 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.9; Fri, 24 Sep
+ 2021 09:42:45 +0000
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb%6]) with mapi id 15.20.4478.014; Fri, 24 Sep 2021
- 09:41:29 +0000
-Date:   Fri, 24 Sep 2021 11:40:51 +0200
+ 09:42:45 +0000
+Date:   Fri, 24 Sep 2021 11:42:40 +0200
 From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org,
         Przemyslaw Cencner <przemyslaw.cencner@nokia.com>
-Subject: [PATCH v2 06/10] hwmon: (tmp421) support specifying n-factor via DT
-Message-ID: <8423ae634ea5106cee9c916dac2e4627c0e2de69.1632473318.git.krzysztof.adamski@nokia.com>
+Subject: [PATCH v2 07/10] hwmon: (tmp421) really disable channels
+Message-ID: <1553ef3db09cfa166b26b77c958f5c13576dfbaf.1632473318.git.krzysztof.adamski@nokia.com>
 References: <cover.1632473318.git.krzysztof.adamski@nokia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1632473318.git.krzysztof.adamski@nokia.com>
-X-ClientProxiedBy: HE1PR05CA0141.eurprd05.prod.outlook.com
- (2603:10a6:7:28::28) To DU2PR07MB8110.eurprd07.prod.outlook.com
+X-ClientProxiedBy: HE1PR05CA0154.eurprd05.prod.outlook.com
+ (2603:10a6:7:28::41) To DU2PR07MB8110.eurprd07.prod.outlook.com
  (2603:10a6:10:239::15)
 MIME-Version: 1.0
-Received: from localhost.localdomain (131.228.2.1) by HE1PR05CA0141.eurprd05.prod.outlook.com (2603:10a6:7:28::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13 via Frontend Transport; Fri, 24 Sep 2021 09:41:26 +0000
+Received: from localhost.localdomain (131.228.2.1) by HE1PR05CA0154.eurprd05.prod.outlook.com (2603:10a6:7:28::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13 via Frontend Transport; Fri, 24 Sep 2021 09:42:44 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cfd9c98d-951c-41aa-687f-08d97f3f7b21
-X-MS-TrafficTypeDiagnostic: DU2PR07MB8111:
+X-MS-Office365-Filtering-Correlation-Id: 0e573117-ec41-4427-9c9d-08d97f3fa9b6
+X-MS-TrafficTypeDiagnostic: DU2PR07MB8272:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DU2PR07MB8111EEE842EF9642B8626789EFA49@DU2PR07MB8111.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-Microsoft-Antispam-PRVS: <DU2PR07MB8272CA77E8FC9DEBD1B24B8AEFA49@DU2PR07MB8272.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jwgmwjn8yhS5rzWtWfSQrmWJ9yfe2V8dTLQofUz3uzP0YsEbQlqaCk0zrv5bNFlMjmnC47kuxdKBD+py70IfNkS5RWKfoGHyAzQlvE0UzDwzKw8tfdfUUpn85IXf+2cRETBWf0e71OO31ME+9cNiM1TK8ZWKfmjiNutXEK8GgFLDYl1BUgznneeOy0J+4bB2v3KwM/3kdvCHqyogPQPzAuDLb6xrCJASvAyFKty/kFJ5sIu04yIEZYNMzBlX6+2IPvjdr8jsI4dlyaP2MbVPOCjaOHuMSySup0w4B9owq7D+hIvX5Nc2hGe3g5wzjx4N1JmEnm+JmiHl/Vxyot1WJBueOFnI4B2XgwsVKy+zj98wahwSr699rwMOCEhlLF7wLF07BICtP7BShxvNqumMbw1aBqOpArhkeDjauKwB9yV2urXDhTN2PG21I1etQ007DeUJ4us8NVUMVh2HovFWTKmJtrOTghZDZN06fyP+FkB4+WMaJzxhrKd1xdrH9gdKqDrGSRrBxqowvtnk9/h0x+0jE8WVPHX3eO5KP8RxU5H5ekbL+JUvRpopSMCS9oDzsYc6T3DXa/fmknwvrYq1M/UKiHZ2V9lPZI7IARk7raasFKrtzf0xJ3pjYuiOnrkZ1YlB85Xqn0m4e0yNuZhTu4vBIyi7z0eRN4RWmeYCae+R/wYewtmU4mN935tdWWaBfjUMjdSsTwF8Q8ZpEoKI6w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(107886003)(6666004)(38350700002)(8936002)(36756003)(6512007)(5660300002)(66556008)(86362001)(956004)(186003)(316002)(6506007)(4326008)(44832011)(110136005)(26005)(66476007)(52116002)(38100700002)(54906003)(2906002)(6486002)(508600001)(2616005)(8676002)(66946007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: aHcHKRxUKRJCarZaLUG2vn1SIcXae8yRjQs6DIzvIxk17UfE+Ykf02eD6FTOGCbwa/R8oyS5/gJuvM4pmZlh543y5lty/e3osigwRQGT3so/XCK4O/wZcxJCYjqXDMuwRlciU5qYaXTEgssE1mQh2u42YaE7hBYBS8qodPOqWLUbvBwoBcGGz+CjRaUQyC0RZ7U3bw2x6E4lEg/KJ1awjK/RPH4f007UgVs/Ll+6gy32NOGt3cblQaVahQczqr1JTJatnS+4U8fl97R7Oxic99Xh9Zp7NvcLGKUgt65usNXEE/yh3/Y+g4bppM17CKSR89U6nnm9uhSvYVBYDm2D2QG0CfAc1W3qZK4xNNsEQ2LJ/5TfSirlg+1FhVL9q/9K1zn/o8hNRRp2KSPh153FEZ+jMpNs/QyxTLsjXDS4oZGrqFjPqHTfWCVPMpdAlC9IETfBdF/U2BFeMg6g/OXHC9wq3X/Ywd+KUQt4KjKdd04z95t/ZauRJxFc+lVf4Ry6TWQUA7hBbl26w2WYkc0fdCRVYPsQ30QYP7TJzljAL91iTRCU4qh/7//UD9JLeebI+hqPg+odzo2koBnaBLfSiODJpaULK3Z/QE25LxthTiHvfD1SkPWJfR5x9BA75vfW9z/fvJPqJaY42xgTkTKAilyeJIGSrCdE8/d70hqe4BUwllPik8hqdDZQUraeUI4yAZlA2u/GMmSQEZcMyQvOkQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(86362001)(54906003)(83380400001)(316002)(110136005)(6512007)(36756003)(8936002)(508600001)(956004)(2616005)(6506007)(107886003)(6486002)(2906002)(4326008)(6666004)(38350700002)(38100700002)(66476007)(52116002)(66946007)(26005)(66556008)(44832011)(186003)(8676002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vqrBzJeuiQUVpk4k+WO772BABwbOaKwu5wl5HBfX3FQ6pmKuVqOd1WS1ixEe?=
- =?us-ascii?Q?w7eY0kl0ypiwONLEIof8rO1/b17jKXtiJSb+3wTmcVt8143q9vG5lRVWHA7v?=
- =?us-ascii?Q?ExIhbGnIHKSpAEOzr5x/1GxBKUW+KY7rq38SdSJIioPtcsBqq+iZuQRauFyg?=
- =?us-ascii?Q?IATsmYd4ls/si/x6+aKV4qtVwXY94t3emKmZGolv4Y00Lt9TISu4Y8UQHYBb?=
- =?us-ascii?Q?p3sJjdvT4B4hiSQM/2sLmss737EkFr/f/GPmcBlh8jYCXpyIIX6ghpkS0ciX?=
- =?us-ascii?Q?Qvk8lfUQJzvhoYfym42kihudCTNB4ShR8XGu3+tbswF1hgq5Qm5O6VsbPyUi?=
- =?us-ascii?Q?lvq1v2DMvX6pEr7d6gwmr3kcCqvEJw9vaPKfI2Ds5ZA8YYVB77MiBMlJOqMZ?=
- =?us-ascii?Q?7m0K9zhBTtsKOZulJOfqj1J++Pa0xCXKXujPe7YwI7ui/lVa/ovcIBTfGoha?=
- =?us-ascii?Q?+Huk1sVzy2tfqnJm0QgqGVrmF69TIIKIVmmNdOxJtvFRFI/vvxz6btfcoEyF?=
- =?us-ascii?Q?6iXJyW9nhrihgZMmeDelftud0M0IPhgnLHJdri9tfI6oSxl/SS54a3It6zcD?=
- =?us-ascii?Q?rk9yR+cDwoFBo/XxWus4bLtS4ZOomaqgGnb+pLyCPuNECnRBIa9FWM1oKfw5?=
- =?us-ascii?Q?oeRrR9r/Zoo/IXjTOz/OSOR7WxvMqMtMOx/Tw988fWWgeWWXg+7cAoIMUr20?=
- =?us-ascii?Q?lqKdvQKcIqxUFxxCJbu3SXeP0J0X4swDh9UNimrzNLFGxTbqHnGgH8zzzv45?=
- =?us-ascii?Q?ZVM949j1pBpTNsnis4ZeOHBmT8M6/kMbewez3AV+gczsYR5BTzxIOE0Sn8SI?=
- =?us-ascii?Q?W/tGTTLArJtE1zwPTtF6YrzyPhAsYpCZm6RYz8S54HI8b0CjZtOKQksP8t1T?=
- =?us-ascii?Q?/PaOe9KDOZDHRwt81BTSgdSFg+N7ffv5Om08a/zdaUGAIgX2HUgycjYLMxnY?=
- =?us-ascii?Q?ZXoxTeYUdK0zKZe5RNrFqDAHmQItRWAAQw1KSsFq10WEPpx8RWvYWbyM5oF/?=
- =?us-ascii?Q?7PP8vDYUnmADvfB9ZFFdwO+a/by3+XAyrSawCFyaEwHQbNN3ryvCWacWzirb?=
- =?us-ascii?Q?0wMuTvb7gOayd9kaI4PXddxgDqhAgGP3SWTVU9xI04QAj9c9EReJI8lIs313?=
- =?us-ascii?Q?4cvt9z/ipAG7AurL7oWejt3njSF/wcOsDgJV5UeFsgH8dkuioxckMvGJWGdB?=
- =?us-ascii?Q?gBGIrlgsbJpf0EQhcmGyvKZMacKWl1vHyGRxYXsRESnn38lCq7ALY9vJocfz?=
- =?us-ascii?Q?+5/KzsKKB9Ccik/UZvcWumtDXLHqkpd5Lp7PX45rS7BTNUg8/4ZlXek8QWXy?=
- =?us-ascii?Q?jVoBf9PzrOf+5oJU67qF0wKf?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j+IaMVWmrWY4YwwWMrOch7ZV6EtNkjhMAWFIEkhASVsx89P/8vfPws/TW3mo?=
+ =?us-ascii?Q?BTIuR73oM6GjlTJSZ8gHfRCrGN5y7GebPa+bUPB9Mysk3WSRiaj2IS549d0E?=
+ =?us-ascii?Q?EOvTdCP+SpjrCb2dKA0rY8kMxTDeyjDkHyjiPTZMTuXdBtBMYXOszysAwgJX?=
+ =?us-ascii?Q?8zT/EulJDZ5WlDz9oHadYTP7ks+47aATboF+Fe0h1BKSOd4ogkZtiXK2OUjy?=
+ =?us-ascii?Q?4AoI4YzMLuBsckCBx1qcM6f3HWkBmUqKLS5zU2NAusOseS64e/3M5rIPGiKv?=
+ =?us-ascii?Q?3KBE+Ptvd6t7jf0WoScKyLNTZjggsF7EFOxfaxZ1zINd/fhyPGRNvSWwGVPP?=
+ =?us-ascii?Q?AjsXZ6eE+SW3TXeeZq4RIth8BC1cjXQ4b5YER4/rNG07zzATmhonaWHYWE9E?=
+ =?us-ascii?Q?B7s53y2Psup9K3xwHmpa0hFdHB2nb0vndm/j3505Vxl+pWV3S3visWjmIjqM?=
+ =?us-ascii?Q?f9EJda+cg8acST1CtVmFY8aIl09bZk6c4WsDA+53stA3ufgyLIc3ytc5C8w3?=
+ =?us-ascii?Q?fh0GgVuGUORiBSOkDedu0XJFUZazJbnzm02SgAkSkiQccZHiJ795hz2QnnhQ?=
+ =?us-ascii?Q?tLiA+0UaLmY2WtqVZf7JNLot0S+sz6P4dQ31sGTFq/oBJV8zdkVrvqqsoKMU?=
+ =?us-ascii?Q?NIodb9/LortBw+TRmb+MHnKgEPuJQDa/l/atcZMv9kAfbjggTb0FnIUw81HK?=
+ =?us-ascii?Q?kJDz34u77VuV3KFPAscv/QqxrKBlPnZe3TrdB9bQ1GMl1qQWeXr+MOjQtAvd?=
+ =?us-ascii?Q?r4u4npLDU5huJPVIZEfxQSks4tyz4NO/mt8arZAO90k4bDu3q2wPnE2P7fHk?=
+ =?us-ascii?Q?A9LuAkpNNKyStwX3n2V0Wwmc9ihmpGwuHzfhVLLyRw0EDdEAnUd0Kcu0auPv?=
+ =?us-ascii?Q?EJnlntTJR3huR/xJHofsFx74SRKEDt9uuE/QzmEGPG5ZJrKcUDsMzaxF/Uve?=
+ =?us-ascii?Q?rVZ21JpSEXRqnMFID5sL7KaggCUSTKx5TlrClh9COOdsMzqAHKBTSn3iOMcE?=
+ =?us-ascii?Q?+jVQPOKKU8VUOIlOh6h3s9QnzFPQbgasm3gPFGSySIPVg3h9U8tVe+rZ/Xa6?=
+ =?us-ascii?Q?NJLGtr3sRNMEXUOTc1DIhc7XWQoU53y4YT8OMrQ2iCVzfJgDyTGZn1Sqcyf0?=
+ =?us-ascii?Q?zRcw2tc2+MKFCiqz1gww+FMc4XaUsI6b2qjFMYsEiQPCTtW8E9SNYDgsxM/y?=
+ =?us-ascii?Q?hFXi8dEmbf2QHX9fDNkSWMs+Gyh8pUC5cpuzpHM3Acpgu2EMl+WgXzbLuh74?=
+ =?us-ascii?Q?DsxIQqksUwuRzthwCNHserfvS91OI6AebsjlCNrWhl8Nj0YuQPgsd2CJ58W+?=
+ =?us-ascii?Q?JmZJeuvdEUvwdI3N1XTIx6x8?=
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfd9c98d-951c-41aa-687f-08d97f3f7b21
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e573117-ec41-4427-9c9d-08d97f3fa9b6
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 09:41:29.3379
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 09:42:45.7645
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FFRDqHb1NSDKsuj0hE/45pr9aveg5HTQjluLxJIwf5Oykt261LA8uDZqZd+2/3O66P5lPdT3W7mfd/eG5I5r4VzALiLUMPHoSW1bOGLoQtw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8111
+X-MS-Exchange-CrossTenant-UserPrincipalName: KD7QUxFTTD1SxtzzA9yMGATWATfqHTZHFYEKP4lpPtbqlTXybZtGX+tqdzo3ZEEvAw17Z4+7u0lqJ8z/tIwIixULSQucqXuF/zI1VvMKGsM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8272
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Previous patches added a way to specify some channel specific parameters
-in DT and n-factor is definitely one of them. This calibration mechanism
-is board specific as its value depends on the diodes/transistors being
-connected to the sensor and thus the DT seems like a right fit for that
-information. It is very similar to the value of shunt resistor that some
-drivers allows specifying in DT.
+Recent patch added possibility to disable selected channels. That would
+only make sure that the ENODATA is returned for those channels but would
+not configure the actual hardware.
 
-This patch adds a possibility to set n-factor for each channel via
-"n-factor" DT property in each channel subnode.
+With this patch, the config register is written to make sure the
+channels are disabled also at hardware level.
 
 Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 ---
- drivers/hwmon/tmp421.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/hwmon/tmp421.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
 diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-index 5ff60b366be4..0fa4c02f5808 100644
+index 0fa4c02f5808..4934ce13afb4 100644
 --- a/drivers/hwmon/tmp421.c
 +++ b/drivers/hwmon/tmp421.c
-@@ -34,6 +34,7 @@ enum chips { tmp421, tmp422, tmp423, tmp441, tmp442 };
+@@ -33,6 +33,9 @@ enum chips { tmp421, tmp422, tmp423, tmp441, tmp442 };
+ /* The TMP421 registers */
  #define TMP421_STATUS_REG			0x08
  #define TMP421_CONFIG_REG_1			0x09
++#define TMP421_CONFIG_REG_2			0x0A
++#define TMP421_CONFIG_REG_REN(x)		(BIT(3 + (x)))
++#define TMP421_CONFIG_REG_REN_MASK		(BIT(3)|BIT(4)|BIT(5)|BIT(6))
  #define TMP421_CONVERSION_RATE_REG		0x0B
-+#define TMP421_N_FACTOR_REG_1			0x21
+ #define TMP421_N_FACTOR_REG_1			0x21
  #define TMP421_MANUFACTURER_ID_REG		0xFE
- #define TMP421_DEVICE_ID_REG			0xFF
+@@ -155,6 +158,33 @@ static struct tmp421_data *tmp421_update_device(struct device *dev)
+ 	return data;
+ }
  
-@@ -303,6 +304,7 @@ static int tmp421_probe_child_from_dt(struct i2c_client *client,
- {
- 	struct device *dev = &client->dev;
- 	u32 i;
-+	s32 val;
- 	int err;
- 
- 	err = of_property_read_u32(child, "reg", &i);
-@@ -322,6 +324,20 @@ static int tmp421_probe_child_from_dt(struct i2c_client *client,
- 
- 	data->channel[i].enabled = of_device_is_available(child);
- 
-+	if (i == 0)
-+		return 0; /* input 0 is internal channel */
++static int tmp421_enable_channels(struct tmp421_data *data)
++{
++	int err;
++	struct i2c_client *client = data->client;
++	struct device *dev = &client->dev;
++	int cfg = i2c_smbus_read_byte_data(client, TMP421_CONFIG_REG_2);
++	int i;
 +
-+	err = of_property_read_s32(child, "n-factor", &val);
-+	if (!err) {
-+		if (val > 127 || val < -128) {
-+			dev_err(dev, "n-factor for channel %d invalid (%d)\n",
-+				i, val);
-+			return -EINVAL;
-+		}
-+		i2c_smbus_write_byte_data(client, TMP421_N_FACTOR_REG_1 + i - 1,
-+						  val);
++	if (cfg < 0) {
++		dev_err(dev,
++			"error reading register, can't disable channels\n");
++		return err;
 +	}
 +
- 	return 0;
- }
++	cfg &= ~TMP421_CONFIG_REG_REN_MASK;
++	for (i = 0; i < data->channels; i++)
++		if (data->channel[i].enabled)
++			cfg |= TMP421_CONFIG_REG_REN(i);
++
++	err = i2c_smbus_write_byte_data(client, TMP421_CONFIG_REG_2, cfg);
++	if (err < 0)
++		dev_err(dev,
++			"error writing register, can't disable channels\n");
++
++	return err;
++}
++
+ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
+ 		       u32 attr, int channel, long *val)
+ {
+@@ -395,6 +425,10 @@ static int tmp421_probe(struct i2c_client *client)
+ 	if (err)
+ 		return err;
+ 
++	err = tmp421_enable_channels(data);
++	if (err)
++		return err;
++
+ 	data->chip.ops = &tmp421_ops;
+ 	data->chip.info = data->info;
  
 -- 
 2.31.1
