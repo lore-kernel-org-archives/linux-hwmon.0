@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB615C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 558AAC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:55:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE51F60EB4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:54:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3894760EB4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:55:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243798AbhIXBzx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 21:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
+        id S243815AbhIXB5U (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 21:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243793AbhIXBzv (ORCPT
+        with ESMTP id S240863AbhIXB5T (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 21:55:51 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8F8C061574;
-        Thu, 23 Sep 2021 18:54:19 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 67-20020a9d0449000000b00546e5a8062aso11132836otc.9;
-        Thu, 23 Sep 2021 18:54:19 -0700 (PDT)
+        Thu, 23 Sep 2021 21:57:19 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96861C061574;
+        Thu, 23 Sep 2021 18:55:47 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id w206so12468996oiw.4;
+        Thu, 23 Sep 2021 18:55:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=eZ7iH6Q8l67sPv3mVUusPpqoviodZTEfInAFFD0to5g=;
-        b=bmJOJ8D4fN5cUpbZE+wUjqNj6kd0TMsZG5DjBjwGT/U831siTueRpCF8CsqTFR6NXP
-         QsJiw7JcNm5+xH+ZCnJhC4CO2Mop1bIz0/RPTDqEzYtlhfTXDtwRPlvfpZsH/nPr81Tq
-         MYcSdOFY9cRV9zb5ufjPjeZoVC+UiNZW+WGLDTumczpylNokKHAnoFQFlTBhXXnYJ+rf
-         s1AQCYTOm2r43XVjcKZ8qLLvlOyGsitgtsnGX2BI8+3SxCAxXPkTm8sMyBsqU4q7X+p2
-         eLKeDnvtbox0NKdBqcGBi7F+cuqffJ7ciHBsp6B08uBlluNFGPRpW8rtQWtCAHhdgbZ6
-         bkfQ==
+        bh=ezYXT7lx1DMyi79smc8gAocvesXupY5YdDbkThvPxwk=;
+        b=cU+q0OgS9IsiqCudoJA3jJ/wdrokQxQ7kp27a3JpWvB7U/IS+jFoAxCF0GaP7k4eHN
+         jaZIVh3WhkJAbF/Sn6XXhCQODpmTOy28YkNxV34Aog9rs8ya7DrJpiVgWHS2PihG7tfm
+         KdKG7gBRi+b9aBL25Pg58fwfUxdPAoh9/7ILNb70iLpUacathyQx5+1qZMxKlF1YzZ1P
+         oRUJGo/oP8Q17nCtj+G0jftEBV8kEXil7jV904095olIufZJWruuDg+xnXkVZMw19GCs
+         M7MpmL0ojCeLP+Kn2/huUcZDIbuJgTUKDU7rAS/fR//bWk6/3onRFXjhrlBAx95bfCEu
+         5fVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=eZ7iH6Q8l67sPv3mVUusPpqoviodZTEfInAFFD0to5g=;
-        b=iAq7fSU8QbKT+CQDIYA6UEiSNp1Q0Y2G0mYQlo+K4uAF6okZoslt6nESMp1nmCxosX
-         2Ci/RR12e0z5INUIejf8nxgjSWN8RfzcMcd5VJ6MMFKpcKdHQTGqO6t1GnMRP7EKeUxN
-         FKBJiHozN5qitwZTcyXjCr/Ak/L5WSGpKWbYae+khWHupifHu5FDalugPiVHMM5Bl1Sl
-         /TE0yrZAuXxrajijmgNog6nqWIwbPoBzYoeWoIsGdnfGebf14RtkG60fe6/+/tI338EI
-         u3bOxCD8OBhzbrbiD53jXsRL+o5w+IGBSvhd7CGqN62pwQMdSCNneuvhPfwgm/VoAE1V
-         6IKw==
-X-Gm-Message-State: AOAM5329kM5qbMYVpreMiyy3/Rgf4GvljVIsLDCrL/keKK/bGR+uoqzD
-        xJaEWJEkYQpsE/g4pgTNZnc=
-X-Google-Smtp-Source: ABdhPJxsZno9TR1s7LghbC1zEKNP9FZnT5qe3iCwsqU5kygZ+JaJaV7hAWJ85B/ytaGZa7apn468lw==
-X-Received: by 2002:a9d:719a:: with SMTP id o26mr1713249otj.278.1632448458901;
-        Thu, 23 Sep 2021 18:54:18 -0700 (PDT)
+        bh=ezYXT7lx1DMyi79smc8gAocvesXupY5YdDbkThvPxwk=;
+        b=CYG7mLQo/9fW55oUoHG7P4cOuk7wCAqLF1ETEewV3hP/VV16L+EMZNJcmKSVufISpV
+         0/buEz78ofUSIAFs46V1SkyTOzX4Iw1W8Y3Nk0SE/lnT+IMi55OsZrAyVtSAjM3ZcUE+
+         MEZoq63BUgWcx4uLOvRtOG3YvxQO+d4j1pVOp1SNL/5Uo6ec4t3YOzYbbdE6F0VTuNXS
+         NdRfS3Ttrbgvg/kT1GA+AT0me6pYAAJjNsbP8Z05D8Gh/jttojDchQAp7a2M7LUo2DfP
+         KQ/54M+MpqI1n9ASk0wepbUPD2/052QuTQA/9b56hfOWQqAN2U5kVLwqZLIBR7lQUAJX
+         NwEA==
+X-Gm-Message-State: AOAM530kMxxCzaVBi89G+u3xXgPHHKQygYZpHDVpeCXHScL2/aEwizin
+        IbNnXEj9GoSa6TnQXdfqo60=
+X-Google-Smtp-Source: ABdhPJxWSaBr3t9NH99NeTcym/RaIawHPoiEdLvjg445e3gWhqOI5FRMRSFAaxqzPofNrjXSdHBXsQ==
+X-Received: by 2002:a05:6808:13c9:: with SMTP id d9mr6371338oiw.165.1632448547043;
+        Thu, 23 Sep 2021 18:55:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g23sm1697785otl.23.2021.09.23.18.54.18
+        by smtp.gmail.com with ESMTPSA id t80sm1833990oie.9.2021.09.23.18.55.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 18:54:18 -0700 (PDT)
+        Thu, 23 Sep 2021 18:55:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 23 Sep 2021 18:54:17 -0700
+Date:   Thu, 23 Sep 2021 18:55:45 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
@@ -65,22 +65,21 @@ Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: hwmon: ti,tmp102: add bindings and
- remove from trivial devices
-Message-ID: <20210924015417.GA3030874@roeck-us.net>
+Subject: Re: [PATCH 4/6] dt-bindings: hwmon: lltc,ltc4151: convert to dtschema
+Message-ID: <20210924015545.GA3031064@roeck-us.net>
 References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
- <20210921102832.143352-2-krzysztof.kozlowski@canonical.com>
+ <20210921102832.143352-4-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210921102832.143352-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210921102832.143352-4-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 12:28:28PM +0200, Krzysztof Kozlowski wrote:
-> The TI TMP102 temperature sensor does not fit into trivial devices
-> bindings due to additional properties.  Add separate bindings for it.
+On Tue, Sep 21, 2021 at 12:28:30PM +0200, Krzysztof Kozlowski wrote:
+> Convert the LTC4151 current and voltage sensor bindings to DT schema
+> format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > Reviewed-by: Rob Herring <robh@kernel.org>
@@ -91,41 +90,40 @@ Thanks,
 Guenter
 
 > ---
->  .../devicetree/bindings/hwmon/ti,tmp102.yaml  | 47 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  2 -
->  2 files changed, 47 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
+>  .../bindings/hwmon/lltc,ltc4151.yaml          | 41 +++++++++++++++++++
+>  .../devicetree/bindings/hwmon/ltc4151.txt     | 18 --------
+>  2 files changed, 41 insertions(+), 18 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/ltc4151.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
+> diff --git a/Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml b/Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml
 > new file mode 100644
-> index 000000000000..d3eff4fac107
+> index 000000000000..4b5851c326f7
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
-> @@ -0,0 +1,47 @@
+> +++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml
+> @@ -0,0 +1,41 @@
 > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/hwmon/ti,tmp102.yaml#
+> +$id: http://devicetree.org/schemas/hwmon/lltc,ltc4151.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: TMP102 temperature sensor
+> +title: LTC4151 High Voltage I2C Current and Voltage Monitor
 > +
 > +maintainers:
 > +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > +
 > +properties:
 > +  compatible:
-> +    enum:
-> +      - ti,tmp102
-> +
-> +  interrupts:
-> +    maxItems: 1
+> +    const: lltc,ltc4151
 > +
 > +  reg:
 > +    maxItems: 1
 > +
-> +  "#thermal-sensor-cells":
-> +    const: 1
+> +  shunt-resistor-micro-ohms:
+> +    description:
+> +      Shunt resistor value in micro-Ohms
+> +    default: 1000
 > +
 > +required:
 > +  - compatible
@@ -135,30 +133,37 @@ Guenter
 > +
 > +examples:
 > +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
 > +    i2c {
 > +        #address-cells = <1>;
 > +        #size-cells = <0>;
 > +
-> +        sensor@48 {
-> +            compatible = "ti,tmp102";
-> +            reg = <0x48>;
-> +            interrupt-parent = <&gpio7>;
-> +            interrupts = <16 IRQ_TYPE_LEVEL_LOW>;
-> +            #thermal-sensor-cells = <1>;
+> +        sensor@6e {
+> +            compatible = "lltc,ltc4151";
+> +            reg = <0x6e>;
+> +            shunt-resistor-micro-ohms = <1500>;
 > +        };
 > +    };
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index c9333fb81fdf..6ad0628741cf 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -317,8 +317,6 @@ properties:
->              # I2C Touch-Screen Controller
->            - ti,tsc2003
->              # Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
-> -          - ti,tmp102
-> -            # Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
->            - ti,tmp103
->              # Thermometer with SPI interface
->            - ti,tmp121
+> diff --git a/Documentation/devicetree/bindings/hwmon/ltc4151.txt b/Documentation/devicetree/bindings/hwmon/ltc4151.txt
+> deleted file mode 100644
+> index d008a5ef525a..000000000000
+> --- a/Documentation/devicetree/bindings/hwmon/ltc4151.txt
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -LTC4151 High Voltage I2C Current and Voltage Monitor
+> -
+> -Required properties:
+> -- compatible: Must be "lltc,ltc4151"
+> -- reg: I2C address
+> -
+> -Optional properties:
+> -- shunt-resistor-micro-ohms
+> -	Shunt resistor value in micro-Ohms
+> -	Defaults to <1000> if unset.
+> -
+> -Example:
+> -
+> -ltc4151@6e {
+> -	compatible = "lltc,ltc4151";
+> -	reg = <0x6e>;
+> -	shunt-resistor-micro-ohms = <1500>;
+> -};
