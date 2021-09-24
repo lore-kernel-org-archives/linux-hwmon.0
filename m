@@ -7,79 +7,80 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C7DDC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 12:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D62B8C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 12:01:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F7FB61164
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 12:00:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAE6B60EB6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 12:01:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245466AbhIXMBd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Sep 2021 08:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S244854AbhIXMC7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Sep 2021 08:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245069AbhIXMBd (ORCPT
+        with ESMTP id S244439AbhIXMC6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Sep 2021 08:01:33 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B844C061574;
-        Fri, 24 Sep 2021 05:00:00 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so12820874ota.6;
-        Fri, 24 Sep 2021 05:00:00 -0700 (PDT)
+        Fri, 24 Sep 2021 08:02:58 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3A3C061574;
+        Fri, 24 Sep 2021 05:01:25 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id s36-20020a05683043a400b0054d4c88353dso1932311otv.0;
+        Fri, 24 Sep 2021 05:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=gaw8hq1tP5dFMMFBJGf09r+9kBtQt8HO+1SL++A5V4w=;
-        b=XLAuCVry5neZjaz6bhGYS8n3Dcffaosa/A5/Kt2OIj7WPDqyzsoBf3azQZQQZ9MpPG
-         eDVul+SKHKWmwZqd/Sy0gmfkypXqXB5ngtmdgHtH4MwUTBeudVy75fTFTbWu3UmGvkmm
-         TykqUajoYG1iJ7QyiX/vW6ynaMxOlho8l12SCzrjcP5TGqG9xvtGcUGfAGg2/7ijdUWz
-         NENu7OH/wsfFH+ycPOwHmD9ksnBog9qH9vMLHXYMn2AItsymzKvVjDi3RrzV28DkvH5N
-         U7K0w5ktkw9i55K41PShTKYhoJviortNeQ2ZlNqEOcIsa1/GmM/tAUlsD79YbWZN6l08
-         AzmA==
+        bh=xe8hbcCe7Il2R3uT9h3I/mQYjYvm30reKshUti4lTYU=;
+        b=HhsXDQ+Enaw+Ox6jaivp+qkBNL3jZBeVYJtkeOBUVX6ZI33Uk7bQlP8JuCKOE8M1cK
+         Zqfqf5H6mofkXgAhhaxtv69r/jBZBXSO9fen+scZLl1euVLoXEZ1z0hQeuR1CeHYPnMa
+         8gyCJyz6U9SpXtdb6BVVC0CknxeBtKroEB2XTgV98OYCP0ymuJYY1NwmgHKllRKVtC9q
+         pQt2RZYD9BLBDE0OXZX3qfwG12DBXxTunRbxFhHAWgFB54+nc4txs6IrzJilYmuPaXlN
+         jdAsLLN4j6F916fXKaFfiKmUdDV3mW2c5IJ4MZwSKhIJinOKlFtM0gcO6vDCMskGRtHq
+         98iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=gaw8hq1tP5dFMMFBJGf09r+9kBtQt8HO+1SL++A5V4w=;
-        b=SL/zLSK4Bx73Fc6l4gsoZDj4HQF1NN04Oxv0Z4jIXQRPCc+RbE5hZqw6aavhfjhLgh
-         YZbxDYSok10y9oJZi7FvAH+YqDCz70JIkG63Tnu6yabIFaCL8/EDfvvrMsWBlglGgTOw
-         Ou+i2Bs4Ym/3viHXVnJDd7+j0ogwP9qhGAUVcEv+w6dL99YnG+zjiPIICFXhesr3kQ9+
-         Vqkbs9kbZWYLNbAGsVOt/mvcRlloqlbE5qScDLna8LP3mPF68e7N8SFQwiamZGNznl1U
-         Oeq3YCgrrQJ3CsuxnTNQYvzzEJiuCzGqgVTGhJ+qsxt3llTHEGiDxqqLVM8iFyz6g38o
-         f4+A==
-X-Gm-Message-State: AOAM532mWjWxkIdLuTEQbEeV6lBQLg41LffGWIfZb6SjH+I2cNYBEUjF
-        WxZz4vsrVcuXPa4fpunGrtozeg+wD4Q=
-X-Google-Smtp-Source: ABdhPJwV6KDoOL4dJobE5iEtEYDFPM40hBhSDcRGQuodsm2FiwCPKNGDoPT+pRNqKHZ/7YTcDP7h6g==
-X-Received: by 2002:a9d:654b:: with SMTP id q11mr3570243otl.184.1632484799865;
-        Fri, 24 Sep 2021 04:59:59 -0700 (PDT)
+        bh=xe8hbcCe7Il2R3uT9h3I/mQYjYvm30reKshUti4lTYU=;
+        b=1PyUR/mz+QTY47KDn2KAQEzUBblZKITdMaOpWWU/aboX8FBfvLSSx9hnNvlR/78aHv
+         enCk+qlNvfu7ZAiUXGyubqJW4aLd+L0FD4cXJD/7/1v2ih6VYSLd4i4uztnCr9C+huRs
+         d744nhpf6ocZO5p5JrZgPG4pG9K4gYXcQlAhx82L6IyQBHTXfkF3hvMAjlgKpYlWM3JP
+         TGVVt76d+lckjOlcDcS+JJ/sm5dnjh6bOaJrB369tZH9Nzce3sdFdaQVZvsqP+9qeBuJ
+         5PQclqkzp1gSTWvG3DiBIzBWW+XNtrZ3zZoYsLfqaNOmVNpvlrimtLlGXNj6Botgl/I4
+         d7uw==
+X-Gm-Message-State: AOAM533cJAmBM6Luwf+V6kLoKDoB/5k15F50yMZawi1WUKbPzMnqWpE0
+        LKarKLjBlBaqwADFrA3ziRb0sj9yvTY=
+X-Google-Smtp-Source: ABdhPJzqemAsZhe3Xlw35FomqbI3ZogJ8e3kDKO7YG67NzCTQWwsGzEbLicdKN+qR12OzZb7sm4H0g==
+X-Received: by 2002:a05:6830:79c:: with SMTP id w28mr3490244ots.332.1632484883173;
+        Fri, 24 Sep 2021 05:01:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v16sm2046200oiv.23.2021.09.24.04.59.59
+        by smtp.gmail.com with ESMTPSA id i25sm2028562oto.26.2021.09.24.05.01.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 04:59:59 -0700 (PDT)
+        Fri, 24 Sep 2021 05:01:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 24 Sep 2021 04:59:58 -0700
+Date:   Fri, 24 Sep 2021 05:01:20 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Paul Fertser <fercerpav@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] hwmon: tmp421: report /PVLD condition as fault
-Message-ID: <20210924115958.GA2695448@roeck-us.net>
+Subject: Re: [PATCH v3 3/3] hwmon: tmp421: fix rounding for negative values
+Message-ID: <20210924120120.GA2695828@roeck-us.net>
 References: <20210924022020.GA3032273@roeck-us.net>
  <20210924093011.26083-1-fercerpav@gmail.com>
- <20210924093011.26083-2-fercerpav@gmail.com>
+ <20210924093011.26083-3-fercerpav@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210924093011.26083-2-fercerpav@gmail.com>
+In-Reply-To: <20210924093011.26083-3-fercerpav@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 12:30:10PM +0300, Paul Fertser wrote:
-> For both local and remote sensors all the supported ICs can report an
-> "undervoltage lockout" condition which means the conversion wasn't
-> properly performed due to insufficient power supply voltage and so the
-> measurement results can't be trusted.
+On Fri, Sep 24, 2021 at 12:30:11PM +0300, Paul Fertser wrote:
+> Old code produces -24999 for 0b1110011100000000 input in standard format due to
+> always rounding up rather than "away from zero".
+> 
+> Use the common macro for division, unify and simplify the conversion code along
+> the way.
 > 
 > Fixes: 9410700b881f ("hwmon: Add driver for Texas Instruments TMP421/422/423 sensor chips")
 > Signed-off-by: Paul Fertser <fercerpav@gmail.com>
@@ -97,34 +98,53 @@ Guenter
 > Changes from v1:
 >  - Trivial rebase
 > 
->  drivers/hwmon/tmp421.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  drivers/hwmon/tmp421.c | 24 ++++++++----------------
+>  1 file changed, 8 insertions(+), 16 deletions(-)
 > 
 > diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-> index e6b2b31d17c8..3a789f21188c 100644
+> index 3a789f21188c..85f5f0eb3d2e 100644
 > --- a/drivers/hwmon/tmp421.c
 > +++ b/drivers/hwmon/tmp421.c
-> @@ -182,10 +182,10 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
+> @@ -100,23 +100,17 @@ struct tmp421_data {
+>  	s16 temp[4];
+>  };
+>  
+> -static int temp_from_s16(s16 reg)
+> +static int temp_from_raw(u16 reg, bool extended)
+>  {
+>  	/* Mask out status bits */
+>  	int temp = reg & ~0xf;
+>  
+> -	return (temp * 1000 + 128) / 256;
+> -}
+> -
+> -static int temp_from_u16(u16 reg)
+> -{
+> -	/* Mask out status bits */
+> -	int temp = reg & ~0xf;
+> -
+> -	/* Add offset for extended temperature range. */
+> -	temp -= 64 * 256;
+> +	if (extended)
+> +		temp = temp - 64 * 256;
+> +	else
+> +		temp = (s16)temp;
+>  
+> -	return (temp * 1000 + 128) / 256;
+> +	return DIV_ROUND_CLOSEST(temp * 1000, 256);
+>  }
+>  
+>  static int tmp421_update_device(struct tmp421_data *data)
+> @@ -175,10 +169,8 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
+>  
+>  	switch (attr) {
+>  	case hwmon_temp_input:
+> -		if (tmp421->config & TMP421_CONFIG_RANGE)
+> -			*val = temp_from_u16(tmp421->temp[channel]);
+> -		else
+> -			*val = temp_from_s16(tmp421->temp[channel]);
+> +		*val = temp_from_raw(tmp421->temp[channel],
+> +				     tmp421->config & TMP421_CONFIG_RANGE);
 >  		return 0;
 >  	case hwmon_temp_fault:
 >  		/*
-> -		 * The OPEN bit signals a fault. This is bit 0 of the temperature
-> -		 * register (low byte).
-> +		 * Any of OPEN or /PVLD bits indicate a hardware mulfunction
-> +		 * and the conversion result may be incorrect
->  		 */
-> -		*val = tmp421->temp[channel] & 0x01;
-> +		*val = !!(tmp421->temp[channel] & 0x03);
->  		return 0;
->  	default:
->  		return -EOPNOTSUPP;
-> @@ -198,9 +198,6 @@ static umode_t tmp421_is_visible(const void *data, enum hwmon_sensor_types type,
->  {
->  	switch (attr) {
->  	case hwmon_temp_fault:
-> -		if (channel == 0)
-> -			return 0;
-> -		return 0444;
->  	case hwmon_temp_input:
->  		return 0444;
->  	default:
