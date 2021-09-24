@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BDC7C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D958C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:52:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4B0261152
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:51:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5066060EB4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:52:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243781AbhIXBwp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 21:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S243833AbhIXByF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 21:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240863AbhIXBwo (ORCPT
+        with ESMTP id S243820AbhIXByD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 21:52:44 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA4AC061574;
-        Thu, 23 Sep 2021 18:51:12 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id b5-20020a4ac285000000b0029038344c3dso2785952ooq.8;
-        Thu, 23 Sep 2021 18:51:12 -0700 (PDT)
+        Thu, 23 Sep 2021 21:54:03 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43572C061760;
+        Thu, 23 Sep 2021 18:52:31 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id r26so12459402oij.2;
+        Thu, 23 Sep 2021 18:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TPANwq5D3QjAAV224OPoOdEUgvvO6sHJqMsCL2qJyks=;
-        b=WamoEAoO4OgK3eDXQ3Hz6BBsohhXxo5dNDVDBj1jSNv+m6/ji+lTnEJ39DmwzfAng8
-         T6ByQcAYJq6qKonDIQYFcudsqH1cDG0iV86O7T7tGGIZUDDSYRVvjms4Jdb6X6TT2jjE
-         SAuZawN0Jq4zRY8EVH4vnctJbViKVnFW/CfGrlnmFn8vRjdZUfkD+O/Pn/CACCdH5s3z
-         faa0md2AkrdigPjYJLXC7FIQl6ffLepuGfvR8/YgBVn6ZS7WUksxmRqqEpSZs0x855IC
-         0ZoQwtsaU8qCBh2u81nck6Lv3ztSClsiW8QIZ9rYoSSh0DoHQd0Xmimk0TLpasfReJo+
-         VVaA==
+        bh=zNrerwDTZGxLcdkOBcTUO8N76tKvz+gTytgsfxC8kqo=;
+        b=M9lFXCUnequUjUG92o/gTm4XPT5JAAjyJkNrKAPehw3EiuweUlAuNnMfYbD2Y5giOm
+         brNC3rLGgNU0UnMfKYtYqGJH9PKiHMFgmyr7lcsdJYVeClgM9diBK/3DKFrAEzgzIX3e
+         Ih0zRAEeGb/ufbLWcpXnbFKrIX109Y8z8hdM2CaBxSoQHO1wNd86axbSDvEtT1okJXH3
+         pYHSJQGTLuXAZqE1AaTyYmZNEnW/gvbmKx/SqBhXUWfT77m5HUSvv32c0RaGdyb2Bk3a
+         TJl52Ft6gB2MbRzw9WCJJVsDWgsGQgsg0I9mn8JqQ/TbAYei3qTjBfnOcKsUXIXxc6zN
+         l9mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=TPANwq5D3QjAAV224OPoOdEUgvvO6sHJqMsCL2qJyks=;
-        b=TSUEND2oBFkO2hR7EBbSui+CKJfvyQPhPDUFVozmibIjhBtKf5Y0alxTCDvwzEgsN9
-         Abc/dlp+s6t2+t93cAJJ/spDUUas1PYX+eCf21iINCzeGNQFTiI10LbELbOFT2NrGh02
-         stzaL+FgT3DAhIpYFJRe4oOs0r+dsD5SzM7kE+StTSOxqhh0z9rUnZOdX37s5AK7Q6+I
-         6sPV5MvzWGHRd3DB7aBaAONuRVNpx2Pv/XHn2GD/9N8B28BPay3vPR04FVwwilg9jNc3
-         HpMUpqzixDaVfEoi5YJ5Z5X2QCrXo9/xmnE0Dx68VHZ2WBb5fuF1IebhftuAN/tZHkFV
-         exCw==
-X-Gm-Message-State: AOAM533Binqq0pMzo/mmbt0XDAEYxU7qf85KQWLE1bb6/f9zMnlqGNK+
-        UsvCabA4iTlYqZcVkXvpGdw=
-X-Google-Smtp-Source: ABdhPJyj+YByoddur8auY2/o3wA2BAh+cavN3tOG/ouFd4nDnDKSVZP99cPun8HU9jv7K0lyFbGGtA==
-X-Received: by 2002:a05:6820:1050:: with SMTP id x16mr6509968oot.40.1632448271676;
-        Thu, 23 Sep 2021 18:51:11 -0700 (PDT)
+        bh=zNrerwDTZGxLcdkOBcTUO8N76tKvz+gTytgsfxC8kqo=;
+        b=dzHZo124zJRsT059iLg+WV86AnD5XYEiUkk91xiLLulPxM0ewvhXSo8CvQwpk/uDua
+         +g6BAyUSQo0oIz6QBNnq1oLETzie4pl+BY0cCDCUxkKuMWBhD6dx8Gz8p0a8z8frsKF7
+         nFBd2IicVr0qZQmevO4KHicuD9VM+QZt4nyVBdADeaQf3ZjChgQ/aaNO35nkTf/MKiCi
+         6q2SDtkQVGt8Sx8JqxSbD03xccywyzK5YgpPJh7FCtl5xKeLWcORVhl+If+r6dduoQNH
+         7UbzzR3demjsDBVdgHM+UH796IBRFM9s3h3r5+QmcliWorUBQlOaP7fhoiKucCPuowoY
+         XTZw==
+X-Gm-Message-State: AOAM5316BftQkUSa41VAVMU9BXMpEEzLVr5p9lECpwlpofTz/y9CHd3e
+        Il7x1G1Q35G+NrDdYC56cMs=
+X-Google-Smtp-Source: ABdhPJxJMakJkTYYDZ/9gg3XmJaqOuPAwDPMmxQjzyLf+9E7t2vuZRT0OPjQQe+7eoM1KV9q0JaaIA==
+X-Received: by 2002:aca:5887:: with SMTP id m129mr10769874oib.123.1632448350626;
+        Thu, 23 Sep 2021 18:52:30 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 9sm1745561oir.10.2021.09.23.18.51.10
+        by smtp.gmail.com with ESMTPSA id d7sm1808051ooa.36.2021.09.23.18.52.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 18:51:11 -0700 (PDT)
+        Thu, 23 Sep 2021 18:52:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 23 Sep 2021 18:51:09 -0700
+Date:   Thu, 23 Sep 2021 18:52:28 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
@@ -65,89 +65,112 @@ Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] dt-bindings: hwmon: lm70: move to trivial devices
-Message-ID: <20210924015109.GA3029984@roeck-us.net>
-References: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH 1/6] dt-bindings: hwmon: ti,tmp108: convert to dtschema
+Message-ID: <20210924015228.GA3030756@roeck-us.net>
+References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 08:21:09PM +0200, Krzysztof Kozlowski wrote:
-> The lm70 thermometer bindings are trivial, so like many other I2C/SPI
-> temperature sensors can be integrated into trivial devices bindings.
+On Tue, Sep 21, 2021 at 12:28:27PM +0200, Krzysztof Kozlowski wrote:
+> Convert the TI TMP108 temperature sensor bindings to DT schema format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > Reviewed-by: Rob Herring <robh@kernel.org>
 
-Applied, per Rob's comment that he prefers devices as .yaml
-over .txt, and would rather have a transition from device.txt ->
-trivial.yaml -> device.yaml than no transition at all.
+Applied.
 
+Thanks,
 Guenter
 
 > ---
->  .../devicetree/bindings/hwmon/lm70.txt        | 22 -------------------
->  .../devicetree/bindings/trivial-devices.yaml  |  8 +++++++
->  2 files changed, 8 insertions(+), 22 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/lm70.txt
+>  .../devicetree/bindings/hwmon/ti,tmp108.yaml  | 50 +++++++++++++++++++
+>  .../devicetree/bindings/hwmon/tmp108.txt      | 18 -------
+>  2 files changed, 50 insertions(+), 18 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/tmp108.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm70.txt b/Documentation/devicetree/bindings/hwmon/lm70.txt
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+> new file mode 100644
+> index 000000000000..eda55bbc172d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ti,tmp108.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TMP108 temperature sensor
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,tmp108
+> +
+> +  interrupts:
+> +    items:
+> +      - description: alert interrupt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sensor@48 {
+> +            compatible = "ti,tmp108";
+> +            reg = <0x48>;
+> +            interrupt-parent = <&gpio1>;
+> +            interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&tmp_alrt>;
+> +            #thermal-sensor-cells = <0>;
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/hwmon/tmp108.txt b/Documentation/devicetree/bindings/hwmon/tmp108.txt
 > deleted file mode 100644
-> index ea417a0d32af..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/lm70.txt
+> index 54d4beed4ee5..000000000000
+> --- a/Documentation/devicetree/bindings/hwmon/tmp108.txt
 > +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -* LM70/TMP121/LM71/LM74 thermometer.
+> @@ -1,18 +0,0 @@
+> -TMP108 temperature sensor
+> --------------------------
 > -
-> -Required properties:
-> -- compatible: one of
-> -		"ti,lm70"
-> -		"ti,tmp121"
-> -		"ti,tmp122"
-> -		"ti,lm71"
-> -		"ti,lm74"
+> -This device supports I2C only.
 > -
-> -See Documentation/devicetree/bindings/spi/spi-bus.txt for more required and
-> -optional properties.
+> -Requires node properties:
+> -- compatible : "ti,tmp108"
+> -- reg : the I2C address of the device. This is 0x48, 0x49, 0x4a, or 0x4b.
+> -
+> -Optional properties:
+> -- interrupts: Reference to the TMP108 alert interrupt.
+> -- #thermal-sensor-cells: should be set to 0.
 > -
 > -Example:
-> -
-> -spi_master {
-> -	temperature-sensor@0 {
-> -		compatible = "ti,lm70";
-> -		reg = <0>;
-> -		spi-max-frequency = <1000000>;
+> -	tmp108@48 {
+> -		compatible = "ti,tmp108";
+> -		reg = <0x48>;
 > -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 1eb4ce7dcdfd..183ee0da22c6 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -303,8 +303,13 @@ properties:
->            - ti,hdc1050
->              # Temperature and humidity sensor with i2c interface
->            - ti,hdc1080
-> +            # Thermometer with SPI interface
-> +          - ti,lm70
-> +          - ti,lm71
->              # Temperature sensor with 2-wire interface
->            - ti,lm73
-> +            # Thermometer with SPI interface
-> +          - ti,lm74
->              # Temperature sensor with integrated fan control
->            - ti,lm96000
->              # I2C Touch-Screen Controller
-> @@ -313,6 +318,9 @@ properties:
->            - ti,tmp102
->              # Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
->            - ti,tmp103
-> +            # Thermometer with SPI interface
-> +          - ti,tmp121
-> +          - ti,tmp122
->              # Digital Temperature Sensor
->            - ti,tmp275
->              # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
