@@ -2,131 +2,169 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40F3BC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CC0FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:37:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0673A60EFD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:30:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4320161039
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:37:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237056AbhIXJcF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Sep 2021 05:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245154AbhIXJcE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Sep 2021 05:32:04 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98BEC061574;
-        Fri, 24 Sep 2021 02:30:31 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z24so38439753lfu.13;
-        Fri, 24 Sep 2021 02:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LfZBefgZKCVrOuu57+nq1H6u9rzubejLN3FV7rqZ18c=;
-        b=GYZaY9Pxa0qLtceGySkS8vUAHEFWvvfWfz7MggaEs0/WtK4dJ6fCUVjqJUf3YS0I8z
-         iHE7pSCKYgPNT2gYrfDeRjYdTHjhlnbdXoT7zOAUh4NhI44LxRu0ttQ5Ox7uOmpj7fWR
-         4DHfISm4N/vFWAkn6u31Tq/pfdVW/y9KkmHfjVxKYTIPDk8J7FAY8ZijRndtHi1pavbJ
-         AtMH73EkUPG1ZcS+DzdUw+ohO9yMaVDbObljD6cyACT/ZZKt05eLWwCu+SFpLqdPaHTo
-         0loSOUe8HyaQr9WPUTnYLpqTSK5qgQ8aYQmtU8dcmzf6oZgB3alLsG1Q+bTbMzr5hRNV
-         o5/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LfZBefgZKCVrOuu57+nq1H6u9rzubejLN3FV7rqZ18c=;
-        b=xH+ZXl8BII47XrdANHrWTaVO+ZXHeexL3oF3gTn5vXWMXJgdvZ5aTTQWrn4hFiPD4n
-         FfBP5Zy+g7B8pkvM6mY+lY+3pixAG7TqmzZxXAb63U0pS3hShSBq0uvI2p33HXk18WMJ
-         o3XKRiBW8XSFLJw0qVvm7P9ZShzFTeLnJAp+bNgfZxJOn4u6KXQZxJy3Vs59JfssbzBh
-         n33opT/vJKdcsrf3yAvaAo4iCmBCbrBGWXXf4CTF8PIFB8dIoo6hx1pZ0AJIyg4Ccl/o
-         0gPFE8Cp4Ll9CfApLw2MRfseZg0n6LssNxh376vtc8ZihRbtfK4YsSYVVSL+9mjNLBaR
-         ULdg==
-X-Gm-Message-State: AOAM531mXRfdaZjgZswQkEl2lsa8IR7muK+GdlUmGmfnAvHmIE+IxchY
-        eLu8WFlWzBag3pmj/Tc1i5wXDdigBJI=
-X-Google-Smtp-Source: ABdhPJwgbJ1MuQ3J9Bphe7doW4lyBvTqp1gebweVRBt3tfS/amN1aulEo3j/CXXIPVXNV3KvJI5S8w==
-X-Received: by 2002:a05:6512:3094:: with SMTP id z20mr8739288lfd.418.1632475830226;
-        Fri, 24 Sep 2021 02:30:30 -0700 (PDT)
-Received: from home.paul.comp (paulfertser.info. [2001:470:26:54b:226:9eff:fe70:80c2])
-        by smtp.gmail.com with ESMTPSA id x1sm882530ljh.113.2021.09.24.02.30.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 02:30:29 -0700 (PDT)
-Received: from home.paul.comp (home.paul.comp [IPv6:0:0:0:0:0:0:0:1])
-        by home.paul.comp (8.15.2/8.15.2/Debian-14~deb10u1) with ESMTP id 18O9URAZ026127;
-        Fri, 24 Sep 2021 12:30:28 +0300
-Received: (from paul@localhost)
-        by home.paul.comp (8.15.2/8.15.2/Submit) id 18O9URru026126;
-        Fri, 24 Sep 2021 12:30:27 +0300
-From:   Paul Fertser <fercerpav@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Paul Fertser <fercerpav@gmail.com>
-Subject: [PATCH v3 2/3] hwmon: tmp421: report /PVLD condition as fault
-Date:   Fri, 24 Sep 2021 12:30:10 +0300
-Message-Id: <20210924093011.26083-2-fercerpav@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210924093011.26083-1-fercerpav@gmail.com>
-References: <20210924022020.GA3032273@roeck-us.net>
- <20210924093011.26083-1-fercerpav@gmail.com>
+        id S245254AbhIXJid (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Sep 2021 05:38:33 -0400
+Received: from mail-eopbgr10131.outbound.protection.outlook.com ([40.107.1.131]:25733
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S245054AbhIXJic (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 Sep 2021 05:38:32 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kqdebQzox6oCmo53aWo+iKaz6lyN9t9JYa+Abmxkk5vrU0OFLtzDkNPJd9leO54M9Vg7SyQLzN5gYdX/N7hf3+NgTXqodg1g5zi9rVGVFlMqxjSi0EXrCYAnDc8+uQBMpWmq8i6aK1xoO1QBR59zmAgJQdCfHIXosKmhtXfiMbEgb3ytke3X7uvQ4MtOr+VPdaTaUT/9R+sx2ACUCJGXrz7F0087rxuhVT/pABReINrDRrMzmslP3t36jk/e05tmxFmIluY1hbU9O9HbuibdVafCkKJuopb3ac2FMCLzPpLt1gyBYz3em8JCs/6dkefcJY2diNuD2EacB8yIAvj3Rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ydRRDFdKsCd0rgjE78d4I7lQZGXwVsD/lrKUsz4aliI=;
+ b=YeXSI6paIrAU8WeGtrPyYwr4Nm55FAR3chmDQEfMEcJVrHT9xJajLB78gnB1ltI/sCeI5fZs9ZIRLdvGNjUkUSue9a+uVambZzVlCfQSuY08kn7aLwZS7f8BDN2JzMZGOICg4/gMoG2dw29AEpd46PR8BbIkbXD+85GvPJ7Q1vFTmoXW0XRiVOmF7CwkDywJ1NWw+P1rSZe2h+JOGoYUkrNCRWkK8zYd012JdAabK0aP00jGciN3bUMf7CVuaUeWn2n3VlW5V4jE1pQacWLl8nz7xXgBpPhzSRwjWA48LbnKmDipO5EvL0xBTg0mVN9s+yU6dEa/aesgMmKE2cUJqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ydRRDFdKsCd0rgjE78d4I7lQZGXwVsD/lrKUsz4aliI=;
+ b=XrBM7V4dkPI/hT8S8ChAygI7bqgFC/I+W5JzWm8W0g79I5Shp7ccjNIK9e/UuBnUsX1XxVf2AEbsCxKJn6sZZbZzkAXtHxAvE0drcC2Kpf+u5JvhmH/Ecj2l96qvhaC+6Y1fpLwIFau/h01PgKX5s4UHTYmgalm45eEiKUjnd2o=
+Authentication-Results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by DU2PR07MB8077.eurprd07.prod.outlook.com (2603:10a6:10:2b6::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.11; Fri, 24 Sep
+ 2021 09:36:51 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::c47f:b569:ac76:9feb%6]) with mapi id 15.20.4478.014; Fri, 24 Sep 2021
+ 09:36:51 +0000
+Date:   Fri, 24 Sep 2021 11:36:30 +0200
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Przemyslaw Cencner <przemyslaw.cencner@nokia.com>
+Subject: [PATCH v2 00/10] Add per channel properies support in tmp421
+Message-ID: <cover.1632473318.git.krzysztof.adamski@nokia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-ClientProxiedBy: HE1PR05CA0140.eurprd05.prod.outlook.com
+ (2603:10a6:7:28::27) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: from localhost.localdomain (131.228.2.1) by HE1PR05CA0140.eurprd05.prod.outlook.com (2603:10a6:7:28::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend Transport; Fri, 24 Sep 2021 09:36:49 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7876caad-fdc1-4d38-9c7a-08d97f3ed659
+X-MS-TrafficTypeDiagnostic: DU2PR07MB8077:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DU2PR07MB8077BEC1B88305CB3F4E8CA2EFA49@DU2PR07MB8077.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5LPQfy1HSCwyoeblWF57w4ox1zSiaOOy96IE5LthpjdfP7lS0x8O7FQNf3Q9ee1kE4Aq0ZeD+HkuhCpoyqvEAKf8LR6eBAAJURwWhiZ590XQqkVzOrYc3HcC/0li1yqj8CWy4mLF2JzThwPGVY8FNN5UI6a1zQXuUtzNDJZb/NWnld5NtU8aWvugRhWHl2uEX3QpCMFdvbOJa5dMam3tPK1tHRLG0xkIpdMLPs1jhkbolmoOl4DM4Zz+8VBN3tywned2fW3aBrHss+6kXfo0mml99T5LSO2gpq3yvI6dhjFXfrI1G16zixJ6u/UDsSoVvNaSXXbzDLo7vBnj/ci41UcE9P+8AxU1T0EsPb5B7vF1oyXYSV++j5AFbZz4osEZwcCqckJWBImVh0UHJb8OcHnmYnTYvrALFQKAOJoP5UdVF+534p8vn6P7/CHLobVaIhq4M041gMAFhPEwki+xyTeXakV5+JZz3V5y9aMJNGTMi2UQAyCzJQHcRV4BIrr06jwqG1Wl7JGKLpC9i26HxDQD+7uYRGY3wy7ag47+vPGLFe3Edt8P4V+6tUUqU4l3wTVXKCS3l53h/eoIXwHb2Vfx5nfv+Pf9VSwaOcuNWNfmcz8jKPynwPQRsBZuD6xjambCvfSzqZJtXxOi/XLQdX1A/yXLj6yrdtN5wvOe40lZjhlAfrgFmQSd7GCjlX6ppDJkwTCb0F1L0XZiUhxPENPi3OU5LguVu5wQgD/qcN242eKLkUK7W+jdXq2jyWYGlgxEXXFJjsJydoKPitt9i3Jo3aN/Hdu/gNXFRtESoSg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(36756003)(8936002)(52116002)(186003)(508600001)(26005)(83380400001)(966005)(38350700002)(8676002)(4326008)(66476007)(6512007)(6486002)(66556008)(86362001)(6666004)(110136005)(107886003)(2616005)(956004)(44832011)(54906003)(5660300002)(66946007)(316002)(2906002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zM/oUZa9wz+DPwLpA9sTjsI6yCXUHgsVdPp1JHU6mBX83fe8TI7UFzP5aQlR?=
+ =?us-ascii?Q?Da/AqtF88bNjM/+iZyjA3zTqffZrBUbC9KgOwMdn/F0BDXmKJM/Jw7+5yRCD?=
+ =?us-ascii?Q?z/ikgPxclr8t5N/xdgx5z6T1IsuJMKCJYoXhMSHJ5mqrCi5P1osg7Tykaty7?=
+ =?us-ascii?Q?HJAIBKyycdVaV9kZytumiSEG5SRueNuIM+qPDEVgaeB7zrhVZrCytHNnFqmr?=
+ =?us-ascii?Q?kW0WveaF3M8yasxr9GwGzD4fg5wObgDL1744QzOff0NRzkH1vZiW2rGzBPbi?=
+ =?us-ascii?Q?bag4+SipOST6uDCNHxW0XK+kz4JuhVxHIeb5D7VYVYd3vrs7eftUYvd6QTsM?=
+ =?us-ascii?Q?4J+5WAH4BJRInPL9VaMBclN7s/z5VggCbBixUOGzBpt8ZquIEk24i8Yxwmm8?=
+ =?us-ascii?Q?4al3jBHzgb3e5okyman8URQqTr10CqvWmrKtmvpqWYxWotMRunFax94/lv30?=
+ =?us-ascii?Q?AacUomdiagYiOLjFmhHgXBCxg2Kr9kjz+Y+Gwo2HjiMBLgUzLLvGgPLcM2p2?=
+ =?us-ascii?Q?czQNna2d3LJEqorX3GsY1KJhwpwRG4uq0GZJOg49A4by/y6dZeC/ABWVBXxC?=
+ =?us-ascii?Q?E7ZvlGabAIudA4hS+zCTEb2Mastweu4c/prz48us95VzVkA+E6qsq5ddiao/?=
+ =?us-ascii?Q?xmAZIF7wIbvxub0SPxW1v4i5sFwxsxY8tn1/lr5Rft8jOf3ujyud3CewGUv6?=
+ =?us-ascii?Q?rbWk8cR9Kht/eMU5Sy7o+HKGbVmgVuWI6pD0VL5oxb7ahCtEDl0UifMhmPlK?=
+ =?us-ascii?Q?bbRRmOI0LaFhLDSK5FuSFr8lxeavAdIhHtk0RLmdhr9gVMpiECogi2M7AnC0?=
+ =?us-ascii?Q?X5Vz+qJG3ylx1I1/rGJ+TtG8zhyH540YnzNgvdrm/oti7+akwVd+aE0SvLUa?=
+ =?us-ascii?Q?2fcQhB0gO4KwCdwNuXKueG1XRKivT0M+XqgkbdFgjj+3yQ17Nij1NbD3EQ4w?=
+ =?us-ascii?Q?IduGakX3O754oY4bo9DgRw0fQuKa3m3FbrUX9WwEr0wy3ZDFuYi4pS8JF7Ik?=
+ =?us-ascii?Q?b0rqgoz3hSSwM9hzM5dUujQu4pJyoNSK084CbSyO7lI0/O42kf7O51eA3Fpg?=
+ =?us-ascii?Q?ra3Naet6qC87hFLk+ceADWqLgKtbupH8drUI0qx1aC8twLaY3kOIMeF39JDc?=
+ =?us-ascii?Q?ealrJIEtpVEQKjKwBaMjUHumJYez8VQ/p3nGb+tcfuyPz24SCxFvoySAuy/y?=
+ =?us-ascii?Q?3x/gtkff3ka8cbniaBKK5ByEXvyQijsjKO2QFvppK3bu40AGuxnst0HHUFCg?=
+ =?us-ascii?Q?YrKAn4+jxHJQcPgKgzSRBHwUbO0Laggw+vtlpiTJu5repZ/OQfm6O9DZ6FEo?=
+ =?us-ascii?Q?+HcTMxr+5JPU723zIHsH3DK7?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7876caad-fdc1-4d38-9c7a-08d97f3ed659
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 09:36:51.2275
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BQwfSAmGaGoEL5T/1ch8jWv3D7xCOFSFtzG0s/japoU0OorPHLmFQmwFA8YyV0JUBDjr/bGZvEuzaGRKAJvOXWTfMZLI/9NheP2ctb2+zEI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8077
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-For both local and remote sensors all the supported ICs can report an
-"undervoltage lockout" condition which means the conversion wasn't
-properly performed due to insufficient power supply voltage and so the
-measurement results can't be trusted.
+Hi,
 
-Fixes: 9410700b881f ("hwmon: Add driver for Texas Instruments TMP421/422/423 sensor chips")
-Signed-off-by: Paul Fertser <fercerpav@gmail.com>
----
+This series adds support for defining per-channel properies (like
+n-factor and label) to the TMP421 driver. It starts by adding the
+missing DT binding for tmp421, in the form that was there before any of
+my changes. Then I do the changes to the driver and finally adjust the
+bindings to my changes.
 
-Changes from v2:
- - Add Fixes: tag
+The precedence for this case is:
+[PATCH v9 2/2] hwmon: (ina3221) Read channel input source info from DT
+Which can be found here:
+https://lkml.org/lkml/2018/10/2/136
 
-Changes from v1:
- - Trivial rebase
+My patches does similar thing but to tmp422 - we need a way to define
+the labels for specific channels as well as to define the n-factor (that
+is board specific as it depends on the diodes used for remote sensing).
+A possibility to disable unused channels seems like a good idea too.
 
- drivers/hwmon/tmp421.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Here comes V2. Changes compared to v1:
+- renamed tmp421.yaml to ti,tmp421.yaml
+- fixed sparse warnings about making function declarations static
+- changed the policy for broken DT - in case of errors, the probe will
+  return an error instead of continuing
+- in addition to disabling the channels specified in DT, the probe
+  function will also enable all the others in case they were disabled by
+  some other code earlier
+  NOTE: this may be a backwards incompatible change - if some channels
+  were disabled by some bootloader code previously the channels would
+  stay like that and now they would be enabled during probe, even if
+  nothing is specified in DT. Is this what we want?
+- added support for HWMON_T_ENABLE
+- updated documentation
+- NOTE: I haven't changed anything related to DT as the discussion has
+  no clear conclusion yet.
 
-diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-index e6b2b31d17c8..3a789f21188c 100644
---- a/drivers/hwmon/tmp421.c
-+++ b/drivers/hwmon/tmp421.c
-@@ -182,10 +182,10 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
- 		return 0;
- 	case hwmon_temp_fault:
- 		/*
--		 * The OPEN bit signals a fault. This is bit 0 of the temperature
--		 * register (low byte).
-+		 * Any of OPEN or /PVLD bits indicate a hardware mulfunction
-+		 * and the conversion result may be incorrect
- 		 */
--		*val = tmp421->temp[channel] & 0x01;
-+		*val = !!(tmp421->temp[channel] & 0x03);
- 		return 0;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -198,9 +198,6 @@ static umode_t tmp421_is_visible(const void *data, enum hwmon_sensor_types type,
- {
- 	switch (attr) {
- 	case hwmon_temp_fault:
--		if (channel == 0)
--			return 0;
--		return 0444;
- 	case hwmon_temp_input:
- 		return 0444;
- 	default:
+Krzysztof Adamski (10):
+  dt-bindings: hwmon: add missing tmp421 binding
+  hwmon: (tmp421) introduce MAX_CHANNELS define
+  hwmon: (tmp421) introduce a channel struct
+  hwmon: (tmp421) add support for defining labels from DT
+  hwmon: (tmp421) support disabling channels from DT
+  hwmon: (tmp421) support specifying n-factor via DT
+  hwmon: (tmp421) really disable channels
+  hwmon: (tmp421) support HWMON_T_ENABLE
+  hwmon: (tmp421) update documentation
+  dt-bindings: hwmon: allow specifying channels for tmp421
+
+ .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 109 +++++++++++
+ Documentation/hwmon/tmp421.rst                |  10 +
+ drivers/hwmon/tmp421.c                        | 172 ++++++++++++++++--
+ 3 files changed, 280 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+
 -- 
-2.17.1
+2.31.1
 
