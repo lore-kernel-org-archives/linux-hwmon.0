@@ -5,141 +5,211 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56362C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ADABC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:45:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E21B60238
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:44:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C0A360238
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 09:45:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245357AbhIXJqP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Sep 2021 05:46:15 -0400
-Received: from mail-eopbgr80114.outbound.protection.outlook.com ([40.107.8.114]:47065
+        id S245306AbhIXJqf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Sep 2021 05:46:35 -0400
+Received: from mail-eopbgr80110.outbound.protection.outlook.com ([40.107.8.110]:7294
         "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245384AbhIXJqE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Sep 2021 05:46:04 -0400
+        id S245228AbhIXJqe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 Sep 2021 05:46:34 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SEPTyuUJUSzpdKv2ebbYuv0Jm+muH9zx/wA/4LM/xOU4fWgqGN4W8D/v9z2DzeHRM+alasC4k6AhgQes30/dXTXpvaKZ2hBm7EytIGTBOsXJnbrtZl3skC4gKm76mXO7wxgbOEOoq+4KKiJ6vp/riMvNXIHmFN4XfyvCFS5v7OWJBhY5XVuWW/LXjzSOYdUDxp1L1eZrgHahF1ykeF6kLvjE4MXb75Ai7mI4mXmZvnfFKp1hRd8kzxKCk4jAu6RSwpVMNSjMvc+vx1wbrtPiVKrVP8VK7u3m9/y8ey17Bv/ZwrBr7CmdkAXNPAenB0qFYpswwopMWaA/z/HXzQvekA==
+ b=LJM9AeogeRxu9sANW/yw5ewuSDQH0C6XnmtZDqnaKHghGPW2s3DGUOeZq25MvWlTFVyKfSdO3PLafdXhxvNZb2Lo7tqQNR071f5a29/LzLFVbNdrYF4UU7xWZWCKo67RLkJ0uFrmcxwsgIST8MpyByZ0nKT1MCGwPS854T3qJ2dGd5bYuXdwaIJZXRzhtx3CeQS0gR6VJJ11W3G9d7sEuhK2rerpu4NsUGpTvFEZtqM0MH3U36ePSdLFeN2BNqMOuPJgwUl0b+aB2TXeDEMMNwzdHI/eRQOTToUVNyFIoobRb/7PppQNWSuSs38cz4u1Ay7Ja1N2C/WnhXgo2VZuug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=avRR6d0VWmsySOvz3RnVrcJ1LnT/zSsQ7X0Wec0Ag5c=;
- b=Fu6bmSIPiBod7lMJ8HZUx/74LgaU5WzMWNaHJ1MsuayPtpHV2vdTDWNqM0ChTRCeNk8b4/PW5BtUn8GUuNvmembO0l27/Ad7Np0sapD/OIpC75NrEcQ/Otcp8BsJ2vs1kE3AIuv6mvrSJFVq8Mj8W6siktwmnIOZn6aHXdOOfQHN6qlQwqc2otToHwtO5QXJd+VXHCW1ZySE5dbtsVnWT3er36ySXKiVDPA9Tq+D2gsCqDREEitvL1EQMHDBM03C7Crl6juT6I8i4Rt3JMQRtrOJl6mg+nu0qxDmk9EBF3Q/ZOuS2b/v1pSZDl9BkyNZrSXpVIZdi9olr3NfB4jXEQ==
+ bh=xFwXBbyk7KPlXQGiYvswXycuWcxwp+jDEbZnCLi9muc=;
+ b=WfX4UYZR0bHnKDzH77bbtjI34C46OXSi79blKeagDImjbb+BdgeJmDZo1jliIB392UXSMcujApXrJFv1M0Q4knHN4vCSltoef5ZR1Y6kGfPmVqxRDFPtqZcLZd0bH0mMTVqwAUDi9m0RJ+SYDlWY449sxKCzLNZe6dDL78zjQ5S2w0fFGkiB50pgHikWy0uZaqt0yaRviehYzYCmTiDs75dr2lQi8/EWKeCb09DZOocI1qtnCn3KB1H92Ws+nHu55TPlyx5Qn0P2G+Gexi1JBA45zsuMVUgy8p5u/oIXYUX7nPwH5s2OYCnpC33KLxtpci3/vRxVDl+s640xf3LL0A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=avRR6d0VWmsySOvz3RnVrcJ1LnT/zSsQ7X0Wec0Ag5c=;
- b=La9B6bNPf1J1z6oaCH5tx5wXFnViskDUuK0jIXKcfRsjTToDygYrVKzywIqUFHsd668DWf591Yn+a7smmcRwSgS6NVixS7PlTN8Dlmx27MGL8RMgDMM+Ee5auIHvAfqbtC7ruaX+/KrikWunAWJqngX3nWyux2T+xMbZSk7KDtE=
+ bh=xFwXBbyk7KPlXQGiYvswXycuWcxwp+jDEbZnCLi9muc=;
+ b=xXmdeq3ifax4wna8DQQXjdObRp9yCtYPp/R6KRcqQHq6lQYk1iuMaGosexzsEnZDdJIPgEDhrWH2lCX+MhhpXc2NLKwRu4Kb7/3LAxLbQAoKkuHtwsLaVkFIMNDA45398HyPT4+tKgLEn4sZLNd0KK0loePfHJXW85cp8FCilig=
 Authentication-Results: roeck-us.net; dkim=none (message not signed)
  header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
  by DU2PR07MB8151.eurprd07.prod.outlook.com (2603:10a6:10:274::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.14; Fri, 24 Sep
- 2021 09:44:22 +0000
+ 2021 09:44:59 +0000
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb%6]) with mapi id 15.20.4478.014; Fri, 24 Sep 2021
- 09:44:22 +0000
-Date:   Fri, 24 Sep 2021 11:44:13 +0200
+ 09:44:59 +0000
+Date:   Fri, 24 Sep 2021 11:44:40 +0200
 From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org,
         Przemyslaw Cencner <przemyslaw.cencner@nokia.com>
-Subject: [PATCH v2 09/10] hwmon: (tmp421) update documentation
-Message-ID: <aca7fa6dc33cb856bace78fcb200b287fd3e39a4.1632473318.git.krzysztof.adamski@nokia.com>
+Subject: [PATCH v2 10/10] dt-bindings: hwmon: allow specifying channels for
+ tmp421
+Message-ID: <582639597503c27409b432a5ed9576cc1b447480.1632473318.git.krzysztof.adamski@nokia.com>
 References: <cover.1632473318.git.krzysztof.adamski@nokia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1632473318.git.krzysztof.adamski@nokia.com>
-X-ClientProxiedBy: HE1PR05CA0128.eurprd05.prod.outlook.com
- (2603:10a6:7:28::15) To DU2PR07MB8110.eurprd07.prod.outlook.com
+X-ClientProxiedBy: HE1PR05CA0133.eurprd05.prod.outlook.com
+ (2603:10a6:7:28::20) To DU2PR07MB8110.eurprd07.prod.outlook.com
  (2603:10a6:10:239::15)
 MIME-Version: 1.0
-Received: from localhost.localdomain (131.228.2.1) by HE1PR05CA0128.eurprd05.prod.outlook.com (2603:10a6:7:28::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13 via Frontend Transport; Fri, 24 Sep 2021 09:44:21 +0000
+Received: from localhost.localdomain (131.228.2.1) by HE1PR05CA0133.eurprd05.prod.outlook.com (2603:10a6:7:28::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend Transport; Fri, 24 Sep 2021 09:44:58 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8a436e2d-7969-465a-4bf2-08d97f3fe35d
+X-MS-Office365-Filtering-Correlation-Id: d0273b0e-5c7b-48a8-58b0-08d97f3ff973
 X-MS-TrafficTypeDiagnostic: DU2PR07MB8151:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DU2PR07MB8151936B666DDEE5DEEBAB1AEFA49@DU2PR07MB8151.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Microsoft-Antispam-PRVS: <DU2PR07MB815190C145BDD3E0CE87C918EFA49@DU2PR07MB8151.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 23GThcQyX24pLVCfsqXgGchZcbtOU7oVpFwYniDv7hGtbG6rzvuXIGQng1H81w2Re569cqJbtIU28QxUwKoUVmbaboAFQY0oaaoZZIt+FQiThKpvT2ykqqJc9AIH0QICjW7J2gYH/xviaS85sRgVBEfNaQckk3hgr0EnFhtAOl2oPkFQ/8RlO5+iD9C6qnPMqAIabvHB3nOURt1z7eTiVy05yOP+jOTm+ToXmU1kudWGDlg41aYD6WG5D6bclqsSkx4De9fz2qIjcFQqZLhZhLzMZDhEj1T3d3GNTSeIPkEWp9thsGCwHM7C2WefLnRdUrC867GTn7XvNZGi5X5Z7fHGdAsyP2RM0mMUAGcuV56Bs8ko1xWmyxYdJrFSKAFLGqxuSE29riJ9xX1RgUB4bZlJKF8SkYkLMpHLwvpLirN+qDN+AOMcb3mgpPiebckEfas7j8Lx42ClAmoZQk9KveVo5viAfE9RKPy/Q3lKdJC0jU+3zYjiConV1/aZpnuRHC/kHDoxZYp6dmwG4Z83jz86EkpZfPJvVDrKiobHAQwvXjOzkXhXFLLFkMc8V9VEFzr5Frxz2t+i/3ulqWqUfuW1kxtrahE33hISB/pK2QkM3iJpmLLjfsTD3hX7/4lI7rM1VcmY06aUYXqSW4WH1AmWokLLbHdX8jRLRY6mZk5/9URi7DEy0258Rr49LParvd+lPk+zq+cuk6KjBcZqsQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(6486002)(52116002)(66946007)(4326008)(107886003)(8676002)(66476007)(508600001)(8936002)(5660300002)(316002)(54906003)(110136005)(6512007)(15650500001)(2906002)(956004)(4744005)(66556008)(44832011)(26005)(186003)(86362001)(36756003)(38350700002)(6506007)(83380400001)(38100700002)(2616005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: G6b48GlZJq43jltR6j2iYv95faW0XvwnE1KUDCPvTRRdTVMQNh+dhSDNXkJW5EGC7A/RCwxs24kmCbWl1J0wZ14wYmyfmFfPaHeo6nowP5tCuH3IMFVVnD2UN2liupl9EPMmhrD5prHw/iQ7x636k+g4souy4A5qnSCu7egL1XcaMitKq3mkppIBoG3Wb07L6oBmMvP/1HKxYgrnEsloXN5Yc0BFqAHVKmKd7DlM0fpJ5bzWtabp9kQpQ5WZnekHUQWWpEKbQvyvxcQtGgBIK4weizq4Q0ifYFNaNvmBOoUZp/59FO0gEMr6ggqfaMW8doHCe8qKxGtxPB5gbPX03Ir95V3ikpwTfdQLmNZkSQGRMVONlA0VRwISyKaFiPxa23DdsdKLiHtViqgARhokdSmGav3EHpRGJTrxicrzFun9ujTUoS16lRcawL6qAHbpOyWSBWP2YC+pyA/E2ZhHe/PJ6qObZZbkWQuvYf2ABibHUJDzX/cvmJekBHv2Uv0qr5JdFWZa+UbI6vMke95bhcQfB6dCdbY9sVakFc4fcus+Uakj5EKqewoUz1Wkx3Uj3zTn2FXJFgQqpIzTmbi7Fy6FZhlap5VH8UP/YdmTUfbUC7YS7fjKueyjaS9v5yHi5DvY3VOaV52O9kH3K9sZjCODRE71eLyfv9YVHDNwcbeiWRJvihCHc03tyPosDVmwZTvZYmgDQyNWiHXqu9dDlw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(6486002)(52116002)(66946007)(4326008)(107886003)(8676002)(66476007)(508600001)(8936002)(5660300002)(316002)(54906003)(110136005)(6512007)(2906002)(956004)(66556008)(44832011)(26005)(186003)(86362001)(36756003)(38350700002)(6506007)(83380400001)(38100700002)(2616005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZjK8AYa6ZQuwvbCBWxkk5HAgyFUK+YwmVwf++Gf7D2gDZqODfUp2n+cf2NKK?=
- =?us-ascii?Q?hLAnrvRHo43gWcWv0F83vymKVRxDtcFrpyg7ZwAO/lih3OZSLSylj+4fjcK5?=
- =?us-ascii?Q?NPDFojWTbe4PYcWO6AItR6K5PoiDtt9RcJelcQNTZJHPsAC2qePGzRBAJGRp?=
- =?us-ascii?Q?ZCMU2MOWJMPWRlZUufdMMbXfeSdpdRzV1mzv/xGjN5/klNWfEv7uwqA3RtGs?=
- =?us-ascii?Q?Qp6aYDoVAIj0Q7u/P/UMuNSS6TFVn07NFyBMMETnP50EUig42GzZt++Y6ji4?=
- =?us-ascii?Q?D1sntEGMa/yTsyNt/lD9tHeSmUk0jzeR7cUyGNCgB8Gys4ZwpYzc5upAmHsR?=
- =?us-ascii?Q?AVz/Jq8oL7E7Gylblr6D5tW4793S+wNCV30CXdzuOM+1HIP2jedWzanQ2TfW?=
- =?us-ascii?Q?T/1CMgsgXEldnmIHWnmSL+qF01zT1S90YFdKnnOG0fTXqZ7PvYNcrBca2QEB?=
- =?us-ascii?Q?51LGWoMWWlPlzP+WQtSt9vnDAQPVNgILLHwjlfSFQ+9SSJh4RkStSYQXVgJE?=
- =?us-ascii?Q?XZyGdkfjZG7/J9LC2F+ncr7Rm1Q0XV609pdj2zr/C5lU0ggTvTmZZc0dthcR?=
- =?us-ascii?Q?aDev1FdNQQ3J3+Q86McA0hrI/FEH6DiXjsBO62LVG43uituOGCx941uCEvji?=
- =?us-ascii?Q?hltJHi/tH5yEPlpIdSFOpMiryXb4kik51v+S7blgejwfUy5G+NnCNyON2Tl2?=
- =?us-ascii?Q?vCMTSxVqKzdyHmVHSGc7/o3cftJkhPkV4urUDylX2U5iwZJ8L24NgupTB5Dg?=
- =?us-ascii?Q?RpoT5MWsxPFos0waLX7pLzASs/ceKJK/9OZcIhNY2SV73KzfKx7ZTqQGe2tT?=
- =?us-ascii?Q?OQUlna3GN7uKMjbMJQvBbgeLifchLfQijSAr1lOnzR0kCLrkKmTbgUOJStY/?=
- =?us-ascii?Q?C1oMWt/IreHfdH52LJBN+8vcwGrnqEQwb3UCKjbgy6KH7VDmYOwvTSxOCu14?=
- =?us-ascii?Q?eCAsgI8vMri0j6vTgwX9vdT1D+91BiWO1zFIAUq8WUwzaP5eZTyPVqPI79Hm?=
- =?us-ascii?Q?nOm/MHSaVmjiAEb/qauwmAczHHYeIIUMda6twYy2AetYuTY0ycRjVYmwAjUO?=
- =?us-ascii?Q?URQcyCoBPIzx+wBVBSA5T0Q+10WXfJoprd11Zi0kiAkPaKwWY5hR0gC+Ktqx?=
- =?us-ascii?Q?cpRczAa1ZAF2BP9fZSRzp4Rhw2fLHvKZYr1g4X7/MVWn5mJpNBCft65shXML?=
- =?us-ascii?Q?LNOvGYM4LwphY+FxY6Yv5ozUthrW25K0fCk/3K3H/+3QdkvnPlrATJeohJNs?=
- =?us-ascii?Q?XR4WVj9dWe70gFEzov3kRnkaLG2IHKcLp86WpWYYbZ5iZyifpwvN+mlb5iSZ?=
- =?us-ascii?Q?aFeMpMn7FtwpUMka93FLNd9W?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h2SBYVeCCy54uArFQ32wJssSz5tHNMcc7C3SrGilpIPZl7nMXP3Tfh8ZSDcu?=
+ =?us-ascii?Q?X2IbG+vO8en1HycaDVpqL17yYvU8EzYBe6NI3ERYT1WbyxbmMuBd3o7fnlgb?=
+ =?us-ascii?Q?r1SxFg6o014A58lHdCrZtC6xGBPiGWllg778lxsEUFKsBQbY/c8biiY7b7PT?=
+ =?us-ascii?Q?Dww3C1fmX7zN0f/cNPtKI8Zt7OvNEJJb1yx3KfKGBV8cFMx2g9CvAP5UoqQj?=
+ =?us-ascii?Q?EDyM84CmMDhkssO7wMbMvQNXJqJIi2YK1iVmKOuY6x7TqqOUWxjpHdN+WLsQ?=
+ =?us-ascii?Q?BV2shPpnnE1VjOdHoU81UfyYIwHC6ZijerkBTExgS9XyASVobwIuSusVpWwo?=
+ =?us-ascii?Q?e2aMfCIYTqWtc23BZ6Rj7NAzquRP7ng0T/Mv/Frox4e3HSZSfy/I2xExu/DM?=
+ =?us-ascii?Q?pTHFX1o7ztGNJsy/GfANnhagUHKXv0Zj8oCjaFNpOsd6lO73tR39lA2ZG+6T?=
+ =?us-ascii?Q?RuAr9GqJJI9HAG8xqysqgiab6n86gW9Wg20i65gMXuDRAnan5y9FfhW8jR6g?=
+ =?us-ascii?Q?sdN5ZAI4gxdjBMsbibeX+DgQ2PHqAlM2ds7ecH4tUnHqRFvj16vqcbVILSrE?=
+ =?us-ascii?Q?mcdWF168z+u5MwsBvrQRnRxvgEOz1xOneAa6VXACLEW6pugS8Ry2LiSxmqXr?=
+ =?us-ascii?Q?dcT0KH81+wxOMTNxQY9EewED+F0wfMsfxvke+REkzYfLVSPz0KeinUZkMyux?=
+ =?us-ascii?Q?AfRsjVYHLHpJoNEW6AGZOO+W5Zjg9h7gvUHHYB6tXcUMC6nhs83LrXRsF651?=
+ =?us-ascii?Q?w40JQe7SN3NrHTBLLtOSp8sbAiL2k+JovlOHALJcMPcEyftscPCiZoqVnldx?=
+ =?us-ascii?Q?lDpLq2Nv9HC7Lczcvti1sZlky3TUb+X+/z96bMws/YqiOcv5U1CbLQJ1sauA?=
+ =?us-ascii?Q?dn9p/+xL4MhRGds9MpBIDr93KpI/75Q9AeA8fX1CVSKJQartBBET2oHB2P3F?=
+ =?us-ascii?Q?RRbPvPML8CcbwQrF1MfuYheoRHhyeHcNETzVnzRmFhXcUl/iDOiXRhqtDb4L?=
+ =?us-ascii?Q?bVRPiDy+K5zYbMfjUw8FQMLY41ccimmeW5XYYeH9hJVTSe1jyu+XLlQCPaP7?=
+ =?us-ascii?Q?AQqj5G+5o5lorivuSgpZOgCmNiF5dporaxKpZUKRUMoVDgfmEAzlG1Ex9IMO?=
+ =?us-ascii?Q?VqoTv627YoOxjrwI61glxoqMCmd5XC8y+rTnGTmsqwpcipQGsF2EFbpHaBDO?=
+ =?us-ascii?Q?pmrjt5anaCTcowzaJS0LdpIJlIohYPJPeC0U2xW6vDvLDqy/W/MczI+2kFHh?=
+ =?us-ascii?Q?c5zX4UG7Ny0Z12lT+o+dF7WmwqZxpMG3ntJAgqfbUE+pl4FTMzREvE0cds69?=
+ =?us-ascii?Q?iOsvcytuUDTIexrYdWmpzUCL?=
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a436e2d-7969-465a-4bf2-08d97f3fe35d
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0273b0e-5c7b-48a8-58b0-08d97f3ff973
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 09:44:22.5458
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 09:44:59.7575
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tKcxwUU/SVgMeV4iH7Bw6kS5DmWFQv2S+50iAwO2JmMWGt6kG6FRBd41ee0t4RViXwEgZff0jWpcEkWPGFtx6O7aIV7q1hjfabk9GWCE0p8=
+X-MS-Exchange-CrossTenant-UserPrincipalName: FapOQAsVFLBkY/NemZqjxQ3C2acCgTGI+wX3Tpwx1HSZH3ID4DxVID5FPHYNHIrrwVKLn4BnOzSiy8K+8lWDxOVbg9R7/DapHCbYI98EALE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8151
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Sysfs interface of the tmp421 driver was extended in the recent patches
-so lets update the documentation to reflect that.
+Add binding description for the per temperature channel configuration
+like labels and n-factor.
 
 Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 ---
- Documentation/hwmon/tmp421.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/Documentation/hwmon/tmp421.rst b/Documentation/hwmon/tmp421.rst
-index ddcd5159c75d..a3002117bbd7 100644
---- a/Documentation/hwmon/tmp421.rst
-+++ b/Documentation/hwmon/tmp421.rst
-@@ -64,3 +64,13 @@ the temperature values via the following sysfs files:
- **temp[1-4]_input**
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+index 53940e146ee6..56085fdf1b57 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+@@ -24,12 +24,49 @@ properties:
+   reg:
+     maxItems: 1
  
- **temp[2-4]_fault**
++  '#address-cells':
++    const: 1
 +
-+Each sensor can be individually disabled via Devicetree or from sysfs
-+via:
++  '#size-cells':
++    const: 0
 +
-+**temp[1-4]_enable**
+ required:
+   - compatible
+   - reg
+ 
+ additionalProperties: false
+ 
++patternProperties:
++  "^input@([0-4])$":
++    type: object
++    description: |
++      Represents channels of the device and their specific configuration.
 +
-+If labels were specified in Devicetree, additional sysfs files will
-+be present:
++    properties:
++      reg:
++        description: |
++          The channel number. 0 is local channel, 1-4 are remote channels
++        items:
++          minimum: 0
++          maximum: 4
 +
-+**temp[1-4]_label**
++      label:
++        description: |
++          A descriptive name for this channel, like "ambient" or "psu".
++
++      n-factor:
++        description: |
++          The value (two's complement) to be programmed in the channel specific N correction register.
++          For remote channels only.
++        items:
++          minimum: 0
++          maximum: 1
++
++    required:
++      - reg
++
++    additionalProperties: false
++
+ examples:
+   - |
+     i2c {
+@@ -41,3 +78,32 @@ examples:
+         reg = <0x4c>;
+       };
+     };
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      sensor@4c {
++        compatible = "ti,tmp422";
++        reg = <0x4c>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        input@0 {
++          reg = <0x0>;
++          n-factor = <0x1>;
++          label = "local";
++        };
++
++        input@1 {
++          reg = <0x1>;
++          n-factor = <0x0>;
++          label = "somelabel";
++        };
++
++        input@2 {
++          reg = <0x2>;
++          status = "disabled";
++        };
++      };
++    };
 -- 
 2.31.1
 
