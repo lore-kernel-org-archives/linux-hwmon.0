@@ -4,89 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB05C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 11:58:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C7DDC433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 12:00:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53DA060F9C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 11:58:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F7FB61164
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 12:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245290AbhIXMAU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Sep 2021 08:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S245466AbhIXMBd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Sep 2021 08:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245273AbhIXMAH (ORCPT
+        with ESMTP id S245069AbhIXMBd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Sep 2021 08:00:07 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552B9C061574;
-        Fri, 24 Sep 2021 04:58:34 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id r43-20020a05683044ab00b0054716b40005so5907895otv.4;
-        Fri, 24 Sep 2021 04:58:34 -0700 (PDT)
+        Fri, 24 Sep 2021 08:01:33 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B844C061574;
+        Fri, 24 Sep 2021 05:00:00 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so12820874ota.6;
+        Fri, 24 Sep 2021 05:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=l6AwaPqrmW+gQUvFl7RM/Ev8GqbFQ1KL/qy37HA9sEY=;
-        b=d+c6BKURhDjKntMYaLv/yTwoA+3XE09C8Ytnrrr8il8M/IU0uMrvnr7LrNbrU2ahZq
-         WqBdFevYLH8vd3oKF+lJs9PuHnGuE5jWM8txyQCcprWsbk++M6XGFHLxPWX6zmK9/bFg
-         AhBu1tb2lOBsJCS3ffGWf/iQoIQSoCzkYAUWhPL5zhJLVxUQdh8vyZqIFrQCN7xYnwmf
-         qOi5W/8iI14yIXH+1tLU8HwsnHvrw0XhC4tg1y39Oj3pzOFvPfAjp+B80KiHqVaUCfz4
-         c7vHrx0ESJks9W/VCdMWb1qBlLMIvqMqMyBUOMK67ARdiUI2uKpTlbbXsPU73Vb+bRPS
-         wuLQ==
+        bh=gaw8hq1tP5dFMMFBJGf09r+9kBtQt8HO+1SL++A5V4w=;
+        b=XLAuCVry5neZjaz6bhGYS8n3Dcffaosa/A5/Kt2OIj7WPDqyzsoBf3azQZQQZ9MpPG
+         eDVul+SKHKWmwZqd/Sy0gmfkypXqXB5ngtmdgHtH4MwUTBeudVy75fTFTbWu3UmGvkmm
+         TykqUajoYG1iJ7QyiX/vW6ynaMxOlho8l12SCzrjcP5TGqG9xvtGcUGfAGg2/7ijdUWz
+         NENu7OH/wsfFH+ycPOwHmD9ksnBog9qH9vMLHXYMn2AItsymzKvVjDi3RrzV28DkvH5N
+         U7K0w5ktkw9i55K41PShTKYhoJviortNeQ2ZlNqEOcIsa1/GmM/tAUlsD79YbWZN6l08
+         AzmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=l6AwaPqrmW+gQUvFl7RM/Ev8GqbFQ1KL/qy37HA9sEY=;
-        b=xy53nmKcv7kppG4uXWhUDSiw/Qg85xbEFoKd2dJAMqalI532sVfMQcWWeq59CuZqee
-         HzbvJg+pnD104GDEEPc2VXbZ0l/oVFI/870YMGDM6P29k9LGWE7HHe2qcttMu7WAvD2Y
-         lPCcmFKc3Kswc6y/yEUxJ3kuIm337pNpU6p0owtawMxGFsjfOHQIzYOxA2knxvBnsIon
-         XdPTAHK/bFzMMVLYf1FrCkz2zHwhh/GBQo0RKguWzAaDTQI76HgF4tuO8H6yryHDWHhT
-         Ls89dza6p+wZUvvmI432yoPvGlBIdOeSo77z/iXK7jlGIpsgiHzy1VF1pD2pQi8epv6B
-         od8w==
-X-Gm-Message-State: AOAM533syrBPBRxzY1SWOeXfORvZB99GSWFQ0Me2qpUv3hrziof1qI2v
-        TlyVZA29jTso0KMACdYmPAdM/xJgmYc=
-X-Google-Smtp-Source: ABdhPJw0kFXfbe6u/G5ac+M9nSxcDyOiFBhdXP40cIkv5Xwuyhnqz5cMN3xmDH/gjPozEBU78pQ/VA==
-X-Received: by 2002:a9d:6143:: with SMTP id c3mr3566086otk.124.1632484713730;
-        Fri, 24 Sep 2021 04:58:33 -0700 (PDT)
+        bh=gaw8hq1tP5dFMMFBJGf09r+9kBtQt8HO+1SL++A5V4w=;
+        b=SL/zLSK4Bx73Fc6l4gsoZDj4HQF1NN04Oxv0Z4jIXQRPCc+RbE5hZqw6aavhfjhLgh
+         YZbxDYSok10y9oJZi7FvAH+YqDCz70JIkG63Tnu6yabIFaCL8/EDfvvrMsWBlglGgTOw
+         Ou+i2Bs4Ym/3viHXVnJDd7+j0ogwP9qhGAUVcEv+w6dL99YnG+zjiPIICFXhesr3kQ9+
+         Vqkbs9kbZWYLNbAGsVOt/mvcRlloqlbE5qScDLna8LP3mPF68e7N8SFQwiamZGNznl1U
+         Oeq3YCgrrQJ3CsuxnTNQYvzzEJiuCzGqgVTGhJ+qsxt3llTHEGiDxqqLVM8iFyz6g38o
+         f4+A==
+X-Gm-Message-State: AOAM532mWjWxkIdLuTEQbEeV6lBQLg41LffGWIfZb6SjH+I2cNYBEUjF
+        WxZz4vsrVcuXPa4fpunGrtozeg+wD4Q=
+X-Google-Smtp-Source: ABdhPJwV6KDoOL4dJobE5iEtEYDFPM40hBhSDcRGQuodsm2FiwCPKNGDoPT+pRNqKHZ/7YTcDP7h6g==
+X-Received: by 2002:a9d:654b:: with SMTP id q11mr3570243otl.184.1632484799865;
+        Fri, 24 Sep 2021 04:59:59 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k23sm2130435ood.12.2021.09.24.04.58.32
+        by smtp.gmail.com with ESMTPSA id v16sm2046200oiv.23.2021.09.24.04.59.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 04:58:33 -0700 (PDT)
+        Fri, 24 Sep 2021 04:59:59 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 24 Sep 2021 04:58:31 -0700
+Date:   Fri, 24 Sep 2021 04:59:58 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Paul Fertser <fercerpav@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] hwmon: tmp421: handle I2C errors
-Message-ID: <20210924115831.GA2695099@roeck-us.net>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] hwmon: tmp421: report /PVLD condition as fault
+Message-ID: <20210924115958.GA2695448@roeck-us.net>
 References: <20210924022020.GA3032273@roeck-us.net>
  <20210924093011.26083-1-fercerpav@gmail.com>
+ <20210924093011.26083-2-fercerpav@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210924093011.26083-1-fercerpav@gmail.com>
+In-Reply-To: <20210924093011.26083-2-fercerpav@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 12:30:09PM +0300, Paul Fertser wrote:
-> Function i2c_smbus_read_byte_data() can return a negative error number
-> instead of the data read if I2C transaction failed for whatever reason.
-> 
-> Lack of error checking can lead to serious issues on production
-> hardware, e.g. errors treated as temperatures produce spurious critical
-> temperature-crossed-threshold errors in BMC logs for OCP server
-> hardware. The patch was tested with Mellanox OCP Mezzanine card
-> emulating TMP421 protocol for temperature sensing which sometimes leads
-> to I2C protocol error during early boot up stage.
+On Fri, Sep 24, 2021 at 12:30:10PM +0300, Paul Fertser wrote:
+> For both local and remote sensors all the supported ICs can report an
+> "undervoltage lockout" condition which means the conversion wasn't
+> properly performed due to insufficient power supply voltage and so the
+> measurement results can't be trusted.
 > 
 > Fixes: 9410700b881f ("hwmon: Add driver for Texas Instruments TMP421/422/423 sensor chips")
-> Cc: stable@vger.kernel.org
 > Signed-off-by: Paul Fertser <fercerpav@gmail.com>
 
 Applied.
@@ -97,88 +92,39 @@ Guenter
 > ---
 > 
 > Changes from v2:
->  - Do not change data->valid type as that's an unrelated cleanup
 >  - Add Fixes: tag
->  - Remove clutter from the commit message
 > 
 > Changes from v1:
->  - Reorganise code following excellent suggestion by Guenter Roeck
->    to use tagged errors consistently
+>  - Trivial rebase
 > 
->  drivers/hwmon/tmp421.c | 41 +++++++++++++++++++++++++++++++----------
->  1 file changed, 31 insertions(+), 10 deletions(-)
+>  drivers/hwmon/tmp421.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
 > diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-> index ede66ea6a730..e6b2b31d17c8 100644
+> index e6b2b31d17c8..3a789f21188c 100644
 > --- a/drivers/hwmon/tmp421.c
 > +++ b/drivers/hwmon/tmp421.c
-> @@ -119,38 +119,59 @@ static int temp_from_u16(u16 reg)
->  	return (temp * 1000 + 128) / 256;
->  }
->  
-> -static struct tmp421_data *tmp421_update_device(struct device *dev)
-> +static int tmp421_update_device(struct tmp421_data *data)
+> @@ -182,10 +182,10 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
+>  		return 0;
+>  	case hwmon_temp_fault:
+>  		/*
+> -		 * The OPEN bit signals a fault. This is bit 0 of the temperature
+> -		 * register (low byte).
+> +		 * Any of OPEN or /PVLD bits indicate a hardware mulfunction
+> +		 * and the conversion result may be incorrect
+>  		 */
+> -		*val = tmp421->temp[channel] & 0x01;
+> +		*val = !!(tmp421->temp[channel] & 0x03);
+>  		return 0;
+>  	default:
+>  		return -EOPNOTSUPP;
+> @@ -198,9 +198,6 @@ static umode_t tmp421_is_visible(const void *data, enum hwmon_sensor_types type,
 >  {
-> -	struct tmp421_data *data = dev_get_drvdata(dev);
->  	struct i2c_client *client = data->client;
-> +	int ret = 0;
->  	int i;
->  
->  	mutex_lock(&data->update_lock);
->  
->  	if (time_after(jiffies, data->last_updated + (HZ / 2)) ||
->  	    !data->valid) {
-> -		data->config = i2c_smbus_read_byte_data(client,
-> -			TMP421_CONFIG_REG_1);
-> +		ret = i2c_smbus_read_byte_data(client,
-> +					       TMP421_CONFIG_REG_1);
-> +		if (ret < 0)
-> +			goto exit;
-> +		data->config = ret;
->  
->  		for (i = 0; i < data->channels; i++) {
-> -			data->temp[i] = i2c_smbus_read_byte_data(client,
-> -				TMP421_TEMP_MSB[i]) << 8;
-> -			data->temp[i] |= i2c_smbus_read_byte_data(client,
-> -				TMP421_TEMP_LSB[i]);
-> +			ret = i2c_smbus_read_byte_data(client,
-> +						       TMP421_TEMP_MSB[i]);
-> +			if (ret < 0)
-> +				goto exit;
-> +			data->temp[i] = ret << 8;
-> +
-> +			ret = i2c_smbus_read_byte_data(client,
-> +						       TMP421_TEMP_LSB[i]);
-> +			if (ret < 0)
-> +				goto exit;
-> +			data->temp[i] |= ret;
->  		}
->  		data->last_updated = jiffies;
->  		data->valid = 1;
->  	}
->  
-> +exit:
->  	mutex_unlock(&data->update_lock);
->  
-> -	return data;
-> +	if (ret < 0) {
-> +		data->valid = 0;
-> +		return ret;
-> +	}
-> +
-> +	return 0;
->  }
->  
->  static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
->  		       u32 attr, int channel, long *val)
->  {
-> -	struct tmp421_data *tmp421 = tmp421_update_device(dev);
-> +	struct tmp421_data *tmp421 = dev_get_drvdata(dev);
-> +	int ret = 0;
-> +
-> +	ret = tmp421_update_device(tmp421);
-> +	if (ret)
-> +		return ret;
->  
 >  	switch (attr) {
+>  	case hwmon_temp_fault:
+> -		if (channel == 0)
+> -			return 0;
+> -		return 0444;
 >  	case hwmon_temp_input:
+>  		return 0444;
+>  	default:
