@@ -7,84 +7,85 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F24C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CDC0C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:05:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8932C60F6D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:03:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C66260EB6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:05:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243833AbhIXCFX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 22:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S243813AbhIXCGi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 22:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243798AbhIXCFW (ORCPT
+        with ESMTP id S243803AbhIXCGg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 22:05:22 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B685C061574
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Sep 2021 19:03:50 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id l16-20020a9d6a90000000b0053b71f7dc83so11169221otq.7
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Sep 2021 19:03:50 -0700 (PDT)
+        Thu, 23 Sep 2021 22:06:36 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28219C061574;
+        Thu, 23 Sep 2021 19:05:04 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id l16-20020a9d6a90000000b0053b71f7dc83so11171608otq.7;
+        Thu, 23 Sep 2021 19:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=yUbngRqXqPfOEoab/qFoEfa/uuiDZuOa3g9N7yNAICk=;
-        b=W5dhkWfg+GFkoMeCr/pmDaF3tB6ihoa5KtPVVQK0bMLDfCPx5EgknHSCXCyo7Ta0et
-         6an9HKx4juIp1YOhINTgkeC9sB8/iPa8my/ff6CkYEySBlHuIgVdaAwFTZ9sAI8miIJV
-         5SD3BKdEtyID8NrlsX+oYAM+AARfS5pq9blIr50xLxuhvUcSiapfB0+Wlgw4RQync5BH
-         mPJf9gHhwSQ6wAYuthBz17kIJc64aN2hGXUmfd5j+lprSPo5Cp9hZwKzNapXClmMebIT
-         c9/Jl4Xf4DVrFDmEyOc0c3hbZdX0Pk0eQACiNrv1fsal1E5KJmFEEO8qQJm36YTbQa0e
-         OVsw==
+         :content-disposition:in-reply-to;
+        bh=3nWufSPgRiPeZY0QCnGO26qPGXji5ABtNdRDlOiJGHU=;
+        b=UTMRcLaICXNGafgVxacVYnASZpkPLEYvemZLwiXVrOhVQXDnGmFmU3YFQUP991HUNw
+         /r9Gn8YnfYuPkKwH2p39FUVHj/MamnEjQqURPHRiUyRDSGNKKPV9Je/awpeZmB4Ebzz3
+         hLgVFMwRBUB4KNHcO0GLGEcMxJ3fNIKA21EzTqbF17mP0Kk4tNVFtDjK5FqtepJEaqt5
+         Rdggb3g5y+SavMdT7AMKUjzCaQWlWPvx2Ne+m0IGrtO2N9DQLZ1SOvhdpeUTwYuo0sd/
+         gyMjagGDIkqUw+PFvYRCvTMoa96d4vN0eDtmtPmopN7VlbAjNi+nEBvCqjS8vmiAhsga
+         8lKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=yUbngRqXqPfOEoab/qFoEfa/uuiDZuOa3g9N7yNAICk=;
-        b=oo8Id1yKlEg+dzF3QtO0b9ij1J78RqmV71pW94RmBEdbpTGskZqCgNxl91yJ9DuuHe
-         ze7oS19GaatimAkXyUZe9+ZoPMYpx5NZS+C1amX5WuXJ3XDtolnXRLTm1u7wIAFPDhxU
-         fd3RYFEIAjLIejzMtyGsA/yctjIBiANdXrZnrlIPguUEdSti33Ik4jFPg1/k8IclszpB
-         t0woiwWktmmoB64gQHuXBphhojyPGg0+5KycRCqbq+0HKAiv+/QhUXo2mPUWzkeYRmOB
-         vOzYDE3xDLX/5t+7QnTldry3DijAgaXFPB7OrAT2TIZjyn9kJMTo+/I8St0kvJRJXaSH
-         N+HA==
-X-Gm-Message-State: AOAM5310AmlzXIVWdKTA0fWiPF4ANXdTXs6hXMwZsIVzFRSkkdDgmAUB
-        KYTn6B0Df++9GaM2kn+j0K8=
-X-Google-Smtp-Source: ABdhPJxzz1y3B+tI0vvPrY/VLty3nLTdZXy9d1iw3lLTTxpvqSDoU9uE+lcoytxVSD0FllJV28S7qw==
-X-Received: by 2002:a9d:6944:: with SMTP id p4mr1754352oto.262.1632449029665;
-        Thu, 23 Sep 2021 19:03:49 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3nWufSPgRiPeZY0QCnGO26qPGXji5ABtNdRDlOiJGHU=;
+        b=3W3NGAv4i0FsMKcFNs69P3Njuvgo+tzsgFcp/7v7zdUcwF9DhoeRZkeEZbrQud23EI
+         6EoROlWMdMpDYpokJBVkGz747fQstSgwMRcOopKfkaERA8qSRhvclpBKF9yRmmeVul2a
+         U+1fJFNU2h9+s2JaoWeCFCv7mRwskmbytl8kDAu5WiqdFH3ZATkBEBC7JEbIQ+Ybawez
+         SsRooZ/BZjYmRitiX/xUiGspuBYJc7iBN/lw45hs+8LBhJ2jxmXOCxog90EmPTip+nG+
+         lTPRHI6TIreG42XLWjjA0b7KCbH+ZxWq/ZRb3dlBY0BM+HrLnBkVkaw+rxqCNhFK48dI
+         yS0Q==
+X-Gm-Message-State: AOAM531NeLWnc8gy2/jzdTrAuJ0mFF6lXcHZGwHU3eyYFofPiXrmj03K
+        JJ9DA3G7oKMg+0ve2RE7Vyw=
+X-Google-Smtp-Source: ABdhPJwsb1301gpFowJEo+IQOfiPwL3Ge/YHLI2klXyJBjYgrDqVkFxgSAMpEI9AHigHe3tc0AMFkQ==
+X-Received: by 2002:a05:6830:2a10:: with SMTP id y16mr1686405otu.37.1632449103511;
+        Thu, 23 Sep 2021 19:05:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k6sm1680603otf.80.2021.09.23.19.03.48
+        by smtp.gmail.com with ESMTPSA id 18sm1745541otj.10.2021.09.23.19.05.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 19:03:49 -0700 (PDT)
+        Thu, 23 Sep 2021 19:05:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 23 Sep 2021 19:03:48 -0700
+Date:   Thu, 23 Sep 2021 19:05:01 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] hwmon: ltc2947: Properly handle errors when looking for
- the external clock
-Message-ID: <20210924020348.GA3031696@roeck-us.net>
-References: <20210923201113.398932-1-u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] dt-bindings: hwmon: lm75: remove gmt,g751 from
+ trivial devices
+Message-ID: <20210924020501.GA3031808@roeck-us.net>
+References: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
+ <20210920182114.339419-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210923201113.398932-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210920182114.339419-2-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 23, 2021 at 10:11:13PM +0200, Uwe Kleine-König wrote:
-> The return value of devm_clk_get should in general be propagated to
-> upper layer. In this case the clk is optional, use the appropriate
-> wrapper instead of interpreting all errors as "The optional clk is not
-> available".
+On Mon, Sep 20, 2021 at 08:21:10PM +0200, Krzysztof Kozlowski wrote:
+> gmt,g751 is covered by LM75 sensor bindings.  This fixes warning:
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>   arch/arm/boot/dts/gemini-dlink-dns-313.dt.yaml: temperature-sensor@48:
+>     '#thermal-sensor-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Applied.
 
@@ -92,28 +93,19 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/ltc2947-core.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> 
-> base-commit: 7d2a07b769330c34b4deabeed939325c77a7ec2f
-> 
-> diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
-> index bb3f7749a0b0..5423466de697 100644
-> --- a/drivers/hwmon/ltc2947-core.c
-> +++ b/drivers/hwmon/ltc2947-core.c
-> @@ -989,8 +989,12 @@ static int ltc2947_setup(struct ltc2947_data *st)
->  		return ret;
->  
->  	/* check external clock presence */
-> -	extclk = devm_clk_get(st->dev, NULL);
-> -	if (!IS_ERR(extclk)) {
-> +	extclk = devm_clk_get_optional(st->dev, NULL);
-> +	if (IS_ERR(extclk))
-> +		return dev_err_probe(st->dev, PTR_ERR(extclk),
-> +				     "Failed to get external clock\n");
-> +
-> +	if (extclk) {
->  		unsigned long rate_hz;
->  		u8 pre = 0, div, tbctl;
->  		u64 aux;
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 183ee0da22c6..1bbfa98a85d8 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -109,8 +109,6 @@ properties:
+>            - mps,mp2888
+>              # Monolithic Power Systems Inc. multi-phase controller mp2975
+>            - mps,mp2975
+> -            # G751: Digital Temperature Sensor and Thermal Watchdog with Two-Wire Interface
+> -          - gmt,g751
+>              # Infineon IR36021 digital POL buck controller
+>            - infineon,ir36021
+>              # Infineon IR38064 Voltage Regulator
