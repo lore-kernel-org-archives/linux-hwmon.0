@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD4A6C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3884DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:57:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A27A860EB4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:56:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10EC561108
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 01:57:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243815AbhIXB6G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 21:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S243840AbhIXB7Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 21:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243807AbhIXB6F (ORCPT
+        with ESMTP id S243826AbhIXB7Z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 21:58:05 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6A9C061574;
-        Thu, 23 Sep 2021 18:56:33 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 97-20020a9d006a000000b00545420bff9eso11137220ota.8;
-        Thu, 23 Sep 2021 18:56:33 -0700 (PDT)
+        Thu, 23 Sep 2021 21:59:25 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3236C061574;
+        Thu, 23 Sep 2021 18:57:52 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 24so12520706oix.0;
+        Thu, 23 Sep 2021 18:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=h06XWVZMzx/fClrR33x5U7yyMWwgEljfMFyGArSZ5RY=;
-        b=C13j7yoeoeHcocbbWfOM/peDMgPbquqH75fqgvuXuI1Ojmc/FlUGc/4F8EuzKNZDrP
-         pn93K85jIf9kDN7NdGPQAKFIQU3O4F6zY6/QsRnWYWI4rt2nl23Xgb9c31SkU6EILGRh
-         shcK0GgbjPD2njFuf08rNJm66FpNLFG0UeuaflQSuvGzsPPYrw9QWrMTpDGaCPbWXHfa
-         D30biWnvOLWVRn3kBiEW9PBc+sfav3O76RpEUy3TgjaSL0SdEfj8MwO+UpGC6+QGDKdy
-         zHeW8LBie63LcrSG24IOYUVYKKeNC8bx9K9WyKoDmo0CpLiYkkm3hnXLBWjQHnQSqxdN
-         mTWw==
+        bh=XwMUpHWHdZN4NHuO4gz678VcNaVlC+0PuUEAOf6ntyQ=;
+        b=HKddQJESF9tmClboBpprQhaL4MrI9rbNqACbBFYvnMnuvxMtqZPKDV8iqS/DgF06q1
+         eaQRFOTbUa4oztDFcdDszY3tKQce/vZfIbacPicPy8T751a9AKNVMu8WzS8WW9B+TIaP
+         tI2BnRgWT+B3FcwgftMfjbsCFw35ZtJZeeJ6BWpF6gnzWzw0dlJWdUO3px2C3eEl4rNU
+         IC+mqtBT9rEZpJai9vEUAzb1NKqZcgx2Igds8g63aTpnJMZuGrRQO3wvOenD8KPGXaZI
+         gG+eqrg6G8N1wzC06/ZIvhazbrrBvgbp8UObMU+G1nXc1vUNbI1ixEwIJ0ykhtdR9r34
+         m6KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=h06XWVZMzx/fClrR33x5U7yyMWwgEljfMFyGArSZ5RY=;
-        b=PU++mqo9rMl7f+labQ8cs3nptjJ7wxDB4MpYc1w4Bcjy+N33q3lEVKoX2y3Z5Wz6+o
-         WVbxP3JCVXCSVVFuySnfIe/J1ERwwKaVByWZnZBEGfP9xaPYG9/mOygko4AGIRiw72Ud
-         ZSc+cRi4nc7u6YNgC1NGM2AirQLewYLfWl3R2RwSrOrOewY7FWOkpzfoEwTHhFECXhze
-         e4TZhRM/e4S12z3qfax2xofPR4ikv4cvlBZWmqF5vkBXW0EWpDXzS/J0NWNldzL66A3s
-         2BYnw+NQkdYBqAFPIaDBEghyHN8KtPHUGOmsk468WfGY+zrb9XNEem0PFzzEBedAV3qf
-         Qegg==
-X-Gm-Message-State: AOAM531bkThLfP8VZle70jQATKq1TE2RPwx9Zlwr1UK8oximGWeV3pXr
-        C1gAGTbF2zyX/wNLTZSEH+k=
-X-Google-Smtp-Source: ABdhPJyxOisF016AIW8BiS5hkwIRomwx5crXPAmv2+nVNuJhBj22Fb4dN6+V6EvJKt1egXcrIepj7Q==
-X-Received: by 2002:a9d:7019:: with SMTP id k25mr1656080otj.350.1632448592803;
-        Thu, 23 Sep 2021 18:56:32 -0700 (PDT)
+        bh=XwMUpHWHdZN4NHuO4gz678VcNaVlC+0PuUEAOf6ntyQ=;
+        b=D4A05fT5xOnc6BbzVZO8FVhv1zoHhYuNmLkcZ2n1k26KTpkYx2HbRcQCz8J/FHBkf8
+         gVktsKMQX3Mk/KSLCmexgLKwLerJkB8l0Z7L0HNiAIXVF4Ptv8PSSypYIaMwV5MUn6pC
+         lh94VwG8I8WxbVwjnTESFyHIE5idl91GlfGmw7bAabnLm87YFMEjjMF8RxnNrzaRWc0g
+         XdrV//+PyI7mrWT/aMwqMzrR59E9+IoHb6Tn77gbjBx+PRSwAB2mao9OeuxOAxhCx2F5
+         jSXEKFsbEpLsEytGtJSWNnlJoxNhZ0dLb2Ay591MittvG/KOJNpAH1mMTiFaNTlFenkS
+         YIOA==
+X-Gm-Message-State: AOAM530bC+sCGqbz0f5grIjcQfkmzoKCIata2VH6nqQP1FxREYAnCoDy
+        TgSs2Syhh3hag+FAgog71s8=
+X-Google-Smtp-Source: ABdhPJzGldP3OT159DfdHm+3h6zYt8n1O4u4DEsjSxhdCZ83/TGBUIQcbY1O4zCdP5G4n03jQA1FZg==
+X-Received: by 2002:aca:3bc2:: with SMTP id i185mr5996011oia.67.1632448672393;
+        Thu, 23 Sep 2021 18:57:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d26sm1734683oij.49.2021.09.23.18.56.31
+        by smtp.gmail.com with ESMTPSA id d10sm1875970ooj.24.2021.09.23.18.57.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 18:56:32 -0700 (PDT)
+        Thu, 23 Sep 2021 18:57:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 23 Sep 2021 18:56:30 -0700
+Date:   Thu, 23 Sep 2021 18:57:50 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
@@ -65,21 +65,21 @@ Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] dt-bindings: hwmon: microchip,mcp3021: convert to
+Subject: Re: [PATCH 6/6] dt-bindings: hwmon: sensirion,sht15: convert to
  dtschema
-Message-ID: <20210924015630.GA3031174@roeck-us.net>
+Message-ID: <20210924015750.GA3031369@roeck-us.net>
 References: <20210921102832.143352-1-krzysztof.kozlowski@canonical.com>
- <20210921102832.143352-5-krzysztof.kozlowski@canonical.com>
+ <20210921102832.143352-6-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210921102832.143352-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210921102832.143352-6-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 12:28:31PM +0200, Krzysztof Kozlowski wrote:
-> Convert the Microchip MCP3021 ADC bindings to DT schema format.
+On Tue, Sep 21, 2021 at 12:28:32PM +0200, Krzysztof Kozlowski wrote:
+> Convert the Sensirion SHT15 humidity sensor to DT schema format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > Reviewed-by: Rob Herring <robh@kernel.org>
@@ -90,85 +90,83 @@ Thanks,
 Guenter
 
 > ---
->  .../devicetree/bindings/hwmon/mcp3021.txt     | 21 ---------
->  .../bindings/hwmon/microchip,mcp3021.yaml     | 43 +++++++++++++++++++
->  2 files changed, 43 insertions(+), 21 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/mcp3021.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml
+>  .../bindings/hwmon/sensirion,sht15.yaml       | 43 +++++++++++++++++++
+>  .../devicetree/bindings/hwmon/sht15.txt       | 19 --------
+>  2 files changed, 43 insertions(+), 19 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/sht15.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/mcp3021.txt b/Documentation/devicetree/bindings/hwmon/mcp3021.txt
-> deleted file mode 100644
-> index 294318ba6914..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/mcp3021.txt
-> +++ /dev/null
-> @@ -1,21 +0,0 @@
-> -mcp3021 properties
-> -
-> -Required properties:
-> -- compatible: Must be one of the following:
-> -	- "microchip,mcp3021" for mcp3021
-> -	- "microchip,mcp3221" for mcp3221
-> -- reg: I2C address
-> -
-> -Optional properties:
-> -
-> -- reference-voltage-microvolt
-> -	Reference voltage in microvolt (uV)
-> -
-> -Example:
-> -
-> -mcp3021@4d {
-> -	compatible = "microchip,mcp3021";
-> -	reg = <0x4d>;
-> -
-> -	reference-voltage-microvolt = <4500000>; /* 4.5 V */
-> -};
-> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml b/Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml
+> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml
 > new file mode 100644
-> index 000000000000..c42051f8a191
+> index 000000000000..4669217d01e1
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml
 > @@ -0,0 +1,43 @@
 > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/hwmon/microchip,mcp3021.yaml#
+> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht15.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Microchip MCP3021 A/D converter
+> +title: Sensirion SHT15 humidity and temperature sensor
 > +
 > +maintainers:
 > +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > +
 > +properties:
 > +  compatible:
-> +    enum:
-> +      - microchip,mcp3021
-> +      - microchip,mcp3221
+> +    const: sensirion,sht15
 > +
-> +  reg:
+> +  clk-gpios:
 > +    maxItems: 1
 > +
-> +  reference-voltage-microvolt:
-> +    description:
-> +      VDD supply power and reference voltage
+> +  data-gpios:
+> +    maxItems: 1
+> +
+> +  vcc-supply:
+> +    description: regulator that drives the VCC pin
 > +
 > +required:
 > +  - compatible
-> +  - reg
+> +  - clk-gpios
+> +  - data-gpios
+> +  - vcc-supply
 > +
 > +additionalProperties: false
 > +
 > +examples:
 > +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
+> +    sensor {
+> +        compatible = "sensirion,sht15";
+> +        clk-gpios = <&gpio4 12 0>;
+> +        data-gpios = <&gpio4 13 0>;
+> +        vcc-supply = <&reg_sht15>;
 > +
-> +        adc@4d {
-> +            compatible = "microchip,mcp3021";
-> +            reg = <0x4d>;
-> +
-> +            reference-voltage-microvolt = <4500000>; /* 4.5 V */
-> +        };
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&pinctrl_sensor>;
 > +    };
+> diff --git a/Documentation/devicetree/bindings/hwmon/sht15.txt b/Documentation/devicetree/bindings/hwmon/sht15.txt
+> deleted file mode 100644
+> index 6a80277cc426..000000000000
+> --- a/Documentation/devicetree/bindings/hwmon/sht15.txt
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> -Sensirion SHT15 Humidity and Temperature Sensor
+> -
+> -Required properties:
+> -
+> - - "compatible": must be "sensirion,sht15".
+> - - "data-gpios": GPIO connected to the data line.
+> - - "clk-gpios": GPIO connected to the clock line.
+> - - "vcc-supply": regulator that drives the VCC pin.
+> -
+> -Example:
+> -
+> -	sensor {
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&pinctrl_sensor>;
+> -		compatible = "sensirion,sht15";
+> -		clk-gpios = <&gpio4 12 0>;
+> -		data-gpios = <&gpio4 13 0>;
+> -		vcc-supply = <&reg_sht15>;
+> -	};
