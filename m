@@ -7,107 +7,113 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64433C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F24C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:03:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 451B360EB6
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:02:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8932C60F6D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Sep 2021 02:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243833AbhIXCEZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Sep 2021 22:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S243833AbhIXCFX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Sep 2021 22:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243792AbhIXCEZ (ORCPT
+        with ESMTP id S243798AbhIXCFW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Sep 2021 22:04:25 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3841AC061574;
-        Thu, 23 Sep 2021 19:02:53 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id r43-20020a05683044ab00b0054716b40005so4286757otv.4;
-        Thu, 23 Sep 2021 19:02:53 -0700 (PDT)
+        Thu, 23 Sep 2021 22:05:22 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B685C061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Sep 2021 19:03:50 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id l16-20020a9d6a90000000b0053b71f7dc83so11169221otq.7
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Sep 2021 19:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vb8VHhj5ZR3ApECLbPR2Ms+JdFGgy9RMbESsdYMrHnU=;
-        b=AcV7cQmNHVAJ8RDH6Tq6JdR7zsKwzWNCqci8hsPnXIB+fprutIWyfIQ7kMgbxzkF4W
-         QepjbDdX+feQLuEYJ8WBgaRxdRJQPbfgCx05WLkpD5bw2rSjx6IMbieD6WM7jbcwUwjE
-         T5PC0P22FkM9T5B3ZKNBoK/k/khUTqOa3GRzDjvG8nSBN1Nscvbu120Mvlqxpu9iN3Nq
-         /jft5KSVFw22+8zo3rbq9oVSuewPmYbPM2H0hhsQWd4xpPuoV3Cr1vIr64hKX6APL0Xk
-         IEiyjpReEMm07xk0w1dujFkHeEQrzcp7GOgS32smxLKecTizeuJpDLLMBi12nM1SXAhq
-         nw+w==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=yUbngRqXqPfOEoab/qFoEfa/uuiDZuOa3g9N7yNAICk=;
+        b=W5dhkWfg+GFkoMeCr/pmDaF3tB6ihoa5KtPVVQK0bMLDfCPx5EgknHSCXCyo7Ta0et
+         6an9HKx4juIp1YOhINTgkeC9sB8/iPa8my/ff6CkYEySBlHuIgVdaAwFTZ9sAI8miIJV
+         5SD3BKdEtyID8NrlsX+oYAM+AARfS5pq9blIr50xLxuhvUcSiapfB0+Wlgw4RQync5BH
+         mPJf9gHhwSQ6wAYuthBz17kIJc64aN2hGXUmfd5j+lprSPo5Cp9hZwKzNapXClmMebIT
+         c9/Jl4Xf4DVrFDmEyOc0c3hbZdX0Pk0eQACiNrv1fsal1E5KJmFEEO8qQJm36YTbQa0e
+         OVsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=vb8VHhj5ZR3ApECLbPR2Ms+JdFGgy9RMbESsdYMrHnU=;
-        b=ZIaA5Gmua17T1NJA2ieVrwPpSTksk/i593O5Gj02DOGi4oT/AchGJQpRG56QLT+GnW
-         2mTaqZbJCZRTRObaUm3BX3FoAvSfkf10KVOK5jGCf7TROrQeShuPyicOfldmAzAnkNNh
-         73mg6Cvj1+4oMmkoFe1PjNrjPWbktSIrIrxCs/ypxkN4KnMILXUhlQbcrzJhO7+qeIGg
-         PtzDTG/kW9U9c45Og+eVenf+lolS5NAnYu1mDkecHIOuLX/vB+5azYBccZjYwzcsIfGI
-         0DGrq1gRXjVekXckR+mkDaMF7nDzA6hljteV1+w27o6+6HqGKsjSY5mq2lrP4eDxaghU
-         BBqg==
-X-Gm-Message-State: AOAM532wQejimy91pPpl6qF+zeZGpoi6cdk+iueLHBoABTSo8GA7sTa4
-        rjfWPyziW7JUjfiKJm8J0CK8wJFgZ2c=
-X-Google-Smtp-Source: ABdhPJxGfjVj8x4wGq9uVV+kK0ji95Lk7Cz7pJzJFRtiiTvC6TwnhFdqKZjFuy1i9W5mcPG4E2AmVQ==
-X-Received: by 2002:a05:6830:3189:: with SMTP id p9mr1645429ots.147.1632448972593;
-        Thu, 23 Sep 2021 19:02:52 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=yUbngRqXqPfOEoab/qFoEfa/uuiDZuOa3g9N7yNAICk=;
+        b=oo8Id1yKlEg+dzF3QtO0b9ij1J78RqmV71pW94RmBEdbpTGskZqCgNxl91yJ9DuuHe
+         ze7oS19GaatimAkXyUZe9+ZoPMYpx5NZS+C1amX5WuXJ3XDtolnXRLTm1u7wIAFPDhxU
+         fd3RYFEIAjLIejzMtyGsA/yctjIBiANdXrZnrlIPguUEdSti33Ik4jFPg1/k8IclszpB
+         t0woiwWktmmoB64gQHuXBphhojyPGg0+5KycRCqbq+0HKAiv+/QhUXo2mPUWzkeYRmOB
+         vOzYDE3xDLX/5t+7QnTldry3DijAgaXFPB7OrAT2TIZjyn9kJMTo+/I8St0kvJRJXaSH
+         N+HA==
+X-Gm-Message-State: AOAM5310AmlzXIVWdKTA0fWiPF4ANXdTXs6hXMwZsIVzFRSkkdDgmAUB
+        KYTn6B0Df++9GaM2kn+j0K8=
+X-Google-Smtp-Source: ABdhPJxzz1y3B+tI0vvPrY/VLty3nLTdZXy9d1iw3lLTTxpvqSDoU9uE+lcoytxVSD0FllJV28S7qw==
+X-Received: by 2002:a9d:6944:: with SMTP id p4mr1754352oto.262.1632449029665;
+        Thu, 23 Sep 2021 19:03:49 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s24sm1791146oic.34.2021.09.23.19.02.51
+        by smtp.gmail.com with ESMTPSA id k6sm1680603otf.80.2021.09.23.19.03.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 19:02:51 -0700 (PDT)
+        Thu, 23 Sep 2021 19:03:49 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 23 Sep 2021 19:02:50 -0700
+Date:   Thu, 23 Sep 2021 19:03:48 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Daniel Dawson <danielcdawson@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Add another customer ID for NCT6683D sensor chip on some
- ASRock boards.
-Message-ID: <20210924020250.GA3031547@roeck-us.net>
-References: <20210921165859.48714-1-danielcdawson@gmail.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] hwmon: ltc2947: Properly handle errors when looking for
+ the external clock
+Message-ID: <20210924020348.GA3031696@roeck-us.net>
+References: <20210923201113.398932-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210921165859.48714-1-danielcdawson@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210923201113.398932-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 09:58:59AM -0700, Daniel Dawson wrote:
-> This value was found on a Z370M Pro4 rev. 1.01, with an
-> NCT6683D-T chip.
+On Thu, Sep 23, 2021 at 10:11:13PM +0200, Uwe Kleine-König wrote:
+> The return value of devm_clk_get should in general be propagated to
+> upper layer. In this case the clk is optional, use the appropriate
+> wrapper instead of interpreting all errors as "The optional clk is not
+> available".
 > 
-> Signed-off-by: Daniel Dawson <danielcdawson@gmail.com>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Applied. In the future, please indicate the subsystem and the affected
-driver in the subject line. See other patches for examples.
+Applied.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/nct6683.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/hwmon/ltc2947-core.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-> index 35f8635dc7f3..6a9f420e7d32 100644
-> --- a/drivers/hwmon/nct6683.c
-> +++ b/drivers/hwmon/nct6683.c
-> @@ -174,6 +174,7 @@ superio_exit(int ioreg)
->  #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
->  #define NCT6683_CUSTOMER_ID_MSI		0x201
->  #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
-> +#define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
+> 
+> base-commit: 7d2a07b769330c34b4deabeed939325c77a7ec2f
+> 
+> diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
+> index bb3f7749a0b0..5423466de697 100644
+> --- a/drivers/hwmon/ltc2947-core.c
+> +++ b/drivers/hwmon/ltc2947-core.c
+> @@ -989,8 +989,12 @@ static int ltc2947_setup(struct ltc2947_data *st)
+>  		return ret;
 >  
->  #define NCT6683_REG_BUILD_YEAR		0x604
->  #define NCT6683_REG_BUILD_MONTH		0x605
-> @@ -1221,6 +1222,8 @@ static int nct6683_probe(struct platform_device *pdev)
->  		break;
->  	case NCT6683_CUSTOMER_ID_ASROCK:
->  		break;
-> +	case NCT6683_CUSTOMER_ID_ASROCK2:
-> +		break;
->  	default:
->  		if (!force)
->  			return -ENODEV;
+>  	/* check external clock presence */
+> -	extclk = devm_clk_get(st->dev, NULL);
+> -	if (!IS_ERR(extclk)) {
+> +	extclk = devm_clk_get_optional(st->dev, NULL);
+> +	if (IS_ERR(extclk))
+> +		return dev_err_probe(st->dev, PTR_ERR(extclk),
+> +				     "Failed to get external clock\n");
+> +
+> +	if (extclk) {
+>  		unsigned long rate_hz;
+>  		u8 pre = 0, div, tbctl;
+>  		u64 aux;
