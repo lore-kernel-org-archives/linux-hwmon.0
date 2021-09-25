@@ -2,147 +2,139 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37692C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 13:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E642DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 13:37:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C6E360FDC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 13:26:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD10661151
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 13:37:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245520AbhIYN2J (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Sep 2021 09:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
+        id S245152AbhIYNif (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Sep 2021 09:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245152AbhIYN2I (ORCPT
+        with ESMTP id S239261AbhIYNif (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Sep 2021 09:28:08 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E25DC061570;
-        Sat, 25 Sep 2021 06:26:34 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 5-20020a9d0685000000b0054706d7b8e5so17195402otx.3;
-        Sat, 25 Sep 2021 06:26:34 -0700 (PDT)
+        Sat, 25 Sep 2021 09:38:35 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E09C061570;
+        Sat, 25 Sep 2021 06:37:00 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id t189so18677898oie.7;
+        Sat, 25 Sep 2021 06:37:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=STTjPalLMSFj3NA/5gOM9KdNmz0Dz40jIybWNHN+/bw=;
-        b=lOxKJqDfUdV0WsX3+8wvaCAFUE47ayzzJwbg5+IrifMCs3/8C+DC4U5TlMOwR3Zsx8
-         yr5BeBCJSkJW48sPP3n9uiVHSF9MmhPDzUs/HTb+gmDFHa8lxU5zQFw8Ity8I2sNtHCD
-         //c4YPGasPK0K9aJQ0mhMx65abq5fj3RXLgbR3qUY+4DdIWE73SeqDkNNuFi1OZQKBU+
-         J2sD8gtAOFfTZJuvmYq0Wa5GAxSPVIy1Ho/zL4T2/MqdoOjY45OKfo/SbDuCX3jKhX7X
-         p0K+WGGh46//aag5GpfyQqj7IwTumIG+U+whgFMBZtrFIuDbL4JdZJf0kWTHalWl7m9z
-         vJkw==
+        bh=hOZ6JIcb8uf4b9WKGfs+BDqn+pjUAFeDvp/C9XwGPuU=;
+        b=Nx642B3chumpXp5giHidtUzTIaZz4pCgMsv7p555+KwRIOlVpJCnvSfxy13wvTNgps
+         2kukFPj5EoS4Zfx/jvClpnoOtunim1FlBBcobImF4y8kQtHYqsSElDgGzYDXiTxg7WyM
+         swXz5B75hZb+KqXtRPzvuiNjkbRRvTVZaf55Hem1UrbSayuV1CM316rqEuF1IsOv/EC4
+         bZeGJFEWC5xClMJ/f3MBny7HUjmMM168bZXA3W68X/7kz+fRgQdXjdkt456bHKyaIk/R
+         SkIjfXy6rRe0yAecvJxxU8o09RBwHtmEFr3WcjoGhgPyURvkgWc/LSJ1O0nY4cJGXt+O
+         6XPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=STTjPalLMSFj3NA/5gOM9KdNmz0Dz40jIybWNHN+/bw=;
-        b=kbt7fxoWy/rKzwRRCrKr+TkHFKq06oaKIuhZuCZPZQGQ9gpHGOcRbYj8C556V+lHlR
-         T1hTM5oa2MeKaQLO2tNgswrFfWimM/UjhmrE85Arv50p+0e5wwPPcb512n4PngiOXA70
-         Y+C7fLLnUwtEYzdm5KwEMpov08KolbD+PUcORwc/Ox6SgKB4uCcnvAr6VXMItyZnGW+3
-         FCFGaqTQ0lWs9z7Y74KS/c1p1BZ/C5D6Rj110UVFzKkDk+3oz9TdYRE9yGKjma5Lf2SV
-         lKZy2xELB25w+5oMWe7I/e5/3vlN9n/obZydf96NQeNAQDbpuiIxGSJjZPqQ3HOQEkUV
-         Xzag==
-X-Gm-Message-State: AOAM531RYEU+qeZM4nqzdbAvU7/eHmdG2mfONmf4MkiioVCuK5oX7O0E
-        f/8nEzYvWUB67Boqus5tJKY=
-X-Google-Smtp-Source: ABdhPJxDrBcaso65rh78LJTdfjN9NFdu+O7clOUQJ0MFDZPJrD1CaNheJJ/xxuaVjFfUwMMkuNBlWA==
-X-Received: by 2002:a05:6830:2486:: with SMTP id u6mr8817325ots.93.1632576393377;
-        Sat, 25 Sep 2021 06:26:33 -0700 (PDT)
+        bh=hOZ6JIcb8uf4b9WKGfs+BDqn+pjUAFeDvp/C9XwGPuU=;
+        b=2m8VfWyKx9QPKk/4Y7h+3RCMoLSqR4EJh4XAuvXMkRDihVVQZ+ON3XinwOqVhF2js7
+         qwOSHiKy3R52KLUdZi6HHicDglod4ZZl9I9cWmyaUGNxHSA8LJM99Q3PgkFjRtUQxTMn
+         y9riUm3lPLCqpyRrR3fduuaXrz2GJaVpsbHgn+YA9SxtKs2dWQ2LboiNcryLjDtVZZ8X
+         GSmiota730vDqbwcpH/Rg8xmyn0tBisOuhQAaRVe8USgjUo1QuTCXO0h9IEdhARzsGuv
+         9y9kIloylsZvTRJJbkRkrY4KAb5Sx7iCYBMVdJF67pXVBp1QhXZv4BEyeLMJ1nzYk9eU
+         45jQ==
+X-Gm-Message-State: AOAM533wEYS5XpLhW+fgjdMwfDdalxEOFvPp9K1V7lS7yrRZpXlmyxjg
+        ANFIVXCf+/ul1HKX/DhHce4=
+X-Google-Smtp-Source: ABdhPJwlVIMztVT8P9TBXddRQKENy4FyJ74MNxgPiEAOAlw18RmnN+dI+7lvL1tl9iQ5j451CcfkpA==
+X-Received: by 2002:a54:4692:: with SMTP id k18mr789280oic.145.1632577019791;
+        Sat, 25 Sep 2021 06:36:59 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a9sm2780241otk.3.2021.09.25.06.26.32
+        by smtp.gmail.com with ESMTPSA id f13sm2869616oto.49.2021.09.25.06.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Sep 2021 06:26:32 -0700 (PDT)
+        Sat, 25 Sep 2021 06:36:59 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Sep 2021 06:26:31 -0700
+Date:   Sat, 25 Sep 2021 06:36:58 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Oskar Senft <osk@google.com>
-Cc:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Rob Herring <robh@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH 8/8] dt-bindings: hwmon: allow specifying channels for
- tmp421
-Message-ID: <20210925132631.GB1240690@roeck-us.net>
-References: <12984255aac11a3edfc0e6278e1a1cac70ce97ec.1631021349.git.krzysztof.adamski@nokia.com>
- <YUkKCe7845uCqoy5@robh.at.kernel.org>
- <20210921125831.GB1864238@roeck-us.net>
- <CAL_JsqLo=inkKVKSU8N=_h90RfpDk6NNWPKdKyTXh-VvqXDCag@mail.gmail.com>
- <20210921205247.GA2363535@roeck-us.net>
- <CAL_Jsq+NXuF+F7OE3vyEbTUj6sxyMHVWHXbCuPPoFaKjpyZREQ@mail.gmail.com>
- <20210924002951.GA3027924@roeck-us.net>
- <YU2D7L7QMgCJZUeb@localhost.localdomain>
- <20210924114636.GB2694238@roeck-us.net>
- <CABoTLcQYHZbsgzXN7XXKQdDn8S-YsuE+ks9WShAEKcBJojEfcQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add nct7802 bindings
+Message-ID: <20210925133658.GA1740158@roeck-us.net>
+References: <20210921004627.2786132-1-osk@google.com>
+ <YUzzjYMwNKwMFGSr@robh.at.kernel.org>
+ <CABoTLcRpSuUUu-x-S8yTLUJCiN4RERi2kd8XATP_n3ZTRpAWDg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABoTLcQYHZbsgzXN7XXKQdDn8S-YsuE+ks9WShAEKcBJojEfcQ@mail.gmail.com>
+In-Reply-To: <CABoTLcRpSuUUu-x-S8yTLUJCiN4RERi2kd8XATP_n3ZTRpAWDg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 11:37:00AM -0400, Oskar Senft wrote:
-> > > In many cases the channels are "shared" - we have 3 voltage, 3 current and 3
-> > > power sensors but in fact they are not separate sensors but 3 channels
-> > > each able to measure 3 different things and they may share some common
-> > > properties in each channel (so current, voltage and power may be
-> > > calculated bases on the same shunt resistor or correction factor). An
-> > > example being adi,ltc2992.  In those cases it doesn't make sense to have
-> > > two levels as how would you describe the shared parent? Call it generic
-> > > "channels"?
+On Fri, Sep 24, 2021 at 11:17:51AM -0400, Oskar Senft wrote:
+> Hi Rob
 > 
-> So in that case (e.g. for the nct7802, see [1]) do we want just
-> 1-level, maybe like this:
+> > > +maintainers:
+> > > +  - Guenter Roeck <linux@roeck-us.net>
+> >
+> > Should be someone that cares about this h/w, not who applies patches.
 > 
-> nct7802@28 {
->     compatible = "nuvoton,nct7802";
->     reg = <0x28>;
-> 
->     sensor@1 { /* RTD1 */
->          reg = <0x1>;
->          status = "okay";
->          mode = "thermistor"; /* Any of "thermistor", "thermal-diode",
-> "voltage" */
->     };
-> 
->     sensor@2 { /* RTD2 */
->          reg = <0x2>;
->          status = "okay";
->          mode = "thermal-diode"; /* Any of "thermistor",
-> "thermal-diode", "voltage" */
->     };
-> 
->     sensor@3 { /* RTD3 */
->          reg = <0x3>;
->          status = "okay";
->          mode = "voltage"; /* Any of "thermistor", "voltage" */
->     };
-> 
->     sensor@4 { /* LTD */
->         reg = <0x4>; /* using the same number as in sysfs */
+> Hmm, ok. After talking with Guenter, I thought that would be him. But
+> I can add myself, too, since we're obviously using that HW. Is that
+> what you mean?
 
-Numbering in sysfs is not relevant here; the index should always start with 0.
-
->         status = "okay";
->         /* No mode configuration for LTD */
->     };
-> };
-> 
-> In this example, RTD1, RTD2 and LTD would be temperature sensors and
-> RTD3 would be a voltage sensor.
-> 
-> Would that make more sense? Is the use of strings acceptable?
-> 
-I don't think so. I am quite sure that rtd3 is still a temperature,
-and I am not sure if other sensor types on that chip may need dt
-configuration.
-
-I have limited internet acces for the next week or so; I'll look
-into this further after I am back.
+FWIW, this happens to be one of the cases where I am also the driver 
+author, and I still have a test board with the chip.
 
 Guenter
 
+> 
+> > > +    properties:
+> > > +      ltd:
+> > > +        type: object
+> > > +        description: Internal Temperature Sensor ("LTD")
+> >
+> > No child properties?
+> 
+> Yes. We really just want the ability to enable / disable that sensor.
+> What's the correct way in the YAML to describe that? Same for RTD3.
+> 
+> > > +          "type":
+> > > +            description: Sensor type (3=thermal diode, 4=thermistor).
+> >
+> > 2nd time I've seen this property this week[1]. Needs to be more specific
+> > than just 'type'.
+> 
+> Ha yes, the example in [1] came from this patch. I went with this name
+> to stay in-line with the sysfs name, being "tempX_type". In the
+> hardware this would be called "mode".
+> 
+> My original proposal [2] was to have this property a string list named
+> "nuvoton,rtd-modes" with a set of accepted values, i.e. basically an
+> enum. Splitting this string list into individual sensors makes sense.
+> 
+> The other question that remains open (at least in my view), is whether
+> naming the sensors "ltd, rtd1, rtd2, rtd3" is the right approach or if
+> we should really go to naming them "sensor@X" with a reg property set
+> to X. Note that ltd and rtd3 do not accept any additional
+> configuration beyond "is enabled" (i.e. "status").
+> 
+> > > +            temperature-sensors {
+> > > +                ltd {
+> > > +                  status = "disabled";
+> >
+> > Don't show status in examples.
+> Hmm, ok. I found it useful to make clear that a sensor can be
+> disabled, but maybe that's just always the case?
+> 
+> I appreciate your other comments and will fix them in the next version
+> of the patch. But I'd like to get clarity wrt. recommended sensor and
+> property naming in the device tree before sending that.
+> 
+> Thoughts?
+> 
 > Thanks
 > Oskar.
 > 
-> [1] https://lore.kernel.org/all/20210921004627.2786132-1-osk@google.com/
+> > [1] https://lore.kernel.org/all/CAL_Jsq+NXuF+F7OE3vyEbTUj6sxyMHVWHXbCuPPoFaKjpyZREQ@mail.gmail.com/
+> [2] https://lore.kernel.org/all/20210910130337.2025426-1-osk@google.com/
