@@ -2,139 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E642DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 13:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E2A7C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 14:18:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD10661151
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 13:37:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 262A060EFF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 14:18:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245152AbhIYNif (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Sep 2021 09:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S237777AbhIYOUM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Sep 2021 10:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239261AbhIYNif (ORCPT
+        with ESMTP id S233738AbhIYOUL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Sep 2021 09:38:35 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E09C061570;
-        Sat, 25 Sep 2021 06:37:00 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id t189so18677898oie.7;
-        Sat, 25 Sep 2021 06:37:00 -0700 (PDT)
+        Sat, 25 Sep 2021 10:20:11 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5BDC061570
+        for <linux-hwmon@vger.kernel.org>; Sat, 25 Sep 2021 07:18:37 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id j195so12404497ybj.8
+        for <linux-hwmon@vger.kernel.org>; Sat, 25 Sep 2021 07:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hOZ6JIcb8uf4b9WKGfs+BDqn+pjUAFeDvp/C9XwGPuU=;
-        b=Nx642B3chumpXp5giHidtUzTIaZz4pCgMsv7p555+KwRIOlVpJCnvSfxy13wvTNgps
-         2kukFPj5EoS4Zfx/jvClpnoOtunim1FlBBcobImF4y8kQtHYqsSElDgGzYDXiTxg7WyM
-         swXz5B75hZb+KqXtRPzvuiNjkbRRvTVZaf55Hem1UrbSayuV1CM316rqEuF1IsOv/EC4
-         bZeGJFEWC5xClMJ/f3MBny7HUjmMM168bZXA3W68X/7kz+fRgQdXjdkt456bHKyaIk/R
-         SkIjfXy6rRe0yAecvJxxU8o09RBwHtmEFr3WcjoGhgPyURvkgWc/LSJ1O0nY4cJGXt+O
-         6XPw==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
+        b=cWjZ+Vzd7/EsxQwed5/RATsnMW3BFCpx5cIGKSepks+ZN2KjVusxgInYeqqNYx189o
+         b4SlQQPZd8XtkV9FL3jllx4IL/0NnNyK6JEaYGgTolMvbqxT8ljxdNy+CWbupE3VcNY4
+         wayh5uvlkWvCH6P5Hz5bs4A4NeUhwtf3dXqVzOwlsUAWwEPAPn4gjpHxS2acOrr0Lbfn
+         A/bIe/lsm5qDEQYZKq8XKhUk5gpazXCqnEYasWOuB/wiKmvUikys1FFH2pK4/H+kxNIr
+         7yHiAjb+FSixgiE3fzqb4NXC5XwP64vYgpMWF+4Co4Qad8tkjuG0sFgCC6BXy5Kc3kTT
+         uQwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=hOZ6JIcb8uf4b9WKGfs+BDqn+pjUAFeDvp/C9XwGPuU=;
-        b=2m8VfWyKx9QPKk/4Y7h+3RCMoLSqR4EJh4XAuvXMkRDihVVQZ+ON3XinwOqVhF2js7
-         qwOSHiKy3R52KLUdZi6HHicDglod4ZZl9I9cWmyaUGNxHSA8LJM99Q3PgkFjRtUQxTMn
-         y9riUm3lPLCqpyRrR3fduuaXrz2GJaVpsbHgn+YA9SxtKs2dWQ2LboiNcryLjDtVZZ8X
-         GSmiota730vDqbwcpH/Rg8xmyn0tBisOuhQAaRVe8USgjUo1QuTCXO0h9IEdhARzsGuv
-         9y9kIloylsZvTRJJbkRkrY4KAb5Sx7iCYBMVdJF67pXVBp1QhXZv4BEyeLMJ1nzYk9eU
-         45jQ==
-X-Gm-Message-State: AOAM533wEYS5XpLhW+fgjdMwfDdalxEOFvPp9K1V7lS7yrRZpXlmyxjg
-        ANFIVXCf+/ul1HKX/DhHce4=
-X-Google-Smtp-Source: ABdhPJwlVIMztVT8P9TBXddRQKENy4FyJ74MNxgPiEAOAlw18RmnN+dI+7lvL1tl9iQ5j451CcfkpA==
-X-Received: by 2002:a54:4692:: with SMTP id k18mr789280oic.145.1632577019791;
-        Sat, 25 Sep 2021 06:36:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f13sm2869616oto.49.2021.09.25.06.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Sep 2021 06:36:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Sep 2021 06:36:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Oskar Senft <osk@google.com>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add nct7802 bindings
-Message-ID: <20210925133658.GA1740158@roeck-us.net>
-References: <20210921004627.2786132-1-osk@google.com>
- <YUzzjYMwNKwMFGSr@robh.at.kernel.org>
- <CABoTLcRpSuUUu-x-S8yTLUJCiN4RERi2kd8XATP_n3ZTRpAWDg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
+        b=uVICiyhqZ3PhggS2WQo33g7wIWNUq4VemBUmHIoqWpCu9brVfrydQHL8ECH54tg1l1
+         6WNoNdnht9zWhUJu6A2IuQobnGrwFzznoZ9e5PFFasaXBPoDOGulG2yxPM7lpWuhReJw
+         GEAsDBc+JtWmhtekOssOpX1Pi+mc8Rl+xFsXC/jugHc9VlK4CPN4SJnNEmRW30D47aaF
+         ZEfeQHlJ+v6rklo+lfDOYV4ZDRFyBsImumoN5oRmbqF0CUY9AaG+ZIH0TfPmZ0edmEm3
+         baGXh1gKWTbDa1Xg3JTqaBuPWKukd+Kbj8OO5hNaVeK5ADH+SCAJ+OE3oEZmz7PCzQ4d
+         JPjw==
+X-Gm-Message-State: AOAM532s22X9FMwP3rCPEH2zLSxjHiAsuYqklC8ttbJoyGDxyVANEO6s
+        QQeXWDi+P8m88x8hlq/gUJd+LTd3f+fUmrRBw/Vwp9q5GAw=
+X-Google-Smtp-Source: ABdhPJyQCjQ1mjQK6is1W9ruuCO/GsHZRFKXbNTqESLUeqSo0C+HvtjacdMqvPlKKZ3eJcvtX8448I7XJXuN6iXMmx0=
+X-Received: by 2002:a25:7449:: with SMTP id p70mr18110062ybc.89.1632579516179;
+ Sat, 25 Sep 2021 07:18:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABoTLcRpSuUUu-x-S8yTLUJCiN4RERi2kd8XATP_n3ZTRpAWDg@mail.gmail.com>
+From:   Turritopsis Dohrnii Teo En Ming <ceo.teo.en.ming@gmail.com>
+Date:   Sat, 25 Sep 2021 22:18:25 +0800
+Message-ID: <CAMEJMGGp2gQaiFXhnZ_oMxcnRrWt7WwN8-Mb7u1Xh0iH=2i29A@mail.gmail.com>
+Subject: Introduction: I am a Linux and open source software enthusiast
+To:     linux-hwmon@vger.kernel.org
+Cc:     ceo@teo-en-ming-corp.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 11:17:51AM -0400, Oskar Senft wrote:
-> Hi Rob
-> 
-> > > +maintainers:
-> > > +  - Guenter Roeck <linux@roeck-us.net>
-> >
-> > Should be someone that cares about this h/w, not who applies patches.
-> 
-> Hmm, ok. After talking with Guenter, I thought that would be him. But
-> I can add myself, too, since we're obviously using that HW. Is that
-> what you mean?
+Subject: Introduction: I am a Linux and open source software enthusiast
 
-FWIW, this happens to be one of the cases where I am also the driver 
-author, and I still have a test board with the chip.
+Greetings from Singapore,
 
-Guenter
+My name is Mr. Turritopsis Dohrnii Teo En Ming, 43 years old as of 25
+September 2021. My country is Singapore. Presently I am an IT
+Consultant with a System Integrator (SI)/computer firm in Singapore. I
+am also a Linux and open source software and information technology
+enthusiast.
 
-> 
-> > > +    properties:
-> > > +      ltd:
-> > > +        type: object
-> > > +        description: Internal Temperature Sensor ("LTD")
-> >
-> > No child properties?
-> 
-> Yes. We really just want the ability to enable / disable that sensor.
-> What's the correct way in the YAML to describe that? Same for RTD3.
-> 
-> > > +          "type":
-> > > +            description: Sensor type (3=thermal diode, 4=thermistor).
-> >
-> > 2nd time I've seen this property this week[1]. Needs to be more specific
-> > than just 'type'.
-> 
-> Ha yes, the example in [1] came from this patch. I went with this name
-> to stay in-line with the sysfs name, being "tempX_type". In the
-> hardware this would be called "mode".
-> 
-> My original proposal [2] was to have this property a string list named
-> "nuvoton,rtd-modes" with a set of accepted values, i.e. basically an
-> enum. Splitting this string list into individual sensors makes sense.
-> 
-> The other question that remains open (at least in my view), is whether
-> naming the sensors "ltd, rtd1, rtd2, rtd3" is the right approach or if
-> we should really go to naming them "sensor@X" with a reg property set
-> to X. Note that ltd and rtd3 do not accept any additional
-> configuration beyond "is enabled" (i.e. "status").
-> 
-> > > +            temperature-sensors {
-> > > +                ltd {
-> > > +                  status = "disabled";
-> >
-> > Don't show status in examples.
-> Hmm, ok. I found it useful to make clear that a sensor can be
-> disabled, but maybe that's just always the case?
-> 
-> I appreciate your other comments and will fix them in the next version
-> of the patch. But I'd like to get clarity wrt. recommended sensor and
-> property naming in the device tree before sending that.
-> 
-> Thoughts?
-> 
-> Thanks
-> Oskar.
-> 
-> > [1] https://lore.kernel.org/all/CAL_Jsq+NXuF+F7OE3vyEbTUj6sxyMHVWHXbCuPPoFaKjpyZREQ@mail.gmail.com/
-> [2] https://lore.kernel.org/all/20210910130337.2025426-1-osk@google.com/
+You can read my autobiography on my redundant blogs. The title of my
+autobiography is:
+
+"Autobiography of Singaporean Targeted Individual Mr. Turritopsis
+Dohrnii Teo En Ming (Very First Draft, Lots More to Add in Future)"
+
+Links to my redundant blogs (Blogger and Wordpress) can be found in my
+email signature below. These are my main blogs.
+
+I have three other redundant blogs, namely:
+
+https://teo-en-ming.tumblr.com/
+
+https://teo-en-ming.medium.com/
+
+https://teo-en-ming.livejournal.com/
+
+Future/subsequent versions of my autobiography will be published on my
+redundant blogs.
+
+My Blog Books (in PDF format) are also available for download on my
+redundant blogs.
+
+I have also published many guides, howtos, tutorials, and information
+technology articles on my redundant blogs.
+
+Thank you very much.
+
+
+
+
+
+
+-----BEGIN EMAIL SIGNATURE-----
+
+The Gospel for all Targeted Individuals (TIs):
+
+[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
+U.S. Embassy Workers
+
+Link:
+https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microwave.html
+
+********************************************************************************************
+
+Singaporean Targeted Individual Mr. Turritopsis Dohrnii Teo En Ming's
+Academic Qualifications as at 14 Feb 2019 and refugee seeking attempts
+at the United Nations Refugee Agency Bangkok (21 Mar 2017), in Taiwan
+(5 Aug 2019) and Australia (25 Dec 2019 to 9 Jan 2020):
+
+[1] https://tdtemcerts.wordpress.com/
+
+[2] https://tdtemcerts.blogspot.sg/
+
+[3] https://www.scribd.com/user/270125049/Teo-En-Ming
+
+-----END EMAIL SIGNATURE-----
