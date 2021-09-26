@@ -2,125 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E2A7C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 14:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5496CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Sep 2021 05:36:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 262A060EFF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Sep 2021 14:18:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25F0E6108E
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Sep 2021 05:36:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237777AbhIYOUM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Sep 2021 10:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbhIYOUL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Sep 2021 10:20:11 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5BDC061570
-        for <linux-hwmon@vger.kernel.org>; Sat, 25 Sep 2021 07:18:37 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id j195so12404497ybj.8
-        for <linux-hwmon@vger.kernel.org>; Sat, 25 Sep 2021 07:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
-        b=cWjZ+Vzd7/EsxQwed5/RATsnMW3BFCpx5cIGKSepks+ZN2KjVusxgInYeqqNYx189o
-         b4SlQQPZd8XtkV9FL3jllx4IL/0NnNyK6JEaYGgTolMvbqxT8ljxdNy+CWbupE3VcNY4
-         wayh5uvlkWvCH6P5Hz5bs4A4NeUhwtf3dXqVzOwlsUAWwEPAPn4gjpHxS2acOrr0Lbfn
-         A/bIe/lsm5qDEQYZKq8XKhUk5gpazXCqnEYasWOuB/wiKmvUikys1FFH2pK4/H+kxNIr
-         7yHiAjb+FSixgiE3fzqb4NXC5XwP64vYgpMWF+4Co4Qad8tkjuG0sFgCC6BXy5Kc3kTT
-         uQwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
-        b=uVICiyhqZ3PhggS2WQo33g7wIWNUq4VemBUmHIoqWpCu9brVfrydQHL8ECH54tg1l1
-         6WNoNdnht9zWhUJu6A2IuQobnGrwFzznoZ9e5PFFasaXBPoDOGulG2yxPM7lpWuhReJw
-         GEAsDBc+JtWmhtekOssOpX1Pi+mc8Rl+xFsXC/jugHc9VlK4CPN4SJnNEmRW30D47aaF
-         ZEfeQHlJ+v6rklo+lfDOYV4ZDRFyBsImumoN5oRmbqF0CUY9AaG+ZIH0TfPmZ0edmEm3
-         baGXh1gKWTbDa1Xg3JTqaBuPWKukd+Kbj8OO5hNaVeK5ADH+SCAJ+OE3oEZmz7PCzQ4d
-         JPjw==
-X-Gm-Message-State: AOAM532s22X9FMwP3rCPEH2zLSxjHiAsuYqklC8ttbJoyGDxyVANEO6s
-        QQeXWDi+P8m88x8hlq/gUJd+LTd3f+fUmrRBw/Vwp9q5GAw=
-X-Google-Smtp-Source: ABdhPJyQCjQ1mjQK6is1W9ruuCO/GsHZRFKXbNTqESLUeqSo0C+HvtjacdMqvPlKKZ3eJcvtX8448I7XJXuN6iXMmx0=
-X-Received: by 2002:a25:7449:: with SMTP id p70mr18110062ybc.89.1632579516179;
- Sat, 25 Sep 2021 07:18:36 -0700 (PDT)
+        id S229829AbhIZFhi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 26 Sep 2021 01:37:38 -0400
+Received: from mail-dm3nam07on2045.outbound.protection.outlook.com ([40.107.95.45]:6689
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229746AbhIZFhi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 26 Sep 2021 01:37:38 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KLwR+8MHRPzjLnu36QPCSmVN7ANi60RISAlA/TCsx6YjUWmdHcJ2hUYQO8XTk9gnacHrRkBrpnJDDcSL1zhHFzrQOSPTx+mDJEVM6MG7cOVD8f8my+7lG8f8X7wvG2tXLbhTZb3ynA2Qz2WlpIIe3OCdMB4Ioq95pYCd/ih9gujko3ezV8FX6gqOaUOClH73REeTMtkgnrgKTmlSOSV9pUcRmQSsH6yCnpQvQ4gMK5Z/VzoLjb7UAJCEmJFWiaqzDK6OGFmaLjP/4bTopWLI8s3bF0uUn1aajagIlNDgZYbdckpMvvTOXunBzg0r4Y9caJr3DV62p3NbSg++HGlgdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=JWjmH5/eg+TLUZ9eWwhRE8+ydzvV+q3tToDTAawX9Q8=;
+ b=ItmQSOJ8ZmB9083Hm/vOfEgLL1V5126kPhtxIh0ekpg0Mx2euQ3KtKKieAUKokYCR58O2GddcULKFBoqp02sf0x0IYniBe58L6LnnIwG0YQXJ3SadSxce8PGM3+/Eg2Q8KIvN+3lSaq75DckJ/kRwNPVx9KV6dSYYg/RaXWeKwrvoOZYdN5KoKzKv7S7PfI+fhmfpxMdRYQq3X4yTi0XvJv7g4gHgTdsrpNzpKWLXY6MYdK3HQJmzHA9ShWWInBI9DZOzc/eW7p9PMExPzs8RX2WvkNztFZO0fbgsnkcYyVhi3561EvfSDjlUXoqPARfveiwFwbBIRlE7gOqTZD9QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.35) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JWjmH5/eg+TLUZ9eWwhRE8+ydzvV+q3tToDTAawX9Q8=;
+ b=Su2VXKLlLHHSXsDuJa6dNG4UqRf6xApLoMRyDhlww/ouy5qiZOGMKot95kUkZq3L9oTjPSqXMQl2WXI3G5lZEFnN5Cmleub2OmncieNpW29RYB/n4lB0uAoq4F51qiD8ZtMHxgfK/ic9s+GTPzXe97uixQvoIo86TvzMsXxC38MV6eQYF+gkjps9oZ56KHBQuKQsV6p5tmlViuhzRn+Huc1dlheY5rDweAxXnl3ohsNXLay22akFIE6tuDgDQ+x1dhEYennRiOEP4e1V4xZ+WF9L2PA/chYEzoR4FVjBDGZx4SddYxUCGZOgIy8R/92peO4dQBlKKn5nRGy4H36F6w==
+Received: from BN9PR03CA0013.namprd03.prod.outlook.com (2603:10b6:408:fa::18)
+ by BN6PR12MB1458.namprd12.prod.outlook.com (2603:10b6:405:d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15; Sun, 26 Sep
+ 2021 05:36:00 +0000
+Received: from BN8NAM11FT038.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fa:cafe::72) by BN9PR03CA0013.outlook.office365.com
+ (2603:10b6:408:fa::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend
+ Transport; Sun, 26 Sep 2021 05:36:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.35)
+ smtp.mailfrom=nvidia.com; roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.35 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.35; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.35) by
+ BN8NAM11FT038.mail.protection.outlook.com (10.13.176.246) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4544.13 via Frontend Transport; Sun, 26 Sep 2021 05:36:00 +0000
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sun, 26 Sep
+ 2021 05:35:59 +0000
+Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.187.5) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.18; Sun, 26 Sep 2021 05:35:58 +0000
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH hwmon-next 0/2] hwmon: (mlxreg-fan) Extend support for multiply PWM
+Date:   Sun, 26 Sep 2021 08:35:39 +0300
+Message-ID: <20210926053541.1806937-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-From:   Turritopsis Dohrnii Teo En Ming <ceo.teo.en.ming@gmail.com>
-Date:   Sat, 25 Sep 2021 22:18:25 +0800
-Message-ID: <CAMEJMGGp2gQaiFXhnZ_oMxcnRrWt7WwN8-Mb7u1Xh0iH=2i29A@mail.gmail.com>
-Subject: Introduction: I am a Linux and open source software enthusiast
-To:     linux-hwmon@vger.kernel.org
-Cc:     ceo@teo-en-ming-corp.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.20.187.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 28f55aaa-8cdd-4b28-e3d8-08d980af8600
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1458:
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1458EC5A48454056C7762D8CAFA69@BN6PR12MB1458.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EVj+F+5ZRYKcP4cSXhxK7iKu88LGwIz/H5GzIgGpyM6ZmSrAFGJCBYzk3sgSFUKUiW8UU3uw+Hc49fHjUugNHeYIpr5y8RtpzVehD47KE7p1rzoswbCBhgQmFu6uIdSDO82R/N07HoA5eI95HJq+OsXuGSgVIlFBndunyYH4ikQ1HvqB0oObFto6P1T7wsFIkb7ggweWyUY7o5MVmicyMY2/2NcSz18iCayWhU8+a+qIcGjxCk2fU1Incc9qnqSpMcaWAg3HWF5eScI9KNnaKe+m9cgee17XiqSNJlQdfYASzwnBgBmXCYig+trKCrt0ZSAGhjXcMHnYjg8RkL+GfnuQ7wRKeBQ4fHUdhvFyRba6OyXdUzq+xiR70qUqzPvM8p/ks/SZGY5S4U33MMmcY/ysan5pjxTdXIGvZXVB7hJYcGhU3FUNwCsQhwRHz/xWTkAOV0jaUb7WkB/a85ATltTtfE7S0SW50x3Zako2OpbAuEiHUYngjCOA4pugfSbn+7gF8gF7b9DnxxZ/pKP6STE3kAXdeSuskE039Ciq1A0L15wwRWJ434lU4ZqyudOkYmbjH0uDes5I/eSOJy30SqThf4dpxTMoBzy58WvJe65qb0q0P/leRgbowrzKBDlhxE8G9l/hky7yCSbnPIxYaq1mDCMDCRwWKVfhKQ2LKM214TvkYXGAxDmMD40CqI6FBJ9iNRoWbfZH5K7EFOhAoQ==
+X-Forefront-Antispam-Report: CIP:216.228.112.35;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid04.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(70206006)(107886003)(8936002)(2906002)(4326008)(54906003)(508600001)(6916009)(26005)(6666004)(2616005)(86362001)(16526019)(1076003)(186003)(70586007)(8676002)(83380400001)(4744005)(82310400003)(5660300002)(47076005)(36906005)(316002)(356005)(7636003)(336012)(36756003)(426003)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2021 05:36:00.3644
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28f55aaa-8cdd-4b28-e3d8-08d980af8600
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.35];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT038.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1458
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Subject: Introduction: I am a Linux and open source software enthusiast
+Patch set contains:
+Patch #1: Change for PWM connectivity logic validation
+Patch #2:Adding different names for cooling devices.
 
-Greetings from Singapore,
+Vadim Pasternak (2):
+  hwmon: (mlxreg-fan) Modify PWM connectivity validation
+  hwmon: (mlxreg-fan) Support distinctive names per different cooling
+    devices
 
-My name is Mr. Turritopsis Dohrnii Teo En Ming, 43 years old as of 25
-September 2021. My country is Singapore. Presently I am an IT
-Consultant with a System Integrator (SI)/computer firm in Singapore. I
-am also a Linux and open source software and information technology
-enthusiast.
+ drivers/hwmon/mlxreg-fan.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-You can read my autobiography on my redundant blogs. The title of my
-autobiography is:
+-- 
+2.20.1
 
-"Autobiography of Singaporean Targeted Individual Mr. Turritopsis
-Dohrnii Teo En Ming (Very First Draft, Lots More to Add in Future)"
-
-Links to my redundant blogs (Blogger and Wordpress) can be found in my
-email signature below. These are my main blogs.
-
-I have three other redundant blogs, namely:
-
-https://teo-en-ming.tumblr.com/
-
-https://teo-en-ming.medium.com/
-
-https://teo-en-ming.livejournal.com/
-
-Future/subsequent versions of my autobiography will be published on my
-redundant blogs.
-
-My Blog Books (in PDF format) are also available for download on my
-redundant blogs.
-
-I have also published many guides, howtos, tutorials, and information
-technology articles on my redundant blogs.
-
-Thank you very much.
-
-
-
-
-
-
------BEGIN EMAIL SIGNATURE-----
-
-The Gospel for all Targeted Individuals (TIs):
-
-[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
-U.S. Embassy Workers
-
-Link:
-https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microwave.html
-
-********************************************************************************************
-
-Singaporean Targeted Individual Mr. Turritopsis Dohrnii Teo En Ming's
-Academic Qualifications as at 14 Feb 2019 and refugee seeking attempts
-at the United Nations Refugee Agency Bangkok (21 Mar 2017), in Taiwan
-(5 Aug 2019) and Australia (25 Dec 2019 to 9 Jan 2020):
-
-[1] https://tdtemcerts.wordpress.com/
-
-[2] https://tdtemcerts.blogspot.sg/
-
-[3] https://www.scribd.com/user/270125049/Teo-En-Ming
-
------END EMAIL SIGNATURE-----
