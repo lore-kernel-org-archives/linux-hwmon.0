@@ -2,216 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A460DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Sep 2021 22:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E3B7C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Sep 2021 22:11:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C78660F4B
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Sep 2021 22:11:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42EE560F4A
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Sep 2021 22:11:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbhIZWMq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 26 Sep 2021 18:12:46 -0400
-Received: from mout.gmx.net ([212.227.15.18]:45509 "EHLO mout.gmx.net"
+        id S230309AbhIZWMv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 26 Sep 2021 18:12:51 -0400
+Received: from mout.gmx.net ([212.227.15.18]:36125 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230309AbhIZWMp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 26 Sep 2021 18:12:45 -0400
+        id S230075AbhIZWMq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 26 Sep 2021 18:12:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-        s=badeba3b8450; t=1632694251;
-        bh=Z4YV0ViNGXLjmwTvsBCwX0IysXTWQCRVraatngTpz5g=;
+        s=badeba3b8450; t=1632694253;
+        bh=Njlopxjblt3vt45EN3BXYKPdOFGjSx57MNpWT6zD1Q4=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=W2bj47wJIUfE9rsTj0hc+qLZ95r9Ju81CeUT2pvfUVB/VMI1EZbmCkfPJyt+OCn6Y
-         F0R0/SFWDqs/Ugo87a7Z4gV1BhYnoW6yd8Nlf6qsBl7Z1ETLUh1sZu11dT8bQhI24N
-         joHAe8RMXrRkJ5KFyYH1o9VNHsRcHI5dH4CDRmXY=
+        b=bLrB32o6Z62eqVimWgXCa/2fYqlccvkzs/eOJwFY0szw9Xh091Br+7De/JVq9OQjH
+         KePwp81h0iQzGL66wPNMsk49zzpUq9bRx8CH/ntLx4767C8AMidu9naEX0ioWP0+Bg
+         CHzSewjPhe7jzRmlkNrBRz++bvXIIg1w4GTUTwKw=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1N79uI-1mtg9P2y0S-017Y1w; Mon, 27 Sep 2021 00:10:51 +0200
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1Mzhj9-1mhtvA0HR3-00vcAV; Mon, 27 Sep 2021 00:10:53 +0200
 From:   W_Armin@gmx.de
 To:     pali@kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH v3 1/2] hwmon: (dell-smm) Add support for fanX_min, fanX_max and fanX_target
-Date:   Mon, 27 Sep 2021 00:10:43 +0200
-Message-Id: <20210926221044.14327-2-W_Armin@gmx.de>
+Subject: [PATCH v3 2/2] hwmon: (dell-smm) Remove unnecessary includes
+Date:   Mon, 27 Sep 2021 00:10:44 +0200
+Message-Id: <20210926221044.14327-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210926221044.14327-1-W_Armin@gmx.de>
 References: <20210926221044.14327-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HIce/h/ynVOSVyCI81PyOdRXP0L93GCnsLP1Zvw5nsPhpnKiwQm
- PCjnXIDO25nr5/tdBNJRVShMXNKTG51ojETO05pkTPJqpX34lu22e1tzyLV4YILmYtOfQKz
- H0r/2y+ovWm79kQPQ12pYjJiJttEJXGwTjpaQZ4wDj0tQvFF0O147wPxXKCDDQI4mS9XO93
- uEKrHZ5NGz5T6DciBtnEw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cLdl8EDrQUk=:uF0zkwDtuomOLEHKc6pU3/
- ED/c3+1xChUMf9Z9Fy6zd65MyuOd2nCkyN/vg8Rd1EhS1/eoCyNwgNL6FuFqkCxgT8V89dXYX
- dEkyzgd+vAlDc3jrdQHNOKXiaR9vMIM+8pySJHNv/WV40UBcetSxWL7H3einiHknksa/HZKSS
- x0mRtkvlJve8mozeoqT8BgJjdtgUedp+GpmK08q1cZKi4MvciNGM9UirfT4TuFcHe8viiWfA5
- jxnLCpTE0tecxov5G0AdMQA3SaWQgi9vnTkfMv9C4mjtpNXWcPW7B2St7njA9uTqlL7mpI2Sp
- 0oJ2PrXV2Kn6NjM8xvBk3MACDMpfHkBIzdoTBIvU11qWsNYDM5WPytHALLOdRwAZ5CLNxlcOU
- W5/2714mxGT7OhEroOkxBnvA62uzmXx1+sCI+/UFp/kUVXbyUlyi18QOUOCUHbR+ouajqkkrp
- +85YAF95/Itk3nMzl+BRJlxrExx5VrsWKLnK927KGvzhOL2BiHjoC+3pXxZj9Xs9tBIxzsgbF
- pYOcV4RkcXThjE3sQQfXK6LGl/DaRWEq47IjkigFLnMuxD4Ushtc5F7L2q7wQu6rNHInKeKOd
- ZNiwZhHOAYTjEHiEak/S1/5U6+jNwd0hQfnUI/K3yff21mTW0TYAyX6X0rflYOa4f+6Q8aKOR
- SOuW8ScURGB1gx79CpiosD1zraWDKrs++t2Vlsf5542kITnuPyN8DXoR5Kz840i9687e/nRNR
- o7T+uXEJuccCB6SXGPP/uthrRc8GOz/30aV4U85P37Jj1ywGbdcV0bOEnmZmKc2WKc/jLEjFe
- cNW8ABtHZzAieUpRHc9rJNLIEo+ep++3kkKymuKvVdPlBwOkt6mVzTr5v8M7DJuFOmjZC0VUS
- 39z0x/oTmU3QQPVhID7rnyXzVifCzRgHEAwDIlmy5LjYwutljs4h2URkbFKcQljb8fE4GlNxt
- tZUtltHx308y3ZdSiGdzyb6ZGV6uCVSuSYLArAh8cRKznq0cX005tgGDt7q+54KJGPNGJQsxG
- 0WkNVp9JJwVpVHrTT7rc5gEZFKvbgYws5CYDbvQoUbGWLco/qzKe1cLypRbifZDsm16S8w2rx
- Pa0LYyRyfBPu6M=
+X-Provags-ID: V03:K1:zt3MRNz7Owuw0iFCX3k2OnwfzSzWm2FMDF6JaN3D6fhWLkGoxiL
+ Ba5rmj20/02dZSt5UMD26gzE23qv6gq+FSh1NTeCjc+FwEoTEykTQqQGaRdUYbzRSf3z4kd
+ +3DUE9uWib/KTAS/pWZOEMWa2gj24H9lxNm6ryQ15GVm4vsrRKuAX+aFTPe0GMqfjXqwygJ
+ DJAGqEB9BxcFqa6fdSK/g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:r2pFTtr6NLQ=:q7kQ+R5YlBJe0rbF074VFe
+ jfLCREhtFu3lcNDbQBuwI3b50RyQ4i0IMXrdQxXcA6A9nN6bKLpY1dP2NCgjoTlHJqm/wkoBg
+ B6QrAiMwWbLSXuF0+TrDXrpeNPHdX+RSB5IaB+59hM3V56jxpXpwZ11KwJxCoydJ2OrrzB2y8
+ WvzfSF/J3v06LXA5E0oqzMn7Dnm4z4qKhk+BO6FJG/2YidVvfW/9875Bk5rNPicwf4mqRALdz
+ 9ldl3MfLkkk0qbjQa6r/NLpOiJ7nIxo5quw6QQnkGVDWtYDUjv2ZHFrTqQBxkpurVY7lj6QnE
+ kfPqcxd0S7O6qDkcrxKASOPoSh2O92c90yPsBpV0HoICYcVanH/vawz3vNTwhqzzr9VH+77xP
+ qUAya2mjtr5TuVBbnHp5AY+WkP8ULUfHYMtjdTkCqkYb2jA+fRsVYCjoIPkO5z+7omJnoMmNj
+ slHpjaJ4wXRsxRgxaJossmO+56jOGhFjePBNtKxRnhZhUE0B7U0RWLJsn3XVgbSsj1zzL5O0p
+ /BIZnz3BiMCZ8AGwgsNGfxTmj7Iusd495mfdkm8GG2kMnh9WW0sPQRw5EOBvbiOT0u8R/j2zD
+ cj9dQBtOnFjr2N0CH9gm4xVaTUaoJGf0/KXmx9+kHDHlFSqBceNoYOzR/WvFd+jCXoIPwfEqY
+ WxFFST/c441A9cCEocFdpwzljClcrnkZatSii5Qbo/4lthajR4+g1Z6pR7tG2poVgkJFiYJ7t
+ JSoy4UxZZIO5eYDdmV/UN7FaMlAEsrHM75B5CVaz7aIqFnrDSM9HWGaIB/nbQGAb92SocTLPi
+ ey84iUz974nBhoO4Yufq6/u94MWzAoY7+846jaj5XCzmmV5ysVlIkUcHyiDxILvsL9B+EO3ON
+ SdFqbMRM4Fr1968C9bOs9686GrXkAPkykp1tunqs36juovS+csCGaCYD3yUJSL84pRNiC0OvH
+ MXP7kqAw/XdrEz7Cgg6Jk3IfZmVtK5pwOF7P8+6VAik/xsJwBYfF9FOCSduhJk05bKeanrrDn
+ 1naDkHWivy1RiD6hrMOyLJdwwU91Yw30qQq2SpKDFeVfyBP6BSZQaM15zhINFoqjmhpX09ZXP
+ bO6fqfj1vZpsZU=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Armin Wolf <W_Armin@gmx.de>
 
-The nominal speed of each fan can be obtained with
-i8k_get_fan_nominal_speed(), however the result is not available
-from userspace.
-Change that by adding fanX_min, fanX_max and fanX_target attributes.
-All are RO since fan control happens over pwm.
-
-Tested on a Dell Inspiron 3505 and a Dell Latitude C600.
+sched.h and io.h are not used anywhere in dell-smm-hwmon.c.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- Documentation/hwmon/dell-smm-hwmon.rst |  3 ++
- drivers/hwmon/dell-smm-hwmon.c         | 61 +++++++++++++++++++++++---
- 2 files changed, 58 insertions(+), 6 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
-dell-smm-hwmon.rst
-index 3bf77a5df995..beec88491171 100644
-=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -34,6 +34,9 @@ Name				Perm	Description
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
- fan[1-3]_input                  RO      Fan speed in RPM.
- fan[1-3]_label                  RO      Fan label.
-+fan[1-3]_min                    RO      Minimal Fan speed in RPM
-+fan[1-3]_max                    RO      Maximal Fan speed in RPM
-+fan[1-3]_target                 RO      Expected Fan speed in RPM
- pwm[1-3]                        RW      Control the fan PWM duty-cycle.
- pwm1_enable                     WO      Enable or disable automatic BIOS =
-fan
-                                         control (not supported on all lap=
-tops,
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index 774c1b0715d9..476f2a74bd8c 100644
+index 476f2a74bd8c..af0d0d2b6e99 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -76,6 +76,7 @@ struct dell_smm_data {
- 	int temp_type[DELL_SMM_NO_TEMP];
- 	bool fan[DELL_SMM_NO_FANS];
- 	int fan_type[DELL_SMM_NO_FANS];
-+	int *fan_nominal_speed[DELL_SMM_NO_FANS];
- };
+@@ -26,8 +26,6 @@
+ #include <linux/mutex.h>
+ #include <linux/hwmon.h>
+ #include <linux/uaccess.h>
+-#include <linux/io.h>
+-#include <linux/sched.h>
+ #include <linux/ctype.h>
+ #include <linux/smp.h>
 
- MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
-@@ -673,6 +674,13 @@ static umode_t dell_smm_is_visible(const void *drvdat=
-a, enum hwmon_sensor_types
- 			if (data->fan[channel] && !data->disallow_fan_type_call)
- 				return 0444;
-
-+			break;
-+		case hwmon_fan_min:
-+		case hwmon_fan_max:
-+		case hwmon_fan_target:
-+			if (data->fan_nominal_speed[channel])
-+				return 0444;
-+
- 			break;
- 		default:
- 			break;
-@@ -740,6 +748,25 @@ static int dell_smm_read(struct device *dev, enum hwm=
-on_sensor_types type, u32 a
-
- 			*val =3D ret;
-
-+			return 0;
-+		case hwmon_fan_min:
-+			*val =3D data->fan_nominal_speed[channel][0];
-+
-+			return 0;
-+		case hwmon_fan_max:
-+			*val =3D data->fan_nominal_speed[channel][data->i8k_fan_max];
-+
-+			return 0;
-+		case hwmon_fan_target:
-+			ret =3D i8k_get_fan_status(data, channel);
-+			if (ret < 0)
-+				return ret;
-+
-+			if (ret > data->i8k_fan_max)
-+				ret =3D data->i8k_fan_max;
-+
-+			*val =3D data->fan_nominal_speed[channel][ret];
-+
- 			return 0;
- 		default:
- 			break;
-@@ -889,9 +916,12 @@ static const struct hwmon_channel_info *dell_smm_info=
-[] =3D {
- 			   HWMON_T_INPUT | HWMON_T_LABEL
- 			   ),
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_LABEL,
--			   HWMON_F_INPUT | HWMON_F_LABEL,
--			   HWMON_F_INPUT | HWMON_F_LABEL
-+			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-+			   HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-+			   HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-+			   HWMON_F_TARGET
- 			   ),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-@@ -910,7 +940,7 @@ static int __init dell_smm_init_hwmon(struct device *d=
-ev)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
- 	struct device *dell_smm_hwmon_dev;
--	int i, err;
-+	int i, state, err;
-
- 	for (i =3D 0; i < DELL_SMM_NO_TEMP; i++) {
- 		data->temp_type[i] =3D i8k_get_temp_type(i);
-@@ -926,8 +956,27 @@ static int __init dell_smm_init_hwmon(struct device *=
-dev)
- 		err =3D i8k_get_fan_status(data, i);
- 		if (err < 0)
- 			err =3D i8k_get_fan_type(data, i);
--		if (err >=3D 0)
--			data->fan[i] =3D true;
-+
-+		if (err < 0)
-+			continue;
-+
-+		data->fan[i] =3D true;
-+		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan_ma=
-x + 1,
-+								sizeof(*data->fan_nominal_speed[i]),
-+								GFP_KERNEL);
-+		if (!data->fan_nominal_speed[i])
-+			continue;
-+
-+		for (state =3D 0; state <=3D data->i8k_fan_max; state++) {
-+			err =3D i8k_get_fan_nominal_speed(data, i, state);
-+			if (err < 0) {
-+				/* Mark nominal speed table as invalid in case of error */
-+				devm_kfree(dev, data->fan_nominal_speed[i]);
-+				data->fan_nominal_speed[i] =3D NULL;
-+				break;
-+			}
-+			data->fan_nominal_speed[i][state] =3D err;
-+		}
- 	}
-
- 	dell_smm_hwmon_dev =3D devm_hwmon_device_register_with_info(dev, "dell_s=
-mm", data,
 =2D-
 2.20.1
 
