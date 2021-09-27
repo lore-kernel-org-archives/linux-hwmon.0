@@ -2,112 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61DCEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Sep 2021 08:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98916C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Sep 2021 08:46:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42FF360F48
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Sep 2021 08:45:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 820566113A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Sep 2021 08:46:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbhI0IrD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Sep 2021 04:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        id S233532AbhI0Ir7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Sep 2021 04:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbhI0IrC (ORCPT
+        with ESMTP id S233507AbhI0Ir6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Sep 2021 04:47:02 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72976C061575
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Sep 2021 01:45:24 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id l8so18456618edw.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Sep 2021 01:45:24 -0700 (PDT)
+        Mon, 27 Sep 2021 04:47:58 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD45C061604
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Sep 2021 01:46:20 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id y26so34609708lfa.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Sep 2021 01:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DGKA8rTEAQu8OeSpTEqYi/Di78F+wnsXdQCPCwN2vKk=;
-        b=wfW2kJHVTtt809o2M23kBVvhmZwKgap19KW7HrDgtbeeY/gyr0ryebb0HMrnO5T++d
-         FVhBbGkjD5FBL7pCntEpyRbY+zn4+q7wYRiFQ1CDfYS0MJA6Rjabb/UW6Gw4Le/28rCe
-         qnaQY2tUnGNnySaYDmvmhvCLTtgIJ61CExWO+wsNsq835sFdGGnxaI8Prq2R5NjR1I0U
-         6IN7D8sp1I0Zn9Wd8e/XDGYLdSnZKUQHLf1rOWgX8lr4TSi60NilAoz6F/mOmerKY9YI
-         raqSwGb/sRwrCUVg4EFmjqyHEd8Lyru8VxD6K6HDxcwNDOmEeH6+h/Q9Y7azDE5pZweJ
-         Phmg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=U0zut/STrbzFzEaYGrjx8N7OZIB3TgBNbxo/HurOdUQ=;
+        b=VBqpJXNDaL4icGpXRQtO2EpchiZGOb5gwRgp6IuJymn7c5Lx3j0LZ4s9DVi8oAe6bw
+         QDQzplH1FcaAZ3hvbKOfOxr3EXJ8fKgEKlLcwWo5cQWbezaXBMdMcxOnKhK/HxATUNrp
+         t+N6o00WIUC6InRAFXAh1Ixc5tFW7SjZMzLkL3ThmqWzz+5bpSVWAM50FHKDcxD4RGzn
+         rw60tIZ9LCzTIpbeGxMkwHuK+U/hFNIGv1aTZ7QxJh7IK2XmnHWoswxmt+vKjS+KHCuk
+         7YCoZvkPJiwUaE+PgqBtEklKHuulNlsnyBwVMotvn4DQr7V8ScloLMWzvXFztV8/OqGP
+         zGcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DGKA8rTEAQu8OeSpTEqYi/Di78F+wnsXdQCPCwN2vKk=;
-        b=u5z8wbYmqCnokP1MgZR5kyx96TOEm4VqxmHK6f+akXpo5TIDL1tZjXXn2FwAzZVT+9
-         ww87gFAuhmrvs8WRukY+KzOhXiV4QlyvBgiEBcGtv2XEPDH4K9M4zwfRmIgHUNC3YgYR
-         2UH30EQML77T8R33xZd95TjsFKYu2pBxq5sO4nzlCDlvyfGx827q4w7vp+x8j5k7+All
-         f/9XQvp335YA12CyQfLqfV4ZN/nqWcKM3wU9cY5nfAzVNd39drhmQxTmrDihe5KRtQuV
-         Ke7Bg5uBVbF5GObVzu3jUOIjcbxM3oo/QLXCh7ZqdzIW6DnzuWy9evHEnN1ymJGbGBbb
-         5kYg==
-X-Gm-Message-State: AOAM532GlH1h7DtZwnfdMAy36d5R1Ohsn232pYWmjfB1TtTkPi4iXWol
-        oh4V/VH3K1MfnFkmkWYbgetIlMoLTcHJoH6hKynl+w==
-X-Google-Smtp-Source: ABdhPJwDKj+aNcnCL/GUS68QPp1qX8UZdCAC1/ZeGTly+mo3wl7fQ4Ub0l/IxZ4EPPX8fBtxfV2cbXjDH+Ebj6GjHzo=
-X-Received: by 2002:a17:906:3a84:: with SMTP id y4mr4319372ejd.340.1632732322981;
- Mon, 27 Sep 2021 01:45:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210924164530.1754128-1-anders.roxell@linaro.org>
- <c3bdc145-70e7-b504-0437-f451a3e1c5a8@infradead.org> <DM6PR04MB6575F2F6841B0573560E10ADFCA49@DM6PR04MB6575.namprd04.prod.outlook.com>
- <5dab9890-6142-3ac3-424a-1fc169734464@infradead.org>
-In-Reply-To: <5dab9890-6142-3ac3-424a-1fc169734464@infradead.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=U0zut/STrbzFzEaYGrjx8N7OZIB3TgBNbxo/HurOdUQ=;
+        b=6vwMLUbfIMuPwbd+1GFaDMJkBHtqGXBYCtW1/lv/BIR5moSSYn380rU1Tz5GkwBwy4
+         Gy7KqtzMMFlMAYznykGs/gYaJ5qDVwLzrxiZg51vIr735HFeURWFHTGrFaeF3Q1Km8+C
+         LuOgxWrJDUNwqR8ZE3dZlv2ECca09457cNn4ans6E5Uy5feYqipCjKv7uWdlpR6RWY8A
+         YqADqssjPEKrXDxUCoqss/Xuz1FnLiB0S2jjkuZBsOeoBhJEdjAVbRnFbWfml4Spgntc
+         5cCO6gGP0mcqIAmrur0ZD4jilkPyO9giU9GT424tffcpgktciwMi3Yyny1u0Ci69P3Tb
+         05Qg==
+X-Gm-Message-State: AOAM531pzofqmDb2Np2ZgOBptLyn/+XRhifY4p60vRd9z02Dfc5QsdSr
+        RsuSrL2RAJWfrQwF1+cs04pEcA==
+X-Google-Smtp-Source: ABdhPJyy4wq8y7JCvg1Nd9f2qhYuJ03dtZEMmiEuqunDVQyRQ2qJLc3EBEZlNTGNt7M0wqKYpIl0Zg==
+X-Received: by 2002:a2e:145c:: with SMTP id 28mr19708234lju.295.1632732378811;
+        Mon, 27 Sep 2021 01:46:18 -0700 (PDT)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id c3sm128196ljf.113.2021.09.27.01.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Sep 2021 01:46:18 -0700 (PDT)
 From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Mon, 27 Sep 2021 10:45:11 +0200
-Message-ID: <CADYN=9K=DsJh+ozL1pJyPScSyZvKDTMgZa_aamEU4YRvWYsC9w@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs: Kconfig: SCSI_UFS_HWMON depens on HWMON=y
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com, jdelvare@suse.com,
+        linux@roeck-us.net
+Cc:     avri.altman@wdc.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCHv2] scsi: ufs: Kconfig: SCSI_UFS_HWMON depens on HWMON=y
+Date:   Mon, 27 Sep 2021 10:46:15 +0200
+Message-Id: <20210927084615.1938432-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <DM6PR04MB6575F2F6841B0573560E10ADFCA49@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <DM6PR04MB6575F2F6841B0573560E10ADFCA49@DM6PR04MB6575.namprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 24 Sept 2021 at 21:53, Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 9/24/21 11:59 AM, Avri Altman wrote:
-> >>> Since fragment 'SCSI_UFS_HWMON' can't be build as a module,
-> >>> 'SCSI_UFS_HWMON' has to depend on 'HWMON=y'.
-> >>>
-> >>> Fixes: e88e2d32200a ("scsi: ufs: core: Probe for temperature
-> >>> notification support")
-> >>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> >>> ---
-> >>>    drivers/scsi/ufs/Kconfig | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig index
-> >>> 565e8aa6319d..30c6edb53be9 100644
-> >>> --- a/drivers/scsi/ufs/Kconfig
-> >>> +++ b/drivers/scsi/ufs/Kconfig
-> >>> @@ -202,7 +202,7 @@ config SCSI_UFS_FAULT_INJECTION
-> >>>
-> >>>    config SCSI_UFS_HWMON
-> >>>        bool "UFS  Temperature Notification"
-> >>> -     depends on SCSI_UFSHCD && HWMON
-> >>> +     depends on SCSI_UFSHCD && HWMON=y
-> >>>        help
-> >>>          This provides support for UFS hardware monitoring. If enabled,
-> >>>          a hardware monitoring device will be created for the UFS device.
->
-> Thinking about this, it should be possible to do it like this
-> so that both SCSI_UFSHCD=m ad SCSI_HFS_HWMON=m would also work.
-> I.e., this would allow more combinations of Kconfig settings to
-> work. It only excludes SCSI_UFSH_HWMON=y and HWMON=m
->
-> +       depends on SCSI_UFSHCD=HWMON || HWMON=y
->
-> OK, I have verified that this works (builds) in all allowed
-> combinations.  Anders, would you please resubmit the patch?
+When building an allmodconfig kernel, the following build error shows
+up:
 
-Yeah, I'll send the patch.
+aarch64-linux-gnu-ld: drivers/scsi/ufs/ufs-hwmon.o: in function `ufs_hwmon_probe':
+/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:177: undefined reference to `hwmon_device_register_with_info'
+/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:177:(.text+0x510): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `hwmon_device_register_with_info'
+aarch64-linux-gnu-ld: drivers/scsi/ufs/ufs-hwmon.o: in function `ufs_hwmon_remove':
+/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:195: undefined reference to `hwmon_device_unregister'
+/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:195:(.text+0x5c8): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `hwmon_device_unregister'
+aarch64-linux-gnu-ld: drivers/scsi/ufs/ufs-hwmon.o: in function `ufs_hwmon_notify_event':
+/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:206: undefined reference to `hwmon_notify_event'
+/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:206:(.text+0x64c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `hwmon_notify_event'
+aarch64-linux-gnu-ld: /home/anders/src/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:209: undefined reference to `hwmon_notify_event'
+/kernel/next/drivers/scsi/ufs/ufs-hwmon.c:209:(.text+0x66c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `hwmon_notify_event'
 
-Cheers,
-Anders
+Since fragment 'SCSI_UFS_HWMON' can't be build as a module,
+'SCSI_UFS_HWMON' has to depend on 'HWMON=y'.
+
+Fixes: e88e2d32200a ("scsi: ufs: core: Probe for temperature notification support")
+Also-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Acked-by: Avri Altman <avri.altman@wdc.com>
+---
+ drivers/scsi/ufs/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
+index 565e8aa6319d..2ca69f87e4de 100644
+--- a/drivers/scsi/ufs/Kconfig
++++ b/drivers/scsi/ufs/Kconfig
+@@ -202,7 +202,7 @@ config SCSI_UFS_FAULT_INJECTION
+ 
+ config SCSI_UFS_HWMON
+ 	bool "UFS  Temperature Notification"
+-	depends on SCSI_UFSHCD && HWMON
++	depends on SCSI_UFSHCD=HWMON || HWMON=y
+ 	help
+ 	  This provides support for UFS hardware monitoring. If enabled,
+ 	  a hardware monitoring device will be created for the UFS device.
+-- 
+2.33.0
+
