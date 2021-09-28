@@ -2,111 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 381EAC41535
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03CF2C43217
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD1E561130
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E35B561130
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239967AbhI1JcZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Sep 2021 05:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbhI1JcW (ORCPT
+        id S239972AbhI1Jc1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Sep 2021 05:32:27 -0400
+Received: from thorn.bewilderbeest.net ([71.19.156.171]:50585 "EHLO
+        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239831AbhI1JcW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 28 Sep 2021 05:32:22 -0400
-X-Greylist: delayed 410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Sep 2021 02:30:38 PDT
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB70C061740;
-        Tue, 28 Sep 2021 02:30:38 -0700 (PDT)
 Received: from hatter.bewilderbeest.net (71-212-29-146.tukw.qwest.net [71.212.29.146])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 7279EC53;
-        Tue, 28 Sep 2021 02:23:52 -0700 (PDT)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 41FDA293;
+        Tue, 28 Sep 2021 02:23:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1632821032;
-        bh=OL+wLYUxy0gYzafQl0tDCAxXVTFEgMWaHXWJNw47X7I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I/IvhQUFC1S3knvGefzb8ZNayYDTTFr19IrAHEeDYC6Q5DfpKw3VdlTqSyzc5t5Se
-         XulSt7S5QeHATdCj1zrjevkBi0vFd3fK80+9VW3srO+Zr29AfBgwckveDXhAkiRSjC
-         2UauikC7JbsZsoSNtHgRL/r2vjRlLcfSEmvdY+3E=
+        s=thorn; t=1632821027;
+        bh=97KklhLeQh76YRY1Elsbf7cYcTo9pXXl9b7LWGG1VS4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g7IOBn658cEz3nJKuSFKelzRTGj5KyBz0QVD6IXVFO2KUJR9QTtkpTdyT6Rp8ZRfP
+         vLrDpbi19J7Pgi7/Bw6ej6VsdYfNtlci/9IZMn8ox9HmwRtEToRzjUrQGlFWd1Dq4/
+         eYgW8rlW8o6IqhuWVKQOGTP49VINHTKGxHYLu7BA=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/8] hwmon: (pmbus/lm25066) Support configurable sense resistor values
-Date:   Tue, 28 Sep 2021 02:22:41 -0700
-Message-Id: <20210928092242.30036-8-zev@bewilderbeest.net>
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH 0/8] hwmon: (pmbus/lm25066) Configurable sense resistor, other cleanups
+Date:   Tue, 28 Sep 2021 02:22:34 -0700
+Message-Id: <20210928092242.30036-1-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210928092242.30036-1-zev@bewilderbeest.net>
-References: <20210928092242.30036-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The appropriate mantissa values for the lm25066 family's direct-format
-current and power readings are a function of the sense resistor
-employed between the SENSE and VIN pins of the chip.  Instead of
-assuming that resistance is always the same 1mOhm as used in the
-datasheet, allow it to be configured via a device-tree property
-("shunt-resistor-micro-ohms").
+Hello,
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
----
- Documentation/hwmon/lm25066.rst |  2 ++
- drivers/hwmon/pmbus/lm25066.c   | 12 ++++++++++++
- 2 files changed, 14 insertions(+)
+I'm working with a board that uses LM25066s with sense resistor values
+significantly different than the 1mOhm assumed by the coefficients
+provided in the datasheet; the power and current readings produced by
+the existing driver are thus fairly inaccurate.
 
-diff --git a/Documentation/hwmon/lm25066.rst b/Documentation/hwmon/lm25066.rst
-index 9f1d7e4d3ca1..a2098eb24090 100644
---- a/Documentation/hwmon/lm25066.rst
-+++ b/Documentation/hwmon/lm25066.rst
-@@ -79,6 +79,8 @@ This driver does not auto-detect devices. You will have to instantiate the
- devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
- details.
- 
-+The shunt (sense) resistor value can be configured by a device tree property;
-+see Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml for details.
- 
- Platform data support
- ---------------------
-diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-index 18d5a76f346d..29e848bcd436 100644
---- a/drivers/hwmon/pmbus/lm25066.c
-+++ b/drivers/hwmon/pmbus/lm25066.c
-@@ -458,6 +458,7 @@ MODULE_DEVICE_TABLE(of, lm25066_of_match);
- static int lm25066_probe(struct i2c_client *client)
- {
- 	int config;
-+	u32 shunt;
- 	struct lm25066_data *data;
- 	struct pmbus_driver_info *info;
- 	const struct __coeff *coeff;
-@@ -535,6 +536,17 @@ static int lm25066_probe(struct i2c_client *client)
- 		info->b[PSC_POWER] = coeff[PSC_POWER].b;
- 	}
- 
-+	/*
-+	 * Values in the TI datasheets are normalized for a 1mOhm sense
-+	 * resistor; assume that unless DT specifies a value explicitly.
-+	 */
-+	if (of_property_read_u32(client->dev.of_node,
-+	                         "shunt-resistor-micro-ohms", &shunt))
-+		shunt = 1000;
-+
-+	info->m[PSC_CURRENT_IN] = info->m[PSC_CURRENT_IN] * shunt / 1000;
-+	info->m[PSC_POWER] = info->m[PSC_POWER] * shunt / 1000;
-+
- 	return pmbus_do_probe(client, info);
- }
- 
+This patch series started out as merely adding support for a
+shunt-resistor-micro-ohms DT property as found in the adm1275 driver,
+but along the way I noticed a number of other minor bits in the
+lm25066 driver that looked like they could use some fixes, so I've
+included those as well.
+
+Patches 1 and 2 bring the m/b/R coefficients in line with what's in
+the relevant datasheets, patches 3 through 5 are fairly generic
+(minor) code cleanups, and patches 6 through 8 add the desired OF
+support for the driver.
+
+
+Thanks,
+Zev
+
+
+Zev Weiss (8):
+  hwmon: (pmbus/lm25066) Add offset coefficients
+  hwmon: (pmbus/lm25066) Adjust lm25066 PSC_CURRENT_IN_L mantissa
+  hwmon: (pmbus/lm25066) Avoid forward declaration of lm25066_id
+  hwmon: (pmbus/lm25066) Let compiler determine outer dimension of
+    lm25066_coeff
+  hwmon: (pmbus/lm25066) Mark lm25066_coeff array const
+  hwmon: (pmbus/lm25066) Add OF device ID table
+  hwmon: (pmbus/lm25066) Support configurable sense resistor values
+  dt-bindings: hwmon/pmbus: Add ti,lm25066 power-management IC
+
+ .../bindings/hwmon/pmbus/ti,lm25066.yaml      | 54 +++++++++++
+ Documentation/hwmon/lm25066.rst               |  2 +
+ drivers/hwmon/pmbus/lm25066.c                 | 90 +++++++++++++++----
+ 3 files changed, 128 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
+
 -- 
 2.33.0
 
