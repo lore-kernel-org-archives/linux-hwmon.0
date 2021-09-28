@@ -2,43 +2,41 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B699EC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3101BC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3F7561130
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FB2761157
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239978AbhI1Jc0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Sep 2021 05:32:26 -0400
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:51011 "EHLO
+        id S239858AbhI1JcY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Sep 2021 05:32:24 -0400
+Received: from thorn.bewilderbeest.net ([71.19.156.171]:60137 "EHLO
         thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239827AbhI1JcW (ORCPT
+        with ESMTP id S239844AbhI1JcV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Sep 2021 05:32:22 -0400
-X-Greylist: delayed 408 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Sep 2021 05:32:20 EDT
+        Tue, 28 Sep 2021 05:32:21 -0400
 Received: from hatter.bewilderbeest.net (71-212-29-146.tukw.qwest.net [71.212.29.146])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id B0890C85;
-        Tue, 28 Sep 2021 02:23:54 -0700 (PDT)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id D6014B1A;
+        Tue, 28 Sep 2021 02:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1632821034;
-        bh=CatX71RSe4cBZ47vo+0qA9ACXKr3G52arA6l0RAFgGw=;
+        s=thorn; t=1632821031;
+        bh=VBdqx6jas8pIr1PD+ePFPfJwfr9ZGcfTFBf3b03vzMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OU3CiAdtMLJuCOrqBhr8ogVpJui6ITSdQiYMktK6cQlMO78+x9e4lX2yF0kGCy3M2
-         WmXS7tFrMzOO05gdT7pWNORCFMVuGDsw3130Lq4IAWpaoWZmPajWiHxd/K6j8+ju5/
-         GWTQUWn6cyFv0j3GvC7jpkCz72+k0ouw0KpulCEo=
+        b=IYqp4fdlsX9u7Kdm5JsrtWc9pNTpze+dy9xFIgnDhkYNJaXESIsHmjSTvRKcucaFU
+         tyC8mLEk6sOBuqPasKw1HQxa8pJMca3JbWeyl33mXW8vhkdRa++qRg5uYrD4Oq/DBD
+         wMfczRyxJfzlZiCjgfMpD67kuj9sU8TV/zjyqclg=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] dt-bindings: hwmon/pmbus: Add ti,lm25066 power-management IC
-Date:   Tue, 28 Sep 2021 02:22:42 -0700
-Message-Id: <20210928092242.30036-9-zev@bewilderbeest.net>
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 3/8] hwmon: (pmbus/lm25066) Avoid forward declaration of lm25066_id
+Date:   Tue, 28 Sep 2021 02:22:37 -0700
+Message-Id: <20210928092242.30036-4-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210928092242.30036-1-zev@bewilderbeest.net>
 References: <20210928092242.30036-1-zev@bewilderbeest.net>
@@ -48,72 +46,62 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Reordering things to put the table before the probe function
+eliminates the need for it.
+
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- .../bindings/hwmon/pmbus/ti,lm25066.yaml      | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
+ drivers/hwmon/pmbus/lm25066.c | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
-new file mode 100644
-index 000000000000..da8292bc32f5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index 3616705aafde..4dc003ff859e 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -234,8 +234,6 @@ struct lm25066_data {
+ 
+ #define to_lm25066_data(x)  container_of(x, struct lm25066_data, info)
+ 
+-static const struct i2c_device_id lm25066_id[];
+-
+ static int lm25066_read_word_data(struct i2c_client *client, int page,
+ 				  int phase, int reg)
+ {
+@@ -436,6 +434,16 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
+ 	return ret;
+ }
+ 
++static const struct i2c_device_id lm25066_id[] = {
++	{"lm25056", lm25056},
++	{"lm25066", lm25066},
++	{"lm5064", lm5064},
++	{"lm5066", lm5066},
++	{"lm5066i", lm5066i},
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, lm25066_id);
 +
-+$id: http://devicetree.org/schemas/hwmon/pmbus/ti,lm25066.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: National Semiconductor/Texas Instruments LM250x6/LM506x power-management ICs
-+
-+maintainers:
-+  - Zev Weiss <zev@bewilderbeest.net>
-+
-+description: |
-+  The LM25066 family of power-management ICs (a.k.a. hot-swap
-+  controllers or eFuses in various contexts) are PMBus devices that
-+  offer temperature, current, voltage, and power monitoring.
-+
-+  Datasheet: https://www.ti.com/lit/ds/symlink/lm25066.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,lm25056
-+      - ti,lm25066
-+      - ti,lm5064
-+      - ti,lm5066
-+      - ti,lm5066i
-+
-+  reg:
-+    maxItems: 1
-+
-+  shunt-resistor-micro-ohms:
-+    description:
-+      Shunt (sense) resistor value in micro-Ohms
-+    default: 1000
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@40 {
-+            compatible = "ti,lm25066";
-+            reg = <0x40>;
-+            shunt-resistor-micro-ohms = <675>;
-+        };
-+    };
+ static int lm25066_probe(struct i2c_client *client)
+ {
+ 	int config;
+@@ -509,17 +517,6 @@ static int lm25066_probe(struct i2c_client *client)
+ 	return pmbus_do_probe(client, info);
+ }
+ 
+-static const struct i2c_device_id lm25066_id[] = {
+-	{"lm25056", lm25056},
+-	{"lm25066", lm25066},
+-	{"lm5064", lm5064},
+-	{"lm5066", lm5066},
+-	{"lm5066i", lm5066i},
+-	{ }
+-};
+-
+-MODULE_DEVICE_TABLE(i2c, lm25066_id);
+-
+ /* This is the driver that will be inserted */
+ static struct i2c_driver lm25066_driver = {
+ 	.driver = {
 -- 
 2.33.0
 
