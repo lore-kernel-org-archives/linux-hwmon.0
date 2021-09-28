@@ -2,44 +2,44 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFD4DC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A608C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0830A61130
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B4A961130
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239758AbhI1JcW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Sep 2021 05:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S239926AbhI1JcX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Sep 2021 05:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239858AbhI1JcV (ORCPT
+        with ESMTP id S239872AbhI1JcV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 28 Sep 2021 05:32:21 -0400
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83241C061765;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38445C06176A;
         Tue, 28 Sep 2021 02:30:38 -0700 (PDT)
 Received: from hatter.bewilderbeest.net (71-212-29-146.tukw.qwest.net [71.212.29.146])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 750A68C0;
-        Tue, 28 Sep 2021 02:23:50 -0700 (PDT)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 8E31BC20;
+        Tue, 28 Sep 2021 02:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1632821030;
-        bh=70fCqkVY3hCEpVjRYy+pHiM6jsyO/PA2U039v04eomg=;
+        s=thorn; t=1632821031;
+        bh=4P1wdSQkXGcDVZjSddgG/Ut0TaQpsgcZ1xCEifRgdLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aTxb4lgNmJSyWNkMVEA0GmCNexMqlnuXDoaxUrKIsKPaobBgZ9/4brOkpVl7ia8yK
-         e4tWOg2gTd4+XoaOW1++3KC28ljK+1H0sh9qq5487U3vkAR+C2WD/u2Df2Jjt6r6/u
-         ZJliqvn73+++zD3N7ORaVvQ2pryMERNANNHhNGxw=
+        b=SXKRjKb68YYJoMFO3J1WS1iQQIDZRigDhx/NvjvXE2QzSUyo/wyRPBiDY94J73QLm
+         D32qEWdfU1WQIgwyUsFqXchiZ6s0T5J6RUWRNHpXf3kJt/8bSyJOlfm/jSqePwgfGe
+         k+gPbM71LrCV75fA+Yvgm4h58kNG8TlH0IOpgVbA=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Zev Weiss <zev@bewilderbeest.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/8] hwmon: (pmbus/lm25066) Adjust lm25066 PSC_CURRENT_IN_L mantissa
-Date:   Tue, 28 Sep 2021 02:22:36 -0700
-Message-Id: <20210928092242.30036-3-zev@bewilderbeest.net>
+Subject: [PATCH 5/8] hwmon: (pmbus/lm25066) Mark lm25066_coeff array const
+Date:   Tue, 28 Sep 2021 02:22:39 -0700
+Message-Id: <20210928092242.30036-6-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210928092242.30036-1-zev@bewilderbeest.net>
 References: <20210928092242.30036-1-zev@bewilderbeest.net>
@@ -49,27 +49,33 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-At least as of Revision J, the datasheet has a slightly different
-value than what we'd had in the driver.
-
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/hwmon/pmbus/lm25066.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/pmbus/lm25066.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-index 1a660c4cd19f..3616705aafde 100644
+index 1ff5407b6977..dbbf8571c437 100644
 --- a/drivers/hwmon/pmbus/lm25066.c
 +++ b/drivers/hwmon/pmbus/lm25066.c
-@@ -101,7 +101,7 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
- 			.R = -2,
- 		},
- 		[PSC_CURRENT_IN_L] = {
--			.m = 6852,
-+			.m = 6854,
- 			.b = -3100,
- 			.R = -2,
- 		},
+@@ -51,7 +51,7 @@ struct __coeff {
+ #define PSC_CURRENT_IN_L	(PSC_NUM_CLASSES)
+ #define PSC_POWER_L		(PSC_NUM_CLASSES + 1)
+ 
+-static struct __coeff lm25066_coeff[][PSC_NUM_CLASSES + 2] = {
++static const struct __coeff lm25066_coeff[][PSC_NUM_CLASSES + 2] = {
+ 	[lm25056] = {
+ 		[PSC_VOLTAGE_IN] = {
+ 			.m = 16296,
+@@ -449,7 +449,7 @@ static int lm25066_probe(struct i2c_client *client)
+ 	int config;
+ 	struct lm25066_data *data;
+ 	struct pmbus_driver_info *info;
+-	struct __coeff *coeff;
++	const struct __coeff *coeff;
+ 
+ 	if (!i2c_check_functionality(client->adapter,
+ 				     I2C_FUNC_SMBUS_READ_BYTE_DATA))
 -- 
 2.33.0
 
