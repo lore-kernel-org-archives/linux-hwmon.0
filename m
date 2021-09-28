@@ -2,45 +2,44 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C133C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85BC3C43217
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E28F061159
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 694DD611C3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239903AbhI1JcW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Sep 2021 05:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
+        id S239951AbhI1JcY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Sep 2021 05:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239832AbhI1JcV (ORCPT
+        with ESMTP id S239865AbhI1JcV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 28 Sep 2021 05:32:21 -0400
-X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Sep 2021 02:30:38 PDT
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F67C061604;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383FAC061769;
         Tue, 28 Sep 2021 02:30:38 -0700 (PDT)
 Received: from hatter.bewilderbeest.net (71-212-29-146.tukw.qwest.net [71.212.29.146])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id E70B1C2D;
-        Tue, 28 Sep 2021 02:23:51 -0700 (PDT)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 201DD6BF;
+        Tue, 28 Sep 2021 02:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1632821032;
-        bh=tXLdw8+7XyyaNC2nx8/azLFD8tnijRO/sXuXLjMDFfI=;
+        s=thorn; t=1632821030;
+        bh=ZxYTBGMf5cIw6CXTGFSPXVUjDJpCAz1J+TK7EcfCnxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KuJx3h8+xeOXqjn30yyHApPuhrufZusIfYS8iPa+FVxQ9JuO80EkpegS3MeE7Ch2s
-         I15GhwuMLy77uLvQkXlTpbS0ao/WpoymxODxEBEePZg43oejKsZl8OEPnpC4n/GQAm
-         ZUAMTya33ECDRvM8YguzsWoJ4+biEduXdAH9j7Zg=
+        b=KrLB+A9L4btJVsG1iAWONbdqkvmpYXQZQSXywHbjdTTxXDeVIB0Pje3O9e+ALgULG
+         0b2YA63vycTptTY5hMndh6zzg2xH0FejMCtrx1AQ5y0sFNNKJdsSyQzQ1kmMpC1Rle
+         nbVguI1jOnsOw/jri+hf3fo2c5PtUDdSaRaLh5A8=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Zev Weiss <zev@bewilderbeest.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 6/8] hwmon: (pmbus/lm25066) Add OF device ID table
-Date:   Tue, 28 Sep 2021 02:22:40 -0700
-Message-Id: <20210928092242.30036-7-zev@bewilderbeest.net>
+Subject: [PATCH 1/8] hwmon: (pmbus/lm25066) Add offset coefficients
+Date:   Tue, 28 Sep 2021 02:22:35 -0700
+Message-Id: <20210928092242.30036-2-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210928092242.30036-1-zev@bewilderbeest.net>
 References: <20210928092242.30036-1-zev@bewilderbeest.net>
@@ -50,78 +49,146 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-See commit 8881a19187e4 ("hwmon: (ucd9000) Add OF device ID table")
-for reasoning.
+With the exception of the lm5066i, all the devices handled by this
+driver had been missing their offset ('b') coefficients for direct
+format readings.
 
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/hwmon/pmbus/lm25066.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/lm25066.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-index dbbf8571c437..18d5a76f346d 100644
+index d209e0afc2ca..1a660c4cd19f 100644
 --- a/drivers/hwmon/pmbus/lm25066.c
 +++ b/drivers/hwmon/pmbus/lm25066.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/i2c.h>
- #include <linux/log2.h>
-+#include <linux/of_device.h>
- #include "pmbus.h"
- 
- enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
-@@ -444,12 +445,24 @@ static const struct i2c_device_id lm25066_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, lm25066_id);
- 
-+static const struct of_device_id __maybe_unused lm25066_of_match[] = {
-+	{ .compatible = "ti,lm25056", .data = (void*)lm25056, },
-+	{ .compatible = "ti,lm25066", .data = (void*)lm25066, },
-+	{ .compatible = "ti,lm5064",  .data = (void*)lm5064,  },
-+	{ .compatible = "ti,lm5066",  .data = (void*)lm5066,  },
-+	{ .compatible = "ti,lm5066i", .data = (void*)lm5066i, },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, lm25066_of_match);
-+
- static int lm25066_probe(struct i2c_client *client)
- {
- 	int config;
- 	struct lm25066_data *data;
- 	struct pmbus_driver_info *info;
- 	const struct __coeff *coeff;
-+	const struct of_device_id *of_id;
-+	const struct i2c_device_id *i2c_id;
- 
- 	if (!i2c_check_functionality(client->adapter,
- 				     I2C_FUNC_SMBUS_READ_BYTE_DATA))
-@@ -464,7 +477,15 @@ static int lm25066_probe(struct i2c_client *client)
- 	if (config < 0)
- 		return config;
- 
--	data->id = i2c_match_id(lm25066_id, client)->driver_data;
-+	i2c_id = i2c_match_id(lm25066_id, client);
-+
-+	of_id = of_match_device(lm25066_of_match, &client->dev);
-+	if (of_id && (enum chips)of_id->data != i2c_id->driver_data)
-+		dev_notice(&client->dev,
-+		           "Device mismatch: %s in device tree, %s detected\n",
-+		           of_id->name, i2c_id->name);
-+
-+	data->id = i2c_id->driver_data;
- 	info = &data->info;
- 
- 	info->pages = 1;
-@@ -521,7 +542,8 @@ static int lm25066_probe(struct i2c_client *client)
- static struct i2c_driver lm25066_driver = {
- 	.driver = {
- 		   .name = "lm25066",
--		   },
-+		   .of_match_table = of_match_ptr(lm25066_of_match),
-+	},
- 	.probe_new = lm25066_probe,
- 	.id_table = lm25066_id,
- };
+@@ -55,22 +55,27 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+ 	[lm25056] = {
+ 		[PSC_VOLTAGE_IN] = {
+ 			.m = 16296,
++			.b = 1343,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN] = {
+ 			.m = 13797,
++			.b = -1833,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN_L] = {
+ 			.m = 6726,
++			.b = -537,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER] = {
+ 			.m = 5501,
++			.b = -2908,
+ 			.R = -3,
+ 		},
+ 		[PSC_POWER_L] = {
+ 			.m = 26882,
++			.b = -5646,
+ 			.R = -4,
+ 		},
+ 		[PSC_TEMPERATURE] = {
+@@ -82,26 +87,32 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+ 	[lm25066] = {
+ 		[PSC_VOLTAGE_IN] = {
+ 			.m = 22070,
++			.b = -1800,
+ 			.R = -2,
+ 		},
+ 		[PSC_VOLTAGE_OUT] = {
+ 			.m = 22070,
++			.b = -1800,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN] = {
+ 			.m = 13661,
++			.b = -5200,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN_L] = {
+ 			.m = 6852,
++			.b = -3100,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER] = {
+ 			.m = 736,
++			.b = -3300,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER_L] = {
+ 			.m = 369,
++			.b = -1900,
+ 			.R = -2,
+ 		},
+ 		[PSC_TEMPERATURE] = {
+@@ -111,26 +122,32 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+ 	[lm5064] = {
+ 		[PSC_VOLTAGE_IN] = {
+ 			.m = 4611,
++			.b = -642,
+ 			.R = -2,
+ 		},
+ 		[PSC_VOLTAGE_OUT] = {
+ 			.m = 4621,
++			.b = 423,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN] = {
+ 			.m = 10742,
++			.b = 1552,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN_L] = {
+ 			.m = 5456,
++			.b = 2118,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER] = {
+ 			.m = 1204,
++			.b = 8524,
+ 			.R = -3,
+ 		},
+ 		[PSC_POWER_L] = {
+ 			.m = 612,
++			.b = 11202,
+ 			.R = -3,
+ 		},
+ 		[PSC_TEMPERATURE] = {
+@@ -140,26 +157,32 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+ 	[lm5066] = {
+ 		[PSC_VOLTAGE_IN] = {
+ 			.m = 4587,
++			.b = -1200,
+ 			.R = -2,
+ 		},
+ 		[PSC_VOLTAGE_OUT] = {
+ 			.m = 4587,
++			.b = -2400,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN] = {
+ 			.m = 10753,
++			.b = -1200,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN_L] = {
+ 			.m = 5405,
++			.b = -600,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER] = {
+ 			.m = 1204,
++			.b = -6000,
+ 			.R = -3,
+ 		},
+ 		[PSC_POWER_L] = {
+ 			.m = 605,
++			.b = -8000,
+ 			.R = -3,
+ 		},
+ 		[PSC_TEMPERATURE] = {
 -- 
 2.33.0
 
