@@ -2,41 +2,46 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3101BC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 381EAC41535
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FB2761157
+	by mail.kernel.org (Postfix) with ESMTP id AD1E561130
 	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Sep 2021 09:30:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239858AbhI1JcY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Sep 2021 05:32:24 -0400
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:60137 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239844AbhI1JcV (ORCPT
+        id S239967AbhI1JcZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Sep 2021 05:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239850AbhI1JcW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Sep 2021 05:32:21 -0400
+        Tue, 28 Sep 2021 05:32:22 -0400
+X-Greylist: delayed 410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Sep 2021 02:30:38 PDT
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB70C061740;
+        Tue, 28 Sep 2021 02:30:38 -0700 (PDT)
 Received: from hatter.bewilderbeest.net (71-212-29-146.tukw.qwest.net [71.212.29.146])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id D6014B1A;
-        Tue, 28 Sep 2021 02:23:50 -0700 (PDT)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 7279EC53;
+        Tue, 28 Sep 2021 02:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1632821031;
-        bh=VBdqx6jas8pIr1PD+ePFPfJwfr9ZGcfTFBf3b03vzMs=;
+        s=thorn; t=1632821032;
+        bh=OL+wLYUxy0gYzafQl0tDCAxXVTFEgMWaHXWJNw47X7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IYqp4fdlsX9u7Kdm5JsrtWc9pNTpze+dy9xFIgnDhkYNJaXESIsHmjSTvRKcucaFU
-         tyC8mLEk6sOBuqPasKw1HQxa8pJMca3JbWeyl33mXW8vhkdRa++qRg5uYrD4Oq/DBD
-         wMfczRyxJfzlZiCjgfMpD67kuj9sU8TV/zjyqclg=
+        b=I/IvhQUFC1S3knvGefzb8ZNayYDTTFr19IrAHEeDYC6Q5DfpKw3VdlTqSyzc5t5Se
+         XulSt7S5QeHATdCj1zrjevkBi0vFd3fK80+9VW3srO+Zr29AfBgwckveDXhAkiRSjC
+         2UauikC7JbsZsoSNtHgRL/r2vjRlLcfSEmvdY+3E=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/8] hwmon: (pmbus/lm25066) Avoid forward declaration of lm25066_id
-Date:   Tue, 28 Sep 2021 02:22:37 -0700
-Message-Id: <20210928092242.30036-4-zev@bewilderbeest.net>
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 7/8] hwmon: (pmbus/lm25066) Support configurable sense resistor values
+Date:   Tue, 28 Sep 2021 02:22:41 -0700
+Message-Id: <20210928092242.30036-8-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210928092242.30036-1-zev@bewilderbeest.net>
 References: <20210928092242.30036-1-zev@bewilderbeest.net>
@@ -46,62 +51,62 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Reordering things to put the table before the probe function
-eliminates the need for it.
+The appropriate mantissa values for the lm25066 family's direct-format
+current and power readings are a function of the sense resistor
+employed between the SENSE and VIN pins of the chip.  Instead of
+assuming that resistance is always the same 1mOhm as used in the
+datasheet, allow it to be configured via a device-tree property
+("shunt-resistor-micro-ohms").
 
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/hwmon/pmbus/lm25066.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+ Documentation/hwmon/lm25066.rst |  2 ++
+ drivers/hwmon/pmbus/lm25066.c   | 12 ++++++++++++
+ 2 files changed, 14 insertions(+)
 
+diff --git a/Documentation/hwmon/lm25066.rst b/Documentation/hwmon/lm25066.rst
+index 9f1d7e4d3ca1..a2098eb24090 100644
+--- a/Documentation/hwmon/lm25066.rst
++++ b/Documentation/hwmon/lm25066.rst
+@@ -79,6 +79,8 @@ This driver does not auto-detect devices. You will have to instantiate the
+ devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+ details.
+ 
++The shunt (sense) resistor value can be configured by a device tree property;
++see Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml for details.
+ 
+ Platform data support
+ ---------------------
 diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-index 3616705aafde..4dc003ff859e 100644
+index 18d5a76f346d..29e848bcd436 100644
 --- a/drivers/hwmon/pmbus/lm25066.c
 +++ b/drivers/hwmon/pmbus/lm25066.c
-@@ -234,8 +234,6 @@ struct lm25066_data {
- 
- #define to_lm25066_data(x)  container_of(x, struct lm25066_data, info)
- 
--static const struct i2c_device_id lm25066_id[];
--
- static int lm25066_read_word_data(struct i2c_client *client, int page,
- 				  int phase, int reg)
- {
-@@ -436,6 +434,16 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
- 	return ret;
- }
- 
-+static const struct i2c_device_id lm25066_id[] = {
-+	{"lm25056", lm25056},
-+	{"lm25066", lm25066},
-+	{"lm5064", lm5064},
-+	{"lm5066", lm5066},
-+	{"lm5066i", lm5066i},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, lm25066_id);
-+
+@@ -458,6 +458,7 @@ MODULE_DEVICE_TABLE(of, lm25066_of_match);
  static int lm25066_probe(struct i2c_client *client)
  {
  	int config;
-@@ -509,17 +517,6 @@ static int lm25066_probe(struct i2c_client *client)
++	u32 shunt;
+ 	struct lm25066_data *data;
+ 	struct pmbus_driver_info *info;
+ 	const struct __coeff *coeff;
+@@ -535,6 +536,17 @@ static int lm25066_probe(struct i2c_client *client)
+ 		info->b[PSC_POWER] = coeff[PSC_POWER].b;
+ 	}
+ 
++	/*
++	 * Values in the TI datasheets are normalized for a 1mOhm sense
++	 * resistor; assume that unless DT specifies a value explicitly.
++	 */
++	if (of_property_read_u32(client->dev.of_node,
++	                         "shunt-resistor-micro-ohms", &shunt))
++		shunt = 1000;
++
++	info->m[PSC_CURRENT_IN] = info->m[PSC_CURRENT_IN] * shunt / 1000;
++	info->m[PSC_POWER] = info->m[PSC_POWER] * shunt / 1000;
++
  	return pmbus_do_probe(client, info);
  }
  
--static const struct i2c_device_id lm25066_id[] = {
--	{"lm25056", lm25056},
--	{"lm25066", lm25066},
--	{"lm5064", lm5064},
--	{"lm5066", lm5066},
--	{"lm5066i", lm5066i},
--	{ }
--};
--
--MODULE_DEVICE_TABLE(i2c, lm25066_id);
--
- /* This is the driver that will be inserted */
- static struct i2c_driver lm25066_driver = {
- 	.driver = {
 -- 
 2.33.0
 
