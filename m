@@ -2,126 +2,140 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0548C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Sep 2021 15:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DF8AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Sep 2021 15:38:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE8CA6147F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Sep 2021 15:36:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 269E861452
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Sep 2021 15:38:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345178AbhI2PiI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Sep 2021 11:38:08 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31548 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345157AbhI2PiH (ORCPT
+        id S1345257AbhI2PkK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Sep 2021 11:40:10 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38796 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1345251AbhI2PkJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 29 Sep 2021 11:40:09 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18TFIXuJ021894;
+        Wed, 29 Sep 2021 11:38:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ni6fW0e6udKKS09xxpVAxi6YbZN4f06i9VJgZGlNL+o=;
+ b=UGQmqc3Qrujy+vHPBI9cxcojAJJSe3ADiTp0mgHqDypQ6QckY8MT0LEtqCvXTXK4HSKX
+ C8KSdz5TsaR6FEP/iuDlXiFbXXCC1hKmH8Kl5Uc4aU25QvCQU4eE3klnLqezSMeV657Y
+ gbPcSRNFFfbmr8zd8TW7P/WiHssO3RJLIjEFgztFac2sbbI35FbC3TdHWFHjAqfRw6L0
+ A4Ic7ZZAz3nJ/IcN7AsIbAtpgwJAD32wmcFQkreOcdLDhwIK8CjHztGHEWNe5+EGC3ti
+ pXNFJ/vQSA/X8rnwQeOkATORLo8unrdpkWkNpmINS4ketcjLl1ocXdAD1jR4Mo2HL2RF VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3bcspg2f83-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 29 Sep 2021 11:38:07 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18TFISb4012258;
-        Wed, 29 Sep 2021 11:36:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=8y8HFu3P9T/ieEDDDn+jonJUF4zXuLC4cmPBiCu8V7I=;
- b=MyPtMixPvK/aFhHNOZgIIODljKk/mm1pwf5ShAnhxXi9cRCglUuSOj4+A4tNON11vdCU
- HDIVC2kNjkzk9UT4pEHcYCHZg/2LFRRMzC7VTV9fUTcmGuHQV2q5jcUhpUAAwkI+e1r2
- nZZWRSr4Y6dNtfVUgDQ1dx+pMDYWAtq5IdHCOCcgbRzH42WJTypEObcAf9BTdOfk+7TD
- fdVLSPEL3KGCnrBMN/84ckwHJUJczNqUTYd8OXV3nJw9aASgX8KO/gMC8buf+oN32Hdc
- VkGp430HBxZY5O+At4mVYvoeeU7KHKcEkJox/KM9zyPwTNkCRCKFHHYm404rt2OgZPGI PQ== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bcshj2ng8-1
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18TFJUBW025629;
+        Wed, 29 Sep 2021 11:38:07 -0400
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3bcspg2f7j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Sep 2021 11:36:10 -0400
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18TFHwEG015056;
-        Wed, 29 Sep 2021 15:36:09 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma04wdc.us.ibm.com with ESMTP id 3b9udbkxmb-1
+        Wed, 29 Sep 2021 11:38:07 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18TFI0DU016321;
+        Wed, 29 Sep 2021 15:38:06 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma04dal.us.ibm.com with ESMTP id 3b9udc6c0x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Sep 2021 15:36:09 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18TFa8La5112660
+        Wed, 29 Sep 2021 15:38:06 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18TFc5ku28115358
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Sep 2021 15:36:08 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C6CDAC060;
-        Wed, 29 Sep 2021 15:36:08 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE2F1AC06B;
-        Wed, 29 Sep 2021 15:36:07 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.163.24.144])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 29 Sep 2021 15:36:07 +0000 (GMT)
+        Wed, 29 Sep 2021 15:38:05 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 77637124052;
+        Wed, 29 Sep 2021 15:38:05 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B45D7124058;
+        Wed, 29 Sep 2021 15:38:04 +0000 (GMT)
+Received: from [9.163.24.144] (unknown [9.163.24.144])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 29 Sep 2021 15:38:04 +0000 (GMT)
+Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) max_power_out swap changes
+To:     Brandon Wyman <bjwyman@gmail.com>, Joel Stanley <joel@jms.id.au>,
+        openbmc@lists.ozlabs.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210928205051.1222815-1-bjwyman@gmail.com>
 From:   Eddie James <eajames@linux.ibm.com>
-To:     linux@roeck-us.net
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: (occ) Fix P10 VRM temp sensors
-Date:   Wed, 29 Sep 2021 10:36:04 -0500
-Message-Id: <20210929153604.14968-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+Message-ID: <2a3e0a3c-c256-92e6-7b1f-e80d56ee5b2c@linux.ibm.com>
+Date:   Wed, 29 Sep 2021 10:38:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210928205051.1222815-1-bjwyman@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: d63kv8mGayhE17DdKepbvsjve20gDAI0
-X-Proofpoint-ORIG-GUID: d63kv8mGayhE17DdKepbvsjve20gDAI0
+X-Proofpoint-ORIG-GUID: FJaFGjauPgaFMsF0btOQzpV-JpIOZ3N0
+X-Proofpoint-GUID: j6qtbYT6SRxz1Hj-T9E5wORoo20Akb_X
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-29_06,2021-09-29_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 phishscore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109230001 definitions=main-2109290092
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The P10 (temp sensor version 0x10) doesn't do the same VRM status
-reporting that was used on P9. It just reports the temperature, so
-drop the check for VRM fru type in the sysfs show function, and don't
-set the name to "alarm".
 
-Fixes: db4919ec86 ("hwmon: (occ) Add new temperature sensor type")
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/hwmon/occ/common.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+On 9/28/21 3:50 PM, Brandon Wyman wrote:
+> The bytes for max_power_out from the ibm-cffps devices differ in byte
+> order for some power supplies.
+>
+> The Witherspoon power supply returns the bytes in MSB/LSB order.
+>
+> The Rainier power supply returns the bytes in LSB/MSB order.
+>
+> The Witherspoon power supply uses version cffps1. The Rainier power
+> supply should use version cffps2. If version is cffps1, swap the bytes
+> before output to max_power_out.
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index 0d68a78be980..ae664613289c 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -340,18 +340,11 @@ static ssize_t occ_show_temp_10(struct device *dev,
- 		if (val == OCC_TEMP_SENSOR_FAULT)
- 			return -EREMOTEIO;
- 
--		/*
--		 * VRM doesn't return temperature, only alarm bit. This
--		 * attribute maps to tempX_alarm instead of tempX_input for
--		 * VRM
--		 */
--		if (temp->fru_type != OCC_FRU_TYPE_VRM) {
--			/* sensor not ready */
--			if (val == 0)
--				return -EAGAIN;
-+		/* sensor not ready */
-+		if (val == 0)
-+			return -EAGAIN;
- 
--			val *= 1000;
--		}
-+		val *= 1000;
- 		break;
- 	case 2:
- 		val = temp->fru_type;
-@@ -886,7 +879,7 @@ static int occ_setup_sensor_attrs(struct occ *occ)
- 					     0, i);
- 		attr++;
- 
--		if (sensors->temp.version > 1 &&
-+		if (sensors->temp.version == 2 &&
- 		    temp->fru_type == OCC_FRU_TYPE_VRM) {
- 			snprintf(attr->name, sizeof(attr->name),
- 				 "temp%d_alarm", s);
--- 
-2.27.0
 
+Looks fine, thanks Brandon!
+
+Reviewed-by: Eddie James <eajames@linux.ibm.com>
+
+
+>
+> Tested:
+>      Witherspoon before: 3148. Witherspoon after: 3148.
+>      Rainier before: 53255. Rainier after: 2000.
+>
+> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+> ---
+>   drivers/hwmon/pmbus/ibm-cffps.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> index df712ce4b164..79bfcd2749a6 100644
+> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> @@ -171,8 +171,14 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+>   		cmd = CFFPS_SN_CMD;
+>   		break;
+>   	case CFFPS_DEBUGFS_MAX_POWER_OUT:
+> -		rc = i2c_smbus_read_word_swapped(psu->client,
+> -						 CFFPS_MAX_POWER_OUT_CMD);
+> +		if (cffps1 == psu->version) {
+> +			rc = i2c_smbus_read_word_swapped(psu->client,
+> +					CFFPS_MAX_POWER_OUT_CMD);
+> +		} else {
+> +			rc = i2c_smbus_read_word_data(psu->client,
+> +					CFFPS_MAX_POWER_OUT_CMD);
+> +		}
+> +
+>   		if (rc < 0)
+>   			return rc;
+>   
