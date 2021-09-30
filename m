@@ -2,206 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D491C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 07:16:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A690C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 07:17:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FDD16187A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 07:16:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E820F615E5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 07:17:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348563AbhI3HRt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 30 Sep 2021 03:17:49 -0400
-Received: from mail-eopbgr10122.outbound.protection.outlook.com ([40.107.1.122]:61410
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        id S1348675AbhI3HTE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 30 Sep 2021 03:19:04 -0400
+Received: from mail-am6eur05on2106.outbound.protection.outlook.com ([40.107.22.106]:32992
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348519AbhI3HRt (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 Sep 2021 03:17:49 -0400
+        id S1348531AbhI3HTD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 30 Sep 2021 03:19:03 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fwazsGUxwN9amLAUusi7BkJx/aOjlARtxIp9aeWQL8p/P+I0cJmplQb4w97lsCIhvA5ZJtcfo0w9ZyzRQ6ecDsNHPmiomWJcljVRvOBjS9rw91EUPye8ufepO0b7gx1PLM+txTyPMuwSXvEy/xu5yJGz+IJ1MeD60s9S5lItY4khLDoqYHQnVLAl8iV+zzrnX/cOq6jDWMGfIql4Axq7aVpEge8E0OCrNLLIc0v+ARqiKWMDWHXHmgxv3RMUMpLaUxyz3VbiGv5JKYpnuOnCHm+oDzUURJag5W6LPq7AJbtOlQyDtetT9QFc5dx4h36DIx5oNhwOkfsIYWP4npxFPA==
+ b=SSz+A0F62jfCsfeF8Ejv+Xfqks0/VLsvAkbocBZCJtLVxYoEIu9+t0qeOXlr/AH/9v9bHL0WdrOfIPymPQmUJ6H+RmHWqoj3OVsPd5QZZwKWlii9bQhksQZ+k3AhpHOmoSvjPgy59npSUk5/TcO5kfivTAi+LLkIP929Y6AeW9uWmqvJdLQWaokeh/dKHzjGgmKsEIEY3fIVRUssjPnQ2nheIIdT8Fr3AObQEdLNEfqbfAbZX+uvBb7viAHHskuU8P0IwAkyt5pY1P/gl4bOgIW5xDLO7Kf8ye0aG/MACxXCQASjthjY/gRzr1tZ0Sngc15B03ZkAE0EmvJVMADHTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MTzVM7nyOcqlPpYRirNEvFe3gvjmazQtO1W46Qrx/Is=;
- b=NwiiaPDtgAKt7rSYHBz/U9B+dWRgdurMOkV8Q4vdCOgoBsI1/KxEpdFUgM3VZm7ydBnQZ+gi4DgDoyYIoxTbHoAH0TQpsqCKO79tAtlj12aMpFTcvBGCIjr9QPIQChIwIXl9z59cKXSmL9M6IVdS4WmgYHi6fbRrDm2RB0MhuXyXvGFfocSXvtuSxHVT5LTN5hh80XYPm0ozetzYmsrezyK4Q9uRtH3yHK5/0vPhw5Oat+MwdIcqCsjwFXDtxifrMY2DQfrwoNYQjLwbSSr0Pb2OfzdiDD/nuMRL9/gOOU2UEy2xagI0jgxXrGW5dJZaGuk7VRb1M3kuu98VyKXn6A==
+ bh=avRR6d0VWmsySOvz3RnVrcJ1LnT/zSsQ7X0Wec0Ag5c=;
+ b=W5ZUcaxSzM1qBXj1eviYbcGHqhIU9Pp8c0b6GqozEmc+0cnld6nhuAWYA+Uo+zja9/iSd/a5ylIErWJUS0y4c387AIJ1Ab8MOSjbFMQleODeGqv5pgjUFbrUWwRzY0L2K1EPJeXsocqqNoAZKHpylnfsrzUUnWVIm9fmmhEAsvZfP/g0zUZNB1vHPIQW68YhZHBdwst1eT1XhhZQTlP+myQDEIT/4LCAcjLD+nWInyhTrysijqFA/EQIPsBGKYasCKWBmJarWjrNHbVW2VXVJcGM0oMgZYv8YXJycvUsyaxDS6371slfgk5+YFJJGNsvYtp/+wSdo6kRaV06jq9Cnw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MTzVM7nyOcqlPpYRirNEvFe3gvjmazQtO1W46Qrx/Is=;
- b=PtRV8VgijyV/YNhZiLSW5mSI5sT5cGQI2mKvbkWykxo6lJKCPHjBe1aoTmj0aszqChIdwx5VPXwMC2W50DbD3p1RWWyz0gGD7JVM4mzompA6iPL4jVXZhOvwYo+R8gdOxbL175shVaUFJcDDTdpjNOfPnte0GSLpsCJG68ZWnkw=
+ bh=avRR6d0VWmsySOvz3RnVrcJ1LnT/zSsQ7X0Wec0Ag5c=;
+ b=allhMbUgOp+Z7wrPdIWttXT5tEBdiJLaEJO/nud2/cKaG7W3qTBnNxSbrkHL96Iaptg1oUY+OCrCKMCcy6T6VHaML8hFcBWqp1eryre04j4sl0wrLw8UEcoSFUBzu3Iu6fConX7ObJ080cq9+mNWxxptVII00+bcPGK+nxfdp3A=
 Authentication-Results: roeck-us.net; dkim=none (message not signed)
  header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by DU2PR07MB8331.eurprd07.prod.outlook.com (2603:10a6:10:2e6::19) with
+ by DU2PR07MB8348.eurprd07.prod.outlook.com (2603:10a6:10:2e7::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.9; Thu, 30 Sep
- 2021 07:16:04 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.10; Thu, 30 Sep
+ 2021 07:17:19 +0000
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb%7]) with mapi id 15.20.4478.014; Thu, 30 Sep 2021
- 07:16:04 +0000
-Date:   Thu, 30 Sep 2021 09:15:36 +0200
+ 07:17:19 +0000
+Date:   Thu, 30 Sep 2021 09:16:21 +0200
 From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v3 08/11] hwmon: (tmp421) support HWMON_T_ENABLE
-Message-ID: <f86b75e58b05a7a60150b9c641ea1d628c1c4c06.1632984254.git.krzysztof.adamski@nokia.com>
+Subject: [PATCH v3 09/11] hwmon: (tmp421) update documentation
+Message-ID: <54bae731f71168839aa3dbc449de922a2bf5c95b.1632984254.git.krzysztof.adamski@nokia.com>
 References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1632984254.git.krzysztof.adamski@nokia.com>
-X-ClientProxiedBy: MAXPR01CA0109.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:5d::27) To DU2PR07MB8110.eurprd07.prod.outlook.com
+X-ClientProxiedBy: MAXPR01CA0115.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:5d::33) To DU2PR07MB8110.eurprd07.prod.outlook.com
  (2603:10a6:10:239::15)
 MIME-Version: 1.0
-Received: from localhost.localdomain (131.228.2.20) by MAXPR01CA0109.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:5d::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend Transport; Thu, 30 Sep 2021 07:16:00 +0000
+Received: from localhost.localdomain (131.228.2.20) by MAXPR01CA0115.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:5d::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend Transport; Thu, 30 Sep 2021 07:17:15 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 11784321-863e-4f7f-7796-08d983e22a24
-X-MS-TrafficTypeDiagnostic: DU2PR07MB8331:
-X-Microsoft-Antispam-PRVS: <DU2PR07MB833186006471DC353B4C4404EFAA9@DU2PR07MB8331.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Office365-Filtering-Correlation-Id: 07c83362-571f-4c1a-1625-08d983e2567a
+X-MS-TrafficTypeDiagnostic: DU2PR07MB8348:
+X-Microsoft-Antispam-PRVS: <DU2PR07MB8348E16B5CDE106DF18DE287EFAA9@DU2PR07MB8348.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tjw7lqk5K4y0z5HDW/DiGAhr8Uo2DZ9M47DK/JnbykUX+TNZm/74ifdijo47/ap5wxF/W05tugsjTBiqNhnTkJQDS+/j8cllTitI25BhfdWNRjwi5WtY/O/kqz8Q03mNsaO8EHLaKrx9uY13pLhrUAFstVCdzykF9Asts/Oh2Z8fZX/vstJjkpBjBsjmw4kFPa3VWPnwKoWZXtq6UllcgbtU6ycoSe5Ux/O7tH5T+afcO/qcAUGMrAhNbb1HNzwQoYoaIL5lQu728//1EkXS9anjdIBztw9Tgctz+n46mZxpxOXl7eM41od9SUhzjuLQGjGwE2XhUOE8ysIhUqLCtfFwHxOhJhvPdpgcSdxaFUEiT042pkNGIgMvkwx+j7dS7zoPaR4U9MCLS+DeEmfOGqwghZC9cpa3IKnVBlZpPnHZVdwVzTJCJApxz4btC3oTWOx3Nqrnb4Hr6YnSjM0h+wOFM6M9F01TnULgeanFRSlTUr5PB/Q7UauCAABVsZM6uZqwXFKuUvLoP1r5xisOtmm5vBSLiZd5VE9hyEk8GlBjZV7/NtYoh4nNkacDyPBkvprhpb7wEQsLXlP+eJFWXK7Ezhmyr/giu2BNx7QKJcaWjuIWt6PRhDg0XPpJ+HSMFm+UjpETkDhybp/Vvkz4jr5imtVlludDlQKS81Tp2atkwInSL2Ff/7+WD1Ld4bYh8wfj/2SKrMGoryd03/vqRQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(6666004)(52116002)(508600001)(26005)(6506007)(8676002)(110136005)(66556008)(66476007)(66946007)(6486002)(4326008)(2906002)(2616005)(956004)(83380400001)(44832011)(38100700002)(36756003)(38350700002)(316002)(186003)(6512007)(5660300002)(86362001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: JNjosI32IjIy+0bPZtRuh+GiDYQzQ8dDi1ajVsJ88fQbi+TP7gic4o//6pfpiOnr4BZhOQ1VRpopHk5SicCuYJAnAIzK37gnmrWYfUCEp8YvPyRB+l8RoNQ6oAP5bpdHjEr25jf8X1X4+ByY9grMYT3NiSLIrA2ITqP6yXB2G1y+2Crh4J3vDrjDsCLaip12OhYFbQKZ15kvAO3WJKVc7/Mmpat+xr2NkYIGkljnysOrQR0746vpWsgjfPcneWtCucbkGc1IcYOum9ZZH0ubCRe702HC/1Z3YHPxKXuMNqq7j8ptf8eaUntSfZiOMZDWk8iUYhNJ3zP2NxtO3Luw3Q/umk24cPy8cK3W1o/zE2w8dgsc9iUKdhIiB4nQUwAe6ULmz807xEn1jkkOb5WLMWHlwFUh+m9hWnCDxl+yDDSvYBcK1anM6Ar2sBwX+l9meoJP2RAhDiW0g/trtWiefuEGmT+LhXrgf+1W3W5Hy5Bu0jsQETTmlZJOa9bX6iMm9Io2bD7F6pUbBPVszcf7WR9sEbfV3+9SlrubgQY/GXETEL/TCk8Rjsr+ctR/DPzOgG+D8ntE9M22GkLYfAFe1+E1Je1RyEeKJ34llskLriK6Vighv5ulzkd7dcjVycRUY+dVqevRzXY8/IpHp+fSweI9yRa0xCwZSO8eP1GclrLFbMNXwBKbPHiqqTWbxCP+gks4Kaho7KnD4JjMUGKoGg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52116002)(110136005)(6512007)(36756003)(83380400001)(5660300002)(38350700002)(316002)(44832011)(38100700002)(186003)(86362001)(6666004)(26005)(6486002)(6506007)(508600001)(2616005)(66946007)(2906002)(66556008)(956004)(66476007)(8676002)(15650500001)(8936002)(4744005)(4326008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JwIInhgBN8yum0gmej9A58mj3J5JYQjWIrD8FV3LDJ8ug3PqKYHs8mbZau7y?=
- =?us-ascii?Q?sgQymyCbtNXedTc+yyX09GIhUm70Ew0Htc3TTQ0XcV0Uq8Koim1uU0gWI6jV?=
- =?us-ascii?Q?tXoJdsEXqwiHNL6U9Dpmj06NBOUTySGwoMZeanjqU33LGNP4AahS//giPHHZ?=
- =?us-ascii?Q?YfiImCbgxd4QuGXSSd7RNqM+6+0YowsLzz+pDta1GoXogfXGl/GIg+eUov0o?=
- =?us-ascii?Q?TjTGAcoM5jVGhGNWd3YN6cEMu6txwYpgzeDNIMuamuFoRD9Cbb9QmLUxjMSg?=
- =?us-ascii?Q?foo96NUlyWauNgYELbZAyUQDULgyHF1V1RSlQZs0ZFySET/XZoD8Us/QOjYT?=
- =?us-ascii?Q?0rNXRPwA+vE03B4iollvkwkOLz/KAev8xdk32/dW6qZwRcpfPM3xC1fulFib?=
- =?us-ascii?Q?K2lmTSHEDwg+roneMKT15SUXeNdKsHr0xSihLMEOyGcLsJumwJU/8IaJJ8DH?=
- =?us-ascii?Q?6AGw5zt+L+dRphgc7h5xYbR710MPL5K5W7EpAFlIwHgtdKDbKGfye3HTKvYW?=
- =?us-ascii?Q?RjqSUQ0lB24aOJfCs5PMIpCunoUUREEHsYEKjbtrfkTzc2S+f7p/9hQn6A5C?=
- =?us-ascii?Q?8Y4oFB6Ng2x0HsFEri8bappBrahWl7tbm1OFZBTXEv0TCxb+cTkPEKdbHiY6?=
- =?us-ascii?Q?7ROpB8yu78pbxealPUeb8uDGwi98IkeRsPXZZ5tf0dC36Pv8Rv4aIZDbBXKK?=
- =?us-ascii?Q?8LJZAw9yzNhByS8yKw1e7MftYH+s90SOhZI0jU1MvBdn5vBVcRbPC/tMMWwm?=
- =?us-ascii?Q?AD+9ElVbbiewtgBZsCWVm0lTASadFh4Y3P/ye6iPD/U4PKp+IDH7JXIvMSjN?=
- =?us-ascii?Q?Vm1/5U6aDRFs4i/kVqy5uo6dpRrB3HfsxToTKy6N/9mb3LJ4c7GF0kIo7A4E?=
- =?us-ascii?Q?3EDFWzyedPMYLGlqtQ2KNA3bVYBPc7Lmd4VW4euctLTmZbgNRk0fcrRr8MoG?=
- =?us-ascii?Q?Rb0VHnKJUwi88HC777uY6DqqMlT2eTMna339Kz33NWETsrTW70MGiWNWZ0MY?=
- =?us-ascii?Q?Vb62dKLu8lDVPyoSIPfBJWUJcQD/gob8qop8qClMydfDOEno8zyg2RJQN7s8?=
- =?us-ascii?Q?VjkvOPbxAI3moSOJFtrAzUu74WLYAUv3q+XY3SWrnXCAfeNC82RbIYXVKADa?=
- =?us-ascii?Q?9Fkb+4aDN1/O3fJsBmqUk5l1S73xTeMufXj/NGDOKnFo7tkmhEWKv94ko9v6?=
- =?us-ascii?Q?JDNgG/KHaMHQcs5rOvaVURK3dEa6JCqrzwDZFybUtblATNHATOaDbZxS4JOc?=
- =?us-ascii?Q?qOqZr9lZrTGyCeOIy24V+PhegDVBLKp9iOx/0y+t/ySwPVTfXIMMTSUJue9P?=
- =?us-ascii?Q?9xTPwKaDdSyr5/3V5GxrM6Lu?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LoCFZ5XsH6ZEFVDylRlkqcYJYQhg0DCz/oE9wbkH915EBgna4rAEELOuywpX?=
+ =?us-ascii?Q?tsfpUQJ48exEfzLca37ORZ0pTM95NIemFLQQ/QNI0irSKRKwZPDJlu1Wk3Ah?=
+ =?us-ascii?Q?rkJnFNoJ2XftrFof5ZAaF2AkmoKWMxWaQgLblzSa4AmVPol2j2p6PCA7lEqg?=
+ =?us-ascii?Q?XX3f49K9e6JDD0Z7cZKXkn7ABwPXw5H+OiHalLUBgVbYMb1sGy99tW4BArHG?=
+ =?us-ascii?Q?1GftoAuu93k4ICAaoZXBwfl33WNpFS9a0q/cU6Abi1BvMLbldR2dJhc8S/eL?=
+ =?us-ascii?Q?RMWB/gYGvcNVgCoPEWabr0/JPBODUulrNBkFwoDofUNwHcu7AGMqDaImIpFJ?=
+ =?us-ascii?Q?if/KM9PCn19m9C4qJrXsF0PtgRoBG2vEmRFmk2ejvg63aJoitVyNE3nNShFT?=
+ =?us-ascii?Q?nBntzqj2E8gq/TIRuQvxZBTkJydfh5ynzBFoHpcYf7TC5UTWHDN65RvxwScQ?=
+ =?us-ascii?Q?9NGOdR8YawicCjJ6KSl0Lt/aex/4PJbLuEHg9NlWXne9wAZuCTj/ups+USkt?=
+ =?us-ascii?Q?RHMylHqEw+zkN+DCebq1YsAkFD7V5WEWsqwepoMH1wJAUc9JUNsHTPT3QhZ3?=
+ =?us-ascii?Q?u7kkI6iUS92Za1BgF11FrLhJIDBkFIH7E5NK8FRzheGwKABSb5yAx4md0ncX?=
+ =?us-ascii?Q?a7SpQgrml+mdDol/1cn5waZF4mKmO3L1S9eanzlrVAy3AGIoLKAWqkLVDJRP?=
+ =?us-ascii?Q?IuiaWS3yEnxsKXG6VEAhtqZ8zg6/BgEj+OIhVlJj61wig9ZPhj2tVgdqCO/i?=
+ =?us-ascii?Q?9mdy5h0EAkAan5+BWDF/Esy7Js4+77JjJcAwCbQCeu6NEt7Ao31IJOcwDIR9?=
+ =?us-ascii?Q?zHak7YkTYNT5t8wKrk3UakHlCyoc1ZCLL+ieOWarwrO0CylfTuZA0y8vDtmP?=
+ =?us-ascii?Q?V5Ys2UMDKAAm9wQy35CMvPJQ5avss8u/KV2iw9V1cv9jUahUt3rsevVVnUkY?=
+ =?us-ascii?Q?hU33Er1GO+GacNpf5cn0FRx0eHiQDqeBit0YkXoL/eED3/jFAXPJ/cOvcnQW?=
+ =?us-ascii?Q?oO/u/EYxWT1EsJrUKD5L4qRjN+XBNlnoOG7lcZ/Biy9vkl+ANcFExGfR+XiV?=
+ =?us-ascii?Q?R8T+fyRIR+mGDqmev+U846+jqriNdfBX/ZF3xlebW2UPZYSfUlp1ronocVUP?=
+ =?us-ascii?Q?mj2eJ/L4tY/0+V9Dr9dDEBq602XlJoZ9JnS17ek0hyrLrTfoMV/g0g/F6uUT?=
+ =?us-ascii?Q?23dOP66dq6KGGX/42NtIOXRcjcDJg0Wu5B7rSRbBJbAXzN2JcWRXZNVhBOD2?=
+ =?us-ascii?Q?MQkrrrJPtswyD9CNOvp9edXhV1VaC85Y7PlGOOXymlWWtgdT7VCGGFWTwfDQ?=
+ =?us-ascii?Q?N2ZkuTcqQFIJj9NmQ/Hq/yt1?=
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11784321-863e-4f7f-7796-08d983e22a24
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07c83362-571f-4c1a-1625-08d983e2567a
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2021 07:16:04.3691
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2021 07:17:19.0367
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3iTdoPKPMyJVHNwBz079ocPuR5dITql28EeM+lWo+2yNpAL4uZRrOQQ8Q76UzsrP1WPvJBRjtOjAYB72/BK2eIrvd/qXYkOL50/L6Dthoxs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8331
+X-MS-Exchange-CrossTenant-UserPrincipalName: nERXwrAAyMraNz09Rwiyk6kW40Sl0PZphzEeSKS/6d3Kub1F34nngkS6EimAJT8Q/rgtXbZELKToH2Tf5VnkQqQp4r/KkFd9Jiq/CAV3cMk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8348
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Since the recent patches added possibility of disabling sensor channels
-via DT, it only make sense to allow controlling that from userspace via
-HWMON_T_ENABLE mechanism. This patches adds support for that.
+Sysfs interface of the tmp421 driver was extended in the recent patches
+so lets update the documentation to reflect that.
 
 Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 ---
- drivers/hwmon/tmp421.c | 35 +++++++++++++++++++++++++++++++----
- 1 file changed, 31 insertions(+), 4 deletions(-)
+ Documentation/hwmon/tmp421.rst | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-index f9c6f23f1f0f..66ef9c5d9a52 100644
---- a/drivers/hwmon/tmp421.c
-+++ b/drivers/hwmon/tmp421.c
-@@ -200,21 +200,27 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
- 	if (ret)
- 		return ret;
+diff --git a/Documentation/hwmon/tmp421.rst b/Documentation/hwmon/tmp421.rst
+index ddcd5159c75d..a3002117bbd7 100644
+--- a/Documentation/hwmon/tmp421.rst
++++ b/Documentation/hwmon/tmp421.rst
+@@ -64,3 +64,13 @@ the temperature values via the following sysfs files:
+ **temp[1-4]_input**
  
--	if (!tmp421->channel[channel].enabled)
--		return -ENODATA;
--
- 	switch (attr) {
- 	case hwmon_temp_input:
-+		if (!tmp421->channel[channel].enabled)
-+			return -ENODATA;
+ **temp[2-4]_fault**
 +
- 		*val = temp_from_raw(tmp421->channel[channel].temp,
- 				     tmp421->config & TMP421_CONFIG_RANGE);
++Each sensor can be individually disabled via Devicetree or from sysfs
++via:
 +
- 		return 0;
- 	case hwmon_temp_fault:
-+		if (!tmp421->channel[channel].enabled)
-+			return -ENODATA;
- 		/*
- 		 * Any of OPEN or /PVLD bits indicate a hardware mulfunction
- 		 * and the conversion result may be incorrect
- 		 */
- 		*val = !!(tmp421->channel[channel].temp & 0x03);
- 		return 0;
-+	case hwmon_temp_enable:
-+		*val = tmp421->channel[channel].enabled;
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -231,6 +237,24 @@ static int tmp421_read_string(struct device *dev, enum hwmon_sensor_types type,
- 	return 0;
- }
- 
-+static int tmp421_write(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long val)
-+{
-+	struct tmp421_data *data = dev_get_drvdata(dev);
-+	int ret;
++**temp[1-4]_enable**
 +
-+	switch (type) {
-+	case hwmon_temp:
-+		data->channel[channel].enabled = val;
-+		ret = tmp421_enable_channels(data);
-+		break;
-+	default:
-+	    ret = -EOPNOTSUPP;
-+	}
++If labels were specified in Devicetree, additional sysfs files will
++be present:
 +
-+	return ret;
-+}
-+
- static umode_t tmp421_is_visible(const void *data, enum hwmon_sensor_types type,
- 				 u32 attr, int channel)
- {
-@@ -240,6 +264,8 @@ static umode_t tmp421_is_visible(const void *data, enum hwmon_sensor_types type,
- 		return 0444;
- 	case hwmon_temp_label:
- 		return 0444;
-+	case hwmon_temp_enable:
-+		return 0644;
- 	default:
- 		return 0;
- 	}
-@@ -397,6 +423,7 @@ static const struct hwmon_ops tmp421_ops = {
- 	.is_visible = tmp421_is_visible,
- 	.read = tmp421_read,
- 	.read_string = tmp421_read_string,
-+	.write = tmp421_write,
- };
- 
- static int tmp421_probe(struct i2c_client *client)
-@@ -419,7 +446,7 @@ static int tmp421_probe(struct i2c_client *client)
- 	data->client = client;
- 
- 	for (i = 0; i < data->channels; i++) {
--		data->temp_config[i] = HWMON_T_INPUT | HWMON_T_FAULT;
-+		data->temp_config[i] = HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_ENABLE;
- 		data->channel[i].enabled = true;
- 	}
- 
++**temp[1-4]_label**
 -- 
 2.31.1
 
