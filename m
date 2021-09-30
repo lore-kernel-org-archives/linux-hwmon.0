@@ -2,170 +2,163 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF203C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 06:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 938FBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 06:58:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB5CB615E1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 06:58:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B3B96162E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Sep 2021 06:58:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348432AbhI3G7x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 30 Sep 2021 02:59:53 -0400
-Received: from mail-eopbgr00135.outbound.protection.outlook.com ([40.107.0.135]:43547
+        id S231938AbhI3HA2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 30 Sep 2021 03:00:28 -0400
+Received: from mail-eopbgr00105.outbound.protection.outlook.com ([40.107.0.105]:16130
         "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348428AbhI3G7w (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 Sep 2021 02:59:52 -0400
+        id S1348452AbhI3HA0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 30 Sep 2021 03:00:26 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZKPJS/iIpbrkt+o0uY0plNcfGVwqfM1KnrLYeaNBIpZoy8LXq2rw2XXmLclCpiPCokFH+kbAhh88H4jYy8ZoFRcGoFaHIysS/NeWDivoycG2lcv//cIiSGjUh+Ts7NQ4Tus82RDm4RF4AeC7Oam38WBSk+2YJKa0oLmA+fAFyqHgGf51ggAT4MMix6eUfjXUYAPqsHv1MeYCIFjYwwCEa0TH9Lmfx1RFQNmUoPbTWhtkmWeFncDfnDagAgFsrNHp35dv60A1pK5bhGgqlicZm/4UNmOIgTZrOvbs0UakXMxvcE3GM0OzBL187x82F8s5pbRmgLkzim41czEQChHyuw==
+ b=l67uHFYatzjLL7D66CRVBO7aJNAcCN+2kkqr3XOfcxSXphOvZbYjLG7o4sPq0tCp+sp6U9qL1xnM/CsUn+5UlBH2dd6cGLqGWHAap6XqPXcN6R52li/X8TjJKbcOoMLzDd8oC4vX2wxRv0RvagiID8kEEIXtdsO9F7joZ7SjwdFtv+ox5iIT5RPOw/MnXwCYz0R/OkmVI5vfmNJsaNLwUQFsUYv8bhQN0rqom0R8FZIUYJ6PRcixzTs99cfH1vbmfK7Vdjr0e38xOT5nrcTx8NGeiBPoOujGcJxrHFdlc8/LeK7L0CTTGzYK0HXSAkoKPigy07LkTeBCcCxO/Yr9WQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7JnMgallAEVSahvEuRRsw1xv5Qb1jfBdoRGTH1oFWw4=;
- b=PwwU5SA+oRHI5Vtu9HKhyKLGY5AgbLSfdXX4pvvMg8QG/BfgDtQf/bqlIBnG/GOr4Q4EmwCzpJjaRyaAyGnLhMp76ZvCiS40psss1p8dWmww/mpPuwx4I7IRSpjdKCBIkeI6ZufHwMFLTLxN+/QgxKX5uqwERE6VyXDKKKGX7H0FNraklNO2eOrbAVWA2J1S9mSXLxHoTM7MzkYfX9urD8Hw+gvI3Eh9gF6Q/nIUOE+79TxHJ4nTlaTG6IVuMQWilr016+r5RHCiNVqUw2O74cVmrT9OXgDLkA2tgGb5DYdGpiMW8j70375Hzbk55OL6hyXdkPpqHCHWvFL4SlIk2g==
+ bh=DoYPuNSOpp/T3BnRykpbt8NPDre5R1E6Tj6/8E6xIjU=;
+ b=kp36G4OgRwM4tNlr9p7iLmGieE3sW5VXf0oqUOoDXVH4lvngcVSJiDy8xdWDVwlH//1L+8NVkmwOuU5wVUBocHMP1xBWe6/BXcua+hfceLHhHweOD32HUSAehRZ4g4OT6whwcNq7vomU5Rhiwn3BuKa3mYLivQjJtrtUsXlkQl2m2Q0ih1O/qvRq4h3q8e+snBCPvlqtWK1uADn8Jg7uNWn70zAKJ+B6PgRNLA+/sKuAepSVlTjBiEINBk+H3uXA43FxJawc4A/fR7RtSgj6hGmDjrqda9wCCo+PRYojpLnSojINrIKyF5efJplDbD8+tq7Zp3afdGRq6YfeKSIqcA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7JnMgallAEVSahvEuRRsw1xv5Qb1jfBdoRGTH1oFWw4=;
- b=G8LmHD01d3gkGSA7ng5HeHsegCtU8Dw4DpcaawcdeJIaJBH9Lg5x/befwr1r+m4x6393Zu3ngxltFkkcS9bN8P8FNRlgkzLSgt+IOraE0OJMBUT5aU08tjmgjH5D5OuYOBEnJBY6aBXLUE5DVqJUeHxxKvNsE7ZzgPhWPyQSCSc=
+ bh=DoYPuNSOpp/T3BnRykpbt8NPDre5R1E6Tj6/8E6xIjU=;
+ b=T+5v30Y5itpVXv1A93FuRdqmRSodZJQ9p1xHe9Abzz19djbdCr8ZapZcFpeFc7CoOw/vfp7rpIhNU5VPqG1YmH3NBdOvkU7ZgdB45PXmBuhEME1MgwFQt0TGW0ZEy7oR8dmuDKjdqEeNAaYGluc60QRx1XtsYWVqNzlXdEBwLbg=
 Authentication-Results: roeck-us.net; dkim=none (message not signed)
  header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
  by DU2PR07MB8079.eurprd07.prod.outlook.com (2603:10a6:10:23b::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Thu, 30 Sep
- 2021 06:58:08 +0000
+ 2021 06:58:42 +0000
 Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
  ([fe80::c47f:b569:ac76:9feb%7]) with mapi id 15.20.4478.014; Thu, 30 Sep 2021
- 06:58:08 +0000
-Date:   Thu, 30 Sep 2021 08:57:52 +0200
+ 06:58:42 +0000
+Date:   Thu, 30 Sep 2021 08:58:28 +0200
 From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v3 01/11] dt-bindings: hwmon: add missing tmp421 binding
-Message-ID: <4ec773876f9e73c05c1328eb60a95b1197f26909.1632984254.git.krzysztof.adamski@nokia.com>
+Subject: [PATCH v3 02/11] hwmon: (tmp421) introduce MAX_CHANNELS define
+Message-ID: <038441600e4477b5f82ff501ba404a2fde6f6aec.1632984254.git.krzysztof.adamski@nokia.com>
 References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <cover.1632984254.git.krzysztof.adamski@nokia.com>
-X-ClientProxiedBy: MAXPR01CA0107.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:5d::25) To DU2PR07MB8110.eurprd07.prod.outlook.com
+X-ClientProxiedBy: MAXPR01CA0115.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:5d::33) To DU2PR07MB8110.eurprd07.prod.outlook.com
  (2603:10a6:10:239::15)
 MIME-Version: 1.0
-Received: from localhost.localdomain (131.228.2.20) by MAXPR01CA0107.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:5d::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13 via Frontend Transport; Thu, 30 Sep 2021 06:58:03 +0000
+Received: from localhost.localdomain (131.228.2.20) by MAXPR01CA0115.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:5d::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend Transport; Thu, 30 Sep 2021 06:58:38 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9066f5f3-be40-4161-878e-08d983dfa84f
+X-MS-Office365-Filtering-Correlation-Id: 92d12888-7b33-440a-f449-08d983dfbd12
 X-MS-TrafficTypeDiagnostic: DU2PR07MB8079:
-X-Microsoft-Antispam-PRVS: <DU2PR07MB8079F031A293580A22AB6005EFAA9@DU2PR07MB8079.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:669;
+X-Microsoft-Antispam-PRVS: <DU2PR07MB807953A1B120A3F5A4D4FDA2EFAA9@DU2PR07MB8079.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:386;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 23+EKPgj7y9l+D0dHHyWPxgbD5Z73ZALLRkTxqE4RpfeqJY17o1dy3UjFFhvcQO4OXGE9XZSD6xaHWNC5Bvh3UpG0SkWN/108YV/fY9zFhqdLAs7cbp93/lG+Nc0HQOt2UJvy93YOPk0rLG7WGev9TChlrKaRfzjBGb1qHUtCvGgb987Np+6/qTbo/oxNsbUPl60DC0HAq/o/YY9ZS2OpN7Du8/6QeP1LWmoblqK8J5dLJei42hAgmDfwDNJ0qed3DKgsbjxy5oebWfNLHZDqA5V9kt8lGO5KyZ+hnkAH1qk2hJ+eCRi2/guDJhkPCUBl7nTpSSg3I+y+UtTrEauPBw9sfNRHzbprNz2T6lVciSi/HsUyAcBljbKOUuR3RRS+wyZX/RU8bdB3I67YrPFUGERcVWaZ1B8ciRt+cpehR7ne4q/Kwz3tWNGAXz0S0tfcCCPQVhWQMXmthRvgE8mq5exi5Dmr2vGjD63uJS3WtkdkIMxn6TK4qztPY84O0d52jqgQCC+bwo2m6cV+VAgYZPRTGmK7I/V+KfkYDmmBm9WGCfzjSi9bVDAJpnvaPCEVBmTObTp3PVupbJKghuL5ZIrd4UK/9zeen7znDVZlSWx1rnEsrUTkj5en4KVUWB27EslEEodtNVCXTmxY5Ef6pQxCP1Nt/gBfvFU8wUYzM8ar1pAvDqkhGModGlF+e710Ds3Dmq70j96weAq6NA5gsYRO1b7vBSKSNt/MKb2BTkrZDdN4iXYY+SKVnDikuTy3Up90IAu2tUAiJMcec8PKXhvFT5fROt88NjrOXE/yHo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(5660300002)(110136005)(8936002)(66556008)(4326008)(8676002)(66476007)(6486002)(66946007)(966005)(508600001)(316002)(6512007)(44832011)(38100700002)(86362001)(6506007)(52116002)(2906002)(186003)(26005)(38350700002)(36756003)(2616005)(956004);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: r8kokBzMTvAXKCcl2akwkGjgaIQWjV2nfXL+RFDb+lnYzFB2uHyVn+mi2dJjT/9G3FTjQ1H3Pn4i41uoRofsQMbt+Ykby/Wt6uQ1j0pFkn+wlXoSXHuy3VF34Tj7BUlAPoeOFlKtMoUyE7w3d0KFZk0na3cekvbgO6OcJSlMJyDTr+s8o9tOr8DcKNthV99abX3Kqc/4qVo5mKUzqGJsILgZWD0Xv3QXMNJuwRziD+9m8Wen3pf1bZbVpW+sfl291TEmhYKTXrJlCTdjNo94euRaRN79fdbprOrAM/RwiCheJo6/dLX4eOJGOKH002ZaFh9yXGk57r7jBe33O865vhmOkl+sPMNCG5ARflIV/aOcWX9/HZWHhG3OyJPTKwu6v6ouUZoRw/Nm0G4bafo96f82GsBp9TfZj3eJLxSdtfs9/T+4VxrXCDnzhOa7Agqk+Mm8RecQLRNqZgjxz0AHwu/rmceaehCUzXdzk53NoCqOLsgTn4X0/kUY3LBKLrUaArn2knLT9RXZpLaDMtWy4p0fmbBuKgkkXLxyc6TljjNHtWefkgsIee/PlegyNIahbb590QVKEOCwIaBt5khDTI0/Omazd0QjOfXI0Z8ojBLIh9crpOvUBORTXwY39yxFeXUrxPHF+Opm1wtFZg1IgwU+D2tvyZWx/wy7kePPJ2HN975capmJlObKTC0dRtXmBlLjqZLgpQUfQ4YsqZNV7A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(186003)(26005)(38350700002)(38100700002)(52116002)(2906002)(86362001)(6506007)(83380400001)(2616005)(956004)(6666004)(5660300002)(8936002)(44832011)(6512007)(110136005)(8676002)(66476007)(66556008)(4326008)(66946007)(508600001)(316002)(6486002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?6Kf0lVte7CQTduT7+ASvmeqxYmVZK4lJ1IYfj2yMkLGBXJaYjM9IVPvhVK?=
- =?iso-8859-1?Q?vlSJG/BFyMrUUnM01Ev4/Acq4Jk+j1kMixICHoV6z5xKmOJW133uZ7sj9Q?=
- =?iso-8859-1?Q?Ms1x89v+a4/+wtVEPdbGxiAe8KUfzDzawQVJZ7Tj9rEr9n9N08weS/+/pW?=
- =?iso-8859-1?Q?XXTBwA/eGYulfbGnfaDc3D1+i6Qq06wAIfKprx0M5sOi1nWEn6uoWdmULw?=
- =?iso-8859-1?Q?Yc6TcQXPDxF6do7YAX177TlGMZQUsq37NK5T+feQrk8ZDE0hqHfx3HCoFi?=
- =?iso-8859-1?Q?mvijjr2fA/57S31GB1B/x6lv5tGAA7MXYumoARu0Sn9cDyBEyASWUmuii0?=
- =?iso-8859-1?Q?9S1Jyhc3Yf8y2MVKvfWZejfH7iEWrGt7rqwCeEr9KNeF+18+6A0ZEcffGf?=
- =?iso-8859-1?Q?CRP7Q85GI+J1TvGZuVdvRr9rDcMPsZBxMXaCKJTyyQSI8ZGa9aI/omQ39B?=
- =?iso-8859-1?Q?YvrIdKp4p53sKQn3277uDuUeWx1e77RSRvlRUhBrDS5ibBGZ+ISy0h8WTv?=
- =?iso-8859-1?Q?pSxjMKs0I9lJI8LgQIgopLknBK2i842z5QPp8vrN/oYo8nEPRhNuNnQDFm?=
- =?iso-8859-1?Q?ZywEjXDK7cOkFkXfXeI3XJSDcLNSDaziECNKiIOYAgY2vNwqnKrAg/VE+p?=
- =?iso-8859-1?Q?GsLoHT8khvcF+9aSnPKvzoUxJWIdih7ecVFIo0pz3appHUaV/4GKfg+RFw?=
- =?iso-8859-1?Q?tIpiOCVrWO0P1kui9rZnEvAcxOoGAmE6sRS1g2P8uYsXZaOKQwFmvgvdSo?=
- =?iso-8859-1?Q?2+q2bItekR3jE8aLhEuTt+fO+aFivOriCO/vm+56W4eLQ6Y1f8C0Clam38?=
- =?iso-8859-1?Q?WlcmOFtAdV1m5vbnGwO0yQa64UFUpogJaUEzK+3wCOha46l5r5XyLHzmPP?=
- =?iso-8859-1?Q?51IPfuqAqS1t6SdMPV0rfbngXa8fVlN7pObovXYAGoH3kxlZoZ0GHeoaPB?=
- =?iso-8859-1?Q?bCFQOhSdOj5WEY3CL2OMVpL6TWZ3mrm88vXdIusIgxRwnwDDea+KVkXycR?=
- =?iso-8859-1?Q?f+bIRFeH0A/LnwcUQUgr4T6ACvrN82rSqOyEgCsgGQeWp0EhG+NhdMloom?=
- =?iso-8859-1?Q?+weI3cCDASpeyZqkfq11OM861Q38JkzM7XSLGSdpMZ6M0YYWk1SO1BPH04?=
- =?iso-8859-1?Q?IO+xIsWdfLefjw+CGQSj8l2Idcx62p9FljPAfIx46Z0h8nk4gTT4PUHLgc?=
- =?iso-8859-1?Q?5/ifdVK5UU1DVfjDUE7Pu7j/uRAt8VRpNmBkIu4QQ+FknUmJCtOF+LPDNz?=
- =?iso-8859-1?Q?U0q4BIiVY6ilcywHdSEzlraWjyVi5HDNWy/ITNm2ykNbz+rygJMl8dFuhI?=
- =?iso-8859-1?Q?2EcuIeGntapY/KXGOIU1T+XysQgaPRbvfZ48+XCZwLMaAa6n+vg7PVCTGD?=
- =?iso-8859-1?Q?T9cskmWNEL?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nSxMEEU6bf8wv+30C7CQcOG6DgkUUIr1axhm7c5xvOpaa7/QqYhvCHDACCHE?=
+ =?us-ascii?Q?1Ng/vspJ/Vs3m2b+i5lvwfHtETnVF5jwuguj5CccoHgmFFbqmDUXCjenCCpt?=
+ =?us-ascii?Q?E0waINCjSKkpwYAr6d+EG6xXHeO9tZ2diMtFdwRGMZAhx7I92GLi6bri3pvZ?=
+ =?us-ascii?Q?kwR0NIYYNblrxzGajb2Sv4te13mTHLN7UZVh3jooVWXLf+prqtnOEMcpNgX3?=
+ =?us-ascii?Q?CUURwjmmUo+6MU6EOsMCek/XlMwSGOaT/TD4gQx23PJbcPn5ZW8/Ry5X/8KZ?=
+ =?us-ascii?Q?6EwDqNgry1B2dCVcwnRGQfA44rE0slD6t0UqPUX5+eAnvDj5KirhJpLy4gdy?=
+ =?us-ascii?Q?bzHERr7vuUqxx0u9Z7gVIaYMZJjDsxPNF3X0ZfS2pyzZC7AiEhe59fXvhLWb?=
+ =?us-ascii?Q?vzXXPizEYZXrjecNekdqxfk9g5x+Ar1r83eSKjfK1Fd6PrjjH0S/Wk/wUaTJ?=
+ =?us-ascii?Q?Yg5ZlEDDA16jUuih0pg8jKtXGXri55T7NmZN8WiDBEqIY1qMbLFQH+fMkkDh?=
+ =?us-ascii?Q?wDkEu0mTLt2hgVDGRiG1QIxXKLrJvgD/y+pi/XvSXA6VI/lOnmSxOTasoNWC?=
+ =?us-ascii?Q?5hQR1IvSu+u8xRpb/wE9nhinineDJGSI1ox0n6FziorGUCgFdHlBaqPr7354?=
+ =?us-ascii?Q?hCsDXS0HQj3GP3PR3uuDIwut5FXTvfex4ziD7Tlg/4zVYbMbPpuYpQIS3/AT?=
+ =?us-ascii?Q?zRUI640fesbUV5wpib4+CVV0osVrtKEfl3Mkg4RIrEMSDbwhI6wHkO1wI539?=
+ =?us-ascii?Q?oALL8qXUvnX11llyH6/qM6wMr7jG7986unqYITJgeuDvPjpksDnq1w0hMqc9?=
+ =?us-ascii?Q?0d0BtV/AEJVrJ0I/hFGoi59mb1gNjB9/EJy7XNr597KtuTFc4pINEcIdkkLM?=
+ =?us-ascii?Q?p0eMKpZQ7FZ9nPsRDT1cvyOmJxufp6sLHcjM8UJw8YBuqXzU+pr15eB8viVL?=
+ =?us-ascii?Q?SmWoY7l07ewbFUakRr6aEJ6OmLt2Vt7I8btoo2ub8gJmI3RuqIyogVZrT0vi?=
+ =?us-ascii?Q?kF6H62arx1eu/va8plvgiyQHpjpJMDk5+RkOw9G/6xY0zhejzFbLonjlqjxI?=
+ =?us-ascii?Q?E9c5nFRwkXy+NJiLwJ0AYqS21kDDCYxxccK0FscZPFYFZS5mBjkhDEDnpkal?=
+ =?us-ascii?Q?qr/61kTQFVa8qlIvKptpy6xyw4sLAlO3qeD5hpDadi9iEA8JdFhBDoRbDH9O?=
+ =?us-ascii?Q?SN8+F38RJpW1rbN1OWxSZLOO7tThXnUamCNSjMOS26r/QU8SF0iKowHwq+gE?=
+ =?us-ascii?Q?pzuNjOOvqMeOIK1tOiB3ak3QozfDvpZFKQuSQDBC+m6U1mnWmP6v99o+JYR0?=
+ =?us-ascii?Q?RJ8oKxxDUXN4IxAVzwQNjPer?=
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9066f5f3-be40-4161-878e-08d983dfa84f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92d12888-7b33-440a-f449-08d983dfbd12
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2021 06:58:08.2151
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2021 06:58:42.7695
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CduSA9HRtNrrKv/WcpwAw85FXEOb/OCKxk6frBoF8djzGGw9J8RpxgBywIjYmcR8OO6bTtzTt1DK4/Bg7rEEybuCs0DkPze9ckATjiMX89A=
+X-MS-Exchange-CrossTenant-UserPrincipalName: AzJwqhniLBQEVx3hhp/2ZyDOyiRCsQ827vtGMtw+k/9MQAdsNpDH4VtDEuW7fH9XkJ74+DwgEBCkgCOqawDsJqcHnY6UfiGxhjF3shVdM3w=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8079
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add basic description of the tmp421 driver DT bindings.
+There are few places where the maximal number of channels is used define
+the size of arrays but when raw number is used it is not clear that they
+really related to this quantity.
+This commit introduces MAX_CHANNELS define and uses it those places to
+give some context to the number.
 
 Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 ---
- .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+ drivers/hwmon/tmp421.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-new file mode 100644
-index 000000000000..47040ace4f73
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/ti,tmp421.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TMP42x/TMP44x temperature sensor
-+
-+maintainers:
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+description: |
-+  ±1°C Remote and Local temperature sensor
-+  https://www.ti.com/lit/ds/symlink/tmp422.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,tmp421
-+      - ti,tmp422
-+      - ti,tmp423
-+      - ti,tmp441
-+      - ti,tmp442
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      sensor@4c {
-+        compatible = "ti,tmp422";
-+        reg = <0x4c>;
-+      };
-+    };
+diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+index b963a369c5ab..a4ac6e16d592 100644
+--- a/drivers/hwmon/tmp421.c
++++ b/drivers/hwmon/tmp421.c
+@@ -29,6 +29,7 @@ static const unsigned short normal_i2c[] = { 0x2a, 0x4c, 0x4d, 0x4e, 0x4f,
+ 
+ enum chips { tmp421, tmp422, tmp423, tmp441, tmp442 };
+ 
++#define MAX_CHANNELS				4
+ /* The TMP421 registers */
+ #define TMP421_STATUS_REG			0x08
+ #define TMP421_CONFIG_REG_1			0x09
+@@ -36,8 +37,8 @@ enum chips { tmp421, tmp422, tmp423, tmp441, tmp442 };
+ #define TMP421_MANUFACTURER_ID_REG		0xFE
+ #define TMP421_DEVICE_ID_REG			0xFF
+ 
+-static const u8 TMP421_TEMP_MSB[4]		= { 0x00, 0x01, 0x02, 0x03 };
+-static const u8 TMP421_TEMP_LSB[4]		= { 0x10, 0x11, 0x12, 0x13 };
++static const u8 TMP421_TEMP_MSB[MAX_CHANNELS]	= { 0x00, 0x01, 0x02, 0x03 };
++static const u8 TMP421_TEMP_LSB[MAX_CHANNELS]	= { 0x10, 0x11, 0x12, 0x13 };
+ 
+ /* Flags */
+ #define TMP421_CONFIG_SHUTDOWN			0x40
+@@ -89,7 +90,7 @@ MODULE_DEVICE_TABLE(of, tmp421_of_match);
+ struct tmp421_data {
+ 	struct i2c_client *client;
+ 	struct mutex update_lock;
+-	u32 temp_config[5];
++	u32 temp_config[MAX_CHANNELS + 1];
+ 	struct hwmon_channel_info temp_info;
+ 	const struct hwmon_channel_info *info[2];
+ 	struct hwmon_chip_info chip;
+@@ -97,7 +98,7 @@ struct tmp421_data {
+ 	unsigned long last_updated;
+ 	unsigned long channels;
+ 	u8 config;
+-	s16 temp[4];
++	s16 temp[MAX_CHANNELS];
+ };
+ 
+ static int temp_from_raw(u16 reg, bool extended)
 -- 
 2.31.1
 
