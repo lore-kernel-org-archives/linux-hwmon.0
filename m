@@ -2,38 +2,38 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 150D2C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 08:50:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0271EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 08:50:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DFCF961A7F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 08:50:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DADB16108F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 08:50:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbhJAIvn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Oct 2021 04:51:43 -0400
-Received: from mga04.intel.com ([192.55.52.120]:1090 "EHLO mga04.intel.com"
+        id S231368AbhJAIwb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Oct 2021 04:52:31 -0400
+Received: from mga05.intel.com ([192.55.52.43]:56598 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229683AbhJAIvn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 1 Oct 2021 04:51:43 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="223484018"
+        id S229683AbhJAIwa (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 1 Oct 2021 04:52:30 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="310919709"
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="scan'208";a="223484018"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 01:49:47 -0700
+   d="scan'208";a="310919709"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 01:50:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="scan'208";a="539945102"
+   d="scan'208";a="564835512"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Oct 2021 01:49:45 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 01 Oct 2021 01:50:45 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mWEEj-0000yZ-5u; Fri, 01 Oct 2021 08:49:45 +0000
-Date:   Fri, 01 Oct 2021 16:48:07 +0800
+        id 1mWEFh-0000yf-83; Fri, 01 Oct 2021 08:50:45 +0000
+Date:   Fri, 01 Oct 2021 16:50:20 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 7b2ff48129ca9b482656e1d849d304a7d3dd9a40
-Message-ID: <6156cb47.BZiWItWNY7cGT0kh%lkp@intel.com>
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 6f7d70467121f790b36af2d84bc02b5c236bf5e6
+Message-ID: <6156cbcc.jWijKSqty6nYe0/C%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -42,12 +42,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 7b2ff48129ca9b482656e1d849d304a7d3dd9a40  dt-bindings: hwmon: jedec,jc42: convert to dtschema
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 6f7d70467121f790b36af2d84bc02b5c236bf5e6  hwmon: (ltc2947) Properly handle errors when looking for the external clock
 
 elapsed time: 1665m
 
-configs tested: 272
+configs tested: 275
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -99,6 +99,10 @@ riscv                               defconfig
 mips                            gpr_defconfig
 sh                           se7721_defconfig
 arc                              allyesconfig
+arm                         axm55xx_defconfig
+parisc                           alldefconfig
+ia64                        generic_defconfig
+powerpc                        icon_defconfig
 sh                                  defconfig
 riscv                            alldefconfig
 powerpc                      cm5200_defconfig
@@ -130,7 +134,6 @@ arm                        spear6xx_defconfig
 sh                            titan_defconfig
 sh                             espt_defconfig
 arm                            mmp2_defconfig
-powerpc                        icon_defconfig
 h8300                       h8s-sim_defconfig
 arm                         bcm2835_defconfig
 arm                            lart_defconfig
@@ -141,8 +144,10 @@ powerpc                 xes_mpc85xx_defconfig
 powerpc                    klondike_defconfig
 powerpc                     taishan_defconfig
 mips                        nlm_xlr_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                      pcm030_defconfig
+powerpc                 linkstation_defconfig
 powerpc                       maple_defconfig
-ia64                        generic_defconfig
 m68k                            mac_defconfig
 xtensa                  nommu_kc705_defconfig
 s390                       zfcpdump_defconfig
@@ -186,7 +191,6 @@ arc                              alldefconfig
 sh                  sh7785lcr_32bit_defconfig
 openrisc                    or1ksim_defconfig
 s390                          debug_defconfig
-powerpc                      pcm030_defconfig
 csky                                defconfig
 ia64                             alldefconfig
 xtensa                              defconfig
@@ -214,7 +218,6 @@ powerpc                   microwatt_defconfig
 powerpc                      obs600_defconfig
 sh                            hp6xx_defconfig
 powerpc                     redwood_defconfig
-powerpc                  mpc885_ads_defconfig
 arm                     davinci_all_defconfig
 sh                         ecovec24_defconfig
 arm                       omap2plus_defconfig
