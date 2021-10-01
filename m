@@ -2,38 +2,38 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0271EC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 08:50:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F27BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 09:34:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DADB16108F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 08:50:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F056161A56
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 09:34:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbhJAIwb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Oct 2021 04:52:31 -0400
-Received: from mga05.intel.com ([192.55.52.43]:56598 "EHLO mga05.intel.com"
+        id S229939AbhJAJge (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Oct 2021 05:36:34 -0400
+Received: from mga05.intel.com ([192.55.52.43]:59973 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229683AbhJAIwa (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 1 Oct 2021 04:52:30 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="310919709"
+        id S229835AbhJAJgd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 1 Oct 2021 05:36:33 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="310926191"
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="scan'208";a="310919709"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 01:50:47 -0700
+   d="scan'208";a="310926191"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 02:34:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="scan'208";a="564835512"
+   d="scan'208";a="556212469"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Oct 2021 01:50:45 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Oct 2021 02:34:48 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mWEFh-0000yf-83; Fri, 01 Oct 2021 08:50:45 +0000
-Date:   Fri, 01 Oct 2021 16:50:20 +0800
+        id 1mWEwJ-000112-Cb; Fri, 01 Oct 2021 09:34:47 +0000
+Date:   Fri, 01 Oct 2021 17:33:52 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 6f7d70467121f790b36af2d84bc02b5c236bf5e6
-Message-ID: <6156cbcc.jWijKSqty6nYe0/C%lkp@intel.com>
+Subject: [groeck-staging:watchdog] BUILD SUCCESS
+ be7a0fe727f9abd68a9db6da5b5f6e68419160b2
+Message-ID: <6156d600.fOd+5twPEwdAN6UF%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -42,12 +42,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 6f7d70467121f790b36af2d84bc02b5c236bf5e6  hwmon: (ltc2947) Properly handle errors when looking for the external clock
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog
+branch HEAD: be7a0fe727f9abd68a9db6da5b5f6e68419160b2  watchdog: sbsa: drop unneeded MODULE_ALIAS
 
-elapsed time: 1665m
+elapsed time: 1709m
 
-configs tested: 275
+configs tested: 288
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -99,10 +99,6 @@ riscv                               defconfig
 mips                            gpr_defconfig
 sh                           se7721_defconfig
 arc                              allyesconfig
-arm                         axm55xx_defconfig
-parisc                           alldefconfig
-ia64                        generic_defconfig
-powerpc                        icon_defconfig
 sh                                  defconfig
 riscv                            alldefconfig
 powerpc                      cm5200_defconfig
@@ -113,10 +109,17 @@ mips                           mtx1_defconfig
 arm                       aspeed_g5_defconfig
 sh                        sh7763rdp_defconfig
 ia64                          tiger_defconfig
+riscv             nommu_k210_sdcard_defconfig
+xtensa                              defconfig
+mips                          ath79_defconfig
+microblaze                          defconfig
 powerpc                     tqm8541_defconfig
 powerpc                      mgcoge_defconfig
 mips                          rm200_defconfig
 powerpc                     mpc83xx_defconfig
+mips                     loongson1b_defconfig
+powerpc                      ppc64e_defconfig
+sh                           se7780_defconfig
 arm                          gemini_defconfig
 powerpc                 mpc8540_ads_defconfig
 powerpc                      ppc40x_defconfig
@@ -134,6 +137,13 @@ arm                        spear6xx_defconfig
 sh                            titan_defconfig
 sh                             espt_defconfig
 arm                            mmp2_defconfig
+powerpc                        icon_defconfig
+arm                            zeus_defconfig
+sh                           se7724_defconfig
+sparc                            allyesconfig
+arm                   milbeaut_m10v_defconfig
+arm                          iop32x_defconfig
+mips                         cobalt_defconfig
 h8300                       h8s-sim_defconfig
 arm                         bcm2835_defconfig
 arm                            lart_defconfig
@@ -148,6 +158,7 @@ powerpc                  mpc885_ads_defconfig
 powerpc                      pcm030_defconfig
 powerpc                 linkstation_defconfig
 powerpc                       maple_defconfig
+ia64                        generic_defconfig
 m68k                            mac_defconfig
 xtensa                  nommu_kc705_defconfig
 s390                       zfcpdump_defconfig
@@ -193,7 +204,6 @@ openrisc                    or1ksim_defconfig
 s390                          debug_defconfig
 csky                                defconfig
 ia64                             alldefconfig
-xtensa                              defconfig
 ia64                             allyesconfig
 powerpc                    socrates_defconfig
 um                             i386_defconfig
@@ -203,7 +213,6 @@ mips                       lemote2f_defconfig
 powerpc                     tqm5200_defconfig
 powerpc64                           defconfig
 x86_64                           alldefconfig
-powerpc                      ppc64e_defconfig
 mips                            e55_defconfig
 mips                      malta_kvm_defconfig
 powerpc                 mpc8560_ads_defconfig
@@ -211,6 +220,7 @@ arm                         palmz72_defconfig
 arm                          ixp4xx_defconfig
 powerpc                     mpc512x_defconfig
 mips                   sb1250_swarm_defconfig
+powerpc                 mpc8272_ads_defconfig
 arm                       aspeed_g4_defconfig
 arm                            qcom_defconfig
 arm                           sama7_defconfig
@@ -229,11 +239,9 @@ mips                       capcella_defconfig
 arm                          pxa168_defconfig
 arm                      footbridge_defconfig
 powerpc                     sequoia_defconfig
-mips                          ath79_defconfig
 sh                          lboxre2_defconfig
 xtensa                    xip_kc705_defconfig
 arc                         haps_hs_defconfig
-arm                   milbeaut_m10v_defconfig
 arc                           tb10x_defconfig
 arm                  randconfig-c002-20210930
 x86_64               randconfig-c001-20210930
@@ -255,10 +263,9 @@ sh                               allmodconfig
 xtensa                           allyesconfig
 parisc                              defconfig
 s390                                defconfig
-parisc                           allyesconfig
 s390                             allyesconfig
 s390                             allmodconfig
-sparc                            allyesconfig
+parisc                           allyesconfig
 sparc                               defconfig
 i386                                defconfig
 i386                             allyesconfig
@@ -267,6 +274,12 @@ mips                             allmodconfig
 powerpc                          allyesconfig
 powerpc                           allnoconfig
 powerpc                          allmodconfig
+x86_64               randconfig-a003-20211001
+x86_64               randconfig-a005-20211001
+x86_64               randconfig-a001-20211001
+x86_64               randconfig-a002-20211001
+x86_64               randconfig-a004-20211001
+x86_64               randconfig-a006-20211001
 x86_64               randconfig-a004-20210930
 x86_64               randconfig-a001-20210930
 x86_64               randconfig-a002-20210930
@@ -285,12 +298,6 @@ i386                 randconfig-a005-20211001
 i386                 randconfig-a002-20211001
 i386                 randconfig-a004-20211001
 i386                 randconfig-a006-20211001
-x86_64               randconfig-a003-20211001
-x86_64               randconfig-a005-20211001
-x86_64               randconfig-a001-20211001
-x86_64               randconfig-a002-20211001
-x86_64               randconfig-a004-20211001
-x86_64               randconfig-a006-20211001
 riscv                    nommu_virt_defconfig
 riscv                             allnoconfig
 riscv                            allyesconfig
@@ -322,6 +329,12 @@ x86_64               randconfig-a012-20210930
 x86_64               randconfig-a013-20210930
 x86_64               randconfig-a016-20210930
 x86_64               randconfig-a014-20210930
+x86_64               randconfig-a015-20211001
+x86_64               randconfig-a012-20211001
+x86_64               randconfig-a016-20211001
+x86_64               randconfig-a014-20211001
+x86_64               randconfig-a013-20211001
+x86_64               randconfig-a011-20211001
 i386                 randconfig-a014-20210930
 i386                 randconfig-a013-20210930
 i386                 randconfig-a011-20210930
