@@ -2,38 +2,38 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F27BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 09:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C696C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 10:00:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F056161A56
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 09:34:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CCE661881
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Oct 2021 10:00:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbhJAJge (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Oct 2021 05:36:34 -0400
-Received: from mga05.intel.com ([192.55.52.43]:59973 "EHLO mga05.intel.com"
+        id S1353315AbhJAKBy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Oct 2021 06:01:54 -0400
+Received: from mga12.intel.com ([192.55.52.136]:64338 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229835AbhJAJgd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 1 Oct 2021 05:36:33 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="310926191"
+        id S1353184AbhJAKBw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 1 Oct 2021 06:01:52 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="204869688"
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="scan'208";a="310926191"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 02:34:49 -0700
+   d="scan'208";a="204869688"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 02:59:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,337,1624345200"; 
-   d="scan'208";a="556212469"
+   d="scan'208";a="618990183"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Oct 2021 02:34:48 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 01 Oct 2021 02:59:48 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mWEwJ-000112-Cb; Fri, 01 Oct 2021 09:34:47 +0000
-Date:   Fri, 01 Oct 2021 17:33:52 +0800
+        id 1mWFKV-00012O-SX; Fri, 01 Oct 2021 09:59:47 +0000
+Date:   Fri, 01 Oct 2021 17:59:10 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog] BUILD SUCCESS
- be7a0fe727f9abd68a9db6da5b5f6e68419160b2
-Message-ID: <6156d600.fOd+5twPEwdAN6UF%lkp@intel.com>
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ 1c2b67fd9b0336ecc29306709af06100f6f2b08e
+Message-ID: <6156dbee.DssTuiGELaFW03pl%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -42,12 +42,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog
-branch HEAD: be7a0fe727f9abd68a9db6da5b5f6e68419160b2  watchdog: sbsa: drop unneeded MODULE_ALIAS
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 1c2b67fd9b0336ecc29306709af06100f6f2b08e  watchdog: mtk: add disable_wdt_extrst support
 
-elapsed time: 1709m
+elapsed time: 1736m
 
-configs tested: 288
+configs tested: 290
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -198,6 +198,8 @@ xtensa                       common_defconfig
 arm                              alldefconfig
 mips                          malta_defconfig
 riscv                          rv32_defconfig
+arm                        mvebu_v5_defconfig
+arm                        mvebu_v7_defconfig
 arc                              alldefconfig
 sh                  sh7785lcr_32bit_defconfig
 openrisc                    or1ksim_defconfig
@@ -249,23 +251,23 @@ x86_64               randconfig-c001-20211001
 arm                  randconfig-c002-20211001
 ia64                                defconfig
 m68k                                defconfig
-m68k                             allmodconfig
 m68k                             allyesconfig
+m68k                             allmodconfig
 nios2                               defconfig
 nds32                             allnoconfig
 nds32                               defconfig
 alpha                               defconfig
 alpha                            allyesconfig
 nios2                            allyesconfig
+xtensa                           allyesconfig
 h8300                            allyesconfig
 arc                                 defconfig
 sh                               allmodconfig
-xtensa                           allyesconfig
 parisc                              defconfig
 s390                                defconfig
+parisc                           allyesconfig
 s390                             allyesconfig
 s390                             allmodconfig
-parisc                           allyesconfig
 sparc                               defconfig
 i386                                defconfig
 i386                             allyesconfig
