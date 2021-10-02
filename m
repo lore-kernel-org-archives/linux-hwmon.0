@@ -2,118 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F285C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 11:40:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27F20C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 11:46:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5528861ACE
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 11:40:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06B8B61AE0
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 11:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbhJBLmQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Oct 2021 07:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S232864AbhJBLry (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 2 Oct 2021 07:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbhJBLmP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 07:42:15 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4F8C061570;
-        Sat,  2 Oct 2021 04:40:30 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id r43-20020a05683044ab00b0054716b40005so14927642otv.4;
-        Sat, 02 Oct 2021 04:40:30 -0700 (PDT)
+        with ESMTP id S232855AbhJBLry (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 07:47:54 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD3AC061570
+        for <linux-hwmon@vger.kernel.org>; Sat,  2 Oct 2021 04:46:08 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id o59-20020a9d2241000000b0054745f28c69so14905943ota.13
+        for <linux-hwmon@vger.kernel.org>; Sat, 02 Oct 2021 04:46:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mRYDN/7Zfb/X9+GCqkJ1Pbz/tDxT8mhcTJ+jdVvwAf0=;
-        b=Half5KMIBST7AJ6wUUnVDBlMdou8hLEI6sp0XMK/6/5jsoNvL0GHadrmiyMME1DlOQ
-         CVN9L1i1vTwPOUTGWx8T8E41nkBb+rGQ8TF/b36xft628GtZbDWNRxxASjpMuYAfaFpN
-         325fjEdfkrv9vqAd45URrOVsLRSGOPgPWMi3RM48EjzubHg6TZy9XlolhJquCm2BD8Cl
-         4c9hXUR6fYLTOmQ7LAyRNhdNlXUQKBnd/Y/ApNTEiXoCnLb7QGJNcv5o2IRwJPcFFn9Q
-         Xn7t7UrBpNr6BdStaYpOoxEPmVkz8lIbHXv2vCor19BawJG4b46YddGzb0YT1vC6hXno
-         g8sQ==
+        bh=4s/DZFI848ly6eHUed3i3tWfaq8wYpkiltaAkxeIAEE=;
+        b=mn8BaKuyfPCUS0Pbkm3UJ/cEiyyBbpVknOk4rTj/s8WdeO2zS/3Ay3knClv4eriPY9
+         OJlM7ZokkBlO/eRhxM+sTnQqFN2zEXIv1DwGfo7hHwgEpZEL8bk1O6Zyf8M3syb72IWs
+         GZsSAiAWSHpBtJnVZDaIbqbLoroCVkEBgH38I6xQSwIhnMVIJMW3psGYlVhmo+Wsrnim
+         4FS2kwFv90YLB+fb1AmVG10sBhIrg79N3acMtEUWY6suSJOKeZABMkSc4nIYzCHIY2E/
+         RJWDmZO2FoCp+nkyI+nkkWarFaacKKxnZcW9VhTfnlfFd9Dqf0kKdUzyc0aVsUldJ44h
+         qp4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=mRYDN/7Zfb/X9+GCqkJ1Pbz/tDxT8mhcTJ+jdVvwAf0=;
-        b=JNDB4cWHMVDWIKWY2Z0UDBePsKnXHw/UmQiyBehfRwuqpCMZYKKiBcDfSEtRz76Bg5
-         OTb6NrwPmpM8FaLH8XvYyb9VPNqvawLE9e1q/5/WRTNEjqMJ4us2Q1j4OkuSeXcxJ4n0
-         UiqqAs0H98a9icY0KsGsEdkREzVyQ2nPcHsApW68Dd9Dzzz62gmYM54VexZqnJOsMNTB
-         1gGrcQF3DlTmvuw+pMq6qhRoyEiRR5u9VQa/ppDWdOlElvv4dMlxkx0LSD4rAgaluKte
-         q8eM6Zqu5/UhHsKpDdBovFADFQ3My+ZNhxAoLQjJC4U3dvn61cU8Tytwnpjn+PqcA/QQ
-         OTog==
-X-Gm-Message-State: AOAM532n1TvlJkCM0JXdWHK8zgP6OC+FiOy7my9FOG6QmMgdJMvaYIpq
-        lGpDe3w9n7IAonCmJgtvsAc=
-X-Google-Smtp-Source: ABdhPJx6iIjnTcIW6+ptJYdtsqGBA4AciBxjGFBcibkzWzB3lC/j4q7mlhYTQi6s8Ff/qDI5Ef1BNg==
-X-Received: by 2002:a9d:7f89:: with SMTP id t9mr2296505otp.143.1633174829483;
-        Sat, 02 Oct 2021 04:40:29 -0700 (PDT)
+        bh=4s/DZFI848ly6eHUed3i3tWfaq8wYpkiltaAkxeIAEE=;
+        b=yCweiAsGKADJ9KP5yUS2/ooO2aADjXGX0N0C9kpwH9u4VWgmYADH2wZEzu97TIY0E3
+         mlGHFoMiy7Ene9ia467YUe3Ym4hajuNXzK9UqfubFtBe4ZPgv5VXsCzRbNcKsHfPHbDi
+         FuGGmkUKnZePj0WH5Ofo8Nk73RRzdj+zcOFMRZVm/JEfGCwSaFcyspHXtz6llzZ/TinR
+         eEfCUq81CEi5MBZENfCpqfZt+k2M4wDX9t+7einYIDL/S+H3gkjjTHJCnyo54WqbI7JF
+         knNS+lwqf1zwRzEtzExDpfzk7QTm9ukn5LoZrXvAlR501lbKE8nW4fcV8cbmUwxZn/Zp
+         h+Mw==
+X-Gm-Message-State: AOAM533tSdjWAhqbxBggHGstiPKxwSsAwIUODOwQ2fFLappU9T6O0gFX
+        n7I36LI09m5GW38LXm2wHTRaXIaEVpw=
+X-Google-Smtp-Source: ABdhPJxaWWiLUeU9kGsMjjJFCe7CNrW1727RwIRQG0IBsCqP09WBqcIFM5u1FrGA23pLL7MyYbyB3g==
+X-Received: by 2002:a05:6830:2781:: with SMTP id x1mr2259804otu.349.1633175168002;
+        Sat, 02 Oct 2021 04:46:08 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 17sm1612077ois.45.2021.10.02.04.40.28
+        by smtp.gmail.com with ESMTPSA id h91sm1682042otb.38.2021.10.02.04.46.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Oct 2021 04:40:28 -0700 (PDT)
+        Sat, 02 Oct 2021 04:46:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 2 Oct 2021 04:40:27 -0700
+Date:   Sat, 2 Oct 2021 04:46:06 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Brandon Wyman <bjwyman@gmail.com>
-Cc:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) max_power_out swap changes
-Message-ID: <20211002114027.GA1012283@roeck-us.net>
-References: <20210928205051.1222815-1-bjwyman@gmail.com>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH hwmon 1/1] hwmon: (pmbus/mp2975) Add missed POUT
+ attribute for page 1 mp2975 controller
+Message-ID: <20211002114606.GA1279026@roeck-us.net>
+References: <20210927070740.2149290-1-vadimp@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210928205051.1222815-1-bjwyman@gmail.com>
+In-Reply-To: <20210927070740.2149290-1-vadimp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 08:50:51PM +0000, Brandon Wyman wrote:
-> The bytes for max_power_out from the ibm-cffps devices differ in byte
-> order for some power supplies.
+On Mon, Sep 27, 2021 at 10:07:40AM +0300, Vadim Pasternak wrote:
+> Add missed attribute for reading POUT from page 1.
+> It is supported by device, but has been missed in initial commit.
 > 
-> The Witherspoon power supply returns the bytes in MSB/LSB order.
-> 
-> The Rainier power supply returns the bytes in LSB/MSB order.
-> 
-> The Witherspoon power supply uses version cffps1. The Rainier power
-> supply should use version cffps2. If version is cffps1, swap the bytes
-> before output to max_power_out.
-> 
-> Tested:
->     Witherspoon before: 3148. Witherspoon after: 3148.
->     Rainier before: 53255. Rainier after: 2000.
-> 
-> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
-> Reviewed-by: Eddie James <eajames@linux.ibm.com>
+> Fixes: 2c6fcbb21149 ("hwmon: (pmbus) Add support for MPS Multi-phase mp2975 controller")
+> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 
-Applied, though ...
+Applied.
+
+Thanks,
+Guenter
 
 > ---
->  drivers/hwmon/pmbus/ibm-cffps.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+>  drivers/hwmon/pmbus/mp2975.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index df712ce4b164..79bfcd2749a6 100644
-> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -171,8 +171,14 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
->  		cmd = CFFPS_SN_CMD;
->  		break;
->  	case CFFPS_DEBUGFS_MAX_POWER_OUT:
-> -		rc = i2c_smbus_read_word_swapped(psu->client,
-> -						 CFFPS_MAX_POWER_OUT_CMD);
-> +		if (cffps1 == psu->version) {
-
-The yoda programming replaced I did.
-
-> +			rc = i2c_smbus_read_word_swapped(psu->client,
-> +					CFFPS_MAX_POWER_OUT_CMD);
-> +		} else {
-> +			rc = i2c_smbus_read_word_data(psu->client,
-> +					CFFPS_MAX_POWER_OUT_CMD);
-> +		}
-> +
->  		if (rc < 0)
->  			return rc;
+> diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+> index eb94bd5f4e2a..51986adfbf47 100644
+> --- a/drivers/hwmon/pmbus/mp2975.c
+> +++ b/drivers/hwmon/pmbus/mp2975.c
+> @@ -54,7 +54,7 @@
 >  
+>  #define MP2975_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
+>  				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
+> -				 PMBUS_PHASE_VIRTUAL)
+> +				 PMBUS_HAVE_POUT | PMBUS_PHASE_VIRTUAL)
+>  
+>  struct mp2975_data {
+>  	struct pmbus_driver_info info;
