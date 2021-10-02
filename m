@@ -2,97 +2,156 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27F20C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 11:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A0C4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 12:07:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06B8B61AE0
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 11:46:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4838C61A56
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 12:07:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbhJBLry (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Oct 2021 07:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
+        id S232938AbhJBMJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 2 Oct 2021 08:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbhJBLry (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 07:47:54 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD3AC061570
-        for <linux-hwmon@vger.kernel.org>; Sat,  2 Oct 2021 04:46:08 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id o59-20020a9d2241000000b0054745f28c69so14905943ota.13
-        for <linux-hwmon@vger.kernel.org>; Sat, 02 Oct 2021 04:46:08 -0700 (PDT)
+        with ESMTP id S232823AbhJBMJh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 08:09:37 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4430DC061570;
+        Sat,  2 Oct 2021 05:07:52 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id 24so15076445oix.0;
+        Sat, 02 Oct 2021 05:07:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=4s/DZFI848ly6eHUed3i3tWfaq8wYpkiltaAkxeIAEE=;
-        b=mn8BaKuyfPCUS0Pbkm3UJ/cEiyyBbpVknOk4rTj/s8WdeO2zS/3Ay3knClv4eriPY9
-         OJlM7ZokkBlO/eRhxM+sTnQqFN2zEXIv1DwGfo7hHwgEpZEL8bk1O6Zyf8M3syb72IWs
-         GZsSAiAWSHpBtJnVZDaIbqbLoroCVkEBgH38I6xQSwIhnMVIJMW3psGYlVhmo+Wsrnim
-         4FS2kwFv90YLB+fb1AmVG10sBhIrg79N3acMtEUWY6suSJOKeZABMkSc4nIYzCHIY2E/
-         RJWDmZO2FoCp+nkyI+nkkWarFaacKKxnZcW9VhTfnlfFd9Dqf0kKdUzyc0aVsUldJ44h
-         qp4A==
+        bh=8JCAOEDCDvSDxOuC8dv7CM9Hr45vp3pb26n1zICiHhk=;
+        b=JhMj45rKQ3KHwoJbfnTKdwBWYKlRY7BJ8znyPiSoHDqPWAvenTPjRCsqryE/HwyNvg
+         NpFppJRUiFDZpgMxUj/s/7ccRHNq/wZ77hgX3YBNzJ+Hya/GTfSHFoE4i32+JtsyknVN
+         BtEhS8Ud6o4GY9kgvx+eEy4txh79bs31CZPqUNhZO+PTYkBIBxPiUgFj+3w+8GSZTxtN
+         Ly+wwRzKfnev2vNiY43U3yhP7hn9MB6oGMwCGhvRq2PVZNBs4JGoYrVfBSznBKfwF5Lo
+         XUaRFndRra5HHKQR7to2NCTfgzMI1l+V8v1m0V6G/mHc7fgA/7uBp+hHExrnbzBOkwhp
+         5t9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=4s/DZFI848ly6eHUed3i3tWfaq8wYpkiltaAkxeIAEE=;
-        b=yCweiAsGKADJ9KP5yUS2/ooO2aADjXGX0N0C9kpwH9u4VWgmYADH2wZEzu97TIY0E3
-         mlGHFoMiy7Ene9ia467YUe3Ym4hajuNXzK9UqfubFtBe4ZPgv5VXsCzRbNcKsHfPHbDi
-         FuGGmkUKnZePj0WH5Ofo8Nk73RRzdj+zcOFMRZVm/JEfGCwSaFcyspHXtz6llzZ/TinR
-         eEfCUq81CEi5MBZENfCpqfZt+k2M4wDX9t+7einYIDL/S+H3gkjjTHJCnyo54WqbI7JF
-         knNS+lwqf1zwRzEtzExDpfzk7QTm9ukn5LoZrXvAlR501lbKE8nW4fcV8cbmUwxZn/Zp
-         h+Mw==
-X-Gm-Message-State: AOAM533tSdjWAhqbxBggHGstiPKxwSsAwIUODOwQ2fFLappU9T6O0gFX
-        n7I36LI09m5GW38LXm2wHTRaXIaEVpw=
-X-Google-Smtp-Source: ABdhPJxaWWiLUeU9kGsMjjJFCe7CNrW1727RwIRQG0IBsCqP09WBqcIFM5u1FrGA23pLL7MyYbyB3g==
-X-Received: by 2002:a05:6830:2781:: with SMTP id x1mr2259804otu.349.1633175168002;
-        Sat, 02 Oct 2021 04:46:08 -0700 (PDT)
+        bh=8JCAOEDCDvSDxOuC8dv7CM9Hr45vp3pb26n1zICiHhk=;
+        b=mLKBsMJv8hv4uYxrYSw27K2QOnPDihM9tz1SjXcsfkezHVOQE2KuRte0tOdFH5Nh3T
+         AwYLlQeQEFB5vrolK7op5LRmc8CBWzYRapNsCxeLt6VZ1LG3gLduOvzos1ZuSHlfvx8q
+         NFXZlxUwKj1z2M3u7UILefNr2bA4VpXFc84V3Xj9zV7At1fGjsQAuUTd4s6EHj4WOu9/
+         ht0Cl6vwBwpc/BaWdlk+yICEnXUxjMgagtS7P6IRyH4hR6WUQX20S5xkQZMBwVGhD3cV
+         mO74dYyKKI+ACnw/o9E3SptTmLgvSRtJerdUHwxR7XaevnlfBj78aRPMHAOf5zW9IBHN
+         s6fQ==
+X-Gm-Message-State: AOAM531R6gsU8n9m5M2WXNYhcg82wB4oLJ6pez9MX3Fb6OH2eXs3Cnvg
+        nh73Gcf3QmR8/6t/4NDoxlk=
+X-Google-Smtp-Source: ABdhPJx9fqjMqOpD0PKrtGYvt5awtYJiPBEJhaw7v3FGekmkvut9XsrW9unDm/MJZb/yRvjTz+n8tQ==
+X-Received: by 2002:a05:6808:256:: with SMTP id m22mr7492951oie.150.1633176471605;
+        Sat, 02 Oct 2021 05:07:51 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h91sm1682042otb.38.2021.10.02.04.46.07
+        by smtp.gmail.com with ESMTPSA id k3sm799009otn.16.2021.10.02.05.07.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Oct 2021 04:46:07 -0700 (PDT)
+        Sat, 02 Oct 2021 05:07:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 2 Oct 2021 04:46:06 -0700
+Date:   Sat, 2 Oct 2021 05:07:49 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH hwmon 1/1] hwmon: (pmbus/mp2975) Add missed POUT
- attribute for page 1 mp2975 controller
-Message-ID: <20211002114606.GA1279026@roeck-us.net>
-References: <20210927070740.2149290-1-vadimp@nvidia.com>
+To:     Nadezda Lutovinova <lutovinova@ispras.ru>
+Cc:     Marc Hulsman <m.hulsman@tudelft.nl>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
+Subject: Re: [PATCH v2 1/3] hwmon: (w83791d) Fix NULL pointer dereference by
+ removing unnecessary structure field
+Message-ID: <20211002120749.GA2021669@roeck-us.net>
+References: <20210811181844.GB3138792@roeck-us.net>
+ <20210921155153.28098-1-lutovinova@ispras.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210927070740.2149290-1-vadimp@nvidia.com>
+In-Reply-To: <20210921155153.28098-1-lutovinova@ispras.ru>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 10:07:40AM +0300, Vadim Pasternak wrote:
-> Add missed attribute for reading POUT from page 1.
-> It is supported by device, but has been missed in initial commit.
+On Tue, Sep 21, 2021 at 06:51:51PM +0300, Nadezda Lutovinova wrote:
+> If driver read val value sufficient for 
+> (val & 0x08) && (!(val & 0x80)) && ((val & 0x7) == ((val >> 4) & 0x7))
+> from device then Null pointer dereference occurs. 
+> (It is possible if tmp = 0b0xyz1xyz, where same literals mean same numbers)
+> Also lm75[] does not serve a purpose anymore after switching to
+> devm_i2c_new_dummy_device() in w83791d_detect_subclients().
 > 
-> Fixes: 2c6fcbb21149 ("hwmon: (pmbus) Add support for MPS Multi-phase mp2975 controller")
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+> The patch fixes possible NULL pointer dereference by removing lm75[].
+> 
+> Found by Linux Driver Verification project (linuxtesting.org).
+> 
+> Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
 
-Applied.
+Applied, after fixing multi-line alignments.
 
-Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/mp2975.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v2: 
+>  - split one file per patch 
+>  - remove lm75[] instead of adding checking  
+> ---
+>  drivers/hwmon/w83791d.c | 32 ++++++++++++++------------------
+>  1 file changed, 14 insertions(+), 18 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-> index eb94bd5f4e2a..51986adfbf47 100644
-> --- a/drivers/hwmon/pmbus/mp2975.c
-> +++ b/drivers/hwmon/pmbus/mp2975.c
-> @@ -54,7 +54,7 @@
+> diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+> index 37b25a1474c4..b4eae45859c1 100644
+> --- a/drivers/hwmon/w83791d.c
+> +++ b/drivers/hwmon/w83791d.c
+> @@ -273,9 +273,6 @@ struct w83791d_data {
+>  	char valid;			/* !=0 if following fields are valid */
+>  	unsigned long last_updated;	/* In jiffies */
 >  
->  #define MP2975_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
->  				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
-> -				 PMBUS_PHASE_VIRTUAL)
-> +				 PMBUS_HAVE_POUT | PMBUS_PHASE_VIRTUAL)
+> -	/* array of 2 pointers to subclients */
+> -	struct i2c_client *lm75[2];
+> -
+>  	/* volts */
+>  	u8 in[NUMBER_OF_VIN];		/* Register value */
+>  	u8 in_max[NUMBER_OF_VIN];	/* Register value */
+> @@ -1257,7 +1254,6 @@ static const struct attribute_group w83791d_group_fanpwm45 = {
+>  static int w83791d_detect_subclients(struct i2c_client *client)
+>  {
+>  	struct i2c_adapter *adapter = client->adapter;
+> -	struct w83791d_data *data = i2c_get_clientdata(client);
+>  	int address = client->addr;
+>  	int i, id;
+>  	u8 val;
+> @@ -1280,21 +1276,21 @@ static int w83791d_detect_subclients(struct i2c_client *client)
+>  	}
 >  
->  struct mp2975_data {
->  	struct pmbus_driver_info info;
+>  	val = w83791d_read(client, W83791D_REG_I2C_SUBADDR);
+> +
+> +	if (!(val & 0x88) && (val & 0x7) == ((val >> 4) & 0x7)) {
+> +		dev_err(&client->dev,
+> +			"duplicate addresses 0x%x, use force_subclient\n",
+> +				0x48 + (val & 0x7));
+> +		return -ENODEV;
+> +	}
+> +
+>  	if (!(val & 0x08))
+> -		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
+> -							  0x48 + (val & 0x7));
+> -	if (!(val & 0x80)) {
+> -		if (!IS_ERR(data->lm75[0]) &&
+> -				((val & 0x7) == ((val >> 4) & 0x7))) {
+> -			dev_err(&client->dev,
+> -				"duplicate addresses 0x%x, "
+> -				"use force_subclient\n",
+> -				data->lm75[0]->addr);
+> -			return -ENODEV;
+> -		}
+> -		data->lm75[1] = devm_i2c_new_dummy_device(&client->dev, adapter,
+> -							  0x48 + ((val >> 4) & 0x7));
+> -	}
+> +		devm_i2c_new_dummy_device(&client->dev, adapter,
+> +						0x48 + (val & 0x7));
+> +
+> +	if (!(val & 0x80))
+> +		devm_i2c_new_dummy_device(&client->dev, adapter,
+> +						0x48 + ((val >> 4) & 0x7));
+>  
+>  	return 0;
+>  }
