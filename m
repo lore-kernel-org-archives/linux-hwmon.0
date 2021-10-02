@@ -2,137 +2,131 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D81B4C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 16:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2773C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 21:09:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B144761A6F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 16:13:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD81A6120D
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 21:09:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbhJBQPm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Oct 2021 12:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S233966AbhJBVLh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 2 Oct 2021 17:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233451AbhJBQPm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 12:15:42 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9957CC0613EC;
-        Sat,  2 Oct 2021 09:13:56 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id e66-20020a9d2ac8000000b0054da8bdf2aeso13418931otb.12;
-        Sat, 02 Oct 2021 09:13:56 -0700 (PDT)
+        with ESMTP id S233122AbhJBVLg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 17:11:36 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4896EC061714;
+        Sat,  2 Oct 2021 14:09:50 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id i4so53984822lfv.4;
+        Sat, 02 Oct 2021 14:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/hcX/JYaM8DBc6e+4N3x+0nWfBmXtTSfCwfrAmAc1u0=;
-        b=ayeXpmk2fNVD+hn0tD45NavkhgzGb/ejFpL42v9Da/d1KNZfViXvYOiZMpwT8aTylA
-         6nWxgoblsTe0D/TRLCsykTLigT9l3vaJYDvXlOY/oh1mp78A67a4e6vIFNzOmITYmxdx
-         lxlLkwR8y8By7W6P9XJsEyIhfRewkvOs+QySsRbjwMK59K2WuNiHHMYfYdsBY260DN1b
-         ZFfxRUlxUCpwwnXL1NdXvJWPTABNKakbGwvbbVXs6CXIwKB/ms+YCvuoviuMi1medq+5
-         VXGjCb/dr0rM9xvyq5O2lgavEGr1V5FcsCSxte6crfKrSnvjYu5GgplGvr6iErQDWxKc
-         pF5w==
+        bh=HxVWflK9zpXBijrFY0ftzOts3Dk+lUJ247YDKOyiFAc=;
+        b=oz8KSdimPB+gzkxD/Xhn4mUg/M+SZtIMoe08EH//suN2NVuGQBF3HSh20WxqqSWd+p
+         z/ze3KFBc7lp3zcQZrfm/jrW31IXDLMaIVjYJDxES8p28Lz/n17RKJyS6ejVZgrgmw/b
+         0/4uuCyhyMFg3blJGuWpBaHUMjqOa7zAu73t+hhQtgFyifqQcTy9qiRVh/ukZiZixZ4p
+         baDJXr/fB+zpUj2l89TX5mSMM5CdH0O0dBEuxWwvPX1boybAbdxhfJYknpo35+ND9flY
+         /0CIVMFhNyv8y+CaUOsrNnYdKu6pSsjZ4DhXFC3CNjSNgQlSFWRH5E6w9jXyE6Ktfeeh
+         IjIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=/hcX/JYaM8DBc6e+4N3x+0nWfBmXtTSfCwfrAmAc1u0=;
-        b=YkR0fsUUdGa5PX6M8CWhT009gdEmS/j8N/JOZN5X19Kwp50izJLfXsDOnxW6Iqilwt
-         V5IyLUlEH3JVVoccV/KTI0whTrDR89Dmb1WcZxsDOunIFxPTcwFpiTV4K2qrBNjQUr6y
-         df2izv2dFaDpJXXJOsRs4y9Ldp5YxL+LpQoY91AHJEfWGbzZVMiglnsrUPi2d/E3CCm/
-         ieyS9/jrZdYxG7hAg7wPszBQFOSUNVhQWVq3rvw23wMiu0AoIM9LWBgEYUkBr8JcwuXV
-         DkXsGNEZf49UlpNAm4py29F+K4NMR+FC42HyWTceKG+PCU+mPVZ9bvjoOHa/adFh+/hr
-         OVEA==
-X-Gm-Message-State: AOAM533WihgWpysjInj46Du4MGsLrWXcOPFYRZzIV98j1+D0LqkotsG2
-        w1ju3kxxnLD600DJus+pfUcESimKZMk=
-X-Google-Smtp-Source: ABdhPJzt8th011/MEJfTnnaUNN5wyO6/oD8k3EQj/gH5x02dok8JH5PLJxn/yJnngYBh5xqUukdbqQ==
-X-Received: by 2002:a9d:4e82:: with SMTP id v2mr3026711otk.376.1633191236054;
-        Sat, 02 Oct 2021 09:13:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w184sm1743421oie.35.2021.10.02.09.13.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HxVWflK9zpXBijrFY0ftzOts3Dk+lUJ247YDKOyiFAc=;
+        b=YfR0WlM3CR94BV1PuY9aRwfj3EhW9Y0BLd5aN10V+gBGLhtKFu/0/wlG2cJgYJYziU
+         riUR3+8t5d+8j7L9ZtZnQK4aCPVHVOvVeYO1djVkugMOdmzkGCSImzpBxteLxRm+wSob
+         jmklvGT3p2zzAw06uAChnYTFskVMniInpi+RFDQ6THmJxuNlpQO91un2hAG94kLMHD3I
+         56zy4S8RNa5ldC0irUOpWCfReJdm8erUSofIf9awDPqeKvFcgRa5Z2BqEQuMtTuB2ZhH
+         hvyINYOl4KJla7EGVvfBDwpnLvDtnxC9zqoYCanc9WbLu4MeQYvd8fmEv0jfZt6D221d
+         U2PA==
+X-Gm-Message-State: AOAM530hEMRrVajD84u3iaCxMcAqp8yRNCO8HFNxazwS3nMfrgidGpjo
+        nQXStTE189/oVYJtkcisoK8=
+X-Google-Smtp-Source: ABdhPJyXkHupuq294i47Y4hLPf0YTgK5zQV4FoH5aprUKestpPuJ/3vCguRdn1WzxZLojbGpnsJXxA==
+X-Received: by 2002:a2e:8782:: with SMTP id n2mr5831276lji.177.1633208988469;
+        Sat, 02 Oct 2021 14:09:48 -0700 (PDT)
+Received: from localhost.localdomain (105-28-94-178.pool.ukrtel.net. [178.94.28.105])
+        by smtp.gmail.com with ESMTPSA id l9sm279511lje.32.2021.10.02.14.09.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Oct 2021 09:13:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.15-rc4
-Date:   Sat,  2 Oct 2021 09:13:53 -0700
-Message-Id: <20211002161353.37484-1-linux@roeck-us.net>
+        Sat, 02 Oct 2021 14:09:48 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     pauk.denis@gmail.com, Eugene Shalygin <eugene.shalygin@gmail.com>,
+        matt-testalltheway <sefoci9222@rerunway.com>,
+        Kamil Dudka <kdudka@redhat.com>,
+        Robert Swiecki <robert@swiecki.net>,
+        Kamil Pietrzak <kpietrzak@disroot.org>, Igor <igor@svelig.com>,
+        Tor Vic <torvic9@mailbox.org>, Poezevara <nephartyz@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH 0/3] Update ASUS WMI supported boards.
+Date:   Sun,  3 Oct 2021 00:08:53 +0300
+Message-Id: <20211002210857.709956-1-pauk.denis@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Add support to nct6775:
+* PRIME B360-PLUS
+* PRIME X570-PRO
+* ROG CROSSHAIR VIII FORMULA
+* ROG STRIX B550-I GAMING
+* ROG STRIX X570-F GAMING
+* ROG STRIX Z390-E GAMING
+* TUF GAMING B550-PRO
+* TUF GAMING Z490-PLUS
+* TUF GAMING Z490-PLUS (WI-FI)
 
-Please pull hwmon fixes for Linux v5.15-rc4 from signed tag:
+Add sensors driver for ASUS motherboards to read sensors from the embedded 
+controller. Based on https://github.com/zeule/asus-wmi-ec-sensors.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.15-rc4
+Could you please review?
 
-Thanks,
-Guenter
-------
+@Andy Shevchenko, @Guenter Roeck should I split last patch in some way?
+Should I add to MAINTAINERS:
+--
+ASUS WMI HARDWARE MONITOR DRIVER
+M:     Eugene Shalygin <eugene.shalygin@gmail.com>
+M:     Denis Pauk <pauk.denis@gmail.com>
+L:     linux-hwmon@vger.kernel.org
+S:     Maintained
+F:     drivers/hwmon/asus_wmi_sensors.c
+--
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Co-developed-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Tested-by: matt-testalltheway <sefoci9222@rerunway.com>
+Tested-by: Kamil Dudka <kdudka@redhat.com>
+Tested-by: Robert Swiecki <robert@swiecki.net>
+Tested-by: Kamil Pietrzak <kpietrzak@disroot.org>
+Tested-by: Igor <igor@svelig.com>
+Tested-by: Tor Vic <torvic9@mailbox.org>
+Tested-by: Poezevara <nephartyz@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
 
-are available in the Git repository at:
+---
+Denis Pauk (3):
+  hwmon: (nct6775) Add additional ASUS motherboards.
+  hwmon: (nct6775) Use custom scale for ASUS motherboards.
+  hwmon: (asus_wmi_sensors) Support access via Asus WMI.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.15-rc4
+ drivers/hwmon/Kconfig            |  12 +
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/asus_wmi_sensors.c | 595 +++++++++++++++++++++++++++++++
+ drivers/hwmon/nct6775.c          |  41 ++-
+ 4 files changed, 643 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/hwmon/asus_wmi_sensors.c
 
-for you to fetch changes up to dd4d747ef05addab887dc8ff0d6ab9860bbcd783:
+-- 
+2.33.0
 
-  hwmon: (w83793) Fix NULL pointer dereference by removing unnecessary structure field (2021-10-02 05:14:11 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v5.15-rc4
-
-- Fixed various potential NULL pointer accesses in w8379* drivers
-- Improved error handling, fault reporting, and fixed rounding in thmp421 driver
-- Fixed error handling in ltc2947 driver
-- Added missing attribute to pmbus/mp2975 driver
-- Fixed attribute values in pbus/ibm-cffps, occ, and mlxreg-fan drivers
-- Removed unused residual code from k10temp driver
-
-----------------------------------------------------------------
-Brandon Wyman (1):
-      hwmon: (pmbus/ibm-cffps) max_power_out swap changes
-
-Eddie James (1):
-      hwmon: (occ) Fix P10 VRM temp sensors
-
-Nadezda Lutovinova (3):
-      hwmon: (w83791d) Fix NULL pointer dereference by removing unnecessary structure field
-      hwmon: (w83792d) Fix NULL pointer dereference by removing unnecessary structure field
-      hwmon: (w83793) Fix NULL pointer dereference by removing unnecessary structure field
-
-Paul Fertser (3):
-      hwmon: (tmp421) handle I2C errors
-      hwmon: (tmp421) report /PVLD condition as fault
-      hwmon: (tmp421) fix rounding for negative values
-
-Uwe Kleine-König (1):
-      hwmon: (ltc2947) Properly handle errors when looking for the external clock
-
-Vadim Pasternak (2):
-      hwmon: (mlxreg-fan) Return non-zero value when fan current state is enforced from sysfs
-      hwmon: (pmbus/mp2975) Add missed POUT attribute for page 1 mp2975 controller
-
-suma hegde (1):
-      hwmon: (k10temp) Remove residues of current and voltage
-
- Documentation/hwmon/k10temp.rst | 17 ----------
- drivers/hwmon/k10temp.c         |  6 ----
- drivers/hwmon/ltc2947-core.c    |  8 +++--
- drivers/hwmon/mlxreg-fan.c      | 12 +++++--
- drivers/hwmon/occ/common.c      | 17 +++-------
- drivers/hwmon/pmbus/ibm-cffps.c | 10 ++++--
- drivers/hwmon/pmbus/mp2975.c    |  2 +-
- drivers/hwmon/tmp421.c          | 71 ++++++++++++++++++++++-------------------
- drivers/hwmon/w83791d.c         | 29 +++++++----------
- drivers/hwmon/w83792d.c         | 28 +++++++---------
- drivers/hwmon/w83793.c          | 26 +++++++--------
- 11 files changed, 101 insertions(+), 125 deletions(-)
