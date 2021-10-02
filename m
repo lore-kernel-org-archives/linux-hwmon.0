@@ -2,185 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F8B1C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 14:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D81B4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 16:13:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0E5C61242
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 14:22:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B144761A6F
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 16:13:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbhJBOYH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Oct 2021 10:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S233574AbhJBQPm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 2 Oct 2021 12:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbhJBOYH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 10:24:07 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5F1C0613EC;
-        Sat,  2 Oct 2021 07:22:21 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id h9-20020a9d2f09000000b005453f95356cso15344792otb.11;
-        Sat, 02 Oct 2021 07:22:21 -0700 (PDT)
+        with ESMTP id S233451AbhJBQPm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 12:15:42 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9957CC0613EC;
+        Sat,  2 Oct 2021 09:13:56 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id e66-20020a9d2ac8000000b0054da8bdf2aeso13418931otb.12;
+        Sat, 02 Oct 2021 09:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rhAlgih+BTmjGMxKoPczehCr7Ohc6WZbR6tgamkRMbA=;
-        b=C8w3DIhGQGOSiiTM2rOV81H4wizNcrmvXSAP3BktonYRsd7dM9+HGsFRXw3NLJ3iU5
-         kxklHgwfBdirEf/3dcj1V2LEWc9K7HmutP53ohjy3+rtLOaLU90YxBtvvey3K32gPp6/
-         81Ih3NA0R4DTbbbBMb+0F4BZOf1t5vxtqaCDtDrT/apYH11XX3cCFsv1GvfK/Tl+hxs4
-         yBgLpDygkukYaESLfy7RmWGTyGTzLO5X4bWfVInmsDcUSXqHXu8I/e4bn0mbi8Pc3VCq
-         Qiyi1JIazx1ozYSIyHjJLfIm6YPTUEbfyZVq+8y8e8Gzs9zilo7U6p+qn1EVkGoYpqga
-         EyMA==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/hcX/JYaM8DBc6e+4N3x+0nWfBmXtTSfCwfrAmAc1u0=;
+        b=ayeXpmk2fNVD+hn0tD45NavkhgzGb/ejFpL42v9Da/d1KNZfViXvYOiZMpwT8aTylA
+         6nWxgoblsTe0D/TRLCsykTLigT9l3vaJYDvXlOY/oh1mp78A67a4e6vIFNzOmITYmxdx
+         lxlLkwR8y8By7W6P9XJsEyIhfRewkvOs+QySsRbjwMK59K2WuNiHHMYfYdsBY260DN1b
+         ZFfxRUlxUCpwwnXL1NdXvJWPTABNKakbGwvbbVXs6CXIwKB/ms+YCvuoviuMi1medq+5
+         VXGjCb/dr0rM9xvyq5O2lgavEGr1V5FcsCSxte6crfKrSnvjYu5GgplGvr6iErQDWxKc
+         pF5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=rhAlgih+BTmjGMxKoPczehCr7Ohc6WZbR6tgamkRMbA=;
-        b=BLTIZLxIc8aa+UluQuoxdZjZ0Ac9k0GxqUjH0BY2JUh0k52/QB70bud8rzT0/fByKP
-         9MXu5tXU3b2DeDSt53SQ2581WrMEQTfjv4Qh3chh7CS72S1hTNdfwNjisUlsz6Akz8Pr
-         JA+WJDnz41aUCfPaJbQl9gap2vC/e7waVzkIRxoDFR8Zxnl4dXZtTgQmt4YSVqNrHKp8
-         KXPzIRNQPk2yhvHkA37ZduHyGIK4RCelklaitjBkjQ/d6Ksm/iIlisA4ppO/8el6QDuR
-         d4jG8bdI1DobsgT3NNGWhC9NqdqPwZaiLiuCNWzNmv78BCg+HUa58HCPPuuvZEmzd+r8
-         RP9Q==
-X-Gm-Message-State: AOAM530D3G9F1UgjiCg3fGpoK2TvmHOrUEkEX9CAbIgCuQv8wB5l69rC
-        I+kZJDWVGHBNIdF/qQkwLlg=
-X-Google-Smtp-Source: ABdhPJyfKa2wYvuN641mTeG6/6dNc/jIgHDzT/3E1c6BIzlFSqG41pUPDxJNGWzrmxk6q2r22eYTvA==
-X-Received: by 2002:a05:6830:2706:: with SMTP id j6mr2847136otu.82.1633184540954;
-        Sat, 02 Oct 2021 07:22:20 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=/hcX/JYaM8DBc6e+4N3x+0nWfBmXtTSfCwfrAmAc1u0=;
+        b=YkR0fsUUdGa5PX6M8CWhT009gdEmS/j8N/JOZN5X19Kwp50izJLfXsDOnxW6Iqilwt
+         V5IyLUlEH3JVVoccV/KTI0whTrDR89Dmb1WcZxsDOunIFxPTcwFpiTV4K2qrBNjQUr6y
+         df2izv2dFaDpJXXJOsRs4y9Ldp5YxL+LpQoY91AHJEfWGbzZVMiglnsrUPi2d/E3CCm/
+         ieyS9/jrZdYxG7hAg7wPszBQFOSUNVhQWVq3rvw23wMiu0AoIM9LWBgEYUkBr8JcwuXV
+         DkXsGNEZf49UlpNAm4py29F+K4NMR+FC42HyWTceKG+PCU+mPVZ9bvjoOHa/adFh+/hr
+         OVEA==
+X-Gm-Message-State: AOAM533WihgWpysjInj46Du4MGsLrWXcOPFYRZzIV98j1+D0LqkotsG2
+        w1ju3kxxnLD600DJus+pfUcESimKZMk=
+X-Google-Smtp-Source: ABdhPJzt8th011/MEJfTnnaUNN5wyO6/oD8k3EQj/gH5x02dok8JH5PLJxn/yJnngYBh5xqUukdbqQ==
+X-Received: by 2002:a9d:4e82:: with SMTP id v2mr3026711otk.376.1633191236054;
+        Sat, 02 Oct 2021 09:13:56 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l13sm809940otp.32.2021.10.02.07.22.20
+        by smtp.gmail.com with ESMTPSA id w184sm1743421oie.35.2021.10.02.09.13.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Oct 2021 07:22:20 -0700 (PDT)
+        Sat, 02 Oct 2021 09:13:55 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 2 Oct 2021 07:22:19 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 11/11] dt-bindings: hwmon: allow specifying channels
- for tmp421
-Message-ID: <20211002142219.GC34532@roeck-us.net>
-References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
- <3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.15-rc4
+Date:   Sat,  2 Oct 2021 09:13:53 -0700
+Message-Id: <20211002161353.37484-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 09:19:49AM +0200, Krzysztof Adamski wrote:
-> Add binding description for the per temperature channel configuration
-> like labels and n-factor.
-> 
-> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> ---
->  .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-> index 47040ace4f73..0d4ea2209500 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-> @@ -24,12 +24,49 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
->  required:
->    - compatible
->    - reg
->  
->  additionalProperties: false
->  
-> +patternProperties:
-> +  "^input@([0-4])$":
+Hi Linus,
 
-Was there agreement on "input" ? It is a somewhat odd name for a temperature
-sensor. If that name can be used to distinguish child sensor types, it might
-make sense to have a well defined name to state that this is a temperature
-sensor.
+Please pull hwmon fixes for Linux v5.15-rc4 from signed tag:
 
-> +    type: object
-> +    description: |
-> +      Represents channels of the device and their specific configuration.
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          The channel number. 0 is local channel, 1-4 are remote channels
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.15-rc4
 
-Which of the supported chips has 4 remote channels ?
+Thanks,
+Guenter
+------
 
-> +        items:
-> +          minimum: 0
-> +          maximum: 4
-> +
-> +      label:
-> +        description: |
-> +          A descriptive name for this channel, like "ambient" or "psu".
-> +
-> +      n-factor:
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
-n-factor or "ti,n-factor" ? The unit is chip specific, after all.
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
-> +        description: |
-> +          The value (two's complement) to be programmed in the channel specific N correction register.
-> +          For remote channels only.
-> +        items:
-> +          minimum: 0
-> +          maximum: 1
+are available in the Git repository at:
 
-Is this the correct value range ? The value range (in integer form) is
--128 .. 127 (or 0 .. 255 as unsigned), not 0..1.
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.15-rc4
 
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
->  examples:
->    - |
->      i2c {
-> @@ -41,3 +78,32 @@ examples:
->          reg = <0x4c>;
->        };
->      };
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      sensor@4c {
-> +        compatible = "ti,tmp422";
-> +        reg = <0x4c>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        input@0 {
-> +          reg = <0x0>;
-> +          n-factor = <0x1>;
-> +          label = "local";
-> +        };
-> +
-> +        input@1 {
-> +          reg = <0x1>;
-> +          n-factor = <0x0>;
-> +          label = "somelabel";
-> +        };
-> +
-> +        input@2 {
-> +          reg = <0x2>;
-> +          status = "disabled";
-> +        };
-> +      };
-> +    };
-> -- 
-> 2.31.1
-> 
+for you to fetch changes up to dd4d747ef05addab887dc8ff0d6ab9860bbcd783:
+
+  hwmon: (w83793) Fix NULL pointer dereference by removing unnecessary structure field (2021-10-02 05:14:11 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v5.15-rc4
+
+- Fixed various potential NULL pointer accesses in w8379* drivers
+- Improved error handling, fault reporting, and fixed rounding in thmp421 driver
+- Fixed error handling in ltc2947 driver
+- Added missing attribute to pmbus/mp2975 driver
+- Fixed attribute values in pbus/ibm-cffps, occ, and mlxreg-fan drivers
+- Removed unused residual code from k10temp driver
+
+----------------------------------------------------------------
+Brandon Wyman (1):
+      hwmon: (pmbus/ibm-cffps) max_power_out swap changes
+
+Eddie James (1):
+      hwmon: (occ) Fix P10 VRM temp sensors
+
+Nadezda Lutovinova (3):
+      hwmon: (w83791d) Fix NULL pointer dereference by removing unnecessary structure field
+      hwmon: (w83792d) Fix NULL pointer dereference by removing unnecessary structure field
+      hwmon: (w83793) Fix NULL pointer dereference by removing unnecessary structure field
+
+Paul Fertser (3):
+      hwmon: (tmp421) handle I2C errors
+      hwmon: (tmp421) report /PVLD condition as fault
+      hwmon: (tmp421) fix rounding for negative values
+
+Uwe Kleine-König (1):
+      hwmon: (ltc2947) Properly handle errors when looking for the external clock
+
+Vadim Pasternak (2):
+      hwmon: (mlxreg-fan) Return non-zero value when fan current state is enforced from sysfs
+      hwmon: (pmbus/mp2975) Add missed POUT attribute for page 1 mp2975 controller
+
+suma hegde (1):
+      hwmon: (k10temp) Remove residues of current and voltage
+
+ Documentation/hwmon/k10temp.rst | 17 ----------
+ drivers/hwmon/k10temp.c         |  6 ----
+ drivers/hwmon/ltc2947-core.c    |  8 +++--
+ drivers/hwmon/mlxreg-fan.c      | 12 +++++--
+ drivers/hwmon/occ/common.c      | 17 +++-------
+ drivers/hwmon/pmbus/ibm-cffps.c | 10 ++++--
+ drivers/hwmon/pmbus/mp2975.c    |  2 +-
+ drivers/hwmon/tmp421.c          | 71 ++++++++++++++++++++++-------------------
+ drivers/hwmon/w83791d.c         | 29 +++++++----------
+ drivers/hwmon/w83792d.c         | 28 +++++++---------
+ drivers/hwmon/w83793.c          | 26 +++++++--------
+ 11 files changed, 101 insertions(+), 125 deletions(-)
