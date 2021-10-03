@@ -2,60 +2,59 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4FF1C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 06:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D881C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 09:48:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9786F61A54
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 06:40:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AC3661A50
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 09:48:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbhJCGmK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 3 Oct 2021 02:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S229687AbhJCJuc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Oct 2021 05:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhJCGmJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Oct 2021 02:42:09 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA9DC0613EC;
-        Sat,  2 Oct 2021 23:40:22 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id bd28so51325317edb.9;
-        Sat, 02 Oct 2021 23:40:22 -0700 (PDT)
+        with ESMTP id S229595AbhJCJuc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Oct 2021 05:50:32 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC1BC0613EC;
+        Sun,  3 Oct 2021 02:48:44 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id r18so52384356edv.12;
+        Sun, 03 Oct 2021 02:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AeP3uMoyOD1tXyvCTemSd5AKSX3A5th0n8YPv2hmEPg=;
-        b=VUM2OZ5rarPxvYf5KeJcnTLyL2duuyY1IX3UsLlN7LgZqw/UIAJsUN6TcOw1Jas01H
-         1FoY/UEzEvw/ABxRCxh5qcFqgyfamBbKg3BlPS8QnTfyBiQODrCr1VhIAD7JEL0HR4Ig
-         wMRGjtDrPmIRLmHwhhAU1pK6CxmiIk34s3rVRt6ga3qyXRSaibu1W0OVlbPrGnJcOO6X
-         6rW3Pn6M4cuBC0xglJGpwNIvdmGXG390+P0h/Px8js+Mjp4i57gC4SBRurQGaxZm1PDI
-         HoRHRPxNu7uImm34b9Pw7Ct1Ei83P2SVPfV5BPaph0K9Ze0+7KM05avNYQwxUxseObUL
-         j7sQ==
+        bh=jOLGt+yfCVBdYhsG5pGUWfu5DrI22+00GHKhfNjMQrA=;
+        b=CKncsyOLbLtTMzH4mmIWk4HWCp/yO1NuIXbMX+pd0jkbQH+/tnwX0+TDuTdLsKQlUz
+         VEIJGf9NEjobZpA1RWWg3TTeNcC0ITG+G19BVH0w655d/lGuiVaMIYtezitDkHbnO616
+         P/Cb7KiyuxeWS/pSGmvE/ajhY2RJ/XHyKRQo39o6eIzY463WGaZEn13en372PbKii1se
+         Oyi5HpoPXaCSlu6L7PgiEOGlQEghNMSsLwddLDbPP64X1iMtYX9RY/83sG5AGdhC8tKT
+         xWtc+KaApdAlxyg0vOM6DY1NmFt3yu2ovAVxIR2zpfOcl3pWgs8dlSacq6yn1l5a0PsJ
+         nw6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AeP3uMoyOD1tXyvCTemSd5AKSX3A5th0n8YPv2hmEPg=;
-        b=54Af69on9/H3xa2fjjyX3IyZwOkXZ9r+te83om7akYP4xchBt5UPO/IMYpdXAUOPbK
-         l5y3gnLhqf+cRTQBhBKcIHXwPA1cLmAanYOmPlo4JZ7diqnrIwlcWhL3AfHquvH+dUvc
-         AZT19a15e+wPwGvlrWn6EtoGWRD0H7I27uaNzhavY+7SfcX5JCeyL6SPZ3gJlJMNIxD5
-         Dc9VIkDTE8SffZ/AM1iwZncWBNOMnDMRbzuf8o2GtSMJ8lMQOR/PhnXowMZgQr3F5LLp
-         WXNJSdDymxhXD0mkqVKmdORUHcrfjtKHrKo0H63VoDBOAR/5HVK/AQdhMMwSzI9pM7kp
-         EiDA==
-X-Gm-Message-State: AOAM532N4PVL/7nZA2VPoL+S/3bOlYDEKjvHU0GTGup0zznH6YxJB94m
-        y1VQFTfdsp6ewpdVdjpNznHwTAwOPLvpTYlAfQs=
-X-Google-Smtp-Source: ABdhPJxnB4bkOmaVK7ynElzFuEWKJtXBV4fz6YiOo2lh7vlc4Lk9hayFHg8p26c6XicCXIKwCpsc+TNajRCK2J6co5g=
-X-Received: by 2002:a50:d987:: with SMTP id w7mr9107500edj.240.1633243220831;
- Sat, 02 Oct 2021 23:40:20 -0700 (PDT)
+        bh=jOLGt+yfCVBdYhsG5pGUWfu5DrI22+00GHKhfNjMQrA=;
+        b=4BqF43MWzIusya1R6VtcDZJC4D/atfcne/m6grYjxeBJWLtoOQ/Ao9Xlyk/R6KPmjc
+         AKGEfaJtz8OiWk0E3iDpoGt4usmAs63QMvp1GsbNznWzQ8wfohzyhJ0gYOw2MHdozcYU
+         padkBpg9FWg85MZCGMAlyIW/+dMBIgo/QHYwrgxxH+QRGDp4WxJ5h9iZ7o2mzT0hnPsr
+         IzyYY8PilhHVZYgvhBA2YjoM8tJVBREN2jWP1Bcc0k752CgirJ5OgNrmcvSvADJopQu1
+         OazNWSqwoff28YLrMESTA5w70hCzByZTZEi3U/WfDRtNJa/CJEb1TlmwLnewqNSexNEA
+         RPKQ==
+X-Gm-Message-State: AOAM5337fwjRVoaFjv5eSkoyc+fSW2EB4p5VOvDe4qEucS7KTZDemAMT
+        WdKKVXq/RsJ0IKjv5SfMBZCDO3Kl9W1TbVn9EDc=
+X-Google-Smtp-Source: ABdhPJzzfa44i+Oga90yALlJfZFS8kITln5E3P5lrdyQ4oelHOwIUgNvYPwGnL+iyEVLqu+ASSHj2V3TKL6v7QIWv8Q=
+X-Received: by 2002:a17:906:1707:: with SMTP id c7mr8983616eje.377.1633254522888;
+ Sun, 03 Oct 2021 02:48:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211002210857.709956-1-pauk.denis@gmail.com>
-In-Reply-To: <20211002210857.709956-1-pauk.denis@gmail.com>
+References: <20211002210857.709956-1-pauk.denis@gmail.com> <20211002210857.709956-2-pauk.denis@gmail.com>
+In-Reply-To: <20211002210857.709956-2-pauk.denis@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 3 Oct 2021 09:39:44 +0300
-Message-ID: <CAHp75VfgGZ1+YfsvfSaUP7+JgKok7oAJJzTni_cPUj0eHXNaBw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Update ASUS WMI supported boards.
+Date:   Sun, 3 Oct 2021 12:48:06 +0300
+Message-ID: <CAHp75VcKQr22xQLN7OizG_Vu42UiDYbmNb9N6EUxkG7Dm0pa+w@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (nct6775) Add additional ASUS motherboards.
 To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        matt-testalltheway <sefoci9222@rerunway.com>,
+Cc:     matt-testalltheway <sefoci9222@rerunway.com>,
         Kamil Dudka <kdudka@redhat.com>,
         Robert Swiecki <robert@swiecki.net>,
         Kamil Pietrzak <kpietrzak@disroot.org>, Igor <igor@svelig.com>,
@@ -72,7 +71,7 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On Sun, Oct 3, 2021 at 12:10 AM Denis Pauk <pauk.denis@gmail.com> wrote:
 >
-> Add support to nct6775:
+> Add support:
 > * PRIME B360-PLUS
 > * PRIME X570-PRO
 > * ROG CROSSHAIR VIII FORMULA
@@ -82,40 +81,11 @@ On Sun, Oct 3, 2021 at 12:10 AM Denis Pauk <pauk.denis@gmail.com> wrote:
 > * TUF GAMING B550-PRO
 > * TUF GAMING Z490-PLUS
 > * TUF GAMING Z490-PLUS (WI-FI)
->
-> Add sensors driver for ASUS motherboards to read sensors from the embedded
-> controller. Based on https://github.com/zeule/asus-wmi-ec-sensors.
->
-> Could you please review?
 
-I will look at the last patch later on.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> @Andy Shevchenko, @Guenter Roeck should I split last patch in some way?
-> Should I add to MAINTAINERS:
-> --
-> ASUS WMI HARDWARE MONITOR DRIVER
-> M:     Eugene Shalygin <eugene.shalygin@gmail.com>
-> M:     Denis Pauk <pauk.denis@gmail.com>
-> L:     linux-hwmon@vger.kernel.org
-> S:     Maintained
-> F:     drivers/hwmon/asus_wmi_sensors.c
-
-I don't see right now if the last patch needs a split, but MAINTAINERS
-update is better to have.
-
-...
-
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
 > Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-
-This makes a little sense in a cover letter (have you used
---cover-letter parameter?).
-
-> Co-developed-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-
-This in a similar way, except the outcome is an appearing above
-mentioned name in the Cc.
-
 > Tested-by: matt-testalltheway <sefoci9222@rerunway.com>
 > Tested-by: Kamil Dudka <kdudka@redhat.com>
 > Tested-by: Robert Swiecki <robert@swiecki.net>
@@ -123,13 +93,50 @@ mentioned name in the Cc.
 > Tested-by: Igor <igor@svelig.com>
 > Tested-by: Tor Vic <torvic9@mailbox.org>
 > Tested-by: Poezevara <nephartyz@gmail.com>
-
-This is fine (and will be reflected in Cc)
-
 > Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
 > Cc: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/nct6775.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+> index aa58ead0ad43..8eaf86ea2433 100644
+> --- a/drivers/hwmon/nct6775.c
+> +++ b/drivers/hwmon/nct6775.c
+> @@ -4986,20 +4986,29 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
+>  static struct platform_device *pdev[2];
+>
+>  static const char * const asus_wmi_boards[] = {
+> +       "PRIME B360-PLUS",
+>         "PRIME B460-PLUS",
+> +       "PRIME X570-PRO",
+>         "ROG CROSSHAIR VIII DARK HERO",
+> +       "ROG CROSSHAIR VIII FORMULA",
+>         "ROG CROSSHAIR VIII HERO",
+>         "ROG CROSSHAIR VIII IMPACT",
+>         "ROG STRIX B550-E GAMING",
+>         "ROG STRIX B550-F GAMING",
+>         "ROG STRIX B550-F GAMING (WI-FI)",
+> +       "ROG STRIX B550-I GAMING",
+> +       "ROG STRIX X570-F GAMING",
+> +       "ROG STRIX Z390-E GAMING",
+>         "ROG STRIX Z490-I GAMING",
+>         "TUF GAMING B550M-PLUS",
+>         "TUF GAMING B550M-PLUS (WI-FI)",
+>         "TUF GAMING B550-PLUS",
+> +       "TUF GAMING B550-PRO",
+>         "TUF GAMING X570-PLUS",
+>         "TUF GAMING X570-PLUS (WI-FI)",
+>         "TUF GAMING X570-PRO (WI-FI)",
+> +       "TUF GAMING Z490-PLUS",
+> +       "TUF GAMING Z490-PLUS (WI-FI)",
+>  };
+>
+>  static int __init sensors_nct6775_init(void)
+> --
+> 2.33.0
+>
 
-This I already talked about.
 
 -- 
 With Best Regards,
