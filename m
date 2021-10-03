@@ -2,126 +2,59 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39AF9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 21:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F9CFC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 00:52:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C27561B1C
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Oct 2021 21:56:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2181661AF9
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 00:52:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbhJBV6T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Oct 2021 17:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbhJBV6S (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Oct 2021 17:58:18 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD68C061714;
-        Sat,  2 Oct 2021 14:56:32 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id r75so15819533iod.7;
-        Sat, 02 Oct 2021 14:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h2DM8y7xwlyINDZajLE8dKUAZiDUpT+YKcFOLMtesDU=;
-        b=Pvjn/YqVqhJc5tod2Ko4mjutNscU7OJzUkh8EUHkN08RsaXHTVWrs01mp2Fnk4Pbun
-         mQU+8SV875f0SKHu4qVT+pdR19oIFmlvi+/4d13zF8r/nIrd/cXlwmcj1129GJVxAS7t
-         Xhz7A8gkIHbVZZe9aXxHAZT9n9zpCod+kO4hHNZW17CRqBjHeaz7OKnLToeYxdIBsHsK
-         xADr5UJe92JhTdrE1Gdy+8I6wd541lfboJA+vDFgzpWFjDCMRTe7f0dqnTW0VvL2TRGI
-         mw70W+op7HrqBUqlBld22u+rjCpscNFdxITgG63KkEKoRe16A1iU7GYfsjilergF02Br
-         nRbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h2DM8y7xwlyINDZajLE8dKUAZiDUpT+YKcFOLMtesDU=;
-        b=0WCe48KPiQaEUIL0VFDC4ua8dPPYq8hRN/sDJJKRmcP6c52iiv4hC1Kd4xi5ioLDTl
-         bCAOT1/erKruHL5TjTd1/FrV4gd3E0bJB+HrURdiVRFOY9jL5HmqaYc8Y31dQS8cQTbk
-         d/P+db47rgRgYpvp49K2MfWIVp2M6Di74JX7nSiF8CkwoNwOd5pFOAuVFrZR0erA1O9f
-         zyvI96TWzGcpuj6UT9WszIkuyJwQOgIlYU4k1lMMLw7VFXqpC3Kw7QDLYOt0eBKOL/SQ
-         zAA6lg7wZymR4pIaaIh8aY8Y0zRlfLBznyVFEyS2BY1dxbQh8N43Lh6LFKK+iMUp18iM
-         MQFw==
-X-Gm-Message-State: AOAM533h2+oZukUY7Lbg7OlLAjkXhxvd7+tyYX3A+G4QXIUEE7KHi+OM
-        rLl854LEYgdMj1f1IH3yk3km2LxhznVuhayIzNM=
-X-Google-Smtp-Source: ABdhPJwIfP+P3PFn1htl3SuiyBxn+mmQaerdFtDb59xXbcIUZIunIKuVOtL7KTJIvDZ4otSbTRYIIgHwNIgStr2stZI=
-X-Received: by 2002:a6b:b242:: with SMTP id b63mr3531734iof.133.1633211791501;
- Sat, 02 Oct 2021 14:56:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211002210857.709956-1-pauk.denis@gmail.com> <20211002210857.709956-4-pauk.denis@gmail.com>
-In-Reply-To: <20211002210857.709956-4-pauk.denis@gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Sat, 2 Oct 2021 23:56:20 +0200
-Message-ID: <CAB95QASk7JGqP2_qLtkb-PXUmKPDMcOvLr_8FLrKpv3S2602mw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] hwmon: (asus_wmi_sensors) Support access via Asus WMI.
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S234347AbhJCAyd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 2 Oct 2021 20:54:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37362 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234329AbhJCAyd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 2 Oct 2021 20:54:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E67C761AF7;
+        Sun,  3 Oct 2021 00:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633222366;
+        bh=wy8+yXrFKFZA6EzKmUFybyAfO5+P3eIVjoyLXj50VmA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=VkEQro566HoYpDRtcBLo7uf0pzwOC5a8hXsuMo6I5ix19tdOtuPc+iY5KJbgiUY3P
+         sJ3P86wdGl+0/9kyIXtKcb+9jzTl12vVGVL0/GqVn/S/RZ7eLrhoGOmPcg5T8/v4L0
+         su39FBr50CBx/U/EfdEHjVjE7/ICIMjzuBP9JMp0GzajCDmeW4AszOBUwuW1wXMPZV
+         wmbuG8Jb1652sWy8Mn20dnGGswfgD1/wB2fkHhtjGgZ43Cd/lhokbmAFXoHujqNdMq
+         aCMlMB1qk2OjcUCjdxoWXMGZdVaPfHsE0RP3hq+7zisW5m9393kDPM2daijy6juesJ
+         fDPYVpK3E0eAg==
+Subject: Re: [GIT PULL] hwmon fixes for v5.15-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211002161353.37484-1-linux@roeck-us.net>
+References: <20211002161353.37484-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211002161353.37484-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.15-rc4
+X-PR-Tracked-Commit-Id: dd4d747ef05addab887dc8ff0d6ab9860bbcd783
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7b66f4393ad421e425ba643fde0493fa64346a43
+Message-Id: <163322236689.17155.15161063289065771969.pr-tracker-bot@kernel.org>
+Date:   Sun, 03 Oct 2021 00:52:46 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi, Denis!
+The pull request you sent on Sat,  2 Oct 2021 09:13:53 -0700:
 
-Thank you for submitting this driver to the mainline! I have a few
-comments/suggestions, please find them below.
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.15-rc4
 
-> +#define HWMON_MAX      9
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7b66f4393ad421e425ba643fde0493fa64346a43
 
-There is a hwmon_max enum member, whose current value is 10.
+Thank you!
 
-> +#define ASUS_WMI_BLOCK_READ_REGISTERS_MAX 0x10 /* from the ASUS DSDT source */
-> +/* from the ASUS_WMI_BLOCK_READ_REGISTERS_MAX value */
-> +#define ASUS_WMI_MAX_BUF_LEN 0x80
-Suggestion:
-#define ASUS_WMI_MAX_BUF_LEN 0x80 /* from the
-ASUS_WMI_BLOCK_READ_REGISTERS_MAX value */
-
-> +#define ASUSWMI_SENSORS_MAX 11
-This one is for the EC only, maybe rename it accordingly?
-
-> +struct asus_wmi_data {
-> +       int ec_board;
-> +};
-
-Duplicates the value in the asus_wmi_sensors struct. Refactoring artifact?
-
-             asus_wmi_ec_set_sensor_info(si++, "Water", hwmon_fan,
-> +                                           asus_wmi_ec_make_sensor_address(2, 0x00, 0xBC),
-> +                                           &ec->nr_registers);
-This one is named "W_FLOW" in the BIOS and ASUS software. Maybe append
-"_flow" to the label?
-
-> + * The next four functions converts to/from BRxx string argument format
-convert (remove "s")
-
-> +       // assert(len <= 30)
-Makes little sense in the kernel.
-
-> +static void asus_wmi_ec_make_block_read_query(struct asus_wmi_ec_info *ec)
-> +{
-> +       u16 registers[ASUS_EC_KNOWN_EC_REGISTERS];
-> +       u8 i, j, register_idx = 0;
-> +
-> +       /* if we can get values for all the registers in a single query,
-> +        * the query will not change from call to call
-> +        */
-> +       if (ec->nr_registers <= ASUS_WMI_BLOCK_READ_REGISTERS_MAX &&
-> +           ec->read_arg[0] > 0) {
-> +               /* no need to update */
-> +               return;
-> +       }
-> +
-I would add a test for ec->nr_registers >
-ASUS_WMI_BLOCK_READ_REGISTERS_MAX and a warning log message here.
-
-> +static int asus_wmi_probe(struct platform_device *pdev)
-
-Can we add a module alias or to load the module automatically by other
-means? For module aliases we know DMI parameters for the supported
-boards.
-
-Best regards,
-Eugene
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
