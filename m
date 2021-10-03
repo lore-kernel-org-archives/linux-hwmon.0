@@ -2,64 +2,59 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E61F1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 06:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 561BFC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 06:31:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B684161B2A
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 06:25:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2991D61B2C
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 06:31:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbhJCG1J (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 3 Oct 2021 02:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S229573AbhJCGc7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Oct 2021 02:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhJCG1J (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Oct 2021 02:27:09 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3818C0613EC;
-        Sat,  2 Oct 2021 23:25:21 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id g7so50411974edv.1;
-        Sat, 02 Oct 2021 23:25:21 -0700 (PDT)
+        with ESMTP id S229567AbhJCGc6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Oct 2021 02:32:58 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFE4C0613EC;
+        Sat,  2 Oct 2021 23:31:11 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ba1so51394528edb.4;
+        Sat, 02 Oct 2021 23:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kvJcjdfW6jyuT4V41heP52jnVfo5D7zz195baLayYxs=;
-        b=RoW3t/45Y4yiWjcd2TM9mvG6zhR0k5VsEc3WUGXs8wXfLLkZQGOFfVq741N2x6JcbX
-         bKVQcXjyG+H4XFr2xfqFIiCElo5jZOBM/cccQ3bJwFDkLLIn4oUUNBZI+1xGNBuo99Hn
-         5Acs7YFzHr4kYxLEffxXWRmYI7rd4L8c8DRk8TF+xcpdh1+Uz160Z7AXG5dCgnsEv0cV
-         QJKypp9EXtE8yi/kS13J61GafSuYHzhsm/8WSUF+nOy3lrAhYlm/xExN75aM8nv38Ho1
-         TD2pVbuFq/9n/Im1lVuypfCozisFOg7/KaC3htCq9tcIt6i8hVYePt43TWv56ZReJIc6
-         8kQA==
+        bh=0Iysf0qA0sgin8jQAL4XbQr0aqoukRZCUSGxOD3j4TM=;
+        b=eLKEEi8zS+ZwymjQEHuug5MtBj5t2S0JAKnsAQFr2235roonRqTLHEDpm7lAhJytvt
+         9QGES/mww4egaNz1FhNJrj2/xNDqGl+yGlvvES2LTJOLpqKukhEGOFKsVPuYteMjo5d3
+         8Qd+CXKGsXr7ezSK+aqrVi8fmmi/6nwpGfolpLRwL0IZpKoeUiQhe4DKE+lOLMC1iTWx
+         JvR0OD2xFL4y1v0E/cN/CMJXRbFhYiNuaVZyvUnnPLNPbp3eDmpmV2R8sazhkF7I6hmK
+         drOXa6gz+pXV/lgtmZWIX51U0R/JpZ4uMoWerprKuejwpd81lv1q3hgiF5ULncIFjV5T
+         x/Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kvJcjdfW6jyuT4V41heP52jnVfo5D7zz195baLayYxs=;
-        b=YHqYgrJ2j8nRSAz5To2Z/wmpi9Y8nOdk8dIlEdTBCuBRllB0xttVD5O/o1mmZezPFp
-         yWqLT7L43ROpnrvPMtTeUVY/OQaLxPhLAKKiDHV3QR901Ta67tgLCShQ1WICBvd/0pG/
-         weuhv+z5tmL3Ei1xVkQNA/p1hQ0AgwEqSXRc7vtm50+dvK6W1/GDeNckP6m86I84um62
-         uEFY4TeHLA1CXnTUmNyj8hIDKCY2J8vQ9hokCBWbV1K4y4uaUejfMZLRoJmJOSBNIZCK
-         zdkd7uXBzGflAs74gbitog7e9bxenMgOKznJYedn/+g6paoZJAYeJmnMH1J2vm6tPXI9
-         sOdg==
-X-Gm-Message-State: AOAM533pg4HqfakgVUX8y9rH/EAjoGjb92TZ/0o00T+RK1CuSslRC4dH
-        iUSVYXiK8CE2lbrkGKVr24xaUeMis21fDelQa2Kbnmruk7FIfQ==
-X-Google-Smtp-Source: ABdhPJzoRSc47RaOPtpeWuwOEtBSwnWkRWljE4vclzQ106ETaIcZlvuUfO7j0Qkf/AQqbvAw6Izf/Rwv8+JG6auHHsw=
-X-Received: by 2002:a05:6402:143b:: with SMTP id c27mr9336197edx.224.1633242320293;
- Sat, 02 Oct 2021 23:25:20 -0700 (PDT)
+        bh=0Iysf0qA0sgin8jQAL4XbQr0aqoukRZCUSGxOD3j4TM=;
+        b=AuydOYU2+NmNhdPqlywP9iMkdxAJLHo731TaHkral0eVUoolKG8nc/6xDFlECxEOkV
+         em3R1XCqhi81W50AKUlP3eDZP5oAj8IXOy5Ipny08J3PB11agqQmr25dssJZEw7MjGE/
+         vSZjZRQVtQsZz06GCtNBGA7izTUrQQ7r41fHeVjpJKUPrGwxPH62Wad3gl/g6g9gvmY4
+         xmiG54Iva/BS+nNDk5RO05qOhCNay6Y/vNKwkBZq7ric6uE/8xSguWvcWyOiBBtaZGWs
+         1ABj1CdhuJdAlV3fvWXAFcMduC6M+IQ8bruPSe2ftEF4BNC3R75khPgpFhO12364DqhX
+         BKjQ==
+X-Gm-Message-State: AOAM532VcCFeu3go1Z6gg6ZQ/weLQ4UY8sKVcW8OO0hNiOt3wSWTA624
+        EODQf2HOFwZvg2P6O6IqcIHcz41tS6uGfMOMhnY=
+X-Google-Smtp-Source: ABdhPJw9aUEYb/aD6GIVj+3bJwaGBAqkvKQVrDQd3c1ZLrspBsEJ8mWVNUswFTSLaRPWW9Hpn1oyuLwmA12KOubBOYg=
+X-Received: by 2002:a17:906:3596:: with SMTP id o22mr8662751ejb.356.1633242669771;
+ Sat, 02 Oct 2021 23:31:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211002210857.709956-1-pauk.denis@gmail.com> <20211003003410.28248af4@penguin.lxd>
-In-Reply-To: <20211003003410.28248af4@penguin.lxd>
+References: <20211002210857.709956-1-pauk.denis@gmail.com> <20211002210857.709956-3-pauk.denis@gmail.com>
+In-Reply-To: <20211002210857.709956-3-pauk.denis@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 3 Oct 2021 09:24:44 +0300
-Message-ID: <CAHp75VegZNh=1+tc9BYhDGzxV6dx4wZDmfx7ET9nXr0+yT3bGQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Update ASUS WMI supported boards.
+Date:   Sun, 3 Oct 2021 09:30:33 +0300
+Message-ID: <CAHp75VfVwxbHEzhvmEcyZce-hXrrr7oFq+xAWY4Kb1nB-EHEEQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] hwmon: (nct6775) Use custom scale for ASUS motherboards.
 To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        matt-testalltheway <sefoci9222@rerunway.com>,
-        Kamil Dudka <kdudka@redhat.com>,
-        Robert Swiecki <robert@swiecki.net>,
-        Kamil Pietrzak <kpietrzak@disroot.org>, Igor <igor@svelig.com>,
-        Tor Vic <torvic9@mailbox.org>, Poezevara <nephartyz@gmail.com>,
+Cc:     Kamil Pietrzak <kpietrzak@disroot.org>,
         Andy Shevchenko <andriy.shevchenko@intel.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
@@ -70,16 +65,35 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Oct 3, 2021 at 12:37 AM Denis Pauk <pauk.denis@gmail.com> wrote:
+On Sun, Oct 3, 2021 at 12:10 AM Denis Pauk <pauk.denis@gmail.com> wrote:
 >
-> On Sun,  3 Oct 2021 00:08:53 +0300
-> Denis Pauk <pauk.denis@gmail.com> wrote:
+> Use custom scaling factor for:
+> * TUF GAMING Z490-PLUS
+> * TUF GAMING Z490-PLUS (WI-FI)
 >
-> Patches should be applied over
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git:hwmon-next
-> (0889b7c73a4d8eaaa321eafcf66835979ead862a)
+> Voltage scaling factors are based on Asus software on Windows.
+>
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> Tested-by: Kamil Pietrzak <kpietrzak@disroot.org>
 
-You may use --base parameter to git format-patch for this.
+> Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+
+Instead of repeating it in each message, use mail headers, i.e. pass
+--cc 'Name One <email@one>, Name Two <email@two>' to git format-patch.
+
+...
+
+> +
+> +               if (strcmp(board_name, "TUF GAMING Z490-PLUS") == 0 ||
+> +                   strcmp(board_name, "TUF GAMING Z490-PLUS (WI-FI)") == 0)
+
+I would expect this to grow, so do the same trick with match_string().
+
+> +                       custom_scale = true;
+>         }
+
 
 -- 
 With Best Regards,
