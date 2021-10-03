@@ -2,93 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E93AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 11:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26D15C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 11:50:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 424AF61AF0
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 11:15:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01FE861B25
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Oct 2021 11:50:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbhJCLRk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 3 Oct 2021 07:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhJCLRj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Oct 2021 07:17:39 -0400
-Received: from mail-yb1-xb47.google.com (mail-yb1-xb47.google.com [IPv6:2607:f8b0:4864:20::b47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AA3C0613EC
-        for <linux-hwmon@vger.kernel.org>; Sun,  3 Oct 2021 04:15:52 -0700 (PDT)
-Received: by mail-yb1-xb47.google.com with SMTP id t7-20020a258387000000b005b6d7220c79so19426876ybk.16
-        for <linux-hwmon@vger.kernel.org>; Sun, 03 Oct 2021 04:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:date:subject:from:to;
-        bh=jVm8mE8AEV/kY1VXzYIFNLg0aZcPa4tOVvAEinz4D8I=;
-        b=DzOFFD+RTmJA6HGa+QdUWMvaiwEwWBOHguqy7VOu0yIgEoS/pB5UwxoYmzjAmb3383
-         QPEvStuvH/hnA+ZcuBtOnqaI0SnVszZ3XCEAGzRXqUQ/2nt5Fncvt6HcuDqdIANEi/76
-         zV3mNb4VaH52tQMR1PPbkBsJwcAsFoNAKqoHRV/MCh1FbtM3ijTZa8FPY5Ch6LYwx7/S
-         nF70O4xIryx26k51nC75nfcLx9cj7K0xQ5y1gFhAoJtWLZ7BkgXCreo46BoHL0Q5GxT6
-         vnRQxV32DRoF/DtL/j7lJ+2VxEXMLhu0C8U7lAIaATiyJSbGl6dPRbrf0lKkN9WVTP8f
-         gEhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:message-id:date:subject:from:to;
-        bh=jVm8mE8AEV/kY1VXzYIFNLg0aZcPa4tOVvAEinz4D8I=;
-        b=I2MfhDg48NDxEVS8kuROgvvkYAK/WoiyVrg6fivNkHQVq+iah2H+xw1g1vX9FUu98J
-         lxpgwwRrl327eXwmVN4HApo2xfmfJMhY/ToJ5Yg0vUzTu24z5IYVJxyGoKbqO9fUrdx4
-         x/Gaxp9UoSLb1MpdxLth1quXAXCXMoJENxhhqQfiL7eyr/zr583UmkiCXJh1hns/IBth
-         Wo++xLrayk2wv8txyOMe/1AI+AjJc2+zAGUzZ6YlRI1NOL+z4114cDGEA2N9HnLywRUd
-         huWFwE3KuK+vKL70ZOdSXXdHXbzsyDG4YNbJh0xYDcc8RlWSBElP6gZXXY2Lp0YTQkcf
-         tsAA==
-X-Gm-Message-State: AOAM531/ORjkbIXUigiC03F7YBGeGMngb4NErRPqaslhDJ86TBKOfUKB
-        1wRfM8wgpJScY43T0bUHsu/4p/wL5w==
-X-Google-Smtp-Source: ABdhPJykZd618o4MsjlA2xcyDnc366NhTEht6bCy6V8ZhOpEQ7Yh4GYa9rjvwt25oNU5Kb5fgVJrd7LTGA==
+        id S230172AbhJCLwJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Oct 2021 07:52:09 -0400
+Received: from vulcan.natalenko.name ([104.207.131.136]:58352 "EHLO
+        vulcan.natalenko.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230132AbhJCLwI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Oct 2021 07:52:08 -0400
+Received: from spock.localnet (unknown [151.237.229.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id B6F18C1CF19;
+        Sun,  3 Oct 2021 13:50:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1633261813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=53ZERQv7zMU+x8S9Zu7/z/fDX7OMssKxmy5sBN16hRY=;
+        b=ruX1rti+FtFS0w4WCjpEZ04u6WM3hVkgoASvqZAJNJov/PL/MZ3MMZ0lAknc+M9G6tzEr/
+        wrKHw2IbxhX4Cj4Ve5jhseS6JiUdVmBom0Bs4OAJH5w96M5gzIlTeWmGQ3lDEfcbNmWQup
+        IEDcbuRCq5YMLi/5NtIzHHM6dsWwwFk=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     pauk.denis@gmail.com, Eugene Shalygin <eugene.shalygin@gmail.com>,
+        matt-testalltheway <sefoci9222@rerunway.com>,
+        Kamil Dudka <kdudka@redhat.com>,
+        Robert Swiecki <robert@swiecki.net>,
+        Kamil Pietrzak <kpietrzak@disroot.org>, Igor <igor@svelig.com>,
+        Tor Vic <torvic9@mailbox.org>, Poezevara <nephartyz@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 0/3] Update ASUS WMI supported boards.
+Date:   Sun, 03 Oct 2021 13:50:12 +0200
+Message-ID: <6096864.rdmfHhMOLH@natalenko.name>
+In-Reply-To: <20211002210857.709956-1-pauk.denis@gmail.com>
+References: <20211002210857.709956-1-pauk.denis@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a25:51c2:: with SMTP id f185mr7888966ybb.479.1633259751452;
- Sun, 03 Oct 2021 04:15:51 -0700 (PDT)
-Message-ID: <0000000000004fb6b905cd70eb55@google.com>
-Date:   Sun, 03 Oct 2021 11:15:51 +0000
-Subject: SEO+SMO Proposal
-From:   francisbeck1981@gmail.com
-To:     linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam: Yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Hello.
 
-My name is Aarav, and am working with a reputable leading S.E.O. Company
-in INDIA
-We have the expertise to get our customer's websites top ranking in Google,
-Yahoo, and MSN and other search engines
-producing high revenue with top page rank, guaranteed based result within
-3-4 months
+On sobota 2. =C5=99=C3=ADjna 2021 23:08:53 CEST Denis Pauk wrote:
+> Add support to nct6775:
+> * PRIME B360-PLUS
+> * PRIME X570-PRO
+> * ROG CROSSHAIR VIII FORMULA
+> * ROG STRIX B550-I GAMING
+> * ROG STRIX X570-F GAMING
+> * ROG STRIX Z390-E GAMING
+> * TUF GAMING B550-PRO
+> * TUF GAMING Z490-PLUS
+> * TUF GAMING Z490-PLUS (WI-FI)
 
-We provide a S.E.O. special offer for the following package:
+Thank you for this submission.
 
-1. 10 Directory submissions
-2. 30 Social Bookmarking Submissions
-3. 1 Article Submissions (1 article x 1 article directories)
-4. 1 Blog Submissions (1 blog x 1 blog posting)
-5. Google Submissions
-6. 1 unique, 400 word article written
-7. 1 unique, 300 word blog
-8. Meta tags changes suggestions
-9. Keyword research
-10. Competitor Analysis
-11. Heading tag changes
-12. Alt tag changes
-13. Interlinking wherever required.
-14. Keyword Density in site content.
-15. HTML Site Map
-16. XML site map and Submission in webmaster tool
-17. Search Engine Submission
-18. Content optimization
+Do you happen to know whether it can be extended with another ASUS board wh=
+ich=20
+is:
 
-Let me know if you interested so give me your website with keyword would do
-an analysis on it to suggest you the best.
-Looking forward for your positive reply here you can Target More than 15
-keywords
+```
+Manufacturer: ASUSTeK COMPUTER INC.
+Product Name: Pro WS X570-ACE
+```
 
-Kind Regards
-Aarav Anand
+?
+
+I've got one, and in case any info or testing is needed, I'd be happy to=20
+contribute.
+
+Currently, this board is kinda working after adding=20
+`acpi_enforce_resources=3Dlax`, but I assume a proper support is needed ins=
+tead.
+
+Thanks.
+
+> Add sensors driver for ASUS motherboards to read sensors from the embedded
+> controller. Based on https://github.com/zeule/asus-wmi-ec-sensors.
+>=20
+> Could you please review?
+>=20
+> @Andy Shevchenko, @Guenter Roeck should I split last patch in some way?
+> Should I add to MAINTAINERS:
+> --
+> ASUS WMI HARDWARE MONITOR DRIVER
+> M:     Eugene Shalygin <eugene.shalygin@gmail.com>
+> M:     Denis Pauk <pauk.denis@gmail.com>
+> L:     linux-hwmon@vger.kernel.org
+> S:     Maintained
+> F:     drivers/hwmon/asus_wmi_sensors.c
+> --
+>=20
+>=20
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=3D204807
+> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> Co-developed-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Tested-by: matt-testalltheway <sefoci9222@rerunway.com>
+> Tested-by: Kamil Dudka <kdudka@redhat.com>
+> Tested-by: Robert Swiecki <robert@swiecki.net>
+> Tested-by: Kamil Pietrzak <kpietrzak@disroot.org>
+> Tested-by: Igor <igor@svelig.com>
+> Tested-by: Tor Vic <torvic9@mailbox.org>
+> Tested-by: Poezevara <nephartyz@gmail.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+>=20
+> ---
+> Denis Pauk (3):
+>   hwmon: (nct6775) Add additional ASUS motherboards.
+>   hwmon: (nct6775) Use custom scale for ASUS motherboards.
+>   hwmon: (asus_wmi_sensors) Support access via Asus WMI.
+>=20
+>  drivers/hwmon/Kconfig            |  12 +
+>  drivers/hwmon/Makefile           |   1 +
+>  drivers/hwmon/asus_wmi_sensors.c | 595 +++++++++++++++++++++++++++++++
+>  drivers/hwmon/nct6775.c          |  41 ++-
+>  4 files changed, 643 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/hwmon/asus_wmi_sensors.c
+
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+
