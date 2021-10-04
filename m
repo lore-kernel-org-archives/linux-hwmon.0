@@ -2,211 +2,171 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D79BAC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 07:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7046FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 14:31:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAA4761163
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 07:36:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CC0D60F9B
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 14:31:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbhJDHia (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 4 Oct 2021 03:38:30 -0400
-Received: from mail-vi1eur05on2099.outbound.protection.outlook.com ([40.107.21.99]:5536
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230018AbhJDHia (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 4 Oct 2021 03:38:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lf9jn0yM1971ndcu4Z2/0omgTocqHqTHYVDfSTg1fEX8m1Momp8geooCb+6zsMKKuRtjw7auEJgGxnbLKzuHhftvRSBUfCfLBne6bQvylceQ2zdXH5XVq1RkWExejCK+euDAIqHof+fXlMKT6h66PLJVybKULDNuMNgW8Kwq6OLkgldmQyB4xHB4ZPol453Qq9/2+o8EGECOn3FYO1053i2HwRW7kKT7JX41viFXIuVZWpSbeKixClqBYlXMh0uf4L2MnHMPBTjJixfJLD+lSloELEr28B3lXXj7dor2idtE17SmnyodF7W1l0jDeltsuYie9NRRCRUBbpktmFx3UA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4ex7sTqHOS9RMp8XRNVyuK5sVYi5pOXeEkD26cRzPX8=;
- b=O16QDdHcpykevVDgoSpmZJOZ0kSGdclsf8Os9vG57S9/NyhrGK6VfIMUvsWm+JFjuNJ5yVs2bKoMavcvqM2FEd1nZw44b7725Ph61dYnkH6Axwf57nbCHpEGk6PtUwGP4i9RmiZ2N+WrnuHvX0sl3Su0758b0xeS9knhgPWlq3iS60+hmGH524GVT7Pv9Q259cllEAPq873DwscvkJRtuIK/RLhM2IVAoJmnNzkCeOXQp8qian6cmDnO0zFOs/Q/SajxXbQTjarw+8fxS2xFWOsAigDlnMcD9JObmg1HRO8pSw1INAuY+kIqz4R789ZV3/DbN6Id0Bk+FegoNp2NNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4ex7sTqHOS9RMp8XRNVyuK5sVYi5pOXeEkD26cRzPX8=;
- b=mLgzp6qZ9ALUBKtBdualjDsBJNW8vQN2IMLVGqi4hjuVlt9ZCj58o1Fa011jVIomJQgKuE7DH3vFiwNnkBsKkAktOKafMhjDBdbhBsVbIKZi0KLu07figk3PpbzkMLFNyP/1n0WLltraDHechLHRwbVMb1zr+ITRpXO1tg2/Cuw=
-Authentication-Results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=nokia.com;
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by DU2PR07MB8221.eurprd07.prod.outlook.com (2603:10a6:10:272::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.9; Mon, 4 Oct
- 2021 07:36:39 +0000
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::c47f:b569:ac76:9feb]) by DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::c47f:b569:ac76:9feb%7]) with mapi id 15.20.4478.014; Mon, 4 Oct 2021
- 07:36:39 +0000
-Date:   Mon, 4 Oct 2021 09:36:23 +0200
-From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 11/11] dt-bindings: hwmon: allow specifying channels
- for tmp421
-Message-ID: <YVqu92dUgNKlYMlG@localhost.localdomain>
-References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
- <3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com>
- <20211002142219.GC34532@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211002142219.GC34532@roeck-us.net>
-X-ClientProxiedBy: MAXPR01CA0117.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:5d::35) To DU2PR07MB8110.eurprd07.prod.outlook.com
- (2603:10a6:10:239::15)
+        id S234218AbhJDOdq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 4 Oct 2021 10:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234201AbhJDOdq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Oct 2021 10:33:46 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FF3C061745;
+        Mon,  4 Oct 2021 07:31:57 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id k13so18423884ilo.7;
+        Mon, 04 Oct 2021 07:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GQndokDNYK2MVP5/OGRbBEhs0vecHIWi+j/FS2tyHcg=;
+        b=MaxOgEqrk0MYewW+FyXBjhp1ghHhe3mKyun7OB4hww3wrTcCYGV3zQgvYdFQInr43E
+         xY63N3mBUG5FT1XQxkcRCYp/mZJtf3PvPWE0v66uo1fk9oeF4lfTZiE5EdWT/gvpSIPO
+         +oho6P2zERzL1cb4D9Mz33ug668A06BBfpHydIiMNwmH2zV3jHDDwAbS26Rv6VOKJvcw
+         k2hyr7RJ1V1Pp0g4YlBBYw9z24x+QRpUtDdSpkd14x5yoGlNndVSyHmCb4J2PVgCwlCb
+         45kH2AOBXGWEp4q3pPnqbvKK/f4yMK1T8Pknaro+Y01F/VU7RDx1wL5LBzHlU8oh/ak0
+         e7yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GQndokDNYK2MVP5/OGRbBEhs0vecHIWi+j/FS2tyHcg=;
+        b=6LJCi5J3lb4uZrU6XvMlJkayQ1fEED33cg1jdfcIDgQrR3ykhKPkpLUwgyx0F/L7u7
+         PY1FaxsNHOo0Eu5zQZt9DtibFDr1rlyvkMJDUoZejOaA70HDbT5jRoKPw3oyVMGdtjUm
+         HQhz39jxU1RVV3l6be6kHk7yZxlszTwpRN6tqBaFsEL8WycQ5KcKWCsb6FElxVlcq3C4
+         4b9fA6cwM0W6l1G8RIpaLCaQQEWF3yEsFdhF2ESwyVTutjNbVOKbmenxPNLd2blMIpaI
+         R//Oaj40c0XXBRouLtpMhwv0cpIHmmBR34Tczal1LTZUlcGgBKHtvFZl0ojKohWCjBe8
+         pUMA==
+X-Gm-Message-State: AOAM530x0oTgTNlNY2Pt7SppR5imqL23Q/P8miG9cZIUfd0APPcP45SM
+        /WzKc8QW9yySaY/gb+zrwJdQTXcOuFwZ84c44rk=
+X-Google-Smtp-Source: ABdhPJw/zO/2iUCWwdlrUJpseHZzbDhKv0N/qLiPEGtIawiGY3F+E9Y4GlxlBfwKshJlnEbGHV/XbEoaphCr2bbp7K4=
+X-Received: by 2002:a05:6e02:921:: with SMTP id o1mr9702774ilt.289.1633357916341;
+ Mon, 04 Oct 2021 07:31:56 -0700 (PDT)
 MIME-Version: 1.0
-Received: from localhost.localdomain (131.228.2.20) by MAXPR01CA0117.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:5d::35) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13 via Frontend Transport; Mon, 4 Oct 2021 07:36:34 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4fb18b85-61e8-484e-c5b5-08d98709b387
-X-MS-TrafficTypeDiagnostic: DU2PR07MB8221:
-X-Microsoft-Antispam-PRVS: <DU2PR07MB82210ED1823C96046A5766AEEFAE9@DU2PR07MB8221.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kaXUVOiXrQT8auYdstn0CN0LuvU71/9j8gRNfHHtO5JxL7+keTYmQbuAmX3TZNRKG3LT/ahq4/o9K1ytP5B6vQ/f7Yw1Tnp2Olj3SBEEeSI4mNmzUz9IMwprWLOmKaPB7xUkzOkQlFQ3SE1oq6Cyfdnn086qI8cWYRG6ec77z5u2jmzvN97CEn5o7oi6qX55HijhdYqV8/0ci6T2n0qwU4Gg/5cqKjl9cLUrXCLSeJlqO0oS8OHPL/r3zZT2XQewaGDPb2pMS7pOeIBAHXoShaN9mWLIW+AfjPOA7GBjogn3M5cEdvwsqnOTqG/kei7uYGF0SRRdIhcc3A1rAf/2L1IhbSBpf9d1LVYkIINC+lea12YSkXIgmWgb9I2QH7hfX9crR6T4ah0rRuiR1J52c63ElyDyKonPIcc0aypVuy/Mu9VsNhEkK5RFLQD4iYHGHoOmEtspc7JX0H+pSUnwRSdTcMYd3hF/KeopK9YKWvmu/QQ2IylwWSrtHAxX0UwdQaLETYN2JnFa/Kh6TwwNlNn9IgwhDJHBtpbY4xCOs0imYK7jaCk90gDy8JFKwZSow0O7gZeF26es8bFAqAA6+w1Df7Sg0ibPovYCuiq/vpqsJyBIQ/YFJKPdxocx5kdabdjiHiTuFjskpx2OF4YnN18T1S0oP3Aesk1pfUBYxNSnL2CwQYUEhPFrZWLTybW5veMl7KqKsrL01qztv9/SMw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(316002)(8936002)(9686003)(6506007)(956004)(52116002)(7696005)(54906003)(2906002)(55016002)(38350700002)(6666004)(38100700002)(44832011)(26005)(66556008)(66476007)(186003)(4326008)(66946007)(86362001)(6916009)(508600001)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RXIyNDcxUEpuTjh4dlAwNy9DT3lTM0QxQXVhbWhwelh5elIwaFI1OHBLWnVr?=
- =?utf-8?B?SDhybkUxR2xKSlJxRVdVdXdSR0xBUE1yamNRZENnZnFmWU9ESEJNYkNyanVo?=
- =?utf-8?B?NVlLMHc3SkV2bkhMM0kxQllwRE5NTktFaUlBSkZMOTFoUEJJMUpINXRtTFo2?=
- =?utf-8?B?UTkrOERRSnhia25tQ0JEZVgrSStOQ2M4ejJUekF6OUVqbnNwSnRlcURBUS9W?=
- =?utf-8?B?d0sza0g3L244MWNQSmIrTVk3UUEwbWQ4eXgxUUlBSC9pMlkzN0NEMWZxbko0?=
- =?utf-8?B?RDI3WUd5czQ0UnR6UVF0VSt4OE1Ib1BVekNJaHJLdlVVTWhjTXZyb01PS0hI?=
- =?utf-8?B?T0pXM0N6alNYZ2ZDeWVEa1JZRlpjcldRVktNRHRmZ21QdVF0WkgvNEZYYWJj?=
- =?utf-8?B?bzZDUDRjYUovSFJPNVJOVHlPMmFHeVhTUWJIcnpnYklSUEFIZFlwOFd0eGtJ?=
- =?utf-8?B?ZmNETW9GV2lDbFl4M3F2TnUvN09wQlBRYThaZjgrbHF1b1NUcGltcGZ4RTVZ?=
- =?utf-8?B?dnN1WFRDLzA4eUVCUHlBeUxzalBYOVZLTlhPcWJ5eGdqYXJ0UXBIcmRNbFFs?=
- =?utf-8?B?RTZVK25VeUF1ZDN2ekNXcW5JTlBvRUFkcTBvNFNwMkI1U3pqNERtTnZQWWg4?=
- =?utf-8?B?blQ3dTUySllNellnV3V4MnNDNzJkbWVHem1HNjFmWmptdG9mbDRtU3h3SFN1?=
- =?utf-8?B?MXZlRzg4c04yZHlsaWI2aFJZQkVIUld0d1RHOTlhN29LYkxKVVJEU1NzYTlO?=
- =?utf-8?B?cFJVR2tjUG9vdmkzeW9CVFBqNzIzVWppM1hNUmlxYnBxS045Zm53UHlJd0tG?=
- =?utf-8?B?anowdndEclRnTnFLcG5TWUJIUUwvSXlVOUFnQXRseFVYTTNmWExUa2huK3RZ?=
- =?utf-8?B?ZGtycGRqcmt1RjUwM0NWQ1VoU0tNOGMxSVg4blA5QURjZkZRMlVXUDdyWkEy?=
- =?utf-8?B?R3B3MWZPNHB6WDJIUWR5L3lyem4wT1dQTG9xV3d0OVhjZ0xQN2Z5dzNRNkNM?=
- =?utf-8?B?SDFoNDI2bjFXQ3h1ajNRa3dQRlQza3RlNDFCZVFKNmU0Z1lDRmU1TUFxb0FC?=
- =?utf-8?B?WTEyQVRUaDlUazYwclZhUnduc3JXK2E5bTNHc3hNZ0dNWjJLWHZoaTQyZ2Zk?=
- =?utf-8?B?V29NYTBmSFFPMEhhdTQ1SG9JWlQzc1ltRGlYNHBWbDdMWm5FNHRkSTVxVDli?=
- =?utf-8?B?UXdVZCtGTm16bmxLSEV0RU95NWlSUXBnSjI3SThTR3pMaVpMSnV4T1hibVNL?=
- =?utf-8?B?ZWJ2VmpPMk9DWGQzaUxwdWtrdit2V0tCWmFseW9zb2pwWVB4enAwUlFhdTM3?=
- =?utf-8?B?VUlTbDE0TzlDSFRoNmV1Z3FIa2xIZWMyMGRRTlRBdjMzRzFVdUdPK3pnQ2xV?=
- =?utf-8?B?WUlUL2dpVTZGa3lMbEVGbGwvMm9qYUl4cXc4R1A0a0VyQmdqRG9yZjV6WWtO?=
- =?utf-8?B?eHptazBKTk1CNUhma0xrMmFTU2ZZZWZTa2hrWWY2VnhhaHNpcHJqYXN4OXBl?=
- =?utf-8?B?eGZUQzlEWG8yUzhsNXdEd29JTGF0d2dld2wrclFqNlN3Z09XajMyd3pqazh1?=
- =?utf-8?B?aXpnMDVnSzc1bW9TRXNYM1Q1UHAyNlcwbDBXbnBYaHkzY01HTEFyMGRIMkdS?=
- =?utf-8?B?REJtOXY5cHlzTHl0ekFSVjlKTkJVODJoMG84MENCb2xEUDJHbS9EQkY3c1VB?=
- =?utf-8?B?dExiRmR1eG1WbkpEWW1BTFhLTUpvc3BjNCttNUhEcDdUdUdRV3lIV0V5TDFp?=
- =?utf-8?Q?gv4Fi2zGohLpTxnvSyZ7Yor0uxVCkKO75JJSO+q?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fb18b85-61e8-484e-c5b5-08d98709b387
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2021 07:36:38.7514
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4Q0dDkiNXPRc+kqjPhMgg/8Ie3fktUtzVw2EiFYYZ04ULedZhx7T7ShgswRdnn3nqOsSLCyTZxfi3HgycodSMh2DUnhra/wUmKu3SheYc+k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR07MB8221
+References: <20211002210857.709956-1-pauk.denis@gmail.com> <20211002210857.709956-4-pauk.denis@gmail.com>
+ <CAB95QASk7JGqP2_qLtkb-PXUmKPDMcOvLr_8FLrKpv3S2602mw@mail.gmail.com> <20211003234852.213bcd87@penguin.lxd>
+In-Reply-To: <20211003234852.213bcd87@penguin.lxd>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Mon, 4 Oct 2021 16:31:45 +0200
+Message-ID: <CAB95QAScBpn_GioELY8QNxxOAu6rvKkk+Fb=U6_pgN_7SrMHbA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] hwmon: (asus_wmi_sensors) Support access via Asus WMI.
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dnia Sat, Oct 02, 2021 at 07:22:19AM -0700, Guenter Roeck napisał(a):
->On Thu, Sep 30, 2021 at 09:19:49AM +0200, Krzysztof Adamski wrote:
->> Add binding description for the per temperature channel configuration
->> like labels and n-factor.
->>
->> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->> ---
->>  .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 66 +++++++++++++++++++
->>  1 file changed, 66 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
->> index 47040ace4f73..0d4ea2209500 100644
->> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
->> @@ -24,12 +24,49 @@ properties:
->>    reg:
->>      maxItems: 1
->>
->> +  '#address-cells':
->> +    const: 1
->> +
->> +  '#size-cells':
->> +    const: 0
->> +
->>  required:
->>    - compatible
->>    - reg
->>
->>  additionalProperties: false
->>
->> +patternProperties:
->> +  "^input@([0-4])$":
+Hello,
+
+When I first wrote the EC sensor driver, I thought there were only a
+few sensor configurations, but it turned out the assumption was wrong
+and even with currently supported 6 boards the sensor to board mapping
+is already hardly readable. Thus I redone that part in a declarative
+way so that the sensor list for each board is condensed and is easy to
+digest [1]. Please consider updating the submitted patches.
+
+Best regards,
+Eugene
+
+[1] https://github.com/zeule/asus-wmi-ec-sensors/pull/4
+
+On Sun, 3 Oct 2021 at 22:49, Denis Pauk <pauk.denis@gmail.com> wrote:
 >
->Was there agreement on "input" ? It is a somewhat odd name for a temperature
->sensor. If that name can be used to distinguish child sensor types, it might
->make sense to have a well defined name to state that this is a temperature
->sensor.
-
-Nope, no conclusion on that, yet, thus I did not change that and I was
-still using the same approach I had on v1. For me it can be a "channel@X", a
-"temperature@X".. whatever you decide.
-
-However I'm in favor of some generic name, like "channel" or "input",
-and using some "type property", if required, instead of calling the
-nodes "temperatue@X", "voltage@X".
-
->> +    type: object
->> +    description: |
->> +      Represents channels of the device and their specific configuration.
->> +
->> +    properties:
->> +      reg:
->> +        description: |
->> +          The channel number. 0 is local channel, 1-4 are remote channels
+> Hi Eugene,
 >
->Which of the supported chips has 4 remote channels ?
-
-True, there is no TMP424. I will fix that in v4.
-
+> On Sat, 2 Oct 2021 23:56:20 +0200
+> Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
 >
->> +        items:
->> +          minimum: 0
->> +          maximum: 4
->> +
->> +      label:
->> +        description: |
->> +          A descriptive name for this channel, like "ambient" or "psu".
->> +
->> +      n-factor:
+> > Hi, Denis!
+> >
+> > Thank you for submitting this driver to the mainline! I have a few
+> > comments/suggestions, please find them below.
+> >
+> > > +#define HWMON_MAX      9
+> >
+> > There is a hwmon_max enum member, whose current value is 10.
+> Thank you, I will check.
 >
->n-factor or "ti,n-factor" ? The unit is chip specific, after all.
-
-Or ti,nfactor, as used by tmp513? Again, there was no clear conclusion
-so I didn't change that. Let me know what is your decision and I will
-obey that.
-
+> >
+> > > +#define ASUS_WMI_BLOCK_READ_REGISTERS_MAX 0x10 /* from the ASUS
+> > > DSDT source */ +/* from the ASUS_WMI_BLOCK_READ_REGISTERS_MAX value
+> > > */ +#define ASUS_WMI_MAX_BUF_LEN 0x80
+> > Suggestion:
+> > #define ASUS_WMI_MAX_BUF_LEN 0x80 /* from the
+> > ASUS_WMI_BLOCK_READ_REGISTERS_MAX value */
+> >
+> > > +#define ASUSWMI_SENSORS_MAX 11
+> > This one is for the EC only, maybe rename it accordingly?
+> >
+> Thank you, I will check.
 >
->> +        description: |
->> +          The value (two's complement) to be programmed in the channel specific N correction register.
->> +          For remote channels only.
->> +        items:
->> +          minimum: 0
->> +          maximum: 1
+> > > +struct asus_wmi_data {
+> > > +       int ec_board;
+> > > +};
+> >
+> > Duplicates the value in the asus_wmi_sensors struct. Refactoring
+> > artifact?
+> >
+> I have used different structures for data in platform and device.
 >
->Is this the correct value range ? The value range (in integer form) is
->-128 .. 127 (or 0 .. 255 as unsigned), not 0..1.
-
-True, I must have misunderstood this minimum/maximum and confused it
-with the number of items or something. Now, since DT does not really
-handle signed values and considers everything an unsigned, should I use
-0..255 or -128..127?
-
-Krzysztof
+> >              asus_wmi_ec_set_sensor_info(si++, "Water", hwmon_fan,
+> > > +
+> > > asus_wmi_ec_make_sensor_address(2, 0x00, 0xBC),
+> > > +                                           &ec->nr_registers);
+> > This one is named "W_FLOW" in the BIOS and ASUS software. Maybe append
+> > "_flow" to the label?
+> >
+> Thank you, I will check.
+>
+> > > + * The next four functions converts to/from BRxx string argument
+> > > format
+> > convert (remove "s")
+> >
+> > > +       // assert(len <= 30)
+> > Makes little sense in the kernel.
+> >
+> Thank you, I will check.
+>
+> > > +static void asus_wmi_ec_make_block_read_query(struct
+> > > asus_wmi_ec_info *ec) +{
+> > > +       u16 registers[ASUS_EC_KNOWN_EC_REGISTERS];
+> > > +       u8 i, j, register_idx = 0;
+> > > +
+> > > +       /* if we can get values for all the registers in a single
+> > > query,
+> > > +        * the query will not change from call to call
+> > > +        */
+> > > +       if (ec->nr_registers <= ASUS_WMI_BLOCK_READ_REGISTERS_MAX &&
+> > > +           ec->read_arg[0] > 0) {
+> > > +               /* no need to update */
+> > > +               return;
+> > > +       }
+> > > +
+> > I would add a test for ec->nr_registers >
+> > ASUS_WMI_BLOCK_READ_REGISTERS_MAX and a warning log message here.
+> >
+> Thank you, I will check.
+>
+> > > +static int asus_wmi_probe(struct platform_device *pdev)
+> >
+> > Can we add a module alias or to load the module automatically by other
+> > means? For module aliases we know DMI parameters for the supported
+> > boards.
+> >
+> I will look, I prefer to reuse same module code for boards with/without
+> EC endpoints same as in
+> https://bugzilla.kernel.org/show_bug.cgi?id=204807#c128.
+>
+> > Best regards,
+> > Eugene
+>
+> Best regards,
+>             Denis.
