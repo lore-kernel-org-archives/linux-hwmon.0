@@ -2,171 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7046FC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 14:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C364FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 14:44:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CC0D60F9B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 14:31:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A66DA6113D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Oct 2021 14:44:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234218AbhJDOdq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 4 Oct 2021 10:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S232220AbhJDOqE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 4 Oct 2021 10:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbhJDOdq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Oct 2021 10:33:46 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FF3C061745;
-        Mon,  4 Oct 2021 07:31:57 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id k13so18423884ilo.7;
-        Mon, 04 Oct 2021 07:31:57 -0700 (PDT)
+        with ESMTP id S231611AbhJDOqE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Oct 2021 10:46:04 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248C4C061745;
+        Mon,  4 Oct 2021 07:44:15 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id h129so20580627iof.1;
+        Mon, 04 Oct 2021 07:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GQndokDNYK2MVP5/OGRbBEhs0vecHIWi+j/FS2tyHcg=;
-        b=MaxOgEqrk0MYewW+FyXBjhp1ghHhe3mKyun7OB4hww3wrTcCYGV3zQgvYdFQInr43E
-         xY63N3mBUG5FT1XQxkcRCYp/mZJtf3PvPWE0v66uo1fk9oeF4lfTZiE5EdWT/gvpSIPO
-         +oho6P2zERzL1cb4D9Mz33ug668A06BBfpHydIiMNwmH2zV3jHDDwAbS26Rv6VOKJvcw
-         k2hyr7RJ1V1Pp0g4YlBBYw9z24x+QRpUtDdSpkd14x5yoGlNndVSyHmCb4J2PVgCwlCb
-         45kH2AOBXGWEp4q3pPnqbvKK/f4yMK1T8Pknaro+Y01F/VU7RDx1wL5LBzHlU8oh/ak0
-         e7yA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EFn5wnEKAEZb25y29QzIAy3UngZkq+Tr6QhUXIqoMzk=;
+        b=XAy6xseKyA85uWu1AcjgqVxdVMhk/76Z8hg+31lpt+87yEJMxXwBvO8mxmzXawd4wo
+         P6gWWRtvtpImu/vCTs46kGmuSkzGNRyRhJ52TpNNDRcT8aTJhb8F3DLdKqphel/4QWsD
+         g+RjodCdu7YYMvRxnHCz/PLtrDOMpCDsCfQ4F8CxnypEaYtFB3Z7h1/Ei4lP0da2cRpN
+         7fW+gn7WNtNfUu4XjWvQxrj8l0gjuEiMQP7YiVfKE4yVVtjFDnrt3ueGCcWgDznoUmn0
+         hH/3UuGZdwV5lJ9EtwqZv2/w9H9PWHdFZe4dKZy5oxzMJtQi+3EmBdtBjQ+ftkLg5aPy
+         etMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GQndokDNYK2MVP5/OGRbBEhs0vecHIWi+j/FS2tyHcg=;
-        b=6LJCi5J3lb4uZrU6XvMlJkayQ1fEED33cg1jdfcIDgQrR3ykhKPkpLUwgyx0F/L7u7
-         PY1FaxsNHOo0Eu5zQZt9DtibFDr1rlyvkMJDUoZejOaA70HDbT5jRoKPw3oyVMGdtjUm
-         HQhz39jxU1RVV3l6be6kHk7yZxlszTwpRN6tqBaFsEL8WycQ5KcKWCsb6FElxVlcq3C4
-         4b9fA6cwM0W6l1G8RIpaLCaQQEWF3yEsFdhF2ESwyVTutjNbVOKbmenxPNLd2blMIpaI
-         R//Oaj40c0XXBRouLtpMhwv0cpIHmmBR34Tczal1LTZUlcGgBKHtvFZl0ojKohWCjBe8
-         pUMA==
-X-Gm-Message-State: AOAM530x0oTgTNlNY2Pt7SppR5imqL23Q/P8miG9cZIUfd0APPcP45SM
-        /WzKc8QW9yySaY/gb+zrwJdQTXcOuFwZ84c44rk=
-X-Google-Smtp-Source: ABdhPJw/zO/2iUCWwdlrUJpseHZzbDhKv0N/qLiPEGtIawiGY3F+E9Y4GlxlBfwKshJlnEbGHV/XbEoaphCr2bbp7K4=
-X-Received: by 2002:a05:6e02:921:: with SMTP id o1mr9702774ilt.289.1633357916341;
- Mon, 04 Oct 2021 07:31:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211002210857.709956-1-pauk.denis@gmail.com> <20211002210857.709956-4-pauk.denis@gmail.com>
- <CAB95QASk7JGqP2_qLtkb-PXUmKPDMcOvLr_8FLrKpv3S2602mw@mail.gmail.com> <20211003234852.213bcd87@penguin.lxd>
-In-Reply-To: <20211003234852.213bcd87@penguin.lxd>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Mon, 4 Oct 2021 16:31:45 +0200
-Message-ID: <CAB95QAScBpn_GioELY8QNxxOAu6rvKkk+Fb=U6_pgN_7SrMHbA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] hwmon: (asus_wmi_sensors) Support access via Asus WMI.
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EFn5wnEKAEZb25y29QzIAy3UngZkq+Tr6QhUXIqoMzk=;
+        b=CL4BDLL3a8esOQidNNj/1RSGOzvj/0KIL6Zqqi6G6SaDYzrQqNbxRbtFbqzAOWRgAo
+         mDuNtVIniYrCFajxFq9XDCDAMpkobGxAJNKkkei8X56WEhHpMm2j+VEsI9/7voO/2FIU
+         upI1IRemJfyjl+wWFkTp8bvwBa5I149qKIjuMbBCtdQ1fYkRxMQoPblxjHwU5qJls963
+         a9Ke8R0sZ2hRQBP+7W31qV8l0eleDh9LvjXcREeJmKoYki4/Q4aowsR1rLLQsHvtMqOc
+         hqYKcOHMlekKcnDRiIB51WCJJKZXIcnXfzvRwWHr/NUh0/nrHyjw7jJTWWaeppjaIXPY
+         ju9A==
+X-Gm-Message-State: AOAM533r5zbV34Ofwd3QMiVR9cL4K0OIeIuD7zEKoq3trPubPJiae+He
+        Kpmd7EXHqWHC+vhOALvEGHo=
+X-Google-Smtp-Source: ABdhPJwEK9aiS5cXI9Wt4cweO7upc9wAlSU/oP6P8LW313Ia3YpyQIuAlQjfAb77zbpDZBjB69QQAw==
+X-Received: by 2002:a6b:5a0c:: with SMTP id o12mr9781570iob.140.1633358653912;
+        Mon, 04 Oct 2021 07:44:13 -0700 (PDT)
+Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
+        by smtp.gmail.com with ESMTPSA id b11sm3692382ile.12.2021.10.04.07.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Oct 2021 07:44:13 -0700 (PDT)
+From:   Brandon Wyman <bjwyman@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Cc:     Brandon Wyman <bjwyman@gmail.com>
+Subject: [PATCH 1/2] hwmon: (pmbus/ibm-cffps) Add mfg_id debugfs entry
+Date:   Mon,  4 Oct 2021 14:43:38 +0000
+Message-Id: <20211004144339.2634330-1-bjwyman@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+Add support for the manufacturer ID to the debugfs entries.
 
-When I first wrote the EC sensor driver, I thought there were only a
-few sensor configurations, but it turned out the assumption was wrong
-and even with currently supported 6 boards the sensor to board mapping
-is already hardly readable. Thus I redone that part in a declarative
-way so that the sensor list for each board is condensed and is easy to
-digest [1]. Please consider updating the submitted patches.
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+---
+ drivers/hwmon/pmbus/ibm-cffps.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Best regards,
-Eugene
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index df712ce4b164..2ee47cbbb665 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -18,6 +18,7 @@
+ 
+ #include "pmbus.h"
+ 
++#define CFFPS_MFG_ID_CMD                        0x99
+ #define CFFPS_FRU_CMD				0x9A
+ #define CFFPS_PN_CMD				0x9B
+ #define CFFPS_HEADER_CMD			0x9C
+@@ -34,7 +35,7 @@
+ #define CFFPS_INPUT_HISTORY_SIZE		100
+ 
+ #define CFFPS_CCIN_REVISION			GENMASK(7, 0)
+-#define  CFFPS_CCIN_REVISION_LEGACY		 0xde
++#define CFFPS_CCIN_REVISION_LEGACY		 0xde
+ #define CFFPS_CCIN_VERSION			GENMASK(15, 8)
+ #define CFFPS_CCIN_VERSION_1			 0x2b
+ #define CFFPS_CCIN_VERSION_2			 0x2e
+@@ -57,6 +58,7 @@
+ 
+ enum {
+ 	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
++	CFFPS_DEBUGFS_MFG_ID,
+ 	CFFPS_DEBUGFS_FRU,
+ 	CFFPS_DEBUGFS_PN,
+ 	CFFPS_DEBUGFS_HEADER,
+@@ -158,6 +160,9 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+ 	switch (idx) {
+ 	case CFFPS_DEBUGFS_INPUT_HISTORY:
+ 		return ibm_cffps_read_input_history(psu, buf, count, ppos);
++	case CFFPS_DEBUGFS_MFG_ID:
++		cmd = CFFPS_MFG_ID_CMD;
++		break;
+ 	case CFFPS_DEBUGFS_FRU:
+ 		cmd = CFFPS_FRU_CMD;
+ 		break;
+@@ -558,6 +563,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+ 	debugfs_create_file("input_history", 0444, ibm_cffps_dir,
+ 			    &psu->debugfs_entries[CFFPS_DEBUGFS_INPUT_HISTORY],
+ 			    &ibm_cffps_fops);
++	debugfs_create_file("mfg_id", 0444, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_MFG_ID],
++			    &ibm_cffps_fops);
+ 	debugfs_create_file("fru", 0444, ibm_cffps_dir,
+ 			    &psu->debugfs_entries[CFFPS_DEBUGFS_FRU],
+ 			    &ibm_cffps_fops);
+-- 
+2.25.1
 
-[1] https://github.com/zeule/asus-wmi-ec-sensors/pull/4
-
-On Sun, 3 Oct 2021 at 22:49, Denis Pauk <pauk.denis@gmail.com> wrote:
->
-> Hi Eugene,
->
-> On Sat, 2 Oct 2021 23:56:20 +0200
-> Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
->
-> > Hi, Denis!
-> >
-> > Thank you for submitting this driver to the mainline! I have a few
-> > comments/suggestions, please find them below.
-> >
-> > > +#define HWMON_MAX      9
-> >
-> > There is a hwmon_max enum member, whose current value is 10.
-> Thank you, I will check.
->
-> >
-> > > +#define ASUS_WMI_BLOCK_READ_REGISTERS_MAX 0x10 /* from the ASUS
-> > > DSDT source */ +/* from the ASUS_WMI_BLOCK_READ_REGISTERS_MAX value
-> > > */ +#define ASUS_WMI_MAX_BUF_LEN 0x80
-> > Suggestion:
-> > #define ASUS_WMI_MAX_BUF_LEN 0x80 /* from the
-> > ASUS_WMI_BLOCK_READ_REGISTERS_MAX value */
-> >
-> > > +#define ASUSWMI_SENSORS_MAX 11
-> > This one is for the EC only, maybe rename it accordingly?
-> >
-> Thank you, I will check.
->
-> > > +struct asus_wmi_data {
-> > > +       int ec_board;
-> > > +};
-> >
-> > Duplicates the value in the asus_wmi_sensors struct. Refactoring
-> > artifact?
-> >
-> I have used different structures for data in platform and device.
->
-> >              asus_wmi_ec_set_sensor_info(si++, "Water", hwmon_fan,
-> > > +
-> > > asus_wmi_ec_make_sensor_address(2, 0x00, 0xBC),
-> > > +                                           &ec->nr_registers);
-> > This one is named "W_FLOW" in the BIOS and ASUS software. Maybe append
-> > "_flow" to the label?
-> >
-> Thank you, I will check.
->
-> > > + * The next four functions converts to/from BRxx string argument
-> > > format
-> > convert (remove "s")
-> >
-> > > +       // assert(len <= 30)
-> > Makes little sense in the kernel.
-> >
-> Thank you, I will check.
->
-> > > +static void asus_wmi_ec_make_block_read_query(struct
-> > > asus_wmi_ec_info *ec) +{
-> > > +       u16 registers[ASUS_EC_KNOWN_EC_REGISTERS];
-> > > +       u8 i, j, register_idx = 0;
-> > > +
-> > > +       /* if we can get values for all the registers in a single
-> > > query,
-> > > +        * the query will not change from call to call
-> > > +        */
-> > > +       if (ec->nr_registers <= ASUS_WMI_BLOCK_READ_REGISTERS_MAX &&
-> > > +           ec->read_arg[0] > 0) {
-> > > +               /* no need to update */
-> > > +               return;
-> > > +       }
-> > > +
-> > I would add a test for ec->nr_registers >
-> > ASUS_WMI_BLOCK_READ_REGISTERS_MAX and a warning log message here.
-> >
-> Thank you, I will check.
->
-> > > +static int asus_wmi_probe(struct platform_device *pdev)
-> >
-> > Can we add a module alias or to load the module automatically by other
-> > means? For module aliases we know DMI parameters for the supported
-> > boards.
-> >
-> I will look, I prefer to reuse same module code for boards with/without
-> EC endpoints same as in
-> https://bugzilla.kernel.org/show_bug.cgi?id=204807#c128.
->
-> > Best regards,
-> > Eugene
->
-> Best regards,
->             Denis.
