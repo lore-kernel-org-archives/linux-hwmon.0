@@ -2,202 +2,230 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 289B2C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Oct 2021 13:56:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 435EEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Oct 2021 14:15:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10507615E3
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Oct 2021 13:56:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E2AD6126A
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Oct 2021 14:15:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235391AbhJEN55 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 5 Oct 2021 09:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
+        id S236139AbhJEORg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 Oct 2021 10:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235433AbhJEN5P (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Oct 2021 09:57:15 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B3DC06136F;
-        Tue,  5 Oct 2021 06:52:08 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 77-20020a9d0ed3000000b00546e10e6699so25901078otj.2;
-        Tue, 05 Oct 2021 06:52:08 -0700 (PDT)
+        with ESMTP id S235717AbhJEORW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Oct 2021 10:17:22 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC3AC061769;
+        Tue,  5 Oct 2021 07:14:59 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id v10so2181322oic.12;
+        Tue, 05 Oct 2021 07:14:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OoiLFDDmp8NkpUfW9xFGT5Y2lvp+YpCHATtTBrPwUdU=;
-        b=oB6JIQ9SHf1bMAsRXE1UBQC6V7b/V9g+b9earx+1YeREVz5MpvKftL/PD0BdlMo1bE
-         tkjdyL9A/0vipoNaV4vNBhKXXTmNvHgL0C1yLzDMxVdOMH1UwdF7klTZERd8Vp2CzG42
-         4wQDIcawAMRjXEvfjdClqqXSXP2YMtBZznLYJ0buw0E2LMvhEcrJLeMoy7juZsyMp4Ty
-         MZ8rvXceM3P6m/I2jg4Ma188QUo3l1ryflFbx5xbnykVutgFYJzWB1wgf8IiR9NTD/7R
-         DARZ7GcWlsCPeF0CEsAPDpvp6p/lka6qnI5RhuS6nOQC2l5kJKv9oW7pm9E1kv3iapVf
-         PLZA==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=HI6VRbTKK1AP3BY4b0yKJ6quCFNI60OtzuTOhWYibI0=;
+        b=FeBBa/D0QziwFl80qarwkQD2zjQ3gllce/62OKvoA5ZintXCTvYYjTidKwZwGB3nEn
+         +CxyhrL6CivXy0eg1XzEnXnduk9r8lBC+8orBy2FUOpBNqUAEiHPi90f+9h2eAL/cLMN
+         +WSP4unl337v+FZrILX8nnpKh7jV/ylRBJcme+J1tzaYIZkOhPTZKTjqMJJea0xLHNV2
+         0IGePrlGitAAY87lAkn2JVLaXcWLv57ByLMolpE1XK06HZmHqW550UZEhgpsPFCxgDHv
+         6eWFD1NoT65nk5jDuMPPj/tvEDNhLIsVIFH9++czov0YnUVhh+eKc7i1BWdQaRg8ugJP
+         Mirw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=OoiLFDDmp8NkpUfW9xFGT5Y2lvp+YpCHATtTBrPwUdU=;
-        b=Re2GSyPvbjRlyd4ya7YgZU19CH2Qm6iO/v4JFx101q+DlO7AuUIKmRFCafck/060bl
-         HJN8sOVACGexSYKgRZfmvau6elbwvPS6btF43NYfiXZnvbvWpQLqWzN3Yu4Bhjy1mKTc
-         5Ey4pZqBYPmMONk404ur/9zeqign5Ayc4ij/Hp0h/jeEvnlKkJhKQhMFFy/0ZNSGSjTu
-         89gBh3KmlEC5rs2ZSv+e3kh9epZe90unsLqU4JOsFElYQUpTBVrC1/xONLJJvDurcfSd
-         hVqRYlafuFcWvzK+Cz0VCguTsrJxDdx8mGVngrGlIhim9YnaLElA747ecqKS/4+8lBIU
-         spiA==
-X-Gm-Message-State: AOAM533OvHK38q1dzDfgPgEZqZk5sGU6ontscMOJug7+aX3Kbs2YjGCr
-        OYtMngmrd3HjkYyYx98Wa582cmCRcyM=
-X-Google-Smtp-Source: ABdhPJyD0XbP8756mmqBofhtX4m/y+BHK9t1qsmxPNYVIidCcMlCDEl+nBvfzdwgA5KuyYj47RbzDQ==
-X-Received: by 2002:a05:6830:204d:: with SMTP id f13mr14159279otp.123.1633441927379;
-        Tue, 05 Oct 2021 06:52:07 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=HI6VRbTKK1AP3BY4b0yKJ6quCFNI60OtzuTOhWYibI0=;
+        b=2+6SFS6Q9X9knOvpnfW7UMTt+md24SbnrUJZ8pQserMV4GhTODrUqdlPfSI+BB88Oc
+         g7n+AinK+55evgPnnd9uigPL3fYlCqGNNb+AL95aqaHfrax8nSyauOZSajd/QHCj8XPe
+         FmoyOEpmcZNcgn3WLkxNs6WqXGCxcZ4PVQZKOZ9UiVcmQGvUJlM/epor2pxNClReXIAI
+         ATCF3f5u488wkGPrrCl1wd0OhrJWTmHFYSWR/HG4YYj7kai3tFjLvpic3h+9+eqLZmCo
+         29UdsHl6pF6uiD8nXWcbBz/G4s6adP0jeKlYDvnooa/RHX0pymP/jKk772SJ34erI11i
+         6lLQ==
+X-Gm-Message-State: AOAM531pZ1h1EDKEYO0ApjqKO9Kqj1CAWfZLEwYrVZrmbyM8K8KoTp7/
+        n5l+0t2B7kHtfdwzG7WBttE=
+X-Google-Smtp-Source: ABdhPJySbUtDUFfNDEUVKEis4xxDEXK2HD7qBjDo6p4nffMgQ7BgeQbmEMZD1riUMV+SYy0XOh/3DA==
+X-Received: by 2002:a05:6808:187:: with SMTP id w7mr2783226oic.140.1633443299203;
+        Tue, 05 Oct 2021 07:14:59 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 65sm3545534otd.81.2021.10.05.06.52.05
+        by smtp.gmail.com with ESMTPSA id x8sm3061906otg.31.2021.10.05.07.14.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 06:52:06 -0700 (PDT)
+        Tue, 05 Oct 2021 07:14:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 5 Oct 2021 06:52:04 -0700
+Date:   Tue, 5 Oct 2021 07:14:57 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Kamil Pietrzak <kpietrzak@disroot.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (nct6775) Use custom scale for ASUS
- motherboards.
-Message-ID: <20211005135204.GA1924024@roeck-us.net>
-References: <20211002210857.709956-1-pauk.denis@gmail.com>
- <20211002210857.709956-3-pauk.denis@gmail.com>
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 11/11] dt-bindings: hwmon: allow specifying channels
+ for tmp421
+Message-ID: <20211005141457.GB2395636@roeck-us.net>
+References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
+ <3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com>
+ <20211002142219.GC34532@roeck-us.net>
+ <YVqu92dUgNKlYMlG@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211002210857.709956-3-pauk.denis@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YVqu92dUgNKlYMlG@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Oct 03, 2021 at 12:08:55AM +0300, Denis Pauk wrote:
-> Use custom scaling factor for:
-> * TUF GAMING Z490-PLUS
-> * TUF GAMING Z490-PLUS (WI-FI)
+On Mon, Oct 04, 2021 at 09:36:23AM +0200, Krzysztof Adamski wrote:
+> Dnia Sat, Oct 02, 2021 at 07:22:19AM -0700, Guenter Roeck napisał(a):
+> > On Thu, Sep 30, 2021 at 09:19:49AM +0200, Krzysztof Adamski wrote:
+> > > Add binding description for the per temperature channel configuration
+> > > like labels and n-factor.
+> > > 
+> > > Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> > > ---
+> > >  .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 66 +++++++++++++++++++
+> > >  1 file changed, 66 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> > > index 47040ace4f73..0d4ea2209500 100644
+> > > --- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> > > +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> > > @@ -24,12 +24,49 @@ properties:
+> > >    reg:
+> > >      maxItems: 1
+> > > 
+> > > +  '#address-cells':
+> > > +    const: 1
+> > > +
+> > > +  '#size-cells':
+> > > +    const: 0
+> > > +
+> > >  required:
+> > >    - compatible
+> > >    - reg
+> > > 
+> > >  additionalProperties: false
+> > > 
+> > > +patternProperties:
+> > > +  "^input@([0-4])$":
+> > 
+> > Was there agreement on "input" ? It is a somewhat odd name for a temperature
+> > sensor. If that name can be used to distinguish child sensor types, it might
+> > make sense to have a well defined name to state that this is a temperature
+> > sensor.
 > 
-> Voltage scaling factors are based on Asus software on Windows.
+> Nope, no conclusion on that, yet, thus I did not change that and I was
+> still using the same approach I had on v1. For me it can be a "channel@X", a
+> "temperature@X".. whatever you decide.
 > 
 
-Scaling is never correct for any SuperIO chips, and is notoriously different
-for each and every PC board. I don't want to add per-board scaling data to
-the kernel drivers for those chips. This would just create an unsupportable
-mess.
+My question was more on mandating a single string instead of letting
+users decide. I don't care either if it isn't used for anything in
+particular, but you specifically mandate "input" as the only valid
+string. I am not a DT expert, but it seems to me that mandating the
+content of that string and then not using it other than to ensure that
+the user really specified "input" doesn't make much sense to me.
+Having said that, if this is the DT way of things, it is ok with
+me.
+
+> However I'm in favor of some generic name, like "channel" or "input",
+> and using some "type property", if required, instead of calling the
+> nodes "temperatue@X", "voltage@X".
+> 
+
+It does open up a nother dimension for multi-type sensor chips, though,
+
+For a chip with voltage and temperature sensors:
+
+	temperature@0 {
+		reg = <0>;
+	};
+
+	voltage@0 {
+		reg = <0>;
+	};
+
+vs:
+
+	temperature-sensors {
+		xxx@0 {
+			reg = <0>;
+		};
+	};
+
+	voltage-sensors {
+		xxx@0 {
+			reg = <0>;
+		};
+	};
+
+This is way out of my league in terms of what is appropriate,
+except that "xxx" isn't always easy to determine if the string is fixed
+as you suggest. What should it be for a sensor measuring an output voltage ?
+
+	input@0 {
+		reg = <0>;
+		label = "output voltage";
+	};
+
+Anyway, maybe Rob has an idea how to name this properly.
 
 Guenter
 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Tested-by: Kamil Pietrzak <kpietrzak@disroot.org>
-> Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/nct6775.c | 32 ++++++++++++++++++++++++++------
->  1 file changed, 26 insertions(+), 6 deletions(-)
+> > > +    type: object
+> > > +    description: |
+> > > +      Represents channels of the device and their specific configuration.
+> > > +
+> > > +    properties:
+> > > +      reg:
+> > > +        description: |
+> > > +          The channel number. 0 is local channel, 1-4 are remote channels
+> > 
+> > Which of the supported chips has 4 remote channels ?
 > 
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index 8eaf86ea2433..ba18c1cbf572 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -140,6 +140,7 @@ struct nct6775_sio_data {
->  	int ld;
->  	enum kinds kind;
->  	enum sensor_access access;
-> +	bool custom_scale;
->  
->  	/* superio_() callbacks  */
->  	void (*sio_outb)(struct nct6775_sio_data *sio_data, int reg, int val);
-> @@ -1159,14 +1160,19 @@ static const u16 scale_in[15] = {
->  	800, 800
->  };
->  
-> -static inline long in_from_reg(u8 reg, u8 nr)
-> +static const u16 scale_in_z490[15] = {
-> +	888, 4000, 1600, 1600, 9600, 800, 800, 1600, 1600, 1600, 1600, 1600, 800,
-> +	800, 800
-> +};
-> +
-> +static inline long in_from_reg(u8 reg, u8 nr, const u16 *scale)
->  {
-> -	return DIV_ROUND_CLOSEST(reg * scale_in[nr], 100);
-> +	return DIV_ROUND_CLOSEST(reg * scale[nr], 100);
->  }
->  
-> -static inline u8 in_to_reg(u32 val, u8 nr)
-> +static inline u8 in_to_reg(u32 val, u8 nr, const u16 *scale)
->  {
-> -	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale_in[nr]), 0, 255);
-> +	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale[nr]), 0, 255);
->  }
->  
->  /*
-> @@ -1323,6 +1329,9 @@ struct nct6775_data {
->  	u8 fandiv2;
->  	u8 sio_reg_enable;
->  
-> +	/* voltage scaling factors */
-> +	const u16 *scale;
-> +
->  	/* nct6775_*() callbacks  */
->  	u16 (*read_value)(struct nct6775_data *data, u16 reg);
->  	int (*write_value)(struct nct6775_data *data, u16 reg, u16 value);
-> @@ -2026,7 +2035,7 @@ show_in_reg(struct device *dev, struct device_attribute *attr, char *buf)
->  	int index = sattr->index;
->  	int nr = sattr->nr;
->  
-> -	return sprintf(buf, "%ld\n", in_from_reg(data->in[nr][index], nr));
-> +	return sprintf(buf, "%ld\n", in_from_reg(data->in[nr][index], nr, data->scale));
->  }
->  
->  static ssize_t
-> @@ -2044,7 +2053,7 @@ store_in_reg(struct device *dev, struct device_attribute *attr, const char *buf,
->  	if (err < 0)
->  		return err;
->  	mutex_lock(&data->update_lock);
-> -	data->in[nr][index] = in_to_reg(val, nr);
-> +	data->in[nr][index] = in_to_reg(val, nr, data->scale);
->  	data->write_value(data, data->REG_IN_MINMAX[index - 1][nr],
->  			  data->in[nr][index]);
->  	mutex_unlock(&data->update_lock);
-> @@ -3980,6 +3989,11 @@ static int nct6775_probe(struct platform_device *pdev)
->  		data->write_value = nct6775_wmi_write_value;
->  	}
->  
-> +	if (sio_data->custom_scale)
-> +		data->scale = scale_in_z490;
-> +	else
-> +		data->scale = scale_in;
-> +
->  	mutex_init(&data->update_lock);
->  	data->name = nct6775_device_names[data->kind];
->  	data->bank = 0xff;		/* Force initial bank selection */
-> @@ -5020,6 +5034,7 @@ static int __init sensors_nct6775_init(void)
->  	struct nct6775_sio_data sio_data;
->  	int sioaddr[2] = { 0x2e, 0x4e };
->  	enum sensor_access access = access_direct;
-> +	bool custom_scale = false;
->  	const char *board_vendor, *board_name;
->  	u8 tmp;
->  
-> @@ -5043,6 +5058,10 @@ static int __init sensors_nct6775_init(void)
->  				pr_err("Can't read ChipID by Asus WMI.\n");
->  			}
->  		}
-> +
-> +		if (strcmp(board_name, "TUF GAMING Z490-PLUS") == 0 ||
-> +		    strcmp(board_name, "TUF GAMING Z490-PLUS (WI-FI)") == 0)
-> +			custom_scale = true;
->  	}
->  
->  	/*
-> @@ -5066,6 +5085,7 @@ static int __init sensors_nct6775_init(void)
->  		found = true;
->  
->  		sio_data.access = access;
-> +		sio_data.custom_scale = custom_scale;
->  
->  		if (access == access_asuswmi) {
->  			sio_data.sio_outb = superio_wmi_outb;
-> -- 
-> 2.33.0
+> True, there is no TMP424. I will fix that in v4.
 > 
+> > 
+> > > +        items:
+> > > +          minimum: 0
+> > > +          maximum: 4
+> > > +
+> > > +      label:
+> > > +        description: |
+> > > +          A descriptive name for this channel, like "ambient" or "psu".
+> > > +
+> > > +      n-factor:
+> > 
+> > n-factor or "ti,n-factor" ? The unit is chip specific, after all.
+> 
+> Or ti,nfactor, as used by tmp513? Again, there was no clear conclusion
+> so I didn't change that. Let me know what is your decision and I will
+> obey that.
+
+Not my call to make about nfactor or n-factor, really. I'll leave that
+for Rob to decide.
+> 
+> > 
+> > > +        description: |
+> > > +          The value (two's complement) to be programmed in the channel specific N correction register.
+
+[ side note: Since the value is just a register value, "two's complement" seems
+  unnecessary and confusing; in the context of the DT description it doesn't
+  really matter what the register values actually mean. ]
+
+> > > +          For remote channels only.
+> > > +        items:
+> > > +          minimum: 0
+> > > +          maximum: 1
+> > 
+> > Is this the correct value range ? The value range (in integer form) is
+> > -128 .. 127 (or 0 .. 255 as unsigned), not 0..1.
+> 
+> True, I must have misunderstood this minimum/maximum and confused it
+> with the number of items or something. Now, since DT does not really
+> handle signed values and considers everything an unsigned, should I use
+> 0..255 or -128..127?
+> 
+
+I suspect it should be 0..255. After all, the values reflect register values,
+not their meaning. But I don't really know. Rob ?
+
+Guenter
