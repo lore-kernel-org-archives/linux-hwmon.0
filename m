@@ -2,243 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A79C5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Oct 2021 20:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 004E2C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Oct 2021 22:25:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B48861163
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Oct 2021 20:55:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDF1B610A2
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Oct 2021 22:25:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbhJFU5m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 Oct 2021 16:57:42 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:40917 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239516AbhJFU5l (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Oct 2021 16:57:41 -0400
-Received: by mail-ot1-f44.google.com with SMTP id l16-20020a9d6a90000000b0053b71f7dc83so4779662otq.7;
-        Wed, 06 Oct 2021 13:55:49 -0700 (PDT)
+        id S239562AbhJFW1O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 Oct 2021 18:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239223AbhJFW1O (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Oct 2021 18:27:14 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CF0C061746;
+        Wed,  6 Oct 2021 15:25:21 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id j5so16462875lfg.8;
+        Wed, 06 Oct 2021 15:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r9LJ/8J2oukzdrKTgF8IimmAsskQ6d87zSHUvyCJOPk=;
+        b=VJEiWqZ/xMGvVd0PSEDKLaQ25UZkmRh1QW3eL8BXbN2aWr/QDTqlDrWCx3r85l0yRV
+         jcWOYq8zBDMtySWmRO481M9A2wVlTbrHsBo2jiMOWJZAYOr8KH60CqUxF4E4Tuz3mDxI
+         EWBa8mdsrltNlS3StBFSnvqr4YsyDZkqL3GWG/On+T6RGdfpR/blmFMyonNQcBrlld8l
+         TK8613Y/9vciN9XcGLeBxufnln3xbs3dZpRo4RDJmORpxW0qqE1AEiiDj9eiSyv9jxCk
+         f/I4FiBcXDfLr4rTcwh+/nyvDwoyB/HvZ88rtaXvYhSinLtWC5aql47W8y9xQ5HBuT19
+         tyMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PEl1Wiq7Yzxw1JyOc9TwT8faJxfEQGULJwcfWCWiJkE=;
-        b=GyzGwyXw7S0wGnKixrE5Ff8odzbDciNXepCn5zlz81lUnphvA2nE8AG3CERHiCWlHN
-         X/6X8Owwdn9cO7wePo4Pwt7fEIputZmAYZVBfhfKUH6PsupIpayfLZd7oWgDHzqcUDfr
-         gt5GnYFL4a1sfn9WV2cUHdAI39a0/z22wd8NL7YnNuZyVO2DOf+c1RzLFVN9E/IqXEeS
-         lZldztLQyW+ebpgW3ebqVHcwmEqSKzEVNOOiJ+jLOElQZ7/cmni2i6XhaF76ansJ7Vqt
-         cewdo8gBshF3Q3VI9zk6Es6yJGYwK7jqANewY9nYDNR2GhzXHp2G4fImsp6q4fCpnKq+
-         C5Ww==
-X-Gm-Message-State: AOAM5300EXxCAWE6Y5aVWNRQVjecVd794944Tv3lJszbiIoeMRYtRyIu
-        6+HNuNaUp3/xqcQ98YLr5eoOJG8fkA==
-X-Google-Smtp-Source: ABdhPJyqBAjKD5LkaXGtc+EwOmuHvjB3JzySclZvRpa0XwLGhqvqXkKvpxQPFOovyl89rcbJ/Gf/8w==
-X-Received: by 2002:a05:6830:9c9:: with SMTP id y9mr400716ott.6.1633553748826;
-        Wed, 06 Oct 2021 13:55:48 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 21sm4300612oix.1.2021.10.06.13.55.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r9LJ/8J2oukzdrKTgF8IimmAsskQ6d87zSHUvyCJOPk=;
+        b=UX8tZjCwEknTZQIkvONsBBcR5m0+zDPH2sS9JttfnO2jWiaZrCbGcDnlwLKHdpH/fe
+         W1CH8XI4RWUxDZmwFRJVU7ApVZMuEcVqVVtQmGYcJmkMfw1JMtTx481Zp5q0gT0E+ViK
+         qhZS87IBi8yWbUQqHpeKI4diy+XAUcQWOG7HHsfMpV5+F2YcQQJE1KhfOzYQ5mtJcuSZ
+         h7QygePEDEkZHCKRdLET79/LslW4YUFxoCyN6aSyMFMoAu4Y757oldg9NYFoNjjLDYfE
+         ePA+JdeMNUwVBtRlyqeTQSxFB12nQKObQMcolvC+Eks3pGfRFBC7Op6KEqe+R1WpUc2r
+         vDIQ==
+X-Gm-Message-State: AOAM5304EubAAxSSD/sPmMfLXvHxm0b086krxQxrsdE5rwiqPFWrDPOb
+        wXhiNEP1XkMO9YbKGbKkjC+IW9fJJ0Q=
+X-Google-Smtp-Source: ABdhPJxgNAsQNZ2Foi/mGFOWQ37zWZcMLeoU5rjTqEeiMAhdSnC9WQEKOFwavvDE2WdBbxPWF/RLEw==
+X-Received: by 2002:ac2:48ad:: with SMTP id u13mr667601lfg.340.1633559119686;
+        Wed, 06 Oct 2021 15:25:19 -0700 (PDT)
+Received: from localhost.localdomain (206-20-179-94.pool.ukrtel.net. [94.179.20.206])
+        by smtp.gmail.com with ESMTPSA id c2sm1364457lfi.277.2021.10.06.15.25.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 13:55:48 -0700 (PDT)
-Received: (nullmailer pid 2857378 invoked by uid 1000);
-        Wed, 06 Oct 2021 20:55:46 -0000
-Date:   Wed, 6 Oct 2021 15:55:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 11/11] dt-bindings: hwmon: allow specifying channels
- for tmp421
-Message-ID: <YV4NUqf7ey5Yr55P@robh.at.kernel.org>
-References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
- <3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com>
- <20211002142219.GC34532@roeck-us.net>
- <YVqu92dUgNKlYMlG@localhost.localdomain>
- <20211005141457.GB2395636@roeck-us.net>
+        Wed, 06 Oct 2021 15:25:19 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Ed Brindley <kernel@maidavale.org>,
+        Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [PATCH v2 0/3]  [PATCH v2 0/3] Update ASUS WMI supported boards
+Date:   Thu,  7 Oct 2021 01:24:58 +0300
+Message-Id: <20211006222502.645003-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211005141457.GB2395636@roeck-us.net>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 05, 2021 at 07:14:57AM -0700, Guenter Roeck wrote:
-> On Mon, Oct 04, 2021 at 09:36:23AM +0200, Krzysztof Adamski wrote:
-> > Dnia Sat, Oct 02, 2021 at 07:22:19AM -0700, Guenter Roeck napisał(a):
-> > > On Thu, Sep 30, 2021 at 09:19:49AM +0200, Krzysztof Adamski wrote:
-> > > > Add binding description for the per temperature channel configuration
-> > > > like labels and n-factor.
-> > > > 
-> > > > Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> > > > ---
-> > > >  .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 66 +++++++++++++++++++
-> > > >  1 file changed, 66 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-> > > > index 47040ace4f73..0d4ea2209500 100644
-> > > > --- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
-> > > > @@ -24,12 +24,49 @@ properties:
-> > > >    reg:
-> > > >      maxItems: 1
-> > > > 
-> > > > +  '#address-cells':
-> > > > +    const: 1
-> > > > +
-> > > > +  '#size-cells':
-> > > > +    const: 0
-> > > > +
-> > > >  required:
-> > > >    - compatible
-> > > >    - reg
-> > > > 
-> > > >  additionalProperties: false
-> > > > 
-> > > > +patternProperties:
-> > > > +  "^input@([0-4])$":
-> > > 
-> > > Was there agreement on "input" ? It is a somewhat odd name for a temperature
-> > > sensor. If that name can be used to distinguish child sensor types, it might
-> > > make sense to have a well defined name to state that this is a temperature
-> > > sensor.
-> > 
-> > Nope, no conclusion on that, yet, thus I did not change that and I was
-> > still using the same approach I had on v1. For me it can be a "channel@X", a
-> > "temperature@X".. whatever you decide.
-> > 
-> 
-> My question was more on mandating a single string instead of letting
-> users decide. I don't care either if it isn't used for anything in
-> particular, but you specifically mandate "input" as the only valid
-> string. I am not a DT expert, but it seems to me that mandating the
-> content of that string and then not using it other than to ensure that
-> the user really specified "input" doesn't make much sense to me.
-> Having said that, if this is the DT way of things, it is ok with
-> me.
+Add support to nct6775:
+* PRIME B360-PLUS
+* PRIME X570-PRO
+* ROG CROSSHAIR VIII FORMULA
+* ROG STRIX B550-I GAMING
+* ROG STRIX X570-F GAMING
+* ROG STRIX Z390-E GAMING
+* TUF GAMING B550-PRO
+* TUF GAMING Z490-PLUS
+* TUF GAMING Z490-PLUS (WI-FI)
 
-Kind of a catch-22. Node names weren't consistent nor checked, so 
-we can use them. 
+Add support by WMI interface privided by Asus for B550/X570 boards: 
+* ROG CROSSHAIR VIII HERO
+* ROG CROSSHAIR VIII DARK HERO
+* ROG CROSSHAIR VIII FORMULA
+* ROG STRIX X570-E GAMING
+* ROG STRIX B550-E GAMING
 
-> > However I'm in favor of some generic name, like "channel" or "input",
-> > and using some "type property", if required, instead of calling the
-> > nodes "temperatue@X", "voltage@X".
-> > 
-> 
-> It does open up a nother dimension for multi-type sensor chips, though,
-> 
-> For a chip with voltage and temperature sensors:
-> 
-> 	temperature@0 {
-> 		reg = <0>;
-> 	};
-> 
-> 	voltage@0 {
-> 		reg = <0>;
-> 	};
+Add support by WMI interface privided by Asus for X370/X470/
+B450/X399 boards:
+* ROG CROSSHAIR VI HERO,
+* PRIME X399-A,
+* PRIME X470-PRO,
+* ROG CROSSHAIR VI EXTREME,
+* ROG CROSSHAIR VI HERO (WI-FI AC),
+* ROG CROSSHAIR VII HERO,
+* ROG CROSSHAIR VII HERO (WI-FI),
+* ROG STRIX B450-E GAMING,
+* ROG STRIX B450-F GAMING,
+* ROG STRIX B450-I GAMING,
+* ROG STRIX X399-E GAMING,
+* ROG STRIX X470-F GAMING,
+* ROG STRIX X470-I GAMING,
+* ROG ZENITH EXTREME,
+* ROG ZENITH EXTREME ALPHA.
 
-Not valid because you have same address twice.
+Could you please review?
 
-> 
-> vs:
-> 
-> 	temperature-sensors {
-> 		xxx@0 {
-> 			reg = <0>;
-> 		};
-> 	};
-> 
-> 	voltage-sensors {
-> 		xxx@0 {
-> 			reg = <0>;
-> 		};
-> 	};
-> 
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Signed-off-by: Ed Brindley <kernel@maidavale.org>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Didn't we already discuss this?
+---
+Changes in v2:
+ - asus_wmi_ec_sensors: Rename asus_wmi_sensors to asus_wmi_ec_sensors for 
+   B550/X570 boards.
+ - asus_wmi_ec_sensors: Use utf8s_to_utf16s/utf16s_to_utf8s instead handmade 
+   fuctions.
+ - asus_wmi_ec_sensors: Use post increment.
+ - asus_wmi_ec_sensors: Use get_unaligned* for convert values.
+ - asus_wmi_ec_sensors: Use PTR_ERR_OR_ZERO.
+ - asus_wmi_ec_sensors: Specify per-board sensors in a declarative way 
+   (by Eugene Shalygin).
+ - asus_wmi_sensors: Add support for X370/X470/B450/X399 boards.
 
-> This is way out of my league in terms of what is appropriate,
-> except that "xxx" isn't always easy to determine if the string is fixed
-> as you suggest. What should it be for a sensor measuring an output voltage ?
+Denis Pauk (3):
+  hwmon: (nct6775) Add additional ASUS motherboards
+  hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
+  hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
 
-Does measuring a voltage have a direction?
+ MAINTAINERS                         |   8 +
+ drivers/hwmon/Kconfig               |  24 +-
+ drivers/hwmon/Makefile              |   2 +
+ drivers/hwmon/asus_wmi_ec_sensors.c | 631 ++++++++++++++++++++++++++
+ drivers/hwmon/asus_wmi_sensors.c    | 661 ++++++++++++++++++++++++++++
+ drivers/hwmon/nct6775.c             |   9 +
+ 6 files changed, 1334 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
+ create mode 100644 drivers/hwmon/asus_wmi_sensors.c
 
-> 
-> 	input@0 {
-> 		reg = <0>;
-> 		label = "output voltage";
-> 	};
-> 
-> Anyway, maybe Rob has an idea how to name this properly.
 
-No, I don't have a sense of the range of h/w...
+base-commit: 0889b7c73a4d8eaaa321eafcf66835979ead862a
+-- 
+2.33.0
 
-> 
-> Guenter
-> 
-> > > > +    type: object
-> > > > +    description: |
-> > > > +      Represents channels of the device and their specific configuration.
-> > > > +
-> > > > +    properties:
-> > > > +      reg:
-> > > > +        description: |
-> > > > +          The channel number. 0 is local channel, 1-4 are remote channels
-> > > 
-> > > Which of the supported chips has 4 remote channels ?
-> > 
-> > True, there is no TMP424. I will fix that in v4.
-> > 
-> > > 
-> > > > +        items:
-> > > > +          minimum: 0
-> > > > +          maximum: 4
-> > > > +
-> > > > +      label:
-> > > > +        description: |
-> > > > +          A descriptive name for this channel, like "ambient" or "psu".
-> > > > +
-> > > > +      n-factor:
-> > > 
-> > > n-factor or "ti,n-factor" ? The unit is chip specific, after all.
-> > 
-> > Or ti,nfactor, as used by tmp513? Again, there was no clear conclusion
-> > so I didn't change that. Let me know what is your decision and I will
-> > obey that.
-> 
-> Not my call to make about nfactor or n-factor, really. I'll leave that
-> for Rob to decide.
-
-ti,n-factor
-
-> > 
-> > > 
-> > > > +        description: |
-> > > > +          The value (two's complement) to be programmed in the channel specific N correction register.
-> 
-> [ side note: Since the value is just a register value, "two's complement" seems
->   unnecessary and confusing; in the context of the DT description it doesn't
->   really matter what the register values actually mean. ]
-> 
-> > > > +          For remote channels only.
-> > > > +        items:
-> > > > +          minimum: 0
-> > > > +          maximum: 1
-> > > 
-> > > Is this the correct value range ? The value range (in integer form) is
-> > > -128 .. 127 (or 0 .. 255 as unsigned), not 0..1.
-> > 
-> > True, I must have misunderstood this minimum/maximum and confused it
-> > with the number of items or something. Now, since DT does not really
-> > handle signed values and considers everything an unsigned, should I use
-> > 0..255 or -128..127?
-> > 
-> 
-> I suspect it should be 0..255. After all, the values reflect register values,
-> not their meaning. But I don't really know. Rob ?
-
-That's fine.
-
-You can define it as a signed type, but the validation there is not 
-working due to dts->dt.yaml losing the sign.
-
-Rob
