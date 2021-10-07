@@ -2,296 +2,121 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FBBAC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 18:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 903EBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 19:24:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3555061029
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 18:11:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67D186101E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 19:24:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbhJGSNj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Oct 2021 14:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S232709AbhJGT02 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Oct 2021 15:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243513AbhJGSNi (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 14:13:38 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC10CC061755;
-        Thu,  7 Oct 2021 11:11:44 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id k13so7310555ilo.7;
-        Thu, 07 Oct 2021 11:11:44 -0700 (PDT)
+        with ESMTP id S233105AbhJGT02 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 15:26:28 -0400
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8858C061570
+        for <linux-hwmon@vger.kernel.org>; Thu,  7 Oct 2021 12:24:33 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id w9-20020a4adec9000000b002b696945457so1719955oou.10
+        for <linux-hwmon@vger.kernel.org>; Thu, 07 Oct 2021 12:24:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8A95ZMuXTENgxPStAtPGqZsNuh9c2GHznVeLZVXqO40=;
-        b=WyLuAlBKYLfueKOt8BDTUiR++XmtegJhgYlMIisZTr3JSpgSyOt866FzWAuSGP6uAV
-         u6BqR5By3kAxt89N7mxIhJuh7eBYBxNYaH6UZWKfhNx1yCgmrwcAO2r75i/Tq3/v52AT
-         aKPCCDo+XMM6bHTz7zIfXr5dEmdsxoYHL3XtYLsAo5gbcrVBFOpn+eQakQ5QpBSxLqne
-         Foa56vjN3tdZnsj11rvdlPKZynoUvbQRvbcYI+GkhruVXRZyzmRqDA32lpKOhFdWEyBE
-         k1VPom41q7ONqUR0Veo5ycaQBDifsAQ5bGg7CdslXQHRLrpV5cwchLmgRrzqgrtnpqXe
-         JgkA==
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=uJ7taHxnNG5zat1UONTlDWwij8GkRPpKOroOhjZh+LU=;
+        b=Fvj9MD6yxjFKMpytyNTvENGmZrVH47rxdEqVn9jgAtyBQvfDmJ/G4YXTITZvh/nXHy
+         F0UObvJ8PFuRSra6NP6Z2D3BLGUIbOBoYzEPAJ6on0Y8dOOThv6rCJrGfc7O7On849i/
+         grpYtQKPWgnF4pNNsA3kvdfvEaRM3gKd+Fu+wZ0qZrImd5H+EBcKgV94FQAR5DOl0T4u
+         RLmW0xVNFVxa5Yzy0ZyPoQ9xZUJxMZBLWOQnhUkP8igTmJrv37uX/5dkpeOh62u51Kvn
+         ftOGj8jeZ3GWCeiYaMzlrAkX+4Rnr9Mznu4ZmiIZnsHo9KaoWFNFlrkPClQ++PoD2hRM
+         M6rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8A95ZMuXTENgxPStAtPGqZsNuh9c2GHznVeLZVXqO40=;
-        b=wMo+rpkltvAusBLUbvl3wjYAQoMlZiS9YNlxdI/khqYUDDTCik5zC8/fYwSTQHEI6K
-         AK408OjT6Ai0A5t1O/gVzcxeLJfSCHK7CMoYAxzkv1slwEJ4eUmIkjNp2kxStv2RYnMb
-         9IqZe2luRx3LXaLW9Y3pj0+lkwir0OI/k4XcE8FhgtIPlJdIm064cCfqXOfIERgHH09/
-         AzwldCndh+qrxENVTBRJxAnDhy4lHcrJwQiwkZk4MRImsbHQmZOW70SRThmE4JPWMUYk
-         ZpywqhqdzsobYvTppiXCr3t9YFa5FSkqY7G4/apCYJXD6bqPY049ySzO2/FMRjCxSGjn
-         kFeg==
-X-Gm-Message-State: AOAM530rPDilTRdDwrn6NfBM7y1/1FoJBX0JpSPCapuMDTKpAc70rQrY
-        mIyQl70YlK0wB194VmT4uTNDRfS/EDIfAj04V+E=
-X-Google-Smtp-Source: ABdhPJz4z4+A4qrE8tW6yw3R0dvhDIaPQFmvZ6A7tcChRWYc8LeZ2UjnyoxlBGsucxUj3ZZcyefz3hzl/+j9onV6y14=
-X-Received: by 2002:a92:de41:: with SMTP id e1mr2196356ilr.289.1633630304343;
- Thu, 07 Oct 2021 11:11:44 -0700 (PDT)
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uJ7taHxnNG5zat1UONTlDWwij8GkRPpKOroOhjZh+LU=;
+        b=ASyapzQ1TTLyayg1ZkmNPv95xGZriS2xSZ6KHwHbJm2AwlQPJyumRVSz+UjDtTsqzj
+         847kI5EqE4rf+31nBsGy9c4iuSlCK+eiZGObi/ECdG7yKXR6jIy/lvIS9Ge9RNZBcpQO
+         CTk1HbZVmWmzowK+tnTao/XiwYgejRRbHS6LLuif8Gr7ivkVBwxpr8eykpvfI7vWzbfb
+         CCkZBOFWL+r2ouQO5HYqkp3/Fg2/m4rDIiAKBvqC5tU+9B7tqvAMGvu0yVgb6+Yq5DPz
+         stDj0n53TvkBjl9sLopkb0l8q1C9ZOCBxOXxZYN7lQLMQAdTwm3FB7v9hedTtr0mRKOy
+         cPmA==
+X-Gm-Message-State: AOAM531C7Xq6QfHk3l2VClh+AYJt6lNAHDd+AuJi+hWk8mIlOCoVY8s/
+        KNodE7RnUkIwaAnWMV16OIID6VDt3FI=
+X-Google-Smtp-Source: ABdhPJypGlnHc2uKM7IMbBtVrxNvFbXyKQiXfvlDwIeS/1sGXTClSKr+evnwZ994LEcLR+UaBHLKiQ==
+X-Received: by 2002:a05:6820:1612:: with SMTP id bb18mr4793486oob.7.1633634672323;
+        Thu, 07 Oct 2021 12:24:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o8sm84970oiw.39.2021.10.07.12.24.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Oct 2021 12:24:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <7aaa2734-514d-3752-01f1-fe3895718f55@gmx.de>
+ <20211002140451.GA34532@roeck-us.net>
+ <ce066c64-bf13-e6fa-278f-0dd6f2c2f45e@gmx.de>
+ <def290d3-8c45-a44b-ebc7-166a77e8a2b9@roeck-us.net>
+ <9f5c769b-416c-c431-5145-2ce9c0bb69ef@gmx.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: i5k_amb temp_mid replacement
+Message-ID: <c817fb03-a0c7-f562-5000-2c46bad58075@roeck-us.net>
+Date:   Thu, 7 Oct 2021 12:24:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211006222502.645003-1-pauk.denis@gmail.com> <20211006222502.645003-3-pauk.denis@gmail.com>
- <CAB95QARmjTBVRyru=ZDz9Wc5SX9EPFg7dg6vB+S8=pMtpg8FRw@mail.gmail.com>
- <20211007184644.1d042550@penguin.lxd> <CAB95QASYPRZSFnpE5u=SYJ49Hd+=BAZY==Ky8dzjL8h7YZj-CQ@mail.gmail.com>
-In-Reply-To: <CAB95QASYPRZSFnpE5u=SYJ49Hd+=BAZY==Ky8dzjL8h7YZj-CQ@mail.gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 7 Oct 2021 20:11:33 +0200
-Message-ID: <CAB95QAQ+u4DmF0e9Zvy5hDV0mFQDEULtr-newtz5_6y=Bzp+ww@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <9f5c769b-416c-c431-5145-2ce9c0bb69ef@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Denis and All,
+On 10/7/21 10:59 AM, Armin Wolf wrote:
+> Am 07.10.21 um 18:30 schrieb Guenter Roeck:
+>> On 10/7/21 7:20 AM, Armin Wolf wrote:
+>>> Am 02.10.21 um 16:04 schrieb Guenter Roeck:
+>>>> On Fri, Oct 01, 2021 at 12:13:53AM +0200, Armin Wolf wrote:
+>>>>> Hello,
+>>>>>
+>>>>> while trying to convert i5k_temp to the new hwmon API to resolve
+>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=208693,
+>>>>> i was asking myself whether or not temp_mid could be replaced with a
+>>>>> standard sysfs attribute?
+>>>>> Since afaik temp_mid and temp_max are both temperature limits, they
+>>>>> could potentially be replaced with
+>>>>> temp_max and temp_crit.
+>>>>>
+>>>> Quite likely. Unfortunately, the chipset documentation is not available
+>>>> to the public, so it is difficult to determine what those temperatures
+>>>> actually mean.
+>>>>
+>>>> Guenter
+>>> Darrick Wong says the chipset documentation would support such a change.
+>>> However, he fears that the changed meaning of tempX_max could confuse
+>>> userspace
+>>> programs.
+>>> But i think the current not using standard attribute names will confuse
+>>> even more
+>>> programms.
+>>
+>> I still don't know what temperature limits temp_mid and temp_max actually
+>> reflect, so I still can not really comment.
+>>
+>> Guenter
+> "Intel 6400/6402 Advanced Memory Buffer" seems to document that.
 
-regarding the asus-wmi-ec-sensors driver: it uses a WMI method to read
-EC registers, and this method is slow (requires almost a full second
-for a single call). Maybe I'm doing something wrong, but my impression
-is that the WMI calls themselves are that slow. I will try to
-reimplement this driver using direct EC operations and the global ACPI
-lock with a hope to make it read sensors quicker. If that works out,
-perhaps the nct6775 may go the same way, as it suffers too from the
-slow WMI calls. I know next to nothing about the ACPI system and learn
-from the beginning, so I'm not sure about the result. I know the naive
-reading from the ACPI EC registers leads to problems (fans get stuck,
-etc.), and if someone with knowledge can assure me that the idea with
-the ACPI global lock (as far as I understand it is even implemented in
-the ec kernel driver already) is correct, I would even request to stop
-accepting the EC WMI sensors driver, as it is so slow (albeit dead
-simple and small).
+Ah, thanks.
 
-Best regards,
-Eugen
+ From the description, it should be:
 
-On Thu, 7 Oct 2021 at 19:55, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
->
-> Hi Denis,
->
-> yes, the GH repo contains the fix and a few code cleanups, which I
-> would like to propose for mainlining too. Also, please find below a
-> draft of the documentation:
->
-> Kernel driver asus-wmi-ec-sensors
-> =================================
->
-> Authors:
->         <eugene.shalygin@gmail.com>
->
-> Description:
-> ------------
-> ASUS mainboards publish hardware monitoring information via Super I/O
-> chip and the ACPI embedded controller (EC) registers. Some of the sensors
-> are only available via the EC.
->
-> ASUS WMI interface provides a method (BREC) to read data from EC registers,
-> which is utilized by this driver to publish those sensor readings to the
-> HWMON system. The driver is aware of and reads the following sensors:
->
-> 1. Chipset (PCH) temperature
-> 2. CPU package temperature
-> 3. Motherboard temperature
-> 4. Readings from the T_Sensor header
-> 5. VRM temperature
-> 6. CPU_Opt fan RPM
-> 7. Chipset fan RPM
-> 8. Readings from the "Water flow meter" header (RPM)
-> 9. Readings from the "Water In" and "Water Out" temperature headers
-> 10. CPU current
->
-> Best regards,
-> Eugene
->
-> On Thu, 7 Oct 2021 at 17:46, Denis Pauk <pauk.denis@gmail.com> wrote:
-> >
-> > Hi Eugene,
-> >
-> > On Thu, 7 Oct 2021 01:32:14 +0200
-> > Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
-> >
-> > > On Thu, 7 Oct 2021 at 00:25, Denis Pauk <pauk.denis@gmail.com> wrote:
-> > > >
-> > >
-> > > > Supported motherboards:
-> > > > * ROG CROSSHAIR VIII HERO
-> > > > * ROG CROSSHAIR VIII DARK HERO
-> > > > * ROG CROSSHAIR VIII FORMULA
-> > > > * ROG STRIX X570-E GAMING
-> > > > * ROG STRIX B550-E GAMING
-> > >
-> > > Pro WS X570-ACE is missing from this list.
-> > Thanks, I will check.
-> > >
-> > > > + * EC provided:
-> > > provides
-> > Thanks, I will check.
-> > >
-> > > > + * Chipset temperature,
-> > > > + * CPU temperature,
-> > > > + * Motherboard temperature,
-> > > > + * T_Sensor temperature,
-> > > > + * VRM  temperature,
-> > > > + * Water In temperature,
-> > > > + * Water Out temperature,
-> > > > + * CPU Optional Fan,
-> > > Hereinafter "CPU Optional Fan RPM"?
-> > >
-> > Thanks, I will check.
-> > > > +static const enum known_ec_sensor
-> > > > known_board_sensors[BOARD_MAX][SENSOR_MAX + 1] = {
-> > > > +       [BOARD_PW_X570_A] = {
-> > > > +               SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU,
-> > > > SENSOR_TEMP_MB, SENSOR_TEMP_VRM,
-> > > > +               SENSOR_FAN_CHIPSET,
-> > >
-> > > I missed SENSOR_CURR_CPU for a few boards, and unfortunately the
-> > > mistake made it here too. Sorry for that.
-> > >
-> > Do you have such fix in your repository?
-> > > > +/**
-> > > > + * struct asus_wmi_ec_info - sensor info.
-> > > > + * @sensors: list of sensors.
-> > > > + * @read_arg: UTF-16 string to pass to BRxx() WMI function.
-> > > > + * @read_buffer: WMI function output.
-> > >
-> > > This seems to be a bit misleading to me in a sense that the variable
-> > > holds decoded output (array of numbers as opposed to array of
-> > > characters in the WMI output buffer.
-> > >
-> > > > +struct asus_wmi_data {
-> > > > +       int ec_board;
-> > > > +};
-> > >
-> > > A leftover?
-> > >
-> > Its platform data and used to share board_id with probe.
-> >
-> > > > +static void asus_wmi_ec_decode_reply_buffer(const u8 *inp, u8 *out)
-> > > > +{
-> > > > +       unsigned int len = ACPI_MIN(ASUS_WMI_MAX_BUF_LEN, inp[0] /
-> > > > 4);
-> > > > +       char buffer[ASUS_WMI_MAX_BUF_LEN * 2];
-> > > > +       const char *pos = buffer;
-> > > > +       const u8 *data = inp + 2;
-> > > > +       unsigned int i;
-> > > > +
-> > > > +       utf16s_to_utf8s((wchar_t *)data, len * 2,
-> > > > UTF16_LITTLE_ENDIAN, buffer, len * 2);
-> > > Errr... Why is it here? You need the same loop afterwards, just with a
-> > > smaller stride.
-> > I have tried to apply Andy's idea. And it looks it does not
-> > provide benefits. Andy, what do you think? Maybe I understand it in
-> > wrong way.
-> > > > +
-> > > > +       for (i = 0; i < len; i++, pos += 2)
-> > > > +               out[i] = (hex_to_bin(pos[0]) << 4) +
-> > > > hex_to_bin(pos[1]); +}
-> > > > +
-> > > > +static void asus_wmi_ec_encode_registers(u16 *registers, u8 len,
-> > > > char *out) +{
-> > > > +       char buffer[ASUS_WMI_MAX_BUF_LEN * 2];
-> > > > +       char *pos = buffer;
-> > > > +       unsigned int i;
-> > > > +       u8 byte;
-> > > > +
-> > > > +       *out++ = len * 8;
-> > > > +       *out++ = 0;
-> > > > +
-> > > > +       for (i = 0; i < len; i++) {
-> > > > +               byte = registers[i] >> 8;
-> > > > +               *pos = hex_asc_hi(byte);
-> > > > +               pos++;
-> > > > +               *pos = hex_asc_lo(byte);
-> > > > +               pos++;
-> > > > +               byte = registers[i];
-> > > > +               *pos = hex_asc_hi(byte);
-> > > > +               pos++;
-> > > > +               *pos = hex_asc_lo(byte);
-> > > > +               pos++;
-> > > > +       }
-> > > > +
-> > > > +       utf8s_to_utf16s(buffer, len * 4, UTF16_LITTLE_ENDIAN,
-> > > > (wchar_t *)out, len * 4);
-> > > Same here. Just for the sake of calling utf8s_to_utf16s() you need the
-> > > same loop plus an additional buffer. I don't get it.
-> > >
-> > I have tried to apply Andy's idea. And it looks it does not
-> > provide benefits. Andy, what do you think? Maybe I understand it in
-> > wrong way.
-> > > > +}
-> > > > +
-> > > > +static void asus_wmi_ec_make_block_read_query(struct
-> > > > asus_wmi_ec_info *ec) +{
-> > > > +       u16 registers[ASUS_WMI_BLOCK_READ_REGISTERS_MAX];
-> > > > +       const struct ec_sensor_info *si;
-> > > > +       long i, j, register_idx = 0;
-> > > long? maybe a simple unsigned or int?
-> > >
-> > Looks as it was in original patch, I will look.
-> > > > +
-> > > > +static int asus_wmi_ec_update_ec_sensors(struct asus_wmi_ec_info
-> > > > *ec) +{
-> > > > +       const struct ec_sensor_info *si;
-> > > > +       struct ec_sensor *s;
-> > > > +
-> > > > +       u32 value;
-> > > This variable is now redundant.
-> > >
-> > Thank you, I will look.
-> >
-> > > > +               if (si->addr.size == 1)
-> > > Maybe switch(si->addr.size)?
-> > >
-> > Thank you, I will check.
-> > > > +                       value = ec->read_buffer[read_reg_ct];
-> > > > +               else if (si->addr.size == 2)
-> > > > +                       value =
-> > > > get_unaligned_le16(&ec->read_buffer[read_reg_ct]);
-> > > > +               else if (si->addr.size == 4)
-> > > > +                       value =
-> > > > get_unaligned_le32(&ec->read_buffer[read_reg_ct]); +
-> > > > +               read_reg_ct += si->addr.size;
-> > > > +               s->cached_value = value;
-> > > > +       }
-> > > > +       return 0;
-> > > > +}
-> > >
-> > >
-> > > > +       mutex_lock(&sensor_data->lock);
-> > > The mutex locking/unlocking should be moved inside the
-> > > update_ec_sensors(), I guess.
-> > >
-> > > I re-read your answer to my question as to why don't you add module
-> > > aliases to the driver, and I have to admit I don't really understand
-> > > it. Could you, please, elaborate?
-> > >
-> > It looked complicated to support two kind of WMI interfaces with UUID.
-> > As we split big support module to two separate - I will look to such
-> > change also.
-> >
-> > > Thank you,
-> > > Eugene
-> >
-> > Best regards,
-> >      Denis.
+TEMPLO -> temp1_max
+TEMPMID -> temp1_crit
+TEMPHI -> temp1_emergency
+
+The respective _alarm attributes should be supported as well (via TEMPSTAT),
+but that would be a separate patch.
+
+Guenter
