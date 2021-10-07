@@ -2,196 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0ABAC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 12:53:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 917AEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 14:20:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94D6961019
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 12:53:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C12F610E6
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 14:20:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbhJGMzI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Oct 2021 08:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbhJGMzD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 08:55:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94BEC061746
-        for <linux-hwmon@vger.kernel.org>; Thu,  7 Oct 2021 05:53:09 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mYStU-0003eE-SQ; Thu, 07 Oct 2021 14:53:04 +0200
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mYStT-0000on-Ry; Thu, 07 Oct 2021 14:53:03 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: [PATCH v1] hwmon: (tmp103) Convert tmp103 to use new hwmon registration API
-Date:   Thu,  7 Oct 2021 14:53:01 +0200
-Message-Id: <20211007125301.3030-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S241977AbhJGOWM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Oct 2021 10:22:12 -0400
+Received: from mout.gmx.net ([212.227.15.19]:47975 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233362AbhJGOWL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 7 Oct 2021 10:22:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1633616403;
+        bh=fLWtbxnHrDMDNhhgtCLeROtZovfBVoqBiBhdaqpUAfk=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Biv6d6cSM0Wxa+8i4V0jMX4aMkbS3hkbk2FpBvQU9l2Wt5v0K4YDDI7RQxN4Q58EH
+         lUCf9nt+JXwqp04OIrOony0TtfP0oP98cWdstnP6Ttbq//hKZz61/pOM8L0zGpE11i
+         AjK6wf/xdCo7mrNIVYxpK0zRePoPnwNmgUi6R5xQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.42] ([91.137.126.34]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MD9X9-1mh2yR3a2j-0098Lh; Thu, 07
+ Oct 2021 16:20:02 +0200
+Subject: Re: i5k_amb temp_mid replacement
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <7aaa2734-514d-3752-01f1-fe3895718f55@gmx.de>
+ <20211002140451.GA34532@roeck-us.net>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <ce066c64-bf13-e6fa-278f-0dd6f2c2f45e@gmx.de>
+Date:   Thu, 7 Oct 2021 16:20:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <20211002140451.GA34532@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:gEyqo6iqjX1Yp75drlWWP6uLzLD5nT5ZGQMh8t5aEc3a4R/Zeco
+ okWZZ0dAvqvpVMogNJDyoWkYkHbxus/wZ+4BELeMUcfGBuD4PYpNLCAQcyzzua4vZMFZN+4
+ dVOFglJFUDD3+I5I88QPLlYN3tli611y//pAyypvvVTpzGmTyKpDSqvUWG5RfNDFW70BqlR
+ aRmDAygmBXdERjrBtMbng==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bUPRnqHN3DM=:CjogQRAV/OIZ6A7FbR7iso
+ 9/+8y1ueijxdqIDf91ZZEKeR0JBAiCOLZxJjBT1nZd3qXZcAPZ+wKvnXRZjHnH9VojNtB5L0p
+ 2ReiscEbd62TrnR87DgbBJ+YTB7bMM7SYbrufyLEFjZCZO5ORBjNy5OtrJltWhdlBWQ6Skim3
+ TBSHObTAq7Judq7FZinFz/bwy2ScsyB3BJFIkTJf6UPh6cHcb8+aH47rb1gJ0bqcKXvMRhvxP
+ SnzgZm7dksnAEQyXYP0KQHCFMnP2EHpzQeh6LNND1SxjK5DGK91fEptkAGa7+vyRyED+m2MFw
+ Rfq7TIofLr8YkGbTs6I77vVeT/snR4wg88u9Z2CXsy+Hc103Eshfz6uWRdKqpxNkUjT5Vcm80
+ 0YkzxzAmxFy60dLio3W/TdU9e+ZdZ/UUk0eGQ74raHmo5ZPVIbkm6O9xtYNApwKU+t7vSLYW/
+ J3bruitusjRGQszo7knwR1Cie8/7000zJ+GOq6VKDB5rfpoQD9zj2kZy8m/eIkvSkofaxQfmv
+ Xia7cocvyG/XfElKbDW9G8LddQcpWzO/iPnNQc8OBBXvWPhee5GPZ0A7UIzURrCKvDLZRr1KF
+ mjXvnZctUY8JUFdrT8Lh931yWK5cOQ4fN1eBA+6zcpeLNbcOJ0Z1Sz+8qttdH6Ob6M+NPNIwg
+ 5X2pCm6s7wuJsQY+MxdjFImB/Y593ytkVE2PZSCO50nP90WEL+dixM00upI4cqYXWqa3HOo+5
+ ND9zCCrXTFm4ecY50KP5ALfHsaV6/DWAl+0pE3ssbNkDAEgpEg+tP4+Xs7L5VSPZOJ6711xt6
+ +MoVhzPrGg/hds01ILTiETyDxs2q2+QNKXrP2HKxtmuEuw9oyIwCw7G+7Q3YuNRQe+c8cbUXM
+ A8eFMkJZdUV48mt4tKyuDndEta/JmjyGVQFPYlWhVh64HYNdPeo8W4rWrMruZ2YUC6hB+Cy8W
+ uWheQ5KZfAG9/vBav3w17k4biV8hLW+kkS81lC0qPmmjpxT6pLQRa2pNhc0Q18mFCSyAAlxJM
+ TXaDPul84/fhkY2RmCAzxUO3Ic1oF++4svWKFz2TTqLf6WOCO/p9b2OmTxf0TG3uWlWbJu4i6
+ NUVexfi25/nlIc=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use devm_hwmon_device_register_with_info() which will make thermal framework
-work.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/hwmon/tmp103.c | 105 +++++++++++++++++++++++++++++------------
- 1 file changed, 74 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/hwmon/tmp103.c b/drivers/hwmon/tmp103.c
-index a7e202cc8323..5cab4436aa77 100644
---- a/drivers/hwmon/tmp103.c
-+++ b/drivers/hwmon/tmp103.c
-@@ -51,51 +51,92 @@ static inline u8 tmp103_mc_to_reg(int val)
- 	return DIV_ROUND_CLOSEST(val, 1000);
- }
- 
--static ssize_t tmp103_temp_show(struct device *dev,
--				struct device_attribute *attr, char *buf)
-+static int tmp103_read(struct device *dev, enum hwmon_sensor_types type,
-+		       u32 attr, int channel, long *temp)
- {
--	struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
- 	struct regmap *regmap = dev_get_drvdata(dev);
- 	unsigned int regval;
--	int ret;
-+	int err, reg;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		reg = TMP103_TEMP_REG;
-+		break;
-+	case hwmon_temp_min:
-+		reg = TMP103_TLOW_REG;
-+		break;
-+	case hwmon_temp_max:
-+		reg = TMP103_THIGH_REG;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
- 
--	ret = regmap_read(regmap, sda->index, &regval);
--	if (ret < 0)
--		return ret;
-+	err = regmap_read(regmap, reg, &regval);
-+	if (err < 0)
-+		return err;
-+
-+	*temp = tmp103_reg_to_mc(regval);
- 
--	return sprintf(buf, "%d\n", tmp103_reg_to_mc(regval));
-+	return 0;
- }
- 
--static ssize_t tmp103_temp_store(struct device *dev,
--				 struct device_attribute *attr,
--				 const char *buf, size_t count)
-+static int tmp103_write(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long temp)
- {
--	struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
- 	struct regmap *regmap = dev_get_drvdata(dev);
--	long val;
--	int ret;
--
--	if (kstrtol(buf, 10, &val) < 0)
--		return -EINVAL;
-+	int reg;
-+
-+	switch (attr) {
-+	case hwmon_temp_min:
-+		reg = TMP103_TLOW_REG;
-+		break;
-+	case hwmon_temp_max:
-+		reg = TMP103_THIGH_REG;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
- 
--	val = clamp_val(val, -55000, 127000);
--	ret = regmap_write(regmap, sda->index, tmp103_mc_to_reg(val));
--	return ret ? ret : count;
-+	temp = clamp_val(temp, -55000, 127000);
-+	return regmap_write(regmap, reg, tmp103_mc_to_reg(temp));
- }
- 
--static SENSOR_DEVICE_ATTR_RO(temp1_input, tmp103_temp, TMP103_TEMP_REG);
-+static umode_t tmp103_is_visible(const void *data, enum hwmon_sensor_types type,
-+				 u32 attr, int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return 0444;
-+	case hwmon_temp_min:
-+	case hwmon_temp_max:
-+		return 0644;
-+	default:
-+		return 0;
-+	}
-+}
- 
--static SENSOR_DEVICE_ATTR_RW(temp1_min, tmp103_temp, TMP103_TLOW_REG);
-+static const struct hwmon_channel_info *tmp103_info[] = {
-+	HWMON_CHANNEL_INFO(chip,
-+			   HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN),
-+	NULL
-+};
- 
--static SENSOR_DEVICE_ATTR_RW(temp1_max, tmp103_temp, TMP103_THIGH_REG);
-+static const struct hwmon_ops tmp103_hwmon_ops = {
-+	.is_visible = tmp103_is_visible,
-+	.read = tmp103_read,
-+	.write = tmp103_write,
-+};
- 
--static struct attribute *tmp103_attrs[] = {
--	&sensor_dev_attr_temp1_input.dev_attr.attr,
--	&sensor_dev_attr_temp1_min.dev_attr.attr,
--	&sensor_dev_attr_temp1_max.dev_attr.attr,
--	NULL
-+static const struct hwmon_chip_info tmp103_chip_info = {
-+	.ops = &tmp103_hwmon_ops,
-+	.info = tmp103_info,
- };
--ATTRIBUTE_GROUPS(tmp103);
- 
- static bool tmp103_regmap_is_volatile(struct device *dev, unsigned int reg)
- {
-@@ -130,8 +171,10 @@ static int tmp103_probe(struct i2c_client *client)
- 	}
- 
- 	i2c_set_clientdata(client, regmap);
--	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
--						      regmap, tmp103_groups);
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-+							 regmap,
-+							 &tmp103_chip_info,
-+							 NULL);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
--- 
-2.30.2
-
+Am 02.10.21 um 16:04 schrieb Guenter Roeck:
+> On Fri, Oct 01, 2021 at 12:13:53AM +0200, Armin Wolf wrote:
+>> Hello,
+>>
+>> while trying to convert i5k_temp to the new hwmon API to resolve
+>> https://bugzilla.kernel.org/show_bug.cgi?id=3D208693,
+>> i was asking myself whether or not temp_mid could be replaced with a
+>> standard sysfs attribute?
+>> Since afaik temp_mid and temp_max are both temperature limits, they
+>> could potentially be replaced with
+>> temp_max and temp_crit.
+>>
+> Quite likely. Unfortunately, the chipset documentation is not available
+> to the public, so it is difficult to determine what those temperatures
+> actually mean.
+>
+> Guenter
+Darrick Wong says the chipset documentation would support such a change.
+However, he fears that the changed meaning of tempX_max could confuse
+userspace
+programs.
+But i think the current not using standard attribute names will confuse
+even more
+programms.
