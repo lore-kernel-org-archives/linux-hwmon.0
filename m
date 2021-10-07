@@ -2,55 +2,55 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 862CBC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 17:15:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 612DEC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 17:17:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6496361108
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 17:15:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42C0061058
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 17:17:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243235AbhJGRRf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Oct 2021 13:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S243255AbhJGRTc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Oct 2021 13:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243237AbhJGRR3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 13:17:29 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4B4C061766;
-        Thu,  7 Oct 2021 10:15:32 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id b20so28276252lfv.3;
-        Thu, 07 Oct 2021 10:15:32 -0700 (PDT)
+        with ESMTP id S243247AbhJGRTa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 13:19:30 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C14BC061570;
+        Thu,  7 Oct 2021 10:17:36 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j5so27799415lfg.8;
+        Thu, 07 Oct 2021 10:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NIxkOYZD3SQeLxgVfmJVcRBH3mIOFhTfejZZK0VOTEI=;
-        b=myKC6j3aOfPOsrwrJgAL/kMPPZju9yCC4zTEqz+J506egvxTExZCMEs3XUuX5Pd3gV
-         l1Jf4GfFUqkZHvegBkiLF5rDyiUHSiydhLEd/YgKjTBnO4wtZNoFTco378pEGsX4Rqro
-         KAnVpIKYdyde8RIQSD6NvadQHxnqrGiXvZlMG0IspIdxfjYKXotn0pG4/aEWXdlGMjgT
-         ig1oiUWp2OJX6rMPyf5jFfcffLLl0K+MgPnpagV7Pxu5ZHGPHVXU3mUGBPccHpgVbM08
-         HwWc3kMBM+Nr7+sDh4/c+a9A59fD5PxpBTvfEZBuhhvMaFMxIoxbi/u1nNJuy9OOuZjF
-         xMtQ==
+        bh=pRmsqag7JHbP9u4fBQp3zn6ndxCUEHPdvN6gk2oA4MQ=;
+        b=Re4WjYlyiUr57g/lZSljrVma6z9YOMVb90aOLzHT/XyCGKOmHuN7uvBwBqzwZXcH2X
+         GE5z0t8iKGE3OxUTtOZqhxVecOk7LGkgHBLUaoJd/4iGDZofu2kWz3jGwCm/vgCxSY2O
+         4D5y6+x07gwY5EbVS7OawkMUOvR/RDvf4enszDCY+T5Mlv5WR1INTZASuzAprV0t76+V
+         QP4PiQWIVm+NWmR4lA0qXzituF+h4e+myqYDvuvhAxbX9A+P0ANZ3S4aOR721WEcNc8L
+         cT1QYSeFSa9BsKgo5WkilMvg9qP0+wDwpgURiZPuinCoYVv7dqqkH4/RlwyRmjr9V2wq
+         p7zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NIxkOYZD3SQeLxgVfmJVcRBH3mIOFhTfejZZK0VOTEI=;
-        b=vC5/nV+0Gh6N4D/eUCNEbI1vajgG6ol2ff0O4+mk5E6xcNkDFTGg70eNZU0R+eujsi
-         fzIbGeU6YrD8e/i9USUgmKGfXVL0vqoUUxClMgcbyXcxpVIFBdgIgouvd7E09DxjkRwG
-         KDqafxV0ZiB1KPhJwCzEjoxOXVro9Q/WLB+GONIpW8okoTsZXUSWINe4/a26QkKOLoBs
-         HkZmwuc+H3WdmbsfitBsOskShBqqAOywYF8DGjUF93m5l/QqVkm8DVYDtKo+dUuTk4nn
-         FOlwQP9ePQl/JwO++AvSEZfmkM2O/yd1tCnLk9Dt+4s48YKBRjo8KxY4R9fF47HrFU9m
-         TibA==
-X-Gm-Message-State: AOAM531/fH2aCz0yph0xEHxefFF6cdMopi5xQ2DkQxF3odd6bPCSYG1Y
-        6Y83gUY51DtycIa3pG0G5n17yG6GkQZIzw==
-X-Google-Smtp-Source: ABdhPJzhndPtRlGzoFSFbBkxzoJaxPv1LfiIDmf7rXJW/D5A+Bf94kXo2ecVNT4h5mBvTTfk3vG2Hg==
-X-Received: by 2002:ac2:4f02:: with SMTP id k2mr5309328lfr.378.1633626930261;
-        Thu, 07 Oct 2021 10:15:30 -0700 (PDT)
+        bh=pRmsqag7JHbP9u4fBQp3zn6ndxCUEHPdvN6gk2oA4MQ=;
+        b=6jjE99t/8Grvon7dG3i/r7AdehSyT47cSbfOMrqiEDP1Q+qrMM2HP7phK5Pm51+2bS
+         vvRzHyWPVlWkbViTMia34jVjzogCau2Klz2XA5PiZAykl1CfFSJKH1jOozaFYjnoAaQY
+         6qsiL4PGJpmWHNKTZfgCnMTHb/3Q5kJkAAyemCK7c1sh4L9VFZzJnSOFoW5wd2Y4TZsd
+         p2SRuunCANSRtMK9fuKigLKhiMhlFFJ2MEXZzmRcXhwMr47L9FHlksp/HsTVl9VHs2q/
+         qT4y4WUnoqADC577jyeWCyV93DMVqCR3Dt0mm7nZq5V5yxQlHafowzwPLWig6b9iP215
+         ACsA==
+X-Gm-Message-State: AOAM530JMRGSKAVdoE+SckJUvPTNUzTQJOha0WJv4QnXnNQcjrtNq6t9
+        NbkyHlgE0TGP/evV+NCxJWI=
+X-Google-Smtp-Source: ABdhPJzads/aXmvyAROylm0WODhSyWQd70RxGSPddvBI5rb8pH3liAHeCq5BG7WDiKt/Jv75hlINxQ==
+X-Received: by 2002:a05:6512:b81:: with SMTP id b1mr5411881lfv.301.1633627054299;
+        Thu, 07 Oct 2021 10:17:34 -0700 (PDT)
 Received: from penguin.lxd ([94.153.83.245])
-        by smtp.gmail.com with ESMTPSA id t26sm12352lfp.173.2021.10.07.10.15.25
+        by smtp.gmail.com with ESMTPSA id l14sm13528lfe.124.2021.10.07.10.17.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 10:15:30 -0700 (PDT)
-Date:   Thu, 7 Oct 2021 20:14:50 +0300
+        Thu, 07 Oct 2021 10:17:34 -0700 (PDT)
+Date:   Thu, 7 Oct 2021 20:17:22 +0300
 From:   Denis Pauk <pauk.denis@gmail.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     andy.shevchenko@gmail.com,
@@ -59,11 +59,11 @@ Cc:     andy.shevchenko@gmail.com,
         linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH v2 2/3] hwmon: (asus_wmi_ec_sensors) Support B550 Asus
  WMI.
-Message-ID: <20211007201450.6d83306c@penguin.lxd>
-In-Reply-To: <03d7f2ea-7e6e-dfef-2bb6-36348f73c906@roeck-us.net>
+Message-ID: <20211007201722.51e0407a@penguin.lxd>
+In-Reply-To: <3ddba12c-94cc-04fa-5c21-983419d62a5f@roeck-us.net>
 References: <20211006222502.645003-1-pauk.denis@gmail.com>
         <20211006222502.645003-3-pauk.denis@gmail.com>
-        <03d7f2ea-7e6e-dfef-2bb6-36348f73c906@roeck-us.net>
+        <3ddba12c-94cc-04fa-5c21-983419d62a5f@roeck-us.net>
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,7 +72,7 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 7 Oct 2021 09:47:27 -0700
+On Thu, 7 Oct 2021 09:41:30 -0700
 Guenter Roeck <linux@roeck-us.net> wrote:
 
 > On 10/6/21 3:25 PM, Denis Pauk wrote:
@@ -117,24 +117,8 @@ Guenter Roeck <linux@roeck-us.net> wrote:
 > >   drivers/hwmon/Kconfig               |  13 +-
 > >   drivers/hwmon/Makefile              |   1 +
 > >   drivers/hwmon/asus_wmi_ec_sensors.c | 631
-> > ++++++++++++++++++++++++++++ =20
->=20
-> Documentation needed. Also,what is the difference to the hwmon device
-> instantiated from drivers/platform/x86/asus-wmi.c, and how is it
-> guaranteed that there is no overlap ?
->=20
-> Guenter
->=20
-
-Both modules in patch series use "466747A0-70EC-11DE-8A39-0800200C9A66"
-when asus-wmi uses "97845ED0-4E6D-11DE-8A39-0800200C9A66".
-
-I will create documentation.
-
-Thank you.
-=20
-> >   4 files changed, 651 insertions(+), 1 deletion(-)
-> >   create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
+> > ++++++++++++++++++++++++++++ 4 files changed, 651 insertions(+), 1
+> > deletion(-) create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
 > >=20
 > > diff --git a/MAINTAINERS b/MAINTAINERS
 > > index bae3f62f548f..bc2e981a54e2 100644
@@ -163,7 +147,13 @@ Thank you.
 > >   config SENSORS_AMC6821
 > >   	tristate "Texas Instruments AMC6821"
 > > -	depends on I2C
-> > +	depends on I2C
+> > +	depends on I2C =20
+>=20
+> Completely unrelated and unacceptable change.
+>=20
+Yes, I will remove it.
+
+Thank you.=20
 > >   	help
 > >   	  If you say yes here you get support for the Texas
 > > Instruments AMC6821 hardware monitoring chips.
