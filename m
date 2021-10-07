@@ -2,130 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B6ACC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 10:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F0BBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 10:56:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4159B60FC3
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 10:35:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7645761058
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 10:56:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240858AbhJGKhV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Oct 2021 06:37:21 -0400
-Received: from vulcan.natalenko.name ([104.207.131.136]:40728 "EHLO
-        vulcan.natalenko.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240366AbhJGKhT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 06:37:19 -0400
-Received: from spock.localnet (unknown [151.237.229.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id BF956C28BEC;
-        Thu,  7 Oct 2021 12:35:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1633602921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8ZOoCbKAPjDNrQy/OXhFF0+1/alnvKQYS65joiIyPbc=;
-        b=FCBYYGdGG51IwgzWKihaUN4G1q0oqR5s5RiwQJjatiNBJ3YkJsQ9UdRP8jtypI6VFuHvrb
-        It8f1aLgt8yR6x+vY63Z7GvbaJswxtu57q5JAO+7CvchAn5671PEKu3PGm8FHnrLzaozkX
-        WxWMov3djeuai4zWx5iOPbY5qm0OV0E=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+        id S240800AbhJGK6R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Oct 2021 06:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232810AbhJGK6P (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 06:58:15 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26991C061746;
+        Thu,  7 Oct 2021 03:56:22 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id x1so2301208iof.7;
+        Thu, 07 Oct 2021 03:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=23gZkYObBsS9Oz5ktS9sLtCgLLCB25YH4/s8PNfqgmI=;
+        b=V3OGQW4hPGJ6lZQLXw+ruDHmH5KvebYrClY7D+6/GJACExdiAhHzLf4n8LNWRn1fLd
+         VB7bDLWaOBF9cyD2gZoRnqQDNH0GYkaPJafzX7FeqI5fDnh19VtodYxatxP7pU0M56DF
+         sPnCnsLfPu9MXnwj4CYb6+mVTEclSs05XpKu9OkUBAvOkl+sOXKRK6c0osdVp3Lcop4c
+         7FFSCzBF727P75fzJZfwEGYO2FlM0jNxjFGCvDYGPwWu9MhJkbZgfgdTccU48RECrsDs
+         TmfZ3b5bBwuc3cXqUAwOL4FK9GvUAqmYPTWY/XKo0PZididPiadxo4UmPLso0wZcdKpc
+         S3gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=23gZkYObBsS9Oz5ktS9sLtCgLLCB25YH4/s8PNfqgmI=;
+        b=jDSwdJInD6zknMJrB44XLr6NW5QgNxd7z0dO72cCFcdyZ+05g1wCfP3ORPAeJFcSCu
+         xSp5HahN9RKAn5wop7MB5n3RrGIJx6kqGn3kueffQLoiN+D9t7Tarvnibq1/zHBjkdw8
+         bXG2T9xu5bpbrwOSZB4Cz58UN+2MIZ23QJdHTUVp/ATekiv3IC71g4IATJTnmulddCL3
+         0kkQw0XpSjCshBCiNdWwQbe9Zfw8+YiURggemo1+mYR3QznfixdIOlUBVsqIeN5HW6vL
+         2SmZuSuhOfIzbUFelE+7vbMMOAO2wVM8M2Dwy+tJznoJPMaPGBO1krgS43+NOhRPQ/pT
+         iOMA==
+X-Gm-Message-State: AOAM531tYkOQp4fnAEExplmx83xsPW6YngR8B8ZG43s3QP3kmM/g0yfZ
+        h7tse461TLH80XomDizxqGi96tFZO0QqV2hWZJA=
+X-Google-Smtp-Source: ABdhPJwZKwsiANsg+UcfYgpf9G8lRlY/XlXD48WbnKmE8u1o5TkbjgyLVxLDudYTFxaewl53ADYtcKRk2KXfxt3MJG0=
+X-Received: by 2002:a6b:f816:: with SMTP id o22mr2692120ioh.106.1633604181530;
+ Thu, 07 Oct 2021 03:56:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211006222502.645003-1-pauk.denis@gmail.com> <20211006222502.645003-4-pauk.denis@gmail.com>
+In-Reply-To: <20211006222502.645003-4-pauk.denis@gmail.com>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Thu, 7 Oct 2021 12:56:09 +0200
+Message-ID: <CAB95QASyv0MGiPGeu3ie7VSK_EjOR7x6kRsK57J5W-56dU0Nxw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
 To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
-        matt-testalltheway <sefoci9222@rerunway.com>,
-        Kamil Dudka <kdudka@redhat.com>,
-        Robert Swiecki <robert@swiecki.net>,
-        Kamil Pietrzak <kpietrzak@disroot.org>, Igor <igor@svelig.com>,
+Cc:     andy.shevchenko@gmail.com, Ed Brindley <kernel@maidavale.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] hwmon: (nct6775) Add additional ASUS motherboards
-Date:   Thu, 07 Oct 2021 12:35:19 +0200
-Message-ID: <9337468.ToWr0jQUh6@natalenko.name>
-In-Reply-To: <20211006222502.645003-2-pauk.denis@gmail.com>
-References: <20211006222502.645003-1-pauk.denis@gmail.com> <20211006222502.645003-2-pauk.denis@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam: Yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello.
+Hello, Denis,
 
-On =C4=8Dtvrtek 7. =C5=99=C3=ADjna 2021 0:24:59 CEST Denis Pauk wrote:
-> Add support:
-> * PRIME B360-PLUS
-> * PRIME X570-PRO
-> * ROG CROSSHAIR VIII FORMULA
-> * ROG STRIX B550-I GAMING
-> * ROG STRIX X570-F GAMING
-> * ROG STRIX Z390-E GAMING
-> * TUF GAMING B550-PRO
-> * TUF GAMING Z490-PLUS
-> * TUF GAMING Z490-PLUS (WI-FI)
->=20
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=3D204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Tested-by: matt-testalltheway <sefoci9222@rerunway.com>
-> Tested-by: Kamil Dudka <kdudka@redhat.com>
-> Tested-by: Robert Swiecki <robert@swiecki.net>
-> Tested-by: Kamil Pietrzak <kpietrzak@disroot.org>
-> Tested-by: Igor <igor@svelig.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> ---
-> Changes in v2:
->   - Without changes.
-> ---
->  drivers/hwmon/nct6775.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index aa58ead0ad43..8eaf86ea2433 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -4986,20 +4986,29 @@ static int __init nct6775_find(int sioaddr, struct
-> nct6775_sio_data *sio_data) static struct platform_device *pdev[2];
->=20
->  static const char * const asus_wmi_boards[] =3D {
-> +	"PRIME B360-PLUS",
->  	"PRIME B460-PLUS",
-> +	"PRIME X570-PRO",
->  	"ROG CROSSHAIR VIII DARK HERO",
-> +	"ROG CROSSHAIR VIII FORMULA",
->  	"ROG CROSSHAIR VIII HERO",
->  	"ROG CROSSHAIR VIII IMPACT",
->  	"ROG STRIX B550-E GAMING",
->  	"ROG STRIX B550-F GAMING",
->  	"ROG STRIX B550-F GAMING (WI-FI)",
-> +	"ROG STRIX B550-I GAMING",
-> +	"ROG STRIX X570-F GAMING",
-> +	"ROG STRIX Z390-E GAMING",
->  	"ROG STRIX Z490-I GAMING",
->  	"TUF GAMING B550M-PLUS",
->  	"TUF GAMING B550M-PLUS (WI-FI)",
->  	"TUF GAMING B550-PLUS",
-> +	"TUF GAMING B550-PRO",
->  	"TUF GAMING X570-PLUS",
->  	"TUF GAMING X570-PLUS (WI-FI)",
->  	"TUF GAMING X570-PRO (WI-FI)",
-> +	"TUF GAMING Z490-PLUS",
-> +	"TUF GAMING Z490-PLUS (WI-FI)",
->  };
->=20
->  static int __init sensors_nct6775_init(void)
+On Thu, 7 Oct 2021 at 00:25, Denis Pauk <pauk.denis@gmail.com> wrote:
 
-Please also add ASUS Pro WS X570-ACE as shown here [1].
+> +MODULE_AUTHOR("Eugene Shalygin <eugene.shalygin@gmail.com>");
 
-Thanks.
+No, I am not.
 
-[1] https://lore.kernel.org/lkml/20211003133344.9036-2-oleksandr@natalenko.=
-name/
+Best regards,
+Eugene
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
-
+P.S. You stripped module aliases for this one too. Why? This driver
+certainly can benefit from them, because the presence of the specific
+WMI UUIDs unambiguously defines its condition to work.
