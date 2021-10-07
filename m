@@ -2,90 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 917AEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 14:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB359C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 15:37:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C12F610E6
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 14:20:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDB0760FC3
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Oct 2021 15:37:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241977AbhJGOWM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Oct 2021 10:22:12 -0400
-Received: from mout.gmx.net ([212.227.15.19]:47975 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233362AbhJGOWL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 7 Oct 2021 10:22:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1633616403;
-        bh=fLWtbxnHrDMDNhhgtCLeROtZovfBVoqBiBhdaqpUAfk=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Biv6d6cSM0Wxa+8i4V0jMX4aMkbS3hkbk2FpBvQU9l2Wt5v0K4YDDI7RQxN4Q58EH
-         lUCf9nt+JXwqp04OIrOony0TtfP0oP98cWdstnP6Ttbq//hKZz61/pOM8L0zGpE11i
-         AjK6wf/xdCo7mrNIVYxpK0zRePoPnwNmgUi6R5xQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.42] ([91.137.126.34]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MD9X9-1mh2yR3a2j-0098Lh; Thu, 07
- Oct 2021 16:20:02 +0200
-Subject: Re: i5k_amb temp_mid replacement
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <7aaa2734-514d-3752-01f1-fe3895718f55@gmx.de>
- <20211002140451.GA34532@roeck-us.net>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <ce066c64-bf13-e6fa-278f-0dd6f2c2f45e@gmx.de>
-Date:   Thu, 7 Oct 2021 16:20:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S240809AbhJGPjB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Oct 2021 11:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230060AbhJGPi7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Oct 2021 11:38:59 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA58FC061570;
+        Thu,  7 Oct 2021 08:37:05 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id j5so26595800lfg.8;
+        Thu, 07 Oct 2021 08:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3oI1BPN+nka/fzeeDadlYPWTNRGu2uv1un/7jFglctU=;
+        b=hI6IAHPtxsN/zUMag/AikB2qPujAq4WmyQDQZ6or4zGzt/r2JuQ5UcFxpxPK14VFbG
+         qC6IB/grAoBRIXdRKWZLe94jlo0BL+H7Mw/2A2wiilSJmU2UMbqjZcRj4ZYMear3J9It
+         +qHolatwuCCfjYDpBJ8f0dyt5sKUIuf9EQN3tPpusw5hocpHreYiTWTIUDB8eVSKdqvS
+         CawyN0ZigfaZ5+ClhjAereXSKGWt1hfm0YKdFMBwLcHdROMl3Epe1wnhVcYZfn9GdOw6
+         VH8cwOJf9cc9UAMRIhUP5EC+ZEyhbE4ZJdpTE34PZHWH7UvcaTgV8NJ1c+41GoFbjubU
+         IF9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3oI1BPN+nka/fzeeDadlYPWTNRGu2uv1un/7jFglctU=;
+        b=VyZK1yRyRXs1bHYvzYDvxItd0QpwzdGgMSEoIriIKkS1q0++rF4iLW2GC3XfOToV+r
+         Bm5fInSi9FjBmenpmvWjORraYwtS8Zt8qLiEfScFKpUML+1OW3p5Q6hY+PFkXpu67LUA
+         G0plVy0hZBP/1Gzl/OEYrDO/oxB/H9gyM9fBqLVSLsfSnkV7AHXsyjzcCets66czDCyb
+         xfXoL065WTJs7hiSCmiDxDjgpO3eQzJgTNTptxN6yJkNz2iwjSL8XLkJhotuowINSQCQ
+         9r2nH05C4tEKsXhX9QB3bi/omlOWXDXeZ0977ImEwE0B++T/qWph+HRJZWZpczQs6TKz
+         o8WA==
+X-Gm-Message-State: AOAM530uaEr+Wyxnarlcr655G5a9/1GxAY4dcMm0xC2IktXUHP6uyoeI
+        ttWD33ZDiqLMGIMvtydt6zU=
+X-Google-Smtp-Source: ABdhPJyARJ/nKHhgnikSZL7H8U8sQ+ssnKQmOurxR2oCACf+suwYGrpPEbIpNifyRUQ03wbT2B/UCQ==
+X-Received: by 2002:a2e:701a:: with SMTP id l26mr5074473ljc.101.1633621024016;
+        Thu, 07 Oct 2021 08:37:04 -0700 (PDT)
+Received: from penguin.lxd ([94.153.6.46])
+        by smtp.gmail.com with ESMTPSA id s4sm2577792ljp.115.2021.10.07.08.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Oct 2021 08:37:03 -0700 (PDT)
+Date:   Thu, 7 Oct 2021 18:36:53 +0300
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     andy.shevchenko@gmail.com, Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
+Message-ID: <20211007183653.7f951658@penguin.lxd>
+In-Reply-To: <CAB95QASyv0MGiPGeu3ie7VSK_EjOR7x6kRsK57J5W-56dU0Nxw@mail.gmail.com>
+References: <20211006222502.645003-1-pauk.denis@gmail.com>
+        <20211006222502.645003-4-pauk.denis@gmail.com>
+        <CAB95QASyv0MGiPGeu3ie7VSK_EjOR7x6kRsK57J5W-56dU0Nxw@mail.gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20211002140451.GA34532@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:gEyqo6iqjX1Yp75drlWWP6uLzLD5nT5ZGQMh8t5aEc3a4R/Zeco
- okWZZ0dAvqvpVMogNJDyoWkYkHbxus/wZ+4BELeMUcfGBuD4PYpNLCAQcyzzua4vZMFZN+4
- dVOFglJFUDD3+I5I88QPLlYN3tli611y//pAyypvvVTpzGmTyKpDSqvUWG5RfNDFW70BqlR
- aRmDAygmBXdERjrBtMbng==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bUPRnqHN3DM=:CjogQRAV/OIZ6A7FbR7iso
- 9/+8y1ueijxdqIDf91ZZEKeR0JBAiCOLZxJjBT1nZd3qXZcAPZ+wKvnXRZjHnH9VojNtB5L0p
- 2ReiscEbd62TrnR87DgbBJ+YTB7bMM7SYbrufyLEFjZCZO5ORBjNy5OtrJltWhdlBWQ6Skim3
- TBSHObTAq7Judq7FZinFz/bwy2ScsyB3BJFIkTJf6UPh6cHcb8+aH47rb1gJ0bqcKXvMRhvxP
- SnzgZm7dksnAEQyXYP0KQHCFMnP2EHpzQeh6LNND1SxjK5DGK91fEptkAGa7+vyRyED+m2MFw
- Rfq7TIofLr8YkGbTs6I77vVeT/snR4wg88u9Z2CXsy+Hc103Eshfz6uWRdKqpxNkUjT5Vcm80
- 0YkzxzAmxFy60dLio3W/TdU9e+ZdZ/UUk0eGQ74raHmo5ZPVIbkm6O9xtYNApwKU+t7vSLYW/
- J3bruitusjRGQszo7knwR1Cie8/7000zJ+GOq6VKDB5rfpoQD9zj2kZy8m/eIkvSkofaxQfmv
- Xia7cocvyG/XfElKbDW9G8LddQcpWzO/iPnNQc8OBBXvWPhee5GPZ0A7UIzURrCKvDLZRr1KF
- mjXvnZctUY8JUFdrT8Lh931yWK5cOQ4fN1eBA+6zcpeLNbcOJ0Z1Sz+8qttdH6Ob6M+NPNIwg
- 5X2pCm6s7wuJsQY+MxdjFImB/Y593ytkVE2PZSCO50nP90WEL+dixM00upI4cqYXWqa3HOo+5
- ND9zCCrXTFm4ecY50KP5ALfHsaV6/DWAl+0pE3ssbNkDAEgpEg+tP4+Xs7L5VSPZOJ6711xt6
- +MoVhzPrGg/hds01ILTiETyDxs2q2+QNKXrP2HKxtmuEuw9oyIwCw7G+7Q3YuNRQe+c8cbUXM
- A8eFMkJZdUV48mt4tKyuDndEta/JmjyGVQFPYlWhVh64HYNdPeo8W4rWrMruZ2YUC6hB+Cy8W
- uWheQ5KZfAG9/vBav3w17k4biV8hLW+kkS81lC0qPmmjpxT6pLQRa2pNhc0Q18mFCSyAAlxJM
- TXaDPul84/fhkY2RmCAzxUO3Ic1oF++4svWKFz2TTqLf6WOCO/p9b2OmTxf0TG3uWlWbJu4i6
- NUVexfi25/nlIc=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 02.10.21 um 16:04 schrieb Guenter Roeck:
-> On Fri, Oct 01, 2021 at 12:13:53AM +0200, Armin Wolf wrote:
->> Hello,
->>
->> while trying to convert i5k_temp to the new hwmon API to resolve
->> https://bugzilla.kernel.org/show_bug.cgi?id=3D208693,
->> i was asking myself whether or not temp_mid could be replaced with a
->> standard sysfs attribute?
->> Since afaik temp_mid and temp_max are both temperature limits, they
->> could potentially be replaced with
->> temp_max and temp_crit.
->>
-> Quite likely. Unfortunately, the chipset documentation is not available
-> to the public, so it is difficult to determine what those temperatures
-> actually mean.
->
-> Guenter
-Darrick Wong says the chipset documentation would support such a change.
-However, he fears that the changed meaning of tempX_max could confuse
-userspace
-programs.
-But i think the current not using standard attribute names will confuse
-even more
-programms.
+Hi Eugene,
+
+On Thu, 7 Oct 2021 12:56:09 +0200
+Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+
+> Hello, Denis,
+> 
+> On Thu, 7 Oct 2021 at 00:25, Denis Pauk <pauk.denis@gmail.com> wrote:
+> 
+> > +MODULE_AUTHOR("Eugene Shalygin <eugene.shalygin@gmail.com>");  
+> 
+> No, I am not.
+I will remove.
+
+> 
+> Best regards,
+> Eugene
+> 
+> P.S. You stripped module aliases for this one too. Why? This driver
+> certainly can benefit from them, because the presence of the specific
+> WMI UUIDs unambiguously defines its condition to work.
+I looked complicated to support two kind of WMI interfaces with UUID.
+As we split big support module to two separate - I will look to such
+change also.
+
+Best regards,
+     Denis. 
