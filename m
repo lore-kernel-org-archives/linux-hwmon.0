@@ -2,62 +2,62 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D912CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:52:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6D50C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:59:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C135560FD8
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:52:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C03FA61039
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:59:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbhJHNyY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 09:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S229607AbhJHOBR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 10:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbhJHNyX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 09:54:23 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FB2C061570;
-        Fri,  8 Oct 2021 06:52:28 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so11851162otb.1;
-        Fri, 08 Oct 2021 06:52:28 -0700 (PDT)
+        with ESMTP id S232200AbhJHOBP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:01:15 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A54C061570;
+        Fri,  8 Oct 2021 06:59:20 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id r43-20020a05683044ab00b0054716b40005so11782849otv.4;
+        Fri, 08 Oct 2021 06:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+i4BnWwioMXqufQiZh2zuVnG+g9/2NgvXRETnHtcmTQ=;
-        b=eaBQ4tyXliwaoPiOnTCH+g9OK5zg68yY2536ktnyZPqaidaPjKzJvpyjQxwRcBl0A8
-         DlfOPjip2D2vdpCD7RGkSGilsKwjR5XVmYL6EH9qf2SZ1XKd57rZY29aHCpctO/JV8vJ
-         j4neB7ZKpPzLMPr2MLie2hThEXGYNyE/OGvxMhS9g4kKzIrPHncgv0o/u6sFx0IqJJ/T
-         1+CMGx+IDECPDGHcp2zsDb3XIPtOlBgZvvgzDH3vXS/vlP0xAk+Lo+e0fkPVX5nRkx79
-         3G1hhbRZpWZxAdKd9HqL+pDta6+NW+KR6AK/0oelV6mGlG88fxUthtmrxcJIS7dxwvGV
-         i3Sg==
+        bh=8JsMyVbYXWHmQqAN8dzkyw1M7z5ypmR5kNNO4PCodYA=;
+        b=lFJ4SIH1i8YA7eHqIHo94ZEIvRL90OSHuH59FDvwVO0DBsjCNuJsW9/LMvnsIWeC0+
+         ZGEFfVomyHn2A5/Al6Ft5EbX6KuEpZeQnS+MSB7VeGwy8SjbFApcBwrU+OCD6P9HJWXp
+         hspeRsf2Dhy+Ar+ROxqEgt4Ofk0HcKPqlt70upnG+ZS9trKpKOVFeGh3ckbOdKAlwlMv
+         hJGX63Rbxjxklyr7b370w+tedTZlIM5N0+OLh7d3BwTrVnvAlRT2vlBruzMq++KLVcyW
+         eaBg9aIhWAr2W1eUoT5qqi+bE4bZgbPgNQcBEsylh7NDoBOLH3Y31R9/ItkZLOGOH+cE
+         zV+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=+i4BnWwioMXqufQiZh2zuVnG+g9/2NgvXRETnHtcmTQ=;
-        b=XE7Jxqcy+F2VA5xXlHY5LQHnj0VyZmvY18rEnu5KyDOcUHd3OM3OE2Ew7HmSNxDSzR
-         p5wEtoWCZ+zkgGFtTavgXfcvKddtZ0U+z5IefHh09U4jaQ6VuyD14Dk6lC4289c1Ct+Y
-         j3JRvYw0qM7uWE7WVl6XVOTu6Yhvjfu0fgsztyOaDTmHIfFT8Au7FqrpayMRVElvBr1r
-         3abxRXiXnDndsBP71koD63voqYA2tdPhU5gIBS4iUGX+7Dk1kwGD8sXQiD2QSzIZ33tY
-         d3dzCuy9bHFh8mUY0Pc3DdMEjOyKPkze/7UwZbboFEVYMTLGZWT831UEuYBRFI0P7Wz2
-         HjQA==
-X-Gm-Message-State: AOAM5319ov9wJQcb2qcMcSmMLb0u2ZEaHRrN3tK8295xt6Ov3TkIcHbP
-        hQ9dSC5mExdjvmnUSrjyD+k=
-X-Google-Smtp-Source: ABdhPJyX1g5WIFgiFMAAG5OCUYF8HFUYpdaJ53EUERXJqxtMq5b7ctNVA4GCcByYcek7Ze/bcvDj7Q==
-X-Received: by 2002:a9d:4049:: with SMTP id o9mr9057064oti.161.1633701147944;
-        Fri, 08 Oct 2021 06:52:27 -0700 (PDT)
+        bh=8JsMyVbYXWHmQqAN8dzkyw1M7z5ypmR5kNNO4PCodYA=;
+        b=f9SUZlshb7TFk/zt6RX4rI+aZHsZap2gOMzc2//rGlIAxots0A0S/obWCivyzF9WOw
+         ckKh0Igkc7msoqT+v+oFVe2SLKu5i8aNQsF82q9F/5dUk/xzF+hifUJQ4Bzu9K7WjBjJ
+         fpeMUEHM/UqGkN++uRP1cVVYVrM7Q05r5pyR/5JroyX90tkEnZxY9GuCRoCbJ/UgD3w4
+         9IYeyqIUmd5lKU0mtW7Yj2mTdvgK/1OY7d5bEUY2ITZyONMab98MzexzbEt+53HAV0Pl
+         osnqjN5+Sfmz7qIO5HOxJKFbypVy4xshZwJHKkUFHClUH+QrkdAyzOLomjBNwgwxutOo
+         Pwzg==
+X-Gm-Message-State: AOAM531GxHZEG7rcuVdwarHojFgA0z9nGPLIppddW0JNqTclAQv+qQ7O
+        5OFHsGRG4yCbYE1i/nIIAtCZdipgv3c=
+X-Google-Smtp-Source: ABdhPJy9fPMAPHrZ+eyMwt0sZPpeq7DOmUfARxi/g/ZFPiENBMcVG1YnNp+8B13WIxPPMkUO3UHR6Q==
+X-Received: by 2002:a05:6830:1c2f:: with SMTP id f15mr333690ote.63.1633701559955;
+        Fri, 08 Oct 2021 06:59:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l25sm513275oot.36.2021.10.08.06.52.27
+        by smtp.gmail.com with ESMTPSA id x10sm525693ooa.16.2021.10.08.06.59.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 06:52:27 -0700 (PDT)
+        Fri, 08 Oct 2021 06:59:19 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Oct 2021 06:52:26 -0700
+Date:   Fri, 8 Oct 2021 06:59:18 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Zev Weiss <zev@bewilderbeest.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 6/8] hwmon: (pmbus/lm25066) Add OF device ID table
-Message-ID: <20211008135226.GA1366565@roeck-us.net>
+Message-ID: <20211008135918.GA1577122@roeck-us.net>
 References: <20210928092242.30036-1-zev@bewilderbeest.net>
  <20210928092242.30036-7-zev@bewilderbeest.net>
 MIME-Version: 1.0
@@ -72,16 +72,7 @@ On Tue, Sep 28, 2021 at 02:22:40AM -0700, Zev Weiss wrote:
 > See commit 8881a19187e4 ("hwmon: (ucd9000) Add OF device ID table")
 > for reasoning.
 > 
-The actual reasoning should be provided here, not a reference to another
-commit. Never mind, I did that.
-
 > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-
-Applied.
-
-Thanks,
-Guenter
-
 > ---
 >  drivers/hwmon/pmbus/lm25066.c | 26 ++++++++++++++++++++++++--
 >  1 file changed, 24 insertions(+), 2 deletions(-)
@@ -108,6 +99,9 @@ Guenter
 > +	{ .compatible = "ti,lm5064",  .data = (void*)lm5064,  },
 > +	{ .compatible = "ti,lm5066",  .data = (void*)lm5066,  },
 > +	{ .compatible = "ti,lm5066i", .data = (void*)lm5066i, },
+
+On a side note, you got lazy here. Should be "void *".
+
 > +	{ },
 > +};
 > +MODULE_DEVICE_TABLE(of, lm25066_of_match);
@@ -135,6 +129,13 @@ Guenter
 > +		dev_notice(&client->dev,
 > +		           "Device mismatch: %s in device tree, %s detected\n",
 > +		           of_id->name, i2c_id->name);
+
+Also, this used spaces instead of tabs for indentation.
+
+Never mind, I fixed it up. But please run checkpatch on your patches.
+
+Guenter
+
 > +
 > +	data->id = i2c_id->driver_data;
 >  	info = &data->info;
