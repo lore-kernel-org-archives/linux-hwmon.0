@@ -2,123 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C097C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 19:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D8D2C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 21:06:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 580596054E
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 19:18:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BD5960F44
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 21:06:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbhJHTU0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 15:20:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55354 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231342AbhJHTUW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 8 Oct 2021 15:20:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0504861100;
-        Fri,  8 Oct 2021 19:18:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633720707;
-        bh=IC9kNsRFIBO+K8d9i6+XTu+7i8NQDKUt9EGCz3dsmac=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BpP1jk6pQ92wMYrNJJz//UzDyIl7KDMW06pY0T2+/sdPu5gjz3r73bfN9q2cGyrEQ
-         sud2KOsGrgUNoR+N9Oc0h826ZN50zQ5NZ6LS+kD/CVsBx5SuhiIjyW3a97uWncfgZb
-         QnZ391AKNF/jjq6BkhcO2ic6Ln9+QmkBu54kb7ENA7k6LNx73/7h4D7gMPH2zflUzo
-         rrRNqzd125lCTk9JTFmb6OKgo/WcAjTN52Ku54KyF4PSoAwPjhHVpk/LZovW05yPey
-         F55WwmujVXSf3MqWRnT5PZiNORb9kZ5bAXVErrBJjsIMF/OzhdMYM7EyvwyukXf/hd
-         DVPpj7BxaNtOA==
-Received: by mail-ed1-f44.google.com with SMTP id d9so16172839edh.5;
-        Fri, 08 Oct 2021 12:18:26 -0700 (PDT)
-X-Gm-Message-State: AOAM5308/AY7MxLU7MtVSBXUGHvyV3tpa4Rtgby4gfxEPdv3zOegaOcj
-        eaDW5LDz74BRn3UhB+z52Vohc86DjQxxH5pKMg==
-X-Google-Smtp-Source: ABdhPJxqow2M5nj6LodviTLlbfFr4zL57L7+Vcp4BPJ43DFWyfStrDXyuWmCoFsVAuWT7QiI7UzLZynfXN+8NRHIZ5E=
-X-Received: by 2002:a05:6402:27d2:: with SMTP id c18mr8725154ede.271.1633720705455;
- Fri, 08 Oct 2021 12:18:25 -0700 (PDT)
+        id S242456AbhJHVI0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 17:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231696AbhJHVIZ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 17:08:25 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E549EC061570;
+        Fri,  8 Oct 2021 14:06:29 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id t4so13548738oie.5;
+        Fri, 08 Oct 2021 14:06:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qPmTBexJ6pfCTZz94LBqYt7PnBRueakfJWUtT0QCH4g=;
+        b=aqfjG35zBT9iRNrfwWJnVrHed+sCfYP+Crgbl8yVAlcoR4a3jzPvEc8OZBKG632LbP
+         Qc1/F5rLQjR20yK7/ptQGGhW/Iez4YJB7R4yvGQ2QJo8e5SU21Tf/vxXd+QTITpUnl+E
+         VVJUx9z3Beu83RjguktHGWNDfD8RycX8hlsh58FX78qDyg+YjYjXdsqnKpLyZzgIb2FN
+         usj2PxmkuVzwpCauHmwkm+nyKoMdLtW1aRlFgOxoyGwSfBjyNtHivPZa81tBHIb+QiO3
+         +1AMan6ap0M9/0Dli6HQlB5ee7j1Wrhdtjj1uoh1Gq1P5iZ6CMbLGmFmwAbRnZ/zojxd
+         6SOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=qPmTBexJ6pfCTZz94LBqYt7PnBRueakfJWUtT0QCH4g=;
+        b=CA9NUol/BYzJD0VESBCM8M8kUZzIAExvL636yr2VjDnnbOHPKTDF9eOSZiZzKZJNAO
+         XniEpPDMpMBITFnYYdePrqFrGMxyVraKHx9Vg2ZYtGAFNngQgLEfth3GOY9QU80/jOsj
+         FuUF8mzOgRLyiqsz9bVdIj5VanKYcOuxLXwyzw9Yd63CkK8VfrCMlwHIHjGgrjFMkfuN
+         R2GsLG8p5+ChVe62wNPQPjdwG4n4t2dos/nukrZ1ghXBZBExXdteOMwD+dZkaV2SgpRW
+         bhrHDjZ/HBe9LwZg0H25Jz/rUpJkr1O0dvr2CSY/aSOS05QEmUiA+nGZROvbGB2z44bp
+         dQNw==
+X-Gm-Message-State: AOAM530K1R6bpfLAS+5KKUL4xgJUQ7W2N3cE61M40l3dffoHZE+VdWtU
+        I7IGHsgdmO340SOiETs0ur4=
+X-Google-Smtp-Source: ABdhPJwX80AfO8/LZudx3BdT413rflaUSp+dkWAMwpRi9u92TuRSovmr2n3E8/gpJDaqitET4wdffQ==
+X-Received: by 2002:a05:6808:13c3:: with SMTP id d3mr9250250oiw.83.1633727189365;
+        Fri, 08 Oct 2021 14:06:29 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e11sm114112oii.0.2021.10.08.14.06.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Oct 2021 14:06:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 8 Oct 2021 14:06:27 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] dt-bindings: hwmon: jedec,jc42: add nxp,se97b
+Message-ID: <20211008210627.GA3473720@roeck-us.net>
+References: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
+ <20210920182114.339419-6-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
- <3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com>
- <20211002142219.GC34532@roeck-us.net> <YVqu92dUgNKlYMlG@localhost.localdomain>
- <20211005141457.GB2395636@roeck-us.net> <YV4NUqf7ey5Yr55P@robh.at.kernel.org>
- <YV6m8MRa4+lKOWTp@localhost.localdomain> <18a5d5c9-2885-68da-256b-7ae1c3b95819@roeck-us.net>
-In-Reply-To: <18a5d5c9-2885-68da-256b-7ae1c3b95819@roeck-us.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 8 Oct 2021 14:18:13 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJP2yX1YoJP00+DK1S=p3TXKVhjvproKsJZtDQQ_6L5Fg@mail.gmail.com>
-Message-ID: <CAL_JsqJP2yX1YoJP00+DK1S=p3TXKVhjvproKsJZtDQQ_6L5Fg@mail.gmail.com>
-Subject: Re: [PATCH v3 11/11] dt-bindings: hwmon: allow specifying channels
- for tmp421
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210920182114.339419-6-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 8, 2021 at 9:33 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 10/7/21 12:51 AM, Krzysztof Adamski wrote:
-> > Dnia Wed, Oct 06, 2021 at 03:55:46PM -0500, Rob Herring napisa=C5=82(a)=
-:
-> >>>
-> >>>     input@0 {
-> >>>         reg =3D <0>;
-> >>>         label =3D "output voltage";
-> >>>     };
-> >>>
-> >>> Anyway, maybe Rob has an idea how to name this properly.
-> >>
-> >> No, I don't have a sense of the range of h/w...
-> >
-> > I feel like we are stuck. Rob does not have a sense of the range of the
-> > h/w and Guenter does not have a sense of the DeviceTree idioms. How can
-> > we solve that?
-> >
->
-> That is why I am asking questions. It doesn't mean we are stuck.
->
-> > Could we, maybe, just focus on this typical, simplified, case I have fo=
-r
-> > now - a sensor with several channels of known, same type (temperature)?
-> > We clearly are unable handle all possible cases here, for now.
-> >
-> > Does this look sane for that usecase or what would you, Rob, change?
-> >
-> > sensor@4c {
-> >    compatible =3D "ti,tmp422";
-> >    reg =3D <0x4c>;
-> >    #address-cells =3D <1>;
-> >    #size-cells =3D <0>;
-> >
-> >    input@0 {
-> >      reg =3D <0x0>;
-> >      ti,n-factor =3D <0x1>;
-> >      label =3D "local";
-> >    };
-> >
-> >    input@1 {
-> >      reg =3D <0x1>;
-> >      ti,n-factor =3D <0x0>;
-> >      label =3D "somelabel";
-> >    };
-> >
-> >    input@2 {
-> >      reg =3D <0x2>;
-> >      status =3D "disabled";
-> >    };
-> > };
-> >
-> > There were some doubts whether "input" makes sense here.  I still think
-> > it doas as even in HWMON subsystem, we have "hwmon_temp_input" and
-> > HWMON_T_INPUT, so a temperature channel _is_ an input.  Of course I can
-> > change it to "temperature" or "channel", just tell me which one is
-> > accepted.
-> >
->
-> I'd be fine with "channel" or "sensor". Both would be generic.
+On Mon, Sep 20, 2021 at 08:21:14PM +0200, Krzysztof Kozlowski wrote:
+> Document bindings for NXP SE97B, a DDR memory module temperature sensor
+> with integrated SPD and EEPROM via Atmel's AT24 interface.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-'channel' aligns with multi-channel ADC node naming, so that's fine for me.
+Applied.
 
-Rob
+Thanks,
+Guenter
+
+> ---
+>  Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
+> index a7bb4e3a1c46..0e49b3901161 100644
+> --- a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
+> @@ -10,6 +10,14 @@ maintainers:
+>    - Jean Delvare <jdelvare@suse.com>
+>    - Guenter Roeck <linux@roeck-us.net>
+>  
+> +select:
+> +  properties:
+> +    compatible:
+> +      const: jedec,jc-42.4-temp
+> +
+> +  required:
+> +    - compatible
+> +
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -31,6 +39,7 @@ properties:
+>                - microchip,mcp98244
+>                - microchip,mcp9843
+>                - nxp,se97
+> +              - nxp,se97b
+>                - nxp,se98
+>                - onnn,cat6095
+>                - onnn,cat34ts02
