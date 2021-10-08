@@ -2,78 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E35EBC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:16:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C8C8C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:16:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C87F461042
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:16:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19F0860FD7
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:16:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbhJHOR4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 10:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S232248AbhJHOSo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 10:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbhJHORz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:17:55 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B13C061570
-        for <linux-hwmon@vger.kernel.org>; Fri,  8 Oct 2021 07:16:00 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 24so14056077oix.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 08 Oct 2021 07:16:00 -0700 (PDT)
+        with ESMTP id S229789AbhJHOSo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:18:44 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3717C061570
+        for <linux-hwmon@vger.kernel.org>; Fri,  8 Oct 2021 07:16:48 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so7352469ote.8
+        for <linux-hwmon@vger.kernel.org>; Fri, 08 Oct 2021 07:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mEuR+QxNv8F64gWk90Q8unGJl1h7wepFAxqyU+OVJ6o=;
-        b=pxv0PqdyiR7mjb8Dmm4vxb28xRPkcxodcp6bf5qR2BgBFjP98Mgj4O00tqUk+CCTkN
-         eldW1PTkYS4zW0SA8UXjuafjw/SJY+Ws9r7vz1wM1QEFuA4MOjqKeKP5CGzJDlFrqhpj
-         omVLCHE05aH8JTgRSVM+oMn09amb36KPuz/dqKcKXyfDbhQcwOygRd5/tWp8/FELefek
-         ZUlobGrgODNDgDDzJZjYgyj5uY5VSnyY1ZetZ+QHBlYSgBDSWPuyaaxl0DO5yT+RzFbE
-         nGDqkXG6hjRpVHxyp28dsaQwk7YxaDMQO0VPVPr3H3fp41lGA2Fg3yFt2C/Bdd2hw6HC
-         Vdmw==
+        bh=mNwzWCTYLcVnxTwksJVSWxc3txmu1I0BmYiFZPWJ7oo=;
+        b=SiHOfFRQ7PRD8PpM5JiKVN1MzEq8e/BEZw4sQAAdFQbPhXPFIotHcqzmCnFhSBBr09
+         uGcKSJaXGEY2Q4pwAzjljp1NytIdo/p5LSBJoOz7GG38IiSTFXf0JBl7n/hzAE2VHCBs
+         S/ADHe39K0jfnMrbuPyou5wdPNA3aq6yTkrnrPLKy+W30K2y+wLC/+82t3jbps5VyPhG
+         ciDmxqp3cCkPGjhiJhtSB77lMp7eB+G58yTeU0Hxa3VX/Xo5gBwQ5mtpGvK5ONW08Yqp
+         xzIYzzNovyEfE6xsONJBZQ68S+DFM+Vod61sIbObGOqjwJMXBcJjOAlfRyTDb/4yxa48
+         Mudw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=mEuR+QxNv8F64gWk90Q8unGJl1h7wepFAxqyU+OVJ6o=;
-        b=Qlm/hhoO+S9zBOIls3lI3Sa1r7AXAzZJN6WPLKq4ajgpbodxLebdxQQezSM8+81P+Q
-         oKrNHSaZB//E5SNId6Kc31P4oz0g1AREnlY/ntuXLkkCCJv0wtIIorBF00Zgs8YP0WC+
-         UJdFHp3tMm2Cfwp5Y5EnpRd2I0CVUMnPhWzD2Opo++AfSHIcqimE6DDXKXrCu7bcAerN
-         9s4hr76UVeQGf03ekluOvfyq/tn/Pf1ykm1Wh/yGJepKVthzePclQaoErSyd3zE2aWTY
-         gsuOpg8JhM1rbXNWScxE0x8sQTbzP00UQ/8Z3VWurjmZB27iKqo6pCQUclwyS2m4K7C6
-         kbKQ==
-X-Gm-Message-State: AOAM533hrLkS9tofSTn9E9vBLOqKrD9lM/1PbuwfnhOaK6QVy+QA6z7D
-        uiRtZeIspbY8BJuTQJPjjdgyjdl+COw=
-X-Google-Smtp-Source: ABdhPJzW7WfeuXby8qrgwk+X5rO3pKUA/AUQUHAOiRLwNIyDo02JWDEtyqbFOIDL/xwxSPK/1xtMAQ==
-X-Received: by 2002:aca:ea83:: with SMTP id i125mr16217848oih.26.1633702559793;
-        Fri, 08 Oct 2021 07:15:59 -0700 (PDT)
+        bh=mNwzWCTYLcVnxTwksJVSWxc3txmu1I0BmYiFZPWJ7oo=;
+        b=DWucHtJWzgQz64cET8aGXLmcsGTgqvZvFQ84JZHHFiwrFRhV1e1aaA/S6PK780KxaF
+         C6ijKfAUBlkfQfRcq1YNlZGQTiRulX8O2pAy48s/Y1N8IGLaRMGMMBA0LNE8UQPcBfg3
+         /p8H6c1W/Ew2horu7ZeYtGqXWZMtZibvPsS5xnNJk9kj9o5q7dcxPAidhO2DnpZ343Om
+         mwcs2zOPTSrGqnU+laRmIcDBD2HSvwlOeXb4Rx6L2/qlBQW1/h1aRwRJtoXU5WYSMXDa
+         pJbhhfjUaQvoMzO33ikod6Q5KSmBiiacvkexgGmHmxzxRoRVBL4jekQ05f13eXzd7KbY
+         +kKg==
+X-Gm-Message-State: AOAM532MOx2XK6J5yVzqAGsm33UL7SEpMtqUpJdV5hpZI2XxA9wmJfzQ
+        NXJIkG1pA1kLL0RqOVGdags=
+X-Google-Smtp-Source: ABdhPJwd7ouKhVexOa22sEhO2wXrgATV2Fg7ZUlqzwzqrRN8pl8lH10kyvV045pEvsg90XLSWBwr7A==
+X-Received: by 2002:a05:6830:2429:: with SMTP id k9mr4592805ots.61.1633702608281;
+        Fri, 08 Oct 2021 07:16:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 21sm641596oix.1.2021.10.08.07.15.58
+        by smtp.gmail.com with ESMTPSA id e2sm520229ooa.20.2021.10.08.07.16.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 07:15:59 -0700 (PDT)
+        Fri, 08 Oct 2021 07:16:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Oct 2021 07:15:58 -0700
+Date:   Fri, 8 Oct 2021 07:16:46 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Vadim Pasternak <vadimp@nvidia.com>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH hwmon-next 1/2] hwmon: (mlxreg-fan) Modify PWM
- connectivity validation
-Message-ID: <20211008141558.GA2156970@roeck-us.net>
+Subject: Re: [PATCH hwmon-next 2/2] hwmon: (mlxreg-fan) Support distinctive
+ names per different cooling devices
+Message-ID: <20211008141646.GA2181795@roeck-us.net>
 References: <20210926053541.1806937-1-vadimp@nvidia.com>
- <20210926053541.1806937-2-vadimp@nvidia.com>
+ <20210926053541.1806937-3-vadimp@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210926053541.1806937-2-vadimp@nvidia.com>
+In-Reply-To: <20210926053541.1806937-3-vadimp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Sep 26, 2021 at 08:35:40AM +0300, Vadim Pasternak wrote:
-> Validate PWM connectivity only for additional PWM - "pwm1" is connected
-> on all systems, while "pwm2" - "pwm4" are optional. Validate
-> connectivity only for optional attributes by reading of related "pwm{n}"
-> registers - in case "pwm{n}" is not connected, register value is
-> supposed to be 0xff.
+On Sun, Sep 26, 2021 at 08:35:41AM +0300, Vadim Pasternak wrote:
+> Provide different names for cooling devices registration to allow
+> binding each cooling devices to relevant thermal zone. Thus, specific
+> cooling device can be associated with related thermal sensor by setting
+> thermal cooling device type for example to "mlxreg_fan2" and passing
+> this type to thermal_zone_bind_cooling_device() through 'cdev->type'.
 > 
 > Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 
@@ -83,28 +83,35 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/mlxreg-fan.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+>  drivers/hwmon/mlxreg-fan.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-> index feab9ec6a6ca..8e5cd6991929 100644
+> index 8e5cd6991929..4a8becdb0d58 100644
 > --- a/drivers/hwmon/mlxreg-fan.c
 > +++ b/drivers/hwmon/mlxreg-fan.c
-> @@ -488,9 +488,14 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
->  				return -EINVAL;
->  			}
+> @@ -263,6 +263,13 @@ mlxreg_fan_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+>  	return 0;
+>  }
 >  
-> -			err = mlxreg_pwm_connect_verify(fan, data);
-> -			if (err)
-> -				return err;
-> +			/* Validate if more then one PWM is connected. */
-> +			if (pwm_num) {
-> +				err = mlxreg_pwm_connect_verify(fan, data);
-> +				if (err < 0)
-> +					return err;
-> +				else if (!err)
-> +					continue;
-> +			}
->  
->  			fan->pwm[pwm_num].reg = data->reg;
->  			fan->pwm[pwm_num].connected = true;
+> +static char *mlxreg_fan_name[] = {
+> +	"mlxreg_fan",
+> +	"mlxreg_fan1",
+> +	"mlxreg_fan2",
+> +	"mlxreg_fan3",
+> +};
+> +
+>  static const struct hwmon_channel_info *mlxreg_fan_hwmon_info[] = {
+>  	HWMON_CHANNEL_INFO(fan,
+>  			   HWMON_F_INPUT | HWMON_F_FAULT,
+> @@ -565,8 +572,8 @@ static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
+>  		if (!pwm->connected)
+>  			continue;
+>  		pwm->fan = fan;
+> -		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, "mlxreg_fan", pwm,
+> -								    &mlxreg_fan_cooling_ops);
+> +		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, mlxreg_fan_name[i],
+> +								    pwm, &mlxreg_fan_cooling_ops);
+>  		if (IS_ERR(pwm->cdev)) {
+>  			dev_err(dev, "Failed to register cooling device\n");
+>  			return PTR_ERR(pwm->cdev);
