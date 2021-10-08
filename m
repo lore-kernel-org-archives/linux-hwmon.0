@@ -2,158 +2,216 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7DCBC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B3B1C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:37:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C96F760F9C
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:25:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4932E61039
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 13:37:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbhJHN1W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 09:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
+        id S242236AbhJHNjV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 09:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbhJHN1V (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 09:27:21 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD03AC061570;
-        Fri,  8 Oct 2021 06:25:26 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id o83so6292893oif.4;
-        Fri, 08 Oct 2021 06:25:26 -0700 (PDT)
+        with ESMTP id S240366AbhJHNjV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 09:39:21 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6FCC061570;
+        Fri,  8 Oct 2021 06:37:25 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 24so13906136oix.0;
+        Fri, 08 Oct 2021 06:37:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=9cq3pyd6+P1KyVokp1RRBpzdAal1KEUlphIpxauekP0=;
-        b=qXUev3VazEI9TlAGHVK0h0WsqbUqu7Cj9spk7kfk7aP5jxpY6HHO/R/q/ixDYeduCa
-         iNdhDYMwAjUCgtm8zt3nGX6fc0c1fJiCuROH41r8xGKKWP6+HIUihTuppj9prYJ5q77o
-         KP5sdd+5AK4LY+1top4904cY7UDCE7ygp4VudHfxEKIm5cU9OFyndoUH4iOe8Gqh8BmU
-         0v6Af936HPUFZwJPdR7G6B2DExHZ7OTyhDRk6UbD9EScqZVxNfgczesxxzQHbe+VGjTB
-         dXDEZjSwAFMb53TLgArilVqgLhR+EDeTq6bzVIG5MFgRbdgPjZpKeNICGnK7VKAcOBqF
-         4IeQ==
+        bh=GGqNAsrJ4yxmiP62I+UHe9w7bOSsj56Sn9iJZ0IXADs=;
+        b=mt8lm1w7Zt54ZvO4t312+xNTKK01NF2AifgX6owOmPRdWpgrRqnJ6vYEeYZfqXyxSM
+         a1nPw7H+QbL1aGF6iq23lqF7kbJzbDHUaDDTD5zyKWIMr75zfwUx45trob2a+/x1o3jm
+         CsZV4G6lFcX55mqBRS1/8SlH9pVm/nVZlCJR3V7pK4Aoa9FI3T6rAJ0VBN84Zrs3lsCr
+         xVK5IkJwW1pK5nGAf3dp5Vo2TjGwaylDYz75wkGRe54Mz0xdahATnijHByXMhqzW8FYT
+         21AkKd1KWio9gCTlCLEBC63wDlQsAKRYc4NnfRi9ldOe594688oev5Wrdq7sEwJDI4Gb
+         MJVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=9cq3pyd6+P1KyVokp1RRBpzdAal1KEUlphIpxauekP0=;
-        b=8Ocq/HKumMhCKxE6WsRUloZXU/4USEdkyceEUGP10a8kPYBo5V/EBhjfSqxJxnkTNs
-         qeUE4SN73+LEojVuotV5ZIL0ClKHOEJFUoaJmQD0hFM8jb+afI8DDQqLEMr1W40Dr5Yz
-         gNYxGJvxcQpTN1wJlZ4k7tpqE+3dr/Giz5eawU0Pw/F5wvQKa5hzTKjnnG+9VlLGJk27
-         EsLRbScP+bb7TdAxAPXTO2zFCLX7pfGkqVFstdTw0A3lkQMyWdhG0+jSJVheJPSKBY9B
-         YiUCDneVtJYur2kHLPSXj7EgMVyMlDvX2nU+CezyCa8PfDC2yS4Nh43Bdw8wJeTMQrxs
-         lq0A==
-X-Gm-Message-State: AOAM532PDCh9dHXjPFKF3zd0NR08kEu/7p8NEJG64RV1WaLf30SPATYD
-        GAp9UQyC0KDfNqdt8uKpka8=
-X-Google-Smtp-Source: ABdhPJyLcBHzIpbsxUY14a+GCfox1I4n5HlkT8R3ZoDFLwei7IgaqFJ8YOalf1Gnw94YEBm5aT3Zyg==
-X-Received: by 2002:aca:4bc4:: with SMTP id y187mr4509447oia.174.1633699526077;
-        Fri, 08 Oct 2021 06:25:26 -0700 (PDT)
+        bh=GGqNAsrJ4yxmiP62I+UHe9w7bOSsj56Sn9iJZ0IXADs=;
+        b=g7NZ/hKrLRdbLzYWrpuco8Ff/N0wYbbodDvnNEA25LSqx/DxxtBO62+GqjflCCUEnn
+         6fDuD5BAh8KZn3U5j4xF5i6Ne/FGccs8SGRWdWfwhiTvBH57R1239Cx6ldZ1cLuokbxt
+         MeFAE3LPvTgAOe2gjRHZql8f6Usq+mUf95gDI1a+ixfqSypNS1ZO/bKOJjXSv8NXqYkv
+         1tUPLKaVMmcBrkMobB9+o9/7CPsCkhq74H/YR+czgZdoditWORDhJB0QlH8WTnmYNcpv
+         Bfpyyqs6NItYBBRtQwoPxdhlUYlZ5HqnmUAHy/pK0MEeqHekqP6CzHCd1miNl1GTP5sZ
+         erDw==
+X-Gm-Message-State: AOAM532vVvZvG7KPdmdgMRB15cRHM9gXJoLMUgycwBUcyLKMU6wg5lVA
+        f/VNPdDc71VNMOkhOS1am0OOYsp7jR0=
+X-Google-Smtp-Source: ABdhPJwbqspmk3FShJDshyYDgJFgTJ8sFCV4UMgdXZNOO8Bs34laVgO4jvQofMmHTFaPKW66JvwblQ==
+X-Received: by 2002:aca:3c8a:: with SMTP id j132mr8060924oia.171.1633700244500;
+        Fri, 08 Oct 2021 06:37:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i127sm603757oia.43.2021.10.08.06.25.25
+        by smtp.gmail.com with ESMTPSA id x62sm621160oig.24.2021.10.08.06.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 06:25:25 -0700 (PDT)
+        Fri, 08 Oct 2021 06:37:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Oct 2021 06:25:24 -0700
+Date:   Fri, 8 Oct 2021 06:37:22 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Oskar Senft <osk@google.com>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add nct7802 bindings
-Message-ID: <20211008132524.GA4171482@roeck-us.net>
-References: <20210921004627.2786132-1-osk@google.com>
- <YUzzjYMwNKwMFGSr@robh.at.kernel.org>
- <CABoTLcRpSuUUu-x-S8yTLUJCiN4RERi2kd8XATP_n3ZTRpAWDg@mail.gmail.com>
- <CAL_JsqJ+hqKfLDzbMpzPks+wJaNuwU6kodqnqWjkOb8aDf92ZQ@mail.gmail.com>
- <CABoTLcTTphA4Kpi-qbpUkX4f_V4NjhDv3_vVk8UNgvWfnKVOYw@mail.gmail.com>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] hwmon: (pmbus/lm25066) Add offset coefficients
+Message-ID: <20211008133722.GA894797@roeck-us.net>
+References: <20210928092242.30036-1-zev@bewilderbeest.net>
+ <20210928092242.30036-2-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABoTLcTTphA4Kpi-qbpUkX4f_V4NjhDv3_vVk8UNgvWfnKVOYw@mail.gmail.com>
+In-Reply-To: <20210928092242.30036-2-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 09:07:47AM -0400, Oskar Senft wrote:
-> Hi Rob
+On Tue, Sep 28, 2021 at 02:22:35AM -0700, Zev Weiss wrote:
+> With the exception of the lm5066i, all the devices handled by this
+> driver had been missing their offset ('b') coefficients for direct
+> format readings.
 > 
-> > > > > +            temperature-sensors {
-> > > > > +                ltd {
-> > > > > +                  status = "disabled";
-> > > >
-> > > > Don't show status in examples.
-> > > Hmm, ok. I found it useful to make clear that a sensor can be
-> > > disabled, but maybe that's just always the case?
-> >
-> > Yeah, this case is a bit special. The node not being present also disables it.
-> Oh, I didn't realize that a missing node defaults to "disabled". What
-> I want to achieve is that if a node is not present, we don't configure
-> it. The reason behind this is that the HW provides a mechanism to
-> configure itself at power-up from a connected EEPROM. In that case
-> we'd still want the list the nct7802 in the DTS, but without
-> configuration. This effectively is the current behavior.
-> 
-> From what I understand from [1] and follow-ups, having the extra
-> "temperature-sensors" level is actually not what we want here and I
-> proposed a different solution in [2].
-> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 
-Turns out this chip has another level of complexity, where a channel
-can either be a temperature sensor or a voltage sensor. So, from dt
-perspective, we don't have separate scoped for the different sensor
-types.
+Applied.
 
-I don't really like [2] to indicate voltage vs. temperature using "mode"
-(it maps both sensor more and type into a single property),
-but I agree that two levels doesn't really make sense here either.
-That is where child naming may come in. We have "sensor" in your proposal,
-and "input" in the tmp421 proposal. My thought on that was that we could
-use the child name to distinguish sensor types.
-
-    temperature-sensor@1 { /* RTD1 */
-         reg = <0x1>;
-         status = "okay";
-         mode = "thermistor"; /* Any of "thermistor", "thermal-diode" */
-    };
-
-    voltage-sensor@3 { /* RTD3 */
-         reg = <0x3>;
-         status = "okay";
-    };
-
-or maybe
-
-    sensor@1 { /* RTD1 */
-         reg = <0x1>;
-         status = "okay";
-	 type = "temperature-sensor";
-         mode = "thermistor"; /* Any of "thermistor", "thermal-diode" */
-    };
-
-    sensor@3 { /* RTD3 */
-         reg = <0x3>;
-         status = "okay";
-	 type = "voltage-sensor";
-    };
-
-> On that background, I'm wondering how we could have compatibility with
-> the previous behavior, where the individual sensors were not listed,
-> and just defaulted to whatever the HW came up with, whether that was
-> power-on defaults or loaded from an EEPROM.
-> 
-> What the code currently does is to check for the presence of
-> "temperature-sensors" and only attempt to configure any of them if
-> that top level node exists. This enables backwards-compatibility.
-> Going forward, I would have done the same for sensor@X and only
-> explicitly enable / disable the sensor if the node is present. If it's
-> not present, I'd use the power-on / EEPROM-provided defaults.
-> 
-
-Makes sense to me.
-
+Thanks,
 Guenter
 
-> Thanks
-> Oskar.
+> ---
+>  drivers/hwmon/pmbus/lm25066.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 > 
-> [1] https://lore.kernel.org/linux-hwmon/20210924114636.GB2694238@roeck-us.net/
-> [2] https://lore.kernel.org/linux-hwmon/CABoTLcQYHZbsgzXN7XXKQdDn8S-YsuE+ks9WShAEKcBJojEfcQ@mail.gmail.com/
+> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+> index d209e0afc2ca..1a660c4cd19f 100644
+> --- a/drivers/hwmon/pmbus/lm25066.c
+> +++ b/drivers/hwmon/pmbus/lm25066.c
+> @@ -55,22 +55,27 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+>  	[lm25056] = {
+>  		[PSC_VOLTAGE_IN] = {
+>  			.m = 16296,
+> +			.b = 1343,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN] = {
+>  			.m = 13797,
+> +			.b = -1833,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN_L] = {
+>  			.m = 6726,
+> +			.b = -537,
+>  			.R = -2,
+>  		},
+>  		[PSC_POWER] = {
+>  			.m = 5501,
+> +			.b = -2908,
+>  			.R = -3,
+>  		},
+>  		[PSC_POWER_L] = {
+>  			.m = 26882,
+> +			.b = -5646,
+>  			.R = -4,
+>  		},
+>  		[PSC_TEMPERATURE] = {
+> @@ -82,26 +87,32 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+>  	[lm25066] = {
+>  		[PSC_VOLTAGE_IN] = {
+>  			.m = 22070,
+> +			.b = -1800,
+>  			.R = -2,
+>  		},
+>  		[PSC_VOLTAGE_OUT] = {
+>  			.m = 22070,
+> +			.b = -1800,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN] = {
+>  			.m = 13661,
+> +			.b = -5200,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN_L] = {
+>  			.m = 6852,
+> +			.b = -3100,
+>  			.R = -2,
+>  		},
+>  		[PSC_POWER] = {
+>  			.m = 736,
+> +			.b = -3300,
+>  			.R = -2,
+>  		},
+>  		[PSC_POWER_L] = {
+>  			.m = 369,
+> +			.b = -1900,
+>  			.R = -2,
+>  		},
+>  		[PSC_TEMPERATURE] = {
+> @@ -111,26 +122,32 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+>  	[lm5064] = {
+>  		[PSC_VOLTAGE_IN] = {
+>  			.m = 4611,
+> +			.b = -642,
+>  			.R = -2,
+>  		},
+>  		[PSC_VOLTAGE_OUT] = {
+>  			.m = 4621,
+> +			.b = 423,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN] = {
+>  			.m = 10742,
+> +			.b = 1552,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN_L] = {
+>  			.m = 5456,
+> +			.b = 2118,
+>  			.R = -2,
+>  		},
+>  		[PSC_POWER] = {
+>  			.m = 1204,
+> +			.b = 8524,
+>  			.R = -3,
+>  		},
+>  		[PSC_POWER_L] = {
+>  			.m = 612,
+> +			.b = 11202,
+>  			.R = -3,
+>  		},
+>  		[PSC_TEMPERATURE] = {
+> @@ -140,26 +157,32 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+>  	[lm5066] = {
+>  		[PSC_VOLTAGE_IN] = {
+>  			.m = 4587,
+> +			.b = -1200,
+>  			.R = -2,
+>  		},
+>  		[PSC_VOLTAGE_OUT] = {
+>  			.m = 4587,
+> +			.b = -2400,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN] = {
+>  			.m = 10753,
+> +			.b = -1200,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN_L] = {
+>  			.m = 5405,
+> +			.b = -600,
+>  			.R = -2,
+>  		},
+>  		[PSC_POWER] = {
+>  			.m = 1204,
+> +			.b = -6000,
+>  			.R = -3,
+>  		},
+>  		[PSC_POWER_L] = {
+>  			.m = 605,
+> +			.b = -8000,
+>  			.R = -3,
+>  		},
+>  		[PSC_TEMPERATURE] = {
