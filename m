@@ -2,81 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D8D2C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 21:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D3D8C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 21:07:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BD5960F44
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 21:06:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D865760F9E
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 21:07:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242456AbhJHVI0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 17:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S242456AbhJHVJe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 17:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbhJHVIZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 17:08:25 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E549EC061570;
-        Fri,  8 Oct 2021 14:06:29 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id t4so13548738oie.5;
-        Fri, 08 Oct 2021 14:06:29 -0700 (PDT)
+        with ESMTP id S231696AbhJHVJe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 17:09:34 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ACFC061570
+        for <linux-hwmon@vger.kernel.org>; Fri,  8 Oct 2021 14:07:38 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id e16-20020a4ad250000000b002b5e1f1bc78so3271102oos.11
+        for <linux-hwmon@vger.kernel.org>; Fri, 08 Oct 2021 14:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=qPmTBexJ6pfCTZz94LBqYt7PnBRueakfJWUtT0QCH4g=;
-        b=aqfjG35zBT9iRNrfwWJnVrHed+sCfYP+Crgbl8yVAlcoR4a3jzPvEc8OZBKG632LbP
-         Qc1/F5rLQjR20yK7/ptQGGhW/Iez4YJB7R4yvGQ2QJo8e5SU21Tf/vxXd+QTITpUnl+E
-         VVJUx9z3Beu83RjguktHGWNDfD8RycX8hlsh58FX78qDyg+YjYjXdsqnKpLyZzgIb2FN
-         usj2PxmkuVzwpCauHmwkm+nyKoMdLtW1aRlFgOxoyGwSfBjyNtHivPZa81tBHIb+QiO3
-         +1AMan6ap0M9/0Dli6HQlB5ee7j1Wrhdtjj1uoh1Gq1P5iZ6CMbLGmFmwAbRnZ/zojxd
-         6SOw==
+        bh=+pinIkXMwz/cgE1amLa23en8OIwiJzUaYnDcmv75xlo=;
+        b=hE6gDev2coeiR5fyb8oKnRa7AmsWVR4lh+oDR/agv4VDrlk/6YFwktJ0rQJCLHw6TS
+         YwvUa3yQ45ClTSy84RHuYFZ7PYfjPgVQOepLp+kwxkrocZbCuLBXjwAe7ctdkUWEemfT
+         2ylFD6YkAZRZifrUZxmx8ZBVF/3CccVo4KSDe2oNsFAV7aTlebLwhgU6laqoWiKYkwK3
+         s89g4e9AALVopse65OP+ctn34vC5sI/Su7H9NLaD+WuY36D4bAeMVPuU4/LWh46Gqr6r
+         O5UgFrAz9LxYssbH6jZ71BU//tHWY68UHcKvPirsEDnd/fHhmH1m/Gpr31ErCfwGwufg
+         diIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=qPmTBexJ6pfCTZz94LBqYt7PnBRueakfJWUtT0QCH4g=;
-        b=CA9NUol/BYzJD0VESBCM8M8kUZzIAExvL636yr2VjDnnbOHPKTDF9eOSZiZzKZJNAO
-         XniEpPDMpMBITFnYYdePrqFrGMxyVraKHx9Vg2ZYtGAFNngQgLEfth3GOY9QU80/jOsj
-         FuUF8mzOgRLyiqsz9bVdIj5VanKYcOuxLXwyzw9Yd63CkK8VfrCMlwHIHjGgrjFMkfuN
-         R2GsLG8p5+ChVe62wNPQPjdwG4n4t2dos/nukrZ1ghXBZBExXdteOMwD+dZkaV2SgpRW
-         bhrHDjZ/HBe9LwZg0H25Jz/rUpJkr1O0dvr2CSY/aSOS05QEmUiA+nGZROvbGB2z44bp
-         dQNw==
-X-Gm-Message-State: AOAM530K1R6bpfLAS+5KKUL4xgJUQ7W2N3cE61M40l3dffoHZE+VdWtU
-        I7IGHsgdmO340SOiETs0ur4=
-X-Google-Smtp-Source: ABdhPJwX80AfO8/LZudx3BdT413rflaUSp+dkWAMwpRi9u92TuRSovmr2n3E8/gpJDaqitET4wdffQ==
-X-Received: by 2002:a05:6808:13c3:: with SMTP id d3mr9250250oiw.83.1633727189365;
-        Fri, 08 Oct 2021 14:06:29 -0700 (PDT)
+        bh=+pinIkXMwz/cgE1amLa23en8OIwiJzUaYnDcmv75xlo=;
+        b=UDV/fyutNa+TBcU56Sc7hXY/dmIJ9MOa2dzbzSzdHbQ88JK+4KvwexWVlZr3q5Q9cQ
+         AkS+O+SkV0SzaMVQhpDvmFcScsrWet8WPAUv0z5IEHUtZYgh1inR32h1Kg1nSwpIa9OR
+         b06WYARljmVNSk3qlKPFRbfqVZHMwCqIoWsk6lMkpnCiztIVjjtxuUxJANSnJt5nA41y
+         9QS5rIXb3zrDGZjHSUVe/MYDuEcgNyM4dXNKWqaA87FHOPK4If1ys/20LW5Pxjybvoos
+         sRdQyZHCeaiWAfWgepC22X2oiBdfUKTn95bbpRY5WhcEkQkUedszgYM8EmcepXjtyejF
+         q0Qw==
+X-Gm-Message-State: AOAM532CjjNLkUqKaoCmxNZXXeo869mDdSpDmdCIq0jftMoSej7zzFIa
+        WZkR+lClnsOQUHTvlrRvIW/HjHK2MU4=
+X-Google-Smtp-Source: ABdhPJwmluTwD2wc6MAw0/nDcoeGriAnm/GRJuvs1Ndyun+o2ZYbKbgAIVX2ZTyFBibuh35kdPfRNA==
+X-Received: by 2002:a4a:bb98:: with SMTP id h24mr9580056oop.23.1633727257820;
+        Fri, 08 Oct 2021 14:07:37 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e11sm114112oii.0.2021.10.08.14.06.28
+        by smtp.gmail.com with ESMTPSA id e16sm157416oiw.2.2021.10.08.14.07.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 14:06:28 -0700 (PDT)
+        Fri, 08 Oct 2021 14:07:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Oct 2021 14:06:27 -0700
+Date:   Fri, 8 Oct 2021 14:07:36 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] dt-bindings: hwmon: jedec,jc42: add nxp,se97b
-Message-ID: <20211008210627.GA3473720@roeck-us.net>
-References: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
- <20210920182114.339419-6-krzysztof.kozlowski@canonical.com>
+To:     W_Armin@gmx.de
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] hwmon: (dell-smm) Remove unnecessary includes
+Message-ID: <20211008210736.GA3473844@roeck-us.net>
+References: <20210926221044.14327-1-W_Armin@gmx.de>
+ <20210926221044.14327-3-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210920182114.339419-6-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210926221044.14327-3-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 08:21:14PM +0200, Krzysztof Kozlowski wrote:
-> Document bindings for NXP SE97B, a DDR memory module temperature sensor
-> with integrated SPD and EEPROM via Atmel's AT24 interface.
+On Mon, Sep 27, 2021 at 12:10:44AM +0200, W_Armin@gmx.de wrote:
+> From: Armin Wolf <W_Armin@gmx.de>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> sched.h and io.h are not used anywhere in dell-smm-hwmon.c.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
 Applied.
 
@@ -84,33 +80,21 @@ Thanks,
 Guenter
 
 > ---
->  Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  drivers/hwmon/dell-smm-hwmon.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> index a7bb4e3a1c46..0e49b3901161 100644
-> --- a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> @@ -10,6 +10,14 @@ maintainers:
->    - Jean Delvare <jdelvare@suse.com>
->    - Guenter Roeck <linux@roeck-us.net>
->  
-> +select:
-> +  properties:
-> +    compatible:
-> +      const: jedec,jc-42.4-temp
-> +
-> +  required:
-> +    - compatible
-> +
->  properties:
->    compatible:
->      oneOf:
-> @@ -31,6 +39,7 @@ properties:
->                - microchip,mcp98244
->                - microchip,mcp9843
->                - nxp,se97
-> +              - nxp,se97b
->                - nxp,se98
->                - onnn,cat6095
->                - onnn,cat34ts02
+> --
+> 2.20.1
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 476f2a74bd8c..af0d0d2b6e99 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -26,8 +26,6 @@
+>  #include <linux/mutex.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/uaccess.h>
+> -#include <linux/io.h>
+> -#include <linux/sched.h>
+>  #include <linux/ctype.h>
+>  #include <linux/smp.h>
