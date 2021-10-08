@@ -2,134 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9223CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3244AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:05:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E01161029
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:03:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A3A261029
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:05:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbhJHOFa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 10:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S230376AbhJHOHe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 10:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240974AbhJHOF3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:05:29 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F6AC061570;
-        Fri,  8 Oct 2021 07:03:34 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id o4so13847306oia.10;
-        Fri, 08 Oct 2021 07:03:34 -0700 (PDT)
+        with ESMTP id S229607AbhJHOHc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:07:32 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169DCC061570;
+        Fri,  8 Oct 2021 07:05:37 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id g15-20020a9d128f000000b0054e3d55dd81so6687229otg.12;
+        Fri, 08 Oct 2021 07:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Tj1c7r+zFI1XL5f1HV03FqFq7aJGpB1dEp7dBvj8Wnk=;
-        b=okHRW+A9P+PProJWdZr8GHnJQM4kMIIor3MOJgJwlA3i21rhKUDPnVPD7MTtbdbTk6
-         scKYmcGu5yQaiLaPqghaGFs7WK5YQeCRB9p/9kfwlh5ioREDQuJxiothtPX7dWr4SQt3
-         CYJGuZVVQz2KBbqf1eeb4ivpnzPnLx7n4RqVnGkIuT9KKwdgcZpmH/2qiErUVUzIHWXb
-         nxdp0500bd0S2WhyubDbfEmPN/47IfnBMp54VCNOxrsFY9XqYL0SthQ0tx6x8nn3YLAN
-         oRVIs9VnFv07iW1WOwFYoBcF3pPMCzH0UrHO0oUf2MKmwER3aJnH1dt5whhHJAfHjWVq
-         UlIg==
+        bh=+8cmniGBVN2PezeljEbDSbJUvW2F5mbVKylcUXP/x7w=;
+        b=iG7tVZn2+bYvwKFyxomcWVADB9zRlDQjYaGD9UzpSpCMqCuK7+wYzy+dEiOQDtV0a8
+         1RrVilgcTat4Z911VWl3O0tJRfpWvF7xHwmuwhHZoqWJncqnTfjDskC3wtKSObeZ3PYA
+         Y8/DgSEyQHyWcp74LeqPnvSUv+bN69j3G+odLM8vPmg5KdDu3uTnICWgqDdaGnV2ECxI
+         RRdHymYHs5XTs4ptFhfVMdmgm1YGkSuLRM055x/dL3+YNqsoHltvnsagrBh1Gb2b3a5T
+         6lyGpG2fcbOa/v8psniFp1+DTRl7Jb8hPUf0/9BopdPI3y7vD/NCQoGO/qThsK/orpOu
+         83sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=Tj1c7r+zFI1XL5f1HV03FqFq7aJGpB1dEp7dBvj8Wnk=;
-        b=6bcLDKmZ13sERBuCo0NVIAPxH1U4nQ7S4ILECob41s4G/V6xKzvGV1KStbW1jtcFeO
-         qLzcUDwo987bOXbE4ETEMAeBLrBFdm0zUKMZHaprN234RZtEP59N/THJyGh2htMORzO7
-         tXo4SjcsJRkFVfSt8BhAFxx8C5JTzk/6J9Iuw/BCh87mKcawMTpwwhnqx595NkRvtL1k
-         vtf912v/5gRY3LmXWBckcf7uKho9d3pl/0oH2AM3//EtQYjgz3Qi+LR3uisdRfJE3tBn
-         17Q85j9mGBBq3fV9RscraNr5PwaEavyqmm6tJkur3jVwfLW0HPmwzwRStOLE2MoitBy3
-         roMQ==
-X-Gm-Message-State: AOAM530Bo0rW2xy9fK+pQzyMu+n7UltowF9JFiL+BvOXSFZY1rcktTpb
-        LQjqbbJ5kNL4iCdBe1rXkKZGixMGW90=
-X-Google-Smtp-Source: ABdhPJxi5GqEavvQBFKbIeKfGRLMTuFrmsBc6IRwQqYHuxaUIRC3YHI6TlRJzSMWz3Jy1S+O4rXREg==
-X-Received: by 2002:a05:6808:3b6:: with SMTP id n22mr7965264oie.133.1633701813525;
-        Fri, 08 Oct 2021 07:03:33 -0700 (PDT)
+        bh=+8cmniGBVN2PezeljEbDSbJUvW2F5mbVKylcUXP/x7w=;
+        b=cpjzUjejxoyk1B4/eWcSjxiHxg4pNScXgjLgReFs9p6f9MK6zkLfBiI8xrur+H9xQ/
+         nmk9bA0Kf9i4DwFCLjOyxrlv7gXOyxPH5k9JFFDCpAAFX0vJ/t6PvggQkgxLNBSgr6BH
+         F9Kp91cjTlLFUuE2VkkOrsEcRvIMWTLWKO1z5RQtydQ09SkPlp5GmPPlLlqSQnvSgBZQ
+         /K37H/YOOTGkJCuT6bDI7WEyts294Diw43NStyc1NmqQp4Ti6tDDld2jNBrShM/SVm+S
+         7/i9VSDEhNy5WYHZ7pS906Df2WvrltZPxioADJAY8F6Msq1156eyASyxCLSHV9jvJ0h5
+         ErlQ==
+X-Gm-Message-State: AOAM532nha+C6eyoaf74uoKI+JhaovJbiKqDVyQpztQLpAkQlBGfL9M1
+        eEKUOeRPQSx+JvbqZqm3VFQ=
+X-Google-Smtp-Source: ABdhPJyc4aEce/oZYp2+1eG/MuQb/NZigkdhWbVH6kMKwDM9WHMi7k6KDBmo7i0NLZvSMAyLDp9SfA==
+X-Received: by 2002:a9d:19c1:: with SMTP id k59mr8631537otk.348.1633701936488;
+        Fri, 08 Oct 2021 07:05:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e16sm696023oiw.2.2021.10.08.07.03.32
+        by smtp.gmail.com with ESMTPSA id z83sm642787oiz.41.2021.10.08.07.05.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 07:03:33 -0700 (PDT)
+        Fri, 08 Oct 2021 07:05:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Oct 2021 07:03:31 -0700
+Date:   Fri, 8 Oct 2021 07:05:34 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/8] hwmon: (pmbus/lm25066) Support configurable sense
- resistor values
-Message-ID: <20211008140331.GA1728738@roeck-us.net>
+Subject: Re: [PATCH 8/8] dt-bindings: hwmon/pmbus: Add ti,lm25066
+ power-management IC
+Message-ID: <20211008140534.GA1806215@roeck-us.net>
 References: <20210928092242.30036-1-zev@bewilderbeest.net>
- <20210928092242.30036-8-zev@bewilderbeest.net>
+ <20210928092242.30036-9-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210928092242.30036-8-zev@bewilderbeest.net>
+In-Reply-To: <20210928092242.30036-9-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 02:22:41AM -0700, Zev Weiss wrote:
-> The appropriate mantissa values for the lm25066 family's direct-format
-> current and power readings are a function of the sense resistor
-> employed between the SENSE and VIN pins of the chip.  Instead of
-> assuming that resistance is always the same 1mOhm as used in the
-> datasheet, allow it to be configured via a device-tree property
-> ("shunt-resistor-micro-ohms").
-> 
+On Tue, Sep 28, 2021 at 02:22:42AM -0700, Zev Weiss wrote:
 > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  Documentation/hwmon/lm25066.rst |  2 ++
->  drivers/hwmon/pmbus/lm25066.c   | 12 ++++++++++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/lm25066.rst b/Documentation/hwmon/lm25066.rst
-> index 9f1d7e4d3ca1..a2098eb24090 100644
-> --- a/Documentation/hwmon/lm25066.rst
-> +++ b/Documentation/hwmon/lm25066.rst
-> @@ -79,6 +79,8 @@ This driver does not auto-detect devices. You will have to instantiate the
->  devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
->  details.
->  
-> +The shunt (sense) resistor value can be configured by a device tree property;
-> +see Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml for details.
->  
->  Platform data support
->  ---------------------
-> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-> index 18d5a76f346d..29e848bcd436 100644
-> --- a/drivers/hwmon/pmbus/lm25066.c
-> +++ b/drivers/hwmon/pmbus/lm25066.c
-> @@ -458,6 +458,7 @@ MODULE_DEVICE_TABLE(of, lm25066_of_match);
->  static int lm25066_probe(struct i2c_client *client)
->  {
->  	int config;
-> +	u32 shunt;
->  	struct lm25066_data *data;
->  	struct pmbus_driver_info *info;
->  	const struct __coeff *coeff;
-> @@ -535,6 +536,17 @@ static int lm25066_probe(struct i2c_client *client)
->  		info->b[PSC_POWER] = coeff[PSC_POWER].b;
->  	}
->  
-> +	/*
-> +	 * Values in the TI datasheets are normalized for a 1mOhm sense
-> +	 * resistor; assume that unless DT specifies a value explicitly.
-> +	 */
-> +	if (of_property_read_u32(client->dev.of_node,
-> +	                         "shunt-resistor-micro-ohms", &shunt))
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Space vs. tabs again. Never mind, fixed up and applied.
+Applied.
 
 Thanks,
 Guenter
 
-> +		shunt = 1000;
+> ---
+>  .../bindings/hwmon/pmbus/ti,lm25066.yaml      | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
+> new file mode 100644
+> index 000000000000..da8292bc32f5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
 > +
-> +	info->m[PSC_CURRENT_IN] = info->m[PSC_CURRENT_IN] * shunt / 1000;
-> +	info->m[PSC_POWER] = info->m[PSC_POWER] * shunt / 1000;
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/ti,lm25066.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	return pmbus_do_probe(client, info);
->  }
->  
+> +title: National Semiconductor/Texas Instruments LM250x6/LM506x power-management ICs
+> +
+> +maintainers:
+> +  - Zev Weiss <zev@bewilderbeest.net>
+> +
+> +description: |
+> +  The LM25066 family of power-management ICs (a.k.a. hot-swap
+> +  controllers or eFuses in various contexts) are PMBus devices that
+> +  offer temperature, current, voltage, and power monitoring.
+> +
+> +  Datasheet: https://www.ti.com/lit/ds/symlink/lm25066.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,lm25056
+> +      - ti,lm25066
+> +      - ti,lm5064
+> +      - ti,lm5066
+> +      - ti,lm5066i
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  shunt-resistor-micro-ohms:
+> +    description:
+> +      Shunt (sense) resistor value in micro-Ohms
+> +    default: 1000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic@40 {
+> +            compatible = "ti,lm25066";
+> +            reg = <0x40>;
+> +            shunt-resistor-micro-ohms = <675>;
+> +        };
+> +    };
