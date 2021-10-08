@@ -2,79 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD77C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:42:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55CFBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:53:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B563160FC1
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:42:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C1F76103C
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:53:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbhJHOon (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 10:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S242095AbhJHOzB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 10:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbhJHOon (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:44:43 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1282C061570;
-        Fri,  8 Oct 2021 07:42:47 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id g2so9157746ild.1;
-        Fri, 08 Oct 2021 07:42:47 -0700 (PDT)
+        with ESMTP id S232200AbhJHOy7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:54:59 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689C1C061570;
+        Fri,  8 Oct 2021 07:53:04 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 24so14196946oix.0;
+        Fri, 08 Oct 2021 07:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aD65N++qNJ05mDhdAztzUQUp3glaEsKomN2IiXw18IU=;
-        b=OncWWgmiCxwRgwoVO5Rp4rQFyFhZ/aaOOgL9f2BzMhWKtoTnGi17rIEdZHAVbcpHoP
-         TFnLKncm7su6XHwU4EwLUmswOvroQ/aIHKSyJ/B86QgTAgajqQRqpAPeo8xT5etrVwI4
-         hQtlYfj864S0Wi346eTK/lGi5XqFfii2/ueGkAGvq6OpVuG5PQuFMoLj9HwYLLsxHlRC
-         rQXvtOdOg+sWY/mVGGCdyk+LT8WcnNrPDfd7ym1rUpBasZBQR9RapCXn8H/S60gJVrZp
-         mK1bLVbfu8T8d1+eHYxkjDlgcpiaReelRvWXw3m+sUbg4IV+8+Lrr5QiC4XDsHxKcFNH
-         P9PA==
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=foYn8H7q3UIU7Of1c0FoDcVDC713rvA1GWkczdQekyI=;
+        b=T/o++cVBomAjw5uW/ulvoVFPzEyUBZ7/bSHSLnGv3znmS3lyRV2xnll/7QK6O8xtBn
+         DJgQerKW9BxIbH3IfmB7B7kqb/KnEsk0P0MPEmKIWCD92yfDN2KxT825JpLFreU/18tH
+         6z28nYb4xIFV5GANFPFYZdqZqYkBSMR7ckyI7Kr9VBud2CO5pszCxcdDyt0mgOBakJc3
+         V66mbBLNgKSn9lR1YfH1mxZOTg8tq3I+eedxRINClbWFFDWK1KYGTXFB9N1BzMiHWo9D
+         rwv4SCdyFBc8yuF6vsVWVldftbePJWv/70IuX2Jq/K3Ew4hUjutHxThJQydjR2y+03i/
+         Hxow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aD65N++qNJ05mDhdAztzUQUp3glaEsKomN2IiXw18IU=;
-        b=mBU6CdHKlB8XAoG8Bga94FuMhJZL5MDc/FJzwcHYyIByFDr8YGis6GxyOzP0Zve8FP
-         JaRhBPsIJwYeaPCQQZwYGKbG/W5FC/VoUfF00qum+9oJfTdyXNDoEhWgNDElhA7ayvtN
-         Mhgi47Eca2AwwS7DGlSFbXiD/FjrG7aecbxOnPnvy730PfH+RbjTICruLAyWoX88J10a
-         o8QTPoCGof/hsKysKHrStCnVwtm3DDyz/OjBJVssbYkujgTw+wgRAJrdL1pDTtjC7NWV
-         iidM800Y/zgCLSfUeHgvEYDPI99CRgfxkU3giQZiWpC/MyLPsJa8jqjYIE8YyKVTgit+
-         Q1jw==
-X-Gm-Message-State: AOAM531DMbzMudeeoxBzOQgT8pCOigUJxfK5i3b8uaQtOK+FDLQewFOf
-        fD4qK/kg7frehsT2wjCdrapn7hv7/RWPV0FKuIGa6HLi/9w=
-X-Google-Smtp-Source: ABdhPJxHf31/FzDQq2IFsOfPS/cYFLyJznSRlzjoYZN7caXEM095WQPKmiWug5blt30P0KWeg1bcG4h1WIjz3t2ICpo=
-X-Received: by 2002:a92:de41:: with SMTP id e1mr5811573ilr.289.1633704167116;
- Fri, 08 Oct 2021 07:42:47 -0700 (PDT)
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=foYn8H7q3UIU7Of1c0FoDcVDC713rvA1GWkczdQekyI=;
+        b=FmVJiIGJg+AX0Iv3eOu/eDJCLhwoIZnl35Xda+SpvBOFBe1IDWnP1GvHe1lYobgWSA
+         1n6KHoMexi/Nn3TfnEXjCl04p5fEYVGwl1mMEF6Jc/bcTMGemNWdQn396qJbZ8NfYPiC
+         dZYqQgbsH4zclXPfSOPkaR8uQEL1gv78SrOfe9GC73AP61UUXCtncSVSIUgXYOAlzadW
+         OVjDEnYczWce1voTqG0YWAnD96m3rLj7+SOXngAmH5UGPiDrK4PFsF10keDvWq2HgmJ1
+         xiP9NSneVsWssTnwelwqRbHqfMQlJ+DpFtNXYH1s7aWnhp4BJp6DPZ4qrM92CkLsq5fP
+         Rf0g==
+X-Gm-Message-State: AOAM532e/PAjbjOmtw3ILKX7P3zXSegrLMK9vQ6uFsEU1woVvmEA6NtH
+        M9uKNSNXNDsdc4Sq3n2Y8COndUCjeRo=
+X-Google-Smtp-Source: ABdhPJx1XMhR0uVbMK1h8u+IVRwzaj8497xzhUJrR/nSvpauLmjCDjJbKKCfXFxZMpou3iFg6VlMtA==
+X-Received: by 2002:a05:6808:2107:: with SMTP id r7mr7557160oiw.153.1633704783489;
+        Fri, 08 Oct 2021 07:53:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d14sm584747otq.65.2021.10.08.07.53.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Oct 2021 07:53:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1632994837.git.mchehab+huawei@kernel.org>
+ <a14f98e1b23ea14cf14da3c3169955343ec28bbe.1632994837.git.mchehab+huawei@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 3/7] ABI: sysfs-class-hwmon: add a description for
+ tempY_crit_alarm
+Message-ID: <3ae66959-1bc0-09ed-b772-079030bc1c1f@roeck-us.net>
+Date:   Fri, 8 Oct 2021 07:53:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211006222502.645003-1-pauk.denis@gmail.com> <20211006222502.645003-3-pauk.denis@gmail.com>
-In-Reply-To: <20211006222502.645003-3-pauk.denis@gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Fri, 8 Oct 2021 16:42:36 +0200
-Message-ID: <CAB95QARh1SBm+QnZsMgvxLk0WqBVBzuk8o_J8Q4qFguHATnZ_A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <a14f98e1b23ea14cf14da3c3169955343ec28bbe.1632994837.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Denis,
+On 9/30/21 2:44 AM, Mauro Carvalho Chehab wrote:
+> Such ABI symbol is currently not described. Document it.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+> 
+> See [PATCH v2 0/7] at: https://lore.kernel.org/all/cover.1632994837.git.mchehab+huawei@kernel.org/
+> 
+>   Documentation/ABI/testing/sysfs-class-hwmon | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-hwmon b/Documentation/ABI/testing/sysfs-class-hwmon
+> index ea5a129ae082..1f20687def44 100644
+> --- a/Documentation/ABI/testing/sysfs-class-hwmon
+> +++ b/Documentation/ABI/testing/sysfs-class-hwmon
+> @@ -410,6 +410,20 @@ Description:
+>   
+>   		RW
+>   
+> +What:		/sys/class/hwmon/hwmonX/tempY_crit_alarm
+> +Description:
+> +		Critical high temperature alarm flag.
+> +
+> +		- 0: OK
+> +		- 1: temperature has reached tempY_crit
+> +
+> +		RW
+> +
+> +		Contrary to regular alarm flags which clear themselves
+> +		automatically when read, this one sticks until cleared by
+> +		the user. This is done by writing 0 to the file. Writing
+> +		other values is unsupported.
+> +
 
+That is not really correct. It _may_ be current implementation for some drivers,
+but such an implementation would not be correct. The proper implementation would
+be to auto-clear the flag after it was read unless the condition persists.
 
-On Thu, 7 Oct 2021 at 00:25, Denis Pauk <pauk.denis@gmail.com> wrote:
-> +               if (si->addr.size == 1)
-> +                       value = ec->read_buffer[read_reg_ct];
-> +               else if (si->addr.size == 2)
-> +                       value = get_unaligned_le16(&ec->read_buffer[read_reg_ct]);
-> +               else if (si->addr.size == 4)
-> +                       value = get_unaligned_le32(&ec->read_buffer[read_reg_ct]);
+>   What:		/sys/class/hwmon/hwmonX/tempY_crit_hyst
+>   Description:
+>   		Temperature hysteresis value for critical limit.
+> 
 
-If you did not invert the encoding scheme the data in the buffer are
-in BE order.
+This should be documented as part of the previous patch, together with
+all other alarm attributes.
 
-Best regards,
-Eugene
+Guenter
