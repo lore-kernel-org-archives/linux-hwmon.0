@@ -2,38 +2,38 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD3AC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 03:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FBA5C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 03:42:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C7E460F94
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 03:37:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4656A60FE3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 03:42:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239238AbhJHDjV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Oct 2021 23:39:21 -0400
-Received: from mga09.intel.com ([134.134.136.24]:60643 "EHLO mga09.intel.com"
+        id S231569AbhJHDoX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Oct 2021 23:44:23 -0400
+Received: from mga07.intel.com ([134.134.136.100]:41281 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229615AbhJHDjU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 7 Oct 2021 23:39:20 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="226326014"
+        id S241740AbhJHDoW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 7 Oct 2021 23:44:22 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="289924914"
 X-IronPort-AV: E=Sophos;i="5.85,356,1624345200"; 
-   d="scan'208";a="226326014"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 20:37:25 -0700
+   d="scan'208";a="289924914"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 20:42:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,356,1624345200"; 
-   d="scan'208";a="478821966"
+   d="scan'208";a="624571365"
 Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2021 20:37:24 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 07 Oct 2021 20:42:26 -0700
 Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mYghH-0007tX-VM; Fri, 08 Oct 2021 03:37:23 +0000
-Date:   Fri, 08 Oct 2021 11:36:57 +0800
+        id 1mYgm9-0007yA-Hz; Fri, 08 Oct 2021 03:42:25 +0000
+Date:   Fri, 08 Oct 2021 11:42:17 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 0889b7c73a4d8eaaa321eafcf66835979ead862a
-Message-ID: <615fbcd9.9VR9nWRULlJ8JOD9%lkp@intel.com>
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ dd4d747ef05addab887dc8ff0d6ab9860bbcd783
+Message-ID: <615fbe19.6u7t7cKvkcP4tmNL%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -42,10 +42,10 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 0889b7c73a4d8eaaa321eafcf66835979ead862a  hwmon: (tmp421) introduce MAX_CHANNELS define
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: dd4d747ef05addab887dc8ff0d6ab9860bbcd783  hwmon: (w83793) Fix NULL pointer dereference by removing unnecessary structure field
 
-elapsed time: 1215m
+elapsed time: 1220m
 
 configs tested: 149
 configs skipped: 3
