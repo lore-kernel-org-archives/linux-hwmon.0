@@ -2,125 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03845C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 18:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C097C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 19:18:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D53B560FE8
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 18:58:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 580596054E
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 19:18:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240388AbhJHTAK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 15:00:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44444 "EHLO mail.kernel.org"
+        id S231350AbhJHTU0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 15:20:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231459AbhJHTAG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 8 Oct 2021 15:00:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E551D60FF2;
-        Fri,  8 Oct 2021 18:58:10 +0000 (UTC)
+        id S231342AbhJHTUW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 8 Oct 2021 15:20:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0504861100;
+        Fri,  8 Oct 2021 19:18:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633719490;
-        bh=vJva/HpoeUn+4gPZyR4WLzqjqQsUwQtyF3rf7Q6S3T4=;
+        s=k20201202; t=1633720707;
+        bh=IC9kNsRFIBO+K8d9i6+XTu+7i8NQDKUt9EGCz3dsmac=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CgXaABOb9gNGAOqRfRfFgwTItuF6RLY77H3NnriIqYe0Y3fyo8GYxxC9df98OFaYW
-         Jb14pYa7EVnXQSU9egbiOzjVbThsZK6povp/ugOQyUC9m6ZJJO5MN6eHFzLUzMRtrr
-         whX9r+3s8HoBewDftCu4lNRX4V382LoIQcB+V9/qJ9yyPlDaea6yRr0AeYGHW869Q3
-         h6UesZupaY86jn+QKVTYJvjDayKQdn23mMhV+OBQgk9pmv640aoHIE8fs2spitLgEn
-         wmAtveTJ3By2OG3Ku4Xlr04l3nWNx2wVGfhXQjDxtafjlQOaZnFbu4arBzJ9m7367n
-         ardhDAoiNsdsw==
-Received: by mail-ed1-f50.google.com with SMTP id d9so15993192edh.5;
-        Fri, 08 Oct 2021 11:58:10 -0700 (PDT)
-X-Gm-Message-State: AOAM533XkHzUX3Jm6evTo1xCP6RGO/ndpZXWDVyDFicpAZwFYKfPkwoj
-        B0m2xX2/VzbopI6jjacodqSjJ26ECWql/qAwCQ==
-X-Google-Smtp-Source: ABdhPJzBttaP056QfvNAp0LGKfTv4Wu68h8vKSUgvj7d/nrVSCz93oZHkNGlo6sQGYTgKEc0qcv31neoUntcj2P7MSM=
-X-Received: by 2002:a17:906:71d4:: with SMTP id i20mr6499269ejk.390.1633719489276;
- Fri, 08 Oct 2021 11:58:09 -0700 (PDT)
+        b=BpP1jk6pQ92wMYrNJJz//UzDyIl7KDMW06pY0T2+/sdPu5gjz3r73bfN9q2cGyrEQ
+         sud2KOsGrgUNoR+N9Oc0h826ZN50zQ5NZ6LS+kD/CVsBx5SuhiIjyW3a97uWncfgZb
+         QnZ391AKNF/jjq6BkhcO2ic6Ln9+QmkBu54kb7ENA7k6LNx73/7h4D7gMPH2zflUzo
+         rrRNqzd125lCTk9JTFmb6OKgo/WcAjTN52Ku54KyF4PSoAwPjhHVpk/LZovW05yPey
+         F55WwmujVXSf3MqWRnT5PZiNORb9kZ5bAXVErrBJjsIMF/OzhdMYM7EyvwyukXf/hd
+         DVPpj7BxaNtOA==
+Received: by mail-ed1-f44.google.com with SMTP id d9so16172839edh.5;
+        Fri, 08 Oct 2021 12:18:26 -0700 (PDT)
+X-Gm-Message-State: AOAM5308/AY7MxLU7MtVSBXUGHvyV3tpa4Rtgby4gfxEPdv3zOegaOcj
+        eaDW5LDz74BRn3UhB+z52Vohc86DjQxxH5pKMg==
+X-Google-Smtp-Source: ABdhPJxqow2M5nj6LodviTLlbfFr4zL57L7+Vcp4BPJ43DFWyfStrDXyuWmCoFsVAuWT7QiI7UzLZynfXN+8NRHIZ5E=
+X-Received: by 2002:a05:6402:27d2:: with SMTP id c18mr8725154ede.271.1633720705455;
+ Fri, 08 Oct 2021 12:18:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210920182114.339419-1-krzysztof.kozlowski@canonical.com>
- <20210920182114.339419-6-krzysztof.kozlowski@canonical.com>
- <YUzuyG3e7sHlMHAJ@robh.at.kernel.org> <8871dd77-f9f1-bf25-78ad-48f97efcf7d9@canonical.com>
-In-Reply-To: <8871dd77-f9f1-bf25-78ad-48f97efcf7d9@canonical.com>
+References: <cover.1632984254.git.krzysztof.adamski@nokia.com>
+ <3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com>
+ <20211002142219.GC34532@roeck-us.net> <YVqu92dUgNKlYMlG@localhost.localdomain>
+ <20211005141457.GB2395636@roeck-us.net> <YV4NUqf7ey5Yr55P@robh.at.kernel.org>
+ <YV6m8MRa4+lKOWTp@localhost.localdomain> <18a5d5c9-2885-68da-256b-7ae1c3b95819@roeck-us.net>
+In-Reply-To: <18a5d5c9-2885-68da-256b-7ae1c3b95819@roeck-us.net>
 From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 8 Oct 2021 13:57:57 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK4cku0XPgEL=xot67FjfApxLHUDAvbwV6-MvpG_M0aKg@mail.gmail.com>
-Message-ID: <CAL_JsqK4cku0XPgEL=xot67FjfApxLHUDAvbwV6-MvpG_M0aKg@mail.gmail.com>
-Subject: Re: [PATCH 6/6] dt-bindings: hwmon: jedec,jc42: add nxp,se97b
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jiri Kosina <trivial@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+Date:   Fri, 8 Oct 2021 14:18:13 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJP2yX1YoJP00+DK1S=p3TXKVhjvproKsJZtDQQ_6L5Fg@mail.gmail.com>
+Message-ID: <CAL_JsqJP2yX1YoJP00+DK1S=p3TXKVhjvproKsJZtDQQ_6L5Fg@mail.gmail.com>
+Subject: Re: [PATCH v3 11/11] dt-bindings: hwmon: allow specifying channels
+ for tmp421
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 1:57 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
+On Fri, Oct 8, 2021 at 9:33 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On 23/09/2021 23:16, Rob Herring wrote:
-> > On Mon, Sep 20, 2021 at 08:21:14PM +0200, Krzysztof Kozlowski wrote:
-> >> Document bindings for NXP SE97B, a DDR memory module temperature sensor
-> >> with integrated SPD and EEPROM via Atmel's AT24 interface.
+> On 10/7/21 12:51 AM, Krzysztof Adamski wrote:
+> > Dnia Wed, Oct 06, 2021 at 03:55:46PM -0500, Rob Herring napisa=C5=82(a)=
+:
+> >>>
+> >>>     input@0 {
+> >>>         reg =3D <0>;
+> >>>         label =3D "output voltage";
+> >>>     };
+> >>>
+> >>> Anyway, maybe Rob has an idea how to name this properly.
 > >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> >> ---
-> >>  Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml | 9 +++++++++
-> >>  1 file changed, 9 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> >> index a7bb4e3a1c46..0e49b3901161 100644
-> >> --- a/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> >> +++ b/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
-> >> @@ -10,6 +10,14 @@ maintainers:
-> >>    - Jean Delvare <jdelvare@suse.com>
-> >>    - Guenter Roeck <linux@roeck-us.net>
-> >>
-> >> +select:
-> >> +  properties:
-> >> +    compatible:
-> >> +      const: jedec,jc-42.4-temp
-> >> +
-> >> +  required:
-> >> +    - compatible
-> >> +
+> >> No, I don't have a sense of the range of h/w...
 > >
-> > Is this supposed to be in the last patch? And why is it needed?
+> > I feel like we are stuck. Rob does not have a sense of the range of the
+> > h/w and Guenter does not have a sense of the DeviceTree idioms. How can
+> > we solve that?
+> >
 >
-> Yes, this is here on purpose because of nxp,se97b which is sensor with
-> at24-compatible EEPROM.
+> That is why I am asking questions. It doesn't mean we are stuck.
 >
-> arch/arm/boot/dts/at91-nattis-2-natte-2.dts:
-> 169         temp@18 {
-> 170                 compatible = "nxp,se97b", "jedec,jc-42.4-temp";
+> > Could we, maybe, just focus on this typical, simplified, case I have fo=
+r
+> > now - a sensor with several channels of known, same type (temperature)?
+> > We clearly are unable handle all possible cases here, for now.
+> >
+> > Does this look sane for that usecase or what would you, Rob, change?
+> >
+> > sensor@4c {
+> >    compatible =3D "ti,tmp422";
+> >    reg =3D <0x4c>;
+> >    #address-cells =3D <1>;
+> >    #size-cells =3D <0>;
+> >
+> >    input@0 {
+> >      reg =3D <0x0>;
+> >      ti,n-factor =3D <0x1>;
+> >      label =3D "local";
+> >    };
+> >
+> >    input@1 {
+> >      reg =3D <0x1>;
+> >      ti,n-factor =3D <0x0>;
+> >      label =3D "somelabel";
+> >    };
+> >
+> >    input@2 {
+> >      reg =3D <0x2>;
+> >      status =3D "disabled";
+> >    };
+> > };
+> >
+> > There were some doubts whether "input" makes sense here.  I still think
+> > it doas as even in HWMON subsystem, we have "hwmon_temp_input" and
+> > HWMON_T_INPUT, so a temperature channel _is_ an input.  Of course I can
+> > change it to "temperature" or "channel", just tell me which one is
+> > accepted.
+> >
 >
-> 171                 reg = <0x18>;
-> 172                 smbus-timeout-disable;
-> 173         };
-> 174
-> 175         eeprom@50 {
-> 176                 compatible = "nxp,se97b", "atmel,24c02";
-> 177                 reg = <0x50>;
-> 178                 pagesize = <16>;
->
-> Without the select, dtbs_check was complaining about the second node:
->
-> eeprom@50: compatible: 'oneOf' conditional failed, one must be fixed:
->         ['nxp,se97b', 'atmel,24c02'] is too long
->         Additional items are not allowed ('atmel,24c02' was unexpected)
->         'jedec,jc-42.4-temp' was expected
->         From schema:
-> /home/dev/linux/linux/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
->
-> eeprom@50: 'pagesize' does not match any of the regexes: 'pinctrl-[0-9]+'
->         From schema:
-> /home/dev/linux/linux/Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml
+> I'd be fine with "channel" or "sensor". Both would be generic.
 
-If a dt only lists one of the vendor specific compatibles, it is going
-to pass as this schema won't be applied with this change. We won't get
-an undocumented compatible either because it is documented. I don't
-have a better suggestion other than listing everything but
-'nxp,se97b'. I don't think it is really worth do that, so:
+'channel' aligns with multi-channel ADC node naming, so that's fine for me.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Rob
