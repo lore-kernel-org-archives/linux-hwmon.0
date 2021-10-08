@@ -2,132 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF0CCC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA89CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:12:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 957DF61029
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:10:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D435C61056
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Oct 2021 14:12:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242482AbhJHOMk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 10:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S230037AbhJHOOg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 10:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242624AbhJHOMY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:12:24 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58F7C06176A;
-        Fri,  8 Oct 2021 07:10:29 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id y207so10759702oia.11;
-        Fri, 08 Oct 2021 07:10:29 -0700 (PDT)
+        with ESMTP id S230009AbhJHOOf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Oct 2021 10:14:35 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2EEC061570;
+        Fri,  8 Oct 2021 07:12:40 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id t4so12111787oie.5;
+        Fri, 08 Oct 2021 07:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=IiXYxUUmxX5fc/N+2AGbIuVJDEoKxiawErZ9srHj0jo=;
-        b=c7i9TclqOXC9NQVa/0QKM57Q5QT8fIu2Uv6j4jzQtqYYYbXGO5S2+Mi2nhcO2FrGFz
-         a0J77gQXvctEdjS9lqpR1Je3tH+8RCIQvEGk7/QX7qwu9flkFoBepGIbW41dwUO8QV4v
-         b1RsXy7mUJOhtan+juYoPJcgW9cvyrktgGHgL3Unx/KE9I4wlHW4JzQOyaRkkbvKBIDE
-         GN2x2Cto3WauKEYvajTIvmhXinClt2A5hRoFM1WsOrsNrHhuqYy+K61FpUhKZmvpEl88
-         oAoo/KmKydPub5dJNYlaD+WhNG6nDsBhswNmKCtpbPbqNxG3G1W66Xb9GXxHzwUZ6C32
-         k4ew==
+        bh=ec0UXnetl/cUzojliEKcqLDXOEMlqclKc/XRj4PNyXE=;
+        b=kLrvKJ4aHZsTuO6lSocllGqMoHF5q/Tep3znQkD8Dx28796e+XZMG9mLO4Z9SEK8qM
+         FsKe1gasVsBcasVNBeC+fvzi+5ljEzEwhyS4aQXdQ64mk941AhpqFs4X8T2Z1kGlqJ22
+         NsHoST6THQvLjbZ+yQ9JScRRYx5PwUxDzmNAx4eqr4yhuTp2W9JVIaHuvgsehQIZwrKQ
+         f4jYXhJNEJLCMh0g+DjPoEc0FzmnXThQr/Skulq2/iOXF2it9Pwp4XBxzbVSVIgG4ZGj
+         Cka55QYrE4tOUqRYkCCbZM0KaxOIIwTqgO3BaimLABEHIJQrzb4NeUDilpaW0p8MEtlY
+         1KSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=IiXYxUUmxX5fc/N+2AGbIuVJDEoKxiawErZ9srHj0jo=;
-        b=hj23Gdbzcx1UKFntZtIAhKrzNoJHcDMYobpec0gC9hpxzJ8cUHzipE+xBjaKyxtxo+
-         wS2tr6K2nmCdEaJVFBlrssHHBGcYe7vfbSP/OtgifNmTGiMwSPRvXwCreJxAV3KnYzUE
-         N6+f25B2uxlEm8/Lhr3xqRm7Twj0jjeU9TNMkbRdqvZuDi3VJG6VCPWoTTRXYaSNPJpV
-         gzBpdKqAdrp5/uGpqjFKzpPPZiWoGMUnq1TBLH0j/iRKdtJbTmx0GNOF2AoYajbxLz/6
-         QH+eqcNLsMXoUgKc1VZOE+fopnvf4BHwYnyRXdXd9I8LEHruI8jFWiRu17jbrxvWaXX0
-         McIQ==
-X-Gm-Message-State: AOAM531Scflw5e1/tb2gMmqg0KCiZP8aUHhE8okvWVb8GbY3kwwyz60l
-        K2bIPhaA/Cj5SyuOFszgF4FDfxlh3cw=
-X-Google-Smtp-Source: ABdhPJxhdHlSP1WurrhCIJ8tM/5LxgwSdz5d+pKk7TVEe5llpRNDBiWgwKyHSppItIe/qE9kJftKiw==
-X-Received: by 2002:a54:410b:: with SMTP id l11mr16346473oic.74.1633702229084;
-        Fri, 08 Oct 2021 07:10:29 -0700 (PDT)
+        bh=ec0UXnetl/cUzojliEKcqLDXOEMlqclKc/XRj4PNyXE=;
+        b=yFr/nhpTR8fN5Gx7kd34jR8FoMPAz5AUlph1Y6KcwM9pVKoNQJzlmYU76loJ3PRU/e
+         oy/YSXm2gLB0oEgedT6jmjQ8FhccqtQ6LpYIxfcZOCGGdz7sQ2Cq7OEYUk3wni+z7Fkp
+         ZZ9hsU2tkIW+f8M/szNCcYQlp6CuMBzZ7D2E/HeY9UZwsBxxi67PFUhlwlyiuvsgH9p+
+         ormdqqMSfio+GZIQYo6alJYSFEarcVJ+tlbckRfSX22a4z3iRurdlx1xxkMN29xjGsqQ
+         aS3no1aJmcNdcVdecUwfikXtY+AjGtWiTUFtEuDdgfPagEJYqmTEhe8FDxGDqV35uZlt
+         7XMw==
+X-Gm-Message-State: AOAM532LagpDcO2t19e6GbbA+Nuk0drRTBtHU1hB9swKkEIGpGcIw/8E
+        1qU4yNNC6rS6BSZS2inr7Rg=
+X-Google-Smtp-Source: ABdhPJzOVTiNEosUQAjVv9QO0iXxPxGaeT/gqUshzEInrFSgqW3WwgCltkFL+EjuofaqHQf7o7y0Ug==
+X-Received: by 2002:a05:6808:1992:: with SMTP id bj18mr16600754oib.125.1633702357758;
+        Fri, 08 Oct 2021 07:12:37 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bg16sm688219oib.30.2021.10.08.07.10.28
+        by smtp.gmail.com with ESMTPSA id d10sm514639ooj.24.2021.10.08.07.12.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 07:10:28 -0700 (PDT)
+        Fri, 08 Oct 2021 07:12:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Oct 2021 07:10:27 -0700
+Date:   Fri, 8 Oct 2021 07:12:35 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Brandon Wyman <bjwyman@gmail.com>
 Cc:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH 1/2] hwmon: (pmbus/ibm-cffps) Add mfg_id debugfs entry
-Message-ID: <20211008141027.GA1987825@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/ibm-cffps) Use MFR_ID to choose version
+Message-ID: <20211008141235.GA2044602@roeck-us.net>
 References: <20211004144339.2634330-1-bjwyman@gmail.com>
+ <20211004144339.2634330-2-bjwyman@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211004144339.2634330-1-bjwyman@gmail.com>
+In-Reply-To: <20211004144339.2634330-2-bjwyman@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 04, 2021 at 02:43:38PM +0000, Brandon Wyman wrote:
-> Add support for the manufacturer ID to the debugfs entries.
+On Mon, Oct 04, 2021 at 02:43:39PM +0000, Brandon Wyman wrote:
+> There are multiple power supplies that will indicate
+> CFFPS_CCIN_VERSION_1, use the manufacturer ID to determine if it should
+> be treated as version cffps1 or version cffps2.
 > 
 > Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
 
-Applied.
+Applied, after fixing continnuation line alignments.
 
-Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/ibm-cffps.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  drivers/hwmon/pmbus/ibm-cffps.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index df712ce4b164..2ee47cbbb665 100644
+> index 2ee47cbbb665..292c87331f2b 100644
 > --- a/drivers/hwmon/pmbus/ibm-cffps.c
 > +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -18,6 +18,7 @@
+> @@ -502,16 +502,29 @@ static int ibm_cffps_probe(struct i2c_client *client)
+>  		u16 ccin_revision = 0;
+>  		u16 ccin_version = CFFPS_CCIN_VERSION_1;
+>  		int ccin = i2c_smbus_read_word_swapped(client, CFFPS_CCIN_CMD);
+> +		char mfg_id[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
 >  
->  #include "pmbus.h"
+>  		if (ccin > 0) {
+>  			ccin_revision = FIELD_GET(CFFPS_CCIN_REVISION, ccin);
+>  			ccin_version = FIELD_GET(CFFPS_CCIN_VERSION, ccin);
+>  		}
 >  
-> +#define CFFPS_MFG_ID_CMD                        0x99
->  #define CFFPS_FRU_CMD				0x9A
->  #define CFFPS_PN_CMD				0x9B
->  #define CFFPS_HEADER_CMD			0x9C
-> @@ -34,7 +35,7 @@
->  #define CFFPS_INPUT_HISTORY_SIZE		100
->  
->  #define CFFPS_CCIN_REVISION			GENMASK(7, 0)
-> -#define  CFFPS_CCIN_REVISION_LEGACY		 0xde
-> +#define CFFPS_CCIN_REVISION_LEGACY		 0xde
->  #define CFFPS_CCIN_VERSION			GENMASK(15, 8)
->  #define CFFPS_CCIN_VERSION_1			 0x2b
->  #define CFFPS_CCIN_VERSION_2			 0x2e
-> @@ -57,6 +58,7 @@
->  
->  enum {
->  	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
-> +	CFFPS_DEBUGFS_MFG_ID,
->  	CFFPS_DEBUGFS_FRU,
->  	CFFPS_DEBUGFS_PN,
->  	CFFPS_DEBUGFS_HEADER,
-> @@ -158,6 +160,9 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
->  	switch (idx) {
->  	case CFFPS_DEBUGFS_INPUT_HISTORY:
->  		return ibm_cffps_read_input_history(psu, buf, count, ppos);
-> +	case CFFPS_DEBUGFS_MFG_ID:
-> +		cmd = CFFPS_MFG_ID_CMD;
-> +		break;
->  	case CFFPS_DEBUGFS_FRU:
->  		cmd = CFFPS_FRU_CMD;
->  		break;
-> @@ -558,6 +563,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
->  	debugfs_create_file("input_history", 0444, ibm_cffps_dir,
->  			    &psu->debugfs_entries[CFFPS_DEBUGFS_INPUT_HISTORY],
->  			    &ibm_cffps_fops);
-> +	debugfs_create_file("mfg_id", 0444, ibm_cffps_dir,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_MFG_ID],
-> +			    &ibm_cffps_fops);
->  	debugfs_create_file("fru", 0444, ibm_cffps_dir,
->  			    &psu->debugfs_entries[CFFPS_DEBUGFS_FRU],
->  			    &ibm_cffps_fops);
+> +		rc = i2c_smbus_read_block_data(client, PMBUS_MFR_ID,
+> +				mfg_id);
+> +		if (rc < 0) {
+> +			dev_err(&client->dev,
+> +					"Failed to read Manufacturer ID\n");
+> +			return rc;
+> +		}
+> +
+>  		switch (ccin_version) {
+>  		default:
+>  		case CFFPS_CCIN_VERSION_1:
+> -			vs = cffps1;
+> +			if ((strncmp(mfg_id, "ACBE", 4) == 0) ||
+> +					(strncmp(mfg_id, "ARTE", 4) == 0))
+> +				vs = cffps1;
+> +			else
+> +				vs = cffps2;
+>  			break;
+>  		case CFFPS_CCIN_VERSION_2:
+>  			vs = cffps2;
