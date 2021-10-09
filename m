@@ -2,183 +2,222 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48E15C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 15:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7097C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 18:53:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D3AA60F22
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 15:50:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8211360F6B
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 18:53:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbhJIPwN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 9 Oct 2021 11:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S229737AbhJISzA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 9 Oct 2021 14:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbhJIPwM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 9 Oct 2021 11:52:12 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE02C061570;
-        Sat,  9 Oct 2021 08:50:16 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id x33-20020a9d37a4000000b0054733a85462so15403858otb.10;
-        Sat, 09 Oct 2021 08:50:16 -0700 (PDT)
+        with ESMTP id S229601AbhJISy7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 9 Oct 2021 14:54:59 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A7EC061762
+        for <linux-hwmon@vger.kernel.org>; Sat,  9 Oct 2021 11:53:02 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id q193-20020a252aca000000b005ba63482993so8779132ybq.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 09 Oct 2021 11:53:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JMVUxn512Tfe+t4BKLTuIbM7ZEEL6xwwLQvWXKN58Uc=;
-        b=mHvc2Ht4xyUaO4+T5NLjfL5+6NFv1GAkzatd59MKWqa70sLiGuTYBkYVKjzgooE4lV
-         9fYQoX8OxaTHchBXobOwYvwIbEkT/m362aUFcLs/frmB0GGz+Bc+uIZSO9deOOO5nF8n
-         FYFOvhQnjHC2QhzmzVZGVF2Z9yEK857AONfSDwoXJNsydXv8Wrl3D8sSeABlwggAtJ56
-         MgNEpZNvpv/IubCm2Y+WafOB7fhlTv6FJrH7Ooc2PO9YT9F6tC3k8PRTlVHHcaiYHalR
-         VrA/du3xhGJSHCL++g0wuOMqlBBolk6Tc17SAApHoGyY7QiwQfQE3xN+inZXzD4ChL1q
-         ZX4Q==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=wgwJpFSMXbT+4uWqtIhIbvoDsh/a6g6X6/NFZ3njfpQ=;
+        b=TwQ69JXhUyNzYM3WbLwFJUjs0xoYc9mk/xEvGMxhHVRlwzhQ9bGFIlGIZmOdi+9Vmm
+         HU6tV0Rhjbk3eq8spaznQFFJX8lK4MhtTX/vleQat1iVS3HZubYf16Oyacsga5R6o2b5
+         2NI3NrVvm9pb3y1IP775QxrkcXn1heWcjfzw2pW6bq70Grzp1bFcv7wZkVA3ORTkGMyP
+         0uPCsdjf1hMSv284t7Q0ezIPd4Zz3mLBjBaMoYXLPW3RN3vfb6qmOyYDB5TcXGoYcea5
+         Fs4JfSChJ0uXS0L9UoE7naSYkfl6JAbj5IeJrLkmQ6MiQtw+x6rvFEU5tDXp3K9ye/JQ
+         bj5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JMVUxn512Tfe+t4BKLTuIbM7ZEEL6xwwLQvWXKN58Uc=;
-        b=aOZylGYQ6ysQ5TXcce1ktoZanv4gho3wlBc/N4dtcdCKU1KAru3q929CxQoJ3yAFMc
-         Phxr2gMpzsG7igbwXAYtBL5LRlw/SpmE5fn1pagbAbXdAjhHeNnDpZKk5i+iuaoGcrCv
-         KwpNnbf5Hwmkh9GKwyxx23jyyUcWp5MZJVtzatEYEsmwPWv3ziU3UcoVF0YF+43Ja3jR
-         SE/nS5NlWr4VdxpDBN4PiVCsw2VnXwllMHjAXMOKGGhsuS8jsABAcu+S6NIVZb5M1ljy
-         a/kbcqa4VMIQGbh1ezewaa853RMXkhD5BwhhaIAojhU++Lyp1DwA3GAbbZHDfueutDv6
-         H0vQ==
-X-Gm-Message-State: AOAM530NtU2y1D1yThX1SdVwxcqT17q4oCd8ZT0+WZHozA1/xyC6YwQq
-        CqAg3AI6Ibl2Dck6q20FqOBTT9EeOZE=
-X-Google-Smtp-Source: ABdhPJxMirTwuQLEVUw64sE7/Ga4CN/r1MlwBVxZfFk75niQyaoL5AghA+KVXjP3MLgaXJLIbLTg/A==
-X-Received: by 2002:a9d:17c5:: with SMTP id j63mr14044004otj.191.1633794615090;
-        Sat, 09 Oct 2021 08:50:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t6sm503959ooa.27.2021.10.09.08.50.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Oct 2021 08:50:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Oskar Senft <osk@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20211009025858.3326725-1-osk@google.com>
- <20211009025858.3326725-2-osk@google.com>
- <0674a2d0-f0a2-d6bc-33e3-483614602bae@roeck-us.net>
- <CABoTLcTL42a23=P501UoqNWr76A3fmEoxwjymz1-g0MNMyYPRA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4 2/2] hwmon: (nct7802) Make temperature sensors
- configurable.
-Message-ID: <fb878fce-8fa1-36b0-fa30-013d571563ee@roeck-us.net>
-Date:   Sat, 9 Oct 2021 08:50:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <CABoTLcTL42a23=P501UoqNWr76A3fmEoxwjymz1-g0MNMyYPRA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=wgwJpFSMXbT+4uWqtIhIbvoDsh/a6g6X6/NFZ3njfpQ=;
+        b=67PjMjiZ7QyDPrL9oCaM8bS1LJkEEucfNLNS70wWM06/iqQgIc6yTtRay3MV4NvWOO
+         zb9V1OYVVpJOJipx2jq1eBnod8GUSlDzasKKsdmCyf8HUjkQA7FSfC0SrwLRKdBvYvl0
+         7y11DC85HrkSX10F3xJw+0BVWNORU0RicN6bA84UDWE6mDYnLZCN59iyMjf9Kz0mYIT+
+         BHg9o1jOF4UVbJOlV4Xnq7qAC4not3y05ylnLTkT2OKr9jnRs6tm7GP2CxxhvkqYlcKu
+         PecKnGPGHGDy5rtTqkodzcxxRMXxfgoZO49n4z6qv8dkIlfc+t0dHLHxnaUCUiKFKpYl
+         ULxw==
+X-Gm-Message-State: AOAM533ru2JAPNtOPf8atiWzLG2zrxxLPf4/+/gpSlPOj7N00Ecy0qSW
+        g5Ysa/fRycSe/wbbqUFajIF1ps4=
+X-Google-Smtp-Source: ABdhPJwFPYxTy4txzD+gz1J4rdpojvO6wlJdUQK+g52zLot0+bRE79OEcbNoEoR6b0yjweTrqnjug1Y=
+X-Received: from osk.cam.corp.google.com ([2620:0:1004:1a:cf37:dd81:3340:f4a7])
+ (user=osk job=sendgmr) by 2002:a25:d407:: with SMTP id m7mr10819050ybf.182.1633805581677;
+ Sat, 09 Oct 2021 11:53:01 -0700 (PDT)
+Date:   Sat,  9 Oct 2021 14:52:56 -0400
+Message-Id: <20211009185257.2230013-1-osk@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
+Subject: [PATCH v5 1/2] dt-bindings: hwmon: Add nct7802 bindings
+From:   Oskar Senft <osk@google.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Oskar Senft <osk@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/9/21 7:50 AM, Oskar Senft wrote:
-> Hi Guenter
-> 
-> Thanks for the review!
-> 
->>> +     return sprintf(buf, "%u\n",
->>> +                     ((mode >> MODE_BIT_OFFSET_RTD(sattr->index)) &
->>> +                             MODE_RTD_MASK) + 2);
->>
->> Please split into two patches to simplify review. The changes from
->> constant to define are logically separate and should thus be in a
->> separate patch.
-> Ok, will do.
-> 
->>> +     if (index >= 30 && index < 38 &&                        /* local */
->>> +         (reg & MODE_LTD_EN) != MODE_LTD_EN)
->>
->> This is just a single bit, so "!(reg & MODE_LTD_EN)" is sufficient.
-> Ack.
-> 
->>> +static bool nct7802_get_input_config(struct device *dev,
->>> +     struct device_node *input, u8 *mode_mask, u8 *mode_val)
->>
->> Please align continuation lines with "(".
-> Oh, even if that would result in a lot of extra lines? Or just start
-> the first argument on a new line?
-> 
+This change documents the device tree bindings for the Nuvoton
+NCT7802Y driver.
 
-I sincerely doubt that will happen with the 100-column limit,
-but yes unless it really doesn't work.
+Signed-off-by: Oskar Senft <osk@google.com>
+---
+ .../bindings/hwmon/nuvoton,nct7802.yaml       | 142 ++++++++++++++++++
+ 1 file changed, 142 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
 
->> The function should return an error code.
-> Ok, I'll look into that.
-> 
->>> +     if (reg >= 1 && reg <= 3 && !of_device_is_available(input)) {
->>
->> reg will always be >=1 and <=3 here.
-> Good catch!
-> 
->>> +             *mode_val &= ~(MODE_RTD_MASK
->>> +                     << MODE_BIT_OFFSET_RTD(reg-1));
->>
->> space around '-'
-> Oh yeah, I'm sorry. Is there a code formatter I should have run? I did
-> run "checkpatch.pl", hoping that it would catch those.
-> 
-For some reason checkpatch doesn't always catch this.
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+new file mode 100644
+index 000000000000..ff99f40034f2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+@@ -0,0 +1,142 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7802.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NCT7802Y Hardware Monitoring IC
++
++maintainers:
++  - Guenter Roeck <linux@roeck-us.net>
++
++description: |
++  The NCT7802Y is a hardware monitor IC which supports one on-die and up to
++  5 remote temperature sensors with SMBus interface.
++
++  Datasheets:
++    https://www.nuvoton.com/export/resource-files/Nuvoton_NCT7802Y_Datasheet_V12.pdf
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,nct7802
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  channel@0:
++    type: object
++    description: Local Temperature Sensor ("LTD")
++    properties:
++      reg:
++        const: 0
++    required:
++      - reg
++
++  channel@1:
++    type: object
++    description: Remote Temperature Sensor or Voltage Sensor ("RTD1")
++    properties:
++      reg:
++        const: 1
++      sensor-type:
++        items:
++          - enum:
++              - temperature
++              - voltage
++      temperature-mode:
++        items:
++          - enum:
++              - thermistor
++              - thermal-diode
++    required:
++      - reg
++      - sensor-type
++
++  channel@2:
++    type: object
++    description: Remote Temperature Sensor or Voltage Sensor ("RTD2")
++    properties:
++      reg:
++        const: 2
++      sensor-type:
++        items:
++          - enum:
++              - temperature
++              - voltage
++      temperature-mode:
++        items:
++          - enum:
++              - thermistor
++              - thermal-diode
++    required:
++      - reg
++      - sensor-type
++
++  channel@3:
++    type: object
++    description: Remote Temperature Sensor or Voltage Sensor ("RTD3")
++    properties:
++      reg:
++        const: 3
++      sensor-type:
++        items:
++          - enum:
++              - temperature
++              - voltage
++    required:
++      - reg
++      - sensor-type
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        nct7802@28 {
++            compatible = "nuvoton,nct7802";
++            reg = <0x28>;
++
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            channel@0 { /* LTD */
++              reg = <0>;
++              status = "okay";
++            };
++
++            channel@1 { /* RTD1 */
++              reg = <1>;
++              status = "okay";
++              sensor-type = "temperature";
++              temperature-mode = "thermistor";
++            };
++
++            channel@2 { /* RTD2 */
++              reg = <2>;
++              status = "okay";
++              sensor-type = "temperature";
++              temperature-mode = "thermal-diode";
++            };
++
++            channel@3 { /* RTD3 */
++              reg = <3>;
++              status = "okay";
++              sensor-type = "voltage";
++            };
++        };
++    };
+-- 
+2.33.0.882.g93a45727a2-goog
 
->>> +             *mode_mask |= MODE_RTD_MASK
->>> +                     << MODE_BIT_OFFSET_RTD(reg-1);
->>
->> Unnecessary continuation lines. There are several more of those;
->> I won't comment on it further. Please only use continuation lines if
->> the resulting line length is otherwise > 100 columns.
-> Argh, yeah. After refactoring that function, I thought I caught all of
-> them, but obviously I didn't. According to [1] we should stay within
-> 80 columns (and use tabs that are 8 spaces wide). I assume that still
-> applies? The rest of this code follows that rule.
-> 
-
- From checkpatch, commit bdc48fa11e46 ("checkpatch/coding-style:
-deprecate 80-column warning"):
-
-     Yes, staying withing 80 columns is certainly still _preferred_.  But
-     it's not the hard limit that the checkpatch warnings imply, and other
-     concerns can most certainly dominate.
-
-I prefer readability over the 80 column limit.
-
->>> +     if (dev->of_node) {
->>> +             for_each_child_of_node(dev->of_node, input) {
->>> +                     if (nct7802_get_input_config(dev, input, &mode_mask,
->>> +                                     &mode_val))
->>> +                             found_input_config = true;
->>
->> This is mixing errors with "dt configuration does not exist".
->> nct7802_get_input_config() should return an actual error if the
->> DT configuration is bad, and return that error to the calling code
->> if that is the case.
-> Ok, I'll change that. I wasn't sure whether we'd rather configure "as
-> much as we can" or fail completely without configuring anything. Shall
-> we allow all of the configuration to be validated before erroring out?
-
-No, bail out on the first error.
-
-> That would make it easier to get the DT right in one pass, but makes
-> the code more complicated.
-> 
->>> +     if (!found_input_config) {
->>> +             /* Enable local temperature sensor by default */
->>> +             mode_val |= MODE_LTD_EN;
->>> +             mode_mask |= MODE_LTD_EN;
->>> +     }
->>
->> This can be set by default since nct7802_get_input_config()
->> removes it if the channel is disabled, meaning found_input_config
->> is really unnecessary.
-> Ok. Should we actually phase out the "LTD enabled by default"
-> completely? Or is that for a future change?
-> 
-
-Why ? That would change code behavior and would be unexpected.
-Just initialize mode_val and mode_mask variables with MODE_LTD_EN.
-
-Thanks,
-Guenter
