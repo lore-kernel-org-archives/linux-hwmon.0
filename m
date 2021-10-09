@@ -2,48 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD82CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 11:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18C4EC43219
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 11:51:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 92469610C7
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 11:51:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 064EF60F9C
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 11:51:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244819AbhJILxV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 9 Oct 2021 07:53:21 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:43205 "EHLO
+        id S244836AbhJILxX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 9 Oct 2021 07:53:23 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:36661 "EHLO
         new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244777AbhJILxL (ORCPT
+        by vger.kernel.org with ESMTP id S244798AbhJILxW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 9 Oct 2021 07:53:11 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8DD47580542;
-        Sat,  9 Oct 2021 07:51:14 -0400 (EDT)
+        Sat, 9 Oct 2021 07:53:22 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3B3C458055A;
+        Sat,  9 Oct 2021 07:51:25 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 09 Oct 2021 07:51:14 -0400
+  by compute6.internal (MEProxy); Sat, 09 Oct 2021 07:51:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=5B7osALGkMq4z
-        6TfUD8C4USTTOHwH17luAiTHWn99ns=; b=Vb1pAROwysxO4IATx/iEZxsvwJA3K
-        zVf3Y8AmAgrzke2OPYeoJtZBQ3c4bA2hy6EJ86Nb3x7XEv++Utltwyb4IUnHFGQs
-        R45VP2ZcAZutb8HjavRxyrvVhe1Zq72Dk2UowYHQofEsP3wYjZbTUPdouibDB9Ng
-        17N2CUIyWepxC/CkJnd9ZwFxf0XSv9lytcpFbgjDxOeeOgLpt4rPs8pbPWqFSIvQ
-        WUkFHkmAgK81tLE4TmJlTgDp4qQbJrL8HL1hODmrB83nN+V/qIE/mEPTeh0Sz+Xd
-        +/GJpzmXXSDWYma0IvzWm+x5fjTDAmqYcBN8dFsk4SVOMEIlM2K6CFIQA==
+        :mime-version:content-transfer-encoding; s=fm2; bh=JmrAk6lslDeRq
+        3HtNAosrHiHpleBbi7+FujnFXzxuU0=; b=a9jASffo+ouzTcQbMF/wWeyVROh29
+        Eq8LUJxa0ujsDLXo7W7UqO7LsGhSeJcIazKOG5Cua58Lk56XEy5kk1KDNQGFyHuw
+        4ZQ4L+p9nnrCrR/redQsfd7++ZObqJX8IN6yOn9oXgA+I3Ms2QbZ++C/P6YU9MCM
+        GWpKN9+KfeIcpFzHuSXhR9artJaEwIBXPywUeDXDm94Bxy37JqYzOZK4lmB0voSK
+        t+QbUg46GnCQRIzwny4qg/p04Fxp/0vUIpPxlUzi/BkPveu2d6+uArgFnS3DMK3r
+        BNv2/c7xFc+G4+HcCJAQrUK9VroD0kQkx3gZxwU+ki2HbIG/li0VY1WqA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=5B7osALGkMq4z6TfUD8C4USTTOHwH17luAiTHWn99ns=; b=gUEfmhWg
-        mplpy4yPWtX1gOtKXYj5x9xafH1A7COtvZBzLSzZcvLxl2Oc1sQYUfvivpTcFsvE
-        AuiHyRoWUIfR+s8XgrCvruautCr8DCLApokLOHvq/CLBz1g3d/+G1b796UETCnXe
-        bxASw6IX1AkdD0q80LVfRsiIxKqkGLKxRruW8QH8Vgp3uR8za5fcsV6r2+cL32wB
-        wIKOOvsbwI+VqSmPjpYMQ7gQfdifXCxpY/XThdw+hP0k/lngAuFl6X9RGysSJ3V2
-        OlAlEna0q9QWWh50nKma3H+20pMnUhutQHsUON6M6hEcuCBoKZKwoCwSTWQMq2ne
-        j/k/yOzJGdiT5g==
-X-ME-Sender: <xms:MoJhYX4-c8klrckoGCsCeLzR8C0vvaoeslM6iiIrlBWtmthvIrADQg>
-    <xme:MoJhYc7rVHgJU2uKb1l_dfTEq5WCqTm4tOYWWiZr67OJqTz59m1zQTIaEkvY5MIEn
-    uk2cJZ4O0r8uyd97f4>
-X-ME-Received: <xmr:MoJhYefSS4Ww9ZI6xtVdUQeuhLzRXAkEW09gOJLVmmcBExJrrWWOuyG_zRpkqaKR3f3AsqjsH6zWoSbIaiZRzk1mTdTElQJWJxM>
+        fm1; bh=JmrAk6lslDeRq3HtNAosrHiHpleBbi7+FujnFXzxuU0=; b=jifjRidy
+        6ivREx2qZJVJnYB/SDTETrCzc0E6gNKxNGEmaLunPXlJH/NcaOfgE22JhTIZ65yh
+        P5j12PxlXaHsCsdKlqUj4XEN+YEjEmpnmSebPZyCVGEUHWpZ09dNKELycPtNS0/N
+        b60stEAEfwQ9vZQaPfffauAjkPYTyTg68K28DwXWyJDyEbIGBEo4f3/ZSI/7ZLze
+        2aiY70HsZ+0qMtWrY4SSkF+8LkL5yLye7Tod34MV26ClKDargu5p9TES12FT41RQ
+        HxtCVZKoWuXOHx9ZbrhFK4nkNXzc/6vu18FqNtLRbyQ3pIu3g6UaSD87oNXiojzf
+        5tveUnbnRALvOg==
+X-ME-Sender: <xms:PYJhYViqOaplLmfgcEr4zhiswb74dYYti8pDLYdJrlum-wxHR6UCeA>
+    <xme:PYJhYaCzrur-wXiMbSZAlCKhglrkNagggCL8THsJtIFNQDiwu2SdAlJkr9shKKyqZ
+    IpEphU_Qzi8Jp1MjqE>
+X-ME-Received: <xmr:PYJhYVGTpDB9i-XwAYSAe3OnSnB0JNdepYCDJce1rxyR9FJErlCx9z5AYpD1xFiTEco4kG3uuEeO-QIz-OsUDT2XcG8ES_TBnVk>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddggeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
@@ -52,12 +52,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddggeegucetufdoteggod
     eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
     ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
     hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:MoJhYYLCm-TBX80z7DSpD5dGdnRZX-oB3OKqpyg1YbcxxSerN3BpkQ>
-    <xmx:MoJhYbJhLo97rDO_ywmPYG92cveMgiy8J7-sWjA5WY0FTal4SC8weg>
-    <xmx:MoJhYRwhhI86qGongx7w-t3ZI0gKK_9rQ2LH7L5r2Tmmcum-HL4WQw>
-    <xmx:MoJhYc54iq16IdeDtYudXJLQjKbp4PIG-seHFd4iu5weSWnrzv79sw>
+X-ME-Proxy: <xmx:PYJhYaTr_ONwvHB-55sfmf5BxVw6fkG3koQAhaU1jeNPj9jRAJie8A>
+    <xmx:PYJhYSxx2f0BbTekdCkexhLOgZI0Y4si1Llz8C2bHqc9Wa62x6ZoKw>
+    <xmx:PYJhYQ5UuW6_kpNl1ZBNrxiDm74-UHZoUk5b026IOVMCDStNWqRsHw>
+    <xmx:PYJhYWDRJhgldM3j4X8re4tF2wpPkC9E3Cwpk79jUFc8p89ImVgmPg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 9 Oct 2021 07:51:09 -0400 (EDT)
+ 9 Oct 2021 07:51:20 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     lee.jones@linaro.org, robh+dt@kernel.org, lgirdwood@gmail.com,
         broonie@kernel.org, kernel@pengutronix.de
@@ -67,9 +67,9 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
         linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org,
         Alistair Francis <alistair.francis@wdc.com>
-Subject: [PATCH 4/7] capsules: sha: Continue reducing code size
-Date:   Sat,  9 Oct 2021 21:50:24 +1000
-Message-Id: <20211009115031.18392-6-alistair@alistair23.me>
+Subject: [PATCH 5/7] capsules: hmac: Continue reducing code size
+Date:   Sat,  9 Oct 2021 21:50:26 +1000
+Message-Id: <20211009115031.18392-8-alistair@alistair23.me>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211009115031.18392-1-alistair@alistair23.me>
 References: <20211009115031.18392-1-alistair@alistair23.me>
@@ -83,18 +83,36 @@ From: Alistair Francis <alistair.francis@wdc.com>
 
 Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
- capsules/src/sha.rs | 39 +++++++++++++++++++--------------------
- 1 file changed, 19 insertions(+), 20 deletions(-)
+ capsules/src/hmac.rs | 52 ++++++++++++++++++++------------------------
+ 1 file changed, 24 insertions(+), 28 deletions(-)
 
-diff --git a/capsules/src/sha.rs b/capsules/src/sha.rs
-index a296bc6bc..0d2667e22 100644
---- a/capsules/src/sha.rs
-+++ b/capsules/src/sha.rs
-@@ -443,28 +443,27 @@ impl<
+diff --git a/capsules/src/hmac.rs b/capsules/src/hmac.rs
+index 83d1e5ea5..0ea30635b 100644
+--- a/capsules/src/hmac.rs
++++ b/capsules/src/hmac.rs
+@@ -478,37 +478,33 @@ impl<
          allow_num: usize,
          mut slice: ReadOnlyProcessBuffer,
      ) -> Result<ReadOnlyProcessBuffer, (ReadOnlyProcessBuffer, ErrorCode)> {
 -        let res = match allow_num {
+-            // Pass buffer for the key to be in
+-            0 => self
+-                .apps
+-                .enter(appid, |app, _| {
+-                    mem::swap(&mut app.key, &mut slice);
+-                    Ok(())
+-                })
+-                .unwrap_or(Err(ErrorCode::FAIL)),
++        let res = self
++            .apps
++            .enter(appid, |app, _| {
++                match allow_num {
++                    // Pass buffer for the key to be in
++                    0 => {
++                        mem::swap(&mut app.key, &mut slice);
++                        Ok(())
++                    }
+ 
 -            // Pass buffer for the data to be in
 -            1 => self
 -                .apps
@@ -103,10 +121,6 @@ index a296bc6bc..0d2667e22 100644
 -                    Ok(())
 -                })
 -                .unwrap_or(Err(ErrorCode::FAIL)),
-+        let res = self
-+            .apps
-+            .enter(appid, |app, _| {
-+                match allow_num {
 +                    // Pass buffer for the data to be in
 +                    1 => {
 +                        mem::swap(&mut app.data, &mut slice);
