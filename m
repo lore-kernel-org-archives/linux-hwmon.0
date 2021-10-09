@@ -2,38 +2,38 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76C18C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 02:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9BE8C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 02:34:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5792260D07
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 02:32:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B617360F5C
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 02:34:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbhJICed (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Oct 2021 22:34:33 -0400
-Received: from mga04.intel.com ([192.55.52.120]:29684 "EHLO mga04.intel.com"
+        id S232318AbhJICge (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Oct 2021 22:36:34 -0400
+Received: from mga07.intel.com ([134.134.136.100]:61338 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232255AbhJICed (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 8 Oct 2021 22:34:33 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10131"; a="225398463"
+        id S232237AbhJICgd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 8 Oct 2021 22:36:33 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10131"; a="290123143"
 X-IronPort-AV: E=Sophos;i="5.85,360,1624345200"; 
-   d="scan'208";a="225398463"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 19:32:37 -0700
+   d="scan'208";a="290123143"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 19:34:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,360,1624345200"; 
-   d="scan'208";a="489700464"
+   d="scan'208";a="440128696"
 Received: from lkp-server02.sh.intel.com (HELO 1950922c5479) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 08 Oct 2021 19:32:35 -0700
+  by orsmga006.jf.intel.com with ESMTP; 08 Oct 2021 19:34:36 -0700
 Received: from kbuild by 1950922c5479 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mZ2A7-0000zy-5W; Sat, 09 Oct 2021 02:32:35 +0000
-Date:   Sat, 09 Oct 2021 10:32:21 +0800
+        id 1mZ2C3-00011Y-K2; Sat, 09 Oct 2021 02:34:35 +0000
+Date:   Sat, 09 Oct 2021 10:33:53 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 9ba3edb8dd44b4253b7bdaf5d4a91f97df9370f0
-Message-ID: <6160ff35.B8NynAJCjyCmC97w%lkp@intel.com>
+Subject: [groeck-staging:watchdog] BUILD SUCCESS
+ be3f5216b903ff5b0f34e0bc01bae518a233dbed
+Message-ID: <6160ff91.99WL4PHMRbusfyxD%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -42,10 +42,10 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 9ba3edb8dd44b4253b7bdaf5d4a91f97df9370f0  watchdog: mtk: add disable_wdt_extrst support
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog
+branch HEAD: be3f5216b903ff5b0f34e0bc01bae518a233dbed  Revert "watchdog: iTCO_wdt: Account for rebooting on second timeout"
 
-elapsed time: 1360m
+elapsed time: 1362m
 
 configs tested: 206
 configs skipped: 4
