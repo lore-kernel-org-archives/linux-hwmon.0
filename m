@@ -2,192 +2,74 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E31BC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 11:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E392CC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 12:03:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22A9260EE9
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 11:57:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD5D460F5D
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Oct 2021 12:03:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244862AbhJIL7l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 9 Oct 2021 07:59:41 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:40625 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244876AbhJIL7k (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 9 Oct 2021 07:59:40 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5D135580A0F;
-        Sat,  9 Oct 2021 07:57:43 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 09 Oct 2021 07:57:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm2; bh=ReThg5ZGo1o5jqJWFdVfwe8Jjp
-        jq33hX/M+b6dnDGuI=; b=sLu8nNcMGanwtLsII36vPFgM7F1DQUUc3hir2+g0kI
-        8pvqGepmuBp4DQZgq5CZCfZH8N1DugVcO23eeGtMc2yOn2y9QCZFEIz96aJM55CB
-        WNEmXkOV9woHWGhxEyImfWTa4Z1dCponu+zbx9GCxA1SLYsgoEscrTXI6c5b43Bj
-        MohTtixF3IALd/Z96srurcWGaU5AcrkLWIcgUk0SIVkbvs/fg2KujcFsWlEsyaZQ
-        A6Xz9H5H/DO+miuL2LjDu/J32hFGcu2i092FSwEAmqMbXBp7HnDb4lYxnjbhs/D7
-        frcmhqkHSBg5BC57B+bDHKMrNWGop1mLCp/eAsyhER2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ReThg5ZGo1o5jqJWF
-        dVfwe8Jjpjq33hX/M+b6dnDGuI=; b=QN8Ys11dYxzubZmJ4Mx4gQG5+owDcHO+v
-        pTSIsdRMeCP554ZY42w1zv3RDDkakSGKkihQkjscGGIahzXCGYyZ42z541tG+6K4
-        rRyF3mrMEVPIPEtOf36sk2KYkHjsyhUvAPy2M8AkR6byobnfuwilqE6AzgoMfjFl
-        awv8QqQ/7UHTlUogYcrlFWoZdjZC5Zh0WQ4MuLFelkUtugJDd8SYtmraNyczLNVx
-        tDW3fwCGbAyRa754W3XxUDxNNwjcr1FOJ6Q92B8gfUa6/ck4tMWILGlK4HzZ3ATw
-        uhICvhKBwRGbXKWi+wRustcFbyX1ZAN9EEtPHoQU+YYypDHHiJG7Q==
-X-ME-Sender: <xms:toNhYdicV8n4lLW8tGEalp39mIFk0bksJNDOau4vZJn66a2hIEHIfA>
-    <xme:toNhYSD0TaDGj8qMcpw8FWxnt4w0w1H7nPwswHvuSJwwDURSFv5FUMDqH-O5Jwi1Z
-    3QJRLLBaDJOT4UbtG4>
-X-ME-Received: <xmr:toNhYdEJZg8n95H46iH-mNKe4CCxWrutW_Y4iAZ1h35oOiAu1t3akdZBb6KgDkKSa6ZV0BsxF1h6xh8CzggeB4fdumdR_06CyFY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgggfestdekredtre
-    dttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
-    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeejleeihfdvtefgtd
-    ethfdtgefftdeiffefjeeiffefveeuleejheejvefhffeukeenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
-    grihhrvdefrdhmvg
-X-ME-Proxy: <xmx:toNhYSRg08r8fAusxsZW03nB_AYqzwu_5qU8HnPVkh8Ahwp0A7lWFQ>
-    <xmx:toNhYawL1FmycW0lo9H9lx7DfvACYdN2n0FdZPPBuxx-CObqPfKyQg>
-    <xmx:toNhYY4cPC3n4sY25WfCfM5xfsOnWskjNauRrHi0Mibdq2uwyEMALw>
-    <xmx:t4NhYeDBkiq5tk8D9L9H4nx6mXMEDeyq8Ffx90yqnft_t5vrYIEPmw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 9 Oct 2021 07:57:36 -0400 (EDT)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     lee.jones@linaro.org, robh+dt@kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org, kernel@pengutronix.de
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
-        amitk@kernel.org, rui.zhang@intel.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alistair23@gmail.com,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v12 10/10] ARM: dts: imx7d: remarkable2: Enable lcdif
-Date:   Sat,  9 Oct 2021 21:57:32 +1000
-Message-Id: <20211009115732.19102-1-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
+        id S232905AbhJIME5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 9 Oct 2021 08:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232889AbhJIME4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 9 Oct 2021 08:04:56 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DF9C061762
+        for <linux-hwmon@vger.kernel.org>; Sat,  9 Oct 2021 05:02:59 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id y15so50452341lfk.7
+        for <linux-hwmon@vger.kernel.org>; Sat, 09 Oct 2021 05:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=2SmIeY3RvR+sxAopTjlz48utuRp0cXC6WogM9AzM3+w=;
+        b=RWuIhFX2NytzmMPip7mieWDbvO63CsBh8wu43qcuEZDcqeFhoXbloJnejuZc5os9rZ
+         F/8It8F/SFyRKKUZuCki1R9oqceGh9Kqk8k4zPO3G8XPV8XYV4q4bzRT43hcotE887ls
+         nAKjUEEEH/lUxdwN6ysim2SX17Mu0EBkR1MwXNpz4gWXnkVca4V41mtYYs/t3VwtZJmV
+         hl/fT7vGyDxv3NLIMIckD3BXb63r9t0Cm4he8McbyGes5iDc2TAwoEYYsMPL8n0lfkvn
+         vFzq6c12JIwSY7vvCrNle+kbeugP2CSV4MUOyzyNHTsHQ2Wvju8E1xiHoSN+LgEGXDZM
+         kjZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=2SmIeY3RvR+sxAopTjlz48utuRp0cXC6WogM9AzM3+w=;
+        b=TCeS0RlDaxRJ42mVOMNOZXvk850rk8F/ychYGeZT0nhMZS9z+Uk5xNpojFWjGqdFNd
+         UuKm4KNwAfkhuPZAqgj2uUR+DXTQtTKd5kn/NVS6LuT4U36cBH/wpEa5tA38pPKAK0HA
+         DY7l1o9/ENb1kTcvDnQgWbQ5TZ4zJZw4calaLLw2IUiHca/LvvgIWuLPqgvR5RR4ZSMC
+         FsgRYk97v9+7V7LmBQY0/4zdgxIwLQ+7fOayIZbKzGEZzr+Tk8flvrGTi9BZswiSilcH
+         6x/cK/A9m9ytuowwG6p2Op1ncOsRKIc30AeI9Btme34Z3PXQxxJze6aJgvP1KlzsxtVg
+         MGNg==
+X-Gm-Message-State: AOAM532IMj1gDwN5gXPK2zUpSy+GOE7HWOpjB23WWn95/48UpXCMcuZ4
+        jPvVjUn2AnDbTjrcHQP90Md5Xz0caHaO3iGGtY5lVA==
+X-Google-Smtp-Source: ABdhPJyTTVUNOFh0n7PTuZupjbgEZGP7eVl+eNzFcqCcRU0Ygs5MfN4sxLUcyaVQNsM7nVXVXgKtwfpd2fwma75r664=
+X-Received: by 2002:a05:6512:3e03:: with SMTP id i3mr5268396lfv.273.1633780977440;
+ Sat, 09 Oct 2021 05:02:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211009025858.3326725-1-osk@google.com> <20211009025858.3326725-2-osk@google.com>
+In-Reply-To: <20211009025858.3326725-2-osk@google.com>
+From:   Oskar Senft <osk@google.com>
+Date:   Sat, 9 Oct 2021 08:02:41 -0400
+Message-ID: <CABoTLcR6GM9ynHfyzBF75hVVa_OWja6ibK_37Lx08Lz=Mr9i7A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] hwmon: (nct7802) Make temperature sensors configurable.
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
+Changes from "PATCH v2 2/2" to "PATCH v4 2/2" (v3 was sent with a typo
+by accident):
+- Added "RTD_MODE_*" #defines for readability.
+- Improved readability in "nct7802_temp_is_visible" and fixed error
+due to missing parentheses
+- Refactored "nct7802_configure_temperature_sensors_from_device_tree"
+into "nct7802_get_input_config" and "nct7802_configure_inputs" for
+readability
+- Restructured "nct7802_get_input_config" for v4 dt-bindings.
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
-
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 1b49c26816cd..5f32c216c3fd 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -47,6 +47,16 @@ reg_digitizer: regulator-digitizer {
- 		startup-delay-us = <100000>; /* 100 ms */
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -55,6 +65,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -114,6 +134,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -228,6 +262,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.31.1
-
+Thanks
+Oskar.
