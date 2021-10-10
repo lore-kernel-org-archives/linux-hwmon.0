@@ -2,100 +2,153 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55B9DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 19:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB3AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 21:06:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38BC361078
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 19:32:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B5DA60F21
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 21:06:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbhJJTeK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 Oct 2021 15:34:10 -0400
-Received: from mail-oo1-f48.google.com ([209.85.161.48]:42530 "EHLO
-        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbhJJTeG (ORCPT
+        id S232878AbhJJVIT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 Oct 2021 17:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232748AbhJJVIT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 Oct 2021 15:34:06 -0400
-Received: by mail-oo1-f48.google.com with SMTP id a17-20020a4a6851000000b002b59bfbf669so4667171oof.9;
-        Sun, 10 Oct 2021 12:32:07 -0700 (PDT)
+        Sun, 10 Oct 2021 17:08:19 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F75C061570;
+        Sun, 10 Oct 2021 14:06:19 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id a25so43463015edx.8;
+        Sun, 10 Oct 2021 14:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6gQ2KVUd8DCi5DdgGacGB/Bif0hOdRztQJCe1iIZeK8=;
+        b=JUiUbZ+yhAzPgctRna9ZmSTREywX5/vB1bj3wrVZMt12Pig29zB0tYE77Q75+c9Rmb
+         fchWZrzU5HK7ZDJguJJP82ySUD7uMgQw1gKP/HHgIaB11d3kw76uNUiJ+YRogc2JfE3u
+         800znk4nRnOapaXUUbRBYDqtFwxqVX3Pif9Gir0qjOzWj/c6dojlvkCXwl6PxgPXdQoi
+         21quDwfCejulFfCC6OW7/EhDf5eEBF7JzJYmHlgV6SARcTkCqVRl1VNkPtP1O/hOHIj2
+         zrm+QBW6FKIW3qMl3yjX0wJgT9vtsa/V3Q71FiL4+xG3uW01istJSe8U3Gk5sX4OVTdN
+         tYSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=oK4cASLRG9KDw6Buwhljv1jwTC0VF/5L0ZVtZoaadh4=;
-        b=I2A0ETz2IjrEpmlITvUS5so/Ltb3Iq3HbWpeWDCvjj9ibapPJZLVZkhVghuDDnlEXw
-         s+xRKd0h9n270PznxiZtvMU9x9LBWfUX0VPbeENWKPkbTQv1piRCK/l5ORLU1W90+qE4
-         mWYj/mp3qXhhd7uzGOUPmsV0S07rx7bbR388h63eqShBkdAoiwzulfTZHdkTaI2od0T1
-         RyxudA3IP1rET72uGSIP14RSTiBSlK6EVkaknvZIFnO4HCeRO+kuUFnIcW2pHUv1LZ42
-         n9fGh0gKcA0OGjAs1uBBKdefzVbbwBoOM0802/DRcOM4T3k6n5jujIqbdaUdO8pTxGmV
-         ulCw==
-X-Gm-Message-State: AOAM531TUya+pEdxKGVymYFZNoCSjVEm87xMLvRxvp4tl9Tm6yo+Yfpt
-        h7ug2E7uDqcM/sfUCycIRg==
-X-Google-Smtp-Source: ABdhPJw/3P18DACANSvasaUJGLn0BgTelQ5sB9S5VvdRh2KhSyIwW4IzTCeFWzSXcM8rcl8Z5Nwj/Q==
-X-Received: by 2002:a4a:e499:: with SMTP id s25mr16419515oov.46.1633894326677;
-        Sun, 10 Oct 2021 12:32:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id b19sm1298316otk.75.2021.10.10.12.32.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6gQ2KVUd8DCi5DdgGacGB/Bif0hOdRztQJCe1iIZeK8=;
+        b=TKptND7EDNGfp5yyGTKXjz7GNH63ojGRCX8TOYwdxDzp/3KbrPdHypJESEp1Y8H3e9
+         dKzreBHctXZEzGQv1Yo9DzGQosQJFu1G80PkTsNoxok+rl0qeB3Sn0oxP3I1cmL7vP63
+         achmOjrU4R/Ytt+v5TJJgpntPmK6DW9e2w/8UwDo+ylFma9o7CW5vLew9FJvx4cf9IMX
+         u8F3P+vdg+0m77EmiaZqUYg98kHsdlH+tqx8wYRi+KSeuE7Bij3whArdh8l5ipqFsa7J
+         3lkymP4oIZ8s3vGWiKkO3QnZjfQXzWCDooD+gGG/w8Symmc9pq75dWrN6Vb/qw27nUob
+         nFwA==
+X-Gm-Message-State: AOAM533mexXYyUhoZVGBgtmP2EkqRAA4r3Wj24aAc5U1DXvyPN6pIn4o
+        /PErNRmiVSNVcEpazXKX40tgZ3DhOtdHzg==
+X-Google-Smtp-Source: ABdhPJzp+UkBFeTe1Kb/4LWPfqL0Eh/KhrLdlB22UIQ3KHsTcQ9x85eRGN7bBfDTp6z8ACEOwCmFFA==
+X-Received: by 2002:a17:906:1359:: with SMTP id x25mr21510332ejb.145.1633899978020;
+        Sun, 10 Oct 2021 14:06:18 -0700 (PDT)
+Received: from localhost.localdomain ([94.179.9.244])
+        by smtp.gmail.com with ESMTPSA id j4sm3037089edk.9.2021.10.10.14.06.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Oct 2021 12:32:06 -0700 (PDT)
-Received: (nullmailer pid 3158664 invoked by uid 1000);
-        Sun, 10 Oct 2021 19:31:56 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Sun, 10 Oct 2021 14:06:17 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
+        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
+        Ed Brindley <kernel@maidavale.org>,
         Jean Delvare <jdelvare@suse.com>,
-        ~okias/devicetree@lists.sr.ht, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-In-Reply-To: <20211009104309.45117-1-david@ixit.cz>
-References: <20211009104309.45117-1-david@ixit.cz>
-Subject: Re: [PATCH] WIP: dt-bindings: arm: hwmon: gpio-fan: Convert txt bindings to yaml
-Date:   Sun, 10 Oct 2021 14:31:56 -0500
-Message-Id: <1633894316.403809.3158663.nullmailer@robh.at.kernel.org>
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] Update ASUS WMI supported boards
+Date:   Mon, 11 Oct 2021 00:05:10 +0300
+Message-Id: <20211010210513.343925-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, 09 Oct 2021 12:43:09 +0200, David Heidelberg wrote:
-> Convert fan devices connected to GPIOs to the YAML syntax.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 -----------
->  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 69 +++++++++++++++++++
->  2 files changed, 69 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> 
+Add support by WMI interface privided by Asus for B550/X570 boards: 
+* PRIME X570-PRO,
+* ROG CROSSHAIR VIII HERO
+* ROG CROSSHAIR VIII DARK HERO
+* ROG CROSSHAIR VIII FORMULA
+* ROG STRIX X570-E GAMING
+* ROG STRIX B550-E GAMING
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Add support by WMI interface privided by Asus for X370/X470/
+B450/X399 boards:
+* ROG CROSSHAIR VI HERO,
+* PRIME X399-A,
+* PRIME X470-PRO,
+* ROG CROSSHAIR VI EXTREME,
+* ROG CROSSHAIR VI HERO (WI-FI AC),
+* ROG CROSSHAIR VII HERO,
+* ROG CROSSHAIR VII HERO (WI-FI),
+* ROG STRIX B450-E GAMING,
+* ROG STRIX B450-F GAMING,
+* ROG STRIX B450-I GAMING,
+* ROG STRIX X399-E GAMING,
+* ROG STRIX X470-F GAMING,
+* ROG STRIX X470-I GAMING,
+* ROG ZENITH EXTREME,
+* ROG ZENITH EXTREME ALPHA.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+I have removed link to https://bugzilla.kernel.org/show_bug.cgi?id=204807 
+as not directly related to patches.
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1538743
+Could you please review?
+
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Signed-off-by: Ed Brindley <kernel@maidavale.org>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+
+---
+Changes in v4:
+ - Implement wmi driver instead platform driver.
+ - Update documentation with known issues.
+
+Changes in v3:
+ - Use MODULE_DEVICE_TABLE for match devices.
+ - asus_wmi_ec_sensors: Use get_unaligned_be32 instead incorrectly used 
+   get_unaligned_le32.
+ - Add documentaion for drivers.
+
+Changes in v2:
+ - asus_wmi_ec_sensors: Rename asus_wmi_sensors to asus_wmi_ec_sensors for 
+   B550/X570 boards.
+ - asus_wmi_ec_sensors: Use utf8s_to_utf16s/utf16s_to_utf8s instead handmade 
+   fuctions.
+ - asus_wmi_ec_sensors: Use post increment.
+ - asus_wmi_ec_sensors: Use get_unaligned* for convert values.
+ - asus_wmi_ec_sensors: Use PTR_ERR_OR_ZERO.
+ - asus_wmi_ec_sensors: Specify per-board sensors in a declarative way 
+   (by Eugene Shalygin).
+ - asus_wmi_sensors: Add support for X370/X470/B450/X399 boards.
+ 
+---
+
+Denis Pauk (2):
+  hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
+  hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
+
+ Documentation/hwmon/asus_wmi_ec_sensors.rst |  35 ++
+ Documentation/hwmon/asus_wmi_sensors.rst    |  74 +++
+ MAINTAINERS                                 |   8 +
+ drivers/hwmon/Kconfig                       |  22 +
+ drivers/hwmon/Makefile                      |   2 +
+ drivers/hwmon/asus_wmi_ec_sensors.c         | 644 ++++++++++++++++++++
+ drivers/hwmon/asus_wmi_sensors.c            | 620 +++++++++++++++++++
+ 7 files changed, 1405 insertions(+)
+ create mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+ create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
+ create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
+ create mode 100644 drivers/hwmon/asus_wmi_sensors.c
 
 
-fan: 'gpio-fan,speed-map' is a required property
-	arch/arm/boot/dts/kirkwood-nas2big.dt.yaml
-	arch/arm/boot/dts/kirkwood-net2big.dt.yaml
-
-gpio-fan: gpio-fan,speed-map: 'anyOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/gemini-dlink-dir-685.dt.yaml
-	arch/arm/boot/dts/gemini-dlink-dns-313.dt.yaml
-
-gpio_fan: gpio-fan,speed-map: 'anyOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/am57xx-beagle-x15.dt.yaml
-	arch/arm/boot/dts/am57xx-beagle-x15-revb1.dt.yaml
-	arch/arm/boot/dts/am57xx-beagle-x15-revc.dt.yaml
-
-gpio-fan: gpio-fan,speed-map: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/gemini-dlink-dir-685.dt.yaml
-	arch/arm/boot/dts/gemini-dlink-dns-313.dt.yaml
-
-gpio_fan: gpio-fan,speed-map: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/am57xx-beagle-x15.dt.yaml
-	arch/arm/boot/dts/am57xx-beagle-x15-revb1.dt.yaml
-	arch/arm/boot/dts/am57xx-beagle-x15-revc.dt.yaml
+base-commit: 39b483aa38995329326988cbc4077422bebc175a
+-- 
+2.33.0
 
