@@ -2,78 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6834DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 14:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B13FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 14:56:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 368CD60EC0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 14:33:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5196560C4D
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 14:56:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbhJJOfH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 Oct 2021 10:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S232658AbhJJO6C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 Oct 2021 10:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbhJJOfG (ORCPT
+        with ESMTP id S232613AbhJJO6C (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 Oct 2021 10:35:06 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BB1C061570;
-        Sun, 10 Oct 2021 07:33:08 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id k2-20020a056830168200b0054e523d242aso8710803otr.6;
-        Sun, 10 Oct 2021 07:33:08 -0700 (PDT)
+        Sun, 10 Oct 2021 10:58:02 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE974C061570;
+        Sun, 10 Oct 2021 07:56:03 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id k2-20020a056830168200b0054e523d242aso8772709otr.6;
+        Sun, 10 Oct 2021 07:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:to:cc:references:from:subject:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2XmoqfFHJaqnS4tTFt5+VRSNF2yHJAScSduBsQ5OA5Q=;
-        b=e+ld7uzGcc3eY0iVjdXwNeRggIQi8pN8frDT9tLgwzJwp6Jq1rARpTZbiprwNRCngS
-         VrCUmvp6nKAzMh3XlCofzyNrDC6pnWW3SMeVI76ssdLplI28w9RBDd7Fv4yAtyQGofNA
-         mzi5cgCslL1U6Y1bdpqBqHpk/ksI8qm5k0DvrAjAOMlOD0OWhpPppJHMwzs2K/NhbjU9
-         +BJcxV/rP0VT4FQfq1WgebOGtnn2yKG5QxHftcdOGSw09TEjj3QALWsabyVjsdzwHpOA
-         151XT9e9lAybXW0PvPuTRZO7F4UTwjj1kEBvueo3Ww566jcs2/ZublbHIlf7idH6rjtX
-         F7QQ==
+        bh=I4jCJS90Gz2JHsm2ZZk4sJXD8ATVF4qZO2QfZKsg3r4=;
+        b=WfmXYTZRRkJH6iit/65AqwC0WYNTURSv/Q2i3Zp431s7HsDVv8ztvnWn3NemmnGrZL
+         67MpeihXd7KOGDYNw7Cz7DHq5X+SyoqHiCW62HIyxSRvV/CeYYFJo8MnPDPd48OHKCxj
+         T2k5V23ZP2c0nxCEYY4+jiEHTQnLOE5boxU6J8bKLx5/OCVRcoSwt6tKJE4yYZYPl76H
+         j5SXvdI/bu6AF2pMY/tOaOWxV7SLXRfGej0foJPO44CXUie3HYhZKUxGT/7p+0QDDfzN
+         o0brkGAW2GblDSDWf9FUtg542mTUm8HEx72uxbH+7plMnTOo9s/NCZuu7p1CAHY0gqxH
+         m17g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=2XmoqfFHJaqnS4tTFt5+VRSNF2yHJAScSduBsQ5OA5Q=;
-        b=4jzKHfc5oDuxDyvHfpBIUC5hxLyEpJsxlAeO1Ia/b7tDsvToYxzI0HGxsOpuUBB9Zc
-         7HkbsjBOUYCCVQB/wu22JnoFRnKEalDvyKq3hd4NzVMZC52W4DwGTMc8XqvbcMGTuYr+
-         h1bLVNarUX2KPzCK9AZ8njBk1Y70GHD+i3oHQr2P6BkeO6LNkJxpxpjmpHMx3U5GvfGw
-         t6mml6l066o99u5fUY71cx3OLMBYpRNEA0TIclJxve7iWKDGYZ/Xj5KlzYrl0gKP1yOL
-         v/labXuekglPAM0Xh0LTQaYdCSuO5pSzr1EMdMoLh+atiZFwfGpxnQ/cK7FXF8yozQpK
-         4x6g==
-X-Gm-Message-State: AOAM532O6r8UjFYrUMv2ZDBiV9t8aW9vAZoC3nh/T+0SoGuaKwO8wV4F
-        5FOaoY46zrlEhDbA4ChgalLA9tfW/yU=
-X-Google-Smtp-Source: ABdhPJxFBjKgo0gZHsXA7r+kx+kv2Qyd1QsDgfQKETLzvwG+NtM0fH6uH3Tocc6qanLMlOSD5sZvIA==
-X-Received: by 2002:a05:6830:30a4:: with SMTP id g4mr7469319ots.312.1633876387255;
-        Sun, 10 Oct 2021 07:33:07 -0700 (PDT)
+        bh=I4jCJS90Gz2JHsm2ZZk4sJXD8ATVF4qZO2QfZKsg3r4=;
+        b=wRNUMtnJ/AHxhvIpyyws4/qbKgXMrggrVI4v4OhaLDPxUlm4b1gU9xJ17asXmxN+/8
+         9TbDyCjVge/ftXDaHMYemm+VWnGMceMPN81smYseJ1pde8wqw6tOe5TIa24AiYLdn2h4
+         wQaObCdbsN57w3CfaaLtba6vUNhu+bpZWC8jo0+HIldW/e1VkoOn6yNng8PaQes+/X8/
+         gbcwIznrWEGCDaUZ7l5aFtG8A551ay92ASRFWY73PLPABv/vDS0SGkbxjAL7CrqciGis
+         5h1ZYxsvyJmHKovwgpBrf7Vzydug5lCgVl90ZGxuv0uzvLEMCMKxB1JtPJViHYQyrcjP
+         /7IQ==
+X-Gm-Message-State: AOAM531diBz9V+SQABUtsEafSe02avZAAsHRpWb+BJOOICo5GV7q3al5
+        7579echM6/Awu4SsFzgl1xo1mOwWhtk=
+X-Google-Smtp-Source: ABdhPJzch+nEh1pNMCUTu9ExCIkHHYBA9h67AL2r4gVVdGqs2W64v6E0D/58zcgZ2vBz0JJxsAPyvQ==
+X-Received: by 2002:a05:6830:2805:: with SMTP id w5mr17480753otu.248.1633877762504;
+        Sun, 10 Oct 2021 07:56:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i25sm1171905oto.26.2021.10.10.07.33.05
+        by smtp.gmail.com with ESMTPSA id n13sm1183953otf.3.2021.10.10.07.56.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Oct 2021 07:33:06 -0700 (PDT)
+        Sun, 10 Oct 2021 07:56:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20211006222502.645003-1-pauk.denis@gmail.com>
- <20211006222502.645003-3-pauk.denis@gmail.com>
- <CAB95QARmjTBVRyru=ZDz9Wc5SX9EPFg7dg6vB+S8=pMtpg8FRw@mail.gmail.com>
- <20211007184644.1d042550@penguin.lxd>
- <CAB95QASYPRZSFnpE5u=SYJ49Hd+=BAZY==Ky8dzjL8h7YZj-CQ@mail.gmail.com>
- <CAB95QAQ+u4DmF0e9Zvy5hDV0mFQDEULtr-newtz5_6y=Bzp+ww@mail.gmail.com>
- <20211010133921.4277dc79@penguin.lxd>
- <CAB95QAQs_PUeTU7d9tg83a8hRepjLfLnxVykU2nvBv3Vn49HBQ@mail.gmail.com>
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>
+Cc:     Denis Pauk <pauk.denis@gmail.com>, eugene.shalygin@gmail.com,
+        andy.shevchenko@gmail.com, Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211010095216.25115-1-pauk.denis@gmail.com>
+ <20211010095216.25115-3-pauk.denis@gmail.com>
+ <0a037ce5-87bb-4aad-a30a-d954ff0910a7@t-8ch.de>
+ <7658358e-5ba6-b764-463c-317f5b318707@roeck-us.net>
+ <13b23940-88d9-4c72-a55b-a66e8c8edffb@t-8ch.de>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/3] hwmon: (asus_wmi_ec_sensors) Support B550 Asus
- WMI.
-Message-ID: <8527fb83-4b76-e3c4-85eb-542c1cee249a@roeck-us.net>
-Date:   Sun, 10 Oct 2021 07:33:04 -0700
+Subject: Re: [PATCH v3 2/2] hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
+Message-ID: <e25063b9-634b-3f56-bcaf-77d8526b9a67@roeck-us.net>
+Date:   Sun, 10 Oct 2021 07:56:00 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <CAB95QAQs_PUeTU7d9tg83a8hRepjLfLnxVykU2nvBv3Vn49HBQ@mail.gmail.com>
+In-Reply-To: <13b23940-88d9-4c72-a55b-a66e8c8edffb@t-8ch.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,59 +79,49 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/10/21 6:46 AM, Eugene Shalygin wrote:
-> Hi Denis,
-> 
-> On Sun, 10 Oct 2021 at 12:39, Denis Pauk <pauk.denis@gmail.com> wrote:
+On 10/10/21 7:10 AM, Thomas Weißschuh wrote:
+> On 2021-10-10T06:38-0700, Guenter Roeck wrote:
+>> On 10/10/21 3:20 AM, Thomas Weißschuh wrote:
+>>> Hi,
+>>>
+>>> for WMI drivers the list platform-driver-x86@vger.kernel.org should probably be
+>>> on CC too.
+>>> Also all other WMI drivers, even for hwmon stuff are located in
+>>> drivers/platform/x86 so it may be better to put it there, too.
+>>>
 >>
->> Hi Eugene,
->>
->> As for me, use WMI methods will be more reliable and cover more
->> motherboards.
+>> Not really. If any of those other drivers are pure hwmon drivers, they
+>> should reside in drivers/hwmon instead. And, yes, that really includes
+>> the gigabyte-wmi driver. We don't have arbitrary drivers in drivers/pci
+>> either just because they are drivers for pci devices.
 > 
-> Why do you believe they are more reliable? How does it cover more motherboards?
+> Fair enough.
+> I suppose it would be too much churn to move gigabyte-wmi to
+> hwmon now though, correct?
 > 
 
-You said yourself below: "I know the naive reading from the ACPI EC registers
-leads to problems (fans get stuck, etc.)".
+Is it ? I don't recall the reason why it was added to drivers/platform/x86
+in the first place. I see other single-use wmi drivers in that directory
+as well (eg xiaomi-wmi, which should be in input). Is there some unwritten
+rule stating that all wmi drivers shall reside in drivers/platform/x86,
+no matter what subsystem they touch ?
 
-Something in the WMI code is obviously broken and, ultimately, will need
-to get fixed. I don't know if that something is on the ASUS side or on the
-kernel side, or on the interface between the two. A single WMI call taking
-1 second is way too long and strongly suggests that some timeout is involved.
-Not using WMI because of that just seems wrong.
+> Having the platform-driver-x86 on Cc would still be useful as they can provide
+> guidance about using the ACPI/WMI/platform APIs.
+> 
+
+Sure, but that is unrelated to the driver location, and the opposite argument
+can be made as well (that drivers implementing subsystem code should be reviewed
+by subsystem maintainers). That is a much stronger argument in my opinion.
 
 Guenter
 
-> Thanks,
-> Eugene
+> For example by using the WMI bus as mentioned in my other mail would allow
+> to completely remove the manually maintained DMI list and instead directly bind
+> to the WMI GUID for any device that supports this GUID.
+> (This is possible as this WMI API seems to be self-describing, so all
+> specific parameters can be discovered by the driver)
 > 
->>
->> Best regards,
->>              Denis.
->>
->> On Thu, 7 Oct 2021 20:11:33 +0200
->> Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
->>
->>> Denis and All,
->>>
->>> regarding the asus-wmi-ec-sensors driver: it uses a WMI method to read
->>> EC registers, and this method is slow (requires almost a full second
->>> for a single call). Maybe I'm doing something wrong, but my impression
->>> is that the WMI calls themselves are that slow. I will try to
->>> reimplement this driver using direct EC operations and the global ACPI
->>> lock with a hope to make it read sensors quicker. If that works out,
->>> perhaps the nct6775 may go the same way, as it suffers too from the
->>> slow WMI calls. I know next to nothing about the ACPI system and learn
->>> from the beginning, so I'm not sure about the result. I know the naive
->>> reading from the ACPI EC registers leads to problems (fans get stuck,
->>> etc.), and if someone with knowledge can assure me that the idea with
->>> the ACPI global lock (as far as I understand it is even implemented in
->>> the ec kernel driver already) is correct, I would even request to stop
->>> accepting the EC WMI sensors driver, as it is so slow (albeit dead
->>> simple and small).
->>>
->>> Best regards,
->>> Eugen
->>>
+> Thomas
+> 
 
