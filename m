@@ -2,225 +2,146 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 912CCC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 04:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0EBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 09:52:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6EE9860F57
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 04:10:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4438460F92
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 09:52:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbhJJEMS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 Oct 2021 00:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        id S231192AbhJJJya (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 Oct 2021 05:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbhJJEMR (ORCPT
+        with ESMTP id S231144AbhJJJya (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 Oct 2021 00:12:17 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9A4C061762;
-        Sat,  9 Oct 2021 21:10:19 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 77-20020a9d0ed3000000b00546e10e6699so16986914otj.2;
-        Sat, 09 Oct 2021 21:10:19 -0700 (PDT)
+        Sun, 10 Oct 2021 05:54:30 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E417CC061570;
+        Sun, 10 Oct 2021 02:52:31 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id y3so12100080wrl.1;
+        Sun, 10 Oct 2021 02:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6E4858d2orjdrSQiha5Y3WBgnHennset4GT8xzXd6F8=;
-        b=QDFPaASct9RptqvmaxtqeORNuBq/B0TTdo6SMEM1eYka9w1/KUFx8yqgxMEEc6TSA9
-         GWPe+u/xWkftGocQvC2j4ew2w2Gvvf1XaS0DcIkoK4zEcfXp5jXZR6e9FlcDa8pNPD6j
-         /wXClERGRWopPDjJ+KW4oPXVr8OM6lkhfChadatqKulinA93CujlAztkm+o4fseaNdbi
-         uM7l6ta6mExd0ibc98g99Yvc7K9Kq6svc7ZG8BoqpIFj0CdN9JNykyt1EOvaXgpqJ3hG
-         rfEAmHw3G5g3cvoErt0w47BcMn7NbBtL3zIOxubd+xBockfoSrD7g/hb10pqi4/AIAa5
-         TEIA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9kbar4ZXl4ZRT7vzKdP00Z5mg5AC+y6StUABYdQFO9s=;
+        b=Yo1vRELZkG1Ns1eu5evML7x5sseRore8Jyyu6ygtWqc3VxetbfJGSC057dM6ZOZ+lP
+         +/MWFUH7GuGaYtRDPwNKM9+imEU2cSY2uWh1hbKafCvPR9KI/NBAYh2tvozsPcI3MWlv
+         HlQFl4RKPvxtLSPB+4SP6eCKzmkyAptiyeOMZk1K2fvz9rqgefoXa2I2DrzyveiL231v
+         NiusS4Q+6ZFg5dg15FdfvFMFwbpre0DoV/w2N+wOy3SBuV2aOTMXCzmykY/aMOs7uqyw
+         s79YVRzVAQ1lVzjPbnyThmbFOrUWulKUj6HCy8U2KNDPHF6L+CEqh1rrnJlmIX7MHaGF
+         i7cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6E4858d2orjdrSQiha5Y3WBgnHennset4GT8xzXd6F8=;
-        b=7Q7qdjwzz91Q6eQsBUzfgMw7PboT65D+CO65v6572mMsQ3So1B57z04uRJoiUHvBlU
-         nIA/nhbeIt/hRM14GS+799JYyRY9OUduRNh+gOYb8VxYSgYRd3f9D2Xi42M3EbQbM9Z8
-         wRS8lJKGxsQZBq/HV9kG6f9ZTzlgJTY4D/2ut1wBYe5G4cdmf/AZUiz3qiq0D+aqOCKT
-         vbbWZjnttKMghTUiDptJx4AB+oTV3D9l0JuPSVi34x0aminD5AbAPRcXTnFwFiW6iuhX
-         1KDlGEnZNy342gC5HyXtThW+l5fPANuxil+fiqnO99jAAkOiZDPC0YCDEKUbZ8ZBmHtf
-         z+Zw==
-X-Gm-Message-State: AOAM530/C1xsHSn+nhDvaNcNqyH3hnjpF91FO+n1rwK++LgkeAab25nh
-        bAFIuWiQGDdrVHeqrJqfvFMZNtb0sm0=
-X-Google-Smtp-Source: ABdhPJy98qKWYaqED9GpozG805AplEwqWwALxIxtl0yXi9XZd6rEm5RQhWAm2ikMO7o5pyQwoFUJrA==
-X-Received: by 2002:a05:6830:922:: with SMTP id v34mr15639087ott.240.1633839018963;
-        Sat, 09 Oct 2021 21:10:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l7sm804328oog.22.2021.10.09.21.10.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Oct 2021 21:10:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add nct7802 bindings
-To:     Oskar Senft <osk@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20211009185257.2230013-1-osk@google.com>
- <b73b638e-5a24-4960-354d-c8ab5d61c387@roeck-us.net>
- <CABoTLcQBjbW_wtQUo9jdbPbcJJcLaHEA+Oe17bWSCy+_GqOeLg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bb62fdc5-fea0-333c-3b46-e52cce2fc0c2@roeck-us.net>
-Date:   Sat, 9 Oct 2021 21:10:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        bh=9kbar4ZXl4ZRT7vzKdP00Z5mg5AC+y6StUABYdQFO9s=;
+        b=vZm6jzBxSbOQAtuoU0CDqRRsI0lTc9YC3xdo84Pj3QcE2CZp9HCBduxFN8JreyaAzq
+         2p/bwhQu0goc6GwI7iHc7q8QfW0qac+V4aOMyBVb8VCuaMAkV6CdsdE5PbkePZdU6qLy
+         jQ8LIcOG/to7E3i6R3lpDofjWaVyXKwtOR9mn17pFEfuSmHDHZ86fuGJQ8BRNM+OcVnA
+         tSAoO9jncTLKRMsHWxIk5BAPCCBiJIm/YMY2Y2Zak0TeMPVGJSbZooxZi80bZjBJUetN
+         Ql8cTAwG+9NKbkmDsstmkcOQVCEarL3t0caI43YF7NqGDTFbf8LlgyRV/by0CVes6pYF
+         Co1Q==
+X-Gm-Message-State: AOAM5322Sx+hRQ2gNEme6aEg6UNFPhkiUjl3Ow+aak4JtK82INmjQ+m4
+        3KN3PZvK7m87OyP0LYeYi/0173hzt47Ivw==
+X-Google-Smtp-Source: ABdhPJwO3YdL6MvX+g/6JvvZ6+TEigI40pVUsMam9THOIdOQt72t5hC0K61n4Z1W/PDrilWPh8VrRw==
+X-Received: by 2002:a7b:cc8c:: with SMTP id p12mr12343973wma.105.1633859550381;
+        Sun, 10 Oct 2021 02:52:30 -0700 (PDT)
+Received: from localhost.localdomain ([94.179.22.101])
+        by smtp.gmail.com with ESMTPSA id k17sm4466683wrc.93.2021.10.10.02.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Oct 2021 02:52:29 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
+        pauk.denis@gmail.com, Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] Update ASUS WMI supported boards
+Date:   Sun, 10 Oct 2021 12:52:13 +0300
+Message-Id: <20211010095216.25115-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <CABoTLcQBjbW_wtQUo9jdbPbcJJcLaHEA+Oe17bWSCy+_GqOeLg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/9/21 8:06 PM, Oskar Senft wrote:
-> Hi Guenter
-> 
-> Thanks again for your review!
-> 
->>> Signed-off-by: Oskar Senft <osk@google.com>
->>> ---
->>
->> change log goes here.
-> This might be a silly question: I'm using "git send-email", but I
-> don't think there's a way to edit the e-mail before it goes out. Do I
-> just add "---\n[Change log]" manually in the commit description?
-> 
+Add support by WMI interface privided by Asus for B550/X570 boards: 
+* PRIME X570-PRO,
+* ROG CROSSHAIR VIII HERO
+* ROG CROSSHAIR VIII DARK HERO
+* ROG CROSSHAIR VIII FORMULA
+* ROG STRIX X570-E GAMING
+* ROG STRIX B550-E GAMING
 
-When you use git send-email, you usually have a patch file to send.
-I use git format-patch to create that patch file, add the change
-log using an editor, and then send it with git send-email.
+Add support by WMI interface privided by Asus for X370/X470/
+B450/X399 boards:
+* ROG CROSSHAIR VI HERO,
+* PRIME X399-A,
+* PRIME X470-PRO,
+* ROG CROSSHAIR VI EXTREME,
+* ROG CROSSHAIR VI HERO (WI-FI AC),
+* ROG CROSSHAIR VII HERO,
+* ROG CROSSHAIR VII HERO (WI-FI),
+* ROG STRIX B450-E GAMING,
+* ROG STRIX B450-F GAMING,
+* ROG STRIX B450-I GAMING,
+* ROG STRIX X399-E GAMING,
+* ROG STRIX X470-F GAMING,
+* ROG STRIX X470-I GAMING,
+* ROG ZENITH EXTREME,
+* ROG ZENITH EXTREME ALPHA.
 
->>> +description: |
->>> +  The NCT7802Y is a hardware monitor IC which supports one on-die and up to
->>> +  5 remote temperature sensors with SMBus interface.
->>> +
->>
->> Just noticed: 5 remote temperature sensors ? Shouldn't that be 3 ?
-> This includes 2 temperature sensors that are queried via PECI (i.e.
-> SMBus). I generated the description from the "general description"
-> section in the datasheet. I think the driver doesn't implement the 2
-> PECI sensors at this time, but the statement about the HW is still
-> true.
-> 
+Could you please review?
 
-Ok, make sense.
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Signed-off-by: Ed Brindley <kernel@maidavale.org>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Thanks,
-Guenter
+---
+Changes in v3:
+ - Use MODULE_DEVICE_TABLE for match devices.
+ - asus_wmi_ec_sensors: Use get_unaligned_be32 instead incorrectly used 
+   get_unaligned_le32.
+ - Add documentaion for drivers.
 
->>> +      sensor-type:
->>> +        items:
->>> +          - enum:
->>> +              - temperature
->>> +              - voltage
->>> +      temperature-mode:
->>> +        items:
->>> +          - enum:
->>> +              - thermistor
->>> +              - thermal-diode
->>> +    required:
->>> +      - reg
->>> +      - sensor-type
->>
->> If I understand correctly, "temperature-mode" is implemented as mandatory
->> for channels 1 and 2 if sensor-type is "temperature" (which makes sense).
->> No idea though if it is possible to express that in yaml.
->> If not, can it be mentioned as comment ?
-> 
-> After doing a bit more searching, I found the amazing "if: then:
-> else:" construct that allows to express this properly and eliminates
-> the code duplication. I'll follow up in PATCH v6.
-> 
-> Thanks
-> Oskar.
-> 
-> 
-> 
->>
->>> +
->>> +  channel@2:
->>> +    type: object
->>> +    description: Remote Temperature Sensor or Voltage Sensor ("RTD2")
->>> +    properties:
->>> +      reg:
->>> +        const: 2
->>> +      sensor-type:
->>> +        items:
->>> +          - enum:
->>> +              - temperature
->>> +              - voltage
->>> +      temperature-mode:
->>> +        items:
->>> +          - enum:
->>> +              - thermistor
->>> +              - thermal-diode
->>> +    required:
->>> +      - reg
->>> +      - sensor-type
->>> +
->>> +  channel@3:
->>> +    type: object
->>> +    description: Remote Temperature Sensor or Voltage Sensor ("RTD3")
->>> +    properties:
->>> +      reg:
->>> +        const: 3
->>> +      sensor-type:
->>> +        items:
->>> +          - enum:
->>> +              - temperature
->>> +              - voltage
->>> +    required:
->>> +      - reg
->>> +      - sensor-type
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    i2c {
->>> +        #address-cells = <1>;
->>> +        #size-cells = <0>;
->>> +
->>> +        nct7802@28 {
->>> +            compatible = "nuvoton,nct7802";
->>> +            reg = <0x28>;
->>> +
->>> +            #address-cells = <1>;
->>> +            #size-cells = <0>;
->>> +
->>> +            channel@0 { /* LTD */
->>> +              reg = <0>;
->>> +              status = "okay";
->>> +            };
->>> +
->>> +            channel@1 { /* RTD1 */
->>> +              reg = <1>;
->>> +              status = "okay";
->>> +              sensor-type = "temperature";
->>> +              temperature-mode = "thermistor";
->>> +            };
->>> +
->>> +            channel@2 { /* RTD2 */
->>> +              reg = <2>;
->>> +              status = "okay";
->>> +              sensor-type = "temperature";
->>> +              temperature-mode = "thermal-diode";
->>> +            };
->>> +
->>> +            channel@3 { /* RTD3 */
->>> +              reg = <3>;
->>> +              status = "okay";
->>> +              sensor-type = "voltage";
->>> +            };
->>> +        };
->>> +    };
->>>
->>
+Changes in v2:
+ - asus_wmi_ec_sensors: Rename asus_wmi_sensors to asus_wmi_ec_sensors for 
+   B550/X570 boards.
+ - asus_wmi_ec_sensors: Use utf8s_to_utf16s/utf16s_to_utf8s instead handmade 
+   fuctions.
+ - asus_wmi_ec_sensors: Use post increment.
+ - asus_wmi_ec_sensors: Use get_unaligned* for convert values.
+ - asus_wmi_ec_sensors: Use PTR_ERR_OR_ZERO.
+ - asus_wmi_ec_sensors: Specify per-board sensors in a declarative way 
+   (by Eugene Shalygin).
+ - asus_wmi_sensors: Add support for X370/X470/B450/X399 boards.
+ 
+---
+
+Denis Pauk (2):
+  hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
+  hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
+
+ Documentation/hwmon/asus_wmi_ec_sensors.rst |  35 ++
+ Documentation/hwmon/asus_wmi_sensors.rst    |  62 ++
+ MAINTAINERS                                 |   8 +
+ drivers/hwmon/Kconfig                       |  22 +
+ drivers/hwmon/Makefile                      |   2 +
+ drivers/hwmon/asus_wmi_ec_sensors.c         | 659 ++++++++++++++++++++
+ drivers/hwmon/asus_wmi_sensors.c            | 635 +++++++++++++++++++
+ 7 files changed, 1423 insertions(+)
+ create mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+ create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
+ create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
+ create mode 100644 drivers/hwmon/asus_wmi_sensors.c
+
+
+base-commit: 39b483aa38995329326988cbc4077422bebc175a
+-- 
+2.33.0
 
