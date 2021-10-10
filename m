@@ -2,61 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2C6AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 13:54:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1739C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 14:10:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C54956109E
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 13:54:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 762436109E
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 14:10:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbhJJN4x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 Oct 2021 09:56:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51486 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232814AbhJJN4x (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 Oct 2021 09:56:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7AC8F60EE7;
-        Sun, 10 Oct 2021 13:54:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633874094;
-        bh=/lt7hCTo+SQbmtc0aeh/KIz1iT8tkUMtuxhR6dilzjw=;
+        id S232169AbhJJOMp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 Oct 2021 10:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231816AbhJJOMo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 10 Oct 2021 10:12:44 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B1CC061570;
+        Sun, 10 Oct 2021 07:10:46 -0700 (PDT)
+Date:   Sun, 10 Oct 2021 16:10:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1633875043; bh=IMqHgPD32NOtwhKZ44gkSBf60ECkunQnAY66nwYyGpI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=boKKg0VFNS71gjIsSnCTGf/z8fEzxUfl83KFLsyx22jtHm7wwCJ3fYj28+e3b4Su/
-         41y/svGC/6aBLW2fTZswZwgXKValxfWXRHLTCvugqzyaAoKghdzuXSHaNM84QMF/Ng
-         PYbdaPS79mwogMAnnpvRzV5Ql4zYqD1zNQ0IAva5XKWYDC9HugeUxaIrtZ1WdkXjMx
-         pTjuynBAzY6QGj+4PnmMMMAvd4IWhCuS6GX3cc16sXh+mzEUolUo1Br/XgsOmx0/i8
-         +xRJJJ5dDcfCpi8PgqZ6ALdNRtNRNbXANgnFYsZTTev6UQbGFzi4FoxUHZA4se/pMu
-         4T/RJKWqCJnPw==
-Received: by pali.im (Postfix)
-        id 9E6D1795; Sun, 10 Oct 2021 15:54:51 +0200 (CEST)
-Date:   Sun, 10 Oct 2021 15:54:51 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        Ed Brindley <kernel@maidavale.org>,
+        b=QVnDgWCDNLKXYQkhSB5F8zRRyZe+/VVm3qYN1f4aZxvuMcYInGU7u4Pfab4XlaEiw
+         O+nhxpzzrtpKLcfQeI0m1ZfNz+ww/HI9ycXVvsJ1kpob8ubVNaCQc50TK+7zW+w8Ug
+         ChEWIC0OgdL7QUrKzMg7UcdjpSBqRdG+o83oQFLI=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Denis Pauk <pauk.denis@gmail.com>, eugene.shalygin@gmail.com,
+        andy.shevchenko@gmail.com, Ed Brindley <kernel@maidavale.org>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Update ASUS WMI supported boards
-Message-ID: <20211010135451.aadvcebestbnzhru@pali>
+Subject: Re: [PATCH v3 2/2] hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
+Message-ID: <13b23940-88d9-4c72-a55b-a66e8c8edffb@t-8ch.de>
 References: <20211010095216.25115-1-pauk.denis@gmail.com>
+ <20211010095216.25115-3-pauk.denis@gmail.com>
+ <0a037ce5-87bb-4aad-a30a-d954ff0910a7@t-8ch.de>
+ <7658358e-5ba6-b764-463c-317f5b318707@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211010095216.25115-1-pauk.denis@gmail.com>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7658358e-5ba6-b764-463c-317f5b318707@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sunday 10 October 2021 12:52:13 Denis Pauk wrote:
-> Add support by WMI interface privided by Asus for B550/X570 boards: 
-...
-> Add support by WMI interface privided by Asus for X370/X470/
-> B450/X399 boards:
-...
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+On 2021-10-10T06:38-0700, Guenter Roeck wrote:
+> On 10/10/21 3:20 AM, Thomas Weißschuh wrote:
+> > Hi,
+> > 
+> > for WMI drivers the list platform-driver-x86@vger.kernel.org should probably be
+> > on CC too.
+> > Also all other WMI drivers, even for hwmon stuff are located in
+> > drivers/platform/x86 so it may be better to put it there, too.
+> > 
+> 
+> Not really. If any of those other drivers are pure hwmon drivers, they
+> should reside in drivers/hwmon instead. And, yes, that really includes
+> the gigabyte-wmi driver. We don't have arbitrary drivers in drivers/pci
+> either just because they are drivers for pci devices.
 
-Hello! Could you provide (at least into bug tracker) MOF definitions of
-WMI functions? If there are are any issues with driver, definitions of
-API, functions and buffers could help.
+Fair enough.
+I suppose it would be too much churn to move gigabyte-wmi to
+hwmon now though, correct?
+
+Having the platform-driver-x86 on Cc would still be useful as they can provide
+guidance about using the ACPI/WMI/platform APIs.
+
+For example by using the WMI bus as mentioned in my other mail would allow
+to completely remove the manually maintained DMI list and instead directly bind
+to the WMI GUID for any device that supports this GUID.
+(This is possible as this WMI API seems to be self-describing, so all
+specific parameters can be discovered by the driver)
+
+Thomas
