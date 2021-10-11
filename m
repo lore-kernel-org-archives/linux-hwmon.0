@@ -2,152 +2,217 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89240C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 13:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A37C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 13:44:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 714C660F21
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 13:28:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9BF5960F4B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 13:44:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236933AbhJKNa3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 09:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236953AbhJKNa2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 09:30:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3A2C061570
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 06:28:28 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLZ-0006fi-Rm; Mon, 11 Oct 2021 15:28:05 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLV-0003nd-8g; Mon, 11 Oct 2021 15:28:01 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLV-0000Re-6O; Mon, 11 Oct 2021 15:28:01 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>
-Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Jason Gunthorpe linux-integrity @ vger . kernel . org" 
-        <jgg@ziepe.ca>, Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, kernel@pengutronix.de,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH 00/13] Make some spi device drivers return zero in .remove()
-Date:   Mon, 11 Oct 2021 15:27:41 +0200
-Message-Id: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S231659AbhJKNqJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 09:46:09 -0400
+Received: from mga04.intel.com ([192.55.52.120]:38965 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231577AbhJKNqJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Oct 2021 09:46:09 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="225649266"
+X-IronPort-AV: E=Sophos;i="5.85,364,1624345200"; 
+   d="scan'208";a="225649266"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 06:43:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,364,1624345200"; 
+   d="scan'208";a="490483527"
+Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 11 Oct 2021 06:43:56 -0700
+Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mZvat-0002MR-Q0; Mon, 11 Oct 2021 13:43:55 +0000
+Date:   Mon, 11 Oct 2021 21:43:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ 15203437f0b11aa0630b297c474c9b3d389f7982
+Message-ID: <61643f66.HlM17Ihz1oFJXurc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 15203437f0b11aa0630b297c474c9b3d389f7982  watchdog: iTCO: Drop vendor support
 
-this series is part of my new quest to make spi remove callbacks return
-void. Today they return an int, but the only result of returning a
-non-zero value is a warning message. So it's a bad idea to return an
-error code in the expectation that not freeing some resources is ok
-then. The same holds true for i2c and platform devices which benefit en
-passant for a few drivers.
+elapsed time: 723m
 
-The patches in this series address some of the spi drivers that might
-return non-zero and adapt them accordingly to return zero instead. For
-most drivers it's just about not hiding the fact that they already
-return zero.
+configs tested: 154
+configs skipped: 3
 
-Given that there are quite some more patches of this type to create
-before I can change the spi remove callback, I suggest the respecive
-subsystem maintainers pick up these patches. There are no
-interdependencies in this series.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Uwe Kleine-König (13):
-  drm/panel: s6e63m0: Make s6e63m0_remove() return void
-  hwmon: adt7x10: Make adt7x10_remove() return void
-  hwmon: max31722: Warn about failure to put device in stand-by in
-    .remove()
-  input: adxl34xx: Make adxl34x_remove() return void
-  input: touchscreen: tsc200x: Make tsc200x_remove() return void
-  media: cxd2880: Eliminate dead code
-  mfd: mc13xxx: Make mc13xxx_common_exit() return void
-  mfd: stmpe: Make stmpe_remove() return void
-  mfd: tps65912: Make tps65912_device_exit() return void
-  serial: max310x: Make max310x_remove() return void
-  serial: sc16is7xx: Make sc16is7xx_remove() return void
-  staging: fbtft: Make fbtft_remove_common() return void
-  tpm: st33zp24: Make st33zp24_remove() return void
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211011
+arm                       omap2plus_defconfig
+m68k                       m5475evb_defconfig
+powerpc                   lite5200b_defconfig
+arm                          imote2_defconfig
+sh                           se7705_defconfig
+arm                      tct_hammer_defconfig
+ia64                      gensparse_defconfig
+i386                             allyesconfig
+mips                       capcella_defconfig
+m68k                           sun3_defconfig
+sh                     sh7710voipgw_defconfig
+s390                                defconfig
+powerpc                    ge_imp3a_defconfig
+arm                            qcom_defconfig
+powerpc                     powernv_defconfig
+sh                               alldefconfig
+nios2                         10m50_defconfig
+arm                        realview_defconfig
+arm                        multi_v5_defconfig
+riscv                               defconfig
+sh                     magicpanelr2_defconfig
+mips                  maltasmvp_eva_defconfig
+powerpc64                           defconfig
+powerpc                     taishan_defconfig
+powerpc                     mpc83xx_defconfig
+openrisc                    or1ksim_defconfig
+m68k                                defconfig
+arm                         at91_dt_defconfig
+arm                             mxs_defconfig
+mips                    maltaup_xpa_defconfig
+arm                          ep93xx_defconfig
+riscv             nommu_k210_sdcard_defconfig
+nios2                            alldefconfig
+powerpc                    adder875_defconfig
+sh                           se7343_defconfig
+h8300                               defconfig
+sh                          lboxre2_defconfig
+sh                                  defconfig
+sh                          r7785rp_defconfig
+arm                         lubbock_defconfig
+xtensa                           alldefconfig
+powerpc                      ppc44x_defconfig
+mips                         tb0287_defconfig
+mips                        workpad_defconfig
+arc                     haps_hs_smp_defconfig
+powerpc                     asp8347_defconfig
+arm                        mini2440_defconfig
+h8300                            alldefconfig
+powerpc                       ebony_defconfig
+arm                        keystone_defconfig
+arm                          iop32x_defconfig
+mips                            e55_defconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                             pxa_defconfig
+sh                           se7206_defconfig
+sh                           se7724_defconfig
+m68k                       m5249evb_defconfig
+arm                        oxnas_v6_defconfig
+arm                     davinci_all_defconfig
+sh                          sdk7780_defconfig
+powerpc                   microwatt_defconfig
+powerpc                     mpc512x_defconfig
+sh                        sh7757lcr_defconfig
+nds32                            alldefconfig
+sh                      rts7751r2d1_defconfig
+ia64                        generic_defconfig
+xtensa                    smp_lx200_defconfig
+arm                  randconfig-c002-20211011
+x86_64               randconfig-c001-20211011
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+s390                             allmodconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20211010
+i386                 randconfig-a003-20211010
+i386                 randconfig-a004-20211010
+i386                 randconfig-a005-20211010
+i386                 randconfig-a002-20211010
+i386                 randconfig-a006-20211010
+x86_64               randconfig-a015-20211011
+x86_64               randconfig-a012-20211011
+x86_64               randconfig-a016-20211011
+x86_64               randconfig-a014-20211011
+x86_64               randconfig-a013-20211011
+x86_64               randconfig-a011-20211011
+i386                 randconfig-a016-20211011
+i386                 randconfig-a014-20211011
+i386                 randconfig-a011-20211011
+i386                 randconfig-a015-20211011
+i386                 randconfig-a012-20211011
+i386                 randconfig-a013-20211011
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                           allyesconfig
 
- drivers/char/tpm/st33zp24/i2c.c                   |  5 +----
- drivers/char/tpm/st33zp24/spi.c                   |  5 +----
- drivers/char/tpm/st33zp24/st33zp24.c              |  3 +--
- drivers/char/tpm/st33zp24/st33zp24.h              |  2 +-
- drivers/gpu/drm/panel/panel-samsung-s6e63m0-dsi.c |  3 ++-
- drivers/gpu/drm/panel/panel-samsung-s6e63m0-spi.c |  3 ++-
- drivers/gpu/drm/panel/panel-samsung-s6e63m0.c     |  4 +---
- drivers/gpu/drm/panel/panel-samsung-s6e63m0.h     |  2 +-
- drivers/hwmon/adt7310.c                           |  3 ++-
- drivers/hwmon/adt7410.c                           |  3 ++-
- drivers/hwmon/adt7x10.c                           |  3 +--
- drivers/hwmon/adt7x10.h                           |  2 +-
- drivers/hwmon/max31722.c                          |  8 +++++++-
- drivers/input/misc/adxl34x-i2c.c                  |  4 +++-
- drivers/input/misc/adxl34x-spi.c                  |  4 +++-
- drivers/input/misc/adxl34x.c                      |  4 +---
- drivers/input/misc/adxl34x.h                      |  2 +-
- drivers/input/touchscreen/tsc2004.c               |  4 +++-
- drivers/input/touchscreen/tsc2005.c               |  4 +++-
- drivers/input/touchscreen/tsc200x-core.c          |  4 +---
- drivers/input/touchscreen/tsc200x-core.h          |  2 +-
- drivers/media/spi/cxd2880-spi.c                   | 13 +------------
- drivers/mfd/mc13xxx-core.c                        |  4 +---
- drivers/mfd/mc13xxx-i2c.c                         |  3 ++-
- drivers/mfd/mc13xxx-spi.c                         |  3 ++-
- drivers/mfd/mc13xxx.h                             |  2 +-
- drivers/mfd/stmpe-i2c.c                           |  4 +++-
- drivers/mfd/stmpe-spi.c                           |  4 +++-
- drivers/mfd/stmpe.c                               |  4 +---
- drivers/mfd/stmpe.h                               |  2 +-
- drivers/mfd/tps65912-core.c                       |  4 +---
- drivers/mfd/tps65912-i2c.c                        |  4 +++-
- drivers/mfd/tps65912-spi.c                        |  4 +++-
- drivers/staging/fbtft/fbtft-core.c                |  8 +-------
- drivers/staging/fbtft/fbtft.h                     |  6 ++++--
- drivers/tty/serial/max310x.c                      |  7 +++----
- drivers/tty/serial/sc16is7xx.c                    | 10 +++++++---
- include/linux/mfd/tps65912.h                      |  2 +-
- 38 files changed, 77 insertions(+), 81 deletions(-)
+clang tested configs:
+arm                  randconfig-c002-20211011
+mips                 randconfig-c004-20211011
+i386                 randconfig-c001-20211011
+s390                 randconfig-c005-20211011
+x86_64               randconfig-c007-20211011
+powerpc              randconfig-c003-20211011
+riscv                randconfig-c006-20211011
+x86_64               randconfig-a004-20211011
+x86_64               randconfig-a006-20211011
+x86_64               randconfig-a001-20211011
+x86_64               randconfig-a005-20211011
+x86_64               randconfig-a002-20211011
+x86_64               randconfig-a003-20211011
+i386                 randconfig-a001-20211011
+i386                 randconfig-a003-20211011
+i386                 randconfig-a004-20211011
+i386                 randconfig-a005-20211011
+i386                 randconfig-a002-20211011
+i386                 randconfig-a006-20211011
+hexagon              randconfig-r041-20211011
+hexagon              randconfig-r045-20211011
 
-
-base-commit: 9e1ff307c779ce1f0f810c7ecce3d95bbae40896
--- 
-2.30.2
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
