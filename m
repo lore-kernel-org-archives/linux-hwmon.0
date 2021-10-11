@@ -2,158 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7D3BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:31:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8285CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:31:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A65C66023F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:31:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6603D6023F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:31:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235016AbhJKOdb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 10:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S236903AbhJKOdt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241909AbhJKOd1 (ORCPT
+        with ESMTP id S240662AbhJKOdp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 10:33:27 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43929C0730D8;
-        Mon, 11 Oct 2021 07:19:57 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id z126so10567801oiz.12;
-        Mon, 11 Oct 2021 07:19:57 -0700 (PDT)
+        Mon, 11 Oct 2021 10:33:45 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20E5C061345;
+        Mon, 11 Oct 2021 07:25:38 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id o4so24832115oia.10;
+        Mon, 11 Oct 2021 07:25:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UbGuAATq8mLj9g7D7Nf8m9hUhR84YLhH9t20OW/RVOE=;
-        b=XWdktjJnh0P6lHjIzWWc84inm2wXSNR4cepzAkZunwwAgZlquQrHN8Y5c1+stM0dNM
-         UC1WDygiDcc+MyHvuSPOag0Ez0H7ZEVyKQQobWcW9pIwmN8J4fHvL6cuHCSmaYBDCCuj
-         xsCCpK8VrgH6vy2peSt3f6ZJb4hboitCtmK94ZigsY2L7p9B3z2ErygniQnsck4BLBt/
-         m9IIHYz+/gbR9sO3vOQefhSf5kTEhUwu4A6nVOidoYVoMRHPnR9sVn4z+WPR81Vqgtlg
-         LX0rk4zJMudaew2TlF0TbOptKY+RmLKk+HUs7DhB1xVah5Q6ch8Ubq2ZgG7fByERqwUX
-         lu8Q==
+         :content-disposition:in-reply-to;
+        bh=/p5U+cPIs1EYHKiD6U4YrHpe9KTVTfBsKJ8HxEXnMLk=;
+        b=Yfe0ZbPT1ZsRLK5v4wae2PFNLtJ56izXoI149bVvdUQRdokMecbZ8xoS0rxFrFfz6t
+         IAektKE8tOD37wchKyuhz1yhlMuEG5CK+UBc3asivQKV8p/14w5mErUTeHnfHyKhR37r
+         qDkzyz+wP6KzxnBW91D8ETEJsQ5YsVTM/10pW84PNKEQVtQhBz2YIc+cn2yCOls7vKKD
+         kXDvoqgehNH5C4qRaRc5W3PFmGRXjmtViyX8T6NGHXSUYhc8+ahB878LtsR90JfW5jgo
+         mH3TOtF7u/hWss5JiTUuESCtlHnqbj7E/rltT57GhcwMSvhSG7NFfPxibbqxOv5ST5NE
+         FGoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=UbGuAATq8mLj9g7D7Nf8m9hUhR84YLhH9t20OW/RVOE=;
-        b=6B8mJBr+1jBbfhlhBRiC1RQcI41NXBItx6WJwpk65px71ZzzqHkGlrdxqpxKzcGw4F
-         QNAWwfo6LJdWPomUMZu5dJSWf2J53KIp5TURsJkM3e1DnN7T6nEpvF6oKCy2ddXgnJXj
-         4m5JwuJSx4CwUDZXUYk8FlAja098HeKsivWdS6lUd7h58NWdHnVVx1pUmxK5ZqsC6z+w
-         ueWZaQpfa7n1qRYVfLhMSmpccl7dY1OlknnPrGMXyYD4Y1c9/cL6u41eBMPChjvnkJwe
-         Cmbzb/T6jUCZwBOLsDOS6iM/CfBDGhqFqKoJiXm4tkkLmk2rf7QoKbWL0h+ZVuH5njH+
-         o+3Q==
-X-Gm-Message-State: AOAM533+XtB+gcH+PWhresU3qnVKuP/C7ou6HDjw5/mJ7Wu3EAqoGs0V
-        oG763aahCCD3dYA6aWLIcLI=
-X-Google-Smtp-Source: ABdhPJx/7iUyf3S/FbfB1eh7GysE2vnW5Jg+PeQm8Kc898xQZRzpj9qct9Uh/Q9ZPXgigiRDWNvHzA==
-X-Received: by 2002:aca:ad45:: with SMTP id w66mr2186046oie.148.1633961996675;
-        Mon, 11 Oct 2021 07:19:56 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=/p5U+cPIs1EYHKiD6U4YrHpe9KTVTfBsKJ8HxEXnMLk=;
+        b=Ez3/Ev1uCwSTVUmBzVzQpHh+Ib8+dHJfMEZ3BYyUjpBJ5xfU0/tOmg7F309HV4JhqH
+         IPwlPrv9jM73XFvNEASFH+uCoucK3kyFFe2dQen7WdKsQSbw6qLSbTTv6k5CKzXvTFc9
+         X2qLdrdilMVRg2CgFc6aMe+A4KBFwrPNRB/u2EBiEAvijdD3t/WorwQo1PmZ7xLGeeb4
+         0PFp/b/R//zT7Jv4sEClN9zDRcs4fhEow72fD7nTyTZOS2l1lVHsCYcqYuGDocbIza0G
+         X9/EmTF3td135kqn/hCB2mdBOoe7CEOYQJA5jS3DZBhT7rftbhqx4vdUTXYMalkXjVFC
+         azrg==
+X-Gm-Message-State: AOAM532rd+MDBaoYxnxnBkTHFXEKQZhmWgA9VDIsy39LDgyo+prmgva5
+        sQHk8XDBFovfp/C1nJ/VbV0=
+X-Google-Smtp-Source: ABdhPJz0tX9UOumFDdWz9PhLR0xPQmGzPGzy9mx/cdCrXjJxPdmqatFd9XRMoItCikF9uwNA2qszGA==
+X-Received: by 2002:a05:6808:16a4:: with SMTP id bb36mr26825361oib.91.1633962338165;
+        Mon, 11 Oct 2021 07:25:38 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bc19sm1585045oob.29.2021.10.11.07.19.55
+        by smtp.gmail.com with ESMTPSA id p18sm1787448otk.7.2021.10.11.07.25.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Oct 2021 07:19:55 -0700 (PDT)
+        Mon, 11 Oct 2021 07:25:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 11 Oct 2021 07:19:54 -0700
+Date:   Mon, 11 Oct 2021 07:25:36 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        linux-hwmon@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 02/13] hwmon: adt7x10: Make adt7x10_remove() return void
-Message-ID: <20211011141954.GA1862555@roeck-us.net>
-References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
- <20211011132754.2479853-3-u.kleine-koenig@pengutronix.de>
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     linux-kernel@vger.kernel.org,
+        Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        matt-testalltheway <sefoci9222@rerunway.com>,
+        Kamil Dudka <kdudka@redhat.com>,
+        Robert Swiecki <robert@swiecki.net>,
+        Kamil Pietrzak <kpietrzak@disroot.org>, Igor <igor@svelig.com>,
+        Tor Vic <torvic9@mailbox.org>, Poezevara <nephartyz@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/3] hwmon: (asus_wmi_sensors) split out T_Sensor
+Message-ID: <20211011142536.GA2036789@roeck-us.net>
+References: <20211003133344.9036-1-oleksandr@natalenko.name>
+ <20211003133344.9036-3-oleksandr@natalenko.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211011132754.2479853-3-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20211003133344.9036-3-oleksandr@natalenko.name>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 03:27:43PM +0200, Uwe Kleine-König wrote:
-> Up to now adt7x10_remove() returns zero unconditionally. Make it return
-> void instead which makes it easier to see in the callers that there is
-> no error to handle.
+On Sun, Oct 03, 2021 at 03:33:43PM +0200, Oleksandr Natalenko wrote:
+> Move `T_Sensor` addition into a separate `case` statement in preparation
+> for the next patch that introduces a board without it.
 > 
-> Also the return value of i2c and spi remove callbacks is ignored anyway.
+> No functional change.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 
-Applied.
+This patch depends on acceptance of the asus_wmi_sensors driver,
+which should at least be mentioned here. The same applies to the
+next patch of the series. In general, please do not send patches
+for multiple drivers as single series, and please always mention
+such dependencies.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/adt7310.c | 3 ++-
->  drivers/hwmon/adt7410.c | 3 ++-
->  drivers/hwmon/adt7x10.c | 3 +--
->  drivers/hwmon/adt7x10.h | 2 +-
->  4 files changed, 6 insertions(+), 5 deletions(-)
+>  drivers/hwmon/asus_wmi_sensors.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwmon/adt7310.c b/drivers/hwmon/adt7310.c
-> index 9fad01191620..c40cac16af68 100644
-> --- a/drivers/hwmon/adt7310.c
-> +++ b/drivers/hwmon/adt7310.c
-> @@ -90,7 +90,8 @@ static int adt7310_spi_probe(struct spi_device *spi)
+> diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+> index 6b04fad18891..98e761861601 100644
+> --- a/drivers/hwmon/asus_wmi_sensors.c
+> +++ b/drivers/hwmon/asus_wmi_sensors.c
+> @@ -144,14 +144,22 @@ static void asus_wmi_ec_fill_board_sensors(struct asus_wmi_ec_info *ec, int boar
+>  		asus_wmi_ec_set_sensor_info(si++, "Motherboard", hwmon_temp,
+>  					    asus_wmi_ec_make_sensor_address(1, 0x00, 0x3C),
+>  					    &ec->nr_registers);
+> -		asus_wmi_ec_set_sensor_info(si++, "T_Sensor", hwmon_temp,
+> -					    asus_wmi_ec_make_sensor_address(1, 0x00, 0x3D),
+> -					    &ec->nr_registers);
+>  		asus_wmi_ec_set_sensor_info(si++, "VRM", hwmon_temp,
+>  					    asus_wmi_ec_make_sensor_address(1, 0x00, 0x3E),
+>  					    &ec->nr_registers);
+>  	}
 >  
->  static int adt7310_spi_remove(struct spi_device *spi)
->  {
-> -	return adt7x10_remove(&spi->dev, spi->irq);
-> +	adt7x10_remove(&spi->dev, spi->irq);
-> +	return 0;
->  }
->  
->  static const struct spi_device_id adt7310_id[] = {
-> diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
-> index 9d80895d0266..973db057427b 100644
-> --- a/drivers/hwmon/adt7410.c
-> +++ b/drivers/hwmon/adt7410.c
-> @@ -50,7 +50,8 @@ static int adt7410_i2c_probe(struct i2c_client *client)
->  
->  static int adt7410_i2c_remove(struct i2c_client *client)
->  {
-> -	return adt7x10_remove(&client->dev, client->irq);
-> +	adt7x10_remove(&client->dev, client->irq);
-> +	return 0;
->  }
->  
->  static const struct i2c_device_id adt7410_ids[] = {
-> diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-> index 3f03b4cf5858..e9d33aa78a19 100644
-> --- a/drivers/hwmon/adt7x10.c
-> +++ b/drivers/hwmon/adt7x10.c
-> @@ -444,7 +444,7 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
->  }
->  EXPORT_SYMBOL_GPL(adt7x10_probe);
->  
-> -int adt7x10_remove(struct device *dev, int irq)
-> +void adt7x10_remove(struct device *dev, int irq)
->  {
->  	struct adt7x10_data *data = dev_get_drvdata(dev);
->  
-> @@ -457,7 +457,6 @@ int adt7x10_remove(struct device *dev, int irq)
->  	sysfs_remove_group(&dev->kobj, &adt7x10_group);
->  	if (data->oldconfig != data->config)
->  		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
-> -	return 0;
->  }
->  EXPORT_SYMBOL_GPL(adt7x10_remove);
->  
-> diff --git a/drivers/hwmon/adt7x10.h b/drivers/hwmon/adt7x10.h
-> index 21ad15ce3163..a1ae682eb32e 100644
-> --- a/drivers/hwmon/adt7x10.h
-> +++ b/drivers/hwmon/adt7x10.h
-> @@ -26,7 +26,7 @@ struct adt7x10_ops {
->  
->  int adt7x10_probe(struct device *dev, const char *name, int irq,
->  	const struct adt7x10_ops *ops);
-> -int adt7x10_remove(struct device *dev, int irq);
-> +void adt7x10_remove(struct device *dev, int irq);
->  
->  #ifdef CONFIG_PM_SLEEP
->  extern const struct dev_pm_ops adt7x10_dev_pm_ops;
+> +	switch (board) {
+> +	case BOARD_RS_B550_E_G:
+> +	case BOARD_RS_X570_E_G:
+> +	case BOARD_R_C8H:
+> +	case BOARD_R_C8DH:
+> +	case BOARD_R_C8F:
+> +		asus_wmi_ec_set_sensor_info(si++, "T_Sensor", hwmon_temp,
+> +					    asus_wmi_ec_make_sensor_address(1, 0x00, 0x3D),
+> +					    &ec->nr_registers);
+> +	}
+> +
+>  	switch (board) {
+>  	case BOARD_RS_X570_E_G:
+>  	case BOARD_R_C8H:
