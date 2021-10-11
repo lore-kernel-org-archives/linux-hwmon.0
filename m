@@ -2,260 +2,235 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7D19C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 18:49:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 834DBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 19:14:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8DA6960F0F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 18:49:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6694560E53
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 19:14:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233712AbhJKSvF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 14:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233913AbhJKSu5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 14:50:57 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710D5C061570
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 11:48:51 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id u69so13424396oie.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 11:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dyO64YME79obPWUAyFT7zN7hP+Nr958JmV1DzZMc8GU=;
-        b=ieIeFwRzC9qL7qQx0UAX/9YCyRYVW5qTsoi5s5oPSKaJXykNHOgpPBPBTPHQi5BH/2
-         DpYhsgmyWPUpNZEEhbUec5H19gPPdsFdgcoxhLgXy/u3iC6/TTxMyyzMSHlql/u1E6U5
-         GCwLfSRmGPLvtLQTB2FJV5V1n37lvgCBjyG5OC5TmYzQdF+cdmO3xXI4/R9iPaxFK4iG
-         etWY7sTNWizB101I/XaUDoYvDLw+PNst7lPllJXSAiSKGCUQlzlcfgQzq0mjj3vX29np
-         k9ZAHCyRLk3KyafLT1LYbgdQRAZftPUvcKPs3/Bewf0U09lzsDMc7Tt3dnCOaJtL2VhO
-         YnRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dyO64YME79obPWUAyFT7zN7hP+Nr958JmV1DzZMc8GU=;
-        b=mRRk2Eq/NqVMmWWTgK/phHuojL30mXM4Bu9VJ9kT8Ig0kFffeYmaDh2yPpxhn/yhuD
-         SxvYvJSxi0GFnWqM1UUm0b0ozqJxycE6jjJXOL08SHucuUFIF19sdJ7J2UwDcUQEgvZz
-         OmHfyGHfLCYFmLcxBtwz4sTNqRCWoSa6ImlqYXdo5R/6IfgwhKCVeDS83GTxObjGJGxP
-         IguqsNOgW/Xurhz8T8AJEw4RuKFnpu03RoQyWU6d3c0uKwj21DB6igGfdAcsumZ/21Ku
-         dqzpNnI6FHMLW4qoWkcL8lDTcgHlTTfBGvxX4rFu3oWIfS+rWpJmamy1AnzXbsfzICaE
-         smsQ==
-X-Gm-Message-State: AOAM531rlD0s8crvvBFfQETuWrMU3BRJHWrYTVjxDqrV8laHH96+anjb
-        dbHTOuGV/okLhCYro8KplM1oQb6Z3Xo=
-X-Google-Smtp-Source: ABdhPJxfAusXg1OqwQkPvUXspqkQX5nzYf9VavubVoBGKtEx8kSAHgf3foaivLgeGoJXkpdugKdJFg==
-X-Received: by 2002:aca:f0c3:: with SMTP id o186mr498039oih.37.1633978130081;
-        Mon, 11 Oct 2021 11:48:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 63sm1841781oih.14.2021.10.11.11.48.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Oct 2021 11:48:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>, W_Armin@gmx.de
+        id S234576AbhJKTQ7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 15:16:59 -0400
+Received: from mout.gmx.net ([212.227.15.19]:39257 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234609AbhJKTQ6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Oct 2021 15:16:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1633979677;
+        bh=YIt443V62NRIK99380JJKXWeweutk0bgPch7EyKuYiE=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=V/YtkhVzvIlF+hvDfgjedU7n3JMTU+itFQEqcDkPh53FpQoI9pkDbu6OHJXQHbs+h
+         +n3fR0eFhG5dX7QpyW4DyANRi3OTp6NGFjkmOqlesE521foKPizNQuDukLqUGHu7at
+         sANlhPWaKFsyhaIzgPstIjKj5fsbpSDXU2DylMZY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.42] ([91.137.126.34]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSt8W-1mBM6U3wNC-00UNIQ; Mon, 11
+ Oct 2021 21:14:37 +0200
+Subject: Re: [PATCH v3 1/2] hwmon: (dell-smm) Add support for fanX_min,
+ fanX_max and fanX_target
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
 References: <20210926221044.14327-1-W_Armin@gmx.de>
  <20210926221044.14327-2-W_Armin@gmx.de>
  <20211011161101.s7lojsh2ugsnbuzh@pali>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 1/2] hwmon: (dell-smm) Add support for fanX_min,
- fanX_max and fanX_target
-Message-ID: <06e2d014-2394-f1ff-225d-fc0afc4d6cf7@roeck-us.net>
-Date:   Mon, 11 Oct 2021 11:48:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ <06e2d014-2394-f1ff-225d-fc0afc4d6cf7@roeck-us.net>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <80199757-dabe-cb34-ceb3-b5e134e730f0@gmx.de>
+Date:   Mon, 11 Oct 2021 21:14:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20211011161101.s7lojsh2ugsnbuzh@pali>
+In-Reply-To: <06e2d014-2394-f1ff-225d-fc0afc4d6cf7@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: base64
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:GWXctXlDEu1c2/mVwdjOhaVuLggQoTcccMTjPIDPBLQ4wMv6lvz
+ +n3fDotmkBOdLtD3bw4f+G6V3j10qe+holhCc/dKurzX/SViNY/ApT+k/bn/ce4m72otOUh
+ kaB+L15bPp5YB5ybsTF5RviB+Kd/2DUeKdTaDvQ9XARVMlP5q4uh13BkpBWPzVlH3CDM9lk
+ K7Xmd0ax98O/16CDTgO+g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eVdSqogZayk=:xqd2uOLKcgCnBjYLsqZG5+
+ SWXJUXtPNYrhKZONMPpNSQpWQI9zxZLZ1XYO5gYAI5Adv4KtjQmmYsgqXN9in/a/yiHncsWFU
+ xnZTVKXJ3/OSfQW4R/YjgODM/2Nd0E+OXLYCbc/PRLGsOG6Y3H+9XuivKlUaqnjvKuxui/bF6
+ 2IVTaTqT24RgGgt2wTZlqyp1UZMEmrP+bQGA4RVHCjzRTFAcVvU6u67yPCsmzule+4WZdbYxn
+ JGZG2jkP0VAJOB6qZNmPrcNKp/DYI8D/dcsXHAEV6nndJhzyqLUUiJPv0ZiYhqO8DTwSUWsB9
+ 4CkdzFfRlpF9E9/KrPaLEWN7es8Ec1cTiI8xPcdkM9kB9y6S/yLF1zzrDJVeXkDzzzofznimy
+ OA6Ezpcbqiav3qfc4jYySo3gWzkPWQRd6DUfm+fyru4g/J9L7tAw/C0oyqR/glhQOhIE0b5v+
+ 6e7AEjpG50qhCE9Ac5eBna0/UeUtaaB1aU1lPr0G55bfKlzjvCZSmlKZQ6ghwar6afddkxlvF
+ 8JqEYIDq554r5LcM0SmMnRRtrlF1eFO3T5/XMcG5nZXtx3EQdHZ2I2WhtLSBgICYGlAJOuqCj
+ gtI1AFl99g5UzOHl8VZLrgvWIXVNsHrxxvmhlR8pFrf6vr/Oy4h3MfU8ckwRN4RQ4PMm7ZiF2
+ FiszxLs25O0UAPoOuXWCIioCL8jtoMrqFM3VdKKSMFdlUQm7KgsokS7abxGMbQ3tjSaUgy9hq
+ +5LU8EuzzlHnI22XMuIQPEm1Tt2kdHANYzplcTpFtGfDUxnawumMTmMWe0QXtlLoo3QWqD9ys
+ d7kSZoOxWD0ycAGA3JU6hK+My+Z57bU4wIh5A3RI+R7nuhEIUt3xU/che/4+tkv+EeyGRT5jp
+ qKTJdI/MVKJ2YFyCK1zHFAtLEANI0kg48yaZpHI8+zZL0vJGDbTwd8i/BqAXdx0SQtdHxT47D
+ 6Qu0Q2bPd/L0YkfMc9RbpDy+GszIKhZuBnw30AbuGT1U9XCDXW+xIJNjWAq2dTAhtKQU1kJZ5
+ i/W3v07gQWKTfR0FwpmWx6BoFvYQguVGm97k4u1Tj5vx/LN+LLgv2Rb/0SeAfhkjWLJpn1kWk
+ 7Qiumdyw8JwRmw=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/11/21 9:11 AM, Pali Rohár wrote:
-> On Monday 27 September 2021 00:10:43 W_Armin@gmx.de wrote:
->> From: Armin Wolf <W_Armin@gmx.de>
->>
->> The nominal speed of each fan can be obtained with
->> i8k_get_fan_nominal_speed(), however the result is not available
->> from userspace.
->> Change that by adding fanX_min, fanX_max and fanX_target attributes.
->> All are RO since fan control happens over pwm.
->>
->> Tested on a Dell Inspiron 3505 and a Dell Latitude C600.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->>   Documentation/hwmon/dell-smm-hwmon.rst |  3 ++
->>   drivers/hwmon/dell-smm-hwmon.c         | 61 +++++++++++++++++++++++---
->>   2 files changed, 58 insertions(+), 6 deletions(-)
->>
->> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
->> index 3bf77a5df995..beec88491171 100644
->> --- a/Documentation/hwmon/dell-smm-hwmon.rst
->> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
->> @@ -34,6 +34,9 @@ Name				Perm	Description
->>   =============================== ======= =======================================
->>   fan[1-3]_input                  RO      Fan speed in RPM.
->>   fan[1-3]_label                  RO      Fan label.
->> +fan[1-3]_min                    RO      Minimal Fan speed in RPM
->> +fan[1-3]_max                    RO      Maximal Fan speed in RPM
->> +fan[1-3]_target                 RO      Expected Fan speed in RPM
-> 
-> Hello!
-> 
-> I do not know API / meaning of these 3 properties, so I looked into
-> hwmon documentation at:
-> https://www.kernel.org/doc/html/latest/hwmon/sysfs-interface.html#fans
-> 
-> And in documentation is written that both 3 properties (min, max and
-> target) are RW.
-> 
-
-That is the expectation. That doesn't mean they _have_ to be RW.
-It doesn't make sense to categorically demand that attributes are RW
-if the hardware does not support it.
-
-> I'm somehow lost as I have not fully understood what is the original
-> meaning of these 3 properties. Guenter could you help?
-> 
-min: lower fan speed results in warning/error.
-max: higher fan speed results in error
-target: target fan speed. The controller should set the fan speed
-	to this level.
-
-> After reading I understood it as that these properties are for HW which
-> supports controlling directly fan speed via RPM (and not PWM). And so
-> user can set lower and upper limit of fan speed (via _min and _max) or
-> can set exact RPM value (via _target).
-> 
-
-Not really. The controller can try to modify a pwm value to reach the
-configured target fan speed. min/max values apply to both pwm and rpm
-controlled fans.
-
->>   pwm[1-3]                        RW      Control the fan PWM duty-cycle.
->>   pwm1_enable                     WO      Enable or disable automatic BIOS fan
->>                                           control (not supported on all laptops,
->> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
->> index 774c1b0715d9..476f2a74bd8c 100644
->> --- a/drivers/hwmon/dell-smm-hwmon.c
->> +++ b/drivers/hwmon/dell-smm-hwmon.c
->> @@ -76,6 +76,7 @@ struct dell_smm_data {
->>   	int temp_type[DELL_SMM_NO_TEMP];
->>   	bool fan[DELL_SMM_NO_FANS];
->>   	int fan_type[DELL_SMM_NO_FANS];
->> +	int *fan_nominal_speed[DELL_SMM_NO_FANS];
->>   };
->>
->>   MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
->> @@ -673,6 +674,13 @@ static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor_types
->>   			if (data->fan[channel] && !data->disallow_fan_type_call)
->>   				return 0444;
->>
->> +			break;
->> +		case hwmon_fan_min:
->> +		case hwmon_fan_max:
->> +		case hwmon_fan_target:
->> +			if (data->fan_nominal_speed[channel])
->> +				return 0444;
->> +
->>   			break;
->>   		default:
->>   			break;
->> @@ -740,6 +748,25 @@ static int dell_smm_read(struct device *dev, enum hwmon_sensor_types type, u32 a
->>
->>   			*val = ret;
->>
->> +			return 0;
->> +		case hwmon_fan_min:
->> +			*val = data->fan_nominal_speed[channel][0];
-> 
-> When fan is turned off then it has speed 0 RPM. So should not be minimal
-> fan speed always hardcoded to zero?
-> 
-
-No. Fans can be turned off on most systems/controllers. This means the
-"minimum" fan speed would always be 0, and the attribute would be
-worthless. In other words, "fan turned off" is always an exception.
-
->> +
->> +			return 0;
->> +		case hwmon_fan_max:
->> +			*val = data->fan_nominal_speed[channel][data->i8k_fan_max];
->> +
->> +			return 0;
->> +		case hwmon_fan_target:
->> +			ret = i8k_get_fan_status(data, channel);
->> +			if (ret < 0)
->> +				return ret;
->> +
->> +			if (ret > data->i8k_fan_max)
->> +				ret = data->i8k_fan_max;
->> +
->> +			*val = data->fan_nominal_speed[channel][ret];
->> +
->>   			return 0;
->>   		default:
->>   			break;
->> @@ -889,9 +916,12 @@ static const struct hwmon_channel_info *dell_smm_info[] = {
->>   			   HWMON_T_INPUT | HWMON_T_LABEL
->>   			   ),
->>   	HWMON_CHANNEL_INFO(fan,
->> -			   HWMON_F_INPUT | HWMON_F_LABEL,
->> -			   HWMON_F_INPUT | HWMON_F_LABEL,
->> -			   HWMON_F_INPUT | HWMON_F_LABEL
->> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
->> +			   HWMON_F_TARGET,
->> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
->> +			   HWMON_F_TARGET,
->> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
->> +			   HWMON_F_TARGET
->>   			   ),
->>   	HWMON_CHANNEL_INFO(pwm,
->>   			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
->> @@ -910,7 +940,7 @@ static int __init dell_smm_init_hwmon(struct device *dev)
->>   {
->>   	struct dell_smm_data *data = dev_get_drvdata(dev);
->>   	struct device *dell_smm_hwmon_dev;
->> -	int i, err;
->> +	int i, state, err;
->>
->>   	for (i = 0; i < DELL_SMM_NO_TEMP; i++) {
->>   		data->temp_type[i] = i8k_get_temp_type(i);
->> @@ -926,8 +956,27 @@ static int __init dell_smm_init_hwmon(struct device *dev)
->>   		err = i8k_get_fan_status(data, i);
->>   		if (err < 0)
->>   			err = i8k_get_fan_type(data, i);
->> -		if (err >= 0)
->> -			data->fan[i] = true;
->> +
->> +		if (err < 0)
->> +			continue;
->> +
->> +		data->fan[i] = true;
->> +		data->fan_nominal_speed[i] = devm_kmalloc_array(dev, data->i8k_fan_max + 1,
->> +								sizeof(*data->fan_nominal_speed[i]),
->> +								GFP_KERNEL);
->> +		if (!data->fan_nominal_speed[i])
->> +			continue;
->> +
->> +		for (state = 0; state <= data->i8k_fan_max; state++) {
->> +			err = i8k_get_fan_nominal_speed(data, i, state);
->> +			if (err < 0) {
->> +				/* Mark nominal speed table as invalid in case of error */
->> +				devm_kfree(dev, data->fan_nominal_speed[i]);
->> +				data->fan_nominal_speed[i] = NULL;
->> +				break;
->> +			}
->> +			data->fan_nominal_speed[i][state] = err;
->> +		}
->>   	}
->>
->>   	dell_smm_hwmon_dev = devm_hwmon_device_register_with_info(dev, "dell_smm", data,
->> --
->> 2.20.1
->>
-
+QW0gMTEuMTAuMjEgdW0gMjA6NDggc2NocmllYiBHdWVudGVyIFJvZWNrOg0KPiBPbiAxMC8xMS8y
+MSA5OjExIEFNLCBQYWxpIFJvaMOhciB3cm90ZToNCj4+IE9uIE1vbmRheSAyNyBTZXB0ZW1iZXIg
+MjAyMSAwMDoxMDo0MyBXX0FybWluQGdteC5kZSB3cm90ZToNCj4+PiBGcm9tOiBBcm1pbiBXb2xm
+IDxXX0FybWluQGdteC5kZT4NCj4+Pg0KPj4+IFRoZSBub21pbmFsIHNwZWVkIG9mIGVhY2ggZmFu
+IGNhbiBiZSBvYnRhaW5lZCB3aXRoDQo+Pj4gaThrX2dldF9mYW5fbm9taW5hbF9zcGVlZCgpLCBo
+b3dldmVyIHRoZSByZXN1bHQgaXMgbm90IGF2YWlsYWJsZQ0KPj4+IGZyb20gdXNlcnNwYWNlLg0K
+Pj4+IENoYW5nZSB0aGF0IGJ5IGFkZGluZyBmYW5YX21pbiwgZmFuWF9tYXggYW5kIGZhblhfdGFy
+Z2V0IGF0dHJpYnV0ZXMuDQo+Pj4gQWxsIGFyZSBSTyBzaW5jZSBmYW4gY29udHJvbCBoYXBwZW5z
+IG92ZXIgcHdtLg0KPj4+DQo+Pj4gVGVzdGVkIG9uIGEgRGVsbCBJbnNwaXJvbiAzNTA1IGFuZCBh
+IERlbGwgTGF0aXR1ZGUgQzYwMC4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IEFybWluIFdvbGYg
+PFdfQXJtaW5AZ214LmRlPg0KPj4+IC0tLQ0KPj4+IMKgIERvY3VtZW50YXRpb24vaHdtb24vZGVs
+bC1zbW0taHdtb24ucnN0IHzCoCAzICsrDQo+Pj4gwqAgZHJpdmVycy9od21vbi9kZWxsLXNtbS1o
+d21vbi5jwqDCoMKgwqDCoMKgwqDCoCB8IDYxIA0KPj4+ICsrKysrKysrKysrKysrKysrKysrKysr
+LS0tDQo+Pj4gwqAgMiBmaWxlcyBjaGFuZ2VkLCA1OCBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9u
+cygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vaHdtb24vZGVsbC1zbW0t
+aHdtb24ucnN0IA0KPj4+IGIvRG9jdW1lbnRhdGlvbi9od21vbi9kZWxsLXNtbS1od21vbi5yc3QN
+Cj4+PiBpbmRleCAzYmY3N2E1ZGY5OTUuLmJlZWM4ODQ5MTE3MSAxMDA2NDQNCj4+PiAtLS0gYS9E
+b2N1bWVudGF0aW9uL2h3bW9uL2RlbGwtc21tLWh3bW9uLnJzdA0KPj4+ICsrKyBiL0RvY3VtZW50
+YXRpb24vaHdtb24vZGVsbC1zbW0taHdtb24ucnN0DQo+Pj4gQEAgLTM0LDYgKzM0LDkgQEAgTmFt
+ZcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBQZXJtwqDCoMKgIERlc2NyaXB0aW9uDQo+
+Pj4gwqAgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSA9PT09PT09IA0KPj4+ID09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPj4+IMKgIGZhblsxLTNdX2lucHV0
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBST8KgwqDCoMKgwqAgRmFuIHNwZWVk
+IGluIFJQTS4NCj4+PiDCoCBmYW5bMS0zXV9sYWJlbMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgUk/CoMKgwqDCoMKgIEZhbiBsYWJlbC4NCj4+PiArZmFuWzEtM11fbWluwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgUk/CoMKgwqDCoMKgIE1pbmltYWwgRmFu
+IHNwZWVkIGluIFJQTQ0KPj4+ICtmYW5bMS0zXV9tYXjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBST8KgwqDCoMKgwqAgTWF4aW1hbCBGYW4gc3BlZWQgaW4gUlBNDQo+Pj4g
+K2ZhblsxLTNdX3RhcmdldMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFJPwqDCoMKg
+wqDCoCBFeHBlY3RlZCBGYW4gc3BlZWQgaW4gUlBNDQo+Pg0KPj4gSGVsbG8hDQo+Pg0KPj4gSSBk
+byBub3Qga25vdyBBUEkgLyBtZWFuaW5nIG9mIHRoZXNlIDMgcHJvcGVydGllcywgc28gSSBsb29r
+ZWQgaW50bw0KPj4gaHdtb24gZG9jdW1lbnRhdGlvbiBhdDoNCj4+IGh0dHBzOi8vd3d3Lmtlcm5l
+bC5vcmcvZG9jL2h0bWwvbGF0ZXN0L2h3bW9uL3N5c2ZzLWludGVyZmFjZS5odG1sI2ZhbnMNCj4+
+DQo+PiBBbmQgaW4gZG9jdW1lbnRhdGlvbiBpcyB3cml0dGVuIHRoYXQgYm90aCAzIHByb3BlcnRp
+ZXMgKG1pbiwgbWF4IGFuZA0KPj4gdGFyZ2V0KSBhcmUgUlcuDQo+Pg0KPg0KPiBUaGF0IGlzIHRo
+ZSBleHBlY3RhdGlvbi4gVGhhdCBkb2Vzbid0IG1lYW4gdGhleSBfaGF2ZV8gdG8gYmUgUlcuDQo+
+IEl0IGRvZXNuJ3QgbWFrZSBzZW5zZSB0byBjYXRlZ29yaWNhbGx5IGRlbWFuZCB0aGF0IGF0dHJp
+YnV0ZXMgYXJlIFJXDQo+IGlmIHRoZSBoYXJkd2FyZSBkb2VzIG5vdCBzdXBwb3J0IGl0Lg0KPg0K
+Pj4gSSdtIHNvbWVob3cgbG9zdCBhcyBJIGhhdmUgbm90IGZ1bGx5IHVuZGVyc3Rvb2Qgd2hhdCBp
+cyB0aGUgb3JpZ2luYWwNCj4+IG1lYW5pbmcgb2YgdGhlc2UgMyBwcm9wZXJ0aWVzLiBHdWVudGVy
+IGNvdWxkIHlvdSBoZWxwPw0KPj4NCj4gbWluOiBsb3dlciBmYW4gc3BlZWQgcmVzdWx0cyBpbiB3
+YXJuaW5nL2Vycm9yLg0KPiBtYXg6IGhpZ2hlciBmYW4gc3BlZWQgcmVzdWx0cyBpbiBlcnJvcg0K
+PiB0YXJnZXQ6IHRhcmdldCBmYW4gc3BlZWQuIFRoZSBjb250cm9sbGVyIHNob3VsZCBzZXQgdGhl
+IGZhbiBzcGVlZA0KPiDCoMKgwqDCoHRvIHRoaXMgbGV2ZWwuDQo+DQo+PiBBZnRlciByZWFkaW5n
+IEkgdW5kZXJzdG9vZCBpdCBhcyB0aGF0IHRoZXNlIHByb3BlcnRpZXMgYXJlIGZvciBIVyB3aGlj
+aA0KPj4gc3VwcG9ydHMgY29udHJvbGxpbmcgZGlyZWN0bHkgZmFuIHNwZWVkIHZpYSBSUE0gKGFu
+ZCBub3QgUFdNKS4gQW5kIHNvDQo+PiB1c2VyIGNhbiBzZXQgbG93ZXIgYW5kIHVwcGVyIGxpbWl0
+IG9mIGZhbiBzcGVlZCAodmlhIF9taW4gYW5kIF9tYXgpIG9yDQo+PiBjYW4gc2V0IGV4YWN0IFJQ
+TSB2YWx1ZSAodmlhIF90YXJnZXQpLg0KPj4NCj4NCj4gTm90IHJlYWxseS4gVGhlIGNvbnRyb2xs
+ZXIgY2FuIHRyeSB0byBtb2RpZnkgYSBwd20gdmFsdWUgdG8gcmVhY2ggdGhlDQo+IGNvbmZpZ3Vy
+ZWQgdGFyZ2V0IGZhbiBzcGVlZC4gbWluL21heCB2YWx1ZXMgYXBwbHkgdG8gYm90aCBwd20gYW5k
+IHJwbQ0KPiBjb250cm9sbGVkIGZhbnMuDQo+DQpUaGUgcmVhc29uIGkgbWFkZSBmYW5YX3Rhcmdl
+dCBSTyBpcyB0aGF0IHRoZSBTTU0gaW50ZXJmYWNlIGRvZXMgbm90IA0KZGlyZWN0bHkgc3VwcG9y
+dA0Kc2V0dGluZyB0aGUgZmFuIHNwZWVkIGluIHJwbS4gU2luY2UgdGhlIGF0dHJpYnV0ZXMgc2hv
+dWxkIHJlZmxlY3QgdGhlIA0KaGFyZHdhcmUgaW1wbGVtZW50YXRpb24sDQptYWtpbmcgZmFuWF90
+YXJnZXQgUlcgd291bGQgbWFrZSBubyBzZW5zZSAoYXQgbGVhc3QgdG8gbWUpLg0KPj4+IMKgIHB3
+bVsxLTNdIFJXwqDCoMKgwqDCoCBDb250cm9sIHRoZSBmYW4gUFdNIGR1dHktY3ljbGUuDQo+Pj4g
+wqAgcHdtMV9lbmFibGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFdP
+wqDCoMKgwqDCoCBFbmFibGUgb3IgZGlzYWJsZSANCj4+PiBhdXRvbWF0aWMgQklPUyBmYW4NCj4+
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnRyb2wgKG5vdCBzdXBwb3J0ZWQgb24gDQo+
+Pj4gYWxsIGxhcHRvcHMsDQo+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vZGVsbC1zbW0t
+aHdtb24uYyANCj4+PiBiL2RyaXZlcnMvaHdtb24vZGVsbC1zbW0taHdtb24uYw0KPj4+IGluZGV4
+IDc3NGMxYjA3MTVkOS4uNDc2ZjJhNzRiZDhjIDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvaHdt
+b24vZGVsbC1zbW0taHdtb24uYw0KPj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vZGVsbC1zbW0taHdt
+b24uYw0KPj4+IEBAIC03Niw2ICs3Niw3IEBAIHN0cnVjdCBkZWxsX3NtbV9kYXRhIHsNCj4+PiDC
+oMKgwqDCoMKgIGludCB0ZW1wX3R5cGVbREVMTF9TTU1fTk9fVEVNUF07DQo+Pj4gwqDCoMKgwqDC
+oCBib29sIGZhbltERUxMX1NNTV9OT19GQU5TXTsNCj4+PiDCoMKgwqDCoMKgIGludCBmYW5fdHlw
+ZVtERUxMX1NNTV9OT19GQU5TXTsNCj4+PiArwqDCoMKgIGludCAqZmFuX25vbWluYWxfc3BlZWRb
+REVMTF9TTU1fTk9fRkFOU107DQo+Pj4gwqAgfTsNCj4+Pg0KPj4+IMKgIE1PRFVMRV9BVVRIT1Io
+Ik1hc3NpbW8gRGFsIFpvdHRvIChkekBkZWJpYW4ub3JnKSIpOw0KPj4+IEBAIC02NzMsNiArNjc0
+LDEzIEBAIHN0YXRpYyB1bW9kZV90IGRlbGxfc21tX2lzX3Zpc2libGUoY29uc3Qgdm9pZCANCj4+
+PiAqZHJ2ZGF0YSwgZW51bSBod21vbl9zZW5zb3JfdHlwZXMNCj4+PiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBpZiAoZGF0YS0+ZmFuW2NoYW5uZWxdICYmICFkYXRhLT5kaXNhbGxvd19mYW5f
+dHlwZV9jYWxsKQ0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJu
+IDA0NDQ7DQo+Pj4NCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+PiArwqDC
+oMKgwqDCoMKgwqAgY2FzZSBod21vbl9mYW5fbWluOg0KPj4+ICvCoMKgwqDCoMKgwqDCoCBjYXNl
+IGh3bW9uX2Zhbl9tYXg6DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGNhc2UgaHdtb25fZmFuX3Rhcmdl
+dDoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoZGF0YS0+ZmFuX25vbWluYWxfc3Bl
+ZWRbY2hhbm5lbF0pDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4g
+MDQ0NDsNCj4+PiArDQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4g
+wqDCoMKgwqDCoMKgwqDCoMKgIGRlZmF1bHQ6DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgYnJlYWs7DQo+Pj4gQEAgLTc0MCw2ICs3NDgsMjUgQEAgc3RhdGljIGludCBkZWxsX3NtbV9y
+ZWFkKHN0cnVjdCBkZXZpY2UgKmRldiwgDQo+Pj4gZW51bSBod21vbl9zZW5zb3JfdHlwZXMgdHlw
+ZSwgdTMyIGENCj4+Pg0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICp2YWwgPSByZXQ7
+DQo+Pj4NCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsNCj4+PiArwqDCoMKg
+wqDCoMKgwqAgY2FzZSBod21vbl9mYW5fbWluOg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+ICp2YWwgPSBkYXRhLT5mYW5fbm9taW5hbF9zcGVlZFtjaGFubmVsXVswXTsNCj4+DQo+PiBXaGVu
+IGZhbiBpcyB0dXJuZWQgb2ZmIHRoZW4gaXQgaGFzIHNwZWVkIDAgUlBNLiBTbyBzaG91bGQgbm90
+IGJlIG1pbmltYWwNCj4+IGZhbiBzcGVlZCBhbHdheXMgaGFyZGNvZGVkIHRvIHplcm8/DQo+Pg0K
+Pg0KPiBOby4gRmFucyBjYW4gYmUgdHVybmVkIG9mZiBvbiBtb3N0IHN5c3RlbXMvY29udHJvbGxl
+cnMuIFRoaXMgbWVhbnMgdGhlDQo+ICJtaW5pbXVtIiBmYW4gc3BlZWQgd291bGQgYWx3YXlzIGJl
+IDAsIGFuZCB0aGUgYXR0cmlidXRlIHdvdWxkIGJlDQo+IHdvcnRobGVzcy4gSW4gb3RoZXIgd29y
+ZHMsICJmYW4gdHVybmVkIG9mZiIgaXMgYWx3YXlzIGFuIGV4Y2VwdGlvbi4NCj4NCkkgYW0gbm90
+IHN1cmUgaWYgd2UgY2FuIGFzc3VtZSB0aGF0IHRoZSBmYW5zIHdpbGwgaGF2ZSAwIHJwbSB3aGVu
+IHR1cm5lZCANCm9mZi4NCk1heWJlIHNvbWUgbm90ZWJvb2sgbW9kZWwgZGVmaW5lcyAxMDAgcnBt
+IGFzICJ0dXJuZWQgb2ZmIj8NCkluIHRoaXMgY2FzZSB3ZSBzaG91bGQgdHJ1c3QgdGhlIG5vbWlu
+YWwgc3BlZWQgZm9yICJvZmYiIHJhdGhlciB0aGFuIGFzc3VtZQ0KaXRzIDAgcnBtLg0KPj4+ICsN
+Cj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsNCj4+PiArwqDCoMKgwqDCoMKg
+wqAgY2FzZSBod21vbl9mYW5fbWF4Og0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICp2YWwg
+PSANCj4+PiBkYXRhLT5mYW5fbm9taW5hbF9zcGVlZFtjaGFubmVsXVtkYXRhLT5pOGtfZmFuX21h
+eF07DQo+Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiAwOw0KPj4+ICvC
+oMKgwqDCoMKgwqDCoCBjYXNlIGh3bW9uX2Zhbl90YXJnZXQ6DQo+Pj4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgcmV0ID0gaThrX2dldF9mYW5fc3RhdHVzKGRhdGEsIGNoYW5uZWwpOw0KPj4+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChyZXQgPCAwKQ0KPj4+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgcmV0dXJuIHJldDsNCj4+PiArDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgaWYgKHJldCA+IGRhdGEtPmk4a19mYW5fbWF4KQ0KPj4+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgcmV0ID0gZGF0YS0+aThrX2Zhbl9tYXg7DQo+Pj4gKw0KPj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgICp2YWwgPSBkYXRhLT5mYW5fbm9taW5hbF9zcGVlZFtjaGFubmVs
+XVtyZXRdOw0KPj4+ICsNCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsN
+Cj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAgZGVmYXVsdDoNCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBicmVhazsNCj4+PiBAQCAtODg5LDkgKzkxNiwxMiBAQCBzdGF0aWMgY29uc3Qgc3Ry
+dWN0IGh3bW9uX2NoYW5uZWxfaW5mbyANCj4+PiAqZGVsbF9zbW1faW5mb1tdID0gew0KPj4+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEhXTU9OX1RfSU5QVVQgfCBIV01PTl9UX0xB
+QkVMDQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKSwNCj4+PiDCoMKgwqDC
+oMKgIEhXTU9OX0NIQU5ORUxfSU5GTyhmYW4sDQo+Pj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgSFdNT05fRl9JTlBVVCB8IEhXTU9OX0ZfTEFCRUwsDQo+Pj4gLcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgSFdNT05fRl9JTlBVVCB8IEhXTU9OX0ZfTEFCRUwsDQo+Pj4gLcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgSFdNT05fRl9JTlBVVCB8IEhXTU9OX0ZfTEFCRUwNCj4+
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBIV01PTl9GX0lOUFVUIHwgSFdNT05fRl9M
+QUJFTCB8IEhXTU9OX0ZfTUlOIHwgDQo+Pj4gSFdNT05fRl9NQVggfA0KPj4+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIEhXTU9OX0ZfVEFSR0VULA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIEhXTU9OX0ZfSU5QVVQgfCBIV01PTl9GX0xBQkVMIHwgSFdNT05fRl9NSU4g
+fCANCj4+PiBIV01PTl9GX01BWCB8DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+SFdNT05fRl9UQVJHRVQsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgSFdNT05f
+Rl9JTlBVVCB8IEhXTU9OX0ZfTEFCRUwgfCBIV01PTl9GX01JTiB8IA0KPj4+IEhXTU9OX0ZfTUFY
+IHwNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBIV01PTl9GX1RBUkdFVA0KPj4+
+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICksDQo+Pj4gwqDCoMKgwqDCoCBIV01P
+Tl9DSEFOTkVMX0lORk8ocHdtLA0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IEhXTU9OX1BXTV9JTlBVVCB8IEhXTU9OX1BXTV9FTkFCTEUsDQo+Pj4gQEAgLTkxMCw3ICs5NDAs
+NyBAQCBzdGF0aWMgaW50IF9faW5pdCBkZWxsX3NtbV9pbml0X2h3bW9uKHN0cnVjdCANCj4+PiBk
+ZXZpY2UgKmRldikNCj4+PiDCoCB7DQo+Pj4gwqDCoMKgwqDCoCBzdHJ1Y3QgZGVsbF9zbW1fZGF0
+YSAqZGF0YSA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPj4+IMKgwqDCoMKgwqAgc3RydWN0IGRl
+dmljZSAqZGVsbF9zbW1faHdtb25fZGV2Ow0KPj4+IC3CoMKgwqAgaW50IGksIGVycjsNCj4+PiAr
+wqDCoMKgIGludCBpLCBzdGF0ZSwgZXJyOw0KPj4+DQo+Pj4gwqDCoMKgwqDCoCBmb3IgKGkgPSAw
+OyBpIDwgREVMTF9TTU1fTk9fVEVNUDsgaSsrKSB7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgIGRh
+dGEtPnRlbXBfdHlwZVtpXSA9IGk4a19nZXRfdGVtcF90eXBlKGkpOw0KPj4+IEBAIC05MjYsOCAr
+OTU2LDI3IEBAIHN0YXRpYyBpbnQgX19pbml0IGRlbGxfc21tX2luaXRfaHdtb24oc3RydWN0IA0K
+Pj4+IGRldmljZSAqZGV2KQ0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBlcnIgPSBpOGtfZ2V0X2Zh
+bl9zdGF0dXMoZGF0YSwgaSk7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChlcnIgPCAwKQ0K
+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVyciA9IGk4a19nZXRfZmFuX3R5cGUoZGF0
+YSwgaSk7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgIGlmIChlcnIgPj0gMCkNCj4+PiAtwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBkYXRhLT5mYW5baV0gPSB0cnVlOw0KPj4+ICsNCj4+PiArwqDCoMKgwqDC
+oMKgwqAgaWYgKGVyciA8IDApDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29udGludWU7
+DQo+Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoCBkYXRhLT5mYW5baV0gPSB0cnVlOw0KPj4+ICvC
+oMKgwqDCoMKgwqDCoCBkYXRhLT5mYW5fbm9taW5hbF9zcGVlZFtpXSA9IGRldm1fa21hbGxvY19h
+cnJheShkZXYsIA0KPj4+IGRhdGEtPmk4a19mYW5fbWF4ICsgMSwNCj4+PiArIHNpemVvZigqZGF0
+YS0+ZmFuX25vbWluYWxfc3BlZWRbaV0pLA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBHRlBfS0VSTkVMKTsNCj4+PiAr
+wqDCoMKgwqDCoMKgwqAgaWYgKCFkYXRhLT5mYW5fbm9taW5hbF9zcGVlZFtpXSkNCj4+PiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBjb250aW51ZTsNCj4+PiArDQo+Pj4gK8KgwqDCoMKgwqDCoMKg
+IGZvciAoc3RhdGUgPSAwOyBzdGF0ZSA8PSBkYXRhLT5pOGtfZmFuX21heDsgc3RhdGUrKykgew0K
+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVyciA9IGk4a19nZXRfZmFuX25vbWluYWxfc3Bl
+ZWQoZGF0YSwgaSwgc3RhdGUpOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChlcnIg
+PCAwKSB7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBNYXJrIG5vbWlu
+YWwgc3BlZWQgdGFibGUgYXMgaW52YWxpZCBpbiBjYXNlIG9mIA0KPj4+IGVycm9yICovDQo+Pj4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkZXZtX2tmcmVlKGRldiwgZGF0YS0+ZmFu
+X25vbWluYWxfc3BlZWRbaV0pOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+ZGF0YS0+ZmFuX25vbWluYWxfc3BlZWRbaV0gPSBOVUxMOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfQ0KPj4+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRhdGEtPmZhbl9ub21pbmFsX3NwZWVkW2ldW3N0YXRl
+XSA9IGVycjsNCj4+PiArwqDCoMKgwqDCoMKgwqAgfQ0KPj4+IMKgwqDCoMKgwqAgfQ0KPj4+DQo+
+Pj4gwqDCoMKgwqDCoCBkZWxsX3NtbV9od21vbl9kZXYgPSBkZXZtX2h3bW9uX2RldmljZV9yZWdp
+c3Rlcl93aXRoX2luZm8oZGV2LCANCj4+PiAiZGVsbF9zbW0iLCBkYXRhLA0KPj4+IC0tIA0KPj4+
+IDIuMjAuMQ0KPj4+DQo+DQoNCg==
