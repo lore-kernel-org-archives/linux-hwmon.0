@@ -2,70 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D75C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 10:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F701C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 12:58:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3E4360F5B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 10:08:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0131B60E9C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 12:58:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbhJKKKD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 06:10:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:42322 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235695AbhJKKKD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 06:10:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 750541FB;
-        Mon, 11 Oct 2021 03:08:03 -0700 (PDT)
-Received: from bogus (unknown [10.57.21.181])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 195683F66F;
-        Mon, 11 Oct 2021 03:08:00 -0700 (PDT)
-Date:   Mon, 11 Oct 2021 11:07:15 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 07/14] mailbox: pcc: Use PCC mailbox channel pointer
- instead of standard
-Message-ID: <20211011100715.yhi4pmre6h2nglfc@bogus>
-References: <20210917133357.1911092-1-sudeep.holla@arm.com>
- <20210917133357.1911092-8-sudeep.holla@arm.com>
+        id S235251AbhJKNAL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 09:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235243AbhJKNAI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Oct 2021 09:00:08 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A05EC061745
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 05:58:08 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id u18so73211789lfd.12
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 05:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sbUATdjWGTZown1ZnIEucnYkDE/lZk0a1R0NRbj82lA=;
+        b=GtYZZLTaTPQkCvo3lO0cZCQphiFepZ3f3PaBdPouVzsGLD6C37NXwtFD047gDTf1m3
+         gPdReKvq5x2pMRaLPRPSG3cBE8r00uEklejrPGOpdUUHhiB24ubS4jMbIQOemgvy909u
+         vXwOU5i5LNSWVd7NtVemXXmaZi8Ogq1R/R9+VwPlsUUD0C+mqGYrr3MaTKPvIaUm3dEo
+         FeVFzA5Le5c35LxQKuUQvtROhHmQhzPsU3OfVZL3aPuEDyDVGIou+LH1KPGwiP1qzKKu
+         zsinSK9PfNCDoRd8mCxJOk+U0i7LnupuwtbCrJXOy4tAnxlJjShIqPdFjjRAXsgNe0Yk
+         nI4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sbUATdjWGTZown1ZnIEucnYkDE/lZk0a1R0NRbj82lA=;
+        b=c1xYfEJHCvFMMISjfl139LxkYCLuD+inlx3MCkvwocn/ApZp/2FoE4UxDwCO1atjdy
+         Wk71E4+b189eMHRhQ5y7i5/HhvUa3pTp5+VvVQ3BL2E13LJ09noG8QWSj/GrPEPJR98O
+         niJPAJNH/oxZdyS+OZIvHy45S62JpC1dtG0wqmTzHuuSP6HA+2M9DA99veKmZoRk4TLQ
+         QBRy1VASJtQoysZOqfjteepMpmQV5ZVk0UdPncMsf7j95bKpFhk0EOn6oRykGRuRuj7L
+         NSZ6RaffVpPx+i1V+Gf6mvgtt3MC/OaYYuCONTf+zvHpacFMfJxqivzuQzi2C9+it0Ro
+         NWxQ==
+X-Gm-Message-State: AOAM531reweW3KBzHq6okOqVZ14bzbmCL1vQ9+GYLeeZfo/dNX4aiIoL
+        mojOh3rnlcrV/v+tCNCvL7JUDeaHbo6tqI5GYFGXSw==
+X-Google-Smtp-Source: ABdhPJz52h/hbutZn2DE0KskwGN8fAFPiQ8NYngB6a3i0hvixssroAlKb1VeWAOrglPxrqkCfYLsZfUsdfcF7dJ8d08=
+X-Received: by 2002:a05:651c:140d:: with SMTP id u13mr22441766lje.9.1633957085891;
+ Mon, 11 Oct 2021 05:58:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210917133357.1911092-8-sudeep.holla@arm.com>
+References: <20211011012212.91357-1-osk@google.com> <20211011012212.91357-2-osk@google.com>
+ <98dcaa85-d04c-7a9c-1901-8786d361477c@roeck-us.net> <CABoTLcTERUpwPSc7fVUAMqs37XCZJhMFbFRT2oyTt_TodE6GnA@mail.gmail.com>
+ <518a6ab3-80af-bbe9-69e5-55e6741bdcbe@roeck-us.net>
+In-Reply-To: <518a6ab3-80af-bbe9-69e5-55e6741bdcbe@roeck-us.net>
+From:   Oskar Senft <osk@google.com>
+Date:   Mon, 11 Oct 2021 08:57:49 -0400
+Message-ID: <CABoTLcQtfoXCy+j9W6-NxAtWN13yTs322BFtCebbMCZr-cWzaA@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] hwmon: (nct7802) Make temperature/voltage sensors configurable
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+Hi Guenter
 
-On Fri, Sep 17, 2021 at 02:33:50PM +0100, Sudeep Holla wrote:
-> Now that we have all the shared memory region information populated in
-> the pcc_mbox_chan, let us propagate the pointer to the same as the
-> return value to pcc_mbox_request channel.
-> 
-> This eliminates the need for the individual users of PCC mailbox to
-> parse the PCCT subspace entries and fetch the shmem information. This
-> also eliminates the need for PCC mailbox controller to set con_priv to
-> PCCT subspace entries. This is required as con_priv is private to the
-> controller driver to attach private data associated with the channel and
-> not meant to be used by the mailbox client/users.
-> 
-> Let us convert all the users of pcc_mbox_{request,free}_channel to use
-> new interface.
-> 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
+I appreciate your help with this!
 
-Any objections ? If you are OK, can I have your ack so that the series
-can go in one go.
+> First, please don't top-post.
+Argh, I'm sorry - old habits! The Gmail web UI makes it too easy to do that :-/
 
--- 
-Regards,
-Sudeep
+> Second, no, submitting both patches was the right thing to do, but
+> you should not drop a Reviewed-by: tag if there was no change to
+> the patch.
+Got it, makes sense. How do I untangle this mess? Resubmit a v8, this
+time with the "Reviewed-by:" added back in? Or are you ok tagging the
+v7 again. I'm sorry!
+
+Thanks
+Oskar.
