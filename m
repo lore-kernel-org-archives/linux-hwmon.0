@@ -2,130 +2,235 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAB0DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D4F6C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:41:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1C3760F38
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:34:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75D1F60EE9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 14:41:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbhJKOgY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 10:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S238643AbhJKOno (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 10:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237382AbhJKOgY (ORCPT
+        with ESMTP id S244507AbhJKOng (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 10:36:24 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A033C06161C
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 07:34:24 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id w9-20020a4adec9000000b002b696945457so4938184oou.10
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 07:34:24 -0700 (PDT)
+        Mon, 11 Oct 2021 10:43:36 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8F9C06161C;
+        Mon, 11 Oct 2021 07:38:44 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id z11so24947823oih.1;
+        Mon, 11 Oct 2021 07:38:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=vyQAJNQV7vGV7usTQ0OI6uuDToowEWKPWUrEgDT0Ejc=;
-        b=gqMdrIXUs8RNnK18ExMevkIenY+Zf5RpXDblubN9mSFAvC6FxO7YoYx7Gz22e81Hc9
-         zrvBXVKx4mnkeV+FdoMIfRvlSFNwD2jonPQnuTL9mYW5DhRwa/4M3PRWGAVxBnIsXPe6
-         Rv9RgiF5gNffW8aXky8MaFwxz0etE/c9NalQTukMLXclr9jPL7F2f84GgyxawTdBH1MC
-         EtkPW5k0JYIWC4Ez2TnS3VoG4ZVaXYprlLTgo2lcYxYlhUfUO7pPNEEtyPBqIusZNVSN
-         NzxLY39KWFC5Fk1uYST1PHP/cKFEe/6N32RKveYaveaCdE4jfdeZCbYe65rnAQalIZWt
-         D6UA==
+        bh=KJ+wtNs2FXm9PQqB8Ks5XiBM40+Egmp/mhiSUATFJC0=;
+        b=IxAQzuJwuf3ITi2kE1/RQgSNkMIW2auvNZHk7nuIA/PRGiriDeVGQSHV6b6/mb8RzA
+         3bMMv4/Pz/PHK9IukmYqZU9ge2gePjr5lOokByjPIznhF8aUAB2y0tUjbvknE3kbMZ92
+         3fuK5byaKladMoKw5ln80/8iA47IVV9+BfdCRGO7+sJR6JkT35jfms4oo5bbg9cg0Jhx
+         zCYXhnsZQY11f8km7rBqdSGoKELRdo8Pez77z+9ML/dQJVKzRLdyYD8i145l4FCo4ijI
+         Xx57CAhkvM+ABzcn0SIiSfdTaHbzyjxK02PIefRlg93UeoB19fqopGSu+ID3hSPHYF/P
+         3Q2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=vyQAJNQV7vGV7usTQ0OI6uuDToowEWKPWUrEgDT0Ejc=;
-        b=bjVbcSCAQADuGROFpeGR5DDzPEp1SgMFHrV9lnHegzJevGuV6uspdOlDzZst83UZrY
-         mC3+Wp6ZN4Qgvb/2vQHDe7f7URiM3H/GTUiRBrwHTazOURUQi3ZT2z5vjeMRgThADrpc
-         wiTMxecRf8FmVHIfZDkjo6F5ess9gRR/9CLkEcs+4N3Ji20PK8lBcfyae14koXSsy+n5
-         vsdSoqVNUgFnysI0Z3w7ruSsf0x3+EvsbvxZpUU/QgNuhMcpbasavo9Bo0DMdkNT+Qlr
-         vU4fW9GjGia0mOzBW5zTcfLQQscPqd7YkJrLgMs9tP27aGIo2dMqMLfDDAVoyvEepxDq
-         Ov2A==
-X-Gm-Message-State: AOAM53125Ik6ndxkxB1kxwmeYuu8hghEHoUO8r3XUbwtOxBSxg9VFwMU
-        8TG8CKebM9wSL4FzSExmD/SYk+Vyn/o=
-X-Google-Smtp-Source: ABdhPJwHPQf2dkAa/HjLjkW0OqQ76Hn+msI/3VUPOJPy+37kVUoVFrRNogXGi8g2EUps/rpqAcyQPw==
-X-Received: by 2002:a4a:b64b:: with SMTP id f11mr19299992ooo.18.1633962863461;
-        Mon, 11 Oct 2021 07:34:23 -0700 (PDT)
+        bh=KJ+wtNs2FXm9PQqB8Ks5XiBM40+Egmp/mhiSUATFJC0=;
+        b=280KggJ+7JUuYgyziHXqbFe6znOPkZ46TIkxyfVNRGn+7NeuJ/jzVfNRsPBfx+NmUb
+         bS3LLZF0eyuokYghNXVooUH2BP3dxlj77Yuo3mDsEq/IgiOeo5kidiHX0YSFK5enMDyU
+         feUup0xRxneV2iRagGUYWVyDAmlpoA1BJDX6DeJYpoWtMa32gxnWIozFfbpFX12d3ir9
+         piKWRRGbpu57cARB/8QTIEA/C7ViOb7zI8P4e3P1QAu9W1Zy3a/hzBEjFLTlH2I6P1z6
+         KgwGRebFTXOA0sMa5YzL3ZkCha8EAv49C00S10+iMWYMWNw8o9nHehuAKKAAaU+is8i8
+         dGLg==
+X-Gm-Message-State: AOAM532bDoPWM0N2/QitlCdcumpwFD2AtYN7Uvv5SACFTSx/nUUk/lPD
+        97e+h+BIkyVKDWUtNGKPS7T5PHQ+pCI=
+X-Google-Smtp-Source: ABdhPJz4T79yPGJNmWyYX8NFjHda8iwub9rBVidMmeHd0CFRmqRr8PR3C9yZvlReq/+5EF4wRJxmFQ==
+X-Received: by 2002:aca:c28b:: with SMTP id s133mr25610965oif.17.1633963124361;
+        Mon, 11 Oct 2021 07:38:44 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q129sm341432oig.2.2021.10.11.07.34.22
+        by smtp.gmail.com with ESMTPSA id w141sm1726846oif.20.2021.10.11.07.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Oct 2021 07:34:22 -0700 (PDT)
+        Mon, 11 Oct 2021 07:38:43 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 11 Oct 2021 07:34:21 -0700
+Date:   Mon, 11 Oct 2021 07:38:43 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>
-Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
-Message-ID: <20211011143421.GA2374570@roeck-us.net>
-References: <20210923023448.4190-1-akinobu.mita@gmail.com>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, jk@ozlabs.org, joel@jms.id.au,
+        alistair@popple.id.au, jdelvare@suse.com
+Subject: Re: [PATCH v3 4/4] hwmon: (occ) Provide the SBEFIFO FFDC in binary
+ sysfs
+Message-ID: <20211011143843.GA2443520@roeck-us.net>
+References: <20210927155925.15485-1-eajames@linux.ibm.com>
+ <20210927155925.15485-5-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210923023448.4190-1-akinobu.mita@gmail.com>
+In-Reply-To: <20210927155925.15485-5-eajames@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 23, 2021 at 11:34:47AM +0900, Akinobu Mita wrote:
-> This adds an optional property "retain-state-shutdown" as requested by
-> Billy Tsai.
+On Mon, Sep 27, 2021 at 10:59:25AM -0500, Eddie James wrote:
+> Save any FFDC provided by the OCC driver, and provide it to userspace
+> through a binary sysfs entry. Notify userspace pollers when there is an
+> error too.
 > 
-> Billy said:
->  "Our platform is BMC that will use a PWM-FAN driver to control the fan
->  on the managed host. In our case, we do not want to stop the fan when
->  the BMC is reboot, which may cause the temperature of the managed host
->  not to be lowered."
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Billy Tsai <billy_tsai@aspeedtech.com>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-For my reference (waiting for DT property approval):
+For my reference (waiting for infra patches to be accepted/acked):
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 Guenter
 
 > ---
->  drivers/hwmon/pwm-fan.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+> Changes since v1:
+>  - Remove "collected" error state in favor of a boolean
+>  - Clear the error flag once the FFDC has been completely read once
+>  - Only store FFDC if there is no FFDC waiting to be retrieved
 > 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 17518b4cab1b..1ea0d0562c28 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -38,6 +38,7 @@ struct pwm_fan_ctx {
->  	struct pwm_fan_tach *tachs;
->  	ktime_t sample_start;
->  	struct timer_list rpm_timer;
-> +	bool retain_state_shutdown;
+>  drivers/hwmon/occ/p9_sbe.c | 86 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 85 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 9709f2b9c052..e50243580269 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -4,18 +4,79 @@
+>  #include <linux/device.h>
+>  #include <linux/errno.h>
+>  #include <linux/fsi-occ.h>
+> +#include <linux/mm.h>
+>  #include <linux/module.h>
+> +#include <linux/mutex.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/string.h>
+> +#include <linux/sysfs.h>
 >  
->  	unsigned int pwm_value;
->  	unsigned int pwm_fan_state;
-> @@ -312,6 +313,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  #include "common.h"
 >  
->  	mutex_init(&ctx->lock);
+>  struct p9_sbe_occ {
+>  	struct occ occ;
+> +	bool sbe_error;
+> +	void *ffdc;
+> +	size_t ffdc_len;
+> +	size_t ffdc_size;
+> +	struct mutex sbe_error_lock;	/* lock access to ffdc data */
+>  	struct device *sbe;
+>  };
 >  
-> +	ctx->retain_state_shutdown =
-> +		of_property_read_bool(dev->of_node, "retain-state-shutdown");
+>  #define to_p9_sbe_occ(x)	container_of((x), struct p9_sbe_occ, occ)
+>  
+> +static ssize_t ffdc_read(struct file *filp, struct kobject *kobj,
+> +			 struct bin_attribute *battr, char *buf, loff_t pos,
+> +			 size_t count)
+> +{
+> +	ssize_t rc = 0;
+> +	struct occ *occ = dev_get_drvdata(kobj_to_dev(kobj));
+> +	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
 > +
->  	ctx->pwm = devm_of_pwm_get(dev, dev->of_node, NULL);
->  	if (IS_ERR(ctx->pwm))
->  		return dev_err_probe(dev, PTR_ERR(ctx->pwm), "Could not get PWM\n");
-> @@ -492,7 +496,10 @@ static int pwm_fan_disable(struct device *dev)
->  
->  static void pwm_fan_shutdown(struct platform_device *pdev)
+> +	mutex_lock(&ctx->sbe_error_lock);
+> +	if (ctx->sbe_error) {
+> +		rc = memory_read_from_buffer(buf, count, &pos, ctx->ffdc,
+> +					     ctx->ffdc_len);
+> +		if (pos >= ctx->ffdc_len)
+> +			ctx->sbe_error = false;
+> +	}
+> +	mutex_unlock(&ctx->sbe_error_lock);
+> +
+> +	return rc;
+> +}
+> +static BIN_ATTR_RO(ffdc, OCC_MAX_RESP_WORDS * 4);
+> +
+> +static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+> +				 size_t resp_len)
+> +{
+> +	bool notify = false;
+> +
+> +	mutex_lock(&ctx->sbe_error_lock);
+> +	if (!ctx->sbe_error) {
+> +		if (resp_len > ctx->ffdc_size) {
+> +			if (ctx->ffdc)
+> +				kvfree(ctx->ffdc);
+> +			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+> +			if (!ctx->ffdc) {
+> +				ctx->ffdc_len = 0;
+> +				ctx->ffdc_size = 0;
+> +				goto done;
+> +			}
+> +
+> +			ctx->ffdc_size = resp_len;
+> +		}
+> +
+> +		notify = true;
+> +		ctx->sbe_error = true;
+> +		ctx->ffdc_len = resp_len;
+> +		memcpy(ctx->ffdc, resp, resp_len);
+> +	}
+> +
+> +done:
+> +	mutex_unlock(&ctx->sbe_error_lock);
+> +	return notify;
+> +}
+> +
+>  static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
 >  {
-> -	pwm_fan_disable(&pdev->dev);
-> +	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
+>  	struct occ_response *resp = &occ->resp;
+> @@ -24,8 +85,15 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>  	int rc;
+>  
+>  	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> -	if (rc < 0)
+> +	if (rc < 0) {
+> +		if (resp_len) {
+> +			if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
+> +				sysfs_notify(&occ->bus_dev->kobj, NULL,
+> +					     bin_attr_ffdc.attr.name);
+> +		}
 > +
-> +	if (!ctx->retain_state_shutdown)
-> +		pwm_fan_disable(&pdev->dev);
+>  		return rc;
+> +	}
+>  
+>  	switch (resp->return_status) {
+>  	case OCC_RESP_CMD_IN_PRG:
+> @@ -65,6 +133,8 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+>  	if (!ctx)
+>  		return -ENOMEM;
+>  
+> +	mutex_init(&ctx->sbe_error_lock);
+> +
+>  	ctx->sbe = pdev->dev.parent;
+>  	occ = &ctx->occ;
+>  	occ->bus_dev = &pdev->dev;
+> @@ -78,6 +148,15 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+>  	if (rc == -ESHUTDOWN)
+>  		rc = -ENODEV;	/* Host is shutdown, don't spew errors */
+>  
+> +	if (!rc) {
+> +		rc = device_create_bin_file(occ->bus_dev, &bin_attr_ffdc);
+> +		if (rc) {
+> +			dev_warn(occ->bus_dev,
+> +				 "failed to create SBE error ffdc file\n");
+> +			rc = 0;
+> +		}
+> +	}
+> +
+>  	return rc;
 >  }
 >  
->  #ifdef CONFIG_PM_SLEEP
+> @@ -86,9 +165,14 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>  	struct occ *occ = platform_get_drvdata(pdev);
+>  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+>  
+> +	device_remove_bin_file(occ->bus_dev, &bin_attr_ffdc);
+> +
+>  	ctx->sbe = NULL;
+>  	occ_shutdown(occ);
+>  
+> +	if (ctx->ffdc)
+> +		kvfree(ctx->ffdc);
+> +
+>  	return 0;
+>  }
+>  
