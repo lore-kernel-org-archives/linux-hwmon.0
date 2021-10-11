@@ -2,82 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F701C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 12:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2168CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 13:28:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0131B60E9C
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 12:58:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF68260F21
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 13:28:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbhJKNAL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 09:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S236930AbhJKNaP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 09:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbhJKNAI (ORCPT
+        with ESMTP id S236921AbhJKNaP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 09:00:08 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A05EC061745
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 05:58:08 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id u18so73211789lfd.12
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 05:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sbUATdjWGTZown1ZnIEucnYkDE/lZk0a1R0NRbj82lA=;
-        b=GtYZZLTaTPQkCvo3lO0cZCQphiFepZ3f3PaBdPouVzsGLD6C37NXwtFD047gDTf1m3
-         gPdReKvq5x2pMRaLPRPSG3cBE8r00uEklejrPGOpdUUHhiB24ubS4jMbIQOemgvy909u
-         vXwOU5i5LNSWVd7NtVemXXmaZi8Ogq1R/R9+VwPlsUUD0C+mqGYrr3MaTKPvIaUm3dEo
-         FeVFzA5Le5c35LxQKuUQvtROhHmQhzPsU3OfVZL3aPuEDyDVGIou+LH1KPGwiP1qzKKu
-         zsinSK9PfNCDoRd8mCxJOk+U0i7LnupuwtbCrJXOy4tAnxlJjShIqPdFjjRAXsgNe0Yk
-         nI4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sbUATdjWGTZown1ZnIEucnYkDE/lZk0a1R0NRbj82lA=;
-        b=c1xYfEJHCvFMMISjfl139LxkYCLuD+inlx3MCkvwocn/ApZp/2FoE4UxDwCO1atjdy
-         Wk71E4+b189eMHRhQ5y7i5/HhvUa3pTp5+VvVQ3BL2E13LJ09noG8QWSj/GrPEPJR98O
-         niJPAJNH/oxZdyS+OZIvHy45S62JpC1dtG0wqmTzHuuSP6HA+2M9DA99veKmZoRk4TLQ
-         QBRy1VASJtQoysZOqfjteepMpmQV5ZVk0UdPncMsf7j95bKpFhk0EOn6oRykGRuRuj7L
-         NSZ6RaffVpPx+i1V+Gf6mvgtt3MC/OaYYuCONTf+zvHpacFMfJxqivzuQzi2C9+it0Ro
-         NWxQ==
-X-Gm-Message-State: AOAM531reweW3KBzHq6okOqVZ14bzbmCL1vQ9+GYLeeZfo/dNX4aiIoL
-        mojOh3rnlcrV/v+tCNCvL7JUDeaHbo6tqI5GYFGXSw==
-X-Google-Smtp-Source: ABdhPJz52h/hbutZn2DE0KskwGN8fAFPiQ8NYngB6a3i0hvixssroAlKb1VeWAOrglPxrqkCfYLsZfUsdfcF7dJ8d08=
-X-Received: by 2002:a05:651c:140d:: with SMTP id u13mr22441766lje.9.1633957085891;
- Mon, 11 Oct 2021 05:58:05 -0700 (PDT)
+        Mon, 11 Oct 2021 09:30:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0946DC06161C
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Oct 2021 06:28:14 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLZ-0006fk-Rm; Mon, 11 Oct 2021 15:28:05 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLV-0003nj-Jv; Mon, 11 Oct 2021 15:28:01 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLV-0000SM-IV; Mon, 11 Oct 2021 15:28:01 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH 02/13] hwmon: adt7x10: Make adt7x10_remove() return void
+Date:   Mon, 11 Oct 2021 15:27:43 +0200
+Message-Id: <20211011132754.2479853-3-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
+References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-References: <20211011012212.91357-1-osk@google.com> <20211011012212.91357-2-osk@google.com>
- <98dcaa85-d04c-7a9c-1901-8786d361477c@roeck-us.net> <CABoTLcTERUpwPSc7fVUAMqs37XCZJhMFbFRT2oyTt_TodE6GnA@mail.gmail.com>
- <518a6ab3-80af-bbe9-69e5-55e6741bdcbe@roeck-us.net>
-In-Reply-To: <518a6ab3-80af-bbe9-69e5-55e6741bdcbe@roeck-us.net>
-From:   Oskar Senft <osk@google.com>
-Date:   Mon, 11 Oct 2021 08:57:49 -0400
-Message-ID: <CABoTLcQtfoXCy+j9W6-NxAtWN13yTs322BFtCebbMCZr-cWzaA@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] hwmon: (nct7802) Make temperature/voltage sensors configurable
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=9He6IzxzqlwCNrbyaU2x86Wz9NsT7rj1rB/U0CelTbM=; m=sqMkzU6U6DMEQr1FURiCM0wFSKVmXZBD0WH+KO+1n50=; p=rpCXoueXF+/6M5DW7UDuOw4hNFSeIvhyHopZtckbJ3w=; g=2d545779f4e06d7b6e6fcd09bcf283a1e608db9e
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkO2QACgkQwfwUeK3K7AkjnQgAk4b 1Rvls6cwIr+4vW5HtNajvUcDh6lULZQr6IxuFUnLBPRRn1QJTVfZ2ewagA+CZrkJ4IKVmtrbgmyYP c/nbeI7q+g3rwO5zz8bGfVuapP0XDyphhZbYzrPVeRM6LUV5eMjRapmn7oQ6e1liFg7HKwRavTu8E o1dOzdvbynwLKR0JOfqMe+P6UAWz/wqodCr2KYVkwV9lAAYjk1j3Ec8oQSpWtJrsN08alEgOd2Ur2 BkmUvURPWU4JrEx/+s3SdNcdXYC4uNieVSXLY86kQGOqtZuVA4mVniONSeBxEQ03PjwNUy/vTh986 KWM+uKI6ffi0jPn1+VNcnFSUhjsEMpQ==
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter
+Up to now adt7x10_remove() returns zero unconditionally. Make it return
+void instead which makes it easier to see in the callers that there is
+no error to handle.
 
-I appreciate your help with this!
+Also the return value of i2c and spi remove callbacks is ignored anyway.
 
-> First, please don't top-post.
-Argh, I'm sorry - old habits! The Gmail web UI makes it too easy to do that :-/
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/hwmon/adt7310.c | 3 ++-
+ drivers/hwmon/adt7410.c | 3 ++-
+ drivers/hwmon/adt7x10.c | 3 +--
+ drivers/hwmon/adt7x10.h | 2 +-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
 
-> Second, no, submitting both patches was the right thing to do, but
-> you should not drop a Reviewed-by: tag if there was no change to
-> the patch.
-Got it, makes sense. How do I untangle this mess? Resubmit a v8, this
-time with the "Reviewed-by:" added back in? Or are you ok tagging the
-v7 again. I'm sorry!
+diff --git a/drivers/hwmon/adt7310.c b/drivers/hwmon/adt7310.c
+index 9fad01191620..c40cac16af68 100644
+--- a/drivers/hwmon/adt7310.c
++++ b/drivers/hwmon/adt7310.c
+@@ -90,7 +90,8 @@ static int adt7310_spi_probe(struct spi_device *spi)
+ 
+ static int adt7310_spi_remove(struct spi_device *spi)
+ {
+-	return adt7x10_remove(&spi->dev, spi->irq);
++	adt7x10_remove(&spi->dev, spi->irq);
++	return 0;
+ }
+ 
+ static const struct spi_device_id adt7310_id[] = {
+diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
+index 9d80895d0266..973db057427b 100644
+--- a/drivers/hwmon/adt7410.c
++++ b/drivers/hwmon/adt7410.c
+@@ -50,7 +50,8 @@ static int adt7410_i2c_probe(struct i2c_client *client)
+ 
+ static int adt7410_i2c_remove(struct i2c_client *client)
+ {
+-	return adt7x10_remove(&client->dev, client->irq);
++	adt7x10_remove(&client->dev, client->irq);
++	return 0;
+ }
+ 
+ static const struct i2c_device_id adt7410_ids[] = {
+diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
+index 3f03b4cf5858..e9d33aa78a19 100644
+--- a/drivers/hwmon/adt7x10.c
++++ b/drivers/hwmon/adt7x10.c
+@@ -444,7 +444,7 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ }
+ EXPORT_SYMBOL_GPL(adt7x10_probe);
+ 
+-int adt7x10_remove(struct device *dev, int irq)
++void adt7x10_remove(struct device *dev, int irq)
+ {
+ 	struct adt7x10_data *data = dev_get_drvdata(dev);
+ 
+@@ -457,7 +457,6 @@ int adt7x10_remove(struct device *dev, int irq)
+ 	sysfs_remove_group(&dev->kobj, &adt7x10_group);
+ 	if (data->oldconfig != data->config)
+ 		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
+-	return 0;
+ }
+ EXPORT_SYMBOL_GPL(adt7x10_remove);
+ 
+diff --git a/drivers/hwmon/adt7x10.h b/drivers/hwmon/adt7x10.h
+index 21ad15ce3163..a1ae682eb32e 100644
+--- a/drivers/hwmon/adt7x10.h
++++ b/drivers/hwmon/adt7x10.h
+@@ -26,7 +26,7 @@ struct adt7x10_ops {
+ 
+ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 	const struct adt7x10_ops *ops);
+-int adt7x10_remove(struct device *dev, int irq);
++void adt7x10_remove(struct device *dev, int irq);
+ 
+ #ifdef CONFIG_PM_SLEEP
+ extern const struct dev_pm_ops adt7x10_dev_pm_ops;
+-- 
+2.30.2
 
-Thanks
-Oskar.
