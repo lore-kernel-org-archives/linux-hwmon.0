@@ -2,928 +2,224 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A7DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 20:43:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5974C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 20:54:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A372603E7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 20:43:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBE3F60F23
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 20:54:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbhJKUpt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 16:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbhJKUpt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 16:45:49 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD96C061570;
-        Mon, 11 Oct 2021 13:43:48 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id m67so177989oif.6;
-        Mon, 11 Oct 2021 13:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=UqFRfGIpwQTpTvcmKqRlbId8ZJI7lhuS9lLUKF6yrHo=;
-        b=p435s0jQGibqmVimxwx2cpwHzIGs+XANeKvETEvVp/zS8QjtRtxbdr4ZPHLykhqioF
-         wKo3aAKwFwanuKLKnWmMTAFcUjLszr4/3McgRkyWmF0r560WV/5MFzWQeSCL2tSih5s5
-         JpRHNeRLbtqCTOkIHLp5suBdWG1UV2qQ9u9OKmdM2ZgEo00BrvuHNUlUqC0ITkevMyu9
-         gF6S79QDAPwHpcMD0tjVhi09gj9oGar7nqA4N6g4J6fDYHCyIscJruwmazdYMGG1eo1F
-         iC0LLCrkpcoCmN2fveRkv9FXhPZc2+GyxefJKpcxzCca34a6tPNw7RYVeRTaSlyAHhRm
-         36kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:content-transfer-encoding;
-        bh=UqFRfGIpwQTpTvcmKqRlbId8ZJI7lhuS9lLUKF6yrHo=;
-        b=CTmOZKhIDaKuWsQrCyNS2piBmfToQpcxJg61z10baHDjFn+8MJFPsPJYY7yxxW9bMf
-         hEMQXo6f4mBsQNn7kE1Yn0mJ4g4PUKmb51j+63bsQHD2yYLw7uzfhxX5hnwFS3cQDDXd
-         uyuDEUuONDtO/ul4NHdStvEpDYRhvrmbfTJUCsATwDZxOOncy8zjOy0lkt6VpQ5pm0ea
-         ep0wsXp1qzUDECGivJCec37KPHVVasUJVGZr2RxvVfJWdyB/2UTuwfxpquGuZZVyJLZf
-         U6Llb0GRvzL/duHllZJL6kNvjp5tAFZ7y6rbJATvUo4/FE6PHQ968KdV26x+ldgG985m
-         GEgA==
-X-Gm-Message-State: AOAM530Lrvjh9D4AAw0b09qlPDQEmhKvq74EiG5zPltLkIx2NIa6ygz7
-        S0UQ5s+uFdBwdFahY9TpntE=
-X-Google-Smtp-Source: ABdhPJxtKwx6lSTlTeZ/0lclv1VHmaS2iYjgOBwRhSyXEy/7iyoVzZfBz4PW6whACOHV6bYiablMvA==
-X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr875998oiv.23.1633985027764;
-        Mon, 11 Oct 2021 13:43:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e28sm987275oiy.10.2021.10.11.13.43.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Oct 2021 13:43:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 11 Oct 2021 13:43:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        platform-driver-x86@vger.kernel.org,
-        Ed Brindley <kernel@maidavale.org>,
-        kernel test robot <lkp@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
-Message-ID: <20211011204345.GA1869030@roeck-us.net>
+        id S235105AbhJKU4F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 16:56:05 -0400
+Received: from mga04.intel.com ([192.55.52.120]:12745 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235112AbhJKU4D (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Oct 2021 16:56:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="225740112"
+X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
+   d="scan'208";a="225740112"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 13:54:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
+   d="scan'208";a="625654550"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Oct 2021 13:54:01 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 11 Oct 2021 13:54:01 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 11 Oct 2021 13:54:00 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Mon, 11 Oct 2021 13:54:00 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.12; Mon, 11 Oct 2021 13:54:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V+hT8bg8lH/GVYIVAANE/NjeP/GhsPmkX4dkQBhClvAqTgmeIel1cnk811jn+LuLVs/OQTFVIU3Xkof9usgFx/2l2iSFUl3U1Lb82g4YWbmSrjfiqgLs73vsDOpQULTrS7yPp5Vi5G/Ruo1BSt/ns+jVrbPRjG57qsSd/fJ2oZFCazVHntJsZzqW610QprGY5BlS/VkqhlDmOFIMu7U63paFeY8xB/zb6vWM/rjI+Wafwi7VH7RMQRB2vCqoe9UFg5fJJ2IPMUv8RxvFqxwyXkcEnh99BjF+OVDrJ+gFOpsno9/M8lGLKYS6OmfJ7buduBo3xYSpCuzHqqBmgZEXzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hOoGdcoB9BpEgjTNE6QR+CmXlk0ZdBF9xh4AyNxE6kQ=;
+ b=QWUP2LzVD8N80NJWiujQ9WIpVV7+0vRdbdL1Vzq0SvHWlQa/nhXmY5DmXsZHwaDm4q8N2vx/ye+W1uxOUfo1bYmijOJaNO8wWEysx5qEevbIawc4XQK7KfGczPB91VmmeIEtbmMDwSX+yBywc1uwVDBWAMNKxEnMLr3VhbMaOKH7AC7dZ8r+SVa13pwZhQV5CVFnmAKSvLYb04tNyY4U+zsqATKbW2qfK/0Jbdy9SanDHanf7yy4pwCbaxx8Jdrw7eenIQ60WRd3q8PAr+CdmRbrivndGvg911LlBNJKlvQRSTHWo2HWJkeKmutEewPtXkeYVsQYGiSiSq4ITJUW4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hOoGdcoB9BpEgjTNE6QR+CmXlk0ZdBF9xh4AyNxE6kQ=;
+ b=YtMCzKE08KlyfPXPT6j5WAifmC49Q1xF6VNuIYyAaWOdOStgZVfmvOyWU7Gi76gDwhvWpWi8IonsI0FZdPH03VRMQ1tUDsf5tKkPRt+8YAKBHvZl84+09e127RNkjVdPBGNhHier53nrbLx2jMOAFhbLwzB5ymj4Ukvc8uYngXI=
+Received: from CY4PR1101MB2278.namprd11.prod.outlook.com
+ (2603:10b6:910:18::13) by CY4PR1101MB2279.namprd11.prod.outlook.com
+ (2603:10b6:910:17::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.22; Mon, 11 Oct
+ 2021 20:53:52 +0000
+Received: from CY4PR1101MB2278.namprd11.prod.outlook.com
+ ([fe80::c482:c237:bcf1:70bc]) by CY4PR1101MB2278.namprd11.prod.outlook.com
+ ([fe80::c482:c237:bcf1:70bc%11]) with mapi id 15.20.4587.026; Mon, 11 Oct
+ 2021 20:53:52 +0000
+From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
+To:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "olof@lixom.net" <olof@lixom.net>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "zweiss@equinix.com" <zweiss@equinix.com>,
+        "d.mueller@elsoft.ch" <d.mueller@elsoft.ch>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>
+Subject: Re: [PATCH v2 01/15] x86/cpu: Move intel-family to arch-independent
+ headers
+Thread-Topic: [PATCH v2 01/15] x86/cpu: Move intel-family to arch-independent
+ headers
+Thread-Index: AQHXiFtZAf43JMVeikGj7NGS9LF26KvDlHGAgAsFNYCAAAVHAIAAFIsA
+Date:   Mon, 11 Oct 2021 20:53:51 +0000
+Message-ID: <43e367e452c6c8d9c6a275299d7ff6f2bb26b8e3.camel@intel.com>
+References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
+         <20210803113134.2262882-2-iwona.winiarska@intel.com>
+         <YVtQG+idmwKn0qLe@zn.tnic>
+         <58ef4107e9b2c60a2605aac0d2fb6670a95bc9e0.camel@intel.com>
+         <67f2cfda-c78b-6282-f5a3-2f345f8e2849@intel.com>
+In-Reply-To: <67f2cfda-c78b-6282-f5a3-2f345f8e2849@intel.com>
+Accept-Language: en-US, pl-PL
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+authentication-results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a2c2f317-b587-498f-b9a1-08d98cf93b7c
+x-ms-traffictypediagnostic: CY4PR1101MB2279:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CY4PR1101MB2279F49F67F92809F64D4001ECB59@CY4PR1101MB2279.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KrPG5qWBCDXdXyeAkTeI5HVRl3bQm2VWYFOw4YKBHz9Oxp/xbeROlD43UW5tAOIJFGjFHsglc4myxiKWnv0yyu9ySmvbOL+ikZniPr81dcj6dn2ZxesKOKTa3KHuQxA7dtSa94l9yDrfEEG9p23CyDGwACiCHGLFoopvQPgHaEuoQV9EZD2fVSEntQwjhq+WrSwzhTA5bbzGikxOeDvGQrz+e6Dl0JEQcMV0uAOA3wKp3E7RzCq6FY1GGnuupfQWPsx8St+DjbaIgexdEutSegYSMhGLNN99UayMNrMHP0UXRO0csxNS8NuXS0mn0q8Jzcdq12OBmk74uKYGbdORYOX/oF2ec4k2xtP9WBKOfVu+Ohy3WJCe7tCX5adlI7EDgKUTeeQHKUhT5O5Wi8O8xKrUHMMHsXLW/VyDVg8r1vD1sQ0gLhDSFQDPHItJayLlWXgehniKz/Q/iM0JdHk2+5gYVnCHeUrn6VZF58o6eZAf9SXe2B6Z1CYeDDZ3/yhSkWVl6vxexrBq5Zv+QWAWedRah7VNM6Bu7msJuzkoc2jY7hyLJFSAGk/TRJzBLWcPr+dMM/oe+j2I+YDlhjV2caqvkYRbbBWCJbPOnCQACAKWk/NQnzpmxDiWCXTER41yrp27NXkJnheQzT5VHQD7E0L84YmZl8iemAJF7d5eCjfw89AzB3hQD8q32qahUL+4ytOppAyRxtXP7ax1TvlpcA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1101MB2278.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(53546011)(7416002)(8936002)(91956017)(122000001)(54906003)(110136005)(186003)(7406005)(71200400001)(6512007)(6506007)(4001150100001)(83380400001)(5660300002)(36756003)(4326008)(26005)(6486002)(64756008)(66476007)(2906002)(66556008)(508600001)(66446008)(66946007)(76116006)(316002)(86362001)(38100700002)(2616005)(38070700005)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NVpNUXJMUnZBVC9OWDEvdnh4cEdzQWVSZGwycktBeVZ0clE5MlV0T3VON3p3?=
+ =?utf-8?B?T0NncXJ3c2IxcVhxeE9YSDIvd3lqZnZFcnhlUVM0TFpsaGZ4TnJiOWZUeDBx?=
+ =?utf-8?B?NSs3Ymp3VFc0R0ZBVk9HYTNodEF1dnFkaVRaVEpwZ05BNzdybkVsM2xBQ3JR?=
+ =?utf-8?B?clhaVWFuZmRJMTEySGJVNkloSnh6ZmZwUWloeFNqcm5RSHl6K3pQc0FPd2JR?=
+ =?utf-8?B?TnRQZlpKbjFNWGZEZmNHSEc5cnVSbGRaMXM0TFlIdTVoVjZhQ1gyRStlTFk4?=
+ =?utf-8?B?bEkreTJjN0F1NDF6Y2JSdWtPM0NMM1JjTjJYV0o2cG5SektsUStVQXRvaGx4?=
+ =?utf-8?B?NTV3dUh4VXFqeUJNRnAxL0NzVlBmdStsQ3lFN0lDd1VvYzdSa21yKy9qSlM0?=
+ =?utf-8?B?YTdOR245Y2ZMbjN4RlN6YjJ3UXJFd1ZMMXZJdjR4K283NWNzaUk0aTludjQ2?=
+ =?utf-8?B?cSsrQTdyNVZpUXI4MGxicmFsc0VnWm1FWmJobXg4akI1NXc0MnZPZFcvbEJR?=
+ =?utf-8?B?TDE5OE40OXFJMUZGOXl4VGczd1NDN3JLNkJBblFIMVR2T1pXSVR5VXo5Tjcr?=
+ =?utf-8?B?eER3Wm5hOE1lWjZMM3RFOFpRRE1pODFKNU1qZ0RLMFYvUmo2Z2hPMlY0YUdD?=
+ =?utf-8?B?ZVIvMHQvaUxrYmZvWkVQcDlBYXZsQ1JIUnNFVE1pVmJYNVBrWnlCZ3dvV0Jv?=
+ =?utf-8?B?WHlKM0swWEQ5NFg1dUxjZDNjYklPTzRPUkhnZEJOSFh3UGdRbUV1RDlsbUNI?=
+ =?utf-8?B?Sjl5NnBHdXM4RzZHZHc2RDZrZEQ2VHNrS01tS01scElKTUNEclZVcXlGQTZW?=
+ =?utf-8?B?NG14OWRrSWtDMEoweGdNaUhIUUxSNDdSTnlLaERERGVja2gvd2VBMU91YWpP?=
+ =?utf-8?B?YURZL0hWb0RuNk1OdkUxeUZzYS9RL3h2K3VNajZuZTZwTmFwdDVUSEIxenQz?=
+ =?utf-8?B?ajJzeXFyYnFSRFpyVHZRS1dzUFhXbU1LdGwzeWpuUjU2MXVheEx6M1paMW1Z?=
+ =?utf-8?B?czZjbnlIZjBWemZsVm41eGxrUVVvMForWjR6NnkzeDUwZzZVZWZDVEF0ZHZN?=
+ =?utf-8?B?b3VOZDBnTERZcVdDWnRrMUFkc3dTZEw4TTM4c0pjOE9WdmJJaTFWdGVPV2xF?=
+ =?utf-8?B?UTdUbzhlUS92TkphNlJDQ1ZkeGhMTGJrRUhLYVlZYUIvbXlTVmZHQmMzalB5?=
+ =?utf-8?B?TVJrOFBBS0RzUlMxS002TFVwdlpwUDRDamxEQlo2UjVLUDhvTkNQSHo5V0FF?=
+ =?utf-8?B?TzhoRXUzNFVDbU4xRklMdjJiak43UGNPV012OU0ybzgxU1VXMlJDckU4eU9P?=
+ =?utf-8?B?YXNRcGwxTGRYSjllYndOS01MQ1ZEN1orTjloU1lhRHBkcFZWWW53TlpXbTk0?=
+ =?utf-8?B?K0VyNms1TGd5TDUrNlo5STZBZkkwaTQxbVozcXJOQWlDLzJ3ai9VNnE5bW9L?=
+ =?utf-8?B?SW1xMjBzYXlUaVo3TGMzd3c0aDF6VU04WktkcWZqM211Sks5L1pFMWZ6QmVP?=
+ =?utf-8?B?UDkrRGNlajF0anZzc0h5RXU5MDhLclgrSjgzejZkZDR3S3B6c0tRMWs3akxw?=
+ =?utf-8?B?MlZIMzVEa3dmZTZyRmxYMGdteTV5MFRjcUVvRXdMRmVtNVBjYVdsNVAwU0VV?=
+ =?utf-8?B?MEkwQlE1dXk5MXFreThrMXhQcDhybm5ZL3lXUVplRnBySHZWSUwwOU5PNlJV?=
+ =?utf-8?B?WjlmMWlTZFRnVGx0Mlp5MzFYN01rem1YVnU3b2MyNGwwTDVTVE8rYk9VMWYv?=
+ =?utf-8?B?VCttdnhLTUdXWDJpNzV0YmdUMnJpOFg2MmV5QjF0Wm0xWVMxaUJrbjlGMTI1?=
+ =?utf-8?B?Mzh1WVhQcVd0a2VkaE92Zz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <21BD1D9D076CFC4A905980A87AE662C4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1101MB2278.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2c2f317-b587-498f-b9a1-08d98cf93b7c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2021 20:53:52.0151
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3m2SbFB1t+bhOgRrruaQecgL6ztslj7qD87UHdd5E59w0IdDZDLY87RMK/LBzuqlQDRr9lnxy8MnLljhDXU2iTKgDiA7GAC15/Bj96AiHxQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2279
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 10:55:02PM +0300, Denis Pauk wrote:
-> Provides a Linux kernel module "asus_wmi_sensors" that provides sensor
-> readouts via ASUS' WMI interface present in the UEFI of
-> X370/X470/B450/X399 Ryzen motherboards.
-> 
-> Supported motherboards:
-> * ROG CROSSHAIR VI HERO,
-> * PRIME X399-A,
-> * PRIME X470-PRO,
-> * ROG CROSSHAIR VI EXTREME,
-> * ROG CROSSHAIR VI HERO (WI-FI AC),
-> * ROG CROSSHAIR VII HERO,
-> * ROG CROSSHAIR VII HERO (WI-FI),
-> * ROG STRIX B450-E GAMING,
-> * ROG STRIX B450-F GAMING,
-> * ROG STRIX B450-I GAMING,
-> * ROG STRIX X399-E GAMING,
-> * ROG STRIX X470-F GAMING,
-> * ROG STRIX X470-I GAMING,
-> * ROG ZENITH EXTREME,
-> * ROG ZENITH EXTREME ALPHA.
-> 
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Co-developed-by: Ed Brindley <kernel@maidavale.org>
-> Signed-off-by: Ed Brindley <kernel@maidavale.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> ---
-> Changes in v5:
-> - Fixes build issue reported by kernel test robot with disabled ACPI_WMI.
-> - Remove sensor->name check as always eevaluated to true.
-> 
-> Changes in v4:
-> - Implement wmi driver instead platform driver.
-> - Update documentation.
-> 
-> Changes in v3:
-> - Use MODULE_DEVICE_TABLE for match devices.
-> - Add documentaion for driver.
-> 
-> Changes in v2:
-> - Add module for boards with support of WMI interface returned sensor name and
->   value of sensor..
-> ---
->  Documentation/hwmon/asus_wmi_sensors.rst |  74 +++
-
-Also add to index.rst.
-
->  MAINTAINERS                              |   1 +
->  drivers/hwmon/Kconfig                    |  11 +
->  drivers/hwmon/Makefile                   |   1 +
->  drivers/hwmon/asus_wmi_sensors.c         | 621 +++++++++++++++++++++++
->  5 files changed, 708 insertions(+)
->  create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
->  create mode 100644 drivers/hwmon/asus_wmi_sensors.c
-> 
-> diff --git a/Documentation/hwmon/asus_wmi_sensors.rst b/Documentation/hwmon/asus_wmi_sensors.rst
-> new file mode 100644
-> index 000000000000..e32bfb74289f
-> --- /dev/null
-> +++ b/Documentation/hwmon/asus_wmi_sensors.rst
-> @@ -0,0 +1,74 @@
-> +Kernel driver asus-wmi-sensors
-> +=================================
-> +
-> +Supported boards:
-> + * PRIME X399-A,
-> + * PRIME X470-PRO,
-> + * ROG CROSSHAIR VI EXTREME,
-> + * ROG CROSSHAIR VI HERO,
-> + * ROG CROSSHAIR VI HERO (WI-FI AC),
-> + * ROG CROSSHAIR VII HERO,
-> + * ROG CROSSHAIR VII HERO (WI-FI),
-> + * ROG STRIX B450-E GAMING,
-> + * ROG STRIX B450-F GAMING,
-> + * ROG STRIX B450-I GAMING,
-> + * ROG STRIX X399-E GAMING,
-> + * ROG STRIX X470-F GAMING,
-> + * ROG STRIX X470-I GAMING,
-> + * ROG ZENITH EXTREME,
-> + * ROG ZENITH EXTREME ALPHA.
-> +
-> +Authors:
-> +        Ed Brindley <kernel@maidavale.org>
-> +
-> +Description:
-> +------------
-> +ASUS mainboards publish hardware monitoring information via WMI interface.
-> +
-> +ASUS WMI interface provides a methods to get list of sensors and values of
-> +such, which is utilized by this driver to publish those sensor readings to the
-> +HWMON system. The driver is aware of and reads the following sensors:
-> + * CPU Core Voltage,
-> + * CPU SOC Voltage,
-> + * DRAM Voltage,
-> + * VDDP Voltage,
-> + * 1.8V PLL Voltage,
-> + * +12V Voltage,
-> + * +5V Voltage,
-> + * 3VSB Voltage,
-> + * VBAT Voltage,
-> + * AVCC3 Voltage,
-> + * SB 1.05V Voltage,
-> + * CPU Core Voltage,
-> + * CPU SOC Voltage,
-> + * DRAM Voltage,
-> + * CPU Fan RPM,
-> + * Chassis Fan 1 RPM,
-> + * Chassis Fan 2 RPM,
-> + * Chassis Fan 3 RPM,
-> + * HAMP Fan RPM,
-> + * Water Pump RPM,
-> + * CPU OPT RPM,
-> + * Water Flow RPM,
-> + * AIO Pump RPM,
-> + * CPU Temperature,
-> + * CPU Socket Temperature,
-> + * Motherboard Temperature,
-> + * Chipset Temperature,
-> + * Tsensor 1 Temperature,
-> + * CPU VRM Temperature,
-> + * Water In,
-> + * Water Out,
-> + * CPU VRM Output Current.
-> +
-> +Known Issues:
-> +* The WMI implementation in some of Asus' BIOSes is buggy. This can result in
-> +   fans stopping, fans getting stuck at max speed, or temperature readouts
-> +   getting stuck. This is not an issue with the driver, but the BIOS. The Prime
-> +   X470 Pro seems particularly bad for this. The more frequently the WMI
-> +   interface is polled the greater the potential for this to happen. Until you
-> +   have subjected your computer to an extended soak test while polling the
-> +   sensors frequently, don't leave you computer unattended. Upgrading to new
-> +   BIOS version with method version greater than or equal to two should
-> +   rectify the issue.
-> +* A few boards report 12v voltages to be ~10v.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 05448435991d..46036c184330 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2943,6 +2943,7 @@ M:	Denis Pauk <pauk.denis@gmail.com>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
->  F:	drivers/hwmon/asus_wmi_ec_sensors.c
-> +F:	drivers/hwmon/asus_wmi_sensors.c
->  
->  ASUS WIRELESS RADIO CONTROL DRIVER
->  M:	João Paulo Rechi Vita <jprvita@gmail.com>
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 430a438432a0..461328c4b00a 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -2215,6 +2215,17 @@ config SENSORS_ATK0110
->  	  This driver can also be built as a module. If so, the module
->  	  will be called asus_atk0110.
->  
-> +config SENSORS_ASUS_WMI
-> +	tristate "ASUS WMI X370/X470/B450/X399"
-> +	help
-> +	  If you say yes here you get support for the ACPI hardware monitoring
-> +	  interface found in X370/X470/B450/X399 ASUS motherboards. This driver
-> +	  will provide readings of fans, voltages and temperatures through the system
-> +	  firmware.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called asus_wmi_sensors.
-> +
->  config SENSORS_ASUS_WMI_EC
->  	tristate "ASUS WMI B550/X570"
->  	help
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index aae2ff5c7335..656a6191a0f8 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -9,6 +9,7 @@ obj-$(CONFIG_HWMON_VID)		+= hwmon-vid.o
->  # APCI drivers
->  obj-$(CONFIG_SENSORS_ACPI_POWER) += acpi_power_meter.o
->  obj-$(CONFIG_SENSORS_ATK0110)	+= asus_atk0110.o
-> +obj-$(CONFIG_SENSORS_ASUS_WMI)	+= asus_wmi_sensors.o
->  obj-$(CONFIG_SENSORS_ASUS_WMI_EC)	+= asus_wmi_ec_sensors.o
->  
->  # Native drivers
-> diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-> new file mode 100644
-> index 000000000000..a45fbec4e319
-> --- /dev/null
-> +++ b/drivers/hwmon/asus_wmi_sensors.c
-> @@ -0,0 +1,621 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * HWMON driver for ASUS motherboards that provides sensor readouts via WMI
-> + * interface present in the UEFI of the X370/X470/B450/X399 Ryzen motherboards.
-> + *
-> + * Copyright (C) 2018-2019 Ed Brindley <kernel@maidavale.org>
-> + *
-> + * WMI interface provides:
-> + * CPU Core Voltage,
-> + * CPU SOC Voltage,
-> + * DRAM Voltage,
-> + * VDDP Voltage,
-> + * 1.8V PLL Voltage,
-> + * +12V Voltage,
-> + * +5V Voltage,
-> + * 3VSB Voltage,
-> + * VBAT Voltage,
-> + * AVCC3 Voltage,
-> + * SB 1.05V Voltage,
-> + * CPU Core Voltage,
-> + * CPU SOC Voltage,
-> + * DRAM Voltage,
-> + * CPU Fan RPM,
-> + * Chassis Fan 1 RPM,
-> + * Chassis Fan 2 RPM,
-> + * Chassis Fan 3 RPM,
-> + * HAMP Fan RPM,
-> + * Water Pump RPM,
-> + * CPU OPT RPM,
-> + * Water Flow RPM,
-> + * AIO Pump RPM,
-> + * CPU Temperature,
-> + * CPU Socket Temperature,
-> + * Motherboard Temperature,
-> + * Chipset Temperature,
-> + * Tsensor 1 Temperature,
-> + * CPU VRM Temperature,
-> + * Water In,
-> + * Water Out,
-> + * CPU VRM Output Current.
-> + *
-> + */
-> +#include <linux/acpi.h>
-> +#include <linux/dmi.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-
-This include seems unnecessary.
-
-> +#include <linux/init.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/units.h>
-> +#include <linux/wmi.h>
-> +
-> +#define ASUSWMI_MONITORING_GUID		"466747A0-70EC-11DE-8A39-0800200C9A66"
-> +#define ASUSWMI_METHODID_GET_VALUE	0x52574543
-> +#define ASUSWMI_METHODID_UPDATE_BUFFER	0x51574543
-> +#define ASUSWMI_METHODID_GET_INFO	0x50574543
-> +#define ASUSWMI_METHODID_GET_NUMBER		0x50574572
-> +#define ASUSWMI_METHODID_GET_VERSION		0x50574574
-> +
-> +#define ASUS_WMI_MAX_STR_SIZE	32
-> +
-> +#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name) \
-> +	{ \
-> +		.matches = { \
-> +			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, \
-> +					"ASUSTeK COMPUTER INC."), \
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, name), \
-> +		}, \
-> +	}
-> +
-> +static const struct dmi_system_id asus_wmi_dmi_table[] = {
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-E GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-F GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-I GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X399-E GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X470-F GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X470-I GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH EXTREME"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH EXTREME ALPHA"),
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(dmi, asus_wmi_dmi_table);
-> +
-> +enum asus_wmi_sensor_class {
-> +	VOLTAGE = 0x0,
-> +	TEMPERATURE_C = 0x1,
-> +	FAN_RPM = 0x2,
-> +	CURRENT = 0x3,
-> +	WATER_FLOW = 0x4,
-> +};
-> +
-> +enum asus_wmi_location {
-> +	CPU = 0x0,
-> +	CPU_SOC = 0x1,
-> +	DRAM = 0x2,
-> +	MOTHERBOARD = 0x3,
-> +	CHIPSET = 0x4,
-> +	AUX = 0x5,
-> +	VRM = 0x6,
-> +	COOLER = 0x7
-> +};
-> +
-> +enum asus_wmi_type {
-> +	SIGNED_INT = 0x0,
-> +	UNSIGNED_INT = 0x1,
-> +	SCALED = 0x3,
-> +};
-> +
-> +enum asus_wmi_source {
-> +	SIO = 0x1,
-> +	EC = 0x2
-> +};
-> +
-> +static enum hwmon_sensor_types asus_data_types[] = {
-> +	[VOLTAGE] = hwmon_in,
-> +	[TEMPERATURE_C] = hwmon_temp,
-> +	[FAN_RPM] = hwmon_fan,
-> +	[CURRENT] = hwmon_curr,
-> +	[WATER_FLOW] = hwmon_fan,
-> +};
-> +
-> +static u32 hwmon_attributes[] = {
-> +	[hwmon_chip] = HWMON_C_REGISTER_TZ,
-> +	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
-> +	[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
-> +	[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
-> +	[hwmon_fan] = HWMON_F_INPUT | HWMON_F_LABEL,
-> +};
-> +
-> +/**
-> + * struct asus_wmi_sensor_info - sensor info.
-> + * @id: sensor id.
-> + * @data_type: sensor class e.g. voltage, temp etc.
-> + * @location: sensor location.
-> + * @name: sensor name.
-> + * @source: sensor source.
-> + * @type: sensor type signed, unsigned etc.
-> + * @cached_value: cached sensor value.
-> + */
-> +struct asus_wmi_sensor_info {
-> +	u32 id;
-> +	int data_type;
-> +	int location;
-> +	char name[ASUS_WMI_MAX_STR_SIZE];
-> +	int source;
-> +	int type;
-> +	u32 cached_value;
-> +};
-> +
-> +struct asus_wmi_wmi_info {
-> +	u8 buffer;
-> +	unsigned long source_last_updated[3];	/* in jiffies */
-> +	int sensor_count;
-> +
-
-What is this empty line for ?
-
-> +	const struct asus_wmi_sensor_info **info[hwmon_max];
-> +	struct asus_wmi_sensor_info **info_by_id;
-> +};
-> +
-> +struct asus_wmi_sensors {
-> +	/* lock access to instrnal cache */
-> +	struct mutex lock;
-> +	struct asus_wmi_wmi_info wmi;
-> +};
-> +
-> +/*
-> + * Universal method for calling WMI method
-> + */
-> +static int asus_wmi_call_method(u32 method_id, u32 *args, struct acpi_buffer *output)
-> +{
-> +#if IS_ENABLED(CONFIG_ACPI_WMI)
-> +	struct acpi_buffer input = {(acpi_size) sizeof(*args), args };
-> +	acpi_status status;
-> +
-> +	status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0, method_id, &input, output);
-> +	if (ACPI_FAILURE(status))
-> +		return -EIO;
-> +
-> +	return 0;
-> +#else
-> +	return -EOPNOTSUPP;
-> +#endif
-> +}
-> +
-> +/*
-> + * Gets the version of the ASUS sensors interface implemented
-> + */
-> +static int asus_wmi_get_version(u32 *version)
-> +{
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {0, 0, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_VERSION, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	obj = output.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_INTEGER)
-
-Doesn't this require releasing the output buffer ?
-Same for other similar functions. If not, it might make sense to
-add a comment explaining why the object doesn't need to be released
-even though ACPI_ALLOCATE_BUFFER is specified.
-
-> +		return -EIO;
-> +
-> +	*version = obj->integer.value;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Gets the number of sensor items
-> + */
-> +static int asus_wmi_get_item_count(u32 *count)
-> +{
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {0, 0, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_NUMBER, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	obj = output.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_INTEGER)
-> +		return -EIO;
-> +
-> +	*count = obj->integer.value;
-> +
-> +	return 0;
-> +}
-> +
-> +static int asus_wmi_hwmon_add_chan_info(struct hwmon_channel_info *asus_wmi_hwmon_chan,
-> +					struct device *dev, int num,
-> +					enum hwmon_sensor_types type, u32 config)
-> +{
-> +	u32 *cfg;
-> +
-> +	cfg = devm_kcalloc(dev, num + 1, sizeof(*cfg), GFP_KERNEL);
-> +	if (!cfg)
-> +		return -ENOMEM;
-> +
-> +	asus_wmi_hwmon_chan->type = type;
-> +	asus_wmi_hwmon_chan->config = cfg;
-> +	memset32(cfg, config, num);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * For a given sensor item returns details e.g. type (voltage/temperature/fan speed etc), bank etc
-> + */
-> +static int asus_wmi_sensor_info(int index, struct asus_wmi_sensor_info *s)
-> +{
-> +	union acpi_object name_obj, data_type_obj, location_obj, source_obj, type_obj;
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {index, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_INFO, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	s->id = index;
-> +
-> +	obj = output.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_PACKAGE)
-> +		return -EIO;
-> +
-> +	if (obj->package.count != 5)
-> +		return 1;
-> +
-> +	name_obj = obj->package.elements[0];
-> +
-> +	if (name_obj.type != ACPI_TYPE_STRING)
-> +		return 1;
-> +
-> +	strncpy(s->name, name_obj.string.pointer, sizeof(s->name) - 1);
-> +
-> +	data_type_obj = obj->package.elements[1];
-> +
-> +	if (data_type_obj.type != ACPI_TYPE_INTEGER)
-> +		return 1;
-> +
-> +	s->data_type = data_type_obj.integer.value;
-> +
-> +	location_obj = obj->package.elements[2];
-> +
-> +	if (location_obj.type != ACPI_TYPE_INTEGER)
-> +		return 1;
-> +
-> +	s->location = location_obj.integer.value;
-> +
-> +	source_obj = obj->package.elements[3];
-> +
-> +	if (source_obj.type != ACPI_TYPE_INTEGER)
-> +		return 1;
-> +
-> +	s->source = source_obj.integer.value;
-> +
-> +	type_obj = obj->package.elements[4];
-> +
-> +	if (type_obj.type != ACPI_TYPE_INTEGER)
-> +		return 1;
-> +
-> +	s->type = type_obj.integer.value;
-> +
-> +	return 0;
-> +}
-> +
-> +static int asus_wmi_update_buffer(u8 source)
-> +{
-> +	u32 args[] = {source, 0};
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +
-> +	return asus_wmi_call_method(ASUSWMI_METHODID_UPDATE_BUFFER, args, &output);
-> +}
-> +
-> +static int asus_wmi_get_sensor_value(u8 index, u32 *value)
-> +{
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {index, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_VALUE, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	obj = output.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_INTEGER)
-> +		return -EIO;
-> +
-> +	*value = obj->integer.value;
-> +
-> +	return 0;
-> +}
-> +
-> +static void asus_wmi_update_values_for_source(u8 source, struct asus_wmi_sensors *sensor_data)
-> +{
-> +	int ret = 0;
-> +	int value = 0;
-> +	int i;
-> +	struct asus_wmi_sensor_info *sensor;
-> +
-> +	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
-> +		sensor = sensor_data->wmi.info_by_id[i];
-> +		if (sensor && sensor->source == source) {
-> +			ret = asus_wmi_get_sensor_value(sensor->id, &value);
-> +			if (!ret)
-> +				sensor->cached_value = value;
-> +		}
-> +	}
-> +}
-> +
-> +static int asus_wmi_scale_sensor_value(u32 value, int data_type)
-> +{
-> +	/* FAN_RPM and WATER_FLOW don't need scaling */
-> +	switch (data_type) {
-> +	case VOLTAGE:
-> +		return DIV_ROUND_CLOSEST(value, 1000);
-> +	case TEMPERATURE_C:
-> +		return value * 1000;
-> +	case CURRENT:
-> +		return value * 1000;
-
-There should still be a default: case, even if it does nothing.
-
-> +	}
-> +	return value;
-> +}
-> +
-> +static int asus_wmi_get_cached_value_or_update(const struct asus_wmi_sensor_info *sensor,
-> +					       struct asus_wmi_sensors *sensor_data,
-> +					       u32 *value)
-> +{
-> +	int ret;
-> +
-> +	if (time_after(jiffies, sensor_data->wmi.source_last_updated[sensor->source] + HZ)) {
-> +		ret = asus_wmi_update_buffer(sensor->source);
-> +		if (ret)
-> +			return -EIO;
-> +
-> +		sensor_data->wmi.buffer = sensor->source;
-> +
-> +		asus_wmi_update_values_for_source(sensor->source, sensor_data);
-> +		sensor_data->wmi.source_last_updated[sensor->source] = jiffies;
-> +	}
-> +
-> +	*value = sensor->cached_value;
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Now follow the functions that implement the hwmon interface
-> + */
-> +
-> +static int asus_wmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> +			       u32 attr, int channel, long *val)
-> +{
-> +	int ret;
-> +	u32 value = 0;
-> +	const struct asus_wmi_sensor_info *sensor;
-> +
-
-Please no empty lines between variable declarations.
-
-> +	struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-> +
-> +	sensor = *(sensor_data->wmi.info[type] + channel);
-> +
-> +	mutex_lock(&sensor_data->lock);
-> +	ret = asus_wmi_get_cached_value_or_update(sensor, sensor_data, &value);
-> +	mutex_unlock(&sensor_data->lock);
-> +	if (!ret)
-> +		*val = asus_wmi_scale_sensor_value(value, sensor->data_type);
-
-Error handling first.
-
-	if (ret)
-		return ret;
-
-	*val = asus_wmi_scale_sensor_value(value, sensor->data_type);
-	return 0;
-
-> +
-> +	return ret;
-> +}
-> +
-> +static int asus_wmi_hwmon_read_string(struct device *dev,
-> +				      enum hwmon_sensor_types type, u32 attr,
-> +				      int channel, const char **str)
-> +{
-> +	const struct asus_wmi_sensor_info *sensor;
-> +	struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-> +
-> +	sensor = *(sensor_data->wmi.info[type] + channel);
-> +	*str = sensor->name;
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t asus_wmi_hwmon_is_visible(const void *drvdata,
-> +					 enum hwmon_sensor_types type, u32 attr,
-> +					 int channel)
-> +{
-> +	const struct asus_wmi_sensor_info *sensor;
-> +	const struct asus_wmi_sensors *sensor_data = drvdata;
-> +
-> +	sensor = *(sensor_data->wmi.info[type] + channel);
-> +	if (sensor)
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops asus_wmi_hwmon_ops = {
-> +	.is_visible = asus_wmi_hwmon_is_visible,
-> +	.read = asus_wmi_hwmon_read,
-> +	.read_string = asus_wmi_hwmon_read_string,
-> +};
-> +
-> +static struct hwmon_chip_info asus_wmi_chip_info = {
-> +	.ops = &asus_wmi_hwmon_ops,
-> +	.info = NULL,
-> +};
-> +
-> +static int asus_wmi_configure_sensor_setup(struct device *dev,
-> +					   struct asus_wmi_sensors *sensor_data)
-> +{
-> +	int err;
-> +	int i, idx;
-> +	int nr_count[hwmon_max] = {0}, nr_types = 0;
-> +	struct device *hwdev;
-> +	struct hwmon_channel_info *asus_wmi_hwmon_chan;
-> +	struct asus_wmi_sensor_info *temp_sensor;
-> +	enum hwmon_sensor_types type;
-> +	const struct hwmon_channel_info **ptr_asus_wmi_ci;
-> +	const struct hwmon_chip_info *chip_info;
-> +
-> +	sensor_data->wmi.buffer = -1;
-> +	temp_sensor = devm_kcalloc(dev, 1, sizeof(*temp_sensor), GFP_KERNEL);
-> +	if (!temp_sensor)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
-> +		err = asus_wmi_sensor_info(i, temp_sensor);
-> +		if (err)
-> +			return -EINVAL;
-> +
-> +		switch (temp_sensor->data_type) {
-> +		case TEMPERATURE_C:
-> +		case VOLTAGE:
-> +		case CURRENT:
-> +		case FAN_RPM:
-> +		case WATER_FLOW:
-> +			type = asus_data_types[temp_sensor->data_type];
-> +			if (!nr_count[type])
-> +				nr_types++;
-> +			nr_count[type]++;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (nr_count[hwmon_temp])
-> +		nr_count[hwmon_chip]++, nr_types++;
-
-Please no ',' between assignments, and one assignment per line.
-
-> +
-> +	asus_wmi_hwmon_chan = devm_kcalloc(dev, nr_types,
-> +					   sizeof(*asus_wmi_hwmon_chan),
-> +					   GFP_KERNEL);
-> +	if (!asus_wmi_hwmon_chan)
-> +		return -ENOMEM;
-> +
-> +	ptr_asus_wmi_ci = devm_kcalloc(dev, nr_types + 1,
-> +				       sizeof(*ptr_asus_wmi_ci), GFP_KERNEL);
-> +	if (!ptr_asus_wmi_ci)
-> +		return -ENOMEM;
-> +
-> +	asus_wmi_chip_info.info = ptr_asus_wmi_ci;
-> +	chip_info = &asus_wmi_chip_info;
-> +
-> +	sensor_data->wmi.info_by_id = devm_kcalloc(dev, sensor_data->wmi.sensor_count,
-> +						   sizeof(*sensor_data->wmi.info_by_id),
-> +						   GFP_KERNEL);
-> +
-> +	if (!sensor_data->wmi.info_by_id)
-> +		return -ENOMEM;
-> +
-> +	for (type = 0; type < hwmon_max; type++) {
-> +		if (!nr_count[type])
-> +			continue;
-> +
-> +		asus_wmi_hwmon_add_chan_info(asus_wmi_hwmon_chan, dev,
-> +					     nr_count[type], type,
-> +					     hwmon_attributes[type]);
-> +		*ptr_asus_wmi_ci++ = asus_wmi_hwmon_chan++;
-> +
-> +		sensor_data->wmi.info[type] = devm_kcalloc(dev,
-> +							   nr_count[type],
-> +							   sizeof(*sensor_data->wmi.info),
-> +							   GFP_KERNEL);
-> +		if (!sensor_data->wmi.info[type])
-> +			return -ENOMEM;
-> +	}
-> +
-> +	for (i = sensor_data->wmi.sensor_count - 1; i >= 0 ; i--) {
-> +		temp_sensor = devm_kzalloc(dev, sizeof(*temp_sensor), GFP_KERNEL);
-> +		if (!temp_sensor)
-> +			return -ENOMEM;
-> +
-> +		err = asus_wmi_sensor_info(i, temp_sensor);
-> +		if (err)
-> +			continue;
-> +
-> +		switch (temp_sensor->data_type) {
-> +		case TEMPERATURE_C:
-> +		case VOLTAGE:
-> +		case CURRENT:
-> +		case FAN_RPM:
-> +		case WATER_FLOW:
-> +			type = asus_data_types[temp_sensor->data_type];
-> +			idx = --nr_count[type];
-> +			*(sensor_data->wmi.info[type] + idx) = temp_sensor;
-> +			sensor_data->wmi.info_by_id[i] = temp_sensor;
-> +			break;
-> +		}
-> +	}
-> +
-> +	dev_dbg(dev, "board has %d sensors",
-> +		sensor_data->wmi.sensor_count);
-> +
-> +	hwdev = devm_hwmon_device_register_with_info(dev, KBUILD_MODNAME,
-> +						     sensor_data, chip_info, NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwdev);
-> +}
-> +
-> +static int asus_wmi_probe(struct wmi_device *wdev, const void *context)
-> +{
-> +	struct asus_wmi_sensors *sensor_data;
-> +	struct device *dev = &wdev->dev;
-> +	u32 version = 0;
-> +
-> +	if (!dmi_check_system(asus_wmi_dmi_table))
-> +		return -ENODEV;
-> +
-> +	sensor_data = devm_kzalloc(dev, sizeof(struct asus_wmi_sensors),
-> +				   GFP_KERNEL);
-> +	if (!sensor_data)
-> +		return -ENOMEM;
-> +
-> +	if (asus_wmi_get_version(&version))
-> +		return -ENODEV;
-
-asus_wmi_get_version() can reeturn the version and error code as return value;
-there is no need to pass version as pointer argument. Also, the error
-returned form asus_wmi_get_version() should be used and not replaced.
-
-> +
-> +	if (asus_wmi_get_item_count(&sensor_data->wmi.sensor_count))
-> +		return -ENODEV;
-> +
-Same here.
-
-> +	if (sensor_data->wmi.sensor_count  <= 0 || version < 2) {
-
-double space before <=
-
-> +		dev_info(dev, "version: %u with %d sensors is unsupported\n",
-> +			 version, sensor_data->wmi.sensor_count);
-> +
-> +		return -ENODEV;
-> +	}
-> +
-> +	mutex_init(&sensor_data->lock);
-> +
-> +	dev_set_drvdata(dev, sensor_data);
-> +
-> +	return asus_wmi_configure_sensor_setup(dev,
-> +					       sensor_data);
-
-Unnecessary continuation line.
-
-> +}
-> +
-> +static const struct wmi_device_id asus_wmi_id_table[] = {
-> +	{ ASUSWMI_MONITORING_GUID, NULL },
-> +	{ }
-> +};
-> +
-> +static struct wmi_driver asus_sensors_wmi_driver = {
-> +	.driver = {
-> +		.name = KBUILD_MODNAME,
-> +	},
-> +	.id_table = asus_wmi_id_table,
-> +	.probe = asus_wmi_probe,
-> +};
-> +module_wmi_driver(asus_sensors_wmi_driver);
-> +
-> +MODULE_AUTHOR("Ed Brindley <kernel@maidavale.org>");
-> +MODULE_DESCRIPTION("Asus WMI Sensors Driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.33.0
-> 
+T24gTW9uLCAyMDIxLTEwLTExIGF0IDEyOjQwIC0wNzAwLCBEYXZlIEhhbnNlbiB3cm90ZToNCj4g
+T24gMTAvMTEvMjEgMTI6MjEgUE0sIFdpbmlhcnNrYSwgSXdvbmEgd3JvdGU6DQo+ID4gT24gTW9u
+LCAyMDIxLTEwLTA0IGF0IDIxOjAzICswMjAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6DQo+ID4g
+PiBPbiBUdWUsIEF1ZyAwMywgMjAyMSBhdCAwMTozMToyMFBNICswMjAwLCBJd29uYSBXaW5pYXJz
+a2Egd3JvdGU6DQo+ID4gPiA+IEJhc2Vib2FyZCBtYW5hZ2VtZW50IGNvbnRyb2xsZXJzIChCTUMp
+IG9mdGVuIHJ1biBMaW51eCBidXQgYXJlIHVzdWFsbHkNCj4gPiA+ID4gaW1wbGVtZW50ZWQgd2l0
+aCBub24tWDg2IHByb2Nlc3NvcnMuIFRoZXkgY2FuIHVzZSBQRUNJIHRvIGFjY2VzcyBwYWNrYWdl
+DQo+ID4gPiA+IGNvbmZpZyBzcGFjZSAoUENTKSByZWdpc3RlcnMgb24gdGhlIGhvc3QgQ1BVIGFu
+ZCBzaW5jZSBzb21lIGluZm9ybWF0aW9uLA0KPiA+ID4gPiBlLmcuIGZpZ3VyaW5nIG91dCB0aGUg
+Y29yZSBjb3VudCwgY2FuIGJlIG9idGFpbmVkIHVzaW5nIGRpZmZlcmVudA0KPiA+ID4gPiByZWdp
+c3RlcnMgb24gZGlmZmVyZW50IENQVSBnZW5lcmF0aW9ucywgdGhleSBuZWVkIHRvIGRlY29kZSB0
+aGUgZmFtaWx5DQo+ID4gPiA+IGFuZCBtb2RlbC4NCj4gPiA+ID4gDQo+ID4gPiA+IE1vdmUgdGhl
+IGRhdGEgZnJvbSBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9pbnRlbC1mYW1pbHkuaCBpbnRvIGEgbmV3
+IGZpbGUNCj4gPiA+ID4gaW5jbHVkZS9saW51eC94ODYvaW50ZWwtZmFtaWx5Lmggc28gdGhhdCBp
+dCBjYW4gYmUgdXNlZCBieSBvdGhlcg0KPiA+ID4gPiBhcmNoaXRlY3R1cmVzLg0KPiA+ID4gPiAN
+Cj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogSXdvbmEgV2luaWFyc2thIDxpd29uYS53aW5pYXJza2FA
+aW50ZWwuY29tPg0KPiA+ID4gPiBSZXZpZXdlZC1ieTogVG9ueSBMdWNrIDx0b255Lmx1Y2tAaW50
+ZWwuY29tPg0KPiA+ID4gPiBSZXZpZXdlZC1ieTogRGFuIFdpbGxpYW1zIDxkYW4uai53aWxsaWFt
+c0BpbnRlbC5jb20+DQo+ID4gPiA+IC0tLQ0KPiA+ID4gPiBUbyBsaW1pdCB0cmVlLXdpZGUgY2hh
+bmdlcyBhbmQgaGVscCBwZW9wbGUgdGhhdCB3ZXJlIGV4cGVjdGluZw0KPiA+ID4gPiBpbnRlbC1m
+YW1pbHkgZGVmaW5lcyBpbiBhcmNoL3g4NiB0byBmaW5kIGl0IG1vcmUgZWFzaWx5IHdpdGhvdXQg
+Z29pbmcNCj4gPiA+ID4gdGhyb3VnaCBnaXQgaGlzdG9yeSwgd2UncmUgbm90IHJlbW92aW5nIHRo
+ZSBvcmlnaW5hbCBoZWFkZXINCj4gPiA+ID4gY29tcGxldGVseSwgd2UncmUga2VlcGluZyBpdCBh
+cyBhICJzdHViIiB0aGF0IGluY2x1ZGVzIHRoZSBuZXcgb25lLg0KPiA+ID4gPiBJZiB0aGVyZSBp
+cyBhIGNvbnNlbnN1cyB0aGF0IHRoZSB0cmVlLXdpZGUgb3B0aW9uIGlzIGJldHRlciwNCj4gPiA+
+ID4gd2UgY2FuIGNob29zZSB0aGlzIGFwcHJvYWNoLg0KPiA+ID4gV2h5IGNhbid0IHRoZSBsaW51
+eC8gbmFtZXNwYWNlIGhlYWRlciBpbmNsdWRlIHRoZSB4ODYgb25lIHNvIHRoYXQNCj4gPiA+IG5v
+dGhpbmcgY2hhbmdlcyBmb3IgYXJjaC94ODYvPw0KPiA+IFNhbWUgcmVhc29uIHdoeSBQRUNJIGNh
+bid0IGp1c3QgaW5jbHVkZSBhcmNoL3g4NiBkaXJlY3RseSAod2UncmUgYnVpbGRpbmcNCj4gPiBm
+b3INCj4gPiBBUk0sIG5vdCB4ODYpLg0KPiBJZiB5b3UncmUgaW4gaW5jbHVkZS9saW51eC94ODYt
+aGFja3MuaCwgd2hhdCBwcmV2ZW50cyB5b3UgZnJvbSBkb2luZw0KPiANCj4gI2luY2x1ZGUgIi4u
+Ly4uL2FyY2gveDg2L2luY2x1ZGUvYXNtL2ludGVsLWZhbWlseS5oIg0KPiANCj4gPw0KPiANCj4g
+SW4gdGhlIGVuZCwgdG8gdGhlIGNvbXBpbGVyLCBpdCdzIGp1c3QgYSBmaWxlIGluIGEgd2VpcmQg
+bG9jYXRpb24gaW4gdGhlDQo+IHRyZWUuwqAgSSB0aGluayBJJ2QgcHJlZmVyIG9uZSB3ZWlyZCBp
+bmNsdWRlIHRvIG1vdmluZyB0aGF0IGZpbGUgb3V0IG9mDQo+IGFyY2gveDg2Lg0KDQpVc2luZyBy
+ZWxhdGl2ZSBpbmNsdWRlcyBpbiBpbmNsdWRlL2xpbnV4IGlzIHVuY29tbW9uIChJIGNhbiBzZWUg
+anVzdCBvbmUgdXNhZ2UNCmluIGxpYmZkdC5oIHB1bGxpbmcgc3R1ZmYgZnJvbSBzY3JpcHRzKSwg
+c28gSSB0aG91Z2h0IEkgY2FuJ3QgdXNlIGl0IGluIHRoaXMgd2F5DQooc2VlbXMgc2xpZ2h0bHkg
+aGFja3kgdG8gcHVsbCBzdHVmZiBmcm9tIG91dHNpZGUgaW5jbHVkZSBwYXRoKS4NCg0KQnV0IGlm
+IHRoYXQgd291bGQgYmUgb2ssIGl0IGxvb2tzIGxpa2UgYSBnb29kIGFsdGVybmF0aXZlIHRvIGF2
+b2lkIGR1cGxpY2F0aW9uDQppbiB0aGlzIGNhc2UuDQoNClRoYW5rcw0KLUl3b25hDQo=
