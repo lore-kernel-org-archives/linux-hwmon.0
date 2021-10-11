@@ -2,35 +2,31 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6286C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 21:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8D9CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 23:12:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DCB360238
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 21:31:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 842DC60F22
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 23:12:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235263AbhJKVdv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 17:33:51 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:35146 "EHLO mail.skyhub.de"
+        id S235678AbhJKXO0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 19:14:26 -0400
+Received: from mga06.intel.com ([134.134.136.31]:47884 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230114AbhJKVdv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 17:33:51 -0400
-Received: from zn.tnic (p200300ec2f08bb0003b0f726e81805f8.dip0.t-ipconnect.de [IPv6:2003:ec:2f08:bb00:3b0:f726:e818:5f8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DA1831EC04D6;
-        Mon, 11 Oct 2021 23:31:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1633987909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ktB79OgjKWu4SFhSyygmMhHHJddjGqbKPeqk6+xxA10=;
-        b=AP8NNI/lF9orIz29IHoZ1onaqIlWc4+tv7BBIyQ+KqL9M5VUAmvyQner4HQ8Dfej+ezj0s
-        rDjJ5dFRCYDxJHoQ7a4kNXigxCehCvPoD4ITWptC1gRP9uXVExolKqM7HHEp1MW8PxfoEr
-        lJQDN29VXXUI+lSK76b0wei8vrWh1jM=
-Date:   Mon, 11 Oct 2021 23:31:45 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
+        id S235636AbhJKXOZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Oct 2021 19:14:25 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="287867793"
+X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
+   d="scan'208";a="287867793"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 16:12:24 -0700
+X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
+   d="scan'208";a="490674153"
+Received: from vg1-mobl2.amr.corp.intel.com (HELO [10.212.193.198]) ([10.212.193.198])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 16:12:23 -0700
+Subject: Re: [PATCH v2 01/15] x86/cpu: Move intel-family to arch-independent
+ headers
+To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>
 Cc:     "corbet@lwn.net" <corbet@lwn.net>,
         "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
         "x86@kernel.org" <x86@kernel.org>,
@@ -63,69 +59,87 @@ Cc:     "corbet@lwn.net" <corbet@lwn.net>,
         "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
         "pierre-louis.bossart@linux.intel.com" 
         <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH v2 01/15] x86/cpu: Move intel-family to arch-independent
- headers
-Message-ID: <YWStQSrRJQ09KXVY@zn.tnic>
 References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
  <20210803113134.2262882-2-iwona.winiarska@intel.com>
  <YVtQG+idmwKn0qLe@zn.tnic>
  <58ef4107e9b2c60a2605aac0d2fb6670a95bc9e0.camel@intel.com>
- <YWSZTq8NWWcCMXtA@zn.tnic>
- <337b6332312ea63862aedd09279417c9e1c7e11f.camel@intel.com>
+ <67f2cfda-c78b-6282-f5a3-2f345f8e2849@intel.com>
+ <43e367e452c6c8d9c6a275299d7ff6f2bb26b8e3.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <18cd5f4a-452b-f043-5686-fc5af47eb5ac@intel.com>
+Date:   Mon, 11 Oct 2021 16:12:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <43e367e452c6c8d9c6a275299d7ff6f2bb26b8e3.camel@intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <337b6332312ea63862aedd09279417c9e1c7e11f.camel@intel.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 08:38:43PM +0000, Winiarska, Iwona wrote:
-> Everything that's part of this series runs on the BMC (Baseboard
-> Management Controller). There's nothing ARM specific to it - it's just
-> that the BMC hardware we're currently supporting is ARM-based. PECI is
-> an interface that's exposed by some x86 CPUs - but that's a hardware
-> interface (available completely independent from whatever is actually
-> running on the x86 CPU).
+On 10/11/21 1:53 PM, Winiarska, Iwona wrote:
+>> If you're in include/linux/x86-hacks.h, what prevents you from doing
+>>
+>> #include "../../arch/x86/include/asm/intel-family.h"
+>>
+>> ?
+>>
+>> In the end, to the compiler, it's just a file in a weird location in the
+>> tree.  I think I'd prefer one weird include to moving that file out of
+>> arch/x86.
+> Using relative includes in include/linux is uncommon (I can see just one usage
+> in libfdt.h pulling stuff from scripts), so I thought I can't use it in this way
+> (seems slightly hacky to pull stuff from outside include path).
+> 
+> But if that would be ok, it looks like a good alternative to avoid duplication
+> in this case.
 
-Aha, I think I got it: so this whole PECI pile is supposed to run on
-the BMC - which can be ARM but doesn't have to be, i.e., code should be
-generic enough - and the interfaces to the x86 CPU do get exposed to the
-Linux running on the BMC.
+If you don't want to do it from a header, you can also do it directly
+from a .c file that's outside of arch/x86.
 
-Which brings me to the answer to your other mail:
-
-On Mon, Oct 11, 2021 at 07:32:38PM +0000, Winiarska, Iwona wrote:
-> Nothing wrong - just a trade-off between churn and keeping things tidy
-> and not duplicated, similar to patch 1. And just like in patch 1, if
-> you have a strong opinion against it - we can duplicate.
-
-So it is not about strong opinion. Rather, it is about whether this
-exporting would be disadvantageous for x86 freedom. And I think it will
-be:
-
-Because if you exported those and then we went and changed those
-interfaces and defines (changed their naming, function arguments,
-whatever) and something outside of x86 used them, we will break that
-something.
-
-And usually we go and fix those users too but I doubt anyone has access
-to that PECI hw to actually test fixes, etc, etc.
-
-So I'd prefer the small amount of duplication vs external stuff using
-x86 facilities any day of the week. And so I'd suggest you simply copy
-the handful of functions and defines you're gonna be needing and the
-defines and be done with it.
-
-Dave's idea makes sense to me too but lately it keeps happening that
-we change something in x86-land and it turns out something "from the
-outside" is using it and it breaks, so it is a lot easier if things are
-independent.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+I think that's a much better alternative than moving stuff elsewhere.
