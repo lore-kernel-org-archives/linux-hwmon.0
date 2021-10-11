@@ -2,159 +2,156 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 621DCC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 19:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87D5DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 19:55:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4810E60F22
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 19:40:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6938360F5B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 19:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234711AbhJKTmY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 15:42:24 -0400
-Received: from mga14.intel.com ([192.55.52.115]:60023 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234687AbhJKTmX (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 15:42:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="227241203"
-X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
-   d="scan'208";a="227241203"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 12:40:23 -0700
-X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
-   d="scan'208";a="490605922"
-Received: from vg1-mobl2.amr.corp.intel.com (HELO [10.212.193.198]) ([10.212.193.198])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 12:40:20 -0700
-Subject: Re: [PATCH v2 01/15] x86/cpu: Move intel-family to arch-independent
- headers
-To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
-        "d.mueller@elsoft.ch" <d.mueller@elsoft.ch>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "zweiss@equinix.com" <zweiss@equinix.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
- <20210803113134.2262882-2-iwona.winiarska@intel.com>
- <YVtQG+idmwKn0qLe@zn.tnic>
- <58ef4107e9b2c60a2605aac0d2fb6670a95bc9e0.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <67f2cfda-c78b-6282-f5a3-2f345f8e2849@intel.com>
-Date:   Mon, 11 Oct 2021 12:40:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S234632AbhJKT5w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 15:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232606AbhJKT5v (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Oct 2021 15:57:51 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAFFC061570;
+        Mon, 11 Oct 2021 12:55:51 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z20so71868246edc.13;
+        Mon, 11 Oct 2021 12:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0+6quUc/p1hTjROFKuI/IIYV+7iDNHoJ7O8PlblBVzE=;
+        b=DbuluLr8YaTum9mTNpVdV9mVS7hsdG14mmPD6YTNBrK4QzAAcX8PVQxoVwX59nBz7g
+         PwctMY2kiY4Zh3BbmJJH/Ixze6I7qS7Vk9dKhLtKOfU1Whg7mdNXKH5QkGdEBvof6Br6
+         ARqkJmA8vi72AMw9HHD3lM6J68qdk9/Bk6LE8VmC9U+CULqC4RcYLTDR2gFTElr9z+Xn
+         b/hzpEcdrK5KDflWFx2gdZnqK6CgTCObsDD3QlHAulrHZZH9RmRwonT8wIyQBXS5EtQN
+         sIjid3I05Ru5kOkZyIH1UvSw6ICyypo7hf2h1mKIjp7IJPODg0XEA9OCMGRcQyDtxTrQ
+         KzIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0+6quUc/p1hTjROFKuI/IIYV+7iDNHoJ7O8PlblBVzE=;
+        b=cHvjda1KxHpm+tmzRxVjsxhua1Ct0va51LUgnDc0lERuKO37EJbdk9+I5f6yWVS9gA
+         HIjsikWS0sw/xsuWsgVbgerkVDpLO2HNM9sm7Z28QKz9uJTMmCu0XL6mbqSlu65r9deN
+         62/uJyrJ3fgfNszSdAn1Cx8tCZez2xexh8ZWeBDTS7anqfXl/J7XRUC1xBdtyD5S+LVw
+         vvdWjws5B5S7OxkghND2fQo7rM43Lpom5RpsfH2ts/yNkF/Hf1nnQc9fE0IEzdcYjb4V
+         KGwACFnxftRHzGfPSetCuodjxZmgusZzINv8hrDaVB6o59lBEavl9cBIx9b5wapKeNLq
+         Iejw==
+X-Gm-Message-State: AOAM531ly1PUzJ6gzQmBYFfpGv7gW0qVXjqOOZbIwDMgI37g7rIJPu1j
+        pVxB0267AMEY7E6YWt4h0ZB7ebl2kBOexA==
+X-Google-Smtp-Source: ABdhPJyHm41Ytzhq3tEUAQ3gfQo8l1ADSLezouBglYaSx6zYfxlK7l3hYCE3TIg5BvKYqIOGzLDYvg==
+X-Received: by 2002:a50:d8cf:: with SMTP id y15mr45174142edj.66.1633982149671;
+        Mon, 11 Oct 2021 12:55:49 -0700 (PDT)
+Received: from localhost.localdomain ([94.179.1.5])
+        by smtp.gmail.com with ESMTPSA id r3sm4654762edo.59.2021.10.11.12.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Oct 2021 12:55:49 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
+        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
+        Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/2] Update ASUS WMI supported boards
+Date:   Mon, 11 Oct 2021 22:55:00 +0300
+Message-Id: <20211011195503.23153-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <58ef4107e9b2c60a2605aac0d2fb6670a95bc9e0.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/11/21 12:21 PM, Winiarska, Iwona wrote:
-> On Mon, 2021-10-04 at 21:03 +0200, Borislav Petkov wrote:
->> On Tue, Aug 03, 2021 at 01:31:20PM +0200, Iwona Winiarska wrote:
->>> Baseboard management controllers (BMC) often run Linux but are usually
->>> implemented with non-X86 processors. They can use PECI to access package
->>> config space (PCS) registers on the host CPU and since some information,
->>> e.g. figuring out the core count, can be obtained using different
->>> registers on different CPU generations, they need to decode the family
->>> and model.
->>>
->>> Move the data from arch/x86/include/asm/intel-family.h into a new file
->>> include/linux/x86/intel-family.h so that it can be used by other
->>> architectures.
->>>
->>> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
->>> Reviewed-by: Tony Luck <tony.luck@intel.com>
->>> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
->>> ---
->>> To limit tree-wide changes and help people that were expecting
->>> intel-family defines in arch/x86 to find it more easily without going
->>> through git history, we're not removing the original header
->>> completely, we're keeping it as a "stub" that includes the new one.
->>> If there is a consensus that the tree-wide option is better,
->>> we can choose this approach.
->> Why can't the linux/ namespace header include the x86 one so that
->> nothing changes for arch/x86/?
-> Same reason why PECI can't just include arch/x86 directly (we're building for
-> ARM, not x86).
-If you're in include/linux/x86-hacks.h, what prevents you from doing
+Add support by WMI interface privided by Asus for B550/X570 boards: 
+* PRIME X570-PRO,
+* ROG CROSSHAIR VIII HERO
+* ROG CROSSHAIR VIII DARK HERO
+* ROG CROSSHAIR VIII FORMULA
+* ROG STRIX X570-E GAMING
+* ROG STRIX B550-E GAMING
 
-#include "../../arch/x86/include/asm/intel-family.h"
+Add support by WMI interface privided by Asus for X370/X470/
+B450/X399 boards:
+* ROG CROSSHAIR VI HERO,
+* PRIME X399-A,
+* PRIME X470-PRO,
+* ROG CROSSHAIR VI EXTREME,
+* ROG CROSSHAIR VI HERO (WI-FI AC),
+* ROG CROSSHAIR VII HERO,
+* ROG CROSSHAIR VII HERO (WI-FI),
+* ROG STRIX B450-E GAMING,
+* ROG STRIX B450-F GAMING,
+* ROG STRIX B450-I GAMING,
+* ROG STRIX X399-E GAMING,
+* ROG STRIX X470-F GAMING,
+* ROG STRIX X470-I GAMING,
+* ROG ZENITH EXTREME,
+* ROG ZENITH EXTREME ALPHA.
 
-?
+Fix warning reported by: kernel test robot.
 
-In the end, to the compiler, it's just a file in a weird location in the
-tree.  I think I'd prefer one weird include to moving that file out of
-arch/x86.
+Could you please review?
+
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Signed-off-by: Ed Brindley <kernel@maidavale.org>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+
+---
+Changes in v5:
+- Fixes build issue reported by kernel test robot with disabled ACPI_WMI.
+- asus_wmi_sensors: Remove sensor->name check as always evaluated to true.
+
+Changes in v4:
+ - Implement wmi driver instead platform driver.
+ - Update documentation with known issues.
+
+Changes in v3:
+ - Use MODULE_DEVICE_TABLE for match devices.
+ - asus_wmi_ec_sensors: Use get_unaligned_be32 instead incorrectly used 
+   get_unaligned_le32.
+ - Add documentaion for drivers.
+
+Changes in v2:
+ - asus_wmi_ec_sensors: Rename asus_wmi_sensors to asus_wmi_ec_sensors for 
+   B550/X570 boards.
+ - asus_wmi_ec_sensors: Use utf8s_to_utf16s/utf16s_to_utf8s instead handmade 
+   fuctions.
+ - asus_wmi_ec_sensors: Use post increment.
+ - asus_wmi_ec_sensors: Use get_unaligned* for convert values.
+ - asus_wmi_ec_sensors: Use PTR_ERR_OR_ZERO.
+ - asus_wmi_ec_sensors: Specify per-board sensors in a declarative way 
+   (by Eugene Shalygin).
+ - asus_wmi_sensors: Add support for X370/X470/B450/X399 boards.
+
+---
+
+Denis Pauk (2):
+  hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
+  hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
+
+ Documentation/hwmon/asus_wmi_ec_sensors.rst |  35 ++
+ Documentation/hwmon/asus_wmi_sensors.rst    |  74 +++
+ MAINTAINERS                                 |   8 +
+ drivers/hwmon/Kconfig                       |  22 +
+ drivers/hwmon/Makefile                      |   2 +
+ drivers/hwmon/asus_wmi_ec_sensors.c         | 648 ++++++++++++++++++++
+ drivers/hwmon/asus_wmi_sensors.c            | 621 +++++++++++++++++++
+ 7 files changed, 1410 insertions(+)
+ create mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+ create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
+ create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
+ create mode 100644 drivers/hwmon/asus_wmi_sensors.c
+
+
+base-commit: 39b483aa38995329326988cbc4077422bebc175a
+-- 
+2.33.0
+
