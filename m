@@ -2,97 +2,232 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87219C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 23:51:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A4F6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 01:22:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55C3C60EFE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Oct 2021 23:51:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E32360241
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 01:22:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbhJJXxk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 Oct 2021 19:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S233206AbhJKBYT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 Oct 2021 21:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbhJJXxk (ORCPT
+        with ESMTP id S232238AbhJKBYS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 Oct 2021 19:53:40 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1CCC061570;
-        Sun, 10 Oct 2021 16:51:41 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so2127483otq.12;
-        Sun, 10 Oct 2021 16:51:41 -0700 (PDT)
+        Sun, 10 Oct 2021 21:24:18 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D39C06161C
+        for <linux-hwmon@vger.kernel.org>; Sun, 10 Oct 2021 18:22:18 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id v14-20020a05620a0f0e00b0043355ed67d1so13010974qkl.7
+        for <linux-hwmon@vger.kernel.org>; Sun, 10 Oct 2021 18:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KnJGehr72FMcQg0eBMDYAYtXZrsYa5O5D2gXyYx+3Zw=;
-        b=hfGWRH1OteNaFHbatjy8/7IP9WJirHj+1ahq8MTxFis7a9G4CWhk0pC0nA5mfz1rGP
-         c6f26QE6noKckihQUHfcbXLQfwSzDAFZPt+Y891kI1Y0XisAtAqFy0NxJ7VbfmhWtgKh
-         HO6fsdsVko/DG7NlEHjol1pFEb2yU7sXU59b8H9b9SkovbNa/gW/0o1XyGRyxN8R4QJR
-         H3mtChrCJbggwNCrJaaVKTH7H9R7kMqHPljqDRT6A7CD4bmIJ/WGqTp4kn9VS/tGaouT
-         UHe+okrK+yzdePhKBwr8z4znrWxa+S2hftFDSwZJYn/jA8BqLoWboop7vgpolO6gaDo4
-         iXQg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pelpqGop9lNK0ivkhrG4qKsEmnDb1OiP8EZo1Fz2vqE=;
+        b=hp7SXw7jtocsPJY2qeNaqGCipXyVGn6axSHZaPOQaTyZ26+Xroo5tcvNvJ7ZipX/Yt
+         KPq611KjO+9iLfrdcLY6JcLHrUp6OvfmMM++nkzaq2SetrEWyL8r32lOj6YyfoSXeAbH
+         Fr/wOlK1kFMfP+nB54KD7G754v1lmkJIa4WbRj1jcOX+5Le/RCNazkJpvS77BNWUyuAp
+         byhfpwzYyKsuqgdhQs2OMnES6J0dn7WuOPOwBixVtdqwHf8P+aWu4c75nMC8xemVADCT
+         UafLuSCaCfwwYweoMppmYC52PdvcA02o/q4ywMEVWJeRJHG/Pm2Dh8/L9AR2Nr5wLA0Y
+         0hPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KnJGehr72FMcQg0eBMDYAYtXZrsYa5O5D2gXyYx+3Zw=;
-        b=t8krrLWWOVlg5Hy1yzTGfz25c07juWbwRiqhz2J3aDAggfdk7OkQfRysO10kOHNrTt
-         ZUErRp3TOkITPcyjK8Ef0rX8I0RJXmzqhhJV0W9anU8UPerr/8ElbLj5f5ap/0FPP2rV
-         MjdLQ6C9eX/E2AcRnZs60BlWorwmeQeKget3PZtvemvG8nF61Spy/PClv860Mv6TPuUZ
-         22B4F4KUUEqfxrLTqpwQ/zZdJyZz0DMw0mTknwGC4pEW3f3LVTd86843CRDcEQo/t5mk
-         zbiKtaRrPSDX8Dq5dZIwj0Iqo/nqgx0TviPOhKipjzidcibOvFvvYt7mIVcVPAYjzeBX
-         pFVg==
-X-Gm-Message-State: AOAM533L0cqx49M9p4M69PEHg/1AeK0+hLBDT0ByQKaggTQ4cAMf9QLg
-        78d7IMXIIkpWEk/NgYCOF3CK3Ky4JEg=
-X-Google-Smtp-Source: ABdhPJzFFRwMlHH2RcBLPYb4meszj7yQy8whnHqnVmFgnBh1m+O+aNOhMdNuXQpHY9PpK0cuAQ1RZg==
-X-Received: by 2002:a9d:458a:: with SMTP id x10mr18588001ote.267.1633909900137;
-        Sun, 10 Oct 2021 16:51:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7sm1362335oiw.27.2021.10.10.16.51.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Oct 2021 16:51:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, platform-driver-x86@vger.kernel.org,
-        Tor Vic <torvic9@mailbox.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211010210513.343925-1-pauk.denis@gmail.com>
- <20211010210513.343925-2-pauk.denis@gmail.com>
- <CAB95QAS863M9Lu3e0Um25PQi_7gxWp4=EyN8j7ioB7eN-G7--g@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4 1/2] hwmon: (asus_wmi_ec_sensors) Support B550 Asus
- WMI.
-Message-ID: <09a81782-1ab6-662a-01c4-0f6dda1d26fb@roeck-us.net>
-Date:   Sun, 10 Oct 2021 16:51:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <CAB95QAS863M9Lu3e0Um25PQi_7gxWp4=EyN8j7ioB7eN-G7--g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pelpqGop9lNK0ivkhrG4qKsEmnDb1OiP8EZo1Fz2vqE=;
+        b=Ag02AOErgJh/t1955lAqt3DyV/2HGBcA/j2ze9CwT5EvAntZ+MIz5PH3qbo6Lhm2+N
+         lh1Y+dOvPmDmh9DfDyhS1dyDAVnlZRa6n/PW2pRJq6fIWrLf7/ww4haLy3X3awuzSKI2
+         xnXUwHjBJUc89lMJL7NwuIghdxqlEI2mAPuirebq2p+Y/yFbdhVvgGRhC6K1B2177qH/
+         6T+yq/e646z939jr7C9QYV9HllLrxqUhvo2mzkm7hn4ac3JucRj5TD/kS9ztqOvcBAjD
+         WpwiHkfNNnWmlVkY1uKaHysi7CGA5O+fNwA3N8T0Kz0B6Ouo284R1F29u2nzPcoTT3ol
+         SYFA==
+X-Gm-Message-State: AOAM532uAtr1mJdCde90aKiT0Ky4zhHGmtM29Tz9mAiBRa+7LfmcnU2D
+        25SEluDPbMsxaqsL+9MWPcHyhCo=
+X-Google-Smtp-Source: ABdhPJxakqS3R8xOFBlupR06TVZ/cUaN2aXRdEF/OW4Gfgmo0Ro10oYgMUoHGtdJNMM/YAHTF5V+zHg=
+X-Received: from osk.cam.corp.google.com ([2620:0:1004:1a:8461:b843:7404:1394])
+ (user=osk job=sendgmr) by 2002:ac8:7e86:: with SMTP id w6mr11757072qtj.277.1633915336530;
+ Sun, 10 Oct 2021 18:22:16 -0700 (PDT)
+Date:   Sun, 10 Oct 2021 21:22:11 -0400
+Message-Id: <20211011012212.91357-1-osk@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
+Subject: [PATCH v7 1/2] dt-bindings: hwmon: Add nct7802 bindings
+From:   Oskar Senft <osk@google.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Oskar Senft <osk@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/10/21 3:09 PM, Eugene Shalygin wrote:
->> Changes in v4:
->>   - implement wmi driver instead platform driver.
-> 
-> There are many ASUS boards where the required function is present but
-> does nothing. With the WMI module alias the driver will be attempted
-> to load for those boards (and rejected by the _probe() function). Is
-> it a good thing?
-> 
+This change documents the device tree bindings for the Nuvoton
+NCT7802Y driver.
 
-Drivers failing probe with -ENODEV (presumably here because dmi_check_system()
-does not find a match) is pretty normal. Board detection with the WMI driver
-seems much more straightforward/simple compared the previous version with
-the platform driver. Maybe I am missing something, but I don't see a
-problem with the WMI approach.
+Signed-off-by: Oskar Senft <osk@google.com>
+---
+Changes from PATCH v6:
+- Fixed formatting error reported by yamllint
 
-Guenter
+Changes from PATCH v5:
+- Refactored to use patternProperties.
+- Added validation for sensor-type and temperature-mode.
+---
+ .../bindings/hwmon/nuvoton,nct7802.yaml       | 144 ++++++++++++++++++
+ 1 file changed, 144 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+new file mode 100644
+index 000000000000..a0a245938528
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+@@ -0,0 +1,144 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7802.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NCT7802Y Hardware Monitoring IC
++
++maintainers:
++  - Guenter Roeck <linux@roeck-us.net>
++
++description: |
++  The NCT7802Y is a hardware monitor IC which supports one on-die and up to
++  5 remote temperature sensors with SMBus interface.
++
++  Datasheets:
++    https://www.nuvoton.com/export/resource-files/Nuvoton_NCT7802Y_Datasheet_V12.pdf
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,nct7802
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++patternProperties:
++  "^channel@[0-3]$":
++    type: object
++    properties:
++      reg:
++        items:
++          - enum:
++              - 0    # Local Temperature Sensor ("LTD")
++              - 1    # Remote Temperature Sensor or Voltage Sensor 1 ("RTD1")
++              - 2    # Remote Temperature Sensor or Voltage Sensor 2 ("RTD2")
++              - 3    # Remote Temperature Sensor or Voltage Sensor 3 ("RTD3")
++      sensor-type:
++        items:
++          - enum:
++              - temperature
++              - voltage
++      temperature-mode:
++        items:
++          - enum:
++              - thermistor
++              - thermal-diode
++    required:
++      - reg
++    allOf:
++      # For channels RTD1, RTD2 and RTD3, require sensor-type to be set.
++      # Otherwise (for all other channels), do not allow temperature-mode to be
++      # set.
++      - if:
++          properties:
++            reg:
++              items:
++                - enum:
++                    - 1
++                    - 2
++                    - 3
++        then:
++          required:
++            - sensor-type
++        else:
++          not:
++            required:
++              - sensor-type
++
++      # For channels RTD1 and RTD2 and if sensor-type is "temperature", require
++      # temperature-mode to be set. Otherwise (for all other channels or
++      # sensor-type settings), do not allow temperature-mode to be set
++      - if:
++          properties:
++            reg:
++              items:
++                - enum:
++                    - 1
++                    - 2
++            sensor-type:
++              items:
++                - enum:
++                    - temperature
++        then:
++          required:
++            - temperature-mode
++        else:
++          not:
++            required:
++              - temperature-mode
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        nct7802@28 {
++            compatible = "nuvoton,nct7802";
++            reg = <0x28>;
++
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            channel@0 { /* LTD */
++              reg = <0>;
++              status = "okay";
++            };
++
++            channel@1 { /* RTD1 */
++              reg = <1>;
++              status = "okay";
++              sensor-type = "voltage";
++            };
++
++            channel@2 { /* RTD2 */
++              reg = <2>;
++              status = "okay";
++              sensor-type = "temperature";
++              temperature-mode = "thermal-diode";
++            };
++
++            channel@3 { /* RTD3 */
++              reg = <3>;
++              status = "okay";
++              sensor-type = "temperature";
++            };
++        };
++    };
+-- 
+2.33.0.882.g93a45727a2-goog
+
