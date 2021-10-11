@@ -2,135 +2,130 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 771FAC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 21:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6286C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 21:31:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B9C960F5B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 21:03:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9DCB360238
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Oct 2021 21:31:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbhJKVF1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Oct 2021 17:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbhJKVF0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Oct 2021 17:05:26 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E66DC061570;
-        Mon, 11 Oct 2021 14:03:26 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id p68so21339434iof.6;
-        Mon, 11 Oct 2021 14:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VpTOmMnYeBAsmZpKSwKJS+8kAPjTggYUu3T1PRR8puw=;
-        b=DWamGnG8bmG8X21EnR0ChHMFjln82VqGUosTW7gTqGfbJnbsKpRDtDk95XDFSVcyM6
-         3MMwWs5f8h4BIZOrA4mYmwDpHOL52JD8lMpNF/mwfN2yxWbpi9YGG3FMvrIkTJZ9sVOU
-         vcqeVv+TJDnsbX1FWpME4OHN0mJGbIFFkiZGlIwEXz5+ruScYFOHc56LLM53ktU7qcTc
-         x9U3FmMp/zv08wn60KJuxRPH8NZIIUyfbVydxa2JOkyQGk88qnbRC+iy3omLIyGwXJ01
-         pwIQrx0tBNNOze+uh8niuwZGvczhrxsA3qkDrMYDdQHmQ9BrJPGlmPpjEEhXJcrysxVy
-         k2lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VpTOmMnYeBAsmZpKSwKJS+8kAPjTggYUu3T1PRR8puw=;
-        b=3nAvL1HKU4YcJUPXeE2HeoZiS/aPg3OXT6Qjxhf8wrZxh2iuJi2VNGvqpx41I73E3z
-         SWe+6p/auhCxiVbzmiNNlRNEvQqqdxbS7NmkF9gSe7Ei7VNsSLVRNnJY5e0/A57+IS8h
-         T7Pwd+wCs01Il+mWUlJoQ/jlPj1XrFxIg0j2bfBRKSLYL4F6kw9o+7WjZjcii5O3UA0Z
-         WKGvWwgVBsVgXqVvMQf7btRIjQSIHnda6lB/dXTvXbWfHB4BvsIxK1RxAsynUo4oTL6W
-         knnKAMKq9Q09n0TmqSC1lp/uDcChtlDF2c3uVY5INpmChS6jG0Y8JV2nRC8OrpxPIYDM
-         IbZQ==
-X-Gm-Message-State: AOAM533L+Bts7fZvIru04xtlvZvlUVfAusU+mduiwGR/qCLoSIVYIHbK
-        gx8HXCbab99pr6FxklkNt1lsp2TXXatNc4LNIYQ=
-X-Google-Smtp-Source: ABdhPJzi9/gjwxSZ7bmJ0i3RpOAZy2AEW8HH88NtQ9J7F/6skXH3IiVp6v+0qkoiL8LEwek/nQh7AnpHXvVKyQmEBsI=
-X-Received: by 2002:a05:6638:37a7:: with SMTP id w39mr21016254jal.19.1633986205891;
- Mon, 11 Oct 2021 14:03:25 -0700 (PDT)
+        id S235263AbhJKVdv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Oct 2021 17:33:51 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:35146 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230114AbhJKVdv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Oct 2021 17:33:51 -0400
+Received: from zn.tnic (p200300ec2f08bb0003b0f726e81805f8.dip0.t-ipconnect.de [IPv6:2003:ec:2f08:bb00:3b0:f726:e818:5f8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DA1831EC04D6;
+        Mon, 11 Oct 2021 23:31:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1633987909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ktB79OgjKWu4SFhSyygmMhHHJddjGqbKPeqk6+xxA10=;
+        b=AP8NNI/lF9orIz29IHoZ1onaqIlWc4+tv7BBIyQ+KqL9M5VUAmvyQner4HQ8Dfej+ezj0s
+        rDjJ5dFRCYDxJHoQ7a4kNXigxCehCvPoD4ITWptC1gRP9uXVExolKqM7HHEp1MW8PxfoEr
+        lJQDN29VXXUI+lSK76b0wei8vrWh1jM=
+Date:   Mon, 11 Oct 2021 23:31:45 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "olof@lixom.net" <olof@lixom.net>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "zweiss@equinix.com" <zweiss@equinix.com>,
+        "d.mueller@elsoft.ch" <d.mueller@elsoft.ch>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>
+Subject: Re: [PATCH v2 01/15] x86/cpu: Move intel-family to arch-independent
+ headers
+Message-ID: <YWStQSrRJQ09KXVY@zn.tnic>
+References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
+ <20210803113134.2262882-2-iwona.winiarska@intel.com>
+ <YVtQG+idmwKn0qLe@zn.tnic>
+ <58ef4107e9b2c60a2605aac0d2fb6670a95bc9e0.camel@intel.com>
+ <YWSZTq8NWWcCMXtA@zn.tnic>
+ <337b6332312ea63862aedd09279417c9e1c7e11f.camel@intel.com>
 MIME-Version: 1.0
-References: <20211011195503.23153-1-pauk.denis@gmail.com> <20211011195503.23153-2-pauk.denis@gmail.com>
-In-Reply-To: <20211011195503.23153-2-pauk.denis@gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Mon, 11 Oct 2021 23:03:14 +0200
-Message-ID: <CAB95QASjUq4P3HhFJrCpBwtJLzwc0ig0q5YQg6FGTDaxkS3SPg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, platform-driver-x86@vger.kernel.org,
-        Tor Vic <torvic9@mailbox.org>,
-        kernel test robot <lkp@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <337b6332312ea63862aedd09279417c9e1c7e11f.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi, Denis,
+On Mon, Oct 11, 2021 at 08:38:43PM +0000, Winiarska, Iwona wrote:
+> Everything that's part of this series runs on the BMC (Baseboard
+> Management Controller). There's nothing ARM specific to it - it's just
+> that the BMC hardware we're currently supporting is ARM-based. PECI is
+> an interface that's exposed by some x86 CPUs - but that's a hardware
+> interface (available completely independent from whatever is actually
+> running on the x86 CPU).
 
-> +       for (i_sensor = 0; i_sensor < ec->nr_sensors; i_sensor++) {
-> +               s = &ec->sensors[i_sensor];
-> +               si = &known_ec_sensors[s->info_index];
-> +
-> +               switch (si->addr.size) {
-> +               case 1:
-> +                       s->cached_value = ec->read_buffer[read_reg_ct];
-> +                       break;
-> +               case 2:
-> +                       s->cached_value = get_unaligned_be16(&ec->read_buffer[read_reg_ct]);
-> +                       break;
-> +               case 4:
-> +                       s->cached_value = get_unaligned_be32(&ec->read_buffer[read_reg_ct]);
-> +                       break;
-> +               default:
-> +                       s->cached_value =  0;
-> +               }
-> +               read_reg_ct += si->addr.size;
+Aha, I think I got it: so this whole PECI pile is supposed to run on
+the BMC - which can be ARM but doesn't have to be, i.e., code should be
+generic enough - and the interfaces to the x86 CPU do get exposed to the
+Linux running on the BMC.
 
-There is at least one more sensor hiding in the EC address space: the
-south bridge voltage. And it seems its value is not an integer, so the
-conversion to mV will not be a simple get_unaligned_xx() call when we
-locate and add it. Thus, I would suggest extracting this switch in a
-separate function to make the future modification simpler. Something
-like the following:
+Which brings me to the answer to your other mail:
 
-static inline u32 get_sensor_value(const struct ec_sensor_info *si, u8
-*data) // si for the data encoding scheme
-{
-    switch (si->addr.components.size) {
-    case 1:
-        return *data;
-    case 2:
-        return get_unaligned_be16(data);
-    case 4:
-        return get_unaligned_be32(data);
-    }
-}
+On Mon, Oct 11, 2021 at 07:32:38PM +0000, Winiarska, Iwona wrote:
+> Nothing wrong - just a trade-off between churn and keeping things tidy
+> and not duplicated, similar to patch 1. And just like in patch 1, if
+> you have a strong opinion against it - we can duplicate.
 
-static void update_sensor_values(struct ec_sensors_data *ec, u8 *data)
-{
-    const struct ec_sensor_info *si;
-    struct ec_sensor *s;
+So it is not about strong opinion. Rather, it is about whether this
+exporting would be disadvantageous for x86 freedom. And I think it will
+be:
 
-    for (s = ec->sensors; s != ec->sensors + ec->nr_sensors; s++) {
-        si = &known_ec_sensors[s->info_index];
-        s->cached_value = get_sensor_value(si, data);
-        data += si->addr.components.size;
-    }
-}
+Because if you exported those and then we went and changed those
+interfaces and defines (changed their naming, function arguments,
+whatever) and something outside of x86 used them, we will break that
+something.
 
-Additionally, this would simplify update_ec_sensors() body:
+And usually we go and fix those users too but I doubt anyone has access
+to that PECI hw to actually test fixes, etc, etc.
 
-mutex_lock(&ec->lock);
-make_asus_wmi_block_read_query(ec);
-status = asus_ec_block_read(dev, METHODID_BLOCK_READ_EC, ec->read_arg,
-    buffer);
+So I'd prefer the small amount of duplication vs external stuff using
+x86 facilities any day of the week. And so I'd suggest you simply copy
+the handful of functions and defines you're gonna be needing and the
+defines and be done with it.
 
-if (!status) {
-    update_sensor_values(ec, buffer);
-}
-mutex_unlock(&ec->lock);
+Dave's idea makes sense to me too but lately it keeps happening that
+we change something in x86-land and it turns out something "from the
+outside" is using it and it breaks, so it is a lot easier if things are
+independent.
 
+Thx.
 
-Eugene
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
