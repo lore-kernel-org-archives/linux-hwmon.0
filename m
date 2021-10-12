@@ -2,115 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C17A0C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 15:51:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B6D0C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 17:30:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A00C66108F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 15:51:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13A3160F23
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 17:30:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbhJLPxy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Oct 2021 11:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237532AbhJLPxx (ORCPT
+        id S231886AbhJLRcq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Oct 2021 13:32:46 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61872 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229810AbhJLRcp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Oct 2021 11:53:53 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FFFC061745;
-        Tue, 12 Oct 2021 08:51:51 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id a17-20020a4a6851000000b002b59bfbf669so6513063oof.9;
-        Tue, 12 Oct 2021 08:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=nIV4GMcFXO2FfQExgtOGvu70adhVEKRJ+yAiGKrtQzA=;
-        b=ZKI8gpM+7XBek6AF91bc2UjvD16P9rqvVBXad5c/kzcTIcfx/3Bz4QnH0lRLz0FqFn
-         516CUc++KtmnCJfbBkPCH/0LoMr7hP8xG0lgJYvb7fITmlAGJhLn1SEFNTdtfRYpHA+C
-         gpdTXYpB2m0ecjC9oiP8A1Dxly0VBAXwMyewc500KaFnU105LLykyUBJ5OrlJOf4jXAA
-         1fdpcnySniXwdRKuw4rM8vbMhXjWLHP+NKdRV3VR4bhCV3Xex17Sk6szLJhKgKZ2RCts
-         GI3iEf2AVSmYa2Kr+9IOPNxiludEyQmerBiy3Rfq9Lr6g1wonTbk5mX5siyOKxjjvh/A
-         b4HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=nIV4GMcFXO2FfQExgtOGvu70adhVEKRJ+yAiGKrtQzA=;
-        b=HPIFI2F2FOE/+Ix2YuY67TN4MLDSH3t7FBGkks4Rh9DoBk5XUceqvW+4+1gEN/yAGy
-         7Umn7CkvYgjWtyy2/pW9mBD1r2EIsxw4PXqiXI3MoCldnjOhCh/WAsp2aYHhl4YjGlOo
-         tVsfMJ8u4cPMceOvCPuso5mR5zMwh99IAHsQblmP6uxwfKYFtUfePWwonD+DaSYW6Oq8
-         3Ogly0WVi0HjYSNHeI928goZ673j7ZpaBJ76YkwfRGNurlXirdQeR02BHbyVkHh4lpy4
-         2GogqRCYGjTx7KiJQanLtWPBP62n17B+3jqBnGXHM5z0S17kz8ITZyGxsLqf5NHJf/ox
-         VmYg==
-X-Gm-Message-State: AOAM531y6Yihqe07dqmKNHvzGvrWoly48wz3v9k26ND3ictgyvdFKm6v
-        U17Tmc0rb8eL7NuEsM8jV3rsbDEUmBs=
-X-Google-Smtp-Source: ABdhPJzUoef/HXvXFPp3AgKcvBiodNI/8phQ99mRRqpsBg/X1w4bobpSmr1giwmwyNbr2/XE3SOLUA==
-X-Received: by 2002:a4a:e867:: with SMTP id m7mr6890342oom.5.1634053911104;
-        Tue, 12 Oct 2021 08:51:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g92sm2408655otb.17.2021.10.12.08.51.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 08:51:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 12 Oct 2021 08:51:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, Mark Brown <broonie@kernel.org>,
-        kernel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>
-Subject: Re: [PATCH v2 04/20] hwmon: max31722: Warn about failure to put
- device in stand-by in .remove()
-Message-ID: <20211012155149.GA4051737@roeck-us.net>
-References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
- <20211012153945.2651412-5-u.kleine-koenig@pengutronix.de>
+        Tue, 12 Oct 2021 13:32:45 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
+ id 6a0cc62dcedd71c2; Tue, 12 Oct 2021 19:30:42 +0200
+Received: from kreacher.localnet (unknown [213.134.187.88])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 51A6866A824;
+        Tue, 12 Oct 2021 19:30:41 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH] hwmon: acpi_power_meter: Use acpi_bus_get_acpi_device()
+Date:   Tue, 12 Oct 2021 19:30:40 +0200
+Message-ID: <11864888.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211012153945.2651412-5-u.kleine-koenig@pengutronix.de>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.187.88
+X-CLIENT-HOSTNAME: 213.134.187.88
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtkedguddutdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppedvudefrddufeegrddukeejrdekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeejrdekkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhhfihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhguvghlvhgrrhgvsehsuhhsvgdrtghomhdprhgtphhtthhopehlihhnuhigsehrohgvtghkqdhu
+ shdrnhgvthdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 05:39:29PM +0200, Uwe Kleine-König wrote:
-> When an spi driver's remove function returns a non-zero error code
-> nothing happens apart from emitting a generic error message. Make this
-> error message more device specific and return zero instead.
-> 
-> Acked-by: Michael Hennerich <michael.hennerich@analog.com>
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Rafael J. Wysocki <rafael@kernel.org>
 
-Applied to hwmon-next.
+In read_domain_devices(), acpi_bus_get_device() is called to obtain
+the ACPI device object attached to the given ACPI handle and
+subsequently that object is passed to get_device() for reference
+counting, but there is a window between the acpi_bus_get_device()
+and get_device() calls in which the ACPI device object in question
+may go away.
 
-Thanks,
-Guenter
+To address this issue, make read_domain_devices() use
+acpi_bus_get_acpi_device() to reference count and return the given
+ACPI device object in one go and export that function to modules.
 
-> ---
->  drivers/hwmon/max31722.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/max31722.c b/drivers/hwmon/max31722.c
-> index 613338cbcb17..4cf4fe6809a3 100644
-> --- a/drivers/hwmon/max31722.c
-> +++ b/drivers/hwmon/max31722.c
-> @@ -103,10 +103,16 @@ static int max31722_probe(struct spi_device *spi)
->  static int max31722_remove(struct spi_device *spi)
->  {
->  	struct max31722_data *data = spi_get_drvdata(spi);
-> +	int ret;
->  
->  	hwmon_device_unregister(data->hwmon_dev);
->  
-> -	return max31722_set_mode(data, MAX31722_MODE_STANDBY);
-> +	ret = max31722_set_mode(data, MAX31722_MODE_STANDBY);
-> +	if (ret)
-> +		/* There is nothing we can do about this ... */
-> +		dev_warn(&spi->dev, "Failed to put device in stand-by mode\n");
-> +
-> +	return 0;
->  }
->  
->  static int __maybe_unused max31722_suspend(struct device *dev)
+While at it, also make read_domain_devices() and
+remove_domain_devices() use acpi_dev_put() instead of calling
+put_device() directly on the ACPI device objects returned by
+acpi_bus_get_acpi_device().
+
+Signed-off-by: Rafael J. Wysocki <rafael@kernel.org>
+---
+ drivers/acpi/scan.c              |    1 +
+ drivers/hwmon/acpi_power_meter.c |   13 +++++--------
+ 2 files changed, 6 insertions(+), 8 deletions(-)
+
+Index: linux-pm/drivers/hwmon/acpi_power_meter.c
+===================================================================
+--- linux-pm.orig/drivers/hwmon/acpi_power_meter.c
++++ linux-pm/drivers/hwmon/acpi_power_meter.c
+@@ -535,7 +535,7 @@ static void remove_domain_devices(struct
+ 
+ 		sysfs_remove_link(resource->holders_dir,
+ 				  kobject_name(&obj->dev.kobj));
+-		put_device(&obj->dev);
++		acpi_dev_put(obj);
+ 	}
+ 
+ 	kfree(resource->domain_devices);
+@@ -597,18 +597,15 @@ static int read_domain_devices(struct ac
+ 			continue;
+ 
+ 		/* Create a symlink to domain objects */
+-		resource->domain_devices[i] = NULL;
+-		if (acpi_bus_get_device(element->reference.handle,
+-					&resource->domain_devices[i]))
++		obj = acpi_bus_get_acpi_device(element->reference.handle);
++		resource->domain_devices[i] = obj;
++		if (!obj)
+ 			continue;
+ 
+-		obj = resource->domain_devices[i];
+-		get_device(&obj->dev);
+-
+ 		res = sysfs_create_link(resource->holders_dir, &obj->dev.kobj,
+ 				      kobject_name(&obj->dev.kobj));
+ 		if (res) {
+-			put_device(&obj->dev);
++			acpi_dev_put(obj);
+ 			resource->domain_devices[i] = NULL;
+ 		}
+ 	}
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -608,6 +608,7 @@ struct acpi_device *acpi_bus_get_acpi_de
+ {
+ 	return handle_to_device(handle, get_acpi_device);
+ }
++EXPORT_SYMBOL_GPL(acpi_bus_get_acpi_device);
+ 
+ static struct acpi_device_bus_id *acpi_device_bus_id_match(const char *dev_id)
+ {
+
+
+
