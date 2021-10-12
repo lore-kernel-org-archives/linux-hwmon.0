@@ -2,142 +2,197 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 734FFC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 14:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D7FAC4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 14:31:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5291E610C9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 14:25:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1578D60240
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Oct 2021 14:31:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237251AbhJLO15 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Oct 2021 10:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S237295AbhJLOdB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Oct 2021 10:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236695AbhJLO14 (ORCPT
+        with ESMTP id S237299AbhJLOdA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Oct 2021 10:27:56 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9B0C06161C;
-        Tue, 12 Oct 2021 07:25:54 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id k2-20020a056830168200b0054e523d242aso16560229otr.6;
-        Tue, 12 Oct 2021 07:25:54 -0700 (PDT)
+        Tue, 12 Oct 2021 10:33:00 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AC8C06174E;
+        Tue, 12 Oct 2021 07:30:58 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id z11so29322480oih.1;
+        Tue, 12 Oct 2021 07:30:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=8dhO4iKJgpntkSBg2CwwF2girkJ/DIoq3G4792Lm7Pw=;
-        b=m+3urIRZDUaPFt4YAqHZzlAf2Co2G1/u3NpnpQNYHGV0cvqbdmaK/wdBGa5lZP/DmE
-         4whR0NZozjxw8+d6DvFB7E2N/HQPiXIc08eIZvpHwLRHgTMduRKK+eLWEbRksezcZvXZ
-         63v3s32o2czL+ftVsGXKff95y2EJ7cBG3f2Cm1QahTRFz/zFYWf7WDmTwasy/Gx5Cqr4
-         WhND6AcbSpBn5VINXCBytKj9jxwPw8f6yg1tRVSnw7LdcOm1HcQU8jlGrqN5wPcImhCb
-         sadTd7bURwGdeRujqwXjJUl96T6Crtpv7E9+sc9NMnjsdtupWV9cocd0HsilMUSfSp87
-         9ZiQ==
+        bh=62/HSu28w9fyX+3Gdf1eH70UJnQvaTefHYnc62GBnR8=;
+        b=FpY3R06Vinegv3TSinn8gWQkPhQFTlLrXMDS1x4s7ifr6YffK91RLhevDfnMpC2eo3
+         +G8cCzs6sp6PZHxn/vl0W7oHdvGHyXYnZbPuf1apnaK6W2uB17DXc2KwrM/4JCUv+HuI
+         G7e7ZG8s6nwdWa9tY86O8ZGGYLPwMPLRd5ttZorAHPKFGu7b+b+bXj/epl2/BTIIF1mJ
+         vbnW+hLwjsk4Q5V0E/9y702sj1pyAm0LTrWvls7MI/EL35XC+IRpTPJQLHhIuOwkkdKt
+         chScs0CuGzmbq3KP/WFDHFF00IbZTdgCDUNJrllaOhwG79CN6iLd9vfogftPFXKzaOR6
+         e//Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=8dhO4iKJgpntkSBg2CwwF2girkJ/DIoq3G4792Lm7Pw=;
-        b=xTmnNQs5oWmdXuF2Je4eKoLv1OWIXGUwQ6znpQJwZss5+EXtUY4uAXSsUEtMwfdZ6u
-         PEVYZYsRn81Dfwv/ph5K4ArOSvGMvPac/vBjJhUWX4UVraazvse+1aUxhGHu1mvRJ+Sl
-         ar2VZpbe4LzCIKAcdqcsYdj/Ml7m1GWkAJV0YFY/Hwio6ZpuuyhhtP2yl+4dAZEsH9yn
-         LQEiU1w0U2uLc43kr+l+NMzAgl3+PaFzMmWfO2FfZqrYKl3Oh9aWR6hvdfHWoB6hWCdv
-         mmtdFDPnnW/5nYPmZVddz8oblW4vouw08U2LYv7VBNsWhJUceys7R/qodwtCZG9h4cDV
-         vv0w==
-X-Gm-Message-State: AOAM5310BqTLQXAHfhdAGk0EG/T3tRzy6YVChfHB/h1gZExQe9iaJiYg
-        7ul39Zp93NGJ8SH2p2Gp/cU=
-X-Google-Smtp-Source: ABdhPJx4ozkQzNek01O2VmB+tImpR0R5CZaBzO4eIsBUBjj6A1cNXJ2K+ZjsWXl/3XhOXODRWZg20g==
-X-Received: by 2002:a05:6830:828:: with SMTP id t8mr13349324ots.87.1634048752566;
-        Tue, 12 Oct 2021 07:25:52 -0700 (PDT)
+        bh=62/HSu28w9fyX+3Gdf1eH70UJnQvaTefHYnc62GBnR8=;
+        b=c/1kF1MJ1KYvLyErZ8H0iM/+BDR26aTVe9EdYTbD2GvyAAuUox1d/j5s/yDXhjxP0i
+         Lzz8nPBHdHRIhiyz7mN0dBdLiQRslPJv2LgBdR1UM0rMaZ8SkAKiu3jZf7rZTRCbRan9
+         t/wzEoahq6nh69UBOAN4BhKJD/REVaqTb32rKRvQ3ptKHwCEKzvNnEcSqTf9HMlsUiQD
+         nt7QheC/me7tNQm9eWsymTyYjgi7yAOdRsoH2uWkzNVaZ7yCfdzUaw5VoQA4o6WAyO14
+         dBN/4U7+60uz29jEJyPOIcL8mYWX3hKDYXWG0cJrkiWEkIvBGP/nGM7kuSV5AWJvyep3
+         scFA==
+X-Gm-Message-State: AOAM531rQsFcFsWX/BF4i8yF4ECEyg1QdhHn7a7/aclhhv3Bdm9hR5sc
+        fC/DMfUzKIUtW+Rg7/HWoYI=
+X-Google-Smtp-Source: ABdhPJzoBSjS7lqMEPaFxwZgNTYnIRKNJ8EtyU47IyW0Uklx0/PuwTRZfMtgLu2qVH+B/DJNe6HduQ==
+X-Received: by 2002:a05:6808:2310:: with SMTP id bn16mr3793538oib.159.1634049057819;
+        Tue, 12 Oct 2021 07:30:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s10sm2357827oib.58.2021.10.12.07.25.51
+        by smtp.gmail.com with ESMTPSA id n18sm2389109oig.16.2021.10.12.07.30.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 07:25:52 -0700 (PDT)
+        Tue, 12 Oct 2021 07:30:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 12 Oct 2021 07:25:50 -0700
+Date:   Tue, 12 Oct 2021 07:30:56 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 02/10] hwmon: (tmp421) introduce a channel struct
-Message-ID: <20211012142550.GA743871@roeck-us.net>
+Subject: Re: [PATCH v4 03/10] hwmon: (tmp421) add support for defining labels
+ from DT
+Message-ID: <20211012143056.GA773275@roeck-us.net>
 References: <cover.1634029538.git.krzysztof.adamski@nokia.com>
- <baf34d95983a6b58a3e39e4c098e5979e541572e.1634029538.git.krzysztof.adamski@nokia.com>
+ <887624ff580a34d3bb16d03228234bcd1635f3e2.1634029538.git.krzysztof.adamski@nokia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <baf34d95983a6b58a3e39e4c098e5979e541572e.1634029538.git.krzysztof.adamski@nokia.com>
+In-Reply-To: <887624ff580a34d3bb16d03228234bcd1635f3e2.1634029538.git.krzysztof.adamski@nokia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 11:26:55AM +0200, Krzysztof Adamski wrote:
-> This is a preparatory change. Upcoming patches will introduce more
-> per-channel parameters so it's worth organizing them into a struct.
+On Tue, Oct 12, 2021 at 11:27:14AM +0200, Krzysztof Adamski wrote:
+> tmp42x is a multichannel temperature sensor with several external
+> channels. Since those channels can be used to connect diodes placed
+> anywhere in the system, their meaning will vary depending on the
+> project. For this case, the hwmon framework has an idea of labels which
+> allows us to assign the meaning to each channel.
+> 
+> The similar concept is already implemented in ina3221 - the label for
+> each channel can be defined via device tree. See commit a9e9dd9c6de5
+> ("hwmon: (ina3221) Read channel input source info from DT")
+> 
+> This patch adds support for similar feature to tmp421.
 > 
 > Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
 > ---
->  drivers/hwmon/tmp421.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
+>  drivers/hwmon/tmp421.c | 61 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
 > 
 > diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-> index 356c96c3588b..707310d616a4 100644
+> index 707310d616a4..ab64d9825ca4 100644
 > --- a/drivers/hwmon/tmp421.c
 > +++ b/drivers/hwmon/tmp421.c
-> @@ -87,6 +87,10 @@ static const struct of_device_id __maybe_unused tmp421_of_match[] = {
->  };
+> @@ -88,6 +88,7 @@ static const struct of_device_id __maybe_unused tmp421_of_match[] = {
 >  MODULE_DEVICE_TABLE(of, tmp421_of_match);
 >  
-> +struct tmp421_channel {
-> +	s16 temp;
-> +};
-> +
->  struct tmp421_data {
->  	struct i2c_client *client;
->  	struct mutex update_lock;
-> @@ -98,7 +102,7 @@ struct tmp421_data {
->  	unsigned long last_updated;
->  	unsigned long channels;
->  	u8 config;
-> -	s16 temp[MAX_CHANNELS];
-> +	struct tmp421_channel channel[MAX_CHANNELS];
+>  struct tmp421_channel {
+> +	const char *label;
+>  	s16 temp;
 >  };
 >  
->  static int temp_from_raw(u16 reg, bool extended)
-> @@ -133,12 +137,12 @@ static int tmp421_update_device(struct tmp421_data *data)
->  			ret = i2c_smbus_read_byte_data(client, TMP421_TEMP_MSB[i]);
->  			if (ret < 0)
->  				goto exit;
-> -			data->temp[i] = ret << 8;
-> +			data->channel[i].temp = ret << 8;
+> @@ -187,6 +188,16 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
 >  
->  			ret = i2c_smbus_read_byte_data(client, TMP421_TEMP_LSB[i]);
->  			if (ret < 0)
->  				goto exit;
-> -			data->temp[i] |= ret;
-> +			data->channel[i].temp |= ret;
->  		}
->  		data->last_updated = jiffies;
->  		data->valid = true;
-> @@ -167,7 +171,7 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
+>  }
 >  
->  	switch (attr) {
->  	case hwmon_temp_input:
-> -		*val = temp_from_raw(tmp421->temp[channel],
-> +		*val = temp_from_raw(tmp421->channel[channel].temp,
->  				     tmp421->config & TMP421_CONFIG_RANGE);
->  		return 0;
+> +static int tmp421_read_string(struct device *dev, enum hwmon_sensor_types type,
+> +			     u32 attr, int channel, const char **str)
+> +{
+> +	struct tmp421_data *data = dev_get_drvdata(dev);
+> +
+> +	*str = data->channel[channel].label;
+> +
+> +	return 0;
+> +}
+> +
+>  static umode_t tmp421_is_visible(const void *data, enum hwmon_sensor_types type,
+>  				 u32 attr, int channel)
+>  {
+> @@ -194,6 +205,8 @@ static umode_t tmp421_is_visible(const void *data, enum hwmon_sensor_types type,
 >  	case hwmon_temp_fault:
-> @@ -175,7 +179,7 @@ static int tmp421_read(struct device *dev, enum hwmon_sensor_types type,
->  		 * Any of OPEN or /PVLD bits indicate a hardware mulfunction
->  		 * and the conversion result may be incorrect
->  		 */
-> -		*val = !!(tmp421->temp[channel] & 0x03);
-> +		*val = !!(tmp421->channel[channel].temp & 0x03);
->  		return 0;
+>  	case hwmon_temp_input:
+>  		return 0444;
+> +	case hwmon_temp_label:
+> +		return 0444;
 >  	default:
->  		return -EOPNOTSUPP;
+>  		return 0;
+>  	}
+> @@ -286,9 +299,53 @@ static int tmp421_detect(struct i2c_client *client,
+>  	return 0;
+>  }
+>  
+> +static int tmp421_probe_child_from_dt(struct i2c_client *client,
+> +				      struct device_node *child,
+> +				      struct tmp421_data *data)
+> +
+> +{
+> +	struct device *dev = &client->dev;
+> +	u32 i;
+> +	int err;
+> +
+> +	err = of_property_read_u32(child, "reg", &i);
+> +	if (err) {
+> +		dev_err(dev, "missing reg property of %pOFn\n", child);
+> +		return err;
+> +	}
+> +
+> +	if (i >= MAX_CHANNELS) {
+
+I think this needs to compare against data->channels. Otherwise, if
+unsupported channels are listed in dt (say, reg==0x2 with tmp421),
+we would end up with label attributes for those channels.
+
+> +		dev_err(dev, "invalid reg %d of %pOFn\n", i, child);
+> +		return -EINVAL;
+> +	}
+> +
+> +	of_property_read_string(child, "label", &data->channel[i].label);
+> +	if (data->channel[i].label)
+> +		data->temp_config[i] |= HWMON_T_LABEL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tmp421_probe_from_dt(struct i2c_client *client, struct tmp421_data *data)
+> +{
+> +	struct device *dev = &client->dev;
+> +	const struct device_node *np = dev->of_node;
+> +	struct device_node *child;
+> +	int err;
+> +
+> +	for_each_child_of_node(np, child) {
+> +		err = tmp421_probe_child_from_dt(client, child, data);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct hwmon_ops tmp421_ops = {
+>  	.is_visible = tmp421_is_visible,
+>  	.read = tmp421_read,
+> +	.read_string = tmp421_read_string,
+>  };
+>  
+>  static int tmp421_probe(struct i2c_client *client)
+> @@ -317,6 +374,10 @@ static int tmp421_probe(struct i2c_client *client)
+>  	for (i = 0; i < data->channels; i++)
+>  		data->temp_config[i] = HWMON_T_INPUT | HWMON_T_FAULT;
+>  
+> +	err = tmp421_probe_from_dt(client, data);
+> +	if (err)
+> +		return err;
+> +
+>  	data->chip.ops = &tmp421_ops;
+>  	data->chip.info = data->info;
+>  
