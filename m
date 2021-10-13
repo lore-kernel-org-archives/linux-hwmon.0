@@ -2,220 +2,279 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE43FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 11:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4F96C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 14:38:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A12DD603E5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 11:47:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90BE7610A2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 14:38:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbhJMLtP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Oct 2021 07:49:15 -0400
-Received: from mga18.intel.com ([134.134.136.126]:44176 "EHLO mga18.intel.com"
+        id S230488AbhJMOkJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Oct 2021 10:40:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49030 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231644AbhJMLsO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Oct 2021 07:48:14 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10135"; a="214350187"
-X-IronPort-AV: E=Sophos;i="5.85,370,1624345200"; 
-   d="scan'208";a="214350187"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 04:46:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,370,1624345200"; 
-   d="scan'208";a="442247574"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 13 Oct 2021 04:46:10 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1maci1-0004ZX-UL; Wed, 13 Oct 2021 11:46:09 +0000
-Date:   Wed, 13 Oct 2021 19:45:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- beee7890c36320fe08d9cce82afa1db848360bfb
-Message-ID: <6166c6ca.hee8tJKqa9jBI3FR%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230015AbhJMOkI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 13 Oct 2021 10:40:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 476FF60C40;
+        Wed, 13 Oct 2021 14:38:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634135885;
+        bh=FJaeruQ6Tsmop2/Qhc/hCWMTG0qs0LMrMi/MFCblfeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rOhfheJv2d+5X4qCcv9t4vBuffLTl7ay0bBcIxx6u7Xp+kkULpmL2hOaEV90apAhM
+         WdoXGh5Zpha9RIBLF4riVQNVCmHbq9ekyOPT1ZJsTnYHNVuzmV0iP1dYg8IZPb6CnK
+         mEhy2Hw9WU1YJP+Qw9AEx2VzIVvrgPtncFshAYC+EsWzn22N+5xOPwAOQgWRDUvwfg
+         Cs815dWlurlqUYD39gst8/vOC0JdISAXHi/oYxHxBScey9zBxB8WHRc3YYzbV+OGLp
+         +c9z1S/haw6UU9knKlYa///s5he6/BIx8GXlIWZBQ+FeyCXbNk5wVP3kbHZEi/Ha6t
+         wRCNc/N5L0DQw==
+Received: by pali.im (Postfix)
+        id C4FDF7FF; Wed, 13 Oct 2021 16:38:02 +0200 (CEST)
+Date:   Wed, 13 Oct 2021 16:38:02 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] hwmon: (dell-smm) Add support for fanX_min,
+ fanX_max and fanX_target
+Message-ID: <20211013143802.xdcnptvbwbfu7kog@pali>
+References: <20210926221044.14327-1-W_Armin@gmx.de>
+ <20210926221044.14327-2-W_Armin@gmx.de>
+ <20211011161101.s7lojsh2ugsnbuzh@pali>
+ <06e2d014-2394-f1ff-225d-fc0afc4d6cf7@roeck-us.net>
+ <80199757-dabe-cb34-ceb3-b5e134e730f0@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <80199757-dabe-cb34-ceb3-b5e134e730f0@gmx.de>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: beee7890c36320fe08d9cce82afa1db848360bfb  hwmon: (adt7x10) Make adt7x10_remove() return void
+On Monday 11 October 2021 21:14:36 Armin Wolf wrote:
+> Am 11.10.21 um 20:48 schrieb Guenter Roeck:
+> > On 10/11/21 9:11 AM, Pali Rohár wrote:
+> > > On Monday 27 September 2021 00:10:43 W_Armin@gmx.de wrote:
+> > > > From: Armin Wolf <W_Armin@gmx.de>
+> > > > 
+> > > > The nominal speed of each fan can be obtained with
+> > > > i8k_get_fan_nominal_speed(), however the result is not available
+> > > > from userspace.
+> > > > Change that by adding fanX_min, fanX_max and fanX_target attributes.
+> > > > All are RO since fan control happens over pwm.
+> > > > 
+> > > > Tested on a Dell Inspiron 3505 and a Dell Latitude C600.
+> > > > 
+> > > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> > > > ---
+> > > >   Documentation/hwmon/dell-smm-hwmon.rst |  3 ++
+> > > >   drivers/hwmon/dell-smm-hwmon.c         | 61
+> > > > +++++++++++++++++++++++---
+> > > >   2 files changed, 58 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/Documentation/hwmon/dell-smm-hwmon.rst
+> > > > b/Documentation/hwmon/dell-smm-hwmon.rst
+> > > > index 3bf77a5df995..beec88491171 100644
+> > > > --- a/Documentation/hwmon/dell-smm-hwmon.rst
+> > > > +++ b/Documentation/hwmon/dell-smm-hwmon.rst
+> > > > @@ -34,6 +34,9 @@ Name                Perm    Description
+> > > >   =============================== =======
+> > > > =======================================
+> > > >   fan[1-3]_input                  RO      Fan speed in RPM.
+> > > >   fan[1-3]_label                  RO      Fan label.
+> > > > +fan[1-3]_min                    RO      Minimal Fan speed in RPM
+> > > > +fan[1-3]_max                    RO      Maximal Fan speed in RPM
+> > > > +fan[1-3]_target                 RO      Expected Fan speed in RPM
+> > > 
+> > > Hello!
+> > > 
+> > > I do not know API / meaning of these 3 properties, so I looked into
+> > > hwmon documentation at:
+> > > https://www.kernel.org/doc/html/latest/hwmon/sysfs-interface.html#fans
+> > > 
+> > > And in documentation is written that both 3 properties (min, max and
+> > > target) are RW.
+> > > 
+> > 
+> > That is the expectation. That doesn't mean they _have_ to be RW.
+> > It doesn't make sense to categorically demand that attributes are RW
+> > if the hardware does not support it.
+> > 
+> > > I'm somehow lost as I have not fully understood what is the original
+> > > meaning of these 3 properties. Guenter could you help?
+> > > 
+> > min: lower fan speed results in warning/error.
+> > max: higher fan speed results in error
+> > target: target fan speed. The controller should set the fan speed
+> >     to this level.
+> > 
+> > > After reading I understood it as that these properties are for HW which
+> > > supports controlling directly fan speed via RPM (and not PWM). And so
+> > > user can set lower and upper limit of fan speed (via _min and _max) or
+> > > can set exact RPM value (via _target).
+> > > 
+> > 
+> > Not really. The controller can try to modify a pwm value to reach the
+> > configured target fan speed. min/max values apply to both pwm and rpm
+> > controlled fans.
+> > 
+> The reason i made fanX_target RO is that the SMM interface does not directly
+> support
+> setting the fan speed in rpm. Since the attributes should reflect the
+> hardware implementation,
+> making fanX_target RW would make no sense (at least to me).
 
-elapsed time: 1226m
+Ok. Then patch seems to be fine.
 
-configs tested: 159
-configs skipped: 3
+> > > >   pwm[1-3] RW      Control the fan PWM duty-cycle.
+> > > >   pwm1_enable                     WO      Enable or disable
+> > > > automatic BIOS fan
+> > > >                                           control (not supported
+> > > > on all laptops,
+> > > > diff --git a/drivers/hwmon/dell-smm-hwmon.c
+> > > > b/drivers/hwmon/dell-smm-hwmon.c
+> > > > index 774c1b0715d9..476f2a74bd8c 100644
+> > > > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > > > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > > > @@ -76,6 +76,7 @@ struct dell_smm_data {
+> > > >       int temp_type[DELL_SMM_NO_TEMP];
+> > > >       bool fan[DELL_SMM_NO_FANS];
+> > > >       int fan_type[DELL_SMM_NO_FANS];
+> > > > +    int *fan_nominal_speed[DELL_SMM_NO_FANS];
+> > > >   };
+> > > > 
+> > > >   MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
+> > > > @@ -673,6 +674,13 @@ static umode_t dell_smm_is_visible(const
+> > > > void *drvdata, enum hwmon_sensor_types
+> > > >               if (data->fan[channel] && !data->disallow_fan_type_call)
+> > > >                   return 0444;
+> > > > 
+> > > > +            break;
+> > > > +        case hwmon_fan_min:
+> > > > +        case hwmon_fan_max:
+> > > > +        case hwmon_fan_target:
+> > > > +            if (data->fan_nominal_speed[channel])
+> > > > +                return 0444;
+> > > > +
+> > > >               break;
+> > > >           default:
+> > > >               break;
+> > > > @@ -740,6 +748,25 @@ static int dell_smm_read(struct device
+> > > > *dev, enum hwmon_sensor_types type, u32 a
+> > > > 
+> > > >               *val = ret;
+> > > > 
+> > > > +            return 0;
+> > > > +        case hwmon_fan_min:
+> > > > +            *val = data->fan_nominal_speed[channel][0];
+> > > 
+> > > When fan is turned off then it has speed 0 RPM. So should not be minimal
+> > > fan speed always hardcoded to zero?
+> > > 
+> > 
+> > No. Fans can be turned off on most systems/controllers. This means the
+> > "minimum" fan speed would always be 0, and the attribute would be
+> > worthless. In other words, "fan turned off" is always an exception.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Ok!
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211012
-i386                 randconfig-c001-20211013
-mips                        workpad_defconfig
-m68k                         apollo_defconfig
-powerpc                 linkstation_defconfig
-arm                           sama5_defconfig
-arm                        mvebu_v5_defconfig
-arm                        shmobile_defconfig
-sh                          r7780mp_defconfig
-mips                      malta_kvm_defconfig
-arm                           sama7_defconfig
-powerpc                     mpc5200_defconfig
-xtensa                generic_kc705_defconfig
-arm                            mmp2_defconfig
-powerpc                      makalu_defconfig
-s390                          debug_defconfig
-mips                           mtx1_defconfig
-parisc                generic-32bit_defconfig
-xtensa                  audio_kc705_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                     tqm8560_defconfig
-powerpc                 mpc8560_ads_defconfig
-powerpc                       holly_defconfig
-arm                            dove_defconfig
-ia64                            zx1_defconfig
-arm                       mainstone_defconfig
-sh                          urquell_defconfig
-arm                        realview_defconfig
-arm                          exynos_defconfig
-m68k                           sun3_defconfig
-m68k                          atari_defconfig
-ia64                        generic_defconfig
-sparc64                          alldefconfig
-mips                        bcm47xx_defconfig
-mips                          ath25_defconfig
-arm                      tct_hammer_defconfig
-csky                             alldefconfig
-arm                         lpc32xx_defconfig
-arm                       multi_v4t_defconfig
-sh                        sh7785lcr_defconfig
-powerpc                      tqm8xx_defconfig
-arm                            pleb_defconfig
-mips                      bmips_stb_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                      ep88xc_defconfig
-sh                          kfr2r09_defconfig
-powerpc                      mgcoge_defconfig
-arm                          simpad_defconfig
-mips                           ip22_defconfig
-powerpc                     tqm5200_defconfig
-sh                   secureedge5410_defconfig
-powerpc                       ppc64_defconfig
-mips                         cobalt_defconfig
-arm                          gemini_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                      pic32mzda_defconfig
-mips                        nlm_xlp_defconfig
-mips                         tb0287_defconfig
-sh                          r7785rp_defconfig
-powerpc                     tqm8555_defconfig
-arm                         s3c2410_defconfig
-arm                            mps2_defconfig
-arm                           corgi_defconfig
-powerpc                       ebony_defconfig
-powerpc                       eiger_defconfig
-mips                            e55_defconfig
-arm                  randconfig-c002-20211012
-x86_64               randconfig-c001-20211012
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20211012
-x86_64               randconfig-a006-20211012
-x86_64               randconfig-a001-20211012
-x86_64               randconfig-a005-20211012
-x86_64               randconfig-a002-20211012
-x86_64               randconfig-a003-20211012
-i386                 randconfig-a001-20211012
-i386                 randconfig-a003-20211012
-i386                 randconfig-a004-20211012
-i386                 randconfig-a005-20211012
-i386                 randconfig-a002-20211012
-i386                 randconfig-a006-20211012
-x86_64               randconfig-a015-20211013
-x86_64               randconfig-a012-20211013
-x86_64               randconfig-a016-20211013
-x86_64               randconfig-a014-20211013
-x86_64               randconfig-a013-20211013
-x86_64               randconfig-a011-20211013
-arc                  randconfig-r043-20211012
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+> I am not sure if we can assume that the fans will have 0 rpm when turned
+> off.
 
-clang tested configs:
-i386                 randconfig-a001-20211013
-i386                 randconfig-a003-20211013
-i386                 randconfig-a004-20211013
-i386                 randconfig-a002-20211013
-i386                 randconfig-a006-20211013
-x86_64               randconfig-a015-20211012
-x86_64               randconfig-a012-20211012
-x86_64               randconfig-a016-20211012
-x86_64               randconfig-a014-20211012
-x86_64               randconfig-a013-20211012
-x86_64               randconfig-a011-20211012
-i386                 randconfig-a016-20211012
-i386                 randconfig-a014-20211012
-i386                 randconfig-a011-20211012
-i386                 randconfig-a015-20211012
-i386                 randconfig-a012-20211012
-i386                 randconfig-a013-20211012
-hexagon              randconfig-r041-20211012
-s390                 randconfig-r044-20211012
-riscv                randconfig-r042-20211012
-hexagon              randconfig-r045-20211012
+E6440 reports 0 rpm when fan is turned off.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Maybe some notebook model defines 100 rpm as "turned off"?
+
+I really do not know.
+
+> In this case we should trust the nominal speed for "off" rather than assume
+> its 0 rpm.
+> > > > +
+> > > > +            return 0;
+> > > > +        case hwmon_fan_max:
+> > > > +            *val =
+> > > > data->fan_nominal_speed[channel][data->i8k_fan_max];
+> > > > +
+> > > > +            return 0;
+> > > > +        case hwmon_fan_target:
+> > > > +            ret = i8k_get_fan_status(data, channel);
+> > > > +            if (ret < 0)
+> > > > +                return ret;
+> > > > +
+> > > > +            if (ret > data->i8k_fan_max)
+> > > > +                ret = data->i8k_fan_max;
+> > > > +
+> > > > +            *val = data->fan_nominal_speed[channel][ret];
+> > > > +
+> > > >               return 0;
+> > > >           default:
+> > > >               break;
+> > > > @@ -889,9 +916,12 @@ static const struct hwmon_channel_info
+> > > > *dell_smm_info[] = {
+> > > >                  HWMON_T_INPUT | HWMON_T_LABEL
+> > > >                  ),
+> > > >       HWMON_CHANNEL_INFO(fan,
+> > > > -               HWMON_F_INPUT | HWMON_F_LABEL,
+> > > > -               HWMON_F_INPUT | HWMON_F_LABEL,
+> > > > -               HWMON_F_INPUT | HWMON_F_LABEL
+> > > > +               HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN |
+> > > > HWMON_F_MAX |
+> > > > +               HWMON_F_TARGET,
+> > > > +               HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN |
+> > > > HWMON_F_MAX |
+> > > > +               HWMON_F_TARGET,
+> > > > +               HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN |
+> > > > HWMON_F_MAX |
+> > > > +               HWMON_F_TARGET
+> > > >                  ),
+> > > >       HWMON_CHANNEL_INFO(pwm,
+> > > >                  HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> > > > @@ -910,7 +940,7 @@ static int __init dell_smm_init_hwmon(struct
+> > > > device *dev)
+> > > >   {
+> > > >       struct dell_smm_data *data = dev_get_drvdata(dev);
+> > > >       struct device *dell_smm_hwmon_dev;
+> > > > -    int i, err;
+> > > > +    int i, state, err;
+> > > > 
+> > > >       for (i = 0; i < DELL_SMM_NO_TEMP; i++) {
+> > > >           data->temp_type[i] = i8k_get_temp_type(i);
+> > > > @@ -926,8 +956,27 @@ static int __init
+> > > > dell_smm_init_hwmon(struct device *dev)
+> > > >           err = i8k_get_fan_status(data, i);
+> > > >           if (err < 0)
+> > > >               err = i8k_get_fan_type(data, i);
+> > > > -        if (err >= 0)
+> > > > -            data->fan[i] = true;
+> > > > +
+> > > > +        if (err < 0)
+> > > > +            continue;
+> > > > +
+> > > > +        data->fan[i] = true;
+> > > > +        data->fan_nominal_speed[i] = devm_kmalloc_array(dev,
+> > > > data->i8k_fan_max + 1,
+> > > > + sizeof(*data->fan_nominal_speed[i]),
+> > > > +                                GFP_KERNEL);
+> > > > +        if (!data->fan_nominal_speed[i])
+> > > > +            continue;
+> > > > +
+> > > > +        for (state = 0; state <= data->i8k_fan_max; state++) {
+> > > > +            err = i8k_get_fan_nominal_speed(data, i, state);
+> > > > +            if (err < 0) {
+> > > > +                /* Mark nominal speed table as invalid in case
+> > > > of error */
+> > > > +                devm_kfree(dev, data->fan_nominal_speed[i]);
+> > > > +                data->fan_nominal_speed[i] = NULL;
+> > > > +                break;
+> > > > +            }
+> > > > +            data->fan_nominal_speed[i][state] = err;
+> > > > +        }
+> > > >       }
+> > > > 
+> > > >       dell_smm_hwmon_dev =
+> > > > devm_hwmon_device_register_with_info(dev, "dell_smm", data,
+> > > > -- 
+> > > > 2.20.1
+> > > > 
+> > 
+> 
