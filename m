@@ -2,220 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB04FC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 05:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5903AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 06:42:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D3ED60FDC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 05:54:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EC9660ED4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 06:42:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbhJMF4I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Oct 2021 01:56:08 -0400
-Received: from mga14.intel.com ([192.55.52.115]:13142 "EHLO mga14.intel.com"
+        id S238062AbhJMGoO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Oct 2021 02:44:14 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:49050 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229582AbhJMF4I (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Oct 2021 01:56:08 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10135"; a="227639930"
-X-IronPort-AV: E=Sophos;i="5.85,369,1624345200"; 
-   d="scan'208";a="227639930"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2021 22:54:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,369,1624345200"; 
-   d="scan'208";a="480656994"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 12 Oct 2021 22:54:03 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1maXDH-0004J4-3e; Wed, 13 Oct 2021 05:54:03 +0000
-Date:   Wed, 13 Oct 2021 13:53:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- ada61aa0b1184a8fda1a89a340c7d6cc4e59aee5
-Message-ID: <6166745c.KAgf2iQV5K6lBmUs%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231597AbhJMGoN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 13 Oct 2021 02:44:13 -0400
+Received: from zn.tnic (p200300ec2f0ce200d6cfbc8b4a6526d3.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:e200:d6cf:bc8b:4a65:26d3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 076361EC01A9;
+        Wed, 13 Oct 2021 08:42:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1634107329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RJHwoQ0GRj7G38aIyE/+JmuKk5oLW3/IXloYTjGdLPM=;
+        b=VlLM3hqiRjov/ZUPpeKCNRCnjNajATN4ZcYXc7ZzMcDIFNKZhMuLyvbwbTV4hNSh7eWHn8
+        fPCgRIXxmKE32JTk43eOePcvO+B1Oj286a3oFYZbzrSJQIMJqxSZjpWKlE/Z9g/IFEvVXX
+        VMGzYr69ythLmV1z4a+M8jVC9oRwEZg=
+Date:   Wed, 13 Oct 2021 08:42:06 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "olof@lixom.net" <olof@lixom.net>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "zweiss@equinix.com" <zweiss@equinix.com>,
+        "d.mueller@elsoft.ch" <d.mueller@elsoft.ch>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v2 01/15] x86/cpu: Move intel-family to arch-independent
+ headers
+Message-ID: <YWZ/vqHXibwOWtDu@zn.tnic>
+References: <20210803113134.2262882-1-iwona.winiarska@intel.com>
+ <20210803113134.2262882-2-iwona.winiarska@intel.com>
+ <YVtQG+idmwKn0qLe@zn.tnic>
+ <58ef4107e9b2c60a2605aac0d2fb6670a95bc9e0.camel@intel.com>
+ <YWSZTq8NWWcCMXtA@zn.tnic>
+ <337b6332312ea63862aedd09279417c9e1c7e11f.camel@intel.com>
+ <YWStQSrRJQ09KXVY@zn.tnic>
+ <15d81463b631e03b00a7031510304d5598fc246c.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <15d81463b631e03b00a7031510304d5598fc246c.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: ada61aa0b1184a8fda1a89a340c7d6cc4e59aee5  hwmon: Fix possible memleak in __hwmon_device_register()
+On Tue, Oct 12, 2021 at 11:15:00PM +0000, Winiarska, Iwona wrote:
+> We (OpenBMC) do have PECI HW, so that shouldn't be a problem.
 
-elapsed time: 875m
+Yeah, don't take it personally, but asking people to test stuff for you
+doesn't really work, in practice.
 
-configs tested: 157
-configs skipped: 3
+> Both CPUID.EAX=1 decoding and definitions in intel-family are pretty "well-
+> defined".
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Sure, they are "well-defined" until we change them for whatever reason.
+Then they will be "well-defined" again. But different.
 
-gcc tested configs:
-arm                              allmodconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20211012
-sh                   sh7724_generic_defconfig
-powerpc                     pseries_defconfig
-xtensa                          iss_defconfig
-arm                           sunxi_defconfig
-arm                        shmobile_defconfig
-sh                          r7780mp_defconfig
-mips                      malta_kvm_defconfig
-arm                           sama7_defconfig
-powerpc                     mpc5200_defconfig
-xtensa                generic_kc705_defconfig
-arm                            mmp2_defconfig
-powerpc                      makalu_defconfig
-s390                          debug_defconfig
-mips                           mtx1_defconfig
-parisc                generic-32bit_defconfig
-xtensa                  audio_kc705_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                     tqm8560_defconfig
-arm                    vt8500_v6_v7_defconfig
-m68k                        m5307c3_defconfig
-m68k                        m5407c3_defconfig
-powerpc                    klondike_defconfig
-riscv                             allnoconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                           omap1_defconfig
-alpha                            allyesconfig
-powerpc                        icon_defconfig
-m68k                          multi_defconfig
-arm                          imote2_defconfig
-mips                  maltasmvp_eva_defconfig
-openrisc                            defconfig
-arm64                            alldefconfig
-powerpc                       maple_defconfig
-arm                             ezx_defconfig
-ia64                             allyesconfig
-mips                 decstation_r4k_defconfig
-powerpc                      ep88xc_defconfig
-sh                          kfr2r09_defconfig
-powerpc                      mgcoge_defconfig
-arm                          simpad_defconfig
-mips                           ip22_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                 linkstation_defconfig
-sh                   secureedge5410_defconfig
-powerpc                       ppc64_defconfig
-mips                         cobalt_defconfig
-arm                         axm55xx_defconfig
-nios2                         10m50_defconfig
-powerpc                      katmai_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                          landisk_defconfig
-um                             i386_defconfig
-arc                           tb10x_defconfig
-mips                           ip32_defconfig
-arm                           corgi_defconfig
-powerpc                       ebony_defconfig
-mips                      bmips_stb_defconfig
-powerpc                       eiger_defconfig
-mips                            e55_defconfig
-mips                        nlm_xlp_defconfig
-arm                  randconfig-c002-20211012
-x86_64               randconfig-c001-20211012
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                                defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a004-20211012
-x86_64               randconfig-a006-20211012
-x86_64               randconfig-a001-20211012
-x86_64               randconfig-a005-20211012
-x86_64               randconfig-a002-20211012
-x86_64               randconfig-a003-20211012
-i386                 randconfig-a001-20211012
-i386                 randconfig-a003-20211012
-i386                 randconfig-a004-20211012
-i386                 randconfig-a005-20211012
-i386                 randconfig-a002-20211012
-i386                 randconfig-a006-20211012
-arc                  randconfig-r043-20211012
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
+-- 
+Regards/Gruss,
+    Boris.
 
-clang tested configs:
-arm                  randconfig-c002-20211012
-mips                 randconfig-c004-20211012
-i386                 randconfig-c001-20211012
-s390                 randconfig-c005-20211012
-x86_64               randconfig-c007-20211012
-powerpc              randconfig-c003-20211012
-riscv                randconfig-c006-20211012
-i386                 randconfig-a001-20211013
-i386                 randconfig-a003-20211013
-i386                 randconfig-a004-20211013
-i386                 randconfig-a005-20211013
-i386                 randconfig-a002-20211013
-i386                 randconfig-a006-20211013
-x86_64               randconfig-a004-20211013
-x86_64               randconfig-a006-20211013
-x86_64               randconfig-a001-20211013
-x86_64               randconfig-a005-20211013
-x86_64               randconfig-a002-20211013
-x86_64               randconfig-a003-20211013
-x86_64               randconfig-a015-20211012
-x86_64               randconfig-a012-20211012
-x86_64               randconfig-a016-20211012
-x86_64               randconfig-a014-20211012
-x86_64               randconfig-a013-20211012
-x86_64               randconfig-a011-20211012
-i386                 randconfig-a016-20211012
-i386                 randconfig-a014-20211012
-i386                 randconfig-a011-20211012
-i386                 randconfig-a015-20211012
-i386                 randconfig-a012-20211012
-i386                 randconfig-a013-20211012
-hexagon              randconfig-r041-20211012
-s390                 randconfig-r044-20211012
-riscv                randconfig-r042-20211012
-hexagon              randconfig-r045-20211012
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+https://people.kernel.org/tglx/notes-about-netiquette
