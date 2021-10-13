@@ -2,192 +2,130 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36462C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 14:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44186C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 16:04:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1459F610FC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 14:39:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1DEC561168
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Oct 2021 16:04:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbhJMOlD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Oct 2021 10:41:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49292 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229789AbhJMOlD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Oct 2021 10:41:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D8D6A610FB;
-        Wed, 13 Oct 2021 14:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634135940;
-        bh=Ezgq3ROWSF0FuwEhr+IKBTOrQd4JRzTif1w5qP+4QfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LpwXlv2fDIQ2+u6Q0p+guFrkKHmCLw8IcuMMz+Bzc+1v3fKEItcgGrPxihT7r7N2Q
-         4VfKLB/d/g8NzIDrf9Nr5VSt8fbqIcIR1AI8GajAHy9JGwft28SAP0yrdfCyRqPQBm
-         C3GGAp6e+f86cQ39MRB20ulReG65gFNR8ziI6dFti74E3qiBvjXN+6CKIatlwOsS8k
-         75SjpqaKh+S0NC2q5sSCYvlcGBaAlo1xnRaOD5WD/6D37yAuZmsZxJddkaynydLQxc
-         bUdSNGLGYm+Pru+RTDoZQt9xBoH2kxhy7o2UHwlu+cZwJD+G38f2ONIXtoXEESTgDI
-         JeB4gobhlpHNQ==
-Received: by pali.im (Postfix)
-        id 2A9997FF; Wed, 13 Oct 2021 16:38:58 +0200 (CEST)
-Date:   Wed, 13 Oct 2021 16:38:58 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     W_Armin@gmx.de
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (dell-smm) Add support for fanX_min,
- fanX_max and fanX_target
-Message-ID: <20211013143858.v4kgci2dv4cnxnep@pali>
-References: <20210926221044.14327-1-W_Armin@gmx.de>
- <20210926221044.14327-2-W_Armin@gmx.de>
+        id S236142AbhJMQGR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Oct 2021 12:06:17 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:55576 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229552AbhJMQGR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 13 Oct 2021 12:06:17 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
+ id 5610ad909f428166; Wed, 13 Oct 2021 18:04:11 +0200
+Received: from kreacher.localnet (unknown [213.134.161.244])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id E1E2166A871;
+        Wed, 13 Oct 2021 18:04:10 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2] hwmon: acpi_power_meter: Use acpi_bus_get_acpi_device()
+Date:   Wed, 13 Oct 2021 18:04:09 +0200
+Message-ID: <11871063.O9o76ZdvQC@kreacher>
+In-Reply-To: <11864888.O9o76ZdvQC@kreacher>
+References: <11864888.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210926221044.14327-2-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.161.244
+X-CLIENT-HOSTNAME: 213.134.161.244
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvddutddgleegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudeiuddrvdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedurddvgeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjuggvlhhvrghrvgesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugiesrhhovggt
+ khdquhhsrdhnvghtpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Monday 27 September 2021 00:10:43 W_Armin@gmx.de wrote:
-> From: Armin Wolf <W_Armin@gmx.de>
-> 
-> The nominal speed of each fan can be obtained with
-> i8k_get_fan_nominal_speed(), however the result is not available
-> from userspace.
-> Change that by adding fanX_min, fanX_max and fanX_target attributes.
-> All are RO since fan control happens over pwm.
-> 
-> Tested on a Dell Inspiron 3505 and a Dell Latitude C600.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+In read_domain_devices(), acpi_bus_get_device() is called to obtain
+the ACPI device object attached to the given ACPI handle and
+subsequently that object is passed to get_device() for reference
+counting, but there is a window between the acpi_bus_get_device()
+and get_device() calls in which the ACPI device object in question
+may go away.
 
-> ---
->  Documentation/hwmon/dell-smm-hwmon.rst |  3 ++
->  drivers/hwmon/dell-smm-hwmon.c         | 61 +++++++++++++++++++++++---
->  2 files changed, 58 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-> index 3bf77a5df995..beec88491171 100644
-> --- a/Documentation/hwmon/dell-smm-hwmon.rst
-> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
-> @@ -34,6 +34,9 @@ Name				Perm	Description
->  =============================== ======= =======================================
->  fan[1-3]_input                  RO      Fan speed in RPM.
->  fan[1-3]_label                  RO      Fan label.
-> +fan[1-3]_min                    RO      Minimal Fan speed in RPM
-> +fan[1-3]_max                    RO      Maximal Fan speed in RPM
-> +fan[1-3]_target                 RO      Expected Fan speed in RPM
->  pwm[1-3]                        RW      Control the fan PWM duty-cycle.
->  pwm1_enable                     WO      Enable or disable automatic BIOS fan
->                                          control (not supported on all laptops,
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 774c1b0715d9..476f2a74bd8c 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -76,6 +76,7 @@ struct dell_smm_data {
->  	int temp_type[DELL_SMM_NO_TEMP];
->  	bool fan[DELL_SMM_NO_FANS];
->  	int fan_type[DELL_SMM_NO_FANS];
-> +	int *fan_nominal_speed[DELL_SMM_NO_FANS];
->  };
-> 
->  MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
-> @@ -673,6 +674,13 @@ static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor_types
->  			if (data->fan[channel] && !data->disallow_fan_type_call)
->  				return 0444;
-> 
-> +			break;
-> +		case hwmon_fan_min:
-> +		case hwmon_fan_max:
-> +		case hwmon_fan_target:
-> +			if (data->fan_nominal_speed[channel])
-> +				return 0444;
-> +
->  			break;
->  		default:
->  			break;
-> @@ -740,6 +748,25 @@ static int dell_smm_read(struct device *dev, enum hwmon_sensor_types type, u32 a
-> 
->  			*val = ret;
-> 
-> +			return 0;
-> +		case hwmon_fan_min:
-> +			*val = data->fan_nominal_speed[channel][0];
-> +
-> +			return 0;
-> +		case hwmon_fan_max:
-> +			*val = data->fan_nominal_speed[channel][data->i8k_fan_max];
-> +
-> +			return 0;
-> +		case hwmon_fan_target:
-> +			ret = i8k_get_fan_status(data, channel);
-> +			if (ret < 0)
-> +				return ret;
-> +
-> +			if (ret > data->i8k_fan_max)
-> +				ret = data->i8k_fan_max;
-> +
-> +			*val = data->fan_nominal_speed[channel][ret];
-> +
->  			return 0;
->  		default:
->  			break;
-> @@ -889,9 +916,12 @@ static const struct hwmon_channel_info *dell_smm_info[] = {
->  			   HWMON_T_INPUT | HWMON_T_LABEL
->  			   ),
->  	HWMON_CHANNEL_INFO(fan,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-> +			   HWMON_F_TARGET,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-> +			   HWMON_F_TARGET,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-> +			   HWMON_F_TARGET
->  			   ),
->  	HWMON_CHANNEL_INFO(pwm,
->  			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> @@ -910,7 +940,7 @@ static int __init dell_smm_init_hwmon(struct device *dev)
->  {
->  	struct dell_smm_data *data = dev_get_drvdata(dev);
->  	struct device *dell_smm_hwmon_dev;
-> -	int i, err;
-> +	int i, state, err;
-> 
->  	for (i = 0; i < DELL_SMM_NO_TEMP; i++) {
->  		data->temp_type[i] = i8k_get_temp_type(i);
-> @@ -926,8 +956,27 @@ static int __init dell_smm_init_hwmon(struct device *dev)
->  		err = i8k_get_fan_status(data, i);
->  		if (err < 0)
->  			err = i8k_get_fan_type(data, i);
-> -		if (err >= 0)
-> -			data->fan[i] = true;
-> +
-> +		if (err < 0)
-> +			continue;
-> +
-> +		data->fan[i] = true;
-> +		data->fan_nominal_speed[i] = devm_kmalloc_array(dev, data->i8k_fan_max + 1,
-> +								sizeof(*data->fan_nominal_speed[i]),
-> +								GFP_KERNEL);
-> +		if (!data->fan_nominal_speed[i])
-> +			continue;
-> +
-> +		for (state = 0; state <= data->i8k_fan_max; state++) {
-> +			err = i8k_get_fan_nominal_speed(data, i, state);
-> +			if (err < 0) {
-> +				/* Mark nominal speed table as invalid in case of error */
-> +				devm_kfree(dev, data->fan_nominal_speed[i]);
-> +				data->fan_nominal_speed[i] = NULL;
-> +				break;
-> +			}
-> +			data->fan_nominal_speed[i][state] = err;
-> +		}
->  	}
-> 
->  	dell_smm_hwmon_dev = devm_hwmon_device_register_with_info(dev, "dell_smm", data,
-> --
-> 2.20.1
-> 
+To address this issue, make read_domain_devices() use
+acpi_bus_get_acpi_device() to reference count and return the given
+ACPI device object in one go and export that function to modules.
+
+While at it, also make read_domain_devices() and
+remove_domain_devices() use acpi_dev_put() instead of calling
+put_device() directly on the ACPI device objects returned by
+acpi_bus_get_acpi_device().
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+
+-> v2: Resend with a different From and S-o-b address and with R-by
+       from Andy.  No other changes.
+
+---
+ drivers/acpi/scan.c              |    1 +
+ drivers/hwmon/acpi_power_meter.c |   13 +++++--------
+ 2 files changed, 6 insertions(+), 8 deletions(-)
+
+Index: linux-pm/drivers/hwmon/acpi_power_meter.c
+===================================================================
+--- linux-pm.orig/drivers/hwmon/acpi_power_meter.c
++++ linux-pm/drivers/hwmon/acpi_power_meter.c
+@@ -535,7 +535,7 @@ static void remove_domain_devices(struct
+ 
+ 		sysfs_remove_link(resource->holders_dir,
+ 				  kobject_name(&obj->dev.kobj));
+-		put_device(&obj->dev);
++		acpi_dev_put(obj);
+ 	}
+ 
+ 	kfree(resource->domain_devices);
+@@ -597,18 +597,15 @@ static int read_domain_devices(struct ac
+ 			continue;
+ 
+ 		/* Create a symlink to domain objects */
+-		resource->domain_devices[i] = NULL;
+-		if (acpi_bus_get_device(element->reference.handle,
+-					&resource->domain_devices[i]))
++		obj = acpi_bus_get_acpi_device(element->reference.handle);
++		resource->domain_devices[i] = obj;
++		if (!obj)
+ 			continue;
+ 
+-		obj = resource->domain_devices[i];
+-		get_device(&obj->dev);
+-
+ 		res = sysfs_create_link(resource->holders_dir, &obj->dev.kobj,
+ 				      kobject_name(&obj->dev.kobj));
+ 		if (res) {
+-			put_device(&obj->dev);
++			acpi_dev_put(obj);
+ 			resource->domain_devices[i] = NULL;
+ 		}
+ 	}
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -608,6 +608,7 @@ struct acpi_device *acpi_bus_get_acpi_de
+ {
+ 	return handle_to_device(handle, get_acpi_device);
+ }
++EXPORT_SYMBOL_GPL(acpi_bus_get_acpi_device);
+ 
+ static struct acpi_device_bus_id *acpi_device_bus_id_match(const char *dev_id)
+ {
+
+
+
