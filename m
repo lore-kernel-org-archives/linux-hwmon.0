@@ -2,171 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6504FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Oct 2021 15:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F689C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Oct 2021 16:31:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46C7B60F36
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Oct 2021 15:10:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E87E261027
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Oct 2021 16:31:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbhJNPMg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Oct 2021 11:12:36 -0400
-Received: from todd.t-8ch.de ([159.69.126.157]:44901 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232713AbhJNPMX (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Oct 2021 11:12:23 -0400
-Date:   Thu, 14 Oct 2021 17:10:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
-        t=1634224214; bh=gb8TV/mqJ07WL6W25Kw3pyYMlfgycWeea7eiktr/Dxc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eaV5YBAK5nmrz9SgCAQaABTChr3MQHB2XayZ7iMRTupjDEj0D8V89XUblHgP5b7Cq
-         glTTtYN2oqPysc8DqI3Zo9sPWk51PZGc2Smz4vTqhMTeJK09Io1OCGGzfoVve4Uvgr
-         JMoML6ho1hIn7p6X5ET2UBjKP5zkfMuX6ChbUFtA=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        platform-driver-x86@vger.kernel.org, Tor Vic <torvic9@mailbox.org>,
-        kernel test robot <lkp@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] hwmon: (asus_wmi_ec_sensors) Support B550 Asus
- WMI.
-Message-ID: <a0bca430-df9a-4164-a7f4-3c32e485fdb8@t-8ch.de>
-References: <20211014072537.190816-1-pauk.denis@gmail.com>
- <20211014072537.190816-2-pauk.denis@gmail.com>
+        id S232127AbhJNQdT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Oct 2021 12:33:19 -0400
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:36551 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231624AbhJNQdS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 14 Oct 2021 12:33:18 -0400
+Received: by mail-oi1-f179.google.com with SMTP id u69so9212065oie.3;
+        Thu, 14 Oct 2021 09:31:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ET+eBAEzswnPZ9lAOusbvcnm44VnpSd48WBrygvyVK4=;
+        b=Ky4amqUwFu/Nokx45uuuGWpZdL7KwYr3sDLX0Q1DcJYC2sWjimz7nsyFVYrBxRkRDe
+         5gGwYROb2bv/NJIT5GZbliATFr1qmLnoeR/tiqd1qa1aLyFeB1LL0gcrHKH1azVergUa
+         DsZG5D3RsrRmpJRD5L3eC658aEnv9sDb5lrfdWDFLrH5HW8cAwVOA+sUD4bgLtfT69Go
+         sLp8ZXCWESsEVp/PAo05JaxL1hpafxaqWpszh8SuzzFCXw3gwVblrVPaYg3E/4yFbW+j
+         pVCJ+2Ye4SDNyHKkVq4+nODl4KAMPllmXVN2TOEg/8tuoKD65UZtiSwOWABxGkZCdNqP
+         0r7A==
+X-Gm-Message-State: AOAM533mXLtnyxLNBW6TTQTeaO/KfLenx2JrCF/BMKZ2WlZXncDQIxC4
+        rQ9z7pAtARLYACM95Duiig==
+X-Google-Smtp-Source: ABdhPJzDHB2Q6XBKVsGmr4k1/ZyOCtRwHuzLmcZKVeIiEaAYwNO8veeKqvwgdUQ5AqFXMYSSHb04vQ==
+X-Received: by 2002:aca:ac0b:: with SMTP id v11mr13670449oie.155.1634229073225;
+        Thu, 14 Oct 2021 09:31:13 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f14sm533883oop.8.2021.10.14.09.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Oct 2021 09:31:12 -0700 (PDT)
+Received: (nullmailer pid 3491534 invoked by uid 1000);
+        Thu, 14 Oct 2021 16:31:11 -0000
+Date:   Thu, 14 Oct 2021 11:31:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 9/9] dt-bindings: hwmon: allow specifying channels for
+ tmp421
+Message-ID: <YWhbT6mU9e9Zs+u1@robh.at.kernel.org>
+References: <cover.1634206677.git.krzysztof.adamski@nokia.com>
+ <d1721a50efc0f88728614b5b07c0d9332ae4971c.1634206677.git.krzysztof.adamski@nokia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211014072537.190816-2-pauk.denis@gmail.com>
+In-Reply-To: <d1721a50efc0f88728614b5b07c0d9332ae4971c.1634206677.git.krzysztof.adamski@nokia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2021-10-14T10:25+0300, Denis Pauk wrote:
-> +static struct asus_wmi_data *board_sensors;
-> +
-> +static int __init asus_wmi_dmi_matched(const struct dmi_system_id *d)
-> +{
-> +	board_sensors = d->driver_data;
-> +	return 0;
-> +}
-> +
-> +#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name, sensors) \
-> +	{ \
-> +		.callback = asus_wmi_dmi_matched, \
-> +		.matches = { \
-> +			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, \
-> +					"ASUSTeK COMPUTER INC."), \
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, name), \
-> +		}, \
-> +		.driver_data = sensors, \
-> +	}
-> +
-> +static const struct dmi_system_id asus_wmi_ec_dmi_table[] = {
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X570-PRO", &sensors_board_PW_X570_P),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE", &sensors_board_PW_X570_A),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII DARK HERO", &sensors_board_R_C8DH),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII FORMULA", &sensors_board_R_C8F),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO", &sensors_board_R_C8H),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING", &sensors_board_RS_B550_E_G),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-E GAMING", &sensors_board_RS_X570_E_G),
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(dmi, asus_wmi_ec_dmi_table);
-> +
-> +/*
-> + * The next four functions converts to/from BRxx string argument format
-> + * The format of the string is as follows:
-> + * The string consists of two-byte UTF-16 characters
-> + * The value of the very first byte int the string is equal to the total length
-> + * of the next string in bytes, thus excluding the first two-byte character
-> + * The rest of the string encodes pairs of (bank, index) pairs, where both
-> + * values are byte-long (0x00 to 0xFF)
-> + * Numbers are encoded as UTF-16 hex values
-> + */
-> +static void asus_wmi_ec_decode_reply_buffer(const u8 *inp, u8 *out)
-> +{
-> +	unsigned int len = ACPI_MIN(ASUS_WMI_MAX_BUF_LEN, inp[0] / 4);
+On Thu, Oct 14, 2021 at 03:11:49PM +0200, Krzysztof Adamski wrote:
+> Add binding description for the per temperature channel configuration
+> like labels and n-factor.
+> 
+> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> ---
+>  .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
 
-The general `min()` would be better.
-(Or `min3()` when also validating the ACPI buffer, see below)
-
-> +	char buffer[ASUS_WMI_MAX_BUF_LEN * 2];
-> +	const char *pos = buffer;
-> +	const u8 *data = inp + 2;
-> +	unsigned int i;
-> +
-> +	utf16s_to_utf8s((wchar_t *)data, len * 2,  UTF16_LITTLE_ENDIAN, buffer, len * 2);
-> +
-> +	for (i = 0; i < len; i++, pos += 2)
-> +		out[i] = (hex_to_bin(pos[0]) << 4) + hex_to_bin(pos[1]);
-> +}
-> +
-> +static int asus_wmi_ec_block_read(u32 method_id, char *query, u8 *out)
-> +{
-> +#if IS_ENABLED(CONFIG_ACPI_WMI)
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER,
-> +				      NULL };
-> +	struct acpi_buffer input;
-> +	union acpi_object *obj;
-> +	acpi_status status;
-> +
-> +	/* the first byte of the BRxx() argument string has to be the string size */
-> +	input.length = (acpi_size)query[0] + 2;
-> +	input.pointer = query;
-> +	status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0, method_id, &input,
-> +				     &output);
-> +	if (ACPI_FAILURE(status))
-> +		return -EIO;
-> +
-> +	obj = output.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_BUFFER) {
-> +		acpi_os_free(obj);
-> +		return -EIO;
-> +	}
-> +	asus_wmi_ec_decode_reply_buffer(obj->buffer.pointer, out);
-
-If this buffer is empty or the length in the first byte is incorrect then
-out-of-bound memory will be accessed.
-
-> +	acpi_os_free(obj);
-> +	return 0;
-> +#else
-> +	return -EOPNOTSUPP;
-> +#endif
-> +}
-> +
-> +static int asus_wmi_ec_configure_sensor_setup(struct device *dev,
-> +					      struct asus_wmi_sensors *sensor_data)
-> +{
-> [..]
-> +}
-> +
-> +static int asus_wmi_probe(struct wmi_device *wdev, const void *context)
-> +{
-> +	struct asus_wmi_sensors *sensor_data;
-> +	struct device *dev = &wdev->dev;
-> +
-> +	if (!dmi_check_system(asus_wmi_ec_dmi_table))
-> +		return -ENODEV;
-
-Instead of using the callback to assign the static variable `board_sensors` you
-could use `dmi_first_match()` here and pass around the result explicitly.
-This would remove the need for a static variable and should cut the code down a
-bit.
-
-> +	sensor_data = devm_kzalloc(dev, sizeof(struct asus_wmi_sensors),
-> +				   GFP_KERNEL);
-> +	if (!sensor_data)
-> +		return -ENOMEM;
-> +
-> +	mutex_init(&sensor_data->lock);
-> +
-> +	dev_set_drvdata(dev, sensor_data);
-> +
-> +	/* ec init */
-> +	return asus_wmi_ec_configure_sensor_setup(dev,
-> +						  sensor_data);
-> +}
-> +
+Reviewed-by: Rob Herring <robh@kernel.org>
