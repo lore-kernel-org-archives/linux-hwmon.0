@@ -2,136 +2,440 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D22FC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 06:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8413AC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 08:23:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DECE61163
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 06:49:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DB6761208
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 08:23:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235684AbhJOGvH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 02:51:07 -0400
-Received: from mail-eopbgr1310138.outbound.protection.outlook.com ([40.107.131.138]:57912
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231949AbhJOGvG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 02:51:06 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XGPQ2dm4lQ562vqfavPu1Annf+jWmYcRv+AsdZ4SwM6Pqqp5ENqZ3/npc6bQx5QCg7Q3Psahs8NUUI76TEUx6dejXuXlXtwmR/qdqcLraUzXH+5KMFRNrAweZw+AUveQ5W1XJlcd2+L5aIdjOC76lvWe4vuR4hJ+pwyM8ukNOGuBvVQM2/SBov7+28yHKFa/Hdy5zRENQZksWwM/06CiYxPn8pnig4R6Nfs10RYuAgNNgssvcL6dcjlKBXuZ+hYYlNsclH5nKIzTHRX1kPTjnWWIs1WAML+H4D7iehYYAFZbstnAdsYZ1qtcf09SUC1rsWCCz4EfRhlCaSbcGWts6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pxLq7Niok6PfJ7F+Dk4DgdIRXGJ0bgEytLe06RZHsP4=;
- b=a9zYagzB9dXNMwr07jTxGICXjyYFQqcv/gcZmkQvQ0Ut6sy0L8jZQmh4hNRSicfkIRrprrVz+DxTlWAKC8P/H/dYeL3Eb06yhltn1bTV+JIK0b8PjFmpVOazYsYAPzQi7vlsfMP41ugYa4lmS0kQuurStaHjgZZp6mtnjbfYn8bWrAcvw+Tlo17CvrtraYSVk7MAbW/uZl0emYfebW/S6el4QZzFysUh6/HaSk5TgemSPp7Aa2El+51lmGkyQYn37G5wi8BN8VISbaaAsaZndXFXsGOrfVOShvT/vmRzPWJmIeYvd5KNcnzI8uFC5y+sqfN4LwVWPH2gyianDSFKAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pxLq7Niok6PfJ7F+Dk4DgdIRXGJ0bgEytLe06RZHsP4=;
- b=UyKpb0PsZ78bX/RPCIQvDIys3hfrDVv5OucrKK5ouW/VexUxItQp9Xd2O0lujXT68AVdyyEL6Hupl05RVc3T2X+TrgUyTxuFDUZH8Qy55y0jSWTv7nUwNocuKAD0PVAGApl9NSn5ZKm/etDHgKfnY2YkfQSZVghIuMTz/Hg600w=
-Authentication-Results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SL2PR06MB3388.apcprd06.prod.outlook.com (2603:1096:100:3c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16; Fri, 15 Oct
- 2021 06:48:58 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::4c9b:b71f:fb67:6414]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::4c9b:b71f:fb67:6414%6]) with mapi id 15.20.4608.017; Fri, 15 Oct 2021
- 06:48:58 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Qing Wang <wangqing@vivo.com>
-Subject: [PATCH] hwmon: replace snprintf in show functions with sysfs_emit
-Date:   Thu, 14 Oct 2021 23:48:45 -0700
-Message-Id: <1634280525-4532-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0168.apcprd02.prod.outlook.com
- (2603:1096:201:1f::28) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        id S234297AbhJOIZE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 04:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237001AbhJOIYx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 15 Oct 2021 04:24:53 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DF5C0613E3;
+        Fri, 15 Oct 2021 01:22:27 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id z20so35116148edc.13;
+        Fri, 15 Oct 2021 01:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VrNt/o1nSa4MO5VitUgo1gh5ZbHCnm6V9nLtUmAkb7I=;
+        b=i4gbiwmRnCV0DehbtrRYKr9MsrTjzWHvG9/DAZOuZjfO3gwr0gBifehKCNJd8KjZfc
+         /0zGdGLVVne8PE/UcyabuP9GWakU9gPziEmLk6NcisHh6REihNFnLqqiAynryLaFwz/n
+         hhpFfQRNhNuPZAB21MY39jBh+CATMo7Qvim6Jc44IGcvESbpDlh7cVB4LddoB85Pmz6z
+         1qqSREoh6Ag4/mJNIdpqT9hUEe972Or8nt5d9JsdedFuY8Mcc95QXmVEyVatNkRiQmMC
+         NVezkgx1Kpf1t9t5IQkkJB70TwKS4FXNjMDS/g6PhVfPpIAfux7AaRsDnLCc+Al3tc+7
+         13bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VrNt/o1nSa4MO5VitUgo1gh5ZbHCnm6V9nLtUmAkb7I=;
+        b=URLCHig4Hs37oq/zRtrIfM88Zw6DLMoBPuE0mnHiBYkl7zfVZhVDs/dXLnZwawTY55
+         Ir0via1rUwKFjq6ob4Fg0j3LIks0oNwdHYC3t1FhRbkZV4HsJ/s9UIgVgAAL6Y6uiLa/
+         9/aO0/j1IrDirEBEiwGeG5BODtiIZf5HPRJ/zDhty/qjjZNFsqz4HWE74cywFcludjRv
+         RlqjNbEQFo1sStJlaiATREPyaLilpXFgOdW4QbOz40Vziqwzid+IGq4KutCQxqHmKkrU
+         w/99ebIAt1vFCJZxklUqnZ9SxTbgFoSD6DosVlyrfmjkgdw959I3P2gYWZnuFzWP25NX
+         Pvrg==
+X-Gm-Message-State: AOAM531zoJWi2nEXK0sHB0nqmjJryGtWUM5AlxwEmQ5AwU7CiVulsgsQ
+        SK2f/MdDyBqwlq3cUWWd9zfMQ8tZVImTumqkv/g=
+X-Google-Smtp-Source: ABdhPJwv/ExlTDSry1jLJBW9JfIk31scH5Z7zEfPwN/7wDwFoY9c1bFn4NLJEn9bhxHfMjB+s/13Hoi/JD1IdPRkgAU=
+X-Received: by 2002:a17:906:a158:: with SMTP id bu24mr4830546ejb.356.1634286145843;
+ Fri, 15 Oct 2021 01:22:25 -0700 (PDT)
 MIME-Version: 1.0
-Received: from ubuntu.localdomain (103.220.76.181) by HK2PR02CA0168.apcprd02.prod.outlook.com (2603:1096:201:1f::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4608.16 via Frontend Transport; Fri, 15 Oct 2021 06:48:57 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 56159a62-6a4a-4453-bea3-08d98fa7dcf4
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3388:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SL2PR06MB3388588C54D71AE3638EC149BDB99@SL2PR06MB3388.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VqObpO8MVVLHccUhOEzGbedUn3x8N4JfqEsLNOhPV0jmrPBbpa/BhP4NiI1z/g080Bcrn7upj2DH8Lv/tDf85nW+9OfbP1cq7RRzMzJJyH4cVP0exvcP9FPvRU1StNBo6DDOfoTp2p4lek8OeA+CZ8JtMU8yyMYq7/7u5Wb6dbtlPsNVLIaZPzly4XSrqwSDhfDOH/SnBBWNTKrVRmp0G+g8T/KiR0rMc8rYZnY/BnmGNcUCT/9X7GXqeI5YMYbyfdoDq1ZyeHs0WvkWRBpyohT2bQ7qxgB06dA3mE9/F+rj8d7P5zF/suXmTu18hhisON63HrTHtOfa91H28gZfvjwoXHOk4E3KNYfvA27fuWWe4mSeix8vnI/tpAyFI+IDs4XBypb9yrYbuJeMDYV9tfXXpP8MVqqwsRoNK3bfa6CPvS2IWYyRQO6SDCGAE+uU05NwSB2TnX+ItTlQyc036aJl5jzfzB0dtftEuVWY3BMznb0cN4nHQqY6LDCja3b5WjjsK2BOf3YK++BuFPsxE/YevSvcw44aXHpaGNvwVLEeM9+TtkhQCLhxZmn541YRRA4hDe/pywyvzShCJVFJg0xCvpAKW8xy7EiZYwnCCLS0FhamsBjavBxSYuj8uDfysLrMAaFwOJ95qSTyIE75dwxVwXp+g8w8UfNXXEzRzx5Ile3YyVONcv5tLITnBMDIXKawC3SXawDxcc0NTlmbag==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38350700002)(38100700002)(2616005)(316002)(4744005)(2906002)(26005)(107886003)(8676002)(66556008)(83380400001)(186003)(66946007)(6486002)(956004)(508600001)(36756003)(4326008)(66476007)(6666004)(6506007)(8936002)(110136005)(5660300002)(86362001)(6512007)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?loIwf6VMcnDksxPKO5n6vSSltW3yWIA9S6XFww0Zsq+fyj6ezWO3Euj6D2Ib?=
- =?us-ascii?Q?zjBq4OSl27VqPyqKO75TFe8FRfB3L6JA3Xxxa5zQNizIw7ESh3cxOQ/fb6oT?=
- =?us-ascii?Q?QMCylDbiJUi9GJ152CtX06sHO1+KXkk3ueSP2NTlU/2r8UfEOdQqpWLW8QZr?=
- =?us-ascii?Q?M1TNnlPUk+7+hX88Mk81qwo51cb1hBDj+CR0j2SuoRpyPpKHaRAgqxOEVfOZ?=
- =?us-ascii?Q?QmUA0kHBiaqPxk5YR1AxuAzZc8IcRQVlOrpuEPatfjI/4IMCbh1s1wIMCBPJ?=
- =?us-ascii?Q?8lmtdfPzxqvOuJEqThpjaztaVHd2mSmKTP+bIhfkRElhuLmZi6Ly7IFq56lK?=
- =?us-ascii?Q?KI33bCxp2XsOo65QRNAfwwmHKrphh+0Zk0Cy44FUL7fo25TKIjeAmesKEr2m?=
- =?us-ascii?Q?HMHlZd/NliJf9ThWD6bMt0cFBfwjd+OpaGOLq31IrRBNs54d0FGqtc2+S8ct?=
- =?us-ascii?Q?jLolIAvLG1weT+zmDTP3N7XCuVo2mOgfOL2LGrBmruA4RG4c9TZAVdNlZSyN?=
- =?us-ascii?Q?q3RZp4AVQ39q+n0UYPJOPvfpsJSM2EWY4FQq8GLphGcXaveklQCAA9ztlgud?=
- =?us-ascii?Q?DHXET/1WcUcFJYsNV9YGkOSl4OH3sEQk81VFbziutt1wdtBl8AcpkmzhVcqt?=
- =?us-ascii?Q?DaweI/PI58mi/0emXU1LUxqDulFfkrI/Xsa/CxQyQKp1M+JjmwzvQXXzZ9sT?=
- =?us-ascii?Q?5bA/2Hfl1jpvjAo3E5WeyKrsNVx/jqRU8ujd2G+J/MS6nMM8Z/dbtTpHipoH?=
- =?us-ascii?Q?ohcAbu9OTDfQehdIpbCokas6tLph3yAK481s3O2AjVuRqg9lCRRCTo7YIgDp?=
- =?us-ascii?Q?0hjWnIQSdOY8yL0B2chbncQ6BSa58gFv01ddoe+EW5FNaVfMfpdPt/JK3K7u?=
- =?us-ascii?Q?K54I6ZKMpO/7HRTcVV/dG9Z7UKGq0SDbPq42IexFcquwjLfD9/L+6azUrKMX?=
- =?us-ascii?Q?6g/HWgrz1imbP94AkMBtEJpzyfVak93TNp28OrMG2hCSDvntFTrHcV1ItkRd?=
- =?us-ascii?Q?cTzJeVf06wvAdOqrHGU96CyvKW3XGEhhCU6yxEqxS79a+p84xC3S9yKLZ96n?=
- =?us-ascii?Q?Fce3gw6mgi/W9lKB1fJtIIUQdPcBx/wZklV4uZa+Bd1siBhdtx1BknY0BeGb?=
- =?us-ascii?Q?1OjvEFcEbQ/oHNMFpo+fst0BwsWUitzo8U0iVv3RNDWWSmbamhj29DEK830W?=
- =?us-ascii?Q?whfznGWEl+EAYmj2XvRca9ntlcGgGo4pT6ufoToxyHl4YsGO7IqwxXnaw6DQ?=
- =?us-ascii?Q?UZeM+sGiZHqjXBUdNdCE5Q4kBedjmgnOi4YRRTKoGVAX/hLudlJw8VTSKmF0?=
- =?us-ascii?Q?+H5pN73ox6SGpeK+l4ZW+AL7?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56159a62-6a4a-4453-bea3-08d98fa7dcf4
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2021 06:48:58.0762
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u67cI7+IwVO776x+DDquDX7DGahYxiyLlcX5NfPjir5ILHhlGlRBghsJXUM6Y+J5gpUfVy6zcW6kLWpqgjaKRg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3388
+References: <20211015055808.327453-1-pauk.denis@gmail.com> <20211015055808.327453-2-pauk.denis@gmail.com>
+In-Reply-To: <20211015055808.327453-2-pauk.denis@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 15 Oct 2021 11:21:49 +0300
+Message-ID: <CAHp75VfUYgYT_RSNXCc+_3rkBbywL8ZDcAFPwr=WbPzcD8MF0w@mail.gmail.com>
+Subject: Re: [PATCH v7 1/2] hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        thomas@weissschuh.net, Tor Vic <torvic9@mailbox.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        kernel test robot <lkp@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-show() must not use snprintf() when formatting the value to be
-returned to user space.
+On Fri, Oct 15, 2021 at 8:58 AM Denis Pauk <pauk.denis@gmail.com> wrote:
+>
+> Linux HWMON sensors driver for ASUS motherboards to read
+> sensors from the embedded controller.
+>
+> Many ASUS motherboards do not publish all the available
+> sensors via the Super I/O chip but the missing ones are
+> available through the embedded controller (EC) registers.
+>
+> This driver implements reading those sensor data via the
+> WMI method BREC, which is known to be present in all ASUS
+> motherboards based on the AMD 500 series chipsets (and
+> probably is available in other models too). The driver
+> needs to know exact register addresses for the sensors and
+> thus support for each motherboard has to be added explicitly.
+>
+> The EC registers do not provide critical values for the
+> sensors and as such they are not published to the HWMON.
+>
+> Supported motherboards:
+> * PRIME X570-PRO
+> * Pro WS X570-ACE
+> * ROG CROSSHAIR VIII HERO
+> * ROG CROSSHAIR VIII DARK HERO
+> * ROG CROSSHAIR VIII FORMULA
+> * ROG STRIX X570-E GAMING
+> * ROG STRIX B550-E GAMING
 
-Fix the following coccicheck warning:
-drivers/hwmon/smm665.c:378: WARNING: use scnprintf or sprintf.
+...
 
-Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Qing Wang <wangqing@vivo.com>
----
- drivers/hwmon/smm665.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+New code can't be reported as regression. Or what did you mean by that?
 
-diff --git a/drivers/hwmon/smm665.c b/drivers/hwmon/smm665.c
-index 62906d9..122031e 100644
---- a/drivers/hwmon/smm665.c
-+++ b/drivers/hwmon/smm665.c
-@@ -375,7 +375,7 @@ static ssize_t smm665_show_##what(struct device *dev, \
- { \
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da); \
- 	const int val = smm665_get_##what(dev, attr->index); \
--	return snprintf(buf, PAGE_SIZE, "%d\n", val); \
-+	return sysfs_emit(buf, "%d\n", val); \
- }
- 
- SMM665_SHOW(min);
+...
+
+> +Kernel driver asus-wmi-ec-sensors
+> +=================================
+> +
+> +Supported boards:
+> + * PRIME X570-PRO,
+> + * Pro WS X570-ACE,
+> + * ROG CROSSHAIR VIII DARK HERO,
+> + * ROG CROSSHAIR VIII FORMULA,
+> + * ROG CROSSHAIR VIII HERO,
+> + * ROG STRIX B550-E GAMING,
+> + * ROG STRIX X570-E GAMING.
+> +
+
+> +Authors:
+> +        Eugene Shalygin <eugene.shalygin@gmail.com>
+
+reST has a special keyword for that.
+
+...
+
+> +/*
+> + * HWMON driver for ASUS B550/X570 motherboards that publish sensor
+> + * values via the embedded controller registers.
+> + *
+> + * Copyright (C) 2021 Eugene Shalygin <eugene.shalygin@gmail.com>
+> + * Copyright (C) 2018-2019 Ed Brindley <kernel@maidavale.org>
+> + *
+> + * EC provides:
+> + * Chipset temperature,
+> + * CPU temperature,
+> + * Motherboard temperature,
+> + * T_Sensor temperature,
+> + * VRM  temperature,
+> + * Water In temperature,
+> + * Water Out temperature,
+> + * CPU Optional Fan RPM,
+> + * Chipset Fan RPM,
+> + * Water Flow Fan RPM,
+> + * CPU current.
+
+> + *
+
+Redundant line.
+
+> + */
+
+> +#include <asm/unaligned.h>
+
+The common rule is to go from generic to particular, hence
+linux/*
+followed by
+asm/*
+followed by local subsystem / local headers like
+linux/hwmon*
+
+with a blank line between each group.
+
+> +#include <linux/acpi.h>
+> +#include <linux/dmi.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/init.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/nls.h>
+> +#include <linux/units.h>
+> +#include <linux/wmi.h>
+
+...
+
+> +/* BLOCK_READ_EC */
+
+Not sure what this means, but...
+
+> +#define        ASUSWMI_METHODID_BREC   0x42524543
+
+...above has definitely an ASCII combination in hex format, care to
+decode it in the comment?
+
+...
+
+> +/* from the ASUS DSDT source */
+
+Keep the same style for all comments, i.e. here "From ..."
+
+...
+
+> +#define        MAKE_SENSOR_ADDRESS(size_i, bank_i, index_i) \
+> +       { .size = size_i,\
+> +          .bank = bank_i,\
+> +          .index = index_i}
+
+You should choose one style for all macros. Here is one, there is
+another... I would recommend to use one of
+
+#define ... { \
+... \
+}
+
+or
+
+#define ... \
+{ \
+... \
+}
+
+In the second case the indentation of the {} is defined by the
+semantics of the macro: in case of function-like macro it starts from
+the first column, in case of data structure filler usually with one
+TAB.
+
+...
+
+> +/*
+> + * All the known sensors for ASUS EC controllers
+> + */
+
+One line and "All known sensors..."
+
+...
+
+> +struct asus_wmi_ec_info {
+> +       struct ec_sensor sensors[SENSOR_MAX];
+
+> +       char read_arg[((ASUSWMI_BREC_REGISTERS_MAX * 4) + 1) * 2];
+
+Too many parentheses.
+
+> +       u8 read_buffer[ASUSWMI_BREC_REGISTERS_MAX];
+> +       unsigned int nr_sensors;
+> +       unsigned int nr_registers;
+> +       unsigned long last_updated;
+> +};
+
+...
+
+> +       for (i = 0; i < SENSOR_MAX && bsi[i] != SENSOR_MAX; i++) {
+> +               s[i].info_index = bsi[i];
+
+> +               s[i].cached_value = 0;
+
+Isn't it filled by kzalloc() or alike?
+
+> +               ec->nr_sensors++;
+> +               ec->nr_registers += known_ec_sensors[bsi[i]].addr.size;
+> +       }
+
+...
+
+> +/*
+> + * The next four functions converts to/from BRxx string argument format
+> + * The format of the string is as follows:
+> + * The string consists of two-byte UTF-16 characters
+> + * The value of the very first byte int the string is equal to the total length
+> + * of the next string in bytes, thus excluding the first two-byte character
+> + * The rest of the string encodes pairs of (bank, index) pairs, where both
+> + * values are byte-long (0x00 to 0xFF)
+> + * Numbers are encoded as UTF-16 hex values
+
+The comment above misses a lot of punctuation. Also it would be nice
+to indent the list of items if any and so on.
+
+> + */
+> +static void asus_wmi_ec_decode_reply_buffer(const u8 *inp, u8 *out, u32 length)
+> +{
+> +       char buffer[ASUSWMI_MAX_BUF_LEN * 2];
+> +       const char *pos = buffer;
+> +       const u8 *data = inp + 2;
+> +       unsigned int i;
+> +       u32 len;
+
+> +       len = min3((u32)ASUSWMI_MAX_BUF_LEN, (length - 2) / 4, (u32)inp[0] / 4);
+
+Instead I would prefer to have to min_t() calls without adding castings.
+Also might be useful to have a short comment explaining this choice.
+
+> +       utf16s_to_utf8s((wchar_t *)data, len * 2,  UTF16_LITTLE_ENDIAN, buffer, len * 2);
+
+> +       for (i = 0; i < len; i++, pos += 2)
+> +               out[i] = (hex_to_bin(pos[0]) << 4) + hex_to_bin(pos[1]);
+
+NIH hex2bin().
+
+> +}
+
+...
+
+> +       for (i = 0; i < len; i++) {
+> +               byte = registers[i] >> 8;
+> +               *pos = hex_asc_hi(byte);
+> +               pos++;
+> +               *pos = hex_asc_lo(byte);
+> +               pos++;
+> +               byte = registers[i];
+> +               *pos = hex_asc_hi(byte);
+> +               pos++;
+> +               *pos = hex_asc_lo(byte);
+> +               pos++;
+> +       }
+
+NIH bin2hex()
+
+...
+
+> +               for (j = 0; j < si->addr.size;
+> +                    j++, register_idx++) {
+
+One line.
+
+> +                       registers[register_idx] = (si->addr.bank << 8) + si->addr.index + j;
+> +               }
+
+...
+
+> +       /* the first byte of the BRxx() argument string has to be the string size */
+
+Comment style.
+
+...
+
+> +       input.length = (acpi_size)query[0] + 2;
+
+Why is casting needed?
+
+...
+
+> +       status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0, method_id, &input,
+> +                                    &output);
+
+Logically better to keep &input and &output on the same line, i.e.
+second one here.
+
+> +       obj = output.pointer;
+> +       if (!obj || obj->type != ACPI_TYPE_BUFFER) {
+
+> +               acpi_os_free(obj);
+
+What's the point of calling acpi_os_free(obj) when you already know it's NULL?
+
+On top of that is the acpi_os_free() high-level enough API for this?
+
+> +               return -EIO;
+> +       }
+> +       asus_wmi_ec_decode_reply_buffer(obj->buffer.pointer, out, obj->buffer.length);
+
+> +       acpi_os_free(obj);
+
+Ditto.
+
+...
+
+> +       switch (data_type) {
+> +       case hwmon_curr:
+> +       case hwmon_temp:
+> +       case hwmon_in:
+
+> +               return value * KILO;
+
+Thanks for using KILO, but do you think it's the correct one and not MILLI?
+MILLI means that we got value in <units> and we would like to convert
+it to <milliunits>.
+KILO would mean the opposite, like we got in <milliunits> and we would
+like to have <units>.
+
+> +       default:
+> +               return value;
+> +       }
+
+...
+
+> +/*
+> + * Now follow the functions that implement the hwmon interface
+> + */
+
+One line.
+
+...
+
+> +       int index;
+> +       const struct asus_wmi_sensors *sensor_data = drvdata;
+
+Here and elsewhere, perhaps reversed xmas tree order?
+
+...
+
+> +       int nr_count[hwmon_max] = { 0 }, nr_types = 0;
+
+{} will work as well.
+
+...
+
+> +       /*
+> +        * if we can get values for all the registers in a single query,
+> +        * the query will not change from call to call
+
+"If..."
+And period at the end since it's a multi-line comment.
+
+> +        */
+
+...
+
+> +       sensor_data = devm_kzalloc(dev, sizeof(struct asus_wmi_sensors),
+> +                                  GFP_KERNEL);
+
+One line?
+
+...
+
+> +       /* ec init */
+
+Usefulness of this comment?
+
+> +       return asus_wmi_ec_configure_sensor_setup(dev,
+> +                                                 sensor_data, bsi);
+
+One line?
+
+...
+
+> +       .driver = {
+
+> +               .name = KBUILD_MODNAME,
+
+It's kinda semi-ABI, please be not dependent on compile-time variables.
+
+> +       },
+
 -- 
-2.7.4
-
+With Best Regards,
+Andy Shevchenko
