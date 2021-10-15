@@ -2,167 +2,135 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 898DEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 16:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 703D9C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 17:43:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D46161151
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 16:39:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E20560F9E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 17:43:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237279AbhJOQlI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 12:41:08 -0400
-Received: from todd.t-8ch.de ([159.69.126.157]:32893 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235894AbhJOQlI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 12:41:08 -0400
-Date:   Fri, 15 Oct 2021 18:38:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1634315938;
-        bh=BdM/MiBquRGKWBf5ex7P/Eueuf6sv5qpuQAqP4mi+4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Frnb8HXX49zeNR+wJVPVqmLM0V1WgMpSRNLcqysXybmm1k+T7zSyMbIXnV2yHRhIe
-         JioGLQJNJnGPf14iwZOvoME3MTHZA23KdMDtMg5Ymq+5lU9wWW4ZSN2MEJvQCH97yF
-         4UWLP8ryzuyygi+C5NlFhn0cfHcFDjlBVAH3LuP8=
-From:   thomas@weissschuh.net
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        platform-driver-x86@vger.kernel.org, Tor Vic <torvic9@mailbox.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        kernel test robot <lkp@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/2] hwmon: (asus_wmi_ec_sensors) Support B550 Asus
- WMI.
-Message-ID: <0590836c-156d-4b67-b0f6-255afaceeb5e@t-8ch.de>
-References: <20211015055808.327453-1-pauk.denis@gmail.com>
- <20211015055808.327453-2-pauk.denis@gmail.com>
+        id S237284AbhJORqD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 13:46:03 -0400
+Received: from mail-bl2gcc02lp2109.outbound.protection.outlook.com ([104.47.64.109]:19936
+        "EHLO GCC02-BL0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234784AbhJORqC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 15 Oct 2021 13:46:02 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MmPiQtqdDPDsstL/rz+rIm/7Sg/sirfcisP+CKfxuvLPnBBgjeDwC3yxpxtqpcAzCJwPBcLQvVdN+iRDVHYe/cZKWFgbm7sTJ3ZNJmfbhw7krvNpeazdPBknzjrEy7FN5QO5i2fpoJVRZXMFk3m3E+s4MKjNsuop0O4R2BjQEHWnQgFgKt3TSlQ8OylZWLf+5l/p+23Z77+CZQzmacjbiKtDjmgidXgivnIDVn+D1cm14mN2SMvNTZbyXBzBQGmWPrx+vcJQV3ENpKRQwI5MRdkKEOCjHzO4lWedd573YjkQNVfAgtmwQH1i3wwaw39LuvfrNwdLUqKRP9olluLOMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NfC05k+APWHicYH1RHyXdWiZKWwhFn77gOWlIUYj54U=;
+ b=Quhm0Y3HUqAJo7WjPLwE9STAPaMN5czEdCKbOYuQKM0i71/zu854z+OLH7uZLN2q87qJzRpLRrEua8ax5OViKctKiYxeWiAUlMpjGVy6K28/rP3nNdaNy9M/ds7O5tzUvyFEOJ/c42Mr0mMtAJpX8c+iwfkWtvxYA55GkYSQpwDU3ByZUAdthrdosdPhrf4PluO5lnq4ey+SxSaVY/7RostFpaodxIxrYyO+QC4EeqEIS0SuvzMaNYv90Q/PeLA46OJMMEACLnegzRWKUfq7GCXVr7pKBKQtt3UtDU38AclEbr4wxlY/EpiwSWTsGrbwgv37U/OKTYkQgi6djy2s5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nasa.gov; dmarc=pass action=none header.from=nasa.gov;
+ dkim=pass header.d=nasa.gov; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nasa.gov; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NfC05k+APWHicYH1RHyXdWiZKWwhFn77gOWlIUYj54U=;
+ b=a2/NalwDq0NCmegwsGBGNzHlZm+1q+1MRrNgpypP49EBb0jHBvOq8ckjYS0pYDGXYYOiY5nRxUEuX9QnfmuuVcv3oEk7mECSerIf42jICB/kriMmlbqQ28U079kEP/Zbe1+K531ZR43+l1Hhbn15FRh1pnPus5OarZv7q0iqf5I=
+Received: from SA1PR09MB7440.namprd09.prod.outlook.com (2603:10b6:806:183::14)
+ by SA1PR09MB7517.namprd09.prod.outlook.com (2603:10b6:806:177::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.20; Fri, 15 Oct
+ 2021 17:43:54 +0000
+Received: from SA1PR09MB7440.namprd09.prod.outlook.com
+ ([fe80::b0d6:a789:37f1:1995]) by SA1PR09MB7440.namprd09.prod.outlook.com
+ ([fe80::b0d6:a789:37f1:1995%2]) with mapi id 15.20.4608.017; Fri, 15 Oct 2021
+ 17:43:54 +0000
+From:   "Wilson, David T. (GSFC-5870)" <david.wilson@nasa.gov>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Potential issue with smb word operations for tmp461 device in tmp401
+ driver
+Thread-Topic: Potential issue with smb word operations for tmp461 device in
+ tmp401 driver
+Thread-Index: AQHXwevE+jBPDZzzYE22a/VOYXutsg==
+Date:   Fri, 15 Oct 2021 17:43:54 +0000
+Message-ID: <SA1PR09MB7440BF952778F0DB8138747DE7B99@SA1PR09MB7440.namprd09.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: dae7ba0a-07a3-bd5f-6771-52f632042864
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=nasa.gov;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cddd6cc6-271a-42d5-82ce-08d990035b81
+x-ms-traffictypediagnostic: SA1PR09MB7517:
+x-microsoft-antispam-prvs: <SA1PR09MB7517551DB6B023A7A74BA53EE7B99@SA1PR09MB7517.namprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3276;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IAT//GwNqndj+iOvYoe7f3OEsjo2PRY5nDulE8/zzZdMj1lCqL3fayGAzvxqwq3RwtOGEF7sAfZxsiIbbTE5RTq+Ty35c8XiXH1z6qlcKCi9B7NuqEdYlBTKu6CC7ez4Cf/J1cDJvp2HPRTiJYLLd80KMhqrE6/HoAvnEYZNJXfw9oLBn/BmCfRNNRIbBbj0toykQoUEpWoo+UL590rLyltLzlUZdV/pOi4Xu2IHQOSsPxPpoVgqG2LZtMIcvhQ0XGdDyk75ehCP3eWqhp/rFpvA7096ELG29LbdHrE7WCj3E/BQeEbGPUeqiMRWWNohsl6V5VPA9FoOOZNhDjJz35QbZWktCHahIAhoS7K0yAsRCZ7Qjl/bR4qXYJnNU+wZUj4RKPvMTXcL9z7Rc0OnhRD42dCeqamA+QrHejMzAAf+7XC7PGN/VmN944hi0GPZauFFCgjhXg3TVX3kQbg19MfSuNktHBrRQYs1whBCQ8nnYTP7ckIOzHy4SLQaytBkKvWjS0v/O5Uh7Ptz9rfLHbnd1XtQxAIwobH9gNyJ+iqzH3sl/deClMOW3WjMkjwfL1xwcex3XdCcDkqs5Tv0igHcLB4yfRJ+SMF0k2/ppTlvqxAkrF4ZfQ8yOco5XWRWyQE+ZxVEVgUVRp36U5z19njUZvLKUeXIoZ+Pe7heneU9Cp9l19aJNSkIQkp8FkSIqRmmBwO0jhJ1xWAGsI3QPe6Nqnz15KifJPp9oslR1GxBDH79Ob6U9q/jYJ9w3fDkh702FqmuiEjZ3XYUndUksfGygxL15pFNeTJdT987baE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR09MB7440.namprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(83380400001)(55016002)(186003)(86362001)(9686003)(4326008)(2906002)(508600001)(54906003)(66446008)(52536014)(122000001)(66946007)(76116006)(316002)(66476007)(38100700002)(26005)(91956017)(66556008)(64756008)(6916009)(71200400001)(38070700005)(6506007)(8676002)(7696005)(33656002)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?2lvHc5YX3n4n2V7vxX36TCR5JmTinQqt6OSS3CYMV5bRHx2piP32QcH87j?=
+ =?iso-8859-1?Q?P24ZHCK1mLnrMvYMpws2/a0Mil0KWrJFTUHwIpUBt9tATmTRWGfmY2hVLy?=
+ =?iso-8859-1?Q?U/DmCnznDu5C1nRU0yp6vbdoTVCM76fJHZhYeTFzytP3G2/K43zPMr9mq4?=
+ =?iso-8859-1?Q?6y+qQ8DnKQ1PNitlQ79iMZQ9+TAX6Ybx7khGPXqCbZNNDJxdOZkxt5tlW2?=
+ =?iso-8859-1?Q?wTH35iumuxv0ushq8O1S8hhiG0qBBI/C7UrWImN2qE2G+aBnRMDElm5DLS?=
+ =?iso-8859-1?Q?g+pnak25LaqM4FcRciFRs+NL9kiaphPpORp6rNEC7zEs1l2K8lwv5yqVmS?=
+ =?iso-8859-1?Q?KiEMIGI3cuNLfIznjP+Z3EkHxImrYGctIdP38/0bUYky3psgaO02k2Ea1y?=
+ =?iso-8859-1?Q?3/LZPDJIpuoG1JWKldPUgRZrVpivYIpmHd3gLtXi3fqWbjx8lfvEmgXi9L?=
+ =?iso-8859-1?Q?1VVX8H86FIxD1eKbaRv8ChyVM3CIDyDNjCSexgwaVKUqF3jHxi340PrEvn?=
+ =?iso-8859-1?Q?F02UzdmGJWZHOMN9TQq1FxX2BuNNq+Uezkvfjzz+djdtlBxa542r/I+E8R?=
+ =?iso-8859-1?Q?/UyQJWFG3hIXYqApSEFhWKYc7c9Y0jB4/PxyzPFG9Rldu1L3mhxiF/5FBc?=
+ =?iso-8859-1?Q?U++SBbq9FrAO0vnpD1TuOtx0KcdTnejnvDSJvY71K60lBP1tAb8dLL/4jI?=
+ =?iso-8859-1?Q?UTMaz4eCuKM6R9yWEPE5KEWyLrqnwbPRBS/SFmfgH7HqRMt1Kuk7ndiDEa?=
+ =?iso-8859-1?Q?jRqkGgbTynooxqJ59JpJh7nKMnP2EQyQ6PcYs4arwOIgK8Xy0aWjkQuYY9?=
+ =?iso-8859-1?Q?GIXfROkrkifVIAv2+HPAK6gN94Br4DmxOIy309svTd9AgfwBDzL1Gy0/gD?=
+ =?iso-8859-1?Q?UMJXlfAHIQvGqjgMr1q2kAcrYvEi7WuFPvPVRMRA/UwfhgKhRr84/v/Ksg?=
+ =?iso-8859-1?Q?M+rPbbbnjMXpFYQGIlmxV800aNOVFHpKd452kZAMwkiiruHrwM8BCLoMOi?=
+ =?iso-8859-1?Q?gclPD3C0EZ2UAQxHgw9PdoV0MPl9PiwwKy6/YNSI/BuACnff4LaX1+MNWE?=
+ =?iso-8859-1?Q?tfrIUkTZpSMY8eK7QeB+Q7UR9ACO+yFJKCnLffHpHpNHu+udjaWPS8nrI+?=
+ =?iso-8859-1?Q?333jvFYZYnKYzHxuSNS1meii+vd3Yds/lubreXcqu9NOX81775UhDWzmhi?=
+ =?iso-8859-1?Q?aU+WjrIP/0sXiOl3DdnMvIT8VyRgvv+aeb8OoR1SSguW3ka3XuGlq+XUWk?=
+ =?iso-8859-1?Q?WiD6YLbzlS9tDidhTxq7wh0eKI7zVsB1eyYSnyxKFiI3++SuS7aWWtx1ch?=
+ =?iso-8859-1?Q?WWIA37+lKfaa8n6EH0LV6YVER4dRnzG5LzxSDKzg9FxRxRFhI6ELWW8Kyx?=
+ =?iso-8859-1?Q?2PVmoA+9IM?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211015055808.327453-2-pauk.denis@gmail.com>
+X-OriginatorOrg: nasa.gov
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR09MB7440.namprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cddd6cc6-271a-42d5-82ce-08d990035b81
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Oct 2021 17:43:54.2688
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7005d458-45be-48ae-8140-d43da96dd17b
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR09MB7517
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2021-10-15T08:58+0300, Denis Pauk wrote:
-> +/*
-> + * The next four functions converts to/from BRxx string argument format
-> + * The format of the string is as follows:
-> + * The string consists of two-byte UTF-16 characters
-> + * The value of the very first byte int the string is equal to the total length
-> + * of the next string in bytes, thus excluding the first two-byte character
-> + * The rest of the string encodes pairs of (bank, index) pairs, where both
-> + * values are byte-long (0x00 to 0xFF)
-> + * Numbers are encoded as UTF-16 hex values
-> + */
-> +static void asus_wmi_ec_decode_reply_buffer(const u8 *inp, u8 *out, u32 length)
-> +{
-> +	char buffer[ASUSWMI_MAX_BUF_LEN * 2];
-> +	const char *pos = buffer;
-> +	const u8 *data = inp + 2;
-> +	unsigned int i;
-> +	u32 len;
-> +
-> +	len = min3((u32)ASUSWMI_MAX_BUF_LEN, (length - 2) / 4, (u32)inp[0] / 4);
-
-This will still access out of bounds memory when length == 0.
-
-> +
-> +	utf16s_to_utf8s((wchar_t *)data, len * 2,  UTF16_LITTLE_ENDIAN, buffer, len * 2);
-> +
-> +	for (i = 0; i < len; i++, pos += 2)
-> +		out[i] = (hex_to_bin(pos[0]) << 4) + hex_to_bin(pos[1]);
-> +}
-
-> +static int asus_wmi_ec_find_sensor_index(const struct asus_wmi_ec_info *ec,
-> +					 enum hwmon_sensor_types type, int channel)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ec->nr_sensors; i++) {
-> +		if (known_ec_sensors[ec->sensors[i].info_index].type == type) {
-> +			if (channel == 0)
-> +				return i;
-> +
-> +			channel--;
-> +		}
-> +	}
-> +	return -EINVAL;
-> +}
-> +
-> +static int asus_wmi_ec_get_cached_value_or_update(int sensor_index,
-> +						  struct asus_wmi_sensors *state,
-> +						  u32 *value)
-
-In both drivers there is function like this where the caller is responsible
-for halding the mutex. Maybe the mutex could be handled by the function
-directly.
-
-> +{
-> +	int ret;
-> +
-> +	if (time_after(jiffies, state->ec.last_updated + HZ)) {
-> +		ret = asus_wmi_ec_block_read(ASUSWMI_METHODID_BREC,
-> +					     state->ec.read_arg,
-> +					     state->ec.read_buffer);
-> +		if (ret)
-> +			return ret;
-> +
-> +		asus_wmi_ec_update_ec_sensors(&state->ec);
-> +		state->ec.last_updated = jiffies;
-> +	}
-> +
-> +	*value = state->ec.sensors[sensor_index].cached_value;
-> +	return 0;
-> +}
-
-> +static umode_t asus_wmi_ec_hwmon_is_visible(const void *drvdata,
-> +					    enum hwmon_sensor_types type, u32 attr,
-> +					    int channel)
-> +{
-> +	int index;
-> +	const struct asus_wmi_sensors *sensor_data = drvdata;
-> +
-> +	index = asus_wmi_ec_find_sensor_index(&sensor_data->ec, type, channel);
-> +
-> +	return index == 0xff ? 0 : 0444;
-
-Should this not check for index < 0?
-
-> +}
-
-> +static int asus_wmi_probe(struct wmi_device *wdev, const void *context)
-> +{
-> +	struct asus_wmi_sensors *sensor_data;
-> +	struct asus_wmi_data *board_sensors;
-> +	const enum known_ec_sensor *bsi;
-> +	const struct dmi_system_id *dmi_id;
-> +	struct device *dev = &wdev->dev;
-> +
-> +	dmi_id = dmi_first_match(asus_wmi_ec_dmi_table);
-> +	if (!dmi_id)
-> +		return -ENODEV;
-> +
-> +	board_sensors = dmi_id->driver_data;
-> +	if (!board_sensors)
-> +		return -ENODEV;
-> +
-> +	bsi = board_sensors->known_board_sensors;
-> +
-> +	sensor_data = devm_kzalloc(dev, sizeof(struct asus_wmi_sensors),
-> +				   GFP_KERNEL);
-
-sizeof(*sensor_data);
-
-> +	if (!sensor_data)
-> +		return -ENOMEM;
-> +
-> +	mutex_init(&sensor_data->lock);
-> +
-> +	dev_set_drvdata(dev, sensor_data);
-> +
-> +	/* ec init */
-> +	return asus_wmi_ec_configure_sensor_setup(dev,
-> +						  sensor_data, bsi);
-> +}
+Hi,=0A=
+=0A=
+I am reporting what I believe is a potential issue in the tmp401 driver for=
+ the tmp461 device specifically. I am new to reporting issues, so I apologi=
+ze in advance if I've provided insufficient information for an issue report=
+.=0A=
+=0A=
+The problem I'm encountering is that when I use the tmp401 linux driver to =
+read temperature values from the tmp461, all of the read temperature values=
+ end with 996 (e.g. 33996, 38996, etc...).=0A=
+=0A=
+Looking further into the tmp401 commit messages, I see that the driver was =
+changed to use smb word operations instead of separate byte operations. Alt=
+hough the other supported devices (i.e. tmp432, etc...) are noted to suppor=
+t 16-bit read operations in their respective datasheets, I see no indicatio=
+ns of 16-bit read support in the tmp461 datasheet, which is supported by my=
+ inquiry in the TI forums (https://e2e.ti.com/support/sensors-group/sensors=
+/f/sensors-forum/1044935/tmp461-linux-driver-support-and-16-bit-temperature=
+-register-reads).=0A=
+=0A=
+Reverting the driver to the commit before the smb word change, I am then ab=
+le to read temperature values that do not end only with 996. As a result, I=
+ believe that the tmp461 support may be partially broken by the switch to s=
+mb word operations.=0A=
+=0A=
+Thanks,=0A=
+David Wilson=
