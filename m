@@ -2,88 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E362C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F29FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:29:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 751A460EB4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:27:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EBF06115C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:29:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243310AbhJOW33 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 18:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
+        id S235868AbhJOWb2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 18:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbhJOW33 (ORCPT
+        with ESMTP id S235677AbhJOWb2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 18:29:29 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39001C061570;
-        Fri, 15 Oct 2021 15:27:22 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id x33-20020a9d37a4000000b0054733a85462so14744376otb.10;
-        Fri, 15 Oct 2021 15:27:22 -0700 (PDT)
+        Fri, 15 Oct 2021 18:31:28 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E02EC061762;
+        Fri, 15 Oct 2021 15:29:21 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so14808347otb.1;
+        Fri, 15 Oct 2021 15:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9aeUe4ZI4jBbqIbND7LhOYrt/dpCCzqy4kzXucAAhcE=;
-        b=nu+wkVrTUYsdrakwbebwUqGS3MNnezxKmYAFGZRflHzIDv4e1KxmpDog4u7molTrK9
-         6WKS5dTeNSohwgVwXkaR2QG0jdGbbz06HgPdKx2v8mTUQu/JFfIjIPLWuzp+sf3+nlZb
-         DLPAuq2JM127wzua+aM8B/qi2zzKwc56YuzZNNUadhxJSZynZih34GfZM+j+zW8FBEp7
-         MTBoXzqdLnKA6F5Wb/0CcbNsql6c6yG+78o8Pbelwnpwb91AnKUA/56MnB7RJYGtlpZp
-         QptPmNIE4ReLlptl81+O0vaF41B+kJJgVikLdaQyASbIHcTk2MMD4gJzzbd3Top/LvhV
-         KLUA==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kuSkiD+Pj6p4qxM8R1gZxeHmf6MlxAeUCzQoIQQYH+Q=;
+        b=ZJlgvKMECE06uW3+FjNfccwY5cYFX9Fax6N3UAa3BNQtqUjK5ATwouK/rzfPIQZ3c1
+         03HqBacxdXaqZ31yhGyWVCxE6hxU7QZoz63U+6+Eyu2cKw6PVfxl034FihRb+prbeZgc
+         7yQUHrEA1O/495LBzPYUcsJ3BwiGZuLneuqWPiWhVVmm4jqZJFkO+8OK138AjYPRhZIB
+         6yrxcVeuRfdYcMBe06m3VnFmJ+Bg18HjQXmPUEhGLnzgPPFPxVUDj8uhrdV2vhJsO06Q
+         f9mFJ5+l47LeMovbwAKwuBwSRTSsdmn8FGj6OprSBdI6c5x7/yyGueWxFbyRKlTbbXe2
+         Wesw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=9aeUe4ZI4jBbqIbND7LhOYrt/dpCCzqy4kzXucAAhcE=;
-        b=iMfTnRCEudb9H7kitEQkxcWhBotmCzHbK91mjRMl9kTYDFBWjEdEPU/OJ4LF3u/rRb
-         ghVHcgyedvnaNU1eCOVntDAGl8Z8XA12j9wkdw5DDJa0pMBW4t1w8AWKmfhSwh/T/jFN
-         npKUvhPMfFw1voolbixQxkh6pul7MwX5rwYILviF81pHYEcwTkjcyFq/nKtnykvKfq13
-         JjJF+4f1bJSa1lMy2JKdPaVQYjjssu6A0kfcknlm2+76xVFn74FCKIONomuh2ueTyIm2
-         JiFovDLdXjZRKu2i57gp4gsi1EiW+N/77veK9/UdfMH5hcmAFcwgp3FSzGuee7VjQvMX
-         Ck4w==
-X-Gm-Message-State: AOAM531XGxHmDCCqhXmoC6sGvd216g7WK2ch+/84hXbjELPAlUc+nNRo
-        octqfA/HTjTyh3VXX9D1C7l+gmXcgjY=
-X-Google-Smtp-Source: ABdhPJwfdfOvdT+Uk8C/mzN/PAp7SrOCk9JWuOEeK8ce5Me9U/dKD2fV5CZdgjrtHJzOdTvsHbdqDg==
-X-Received: by 2002:a9d:655a:: with SMTP id q26mr10184755otl.130.1634336841603;
-        Fri, 15 Oct 2021 15:27:21 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=kuSkiD+Pj6p4qxM8R1gZxeHmf6MlxAeUCzQoIQQYH+Q=;
+        b=egXy9I5P2hTdlFlKKoWyJMN7tTAUdP5GJyVSFVPc61ePhgD9cTh2QzoQNd6mEpgBhX
+         lZbw02dtBDNByFeopWZtvf80vCwgK398IyliApzH0D8PG3NiPML3alB60JlsCVc4BV0+
+         z+b7fqNm+ZXVpxxSiY3nZE9Q0qcM8LP+ngljBFGvqd/WCHz8vg3Dk1tk2Q9sl6PznAjh
+         4U2TnOcf9gqQDQTZ1z++3PWuQ7LIA/k4ZxpeE0awn8pDIXwSAInS/uLuK0k1glY8qWeu
+         uih9BfvSI1s+WqYhrqAD9V1aE05rdgSR8mjjg/Bx3gCFfMLoJ0hjadLk9fwPnIn0Ki40
+         RuSQ==
+X-Gm-Message-State: AOAM533pCXDO9AqtQ7RzVngGQFd7uqW1jpROzaPoehhR61BQeNnCp5P8
+        r9NrLtspeyp8ZbsAD4SgrW+RUS0dcXc=
+X-Google-Smtp-Source: ABdhPJxDuu84sFBn0ixwnJXVs2lELhK2LP32tbY0J1Uic/Tv5z5wNHFMM7iCg86EfzTIQ83OWqCbkQ==
+X-Received: by 2002:a05:6830:2696:: with SMTP id l22mr3608622otu.153.1634336960665;
+        Fri, 15 Oct 2021 15:29:20 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4sm1471848oia.56.2021.10.15.15.27.20
+        by smtp.gmail.com with ESMTPSA id u2sm1510868otg.51.2021.10.15.15.29.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Oct 2021 15:27:21 -0700 (PDT)
+        Fri, 15 Oct 2021 15:29:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 15 Oct 2021 15:27:19 -0700
+Date:   Fri, 15 Oct 2021 15:29:18 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Wilson, David T. (GSFC-5870)" <david.wilson@nasa.gov>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: Potential issue with smb word operations for tmp461 device in
- tmp401 driver
-Message-ID: <20211015222719.GG1480361@roeck-us.net>
-References: <SA1PR09MB7440BF952778F0DB8138747DE7B99@SA1PR09MB7440.namprd09.prod.outlook.com>
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 1/9] dt-bindings: hwmon: add missing tmp421 binding
+Message-ID: <20211015222918.GA1482125@roeck-us.net>
+References: <cover.1634206677.git.krzysztof.adamski@nokia.com>
+ <84ac871e30a406a1613d140a084b4f3390753099.1634206677.git.krzysztof.adamski@nokia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <SA1PR09MB7440BF952778F0DB8138747DE7B99@SA1PR09MB7440.namprd09.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <84ac871e30a406a1613d140a084b4f3390753099.1634206677.git.krzysztof.adamski@nokia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+On Thu, Oct 14, 2021 at 03:00:25PM +0200, Krzysztof Adamski wrote:
+> Add basic description of the tmp421 driver DT bindings.
+> 
+> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-On Fri, Oct 15, 2021 at 05:43:54PM +0000, Wilson, David T. (GSFC-5870) wrote:
-> Hi,
-> 
-> I am reporting what I believe is a potential issue in the tmp401 driver for the tmp461 device specifically. I am new to reporting issues, so I apologize in advance if I've provided insufficient information for an issue report.
-> 
-> The problem I'm encountering is that when I use the tmp401 linux driver to read temperature values from the tmp461, all of the read temperature values end with 996 (e.g. 33996, 38996, etc...).
-> 
-> Looking further into the tmp401 commit messages, I see that the driver was changed to use smb word operations instead of separate byte operations. Although the other supported devices (i.e. tmp432, etc...) are noted to support 16-bit read operations in their respective datasheets, I see no indications of 16-bit read support in the tmp461 datasheet, which is supported by my inquiry in the TI forums (https://e2e.ti.com/support/sensors-group/sensors/f/sensors-forum/1044935/tmp461-linux-driver-support-and-16-bit-temperature-register-reads).
-> 
-> Reverting the driver to the commit before the smb word change, I am then able to read temperature values that do not end only with 996. As a result, I believe that the tmp461 support may be partially broken by the switch to smb word operations.
-> 
-
-Thanks a lot for the report. Can you send me a register dump for the tmp461 ?
+Applied.
 
 Thanks,
 Guenter
+
+> ---
+>   .../devicetree/bindings/hwmon/ti,tmp421.yaml  | 43 +++++++++++++++++++
+>   1 file changed, 43 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> new file mode 100644
+> index 000000000000..47040ace4f73
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ti,tmp421.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TMP42x/TMP44x temperature sensor
+> +
+> +maintainers:
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +description: |
+> +  ±1°C Remote and Local temperature sensor
+> +  https://www.ti.com/lit/ds/symlink/tmp422.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,tmp421
+> +      - ti,tmp422
+> +      - ti,tmp423
+> +      - ti,tmp441
+> +      - ti,tmp442
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      sensor@4c {
+> +        compatible = "ti,tmp422";
+> +        reg = <0x4c>;
+> +      };
+> +    };
