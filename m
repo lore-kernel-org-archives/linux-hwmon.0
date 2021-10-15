@@ -2,68 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0DCEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:01:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3771FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:01:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C04BE61163
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:01:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1DF3961027
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 22:01:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238730AbhJOWDK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 18:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S238752AbhJOWDh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 18:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbhJOWDK (ORCPT
+        with ESMTP id S229921AbhJOWDg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 18:03:10 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16675C061570;
-        Fri, 15 Oct 2021 15:01:03 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id q129so15088906oib.0;
-        Fri, 15 Oct 2021 15:01:03 -0700 (PDT)
+        Fri, 15 Oct 2021 18:03:36 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48004C061570;
+        Fri, 15 Oct 2021 15:01:29 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 34-20020a9d0325000000b00552cae0decbso4454303otv.0;
+        Fri, 15 Oct 2021 15:01:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:references:from:message-id:date:user-agent
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9bQx+RJz2MXi6DBbWzAZJMniAgxrAjk9YsVhNq5+Guw=;
-        b=ba/M8abj4sG3KTmYKoHuhyUXRyXLnqC/NCOqu5YLgw5XIGZ7P/BSheyBQfq8h8HHGV
-         n4AMCokPq96nP1hoAQvMmjMDNrYGry2RMByCfonJmM0R5e1rFr3c6sWP9SvN4G786KG6
-         dmNHVyPHYL/pAbSd0g3OU0r6RGfqa+HZswpi2cMogabQ+rLfbLvuSgV/BjVGhQzIvpKE
-         9koJtuESPngUyRnttoPREPe4trsxoxbC0iqMkFQ9Znb0giERFJgLBL+UQNrZ4s5gVkrw
-         Wd1IEdly12q3zpfJpCv/bNv+kO9OjCi/HI6X+MMhFgFOQVlk4c6TixlXU5/dD7jyhouG
-         /5pw==
+        bh=kXV+8u2z0PXq5hQF/5zRjzhxcWTJ/etl98iykZqGjRo=;
+        b=q5jUN3iISavANR/5hqWdaF7w3sLkmv5Znul2j/+Gj4v3HTZfdPYNMsi9b58+Mq4xk+
+         Svl1wXXRo5UyYsngFd1Q7FSoPawfHvguBEv2xB4a7NhjAQ317D+iz/0J94qb4qpGbJ6q
+         ZuP+1xfA2pEtJOmI5c+sn2BUd7lCE0vQnPA2w8frQ4QhalJqQtAZrUBkKP73stvKnRe0
+         YAJW1gqJJ8QqXHCATripPh03+2dFRg2fRY8fGafDd677dfBkJ/t+UFYjsZG9NFpbOWQe
+         89xvQr6DD7ZxL7HgYBpaDgVacI+DBkY+IpB3PJv7K9IOW/MycM21+ZyC9kEyAQjnMzdS
+         0KjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=9bQx+RJz2MXi6DBbWzAZJMniAgxrAjk9YsVhNq5+Guw=;
-        b=tDYW8aKE/is+kVWcgzk72xatK77vFXa9k+u+bZ2PMcKyJ0zU2dZOt+bKQabzxnKjeo
-         jjfVcXpXjBJTenTSpasGc8pPsz4ATWjuEMjRa7DGLo+Ei1QCaYdoUgBysq47O7hZxTIm
-         E+Vo0QskSyJlrTeIbCdcg4bqyfU+Thl4TA2m7ZaY6JaLfW0DYKjWTs7e+xgoKUQgh5G8
-         eTyy2zx3GYEx3LHD25UYau5Ut7nZQR9SSnNtyP0cx6oB+Y7JZ/PwmLHkr2dK1im8MGxn
-         R/1ToWB6/dTsBo55Am5G/tXUTecuv40y6nFQ2hQHbyQkOKliZYgRMLjvM1puQAf/c2RU
-         RvKQ==
-X-Gm-Message-State: AOAM5335HDtr6weGGc4OPx3VuROfteDWujejSG43y/v/J805XhUlb3a6
-        sUOQLb9FuKmjd8Gu6r97DmLYU8KYvCw=
-X-Google-Smtp-Source: ABdhPJx0xjbSPlShlBM2QaX3vyPI0HbSm2JvxsovM/9G5367Wr9jauqTUyUGe+lMh+Y8W26iZuff0w==
-X-Received: by 2002:a05:6808:1487:: with SMTP id e7mr10637466oiw.126.1634335262138;
-        Fri, 15 Oct 2021 15:01:02 -0700 (PDT)
+        bh=kXV+8u2z0PXq5hQF/5zRjzhxcWTJ/etl98iykZqGjRo=;
+        b=g9I1Yrpzue6CG6V0EF7pGLu6Re6QJIVcVmn1tX6Y4tFOl2YdyacXMjVfXD8NpU/AHv
+         Zv7pTVt6QxYJe2p/iANRUOo3d9XWL8/+IOu31xEjohPN3OfvgAGwZmDbd86DzSV7Kw3x
+         ovRULxzSLr1yrD1J22dWYUge31tg4zrNXvfrJSmoB+HdaMd4DdtBO8GMlE9NFOmRaaCx
+         9AoUSYPga8Iz9c7kguM+RqGtHHn4YhuSNJrHCK1dA3a76wHJrQEsKPVxhVDgh+eU3GH3
+         U2o2g/esP2KhHcCGwiudKkSa0FPAASyO5lOH0hPXdTeuO29V4Mb5EPLynO65USW0zl4I
+         qQ0Q==
+X-Gm-Message-State: AOAM533nz2kPRbK13K2MaO9JM4kIF5XO+ictmburn5mHtbbKvm3vvCtb
+        cevI1cBgIuuX/pfBf4K4zSnmdXnd6Gc=
+X-Google-Smtp-Source: ABdhPJwEI//gt0Tt1gWwC/bBEhRY2aU0gksh1u+LZLzt21IR7jIdC3yZ9FgiZBSQte8Fz7TMAvCsmA==
+X-Received: by 2002:a05:6830:81a:: with SMTP id r26mr9957716ots.176.1634335288429;
+        Fri, 15 Oct 2021 15:01:28 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bg16sm1651837oib.30.2021.10.15.15.01.00
+        by smtp.gmail.com with ESMTPSA id z8sm1183857oof.47.2021.10.15.15.01.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Oct 2021 15:01:01 -0700 (PDT)
+        Fri, 15 Oct 2021 15:01:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon: replace snprintf in show functions with sysfs_emit
-To:     Qing Wang <wangqing@vivo.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1634280525-4532-1-git-send-email-wangqing@vivo.com>
+Subject: Re: [PATCH] hwmon: (ad7414) cleanup codestyle
+To:     Sohaib Mohamed <sohaib.amhmd@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211015122843.135814-1-sohaib.amhmd@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <96c3c93c-f959-a401-3c91-df58e2643a39@roeck-us.net>
-Date:   Fri, 15 Oct 2021 15:00:59 -0700
+Message-ID: <c46c3b62-ee95-8d01-2f45-0110ecf942b8@roeck-us.net>
+Date:   Fri, 15 Oct 2021 15:01:26 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <1634280525-4532-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <20211015122843.135814-1-sohaib.amhmd@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,38 +72,67 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/14/21 11:48 PM, Qing Wang wrote:
-> show() must not use snprintf() when formatting the value to be
-> returned to user space.
+On 10/15/21 5:28 AM, Sohaib Mohamed wrote:
+> - Add a blank line after declarations
+> - Prefer using '"%s...", __func__' to using 'ad7414_probe'
+> - Don't split strings across lines
 > 
-> Fix the following coccicheck warning:
-> drivers/hwmon/smm665.c:378: WARNING: use scnprintf or sprintf.
-> 
-> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
-> 
-> Signed-off-by: Qing Wang <wangqing@vivo.com>
+> Signed-off-by: Sohaib Mohamed <sohaib.amhmd@gmail.com>
 
-Please refrain from such cleanup patches unless you also
-make functional changes to a driver.
+Please refrain from such cleanup patches unless you also make functional changes to a driver.
 
 Guenter
 
 > ---
->   drivers/hwmon/smm665.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/hwmon/ad7414.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwmon/smm665.c b/drivers/hwmon/smm665.c
-> index 62906d9..122031e 100644
-> --- a/drivers/hwmon/smm665.c
-> +++ b/drivers/hwmon/smm665.c
-> @@ -375,7 +375,7 @@ static ssize_t smm665_show_##what(struct device *dev, \
->   { \
->   	struct sensor_device_attribute *attr = to_sensor_dev_attr(da); \
->   	const int val = smm665_get_##what(dev, attr->index); \
-> -	return snprintf(buf, PAGE_SIZE, "%d\n", val); \
-> +	return sysfs_emit(buf, "%d\n", val); \
+> diff --git a/drivers/hwmon/ad7414.c b/drivers/hwmon/ad7414.c
+> index 0afb89c4629d..52df6005812c 100644
+> --- a/drivers/hwmon/ad7414.c
+> +++ b/drivers/hwmon/ad7414.c
+> @@ -107,6 +107,7 @@ static ssize_t temp_input_show(struct device *dev,
+>   			       struct device_attribute *attr, char *buf)
+>   {
+>   	struct ad7414_data *data = ad7414_update_device(dev);
+> +
+>   	return sprintf(buf, "%d\n", ad7414_temp_from_reg(data->temp_input));
+>   }
+>   static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_input, 0);
+> @@ -116,6 +117,7 @@ static ssize_t max_min_show(struct device *dev, struct device_attribute *attr,
+>   {
+>   	int index = to_sensor_dev_attr(attr)->index;
+>   	struct ad7414_data *data = ad7414_update_device(dev);
+> +
+>   	return sprintf(buf, "%d\n", data->temps[index] * 1000);
 >   }
 >   
->   SMM665_SHOW(min);
+> @@ -152,6 +154,7 @@ static ssize_t alarm_show(struct device *dev, struct device_attribute *attr,
+>   	int bitnr = to_sensor_dev_attr(attr)->index;
+>   	struct ad7414_data *data = ad7414_update_device(dev);
+>   	int value = (data->temp_input >> bitnr) & 1;
+> +
+>   	return sprintf(buf, "%d\n", value);
+>   }
+>   
+> @@ -192,7 +195,7 @@ static int ad7414_probe(struct i2c_client *client)
+>   	/* Make sure the chip is powered up. */
+>   	conf = i2c_smbus_read_byte_data(client, AD7414_REG_CONF);
+>   	if (conf < 0)
+> -		dev_warn(dev, "ad7414_probe unable to read config register.\n");
+> +		dev_warn(dev, "%s unable to read config register.\n", __func__);
+>   	else {
+>   		conf &= ~(1 << 7);
+>   		i2c_smbus_write_byte_data(client, AD7414_REG_CONF, conf);
+> @@ -227,8 +230,7 @@ static struct i2c_driver ad7414_driver = {
+>   
+>   module_i2c_driver(ad7414_driver);
+>   
+> -MODULE_AUTHOR("Stefan Roese <sr at denx.de>, "
+> -	      "Frank Edelhaeuser <frank.edelhaeuser at spansion.com>");
+> +MODULE_AUTHOR("Stefan Roese <sr at denx.de>, Frank Edelhaeuser <frank.edelhaeuser at spansion.com>");
+>   
+>   MODULE_DESCRIPTION("AD7414 driver");
+>   MODULE_LICENSE("GPL");
 > 
 
