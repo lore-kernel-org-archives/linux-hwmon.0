@@ -2,126 +2,258 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39133C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 12:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43DCAC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:12:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 186A46108E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 12:29:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2047260FF2
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:12:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbhJOMbQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 08:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S235031AbhJOOOq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 10:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232123AbhJOMax (ORCPT
+        with ESMTP id S240196AbhJOOO1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 08:30:53 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79A8C061570;
-        Fri, 15 Oct 2021 05:28:46 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id e3so25990356wrc.11;
-        Fri, 15 Oct 2021 05:28:46 -0700 (PDT)
+        Fri, 15 Oct 2021 10:14:27 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43263C06176F;
+        Fri, 15 Oct 2021 07:12:14 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id n63so13269075oif.7;
+        Fri, 15 Oct 2021 07:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lvpvriDjktmuhTTAKKGqAIEOr/xDM6cpw+0a0Lp9KwU=;
-        b=en0QVqk8y80StirBCzqGqs4Pmk1lsYCrq/kx2FEMBPpjONDRa3JyF0NNNfsKVuQa5Z
-         FTmIjVqmOaeA3Iyj+CEyZKt+2jAyPBs/qCrBpWTBSoYd0UJj5a7PdpfjCr1Sext3JXnc
-         oMob3B7r+wCrYyZz/eMgBiosfjO38WDe7iLRoeIWhAMln1X0+qk4dwAgyEbBUMcRZEsi
-         Zkb9PUMPD0WDxLPOylzr5+Ndsg1B1SMtsN3MNHjscTzPcgyXgBM/rgQGuk/BmCOLJFKz
-         NpJwv8i7NXo9Oe9hyqdUQ5LP1ftnGc5hc/ytq2IQLSLG7tohOfQp1Wsc/VvgbV/KFHBu
-         KBpg==
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=E1fykEaEp8TohMY+IiHVmw9TscjKXemOxBpXDundzLQ=;
+        b=SL/ewftzAqVc7u48caQAwLWiVkleZ07bgL1jRQwWvyyyVlL6ZCJ6BKAaA+GClbCJmd
+         Fsj6oABT/OSjZRmsQyfrqh1pMCCugBrGzRjfHGxqJGWZVe55UAstK7y6M0hic4cGCg6j
+         ofbj79o957HGo/TyoEPwUElYIhdmC3hdJBLA9A1LZqf1KvT0GnHY93cABCRpCQl/LJj1
+         9Bbc729m2QrmKUbRUNLhFHjndQf1Jcvsl4PQS3ZSXOAXDgoz9ZHM0sELL62dF4wc0ugo
+         CBOWl3SMygdoF6DhGljeTd3Yd/gIzrFNefPw84wqtBag9CPUOOvMZm0y1Mhv9C6SsGsd
+         ijzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=lvpvriDjktmuhTTAKKGqAIEOr/xDM6cpw+0a0Lp9KwU=;
-        b=fY1GEjBU531u04NDWttYWQc6LniMfNb4KVQ5+enLLkuL9VHo387n9hkovvxrJEYvCt
-         METk9VMpJDCkI+rMGDBHFODcx8EGhFK8vwVvSEVC+xGcY9+GGxOX636LaoFa+LJ6IB9k
-         VJRz1WEYM5MUj6QhbD2SjZNgcM76CcUviMiEK0P1vklSQ6ktCB8J0wlmkO3kvj4cIg5z
-         HbuL6SiVz4X59o+vyyi97obu9SIQtzE58invycpTEISwRnT7XjsGvEB7q4ynyzu7DUwm
-         kxX/EgBlSfWQGXrERQM48Ufyd3eCigs6ux+CIp1mL+c38Lzs39a/TKgM++YcDacAh1bo
-         0FEA==
-X-Gm-Message-State: AOAM530p9ktO3AXZMODwRNA1S38qNyIxnFQGOZuGFgXsWKXAopNN0N6f
-        x1F7B5Y1z1RF67y7xbADcpxfEqp41D0=
-X-Google-Smtp-Source: ABdhPJyPbM3kbJCvEy3jtyppF5yviAaityKCGZhTN9LIdZLxrgoRRlbzQzg9oA0B2tA3XZ3ytmNAXA==
-X-Received: by 2002:adf:9bd3:: with SMTP id e19mr14488511wrc.167.1634300925432;
-        Fri, 15 Oct 2021 05:28:45 -0700 (PDT)
-Received: from localhost.localdomain ([197.49.234.11])
-        by smtp.gmail.com with ESMTPSA id d8sm5002267wrv.80.2021.10.15.05.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Oct 2021 05:28:45 -0700 (PDT)
-From:   Sohaib Mohamed <sohaib.amhmd@gmail.com>
-To:     sohaib.amhmd@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (ad7414) cleanup codestyle
-Date:   Fri, 15 Oct 2021 14:28:43 +0200
-Message-Id: <20211015122843.135814-1-sohaib.amhmd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=E1fykEaEp8TohMY+IiHVmw9TscjKXemOxBpXDundzLQ=;
+        b=KdE6p2LveCUKOuDYUsGKVvLsWPYl83etSRYz7o5MC33nRnbQD7BA7LQA6lF13iZWbt
+         hWbmwyR1qfjGM5VG2tnMuN9pUfXs0XjyOhg3//nX6o0aeKcrNevHsw03YCojaO+29Hnd
+         zz+xhO0tPaH0s69aZCi/pOvwAWA10d8xqrsTHjkEpJ6nFO5PW55Rpozday3nX4j3wQSG
+         PrYbH/XtVOaSsXVd4VZE7kPbsMAWg2zBW4NARcG5CkvjGhqYYYduuHEZsM2JwtrD01eG
+         cq67nVfYAvnOIDvjVUs3WBfUYmaHygtTgWuSPnkauCBWnO3VFOzmlQz64IJ7OSnE0qhI
+         os/A==
+X-Gm-Message-State: AOAM530wzdFV/83Yqq2b8GNkHFbCgcRohEs5nS5tI4Qk02W89CQukrJx
+        1k5q/H+4jQBKOch7m6Y6JKS8n+8AfyU=
+X-Google-Smtp-Source: ABdhPJzJCmCho+YkOarrtHmJ2r8dMQMrpGl7fFTl/9bdF/txv43Gz0mliDwMq+3b/jQgNXijMFgQGQ==
+X-Received: by 2002:aca:eb82:: with SMTP id j124mr17608877oih.46.1634307133220;
+        Fri, 15 Oct 2021 07:12:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u2sm1261042otg.51.2021.10.15.07.12.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Oct 2021 07:12:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Alistair Francis <alistair@alistair23.me>, lee.jones@linaro.org,
+        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        kernel@pengutronix.de
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
+        amitk@kernel.org, rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alistair23@gmail.com,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+References: <20211015122551.38951-1-alistair@alistair23.me>
+ <20211015122551.38951-7-alistair@alistair23.me>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v13 6/9] hwmon: sy7636a: Add temperature driver for
+ sy7636a
+Message-ID: <45191f55-e7a8-7d12-2f27-a03ab50626b1@roeck-us.net>
+Date:   Fri, 15 Oct 2021 07:12:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20211015122551.38951-7-alistair@alistair23.me>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-- Add a blank line after declarations
-- Prefer using '"%s...", __func__' to using 'ad7414_probe'
-- Don't split strings across lines
+On 10/15/21 5:25 AM, Alistair Francis wrote:
+> This is a multi-function device to interface with the sy7636a
+> EPD PMIC chip from Silergy.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>   Documentation/hwmon/sy7636a-hwmon.rst | 24 +++++++++
+>   drivers/hwmon/Kconfig                 |  9 ++++
+>   drivers/hwmon/Makefile                |  1 +
+>   drivers/hwmon/sy7636a-hwmon.c         | 75 +++++++++++++++++++++++++++
+>   4 files changed, 109 insertions(+)
+>   create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst
+>   create mode 100644 drivers/hwmon/sy7636a-hwmon.c
+> 
+> diff --git a/Documentation/hwmon/sy7636a-hwmon.rst b/Documentation/hwmon/sy7636a-hwmon.rst
+> new file mode 100644
+> index 000000000000..6b3e36d028dd
+> --- /dev/null
+> +++ b/Documentation/hwmon/sy7636a-hwmon.rst
+> @@ -0,0 +1,24 @@
+> +Kernel driver sy7636a-hwmon
+> +=========================
+> +
+> +Supported chips:
+> +
+> + * Silergy SY7636A PMIC
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver adds hardware temperature reading support for
+> +the Silergy SY7636A PMIC.
+> +
+> +The following sensors are supported
+> +
+> +  * Temperature
+> +      - SoC on-die temperature in milli-degree C
+> +
+> +sysfs-Interface
+> +---------------
+> +
+> +temp0_input
+> +	- SoC on-die temperature (milli-degree C)
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index c4578e8f34bb..d768b833b721 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1651,6 +1651,15 @@ config SENSORS_SIS5595
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called sis5595.
+>   
+> +config SENSORS_SY7636A
+> +	tristate "Silergy SY7636A"
+> +	help
+> +	  If you say yes here you get support for the thermistor readout of
+> +	  the Silergy SY7636A PMIC.
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called sy7636a-hwmon.
+> +
+>   config SENSORS_DME1737
+>   	tristate "SMSC DME1737, SCH311x and compatibles"
+>   	depends on I2C && !PPC
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 162940270661..1355ffdb1481 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -181,6 +181,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+>   obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>   obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
+>   obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
+> +obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
+>   obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
+>   obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+>   obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
+> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+> new file mode 100644
+> index 000000000000..a59628f87ff3
+> --- /dev/null
+> +++ b/drivers/hwmon/sy7636a-hwmon.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Functions to access SY3686A power management chip temperature
+> + *
+> + * Copyright (C) 2019 reMarkable AS - http://www.remarkable.com/
+> + *
+> + * Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
+> + *          Alistair Francis <alistair@alistair23.me>
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <linux/mfd/sy7636a.h>
+> +
+> +static ssize_t show_temp(struct device *dev,
+> +			 struct device_attribute *attr, char *buf)
+> +{
+> +	unsigned int reg_val;
+> +	struct regmap *regmap = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = regmap_read(regmap, SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return snprintf(buf, PAGE_SIZE, "%d\n", reg_val);
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR(temp0, 0444, show_temp, NULL, 0);
+> +
 
-Signed-off-by: Sohaib Mohamed <sohaib.amhmd@gmail.com>
----
- drivers/hwmon/ad7414.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+This must be temp1_input. "temp0" is not a standard attribute,
+and without standard attributes the driver is pointless.
 
-diff --git a/drivers/hwmon/ad7414.c b/drivers/hwmon/ad7414.c
-index 0afb89c4629d..52df6005812c 100644
---- a/drivers/hwmon/ad7414.c
-+++ b/drivers/hwmon/ad7414.c
-@@ -107,6 +107,7 @@ static ssize_t temp_input_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct ad7414_data *data = ad7414_update_device(dev);
-+
- 	return sprintf(buf, "%d\n", ad7414_temp_from_reg(data->temp_input));
- }
- static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_input, 0);
-@@ -116,6 +117,7 @@ static ssize_t max_min_show(struct device *dev, struct device_attribute *attr,
- {
- 	int index = to_sensor_dev_attr(attr)->index;
- 	struct ad7414_data *data = ad7414_update_device(dev);
-+
- 	return sprintf(buf, "%d\n", data->temps[index] * 1000);
- }
- 
-@@ -152,6 +154,7 @@ static ssize_t alarm_show(struct device *dev, struct device_attribute *attr,
- 	int bitnr = to_sensor_dev_attr(attr)->index;
- 	struct ad7414_data *data = ad7414_update_device(dev);
- 	int value = (data->temp_input >> bitnr) & 1;
-+
- 	return sprintf(buf, "%d\n", value);
- }
- 
-@@ -192,7 +195,7 @@ static int ad7414_probe(struct i2c_client *client)
- 	/* Make sure the chip is powered up. */
- 	conf = i2c_smbus_read_byte_data(client, AD7414_REG_CONF);
- 	if (conf < 0)
--		dev_warn(dev, "ad7414_probe unable to read config register.\n");
-+		dev_warn(dev, "%s unable to read config register.\n", __func__);
- 	else {
- 		conf &= ~(1 << 7);
- 		i2c_smbus_write_byte_data(client, AD7414_REG_CONF, conf);
-@@ -227,8 +230,7 @@ static struct i2c_driver ad7414_driver = {
- 
- module_i2c_driver(ad7414_driver);
- 
--MODULE_AUTHOR("Stefan Roese <sr at denx.de>, "
--	      "Frank Edelhaeuser <frank.edelhaeuser at spansion.com>");
-+MODULE_AUTHOR("Stefan Roese <sr at denx.de>, Frank Edelhaeuser <frank.edelhaeuser at spansion.com>");
- 
- MODULE_DESCRIPTION("AD7414 driver");
- MODULE_LICENSE("GPL");
--- 
-2.25.1
+> +static struct attribute *sy7636a_attrs[] = {
+> +	&sensor_dev_attr_temp0.dev_attr.attr,
+> +	NULL
+> +};
+> +
+> +ATTRIBUTE_GROUPS(sy7636a);
+> +
+> +static int sy7636a_sensor_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	struct device *hwmon_dev;
+> +	int err;
+> +
+> +	if (!regmap)
+> +		return -EPROBE_DEFER;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +			"sy7636a_temperature", regmap, NULL, sy7636a_groups);
+
+
+I am not going to accept this. The groups pointer is only supposed
+to be used for non-standard attributes.
+
+Anyway, it is pointless to have both a thermal driver and a hwmon
+driver. The hwmon driver can register the thermal node if the _info
+interface is used properly, and the thermal driver can register
+a hwmon interface using [devm_]thermal_add_hwmon_sysfs(). If you don't
+want to use the _info API in the hwmon driver, please drop this
+driver and register the hwmon interface from the thermal driver.
+
+Thanks,
+Guenter
+
+> +
+> +	if (IS_ERR(hwmon_dev)) {
+> +		err = PTR_ERR(hwmon_dev);
+> +		dev_err(&pdev->dev, "Unable to register hwmon device, returned %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver sy7636a_sensor_driver = {
+> +	.probe = sy7636a_sensor_probe,
+> +	.driver = {
+> +		.name = "sy7636a-temperature",
+> +	},
+> +};
+> +module_platform_driver(sy7636a_sensor_driver);
+> +
+> +MODULE_DESCRIPTION("SY7636A sensor driver");
+> +MODULE_LICENSE("GPL");
+> 
 
