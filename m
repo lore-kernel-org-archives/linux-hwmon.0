@@ -2,156 +2,174 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE0BCC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 05:05:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8631AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 05:58:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94DE5611C3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 05:05:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6EDE860FDA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 05:58:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbhJOFHu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 01:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S235478AbhJOGAW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 02:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbhJOFHu (ORCPT
+        with ESMTP id S229706AbhJOGAV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 01:07:50 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD866C061570;
-        Thu, 14 Oct 2021 22:05:44 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id d20so5056889qvm.8;
-        Thu, 14 Oct 2021 22:05:44 -0700 (PDT)
+        Fri, 15 Oct 2021 02:00:21 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E917CC061570;
+        Thu, 14 Oct 2021 22:58:15 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id d9so33333501edh.5;
+        Thu, 14 Oct 2021 22:58:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SVSDlRtUbO26Znlz3FX13ju5T/3DmVvaUnOyfVchjzs=;
-        b=elrdX1cpB1nDA+5QZPRa5ZtlWXqUfKwBaWxMYWW+zgG8VTp1BvP92U1fYhQ5z17QvJ
-         i0hxnMiX38QA96+3vQNnd0C8bEczfn5F9ufPSdnZ+hNLbytj3/FUFqvGIW037XgR8ZVk
-         YeN13QrAqC2Iuxqx3PvhtkKOD5M2YZ/bLy5Ro=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a7lf7LUGPaS4QDss+KWCnNxX2/jz7fWtBbSCfzXNCrg=;
+        b=OUhHyh3COTqO1BLIuRtk2tPNbsmxX5WrZ5NsVL6FIkd5owHBdlYIT9Z4EKh+1BJHCH
+         tgZPUX5ydiO/z8LXIozWjNnXmbftGok6A7/GMQQzAbbpRwTG6O0/diC5BJHm3LguHBsG
+         s5UkT5IaLd2hWqBFhdz0IZMcZB3M1jm57Mb970KQuAUJtcmcQ1Dl+Nxc4gLJ9oSUjODu
+         wpXXVHq0v6zSJ/6u14jSzMehzJ5XGMDPiOt/7nuYE7NKhgLm3+RWd6qMt2bNKRhDZvaV
+         w5l6Fk5NIjz5mBb8F5O8Y4bXuSgYzauMxEM8ONLrqTFXtYF3fcm4EY8QohZPsrg/XOGO
+         G9aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SVSDlRtUbO26Znlz3FX13ju5T/3DmVvaUnOyfVchjzs=;
-        b=egcqxJpiro2rvMlAhe/MwDKNnKeHAhCRAg/RW1N0Mf3o7IXmK4wcZMpkRR3YClBX6U
-         2BObeRYeZvmu5bJQwZ1i1ERX4WCvDCBW6uJU1p3lu6GQAqOaLVxNa8f2lkRamJ543y8t
-         fQGP9Ewr/ggl/SENiOsNxI5xdYZviMurbRAw/rEdMTzu27llmxRaEiYHdnzGPLC+9jei
-         HaJk1rCEYWlUMuJrwjNel8QFF0MHjWRtCtMo9TkimukDb8wPTFFni16O99L5nTUedrGs
-         fNnPa1oq5/hTElg/JF+V6cYXAqNw1vyIkIYqRGpOvSvlykpbok8lnXd25Qo8t9WAARRC
-         M3Pw==
-X-Gm-Message-State: AOAM5314KeJKeaDR+RzY472sG60WENBf1PgnBs9z2scfIGMCD8vqP77/
-        u3zcYCyXiDfBAGljkM4IVj1cinu2gEHw+O0bzEw=
-X-Google-Smtp-Source: ABdhPJwyxNh3quQmc4LjNuE3K+5AnLtlDoZrZxFupHfdR3nYhF4Eyc1zvKRvGLLuJ41tOk3Se5lfgtNgs8C45ogCHrc=
-X-Received: by 2002:a05:6214:98d:: with SMTP id dt13mr9316954qvb.13.1634274343844;
- Thu, 14 Oct 2021 22:05:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210927155925.15485-1-eajames@linux.ibm.com> <20210927155925.15485-2-eajames@linux.ibm.com>
-In-Reply-To: <20210927155925.15485-2-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Fri, 15 Oct 2021 05:05:32 +0000
-Message-ID: <CACPK8XdQ9wdg=VxRb0atd8P7PpFZTsWZwsYEkWsbmbR20DKKBQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] fsi: occ: Use a large buffer for responses
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, Jeremy Kerr <jk@ozlabs.org>,
-        Alistair Popple <alistair@popple.id.au>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a7lf7LUGPaS4QDss+KWCnNxX2/jz7fWtBbSCfzXNCrg=;
+        b=6yvwUGYbsX4M5r0nIjN8D193z2s+RYitXAlrLBy0j3XRKl5E1ZXnMKH47jK/9pbEE4
+         YgLHA9URVl9Oq3s6Re48iOpWb+ekYG8zG2tyImweV1vM/aLqYH24tkc2v5d0kONVLudX
+         OTdZjgsk2gWd17Ri32ZBAV4jcgjIv5M5wGgBwOCWTJ0dpoZYsUkS9fSkkB07xy8HNGUb
+         uN0ORidhqnKEBYNnpn4KogvAG00BcxDLwjEi1/+rqPw91PmeiAmL+2UUA9GmlTLuUIzo
+         hD8ohYrmif6EZDE2Dqc1RYb/oSkPVyPWn5YY5PI4jXlZ2bbTf7kaLC5qQ0VH3JHHkvCX
+         7u8w==
+X-Gm-Message-State: AOAM531iODjvPSwWt+ceUnBUxg7WK9WziK3MOvJMUrwNN3c58bZI+S32
+        2cJoRHWh/jp9M3mlPmHhDag=
+X-Google-Smtp-Source: ABdhPJzlblEiDz4sUVcySsaH1v0Kmd3ElWH+JaSlUaAio9CscB6+RebJ7PbPaJeHPVKfr+FUzh4mGw==
+X-Received: by 2002:a17:906:fb91:: with SMTP id lr17mr4551340ejb.256.1634277494311;
+        Thu, 14 Oct 2021 22:58:14 -0700 (PDT)
+Received: from localhost.localdomain ([178.94.41.216])
+        by smtp.gmail.com with ESMTPSA id ck13sm3872448edb.0.2021.10.14.22.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Oct 2021 22:58:13 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
+        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
+        thomas@weissschuh.net, Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/2] Update ASUS WMI supported boards
+Date:   Fri, 15 Oct 2021 08:58:04 +0300
+Message-Id: <20211015055808.327453-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 27 Sept 2021 at 15:59, Eddie James <eajames@linux.ibm.com> wrote:
->
-> Allocate a large buffer for each OCC to handle response data. This
-> removes memory allocation during an operation, and also allows for
-> the maximum amount of SBE FFDC.
+Add support by WMI interface privided by Asus for B550/X570 boards: 
+* PRIME X570-PRO,
+* ROG CROSSHAIR VIII HERO
+* ROG CROSSHAIR VIII DARK HERO
+* ROG CROSSHAIR VIII FORMULA
+* ROG STRIX X570-E GAMING
+* ROG STRIX B550-E GAMING
 
-Why do we need this change? (is it fixing a bug, did the host change,
-is it an unimplemented feature, etc)
+Add support by WMI interface privided by Asus for X370/X470/
+B450/X399 boards:
+* ROG CROSSHAIR VI HERO,
+* PRIME X399-A,
+* PRIME X470-PRO,
+* ROG CROSSHAIR VI EXTREME,
+* ROG CROSSHAIR VI HERO (WI-FI AC),
+* ROG CROSSHAIR VII HERO,
+* ROG CROSSHAIR VII HERO (WI-FI),
+* ROG STRIX B450-E GAMING,
+* ROG STRIX B450-F GAMING,
+* ROG STRIX B450-I GAMING,
+* ROG STRIX X399-E GAMING,
+* ROG STRIX X470-F GAMING,
+* ROG STRIX X470-I GAMING,
+* ROG ZENITH EXTREME,
+* ROG ZENITH EXTREME ALPHA.
 
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/fsi/fsi-occ.c   | 109 ++++++++++++++++------------------------
->  include/linux/fsi-occ.h |   2 +
->  2 files changed, 45 insertions(+), 66 deletions(-)
->
-> diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-> index b0c9322078a1..ace3ec7767e5 100644
-> --- a/drivers/fsi/fsi-occ.c
-> +++ b/drivers/fsi/fsi-occ.c
-> @@ -10,6 +10,7 @@
->  #include <linux/kernel.h>
->  #include <linux/list.h>
->  #include <linux/miscdevice.h>
-> +#include <linux/mm.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/fsi-occ.h>
-> @@ -42,13 +43,6 @@
->
->  #define OCC_P10_SRAM_MODE      0x58    /* Normal mode, OCB channel 2 */
->
-> -/*
-> - * Assume we don't have much FFDC, if we do we'll overflow and
-> - * fail the command. This needs to be big enough for simple
-> - * commands as well.
-> - */
-> -#define OCC_SBE_STATUS_WORDS   32
-> -
->  #define OCC_TIMEOUT_MS         1000
->  #define OCC_CMD_IN_PRG_WAIT_MS 50
->
-> @@ -60,6 +54,7 @@ struct occ {
->         char name[32];
->         int idx;
->         u8 sequence_number;
-> +       void *buffer;
->         enum versions version;
->         struct miscdevice mdev;
->         struct mutex occ_lock;
-> @@ -250,8 +245,10 @@ static int occ_verify_checksum(struct occ *occ, struct occ_response *resp,
->  static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
->  {
->         u32 data_len = ((len + 7) / 8) * 8;     /* must be multiples of 8 B */
-> -       size_t cmd_len, resp_len, resp_data_len;
-> -       __be32 *resp, cmd[6];
-> +       size_t cmd_len, resp_data_len;
-> +       size_t resp_len = OCC_MAX_RESP_WORDS;
-> +       __be32 *resp = occ->buffer;
-> +       __be32 cmd[6];
->         int idx = 0, rc;
->
->         /*
-> @@ -278,19 +275,19 @@ static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
->         cmd[1] = cpu_to_be32(SBEFIFO_CMD_GET_OCC_SRAM);
->         cmd[4 + idx] = cpu_to_be32(data_len);
->
-> -       resp_len = (data_len >> 2) + OCC_SBE_STATUS_WORDS;
-> -       resp = kzalloc(resp_len << 2, GFP_KERNEL);
+I have changed code to use dmi_first_match for directly without callbacks 
+get sensors list defined for board, added "depends on ACPI_WMI" for 
+both modules and added additional check for input buffer in 
+asus_wmi_ec_decode_reply_buffer..
 
-Previously the driver would zero the buffer before using it. Should
-you add a memset here?
+Could you please review?
 
-> @@ -635,6 +605,10 @@ static int occ_probe(struct platform_device *pdev)
->         if (!occ)
->                 return -ENOMEM;
->
-> +       occ->buffer = kvmalloc(OCC_MAX_RESP_WORDS * 4, GFP_KERNEL);
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Signed-off-by: Ed Brindley <kernel@maidavale.org>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Why do you allocate WORDS * 4?
+---
+Changes in v7:
+- Use  for directly get sensors list by board.
+- Add depends on ACPI_WMI to Kconfig.
+- Add response buffer size check in asus_wmi_ec_decode_reply_buffer.
+- Clean up defines names.
 
-> diff --git a/include/linux/fsi-occ.h b/include/linux/fsi-occ.h
-> index d4cdc2aa6e33..7ee3dbd7f4b3 100644
-> --- a/include/linux/fsi-occ.h
-> +++ b/include/linux/fsi-occ.h
-> @@ -19,6 +19,8 @@ struct device;
->  #define OCC_RESP_CRIT_OCB              0xE3
->  #define OCC_RESP_CRIT_HW               0xE4
->
-> +#define OCC_MAX_RESP_WORDS             2048
+Changes in v6:
+- asus_wmi_ec_sensors: Generate query for all sensors on sensors setup
+- asus_wmi_ec_sensors: Move binary to sensor value logic to separate 
+  get_sensor_value (by Eugene Shalygin)
+- asus_wmi_ec_sensors: Use acpi_os_free without NULL pointer check.
+- Add asus_wmi_sensor to documentation index.
+- Add asus_wmi_ec_sensor to documentation index.
 
-Does this need to go in the header?
+Changes in v5:
+- Fixes build issue reported by kernel test robot with disabled ACPI_WMI.
+- asus_wmi_sensors: Remove sensor->name check as always evaluated to true.
+
+Changes in v4:
+ - Implement wmi driver instead platform driver.
+ - Update documentation with known issues.
+
+Changes in v3:
+ - Use MODULE_DEVICE_TABLE for match devices.
+ - asus_wmi_ec_sensors: Use get_unaligned_be32 instead incorrectly used 
+   get_unaligned_le32.
+ - Add documentaion for drivers.
+
+Changes in v2:
+ - asus_wmi_ec_sensors: Rename asus_wmi_sensors to asus_wmi_ec_sensors for 
+   B550/X570 boards.
+ - asus_wmi_ec_sensors: Use utf8s_to_utf16s/utf16s_to_utf8s instead handmade 
+   fuctions.
+ - asus_wmi_ec_sensors: Use post increment.
+ - asus_wmi_ec_sensors: Use get_unaligned* for convert values.
+ - asus_wmi_ec_sensors: Use PTR_ERR_OR_ZERO.
+ - asus_wmi_ec_sensors: Specify per-board sensors in a declarative way 
+   (by Eugene Shalygin).
+ - asus_wmi_sensors: Add support for X370/X470/B450/X399 boards.
+
+---
+
+Denis Pauk (2):
+  hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
+  hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
+
+ Documentation/hwmon/asus_wmi_ec_sensors.rst |  35 ++
+ Documentation/hwmon/asus_wmi_sensors.rst    |  74 +++
+ Documentation/hwmon/index.rst               |   2 +
+ MAINTAINERS                                 |   8 +
+ drivers/hwmon/Kconfig                       |  24 +
+ drivers/hwmon/Makefile                      |   2 +
+ drivers/hwmon/asus_wmi_ec_sensors.c         | 632 ++++++++++++++++++++
+ drivers/hwmon/asus_wmi_sensors.c            | 617 +++++++++++++++++++
+ 8 files changed, 1394 insertions(+)
+ create mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+ create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
+ create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
+ create mode 100644 drivers/hwmon/asus_wmi_sensors.c
+
+
+base-commit: be68c4dcc659172af86e875c25d26c6a114b1afc
+-- 
+2.33.0
+
