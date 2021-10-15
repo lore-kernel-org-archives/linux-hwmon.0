@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DC35C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F66FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:49:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15C44611C3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:42:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0BE6361056
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:49:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237078AbhJOOoe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 10:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
+        id S233389AbhJOOwB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 10:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbhJOOoc (ORCPT
+        with ESMTP id S230471AbhJOOwB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 10:44:32 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3046C061762;
-        Fri, 15 Oct 2021 07:42:24 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id i20so38212900edj.10;
-        Fri, 15 Oct 2021 07:42:24 -0700 (PDT)
+        Fri, 15 Oct 2021 10:52:01 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B12C061570;
+        Fri, 15 Oct 2021 07:49:55 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id h196so8052968iof.2;
+        Fri, 15 Oct 2021 07:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=E+zGmTYCSMl9Jk+wZyC8YFyhGK1gcDucxT1GDpDZTuM=;
-        b=kj+1T7etiQ1yhpR2wJ7yK2OOWl6GCSSjJmmCnSVASs6glWgSnriT29vLkNJ1ECIdui
-         sIR66gqMbuhBQIU3mNidpBfEDfx2O6HGmSE0L0X5K1p1AX0okpXxnYYjSfv2hbE/2qCw
-         +nZa723fFPpj4V4gecfZPdrNdpgMMCedc+6UYjizAaEWwoy5zYHx5seAJno2biMs6LHA
-         ydj3s6QI3fj7md4F3zclEVJEQm0EO3ZEI/9sOinS0RyrZPGhf0IZkrNQgCPxyo9Esy01
-         IxBaLjcuo1+OuCibQm9PZlPCYs1cUtbJRCdcGgbRJJJIEGPZzfXRQZXs45sLmYEFAPLZ
-         KrHw==
+        bh=fL8+mgMcadnALrTayBWbaujkXyGx/ICo6dyKKnlu570=;
+        b=Vl8/fHUgsoGAEvaEAPPyassn27Us3O1tIYbImm/prxO5yCZC7Icl8aG7VOwmxcDXxk
+         pIiXPKAb6VdRPBu8ICOZ054AbNpP8vQVyYWkiWS63mnQ+1zTSFx65j92wBC7EusXKHQR
+         KzXMoLIEbh2r7s/5g2MIC4CxPF6/FtVDYu+QvKKTj/jesPsphm7VHalstx/JA18qp97B
+         YfLi5P9z5u6+9o++qcj+a3dkZlFeHOmfDimSz01cmn/OzMbdCKaiq/lyj/rZMX9XTgAz
+         IOg7hzJzbdCseQ71hCYXn0yZFmzeA9A535kXisUy9WjgMNPHf+7Z9BcQ3b9YU1ORrhol
+         6wIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=E+zGmTYCSMl9Jk+wZyC8YFyhGK1gcDucxT1GDpDZTuM=;
-        b=UGQv6DJCfvugvGEuE+EoNokrrxtHRntruA+oaa2n1wm8AcOcyLxUK2Kmeeox3HQB6R
-         W/8HAjYGRncO5Y9OM8r9sL2REaMSJzNqAIESQnP4Y4XE2gk7znONnDKrbNGp63sOSBnU
-         PLSX37hc9J6pnwYKuzApKlJ88heMxufj0dHROPe/wF2P4ToX4Sdo+mRUSfWKCMLtm4Sr
-         maOkQoXAKnZoXzi0LnPDhbnZgzx811pKXUMejVayRqvmntU6td/eaPZiR6wgKr8FqqZw
-         lUCkWt/6NMX4FCqkaR8w3kOVXpb+3cVL817/8DSl2APhIJM6z/Ym2j4yz6Fx7LQXpnew
-         ax+Q==
-X-Gm-Message-State: AOAM533F2Wp7o2mR5huy9axcce4HNac/njINR7xeiCd24wJrl/qklIeI
-        kccLNDFS3qY0AK6AOQNhamvFRNqZ2DDVARBW0t7dG3GA6xNSNe6a
-X-Google-Smtp-Source: ABdhPJyaEGgUmNaZ1jQj4eTP5bfnQBSjwm5dDuw1uXLDARKhiRmmQfJCCePav+qKCR42/TjM/nVD0kVpeQMEJEEUQik=
-X-Received: by 2002:a17:907:8a27:: with SMTP id sc39mr7125346ejc.567.1634308900544;
- Fri, 15 Oct 2021 07:41:40 -0700 (PDT)
+        bh=fL8+mgMcadnALrTayBWbaujkXyGx/ICo6dyKKnlu570=;
+        b=dR+psE8Rcihya6tAU6X+CZHPLoLvUDzF4iO6sejSmPm258yUWKStcKE1f3PgwrFsyw
+         APIZFog8YXG/HlvoZEgb2l/VSXWoCx5M+c1AXEHFO/3gBX+EbByEbr7Y1A8cygZqL2+E
+         +mLloNsEX/MB6mhNOz81JTZA42ySJccWbJMlD1WDdsSFgyDUfjrEcUwy/qpM+IXVrBqJ
+         VA8MIEZhrsFqDInOGVdBBkf8nYSg7tQ+Ktwf8H2xJT8JajpEQNq3kkXllbx0kWWoc/oI
+         o3CLbc5HJq1oILk+vq41uWd7upWTA5KkiE4ZFy/GoEw3ypQ8Kr9S1WwTXkAAq1XGiOFh
+         24Eg==
+X-Gm-Message-State: AOAM532FyuFmjkNEinZlIJbpmQn2TtmqoXUBUa7aAAosA6oNgRj4DZIl
+        ePSGsSeQiKFzKdArVg5ZPIUAp6pgOeZtMgctNLs=
+X-Google-Smtp-Source: ABdhPJzzB8N6SPYWHddFZ13/1bfKjIU1iQmR5XsMBgpen4Gi9hWheknEqQ3rEy04MABdE0cHk/A9MCQIbva0TNP2/ho=
+X-Received: by 2002:a05:6602:1504:: with SMTP id g4mr4004341iow.133.1634309394425;
+ Fri, 15 Oct 2021 07:49:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211015055808.327453-1-pauk.denis@gmail.com> <20211015055808.327453-2-pauk.denis@gmail.com>
  <CAHp75VfUYgYT_RSNXCc+_3rkBbywL8ZDcAFPwr=WbPzcD8MF0w@mail.gmail.com>
  <CAB95QAQMP58-H427+nASKBvHOHZtLQqgRBSPa+MqGU7_D42M2Q@mail.gmail.com> <CAHp75VfJzaSKzw4E3P=GdtMU1vpi3DvW-VLGNbuaGaykEydhFQ@mail.gmail.com>
 In-Reply-To: <CAHp75VfJzaSKzw4E3P=GdtMU1vpi3DvW-VLGNbuaGaykEydhFQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 15 Oct 2021 20:40:52 +0300
-Message-ID: <CAHp75VcUk=b32F0Ngo5xtUmDJGmJqxbFaHHs44w6yrmcuisOpg@mail.gmail.com>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 15 Oct 2021 16:49:43 +0200
+Message-ID: <CAB95QATQNaPiqJf7DuhWcJiU1Yq3_RXX7r+f3FAdw9aO0hvr0g@mail.gmail.com>
 Subject: Re: [PATCH v7 1/2] hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Denis Pauk <pauk.denis@gmail.com>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
         thomas@weissschuh.net, Tor Vic <torvic9@mailbox.org>,
@@ -72,27 +72,31 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 8:36 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Fri, Oct 15, 2021 at 5:26 PM Eugene Shalygin
-> <eugene.shalygin@gmail.com> wrote:
+Hi, Andy,
 
-...
-
-> > bin2hex() can't output UTF-16LE characters, can it? It would need an
-> > intermediate buffer and a call to convert ASCII (UTF-8) to UTF-16.
->
+On Fri, 15 Oct 2021 at 16:37, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 > I didn't get it. If there is a strong endianess expected the parameter
 > should be __le16 or __be16, moreover it seems it missed the const
 > qualifier. Any preparatory stuff should be done in the
 > asus_wmi_ec_make_block_read_query() which prepares the input buffer,
 > doesn't it?
 
-I'm expecting a confusion here, so let me clarify:
-1) in the current code the __le16/__be16 is missed, BUT
-2) if you are going to prepare CPU endian buffer in the caller, the
-u16 is correct, only const should be added.
+We need to produce and parse a, roughly speaking, hex-BSTR to pass it
+to the WMI function (save for its size parameter of 16 bits instead of
+32 for the BSTR). bin/hex conversion functions accept/output UTF-8
+strings and thus require an intermediate buffer and additional utf-8
+<-> utf-16 conversion. Do you insist that a loop with a stride of 4 is
+a homegrown library already?
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > > What's the point of calling acpi_os_free(obj) when you already know it's NULL?
+> >
+> > The case when obj->type != ACPI_TYPE_BUFFER
+>
+> Read my comment again, please.
+
+I did it twice already and still can't understand. The WMI method can
+return a string, for example, which is an error for our code, but the
+buffer needs to be freed.
+
+Regards,
+Eugene
