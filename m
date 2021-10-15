@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 584C9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 106E5C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:38:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 380A061164
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:26:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4F4F611C8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Oct 2021 14:38:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240289AbhJOO2R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Oct 2021 10:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S234239AbhJOOkJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Oct 2021 10:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240273AbhJOO2P (ORCPT
+        with ESMTP id S233109AbhJOOkJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Oct 2021 10:28:15 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5842EC061570;
-        Fri, 15 Oct 2021 07:26:09 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id s17so7877956ioa.13;
-        Fri, 15 Oct 2021 07:26:09 -0700 (PDT)
+        Fri, 15 Oct 2021 10:40:09 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EE1C061570;
+        Fri, 15 Oct 2021 07:38:02 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id w14so38821919edv.11;
+        Fri, 15 Oct 2021 07:38:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yoxPsmnc01VS+MXakR3w69x2ei/elIBkKRVWfGQtpeQ=;
-        b=Wk4FiEkzfymg8nQOcrLtLcRFiR/itEoqbhDsMUDdjABFxDgI/q+/eOpGiooJrLpbYR
-         /7CpmfDl0EcJ/JJxMAJlemV4qTNQ72boy7Aob6T6gMZ2F5s34G2qrCx1owFLyoQofl1j
-         6j0DSYAhigtADL3lnkRGVfVt8EViL22wKoLrjKcxxWoNaKdM16jbewLFgMPoGtzyZ7Rx
-         +pyFTwxwwy+4L2K0TUvfi3+hzwxxfVonIJoZLPpZwNMFCJbWJ5gLfCopR0oI0yxmFhAN
-         Wb5lNUABlWi5+DfO/5toq8ubNTgysiL8mWljPKgxRaFcRN/0DezYDnX6X0Jdbt/XxMX6
-         xDCw==
+        bh=1HEP6At+Hhj0+UfjA/lr3AwiRgliiJ9IAA2X6QY9jNg=;
+        b=gpzcTWsjIEATku5vg2TX7wcqqI6aycAZqoq6BuILpmrWxtRQgMxpjoYCnK2GUBN0P1
+         nxqbCjNi5RmP/FTgc8wce5r1UH+BHjLmG30Sb98nSA8O2P2YtYFC+Ee+sQwwPlaEwVvu
+         QYUa/hbH9kOfVTF2i13OtvAIVifsi+fV1s3/+Idcjl/BVc9YKUiWk2F9/VqeAerb1pGk
+         BHqG8wCdQLmJ1HrIzjqV97W42Dhp+Mv+p1ECvIP/qbGFoAWWyv6eDSAOo48fbN7P0iHU
+         sdVRpvvbYRY0G8TkemZ6JuUSaG4b8BNEEbzwCYEMJ5hStyg70LlAudlUUwOZpektY3WU
+         NfIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yoxPsmnc01VS+MXakR3w69x2ei/elIBkKRVWfGQtpeQ=;
-        b=FOK5QhjWGk/fvS+MY0n/QFxDcXb6YXbP/Ftiskqpi5nnvDYVphgxgbPFJbbA9AIRiK
-         AQydxHgJTiDOcPHcOBSZjmYKwD0Ey0AfuTz8RBj8KVEHVgjoUi8JXyvOcZ/swUE1ZeZ+
-         Qmw2rZPQJH70Weeq1RPGkXCNbXNnbVQtFuqd943RSRJJnctR2UP+1zjpIETUPhiFGTNy
-         /WXwYZK7SsdMj1vR3Bot0qGvPam+rcVP0KeLBItFKTkOg6dmpd0If2CRFLF4gz5aCIkN
-         E9GVuBSl4NCaXllG8L61p0daUDlRE3GoY2ttAjGB6MJzdpR3oWWdH27Kv2dnbsGYeXJM
-         KLrA==
-X-Gm-Message-State: AOAM531ZocfGVPFztUpZ3Xxs65vaVjSiT/cjBrbCZFrhUCWgqwErqgtW
-        ByOfalo8uCAjUtR1j6HPZNvuv3x04EVkX+h1Rk8=
-X-Google-Smtp-Source: ABdhPJwqJKE4HRjNGvtHlHAn5UXmcbJDLTqP+RhK1SBxcQZWOPsrfkUqGDJu/vOqVZZXTrd6bq3S8U8fseoCy4YvBB0=
-X-Received: by 2002:a02:2124:: with SMTP id e36mr8485785jaa.35.1634307968705;
- Fri, 15 Oct 2021 07:26:08 -0700 (PDT)
+        bh=1HEP6At+Hhj0+UfjA/lr3AwiRgliiJ9IAA2X6QY9jNg=;
+        b=WBck8zg8iovXW9mKC5t91bEYVLX2gX1kL9ZVFSTpwQLFVHR0hCRkJBQeGdnJZp0+eO
+         QjwcW67cNzTvfwOECH4jawmsI8dq2meHVhmCfLWTRAuy64xQjpQBqlnIHr1zvk48ZaqA
+         KaZIhIUQZuaKTZqPLY7VCJjnGSjrVGw6fMxbFba0grVS2F2dLKUwUE2ilKp6S4RA0SX4
+         sXjO0u0WxE8ZL2GQp50u7JzP9yEs6FHdoQmYjMnLVo94DwtxVQFSajCcek0EduWeRGsf
+         11Qyu2QvjDNct6wVFxTR5ZZ6tyKw6FD4UO3wWZ6/QKRsFrzGJ8ascF5xqwMzEJTSLUs5
+         KeKQ==
+X-Gm-Message-State: AOAM5321D2hcb2xFk+29TaxVJ/4XuUDzJ4RLDvUKup8OohlPFFYybxgK
+        F7ZzAv9ewCqaO/gDMGCLugMyZZWI9NobpgzQoTwraCIM/yW8ejsDvQA=
+X-Google-Smtp-Source: ABdhPJzwVHwjaCBPY1T90IHyGw1GB0Emtn6fo6leBPXStxB2xCcSAJSI4dkJnJvow6Js6zD0nE1BRWqhqqZHOpVPPD4=
+X-Received: by 2002:a17:906:a158:: with SMTP id bu24mr6870109ejb.356.1634308639061;
+ Fri, 15 Oct 2021 07:37:19 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211015055808.327453-1-pauk.denis@gmail.com> <20211015055808.327453-2-pauk.denis@gmail.com>
- <CAHp75VfUYgYT_RSNXCc+_3rkBbywL8ZDcAFPwr=WbPzcD8MF0w@mail.gmail.com>
-In-Reply-To: <CAHp75VfUYgYT_RSNXCc+_3rkBbywL8ZDcAFPwr=WbPzcD8MF0w@mail.gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Fri, 15 Oct 2021 16:25:57 +0200
-Message-ID: <CAB95QAQMP58-H427+nASKBvHOHZtLQqgRBSPa+MqGU7_D42M2Q@mail.gmail.com>
+ <CAHp75VfUYgYT_RSNXCc+_3rkBbywL8ZDcAFPwr=WbPzcD8MF0w@mail.gmail.com> <CAB95QAQMP58-H427+nASKBvHOHZtLQqgRBSPa+MqGU7_D42M2Q@mail.gmail.com>
+In-Reply-To: <CAB95QAQMP58-H427+nASKBvHOHZtLQqgRBSPa+MqGU7_D42M2Q@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 15 Oct 2021 20:36:31 +0300
+Message-ID: <CAHp75VfJzaSKzw4E3P=GdtMU1vpi3DvW-VLGNbuaGaykEydhFQ@mail.gmail.com>
 Subject: Re: [PATCH v7 1/2] hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     Denis Pauk <pauk.denis@gmail.com>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
         thomas@weissschuh.net, Tor Vic <torvic9@mailbox.org>,
@@ -71,54 +71,77 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi, Andy,
+On Fri, Oct 15, 2021 at 5:26 PM Eugene Shalygin
+<eugene.shalygin@gmail.com> wrote:
 
+...
 
-> > +#define        ASUSWMI_METHODID_BREC   0x42524543
+> > > +#define        ASUSWMI_METHODID_BREC   0x42524543
+> >
+> > ...above has definitely an ASCII combination in hex format, care to
+> > decode it in the comment?
 >
-> ...above has definitely an ASCII combination in hex format, care to
-> decode it in the comment?
+> This is a constant from the WMI dispatch function, the number is a
+> four-letter ASCII-encoded method name, here BREC, which is already
+> noted in the define identifier. Is it needed to repeat that?
 
-This is a constant from the WMI dispatch function, the number is a
-four-letter ASCII-encoded method name, here BREC, which is already
-noted in the define identifier. Is it needed to repeat that?
+Method name and signature might be different, I tend to ask to add a
+comment, simple /* BREC */ at the end of line would suffice.
 
-> > +       utf16s_to_utf8s((wchar_t *)data, len * 2,  UTF16_LITTLE_ENDIAN, buffer, len * 2);
+...
+
+> > > +       utf16s_to_utf8s((wchar_t *)data, len * 2,  UTF16_LITTLE_ENDIAN, buffer, len * 2);
+> >
+> > > +       for (i = 0; i < len; i++, pos += 2)
+> > > +               out[i] = (hex_to_bin(pos[0]) << 4) + hex_to_bin(pos[1]);
+> >
+> > NIH hex2bin().
 >
-> > +       for (i = 0; i < len; i++, pos += 2)
-> > +               out[i] = (hex_to_bin(pos[0]) << 4) + hex_to_bin(pos[1]);
+> Does it make sense to call hex2bin() with size = 1?
+
+Definitely. We don't want homegrown copies of library APIs.
+
+...
+
+> > > +       for (i = 0; i < len; i++) {
+> > > +               byte = registers[i] >> 8;
+> > > +               *pos = hex_asc_hi(byte);
+> > > +               pos++;
+> > > +               *pos = hex_asc_lo(byte);
+> > > +               pos++;
+> > > +               byte = registers[i];
+> > > +               *pos = hex_asc_hi(byte);
+> > > +               pos++;
+> > > +               *pos = hex_asc_lo(byte);
+> > > +               pos++;
+> > > +       }
+> >
+> > NIH bin2hex()
 >
-> NIH hex2bin().
+> bin2hex() can't output UTF-16LE characters, can it? It would need an
+> intermediate buffer and a call to convert ASCII (UTF-8) to UTF-16.
 
-Does it make sense to call hex2bin() with size = 1?
+I didn't get it. If there is a strong endianess expected the parameter
+should be __le16 or __be16, moreover it seems it missed the const
+qualifier. Any preparatory stuff should be done in the
+asus_wmi_ec_make_block_read_query() which prepares the input buffer,
+doesn't it?
 
-> > +       for (i = 0; i < len; i++) {
-> > +               byte = registers[i] >> 8;
-> > +               *pos = hex_asc_hi(byte);
-> > +               pos++;
-> > +               *pos = hex_asc_lo(byte);
-> > +               pos++;
-> > +               byte = registers[i];
-> > +               *pos = hex_asc_hi(byte);
-> > +               pos++;
-> > +               *pos = hex_asc_lo(byte);
-> > +               pos++;
-> > +       }
+So, replace homegwon library APIs.
+
+...
+
+> > > +       obj = output.pointer;
+> > > +       if (!obj || obj->type != ACPI_TYPE_BUFFER) {
+> >
+> > > +               acpi_os_free(obj);
+> >
+> > What's the point of calling acpi_os_free(obj) when you already know it's NULL?
 >
-> NIH bin2hex()
+> The case when obj->type != ACPI_TYPE_BUFFER
 
-bin2hex() can't output UTF-16LE characters, can it? It would need an
-intermediate buffer and a call to convert ASCII (UTF-8) to UTF-16.
+Read my comment again, please.
 
-
-> > +       obj = output.pointer;
-> > +       if (!obj || obj->type != ACPI_TYPE_BUFFER) {
->
-> > +               acpi_os_free(obj);
->
-> What's the point of calling acpi_os_free(obj) when you already know it's NULL?
-
-The case when obj->type != ACPI_TYPE_BUFFER
-
-Regards,
-Eugene
+-- 
+With Best Regards,
+Andy Shevchenko
