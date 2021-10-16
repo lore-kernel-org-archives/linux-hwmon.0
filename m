@@ -2,38 +2,38 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 860EEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 16 Oct 2021 14:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78759C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 16 Oct 2021 14:38:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B94F61139
-	for <linux-hwmon@archiver.kernel.org>; Sat, 16 Oct 2021 14:25:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B2C461073
+	for <linux-hwmon@archiver.kernel.org>; Sat, 16 Oct 2021 14:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240397AbhJPO1H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 16 Oct 2021 10:27:07 -0400
-Received: from mga05.intel.com ([192.55.52.43]:17757 "EHLO mga05.intel.com"
+        id S236206AbhJPOkH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 16 Oct 2021 10:40:07 -0400
+Received: from mga12.intel.com ([192.55.52.136]:61694 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235901AbhJPO1G (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 16 Oct 2021 10:27:06 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10138"; a="314250621"
+        id S235150AbhJPOkG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 16 Oct 2021 10:40:06 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10138"; a="208164725"
 X-IronPort-AV: E=Sophos;i="5.85,378,1624345200"; 
-   d="scan'208";a="314250621"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2021 07:24:58 -0700
+   d="scan'208";a="208164725"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2021 07:37:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,378,1624345200"; 
-   d="scan'208";a="482125171"
+   d="scan'208";a="593252711"
 Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 16 Oct 2021 07:24:57 -0700
+  by orsmga004.jf.intel.com with ESMTP; 16 Oct 2021 07:37:57 -0700
 Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mbkcK-0009OC-KF; Sat, 16 Oct 2021 14:24:56 +0000
-Date:   Sat, 16 Oct 2021 22:23:55 +0800
+        id 1mbkou-0009Op-SK; Sat, 16 Oct 2021 14:37:56 +0000
+Date:   Sat, 16 Oct 2021 22:37:46 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog] BUILD SUCCESS
- 87182d1636dc5e2df76b19149e9e527db2c39394
-Message-ID: <616ae07b.Te4MT5sy1q5eQbNR%lkp@intel.com>
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 51369c0f05347c1f4762cb05e9775e81eec04262
+Message-ID: <616ae3ba./PR6JzSoYkI4HbFo%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -42,12 +42,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog
-branch HEAD: 87182d1636dc5e2df76b19149e9e527db2c39394  watchdog: Fix OMAP watchdog early handling
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 51369c0f05347c1f4762cb05e9775e81eec04262  dt-bindings: hwmon: allow specifying channels for tmp421
 
-elapsed time: 876m
+elapsed time: 890m
 
-configs tested: 191
+configs tested: 185
 configs skipped: 5
 
 The following configs have been built successfully.
@@ -65,12 +65,6 @@ arm                         at91_dt_defconfig
 mips                      pic32mzda_defconfig
 arm                           u8500_defconfig
 arm                           viper_defconfig
-sh                           se7722_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                            pleb_defconfig
-powerpc                        fsp2_defconfig
-arm                        realview_defconfig
-powerpc                        warp_defconfig
 powerpc                      ep88xc_defconfig
 powerpc                      pasemi_defconfig
 powerpc                     sequoia_defconfig
@@ -177,10 +171,10 @@ h8300                            allyesconfig
 arc                                 defconfig
 xtensa                           allyesconfig
 sh                               allmodconfig
+parisc                           allyesconfig
 parisc                              defconfig
 s390                             allyesconfig
 s390                             allmodconfig
-parisc                           allyesconfig
 sparc                            allyesconfig
 sparc                               defconfig
 i386                             allyesconfig
