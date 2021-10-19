@@ -2,343 +2,224 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 781CEC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Oct 2021 20:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB228C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Oct 2021 21:35:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FFB460ED3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Oct 2021 20:53:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 795E7608FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Oct 2021 21:35:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbhJSUzq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Oct 2021 16:55:46 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32730 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230454AbhJSUzp (ORCPT
+        id S229521AbhJSVhf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Oct 2021 17:37:35 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:41710 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229483AbhJSVhe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Oct 2021 16:55:45 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19JJqGqu015740;
-        Tue, 19 Oct 2021 16:53:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=wnwrsiBSJRdAigf/caWL6172P/Bbo//AB28ukbT+GHo=;
- b=ciqU758He3BjNhYR+M1ZhQv20ThORR9VH+wypVWIbhFXjdLSNPDFO3eSff+7kqfxvDLz
- WAEx5SSxDlep/mvdqu5s6rwRzHidtGviPWvw5ZfXrmaQPARiBlhMp3+ljHqFtXhEK1SI
- BD+KcxwgSnOfJcC5ghCURSk5zt+Qs2dbwaEgPxEW6sEyPE4JmYq/wIo3T+hMF6Zf8wrM
- tki7DbVeNNp2AKJimbaIVvolAQLn3L/lYTpHIi7UHLvaCeN+Dww8YFA1qKw3km6SCHgt
- 3O9PYpQJmzmXA9beE94QkvGmrgCc6Gau3WBmrhp2seJeJGAppBPjSURaW7i1p5KPfo3F /w== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bt4jbhcdf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Oct 2021 16:53:11 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19JKhTFp006422;
-        Tue, 19 Oct 2021 20:53:10 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma04dal.us.ibm.com with ESMTP id 3bqpcc6jp1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Oct 2021 20:53:10 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19JKr9rZ39059756
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Oct 2021 20:53:09 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 65CC6124058;
-        Tue, 19 Oct 2021 20:53:09 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9410F124052;
-        Tue, 19 Oct 2021 20:53:08 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.36.93])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Oct 2021 20:53:08 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jk@ozlabs.org, joel@jms.id.au, linux@roeck-us.net,
-        jdelvare@suse.com, eajames@linux.ibm.com
-Subject: [PATCH v4 1/4] fsi: occ: Use a large buffer for responses
-Date:   Tue, 19 Oct 2021 15:53:04 -0500
-Message-Id: <20211019205307.36946-2-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211019205307.36946-1-eajames@linux.ibm.com>
-References: <20211019205307.36946-1-eajames@linux.ibm.com>
+        Tue, 19 Oct 2021 17:37:34 -0400
+Received: by mail-ot1-f48.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so3678661ote.8;
+        Tue, 19 Oct 2021 14:35:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xbQGFzivhpvVw2AMdu/JQq7yxujXnqSJPyy32VIDIa4=;
+        b=FJH6GOfCj/XXZJP9NIiPEF01RYMNlV0C413qus9ADUyM+2qaoY5h44e/Ei5QnM51LX
+         7LvKdR43R4/XHUItHi6i98pT0R2JdeyYNMG2ji57w9bNbxKoNfTelyvRXwcssnCtLeGi
+         n3XXbtCBdmvW0lufwJFIyWwJNs2RiIKmno5tPNesRHvTgsbegUQoN68CrSj9gFzpFvbM
+         jrapu3+MxRiC2fjp0LnwGVGP+fMp4NI4vt870YV3BjC7hObxYuRqYJvKILULqqApy4LV
+         WzaNPEEOffEWa8a6lPEiiPc3CmvoCjtlxzsQdxGwq0xeEexqw4wngGvwMYjwH1uiGxRn
+         nK3w==
+X-Gm-Message-State: AOAM533S9p1yS7ujogsz5VQcBqFFTXEUadQol98oeAFgsQ7+CQBLbMMl
+        wNjyj0YMR/p7IqG+cQbI7Q==
+X-Google-Smtp-Source: ABdhPJxSgDWR+Ryh7YMTDSSXIL/rS/rBi87TDKPfqO64NwUKIjrQjgMURUgGELXKqNJto4I2tpJ2xQ==
+X-Received: by 2002:a9d:2a8:: with SMTP id 37mr7507545otl.58.1634679321127;
+        Tue, 19 Oct 2021 14:35:21 -0700 (PDT)
+Received: from robh.at.kernel.org (rrcs-67-78-118-34.sw.biz.rr.com. [67.78.118.34])
+        by smtp.gmail.com with ESMTPSA id f1sm56616oos.46.2021.10.19.14.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Oct 2021 14:35:19 -0700 (PDT)
+Received: (nullmailer pid 879931 invoked by uid 1000);
+        Tue, 19 Oct 2021 21:35:17 -0000
+Date:   Tue, 19 Oct 2021 16:35:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~okias/devicetree@lists.sr.ht
+Subject: Re: [PATCH] WIP: dt-bindings: arm: hwmon: gpio-fan: Convert txt
+ bindings to yaml
+Message-ID: <YW86Ffa+zoIZpixu@robh.at.kernel.org>
+References: <20211009104309.45117-1-david@ixit.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3nC4TCFG_p283Z-LWCuKy18_Ru6FeE_8
-X-Proofpoint-ORIG-GUID: 3nC4TCFG_p283Z-LWCuKy18_Ru6FeE_8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-19_02,2021-10-19_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- impostorscore=0 bulkscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110190118
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211009104309.45117-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Allocate a large buffer for each OCC to handle response data. This
-removes memory allocation during an operation, and also allows for
-the maximum amount of SBE FFDC. Previously the driver would have been
-limited to 32 words of FFDC in the responses to PutSRAM and ATTN
-commands.
+On Sat, Oct 09, 2021 at 12:43:09PM +0200, David Heidelberg wrote:
+> Convert fan devices connected to GPIOs to the YAML syntax.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 -----------
+>  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 69 +++++++++++++++++++
+>  2 files changed, 69 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+> deleted file mode 100644
+> index f4cfa350f6a1..000000000000
+> --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -Bindings for fan connected to GPIO lines
+> -
+> -Required properties:
+> -- compatible : "gpio-fan"
+> -
+> -Optional properties:
+> -- gpios: Specifies the pins that map to bits in the control value,
+> -  ordered MSB-->LSB.
+> -- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
+> -  control value that should be set to achieve them. This array
+> -  must have the RPM values in ascending order.
+> -- alarm-gpios: This pin going active indicates something is wrong with
+> -  the fan, and a udev event will be fired.
+> -- #cooling-cells: If used as a cooling device, must be <2>
+> -  Also see:
+> -  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> -  min and max states are derived from the speed-map of the fan.
+> -
+> -Note: At least one the "gpios" or "alarm-gpios" properties must be set.
+> -
+> -Examples:
+> -
+> -	gpio_fan {
+> -		compatible = "gpio-fan";
+> -		gpios = <&gpio1 14 1
+> -			 &gpio1 13 1>;
+> -		gpio-fan,speed-map = <0    0
+> -				      3000 1
+> -				      6000 2>;
+> -		alarm-gpios = <&gpio1 15 1>;
+> -	};
+> -	gpio_fan_cool: gpio_fan {
+> -		compatible = "gpio-fan";
+> -		gpios = <&gpio2 14 1
+> -			 &gpio2 13 1>;
+> -		gpio-fan,speed-map =	<0    0>,
+> -					<3000 1>,
+> -					<6000 2>;
+> -		alarm-gpios = <&gpio2 15 1>;
+> -		#cooling-cells = <2>; /* min followed by max */
+> -	};
+> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> new file mode 100644
+> index 000000000000..e2db65d58a92
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/hwmon/gpio-fan.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Bindings for fan connected to GPIO lines
+> +
+> +maintainers:
+> +  - Rob Herring <robh+dt@kernel.org>
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-occ.c   | 110 ++++++++++++++++------------------------
- include/linux/fsi-occ.h |   2 +
- 2 files changed, 46 insertions(+), 66 deletions(-)
+Just robh@kernel.org
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index ecf738411fe2..b4302776026d 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/miscdevice.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/fsi-occ.h>
-@@ -33,13 +34,6 @@
- 
- #define OCC_P10_SRAM_MODE	0x58	/* Normal mode, OCB channel 2 */
- 
--/*
-- * Assume we don't have much FFDC, if we do we'll overflow and
-- * fail the command. This needs to be big enough for simple
-- * commands as well.
-- */
--#define OCC_SBE_STATUS_WORDS	32
--
- #define OCC_TIMEOUT_MS		1000
- #define OCC_CMD_IN_PRG_WAIT_MS	50
- 
-@@ -51,6 +45,7 @@ struct occ {
- 	char name[32];
- 	int idx;
- 	u8 sequence_number;
-+	void *buffer;
- 	enum versions version;
- 	struct miscdevice mdev;
- 	struct mutex occ_lock;
-@@ -241,8 +236,10 @@ static int occ_verify_checksum(struct occ *occ, struct occ_response *resp,
- static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
- {
- 	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
--	size_t cmd_len, resp_len, resp_data_len;
--	__be32 *resp, cmd[6];
-+	size_t cmd_len, resp_data_len;
-+	size_t resp_len = OCC_MAX_RESP_WORDS;
-+	__be32 *resp = occ->buffer;
-+	__be32 cmd[6];
- 	int idx = 0, rc;
- 
- 	/*
-@@ -269,19 +266,19 @@ static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
- 	cmd[1] = cpu_to_be32(SBEFIFO_CMD_GET_OCC_SRAM);
- 	cmd[4 + idx] = cpu_to_be32(data_len);
- 
--	resp_len = (data_len >> 2) + OCC_SBE_STATUS_WORDS;
--	resp = kzalloc(resp_len << 2, GFP_KERNEL);
--	if (!resp)
--		return -ENOMEM;
--
- 	rc = sbefifo_submit(occ->sbefifo, cmd, cmd_len, resp, &resp_len);
- 	if (rc)
--		goto free;
-+		return rc;
- 
- 	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_GET_OCC_SRAM,
- 				  resp, resp_len, &resp_len);
--	if (rc)
--		goto free;
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM read returned failure status: %08x\n",
-+			rc);
-+		return -EBADMSG;
-+	} else if (rc) {
-+		return rc;
-+	}
- 
- 	resp_data_len = be32_to_cpu(resp[resp_len - 1]);
- 	if (resp_data_len != data_len) {
-@@ -292,39 +289,21 @@ static int occ_getsram(struct occ *occ, u32 offset, void *data, ssize_t len)
- 		memcpy(data, resp, len);
- 	}
- 
--free:
--	/* Convert positive SBEI status */
--	if (rc > 0) {
--		dev_err(occ->dev, "SRAM read returned failure status: %08x\n",
--			rc);
--		rc = -EBADMSG;
--	}
--
--	kfree(resp);
- 	return rc;
- }
- 
- static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
- 		       u8 seq_no, u16 checksum)
- {
--	size_t cmd_len, buf_len, resp_len, resp_data_len;
- 	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
--	__be32 *buf;
-+	size_t cmd_len, resp_data_len;
-+	size_t resp_len = OCC_MAX_RESP_WORDS;
-+	__be32 *buf = occ->buffer;
- 	u8 *byte_buf;
- 	int idx = 0, rc;
- 
- 	cmd_len = (occ->version == occ_p10) ? 6 : 5;
--
--	/*
--	 * We use the same buffer for command and response, make
--	 * sure it's big enough
--	 */
--	resp_len = OCC_SBE_STATUS_WORDS;
- 	cmd_len += data_len >> 2;
--	buf_len = max(cmd_len, resp_len);
--	buf = kzalloc(buf_len << 2, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
- 
- 	/*
- 	 * Magic sequence to do SBE putsram command. SBE will transfer
-@@ -361,12 +340,17 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
- 
- 	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
- 	if (rc)
--		goto free;
-+		return rc;
- 
- 	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_PUT_OCC_SRAM,
- 				  buf, resp_len, &resp_len);
--	if (rc)
--		goto free;
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM write returned failure status: %08x\n",
-+			rc);
-+		return -EBADMSG;
-+	} else if (rc) {
-+		return rc;
-+	}
- 
- 	if (resp_len != 1) {
- 		dev_err(occ->dev, "SRAM write response length invalid: %zd\n",
-@@ -382,27 +366,16 @@ static int occ_putsram(struct occ *occ, const void *data, ssize_t len,
- 		}
- 	}
- 
--free:
--	/* Convert positive SBEI status */
--	if (rc > 0) {
--		dev_err(occ->dev, "SRAM write returned failure status: %08x\n",
--			rc);
--		rc = -EBADMSG;
--	}
--
--	kfree(buf);
- 	return rc;
- }
- 
- static int occ_trigger_attn(struct occ *occ)
- {
--	__be32 buf[OCC_SBE_STATUS_WORDS];
--	size_t cmd_len, resp_len, resp_data_len;
-+	__be32 *buf = occ->buffer;
-+	size_t cmd_len, resp_data_len;
-+	size_t resp_len = OCC_MAX_RESP_WORDS;
- 	int idx = 0, rc;
- 
--	BUILD_BUG_ON(OCC_SBE_STATUS_WORDS < 8);
--	resp_len = OCC_SBE_STATUS_WORDS;
--
- 	switch (occ->version) {
- 	default:
- 	case occ_p9:
-@@ -427,12 +400,17 @@ static int occ_trigger_attn(struct occ *occ)
- 
- 	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
- 	if (rc)
--		goto error;
-+		return rc;
- 
- 	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_PUT_OCC_SRAM,
- 				  buf, resp_len, &resp_len);
--	if (rc)
--		goto error;
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM attn returned failure status: %08x\n",
-+			rc);
-+		return -EBADMSG;
-+	} else if (rc) {
-+		return rc;
-+	}
- 
- 	if (resp_len != 1) {
- 		dev_err(occ->dev, "SRAM attn response length invalid: %zd\n",
-@@ -448,14 +426,6 @@ static int occ_trigger_attn(struct occ *occ)
- 		}
- 	}
- 
-- error:
--	/* Convert positive SBEI status */
--	if (rc > 0) {
--		dev_err(occ->dev, "SRAM attn returned failure status: %08x\n",
--			rc);
--		rc = -EBADMSG;
--	}
--
- 	return rc;
- }
- 
-@@ -590,6 +560,11 @@ static int occ_probe(struct platform_device *pdev)
- 	if (!occ)
- 		return -ENOMEM;
- 
-+	/* SBE words are always four bytes */
-+	occ->buffer = kvmalloc(OCC_MAX_RESP_WORDS * 4, GFP_KERNEL);
-+	if (!occ->buffer)
-+		return -ENOMEM;
-+
- 	occ->version = (uintptr_t)of_device_get_match_data(dev);
- 	occ->dev = dev;
- 	occ->sbefifo = dev->parent;
-@@ -625,6 +600,7 @@ static int occ_probe(struct platform_device *pdev)
- 	if (rc) {
- 		dev_err(dev, "failed to register miscdevice: %d\n", rc);
- 		ida_simple_remove(&occ_ida, occ->idx);
-+		kvfree(occ->buffer);
- 		return rc;
- 	}
- 
-@@ -640,6 +616,8 @@ static int occ_remove(struct platform_device *pdev)
- {
- 	struct occ *occ = platform_get_drvdata(pdev);
- 
-+	kvfree(occ->buffer);
-+
- 	misc_deregister(&occ->mdev);
- 
- 	device_for_each_child(&pdev->dev, NULL, occ_unregister_child);
-diff --git a/include/linux/fsi-occ.h b/include/linux/fsi-occ.h
-index d4cdc2aa6e33..7ee3dbd7f4b3 100644
---- a/include/linux/fsi-occ.h
-+++ b/include/linux/fsi-occ.h
-@@ -19,6 +19,8 @@ struct device;
- #define OCC_RESP_CRIT_OCB		0xE3
- #define OCC_RESP_CRIT_HW		0xE4
- 
-+#define OCC_MAX_RESP_WORDS		2048
-+
- int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 		   void *response, size_t *resp_len);
- 
--- 
-2.27.0
+> +
+> +properties:
+> +  compatible:
+> +    const: gpio-fan
+> +
+> +  gpios:
+> +    description: |
+> +      Specifies the pins that map to bits in the control value,
+> +      ordered MSB-->LSB.
 
+minItems: 1
+maxItems: 7 ?
+
+> +
+> +  gpio-fan,speed-map:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 4
+> +    maxItems: 254
+> +    description: |
+> +      A mapping of possible fan RPM speeds and the
+> +      control value that should be set to achieve them. This array
+> +      must have the RPM values in ascending order.
+
+Really this should be a uint32-matrix with this schema:
+
+items:
+  minItems: 2
+  maxItems: 127
+  items:
+    - description: fan speed in RPMs
+    - description: control value
+
+> +
+> +  alarm-gpios:
+> +    description: |
+> +      This pin going active indicates something is wrong with
+> +      the fan, and a udev event will be fired.
+
+maxItems: 1
+
+udev is a linuxism and shouldn't be in the binding.
+
+> +
+> +  '#cooling-cells':
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - gpio-fan,speed-map
+> +
+> +anyOf:
+> +  - required: [gpios]
+
+How is 'gpios' not always required?
+
+> +  - required: [alarm-gpios]
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    gpio_fan {
+> +      compatible = "gpio-fan";
+> +      gpios = <&gpio1 14 1
+> +               &gpio1 13 1>;
+> +      gpio-fan,speed-map = <0    0
+> +                            3000 1
+> +                            6000 2>;
+
+Brackets needed around each pair.
+
+> +      alarm-gpios = <&gpio1 15 1>;
+> +    };
+> +  - |
+> +    gpio_fan_cool: gpio_fan {
+> +      compatible = "gpio-fan";
+> +      gpios = <&gpio2 14 1
+> +               &gpio2 13 1>;
+> +      gpio-fan,speed-map = <0    0
+> +                            3000 1
+> +                            6000 2>;
+> +      alarm-gpios = <&gpio2 15 1>;
+> +      #cooling-cells = <2>; /* min followed by max */
+> +    };
+> -- 
+> 2.33.0
+> 
+> 
