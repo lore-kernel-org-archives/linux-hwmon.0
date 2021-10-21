@@ -2,229 +2,226 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D398C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 20:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 648FCC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 23:09:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E1C761037
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 20:53:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C6BD610EA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 23:09:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbhJUU4A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Oct 2021 16:56:00 -0400
-Received: from mga06.intel.com ([134.134.136.31]:33426 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230272AbhJUU4A (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Oct 2021 16:56:00 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10144"; a="289982393"
-X-IronPort-AV: E=Sophos;i="5.87,170,1631602800"; 
-   d="scan'208";a="289982393"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2021 13:53:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,170,1631602800"; 
-   d="scan'208";a="444964159"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 21 Oct 2021 13:53:42 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mdf4H-000Enw-Ss; Thu, 21 Oct 2021 20:53:41 +0000
-Date:   Fri, 22 Oct 2021 04:53:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:master] BUILD SUCCESS
- 913a01cff4fae9115e2bcbb6c888b3fe29890029
-Message-ID: <6171d348.POVYwSIWSxxLwrM7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231515AbhJUXMJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Oct 2021 19:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230500AbhJUXMH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 21 Oct 2021 19:12:07 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8457FC061764;
+        Thu, 21 Oct 2021 16:09:50 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id j12so1402998qvk.12;
+        Thu, 21 Oct 2021 16:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+flPRXbpgkFt1w/rql0HpymLEHrdUzpgA/a0FNf4ek4=;
+        b=QGfD/Y1zzyisUE0Zsf0PFy35VQlOUQLFvMrJwliQ+YUVPN7Tkr6XQ8dR1pmvg2EqVQ
+         DSIXciC3BPTcH4pQVKS/bG0eGJcXRsSw8F+17RuuM8UvZk1M3Wv7ZHRTiHORN3BhchMD
+         2m7m9IiF0FOJ5/i89MawulW/7x0Q5tkiFoDas=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+flPRXbpgkFt1w/rql0HpymLEHrdUzpgA/a0FNf4ek4=;
+        b=BqSP2IUr26sf0hdXIzNQYRDCbiG9onHTKEx68nROrj/OjjTu7qPn7X5s7ZxvZGBULw
+         1KTDos0o++kKor7ODdzTyajrEFHfDuWFJ+kjNfXATV3DyH39gIfAU33x2XUIph67cj8x
+         j1Spjp0yYC9svRdbtvKh1x6S41yo84COqP9L1M19mu8oyjDsAaO4twrPuCsGvL889ppR
+         pUXNRoFqyB3EvbQvjU5DzbdOKw/bDtiF89kGmXPofAEDY0L+gujWVTBoDHp/UNRU9cBF
+         eFxOildjzH20V2peFgSd3oLc+XG1Rc1k8djfOAOXKnOHGXgkOLmHuQvb+Rg1t+cMjIjv
+         D7nw==
+X-Gm-Message-State: AOAM5312AkPw0suCpB1kRyOV83AX3LEnwRuKM9Wnb4jsKDpeWAIzK5/t
+        0YGcU33vicSxoOtCBfWi2+ttX/5neDZdGbsIbeWvOm98
+X-Google-Smtp-Source: ABdhPJzG5WUAHhHh2V7zebpusihtol3LtK1lieEpGt9AEKB3YVFzqDJYy9SIxaIIpqtIkYht4eLbBLH+THl8bGPlndk=
+X-Received: by 2002:a05:6214:98d:: with SMTP id dt13mr7976087qvb.13.1634857789458;
+ Thu, 21 Oct 2021 16:09:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20211019205307.36946-1-eajames@linux.ibm.com> <20211019205307.36946-5-eajames@linux.ibm.com>
+In-Reply-To: <20211019205307.36946-5-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Thu, 21 Oct 2021 23:09:37 +0000
+Message-ID: <CACPK8Xdq-tzPddkCDFx7-BuYh-hReutiKD4Rax+Wxi4FKfDSow@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, Jeremy Kerr <jk@ozlabs.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git master
-branch HEAD: 913a01cff4fae9115e2bcbb6c888b3fe29890029  Merge tag 'sound-5.15-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound
+On Tue, 19 Oct 2021 at 20:53, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Save any FFDC provided by the OCC driver, and provide it to userspace
+> through a binary sysfs entry. Notify userspace pollers when there is an
+> error too.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-elapsed time: 1238m
+Guenter, I will merge this through the fsi tree unless you have objections.
 
-configs tested: 166
-configs skipped: 4
+Cheers,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Joel
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20211021
-sh                         microdev_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                       eiger_defconfig
-ia64                      gensparse_defconfig
-arm                         shannon_defconfig
-arm                             pxa_defconfig
-m68k                        mvme16x_defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                     asp8347_defconfig
-m68k                         apollo_defconfig
-arm                            mmp2_defconfig
-arm                         vf610m4_defconfig
-powerpc                    gamecube_defconfig
-h8300                            alldefconfig
-powerpc                    amigaone_defconfig
-mips                        maltaup_defconfig
-arm                      pxa255-idp_defconfig
-arm                            hisi_defconfig
-s390                             alldefconfig
-sh                           se7780_defconfig
-powerpc                      mgcoge_defconfig
-arm                         lubbock_defconfig
-sh                             shx3_defconfig
-x86_64                           allyesconfig
-m68k                          sun3x_defconfig
-arm                         mv78xx0_defconfig
-sh                            hp6xx_defconfig
-powerpc                      ppc44x_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                   bluestone_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                     sequoia_defconfig
-arm                        magician_defconfig
-xtensa                  cadence_csp_defconfig
-sh                 kfr2r09-romimage_defconfig
-csky                             alldefconfig
-powerpc                      ppc40x_defconfig
-parisc                           alldefconfig
-powerpc                    klondike_defconfig
-mips                        bcm47xx_defconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                    adder875_defconfig
-mips                malta_qemu_32r6_defconfig
-arc                            hsdk_defconfig
-xtensa                       common_defconfig
-mips                        omega2p_defconfig
-mips                         mpc30x_defconfig
-um                                  defconfig
-arm                         orion5x_defconfig
-sh                          sdk7780_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                        cerfcube_defconfig
-arm                          exynos_defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                          g5_defconfig
-sparc                       sparc64_defconfig
-arm                           viper_defconfig
-nios2                         3c120_defconfig
-sparc                       sparc32_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                      pmac32_defconfig
-arm                          gemini_defconfig
-arm                        spear6xx_defconfig
-powerpc                      ppc6xx_defconfig
-arm                        trizeps4_defconfig
-parisc                              defconfig
-m68k                          atari_defconfig
-mips                        qi_lb60_defconfig
-m68k                                defconfig
-powerpc                 mpc8313_rdb_defconfig
-powerpc                 mpc837x_mds_defconfig
-ia64                            zx1_defconfig
-powerpc                      obs600_defconfig
-sh                          kfr2r09_defconfig
-powerpc                         wii_defconfig
-powerpc                          allmodconfig
-arm                        multi_v5_defconfig
-mips                          ath79_defconfig
-nios2                               defconfig
-mips                       capcella_defconfig
-arm                         s5pv210_defconfig
-sh                          rsk7201_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                          rm200_defconfig
-ia64                             alldefconfig
-arc                        nsimosci_defconfig
-arm                  randconfig-c002-20211021
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a013-20211021
-x86_64               randconfig-a015-20211021
-x86_64               randconfig-a011-20211021
-x86_64               randconfig-a014-20211021
-x86_64               randconfig-a016-20211021
-x86_64               randconfig-a012-20211021
-i386                 randconfig-a012-20211021
-i386                 randconfig-a013-20211021
-i386                 randconfig-a011-20211021
-i386                 randconfig-a016-20211021
-i386                 randconfig-a015-20211021
-i386                 randconfig-a014-20211021
-riscv                            allyesconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-powerpc              randconfig-c003-20211021
-riscv                randconfig-c006-20211021
-arm                  randconfig-c002-20211021
-x86_64               randconfig-c007-20211021
-mips                 randconfig-c004-20211021
-s390                 randconfig-c005-20211021
-i386                 randconfig-c001-20211021
-x86_64               randconfig-a002-20211021
-x86_64               randconfig-a004-20211021
-x86_64               randconfig-a005-20211021
-x86_64               randconfig-a001-20211021
-x86_64               randconfig-a006-20211021
-x86_64               randconfig-a003-20211021
-i386                 randconfig-a004-20211021
-i386                 randconfig-a003-20211021
-i386                 randconfig-a002-20211021
-i386                 randconfig-a005-20211021
-i386                 randconfig-a001-20211021
-i386                 randconfig-a006-20211021
-hexagon              randconfig-r045-20211021
-hexagon              randconfig-r041-20211021
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/hwmon/occ/p9_sbe.c | 86 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 85 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 9709f2b9c052..e50243580269 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -4,18 +4,79 @@
+>  #include <linux/device.h>
+>  #include <linux/errno.h>
+>  #include <linux/fsi-occ.h>
+> +#include <linux/mm.h>
+>  #include <linux/module.h>
+> +#include <linux/mutex.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/string.h>
+> +#include <linux/sysfs.h>
+>
+>  #include "common.h"
+>
+>  struct p9_sbe_occ {
+>         struct occ occ;
+> +       bool sbe_error;
+> +       void *ffdc;
+> +       size_t ffdc_len;
+> +       size_t ffdc_size;
+> +       struct mutex sbe_error_lock;    /* lock access to ffdc data */
+>         struct device *sbe;
+>  };
+>
+>  #define to_p9_sbe_occ(x)       container_of((x), struct p9_sbe_occ, occ)
+>
+> +static ssize_t ffdc_read(struct file *filp, struct kobject *kobj,
+> +                        struct bin_attribute *battr, char *buf, loff_t pos,
+> +                        size_t count)
+> +{
+> +       ssize_t rc = 0;
+> +       struct occ *occ = dev_get_drvdata(kobj_to_dev(kobj));
+> +       struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+> +
+> +       mutex_lock(&ctx->sbe_error_lock);
+> +       if (ctx->sbe_error) {
+> +               rc = memory_read_from_buffer(buf, count, &pos, ctx->ffdc,
+> +                                            ctx->ffdc_len);
+> +               if (pos >= ctx->ffdc_len)
+> +                       ctx->sbe_error = false;
+> +       }
+> +       mutex_unlock(&ctx->sbe_error_lock);
+> +
+> +       return rc;
+> +}
+> +static BIN_ATTR_RO(ffdc, OCC_MAX_RESP_WORDS * 4);
+> +
+> +static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+> +                                size_t resp_len)
+> +{
+> +       bool notify = false;
+> +
+> +       mutex_lock(&ctx->sbe_error_lock);
+> +       if (!ctx->sbe_error) {
+> +               if (resp_len > ctx->ffdc_size) {
+> +                       if (ctx->ffdc)
+> +                               kvfree(ctx->ffdc);
+> +                       ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+> +                       if (!ctx->ffdc) {
+> +                               ctx->ffdc_len = 0;
+> +                               ctx->ffdc_size = 0;
+> +                               goto done;
+> +                       }
+> +
+> +                       ctx->ffdc_size = resp_len;
+> +               }
+> +
+> +               notify = true;
+> +               ctx->sbe_error = true;
+> +               ctx->ffdc_len = resp_len;
+> +               memcpy(ctx->ffdc, resp, resp_len);
+> +       }
+> +
+> +done:
+> +       mutex_unlock(&ctx->sbe_error_lock);
+> +       return notify;
+> +}
+> +
+>  static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>  {
+>         struct occ_response *resp = &occ->resp;
+> @@ -24,8 +85,15 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>         int rc;
+>
+>         rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> -       if (rc < 0)
+> +       if (rc < 0) {
+> +               if (resp_len) {
+> +                       if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
+> +                               sysfs_notify(&occ->bus_dev->kobj, NULL,
+> +                                            bin_attr_ffdc.attr.name);
+> +               }
+> +
+>                 return rc;
+> +       }
+>
+>         switch (resp->return_status) {
+>         case OCC_RESP_CMD_IN_PRG:
+> @@ -65,6 +133,8 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+>         if (!ctx)
+>                 return -ENOMEM;
+>
+> +       mutex_init(&ctx->sbe_error_lock);
+> +
+>         ctx->sbe = pdev->dev.parent;
+>         occ = &ctx->occ;
+>         occ->bus_dev = &pdev->dev;
+> @@ -78,6 +148,15 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+>         if (rc == -ESHUTDOWN)
+>                 rc = -ENODEV;   /* Host is shutdown, don't spew errors */
+>
+> +       if (!rc) {
+> +               rc = device_create_bin_file(occ->bus_dev, &bin_attr_ffdc);
+> +               if (rc) {
+> +                       dev_warn(occ->bus_dev,
+> +                                "failed to create SBE error ffdc file\n");
+> +                       rc = 0;
+> +               }
+> +       }
+> +
+>         return rc;
+>  }
+>
+> @@ -86,9 +165,14 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>         struct occ *occ = platform_get_drvdata(pdev);
+>         struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+>
+> +       device_remove_bin_file(occ->bus_dev, &bin_attr_ffdc);
+> +
+>         ctx->sbe = NULL;
+>         occ_shutdown(occ);
+>
+> +       if (ctx->ffdc)
+> +               kvfree(ctx->ffdc);
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.27.0
+>
