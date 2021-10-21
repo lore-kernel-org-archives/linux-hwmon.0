@@ -2,123 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23EC4C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 18:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35212C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 19:05:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF029611CE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 18:42:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17F7760FC1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 19:05:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhJUSo5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Oct 2021 14:44:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42314 "EHLO mail.kernel.org"
+        id S231239AbhJUTIK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Oct 2021 15:08:10 -0400
+Received: from mout.gmx.net ([212.227.15.15]:36109 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230020AbhJUSo4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Oct 2021 14:44:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DC336120C;
-        Thu, 21 Oct 2021 18:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634841760;
-        bh=mWq+HNH7jhpFw0qyayM/Tf8vgynZGUVPL3JRK4UbEI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bnuu7kdt/lgdlkGrQ5AETr3KB7LCTbR5YXo2uRkM/eAu8rcfttFSgiCIf+1FY20vQ
-         bdkQ1iatXXEDbQ5PiDe/4/n9Rmdk1JrJhQkOpWs2h8tzVfIJhrGr6yJokU02mdNGDt
-         wGYuRM2ClaoFqnxKzuBizvW2HKQE0voQzhKl27dsVerr6GBijpRYBQbFemq3YdlUfl
-         jz2YUQy/dxcB+vo1CKRoYF9k5tNPXAi7TCYCvreKTs7It8O4GSp0R9l+ftDrgR5fKp
-         HZalfMbCSwGAjSWwfNQqSaDYuG8JGdbj8hNVdKtX31G61Y0I1yFmXvvAkpSZNckBgS
-         dlQk99zRo0jRQ==
-Received: by pali.im (Postfix)
-        id EE54D85E; Thu, 21 Oct 2021 20:42:37 +0200 (CEST)
-Date:   Thu, 21 Oct 2021 20:42:37 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
+        id S230267AbhJUTIJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 21 Oct 2021 15:08:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1634843136;
+        bh=5EiLs9aM09VBamPZ2A4dd77uzNkryaDokP6wmBs8aY8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=KjH/NAJSk3XUSBooiGEhBeoy010TVQVvGzWoNp+v+MbuidCr8vw+Rb1s+A9PxVATD
+         oc/CUF0uq2yXegSYQ00eOKK7bHwbKCQfjwalQoeeiz9CgywhkLVvvS0XapRzpHn8M4
+         gEGHETLSkxIIHbbSwf1+z2ot/kiukWkX6Gw5vdzY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MYvY2-1m8qwJ3zVI-00UuLK; Thu, 21 Oct 2021 21:05:36 +0200
+From:   W_Armin@gmx.de
+To:     pali@kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 4/5] hwmon: (dell-smm) Add Dell Inspiron 3505 config data
-Message-ID: <20211021184237.ysvhawhmpw3vnsa2@pali>
-References: <20211021175447.5380-1-W_Armin@gmx.de>
- <20211021175447.5380-5-W_Armin@gmx.de>
- <20211021180521.a5l2shvor4qwesfe@pali>
- <02f9b445-cc5d-0699-7bac-cbd28d1ea35f@gmx.de>
+Subject: [PATCH v2 0/5] hwmon: (dell-smm) Miscellaneous Improvments
+Date:   Thu, 21 Oct 2021 21:05:26 +0200
+Message-Id: <20211021190531.17379-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <02f9b445-cc5d-0699-7bac-cbd28d1ea35f@gmx.de>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7wstTwHiB1tbzVApQicuqcBfWsxYtefvU8l/JC6gzLLdEvwHjve
+ P8+XFgZd75/C1/lRoKWuL9ga44vmhTUHOricfqKa305TRc62W4zUzSewD7ylBMzuHyh2JJb
+ 3hKnAOm3GxNjMK61PfXO3K16RFufmiBG9iWsD2XkeFgztPpMsHuLWq75L7ThF5h+OeC5y/f
+ +jCVPkXXh0LJfU14jd/JQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lloir4qJD14=:jT9YrwaIqIN9smXz1hUVIF
+ ucdyoO8bx1xr6MTzVoymtQwSrdOYONYdQb8F8fcBp73zZRkQIQ+5WHJZ8Nb7rUy12sSxQ5iPe
+ cjVM9fegQ35Q/OIXw87TF6EUGInDx+WLUlSSYo/axbkHFBZwqJ3GoGsR5UwADZbpCcKwYVKKM
+ Zc8Y6ZlKvZ9AtfDMl2WjdyWmypl6xjIHpAW2E8mFk24Cdbow/W8VS+onR+YNspdLTwUVvTvE5
+ DOUaZunOQHiScce49GAhF1FPo+s/0SPFj4DoLbD0CGRkPdZfrqIcl9MeE/aJ2h0loYjT65ska
+ 7xoRr/f+3Bv5TT0e1j/CWALEhP9cj5V9Bzb4cRKgIQPY0sQsW/xNGxiEUrIZCvvDy25qgFeuE
+ 4LBvXSGcgFPEelYKZYAOO9MG5Zf3WoRQdUqeBoUjh1znp7aXbW4RIMpLy8G+vNX003mJwDDBE
+ gels64RkBspe6MXp0x7oIGVdCp3M5IsWE3crLOcOE+CBpZlYaZ2GTqfPYYxAq9whTFvSysw91
+ BMTrCIopeRObUAOOL9eHmYmuxG+PI2QlQ/grZ6QViRvq66l9X7ZNRe+CgGSqxnfbW5nQiw3ky
+ ++2kqLWBjA4HLMAN9HJL1M+Or5jctlJ/wgwyvv1ynckpTnAWTSOZ1L8Q1Ae/eUNBNTCY50KHH
+ synk0fm6r1LF04OQeVfNFP0q8yMKJFFF8lq8PfKcjDLoFZx0lz/eUHHRc1FCyh2iqW5aBku79
+ v98JiVfjbRMp6SMUObU4vkSEwNA2gUDWPjqeW3kh3kP+CaB40b9WZa8joT/3tW8C5ynYOpbRt
+ jMCOcI1aCBTmMyKpcO9ZXGPPuxR8Nulrpvk1MJjhJV8lcsvU3NETsw1FDVlldZiErhYRKcR3P
+ jBj+rWx9dXHX5qpziiUDTt+nm11Hj71K124awRBdnWU/QjLAMNTrRwMO/A77/C0oq0C45vPbb
+ fv1iLe4qpiCcabnG4PHKLX/q0qgedUYpjbFht9fXP2Q7Mlpgye0mT4uPovWwTLt5HvfHTUbSk
+ PqHOMU3DHkhpjOLysOfZTZ4bIe7fBbzQyYDZkIc/Evm3SbAl+PEHSxBiR96jiG4F7/WK5aNG/
+ zyvcLsLXlyHt4Q=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thursday 21 October 2021 20:36:16 Armin Wolf wrote:
-> Am 21.10.21 um 20:05 schrieb Pali Rohár:
-> > On Thursday 21 October 2021 19:54:46 W_Armin@gmx.de wrote:
-> > > From: Armin Wolf <W_Armin@gmx.de>
-> > > 
-> > > After checking the fan speeds reported with the
-> > > Dell Diag UEFI ROM, its safe to permanently
-> > > set fan_max to I8K_FAN_HIGH and fan_mult
-> > > to 1 for the Dell Inspiron 3505.
-> > > 
-> > > Tested on a Dell Inspiron 3505.
-> > Hello! Are there any issues without this change on Dell Inspiron 3505?
-> > Because i8k_config_data[] array is there for machines which need some
-> > hooks and do not work correctly (e.g. allowing to use I8K_FAN_TURBO).
-> The Inspiron 3505 works fine without this change. If i8k_config_data[]
-> is only there for applying
-> device specific quirks, then this change can be removed.
+From: Armin Wolf <W_Armin@gmx.de>
 
-In past when autodetection of fan_mult started working, I removed
-machines which was tested that do not need hook entry anymore.
+This patch series contains various improvments to the
+dell-smm-hwmon driver. The first patch is merely a cosmetic
+change. The next two patches improve the ioctl handling
+and have been tested with i8kutils (the only program using
+this interface). The fourth patch adds some clarification
+about i8k_config_data[], and the last patch
+accelerates the setting of fan speed and has been tested as well
+over the legacy interface and the hwmon sysfs interface.
 
-We really do not need special entry for every possible Dell machine on
-the world in this table.
+Tested on a Dell Inspiron 3505, the Dell Latitude C600 is
+currently out-of-service.
+=2D--
+Changes in v2:
+- drop patch 4 and instead add a comment on when to use
+i8k_config_data[]
+- reword patch 5
 
-Hm... Maybe some comment for this array could be add to express why it
-is there or why entries here are needed...
+Armin Wolf (5):
+  hwmon: (dell-smm) Sort includes in alphabetical order
+  hwmon: (dell-smm) Use strscpy_pad()
+  hwmon: (dell-smm) Return -ENOIOCTLCMD instead of -EINVAL
+  hwmon: (dell-smm) Add comment explaining usage of i8k_config_data[]
+  hwmon: (dell-smm) Speed up setting of fan speed
 
-> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> > > ---
-> > >   drivers/hwmon/dell-smm-hwmon.c | 13 +++++++++++++
-> > >   1 file changed, 13 insertions(+)
-> > > 
-> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > > index 5f0338b4a717..2579dd646b20 100644
-> > > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > > @@ -990,6 +990,7 @@ struct i8k_config_data {
-> > >   };
-> > > 
-> > >   enum i8k_configs {
-> > > +	DELL_INSPIRON_3505,
-> > >   	DELL_LATITUDE_D520,
-> > >   	DELL_PRECISION_490,
-> > >   	DELL_STUDIO,
-> > > @@ -997,6 +998,10 @@ enum i8k_configs {
-> > >   };
-> > > 
-> > >   static const struct i8k_config_data i8k_config_data[] __initconst = {
-> > > +	[DELL_INSPIRON_3505] = {
-> > > +		.fan_mult = 1,
-> > > +		.fan_max = I8K_FAN_HIGH,
-> > > +	},
-> > >   	[DELL_LATITUDE_D520] = {
-> > >   		.fan_mult = 1,
-> > >   		.fan_max = I8K_FAN_TURBO,
-> > > @@ -1030,6 +1035,14 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
-> > >   			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude"),
-> > >   		},
-> > >   	},
-> > > +	{
-> > > +		.ident = "Dell Inspiron 3505",
-> > > +		.matches = {
-> > > +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> > > +			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 3505"),
-> > > +		},
-> > > +		.driver_data = (void *)&i8k_config_data[DELL_INSPIRON_3505],
-> > > +	},
-> > >   	{
-> > >   		.ident = "Dell Inspiron 2",
-> > >   		.matches = {
-> > > --
-> > > 2.20.1
-> > > 
-> 
+ drivers/hwmon/dell-smm-hwmon.c | 40 +++++++++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 15 deletions(-)
+
+=2D-
+2.20.1
+
