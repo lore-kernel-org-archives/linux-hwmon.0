@@ -2,110 +2,92 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00B30C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 23:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B141C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Oct 2021 00:52:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFCA761208
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Oct 2021 23:25:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D64736136F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Oct 2021 00:52:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbhJUX16 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Oct 2021 19:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbhJUX16 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Oct 2021 19:27:58 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB31C061764;
-        Thu, 21 Oct 2021 16:25:41 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id y11so2021460qtn.13;
-        Thu, 21 Oct 2021 16:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/15db6Apbth6KWgHu9T+Z7/sxzP+v8xElG8h3sD5lB0=;
-        b=B0ugykVGeVHNbbq6udchd8maFVM3S/YKsUeCtXOcEPcEBjmDMjCzT+r3RprM9t49Vx
-         Huv8OzXgfBcXwHRGDyQ3m91qIX0OQUOaYoxPGANuLLG3PUJn3UmEK4dwt2ipLaWoXYNK
-         CX3RKjR2d9XJH39AgdMQitL8pLWQi7qeNcNHI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/15db6Apbth6KWgHu9T+Z7/sxzP+v8xElG8h3sD5lB0=;
-        b=UVwnPrianvYKSFRGpjVJUn74b4lSU7gI9l35K2zg+tf0gU/RA1w5kn9j1aCFEGsJJL
-         pZa2O/6i2gjhwovQaZZVcI5odeYRqK+I/5qFVC1LbF0+78HsVap3aYgXLkfnJF3fdJkc
-         j77tvfyCCg1vf2bo1SlZ2gUz2ZjWSZympUsK+C/ExojzNvjeKeWhDTfHo3BwTLE5YSyD
-         d8lasktpneQy3SErA0Au2zNlUyD3qmd8IaIPPnMr61gjjVtwea90qTnLm+4M6T7WCu+m
-         eXxGw6tlqQom201S7rcKEr8L54BneYcB4RZWujYYlN/jYmz++YXZUjarLOu83uRF1bhK
-         rXpg==
-X-Gm-Message-State: AOAM533vLdYvzdDhx0qHamvmLZ08bMsSnM3OYrI5idBWWnTJPmbp1gmJ
-        Xn6wLr4YjOg9cJNPOGXHMC9Xkb9EtOEroYu2BBM=
-X-Google-Smtp-Source: ABdhPJzjwuh9jnD5tusFhcXxstWRpLFH7+vaBwsmdcwqUHV7+REwAoSLrqCb8T2W2yfOBKpGEmJJTZfem/iuv3whScQ=
-X-Received: by 2002:ac8:5f06:: with SMTP id x6mr9535444qta.295.1634858740877;
- Thu, 21 Oct 2021 16:25:40 -0700 (PDT)
+        id S231755AbhJVAzH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Oct 2021 20:55:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229512AbhJVAzH (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 21 Oct 2021 20:55:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 05DFC6135F;
+        Fri, 22 Oct 2021 00:52:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634863970;
+        bh=3gGl+p/p7nrAAcGQCrBlZ0+ewM4YLxTwf4TWidy+7po=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BovWNkfe3c08rlup31Cfgo839P5smFnYqAl19DbqRa7QJrqenf5HrSUb7igGdLEvu
+         6JmqIUTp48zkUi8ETtaxGb6rR+30U0bBKQlKdNAZ6hyJpG5BtBnzoLmIUdUyQBNinr
+         al6E1G0wUl7SM3m5+rewC/eDk4fCD1RX7BdJ+wNXiuSmUKlUa6cLL3GhWd3zNDlEU7
+         4wjMZwguMzRyL8GSwXQOZ5ZoRHPBlBhe4PygNbtnKzWMy0fFlwhpnsqsZV6U/WoEZB
+         hpvyAWxLlGjBvZtntNVmaC1PWlUwq6KyU3sS0vaz0zDay/J0JGhSNP1qz1hvkZCDvs
+         QSQn3uq62hbQw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Alistair Francis <alistair@alistair23.me>, robh+dt@kernel.org,
+        lgirdwood@gmail.com, kernel@pengutronix.de, lee.jones@linaro.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+        alistair23@gmail.com, linux-imx@nxp.com,
+        linux-hwmon@vger.kernel.org, rui.zhang@intel.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        s.hauer@pengutronix.de, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org
+Subject: Re: (subset) [PATCH v13 0/9] Add support for the silergy,sy7636a
+Date:   Fri, 22 Oct 2021 01:52:44 +0100
+Message-Id: <163486395940.2610269.12381320818786809684.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211015122551.38951-1-alistair@alistair23.me>
+References: <20211015122551.38951-1-alistair@alistair23.me>
 MIME-Version: 1.0
-References: <20211019205307.36946-1-eajames@linux.ibm.com>
-In-Reply-To: <20211019205307.36946-1-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 21 Oct 2021 23:25:29 +0000
-Message-ID: <CACPK8Xcg2Kwh+LTS=E3r5ZgSWD8eyntWp77KabNjt0vFMUTyAg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] occ: fsi and hwmon: Extract and provide the
- SBEFIFO FFDC
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, Jeremy Kerr <jk@ozlabs.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 19 Oct 2021 at 20:53, Eddie James <eajames@linux.ibm.com> wrote:
->
-> Currently, users have no way to obtain the FFDC (First Failure Data
-> Capture) provided by the SBEFIFO when an operation fails. To remedy this,
-> add code in the FSI OCC driver to store this FFDC in the user's response
-> buffer and set the response length accordingly.
-> On the hwmon side, there is a need at the application level to perform
-> side-band operations in response to SBE errors. Therefore, add a new
-> binary sysfs file that provides the FFDC (or lack thereof) when there is
-> an SBEFIFO error. Now applications can take action when an SBE error is
-> detected.
-
-Thanks, I've merged these. I took the chance to add some of your
-responses to the commit messages as they were useful.
-
->
-> Changes since v3:
+On Fri, 15 Oct 2021 22:25:42 +1000, Alistair Francis wrote:
+> v13:
+>  - Address comments on thermal driver
+>  - Rebase on master (without other patches)
+> v12:
 >  - Rebase
->  - Add a check for valid FFDC length
->  - Add comments about SBE words being four bytes
->
-> Changes since v2:
->  - Add documentation
->
-> Changes since v1:
->  - Remove the magic value that indicated an SBE/SBEFIFO error with no
->    FFDC.
->  - Remove binary sysfs state management and intead just clear the error
->    flag when the whole FFDC has been read.
->
-> Eddie James (4):
->   fsi: occ: Use a large buffer for responses
->   fsi: occ: Store the SBEFIFO FFDC in the user response buffer
->   docs: ABI: testing: Document the OCC hwmon FFDC binary interface
->   hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs
->
->  .../sysfs-bus-platform-devices-occ-hwmon      |  13 ++
->  drivers/fsi/fsi-occ.c                         | 164 +++++++++---------
->  drivers/hwmon/occ/p9_sbe.c                    |  86 ++++++++-
->  include/linux/fsi-occ.h                       |   2 +
->  4 files changed, 186 insertions(+), 79 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-devices-occ-hwmon
->
-> --
-> 2.27.0
->
+> v11:
+>  - Address comments on hwmon
+>  - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
+> v10:
+>  - Use dev_get_regmap() instead of dev_get_drvdata()
+> v9:
+>  - Convert to use the simple-mfd-i2c instead
+> 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[4/9] regulator: sy7636a: Remove requirement on sy7636a mfd
+      commit: cb17820ef71ed70f70ee1eed2b378664746b6fde
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
