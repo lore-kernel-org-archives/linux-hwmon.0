@@ -2,110 +2,153 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACEF8C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Oct 2021 23:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB19C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Oct 2021 08:19:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7575F60F22
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Oct 2021 23:47:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F2FD60ED3
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Oct 2021 08:19:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbhJWXuJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 23 Oct 2021 19:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbhJWXuI (ORCPT
+        id S231177AbhJXIWF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Oct 2021 04:22:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35246 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229527AbhJXIWE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Oct 2021 19:50:08 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A61CC061764;
-        Sat, 23 Oct 2021 16:47:49 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id d21-20020a9d4f15000000b0054e677e0ac5so9301852otl.11;
-        Sat, 23 Oct 2021 16:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9EhtECxpEHT4/S8i65sw49IoenLttWhucmR7R+ka9Tw=;
-        b=o5jZt61rJg1Bg1+MiK5QwxEdeWklbBG0IGst2aRCzPb1P5O2+CdelnpeR4gwtHiO2B
-         RicJ96SYY2l0BwQ9ndqLuUKFgpIsEjklxUEUNsnPSFuwFwEa7DA9bcEgfsKNl6okpY37
-         dp1XfyyUR4x5OBfAT3gn3Nlq2lTHeqly8lVc/zQ1HZ9C/v8EjNRpkNqAM6GSuTAP2dbv
-         0AXTsh7kLD0iqD2csTRzEQB05+9tUea4tte0IvYV0VkD5mUaEhn4kCPLjxt9ZQRd/n9+
-         mHXtZSFP0upWK0f9QAT4+P9v5rj9ppyBCmH7h5JRQkvD8/vrIriV/KzrQh2sp8ae92x7
-         ihzQ==
+        Sun, 24 Oct 2021 04:22:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635063584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iEA+bOsDY0+9yg7R/acNp9qvWIVajgO8oDCJI28qcNg=;
+        b=Lkfzny+wD1AfQqXGAvUKreA+pEWmb3drBkbgc7U8Y0WoaUR08m/o7R/gouCzVqnrvj0AQv
+        vD2k+oNmGGuHIPcVipW79UfR96hgjXtVGoFLXCGFsQ079CBp1MpvDmS78i1a8dmfZpyy7r
+        C0nemIRG7K24LAYLY1MEqnZVL+FZ6a4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-549-ZGkNlm8xMrasjWzBdVVF_w-1; Sun, 24 Oct 2021 04:19:42 -0400
+X-MC-Unique: ZGkNlm8xMrasjWzBdVVF_w-1
+Received: by mail-ed1-f72.google.com with SMTP id i9-20020a508709000000b003dd4b55a3caso915449edb.19
+        for <linux-hwmon@vger.kernel.org>; Sun, 24 Oct 2021 01:19:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=9EhtECxpEHT4/S8i65sw49IoenLttWhucmR7R+ka9Tw=;
-        b=Cij11eK4QqcpKB/g1VvATiZaQKKxeks11JqvZJgrD2OoFTAe4uBJbxEIamoxNQg+43
-         SYDJoEpCgI6ZHKZ2eM5Kb4JVw3wZ4dRFi9Az1xDPZuuo/x9cwfeMmLbd0avcEbu6zQW0
-         YDlkTosJXh9h76GrSUzlEuWNnPMSXqwxonvxKrHcrov5hIF7TQUhnXbc7mDEH+2vpaGn
-         ulYdhrbhKGBcclBQcpGIMFEj3ViSN0XT02+D9m3A7jIIiQQ8dM8cR4NMniyf2QwFnlQ2
-         yCrgxBLDnToETrDyr1nIH3SvQ107a+KpT42/xUDyp7Z0dXtERRulVDnROjniaIj5HGhh
-         OYlg==
-X-Gm-Message-State: AOAM533AIi1n0rN+0tXWZK4Z4B3cmz3mInHoAUEGxfeVke2ywV3Uk1ic
-        6bMIrw3JSyuMv6MdV+dm1TE=
-X-Google-Smtp-Source: ABdhPJxdan+q2jqR22n6WqBpuNNuYW4hjQziIGsPymwPST3qn07it/6SqJUfVDzjseZzGGqCMZRgwQ==
-X-Received: by 2002:a05:6830:4c8:: with SMTP id s8mr7120609otd.359.1635032868244;
-        Sat, 23 Oct 2021 16:47:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a2sm2608077otf.46.2021.10.23.16.47.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Oct 2021 16:47:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Oct 2021 16:47:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kai Song <songkai01@inspur.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (xgene) fix return value in xgene_hwmon_probe()
-Message-ID: <20211023234745.GA3703155@roeck-us.net>
-References: <20211022084446.16728-1-songkai01@inspur.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iEA+bOsDY0+9yg7R/acNp9qvWIVajgO8oDCJI28qcNg=;
+        b=7SJlVWGZd+J+zzx1yx3Yq1CBt3Pg3O74tWLDEiETrSlBQEucyptj8PGQjxyWU5gudY
+         vSPdUOwFs2D2v1Xfk9sl9uo2StD03amKwqenv6zvaupZLWDNEjgvg8F5b0jv+sn3CsBf
+         J8KSzsENLAfGQi2e1WCK4RUSEtaaT+a/rcKQYq52cegrojP/rqhhhVSc/9OxBe10WvS2
+         IRLfs8yn29pbz7dlgmbvO0lV6HljaJr8GOTrO8lRUTK2Pl+OazysranTfObvQ0SeNR6Z
+         CFQatacv3NfmZVvacYUnbMTGoaBjS0z9hkNQbuxqoQauJYdjVAVC4r7DqIlHX70A9FIW
+         xdww==
+X-Gm-Message-State: AOAM533DaPEv0X2hnfu5TbcYrzHC078r20WRDI5THaZgbcAByf2+KjMb
+        84jbo4U/zRWOT2w2vFxeBfdsnQmArBtiie6fkC68cZ1fw9xCYZpSKMaQUE1EjYi93EznOa/trdG
+        8NuavZhEzMQ9X0FcsYTFgoMc=
+X-Received: by 2002:aa7:c952:: with SMTP id h18mr16344384edt.18.1635063581667;
+        Sun, 24 Oct 2021 01:19:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz5rtFBpYqxF0K9CIYe+eHutxNObi8ukisQuZC6nx0OFjTu3p+Z581qSKvqb5oWD+F57MrVvA==
+X-Received: by 2002:aa7:c952:: with SMTP id h18mr16344365edt.18.1635063581499;
+        Sun, 24 Oct 2021 01:19:41 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id y22sm7607114edc.76.2021.10.24.01.19.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Oct 2021 01:19:41 -0700 (PDT)
+Message-ID: <f52acae3-42b8-72e5-84dd-68eb41ff0efa@redhat.com>
+Date:   Sun, 24 Oct 2021 10:19:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211022084446.16728-1-songkai01@inspur.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] platform/x86: system76_acpi: fix Kconfig dependencies
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Tim Crawford <tcrawford@system76.com>,
+        Jeremy Soller <jeremy@system76.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        "David E. Box" <david.e.box@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20211022154901.904984-1-arnd@kernel.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211022154901.904984-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 04:44:46PM +0800, Kai Song wrote:
-> It uses IS_ERR to judge the return value of mbox_request_channel()
-> and pcc_mbox_request_channel().If it is invalid, maybe we should
-> use PTR_ERR to get the correct return value.
+Hi,
+
+On 10/22/21 17:48, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
+> When CONFIG_INPUT is disabled, this driver now fails to link:
+> 
+> ld.lld: error: undefined symbol: devm_input_allocate_device
+>>>> referenced by system76_acpi.c
+>>>>               platform/x86/system76_acpi.o:(system76_add) in archive drivers/built-in.a
+> 
+> ld.lld: error: undefined symbol: input_set_capability
+>>>> referenced by system76_acpi.c
+>>>>               platform/x86/system76_acpi.o:(system76_add) in archive drivers/built-in.a
+> 
+> ld.lld: error: undefined symbol: devm_hwmon_device_register_with_info
+>>>> referenced by system76_acpi.c
+>>>>               platform/x86/system76_acpi.o:(system76_add) in archive drivers/built-in.a
+> 
+> ld.lld: error: undefined symbol: battery_hook_unregister
+>>>> referenced by system76_acpi.c
+>>>>               platform/x86/system76_acpi.o:(system76_remove) in archive drivers/built-in.a
+> 
+> Add Kconfig dependencies for each of these three.
+> 
+> Fixes: 0de30fc684b3 ("platform/x86: system76_acpi: Replace Fn+F2 function for OLED models")
+> Fixes: 95563d45b5da ("platform/x86: system76_acpi: Report temperature and fan speed")
+> Fixes: 76f7eba3e0a2 ("platform/x86: system76_acpi: Add battery charging thresholds")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Only if the error reflects something else than -ENODEV, ie than
-a missing device.
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-Guenter
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-> Signed-off-by: Kai Song <songkai01@inspur.com>
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
 > ---
->  drivers/hwmon/xgene-hwmon.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/platform/x86/Kconfig | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-> index 382ef0395d8e..fd0847f251c0 100644
-> --- a/drivers/hwmon/xgene-hwmon.c
-> +++ b/drivers/hwmon/xgene-hwmon.c
-> @@ -648,7 +648,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->  		if (IS_ERR(ctx->mbox_chan)) {
->  			dev_err(&pdev->dev,
->  				"SLIMpro mailbox channel request failed\n");
-> -			rc = -ENODEV;
-> +			rc = PTR_ERR(ctx->mbox_chan);
->  			goto out_mbox_free;
->  		}
->  	} else {
-> @@ -675,7 +675,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->  		if (IS_ERR(ctx->mbox_chan)) {
->  			dev_err(&pdev->dev,
->  				"PPC channel request failed\n");
-> -			rc = -ENODEV;
-> +			rc = PTR_ERR(ctx->mbox_chan);
->  			goto out_mbox_free;
->  		}
->  
-> -- 
-> 2.27.0
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 56bcf80da60a..c422ee785c56 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -923,6 +923,9 @@ config SONYPI_COMPAT
+>  config SYSTEM76_ACPI
+>  	tristate "System76 ACPI Driver"
+>  	depends on ACPI
+> +	depends on ACPI_BATTERY
+> +	depends on HWMON
+> +	depends on INPUT
+>  	select NEW_LEDS
+>  	select LEDS_CLASS
+>  	select LEDS_TRIGGERS
 > 
+
