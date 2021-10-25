@@ -2,121 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDB6C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 09:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C75E8C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 10:53:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F36A260EB1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 09:35:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AADD160EBD
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 10:53:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbhJYJhm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Oct 2021 05:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbhJYJhl (ORCPT
+        id S230000AbhJYKzn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Oct 2021 06:55:43 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:55049 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229890AbhJYKzn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Oct 2021 05:37:41 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36685C061745;
-        Mon, 25 Oct 2021 02:35:19 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id l13so19877667edi.8;
-        Mon, 25 Oct 2021 02:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RSWOPzNpv+gqobr9oD44cMNl/gjPokC+2ZSGAR+LGvc=;
-        b=a+5dD8ItWz4O5QFIzUEtGJoJsR951RDBjl81/f3t4cVyOqcgWrgIuY2AP49/K8n6Rd
-         /stIXbufTsTrDU495bT0dnLGUXJrdvk7ZKyyH6Zz1Aj1wpHXP378Aj9RCraqP9mTpmbH
-         icbT9i4jg/b4/D2yZEL+CWA+P1GecqsnekYdtxPX891Erk5Yn/eoaURCq2EqoISGvEXN
-         eSGui04a9h4g/RQgUrqrvK5QLHPw9r7c1inttYrSJ8M2kPLuPSqmZUCSqSVhow53Oazb
-         HI7YT04u3ZN+wAY5umc1PrwSY41CFxBRN04uTy6eRoZjbzWP4o+I+b11SILZWht/2ezm
-         w2Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RSWOPzNpv+gqobr9oD44cMNl/gjPokC+2ZSGAR+LGvc=;
-        b=hsrhv8vuZqVHSjHT18IWA377hzbpU84D3eZRJwoNWFws728YhQkzLNXLe7yNg1CVsX
-         kTXwv6K99afq1Jqte+kJI1uUnX7wWDAGJm1X+ZauRhhBdro/3kGsS8BL/03xk1eqrQ5B
-         ocJ9kOtguKeW1L5HIztZt95n4TdnH8ZpP2OcxsXnnKd7rc2BUtN63D1hej08oea4p8u3
-         3PGjJv4SzPc7Qqom6iMMCFV4AnaUMc7UVksB2ILzKSh4elzr+W28/28M7lFUwI3q399P
-         WX7G6pGVemw5LhDfTH2gQeGzC/2B9XDoZOvlgn7w00+vBYvhRQWtsrYol2h6fgrKdpll
-         WY8w==
-X-Gm-Message-State: AOAM531QPyWfqG1Xj6czZc8TVkOrHDLalGBujVX1/3fcRgUoy1zePadp
-        MTr2F84OT5jxKns/r0UfxkZJujPZ1Nt45uIZHBjgfAE6pQFN2A==
-X-Google-Smtp-Source: ABdhPJx3+UgXIEBRlA9nUZuUcAiapUMwd/T0Yw/6DynvNGWRM7W9yjJVyzjCBVv6iOwqWGLngTX5Bl78AuEdwya0ox0=
-X-Received: by 2002:a05:6402:2031:: with SMTP id ay17mr25638264edb.240.1635154517795;
- Mon, 25 Oct 2021 02:35:17 -0700 (PDT)
+        Mon, 25 Oct 2021 06:55:43 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1D55F580477;
+        Mon, 25 Oct 2021 06:53:21 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 25 Oct 2021 06:53:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:content-type:mime-version
+        :content-transfer-encoding; s=fm2; bh=E/lvINlfaDwDv0II0+z7GqFpIN
+        xVAc1W2JO3GLlW0rs=; b=tN+9t6ZEHIZv+bVrjduN7ovPJzj1aSUmxaRtHd7aLR
+        LcSD9oQiesQ2l6PzKAtotOukl6wKlO3jYSCSSdANaAFPxyuh82lEawjvF8Rqkqwj
+        bKTdvIPnxRXj70imyA0epfTzXMlAeA7z6ZxkU/AugJl8LeTzJutOs06xbjtNUo6q
+        xAn4BwsX1AArzvsYTIUwP+kPfx4SeA7gh1Rlt25yvPNHLALCnWX7Q74w3SIXU2Eo
+        W95h4+2ynnhmlQuQs+DwYvVzkmwebJkHnHxaX5O2uSyiYGViA9PFZCbrhJhpVrn/
+        UYWAzQ3qe27WSnAPXuaWkJl8XEr1/g4ZPMggtopyr0Ww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=E/lvIN
+        lfaDwDv0II0+z7GqFpINxVAc1W2JO3GLlW0rs=; b=SV4eDD63byAlyVN8/UxyA+
+        vmxDbfWnIkfys16pVnx17NEzQ2xHcphKZa0uAkcwT2x4TIXT19iGM0OicRsI6Jgr
+        5JCY1CRfdT/8pJ0xb+XTAj1K0Kt4bUjAhsx+Im1HVBzgtpkvXggEviywpwsGMpkR
+        0lFil1fFezNAv9uBU9sY9pUaOvth6kcRHl7YUnfKOlzkkBxcnlyga1xjNOGVz9KR
+        2OJnQMGXp4k3n5JUGw/C/UxucbanCqwXAxKfEcNZx1jhQJ0XMX5Q5fUp2p5+hI1A
+        tqTDWQjRkDvteh9/2sUTJUd7F4X0UpaSOleHAkI/ggrTeEqbbn3DiI2cFPki5ltg
+        ==
+X-ME-Sender: <xms:oIx2YcBuKEAUVD9nCEmxvXOp-WOvfd6lef5oadmee3CdpQ7uIl3WRw>
+    <xme:oIx2YejDrYWetbn8m7CarVGTRh9J24-p7dWFWy8TG7HmHZayEQlYFdCpbtLZehS_k
+    6Q6fiplO1DX-oLz0R4>
+X-ME-Received: <xmr:oIx2YfkxP8qKJHSipgDx4QdOkjY8vbtI9wM5xb8q8LNjf2xKV5flvcHkKEOIpcq8pCwvfROCAbO5>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgtggfgsehtqhertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepheetfefgjeeuje
+    dtgedvgfeghfeigfehffdvffduveevteejudfhudekudetveejnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    htrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:oIx2YSxpPSjPnnXapU4XhCHxAzW3Tl2ylAB6fbzxR5cGovnQORfpXw>
+    <xmx:oIx2YRQUd6dEDRAyAvERAkW5_3l0ulG75TBHI6W1Ki79f_KXU0UJSw>
+    <xmx:oIx2YdYgFKXMiKpbqmWq6HAsTjXAnt3f3LnPVEI0W4H_KBTRHqx54Q>
+    <xmx:oYx2YSAs_aXQpOpVILKRjR5NFk5vZvDipS-J3C2D2EZs5UzgP6qPDw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 25 Oct 2021 06:53:12 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     robh+dt@kernel.org, kernel@pengutronix.de, lgirdwood@gmail.com,
+        lee.jones@linaro.org, broonie@kernel.org
+Cc:     s.hauer@pengutronix.de, rui.zhang@intel.com,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        amitk@kernel.org, shawnguo@kernel.org, alistair23@gmail.com,
+        devicetree@vger.kernel.org, linux-imx@nxp.com,
+        andreas@kemnade.info, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v14 0/8] Add support for the silergy,sy7636a
+Date:   Mon, 25 Oct 2021 20:53:01 +1000
+Message-Id: <20211025105309.37942-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211022200032.23267-1-pauk.denis@gmail.com>
-In-Reply-To: <20211022200032.23267-1-pauk.denis@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Oct 2021 12:34:23 +0300
-Message-ID: <CAHp75VcvzBoY_avM2r-vQei+UCULU8oEYBdgM6dD7Yr3N69hvA@mail.gmail.com>
-Subject: Re: [PATCH v8 0/3] Update ASUS WMI supported boards
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        thomas@weissschuh.net, Ed Brindley <kernel@maidavale.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 11:01 PM Denis Pauk <pauk.denis@gmail.com> wrote:
->
-> Update ASUS WMI supported boards
->
-> Add support by WMI interface privided by Asus for B550/X570 boards:
-
-provided
-
-> * PRIME X570-PRO,
-> * ROG CROSSHAIR VIII HERO
-> * ROG CROSSHAIR VIII DARK HERO
-> * ROG CROSSHAIR VIII FORMULA
-> * ROG STRIX X570-E GAMING
-> * ROG STRIX B550-E GAMING
->
-> Add support by WMI interface privided by Asus for X370/X470/
-
-provided
-
-> B450/X399 boards:
-> * ROG CROSSHAIR VI HERO,
-> * PRIME X399-A,
-> * PRIME X470-PRO,
-> * ROG CROSSHAIR VI EXTREME,
-> * ROG CROSSHAIR VI HERO (WI-FI AC),
-> * ROG CROSSHAIR VII HERO,
-> * ROG CROSSHAIR VII HERO (WI-FI),
-> * ROG STRIX B450-E GAMING,
-> * ROG STRIX B450-F GAMING,
-> * ROG STRIX B450-I GAMING,
-> * ROG STRIX X399-E GAMING,
-> * ROG STRIX X470-F GAMING,
-> * ROG STRIX X470-I GAMING,
-> * ROG ZENITH EXTREME,
-> * ROG ZENITH EXTREME ALPHA.
->
-> Add support to nct6775:
-> * ProArt X570-CREATOR WIFI.
->
-> Could you please review?
-
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Signed-off-by: Ed Brindley <kernel@maidavale.org>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-
-No need to have this in cover letter. But it's harmless, so up to you.
-
-I will look at it this week, I think we can still improve utf conversion code.
-
--- 
-With Best Regards,
-Andy Shevchenko
+v14:=0D
+ - Merge the thermal driver and hwmon=0D
+v13:=0D
+ - Address comments on thermal driver=0D
+ - Rebase on master (without other patches)=0D
+v12:=0D
+ - Rebase=0D
+v11:=0D
+ - Address comments on hwmon=0D
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
+v10:=0D
+ - Use dev_get_regmap() instead of dev_get_drvdata()=0D
+v9:=0D
+ - Convert to use the simple-mfd-i2c instead=0D
+=0D
+Alistair Francis (8):=0D
+  dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml=0D
+  mfd: simple-mfd-i2c: Add a Kconfig name=0D
+  mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a=0D
+  regulator: sy7636a: Remove requirement on sy7636a mfd=0D
+  hwmon: sy7636a: Add temperature driver for sy7636a=0D
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d: remarkable2: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d: remarkable2: Enable lcdif=0D
+=0D
+ .../bindings/mfd/silergy,sy7636a.yaml         |  79 ++++++++++=0D
+ Documentation/hwmon/sy7636a-hwmon.rst         |  24 ++++=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++=0D
+ arch/arm/configs/imx_v6_v7_defconfig          |   3 +=0D
+ drivers/hwmon/Kconfig                         |   9 ++=0D
+ drivers/hwmon/Makefile                        |   1 +=0D
+ drivers/hwmon/sy7636a-hwmon.c                 | 114 +++++++++++++++=0D
+ drivers/mfd/Kconfig                           |   2 +-=0D
+ drivers/mfd/simple-mfd-i2c.c                  |  11 ++=0D
+ drivers/regulator/Kconfig                     |   1 -=0D
+ drivers/regulator/sy7636a-regulator.c         |   9 +-=0D
+ include/linux/mfd/sy7636a.h                   |  36 +++++=0D
+ 12 files changed, 420 insertions(+), 5 deletions(-)=0D
+ create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.y=
+aml=0D
+ create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst=0D
+ create mode 100644 drivers/hwmon/sy7636a-hwmon.c=0D
+ create mode 100644 include/linux/mfd/sy7636a.h=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D
