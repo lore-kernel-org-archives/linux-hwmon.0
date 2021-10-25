@@ -2,197 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A7CCC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 10:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66E61C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 13:11:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70E6660F46
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 10:54:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44D5360EB1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 13:11:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbhJYK5C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Oct 2021 06:57:02 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:49819 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231796AbhJYK5C (ORCPT
+        id S233460AbhJYNNW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Oct 2021 09:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233448AbhJYNNW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Oct 2021 06:57:02 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A271658052B;
-        Mon, 25 Oct 2021 06:54:39 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 25 Oct 2021 06:54:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=2aOAXpeIPQR2x
-        ghpp4OMQNId//edXUxPmx/LpQURmRg=; b=pZqD4+hi3r5C4z32xOCV/LV6iuzW0
-        5EkwSdxAjOffReaHSG6NkJqzNfL0NnJ/8HvvNmhjtsPuOMENApFhY5hgJ9iConUP
-        mrbi3D2puYBScNKZDQs2Dl7CznXcNI/ZUF5jH4dWxpbCjWv/4uW9l4IZR3wM+r70
-        GsFWORLirDfQDEjy6H5bgd0Oekfr/TuHDfl3ZrqhtKbI7FrNlw8BiEvrR7jDsYiI
-        FIZumTe5nlIwPL1ne6jlnjZhjjq0yAt56PACriDxm5YoPv6c6Xa1gyiRawOjzXDv
-        4Pidz/RuAUO8G18qX1mAxpX27ZJMpWbNR4BbcT5/ZYRxEB7bf7LNIQrDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=2aOAXpeIPQR2xghpp4OMQNId//edXUxPmx/LpQURmRg=; b=D7h8Eqln
-        LEwsr+YpBPdsOx+5GaFMFm/4R8ou7D5TNPtGn7R4AfpPLDUsJA0ewEXPEakkeuIr
-        fx71waQuyhtlTq8Abaa5hI9Da6/hz9vYMgs6M8FkV4TPDYwmbe2VRIf0CQajNEsp
-        rKwz9d/p423YMoTX4M8e16tAgylm2BcgRM3IPIodQXsfSaQdvDW/r4ElVOOwn0Wu
-        AzJVhK95aEi21/H+5Dt9CRqphByjwiEnW2uo3+XQt4LFyy12bpoOq7z9D2OYNcUr
-        o7XX6RMCXjZkicf9W6cHqzoTd+KgmC4Rmm/hyI8Akq3gn3X2r1yOTsbEMEqZkgoQ
-        vpDGQNhcx6YZ8g==
-X-ME-Sender: <xms:74x2YSoSyplQkf4OTmKms_jsy-WPj4nKLPEOaWsXotNnUz5AqNgYtw>
-    <xme:74x2YQqUCXph7pfwuSMgf9PpMEsj9RRqap4CenG6NJdMNuUc82AvYar6GgLItHsY_
-    RWRYKzxPkPkz2faybs>
-X-ME-Received: <xmr:74x2YXNcra0olR8SOj1-M-NUa8sUV0KL3sczTe012j3OJI736GZs0Qhg9cZJ9UXE8_HS67iQ3577>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgfedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
-    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeggedtteejke
-    eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
-    ufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
-    hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:74x2YR4bx-yTGPKBAPl5JvEoxlNChoXb5EQCT9YdVttYCurywTchJA>
-    <xmx:74x2YR5ED_OiYCwyjRial02ZXcdtXawGrNxc_L6lzRf8wh6uHYSHdA>
-    <xmx:74x2YRiRQYV3N-1z6d_0H106191oaM54FsjUYwJ5yTnxNSpgbVMk-g>
-    <xmx:74x2YVrOyylMDGY81FIxCN4tqAXLRoaec3bdP7o80MaLMUrLNloRSg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Oct 2021 06:54:29 -0400 (EDT)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     robh+dt@kernel.org, kernel@pengutronix.de, lgirdwood@gmail.com,
-        lee.jones@linaro.org, broonie@kernel.org
-Cc:     s.hauer@pengutronix.de, rui.zhang@intel.com,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        amitk@kernel.org, shawnguo@kernel.org, alistair23@gmail.com,
-        devicetree@vger.kernel.org, linux-imx@nxp.com,
-        andreas@kemnade.info, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v14 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
-Date:   Mon, 25 Oct 2021 20:53:09 +1000
-Message-Id: <20211025105309.37942-9-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211025105309.37942-1-alistair@alistair23.me>
-References: <20211025105309.37942-1-alistair@alistair23.me>
+        Mon, 25 Oct 2021 09:13:22 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197C8C061745;
+        Mon, 25 Oct 2021 06:11:00 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id r134so15328287iod.11;
+        Mon, 25 Oct 2021 06:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LqSgr0K3Z/r9sP1YQd1U8WeH+I8Nt19Et4qB9zN0QnM=;
+        b=gosArYnwumg1N6VgrU3ws2OC+QIQsYC/xRwLyYcspNj5zKaqXy0dBC43yikj/R4SGz
+         BWfYXJwxDqX3Z4iIkH36n+902vqYsq5SIo9uv/pNq5VnVaomow+reus8oUl+tVJAS6aN
+         Y6aSFMpsr9Xm4mFsqORkCzt8akgjAcQ0XIJciNKrUtEpPxBRKMN4ZfDmSHum4XyKyy7i
+         NsBWDzqKMtSdoLgvMktRfOpQ926dhTXFIC1h3Zn9+YmtvsakmIwPNIv8Xz3AXkOaVBx7
+         AWUTYKFg9+m9i3gAu7G/pymyZ+CNIZDQlqjx7C3B53D+/ucWX7gH4vh9AfZr5WP1ACCw
+         QAOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LqSgr0K3Z/r9sP1YQd1U8WeH+I8Nt19Et4qB9zN0QnM=;
+        b=1iKJONQp4yuo/CUFbg/eL862TWE5wGqnlj9+I1Vqyd8InuIsxhaWYr7B2UkScDghp1
+         1kGzcL7I5r4YFBrrFk7Sp3mJJRDKbkEKXcw8iQuDKlMkN9MTjJbBXKh6npZfsPlH0HpR
+         6qZnbkG0rUPRPEWXLq0iob318SnQAHhJmz0F/p33aETzQiZGDp0Yv7bJirzcJOwYQAnK
+         /sv65PghtTlXuS7kkh4ic4CVPoUWKZr3qWShk/WQ2lcA6WR4jVVAJzL1WOdbc+d4q2wu
+         dIjnE2gzRBFwvh1AKInhfobkkR9/GEBj5WMfKK8Wa5LDYPm2ZsiDLZOUPATGWO7xEJ6f
+         scuA==
+X-Gm-Message-State: AOAM5303rOolnJT0Z7OM2+gAmKDNXCQBSin9brRMCXfSjUDLlEY0GvsF
+        LBtfFqN8wMetf5k7qSrwV32Ql96wC61TTNRGpSNnqCuU
+X-Google-Smtp-Source: ABdhPJyE2CchchZpEfZkAyrM/PAwt1sP0pvFhVpiTlJ6N/8hbgOMoqp0drlHvQXDnV3C5K5PocsJF5b1ElK8v0a/IgM=
+X-Received: by 2002:a6b:8dd6:: with SMTP id p205mr10227210iod.192.1635167459394;
+ Mon, 25 Oct 2021 06:10:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211006222502.645003-1-pauk.denis@gmail.com> <20211006222502.645003-3-pauk.denis@gmail.com>
+ <CAB95QARmjTBVRyru=ZDz9Wc5SX9EPFg7dg6vB+S8=pMtpg8FRw@mail.gmail.com>
+ <20211007184644.1d042550@penguin.lxd> <CAB95QASYPRZSFnpE5u=SYJ49Hd+=BAZY==Ky8dzjL8h7YZj-CQ@mail.gmail.com>
+ <CAB95QAQ+u4DmF0e9Zvy5hDV0mFQDEULtr-newtz5_6y=Bzp+ww@mail.gmail.com>
+ <20211010133921.4277dc79@penguin.lxd> <CAB95QAQs_PUeTU7d9tg83a8hRepjLfLnxVykU2nvBv3Vn49HBQ@mail.gmail.com>
+ <8527fb83-4b76-e3c4-85eb-542c1cee249a@roeck-us.net> <CAB95QATwDkGBWdB0YWJovfN=MdtV9JkAWH2ofDFHMVYymStk5w@mail.gmail.com>
+In-Reply-To: <CAB95QATwDkGBWdB0YWJovfN=MdtV9JkAWH2ofDFHMVYymStk5w@mail.gmail.com>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Mon, 25 Oct 2021 15:10:48 +0200
+Message-ID: <CAB95QASpK+ajGTpJoMTQN1epa-QMy9sJHRPFVyizFgCa3dut=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
+Hi All,
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+> On that machine a single reading of the EC register (i.e. a call to
+> ec_read()) takes approx. 14 ms. The timeout is probably right here.
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index b66d28b30d75..fe68f6eaa2ec 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -55,6 +55,16 @@ reg_brcm: regulator-brcm {
- 		startup-delay-us = <150>;
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -63,6 +73,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -99,6 +119,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -187,6 +221,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.31.1
+I migrated that ASUS machine to another distribution (Arch -> Gentoo,
+kernel versions 5.14.8 -> 5.14.14) and surprisingly reading EC
+registers became faster. I accumulated data from 14133 read operations
+and the times are distributed as follows: 84 % at 4 ms, 10 % at 5 ms,
+5.0 % at 6 ms and the rest is between 3 and 9 ms (but concentrating
+around multiples of 0.5 ms).
 
+In the meantime the only other user who provided EC read timeouts
+showed 14 ms per EC read too.
+
+Regards,
+Eugene
