@@ -2,153 +2,214 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB19C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Oct 2021 08:19:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7374C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 02:16:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F2FD60ED3
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Oct 2021 08:19:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A40D460E97
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 02:16:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbhJXIWF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Oct 2021 04:22:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35246 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229527AbhJXIWE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Oct 2021 04:22:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635063584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iEA+bOsDY0+9yg7R/acNp9qvWIVajgO8oDCJI28qcNg=;
-        b=Lkfzny+wD1AfQqXGAvUKreA+pEWmb3drBkbgc7U8Y0WoaUR08m/o7R/gouCzVqnrvj0AQv
-        vD2k+oNmGGuHIPcVipW79UfR96hgjXtVGoFLXCGFsQ079CBp1MpvDmS78i1a8dmfZpyy7r
-        C0nemIRG7K24LAYLY1MEqnZVL+FZ6a4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-549-ZGkNlm8xMrasjWzBdVVF_w-1; Sun, 24 Oct 2021 04:19:42 -0400
-X-MC-Unique: ZGkNlm8xMrasjWzBdVVF_w-1
-Received: by mail-ed1-f72.google.com with SMTP id i9-20020a508709000000b003dd4b55a3caso915449edb.19
-        for <linux-hwmon@vger.kernel.org>; Sun, 24 Oct 2021 01:19:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iEA+bOsDY0+9yg7R/acNp9qvWIVajgO8oDCJI28qcNg=;
-        b=7SJlVWGZd+J+zzx1yx3Yq1CBt3Pg3O74tWLDEiETrSlBQEucyptj8PGQjxyWU5gudY
-         vSPdUOwFs2D2v1Xfk9sl9uo2StD03amKwqenv6zvaupZLWDNEjgvg8F5b0jv+sn3CsBf
-         J8KSzsENLAfGQi2e1WCK4RUSEtaaT+a/rcKQYq52cegrojP/rqhhhVSc/9OxBe10WvS2
-         IRLfs8yn29pbz7dlgmbvO0lV6HljaJr8GOTrO8lRUTK2Pl+OazysranTfObvQ0SeNR6Z
-         CFQatacv3NfmZVvacYUnbMTGoaBjS0z9hkNQbuxqoQauJYdjVAVC4r7DqIlHX70A9FIW
-         xdww==
-X-Gm-Message-State: AOAM533DaPEv0X2hnfu5TbcYrzHC078r20WRDI5THaZgbcAByf2+KjMb
-        84jbo4U/zRWOT2w2vFxeBfdsnQmArBtiie6fkC68cZ1fw9xCYZpSKMaQUE1EjYi93EznOa/trdG
-        8NuavZhEzMQ9X0FcsYTFgoMc=
-X-Received: by 2002:aa7:c952:: with SMTP id h18mr16344384edt.18.1635063581667;
-        Sun, 24 Oct 2021 01:19:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz5rtFBpYqxF0K9CIYe+eHutxNObi8ukisQuZC6nx0OFjTu3p+Z581qSKvqb5oWD+F57MrVvA==
-X-Received: by 2002:aa7:c952:: with SMTP id h18mr16344365edt.18.1635063581499;
-        Sun, 24 Oct 2021 01:19:41 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id y22sm7607114edc.76.2021.10.24.01.19.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Oct 2021 01:19:41 -0700 (PDT)
-Message-ID: <f52acae3-42b8-72e5-84dd-68eb41ff0efa@redhat.com>
-Date:   Sun, 24 Oct 2021 10:19:40 +0200
+        id S231998AbhJYCS5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Oct 2021 22:18:57 -0400
+Received: from mga18.intel.com ([134.134.136.126]:14773 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231992AbhJYCS4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 24 Oct 2021 22:18:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10147"; a="216463148"
+X-IronPort-AV: E=Sophos;i="5.87,179,1631602800"; 
+   d="scan'208";a="216463148"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2021 19:16:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,179,1631602800"; 
+   d="scan'208";a="663867881"
+Received: from lkp-server02.sh.intel.com (HELO 74392981b700) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 24 Oct 2021 19:16:33 -0700
+Received: from kbuild by 74392981b700 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mepXM-0001GV-Um; Mon, 25 Oct 2021 02:16:32 +0000
+Date:   Mon, 25 Oct 2021 10:16:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ c0d79987a0d82671bff374c07f2201f9bdf4aaa2
+Message-ID: <61761364.Y16sTEPzcIlkwdek%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] platform/x86: system76_acpi: fix Kconfig dependencies
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Tim Crawford <tcrawford@system76.com>,
-        Jeremy Soller <jeremy@system76.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        "David E. Box" <david.e.box@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20211022154901.904984-1-arnd@kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211022154901.904984-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: c0d79987a0d82671bff374c07f2201f9bdf4aaa2  hwmon: (dell-smm) Speed up setting of fan speed
 
-On 10/22/21 17:48, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When CONFIG_INPUT is disabled, this driver now fails to link:
-> 
-> ld.lld: error: undefined symbol: devm_input_allocate_device
->>>> referenced by system76_acpi.c
->>>>               platform/x86/system76_acpi.o:(system76_add) in archive drivers/built-in.a
-> 
-> ld.lld: error: undefined symbol: input_set_capability
->>>> referenced by system76_acpi.c
->>>>               platform/x86/system76_acpi.o:(system76_add) in archive drivers/built-in.a
-> 
-> ld.lld: error: undefined symbol: devm_hwmon_device_register_with_info
->>>> referenced by system76_acpi.c
->>>>               platform/x86/system76_acpi.o:(system76_add) in archive drivers/built-in.a
-> 
-> ld.lld: error: undefined symbol: battery_hook_unregister
->>>> referenced by system76_acpi.c
->>>>               platform/x86/system76_acpi.o:(system76_remove) in archive drivers/built-in.a
-> 
-> Add Kconfig dependencies for each of these three.
-> 
-> Fixes: 0de30fc684b3 ("platform/x86: system76_acpi: Replace Fn+F2 function for OLED models")
-> Fixes: 95563d45b5da ("platform/x86: system76_acpi: Report temperature and fan speed")
-> Fixes: 76f7eba3e0a2 ("platform/x86: system76_acpi: Add battery charging thresholds")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+elapsed time: 4464m
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+configs tested: 153
+configs skipped: 4
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211025
+sh                         ap325rxa_defconfig
+powerpc                      pcm030_defconfig
+mips                     decstation_defconfig
+powerpc                      arches_defconfig
+sh                            migor_defconfig
+powerpc                      pmac32_defconfig
+powerpc                      walnut_defconfig
+m68k                         amcore_defconfig
+arc                        nsim_700_defconfig
+powerpc                        cell_defconfig
+s390                          debug_defconfig
+powerpc                 mpc832x_rdb_defconfig
+sh                           se7751_defconfig
+xtensa                          iss_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                           se7705_defconfig
+mips                      pic32mzda_defconfig
+mips                      bmips_stb_defconfig
+arm                           h5000_defconfig
+nios2                            alldefconfig
+arm                       mainstone_defconfig
+mips                          rb532_defconfig
+arm                           sunxi_defconfig
+arm                         hackkit_defconfig
+arc                        vdk_hs38_defconfig
+sh                          rsk7269_defconfig
+powerpc                      obs600_defconfig
+arc                         haps_hs_defconfig
+arm                            pleb_defconfig
+mips                         bigsur_defconfig
+sh                              ul2_defconfig
+i386                             alldefconfig
+powerpc                 mpc8313_rdb_defconfig
+sparc                       sparc32_defconfig
+sparc64                          alldefconfig
+sh                        sh7785lcr_defconfig
+openrisc                    or1ksim_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                 mpc8272_ads_defconfig
+arm                            xcep_defconfig
+powerpc                     kmeter1_defconfig
+openrisc                         alldefconfig
+powerpc                     tqm8548_defconfig
+arm                       spear13xx_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                   bluestone_defconfig
+arc                      axs103_smp_defconfig
+mips                          rm200_defconfig
+arm                          pxa3xx_defconfig
+nios2                         3c120_defconfig
+powerpc                        warp_defconfig
+arm                        mvebu_v7_defconfig
+arm                            dove_defconfig
+mips                          ath79_defconfig
+arm                  colibri_pxa300_defconfig
+mips                        omega2p_defconfig
+mips                        maltaup_defconfig
+powerpc                      ppc6xx_defconfig
+arm                         orion5x_defconfig
+mips                    maltaup_xpa_defconfig
+arm                          ep93xx_defconfig
+mips                           ip32_defconfig
+arm                  randconfig-c002-20211025
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+arc                              allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+s390                             allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20211024
+x86_64               randconfig-a004-20211024
+x86_64               randconfig-a005-20211024
+x86_64               randconfig-a006-20211024
+x86_64               randconfig-a003-20211024
+x86_64               randconfig-a001-20211024
+i386                 randconfig-a003-20211024
+i386                 randconfig-a004-20211024
+i386                 randconfig-a002-20211024
+i386                 randconfig-a005-20211024
+i386                 randconfig-a006-20211024
+i386                 randconfig-a001-20211024
+i386                 randconfig-a012-20211025
+i386                 randconfig-a013-20211025
+i386                 randconfig-a011-20211025
+i386                 randconfig-a016-20211025
+i386                 randconfig-a015-20211025
+i386                 randconfig-a014-20211025
+x86_64               randconfig-a002-20211022
+x86_64               randconfig-a004-20211022
+x86_64               randconfig-a005-20211022
+x86_64               randconfig-a001-20211022
+x86_64               randconfig-a006-20211022
+x86_64               randconfig-a003-20211022
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                           allyesconfig
 
-Regards,
+clang tested configs:
+x86_64               randconfig-a013-20211022
+x86_64               randconfig-a015-20211022
+x86_64               randconfig-a011-20211022
+x86_64               randconfig-a014-20211022
+x86_64               randconfig-a016-20211022
+x86_64               randconfig-a012-20211022
+hexagon              randconfig-r045-20211025
+hexagon              randconfig-r041-20211025
+riscv                randconfig-r042-20211022
+s390                 randconfig-r044-20211022
+hexagon              randconfig-r045-20211022
+hexagon              randconfig-r041-20211022
 
-Hans
-
-
-> ---
->  drivers/platform/x86/Kconfig | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index 56bcf80da60a..c422ee785c56 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -923,6 +923,9 @@ config SONYPI_COMPAT
->  config SYSTEM76_ACPI
->  	tristate "System76 ACPI Driver"
->  	depends on ACPI
-> +	depends on ACPI_BATTERY
-> +	depends on HWMON
-> +	depends on INPUT
->  	select NEW_LEDS
->  	select LEDS_CLASS
->  	select LEDS_TRIGGERS
-> 
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
