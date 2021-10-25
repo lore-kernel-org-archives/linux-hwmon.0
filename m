@@ -2,214 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7374C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 02:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3D23C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 02:58:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A40D460E97
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 02:16:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D17D760FBF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Oct 2021 02:58:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbhJYCS5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Oct 2021 22:18:57 -0400
-Received: from mga18.intel.com ([134.134.136.126]:14773 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231992AbhJYCS4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Oct 2021 22:18:56 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10147"; a="216463148"
-X-IronPort-AV: E=Sophos;i="5.87,179,1631602800"; 
-   d="scan'208";a="216463148"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2021 19:16:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,179,1631602800"; 
-   d="scan'208";a="663867881"
-Received: from lkp-server02.sh.intel.com (HELO 74392981b700) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Oct 2021 19:16:33 -0700
-Received: from kbuild by 74392981b700 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mepXM-0001GV-Um; Mon, 25 Oct 2021 02:16:32 +0000
-Date:   Mon, 25 Oct 2021 10:16:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- c0d79987a0d82671bff374c07f2201f9bdf4aaa2
-Message-ID: <61761364.Y16sTEPzcIlkwdek%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232313AbhJYDAl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Oct 2021 23:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232002AbhJYDAk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 24 Oct 2021 23:00:40 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F980C061745
+        for <linux-hwmon@vger.kernel.org>; Sun, 24 Oct 2021 19:58:19 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id f11so9309560pfc.12
+        for <linux-hwmon@vger.kernel.org>; Sun, 24 Oct 2021 19:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nathanrossi.com; s=google;
+        h=date:message-id:from:to:cc:subject:content-transfer-encoding
+         :mime-version;
+        bh=H/kXO5wOonCyGZmApPOrBkhxaaPKvU/ttbJczsp4UII=;
+        b=MVQWdEfUaHIiFX9NrP+ZgS3e0PcMCIeiT1N2ayAHUXKezmpo0Z/MlXosil4D9Nr5V4
+         P9aNkxbilgpXTnrg31zSJeeZCCDx4lWRuXvOhR0GZu36JcDvGl3WMmtEt8+syTknpya8
+         8usRVjAB/cm5l2A2yh5m/AvT4Hb1YOcUkdK8pYaBFd5qFpXaaw6d63XpAjtXGDxUHBG8
+         VaD0Rvvg1p+sD/xrCgr/R/DIVdpHW0CincY9BnO3yMcmgad7Y8KVCcAeib7YTRJCvHRf
+         kpNKypNSVIDzWAtQ/HU1syVeGFlbDpU3kcHMKMdV8y1Z/vjSktTVGU8PRzp85qmZZu05
+         Jj+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject
+         :content-transfer-encoding:mime-version;
+        bh=H/kXO5wOonCyGZmApPOrBkhxaaPKvU/ttbJczsp4UII=;
+        b=pNe+FxLutGn2RrTQscbS0BbQxOiBeVGRulmv0ePpDqVIe6DNngbeDRSHfT6j9hqZOi
+         RBRXkXWskEHm7+EvOIVOzwTNvciero+hPmh9F5wT8hmCAPCwS/9mzEFSc0wjqRujUOY7
+         ohYlNzZKUoYOUtHfGPrQBx/7EqFX9v27xFp+r8kaHpQKoYXEXdcnpXAQmKJH27B7s6Tu
+         8B82auC0NpLGcmuqAVxvQ6KxbGfBZXWv5WXb4diXh00dmpqKTkjwuGfbx/m3Fut2rUM8
+         COzOtLwbO0jG4le+LX62KQ5eLyG6Hqj1SrVs1sEPdC2J7lg6rfJU+VQop2q8RarBSzZI
+         vOlA==
+X-Gm-Message-State: AOAM533JMfjWfukUpsv/GhNKnxMx/kAc2ZvgOxKqrcbFsX7QtOWMhPtu
+        dXOJSV7X9BnmSIwC8bVpx1ZTvg==
+X-Google-Smtp-Source: ABdhPJyhxAAh1BADJWLpfqRq3DeJhm6+jocSmJc62E5uJDhOa/fgXXMqSxtKYD7ft6zaIQjm/PuETw==
+X-Received: by 2002:a05:6a00:14cc:b0:44d:ebab:2e16 with SMTP id w12-20020a056a0014cc00b0044debab2e16mr15269662pfu.23.1635130698866;
+        Sun, 24 Oct 2021 19:58:18 -0700 (PDT)
+Received: from [127.0.1.1] (117-20-69-24.751445.bne.nbn.aussiebb.net. [117.20.69.24])
+        by smtp.gmail.com with UTF8SMTPSA id rm14sm19989676pjb.4.2021.10.24.19.58.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Oct 2021 19:58:18 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 02:58:05 +0000
+Message-Id: <20211025025805.618566-0-nathan@nathanrossi.com>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Nathan Rossi <nathan@nathanrossi.com>,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 0/2] Driver for TI INA238 I2C Power Monitor
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: c0d79987a0d82671bff374c07f2201f9bdf4aaa2  hwmon: (dell-smm) Speed up setting of fan speed
+From: Nathan Rossi <nathan.rossi@digi.com>
 
-elapsed time: 4464m
 
-configs tested: 153
-configs skipped: 4
+Nathan Rossi (2):
+  dt-bindings: hwmon: ti,ina2xx: Document ti,ina238 compatible string
+  hwmon: Driver for Texas Instruments INA238
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211025
-sh                         ap325rxa_defconfig
-powerpc                      pcm030_defconfig
-mips                     decstation_defconfig
-powerpc                      arches_defconfig
-sh                            migor_defconfig
-powerpc                      pmac32_defconfig
-powerpc                      walnut_defconfig
-m68k                         amcore_defconfig
-arc                        nsim_700_defconfig
-powerpc                        cell_defconfig
-s390                          debug_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                           se7751_defconfig
-xtensa                          iss_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                           se7705_defconfig
-mips                      pic32mzda_defconfig
-mips                      bmips_stb_defconfig
-arm                           h5000_defconfig
-nios2                            alldefconfig
-arm                       mainstone_defconfig
-mips                          rb532_defconfig
-arm                           sunxi_defconfig
-arm                         hackkit_defconfig
-arc                        vdk_hs38_defconfig
-sh                          rsk7269_defconfig
-powerpc                      obs600_defconfig
-arc                         haps_hs_defconfig
-arm                            pleb_defconfig
-mips                         bigsur_defconfig
-sh                              ul2_defconfig
-i386                             alldefconfig
-powerpc                 mpc8313_rdb_defconfig
-sparc                       sparc32_defconfig
-sparc64                          alldefconfig
-sh                        sh7785lcr_defconfig
-openrisc                    or1ksim_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                            xcep_defconfig
-powerpc                     kmeter1_defconfig
-openrisc                         alldefconfig
-powerpc                     tqm8548_defconfig
-arm                       spear13xx_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                   bluestone_defconfig
-arc                      axs103_smp_defconfig
-mips                          rm200_defconfig
-arm                          pxa3xx_defconfig
-nios2                         3c120_defconfig
-powerpc                        warp_defconfig
-arm                        mvebu_v7_defconfig
-arm                            dove_defconfig
-mips                          ath79_defconfig
-arm                  colibri_pxa300_defconfig
-mips                        omega2p_defconfig
-mips                        maltaup_defconfig
-powerpc                      ppc6xx_defconfig
-arm                         orion5x_defconfig
-mips                    maltaup_xpa_defconfig
-arm                          ep93xx_defconfig
-mips                           ip32_defconfig
-arm                  randconfig-c002-20211025
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                              allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-s390                             allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20211024
-x86_64               randconfig-a004-20211024
-x86_64               randconfig-a005-20211024
-x86_64               randconfig-a006-20211024
-x86_64               randconfig-a003-20211024
-x86_64               randconfig-a001-20211024
-i386                 randconfig-a003-20211024
-i386                 randconfig-a004-20211024
-i386                 randconfig-a002-20211024
-i386                 randconfig-a005-20211024
-i386                 randconfig-a006-20211024
-i386                 randconfig-a001-20211024
-i386                 randconfig-a012-20211025
-i386                 randconfig-a013-20211025
-i386                 randconfig-a011-20211025
-i386                 randconfig-a016-20211025
-i386                 randconfig-a015-20211025
-i386                 randconfig-a014-20211025
-x86_64               randconfig-a002-20211022
-x86_64               randconfig-a004-20211022
-x86_64               randconfig-a005-20211022
-x86_64               randconfig-a001-20211022
-x86_64               randconfig-a006-20211022
-x86_64               randconfig-a003-20211022
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64               randconfig-a013-20211022
-x86_64               randconfig-a015-20211022
-x86_64               randconfig-a011-20211022
-x86_64               randconfig-a014-20211022
-x86_64               randconfig-a016-20211022
-x86_64               randconfig-a012-20211022
-hexagon              randconfig-r045-20211025
-hexagon              randconfig-r041-20211025
-riscv                randconfig-r042-20211022
-s390                 randconfig-r044-20211022
-hexagon              randconfig-r045-20211022
-hexagon              randconfig-r041-20211022
-
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   1 +
+ Documentation/hwmon/ina238.rst                |  57 +++
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/ina238.c                        | 453 ++++++++++++++++++
+ 5 files changed, 524 insertions(+)
+ create mode 100644 Documentation/hwmon/ina238.rst
+ create mode 100644 drivers/hwmon/ina238.c
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+2.33.0
