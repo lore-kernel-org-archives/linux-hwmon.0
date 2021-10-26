@@ -2,265 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4259C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Oct 2021 19:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BED99C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Oct 2021 19:58:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 811CD60F56
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Oct 2021 19:29:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C00E60F39
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Oct 2021 19:58:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbhJZTbs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Oct 2021 15:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S237231AbhJZUAl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Oct 2021 16:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238724AbhJZTbr (ORCPT
+        with ESMTP id S239052AbhJZUAk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Oct 2021 15:31:47 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2890C061570;
-        Tue, 26 Oct 2021 12:29:22 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id q124so149012oig.3;
-        Tue, 26 Oct 2021 12:29:22 -0700 (PDT)
+        Tue, 26 Oct 2021 16:00:40 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8D9C061570;
+        Tue, 26 Oct 2021 12:58:15 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id x27so1209434lfu.5;
+        Tue, 26 Oct 2021 12:58:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/DsGp68guXlSIqkqaJmSVVnWQHHvWYZ3U4rjyZZAqEU=;
-        b=SA5TCGPavR5bxhLLTKmTD4lY3ylQPGGavzCWLEVGbRmSxgZZ3bZF8OW5cM8c/nDrA9
-         ZSrhgAilyVDySP49S+o9mTegv+rDLnp2C3Qrp13KSoJQQ7BR9y1tDvvnd8bbuuoop+Vh
-         8JesDnElLmJkyAno+vQjteObERgUgaF/ku7JnoHB8GeRe9h3g/WgcylrnAK6UwphC+md
-         +8TnLfAoMt3jf14R4X+Kdj5M/F9G8Fb0t5/LDyMKmO/XaUgw8TYPV+QCnG1bKcpEC3S4
-         f7wL4onsLTgnPGJHsEL7+lDXi5Yn6TCY3ufmkxLTC0iEDm62DE2GH8JPHcmB6uoPiYq9
-         qmaw==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=G2EUbiSBFqMAbwlq+Hh6bZmWi5bhxCtnpI1o6+QMB2g=;
+        b=SoHipItjHdtWBcxrwaOJGDTQDqdCu4ryplWxTF37sBQ1eLniffJQZZh80tiRvrhWJw
+         qzhJC2dZwIRHZcVcW5I6WZOC0H5nG3gHUSB0WZSvqrau4BY2IqXUbrwyHsTmzkXlPBxA
+         rbeM4pBik8HbrF9E2CYIjhW2SLcEb5F1Qt2OUguC6UxUtoF6BaA7Td41aCHapJzUHDfQ
+         PtpX2JPiIczvqi5lEO69txh+KLUsXX/MjyU+cnlYilh/gDG3XdALHzVdA7SuzPp0rhRt
+         B7PouoYeKTm5SeHeeaXJaOg+7MaYcXlQMKgpnE2o2gzmIkwTstXWvo3GcfHchAiro5cQ
+         MWhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/DsGp68guXlSIqkqaJmSVVnWQHHvWYZ3U4rjyZZAqEU=;
-        b=gqAe7JYu2t2xDjuPlUqvQRqcLUB4wRmsZ3vv9FKdeThv4NeGkXsDVzj9IQSUt76CxH
-         agMhIgwCZT9hyueJ4/uDtO6uEb1AHLw2h60uz1IO2EVdKt4enNARCDolOF8Hucd6dWcP
-         EalinLahq56iUtRsLr9LDi3L8HtJYDPKy+2d30xZm+vwiGuIp6fN1Di1P0JXZT71J/NG
-         OUeLzTuuG6zq6R7ck4bboicKxN5JI66xnNsPTLcvWBV9Gef59t1Vvck5PONOV0IzXupb
-         cqRF9oYZfeTCU3sFze3y3JhJaH2Mb8IqoVQ1dlKIHGP1HuwQX9UXl6jEAjmdBArlftQe
-         /VrA==
-X-Gm-Message-State: AOAM533GhfDCfJbbAOvT0Qn9OO4i6+qklDbMudj6zUjUVnLdsc69PlSI
-        t5u7Wj4eESDP9htv63UW54zKx1XHQTo=
-X-Google-Smtp-Source: ABdhPJxMN4s+93ffEnlYkHYyyqOnevPfNwsTl5wXlqa2ukfKOM5SQkebRBTd0bL+IzhNquYIy5i2NA==
-X-Received: by 2002:a05:6808:1597:: with SMTP id t23mr552562oiw.78.1635276561999;
-        Tue, 26 Oct 2021 12:29:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s20sm5466777oiw.17.2021.10.26.12.29.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 12:29:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [RFC] hwmon: (dell-smm) Allow for specifying fan control commands
- as module params
-To:     Armin Wolf <W_Armin@gmx.de>, pali@kernel.org
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211026171821.25944-1-W_Armin@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c0084820-6e4b-8a76-6220-5262774a8f69@roeck-us.net>
-Date:   Tue, 26 Oct 2021 12:29:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=G2EUbiSBFqMAbwlq+Hh6bZmWi5bhxCtnpI1o6+QMB2g=;
+        b=OD7sza7vVRaQimbIS0rZ7TTEnRPEl3ID6tCvNqO6D5ZEcGFgjc4MslsOP0b9w0Zvcd
+         XyjAa55HpDKt6zwz7EQJgxpfzaowbZfrNUB8RheEZKiQWRJHKnYMdc8FUYdHvuvGFE+8
+         gwUufP8/9ZO7p1b2mjn0hF2FGsYUszqn1R9OOr6heGqFPLzYdz49OO4wW34MKnYRqNS2
+         H/OEvvXBroct5HIfoabjo/+uXQXjt3JzuAjSAZa77SsTT2d+jrbmov+Ls4npCgbdRdHr
+         ZTv6T8+thIOpaP0X0fTmC8SwjvOqu9ISLzo9NGgbxGZ5tQ+LHIsZ6ECxyMPEZTFXmFs1
+         h9JA==
+X-Gm-Message-State: AOAM532wBlpC19nsDijb+ZHhk1sx5vmv4rVj6YdcMKvxrpZWULH/SWwy
+        DdWpXOVrTTWLukihr7NmvYoFXeDohUtP6w==
+X-Google-Smtp-Source: ABdhPJzAIHsmf6jhU+O5aBG2Yjds5qCqmoR//7ADUCzjefCud9HvzJygMhzcWwpYBJ0ouhiOtkmwHA==
+X-Received: by 2002:a05:6512:3f04:: with SMTP id y4mr24721401lfa.180.1635278294066;
+        Tue, 26 Oct 2021 12:58:14 -0700 (PDT)
+Received: from penguin.lxd ([94.179.4.108])
+        by smtp.gmail.com with ESMTPSA id w26sm2436759ljh.18.2021.10.26.12.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 12:58:13 -0700 (PDT)
+Date:   Tue, 26 Oct 2021 22:58:05 +0300
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     eugene.shalygin@gmail.com, platform-driver-x86@vger.kernel.org,
+        thomas@weissschuh.net, Tor Vic <torvic9@mailbox.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 1/3] hwmon: (asus_wmi_ec_sensors) Support B550 Asus
+ WMI.
+Message-ID: <20211026225805.1504a9f9@penguin.lxd>
+In-Reply-To: <YXcKLvRu3gRm3zUF@smile.fi.intel.com>
+References: <20211022200032.23267-1-pauk.denis@gmail.com>
+        <20211022200032.23267-2-pauk.denis@gmail.com>
+        <YXcDcXrUo4a/KAsT@smile.fi.intel.com>
+        <YXcHYvleoOr6sqMK@smile.fi.intel.com>
+        <YXcKLvRu3gRm3zUF@smile.fi.intel.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20211026171821.25944-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/26/21 10:18 AM, Armin Wolf wrote:
-> Right now, the only way to test if setting manual/auto fan control works
-> is to edit and recompile the module, which might not be possible for
-> everyone. Allow for specifying the necessary SMM commands when loading
-> the module, but taint the kernel if so since those commands might
-> cause strange side effects. Also update kernel-parameters.txt
-> accordingly.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Hi Andy,
 
-As far as I can see there are three logical changes in this patch:
-- move parameters from i8k to dell_smm_hwmon
-- add documentation for undocumented parameters
-- add new parameters
+Thank you, currently code has returned N/A by some reason. I will search
+place of regression.
 
-"One patch per logical change", please, as documented.
+On Mon, 25 Oct 2021 22:49:02 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+...
+> 
+> Okay, here a few additional fixes (make them symmetrical and hope that
+> it will compile now):
+> 
+...
 
-Thanks,
-Guenter
-
-> ---
->   .../admin-guide/kernel-parameters.txt         | 45 ++++++++++++++-----
->   Documentation/hwmon/dell-smm-hwmon.rst        | 27 ++++++++---
->   drivers/hwmon/dell-smm-hwmon.c                | 22 +++++++--
->   3 files changed, 73 insertions(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 91ba391f9b32..7025f5bf625f 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -940,6 +940,40 @@
->   			dump out devices still on the deferred probe list after
->   			retrying.
-> 
-> +	dell_smm_hwmon.ignore_dmi=
-> +			[HW] Continue probing hardware even if DMI data
-> +                        indicates that the driver is running on unsupported
-> +                        hardware.
-> +
-> +        dell_smm_hwmon.force=
-> +			[HW] Activate driver even if SMM BIOS signature does
-> +			not match list of supported models or certain
-> +			features are disabled.
-> +
-> +        dell_smm_hwmon.power_status=
-> +                        [HW] Report power status in /proc/i8k
-> +                        (disabled by default).
-> +
-> +        dell_smm_hwmon.restricted=
-> +			[HW] Allow controlling fans only if SYS_ADMIN
-> +                        capability is set.
-> +
-> +	dell_smm_hwmon.fan_mult=
-> +			[HW] Factor to multiply fan speed with.
-> +
-> +	dell_smm_hwmon.fan_max=
-> +			[HW] Maximum configurable fan speed.
-> +
-> +	dell_smm_hwmon.manual_fan=
-> +			[HW] SMM command to disable BIOS fan control, must be
-> +			set together with dell_smm_hwmon.auto_fan to work.
-> +			This can be dangerous, yet let us know if a certain
-> +			command combination worked.
-> +
-> +	dell_smm_hwmon.auto_fan=
-> +			[HW] SMM command to enable BIOS fan control, see
-> +			dell_smm_hwmon.manual_fan for further explaination.
-> +
->   	dfltcc=		[HW,S390]
->   			Format: { on | off | def_only | inf_only | always }
->   			on:       s390 zlib hardware support for compression on
-> @@ -1693,17 +1727,6 @@
-> 
->   	i810=		[HW,DRM]
-> 
-> -	i8k.ignore_dmi	[HW] Continue probing hardware even if DMI data
-> -			indicates that the driver is running on unsupported
-> -			hardware.
-> -	i8k.force	[HW] Activate i8k driver even if SMM BIOS signature
-> -			does not match list of supported models.
-> -	i8k.power_status
-> -			[HW] Report power status in /proc/i8k
-> -			(disabled by default)
-> -	i8k.restricted	[HW] Allow controlling fans only if SYS_ADMIN
-> -			capability is set.
-> -
->   	i915.invert_brightness=
->   			[DRM] Invert the sense of the variable that is used to
->   			set the brightness of the panel backlight. Normally a
-> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-> index beec88491171..df12dce7b02e 100644
-> --- a/Documentation/hwmon/dell-smm-hwmon.rst
-> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
-> @@ -67,13 +67,13 @@ for your hardware. It is possible that codes that work for other
->   laptops actually work for yours as well, or that you have to discover
->   new codes.
-> 
-> -Check the list ``i8k_whitelist_fan_control`` in file
-> -``drivers/hwmon/dell-smm-hwmon.c`` in the kernel tree: as a first
-> -attempt you can try to add your machine and use an already-known code
-> -pair. If, after recompiling the kernel, you see that ``pwm1_enable``
-> -is present and works (i.e., you can manually control the fan speed),
-> -then please submit your finding as a kernel patch, so that other users
-> -can benefit from it. Please see
-> +Check the list ``i8k_fan_control_data`` in file
-> +``drivers/hwmon/dell-smm-hwmon.c`` inside the kernel tree:
-> +as a first attempt you can load the module with ``manual_fan`` and
-> +``auto_fan`` set to an already-known code pair. If you see that
-> +``pwm1_enable`` is present and works (i.e., you can manually control
-> +the fan speed), then please submit your finding as a kernel patch,
-> +so that other users can benefit from it. Please see
->   :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
->   for information on submitting patches.
-> 
-> @@ -120,6 +120,19 @@ Module parameters
->                      Maximum configurable fan speed. (default:
->                      autodetect)
-> 
-> +* manual_fan:uint
-> +                   SMM code to disable BIOS fan control, must
-> +                   be set together with auto_fan to work.
-> +                   Please note that this parameter is unsafe and
-> +                   will taint your kernel when set, use only for
-> +                   testing codes on your hardware!
-> +                   (default: retrieved from whitelist)
-> +
-> +* auto_fan:uint
-> +                   SMM command to enable BIOS fan control, see
-> +                   manual_fan for further explaination.
-> +                   (default: retrieved from whitelist)
-> +
->   Legacy ``/proc`` interface
->   --------------------------
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index eaace478f508..4257aa297d7a 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -111,6 +111,14 @@ static uint fan_max;
->   module_param(fan_max, uint, 0);
->   MODULE_PARM_DESC(fan_max, "Maximum configurable fan speed (default: autodetect)");
-> 
-> +static uint manual_fan;
-> +module_param_unsafe(manual_fan, uint, 0);
-> +MODULE_PARM_DESC(manual_fan, "SMM command to disable BIOS fan control (default: disabled)");
-> +
-> +static uint auto_fan;
-> +module_param_unsafe(auto_fan, uint, 0);
-> +MODULE_PARM_DESC(auto_fan, "SMM command to enable BIOS fan control (default: disabled)");
-> +
->   struct smm_regs {
->   	unsigned int eax;
->   	unsigned int ebx __packed;
-> @@ -700,7 +708,7 @@ static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor_types
-> 
->   			break;
->   		case hwmon_pwm_enable:
-> -			if (data->auto_fan)
-> +			if (data->auto_fan && data->manual_fan)
->   				/*
->   				 * There is no command for retrieve the current status
->   				 * from BIOS, and userspace/firmware itself can change
-> @@ -1305,12 +1313,20 @@ static int __init dell_smm_probe(struct platform_device *pdev)
->   	data->i8k_fan_max = fan_max ? : I8K_FAN_HIGH;	/* Must not be 0 */
->   	data->i8k_pwm_mult = DIV_ROUND_UP(255, data->i8k_fan_max);
-> 
-> +	/* Values specified in module parameters override values from dmi */
->   	fan_control = dmi_first_match(i8k_whitelist_fan_control);
->   	if (fan_control && fan_control->driver_data) {
->   		const struct i8k_fan_control_data *control = fan_control->driver_data;
-> 
-> -		data->manual_fan = control->manual_fan;
-> -		data->auto_fan = control->auto_fan;
-> +		if (!manual_fan)
-> +			manual_fan = control->manual_fan;
-> +
-> +		if (!auto_fan)
-> +			auto_fan = control->auto_fan;
-> +	}
-> +	if (manual_fan && auto_fan) {
-> +		data->manual_fan = manual_fan;
-> +		data->auto_fan = auto_fan;
->   		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan control\n");
->   	}
-> 
-> --
-> 2.30.2
-> 
-
+Best regards,
+    Denis.
