@@ -2,95 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BED99C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Oct 2021 19:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F81CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Oct 2021 07:42:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C00E60F39
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Oct 2021 19:58:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87BDC60C51
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Oct 2021 07:42:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237231AbhJZUAl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Oct 2021 16:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S240531AbhJ0How (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Oct 2021 03:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239052AbhJZUAk (ORCPT
+        with ESMTP id S240581AbhJ0Hov (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Oct 2021 16:00:40 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8D9C061570;
-        Tue, 26 Oct 2021 12:58:15 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x27so1209434lfu.5;
-        Tue, 26 Oct 2021 12:58:15 -0700 (PDT)
+        Wed, 27 Oct 2021 03:44:51 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93B8C061348
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Oct 2021 00:42:26 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id u6-20020a17090a3fc600b001a00250584aso4403202pjm.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Oct 2021 00:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=G2EUbiSBFqMAbwlq+Hh6bZmWi5bhxCtnpI1o6+QMB2g=;
-        b=SoHipItjHdtWBcxrwaOJGDTQDqdCu4ryplWxTF37sBQ1eLniffJQZZh80tiRvrhWJw
-         qzhJC2dZwIRHZcVcW5I6WZOC0H5nG3gHUSB0WZSvqrau4BY2IqXUbrwyHsTmzkXlPBxA
-         rbeM4pBik8HbrF9E2CYIjhW2SLcEb5F1Qt2OUguC6UxUtoF6BaA7Td41aCHapJzUHDfQ
-         PtpX2JPiIczvqi5lEO69txh+KLUsXX/MjyU+cnlYilh/gDG3XdALHzVdA7SuzPp0rhRt
-         B7PouoYeKTm5SeHeeaXJaOg+7MaYcXlQMKgpnE2o2gzmIkwTstXWvo3GcfHchAiro5cQ
-         MWhQ==
+        d=nathanrossi.com; s=google;
+        h=date:message-id:in-reply-to:references:from:to:cc:subject
+         :content-transfer-encoding:mime-version;
+        bh=EvWO9/aP2UYkWDRoMSk+UDHZ7nRats7jMQJQZIEXWAU=;
+        b=k0uypuoa/tSMIoB+UArjlA7+U5joF88Bjt7a/jjC+VozJJHJorpHFAPYgUAv3TcPb5
+         IooaM7AQRTLfNG1fcIu0e+jKw6OYKnqD2klEG0e6Y1J8UI+NZQso5uCGvvRU8KbsenWu
+         sWpWZzr69WDdZI5fvIKdRC3bBZ0E2mpKmANl1KUdnqgL64Yv6QZM14xXeJVHhpdiR5Ix
+         A92BxQ8OL9PrwpFB2L9HX6x75a1aDw89wSHnH4B4awmYMA58jqXMF8NHXvL3BFfIDd8S
+         11hgRoSD//YWuA8GCLsggL0PkUXx92NPm1AstguVi9m8fPjndlhC6XLGETnX+bzlKyGH
+         BFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=G2EUbiSBFqMAbwlq+Hh6bZmWi5bhxCtnpI1o6+QMB2g=;
-        b=OD7sza7vVRaQimbIS0rZ7TTEnRPEl3ID6tCvNqO6D5ZEcGFgjc4MslsOP0b9w0Zvcd
-         XyjAa55HpDKt6zwz7EQJgxpfzaowbZfrNUB8RheEZKiQWRJHKnYMdc8FUYdHvuvGFE+8
-         gwUufP8/9ZO7p1b2mjn0hF2FGsYUszqn1R9OOr6heGqFPLzYdz49OO4wW34MKnYRqNS2
-         H/OEvvXBroct5HIfoabjo/+uXQXjt3JzuAjSAZa77SsTT2d+jrbmov+Ls4npCgbdRdHr
-         ZTv6T8+thIOpaP0X0fTmC8SwjvOqu9ISLzo9NGgbxGZ5tQ+LHIsZ6ECxyMPEZTFXmFs1
-         h9JA==
-X-Gm-Message-State: AOAM532wBlpC19nsDijb+ZHhk1sx5vmv4rVj6YdcMKvxrpZWULH/SWwy
-        DdWpXOVrTTWLukihr7NmvYoFXeDohUtP6w==
-X-Google-Smtp-Source: ABdhPJzAIHsmf6jhU+O5aBG2Yjds5qCqmoR//7ADUCzjefCud9HvzJygMhzcWwpYBJ0ouhiOtkmwHA==
-X-Received: by 2002:a05:6512:3f04:: with SMTP id y4mr24721401lfa.180.1635278294066;
-        Tue, 26 Oct 2021 12:58:14 -0700 (PDT)
-Received: from penguin.lxd ([94.179.4.108])
-        by smtp.gmail.com with ESMTPSA id w26sm2436759ljh.18.2021.10.26.12.58.11
+        h=x-gm-message-state:date:message-id:in-reply-to:references:from:to
+         :cc:subject:content-transfer-encoding:mime-version;
+        bh=EvWO9/aP2UYkWDRoMSk+UDHZ7nRats7jMQJQZIEXWAU=;
+        b=g548HQE9whGTH5wkt5DEdRsTsdI3Y+a9CLdxSP4yV5BUA28FDqurDAUJJGiY2IZQif
+         TvHDFnh81XCsvQik+7vZ/C+HxAvUhUatnsb07EvcB76OsBP1CW8q1S3yppqUDZpo5lpc
+         VB4bEMBejgDl8iXQDohg/tcnUtEO6aynbih9DunLoS+gf7pBESl9FTVSwU6RxbLWOW4C
+         t96v+hYHzbBi1YpZWOevw5AyeIzNvnNkx0AIct4w668NsI3Ut32ZwxMZdYiykWK5BxE6
+         GhDlNsjuhhJB1XrRs6/39xtF6aLxf/OYlJ8iry5S6VUxEtPU9FwqO7yviWXt9KH2M+fG
+         KtAg==
+X-Gm-Message-State: AOAM530GrVHRid/5oC5Eo6qs7sauD6ciLBFmUWel7jM+HxdVvtwmloqP
+        si8pHEK0iR3fm/Ap9rtbXPrlErw3jE2GcgBr
+X-Google-Smtp-Source: ABdhPJyf8nYG8qW81/yolRdeZUerGGa9z3mseuZofnD2TXanUqJezx9SKGVMO/KNngkgyBfXtZQpCA==
+X-Received: by 2002:a17:90a:cc05:: with SMTP id b5mr4099506pju.71.1635320546280;
+        Wed, 27 Oct 2021 00:42:26 -0700 (PDT)
+Received: from [127.0.1.1] (117-20-69-24.751445.bne.nbn.aussiebb.net. [117.20.69.24])
+        by smtp.gmail.com with UTF8SMTPSA id c85sm10272618pfc.146.2021.10.27.00.42.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 12:58:13 -0700 (PDT)
-Date:   Tue, 26 Oct 2021 22:58:05 +0300
-From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     eugene.shalygin@gmail.com, platform-driver-x86@vger.kernel.org,
-        thomas@weissschuh.net, Tor Vic <torvic9@mailbox.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jean Delvare <jdelvare@suse.com>,
+        Wed, 27 Oct 2021 00:42:25 -0700 (PDT)
+Date:   Wed, 27 Oct 2021 07:42:12 +0000
+Message-Id: <20211027074212.690611-0-nathan@nathanrossi.com>
+In-Reply-To: <20211025025805.618566-0-nathan@nathanrossi.com>
+References: <20211025025805.618566-0-nathan@nathanrossi.com>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Nathan Rossi <nathan@nathanrossi.com>,
+        Nathan Rossi <nathan.rossi@digi.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 1/3] hwmon: (asus_wmi_ec_sensors) Support B550 Asus
- WMI.
-Message-ID: <20211026225805.1504a9f9@penguin.lxd>
-In-Reply-To: <YXcKLvRu3gRm3zUF@smile.fi.intel.com>
-References: <20211022200032.23267-1-pauk.denis@gmail.com>
-        <20211022200032.23267-2-pauk.denis@gmail.com>
-        <YXcDcXrUo4a/KAsT@smile.fi.intel.com>
-        <YXcHYvleoOr6sqMK@smile.fi.intel.com>
-        <YXcKLvRu3gRm3zUF@smile.fi.intel.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; aarch64-unknown-linux-gnu)
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v2 0/3] Driver for TI INA238 I2C Power Monitor
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Andy,
+From: Nathan Rossi <nathan.rossi@digi.com>
 
-Thank you, currently code has returned N/A by some reason. I will search
-place of regression.
+Changes in v2:
+- Added device tree binding for ti,shunt-gain to specify the target
+  ADCRANGE for the ina238
+- Reworked ina238 driver to use hwmon_chip_info API, and addressed
+  various review comments
 
-On Mon, 25 Oct 2021 22:49:02 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-...
-> 
-> Okay, here a few additional fixes (make them symmetrical and hope that
-> it will compile now):
-> 
-...
+Nathan Rossi (3):
+  dt-bindings: hwmon: ti,ina2xx: Document ti,ina238 compatible string
+  dt-bindings: hwmon: ti,ina2xx: Add ti,shunt-gain property
+  hwmon: Driver for Texas Instruments INA238
 
-Best regards,
-    Denis.
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   7 +
+ Documentation/hwmon/ina238.rst                |  56 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/ina238.c                        | 672 ++++++++++++++++++
+ 6 files changed, 749 insertions(+)
+ create mode 100644 Documentation/hwmon/ina238.rst
+ create mode 100644 drivers/hwmon/ina238.c
+---
+2.33.0
