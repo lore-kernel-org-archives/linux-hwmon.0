@@ -2,244 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35BECC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 13:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07B86C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 16:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F290610A0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 13:52:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9D9360FC4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 16:20:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbhJ1NzZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Oct 2021 09:55:25 -0400
-Received: from ixit.cz ([94.230.151.217]:35258 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230370AbhJ1NzM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Oct 2021 09:55:12 -0400
-Received: from [192.168.1.138] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 5D70A20064;
-        Thu, 28 Oct 2021 15:52:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1635429161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IhbhJtURt+WnE9ECLdh1gqMi5nXfjMcR+LTiEWo/+2s=;
-        b=fcB6XX4004At1KY3+sfv99iJcibCHwuuu1xRny9RTu2cLvXDlLeMYiamkB25qVGjJHAka4
-        T0q6GYJuGrskIG7yQWiSp6cvF7MuEE9BeAN/CUIJNVe7DBtCp/1s94vHGaDgwaUqd+Odtt
-        RWeqqQcx0NNlwN2ePm2BD2H6aUo6rBs=
-Date:   Thu, 28 Oct 2021 15:52:35 +0200
-From:   David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH] WIP: dt-bindings: arm: hwmon: gpio-fan: Convert txt
- bindings to yaml
-To:     Rob Herring <robh@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~okias/devicetree@lists.sr.ht
-Message-Id: <N7XO1R.T7ICL6D5U4CF3@ixit.cz>
-In-Reply-To: <YW86Ffa+zoIZpixu@robh.at.kernel.org>
-References: <20211009104309.45117-1-david@ixit.cz>
-        <YW86Ffa+zoIZpixu@robh.at.kernel.org>
-X-Mailer: geary/40.0
+        id S229985AbhJ1QWn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Oct 2021 12:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229925AbhJ1QWm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 28 Oct 2021 12:22:42 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D19C061570;
+        Thu, 28 Oct 2021 09:20:15 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id l24-20020a9d1c98000000b00552a5c6b23cso9294594ota.9;
+        Thu, 28 Oct 2021 09:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qpc8jpsWVpJyk0cd0OJ7nlpLB5oumfHlBGc3n3seh8I=;
+        b=RC6Wxlkoq2dVLklq2Jk0LTN1s8376mQdC+nJuxnPTooIzwe/azssI5ZCo6oAhn9Mz9
+         OLjq7/lFO+NU0yvCOSoxzkSuhOUYDeBZ018jLgsyDO8rKmVfT8Qh1spxipVAC0HIJhAm
+         EFWknDA6C11qJLmSKc7JcdpR37UD1p9EoazsmzGGAuP7ad0oykv0aWd8b2+mPOPvX8Nv
+         A0y55TNc7w6NWO86Jm0r44hAlHJ/2Smh1YCIbk/DQk33+3Or4x9rAd5MxH8PHaKx4CzU
+         +tR/Txani8LyXkcWIWsOdRy6VzxoJr5pXBznTP771dpn+dFttGy6IgVb2SPBF42hl8su
+         0UXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=qpc8jpsWVpJyk0cd0OJ7nlpLB5oumfHlBGc3n3seh8I=;
+        b=X5lo3zDoHhEq5JNrDVjqF9KTKFWCb7GQ+Ci8a5NTtfSeya0Dv2WYW6ztVb2KHkEDUo
+         8LVQFH+xfDS3WiTzvgrrq1ZwzpolLzKUIDKJk5N2CUwkjadrQcB33x1xIvItohWHTTGm
+         k28+sd/7pXMo8VPzreGcz3fx/RqcBwYit3hgr7MRKcWGwEAojZOpExfXnEf973g2y/7m
+         9SpiKLnnzjbfXn8ZnMuWU/cJq91hrkXFHUUR2X8CzQH6/+gFfFboyHQznz+n/e5Pvz5o
+         XGr9G35TGR52jhgednlxS18a9hZDNUz80UjF/YS8SD7oWtwXs3D+TEgyOClXOi5/S9V9
+         +LbA==
+X-Gm-Message-State: AOAM5304xRrvKK1IsanUgoYQw8OPlvBOBOu/Ephs1xacZP/WAcEHJGM0
+        SxmRtCTMTL/lPE3ylA14ZkO4CmQSkl0=
+X-Google-Smtp-Source: ABdhPJzvi/sN32vb6BiJI0UOAyMHnmRji434S5M676KNZTpq8px/UHWPV6+07ie7eBpBdoujIFAHew==
+X-Received: by 2002:a9d:669:: with SMTP id 96mr4176377otn.224.1635438015002;
+        Thu, 28 Oct 2021 09:20:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p133sm1150001oia.11.2021.10.28.09.20.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 09:20:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 28 Oct 2021 09:20:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Wilson, David T. (GSFC-5870)" <david.wilson@nasa.gov>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [EXTERNAL] Re: Potential issue with smb word operations for
+ tmp461 device in tmp401 driver
+Message-ID: <20211028162012.GA470146@roeck-us.net>
+References: <SA1PR09MB7440BF952778F0DB8138747DE7B99@SA1PR09MB7440.namprd09.prod.outlook.com>
+ <7f334e4c-0e71-2005-854f-c2d4e068ef85@roeck-us.net>
+ <SA1PR09MB74408633E36AE3C97B4D2CA7E7BD9@SA1PR09MB7440.namprd09.prod.outlook.com>
+ <3923f61f-031c-f293-dfbd-8db7efbce2cb@roeck-us.net>
+ <SA1PR09MB7440DE6CE6882186ECDE3401E7BE9@SA1PR09MB7440.namprd09.prod.outlook.com>
+ <8485a422-31b2-6d9f-516c-29d60fd13490@roeck-us.net>
+ <SA1PR09MB74400C313FFCCEAE32A4C565E7869@SA1PR09MB7440.namprd09.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR09MB74400C313FFCCEAE32A4C565E7869@SA1PR09MB7440.namprd09.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi David,
 
+On Thu, Oct 28, 2021 at 01:54:01AM +0000, Wilson, David T. (GSFC-5870) wrote:
+> Hi Guenter,
+> 
+> Like last time, I updated several files in my platform's v5.4 files and applied your three patches. 
+> From what I can tell, I'm having no problems with the tmp461's basic support in the modified lm90 driver.
+> 
+> Thanks again for looking into this,
 
+I ordered an evaluation board from TI to be able to test improved support
+for TMP461 in the lm90 driver (actual chips are all but impossible to get,
+unless I am willing to wait for 9+ months). There are still some issues
+with negative temperatures in standard mode and, as you noticed, with
+resolution. I do have a board with TMP451 (which doesn't support negative
+temperatures in standard mode), but that doesn't help with the TMP461
+specifics. I'll keep you posted.
 
-On Tue, Oct 19 2021 at 16:35:17 -0500, Rob Herring <robh@kernel.org> 
-wrote:
-> On Sat, Oct 09, 2021 at 12:43:09PM +0200, David Heidelberg wrote:
->>  Convert fan devices connected to GPIOs to the YAML syntax.
->> 
->>  Signed-off-by: David Heidelberg <david@ixit.cz>
->>  ---
->>   .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 -----------
->>   .../devicetree/bindings/hwmon/gpio-fan.yaml   | 69 
->> +++++++++++++++++++
->>   2 files changed, 69 insertions(+), 41 deletions(-)
->>   delete mode 100644 
->> Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->>   create mode 100644 
->> Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
->> 
->>  diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt 
->> b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->>  deleted file mode 100644
->>  index f4cfa350f6a1..000000000000
->>  --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->>  +++ /dev/null
->>  @@ -1,41 +0,0 @@
->>  -Bindings for fan connected to GPIO lines
->>  -
->>  -Required properties:
->>  -- compatible : "gpio-fan"
->>  -
->>  -Optional properties:
->>  -- gpios: Specifies the pins that map to bits in the control value,
->>  -  ordered MSB-->LSB.
->>  -- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
->>  -  control value that should be set to achieve them. This array
->>  -  must have the RPM values in ascending order.
->>  -- alarm-gpios: This pin going active indicates something is wrong 
->> with
->>  -  the fan, and a udev event will be fired.
->>  -- #cooling-cells: If used as a cooling device, must be <2>
->>  -  Also see:
->>  -  
->> Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
->>  -  min and max states are derived from the speed-map of the fan.
->>  -
->>  -Note: At least one the "gpios" or "alarm-gpios" properties must be 
->> set.
->>  -
->>  -Examples:
->>  -
->>  -	gpio_fan {
->>  -		compatible = "gpio-fan";
->>  -		gpios = <&gpio1 14 1
->>  -			 &gpio1 13 1>;
->>  -		gpio-fan,speed-map = <0    0
->>  -				      3000 1
->>  -				      6000 2>;
->>  -		alarm-gpios = <&gpio1 15 1>;
->>  -	};
->>  -	gpio_fan_cool: gpio_fan {
->>  -		compatible = "gpio-fan";
->>  -		gpios = <&gpio2 14 1
->>  -			 &gpio2 13 1>;
->>  -		gpio-fan,speed-map =	<0    0>,
->>  -					<3000 1>,
->>  -					<6000 2>;
->>  -		alarm-gpios = <&gpio2 15 1>;
->>  -		#cooling-cells = <2>; /* min followed by max */
->>  -	};
->>  diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml 
->> b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
->>  new file mode 100644
->>  index 000000000000..e2db65d58a92
->>  --- /dev/null
->>  +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
->>  @@ -0,0 +1,69 @@
->>  +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>  +%YAML 1.2
->>  +---
->>  +$id: "http://devicetree.org/schemas/hwmon/gpio-fan.yaml#"
->>  +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>  +
->>  +title: Bindings for fan connected to GPIO lines
->>  +
->>  +maintainers:
->>  +  - Rob Herring <robh+dt@kernel.org>
-> 
-> Just robh@kernel.org
-> 
->>  +
->>  +properties:
->>  +  compatible:
->>  +    const: gpio-fan
->>  +
->>  +  gpios:
->>  +    description: |
->>  +      Specifies the pins that map to bits in the control value,
->>  +      ordered MSB-->LSB.
-> 
-> minItems: 1
-> maxItems: 7 ?
-> 
->>  +
->>  +  gpio-fan,speed-map:
->>  +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>  +    minItems: 4
->>  +    maxItems: 254
->>  +    description: |
->>  +      A mapping of possible fan RPM speeds and the
->>  +      control value that should be set to achieve them. This array
->>  +      must have the RPM values in ascending order.
-> 
-> Really this should be a uint32-matrix with this schema:
-> 
-> items:
->   minItems: 2
->   maxItems: 127
->   items:
->     - description: fan speed in RPMs
->     - description: control value
-> 
->>  +
->>  +  alarm-gpios:
->>  +    description: |
->>  +      This pin going active indicates something is wrong with
->>  +      the fan, and a udev event will be fired.
-> 
-> maxItems: 1
-> 
-> udev is a linuxism and shouldn't be in the binding.
-> 
->>  +
->>  +  '#cooling-cells':
->>  +    const: 2
->>  +
->>  +required:
->>  +  - compatible
->>  +  - gpio-fan,speed-map
->>  +
->>  +anyOf:
->>  +  - required: [gpios]
-> 
-> How is 'gpios' not always required?
-> 
->>  +  - required: [alarm-gpios]
->>  +
->>  +additionalProperties: false
->>  +
->>  +examples:
->>  +  - |
->>  +    gpio_fan {
->>  +      compatible = "gpio-fan";
->>  +      gpios = <&gpio1 14 1
->>  +               &gpio1 13 1>;
->>  +      gpio-fan,speed-map = <0    0
->>  +                            3000 1
->>  +                            6000 2>;
-> 
-> Brackets needed around each pair.
-
-Well, that's the issue. I would love to use u32-matrix, but all the 
-drivers use < x1 x2 y1 x2 ... z1 z2 > syntax and driver suggests it's 
-the right solution.
-         * Speed map is in the form <RPM ctrl_val RPM ctrl_val ...>
-
-Someone had to rewrite the driver and the DTS files to fix it. We could 
-mark old format as deprecated and use u32-matrix, but for now with 
-current drivers it's not a solution.
-
-What you think? Should I document it as it is (so u32-array)?
-
-David
-
-> 
->>  +      alarm-gpios = <&gpio1 15 1>;
->>  +    };
->>  +  - |
->>  +    gpio_fan_cool: gpio_fan {
->>  +      compatible = "gpio-fan";
->>  +      gpios = <&gpio2 14 1
->>  +               &gpio2 13 1>;
->>  +      gpio-fan,speed-map = <0    0
->>  +                            3000 1
->>  +                            6000 2>;
->>  +      alarm-gpios = <&gpio2 15 1>;
->>  +      #cooling-cells = <2>; /* min followed by max */
->>  +    };
->>  --
->>  2.33.0
->> 
->> 
-
-
+Guenter
