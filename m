@@ -2,93 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A567DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 04:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66A07C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 08:10:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 812AB61056
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 04:03:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 404AF60FC4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 08:10:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbhJ1EF6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Oct 2021 00:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S229968AbhJ1INR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Oct 2021 04:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbhJ1EF4 (ORCPT
+        with ESMTP id S229868AbhJ1INQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Oct 2021 00:05:56 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED17FC061570;
-        Wed, 27 Oct 2021 21:03:29 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id w193so6562454oie.1;
-        Wed, 27 Oct 2021 21:03:29 -0700 (PDT)
+        Thu, 28 Oct 2021 04:13:16 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C262C061767
+        for <linux-hwmon@vger.kernel.org>; Thu, 28 Oct 2021 01:10:50 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id y1so3862604plk.10
+        for <linux-hwmon@vger.kernel.org>; Thu, 28 Oct 2021 01:10:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=S6lpuP4txG3Zyi23T7AGq3oAlRNM/MD8E5LDniLzV7Y=;
-        b=QIKRU9PE94pBYIm3aw9kQI7OcvN1DKaDAiGIshNCHnhPvZZNDgei4wFzIarfT/7aEd
-         H/CsU/nNCkszvaOtv644Lz4qIwVWE13pOZZAexhyX5k1KLVMmnVWd/O5UFhtFfJ/X2xt
-         9XSKfa9s3MJ/sfVrdtpuY1jPWCXZyPGHZnvIFDc52/Cz6t4UL3mknDa+NhQ2hoea7XoI
-         8bT/qzQtbQblfmQUFTJB1r9d7WgGRgQELFiDQ33Rh3SkU8lCB4P2lo5d3qcxA6AkbO1p
-         vGuvOyPfpgGhvyqYPaRuIknl18MVFoQbA6xPxfBspQvP2rssSl6gZTKW7ylL9Qy4Ccm5
-         9nNw==
+        d=nathanrossi.com; s=google;
+        h=date:message-id:from:to:cc:subject:content-transfer-encoding
+         :mime-version;
+        bh=MAly2iZKcBbQJDaNxPhgWBngmMpLu3rVz+Azr51sx24=;
+        b=I1yxwJyom2XRVdWQGyaHgPAxp/r72Dw6LQnFWFt07fH7tSpaF5JOKd5/tih4kO+rWZ
+         3iHfQeSHk3wQvdrKkMjuK4ZcOR6No4tmogm36jcffx5RqQT9mIvdoBJLzgKy2V6Q/AVq
+         g0h2CxKvS7DVNt/GlVds66SOuDI0U663D44Tq+GV2KJY80gWs3cIrRQkNEpWNM8CdNMC
+         zjWrbSrDRfbrsxbqvYgERl5Ei7QUwJKRvb7muh9cpLzYyEFl2oFZPq/+BV6PXbHs3gJ8
+         vzbV1/u6a7RZGThCaHoyEcEJffD3B0Dyg1XncEOmReVxXINDiNNoD14byGWZ+NBh4XoC
+         BxbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S6lpuP4txG3Zyi23T7AGq3oAlRNM/MD8E5LDniLzV7Y=;
-        b=M/jU/eJ/wVjHj16WhFb3BO/Abd/D4wCznZhle4fIdExpzUjhkr77C8Mul+Q0xxpiEz
-         /VLZJH4ZA8mSRT95mbl9JCvXhXfVA0Ydu5wWbYVx7Sozkjok686DR++HD1rMyKm7D/A7
-         JNpmb52GnEc6nEx6L/z0kcq4qT123OLO5fwFMn7ONuziiQi2Zm0WnUDlj1alBGTHsRyU
-         KWpqILqZCaElXp5lEjDRtthwsk2NcB1O3OVH+MOrJcpUj4xVZISRbu/pm9AI5apOt+64
-         4wC5vx2N2XYJw9nL8Ew1qUPUwxF89ndcMFSmwBVwGa/3Omd7tNOqrJFeSaUL5rsF9Bc1
-         kxsw==
-X-Gm-Message-State: AOAM532SVT3PHq5HQlQQ/BVwnl5Q1KkccT0qNJFWFfoeYr/OtUhRYudZ
-        Fgsiycxt4H/cny8KBVo4AcrXr6VnH4w=
-X-Google-Smtp-Source: ABdhPJw0upXWjARnJdyFIvbTnrY8XpG4oJxOcTFCjBlaf+eyxUZo00EfLsHNphtHPV2Wm5DbuCYm3Q==
-X-Received: by 2002:a05:6808:b38:: with SMTP id t24mr7077100oij.20.1635393809012;
-        Wed, 27 Oct 2021 21:03:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e9sm670727otr.25.2021.10.27.21.03.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 21:03:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [EXTERNAL] Re: Potential issue with smb word operations for
- tmp461 device in tmp401 driver
-To:     "Wilson, David T. (GSFC-5870)" <david.wilson@nasa.gov>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <SA1PR09MB7440BF952778F0DB8138747DE7B99@SA1PR09MB7440.namprd09.prod.outlook.com>
- <7f334e4c-0e71-2005-854f-c2d4e068ef85@roeck-us.net>
- <SA1PR09MB74408633E36AE3C97B4D2CA7E7BD9@SA1PR09MB7440.namprd09.prod.outlook.com>
- <3923f61f-031c-f293-dfbd-8db7efbce2cb@roeck-us.net>
- <SA1PR09MB7440DE6CE6882186ECDE3401E7BE9@SA1PR09MB7440.namprd09.prod.outlook.com>
- <8485a422-31b2-6d9f-516c-29d60fd13490@roeck-us.net>
- <SA1PR09MB74400C313FFCCEAE32A4C565E7869@SA1PR09MB7440.namprd09.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <066daeec-a2dc-8a7b-f74a-0c4c94e42880@roeck-us.net>
-Date:   Wed, 27 Oct 2021 21:03:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:date:message-id:from:to:cc:subject
+         :content-transfer-encoding:mime-version;
+        bh=MAly2iZKcBbQJDaNxPhgWBngmMpLu3rVz+Azr51sx24=;
+        b=UMOXZ4vxZbBvZrE7FQDKLuWphWDimeAuFnRnOZLq6JOddtdznJUS/GWN8xQZEhd093
+         +DnUnHfDiiQXiUwnmAJPF9WEuiI/YE2itl1b93AUgFIF3VzzttttTEvu0PLU42GfTQM9
+         pV/wSkkISkD9e06Xqn8l7wFHFpxxFvf1QEXOlWKTdsHhD3SqyLAgdEp+tKHkpPEinlXn
+         AFOuMR9dSz024GZLydPSMtyh2JBgR7dNpusxzAkkwpIevd4zij0xikskFGQwjX5oSev/
+         3i8ORaHLx07X4RgXMFxXPgWPHpwMTHV2m2whWyZ34MgMTv4xtTdTkrguCuwj4miIhZh/
+         DOaw==
+X-Gm-Message-State: AOAM532H0FtRePzx5FlJlFwkPjX1lThd+SV9bYWOU9wAubW6C2JIXmwI
+        hu8qyrf7OaT0vgcgexjCJfxHiw==
+X-Google-Smtp-Source: ABdhPJz/zr5adLuvZKmC8Av0h4S09ArkE9wUmTXFOACTB3FYppdw+fl1k6Q80Mod5yLBeNRGQ+jq8A==
+X-Received: by 2002:a17:90a:b296:: with SMTP id c22mr2880678pjr.13.1635408649697;
+        Thu, 28 Oct 2021 01:10:49 -0700 (PDT)
+Received: from [127.0.1.1] (117-20-69-24.751445.bne.nbn.aussiebb.net. [117.20.69.24])
+        by smtp.gmail.com with UTF8SMTPSA id oa1sm7439285pjb.6.2021.10.28.01.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 01:10:49 -0700 (PDT)
+Date:   Thu, 28 Oct 2021 08:10:30 +0000
+Message-Id: <20211028081030.719265-0-nathan@nathanrossi.com>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Nathan Rossi <nathan@nathanrossi.com>,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v3 0/3] Driver for TI INA238 I2C Power Monitor
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-In-Reply-To: <SA1PR09MB74400C313FFCCEAE32A4C565E7869@SA1PR09MB7440.namprd09.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi David,
+From: Nathan Rossi <nathan.rossi@digi.com>
 
-On 10/27/21 6:54 PM, Wilson, David T. (GSFC-5870) wrote:
-> Hi Guenter,
-> 
-> Like last time, I updated several files in my platform's v5.4 files and applied your three patches.
->>From what I can tell, I'm having no problems with the tmp461's basic support in the modified lm90 driver.
-> 
-> Thanks again for looking into this,
+Changes in v2:
+- Added device tree binding for ti,shunt-gain to specify the target
+  ADCRANGE for the ina238
+- Reworked ina238 driver to use hwmon_chip_info API, and addressed
+  various review comments
 
-Thanks a lot for testing!
+Changes in v3:
+- Fix schema error for ti,shunt-gain binding
+- Address review comments
 
-Guenter
+Nathan Rossi (3):
+  dt-bindings: hwmon: ti,ina2xx: Document ti,ina238 compatible string
+  dt-bindings: hwmon: ti,ina2xx: Add ti,shunt-gain property
+  hwmon: Driver for Texas Instruments INA238
+
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |  22 +
+ Documentation/hwmon/ina238.rst                |  56 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/ina238.c                        | 644 ++++++++++++++++++
+ 6 files changed, 736 insertions(+)
+ create mode 100644 Documentation/hwmon/ina238.rst
+ create mode 100644 drivers/hwmon/ina238.c
+---
+2.33.0
