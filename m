@@ -2,258 +2,283 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92AC3C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Oct 2021 17:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBA52C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 01:54:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 705AE61040
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Oct 2021 17:43:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA82361152
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Oct 2021 01:54:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243352AbhJ0Rpv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Oct 2021 13:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbhJ0Rpu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Oct 2021 13:45:50 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68034C061570;
-        Wed, 27 Oct 2021 10:43:24 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id q124so4496263oig.3;
-        Wed, 27 Oct 2021 10:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K4risx0TGhNAaFJcqujWqV/2Qa+DXLeA+SV94Gps/ts=;
-        b=Iv0cPaCfuJjiAiItqZkUUWuAXF8WjLaCKWn6pLa2GW+5AkuZWM+GteooPqm3VQU/rR
-         Sh5gL94onzjGllHIRcLLJjU/arOMkwxg4OVR2nIr1dO5BxgK2qerVXC0Ri1/LsxCzByC
-         y/BpjZNmHMGJd+CEXxI9gwoJqDrgUXkgt2BjJTQnchxCCW8VyaCXHjTM8iH8ipv8L6ji
-         g3F9MRejeIRdzY885+5XZdkRLlKKAc1IM5qLZ2DivxHP94XCNjKMU2ubOpMSS4aklOOM
-         9yWy32csmy+ZT5wiSLB+XVe01cVved9oWtAL54DPk1iOvyK/ZBtZjyr37x52DxzV4gfd
-         rlBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=K4risx0TGhNAaFJcqujWqV/2Qa+DXLeA+SV94Gps/ts=;
-        b=EUsc4jZ0DithVkLkbWvx6quD7mYcKVqGddDR4xwsGHcKtRp4iLZQzxSv7mbKN7zyrr
-         EN+h12BwG1YXyV6fJZtMNe5TYosAlJwBXVbgfFytMj872oZlAd1wVolRjVYpkI4DX3TH
-         fKkU6aTP7rTzNbxDlvKVtFl1xs67gvS5yNCgkJdEKjmOFFkeTFjqUrFcC7xJZwUvsmuk
-         sY90wvEtB6vLYuAZrCTqZGrinNp8Qi/lL5wuuuZXu6MzNpwWjErX9LwCr5+419nY7zRP
-         ISlE2QQxOnqtiPDU4aL9ev2Ck4p6MvK3qxYm5kB5DTKFHuebsyvvbepw+uwwwPDctDNp
-         95EA==
-X-Gm-Message-State: AOAM530yO6lHJg0xRs5lwxLOHdl5Pdtsw4xbm55rnS8OppmMSBqB/9V9
-        0mDp0gjufoHYNuaa1J+u80A=
-X-Google-Smtp-Source: ABdhPJyOUY6E/8SIMxyJdD4+R6JxuOSVHZJ94lpn6AUS6GjdrkJE70PhLP3eW6hiLliaFfniGlBuRw==
-X-Received: by 2002:a05:6808:1315:: with SMTP id y21mr4685880oiv.147.1635356603760;
-        Wed, 27 Oct 2021 10:43:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q5sm209361otc.79.2021.10.27.10.43.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 10:43:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 27 Oct 2021 10:43:22 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Oskar Senft <osk@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v8 2/2] hwmon: (nct7802) Make temperature/voltage sensors
- configurable
-Message-ID: <20211027174322.GA2762049@roeck-us.net>
-References: <20211020164213.174597-1-osk@google.com>
- <20211020164213.174597-2-osk@google.com>
+        id S229578AbhJ1B4b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Oct 2021 21:56:31 -0400
+Received: from mail-bl2gcc02lp2102.outbound.protection.outlook.com ([104.47.64.102]:28641
+        "EHLO GCC02-BL0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229534AbhJ1B4a (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 27 Oct 2021 21:56:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OilR5Q6zcinRex42XK38vu5zhSvCybwp3FtWsJf4cy5xm5CVBKrFdL/kzia8jhxeddf1QloFKENrxZg7jx0obn5LiR8dKJiiLyi99lsAal4NMNqObW/9JmDuX8iVzoUjmy1EagBIowzLIpdQfi7qjcP/CtUcAyOCYSgcufoVHGoXdYdjEzV4pdPdY+5NGRbX0/RNg4YO2pDn29iXa+w5qD6N6fsbW+SBecCcgiBUc3pN1TTKH362LbRYiS7MqF4R73Ps1vjBnX1aPVfTXcUzJnMoIi/oHAOk7SxINC/lAxda6ZzPKVJR5KywCLS+/r4CGgu0Qys8CiLy5r8i3Us5NQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hnD4csDvdVL+X7Qh7ECdCWhdeu7lW8x4Gd3dcz+MAqA=;
+ b=jQ/lAjyypxQR0pKvf0emZIYed+Jj+T3Ssrw/m2a5WkvVbR1l33UfZHRFVyn0+AGzclG8HHYtzV4B2b4WBnHN7xu8RCzcBwKxyU1vv2oIUEiGCwOEvkmS8cVCFP/8JVommSihEPfx+OpNmCIV9sutY0tQdPxbsEF9yl+gGaP2ETgmhmznHfU+hna+blAukvx9zeqGyLk1/nWgAFKbbU7GNSaeFtpD66PfXdeF0Uf+RAyEXIzoNhJ6D4kf7NOqoc0j15GVFMN1P+uOdjLOxpz/9aA9v+8mjDfEwWdEWo4/8e/WQz0/wxJyS96HlWtzJ8KmDsMg/ERFVMjCjSx40Dm10A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nasa.gov; dmarc=pass action=none header.from=nasa.gov;
+ dkim=pass header.d=nasa.gov; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nasa.gov; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hnD4csDvdVL+X7Qh7ECdCWhdeu7lW8x4Gd3dcz+MAqA=;
+ b=SMoWZQbGlOCbzGOfdoNDKy5CXRqoxOdiXmHk/nGJ1yPw2Z6x5I/1jYnftKI+m/58WZKanP6NtFZf0MMzFfHFY3wrybk6p3SYzjmz9W4ONNb3XOzR83dLmoOeOY9GkZ6vMCUR2rzcV7ukl0ohVU7zZu8FLw6OLEJtZdFHAmMPCvI=
+Received: from SA1PR09MB7440.namprd09.prod.outlook.com (2603:10b6:806:183::14)
+ by SA1PR09MB7694.namprd09.prod.outlook.com (2603:10b6:806:177::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14; Thu, 28 Oct
+ 2021 01:54:02 +0000
+Received: from SA1PR09MB7440.namprd09.prod.outlook.com
+ ([fe80::44b:e648:2d1:3471]) by SA1PR09MB7440.namprd09.prod.outlook.com
+ ([fe80::44b:e648:2d1:3471%7]) with mapi id 15.20.4649.014; Thu, 28 Oct 2021
+ 01:54:01 +0000
+From:   "Wilson, David T. (GSFC-5870)" <david.wilson@nasa.gov>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [EXTERNAL] Re: Potential issue with smb word operations for
+ tmp461 device in tmp401 driver
+Thread-Topic: [EXTERNAL] Re: Potential issue with smb word operations for
+ tmp461 device in tmp401 driver
+Thread-Index: AQHXwevE+jBPDZzzYE22a/VOYXutsqvZx2uAgAAKYFOAAJKegIAA+/8jgAGwgICACqaJgA==
+Date:   Thu, 28 Oct 2021 01:54:01 +0000
+Message-ID: <SA1PR09MB74400C313FFCCEAE32A4C565E7869@SA1PR09MB7440.namprd09.prod.outlook.com>
+References: <SA1PR09MB7440BF952778F0DB8138747DE7B99@SA1PR09MB7440.namprd09.prod.outlook.com>
+ <7f334e4c-0e71-2005-854f-c2d4e068ef85@roeck-us.net>
+ <SA1PR09MB74408633E36AE3C97B4D2CA7E7BD9@SA1PR09MB7440.namprd09.prod.outlook.com>
+ <3923f61f-031c-f293-dfbd-8db7efbce2cb@roeck-us.net>
+ <SA1PR09MB7440DE6CE6882186ECDE3401E7BE9@SA1PR09MB7440.namprd09.prod.outlook.com>
+ <8485a422-31b2-6d9f-516c-29d60fd13490@roeck-us.net>
+In-Reply-To: <8485a422-31b2-6d9f-516c-29d60fd13490@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: 6a4fab40-c6dd-9c74-124a-903b18b47fe5
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=nasa.gov;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ef153d41-bb35-4058-047e-08d999b5d0ac
+x-ms-traffictypediagnostic: SA1PR09MB7694:
+x-microsoft-antispam-prvs: <SA1PR09MB7694CD03D57A9C0C92D7112DE7869@SA1PR09MB7694.namprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qiNa/34vE4vnsWJ3vgk99YqKtjU57gRmjEeJn1YmnnQ6Oyx8wMY0K6gP+gfu9Z9/hpEvMvICXWM/6+NbmAnso/ccZ+kO0FynLeOHzBYocX7h5M4/GEcf0+bVrHUq8B+Qw2VrL+agG8aDV/T81nUkz6RthLkzggD1V7GjJ7tr1JCWqSKjKV0dhCItAkHMZgItKCLt9cKEjyN4kEM4Ic7GQkKcUm7vnR9aMHmGdueYrIE1M0kLXSHxKZ00kc1xLolf4YRIn8aDFn5RcVepsl1q3Oi4R+R3jJWjPfY9dtjAwLKVI3j5yUnotuYJcJgRQQ9xVLecAAW05V6pPaiwf16BX6phgqH+i/EMwZZQm5ppeDlDA6/K1GYzgRmdQSxwMg1gmULVciwHR4fip7LWjG9FK8JNw1dacRSxxHLnOb13SzEt/wYxxjIGZLCCm7xHV8EIAb+kO1sb/lrG4FrMOr+/tiVEpkVf6P1JHbZE9KRSvzAwJKavGGL4Osuj1hVApAaxEosJv3jWRDt92IItPk1PZLliNyWzQ4qYob8CoR3nimOnRRg8B+K51Q+RmcZk6KW/2GB6MQ4UszUBk3stXLZOub0nnBJb9DGXJuxZ/CoU55ndwdvdlaMDPNzS1mbRCb3BiMWmih0IIdpxHZwCOCW+n/pK95PfPQBq1FC6N/TH9qnsynb1vtAVqrdKVIRaGWGA/74hiOu8woqjPo7kfxE7X+7TsV12DGGjy6n7JIMMJIYDy6JByqd+MgWjjCbclJZqhoNrGMrfhQ7uQBrtYjUigQ+bgHQ8cIncseZG/fUCs/M=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR09MB7440.namprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(86362001)(5660300002)(33656002)(8676002)(7696005)(4326008)(316002)(2906002)(6916009)(76116006)(91956017)(66476007)(45080400002)(6506007)(186003)(38070700005)(66946007)(64756008)(66556008)(55016002)(122000001)(54906003)(66446008)(38100700002)(53546011)(9686003)(71200400001)(8936002)(83380400001)(52536014)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Rj5o9JFng060zwtf55XjFCIkjHPl/zp4xP9vwC7w/dQqO1WRhk3VYG8WbE?=
+ =?iso-8859-1?Q?aUuzFxFgfIMJv/PCXnLf8R1PIpPBHzEAQ9qkZRvvVLGbItekFwoLU+7p/d?=
+ =?iso-8859-1?Q?E6u3oXwzis1WP1cveao6VumdQJ4saj8WO9tpIbjqCqvJtZ0+15FvRhcUJL?=
+ =?iso-8859-1?Q?hh6moEBb5xEpeUfHVcLGooclIIcLx5rHuXLPbkGqzAIrkV1VuMf+C4I304?=
+ =?iso-8859-1?Q?t27ZShDkDHav8Vseb3IVoTqRm35J5ebVBdXblEwidoZvIF0ZqXSSfaUrJx?=
+ =?iso-8859-1?Q?Q0x6IJRHyvv6cCFzuICkx4T1DjHaF7zjUu/cAK6ABuS/jt77vxUKdIxwOg?=
+ =?iso-8859-1?Q?A7suCVq6M+1t5lTvI0f6+gbl9dMWDwF6QvYdETaR/l/YLQaADN6ZHHAAQo?=
+ =?iso-8859-1?Q?tom1BivGmfXU4N2mDrn4IV+Bk5NhUIUguwxupRSNM4oksY1dXDjs4n/whx?=
+ =?iso-8859-1?Q?taZL0gHQqHn2kOqDhodj0oGQNNqoWG9mFkMuA+KjyTjKIkU2adHPzXGWh5?=
+ =?iso-8859-1?Q?X8P4DyCi9CHifUT4PRPieQn7kl+3OClUhdgzVdcO/pCRKpQE1cSg3Rmt+P?=
+ =?iso-8859-1?Q?7oy1WLIlLDu6rNrVDKFmO1MZUGMfOtbbvGzZ5Q+6WwPSTd0fGXU8yMjZvn?=
+ =?iso-8859-1?Q?+6Jo6OD+IUkNWk/815MjT2scjvMbNhQ3Nug48UEtTK31b0VAx6lHI/7MAh?=
+ =?iso-8859-1?Q?+KYxtzsLSh2VVT1y/RA3ltyq2nwhMvjTX69meF/lr7MDitKPCKO/D3F3SF?=
+ =?iso-8859-1?Q?lPtqeiNHLGQ51HyRnvSv7GUqDaZoHNJdhyIBY/m5cHrr2jsEpMiBIxfyhj?=
+ =?iso-8859-1?Q?9XsyIMh22nmBV/mpX6pxe1FnazBbNci2/K6+qwPOOmiJLalTnoxf5OpoAl?=
+ =?iso-8859-1?Q?CAN9JNVadnbQC8gjw9NcJfp0DOU32gKyAc0WyxoZx4Dvlm/A5LzG3+1Q5G?=
+ =?iso-8859-1?Q?uou7J3YOR6FzYpwIloJydEJ5UiaP8PdcMgEbDLZ95ff9s7EH5myB8fDOdO?=
+ =?iso-8859-1?Q?d0pgprXalrqdWpwYXvR6lM4yGNVRpDKxqjepPpvmRGIor8MZkfAUJoQ3d0?=
+ =?iso-8859-1?Q?mVZ5taWoB+NQ02WlYuFQOTFrmQxIlJwVOeFRC8GLmLTh8RLVdI4nJin4U6?=
+ =?iso-8859-1?Q?enyDMyt6vKk57uj+rDbpcIVMvgaM0rKlUDyWrXjVOk3swmWLwlPFpkdM6U?=
+ =?iso-8859-1?Q?l4xmTsS50mj30Q6rheAIJcZKB2hVrVDlMOVYeX5yhyDNhpBsLxzrfr+Di/?=
+ =?iso-8859-1?Q?6jila/YQT5chK0ewjWqBwnwpoaikdwGB0+uTrz8r+eTLjLKwCH5b3dTFr5?=
+ =?iso-8859-1?Q?z85EqpsaWTP6TS5Qa3PfOriZTT4n/qKH7WrgWx8PDBYXfwg=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211020164213.174597-2-osk@google.com>
+X-OriginatorOrg: nasa.gov
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR09MB7440.namprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef153d41-bb35-4058-047e-08d999b5d0ac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2021 01:54:01.7097
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7005d458-45be-48ae-8140-d43da96dd17b
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR09MB7694
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 12:42:13PM -0400, Oskar Senft wrote:
-> This change allows LTD and RTD inputs to be configured via
-> device tree bindings. If the DT bindings are not present or
-> invalid, the input configuration is not modified and left at
-> HW defaults.
-> 
-> Signed-off-by: Oskar Senft <osk@google.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-Applied.
-
-Thanks,
-Guenter
-
-> ---
-> Changes from PATCH v6 and v7:
-> - None (resubmitted due to changes in nuvoton,nct7802.yaml).
-> 
-> Changes from PATCH v5:
-> - Removed unused "found_channel_config" variable.
-> - Initialize mode_mask and mode_val to defaults.
-> ---
->  drivers/hwmon/nct7802.c | 129 ++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 125 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
-> index 604af2f6103a..d56f78327619 100644
-> --- a/drivers/hwmon/nct7802.c
-> +++ b/drivers/hwmon/nct7802.c
-> @@ -51,6 +51,23 @@ static const u8 REG_VOLTAGE_LIMIT_MSB_SHIFT[2][5] = {
->  #define REG_CHIP_ID		0xfe
->  #define REG_VERSION_ID		0xff
->  
-> +/*
-> + * Resistance temperature detector (RTD) modes according to 7.2.32 Mode
-> + * Selection Register
-> + */
-> +#define RTD_MODE_CURRENT	0x1
-> +#define RTD_MODE_THERMISTOR	0x2
-> +#define RTD_MODE_VOLTAGE	0x3
-> +
-> +#define MODE_RTD_MASK		0x3
-> +#define MODE_LTD_EN		0x40
-> +
-> +/*
-> + * Bit offset for sensors modes in REG_MODE.
-> + * Valid for index 0..2, indicating RTD1..3.
-> + */
-> +#define MODE_BIT_OFFSET_RTD(index) ((index) * 2)
-> +
->  /*
->   * Data structures and manipulation thereof
->   */
-> @@ -1038,7 +1055,112 @@ static const struct regmap_config nct7802_regmap_config = {
->  	.volatile_reg = nct7802_regmap_is_volatile,
->  };
->  
-> -static int nct7802_init_chip(struct nct7802_data *data)
-> +static int nct7802_get_channel_config(struct device *dev,
-> +				      struct device_node *node, u8 *mode_mask,
-> +				      u8 *mode_val)
-> +{
-> +	u32 reg;
-> +	const char *type_str, *md_str;
-> +	u8 md;
-> +
-> +	if (!node->name || of_node_cmp(node->name, "channel"))
-> +		return 0;
-> +
-> +	if (of_property_read_u32(node, "reg", &reg)) {
-> +		dev_err(dev, "Could not read reg value for '%s'\n",
-> +			node->full_name);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (reg > 3) {
-> +		dev_err(dev, "Invalid reg (%u) in '%s'\n", reg,
-> +			node->full_name);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (reg == 0) {
-> +		if (!of_device_is_available(node))
-> +			*mode_val &= ~MODE_LTD_EN;
-> +		else
-> +			*mode_val |= MODE_LTD_EN;
-> +		*mode_mask |= MODE_LTD_EN;
-> +		return 0;
-> +	}
-> +
-> +	/* At this point we have reg >= 1 && reg <= 3 */
-> +
-> +	if (!of_device_is_available(node)) {
-> +		*mode_val &= ~(MODE_RTD_MASK << MODE_BIT_OFFSET_RTD(reg - 1));
-> +		*mode_mask |= MODE_RTD_MASK << MODE_BIT_OFFSET_RTD(reg - 1);
-> +		return 0;
-> +	}
-> +
-> +	if (of_property_read_string(node, "sensor-type", &type_str)) {
-> +		dev_err(dev, "No type for '%s'\n", node->full_name);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!strcmp(type_str, "voltage")) {
-> +		*mode_val |= (RTD_MODE_VOLTAGE & MODE_RTD_MASK)
-> +			     << MODE_BIT_OFFSET_RTD(reg - 1);
-> +		*mode_mask |= MODE_RTD_MASK << MODE_BIT_OFFSET_RTD(reg - 1);
-> +		return 0;
-> +	}
-> +
-> +	if (strcmp(type_str, "temperature")) {
-> +		dev_err(dev, "Invalid type '%s' for '%s'\n", type_str,
-> +			node->full_name);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (reg == 3) {
-> +		/* RTD3 only supports thermistor mode */
-> +		md = RTD_MODE_THERMISTOR;
-> +	} else {
-> +		if (of_property_read_string(node, "temperature-mode",
-> +					    &md_str)) {
-> +			dev_err(dev, "No mode for '%s'\n", node->full_name);
-> +			return -EINVAL;
-> +		}
-> +
-> +		if (!strcmp(md_str, "thermal-diode"))
-> +			md = RTD_MODE_CURRENT;
-> +		else if (!strcmp(md_str, "thermistor"))
-> +			md = RTD_MODE_THERMISTOR;
-> +		else {
-> +			dev_err(dev, "Invalid mode '%s' for '%s'\n", md_str,
-> +				node->full_name);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	*mode_val |= (md & MODE_RTD_MASK) << MODE_BIT_OFFSET_RTD(reg - 1);
-> +	*mode_mask |= MODE_RTD_MASK << MODE_BIT_OFFSET_RTD(reg - 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static int nct7802_configure_channels(struct device *dev,
-> +				      struct nct7802_data *data)
-> +{
-> +	/* Enable local temperature sensor by default */
-> +	u8 mode_mask = MODE_LTD_EN, mode_val = MODE_LTD_EN;
-> +	struct device_node *node;
-> +	int err;
-> +
-> +	if (dev->of_node) {
-> +		for_each_child_of_node(dev->of_node, node) {
-> +			err = nct7802_get_channel_config(dev, node, &mode_mask,
-> +							 &mode_val);
-> +			if (err)
-> +				return err;
-> +		}
-> +	}
-> +
-> +	return regmap_update_bits(data->regmap, REG_MODE, mode_mask, mode_val);
-> +}
-> +
-> +static int nct7802_init_chip(struct device *dev, struct nct7802_data *data)
->  {
->  	int err;
->  
-> @@ -1047,8 +1169,7 @@ static int nct7802_init_chip(struct nct7802_data *data)
->  	if (err)
->  		return err;
->  
-> -	/* Enable local temperature sensor */
-> -	err = regmap_update_bits(data->regmap, REG_MODE, 0x40, 0x40);
-> +	err = nct7802_configure_channels(dev, data);
->  	if (err)
->  		return err;
->  
-> @@ -1074,7 +1195,7 @@ static int nct7802_probe(struct i2c_client *client)
->  	mutex_init(&data->access_lock);
->  	mutex_init(&data->in_alarm_lock);
->  
-> -	ret = nct7802_init_chip(data);
-> +	ret = nct7802_init_chip(dev, data);
->  	if (ret < 0)
->  		return ret;
->  
+Hi Guenter,=0A=
+=0A=
+Like last time, I updated several files in my platform's v5.4 files and app=
+lied your three patches. =0A=
+From what I can tell, I'm having no problems with the tmp461's basic suppor=
+t in the modified lm90 driver.=0A=
+=0A=
+Thanks again for looking into this,=0A=
+David=0A=
+=0A=
+=0A=
+From: Guenter Roeck <groeck7@gmail.com> on behalf of Guenter Roeck <linux@r=
+oeck-us.net>=0A=
+Sent: Thursday, October 21, 2021 3:07 AM=0A=
+To: Wilson, David T. (GSFC-5870) <david.wilson@nasa.gov>=0A=
+Cc: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; linux-hwmo=
+n@vger.kernel.org <linux-hwmon@vger.kernel.org>=0A=
+Subject: Re: [EXTERNAL] Re: Potential issue with smb word operations for tm=
+p461 device in tmp401 driver =0A=
+=A0=0A=
+Hi David,=0A=
+=0A=
+On 10/20/21 10:37 PM, Wilson, David T. (GSFC-5870) wrote:=0A=
+> Guenter,=0A=
+> =0A=
+> I updated several files and applied the lm90.c and tmp401.c patches. It s=
+hould be noted that my target platform only supports v5.4, so=0A=
+> I had to update additional files (i.e. hwmon.c/.h) in order to successful=
+ly compile and apply the patch to lm90.c, which could suggest=0A=
+> that some of my findings may have been due to poor updating of files.=0A=
+> =0A=
+> In regards to testing, I got temp1_input and temp2_input values that look=
+ good from a glance and that steadily increased after booting=0A=
+> my target platform. There were three areas of possible concern.=0A=
+> 1. The lm90.c patch includes=A0 "+#define TMP461_REG_DFC 0x23". If this d=
+efine is referring to the address of the digital filter control,=0A=
+>=A0=A0=A0=A0=A0 then the value should be 0x24, since 0x23 is the n-Factor =
+Correction register=0A=
+=0A=
+Good catch. That is a bug. Thanks a lot for noticing.=0A=
+=0A=
+> 2. The values I recorded had a resolution of 0.125 deg resolution (e.g., =
+30625, 25250, etc...). However, the datasheet for the tmp461=0A=
+>=A0=A0=A0=A0=A0 notes that the resolution is 0.0625 deg for local and remo=
+te channels, so I was wondering if that would also be supported in lm90.c=
+=0A=
+=0A=
+You are correct, the lm90 driver assumes a 0.125 deg resolution. I'll see w=
+hat I can do about that.=0A=
+=0A=
+> 3. For temp1_min and temp2_min, I used "cat temp1_min" to get the value -=
+128000. Assuming that is -128.0 deg, I don't believe the=0A=
+>=A0=A0=A0=A0=A0 tmp461 should be returning a value underneath -64 deg base=
+d on the temp data format if I'm understanding the datasheet correctly.=0A=
+> =0A=
+=0A=
+It is odd, but the tmp461 datasheet does list a default value of 0x80 for t=
+he low limit registers.=0A=
+In 2-complement format, that does translate to -128 degrees C. That doesn't=
+ really make much sense,=0A=
+but it is what the chip reports, and I hesitate to change that.=0A=
+=0A=
+Thanks,=0A=
+Guenter=0A=
+=0A=
+> Thanks,=0A=
+> David=0A=
+> =0A=
+> From: Guenter Roeck <groeck7@gmail.com> on behalf of Guenter Roeck <linux=
+@roeck-us.net>=0A=
+> Sent: Tuesday, October 19, 2021 10:18 AM=0A=
+> To: Wilson, David T. (GSFC-5870) <david.wilson@nasa.gov>=0A=
+> Cc: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; linux-hw=
+mon@vger.kernel.org <linux-hwmon@vger.kernel.org>=0A=
+> Subject: Re: [EXTERNAL] Re: Potential issue with smb word operations for =
+tmp461 device in tmp401 driver=0A=
+>=A0=A0 =0A=
+> David,=0A=
+> =0A=
+> On 10/18/21 10:42 PM, Wilson, David T. (GSFC-5870) wrote:=0A=
+>> Guenter,=0A=
+>>=0A=
+>> I've tried testing the patch by checking out the most recent commit's ve=
+rsion for tmp401.c and applying the patch. However, the temperature values =
+seem to be to low <1000 for each read.=0A=
+>>=0A=
+>> If I'm understanding the driver code correctly, I believe there's two pl=
+aces of interest that might explain the low values=0A=
+>> 1. In tmp401_update_device_reg16, the final assignment to data->temp[j][=
+i] overrides the patch's assignment to data->temp[j][i] in the tmp461 branc=
+h=0A=
+>> 2. In SENSOR_DEVICE_ATTR_2_RW, the temp2_offset is at (6, 1), but the ne=
+wly added LSB array does not contain the LSB address at (6, 1)=0A=
+>>=0A=
+> Thanks a lot for the information.=0A=
+> =0A=
+>> Regarding your most recent email, I will try the lm90 by changing the dr=
+iver tree entry to "ti,tmp451" and I'll let you know if that works for me.=
+=0A=
+>>=0A=
+> I just sent two patches, one to remove tmp461 support from the tmp401 dri=
+ver, and one to add=0A=
+> tmp461 support to the lm90 driver. Turns out tmp461 is almost identical t=
+o tmp451, which was=0A=
+> already supported by the lm90 driver. Adding support for tmp461 to the lm=
+90 driver makes=0A=
+> much more sense than trying to fix the tmp401 driver.=0A=
+> =0A=
+> I module tested the lm90 driver for both tmp451 and tmp461 (I was able to=
+ find=0A=
+> register dumps for both chips), so I am reasonably sure that it works.=0A=
+> =0A=
+> Thanks,=0A=
+> Guenter=0A=
+> =0A=
+>> Thanks,=0A=
+>> David=0A=
+>>=0A=
+>> From: Guenter Roeck <groeck7@gmail.com> on behalf of Guenter Roeck <linu=
+x@roeck-us.net>=0A=
+>> Sent: Tuesday, October 19, 2021 12:56 AM=0A=
+>> To: Wilson, David T. (GSFC-5870) <david.wilson@nasa.gov>=0A=
+>> Cc: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; linux-h=
+wmon@vger.kernel.org <linux-hwmon@vger.kernel.org>=0A=
+>> Subject: [EXTERNAL] Re: Potential issue with smb word operations for tmp=
+461 device in tmp401 driver=0A=
+>>=A0=A0=A0=A0 =0A=
+>> David,=0A=
+>>=0A=
+>> On 10/15/21 10:43 AM, Wilson, David T. (GSFC-5870) wrote:=0A=
+>>> Hi,=0A=
+>>>=0A=
+>>> I am reporting what I believe is a potential issue in the tmp401 driver=
+ for the tmp461 device specifically. I am new to reporting issues, so I apo=
+logize in advance if I've provided insufficient information for an issue re=
+port.=0A=
+>>>=0A=
+>>> The problem I'm encountering is that when I use the tmp401 linux driver=
+ to read temperature values from the tmp461, all of the read temperature va=
+lues end with 996 (e.g. 33996, 38996, etc...).=0A=
+>>>=0A=
+>>> Looking further into the tmp401 commit messages, I see that the driver =
+was changed to use smb word operations instead of separate byte operations.=
+ Although the other supported devices (i.e. tmp432, etc...) are noted to su=
+pport 16-bit read operations in their respective datasheets, I see no indic=
+ations of 16-bit read support in the tmp461 datasheet, which is supported b=
+y my inquiry in the TI forums (https://gcc02.safelinks.protection.outlook.c=
+om/?url=3Dhttps%3A%2F%2Fe2e.ti.com%2Fsupport%2Fsensors-group%2Fsensors%2Ff%=
+2Fsensors-forum%2F1044935%2Ftmp461-linux-driver-support-and-16-bit-temperat=
+ure-register-reads&amp;data=3D04%7C01%7Cdavid.wilson%40nasa.gov%7C2e3728d5f=
+2e74810482108d994618683%7C7005d45845be48ae8140d43da96dd17b%7C0%7C0%7C637703=
+968869859896%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLC=
+JBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=3D3n9QPCDAzD0Qoy16KVtTzVNAe42=
+KBgFdGbZr3naFWko%3D&amp;reserved=3D0).=0A=
+>>>=0A=
+>>> Reverting the driver to the commit before the smb word change, I am the=
+n able to read temperature values that do not end only with 996. As a resul=
+t, I believe that the tmp461 support may be partially broken by the switch =
+to smb word operations.=0A=
+>>>=0A=
+>>=0A=
+>> can you try to instantiate the lm90 driver (instead of the tmp401 driver=
+)=0A=
+>> and let me know if it works for you ? If your system uses devicetree,=0A=
+>> you might have to select "ti,tmp451" instead of "ti,tmp461".=0A=
+>>=0A=
+>> Thanks,=0A=
+>> Guenter=0A=
+>>=0A=
