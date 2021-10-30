@@ -2,995 +2,312 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E3D1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 15:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9364C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 16:20:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EFBB60E8C
-	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 15:48:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85A6E60F58
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 16:20:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbhJ3Pu5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 30 Oct 2021 11:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbhJ3Pu5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 30 Oct 2021 11:50:57 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0216CC061570;
-        Sat, 30 Oct 2021 08:48:26 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id 71-20020a9d034d000000b00553e24ce2b8so13527118otv.7;
-        Sat, 30 Oct 2021 08:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=Z8AFgPCjh8HgG4Bn8SX+924wpN0EpwSowsah/I74oFI=;
-        b=BlPC6vk8yh2RT+9vBH4bkLipbf7GAQ+mrZh9Q0KKrie8QZrohsRcXXh/M5w6wjnXNO
-         i1e5YUK+jKos6Z+6+bSfHiHydGGwazKInAn3vJ2yyJ5zbitPoHsBVTkwqmQZcbHHNoHZ
-         7z5epiG7VahroH+3RsJYyRJLFytJHGjTQCH1by6ThEHgHOnvN7lr7TxSdoc06GGpMdsL
-         ypd8nnAsIabE0cSnUoOJUl9rerWENatWJmfhWW3I0LhBjBsQJJWMOsp2kEmN5ICrlOt6
-         2IP+HPS17XMIhfg2NATLyDwWvZDohMVos+OfxjKwhOzELpt95T/rI7nxJviYMioTcpdp
-         LgRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:content-transfer-encoding;
-        bh=Z8AFgPCjh8HgG4Bn8SX+924wpN0EpwSowsah/I74oFI=;
-        b=cGbiKcn/rgtUe4lyWojgcalaOZJXUtvTj66Gez0zbnpMB00ZZoEA6iaQcasR0jgiyZ
-         XkQ+4tLI+dptXGkH1HaYsjgAVO83FIw4Q+/O129Mr66B9WdRsMeQRvKs/QUoz71s/6Zg
-         xDjyEG/fL5Czhn5arD9FbFBrlc8EewWH2lDZEseaJyX7e3oKxAv3Xi2qKHweOHJl0b/9
-         +WdExcKCmTP4rGWiWDzPP/ayjyvW4h3ygtWmo2f9xnaHzScojgWxll/TcX4D5CQzT5Sr
-         8QgdZcLGGfm761upMnmyLXJX4oCfUGA42oRtdtizduleJUYzSpCzV/jOhPaDBTnZc3ke
-         deHQ==
-X-Gm-Message-State: AOAM531IFHy4pbME6lCwptPfGLLdq0uuxXhmGNHcVSKEMoCKCcZ1ULri
-        XonI5Rl4u0G3+kV/MgceeTQ=
-X-Google-Smtp-Source: ABdhPJyRG0NttX8KC3lE3nufT+ElAg+h1YKl0bOD8OhuSwZOuBJaCzgr6rq6j/B9T3vF9Y0LWssKKQ==
-X-Received: by 2002:a9d:1b4f:: with SMTP id l73mr13904456otl.200.1635608905889;
-        Sat, 30 Oct 2021 08:48:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f14sm2840248ots.51.2021.10.30.08.48.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Oct 2021 08:48:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 30 Oct 2021 08:48:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        platform-driver-x86@vger.kernel.org, thomas@weissschuh.net,
-        Ed Brindley <kernel@maidavale.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 2/2] hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
-Message-ID: <20211030154823.GA3973084@roeck-us.net>
+        id S229694AbhJ3QXS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 30 Oct 2021 12:23:18 -0400
+Received: from mga03.intel.com ([134.134.136.65]:27518 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229578AbhJ3QXP (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 30 Oct 2021 12:23:15 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10153"; a="230780976"
+X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
+   d="scan'208";a="230780976"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2021 09:20:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
+   d="scan'208";a="448817839"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 30 Oct 2021 09:20:43 -0700
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mgr62-0001ZK-E5; Sat, 30 Oct 2021 16:20:42 +0000
+Date:   Sun, 31 Oct 2021 00:20:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 10f0d2ab9aa672707559d46601fd35544759ff70
+Message-ID: <617d70c6.vsGJtto/gL9xoy2E%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Oct 30, 2021 at 12:17:05PM +0300, Denis Pauk wrote:
-> Provides a Linux kernel module "asus_wmi_sensors" that provides sensor
-> readouts via ASUS' WMI interface present in the UEFI of
-> X370/X470/B450/X399 Ryzen motherboards.
-> 
-> Supported motherboards:
-> * ROG CROSSHAIR VI HERO,
-> * PRIME X399-A,
-> * PRIME X470-PRO,
-> * ROG CROSSHAIR VI EXTREME,
-> * ROG CROSSHAIR VI HERO (WI-FI AC),
-> * ROG CROSSHAIR VII HERO,
-> * ROG CROSSHAIR VII HERO (WI-FI),
-> * ROG STRIX B450-E GAMING,
-> * ROG STRIX B450-F GAMING,
-> * ROG STRIX B450-I GAMING,
-> * ROG STRIX X399-E GAMING,
-> * ROG STRIX X470-F GAMING,
-> * ROG STRIX X470-I GAMING,
-> * ROG ZENITH EXTREME,
-> * ROG ZENITH EXTREME ALPHA.
-> 
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Co-developed-by: Ed Brindley <kernel@maidavale.org>
-> Signed-off-by: Ed Brindley <kernel@maidavale.org>
-> 
-> ---
-> Changes in v9:
-> - Fix memory leaks in asus_wmi_*().
-> 
-> Changes in v8:
-> - Fix codestyle in defines and comments.
-> - Call mutex_lock inside of functions.
-> 
-> Changes in v7:
-> - Add depends on ACPI_WMI to Kconfig.
-> - Clean up defines names.
-> 
-> Changes in v6:
-> - Add asus_wmi_sensor to documentation index.
-> 
-> Changes in v5:
-> - Fixes build issue reported by kernel test robot with disabled ACPI_WMI.
-> - Remove sensor->name check as always eevaluated to true.
-> 
-> Changes in v4:
-> - Implement wmi driver instead platform driver.
-> - Update documentation.
-> 
-> Changes in v3:
-> - Use MODULE_DEVICE_TABLE for match devices.
-> - Add documentaion for driver.
-> 
-> Changes in v2:
-> - Add module for boards with support of WMI interface returned sensor name and
->   value of sensor..
-> ---
->  Documentation/hwmon/asus_wmi_sensors.rst |  74 +++
->  Documentation/hwmon/index.rst            |   1 +
->  MAINTAINERS                              |   1 +
->  drivers/hwmon/Kconfig                    |  12 +
->  drivers/hwmon/Makefile                   |   1 +
->  drivers/hwmon/asus_wmi_sensors.c         | 657 +++++++++++++++++++++++
->  6 files changed, 746 insertions(+)
->  create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
->  create mode 100644 drivers/hwmon/asus_wmi_sensors.c
-> 
-> diff --git a/Documentation/hwmon/asus_wmi_sensors.rst b/Documentation/hwmon/asus_wmi_sensors.rst
-> new file mode 100644
-> index 000000000000..cc88adc8915f
-> --- /dev/null
-> +++ b/Documentation/hwmon/asus_wmi_sensors.rst
-> @@ -0,0 +1,74 @@
-> +Kernel driver asus_wmi_sensors
-> +=================================
-> +
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 10f0d2ab9aa672707559d46601fd35544759ff70  hwmon: (nct7802) Add of_node_put() before return
 
-Same checkpatch warning as with other driver.
+elapsed time: 2090m
 
-> +Supported boards:
-> + * PRIME X399-A,
-> + * PRIME X470-PRO,
-> + * ROG CROSSHAIR VI EXTREME,
-> + * ROG CROSSHAIR VI HERO,
-> + * ROG CROSSHAIR VI HERO (WI-FI AC),
-> + * ROG CROSSHAIR VII HERO,
-> + * ROG CROSSHAIR VII HERO (WI-FI),
-> + * ROG STRIX B450-E GAMING,
-> + * ROG STRIX B450-F GAMING,
-> + * ROG STRIX B450-I GAMING,
-> + * ROG STRIX X399-E GAMING,
-> + * ROG STRIX X470-F GAMING,
-> + * ROG STRIX X470-I GAMING,
-> + * ROG ZENITH EXTREME,
-> + * ROG ZENITH EXTREME ALPHA.
-> +
-> +Authors:
-> +    - Ed Brindley <kernel@maidavale.org>
-> +
-> +Description:
-> +------------
-> +ASUS mainboards publish hardware monitoring information via WMI interface.
-> +
-> +ASUS WMI interface provides a methods to get list of sensors and values of
-> +such, which is utilized by this driver to publish those sensor readings to the
-> +HWMON system. The driver is aware of and reads the following sensors:
-> + * CPU Core Voltage,
-> + * CPU SOC Voltage,
-> + * DRAM Voltage,
-> + * VDDP Voltage,
-> + * 1.8V PLL Voltage,
-> + * +12V Voltage,
-> + * +5V Voltage,
-> + * 3VSB Voltage,
-> + * VBAT Voltage,
-> + * AVCC3 Voltage,
-> + * SB 1.05V Voltage,
-> + * CPU Core Voltage,
-> + * CPU SOC Voltage,
-> + * DRAM Voltage,
-> + * CPU Fan RPM,
-> + * Chassis Fan 1 RPM,
-> + * Chassis Fan 2 RPM,
-> + * Chassis Fan 3 RPM,
-> + * HAMP Fan RPM,
-> + * Water Pump RPM,
-> + * CPU OPT RPM,
-> + * Water Flow RPM,
-> + * AIO Pump RPM,
-> + * CPU Temperature,
-> + * CPU Socket Temperature,
-> + * Motherboard Temperature,
-> + * Chipset Temperature,
-> + * Tsensor 1 Temperature,
-> + * CPU VRM Temperature,
-> + * Water In,
-> + * Water Out,
-> + * CPU VRM Output Current.
-> +
-> +Known Issues:
-> +* The WMI implementation in some of Asus' BIOSes is buggy. This can result in
-> +   fans stopping, fans getting stuck at max speed, or temperature readouts
-> +   getting stuck. This is not an issue with the driver, but the BIOS. The Prime
-> +   X470 Pro seems particularly bad for this. The more frequently the WMI
-> +   interface is polled the greater the potential for this to happen. Until you
-> +   have subjected your computer to an extended soak test while polling the
-> +   sensors frequently, don't leave you computer unattended. Upgrading to new
-> +   BIOS version with method version greater than or equal to two should
-> +   rectify the issue.
-> +* A few boards report 12v voltages to be ~10v.
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 23deb1a1202f..6dca9df9d24a 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -44,6 +44,7 @@ Hardware Monitoring Kernel Drivers
->     asc7621
->     aspeed-pwm-tacho
->     asus_wmi_ec_sensors
-> +   asus_wmi_sensors
->     bcm54140
->     bel-pfe
->     bpa-rs600
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 05448435991d..46036c184330 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2943,6 +2943,7 @@ M:	Denis Pauk <pauk.denis@gmail.com>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
->  F:	drivers/hwmon/asus_wmi_ec_sensors.c
-> +F:	drivers/hwmon/asus_wmi_sensors.c
->  
->  ASUS WIRELESS RADIO CONTROL DRIVER
->  M:	João Paulo Rechi Vita <jprvita@gmail.com>
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 01d50fb9da54..d99aef4b2583 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -2215,6 +2215,18 @@ config SENSORS_ATK0110
->  	  This driver can also be built as a module. If so, the module
->  	  will be called asus_atk0110.
->  
-> +config SENSORS_ASUS_WMI
-> +	tristate "ASUS WMI X370/X470/B450/X399"
-> +	depends on ACPI_WMI
-> +	help
-> +	  If you say yes here you get support for the ACPI hardware monitoring
-> +	  interface found in X370/X470/B450/X399 ASUS motherboards. This driver
-> +	  will provide readings of fans, voltages and temperatures through the system
-> +	  firmware.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called asus_wmi_sensors.
-> +
->  config SENSORS_ASUS_WMI_EC
->  	tristate "ASUS WMI B550/X570"
->  	depends on ACPI_WMI
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index aae2ff5c7335..656a6191a0f8 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -9,6 +9,7 @@ obj-$(CONFIG_HWMON_VID)		+= hwmon-vid.o
->  # APCI drivers
->  obj-$(CONFIG_SENSORS_ACPI_POWER) += acpi_power_meter.o
->  obj-$(CONFIG_SENSORS_ATK0110)	+= asus_atk0110.o
-> +obj-$(CONFIG_SENSORS_ASUS_WMI)	+= asus_wmi_sensors.o
->  obj-$(CONFIG_SENSORS_ASUS_WMI_EC)	+= asus_wmi_ec_sensors.o
->  
->  # Native drivers
-> diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-> new file mode 100644
-> index 000000000000..99553eb74e51
-> --- /dev/null
-> +++ b/drivers/hwmon/asus_wmi_sensors.c
-> @@ -0,0 +1,657 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * HWMON driver for ASUS motherboards that provides sensor readouts via WMI
-> + * interface present in the UEFI of the X370/X470/B450/X399 Ryzen motherboards.
-> + *
-> + * Copyright (C) 2018-2019 Ed Brindley <kernel@maidavale.org>
-> + *
-> + * WMI interface provides:
-> + * - CPU Core Voltage,
-> + * - CPU SOC Voltage,
-> + * - DRAM Voltage,
-> + * - VDDP Voltage,
-> + * - 1.8V PLL Voltage,
-> + * - +12V Voltage,
-> + * - +5V Voltage,
-> + * - 3VSB Voltage,
-> + * - VBAT Voltage,
-> + * - AVCC3 Voltage,
-> + * - SB 1.05V Voltage,
-> + * - CPU Core Voltage,
-> + * - CPU SOC Voltage,
-> + * - DRAM Voltage,
-> + * - CPU Fan RPM,
-> + * - Chassis Fan 1 RPM,
-> + * - Chassis Fan 2 RPM,
-> + * - Chassis Fan 3 RPM,
-> + * - HAMP Fan RPM,
-> + * - Water Pump RPM,
-> + * - CPU OPT RPM,
-> + * - Water Flow RPM,
-> + * - AIO Pump RPM,
-> + * - CPU Temperature,
-> + * - CPU Socket Temperature,
-> + * - Motherboard Temperature,
-> + * - Chipset Temperature,
-> + * - Tsensor 1 Temperature,
-> + * - CPU VRM Temperature,
-> + * - Water In,
-> + * - Water Out,
-> + * - CPU VRM Output Current.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/dmi.h>
-> +#include <linux/init.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/units.h>
-> +#include <linux/wmi.h>
-> +
-> +#include <linux/hwmon.h>
+configs tested: 247
+configs skipped: 3
 
-include file order
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +#include <linux/hwmon-sysfs.h>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20211028
+powerpc              randconfig-c003-20211028
+s390                       zfcpdump_defconfig
+powerpc                 mpc8272_ads_defconfig
+arc                              alldefconfig
+sh                            shmin_defconfig
+powerpc                 canyonlands_defconfig
+mips                        vocore2_defconfig
+sh                          landisk_defconfig
+um                           x86_64_defconfig
+sh                           se7751_defconfig
+arm                          exynos_defconfig
+m68k                          multi_defconfig
+powerpc               mpc834x_itxgp_defconfig
+m68k                         amcore_defconfig
+sh                        apsh4ad0a_defconfig
+arm                        magician_defconfig
+mips                   sb1250_swarm_defconfig
+arm                    vt8500_v6_v7_defconfig
+mips                           xway_defconfig
+parisc                generic-64bit_defconfig
+powerpc                     pseries_defconfig
+arm                          ixp4xx_defconfig
+arm                        trizeps4_defconfig
+arm                         vf610m4_defconfig
+powerpc                     skiroot_defconfig
+powerpc                     ksi8560_defconfig
+mips                      maltasmvp_defconfig
+h8300                            alldefconfig
+arm                            lart_defconfig
+arc                 nsimosci_hs_smp_defconfig
+mips                      loongson3_defconfig
+arm                            mps2_defconfig
+powerpc                 mpc832x_rdb_defconfig
+mips                      malta_kvm_defconfig
+m68k                        mvme16x_defconfig
+sh                             shx3_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                       omap2plus_defconfig
+powerpc                     redwood_defconfig
+m68k                          atari_defconfig
+mips                        jmr3927_defconfig
+openrisc                         alldefconfig
+arm                         bcm2835_defconfig
+sh                          kfr2r09_defconfig
+parisc                generic-32bit_defconfig
+mips                      fuloong2e_defconfig
+arm                           h3600_defconfig
+arm                         s5pv210_defconfig
+s390                             alldefconfig
+riscv                    nommu_k210_defconfig
+m68k                       m5475evb_defconfig
+sh                           se7724_defconfig
+powerpc                    mvme5100_defconfig
+m68k                        mvme147_defconfig
+arm                         socfpga_defconfig
+arm                            pleb_defconfig
+openrisc                    or1ksim_defconfig
+sh                 kfr2r09-romimage_defconfig
+sh                         apsh4a3a_defconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                          lboxre2_defconfig
+powerpc                      pasemi_defconfig
+arc                     haps_hs_smp_defconfig
+riscv                            alldefconfig
+arm                           sama7_defconfig
+powerpc                       maple_defconfig
+m68k                       m5249evb_defconfig
+arm                            dove_defconfig
+arm                          pxa910_defconfig
+powerpc                 mpc836x_rdk_defconfig
+m68k                            mac_defconfig
+um                               alldefconfig
+arm                             pxa_defconfig
+sh                          polaris_defconfig
+mips                          rm200_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                     rainier_defconfig
+arm                             rpc_defconfig
+powerpc                      ppc6xx_defconfig
+arm                              alldefconfig
+arm                         shannon_defconfig
+nios2                         10m50_defconfig
+arm64                            alldefconfig
+powerpc                        warp_defconfig
+mips                          ath25_defconfig
+powerpc                     tqm8541_defconfig
+sh                          rsk7269_defconfig
+sh                               j2_defconfig
+arm                        multi_v5_defconfig
+mips                             allyesconfig
+arm                     davinci_all_defconfig
+arm                       aspeed_g5_defconfig
+arm                           omap1_defconfig
+arm                          lpd270_defconfig
+powerpc                    klondike_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                           stm32_defconfig
+microblaze                      mmu_defconfig
+openrisc                  or1klitex_defconfig
+sh                           sh2007_defconfig
+powerpc                  iss476-smp_defconfig
+mips                         rt305x_defconfig
+mips                         tb0219_defconfig
+arm                          ep93xx_defconfig
+riscv             nommu_k210_sdcard_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                      ppc64e_defconfig
+microblaze                          defconfig
+sh                        edosk7705_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                          urquell_defconfig
+arm                           h5000_defconfig
+mips                            gpr_defconfig
+powerpc                    ge_imp3a_defconfig
+powerpc                    socrates_defconfig
+powerpc                      arches_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                        mvebu_v5_defconfig
+arm                   milbeaut_m10v_defconfig
+m68k                          amiga_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                     tqm8560_defconfig
+mips                       lemote2f_defconfig
+arm                  randconfig-c002-20211028
+arm                  randconfig-c002-20211029
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+xtensa                           allyesconfig
+sh                               allmodconfig
+arc                              allyesconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                              defconfig
+s390                                defconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20211028
+x86_64               randconfig-a004-20211028
+x86_64               randconfig-a005-20211028
+x86_64               randconfig-a001-20211028
+x86_64               randconfig-a006-20211028
+x86_64               randconfig-a003-20211028
+i386                 randconfig-a004-20211028
+i386                 randconfig-a003-20211028
+i386                 randconfig-a002-20211028
+i386                 randconfig-a006-20211028
+i386                 randconfig-a001-20211028
+i386                 randconfig-a005-20211028
+x86_64               randconfig-a015-20211029
+x86_64               randconfig-a013-20211029
+x86_64               randconfig-a011-20211029
+x86_64               randconfig-a014-20211029
+x86_64               randconfig-a012-20211029
+x86_64               randconfig-a016-20211029
+i386                 randconfig-a012-20211029
+i386                 randconfig-a013-20211029
+i386                 randconfig-a011-20211029
+i386                 randconfig-a015-20211029
+i386                 randconfig-a016-20211029
+i386                 randconfig-a014-20211029
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
 
-unnecessary
+clang tested configs:
+arm                  randconfig-c002-20211028
+powerpc              randconfig-c003-20211028
+riscv                randconfig-c006-20211028
+x86_64               randconfig-c007-20211028
+mips                 randconfig-c004-20211028
+s390                 randconfig-c005-20211028
+i386                 randconfig-c001-20211028
+arm                  randconfig-c002-20211029
+powerpc              randconfig-c003-20211029
+riscv                randconfig-c006-20211029
+x86_64               randconfig-c007-20211029
+mips                 randconfig-c004-20211029
+s390                 randconfig-c005-20211029
+i386                 randconfig-c001-20211029
+x86_64               randconfig-a005-20211030
+x86_64               randconfig-a004-20211030
+x86_64               randconfig-a002-20211030
+x86_64               randconfig-a003-20211030
+x86_64               randconfig-a001-20211030
+x86_64               randconfig-a006-20211030
+x86_64               randconfig-a002-20211029
+x86_64               randconfig-a004-20211029
+x86_64               randconfig-a005-20211029
+x86_64               randconfig-a001-20211029
+x86_64               randconfig-a006-20211029
+x86_64               randconfig-a003-20211029
+i386                 randconfig-a004-20211029
+i386                 randconfig-a003-20211029
+i386                 randconfig-a002-20211029
+i386                 randconfig-a001-20211029
+i386                 randconfig-a006-20211029
+i386                 randconfig-a005-20211029
+x86_64               randconfig-a015-20211028
+x86_64               randconfig-a013-20211028
+x86_64               randconfig-a011-20211028
+x86_64               randconfig-a014-20211028
+x86_64               randconfig-a012-20211028
+x86_64               randconfig-a016-20211028
+i386                 randconfig-a012-20211028
+i386                 randconfig-a013-20211028
+i386                 randconfig-a011-20211028
+i386                 randconfig-a015-20211028
+i386                 randconfig-a016-20211028
+i386                 randconfig-a014-20211028
+hexagon              randconfig-r045-20211028
+riscv                randconfig-r042-20211028
+s390                 randconfig-r044-20211028
+hexagon              randconfig-r041-20211028
+hexagon              randconfig-r045-20211029
+hexagon              randconfig-r041-20211029
 
-> +
-> +#define ASUSWMI_MONITORING_GUID		"466747A0-70EC-11DE-8A39-0800200C9A66"
-> +#define ASUSWMI_METHODID_GET_VALUE	0x52574543 /* RWEC */
-> +#define ASUSWMI_METHODID_UPDATE_BUFFER	0x51574543 /* QWEC */
-> +#define ASUSWMI_METHODID_GET_INFO	0x50574543 /* PWEC */
-> +#define ASUSWMI_METHODID_GET_NUMBER	0x50574572 /* PWEr */
-> +#define ASUSWMI_METHODID_GET_VERSION	0x50574574 /* PWEt */
-> +
-> +#define ASUS_WMI_MAX_STR_SIZE		32
-> +
-> +#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name) {					\
-> +	.matches = {								\
-> +		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),	\
-> +		DMI_EXACT_MATCH(DMI_BOARD_NAME, name),				\
-> +	},									\
-> +}
-> +
-> +static const struct dmi_system_id asus_wmi_dmi_table[] = {
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-E GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-F GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-I GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X399-E GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X470-F GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X470-I GAMING"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH EXTREME"),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH EXTREME ALPHA"),
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(dmi, asus_wmi_dmi_table);
-> +
-> +enum asus_wmi_sensor_class {
-> +	VOLTAGE		= 0x0,
-> +	TEMPERATURE_C	= 0x1,
-> +	FAN_RPM		= 0x2,
-> +	CURRENT		= 0x3,
-> +	WATER_FLOW	= 0x4,
-> +};
-> +
-> +enum asus_wmi_location {
-> +	CPU		= 0x0,
-> +	CPU_SOC		= 0x1,
-> +	DRAM		= 0x2,
-> +	MOTHERBOARD	= 0x3,
-> +	CHIPSET		= 0x4,
-> +	AUX		= 0x5,
-> +	VRM		= 0x6,
-> +	COOLER		= 0x7
-> +};
-> +
-> +enum asus_wmi_type {
-> +	SIGNED_INT	= 0x0,
-> +	UNSIGNED_INT	= 0x1,
-> +	SCALED		= 0x3,
-> +};
-> +
-> +enum asus_wmi_source {
-> +	SIO		= 0x1,
-> +	EC		= 0x2
-> +};
-> +
-> +static enum hwmon_sensor_types asus_data_types[] = {
-> +	[VOLTAGE]	= hwmon_in,
-> +	[TEMPERATURE_C]	= hwmon_temp,
-> +	[FAN_RPM]	= hwmon_fan,
-> +	[CURRENT]	= hwmon_curr,
-> +	[WATER_FLOW]	= hwmon_fan,
-> +};
-> +
-> +static u32 hwmon_attributes[] = {
-> +	[hwmon_chip]	= HWMON_C_REGISTER_TZ,
-> +	[hwmon_temp]	= HWMON_T_INPUT | HWMON_T_LABEL,
-> +	[hwmon_in]	= HWMON_I_INPUT | HWMON_I_LABEL,
-> +	[hwmon_curr]	= HWMON_C_INPUT | HWMON_C_LABEL,
-> +	[hwmon_fan]	= HWMON_F_INPUT | HWMON_F_LABEL,
-> +};
-> +
-> +/**
-> + * struct asus_wmi_sensor_info - sensor info.
-> + * @id: sensor id.
-> + * @data_type: sensor class e.g. voltage, temp etc.
-> + * @location: sensor location.
-> + * @name: sensor name.
-> + * @source: sensor source.
-> + * @type: sensor type signed, unsigned etc.
-> + * @cached_value: cached sensor value.
-> + */
-> +struct asus_wmi_sensor_info {
-> +	u32 id;
-> +	int data_type;
-> +	int location;
-> +	char name[ASUS_WMI_MAX_STR_SIZE];
-> +	int source;
-> +	int type;
-> +	u32 cached_value;
-> +};
-> +
-> +struct asus_wmi_wmi_info {
-> +	u8 buffer;
-> +	unsigned long source_last_updated[3];	/* in jiffies */
-> +	int sensor_count;
-> +
-> +	const struct asus_wmi_sensor_info **info[hwmon_max];
-> +	struct asus_wmi_sensor_info **info_by_id;
-> +};
-> +
-> +struct asus_wmi_sensors {
-> +	struct asus_wmi_wmi_info wmi;
-> +	/* lock access to internal cache */
-> +	struct mutex lock;
-> +};
-> +
-> +/*
-> + * Universal method for calling WMI method
-> + */
-> +static int asus_wmi_call_method(u32 method_id, u32 *args, struct acpi_buffer *output)
-> +{
-> +	struct acpi_buffer input = {(acpi_size) sizeof(*args), args };
-> +	acpi_status status;
-> +
-> +	status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0,
-> +				     method_id, &input, output);
-> +	if (ACPI_FAILURE(status))
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Gets the version of the ASUS sensors interface implemented
-> + */
-> +static int asus_wmi_get_version(u32 *version)
-> +{
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {0, 0, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_VERSION, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	obj = output.pointer;
-> +	if (!obj)
-> +		return -EIO;
-> +
-> +	err = -EIO;
-> +	if (obj->type != ACPI_TYPE_INTEGER)
-> +		goto out_free_obj;
-
-Same as with other driver.
-
-> +
-> +	err = 0;
-
-Worse here since the assignment above makes it necessary to reassign
-it again here.
-
-> +	*version = obj->integer.value;
-> +
-> +out_free_obj:
-> +	ACPI_FREE(obj);
-> +	return err;
-> +}
-> +
-> +/*
-> + * Gets the number of sensor items
-> + */
-> +static int asus_wmi_get_item_count(u32 *count)
-> +{
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {0, 0, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_NUMBER, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	obj = output.pointer;
-> +	if (!obj)
-> +		return -EIO;
-> +
-> +	err = -EIO;
-> +	if (obj->type != ACPI_TYPE_INTEGER)
-> +		goto out_free_obj;
-> +
-> +	err = 0;
-
-Same as above.
-
-> +	*count = obj->integer.value;
-> +
-> +out_free_obj:
-> +	ACPI_FREE(obj);
-> +	return err;
-> +}
-> +
-> +static int asus_wmi_hwmon_add_chan_info(struct hwmon_channel_info *asus_wmi_hwmon_chan,
-> +					struct device *dev, int num,
-> +					enum hwmon_sensor_types type, u32 config)
-> +{
-> +	u32 *cfg;
-> +
-> +	cfg = devm_kcalloc(dev, num + 1, sizeof(*cfg), GFP_KERNEL);
-> +	if (!cfg)
-> +		return -ENOMEM;
-> +
-> +	asus_wmi_hwmon_chan->type = type;
-> +	asus_wmi_hwmon_chan->config = cfg;
-> +	memset32(cfg, config, num);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * For a given sensor item returns details e.g. type (voltage/temperature/fan speed etc), bank etc
-> + */
-> +static int asus_wmi_sensor_info(int index, struct asus_wmi_sensor_info *s)
-> +{
-> +	union acpi_object name_obj, data_type_obj, location_obj, source_obj, type_obj;
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {index, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_INFO, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	s->id = index;
-> +
-> +	obj = output.pointer;
-> +	if (!obj)
-> +		return -EIO;
-> +
-> +	err = -EIO;
-> +	if (obj->type != ACPI_TYPE_PACKAGE)
-> +		goto out_free_obj;
-
-Same as above.
-
-> +
-> +	if (obj->package.count != 5)
-> +		goto out_free_obj;
-> +
-> +	name_obj = obj->package.elements[0];
-> +
-> +	if (name_obj.type != ACPI_TYPE_STRING)
-> +		goto out_free_obj;
-> +
-> +	strncpy(s->name, name_obj.string.pointer, sizeof(s->name) - 1);
-> +
-> +	data_type_obj = obj->package.elements[1];
-> +
-> +	if (data_type_obj.type != ACPI_TYPE_INTEGER)
-> +		goto out_free_obj;
-> +
-> +	s->data_type = data_type_obj.integer.value;
-> +
-> +	location_obj = obj->package.elements[2];
-> +
-> +	if (location_obj.type != ACPI_TYPE_INTEGER)
-> +		goto out_free_obj;
-> +
-> +	s->location = location_obj.integer.value;
-> +
-> +	source_obj = obj->package.elements[3];
-> +
-> +	if (source_obj.type != ACPI_TYPE_INTEGER)
-> +		goto out_free_obj;
-> +
-> +	s->source = source_obj.integer.value;
-> +
-> +	type_obj = obj->package.elements[4];
-> +
-> +	if (type_obj.type != ACPI_TYPE_INTEGER)
-> +		goto out_free_obj;
-> +
-> +	err = 0;
-
-Unnecessary if err is set conditionally above.
-
-> +	s->type = type_obj.integer.value;
-> +
-> +out_free_obj:
-> +	ACPI_FREE(obj);
-> +	return err;
-> +}
-> +
-> +static int asus_wmi_update_buffer(u8 source)
-> +{
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {source, 0};
-> +
-> +	return asus_wmi_call_method(ASUSWMI_METHODID_UPDATE_BUFFER, args, &output);
-> +}
-> +
-> +static int asus_wmi_get_sensor_value(u8 index, u32 *value)
-> +{
-> +	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	u32 args[] = {index, 0};
-> +	union acpi_object *obj;
-> +	int err;
-> +
-> +	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_VALUE, args, &output);
-> +	if (err)
-> +		return err;
-> +
-> +	obj = output.pointer;
-> +	if (!obj)
-> +		return -EIO;
-> +
-> +	err = -EIO;
-> +	if (obj->type != ACPI_TYPE_INTEGER)
-> +		goto out_free_obj;
-> +
-> +	err = 0;
-
-Same as above.
-
-> +	*value = obj->integer.value;
-> +
-> +out_free_obj:
-> +	ACPI_FREE(obj);
-> +	return err;
-> +}
-> +
-> +static int asus_wmi_update_values_for_source(u8 source, struct asus_wmi_sensors *sensor_data)
-> +{
-> +	struct asus_wmi_sensor_info *sensor;
-> +	int value = 0;
-> +	int ret = 0;
-
-Unnecessary preinitialization.
-
-> +	int i;
-> +
-> +	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
-> +		sensor = sensor_data->wmi.info_by_id[i];
-> +		if (sensor && sensor->source == source) {
-> +			ret = asus_wmi_get_sensor_value(sensor->id, &value);
-> +			if (ret)
-> +				return ret;
-> +
-> +			sensor->cached_value = value;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int asus_wmi_scale_sensor_value(u32 value, int data_type)
-
-Same questions as with other driver: Why "int" instead of "long"
-return value, and is it guaranteed that value is always positive ?
-
-> +{
-> +	/* FAN_RPM and WATER_FLOW don't need scaling */
-> +	switch (data_type) {
-> +	case VOLTAGE:
-> +		/* value in microVolts */
-> +		return DIV_ROUND_CLOSEST(value,  KILO);
-> +	case TEMPERATURE_C:
-> +		/* value in Celsius */
-> +		return value * MILLIDEGREE_PER_DEGREE;
-> +	case CURRENT:
-> +		/* value in Amperes */
-> +		return value * MILLI;
-> +	}
-> +	return value;
-> +}
-> +
-> +static int asus_wmi_get_cached_value_or_update(const struct asus_wmi_sensor_info *sensor,
-> +					       struct asus_wmi_sensors *sensor_data,
-> +					       u32 *value)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&sensor_data->lock);
-> +
-> +	if (time_after(jiffies, sensor_data->wmi.source_last_updated[sensor->source] + HZ)) {
-> +		ret = asus_wmi_update_buffer(sensor->source);
-> +		if (ret)
-> +			goto unlock;
-> +
-> +		sensor_data->wmi.buffer = sensor->source;
-> +
-> +		ret = asus_wmi_update_values_for_source(sensor->source, sensor_data);
-> +		if (ret)
-> +			goto unlock;
-> +
-> +		sensor_data->wmi.source_last_updated[sensor->source] = jiffies;
-> +	}
-> +
-> +	*value = sensor->cached_value;
-> +
-> +unlock:
-> +	mutex_unlock(&sensor_data->lock);
-> +
-> +	return ret;
-
-Possibly uninitialized. I am a bit puzzled. Doesn't this cause trouble
-when running the code ?
-
-> +}
-> +
-> +/* Now follow the functions that implement the hwmon interface */
-> +static int asus_wmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> +			       u32 attr, int channel, long *val)
-> +{
-> +	const struct asus_wmi_sensor_info *sensor;
-> +	u32 value = 0;
-> +	int ret;
-> +
-> +	struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-> +
-> +	sensor = *(sensor_data->wmi.info[type] + channel);
-> +
-> +	ret = asus_wmi_get_cached_value_or_update(sensor, sensor_data, &value);
-> +	if (!ret)
-> +		*val = asus_wmi_scale_sensor_value(value, sensor->data_type);
-
-I really prefer error handling in the conditional.
-
-	if (ret)
-		return ret;
-	*val = ...
-	return 0;
-
-> +
-> +	return ret;
-> +}
-> +
-> +static int asus_wmi_hwmon_read_string(struct device *dev,
-> +				      enum hwmon_sensor_types type, u32 attr,
-> +				      int channel, const char **str)
-> +{
-> +	struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-> +	const struct asus_wmi_sensor_info *sensor;
-> +
-> +	sensor = *(sensor_data->wmi.info[type] + channel);
-> +	*str = sensor->name;
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t asus_wmi_hwmon_is_visible(const void *drvdata,
-> +					 enum hwmon_sensor_types type, u32 attr,
-> +					 int channel)
-> +{
-> +	const struct asus_wmi_sensors *sensor_data = drvdata;
-> +	const struct asus_wmi_sensor_info *sensor;
-> +
-> +	sensor = *(sensor_data->wmi.info[type] + channel);
-> +	if (sensor)
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops asus_wmi_hwmon_ops = {
-> +	.is_visible = asus_wmi_hwmon_is_visible,
-> +	.read = asus_wmi_hwmon_read,
-> +	.read_string = asus_wmi_hwmon_read_string,
-> +};
-> +
-> +static struct hwmon_chip_info asus_wmi_chip_info = {
-> +	.ops = &asus_wmi_hwmon_ops,
-> +	.info = NULL,
-> +};
-> +
-> +static int asus_wmi_configure_sensor_setup(struct device *dev,
-> +					   struct asus_wmi_sensors *sensor_data)
-> +{
-> +	const struct hwmon_channel_info **ptr_asus_wmi_ci;
-> +	struct hwmon_channel_info *asus_wmi_hwmon_chan;
-> +	int nr_count[hwmon_max] = {}, nr_types = 0;
-> +	struct asus_wmi_sensor_info *temp_sensor;
-> +	const struct hwmon_chip_info *chip_info;
-> +	enum hwmon_sensor_types type;
-> +	struct device *hwdev;
-> +	int i, idx;
-> +	int err;
-> +
-> +	sensor_data->wmi.buffer = -1;
-
-buffer is u8, so whatever this is supposed to accomplish is bad.
-What is this used for anyway ? I only see it set. Please explain.
-
-> +	temp_sensor = devm_kcalloc(dev, 1, sizeof(*temp_sensor), GFP_KERNEL);
-> +	if (!temp_sensor)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
-> +		err = asus_wmi_sensor_info(i, temp_sensor);
-> +		if (err)
-> +			return err;
-> +
-> +		switch (temp_sensor->data_type) {
-> +		case TEMPERATURE_C:
-> +		case VOLTAGE:
-> +		case CURRENT:
-> +		case FAN_RPM:
-> +		case WATER_FLOW:
-> +			type = asus_data_types[temp_sensor->data_type];
-> +			if (!nr_count[type])
-> +				nr_types++;
-> +			nr_count[type]++;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (nr_count[hwmon_temp])
-> +		nr_count[hwmon_chip]++, nr_types++;
-> +
-> +	asus_wmi_hwmon_chan = devm_kcalloc(dev, nr_types,
-> +					   sizeof(*asus_wmi_hwmon_chan),
-> +					   GFP_KERNEL);
-> +	if (!asus_wmi_hwmon_chan)
-> +		return -ENOMEM;
-> +
-> +	ptr_asus_wmi_ci = devm_kcalloc(dev, nr_types + 1,
-> +				       sizeof(*ptr_asus_wmi_ci), GFP_KERNEL);
-> +	if (!ptr_asus_wmi_ci)
-> +		return -ENOMEM;
-> +
-> +	asus_wmi_chip_info.info = ptr_asus_wmi_ci;
-> +	chip_info = &asus_wmi_chip_info;
-> +
-> +	sensor_data->wmi.info_by_id = devm_kcalloc(dev, sensor_data->wmi.sensor_count,
-> +						   sizeof(*sensor_data->wmi.info_by_id),
-> +						   GFP_KERNEL);
-> +
-> +	if (!sensor_data->wmi.info_by_id)
-> +		return -ENOMEM;
-> +
-> +	for (type = 0; type < hwmon_max; type++) {
-> +		if (!nr_count[type])
-> +			continue;
-> +
-> +		err = asus_wmi_hwmon_add_chan_info(asus_wmi_hwmon_chan, dev,
-> +						   nr_count[type], type,
-> +						   hwmon_attributes[type]);
-> +		if (err)
-> +			return err;
-> +
-> +		*ptr_asus_wmi_ci++ = asus_wmi_hwmon_chan++;
-> +
-> +		sensor_data->wmi.info[type] = devm_kcalloc(dev,
-> +							   nr_count[type],
-> +							   sizeof(*sensor_data->wmi.info),
-> +							   GFP_KERNEL);
-> +		if (!sensor_data->wmi.info[type])
-> +			return -ENOMEM;
-> +	}
-> +
-> +	for (i = sensor_data->wmi.sensor_count - 1; i >= 0; i--) {
-> +		temp_sensor = devm_kzalloc(dev, sizeof(*temp_sensor), GFP_KERNEL);
-> +		if (!temp_sensor)
-> +			return -ENOMEM;
-> +
-> +		err = asus_wmi_sensor_info(i, temp_sensor);
-> +		if (err)
-> +			continue;
-> +
-> +		switch (temp_sensor->data_type) {
-> +		case TEMPERATURE_C:
-> +		case VOLTAGE:
-> +		case CURRENT:
-> +		case FAN_RPM:
-> +		case WATER_FLOW:
-> +			type = asus_data_types[temp_sensor->data_type];
-> +			idx = --nr_count[type];
-> +			*(sensor_data->wmi.info[type] + idx) = temp_sensor;
-> +			sensor_data->wmi.info_by_id[i] = temp_sensor;
-> +			break;
-> +		}
-> +	}
-> +
-> +	dev_dbg(dev, "board has %d sensors",
-> +		sensor_data->wmi.sensor_count);
-> +
-> +	hwdev = devm_hwmon_device_register_with_info(dev, "asus_wmi_sensors",
-> +						     sensor_data, chip_info, NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwdev);
-> +}
-> +
-> +static int asus_wmi_probe(struct wmi_device *wdev, const void *context)
-> +{
-> +	struct asus_wmi_sensors *sensor_data;
-> +	struct device *dev = &wdev->dev;
-> +	u32 version = 0;
-> +
-> +	if (!dmi_check_system(asus_wmi_dmi_table))
-> +		return -ENODEV;
-> +
-> +	sensor_data = devm_kzalloc(dev, sizeof(*sensor_data), GFP_KERNEL);
-> +	if (!sensor_data)
-> +		return -ENOMEM;
-> +
-> +	if (asus_wmi_get_version(&version))
-> +		return -ENODEV;
-> +
-> +	if (asus_wmi_get_item_count(&sensor_data->wmi.sensor_count))
-> +		return -ENODEV;
-> +
-> +	if (sensor_data->wmi.sensor_count  <= 0 || version < 2) {
-> +		dev_info(dev, "version: %u with %d sensors is unsupported\n",
-> +			 version, sensor_data->wmi.sensor_count);
-> +
-> +		return -ENODEV;
-> +	}
-> +
-> +	mutex_init(&sensor_data->lock);
-> +
-> +	dev_set_drvdata(dev, sensor_data);
-> +
-> +	return asus_wmi_configure_sensor_setup(dev, sensor_data);
-> +}
-> +
-> +static const struct wmi_device_id asus_wmi_id_table[] = {
-> +	{ ASUSWMI_MONITORING_GUID, NULL },
-> +	{ }
-> +};
-> +
-> +static struct wmi_driver asus_sensors_wmi_driver = {
-> +	.driver = {
-> +		.name = "asus_wmi_sensors",
-> +	},
-> +	.id_table = asus_wmi_id_table,
-> +	.probe = asus_wmi_probe,
-> +};
-> +module_wmi_driver(asus_sensors_wmi_driver);
-> +
-> +MODULE_AUTHOR("Ed Brindley <kernel@maidavale.org>");
-> +MODULE_DESCRIPTION("Asus WMI Sensors Driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.33.0
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
