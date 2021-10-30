@@ -2,57 +2,57 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF389C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 11:22:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BB1BC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 11:45:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9238860F58
-	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 11:22:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E80B361040
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Oct 2021 11:45:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbhJ3LZX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 30 Oct 2021 07:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S231830AbhJ3Lr2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 30 Oct 2021 07:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbhJ3LZX (ORCPT
+        with ESMTP id S230327AbhJ3Lr2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 30 Oct 2021 07:25:23 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBADC061570;
-        Sat, 30 Oct 2021 04:22:52 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 5so46483571edw.7;
-        Sat, 30 Oct 2021 04:22:52 -0700 (PDT)
+        Sat, 30 Oct 2021 07:47:28 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79E6C061570;
+        Sat, 30 Oct 2021 04:44:57 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id j2so26387889lfg.3;
+        Sat, 30 Oct 2021 04:44:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UWexc/LK6FIYBp06KI+cdl/UAdPUztyrgVADysvBRp4=;
-        b=dwWzKdWF8h5SLSpkIe+VNo+53IWktafwG0rmntBROOczBXkp5tZgCaaTDe2cTNusR2
-         1+438Kp9E3oUpSDBZA3U20a/z8AC/TwoNfJXKoehe/Ihwrc/qmV1HQmFBhwTpmNWPLry
-         /xGGI1A6oa2t09ZjeUVGJ1ynIkhvlkcF/ynTIlJ6QJUXTWX/rAaTsNu7DgsVGiLJI8IH
-         jqRxPEsWP+Cnl+Pl1RX46u54QOANMaWQ69CDrgLRCHNRFRymZ1nwpXL85EVhaZzLOL0/
-         gGNZfTBg7RASOPPvx4278ajfzIdx1cinXLsxuJiJxWq9uaDawCXrxT6oPXl6fUiI3M5J
-         WJ6g==
+        bh=z2Zff269gpFMGO4oJzwm2RkZTLLsA1HaBdPOKQxR7ig=;
+        b=mRrYXbHOUsUiNTKM/TxfnpM/qFackavuXxVPk/xVYmh4lqbniwtY+xjN4nuAZ1tOUh
+         04Ka7Vz2N4vkNTo2F21MQY6FHDpFcGb/9aV70z2A/Idv4qLs3hYxU9jBpxDrBg/8t4rE
+         9dTl74zzzTkAoGnCn4eB1EFRVlNgoaJ9d4aevhDtfOlkt4UkqFTgAa0leSlVCpJKxgVW
+         MT33vv1O50I4e6Z7Ld30HtH+dfE4aAHVWO6EKUOBX46t/0zl4ZpGPzf1BlSG7rqTS6Lq
+         GLEqvC/b0XNPweBTS2UaRto8L2RlpnuR7sGrqWuhedtwOZnINHnbMvQhbf37b1nkbtDF
+         c2DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UWexc/LK6FIYBp06KI+cdl/UAdPUztyrgVADysvBRp4=;
-        b=ASmveCICRr0Kw9uvUq3pS9rDJwefQPFkJyqZgqinCqJ6eO9kDmw89OSCr32cvvyITj
-         /w0doiBvouZh5v45zv9E/+Blf/wrVb5KOD9NjTRjX+rb1qJmeUCR9h9ZkDkYkZyhkFZp
-         40epMnVSlau2WF4KdG47xOCKyCHAbwZb0oaKbHLgMWLB6gdunhEbPsR+pNaRnJ+ZHr5v
-         n9QsJOxJySIzCvW1WTHBUG56Du/G9DpqEkud7+wYaai0bBF33UqI3SoZKFTQlpREDm2P
-         L2aYO49DRzt8LWq2zNSX3isVco09jk22m/0l4FaKPZRSFK6M/hApilHDx6z007gNDsUw
-         Ffhw==
-X-Gm-Message-State: AOAM532j3IA+ZdukseW1lo9e9cDqqfNEl3yhAuliBJT9WSx6EF7URzun
-        DJZDWmSXsRXWdTSAZN1+feYFHITfEuTJ90gLnpk=
-X-Google-Smtp-Source: ABdhPJyWM6mUu9nd+6aSReRhyZXfjsf2nEINvwXybTGMVOc5SygZgwRXFmachl+VY9XuCAax/oSKK0p/pzvd/dD+w14=
-X-Received: by 2002:a17:906:d553:: with SMTP id cr19mr20119313ejc.128.1635592971384;
- Sat, 30 Oct 2021 04:22:51 -0700 (PDT)
+        bh=z2Zff269gpFMGO4oJzwm2RkZTLLsA1HaBdPOKQxR7ig=;
+        b=QYUBWrkePJyXQCzUOpmk0HjenIaYUASIkzX01dyranCG8fwlZzPSLR8MtAYlC13DUY
+         Z2SqK60anqwGsPdnn20PTc3F9xIb+h+5T8bK5FOAIJ7K8/EkjgWA6uxVi1QwXBhDj4dy
+         H8nLxnbmsR7tMFwdmBLwz4d7R66KH5x4kAcAEAxfK5vMpaAaIHtky3KAxqa+B64+YIfY
+         Irm43x8CNojqHNz2/6wtkTPc+/I3qOKuW6sWV+xgRrZ1IoBmdYFfybDmzh9C948IpZuo
+         weHTz7msAZUybVNYFvoON4g6+x3R9W2+3VnEjLLFjGGjLYGJ4po473YfM6+gD/Vk2Z8s
+         yVtQ==
+X-Gm-Message-State: AOAM531s2jMq1+EqvItV2klm3Y2lHYPBTbFcRyBRA0k753H+AujAenUW
+        LP2EDfMNIE6EH0mBjEFzXxUM+MxizeXM9/m3YCs=
+X-Google-Smtp-Source: ABdhPJwddF4ZU43dJdeF3PbTyMQvTGhrXqALX5yQ2mBaCnQhQ0wNJJnkPUznhx6eLMVnw67xIMSgyO1tlvrOVrcdoXs=
+X-Received: by 2002:a05:6512:260e:: with SMTP id bt14mr16427171lfb.129.1635594294870;
+ Sat, 30 Oct 2021 04:44:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211030091706.25470-1-pauk.denis@gmail.com>
-In-Reply-To: <20211030091706.25470-1-pauk.denis@gmail.com>
+References: <20211030091706.25470-1-pauk.denis@gmail.com> <CAHp75Ve_dvc-33y5U3fgN-ZTGibcyO3dO7WxC_ZaPkNSh8kd0w@mail.gmail.com>
+In-Reply-To: <CAHp75Ve_dvc-33y5U3fgN-ZTGibcyO3dO7WxC_ZaPkNSh8kd0w@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 30 Oct 2021 14:22:15 +0300
-Message-ID: <CAHp75Ve_dvc-33y5U3fgN-ZTGibcyO3dO7WxC_ZaPkNSh8kd0w@mail.gmail.com>
+Date:   Sat, 30 Oct 2021 14:44:18 +0300
+Message-ID: <CAHp75VfRY6nS=YcFstW_Bt+_+Zz366vh8=mfjat4kfTOBH0e3w@mail.gmail.com>
 Subject: Re: [PATCH v9 0/2] Update ASUS WMI supported boards
 To:     Denis Pauk <pauk.denis@gmail.com>
 Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
@@ -69,50 +69,19 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Oct 30, 2021 at 12:17 PM Denis Pauk <pauk.denis@gmail.com> wrote:
->
-> Add support by WMI interface provided by Asus for B550/X570 boards:
-> * PRIME X570-PRO,
-> * ROG CROSSHAIR VIII HERO
-> * ROG CROSSHAIR VIII DARK HERO
-> * ROG CROSSHAIR VIII FORMULA
-> * ROG STRIX X570-E GAMING
-> * ROG STRIX B550-E GAMING
->
-> Add support by WMI interface provided by Asus for X370/X470/
-> B450/X399 boards:
-> * ROG CROSSHAIR VI HERO,
-> * PRIME X399-A,
-> * PRIME X470-PRO,
-> * ROG CROSSHAIR VI EXTREME,
-> * ROG CROSSHAIR VI HERO (WI-FI AC),
-> * ROG CROSSHAIR VII HERO,
-> * ROG CROSSHAIR VII HERO (WI-FI),
-> * ROG STRIX B450-E GAMING,
-> * ROG STRIX B450-F GAMING,
-> * ROG STRIX B450-I GAMING,
-> * ROG STRIX X399-E GAMING,
-> * ROG STRIX X470-F GAMING,
-> * ROG STRIX X470-I GAMING,
-> * ROG ZENITH EXTREME,
-> * ROG ZENITH EXTREME ALPHA.
->
-> @Andy Shevchenko: I have added your changes to asus_wmi_ec_sensors. Have I
->     correctly applied changes? Thank you.
+On Sat, Oct 30, 2021 at 2:22 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Sat, Oct 30, 2021 at 12:17 PM Denis Pauk <pauk.denis@gmail.com> wrote:
 
-Thanks!
-Since I have no hardware, you may answer better than me, i.e. if it
-works, then you did a great job!
 
-> @Guenter Roeck: I have adeed comments about units in the
->     asus_wmi_scale_sensor_value.
+> > Could you please review?
 >
-> I have added ACPI_FREE for results to all case of
-> usage wmi_evaluate_method. Is it correct?
->
-> Could you please review?
+> I'll look at it later.
 
-I'll look at it later.
+I briefly looked into it and found some subtle changes that might be
+incorporated. However, I will send the full review if there will be a
+new version (of the series) for sure. Let Guenter make his comment on
+this first.
 
 -- 
 With Best Regards,
