@@ -2,960 +2,900 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 943DAC43217
-	for <linux-hwmon@archiver.kernel.org>; Sun, 31 Oct 2021 21:33:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01DBBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Nov 2021 02:20:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71D5661058
-	for <linux-hwmon@archiver.kernel.org>; Sun, 31 Oct 2021 21:33:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE80F60F3A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Nov 2021 02:20:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbhJaVgJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 31 Oct 2021 17:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S230451AbhKACXX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 31 Oct 2021 22:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbhJaVgI (ORCPT
+        with ESMTP id S230321AbhKACXW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 31 Oct 2021 17:36:08 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7012C061746;
-        Sun, 31 Oct 2021 14:33:35 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id v127so12076010wme.5;
-        Sun, 31 Oct 2021 14:33:35 -0700 (PDT)
+        Sun, 31 Oct 2021 22:23:22 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA50C061764
+        for <linux-hwmon@vger.kernel.org>; Sun, 31 Oct 2021 19:20:49 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id e2so29253594uax.7
+        for <linux-hwmon@vger.kernel.org>; Sun, 31 Oct 2021 19:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BKrYCExuab1IYuDrTevx54totoNRtUHsETpAW2d4Ulo=;
-        b=RX9uESCmSBZUniP7kR3yrsAGzV91ZYrC0aPBVbErwHQIJHLP8cIu1Bizp6FdyNpc4L
-         zDczpAv29no+hNQz4el3bfDBhAUTnJfc5H6gWW9fMEYkj+2o12RcJdSP2Hu0Xu3JwNMU
-         lA90Mda18CZrLWmrX2i9TnSe/BpvNAND1bYw3TRo13ACbEiVOs+FkzSdCF8MQXabDjU5
-         XrmJazBThTvzVoCeu5U53UIIj/pcY+ZwuAwQWOm2SFt45Co6Re7kHf3c+s9FfMuUq9we
-         cfJjOu3thtxZ+pLonl1xzxMV6FVJlfFprbyse7cLJJBt0OWaLp96PU8/judszTakEzOa
-         yHmQ==
+        d=nathanrossi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ol55g/Y5RfiE/yXvSKtMwqWt9cRsSqeNkHsM/lJmiCE=;
+        b=Tcz7fGRjwa6+v9O3ixeyXi0p/oECHSNVrzhsBNUbVuF5rHRwvGHtI5NThri3L2JDxG
+         Lupm+TrdQgh01HpjSlMvYiNx4f44XuPlgSPEC5EfcEstk9Ka9avrRLjxby5eFjt/cwz0
+         30sA1bVbYMZlQp819HXs5wXoXPXgCSLlEbmkEadLjIoSfGfmZ+8QtD4+s5rIAYqzPd5R
+         v9hAuiWcFVDr1WpF+Yw1AKP6pvS0L4nKXP7x6jKAyuHXuH/r/kz4/6TkJ4ULNSt0oyEs
+         7BrOu5kVftH1RDUr1QJmenf7pKr973ZKLllRxshzD34N8PD6ESN/x6vfmEk9F1txGIwA
+         GESQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BKrYCExuab1IYuDrTevx54totoNRtUHsETpAW2d4Ulo=;
-        b=dzqjNGMztxlRAbhTjR1z6SJgGnywyMyA5a2huHdyq94sOryWC+So9dNcAQxncHXq/v
-         I0iqhsp5HAmyJyESls/CULRw1T7NQSjOywYuAWhMSRKgD8dFS7AaQSuAPN90AkXtySfz
-         7pgz1dIZQD7LbhlAksi+HfdMggeVFI+rKCDJaoe+sISe3c8XcSBuM/o+lkDOH4GcCE1v
-         zZUyrFBiGqC+PnjP71Sdg429hPb1ANc3gQ6Q/qqR+5an96Q8CZiRKL92/Exj6UglQDFq
-         dGe8cwV15PgEDOwMMXNWOnG1TYDVeGwk//KCroe0cOGf7qw2VtzLxwYSsA/22PppBmbD
-         qsLA==
-X-Gm-Message-State: AOAM530qBjNvj9xwlTjASwH7gAgYOJKMl5qDS32zOqFJBw5oc8b4Xc0I
-        9OeTarsvcgEiZWN3q2Gn+eU=
-X-Google-Smtp-Source: ABdhPJyTsVR0vLvc6L3Vlyg3k5qJzPG5Yn3wWhOd/8WAazpufKcqRT6D2+WoUfxNe6fuDlq4Z57mJA==
-X-Received: by 2002:a05:600c:3584:: with SMTP id p4mr34124039wmq.168.1635716014225;
-        Sun, 31 Oct 2021 14:33:34 -0700 (PDT)
-Received: from localhost.localdomain ([94.179.15.8])
-        by smtp.gmail.com with ESMTPSA id n7sm10526158wro.68.2021.10.31.14.33.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Oct 2021 14:33:33 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
-        thomas@weissschuh.net, kernel@maidavale.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v10 2/2] hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
-Date:   Sun, 31 Oct 2021 23:32:56 +0200
-Message-Id: <20211031213257.123049-3-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211031213257.123049-1-pauk.denis@gmail.com>
-References: <20211031213257.123049-1-pauk.denis@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ol55g/Y5RfiE/yXvSKtMwqWt9cRsSqeNkHsM/lJmiCE=;
+        b=1hhiGnhrdVwodIBgQ5Trd2tfYVU5IPybtOnVVBptCfRoQl9Pjf7KDw3S1qRL05C7XN
+         AdQI+gm5KoT0rS/aUu9xFmwjbQNW/R9QBHIjpXUiBdlAhkFvywZkbUhbsDuavxkNi/v+
+         S6rI1hZ2zISs1ZQwQlnc2ThRzENTrPSwoasCs+EqXTSDjXpiSKu1b3O64pVpbNm5UmJI
+         NBgA8TgQxtQUbfr1U4sIO0EgD9rTxr4MFF9XzPv0j+CLDihW5y7P6uPAKCEwm2IPeGK/
+         yXMa5x9Xi4MKcBYTcXfM0jaLo3i9wCKxnatiTbutPeQYrBwzrrlrtMSwf+X+4MWk3oPQ
+         jKFw==
+X-Gm-Message-State: AOAM530yZRdPCiJViGYRDP7/9aKBCAUcLRTvc8VlWS4ApYmjpExU3W4l
+        N4kIUvvWXxCw9n9ik5v0LKKhduuyAKe/syIztlVZgg==
+X-Google-Smtp-Source: ABdhPJxJ375kGKAwpqdFT1IRwzo2axILKnK8hpPPDFLaxsRvT5PTgJsGHJ9v8JYD6KdDwUr2pGh0oHiMCQggeDeVGpQ=
+X-Received: by 2002:a05:6102:370a:: with SMTP id s10mr11855231vst.37.1635733248324;
+ Sun, 31 Oct 2021 19:20:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20211028081030.719265-0-nathan@nathanrossi.com>
+ <20211028081030.719265-3-nathan@nathanrossi.com> <7b6764bf-4978-60ec-b1e6-8d59077c3023@roeck-us.net>
+In-Reply-To: <7b6764bf-4978-60ec-b1e6-8d59077c3023@roeck-us.net>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+Date:   Mon, 1 Nov 2021 12:20:36 +1000
+Message-ID: <CA+aJhH1aGJXwYSCU8RC275G5=qGLyZRK94g9ic24wxKuRGCwEA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] hwmon: Driver for Texas Instruments INA238
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nathan Rossi <nathan.rossi@digi.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Provides a Linux kernel module "asus_wmi_sensors" that provides sensor
-readouts via ASUS' WMI interface present in the UEFI of
-X370/X470/B450/X399 Ryzen motherboards.
+On Fri, 29 Oct 2021 at 20:11, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 10/28/21 1:10 AM, Nathan Rossi wrote:
+> > From: Nathan Rossi <nathan.rossi@digi.com>
+> >
+> > The INA238 is a I2C power monitor similar to other INA2xx devices,
+> > providing shunt voltage, bus voltage, current, power and temperature
+> > measurements.
+> >
+> > Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> > ---
+> > Changes in v2:
+> > - Add ina238 documentation to hwmon/index
+> > - Remove unused header includes and sort
+> > - Set regmap_config max_register in struct initialization
+> > - Remove shunt-resistor attribute and associated functions
+> > - Rename crit/lcrit attributes to max/min
+> > - Rework to use the hwmon_chip_info API
+> > - Add max_alarm and min_alarm channels and associated alert/alarm config
+> > - Add device tree ti,shunt-gain property use and ADCRANGE setup
+> >
+> > Changes in v3:
+> > - Remove unnecessary header include
+> > - Change ina238_read_reg24 to return EIO when invalid byte count is read
+> >    from device
+> > - Replace '? 1 : 0' with '!!'
+> > - Clamp the input value of attributes before calculating the associated
+> >    register value, this avoids issues with negative values and avoids
+> >    some of the need to perform 64-bit calculations
+> > - Check the use of 64-bit divides and replace where possible
+> >    - The current and power calculations still use 64-bit calculations due
+> >      to maintaining precision while correcting for difference between
+> >      calibrated and actual shunt values (micro ohm value multiplication
+> >      causes overflow of long)
+> > - Remove channel index checks and passing channel value to read/write
+> >    functions
+> > ---
+> >   Documentation/hwmon/ina238.rst |  56 ++++
+> >   Documentation/hwmon/index.rst  |   1 +
+> >   drivers/hwmon/Kconfig          |  12 +
+> >   drivers/hwmon/Makefile         |   1 +
+> >   drivers/hwmon/ina238.c         | 644 +++++++++++++++++++++++++++++++++++++++++
+> >   5 files changed, 714 insertions(+)
+> >   create mode 100644 Documentation/hwmon/ina238.rst
+> >   create mode 100644 drivers/hwmon/ina238.c
+> >
+> > diff --git a/Documentation/hwmon/ina238.rst b/Documentation/hwmon/ina238.rst
+> > new file mode 100644
+> > index 0000000000..d9f4799844
+> > --- /dev/null
+> > +++ b/Documentation/hwmon/ina238.rst
+> > @@ -0,0 +1,56 @@
+> > +.. SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +Kernel driver ina238
+> > +====================
+> > +
+> > +Supported chips:
+> > +
+> > +  * Texas Instruments INA238
+> > +
+> > +    Prefix: 'ina238'
+> > +
+> > +    Addresses: I2C 0x40 - 0x4f
+> > +
+> > +    Datasheet:
+> > +     https://www.ti.com/lit/gpn/ina238
+> > +
+> > +Author: Nathan Rossi <nathan.rossi@digi.com>
+> > +
+> > +Description
+> > +-----------
+> > +
+> > +The INA238 is a current shunt, power and temperature monitor with an I2C
+> > +interface. It includes a number of programmable functions including alerts,
+> > +conversion rate, sample averaging and selectable shunt voltage accuracy.
+> > +
+> > +The shunt value in micro-ohms can be set via platform data or device tree at
+> > +compile-time or via the shunt_resistor attribute in sysfs at run-time. Please
+> > +refer to the Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml for bindings
+> > +if the device tree is used.
+> > +
+> > +Sysfs entries
+> > +-------------
+> > +
+> > +======================= =======================================================
+> > +in0_input            Shunt voltage (mV)
+> > +in0_min                      Minimum shunt voltage threshold (mV)
+> > +in0_min_alarm                Minimum shunt voltage alarm
+> > +in0_max                      Maximum shunt voltage threshold (mV)
+> > +in0_max_alarm                Maximum shunt voltage alarm
+> > +
+> > +in1_input            Bus voltage (mV)
+> > +in1_min                      Minimum bus voltage threshold (mV)
+> > +in1_min_alarm                Minimum shunt voltage alarm
+> > +in1_max                      Maximum bus voltage threshold (mV)
+> > +in1_max_alarm                Maximum shunt voltage alarm
+> > +
+> > +power1_input         Power measurement (uW)
+> > +power1_max           Maximum power threshold (uW)
+> > +power1_max_alarm     Maximum power alarm
+> > +
+> > +curr1_input          Current measurement (mA)
+> > +
+> > +temp1_input          Die temperature measurement (mC)
+> > +temp1_max            Maximum die temperature threshold (mC)
+> > +temp1_max_alarm              Maximum die temperature alarm
+> > +======================= =======================================================
+> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> > index 7046bf1870..6f30c8c9c7 100644
+> > --- a/Documentation/hwmon/index.rst
+> > +++ b/Documentation/hwmon/index.rst
+> > @@ -76,6 +76,7 @@ Hardware Monitoring Kernel Drivers
+> >      ibmpowernv
+> >      ina209
+> >      ina2xx
+> > +   ina238
+> >      ina3221
+> >      intel-m10-bmc-hwmon
+> >      ir35221
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 7fde4c6e1e..21aff4cef7 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -1872,6 +1872,18 @@ config SENSORS_INA2XX
+> >         This driver can also be built as a module. If so, the module
+> >         will be called ina2xx.
+> >
+> > +config SENSORS_INA238
+> > +     tristate "Texas Instruments INA238"
+> > +     depends on I2C
+> > +     select REGMAP_I2C
+> > +     help
+> > +       If you say yes here you get support for the INA238 power monitor
+> > +       chip. This driver supports voltage, current, power and temperature
+> > +       measurements as well as alarm configuration.
+> > +
+> > +       This driver can also be built as a module. If so, the module
+> > +       will be called ina238.
+> > +
+> >   config SENSORS_INA3221
+> >       tristate "Texas Instruments INA3221 Triple Power Monitor"
+> >       depends on I2C
+> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> > index baee6a8d4d..1ddb26f57a 100644
+> > --- a/drivers/hwmon/Makefile
+> > +++ b/drivers/hwmon/Makefile
+> > @@ -90,6 +90,7 @@ obj-$(CONFIG_SENSORS_IBMPOWERNV)+= ibmpowernv.o
+> >   obj-$(CONFIG_SENSORS_IIO_HWMON) += iio_hwmon.o
+> >   obj-$(CONFIG_SENSORS_INA209)        += ina209.o
+> >   obj-$(CONFIG_SENSORS_INA2XX)        += ina2xx.o
+> > +obj-$(CONFIG_SENSORS_INA238) += ina238.o
+> >   obj-$(CONFIG_SENSORS_INA3221)       += ina3221.o
+> >   obj-$(CONFIG_SENSORS_INTEL_M10_BMC_HWMON) += intel-m10-bmc-hwmon.o
+> >   obj-$(CONFIG_SENSORS_IT87)  += it87.o
+> > diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
+> > new file mode 100644
+> > index 0000000000..fd830e2582
+> > --- /dev/null
+> > +++ b/drivers/hwmon/ina238.c
+> > @@ -0,0 +1,644 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Driver for Texas Instruments INA238 power monitor chip
+> > + * Datasheet: https://www.ti.com/product/ina238
+> > + *
+> > + * Copyright (C) 2021 Nathan Rossi <nathan.rossi@digi.com>
+> > + */
+> > +
+> > +#include <linux/err.h>
+> > +#include <linux/hwmon.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/init.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of.h>
+> > +#include <linux/regmap.h>
+> > +
+> > +#include <linux/platform_data/ina2xx.h>
+> > +
+> > +/* INA238 register definitions */
+> > +#define INA238_CONFIG                        0x0
+> > +#define INA238_ADC_CONFIG            0x1
+> > +#define INA238_SHUNT_CALIBRATION     0x2
+> > +#define INA238_SHUNT_VOLTAGE         0x4
+> > +#define INA238_BUS_VOLTAGE           0x5
+> > +#define INA238_DIE_TEMP                      0x6
+> > +#define INA238_CURRENT                       0x7
+> > +#define INA238_POWER                 0x8
+> > +#define INA238_DIAG_ALERT            0xb
+> > +#define INA238_SHUNT_OVER_VOLTAGE    0xc
+> > +#define INA238_SHUNT_UNDER_VOLTAGE   0xd
+> > +#define INA238_BUS_OVER_VOLTAGE              0xe
+> > +#define INA238_BUS_UNDER_VOLTAGE     0xf
+> > +#define INA238_TEMP_LIMIT            0x10
+> > +#define INA238_POWER_LIMIT           0x11
+> > +#define INA238_DEVICE_ID             0x3f
+> > +
+> > +#define INA238_CONFIG_ADCRANGE               BIT(4)
+> > +
+> > +#define INA238_DIAG_ALERT_TMPOL              BIT(7)
+> > +#define INA238_DIAG_ALERT_SHNTOL     BIT(6)
+> > +#define INA238_DIAG_ALERT_SHNTUL     BIT(5)
+> > +#define INA238_DIAG_ALERT_BUSOL              BIT(4)
+> > +#define INA238_DIAG_ALERT_BUSUL              BIT(3)
+> > +#define INA238_DIAG_ALERT_POL                BIT(2)
+> > +
+> > +#define INA238_REGISTERS             0x11
+> > +
+> > +#define INA238_RSHUNT_DEFAULT                10000 /* uOhm */
+> > +
+> > +/* Default configuration of device on reset. */
+> > +#define INA238_CONFIG_DEFAULT                0
+> > +/* 16 sample averaging, 1052us conversion time, continuous mode */
+> > +#define INA238_ADC_CONFIG_DEFAULT    0xfb6a
+> > +/* Configure alerts to be based on averaged value (SLOWALERT) */
+> > +#define INA238_DIAG_ALERT_DEFAULT    0x2000
+> > +/*
+> > + * This driver uses a fixed calibration value in order to scale current/power
+> > + * based on a fixed shunt resistor value. This allows for conversion within the
+> > + * device to avoid integer limits whilst current/power accuracy is scaled
+> > + * relative to the shunt resistor value within the driver. This is similar to
+> > + * how the ina2xx driver handles current/power scaling.
+> > + *
+> > + * The end result of this is that increasing shunt values (from a fixed 20 mOhm
+> > + * shunt) increase the effective current/power accuracy whilst limiting the
+> > + * range and decreasing shunt values decrease the effective accuracy but
+> > + * increase the range.
+> > + *
+> > + * The value of the Current register is calculated given the following:
+> > + *   Current (A) = (shunt voltage register * 5) * calibration / 81920
+> > + *
+> > + * The maximum shunt voltage is 163.835 mV (0x7fff, ADC_RANGE = 0, gain = 4).
+> > + * With the maximum current value of 0x7fff and a fixed shunt value results in
+> > + * a calibration value of 16384 (0x4000).
+> > + *
+> > + *   0x7fff = (0x7fff * 5) * calibration / 81920
+> > + *   calibration = 0x4000
+> > + *
+> > + * Equivalent calibration is applied for the Power register (maximum value for
+> > + * bus voltage is 102396.875 mV, 0x7fff), where the maximum power that can
+> > + * occur is ~16776192 uW (register value 0x147a8):
+> > + *
+> > + * This scaling means the resulting values for Current and Power registers need
+> > + * to be scaled by the difference between the fixed shunt resistor and the
+> > + * actual shunt resistor:
+> > + *
+> > + *  shunt = 0x4000 / (819.2 * 10^6) / 0.001 = 20000 uOhms (with 1mA/lsb)
+> > + *
+> > + *  Current (mA) = register value * 20000 / rshunt / 4 * gain
+> > + *  Power (W) = 0.2 * register value * 20000 / rshunt / 4 * gain
+> > + */
+> > +#define INA238_CALIBRATION_VALUE     16384
+> > +#define INA238_FIXED_SHUNT           20000
+> > +
+> > +#define INA238_SHUNT_VOLTAGE_LSB     5 /* 5 uV/lsb */
+> > +#define INA238_BUS_VOLTAGE_LSB               3125 /* 3.125 mV/lsb */
+> > +#define INA238_DIE_TEMP_LSB          125 /* 125 mC/lsb */
+> > +
+> > +static struct regmap_config ina238_regmap_config = {
+> > +     .max_register = INA238_REGISTERS,
+> > +     .reg_bits = 8,
+> > +     .val_bits = 16,
+> > +};
+> > +
+> > +struct ina238_data {
+> > +     struct i2c_client *client;
+> > +     struct mutex config_lock;
+> > +     struct regmap *regmap;
+> > +     u32 rshunt;
+> > +     u32 gain;
+> > +};
+> > +
+> > +static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
+> > +{
+> > +     u8 data[3];
+> > +     int err;
+> > +
+> > +     /* 24-bit register read */
+> > +     err = i2c_smbus_read_i2c_block_data(client, reg, 3, data);
+> > +     if (err < 0)
+> > +             return err;
+> > +     if (err != 3)
+> > +             return -EIO;
+> > +     *val = (data[0] << 16) | (data[1] << 8) | data[2];
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ina238_read_in(struct device *dev, u32 attr, int channel,
+> > +                       long *val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     int reg, mask;
+> > +     int regval;
+> > +     int err;
+> > +
+> > +     switch (channel) {
+> > +     case 0:
+> > +             switch (attr) {
+> > +             case hwmon_in_input:
+> > +                     reg = INA238_SHUNT_VOLTAGE;
+> > +                     break;
+> > +             case hwmon_in_max:
+> > +                     reg = INA238_SHUNT_OVER_VOLTAGE;
+> > +                     break;
+> > +             case hwmon_in_min:
+> > +                     reg = INA238_SHUNT_UNDER_VOLTAGE;
+> > +                     break;
+> > +             case hwmon_in_max_alarm:
+> > +                     reg = INA238_DIAG_ALERT;
+> > +                     mask = INA238_DIAG_ALERT_SHNTOL;
+> > +                     break;
+> > +             case hwmon_in_min_alarm:
+> > +                     reg = INA238_DIAG_ALERT;
+> > +                     mask = INA238_DIAG_ALERT_SHNTUL;
+> > +                     break;
+> > +             default:
+> > +                     return -EOPNOTSUPP;
+> > +             }
+> > +             break;
+> > +     case 1:
+> > +             switch (attr) {
+> > +             case hwmon_in_input:
+> > +                     reg = INA238_BUS_VOLTAGE;
+> > +                     break;
+> > +             case hwmon_in_max:
+> > +                     reg = INA238_BUS_OVER_VOLTAGE;
+> > +                     break;
+> > +             case hwmon_in_min:
+> > +                     reg = INA238_BUS_UNDER_VOLTAGE;
+> > +                     break;
+> > +             case hwmon_in_max_alarm:
+> > +                     reg = INA238_DIAG_ALERT;
+> > +                     mask = INA238_DIAG_ALERT_BUSOL;
+> > +                     break;
+> > +             case hwmon_in_min_alarm:
+> > +                     reg = INA238_DIAG_ALERT;
+> > +                     mask = INA238_DIAG_ALERT_BUSUL;
+> > +                     break;
+> > +             default:
+> > +                     return -EOPNOTSUPP;
+> > +             }
+> > +             break;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     err = regmap_read(data->regmap, reg, &regval);
+> > +     if (err < 0)
+> > +             return err;
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_in_input:
+> > +     case hwmon_in_max:
+> > +     case hwmon_in_min:
+> > +             /* signed register, value in mV */
+> > +             regval = (s16)regval;
+> > +             if (channel == 0)
+> > +                     /* gain of 1 -> LSB / 4 */
+> > +                     *val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
+> > +                            (1000 * (4 - (int)data->gain + 1));
+> > +             else
+> > +                     *val = (regval * INA238_BUS_VOLTAGE_LSB) / 1000;
+>
+> Those calculations make me wonder: Are you sure you want to use divide operations
+> instead of DIV_ROUND_CLOSEST() ? That applies to all divide operations.
 
-Supported motherboards:
-* ROG CROSSHAIR VI HERO,
-* PRIME X399-A,
-* PRIME X470-PRO,
-* ROG CROSSHAIR VI EXTREME,
-* ROG CROSSHAIR VI HERO (WI-FI AC),
-* ROG CROSSHAIR VII HERO,
-* ROG CROSSHAIR VII HERO (WI-FI),
-* ROG STRIX B450-E GAMING,
-* ROG STRIX B450-F GAMING,
-* ROG STRIX B450-I GAMING,
-* ROG STRIX X399-E GAMING,
-* ROG STRIX X470-F GAMING,
-* ROG STRIX X470-I GAMING,
-* ROG ZENITH EXTREME,
-* ROG ZENITH EXTREME ALPHA.
+I avoided DIV_ROUND_CLOSEST to avoid conditions where the _input
+attributes would read values above the set alarm thresholds when they
+are not actually above the thresholds (which could lead to confusion).
 
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Co-developed-by: Ed Brindley <kernel@maidavale.org>
-Signed-off-by: Ed Brindley <kernel@maidavale.org>
+>
+> > +             break;
+> > +     case hwmon_in_max_alarm:
+> > +     case hwmon_in_min_alarm:
+> > +             *val = !!(regval & mask);
+> > +             break;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ina238_write_in(struct device *dev, u32 attr, int channel,
+> > +                        long val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     long regval;
+>
+> nit: int should be sufficient here.
+>
+> > +
+> > +     if (attr != hwmon_in_max && attr != hwmon_in_min)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     /* convert decimal to register value */
+> > +     switch (channel) {
+> > +     case 0:
+> > +             /* signed value, clamp to max range +/-163 mV */
+> > +             regval = clamp_val(val, -163, 163);
+> > +             regval = (regval * 1000L * (4 - (int)data->gain + 1)) /
+>
+> nit: The typecast "(int)" is not needed here.
 
----
-Changes in v10:
-- Use long for sensor values.
-- Remove unrequired linux/hwmon-sysfs.h
-- Change code style in error status return.
-- Remove unuses wmi.buffer and fix type of source.
+Due to the unsigned type of gain, it causes promotion of regval (and
+the rest of the numerator) to unsigned long which causes issues with
+negative numbers on the divide. It makes more sense for gain to be an
+int to begin with, I will change it to int to avoid the need for type
+casting.
 
-Changes in v9:
-- Fix memory leaks in asus_wmi_*().
+Regards,
+Nathan
 
-Changes in v8:
-- Fix codestyle in defines and comments.
-- Call mutex_lock inside of functions.
-
-Changes in v7:
-- Add depends on ACPI_WMI to Kconfig.
-- Clean up defines names.
-
-Changes in v6:
-- Add asus_wmi_sensor to documentation index.
-
-Changes in v5:
-- Fixes build issue reported by kernel test robot with disabled ACPI_WMI.
-- Remove sensor->name check as always eevaluated to true.
-
-Changes in v4:
-- Implement wmi driver instead platform driver.
-- Update documentation.
-
-Changes in v3:
-- Use MODULE_DEVICE_TABLE for match devices.
-- Add documentaion for driver.
-
-Changes in v2:
-- Add module for boards with support of WMI interface returned sensor name and
-  value of sensor..
----
- Documentation/hwmon/asus_wmi_sensors.rst |  76 +++
- Documentation/hwmon/index.rst            |   1 +
- MAINTAINERS                              |   1 +
- drivers/hwmon/Kconfig                    |  12 +
- drivers/hwmon/Makefile                   |   1 +
- drivers/hwmon/asus_wmi_sensors.c         | 664 +++++++++++++++++++++++
- 6 files changed, 755 insertions(+)
- create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
- create mode 100644 drivers/hwmon/asus_wmi_sensors.c
-
-diff --git a/Documentation/hwmon/asus_wmi_sensors.rst b/Documentation/hwmon/asus_wmi_sensors.rst
-new file mode 100644
-index 000000000000..408fd3b4a0de
---- /dev/null
-+++ b/Documentation/hwmon/asus_wmi_sensors.rst
-@@ -0,0 +1,76 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver asus_wmi_sensors
-+=================================
-+
-+Supported boards:
-+ * PRIME X399-A,
-+ * PRIME X470-PRO,
-+ * ROG CROSSHAIR VI EXTREME,
-+ * ROG CROSSHAIR VI HERO,
-+ * ROG CROSSHAIR VI HERO (WI-FI AC),
-+ * ROG CROSSHAIR VII HERO,
-+ * ROG CROSSHAIR VII HERO (WI-FI),
-+ * ROG STRIX B450-E GAMING,
-+ * ROG STRIX B450-F GAMING,
-+ * ROG STRIX B450-I GAMING,
-+ * ROG STRIX X399-E GAMING,
-+ * ROG STRIX X470-F GAMING,
-+ * ROG STRIX X470-I GAMING,
-+ * ROG ZENITH EXTREME,
-+ * ROG ZENITH EXTREME ALPHA.
-+
-+Authors:
-+    - Ed Brindley <kernel@maidavale.org>
-+
-+Description:
-+------------
-+ASUS mainboards publish hardware monitoring information via WMI interface.
-+
-+ASUS WMI interface provides a methods to get list of sensors and values of
-+such, which is utilized by this driver to publish those sensor readings to the
-+HWMON system. The driver is aware of and reads the following sensors:
-+ * CPU Core Voltage,
-+ * CPU SOC Voltage,
-+ * DRAM Voltage,
-+ * VDDP Voltage,
-+ * 1.8V PLL Voltage,
-+ * +12V Voltage,
-+ * +5V Voltage,
-+ * 3VSB Voltage,
-+ * VBAT Voltage,
-+ * AVCC3 Voltage,
-+ * SB 1.05V Voltage,
-+ * CPU Core Voltage,
-+ * CPU SOC Voltage,
-+ * DRAM Voltage,
-+ * CPU Fan RPM,
-+ * Chassis Fan 1 RPM,
-+ * Chassis Fan 2 RPM,
-+ * Chassis Fan 3 RPM,
-+ * HAMP Fan RPM,
-+ * Water Pump RPM,
-+ * CPU OPT RPM,
-+ * Water Flow RPM,
-+ * AIO Pump RPM,
-+ * CPU Temperature,
-+ * CPU Socket Temperature,
-+ * Motherboard Temperature,
-+ * Chipset Temperature,
-+ * Tsensor 1 Temperature,
-+ * CPU VRM Temperature,
-+ * Water In,
-+ * Water Out,
-+ * CPU VRM Output Current.
-+
-+Known Issues:
-+* The WMI implementation in some of Asus' BIOSes is buggy. This can result in
-+   fans stopping, fans getting stuck at max speed, or temperature readouts
-+   getting stuck. This is not an issue with the driver, but the BIOS. The Prime
-+   X470 Pro seems particularly bad for this. The more frequently the WMI
-+   interface is polled the greater the potential for this to happen. Until you
-+   have subjected your computer to an extended soak test while polling the
-+   sensors frequently, don't leave you computer unattended. Upgrading to new
-+   BIOS version with method version greater than or equal to two should
-+   rectify the issue.
-+* A few boards report 12v voltages to be ~10v.
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 23deb1a1202f..6dca9df9d24a 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -44,6 +44,7 @@ Hardware Monitoring Kernel Drivers
-    asc7621
-    aspeed-pwm-tacho
-    asus_wmi_ec_sensors
-+   asus_wmi_sensors
-    bcm54140
-    bel-pfe
-    bpa-rs600
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 05448435991d..46036c184330 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2943,6 +2943,7 @@ M:	Denis Pauk <pauk.denis@gmail.com>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
- F:	drivers/hwmon/asus_wmi_ec_sensors.c
-+F:	drivers/hwmon/asus_wmi_sensors.c
- 
- ASUS WIRELESS RADIO CONTROL DRIVER
- M:	João Paulo Rechi Vita <jprvita@gmail.com>
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 01d50fb9da54..d99aef4b2583 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2215,6 +2215,18 @@ config SENSORS_ATK0110
- 	  This driver can also be built as a module. If so, the module
- 	  will be called asus_atk0110.
- 
-+config SENSORS_ASUS_WMI
-+	tristate "ASUS WMI X370/X470/B450/X399"
-+	depends on ACPI_WMI
-+	help
-+	  If you say yes here you get support for the ACPI hardware monitoring
-+	  interface found in X370/X470/B450/X399 ASUS motherboards. This driver
-+	  will provide readings of fans, voltages and temperatures through the system
-+	  firmware.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called asus_wmi_sensors.
-+
- config SENSORS_ASUS_WMI_EC
- 	tristate "ASUS WMI B550/X570"
- 	depends on ACPI_WMI
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index aae2ff5c7335..656a6191a0f8 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -9,6 +9,7 @@ obj-$(CONFIG_HWMON_VID)		+= hwmon-vid.o
- # APCI drivers
- obj-$(CONFIG_SENSORS_ACPI_POWER) += acpi_power_meter.o
- obj-$(CONFIG_SENSORS_ATK0110)	+= asus_atk0110.o
-+obj-$(CONFIG_SENSORS_ASUS_WMI)	+= asus_wmi_sensors.o
- obj-$(CONFIG_SENSORS_ASUS_WMI_EC)	+= asus_wmi_ec_sensors.o
- 
- # Native drivers
-diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-new file mode 100644
-index 000000000000..67af15d99396
---- /dev/null
-+++ b/drivers/hwmon/asus_wmi_sensors.c
-@@ -0,0 +1,664 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * HWMON driver for ASUS motherboards that provides sensor readouts via WMI
-+ * interface present in the UEFI of the X370/X470/B450/X399 Ryzen motherboards.
-+ *
-+ * Copyright (C) 2018-2019 Ed Brindley <kernel@maidavale.org>
-+ *
-+ * WMI interface provides:
-+ * - CPU Core Voltage,
-+ * - CPU SOC Voltage,
-+ * - DRAM Voltage,
-+ * - VDDP Voltage,
-+ * - 1.8V PLL Voltage,
-+ * - +12V Voltage,
-+ * - +5V Voltage,
-+ * - 3VSB Voltage,
-+ * - VBAT Voltage,
-+ * - AVCC3 Voltage,
-+ * - SB 1.05V Voltage,
-+ * - CPU Core Voltage,
-+ * - CPU SOC Voltage,
-+ * - DRAM Voltage,
-+ * - CPU Fan RPM,
-+ * - Chassis Fan 1 RPM,
-+ * - Chassis Fan 2 RPM,
-+ * - Chassis Fan 3 RPM,
-+ * - HAMP Fan RPM,
-+ * - Water Pump RPM,
-+ * - CPU OPT RPM,
-+ * - Water Flow RPM,
-+ * - AIO Pump RPM,
-+ * - CPU Temperature,
-+ * - CPU Socket Temperature,
-+ * - Motherboard Temperature,
-+ * - Chipset Temperature,
-+ * - Tsensor 1 Temperature,
-+ * - CPU VRM Temperature,
-+ * - Water In,
-+ * - Water Out,
-+ * - CPU VRM Output Current.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/dmi.h>
-+#include <linux/hwmon.h>
-+#include <linux/init.h>
-+#include <linux/jiffies.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/units.h>
-+#include <linux/wmi.h>
-+
-+#define ASUSWMI_MONITORING_GUID		"466747A0-70EC-11DE-8A39-0800200C9A66"
-+#define ASUSWMI_METHODID_GET_VALUE	0x52574543 /* RWEC */
-+#define ASUSWMI_METHODID_UPDATE_BUFFER	0x51574543 /* QWEC */
-+#define ASUSWMI_METHODID_GET_INFO	0x50574543 /* PWEC */
-+#define ASUSWMI_METHODID_GET_NUMBER	0x50574572 /* PWEr */
-+#define ASUSWMI_METHODID_GET_VERSION	0x50574574 /* PWEt */
-+
-+#define ASUS_WMI_MAX_STR_SIZE		32
-+
-+#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name) {					\
-+	.matches = {								\
-+		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),	\
-+		DMI_EXACT_MATCH(DMI_BOARD_NAME, name),				\
-+	},									\
-+}
-+
-+static const struct dmi_system_id asus_wmi_dmi_table[] = {
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-E GAMING"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-F GAMING"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-I GAMING"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X399-E GAMING"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X470-F GAMING"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X470-I GAMING"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH EXTREME"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH EXTREME ALPHA"),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(dmi, asus_wmi_dmi_table);
-+
-+enum asus_wmi_sensor_class {
-+	VOLTAGE		= 0x0,
-+	TEMPERATURE_C	= 0x1,
-+	FAN_RPM		= 0x2,
-+	CURRENT		= 0x3,
-+	WATER_FLOW	= 0x4,
-+};
-+
-+enum asus_wmi_location {
-+	CPU		= 0x0,
-+	CPU_SOC		= 0x1,
-+	DRAM		= 0x2,
-+	MOTHERBOARD	= 0x3,
-+	CHIPSET		= 0x4,
-+	AUX		= 0x5,
-+	VRM		= 0x6,
-+	COOLER		= 0x7
-+};
-+
-+enum asus_wmi_type {
-+	SIGNED_INT	= 0x0,
-+	UNSIGNED_INT	= 0x1,
-+	SCALED		= 0x3,
-+};
-+
-+enum asus_wmi_source {
-+	SIO		= 0x1,
-+	EC		= 0x2
-+};
-+
-+static enum hwmon_sensor_types asus_data_types[] = {
-+	[VOLTAGE]	= hwmon_in,
-+	[TEMPERATURE_C]	= hwmon_temp,
-+	[FAN_RPM]	= hwmon_fan,
-+	[CURRENT]	= hwmon_curr,
-+	[WATER_FLOW]	= hwmon_fan,
-+};
-+
-+static u32 hwmon_attributes[] = {
-+	[hwmon_chip]	= HWMON_C_REGISTER_TZ,
-+	[hwmon_temp]	= HWMON_T_INPUT | HWMON_T_LABEL,
-+	[hwmon_in]	= HWMON_I_INPUT | HWMON_I_LABEL,
-+	[hwmon_curr]	= HWMON_C_INPUT | HWMON_C_LABEL,
-+	[hwmon_fan]	= HWMON_F_INPUT | HWMON_F_LABEL,
-+};
-+
-+/**
-+ * struct asus_wmi_sensor_info - sensor info.
-+ * @id: sensor id.
-+ * @data_type: sensor class e.g. voltage, temp etc.
-+ * @location: sensor location.
-+ * @name: sensor name.
-+ * @source: sensor source.
-+ * @type: sensor type signed, unsigned etc.
-+ * @cached_value: cached sensor value.
-+ */
-+struct asus_wmi_sensor_info {
-+	u32 id;
-+	int data_type;
-+	int location;
-+	char name[ASUS_WMI_MAX_STR_SIZE];
-+	int source;
-+	int type;
-+	long cached_value;
-+};
-+
-+struct asus_wmi_wmi_info {
-+	unsigned long source_last_updated[3];	/* in jiffies */
-+	int sensor_count;
-+
-+	const struct asus_wmi_sensor_info **info[hwmon_max];
-+	struct asus_wmi_sensor_info **info_by_id;
-+};
-+
-+struct asus_wmi_sensors {
-+	struct asus_wmi_wmi_info wmi;
-+	/* lock access to internal cache */
-+	struct mutex lock;
-+};
-+
-+/*
-+ * Universal method for calling WMI method
-+ */
-+static int asus_wmi_call_method(u32 method_id, u32 *args, struct acpi_buffer *output)
-+{
-+	struct acpi_buffer input = {(acpi_size) sizeof(*args), args };
-+	acpi_status status;
-+
-+	status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0,
-+				     method_id, &input, output);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Gets the version of the ASUS sensors interface implemented
-+ */
-+static int asus_wmi_get_version(u32 *version)
-+{
-+	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-+	u32 args[] = {0, 0, 0};
-+	union acpi_object *obj;
-+	int err;
-+
-+	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_VERSION, args, &output);
-+	if (err)
-+		return err;
-+
-+	obj = output.pointer;
-+	if (!obj)
-+		return -EIO;
-+
-+	if (obj->type != ACPI_TYPE_INTEGER) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	err = 0;
-+	*version = obj->integer.value;
-+
-+out_free_obj:
-+	ACPI_FREE(obj);
-+	return err;
-+}
-+
-+/*
-+ * Gets the number of sensor items
-+ */
-+static int asus_wmi_get_item_count(u32 *count)
-+{
-+	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-+	u32 args[] = {0, 0, 0};
-+	union acpi_object *obj;
-+	int err;
-+
-+	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_NUMBER, args, &output);
-+	if (err)
-+		return err;
-+
-+	obj = output.pointer;
-+	if (!obj)
-+		return -EIO;
-+
-+	if (obj->type != ACPI_TYPE_INTEGER) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	err = 0;
-+	*count = obj->integer.value;
-+
-+out_free_obj:
-+	ACPI_FREE(obj);
-+	return err;
-+}
-+
-+static int asus_wmi_hwmon_add_chan_info(struct hwmon_channel_info *asus_wmi_hwmon_chan,
-+					struct device *dev, int num,
-+					enum hwmon_sensor_types type, u32 config)
-+{
-+	u32 *cfg;
-+
-+	cfg = devm_kcalloc(dev, num + 1, sizeof(*cfg), GFP_KERNEL);
-+	if (!cfg)
-+		return -ENOMEM;
-+
-+	asus_wmi_hwmon_chan->type = type;
-+	asus_wmi_hwmon_chan->config = cfg;
-+	memset32(cfg, config, num);
-+
-+	return 0;
-+}
-+
-+/*
-+ * For a given sensor item returns details e.g. type (voltage/temperature/fan speed etc), bank etc
-+ */
-+static int asus_wmi_sensor_info(int index, struct asus_wmi_sensor_info *s)
-+{
-+	union acpi_object name_obj, data_type_obj, location_obj, source_obj, type_obj;
-+	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-+	u32 args[] = {index, 0};
-+	union acpi_object *obj;
-+	int err;
-+
-+	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_INFO, args, &output);
-+	if (err)
-+		return err;
-+
-+	s->id = index;
-+
-+	obj = output.pointer;
-+	if (!obj)
-+		return -EIO;
-+
-+	if (obj->type != ACPI_TYPE_PACKAGE) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	if (obj->package.count != 5) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	name_obj = obj->package.elements[0];
-+	if (name_obj.type != ACPI_TYPE_STRING) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	strncpy(s->name, name_obj.string.pointer, sizeof(s->name) - 1);
-+
-+	data_type_obj = obj->package.elements[1];
-+	if (data_type_obj.type != ACPI_TYPE_INTEGER) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	s->data_type = data_type_obj.integer.value;
-+
-+	location_obj = obj->package.elements[2];
-+	if (location_obj.type != ACPI_TYPE_INTEGER) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	s->location = location_obj.integer.value;
-+
-+	source_obj = obj->package.elements[3];
-+	if (source_obj.type != ACPI_TYPE_INTEGER) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	s->source = source_obj.integer.value;
-+
-+	type_obj = obj->package.elements[4];
-+	if (type_obj.type != ACPI_TYPE_INTEGER) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	err = 0;
-+	s->type = type_obj.integer.value;
-+
-+out_free_obj:
-+	ACPI_FREE(obj);
-+	return err;
-+}
-+
-+static int asus_wmi_update_buffer(int source)
-+{
-+	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-+	u32 args[] = {source, 0};
-+
-+	return asus_wmi_call_method(ASUSWMI_METHODID_UPDATE_BUFFER, args, &output);
-+}
-+
-+static int asus_wmi_get_sensor_value(u8 index, long *value)
-+{
-+	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-+	u32 args[] = {index, 0};
-+	union acpi_object *obj;
-+	int err;
-+
-+	err = asus_wmi_call_method(ASUSWMI_METHODID_GET_VALUE, args, &output);
-+	if (err)
-+		return err;
-+
-+	obj = output.pointer;
-+	if (!obj)
-+		return -EIO;
-+
-+	if (obj->type != ACPI_TYPE_INTEGER) {
-+		err = -EIO;
-+		goto out_free_obj;
-+	}
-+
-+	err = 0;
-+	*value = obj->integer.value;
-+
-+out_free_obj:
-+	ACPI_FREE(obj);
-+	return err;
-+}
-+
-+static int asus_wmi_update_values_for_source(u8 source, struct asus_wmi_sensors *sensor_data)
-+{
-+	struct asus_wmi_sensor_info *sensor;
-+	long value = 0;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
-+		sensor = sensor_data->wmi.info_by_id[i];
-+		if (sensor && sensor->source == source) {
-+			ret = asus_wmi_get_sensor_value(sensor->id, &value);
-+			if (ret)
-+				return ret;
-+
-+			sensor->cached_value = value;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int asus_wmi_scale_sensor_value(u32 value, int data_type)
-+{
-+	/* FAN_RPM and WATER_FLOW don't need scaling */
-+	switch (data_type) {
-+	case VOLTAGE:
-+		/* value in microVolts */
-+		return DIV_ROUND_CLOSEST(value,  KILO);
-+	case TEMPERATURE_C:
-+		/* value in Celsius */
-+		return value * MILLIDEGREE_PER_DEGREE;
-+	case CURRENT:
-+		/* value in Amperes */
-+		return value * MILLI;
-+	}
-+	return value;
-+}
-+
-+static int asus_wmi_get_cached_value_or_update(const struct asus_wmi_sensor_info *sensor,
-+					       struct asus_wmi_sensors *sensor_data,
-+					       u32 *value)
-+{
-+	int ret = 0;
-+
-+	mutex_lock(&sensor_data->lock);
-+
-+	if (time_after(jiffies, sensor_data->wmi.source_last_updated[sensor->source] + HZ)) {
-+		ret = asus_wmi_update_buffer(sensor->source);
-+		if (ret)
-+			goto unlock;
-+
-+		ret = asus_wmi_update_values_for_source(sensor->source, sensor_data);
-+		if (ret)
-+			goto unlock;
-+
-+		sensor_data->wmi.source_last_updated[sensor->source] = jiffies;
-+	}
-+
-+	*value = sensor->cached_value;
-+
-+unlock:
-+	mutex_unlock(&sensor_data->lock);
-+
-+	return ret;
-+}
-+
-+/* Now follow the functions that implement the hwmon interface */
-+static int asus_wmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			       u32 attr, int channel, long *val)
-+{
-+	const struct asus_wmi_sensor_info *sensor;
-+	u32 value = 0;
-+	int ret;
-+
-+	struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-+
-+	sensor = *(sensor_data->wmi.info[type] + channel);
-+
-+	ret = asus_wmi_get_cached_value_or_update(sensor, sensor_data, &value);
-+	if (ret)
-+		return ret;
-+
-+	*val = asus_wmi_scale_sensor_value(value, sensor->data_type);
-+
-+	return ret;
-+}
-+
-+static int asus_wmi_hwmon_read_string(struct device *dev,
-+				      enum hwmon_sensor_types type, u32 attr,
-+				      int channel, const char **str)
-+{
-+	struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-+	const struct asus_wmi_sensor_info *sensor;
-+
-+	sensor = *(sensor_data->wmi.info[type] + channel);
-+	*str = sensor->name;
-+
-+	return 0;
-+}
-+
-+static umode_t asus_wmi_hwmon_is_visible(const void *drvdata,
-+					 enum hwmon_sensor_types type, u32 attr,
-+					 int channel)
-+{
-+	const struct asus_wmi_sensors *sensor_data = drvdata;
-+	const struct asus_wmi_sensor_info *sensor;
-+
-+	sensor = *(sensor_data->wmi.info[type] + channel);
-+	if (sensor)
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops asus_wmi_hwmon_ops = {
-+	.is_visible = asus_wmi_hwmon_is_visible,
-+	.read = asus_wmi_hwmon_read,
-+	.read_string = asus_wmi_hwmon_read_string,
-+};
-+
-+static struct hwmon_chip_info asus_wmi_chip_info = {
-+	.ops = &asus_wmi_hwmon_ops,
-+	.info = NULL,
-+};
-+
-+static int asus_wmi_configure_sensor_setup(struct device *dev,
-+					   struct asus_wmi_sensors *sensor_data)
-+{
-+	const struct hwmon_channel_info **ptr_asus_wmi_ci;
-+	struct hwmon_channel_info *asus_wmi_hwmon_chan;
-+	int nr_count[hwmon_max] = {}, nr_types = 0;
-+	struct asus_wmi_sensor_info *temp_sensor;
-+	const struct hwmon_chip_info *chip_info;
-+	enum hwmon_sensor_types type;
-+	struct device *hwdev;
-+	int i, idx;
-+	int err;
-+
-+	temp_sensor = devm_kcalloc(dev, 1, sizeof(*temp_sensor), GFP_KERNEL);
-+	if (!temp_sensor)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
-+		err = asus_wmi_sensor_info(i, temp_sensor);
-+		if (err)
-+			return err;
-+
-+		switch (temp_sensor->data_type) {
-+		case TEMPERATURE_C:
-+		case VOLTAGE:
-+		case CURRENT:
-+		case FAN_RPM:
-+		case WATER_FLOW:
-+			type = asus_data_types[temp_sensor->data_type];
-+			if (!nr_count[type])
-+				nr_types++;
-+			nr_count[type]++;
-+			break;
-+		}
-+	}
-+
-+	if (nr_count[hwmon_temp])
-+		nr_count[hwmon_chip]++, nr_types++;
-+
-+	asus_wmi_hwmon_chan = devm_kcalloc(dev, nr_types,
-+					   sizeof(*asus_wmi_hwmon_chan),
-+					   GFP_KERNEL);
-+	if (!asus_wmi_hwmon_chan)
-+		return -ENOMEM;
-+
-+	ptr_asus_wmi_ci = devm_kcalloc(dev, nr_types + 1,
-+				       sizeof(*ptr_asus_wmi_ci), GFP_KERNEL);
-+	if (!ptr_asus_wmi_ci)
-+		return -ENOMEM;
-+
-+	asus_wmi_chip_info.info = ptr_asus_wmi_ci;
-+	chip_info = &asus_wmi_chip_info;
-+
-+	sensor_data->wmi.info_by_id = devm_kcalloc(dev, sensor_data->wmi.sensor_count,
-+						   sizeof(*sensor_data->wmi.info_by_id),
-+						   GFP_KERNEL);
-+
-+	if (!sensor_data->wmi.info_by_id)
-+		return -ENOMEM;
-+
-+	for (type = 0; type < hwmon_max; type++) {
-+		if (!nr_count[type])
-+			continue;
-+
-+		err = asus_wmi_hwmon_add_chan_info(asus_wmi_hwmon_chan, dev,
-+						   nr_count[type], type,
-+						   hwmon_attributes[type]);
-+		if (err)
-+			return err;
-+
-+		*ptr_asus_wmi_ci++ = asus_wmi_hwmon_chan++;
-+
-+		sensor_data->wmi.info[type] = devm_kcalloc(dev,
-+							   nr_count[type],
-+							   sizeof(*sensor_data->wmi.info),
-+							   GFP_KERNEL);
-+		if (!sensor_data->wmi.info[type])
-+			return -ENOMEM;
-+	}
-+
-+	for (i = sensor_data->wmi.sensor_count - 1; i >= 0; i--) {
-+		temp_sensor = devm_kzalloc(dev, sizeof(*temp_sensor), GFP_KERNEL);
-+		if (!temp_sensor)
-+			return -ENOMEM;
-+
-+		err = asus_wmi_sensor_info(i, temp_sensor);
-+		if (err)
-+			continue;
-+
-+		switch (temp_sensor->data_type) {
-+		case TEMPERATURE_C:
-+		case VOLTAGE:
-+		case CURRENT:
-+		case FAN_RPM:
-+		case WATER_FLOW:
-+			type = asus_data_types[temp_sensor->data_type];
-+			idx = --nr_count[type];
-+			*(sensor_data->wmi.info[type] + idx) = temp_sensor;
-+			sensor_data->wmi.info_by_id[i] = temp_sensor;
-+			break;
-+		}
-+	}
-+
-+	dev_dbg(dev, "board has %d sensors",
-+		sensor_data->wmi.sensor_count);
-+
-+	hwdev = devm_hwmon_device_register_with_info(dev, "asus_wmi_sensors",
-+						     sensor_data, chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwdev);
-+}
-+
-+static int asus_wmi_probe(struct wmi_device *wdev, const void *context)
-+{
-+	struct asus_wmi_sensors *sensor_data;
-+	struct device *dev = &wdev->dev;
-+	u32 version = 0;
-+
-+	if (!dmi_check_system(asus_wmi_dmi_table))
-+		return -ENODEV;
-+
-+	sensor_data = devm_kzalloc(dev, sizeof(*sensor_data), GFP_KERNEL);
-+	if (!sensor_data)
-+		return -ENOMEM;
-+
-+	if (asus_wmi_get_version(&version))
-+		return -ENODEV;
-+
-+	if (asus_wmi_get_item_count(&sensor_data->wmi.sensor_count))
-+		return -ENODEV;
-+
-+	if (sensor_data->wmi.sensor_count  <= 0 || version < 2) {
-+		dev_info(dev, "version: %u with %d sensors is unsupported\n",
-+			 version, sensor_data->wmi.sensor_count);
-+
-+		return -ENODEV;
-+	}
-+
-+	mutex_init(&sensor_data->lock);
-+
-+	dev_set_drvdata(dev, sensor_data);
-+
-+	return asus_wmi_configure_sensor_setup(dev, sensor_data);
-+}
-+
-+static const struct wmi_device_id asus_wmi_id_table[] = {
-+	{ ASUSWMI_MONITORING_GUID, NULL },
-+	{ }
-+};
-+
-+static struct wmi_driver asus_sensors_wmi_driver = {
-+	.driver = {
-+		.name = "asus_wmi_sensors",
-+	},
-+	.id_table = asus_wmi_id_table,
-+	.probe = asus_wmi_probe,
-+};
-+module_wmi_driver(asus_sensors_wmi_driver);
-+
-+MODULE_AUTHOR("Ed Brindley <kernel@maidavale.org>");
-+MODULE_DESCRIPTION("Asus WMI Sensors Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.33.0
-
+>
+> > +                      INA238_SHUNT_VOLTAGE_LSB;
+> > +             regval = clamp_val(regval, S16_MIN, S16_MAX);
+> > +
+> > +             switch (attr) {
+> > +             case hwmon_in_max:
+> > +                     return regmap_write(data->regmap,
+> > +                                         INA238_SHUNT_OVER_VOLTAGE, regval);
+> > +             case hwmon_in_min:
+> > +                     return regmap_write(data->regmap,
+> > +                                         INA238_SHUNT_UNDER_VOLTAGE, regval);
+> > +             default:
+> > +                     return -EOPNOTSUPP;
+> > +             }
+> > +     case 1:
+> > +             /* signed value, positive values only. Clamp to max 102.396 V */
+> > +             regval = clamp_val(val, 0, 102396);
+> > +             regval = (regval * 1000) / INA238_BUS_VOLTAGE_LSB;
+> > +             regval = clamp_val(regval, 0, S16_MAX);
+> > +
+> > +             switch (attr) {
+> > +             case hwmon_in_max:
+> > +                     return regmap_write(data->regmap,
+> > +                                         INA238_BUS_OVER_VOLTAGE, regval);
+> > +             case hwmon_in_min:
+> > +                     return regmap_write(data->regmap,
+> > +                                         INA238_BUS_UNDER_VOLTAGE, regval);
+> > +             default:
+> > +                     return -EOPNOTSUPP;
+> > +             }
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static int ina238_read_current(struct device *dev, u32 attr, long *val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     int regval;
+> > +     int err;
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_curr_input:
+> > +             err = regmap_read(data->regmap, INA238_CURRENT, &regval);
+> > +             if (err < 0)
+> > +                     return err;
+> > +
+> > +             /* Signed register, fixed 1mA current lsb. result in mA */
+> > +             *val = div_s64((s16)regval * INA238_FIXED_SHUNT * data->gain,
+> > +                            data->rshunt * 4);
+> > +             break;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ina238_read_power(struct device *dev, u32 attr, long *val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     long long power;
+> > +     int regval;
+> > +     int err;
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_power_input:
+> > +             err = ina238_read_reg24(data->client, INA238_POWER, &regval);
+> > +             if (err)
+> > +                     return err;
+> > +
+> > +             /* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
+> > +             power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *
+> > +                             data->gain, 20 * data->rshunt);
+> > +             /* Clamp value to maximum value of long */
+> > +             *val = clamp_val(power, 0, LONG_MAX);
+> > +             break;
+> > +     case hwmon_power_max:
+> > +             err = regmap_read(data->regmap, INA238_POWER_LIMIT, &regval);
+> > +             if (err)
+> > +                     return err;
+> > +
+> > +             /*
+> > +              * Truncated 24-bit compare register, lower 8-bits are
+> > +              * truncated. Same conversion to/from uW as POWER register.
+> > +              */
+> > +             power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT *
+> > +                            data->gain, 20 * data->rshunt);
+> > +             /* Clamp value to maximum value of long */
+> > +             *val = clamp_val(power, 0, LONG_MAX);
+> > +             break;
+> > +     case hwmon_power_max_alarm:
+> > +             err = regmap_read(data->regmap, INA238_DIAG_ALERT, &regval);
+> > +             if (err)
+> > +                     return err;
+> > +
+> > +             *val = !!(regval & INA238_DIAG_ALERT_POL);
+> > +             break;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ina238_write_power(struct device *dev, u32 attr, long val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     long regval;
+> > +
+> > +     if (attr != hwmon_power_max)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     /*
+> > +      * Unsigned postive values. Compared against the 24-bit power register,
+> > +      * lower 8-bits are truncated. Same conversion to/from uW as POWER
+> > +      * register.
+> > +      */
+> > +     regval = clamp_val(val, 0, LONG_MAX);
+> > +     regval = div_u64(val * 20ULL * data->rshunt,
+> > +                      1000ULL * INA238_FIXED_SHUNT * data->gain);
+> > +     regval = clamp_val(regval >> 8, 0, U16_MAX);
+> > +
+> > +     return regmap_write(data->regmap, INA238_POWER_LIMIT, regval);
+> > +}
+> > +
+> > +static int ina238_read_temp(struct device *dev, u32 attr, long *val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     int regval;
+> > +     int err;
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_temp_input:
+> > +             err = regmap_read(data->regmap, INA238_DIE_TEMP, &regval);
+> > +             if (err)
+> > +                     return err;
+> > +
+> > +             /* Signed, bits 15-4 of register, result in mC */
+> > +             *val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
+> > +             break;
+> > +     case hwmon_temp_max:
+> > +             err = regmap_read(data->regmap, INA238_TEMP_LIMIT, &regval);
+> > +             if (err)
+> > +                     return err;
+> > +
+> > +             /* Signed, bits 15-4 of register, result in mC */
+> > +             *val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
+> > +             break;
+> > +     case hwmon_temp_max_alarm:
+> > +             err = regmap_read(data->regmap, INA238_DIAG_ALERT, &regval);
+> > +             if (err)
+> > +                     return err;
+> > +
+> > +             *val = !!(regval & INA238_DIAG_ALERT_TMPOL);
+> > +             break;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ina238_write_temp(struct device *dev, u32 attr, long val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     int regval;
+> > +
+> > +     if (attr != hwmon_temp_max)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     /* Signed, bits 15-4 of register */
+> > +     regval = (val / INA238_DIE_TEMP_LSB) << 4;
+> > +     regval = clamp_val(regval, S16_MIN, S16_MAX) & 0xfff0;
+> > +
+> > +     return regmap_write(data->regmap, INA238_TEMP_LIMIT, regval);
+> > +}
+> > +
+> > +static int ina238_read(struct device *dev, enum hwmon_sensor_types type,
+> > +                    u32 attr, int channel, long *val)
+> > +{
+> > +     switch (type) {
+> > +     case hwmon_in:
+> > +             return ina238_read_in(dev, attr, channel, val);
+> > +     case hwmon_curr:
+> > +             return ina238_read_current(dev, attr, val);
+> > +     case hwmon_power:
+> > +             return ina238_read_power(dev, attr, val);
+> > +     case hwmon_temp:
+> > +             return ina238_read_temp(dev, attr, val);
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +     return 0;
+> > +}
+> > +
+> > +static int ina238_write(struct device *dev, enum hwmon_sensor_types type,
+> > +                    u32 attr, int channel, long val)
+> > +{
+> > +     struct ina238_data *data = dev_get_drvdata(dev);
+> > +     int err;
+> > +
+> > +     mutex_lock(&data->config_lock);
+> > +
+> > +     switch (type) {
+> > +     case hwmon_in:
+> > +             err = ina238_write_in(dev, attr, channel, val);
+> > +             break;
+> > +     case hwmon_power:
+> > +             err = ina238_write_power(dev, attr, val);
+> > +             break;
+> > +     case hwmon_temp:
+> > +             err = ina238_write_temp(dev, attr, val);
+> > +             break;
+> > +     default:
+> > +             err = -EOPNOTSUPP;
+> > +             break;
+> > +     }
+> > +
+> > +     mutex_unlock(&data->config_lock);
+> > +     return err;
+> > +}
+> > +
+> > +static umode_t ina238_is_visible(const void *drvdata,
+> > +                              enum hwmon_sensor_types type,
+> > +                              u32 attr, int channel)
+> > +{
+> > +     switch (type) {
+> > +     case hwmon_in:
+> > +             switch (attr) {
+> > +             case hwmon_in_input:
+> > +             case hwmon_in_max_alarm:
+> > +             case hwmon_in_min_alarm:
+> > +                     return 0444;
+> > +             case hwmon_in_max:
+> > +             case hwmon_in_min:
+> > +                     return 0644;
+> > +             default:
+> > +                     return 0;
+> > +             }
+> > +     case hwmon_curr:
+> > +             switch (attr) {
+> > +             case hwmon_curr_input:
+> > +                     return 0444;
+> > +             default:
+> > +                     return 0;
+> > +             }
+> > +     case hwmon_power:
+> > +             switch (attr) {
+> > +             case hwmon_power_input:
+> > +             case hwmon_power_max_alarm:
+> > +                     return 0444;
+> > +             case hwmon_power_max:
+> > +                     return 0644;
+> > +             default:
+> > +                     return 0;
+> > +             }
+> > +     case hwmon_temp:
+> > +             switch (attr) {
+> > +             case hwmon_temp_input:
+> > +             case hwmon_temp_max_alarm:
+> > +                     return 0444;
+> > +             case hwmon_temp_max:
+> > +                     return 0644;
+> > +             default:
+> > +                     return 0;
+> > +             }
+> > +     default:
+> > +             return 0;
+> > +     }
+> > +}
+> > +
+> > +#define INA238_HWMON_IN_CONFIG (HWMON_I_INPUT | \
+> > +                             HWMON_I_MAX | HWMON_I_MAX_ALARM | \
+> > +                             HWMON_I_MIN | HWMON_I_MIN_ALARM)
+> > +
+> > +static const struct hwmon_channel_info *ina238_info[] = {
+> > +     HWMON_CHANNEL_INFO(in,
+> > +                        /* 0: shunt voltage */
+> > +                        INA238_HWMON_IN_CONFIG,
+> > +                        /* 1: bus voltage */
+> > +                        INA238_HWMON_IN_CONFIG),
+> > +     HWMON_CHANNEL_INFO(curr,
+> > +                        /* 0: current through shunt */
+> > +                        HWMON_C_INPUT),
+> > +     HWMON_CHANNEL_INFO(power,
+> > +                        /* 0: power */
+> > +                        HWMON_P_INPUT | HWMON_P_MAX | HWMON_P_MAX_ALARM),
+> > +     HWMON_CHANNEL_INFO(temp,
+> > +                        /* 0: die temperature */
+> > +                        HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
+> > +     NULL
+> > +};
+> > +
+> > +static const struct hwmon_ops ina238_hwmon_ops = {
+> > +     .is_visible = ina238_is_visible,
+> > +     .read = ina238_read,
+> > +     .write = ina238_write,
+> > +};
+> > +
+> > +static const struct hwmon_chip_info ina238_chip_info = {
+> > +     .ops = &ina238_hwmon_ops,
+> > +     .info = ina238_info,
+> > +};
+> > +
+> > +static int ina238_probe(struct i2c_client *client)
+> > +{
+> > +     struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
+> > +     struct device *dev = &client->dev;
+> > +     struct device *hwmon_dev;
+> > +     struct ina238_data *data;
+> > +     int config;
+> > +     int ret;
+> > +
+> > +     data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +
+> > +     data->client = client;
+> > +     mutex_init(&data->config_lock);
+> > +
+> > +     data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
+> > +     if (IS_ERR(data->regmap)) {
+> > +             dev_err(dev, "failed to allocate register map\n");
+> > +             return PTR_ERR(data->regmap);
+> > +     }
+> > +
+> > +     /* load shunt value */
+> > +     data->rshunt = INA238_RSHUNT_DEFAULT;
+> > +     if (device_property_read_u32(dev, "shunt-resistor", &data->rshunt) < 0 && pdata)
+> > +             data->rshunt = pdata->shunt_uohms;
+> > +     if (data->rshunt == 0) {
+> > +             dev_err(dev, "invalid shunt resister value %u\n", data->rshunt);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     /* load shunt gain value */
+> > +     if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
+> > +             data->gain = 4; /* Default of ADCRANGE = 0 */
+> > +     if (data->gain != 1 && data->gain != 4) {
+> > +             dev_err(dev, "invalid shunt gain value %u\n", data->gain);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     /* Setup CONFIG register */
+> > +     config = INA238_CONFIG_DEFAULT;
+> > +     if (data->gain == 1)
+> > +             config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
+> > +     ret = regmap_write(data->regmap, INA238_CONFIG, config);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "error configuring the device: %d\n", ret);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     /* Setup ADC_CONFIG register */
+> > +     ret = regmap_write(data->regmap, INA238_ADC_CONFIG,
+> > +                        INA238_ADC_CONFIG_DEFAULT);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "error configuring the device: %d\n", ret);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     /* Setup SHUNT_CALIBRATION register with fixed value */
+> > +     ret = regmap_write(data->regmap, INA238_SHUNT_CALIBRATION,
+> > +                        INA238_CALIBRATION_VALUE);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "error configuring the device: %d\n", ret);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     /* Setup alert/alarm configuration */
+> > +     ret = regmap_write(data->regmap, INA238_DIAG_ALERT,
+> > +                        INA238_DIAG_ALERT_DEFAULT);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "error configuring the device: %d\n", ret);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
+> > +                                                      &ina238_chip_info,
+> > +                                                      NULL);
+> > +     if (IS_ERR(hwmon_dev))
+> > +             return PTR_ERR(hwmon_dev);
+> > +
+> > +     dev_info(dev, "power monitor %s (Rshunt = %u uOhm, gain = %u)\n",
+> > +              client->name, data->rshunt, data->gain);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct i2c_device_id ina238_id[] = {
+> > +     { "ina238", 0 },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, ina238_id);
+> > +
+> > +static const struct of_device_id __maybe_unused ina238_of_match[] = {
+> > +     { .compatible = "ti,ina238" },
+> > +     { },
+> > +};
+> > +MODULE_DEVICE_TABLE(of, ina238_of_match);
+> > +
+> > +static struct i2c_driver ina238_driver = {
+> > +     .class          = I2C_CLASS_HWMON,
+> > +     .driver = {
+> > +             .name   = "ina238",
+> > +             .of_match_table = of_match_ptr(ina238_of_match),
+> > +     },
+> > +     .probe_new      = ina238_probe,
+> > +     .id_table       = ina238_id,
+> > +};
+> > +
+> > +module_i2c_driver(ina238_driver);
+> > +
+> > +MODULE_AUTHOR("Nathan Rossi <nathan.rossi@digi.com>");
+> > +MODULE_DESCRIPTION("ina238 driver");
+> > +MODULE_LICENSE("GPL");
+> > ---
+> > 2.33.0
+> >
+>
