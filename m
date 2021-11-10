@@ -2,288 +2,441 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E11C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 15:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E355BC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 23:23:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9EBF960FE3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 15:55:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7B346112E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 23:23:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbhKJP6Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Nov 2021 10:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbhKJP6X (ORCPT
+        id S233936AbhKJX0h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Nov 2021 18:26:37 -0500
+Received: from thorn.bewilderbeest.net ([71.19.156.171]:59587 "EHLO
+        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhKJX0g (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Nov 2021 10:58:23 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC80C061764;
-        Wed, 10 Nov 2021 07:55:36 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id h12-20020a056830034c00b0055c8458126fso4642976ote.0;
-        Wed, 10 Nov 2021 07:55:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=33y2K1n4+a77pWOR3n6HeGOY3n+xOhILC5MDJChRPQs=;
-        b=lNx1dXg/KoSTJEUrthhuuymEFJiI4KHW5wtQZ5wifVxeU5YV7hD/VMvKQ8u1f3nxp1
-         UD1E0bCOK2aWK3ld6GztgOgLAli498Zgb0mHDrqCwwoW0DNvX/U9s430uxlshlG0mgHD
-         WgX50vixrzGZXvZNaXnPrYpk1NXfTlAjEne5R6jA7Jtxxs6TRXPinKmtanj4jhQKdpjK
-         s+Li88Fuu5avu+vraUlUifA/EjWlQ+xnuYLuXWiRY016aurqXGBjwMRws3GMYy8hF/Be
-         LesgolfkxJvxgYDnk+NUAGGBKkGAso7/IXOcRMFiMTRaCJ+hQtbPcTXyWkckZyCZs56Z
-         tTCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=33y2K1n4+a77pWOR3n6HeGOY3n+xOhILC5MDJChRPQs=;
-        b=DRljFTFmimh0wAXRgGSXuhATIkY/WVJIvyzFZoodc6YR/1JzK+LDlg4p4VU8ACY2wg
-         AGoxUK9lkP3lCibNWcdJLarJv0iLE/tQDDJUjArUPISLj6Wss1MDkyab2h8GMUVBxSTz
-         X3hxJ8HkGhjeO87XR+fnp6wATeuGVVCwbriosCn5GfzFRFGEoUdcC7050ovhTf1bpZzP
-         +43bhr2QCAtTIIhGuTGH+6pEI0ekz+4FNAX+j7qDjy96RTX4nm1PXfMXtliQik3NUe9o
-         KgzAnqNizxcWVFl3hDBaQ0fusLeK3ujebWZGsWuSzI3TTJy6XX9AOtJAcVleT0kH0D/a
-         tfsA==
-X-Gm-Message-State: AOAM530lwKkT9Br8ktPaQ6Ig//4qRQXO3sngmjGij1JrQ+anhnQ0YS6+
-        RKYXxB9cWZI0TtQQITIYC00=
-X-Google-Smtp-Source: ABdhPJyTsvfV3nJgDRLyuR7Gv6RwKoDLsSEonATegNm7ehO7yJyI+hv3yWf6/cLlDC08wXUuK+rWIA==
-X-Received: by 2002:a05:6830:236b:: with SMTP id r11mr207666oth.145.1636559734819;
-        Wed, 10 Nov 2021 07:55:34 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i15sm45851otu.67.2021.11.10.07.55.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 07:55:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 10 Nov 2021 07:55:30 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     lee.jones@linaro.org, broonie@kernel.org, kernel@pengutronix.de,
-        lgirdwood@gmail.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        s.hauer@pengutronix.de, linux-hwmon@vger.kernel.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org, linux-imx@nxp.com,
-        alistair23@gmail.com, andreas@kemnade.info, shawnguo@kernel.org
-Subject: Re: [PATCH v15 5/8] hwmon: sy7636a: Add temperature driver for
- sy7636a
-Message-ID: <20211110155530.GA2341709@roeck-us.net>
-References: <20211110122948.188683-1-alistair@alistair23.me>
- <20211110122948.188683-6-alistair@alistair23.me>
+        Wed, 10 Nov 2021 18:26:36 -0500
+X-Greylist: delayed 515 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Nov 2021 18:26:36 EST
+Received: from hatter.bewilderbeest.net (97-113-240-219.tukw.qwest.net [97.113.240.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 008D0285;
+        Wed, 10 Nov 2021 15:15:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1636586112;
+        bh=YCFrwAWMCFTzEJ+WgWNvoPzKaV2QDCkeC6kIGYi+3jw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JS0iBcF3l7Kt0Dhf6ZcEKa1fGFkjFwwC4PazxjjYs4I2KJ3UnYQhjfFfi27dZ6oYa
+         TMhpFIWGeh5YLd8Urvy6WRTHsKLctrVMXs9U7REeZhGEizhwDV9NtCyw9yHrueoGZG
+         SpeWGEVLcawPCbyD2kZduxVJehGOpgv3kfLNjPAM=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Bernhard Seibold <mail@bernhard-seibold.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6775) add support for TSI temperature registers
+Date:   Wed, 10 Nov 2021 15:14:39 -0800
+Message-Id: <20211110231440.17309-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110122948.188683-6-alistair@alistair23.me>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 10:29:45PM +1000, Alistair Francis wrote:
-> This is a multi-function device to interface with the sy7636a
-> EPD PMIC chip from Silergy.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->  Documentation/hwmon/index.rst         |   1 +
->  Documentation/hwmon/sy7636a-hwmon.rst |  24 ++++++
->  drivers/hwmon/Kconfig                 |   9 +++
->  drivers/hwmon/Makefile                |   1 +
->  drivers/hwmon/sy7636a-hwmon.c         | 108 ++++++++++++++++++++++++++
->  5 files changed, 143 insertions(+)
->  create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst
->  create mode 100644 drivers/hwmon/sy7636a-hwmon.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 7046bf1870d9..a887308850cd 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -180,6 +180,7 @@ Hardware Monitoring Kernel Drivers
->     smsc47m1
->     sparx5-temp
->     stpddc60
-> +   sy7636a-hwmon
->     tc654
->     tc74
->     thmc50
-> diff --git a/Documentation/hwmon/sy7636a-hwmon.rst b/Documentation/hwmon/sy7636a-hwmon.rst
-> new file mode 100644
-> index 000000000000..6b3e36d028dd
-> --- /dev/null
-> +++ b/Documentation/hwmon/sy7636a-hwmon.rst
-> @@ -0,0 +1,24 @@
-> +Kernel driver sy7636a-hwmon
-> +=========================
-> +
-> +Supported chips:
-> +
-> + * Silergy SY7636A PMIC
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver adds hardware temperature reading support for
-> +the Silergy SY7636A PMIC.
-> +
-> +The following sensors are supported
-> +
-> +  * Temperature
-> +      - SoC on-die temperature in milli-degree C
-> +
-> +sysfs-Interface
-> +---------------
-> +
-> +temp0_input
-> +	- SoC on-die temperature (milli-degree C)
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 64bd3dfba2c4..3139a286c35a 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1662,6 +1662,15 @@ config SENSORS_SIS5595
->  	  This driver can also be built as a module. If so, the module
->  	  will be called sis5595.
->  
-> +config SENSORS_SY7636A
-> +	tristate "Silergy SY7636A"
-> +	help
-> +	  If you say yes here you get support for the thermistor readout of
-> +	  the Silergy SY7636A PMIC.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called sy7636a-hwmon.
-> +
->  config SENSORS_DME1737
->  	tristate "SMSC DME1737, SCH311x and compatibles"
->  	depends on I2C && !PPC
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index baee6a8d4dd1..8f8da52098d1 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -182,6 +182,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
->  obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
->  obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
->  obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
-> +obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
->  obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
->  obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
->  obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
-> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
-> new file mode 100644
-> index 000000000000..84ceaae3a404
-> --- /dev/null
-> +++ b/drivers/hwmon/sy7636a-hwmon.c
-> @@ -0,0 +1,108 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Functions to access SY3686A power management chip temperature
-> + *
-> + * Copyright (C) 2021 reMarkable AS - http://www.remarkable.com/
-> + *
-> + * Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
-> + *          Alistair Francis <alistair@alistair23.me>
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/machine.h>
-> +
-> +#include <linux/mfd/sy7636a.h>
-> +
-> +static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long *temp)
-> +{
-> +	struct regmap *regmap = dev_get_drvdata(dev);
-> +	int ret, reg_val;
-> +
-> +	ret = regmap_read(regmap,
-> +			SY7636A_REG_TERMISTOR_READOUT, &reg_val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*temp = reg_val * 1000;
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t sy7636a_is_visible(const void *data,
-> +				   enum hwmon_sensor_types type,
-> +				   u32 attr, int channel)
-> +{
-> +	if (type != hwmon_temp)
-> +		return 0;
-> +
-> +	if (attr != hwmon_temp_input)
-> +		return 0;
-> +
-> +	return 0444;
-> +}
-> +
-> +static const struct hwmon_ops sy7636a_hwmon_ops = {
-> +	.is_visible = sy7636a_is_visible,
-> +	.read = sy7636a_read,
-> +};
-> +
-> +static const struct hwmon_channel_info *sy7636a_info[] = {
-> +	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info sy7636a_chip_info = {
-> +	.ops = &sy7636a_hwmon_ops,
-> +	.info = sy7636a_info,
-> +};
-> +
-> +static int sy7636a_sensor_probe(struct platform_device *pdev)
-> +{
-> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	struct regulator *regulator;
-> +	struct device *hwmon_dev;
-> +	int err;
-> +
-> +	if (!regmap)
-> +		return -EPROBE_DEFER;
-> +
-> +	regulator = devm_regulator_get(&pdev->dev, "vcom");
-> +	if (IS_ERR(regulator)) {
-> +		return PTR_ERR(regulator);
-> +	}
-> +
-> +	err = regulator_enable(regulator);
-> +	if (err) {
-> +		regulator_put(regulator);
+These registers report CPU temperatures (and, depending on the system,
+sometimes chipset temperatures) via the TSI interface on AMD systems.
+They're distinct from most of the other Super-IO temperature readings
+(CPUTIN, SYSTIN, etc.) in that they're not a selectable source for
+monitoring and are in a different (higher resolution) format, but can
+still provide useful temperature data.
 
-Is this needed ? I would have assumed that the devm_ function
-above would ensure that the put is handled automatically.
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Tested-by: Renze Nicolai <renze@rnplus.nl>
+---
 
-Guenter
+This patch has been tested on NCT6779 and NCT6798[1] hardware on
+(respectively) ASRock Rack ROMED8HM3 and X570D4U boards, and seems to
+work as expected; the implementation for the other chips supported by
+the driver is purely based on the datasheets and has not been tested
+(for lack of available hardware).
 
-> +		return err;
-> +	}
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
-> +			"sy7636a_temperature", regmap, &sy7636a_chip_info, NULL);
-> +
-> +	if (IS_ERR(hwmon_dev)) {
-> +		err = PTR_ERR(hwmon_dev);
-> +		dev_err(&pdev->dev, "Unable to register hwmon device, returned %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver sy7636a_sensor_driver = {
-> +	.probe = sy7636a_sensor_probe,
-> +	.driver = {
-> +		.name = "sy7636a-temperature",
-> +	},
-> +};
-> +module_platform_driver(sy7636a_sensor_driver);
-> +
-> +MODULE_DESCRIPTION("SY7636A sensor driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.31.1
-> 
+[1] Or at least, its chip ID registers identify it as an NCT6798 and
+it seems to behave consistently with that, though it's actually
+physically labeled as an NCT6796.
+
+ drivers/hwmon/nct6775.c | 136 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 130 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 93dca471972e..0d8624756cb3 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -308,6 +308,7 @@ static void superio_exit(struct nct6775_sio_data *sio_data)
+ 
+ #define NUM_TEMP	10	/* Max number of temp attribute sets w/ limits*/
+ #define NUM_TEMP_FIXED	6	/* Max number of fixed temp attribute sets */
++#define NUM_TSI_TEMP	8	/* Max number of TSI temp register pairs */
+ 
+ #define NUM_REG_ALARM	7	/* Max number of alarm registers */
+ #define NUM_REG_BEEP	5	/* Max number of beep registers */
+@@ -498,6 +499,8 @@ static const u16 NCT6775_REG_TEMP_CRIT[32] = {
+ 	[11] = 0xa07
+ };
+ 
++static const u16 NCT6775_REG_TSI_TEMP[] = { 0x669 };
++
+ /* NCT6776 specific data */
+ 
+ /* STEP_UP_TIME and STEP_DOWN_TIME regs are swapped for all chips but NCT6775 */
+@@ -581,6 +584,9 @@ static const u16 NCT6776_REG_TEMP_CRIT[32] = {
+ 	[12] = 0x70a,
+ };
+ 
++static const u16 NCT6776_REG_TSI_TEMP[] = {
++	0x409, 0x40b, 0x40d, 0x40f, 0x411, 0x413, 0x415, 0x417 };
++
+ /* NCT6779 specific data */
+ 
+ static const u16 NCT6779_REG_IN[] = {
+@@ -864,6 +870,8 @@ static const char *const nct6796_temp_label[] = {
+ #define NCT6796_TEMP_MASK	0xbfff0ffe
+ #define NCT6796_VIRT_TEMP_MASK	0x80000c00
+ 
++static const u16 NCT6796_REG_TSI_TEMP[] = { 0x409, 0x40b };
++
+ static const char *const nct6798_temp_label[] = {
+ 	"",
+ 	"SYSTIN",
+@@ -1005,6 +1013,8 @@ static const u16 NCT6106_REG_TEMP_CRIT[32] = {
+ 	[12] = 0x205,
+ };
+ 
++static const u16 NCT6106_REG_TSI_TEMP[] = { 0x59, 0x5b, 0x5d, 0x5f, 0x61, 0x63, 0x65, 0x67 };
++
+ /* NCT6112D/NCT6114D/NCT6116D specific data */
+ 
+ static const u16 NCT6116_REG_FAN[] = { 0x20, 0x22, 0x24, 0x26, 0x28 };
+@@ -1069,6 +1079,8 @@ static const s8 NCT6116_BEEP_BITS[] = {
+ 	34, -1				/* intrusion0, intrusion1 */
+ };
+ 
++static const u16 NCT6116_REG_TSI_TEMP[] = { 0x59, 0x5b };
++
+ static enum pwm_enable reg_to_pwm_enable(int pwm, int mode)
+ {
+ 	if (mode == 0 && pwm == 255)
+@@ -1169,6 +1181,12 @@ static inline u8 in_to_reg(u32 val, u8 nr)
+ 	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale_in[nr]), 0, 255);
+ }
+ 
++/* TSI temperatures are in 8.3 format */
++static inline unsigned int tsi_temp_from_reg(unsigned int reg)
++{
++	return (reg >> 5) * 125;
++}
++
+ /*
+  * Data structures and manipulation thereof
+  */
+@@ -1179,7 +1197,7 @@ struct nct6775_data {
+ 	enum kinds kind;
+ 	const char *name;
+ 
+-	const struct attribute_group *groups[6];
++	const struct attribute_group *groups[7];
+ 
+ 	u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
+ 				    * 3=temp_crit, 4=temp_lcrit
+@@ -1240,6 +1258,8 @@ struct nct6775_data {
+ 	const u16 *REG_ALARM;
+ 	const u16 *REG_BEEP;
+ 
++	const u16 *REG_TSI_TEMP;
++
+ 	unsigned int (*fan_from_reg)(u16 reg, unsigned int divreg);
+ 	unsigned int (*fan_from_reg_min)(u16 reg, unsigned int divreg);
+ 
+@@ -1267,6 +1287,7 @@ struct nct6775_data {
+ 	s8 temp_offset[NUM_TEMP_FIXED];
+ 	s16 temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
+ 				* 3=temp_crit, 4=temp_lcrit */
++	s16 tsi_temp[NUM_TSI_TEMP];
+ 	u64 alarms;
+ 	u64 beeps;
+ 
+@@ -1315,6 +1336,7 @@ struct nct6775_data {
+ 
+ 	u16 have_temp;
+ 	u16 have_temp_fixed;
++	u16 have_tsi_temp;
+ 	u16 have_in;
+ 
+ 	/* Remember extra register values over suspend/resume */
+@@ -1461,16 +1483,20 @@ nct6775_create_attr_group(struct device *dev,
+ 
+ static bool is_word_sized(struct nct6775_data *data, u16 reg)
+ {
++	int num_tsi_regs;
++
+ 	switch (data->kind) {
+ 	case nct6106:
+ 		return reg == 0x20 || reg == 0x22 || reg == 0x24 ||
++		  (reg >= 0x59 && reg <= 0x69 && (reg & 1)) ||
+ 		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 ||
+ 		  reg == 0x111 || reg == 0x121 || reg == 0x131;
+ 	case nct6116:
+ 		return reg == 0x20 || reg == 0x22 || reg == 0x24 ||
+-		  reg == 0x26 || reg == 0x28 || reg == 0xe0 || reg == 0xe2 ||
+-		  reg == 0xe4 || reg == 0xe6 || reg == 0xe8 || reg == 0x111 ||
+-		  reg == 0x121 || reg == 0x131 || reg == 0x191 || reg == 0x1a1;
++		  reg == 0x26 || reg == 0x28 || reg == 0x59 || reg == 0x5b ||
++		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 || reg == 0xe6 ||
++		  reg == 0xe8 || reg == 0x111 || reg == 0x121 || reg == 0x131 ||
++		  reg == 0x191 || reg == 0x1a1;
+ 	case nct6775:
+ 		return (((reg & 0xff00) == 0x100 ||
+ 		    (reg & 0xff00) == 0x200) &&
+@@ -1479,7 +1505,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
+ 		    (reg & 0x00ff) == 0x55)) ||
+ 		  (reg & 0xfff0) == 0x630 ||
+ 		  reg == 0x640 || reg == 0x642 ||
+-		  reg == 0x662 ||
++		  reg == 0x662 || reg == 0x669 ||
+ 		  ((reg & 0xfff0) == 0x650 && (reg & 0x000f) >= 0x06) ||
+ 		  reg == 0x73 || reg == 0x75 || reg == 0x77;
+ 	case nct6776:
+@@ -1490,6 +1516,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
+ 		    (reg & 0x00ff) == 0x55)) ||
+ 		  (reg & 0xfff0) == 0x630 ||
+ 		  reg == 0x402 ||
++		  (reg >= 0x409 && reg <= 0x419 && (reg & 1)) ||
+ 		  reg == 0x640 || reg == 0x642 ||
+ 		  ((reg & 0xfff0) == 0x650 && (reg & 0x000f) >= 0x06) ||
+ 		  reg == 0x73 || reg == 0x75 || reg == 0x77;
+@@ -1497,13 +1524,18 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
+ 	case nct6791:
+ 	case nct6792:
+ 	case nct6793:
++		num_tsi_regs = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
++		goto check;
+ 	case nct6795:
+ 	case nct6796:
+ 	case nct6797:
+ 	case nct6798:
++		num_tsi_regs = ARRAY_SIZE(NCT6796_REG_TSI_TEMP);
++check:
+ 		return reg == 0x150 || reg == 0x153 || reg == 0x155 ||
+ 		  (reg & 0xfff0) == 0x4c0 ||
+ 		  reg == 0x402 ||
++		  (reg >= 0x409 && reg < (0x409 + num_tsi_regs * 2) && (reg & 1)) ||
+ 		  reg == 0x63a || reg == 0x63c || reg == 0x63e ||
+ 		  reg == 0x640 || reg == 0x642 || reg == 0x64a ||
+ 		  reg == 0x64c ||
+@@ -1987,6 +2019,12 @@ static struct nct6775_data *nct6775_update_device(struct device *dev)
+ 								   data->REG_TEMP_OFFSET[i]);
+ 		}
+ 
++		for (i = 0; i < NUM_TSI_TEMP; i++) {
++			if (!(data->have_tsi_temp & BIT(i)))
++				continue;
++			data->tsi_temp[i] = data->read_value(data, data->REG_TSI_TEMP[i]);
++		}
++
+ 		data->alarms = 0;
+ 		for (i = 0; i < NUM_REG_ALARM; i++) {
+ 			u8 alarm;
+@@ -2670,6 +2708,44 @@ static const struct sensor_template_group nct6775_temp_template_group = {
+ 	.base = 1,
+ };
+ 
++static ssize_t show_tsi_temp(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct nct6775_data *data = nct6775_update_device(dev);
++	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
++
++	return sysfs_emit(buf, "%u\n", tsi_temp_from_reg(data->tsi_temp[sattr->index]));
++}
++
++static ssize_t show_tsi_temp_label(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
++
++	return sysfs_emit(buf, "TSI%d_TEMP\n", sattr->index);
++}
++
++SENSOR_TEMPLATE(tsi_temp_input, "temp%d_input", 0444, show_tsi_temp, NULL, 0);
++SENSOR_TEMPLATE(tsi_temp_label, "temp%d_label", 0444, show_tsi_temp_label, NULL, 0);
++
++static umode_t nct6775_tsi_temp_is_visible(struct kobject *kobj, struct attribute *attr,
++					       int index)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct nct6775_data *data = dev_get_drvdata(dev);
++	int temp = index / 2;
++
++	return (data->have_tsi_temp & BIT(temp)) ? attr->mode : 0;
++}
++
++/*
++ * The index calculation in nct6775_tsi_temp_is_visible() must be kept in
++ * sync with the size of this array.
++ */
++static struct sensor_device_template *nct6775_tsi_temp_template[] = {
++	&sensor_dev_template_tsi_temp_input,
++	&sensor_dev_template_tsi_temp_label,
++	NULL
++};
++
+ static ssize_t
+ show_pwm_mode(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+@@ -3950,10 +4026,11 @@ static int nct6775_probe(struct platform_device *pdev)
+ 	const u16 *reg_temp, *reg_temp_over, *reg_temp_hyst, *reg_temp_config;
+ 	const u16 *reg_temp_mon, *reg_temp_alternate, *reg_temp_crit;
+ 	const u16 *reg_temp_crit_l = NULL, *reg_temp_crit_h = NULL;
+-	int num_reg_temp, num_reg_temp_mon;
++	int num_reg_temp, num_reg_temp_mon, num_reg_tsi_temp;
+ 	u8 cr2a;
+ 	struct attribute_group *group;
+ 	struct device *hwmon_dev;
++	struct sensor_template_group tsi_temp_tg;
+ 	int num_attr_groups = 0;
+ 
+ 	if (sio_data->access == access_direct) {
+@@ -4045,11 +4122,13 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->ALARM_BITS = NCT6106_ALARM_BITS;
+ 		data->REG_BEEP = NCT6106_REG_BEEP;
+ 		data->BEEP_BITS = NCT6106_BEEP_BITS;
++		data->REG_TSI_TEMP = NCT6106_REG_TSI_TEMP;
+ 
+ 		reg_temp = NCT6106_REG_TEMP;
+ 		reg_temp_mon = NCT6106_REG_TEMP_MON;
+ 		num_reg_temp = ARRAY_SIZE(NCT6106_REG_TEMP);
+ 		num_reg_temp_mon = ARRAY_SIZE(NCT6106_REG_TEMP_MON);
++		num_reg_tsi_temp = ARRAY_SIZE(NCT6106_REG_TSI_TEMP);
+ 		reg_temp_over = NCT6106_REG_TEMP_OVER;
+ 		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
+ 		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
+@@ -4118,11 +4197,13 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->ALARM_BITS = NCT6116_ALARM_BITS;
+ 		data->REG_BEEP = NCT6106_REG_BEEP;
+ 		data->BEEP_BITS = NCT6116_BEEP_BITS;
++		data->REG_TSI_TEMP = NCT6116_REG_TSI_TEMP;
+ 
+ 		reg_temp = NCT6106_REG_TEMP;
+ 		reg_temp_mon = NCT6106_REG_TEMP_MON;
+ 		num_reg_temp = ARRAY_SIZE(NCT6106_REG_TEMP);
+ 		num_reg_temp_mon = ARRAY_SIZE(NCT6106_REG_TEMP_MON);
++		num_reg_tsi_temp = ARRAY_SIZE(NCT6106_REG_TSI_TEMP);
+ 		reg_temp_over = NCT6106_REG_TEMP_OVER;
+ 		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
+ 		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
+@@ -4193,11 +4274,13 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
+ 		data->REG_ALARM = NCT6775_REG_ALARM;
+ 		data->REG_BEEP = NCT6775_REG_BEEP;
++		data->REG_TSI_TEMP = NCT6775_REG_TSI_TEMP;
+ 
+ 		reg_temp = NCT6775_REG_TEMP;
+ 		reg_temp_mon = NCT6775_REG_TEMP_MON;
+ 		num_reg_temp = ARRAY_SIZE(NCT6775_REG_TEMP);
+ 		num_reg_temp_mon = ARRAY_SIZE(NCT6775_REG_TEMP_MON);
++		num_reg_tsi_temp = ARRAY_SIZE(NCT6775_REG_TSI_TEMP);
+ 		reg_temp_over = NCT6775_REG_TEMP_OVER;
+ 		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
+ 		reg_temp_config = NCT6775_REG_TEMP_CONFIG;
+@@ -4266,11 +4349,13 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
+ 		data->REG_ALARM = NCT6775_REG_ALARM;
+ 		data->REG_BEEP = NCT6776_REG_BEEP;
++		data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
+ 
+ 		reg_temp = NCT6775_REG_TEMP;
+ 		reg_temp_mon = NCT6775_REG_TEMP_MON;
+ 		num_reg_temp = ARRAY_SIZE(NCT6775_REG_TEMP);
+ 		num_reg_temp_mon = ARRAY_SIZE(NCT6775_REG_TEMP_MON);
++		num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
+ 		reg_temp_over = NCT6775_REG_TEMP_OVER;
+ 		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
+ 		reg_temp_config = NCT6776_REG_TEMP_CONFIG;
+@@ -4343,11 +4428,13 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
+ 		data->REG_ALARM = NCT6779_REG_ALARM;
+ 		data->REG_BEEP = NCT6776_REG_BEEP;
++		data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
+ 
+ 		reg_temp = NCT6779_REG_TEMP;
+ 		reg_temp_mon = NCT6779_REG_TEMP_MON;
+ 		num_reg_temp = ARRAY_SIZE(NCT6779_REG_TEMP);
+ 		num_reg_temp_mon = ARRAY_SIZE(NCT6779_REG_TEMP_MON);
++		num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
+ 		reg_temp_over = NCT6779_REG_TEMP_OVER;
+ 		reg_temp_hyst = NCT6779_REG_TEMP_HYST;
+ 		reg_temp_config = NCT6779_REG_TEMP_CONFIG;
+@@ -4462,6 +4549,25 @@ static int nct6775_probe(struct platform_device *pdev)
+ 			data->REG_BEEP = NCT6776_REG_BEEP;
+ 		else
+ 			data->REG_BEEP = NCT6792_REG_BEEP;
++		switch (data->kind) {
++		case nct6791:
++		case nct6792:
++		case nct6793:
++			data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
++			num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
++			break;
++		case nct6795:
++		case nct6796:
++		case nct6797:
++		case nct6798:
++			data->REG_TSI_TEMP = NCT6796_REG_TSI_TEMP;
++			num_reg_tsi_temp = ARRAY_SIZE(NCT6796_REG_TSI_TEMP);
++			break;
++		default:
++			dev_warn(dev, "unknown number of TSI temp registers for %s\n", data->name);
++			num_reg_tsi_temp = 0;
++			break;
++		}
+ 
+ 		reg_temp = NCT6779_REG_TEMP;
+ 		num_reg_temp = ARRAY_SIZE(NCT6779_REG_TEMP);
+@@ -4661,6 +4767,12 @@ static int nct6775_probe(struct platform_device *pdev)
+ 	}
+ #endif /* USE_ALTERNATE */
+ 
++	/* Check which TSIx_TEMP registers are active */
++	for (i = 0; i < num_reg_tsi_temp; i++) {
++		if (data->read_value(data, data->REG_TSI_TEMP[i]))
++			data->have_tsi_temp |= BIT(i);
++	}
++
+ 	/* Initialize the chip */
+ 	nct6775_init_device(data);
+ 
+@@ -4768,6 +4880,18 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		return PTR_ERR(group);
+ 
+ 	data->groups[num_attr_groups++] = group;
++
++	if (data->have_tsi_temp) {
++		tsi_temp_tg.templates = nct6775_tsi_temp_template;
++		tsi_temp_tg.is_visible = nct6775_tsi_temp_is_visible;
++		tsi_temp_tg.base = fls(data->have_temp) + 1;
++		group = nct6775_create_attr_group(dev, &tsi_temp_tg, fls(data->have_tsi_temp));
++		if (IS_ERR(group))
++			return PTR_ERR(group);
++
++		data->groups[num_attr_groups++] = group;
++	}
++
+ 	data->groups[num_attr_groups++] = &nct6775_group_other;
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, data->name,
+-- 
+2.33.1
+
