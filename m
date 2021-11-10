@@ -2,196 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BA16C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 12:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B04C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 14:40:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64345610CB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 12:30:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D52C6611F2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Nov 2021 14:40:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbhKJMdo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Nov 2021 07:33:44 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:37525 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231716AbhKJMdg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Nov 2021 07:33:36 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4650F580867;
-        Wed, 10 Nov 2021 07:30:48 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 10 Nov 2021 07:30:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=2aOAXpeIPQR2x
-        ghpp4OMQNId//edXUxPmx/LpQURmRg=; b=rN0GozkZomARTM3Ae7lYEh5VRQjGq
-        VhAWKWxdRL1/ppwHKv5zyJ8AYqu6Q5uC/d7/R8X1xfIGgKaacOnRf/gopaMgYsOR
-        TE2LyW/gPulPE84/UCbJJIid0prt2OLQycvVrczeVlWjsxkyki/sm/zHfMTueyKc
-        CN7UlgoUXi5zscfPn/cZJ0IpVwG6qVWNzbhHDwXzXOwUDN4AKh1keMOZL5LKLeq2
-        Sq/PR8p37TEv0g75x6qHgSXny/NNiNmMBfp608ZHcATSpYH7inGm5tyaFXKSujLD
-        7afc/dv8TOF4uZjsqc1XOvPcJv6DOp+w1dKQBXzL8ssqD0sPdoh+g/woQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=2aOAXpeIPQR2xghpp4OMQNId//edXUxPmx/LpQURmRg=; b=OmiOOc57
-        ZlacV5k9CDJH0jgZQ1uMTsazfKBe3x7dBXHDJlJjPmaqXdl9SWUo5eJCfw3HxdV7
-        2Eby8kW85EFSx18kZF9lVy2Ahb8jUEWvlgpoy+779IO7OC/jsAqgSL6UVBUKeJgz
-        CA7HMLO0zmbDp1sxvO6Zyd1uq1BrbLmVehy2Xqlaj0Gi14R/NvNIGgri2GMtsV4z
-        eHM4hnWFH03HqnIRa62L2PjxoR4s8ygwluLYn6HlPx0EHPzT6/e9ENuW9cVMy85a
-        rn4c6sC2I/W7kR5bvLH+YVIZz39jGcYgGgLqafDSjssuA00DPTO36o671wXRcg8s
-        QT4r3QAdW64tGw==
-X-ME-Sender: <xms:d7uLYbI1oO6xLDX0cu2C85Gr59DoKX_pry_YXGCVkX2RK3Fx01hrNA>
-    <xme:d7uLYfLkgq7BXeLd0RO5F1whybIDe5kt4YiHmbQyK2yftGN0WH9kRbpYLdVgADAOI
-    5uUB3KRDuWri6HfjUQ>
-X-ME-Received: <xmr:d7uLYTs_5cmtJkOb7K6boKPHcUC9BfduU3CPHulFemUWuDZxfEa7Wt_PpoQW3ATd_RPg2ZaSwJ8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudejgdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
-    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepgeegtdetjeekge
-    eguefgheeuvedugedvteejveeiudegvddtkeffkeehtdetudfhnecuvehluhhsthgvrhfu
-    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
-    htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:d7uLYUZasqafo7JQWwDKUFgjUNRs9kv6cnNEvNLg-6fbZZxNjDji9A>
-    <xmx:d7uLYSYY11_zXgxOfQhYNZlvretdIjEkkZHj7gj-UJJGlJRk4TIJog>
-    <xmx:d7uLYYAINsYQHcK_W6deKJeM7MGgq0ch7b3dz6xQzfSZDMH9ZjbQQg>
-    <xmx:eLuLYSLE5uIHQ1g-H0VJG09c2t_q8Ji1nBMp58Btf-n9Fw-kJnPEpQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 10 Nov 2021 07:30:42 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     lee.jones@linaro.org, broonie@kernel.org, kernel@pengutronix.de,
-        lgirdwood@gmail.com, robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        s.hauer@pengutronix.de, linux-hwmon@vger.kernel.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org, linux-imx@nxp.com,
-        alistair23@gmail.com, andreas@kemnade.info, shawnguo@kernel.org,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v15 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
-Date:   Wed, 10 Nov 2021 22:29:48 +1000
-Message-Id: <20211110122948.188683-9-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211110122948.188683-1-alistair@alistair23.me>
+        id S232186AbhKJOmt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Nov 2021 09:42:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40590 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232197AbhKJOms (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 10 Nov 2021 09:42:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1378B61106;
+        Wed, 10 Nov 2021 14:39:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636555201;
+        bh=xqZi6iTYc50vjoO0XtxsyimzxbnA+3z6Sn+/RRjZgtk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XXVWX7fuRz9fJ47j8xk7hCkr3Lt0XQmfYcrFDGwOaNHgVd1OrZS7Y51zxZeK6N6cQ
+         mzcdnC/kngo0vr7stFva55y6D13ypLXGNr+vc7wG6zkAcyIApK5YI42TE74y1ALbWg
+         92WS+Df4Z2/OuJ9kMdPshfQubomOWn+g+jLab5Ef/+jsxBdhwvMx+NsuUqXyJ2aQsS
+         WCFR6OrsJ+l7TECGzjw2viaFBT4lcWKTev/AIhMb7kqOhqBD6bHJnGLSeUpxdgmDP5
+         xpsyLPHjbrOnT+isXgBhRw/InkgCtvYXNwCWP3uccmRp3s4hygKYCRWy9SNnpwjcYj
+         s8BMumMnSIeow==
+Date:   Wed, 10 Nov 2021 14:39:54 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     lee.jones@linaro.org, kernel@pengutronix.de, lgirdwood@gmail.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, s.hauer@pengutronix.de,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com, alistair23@gmail.com,
+        andreas@kemnade.info, shawnguo@kernel.org
+Subject: Re: [PATCH v15 4/8] regulator: sy7636a: Remove requirement on
+ sy7636a mfd
+Message-ID: <YYvZuo+VWhe23fgN@sirena.org.uk>
 References: <20211110122948.188683-1-alistair@alistair23.me>
+ <20211110122948.188683-5-alistair@alistair23.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mSiTZPc7Z0AF7E/8"
+Content-Disposition: inline
+In-Reply-To: <20211110122948.188683-5-alistair@alistair23.me>
+X-Cookie: You have junk mail.
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+--mSiTZPc7Z0AF7E/8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index b66d28b30d75..fe68f6eaa2ec 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -55,6 +55,16 @@ reg_brcm: regulator-brcm {
- 		startup-delay-us = <150>;
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -63,6 +73,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -99,6 +119,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -187,6 +221,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.31.1
+On Wed, Nov 10, 2021 at 10:29:44PM +1000, Alistair Francis wrote:
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
 
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--mSiTZPc7Z0AF7E/8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGL2boACgkQJNaLcl1U
+h9Bx3gf/XHLIMEoOui17lfMQpG17TCnihVcc6BYCq5EZQlOOwi5yLEqwMqwFDKc2
+TnbR6hpDO7wm7eUevhDb9E9FRY8vyGXoV/bZE07XaKlJh7C9h7qiJCzdXroJvZVl
+ClLrBTcMBLKRJGVU4Ff8bvohEigK6iH8Oq2b5whh2mZfA9s8ne5A8K+7edsqwl/u
+FWeYyAwXEYFhaRHJ6wkN5iFwX1XftgkTxUMS4jUBypFM68t9qtCrHNo6nNsArfPU
+6gefYO8LS8FvnJtf84F+oWqiiPalOcGJGw30tYGoyjCJwKSn4ilS8Y5Fj+1MUI14
+oUkyet/xZzRwfpGdbO1ZE8k3KHonyA==
+=QAPF
+-----END PGP SIGNATURE-----
+
+--mSiTZPc7Z0AF7E/8--
