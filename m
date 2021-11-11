@@ -2,79 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9324C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Nov 2021 02:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A88C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Nov 2021 09:14:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA8246103C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Nov 2021 02:53:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 695256124C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Nov 2021 09:14:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234599AbhKKC4j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Nov 2021 21:56:39 -0500
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:38099 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbhKKC4j (ORCPT
+        id S229674AbhKKJRq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Nov 2021 04:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229625AbhKKJRp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Nov 2021 21:56:39 -0500
-Received: from hatter.bewilderbeest.net (97-113-240-219.tukw.qwest.net [97.113.240.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 76A00407;
-        Wed, 10 Nov 2021 18:53:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1636599230;
-        bh=UxlRwr40WBjszXqnUlD1ucaCTdcWrwtOkgrw3DJK1DA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iBDLSNOKN5rrtw+PCljwdjBmZ6hLpG+mIUtMjL4DDRQBM0YUSzOAwOuZ2pgk2E1bE
-         dcdw4OPDTMDGiz7XGeiMNNOX9WE53tTY9jgj6/sLzSEyn+mmLWlp1+QIHnKi3YrK3c
-         1o9qC+OWdsOebJrrT0xZ/wjYw9KS0ntNFwMHj2qM=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Thu, 11 Nov 2021 04:17:45 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBABC061766;
+        Thu, 11 Nov 2021 01:14:56 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id z21so21536507edb.5;
+        Thu, 11 Nov 2021 01:14:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/OVKpBIcZdDNwTBwBpFvLGgM+7/0ex/GiW+ZCJo7GxA=;
+        b=oTgMs/UR9WFlnJYw85CRg7h5OSZRkyVCWhvHaOB59iUx8RgPWZ6lQgSU8bhQtropze
+         CIOw2HL7muqGwsKPSHduO6OmlKc+c7qpdxoi86e18xnayxluAIjGMvLr+fjWJxof53Gi
+         HcS0ZZugT6RA1/jGkjIz2tyCTSMJ1US27zLIVMDeTY1JACQc34q7iguGTkEHqT5AiWDY
+         +RWN3pX1iRcNkcJLdmtYRnMKSSUz0+0fwWfnuGsb3bgDV98bpMpWyXDQyypm+Ds83TVs
+         S8WJwQoH2UTfyaHbhUQE4sqfNt5QH7cifxm/T2k2AHisbpPsznK1WCXLV/MGQee+4Slv
+         tV7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/OVKpBIcZdDNwTBwBpFvLGgM+7/0ex/GiW+ZCJo7GxA=;
+        b=JdGURXayH6XDUJbdrmeXFJOSbz6K87htHld9BXNdDhCz3zaxShtylK2wk2EACQbZOc
+         4omP7weoB+xfVEeZ0B3kLrNaktEm83laVaAQp/3Liqe4chW4iLEAjYwUO9UZCp56h2hi
+         rl9loNoCA4NStt8Lc96OmSVCsEXhHNeqixmYDIoriP+T/pzL9EFt353Hno3wo6QyxALV
+         dvzW3hkj7ApS9zzsBIN+Id2aFK1B1nUOK3XSrGgNmzHbSNSo7tg64TJ91l5TNiSxDWOT
+         oFTmirx5LHDqo+OTGV15lqObUJ8G03G2+dFVKK8mvmzOe7pTRJXpgXEmHOSQAIQgjfSw
+         +Exw==
+X-Gm-Message-State: AOAM531sjLYRoLT4Zk58mErVZ1xRvRqEgPj/hzs+QIZUawaoiY+mwgA/
+        pLOOEbHwlqj6O23+IZReSamgjIvNMwZQIhoVD+0=
+X-Google-Smtp-Source: ABdhPJxnRaUzjJ7TpRP1waNVkwD2VHVrVr45CFp25MOPz5+UYotVlT+wmUuh2Pw5vmPTCJi8qccKTrNZo+JmKOa2GEs=
+X-Received: by 2002:a17:906:2887:: with SMTP id o7mr7341955ejd.425.1636622095123;
+ Thu, 11 Nov 2021 01:14:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20211111025339.27520-1-zev@bewilderbeest.net>
+In-Reply-To: <20211111025339.27520-1-zev@bewilderbeest.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 11 Nov 2021 11:14:18 +0200
+Message-ID: <CAHp75Ve16gLhaZOuUC19c3OrEcq73ZP5MErvtJ7O-G=astjEPQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (nct6775) mask out bank number in nct6775_wmi_read_value()
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Denis Pauk <pauk.denis@gmail.com>,
         Bernhard Seibold <mail@bernhard-seibold.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6775) mask out bank number in nct6775_wmi_read_value()
-Date:   Wed, 10 Nov 2021 18:53:38 -0800
-Message-Id: <20211111025339.27520-1-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The first call to nct6775_asuswmi_read() in nct6775_wmi_read_value()
-had been passing the full bank+register number instead of just the
-lower 8 bits.  It didn't end up actually causing problems because the
-second argument of that function is a u8 anyway, but it seems
-preferable to be explicit about it at the call site (and consistent
-with the rest of the code).
+On Thu, Nov 11, 2021 at 4:53 AM Zev Weiss <zev@bewilderbeest.net> wrote:
+>
+> The first call to nct6775_asuswmi_read() in nct6775_wmi_read_value()
+> had been passing the full bank+register number instead of just the
+> lower 8 bits.
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Fixes: 3fbbfc27f955 ("hwmon: (nct6775) Support access via Asus WMI")
----
- drivers/hwmon/nct6775.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>  It didn't end up actually causing problems because the
+> second argument of that function is a u8 anyway,
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 93dca471972e..57ce8633a725 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -1527,7 +1527,7 @@ static u16 nct6775_wmi_read_value(struct nct6775_data *data, u16 reg)
- 
- 	nct6775_wmi_set_bank(data, reg);
- 
--	err = nct6775_asuswmi_read(data->bank, reg, &tmp);
-+	err = nct6775_asuswmi_read(data->bank, reg & 0xff, &tmp);
- 	if (err)
- 		return 0;
- 
+It contradicts the existence of the Fixes tag below. What do you fix then?
+
+> but it seems
+> preferable to be explicit about it at the call site (and consistent
+> with the rest of the code).
+
+Yeah, in the current state it makes sense.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+Later one may refactor this to drop that tons of ' & 0xff':s.
+
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Fixes: 3fbbfc27f955 ("hwmon: (nct6775) Support access via Asus WMI")
+> ---
+>  drivers/hwmon/nct6775.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+> index 93dca471972e..57ce8633a725 100644
+> --- a/drivers/hwmon/nct6775.c
+> +++ b/drivers/hwmon/nct6775.c
+> @@ -1527,7 +1527,7 @@ static u16 nct6775_wmi_read_value(struct nct6775_data *data, u16 reg)
+>
+>         nct6775_wmi_set_bank(data, reg);
+>
+> -       err = nct6775_asuswmi_read(data->bank, reg, &tmp);
+> +       err = nct6775_asuswmi_read(data->bank, reg & 0xff, &tmp);
+>         if (err)
+>                 return 0;
+
+> 2.33.1
+>
+
+
 -- 
-2.33.1
-
+With Best Regards,
+Andy Shevchenko
