@@ -2,72 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCDEEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Nov 2021 06:53:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6648C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Nov 2021 19:46:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A6B48610A1
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Nov 2021 06:53:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8F4161168
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Nov 2021 19:46:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbhKMG4s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Nov 2021 01:56:48 -0500
-Received: from mout01.posteo.de ([185.67.36.65]:49465 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229553AbhKMG4s (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Nov 2021 01:56:48 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id DD9B3240028
-        for <linux-hwmon@vger.kernel.org>; Sat, 13 Nov 2021 07:53:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1636786434; bh=ReYgxVt/Tl+dgQ0DOmwaxXXVbeDYovdMr2t9IVlsrN4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GsGeAOKoO+TphW5U9/uqfVzVLSWoillTuvkrY6VxPEmtcRhKSOYdSPG4HIsmXK+0S
-         2UI9OKeCNYwTC1sp/syaxtDE8TTJvtD2WMS5CKVGkkU4LKdhPxd6H93+bjIJ90UBL8
-         FCWG+YT8BVBn6+KETK4q9gKAonHViKhRgqvT0WLm4r/SlWbq1qy/7P9+DkbfgQ6qyQ
-         6dnTJS+dG0A78yjyjKru25dKFNn7BRfhRpd2vPs4z30mzxeMfdrXBbX4YpHx6mU7aN
-         x3IdDYO9gS6CjIO2HR25SpToAk+GdUBzfDSnN/JhHE+W4urJn7DWz4FhH0d/7ksbJz
-         78OBzn5gxardQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4HrmQ94Ts8z6tmh;
-        Sat, 13 Nov 2021 07:53:53 +0100 (CET)
-Date:   Sat, 13 Nov 2021 06:53:52 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: corsair-psu: fix plain integer used as NULL pointer
-Message-ID: <YY9hAL8MZEQYLYPf@monster.localdomain>
+        id S234129AbhKMTtk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 13 Nov 2021 14:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233692AbhKMTtk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 13 Nov 2021 14:49:40 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92307C061766;
+        Sat, 13 Nov 2021 11:46:47 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id l8so12339281ilv.3;
+        Sat, 13 Nov 2021 11:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=q0pW/4SZQfcs9fB3+2D2UZECvYnIw9zgslfHYJWgEMU=;
+        b=ekf8g1eT2p9OWdenOZ7dzbLiKh9wa5uD+rYdhY1iurcQn40xes12kTY3adJc9h4HNQ
+         QHS1jCb6iLntzWzFzDrT/K/Q1zYuvDVrwFFq7/qbUsqNzPD8WGYNuKE8Rmvte9e3vFf1
+         IrSD7/Y/fMi8xZyaPFMg0SHVmRkpUbUDudOvPQfIaNLk+iE+ANiepReWT1T9gPzUcd0w
+         NM09+o1r3G4xvixka2zW+Z1ee+tw/TjbeyMKmHKshUWWNdCCU10HyLa+Vx1KLxbSWQBE
+         4f/Ou4GyFMjEvz0Mb6DnFSA3duoP1wrrRPEaCwIhabivG82mbUQt0xe1vu5Te6X2e0fY
+         dbuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=q0pW/4SZQfcs9fB3+2D2UZECvYnIw9zgslfHYJWgEMU=;
+        b=XB4qd9U8/Jk61EoKT8OkodYkc6FklMsJ/iZSte1rZ45rKBmUWYQEz+7LprPATDiqWw
+         mmJtBLHayPgiud3hVYNqs3rEUij+apLZ0RUdhQKsa/2JjaS8F5qes0teVWyZmzfAO4FQ
+         xVwpZ6tM9Esla/yKl6IXvJvJTmoQ4JYceS+ZsrgRRhMFZQyQymqSzmI3xTRmx10JfyJn
+         DhOBBr+FTubkZdpGEYPNlghrNCmtxb7CcjhPCffXO3fbMSC4bMTlFyX8hJx4yOToHmb4
+         0VLIPaypOp//gGFMOdx6jd5pRxy3vORSTV9DemL8wEGafkigqaZHtEjtVuPMzOwNMBZR
+         vONA==
+X-Gm-Message-State: AOAM53221GnQ/ZSj8DZnojD7PCWCEUfkmQ5mntd3NRhXsz4lm7im+0qK
+        F4RA8iF7RIpggfGYl/M7X/PsENKVKrEh83OwvoqPlY9SXpQ=
+X-Google-Smtp-Source: ABdhPJz+5fCcj/AvU+qC15x2V0vf8MH+GI4DaGssdfeV53CgzP+e5YcS+WZtmGosZeUpSOjskFgUb84YkWD3SStIc5E=
+X-Received: by 2002:a05:6e02:1a0a:: with SMTP id s10mr14771925ild.161.1636832807041;
+ Sat, 13 Nov 2021 11:46:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   =?UTF-8?Q?Pawe=C5=82_Metelski?= <pabou88@gmail.com>
+Date:   Sat, 13 Nov 2021 20:46:25 +0100
+Message-ID: <CAA6C2x9Snh0jzCT7Z4+m4kA+StCfsWtESPC1C0s-uKXB6_fJWw@mail.gmail.com>
+Subject: New hardware support - ITE IT8689
+To:     linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/hwmon/corsair-psu.c:536:82: sparse: sparse: Using plain
-   integer as NULL pointer
+Hi,
 
-Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
----
- drivers/hwmon/corsair-psu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've got this new hardware, Gigabyte Z690 UD DDR5.
+Apparently it employs a new SuperIO monitoring chip, an ITE IT8689:
+[    1.626587] gpio_it87: Unknown Chip found, Chip 8689 Revision 1
 
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 731d5117f9f1..14389fd7afb8 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -729,7 +729,7 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
- 	corsairpsu_check_cmd_support(priv);
- 
- 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsairpsu", priv,
--							  &corsairpsu_chip_info, 0);
-+							  &corsairpsu_chip_info, NULL);
- 
- 	if (IS_ERR(priv->hwmon_dev)) {
- 		ret = PTR_ERR(priv->hwmon_dev);
--- 
-2.33.1
+I'm running gentoo-sources-5.14.17 but it also seems missing on upstream gi=
+t.
 
+I could probably test your patches quite easily (I suppose I just need
+to build a module and load it, see dmesg output, try to spin up a fan,
+see if hwmon reports it, etc.), I could also try to patch it myself
+given a domain introduction (8y exp C dev, 0y exp kernel C dev).
+
+--=20
+Pozdrawiam,
+Pawe=C5=82 Metelski
