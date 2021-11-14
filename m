@@ -2,108 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79030C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Nov 2021 16:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D29B4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Nov 2021 17:11:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 57B7460C4D
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Nov 2021 16:53:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF21D6120A
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Nov 2021 17:11:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbhKNQ4m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 14 Nov 2021 11:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S233073AbhKNRNm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 14 Nov 2021 12:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236154AbhKNQ42 (ORCPT
+        with ESMTP id S236591AbhKNRLT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 14 Nov 2021 11:56:28 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED330C061766;
-        Sun, 14 Nov 2021 08:53:32 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id h16-20020a9d7990000000b0055c7ae44dd2so23133735otm.10;
-        Sun, 14 Nov 2021 08:53:32 -0800 (PST)
+        Sun, 14 Nov 2021 12:11:19 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEBBC079783;
+        Sun, 14 Nov 2021 09:07:03 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id a11-20020a4ad1cb000000b002c2657270a0so4968982oos.8;
+        Sun, 14 Nov 2021 09:07:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=E37wA/hsCJDRq+8BgTkaMhMSDrqI4fJzKISSqHgvjSw=;
-        b=bkpiLjIF3wmuP7g2DrDDP4SYjv8SVAB0TuAsk5bXm6X0JitJ/f6WbMsfBry1OkQWJR
-         BoMSIrtS/W4k3ivq2jgE+Gv+a8b/AVvaFSnAjEkVVuvtKOHzs1iGa/XwH+/I8VSefz5Y
-         xMAnuX23zMK2Az8WBtdxJeyM4lsy4sSZp/tLIxpioedm8jyJvYqV/JLpC0lKIAuIaLob
-         58TfpBfOejN06ADESxgkLZXnbY6vin91YNq5ZMSgFSWzYufOLJBdhwSWuOWzyvb3Atb/
-         4OUMUVVJhSvqRI7YSuMh5q47Fs2OnhP4UXLnu74t+ioLykugR5r5VkQ/1WQp39NPWZkW
-         VG1A==
+        h=sender:to:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XpAS6BBw1T3zY4eZyUsPcr/QNf1RWV9b1FJ9v/LrJJM=;
+        b=ixZe5O7WuXGXkoOb1E6qqmV77u+DxQ6GKG39HH3FHtOSQu2Tr7I2PdBLec5r9kwaI1
+         sVw63r/BVO4g77qkYZJF3UOc13uFTNyYUZh38FrMXHE0OJRsrVOOWXsoLzntJbVoC9wA
+         Aziru3ZoWc9yM1Gm0vQ48sS9GoOlead/FHyPZc3rL2TMyu0oG/JzXpMGymiBTtsLblBV
+         erLwRo972FDb/dwt57oT9bioH2eRuDmP/lVT+yqkjaJ+YUVHLptlyP0Rb4GACjSY70Jb
+         WMXsoKpKCDX99EaqQ8QJ6Ep0/zVaRgNXjsELPUKEtFHTCVbFRb+jl4yEn7P6DyQ3ddQE
+         NaFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=E37wA/hsCJDRq+8BgTkaMhMSDrqI4fJzKISSqHgvjSw=;
-        b=uKjRMuVArxMO/rw+Ii4xr41r3h3IB35jr27fYtsQk4TJtP0/yx7kUmFWyw9G/WG6B9
-         WJpiyzTUkIWvskmAlKygPNCumy1hnzLU+TUaAFut+6dZMmwzzNxFoGmU0zTw2aZzLRSQ
-         686WcgZBrXCu3lGqjszr+S97FQFz2Rm+6cYwJ9TUdpxRVX0toKL8rdL3PMfGMAjd5FaR
-         Zjt9IlZGIPDPyGGd27J3uDbJfmZfXkFTM7IJWurKV5+xfKx7ezSnmTEAuxQ3K/txNw09
-         +m9POXaRKYrUiKVXiaA5M9KXSNLkw6xZEh+sJWw9LxCe2glfdDNtbOnwAsempTc2oc30
-         uUOA==
-X-Gm-Message-State: AOAM531znuC7fM3wouCzggJwZ94hRaSlyQxv0MTLw4GUbfZUKhZ0bT6A
-        /PB6diG4p+HHr0FQUoG1VI+lGt6ZnoE=
-X-Google-Smtp-Source: ABdhPJzi8tFnscb6qa3jYCSqGWIEQWML1S+GORaBIDBn9NUrrMUIkuFrVLCdboPOdQdMRL6PnkoqiQ==
-X-Received: by 2002:a9d:4d8b:: with SMTP id u11mr25495018otk.144.1636908812395;
-        Sun, 14 Nov 2021 08:53:32 -0800 (PST)
+        h=x-gm-message-state:sender:to:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XpAS6BBw1T3zY4eZyUsPcr/QNf1RWV9b1FJ9v/LrJJM=;
+        b=PKyx9Q31GN+grN9gDw4trRhrM1pyRCdtIsMv0ih85bdE2BuHafk7gPwFQZsBJ3IL8G
+         TVIvYfkOH5EuG3VY4yzKTwda4MNLBAvNAeT2POzdhjMCHd4pfbt9bKP2LNQ5C+ykRpK/
+         nuwKrQlNdcxTbgJ3VjLzFb8Ysc1FiL2OOjSoO7FQUyGNzmXu80+6LzzvtjpfkBf48BU7
+         CJ0TdKxRU5I5XGQH3sM6Pg9yGYfT4vAxMd3YCHL19qfAJZvE103x//93MKZj0qefehw1
+         MCrCiRddQAe8/MTWZAJboB9Coy93eCgj9I0dHwYyzfrYAitmK3PMep2DT9dx0AWFj60R
+         7vCA==
+X-Gm-Message-State: AOAM530YQPZ8tzij80WjHMpwegiC2twPPPrUeoksbaG++d4ZqVFDGSBD
+        Q+s8UMqzumNkdew5re84reMVE+nF77o=
+X-Google-Smtp-Source: ABdhPJx+FPSRO7wcqYvxNVkhpnxgh2u1+PTTv4Fy13WIuWjCRBFalTEZZMKdw4y0KEtNU0zEF9lYyg==
+X-Received: by 2002:a4a:abc2:: with SMTP id o2mr16667336oon.65.1636909622739;
+        Sun, 14 Nov 2021 09:07:02 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s26sm531688oiw.19.2021.11.14.08.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 08:53:31 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id w2sm2084969ooa.26.2021.11.14.09.07.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Nov 2021 09:07:02 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 14 Nov 2021 08:53:30 -0800
+To:     =?UTF-8?Q?Pawe=c5=82_Metelski?= <pabou88@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <CAA6C2x9Snh0jzCT7Z4+m4kA+StCfsWtESPC1C0s-uKXB6_fJWw@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Bernhard Seibold <mail@bernhard-seibold.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6775) mask out bank number in
- nct6775_wmi_read_value()
-Message-ID: <20211114165330.GA1983567@roeck-us.net>
-References: <20211111025339.27520-1-zev@bewilderbeest.net>
+Subject: Re: New hardware support - ITE IT8689
+Message-ID: <0134609e-0b03-d9d2-62ba-75d8d8211030@roeck-us.net>
+Date:   Sun, 14 Nov 2021 09:07:00 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211111025339.27520-1-zev@bewilderbeest.net>
+In-Reply-To: <CAA6C2x9Snh0jzCT7Z4+m4kA+StCfsWtESPC1C0s-uKXB6_fJWw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 06:53:38PM -0800, Zev Weiss wrote:
-> The first call to nct6775_asuswmi_read() in nct6775_wmi_read_value()
-> had been passing the full bank+register number instead of just the
-> lower 8 bits.  It didn't end up actually causing problems because the
-> second argument of that function is a u8 anyway, but it seems
-> preferable to be explicit about it at the call site (and consistent
-> with the rest of the code).
+Hi,
+
+On 11/13/21 11:46 AM, Paweł Metelski wrote:
+> Hi,
 > 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Fixes: 3fbbfc27f955 ("hwmon: (nct6775) Support access via Asus WMI")
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> I've got this new hardware, Gigabyte Z690 UD DDR5.
+> Apparently it employs a new SuperIO monitoring chip, an ITE IT8689:
+> [    1.626587] gpio_it87: Unknown Chip found, Chip 8689 Revision 1
+> 
+> I'm running gentoo-sources-5.14.17 but it also seems missing on upstream git.
+> 
+> I could probably test your patches quite easily (I suppose I just need
+> to build a module and load it, see dmesg output, try to spin up a fan,
+> see if hwmon reports it, etc.), I could also try to patch it myself
+> given a domain introduction (8y exp C dev, 0y exp kernel C dev).
+> 
 
-Applied.
+Gigabyte does not support Linux and does not make datasheets available,
+and ITE usually does not even admit the existence of specific Super-IO
+chips. On top of that, ITE Super-IO chips are somewhat notorious for issues
+which can, if programmed the wrong way, result in random system resets.
+This means the it87 driver in the Linux kernel is for all practical purposes
+unmaintained, and there is pretty much zero chance that it will be possible
+to add support for this chip to the driver.
 
-Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/nct6775.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index 93dca471972e..57ce8633a725 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -1527,7 +1527,7 @@ static u16 nct6775_wmi_read_value(struct nct6775_data *data, u16 reg)
->  
->  	nct6775_wmi_set_bank(data, reg);
->  
-> -	err = nct6775_asuswmi_read(data->bank, reg, &tmp);
-> +	err = nct6775_asuswmi_read(data->bank, reg & 0xff, &tmp);
->  	if (err)
->  		return 0;
->  
