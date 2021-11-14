@@ -2,77 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6648C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Nov 2021 19:46:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6E91C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Nov 2021 16:52:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8F4161168
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Nov 2021 19:46:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF81860296
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Nov 2021 16:52:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbhKMTtk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Nov 2021 14:49:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
+        id S231831AbhKNQzG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 14 Nov 2021 11:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbhKMTtk (ORCPT
+        with ESMTP id S229725AbhKNQzB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Nov 2021 14:49:40 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92307C061766;
-        Sat, 13 Nov 2021 11:46:47 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id l8so12339281ilv.3;
-        Sat, 13 Nov 2021 11:46:47 -0800 (PST)
+        Sun, 14 Nov 2021 11:55:01 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BCBC061746;
+        Sun, 14 Nov 2021 08:52:06 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id bf8so29605239oib.6;
+        Sun, 14 Nov 2021 08:52:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=q0pW/4SZQfcs9fB3+2D2UZECvYnIw9zgslfHYJWgEMU=;
-        b=ekf8g1eT2p9OWdenOZ7dzbLiKh9wa5uD+rYdhY1iurcQn40xes12kTY3adJc9h4HNQ
-         QHS1jCb6iLntzWzFzDrT/K/Q1zYuvDVrwFFq7/qbUsqNzPD8WGYNuKE8Rmvte9e3vFf1
-         IrSD7/Y/fMi8xZyaPFMg0SHVmRkpUbUDudOvPQfIaNLk+iE+ANiepReWT1T9gPzUcd0w
-         NM09+o1r3G4xvixka2zW+Z1ee+tw/TjbeyMKmHKshUWWNdCCU10HyLa+Vx1KLxbSWQBE
-         4f/Ou4GyFMjEvz0Mb6DnFSA3duoP1wrrRPEaCwIhabivG82mbUQt0xe1vu5Te6X2e0fY
-         dbuw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z4tGP427GAXY3GhIqfJ2FaqzEZ1Whewjd01eu201mkU=;
+        b=e5SDhrM6s+I2z8m9AUS9fGdQCnnpmaTZXIXa/ysbQj+PfYC5Iy3ZDzVbYf/1L5XpkW
+         /tpvrlh52ZIBYWYdcNeEwcaJiWUr2K5V8Bj0aQ+RSe89p2RNrJPqNxBdKfHU90kK2J9N
+         C81bz+7NThd6hrpK615m5s/HIJ5uaqMKRimw/pVyZFD9NOzo9eCnwqQ801M+amHMazX+
+         mJttkFMPDM2bC+QS8Cb0U2/qjyVVRUdV3wZbcnNMoI697s5AkqznMfZlDTrZ0wl1xRVE
+         9gWpxygY/c6HZSis6AcqzZDGOlVdAMlNTi0GIVh7PT3OU2zJBYL458t0GHNFlQYW409B
+         uVnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=q0pW/4SZQfcs9fB3+2D2UZECvYnIw9zgslfHYJWgEMU=;
-        b=XB4qd9U8/Jk61EoKT8OkodYkc6FklMsJ/iZSte1rZ45rKBmUWYQEz+7LprPATDiqWw
-         mmJtBLHayPgiud3hVYNqs3rEUij+apLZ0RUdhQKsa/2JjaS8F5qes0teVWyZmzfAO4FQ
-         xVwpZ6tM9Esla/yKl6IXvJvJTmoQ4JYceS+ZsrgRRhMFZQyQymqSzmI3xTRmx10JfyJn
-         DhOBBr+FTubkZdpGEYPNlghrNCmtxb7CcjhPCffXO3fbMSC4bMTlFyX8hJx4yOToHmb4
-         0VLIPaypOp//gGFMOdx6jd5pRxy3vORSTV9DemL8wEGafkigqaZHtEjtVuPMzOwNMBZR
-         vONA==
-X-Gm-Message-State: AOAM53221GnQ/ZSj8DZnojD7PCWCEUfkmQ5mntd3NRhXsz4lm7im+0qK
-        F4RA8iF7RIpggfGYl/M7X/PsENKVKrEh83OwvoqPlY9SXpQ=
-X-Google-Smtp-Source: ABdhPJz+5fCcj/AvU+qC15x2V0vf8MH+GI4DaGssdfeV53CgzP+e5YcS+WZtmGosZeUpSOjskFgUb84YkWD3SStIc5E=
-X-Received: by 2002:a05:6e02:1a0a:: with SMTP id s10mr14771925ild.161.1636832807041;
- Sat, 13 Nov 2021 11:46:47 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Z4tGP427GAXY3GhIqfJ2FaqzEZ1Whewjd01eu201mkU=;
+        b=ko/6MEmZypWghaKjEGkHJS1KXVi1S1H6AnxeDa5jJXnQgDihwClTzEpF7jr6jFuM2u
+         KBgQlUklZ7fG9QRaDLz4DR8w3hbMtTrq/buZf4UV/clC/MNQbl+rAxkhlnkfvhJKOkVD
+         6EwgS/T1j18yID0kpkXgg60i84c9YzoD2q8mgcje2/nO7s5WKAGBqfrBLTrhZOuvSg/2
+         SyZVJyZYj4EvcAtooXHofpctMBL0ERGa7TtB8rO0bb5Q4iQF7aL182FyDQ9q8VKbnAXt
+         KqPgQ2PlTvRdiE0DEWuFEiPKRa2LKo7Kjpu1Yu6lJccPAVRpk8FAg+ggrUNlrISXSZLW
+         Yutg==
+X-Gm-Message-State: AOAM532H6ccgi6U5Hwro4mZKvptarD8pnVuGoKWkq8BW3+GeRBYDhECy
+        BpE3ycUdW2CoRVcHWk0DZV2xcJoM3VM=
+X-Google-Smtp-Source: ABdhPJz6ZDW88cZnuaA6OHLH8V2t6lr/POihODQ88Dy6et4rbUTa7FM9EH9TA6Nx0pE7gCp0x/wfjQ==
+X-Received: by 2002:aca:2408:: with SMTP id n8mr40023631oic.124.1636908726095;
+        Sun, 14 Nov 2021 08:52:06 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bb39sm2822205oib.28.2021.11.14.08.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Nov 2021 08:52:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 14 Nov 2021 08:52:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: corsair-psu: fix plain integer used as NULL
+ pointer
+Message-ID: <20211114165204.GA1956012@roeck-us.net>
+References: <YY9hAL8MZEQYLYPf@monster.localdomain>
 MIME-Version: 1.0
-From:   =?UTF-8?Q?Pawe=C5=82_Metelski?= <pabou88@gmail.com>
-Date:   Sat, 13 Nov 2021 20:46:25 +0100
-Message-ID: <CAA6C2x9Snh0jzCT7Z4+m4kA+StCfsWtESPC1C0s-uKXB6_fJWw@mail.gmail.com>
-Subject: New hardware support - ITE IT8689
-To:     linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YY9hAL8MZEQYLYPf@monster.localdomain>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+On Sat, Nov 13, 2021 at 06:53:52AM +0000, Wilken Gottwalt wrote:
+> sparse warnings: (new ones prefixed by >>)
+> >> drivers/hwmon/corsair-psu.c:536:82: sparse: sparse: Using plain
+>    integer as NULL pointer
+> 
+> Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 
-I've got this new hardware, Gigabyte Z690 UD DDR5.
-Apparently it employs a new SuperIO monitoring chip, an ITE IT8689:
-[    1.626587] gpio_it87: Unknown Chip found, Chip 8689 Revision 1
+Applied.
 
-I'm running gentoo-sources-5.14.17 but it also seems missing on upstream gi=
-t.
+Thanks,
+Guenter
 
-I could probably test your patches quite easily (I suppose I just need
-to build a module and load it, see dmesg output, try to spin up a fan,
-see if hwmon reports it, etc.), I could also try to patch it myself
-given a domain introduction (8y exp C dev, 0y exp kernel C dev).
-
---=20
-Pozdrawiam,
-Pawe=C5=82 Metelski
+> ---
+>  drivers/hwmon/corsair-psu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index 731d5117f9f1..14389fd7afb8 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -729,7 +729,7 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
+>  	corsairpsu_check_cmd_support(priv);
+>  
+>  	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsairpsu", priv,
+> -							  &corsairpsu_chip_info, 0);
+> +							  &corsairpsu_chip_info, NULL);
+>  
+>  	if (IS_ERR(priv->hwmon_dev)) {
+>  		ret = PTR_ERR(priv->hwmon_dev);
