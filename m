@@ -2,868 +2,318 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54CFFC43219
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:38:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0F30C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 21:42:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BD17632EB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:38:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3F0E6322A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 21:42:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242494AbhKOSlQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Nov 2021 13:41:16 -0500
-Received: from mga12.intel.com ([192.55.52.136]:25196 "EHLO mga12.intel.com"
+        id S1351165AbhKOVpm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Nov 2021 16:45:42 -0500
+Received: from mga18.intel.com ([134.134.136.126]:33009 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242097AbhKOSjW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Nov 2021 13:39:22 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="213536870"
+        id S236530AbhKOVgw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 15 Nov 2021 16:36:52 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="220425859"
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="213536870"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:29:55 -0800
+   d="scan'208";a="220425859"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 13:33:52 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="548102602"
-Received: from tkolecki-mobl.ger.corp.intel.com (HELO localhost) ([10.249.154.97])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:29:46 -0800
-From:   Iwona Winiarska <iwona.winiarska@intel.com>
-To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zev Weiss <zweiss@equinix.com>,
-        David Muller <d.mueller@elsoft.ch>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH v3 09/13] peci: Add peci-cpu driver
-Date:   Mon, 15 Nov 2021 19:25:48 +0100
-Message-Id: <20211115182552.3830849-10-iwona.winiarska@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211115182552.3830849-1-iwona.winiarska@intel.com>
-References: <20211115182552.3830849-1-iwona.winiarska@intel.com>
+   d="scan'208";a="671673014"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 15 Nov 2021 13:33:51 -0800
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mmjbq-000N2W-AS; Mon, 15 Nov 2021 21:33:50 +0000
+Date:   Tue, 16 Nov 2021 05:32:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 214f525255069a55b4664842c68bc15b2ee049f0
+Message-ID: <6192d207.NL7P6xsjw2k1ewrj%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-PECI is an interface that may be used by different types of devices.
-Add a peci-cpu driver compatible with Intel processors. The driver is
-responsible for handling auxiliary devices that can subsequently be used
-by other drivers (e.g. hwmons).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 214f525255069a55b4664842c68bc15b2ee049f0  hwmon: (nct6775) mask out bank number in nct6775_wmi_read_value()
 
-Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+elapsed time: 1174m
+
+configs tested: 255
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211115
+arm                            zeus_defconfig
+nios2                         10m50_defconfig
+arm                          pcm027_defconfig
+arm                         assabet_defconfig
+arm                           tegra_defconfig
+h8300                            alldefconfig
+sh                          landisk_defconfig
+arm                         at91_dt_defconfig
+powerpc64                           defconfig
+arc                                 defconfig
+sh                           se7751_defconfig
+arm                        mini2440_defconfig
+mips                        bcm63xx_defconfig
+sh                           se7721_defconfig
+s390                          debug_defconfig
+arm64                            alldefconfig
+arc                            hsdk_defconfig
+arm                         lpc32xx_defconfig
+powerpc                      pasemi_defconfig
+powerpc                      walnut_defconfig
+powerpc                     sequoia_defconfig
+arm                        mvebu_v7_defconfig
+sh                     sh7710voipgw_defconfig
+arm                       omap2plus_defconfig
+arm                       cns3420vb_defconfig
+sh                            shmin_defconfig
+sh                        sh7763rdp_defconfig
+mips                          malta_defconfig
+powerpc                         wii_defconfig
+arm                          collie_defconfig
+arm                        multi_v7_defconfig
+powerpc                    ge_imp3a_defconfig
+xtensa                  audio_kc705_defconfig
+arm                          ixp4xx_defconfig
+m68k                          multi_defconfig
+arm                      jornada720_defconfig
+powerpc                    sam440ep_defconfig
+nios2                               defconfig
+mips                         bigsur_defconfig
+sh                        edosk7760_defconfig
+um                                  defconfig
+riscv                               defconfig
+arm                       netwinder_defconfig
+powerpc                mpc7448_hpc2_defconfig
+arm                    vt8500_v6_v7_defconfig
+mips                           rs90_defconfig
+sh                      rts7751r2d1_defconfig
+nios2                            alldefconfig
+mips                         db1xxx_defconfig
+ia64                          tiger_defconfig
+mips                         cobalt_defconfig
+powerpc                   bluestone_defconfig
+mips                     loongson2k_defconfig
+mips                          rb532_defconfig
+mips                          ath79_defconfig
+arc                        nsimosci_defconfig
+h8300                     edosk2674_defconfig
+m68k                          amiga_defconfig
+alpha                            allyesconfig
+openrisc                 simple_smp_defconfig
+sh                          r7780mp_defconfig
+ia64                                defconfig
+arm                            xcep_defconfig
+sh                        apsh4ad0a_defconfig
+m68k                        m5307c3_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arc                        nsim_700_defconfig
+mips                       capcella_defconfig
+arm                        cerfcube_defconfig
+powerpc                      katmai_defconfig
+arm                         cm_x300_defconfig
+m68k                          atari_defconfig
+sh                             espt_defconfig
+arm                        vexpress_defconfig
+h8300                    h8300h-sim_defconfig
+openrisc                  or1klitex_defconfig
+mips                     loongson1c_defconfig
+powerpc                        warp_defconfig
+powerpc                        icon_defconfig
+arm                         hackkit_defconfig
+arm                        clps711x_defconfig
+powerpc                     tqm5200_defconfig
+mips                        vocore2_defconfig
+powerpc                           allnoconfig
+arm                       aspeed_g4_defconfig
+powerpc                     tqm8541_defconfig
+m68k                            mac_defconfig
+m68k                       m5475evb_defconfig
+mips                          ath25_defconfig
+arm                        spear3xx_defconfig
+mips                         tb0219_defconfig
+sh                          sdk7780_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                          iop32x_defconfig
+powerpc                     ep8248e_defconfig
+sh                          rsk7203_defconfig
+arm                            qcom_defconfig
+arm                        multi_v5_defconfig
+microblaze                      mmu_defconfig
+arm                          pxa3xx_defconfig
+mips                             allyesconfig
+arm                           sama7_defconfig
+riscv                    nommu_virt_defconfig
+arm                          pxa168_defconfig
+xtensa                generic_kc705_defconfig
+m68k                        mvme16x_defconfig
+sh                        sh7757lcr_defconfig
+powerpc                     redwood_defconfig
+arc                         haps_hs_defconfig
+powerpc                       holly_defconfig
+powerpc                       ppc64_defconfig
+powerpc                  iss476-smp_defconfig
+sh                          polaris_defconfig
+powerpc                   currituck_defconfig
+powerpc                     kmeter1_defconfig
+sh                          sdk7786_defconfig
+mips                       rbtx49xx_defconfig
+mips                            e55_defconfig
+arm                          pxa910_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                     decstation_defconfig
+sh                         apsh4a3a_defconfig
+sparc64                             defconfig
+alpha                            alldefconfig
+arm                            dove_defconfig
+parisc                           alldefconfig
+sh                ecovec24-romimage_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                        trizeps4_defconfig
+sh                          urquell_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                 xes_mpc85xx_defconfig
+x86_64                           allyesconfig
+powerpc                     taishan_defconfig
+mips                           ip28_defconfig
+arm                         socfpga_defconfig
+arm                        shmobile_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                      ppc64e_defconfig
+mips                           ip32_defconfig
+m68k                         amcore_defconfig
+powerpc                      ppc6xx_defconfig
+sh                   sh7770_generic_defconfig
+mips                      malta_kvm_defconfig
+arm                      pxa255-idp_defconfig
+powerpc                  mpc866_ads_defconfig
+arc                      axs103_smp_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                 mpc837x_mds_defconfig
+m68k                        m5272c3_defconfig
+powerpc                     pq2fads_defconfig
+arm                         palmz72_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                 mpc836x_rdk_defconfig
+powerpc                 linkstation_defconfig
+parisc                generic-32bit_defconfig
+arm                     am200epdkit_defconfig
+arm                          lpd270_defconfig
+h8300                               defconfig
+mips                      maltaaprp_defconfig
+xtensa                    xip_kc705_defconfig
+mips                  decstation_64_defconfig
+sh                           se7206_defconfig
+powerpc                      pcm030_defconfig
+sparc                            allyesconfig
+sh                           se7343_defconfig
+arm                             mxs_defconfig
+parisc                generic-64bit_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                     pseries_defconfig
+sh                          r7785rp_defconfig
+m68k                        stmark2_defconfig
+arm                           sunxi_defconfig
+arm                  randconfig-c002-20211115
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+s390                                defconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a005-20211115
+x86_64               randconfig-a003-20211115
+x86_64               randconfig-a002-20211115
+x86_64               randconfig-a001-20211115
+x86_64               randconfig-a006-20211115
+x86_64               randconfig-a004-20211115
+i386                 randconfig-a006-20211115
+i386                 randconfig-a003-20211115
+i386                 randconfig-a005-20211115
+i386                 randconfig-a001-20211115
+i386                 randconfig-a004-20211115
+i386                 randconfig-a002-20211115
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-c007-20211115
+i386                 randconfig-c001-20211115
+arm                  randconfig-c002-20211115
+riscv                randconfig-c006-20211115
+powerpc              randconfig-c003-20211115
+s390                 randconfig-c005-20211115
+mips                 randconfig-c004-20211115
+x86_64               randconfig-a015-20211115
+x86_64               randconfig-a013-20211115
+x86_64               randconfig-a011-20211115
+x86_64               randconfig-a012-20211115
+x86_64               randconfig-a016-20211115
+x86_64               randconfig-a014-20211115
+i386                 randconfig-a014-20211115
+i386                 randconfig-a016-20211115
+i386                 randconfig-a012-20211115
+i386                 randconfig-a013-20211115
+i386                 randconfig-a011-20211115
+i386                 randconfig-a015-20211115
+hexagon              randconfig-r045-20211115
+hexagon              randconfig-r041-20211115
+s390                 randconfig-r044-20211115
+riscv                randconfig-r042-20211115
+
 ---
- MAINTAINERS              |   1 +
- drivers/peci/Kconfig     |  15 ++
- drivers/peci/Makefile    |   2 +
- drivers/peci/cpu.c       | 343 +++++++++++++++++++++++++++++++++++++++
- drivers/peci/device.c    |   1 +
- drivers/peci/internal.h  |  27 +++
- drivers/peci/request.c   | 213 ++++++++++++++++++++++++
- include/linux/peci-cpu.h |  40 +++++
- include/linux/peci.h     |   8 -
- 9 files changed, 642 insertions(+), 8 deletions(-)
- create mode 100644 drivers/peci/cpu.c
- create mode 100644 include/linux/peci-cpu.h
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a4da3bba09ba..d751590f32e3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14927,6 +14927,7 @@ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/peci/
- F:	drivers/peci/
-+F:	include/linux/peci-cpu.h
- F:	include/linux/peci.h
- 
- PENSANDO ETHERNET DRIVERS
-diff --git a/drivers/peci/Kconfig b/drivers/peci/Kconfig
-index 99279df97a78..89872ad83320 100644
---- a/drivers/peci/Kconfig
-+++ b/drivers/peci/Kconfig
-@@ -16,6 +16,21 @@ menuconfig PECI
- 
- if PECI
- 
-+config PECI_CPU
-+	tristate "PECI CPU"
-+	select AUXILIARY_BUS
-+	help
-+	  This option enables peci-cpu driver for Intel processors. It is
-+	  responsible for creating auxiliary devices that can subsequently
-+	  be used by other drivers in order to perform various
-+	  functionalities such as e.g. temperature monitoring.
-+
-+	  Additional drivers must be enabled in order to use the functionality
-+	  of the device.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called peci-cpu.
-+
- source "drivers/peci/controller/Kconfig"
- 
- endif # PECI
-diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
-index 917f689e147a..7de18137e738 100644
---- a/drivers/peci/Makefile
-+++ b/drivers/peci/Makefile
-@@ -3,6 +3,8 @@
- # Core functionality
- peci-y := core.o request.o device.o sysfs.o
- obj-$(CONFIG_PECI) += peci.o
-+peci-cpu-y := cpu.o
-+obj-$(CONFIG_PECI_CPU) += peci-cpu.o
- 
- # Hardware specific bus drivers
- obj-y += controller/
-diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
-new file mode 100644
-index 000000000000..68eb61c65d34
---- /dev/null
-+++ b/drivers/peci/cpu.c
-@@ -0,0 +1,343 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2021 Intel Corporation
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/module.h>
-+#include <linux/peci.h>
-+#include <linux/peci-cpu.h>
-+#include <linux/slab.h>
-+
-+#include "internal.h"
-+
-+/**
-+ * peci_temp_read() - read the maximum die temperature from PECI target device
-+ * @device: PECI device to which request is going to be sent
-+ * @temp_raw: where to store the read temperature
-+ *
-+ * It uses GetTemp PECI command.
-+ *
-+ * Return: 0 if succeeded, other values in case errors.
-+ */
-+int peci_temp_read(struct peci_device *device, s16 *temp_raw)
-+{
-+	struct peci_request *req;
-+
-+	req = peci_xfer_get_temp(device);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
-+
-+	*temp_raw = peci_request_temp_read(req);
-+
-+	peci_request_free(req);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_NS_GPL(peci_temp_read, PECI_CPU);
-+
-+/**
-+ * peci_pcs_read() - read PCS register
-+ * @device: PECI device to which request is going to be sent
-+ * @index: PCS index
-+ * @param: PCS parameter
-+ * @data: where to store the read data
-+ *
-+ * It uses RdPkgConfig PECI command.
-+ *
-+ * Return: 0 if succeeded, other values in case errors.
-+ */
-+int peci_pcs_read(struct peci_device *device, u8 index, u16 param, u32 *data)
-+{
-+	struct peci_request *req;
-+	int ret;
-+
-+	req = peci_xfer_pkg_cfg_readl(device, index, param);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
-+
-+	ret = peci_request_status(req);
-+	if (ret)
-+		goto out_req_free;
-+
-+	*data = peci_request_data_readl(req);
-+out_req_free:
-+	peci_request_free(req);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(peci_pcs_read, PECI_CPU);
-+
-+/**
-+ * peci_pci_local_read() - read 32-bit memory location using raw address
-+ * @device: PECI device to which request is going to be sent
-+ * @bus: bus
-+ * @dev: device
-+ * @func: function
-+ * @reg: register
-+ * @data: where to store the read data
-+ *
-+ * It uses RdPCIConfigLocal PECI command.
-+ *
-+ * Return: 0 if succeeded, other values in case errors.
-+ */
-+int peci_pci_local_read(struct peci_device *device, u8 bus, u8 dev, u8 func,
-+			u16 reg, u32 *data)
-+{
-+	struct peci_request *req;
-+	int ret;
-+
-+	req = peci_xfer_pci_cfg_local_readl(device, bus, dev, func, reg);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
-+
-+	ret = peci_request_status(req);
-+	if (ret)
-+		goto out_req_free;
-+
-+	*data = peci_request_data_readl(req);
-+out_req_free:
-+	peci_request_free(req);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(peci_pci_local_read, PECI_CPU);
-+
-+/**
-+ * peci_ep_pci_local_read() - read 32-bit memory location using raw address
-+ * @device: PECI device to which request is going to be sent
-+ * @seg: PCI segment
-+ * @bus: bus
-+ * @dev: device
-+ * @func: function
-+ * @reg: register
-+ * @data: where to store the read data
-+ *
-+ * Like &peci_pci_local_read, but it uses RdEndpointConfig PECI command.
-+ *
-+ * Return: 0 if succeeded, other values in case errors.
-+ */
-+int peci_ep_pci_local_read(struct peci_device *device, u8 seg,
-+			   u8 bus, u8 dev, u8 func, u16 reg, u32 *data)
-+{
-+	struct peci_request *req;
-+	int ret;
-+
-+	req = peci_xfer_ep_pci_cfg_local_readl(device, seg, bus, dev, func, reg);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
-+
-+	ret = peci_request_status(req);
-+	if (ret)
-+		goto out_req_free;
-+
-+	*data = peci_request_data_readl(req);
-+out_req_free:
-+	peci_request_free(req);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(peci_ep_pci_local_read, PECI_CPU);
-+
-+/**
-+ * peci_mmio_read() - read 32-bit memory location using 64-bit bar offset address
-+ * @device: PECI device to which request is going to be sent
-+ * @bar: PCI bar
-+ * @seg: PCI segment
-+ * @bus: bus
-+ * @dev: device
-+ * @func: function
-+ * @address: 64-bit MMIO address
-+ * @data: where to store the read data
-+ *
-+ * It uses RdEndpointConfig PECI command.
-+ *
-+ * Return: 0 if succeeded, other values in case errors.
-+ */
-+int peci_mmio_read(struct peci_device *device, u8 bar, u8 seg,
-+		   u8 bus, u8 dev, u8 func, u64 address, u32 *data)
-+{
-+	struct peci_request *req;
-+	int ret;
-+
-+	req = peci_xfer_ep_mmio64_readl(device, bar, seg, bus, dev, func, address);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
-+
-+	ret = peci_request_status(req);
-+	if (ret)
-+		goto out_req_free;
-+
-+	*data = peci_request_data_readl(req);
-+out_req_free:
-+	peci_request_free(req);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(peci_mmio_read, PECI_CPU);
-+
-+static const char * const peci_adev_types[] = {
-+	"cputemp",
-+	"dimmtemp",
-+};
-+
-+struct peci_cpu {
-+	struct peci_device *device;
-+	const struct peci_device_id *id;
-+};
-+
-+static void adev_release(struct device *dev)
-+{
-+	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-+
-+	auxiliary_device_uninit(adev);
-+
-+	kfree(adev->name);
-+	kfree(adev);
-+}
-+
-+static struct auxiliary_device *adev_alloc(struct peci_cpu *priv, int idx)
-+{
-+	struct peci_controller *controller = to_peci_controller(priv->device->dev.parent);
-+	struct auxiliary_device *adev;
-+	const char *name;
-+	int ret;
-+
-+	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
-+	if (!adev)
-+		return ERR_PTR(-ENOMEM);
-+
-+	name = kasprintf(GFP_KERNEL, "%s.%s", peci_adev_types[idx], (const char *)priv->id->data);
-+	if (!name) {
-+		ret = -ENOMEM;
-+		goto free_adev;
-+	}
-+
-+	adev->name = name;
-+	adev->dev.parent = &priv->device->dev;
-+	adev->dev.release = adev_release;
-+	adev->id = (controller->id << 16) | (priv->device->addr);
-+
-+	ret = auxiliary_device_init(adev);
-+	if (ret)
-+		goto free_name;
-+
-+	return adev;
-+
-+free_name:
-+	kfree(name);
-+free_adev:
-+	kfree(adev);
-+	return ERR_PTR(ret);
-+}
-+
-+static void unregister_adev(void *_adev)
-+{
-+	struct auxiliary_device *adev = _adev;
-+
-+	auxiliary_device_delete(adev);
-+}
-+
-+static int devm_adev_add(struct device *dev, int idx)
-+{
-+	struct peci_cpu *priv = dev_get_drvdata(dev);
-+	struct auxiliary_device *adev;
-+	int ret;
-+
-+	adev = adev_alloc(priv, idx);
-+	if (IS_ERR(adev))
-+		return PTR_ERR(adev);
-+
-+	ret = auxiliary_device_add(adev);
-+	if (ret) {
-+		auxiliary_device_uninit(adev);
-+		return ret;
-+	}
-+
-+	ret = devm_add_action_or_reset(&priv->device->dev, unregister_adev, adev);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static void peci_cpu_add_adevices(struct peci_cpu *priv)
-+{
-+	struct device *dev = &priv->device->dev;
-+	int ret, i;
-+
-+	for (i = 0; i < ARRAY_SIZE(peci_adev_types); i++) {
-+		ret = devm_adev_add(dev, i);
-+		if (ret) {
-+			dev_warn(dev, "Failed to register PECI auxiliary: %s, ret = %d\n",
-+				 peci_adev_types[i], ret);
-+			continue;
-+		}
-+	}
-+}
-+
-+static int
-+peci_cpu_probe(struct peci_device *device, const struct peci_device_id *id)
-+{
-+	struct device *dev = &device->dev;
-+	struct peci_cpu *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(dev, priv);
-+	priv->device = device;
-+	priv->id = id;
-+
-+	peci_cpu_add_adevices(priv);
-+
-+	return 0;
-+}
-+
-+static const struct peci_device_id peci_cpu_device_ids[] = {
-+	{ /* Haswell Xeon */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_HASWELL_X,
-+		.data	= "hsx",
-+	},
-+	{ /* Broadwell Xeon */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_BROADWELL_X,
-+		.data	= "bdx",
-+	},
-+	{ /* Broadwell Xeon D */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_BROADWELL_D,
-+		.data	= "bdxd",
-+	},
-+	{ /* Skylake Xeon */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_SKYLAKE_X,
-+		.data	= "skx",
-+	},
-+	{ /* Icelake Xeon */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_ICELAKE_X,
-+		.data	= "icx",
-+	},
-+	{ /* Icelake Xeon D */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_ICELAKE_D,
-+		.data	= "icxd",
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(peci, peci_cpu_device_ids);
-+
-+static struct peci_driver peci_cpu_driver = {
-+	.probe		= peci_cpu_probe,
-+	.id_table	= peci_cpu_device_ids,
-+	.driver		= {
-+		.name		= "peci-cpu",
-+	},
-+};
-+module_peci_driver(peci_cpu_driver);
-+
-+MODULE_AUTHOR("Iwona Winiarska <iwona.winiarska@intel.com>");
-+MODULE_DESCRIPTION("PECI CPU driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PECI);
-diff --git a/drivers/peci/device.c b/drivers/peci/device.c
-index 0a7660f4fc9b..235815710e5b 100644
---- a/drivers/peci/device.c
-+++ b/drivers/peci/device.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/bitfield.h>
- #include <linux/peci.h>
-+#include <linux/peci-cpu.h>
- #include <linux/slab.h>
- 
- #include "internal.h"
-diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
-index 52c02e12874f..9d75ea54504c 100644
---- a/drivers/peci/internal.h
-+++ b/drivers/peci/internal.h
-@@ -22,6 +22,7 @@ void peci_request_free(struct peci_request *req);
- int peci_request_status(struct peci_request *req);
- 
- u64 peci_request_dib_read(struct peci_request *req);
-+s16 peci_request_temp_read(struct peci_request *req);
- 
- u8 peci_request_data_readb(struct peci_request *req);
- u16 peci_request_data_readw(struct peci_request *req);
-@@ -36,6 +37,32 @@ struct peci_request *peci_xfer_pkg_cfg_readw(struct peci_device *device, u8 inde
- struct peci_request *peci_xfer_pkg_cfg_readl(struct peci_device *device, u8 index, u16 param);
- struct peci_request *peci_xfer_pkg_cfg_readq(struct peci_device *device, u8 index, u16 param);
- 
-+struct peci_request *peci_xfer_pci_cfg_local_readb(struct peci_device *device,
-+						   u8 bus, u8 dev, u8 func, u16 reg);
-+struct peci_request *peci_xfer_pci_cfg_local_readw(struct peci_device *device,
-+						   u8 bus, u8 dev, u8 func, u16 reg);
-+struct peci_request *peci_xfer_pci_cfg_local_readl(struct peci_device *device,
-+						   u8 bus, u8 dev, u8 func, u16 reg);
-+
-+struct peci_request *peci_xfer_ep_pci_cfg_local_readb(struct peci_device *device, u8 seg,
-+						      u8 bus, u8 dev, u8 func, u16 reg);
-+struct peci_request *peci_xfer_ep_pci_cfg_local_readw(struct peci_device *device, u8 seg,
-+						      u8 bus, u8 dev, u8 func, u16 reg);
-+struct peci_request *peci_xfer_ep_pci_cfg_local_readl(struct peci_device *device, u8 seg,
-+						      u8 bus, u8 dev, u8 func, u16 reg);
-+
-+struct peci_request *peci_xfer_ep_pci_cfg_readb(struct peci_device *device, u8 seg,
-+						u8 bus, u8 dev, u8 func, u16 reg);
-+struct peci_request *peci_xfer_ep_pci_cfg_readw(struct peci_device *device, u8 seg,
-+						u8 bus, u8 dev, u8 func, u16 reg);
-+struct peci_request *peci_xfer_ep_pci_cfg_readl(struct peci_device *device, u8 seg,
-+						u8 bus, u8 dev, u8 func, u16 reg);
-+
-+struct peci_request *peci_xfer_ep_mmio32_readl(struct peci_device *device, u8 bar, u8 seg,
-+					       u8 bus, u8 dev, u8 func, u64 offset);
-+
-+struct peci_request *peci_xfer_ep_mmio64_readl(struct peci_device *device, u8 bar, u8 seg,
-+					       u8 bus, u8 dev, u8 func, u64 offset);
- /**
-  * struct peci_device_id - PECI device data to match
-  * @data: pointer to driver private data specific to device
-diff --git a/drivers/peci/request.c b/drivers/peci/request.c
-index 9bd1d81c6093..33da90d801d5 100644
---- a/drivers/peci/request.c
-+++ b/drivers/peci/request.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/bug.h>
- #include <linux/export.h>
-+#include <linux/pci.h>
- #include <linux/peci.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-@@ -15,6 +16,10 @@
- #define  PECI_GET_DIB_WR_LEN		1
- #define  PECI_GET_DIB_RD_LEN		8
- 
-+#define PECI_GET_TEMP_CMD		0x01
-+#define  PECI_GET_TEMP_WR_LEN		1
-+#define  PECI_GET_TEMP_RD_LEN		2
-+
- #define PECI_RDPKGCFG_CMD		0xa1
- #define  PECI_RDPKGCFG_WR_LEN		5
- #define  PECI_RDPKGCFG_RD_LEN_BASE	1
-@@ -22,6 +27,45 @@
- #define  PECI_WRPKGCFG_WR_LEN_BASE	6
- #define  PECI_WRPKGCFG_RD_LEN		1
- 
-+#define PECI_RDIAMSR_CMD		0xb1
-+#define  PECI_RDIAMSR_WR_LEN		5
-+#define  PECI_RDIAMSR_RD_LEN		9
-+#define PECI_WRIAMSR_CMD		0xb5
-+#define PECI_RDIAMSREX_CMD		0xd1
-+#define  PECI_RDIAMSREX_WR_LEN		6
-+#define  PECI_RDIAMSREX_RD_LEN		9
-+
-+#define PECI_RDPCICFG_CMD		0x61
-+#define  PECI_RDPCICFG_WR_LEN		6
-+#define  PECI_RDPCICFG_RD_LEN		5
-+#define  PECI_RDPCICFG_RD_LEN_MAX	24
-+#define PECI_WRPCICFG_CMD		0x65
-+
-+#define PECI_RDPCICFGLOCAL_CMD			0xe1
-+#define  PECI_RDPCICFGLOCAL_WR_LEN		5
-+#define  PECI_RDPCICFGLOCAL_RD_LEN_BASE		1
-+#define PECI_WRPCICFGLOCAL_CMD			0xe5
-+#define  PECI_WRPCICFGLOCAL_WR_LEN_BASE		6
-+#define  PECI_WRPCICFGLOCAL_RD_LEN		1
-+
-+#define PECI_ENDPTCFG_TYPE_LOCAL_PCI		0x03
-+#define PECI_ENDPTCFG_TYPE_PCI			0x04
-+#define PECI_ENDPTCFG_TYPE_MMIO			0x05
-+#define PECI_ENDPTCFG_ADDR_TYPE_PCI		0x04
-+#define PECI_ENDPTCFG_ADDR_TYPE_MMIO_D		0x05
-+#define PECI_ENDPTCFG_ADDR_TYPE_MMIO_Q		0x06
-+#define PECI_RDENDPTCFG_CMD			0xc1
-+#define  PECI_RDENDPTCFG_PCI_WR_LEN		12
-+#define  PECI_RDENDPTCFG_MMIO_WR_LEN_BASE	10
-+#define  PECI_RDENDPTCFG_MMIO_D_WR_LEN		14
-+#define  PECI_RDENDPTCFG_MMIO_Q_WR_LEN		18
-+#define  PECI_RDENDPTCFG_RD_LEN_BASE		1
-+#define PECI_WRENDPTCFG_CMD			0xc5
-+#define  PECI_WRENDPTCFG_PCI_WR_LEN_BASE	13
-+#define  PECI_WRENDPTCFG_MMIO_D_WR_LEN_BASE	15
-+#define  PECI_WRENDPTCFG_MMIO_Q_WR_LEN_BASE	19
-+#define  PECI_WRENDPTCFG_RD_LEN			1
-+
- /* Device Specific Completion Code (CC) Definition */
- #define PECI_CC_SUCCESS				0x40
- #define PECI_CC_NEED_RETRY			0x80
-@@ -202,6 +246,27 @@ struct peci_request *peci_xfer_get_dib(struct peci_device *device)
- }
- EXPORT_SYMBOL_NS_GPL(peci_xfer_get_dib, PECI);
- 
-+struct peci_request *peci_xfer_get_temp(struct peci_device *device)
-+{
-+	struct peci_request *req;
-+	int ret;
-+
-+	req = peci_request_alloc(device, PECI_GET_TEMP_WR_LEN, PECI_GET_TEMP_RD_LEN);
-+	if (!req)
-+		return ERR_PTR(-ENOMEM);
-+
-+	req->tx.buf[0] = PECI_GET_TEMP_CMD;
-+
-+	ret = peci_request_xfer(req);
-+	if (ret) {
-+		peci_request_free(req);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return req;
-+}
-+EXPORT_SYMBOL_NS_GPL(peci_xfer_get_temp, PECI);
-+
- static struct peci_request *
- __pkg_cfg_read(struct peci_device *device, u8 index, u16 param, u8 len)
- {
-@@ -226,6 +291,108 @@ __pkg_cfg_read(struct peci_device *device, u8 index, u16 param, u8 len)
- 	return req;
- }
- 
-+static u32 __get_pci_addr(u8 bus, u8 dev, u8 func, u16 reg)
-+{
-+	return reg | PCI_DEVID(bus, PCI_DEVFN(dev, func)) << 12;
-+}
-+
-+static struct peci_request *
-+__pci_cfg_local_read(struct peci_device *device, u8 bus, u8 dev, u8 func, u16 reg, u8 len)
-+{
-+	struct peci_request *req;
-+	u32 pci_addr;
-+	int ret;
-+
-+	req = peci_request_alloc(device, PECI_RDPCICFGLOCAL_WR_LEN,
-+				 PECI_RDPCICFGLOCAL_RD_LEN_BASE + len);
-+	if (!req)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pci_addr = __get_pci_addr(bus, dev, func, reg);
-+
-+	req->tx.buf[0] = PECI_RDPCICFGLOCAL_CMD;
-+	req->tx.buf[1] = 0;
-+	put_unaligned_le24(pci_addr, &req->tx.buf[2]);
-+
-+	ret = peci_request_xfer_retry(req);
-+	if (ret) {
-+		peci_request_free(req);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return req;
-+}
-+
-+static struct peci_request *
-+__ep_pci_cfg_read(struct peci_device *device, u8 msg_type, u8 seg,
-+		  u8 bus, u8 dev, u8 func, u16 reg, u8 len)
-+{
-+	struct peci_request *req;
-+	u32 pci_addr;
-+	int ret;
-+
-+	req = peci_request_alloc(device, PECI_RDENDPTCFG_PCI_WR_LEN,
-+				 PECI_RDENDPTCFG_RD_LEN_BASE + len);
-+	if (!req)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pci_addr = __get_pci_addr(bus, dev, func, reg);
-+
-+	req->tx.buf[0] = PECI_RDENDPTCFG_CMD;
-+	req->tx.buf[1] = 0;
-+	req->tx.buf[2] = msg_type;
-+	req->tx.buf[3] = 0;
-+	req->tx.buf[4] = 0;
-+	req->tx.buf[5] = 0;
-+	req->tx.buf[6] = PECI_ENDPTCFG_ADDR_TYPE_PCI;
-+	req->tx.buf[7] = seg; /* PCI Segment */
-+	put_unaligned_le32(pci_addr, &req->tx.buf[8]);
-+
-+	ret = peci_request_xfer_retry(req);
-+	if (ret) {
-+		peci_request_free(req);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return req;
-+}
-+
-+static struct peci_request *
-+__ep_mmio_read(struct peci_device *device, u8 bar, u8 addr_type, u8 seg,
-+	       u8 bus, u8 dev, u8 func, u64 offset, u8 tx_len, u8 len)
-+{
-+	struct peci_request *req;
-+	int ret;
-+
-+	req = peci_request_alloc(device, tx_len, PECI_RDENDPTCFG_RD_LEN_BASE + len);
-+	if (!req)
-+		return ERR_PTR(-ENOMEM);
-+
-+	req->tx.buf[0] = PECI_RDENDPTCFG_CMD;
-+	req->tx.buf[1] = 0;
-+	req->tx.buf[2] = PECI_ENDPTCFG_TYPE_MMIO;
-+	req->tx.buf[3] = 0; /* Endpoint ID */
-+	req->tx.buf[4] = 0; /* Reserved */
-+	req->tx.buf[5] = bar;
-+	req->tx.buf[6] = addr_type;
-+	req->tx.buf[7] = seg; /* PCI Segment */
-+	req->tx.buf[8] = PCI_DEVFN(dev, func);
-+	req->tx.buf[9] = bus; /* PCI Bus */
-+
-+	if (addr_type == PECI_ENDPTCFG_ADDR_TYPE_MMIO_D)
-+		put_unaligned_le32(offset, &req->tx.buf[10]);
-+	else
-+		put_unaligned_le64(offset, &req->tx.buf[10]);
-+
-+	ret = peci_request_xfer_retry(req);
-+	if (ret) {
-+		peci_request_free(req);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return req;
-+}
-+
- u8 peci_request_data_readb(struct peci_request *req)
- {
- 	return req->rx.buf[1];
-@@ -256,6 +423,12 @@ u64 peci_request_dib_read(struct peci_request *req)
- }
- EXPORT_SYMBOL_NS_GPL(peci_request_dib_read, PECI);
- 
-+s16 peci_request_temp_read(struct peci_request *req)
-+{
-+	return get_unaligned_le16(&req->rx.buf[0]);
-+}
-+EXPORT_SYMBOL_NS_GPL(peci_request_temp_read, PECI);
-+
- #define __read_pkg_config(x, type) \
- struct peci_request *peci_xfer_pkg_cfg_##x(struct peci_device *device, u8 index, u16 param) \
- { \
-@@ -267,3 +440,43 @@ __read_pkg_config(readb, u8);
- __read_pkg_config(readw, u16);
- __read_pkg_config(readl, u32);
- __read_pkg_config(readq, u64);
-+
-+#define __read_pci_config_local(x, type) \
-+struct peci_request * \
-+peci_xfer_pci_cfg_local_##x(struct peci_device *device, u8 bus, u8 dev, u8 func, u16 reg) \
-+{ \
-+	return __pci_cfg_local_read(device, bus, dev, func, reg, sizeof(type)); \
-+} \
-+EXPORT_SYMBOL_NS_GPL(peci_xfer_pci_cfg_local_##x, PECI)
-+
-+__read_pci_config_local(readb, u8);
-+__read_pci_config_local(readw, u16);
-+__read_pci_config_local(readl, u32);
-+
-+#define __read_ep_pci_config(x, msg_type, type) \
-+struct peci_request * \
-+peci_xfer_ep_pci_cfg_##x(struct peci_device *device, u8 seg, u8 bus, u8 dev, u8 func, u16 reg) \
-+{ \
-+	return __ep_pci_cfg_read(device, msg_type, seg, bus, dev, func, reg, sizeof(type)); \
-+} \
-+EXPORT_SYMBOL_NS_GPL(peci_xfer_ep_pci_cfg_##x, PECI)
-+
-+__read_ep_pci_config(local_readb, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u8);
-+__read_ep_pci_config(local_readw, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u16);
-+__read_ep_pci_config(local_readl, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u32);
-+__read_ep_pci_config(readb, PECI_ENDPTCFG_TYPE_PCI, u8);
-+__read_ep_pci_config(readw, PECI_ENDPTCFG_TYPE_PCI, u16);
-+__read_ep_pci_config(readl, PECI_ENDPTCFG_TYPE_PCI, u32);
-+
-+#define __read_ep_mmio(x, y, addr_type, type1, type2) \
-+struct peci_request *peci_xfer_ep_mmio##y##_##x(struct peci_device *device, u8 bar, u8 seg, \
-+					   u8 bus, u8 dev, u8 func, u64 offset) \
-+{ \
-+	return __ep_mmio_read(device, bar, addr_type, seg, bus, dev, func, \
-+			      offset, PECI_RDENDPTCFG_MMIO_WR_LEN_BASE + sizeof(type1), \
-+			      sizeof(type2)); \
-+} \
-+EXPORT_SYMBOL_NS_GPL(peci_xfer_ep_mmio##y##_##x, PECI)
-+
-+__read_ep_mmio(readl, 32, PECI_ENDPTCFG_ADDR_TYPE_MMIO_D, u32, u32);
-+__read_ep_mmio(readl, 64, PECI_ENDPTCFG_ADDR_TYPE_MMIO_Q, u64, u32);
-diff --git a/include/linux/peci-cpu.h b/include/linux/peci-cpu.h
-new file mode 100644
-index 000000000000..ff8ae9c26c80
---- /dev/null
-+++ b/include/linux/peci-cpu.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2021 Intel Corporation */
-+
-+#ifndef __LINUX_PECI_CPU_H
-+#define __LINUX_PECI_CPU_H
-+
-+#include <linux/types.h>
-+
-+#include "../../arch/x86/include/asm/intel-family.h"
-+
-+#define PECI_PCS_PKG_ID			0  /* Package Identifier Read */
-+#define  PECI_PKG_ID_CPU_ID		0x0000  /* CPUID Info */
-+#define  PECI_PKG_ID_PLATFORM_ID	0x0001  /* Platform ID */
-+#define  PECI_PKG_ID_DEVICE_ID		0x0002  /* Uncore Device ID */
-+#define  PECI_PKG_ID_MAX_THREAD_ID	0x0003  /* Max Thread ID */
-+#define  PECI_PKG_ID_MICROCODE_REV	0x0004  /* CPU Microcode Update Revision */
-+#define  PECI_PKG_ID_MCA_ERROR_LOG	0x0005  /* Machine Check Status */
-+#define PECI_PCS_MODULE_TEMP		9  /* Per Core DTS Temperature Read */
-+#define PECI_PCS_THERMAL_MARGIN		10 /* DTS thermal margin */
-+#define PECI_PCS_DDR_DIMM_TEMP		14 /* DDR DIMM Temperature */
-+#define PECI_PCS_TEMP_TARGET		16 /* Temperature Target Read */
-+#define PECI_PCS_TDP_UNITS		30 /* Units for power/energy registers */
-+
-+struct peci_device;
-+
-+int peci_temp_read(struct peci_device *device, s16 *temp_raw);
-+
-+int peci_pcs_read(struct peci_device *device, u8 index,
-+		  u16 param, u32 *data);
-+
-+int peci_pci_local_read(struct peci_device *device, u8 bus, u8 dev,
-+			u8 func, u16 reg, u32 *data);
-+
-+int peci_ep_pci_local_read(struct peci_device *device, u8 seg,
-+			   u8 bus, u8 dev, u8 func, u16 reg, u32 *data);
-+
-+int peci_mmio_read(struct peci_device *device, u8 bar, u8 seg,
-+		   u8 bus, u8 dev, u8 func, u64 address, u32 *data);
-+
-+#endif /* __LINUX_PECI_CPU_H */
-diff --git a/include/linux/peci.h b/include/linux/peci.h
-index dcf1c53f4e40..ce43705eaac4 100644
---- a/include/linux/peci.h
-+++ b/include/linux/peci.h
-@@ -14,14 +14,6 @@
-  */
- #define PECI_REQUEST_MAX_BUF_SIZE 32
- 
--#define PECI_PCS_PKG_ID			0  /* Package Identifier Read */
--#define  PECI_PKG_ID_CPU_ID		0x0000  /* CPUID Info */
--#define  PECI_PKG_ID_PLATFORM_ID	0x0001  /* Platform ID */
--#define  PECI_PKG_ID_DEVICE_ID		0x0002  /* Uncore Device ID */
--#define  PECI_PKG_ID_MAX_THREAD_ID	0x0003  /* Max Thread ID */
--#define  PECI_PKG_ID_MICROCODE_REV	0x0004  /* CPU Microcode Update Revision */
--#define  PECI_PKG_ID_MCA_ERROR_LOG	0x0005  /* Machine Check Status */
--
- struct peci_controller;
- struct peci_request;
- 
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
