@@ -2,110 +2,202 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 405B2C43217
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 043B5C4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 22:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F8736321F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E28BF6321B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 22:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345063AbhKOWze (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Nov 2021 17:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbhKOWuH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Nov 2021 17:50:07 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3B7C03AA22;
-        Mon, 15 Nov 2021 14:01:59 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id m14so78583695edd.0;
-        Mon, 15 Nov 2021 14:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I5HscGTHZr6+xi1a6alcJPyjhjUoDbOBDFHoUw2L51o=;
-        b=lIwqy+vraVBs9t40KMt6lhKFZG5nM6cLoF5A3AalVN0hTJVgNQuGGORQjwEvumUGle
-         3cBQqlcv3mrjNG4FORxmkRbj40heghE0+RhCPQKKTD6lhlmZoFqjGg4wNUp8ZnWgycRY
-         VsEQ2BtXzKXDyd4CAynzjijP4NH5DJ0zidKOLplWjaY8mm4YB8HjiZpAycdaGTsO4nsY
-         bbr8nrgw4lIoLE4KhmUO/UHtoRbNv0OEFhBv3N118wQZKlF2o0BO9mRQuLP/AXXx4Zmv
-         GNOR1UehG3cqPMbiuzhj5PziQmILouBLerjvgdVW02Pq2oPz5WfmtGT6d/ZnPTlE7xBu
-         G9Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I5HscGTHZr6+xi1a6alcJPyjhjUoDbOBDFHoUw2L51o=;
-        b=zpt/zCPr30PQzij03dyQc6LIOl08FJqeM5Y9pQhlv33I9YBa7SBSh+9+jwfKK84s1k
-         JQn5Q/Zd6/pL8RwVjJ2YNBUga+pFeavGLXBYeVUt1h8n8KAtdXOio5VXqbztkkISdidw
-         Whu4U9XvONGbw2o1ZpKFFrGWlsqXdUrkTsu88Abh28QymZtlD/wq9y4Nq/ZaEgL8rC+q
-         LRV187tXrZq/nxyNH740VMA3Cv6LshQs7AZCwf+ikDXpW4z6HpsLe5RuYLjcfeN8rcJ9
-         y6+jmy/HTKYDuc8HlmRUB9hGIrCKoUweHlr0G+yZS5gtXVsAxiy1GW0rlTm0NYHaG2Cz
-         dr7A==
-X-Gm-Message-State: AOAM5331GVX9yVWry9be2hHZ8IIhGWVOU+hLmsnaeNtxONzR7e9wZMGg
-        oRUvGUBLAFPTVWe72zFVgMR1ef4xt/TZAJtqzRdTR10xpfc=
-X-Google-Smtp-Source: ABdhPJz3pWyThL+n+5rrtc+iEasNam2xwC2mel1/qlNmbMzGVGsIC0sscKWK8fGf4NLo2ipGveze1EYD5q0o+3rvvGM=
-X-Received: by 2002:a05:6402:26d4:: with SMTP id x20mr745600edd.119.1637013718460;
- Mon, 15 Nov 2021 14:01:58 -0800 (PST)
+        id S241366AbhKOXA2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Nov 2021 18:00:28 -0500
+Received: from mga04.intel.com ([192.55.52.120]:45719 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353600AbhKOWjx (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 15 Nov 2021 17:39:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="232269490"
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="232269490"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 14:35:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="604052876"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga004.jf.intel.com with ESMTP; 15 Nov 2021 14:35:25 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 15 Nov 2021 14:35:25 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 15 Nov 2021 14:35:25 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Mon, 15 Nov 2021 14:35:25 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.12; Mon, 15 Nov 2021 14:35:24 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AOhNf39+O8mD2pw1WUDgs7ui29IrXkpdOR+lqpruwGb+uTb1smT7lReoilk0WmS0ukb4ShikljVvPf9x7w86SX1LOqpdkxOjei6i76Bn5P9AI9Zehjanc97vSk0oKlSzJDCt44oN7j9EA5f4FteVkDwqoTRpzFauDLWtSE+1sud8bkm3j6DG54DqsLqmSvCcrZSwOlUxYEWsOj9uoGwBJDNEr/n+Fmj4mBygWipKyVkgIEzwLkhvas1NPV/zNsog0Op++/IL+4UzdRNDD5h26mQfK59rp6oT/QLpUGhaJlE0Y+5JlmKm7DfwqkUHUuxw7hhBKWjWQpHIxRiicRg41g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M/aW7KGgLZXg7ts3dPHP6JHaWVZ6xIEP+pkWmobE3iQ=;
+ b=WOZZZULg8yU4fKJT/vpUffKc3XNMpj5q67u3O1A2ztx7Dmu+CauHNDLLnYJpLLRTwJ7Mo8Yd4RiyXxIgVsvRyQtjxU/TfT2kU5LlxfA0/VOTT6XbCMGNsEqoU3xZzFHLKFOzTZvl/4An5U+Iv50PWXZru63qCRZULTcorTDCRvCnmvGeW3cC5BLRLOky8ujOcrHwgMH3ZzE41RbFBMc4xAYG5DWxDObCvcPZKbfmE9hj6nhD01prNDUVb8mljJIRyb3FosLm1or3mrtZm0imOixDbheqtjbeY7/acfRLjqAgg0HNr/gZbxidWMFYH+bfvNNQMdeYQnuV0Yk6Kq5cAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M/aW7KGgLZXg7ts3dPHP6JHaWVZ6xIEP+pkWmobE3iQ=;
+ b=hm/uFOPofm3P0DZPOVfWJKhE94O8QFGbw96q5g6H7ybN0hDAzb7z151zb4fUA2qLFy/VVTZHcNH4AvTgm++/j77undxrVvD96ndfnuIqKbn2tHe4IuHe6mOYlvyeBMcz/Fol6S9TtDJOnjxGV7hKq7rRj6A5/hIRror3cKmyuJs=
+Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
+ by CO1PR11MB5123.namprd11.prod.outlook.com (2603:10b6:303:94::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.16; Mon, 15 Nov
+ 2021 22:35:23 +0000
+Received: from MW4PR11MB5823.namprd11.prod.outlook.com
+ ([fe80::6553:c7f9:a224:cac1]) by MW4PR11MB5823.namprd11.prod.outlook.com
+ ([fe80::6553:c7f9:a224:cac1%4]) with mapi id 15.20.4690.027; Mon, 15 Nov 2021
+ 22:35:23 +0000
+From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "d.mueller@elsoft.ch" <d.mueller@elsoft.ch>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "zweiss@equinix.com" <zweiss@equinix.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "bp@alien8.de" <bp@alien8.de>, "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v3 06/13] peci: Add device detection
+Thread-Topic: [PATCH v3 06/13] peci: Add device detection
+Thread-Index: AQHX2k6vfpbjE6OLJ069BVykJfvHA6wE7o6AgAA++wA=
+Date:   Mon, 15 Nov 2021 22:35:23 +0000
+Message-ID: <368c990c30c5bacde15ac4bce5db8389aea3ec9c.camel@intel.com>
+References: <20211115182552.3830849-1-iwona.winiarska@intel.com>
+         <20211115182552.3830849-7-iwona.winiarska@intel.com>
+         <YZKr1Rqfx6Cmw+Ok@kroah.com>
+In-Reply-To: <YZKr1Rqfx6Cmw+Ok@kroah.com>
+Accept-Language: en-US, pl-PL
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9fa09d48-837d-4073-d430-08d9a88836da
+x-ms-traffictypediagnostic: CO1PR11MB5123:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+x-microsoft-antispam-prvs: <CO1PR11MB51234E8E3EBDDE050A951841EC989@CO1PR11MB5123.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ufUTV4kj8T88980pNtkgc7PonAcLAie0IQWOWhyUNaxWwTC3G0s+XMPBHDI13rThEBQSXb0PvefRTKxNap/TYG9YQeKYh/Y0LDDzgpG8Cuu+wTPs2Ei3K2FQgVNExMUqV08RvZIkwG5jXToIvRkbkRKsBwsDyzkEeq4nx/sixnT0DLcShTyQi2WeUlCXJrS0V2IF+yapHRywF2/eDKcsf0LPCEOzbJYduiVzCP688fEs9aG0y1H4AsgTtdkTtxNXtqp78/H9lEl2oHd8W/oUh01nA9b2Lts+C9sPUtb+J9Cuak1h3ymtVrv5QlDc1jNn08V4t6SaZk+BR949uzHy7JJz5UKyclbecwJiDl2pkRIqCB9hm3QYaG8PRgCXJ11FJljMsTacb2eP2Ce6dUgJ3VsQIQiaUYnFP1CFeas8zkK6X5/y1xEYR5itAR0KbXgX3xTDxmEXdTkrEJY01WevN9C40KKzky7aHbKOCg6vx7/whMUnB003ai2IQT3Y/WIZLEhVQvSykNOyXXRhaLnWLY8CwLHUADBKb52hg87JMhRLxaf5EFIUjvhuzODS74a+awdgtxQm3F5V0HnlGAwPQKeqtqqaJ/O0Oj+aOZXYC/lH3Eonke247b1ZkUHa1ULRBx+Ps4P5k83w44dAthadTCyvOYm6QZDhBqZIp+OFFtLJXW2vUPfvaveOhBAFuvIrNNIRuLxZKweB2d7twflyQg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66556008)(66476007)(76116006)(71200400001)(8936002)(64756008)(316002)(54906003)(4001150100001)(36756003)(5660300002)(91956017)(2906002)(38100700002)(508600001)(122000001)(82960400001)(6506007)(6916009)(83380400001)(8676002)(6486002)(6512007)(2616005)(186003)(66446008)(86362001)(7416002)(26005)(38070700005)(66946007)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UHhlVXNHZTdkZ1hSWnlyKzU5azZkWVVvM1ZqdXRLSDNVN0tiN05OS053cDE0?=
+ =?utf-8?B?dUhrRThSM2R1TFhLL0E5Z1VYNWtDcFBuV2EzL240eEN2YzIySFAzSUROaVpp?=
+ =?utf-8?B?SmJRZExoUWFoUGpKVXppVG4zaG5kL1dRbjUwNHB5S3p0Q2RUL2VHLzJvQjNS?=
+ =?utf-8?B?ZFdZY1JoYmlCWFZpUEZyTmhMWlpOQTZwWVFBYldrT1N5T0sxZDBVS3lRQThQ?=
+ =?utf-8?B?Y3h1T04wSE5HTk1IRER4UTRTTkF1NC9KdjVyU1M1TmRpenlBRUhHY1l2T0k5?=
+ =?utf-8?B?SXVKd1g0d3NEVEVpUThYRzFTa0pVN3JBcXlIbG91T3dKcG1PZ0FQNFlQZWNQ?=
+ =?utf-8?B?Sk1meklrbm84RW1QOXNUb1lZUE15d2JRcnpTakN1QTBnOEtwMVRzZWlud05n?=
+ =?utf-8?B?VnBGYlN5dEVCTktWUnpWR1lieWJ5UkYzYkxMQ29Fc0hNdGhaUnhxRDJQMzdm?=
+ =?utf-8?B?MVRKZlZ4SzBCdlREaW5TMncxcHpvZ1lXajdsdGY3cVdaOVFZMkx5N3BXSk9I?=
+ =?utf-8?B?eXltNFBidktnMjRVODZQRlpXOVhWRW5KWDE3bmMwaXE2M2w5Z3Q2Z2VNaTFy?=
+ =?utf-8?B?WkFtSlAxd3NmL2RkMUFlMUxwNDB1ak9NYm1xNHZaT1FvQ0JZZTkyRXBNb282?=
+ =?utf-8?B?a2Z3MVo4MENLYm5mQ0ZlQm9pc0J0ZDByNkhUZkRpeGpHL2hzNmhUVkx4Q1pE?=
+ =?utf-8?B?UDNoM2t6UThzZ3oyeHM3TEkvNkYxOTVHcXdEOGJpOUtWbkZOTzBPeWJzRUxO?=
+ =?utf-8?B?TDB6d2FnOWJ3R1pEVHRQTi9zb01HbVA3ZWJJa0ozcFozdFhTcTQ3WDhML1d2?=
+ =?utf-8?B?WVZuMTRaek5vbDNTQmJYWHVKSUd1SEFVek4vekpYcE51L051YVZUYXBFNjQz?=
+ =?utf-8?B?WE9kUjk4cEJwL3JFNmdTZjFESHd6UjM0bGdzbk1qcXFqQmRqNVZOdjc2RjFI?=
+ =?utf-8?B?RCt0Y3VjUExxTmlFTXhmaFJEeHE2ZHMybEMxLzdFU1dHWko4U1hOak1yc2J1?=
+ =?utf-8?B?b2J5Njc2d1dVT0dBbnp1bEhFak45Rnd5cmgrSjNyemZmRGVVTThLbWdzSFBl?=
+ =?utf-8?B?eE1FR0EwQ1BSS243dmI5Wk5JRHd2QndERjNtMmFXUDNlcVYrTTZxTU92MmRs?=
+ =?utf-8?B?U1VkL3h4VXZiZjg5NE8zcFBmL2k2R1hPUGYwZ0JPRkNodlJMRW9iVVZWdkdo?=
+ =?utf-8?B?M2gyY3JUWTAyU2ZQR1BKTUlPSjdqUWIvVWtUekFrZThwbEpOaktiaWV2aE9u?=
+ =?utf-8?B?d2RXVWhwcUU1bmc5b2l4UDNGUUNLeTRMS2Y3OGdQcjM0RmxJUDdDc3ZPckVy?=
+ =?utf-8?B?NXdvSFc4dXFEUGphNytWbWZxRXUraUI1OW9jY2g5SHJ5UEZvSlpnTkpCcjdo?=
+ =?utf-8?B?ZDlEQ0RLdkRBdEZ4TG42WS9zRGJWQzM5TjVxOXVwTFNBb3NwcnF0bTFLNjNq?=
+ =?utf-8?B?QkpVaEd0cDJmbi9yeXFUYlg3KzdRbGFDdEVLUEI2enAySjd5TUR5M0FzcFM3?=
+ =?utf-8?B?SmhQY1phdUJjanlYUXZUM0xTTnlhSDBNd25tUU0zdHQvcDU1TFZkOHJQTHpB?=
+ =?utf-8?B?aXI2MFhVblBINllTY0Rtdk9lNWhYaDNPalZ5Q1JxZGIyYWFrUlpHbWtUU3dC?=
+ =?utf-8?B?N0hkTWY0Yng4Vzh2SlFlZVpMbVlIRG5UK3gyd3kwR09qeStmaFVvRGxMZHZk?=
+ =?utf-8?B?MG9HTlJaQkdKNzcyQmRXVUxWa1dqaGRuWkNaUyt6a1pVOWMvWmNkQTdUZmdi?=
+ =?utf-8?B?TWpLK0VZT1hZcUkwRVFmMyt1Z3B1NjRReS90VkN2aEZmc3NOOSt0R1pYSTVs?=
+ =?utf-8?B?RmlXVkRyNW1mMEhDNFd5aFNZSXN4eG82bEN0bTQ2MG93dHhRZit0TThLRTFk?=
+ =?utf-8?B?SjB1NUFVSlJTVW5sZ0dzMkdFNmZrUE11c2xNTWwrOTFET2FCcVhadDVOV2h5?=
+ =?utf-8?B?MnEzT1Q5Rm1zbkhFYTlmVnNFV3JTcHNtclN1UE5zbXlyTlNBN05yeUJoQWht?=
+ =?utf-8?B?cTQ5NitLY0ppVHU1eHdKYlM3Ti9BRXVEdFcvNW5PTHhyOWZvaGIxQUxmdmFG?=
+ =?utf-8?B?UW1ZQjZHQ2lUb2ZmM29LdkZZS3J0d0Z3WFZjaU82NmxOYUJGNjQzK3pxbGxP?=
+ =?utf-8?B?M2hrNmViaFROK3E4bVgyM3pFak1LLzdERlFubS9GemhhK0dRdVhic0VIYW9X?=
+ =?utf-8?B?ODdqbmNMdTdVakZXVGw1NmsyTnlMYWJhR3UralJZMHM0aXBoeE8rd3ZIVGdV?=
+ =?utf-8?Q?el8Zi39mO9VyTQdo/ncfc98rZxBVZioZcV9UvvUzog=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D0753BAE25815142A6592DB1F5E78778@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211115210842.11972-1-pauk.denis@gmail.com>
-In-Reply-To: <20211115210842.11972-1-pauk.denis@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 16 Nov 2021 00:01:22 +0200
-Message-ID: <CAHp75VcPHi1XyZr=CFbUhiUXK0q-10iBx5U3d==aG8pMG27k1Q@mail.gmail.com>
-Subject: Re: [PATCH v11 0/2] Update ASUS WMI supported boards
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        thomas@weissschuh.net, Ed Brindley <kernel@maidavale.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fa09d48-837d-4073-d430-08d9a88836da
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2021 22:35:23.6834
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rztPXGBaWoTxNQdQrkrJItF7HZKsyIClirIsC5RW3UfrGKK3/TvSzNfJIzVns7Z6a5c4/jpIgUk5vuP8VQ0Zai0KrVMN8EIDbIqOgx588r8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5123
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 11:09 PM Denis Pauk <pauk.denis@gmail.com> wrote:
->
-> Add support by WMI interface provided by Asus for B550/X570 boards:
-> * PRIME X570-PRO,
-> * ROG CROSSHAIR VIII HERO
-> * ROG CROSSHAIR VIII DARK HERO
-> * ROG CROSSHAIR VIII FORMULA
-> * ROG STRIX X570-E GAMING
-> * ROG STRIX B550-I GAMING
-> * ROG STRIX B550-E GAMING
->
-> Add support by WMI interface provided by Asus for X370/X470/
-> B450/X399 boards:
-> * ROG CROSSHAIR VI HERO,
-> * PRIME X399-A,
-> * PRIME X470-PRO,
-> * ROG CROSSHAIR VI EXTREME,
-> * ROG CROSSHAIR VI HERO (WI-FI AC),
-> * ROG CROSSHAIR VII HERO,
-> * ROG CROSSHAIR VII HERO (WI-FI),
-> * ROG STRIX Z390-F GAMING
-> * ROG STRIX B450-E GAMING,
-> * ROG STRIX B450-F GAMING,
-> * ROG STRIX B450-I GAMING,
-> * ROG STRIX X399-E GAMING,
-> * ROG STRIX X470-F GAMING,
-> * ROG STRIX X470-I GAMING,
-> * ROG ZENITH EXTREME,
-> * ROG ZENITH EXTREME ALPHA.
->
-> I have added "ROG STRIX Z390-F GAMING" to list of supported boards in
-> asus_wmi_sensors.
-
-Guenter, what is your plan about this patch series? It seems it
-missed, by unknown (?) reason, the v5.16-rc1 (I remember seeing it in
-some of your tree branches at some point).
-
--- 
-With Best Regards,
-Andy Shevchenko
+T24gTW9uLCAyMDIxLTExLTE1IGF0IDE5OjQ5ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
+dGU6DQo+IE9uIE1vbiwgTm92IDE1LCAyMDIxIGF0IDA3OjI1OjQ1UE0gKzAxMDAsIEl3b25hIFdp
+bmlhcnNrYSB3cm90ZToNCj4gPiArdm9pZCBwZWNpX2RldmljZV9kZXN0cm95KHN0cnVjdCBwZWNp
+X2RldmljZSAqZGV2aWNlKQ0KPiA+ICt7DQo+ID4gK8KgwqDCoMKgwqDCoMKgYm9vbCBraWxsZWQ7
+DQo+ID4gKw0KPiA+ICvCoMKgwqDCoMKgwqDCoGRldmljZV9sb2NrKCZkZXZpY2UtPmRldik7DQo+
+ID4gK8KgwqDCoMKgwqDCoMKga2lsbGVkID0ga2lsbF9kZXZpY2UoJmRldmljZS0+ZGV2KTsNCj4g
+DQo+IEVlZWssIHdoeSBjYWxsIHRoaXM/DQo+IA0KPiA+ICvCoMKgwqDCoMKgwqDCoGRldmljZV91
+bmxvY2soJmRldmljZS0+ZGV2KTsNCj4gPiArDQo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKCFraWxs
+ZWQpDQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybjsNCj4gDQo+IFdo
+YXQgaGFwcGVuZWQgaWYgc29tZXRoaW5nIGNoYW5nZWQgYWZ0ZXIgeW91IHVubG9ja2VkIGl0Pw0K
+DQpXZSBlaXRoZXIga2lsbGVkIGl0LCBvciB0aGUgb3RoZXIgY2FsbGVyIGtpbGxlZCBpdC4NCg0K
+PiANCj4gV2h5IGlzIGtpbGxfZGV2aWNlKCkgcmVxdWlyZWQgYXQgYWxsP8KgIFRoYXQncyBhIHZl
+cnkgcmFyZSBmdW5jdGlvbiB0bw0KPiBjYWxsLCBhbmQgb25lIHRoYXQgb25seSBvbmUgImJ1cyIg
+Y2FsbHMgdG9kYXkgYmVjYXVzZSBpdCBpcyB2ZXJ5DQo+IHNwZWNpYWwgKGkuZS4gY3JhenkgYW5k
+IGJyb2tlbi4uLikNCg0KSXQncyB1c2VkIHRvIGF2b2lkIGRvdWJsZS1kZWxldGUgaW4gY2FzZSBv
+ZiByYWNlcyBiZXR3ZWVuIHBlY2lfY29udHJvbGxlcg0KdW5yZWdpc3RlciBhbmQgIm1hbnVhbGx5
+IiByZW1vdmluZyB0aGUgZGV2aWNlIHVzaW5nIHN5c2ZzIChwb2ludGVkIG91dCBieSBEYW4gaW4N
+CnYyKS4gV2UncmUgY2FsbGluZyBwZWNpX2RldmljZV9kZXN0cm95KCkgaW4gYm90aCBjYWxsc2l0
+ZXMuDQpPdGhlciB3YXkgdG8gc29sdmUgaXQgd291bGQgYmUgdG8ganVzdCBoYXZlIGEgcGVjaS1z
+cGVjaWZpYyBsb2NrLCBidXQNCmtpbGxfZGV2aWNlIHNlZW1lZCB0byBiZSB3ZWxsIHN1aXRlZCBm
+b3IgdGhlIHByb2JsZW0gYXQgaGFuZC4NCkRvIHlvdSBzdWdnZXN0IHRvIHJlbW92ZSBpdCBhbmQg
+anVzdCBnbyB3aXRoIHRoZSBsb2NrPw0KDQpUaGFua3MNCi1Jd29uYQ0KDQo+IA0KPiB0aGFua3Ms
+DQo+IA0KPiBncmVnIGstaA0KDQo=
