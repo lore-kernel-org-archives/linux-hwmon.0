@@ -2,27 +2,27 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4839BC43217
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FBAC433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:38:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32D526358C
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:38:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A465632ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:38:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242335AbhKOSlO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Nov 2021 13:41:14 -0500
-Received: from mga18.intel.com ([134.134.136.126]:16856 "EHLO mga18.intel.com"
+        id S242245AbhKOSlQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Nov 2021 13:41:16 -0500
+Received: from mga11.intel.com ([192.55.52.93]:64239 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242358AbhKOSh6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Nov 2021 13:37:58 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="220392321"
+        id S242609AbhKOSjF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:39:05 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="230962958"
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="220392321"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:31:57 -0800
+   d="scan'208";a="230962958"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:27:10 -0800
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="735076418"
+   d="scan'208";a="592241453"
 Received: from tkolecki-mobl.ger.corp.intel.com (HELO localhost) ([10.249.154.97])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:31:49 -0800
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:27:01 -0800
 From:   Iwona Winiarska <iwona.winiarska@intel.com>
 To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -46,9 +46,9 @@ Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         David Muller <d.mueller@elsoft.ch>,
         Dave Hansen <dave.hansen@intel.com>,
         Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH v3 13/13] docs: Add PECI documentation
-Date:   Mon, 15 Nov 2021 19:25:52 +0100
-Message-Id: <20211115182552.3830849-14-iwona.winiarska@intel.com>
+Subject: [PATCH v3 03/13] ARM: dts: aspeed: Add PECI controller nodes
+Date:   Mon, 15 Nov 2021 19:25:42 +0100
+Message-Id: <20211115182552.3830849-4-iwona.winiarska@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211115182552.3830849-1-iwona.winiarska@intel.com>
 References: <20211115182552.3830849-1-iwona.winiarska@intel.com>
@@ -58,124 +58,92 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add a brief overview of PECI and PECI wire interface.
-The documentation also contains kernel-doc for PECI subsystem internals
-and PECI CPU Driver API.
+Add PECI controller nodes with all required information.
 
+Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 ---
- Documentation/index.rst      |  1 +
- Documentation/peci/index.rst | 16 +++++++++++
- Documentation/peci/peci.rst  | 51 ++++++++++++++++++++++++++++++++++++
- MAINTAINERS                  |  1 +
- 4 files changed, 69 insertions(+)
- create mode 100644 Documentation/peci/index.rst
- create mode 100644 Documentation/peci/peci.rst
+ arch/arm/boot/dts/aspeed-g4.dtsi | 14 ++++++++++++++
+ arch/arm/boot/dts/aspeed-g5.dtsi | 14 ++++++++++++++
+ arch/arm/boot/dts/aspeed-g6.dtsi | 14 ++++++++++++++
+ 3 files changed, 42 insertions(+)
 
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index 54ce34fd6fbd..7671f2cd474f 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -137,6 +137,7 @@ needed).
-    misc-devices/index
-    scheduler/index
-    mhi/index
-+   peci/index
+diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
+index b313a1cf5f73..cdaf6db4f07d 100644
+--- a/arch/arm/boot/dts/aspeed-g4.dtsi
++++ b/arch/arm/boot/dts/aspeed-g4.dtsi
+@@ -391,6 +391,20 @@ uart_routing: uart-routing@9c {
+ 				};
+ 			};
  
- Architecture-agnostic documentation
- -----------------------------------
-diff --git a/Documentation/peci/index.rst b/Documentation/peci/index.rst
-new file mode 100644
-index 000000000000..989de10416e7
---- /dev/null
-+++ b/Documentation/peci/index.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
++			peci0: peci-controller@1e78b000 {
++				compatible = "aspeed,ast2400-peci";
++				reg = <0x1e78b000 0x60>;
++				interrupts = <15>;
++				clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
++				resets = <&syscon ASPEED_RESET_PECI>;
++				cmd-timeout-ms = <1000>;
++				aspeed,clock-divider = <0>;
++				aspeed,msg-timing = <1>;
++				aspeed,addr-timing = <1>;
++				aspeed,rd-sampling-point = <8>;
++				status = "disabled";
++			};
 +
-+====================
-+Linux PECI Subsystem
-+====================
+ 			uart2: serial@1e78d000 {
+ 				compatible = "ns16550a";
+ 				reg = <0x1e78d000 0x20>;
+diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
+index c7049454c7cb..1ff71c182c95 100644
+--- a/arch/arm/boot/dts/aspeed-g5.dtsi
++++ b/arch/arm/boot/dts/aspeed-g5.dtsi
+@@ -511,6 +511,20 @@ ibt: ibt@140 {
+ 				};
+ 			};
+ 
++			peci0: peci-controller@1e78b000 {
++				compatible = "aspeed,ast2500-peci";
++				reg = <0x1e78b000 0x60>;
++				interrupts = <15>;
++				clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
++				resets = <&syscon ASPEED_RESET_PECI>;
++				cmd-timeout-ms = <1000>;
++				aspeed,clock-divider = <0>;
++				aspeed,msg-timing = <1>;
++				aspeed,addr-timing = <1>;
++				aspeed,rd-sampling-point = <8>;
++				status = "disabled";
++			};
 +
-+.. toctree::
+ 			uart2: serial@1e78d000 {
+ 				compatible = "ns16550a";
+ 				reg = <0x1e78d000 0x20>;
+diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
+index 5106a424f1ce..efd87ceb40b6 100644
+--- a/arch/arm/boot/dts/aspeed-g6.dtsi
++++ b/arch/arm/boot/dts/aspeed-g6.dtsi
+@@ -507,6 +507,20 @@ wdt4: watchdog@1e7850c0 {
+ 				status = "disabled";
+ 			};
+ 
++			peci0: peci-controller@1e78b000 {
++				compatible = "aspeed,ast2600-peci";
++				reg = <0x1e78b000 0x100>;
++				interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
++				resets = <&syscon ASPEED_RESET_PECI>;
++				cmd-timeout-ms = <1000>;
++				aspeed,clock-divider = <0>;
++				aspeed,msg-timing = <1>;
++				aspeed,addr-timing = <1>;
++				aspeed,rd-sampling-point = <8>;
++				status = "disabled";
++			};
 +
-+   peci
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
-diff --git a/Documentation/peci/peci.rst b/Documentation/peci/peci.rst
-new file mode 100644
-index 000000000000..331b1ec00e22
---- /dev/null
-+++ b/Documentation/peci/peci.rst
-@@ -0,0 +1,51 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+========
-+Overview
-+========
-+
-+The Platform Environment Control Interface (PECI) is a communication
-+interface between Intel processor and management controllers
-+(e.g. Baseboard Management Controller, BMC).
-+PECI provides services that allow the management controller to
-+configure, monitor and debug platform by accessing various registers.
-+It defines a dedicated command protocol, where the management
-+controller is acting as a PECI originator and the processor - as
-+a PECI responder.
-+PECI can be used in both single processor and multiple-processor based
-+systems.
-+
-+NOTE:
-+Intel PECI specification is not released as a dedicated document,
-+instead it is a part of External Design Specification (EDS) for given
-+Intel CPU. External Design Specifications are usually not publicly
-+available.
-+
-+PECI Wire
-+---------
-+
-+PECI Wire interface uses a single wire for self-clocking and data
-+transfer. It does not require any additional control lines - the
-+physical layer is a self-clocked one-wire bus signal that begins each
-+bit with a driven, rising edge from an idle near zero volts. The
-+duration of the signal driven high allows to determine whether the bit
-+value is logic '0' or logic '1'. PECI Wire also includes variable data
-+rate established with every message.
-+
-+For PECI Wire, each processor package will utilize unique, fixed
-+addresses within a defined range and that address should
-+have a fixed relationship with the processor socket ID - if one of the
-+processors is removed, it does not affect addresses of remaining
-+processors.
-+
-+PECI subsystem internals
-+------------------------
-+
-+.. kernel-doc:: include/linux/peci.h
-+.. kernel-doc:: drivers/peci/internal.h
-+.. kernel-doc:: drivers/peci/core.c
-+.. kernel-doc:: drivers/peci/request.c
-+
-+PECI CPU Driver API
-+-------------------
-+.. kernel-doc:: drivers/peci/cpu.c
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0f7216644bd5..4db4979db60a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14935,6 +14935,7 @@ R:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
- L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/peci/
-+F:	Documentation/peci/
- F:	drivers/peci/
- F:	include/linux/peci-cpu.h
- F:	include/linux/peci.h
+ 			lpc: lpc@1e789000 {
+ 				compatible = "aspeed,ast2600-lpc-v2", "simple-mfd", "syscon";
+ 				reg = <0x1e789000 0x1000>;
 -- 
 2.31.1
 
