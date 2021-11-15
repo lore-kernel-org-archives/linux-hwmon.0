@@ -2,134 +2,240 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31152C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 16:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0420AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:28:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A7E461163
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 16:08:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DEB7363509
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:28:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbhKOQLp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Nov 2021 11:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbhKOQLj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Nov 2021 11:11:39 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C46C061200
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Nov 2021 08:08:43 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id bf8so35836506oib.6
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Nov 2021 08:08:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1+7Nu/Y7sXQ3mP3Tv8QxDfh1hu9G2HGXSSJGtnsDk2w=;
-        b=iGNGjeZuBfCqawLlGP/74RYvQYQC2cwgoOeVy4+iMqRi9sNbYJHyeh13Qag9jljSBi
-         72uozBq/IdPLZYLyh19YuIcWPqKnOeA9JH+r0KdHTSQwUjBhh98+qIucRgdHS1uB5i+z
-         zA1m4P4J9YJT4BwBKWUuAe5NY+mr+SN8JdhjpFXfVJDz0XKO2C0vi8eOdSEfieZGG6BS
-         gPqWJCf6GOQLzmpTY8Xw0dOcBm9/VUajcOkEOfczIs5Km1/oqLkG4AOJHKMTdgbGqajI
-         +C0Nnb5o2F8QrEBsE5T9YiHEdkJAI4/RFSQm2SvjcBm0flaovAz95txku9GGEysvujJ1
-         inWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=1+7Nu/Y7sXQ3mP3Tv8QxDfh1hu9G2HGXSSJGtnsDk2w=;
-        b=ox40I0R+C9mDSHAJBrqkCcWbtMH37SRiRbYAD0KUGGPlputV3uf1jH8uqshF6pcgEV
-         0LrH7/OAVPd8ts/hSzyNUOa3sR791McYzUI6QROyc1gTVIYm5iaWMe96CzG3v/1KGiRM
-         mHZ/HHxi8BnQKpNT12pzaXLnoDFop6ZGv79sqqxX9x5Idnsh6/gk6zcw6uffqjeGEZnb
-         PqzNn7vjF/sPOiI4tEzZLcC+rv8QS1BkKsrWc54r507kqKmpZzcO4eUXPoE4L+Euvmkg
-         VpnwjGJdCf3ARHB+iZ5smBYnneBlDhGhBMfId4iSBD5hli2oxfnbqdcLNFKi7GOizFvJ
-         fkKg==
-X-Gm-Message-State: AOAM533XPKV0hn/KPiRjXYdNlDAl6NHf2Dabi8JxlzbVBMhmCBt+IdlT
-        MIsV4YpoAOmluIlXc1O8HY59TADCDI4=
-X-Google-Smtp-Source: ABdhPJwcUjCEQLTXIh4/QCY2AaRLgstRpcgFnb4AXGW6uKQ8dNad3XaNsiu4mzI+1LQaJHKxifipaA==
-X-Received: by 2002:aca:eb02:: with SMTP id j2mr16139607oih.3.1636992522274;
-        Mon, 15 Nov 2021 08:08:42 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w2sm2560442ooa.26.2021.11.15.08.08.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 08:08:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (adm1021) Improve detection of LM84, MAX1617, and MAX1617A
-Date:   Mon, 15 Nov 2021 08:08:38 -0800
-Message-Id: <20211115160838.3556365-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+        id S241200AbhKOSb0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Nov 2021 13:31:26 -0500
+Received: from mga09.intel.com ([134.134.136.24]:2983 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241844AbhKOS3L (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:29:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="233341106"
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="233341106"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:26:14 -0800
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="671603716"
+Received: from tkolecki-mobl.ger.corp.intel.com (HELO localhost) ([10.249.154.97])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:26:02 -0800
+From:   Iwona Winiarska <iwona.winiarska@intel.com>
+To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH v3 00/13] Introduce PECI subsystem
+Date:   Mon, 15 Nov 2021 19:25:39 +0100
+Message-Id: <20211115182552.3830849-1-iwona.winiarska@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The adm1021 driver is quite generous with its automatic chip detection
-and easily misdetects several chips. Strengthen detection of MAX1617,
-MAX1617A, and LM84 to make the driver less vulnerable to false matches.
+Hi,
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/adm1021.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+This is a third round of patches introducing PECI subsystem.
+Sorry for the delay between v2 and v3.
 
-diff --git a/drivers/hwmon/adm1021.c b/drivers/hwmon/adm1021.c
-index 38b447c6e8cd..91ecfee243bf 100644
---- a/drivers/hwmon/adm1021.c
-+++ b/drivers/hwmon/adm1021.c
-@@ -324,7 +324,7 @@ static int adm1021_detect(struct i2c_client *client,
- {
- 	struct i2c_adapter *adapter = client->adapter;
- 	const char *type_name;
--	int conv_rate, status, config, man_id, dev_id;
-+	int reg, conv_rate, status, config, man_id, dev_id;
- 
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA)) {
- 		pr_debug("detect failed, smbus byte data not supported!\n");
-@@ -349,9 +349,19 @@ static int adm1021_detect(struct i2c_client *client,
- 	if (man_id < 0 || dev_id < 0)
- 		return -ENODEV;
- 
--	if (man_id == 0x4d && dev_id == 0x01)
-+	if (man_id == 0x4d && dev_id == 0x01) {
-+		/*
-+		 * dev_id 0x01 matches MAX6680, MAX6695, MAX6696, and possibly
-+		 * others. Read register which is unsupported on MAX1617 but
-+		 * exists on all those chips and compare with the dev_id
-+		 * register. If it matches, it may be a MAX1617A.
-+		 */
-+		reg = i2c_smbus_read_byte_data(client,
-+					       ADM1023_REG_REM_TEMP_PREC);
-+		if (reg != dev_id)
-+			return -ENODEV;
- 		type_name = "max1617a";
--	else if (man_id == 0x41) {
-+	} else if (man_id == 0x41) {
- 		if ((dev_id & 0xF0) == 0x30)
- 			type_name = "adm1023";
- 		else if ((dev_id & 0xF0) == 0x00)
-@@ -395,13 +405,18 @@ static int adm1021_detect(struct i2c_client *client,
- 
- 		/*
- 		 * LM84 Mfr ID is in a different place,
--		 * and it has more unused bits.
-+		 * and it has more unused bits. Registers at 0xfe and 0xff
-+		 * are undefined and return the most recently read value,
-+		 * here the value of the configuration register.
- 		 */
- 		if (conv_rate == 0x00
-+		    && man_id == config && dev_id == config
- 		    && (config & 0x7F) == 0x00
- 		    && (status & 0xAB) == 0x00) {
- 			type_name = "lm84";
- 		} else {
-+			if ((config & 0x3f) || (status & 0x03))
-+				return -ENODEV;
- 			/* fail if low limits are larger than high limits */
- 			if ((s8)llo > lhi || (s8)rlo > rhi)
- 				return -ENODEV;
+The Platform Environment Control Interface (PECI) is a communication
+interface between Intel processors and management controllers (e.g.
+Baseboard Management Controller, BMC).
+
+This series adds a PECI subsystem and introduces drivers which run in
+the Linux instance on the management controller (not the main Intel
+processor) and is intended to be used by the OpenBMC [1], a Linux
+distribution for BMC devices.
+The information exposed over PECI (like processor and DIMM
+temperature) refers to the Intel processor and can be consumed by
+daemons running on the BMC to, for example, display the processor
+temperature in its web interface.
+
+The PECI bus is collection of code that provides interface support
+between PECI devices (that actually represent processors) and PECI
+controllers (such as the "peci-aspeed" controller) that allow to
+access physical PECI interface. PECI devices are bound to PECI
+drivers that provides access to PECI services. This series introduces
+a generic "peci-cpu" driver that exposes hardware monitoring "cputemp"
+and "dimmtemp" using the auxiliary bus.
+
+Exposing "raw" PECI to userspace, either to write userspace drivers or
+for debug/testing purpose was left out of this series to encourage
+writing kernel drivers instead, but may be pursued in the future.
+
+Introducing PECI to upstream Linux was already attempted before [2].
+Since it's been over a year since last revision, and the series
+changed quite a bit in the meantime, I've decided to start from v1.
+
+I would also like to give credit to everyone who helped me with
+different aspects of preliminary review:
+- Pierre-Louis Bossart,
+- Tony Luck, 
+- Andy Shevchenko,
+- Dave Hansen.
+
+[1] https://github.com/openbmc/openbmc
+[2] https://lore.kernel.org/openbmc/20191211194624.2872-1-jae.hyun.yoo@linux.intel.com/
+
+Changes v2 -> v3:
+
+* Dropped x86/cpu patches (Boris)
+* Dropped pr_fmt() for PECI module (Dan)
+* Fixed releasing peci controller device flow (Dan) 
+* Improved peci-aspeed commit-msg and Kconfig help (Dan)
+* Fixed aspeed_peci_xfer() to use the proper spin_lock function (Dan) 
+* Wrapped print_hex_dump_bytes() in CONFIG_DYNAMIC_DEBUG (Dan)
+* Removed debug status logs from aspeed_peci_irq_handler() (Dan)
+* Renamed functions using devres to start with "devm" (Dan)
+* Changed request to be allocated on stack in peci_detect (Dan)
+* Removed redundant WARN_ON on invalid PECI addr (Dan)
+* Changed peci_device_create() to use device_initialize() + device_add() pattern (Dan)
+* Fixed peci_device_destroy() to use kill_device() avoiding double-free (Dan)
+* Renamed functions that perform xfer using "peci_xfer_*" prefix (Dan) 
+* Renamed peci_request_data_dib(temp) -> peci_request_dib(temp)_read (Dan)
+* Fixed thermal margin readings for older Intel processors (Zev) 
+* Misc hwmon simplifications (Guenter)
+* Used BIT_PER_TYPE to verify macro value constrains (Guenter)
+* Improved WARN_ON message to print chan_rank_max and idx_dimm_max (Guenter)
+* Improved dimmtemp to not reattempt probe if no dimms are populated
+
+Changes v1 -> v2:
+
+Biggest changes when it comes to diffstat are locking in HWMON
+(I decided to clean things up a bit while adding it), switching to
+devres usage in more places and exposing sysfs interface in separate patch.
+
+* Moved extending X86 ARCHITECTURE MAINTAINERS earlier in series (Dan)
+* Removed "default n" for GENERIC_LIB_X86 (Dan)
+* Added vendor prefix for peci-aspeed specific properties (Rob)
+* Refactored PECI to use devres consistently (Dan)
+* Added missing sysfs documentation and excluded adding peci-sysfs to
+  separate patch (Dan)
+* Used module_init() instead of subsys_init() for peci module initialization (Dan)
+* Removed redundant struct peci_device member (Dan)
+* Improved PECI Kconfig help (Randy/Dan)
+* Fixed/removed log messages (Dan, Guenter)
+* Refactored peci-cputemp and peci-dimmtemp and added missing locks (Guenter)
+* Removed unused dev_set_drvdata() in peci-cputemp and peci-dimmtemp (Guenter)
+* Fixed used types, names, fixed broken and added additional comments
+  to peci-hwmon (Guenter, Zev)
+* Refactored peci-dimmtemp to not return -ETIMEDOUT (Guenter)
+* Added sanity check for min_peci_revision in peci-hwmon drivers (Zev)
+* Added assert for DIMM_NUMS_MAX and additional warning in peci-dimmtemp (Zev)
+* Fixed macro names in peci-aspeed (Zev)
+* Refactored peci-aspeed sanitizing properties to a single helper function (Zev)
+* Fixed peci_cpu_device_ids definition for Broadwell Xeon D (David)
+* Refactor peci_request to use a single allocation (Zev)
+* Used min_t() to improve code readability (Zev)
+* Added macro for PECI_RDENDPTCFG_MMIO_WR_LEN_BASE and fixed adev type
+  array name to more descriptive (Zev)
+* Fixed peci-hwmon commit-msg and documentation (Zev)
+
+Thanks
+-Iwona
+
+Iwona Winiarska (11):
+  dt-bindings: Add generic bindings for PECI
+  dt-bindings: Add bindings for peci-aspeed
+  ARM: dts: aspeed: Add PECI controller nodes
+  peci: Add core infrastructure
+  peci: Add device detection
+  peci: Add sysfs interface for PECI bus
+  peci: Add support for PECI device drivers
+  peci: Add peci-cpu driver
+  hwmon: peci: Add cputemp driver
+  hwmon: peci: Add dimmtemp driver
+  docs: Add PECI documentation
+
+Jae Hyun Yoo (2):
+  peci: Add peci-aspeed controller driver
+  docs: hwmon: Document PECI drivers
+
+ Documentation/ABI/testing/sysfs-bus-peci      |  16 +
+ .../devicetree/bindings/peci/peci-aspeed.yaml | 109 +++
+ .../bindings/peci/peci-controller.yaml        |  33 +
+ Documentation/hwmon/index.rst                 |   2 +
+ Documentation/hwmon/peci-cputemp.rst          |  90 +++
+ Documentation/hwmon/peci-dimmtemp.rst         |  57 ++
+ Documentation/index.rst                       |   1 +
+ Documentation/peci/index.rst                  |  16 +
+ Documentation/peci/peci.rst                   |  51 ++
+ MAINTAINERS                                   |  29 +
+ arch/arm/boot/dts/aspeed-g4.dtsi              |  14 +
+ arch/arm/boot/dts/aspeed-g5.dtsi              |  14 +
+ arch/arm/boot/dts/aspeed-g6.dtsi              |  14 +
+ drivers/Kconfig                               |   3 +
+ drivers/Makefile                              |   1 +
+ drivers/hwmon/Kconfig                         |   2 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/peci/Kconfig                    |  31 +
+ drivers/hwmon/peci/Makefile                   |   7 +
+ drivers/hwmon/peci/common.h                   |  58 ++
+ drivers/hwmon/peci/cputemp.c                  | 592 ++++++++++++++++
+ drivers/hwmon/peci/dimmtemp.c                 | 630 ++++++++++++++++++
+ drivers/peci/Kconfig                          |  36 +
+ drivers/peci/Makefile                         |  10 +
+ drivers/peci/controller/Kconfig               |  17 +
+ drivers/peci/controller/Makefile              |   3 +
+ drivers/peci/controller/peci-aspeed.c         | 429 ++++++++++++
+ drivers/peci/core.c                           | 236 +++++++
+ drivers/peci/cpu.c                            | 343 ++++++++++
+ drivers/peci/device.c                         | 249 +++++++
+ drivers/peci/internal.h                       | 136 ++++
+ drivers/peci/request.c                        | 482 ++++++++++++++
+ drivers/peci/sysfs.c                          |  82 +++
+ include/linux/peci-cpu.h                      |  40 ++
+ include/linux/peci.h                          | 110 +++
+ 35 files changed, 3944 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-peci
+ create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+ create mode 100644 Documentation/devicetree/bindings/peci/peci-controller.yaml
+ create mode 100644 Documentation/hwmon/peci-cputemp.rst
+ create mode 100644 Documentation/hwmon/peci-dimmtemp.rst
+ create mode 100644 Documentation/peci/index.rst
+ create mode 100644 Documentation/peci/peci.rst
+ create mode 100644 drivers/hwmon/peci/Kconfig
+ create mode 100644 drivers/hwmon/peci/Makefile
+ create mode 100644 drivers/hwmon/peci/common.h
+ create mode 100644 drivers/hwmon/peci/cputemp.c
+ create mode 100644 drivers/hwmon/peci/dimmtemp.c
+ create mode 100644 drivers/peci/Kconfig
+ create mode 100644 drivers/peci/Makefile
+ create mode 100644 drivers/peci/controller/Kconfig
+ create mode 100644 drivers/peci/controller/Makefile
+ create mode 100644 drivers/peci/controller/peci-aspeed.c
+ create mode 100644 drivers/peci/core.c
+ create mode 100644 drivers/peci/cpu.c
+ create mode 100644 drivers/peci/device.c
+ create mode 100644 drivers/peci/internal.h
+ create mode 100644 drivers/peci/request.c
+ create mode 100644 drivers/peci/sysfs.c
+ create mode 100644 include/linux/peci-cpu.h
+ create mode 100644 include/linux/peci.h
+
 -- 
-2.33.0
+2.31.1
 
