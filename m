@@ -2,203 +2,365 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AE12C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 01:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB217C43217
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 01:33:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C69961104
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 01:27:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9872E61BC1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 01:33:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356988AbhKPBaD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Nov 2021 20:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354284AbhKPB2E (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Nov 2021 20:28:04 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61D9C08C30C;
-        Mon, 15 Nov 2021 15:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7eaRSnO6DvJcmgSx4Jh9u88P+ZEa+bilmuFqzgTMEmA=; b=fnBzpsc64M38Z6WqKOeB2dosXj
-        eSKc5upq/AZOP2TtjbCP1cSDKf4JOovVIfz2FpIZ5TshxFjr76p3biNl5GX6Q154cO2lIM4Zsw1oR
-        zr5QGxBJrsOKHrJqCzDD2S3rlIMPYTUFukpe9cxUOJdA/L70GzieAkhJfS6AVyObDubo=;
-Received: from p200300ccff0ca2001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0c:a200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1mml77-00068e-IG; Tue, 16 Nov 2021 00:10:13 +0100
-Date:   Tue, 16 Nov 2021 00:10:10 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     lee.jones@linaro.org, broonie@kernel.org, kernel@pengutronix.de,
-        lgirdwood@gmail.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        s.hauer@pengutronix.de, linux-hwmon@vger.kernel.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org, linux-imx@nxp.com,
-        alistair23@gmail.com, shawnguo@kernel.org
-Subject: Re: [PATCH v15 3/8] mfd: simple-mfd-i2c: Enable support for the
- silergy,sy7636a
-Message-ID: <20211116000634.767dcdc0@aktux>
-In-Reply-To: <20211110122948.188683-4-alistair@alistair23.me>
-References: <20211110122948.188683-1-alistair@alistair23.me>
-        <20211110122948.188683-4-alistair@alistair23.me>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S244399AbhKPBgN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Nov 2021 20:36:13 -0500
+Received: from mga14.intel.com ([192.55.52.115]:5472 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242113AbhKOSeV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:34:21 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="233745690"
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="233745690"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:29:03 -0800
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="471999523"
+Received: from tkolecki-mobl.ger.corp.intel.com (HELO localhost) ([10.249.154.97])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:28:56 -0800
+From:   Iwona Winiarska <iwona.winiarska@intel.com>
+To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH v3 06/13] peci: Add device detection
+Date:   Mon, 15 Nov 2021 19:25:45 +0100
+Message-Id: <20211115182552.3830849-7-iwona.winiarska@intel.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211115182552.3830849-1-iwona.winiarska@intel.com>
+References: <20211115182552.3830849-1-iwona.winiarska@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Since PECI devices are discoverable, we can dynamically detect devices
+that are actually available in the system.
 
-this all creates a lot of question marks...
-One of my main question is whether sy7636a = sy7636 (at least the
-driver in the kobo vendor kernels does not have the "A" at the end,
-whic does not necessarily mean a difference).
+This change complements the earlier implementation by rescanning PECI
+bus to detect available devices. For this purpose, it also introduces the
+minimal API for PECI requests.
 
-https://www.silergy.com/products/panel_pmic
-lists only a SY7636ARMC, so chances are good that the letters were just
-stripped away by the driver developers. Printing on chip package is
-cryptic so it is not that helpful. It is just "BWNBDA"
+Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+---
+ drivers/peci/Makefile   |   2 +-
+ drivers/peci/core.c     |  33 ++++++++++++
+ drivers/peci/device.c   | 117 ++++++++++++++++++++++++++++++++++++++++
+ drivers/peci/internal.h |  14 +++++
+ drivers/peci/request.c  |  55 +++++++++++++++++++
+ 5 files changed, 220 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/peci/device.c
+ create mode 100644 drivers/peci/request.c
 
- On Wed, 10 Nov 2021 22:29:43 +1000
-Alistair Francis <alistair@alistair23.me> wrote:
-
-[...]
-> diff --git a/include/linux/mfd/sy7636a.h b/include/linux/mfd/sy7636a.h
-> new file mode 100644
-> index 000000000000..2797c22dabc2
-> --- /dev/null
-> +++ b/include/linux/mfd/sy7636a.h
-> @@ -0,0 +1,36 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Functions to access SY3686A power management chip.
-
-Typo? or is it really a SY3686A? So what we are talking about?
-
-> + *
-> + * Copyright (C) 2021 reMarkable AS - http://www.remarkable.com/
-> + */
-> +
-> +#ifndef __MFD_SY7636A_H
-> +#define __MFD_SY7636A_H
-> +
-> +#define SY7636A_REG_OPERATION_MODE_CRL		0x00
-> +#define SY7636A_OPERATION_MODE_CRL_VCOMCTL	BIT(6)
-
-hmm, this thing is called VCOM_MANUAL in the 4.1.15-based driver for the
-Kobos and in the 3.0.35 kernel for the Tolinos it is:
-
-// 1:controll the vcom by external VCOM_EN pin 
-#define SY7636_REG_OPM_VCOM_EXT_mask    0x1 //  
-#define SY7636_REG_OPM_VCOM_EXT_lsb             6 //  
-
-In both kernels, it is set if a gpio is used to control the regulator.
-That does not necessarily conflict with your usage. The gpio might just
-be hardwired to something in your device. Maybe just a comment about
-that issue.
+diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
+index 926d8df15cbd..c5f9d3fe21bb 100644
+--- a/drivers/peci/Makefile
++++ b/drivers/peci/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
-> +#define SY7636A_OPERATION_MODE_CRL_ONOFF	BIT(7)
-> +#define SY7636A_REG_VCOM_ADJUST_CTRL_L		0x01
-> +#define SY7636A_REG_VCOM_ADJUST_CTRL_H		0x02
-> +#define SY7636A_REG_VCOM_ADJUST_CTRL_MASK	0x01ff
-> +#define SY7636A_REG_VLDO_VOLTAGE_ADJULST_CTRL	0x03
-> +#define SY7636A_REG_POWER_ON_DELAY_TIME		0x06
-> +#define SY7636A_REG_FAULT_FLAG			0x07
-> +#define SY7636A_FAULT_FLAG_PG			BIT(0)
-> +#define SY7636A_REG_TERMISTOR_READOUT		0x08
-> +
-> +#define SY7636A_REG_MAX				0x08
-> +
-> +#define VCOM_MIN		0
-> +#define VCOM_MAX		5000
+ # Core functionality
+-peci-y := core.o
++peci-y := core.o request.o device.o
+ obj-$(CONFIG_PECI) += peci.o
+ 
+ # Hardware specific bus drivers
+diff --git a/drivers/peci/core.c b/drivers/peci/core.c
+index 73ad0a47fa9d..c3361e6e043a 100644
+--- a/drivers/peci/core.c
++++ b/drivers/peci/core.c
+@@ -29,6 +29,20 @@ struct device_type peci_controller_type = {
+ 	.release	= peci_controller_dev_release,
+ };
+ 
++static int peci_controller_scan_devices(struct peci_controller *controller)
++{
++	int ret;
++	u8 addr;
++
++	for (addr = PECI_BASE_ADDR; addr < PECI_BASE_ADDR + PECI_DEVICE_NUM_MAX; addr++) {
++		ret = peci_device_create(controller, addr);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static struct peci_controller *peci_controller_alloc(struct device *dev,
+ 						     struct peci_controller_ops *ops)
+ {
+@@ -64,10 +78,23 @@ static struct peci_controller *peci_controller_alloc(struct device *dev,
+ 	return ERR_PTR(ret);
+ }
+ 
++static int unregister_child(struct device *dev, void *dummy)
++{
++	peci_device_destroy(to_peci_device(dev));
++
++	return 0;
++}
++
+ static void unregister_controller(void *_controller)
+ {
+ 	struct peci_controller *controller = _controller;
+ 
++	/*
++	 * Detach any active PECI devices. This can't fail, thus we do not
++	 * check the returned value.
++	 */
++	device_for_each_child_reverse(&controller->dev, NULL, unregister_child);
++
+ 	device_unregister(&controller->dev);
+ 
+ 	fwnode_handle_put(controller->dev.fwnode);
+@@ -113,6 +140,12 @@ struct peci_controller *devm_peci_controller_add(struct device *dev,
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
++	/*
++	 * Ignoring retval since failures during scan are non-critical for
++	 * controller itself.
++	 */
++	peci_controller_scan_devices(controller);
++
+ 	return controller;
+ 
+ err_fwnode:
+diff --git a/drivers/peci/device.c b/drivers/peci/device.c
+new file mode 100644
+index 000000000000..39f7f6409391
+--- /dev/null
++++ b/drivers/peci/device.c
+@@ -0,0 +1,117 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (c) 2018-2021 Intel Corporation
++
++#include <linux/peci.h>
++#include <linux/slab.h>
++
++#include "internal.h"
++
++static int peci_detect(struct peci_controller *controller, u8 addr)
++{
++	/*
++	 * PECI Ping is a command encoded by tx_len = 0, rx_len = 0.
++	 * We expect correct Write FCS if the device at the target address
++	 * is able to respond.
++	 */
++	struct peci_request req = { 0 };
++	int ret;
++
++	mutex_lock(&controller->bus_lock);
++	ret = controller->ops->xfer(controller, addr, &req);
++	mutex_unlock(&controller->bus_lock);
++
++	return ret;
++}
++
++static bool peci_addr_valid(u8 addr)
++{
++	return addr >= PECI_BASE_ADDR && addr < PECI_BASE_ADDR + PECI_DEVICE_NUM_MAX;
++}
++
++static int peci_dev_exists(struct device *dev, void *data)
++{
++	struct peci_device *device = to_peci_device(dev);
++	u8 *addr = data;
++
++	if (device->addr == *addr)
++		return -EBUSY;
++
++	return 0;
++}
++
++int peci_device_create(struct peci_controller *controller, u8 addr)
++{
++	struct peci_device *device;
++	int ret;
++
++	if (!peci_addr_valid(addr))
++		return -EINVAL;
++
++	/* Check if we have already detected this device before. */
++	ret = device_for_each_child(&controller->dev, &addr, peci_dev_exists);
++	if (ret)
++		return 0;
++
++	ret = peci_detect(controller, addr);
++	if (ret) {
++		/*
++		 * Device not present or host state doesn't allow successful
++		 * detection at this time.
++		 */
++		if (ret == -EIO || ret == -ETIMEDOUT)
++			return 0;
++
++		return ret;
++	}
++
++	device = kzalloc(sizeof(*device), GFP_KERNEL);
++	if (!device)
++		return -ENOMEM;
++
++	device_initialize(&device->dev);
++
++	device->addr = addr;
++	device->dev.parent = &controller->dev;
++	device->dev.bus = &peci_bus_type;
++	device->dev.type = &peci_device_type;
++
++	ret = dev_set_name(&device->dev, "%d-%02x", controller->id, device->addr);
++	if (ret)
++		goto err_put;
++
++	ret = device_add(&device->dev);
++	if (ret)
++		goto err_put;
++
++	return 0;
++
++err_put:
++	put_device(&device->dev);
++
++	return ret;
++}
++
++void peci_device_destroy(struct peci_device *device)
++{
++	bool killed;
++
++	device_lock(&device->dev);
++	killed = kill_device(&device->dev);
++	device_unlock(&device->dev);
++
++	if (!killed)
++		return;
++
++	device_unregister(&device->dev);
++}
++
++static void peci_device_release(struct device *dev)
++{
++	struct peci_device *device = to_peci_device(dev);
++
++	kfree(device);
++}
++
++struct device_type peci_device_type = {
++	.release	= peci_device_release,
++};
+diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
+index 918dea745a86..57d11a902c5d 100644
+--- a/drivers/peci/internal.h
++++ b/drivers/peci/internal.h
+@@ -8,6 +8,20 @@
+ #include <linux/types.h>
+ 
+ struct peci_controller;
++struct peci_device;
++struct peci_request;
++
++/* PECI CPU address range 0x30-0x37 */
++#define PECI_BASE_ADDR		0x30
++#define PECI_DEVICE_NUM_MAX	8
++
++struct peci_request *peci_request_alloc(struct peci_device *device, u8 tx_len, u8 rx_len);
++void peci_request_free(struct peci_request *req);
++
++extern struct device_type peci_device_type;
++
++int peci_device_create(struct peci_controller *controller, u8 addr);
++void peci_device_destroy(struct peci_device *device);
+ 
+ extern struct bus_type peci_bus_type;
+ 
+diff --git a/drivers/peci/request.c b/drivers/peci/request.c
+new file mode 100644
+index 000000000000..7dee51c50dd2
+--- /dev/null
++++ b/drivers/peci/request.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (c) 2021 Intel Corporation
++
++#include <linux/export.h>
++#include <linux/peci.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++
++#include "internal.h"
++
++/**
++ * peci_request_alloc() - allocate &struct peci_requests
++ * @device: PECI device to which request is going to be sent
++ * @tx_len: TX length
++ * @rx_len: RX length
++ *
++ * Return: A pointer to a newly allocated &struct peci_request on success or NULL otherwise.
++ */
++struct peci_request *peci_request_alloc(struct peci_device *device, u8 tx_len, u8 rx_len)
++{
++	struct peci_request *req;
++
++	/*
++	 * TX and RX buffers are fixed length members of peci_request, this is
++	 * just a warn for developers to make sure to expand the buffers (or
++	 * change the allocation method) if we go over the current limit.
++	 */
++	if (WARN_ON_ONCE(tx_len > PECI_REQUEST_MAX_BUF_SIZE || rx_len > PECI_REQUEST_MAX_BUF_SIZE))
++		return NULL;
++	/*
++	 * PECI controllers that we are using now don't support DMA, this
++	 * should be converted to DMA API once support for controllers that do
++	 * allow it is added to avoid an extra copy.
++	 */
++	req = kzalloc(sizeof(*req), GFP_KERNEL);
++	if (!req)
++		return NULL;
++
++	req->device = device;
++	req->tx.len = tx_len;
++	req->rx.len = rx_len;
++
++	return req;
++}
++EXPORT_SYMBOL_NS_GPL(peci_request_alloc, PECI);
++
++/**
++ * peci_request_free() - free peci_request
++ * @req: the PECI request to be freed
++ */
++void peci_request_free(struct peci_request *req)
++{
++	kfree(req);
++}
++EXPORT_SYMBOL_NS_GPL(peci_request_free, PECI);
+-- 
+2.31.1
 
-hmm, what does that maximum mean? What you can set without something
-freaking out just by setting it? Or the limit where the driver works
-reliably?
-> +
-> +#define VCOM_ADJUST_CTRL_MASK	0x1ff
-> +// Used to shift the high byte
-> +#define VCOM_ADJUST_CTRL_SHIFT	8
-> +// Used to scale from VCOM_ADJUST_CTRL to mv
-> +#define VCOM_ADJUST_CTRL_SCAL	10000
-> +
-> +#define FAULT_FLAG_SHIFT	1
-> +
-> +#endif /* __LINUX_MFD_SY7636A_H */
-
-Hmm, are that all defines you know about? I am fine with not including
-unused things now, but I am curious.
-For comparison, here is my "scratchpad" of all the information I could
-squeeze out of the sy7636 driver until now:
-
-OPMODE 0
-  RAILS_ON 7
-  VCOM_MANUAL 6
-  LIGHTNESS 5
-
-  VDDH_DISABLE 4
-  VEE_DISABLE 3
-  VPOS_DISABLE 2
-  VNEG_DISABLE 1
-  VCOM_DISABLE 0
-
-  -> combined as RAILS_DISABLE in code
-
-  VCOM: 10000 uV per step, accepts up to 2.75V (that is a bit contradictory)
-VCOM_ADJ1 1
-
-VCOM_ADJ2 2
-  VCOM2_B8 7
-  VDDH_EXT 0..4
-
-VLDO_ADJ 3
-  VLDO_ADJ = 5..7
-  VPDD_ADJ = 0..4 
-
-VPDD_LEN 4 
-  VPPD_LEN 0..4
-
-VEE_VP_EXT 5
-  VP_EXT 5..6
-  VEE_EXT 0..4
-
-PWRON_DLY = 6
-  TDLY4 = 6..7
-  TDLY3 = 4..5
-  TDLY2 = 2..3
-  TDLY1 = 0..1
-
-FAULTFLAGS 7
-  FAULS 1..4: to be read out after interrupt and cleared
-      0  no faults
-      1  UVP at VB rail
-      2  UVP at VN rail
-      3  UVP at VPOS rail
-      4  UVP at VNEG rail
-      5  UVP at VDDH rail
-      6  UVP at VEE rail
-      7  SCP at VB rail
-      8  SCP at VN rail
-      9  SCP at VPOS rail
-      A  SCP at VNEG rail
-      B  SCP at VDDH rail
-      C  SCP at VEE rail
-      D  SCP at VCOM rail
-      E  UVLO
-      F  Thermal shutdown
-
-  PG 0
-
-THERM 8
-
-Regards,
-Andreas
