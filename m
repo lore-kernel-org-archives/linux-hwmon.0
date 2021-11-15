@@ -2,27 +2,27 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A267C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:34:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49948C4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:37:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 43D7163542
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:34:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F96163563
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Nov 2021 18:37:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237165AbhKOShm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Nov 2021 13:37:42 -0500
-Received: from mga01.intel.com ([192.55.52.88]:44514 "EHLO mga01.intel.com"
+        id S242133AbhKOSjy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Nov 2021 13:39:54 -0500
+Received: from mga18.intel.com ([134.134.136.126]:17188 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237780AbhKOSfP (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Nov 2021 13:35:15 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="257253720"
+        id S242270AbhKOShj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:37:39 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="220392157"
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="257253720"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:27:28 -0800
+   d="scan'208";a="220392157"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:31:26 -0800
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="592241516"
+   d="scan'208";a="734912113"
 Received: from tkolecki-mobl.ger.corp.intel.com (HELO localhost) ([10.249.154.97])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:27:19 -0800
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:31:18 -0800
 From:   Iwona Winiarska <iwona.winiarska@intel.com>
 To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -45,11 +45,10 @@ Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         Zev Weiss <zweiss@equinix.com>,
         David Muller <d.mueller@elsoft.ch>,
         Dave Hansen <dave.hansen@intel.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        Jason M Bills <jason.m.bills@linux.intel.com>
-Subject: [PATCH v3 04/13] peci: Add core infrastructure
-Date:   Mon, 15 Nov 2021 19:25:43 +0100
-Message-Id: <20211115182552.3830849-5-iwona.winiarska@intel.com>
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH v3 11/13] hwmon: peci: Add dimmtemp driver
+Date:   Mon, 15 Nov 2021 19:25:50 +0100
+Message-Id: <20211115182552.3830849-12-iwona.winiarska@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211115182552.3830849-1-iwona.winiarska@intel.com>
 References: <20211115182552.3830849-1-iwona.winiarska@intel.com>
@@ -59,403 +58,695 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Intel processors provide access for various services designed to support
-processor and DRAM thermal management, platform manageability and
-processor interface tuning and diagnostics.
-Those services are available via the Platform Environment Control
-Interface (PECI) that provides a communication channel between the
-processor and the Baseboard Management Controller (BMC) or other
-platform management device.
+Add peci-dimmtemp driver for Temperature Sensor on DIMM readings that
+are accessible via the processor PECI interface.
 
-This change introduces PECI subsystem by adding the initial core module
-and API for controller drivers.
+The main use case for the driver (and PECI interface) is out-of-band
+management, where we're able to obtain thermal readings from an external
+entity connected with PECI, e.g. BMC on server platforms.
 
-Co-developed-by: Jason M Bills <jason.m.bills@linux.intel.com>
-Signed-off-by: Jason M Bills <jason.m.bills@linux.intel.com>
 Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 ---
- MAINTAINERS             |   9 +++
- drivers/Kconfig         |   3 +
- drivers/Makefile        |   1 +
- drivers/peci/Kconfig    |  15 ++++
- drivers/peci/Makefile   |   5 ++
- drivers/peci/core.c     | 158 ++++++++++++++++++++++++++++++++++++++++
- drivers/peci/internal.h |  16 ++++
- include/linux/peci.h    |  99 +++++++++++++++++++++++++
- 8 files changed, 306 insertions(+)
- create mode 100644 drivers/peci/Kconfig
- create mode 100644 drivers/peci/Makefile
- create mode 100644 drivers/peci/core.c
- create mode 100644 drivers/peci/internal.h
- create mode 100644 include/linux/peci.h
+ drivers/hwmon/peci/Kconfig    |  13 +
+ drivers/hwmon/peci/Makefile   |   2 +
+ drivers/hwmon/peci/dimmtemp.c | 630 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 645 insertions(+)
+ create mode 100644 drivers/hwmon/peci/dimmtemp.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2345ce8521..11a6c0869010 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14911,6 +14911,15 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/peaq-wmi.c
+diff --git a/drivers/hwmon/peci/Kconfig b/drivers/hwmon/peci/Kconfig
+index e10eed68d70a..9d32a57badfe 100644
+--- a/drivers/hwmon/peci/Kconfig
++++ b/drivers/hwmon/peci/Kconfig
+@@ -14,5 +14,18 @@ config SENSORS_PECI_CPUTEMP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called peci-cputemp.
  
-+PECI SUBSYSTEM
-+M:	Iwona Winiarska <iwona.winiarska@intel.com>
-+R:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-+L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
-+S:	Supported
-+F:	Documentation/devicetree/bindings/peci/
-+F:	drivers/peci/
-+F:	include/linux/peci.h
-+
- PENSANDO ETHERNET DRIVERS
- M:	Shannon Nelson <snelson@pensando.io>
- M:	drivers@pensando.io
-diff --git a/drivers/Kconfig b/drivers/Kconfig
-index 0d399ddaa185..8d6cd5d08722 100644
---- a/drivers/Kconfig
-+++ b/drivers/Kconfig
-@@ -236,4 +236,7 @@ source "drivers/interconnect/Kconfig"
- source "drivers/counter/Kconfig"
- 
- source "drivers/most/Kconfig"
-+
-+source "drivers/peci/Kconfig"
-+
- endmenu
-diff --git a/drivers/Makefile b/drivers/Makefile
-index be5d40ae1488..ed84d5102302 100644
---- a/drivers/Makefile
-+++ b/drivers/Makefile
-@@ -188,3 +188,4 @@ obj-$(CONFIG_GNSS)		+= gnss/
- obj-$(CONFIG_INTERCONNECT)	+= interconnect/
- obj-$(CONFIG_COUNTER)		+= counter/
- obj-$(CONFIG_MOST)		+= most/
-+obj-$(CONFIG_PECI)		+= peci/
-diff --git a/drivers/peci/Kconfig b/drivers/peci/Kconfig
-new file mode 100644
-index 000000000000..71a4ad81225a
---- /dev/null
-+++ b/drivers/peci/Kconfig
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+menuconfig PECI
-+	tristate "PECI support"
++config SENSORS_PECI_DIMMTEMP
++	tristate "PECI DIMM temperature monitoring client"
++	depends on PECI
++	select SENSORS_PECI
++	select PECI_CPU
 +	help
-+	  The Platform Environment Control Interface (PECI) is an interface
-+	  that provides a communication channel to Intel processors and
-+	  chipset components from external monitoring or control devices.
++	  If you say yes here you get support for the generic Intel PECI hwmon
++	  driver which provides Temperature Sensor on DIMM readings that are
++	  accessible via the processor PECI interface.
 +
-+	  If you are building a Baseboard Management Controller (BMC) kernel
-+	  for Intel platform say Y here and also to the specific driver for
-+	  your adapter(s) below. If unsure say N.
++	  This driver can also be built as a module. If so, the module
++	  will be called peci-dimmtemp.
 +
-+	  This support is also available as a module. If so, the module
-+	  will be called peci.
-diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
+ config SENSORS_PECI
+ 	tristate
+diff --git a/drivers/hwmon/peci/Makefile b/drivers/hwmon/peci/Makefile
+index e8a0ada5ab1f..191cfa0227f3 100644
+--- a/drivers/hwmon/peci/Makefile
++++ b/drivers/hwmon/peci/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ peci-cputemp-y := cputemp.o
++peci-dimmtemp-y := dimmtemp.o
+ 
+ obj-$(CONFIG_SENSORS_PECI_CPUTEMP)	+= peci-cputemp.o
++obj-$(CONFIG_SENSORS_PECI_DIMMTEMP)	+= peci-dimmtemp.o
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
 new file mode 100644
-index 000000000000..e789a354e842
+index 000000000000..ec435b03e401
 --- /dev/null
-+++ b/drivers/peci/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+# Core functionality
-+peci-y := core.o
-+obj-$(CONFIG_PECI) += peci.o
-diff --git a/drivers/peci/core.c b/drivers/peci/core.c
-new file mode 100644
-index 000000000000..73ad0a47fa9d
---- /dev/null
-+++ b/drivers/peci/core.c
-@@ -0,0 +1,158 @@
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -0,0 +1,630 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +// Copyright (c) 2018-2021 Intel Corporation
 +
-+#include <linux/bug.h>
-+#include <linux/device.h>
-+#include <linux/export.h>
-+#include <linux/idr.h>
++#include <linux/auxiliary_bus.h>
++#include <linux/bitfield.h>
++#include <linux/bitops.h>
++#include <linux/hwmon.h>
++#include <linux/jiffies.h>
 +#include <linux/module.h>
-+#include <linux/of.h>
 +#include <linux/peci.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/property.h>
-+#include <linux/slab.h>
++#include <linux/peci-cpu.h>
++#include <linux/units.h>
++#include <linux/workqueue.h>
 +
-+#include "internal.h"
++#include "common.h"
 +
-+static DEFINE_IDA(peci_controller_ida);
++#define DIMM_MASK_CHECK_DELAY_JIFFIES	msecs_to_jiffies(5000)
 +
-+static void peci_controller_dev_release(struct device *dev)
-+{
-+	struct peci_controller *controller = to_peci_controller(dev);
++/* Max number of channel ranks and DIMM index per channel */
++#define CHAN_RANK_MAX_ON_HSX	8
++#define DIMM_IDX_MAX_ON_HSX	3
++#define CHAN_RANK_MAX_ON_BDX	4
++#define DIMM_IDX_MAX_ON_BDX	3
++#define CHAN_RANK_MAX_ON_BDXD	2
++#define DIMM_IDX_MAX_ON_BDXD	2
++#define CHAN_RANK_MAX_ON_SKX	6
++#define DIMM_IDX_MAX_ON_SKX	2
++#define CHAN_RANK_MAX_ON_ICX	8
++#define DIMM_IDX_MAX_ON_ICX	2
++#define CHAN_RANK_MAX_ON_ICXD	4
++#define DIMM_IDX_MAX_ON_ICXD	2
 +
-+	mutex_destroy(&controller->bus_lock);
-+	ida_free(&peci_controller_ida, controller->id);
-+	kfree(controller);
-+}
++#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_HSX
++#define DIMM_IDX_MAX		DIMM_IDX_MAX_ON_HSX
++#define DIMM_NUMS_MAX		(CHAN_RANK_MAX * DIMM_IDX_MAX)
 +
-+struct device_type peci_controller_type = {
-+	.release	= peci_controller_dev_release,
++#define CPU_SEG_MASK		GENMASK(23, 16)
++#define GET_CPU_SEG(x)		(((x) & CPU_SEG_MASK) >> 16)
++#define CPU_BUS_MASK		GENMASK(7, 0)
++#define GET_CPU_BUS(x)		((x) & CPU_BUS_MASK)
++
++#define DIMM_TEMP_MAX		GENMASK(15, 8)
++#define DIMM_TEMP_CRIT		GENMASK(23, 16)
++#define GET_TEMP_MAX(x)		(((x) & DIMM_TEMP_MAX) >> 8)
++#define GET_TEMP_CRIT(x)	(((x) & DIMM_TEMP_CRIT) >> 16)
++
++#define NO_DIMM_RETRY_COUNT_MAX	5
++
++struct peci_dimmtemp;
++
++struct dimm_info {
++	int chan_rank_max;
++	int dimm_idx_max;
++	u8 min_peci_revision;
++	int (*read_thresholds)(struct peci_dimmtemp *priv, int dimm_order,
++			       int chan_rank, u32 *data);
 +};
 +
-+static struct peci_controller *peci_controller_alloc(struct device *dev,
-+						     struct peci_controller_ops *ops)
-+{
-+	struct peci_controller *controller;
-+	int ret;
-+
-+	if (!ops->xfer)
-+		return ERR_PTR(-EINVAL);
-+
-+	controller = kzalloc(sizeof(*controller), GFP_KERNEL);
-+	if (!controller)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ret = ida_alloc_max(&peci_controller_ida, U8_MAX, GFP_KERNEL);
-+	if (ret < 0)
-+		goto err;
-+	controller->id = ret;
-+
-+	controller->ops = ops;
-+
-+	controller->dev.parent = dev;
-+	controller->dev.bus = &peci_bus_type;
-+	controller->dev.type = &peci_controller_type;
-+
-+	device_initialize(&controller->dev);
-+
-+	mutex_init(&controller->bus_lock);
-+
-+	return controller;
-+
-+err:
-+	kfree(controller);
-+	return ERR_PTR(ret);
-+}
-+
-+static void unregister_controller(void *_controller)
-+{
-+	struct peci_controller *controller = _controller;
-+
-+	device_unregister(&controller->dev);
-+
-+	fwnode_handle_put(controller->dev.fwnode);
-+
-+	pm_runtime_disable(&controller->dev);
-+}
-+
-+/**
-+ * devm_peci_controller_add() - add PECI controller
-+ * @dev: device for devm operations
-+ * @ops: pointer to controller specific methods
-+ *
-+ * In final stage of its probe(), peci_controller driver calls
-+ * devm_peci_controller_add() to register itself with the PECI bus.
-+ *
-+ * Return: Pointer to the newly allocated controller or ERR_PTR() in case of failure.
-+ */
-+struct peci_controller *devm_peci_controller_add(struct device *dev,
-+						 struct peci_controller_ops *ops)
-+{
-+	struct peci_controller *controller;
-+	int ret;
-+
-+	controller = peci_controller_alloc(dev, ops);
-+	if (IS_ERR(controller))
-+		return controller;
-+
-+	ret = dev_set_name(&controller->dev, "peci-%d", controller->id);
-+	if (ret)
-+		goto err_put;
-+
-+	pm_runtime_no_callbacks(&controller->dev);
-+	pm_suspend_ignore_children(&controller->dev, true);
-+	pm_runtime_enable(&controller->dev);
-+
-+	device_set_node(&controller->dev, fwnode_handle_get(dev_fwnode(dev)));
-+
-+	ret = device_add(&controller->dev);
-+	if (ret)
-+		goto err_fwnode;
-+
-+	ret = devm_add_action_or_reset(dev, unregister_controller, controller);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return controller;
-+
-+err_fwnode:
-+	fwnode_handle_put(controller->dev.fwnode);
-+
-+	pm_runtime_disable(&controller->dev);
-+
-+err_put:
-+	put_device(&controller->dev);
-+
-+	return ERR_PTR(ret);
-+}
-+EXPORT_SYMBOL_NS_GPL(devm_peci_controller_add, PECI);
-+
-+struct bus_type peci_bus_type = {
-+	.name		= "peci",
++struct peci_dimm_thresholds {
++	long temp_max;
++	long temp_crit;
++	struct peci_sensor_state state;
 +};
 +
-+static int __init peci_init(void)
++enum peci_dimm_threshold_type {
++	temp_max_type,
++	temp_crit_type,
++};
++
++struct peci_dimmtemp {
++	struct peci_device *peci_dev;
++	struct device *dev;
++	const char *name;
++	const struct dimm_info *gen_info;
++	struct delayed_work detect_work;
++	struct {
++		struct peci_sensor_data temp;
++		struct peci_dimm_thresholds thresholds;
++	} dimm[DIMM_NUMS_MAX];
++	char **dimmtemp_label;
++	DECLARE_BITMAP(dimm_mask, DIMM_NUMS_MAX);
++	u8 no_dimm_retry_count;
++};
++
++static u8 __dimm_temp(u32 reg, int dimm_order)
++{
++	return (reg >> (dimm_order * 8)) & 0xff;
++}
++
++static int get_dimm_temp(struct peci_dimmtemp *priv, int dimm_no, long *val)
++{
++	int dimm_order = dimm_no % priv->gen_info->dimm_idx_max;
++	int chan_rank = dimm_no / priv->gen_info->dimm_idx_max;
++	int ret = 0;
++	u32 data;
++
++	mutex_lock(&priv->dimm[dimm_no].temp.state.lock);
++	if (!peci_sensor_need_update(&priv->dimm[dimm_no].temp.state))
++		goto skip_update;
++
++	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &data);
++	if (ret)
++		goto unlock;
++
++	priv->dimm[dimm_no].temp.value = __dimm_temp(data, dimm_order) * MILLIDEGREE_PER_DEGREE;
++
++	peci_sensor_mark_updated(&priv->dimm[dimm_no].temp.state);
++
++skip_update:
++	*val = priv->dimm[dimm_no].temp.value;
++unlock:
++	mutex_unlock(&priv->dimm[dimm_no].temp.state.lock);
++	return ret;
++}
++
++static int update_thresholds(struct peci_dimmtemp *priv, int dimm_no)
++{
++	int dimm_order = dimm_no % priv->gen_info->dimm_idx_max;
++	int chan_rank = dimm_no / priv->gen_info->dimm_idx_max;
++	u32 data;
++	int ret;
++
++	if (!peci_sensor_need_update(&priv->dimm[dimm_no].thresholds.state))
++		return 0;
++
++	ret = priv->gen_info->read_thresholds(priv, dimm_order, chan_rank, &data);
++	if (ret == -ENODATA) /* Use default or previous value */
++		return 0;
++	if (ret)
++		return ret;
++
++	priv->dimm[dimm_no].thresholds.temp_max = GET_TEMP_MAX(data) * MILLIDEGREE_PER_DEGREE;
++	priv->dimm[dimm_no].thresholds.temp_crit = GET_TEMP_CRIT(data) * MILLIDEGREE_PER_DEGREE;
++
++	peci_sensor_mark_updated(&priv->dimm[dimm_no].thresholds.state);
++
++	return 0;
++}
++
++static int get_dimm_thresholds(struct peci_dimmtemp *priv, enum peci_dimm_threshold_type type,
++			       int dimm_no, long *val)
 +{
 +	int ret;
 +
-+	ret = bus_register(&peci_bus_type);
-+	if (ret < 0) {
-+		pr_err("peci: failed to register PECI bus type!\n");
++	mutex_lock(&priv->dimm[dimm_no].thresholds.state.lock);
++	ret = update_thresholds(priv, dimm_no);
++	if (ret)
++		goto unlock;
++
++	switch (type) {
++	case temp_max_type:
++		*val = priv->dimm[dimm_no].thresholds.temp_max;
++		break;
++	case temp_crit_type:
++		*val = priv->dimm[dimm_no].thresholds.temp_crit;
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++		break;
++	}
++unlock:
++	mutex_unlock(&priv->dimm[dimm_no].thresholds.state.lock);
++
++	return ret;
++}
++
++static int dimmtemp_read_string(struct device *dev,
++				enum hwmon_sensor_types type,
++				u32 attr, int channel, const char **str)
++{
++	struct peci_dimmtemp *priv = dev_get_drvdata(dev);
++
++	if (attr != hwmon_temp_label)
++		return -EOPNOTSUPP;
++
++	*str = (const char *)priv->dimmtemp_label[channel];
++
++	return 0;
++}
++
++static int dimmtemp_read(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long *val)
++{
++	struct peci_dimmtemp *priv = dev_get_drvdata(dev);
++
++	switch (attr) {
++	case hwmon_temp_input:
++		return get_dimm_temp(priv, channel, val);
++	case hwmon_temp_max:
++		return get_dimm_thresholds(priv, temp_max_type, channel, val);
++	case hwmon_temp_crit:
++		return get_dimm_thresholds(priv, temp_crit_type, channel, val);
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static umode_t dimmtemp_is_visible(const void *data, enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	const struct peci_dimmtemp *priv = data;
++
++	if (test_bit(channel, priv->dimm_mask))
++		return 0444;
++
++	return 0;
++}
++
++static const struct hwmon_ops peci_dimmtemp_ops = {
++	.is_visible = dimmtemp_is_visible,
++	.read_string = dimmtemp_read_string,
++	.read = dimmtemp_read,
++};
++
++static int check_populated_dimms(struct peci_dimmtemp *priv)
++{
++	int chan_rank_max = priv->gen_info->chan_rank_max;
++	int dimm_idx_max = priv->gen_info->dimm_idx_max;
++	u32 chan_rank_empty = 0;
++	u64 dimm_mask = 0;
++	int chan_rank, dimm_idx, ret;
++	u32 pcs;
++
++	BUILD_BUG_ON(BITS_PER_TYPE(chan_rank_empty) < CHAN_RANK_MAX);
++	BUILD_BUG_ON(BITS_PER_TYPE(dimm_mask) < DIMM_NUMS_MAX);
++	if (chan_rank_max * dimm_idx_max > DIMM_NUMS_MAX) {
++		WARN_ONCE(1, "Unsupported number of DIMMs - chan_rank_max: %d, dimm_idx_max: %d",
++			  chan_rank_max, dimm_idx_max);
++		return -EINVAL;
++	}
++
++	for (chan_rank = 0; chan_rank < chan_rank_max; chan_rank++) {
++		ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &pcs);
++		if (ret) {
++			/*
++			 * Overall, we expect either success or -EINVAL in
++			 * order to determine whether DIMM is populated or not.
++			 * For anything else we fall back to deferring the
++			 * detection to be performed at a later point in time.
++			 */
++			if (ret == -EINVAL) {
++				chan_rank_empty |= BIT(chan_rank);
++				continue;
++			}
++
++			return -EAGAIN;
++		}
++
++		for (dimm_idx = 0; dimm_idx < dimm_idx_max; dimm_idx++)
++			if (__dimm_temp(pcs, dimm_idx))
++				dimm_mask |= BIT(chan_rank * dimm_idx_max + dimm_idx);
++	}
++
++	/*
++	 * If we got all -EINVALs, it means that the CPU doesn't have any
++	 * DIMMs. Unfortunately, it may also happen at the very start of
++	 * host platform boot. Retrying a couple of times lets us make sure
++	 * that the state is persistent.
++	 */
++	if (chan_rank_empty == GENMASK(chan_rank_max - 1, 0)) {
++		if (priv->no_dimm_retry_count < NO_DIMM_RETRY_COUNT_MAX) {
++			priv->no_dimm_retry_count++;
++
++			return -EAGAIN;
++		} else {
++			return -ENODEV;
++		}
++	}
++
++	/*
++	 * It's possible that memory training is not done yet. In this case we
++	 * defer the detection to be performed at a later point in time.
++	 */
++	if (!dimm_mask) {
++		priv->no_dimm_retry_count = 0;
++		return -EAGAIN;
++	}
++
++	dev_dbg(priv->dev, "Scanned populated DIMMs: %#llx\n", dimm_mask);
++
++	bitmap_from_u64(priv->dimm_mask, dimm_mask);
++
++	return 0;
++}
++
++static int create_dimm_temp_label(struct peci_dimmtemp *priv, int chan)
++{
++	int rank = chan / priv->gen_info->dimm_idx_max;
++	int idx = chan % priv->gen_info->dimm_idx_max;
++
++	priv->dimmtemp_label[chan] = devm_kasprintf(priv->dev, GFP_KERNEL,
++						    "DIMM %c%d", 'A' + rank,
++						    idx + 1);
++	if (!priv->dimmtemp_label[chan])
++		return -ENOMEM;
++
++	return 0;
++}
++
++static const u32 peci_dimmtemp_temp_channel_config[] = {
++	[0 ... DIMM_NUMS_MAX - 1] = HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT,
++	0
++};
++
++static const struct hwmon_channel_info peci_dimmtemp_temp_channel = {
++	.type = hwmon_temp,
++	.config = peci_dimmtemp_temp_channel_config,
++};
++
++static const struct hwmon_channel_info *peci_dimmtemp_temp_info[] = {
++	&peci_dimmtemp_temp_channel,
++	NULL
++};
++
++static const struct hwmon_chip_info peci_dimmtemp_chip_info = {
++	.ops = &peci_dimmtemp_ops,
++	.info = peci_dimmtemp_temp_info,
++};
++
++static int create_dimm_temp_info(struct peci_dimmtemp *priv)
++{
++	int ret, i, channels;
++	struct device *dev;
++
++	/*
++	 * We expect to either find populated DIMMs and carry on with creating
++	 * sensors, or find out that there are no DIMMs populated.
++	 * All other states mean that the platform never reached the state that
++	 * allows to check DIMM state - causing us to retry later on.
++	 */
++	ret = check_populated_dimms(priv);
++	if (ret == -ENODEV) {
++		dev_dbg(priv->dev, "No DIMMs found\n");
++		return 0;
++	} else if (ret) {
++		schedule_delayed_work(&priv->detect_work, DIMM_MASK_CHECK_DELAY_JIFFIES);
++		dev_dbg(priv->dev, "Deferred populating DIMM temp info\n");
++		return ret;
++	}
++
++	channels = priv->gen_info->chan_rank_max * priv->gen_info->dimm_idx_max;
++
++	priv->dimmtemp_label = devm_kzalloc(priv->dev, channels * sizeof(char *), GFP_KERNEL);
++	if (!priv->dimmtemp_label)
++		return -ENOMEM;
++
++	for_each_set_bit(i, priv->dimm_mask, DIMM_NUMS_MAX) {
++		ret = create_dimm_temp_label(priv, i);
++		if (ret)
++			return ret;
++		mutex_init(&priv->dimm[i].thresholds.state.lock);
++		mutex_init(&priv->dimm[i].temp.state.lock);
++	}
++
++	dev = devm_hwmon_device_register_with_info(priv->dev, priv->name, priv,
++						   &peci_dimmtemp_chip_info, NULL);
++	if (IS_ERR(dev)) {
++		dev_err(priv->dev, "Failed to register hwmon device\n");
++		return PTR_ERR(dev);
++	}
++
++	dev_dbg(priv->dev, "%s: sensor '%s'\n", dev_name(dev), priv->name);
++
++	return 0;
++}
++
++static void create_dimm_temp_info_delayed(struct work_struct *work)
++{
++	struct peci_dimmtemp *priv = container_of(to_delayed_work(work),
++						  struct peci_dimmtemp,
++						  detect_work);
++	int ret;
++
++	ret = create_dimm_temp_info(priv);
++	if (ret && ret != -EAGAIN)
++		dev_err(priv->dev, "Failed to populate DIMM temp info\n");
++}
++
++static void remove_delayed_work(void *_priv)
++{
++	struct peci_dimmtemp *priv = _priv;
++
++	cancel_delayed_work_sync(&priv->detect_work);
++}
++
++static int peci_dimmtemp_probe(struct auxiliary_device *adev, const struct auxiliary_device_id *id)
++{
++	struct device *dev = &adev->dev;
++	struct peci_device *peci_dev = to_peci_device(dev->parent);
++	struct peci_dimmtemp *priv;
++	int ret;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->name = devm_kasprintf(dev, GFP_KERNEL, "peci_dimmtemp.cpu%d",
++				    peci_dev->info.socket_id);
++	if (!priv->name)
++		return -ENOMEM;
++
++	priv->dev = dev;
++	priv->peci_dev = peci_dev;
++	priv->gen_info = (const struct dimm_info *)id->driver_data;
++
++	/*
++	 * This is just a sanity check. Since we're using commands that are
++	 * guaranteed to be supported on a given platform, we should never see
++	 * revision lower than expected.
++	 */
++	if (peci_dev->info.peci_revision < priv->gen_info->min_peci_revision)
++		dev_warn(priv->dev,
++			 "Unexpected PECI revision %#x, some features may be unavailable\n",
++			 peci_dev->info.peci_revision);
++
++	INIT_DELAYED_WORK(&priv->detect_work, create_dimm_temp_info_delayed);
++
++	ret = devm_add_action_or_reset(priv->dev, remove_delayed_work, priv);
++	if (ret)
++		return ret;
++
++	ret = create_dimm_temp_info(priv);
++	if (ret && ret != -EAGAIN) {
++		dev_err(dev, "Failed to populate DIMM temp info\n");
 +		return ret;
 +	}
 +
 +	return 0;
 +}
-+module_init(peci_init);
 +
-+static void __exit peci_exit(void)
++static int
++read_thresholds_hsx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
 +{
-+	bus_unregister(&peci_bus_type);
-+}
-+module_exit(peci_exit);
++	u8 dev, func;
++	u16 reg;
++	int ret;
 +
-+MODULE_AUTHOR("Jason M Bills <jason.m.bills@linux.intel.com>");
++	/*
++	 * Device 20, Function 0: IMC 0 channel 0 -> rank 0
++	 * Device 20, Function 1: IMC 0 channel 1 -> rank 1
++	 * Device 21, Function 0: IMC 0 channel 2 -> rank 2
++	 * Device 21, Function 1: IMC 0 channel 3 -> rank 3
++	 * Device 23, Function 0: IMC 1 channel 0 -> rank 4
++	 * Device 23, Function 1: IMC 1 channel 1 -> rank 5
++	 * Device 24, Function 0: IMC 1 channel 2 -> rank 6
++	 * Device 24, Function 1: IMC 1 channel 3 -> rank 7
++	 */
++	dev = 20 + chan_rank / 2 + chan_rank / 4;
++	func = chan_rank % 2;
++	reg = 0x120 + dimm_order * 4;
++
++	ret = peci_pci_local_read(priv->peci_dev, 1, dev, func, reg, data);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int
++read_thresholds_bdxd(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
++{
++	u8 dev, func;
++	u16 reg;
++	int ret;
++
++	/*
++	 * Device 10, Function 2: IMC 0 channel 0 -> rank 0
++	 * Device 10, Function 6: IMC 0 channel 1 -> rank 1
++	 * Device 12, Function 2: IMC 1 channel 0 -> rank 2
++	 * Device 12, Function 6: IMC 1 channel 1 -> rank 3
++	 */
++	dev = 10 + chan_rank / 2 * 2;
++	func = (chan_rank % 2) ? 6 : 2;
++	reg = 0x120 + dimm_order * 4;
++
++	ret = peci_pci_local_read(priv->peci_dev, 2, dev, func, reg, data);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int
++read_thresholds_skx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
++{
++	u8 dev, func;
++	u16 reg;
++	int ret;
++
++	/*
++	 * Device 10, Function 2: IMC 0 channel 0 -> rank 0
++	 * Device 10, Function 6: IMC 0 channel 1 -> rank 1
++	 * Device 11, Function 2: IMC 0 channel 2 -> rank 2
++	 * Device 12, Function 2: IMC 1 channel 0 -> rank 3
++	 * Device 12, Function 6: IMC 1 channel 1 -> rank 4
++	 * Device 13, Function 2: IMC 1 channel 2 -> rank 5
++	 */
++	dev = 10 + chan_rank / 3 * 2 + (chan_rank % 3 == 2 ? 1 : 0);
++	func = chan_rank % 3 == 1 ? 6 : 2;
++	reg = 0x120 + dimm_order * 4;
++
++	ret = peci_pci_local_read(priv->peci_dev, 2, dev, func, reg, data);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int
++read_thresholds_icx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
++{
++	u32 reg_val;
++	u64 offset;
++	int ret;
++	u8 dev;
++
++	ret = peci_ep_pci_local_read(priv->peci_dev, 0, 13, 0, 2, 0xd4, &reg_val);
++	if (ret || !(reg_val & BIT(31)))
++		return -ENODATA; /* Use default or previous value */
++
++	ret = peci_ep_pci_local_read(priv->peci_dev, 0, 13, 0, 2, 0xd0, &reg_val);
++	if (ret)
++		return -ENODATA; /* Use default or previous value */
++
++	/*
++	 * Device 26, Offset 224e0: IMC 0 channel 0 -> rank 0
++	 * Device 26, Offset 264e0: IMC 0 channel 1 -> rank 1
++	 * Device 27, Offset 224e0: IMC 1 channel 0 -> rank 2
++	 * Device 27, Offset 264e0: IMC 1 channel 1 -> rank 3
++	 * Device 28, Offset 224e0: IMC 2 channel 0 -> rank 4
++	 * Device 28, Offset 264e0: IMC 2 channel 1 -> rank 5
++	 * Device 29, Offset 224e0: IMC 3 channel 0 -> rank 6
++	 * Device 29, Offset 264e0: IMC 3 channel 1 -> rank 7
++	 */
++	dev = 26 + chan_rank / 2;
++	offset = 0x224e0 + dimm_order * 4 + (chan_rank % 2) * 0x4000;
++
++	ret = peci_mmio_read(priv->peci_dev, 0, GET_CPU_SEG(reg_val), GET_CPU_BUS(reg_val),
++			     dev, 0, offset, data);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static const struct dimm_info dimm_hsx = {
++	.chan_rank_max	= CHAN_RANK_MAX_ON_HSX,
++	.dimm_idx_max	= DIMM_IDX_MAX_ON_HSX,
++	.min_peci_revision = 0x33,
++	.read_thresholds = &read_thresholds_hsx,
++};
++
++static const struct dimm_info dimm_bdx = {
++	.chan_rank_max	= CHAN_RANK_MAX_ON_BDX,
++	.dimm_idx_max	= DIMM_IDX_MAX_ON_BDX,
++	.min_peci_revision = 0x33,
++	.read_thresholds = &read_thresholds_hsx,
++};
++
++static const struct dimm_info dimm_bdxd = {
++	.chan_rank_max	= CHAN_RANK_MAX_ON_BDXD,
++	.dimm_idx_max	= DIMM_IDX_MAX_ON_BDXD,
++	.min_peci_revision = 0x33,
++	.read_thresholds = &read_thresholds_bdxd,
++};
++
++static const struct dimm_info dimm_skx = {
++	.chan_rank_max	= CHAN_RANK_MAX_ON_SKX,
++	.dimm_idx_max	= DIMM_IDX_MAX_ON_SKX,
++	.min_peci_revision = 0x33,
++	.read_thresholds = &read_thresholds_skx,
++};
++
++static const struct dimm_info dimm_icx = {
++	.chan_rank_max	= CHAN_RANK_MAX_ON_ICX,
++	.dimm_idx_max	= DIMM_IDX_MAX_ON_ICX,
++	.min_peci_revision = 0x40,
++	.read_thresholds = &read_thresholds_icx,
++};
++
++static const struct dimm_info dimm_icxd = {
++	.chan_rank_max	= CHAN_RANK_MAX_ON_ICXD,
++	.dimm_idx_max	= DIMM_IDX_MAX_ON_ICXD,
++	.min_peci_revision = 0x40,
++	.read_thresholds = &read_thresholds_icx,
++};
++
++static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
++	{
++		.name = "peci_cpu.dimmtemp.hsx",
++		.driver_data = (kernel_ulong_t)&dimm_hsx,
++	},
++	{
++		.name = "peci_cpu.dimmtemp.bdx",
++		.driver_data = (kernel_ulong_t)&dimm_bdx,
++	},
++	{
++		.name = "peci_cpu.dimmtemp.bdxd",
++		.driver_data = (kernel_ulong_t)&dimm_bdxd,
++	},
++	{
++		.name = "peci_cpu.dimmtemp.skx",
++		.driver_data = (kernel_ulong_t)&dimm_skx,
++	},
++	{
++		.name = "peci_cpu.dimmtemp.icx",
++		.driver_data = (kernel_ulong_t)&dimm_icx,
++	},
++	{
++		.name = "peci_cpu.dimmtemp.icxd",
++		.driver_data = (kernel_ulong_t)&dimm_icxd,
++	},
++	{ }
++};
++MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
++
++static struct auxiliary_driver peci_dimmtemp_driver = {
++	.probe		= peci_dimmtemp_probe,
++	.id_table	= peci_dimmtemp_ids,
++};
++
++module_auxiliary_driver(peci_dimmtemp_driver);
++
 +MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
 +MODULE_AUTHOR("Iwona Winiarska <iwona.winiarska@intel.com>");
-+MODULE_DESCRIPTION("PECI bus core module");
++MODULE_DESCRIPTION("PECI dimmtemp driver");
 +MODULE_LICENSE("GPL");
-diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
-new file mode 100644
-index 000000000000..918dea745a86
---- /dev/null
-+++ b/drivers/peci/internal.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2018-2021 Intel Corporation */
-+
-+#ifndef __PECI_INTERNAL_H
-+#define __PECI_INTERNAL_H
-+
-+#include <linux/device.h>
-+#include <linux/types.h>
-+
-+struct peci_controller;
-+
-+extern struct bus_type peci_bus_type;
-+
-+extern struct device_type peci_controller_type;
-+
-+#endif /* __PECI_INTERNAL_H */
-diff --git a/include/linux/peci.h b/include/linux/peci.h
-new file mode 100644
-index 000000000000..26e0a4e73b50
---- /dev/null
-+++ b/include/linux/peci.h
-@@ -0,0 +1,99 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2018-2021 Intel Corporation */
-+
-+#ifndef __LINUX_PECI_H
-+#define __LINUX_PECI_H
-+
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/mutex.h>
-+#include <linux/types.h>
-+
-+/*
-+ * Currently we don't support any PECI command over 32 bytes.
-+ */
-+#define PECI_REQUEST_MAX_BUF_SIZE 32
-+
-+struct peci_controller;
-+struct peci_request;
-+
-+/**
-+ * struct peci_controller_ops - PECI controller specific methods
-+ * @xfer: PECI transfer function
-+ *
-+ * PECI controllers may have different hardware interfaces - the drivers
-+ * implementing PECI controllers can use this structure to abstract away those
-+ * differences by exposing a common interface for PECI core.
-+ */
-+struct peci_controller_ops {
-+	int (*xfer)(struct peci_controller *controller, u8 addr, struct peci_request *req);
-+};
-+
-+/**
-+ * struct peci_controller - PECI controller
-+ * @dev: device object to register PECI controller to the device model
-+ * @ops: pointer to device specific controller operations
-+ * @bus_lock: lock used to protect multiple callers
-+ * @id: PECI controller ID
-+ *
-+ * PECI controllers usually connect to their drivers using non-PECI bus,
-+ * such as the platform bus.
-+ * Each PECI controller can communicate with one or more PECI devices.
-+ */
-+struct peci_controller {
-+	struct device dev;
-+	struct peci_controller_ops *ops;
-+	struct mutex bus_lock; /* held for the duration of xfer */
-+	u8 id;
-+};
-+
-+struct peci_controller *devm_peci_controller_add(struct device *parent,
-+						 struct peci_controller_ops *ops);
-+
-+static inline struct peci_controller *to_peci_controller(void *d)
-+{
-+	return container_of(d, struct peci_controller, dev);
-+}
-+
-+/**
-+ * struct peci_device - PECI device
-+ * @dev: device object to register PECI device to the device model
-+ * @controller: manages the bus segment hosting this PECI device
-+ * @addr: address used on the PECI bus connected to the parent controller
-+ *
-+ * A peci_device identifies a single device (i.e. CPU) connected to a PECI bus.
-+ * The behaviour exposed to the rest of the system is defined by the PECI driver
-+ * managing the device.
-+ */
-+struct peci_device {
-+	struct device dev;
-+	u8 addr;
-+};
-+
-+static inline struct peci_device *to_peci_device(struct device *d)
-+{
-+	return container_of(d, struct peci_device, dev);
-+}
-+
-+/**
-+ * struct peci_request - PECI request
-+ * @device: PECI device to which the request is sent
-+ * @tx: TX buffer specific data
-+ * @tx.buf: TX buffer
-+ * @tx.len: transfer data length in bytes
-+ * @rx: RX buffer specific data
-+ * @rx.buf: RX buffer
-+ * @rx.len: received data length in bytes
-+ *
-+ * A peci_request represents a request issued by PECI originator (TX) and
-+ * a response received from PECI responder (RX).
-+ */
-+struct peci_request {
-+	struct peci_device *device;
-+	struct {
-+		u8 buf[PECI_REQUEST_MAX_BUF_SIZE];
-+		u8 len;
-+	} rx, tx;
-+};
-+
-+#endif /* __LINUX_PECI_H */
++MODULE_IMPORT_NS(PECI_CPU);
 -- 
 2.31.1
 
