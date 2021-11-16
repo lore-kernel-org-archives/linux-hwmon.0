@@ -2,133 +2,118 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B84ABC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 10:38:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA1DFC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 11:03:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 982CD60F38
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 10:38:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D095F61B62
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 11:03:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbhKPKlo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Nov 2021 05:41:44 -0500
-Received: from mga01.intel.com ([192.55.52.88]:12433 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234039AbhKPKlo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Nov 2021 05:41:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="257422426"
-X-IronPort-AV: E=Sophos;i="5.87,238,1631602800"; 
-   d="scan'208";a="257422426"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 02:38:47 -0800
-X-IronPort-AV: E=Sophos;i="5.87,238,1631602800"; 
-   d="scan'208";a="592571817"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 02:38:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1mmvrI-007O8b-IQ;
-        Tue, 16 Nov 2021 12:38:36 +0200
-Date:   Tue, 16 Nov 2021 12:38:36 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        thomas@weissschuh.net, Ed Brindley <kernel@maidavale.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v11 0/2] Update ASUS WMI supported boards
-Message-ID: <YZOKLDg582dQPzVN@smile.fi.intel.com>
-References: <20211115210842.11972-1-pauk.denis@gmail.com>
- <CAHp75VcPHi1XyZr=CFbUhiUXK0q-10iBx5U3d==aG8pMG27k1Q@mail.gmail.com>
- <c016d0ca-b8b1-fb06-50f3-06a7b1c4aaea@roeck-us.net>
+        id S234677AbhKPLGw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Nov 2021 06:06:52 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:57472
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234624AbhKPLFs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 16 Nov 2021 06:05:48 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3891C3F499
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Nov 2021 11:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1637060570;
+        bh=/fhj+bVJm076Wq/VhTriJ0yxdPwTog87+Zp8k+Dl/zY=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=NUWFbxQoCZvJWjTS8Ht7e3I2J5ylWjXWPLTwiEZjiEPjjjL/l4M3yesmp8gtzBp/e
+         xKqxhssVrSmlnQXVW1Vs+sYohaZO2Tfjxb54q6nVaiGsYb+e7x7KBobbvrd5LTsSyI
+         PDljoEHz0YRdwBb4gAe7J0XuMO4djMTufpZUvBiQrtYUuYDotIQNsFmrLa99/QFInZ
+         2Mc6BR3QBS9rAew/rstubrrRJdcH+TelAsPtzagYG4uP8QhO4Q9JSetTMD4zffqz+u
+         4cVUqrHO/aFHyCLGoWjjTMSh3/D2TaPVtywzI7XC195M272gx4G2ArdjEmh2MxLoL+
+         BPT72sUXpD1qQ==
+Received: by mail-lf1-f70.google.com with SMTP id g38-20020a0565123ba600b004036147023bso8074225lfv.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Nov 2021 03:02:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/fhj+bVJm076Wq/VhTriJ0yxdPwTog87+Zp8k+Dl/zY=;
+        b=5kX5kX78W0p3pZGcxEDO19mEbjEuTdKQUaY7kC3M3q/FruBbeDUnc8pCDqa3cE0UEt
+         OMUzMnI08PqK4D2wedMpgTCgmkefQv67nymO/NyCdErkle2qbwHTNPw99EIp2ZQELE0J
+         GilwesMIqc6xoZIYMt1Eu44PNHFScJOUZFBND6Md0XV6aQvsPELwbRHR9ehQxBRx9yrh
+         QRpL85yYISd8vusT3p8AgqPj620U7r2nF06ERmotc44I6x8GfFI0gJ8Uhg5D9qWYkxk3
+         Tk5/bEYDLQE+6BmWAbvXLiQAKztVa5lSR/nhGMyOrCJqQUFAD/+TqkkqGnmD+Yk6z7CT
+         mgsA==
+X-Gm-Message-State: AOAM530ufWPah9JJnxkAGzgcsU347zD40NYgHypfQe9H/LaslPNT94eK
+        JW3UJ9XnDWN0fFpCOtsczIbFus0ltwHBkjoUO8HWr8o0PHq3aNMp3I7HhTc5UZpUv124Ee2hvQI
+        9y4+QiWN5YqK7q9UUqZENV7Xd4XHV8FgSYUFYlAlU
+X-Received: by 2002:a05:6512:604:: with SMTP id b4mr5696000lfe.198.1637060569467;
+        Tue, 16 Nov 2021 03:02:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx7ajDYjXbeKcZbiXLfcr+dTx8ryW8atDeHVo7pyKw8Zx2SmbmhraxaC8+5fg6M9h4tJ5URtQ==
+X-Received: by 2002:a05:6512:604:: with SMTP id b4mr5695972lfe.198.1637060569244;
+        Tue, 16 Nov 2021 03:02:49 -0800 (PST)
+Received: from localhost.localdomain (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id z8sm1420074ljj.86.2021.11.16.03.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Nov 2021 03:02:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        devicetree@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>
+Subject: [PATCH] dt-bindings: hwmon: add TI DC-DC converters
+Date:   Tue, 16 Nov 2021 12:02:07 +0100
+Message-Id: <20211116110207.68494-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c016d0ca-b8b1-fb06-50f3-06a7b1c4aaea@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 03:15:39PM -0800, Guenter Roeck wrote:
-> On 11/15/21 2:01 PM, Andy Shevchenko wrote:
-> > On Mon, Nov 15, 2021 at 11:09 PM Denis Pauk <pauk.denis@gmail.com> wrote:
-> > > 
-> > > Add support by WMI interface provided by Asus for B550/X570 boards:
-> > > * PRIME X570-PRO,
-> > > * ROG CROSSHAIR VIII HERO
-> > > * ROG CROSSHAIR VIII DARK HERO
-> > > * ROG CROSSHAIR VIII FORMULA
-> > > * ROG STRIX X570-E GAMING
-> > > * ROG STRIX B550-I GAMING
-> > > * ROG STRIX B550-E GAMING
-> > > 
-> > > Add support by WMI interface provided by Asus for X370/X470/
-> > > B450/X399 boards:
-> > > * ROG CROSSHAIR VI HERO,
-> > > * PRIME X399-A,
-> > > * PRIME X470-PRO,
-> > > * ROG CROSSHAIR VI EXTREME,
-> > > * ROG CROSSHAIR VI HERO (WI-FI AC),
-> > > * ROG CROSSHAIR VII HERO,
-> > > * ROG CROSSHAIR VII HERO (WI-FI),
-> > > * ROG STRIX Z390-F GAMING
-> > > * ROG STRIX B450-E GAMING,
-> > > * ROG STRIX B450-F GAMING,
-> > > * ROG STRIX B450-I GAMING,
-> > > * ROG STRIX X399-E GAMING,
-> > > * ROG STRIX X470-F GAMING,
-> > > * ROG STRIX X470-I GAMING,
-> > > * ROG ZENITH EXTREME,
-> > > * ROG ZENITH EXTREME ALPHA.
-> > > 
-> > > I have added "ROG STRIX Z390-F GAMING" to list of supported boards in
-> > > asus_wmi_sensors.
-> > 
-> > Guenter, what is your plan about this patch series? It seems it
-> > missed, by unknown (?) reason, the v5.16-rc1 (I remember seeing it in
-> > some of your tree branches at some point).
-> > 
-> 
-> I don't see it in my record. Earlier I was simply waiting for some
-> Reviewed-by: tags, which I have never seen.
+Few Texas Instruments DC-DC converters on PMBus like TPS544B20 do not
+have bindings and are used only as hardware monitoring sensor.  These
+devices are actually not trivial and can receive basic configuration
+(e.g. power up mode, CNTL pin polarity, expected input voltage), however
+devicetree support for configuration was never added.
 
-Ah, understood. Thank you for clarifications.
+Therefore in current state the devices are used only in read-only mode
+and have trivial bindings, so document them to have basic dtschema
+tests.
 
-> Looking into the commit log,
-> I do see:
-> 
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Co-developed-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Did you and Eugene indeed sign this off, ie did you write it, and
-> Eugene and Denis signed it off ? If so, the tags are in the wrong order.
+Cc: Vincent Pelletier <plr.vincent@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-I'm not sure I follow. I have helped Denis with the code and according to
-Submitting Patches documentation the order should be chronological with the
-main author to be first in the list. Here the committer (submitter) is the
-same as the original author IIUC. (I can't speak for Eugene, though)
-
-> On the other side, if the code is ultimately from Denis, with your input,
-> the tags should be either Acked-by: or Reviewed-by: for both Eugene
-> and yourself.
-
-I'm fine with either Co-developed-by+SoB or Reviewed-by.
-
-> Note that v11 of this patch series is missing from
-> https://patchwork.kernel.org/project/linux-hwmon/list/
-> for some reason.
-
-Hmm... Denis, please check locally how you prepare your patches.
-
-
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 791079021f1b..3297a6480534 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -329,12 +329,19 @@ properties:
+           - ti,tmp122
+             # Digital Temperature Sensor
+           - ti,tmp275
++            # TI DC-DC converter on PMBus
++          - ti,tps40400
+             # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
+           - ti,tps53676
+             # TI Dual channel DCAP+ multiphase controller TPS53679
+           - ti,tps53679
+             # TI Dual channel DCAP+ multiphase controller TPS53688
+           - ti,tps53688
++            # TI DC-DC converters on PMBus
++          - ti,tps544b20
++          - ti,tps544b25
++          - ti,tps544c20
++          - ti,tps544c25
+             # Winbond/Nuvoton H/W Monitor
+           - winbond,w83793
+             # i2c trusted platform module (TPM)
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.32.0
 
