@@ -2,118 +2,238 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA1DFC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 11:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89AD3C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 12:04:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D095F61B62
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 11:03:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 727DA61414
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Nov 2021 12:04:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbhKPLGw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Nov 2021 06:06:52 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:57472
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234624AbhKPLFs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Nov 2021 06:05:48 -0500
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3891C3F499
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Nov 2021 11:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1637060570;
-        bh=/fhj+bVJm076Wq/VhTriJ0yxdPwTog87+Zp8k+Dl/zY=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=NUWFbxQoCZvJWjTS8Ht7e3I2J5ylWjXWPLTwiEZjiEPjjjL/l4M3yesmp8gtzBp/e
-         xKqxhssVrSmlnQXVW1Vs+sYohaZO2Tfjxb54q6nVaiGsYb+e7x7KBobbvrd5LTsSyI
-         PDljoEHz0YRdwBb4gAe7J0XuMO4djMTufpZUvBiQrtYUuYDotIQNsFmrLa99/QFInZ
-         2Mc6BR3QBS9rAew/rstubrrRJdcH+TelAsPtzagYG4uP8QhO4Q9JSetTMD4zffqz+u
-         4cVUqrHO/aFHyCLGoWjjTMSh3/D2TaPVtywzI7XC195M272gx4G2ArdjEmh2MxLoL+
-         BPT72sUXpD1qQ==
-Received: by mail-lf1-f70.google.com with SMTP id g38-20020a0565123ba600b004036147023bso8074225lfv.10
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Nov 2021 03:02:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/fhj+bVJm076Wq/VhTriJ0yxdPwTog87+Zp8k+Dl/zY=;
-        b=5kX5kX78W0p3pZGcxEDO19mEbjEuTdKQUaY7kC3M3q/FruBbeDUnc8pCDqa3cE0UEt
-         OMUzMnI08PqK4D2wedMpgTCgmkefQv67nymO/NyCdErkle2qbwHTNPw99EIp2ZQELE0J
-         GilwesMIqc6xoZIYMt1Eu44PNHFScJOUZFBND6Md0XV6aQvsPELwbRHR9ehQxBRx9yrh
-         QRpL85yYISd8vusT3p8AgqPj620U7r2nF06ERmotc44I6x8GfFI0gJ8Uhg5D9qWYkxk3
-         Tk5/bEYDLQE+6BmWAbvXLiQAKztVa5lSR/nhGMyOrCJqQUFAD/+TqkkqGnmD+Yk6z7CT
-         mgsA==
-X-Gm-Message-State: AOAM530ufWPah9JJnxkAGzgcsU347zD40NYgHypfQe9H/LaslPNT94eK
-        JW3UJ9XnDWN0fFpCOtsczIbFus0ltwHBkjoUO8HWr8o0PHq3aNMp3I7HhTc5UZpUv124Ee2hvQI
-        9y4+QiWN5YqK7q9UUqZENV7Xd4XHV8FgSYUFYlAlU
-X-Received: by 2002:a05:6512:604:: with SMTP id b4mr5696000lfe.198.1637060569467;
-        Tue, 16 Nov 2021 03:02:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7ajDYjXbeKcZbiXLfcr+dTx8ryW8atDeHVo7pyKw8Zx2SmbmhraxaC8+5fg6M9h4tJ5URtQ==
-X-Received: by 2002:a05:6512:604:: with SMTP id b4mr5695972lfe.198.1637060569244;
-        Tue, 16 Nov 2021 03:02:49 -0800 (PST)
-Received: from localhost.localdomain (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id z8sm1420074ljj.86.2021.11.16.03.02.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 03:02:48 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        devicetree@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>
-Subject: [PATCH] dt-bindings: hwmon: add TI DC-DC converters
-Date:   Tue, 16 Nov 2021 12:02:07 +0100
-Message-Id: <20211116110207.68494-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        id S235864AbhKPMHW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Nov 2021 07:07:22 -0500
+Received: from mga14.intel.com ([192.55.52.115]:59274 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235953AbhKPMFN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 16 Nov 2021 07:05:13 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="233919106"
+X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
+   d="scan'208";a="233919106"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 04:02:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
+   d="scan'208";a="494432986"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 16 Nov 2021 04:02:11 -0800
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mmxAA-0000Po-S7; Tue, 16 Nov 2021 12:02:10 +0000
+Date:   Tue, 16 Nov 2021 20:02:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 82b520da9134a594eb9816759ed66ba6ef44888e
+Message-ID: <61939dba.k9UXbyzFe7lZHHAy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Few Texas Instruments DC-DC converters on PMBus like TPS544B20 do not
-have bindings and are used only as hardware monitoring sensor.  These
-devices are actually not trivial and can receive basic configuration
-(e.g. power up mode, CNTL pin polarity, expected input voltage), however
-devicetree support for configuration was never added.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 82b520da9134a594eb9816759ed66ba6ef44888e  hwmon: (adm1021) Improve detection of LM84, MAX1617, and MAX1617A
 
-Therefore in current state the devices are used only in read-only mode
-and have trivial bindings, so document them to have basic dtschema
-tests.
+elapsed time: 723m
 
-Cc: Vincent Pelletier <plr.vincent@gmail.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+configs tested: 175
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211115
+i386                 randconfig-c001-20211116
+m68k                             alldefconfig
+powerpc                 linkstation_defconfig
+ia64                                defconfig
+mips                         db1xxx_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                        cell_defconfig
+arm                         lubbock_defconfig
+sh                             shx3_defconfig
+sh                          lboxre2_defconfig
+arc                                 defconfig
+arm                       netwinder_defconfig
+arm                        mini2440_defconfig
+powerpc                mpc7448_hpc2_defconfig
+mips                            ar7_defconfig
+mips                             allyesconfig
+powerpc                      arches_defconfig
+m68k                            mac_defconfig
+powerpc                     tqm8560_defconfig
+m68k                          multi_defconfig
+m68k                        m5307c3_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                         cm_x300_defconfig
+m68k                          atari_defconfig
+sh                             espt_defconfig
+arm                        vexpress_defconfig
+h8300                    h8300h-sim_defconfig
+sh                               j2_defconfig
+powerpc                      ppc6xx_defconfig
+mips                          ath25_defconfig
+openrisc                 simple_smp_defconfig
+sh                         ecovec24_defconfig
+sh                      rts7751r2d1_defconfig
+mips                           gcw0_defconfig
+m68k                       m5208evb_defconfig
+mips                      bmips_stb_defconfig
+powerpc                     ppa8548_defconfig
+mips                     decstation_defconfig
+sh                         apsh4a3a_defconfig
+sparc64                             defconfig
+powerpc                    klondike_defconfig
+m68k                          amiga_defconfig
+arm                       versatile_defconfig
+m68k                        mvme147_defconfig
+arm                       aspeed_g4_defconfig
+m68k                       m5275evb_defconfig
+arm                        magician_defconfig
+mips                           ip22_defconfig
+arm                          badge4_defconfig
+sh                           sh2007_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                     kilauea_defconfig
+arm                      tct_hammer_defconfig
+sh                          sdk7780_defconfig
+powerpc                      cm5200_defconfig
+powerpc                   microwatt_defconfig
+mips                       bmips_be_defconfig
+um                               alldefconfig
+sh                          rsk7203_defconfig
+m68k                        m5407c3_defconfig
+mips                           xway_defconfig
+riscv                             allnoconfig
+arm                  colibri_pxa270_defconfig
+arm                         at91_dt_defconfig
+m68k                         amcore_defconfig
+sh                   sh7770_generic_defconfig
+mips                      malta_kvm_defconfig
+sparc                               defconfig
+um                             i386_defconfig
+s390                             alldefconfig
+s390                                defconfig
+powerpc                    ge_imp3a_defconfig
+sh                        sh7763rdp_defconfig
+mips                         mpc30x_defconfig
+sh                     sh7710voipgw_defconfig
+nds32                            alldefconfig
+m68k                       bvme6000_defconfig
+xtensa                  audio_kc705_defconfig
+riscv             nommu_k210_sdcard_defconfig
+mips                            e55_defconfig
+arm                  randconfig-c002-20211116
+arm                  randconfig-c002-20211115
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+i386                 randconfig-a006-20211115
+i386                 randconfig-a003-20211115
+i386                 randconfig-a005-20211115
+i386                 randconfig-a001-20211115
+i386                 randconfig-a004-20211115
+i386                 randconfig-a002-20211115
+x86_64               randconfig-a015-20211116
+x86_64               randconfig-a013-20211116
+x86_64               randconfig-a012-20211116
+x86_64               randconfig-a011-20211116
+x86_64               randconfig-a016-20211116
+x86_64               randconfig-a014-20211116
+i386                 randconfig-a014-20211116
+i386                 randconfig-a016-20211116
+i386                 randconfig-a012-20211116
+i386                 randconfig-a013-20211116
+i386                 randconfig-a011-20211116
+i386                 randconfig-a015-20211116
+x86_64               randconfig-a005-20211115
+x86_64               randconfig-a003-20211115
+x86_64               randconfig-a002-20211115
+x86_64               randconfig-a001-20211115
+x86_64               randconfig-a006-20211115
+x86_64               randconfig-a004-20211115
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
+
+clang tested configs:
+x86_64               randconfig-c007-20211116
+i386                 randconfig-c001-20211116
+arm                  randconfig-c002-20211116
+riscv                randconfig-c006-20211116
+powerpc              randconfig-c003-20211116
+s390                 randconfig-c005-20211116
+mips                 randconfig-c004-20211116
+x86_64               randconfig-a005-20211116
+x86_64               randconfig-a003-20211116
+x86_64               randconfig-a001-20211116
+x86_64               randconfig-a002-20211116
+x86_64               randconfig-a006-20211116
+x86_64               randconfig-a004-20211116
+i386                 randconfig-a014-20211115
+i386                 randconfig-a016-20211115
+i386                 randconfig-a012-20211115
+i386                 randconfig-a013-20211115
+i386                 randconfig-a011-20211115
+i386                 randconfig-a015-20211115
+hexagon              randconfig-r045-20211115
+hexagon              randconfig-r041-20211115
+s390                 randconfig-r044-20211115
+riscv                randconfig-r042-20211115
+
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 791079021f1b..3297a6480534 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -329,12 +329,19 @@ properties:
-           - ti,tmp122
-             # Digital Temperature Sensor
-           - ti,tmp275
-+            # TI DC-DC converter on PMBus
-+          - ti,tps40400
-             # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
-           - ti,tps53676
-             # TI Dual channel DCAP+ multiphase controller TPS53679
-           - ti,tps53679
-             # TI Dual channel DCAP+ multiphase controller TPS53688
-           - ti,tps53688
-+            # TI DC-DC converters on PMBus
-+          - ti,tps544b20
-+          - ti,tps544b25
-+          - ti,tps544c20
-+          - ti,tps544c25
-             # Winbond/Nuvoton H/W Monitor
-           - winbond,w83793
-             # i2c trusted platform module (TPM)
--- 
-2.32.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
