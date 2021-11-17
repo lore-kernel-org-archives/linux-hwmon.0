@@ -2,193 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE06FC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 04:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DE96C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 13:23:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B354C63212
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 04:56:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0132F611AF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 13:23:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbhKQE7k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Nov 2021 23:59:40 -0500
-Received: from mga09.intel.com ([134.134.136.24]:47506 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232623AbhKQE7j (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Nov 2021 23:59:39 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="233714831"
-X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="233714831"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 20:56:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="672245295"
-Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 Nov 2021 20:56:40 -0800
-Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mnCzv-0001FQ-Mu; Wed, 17 Nov 2021 04:56:39 +0000
-Date:   Wed, 17 Nov 2021 12:56:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- d20638935cecc55960918079aaa2d8652ace391e
-Message-ID: <61948b7e.lDuIdo9g+nKE+Dsl%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232163AbhKQN0g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Nov 2021 08:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237535AbhKQN0f (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 17 Nov 2021 08:26:35 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5176CC061570;
+        Wed, 17 Nov 2021 05:23:37 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso4682054ots.6;
+        Wed, 17 Nov 2021 05:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JpcC4e4rsVEA5qZKmhjIiquAG4OB5LHCYUwoQQFuZ4A=;
+        b=m8ga3yPVjpLMru7uIOlFGHmtHhRnr8H0Uhtv5FaKKEMEcG95rnmjYRlyfz2Tz5U46V
+         2GKztYNF75qBOvIrQ9DHchA0rh/oPr2fJVfQJpaZomBVSm6CKDAKpIbeUqkstHZTdqo2
+         5GIfvBvCdYO42rufAxILnl763GKwx1ZpB5zfCwikDEgB69i35QvBtdXFLi/r69lrFZ2V
+         6XWJ8oQlvD7NSANJRwOgTMemNiuQ8Vem3xoHoy89VjOYO70fjJZHfoE27gtHbP2d+iwF
+         uV+DLGheXyuiok/dzlw6nsX6OrvmD/cENO+sPn+Kq5NbxhI65m6kQE9iuLL9CcQ3ZNSO
+         vq1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=JpcC4e4rsVEA5qZKmhjIiquAG4OB5LHCYUwoQQFuZ4A=;
+        b=7Wafpi+GvoQJYjvAtNnqoQvEbxXNA8HMz5KAGPz8kDWMnHgjw3cVpGFl74YGpDNRyk
+         nHS2clr4Oh4HjHMwJuxHVBjglkyRFq0v45YtUiRsQUOJshBpNpI1aP2qMYGx1nhZ4ner
+         iInZ0gwu4n0KgV3qOXPyBktjc8P2SuC7jGKmKf7kBxiJKANk+/YFS9Ssb8Oc/+FjqbIc
+         RdxqsiUCdkwvkdkoTHmchR0/z5ePql1Et2YAKlYLS7neWCi+MpNdDyyGPgnyGd2hlDND
+         8df4Ax2PtLUXuW+bjZBnOuwNrCI3xOz/PeSZP9ZOvekQTWHC0/lhwwna7oT1mL+FLqff
+         OGyw==
+X-Gm-Message-State: AOAM531F29oMD/hl6f3D0rc016LQxrmq5q2gZcu27a3Jy7qf90JlFrAZ
+        W06d84sPrT5/MhYcDqOt5sCrRtBy8RE=
+X-Google-Smtp-Source: ABdhPJw9CgQHgVoa1QsXkrAKBbafuxM2CW9sqaBc7ooky0XvJo9UWHzs5X9QzwruC3gOfvJdGjbLaA==
+X-Received: by 2002:a9d:6855:: with SMTP id c21mr13936653oto.357.1637155416727;
+        Wed, 17 Nov 2021 05:23:36 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r24sm4256009otc.12.2021.11.17.05.23.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Nov 2021 05:23:35 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 Nov 2021 05:23:33 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     AceLan Kao <acelan.kao@canonical.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, SophieHu <sophiehu@aaeon.com.tw>
+Subject: Re: [PATCH] hwmon: f71882fg: Add F81966 support
+Message-ID: <20211117132333.GA2201569@roeck-us.net>
+References: <20211117024320.2428144-1-acelan.kao@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20211117024320.2428144-1-acelan.kao@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: d20638935cecc55960918079aaa2d8652ace391e  hwmon: (adm1021) Improve detection of LM84, MAX1617, and MAX1617A
+On Wed, Nov 17, 2021 at 10:43:20AM +0800, AceLan Kao wrote:
+> From: Menghui Wu <Menghui_Wu@aaeon.com.tw>
+> 
+> This adds hardware monitor support the Fintek F81966 Super I/O chip.
+> Testing was done on the Aaeon SSE-IPTI
+> 
+> Signed-off-by: Menghui Wu <Menghui_Wu@aaeon.com.tw>
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 
-elapsed time: 731m
+Applied to hwmon-next.
 
-configs tested: 130
-configs skipped: 3
+Thanks,
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211116
-mips                     loongson2k_defconfig
-powerpc                    socrates_defconfig
-xtensa                       common_defconfig
-mips                  decstation_64_defconfig
-s390                       zfcpdump_defconfig
-arm                        mini2440_defconfig
-microblaze                          defconfig
-arm                            hisi_defconfig
-ia64                            zx1_defconfig
-arc                          axs103_defconfig
-arm                            xcep_defconfig
-arm                       netwinder_defconfig
-powerpc                     skiroot_defconfig
-mips                      maltasmvp_defconfig
-arm                       aspeed_g4_defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                 mpc832x_mds_defconfig
-s390                             alldefconfig
-arm                          exynos_defconfig
-arm                            lart_defconfig
-powerpc                     pseries_defconfig
-sh                            hp6xx_defconfig
-mips                      maltaaprp_defconfig
-nios2                         3c120_defconfig
-arm                       mainstone_defconfig
-powerpc                         wii_defconfig
-powerpc                     mpc512x_defconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                   sh7724_generic_defconfig
-sh                          rsk7264_defconfig
-m68k                         apollo_defconfig
-sh                            shmin_defconfig
-h8300                            alldefconfig
-mips                         rt305x_defconfig
-riscv                             allnoconfig
-arm                            mps2_defconfig
-xtensa                  cadence_csp_defconfig
-sh                         ap325rxa_defconfig
-sh                          urquell_defconfig
-sh                           se7751_defconfig
-arm                       cns3420vb_defconfig
-arm                  randconfig-c002-20211116
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a015-20211116
-x86_64               randconfig-a013-20211116
-x86_64               randconfig-a012-20211116
-x86_64               randconfig-a011-20211116
-x86_64               randconfig-a016-20211116
-x86_64               randconfig-a014-20211116
-i386                 randconfig-a014-20211116
-i386                 randconfig-a016-20211116
-i386                 randconfig-a012-20211116
-i386                 randconfig-a013-20211116
-i386                 randconfig-a011-20211116
-i386                 randconfig-a015-20211116
-arc                  randconfig-r043-20211116
-s390                 randconfig-r044-20211116
-riscv                randconfig-r042-20211116
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-c007-20211116
-i386                 randconfig-c001-20211116
-arm                  randconfig-c002-20211116
-riscv                randconfig-c006-20211116
-powerpc              randconfig-c003-20211116
-s390                 randconfig-c005-20211116
-mips                 randconfig-c004-20211116
-x86_64               randconfig-a005-20211116
-x86_64               randconfig-a003-20211116
-x86_64               randconfig-a001-20211116
-x86_64               randconfig-a002-20211116
-x86_64               randconfig-a006-20211116
-x86_64               randconfig-a004-20211116
-i386                 randconfig-a006-20211116
-i386                 randconfig-a003-20211116
-i386                 randconfig-a005-20211116
-i386                 randconfig-a001-20211116
-i386                 randconfig-a004-20211116
-i386                 randconfig-a002-20211116
-hexagon              randconfig-r045-20211116
-hexagon              randconfig-r041-20211116
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/hwmon/f71882fg.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
+> index 4673d403759a..938a8b9ec70d 100644
+> --- a/drivers/hwmon/f71882fg.c
+> +++ b/drivers/hwmon/f71882fg.c
+> @@ -49,6 +49,7 @@
+>  #define SIO_F81768D_ID		0x1210	/* Chipset ID */
+>  #define SIO_F81865_ID		0x0704	/* Chipset ID */
+>  #define SIO_F81866_ID		0x1010	/* Chipset ID */
+> +#define SIO_F81966_ID		0x1502	/* Chipset ID */
+>  
+>  #define REGION_LENGTH		8
+>  #define ADDR_REG_OFFSET		5
+> @@ -2672,6 +2673,7 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
+>  		sio_data->type = f81865f;
+>  		break;
+>  	case SIO_F81866_ID:
+> +	case SIO_F81966_ID:
+>  		sio_data->type = f81866a;
+>  		break;
+>  	default:
