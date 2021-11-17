@@ -2,108 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DE96C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 13:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E09EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 21:40:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0132F611AF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 13:23:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9C75613AD
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Nov 2021 21:40:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbhKQN0g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Nov 2021 08:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S236101AbhKQVnD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Nov 2021 16:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237535AbhKQN0f (ORCPT
+        with ESMTP id S231839AbhKQVnB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Nov 2021 08:26:35 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5176CC061570;
-        Wed, 17 Nov 2021 05:23:37 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso4682054ots.6;
-        Wed, 17 Nov 2021 05:23:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JpcC4e4rsVEA5qZKmhjIiquAG4OB5LHCYUwoQQFuZ4A=;
-        b=m8ga3yPVjpLMru7uIOlFGHmtHhRnr8H0Uhtv5FaKKEMEcG95rnmjYRlyfz2Tz5U46V
-         2GKztYNF75qBOvIrQ9DHchA0rh/oPr2fJVfQJpaZomBVSm6CKDAKpIbeUqkstHZTdqo2
-         5GIfvBvCdYO42rufAxILnl763GKwx1ZpB5zfCwikDEgB69i35QvBtdXFLi/r69lrFZ2V
-         6XWJ8oQlvD7NSANJRwOgTMemNiuQ8Vem3xoHoy89VjOYO70fjJZHfoE27gtHbP2d+iwF
-         uV+DLGheXyuiok/dzlw6nsX6OrvmD/cENO+sPn+Kq5NbxhI65m6kQE9iuLL9CcQ3ZNSO
-         vq1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=JpcC4e4rsVEA5qZKmhjIiquAG4OB5LHCYUwoQQFuZ4A=;
-        b=7Wafpi+GvoQJYjvAtNnqoQvEbxXNA8HMz5KAGPz8kDWMnHgjw3cVpGFl74YGpDNRyk
-         nHS2clr4Oh4HjHMwJuxHVBjglkyRFq0v45YtUiRsQUOJshBpNpI1aP2qMYGx1nhZ4ner
-         iInZ0gwu4n0KgV3qOXPyBktjc8P2SuC7jGKmKf7kBxiJKANk+/YFS9Ssb8Oc/+FjqbIc
-         RdxqsiUCdkwvkdkoTHmchR0/z5ePql1Et2YAKlYLS7neWCi+MpNdDyyGPgnyGd2hlDND
-         8df4Ax2PtLUXuW+bjZBnOuwNrCI3xOz/PeSZP9ZOvekQTWHC0/lhwwna7oT1mL+FLqff
-         OGyw==
-X-Gm-Message-State: AOAM531F29oMD/hl6f3D0rc016LQxrmq5q2gZcu27a3Jy7qf90JlFrAZ
-        W06d84sPrT5/MhYcDqOt5sCrRtBy8RE=
-X-Google-Smtp-Source: ABdhPJw9CgQHgVoa1QsXkrAKBbafuxM2CW9sqaBc7ooky0XvJo9UWHzs5X9QzwruC3gOfvJdGjbLaA==
-X-Received: by 2002:a9d:6855:: with SMTP id c21mr13936653oto.357.1637155416727;
-        Wed, 17 Nov 2021 05:23:36 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r24sm4256009otc.12.2021.11.17.05.23.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Nov 2021 05:23:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 Nov 2021 05:23:33 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     AceLan Kao <acelan.kao@canonical.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, SophieHu <sophiehu@aaeon.com.tw>
-Subject: Re: [PATCH] hwmon: f71882fg: Add F81966 support
-Message-ID: <20211117132333.GA2201569@roeck-us.net>
-References: <20211117024320.2428144-1-acelan.kao@canonical.com>
+        Wed, 17 Nov 2021 16:43:01 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C33C061570;
+        Wed, 17 Nov 2021 13:40:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=JFZEUOPWf1/nxGeGtVRYuWseGaRsxvnuJVELp2zrJLw=; b=cI6tiWIw8UrB0NnC9bDlb7IRkj
+        9VyLjEXqJiZ+ikt0/0lKIZ2hFeU19SmbUsmRMKLCMLoGhhZVZv6d2n1qo0FaLeXNe7xo377hbPO1j
+        pfztujetrGwJ3qq+Ri2v4hSEzw143ca3BxZLu0Qq2wwK+beGN04s3lCP7b7BPRzVbxpU=;
+Received: from p200300ccff0ece001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0e:ce00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1mnSel-0004n2-UB; Wed, 17 Nov 2021 22:39:52 +0100
+Date:   Wed, 17 Nov 2021 22:39:50 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     lee.jones@linaro.org, broonie@kernel.org, kernel@pengutronix.de,
+        lgirdwood@gmail.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        s.hauer@pengutronix.de, linux-hwmon@vger.kernel.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org, linux-imx@nxp.com,
+        alistair23@gmail.com, shawnguo@kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of
+ silergy,sy7636a.yaml
+Message-ID: <20211117223950.3a7eaf7a@aktux>
+In-Reply-To: <20211110122948.188683-2-alistair@alistair23.me>
+References: <20211110122948.188683-1-alistair@alistair23.me>
+        <20211110122948.188683-2-alistair@alistair23.me>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211117024320.2428144-1-acelan.kao@canonical.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 10:43:20AM +0800, AceLan Kao wrote:
-> From: Menghui Wu <Menghui_Wu@aaeon.com.tw>
+On Wed, 10 Nov 2021 22:29:41 +1000
+Alistair Francis <alistair@alistair23.me> wrote:
+
+> Initial support for the Silergy SY7636A Power Management chip
+> and regulator.
 > 
-> This adds hardware monitor support the Fintek F81966 Super I/O chip.
-> Testing was done on the Aaeon SSE-IPTI
-> 
-> Signed-off-by: Menghui Wu <Menghui_Wu@aaeon.com.tw>
-> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/hwmon/f71882fg.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
 > 
-> diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
-> index 4673d403759a..938a8b9ec70d 100644
-> --- a/drivers/hwmon/f71882fg.c
-> +++ b/drivers/hwmon/f71882fg.c
-> @@ -49,6 +49,7 @@
->  #define SIO_F81768D_ID		0x1210	/* Chipset ID */
->  #define SIO_F81865_ID		0x0704	/* Chipset ID */
->  #define SIO_F81866_ID		0x1010	/* Chipset ID */
-> +#define SIO_F81966_ID		0x1502	/* Chipset ID */
->  
->  #define REGION_LENGTH		8
->  #define ADDR_REG_OFFSET		5
-> @@ -2672,6 +2673,7 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
->  		sio_data->type = f81865f;
->  		break;
->  	case SIO_F81866_ID:
-> +	case SIO_F81966_ID:
->  		sio_data->type = f81866a;
->  		break;
->  	default:
+> diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> new file mode 100644
+> index 000000000000..0566f9498e2f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+[...]
+> +  regulators:
+> +    type: object
+> +
+> +    properties:
+> +      compatible:
+> +        const: silergy,sy7636a-regulator
+> +
+> +      vcom:
+> +        type: object
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +        properties:
+> +          regulator-name:
+> +            const: vcom
+> +
+hmm, this is what? If I understand it correctly, vcom means some
+voltage for compensation. On other comparable pmics (e.g. TPS65185
+which has also a sane public datasheet, MAX17135) I have seen some
+methods to measure a voltage while the display is doing something
+defined and then program this voltage non-volatile for compensation
+during manufacturing.
+
+If I understand the code correctly all the bunch of voltages are
+powered up if this one is enabled.
+So at least a description should be suitable.
+
+The other comparable PMICs have at least regulators named VCOM, DISPLAY
+(controls several regulators, started with delays configured via
+registers) and V3P3. MAX17135 source can be found in NXP kernels, 
+TPS65185 in Kobo vendor kernels.
+
+So I would expect to see something similar here and a description or at
+least not such a misleading name as vcom if it is for some reason not
+feasible to separate the regulators.
+
+Regards,
+Andreas
