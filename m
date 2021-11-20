@@ -2,50 +2,50 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98A88C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Nov 2021 20:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1113DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Nov 2021 20:41:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbhKTUnO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 20 Nov 2021 15:43:14 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:45630 "EHLO
+        id S233192AbhKTUoD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 20 Nov 2021 15:44:03 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:11636 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbhKTUnM (ORCPT
+        with ESMTP id S229671AbhKTUoD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 20 Nov 2021 15:43:12 -0500
+        Sat, 20 Nov 2021 15:44:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=OaW8TBJK0gAZECqvr3Ggo3aumc1hO95J3CUsj9GFMQ8=;
-        b=mabLrEzFzRJL+YYptFCeB/sz1i5hqust/baeYKzZVMPrkOTDRS7Sa0GvI2TPWMmDh3cW
-        rHkfTMeCgtTDSp8vl54XpHpdljSdQ28x2Bw8ND9CxyzLA/pHinzbWuPcghaA4nNzGwB9fe
-        fr0ysA0C54yQz8NapclIPsvxODcR+s/jzxhkVZX0Nj0GA/cBedK/smW/BpVYVBLoPgxt+6
-        xM+uKWdx5ulWNhHhST+b7Lng0LbomLR+Y/p7fEs0Z9p7I9s2xYyJcJWzVsCoM6lPxxbeos
-        jzXXJVAj4YkjndhA4lf3f2nH6cZKm7eTrN6mkDU3HYKjkGQ8kmJQUwMprgT4KJog==
-Received: by filterdrecv-55446c4d49-vth2g with SMTP id filterdrecv-55446c4d49-vth2g-1-61995BFA-4
-        2021-11-20 20:35:06.122575595 +0000 UTC m=+6905697.961899248
+        s=sgd; bh=pGcTRSrZpH8OcO+c2YTkQwVJBmV23KR1vDtsPqnti5M=;
+        b=NHABS7BVzvqegvAyncB31iK5X5G0B197+Z/gfSXkN+ISnpfc4IDZ37ulw0ZRXxHXPR6R
+        Tqu49ZYZ7KoqWBYBbPHz5P7Umk1k4aqluZRDCvC9QR9QZ8d3tiGKZZCuQZcBmHBywOEfzU
+        zC2n2l9PcQhnV2GfDR1aC+y4gEQU0KHuz4sQQzBsUSSRRW+gsX1qyWZIFHIWW7Ng19oU+d
+        WLJMi2Z/I4dHTlfh6NDv//Cpetf8WYFlrqeGs1U9L1UcCzWvZ97iJ3P2GWLrwb683wylLP
+        jH3jzV+iB8kC3ShXSsffX5BU+BHo5z9tO0RiITSudXfdMTz/9vH8WPrvOt01b0JA==
+Received: by filterdrecv-656998cfdd-ngmx2 with SMTP id filterdrecv-656998cfdd-ngmx2-1-61995D5B-6
+        2021-11-20 20:40:59.184025275 +0000 UTC m=+5174019.480259924
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-2-0 (SG)
+        by geopod-ismtpd-5-1 (SG)
         with ESMTP
-        id ll3qRdD8TV28tob41iUjqA
-        Sat, 20 Nov 2021 20:35:05.984 +0000 (UTC)
+        id 7wN_pJ5sTCi_UYswl6wEyg
+        Sat, 20 Nov 2021 20:40:59.053 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id A6B62700297; Sat, 20 Nov 2021 13:35:05 -0700 (MST)
+        id 2CD2F7002B2; Sat, 20 Nov 2021 13:40:58 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH 2/2] hwmon: (sht4x) Add device tree match table and document
- it
-Date:   Sat, 20 Nov 2021 20:35:06 +0000 (UTC)
-Message-Id: <20211120203443.2299276-2-davidm@egauge.net>
+Subject: [PATCH v2 2/2] hwmon: (sht4x) Add device tree match table and
+ document it
+Date:   Sat, 20 Nov 2021 20:40:59 +0000 (UTC)
+Message-Id: <20211120204053.2299501-2-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211120203443.2299276-1-davidm@egauge.net>
-References: <20211120203443.2299276-1-davidm@egauge.net>
+In-Reply-To: <20211120204053.2299501-1-davidm@egauge.net>
+References: <20211120204053.2299501-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvOUtKsV6b3M6Ot72l?=
- =?us-ascii?Q?hFdy18UO7iblsn5FA0PxST4VBVpmeeiwiUZJ89J?=
- =?us-ascii?Q?JsNJVdX1UN2oLLAC5RMPG9Ja+z45q7ybH9RlwCx?=
- =?us-ascii?Q?kQ0=2FsxbcG=2FMFlNx9ZUFO6A01DaQl8GSq=2FH89hfU?=
- =?us-ascii?Q?S+mCvaafgAS0yxuR+sZfIYDsppr2BKVjP7SptRD?=
- =?us-ascii?Q?rwTMSxrCuPW832gsJG=2FbA=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvA8oAjtvYg7WnEhH=2F?=
+ =?us-ascii?Q?dw91Ij2D1DVsWISMmT+H0oZXjWX6h4p6YE6+okN?=
+ =?us-ascii?Q?PltGUV8J0NXodoJbBOUsyw4oUNUxP6QAy3aij8h?=
+ =?us-ascii?Q?7bv5G7VHMPxTmegjwFvYz6SknY=2F5QfVdL2KUHn3?=
+ =?us-ascii?Q?zZfof=2F7j0z923JaeRez6BIbjwr=2Fc1Ki8n4Z0x99?=
+ =?us-ascii?Q?+9b28IZozEYFCNAkZ=2FATA=3D=3D?=
 To:     Navin Sankar Velliangiri <navin@linumiz.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -64,9 +64,8 @@ tree table entry.
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
  .../bindings/hwmon/sensirion,sht4x.yaml       | 50 +++++++++++++++++++
- arch/arm/boot/dts/egauge-cpk.dts              |  5 ++
  drivers/hwmon/sht4x.c                         |  7 +++
- 3 files changed, 62 insertions(+)
+ 2 files changed, 57 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht4x.yaml
 
 diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht4x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht4x.yaml
@@ -125,22 +124,6 @@ index 000000000000..588c2e37b035
 +      };
 +    };
 +...
-diff --git a/arch/arm/boot/dts/egauge-cpk.dts b/arch/arm/boot/dts/egauge-cpk.dts
-index 17f85b2d54a2..ee8b52c92248 100644
---- a/arch/arm/boot/dts/egauge-cpk.dts
-+++ b/arch/arm/boot/dts/egauge-cpk.dts
-@@ -477,6 +477,11 @@ tmp102@48 {
- 					reg = <0x48>;
- 					pagesize = <16>;
- 				};
-+
-+				sht4x@44 {
-+					compatible = "sensirion,sht4x";
-+					reg = <0x44>;
-+				};
- 			};
- 
- 			securam: sram@f8044000 {
 diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
 index 3415d7a0e0fc..6e53d81e32d4 100644
 --- a/drivers/hwmon/sht4x.c
