@@ -2,183 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB2DEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Nov 2021 21:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBED9C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Nov 2021 21:51:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbhKTVjt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 20 Nov 2021 16:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S232156AbhKTVyz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 20 Nov 2021 16:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbhKTVjt (ORCPT
+        with ESMTP id S230458AbhKTVyz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 20 Nov 2021 16:39:49 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0387C06173E
-        for <linux-hwmon@vger.kernel.org>; Sat, 20 Nov 2021 13:36:45 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id i9so8450026ilu.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 20 Nov 2021 13:36:45 -0800 (PST)
+        Sat, 20 Nov 2021 16:54:55 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EFAC061574;
+        Sat, 20 Nov 2021 13:51:51 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id h16-20020a9d7990000000b0055c7ae44dd2so22496605otm.10;
+        Sat, 20 Nov 2021 13:51:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=egauge.net; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :organization:user-agent:mime-version:content-transfer-encoding;
-        bh=2ym3jgXfty8UXyjcPml2J7z3wKvOhRl8Is0wkpPJJXk=;
-        b=VENRBHWdL293tBfK7NMYlY9+H+I5W+mKSFe/RAa0BYXM+qD1WdHG8CiFicXIiEM6V0
-         ijexNlm9D+r/yavf/gPn5b1iSs38u7EZec5U8smKWnTNmKGkqUg+lq0W/PtGmkZjMcnL
-         HoQOB0DVREmM9su89gvOWBjquu5DvqKQcKYlOeULyrTm+7Tw95WiNxdKr2ttRqRtmQq3
-         gLgJ44SCfaXB5R+SmkOyC6F4mzTHPt2OuBCO26h+3K1PyXUPXfkrPqPWDVHkrQD1/1Aj
-         cRa8YdkBZsPmUCTxivkL0qUiKCGmGezsCOFH3gyrUeSz1bFxbkiq9PqwTuEn+NLwhVqd
-         NZrw==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NY1Fi+OAo8NQyf3et78wQgnWi0yCaD3WSiqHchLq/1o=;
+        b=MGcjuhq+WQWuXFaQDFQwyC8Hw7bcd5ehd9p6kEXJaz1x0JH9iDjuPMyf64EfiTCGqH
+         RFQ60tTbkC+PAiltPuB0EH+xke8kCXDnKWhB8ptF6cV73O2jNjtbcQbKvGtXNuBSgSpO
+         jRr7gh262lDoV/U3KwzGS1Ic5KMT3Sptr4FxmcE1EtppemfJBUuNljzUytmnnVt0EOQO
+         3hWDT5Vh0fazE6AYHpk1IqLE0H0EMn9BB4268bp9nWSa87OGgt+nyKqguOZpFL+4Uu7L
+         1PPYr0KBpLxCwpmLHx5j/FM3jByD8l8ksLynIUUkaS52O+EnVEingSUuwN9SKOsv9dfs
+         /8tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=2ym3jgXfty8UXyjcPml2J7z3wKvOhRl8Is0wkpPJJXk=;
-        b=x0w2LO+b8/3Lu1b6gZm3T1z5jK6QpnYKss8vjxjbSGtqjFW0MjF2V+177jW9AQmP9l
-         sEFS1d83OV08djZwKdQIGsx9ft1o9pwqlrFvwR5f4b0ukzEMndc+/feDebBGWOJfqltS
-         EiPYmscUcxoBah7dI0xACTNX9JA4tzZFCNhWEjjVP79HBNVYJOjenKPySWsT7AUN+v4v
-         C0YtP+va9H6eI25APSIojL6synHNecOKd+3QdH5gMYYVBuAI4pcv5XPiLVy4xW5mRM1W
-         2BcuvbScHFyHPZMN/DQv86tiFFUesbqU1+P9nuFXr0T5dRYGV3CnG4YE4e4XcI8bv+de
-         jwxw==
-X-Gm-Message-State: AOAM533zB/hlhNRN4jVeocsUBiwYPxUZknBGBB08z1JUQianUT82nLI/
-        zUpMEAYnabk9JKURvef93BqM
-X-Google-Smtp-Source: ABdhPJwNBChRQ+t9fbcpGdKC/acImTmcF9oEnTJMarJeXzokb8qvzNfwiywvGK2+7TTrpeP1xCeZxw==
-X-Received: by 2002:a05:6e02:160c:: with SMTP id t12mr10853621ilu.308.1637444204755;
-        Sat, 20 Nov 2021 13:36:44 -0800 (PST)
-Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
-        by smtp.gmail.com with ESMTPSA id h18sm2097231ilq.60.2021.11.20.13.36.42
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=NY1Fi+OAo8NQyf3et78wQgnWi0yCaD3WSiqHchLq/1o=;
+        b=4nmeUK1NXoHUTGmQWPPrKH7QaphQ+rutk+AtGce99dIH2ntPIxaCGbgj5G2d3/FtZm
+         XbIQFjFFC+2G4GbO//8QY0HCMnKpGIhAphA/psOZ3fGHn7tdRe7wqHf317L+1WhBvlFg
+         gNKcfc5kiRErpkGjTA7me3m7nZhAUm4fBQMGVXAxyL9Y2Ck865mCE9eBfaX06uPHpM4b
+         HToZmvJgaOrt1wok7nrzQm0P7YY554niMJz0P85D0EaIkU+NHnzAnH7zi8QnVKEQeXAk
+         lrhrx4Gvln+zmMZVAwNwGSoOOeVP3WM9JAZs9k/vmb1SG+kQWpQKXqG5aUVC6VhaJ7L9
+         kLLg==
+X-Gm-Message-State: AOAM533w9kYD8azOyBqI/7N3QuHrUfI0qFGIjLbiAvG7fPRZ29XL50zV
+        33gd4R0YrUzp0dfPwG/ByLo=
+X-Google-Smtp-Source: ABdhPJwTWqnTUeQy7WPB12b34VQsQUk+SIsQzX3Q5sKvNDmo1EeNkNykamJ+0Xzcx4iIewg3fVT0ng==
+X-Received: by 2002:a9d:6216:: with SMTP id g22mr14749258otj.46.1637445110744;
+        Sat, 20 Nov 2021 13:51:50 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o6sm725198oou.41.2021.11.20.13.51.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Nov 2021 13:36:44 -0800 (PST)
-Message-ID: <5f5798b3f021c419e94714ba557be0e3a40c671e.camel@egauge.net>
+        Sat, 20 Nov 2021 13:51:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 20 Nov 2021 13:51:48 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     David Mosberger-Tang <davidm@egauge.net>
+Cc:     Navin Sankar Velliangiri <navin@linumiz.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 2/2] hwmon: (sht4x) Add device tree match table and
  document it
-From:   David Mosberger-Tang <davidm@egauge.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Navin Sankar Velliangiri <navin@linumiz.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 20 Nov 2021 14:36:39 -0700
-In-Reply-To: <4ebe1f6a-575f-2d34-7839-9055545e5e6b@roeck-us.net>
+Message-ID: <20211120215148.GA1291159@roeck-us.net>
 References: <20211120204053.2299501-1-davidm@egauge.net>
-         <20211120204053.2299501-2-davidm@egauge.net>
-         <4ebe1f6a-575f-2d34-7839-9055545e5e6b@roeck-us.net>
-Organization: eGauge Systems LLC
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+ <20211120204053.2299501-2-davidm@egauge.net>
+ <4ebe1f6a-575f-2d34-7839-9055545e5e6b@roeck-us.net>
+ <5f5798b3f021c419e94714ba557be0e3a40c671e.camel@egauge.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f5798b3f021c419e94714ba557be0e3a40c671e.camel@egauge.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, 2021-11-20 at 13:12 -0800, Guenter Roeck wrote:
-> On 11/20/21 12:40 PM, David Mosberger-Tang wrote:
-> > This patch enables automatic loading of the sht4x module via a device
-> > tree table entry.
+On Sat, Nov 20, 2021 at 02:36:39PM -0700, David Mosberger-Tang wrote:
+> On Sat, 2021-11-20 at 13:12 -0800, Guenter Roeck wrote:
+> > On 11/20/21 12:40 PM, David Mosberger-Tang wrote:
+> > > This patch enables automatic loading of the sht4x module via a device
+> > > tree table entry.
+> > > 
+> > > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+> > > ---
+> > >   .../bindings/hwmon/sensirion,sht4x.yaml       | 50 +++++++++++++++++++
+> > >   drivers/hwmon/sht4x.c                         |  7 +++
 > > 
-> > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
-> > ---
-> >   .../bindings/hwmon/sensirion,sht4x.yaml       | 50 +++++++++++++++++++
-> >   drivers/hwmon/sht4x.c                         |  7 +++
+> > This needs to be two separate patches, one the devicetree change and the other
+> > the source code change. DT maintainers need to be copied on the devicetree
+> > patch.
 > 
-> This needs to be two separate patches, one the devicetree change and the other
-> the source code change. DT maintainers need to be copied on the devicetree
-> patch.
-
-Isn't that going to be confusing if one but not the other patch makes
-it into a repository?  Either you end up with an undocumented device
-tree property or you end up with documentation for an unsupported
-property.
-
-> Also, please consider adding the device to trivial-devices.yaml instead since
-> there are no special bindings.
-
-I didn't know it existed.  Sure, that's much easier.
-
-  --david
-
-> Thanks,
-> Guenter
+> Isn't that going to be confusing if one but not the other patch makes
+> it into a repository?  Either you end up with an undocumented device
+> tree property or you end up with documentation for an unsupported
+> property.
 > 
-> >   2 files changed, 57 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht4x.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht4x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht4x.yaml
-> > new file mode 100644
-> > index 000000000000..588c2e37b035
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht4x.yaml
-> > @@ -0,0 +1,50 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/sensirion,sht4x.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Sensirion SHT4x Humidity and Temperature Sensor IC
-> > +
-> > +maintainers:
-> > +  - Navin Sankar Velliangiri navin@linumiz.com
-> > +
-> > +description: |
-> > +  The SHT4x is a high-accuracy digital humidity and temperature sensor
-> > +  designed especially for battery-driven high-volume consumer
-> > +  electronics applications.  For further information refere to
-> > +  Documentation/hwmon/sht4x.rst
-> > +
-> > +  This binding document describes the binding for the hardware monitor
-> > +  portion of the driver.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - sensirion,sht4x
-> > +
-> > +  reg:
-> > +    const: 0x44
-> > +    description:
-> > +      The I2c base address of the SHT4x.  0x44 for all chip versions
-> > +      except for SHT41-BD1B, where it is 0x45.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
-> > +      #address-cells = <1>;
-> > +      #size-cells = <0>;
-> > +      clock-frequency = <400000>;
-> > +
-> > +      sht4x@44 {
-> > +        compatible = "sensirion,sht4x";
-> > +        reg = <0x44>;
-> > +      };
-> > +    };
-> > +...
-> > diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-> > index 3415d7a0e0fc..6e53d81e32d4 100644
-> > --- a/drivers/hwmon/sht4x.c
-> > +++ b/drivers/hwmon/sht4x.c
-> > @@ -281,9 +281,16 @@ static const struct i2c_device_id sht4x_id[] = {
-> >   };
-> >   MODULE_DEVICE_TABLE(i2c, sht4x_id);
-> >   
-> > +static const struct of_device_id sht4x_of_match[] = {
-> > +	{ .compatible = "sensirion,sht4x" },
-> > +	{ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, sht4x_of_match);
-> > +
-> >   static struct i2c_driver sht4x_driver = {
-> >   	.driver = {
-> >   		.name = "sht4x",
-> > +		.of_match_table = sht4x_of_match
-> >   	},
-> >   	.probe		= sht4x_probe,
-> >   	.id_table	= sht4x_id,
-> > 
+This is a trivial device, so that isn't really an issue. Otherwise,
+if there are real bindings to approve, I would not accept the patch
+making the code change unless the devicetree patch is approved,
+and I would typically apply both together.
 
+Anyway, those are the rules. Devicetree patches need to be sent
+separately and approved by a devicetree maintainer. We should not
+[have to] discuss rules here. If you are unhappy with it, I would
+suggest to start a discussion on the devicetree mailing list and
+suggest alternatives.
+
+Thanks,
+Guenter
