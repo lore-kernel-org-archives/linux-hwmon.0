@@ -2,105 +2,109 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD1F9C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Nov 2021 16:15:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC62C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Nov 2021 16:31:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbhKUQSc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 21 Nov 2021 11:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S233928AbhKUQep (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 21 Nov 2021 11:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238362AbhKUQSb (ORCPT
+        with ESMTP id S230330AbhKUQep (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 Nov 2021 11:18:31 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893C7C061574
-        for <linux-hwmon@vger.kernel.org>; Sun, 21 Nov 2021 08:15:26 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id e8so15595261ilu.9
-        for <linux-hwmon@vger.kernel.org>; Sun, 21 Nov 2021 08:15:26 -0800 (PST)
+        Sun, 21 Nov 2021 11:34:45 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743B0C061574;
+        Sun, 21 Nov 2021 08:31:40 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso25111661otf.12;
+        Sun, 21 Nov 2021 08:31:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=egauge.net; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :organization:user-agent:mime-version:content-transfer-encoding;
-        bh=wYeCOd7p9kGBj7Q3Ct50Rhv3BWXTno7uUCRuqGjaPE4=;
-        b=Q0yjIr8PAv1CU/miCaAGvQjCI5kOmOPSd4pZ29k4AEDg4yIkHgQMG25KFupr0/rWJd
-         tBWpsmFKzXIL4PrM9gLwpsbdHvWmZ3jSDwCiJGDs0oObqwZ3aqf8Khv9jUflsHP5Ts6P
-         jMqJa1+7D1oU1eIJ6OTwDVDGnb/UnyKN71ufWWR0du4HrMzH4xm9BRo7qRDypN+mToee
-         RV3Or4olZGju35RzUCXTaGI3in31KGYFUaPx9uV57spxMnoNMUwXJr4VN2aCMbINFv10
-         49yjfoGHGvRuoqZezEsqlIZ1Drj8YkfNMCjey8h4uemDMrQpT4TMbykNFK1PRrXC1sbm
-         NEcQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PFGXxEL/mHus5qxCVVaZQN5AEb5maimOW1ctbt5bKrY=;
+        b=UMGehJOvwXSNGXB7HR1Tj5QmB7Ps6g9HuDmOfqkKKz/7C2WVMlZ/k03LH1r1KoaQLA
+         Nonwp9fGhTd5a2PvnaCupbohW06LGk1PxfX7nhFX6rgHKM5tEqBp83Qd0usK61AdxCGR
+         K1nA9TSpg+QNgEEQZKv2U6QxQEVtgs2ddkzr1QU6TqZVFnbPLv1yXsx2YZzGIvmVqK6p
+         U6b4uelK3QhzqtY8bmpOqOs65F2zOQpfxWE5CjDp1y6RnMvcuqnxRss+XmyYKZFQkHP1
+         3xMmqUtFPKKI4z96JDyha+BwU0AapqkyivQMstlZ8e5pKP2wamWZXUzWZ8HaWj0KAq6W
+         y8Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=wYeCOd7p9kGBj7Q3Ct50Rhv3BWXTno7uUCRuqGjaPE4=;
-        b=OBL0JGaW9eJut1HgIzW5A2ronhPGH+5ket7j9cA08/EpDa1m4bpunzX0RGu5LE93tr
-         m7UUi3Dc4Sjar2fXo1NPbrcAFT+TK3eGYIxqxT4JWwms78EiVnko+U+vGRqnhLKXWE5c
-         YoMh80MVWmy7bI1N+di8CehygCh74EPJ8XJVd+upxQGL8xksmDM4II6N/TrTBlSzfOBD
-         PYA2azxzWYKKls9daq5V0yQJuFCVT2JggJCyF+8I/7QLq6G1uJcxu7td9XAi7ZziAjl+
-         HJ0heyPS2LIcQcbipTllag2fGmeHyythL8RsuSlOnAXEAvWJ7RCDL/mnsxLXBOZsVyFh
-         R0aQ==
-X-Gm-Message-State: AOAM533dkPmAEUoxCbPHf3CnGCU/TPIqg9rqqZmpUi/cZzSBmW41GciJ
-        pXkS7TV3wq+K5GmZoOUaiEXWo4VaoDpy2ZE=
-X-Google-Smtp-Source: ABdhPJx2we4xVeYk90vEZ5TVQsea/Kd8ENExI5kvo/4/A4Q/OPPwiF6+dgPl4HC/IZCFEKWGcL6NAA==
-X-Received: by 2002:a92:cb11:: with SMTP id s17mr13105062ilo.321.1637511325854;
-        Sun, 21 Nov 2021 08:15:25 -0800 (PST)
-Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
-        by smtp.gmail.com with ESMTPSA id r14sm4534186iov.14.2021.11.21.08.15.23
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=PFGXxEL/mHus5qxCVVaZQN5AEb5maimOW1ctbt5bKrY=;
+        b=24HaxnnQ82RQ3n0b+PhXaGLNesE2ixozgCY+SzBOnKXgmTIGzQ/uzVSAOQJQ+Ggfik
+         PS4iRExXxltyCWCDCnLtbhStaHkhH/xUDLMdxOCRQrINJznTrKKswY17xDoDXmJaUtX6
+         4+N3UlWLzTTtI7sBrMcmxHSsKWVlclO+Vtyr3IS+L17VOqmFm/bVYda0VyjRjqzvFcyK
+         6aNndj4dgtcSvMeKKyqhV7lRfKcEdMa8YjcDXK3OzkAByzUYDdZz/xVGzR0+hvn4o2uT
+         dvb75l4tWTmMbX37edm749LR7QBlNojboO2hNvAXwmxnt+8My3vIEj1vsnt9OA4ZgcnO
+         IdOA==
+X-Gm-Message-State: AOAM5305ojFbmvPpUFXgvrziLkbrbmRy3pUCmlInfxvLCfdZyIee+3qI
+        HBack4I7jUDnnrjUUoelQsVU+Wa6KfU=
+X-Google-Smtp-Source: ABdhPJzAGE8GfIPBbQzqZGIYyU4dhwE5QPL7G1ZTMfNbPPJmnUtiQkZyd+5GxP3DWG8dksu+CdaqgA==
+X-Received: by 2002:a9d:7516:: with SMTP id r22mr19356569otk.81.1637512299814;
+        Sun, 21 Nov 2021 08:31:39 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n19sm1179099otq.11.2021.11.21.08.31.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Nov 2021 08:15:25 -0800 (PST)
-Message-ID: <5c6986c4e0c6ff34bfaf94c30b79c7f3dd21d1a3.camel@egauge.net>
-Subject: Re: [PATCH v2 2/2] hwmon: (sht4x) Add device tree match table and
- document it
-From:   David Mosberger-Tang <davidm@egauge.net>
-To:     Guenter Roeck <linux@roeck-us.net>
+        Sun, 21 Nov 2021 08:31:39 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 21 Nov 2021 08:31:37 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     David Mosberger-Tang <davidm@egauge.net>
 Cc:     Navin Sankar Velliangiri <navin@linumiz.com>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Sun, 21 Nov 2021 09:15:21 -0700
-In-Reply-To: <20211120215148.GA1291159@roeck-us.net>
-References: <20211120204053.2299501-1-davidm@egauge.net>
-         <20211120204053.2299501-2-davidm@egauge.net>
-         <4ebe1f6a-575f-2d34-7839-9055545e5e6b@roeck-us.net>
-         <5f5798b3f021c419e94714ba557be0e3a40c671e.camel@egauge.net>
-         <20211120215148.GA1291159@roeck-us.net>
-Organization: eGauge Systems LLC
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+Subject: Re: [PATCH] hwmon: (sht4x) Add device tree match table
+Message-ID: <20211121163137.GA3534505@roeck-us.net>
+References: <20211121160637.2312106-1-davidm@egauge.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211121160637.2312106-1-davidm@egauge.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, 2021-11-20 at 13:51 -0800, Guenter Roeck wrote:
-> On Sat, Nov 20, 2021 at 02:36:39PM -0700, David Mosberger-Tang wrote:
-> > On Sat, 2021-11-20 at 13:12 -0800, Guenter Roeck wrote:
-> > > On 11/20/21 12:40 PM, David Mosberger-Tang wrote:
-> > > > This patch enables automatic loading of the sht4x module via a device
-> > > > tree table entry.
-> > > > 
-> > > > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
-> > > > ---
-> > > >   .../bindings/hwmon/sensirion,sht4x.yaml       | 50 +++++++++++++++++++
-> > > >   drivers/hwmon/sht4x.c                         |  7 +++
-> > > 
-> > > This needs to be two separate patches, one the devicetree change and the other
-> > > the source code change. DT maintainers need to be copied on the devicetree
-> > > patch.
-> > 
-> > Isn't that going to be confusing if one but not the other patch makes
-> > it into a repository?  Either you end up with an undocumented device
-> > tree property or you end up with documentation for an unsupported
-> > property.
-> > 
-> This is a trivial device, so that isn't really an issue. Otherwise,
-> if there are real bindings to approve, I would not accept the patch
-> making the code change unless the devicetree patch is approved,
-> and I would typically apply both together.
+On Sun, Nov 21, 2021 at 04:07:02PM +0000, David Mosberger-Tang wrote:
+> This patch enables automatic loading of the sht4x module via a device
+> tree table entry.
+> 
+> Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 
-Got it, thanks for the explanation.
+I'll wait for the DT patch to be approved before applying.
 
-  --david
+Please send related patches as series in the future; this should have been
+patch 2/2, with the DT patch as first patch.
 
+Thanks,
+Guenter
 
+> ---
+>  drivers/hwmon/sht4x.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+> index 3415d7a0e0fc..6e53d81e32d4 100644
+> --- a/drivers/hwmon/sht4x.c
+> +++ b/drivers/hwmon/sht4x.c
+> @@ -281,9 +281,16 @@ static const struct i2c_device_id sht4x_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, sht4x_id);
+>  
+> +static const struct of_device_id sht4x_of_match[] = {
+> +	{ .compatible = "sensirion,sht4x" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sht4x_of_match);
+> +
+>  static struct i2c_driver sht4x_driver = {
+>  	.driver = {
+>  		.name = "sht4x",
+> +		.of_match_table = sht4x_of_match
+>  	},
+>  	.probe		= sht4x_probe,
+>  	.id_table	= sht4x_id,
+> -- 
+> 2.25.1
+> 
