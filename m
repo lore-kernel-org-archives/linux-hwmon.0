@@ -2,90 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7447EC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Nov 2021 16:46:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFBAEC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Nov 2021 16:01:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238146AbhKUQtl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 21 Nov 2021 11:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbhKUQtl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 Nov 2021 11:49:41 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09005C061714
-        for <linux-hwmon@vger.kernel.org>; Sun, 21 Nov 2021 08:46:36 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id l8so15676846ilv.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 21 Nov 2021 08:46:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=egauge.net; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :organization:user-agent:mime-version:content-transfer-encoding;
-        bh=HuFgrGg2bNqZfAVR0F7+pPQW9sww/mE5aTG7ilf+0e4=;
-        b=Bt1kDRz9ap4XGE/8gsQwAbG/EpWvpqYYrQ6Hsirta3pqThaza9MYYUAEWiHslezgcY
-         GUhhKPOzSYtRCu3lHMOGKRKveBhUhzzVO0vK3xsz4BvRFjkziq1DD6lkoqTYfhOqFmnt
-         +9yfCL4oPGizrgdamfM1gP+i2xfKRp/tn3lJ5VjoKhEWx3oSzGtgrV/ozXGAOGQlafPk
-         5vNs8IzQulILMNQMUQXd82Q2kiBQ3UNHLV08Kxi1YKvNexqRQp3EeWt2MuOBwGR7bjKI
-         c0qpLnna8Cohgc+KK0kKq2K3ZFJUHi2IHpLPSWntfJVMcnyxKNStxHcNgxVBpZ5G/HyH
-         n4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=HuFgrGg2bNqZfAVR0F7+pPQW9sww/mE5aTG7ilf+0e4=;
-        b=miby3JCuQztf5OV3e4dJY3UnHRq6fh05+P35oKvFBB+ACyfXey28Gm3NZ5hQBDyFnm
-         TEqHOjUSoBlYT5Ebbl3jycdE85AxDSDnbeDuz6jW1j6tXgSabNtJ2iPXVHQ2DFEq9dUz
-         5q9qPsYC/o/HxildYz7DFupMwSMReYh7PJ910bcamHwnjwblprHUxOPkUH6q3kmYdkqB
-         uB0rXt9ZKaOmHSkXwfONsR82tBHbz87udtBe6isnLlL85nLePbuiRZ0lxjCAvFXhgfA9
-         5AZ75vr5Jp8s1yjgkQS7UxFFdAy16z9/JUdxGkEYWPu7AMzWkRiqxCft8o5YS6Li1a0g
-         iSGw==
-X-Gm-Message-State: AOAM531qESgj1Cqhrji6ZDVSM7Y4SULKVTjvef2phdXJZhN5coPA0qZ0
-        utx03AfJuoF0EjR+DK+LtV4Qh6u5WJV+KxA=
-X-Google-Smtp-Source: ABdhPJzdjbC8MkTh06xDYAl+ykRvm2SdDwuq1d5v4/3FtjoIB3xnSEcfgVETjzbw2h4E5jfcqtcYFQ==
-X-Received: by 2002:a05:6e02:546:: with SMTP id i6mr3912979ils.208.1637513195004;
-        Sun, 21 Nov 2021 08:46:35 -0800 (PST)
-Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
-        by smtp.gmail.com with ESMTPSA id k8sm4239846ilu.23.2021.11.21.08.46.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Nov 2021 08:46:34 -0800 (PST)
-Message-ID: <f4ec6ca2fd8994fcd43bb1cb553371beea5de261.camel@egauge.net>
-Subject: Re: [PATCH] hwmon: (sht4x) Add device tree match table
-From:   David Mosberger-Tang <davidm@egauge.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Navin Sankar Velliangiri <navin@linumiz.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        id S231531AbhKVQEb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Nov 2021 11:04:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52972 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229911AbhKVQEb (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 22 Nov 2021 11:04:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C4DB26044F;
+        Mon, 22 Nov 2021 16:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637596884;
+        bh=H2oSmLBlYC0pyLwuEp1gnOlHn7RG14lRw0UmEgSeHXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J0od3oFyTDrRFSx2OarDv8QhCmhU8ngVfDVJDEpmrlC+KVItOcv+AQwVuBpuN7Fxq
+         VN/9EQ5wuMw6+ILd7GwYAcnu46O0v4IfDD/ysvSpjlPTV71bslbKU5KHVTLF3KKia4
+         AqXX7YPpXO7tduXiK1h9F50YT1x1RBHfVCCU8AzkP+2GVtmgY+IBFh0I08o9Z1SO6X
+         lOQcjG3/y2hUYEKzx8/32wQyhfz5+dL6eZo65lJCdMzvYyF0nCu7gvs84kRZU1AkvS
+         0LmudGD9yoFPfDoFOs1laqLbKOXEG1qjgZ8BGtBD9bM/N94TxYM76IrGWbFr9+feTy
+         tKETiutT9Vgsw==
+Received: by pali.im (Postfix)
+        id 6D4CCA87; Mon, 22 Nov 2021 17:01:22 +0100 (CET)
+Date:   Mon, 22 Nov 2021 17:01:22 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Sun, 21 Nov 2021 09:46:30 -0700
-In-Reply-To: <20211121163137.GA3534505@roeck-us.net>
-References: <20211121160637.2312106-1-davidm@egauge.net>
-         <20211121163137.GA3534505@roeck-us.net>
-Organization: eGauge Systems LLC
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+Subject: Re: [PATCH 2/2] hwmon: (dell-smm) Unify i8k_ioctl() and
+ i8k_ioctl_unlocked()
+Message-ID: <20211122160122.gf6i3qj6dnwi6wla@pali>
+References: <20211120170319.72369-1-W_Armin@gmx.de>
+ <20211120170319.72369-3-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211120170319.72369-3-W_Armin@gmx.de>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 2021-11-21 at 08:31 -0800, Guenter Roeck wrote:
-> On Sun, Nov 21, 2021 at 04:07:02PM +0000, David Mosberger-Tang wrote:
-> > This patch enables automatic loading of the sht4x module via a device
-> > tree table entry.
-> > 
-> > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+On Saturday 20 November 2021 18:03:19 Armin Wolf wrote:
+> The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
+> with i8k_mutex held. Judging from the hwmon code, this mutex
+> only needs to be held when setting the fan speed/mode.
+
+Really? I think that there is no difference between setting and getting
+fan speed/mode. At least I do not see why 'set' needs mutex and 'get' do
+not need it. Some more explanation is needed...
+
+I'm not sure here but SMM call consist of two 'out' instructions and we
+probably need to ensure that interrupt does not happen between them.
+
+> Unify both functions and reduce the locking of i8k_mutex
+> to I8K_SET_FAN.
 > 
-> I'll wait for the DT patch to be approved before applying.
+> Tested on a Dell Inspiron 3505.
 > 
-> Please send related patches as series in the future; this should have been
-> patch 2/2, with the DT patch as first patch.
-
-Ah, I misunderstood.  I thought you wanted me to send the two patches
-to the relevant maintainers only.  I got it now.
-
-Thanks,
-
-  --david
-
-
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 27 +++++++++------------------
+>  1 file changed, 9 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index b5d1703faa62..e2d388f7360e 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -449,12 +449,12 @@ static int i8k_get_power_status(void)
+>   * Procfs interface
+>   */
+> 
+> -static int
+> -i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd, unsigned long arg)
+> +static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
+>  {
+> -	int val = 0;
+> -	int speed, err;
+> +	struct dell_smm_data *data = PDE_DATA(file_inode(fp));
+>  	int __user *argp = (int __user *)arg;
+> +	int speed, err;
+> +	int val = 0;
+> 
+>  	if (!argp)
+>  		return -EINVAL;
+> @@ -516,11 +516,14 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+>  		if (copy_from_user(&speed, argp + 1, sizeof(int)))
+>  			return -EFAULT;
+> 
+> +		mutex_lock(&data->i8k_mutex);
+>  		err = i8k_set_fan(data, val, speed);
+> -		if (err < 0)
+> +		if (err < 0) {
+> +			mutex_unlock(&data->i8k_mutex);
+>  			return err;
+> -
+> +		}
+>  		val = i8k_get_fan_status(data, val);
+> +		mutex_unlock(&data->i8k_mutex);
+>  		break;
+> 
+>  	default:
+> @@ -536,18 +539,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+>  	return 0;
+>  }
+> 
+> -static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
+> -{
+> -	struct dell_smm_data *data = PDE_DATA(file_inode(fp));
+> -	long ret;
+> -
+> -	mutex_lock(&data->i8k_mutex);
+> -	ret = i8k_ioctl_unlocked(fp, data, cmd, arg);
+> -	mutex_unlock(&data->i8k_mutex);
+> -
+> -	return ret;
+> -}
+> -
+>  /*
+>   * Print the information for /proc/i8k.
+>   */
+> --
+> 2.30.2
+> 
