@@ -2,92 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 814A9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Nov 2021 17:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B8FCC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Nov 2021 18:50:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbhKVR6k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Nov 2021 12:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbhKVR6j (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Nov 2021 12:58:39 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF411C061574;
-        Mon, 22 Nov 2021 09:55:32 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id t23so39377985oiw.3;
-        Mon, 22 Nov 2021 09:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A3/GZswFZkAIstso6YZ0M3u2bPkXBpTewgmCnfB9rd4=;
-        b=AhwjdRjBupoQ1rkrWr0DPJoZkZWqqfwpGfIA+ZzO2LB/8F4QWG4lidalXHwbWVgZWb
-         HrqvxVavVxLw6e2nCEnUINMQr1OPBdDjVYrUzJlVKYy3QjeKxxo89G07WufAe9884btr
-         S8qdz36OZhoDIXb8Y/izRD72ESqQ7uskDqkhtvZZBtdqnoHmHHyMJBWYAMAlk0/SSfHI
-         0V0S1pSi31jc3aJYMhVeJyp+N0nkLKGE7nvMk2RjosXbkjNJIreH/O0OUBiCoHak7AKP
-         t7ATKwud9WTqndG+EBTLLyFMu6WqOEwzn81rAXm9i2wAqJ5wOfMYk6LzeqVoZ/Lv6ruv
-         c6/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A3/GZswFZkAIstso6YZ0M3u2bPkXBpTewgmCnfB9rd4=;
-        b=MfrwWTAWUaKcsee5+xkdJaOkI9QdK0KQ1A/d4pTapsNzCgk3y9QbTtOxyhRLf3mbvE
-         J4SwGeUoWsZzhd2fcoHQ9rNMlm0Up4F6aLp7ZgiMVKZ5qbHlu9fzaTMCoqHBNaByF+w7
-         PgxLnM3Qv7nuII9TbbgpSoZ7hqnEqsal61EbLf3yd+KLgcKNx15MzNcLtK5QvrG58MP6
-         5Pvv95TuQhBq+tXY61EfF9dst4MEtqQAfqpp/sJUzfmuWCnffKbU10pBOvgzB0GZ9xf+
-         zhN05Gppddt569ac4nLQJxvEhed80kDtKXaNQKNjwpABf8wG8D1E5GWFBdPst7vNWPCj
-         f8pw==
-X-Gm-Message-State: AOAM5332HGSiLMCsa6RaTvXFgCld35cnhCjWKYLivQpk6KHvhlJRtSC2
-        8xotFHO1A7Ys9eHjgT4KA/HtNMuacNc=
-X-Google-Smtp-Source: ABdhPJzsjywB7pHSYU5CCgNdn7Y6FVaSVQH49xrsoIO0XVEOcy2khmcJsAHgs1VWIASzI1BDRn6uiQ==
-X-Received: by 2002:a05:6808:4d2:: with SMTP id a18mr23199608oie.99.1637603731857;
-        Mon, 22 Nov 2021 09:55:31 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i3sm1500922ooq.39.2021.11.22.09.55.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Nov 2021 09:55:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
+        id S231737AbhKVSxl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Nov 2021 13:53:41 -0500
+Received: from mout.gmx.net ([212.227.15.19]:38847 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231699AbhKVSxk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 22 Nov 2021 13:53:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1637607015;
+        bh=lE3hAYAJQ/qcZuhnjnZSZiuOuT/DfD3hCHSy2l/ZcKY=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=iZNE1qYAdNggYvvHnI1iXOeHZZDLCPok5FMHeTrEaofLth4vfMGuqOv6PXrfVFxyh
+         JA2pGf2teC4l4sNsMjX2+52akiVDoCylI2gsZ+Vbqm/i/7UNAyCfg1sTqoo7RUjglB
+         OqLsJdA5mOXM4W4FfcgVF6ZXrhzp9jRdebkf0CuY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.29] ([91.137.126.34]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1Obh-1mdAqa2pPX-012msj; Mon, 22
+ Nov 2021 19:50:15 +0100
 Subject: Re: [PATCH 2/2] hwmon: (dell-smm) Unify i8k_ioctl() and
  i8k_ioctl_unlocked()
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Armin Wolf <W_Armin@gmx.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20211120170319.72369-1-W_Armin@gmx.de>
  <20211120170319.72369-3-W_Armin@gmx.de>
  <20211122160122.gf6i3qj6dnwi6wla@pali>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c23caeab-dd27-4c95-2e25-9eb0ff7b33f6@roeck-us.net>
-Date:   Mon, 22 Nov 2021 09:55:29 -0800
+ <c23caeab-dd27-4c95-2e25-9eb0ff7b33f6@roeck-us.net>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <e336f501-fe07-7b49-bc65-d6ca443491ca@gmx.de>
+Date:   Mon, 22 Nov 2021 19:50:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211122160122.gf6i3qj6dnwi6wla@pali>
+In-Reply-To: <c23caeab-dd27-4c95-2e25-9eb0ff7b33f6@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:+U/yhAZc+ahbuRqVIOPG9v69dobZxB22akiDB1NPWd4KQe/RxYv
+ hryo/d1U9MbBVhLIomW+lHTcf251+ViwN9MH6ePZv/4mqm32OKLQwVBI43wwRBDtytNPwE3
+ NhlXCFzkGW8Sbfk71OdqPaoEnpul48/uSpP7z+b2GGPDDQq2JFp3ECYILPz39zHplc34V9r
+ BwKTDpLVRQDD+NwLbvTkA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cwXnVz/4slc=:VVaZm5GRAYQIDMV9v52Nbp
+ AO6k8BcaHoNCAz7NTeBxp/CM43hJO2cyq/BtzRuL6cT5WeDBn5DKNlRgWCDazPhjmS5JtEhhC
+ BRork3Qlaye2F8l//brh1Derch1VJXPKSHcqNgg+MXVmBiCnsgke6wAUEZWatrEFihqvDOlY9
+ f8RNDVHEG+It1PwyFtGzouQfjR7irLDO2hrGUrkXOwZLSSCVTc2uWcdDJoF1XKFh7mF9B24vP
+ J3xdjcNuQhn66+rdRKSHZOssAAqU7/JW1heyssIEskXpY6daAsNiufxfJn6Bn3WJUotlFYGGM
+ a+ywYUZb9OT7lo7DC0b3m8Pn2HbOQ2gp84KVh50wkn/8a3E9MSYBuII++K/dcCIrGE9lr1y1N
+ yEsHSGtdxE78/GuWUvy1bkX/1ymtNTvlkpitdJaqHtxkfyesfJbfvpHS96e323cU2rAUA7YdQ
+ 8/dm6ScCaXmklLu7Fko27uMj13iTTBIEs0ZE+O1y7SDZ5tXosufxqSr7ectCKVee9oGVpO+q4
+ QLAmBBZ7MT1uU+R0BeI2z8Rqr0jGYR4zlYoH0MISNbaYvfh5Fnt5gxaMXUPcHfUxQ9MmiqWgw
+ npeZypUo0HHQ5JZck+EPXfwvWokolN8yEXqjyWuRT935+zgiDkHvVruuvQRmJQGzr51Lh8yKr
+ /IB9JlkoWjtbI3+iHxrdUz39AZ6EQCK2hStRvvPdK1hfh0EBluST8TEPm84EBMLja8bVwrppH
+ JL1+E4z5T7+ZYTatwlGoof4tcc6lVkPK83rEwbowhsM+d2PYVicfhLOlm/iSrdXpEplWfc8cu
+ Uv+phswh1plpkDzr+v+K5g46s+bwjXb4iz7J+Rs7mKeq8UctI6mF5k4foK8oI2LLZdKLdaBXo
+ mCFLiITc42i/O9t/fB/hpgZqCBJi6ZbvHNJ6EyfkKqcqVzYtx1+8LITCip+pI0f89M063r/D1
+ yC8iX0ruarJZL1WKWHsrPTw/FpQOars7aHAd/fxpULwerIsgWfXhOQVSaqjNFsHuin3W0jJkO
+ gkO9Q/uXMowozvCJcH7hFQDvbzrMpuQvTWiw3FIi//me1D4DYRUGGdB1oyeR+VuX7WBxoSWOx
+ oa6V1RsreqAzMA=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/22/21 8:01 AM, Pali Rohár wrote:
-> On Saturday 20 November 2021 18:03:19 Armin Wolf wrote:
->> The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
->> with i8k_mutex held. Judging from the hwmon code, this mutex
->> only needs to be held when setting the fan speed/mode.
-> 
-> Really? I think that there is no difference between setting and getting
-> fan speed/mode. At least I do not see why 'set' needs mutex and 'get' do
-> not need it. Some more explanation is needed...
-> 
-I8K_SET_FAN sets the fan speed and returns the current status. Without
-locking, the returned status may not match or be associated with the previous
-set operation.
 
-Maybe that doesn't matter, and the synchronization is not needed. If so,
-you can probably remove the locking entirely.
+Am 22.11.21 um 18:55 schrieb Guenter Roeck:
+> On 11/22/21 8:01 AM, Pali Roh=C3=A1r wrote:
+>> On Saturday 20 November 2021 18:03:19 Armin Wolf wrote:
+>>> The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
+>>> with i8k_mutex held. Judging from the hwmon code, this mutex
+>>> only needs to be held when setting the fan speed/mode.
+>>
+>> Really? I think that there is no difference between setting and getting
+>> fan speed/mode. At least I do not see why 'set' needs mutex and 'get' d=
+o
+>> not need it. Some more explanation is needed...
+>>
+> I8K_SET_FAN sets the fan speed and returns the current status. Without
+> locking, the returned status may not match or be associated with the
+> previous
+> set operation.
+>
+> Maybe that doesn't matter, and the synchronization is not needed. If so,
+> you can probably remove the locking entirely.
+>
+> Guenter
 
-Guenter
+That is the reason i kept the locking code. Since i do not want to break
+the ioctl interfacein any way, removing the locking code seems too risky
+to me.
+
+Armin
+
