@@ -2,101 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FBDFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Nov 2021 19:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C43C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Nov 2021 21:29:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240142AbhKVTqU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Nov 2021 14:46:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56008 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234367AbhKVTqU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Nov 2021 14:46:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AE2160F51;
-        Mon, 22 Nov 2021 19:43:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637610193;
-        bh=2GSnTrkyMmob9ul0okQ5IjodpC5j/H3akBJZQJWdZWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YFK4tp9d5S/A3WGokZ6l48peGnCQY7y/oDr+IxVe4LQYZOjKSXD3DqSudXuOpgmtJ
-         17++mQAUtKFspXYVIt+AjBEkaJoqxLfRZ6wCyEO1L2ys2hpvdbPqvsfW7XiT7cUKLL
-         QdmPMVNYg3oseNg0Wz8Q6wRWgRauhfH8uLTNfUPexHZLrRQ/tJf8JdBblB2WhCGVRY
-         K+Vph8FX4J6krXVy05pYSlGx5lF+0VaFdzXNFfTywex6a/ikDtf96hAcj8sPLpa2xm
-         +Hsy0RUKMa3SRsjbTSoeKcRwh9T9v0PygtRMtWQa42CzW+/AxO3hGPY/EB0pj8jBSO
-         N1lLyOxFPvPoA==
-Received: by pali.im (Postfix)
-        id CE636A87; Mon, 22 Nov 2021 20:43:10 +0100 (CET)
-Date:   Mon, 22 Nov 2021 20:43:10 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Armin Wolf <W_Armin@gmx.de>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (dell-smm) Unify i8k_ioctl() and
- i8k_ioctl_unlocked()
-Message-ID: <20211122194310.viaddbblls2wxmbm@pali>
-References: <20211120170319.72369-1-W_Armin@gmx.de>
- <20211120170319.72369-3-W_Armin@gmx.de>
- <20211122160122.gf6i3qj6dnwi6wla@pali>
- <c23caeab-dd27-4c95-2e25-9eb0ff7b33f6@roeck-us.net>
- <e336f501-fe07-7b49-bc65-d6ca443491ca@gmx.de>
- <20211122191008.uw2tk4orb7p2elb7@pali>
- <b73d5a00-ecce-0517-4fb5-4af451e1facb@roeck-us.net>
+        id S230415AbhKVVcN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Nov 2021 16:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhKVVcM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 22 Nov 2021 16:32:12 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF9EC061574;
+        Mon, 22 Nov 2021 13:29:05 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id d24so35268687wra.0;
+        Mon, 22 Nov 2021 13:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YU04lNfSw6056ENwW5csldH8LgLJmhuf/rxtXEphcoU=;
+        b=HXoISZE70aA5DDHoEVLz7DmaYsveCifR+QMkfPVic7M6QWJwR9pYK5OoAH6Vsm/XyO
+         p9lJV/I6elOyyWJXkyCpqcuJrzdfJXCbkX/3UwL3j6XxiEkO0Q+sBKxj3dR+cCa5w+5B
+         ApSbp/Z5YhqFye0V/3JMgCOU0hdDP46dpq0aGly8ijcE0dTnmNN9pYcKHv/nVwnsZycG
+         KfBQuAXI0aI3mbcyGML4flyiFlBKO8mdQtbj09JBGxv5xXwHKFnGY4BAc58TQitGeRJt
+         99CxEuYXg7frCu1fEF48zDl0j7xM1a9yN1iyCsK+bsJ2Ly/7IgRdqWWD6OJrQh6CeAY2
+         8e1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YU04lNfSw6056ENwW5csldH8LgLJmhuf/rxtXEphcoU=;
+        b=sxFtcudcL1Qj38mrMnfDGV5PbEkJrpZuYIEGlqTXFG5nc4vCnxKSJIekyzHNXXvv8/
+         r4/6QUgWAUcwRQ+ZUgrqGMWJA/zcLSmwSb9AAhBqS2CLN+NzvflWwuGv5QHSnoRD7qoE
+         s5bTBCQZn8OhW6tSD7+03woKoLJpDz+G67X5Mt4B23o4NN2zrN90wgUOyoB4hHfZdGfV
+         9L2LR5ktoLpjVOPFrVu9/Wlg0lMzhZbiB8LjicUvFByaYbaDr189bZz/n6rPK3+RrvMO
+         xOwxjuLb9owwHz8ilc/nEdRCiLGaCMAUDG7ipnFS+dmjMsFI/GbiV7aVY/GIPhV5Q4T2
+         ArTA==
+X-Gm-Message-State: AOAM532BT2gZo6LlHt3ZQAcWzukNBL3HdqPdnLhdUTZ4Aaw5H4cjS2pw
+        EFqLYx4x+pnIMuo8PAKw3/UFD2n8zQzcEQ==
+X-Google-Smtp-Source: ABdhPJyuj49EFk3Dr9T0ATIMCiynQw5lRpDWlCzxQX1jX0LvirdarrPgCsBim1jWUMmycRMf33+ViQ==
+X-Received: by 2002:adf:ea0a:: with SMTP id q10mr428797wrm.1.1637616543976;
+        Mon, 22 Nov 2021 13:29:03 -0800 (PST)
+Received: from localhost.localdomain (149-45-179-94.pool.ukrtel.net. [94.179.45.149])
+        by smtp.gmail.com with ESMTPSA id k8sm9767928wrn.91.2021.11.22.13.29.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Nov 2021 13:29:03 -0800 (PST)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
+        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
+        thomas@weissschuh.net, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] hwmon: (nct6775) Support lock by ACPI mutex
+Date:   Mon, 22 Nov 2021 23:28:47 +0200
+Message-Id: <20211122212850.321542-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b73d5a00-ecce-0517-4fb5-4af451e1facb@roeck-us.net>
-User-Agent: NeoMutt/20180716
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Monday 22 November 2021 11:28:30 Guenter Roeck wrote:
-> On 11/22/21 11:10 AM, Pali Rohár wrote:
-> > On Monday 22 November 2021 19:50:14 Armin Wolf wrote:
-> > > Am 22.11.21 um 18:55 schrieb Guenter Roeck:
-> > > > On 11/22/21 8:01 AM, Pali Rohár wrote:
-> > > > > On Saturday 20 November 2021 18:03:19 Armin Wolf wrote:
-> > > > > > The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
-> > > > > > with i8k_mutex held. Judging from the hwmon code, this mutex
-> > > > > > only needs to be held when setting the fan speed/mode.
-> > > > > 
-> > > > > Really? I think that there is no difference between setting and getting
-> > > > > fan speed/mode. At least I do not see why 'set' needs mutex and 'get' do
-> > > > > not need it. Some more explanation is needed...
-> > > > > 
-> > > > I8K_SET_FAN sets the fan speed and returns the current status. Without
-> > > > locking, the returned status may not match or be associated with the
-> > > > previous
-> > > > set operation.
-> > > > 
-> > > > Maybe that doesn't matter, and the synchronization is not needed. If so,
-> > > > you can probably remove the locking entirely.
-> > > > 
-> > > > Guenter
-> > > 
-> > > That is the reason i kept the locking code. Since i do not want to break
-> > > the ioctl interfacein any way, removing the locking code seems too risky
-> > > to me.
-> > 
-> > I see. That is a good point.
-> > 
-> > But there is same race condition also when at the same time going to
-> > change speed via ioctl and also via hwmon sysfs.
-> > 
-> 
-> I thought the sysfs code does not change the fan speed and report the
-> fan status in the same request. Did I miss something ?
+Lock by ACPI mutex that is required for support ASUS MAXIMUS VII HERO 
+motherboard. In other case, all methods are returned zero instead of real 
+values. Code uses acpi mutex before any IO operations in case when such 
+acpi mutex is known.
 
-No. I mean something different. Let me to write trace call:
+Patch series adds additional check for ChipID, and if method returned 
+zero, all calls by acpi_wmi are disabled. 
 
-CPU 0:                          CPU 1:
-                                1. dell_smm_write()
-1. ioctl(I8K_SET_FAN)
-2. i8k_set_fan()
-                                2. i8k_set_fan()
-3. i8k_get_fan_status()
+Could you please review? Is it correct usage of ACPI mutex or better 
+to use some other method for reuse same ACPI mutex?
 
-So to ensure that i8k_get_fan_status() on CPU 0 returns value which
-belongs to i8k_set_fan() from CPU 0 it is needed to still use mutex.
+---
 
-Armin is right here and I think that patch is correct.
+Denis Pauk (3):
+  hwmon: (nct6775) Use nct6775_*() lock function pointers in
+    nct6775_data.
+  hwmon: (nct6775) Implement custom lock by ACPI mutex.
+  hwmon: (nct6775) add MAXIMUS VII HERO.
+
+ drivers/hwmon/nct6775.c | 358 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 259 insertions(+), 99 deletions(-)
+
+
+base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+-- 
+2.33.0
+
