@@ -2,127 +2,92 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFBAEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Nov 2021 16:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 814A9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Nov 2021 17:55:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbhKVQEb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Nov 2021 11:04:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52972 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229911AbhKVQEb (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Nov 2021 11:04:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C4DB26044F;
-        Mon, 22 Nov 2021 16:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637596884;
-        bh=H2oSmLBlYC0pyLwuEp1gnOlHn7RG14lRw0UmEgSeHXQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J0od3oFyTDrRFSx2OarDv8QhCmhU8ngVfDVJDEpmrlC+KVItOcv+AQwVuBpuN7Fxq
-         VN/9EQ5wuMw6+ILd7GwYAcnu46O0v4IfDD/ysvSpjlPTV71bslbKU5KHVTLF3KKia4
-         AqXX7YPpXO7tduXiK1h9F50YT1x1RBHfVCCU8AzkP+2GVtmgY+IBFh0I08o9Z1SO6X
-         lOQcjG3/y2hUYEKzx8/32wQyhfz5+dL6eZo65lJCdMzvYyF0nCu7gvs84kRZU1AkvS
-         0LmudGD9yoFPfDoFOs1laqLbKOXEG1qjgZ8BGtBD9bM/N94TxYM76IrGWbFr9+feTy
-         tKETiutT9Vgsw==
-Received: by pali.im (Postfix)
-        id 6D4CCA87; Mon, 22 Nov 2021 17:01:22 +0100 (CET)
-Date:   Mon, 22 Nov 2021 17:01:22 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S239635AbhKVR6k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Nov 2021 12:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231383AbhKVR6j (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 22 Nov 2021 12:58:39 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF411C061574;
+        Mon, 22 Nov 2021 09:55:32 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id t23so39377985oiw.3;
+        Mon, 22 Nov 2021 09:55:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=A3/GZswFZkAIstso6YZ0M3u2bPkXBpTewgmCnfB9rd4=;
+        b=AhwjdRjBupoQ1rkrWr0DPJoZkZWqqfwpGfIA+ZzO2LB/8F4QWG4lidalXHwbWVgZWb
+         HrqvxVavVxLw6e2nCEnUINMQr1OPBdDjVYrUzJlVKYy3QjeKxxo89G07WufAe9884btr
+         S8qdz36OZhoDIXb8Y/izRD72ESqQ7uskDqkhtvZZBtdqnoHmHHyMJBWYAMAlk0/SSfHI
+         0V0S1pSi31jc3aJYMhVeJyp+N0nkLKGE7nvMk2RjosXbkjNJIreH/O0OUBiCoHak7AKP
+         t7ATKwud9WTqndG+EBTLLyFMu6WqOEwzn81rAXm9i2wAqJ5wOfMYk6LzeqVoZ/Lv6ruv
+         c6/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=A3/GZswFZkAIstso6YZ0M3u2bPkXBpTewgmCnfB9rd4=;
+        b=MfrwWTAWUaKcsee5+xkdJaOkI9QdK0KQ1A/d4pTapsNzCgk3y9QbTtOxyhRLf3mbvE
+         J4SwGeUoWsZzhd2fcoHQ9rNMlm0Up4F6aLp7ZgiMVKZ5qbHlu9fzaTMCoqHBNaByF+w7
+         PgxLnM3Qv7nuII9TbbgpSoZ7hqnEqsal61EbLf3yd+KLgcKNx15MzNcLtK5QvrG58MP6
+         5Pvv95TuQhBq+tXY61EfF9dst4MEtqQAfqpp/sJUzfmuWCnffKbU10pBOvgzB0GZ9xf+
+         zhN05Gppddt569ac4nLQJxvEhed80kDtKXaNQKNjwpABf8wG8D1E5GWFBdPst7vNWPCj
+         f8pw==
+X-Gm-Message-State: AOAM5332HGSiLMCsa6RaTvXFgCld35cnhCjWKYLivQpk6KHvhlJRtSC2
+        8xotFHO1A7Ys9eHjgT4KA/HtNMuacNc=
+X-Google-Smtp-Source: ABdhPJzsjywB7pHSYU5CCgNdn7Y6FVaSVQH49xrsoIO0XVEOcy2khmcJsAHgs1VWIASzI1BDRn6uiQ==
+X-Received: by 2002:a05:6808:4d2:: with SMTP id a18mr23199608oie.99.1637603731857;
+        Mon, 22 Nov 2021 09:55:31 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i3sm1500922ooq.39.2021.11.22.09.55.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Nov 2021 09:55:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH 2/2] hwmon: (dell-smm) Unify i8k_ioctl() and
  i8k_ioctl_unlocked()
-Message-ID: <20211122160122.gf6i3qj6dnwi6wla@pali>
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20211120170319.72369-1-W_Armin@gmx.de>
  <20211120170319.72369-3-W_Armin@gmx.de>
+ <20211122160122.gf6i3qj6dnwi6wla@pali>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <c23caeab-dd27-4c95-2e25-9eb0ff7b33f6@roeck-us.net>
+Date:   Mon, 22 Nov 2021 09:55:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211120170319.72369-3-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20211122160122.gf6i3qj6dnwi6wla@pali>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Saturday 20 November 2021 18:03:19 Armin Wolf wrote:
-> The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
-> with i8k_mutex held. Judging from the hwmon code, this mutex
-> only needs to be held when setting the fan speed/mode.
+On 11/22/21 8:01 AM, Pali Rohár wrote:
+> On Saturday 20 November 2021 18:03:19 Armin Wolf wrote:
+>> The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
+>> with i8k_mutex held. Judging from the hwmon code, this mutex
+>> only needs to be held when setting the fan speed/mode.
+> 
+> Really? I think that there is no difference between setting and getting
+> fan speed/mode. At least I do not see why 'set' needs mutex and 'get' do
+> not need it. Some more explanation is needed...
+> 
+I8K_SET_FAN sets the fan speed and returns the current status. Without
+locking, the returned status may not match or be associated with the previous
+set operation.
 
-Really? I think that there is no difference between setting and getting
-fan speed/mode. At least I do not see why 'set' needs mutex and 'get' do
-not need it. Some more explanation is needed...
+Maybe that doesn't matter, and the synchronization is not needed. If so,
+you can probably remove the locking entirely.
 
-I'm not sure here but SMM call consist of two 'out' instructions and we
-probably need to ensure that interrupt does not happen between them.
-
-> Unify both functions and reduce the locking of i8k_mutex
-> to I8K_SET_FAN.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 27 +++++++++------------------
->  1 file changed, 9 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index b5d1703faa62..e2d388f7360e 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -449,12 +449,12 @@ static int i8k_get_power_status(void)
->   * Procfs interface
->   */
-> 
-> -static int
-> -i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd, unsigned long arg)
-> +static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
->  {
-> -	int val = 0;
-> -	int speed, err;
-> +	struct dell_smm_data *data = PDE_DATA(file_inode(fp));
->  	int __user *argp = (int __user *)arg;
-> +	int speed, err;
-> +	int val = 0;
-> 
->  	if (!argp)
->  		return -EINVAL;
-> @@ -516,11 +516,14 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
->  		if (copy_from_user(&speed, argp + 1, sizeof(int)))
->  			return -EFAULT;
-> 
-> +		mutex_lock(&data->i8k_mutex);
->  		err = i8k_set_fan(data, val, speed);
-> -		if (err < 0)
-> +		if (err < 0) {
-> +			mutex_unlock(&data->i8k_mutex);
->  			return err;
-> -
-> +		}
->  		val = i8k_get_fan_status(data, val);
-> +		mutex_unlock(&data->i8k_mutex);
->  		break;
-> 
->  	default:
-> @@ -536,18 +539,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
->  	return 0;
->  }
-> 
-> -static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
-> -{
-> -	struct dell_smm_data *data = PDE_DATA(file_inode(fp));
-> -	long ret;
-> -
-> -	mutex_lock(&data->i8k_mutex);
-> -	ret = i8k_ioctl_unlocked(fp, data, cmd, arg);
-> -	mutex_unlock(&data->i8k_mutex);
-> -
-> -	return ret;
-> -}
-> -
->  /*
->   * Print the information for /proc/i8k.
->   */
-> --
-> 2.30.2
-> 
+Guenter
