@@ -2,69 +2,170 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C527C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 16:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D09C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 21:16:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236061AbhKWQXr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Nov 2021 11:23:47 -0500
-Received: from mga12.intel.com ([192.55.52.136]:24423 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235988AbhKWQXr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:23:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="215081455"
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="215081455"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:20:38 -0800
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="538304991"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:20:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1mpYX0-009pkf-JQ;
-        Tue, 23 Nov 2021 18:20:30 +0200
-Date:   Tue, 23 Nov 2021 18:20:30 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        thomas@weissschuh.net, Ed Brindley <kernel@maidavale.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v12 0/2] Update ASUS WMI supported boards
-Message-ID: <YZ0UziuWdEnaUGrm@smile.fi.intel.com>
-References: <20211116205744.381790-1-pauk.denis@gmail.com>
- <f0bf01fa-ccd8-3a6a-8fd2-4c785fa212ef@roeck-us.net>
- <CAHp75Vfbh+O39C_k9zQqSqsoSro7_gv6QmsxgmdO=woA32Q0HQ@mail.gmail.com>
- <20211123155040.GA2184678@roeck-us.net>
+        id S240373AbhKWVTp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Nov 2021 16:19:45 -0500
+Received: from mail-dm6nam10on2045.outbound.protection.outlook.com ([40.107.93.45]:19297
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239630AbhKWVTo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 23 Nov 2021 16:19:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fSWe8+a/qwU5zFlTbHLnM5LV5huFn29z6Wi8C/OThCRLsDsL7MrNRnBpC9QchLKpgUVPMrYHs/6Rl2Gvmcxx4JfDVxXvtsACoaICpdPCmBKQ0t06kMaGN28V1CY/7wjeGw7KrirbkzQ2YfiSS1gufJyQEVGpK3vDgLNTefzFIW1Cl3oZH7Et6of8lmNU3Rh86BalGjoSWZWf4dRbD8c6sTyUZT9dzQ279Bnen+SNb2qqhVpAbMkArJpqS7fIpokRpFv1MNMkZm3WEx6FEJZF9Fj4/lJMPFADYY+TQuDEdhYRga707oweWHmNjczyv4QsM4GeTofgbZ6VSOjVHV/Opw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8QmYMef9ORmx30J6vdBxzucnHFXl4ltdHRVZgaOCwn4=;
+ b=SErt38AaeyGY6UHxl+Vdv1iSvU38KCGBMEnnPPsImKw0+V1SDXXzTklyZjISAecYCxBBS08fcGFqoKjQuMpWRb2V478eIOsVeF4IOAjFd/jLF0PCAlJkqmluUCRjGZMnqVkrIzCgf42Auaz/GXTJcuECtDUTf/IOE6K0mdIOiwcI2j9kKrs0oEmRzRNGKGSJY46lE8e9L0JJT4569hSWkNVaWjXUMV0wWUNsOwwBtB0ZUWMF57JUN5Lmjyc/mEtY9X3t+CYVVplmFwx3jR31zV0YuZVt8VCoNRl4Pr+fQbOx2Crkou/fanNU3BUQWmb68RjBqKsmWgplCm65/JtZcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8QmYMef9ORmx30J6vdBxzucnHFXl4ltdHRVZgaOCwn4=;
+ b=zdsxMQyNNwjGbRUIoB2BUjFkTaqpRsdNLLQmdq/6AwzLAB5dnJzBNgu166G+SCjittp9bTy8K0utHzsLu3VJC2iglAHpXBELxNUichd7jfmQNt4dsQTBAYmkhEv26eZS+9xYcsqG9w1jTlftsZ5vbGAM9hy6zDdpYnNfM6RIJk4=
+Received: from BN0PR04CA0022.namprd04.prod.outlook.com (2603:10b6:408:ee::27)
+ by MN2PR12MB3390.namprd12.prod.outlook.com (2603:10b6:208:c9::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Tue, 23 Nov
+ 2021 21:16:32 +0000
+Received: from BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ee:cafe::7f) by BN0PR04CA0022.outlook.office365.com
+ (2603:10b6:408:ee::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.19 via Frontend
+ Transport; Tue, 23 Nov 2021 21:16:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT058.mail.protection.outlook.com (10.13.177.58) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4713.20 via Frontend Transport; Tue, 23 Nov 2021 21:16:30 +0000
+Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 23 Nov
+ 2021 15:16:28 -0600
+Subject: [PATCH 1/2] hwmon: (k10temp) Move the CCD limit info inside
+ k10temp_data structure
+From:   Babu Moger <babu.moger@amd.com>
+To:     <clemens@ladisch.de>, <jdelvare@suse.com>, <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Date:   Tue, 23 Nov 2021 15:16:28 -0600
+Message-ID: <163770216907.777059.6947726637265961161.stgit@bmoger-ubuntu>
+User-Agent: StGit/1.1.dev103+g5369f4c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211123155040.GA2184678@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 856ad192-4615-4571-1c35-08d9aec68526
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3390:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3390DEBA667B56F32E03A7C895609@MN2PR12MB3390.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BSS4mEsty6NHWENqETU9U0dfYO9/ik2GY0USuq9Eu/A4QUZjw/YNeNm3sVdHwkHaNbaGAKuKMmx95nyaxCNtHjl0077djG6TT9yJ30CXbEH9p7CreNfyT3M7/mbvufaH7uiXpAlIZ3noYf7bJ28unsKlDx5EpNiA9ofHV9NJ8N3g6ezfiUWJEHHm2K88rc5b9qy8UL/Hb6NSN/D9njrZD89FeGbmebHySx029JQZzJrIhXP/4RDp4Gla/lhAwcJTJX+5cp2fIVvHYcwyoKK6umAunCeejzHCTt0SB5uD37fEUHSuIZ2MCeQcTFKLAtnTl6HyxRHDfqQLydn1fokLhSm9+qzFviV/UYMBCGlmNjSrSPxgNd8RdQCO82W7JP+Az0gTVAu4r/c/kNKHnZGXtNq3WhrObPooZ4k3GF0mfgLWzlDCv610QvpFWDg3fWmb+sulDuLqvjXpuEiok9w6XnZmm91kdREtXHz/fPfnm+g/H6KRNIqE5yQPQLjljCEQ9UGhuaUNNOELd3lZzeqhYPIeWKa7tQA3hWMORmhcwvctb5Rhdomv5rfdc8d5ZejHPt2JFSvUfqX7zicsHnFbd2jas1NWXD0hkE3dCG3ByvZSmuqnmOtpamnuy+QuTfUUwqF56iZo4ejN8poQPKRDLQG2nxM5M0NWCme6DFZvXZRJT+o+FGgi7vDzmCaD4VMzpVcjvzGW6ktpDk+piROR6QLH+0NtNZdDb+tJa9U2CQzI4pazM+uGRTSR/nTNmPEUSFcpDF00Stxfkjz1y1jIdA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(7916004)(4636009)(36840700001)(46966006)(5660300002)(33716001)(336012)(110136005)(8936002)(356005)(426003)(70586007)(103116003)(2906002)(4326008)(186003)(26005)(54906003)(8676002)(508600001)(16526019)(16576012)(9686003)(81166007)(47076005)(86362001)(36860700001)(70206006)(83380400001)(44832011)(316002)(82310400004)(71626007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2021 21:16:30.9821
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 856ad192-4615-4571-1c35-08d9aec68526
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3390
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 07:50:40AM -0800, Guenter Roeck wrote:
-> On Tue, Nov 23, 2021 at 12:22:46PM +0200, Andy Shevchenko wrote:
-> > >
-> > > Series applied to hwmon-next.
-> > 
-> > What is the repository it has been applied to? I don't see it in
-> > neither Linux Next nor [1]. It might be that I am missing the
-> > workflow.
-> 
-> I had not pushed the branch out. Done now.
-
-I can see it now, thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+It seems appropriate to move the CCD specific information inside the=0A=
+k10temp_data structure.=0A=
+=0A=
+Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
+---=0A=
+Note: Generated the patch on top of hwmon-next.=0A=
+=0A=
+ drivers/hwmon/k10temp.c |   17 +++++++++++------=0A=
+ 1 file changed, 11 insertions(+), 6 deletions(-)=0A=
+=0A=
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c=0A=
+index 880990fa4795..bd436b380a02 100644=0A=
+--- a/drivers/hwmon/k10temp.c=0A=
++++ b/drivers/hwmon/k10temp.c=0A=
+@@ -85,6 +85,7 @@ struct k10temp_data {=0A=
+ 	u32 show_temp;=0A=
+ 	bool is_zen;=0A=
+ 	u32 ccd_offset;=0A=
++	u32 ccd_limit;=0A=
+ };=0A=
+ =0A=
+ #define TCTL_BIT	0=0A=
+@@ -357,12 +358,12 @@ static const struct hwmon_chip_info k10temp_chip_info=
+ =3D {=0A=
+ };=0A=
+ =0A=
+ static void k10temp_get_ccd_support(struct pci_dev *pdev,=0A=
+-				    struct k10temp_data *data, int limit)=0A=
++				    struct k10temp_data *data)=0A=
+ {=0A=
+ 	u32 regval;=0A=
+ 	int i;=0A=
+ =0A=
+-	for (i =3D 0; i < limit; i++) {=0A=
++	for (i =3D 0; i < data->ccd_limit; i++) {=0A=
+ 		amd_smn_read(amd_pci_dev_to_node_id(pdev),=0A=
+ 			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);=0A=
+ 		if (regval & ZEN_CCD_TEMP_VALID)=0A=
+@@ -411,14 +412,16 @@ static int k10temp_probe(struct pci_dev *pdev, const =
+struct pci_device_id *id)=0A=
+ 		case 0x11:	/* Zen APU */=0A=
+ 		case 0x18:	/* Zen+ APU */=0A=
+ 			data->ccd_offset =3D 0x154;=0A=
+-			k10temp_get_ccd_support(pdev, data, 4);=0A=
++			data->ccd_limit =3D 4;=0A=
++			k10temp_get_ccd_support(pdev, data);=0A=
+ 			break;=0A=
+ 		case 0x31:	/* Zen2 Threadripper */=0A=
+ 		case 0x60:	/* Renoir */=0A=
+ 		case 0x68:	/* Lucienne */=0A=
+ 		case 0x71:	/* Zen2 */=0A=
+ 			data->ccd_offset =3D 0x154;=0A=
+-			k10temp_get_ccd_support(pdev, data, 8);=0A=
++			data->ccd_limit =3D 8;=0A=
++			k10temp_get_ccd_support(pdev, data);=0A=
+ 			break;=0A=
+ 		}=0A=
+ 	} else if (boot_cpu_data.x86 =3D=3D 0x19) {=0A=
+@@ -431,13 +434,15 @@ static int k10temp_probe(struct pci_dev *pdev, const =
+struct pci_device_id *id)=0A=
+ 		case 0x21:		/* Zen3 Ryzen Desktop */=0A=
+ 		case 0x50 ... 0x5f:	/* Green Sardine */=0A=
+ 			data->ccd_offset =3D 0x154;=0A=
+-			k10temp_get_ccd_support(pdev, data, 8);=0A=
++			data->ccd_limit =3D 8;=0A=
++			k10temp_get_ccd_support(pdev, data);=0A=
+ 			break;=0A=
+ 		case 0x10 ... 0x1f:=0A=
+ 		case 0x40 ... 0x4f:	/* Yellow Carp */=0A=
+ 		case 0xa0 ... 0xaf:=0A=
+ 			data->ccd_offset =3D 0x300;=0A=
+-			k10temp_get_ccd_support(pdev, data, 8);=0A=
++			data->ccd_limit =3D 8;=0A=
++			k10temp_get_ccd_support(pdev, data);=0A=
+ 			break;=0A=
+ 		}=0A=
+ 	} else {=0A=
+=0A=
 
