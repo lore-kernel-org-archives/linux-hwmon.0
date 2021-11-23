@@ -2,115 +2,140 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB7CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 12:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74B4BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 13:29:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234758AbhKWMat (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Nov 2021 07:30:49 -0500
-Received: from mga03.intel.com ([134.134.136.65]:32982 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235725AbhKWMas (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Nov 2021 07:30:48 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="234959939"
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="234959939"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 04:27:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="457038854"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 23 Nov 2021 04:27:37 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mpUtc-0001ow-KN; Tue, 23 Nov 2021 12:27:36 +0000
-Date:   Tue, 23 Nov 2021 20:27:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [groeck-staging:watchdog-next 11/23]
- drivers/watchdog/s3c2410_wdt.c:94: warning: expecting prototype for Quirk
- flags for different Samsung watchdog IP(). Prototype was for
- QUIRK_HAS_WTCLRINT_REG() instead
-Message-ID: <202111232037.iwzPIkeS-lkp@intel.com>
+        id S236094AbhKWNdE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Nov 2021 08:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236277AbhKWNdA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 23 Nov 2021 08:33:00 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3512C061756;
+        Tue, 23 Nov 2021 05:29:52 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id x6so6163855iol.13;
+        Tue, 23 Nov 2021 05:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1mzzQH4LR8E9en0oLHeEKt75OwAJ6GPgE1N3vKIF5Ws=;
+        b=EIo2zpjMsvO81Q+EI8R8OfQZEXUoQwQClX2UVj0GR1MrfeNV9a2+iuM6IKMbfJesVu
+         5W++R+mfnHKAUBjb2m6wPb6Sfqmep6qhLW5scVdDgAqj3KvBsvWJ9c5XPr6tFEgvtpQV
+         e6nwS00xARewgIe5CpUn3IH9LWwEJ05wjGn8v7yaoRz9h8inoXZiIiq84LNAITBaJQpV
+         7K3P5Jp7/mXCjZuHeuaujwziT+pycwl9fWiyw5X8zWIxxcE8QOQHQujCuZwBbnVWt64V
+         7jXjBqcQATkgPpUKl/jNmU4MZRgd1ahChBNZ+dhDBnV44dn8DOUvmWaeGA68tZpWYOuP
+         LgYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1mzzQH4LR8E9en0oLHeEKt75OwAJ6GPgE1N3vKIF5Ws=;
+        b=r/tOiNxk5OdO67wrjgknl05LpEZs0nU3sF7A6MogsdEPq6eEgSn1dlvObQFLfkzZm/
+         G+cgjc+cApi2nqmm16OUcepfYo1iQ4H9BwY4ikCQdoaneds+ON5yqJXc6u7F33H3OLNI
+         huKj1NSlTrW2B6iPj5LGG04/khP5rg08ts2j7rHh7Uf1iGGUZOgA4yF5Rrc94L+lGTqW
+         MyO2tYAGjVOhyfvOnihOCZH0EIFguCSQLySMfAqLhLEO4Kw3D7usmc4TZEaUZiMQ/puq
+         lEknIJSZ++ygo17BKw4ooNYxG3RHdHUgcTXP+KDb+o0mI+JfVsJ9mwOUZh6+aTWunnKw
+         uLqg==
+X-Gm-Message-State: AOAM532bYFn0hJ+mmi7O7ddoMaF4QhIyUlmH08UBxXdi39ixOjkdtGwR
+        PpcIKSWwtHRFIT5jJABHi6NF8eVLfWFBHpOZnO8=
+X-Google-Smtp-Source: ABdhPJwMXgvkb/4JorRGYlbB9RBc9fTrr+yiBWVTdyS2Dguc9dZBlAvAFOrg/Q3ogahTOw2JtEq0LxkF6gaQvD7d6os=
+X-Received: by 2002:a6b:ea0a:: with SMTP id m10mr5581825ioc.91.1637674192312;
+ Tue, 23 Nov 2021 05:29:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211110122948.188683-1-alistair@alistair23.me>
+ <20211110122948.188683-2-alistair@alistair23.me> <20211117223950.3a7eaf7a@aktux>
+In-Reply-To: <20211117223950.3a7eaf7a@aktux>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Tue, 23 Nov 2021 23:29:26 +1000
+Message-ID: <CAKmqyKP_gQ1qSADMPwmyf-V0TqGOYf2GitzpDXsmBUO6_iqK7Q@mail.gmail.com>
+Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-head:   5c9a4cc5516e30ac2e0586e315e0806ae766321b
-commit: 10748806ee44ad974d7ccd84c682222213b53e69 [11/23] watchdog: s3c2410: Cleanup PMU related code
-config: arc-randconfig-r015-20211117 (https://download.01.org/0day-ci/archive/20211123/202111232037.iwzPIkeS-lkp@intel.com/config.gz)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=10748806ee44ad974d7ccd84c682222213b53e69
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging watchdog-next
-        git checkout 10748806ee44ad974d7ccd84c682222213b53e69
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/watchdog/
+On Thu, Nov 18, 2021 at 7:40 AM Andreas Kemnade <andreas@kemnade.info> wrote:
+>
+> On Wed, 10 Nov 2021 22:29:41 +1000
+> Alistair Francis <alistair@alistair23.me> wrote:
+>
+> > Initial support for the Silergy SY7636A Power Management chip
+> > and regulator.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > ---
+> >  .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
+> >  1 file changed, 79 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> > new file mode 100644
+> > index 000000000000..0566f9498e2f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> [...]
+> > +  regulators:
+> > +    type: object
+> > +
+> > +    properties:
+> > +      compatible:
+> > +        const: silergy,sy7636a-regulator
+> > +
+> > +      vcom:
+> > +        type: object
+> > +        $ref: /schemas/regulator/regulator.yaml#
+> > +        properties:
+> > +          regulator-name:
+> > +            const: vcom
+> > +
+> hmm, this is what? If I understand it correctly, vcom means some
+> voltage for compensation. On other comparable pmics (e.g. TPS65185
+> which has also a sane public datasheet, MAX17135) I have seen some
+> methods to measure a voltage while the display is doing something
+> defined and then program this voltage non-volatile for compensation
+> during manufacturing.
+>
+> If I understand the code correctly all the bunch of voltages are
+> powered up if this one is enabled.
+> So at least a description should be suitable.
+>
+> The other comparable PMICs have at least regulators named VCOM, DISPLAY
+> (controls several regulators, started with delays configured via
+> registers) and V3P3. MAX17135 source can be found in NXP kernels,
+> TPS65185 in Kobo vendor kernels.
+>
+> So I would expect to see something similar here and a description or at
+> least not such a misleading name as vcom if it is for some reason not
+> feasible to separate the regulators.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is a vcom in the sense of voltage for compensation. We just
+currently don't support setting the vcom.
 
-All warnings (new ones prefixed by >>):
+I had a look at the Kobo code and this is similar to
+https://github.com/akemnade/linux/blob/kobo/epdc-pmic-5.15/drivers/regulator/sy7636-regulator.c#L614
 
->> drivers/watchdog/s3c2410_wdt.c:94: warning: expecting prototype for Quirk flags for different Samsung watchdog IP(). Prototype was for QUIRK_HAS_WTCLRINT_REG() instead
+So I think that vcom is still the appropriate name for this.
 
+Alistair
 
-vim +94 drivers/watchdog/s3c2410_wdt.c
-
-    59	
-    60	/**
-    61	 * Quirk flags for different Samsung watchdog IP-cores.
-    62	 *
-    63	 * This driver supports multiple Samsung SoCs, each of which might have
-    64	 * different set of registers and features supported. As watchdog block
-    65	 * sometimes requires modifying PMU registers for proper functioning, register
-    66	 * differences in both watchdog and PMU IP-cores should be accounted for. Quirk
-    67	 * flags described below serve the purpose of telling the driver about mentioned
-    68	 * SoC traits, and can be specified in driver data for each particular supported
-    69	 * device.
-    70	 *
-    71	 * %QUIRK_HAS_WTCLRINT_REG: Watchdog block has WTCLRINT register. It's used to
-    72	 * clear the interrupt once the interrupt service routine is complete. It's
-    73	 * write-only, writing any values to this register clears the interrupt, but
-    74	 * reading is not permitted.
-    75	 *
-    76	 * %QUIRK_HAS_PMU_MASK_RESET: PMU block has the register for disabling/enabling
-    77	 * WDT reset request. On old SoCs it's usually called MASK_WDT_RESET_REQUEST,
-    78	 * new SoCs have CLUSTERx_NONCPU_INT_EN register, which 'mask_bit' value is
-    79	 * inverted compared to the former one.
-    80	 *
-    81	 * %QUIRK_HAS_PMU_RST_STAT: PMU block has RST_STAT (reset status) register,
-    82	 * which contains bits indicating the reason for most recent CPU reset. If
-    83	 * present, driver will use this register to check if previous reboot was due to
-    84	 * watchdog timer reset.
-    85	 *
-    86	 * %QUIRK_HAS_PMU_AUTO_DISABLE: PMU block has AUTOMATIC_WDT_RESET_DISABLE
-    87	 * register. If 'mask_bit' bit is set, PMU will disable WDT reset when
-    88	 * corresponding processor is in reset state.
-    89	 *
-    90	 * %QUIRK_HAS_PMU_CNT_EN: PMU block has some register (e.g. CLUSTERx_NONCPU_OUT)
-    91	 * with "watchdog counter enable" bit. That bit should be set to make watchdog
-    92	 * counter running.
-    93	 */
-  > 94	#define QUIRK_HAS_WTCLRINT_REG			(1 << 0)
-    95	#define QUIRK_HAS_PMU_MASK_RESET		(1 << 1)
-    96	#define QUIRK_HAS_PMU_RST_STAT			(1 << 2)
-    97	#define QUIRK_HAS_PMU_AUTO_DISABLE		(1 << 3)
-    98	#define QUIRK_HAS_PMU_CNT_EN			(1 << 4)
-    99	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> Regards,
+> Andreas
