@@ -2,138 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4014C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 16:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C527C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 16:20:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235962AbhKWQQn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Nov 2021 11:16:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39592 "EHLO mail.kernel.org"
+        id S236061AbhKWQXr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Nov 2021 11:23:47 -0500
+Received: from mga12.intel.com ([192.55.52.136]:24423 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235243AbhKWQQn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:16:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A7EED60187;
-        Tue, 23 Nov 2021 16:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637684014;
-        bh=E5pA6PdwDF22Spc5ZX2szyBC40AyI6yucaz1XeUZuFQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Or0TWRPvG0ijxchBUVrJSXAbASTD+vfQqcgB5q2fJYtWpD0HBhG9leb0ip/lGy/bN
-         inasYINuIajDDpUW7SXzEPiLNErhmMEy6t/PhhGce/8S5+eMpdQDG0nzbabvkcaLSR
-         p01NR8yFZ30mKiYTG2mjbVj9vtyAUmtXG6zn6FNwklyhjnrlWRl09wC8Fu6UHMNVr6
-         qNdVf/JtmGsn73kBiPgeTFHbflvl48754hUajap2Ct4rD+SQ8MGZnGDbmUQDHJD08h
-         +YXXX6Rk2h4GU+Y7LCav4h7Wd9BCKKTOu+mpu6kw/MnK0mYuQBFfaX82m2eIlh3YRS
-         LtCxmCWAb3Unw==
-Received: by pali.im (Postfix)
-        id 589218A3; Tue, 23 Nov 2021 17:13:32 +0100 (CET)
-Date:   Tue, 23 Nov 2021 17:13:32 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (dell-smm) Simplify ioctl handler
-Message-ID: <20211123161332.discv3bfx4rkowah@pali>
-References: <20211120170319.72369-1-W_Armin@gmx.de>
- <20211120170319.72369-2-W_Armin@gmx.de>
+        id S235988AbhKWQXr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 23 Nov 2021 11:23:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="215081455"
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="215081455"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:20:38 -0800
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="538304991"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:20:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1mpYX0-009pkf-JQ;
+        Tue, 23 Nov 2021 18:20:30 +0200
+Date:   Tue, 23 Nov 2021 18:20:30 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
+        Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        thomas@weissschuh.net, Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v12 0/2] Update ASUS WMI supported boards
+Message-ID: <YZ0UziuWdEnaUGrm@smile.fi.intel.com>
+References: <20211116205744.381790-1-pauk.denis@gmail.com>
+ <f0bf01fa-ccd8-3a6a-8fd2-4c785fa212ef@roeck-us.net>
+ <CAHp75Vfbh+O39C_k9zQqSqsoSro7_gv6QmsxgmdO=woA32Q0HQ@mail.gmail.com>
+ <20211123155040.GA2184678@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211120170319.72369-2-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20211123155040.GA2184678@roeck-us.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Saturday 20 November 2021 18:03:18 Armin Wolf wrote:
-> The second switch-case has no real purpose:
+On Tue, Nov 23, 2021 at 07:50:40AM -0800, Guenter Roeck wrote:
+> On Tue, Nov 23, 2021 at 12:22:46PM +0200, Andy Shevchenko wrote:
+> > >
+> > > Series applied to hwmon-next.
+> > 
+> > What is the repository it has been applied to? I don't see it in
+> > neither Linux Next nor [1]. It might be that I am missing the
+> > workflow.
 > 
-> - for I8K_BIOS_VERSION, val does not represent a return value,
->   making the check for error values unnecessary.
-> - for I8K_MACHINE_ID, val remains zero, so the error check is
->   unnecessary too.
-> 
-> Remove the switch-case and move the calls to copy_to_user()
-> into the first switch-case for I8K_BIOS_VERSION/_MACHINE_ID.
-> Omit buff[] since data->machineid already contains the string
+> I had not pushed the branch out. Done now.
 
-s/->machineid/->bios_machineid/
+I can see it now, thanks!
 
-> with the necessary zero padding.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-data is allocated by devm_kzalloc() so data->bios_machineid is really
-zero padded.
 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 30 +++++++++---------------------
->  1 file changed, 9 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 5596c211f38d..b5d1703faa62 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -454,7 +454,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
->  {
->  	int val = 0;
->  	int speed, err;
-> -	unsigned char buff[16];
->  	int __user *argp = (int __user *)arg;
-> 
->  	if (!argp)
-> @@ -468,15 +467,19 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
-> 
->  		val = (data->bios_version[0] << 16) |
->  				(data->bios_version[1] << 8) | data->bios_version[2];
-> -		break;
-> 
-> +		if (copy_to_user(argp, &val, 4))
-> +			return -EFAULT;
-> +
-> +		return 0;
->  	case I8K_MACHINE_ID:
->  		if (restricted && !capable(CAP_SYS_ADMIN))
->  			return -EPERM;
-> 
-> -		strscpy_pad(buff, data->bios_machineid, sizeof(buff));
-> -		break;
-> +		if (copy_to_user(argp, data->bios_machineid, 16))
-
-What about usage of sizeof(data->bios_machineid) instead of hardcoded
-constant 16? And maybe same for constant 4?
-
-> +			return -EFAULT;
-> 
-> +		return 0;
->  	case I8K_FN_STATUS:
->  		val = i8k_get_fn_status();
->  		break;
-> @@ -527,23 +530,8 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
->  	if (val < 0)
->  		return val;
-> 
-> -	switch (cmd) {
-> -	case I8K_BIOS_VERSION:
-> -		if (copy_to_user(argp, &val, 4))
-> -			return -EFAULT;
-> -
-> -		break;
-> -	case I8K_MACHINE_ID:
-> -		if (copy_to_user(argp, buff, 16))
-> -			return -EFAULT;
-> -
-> -		break;
-> -	default:
-> -		if (copy_to_user(argp, &val, sizeof(int)))
-> -			return -EFAULT;
-> -
-> -		break;
-> -	}
-> +	if (copy_to_user(argp, &val, sizeof(int)))
-> +		return -EFAULT;
-> 
->  	return 0;
->  }
-> --
-> 2.30.2
-> 
