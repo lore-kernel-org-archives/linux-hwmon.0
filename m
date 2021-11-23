@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92DFFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 15:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DDBBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Nov 2021 15:56:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238513AbhKWPyO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Nov 2021 10:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        id S231702AbhKWP7T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Nov 2021 10:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237258AbhKWPyO (ORCPT
+        with ESMTP id S230026AbhKWP7S (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Nov 2021 10:54:14 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485EAC061574;
-        Tue, 23 Nov 2021 07:51:06 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id b5-20020a9d60c5000000b0055c6349ff22so34341348otk.13;
-        Tue, 23 Nov 2021 07:51:06 -0800 (PST)
+        Tue, 23 Nov 2021 10:59:18 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BCCC061574;
+        Tue, 23 Nov 2021 07:56:10 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso3756902otf.0;
+        Tue, 23 Nov 2021 07:56:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tJQKOiGB2vMuUqi1aD/KDeUab9z92lW/Lc4DaqZriqA=;
-        b=f4kmgK0vVOxM7SUOOui9MCrPkzPqPGRFZjasT0mKmxH+SZ2MigxSi9obkrdIxo7jLy
-         /7mWXJLAmnpXtrA3LJ9eyH8LSugnBNo3+nClOf7UiabcSD+YDAELoJVjX9yz3oQRnNnr
-         FIjAUFb68dCPXF18UEP/k1DsHEte9I6kvSmnV+NWOW5VMUKtq+umbTtsLXr6mZ8bm7+Z
-         3IOA7DurRDMTl6QBVE8LOkG9QD3ez0kWGIKJ4xlq3OmNpQOvDaKPU+jdXmhfSP86mssb
-         1XmbZi52GRozESpCh9wtR9znEdP1RC9wBIPEbwFO4HtS3FU5LHrPQCWrqHzpHz293s9h
-         Vpwg==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=d7UN/gtMFD0+CfntgagBDCU3OFGLUJ14fJxOZRpFpSs=;
+        b=jBTtlGU7wUCAayGuVcs+MGhonZwixiA3mxfhySHHgJi/8js6jxNFutgeP6ZeDFy6eo
+         bRueqSE3q+ttWrdA38y5gt5cpRs8Cg8Iu+M6brzgIFtpgDKUVBS7EINqqEOluy4uNYaJ
+         WipHeonFnSQKbMcReO55R/3Zc3BGfjy6Hg8xUl2iyvegzRBwrYGXr5INsmMAl/YXYyVE
+         yZTPbTOvNIfNrJZBKsRwacNVDCI24aje4MfbTFZ16zD8A/ALpa2txk5sUScm11yKyg5G
+         Yti0eh4bHUNgWczNpkAj9WUIputVNJ677alE28Mhq/vg7JyIQcJBZT2NzvBVTVWwVeeo
+         q07A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=tJQKOiGB2vMuUqi1aD/KDeUab9z92lW/Lc4DaqZriqA=;
-        b=JHl5aUc9t+/vK9AEbzombMk4dWJ0PbFdhQzoSWcoOwBIX2boUI6QL9ffdf9T1u8n1h
-         bXp+PqnDLqIieckEyC3WD2bAvQGp2vq9MlFgmjqAzMWnaB/BXIPKU9EDm+JpOLRSw0Tp
-         gFhbR5A/Cif99XFvMT/zN86zt1WNM54+pToQE1sMwa2omlU7bgbmELZox37YMqXeE2x4
-         RI0ooVEAi5a5hbrMuvOvntt6VI+a2M+oYYRinbgV7XpEeltChmWLlYNDzvQM2Zc411UX
-         CxInoiBWNsslnbEbQaQH2z/FOJj2CffM6SekFPC9DoS+Grm0sQH4BUQtUaI0IoSypmhb
-         uxUw==
-X-Gm-Message-State: AOAM530XRXrZCjt3R2tT7txZZkPT2XdNw1Q5obHmbX/S38PCMsktkQ4W
-        5LquiWZ+RZ5/XvnCFfyihr8=
-X-Google-Smtp-Source: ABdhPJyhyAw55KSiewZGLoxSdgQk1C3eR3BBScfSyS28Z3a9YLYF+FAAzifxgRGw/7mzEoByrErOFA==
-X-Received: by 2002:a05:6830:22d8:: with SMTP id q24mr5291559otc.170.1637682665727;
-        Tue, 23 Nov 2021 07:51:05 -0800 (PST)
+         :mime-version:content-disposition;
+        bh=d7UN/gtMFD0+CfntgagBDCU3OFGLUJ14fJxOZRpFpSs=;
+        b=L0GCv+HgZ6OLr0kxTWlfTahm3Lwj2Qzxx2pAS10EMVXLYUGwKnEpRxuNMmuvIyIRoT
+         m+PxU1w0c0tpL+kMCh3i/MberNkHb30CtgtCJVdHPUikEulAnE/ql/04pDoMsMyUCy6J
+         awWS+D80beHUbJ8/nPTrZSyqD4secbIOng4uOhtCG/Ot9OyX5BOQRgTpulM2n8TbmnSV
+         A+9yvv7I9PACdsZ218EHJFvKgmudJLz8xd2wL74gE8nbToFug+M2RGwMhw0vgJfrlFnA
+         E5Ln32RdHooUYZ19ublT8M+MJIC6QOuB2jy9yr50c4wFtK+2qFFAli/UQjOzWqtFK4MH
+         8BOA==
+X-Gm-Message-State: AOAM5309t3KneY/QGrv4qkUQIQ0Xvl9b++wEV0qeLLwXfwQdxwKrSK1z
+        lDJKWLgWoZ3wtKqxs9PwJUM=
+X-Google-Smtp-Source: ABdhPJzHGnMWkUtLsG4O+tAtmQGUp8qFfdDduM22WfEJrNkViM5QUIW5SQvrPEoueCL+oyG1ETpS8g==
+X-Received: by 2002:a9d:749a:: with SMTP id t26mr5694122otk.96.1637682970071;
+        Tue, 23 Nov 2021 07:56:10 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s2sm2226111otr.69.2021.11.23.07.51.05
+        by smtp.gmail.com with ESMTPSA id k4sm2558888oij.54.2021.11.23.07.56.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 07:51:05 -0800 (PST)
+        Tue, 23 Nov 2021 07:56:09 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 Nov 2021 07:51:04 -0800
+Date:   Tue, 23 Nov 2021 07:56:08 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Iwona Winiarska <iwona.winiarska@intel.com>
 Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
@@ -72,30 +72,85 @@ Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         David Muller <d.mueller@elsoft.ch>,
         Dave Hansen <dave.hansen@intel.com>,
         Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH v4 10/13] hwmon: peci: Add cputemp driver
-Message-ID: <20211123155104.GB2184678@roeck-us.net>
-References: <20211123140706.2945700-1-iwona.winiarska@intel.com>
- <20211123140706.2945700-11-iwona.winiarska@intel.com>
+Subject: Re: [PATCH v4 11/13] hwmon: peci: Add dimmtemp driver
+Message-ID: <20211123155608.GA2258206@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211123140706.2945700-11-iwona.winiarska@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 03:07:03PM +0100, Iwona Winiarska wrote:
-> Add peci-cputemp driver for Digital Thermal Sensor (DTS) thermal
-> readings of the processor package and processor cores that are
-> accessible via the PECI interface.
+On Tue, Nov 23, 2021 at 03:07:04PM +0100, Iwona Winiarska wrote:
+> Add peci-dimmtemp driver for Temperature Sensor on DIMM readings that
+> are accessible via the processor PECI interface.
 > 
 > The main use case for the driver (and PECI interface) is out-of-band
-> management, where we're able to obtain the DTS readings from an external
+> management, where we're able to obtain thermal readings from an external
 > entity connected with PECI, e.g. BMC on server platforms.
 > 
 > Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 > Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 > Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 > Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> ---
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+[ ... ]
+
+> +static int check_populated_dimms(struct peci_dimmtemp *priv)
+> +{
+> +	int chan_rank_max = priv->gen_info->chan_rank_max;
+> +	int dimm_idx_max = priv->gen_info->dimm_idx_max;
+> +	u32 chan_rank_empty = 0;
+> +	u64 dimm_mask = 0;
+> +	int chan_rank, dimm_idx, ret;
+> +	u32 pcs;
+> +
+> +	BUILD_BUG_ON(BITS_PER_TYPE(chan_rank_empty) < CHAN_RANK_MAX);
+> +	BUILD_BUG_ON(BITS_PER_TYPE(dimm_mask) < DIMM_NUMS_MAX);
+> +	if (chan_rank_max * dimm_idx_max > DIMM_NUMS_MAX) {
+> +		WARN_ONCE(1, "Unsupported number of DIMMs - chan_rank_max: %d, dimm_idx_max: %d",
+> +			  chan_rank_max, dimm_idx_max);
+> +		return -EINVAL;
+> +	}
+> +
+> +	for (chan_rank = 0; chan_rank < chan_rank_max; chan_rank++) {
+> +		ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &pcs);
+> +		if (ret) {
+> +			/*
+> +			 * Overall, we expect either success or -EINVAL in
+> +			 * order to determine whether DIMM is populated or not.
+> +			 * For anything else we fall back to deferring the
+> +			 * detection to be performed at a later point in time.
+> +			 */
+> +			if (ret == -EINVAL) {
+> +				chan_rank_empty |= BIT(chan_rank);
+> +				continue;
+> +			}
+> +
+> +			return -EAGAIN;
+> +		}
+> +
+> +		for (dimm_idx = 0; dimm_idx < dimm_idx_max; dimm_idx++)
+> +			if (__dimm_temp(pcs, dimm_idx))
+> +				dimm_mask |= BIT(chan_rank * dimm_idx_max + dimm_idx);
+> +	}
+> +
+> +	/*
+> +	 * If we got all -EINVALs, it means that the CPU doesn't have any
+> +	 * DIMMs. Unfortunately, it may also happen at the very start of
+> +	 * host platform boot. Retrying a couple of times lets us make sure
+> +	 * that the state is persistent.
+> +	 */
+> +	if (chan_rank_empty == GENMASK(chan_rank_max - 1, 0)) {
+> +		if (priv->no_dimm_retry_count < NO_DIMM_RETRY_COUNT_MAX) {
+> +			priv->no_dimm_retry_count++;
+> +
+> +			return -EAGAIN;
+> +		} else {
+> +			return -ENODEV;
+> +		}
+
+Static analyzers will complain "else after return is unnecessary".
+
+Guenter
