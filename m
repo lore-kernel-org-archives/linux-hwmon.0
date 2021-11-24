@@ -2,80 +2,140 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 768D1C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Nov 2021 20:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 378C2C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Nov 2021 22:51:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbhKXUhx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 24 Nov 2021 15:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S1351586AbhKXWyM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 24 Nov 2021 17:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234742AbhKXUhx (ORCPT
+        with ESMTP id S244991AbhKXWyI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 24 Nov 2021 15:37:53 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14519C061574;
-        Wed, 24 Nov 2021 12:34:43 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso6140438ots.6;
-        Wed, 24 Nov 2021 12:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mS4HySlQjvLA0Eh6hx8Q415CZ5EeqmdP8px2xegynzo=;
-        b=NvrVwpChSyHwXcEZoh/HXt0PZ1G5f+LsIj6H3rtcObZd0ZuIYo0Axwp2yMTpDsz1OJ
-         3hJ8Mbj1Ml5B/QTMBQDIGOidkbUsju94Kp4MzxAhqU0ktu7qX5dMIX1IDeXGUTDASRcK
-         uCJoRXMFnarkOSnPOTcJPqC1A+rOjmH+GtiCftglv5zDAC8c7knQceTtRCr6YyijE34p
-         taDhAf9nFuFka4X7Ga5GTYZmLQ/STZEzl6iMUZuBqT7tYNna5B8dX6S0SzNwGhyG/cnK
-         F34PMzTMIUXLEtO28M0TNTgJ1/EynxwvYE/wtqRcS8IT+sMj1W323WU4riZKkRa9FUXN
-         o8hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=mS4HySlQjvLA0Eh6hx8Q415CZ5EeqmdP8px2xegynzo=;
-        b=hPv6YLyUpY3Kjienz5zTPgula8ihGTckAV3Coi2DVJ/bWIwt+72DvYCQGYggfE/+gI
-         +ujRVkeM3HGY0tQqIdySNsktZspHDEbXIp6VABmet2eRKezjGbYI3WcisK/w/u78MA1p
-         nf0HmL+gwoygMuipEL84C8O71IYKDadazXaG0G/N2EzsKmuUP1H5/64hmFbRQRyu+aKw
-         Kmkn0j2NtKsntjTt3LvY4W65oZV+fgUFyid8Svaoq5cJEZ2G4OFXu33HFl03/J4U7cCb
-         AcC4u4WZ5Xvc8sFHXpLsAKALnso4ZdZes8JchNapm0hsOUI6BuIp6YqfB70WoiIJd8Tc
-         2ngQ==
-X-Gm-Message-State: AOAM532NGPdks1jStUz1gJzilD5qswD/ykPzkuSdgajy3dCS8VauZs9y
-        EOapGB/bewnXcWKlmOP/YrQA5zBmfZ0=
-X-Google-Smtp-Source: ABdhPJz5g50fspbB4X37CHDS7oUqBCm/dtswbS8q8rj9urzy3j8upXQ5Q6duILt85BbdT/OQeuhmqw==
-X-Received: by 2002:a05:6830:1514:: with SMTP id k20mr15640704otp.147.1637786082493;
-        Wed, 24 Nov 2021 12:34:42 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j20sm142559ota.76.2021.11.24.12.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 12:34:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 24 Nov 2021 12:34:40 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Babu Moger <babu.moger@amd.com>
-Cc:     clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (k10temp) Support up to 12 CCDs on AMD Family
- of processors
-Message-ID: <20211124203440.GA346758@roeck-us.net>
-References: <163776976762.904164.5618896687524494215.stgit@bmoger-ubuntu>
+        Wed, 24 Nov 2021 17:54:08 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAD3C061574;
+        Wed, 24 Nov 2021 14:50:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=C1JErvcbhxfEVHxYdQe+2WCbatKoUOR1fMCyHqNo4+w=; b=EG7eyj40mtJ2kFbE0yuI6uRYDu
+        ugQILDQcOkPpdcKj2AafOOR739vNFkQaM4rz1gMNWAGeDbwKU339r/MB/LDYtZ3ExvX7i7S5s61Bx
+        neZhhVRzuvgZH3F2jcmcdiLNBkANBHVHAKHdqQ1T5q+vAfU259j4h++GRd+Pm9OGNAuc=;
+Received: from p200300ccff0d65001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0d:6500:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1mq16A-0008N5-1o; Wed, 24 Nov 2021 23:50:42 +0100
+Date:   Wed, 24 Nov 2021 23:50:41 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alistair Francis <alistair23@gmail.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v15 3/8] mfd: simple-mfd-i2c: Enable support for the
+ silergy,sy7636a
+Message-ID: <20211124235041.2840a770@aktux>
+In-Reply-To: <a2fd5089-14a5-e36e-63ce-d73be3cd99a2@roeck-us.net>
+References: <20211110122948.188683-1-alistair@alistair23.me>
+        <20211110122948.188683-4-alistair@alistair23.me>
+        <20211116000634.767dcdc0@aktux>
+        <CAKmqyKPFOqWD7t6tC1Act97CVcY+yazrhwMLLr3j_wOyH50GTA@mail.gmail.com>
+        <00d68181-ad3b-17d2-0150-00029d399f0f@roeck-us.net>
+        <20211124203532.30577a50@aktux>
+        <a2fd5089-14a5-e36e-63ce-d73be3cd99a2@roeck-us.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <163776976762.904164.5618896687524494215.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 10:03:13AM -0600, Babu Moger wrote:
-> The current driver can read the temperatures from upto 8 CCDs
-> (Core-Complex Die).
-> 
-> The newer AMD Family 19h Models 10h-1Fh and A0h-AFh can support up to
-> 12 CCDs. Update the driver to read up to 12 CCDs.
-> 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
+On Wed, 24 Nov 2021 12:09:44 -0800
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Applied to hwmon-next.
+> On 11/24/21 11:35 AM, Andreas Kemnade wrote:
+> > Hi,
+> >=20
+> > On Tue, 23 Nov 2021 07:39:05 -0800
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> >  =20
+> >> On 11/23/21 4:14 AM, Alistair Francis wrote: =20
+> >>> On Tue, Nov 16, 2021 at 9:10 AM Andreas Kemnade <andreas@kemnade.info=
+> wrote: =20
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> this all creates a lot of question marks...
+> >>>> One of my main question is whether sy7636a =3D sy7636 (at least the
+> >>>> driver in the kobo vendor kernels does not have the "A" at the end,
+> >>>> whic does not necessarily mean a difference).
+> >>>>
+> >>>> https://www.silergy.com/products/panel_pmic
+> >>>> lists only a SY7636ARMC, so chances are good that the letters were j=
+ust
+> >>>> stripped away by the driver developers. Printing on chip package is
+> >>>> cryptic so it is not that helpful. It is just "BWNBDA" =20
+> >>>
+> >>> I don't have a definite answer for you. But I think it's sy7636a
+> >>>
+> >>> The page you linked to above lists SY7636ARMC as well as SY7627RMC,
+> >>> SY7570RMC. That makes me think that the RMC is a generic suffix and
+> >>> this actual IC is the SY7636A.
+> >>>     =20
+> >>
+> >> Almost all chips have an ordering suffix, indicating things like
+> >> temperature range or packaging. The datasheet says:
+> >> =20
+> > yes, they have. The only question is where it starts. So did you find a
+> > public datasheet which you can chere
+> >  =20
+>=20
+> I registered an account on the Silergy web site, and I was subsequently
+> able to download the datasheet. The document has a "confidential"
+> watermark, so I can not share it. You should be able to register an
+> account and download it yourself, though.
+>=20
+ok, did so.=20
 
-Thanks,
-Guenter
+> >> Ordering Information
+> >> SY7636 =E2=96=A1(=E2=96=A1=E2=96=A1)=E2=96=A1
+> >>               | Temperature Code (C)
+> >>            | Package Code (RM)
+> >>          | Optional Spec Code (A)
+> >>
+> >> The datasheet otherwise refers to the chip as SY7636A.
+> >> =20
+> > so there is no indication of something like this where the A really
+> > makes a difference:
+> >  =20
+>=20
+> I may be missing it, but I see nothing in the datasheet that would indica=
+te
+> that or if the "A" has any relevance other than "Optional Spec Code",
+> and I do not see an explanation for that term either.
+
+well things seems to match with things I got from analysing the kobo
+sources. So at least the thing in the Kobo Libra H2O seems to be that
+one described in the datasheet, so we can have one sy7636a driver for
+it.
+
+BTW: If I search for a sy7636 on aliexpress I get some SO-8 lithium
+charger ICs.
+
+Regards,
+Andreas
+
