@@ -2,54 +2,55 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A4A7C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Nov 2021 16:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C383AC433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Nov 2021 16:25:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237174AbhKXQ1P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 24 Nov 2021 11:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
+        id S241963AbhKXQ2k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 24 Nov 2021 11:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348617AbhKXQZd (ORCPT
+        with ESMTP id S1348742AbhKXQ2k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 24 Nov 2021 11:25:33 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E35C061757;
-        Wed, 24 Nov 2021 08:22:08 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id r25so12903176edq.7;
-        Wed, 24 Nov 2021 08:22:08 -0800 (PST)
+        Wed, 24 Nov 2021 11:28:40 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149D7C061574;
+        Wed, 24 Nov 2021 08:25:30 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id y13so12815270edd.13;
+        Wed, 24 Nov 2021 08:25:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wEXZc8R5yEIrgQ4MYOLlm+SaoIgScgmUX3YPF/pZ09g=;
-        b=DHkqm2r6wH23tUGtFdJrg/ijsnibP52SB/uKaXcgsctINJU4hkAHdL7iEDdTc+/7wW
-         hlvNwOmAmXJK2bEdSLZylwoutiOBotlintnDBoEYDp5s0nSd0ycEfCVatpp+pWCevvMw
-         t3xfTZ/GvKPgfdLI4yF1gsNbHEkNRKtdC9hRxLlnvQ6DGLHZa15ibifMJccmr8wTv13o
-         akoXPn2mLKn19einDNO5bQrWE2n1fH9xJpjGBMDGxkryuHwrjIfEmdpyu7IMpPYtaeXG
-         V6z+ZkQ4SQxP6SlTEzXfpizmf7zStxFLpJ0r6pU6NouKzC32RzotxDQ2vWB11N8Yj08t
-         uEUw==
+        bh=N+0513+tPJAoiuSxQyruSWrPHQwkKTbPLjcwm6Qo8Wo=;
+        b=GuLxyfcIIu5TUTlBT5R4g2Xr4EPMv4zH8Y7pUWZFR4Sti4v0kmMNYBO9Ozf0o90hYG
+         TC4RqBalXwWmfgfeaWxvWjHknJPX9NvzAD2iUrQFsz4MGD4LyriFW4aX95LttaGvgUDP
+         96fLQDa9R85Db/zpzf1boza5xvyhzTB4sXRhjVnjDQzTnr62IDOvKV3QP9v0jAL9XLd0
+         Nh6lH4KbCpL9ja+C8PircBNhYx3fjpDnjPNPXbkr52xYATY2vaiIQV1n+1BAeIB9ioyT
+         c4IxKU2ZlMRLyrFnWHbVkI3wx2aAxx8nUPFwvN1WEqay7QjN3uYIecun4cVhUTKxXPOl
+         mAPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wEXZc8R5yEIrgQ4MYOLlm+SaoIgScgmUX3YPF/pZ09g=;
-        b=j58kCoq2hjn8PoKla2bvn1DJYtZNH9bH7C2PgpDz1b+C4d0W3ivvjTOkeVXcmEo1KY
-         PbUQcLA3chk9hat6IcANBxrdiAMhGbePFeKYLeda2r4VEQR/xT7Mw7uwhIXrOetqr2cL
-         2++IkjS1uI7VgMMp2gmCEx5YgC2Zmb6wQVqi6oaoNftDSr96gk7oNkXVWB7Y/Qsuihnf
-         7R4DXeOKyTdcMBlAU9m0aJCAq4ErK0o9N8wKjOedkbTWFsQJ30La/+QHTde2dtTuBWyq
-         2OTSkaDhm9U01plkEp9LMBoE2Jv0Cf0ptR1cES3XDMlqqdKJJ8VY1/qwZr+x1QryjScd
-         hauA==
-X-Gm-Message-State: AOAM530dhORU4IriLjzAclk0GzF3yieOhJgGEsFdZ1yyY4DoerKb87po
-        Bpzytb4QS+n2HXfFKtsb7L8pCAPqQP0qrYsHf0o=
-X-Google-Smtp-Source: ABdhPJxAQTJYrBt7sP/hy533sdjmlUNyL8pMeZfIpiJQkk03O50xJJMIwt3G4bnxD17b8M+ck5HdgndOAKUuRUYrEwc=
-X-Received: by 2002:a05:6402:26d4:: with SMTP id x20mr26549087edd.119.1637770926939;
- Wed, 24 Nov 2021 08:22:06 -0800 (PST)
+        bh=N+0513+tPJAoiuSxQyruSWrPHQwkKTbPLjcwm6Qo8Wo=;
+        b=hKlKEYWuV6/pFnCIXSPfqWjsPwGe/6i7mTm4N6rGkHm3iUU4HIStwGk521Uai57saT
+         yNxh2iQQ/ETVLBEuAqVe5k3EaSYa6Dg/gKOGUK1pEzWHh5eBHhM78/KyS5aPXRZrhuJ6
+         zxxq0U7obg4SuovppmRrYgcATuIk9bBAgG+evncLUUGpGVyq8LLWkm1cDpjp5g7bNOHz
+         ZJbZm2cmFMmV/YDahgTjU1vDJHmaHCRjpp15KN0i9phvj4ssOiMje79HHR8QO4jXWsZ+
+         Reg1G8oDYTqPQbA8Juo80C8Nlk5cSqGtEuNW2lP2wYLdiUTdHI1P7o/S7b0ioZc9ASyz
+         ioRw==
+X-Gm-Message-State: AOAM533TagcE9DlywU76dHme7J/hB8D9Q6MC2LmSXLll5+EM97drmbG7
+        STvjN3uAZmgRkr29Nj+ptKnDHClJeHUPC648xDy0+BIFwbY=
+X-Google-Smtp-Source: ABdhPJzrrLVjIJ9PgqdEJmBnnaAooAhDNbBsZW9KDrRRdHRgV9T0ter4KlQBRzEeuDv/uN1YH5SQ5wieaDAWu52WPl8=
+X-Received: by 2002:a05:6402:51c7:: with SMTP id r7mr26644917edd.359.1637771128594;
+ Wed, 24 Nov 2021 08:25:28 -0800 (PST)
 MIME-Version: 1.0
 References: <20211122212850.321542-1-pauk.denis@gmail.com> <20211122212850.321542-4-pauk.denis@gmail.com>
-In-Reply-To: <20211122212850.321542-4-pauk.denis@gmail.com>
+ <CAHp75VeKosontsmFJSp-fbV9mPiSWJeLUCpx90=RHy1HFfBDnA@mail.gmail.com>
+In-Reply-To: <CAHp75VeKosontsmFJSp-fbV9mPiSWJeLUCpx90=RHy1HFfBDnA@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 24 Nov 2021 18:21:30 +0200
-Message-ID: <CAHp75VeKosontsmFJSp-fbV9mPiSWJeLUCpx90=RHy1HFfBDnA@mail.gmail.com>
+Date:   Wed, 24 Nov 2021 18:24:51 +0200
+Message-ID: <CAHp75Vdr+9zoWG74d0ZfGEjj_b1xkX7gw1ka_4NkGtjmvKB73A@mail.gmail.com>
 Subject: Re: [PATCH 3/3] hwmon: (nct6775) add MAXIMUS VII HERO.
 To:     Denis Pauk <pauk.denis@gmail.com>
 Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
@@ -63,131 +64,45 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 11:29 PM Denis Pauk <pauk.denis@gmail.com> wrote:
+On Wed, Nov 24, 2021 at 6:21 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Mon, Nov 22, 2021 at 11:29 PM Denis Pauk <pauk.denis@gmail.com> wrote:
+
+...
+
+> > +               if (access == access_asuswmi &&
+> > +                   nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
+> > +                       access = access_direct;
+> > +                       pr_err("Can't read ChipID by Asus WMI.\n");
+> > +               }
+> > +
+> > +               if (access == access_asuswmi) {
+> > +                       if (tmp)
+> > +                               pr_info("Using Asus WMI to access %#x chip.\n", tmp);
+> > +                       else
+> > +                               access = access_direct;
 >
-> ASUS MAXIMUS VII HERO board has got an nct6775 chip, but by default
-> there's no use of it because of resource conflict with WMI method.
+> Why not:
+
+>         if (access == access_asuswmi) {
+>                access = access_direct;
+
+Oh, just noticed above... Looks not good due to possible confusion
+which means this part needs to be thought through and refactored,
+perhaps by intermediate variable that defines the access and then you
+assign access= to it if it satisfies the conditions.
+
+>                if (nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp))
+>                        pr_err("Can't read ChipID by Asus WMI.\n");
+>                if (tmp) {
+>                        pr_info("Using Asus WMI to access %#x chip.\n", tmp);
+>                       access = access_...; // do you have this?
+>                }
+>                ...
+>         }
 >
-> This commit adds MAXIMUS VII HERO to the list of boards and provides
-> ACPI mutex name that can be used as shared lock with ASUS WMI.
->
-> Logic checks that mutex is available. If mutex is not available
-> tries to get chip version by ACPI WMI interface.
+> ?
 
-a chip
-
-...
-
-> +struct acpi_board_info {
-> +       char *acpi_mutex_name;
-
-Looking below the name of the "name" should be rather "path".
-
->  };
-
-...
-
-> +static const struct dmi_system_id asus_wmi_info_table[] = {
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("MAXIMUS VII HERO", &acpi_board_MAXIMUS_VII_HERO),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B360-PLUS", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B460-PLUS", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B550M-A (WI-FI)", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X570-PRO", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII DARK HERO", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII FORMULA", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII IMPACT", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING",
-> +                                       &acpi_board_ROG_STRIX_B550_E_GAMING),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-F GAMING", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-F GAMING (WI-FI)", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-F GAMING", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-E GAMING", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-I GAMING", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550-PLUS", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550-PRO", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550M-PLUS", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550M-PLUS (WI-FI)", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PLUS", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PLUS (WI-FI)", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PRO (WI-FI)", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING Z490-PLUS", &acpi_board_ANY),
-> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING Z490-PLUS (WI-FI)", &acpi_board_ANY),
-
-So, is it possible to eliminate acpi_board_ANY and use some default in
-the code instead?
-
-> +       {}
-> +};
-
-....
-
-> -       if (board_name && board_vendor &&
-> -           !strcmp(board_vendor, "ASUSTeK COMPUTER INC.")) {
-> -               err = match_string(asus_wmi_boards, ARRAY_SIZE(asus_wmi_boards),
-> -                                  board_name);
-
-Do you need string_helpers.h after this change?
-
-> -               if (err >= 0) {
-> -                       /* if reading chip id via WMI succeeds, use WMI */
-> -                       if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
-> -                               pr_info("Using Asus WMI to access %#x chip.\n", tmp);
-> -                               access = access_asuswmi;
-> +               if (board_info->acpi_mutex_name) {
-
-> +                       status = acpi_get_handle(NULL, board_info->acpi_mutex_name,
-> +                                                &acpi_wmi_mutex);
-
-One line?
-
-> +                       if (ACPI_FAILURE(status)) {
-> +                               pr_err("Could not get hardware access guard mutex.\n");
->                         } else {
-> -                               pr_err("Can't read ChipID by Asus WMI.\n");
-> +                               pr_info("Using Asus WMI mutex: %s\n", board_info->acpi_mutex_name);
-> +                               access = access_direct;
->                         }
->                 }
-
-...
-
-> +               /* if reading chip id via WMI succeeds, use WMI */
-
-Be consistent with how you spell "ChipID" / "chip id" / etc everywhere
-in the code.
-
-...
-
-> +               if (access == access_asuswmi &&
-> +                   nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
-> +                       access = access_direct;
-> +                       pr_err("Can't read ChipID by Asus WMI.\n");
-> +               }
-> +
-> +               if (access == access_asuswmi) {
-> +                       if (tmp)
-> +                               pr_info("Using Asus WMI to access %#x chip.\n", tmp);
-> +                       else
-> +                               access = access_direct;
-
-Why not:
-
-        if (access == access_asuswmi) {
-               access = access_direct;
-               if (nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp))
-                       pr_err("Can't read ChipID by Asus WMI.\n");
-               if (tmp) {
-                       pr_info("Using Asus WMI to access %#x chip.\n", tmp);
-                      access = access_...; // do you have this?
-               }
-               ...
-        }
-
-?
 
 -- 
 With Best Regards,
