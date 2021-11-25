@@ -2,94 +2,73 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3956C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 13:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A4DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 14:00:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355537AbhKYOB5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Nov 2021 09:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S1344131AbhKYOD4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Nov 2021 09:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350991AbhKYN74 (ORCPT
+        with ESMTP id S1344097AbhKYOB4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Nov 2021 08:59:56 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3386AC0613B6;
-        Thu, 25 Nov 2021 05:52:16 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id y13so25850533edd.13;
-        Thu, 25 Nov 2021 05:52:16 -0800 (PST)
+        Thu, 25 Nov 2021 09:01:56 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E850BC0613FF;
+        Thu, 25 Nov 2021 05:54:41 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id i9so5964409ilu.1;
+        Thu, 25 Nov 2021 05:54:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=w7QOqlg7NXp+XdD6x2IVHW38xoWHxMWCKBKmK9OXTFI=;
-        b=d5NvN0WUd7yKpTq4Nc9aefuuCetqmxEWCWO3TA/E+xJa9uPRGbji+sq4HdO4nzXJ8r
-         orKZ6NV8ofRrvcjSbpaYwTlwNLG3PONhfrYBykUner7H2YtEW5hbBB/Nu/WCgfrHPvAn
-         clh8YWePEhpFaDJmOkLSXbt6L/Aqp7M/8V00nAQGZZwYZv8nweyl7fa5NTvPGHDNfMDa
-         YOjo1z/SOUL9uy5pT6GJz/YaueOFsTB6pqrdyiaJj7dImND7zKM3OyGB7FQCHdXwPcS1
-         L066FjYSANUm/JvfSthNBQqUlOYQlG32XRYVaBAOhRuqPYzXqsRlRxzqqXzgTv5+t84f
-         2qiw==
+         :cc;
+        bh=lfz94yGj2qP/Q0BYpg1q/IaqhYYE248T5+zyBIuCBVw=;
+        b=IAFv+RQRv6T4XOW7hcmZSGAKK7COo3OvKvyJYT7ZxI4OHe8mtzMtMEdMHIy4qLQWfi
+         mU2ypxupjBpZmJGBImC2/WJ8LcvvGLOXw2uFx1cYAK0XOeMYliZELrNc3UA0CE42V+ld
+         FqxdpS1uAYcFW8Swc/EJBkvJNwqIpHJu1dnGUwkFcKFzJxLqHstXXYI6YsFN5b28cgjw
+         e+NdIWh3CoKSbZHPbJQCc1W8IIrK7jZ6jxBve6Qz7djZDrRX6aMnQu0egRoLp/YRdywd
+         KxJvynrFbdoT7gjypJ1ufDb1hJBGAWPVoOAt+VKm4HEfX4E47YRmtAkMa1KiN1uWZ7Tx
+         kzJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=w7QOqlg7NXp+XdD6x2IVHW38xoWHxMWCKBKmK9OXTFI=;
-        b=rwTpOQwC6mshEJv+Z4cXGAIxXKb4mpYvSK3nZfKmnhdpycF6fY9uprwWR5ZyFUJZ6Y
-         z1cA4z0FN7MMTe/94h8RpRRYhxKGoH17yHJ9Uml4kyaPCtvrTivP7OjFLmd0H1naMg9c
-         gTZk2htaGWgQQeAhG8TwshuP6TAuKa5ZMbGwtSpvvWJ42dikcaC2b1iyqC5ARLDh5NXW
-         YHYWgVWIwYYbbfYyGsd8aCfWCnwhH6eTNpIlcrOpNjWh7T/PTOuQ7t5bqEXyuLq92oQk
-         uihORIxoGlsAlnzMzqK1IJ4QS7pvgvUklNLtZreAtTOqu6WJYNi/vgkmMNyNRXvenxQZ
-         /Pkg==
-X-Gm-Message-State: AOAM531CemoO8aHz+z5zw1HjGg0qob8iCUQ1TUMa18AsZashox7ptLaT
-        coV6ZozsPPgDf+sw4HRGfsq3Pj6mEZl3C64svUmFUryJOX0=
-X-Google-Smtp-Source: ABdhPJx+OYIAa1Pd1vqUueC7F/YmpUU08xG9UUcifQ5Zl0yw0xgp6iXNig/6FGNn4cctN2raskJbJZZW2IUa9MgnMPU=
-X-Received: by 2002:a17:906:6a0a:: with SMTP id qw10mr32812491ejc.141.1637848334761;
- Thu, 25 Nov 2021 05:52:14 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=lfz94yGj2qP/Q0BYpg1q/IaqhYYE248T5+zyBIuCBVw=;
+        b=aSx7SuTPf8K52X/H6TrsYp3s4l9WttsfoL6ehrr1dJEp9LhGtOqJR9LOVt4qaejvNZ
+         L1TPe3ftlCiG6GmJL4pFyY8ExGtE36Lwecz1HTVrTS0oAsWFvhe/xIXqrpWp1fnx3cdv
+         LrKjW43llBrCWjvyot4hWvkIrEK7qe4ZYna9VNORo/ZiabHDS7dH9hZ3uZiu8taMpApn
+         hoE222fax1Y2hnR1pCyaR3yFaR+IP3MPcz79Tf5ANmHFrL6tv50IHv1KazmFi2V2Db+N
+         YJjlbAaLHRqsEkeRPR741aIlCfjZiuegOj9p0DGYmaFnVrC+87uT0z7mfH2Y77IhLGut
+         B/pQ==
+X-Gm-Message-State: AOAM532RlGz5/AEZ6jKtNYW09yL7B0lT3VvpVrD2elw/uJGFSSPrn/dS
+        sfk6LKxxPZWqyDugUwXECD/CMBJIcbhiYPUwTa0=
+X-Google-Smtp-Source: ABdhPJyiAwOE9QIjl0HH+LFAswWcFyQYJuQmCatDkCqw36Wse+LTCfVHLw1UpwUBymh+AEUPjaU/o7ZrU5Nw2S6C4y8=
+X-Received: by 2002:a05:6e02:1445:: with SMTP id p5mr919473ilo.164.1637848481350;
+ Thu, 25 Nov 2021 05:54:41 -0800 (PST)
 MIME-Version: 1.0
 References: <20211122212850.321542-1-pauk.denis@gmail.com> <20211122212850.321542-3-pauk.denis@gmail.com>
- <CAHp75Vfg7LKX-21+b6f5c34G4Y=ZUqrWRbfDt_quCiJe+By-Ww@mail.gmail.com> <CAB95QASDiwM+-AwPgGfc7dP=Ctm0s2WP4xrapJzNHJ22B9foAw@mail.gmail.com>
-In-Reply-To: <CAB95QASDiwM+-AwPgGfc7dP=Ctm0s2WP4xrapJzNHJ22B9foAw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 25 Nov 2021 15:51:38 +0200
-Message-ID: <CAHp75VeO2mz7wJpuKdrErnYcw-dUOBs9W4FzA6MkgCQLr0eQUg@mail.gmail.com>
+ <CAHp75Vfg7LKX-21+b6f5c34G4Y=ZUqrWRbfDt_quCiJe+By-Ww@mail.gmail.com>
+ <CAB95QASDiwM+-AwPgGfc7dP=Ctm0s2WP4xrapJzNHJ22B9foAw@mail.gmail.com> <4b00cd7e-4d40-8220-b313-6a5f8381b5af@roeck-us.net>
+In-Reply-To: <4b00cd7e-4d40-8220-b313-6a5f8381b5af@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Thu, 25 Nov 2021 14:54:30 +0100
+Message-ID: <CAB95QAQWYk598hzLuso=psZbFSmgqKK5b5MR83f01zOrPxQLeA@mail.gmail.com>
 Subject: Re: [PATCH 2/3] hwmon: (nct6775) Implement custom lock by ACPI mutex.
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
-        thomas@weissschuh.net, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        thomas@weissschuh.net, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 3:15 PM Eugene Shalygin
-<eugene.shalygin@gmail.com> wrote:
->
-> Dear Andy, Denis, and G=C3=BCnter,
+> Two drivers with the same functionality ? What would be the benefit of that ?
+> Why not drop the current one entirely instead ?
 
-Please, do not top post in the mailing lists!
-
-> Denis worked on my code with the first attempt to read EC sensors from
-> ASUS motherboards and submitted it as a driver named
-> "asus_wmi_ec_sensors", which is not in hwmon-next. Now he adds the
-> ACPI lock feature to support other motherboards, and I have another
-> iteration of the EC sensor driver under development (needs some
-> polishment) that utilizes the same concept (ACPI lock instead of WMI
-> methods), which is smaller, cleaner and faster than the WMI-based one.
-> I'm going to submit it to the mainline too. I think it should replace
-> the WMI one. In anticipation of that, can we change the name of the
-> accepted driver (asus_wmi_ec_sensors -> asus_ec_sensors) now, in order
-> to not confuse users in the next version and to remove implementation
-> detail from the module name? The drivers provide indistinguishable
-> data to HWMON.
-
-I'm not sure I have got the above correctly, do you mean that the just
-submitted asus_wmi_sensors HWMON driver will be replaced by your
-changes? If so, you guys, need a lot to improve communication between
-each other before submitting anything upstream.
-
---=20
-With Best Regards,
-Andy Shevchenko
+Exactly that: I want to replace the WMI one with the new one, which
+relies on ACPI lock and directly talks to the EC, and I want to keep
+the driver name unchanged. Thus asking to rename the WMI driver before
+the 5.16 release.
