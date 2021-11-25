@@ -2,107 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4AD1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 07:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EB69C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 09:48:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbhKYHfT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Nov 2021 02:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbhKYHdT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Nov 2021 02:33:19 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86271C06175B;
-        Wed, 24 Nov 2021 23:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=AoNS7IlrvP3Cw/y+6cNuB0NOoKwsJQac1U9nQY9aARk=; b=GOd7EmQhZ+dxfQMASMAE7rAhQf
-        m3TRHCjskVh6GiYaotc7iOhCoWLSQMKUXt8/toE3JABI0YuPccAyj9lIxF6LZPzlDPGNgrHkjWsKE
-        Hn14gNNSLAqvpiK6weqNaxhC//5EUbns3bDVMF4p2kDdSQdEoLL8Jsi4zSuk7AwBEjfc=;
-Received: from p200300ccff15b4001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff15:b400:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1mq9C0-0003Aj-6K; Thu, 25 Nov 2021 08:29:16 +0100
-Date:   Thu, 25 Nov 2021 08:29:15 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
+        id S1354074AbhKYJwB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Nov 2021 04:52:01 -0500
+Received: from mga09.intel.com ([134.134.136.24]:56536 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354206AbhKYJuA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 25 Nov 2021 04:50:00 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="235303130"
+X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
+   d="scan'208";a="235303130"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 01:44:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
+   d="scan'208";a="554581125"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Nov 2021 01:44:31 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mqBIs-00068v-Dj; Thu, 25 Nov 2021 09:44:30 +0000
+Date:   Thu, 25 Nov 2021 17:43:40 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alistair Francis <alistair23@gmail.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-hwmon@vger.kernel.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v15 3/8] mfd: simple-mfd-i2c: Enable support for the
- silergy,sy7636a
-Message-ID: <20211125082915.534b99fc@aktux>
-In-Reply-To: <39b586c1-aba7-4d82-2c96-9f4ca9db4f11@roeck-us.net>
-References: <20211110122948.188683-1-alistair@alistair23.me>
-        <20211110122948.188683-4-alistair@alistair23.me>
-        <20211116000634.767dcdc0@aktux>
-        <CAKmqyKPFOqWD7t6tC1Act97CVcY+yazrhwMLLr3j_wOyH50GTA@mail.gmail.com>
-        <00d68181-ad3b-17d2-0150-00029d399f0f@roeck-us.net>
-        <20211124203532.30577a50@aktux>
-        <a2fd5089-14a5-e36e-63ce-d73be3cd99a2@roeck-us.net>
-        <20211124235041.2840a770@aktux>
-        <39b586c1-aba7-4d82-2c96-9f4ca9db4f11@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 32556f31d0bc14cf0934f8f2a057688a67afcc0b
+Message-ID: <619f5acc.Yf7iNMWP31I1WBzm%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 32556f31d0bc14cf0934f8f2a057688a67afcc0b  hwmon: (k10temp) Support up to 12 CCDs on AMD Family of processors
 
-On Wed, 24 Nov 2021 14:56:46 -0800
-Guenter Roeck <linux@roeck-us.net> wrote:
+elapsed time: 721m
 
-[...]
-> >>>> Ordering Information
-> >>>> SY7636 =E2=96=A1(=E2=96=A1=E2=96=A1)=E2=96=A1
-> >>>>                | Temperature Code (C)
-> >>>>             | Package Code (RM)
-> >>>>           | Optional Spec Code (A)
-> >>>>
-> >>>> The datasheet otherwise refers to the chip as SY7636A.
-> >>>>    =20
-> >>> so there is no indication of something like this where the A really
-> >>> makes a difference:
-> >>>     =20
-> >>
-> >> I may be missing it, but I see nothing in the datasheet that would ind=
-icate
-> >> that or if the "A" has any relevance other than "Optional Spec Code",
-> >> and I do not see an explanation for that term either. =20
-> >=20
-> > well things seems to match with things I got from analysing the kobo
-> > sources. So at least the thing in the Kobo Libra H2O seems to be that
-> > one described in the datasheet, so we can have one sy7636a driver for
-> > it.
-> >=20
-> > BTW: If I search for a sy7636 on aliexpress I get some SO-8 lithium
-> > charger ICs.
-> >  =20
->=20
-> The datasheet says "PMIC for Electronic Paper Display".
->=20
-Correct. And we have the silergy vendor prefix in the dt compatible, so
-if some other company decides to call its chip sy7636, we can
-distinguish.
+configs tested: 54
+configs skipped: 3
 
-Regards,
-Andreas
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211125
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
