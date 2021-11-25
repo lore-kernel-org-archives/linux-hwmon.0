@@ -2,104 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3A4FC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 19:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACE19C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 20:08:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356654AbhKYT71 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Nov 2021 14:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S244460AbhKYULi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Nov 2021 15:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233721AbhKYT51 (ORCPT
+        with ESMTP id S234768AbhKYUJh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Nov 2021 14:57:27 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8BBC06173E;
-        Thu, 25 Nov 2021 11:54:15 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso2375579ood.13;
-        Thu, 25 Nov 2021 11:54:15 -0800 (PST)
+        Thu, 25 Nov 2021 15:09:37 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED78C06175B;
+        Thu, 25 Nov 2021 12:05:24 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id p23so8858313iod.7;
+        Thu, 25 Nov 2021 12:05:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3PNODSeJUKSzpmtT5055Fa1wEv5yYWyy+5/m09p+AeA=;
-        b=CJbw4Jm+zQe1XFivkZRUmGif9lxaxPHpk++ZyOHrbOq68cgGs3RMcCTBBUUopTP0lL
-         h4Bv060+/KUTm8z6qxP4E4OnYDAFQke/ekjYTXsTDeqm3uOqXGI7Al2ZUjZzO/oNKoLT
-         P8OTwXpUheF7i05BkCiocW/EjaSGUWvT8ES+RuwptqpIJKLSJwUo5udftfMTX+1Fzlpq
-         7nib55zW4TyOk3ZOyBGwTIQQmZFcG3NHCkAfDL6SlpQAWGjLXI5ErqdAFW5IwOgs+JHy
-         WAXW9u9axuhiFZwqFM6IjtC25Vn0flc0H66ugiTAZGNzs623IfHjm50+rTbjHZovjeo6
-         zNuQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tk+wDJ0OIJSyvhiVPqoj4E54xUK6n2Q3zpVGN+CGegs=;
+        b=BKd/b6HTWV41bKS7ciC/+NwIZ1/4K4nhUOFF05GvfEleMDUKUp0HJvC0fsXMj4eY4z
+         kdB0L6rLa2EMarlJcU9K8hC9ODloAx/r+6mN/f0//qS4fUKED23rj6PwTT7rm8vpIR29
+         x0RYemJOjXgGOU5s29uSzQKPa0WIJ/6dVU+tPeqf2rj4NtgnChdJXjOJSIlp6bhxE/tu
+         1UQZyHlixcwrhuOGfCby12FU1ycsHodJr38CGbN9MXeXDU57WrJMQj6Ya0Nv6g6p78lL
+         qNP9kb9uvjl+hkVK4AxXg7jUeD7EpEUV4v0NvceQu2voTy46on4YfpSS1BAaDdGZ/1ia
+         9+Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3PNODSeJUKSzpmtT5055Fa1wEv5yYWyy+5/m09p+AeA=;
-        b=lK59vhA7ovVGlDadHgF4CCDkAaSNaXzVHe7Jr+8zhXbo/MBz6PVHUQRy5xYLGr/j7+
-         2oIDnVduxS6MQ8s4gBHRRMyNKJvVkVPQ8gYIB1NrI/tBMVNy7lrLBuAo6pFEQLPJk8nw
-         dd8IAwDaJe1dUS7hu16a+uJ88Gn85FwlioQf2BtRttlLgvRGBH0u9R934a0hnrzQDzBg
-         zi2oR7hUMT3iykpXb95Olh7Wm4TL5vDswFndDTf2tNzsIT/7yXdUZtyoOIDin7AeL9T9
-         xa/XggdniaphwXB18nYjb4fY3wVHUf7kyLKbf3XZ9qDR+Bj3oeRI3MwOJi1yGwv4/fRy
-         bcOw==
-X-Gm-Message-State: AOAM532qacDd5fLu/F2Udy5dzHY+kjaJZAo74uoPkTzjekKjvkeogh73
-        dU/sBJCt78SJ481Kzrp1SvVGFU82Tdo=
-X-Google-Smtp-Source: ABdhPJx7P+v+iwY3NcbdX5futs8CugPGAXHBFXD0FmRBAeTr/ZRkF8sr+O8Sv2WuGGV3xHCV6hVH4A==
-X-Received: by 2002:a4a:dc1a:: with SMTP id p26mr16327693oov.6.1637870054823;
-        Thu, 25 Nov 2021 11:54:14 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m12sm657896ots.59.2021.11.25.11.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Nov 2021 11:54:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tk+wDJ0OIJSyvhiVPqoj4E54xUK6n2Q3zpVGN+CGegs=;
+        b=bYawYtidrj08zJu0QM0tj/72eC+D1rIcpM+ckphM4w+oBhVQMtxObVD/orPBxvOxLc
+         Bn2H+CBy4TE1OkQThJaOoUEdVp96D4AiUxH3g8Wr/SosoIFnI77Id6hahSHGrezxgGYi
+         Sb6Qd1sAz7RdC5MxkNWym719sWX2tw5IaTvkbhzoLZrd74x8blkTRXAMExxZT2vtDp13
+         cWd2yYQnXdcCuJsCs4ifEvCeqF5mBDuuQYstMrS+2VdOPOciF5RaGuTMerjPGMoEwE17
+         8vgiQFlmb0mu4k2k58O1trQWqouk5mksQttKe6wOxGpJxj4SmFWGmMs6HxMK+zdNqGDE
+         eUKQ==
+X-Gm-Message-State: AOAM532dbur06bPT+Z0Lvbmx8k5b1/g2et/eDtHZmexqjCVli8xXG8+P
+        tSTHrDhcRjzAPHnnae3aPnaKTtx0zkzR4/z7zq8=
+X-Google-Smtp-Source: ABdhPJyyvN2jld5oPPLGEqT0uIXzet5/CMmfRu2rP0BA1sAFw4EAgn07nDoNish5O5T941XUkXMy3i7nlN3bWbJwu+Y=
+X-Received: by 2002:a05:6638:3014:: with SMTP id r20mr10004991jak.146.1637870724006;
+ Thu, 25 Nov 2021 12:05:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20211122212850.321542-1-pauk.denis@gmail.com> <20211122212850.321542-3-pauk.denis@gmail.com>
+ <CAHp75Vfg7LKX-21+b6f5c34G4Y=ZUqrWRbfDt_quCiJe+By-Ww@mail.gmail.com>
+ <CAB95QASDiwM+-AwPgGfc7dP=Ctm0s2WP4xrapJzNHJ22B9foAw@mail.gmail.com>
+ <CAHp75VeO2mz7wJpuKdrErnYcw-dUOBs9W4FzA6MkgCQLr0eQUg@mail.gmail.com>
+ <CAB95QAT_b8Wef+4wN-H8dKZXxgnznqOk5J0fMuL2XJLhob7d9Q@mail.gmail.com> <b7616187-87d8-c87f-8f66-d5936a33395f@roeck-us.net>
+In-Reply-To: <b7616187-87d8-c87f-8f66-d5936a33395f@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Thu, 25 Nov 2021 21:05:12 +0100
+Message-ID: <CAB95QAQ2vpXFxZC0G6ogbpk+rDzGMN7N8-RaUX9w_U5bQ1WGMg@mail.gmail.com>
 Subject: Re: [PATCH 2/3] hwmon: (nct6775) Implement custom lock by ACPI mutex.
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
         thomas@weissschuh.net, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211122212850.321542-1-pauk.denis@gmail.com>
- <20211122212850.321542-3-pauk.denis@gmail.com>
- <CAHp75Vfg7LKX-21+b6f5c34G4Y=ZUqrWRbfDt_quCiJe+By-Ww@mail.gmail.com>
- <CAB95QASDiwM+-AwPgGfc7dP=Ctm0s2WP4xrapJzNHJ22B9foAw@mail.gmail.com>
- <CAHp75VeO2mz7wJpuKdrErnYcw-dUOBs9W4FzA6MkgCQLr0eQUg@mail.gmail.com>
- <CAB95QAT_b8Wef+4wN-H8dKZXxgnznqOk5J0fMuL2XJLhob7d9Q@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b7616187-87d8-c87f-8f66-d5936a33395f@roeck-us.net>
-Date:   Thu, 25 Nov 2021 11:54:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <CAB95QAT_b8Wef+4wN-H8dKZXxgnznqOk5J0fMuL2XJLhob7d9Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/25/21 6:00 AM, Eugene Shalygin wrote:
->> Please, do not top post in the mailing lists!
-> 
-> Well, it was almost a new topic...
-> 
->> I'm not sure I have got the above correctly, do you mean that the just
->> submitted asus_wmi_sensors HWMON driver will be replaced by your
->> changes? If so, you guys, need a lot to improve communication between
->> each other before submitting anything upstream.
-> 
-> Yes, you get it right. Sorry for that, it was a long story and I
-> worked on the subject
-> only occasionally, so that when Denis took the code and submitted it
-> to the mainline
-> I was not sure which approach is better, and so I did not stop him.
-> 
+On Thu, 25 Nov 2021 at 20:54, Guenter Roeck <linux@roeck-us.net> wrote:
+> We won't be heving two drivers with the same functionality. Give me one
+> reason why I should not drop the wmi driver (or both of them; I am not
+> sure which one we are talking about here).
+>
+> On top of all that, this submission isn't about any of the wmi drivers,
+> but for the nct6775 driver, which just adds to the confusion.
 
-We won't be heving two drivers with the same functionality. Give me one
-reason why I should not drop the wmi driver (or both of them; I am not
-sure which one we are talking about here).
+Let me try to explain once again, please. I began to dig into the ASUS
+sensors and how to read their values and at first found the WMI
+function to do that, wrote a driver and Denis submitted it as
+asus_wmi_ec_sensors. Now, I know a better and simpler way to read
+those sensors, which uses ACPI mutex directly. I suggested Denis to
+use the mutex way for the nct6775 driver for motherboards without WMI
+functions to read from the nct chip. With that change entering the nct
+driver, I want to submit my updated driver for EC sensors, replacing
+the asus_wmi_ec_sensors code (which is essentially my old driver).
 
-On top of all that, this submission isn't about any of the wmi drivers,
-but for the nct6775 driver, which just adds to the confusion.
+So, now I ask to rename asus_wmi_sensors to asus_ec_sensors (source
+file and KBuild options) already before 5.16 is released, because the
+updated code, which I will submit later, and which will replace that
+in asus_wmi_ec_sensors.c, does not use WMI.
 
-Guenter
+Hope this clarifies my request and intention.
+
+Best regards,
+Eugene
