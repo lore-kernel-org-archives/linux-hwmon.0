@@ -2,89 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83090C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 20:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCCB6C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Nov 2021 21:11:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350472AbhKYUnn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Nov 2021 15:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        id S233128AbhKYVOh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Nov 2021 16:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357108AbhKYUlm (ORCPT
+        with ESMTP id S233583AbhKYVMg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Nov 2021 15:41:42 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E019C0613B4;
-        Thu, 25 Nov 2021 12:33:44 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id c3so8931721iob.6;
-        Thu, 25 Nov 2021 12:33:44 -0800 (PST)
+        Thu, 25 Nov 2021 16:12:36 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94AEC06175E;
+        Thu, 25 Nov 2021 13:07:35 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id z8so14727080ljz.9;
+        Thu, 25 Nov 2021 13:07:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZGJMV8L0xIfo6824D1QFIO2JOAipCJYM3y5yS0h3fUw=;
-        b=ThAHbxP6zW3y2z5iWgNAj8GUtM2px8RHMpP0eU+3SfdUzBcEm58Mj1AiplBKG0Pwbx
-         jZ+YuBovqHLw7EJbw+8oHvNKEZ2XS7Ok81l2/QqMDXQ69tR+V/+PNJZdET1fmhfCH/SI
-         Uk0LE+2z0m4lU14FQ6YrcjMzQDt4TDtTCLbNGRXh9Ia4EW1qUjJbqwmwk0u0pS58nbAt
-         IwFXmXkUnr23kyWQP0gc+Iyc6pU6aeO/Khs2Bg9f/4DqNKTEw+cn8MGblI437Nq3dpwR
-         TmGuIhg41Nw3MUsWQNNgR0maG1hTN6+x0eS0tpCxBtAUvhZFRkFl9pJ1XDgRKLa0KjPQ
-         0AXg==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fDWVlGc9bkfdx0uGoZEsq0fC8zJhCxYYZIKbBpnGA24=;
+        b=AEN2AeDMq5pd5sT+WTKPV6Ck8A2r0WdZyPZ/BTTvBFM9W3KRgcQS40P9g9m2HPwbWK
+         56oYBQb9QqEbwy//ALKtx869/tFjcbpTTxaGVb9Agc29MUK/CR6YzXiAb55KXfurgkKs
+         uf9Tnkm8gb7qy0ohdwIgRuBf2+g0z1eUnhnHNVWRZq6eW+qpGGPq/ydqWB6lk4eG1NYH
+         VUSwirp1RfInXfko4Eob3zBr61jiY5qkRm09/abMq6hKjx5GxGxhobQvNrkY57mJScp3
+         tnWbdZiW8B4UYJBkpALG8mAEG1+YdmpkpoA/I5U2UkVEMk5qUK+9yK8ZW+P9wgJ0qOTj
+         jNkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZGJMV8L0xIfo6824D1QFIO2JOAipCJYM3y5yS0h3fUw=;
-        b=4EFw+V7+AWZe7/qGEnYlD+1V7e97IOpWIxqVxxMuc1HxBcefEb1oAVwpxF0SPLOhm7
-         QfE2fUKH4XyTMbdBudzVldo7Xo2weg6Rad5k0meQGeFDhViXHEgPJALoqgcegF5kMALC
-         ebV47XlaOIXxia1CmICEK+LEYf9EYN2NUE9eKC1wEOXMbx33sB3FTSw7HL9A657blDdQ
-         NRi4uz0mE9B4wKRCbnf0ejeiQfTrqn3nwMzt6z8et6+wUHHEv8zzvnN6xyuQhu443rwC
-         oR0PG4QBFBlftOvszyOcBdewE1v9aDg8KpjOpBeg+SPvX575VOpIuCGJL4Ps24gg49Wq
-         5sYQ==
-X-Gm-Message-State: AOAM532nY2a9I7QasPc8A/OQJzW1wV90aa34U1vzdAe5aKEvDVFg90t/
-        h09/Xhxaditvuimj4H5NHXKtAWCEyarzRh1Zgy8=
-X-Google-Smtp-Source: ABdhPJz+5TI7RWReAyBkCMHBGn8t1G46iHUI93uTDkMsKVAJtKaaXzt1JO0YtsIAh7Hm9+/r9qG8zeBdycruB4TIwrc=
-X-Received: by 2002:a05:6602:2d04:: with SMTP id c4mr27125834iow.146.1637872423489;
- Thu, 25 Nov 2021 12:33:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20211122212850.321542-1-pauk.denis@gmail.com> <20211122212850.321542-3-pauk.denis@gmail.com>
- <CAHp75Vfg7LKX-21+b6f5c34G4Y=ZUqrWRbfDt_quCiJe+By-Ww@mail.gmail.com>
- <CAB95QASDiwM+-AwPgGfc7dP=Ctm0s2WP4xrapJzNHJ22B9foAw@mail.gmail.com>
- <CAHp75VeO2mz7wJpuKdrErnYcw-dUOBs9W4FzA6MkgCQLr0eQUg@mail.gmail.com>
- <CAB95QAT_b8Wef+4wN-H8dKZXxgnznqOk5J0fMuL2XJLhob7d9Q@mail.gmail.com>
- <b7616187-87d8-c87f-8f66-d5936a33395f@roeck-us.net> <CAB95QAQ2vpXFxZC0G6ogbpk+rDzGMN7N8-RaUX9w_U5bQ1WGMg@mail.gmail.com>
- <CAHp75Vdi8ujoC5LTYqNmiWe1dTxrYRQKS+YtZE921d-6CZTs=A@mail.gmail.com> <20211125222526.405ce775@netbook-debian>
-In-Reply-To: <20211125222526.405ce775@netbook-debian>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 25 Nov 2021 21:33:32 +0100
-Message-ID: <CAB95QAQnU8t4uY17mO9edEd9jktariU_RcZk_1Jdevfr-o0Gnw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] hwmon: (nct6775) Implement custom lock by ACPI mutex.
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fDWVlGc9bkfdx0uGoZEsq0fC8zJhCxYYZIKbBpnGA24=;
+        b=TNnQtqFgUT1yUZ2AzAdrWEPpXQwvq5QKvuHv4JBOpa3BO1V/ETM6wc1KTUBb14NMiW
+         Ft67iQHd2A6KqHFZVFcxSPYit+M1cFRIkOYYIOnUiJGcGKcwQ8r/S7mqPf8W6g/qlTe3
+         oyau0a1wCY9X5B86IUsKt7p3nahptt0PvYjdVGzdxwLzprocuUHXItHUBqn6DF7pHGXY
+         CekTWOxtwPZ8Ml93jPehnD7D/4niSSyG7J0R7YiPMiB7JItwM5XdlcoBZslSrE0Y8GFa
+         QaVXSzaO8kGoVwImt1ql15gSXxE/DGHv9TrNqLRtYa79lpTbSEA95YTFn+BQVI4mrROB
+         q2aA==
+X-Gm-Message-State: AOAM530dhzOkiHnre+znV/hJioXeDWpChbpwbwQbBxHzG/UkUz3J0UiZ
+        sJt15eU+7yi/x94D/HjesM4=
+X-Google-Smtp-Source: ABdhPJyAn1heOEmcVZdI7bU/B89WZITYQzw3nQ9+EMs5qbVA6MfZ6P6S7Q6k+29KOR+5bxgzQrzSdw==
+X-Received: by 2002:a2e:a378:: with SMTP id i24mr28530130ljn.290.1637874454136;
+        Thu, 25 Nov 2021 13:07:34 -0800 (PST)
+Received: from netbook-debian (110-38-179-94.pool.ukrtel.net. [94.179.38.110])
+        by smtp.gmail.com with ESMTPSA id u22sm347968lff.118.2021.11.25.13.07.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Nov 2021 13:07:33 -0800 (PST)
+Date:   Thu, 25 Nov 2021 23:07:30 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
-        thomas@weissschuh.net, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
+        thomas@weissschuh.net, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 1/3] hwmon: (nct6775) Use nct6775_*() lock function
+ pointers in nct6775_data.
+Message-ID: <20211125230730.485ca7b0@netbook-debian>
+In-Reply-To: <CAHp75VfAAyHEnOS7npPOJqpgMgJpaukFcYC+1TH+UhTK5iksMg@mail.gmail.com>
+References: <20211122212850.321542-1-pauk.denis@gmail.com>
+        <20211122212850.321542-2-pauk.denis@gmail.com>
+        <CAHp75VfAAyHEnOS7npPOJqpgMgJpaukFcYC+1TH+UhTK5iksMg@mail.gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 25 Nov 2021 at 21:25, Denis Pauk <pauk.denis@gmail.com> wrote:
+On Wed, 24 Nov 2021 18:03:25 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-> I would like to propose to leave the current name of the driver and add
-> the same logic as in the current patch. So when we know the exact name
-> of acpi mutex - code will use such mutex for lock and directly read EC
-> memory region. In case if we don't know the exact mutex name/path or for
-> some reason ASUS decides to change UEFI code - code will use WMI
-> methods. In such a case, adding or checking a new motherboard will
-> require only adding a minimal list of well known registers without
-> disassembling UEFI code.
->
-> What do you think?
+> On Mon, Nov 22, 2021 at 11:29 PM Denis Pauk <pauk.denis@gmail.com>
+> wrote:
+> 
+> Better subject line (after prefix): Use lock function pointers in
+> nct6775_data (note no period and drop of redundancy)
+> 
+> > Prepare for platform specific callbacks usage:
+> > * Use nct6775 lock function pointers in struct nct6775_data instead
+> >   direct calls.  
+> 
+> ...
+> 
+> > +static int nct6775_lock(struct nct6775_data *data)
+> > +{
+> > +       mutex_lock(&data->update_lock);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static void nct6775_unlock(struct nct6775_data *data, struct
+> > device *dev) +{
+> > +       mutex_unlock(&data->update_lock);
+> > +}  
+> 
+> Have you run `sparse` against this?
+> Install `sparse` in your distribution and make kernel with
+> `make W=1 C=1 CF=-D__CHECK_ENDIAN__ ...`
+> 
+> It might require using special annotations to these functions to make
+> static analysers happy.
+> 
 
-Sounds reasonable to me, but nevertheless I think dropping the "wmi"
-part from the driver name would make the name clearer with the
-proposed functional change.
+Thank you, I will validate my patches before sending with sparse also.
+
+I have tried with sparse==0.6.4:
+---
+$ make CC="ccache gcc" W=1 C=2 CF=-D__CHECK_ENDIAN__ 2>&1 | grep
+nct6775 -n5
+....
+27219-  CHECK   drivers/hwmon/nct6683.c
+27220:  CHECK   drivers/hwmon/nct6775.c
+27221-  CHECK   drivers/hwmon/nct7802.c
+....
+---
+
+It has not showed any warnings. Have I missed some flag? 
+
 
 Best regards,
-Eugene
+             Denis.
