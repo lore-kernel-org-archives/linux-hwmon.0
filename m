@@ -2,62 +2,64 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F087C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B219EC43217
 	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Nov 2021 18:48:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347059AbhK1Sva (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 28 Nov 2021 13:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S1352966AbhK1Svb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 28 Nov 2021 13:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbhK1St1 (ORCPT
+        with ESMTP id S232558AbhK1Sta (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 28 Nov 2021 13:49:27 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA19C061746;
-        Sun, 28 Nov 2021 10:46:10 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id e3so62458997edu.4;
-        Sun, 28 Nov 2021 10:46:10 -0800 (PST)
+        Sun, 28 Nov 2021 13:49:30 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0268C06174A;
+        Sun, 28 Nov 2021 10:46:13 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id z5so62561683edd.3;
+        Sun, 28 Nov 2021 10:46:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1aHLX1viH/WS2n9CHSEXBPwORlSxbTiU2QKC9Iz83+A=;
-        b=ldo+RRt2xa0TkaYt9nsluh77KQr0+Jagv+Lle+tA/35vASAhKmcRbcmdMg8WYhPtJk
-         qaRjTYNVT8VdzpQdTBBTMeVLvcLuAk6l62+/CelJfAadDE3OYQAViCbJ6WIPX9RIjL5H
-         ZDOJQPtrmhGCsz6rQCnTXOnn8rBxgQfB+nETnBXmgxUfO0QC+JAH7AvYAjnwDnBOw1VB
-         +muceCz+yVLXWU5qSuuoiTbr49ZHrkX5Mf+NxgQV8o71pfvKzHdhR6OHR3pE+FEY+O9c
-         dPr0AYKCK8jSX/7zK+7vXsu50FNg5gqkll8Tq4sLhbvNM2EPsKK3NtvTk/6tvmrq6hRG
-         Y48g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wpnEgkip+Kt8m4w9l8JR2NtbEGgQKuW0np00Xo92hpg=;
+        b=hh0Q9boFoXqFrYUuvsMPUYuGWC6x4nSAFx0ol3cUf6OUKmKkYGF1dhzLjtecbV6+D0
+         4qRDANAEf0lfqSlg1cLJEMD+l5+oLFnBqOy/rUGIo4BZZwNmXGHpEzQ1cUqMWn4966H0
+         bEzMaFtx5GnMRTKYqgYt8F4c7iIaoA9owclmY4OCTYJFxhZg01VO7amPl5XbaDdccCdR
+         I3P7d8yLPuvllBlIWLaqRsS2kzlk2ypzqFFaDyuJZo28913LDr34dDsahuL6dsWAeFj7
+         3wJ1AMcKQRLE0Vepvl7sVtFHAqCvjSRP8OfA51ekJ/jSlM4DMB7/Saez1yM8jrHIFG+1
+         s9dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1aHLX1viH/WS2n9CHSEXBPwORlSxbTiU2QKC9Iz83+A=;
-        b=P17OXokvLUlTHw8tmBPKVZWWmy+7yvfE5dcVbtuz/REsBBNYhx+0zeErldaPKVJd4p
-         lDRZye7oz/c+88HKT60u5OclGfwf9jc5o+JCdrwSh7pnZeMMBTbwjVOA+fblOPLLUBBf
-         dg2woFesBbN9xPZRy/+f+R2w/QKtwm9i3CecF6DoX/kfYt9NTa9VfP2qjEypMxr+Hl4q
-         eYbhaNcMccIF8fi5lHYfuTwxRoYHwsePTHAymY7nK8Km8IbyUPsihgBKrPtuUcdayjWG
-         2efSwnav8DzSzcSm7aF6xg88QyMaFQoCetk79lrvyLPb4ikCq5r8Js8YTdN3vlrMqLrB
-         M11w==
-X-Gm-Message-State: AOAM532Va6Kuf28wpecP9w7Sg3TK+zjtRUgz3YuAhLYypW6QNtJWuJsB
-        peTMCjIVQzjbXYDD3d/u8bI=
-X-Google-Smtp-Source: ABdhPJzTyp53JAn92mdY4kUb6yEuYbaKSh7TQrat2sTl5Z4dctCJGJBn7D5jEC4vynTHOF7Cm1tSYQ==
-X-Received: by 2002:a05:6402:1a4f:: with SMTP id bf15mr67289121edb.260.1638125169115;
-        Sun, 28 Nov 2021 10:46:09 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wpnEgkip+Kt8m4w9l8JR2NtbEGgQKuW0np00Xo92hpg=;
+        b=7jpSDOlN4SRSdNwIbZn3qEYNt1t5mG2oZ3cMR4XiR8wlmuTxm1lqmOfXNHHphKd4GS
+         wLcFvSLekRXvpHpqkxnS7MHvWzeiCymEgAB/24dAABGhyxCgvnottzZWq1EN434UvqJC
+         4sSh9eLYXyWPhK3Fd697+Jc6jxRDy3gyqRkVzVfbtnO9KyY9WhbELyBr0Q0XlhirGB8k
+         wjyTLuP99VeSXZ1h9AhYLvuXKgRru58Qw1AflhEwxlJJljaLC2a87HCrK/E4PSQXNKBT
+         YIWx9BUa4tO8Yg1yoNOSNrWpW+pGfSCHlzrldLqKRPYLHnAjOYE438JMFW+IcUqSTEfZ
+         r+JA==
+X-Gm-Message-State: AOAM532Ot2JZQ0EG+gI2JD0H4/CgcbW1Ff1U6Cs+8Y0HrGc8T/vOFcr5
+        IDnW87MMIu/xaRGNfmhVBVs=
+X-Google-Smtp-Source: ABdhPJxOsQ54yX7NIsXdO48HC6ayenrjpqbywAyUyjdQm4LtgjUekdGUYvoZnAk2NDlw7oDodwzrwg==
+X-Received: by 2002:a05:6402:d49:: with SMTP id ec9mr66552057edb.235.1638125172292;
+        Sun, 28 Nov 2021 10:46:12 -0800 (PST)
 Received: from localhost.localdomain ([94.179.32.10])
-        by smtp.gmail.com with ESMTPSA id g1sm6072900eje.105.2021.11.28.10.46.07
+        by smtp.gmail.com with ESMTPSA id g1sm6072900eje.105.2021.11.28.10.46.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 10:46:08 -0800 (PST)
+        Sun, 28 Nov 2021 10:46:12 -0800 (PST)
 From:   Denis Pauk <pauk.denis@gmail.com>
 Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
         pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/3] hwmon: (nct6775) Support lock by ACPI mutex
-Date:   Sun, 28 Nov 2021 20:45:45 +0200
-Message-Id: <20211128184549.9161-1-pauk.denis@gmail.com>
+Subject: [PATCH v2 2/3] hwmon: (nct6775) Implement custom lock by ACPI mutex
+Date:   Sun, 28 Nov 2021 20:45:47 +0200
+Message-Id: <20211128184549.9161-3-pauk.denis@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211128184549.9161-1-pauk.denis@gmail.com>
+References: <20211128184549.9161-1-pauk.denis@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -65,50 +67,152 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Lock by a ACPI mutex that is required for support ASUS MAXIMUS VII HERO 
-motherboard. In other case, all methods are returned zero instead of real 
-values. Code uses acpi mutex before any IO operations in case when such 
-acpi mutex is known.
+Use ACPI lock when the board has a separate lock for monitoring IO.
 
-Patch series adds additional check for chip ID, and if method returned 
-zero, all calls by acpi_wmi are disabled. 
-
-@Andy Shevchenko: 
->> Do you need string_helpers.h after this change?
-It was not required in the original patch, as it was included as part of 
-some other header and I have left includes without changes.
-
-I have a little bit changed conditionals in "add MAXIMUS VII HERO", code 
-can change access variable several times: 
-* By the default, access is set to direct, 
-* after code has checked that wmi methods can return something useful,
-* and as the last step code has checked that mutext is existed and set 
-  access back to direct.
-
-But as for me, it should be less confusing.
-
-What do you think?
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
 
 ---
-
 Changes in v2:
 - Fix commit message.
-- Remove default acpi_board_ANY and use NULL instead.
-- Use chip ID everywhere.
 - Use an anonymous union for mutexes.
 - Use temporary status varibale in acpi calls.
 ---
+ drivers/hwmon/nct6775.c | 59 +++++++++++++++++++++++++++++++++--------
+ 1 file changed, 48 insertions(+), 11 deletions(-)
 
-Denis Pauk (3):
-  hwmon: (nct6775) Use lock function pointers in nct6775_data
-  hwmon: (nct6775) Implement custom lock by ACPI mutex
-  hwmon: (nct6775) add MAXIMUS VII HERO
-
- drivers/hwmon/nct6775.c | 364 +++++++++++++++++++++++++++++-----------
- 1 file changed, 263 insertions(+), 101 deletions(-)
-
-
-base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 049c42ea66bb..206c20a1ae9b 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -140,6 +140,7 @@ struct nct6775_sio_data {
+ 	int ld;
+ 	enum kinds kind;
+ 	enum sensor_access access;
++	acpi_handle acpi_wmi_mutex;
+ 
+ 	/* superio_() callbacks  */
+ 	void (*sio_outb)(struct nct6775_sio_data *sio_data, int reg, int val);
+@@ -155,6 +156,8 @@ struct nct6775_sio_data {
+ #define ASUSWMI_METHODID_RHWM		0x5248574D
+ #define ASUSWMI_METHODID_WHWM		0x5748574D
+ #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
++/* Wait for up to 0.5 s to acquire the lock */
++#define ASUSWMI_LOCK_TIMEOUT_MS		500
+ 
+ static int nct6775_asuswmi_evaluate_method(u32 method_id, u8 bank, u8 reg, u8 val, u32 *retval)
+ {
+@@ -1243,7 +1246,11 @@ struct nct6775_data {
+ 	unsigned int (*fan_from_reg)(u16 reg, unsigned int divreg);
+ 	unsigned int (*fan_from_reg_min)(u16 reg, unsigned int divreg);
+ 
+-	struct mutex update_lock;
++	union {
++		struct mutex update_lock;	/* non ACPI lock */
++		acpi_handle acpi_wmi_mutex;	/* ACPI lock */
++	} mlock;
++
+ 	bool valid;		/* true if following fields are valid */
+ 	unsigned long last_updated;	/* In jiffies */
+ 
+@@ -1563,6 +1570,26 @@ static int nct6775_wmi_write_value(struct nct6775_data *data, u16 reg, u16 value
+ 	return res;
+ }
+ 
++static int nct6775_wmi_lock(struct nct6775_data *data)
++{
++	acpi_status status;
++
++	status = acpi_acquire_mutex(data->mlock.acpi_wmi_mutex, NULL, ASUSWMI_LOCK_TIMEOUT_MS);
++	if (ACPI_FAILURE(status))
++		return -EIO;
++
++	return 0;
++}
++
++static void nct6775_wmi_unlock(struct nct6775_data *data, struct device *dev)
++{
++	acpi_status status;
++
++	status = acpi_release_mutex(data->mlock.acpi_wmi_mutex, NULL);
++	if (ACPI_FAILURE(status))
++		dev_err(dev, "Failed to release mutex.");
++}
++
+ /*
+  * On older chips, only registers 0x50-0x5f are banked.
+  * On more recent chips, all registers are banked.
+@@ -1922,14 +1949,14 @@ static void nct6775_update_pwm_limits(struct device *dev)
+ 
+ static int nct6775_lock(struct nct6775_data *data)
+ {
+-	mutex_lock(&data->update_lock);
++	mutex_lock(&data->mlock.update_lock);
+ 
+ 	return 0;
+ }
+ 
+ static void nct6775_unlock(struct nct6775_data *data, struct device *dev)
+ {
+-	mutex_unlock(&data->update_lock);
++	mutex_unlock(&data->mlock.update_lock);
+ }
+ 
+ static struct nct6775_data *nct6775_update_device(struct device *dev)
+@@ -4061,9 +4088,15 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->write_value = nct6775_wmi_write_value;
+ 	}
+ 
+-	mutex_init(&data->update_lock);
+-	data->lock = nct6775_lock;
+-	data->unlock = nct6775_unlock;
++	if (sio_data->acpi_wmi_mutex) {
++		data->mlock.acpi_wmi_mutex = sio_data->acpi_wmi_mutex;
++		data->lock = nct6775_wmi_lock;
++		data->unlock = nct6775_wmi_unlock;
++	} else {
++		mutex_init(&data->mlock.update_lock);
++		data->lock = nct6775_lock;
++		data->unlock = nct6775_unlock;
++	}
+ 
+ 	data->name = nct6775_device_names[data->kind];
+ 	data->bank = 0xff;		/* Force initial bank selection */
+@@ -5114,6 +5147,7 @@ static int __init sensors_nct6775_init(void)
+ 	int sioaddr[2] = { 0x2e, 0x4e };
+ 	enum sensor_access access = access_direct;
+ 	const char *board_vendor, *board_name;
++	acpi_handle acpi_wmi_mutex = NULL;
+ 	u8 tmp;
+ 
+ 	err = platform_driver_register(&nct6775_driver);
+@@ -5159,6 +5193,7 @@ static int __init sensors_nct6775_init(void)
+ 		found = true;
+ 
+ 		sio_data.access = access;
++		sio_data.acpi_wmi_mutex = acpi_wmi_mutex;
+ 
+ 		if (access == access_asuswmi) {
+ 			sio_data.sio_outb = superio_wmi_outb;
+@@ -5186,11 +5221,13 @@ static int __init sensors_nct6775_init(void)
+ 			res.end = address + IOREGION_OFFSET + IOREGION_LENGTH - 1;
+ 			res.flags = IORESOURCE_IO;
+ 
+-			err = acpi_check_resource_conflict(&res);
+-			if (err) {
+-				platform_device_put(pdev[i]);
+-				pdev[i] = NULL;
+-				continue;
++			if (!acpi_wmi_mutex) {
++				err = acpi_check_resource_conflict(&res);
++				if (err) {
++					platform_device_put(pdev[i]);
++					pdev[i] = NULL;
++					continue;
++				}
+ 			}
+ 
+ 			err = platform_device_add_resources(pdev[i], &res, 1);
 -- 
 2.33.0
 
