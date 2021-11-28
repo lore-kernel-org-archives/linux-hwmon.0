@@ -2,61 +2,62 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F84BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Nov 2021 18:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1D0CC4332F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Nov 2021 18:48:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348892AbhK1Svb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 28 Nov 2021 13:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S1353232AbhK1Svg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 28 Nov 2021 13:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234909AbhK1St3 (ORCPT
+        with ESMTP id S238301AbhK1Stc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 28 Nov 2021 13:49:29 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE87C061748;
-        Sun, 28 Nov 2021 10:46:12 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o20so62110731eds.10;
-        Sun, 28 Nov 2021 10:46:12 -0800 (PST)
+        Sun, 28 Nov 2021 13:49:32 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5DEC061756;
+        Sun, 28 Nov 2021 10:46:15 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id t5so62676007edd.0;
+        Sun, 28 Nov 2021 10:46:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wSSalsLJ8d6B9F8bA3Rq1U2Gq3t7q7ouWYqMxsHBioM=;
-        b=XtLTu7X8JfEktZnl/Co3a7m8AOCyCGoVX9WcgR+zu16sJPSGOlLtETytHNaYRo8FEb
-         o2B8KfkaTxrf9MFqA7xs5BjFtqf6JglF3cjkYrD1J+A/OBAHgfVGfQgsldCmjaR6sYKp
-         Z1522J/KUb91IEN0b4Sl5408Cn4OE5yPKcxNxaV4c9mFECENGaRx97Hd/5Et8Q3q+FxR
-         MyW17BMe+Elq7afQz7QRJkmaDI3lyYw7QJCbHP8x8bMMFvINYXj6gZEy4QY9eRNWKr/t
-         0v42YjJKX+bO08BxSElzoa0hH60z08b8praRC8yrbmWtPPWigNXTwGp5dWOUCRbDf9uZ
-         sKgw==
+        bh=7zper/oRWwE3imxn/cLlSmDdkvNOi7B9bVzq3y2Trn0=;
+        b=hx28hZoGiVOwxCKi9x1RfD68kvtKvyGKt3ZxkcRBPPXtrlBfaPTL903plk+oWL4FZj
+         gD49PdWTR4QG8EzAfLVSexh8hpyYKIAownDf/YHeMAPaxkNwMf4awAWVP6Thah4a1ryt
+         Vy9BNVq5orlRf/lajAQiFi/7loksmTNvag61nWhCKQGwLperEYF1P/HI1QtqeDvtK1+m
+         Xm8DSvKrBhJ02pRiwLngpTrC7+UnjWlTpEVD03se+QjfF/pgnv3ivVFczMZomD2zU6Mx
+         SzuGbbEtd13eOkLLCdhVqtNUFYiDG3BPNu+DBy2CPUk6k1ce/2Krsh1AgOrtwVahzHcz
+         muZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wSSalsLJ8d6B9F8bA3Rq1U2Gq3t7q7ouWYqMxsHBioM=;
-        b=iufYwnH+5+TO5w1kgFeTS5o52n2jaBfUwNyTIUQpdumZUmzUNkgv5ma1FR5ief7uWz
-         HcvQRjWrtKkzkvJnRFTwYeopbXzktILrr+e7RIq/daY0FRrIJVQrsLJMuuguBlEC0oDl
-         n2/8FzOztbKrkfpRGus4atO5naL/1hBCK61qrHhgsAg5R2C1udQ2IMFco1y0QdrtNRsA
-         S/wxFHHcaHK8eyQktaHoNo4Om/3V+EMr/uc/pHjI7Y+xbxB5DWNszRFps62JV7YbUtBl
-         3vwBXWClOXXlfLnknDNdjzmL3Y1uFOKiX2LXBg+lGMz7ON/8TOq09UumIJNBtLkLjP7D
-         mJsA==
-X-Gm-Message-State: AOAM5305ZhqKKajvSwKvENV8pJv5swm5qA9uo7NjZXbk9X1jAIthgO+7
-        42e0CurODx1reh9HQkvZKeg=
-X-Google-Smtp-Source: ABdhPJyTDwXVoZeySSww3kxEV3UOqhi81KT8JyL64SDhWIusuuwv7i23n0dUdpI8v6k8AGS7Z9DXqQ==
-X-Received: by 2002:a17:907:7b98:: with SMTP id ne24mr58233583ejc.14.1638125170849;
-        Sun, 28 Nov 2021 10:46:10 -0800 (PST)
+        bh=7zper/oRWwE3imxn/cLlSmDdkvNOi7B9bVzq3y2Trn0=;
+        b=4wkEc0ON4f8WRPZmr//9J7N1kZ+5yk7g2OFlVVDSQ8HAyKgGdyGs0z0j55WC5YkRdd
+         FIhV7YnpSesISxmFXPVfAaYxWOtbcXc5Y33r0V/WRNjgW70SVNutbJiQ4IhuMAXT8psU
+         NgWLg6JdZ20kAPCp18J2czZvRgQ3TY4qX0jV8p1hiBO50Ble/bw/7RfVZ/b1QAmKRFh7
+         ubBJYD8lFYlDOsZm08b1xvGnQUlx7fKkJC54/2yKtJ8VHWY2hX1ZfRSBpVrJnXv77f2k
+         Ld7VhzQ8S67rX9DmabvfNYrl/LrA86pPS03XMvrH5rQ1vVyzB6g3Vl1vzedOYcAT4QyL
+         /HJg==
+X-Gm-Message-State: AOAM5323l4RkTJAwuev2jQgTKJ/LllkGx9Q67+/IIfUyKWifBel6u1xq
+        N6Gh8xBPnOSGEtFgr8Ie/MQ=
+X-Google-Smtp-Source: ABdhPJwZgncrx6pWXJ1ilrZrryFxIRYG7hKEgMB2maYBQjExZcNqjKRO/TExpO+QJ4rF/Wb8lKQgdg==
+X-Received: by 2002:a05:6402:4413:: with SMTP id y19mr66464941eda.26.1638125173913;
+        Sun, 28 Nov 2021 10:46:13 -0800 (PST)
 Received: from localhost.localdomain ([94.179.32.10])
-        by smtp.gmail.com with ESMTPSA id g1sm6072900eje.105.2021.11.28.10.46.09
+        by smtp.gmail.com with ESMTPSA id g1sm6072900eje.105.2021.11.28.10.46.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 10:46:10 -0800 (PST)
+        Sun, 28 Nov 2021 10:46:13 -0800 (PST)
 From:   Denis Pauk <pauk.denis@gmail.com>
 Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
         pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
+        Olli Asikainen <olli.asikainen@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] hwmon: (nct6775) Use lock function pointers in nct6775_data
-Date:   Sun, 28 Nov 2021 20:45:46 +0200
-Message-Id: <20211128184549.9161-2-pauk.denis@gmail.com>
+Subject: [PATCH v2 3/3] hwmon: (nct6775) add MAXIMUS VII HERO
+Date:   Sun, 28 Nov 2021 20:45:48 +0200
+Message-Id: <20211128184549.9161-4-pauk.denis@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211128184549.9161-1-pauk.denis@gmail.com>
 References: <20211128184549.9161-1-pauk.denis@gmail.com>
@@ -67,544 +68,172 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Prepare for platform specific callbacks usage:
-* Use nct6775 lock function pointers in struct nct6775_data instead
-  direct calls.
+ASUS MAXIMUS VII HERO board has got a nct6775 chip, but by default
+there's no use of it because of resource conflict with WMI method.
+
+This commit adds MAXIMUS VII HERO to the list of boards and provides
+ACPI mutex name that can be used as shared lock with ASUS WMI.
+
+Logic checks that mutex is available. If mutex is not available
+tries to get a chip ID by ACPI WMI interface.
 
 BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
 Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Tested-by: Olli Asikainen <olli.asikainen@gmail.com>
 
 ---
 Changes in v2:
 - Fix commit message.
+- Remove default acpi_board_ANY and use NULL instead.
+- Use chip ID everywhere.
 ---
- drivers/hwmon/nct6775.c | 195 +++++++++++++++++++++++++++++-----------
- 1 file changed, 143 insertions(+), 52 deletions(-)
+ drivers/hwmon/nct6775.c | 118 ++++++++++++++++++++++++++--------------
+ 1 file changed, 76 insertions(+), 42 deletions(-)
 
 diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 93dca471972e..049c42ea66bb 100644
+index 206c20a1ae9b..ea99f68b9146 100644
 --- a/drivers/hwmon/nct6775.c
 +++ b/drivers/hwmon/nct6775.c
-@@ -1326,6 +1326,8 @@ struct nct6775_data {
- 	/* nct6775_*() callbacks  */
- 	u16 (*read_value)(struct nct6775_data *data, u16 reg);
- 	int (*write_value)(struct nct6775_data *data, u16 reg, u16 value);
-+	int (*lock)(struct nct6775_data *data);
-+	void (*unlock)(struct nct6775_data *data, struct device *dev);
+@@ -5109,34 +5109,59 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
+  */
+ static struct platform_device *pdev[2];
+ 
+-static const char * const asus_wmi_boards[] = {
+-	"ProArt X570-CREATOR WIFI",
+-	"Pro WS X570-ACE",
+-	"PRIME B360-PLUS",
+-	"PRIME B460-PLUS",
+-	"PRIME X570-PRO",
+-	"ROG CROSSHAIR VIII DARK HERO",
+-	"ROG CROSSHAIR VIII FORMULA",
+-	"ROG CROSSHAIR VIII HERO",
+-	"ROG CROSSHAIR VIII IMPACT",
+-	"ROG STRIX B550-E GAMING",
+-	"ROG STRIX B550-F GAMING",
+-	"ROG STRIX B550-F GAMING (WI-FI)",
+-	"ROG STRIX B550-I GAMING",
+-	"ROG STRIX X570-F GAMING",
+-	"ROG STRIX Z390-E GAMING",
+-	"ROG STRIX Z490-I GAMING",
+-	"TUF GAMING B550M-PLUS",
+-	"TUF GAMING B550M-PLUS (WI-FI)",
+-	"TUF GAMING B550-PLUS",
+-	"TUF GAMING B550-PRO",
+-	"TUF GAMING X570-PLUS",
+-	"TUF GAMING X570-PLUS (WI-FI)",
+-	"TUF GAMING X570-PRO (WI-FI)",
+-	"TUF GAMING Z490-PLUS",
+-	"TUF GAMING Z490-PLUS (WI-FI)",
++struct acpi_board_info {
++	char *acpi_mutex_path;
  };
  
- struct sensor_device_template {
-@@ -1918,12 +1920,26 @@ static void nct6775_update_pwm_limits(struct device *dev)
- 	}
- }
- 
-+static int nct6775_lock(struct nct6775_data *data)
-+{
-+	mutex_lock(&data->update_lock);
-+
-+	return 0;
++#define DMI_ASUS_BOARD_INFO(name, mutex_path)			\
++static struct acpi_board_info name = {				\
++	.acpi_mutex_path = mutex_path,				\
 +}
 +
-+static void nct6775_unlock(struct nct6775_data *data, struct device *dev)
-+{
-+	mutex_unlock(&data->update_lock);
++DMI_ASUS_BOARD_INFO(acpi_board_MAXIMUS_VII_HERO, "\\_SB_.PCI0.LPCB.SIO1.MUT0");
++DMI_ASUS_BOARD_INFO(acpi_board_ROG_STRIX_B550_E_GAMING, "\\_SB.PCI0.SBRG.SIO1.MUT0");
++
++#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name, info) {			\
++	.matches = {								\
++		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),	\
++		DMI_EXACT_MATCH(DMI_BOARD_NAME, name),				\
++	},									\
++	.driver_data = info,							\
 +}
 +
- static struct nct6775_data *nct6775_update_device(struct device *dev)
++static const struct dmi_system_id asus_wmi_info_table[] = {
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("MAXIMUS VII HERO", &acpi_board_MAXIMUS_VII_HERO),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B360-PLUS", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B460-PLUS", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B550M-A (WI-FI)", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X570-PRO", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII DARK HERO", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII FORMULA", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII IMPACT", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING",
++					&acpi_board_ROG_STRIX_B550_E_GAMING),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-F GAMING", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-F GAMING (WI-FI)", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-F GAMING", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-E GAMING", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-I GAMING", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550-PLUS", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550-PRO", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550M-PLUS", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550M-PLUS (WI-FI)", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PLUS", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PLUS (WI-FI)", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PRO (WI-FI)", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING Z490-PLUS", NULL),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING Z490-PLUS (WI-FI)", NULL),
++	{}
++};
++MODULE_DEVICE_TABLE(dmi, asus_wmi_info_table);
++
+ static int __init sensors_nct6775_init(void)
  {
- 	struct nct6775_data *data = dev_get_drvdata(dev);
--	int i, j;
-+	int i, j, err;
+ 	int i, err;
+@@ -5146,28 +5171,37 @@ static int __init sensors_nct6775_init(void)
+ 	struct nct6775_sio_data sio_data;
+ 	int sioaddr[2] = { 0x2e, 0x4e };
+ 	enum sensor_access access = access_direct;
+-	const char *board_vendor, *board_name;
++	const struct dmi_system_id *dmi_id;
++	struct acpi_board_info *board_info;
+ 	acpi_handle acpi_wmi_mutex = NULL;
+-	u8 tmp;
++	acpi_status status;
++	u8 tmp = 0;
  
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return data;
- 
- 	if (time_after(jiffies, data->last_updated + HZ + HZ / 2)
- 	    || !data->valid) {
-@@ -2011,7 +2027,7 @@ static struct nct6775_data *nct6775_update_device(struct device *dev)
- 		data->valid = true;
- 	}
- 
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return data;
- }
- 
-@@ -2043,11 +2059,15 @@ store_in_reg(struct device *dev, struct device_attribute *attr, const char *buf,
- 	err = kstrtoul(buf, 10, &val);
- 	if (err < 0)
- 		return err;
--	mutex_lock(&data->update_lock);
-+
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->in[nr][index] = in_to_reg(val, nr);
- 	data->write_value(data, data->REG_IN_MINMAX[index - 1][nr],
- 			  data->in[nr][index]);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -2127,14 +2147,17 @@ store_beep(struct device *dev, struct device_attribute *attr, const char *buf,
- 	if (val > 1)
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	if (val)
- 		data->beeps |= (1ULL << nr);
- 	else
- 		data->beeps &= ~(1ULL << nr);
- 	data->write_value(data, data->REG_BEEP[regindex],
- 			  (data->beeps >> (regindex << 3)) & 0xff);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -2183,14 +2206,17 @@ store_temp_beep(struct device *dev, struct device_attribute *attr,
- 	bit = data->BEEP_BITS[nr + TEMP_ALARM_BASE];
- 	regindex = bit >> 3;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	if (val)
- 		data->beeps |= (1ULL << bit);
- 	else
- 		data->beeps &= ~(1ULL << bit);
- 	data->write_value(data, data->REG_BEEP[regindex],
- 			  (data->beeps >> (regindex << 3)) & 0xff);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return count;
- }
-@@ -2284,7 +2310,10 @@ store_fan_min(struct device *dev, struct device_attribute *attr,
- 	if (err < 0)
+ 	err = platform_driver_register(&nct6775_driver);
+ 	if (err)
  		return err;
  
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
+-	board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
+-	board_name = dmi_get_system_info(DMI_BOARD_NAME);
+-
+-	if (board_name && board_vendor &&
+-	    !strcmp(board_vendor, "ASUSTeK COMPUTER INC.")) {
+-		err = match_string(asus_wmi_boards, ARRAY_SIZE(asus_wmi_boards),
+-				   board_name);
+-		if (err >= 0) {
+-			/* if reading chip id via WMI succeeds, use WMI */
+-			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
+-				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
+-				access = access_asuswmi;
+-			} else {
+-				pr_err("Can't read ChipID by Asus WMI.\n");
++	dmi_id = dmi_first_match(asus_wmi_info_table);
++	if (dmi_id) {
++		/* if reading chip ID via WMI succeeds, use WMI */
++		if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) &&
++		    tmp) {
++			pr_info("Using Asus WMI to access %#x chip.\n", tmp);
++			access = access_asuswmi;
++		} else {
++			pr_err("Can't read chip ID by Asus WMI.\n");
++		}
 +
- 	if (!data->has_fan_div) {
- 		/* NCT6776F or NCT6779D; we know this is a 13 bit register */
- 		if (!val) {
-@@ -2357,7 +2386,7 @@ store_fan_min(struct device *dev, struct device_attribute *attr,
- 
- write_min:
- 	data->write_value(data, data->REG_FAN_MIN[nr], data->fan_min[nr]);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return count;
- }
-@@ -2390,13 +2419,16 @@ store_fan_pulses(struct device *dev, struct device_attribute *attr,
- 	if (val > 4)
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->fan_pulses[nr] = val & 3;
- 	reg = data->read_value(data, data->REG_FAN_PULSES[nr]);
- 	reg &= ~(0x03 << data->FAN_PULSE_SHIFT[nr]);
- 	reg |= (val & 3) << data->FAN_PULSE_SHIFT[nr];
- 	data->write_value(data, data->REG_FAN_PULSES[nr], reg);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return count;
- }
-@@ -2494,11 +2526,14 @@ store_temp(struct device *dev, struct device_attribute *attr, const char *buf,
- 	if (err < 0)
- 		return err;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->temp[index][nr] = LM75_TEMP_TO_REG(val);
- 	nct6775_write_temp(data, data->reg_temp[index][nr],
- 			   data->temp[index][nr]);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -2527,10 +2562,13 @@ store_temp_offset(struct device *dev, struct device_attribute *attr,
- 
- 	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->temp_offset[nr] = val;
- 	data->write_value(data, data->REG_TEMP_OFFSET[nr], val);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return count;
- }
-@@ -2563,7 +2601,9 @@ store_temp_type(struct device *dev, struct device_attribute *attr,
- 	if (val != 1 && val != 3 && val != 4)
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
- 
- 	data->temp_type[nr] = val;
- 	vbit = 0x02 << nr;
-@@ -2584,7 +2624,7 @@ store_temp_type(struct device *dev, struct device_attribute *attr,
- 	data->write_value(data, data->REG_VBAT, vbat);
- 	data->write_value(data, data->REG_DIODE, diode);
- 
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -2704,14 +2744,17 @@ store_pwm_mode(struct device *dev, struct device_attribute *attr,
- 		return count;
- 	}
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->pwm_mode[nr] = val;
- 	reg = data->read_value(data, data->REG_PWM_MODE[nr]);
- 	reg &= ~data->PWM_MODE_MASK[nr];
- 	if (!val)
- 		reg |= data->PWM_MODE_MASK[nr];
- 	data->write_value(data, data->REG_PWM_MODE[nr], reg);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -2756,7 +2799,10 @@ store_pwm(struct device *dev, struct device_attribute *attr, const char *buf,
- 		return err;
- 	val = clamp_val(val, minval[index], maxval[index]);
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->pwm[index][nr] = val;
- 	data->write_value(data, data->REG_PWM[index][nr], val);
- 	if (index == 2)	{ /* floor: disable if val == 0 */
-@@ -2766,7 +2812,7 @@ store_pwm(struct device *dev, struct device_attribute *attr, const char *buf,
- 			reg |= 0x80;
- 		data->write_value(data, data->REG_TEMP_SEL[nr], reg);
- 	}
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -2866,7 +2912,10 @@ store_pwm_enable(struct device *dev, struct device_attribute *attr,
- 		return -EINVAL;
- 	}
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->pwm_enable[nr] = val;
- 	if (val == off) {
- 		/*
-@@ -2880,7 +2929,7 @@ store_pwm_enable(struct device *dev, struct device_attribute *attr,
- 	reg &= 0x0f;
- 	reg |= pwm_enable_to_reg(val) << 4;
- 	data->write_value(data, data->REG_FAN_MODE[nr], reg);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -2929,14 +2978,17 @@ store_pwm_temp_sel(struct device *dev, struct device_attribute *attr,
- 	if (!(data->have_temp & BIT(val - 1)) || !data->temp_src[val - 1])
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	src = data->temp_src[val - 1];
- 	data->pwm_temp_sel[nr] = src;
- 	reg = data->read_value(data, data->REG_TEMP_SEL[nr]);
- 	reg &= 0xe0;
- 	reg |= src;
- 	data->write_value(data, data->REG_TEMP_SEL[nr], reg);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return count;
- }
-@@ -2973,7 +3025,10 @@ store_pwm_weight_temp_sel(struct device *dev, struct device_attribute *attr,
- 		    !data->temp_src[val - 1]))
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	if (val) {
- 		src = data->temp_src[val - 1];
- 		data->pwm_weight_temp_sel[nr] = src;
-@@ -2987,7 +3042,7 @@ store_pwm_weight_temp_sel(struct device *dev, struct device_attribute *attr,
- 		reg &= 0x7f;
- 		data->write_value(data, data->REG_WEIGHT_TEMP_SEL[nr], reg);
- 	}
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return count;
- }
-@@ -3018,10 +3073,13 @@ store_target_temp(struct device *dev, struct device_attribute *attr,
- 	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0,
- 			data->target_temp_mask);
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->target_temp[nr] = val;
- 	pwm_update_registers(data, nr);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3055,10 +3113,13 @@ store_target_speed(struct device *dev, struct device_attribute *attr,
- 	val = clamp_val(val, 0, 1350000U);
- 	speed = fan_to_reg(val, data->fan_div[nr]);
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->target_speed[nr] = speed;
- 	pwm_update_registers(data, nr);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3092,7 +3153,10 @@ store_temp_tolerance(struct device *dev, struct device_attribute *attr,
- 	/* Limit tolerance as needed */
- 	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, data->tolerance_mask);
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->temp_tolerance[index][nr] = val;
- 	if (index)
- 		pwm_update_registers(data, nr);
-@@ -3100,7 +3164,7 @@ store_temp_tolerance(struct device *dev, struct device_attribute *attr,
- 		data->write_value(data,
- 				  data->REG_CRITICAL_TEMP_TOLERANCE[nr],
- 				  val);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3169,10 +3233,13 @@ store_speed_tolerance(struct device *dev, struct device_attribute *attr,
- 	/* Limit tolerance as needed */
- 	val = clamp_val(val, 0, data->speed_tolerance_limit);
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->target_speed_tolerance[nr] = val;
- 	pwm_update_registers(data, nr);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3220,10 +3287,13 @@ store_weight_temp(struct device *dev, struct device_attribute *attr,
- 
- 	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 255);
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->weight_temp[index][nr] = val;
- 	data->write_value(data, data->REG_WEIGHT_TEMP[index][nr], val);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3269,10 +3339,13 @@ store_fan_time(struct device *dev, struct device_attribute *attr,
- 		return err;
- 
- 	val = step_time_to_reg(val, data->pwm_mode[nr]);
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->fan_time[index][nr] = val;
- 	data->write_value(data, data->REG_FAN_TIME[index][nr], val);
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3310,7 +3383,10 @@ store_auto_pwm(struct device *dev, struct device_attribute *attr,
- 			val = 0xff;
- 	}
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->auto_pwm[nr][point] = val;
- 	if (point < data->auto_pwm_num) {
- 		data->write_value(data,
-@@ -3355,7 +3431,7 @@ store_auto_pwm(struct device *dev, struct device_attribute *attr,
- 			break;
++		if (dmi_id->driver_data) {
++			board_info = dmi_id->driver_data;
++			if (board_info->acpi_mutex_path) {
++				status = acpi_get_handle(NULL, board_info->acpi_mutex_path,
++							 &acpi_wmi_mutex);
++				if (!ACPI_FAILURE(status)) {
++					pr_info("Using Asus WMI mutex: %s\n",
++						board_info->acpi_mutex_path);
++					access = access_direct;
++				}
+ 			}
  		}
  	}
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3391,7 +3467,10 @@ store_auto_temp(struct device *dev, struct device_attribute *attr,
- 	if (val > 255000)
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->auto_temp[nr][point] = DIV_ROUND_CLOSEST(val, 1000);
- 	if (point < data->auto_pwm_num) {
- 		data->write_value(data,
-@@ -3401,7 +3480,7 @@ store_auto_temp(struct device *dev, struct device_attribute *attr,
- 		data->write_value(data, data->REG_CRITICAL_TEMP[nr],
- 				    data->auto_temp[nr][point]);
- 	}
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3570,7 +3649,9 @@ clear_caseopen(struct device *dev, struct device_attribute *attr,
- 	if (kstrtoul(buf, 10, &val) || val != 0)
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	ret = data->lock(data);
-+	if (ret)
-+		return ret;
- 
- 	/*
- 	 * Use CR registers to clear caseopen status.
-@@ -3593,7 +3674,7 @@ clear_caseopen(struct device *dev, struct device_attribute *attr,
- 
- 	data->valid = false;	/* Force cache refresh */
- error:
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 	return count;
- }
- 
-@@ -3981,6 +4062,9 @@ static int nct6775_probe(struct platform_device *pdev)
- 	}
- 
- 	mutex_init(&data->update_lock);
-+	data->lock = nct6775_lock;
-+	data->unlock = nct6775_unlock;
-+
- 	data->name = nct6775_device_names[data->kind];
- 	data->bank = 0xff;		/* Force initial bank selection */
- 	platform_set_drvdata(pdev, data);
-@@ -4790,14 +4874,18 @@ static void nct6791_enable_io_mapping(struct nct6775_sio_data *sio_data)
- static int __maybe_unused nct6775_suspend(struct device *dev)
- {
- 	struct nct6775_data *data = nct6775_update_device(dev);
-+	int err;
-+
-+	err = data->lock(data);
-+	if (err)
-+		return err;
- 
--	mutex_lock(&data->update_lock);
- 	data->vbat = data->read_value(data, data->REG_VBAT);
- 	if (data->kind == nct6775) {
- 		data->fandiv1 = data->read_value(data, NCT6775_REG_FANDIV1);
- 		data->fandiv2 = data->read_value(data, NCT6775_REG_FANDIV2);
- 	}
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return 0;
- }
-@@ -4806,10 +4894,13 @@ static int __maybe_unused nct6775_resume(struct device *dev)
- {
- 	struct nct6775_data *data = dev_get_drvdata(dev);
- 	struct nct6775_sio_data *sio_data = dev_get_platdata(dev);
--	int i, j, err = 0;
-+	int i, j, err;
- 	u8 reg;
- 
--	mutex_lock(&data->update_lock);
-+	err = data->lock(data);
-+	if (err)
-+		return err;
-+
- 	data->bank = 0xff;		/* Force initial bank selection */
- 
- 	err = sio_data->sio_enter(sio_data);
-@@ -4868,7 +4959,7 @@ static int __maybe_unused nct6775_resume(struct device *dev)
- abort:
- 	/* Force re-reading all values */
- 	data->valid = false;
--	mutex_unlock(&data->update_lock);
-+	data->unlock(data, dev);
- 
- 	return err;
- }
 -- 
 2.33.0
 
