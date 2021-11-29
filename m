@@ -2,162 +2,269 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 185F2C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 06:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 768AFC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 07:08:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbhK2Gve (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Nov 2021 01:51:34 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:21213 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348931AbhK2Gtd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Nov 2021 01:49:33 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AT6HcpA024517;
-        Mon, 29 Nov 2021 14:17:38 +0800 (GMT-8)
-        (envelope-from billy_tsai@aspeedtech.com)
-Received: from BillyTsai-pc.aspeed.com (192.168.2.149) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 29 Nov
- 2021 14:42:05 +0800
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <joel@jms.id.au>, <andrew@aj.id.au>, <lee.jones@linaro.org>,
-        <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
-        <p.zabel@pengutronix.de>, <billy_tsai@aspeedtech.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>
-CC:     <BMC-SW@aspeedtech.com>
-Subject: [v13 0/2] Support pwm driver for aspeed ast26xx
-Date:   Mon, 29 Nov 2021 14:43:27 +0800
-Message-ID: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        id S232502AbhK2HLR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Nov 2021 02:11:17 -0500
+Received: from mga18.intel.com ([134.134.136.126]:39268 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238705AbhK2HJQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Nov 2021 02:09:16 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="222793134"
+X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
+   d="scan'208";a="222793134"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 23:05:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
+   d="scan'208";a="608592352"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 28 Nov 2021 23:05:57 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mrajd-000BeZ-2n; Mon, 29 Nov 2021 07:05:57 +0000
+Date:   Mon, 29 Nov 2021 15:05:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ 293903b9dfe43520f01374dc1661be11d6838c49
+Message-ID: <61a47bb8.RrlRIeAHUajPbERe%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.149]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AT6HcpA024517
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The legacy driver of aspeed pwm is binding with tach controller and it
-doesn't follow the pwm framworks usage. In addition, the pwm register
-usage of the 6th generation of ast26xx has drastic change. So these
-patch serials add the new aspeed pwm driver to fix up the problem above.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 293903b9dfe43520f01374dc1661be11d6838c49  watchdog: Add Realtek Otto watchdog timer
 
-Change since v12:
-- pwm-aspeed-ast2600.c
-  - Fix the comment about the duty cycle and period of the PWM.
-  - Configured to max period when request period > max period.
-  - Remove unnecessary curly braces.
+elapsed time: 726m
 
-Change since v11:
-- pwm-aspeed-ast2600.c
-  - Request reset controller before clock enable.
+configs tested: 209
+configs skipped: 3
 
-Change since v10:
-- pwm-aspeed-ast2600.c
-  - Add more comment to explain the feature of PWM
-  - Fix the naming of some parameters.
-  - Set pin_enable and clk_enable at the same time.
-  - Always set fixed divisor to hw register when apply.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Change since v9:
-- dt-bindings:
-  - Change the naming of tach subnode channel setting property to
-  aspeed,tach-ch.
-- pwm-aspeed-ast2600.c
-  - Fix the naming of some parameters.
-  - Capitalise error messages.
-  - Handling potentially mult overflow when .apply
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211128
+nios2                            alldefconfig
+arm                        shmobile_defconfig
+mips                      fuloong2e_defconfig
+arc                            hsdk_defconfig
+powerpc                   bluestone_defconfig
+sh                          rsk7269_defconfig
+sh                          sdk7780_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                        warp_defconfig
+arm                         axm55xx_defconfig
+sh                             espt_defconfig
+sh                        apsh4ad0a_defconfig
+sh                 kfr2r09-romimage_defconfig
+arm                             mxs_defconfig
+arm                         mv78xx0_defconfig
+mips                          ath79_defconfig
+arm                              alldefconfig
+powerpc                     pq2fads_defconfig
+sh                   sh7724_generic_defconfig
+ia64                                defconfig
+arm                           omap1_defconfig
+riscv                          rv32_defconfig
+arm                        mini2440_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                        spear3xx_defconfig
+arc                          axs103_defconfig
+sh                           se7619_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                        icon_defconfig
+sh                          landisk_defconfig
+m68k                       m5249evb_defconfig
+arm                           sama7_defconfig
+arm                            dove_defconfig
+m68k                                defconfig
+h8300                       h8s-sim_defconfig
+sh                         ap325rxa_defconfig
+powerpc                 xes_mpc85xx_defconfig
+mips                  decstation_64_defconfig
+powerpc                     skiroot_defconfig
+powerpc                     kmeter1_defconfig
+sparc                               defconfig
+mips                          rm200_defconfig
+arm                        magician_defconfig
+arm                          exynos_defconfig
+ia64                            zx1_defconfig
+powerpc                    ge_imp3a_defconfig
+mips                      malta_kvm_defconfig
+mips                            ar7_defconfig
+mips                        omega2p_defconfig
+mips                       lemote2f_defconfig
+powerpc                  iss476-smp_defconfig
+arc                        vdk_hs38_defconfig
+arm                            lart_defconfig
+mips                         mpc30x_defconfig
+mips                             allyesconfig
+powerpc                         ps3_defconfig
+powerpc                      ep88xc_defconfig
+powerpc                 linkstation_defconfig
+mips                           mtx1_defconfig
+arm                          pxa168_defconfig
+m68k                             alldefconfig
+mips                        maltaup_defconfig
+arm                            xcep_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                         s3c6400_defconfig
+sh                          r7785rp_defconfig
+powerpc                         wii_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                       imx_v4_v5_defconfig
+sh                                  defconfig
+powerpc                      ppc40x_defconfig
+arm                      jornada720_defconfig
+sh                           se7722_defconfig
+arc                                 defconfig
+parisc                           allyesconfig
+powerpc                     redwood_defconfig
+powerpc                    socrates_defconfig
+arm                     am200epdkit_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                     tqm8541_defconfig
+i386                             alldefconfig
+sh                           se7712_defconfig
+mips                    maltaup_xpa_defconfig
+mips                           ip32_defconfig
+s390                          debug_defconfig
+openrisc                  or1klitex_defconfig
+arc                     haps_hs_smp_defconfig
+parisc                generic-64bit_defconfig
+m68k                       bvme6000_defconfig
+x86_64                              defconfig
+m68k                        m5307c3_defconfig
+arm                           h3600_defconfig
+mips                     loongson1c_defconfig
+mips                        bcm47xx_defconfig
+mips                      maltaaprp_defconfig
+arm                       omap2plus_defconfig
+arm                          iop32x_defconfig
+mips                          rb532_defconfig
+arm                         hackkit_defconfig
+openrisc                         alldefconfig
+arm                           h5000_defconfig
+sh                            shmin_defconfig
+arm                         nhk8815_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                   microwatt_defconfig
+arm                         socfpga_defconfig
+ia64                          tiger_defconfig
+powerpc64                        alldefconfig
+powerpc                       maple_defconfig
+powerpc                       ebony_defconfig
+sparc                            allyesconfig
+xtensa                              defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                  randconfig-c002-20211128
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                                defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                 randconfig-a001-20211129
+i386                 randconfig-a002-20211129
+i386                 randconfig-a006-20211129
+i386                 randconfig-a005-20211129
+i386                 randconfig-a004-20211129
+i386                 randconfig-a003-20211129
+x86_64               randconfig-a011-20211128
+x86_64               randconfig-a014-20211128
+x86_64               randconfig-a012-20211128
+x86_64               randconfig-a016-20211128
+x86_64               randconfig-a013-20211128
+x86_64               randconfig-a015-20211128
+i386                 randconfig-a015-20211128
+i386                 randconfig-a016-20211128
+i386                 randconfig-a013-20211128
+i386                 randconfig-a012-20211128
+i386                 randconfig-a014-20211128
+i386                 randconfig-a011-20211128
+arc                  randconfig-r043-20211128
+s390                 randconfig-r044-20211128
+riscv                randconfig-r042-20211128
+arc                  randconfig-r043-20211129
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-Change since v8:
-- pwm-aspeed-ast2600.c
-  - Replace "* _BITULL(div_h)" to "<< div_h"
-  - Fix duty_cycle precision problem.
-  - Add the comment about the formula of duty_cycle.
+clang tested configs:
+s390                 randconfig-c005-20211128
+i386                 randconfig-c001-20211128
+riscv                randconfig-c006-20211128
+arm                  randconfig-c002-20211128
+powerpc              randconfig-c003-20211128
+x86_64               randconfig-c007-20211128
+mips                 randconfig-c004-20211128
+x86_64               randconfig-a001-20211128
+x86_64               randconfig-a006-20211128
+x86_64               randconfig-a003-20211128
+x86_64               randconfig-a005-20211128
+x86_64               randconfig-a004-20211128
+x86_64               randconfig-a002-20211128
+i386                 randconfig-a001-20211128
+i386                 randconfig-a002-20211128
+i386                 randconfig-a006-20211128
+i386                 randconfig-a005-20211128
+i386                 randconfig-a004-20211128
+i386                 randconfig-a003-20211128
+i386                 randconfig-a015-20211129
+i386                 randconfig-a016-20211129
+i386                 randconfig-a013-20211129
+i386                 randconfig-a012-20211129
+i386                 randconfig-a014-20211129
+i386                 randconfig-a011-20211129
+hexagon              randconfig-r045-20211129
+hexagon              randconfig-r041-20211129
+s390                 randconfig-r044-20211129
+riscv                randconfig-r042-20211129
 
-Change since v7:
-- pwm-aspeed-g6.c
-  - Rename the driver: pwm-aspeed-g6.c -> pwm-aspeed-ast2600.c.
-  - Macro remove "_CH" part of the register name.
-  - Unroll the aspeed_pwm_get_period and remove it.
-  - Simplify the formula to get duty_pt
-  - Reduce the number of writing register. Organize all the fields and
-    write them at once.
-
-Change since v6:
-- dt-bindings:
-  - Add blank line between each DT property.
-  - Change the sub-node name from fan to tach-ch.
-- pwm-aspeed-g6.c
-  - Merge aspeed_pwm_set_period and aspeed_pwm_set_duty into .apply.
-  - Convert the factor type to u64 when calculating the period value.
-  - Using ROUND_UP strategy to calculate div_h for finer resolution.
-
-Change since v5:
-- pwm-aspeed-g6.c suggested by Uwe Kleine-König
-  - Move the divide at the end of the calculation.
-  - Unified the prefix of the function name.
-  - Use div64_u64 to calculate the divider of frequency.
-
-Change since v4:
-- dt_binding:
-  - pwm/tach yaml: Replace child-node with additionalProperties
-  - pwm-tach yaml: Replace child-node with patternProperties
-- pwm-aspeed-g6.c suggested by Uwe Kleine-König
-  - The bit definitions contained the name of the register.
-  - Remove single caller function and fold it to the caller.
-  - Avoid to divide by the result of a division.
-  - Remove unnecessary condition in .apply().
-  - Use goto for error handling
-
-Changes since v3:
-- Add the dt_binding for aspeed,ast2600-tach.
-- Describe the pwm/tach as child-node of pwm-tach mfd.
-- Complete the properties of pwm node.
-
-Changes since v2:
-- Remove the tach node, #address-cells and #size-cells from pwm-tach.yaml
-- Add clocks and reset properties to pwm-tach.yaml
-- Kconfig/Makfile sorted alphabetically
-- pwm-aspeed-g6.c suggested by Uwe Kleine-König
-  - Add more hardware descriptions at top of the driver.
-  - Remove unused api request and free
-  - Move the initialize settings of all pwm channel to probe.
-  - Change the method of getting the approximate period.
-  - Read the hardware register values to fill the state for .get_state()
-
-Changes since v1:
-- Fix the dt_binding_check fail suggested by Rob Herring
-- Add depends to PWM_ASPEED_G6 configure suggested by Uwe Kleine-Konig
-- pwm-aspeed-g6.c suggested by Uwe Kleine-König
-  - Fix license header
-  - Use bitfiled.h macro to define register fields
-  - Implement .remove device function
-  - Implement .get_state pwm api
-
-Billy Tsai (2):
-  dt-bindings: Add bindings for aspeed pwm-tach.
-  pwm: Add Aspeed ast2600 PWM support
-
- .../bindings/hwmon/aspeed,ast2600-tach.yaml   |  68 ++++
- .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml |  76 ++++
- .../bindings/pwm/aspeed,ast2600-pwm.yaml      |  64 ++++
- drivers/pwm/Kconfig                           |  10 +
- drivers/pwm/Makefile                          |   1 +
- drivers/pwm/pwm-aspeed-ast2600.c              | 327 ++++++++++++++++++
- 6 files changed, 546 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
- create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
- create mode 100644 drivers/pwm/pwm-aspeed-ast2600.c
-
--- 
-2.25.1
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
