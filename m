@@ -2,238 +2,291 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1D0CC4332F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Nov 2021 18:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4D07C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 06:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353232AbhK1Svg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 28 Nov 2021 13:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbhK1Stc (ORCPT
+        id S232427AbhK2Gvb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Nov 2021 01:51:31 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:30815 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238326AbhK2Gta (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 28 Nov 2021 13:49:32 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5DEC061756;
-        Sun, 28 Nov 2021 10:46:15 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id t5so62676007edd.0;
-        Sun, 28 Nov 2021 10:46:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7zper/oRWwE3imxn/cLlSmDdkvNOi7B9bVzq3y2Trn0=;
-        b=hx28hZoGiVOwxCKi9x1RfD68kvtKvyGKt3ZxkcRBPPXtrlBfaPTL903plk+oWL4FZj
-         gD49PdWTR4QG8EzAfLVSexh8hpyYKIAownDf/YHeMAPaxkNwMf4awAWVP6Thah4a1ryt
-         Vy9BNVq5orlRf/lajAQiFi/7loksmTNvag61nWhCKQGwLperEYF1P/HI1QtqeDvtK1+m
-         Xm8DSvKrBhJ02pRiwLngpTrC7+UnjWlTpEVD03se+QjfF/pgnv3ivVFczMZomD2zU6Mx
-         SzuGbbEtd13eOkLLCdhVqtNUFYiDG3BPNu+DBy2CPUk6k1ce/2Krsh1AgOrtwVahzHcz
-         muZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7zper/oRWwE3imxn/cLlSmDdkvNOi7B9bVzq3y2Trn0=;
-        b=4wkEc0ON4f8WRPZmr//9J7N1kZ+5yk7g2OFlVVDSQ8HAyKgGdyGs0z0j55WC5YkRdd
-         FIhV7YnpSesISxmFXPVfAaYxWOtbcXc5Y33r0V/WRNjgW70SVNutbJiQ4IhuMAXT8psU
-         NgWLg6JdZ20kAPCp18J2czZvRgQ3TY4qX0jV8p1hiBO50Ble/bw/7RfVZ/b1QAmKRFh7
-         ubBJYD8lFYlDOsZm08b1xvGnQUlx7fKkJC54/2yKtJ8VHWY2hX1ZfRSBpVrJnXv77f2k
-         Ld7VhzQ8S67rX9DmabvfNYrl/LrA86pPS03XMvrH5rQ1vVyzB6g3Vl1vzedOYcAT4QyL
-         /HJg==
-X-Gm-Message-State: AOAM5323l4RkTJAwuev2jQgTKJ/LllkGx9Q67+/IIfUyKWifBel6u1xq
-        N6Gh8xBPnOSGEtFgr8Ie/MQ=
-X-Google-Smtp-Source: ABdhPJwZgncrx6pWXJ1ilrZrryFxIRYG7hKEgMB2maYBQjExZcNqjKRO/TExpO+QJ4rF/Wb8lKQgdg==
-X-Received: by 2002:a05:6402:4413:: with SMTP id y19mr66464941eda.26.1638125173913;
-        Sun, 28 Nov 2021 10:46:13 -0800 (PST)
-Received: from localhost.localdomain ([94.179.32.10])
-        by smtp.gmail.com with ESMTPSA id g1sm6072900eje.105.2021.11.28.10.46.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 10:46:13 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
-        Olli Asikainen <olli.asikainen@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] hwmon: (nct6775) add MAXIMUS VII HERO
-Date:   Sun, 28 Nov 2021 20:45:48 +0200
-Message-Id: <20211128184549.9161-4-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211128184549.9161-1-pauk.denis@gmail.com>
-References: <20211128184549.9161-1-pauk.denis@gmail.com>
+        Mon, 29 Nov 2021 01:49:30 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1AT6HdaK024518;
+        Mon, 29 Nov 2021 14:17:39 +0800 (GMT-8)
+        (envelope-from billy_tsai@aspeedtech.com)
+Received: from BillyTsai-pc.aspeed.com (192.168.2.149) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 29 Nov
+ 2021 14:42:06 +0800
+From:   Billy Tsai <billy_tsai@aspeedtech.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <joel@jms.id.au>, <andrew@aj.id.au>, <lee.jones@linaro.org>,
+        <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <p.zabel@pengutronix.de>, <billy_tsai@aspeedtech.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>
+CC:     <BMC-SW@aspeedtech.com>
+Subject: [v13 1/2] dt-bindings: Add bindings for aspeed pwm-tach.
+Date:   Mon, 29 Nov 2021 14:43:28 +0800
+Message-ID: <20211129064329.27006-2-billy_tsai@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
+References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.149]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1AT6HdaK024518
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-ASUS MAXIMUS VII HERO board has got a nct6775 chip, but by default
-there's no use of it because of resource conflict with WMI method.
+This patch adds device binding for aspeed pwm-tach device which is a
+multi-function device include pwm and tach function and pwm/tach device
+bindings which should be the child-node of pwm-tach device.
 
-This commit adds MAXIMUS VII HERO to the list of boards and provides
-ACPI mutex name that can be used as shared lock with ASUS WMI.
-
-Logic checks that mutex is available. If mutex is not available
-tries to get a chip ID by ACPI WMI interface.
-
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Olli Asikainen <olli.asikainen@gmail.com>
-
+Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 ---
-Changes in v2:
-- Fix commit message.
-- Remove default acpi_board_ANY and use NULL instead.
-- Use chip ID everywhere.
----
- drivers/hwmon/nct6775.c | 118 ++++++++++++++++++++++++++--------------
- 1 file changed, 76 insertions(+), 42 deletions(-)
+ .../bindings/hwmon/aspeed,ast2600-tach.yaml   | 68 +++++++++++++++++
+ .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml | 76 +++++++++++++++++++
+ .../bindings/pwm/aspeed,ast2600-pwm.yaml      | 64 ++++++++++++++++
+ 3 files changed, 208 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
+ create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 206c20a1ae9b..ea99f68b9146 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -5109,34 +5109,59 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
-  */
- static struct platform_device *pdev[2];
- 
--static const char * const asus_wmi_boards[] = {
--	"ProArt X570-CREATOR WIFI",
--	"Pro WS X570-ACE",
--	"PRIME B360-PLUS",
--	"PRIME B460-PLUS",
--	"PRIME X570-PRO",
--	"ROG CROSSHAIR VIII DARK HERO",
--	"ROG CROSSHAIR VIII FORMULA",
--	"ROG CROSSHAIR VIII HERO",
--	"ROG CROSSHAIR VIII IMPACT",
--	"ROG STRIX B550-E GAMING",
--	"ROG STRIX B550-F GAMING",
--	"ROG STRIX B550-F GAMING (WI-FI)",
--	"ROG STRIX B550-I GAMING",
--	"ROG STRIX X570-F GAMING",
--	"ROG STRIX Z390-E GAMING",
--	"ROG STRIX Z490-I GAMING",
--	"TUF GAMING B550M-PLUS",
--	"TUF GAMING B550M-PLUS (WI-FI)",
--	"TUF GAMING B550-PLUS",
--	"TUF GAMING B550-PRO",
--	"TUF GAMING X570-PLUS",
--	"TUF GAMING X570-PLUS (WI-FI)",
--	"TUF GAMING X570-PRO (WI-FI)",
--	"TUF GAMING Z490-PLUS",
--	"TUF GAMING Z490-PLUS (WI-FI)",
-+struct acpi_board_info {
-+	char *acpi_mutex_path;
- };
- 
-+#define DMI_ASUS_BOARD_INFO(name, mutex_path)			\
-+static struct acpi_board_info name = {				\
-+	.acpi_mutex_path = mutex_path,				\
-+}
+diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+new file mode 100644
+index 000000000000..dded50a049fb
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2021 Aspeed, Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/aspeed,ast2600-tach.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+DMI_ASUS_BOARD_INFO(acpi_board_MAXIMUS_VII_HERO, "\\_SB_.PCI0.LPCB.SIO1.MUT0");
-+DMI_ASUS_BOARD_INFO(acpi_board_ROG_STRIX_B550_E_GAMING, "\\_SB.PCI0.SBRG.SIO1.MUT0");
++title: Aspeed Ast2600 Tach controller
 +
-+#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name, info) {			\
-+	.matches = {								\
-+		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),	\
-+		DMI_EXACT_MATCH(DMI_BOARD_NAME, name),				\
-+	},									\
-+	.driver_data = info,							\
-+}
++maintainers:
++  - Billy Tsai <billy_tsai@aspeedtech.com>
 +
-+static const struct dmi_system_id asus_wmi_info_table[] = {
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("MAXIMUS VII HERO", &acpi_board_MAXIMUS_VII_HERO),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B360-PLUS", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B460-PLUS", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME B550M-A (WI-FI)", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X570-PRO", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII DARK HERO", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII FORMULA", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII IMPACT", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING",
-+					&acpi_board_ROG_STRIX_B550_E_GAMING),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-F GAMING", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-F GAMING (WI-FI)", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-F GAMING", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-E GAMING", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-I GAMING", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550-PLUS", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550-PRO", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550M-PLUS", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING B550M-PLUS (WI-FI)", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PLUS", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PLUS (WI-FI)", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X570-PRO (WI-FI)", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING Z490-PLUS", NULL),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING Z490-PLUS (WI-FI)", NULL),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(dmi, asus_wmi_info_table);
++description: |
++  The Aspeed Tach controller can support upto 16 fan input.
++  This module is part of the ast2600-pwm-tach multi-function device. For more
++  details see ../mfd/aspeed,ast2600-pwm-tach.yaml.
 +
- static int __init sensors_nct6775_init(void)
- {
- 	int i, err;
-@@ -5146,28 +5171,37 @@ static int __init sensors_nct6775_init(void)
- 	struct nct6775_sio_data sio_data;
- 	int sioaddr[2] = { 0x2e, 0x4e };
- 	enum sensor_access access = access_direct;
--	const char *board_vendor, *board_name;
-+	const struct dmi_system_id *dmi_id;
-+	struct acpi_board_info *board_info;
- 	acpi_handle acpi_wmi_mutex = NULL;
--	u8 tmp;
-+	acpi_status status;
-+	u8 tmp = 0;
- 
- 	err = platform_driver_register(&nct6775_driver);
- 	if (err)
- 		return err;
- 
--	board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
--	board_name = dmi_get_system_info(DMI_BOARD_NAME);
--
--	if (board_name && board_vendor &&
--	    !strcmp(board_vendor, "ASUSTeK COMPUTER INC.")) {
--		err = match_string(asus_wmi_boards, ARRAY_SIZE(asus_wmi_boards),
--				   board_name);
--		if (err >= 0) {
--			/* if reading chip id via WMI succeeds, use WMI */
--			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
--				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
--				access = access_asuswmi;
--			} else {
--				pr_err("Can't read ChipID by Asus WMI.\n");
-+	dmi_id = dmi_first_match(asus_wmi_info_table);
-+	if (dmi_id) {
-+		/* if reading chip ID via WMI succeeds, use WMI */
-+		if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) &&
-+		    tmp) {
-+			pr_info("Using Asus WMI to access %#x chip.\n", tmp);
-+			access = access_asuswmi;
-+		} else {
-+			pr_err("Can't read chip ID by Asus WMI.\n");
-+		}
++properties:
++  compatible:
++    enum:
++      - aspeed,ast2600-tach
 +
-+		if (dmi_id->driver_data) {
-+			board_info = dmi_id->driver_data;
-+			if (board_info->acpi_mutex_path) {
-+				status = acpi_get_handle(NULL, board_info->acpi_mutex_path,
-+							 &acpi_wmi_mutex);
-+				if (!ACPI_FAILURE(status)) {
-+					pr_info("Using Asus WMI mutex: %s\n",
-+						board_info->acpi_mutex_path);
-+					access = access_direct;
-+				}
- 			}
- 		}
- 	}
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  pinctrl-0: true
++
++  pinctrl-names:
++    const: default
++
++required:
++  - compatible
++  - "#address-cells"
++  - "#size-cells"
++
++additionalProperties:
++  type: object
++  properties:
++    aspeed,tach-ch:
++      description:
++        The tach channel used for this node.
++      maxItems: 1
++
++    aspeed,min-rpm:
++      description:
++        define the minimal revolutions per minute of the measure fan
++        used to calculate the sample period of tach
++      default: 1000
++
++    aspeed,pulse-pr:
++      description:
++        Value specifying the number of pulses per revolution of the
++        monitored FAN.
++      default: 2
++
++    aspeed,tach-div:
++      description:
++        define the tachometer clock divider as an integer. Formula of
++        tach clock = clock source / (2^tach-div)^2
++      minimum: 0
++      maximum: 15
++      default: 5
++
++  required:
++    - reg
+diff --git a/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml b/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
+new file mode 100644
+index 000000000000..1eaf6fab2752
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2021 Aspeed, Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/aspeed,ast2600-pwm-tach.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: PWM Tach controller Device Tree Bindings
++
++description: |
++  The PWM Tach controller is represented as a multi-function device which
++  includes:
++    PWM
++    Tach
++
++maintainers:
++  - Billy Tsai <billy_tsai@aspeedtech.com>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - aspeed,ast2600-pwm-tach
++      - const: syscon
++      - const: simple-mfd
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - resets
++
++patternProperties:
++  "^pwm(@[0-9a-f]+)?$":
++    $ref: ../pwm/aspeed,ast2600-pwm.yaml
++
++  "^tach(@[0-9a-f]+)?$":
++    $ref: ../hwmon/aspeed,ast2600-tach.yaml
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/ast2600-clock.h>
++    pwm_tach: pwm_tach@1e610000 {
++      compatible = "aspeed,ast2600-pwm-tach", "syscon", "simple-mfd";
++      reg = <0x1e610000 0x100>;
++      clocks = <&syscon ASPEED_CLK_AHB>;
++      resets = <&syscon ASPEED_RESET_PWM>;
++
++      pwm: pwm {
++        compatible = "aspeed,ast2600-pwm";
++        #address-cells = <1>;
++        #size-cells = <0>;
++        #pwm-cells = <3>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_pwm0_default>;
++      };
++
++      tach: tach {
++        compatible = "aspeed,ast2600-tach";
++        #address-cells = <1>;
++        #size-cells = <0>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_tach0_default>;
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
+new file mode 100644
+index 000000000000..f501f8a769df
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
+@@ -0,0 +1,64 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2021 Aspeed, Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pwm/aspeed,ast2600-pwm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Aspeed Ast2600 PWM controller
++
++maintainers:
++  - Billy Tsai <billy_tsai@aspeedtech.com>
++
++description: |
++  The Aspeed PWM controller can support upto 16 PWM outputs.
++  This module is part of the ast2600-pwm-tach multi-function device. For more
++  details see ../mfd/aspeed,ast2600-pwm-tach.yaml.
++
++properties:
++  compatible:
++    enum:
++      - aspeed,ast2600-pwm
++
++  "#pwm-cells":
++    const: 3
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  pinctrl-0: true
++
++  pinctrl-names:
++    const: default
++
++required:
++  - compatible
++  - "#pwm-cells"
++  - "#address-cells"
++  - "#size-cells"
++
++additionalProperties:
++  description: Set extend properties for each pwm channel.
++  type: object
++  properties:
++    reg:
++      description:
++        The pwm channel index.
++      maxItems: 1
++
++    aspeed,wdt-reload-enable:
++      type: boolean
++      description:
++        Enable the function of wdt reset reload duty point.
++
++    aspeed,wdt-reload-duty-point:
++      description:
++        Define the duty point after wdt reset, 0 = 100%
++      minimum: 0
++      maximum: 255
++
++  required:
++    - reg
 -- 
-2.33.0
+2.25.1
 
