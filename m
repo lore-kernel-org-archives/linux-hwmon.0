@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 768AFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 07:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4EB1C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 07:10:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbhK2HLR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Nov 2021 02:11:17 -0500
+        id S229959AbhK2HNR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Nov 2021 02:13:17 -0500
 Received: from mga18.intel.com ([134.134.136.126]:39268 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238705AbhK2HJQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:09:16 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="222793134"
+        id S232445AbhK2HLR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Nov 2021 02:11:17 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="222793133"
 X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
-   d="scan'208";a="222793134"
+   d="scan'208";a="222793133"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 23:05:59 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
-   d="scan'208";a="608592352"
+   d="scan'208";a="608592353"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
   by orsmga004.jf.intel.com with ESMTP; 28 Nov 2021 23:05:57 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mrajd-000BeZ-2n; Mon, 29 Nov 2021 07:05:57 +0000
-Date:   Mon, 29 Nov 2021 15:05:28 +0800
+        id 1mrajd-000Bec-3N; Mon, 29 Nov 2021 07:05:57 +0000
+Date:   Mon, 29 Nov 2021 15:05:25 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 293903b9dfe43520f01374dc1661be11d6838c49
-Message-ID: <61a47bb8.RrlRIeAHUajPbERe%lkp@intel.com>
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 7844f4722a8c1bcb366d00264dd7793326469fcc
+Message-ID: <61a47bb5.+qJWMnc25YTmd2iU%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,12 +39,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 293903b9dfe43520f01374dc1661be11d6838c49  watchdog: Add Realtek Otto watchdog timer
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 7844f4722a8c1bcb366d00264dd7793326469fcc  hwmon: (ntc_thermistor) Merge platform data
 
-elapsed time: 726m
+elapsed time: 727m
 
-configs tested: 209
+configs tested: 192
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -102,12 +102,6 @@ mips                          rm200_defconfig
 arm                        magician_defconfig
 arm                          exynos_defconfig
 ia64                            zx1_defconfig
-powerpc                    ge_imp3a_defconfig
-mips                      malta_kvm_defconfig
-mips                            ar7_defconfig
-mips                        omega2p_defconfig
-mips                       lemote2f_defconfig
-powerpc                  iss476-smp_defconfig
 arc                        vdk_hs38_defconfig
 arm                            lart_defconfig
 mips                         mpc30x_defconfig
@@ -130,6 +124,7 @@ sh                                  defconfig
 powerpc                      ppc40x_defconfig
 arm                      jornada720_defconfig
 sh                           se7722_defconfig
+mips                        omega2p_defconfig
 arc                                 defconfig
 parisc                           allyesconfig
 powerpc                     redwood_defconfig
@@ -155,6 +150,7 @@ mips                      maltaaprp_defconfig
 arm                       omap2plus_defconfig
 arm                          iop32x_defconfig
 mips                          rb532_defconfig
+powerpc                  iss476-smp_defconfig
 arm                         hackkit_defconfig
 openrisc                         alldefconfig
 arm                           h5000_defconfig
@@ -175,14 +171,14 @@ ia64                             allmodconfig
 ia64                             allyesconfig
 m68k                             allmodconfig
 m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
 nds32                               defconfig
 nios2                            allyesconfig
 csky                                defconfig
 alpha                               defconfig
 alpha                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
 xtensa                           allyesconfig
 h8300                            allyesconfig
 sh                               allmodconfig
@@ -195,15 +191,9 @@ i386                                defconfig
 i386                   debian-10.3-kselftests
 i386                              debian-10.3
 mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
 powerpc                          allyesconfig
-i386                 randconfig-a001-20211129
-i386                 randconfig-a002-20211129
-i386                 randconfig-a006-20211129
-i386                 randconfig-a005-20211129
-i386                 randconfig-a004-20211129
-i386                 randconfig-a003-20211129
+powerpc                          allmodconfig
+powerpc                           allnoconfig
 x86_64               randconfig-a011-20211128
 x86_64               randconfig-a014-20211128
 x86_64               randconfig-a012-20211128
@@ -219,7 +209,6 @@ i386                 randconfig-a011-20211128
 arc                  randconfig-r043-20211128
 s390                 randconfig-r044-20211128
 riscv                randconfig-r042-20211128
-arc                  randconfig-r043-20211129
 riscv                    nommu_k210_defconfig
 riscv                            allyesconfig
 riscv                    nommu_virt_defconfig
@@ -254,12 +243,6 @@ i386                 randconfig-a006-20211128
 i386                 randconfig-a005-20211128
 i386                 randconfig-a004-20211128
 i386                 randconfig-a003-20211128
-i386                 randconfig-a015-20211129
-i386                 randconfig-a016-20211129
-i386                 randconfig-a013-20211129
-i386                 randconfig-a012-20211129
-i386                 randconfig-a014-20211129
-i386                 randconfig-a011-20211129
 hexagon              randconfig-r045-20211129
 hexagon              randconfig-r041-20211129
 s390                 randconfig-r044-20211129
