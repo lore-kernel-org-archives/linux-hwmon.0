@@ -2,76 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97105C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 22:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A8F5C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 22:26:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbhK2WLK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Nov 2021 17:11:10 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:34571 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbhK2WJJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:09:09 -0500
-Received: by mail-oi1-f182.google.com with SMTP id t19so37363868oij.1;
-        Mon, 29 Nov 2021 14:05:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XIW+pH2qOJaBXjjYGeI9op4sKIfFc3lvE4r+eNWiM8I=;
-        b=xbeWWXvpiUc87b9QBAltWhEzbYelWIA0VsrJ7iNzkXzoMP5HH6WKw8dgsmaEFLO29q
-         ujyej66ckHupt3AYg99NALBFfjhScxyI5k9RLzs/0y3MNwvj9OQNxv2bJnCYnx9vrNqo
-         w5GjCAwwjSo6rW2lKUTsErO0h1sGpj2eNK3O2b7rbqdPfcl1csrq6nBiFiRYJPR80pgY
-         6Ptyrc8k/i6Egv+TmGA/RW2V1vznpDH4GtrKR/GScHyattZYldlbgQe3vSOb93MYSfOp
-         bA1sYyQ89nkii3KlUXz6joUXLq/FOpQ3qklkq6ur2HWJOOOKa6PMSXS3fLo1saN/dP8l
-         WUzA==
-X-Gm-Message-State: AOAM532yH+DMpEM5QRLTZDw3F72N+NmXqDY5D5jU71T5oP9Yrs4/B458
-        cixrZ5OF+wFrryIrc+pDUQ==
-X-Google-Smtp-Source: ABdhPJxPkJnupnHOFRixHPEsqqXYG1X+4g9VnIUa5KYXQ517HqtQKaEAcoz7JUSOYt4sPqqKzVU0uQ==
-X-Received: by 2002:aca:a897:: with SMTP id r145mr709451oie.136.1638223551413;
-        Mon, 29 Nov 2021 14:05:51 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j10sm2440443ooq.5.2021.11.29.14.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 14:05:50 -0800 (PST)
-Received: (nullmailer pid 693931 invoked by uid 1000);
-        Mon, 29 Nov 2021 22:05:49 -0000
-Date:   Mon, 29 Nov 2021 16:05:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: add TI DC-DC converters
-Message-ID: <YaVOvZuvVlaTRTDD@robh.at.kernel.org>
-References: <20211116110207.68494-1-krzysztof.kozlowski@canonical.com>
+        id S229793AbhK2W3X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Nov 2021 17:29:23 -0500
+Received: from mga06.intel.com ([134.134.136.31]:25946 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231215AbhK2W3A (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:29:00 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="296896215"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="296896215"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 14:25:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="476887613"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 29 Nov 2021 14:25:22 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mrp5N-000CQb-JU; Mon, 29 Nov 2021 22:25:21 +0000
+Date:   Tue, 30 Nov 2021 06:24:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:watchdog-next 31/31] rzg2l_wdt.c:undefined reference
+ to `__udivdi3'
+Message-ID: <202111300656.siGCggSo-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211116110207.68494-1-krzysztof.kozlowski@canonical.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 16 Nov 2021 12:02:07 +0100, Krzysztof Kozlowski wrote:
-> Few Texas Instruments DC-DC converters on PMBus like TPS544B20 do not
-> have bindings and are used only as hardware monitoring sensor.  These
-> devices are actually not trivial and can receive basic configuration
-> (e.g. power up mode, CNTL pin polarity, expected input voltage), however
-> devicetree support for configuration was never added.
-> 
-> Therefore in current state the devices are used only in read-only mode
-> and have trivial bindings, so document them to have basic dtschema
-> tests.
-> 
-> Cc: Vincent Pelletier <plr.vincent@gmail.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+head:   3a5191bbb04b28007f074b18d0c4782c0f99919c
+commit: 3a5191bbb04b28007f074b18d0c4782c0f99919c [31/31] watchdog: Add Watchdog Timer driver for RZ/G2L
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20211130/202111300656.siGCggSo-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=3a5191bbb04b28007f074b18d0c4782c0f99919c
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging watchdog-next
+        git checkout 3a5191bbb04b28007f074b18d0c4782c0f99919c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
 
-Applied, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   m68k-linux-ld: drivers/watchdog/rzg2l_wdt.o: in function `rzg2l_wdt_probe':
+>> rzg2l_wdt.c:(.text+0x296): undefined reference to `__udivdi3'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
