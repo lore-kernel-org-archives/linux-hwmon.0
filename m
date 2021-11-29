@@ -2,164 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E7CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 21:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97105C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 22:07:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbhK2VDT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Nov 2021 16:03:19 -0500
-Received: from mout.gmx.net ([212.227.17.20]:55815 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229649AbhK2VBS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:01:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638219461;
-        bh=DNtADlqCD16a0p6leRSeTgFd5ERa28Gj8N49dVh2+pg=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=YQ81nweFNdzUZYSaFn1hWZQq0zH3r9P6bR1QvsNtmJMPNsKflJELhWKDytM+LliwJ
-         FW8vLu5SGv3nvahoaJLLSAuhnawlj3jmr/S24TtVnHzFu4lEQeaIZVx7YQgVkaIWag
-         StV04iT+TicCnKHrp4KOAYn0tcculpszqJj9RgCI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.29] ([91.137.126.34]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mqb1c-1mEHyv3CAi-00mdX7; Mon, 29
- Nov 2021 21:57:41 +0100
-Subject: Re: [PATCH 1/2] hwmon: (dell-smm) Simplify ioctl handler
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211120170319.72369-1-W_Armin@gmx.de>
- <20211120170319.72369-2-W_Armin@gmx.de>
- <20211123161332.discv3bfx4rkowah@pali>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
-Date:   Mon, 29 Nov 2021 21:57:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S230150AbhK2WLK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Nov 2021 17:11:10 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:34571 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231403AbhK2WJJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:09:09 -0500
+Received: by mail-oi1-f182.google.com with SMTP id t19so37363868oij.1;
+        Mon, 29 Nov 2021 14:05:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XIW+pH2qOJaBXjjYGeI9op4sKIfFc3lvE4r+eNWiM8I=;
+        b=xbeWWXvpiUc87b9QBAltWhEzbYelWIA0VsrJ7iNzkXzoMP5HH6WKw8dgsmaEFLO29q
+         ujyej66ckHupt3AYg99NALBFfjhScxyI5k9RLzs/0y3MNwvj9OQNxv2bJnCYnx9vrNqo
+         w5GjCAwwjSo6rW2lKUTsErO0h1sGpj2eNK3O2b7rbqdPfcl1csrq6nBiFiRYJPR80pgY
+         6Ptyrc8k/i6Egv+TmGA/RW2V1vznpDH4GtrKR/GScHyattZYldlbgQe3vSOb93MYSfOp
+         bA1sYyQ89nkii3KlUXz6joUXLq/FOpQ3qklkq6ur2HWJOOOKa6PMSXS3fLo1saN/dP8l
+         WUzA==
+X-Gm-Message-State: AOAM532yH+DMpEM5QRLTZDw3F72N+NmXqDY5D5jU71T5oP9Yrs4/B458
+        cixrZ5OF+wFrryIrc+pDUQ==
+X-Google-Smtp-Source: ABdhPJxPkJnupnHOFRixHPEsqqXYG1X+4g9VnIUa5KYXQ517HqtQKaEAcoz7JUSOYt4sPqqKzVU0uQ==
+X-Received: by 2002:aca:a897:: with SMTP id r145mr709451oie.136.1638223551413;
+        Mon, 29 Nov 2021 14:05:51 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j10sm2440443ooq.5.2021.11.29.14.05.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 14:05:50 -0800 (PST)
+Received: (nullmailer pid 693931 invoked by uid 1000);
+        Mon, 29 Nov 2021 22:05:49 -0000
+Date:   Mon, 29 Nov 2021 16:05:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: add TI DC-DC converters
+Message-ID: <YaVOvZuvVlaTRTDD@robh.at.kernel.org>
+References: <20211116110207.68494-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <20211123161332.discv3bfx4rkowah@pali>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:t4sNQTDSNMewwWOSx+cI2e1mkeNskLRcioK8L/S4emE+Bty8THA
- vJzDjGrPxyr9ISIKc/mwbSVAgjhSZ7WjJA8R/ce6YczPjWpAdl1JIT6nwXV8KAipbmTk3Rd
- nhwu5QM5PN/LnDUWKvhGwv19hFd3uLozIy+3d91Ibg/1xRfYUqGzQvdlGhrWOMt84R6TQkE
- jA/uAhZu1M6ljht0kgL9g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:u5DZRe+gL4o=:I9068Yw+qcpz3A9OOhXab0
- nu1NKe24BjQQ8r70SoRbS7Ug2+AgnSA4zOz1KngP2js2IbkNcYKMVS4bmP1ozmixcBXbMx1KM
- oOjP9LB1VsO0hdJowRRVoAS1BtSHumfNe6DKprAlO1VG1osAAV+MqmxUvpQzWnW+a36IvLhZV
- Z8lveNnVD3FkXpOJMaP0zUlLOX9QJcoASdHOh2vbcAMa/5T9782/fnkL8/LzebxMxDnet3BM0
- RMUmAF72ZWmXaR1Px8OLeQwsZnyaRtA4PUaB+5XZyp7dttf6qGdpQP5zTTmjYEEs/54rQ54Ns
- hEQi5CW2wsnbAEP7eY2xzWYR79EgsMWLb6P1uo67fuQaCNdRGklooZvIW4k8sZDpuinlyMBdD
- FOxnN3yJay0r9jqrmudRBRnenaEbXgUnI8I0xZVoxSet8AwWhl/yl4qn/pLd5BQHS04AEntxj
- pWCcpq/avQSJDAdAZGwHbj/XKdsY2U40QY7Kvty9KcbFwusZeCa73HX692YOxced6qJIHRh5g
- 9VcV9Fj1gxMUf12TTsdP3pGBlird/4hiXTghJ84VRsFHN1Agg7+roXyk04NtuPFx6STlmL2a6
- 76DQFIyDrNDc+wEMAIzn/ZGGbRHshg60xw505ws1/XKpiiL+tTfZCgUejvZC0tV51njohRhpt
- svL6NLzFFdUo+IqJnO2Zg+OCFECeCbdD2wV3R9zZ2YnkZeIcJMX9UcvIrLo8+PQaRy6hz9Syw
- WwFyXTRCr/AQuN/ijtELdkXqwO7ZYqku028I+oZXPQ7lQKGmxPToHTW3Io5HOK7gnFTDtPWqp
- 96AJd1jspDHbHMWX5gv7IApXst7x0PvNrEnTNU3pI30YdQv3K1czP0aCubSWM24GuUamtFOU7
- eCz19lKCU4S/vQCaoosDRm0kIaSqo4wOJ6BERsFXnsYa+OQdLyggBflYg6onVEPFMy6Q3TSSu
- ywS5L4gHmy9kGwKMgJY3UbI7hHigAb+/SEdXnVA9U0awOFud87Dw3Y4eBPQvAW1iuYTHqwRV+
- psuBCXOryqyyXDHTxGxDFcHUwBZQpHS7P8qDvPD0pCQ6RImbQg0LNqDEJQ6fGOmPMLWcWqzQN
- uL/DjGpTuN3qpQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211116110207.68494-1-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 23.11.21 um 17:13 schrieb Pali Roh=C3=A1r:
+On Tue, 16 Nov 2021 12:02:07 +0100, Krzysztof Kozlowski wrote:
+> Few Texas Instruments DC-DC converters on PMBus like TPS544B20 do not
+> have bindings and are used only as hardware monitoring sensor.  These
+> devices are actually not trivial and can receive basic configuration
+> (e.g. power up mode, CNTL pin polarity, expected input voltage), however
+> devicetree support for configuration was never added.
+> 
+> Therefore in current state the devices are used only in read-only mode
+> and have trivial bindings, so document them to have basic dtschema
+> tests.
+> 
+> Cc: Vincent Pelletier <plr.vincent@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-> On Saturday 20 November 2021 18:03:18 Armin Wolf wrote:
->> The second switch-case has no real purpose:
->>
->> - for I8K_BIOS_VERSION, val does not represent a return value,
->>    making the check for error values unnecessary.
->> - for I8K_MACHINE_ID, val remains zero, so the error check is
->>    unnecessary too.
->>
->> Remove the switch-case and move the calls to copy_to_user()
->> into the first switch-case for I8K_BIOS_VERSION/_MACHINE_ID.
->> Omit buff[] since data->machineid already contains the string
-> s/->machineid/->bios_machineid/
->
->> with the necessary zero padding.
-> data is allocated by devm_kzalloc() so data->bios_machineid is really
-> zero padded.
->
->> Tested on a Dell Inspiron 3505.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->>   drivers/hwmon/dell-smm-hwmon.c | 30 +++++++++---------------------
->>   1 file changed, 9 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
-mon.c
->> index 5596c211f38d..b5d1703faa62 100644
->> --- a/drivers/hwmon/dell-smm-hwmon.c
->> +++ b/drivers/hwmon/dell-smm-hwmon.c
->> @@ -454,7 +454,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm=
-_data *data, unsigned int cmd
->>   {
->>   	int val =3D 0;
->>   	int speed, err;
->> -	unsigned char buff[16];
->>   	int __user *argp =3D (int __user *)arg;
->>
->>   	if (!argp)
->> @@ -468,15 +467,19 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_s=
-mm_data *data, unsigned int cmd
->>
->>   		val =3D (data->bios_version[0] << 16) |
->>   				(data->bios_version[1] << 8) | data->bios_version[2];
->> -		break;
->>
->> +		if (copy_to_user(argp, &val, 4))
->> +			return -EFAULT;
->> +
->> +		return 0;
->>   	case I8K_MACHINE_ID:
->>   		if (restricted && !capable(CAP_SYS_ADMIN))
->>   			return -EPERM;
->>
->> -		strscpy_pad(buff, data->bios_machineid, sizeof(buff));
->> -		break;
->> +		if (copy_to_user(argp, data->bios_machineid, 16))
-> What about usage of sizeof(data->bios_machineid) instead of hardcoded
-> constant 16? And maybe same for constant 4?
-
-For the string yes, but maybe i should change the int to an u32?
-
->> +			return -EFAULT;
->>
->> +		return 0;
->>   	case I8K_FN_STATUS:
->>   		val =3D i8k_get_fn_status();
->>   		break;
->> @@ -527,23 +530,8 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_sm=
-m_data *data, unsigned int cmd
->>   	if (val < 0)
->>   		return val;
->>
->> -	switch (cmd) {
->> -	case I8K_BIOS_VERSION:
->> -		if (copy_to_user(argp, &val, 4))
->> -			return -EFAULT;
->> -
->> -		break;
->> -	case I8K_MACHINE_ID:
->> -		if (copy_to_user(argp, buff, 16))
->> -			return -EFAULT;
->> -
->> -		break;
->> -	default:
->> -		if (copy_to_user(argp, &val, sizeof(int)))
->> -			return -EFAULT;
->> -
->> -		break;
->> -	}
->> +	if (copy_to_user(argp, &val, sizeof(int)))
->> +		return -EFAULT;
->>
->>   	return 0;
->>   }
->> --
->> 2.30.2
->>
+Applied, thanks!
