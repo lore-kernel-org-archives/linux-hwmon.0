@@ -2,133 +2,164 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C5CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 14:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E7CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 21:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244687AbhK2OFb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Nov 2021 09:05:31 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:51550 "EHLO cpanel.siel.si"
+        id S229681AbhK2VDT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Nov 2021 16:03:19 -0500
+Received: from mout.gmx.net ([212.227.17.20]:55815 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244190AbhK2ODb (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:03:31 -0500
-X-Greylist: delayed 2361 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 09:03:30 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
-        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=6rQeqm1gf5TyoLBH5qU0ilKudxmiHViF98acqSq9ssY=; b=Cea/k2TirYunprZoGUKfFUfRAn
-        E13DUFonSUQOINQK9cVl+Fe6ZxPeAvemm34HsS0SxWEiWL0Bid+4e4sL1JA7r+iiDw4jfbe2sK2h1
-        //Vtg7NlwnEb3M3etMyfm4e0RsNEO2R+yn6lXaDlg6wQdFd4JLixEs1PgkEI9DFgnb2HTHvq7qfkz
-        xoPplwtAKfDP5ND4shCvmWjbziF2jCB9CLSc4N/yOxeJsW5t0MrEFOqrGY2p6F58QsptIpfYJHLM7
-        9DcuLh9HJaB12Mwidq5/E+MdT/+wZYMCtBXdRnryY5j/OopFzGzQH2WFt8cEQz4u6Ua1yoVDTbi8N
-        5F13UBzA==;
-Received: from [89.212.21.243] (port=60946 helo=[192.168.69.215])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1mrgaL-00FHBt-Ef; Mon, 29 Nov 2021 14:20:45 +0100
-Subject: Re: [groeck-staging:watchdog-next 25/28]
- drivers/watchdog/da9063_wdt.c:177:15: error: implicit declaration of function
- 'i2c_smbus_write_byte_data'
-To:     kernel test robot <lkp@intel.com>, Yunus Bas <y.bas@phytec.de>
-Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-References: <202111292050.cwhXdxtQ-lkp@intel.com>
-From:   Andrej Picej <andrej.picej@norik.com>
-Message-ID: <46440ccf-edb9-3d35-aae0-72e60278e650@norik.com>
-Date:   Mon, 29 Nov 2021 14:20:48 +0100
+        id S229649AbhK2VBS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Nov 2021 16:01:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638219461;
+        bh=DNtADlqCD16a0p6leRSeTgFd5ERa28Gj8N49dVh2+pg=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=YQ81nweFNdzUZYSaFn1hWZQq0zH3r9P6bR1QvsNtmJMPNsKflJELhWKDytM+LliwJ
+         FW8vLu5SGv3nvahoaJLLSAuhnawlj3jmr/S24TtVnHzFu4lEQeaIZVx7YQgVkaIWag
+         StV04iT+TicCnKHrp4KOAYn0tcculpszqJj9RgCI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.29] ([91.137.126.34]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mqb1c-1mEHyv3CAi-00mdX7; Mon, 29
+ Nov 2021 21:57:41 +0100
+Subject: Re: [PATCH 1/2] hwmon: (dell-smm) Simplify ioctl handler
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211120170319.72369-1-W_Armin@gmx.de>
+ <20211120170319.72369-2-W_Armin@gmx.de>
+ <20211123161332.discv3bfx4rkowah@pali>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
+Date:   Mon, 29 Nov 2021 21:57:40 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <202111292050.cwhXdxtQ-lkp@intel.com>
+In-Reply-To: <20211123161332.discv3bfx4rkowah@pali>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+X-Provags-ID: V03:K1:t4sNQTDSNMewwWOSx+cI2e1mkeNskLRcioK8L/S4emE+Bty8THA
+ vJzDjGrPxyr9ISIKc/mwbSVAgjhSZ7WjJA8R/ce6YczPjWpAdl1JIT6nwXV8KAipbmTk3Rd
+ nhwu5QM5PN/LnDUWKvhGwv19hFd3uLozIy+3d91Ibg/1xRfYUqGzQvdlGhrWOMt84R6TQkE
+ jA/uAhZu1M6ljht0kgL9g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:u5DZRe+gL4o=:I9068Yw+qcpz3A9OOhXab0
+ nu1NKe24BjQQ8r70SoRbS7Ug2+AgnSA4zOz1KngP2js2IbkNcYKMVS4bmP1ozmixcBXbMx1KM
+ oOjP9LB1VsO0hdJowRRVoAS1BtSHumfNe6DKprAlO1VG1osAAV+MqmxUvpQzWnW+a36IvLhZV
+ Z8lveNnVD3FkXpOJMaP0zUlLOX9QJcoASdHOh2vbcAMa/5T9782/fnkL8/LzebxMxDnet3BM0
+ RMUmAF72ZWmXaR1Px8OLeQwsZnyaRtA4PUaB+5XZyp7dttf6qGdpQP5zTTmjYEEs/54rQ54Ns
+ hEQi5CW2wsnbAEP7eY2xzWYR79EgsMWLb6P1uo67fuQaCNdRGklooZvIW4k8sZDpuinlyMBdD
+ FOxnN3yJay0r9jqrmudRBRnenaEbXgUnI8I0xZVoxSet8AwWhl/yl4qn/pLd5BQHS04AEntxj
+ pWCcpq/avQSJDAdAZGwHbj/XKdsY2U40QY7Kvty9KcbFwusZeCa73HX692YOxced6qJIHRh5g
+ 9VcV9Fj1gxMUf12TTsdP3pGBlird/4hiXTghJ84VRsFHN1Agg7+roXyk04NtuPFx6STlmL2a6
+ 76DQFIyDrNDc+wEMAIzn/ZGGbRHshg60xw505ws1/XKpiiL+tTfZCgUejvZC0tV51njohRhpt
+ svL6NLzFFdUo+IqJnO2Zg+OCFECeCbdD2wV3R9zZ2YnkZeIcJMX9UcvIrLo8+PQaRy6hz9Syw
+ WwFyXTRCr/AQuN/ijtELdkXqwO7ZYqku028I+oZXPQ7lQKGmxPToHTW3Io5HOK7gnFTDtPWqp
+ 96AJd1jspDHbHMWX5gv7IApXst7x0PvNrEnTNU3pI30YdQv3K1czP0aCubSWM24GuUamtFOU7
+ eCz19lKCU4S/vQCaoosDRm0kIaSqo4wOJ6BERsFXnsYa+OQdLyggBflYg6onVEPFMy6Q3TSSu
+ ywS5L4gHmy9kGwKMgJY3UbI7hHigAb+/SEdXnVA9U0awOFud87Dw3Y4eBPQvAW1iuYTHqwRV+
+ psuBCXOryqyyXDHTxGxDFcHUwBZQpHS7P8qDvPD0pCQ6RImbQg0LNqDEJQ6fGOmPMLWcWqzQN
+ uL/DjGpTuN3qpQ=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi
+Am 23.11.21 um 17:13 schrieb Pali Roh=C3=A1r:
 
-On 29. 11. 21 13:24, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-> head:   293903b9dfe43520f01374dc1661be11d6838c49
-> commit: 5ea29919c29413c984f4ba3e04a6679d306e7a6e [25/28] watchdog: da9063: use atomic safe i2c transfer in reset handler
-> config: csky-randconfig-r032-20211128 (https://download.01.org/0day-ci/archive/20211129/202111292050.cwhXdxtQ-lkp@intel.com/config)
-> compiler: csky-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=5ea29919c29413c984f4ba3e04a6679d306e7a6e
->          git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
->          git fetch --no-tags groeck-staging watchdog-next
->          git checkout 5ea29919c29413c984f4ba3e04a6679d306e7a6e
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash drivers/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     drivers/watchdog/da9063_wdt.c: In function 'da9063_wdt_restart':
->>> drivers/watchdog/da9063_wdt.c:177:15: error: implicit declaration of function 'i2c_smbus_write_byte_data' [-Werror=implicit-function-declaration]
->       177 |         ret = i2c_smbus_write_byte_data(client, DA9063_REG_CONTROL_F,
->           |               ^~~~~~~~~~~~~~~~~~~~~~~~~
->     cc1: some warnings being treated as errors
-> 
-> 
-> vim +/i2c_smbus_write_byte_data +177 drivers/watchdog/da9063_wdt.c
-> 
->     168	
->     169	static int da9063_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->     170				      void *data)
->     171	{
->     172		struct da9063 *da9063 = watchdog_get_drvdata(wdd);
->     173		struct i2c_client *client = to_i2c_client(da9063->dev);
->     174		int ret;
->     175	
->     176		/* Don't use regmap because it is not atomic safe */
->   > 177		ret = i2c_smbus_write_byte_data(client, DA9063_REG_CONTROL_F,
->     178						DA9063_SHUTDOWN);
->     179		if (ret < 0)
->     180			dev_alert(da9063->dev, "Failed to shutdown (err = %d)\n",
->     181				  ret);
->     182	
->     183		/* wait for reset to assert... */
->     184		mdelay(500);
->     185	
->     186		return ret;
->     187	}
->     188	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+> On Saturday 20 November 2021 18:03:18 Armin Wolf wrote:
+>> The second switch-case has no real purpose:
+>>
+>> - for I8K_BIOS_VERSION, val does not represent a return value,
+>>    making the check for error values unnecessary.
+>> - for I8K_MACHINE_ID, val remains zero, so the error check is
+>>    unnecessary too.
+>>
+>> Remove the switch-case and move the calls to copy_to_user()
+>> into the first switch-case for I8K_BIOS_VERSION/_MACHINE_ID.
+>> Omit buff[] since data->machineid already contains the string
+> s/->machineid/->bios_machineid/
+>
+>> with the necessary zero padding.
+> data is allocated by devm_kzalloc() so data->bios_machineid is really
+> zero padded.
+>
+>> Tested on a Dell Inspiron 3505.
+>>
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> ---
+>>   drivers/hwmon/dell-smm-hwmon.c | 30 +++++++++---------------------
+>>   1 file changed, 9 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
+mon.c
+>> index 5596c211f38d..b5d1703faa62 100644
+>> --- a/drivers/hwmon/dell-smm-hwmon.c
+>> +++ b/drivers/hwmon/dell-smm-hwmon.c
+>> @@ -454,7 +454,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm=
+_data *data, unsigned int cmd
+>>   {
+>>   	int val =3D 0;
+>>   	int speed, err;
+>> -	unsigned char buff[16];
+>>   	int __user *argp =3D (int __user *)arg;
+>>
+>>   	if (!argp)
+>> @@ -468,15 +467,19 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_s=
+mm_data *data, unsigned int cmd
+>>
+>>   		val =3D (data->bios_version[0] << 16) |
+>>   				(data->bios_version[1] << 8) | data->bios_version[2];
+>> -		break;
+>>
+>> +		if (copy_to_user(argp, &val, 4))
+>> +			return -EFAULT;
+>> +
+>> +		return 0;
+>>   	case I8K_MACHINE_ID:
+>>   		if (restricted && !capable(CAP_SYS_ADMIN))
+>>   			return -EPERM;
+>>
+>> -		strscpy_pad(buff, data->bios_machineid, sizeof(buff));
+>> -		break;
+>> +		if (copy_to_user(argp, data->bios_machineid, 16))
+> What about usage of sizeof(data->bios_machineid) instead of hardcoded
+> constant 16? And maybe same for constant 4?
 
-This should be fixed if we add hard dependency to I2C. Just like 
-44144c809e39 ("watchdog: da9062: Add dependency on I2C") fixes the 
-057b52b4b3d58 ("watchdog: da9062: make restart handler atomic safe") on 
-the da9062.
+For the string yes, but maybe i should change the int to an u32?
 
-I will create a patch and submit it if that's OK.
-
-Sorry for not noticing this problem before submitting the initial patch.
-
-BR,
-Andrej
+>> +			return -EFAULT;
+>>
+>> +		return 0;
+>>   	case I8K_FN_STATUS:
+>>   		val =3D i8k_get_fn_status();
+>>   		break;
+>> @@ -527,23 +530,8 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_sm=
+m_data *data, unsigned int cmd
+>>   	if (val < 0)
+>>   		return val;
+>>
+>> -	switch (cmd) {
+>> -	case I8K_BIOS_VERSION:
+>> -		if (copy_to_user(argp, &val, 4))
+>> -			return -EFAULT;
+>> -
+>> -		break;
+>> -	case I8K_MACHINE_ID:
+>> -		if (copy_to_user(argp, buff, 16))
+>> -			return -EFAULT;
+>> -
+>> -		break;
+>> -	default:
+>> -		if (copy_to_user(argp, &val, sizeof(int)))
+>> -			return -EFAULT;
+>> -
+>> -		break;
+>> -	}
+>> +	if (copy_to_user(argp, &val, sizeof(int)))
+>> +		return -EFAULT;
+>>
+>>   	return 0;
+>>   }
+>> --
+>> 2.30.2
+>>
