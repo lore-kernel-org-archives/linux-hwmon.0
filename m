@@ -2,131 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6DE2C4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Nov 2021 22:58:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC77BC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Nov 2021 02:20:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236929AbhK2XBf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Nov 2021 18:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S237414AbhK3CXW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Nov 2021 21:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbhK2XAZ (ORCPT
+        with ESMTP id S229485AbhK3CXW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:00:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0825C043AF5
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Nov 2021 12:52:53 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mrndF-0001H9-9a; Mon, 29 Nov 2021 21:52:13 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mrnd1-001nbP-Cy; Mon, 29 Nov 2021 21:51:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mrnd0-0003gn-Bn; Mon, 29 Nov 2021 21:51:58 +0100
-Date:   Mon, 29 Nov 2021 21:51:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        joel@jms.id.au, andrew@aj.id.au, lee.jones@linaro.org,
-        thierry.reding@gmail.com, p.zabel@pengutronix.de,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, BMC-SW@aspeedtech.com
-Subject: Re: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
-Message-ID: <20211129205154.jtm4ehvvfo52toth@pengutronix.de>
-References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
- <20211129064329.27006-3-billy_tsai@aspeedtech.com>
+        Mon, 29 Nov 2021 21:23:22 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D045EC061574;
+        Mon, 29 Nov 2021 18:20:03 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so28184714otl.3;
+        Mon, 29 Nov 2021 18:20:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C+xyUhITd9hMveij7HHXygIBOls6mAExEb6UxhOFF6c=;
+        b=fR36kPvfVrgNn5CSIpSQ49OFFhADTbIt6wbu8DWNa5OzYhSxIeACvbJNV7vc6UuOY9
+         BQONcqv09bt+AQem0IANG9PtvEui0LlDGNJF/q0pxgxGt0fDumESxhhBIBHkzCg01DuN
+         gVPw0BiSmWPjZp94gU0IO5v3oWR7vaeaadaDyvd1T1eCxBWZl+7zhrEhtZutmrayvz2R
+         wPxnHqWjifD3SmkXuvXiWHJw7Sjq41tEvZ9Qi3LUwpA63gntaj455M7qLHddx1WwDqUn
+         tDkEkf9WcgnBpJpQ23XDrDDQfBtLqBNvNjBEELER+VCcaIPYnp+EapivAV0W0lnQri+l
+         Q8TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=C+xyUhITd9hMveij7HHXygIBOls6mAExEb6UxhOFF6c=;
+        b=olEPnERTTNTZ9eowel1yb8mh40yNyJsw1I+GTIEye0kg7A4lT9TTzQjwemZoujs8fk
+         nANODrp+nFxvKvbG6QU6RQwVUSOIOXtggjrNjR18cXqptL/W38OBRglY3GsaFe3/xEZ8
+         mz24j+i7FngXylHvuqTnq2+KTG+riTmMBSAXXGVtROt4C+yETRHUJm/scqyyq79xstLE
+         6bzPP0NCacEvBmnrAJecmFo4nT5MDM9U7GzCo67EyrNHO9p1YALOYovtnd5VDkOa/Ij3
+         8N9r9HovZAcNIUKWpDKWl3zyNxIYb8UeFcLIgawm2gkCfAGtbqMz2uOTXttWAXSguExy
+         dXNw==
+X-Gm-Message-State: AOAM533l7IgX/4hgK+Slb2bwWSbY/UygmrJNainipNHCBJDaSW1jmlLW
+        H9CyfIvTgsbRWurIinPR13Nh5r7BJ5s=
+X-Google-Smtp-Source: ABdhPJyuvJuXbXhGnQB7FQi4aYt9q/wxImcjYLgxqeZdeewXFkrddkyjxHegzRuhuanusp+im9qWwg==
+X-Received: by 2002:a05:6830:2082:: with SMTP id y2mr47241041otq.15.1638238802795;
+        Mon, 29 Nov 2021 18:20:02 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g1sm2517650ooq.2.2021.11.29.18.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 18:20:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 29 Nov 2021 18:20:00 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     David Mosberger-Tang <davidm@egauge.net>
+Cc:     Navin Sankar Velliangiri <navin@linumiz.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (sht4x) Add device tree match table
+Message-ID: <20211130022000.GA21721@roeck-us.net>
+References: <20211121160637.2312106-1-davidm@egauge.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ltrr7wjbtue7nf5u"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211129064329.27006-3-billy_tsai@aspeedtech.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <20211121160637.2312106-1-davidm@egauge.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Sun, Nov 21, 2021 at 04:07:02PM +0000, David Mosberger-Tang wrote:
+> This patch enables automatic loading of the sht4x module via a device
+> tree table entry.
+> 
+> Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 
---ltrr7wjbtue7nf5u
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to hwmon-next.
 
-Hello Billy,
+Thanks,
+Guenter
 
-just two minor thing left to criticise:
-
-On Mon, Nov 29, 2021 at 02:43:29PM +0800, Billy Tsai wrote:
-> +	if (clk_en && duty_pt) {
-> +		dividend =3D (u64)NSEC_PER_SEC * (div_l + 1) * duty_pt
-> +				 << div_h;
-> +		state->duty_cycle =3D DIV_ROUND_UP_ULL(dividend, rate);
-> +	} else
-> +		state->duty_cycle =3D clk_en ? state->period : 0;
-
-I wonder about checkpatch not criticising this construct. See
-Documentation/process/coding-style.rst:
-
-	Do not unnecessarily use braces where a single statement will
-	do. [...] This does not apply if only one branch of a
-	conditional statement is a single statement; in the latter case
-	use braces in both branches
-
-> [...]
-> +static int aspeed_pwm_apply(struct pwm_chip *chip, struct pwm_device *pw=
-m,
-> +			    const struct pwm_state *state)
-> +{
-> +	struct device *dev =3D chip->dev;
-> +	struct aspeed_pwm_data *priv =3D aspeed_pwm_chip_to_data(chip);
-> +	u32 hwpwm =3D pwm->hwpwm, duty_pt;
-> +	unsigned long rate;
-> +	u64 div_h, div_l, divisor, expect_period;
-> +	bool clk_en;
+> ---
+>  drivers/hwmon/sht4x.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+> index 3415d7a0e0fc..6e53d81e32d4 100644
+> --- a/drivers/hwmon/sht4x.c
+> +++ b/drivers/hwmon/sht4x.c
+> @@ -281,9 +281,16 @@ static const struct i2c_device_id sht4x_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, sht4x_id);
+>  
+> +static const struct of_device_id sht4x_of_match[] = {
+> +	{ .compatible = "sensirion,sht4x" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sht4x_of_match);
 > +
-> +	expect_period =3D state->period;
-> +	dev_dbg(dev, "expect period: %lldns, duty_cycle: %lldns", expect_period,
-> +		state->duty_cycle);
-> +
-> +	rate =3D clk_get_rate(priv->clk);
-> +	if (expect_period > div64_u64(ULLONG_MAX, (u64)rate))
-> +		expect_period =3D div64_u64(ULLONG_MAX, (u64)rate);
-
-If you write that as
-
-	expect_period =3D min(div64_u64(ULLONG_MAX, (u64)rate), expect_period);
-
-you make sure that the division is only calculated once.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ltrr7wjbtue7nf5u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGlPWcACgkQwfwUeK3K
-7Ak8pwf/f38P/ANk72PoQ6XaxGN4JtL+YI2d3Fnkk/akQZog/rZXoqAqA+vpeUZN
-ZCP6kfvy1afZmpmJZ5/A7IcEVbx63vryrJDubwJBpEjW+XQ7zUEIkWviTmmfgtbf
-d4alL1S8iU6oPpM4ijAZi+AUbwOkzu0mLEW6Cvx/EPJaahmLxWTUjip+WVgEN3XW
-CbrXaQCNLjX2E+OE/ddOC2kCwGJjM8eOjoMl7xZ6gL0mEMyyQpReIxDKuUUK3PSA
-RhTGOVEP0CVoksgQaMf8X5aKQvbQqzlS0/Tpinpb2sPTeefRouahOsqb5aieNsbH
-qrCFLTc6x3uQByyGnIUj9364lD8/5A==
-=/Kh7
------END PGP SIGNATURE-----
-
---ltrr7wjbtue7nf5u--
+>  static struct i2c_driver sht4x_driver = {
+>  	.driver = {
+>  		.name = "sht4x",
+> +		.of_match_table = sht4x_of_match
+>  	},
+>  	.probe		= sht4x_probe,
+>  	.id_table	= sht4x_id,
