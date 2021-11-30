@@ -2,78 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28029C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Nov 2021 09:21:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5313C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Nov 2021 09:52:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240093AbhK3JZI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Nov 2021 04:25:08 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:50974 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbhK3JZI (ORCPT
+        id S235581AbhK3Jzy convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Nov 2021 04:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235524AbhK3Jzx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:25:08 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AU8uNuZ069770;
-        Tue, 30 Nov 2021 16:56:23 +0800 (GMT-8)
-        (envelope-from billy_tsai@aspeedtech.com)
-Received: from BillyTsai-pc.aspeed.com (192.168.2.149) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
- 2021 17:20:54 +0800
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
-To:     <b.zolnierkie@samsung.com>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>, <u.kleine-koenig@pengutronix.de>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <BMC-SW@aspeedtech.com>, <stable@vger.kernel.org>
-Subject: [PATCH] hwmon: (pwm-fan) Ensure the fan going on in .probe()
-Date:   Tue, 30 Nov 2021 17:22:12 +0800
-Message-ID: <20211130092212.17783-1-billy_tsai@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 04:55:53 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB12BC061574
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Nov 2021 01:52:34 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mrzoB-0003kK-0n; Tue, 30 Nov 2021 10:52:19 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mrzo9-0003oR-5R; Tue, 30 Nov 2021 10:52:17 +0100
+Message-ID: <e28a5d5de9b940717e6444f019eab63ab1bb0b75.camel@pengutronix.de>
+Subject: Re: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, lee.jones@linaro.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Cc:     BMC-SW@aspeedtech.com
+Date:   Tue, 30 Nov 2021 10:52:17 +0100
+In-Reply-To: <20211129064329.27006-3-billy_tsai@aspeedtech.com>
+References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
+         <20211129064329.27006-3-billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.149]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AU8uNuZ069770
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Before commit 86585c61972f ("hwmon: (pwm-fan) stop using legacy
-PWM functions and some cleanups") pwm_apply_state() was called
-unconditionally in pwm_fan_probe(). In this commit this direct
-call was replaced by a call to __set_pwm(ct, MAX_PWM) which
-however is a noop if ctx->pwm_value already matches the value to
-set.
-After probe the fan is supposed to run at full speed, and the
-internal driver state suggests it does, but this isn't asserted
-and depending on bootloader and pwm low-level driver, the fan
-might just be off.
-So drop setting pwm_value to MAX_PWM to ensure the check in
-__set_pwm doesn't make it exit early and the fan goes on as
-intended.
+On Mon, 2021-11-29 at 14:43 +0800, Billy Tsai wrote:
+[...]
+> +	ret = clk_prepare_enable(priv->clk);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Couldn't enable clock\n");
+> +
+> +	ret = reset_control_deassert(priv->reset);
+> +	if (ret) {
+> +		dev_err_probe(dev, ret, "Couldn't deassert reset control\n");
+> +		goto err_disable_clk;
+> +	}
 
-Cc: stable@vger.kernel.org
-Fixes: 86585c61972f ("hwmon: (pwm-fan) stop using legacy PWM functions and some cleanups")
-Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
----
- drivers/hwmon/pwm-fan.c | 2 --
- 1 file changed, 2 deletions(-)
+Is there any reason to keep the clocks running and the controller out of
+reset while the PWM outputs are disabled?
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 17518b4cab1b..f12b9a28a232 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -336,8 +336,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 			return ret;
- 	}
- 
--	ctx->pwm_value = MAX_PWM;
--
- 	pwm_init_state(ctx->pwm, &ctx->pwm_state);
- 
- 	/*
--- 
-2.25.1
-
+regards
+Philipp
