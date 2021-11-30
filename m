@@ -2,69 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5313C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Nov 2021 09:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1714DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Nov 2021 10:39:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235581AbhK3Jzy convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Nov 2021 04:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
+        id S234572AbhK3Kme (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Nov 2021 05:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235524AbhK3Jzx (ORCPT
+        with ESMTP id S234440AbhK3Kmd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:55:53 -0500
+        Tue, 30 Nov 2021 05:42:33 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB12BC061574
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Nov 2021 01:52:34 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F5EC061574
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Nov 2021 02:39:14 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mrzoB-0003kK-0n; Tue, 30 Nov 2021 10:52:19 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mrzo9-0003oR-5R; Tue, 30 Nov 2021 10:52:17 +0100
-Message-ID: <e28a5d5de9b940717e6444f019eab63ab1bb0b75.camel@pengutronix.de>
-Subject: Re: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org, joel@jms.id.au,
-        andrew@aj.id.au, lee.jones@linaro.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     BMC-SW@aspeedtech.com
-Date:   Tue, 30 Nov 2021 10:52:17 +0100
-In-Reply-To: <20211129064329.27006-3-billy_tsai@aspeedtech.com>
-References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
-         <20211129064329.27006-3-billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ms0XU-00020W-4z; Tue, 30 Nov 2021 11:39:08 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ms0XH-001u5G-Rn; Tue, 30 Nov 2021 11:38:55 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ms0XG-0006Qj-PJ; Tue, 30 Nov 2021 11:38:54 +0100
+Date:   Tue, 30 Nov 2021 11:38:54 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     b.zolnierkie@samsung.com, jdelvare@suse.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        BMC-SW@aspeedtech.com, stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pwm-fan) Ensure the fan going on in .probe()
+Message-ID: <20211130103854.gwt5bib34t2qvbgg@pengutronix.de>
+References: <20211130092212.17783-1-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fzjl6gjehnbdzyrr"
+Content-Disposition: inline
+In-Reply-To: <20211130092212.17783-1-billy_tsai@aspeedtech.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 2021-11-29 at 14:43 +0800, Billy Tsai wrote:
-[...]
-> +	ret = clk_prepare_enable(priv->clk);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Couldn't enable clock\n");
-> +
-> +	ret = reset_control_deassert(priv->reset);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "Couldn't deassert reset control\n");
-> +		goto err_disable_clk;
-> +	}
 
-Is there any reason to keep the clocks running and the controller out of
-reset while the PWM outputs are disabled?
+--fzjl6gjehnbdzyrr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-regards
-Philipp
+On Tue, Nov 30, 2021 at 05:22:12PM +0800, Billy Tsai wrote:
+> Before commit 86585c61972f ("hwmon: (pwm-fan) stop using legacy
+> PWM functions and some cleanups") pwm_apply_state() was called
+> unconditionally in pwm_fan_probe(). In this commit this direct
+> call was replaced by a call to __set_pwm(ct, MAX_PWM) which
+> however is a noop if ctx->pwm_value already matches the value to
+> set.
+> After probe the fan is supposed to run at full speed, and the
+> internal driver state suggests it does, but this isn't asserted
+> and depending on bootloader and pwm low-level driver, the fan
+> might just be off.
+> So drop setting pwm_value to MAX_PWM to ensure the check in
+> __set_pwm doesn't make it exit early and the fan goes on as
+> intended.
+>=20
+> Cc: stable@vger.kernel.org
+> Fixes: 86585c61972f ("hwmon: (pwm-fan) stop using legacy PWM functions an=
+d some cleanups")
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+
+Nice commit log :-)
+
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--fzjl6gjehnbdzyrr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGl/zUACgkQwfwUeK3K
+7Almggf+OiugVJ7TlXxSFbcLyiNTc3kujV+5lVDZVY5j8+qn9hsAJJo5Rrqsvc1+
+KmfRHw4L6gWJxlNkJHLRoUcimSqOPJ8PtjRb+OA/d8Tzh1ymOornyGGglw6YAHF3
+yWL9hiltGqNXlfUEboQalHpQoVi5J78x9axEoZFSBzQE6Qeiu/3geU+n2kLP/syz
+DEHZrdv3jLrCOIkI3mZz7Obp6SNn49j2acAt347kcnwKKt9T9e14cjBIQdY/Ergk
+CfbkO9vy8ZOd2Cuh83zRwxkqCSdc7aBwyLFPhPYUYKVYla7XCfBMMomPYN+k1jnx
+dztkexQN+JZ4JyDRqyaoHAExjcl1Dg==
+=b/hm
+-----END PGP SIGNATURE-----
+
+--fzjl6gjehnbdzyrr--
