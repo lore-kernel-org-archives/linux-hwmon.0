@@ -2,91 +2,81 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F04C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Dec 2021 23:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4860CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Dec 2021 01:23:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbhLDXfY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 4 Dec 2021 18:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbhLDXfY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 4 Dec 2021 18:35:24 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E9BC061751;
-        Sat,  4 Dec 2021 15:31:58 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id v11so13882851wrw.10;
-        Sat, 04 Dec 2021 15:31:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TwHuq68BGqmW2Fn/QSPttgnID1EQBPBbIWi17rr9Wt0=;
-        b=p3aA+/XK9CZR2UZFRQ+oUvl5Qz4iSfm7XKTtBgNt9sXe20sZXdZDtmOsPk2WTjoIhW
-         zxQHi8P9zHfCCKyfyxNjRFIHu0gop+wbNKPkIKPR4oGRkVrLuTz3BOCAohSN8CUxBwHg
-         xMxHqyRMT5n9phe4ECe3vf5XPgxd+M8oLDD1NYAnlI/tObDdLuTC+0StpKh2mG19I66b
-         sCGpnBUmvi1BeDUVJqdiUe21suYTYc9l6qnfFdFiPBLQc7JX8viCrFW9syg2S346Aerj
-         cG2bKUa4udoBTOBLWoaSUP6o6UcGF3lLLEhmT0neCMluPf/zszV//T+1do/9n194d/f0
-         LOlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TwHuq68BGqmW2Fn/QSPttgnID1EQBPBbIWi17rr9Wt0=;
-        b=S+v/VnVIIsq0ICV1V1Aw6dJ08JRtCZsi5dEHUfDGikiXNO2PpscRDoYGdepdcwznUi
-         2ynMQP8m6V7d3FrGxoY+Ry7pblKkMvWTOjuxRumZah++Dc1E2KOiKVrQXx5XWFpFNdHV
-         453RVCJXA5ReK4Hyu6y+vBUqhSA/gPHJkt8dgCRTAaDh05WJmvvAnOA2CWunKUbwU8Y+
-         H9eszQrXa4arL3Fv9R0vVe/GSBh9Viu13hoeKUlHyDfGnE1eNJDKZY4VVF/XsvpKsgVO
-         KmIS1pVdGUw4uUu07EeJ2nIx7FZOe7BJpkif1D+yQ56y/a28VizlOrjuGTJGMlAMvqQF
-         gYJA==
-X-Gm-Message-State: AOAM533LNJsWhqDfUVL5pX9Y20SVBl0I0ii5TV4UmpJd00M89kaDuuJs
-        /jVK+mbDHrqO2VsbCRx/y/C7e7YQi4KESw==
-X-Google-Smtp-Source: ABdhPJxaehApPnDPynBlXoaSmySz8HBQiG7JsfudAeFDxcAt3kKx61NAAawUPNZyaQWoRIVZP/YMtQ==
-X-Received: by 2002:adf:d1e2:: with SMTP id g2mr32679075wrd.362.1638660716448;
-        Sat, 04 Dec 2021 15:31:56 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id w4sm6740284wrs.88.2021.12.04.15.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 15:31:56 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (adm1031): Remove redundant assignment to variable range
-Date:   Sat,  4 Dec 2021 23:31:55 +0000
-Message-Id: <20211204233155.55454-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        id S230378AbhLEB0h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 4 Dec 2021 20:26:37 -0500
+Received: from mga01.intel.com ([192.55.52.88]:62187 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230403AbhLEB0g (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 4 Dec 2021 20:26:36 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="261177100"
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="261177100"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 17:23:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="460439053"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 04 Dec 2021 17:23:07 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtgF8-000Jea-Ml; Sun, 05 Dec 2021 01:23:06 +0000
+Date:   Sun, 5 Dec 2021 09:22:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alistair Francis <alistair@alistair23.me>, kernel@pengutronix.de,
+        robh+dt@kernel.org, lee.jones@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+        alistair23@gmail.com, linux-hwmon@vger.kernel.org,
+        andreas@kemnade.info, s.hauer@pengutronix.de
+Subject: Re: [PATCH v16 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
+Message-ID: <202112050943.k8t5MaMs-lkp@intel.com>
+References: <20211202120758.41478-9-alistair@alistair23.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202120758.41478-9-alistair@alistair23.me>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Variable range is being initialized with a value that is never read, it
-is being re-assigned in the next statement. The assignment is redundant,
-remove it and initialize range using the second assigned value. Clean up
-the formatting too by adding missing spaces.
+Hi Alistair,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on lee-mfd/for-mfd-next robh/for-next v5.16-rc3 next-20211203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Alistair-Francis/Add-support-for-the-silergy-sy7636a/20211202-201116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: arm-randconfig-c002-20211202 (https://download.01.org/0day-ci/archive/20211205/202112050943.k8t5MaMs-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/690ae9a20c4cbd1aab1695c0ca6c8d7dbe1d51a6
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alistair-Francis/Add-support-for-the-silergy-sy7636a/20211202-201116
+        git checkout 690ae9a20c4cbd1aab1695c0ca6c8d7dbe1d51a6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm/boot/dts/imx7d-remarkable2.dts:258.3-260.5 Properties must precede subnodes
+>> FATAL ERROR: Unable to parse input tree
+
 ---
- drivers/hwmon/adm1031.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
-index 257ec53ae723..ac841fa3a369 100644
---- a/drivers/hwmon/adm1031.c
-+++ b/drivers/hwmon/adm1031.c
-@@ -242,9 +242,8 @@ static int FAN_TO_REG(int reg, int div)
- static int AUTO_TEMP_MAX_TO_REG(int val, int reg, int pwm)
- {
- 	int ret;
--	int range = val - AUTO_TEMP_MIN_FROM_REG(reg);
-+	int range = ((val - AUTO_TEMP_MIN_FROM_REG(reg)) * 10) / (16 - pwm);
- 
--	range = ((val - AUTO_TEMP_MIN_FROM_REG(reg))*10)/(16 - pwm);
- 	ret = ((reg & 0xf8) |
- 	       (range < 10000 ? 0 :
- 		range < 20000 ? 1 :
--- 
-2.33.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
