@@ -2,51 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C4ACC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Dec 2021 02:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D895C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Dec 2021 02:06:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbhLFCKM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Dec 2021 21:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S233111AbhLFCKO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 5 Dec 2021 21:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbhLFCKM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Dec 2021 21:10:12 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F325C061751
-        for <linux-hwmon@vger.kernel.org>; Sun,  5 Dec 2021 18:06:44 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id k37so21625322lfv.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 05 Dec 2021 18:06:44 -0800 (PST)
+        with ESMTP id S231177AbhLFCKO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Dec 2021 21:10:14 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093A4C061751
+        for <linux-hwmon@vger.kernel.org>; Sun,  5 Dec 2021 18:06:46 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id d11so18004849ljg.8
+        for <linux-hwmon@vger.kernel.org>; Sun, 05 Dec 2021 18:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zdLX6B7TuNFtDV9H/ypWbFLEkQU5InXBFriSKP/v27w=;
-        b=ZV9CP10/bEmPZl4Ebih7JEjoiuEHa3ECw7vtCF6kuxN5HgjcbdH5RRqK5ssUg5wBNm
-         W5gzDshQa+86/fVJAY+VUsBbWxKrWRsofY7060DGtFgzc49uoJtVLmCe/RE8W+a74EGc
-         QPlWwd3kN0KB1TJTD7b46Z374t2gKCatxmM14sEnJefiKzKQfMwkmHZRKqIzr9/e43BQ
-         hjs7ThSN6XZ7Jk72MI5KCz2Y3XnaoTDA1XFFgIPCe4qP2GPJlUoErpG5ttkYzpVof3CK
-         rARrZRmsg1FD0qQDKIzjomUwOrjEM7tEsHEKr1RIzQdmmfQZUY9XGWtsJYHYz0DrcNlS
-         dayQ==
+        bh=rsoPIFIn5+zqSPXgDJdPPy2SoSRl7YHAN+dOpGg/k7k=;
+        b=w93SchqSYaOYRhnaITLS8UP8CNLWnejns7J1egpWYmioY4txpTIBt5zxQGYnXyd3rf
+         1C2itoF2HlmGXvXpAn6rjdLGfp1RKZCzW+PzyOIW3FTJqr901KX9Djamso7fO/uMrdel
+         k8Up28i6VzNc5E2udQEOisVVyANpHAoKLLNdOv+Fbo5ID5p36HFB/GUiygORBD5wjvlv
+         qYshlqsCR3/yQHDXiHmtnbHe2nqTpKeQluGHzmKqUaGd8NqD4ho1fJfwsIWvQLR2upZo
+         Jvbz+q4p3z+iZOvmQHhsB92TBCZGe86HUT7a13Xtv7u79efsBp6dDUaiP9/ac3Jx9UuA
+         e8AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zdLX6B7TuNFtDV9H/ypWbFLEkQU5InXBFriSKP/v27w=;
-        b=OPU5IcqVrEFXMUR80tc/G1EwQdSN0Q58pmCMkiTlW2Mulw5aQs0qqBate0hlUB015g
-         r5OS6AdtGq6kcyiQ6lEKf/eTBP7zF/j2HVvXjK/NXB0oVzGXv5CucOsqk+QI+wnh1J9A
-         RIk9p50iHad5J4FT3kDLidFm5C9RfbBMgeHMs9+x+y8hEOIL2yaRHfVyrWhwWUtd7yII
-         aFVYrKgVWCmmGFhGTp2SIKHy9Iht/iXoWDVLEDOYMC2GmFD3DJK5Ka0B6fHNdHURuIF5
-         2XsoGUnSbAPeRlDGfKCLVtEp5psxaeBWcoEwic+BASdLlCy/uwiEYc71TV3pvLa2Z4AB
-         l9yQ==
-X-Gm-Message-State: AOAM532ftEYKGPFM36wS+6VDTEMBdKB7Ek2x6A2WT7oQ7azIJQGn0HPl
-        sgFWN9MOa+AJz7kxdfLd+YhGNsHGHeizPQ==
-X-Google-Smtp-Source: ABdhPJzRRfFvwe2mRUcPN4JfLx1zokUkjFdyWDQUGfoeKzs3raSv3nma7TdlXWDpH98EAStQlbylkQ==
-X-Received: by 2002:a05:6512:33a8:: with SMTP id i8mr32501239lfg.497.1638756402101;
-        Sun, 05 Dec 2021 18:06:42 -0800 (PST)
+        bh=rsoPIFIn5+zqSPXgDJdPPy2SoSRl7YHAN+dOpGg/k7k=;
+        b=4EhjF3fSanz1C7rvgnTmRn5pEum3L+PSUQmimGXzRXulNiurCY1nkESE0qcaCTSaiY
+         c3dEHclLnHCH6Yrve91PD8hFiUSVgiIEM6HwK287QasJMfXgzfpxTP/lZfvBhRCOAVhF
+         oeFxdJd+8Ao/ST/TBPdtZyPAH0W3Vzt2UBviu/I0Xf0dxi0uuVok/nh7E82FOPKZ6nqE
+         cougUl5qSmo7cdfsce30Y5VBzV/lveFXLT/tViH/Xb45Hgo2JGLLWAHF5CJEjCuitWPN
+         zEvMCT6UD794VUzrtYblS4t2W7L2hYsWUAKCg0MiBWwWANDqaZDq3OQM5Lv9LNXS8dIT
+         70IQ==
+X-Gm-Message-State: AOAM531xmKsXj1k7xQZ8OqitYwhnf16fwTSFmJTtcnXfysY7j7hnrrTN
+        CXIZ60bP04Y3JpSSqsXHKmOMKQ==
+X-Google-Smtp-Source: ABdhPJzh4aYTlX1uy1OqlvW3cS2U9Rt1udy9IIJCitP9fCW8BI7pwV3yatmesrO9SbnWo+e2fgSwKw==
+X-Received: by 2002:a2e:86cb:: with SMTP id n11mr33700233ljj.425.1638756404305;
+        Sun, 05 Dec 2021 18:06:44 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id k8sm1215672lfv.179.2021.12.05.18.06.40
+        by smtp.gmail.com with ESMTPSA id k8sm1215672lfv.179.2021.12.05.18.06.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 18:06:41 -0800 (PST)
+        Sun, 05 Dec 2021 18:06:43 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
@@ -54,9 +54,9 @@ Cc:     linux-hwmon@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Peter Rosin <peda@axentia.se>,
         Chris Lesiak <chris.lesiak@licor.com>
-Subject: [PATCH 2/3 v2] hwmon: (ntc_thermistor): Switch to generic firmware props
-Date:   Mon,  6 Dec 2021 03:04:22 +0100
-Message-Id: <20211206020423.62402-2-linus.walleij@linaro.org>
+Subject: [PATCH 3/3 v2] hwmon: (ntc_thermistor): Move DT matches to the driver block
+Date:   Mon,  6 Dec 2021 03:04:23 +0100
+Message-Id: <20211206020423.62402-3-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211206020423.62402-1-linus.walleij@linaro.org>
 References: <20211206020423.62402-1-linus.walleij@linaro.org>
@@ -66,124 +66,108 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This switches to retrieveing the configuration of the NTC
-from generic firmware properties so that we get neutral from
-device tree: now ACPI or, more importantly, software nodes
-can be used to spawn NTC devices provided they have the
-required properties.
-
-This was inspired by the similar changes made to the IIO
-drivers.
-
-This was tested on the Ux500 HREF with the NTC devices
-probing from device tree just as fine after this as before.
+This moves the device tree match data toward the end of the
+driver which is the convention, here we can also add ACPI
+and similar match data in a conforming manner.
 
 Cc: Peter Rosin <peda@axentia.se>
 Cc: Chris Lesiak <chris.lesiak@licor.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
 ChangeLog v1->v2:
-- Rebase on the changes keeping the props parsing code in
-  a separate function.
+- Rebase, no other changes.
 ---
- drivers/hwmon/ntc_thermistor.c | 36 ++++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 17 deletions(-)
+ drivers/hwmon/ntc_thermistor.c | 70 +++++++++++++++++-----------------
+ 1 file changed, 35 insertions(+), 35 deletions(-)
 
 diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-index 12435ef66530..0c8b3dbcb38b 100644
+index 0c8b3dbcb38b..00356c28e8c8 100644
 --- a/drivers/hwmon/ntc_thermistor.c
 +++ b/drivers/hwmon/ntc_thermistor.c
-@@ -9,10 +9,10 @@
- #include <linux/slab.h>
- #include <linux/module.h>
- #include <linux/math64.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/err.h>
--#include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/fixp-arith.h>
- #include <linux/iio/consumer.h>
- #include <linux/hwmon.h>
-@@ -595,12 +595,11 @@ static const struct hwmon_chip_info ntc_chip_info = {
- 	.info = ntc_info,
- };
+@@ -368,41 +368,6 @@ static int ntc_adc_iio_read(struct ntc_data *data)
+ 	return uv;
+ }
  
--static int ntc_thermistor_parse_dt(struct device *dev,
--				   struct ntc_data *data)
-+static int ntc_thermistor_parse_props(struct device *dev,
-+				      struct ntc_data *data)
+-static const struct of_device_id ntc_match[] = {
+-	{ .compatible = "epcos,b57330v2103",
+-		.data = &ntc_thermistor_id[NTC_B57330V2103]},
+-	{ .compatible = "epcos,b57891s0103",
+-		.data = &ntc_thermistor_id[NTC_B57891S0103] },
+-	{ .compatible = "murata,ncp03wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP03WB473] },
+-	{ .compatible = "murata,ncp03wf104",
+-		.data = &ntc_thermistor_id[NTC_NCP03WF104] },
+-	{ .compatible = "murata,ncp15wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP15WB473] },
+-	{ .compatible = "murata,ncp15wl333",
+-		.data = &ntc_thermistor_id[NTC_NCP15WL333] },
+-	{ .compatible = "murata,ncp15xh103",
+-		.data = &ntc_thermistor_id[NTC_NCP15XH103] },
+-	{ .compatible = "murata,ncp18wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP18WB473] },
+-	{ .compatible = "murata,ncp21wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP21WB473] },
+-
+-	/* Usage of vendor name "ntc" is deprecated */
+-	{ .compatible = "ntc,ncp03wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP03WB473] },
+-	{ .compatible = "ntc,ncp15wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP15WB473] },
+-	{ .compatible = "ntc,ncp15wl333",
+-		.data = &ntc_thermistor_id[NTC_NCP15WL333] },
+-	{ .compatible = "ntc,ncp18wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP18WB473] },
+-	{ .compatible = "ntc,ncp21wb473",
+-		.data = &ntc_thermistor_id[NTC_NCP21WB473] },
+-	{ },
+-};
+-MODULE_DEVICE_TABLE(of, ntc_match);
+-
+ static inline u64 div64_u64_safe(u64 dividend, u64 divisor)
  {
- 	struct iio_channel *chan;
- 	enum iio_chan_type type;
--	struct device_node *np = dev->of_node;
- 	int ret;
+ 	if (divisor == 0 && dividend == 0)
+@@ -687,6 +652,41 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
+ 	return 0;
+ }
  
- 	chan = devm_iio_channel_get(dev, NULL);
-@@ -614,14 +613,19 @@ static int ntc_thermistor_parse_dt(struct device *dev,
- 	if (type != IIO_VOLTAGE)
- 		return -EINVAL;
- 
--	if (of_property_read_u32(np, "pullup-uv", &data->pullup_uv))
--		return -ENODEV;
--	if (of_property_read_u32(np, "pullup-ohm", &data->pullup_ohm))
--		return -ENODEV;
--	if (of_property_read_u32(np, "pulldown-ohm", &data->pulldown_ohm))
--		return -ENODEV;
-+	ret = device_property_read_u32(dev, "pullup-uv", &data->pullup_uv);
-+	if (ret)
-+		return dev_err_probe(dev,  ret, "pullup-uv not specified\n");
++static const struct of_device_id ntc_match[] = {
++	{ .compatible = "epcos,b57330v2103",
++		.data = &ntc_thermistor_id[NTC_B57330V2103]},
++	{ .compatible = "epcos,b57891s0103",
++		.data = &ntc_thermistor_id[NTC_B57891S0103] },
++	{ .compatible = "murata,ncp03wb473",
++		.data = &ntc_thermistor_id[NTC_NCP03WB473] },
++	{ .compatible = "murata,ncp03wf104",
++		.data = &ntc_thermistor_id[NTC_NCP03WF104] },
++	{ .compatible = "murata,ncp15wb473",
++		.data = &ntc_thermistor_id[NTC_NCP15WB473] },
++	{ .compatible = "murata,ncp15wl333",
++		.data = &ntc_thermistor_id[NTC_NCP15WL333] },
++	{ .compatible = "murata,ncp15xh103",
++		.data = &ntc_thermistor_id[NTC_NCP15XH103] },
++	{ .compatible = "murata,ncp18wb473",
++		.data = &ntc_thermistor_id[NTC_NCP18WB473] },
++	{ .compatible = "murata,ncp21wb473",
++		.data = &ntc_thermistor_id[NTC_NCP21WB473] },
 +
-+	ret = device_property_read_u32(dev, "pullup-ohm", &data->pullup_ohm);
-+	if (ret)
-+		return dev_err_probe(dev,  ret, "pullup-ohm not specified\n");
++	/* Usage of vendor name "ntc" is deprecated */
++	{ .compatible = "ntc,ncp03wb473",
++		.data = &ntc_thermistor_id[NTC_NCP03WB473] },
++	{ .compatible = "ntc,ncp15wb473",
++		.data = &ntc_thermistor_id[NTC_NCP15WB473] },
++	{ .compatible = "ntc,ncp15wl333",
++		.data = &ntc_thermistor_id[NTC_NCP15WL333] },
++	{ .compatible = "ntc,ncp18wb473",
++		.data = &ntc_thermistor_id[NTC_NCP18WB473] },
++	{ .compatible = "ntc,ncp21wb473",
++		.data = &ntc_thermistor_id[NTC_NCP21WB473] },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, ntc_match);
 +
-+	ret = device_property_read_u32(dev, "pulldown-ohm", &data->pulldown_ohm);
-+	if (ret)
-+		return dev_err_probe(dev,  ret, "pulldown-ohm not specified\n");
- 
--	if (of_find_property(np, "connected-positive", NULL))
-+	if (device_property_read_bool(dev, "connected-positive"))
- 		data->connect = NTC_CONNECTED_POSITIVE;
- 	else /* status change should be possible if not always on. */
- 		data->connect = NTC_CONNECTED_GROUND;
-@@ -634,8 +638,6 @@ static int ntc_thermistor_parse_dt(struct device *dev,
- static int ntc_thermistor_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	const struct of_device_id *of_id =
--			of_match_device(of_match_ptr(ntc_match), dev);
- 	const struct platform_device_id *pdev_id;
- 	struct device *hwmon_dev;
- 	struct ntc_data *data;
-@@ -645,7 +647,7 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENOMEM;
- 
--	ret = ntc_thermistor_parse_dt(dev, data);
-+	ret = ntc_thermistor_parse_props(dev, data);
- 	if (ret)
- 		return ret;
- 
-@@ -660,7 +662,7 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	pdev_id = of_id ? of_id->data : platform_get_device_id(pdev);
-+	pdev_id = device_get_match_data(dev);
- 
- 	if (pdev_id->driver_data >= ARRAY_SIZE(ntc_type)) {
- 		dev_err(dev, "Unknown device type: %lu(%s)\n",
-@@ -688,7 +690,7 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
  static struct platform_driver ntc_thermistor_driver = {
  	.driver = {
  		.name = "ntc-thermistor",
--		.of_match_table = of_match_ptr(ntc_match),
-+		.of_match_table = ntc_match,
- 	},
- 	.probe = ntc_thermistor_probe,
- 	.id_table = ntc_thermistor_id,
 -- 
 2.31.1
 
