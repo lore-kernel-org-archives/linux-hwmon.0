@@ -2,76 +2,83 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19910C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Dec 2021 17:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEFF2C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Dec 2021 17:33:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239791AbhLGRe1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Dec 2021 12:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S240016AbhLGRgf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Dec 2021 12:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbhLGRe1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Dec 2021 12:34:27 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D81C061574;
-        Tue,  7 Dec 2021 09:30:56 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso5603008ood.13;
-        Tue, 07 Dec 2021 09:30:56 -0800 (PST)
+        with ESMTP id S229718AbhLGRge (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Dec 2021 12:36:34 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB20C061574
+        for <linux-hwmon@vger.kernel.org>; Tue,  7 Dec 2021 09:33:04 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso19096105otf.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Dec 2021 09:33:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=UfRFcZhTqwVLVt7r2zueC/pU4lBh0hExXO/ZORo48wQ=;
-        b=owALHfLYmXossbIFvZDrUvt/Rivjzm1yU1ECHuCrg8uTANH2C+BbYxOMFrDmaceRyP
-         PNALtgmYczTPG4KqhsKYOkhCFRfPvp65jXNeeoUJp778fcE93b9uLmQehgNtEB/Katdl
-         9IM973tgVDhBfW0ATYwvf4SAp3uRH3se6A27oEN4fGjkI+7XdR5SAfMgP727kk7sQeBQ
-         oLduWw3VyAdJZmRMgXpulqB52pPbi3EVR+qfRMN2ElVZyyYI4dADkUX9pzbthshY3ayE
-         He7MrQOUIvsMXFlNg84Zm/pIFNsnLnJ4nrhVAYzF6EhNHNtat/YJVl6T5LFmbZd2V7bG
-         bmug==
+        bh=afcqqvGe3oE5huko7HjJXYpeV+s7PUFD0/spTUHweSk=;
+        b=fICSTwo9v1SUBBTmUoB9xIfqIhl1PrgXSfA/SC1IpkgGhq8nrf2Ufgl99c4xuc+QQK
+         dlSnhW2bpQGqQeUVhIFLlxSazS+BXUhGlTBlANOIzNlS4qRzf7faQNJR8/xy/7f69IKg
+         UR4KtC1PZ3MUYzpn3zwWIagdd7EcoaTDDwH9aYjlxesAASN4iVPYQfb3+wBuXVTTTm9X
+         xqOHmr2KE9ZVxwP+Ekl9xikZCVmZSuA2B5i+Pmgb8+Tnk/ZKxnIXB8nfJTocVgcd0qTe
+         bROPkZmx6yg58sGxplhfKLpL3oyvVoKsAdWTBkVC5rVvmhDygGvotzp9fVsXD5EPkI+8
+         BAcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=UfRFcZhTqwVLVt7r2zueC/pU4lBh0hExXO/ZORo48wQ=;
-        b=UYsnBNQYq+l/28M3lk1O0VEDQPagNlwhfrO/QtYubEOKy9PZ8RRiokEvfPjFnvLSqi
-         dSFeTcu/9DY+Bx31v9RvvNnmbleQ8y8zISNmpezH1PAt3jZ6FT57sdPne3paYbDebWb9
-         KzBo28LvVnvn/WX9PIsXzp++ftZlvr0372WX4mlVL0DEBIputjNetkf5fzhit5wKmL2U
-         5AAuZbkOwCpSWH7dy7CyRbaGss0h/MyVDKJUR73I9NLhiArddVhHJngjQ7gt4dXdHP+W
-         1deIW8DoM8EygkQeohMHmUwiLOZXQqoI/1Iq8HMR696huETT+ot2Ragt0i2cpV1IWDp/
-         XCIw==
-X-Gm-Message-State: AOAM530qr8MVFVwK1qGHQf1uwEcjF/iaTu3cQEW0TM7XXdBEuCtyfEVE
-        a3RCr6zwg6apxlgT2m7lDWSYa1WZ4yY=
-X-Google-Smtp-Source: ABdhPJwIc0LVN4/MQdUZjJdvbi1VBFbGaJdglcFbSsjW5Rcqb43m1YoJc3mtk3uGKYJ9qrw43LmsJA==
-X-Received: by 2002:a05:6820:445:: with SMTP id p5mr27603951oou.9.1638898256014;
-        Tue, 07 Dec 2021 09:30:56 -0800 (PST)
+        bh=afcqqvGe3oE5huko7HjJXYpeV+s7PUFD0/spTUHweSk=;
+        b=j8TzGTeweeRvuod+0LcTTHMmLbe2DyS6T7pFy2YCEEGvtsfnFd834isuJcmCRr8RRW
+         Ao/Jdm8wx1Z8Pf1k2tPCOeryEZQnkqtZd5fG6IJ2Nqq5OdGEiThY997Cddn2fL+gTTl/
+         Yo0BBgfC08bBiqcbuJAkNZz8mSlsyOztkp47l5z6ftzkdLrCxvOzWe3awpfsy9cXzSJ6
+         vTNuOsufaA8iLnNSaWkoBar4nubqGlWexBRI3aBCXq8uWzVMdkaKxgoStuqvDJHrhbjn
+         4VB4x/qYj8yDz1mieVj+sGJM3XGHUqnUBpwo4RcsFo3KEcEOQpsoxSF/qhDHdAHgnxMv
+         580g==
+X-Gm-Message-State: AOAM532hBD2E2jwC9aME+HKmctCJaf+YsBOPw5L3oN7ficN2Gr93tVvs
+        7QQVxxYR/0eKY1L0Y34P+kYRgXAtQic=
+X-Google-Smtp-Source: ABdhPJwmkIJ7kZwyhuTPZH8jtv2z3Up0ryrr/i5k6eMxEtvfmQv7oemiVVaFa30mlXh+Wwbyx33j7w==
+X-Received: by 2002:a05:6830:3155:: with SMTP id c21mr36286509ots.7.1638898383559;
+        Tue, 07 Dec 2021 09:33:03 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h1sm36907otq.45.2021.12.07.09.30.55
+        by smtp.gmail.com with ESMTPSA id c3sm75574oiw.8.2021.12.07.09.33.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 09:30:55 -0800 (PST)
+        Tue, 07 Dec 2021 09:33:02 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 7 Dec 2021 09:30:54 -0800
+Date:   Tue, 7 Dec 2021 09:33:01 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin Ian King <colin.i.king@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adm1031): Remove redundant assignment to
- variable range
-Message-ID: <20211207173054.GA657431@roeck-us.net>
-References: <20211204233155.55454-1-colin.i.king@gmail.com>
+        Peter Rosin <peda@axentia.se>,
+        Chris Lesiak <chris.lesiak@licor.com>
+Subject: Re: [PATCH 1/3 v2] hwmon: (ntc_thermistor): Move and refactor DT
+ parsing
+Message-ID: <20211207173301.GA658961@roeck-us.net>
+References: <20211206020423.62402-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211204233155.55454-1-colin.i.king@gmail.com>
+In-Reply-To: <20211206020423.62402-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 11:31:55PM +0000, Colin Ian King wrote:
-> Variable range is being initialized with a value that is never read, it
-> is being re-assigned in the next statement. The assignment is redundant,
-> remove it and initialize range using the second assigned value. Clean up
-> the formatting too by adding missing spaces.
+On Mon, Dec 06, 2021 at 03:04:21AM +0100, Linus Walleij wrote:
+> Move the parsing of the DT config right above probe().
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Allocate the state container for the driver in probe()
+> instead of inside the DT config parsing function: as a
+> result return an int instead of a pointer.
+> 
+> Drop the check for !np: we can only probe from DT right
+> now so no risk of ending up here.
+> 
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Chris Lesiak <chris.lesiak@licor.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
 Applied.
 
@@ -79,21 +86,131 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/adm1031.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> ChangeLog v1->v2:
+> - Instead of inlining the DT probing, keep the separate
+>   function, but move out the state container allocation
+>   and return an int.
+> ---
+>  drivers/hwmon/ntc_thermistor.c | 93 ++++++++++++++++------------------
+>  1 file changed, 43 insertions(+), 50 deletions(-)
 > 
-> diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
-> index 257ec53ae723..ac841fa3a369 100644
-> --- a/drivers/hwmon/adm1031.c
-> +++ b/drivers/hwmon/adm1031.c
-> @@ -242,9 +242,8 @@ static int FAN_TO_REG(int reg, int div)
->  static int AUTO_TEMP_MAX_TO_REG(int val, int reg, int pwm)
->  {
->  	int ret;
-> -	int range = val - AUTO_TEMP_MIN_FROM_REG(reg);
-> +	int range = ((val - AUTO_TEMP_MIN_FROM_REG(reg)) * 10) / (16 - pwm);
+> diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
+> index ed638ebd0923..12435ef66530 100644
+> --- a/drivers/hwmon/ntc_thermistor.c
+> +++ b/drivers/hwmon/ntc_thermistor.c
+> @@ -403,49 +403,6 @@ static const struct of_device_id ntc_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, ntc_match);
 >  
-> -	range = ((val - AUTO_TEMP_MIN_FROM_REG(reg))*10)/(16 - pwm);
->  	ret = ((reg & 0xf8) |
->  	       (range < 10000 ? 0 :
->  		range < 20000 ? 1 :
+> -static struct ntc_data *ntc_thermistor_parse_dt(struct device *dev)
+> -{
+> -	struct ntc_data *data;
+> -	struct iio_channel *chan;
+> -	enum iio_chan_type type;
+> -	struct device_node *np = dev->of_node;
+> -	int ret;
+> -
+> -	if (!np)
+> -		return NULL;
+> -
+> -	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> -	if (!data)
+> -		return ERR_PTR(-ENOMEM);
+> -
+> -	chan = devm_iio_channel_get(dev, NULL);
+> -	if (IS_ERR(chan))
+> -		return ERR_CAST(chan);
+> -
+> -	ret = iio_get_channel_type(chan, &type);
+> -	if (ret < 0)
+> -		return ERR_PTR(ret);
+> -
+> -	if (type != IIO_VOLTAGE)
+> -		return ERR_PTR(-EINVAL);
+> -
+> -	if (of_property_read_u32(np, "pullup-uv", &data->pullup_uv))
+> -		return ERR_PTR(-ENODEV);
+> -	if (of_property_read_u32(np, "pullup-ohm", &data->pullup_ohm))
+> -		return ERR_PTR(-ENODEV);
+> -	if (of_property_read_u32(np, "pulldown-ohm", &data->pulldown_ohm))
+> -		return ERR_PTR(-ENODEV);
+> -
+> -	if (of_find_property(np, "connected-positive", NULL))
+> -		data->connect = NTC_CONNECTED_POSITIVE;
+> -	else /* status change should be possible if not always on. */
+> -		data->connect = NTC_CONNECTED_GROUND;
+> -
+> -	data->chan = chan;
+> -
+> -	return data;
+> -}
+> -
+>  static inline u64 div64_u64_safe(u64 dividend, u64 divisor)
+>  {
+>  	if (divisor == 0 && dividend == 0)
+> @@ -638,6 +595,42 @@ static const struct hwmon_chip_info ntc_chip_info = {
+>  	.info = ntc_info,
+>  };
+>  
+> +static int ntc_thermistor_parse_dt(struct device *dev,
+> +				   struct ntc_data *data)
+> +{
+> +	struct iio_channel *chan;
+> +	enum iio_chan_type type;
+> +	struct device_node *np = dev->of_node;
+> +	int ret;
+> +
+> +	chan = devm_iio_channel_get(dev, NULL);
+> +	if (IS_ERR(chan))
+> +		return PTR_ERR(chan);
+> +
+> +	ret = iio_get_channel_type(chan, &type);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (type != IIO_VOLTAGE)
+> +		return -EINVAL;
+> +
+> +	if (of_property_read_u32(np, "pullup-uv", &data->pullup_uv))
+> +		return -ENODEV;
+> +	if (of_property_read_u32(np, "pullup-ohm", &data->pullup_ohm))
+> +		return -ENODEV;
+> +	if (of_property_read_u32(np, "pulldown-ohm", &data->pulldown_ohm))
+> +		return -ENODEV;
+> +
+> +	if (of_find_property(np, "connected-positive", NULL))
+> +		data->connect = NTC_CONNECTED_POSITIVE;
+> +	else /* status change should be possible if not always on. */
+> +		data->connect = NTC_CONNECTED_GROUND;
+> +
+> +	data->chan = chan;
+> +
+> +	return 0;
+> +}
+> +
+>  static int ntc_thermistor_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -646,15 +639,15 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
+>  	const struct platform_device_id *pdev_id;
+>  	struct device *hwmon_dev;
+>  	struct ntc_data *data;
+> +	int ret;
+>  
+> -	data = ntc_thermistor_parse_dt(dev);
+> -	if (IS_ERR(data))
+> -		return PTR_ERR(data);
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+>  
+> -	if (!data) {
+> -		dev_err(dev, "No platform init data supplied.\n");
+> -		return -ENODEV;
+> -	}
+> +	ret = ntc_thermistor_parse_dt(dev, data);
+> +	if (ret)
+> +		return ret;
+>  
+>  	if (data->pullup_uv == 0 ||
+>  	    (data->pullup_ohm == 0 && data->connect ==
