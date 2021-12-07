@@ -2,96 +2,222 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7086C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Dec 2021 23:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41275C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Dec 2021 06:46:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357426AbhLFXIq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Dec 2021 18:08:46 -0500
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:35067 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbhLFXIq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Dec 2021 18:08:46 -0500
-Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 1ABA15B1;
-        Mon,  6 Dec 2021 15:05:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1638831916;
-        bh=AGZUvdoz1R/W4UGcI1sQgiuXPO1E1UwVokdQHmJX2XY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o+Hq59pJTf0HeC60xL18SQ1NRlYfPzNViiEaAFvLov1s302L/L9DIpY/cUfw4XD8g
-         UM9m0iZdUijm6HcJAemqg/QgxQafZaSmj5CjxIW3s0FqzWFPJ9bqyNyTNwX+Az5/q9
-         rm5Gve+vEkPdOYHJrfPJ7+kTIXCv0Boi9ND6kDc0=
-Date:   Mon, 6 Dec 2021 15:05:14 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>, g@hatter.bewilderbeest.net
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: add Delta AHE-50DC fan control module driver
-Message-ID: <Ya6XKtxREvocOXow@hatter.bewilderbeest.net>
-References: <20211206224419.15736-1-zev@bewilderbeest.net>
- <20211206224419.15736-2-zev@bewilderbeest.net>
- <28719505-ace1-bb04-bbc2-043c56b0db7d@roeck-us.net>
+        id S234562AbhLGGtb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Dec 2021 01:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232354AbhLGGta (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Dec 2021 01:49:30 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CED3C061746;
+        Mon,  6 Dec 2021 22:46:01 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id t6so13791183qkg.1;
+        Mon, 06 Dec 2021 22:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zbba/UkaBqT6lJeesV5XnDR8ly5tsCHkshlo7j8jGmI=;
+        b=Q+yWS6IouAezP2RtXT7wfG4/tNxdp9ZXLR+wW9lKJBMyDsJlbJ5H3xZ0rKJ6fVBHbG
+         dSSqWRMXnedRWTkImMBJ02GzPEnNeRFyXRgjK0GwRALs2WOZh06MkTmzmmR7igDS3WRT
+         n9cK0g2H5P2BlLtjlmxoUtb2D+/i7e+uibXPM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zbba/UkaBqT6lJeesV5XnDR8ly5tsCHkshlo7j8jGmI=;
+        b=PhdEVnI6dYg00PJuLWCH4y5EPtMAWlnBMK+HS90cks0zUYxf0c+2OEqIOXlT6TazA6
+         quf9bdlAGZFGsNJCgaYlUdWjrwT4XlqcvoOAWGzgsxu3LioqzvrHaQ0kFpYJREfmsPPW
+         WNIoi4Ig4REY6cM0d57zLHEcKcxaxFnGD4aGMgIiaacCIIwBjCqxytsbdjHwEP/1Vu5l
+         vpCfJHyVjbz19+Z4+kYrXcfcgdb7L/Louf45bKbQDNjqOSqc5fp+uJSdeGFEPUS3Lv2W
+         q6XH/0woghnTs32D9l2bPVSZ+aURWXXQ7yQQ8azK6cBX6gxSMr4qs73LVGu8dh8EyS+n
+         yusA==
+X-Gm-Message-State: AOAM5335po9MDdykn8MXnDfsFc325PhaBygqT/CcUaFvTOtTL4znnAAN
+        nqlNPmBnSo+g7cnh1WUsrmOaHZfVKaXwGwnSE74=
+X-Google-Smtp-Source: ABdhPJwMyI+isbOcD9jb1sDe2P/kVRSvemDmcx2g+X8998rktI8XFF6NjHYwG35zn7OuoJyPRSFLT3eZWu86DISifLQ=
+X-Received: by 2002:a05:620a:1004:: with SMTP id z4mr37420042qkj.243.1638859560150;
+ Mon, 06 Dec 2021 22:46:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <28719505-ace1-bb04-bbc2-043c56b0db7d@roeck-us.net>
+References: <20211130055933.32708-1-billy_tsai@aspeedtech.com>
+In-Reply-To: <20211130055933.32708-1-billy_tsai@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 7 Dec 2021 06:45:47 +0000
+Message-ID: <CACPK8XfM4C7v3keXaxMs9SkqNzb8XWbZ6QvcZXWcy3ZKJCrvWQ@mail.gmail.com>
+Subject: Re: [v14 0/2] Support pwm driver for aspeed ast26xx
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, Andrew Jeffery <andrew@aj.id.au>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-hwmon@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pwm@vger.kernel.org, BMC-SW <BMC-SW@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:02:49PM PST, Guenter Roeck wrote:
->On 12/6/21 2:44 PM, Zev Weiss wrote:
->>This device is an integrated module of the Delta AHE-50DC Open19 power
->>shelf.  For lack of proper documentation, this driver has been developed
->>referencing an existing (GPL) driver that was included in a code release
->>from LinkedIn [1].  It provides four fan speeds, four temperatures, and
->>one voltage reading, as well as a handful of warning and fault
->>indicators.
->>
->>[1] https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-kernel/fancontrol-mod/files/fancontrol.c
->>
->>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->>---
->
->[ ... ]
->
->>+
->>+static const u8 AHE50DC_FAN_TEMP_REGS[] = { 0x8d, 0x8e, 0x8f, 0xd0 };
->>+static const u8 AHE50DC_FAN_SPEED_REGS[] = { 0x90, 0x91, 0x92, 0x93 };
->>+static const u8 AHE50DC_FAN_FAN_STATUS_REGS[] = { 0x81, 0x82 };
->>+#define AHE50DC_FAN_VIN_REG 0x88
->>+#define AHE50DC_FAN_CHIP_STATUS_REG 0x79
->
->PMBus registers:
->
->	PMBUS_STATUS_WORD               = 0x79,
->
->	PMBUS_STATUS_FAN_12             = 0x81,
->	PMBUS_STATUS_FAN_34             = 0x82,
->
->	PMBUS_READ_VIN                  = 0x88,
->
->        PMBUS_READ_TEMPERATURE_1        = 0x8D,
->        PMBUS_READ_TEMPERATURE_2        = 0x8E,
->        PMBUS_READ_TEMPERATURE_3        = 0x8F,
->        PMBUS_READ_FAN_SPEED_1          = 0x90,
->        PMBUS_READ_FAN_SPEED_2          = 0x91,
->        PMBUS_READ_FAN_SPEED_3          = 0x92,
->        PMBUS_READ_FAN_SPEED_4          = 0x93,
->
->This is quite obviously a PMBus device. Why not use the PMBus driver ?
->
->Guenter
+Hi Billy,
 
-Ah, so it appears -- not familiar enough with the constants to recognize 
-it immediately I suppose (and wasn't expecting PMBus on this particular 
-device).  Let me try that.
+On Tue, 30 Nov 2021 at 05:58, Billy Tsai <billy_tsai@aspeedtech.com> wrote:
+>
+> The legacy driver of aspeed pwm is binding with tach controller and it
+> doesn't follow the pwm framworks usage. In addition, the pwm register
+> usage of the 6th generation of ast26xx has drastic change. So these
+> patch serials add the new aspeed pwm driver to fix up the problem above.
+
+Sorry for not taking a look earlier. Well done on making it this far.
+
+There's a few things that need to be addressed before merging this.
+
+Firstly, the bindings need fixing up. I think these should be the one
+file. The device tree bindings are supposed to describe the hardware,
+and it doesn't make sense to separate them out just because we plan on
+using two subsystems to implement the functionality.
+
+Rob, please chime in if you would prefer something different.
+
+Secondly, we need to clarify why this is a pwm driver and not a hwmon
+driver like we had for the 2500 hardware, and that you're planning on
+submitting a hwmon driver for the other half of the registers.
+
+Finally, do you really need to use regmap? It's lots of overhead for a
+mmio driver, and I like to see it avoided where possible. I know the
+regions are shared, but are there any individual registers shared?
+
+Cheers,
+
+Joel
 
 
-Thanks,
-Zev
 
+>
+> Change since v13:
+> - pwm-aspeed-ast2600.c
+>   - Fix the usage of the braces to meet the coding-style.rst
+>   - Use min function to reduce the times of division.
+>
+> Change since v12:
+> - pwm-aspeed-ast2600.c
+>   - Fix the comment about the duty cycle and period of the PWM.
+>   - Configured to max period when request period > max period.
+>   - Remove unnecessary curly braces.
+>
+> Change since v11:
+> - pwm-aspeed-ast2600.c
+>   - Request reset controller before clock enable.
+>
+> Change since v10:
+> - pwm-aspeed-ast2600.c
+>   - Add more comment to explain the feature of PWM
+>   - Fix the naming of some parameters.
+>   - Set pin_enable and clk_enable at the same time.
+>   - Always set fixed divisor to hw register when apply.
+>
+> Change since v9:
+> - dt-bindings:
+>   - Change the naming of tach subnode channel setting property to
+>   aspeed,tach-ch.
+> - pwm-aspeed-ast2600.c
+>   - Fix the naming of some parameters.
+>   - Capitalise error messages.
+>   - Handling potentially mult overflow when .apply
+>
+> Change since v8:
+> - pwm-aspeed-ast2600.c
+>   - Replace "* _BITULL(div_h)" to "<< div_h"
+>   - Fix duty_cycle precision problem.
+>   - Add the comment about the formula of duty_cycle.
+>
+> Change since v7:
+> - pwm-aspeed-g6.c
+>   - Rename the driver: pwm-aspeed-g6.c -> pwm-aspeed-ast2600.c.
+>   - Macro remove "_CH" part of the register name.
+>   - Unroll the aspeed_pwm_get_period and remove it.
+>   - Simplify the formula to get duty_pt
+>   - Reduce the number of writing register. Organize all the fields and
+>     write them at once.
+>
+> Change since v6:
+> - dt-bindings:
+>   - Add blank line between each DT property.
+>   - Change the sub-node name from fan to tach-ch.
+> - pwm-aspeed-g6.c
+>   - Merge aspeed_pwm_set_period and aspeed_pwm_set_duty into .apply.
+>   - Convert the factor type to u64 when calculating the period value.
+>   - Using ROUND_UP strategy to calculate div_h for finer resolution.
+>
+> Change since v5:
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - Move the divide at the end of the calculation.
+>   - Unified the prefix of the function name.
+>   - Use div64_u64 to calculate the divider of frequency.
+>
+> Change since v4:
+> - dt_binding:
+>   - pwm/tach yaml: Replace child-node with additionalProperties
+>   - pwm-tach yaml: Replace child-node with patternProperties
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - The bit definitions contained the name of the register.
+>   - Remove single caller function and fold it to the caller.
+>   - Avoid to divide by the result of a division.
+>   - Remove unnecessary condition in .apply().
+>   - Use goto for error handling
+>
+> Changes since v3:
+> - Add the dt_binding for aspeed,ast2600-tach.
+> - Describe the pwm/tach as child-node of pwm-tach mfd.
+> - Complete the properties of pwm node.
+>
+> Changes since v2:
+> - Remove the tach node, #address-cells and #size-cells from pwm-tach.yaml
+> - Add clocks and reset properties to pwm-tach.yaml
+> - Kconfig/Makfile sorted alphabetically
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - Add more hardware descriptions at top of the driver.
+>   - Remove unused api request and free
+>   - Move the initialize settings of all pwm channel to probe.
+>   - Change the method of getting the approximate period.
+>   - Read the hardware register values to fill the state for .get_state()
+>
+> Changes since v1:
+> - Fix the dt_binding_check fail suggested by Rob Herring
+> - Add depends to PWM_ASPEED_G6 configure suggested by Uwe Kleine-Konig
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - Fix license header
+>   - Use bitfiled.h macro to define register fields
+>   - Implement .remove device function
+>   - Implement .get_state pwm api
+>
+> Billy Tsai (2):
+>   dt-bindings: Add bindings for aspeed pwm-tach.
+>   pwm: Add Aspeed ast2600 PWM support
+>
+>  .../bindings/hwmon/aspeed,ast2600-tach.yaml   |  68 ++++
+>  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml |  76 ++++
+>  .../bindings/pwm/aspeed,ast2600-pwm.yaml      |  64 ++++
+>  drivers/pwm/Kconfig                           |  10 +
+>  drivers/pwm/Makefile                          |   1 +
+>  drivers/pwm/pwm-aspeed-ast2600.c              | 325 ++++++++++++++++++
+>  6 files changed, 544 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast260=
+0-tach.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-=
+pwm-tach.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-=
+pwm.yaml
+>  create mode 100644 drivers/pwm/pwm-aspeed-ast2600.c
+>
+> --
+> 2.25.1
+>
