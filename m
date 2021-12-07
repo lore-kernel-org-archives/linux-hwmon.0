@@ -2,77 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 974CAC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Dec 2021 08:49:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19910C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Dec 2021 17:30:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbhLGIw3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Dec 2021 03:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S239791AbhLGRe1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Dec 2021 12:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbhLGIw0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Dec 2021 03:52:26 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5CEC061746;
-        Tue,  7 Dec 2021 00:48:56 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 08CB513C;
-        Tue,  7 Dec 2021 00:48:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1638866936;
-        bh=rFG3fPh/GO6YZe67EweUIEV/cR182XtK+FWjQnWRVC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dKANB7yzY70JDvU99+fu26wXvQtyT4eeJlWmbsq4yWKP2qhUAG0P/RnG8GgmoOScb
-         Bm9rDusBbcmf7Uco8MZNIM8cNBbXWwyGl6JR4V04xYIfzq8e3u4WelOSnzr74RunT5
-         uCEYQ5ztHKOrqbGBxILlwE8equ6/r0lb+msO12oI=
-Date:   Tue, 7 Dec 2021 00:48:51 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, openbmc@lists.ozlabs.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: add Delta AHE-50DC fan control module
-Message-ID: <Ya8f81AQKTmQnYde@hatter.bewilderbeest.net>
-References: <20211207071521.543-1-zev@bewilderbeest.net>
- <20211207071521.543-3-zev@bewilderbeest.net>
- <498caafa-fdc5-eb5a-312f-13968a088448@kernel.org>
+        with ESMTP id S230020AbhLGRe1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Dec 2021 12:34:27 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D81C061574;
+        Tue,  7 Dec 2021 09:30:56 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso5603008ood.13;
+        Tue, 07 Dec 2021 09:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UfRFcZhTqwVLVt7r2zueC/pU4lBh0hExXO/ZORo48wQ=;
+        b=owALHfLYmXossbIFvZDrUvt/Rivjzm1yU1ECHuCrg8uTANH2C+BbYxOMFrDmaceRyP
+         PNALtgmYczTPG4KqhsKYOkhCFRfPvp65jXNeeoUJp778fcE93b9uLmQehgNtEB/Katdl
+         9IM973tgVDhBfW0ATYwvf4SAp3uRH3se6A27oEN4fGjkI+7XdR5SAfMgP727kk7sQeBQ
+         oLduWw3VyAdJZmRMgXpulqB52pPbi3EVR+qfRMN2ElVZyyYI4dADkUX9pzbthshY3ayE
+         He7MrQOUIvsMXFlNg84Zm/pIFNsnLnJ4nrhVAYzF6EhNHNtat/YJVl6T5LFmbZd2V7bG
+         bmug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=UfRFcZhTqwVLVt7r2zueC/pU4lBh0hExXO/ZORo48wQ=;
+        b=UYsnBNQYq+l/28M3lk1O0VEDQPagNlwhfrO/QtYubEOKy9PZ8RRiokEvfPjFnvLSqi
+         dSFeTcu/9DY+Bx31v9RvvNnmbleQ8y8zISNmpezH1PAt3jZ6FT57sdPne3paYbDebWb9
+         KzBo28LvVnvn/WX9PIsXzp++ftZlvr0372WX4mlVL0DEBIputjNetkf5fzhit5wKmL2U
+         5AAuZbkOwCpSWH7dy7CyRbaGss0h/MyVDKJUR73I9NLhiArddVhHJngjQ7gt4dXdHP+W
+         1deIW8DoM8EygkQeohMHmUwiLOZXQqoI/1Iq8HMR696huETT+ot2Ragt0i2cpV1IWDp/
+         XCIw==
+X-Gm-Message-State: AOAM530qr8MVFVwK1qGHQf1uwEcjF/iaTu3cQEW0TM7XXdBEuCtyfEVE
+        a3RCr6zwg6apxlgT2m7lDWSYa1WZ4yY=
+X-Google-Smtp-Source: ABdhPJwIc0LVN4/MQdUZjJdvbi1VBFbGaJdglcFbSsjW5Rcqb43m1YoJc3mtk3uGKYJ9qrw43LmsJA==
+X-Received: by 2002:a05:6820:445:: with SMTP id p5mr27603951oou.9.1638898256014;
+        Tue, 07 Dec 2021 09:30:56 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h1sm36907otq.45.2021.12.07.09.30.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 09:30:55 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 7 Dec 2021 09:30:54 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (adm1031): Remove redundant assignment to
+ variable range
+Message-ID: <20211207173054.GA657431@roeck-us.net>
+References: <20211204233155.55454-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <498caafa-fdc5-eb5a-312f-13968a088448@kernel.org>
+In-Reply-To: <20211204233155.55454-1-colin.i.king@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:58:14PM PST, Krzysztof Kozlowski wrote:
->On 07/12/2021 08:15, Zev Weiss wrote:
->> This is the integrated fan control module of the Delta AHE-50DC Open19
->> power shelf.
->>
->> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->> ---
->>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->>  1 file changed, 2 insertions(+)
->
->This is a third version sent within one night, without changelog and any
->indication why sending the same three times. Please do not send multiple
->versions the same day and give people some time to respond. When
->creating a new version, add a changelog under ---.
->
+On Sat, Dec 04, 2021 at 11:31:55PM +0000, Colin Ian King wrote:
+> Variable range is being initialized with a value that is never read, it
+> is being re-assigned in the next statement. The assignment is redundant,
+> remove it and initialize range using the second assigned value. Clean up
+> the formatting too by adding missing spaces.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Sorry for the noise -- I wrote changelogs in the cover letter 
-(https://lore.kernel.org/linux-hwmon/20211207071521.543-1-zev@bewilderbeest.net/), 
-but forgot to include all the recipients of the component patches in the 
-CC list of the cover (which I presume would have been preferred), I just 
-used git send-email's --cc-cmd flag with get_maintainer.pl.
+Applied.
 
+Thanks,
+Guenter
 
-Zev
-
+> ---
+>  drivers/hwmon/adm1031.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
+> index 257ec53ae723..ac841fa3a369 100644
+> --- a/drivers/hwmon/adm1031.c
+> +++ b/drivers/hwmon/adm1031.c
+> @@ -242,9 +242,8 @@ static int FAN_TO_REG(int reg, int div)
+>  static int AUTO_TEMP_MAX_TO_REG(int val, int reg, int pwm)
+>  {
+>  	int ret;
+> -	int range = val - AUTO_TEMP_MIN_FROM_REG(reg);
+> +	int range = ((val - AUTO_TEMP_MIN_FROM_REG(reg)) * 10) / (16 - pwm);
+>  
+> -	range = ((val - AUTO_TEMP_MIN_FROM_REG(reg))*10)/(16 - pwm);
+>  	ret = ((reg & 0xf8) |
+>  	       (range < 10000 ? 0 :
+>  		range < 20000 ? 1 :
