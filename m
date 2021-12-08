@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0467CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Dec 2021 06:22:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6035AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Dec 2021 08:49:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239819AbhLHG0C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Dec 2021 01:26:02 -0500
-Received: from mga03.intel.com ([134.134.136.65]:54245 "EHLO mga03.intel.com"
+        id S229751AbhLHIx1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Dec 2021 03:53:27 -0500
+Received: from mga14.intel.com ([192.55.52.115]:54565 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239648AbhLHG0C (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 8 Dec 2021 01:26:02 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237706974"
-X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
-   d="scan'208";a="237706974"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 22:22:30 -0800
+        id S229489AbhLHIx1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 8 Dec 2021 03:53:27 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="238015164"
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="238015164"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 00:49:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
-   d="scan'208";a="580501772"
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="461621688"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Dec 2021 22:22:28 -0800
+  by orsmga003.jf.intel.com with ESMTP; 08 Dec 2021 00:49:37 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1muqLT-0000A4-UG; Wed, 08 Dec 2021 06:22:27 +0000
-Date:   Wed, 08 Dec 2021 14:21:37 +0800
+        id 1musds-0000Jy-D4; Wed, 08 Dec 2021 08:49:36 +0000
+Date:   Wed, 08 Dec 2021 16:49:06 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 7ee5be1e6c43ffc60e0834ec359e4814dce658f8
-Message-ID: <61b04ef1.t6+NuYrbnqBvYgJc%lkp@intel.com>
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 4ded7796ed5290014ff3234db8e8ae83b0c88bfb
+Message-ID: <61b07182.ERvZsHRub5zai3xi%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,12 +39,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 7ee5be1e6c43ffc60e0834ec359e4814dce658f8  watchdog: Add Watchdog Timer driver for RZ/G2L
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 4ded7796ed5290014ff3234db8e8ae83b0c88bfb  hwmon: (ntc_thermistor) Move DT matches to the driver block
 
-elapsed time: 727m
+elapsed time: 722m
 
-configs tested: 192
+configs tested: 188
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -57,11 +57,16 @@ arm64                               defconfig
 arm                              allyesconfig
 arm                              allmodconfig
 i386                 randconfig-c001-20211207
+arm                         axm55xx_defconfig
+sh                         microdev_defconfig
+mips                     loongson1c_defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                  iss476-smp_defconfig
 m68k                             alldefconfig
-csky                                defconfig
 arc                           tb10x_defconfig
 arm                           tegra_defconfig
 powerpc                 mpc837x_rdb_defconfig
+csky                                defconfig
 xtensa                           allyesconfig
 arm                           stm32_defconfig
 powerpc                  storcenter_defconfig
@@ -70,11 +75,10 @@ m68k                          atari_defconfig
 arm                           sama7_defconfig
 arm                         s5pv210_defconfig
 arm                       spear13xx_defconfig
-powerpc                  iss476-smp_defconfig
+h8300                            allyesconfig
 h8300                     edosk2674_defconfig
 mips                           rs90_defconfig
 mips                      maltasmvp_defconfig
-h8300                            allyesconfig
 nds32                            alldefconfig
 powerpc                     redwood_defconfig
 sh                          sdk7786_defconfig
@@ -109,7 +113,6 @@ mips                        workpad_defconfig
 sh                             espt_defconfig
 arm                      footbridge_defconfig
 powerpc                      acadia_defconfig
-sh                     sh7710voipgw_defconfig
 sh                           se7721_defconfig
 arm                        mvebu_v7_defconfig
 riscv             nommu_k210_sdcard_defconfig
@@ -120,12 +123,8 @@ powerpc                    ge_imp3a_defconfig
 powerpc                   microwatt_defconfig
 mips                         tb0226_defconfig
 arm                          pxa910_defconfig
-i386                             allyesconfig
-mips                         db1xxx_defconfig
-arc                            hsdk_defconfig
-powerpc                      katmai_defconfig
-s390                                defconfig
 powerpc                      tqm8xx_defconfig
+mips                         db1xxx_defconfig
 parisc                generic-64bit_defconfig
 sparc64                          alldefconfig
 arm                         mv78xx0_defconfig
@@ -156,6 +155,7 @@ sh                     magicpanelr2_defconfig
 powerpc               mpc834x_itxgp_defconfig
 powerpc                      walnut_defconfig
 arm                   milbeaut_m10v_defconfig
+powerpc                      katmai_defconfig
 arm                  randconfig-c002-20211207
 ia64                             allmodconfig
 ia64                                defconfig
@@ -174,6 +174,8 @@ parisc                              defconfig
 s390                             allyesconfig
 s390                             allmodconfig
 parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
 sparc                            allyesconfig
 i386                                defconfig
 i386                   debian-10.3-kselftests
@@ -195,12 +197,6 @@ i386                 randconfig-a002-20211207
 i386                 randconfig-a003-20211207
 i386                 randconfig-a006-20211207
 i386                 randconfig-a004-20211207
-x86_64               randconfig-a016-20211208
-x86_64               randconfig-a011-20211208
-x86_64               randconfig-a013-20211208
-x86_64               randconfig-a012-20211208
-x86_64               randconfig-a015-20211208
-x86_64               randconfig-a014-20211208
 i386                 randconfig-a013-20211208
 i386                 randconfig-a016-20211208
 i386                 randconfig-a011-20211208
@@ -215,8 +211,8 @@ riscv                               defconfig
 riscv                          rv32_defconfig
 riscv                            allmodconfig
 x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
 um                             i386_defconfig
+um                           x86_64_defconfig
 x86_64                           allyesconfig
 x86_64                              defconfig
 x86_64                               rhel-8.3
