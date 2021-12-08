@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6035AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Dec 2021 08:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAA9FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Dec 2021 08:50:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbhLHIx1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Dec 2021 03:53:27 -0500
-Received: from mga14.intel.com ([192.55.52.115]:54565 "EHLO mga14.intel.com"
+        id S229757AbhLHIxo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Dec 2021 03:53:44 -0500
+Received: from mga06.intel.com ([134.134.136.31]:54607 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229489AbhLHIx1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:53:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="238015164"
+        id S229489AbhLHIxn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 8 Dec 2021 03:53:43 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="298581743"
 X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="238015164"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 00:49:55 -0800
+   d="scan'208";a="298581743"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 00:50:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="461621688"
+   d="scan'208";a="543131709"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Dec 2021 00:49:37 -0800
+  by orsmga001.jf.intel.com with ESMTP; 08 Dec 2021 00:49:37 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1musds-0000Jy-D4; Wed, 08 Dec 2021 08:49:36 +0000
-Date:   Wed, 08 Dec 2021 16:49:06 +0800
+        id 1musds-0000K2-ED; Wed, 08 Dec 2021 08:49:36 +0000
+Date:   Wed, 08 Dec 2021 16:49:21 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 4ded7796ed5290014ff3234db8e8ae83b0c88bfb
-Message-ID: <61b07182.ERvZsHRub5zai3xi%lkp@intel.com>
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ a2ca752055edd39be38b887e264d3de7ca2bc1bb
+Message-ID: <61b07191.IPVdqApQMls5Zs1h%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,10 +39,10 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 4ded7796ed5290014ff3234db8e8ae83b0c88bfb  hwmon: (ntc_thermistor) Move DT matches to the driver block
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: a2ca752055edd39be38b887e264d3de7ca2bc1bb  hwmon: (pwm-fan) Ensure the fan going on in .probe()
 
-elapsed time: 722m
+elapsed time: 723m
 
 configs tested: 188
 configs skipped: 3
@@ -165,8 +165,8 @@ m68k                                defconfig
 m68k                             allyesconfig
 nios2                               defconfig
 arc                              allyesconfig
-nds32                               defconfig
 alpha                               defconfig
+nds32                               defconfig
 alpha                            allyesconfig
 arc                                 defconfig
 sh                               allmodconfig
@@ -211,8 +211,8 @@ riscv                               defconfig
 riscv                          rv32_defconfig
 riscv                            allmodconfig
 x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
 um                           x86_64_defconfig
+um                             i386_defconfig
 x86_64                           allyesconfig
 x86_64                              defconfig
 x86_64                               rhel-8.3
