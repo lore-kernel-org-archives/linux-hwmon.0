@@ -2,273 +2,153 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEA47C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Dec 2021 05:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59CB9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Dec 2021 16:52:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbhLIFPu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Dec 2021 00:15:50 -0500
-Received: from mga04.intel.com ([192.55.52.120]:30218 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230441AbhLIFPr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:15:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639026735; x=1670562735;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=M4VnbqcOG4cnUG9SXKmXNdOLZJ0q/Cla3kKX14jhG6g=;
-  b=lP8jFiCusNQXj6T8IYNZao1Q39vAulLB3+RqPdxPw5kVqZ89EOYk9CTP
-   xI0iy91uvVKehTGeYvjLahUVSp1S8TTp/mEp/H03YHOs1aVLPDW8a0qIu
-   Yb93igbe+vM4qYfuel+y+3iCyjoLuKVoadVopS/EFMP7TuEfsh0azHKbh
-   JfoU9NRkhF1Smx718CMWmHCa1O5RIdjAF97BGT979SgPX1i46kBXjMHk/
-   2LVesTo9h8VbBFyfXtgldX5GkmTdM68n/fH/TvrM6OAUvYKJKAADVl8f6
-   WM2QJiEMDuRuYv1mCWOKbG054XVv5PeSES2sX/awFIHTgptrZyfMt+NP4
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="236756042"
-X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
-   d="scan'208";a="236756042"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 21:11:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
-   d="scan'208";a="463074709"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 21:11:09 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvBi0-0001Vw-50; Thu, 09 Dec 2021 05:11:08 +0000
-Date:   Thu, 09 Dec 2021 13:10:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 59a29872ed5c746bba5898ed8e77c3e33d3aa9b6
-Message-ID: <61b18fde.HB0pBETjnU7a3OuS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237373AbhLIQzs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Dec 2021 11:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234550AbhLIQzs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Dec 2021 11:55:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED03C061746;
+        Thu,  9 Dec 2021 08:52:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8B290CE2720;
+        Thu,  9 Dec 2021 16:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA60C004DD;
+        Thu,  9 Dec 2021 16:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639068730;
+        bh=lFjiir2sD0md/TMvmilM7d7unRsKVDD5122cBpWYVHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ay8itGGWLP4hcucKaH7KnA0aif4zos10gDn7dU++YCK3HfNUvy/0g53jLbHTxq5S7
+         /QH6TKJS14zrdPM4CGBxE7SWzyI94Q/AhSaPj/FFbySAUZF6sa2tH+Z77hsJBrZrHK
+         Sc5tqt4Et5XCUhElErkw1Th3zbOBAElnj5AwACuMxTnLqlnknieoWJTzd9Ur2wkJE1
+         ZSSoxVKFeutGnVdnGdtNb4XKjiyfk2tz8knNu0ufjbEyX2+SRn9r/f0n2efhjli8Iy
+         FHhQUXO1xGdFd7I8hgHVM+5xq0E38pelMs3AXtxgwX18KC2+q9ZkNsDScN78GcB0mF
+         is4SrpUHWXCDQ==
+Received: by pali.im (Postfix)
+        id 56707111E; Thu,  9 Dec 2021 17:52:07 +0100 (CET)
+Date:   Thu, 9 Dec 2021 17:52:07 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (dell-smm) Simplify ioctl handler
+Message-ID: <20211209165207.kik56ozi7umti4xo@pali>
+References: <20211120170319.72369-1-W_Armin@gmx.de>
+ <20211120170319.72369-2-W_Armin@gmx.de>
+ <20211123161332.discv3bfx4rkowah@pali>
+ <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 59a29872ed5c746bba5898ed8e77c3e33d3aa9b6  watchdog: mtk_wdt: use platform_get_irq_optional
+On Monday 29 November 2021 21:57:40 Armin Wolf wrote:
+> Am 23.11.21 um 17:13 schrieb Pali Rohár:
+> 
+> > On Saturday 20 November 2021 18:03:18 Armin Wolf wrote:
+> > > The second switch-case has no real purpose:
+> > > 
+> > > - for I8K_BIOS_VERSION, val does not represent a return value,
+> > >    making the check for error values unnecessary.
+> > > - for I8K_MACHINE_ID, val remains zero, so the error check is
+> > >    unnecessary too.
+> > > 
+> > > Remove the switch-case and move the calls to copy_to_user()
+> > > into the first switch-case for I8K_BIOS_VERSION/_MACHINE_ID.
+> > > Omit buff[] since data->machineid already contains the string
+> > s/->machineid/->bios_machineid/
+> > 
+> > > with the necessary zero padding.
+> > data is allocated by devm_kzalloc() so data->bios_machineid is really
+> > zero padded.
+> > 
+> > > Tested on a Dell Inspiron 3505.
+> > > 
+> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> > > ---
+> > >   drivers/hwmon/dell-smm-hwmon.c | 30 +++++++++---------------------
+> > >   1 file changed, 9 insertions(+), 21 deletions(-)
+> > > 
+> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> > > index 5596c211f38d..b5d1703faa62 100644
+> > > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > > @@ -454,7 +454,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+> > >   {
+> > >   	int val = 0;
+> > >   	int speed, err;
+> > > -	unsigned char buff[16];
+> > >   	int __user *argp = (int __user *)arg;
+> > > 
+> > >   	if (!argp)
+> > > @@ -468,15 +467,19 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+> > > 
+> > >   		val = (data->bios_version[0] << 16) |
+> > >   				(data->bios_version[1] << 8) | data->bios_version[2];
+> > > -		break;
+> > > 
+> > > +		if (copy_to_user(argp, &val, 4))
+> > > +			return -EFAULT;
+> > > +
+> > > +		return 0;
+> > >   	case I8K_MACHINE_ID:
+> > >   		if (restricted && !capable(CAP_SYS_ADMIN))
+> > >   			return -EPERM;
+> > > 
+> > > -		strscpy_pad(buff, data->bios_machineid, sizeof(buff));
+> > > -		break;
+> > > +		if (copy_to_user(argp, data->bios_machineid, 16))
+> > What about usage of sizeof(data->bios_machineid) instead of hardcoded
+> > constant 16? And maybe same for constant 4?
+> 
+> For the string yes, but maybe i should change the int to an u32?
 
-possible Warning in current branch (please contact us if interested):
+I do not know if changing int to u32 should be done or not...
 
-drivers/watchdog/s3c2410_wdt.c:663 s3c2410wdt_probe() warn: passing zero to 'PTR_ERR'
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- nios2-randconfig-m031-20211202
-    `-- drivers-watchdog-s3c2410_wdt.c-s3c2410wdt_probe()-warn:passing-zero-to-PTR_ERR
-
-elapsed time: 731m
-
-configs tested: 189
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211207
-i386                 randconfig-c001-20211208
-sh                        edosk7760_defconfig
-riscv                            alldefconfig
-arm                            xcep_defconfig
-sh                           se7750_defconfig
-arm                        shmobile_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                        jmr3927_defconfig
-sh                        sh7763rdp_defconfig
-csky                             alldefconfig
-arc                        nsim_700_defconfig
-parisc                           alldefconfig
-arm                        spear6xx_defconfig
-arm                           h5000_defconfig
-mips                          ath25_defconfig
-arm                         orion5x_defconfig
-m68k                        stmark2_defconfig
-powerpc                    socrates_defconfig
-arm                          iop32x_defconfig
-arm                       versatile_defconfig
-arm                        spear3xx_defconfig
-powerpc                      pasemi_defconfig
-arm                           sama5_defconfig
-powerpc                     sequoia_defconfig
-sh                          rsk7201_defconfig
-nios2                               defconfig
-powerpc                      chrp32_defconfig
-arc                    vdk_hs38_smp_defconfig
-mips                         tb0219_defconfig
-mips                     loongson1c_defconfig
-sparc64                          alldefconfig
-arm                        magician_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                      pcm030_defconfig
-arm                         mv78xx0_defconfig
-sh                           se7206_defconfig
-arm                         palmz72_defconfig
-mips                       rbtx49xx_defconfig
-powerpc                 canyonlands_defconfig
-um                           x86_64_defconfig
-arc                     haps_hs_smp_defconfig
-m68k                            q40_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm64                            alldefconfig
-powerpc                       ppc64_defconfig
-arc                        nsimosci_defconfig
-arm                         shannon_defconfig
-sh                           se7722_defconfig
-arm                         lpc32xx_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                           se7619_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                            zeus_defconfig
-powerpc                      cm5200_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                 mpc836x_mds_defconfig
-arm                         hackkit_defconfig
-powerpc                      acadia_defconfig
-arm                          badge4_defconfig
-powerpc                  iss476-smp_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                        warp_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                     magicpanelr2_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                 mpc8540_ads_defconfig
-sparc                       sparc64_defconfig
-arm                  randconfig-c002-20211207
-arm                  randconfig-c002-20211209
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211207
-x86_64               randconfig-a005-20211207
-x86_64               randconfig-a001-20211207
-x86_64               randconfig-a002-20211207
-x86_64               randconfig-a004-20211207
-x86_64               randconfig-a003-20211207
-i386                 randconfig-a001-20211209
-i386                 randconfig-a005-20211209
-i386                 randconfig-a003-20211209
-i386                 randconfig-a002-20211209
-i386                 randconfig-a006-20211209
-i386                 randconfig-a004-20211209
-i386                 randconfig-a001-20211207
-i386                 randconfig-a003-20211207
-i386                 randconfig-a006-20211207
-i386                 randconfig-a005-20211207
-i386                 randconfig-a002-20211207
-i386                 randconfig-a004-20211207
-x86_64               randconfig-a016-20211208
-x86_64               randconfig-a011-20211208
-x86_64               randconfig-a013-20211208
-x86_64               randconfig-a012-20211208
-x86_64               randconfig-a015-20211208
-x86_64               randconfig-a014-20211208
-i386                 randconfig-a013-20211208
-i386                 randconfig-a016-20211208
-i386                 randconfig-a011-20211208
-i386                 randconfig-a014-20211208
-i386                 randconfig-a012-20211208
-i386                 randconfig-a015-20211208
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-c007-20211207
-arm                  randconfig-c002-20211207
-riscv                randconfig-c006-20211207
-mips                 randconfig-c004-20211207
-i386                 randconfig-c001-20211207
-powerpc              randconfig-c003-20211207
-s390                 randconfig-c005-20211207
-arm                  randconfig-c002-20211209
-x86_64               randconfig-c007-20211209
-riscv                randconfig-c006-20211209
-i386                 randconfig-c001-20211209
-mips                 randconfig-c004-20211209
-powerpc              randconfig-c003-20211209
-s390                 randconfig-c005-20211209
-x86_64               randconfig-a006-20211208
-x86_64               randconfig-a005-20211208
-x86_64               randconfig-a001-20211208
-x86_64               randconfig-a002-20211208
-x86_64               randconfig-a004-20211208
-x86_64               randconfig-a003-20211208
-x86_64               randconfig-a016-20211207
-x86_64               randconfig-a011-20211207
-x86_64               randconfig-a013-20211207
-x86_64               randconfig-a014-20211207
-x86_64               randconfig-a015-20211207
-x86_64               randconfig-a012-20211207
-i386                 randconfig-a016-20211207
-i386                 randconfig-a013-20211207
-i386                 randconfig-a011-20211207
-i386                 randconfig-a014-20211207
-i386                 randconfig-a012-20211207
-i386                 randconfig-a015-20211207
-hexagon              randconfig-r045-20211208
-hexagon              randconfig-r041-20211208
-hexagon              randconfig-r045-20211207
-s390                 randconfig-r044-20211207
-riscv                randconfig-r042-20211207
-hexagon              randconfig-r041-20211207
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > > +			return -EFAULT;
+> > > 
+> > > +		return 0;
+> > >   	case I8K_FN_STATUS:
+> > >   		val = i8k_get_fn_status();
+> > >   		break;
+> > > @@ -527,23 +530,8 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+> > >   	if (val < 0)
+> > >   		return val;
+> > > 
+> > > -	switch (cmd) {
+> > > -	case I8K_BIOS_VERSION:
+> > > -		if (copy_to_user(argp, &val, 4))
+> > > -			return -EFAULT;
+> > > -
+> > > -		break;
+> > > -	case I8K_MACHINE_ID:
+> > > -		if (copy_to_user(argp, buff, 16))
+> > > -			return -EFAULT;
+> > > -
+> > > -		break;
+> > > -	default:
+> > > -		if (copy_to_user(argp, &val, sizeof(int)))
+> > > -			return -EFAULT;
+> > > -
+> > > -		break;
+> > > -	}
+> > > +	if (copy_to_user(argp, &val, sizeof(int)))
+> > > +		return -EFAULT;
+> > > 
+> > >   	return 0;
+> > >   }
+> > > --
+> > > 2.30.2
+> > > 
