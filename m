@@ -2,66 +2,65 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C3AEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Dec 2021 22:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45956C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Dec 2021 22:46:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344599AbhLJWKG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Dec 2021 17:10:06 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:43521 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243193AbhLJWKF (ORCPT
+        id S1344839AbhLJWuc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Dec 2021 17:50:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43646 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344823AbhLJWu2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Dec 2021 17:10:05 -0500
-Received: by mail-ot1-f54.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so10984255otu.10;
-        Fri, 10 Dec 2021 14:06:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zGf/38Vwo8eR5gshSlfvh26HPD1VlHPaMv5irQiJzic=;
-        b=xA1z442YlipIQ03H5yl6+PoYya9M18b5xfTZn0oFqSJJWkvE6d9oPj08FXmsrWA15m
-         /HrrmWO9drz/dAzuVxQWZW9mpKjhfnqD2oHVefHm4pGXnXSLpw9GOvThyhKqddIQ43lP
-         PTVTD5KkO46+CQI+plCZicZqKTB9HzOYSW1RqZ6+viToUBAuRBfwzQcj9YSzDNyCiyUX
-         4JGmmKsP0ysx96Fsq2y19qjMf0s7cth+OMdmNZRagHa9HbeDGQ2otybf3HU69eig+W3u
-         MoRuD2avjoPuDoemIR/g6i+1M72g1qVkPiyBtFB9qagvto+JIEiJqHBqOZFy/w52i22P
-         46lw==
-X-Gm-Message-State: AOAM532/qPje5jHw1X8Joxpo6JfifzBlCyrHLzaX3sfkaWM7Mhugw/SX
-        BeEs0rXvJcc2SY8oCZslhw==
-X-Google-Smtp-Source: ABdhPJydz0gR7yjLFC5bPmusOYQaEY/qraySMB9ap370KXzu4GwifsBe02pFaB1/RrFgq9JjcMaZmA==
-X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr13041702oti.269.1639173989753;
-        Fri, 10 Dec 2021 14:06:29 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l23sm758023oti.16.2021.12.10.14.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 14:06:29 -0800 (PST)
-Received: (nullmailer pid 2011299 invoked by uid 1000);
-        Fri, 10 Dec 2021 22:06:28 -0000
-Date:   Fri, 10 Dec 2021 16:06:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Guenter Roeck <linux@roeck-us.net>, openbmc@lists.ozlabs.org,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 2/2] dt-bindings: add Delta AHE-50DC fan control module
-Message-ID: <YbPPZISviJxKsK15@robh.at.kernel.org>
-References: <20211208213703.2577-1-zev@bewilderbeest.net>
- <20211208213703.2577-3-zev@bewilderbeest.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208213703.2577-3-zev@bewilderbeest.net>
+        Fri, 10 Dec 2021 17:50:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 246C7B82A11;
+        Fri, 10 Dec 2021 22:46:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7FA7C341CC;
+        Fri, 10 Dec 2021 22:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639176410;
+        bh=C2JzY9tX7KaQ2HOds8rX4N2O9jKgCtiqKeLn2qzgDiw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=OgcCyIdNHkokcQOUJw+1TNEIUrW0LwbwLcQjQdd2Kcxco8QNx1RRyvYQmrUbiy7lU
+         Anp7si5EoB5b+Rvb+UQ1FW0LQS+p/rEiKeZPz6RdV/8edxGn/flm+YT6ffuOW+fJO5
+         V9nQdppb0mQnU0yMyqlgLnSShPyBFT/0S1xf5f/O9/S+9AjhdRN8fKd/i+CpmE+1U5
+         u1Wqr+195+KfGaTHqr2aRPraYaA182qEPN7E9SeHh/Ia2ktDjMbb7aUV+nFFAsCfp+
+         SjUtlHcfiUuxnMDZxD5dU3+frKfKeP2FplcmTBy82chqirCivLxkeBo8VbqibPs6y+
+         2DR3KP0DQz8Ew==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D7EB6609EB;
+        Fri, 10 Dec 2021 22:46:50 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v5.16-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211210204106.1663978-1-linux@roeck-us.net>
+References: <20211210204106.1663978-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211210204106.1663978-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc5
+X-PR-Tracked-Commit-Id: a2ca752055edd39be38b887e264d3de7ca2bc1bb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1e050cd539b843eefce6e742a46f82c4dcdf3c23
+Message-Id: <163917641087.4787.17026916604256509238.pr-tracker-bot@kernel.org>
+Date:   Fri, 10 Dec 2021 22:46:50 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 08 Dec 2021 13:37:03 -0800, Zev Weiss wrote:
-> This is the integrated fan control module of the Delta AHE-50DC Open19
-> power shelf.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+The pull request you sent on Fri, 10 Dec 2021 12:41:06 -0800:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc5
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1e050cd539b843eefce6e742a46f82c4dcdf3c23
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
