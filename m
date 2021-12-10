@@ -2,153 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59CB9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Dec 2021 16:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75BAEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Dec 2021 08:16:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237373AbhLIQzs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Dec 2021 11:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S231903AbhLJIUY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Dec 2021 03:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbhLIQzs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Dec 2021 11:55:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED03C061746;
-        Thu,  9 Dec 2021 08:52:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229596AbhLJIUY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 10 Dec 2021 03:20:24 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FBEC061746;
+        Fri, 10 Dec 2021 00:16:49 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8B290CE2720;
-        Thu,  9 Dec 2021 16:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA60C004DD;
-        Thu,  9 Dec 2021 16:52:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639068730;
-        bh=lFjiir2sD0md/TMvmilM7d7unRsKVDD5122cBpWYVHM=;
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 7C46446D;
+        Fri, 10 Dec 2021 00:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1639124208;
+        bh=aCwwobdpEi3sNsLc8ASXHTj3fg8LMPfWjPCABMYSkuQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ay8itGGWLP4hcucKaH7KnA0aif4zos10gDn7dU++YCK3HfNUvy/0g53jLbHTxq5S7
-         /QH6TKJS14zrdPM4CGBxE7SWzyI94Q/AhSaPj/FFbySAUZF6sa2tH+Z77hsJBrZrHK
-         Sc5tqt4Et5XCUhElErkw1Th3zbOBAElnj5AwACuMxTnLqlnknieoWJTzd9Ur2wkJE1
-         ZSSoxVKFeutGnVdnGdtNb4XKjiyfk2tz8knNu0ufjbEyX2+SRn9r/f0n2efhjli8Iy
-         FHhQUXO1xGdFd7I8hgHVM+5xq0E38pelMs3AXtxgwX18KC2+q9ZkNsDScN78GcB0mF
-         is4SrpUHWXCDQ==
-Received: by pali.im (Postfix)
-        id 56707111E; Thu,  9 Dec 2021 17:52:07 +0100 (CET)
-Date:   Thu, 9 Dec 2021 17:52:07 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        b=oBbfNOrHQPA7wsLz8VKiLNZN1oBPFlpmETyg8N5SuOiNy+d7ndEkU6jC1z8IfvjqK
+         Lhpmjft4Flh//zcn+KuiXCC9b2rVNoOuwtverSUIo3J+2NRMhv7AxDFTMEjhOE/Fxl
+         CsQiVmc4LfgJfeRpFV9SyvbdRwCEFQzznK/7TVEs=
+Date:   Fri, 10 Dec 2021 00:16:43 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Renze Nicolai <renze@rnplus.nl>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Bernhard Seibold <mail@bernhard-seibold.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (dell-smm) Simplify ioctl handler
-Message-ID: <20211209165207.kik56ozi7umti4xo@pali>
-References: <20211120170319.72369-1-W_Armin@gmx.de>
- <20211120170319.72369-2-W_Armin@gmx.de>
- <20211123161332.discv3bfx4rkowah@pali>
- <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
+Subject: Re: [PATCH] hwmon: (nct6775) add support for TSI temperature
+ registers
+Message-ID: <YbMM63VKYBTmZYiX@hatter.bewilderbeest.net>
+References: <20211110231440.17309-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20211110231440.17309-1-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Monday 29 November 2021 21:57:40 Armin Wolf wrote:
-> Am 23.11.21 um 17:13 schrieb Pali Rohár:
-> 
-> > On Saturday 20 November 2021 18:03:18 Armin Wolf wrote:
-> > > The second switch-case has no real purpose:
-> > > 
-> > > - for I8K_BIOS_VERSION, val does not represent a return value,
-> > >    making the check for error values unnecessary.
-> > > - for I8K_MACHINE_ID, val remains zero, so the error check is
-> > >    unnecessary too.
-> > > 
-> > > Remove the switch-case and move the calls to copy_to_user()
-> > > into the first switch-case for I8K_BIOS_VERSION/_MACHINE_ID.
-> > > Omit buff[] since data->machineid already contains the string
-> > s/->machineid/->bios_machineid/
-> > 
-> > > with the necessary zero padding.
-> > data is allocated by devm_kzalloc() so data->bios_machineid is really
-> > zero padded.
-> > 
-> > > Tested on a Dell Inspiron 3505.
-> > > 
-> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> > > ---
-> > >   drivers/hwmon/dell-smm-hwmon.c | 30 +++++++++---------------------
-> > >   1 file changed, 9 insertions(+), 21 deletions(-)
-> > > 
-> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > > index 5596c211f38d..b5d1703faa62 100644
-> > > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > > @@ -454,7 +454,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
-> > >   {
-> > >   	int val = 0;
-> > >   	int speed, err;
-> > > -	unsigned char buff[16];
-> > >   	int __user *argp = (int __user *)arg;
-> > > 
-> > >   	if (!argp)
-> > > @@ -468,15 +467,19 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
-> > > 
-> > >   		val = (data->bios_version[0] << 16) |
-> > >   				(data->bios_version[1] << 8) | data->bios_version[2];
-> > > -		break;
-> > > 
-> > > +		if (copy_to_user(argp, &val, 4))
-> > > +			return -EFAULT;
-> > > +
-> > > +		return 0;
-> > >   	case I8K_MACHINE_ID:
-> > >   		if (restricted && !capable(CAP_SYS_ADMIN))
-> > >   			return -EPERM;
-> > > 
-> > > -		strscpy_pad(buff, data->bios_machineid, sizeof(buff));
-> > > -		break;
-> > > +		if (copy_to_user(argp, data->bios_machineid, 16))
-> > What about usage of sizeof(data->bios_machineid) instead of hardcoded
-> > constant 16? And maybe same for constant 4?
-> 
-> For the string yes, but maybe i should change the int to an u32?
+On Wed, Nov 10, 2021 at 03:14:39PM PST, Zev Weiss wrote:
+>These registers report CPU temperatures (and, depending on the system,
+>sometimes chipset temperatures) via the TSI interface on AMD systems.
+>They're distinct from most of the other Super-IO temperature readings
+>(CPUTIN, SYSTIN, etc.) in that they're not a selectable source for
+>monitoring and are in a different (higher resolution) format, but can
+>still provide useful temperature data.
+>
+>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>Tested-by: Renze Nicolai <renze@rnplus.nl>
+>---
+>
+>This patch has been tested on NCT6779 and NCT6798[1] hardware on
+>(respectively) ASRock Rack ROMED8HM3 and X570D4U boards, and seems to
+>work as expected; the implementation for the other chips supported by
+>the driver is purely based on the datasheets and has not been tested
+>(for lack of available hardware).
+>
+>[1] Or at least, its chip ID registers identify it as an NCT6798 and
+>it seems to behave consistently with that, though it's actually
+>physically labeled as an NCT6796.
+>
+> drivers/hwmon/nct6775.c | 136 ++++++++++++++++++++++++++++++++++++++--
+> 1 file changed, 130 insertions(+), 6 deletions(-)
+>
 
-I do not know if changing int to u32 should be done or not...
+Ping...any thoughts/feedback on this patch?
 
-> > > +			return -EFAULT;
-> > > 
-> > > +		return 0;
-> > >   	case I8K_FN_STATUS:
-> > >   		val = i8k_get_fn_status();
-> > >   		break;
-> > > @@ -527,23 +530,8 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
-> > >   	if (val < 0)
-> > >   		return val;
-> > > 
-> > > -	switch (cmd) {
-> > > -	case I8K_BIOS_VERSION:
-> > > -		if (copy_to_user(argp, &val, 4))
-> > > -			return -EFAULT;
-> > > -
-> > > -		break;
-> > > -	case I8K_MACHINE_ID:
-> > > -		if (copy_to_user(argp, buff, 16))
-> > > -			return -EFAULT;
-> > > -
-> > > -		break;
-> > > -	default:
-> > > -		if (copy_to_user(argp, &val, sizeof(int)))
-> > > -			return -EFAULT;
-> > > -
-> > > -		break;
-> > > -	}
-> > > +	if (copy_to_user(argp, &val, sizeof(int)))
-> > > +		return -EFAULT;
-> > > 
-> > >   	return 0;
-> > >   }
-> > > --
-> > > 2.30.2
-> > > 
+
+Thanks,
+Zev
+
