@@ -2,48 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A1AC433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84002C433EF
 	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Dec 2021 17:47:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbhLKRru (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S229982AbhLKRru (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sat, 11 Dec 2021 12:47:50 -0500
-Received: from mga17.intel.com ([192.55.52.151]:35153 "EHLO mga17.intel.com"
+Received: from mga02.intel.com ([134.134.136.20]:42141 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229952AbhLKRru (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Dec 2021 12:47:50 -0500
+        id S229456AbhLKRrt (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Dec 2021 12:47:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1639244869; x=1670780869;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=JqAJ8cFTkh891GKeM4JD+3amnyVZGDuP0Aazm+f9aQc=;
-  b=PyDJaKkRzGEmJugpe2GL1p9dWveQXg3ip86ShfBub69106abGpxu0Z6u
-   hoOkBFWrOZ7x4fmS1kFE0JOEdexlBpHjm0rjQ/nlPDcwFdLRuyjSbTdVd
-   WTRg+5dGPalRV11gvQHK4R8Om2Y1z46RITTetKFFn8OsG3p/H2mPywNEO
-   P5Acj5vHhGFfxRIwLiR+nJRoUhgejkpVW8s6llzPih6RlNsoMKjGhuF+F
-   /pZ9p5Oc6jdgRxNd9Fj/haUAPsF0FPDQfBJrEoewsKMBNPeHAs4lTWG+D
-   a0fC5TtS8LYA9iX847qCu3QnLa9PdkmXAp+C0QxWCs+PvKFAICVhKZ3qR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="219235266"
+  bh=Hv7sLYUNL5JJ05c/Rcwy2T2qSaMxl7J16V/JgL4UvW4=;
+  b=UYizah/s/UN/sSPNqr1dw4w7Q0dQluDvZlsIZlPWXOu0sBjzo9/RcPS8
+   D2qLJB7JKyeT+BTteT/5kItcv8/xvXkolffWHVCYUsTC6C7kSC17YlgzG
+   zMwFbz4xl0EoXcUiwrsZJrT4TquSsn8khvtLMVmo3bEKPPqk0gGlOFn/Z
+   wt39ychF8rm+Z22NKctO3TRPS56mDEObCZ2FvzMaHPAhHHaX06wrYIxBm
+   GKRdBaD15PsE2Uoq40bOx6vW4FbYAPW5rNSXZsn/MirrX3+2Hddpaacck
+   fo5hAY3/qTPYx5rcuRnv/+FZKA1mtqPUFTvPs4/VOBak6C+fXr/66fNp1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="225823312"
 X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
-   d="scan'208";a="219235266"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 09:47:49 -0800
+   d="scan'208";a="225823312"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 09:47:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
-   d="scan'208";a="517202428"
+   d="scan'208";a="613298996"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 11 Dec 2021 09:47:48 -0800
+  by orsmga004.jf.intel.com with ESMTP; 11 Dec 2021 09:47:48 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mw6TL-0004th-IJ; Sat, 11 Dec 2021 17:47:47 +0000
-Date:   Sun, 12 Dec 2021 01:47:27 +0800
+        id 1mw6TL-0004tk-JJ; Sat, 11 Dec 2021 17:47:47 +0000
+Date:   Sun, 12 Dec 2021 01:47:21 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 5a97ef662578ba3150ea53d2765a50d2ab48e7b5
-Message-ID: <61b4e42f.81U9y21gkY8czrHi%lkp@intel.com>
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 30a0b1e08c6a4f1c6d7a962fe809bcc24b691d87
+Message-ID: <61b4e429.A6aARsax8gLx445D%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -52,10 +52,10 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 5a97ef662578ba3150ea53d2765a50d2ab48e7b5  hwmon: (lm90) Do not report 'busy' status bit as alarm
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 30a0b1e08c6a4f1c6d7a962fe809bcc24b691d87  hwmon: (ntc_thermistor) Move DT matches to the driver block
 
-elapsed time: 723m
+elapsed time: 722m
 
 configs tested: 191
 configs skipped: 3
