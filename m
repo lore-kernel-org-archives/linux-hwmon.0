@@ -2,65 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45956C433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Dec 2021 22:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EC5FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Dec 2021 15:54:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344839AbhLJWuc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Dec 2021 17:50:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43646 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344823AbhLJWu2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Dec 2021 17:50:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 246C7B82A11;
-        Fri, 10 Dec 2021 22:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7FA7C341CC;
-        Fri, 10 Dec 2021 22:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639176410;
-        bh=C2JzY9tX7KaQ2HOds8rX4N2O9jKgCtiqKeLn2qzgDiw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=OgcCyIdNHkokcQOUJw+1TNEIUrW0LwbwLcQjQdd2Kcxco8QNx1RRyvYQmrUbiy7lU
-         Anp7si5EoB5b+Rvb+UQ1FW0LQS+p/rEiKeZPz6RdV/8edxGn/flm+YT6ffuOW+fJO5
-         V9nQdppb0mQnU0yMyqlgLnSShPyBFT/0S1xf5f/O9/S+9AjhdRN8fKd/i+CpmE+1U5
-         u1Wqr+195+KfGaTHqr2aRPraYaA182qEPN7E9SeHh/Ia2ktDjMbb7aUV+nFFAsCfp+
-         SjUtlHcfiUuxnMDZxD5dU3+frKfKeP2FplcmTBy82chqirCivLxkeBo8VbqibPs6y+
-         2DR3KP0DQz8Ew==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D7EB6609EB;
-        Fri, 10 Dec 2021 22:46:50 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v5.16-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211210204106.1663978-1-linux@roeck-us.net>
-References: <20211210204106.1663978-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211210204106.1663978-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc5
-X-PR-Tracked-Commit-Id: a2ca752055edd39be38b887e264d3de7ca2bc1bb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1e050cd539b843eefce6e742a46f82c4dcdf3c23
-Message-Id: <163917641087.4787.17026916604256509238.pr-tracker-bot@kernel.org>
-Date:   Fri, 10 Dec 2021 22:46:50 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S230283AbhLKPy5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Dec 2021 10:54:57 -0500
+Received: from mout.gmx.net ([212.227.17.21]:52559 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230204AbhLKPy4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Dec 2021 10:54:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639238076;
+        bh=w09I6mhNq385P5WZh71t6ffdsvjEMKUE3DIIffgnR+s=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=gYHOW8BtWFiosnsszDI2K3wSZkXjCE6u9/ZYDooV3Xynis5aAJChp5W1zH4d3ArMn
+         nlalBOIoc6aaqhbvtX2nVzc6aziQbU8NVHwX6dUQtz/i/L/gHCqAEVJbP1gfK/T7LJ
+         Xhf9HH/Yf/dy/jyVlkkCgXjxf2PwvJbcqfqrLkFo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MYeMt-1n1Hdn0Wax-00VhnE; Sat, 11 Dec 2021 16:54:36 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: (dell-smm) Improve ioctl handler
+Date:   Sat, 11 Dec 2021 16:54:20 +0100
+Message-Id: <20211211155422.16830-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tdml37ZHnMLlwMeDIbyjmY8yLecZERa8awpBWbopEzXmAaRwP0I
+ ceBXPE64TxsDh9xXGtlH2ppXtEPlInm1ibJ2Db4sDTvX/GuhgD8GiRT1H6UlA1fuWsljnNh
+ iB2Rho/X+oh/siGD3MhsJ3XZPmsihTuTzWKoggXzw1/rFT435wEP38tEfM46loQC1RXrP0x
+ Wh+3WB8Q5hUYopx6wahww==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:udXNhJXsZng=:TRjjkoQwAiwpMTJI/Epdrb
+ IcMiCoFfSquVKmEJIjo4dtWOH7I97xOEs9xDvCXjbP0vBAI5avpXu4hG5frcDLHGd+9rayXUg
+ PxYKo2WTNfh1Bt4SHrcOdhjQjv7bxYldPMc32B5obB573dXfOeoVklYkdPei5lYtGmmEAH/el
+ p7MNn970WqZhpIjPxcwuEjJ6bvLEmGJ8maWq2BfFSIlhSMvgGCTIe5lXkGwLVBMF28OFX4gvO
+ fd38rIXzf0KNPkwEHXyCKWOxnGxcytt2cCqkpSQ2JO2RxRqTSf9tF2uAGekrtM3RMM5BfX9OV
+ ylgRq+VANb+tQJNp7nuj8iTjh5s9ZNHul6kVA34aZ+PxBw1y/2YbyyRu9uI8tKbUxNtbwnDkz
+ 5A76J36ANbtNcAo3mjvyBBfcaNBhHZLwZtiv1AXzZKKen0tE/WCPTlPG75g91n54l4csHn+HE
+ 8yyVPooFeHhI7jWwxIyoj3ZuZAfJ6dUcrdFi9tWGXQyjetE/RaHvd7eZ7uNFBBi8emqaU+kjr
+ b9VRie5eOVNVxOw1p46sN7i+VaR5jVi5IKblRSwuvx4wew5MVRxYOqjcxlsrnmJP5sLFYoaMn
+ 5wZ7SRzKDwr6ijloBaqUx5oc+r5H+HcDLMzMffMfUeNcfFzv0cd8HELZLLl98IuTCvuodKKxW
+ zxF7+2C8QXQvH7m6peGDkyXBLPKwtT4aX7kJ3omU942Ggp4y+yeHPPUjRHYX5k8qFzKOFJNVK
+ sAfWiF/Kg3tXd+RIw04eRFixRk8NHD9MIuhq18jUgh+eIm6fs9vXxIcoFeQTU8LuaxoSlnpms
+ MZKtQAtUyxIStfOVdG7PcUS8uinpWiGCW01JWcxY5QMRVGXc8U/NvFuw0vjNs6HDBpMOk5CcF
+ 0nTgB/5oj96dU/fanFTkSENCT5qzns5hBp+sI1bPQ8RTfg7viLlEBPqSfQez9NrHDpoUSOlCH
+ f8IJoQ/lFu0caU6rdhAIcYP8bRLYg24nswoDrTuubRf/V1+lt6dZPOISq5YaA+JgakNFP7bEx
+ DJsgdA4mqT06oCuwgmuMbxIFEOU6jZh5bzqs3yOXiP5uh3uk55Q2Yt86chh9JF3thRKtLTy4S
+ visNBobVVDG/T4=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Fri, 10 Dec 2021 12:41:06 -0800:
+This patch series improves the ioctl handler in dell_smm_hwmon.
+The first patch is simplifying the ioctl handler by removing
+an unnecessary switch case, while the second patch is unifying
+both i8k_ioctl() and i8k_ioctl_unlocked(), resulting in better
+performance since i8k_mutex is only acquired when needed
+(during fan status change) instead of being acquired for
+every ioctl call.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc5
+Tested on a Dell Inspiron 3505.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1e050cd539b843eefce6e742a46f82c4dcdf3c23
+changes in v2:
+- simplify logic between mutex_lock()/_unlock()
+- replace hardcoded values with sizeof statements
 
-Thank you!
+Armin Wolf (2):
+  hwmon: (dell-smm) Simplify ioctl handler
+  hwmon: (dell-smm) Unify i8k_ioctl() and i8k_ioctl_unlocked()
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+ drivers/hwmon/dell-smm-hwmon.c | 58 +++++++++++-----------------------
+ 1 file changed, 18 insertions(+), 40 deletions(-)
+
+=2D-
+2.30.2
+
