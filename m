@@ -2,108 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFA8FC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Dec 2021 18:01:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C5C1C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Dec 2021 18:45:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbhLKSBL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Dec 2021 13:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhLKSBE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Dec 2021 13:01:04 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8186BC061A32;
-        Sat, 11 Dec 2021 10:01:03 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y12so38694339eda.12;
-        Sat, 11 Dec 2021 10:01:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j9R8K3miqhXvXlJiG1vL3PmKdSgpdU9lAqSqAOUQnj4=;
-        b=UJl++pAKNsr6zwC/Dgul9gYxsuwQgfJK3m9Pm2f/aVQNey0o/YljEvcwujCDN6UaNd
-         Vhh8MDiyDGxqODFXz/OY3m+rLuLq8xWViUh1WOTOakgRVodWMRQNaVIMi4LHEx2XsAKt
-         3wdm5z59tmTcR200uIns9026koBIu9F5u435OpHsJ/VaBjTnUtUOVxnSLsUPTAljsk1o
-         sC1mvZ9GPLXU+XA/de6EXk1RoRzZZg+BTbupZnYlXvruQfJWHz/8CTpU/0bwU1Wf9c8X
-         uAfT4J91jiC0G0ARVqQ44016+StQAsmQpJklpkH4PM8fVOxkxt7zblS0vbS/oB0nxYb4
-         yxxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j9R8K3miqhXvXlJiG1vL3PmKdSgpdU9lAqSqAOUQnj4=;
-        b=ylXZki4tsa1/keE11cVZax6R4nP38MJTZfi+rYoH5dK81Ce/zDsZHlprvVpSn6EBZH
-         gjkzUkT3yuhcGu34dBEOlB03MMEevU0GufsE3YlCD0bTH4sMbB8iqNn4nWNLO5KfhwYS
-         4RKFQgCNeRQoXY5tKyJRKS+fKEUGwFQtgJi87CbldXqGs1CQ8z3ykA9sQ8xpFAkJRVKc
-         +KoeRxenEJx/BsgO/MjX/gz86HNqzBuUHKp6I4rg0W4WLgLU43hI9sVocideo8o6bgAh
-         XBwIZILpk69rWZku0gMkt60bycvnxNVABB9VCiuiZXu804yul2tlEBiHT8cW7M0PA7HL
-         2mSA==
-X-Gm-Message-State: AOAM5312qMWeA+Ulzn0tbzV1zJMwqGycm4IADtXpu1RrWwCkGPlGm4Lp
-        nl/y565rj8Ja0cFIAN9S5Wzqo5tCvHQ=
-X-Google-Smtp-Source: ABdhPJwLz2QoTnF7chmJIKhVWiIPhlsbmR9u8x0g3MTo9PczNHpZEX9oNxOXDfRKQEr2taDO3gEYNA==
-X-Received: by 2002:a17:907:7f9e:: with SMTP id qk30mr32405805ejc.313.1639245661439;
-        Sat, 11 Dec 2021 10:01:01 -0800 (PST)
-Received: from localhost.localdomain ([178.94.9.252])
-        by smtp.gmail.com with ESMTPSA id sg17sm3337909ejc.72.2021.12.11.10.00.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 10:01:00 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
-        Daniel Gibson <metalcaedes@gmail.com>,
-        Michael Altizer <michael@theoddone.net>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] hwmon: (nct6775) add ROG STRIX B550-A/X570-I GAMING
-Date:   Sat, 11 Dec 2021 20:00:36 +0200
-Message-Id: <20211211180037.367062-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        id S229707AbhLKSpM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Dec 2021 13:45:12 -0500
+Received: from mout.gmx.net ([212.227.17.20]:59981 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230468AbhLKSpL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Dec 2021 13:45:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639248292;
+        bh=TNaxw9F5mdkBVD8JV4tQ5Gi+bPFXfvjPAHwyHGpOTts=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=GwyLThNv1+O34J3F3gjuZbHgB3RtNfJDQAHthPQRNyBIACOUPw7l2XR9hjVWDrgSM
+         ZhHZ/2YXxhasX5AH+KWM/ZBG4t6wQykmIdv6uD5kSqgcQvTOu8e3zZvd2TYV2kPljx
+         yVeUEw2iv6NeeM35yj51RA8EgRCxtkPSygUTP1Qg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Mq2jC-1mA5EE28uI-00nCDt; Sat, 11 Dec 2021 19:44:52 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (raspberrypi) Exit immediately in case of error in init
+Date:   Sat, 11 Dec 2021 19:44:49 +0100
+Message-Id: <20211211184449.18211-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:e1ZayIrRzfNtRAPi4vAeLu3OQ15DNYjst+ZKvGyY91ddBPfDadf
+ oKwlAwSx31P/qbhx4DzCrwzt3zHu93SJUk0ENxIcTiNhGkMGq3zIscfxahYJgDj+p9PNepW
+ n/t/+77UmbVrDyPWmYUaAkscfpdi5MMQjd3FTL/ioOLgNRs2lDxAYaBvpL5WZ/O2X3jWxEf
+ JlIglgQKVbjnxb625cAow==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:w2yVm3JTnxc=:Cq2IgundaWCWQW+uEfFBDd
+ iGxcBSPwKQtVihLuMYXAXtcPZt9vm1wnasjwnfqR//Qu3xS/BGXQFk7/JwM6mAXn74lyXolFl
+ fpKJe5VqUnrNgjQjncbyLQ75BnMVf+Xsj60MN0Yk3KcRV2VHi4+O5hTYB30aMMGBbTOad68L5
+ KTi1p6USXixd88xwUggf/cpbVIqH0BUX8wnKNFXWegwzxjJuZ851692qJ2TvQlIUk0sgUFA/E
+ e5kdKAvd8FLRLEnHdIuTZp7y4vXu3bTUFFlfrS/47ZZvciuAnb+rJOhhttzTT/piOmSWdATl4
+ gkp6cHjmeYZJ/dvvc5EteMCYJEskdwdm8+glTlIqQkzZl51e3pkYTJ72yfInKDqhfCy9xju62
+ mUWY/0D+lGdFcSo/PnETypQoy0y9qQwFv4MgJiMESyl+d7ZaPYAxu/Qbt2/9gTZ/TfheRWUit
+ R87AoFqdw+RZeZCOagEoqcDxWwq6iSw84jw22zRIB1hm0/44cii5uVYOO+lnE3napTmm0s9pj
+ khXRhZXIXQKE7sddrtPIkg9WmsRPC2jBtrlfD5rjU3MXwIWiQTfjEKU7QfS91oTfL8NMMdinX
+ 2Irz//8mp8JNea45HN2RO7PlHJDsyQMNe8lQfBr90Y84lMVHfU/rbceAsVy5NSqjLTeD575zV
+ kZkZvZyMrS4566yENO0mclhcB938isGH0I8XVdREm/EA6P85Ng+DpPZv6VK4dAuPRD5tU0SVl
+ VbwJRBtMNLzIvmt8kqEiRbP3OgPF35Fy4QN6mN2PwZOyyf/QvzG1SL1GQhT+sG4qx3YpdLCeU
+ ldQg6BbSGZWesMzR6ggDe9HgJCsqh1/twHHpWF0wzPV7FXlWo7jNDRTntEoHS9rUyBVZvtqKj
+ S53qDKQAkl/lu+zKE7KAnKkVYwrSLbgHTxAroliC75mKapObx3SGQUpbeGssyy3VbKZrGDhnX
+ PjBZghD0vd+fNEj1awZBcX0efJ+4+lh+BzcchOAIF+1T52iqrt1Oq0WVsmkLyn3O1QQG/ZGYN
+ 2hQjo3BTiVPqY+YvvdJr3dFuwVWojKYAoYbneeWkaFmjvyAWrdjMJWhN8tdksqioIK4pBsLFT
+ 3cfeoH6z3zo4Tk=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-ASUS ROG STRIX B550-A/X570-I GAMING boards have got an nct6775 chip, but
-by default there's no use of it because of resource conflict with WMI 
-method.
+Exit immediately if devm_hwmon_device_register_with_info()
+fails since registering a delayed work whould be useless
+in such a case anyway.
 
-This commit adds "ROG STRIX B550-A GAMING" and "ROG STRIX X570-I GAMING" to
-the list of boards that can be monitored using ASUS WMI.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/raspberrypi-hwmon.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Daniel Gibson <metalcaedes@gmail.com>
-Tested-by: Michael Altizer <michael@theoddone.net>
-Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
----
- drivers/hwmon/nct6775.c | 2 ++
- 1 file changed, 2 insertions(+)
+diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi=
+-hwmon.c
+index 573f53d52912..1650d3b4c26e 100644
+=2D-- a/drivers/hwmon/raspberrypi-hwmon.c
++++ b/drivers/hwmon/raspberrypi-hwmon.c
+@@ -120,6 +120,8 @@ static int rpi_hwmon_probe(struct platform_device *pde=
+v)
+ 							       data,
+ 							       &rpi_chip_info,
+ 							       NULL);
++	if (IS_ERR(data->hwmon_dev))
++		return PTR_ERR(data->hwmon_dev);
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 93dca471972e..e3edb1a72654 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -4995,11 +4995,13 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG CROSSHAIR VIII FORMULA",
- 	"ROG CROSSHAIR VIII HERO",
- 	"ROG CROSSHAIR VIII IMPACT",
-+	"ROG STRIX B550-A GAMING",
- 	"ROG STRIX B550-E GAMING",
- 	"ROG STRIX B550-F GAMING",
- 	"ROG STRIX B550-F GAMING (WI-FI)",
- 	"ROG STRIX B550-I GAMING",
- 	"ROG STRIX X570-F GAMING",
-+	"ROG STRIX X570-I GAMING",
- 	"ROG STRIX Z390-E GAMING",
- 	"ROG STRIX Z490-I GAMING",
- 	"TUF GAMING B550M-PLUS",
+ 	ret =3D devm_delayed_work_autocancel(dev, &data->get_values_poll_work,
+ 					   get_values_poll);
+@@ -127,10 +129,9 @@ static int rpi_hwmon_probe(struct platform_device *pd=
+ev)
+ 		return ret;
+ 	platform_set_drvdata(pdev, data);
 
-base-commit: c741e49150dbb0c0aebe234389f4aa8b47958fa8
--- 
-2.33.0
+-	if (!PTR_ERR_OR_ZERO(data->hwmon_dev))
+-		schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
++	schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
+
+-	return PTR_ERR_OR_ZERO(data->hwmon_dev);
++	return 0;
+ }
+
+ static struct platform_driver rpi_hwmon_driver =3D {
+=2D-
+2.30.2
 
