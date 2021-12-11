@@ -2,130 +2,264 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E5FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Dec 2021 16:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A1AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Dec 2021 17:47:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbhLKQF5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Dec 2021 11:05:57 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:36984 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbhLKQF5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Dec 2021 11:05:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AB753CE000E;
-        Sat, 11 Dec 2021 16:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D923AC004DD;
-        Sat, 11 Dec 2021 16:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639238754;
-        bh=6ECba4zdP0TaGj8u/SYfplHplf34p0rrMv4pwmsei6g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U960he549WfnNuFXf5suQqjHX5W8DH78NwL2ETn3ZR8RjrlVrY0OB/A3YUC+L0kpA
-         2VnlTtSs4cLjoFf9+cxilQnPzP7j/Hu+3vOGS1SE6Oh7bgYN2FSZO6wOd8BCsing+7
-         wkqw5zNZWp9PermN6xinxrCW7hHAFuLudPzh4sSfVPOwveY/9Lfx1R8Zu/qq8mUuEd
-         iq3gCBOm23Kx+XuQypMypcO4lZomp5SSegRjni23wO/vEj7iIP5UEnpmtiJgbEppZN
-         Dd7Y0ggiY7DyWwFljDSo/ABsaPzFz5Z6XpOw4d+Se4vQ+beBLwqAiJglTunEjec8nz
-         cH9wNYnV/OiKw==
-Received: by pali.im (Postfix)
-        id B4E5A735; Sat, 11 Dec 2021 17:05:51 +0100 (CET)
-Date:   Sat, 11 Dec 2021 17:05:51 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (dell-smm) Unify i8k_ioctl() and
- i8k_ioctl_unlocked()
-Message-ID: <20211211160551.agftqd7g3dtyu2x6@pali>
-References: <20211211155422.16830-1-W_Armin@gmx.de>
- <20211211155422.16830-3-W_Armin@gmx.de>
+        id S229456AbhLKRru (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Dec 2021 12:47:50 -0500
+Received: from mga17.intel.com ([192.55.52.151]:35153 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229952AbhLKRru (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Dec 2021 12:47:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639244869; x=1670780869;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JqAJ8cFTkh891GKeM4JD+3amnyVZGDuP0Aazm+f9aQc=;
+  b=PyDJaKkRzGEmJugpe2GL1p9dWveQXg3ip86ShfBub69106abGpxu0Z6u
+   hoOkBFWrOZ7x4fmS1kFE0JOEdexlBpHjm0rjQ/nlPDcwFdLRuyjSbTdVd
+   WTRg+5dGPalRV11gvQHK4R8Om2Y1z46RITTetKFFn8OsG3p/H2mPywNEO
+   P5Acj5vHhGFfxRIwLiR+nJRoUhgejkpVW8s6llzPih6RlNsoMKjGhuF+F
+   /pZ9p5Oc6jdgRxNd9Fj/haUAPsF0FPDQfBJrEoewsKMBNPeHAs4lTWG+D
+   a0fC5TtS8LYA9iX847qCu3QnLa9PdkmXAp+C0QxWCs+PvKFAICVhKZ3qR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="219235266"
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="219235266"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 09:47:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="517202428"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 11 Dec 2021 09:47:48 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mw6TL-0004th-IJ; Sat, 11 Dec 2021 17:47:47 +0000
+Date:   Sun, 12 Dec 2021 01:47:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 5a97ef662578ba3150ea53d2765a50d2ab48e7b5
+Message-ID: <61b4e42f.81U9y21gkY8czrHi%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211211155422.16830-3-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Saturday 11 December 2021 16:54:22 Armin Wolf wrote:
-> The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
-> with i8k_mutex held. Judging from the hwmon code, this mutex
-> only needs to be held when setting the fan speed/mode, so
-> the operation of I8K_SET_FAN is guaranteed to be atomic.
-> Unify both functions and reduce the locking of i8k_mutex
-> to I8K_SET_FAN.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 5a97ef662578ba3150ea53d2765a50d2ab48e7b5  hwmon: (lm90) Do not report 'busy' status bit as alarm
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+elapsed time: 723m
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 28 +++++++++-------------------
->  1 file changed, 9 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 186d40938036..d8c6e75bb374 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -449,12 +449,12 @@ static int i8k_get_power_status(void)
->   * Procfs interface
->   */
-> 
-> -static int
-> -i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd, unsigned long arg)
-> +static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
->  {
-> -	int val = 0;
-> -	int speed, err;
-> +	struct dell_smm_data *data = PDE_DATA(file_inode(fp));
->  	int __user *argp = (int __user *)arg;
-> +	int speed, err;
-> +	int val = 0;
-> 
->  	if (!argp)
->  		return -EINVAL;
-> @@ -516,11 +516,13 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
->  		if (copy_from_user(&speed, argp + 1, sizeof(int)))
->  			return -EFAULT;
-> 
-> +		mutex_lock(&data->i8k_mutex);
->  		err = i8k_set_fan(data, val, speed);
->  		if (err < 0)
-> -			return err;
-> -
-> -		val = i8k_get_fan_status(data, val);
-> +			val = err;
-> +		else
-> +			val = i8k_get_fan_status(data, val);
-> +		mutex_unlock(&data->i8k_mutex);
->  		break;
-> 
->  	default:
-> @@ -536,18 +538,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
->  	return 0;
->  }
-> 
-> -static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
-> -{
-> -	struct dell_smm_data *data = PDE_DATA(file_inode(fp));
-> -	long ret;
-> -
-> -	mutex_lock(&data->i8k_mutex);
-> -	ret = i8k_ioctl_unlocked(fp, data, cmd, arg);
-> -	mutex_unlock(&data->i8k_mutex);
-> -
-> -	return ret;
-> -}
-> -
->  /*
->   * Print the information for /proc/i8k.
->   */
-> --
-> 2.30.2
-> 
+configs tested: 191
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211210
+sh                          r7780mp_defconfig
+powerpc                          g5_defconfig
+arm                  colibri_pxa270_defconfig
+m68k                                defconfig
+m68k                        m5307c3_defconfig
+arm                        spear6xx_defconfig
+sh                             sh03_defconfig
+riscv                            alldefconfig
+powerpc                        cell_defconfig
+mips                      bmips_stb_defconfig
+mips                         tb0287_defconfig
+openrisc                         alldefconfig
+powerpc                       ebony_defconfig
+mips                  decstation_64_defconfig
+arm                           h5000_defconfig
+sh                      rts7751r2d1_defconfig
+arm                       aspeed_g5_defconfig
+sparc64                             defconfig
+arm                          ixp4xx_defconfig
+sh                           se7780_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                 xes_mpc85xx_defconfig
+ia64                        generic_defconfig
+arm                           sama7_defconfig
+powerpc                       holly_defconfig
+arc                      axs103_smp_defconfig
+sh                         apsh4a3a_defconfig
+powerpc                      katmai_defconfig
+powerpc                       eiger_defconfig
+h8300                       h8s-sim_defconfig
+i386                             alldefconfig
+arc                    vdk_hs38_smp_defconfig
+mips                        bcm63xx_defconfig
+xtensa                generic_kc705_defconfig
+m68k                            q40_defconfig
+arc                           tb10x_defconfig
+arc                     nsimosci_hs_defconfig
+mips                       bmips_be_defconfig
+nios2                         3c120_defconfig
+arm                       multi_v4t_defconfig
+sh                           se7619_defconfig
+arm                      integrator_defconfig
+um                             i386_defconfig
+powerpc                     sequoia_defconfig
+arm                         lpc32xx_defconfig
+microblaze                      mmu_defconfig
+sh                        edosk7705_defconfig
+powerpc                   motionpro_defconfig
+m68k                         amcore_defconfig
+parisc                generic-32bit_defconfig
+powerpc                     kmeter1_defconfig
+arm                        trizeps4_defconfig
+sh                               j2_defconfig
+arm                            hisi_defconfig
+xtensa                  audio_kc705_defconfig
+powerpc                      ppc40x_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                  mpc866_ads_defconfig
+m68k                          amiga_defconfig
+m68k                          sun3x_defconfig
+parisc                           allyesconfig
+arm                     eseries_pxa_defconfig
+mips                        bcm47xx_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                 mpc837x_mds_defconfig
+arc                          axs103_defconfig
+powerpc                 mpc8540_ads_defconfig
+m68k                       bvme6000_defconfig
+arm                  colibri_pxa300_defconfig
+arm                         socfpga_defconfig
+x86_64                           allyesconfig
+sparc                       sparc64_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                      chrp32_defconfig
+m68k                        m5407c3_defconfig
+arc                            hsdk_defconfig
+csky                             alldefconfig
+riscv                    nommu_virt_defconfig
+arm                        neponset_defconfig
+mips                      maltasmvp_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                     pq2fads_defconfig
+alpha                            alldefconfig
+arm                       netwinder_defconfig
+powerpc                     tqm8541_defconfig
+arm                          pxa3xx_defconfig
+powerpc                    mvme5100_defconfig
+m68k                       m5275evb_defconfig
+xtensa                          iss_defconfig
+s390                          debug_defconfig
+arm                        mvebu_v7_defconfig
+arm                          pxa168_defconfig
+arm                  randconfig-c002-20211210
+arm                  randconfig-c002-20211211
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20211210
+i386                 randconfig-a002-20211210
+i386                 randconfig-a005-20211210
+i386                 randconfig-a003-20211210
+i386                 randconfig-a006-20211210
+i386                 randconfig-a004-20211210
+x86_64               randconfig-a006-20211210
+x86_64               randconfig-a005-20211210
+x86_64               randconfig-a001-20211210
+x86_64               randconfig-a002-20211210
+x86_64               randconfig-a003-20211210
+x86_64               randconfig-a004-20211210
+i386                 randconfig-a013-20211211
+i386                 randconfig-a011-20211211
+i386                 randconfig-a016-20211211
+i386                 randconfig-a014-20211211
+i386                 randconfig-a015-20211211
+i386                 randconfig-a012-20211211
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+arm                  randconfig-c002-20211210
+x86_64               randconfig-c007-20211210
+riscv                randconfig-c006-20211210
+mips                 randconfig-c004-20211210
+i386                 randconfig-c001-20211210
+s390                 randconfig-c005-20211210
+powerpc              randconfig-c003-20211210
+i386                 randconfig-a001-20211211
+i386                 randconfig-a002-20211211
+i386                 randconfig-a005-20211211
+i386                 randconfig-a003-20211211
+i386                 randconfig-a006-20211211
+i386                 randconfig-a004-20211211
+x86_64               randconfig-a011-20211210
+x86_64               randconfig-a012-20211210
+x86_64               randconfig-a014-20211210
+x86_64               randconfig-a013-20211210
+x86_64               randconfig-a016-20211210
+x86_64               randconfig-a015-20211210
+i386                 randconfig-a013-20211210
+i386                 randconfig-a011-20211210
+i386                 randconfig-a016-20211210
+i386                 randconfig-a014-20211210
+i386                 randconfig-a015-20211210
+i386                 randconfig-a012-20211210
+hexagon              randconfig-r045-20211210
+riscv                randconfig-r042-20211210
+s390                 randconfig-r044-20211210
+hexagon              randconfig-r041-20211210
+hexagon              randconfig-r045-20211211
+hexagon              randconfig-r041-20211211
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
