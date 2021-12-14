@@ -2,124 +2,52 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87A5CC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Dec 2021 14:28:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7944C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Dec 2021 08:40:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239341AbhLMO2s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Dec 2021 09:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239376AbhLMO2q (ORCPT
+        id S231903AbhLNIkn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Dec 2021 03:40:43 -0500
+Received: from mail.thebizzie.pl ([192.236.147.111]:41074 "EHLO
+        mail.thebizzie.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231892AbhLNIkm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:28:46 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5712C06173F
-        for <linux-hwmon@vger.kernel.org>; Mon, 13 Dec 2021 06:28:45 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id y13so52303144edd.13
-        for <linux-hwmon@vger.kernel.org>; Mon, 13 Dec 2021 06:28:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aheymans-xyz.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ygpc4SFsAp5XZZ3iqS6qiq3RqIajhWzXZFI9KjKMIs8=;
-        b=pki0FSn5NIeQ8IurjAvXJUwgSWKeR+aUphSXEc42CO9efL3P9ensZqPGO9VNdxIf1k
-         8bZxQUOh8wbQWwplZpjU5M7dOoEirtXlImT37HXKn5pfE8b9ArfSMbU8dNb8OvYP182O
-         ZkdVU3gt84UOXXSVM8pMYdTQ/GPlZ5xvMDQnox9fIUD7mpWd78wkFV3efI3GgU+8KDu8
-         lASh5+szBSd7VF0NE8rqMuHb9vTYRtoT07lqyuywsbhjaOVOXw01Pxia9OAdre8Blzhk
-         K3KPpjjzuLxIqfP24eykUToctuOpBxqY9RNIY7f6XusSZa2OIYGCkGLsNLCW0wEvXben
-         2m0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ygpc4SFsAp5XZZ3iqS6qiq3RqIajhWzXZFI9KjKMIs8=;
-        b=jzhl0CImZQfePyDIIMOjQ50IqBjetivTP05gZaZEsu5eX47sG0uD9y/iX1yTtxu/BU
-         6wAulg2tuKaDJ6HVeS/C7zqimuP6RQiFky81r1fGJvFH6xM1oFnDjSjCrelOZuHfhfcz
-         mRPLSZ0S92/L7wbqjk2ntKAzRUgCei1NfrnhLmiEn8Vl3eIaxynSJtS5waQFIH5ZiobF
-         XeVC1qhswN8VuK/ZpgvPg1ZMfCqzUcPVHg/gNjXVvnfPixjPGpYvqetR5Gcd4C1VnzcZ
-         gt9T/Q+E4kCx7Fsj9FnSqLDbnyHTMoscVaPDhJtXccRy5mAY0WeM3XYfHz7zQsU4Z8Dk
-         +pqw==
-X-Gm-Message-State: AOAM533D4H4gxPrzrwwokVWVjCFtKsJvBuBEL2Z7T6Ss2nUs/VzTwzCq
-        Vc4iLgunr7yTkLMdqkL8GFKJOaxlG3MRWWqI
-X-Google-Smtp-Source: ABdhPJxGQpxqVPCzLf/C/scPYs2YXv56OSpOyFkxjTuxYqv1i28rSX/+BYwRUd8L400mlcxWsRiX0g==
-X-Received: by 2002:aa7:d652:: with SMTP id v18mr64359895edr.68.1639405724318;
-        Mon, 13 Dec 2021 06:28:44 -0800 (PST)
-Received: from t41sarthur.home (ip-193-121-10-250.dsl.scarlet.be. [193.121.10.250])
-        by smtp.gmail.com with ESMTPSA id kx3sm5996414ejc.112.2021.12.13.06.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 06:28:44 -0800 (PST)
-From:   arthur@aheymans.xyz
-X-Google-Original-From: arthur.heymans@9elements.com
-To:     linux-hwmon@vger.kernel.org
-Cc:     patrick.rudolph@9elements.com
-Subject: [PATCH v2 3/3] ir38064: Expose a regulator
-Date:   Mon, 13 Dec 2021 15:28:14 +0100
-Message-Id: <20211213142814.264802-4-arthur.heymans@9elements.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211213142814.264802-1-arthur.heymans@9elements.com>
-References: <20211213142814.264802-1-arthur.heymans@9elements.com>
+        Tue, 14 Dec 2021 03:40:42 -0500
+Received: by mail.thebizzie.pl (Postfix, from userid 1002)
+        id 31840181334; Tue, 14 Dec 2021 08:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=thebizzie.pl; s=mail;
+        t=1639470863; bh=kU+//Lu71IqgcFfjayWXuIc0mZtoyrYJc2YuqyU8eS8=;
+        h=Date:From:To:Subject:From;
+        b=lFIEdQO0+Ln7wdcUelxzI3zxZTU1EDv8hE7Gjw60TDtIHHTUMKPp2TnhjN+D3+JKO
+         BiXPcbQAXwr2/gorGlgv+z4qRrtad+pd1XCKmoA4CZ8XFFjX2G0e2YmN5dizdNBeEU
+         uWzKwNS5quSNSHALiFlEsMAdB5jC0bLxvqD2O8X87ldZZdMAksBfy7bQS52CRXIgOW
+         pc2JqiBi8DeeXFibjOPHJsiH5+ezaJid9gLczugMjiwx46ZCneDUaXbOSA75NUlhLj
+         17Z9zTAI45SQGD3jhUJ8BxzFG09YPaNuc0lbMVuxzPfnq58f1BWwEx28d2Uknr6MEq
+         cqez60e1LIulw==
+Received: by mail.thebizzie.pl for <linux-hwmon@vger.kernel.org>; Tue, 14 Dec 2021 08:31:44 GMT
+Message-ID: <20211214074500-0.1.7.26j.0.cu12v91i2r@thebizzie.pl>
+Date:   Tue, 14 Dec 2021 08:31:44 GMT
+From:   "Mateusz Adamczyk" <mateusz.adamczyk@thebizzie.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.thebizzie.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+Dzie=C5=84 dobry,
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/hwmon/pmbus/Kconfig   |  6 ++++++
- drivers/hwmon/pmbus/ir38064.c | 11 +++++++++++
- 2 files changed, 17 insertions(+)
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index d2b178a902f0..fdfe1cd54799 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -131,6 +131,12 @@ config SENSORS_IR38064
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ir38064.
- 
-+config SENSORS_IR38064_REGULATOR
-+	bool "Regulator support for IR38064 and compatibles"
-+	depends on SENSORS_IR38064 && REGULATOR
-+	help
-+	  Uses the IR38064 or compatible as regulator.
-+
- config SENSORS_IRPS5401
- 	tristate "Infineon IRPS5401"
- 	help
-diff --git a/drivers/hwmon/pmbus/ir38064.c b/drivers/hwmon/pmbus/ir38064.c
-index 4211de048069..07bdbb16f216 100644
---- a/drivers/hwmon/pmbus/ir38064.c
-+++ b/drivers/hwmon/pmbus/ir38064.c
-@@ -17,8 +17,15 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/regulator/driver.h>
- #include "pmbus.h"
- 
-+#if IS_ENABLED(CONFIG_SENSORS_IR38064_REGULATOR)
-+static const struct regulator_desc ir38064_reg_desc[] = {
-+	PMBUS_REGULATOR("vout", 0),
-+};
-+#endif /* CONFIG_SENSORS_IR38064_REGULATOR */
-+
- static struct pmbus_driver_info ir38064_info = {
- 	.pages = 1,
- 	.format[PSC_VOLTAGE_IN] = linear,
-@@ -34,6 +41,10 @@ static struct pmbus_driver_info ir38064_info = {
- 	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
- 	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
- 	    | PMBUS_HAVE_POUT,
-+#if IS_ENABLED(CONFIG_SENSORS_IR38064_REGULATOR)
-+	.num_regulators = 1,
-+	.reg_desc = ir38064_reg_desc,
-+#endif
- };
- 
- static int ir38064_probe(struct i2c_client *client)
--- 
-2.33.1
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Mateusz Adamczyk
