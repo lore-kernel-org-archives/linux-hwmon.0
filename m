@@ -2,108 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 436AFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Dec 2021 12:31:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 227A7C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Dec 2021 12:36:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242512AbhLOMbe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Dec 2021 07:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237629AbhLOMbd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:31:33 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD74C061574;
-        Wed, 15 Dec 2021 04:31:33 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so24676738otv.9;
-        Wed, 15 Dec 2021 04:31:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0TSpLPQPFLItXTo3lZzCz10vs9V+Bflifn6PD2+rUjs=;
-        b=e6pTCNptZTpRA0nZOl6upXu5TF1Mzu+p4NR1V7Ci1Oaar2kwCBdZ5C1Isc0/Z0WiFv
-         b5V/37QeGdSfuPbJx8Y5HFnyig8kFObv0YP6hCktB23tTnbrnic8WmYn4pQXGKDNrzhz
-         L+orZIsgDLd8ccFgWIH/AffKR9/oz6fg3xmAfyAUA9ibrJdKnynobfgyMXb/tw+8YlQQ
-         mDub8RfAJzz7brZ7jEI7rqGaD9ZZ3P50iFS/hTvT4cm1I0tk3Gp5dHx8tHKVRMOUEvHq
-         rCAk8A8sDW0QaLLMer5OkxkPI883qdQxWV+Mpam1lcMG0X1+5jp+gTHGzNhxTCuFLs3K
-         kGPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:from:to:cc:references:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0TSpLPQPFLItXTo3lZzCz10vs9V+Bflifn6PD2+rUjs=;
-        b=iBkBmr19H3JNExpou6cW1VMYdYey3OpuIPMaXab20iN8p2Cp7P3tM1VIsLRI16WG7r
-         NUsZW5L5U1nZUwJDIR1bHfkeWU293n4/Spx915JNyWY30tXbbjwRrGdO4VkSOCgRC7oC
-         JiC32/RaOIgA6v1HwsYpXuZ9Fa61ief73XSf3LO659BbIthEUk0+I3Vgg0gzQtMOpYvx
-         vbmV/rRCMVqPCr+LmsEAiSwvEX4gVOxKtKjM1aE7rQAj8U3F7/cxCjIXfF4/tye/ah9G
-         96at2YVw68wV2iK2DG61exipzsnxmHOa8S/FgqdU9fPseAqohmwWgOrpbg/OPQJJvBbv
-         91JA==
-X-Gm-Message-State: AOAM530+IxV+T1ABXOaETe+aeClBQn/781QOHSivye4ZLQlBSWnl+o8j
-        H1rR+p3FfDvyEjvP+0YQnwmmh2aZM9M=
-X-Google-Smtp-Source: ABdhPJyEF+97/XhrZAC0KV+lMOz4inQ2VncVYhhcmHk3f/XtFenVt3rCmmwJVKR5axwfwZcAClRL/w==
-X-Received: by 2002:a05:6830:4391:: with SMTP id s17mr8400677otv.118.1639571492329;
-        Wed, 15 Dec 2021 04:31:32 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bl33sm342599oib.47.2021.12.15.04.31.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 04:31:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arseny Demidov <arsdemal@gmail.com>
-Cc:     Arseny Demidov <a.demidov@yadro.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S242563AbhLOMgh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Dec 2021 07:36:37 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:48934 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242572AbhLOMgg (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:36:36 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 523514382B;
+        Wed, 15 Dec 2021 12:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        mime-version:content-transfer-encoding:content-type:content-type
+        :content-language:accept-language:in-reply-to:references
+        :message-id:date:date:subject:subject:from:from:received
+        :received:received:received:received; s=mta-01; t=1639571794; x=
+        1641386195; bh=vYjW8XrgnwJ5djB3iYo4jM09bOlWQU/PIRsmeJ0i0vg=; b=n
+        46q9AEkWrYlHbHDzxf5EMfQtQsqI+xHhjvxeBVRyWjtBXxwvFfsFXni+BGk1eb/q
+        74Cr1DJDB4U1HSAhAVmv/Wok86/SH6xzXD0ni/9O+FCAdRdSdT6aKvN/b8wKAU3y
+        1X+XG/8Lg3u5bjOw+qN/EbRp+HRSq3YTURhEvIRdRA=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Gk4kjZDlEaU3; Wed, 15 Dec 2021 15:36:34 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id A57D443828;
+        Wed, 15 Dec 2021 15:36:33 +0300 (MSK)
+Received: from T-EXCH-06.corp.yadro.com (172.17.10.110) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Wed, 15 Dec 2021 15:36:33 +0300
+Received: from T-Exch-05.corp.yadro.com (172.17.10.109) by
+ T-EXCH-06.corp.yadro.com (172.17.10.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 15 Dec 2021 15:36:33 +0300
+Received: from T-Exch-05.corp.yadro.com ([fe80::a43b:5159:cc52:9ad8]) by
+ T-Exch-05.corp.yadro.com ([fe80::a43b:5159:cc52:9ad8%14]) with mapi id
+ 15.02.0792.003; Wed, 15 Dec 2021 15:36:33 +0300
+From:   Arseny Demidov <a.demidov@yadro.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Arseny Demidov <arsdemal@gmail.com>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] hwmon : (mr75203) fix macro typo
+Thread-Topic: [PATCH] hwmon : (mr75203) fix macro typo
+Thread-Index: AQHX8adVWLaP7HAg3kCtAegOS1jXr6wzQLyAgAAJCICAADLCIA==
+Date:   Wed, 15 Dec 2021 12:36:32 +0000
+Message-ID: <c1d036c0cfa14fbb9c289f792780f003@yadro.com>
 References: <20211215113023.2945-1-a.demidov@yadro.com>
  <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
-Message-ID: <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
-Date:   Wed, 15 Dec 2021 04:31:29 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
+In-Reply-To: <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
+Accept-Language: en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.17.4.118]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/15/21 3:59 AM, Guenter Roeck wrote:
-> On 12/15/21 3:30 AM, Arseny Demidov wrote:
->> In the file mr75203.c we have a macro named
->> POWER_DELAY_CYCLE_256, the correct value should be 0x100
->>
-> 
-> How do you know that ? Do you have access to the datasheet, or
-> is it just an assumption based on the name of the define ?
-> 
-
-Also, how do you know that the value is wrong, not the name
-of the define ?
-
-Guenter
-
-> Guenter
-> 
->> Signed-off-by: Arseny Demidov <a.demidov@yadro.com>
->> ---
->>   drivers/hwmon/mr75203.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
->> index 868243dba1ee..1ba1e3145969 100644
->> --- a/drivers/hwmon/mr75203.c
->> +++ b/drivers/hwmon/mr75203.c
->> @@ -93,7 +93,7 @@
->>   #define VM_CH_REQ    BIT(21)
->>   #define IP_TMR            0x05
->> -#define POWER_DELAY_CYCLE_256    0x80
->> +#define POWER_DELAY_CYCLE_256    0x100
->>   #define POWER_DELAY_CYCLE_64    0x40
->>   #define PVT_POLL_DELAY_US    20
->>
-> 
-
+WWVzLCBJIGhhdmUgYWNjZXNzIHRvIHRoZSBkYXRhc2hlZXQgYW5kIGNhdWdodCBhbiBlcnJvciBv
+biBzaW11bGF0aW9uIElQLWJsb2NrLg0KVGhlIGRhdGFzaGVldCBzYXlzIHRoYXQgcmVnaXN0ZXIg
+IkV4cHJlc3NlZCBpbiB1bml0cyBvZiBJUCBjbGsgY3ljbGVzLiINClR5cGljYWwgcG93ZXItdXAg
+ZGVsYXlzIGZvciBUZW1wZXJhdHVyZSBTZW5zb3IgYXJlIDI1NiBjeWNsZXMgaS4gZS4gMHgxMDAN
+Cg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEd1ZW50ZXIgUm9lY2sgPGdyb2Vj
+azdAZ21haWwuY29tPiBPbiBCZWhhbGYgT2YgR3VlbnRlciBSb2Vjaw0KU2VudDogV2VkbmVzZGF5
+LCBEZWNlbWJlciAxNSwgMjAyMSAzOjMxIFBNDQpUbzogQXJzZW55IERlbWlkb3YgPGFyc2RlbWFs
+QGdtYWlsLmNvbT4NCkNjOiBBcnNlbnkgRGVtaWRvdiA8YS5kZW1pZG92QHlhZHJvLmNvbT47IEpl
+YW4gRGVsdmFyZSA8amRlbHZhcmVAc3VzZS5jb20+OyBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5v
+cmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBbUEFUQ0hdIGh3
+bW9uIDogKG1yNzUyMDMpIGZpeCBtYWNybyB0eXBvDQoNCk9uIDEyLzE1LzIxIDM6NTkgQU0sIEd1
+ZW50ZXIgUm9lY2sgd3JvdGU6DQo+IE9uIDEyLzE1LzIxIDM6MzAgQU0sIEFyc2VueSBEZW1pZG92
+IHdyb3RlOg0KPj4gSW4gdGhlIGZpbGUgbXI3NTIwMy5jIHdlIGhhdmUgYSBtYWNybyBuYW1lZCBQ
+T1dFUl9ERUxBWV9DWUNMRV8yNTYsIA0KPj4gdGhlIGNvcnJlY3QgdmFsdWUgc2hvdWxkIGJlIDB4
+MTAwDQo+Pg0KPiANCj4gSG93IGRvIHlvdSBrbm93IHRoYXQgPyBEbyB5b3UgaGF2ZSBhY2Nlc3Mg
+dG8gdGhlIGRhdGFzaGVldCwgb3IgaXMgaXQgDQo+IGp1c3QgYW4gYXNzdW1wdGlvbiBiYXNlZCBv
+biB0aGUgbmFtZSBvZiB0aGUgZGVmaW5lID8NCj4gDQoNCkFsc28sIGhvdyBkbyB5b3Uga25vdyB0
+aGF0IHRoZSB2YWx1ZSBpcyB3cm9uZywgbm90IHRoZSBuYW1lIG9mIHRoZSBkZWZpbmUgPw0KDQpH
+dWVudGVyDQoNCj4gR3VlbnRlcg0KPiANCj4+IFNpZ25lZC1vZmYtYnk6IEFyc2VueSBEZW1pZG92
+IDxhLmRlbWlkb3ZAeWFkcm8uY29tPg0KPj4gLS0tDQo+PiDCoCBkcml2ZXJzL2h3bW9uL21yNzUy
+MDMuYyB8IDIgKy0NCj4+IMKgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxl
+dGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL21yNzUyMDMuYyBiL2Ry
+aXZlcnMvaHdtb24vbXI3NTIwMy5jIGluZGV4IA0KPj4gODY4MjQzZGJhMWVlLi4xYmExZTMxNDU5
+NjkgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL21yNzUyMDMuYw0KPj4gKysrIGIvZHJp
+dmVycy9od21vbi9tcjc1MjAzLmMNCj4+IEBAIC05Myw3ICs5Myw3IEBADQo+PiDCoCAjZGVmaW5l
+IFZNX0NIX1JFUcKgwqDCoCBCSVQoMjEpDQo+PiDCoCAjZGVmaW5lIElQX1RNUsKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgMHgwNQ0KPj4gLSNkZWZpbmUgUE9XRVJfREVMQVlfQ1lDTEVfMjU2wqDCoMKg
+IDB4ODANCj4+ICsjZGVmaW5lIFBPV0VSX0RFTEFZX0NZQ0xFXzI1NsKgwqDCoCAweDEwMA0KPj4g
+wqAgI2RlZmluZSBQT1dFUl9ERUxBWV9DWUNMRV82NMKgwqDCoCAweDQwDQo+PiDCoCAjZGVmaW5l
+IFBWVF9QT0xMX0RFTEFZX1VTwqDCoMKgIDIwDQo+Pg0KPiANCg0K
