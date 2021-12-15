@@ -2,52 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7944C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Dec 2021 08:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEDBEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Dec 2021 11:31:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbhLNIkn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Dec 2021 03:40:43 -0500
-Received: from mail.thebizzie.pl ([192.236.147.111]:41074 "EHLO
-        mail.thebizzie.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbhLNIkm (ORCPT
+        id S236738AbhLOLbk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Dec 2021 06:31:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231911AbhLOLbk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:40:42 -0500
-Received: by mail.thebizzie.pl (Postfix, from userid 1002)
-        id 31840181334; Tue, 14 Dec 2021 08:31:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=thebizzie.pl; s=mail;
-        t=1639470863; bh=kU+//Lu71IqgcFfjayWXuIc0mZtoyrYJc2YuqyU8eS8=;
-        h=Date:From:To:Subject:From;
-        b=lFIEdQO0+Ln7wdcUelxzI3zxZTU1EDv8hE7Gjw60TDtIHHTUMKPp2TnhjN+D3+JKO
-         BiXPcbQAXwr2/gorGlgv+z4qRrtad+pd1XCKmoA4CZ8XFFjX2G0e2YmN5dizdNBeEU
-         uWzKwNS5quSNSHALiFlEsMAdB5jC0bLxvqD2O8X87ldZZdMAksBfy7bQS52CRXIgOW
-         pc2JqiBi8DeeXFibjOPHJsiH5+ezaJid9gLczugMjiwx46ZCneDUaXbOSA75NUlhLj
-         17Z9zTAI45SQGD3jhUJ8BxzFG09YPaNuc0lbMVuxzPfnq58f1BWwEx28d2Uknr6MEq
-         cqez60e1LIulw==
-Received: by mail.thebizzie.pl for <linux-hwmon@vger.kernel.org>; Tue, 14 Dec 2021 08:31:44 GMT
-Message-ID: <20211214074500-0.1.7.26j.0.cu12v91i2r@thebizzie.pl>
-Date:   Tue, 14 Dec 2021 08:31:44 GMT
-From:   "Mateusz Adamczyk" <mateusz.adamczyk@thebizzie.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.thebizzie.pl
+        Wed, 15 Dec 2021 06:31:40 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CA8C061574;
+        Wed, 15 Dec 2021 03:31:39 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id m12so32838727ljj.6;
+        Wed, 15 Dec 2021 03:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u/WpwxjhXhKPLEsZCHHJaWrhenS1141huRo9nJnkSqM=;
+        b=ZhmVV+uXqO4OY7R7PT8sUIRIm+DdcohcjTlK015m0/nkBQ+ooTwdKUP87q4w/tipys
+         AMLO8jnsoV4uTomaybmRNGAMUb2W19INewD6tQ7WT/9goKOevhovzu0s6P4FMrKbR2ia
+         uWvZqbVu/+ZN4BFhL+Yx8cRrnANG20DGDducWT/O5j4xX11sZij/YN88rWi9FcpT7Amx
+         fU01hfNXLeNS71PW+vuYyG0FJqr2btfZtYnlaiZZ1q3WQeh4qJgOV1+uQeUzWPCDjQX3
+         kNeghqzRoAdMEAwVX0oB2v/0aUS9z3UZnrp72KeoJvziEGVA5jKNrswAfbphrsQwZfxs
+         Y3pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u/WpwxjhXhKPLEsZCHHJaWrhenS1141huRo9nJnkSqM=;
+        b=yQCcYxWjpQUkMJpKpPtUFKU2m3tp8MjI9Z6zFX+/2U80Yrvss209Gp023jn/izr7O9
+         ecogWWeIVt3zj5bG3wwIDXrdyA90osWNSyrIT+ryMd8CeB6qFOTwHPK1rklNMUneFnWn
+         TvQGQHeqpbhj28EcCl1vzg2kc5ZZ5Kq++GtTqF5ilvaqd55sR8O2EwVC46bkpjaD/rv3
+         TGzGyVFl9IKJxsJHs/RRtWZAl/jKyGaUOJHbE5xptaazAMeCZ+01OOcfH12W9zFxOROP
+         qXW1wbORqVxUjASDM7SYM/ONrSuTMcfOPHd2qzFO9QyQtlVAWW7EayWwxhTMkPf73hyb
+         T98g==
+X-Gm-Message-State: AOAM533hhu/6dDIjyif4/hpyZAKZePSgqugByQRxbdL7COp/Aza3cxV6
+        14mrgCM1ZQUqOfBJayjQGBSFu8EB84M4Wv0w
+X-Google-Smtp-Source: ABdhPJyJ7Mw1muK0bruoBZ3SSdGksntkJY8Bu3g7KohHwyMu4euTBey6HMXrLMTZphtOUfFBGROy4w==
+X-Received: by 2002:a2e:a786:: with SMTP id c6mr9801702ljf.161.1639567897106;
+        Wed, 15 Dec 2021 03:31:37 -0800 (PST)
+Received: from NB-893.corp.yadro.com ([89.207.88.249])
+        by smtp.googlemail.com with ESMTPSA id p11sm279546lfk.7.2021.12.15.03.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 03:31:36 -0800 (PST)
+From:   Arseny Demidov <arsdemal@gmail.com>
+X-Google-Original-From: Arseny Demidov <a.demidov@yadro.com>
+Cc:     arsdemal@gmail.com, Arseny Demidov <a.demidov@yadro.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon : (mr75203) fix macro typo
+Date:   Wed, 15 Dec 2021 14:30:23 +0300
+Message-Id: <20211215113023.2945-1-a.demidov@yadro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
+In the file mr75203.c we have a macro named
+POWER_DELAY_CYCLE_256, the correct value should be 0x100
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Signed-off-by: Arseny Demidov <a.demidov@yadro.com>
+---
+ drivers/hwmon/mr75203.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 868243dba1ee..1ba1e3145969 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -93,7 +93,7 @@
+ #define VM_CH_REQ	BIT(21)
+ 
+ #define IP_TMR			0x05
+-#define POWER_DELAY_CYCLE_256	0x80
++#define POWER_DELAY_CYCLE_256	0x100
+ #define POWER_DELAY_CYCLE_64	0x40
+ 
+ #define PVT_POLL_DELAY_US	20
+-- 
+2.25.1
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam,
-Mateusz Adamczyk
