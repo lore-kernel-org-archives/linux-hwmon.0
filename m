@@ -2,102 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0058C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 15:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E931C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 20:29:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235445AbhLPPpF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Dec 2021 10:45:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbhLPPpE (ORCPT
+        id S241417AbhLPU3Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Dec 2021 15:29:25 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:34776 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236123AbhLPU3Y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:45:04 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83419C061574;
-        Thu, 16 Dec 2021 07:45:04 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id q16so4163807wrg.7;
-        Thu, 16 Dec 2021 07:45:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=/jha9cndIkDUqDGzCuDAbGL68WCP4ZkFrCHCGFvS9NU=;
-        b=hNqLAguz19bFoQGcAK15Ed/ccdjM/t5qAW0r6YVp6TCB744NduFAt1Wr2fQh840ANp
-         Qzndl8emfxBMTODABRHNSiFA6Co21+dUL9NWwV3FBsvMtNxWSBI6mKXW3XOdNg0a9Yzn
-         ABWvgB7kr5R5ntXlD7Euq4FkFM9W0n9W7/SHwCo2bYROYgGqhYsNkl5trXKu4xuErOW+
-         AVbOuqvO2GSggoZaoQjK6q20w98sgY2dRz3QMGOcD0jwCDE0ATf2dEAN2644i0F8d2cB
-         yv4cSlAAacjM6wckSPUoaGS1Qt2BD41TmjXVPW3UUgCJ22RZ+LFOw9oUyyM1/npWUZhK
-         Wpww==
+        Thu, 16 Dec 2021 15:29:24 -0500
+Received: by mail-ot1-f52.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso348891otj.1;
+        Thu, 16 Dec 2021 12:29:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/jha9cndIkDUqDGzCuDAbGL68WCP4ZkFrCHCGFvS9NU=;
-        b=z2VWy4iuqhw1kNe5jHH0+B9p7t8HxBuCpunnYd2x9exaAkjGIzTHWDntkuuY+9KaEY
-         2K82Vv+BQxXL+dFTEngoJTZe4XiH83V0Bm61JN4mVbKvVAceFUkMAtkopJxAKDnZvkYr
-         4Yq/+FROfnWPVyI2xmFRuGykRwvwAq8erywHUium6Gj01BovTWKLmO1xrX/vd9iyGset
-         HqQxX6u5XqEsOuWQtuHiEtGS1NFHwmfdCkAN3S0kvoa9RVVdo/75pvENb1wqSk0F9n3Y
-         dV9SWRvEo1oeGWJyWkqyV4dW8MvB99OYefVJUysLqm3MNi9wFtLoDttS8byK+98p7kWk
-         lurg==
-X-Gm-Message-State: AOAM533Uk31tT+d/c3Wa7hFAvv5eVfuw3ugKpipPHvdjmflEVcwvo6dZ
-        dVs22eSWL4P6jpETlXL6alI=
-X-Google-Smtp-Source: ABdhPJyolMr0OuFmVV0QPXqOQnaVM3//e6hsDhL+jeMG36K/I6zFfzga9OMOtAiZPnMin9pDbJ4prw==
-X-Received: by 2002:adf:fa49:: with SMTP id y9mr7512398wrr.375.1639669503044;
-        Thu, 16 Dec 2021 07:45:03 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:26ad:b100:414e:3655:7ee7:65c5])
-        by smtp.gmail.com with ESMTPSA id y11sm6537075wry.70.2021.12.16.07.45.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bDBqevOB85xRGIw/RBLVUuTMCIA2+fremlM1z3vOPh0=;
+        b=QHzhkGYNERcqyHZE7XYrZQgTEi5C6HLUeCZ8v6W680AQuTJTkzb+dirxQ+9xcYsAsh
+         9T4P/VDVHk0uPqJP3fDuNEmhc9HFI0zkTqmtdXA36w5sVsrjq3GLoMzViFq0/Tsp9oDF
+         MdTC6dJrPw6A97UqWpvZ8FIx8eUWKMObfYkQp3lhExnpSucZOUo5WyBTKBS7HABuyyuG
+         uw1fQQpPbRhxNqcGFKOqFmDGv4t7TIR+qqt0s0KJeDFNfU+Ohcnq7opU9XX9AR+1gJKS
+         YhkJvtm3R72hTgbMvFzduKqc0n+1P7rLwVSLs4sMagoiCXNDMaH6g6Snj7eww9v+djVI
+         KLUQ==
+X-Gm-Message-State: AOAM533ZQ/cmZJw++Uv3vkZU2q5fZTNZI0Y1komDutv8uMjucypsBs5z
+        NNfgfoinohcxgPXDJ9kdxw==
+X-Google-Smtp-Source: ABdhPJy+B6a3x2FqVeUfnuWoMpK9XmwbhVz6YLYvC8ukefOb6l2pVnRu7UxvCf3lR1kjgugdCYMoAA==
+X-Received: by 2002:a05:6830:1e97:: with SMTP id n23mr13515194otr.4.1639686563407;
+        Thu, 16 Dec 2021 12:29:23 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id h3sm1185255ooe.13.2021.12.16.12.29.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:45:02 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] hwmon: prefix kernel-doc comments for structs with struct
-Date:   Thu, 16 Dec 2021 16:42:57 +0100
-Message-Id: <20211216154257.26758-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 16 Dec 2021 12:29:22 -0800 (PST)
+Received: (nullmailer pid 702224 invoked by uid 1000);
+        Thu, 16 Dec 2021 20:29:21 -0000
+Date:   Thu, 16 Dec 2021 14:29:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, Chris Lesiak <chris.lesiak@licor.com>,
+        Peter Rosin <peda@axentia.se>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (ntc_thermistor): Add Samsung 1404-001221 NTC
+Message-ID: <YbuhoaaO6d/KjKuy@robh.at.kernel.org>
+References: <20211215174241.1496169-1-linus.walleij@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215174241.1496169-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The command ./scripts/kernel-doc -none include/linux/hwmon.h warns:
+On Wed, 15 Dec 2021 18:42:41 +0100, Linus Walleij wrote:
+> This adds the Samsung 1404-001221 NTC thermistor to the
+> NTC thermistor driver. As far as I can tell it is electrically
+> compatible with the Murata 47K NTC thermistor.
+> 
+> This thermistor is mounted in a variety of Samsung products.
+> 
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Chris Lesiak <chris.lesiak@licor.com>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> The DT binding oneline is included, I see no point in splitting
+> that into a separate patch.
+> ---
+>  Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml | 1 +
+>  drivers/hwmon/ntc_thermistor.c                              | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
 
-  include/linux/hwmon.h:406: warning: This comment starts with '/**', but
-    isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-   * Channel information
-  include/linux/hwmon.h:425: warning: This comment starts with '/**', but
-    isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-   * Chip configuration
-
-Address those kernel-doc warnings by prefixing kernel-doc descriptions for
-structs with the keyword 'struct'.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- include/linux/hwmon.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 1e8d6ea8992e..fad1f1df26df 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -403,7 +403,7 @@ struct hwmon_ops {
- };
- 
- /**
-- * Channel information
-+ * struct hwmon_channel_info - Channel information
-  * @type:	Channel type.
-  * @config:	Pointer to NULL-terminated list of channel parameters.
-  *		Use for per-channel attributes.
-@@ -422,7 +422,7 @@ struct hwmon_channel_info {
- 	})
- 
- /**
-- * Chip configuration
-+ * struct hwmon_chip_info - Chip configuration
-  * @ops:	Pointer to hwmon operations.
-  * @info:	Null-terminated list of channel information.
-  */
--- 
-2.17.1
-
+Acked-by: Rob Herring <robh@kernel.org>
