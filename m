@@ -2,193 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4230FC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 12:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37AFCC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 14:20:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbhLPM0e (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Dec 2021 07:26:34 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:41703 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236849AbhLPM01 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:26:27 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E976B5805EC;
-        Thu, 16 Dec 2021 07:26:26 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 16 Dec 2021 07:26:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=iFE30ZBYJvCyN
-        kM0bB9sCSLWOJ+dFFVmxcQv5U8f2Ek=; b=Yhc/6u5mcB+c/p6khbrfYTfsL6Vjn
-        9+bB/+NB2KwLSam6vyE0vgq3ASnKjcnylyLxoFaEnGatRtIDLG1OWziHHXUZ40Yl
-        VfRnumVe/Ur3sZTKqWnxuCXtcch5ylIUTeKBJhXAvnsYpodRFCoJVI6YL1bEun50
-        EItlij+sB8Uu+/rtMxo64aY+6avfq/+4WeqJWhOvfqBXQ01AYhb2Be4zFj27Cz+M
-        lSR0Dpe2k5NiEjEf8QO7dXyk24KCETjMZmBWv48Gp6mM3rocOw2qF0y07z+XjJ7Q
-        hGqn8IYfOO0IWFSPjMy9Vnk3+uipqXdqh2jsqKXllm4VAwGezC6nGZjVw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=iFE30ZBYJvCyNkM0bB9sCSLWOJ+dFFVmxcQv5U8f2Ek=; b=kZhc30Ok
-        dFcQKhc3ZgZ6254jtlNUCEDF3q8E1z6zxqFVlCcFNjFqB2cZGukKIB60ZUv3UNGn
-        sbxNjptr7Vg3wnryYbPd/MgMaTUgr0+1k59texia98ff8h3nH+jko45lNwyCGJOc
-        ZAY4vLxex6d8U9HUDh1/7IjWw3FC0oF5xRAe0p91kxfroJvlcJk2I+xZQ5ZKyswB
-        39Qet54s2cT2gexsPeAL4lKt8M39WNH5elZ0uosa1H0znYA5kT18m/0nPodGQIMk
-        LRQHHrLTNyQvBziHlc45hCK70OOyYJpt0Ung4PLgHCl55LNih6B1SAZbd2xci+E0
-        b5ChBK9NhnwYWw==
-X-ME-Sender: <xms:cjC7YdF96Ma-VqO80SKfUfDXrfIpYwu-LWKr5oAJcxv49SRgyNJ1KA>
-    <xme:cjC7YSV0qRTAYMfkBVuyvbn2IyIhHPvZLIe49NkKH-xr_BGLZt2rqLv27q3fx75X0
-    drkntCs_S6g4DcRwnk>
-X-ME-Received: <xmr:cjC7YfIJ_ClNlOeP4uiVMoXHqYN6GJZRYNG7yUdogCpp8ek--fY0zp0ju6l_2pkz2oBpt54apjvPbuxT41_LN3A20ZUrvwpluiLPNVm-rhwz>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdegudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
-    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepgeegtdetjeekge
-    eguefgheeuvedugedvteejveeiudegvddtkeffkeehtdetudfhnecuvehluhhsthgvrhfu
-    ihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
-    htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:cjC7YTEUO53tvOdjra3SvffLi-7GiJe3gYiNwy8WvN--C6o7mZ6DHg>
-    <xmx:cjC7YTVju1311KNtX5tfsV_CHGhaOsjU97C2DsX_1XoZubXAPvydaw>
-    <xmx:cjC7YeN3rS86aUTwml0UfFsHE0TmRjWXS6b4BAcvhK__FV36SvUBpQ>
-    <xmx:cjC7YXli5XcBdhJ0HpR8HCB9bY8t607R_5kxj5_vy1eex2DKQ9KADw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Dec 2021 07:26:20 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     kernel@pengutronix.de, lgirdwood@gmail.com, robh+dt@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org
-Cc:     linux-imx@nxp.com, devicetree@vger.kernel.org,
-        s.hauer@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        andreas@kemnade.info, linux-hwmon@vger.kernel.org,
-        alistair23@gmail.com, amitk@kernel.org, shawnguo@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v17 8/8] ARM: dts: imx7d-remarkable2: Enable lcdif
-Date:   Thu, 16 Dec 2021 22:25:25 +1000
-Message-Id: <20211216122525.136139-9-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211216122525.136139-1-alistair@alistair23.me>
-References: <20211216122525.136139-1-alistair@alistair23.me>
+        id S232569AbhLPOUM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Dec 2021 09:20:12 -0500
+Received: from mga17.intel.com ([192.55.52.151]:26385 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229583AbhLPOUM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:20:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639664412; x=1671200412;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dtoqBpdkR2HHnUltaVX/SRE7Wk0WyJU9gZuR3pl9tSI=;
+  b=S8kMyNGISXJy85C0eaFkrQYGlPw94IJl2ZAuUF/gAe+7rScENYQ9Bn6C
+   oB0lP2ItjhezCYe/QiJfxv9IPcKgeFLFHderfTC0/B1nlGjH4MU6kKTD/
+   1+jWVOX59dWxroDuo1srj2fjcKs6d8amQ/+0biRDKuSS7QPbbY7V+jUPb
+   tlGYOSryzNtJb9280PddG5aXA8INIWL5mX3NqUW9uPT9SV74lPaBzu/5K
+   YkKnPDgMGp3ZxR15g9iJmS5pAIr45rQOD+2/0OIF44uWCy/mmNNLUMTLV
+   XN8So8YgbdMaecV9w4kW8QOJSg06QIbwbWepWX3yXuWXioGXMg5ldkB5A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220181746"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="220181746"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 06:20:12 -0800
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="605535740"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 06:20:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1mxrbH-007475-3j;
+        Thu, 16 Dec 2021 16:19:15 +0200
+Date:   Thu, 16 Dec 2021 16:19:14 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Arseny Demidov <arsdemal@gmail.com>
+Cc:     rahul.tanwar@linux.intel.com, Arseny Demidov <a.demidov@yadro.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
+Message-ID: <YbtK4mHxpdF5VtOk@smile.fi.intel.com>
+References: <20211216083302.986-1-a.demidov@yadro.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216083302.986-1-a.demidov@yadro.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
+On Thu, Dec 16, 2021 at 11:33:02AM +0300, Arseny Demidov wrote:
+> In the file mr75203.c we have a macro named POWER_DELAY_CYCLE_256,
+> the correct value should be 0x100. The register ip_tmr is expressed
+> in units of IP clk cycles, in accordance with the datasheet.
+> Typical power-up delays for Temperature Sensor are 256 cycles i.e. 0x100.
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+Should you provide Fixes tag?
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 99ac0d242936..03a4029e1e57 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
- 		startup-delay-us = <100000>; /* 100 ms */
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -132,6 +152,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
+...
+
+> -#define POWER_DELAY_CYCLE_256	0x80
+> +#define POWER_DELAY_CYCLE_256	0x100
+>  #define POWER_DELAY_CYCLE_64	0x40
+
+I;m wondering why they are in hex? Perhaps the decimal is better for both.
+
 -- 
-2.31.1
+With Best Regards,
+Andy Shevchenko
+
 
