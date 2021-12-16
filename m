@@ -2,78 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37AFCC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 14:20:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A48CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 14:28:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbhLPOUM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Dec 2021 09:20:12 -0500
-Received: from mga17.intel.com ([192.55.52.151]:26385 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229583AbhLPOUM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:20:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639664412; x=1671200412;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dtoqBpdkR2HHnUltaVX/SRE7Wk0WyJU9gZuR3pl9tSI=;
-  b=S8kMyNGISXJy85C0eaFkrQYGlPw94IJl2ZAuUF/gAe+7rScENYQ9Bn6C
-   oB0lP2ItjhezCYe/QiJfxv9IPcKgeFLFHderfTC0/B1nlGjH4MU6kKTD/
-   1+jWVOX59dWxroDuo1srj2fjcKs6d8amQ/+0biRDKuSS7QPbbY7V+jUPb
-   tlGYOSryzNtJb9280PddG5aXA8INIWL5mX3NqUW9uPT9SV74lPaBzu/5K
-   YkKnPDgMGp3ZxR15g9iJmS5pAIr45rQOD+2/0OIF44uWCy/mmNNLUMTLV
-   XN8So8YgbdMaecV9w4kW8QOJSg06QIbwbWepWX3yXuWXioGXMg5ldkB5A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220181746"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="220181746"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 06:20:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="605535740"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 06:20:10 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mxrbH-007475-3j;
-        Thu, 16 Dec 2021 16:19:15 +0200
-Date:   Thu, 16 Dec 2021 16:19:14 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Arseny Demidov <arsdemal@gmail.com>
-Cc:     rahul.tanwar@linux.intel.com, Arseny Demidov <a.demidov@yadro.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
-Message-ID: <YbtK4mHxpdF5VtOk@smile.fi.intel.com>
-References: <20211216083302.986-1-a.demidov@yadro.com>
+        id S234850AbhLPO2E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Dec 2021 09:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237983AbhLPO2E (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:28:04 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72379C061574;
+        Thu, 16 Dec 2021 06:28:03 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id y13so87465271edd.13;
+        Thu, 16 Dec 2021 06:28:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7N+4SfG1J4ZkC7SpJj4hi6lnQkxzgHx/+ulCn0ZunME=;
+        b=nX0yOqE/vXcC6n+1R8nPN9msC85mmFuwEmRO3pndmu/s7V/fyIfGoKch8C40gr9VTa
+         857ZQFH4KJa31QCpH9DaPBKQItzJ5ScR72LtBG96O3lnWWYXy2vnj2mc988WB43BXaGY
+         oCzn71Bf/U5zk+rLq9g/YQQvTdGYYCggI74w0FUtLncUlZ41IT6sOk0qv7a5ykXxCyHU
+         qIMcz8m2IW+Z1DQjbMMVkzHt7ragHad8bhY7bTh95LISDtYeL2ewvFrPeMcqE/tkaiVn
+         ubR9Kxj4hVygGH1fWbpim4YkAFu6FIQwGwyDnZU9qcm5GCePEiC0rb0y3wVrzgDnGH3b
+         GXjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7N+4SfG1J4ZkC7SpJj4hi6lnQkxzgHx/+ulCn0ZunME=;
+        b=ogICAVbaUUHH9ou4hJfRANFNDL5MsieDGP/ufKG54DVwFk3Kd7tGF7XNGYBdMtOl+7
+         9aio8Ygcz+ZrISg/64hANlmbmtcmj1wpqUkHaI2tQWY7hMLZCxPlZH+BTDz759Ajd0Is
+         49QodYltob8SOPsMLCwD4mWYDNMWl8imkHY+jJIv19EXVjm3EBwHEoT0p93tHXkXW6ak
+         4LcqskSHl1/uMNjOKWb3lcRh0WsYqb91KZEM5LSYibr2QbeuQjWVJIZI7W0TwwMwIzvs
+         MxFLNkw/7TuPREFnsBOjL8DDF3SGyRG1kaszy8Frz3Pby02Ub/17QRRv9lEH+xIaOIGW
+         oosQ==
+X-Gm-Message-State: AOAM5329prCPLO1W0Uq++qwOiNGQAc3mzGZM6ABRyhFVEeI9prWU9WyF
+        jWBRAq+WxHoV/kT/KOYZYHv0w7Bj6ib5o0bkk3p+AL4ncX6o7w==
+X-Google-Smtp-Source: ABdhPJwpFOMPTs1rXyGuaNC5XM+NCg+klNhSaJ9Zt/05isinQ4JZ4npThJvcP1Th/tBb1q5FnInt9JcmrhjnpQofNVI=
+X-Received: by 2002:aa7:cd75:: with SMTP id ca21mr4146824edb.242.1639664881962;
+ Thu, 16 Dec 2021 06:28:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216083302.986-1-a.demidov@yadro.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211215113023.2945-1-a.demidov@yadro.com> <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
+ <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net> <c1d036c0cfa14fbb9c289f792780f003@yadro.com>
+ <20211215162753.GB2906031@roeck-us.net>
+In-Reply-To: <20211215162753.GB2906031@roeck-us.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 16 Dec 2021 16:26:33 +0200
+Message-ID: <CAHp75Vc646YB0FeYZrFYKHkzCQUt9Nu0bmaGO_1-5mxpQgGtLg@mail.gmail.com>
+Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "Tanwar, Rahul" <rahul.tanwar@linux.intel.com>
+Cc:     Arseny Demidov <a.demidov@yadro.com>,
+        Arseny Demidov <arsdemal@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:33:02AM +0300, Arseny Demidov wrote:
-> In the file mr75203.c we have a macro named POWER_DELAY_CYCLE_256,
-> the correct value should be 0x100. The register ip_tmr is expressed
-> in units of IP clk cycles, in accordance with the datasheet.
-> Typical power-up delays for Temperature Sensor are 256 cycles i.e. 0x100.
+On Wed, Dec 15, 2021 at 11:37 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On Wed, Dec 15, 2021 at 12:36:32PM +0000, Arseny Demidov wrote:
 
-Should you provide Fixes tag?
+> Please add that information to the commit description. Also,
+> please copy Rahul Tanwar <rahul.tanwar@linux.intel.com> and
+> Andy Shevchenko <andriy.shevchenko@intel.com> on your patch.
 
-...
-
-> -#define POWER_DELAY_CYCLE_256	0x80
-> +#define POWER_DELAY_CYCLE_256	0x100
->  #define POWER_DELAY_CYCLE_64	0x40
-
-I;m wondering why they are in hex? Perhaps the decimal is better for both.
+I see how my name appeared here:)
+Okay, I have no access to the datasheet, I believe Rahul is the best
+person here to answer this question.
 
 -- 
 With Best Regards,
 Andy Shevchenko
-
-
