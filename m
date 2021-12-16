@@ -2,93 +2,130 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C10BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 08:33:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9060C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 12:25:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbhLPIdH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Dec 2021 03:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbhLPIdH (ORCPT
+        id S234229AbhLPMZh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Dec 2021 07:25:37 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:47563 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234240AbhLPMZh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:33:07 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF968C061574;
-        Thu, 16 Dec 2021 00:33:06 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id l22so48157797lfg.7;
-        Thu, 16 Dec 2021 00:33:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZeuoAPntk3hXwhFRVqNwsz2JIoOQMdkHLY6+hrxWebk=;
-        b=RBlQLIYIk3EKDUD0ddqeYK9I+MrDrQ1eTNcv1Z/II8hQcvkH39XWFW+Iu1X3rzaD8B
-         22Qrx5IqvkUzTfxtOZTSef5s/metOSUftONiv3Ms6iMSb3Fxm/i8kFz9nNMg6qpSR31q
-         LID9GC3IKbCVs3pQG5Nxogo0GmqZnjTEYEb6qUTP4qOFu+qWUb95oUD+DVlPqUPXCMHZ
-         G3IF87r9ALmyNHP3uLNZuD82SH98wKsYbPrqkhzLMAC4D9nWqWUFxAxLFlADwNE3PFkI
-         d+y3xhYI3ApO03lbv4K5eWr7i8f2kJDw18UJrTBInCYk1PQpNfAlRbRi6ErMsXb/4091
-         sVLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZeuoAPntk3hXwhFRVqNwsz2JIoOQMdkHLY6+hrxWebk=;
-        b=3C3D1mhd68esO/2qfiO7LG53wxndJilIy7Nhbuc5YNEdDT50jT+1NYtgg4uZdlKI2Y
-         uA50NmMs4LqdqQ+TaJXS5E2Ae5Kvbe5LoPCaSPqi0wi6KS7VQYdU8gj/HI91Ef4M/YsK
-         FYP7P/YnfYE9UezvlwaoUzUBOH7t/b3mp6beyPuyr5uiFI1aFZ4jdX2wdkiKIt4SSFxh
-         iM/W2KWc+qNKaP3cEQhuIGicCLsm02a87/Wco3ZDvjJ5Wj9UrnnDIZUe8BWtFQmc7KzG
-         vkEN5WA9ldjRwRisoDMv6/RnTo+zC/xnNA5nRyjH0OTaWzTrqffrCbII899GAGGi2L5Y
-         /ghA==
-X-Gm-Message-State: AOAM532stOpz8y+OCQt/qDdYwY6G/gmsnCmmYKeJgoQS2zzxrad+voeM
-        V8TL3NQsLrUFYpvxgQ9sMdKTGEHCC5ZatAu1mOo=
-X-Google-Smtp-Source: ABdhPJyy7KZQLrZ2S+3EQXDdnieeVzasTDFGA0g1IzBfGoA5XtGkI2iOXswKQ1Zx0owOoe9R8wAXdw==
-X-Received: by 2002:a05:6512:370c:: with SMTP id z12mr131328lfr.458.1639643585259;
-        Thu, 16 Dec 2021 00:33:05 -0800 (PST)
-Received: from NB-893.corp.yadro.com ([89.207.88.249])
-        by smtp.googlemail.com with ESMTPSA id d16sm993066ljj.87.2021.12.16.00.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 00:33:04 -0800 (PST)
-From:   Arseny Demidov <arsdemal@gmail.com>
-X-Google-Original-From: Arseny Demidov <a.demidov@yadro.com>
-Cc:     arsdemal@gmail.com, rahul.tanwar@linux.intel.com,
-        andriy.shevchenko@intel.com, Arseny Demidov <a.demidov@yadro.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon : (mr75203) fix macro typo
-Date:   Thu, 16 Dec 2021 11:33:02 +0300
-Message-Id: <20211216083302.986-1-a.demidov@yadro.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Dec 2021 07:25:37 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 078255804DC;
+        Thu, 16 Dec 2021 07:25:36 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 16 Dec 2021 07:25:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:content-type:mime-version
+        :content-transfer-encoding; s=fm2; bh=TSgqps1iDUhbFhbJp7MGOAGo8m
+        qIrmX1W/B+0CydO9Y=; b=0RyepsFVU2bY6Baev95I7Tvrq9ixoPqI/XERGWtUYq
+        TfZII+f+2JoFTvR4pIwYM9ilB3cGjdWGv2Bv9Eg20R78+hi3aVG36BU1Q3MvQJEj
+        9ayYdDbz/kniS6QjCFcPXSGp+ompTOf3KKaUpmQ8C4QPXoFn+uTLILmObS4tjA+T
+        XFnRNCLxlZRhGc1Dp58hZMCDxhyQ4HYzTHdXxKy48cI6u/LOdbLQDl2IOCNBV88f
+        3tCY971ic908P4ZZpMrV8g5X6U4gZQnctDu5QWU4JmB2Hhq33QSODNIAIU99Nzw8
+        UxqeohKk6eCmTMwCNFJMBicKA4tLpeFe7ODG3PNd44Zg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=TSgqps
+        1iDUhbFhbJp7MGOAGo8mqIrmX1W/B+0CydO9Y=; b=T3WhLBxTOlHr1HPbwCy8dc
+        SoYs5DWUoZtX5CcC4eZQkfIcVuRW0zMdDkbavVTI2WZFRMDwj1ivGIjOnrgQ6709
+        6DeNTxPbwYNOky8QSH47OS2CaMmiYAn+CBnBX8jyBTVC7HzETljapGee40uiui9y
+        Kic6b7OarK3wlHMFKi7ZExgryc+pF5gWpRCqbzF4/g4Jo81SW7VWjkZh2b4es8lq
+        uDD5zVC6hjrz8bFfzxojGJ0bPpgDGc42bujvdnVeu2cHD4lPAGq94TcVzpqzp0K7
+        f1p20DIBGf8kv6lyVcHEHZTnzeEztdw4gLxBVAdazq4L83SrhR1J28nsiXfjqDqA
+        ==
+X-ME-Sender: <xms:PzC7YcdGBg8qO-508admVP7vai__h-1IwJW7GqQcsfjSWTphvSDYVg>
+    <xme:PzC7YeMIrSJTkd3c7IfpNMvchhEfjH6ya-Yz_CQn9Bv2GawVX-sv2mMSmTw4TK2PX
+    -ifKm3qz1ErfwkG-To>
+X-ME-Received: <xmr:PzC7YdgSTTzaCeomh0BhZ4zjC1zDpeJGtIDOJLzz1b07aJZBJ7BKWiMzm-74ihKbMi82-CFBwPyrmg9-vw09hx4GYgu67eZHaXYAZbPeTEGj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdegtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffotggggfesthhqredtre
+    dtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
+    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehteefgfejueejtd
+    egvdfggefhiefgheffvdffudevveetjeduhfdukeduteevjeenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
+    grihhrvdefrdhmvg
+X-ME-Proxy: <xmx:PzC7YR-Cwt_ZpA2kSuvQHCRhBPYDqkqx0x_TD558lbdyA3JzPU72OQ>
+    <xmx:PzC7YYsFkRl5QQ-iIWGoa-PFgnkopaMTmTWmQwEnvnWZISxrlarh0A>
+    <xmx:PzC7YYHaxFSGt__pn4YOzA2JU19Om7Nl6EuICb2UzSBlktUU5KekOw>
+    <xmx:PzC7YZ-XE996ln-ZB-ZZStuN6qAX0zJHNpHrZ12bepmVV1aSKaFo2w>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Dec 2021 07:25:29 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     kernel@pengutronix.de, lgirdwood@gmail.com, robh+dt@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org
+Cc:     linux-imx@nxp.com, devicetree@vger.kernel.org,
+        s.hauer@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        andreas@kemnade.info, linux-hwmon@vger.kernel.org,
+        alistair23@gmail.com, amitk@kernel.org, shawnguo@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v17 0/8] Add support for the silergy,sy7636a
+Date:   Thu, 16 Dec 2021 22:25:17 +1000
+Message-Id: <20211216122525.136139-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In the file mr75203.c we have a macro named POWER_DELAY_CYCLE_256,
-the correct value should be 0x100. The register ip_tmr is expressed
-in units of IP clk cycles, in accordance with the datasheet.
-Typical power-up delays for Temperature Sensor are 256 cycles i.e. 0x100.
-
-Signed-off-by: Arseny Demidov <a.demidov@yadro.com>
----
- drivers/hwmon/mr75203.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 868243dba1ee..1ba1e3145969 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -93,7 +93,7 @@
- #define VM_CH_REQ	BIT(21)
- 
- #define IP_TMR			0x05
--#define POWER_DELAY_CYCLE_256	0x80
-+#define POWER_DELAY_CYCLE_256	0x100
- #define POWER_DELAY_CYCLE_64	0x40
- 
- #define PVT_POLL_DELAY_US	20
--- 
-2.25.1
-
+v17:=0D
+ - Rebase and fix build issues=0D
+v16:=0D
+ - Improve vdd regulator comments=0D
+v15:=0D
+ - Address comments on the patches=0D
+v14:=0D
+ - Merge the thermal driver and hwmon=0D
+v13:=0D
+ - Address comments on thermal driver=0D
+ - Rebase on master (without other patches)=0D
+v12:=0D
+ - Rebase=0D
+v11:=0D
+ - Address comments on hwmon=0D
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
+v10:=0D
+ - Use dev_get_regmap() instead of dev_get_drvdata()=0D
+v9:=0D
+ - Convert to use the simple-mfd-i2c instead=0D
+=0D
+Alistair Francis (8):=0D
+  dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml=0D
+  mfd: simple-mfd-i2c: Add a Kconfig name=0D
+  mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a=0D
+  regulator: sy7636a: Remove requirement on sy7636a mfd=0D
+  hwmon: sy7636a: Add temperature driver for sy7636a=0D
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable lcdif=0D
+=0D
+ .../bindings/mfd/silergy,sy7636a.yaml         |  82 +++++++++++=0D
+ Documentation/hwmon/index.rst                 |   1 +=0D
+ Documentation/hwmon/sy7636a-hwmon.rst         |  26 ++++=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++=0D
+ arch/arm/configs/imx_v6_v7_defconfig          |   3 +=0D
+ drivers/hwmon/Kconfig                         |   9 ++=0D
+ drivers/hwmon/Makefile                        |   1 +=0D
+ drivers/hwmon/sy7636a-hwmon.c                 | 106 ++++++++++++++=0D
+ drivers/mfd/Kconfig                           |   2 +-=0D
+ drivers/mfd/simple-mfd-i2c.c                  |  11 ++=0D
+ drivers/regulator/Kconfig                     |   1 -=0D
+ drivers/regulator/sy7636a-regulator.c         |   7 +-=0D
+ include/linux/mfd/sy7636a.h                   |  34 +++++=0D
+ 13 files changed, 415 insertions(+), 4 deletions(-)=0D
+ create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.y=
+aml=0D
+ create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst=0D
+ create mode 100644 drivers/hwmon/sy7636a-hwmon.c=0D
+ create mode 100644 include/linux/mfd/sy7636a.h=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D
