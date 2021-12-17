@@ -2,123 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FB24C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Dec 2021 00:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 966F8C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Dec 2021 04:35:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhLQAHx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Dec 2021 19:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLQAHx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:07:53 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414AAC061574;
-        Thu, 16 Dec 2021 16:07:53 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id s11so387497ilv.3;
-        Thu, 16 Dec 2021 16:07:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eMuIk+47x3s4KpscvxEDy8ls/dZRCTh3L6EHdqgxJeg=;
-        b=gfJzoNvxEql+KFUv6k/sKfVyqM+KFIQr4MCApsmE3qk3MS8GNbWhH/vwq86rRjTr1q
-         KgjeqWaRem0swd/Yuri6jvBETjjDtAhKpnIWnm/PrKXxBa8OyLxiNnPSfCvaLycPNmwV
-         UHmeH70TK9rxT5b3Kt4ApiMziZaSAC2vRVLIDIt6A0eHGk8dVNgls+aDVWoP/f8TC++V
-         PKQKa09eTh+9uEdbIL/yqj1BbovmozyQhUUih63162FhiHbfzkRrfKQ9fbiwjfSwRDy7
-         RbyvBDVhwiD9bn0ydRx9Qo8/tKBMRWBvPjMX1wpEDKYlz8s08dc/2IrbDsINYMHnvQiu
-         W8nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eMuIk+47x3s4KpscvxEDy8ls/dZRCTh3L6EHdqgxJeg=;
-        b=qP3o0jFXQVogRj3f1TDA42xbhKvwwg2Qt7NHlVn3QjW0AFt5PN/vvkvPsHjfsb8gAU
-         vBM947YXYyo1JKeuEpYReY2N8698gJ0leJzd0Vmtw4tdRezxCJs7BRTNkwawXHOZFPef
-         nKnYHeosSUVNNtOVqadub66eopo3DO67gjp27w+JRiVKKwZI+mTYzTfWKk74VeZUjQQ4
-         r5u2YsADlvOr2Wpoicv6A0eqPOteRh91gZBYsoR2o3JXKeUEbJef5NOCsGohgKjcYeCN
-         8pchVgyNhZFOASFAdyrZWRCoEnlF0Gsu6VlL9EMeTbUxfnO1RjwVl/P4oGfpvp+jovkp
-         /YQg==
-X-Gm-Message-State: AOAM530B1gsgbsX+3gn3VIzUCqvDuM6gRgiF28lurSHWDhJcscNms2sp
-        qJb+9ZM3m3BbYtjcAUv5ljWbt7DWm0h+cKZ+p2HopCUK3B6jk1De
-X-Google-Smtp-Source: ABdhPJyx8dEogaBaodh2Km2K02ZO+V29sTf/77eBOfXw11zwLkKc4rL+O5H9avz+ziDt/1OuQm3zeoumlaINai8H934=
-X-Received: by 2002:a05:6e02:1aa1:: with SMTP id l1mr100114ilv.187.1639699672540;
- Thu, 16 Dec 2021 16:07:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20211216205303.768991-1-eugene.shalygin@gmail.com> <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
-In-Reply-To: <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Fri, 17 Dec 2021 01:07:41 +0100
-Message-ID: <CAB95QARFT8V-kMTtdRJHPAhXFk2BrF=5jxY2+CT0DvMrn6vKOg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
+        id S231715AbhLQEfs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Dec 2021 23:35:48 -0500
+Received: from mga14.intel.com ([192.55.52.115]:4025 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229511AbhLQEfr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Dec 2021 23:35:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639715747; x=1671251747;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nsTk2GCSHeSnnQlS3n1iZdnu7KhMPFn3pts3SeWaO6U=;
+  b=ORF7QjX21SFYjYsgZ6mZhRc9huECvuiafySyAsVagCp7oU0k7Z+Z8ruM
+   nBRdqlznBvIv7mct6bs5k7TiRWMUTvXMvdS8efMfFqfTfUjpK+S5+POST
+   uY7lquZrEwOWh564alt0gePIZqQ+chT6EV/NaL7o5oUHFc9MALohJs6Tf
+   TNeVbl//yx4TOyZkv5f0pRXC7EtDGX9ZeaykAt1b7B5Zoh+HHSiSKsJL7
+   rqVKQQAifv3G6iToiVvagkLGtyPjkoUk6k/01hryatc55EKfonYe0vKaQ
+   /mFXB2nCOVdgONhLT6/3HQNMkehb45jOJhQ/gnpe48h4PCEWV4cDIJH25
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239901367"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="239901367"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 20:35:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="464988526"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 Dec 2021 20:35:45 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my4y8-0004E7-IA; Fri, 17 Dec 2021 04:35:44 +0000
+Date:   Fri, 17 Dec 2021 12:35:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     kbuild-all@lists.01.org, andy.shevchenko@gmail.com,
+        pauk.denis@gmail.com, Eugene Shalygin <eugene.shalygin@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
+Message-ID: <202112171205.FwhZfLkY-lkp@intel.com>
+References: <20211216205303.768991-1-eugene.shalygin@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216205303.768991-1-eugene.shalygin@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 16 Dec 2021 at 22:28, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > to the EC, in the same way as the WMI DSDT code does.
->
-> How do you know that this way there is no race with any of ACPI code?
+Hi Eugene,
 
-Because this mutex is exactly what the ACPI code uses to avoid races.
+I love your patch! Perhaps something to improve:
 
-> _LOCK_DELAY_MS and drop useless comment
->
-> I think I gave the very same comments before. Maybe you can check the
-> reviews of another driver?
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on next-20211215]
+[cannot apply to v5.16-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I understand your frustration, sorry. In all those similar reviews I
-must have missed some emails. I'll fix what I can.
+url:    https://github.com/0day-ci/linux/commits/Eugene-Shalygin/hwmon-asus-ec-sensors-add-driver-for-ASUS-EC/20211217-045428
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20211217/202112171205.FwhZfLkY-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/27e7f47121cb02208740ed895a4cf4c7ab5bee63
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Eugene-Shalygin/hwmon-asus-ec-sensors-add-driver-for-ASUS-EC/20211217-045428
+        git checkout 27e7f47121cb02208740ed895a4cf4c7ab5bee63
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/hwmon/
 
-> > +static const struct ec_sensor_info known_ec_sensors[] = {
-> > +       EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a), /* SENSOR_TEMP_CHIPSET */
-> > +       EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b), /* SENSOR_TEMP_CPU */
-> > +       EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c), /* SENSOR_TEMP_MB */
-> > +       EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d), /* SENSOR_TEMP_T_SENSOR */
-> > +       EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e), /* SENSOR_TEMP_VRM */
-> > +       EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0), /* SENSOR_FAN_CPU_OPT */
-> > +       EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2), /* SENSOR_FAN_VRM_HS */
-> > +       EC_SENSOR("Chipset", hwmon_fan, 2, 0x00, 0xb4), /* SENSOR_FAN_CHIPSET */
-> > +       EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc), /* SENSOR_FAN_WATER_FLOW */
-> > +       EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4), /* SENSOR_CURR_CPU */
-> > +       EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00), /* SENSOR_TEMP_WATER_IN */
-> > +       EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01), /* SENSOR_TEMP_WATER_OUT */
->
-> Instead of comments, use form of
->
->   [FOO] = BAR(...),
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Was unable do that because the SENSOR_ enum is a flag enum. But given
-this suggestion and the one about bit foreach loop, I will convert the
-enum to bitmap.
+All warnings (new ones prefixed by >>):
 
-> What's wrong with post-decrement, and I think I already commented on this.
-> So, I stopped here until you go and enforce all comments given against
-> previous incarnation of this driver.
+   drivers/hwmon/asus-ec-sensors.c: In function 'asus_ec_probe':
+>> drivers/hwmon/asus-ec-sensors.c:690:26: warning: ordered comparison of pointer with integer zero [-Wextra]
+     690 |         if (state->board < 0) {
+         |                          ^
 
-I missed these ones, sorry.
 
-> > +       for (i = 1; i < SENSOR_END; i <<= 1) {
-> > +               if ((i & ec->board->sensors) == 0
-> > +                       continue;
->
-> Interesting way of NIH for_each_set_bit().
+vim +690 drivers/hwmon/asus-ec-sensors.c
 
-Will convert to bitmap.
+   685	
+   686	static int asus_ec_probe(struct platform_device *pdev)
+   687	{
+   688		struct ec_sensors_data *state = platform_get_drvdata(pdev);
+   689	
+ > 690		if (state->board < 0) {
+   691			return -ENODEV;
+   692		}
+   693	
+   694		return 0;
+   695	}
+   696	
 
-> > +       acpi_status status = acpi_get_handle(
-> > +               NULL, (acpi_string)state->board->acpi_mutex_path, &res);
->
-> It looks awful (indentation), Have you run checkpatch?
-
-Yes, but some warnings remained.
-
-Thanks,
-Eugene
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
