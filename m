@@ -2,58 +2,57 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD7F0C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Dec 2021 22:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FB24C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Dec 2021 00:07:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbhLPW6w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Dec 2021 17:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S229512AbhLQAHx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Dec 2021 19:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbhLPW6w (ORCPT
+        with ESMTP id S229436AbhLQAHx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Dec 2021 17:58:52 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF45C061574;
-        Thu, 16 Dec 2021 14:58:51 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id m12so326012ild.0;
-        Thu, 16 Dec 2021 14:58:51 -0800 (PST)
+        Thu, 16 Dec 2021 19:07:53 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414AAC061574;
+        Thu, 16 Dec 2021 16:07:53 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id s11so387497ilv.3;
+        Thu, 16 Dec 2021 16:07:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=U0m4Q3hGlzYdyBIUPzHCZSSuAjneWrkCoYtGboZy5fY=;
-        b=ma4JKiyDAeTftIR5xYKRx+/AMah3OImnO4fn4pBnKhulZ9PrilolWzhqyXoBqphaOQ
-         ub6N0wmjl+phIPjmgRGBb4as0YxuRm8E+MrnYMYJLzmhyIr8cVtzBMbMQ8qwJX4WyuHj
-         +k6WI52JtgCaMWj+ZVGIKO/VlUp1FrUwNUqUUnCPMGSJ2BOUaULXeityBNlVY3YqtX4B
-         doBqkU0N+lX+1wx4IPfMgkv/7thqAJpcr5F98fKU1viFhkyyX5m0vLzgbmCUpwOxQYmn
-         0YAhrmbGvVitmJunkHN0zJUgaJ/EXEzGRAbMJI9pGMIueRJV9ftGV74RM7L8KyB32c8z
-         jmvA==
+        bh=eMuIk+47x3s4KpscvxEDy8ls/dZRCTh3L6EHdqgxJeg=;
+        b=gfJzoNvxEql+KFUv6k/sKfVyqM+KFIQr4MCApsmE3qk3MS8GNbWhH/vwq86rRjTr1q
+         KgjeqWaRem0swd/Yuri6jvBETjjDtAhKpnIWnm/PrKXxBa8OyLxiNnPSfCvaLycPNmwV
+         UHmeH70TK9rxT5b3Kt4ApiMziZaSAC2vRVLIDIt6A0eHGk8dVNgls+aDVWoP/f8TC++V
+         PKQKa09eTh+9uEdbIL/yqj1BbovmozyQhUUih63162FhiHbfzkRrfKQ9fbiwjfSwRDy7
+         RbyvBDVhwiD9bn0ydRx9Qo8/tKBMRWBvPjMX1wpEDKYlz8s08dc/2IrbDsINYMHnvQiu
+         W8nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U0m4Q3hGlzYdyBIUPzHCZSSuAjneWrkCoYtGboZy5fY=;
-        b=dUYdIv3FE5XpT9KQ8G+WD2H3qbQT6hcdiRmPDpI9yCwrf1vXRXOevcEqi8gzkl/xYL
-         hfxDDykWdYzdaY462BoPss4C7VYiwLBHEDhqkbCoIKcXNaVJlK82+CGhyhlDEjwfDbd8
-         a+rz/SsUGV0S7v9MdviMdkvkbTyMMoVhVs27CPAzoh+EL0XgyKHC+mAYwnneca9Ath86
-         mU4BklTO1teB6yZMY54YpWwsnUxL3KbgV7cTTx7CrM31N+tdUpOT2dfnTbCsN2kKJBKt
-         oXgJuRG0Sgvcta0nvhUz8+T48jIAD5wPr8oJuQnzHEG8aRXuTBxE9+tIiYVe8rXur824
-         95Fg==
-X-Gm-Message-State: AOAM531Iz8akkd6kj0VLtRMp6aGxcvQUi9pLFmTb2s/CBnAVzJA4Il1b
-        6mR+chDK6vMofIoKqIwddtLx6YXQQuTvioHd+GoECYSZVFRZ3PTjtrc=
-X-Google-Smtp-Source: ABdhPJzNrq2MAGYiMRpet+HvO8uSMEKpVsvMvcHfLSLDsglmds6TCDUSSHydXYQN4lgW68iqs1F3nnsCzHVPqtCLz30=
-X-Received: by 2002:a05:6e02:1445:: with SMTP id p5mr121952ilo.164.1639695531309;
- Thu, 16 Dec 2021 14:58:51 -0800 (PST)
+        bh=eMuIk+47x3s4KpscvxEDy8ls/dZRCTh3L6EHdqgxJeg=;
+        b=qP3o0jFXQVogRj3f1TDA42xbhKvwwg2Qt7NHlVn3QjW0AFt5PN/vvkvPsHjfsb8gAU
+         vBM947YXYyo1JKeuEpYReY2N8698gJ0leJzd0Vmtw4tdRezxCJs7BRTNkwawXHOZFPef
+         nKnYHeosSUVNNtOVqadub66eopo3DO67gjp27w+JRiVKKwZI+mTYzTfWKk74VeZUjQQ4
+         r5u2YsADlvOr2Wpoicv6A0eqPOteRh91gZBYsoR2o3JXKeUEbJef5NOCsGohgKjcYeCN
+         8pchVgyNhZFOASFAdyrZWRCoEnlF0Gsu6VlL9EMeTbUxfnO1RjwVl/P4oGfpvp+jovkp
+         /YQg==
+X-Gm-Message-State: AOAM530B1gsgbsX+3gn3VIzUCqvDuM6gRgiF28lurSHWDhJcscNms2sp
+        qJb+9ZM3m3BbYtjcAUv5ljWbt7DWm0h+cKZ+p2HopCUK3B6jk1De
+X-Google-Smtp-Source: ABdhPJyx8dEogaBaodh2Km2K02ZO+V29sTf/77eBOfXw11zwLkKc4rL+O5H9avz+ziDt/1OuQm3zeoumlaINai8H934=
+X-Received: by 2002:a05:6e02:1aa1:: with SMTP id l1mr100114ilv.187.1639699672540;
+ Thu, 16 Dec 2021 16:07:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20211216205303.768991-1-eugene.shalygin@gmail.com>
- <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com> <20211217000424.41da446e@netbook-debian>
-In-Reply-To: <20211217000424.41da446e@netbook-debian>
+References: <20211216205303.768991-1-eugene.shalygin@gmail.com> <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
+In-Reply-To: <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
 From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 16 Dec 2021 23:58:40 +0100
-Message-ID: <CAB95QAQs5=t37UTv2r=ewj1QaaD5LQckGXG1zL+wWYxYTgBdtA@mail.gmail.com>
+Date:   Fri, 17 Dec 2021 01:07:41 +0100
+Message-ID: <CAB95QARFT8V-kMTtdRJHPAhXFk2BrF=5jxY2+CT0DvMrn6vKOg@mail.gmail.com>
 Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -63,38 +62,63 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Denis,
-
-On Thu, 16 Dec 2021 at 23:04, Denis Pauk <pauk.denis@gmail.com> wrote:
+On Thu, 16 Dec 2021 at 22:28, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > to the EC, in the same way as the WMI DSDT code does.
 >
-> Hi Eugene,
+> How do you know that this way there is no race with any of ACPI code?
+
+Because this mutex is exactly what the ACPI code uses to avoid races.
+
+> _LOCK_DELAY_MS and drop useless comment
 >
-> Have you found some issues with idea of usage ACPI WMI methods as
-> failback solution, like in case when ASUS will release some BIOS with
-> different mutex path or different motherboard where will be same WMI
-> methods but fully different internal logic?
+> I think I gave the very same comments before. Maybe you can check the
+> reviews of another driver?
 
-Not direct ones, but yes. First of all, I still don't understand what
-causes the big slowdown in ec_read() calls. I learned that Fedora and
-Arch kernel configs result in the slowdown, while my custom minimal
-kernel does not (well, it is still slow but nevertheless). I tried to
-unload all the modules I do not have in my custom kernel, I tried to
-disable every option which is related to ACPI in the Fedora config,
-but the slowdown did not disappear. Then it is not that simple to
-gather information from other users, because one needs the ec_sys
-module to measure ec_read() performance, but it is not available in
-many distribution kernels it seems.
+I understand your frustration, sorry. In all those similar reviews I
+must have missed some emails. I'll fix what I can.
 
-Instead of that I've changed data structures for board description to
-include the mutex path there, so that we can handle various paths or
-version dependent paths for each motherboard. I can add code to select
-the mutex path based on the BIOS version for the next iteration. Also
-considering adding a module parameter to override that path. I think
-that will be maintainable and give users a way for a local fix while
-waiting for kernel update. Would you agree?
+> > +static const struct ec_sensor_info known_ec_sensors[] = {
+> > +       EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a), /* SENSOR_TEMP_CHIPSET */
+> > +       EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b), /* SENSOR_TEMP_CPU */
+> > +       EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c), /* SENSOR_TEMP_MB */
+> > +       EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d), /* SENSOR_TEMP_T_SENSOR */
+> > +       EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e), /* SENSOR_TEMP_VRM */
+> > +       EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0), /* SENSOR_FAN_CPU_OPT */
+> > +       EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2), /* SENSOR_FAN_VRM_HS */
+> > +       EC_SENSOR("Chipset", hwmon_fan, 2, 0x00, 0xb4), /* SENSOR_FAN_CHIPSET */
+> > +       EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc), /* SENSOR_FAN_WATER_FLOW */
+> > +       EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4), /* SENSOR_CURR_CPU */
+> > +       EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00), /* SENSOR_TEMP_WATER_IN */
+> > +       EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01), /* SENSOR_TEMP_WATER_OUT */
+>
+> Instead of comments, use form of
+>
+>   [FOO] = BAR(...),
 
-That way, I believe, the WMI fallback is rendered barely useful and I
-decided to drop it.
+Was unable do that because the SENSOR_ enum is a flag enum. But given
+this suggestion and the one about bit foreach loop, I will convert the
+enum to bitmap.
 
-Best regards,
+> What's wrong with post-decrement, and I think I already commented on this.
+> So, I stopped here until you go and enforce all comments given against
+> previous incarnation of this driver.
+
+I missed these ones, sorry.
+
+> > +       for (i = 1; i < SENSOR_END; i <<= 1) {
+> > +               if ((i & ec->board->sensors) == 0
+> > +                       continue;
+>
+> Interesting way of NIH for_each_set_bit().
+
+Will convert to bitmap.
+
+> > +       acpi_status status = acpi_get_handle(
+> > +               NULL, (acpi_string)state->board->acpi_mutex_path, &res);
+>
+> It looks awful (indentation), Have you run checkpatch?
+
+Yes, but some warnings remained.
+
+Thanks,
 Eugene
