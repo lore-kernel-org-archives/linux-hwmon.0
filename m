@@ -2,80 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C51DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Dec 2021 15:46:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4333C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Dec 2021 15:48:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbhLQPqS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Dec 2021 10:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S233461AbhLQPsx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Dec 2021 10:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235533AbhLQPqR (ORCPT
+        with ESMTP id S229725AbhLQPsx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:46:17 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4513C061574;
-        Fri, 17 Dec 2021 07:46:17 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso3313168otf.12;
-        Fri, 17 Dec 2021 07:46:17 -0800 (PST)
+        Fri, 17 Dec 2021 10:48:53 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5899C061574;
+        Fri, 17 Dec 2021 07:48:52 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso813545ood.13;
+        Fri, 17 Dec 2021 07:48:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=p0QftDbLVEjaifUdOY6G8MAYqVEgDGe4owAz0ggdUhI=;
-        b=QLaCR2AU8uG3Q7LBIu/+mrOR8fortXlZZV6BOvctjPqfvl4FcWB5AxNw47AnJN+Cyj
-         7K1R4i8d0HrWZGm+J2bRdE4xRyepTbGgjU7kJ4WoTrrxSTctHatkK3CwilMpKsBQ2jN1
-         gnhIEY28lt157qYWFnJ0DDXlKtdjbfSB3hz0MHxEv6u16MRPT1182jpodmdYhebFtRWN
-         kxcWtRxeyYhf8H99Sg5rALrm+7os6PElmsepSXLnaFyqpRwIDxruKwwR7wXnU+lBA6n7
-         Y6B579Jy2j9YQqnm1g9dzT69WycSanZHw0HBWPqgft0Qz7em8PlB5OjFDH8BMcqH1NmG
-         smzw==
+        bh=6dm4pOYGFOUOnd9TBndDBcAp1Msui/lpdLLescsGmQA=;
+        b=MsyAIMi0rI6dnluKwifLKBjgw8MSA/nu+AxFriSzfgy8u63mTZjxqKW/csPHbRk/LU
+         z5IKRn04aNy9X7PEIV2twi23dM3LV86s7LDdAYc0uRKQlpjafphFv/EjqXr/oZUUpOA5
+         Hj8sSooRsCVcCixaPCG1tv1mosUkULpk1DV9CNCdPWdkAmT4I/s4rMIn0jdAg7jSn3Bk
+         NDyxO9ubTSyLLE/Sj5ecyT3FEnPMdTV+E19VHDqWPZ0NXDnp027/RjdX1Ioqu9ZXGzex
+         gm5h8qjf/CQJv9WcxZlqM6AsBEkx+OfM/hs+mJYd39XmZuV/1uFrUaCc4Qv4T9dQ5nUH
+         YRsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=p0QftDbLVEjaifUdOY6G8MAYqVEgDGe4owAz0ggdUhI=;
-        b=2dO9vRrZcBf3KvyCMxehJczARYDlRjm0rQYjwS4un7hSKs5Oy8D+K8ox/OcmMB2rbV
-         8hZjsh+Hx6PhshIhQ1t2ozb7alJBAn6DeVRYhTkeMblGaQ5dnZ0vp/t3cGBzFnyPoNbJ
-         z8Ifh0Cfu8aHs8EDVy0lGV28iNUm/EqawNLy6caZTDZ2kcFDV4R52isiD3vPRNgzY4+V
-         Ch+HeUxhum8FJMHha3YlrQMlqz1XZoWVqxqfJ0xggegESL8rA6dyjhA4SGGov0dBm8JO
-         Q5zQ1QY7PMtkbiPS6g/zcZ61/023I8q+8zZW4qlY93uuz0C3ZApcVQU3eG5JuVARa+WC
-         l8Wg==
-X-Gm-Message-State: AOAM530dHADcc6VgYUkxqgKibQMTSFzKmj7/dJ0JdnsD3ERCS8BUTi7b
-        W5J1m3QXQbl4xYmXhJ3x5yFHUwE1pTc=
-X-Google-Smtp-Source: ABdhPJyCVA5rp0RWFZSVd0Lq5iy+S8fFH+olrP6BEllaSupNzkBVLpZM6MFiSywNeH57KWFFHb0jRQ==
-X-Received: by 2002:a05:6830:1e13:: with SMTP id s19mr2569561otr.358.1639755977016;
-        Fri, 17 Dec 2021 07:46:17 -0800 (PST)
+        bh=6dm4pOYGFOUOnd9TBndDBcAp1Msui/lpdLLescsGmQA=;
+        b=m0y9wrJVgvN2ouu9iZI8r4rJ2SeaybpkZZUCRUDHACwNhde/yLBZKHx5Azx/CrKqT/
+         Jjxe0QXgurhl2b9zsc4pLWzQkIMz2kzdlDjQQ3g5mPI/W4/FO16y9dHBkAmuqJ/8zzGv
+         2HNRfr3xIlOIs05BG9cOhPHq94R0/bBolmVPQhuRfuloInQVK/Ry+yaI8gn9ILhesFeu
+         ZSsX216xakuOgzwaIdG/9vDKV0wlbzzbI7liVUK8l0EiJX34OoWg29h0C8F/OZE67Vxu
+         ayjALBz6o0GB7wT4LJ71N8tTLCrEBqzAcoti12Rw6rnBP1IglfRuCapvxOlx9cIiV9uB
+         kaFQ==
+X-Gm-Message-State: AOAM531Y93yNsjHOutYUfb3HM+JhNnOgE96b8HOKzUJYM5Z3BWFNvxbA
+        GHUc1Y9oV50QOY2S+/lZok4=
+X-Google-Smtp-Source: ABdhPJy4vDAoMqy1suYtcDZ5UF0RmpzzS+JQbYdAFRDtXk7bkPcIiomXqooHg3rF3Mi9zza1gK/0lQ==
+X-Received: by 2002:a4a:d284:: with SMTP id h4mr2323424oos.31.1639756132252;
+        Fri, 17 Dec 2021 07:48:52 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l9sm1591270oom.4.2021.12.17.07.46.16
+        by smtp.gmail.com with ESMTPSA id c41sm1746402otu.7.2021.12.17.07.48.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 07:46:16 -0800 (PST)
+        Fri, 17 Dec 2021 07:48:51 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 17 Dec 2021 07:46:15 -0800
+Date:   Fri, 17 Dec 2021 07:48:50 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Zev Weiss <zev@bewilderbeest.net>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 1/2] hwmon: (pmbus) Add Delta AHE-50DC fan control
- module driver
-Message-ID: <20211217154615.GA2913871@roeck-us.net>
+Subject: Re: [PATCH v4 2/2] dt-bindings: add Delta AHE-50DC fan control module
+Message-ID: <20211217154850.GA2969063@roeck-us.net>
 References: <20211208213703.2577-1-zev@bewilderbeest.net>
- <20211208213703.2577-2-zev@bewilderbeest.net>
+ <20211208213703.2577-3-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208213703.2577-2-zev@bewilderbeest.net>
+In-Reply-To: <20211208213703.2577-3-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:37:02PM -0800, Zev Weiss wrote:
-> This device is an integrated module of the Delta AHE-50DC Open19 power
-> shelf.  I haven't been able to procure any proper documentation for
-> it, but it seems to be a (somewhat minimally) PMBus-compliant device.
-> It provides four fan speeds, four temperatures (three standard and one
-> manufacturer-specific via a virtual second page), and a vin reading.
+On Wed, Dec 08, 2021 at 01:37:03PM -0800, Zev Weiss wrote:
+> This is the integrated fan control module of the Delta AHE-50DC Open19
+> power shelf.
 > 
 > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Acked-by: Rob Herring <robh@kernel.org>
 
 Applied.
 
@@ -83,180 +80,19 @@ Thanks,
 Guenter
 
 > ---
->  MAINTAINERS                             |   6 ++
->  drivers/hwmon/pmbus/Kconfig             |  10 +++
->  drivers/hwmon/pmbus/Makefile            |   1 +
->  drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 114 ++++++++++++++++++++++++
->  4 files changed, 131 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0ac052200ecb..8bb7ba52d2f5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5425,6 +5425,12 @@ W:	https://linuxtv.org
->  T:	git git://linuxtv.org/media_tree.git
->  F:	drivers/media/platform/sti/delta
->  
-> +DELTA AHE-50DC FAN CONTROL MODULE DRIVER
-> +M:	Zev Weiss <zev@bewilderbeest.net>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-> +
->  DELTA DPS920AB PSU DRIVER
->  M:	Robert Marko <robert.marko@sartura.hr>
->  L:	linux-hwmon@vger.kernel.org
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index ffb609cee3a4..0b1157b883aa 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -66,6 +66,16 @@ config SENSORS_BPA_RS600
->  	  This driver can also be built as a module. If so, the module will
->  	  be called bpa-rs600.
->  
-> +config SENSORS_DELTA_AHE50DC_FAN
-> +	tristate "Delta AHE-50DC fan control module"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for
-> +	  the integrated fan control module of the Delta AHE-50DC
-> +	  Open19 power shelf.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called delta-ahe50dc-fan.
-> +
->  config SENSORS_FSP_3Y
->  	tristate "FSP/3Y-Power power supplies"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 0ed4d596a948..a56b2897288d 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
->  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
->  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
->  obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
-> +obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
->  obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
->  obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->  obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
-> diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-> new file mode 100644
-> index 000000000000..40dffd9c4cbf
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-> @@ -0,0 +1,114 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Delta AHE-50DC power shelf fan control module driver
-> + *
-> + * Copyright 2021 Zev Weiss <zev@bewilderbeest.net>
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +
-> +#include "pmbus.h"
-> +
-> +#define AHE50DC_PMBUS_READ_TEMP4 0xd0
-> +
-> +static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
-> +	if (page == 1) {
-> +		if (reg == PMBUS_READ_TEMPERATURE_1)
-> +			return i2c_smbus_read_word_data(client, AHE50DC_PMBUS_READ_TEMP4);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	/*
-> +	 * There's a fairly limited set of commands this device actually
-> +	 * supports, so here we block attempts to read anything else (which
-> +	 * return 0xffff and would cause confusion elsewhere).
-> +	 */
-> +	switch (reg) {
-> +	case PMBUS_STATUS_WORD:
-> +	case PMBUS_FAN_COMMAND_1:
-> +	case PMBUS_FAN_COMMAND_2:
-> +	case PMBUS_FAN_COMMAND_3:
-> +	case PMBUS_FAN_COMMAND_4:
-> +	case PMBUS_STATUS_FAN_12:
-> +	case PMBUS_STATUS_FAN_34:
-> +	case PMBUS_READ_VIN:
-> +	case PMBUS_READ_TEMPERATURE_1:
-> +	case PMBUS_READ_TEMPERATURE_2:
-> +	case PMBUS_READ_TEMPERATURE_3:
-> +	case PMBUS_READ_FAN_SPEED_1:
-> +	case PMBUS_READ_FAN_SPEED_2:
-> +	case PMBUS_READ_FAN_SPEED_3:
-> +	case PMBUS_READ_FAN_SPEED_4:
-> +		return -ENODATA;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static struct pmbus_driver_info ahe50dc_fan_info = {
-> +	.pages = 2,
-> +	.format[PSC_FAN] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.m[PSC_FAN] = 1,
-> +	.b[PSC_FAN] = 0,
-> +	.R[PSC_FAN] = 0,
-> +	.m[PSC_TEMPERATURE] = 1,
-> +	.b[PSC_TEMPERATURE] = 0,
-> +	.R[PSC_TEMPERATURE] = 1,
-> +	.m[PSC_VOLTAGE_IN] = 1,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 3,
-> +	.func[0] = PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
-> +		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
-> +		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
-> +	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
-> +	.read_word_data = ahe50dc_fan_read_word_data,
-> +};
-> +
-> +/*
-> + * CAPABILITY returns 0xff, which appears to be this device's way indicating
-> + * it doesn't support something (and if we enable I2C_CLIENT_PEC on seeing bit
-> + * 7 being set it generates bad PECs, so let's not go there).
-> + */
-> +static struct pmbus_platform_data ahe50dc_fan_data = {
-> +	.flags = PMBUS_NO_CAPABILITY,
-> +};
-> +
-> +static int ahe50dc_fan_probe(struct i2c_client *client)
-> +{
-> +	client->dev.platform_data = &ahe50dc_fan_data;
-> +	return pmbus_do_probe(client, &ahe50dc_fan_info);
-> +}
-> +
-> +static const struct i2c_device_id ahe50dc_fan_id[] = {
-> +	{ "ahe50dc_fan" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ahe50dc_fan_id);
-> +
-> +static const struct of_device_id __maybe_unused ahe50dc_fan_of_match[] = {
-> +	{ .compatible = "delta,ahe50dc-fan" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ahe50dc_fan_of_match);
-> +
-> +static struct i2c_driver ahe50dc_fan_driver = {
-> +	.driver = {
-> +		   .name = "ahe50dc_fan",
-> +		   .of_match_table = of_match_ptr(ahe50dc_fan_of_match),
-> +	},
-> +	.probe_new = ahe50dc_fan_probe,
-> +	.id_table = ahe50dc_fan_id,
-> +};
-> +module_i2c_driver(ahe50dc_fan_driver);
-> +
-> +MODULE_AUTHOR("Zev Weiss <zev@bewilderbeest.net>");
-> +MODULE_DESCRIPTION("Driver for Delta AHE-50DC power shelf fan control module");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 791079021f1b..1c43cc91f804 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -73,6 +73,8 @@ properties:
+>            - dallas,ds4510
+>              # Digital Thermometer and Thermostat
+>            - dallas,ds75
+> +            # Delta AHE-50DC Open19 power shelf fan control module
+> +          - delta,ahe50dc-fan
+>              # Delta Electronics DPS-650-AB power supply
+>            - delta,dps650ab
+>            # Delta Electronics DPS920AB 920W 54V Power Supply
