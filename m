@@ -2,81 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF6C8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Dec 2021 16:46:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D84C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Dec 2021 17:14:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239220AbhLQQqp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Dec 2021 11:46:45 -0500
-Received: from mga07.intel.com ([134.134.136.100]:52997 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235989AbhLQQqp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:46:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639759605; x=1671295605;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rm2HVh8P6X4lFzTcgUHbjmh5k/gA7K+fk7L5EqTG4Zs=;
-  b=FBZKQew7si8NjXHjWYQRq1TYLrVLaD5yFgnyQafnHcI37tpMfykwVMfo
-   lTH04k3Nl/FHXHFCxRB6tfpBkHhauVIT0FWDxehZRy+DwWolMxDJW5a/1
-   yzyuNJfXDoWt5eOzdq3pX75ZCkEKz/kaFYSqhRVYLCHINkUNoI+jFaWzv
-   MySZE47nr3HQQ7I11VsjvmqOS2dnAi4N9pi5iYITzDgyLyB7nWzqKvXof
-   vIAQJ1BJQC546E2cFoTuJJo+eFNoHXwPzAnNQuNfEHR12OqnMpA5umEoo
-   Q39ERi2BcOdRbm6PYKy9PGmWh/fzNKJTBC/ZkRfb4Vr+4xPRSKLQzE157
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="303162499"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="303162499"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 08:46:27 -0800
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="605941128"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 08:46:24 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1myGMK-007W5K-4t;
-        Fri, 17 Dec 2021 18:45:28 +0200
-Date:   Fri, 17 Dec 2021 18:45:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arseny Demidov <arsdemal@gmail.com>, rahul.tanwar@linux.intel.com,
-        Arseny Demidov <a.demidov@yadro.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
-Message-ID: <Yby+pwwCg4gagNEf@smile.fi.intel.com>
-References: <20211216083302.986-1-a.demidov@yadro.com>
- <YbtK4mHxpdF5VtOk@smile.fi.intel.com>
- <4a93a4cc-5b37-4524-add9-541bfbe3980e@roeck-us.net>
+        id S232932AbhLQROe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Dec 2021 12:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239570AbhLQROd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 17 Dec 2021 12:14:33 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E43C061574;
+        Fri, 17 Dec 2021 09:14:33 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id p65so3965131iof.3;
+        Fri, 17 Dec 2021 09:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HRDj4HZx+TjmR/qEmd31zkJfvmvydMXTkEu7eSvoPHA=;
+        b=TFuWFBDQDSGyA+RduOmDGqkspWQoOzcZiqD01jHeWgT70glwDmSbi74m7pcMcNMG0Q
+         PSxUvXFHaN6MlUX7LnoruZA1DrVyjVnFVvXXYMgJNoBgTktx7CwScrSFnzZNnwoa+eBj
+         iL78nMjjNVTsR4lj+GbNGyiuXFwz1VngNCvsHk82KMOJlfjl5dEKLYsDDGZXbXoWHC6A
+         2GaQIZWEZkHF4sWR0PH+dxKolIdCpv0InJAUMLWGoLPWTd+4kZZNW14hccWm9uj8iZ7F
+         62aBQBDOFMoTvkXuPiygEcrUf7e4bB/u7ipIg353ACou0TXwB6td3Yhg0yqM1JRWUcca
+         09kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HRDj4HZx+TjmR/qEmd31zkJfvmvydMXTkEu7eSvoPHA=;
+        b=Crn6C26dHzhG8zfZULm6scgWGoz5vH5xIsTqnpe5ZmfVeyE4QdwqHKDK+VdQFwUIsO
+         mMNKN1U+Iv+b/VDFBpc2x8BfKLgQN2ZW7pgo6Q8X+JMvb9feiQly8iU2P5dMVQ9RSIdP
+         SVip44St8BM4BP9ra/HQbT5Ut44tDqcIdqDTyEPyvgcVjLcrDmcXJdndVEhfn6NWZUhA
+         NUIat3wlTmkWmW0UpQjs71TZU0Q3/e0Wi/xINziK4vs+9SeZN9iA8UX+3tPfBZTmvWDh
+         UKe4ly3Wb2uqpKYEA/oMnNiFM2vQ/mYbSp7JUWmPX2aCd4F6daLuSBviRSdP36IiSyx5
+         TxZw==
+X-Gm-Message-State: AOAM531NPhuXEKXzoZAfS4BxOZnEdeHEiU/3WAFsAZmt49bJUmntxMCj
+        DFbxAMaEGO4YveVVgPchRmN1BD0VcFBYM/+9+2U=
+X-Google-Smtp-Source: ABdhPJwicZpGJ5z0mtVKWyHRmd62BjE2Tsi+vnZpUFcGPllul/iuGgQ6Zio/JpSlivtcagWLZ/qiEa2YncukzWpS4VU=
+X-Received: by 2002:a05:6638:2191:: with SMTP id s17mr2726181jaj.67.1639761271894;
+ Fri, 17 Dec 2021 09:14:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a93a4cc-5b37-4524-add9-541bfbe3980e@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211128184549.9161-1-pauk.denis@gmail.com> <20211217002223.63b1e0a7@netbook-debian>
+ <c6bf6ce9-8b45-e4a2-7167-83bdc8437fca@roeck-us.net>
+In-Reply-To: <c6bf6ce9-8b45-e4a2-7167-83bdc8437fca@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 17 Dec 2021 18:14:19 +0100
+Message-ID: <CAB95QARN=iYNW5cUK+gsBj7NUdZG2pFXbqWsXsdjE-hqNiSXSQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] hwmon: (nct6775) Support lock by ACPI mutex
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 08:05:17AM -0800, Guenter Roeck wrote:
-> On 12/16/21 6:19 AM, Andy Shevchenko wrote:
-> > On Thu, Dec 16, 2021 at 11:33:02AM +0300, Arseny Demidov wrote:
+On Fri, 17 Dec 2021 at 17:23, Guenter Roeck <linux@roeck-us.net> wrote:
 
-...
+> At some point, we have to face it: ASUS doesn't support Linux, and they
+> make it hard to access chips like this. I think the chip should be
+> accessed through "official" channels only if provided (ie WMI/ACPI),
+> or not at all.
 
-> > > -#define POWER_DELAY_CYCLE_256	0x80
-> > > +#define POWER_DELAY_CYCLE_256	0x100
-> > >   #define POWER_DELAY_CYCLE_64	0x40
-> > 
-> > I;m wondering why they are in hex? Perhaps the decimal is better for both.
-> > 
-> Maybe, but that is POV, and I tend to leave it up to driver authors to decide.
-> It is definitely not something we would want to change as part of a bug fix.
+My two cents, if you please. Unfortunately, ASUS doesn't support
+Windows as well, they only support their own shitty software, and they
+change the WMI methods (both names and logic). For example, just
+recently they packed a full hardware monitoring solution in X470
+boards in WMI, then removed it in X570 and changed hardware access
+function names. In order to add support for their next WMI
+implementation, one needs to thoroughly read the decompiled DSDT code,
+find functions, learn their logic and test. This is hard to do
+remotely, without the hardware, obviously. On the other hand it is
+much easier to find the required mutex name from the DSDT code and
+access the chip normally.
 
-Agreed on both points.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best regards,
+Eugene
