@@ -2,108 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF4CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Dec 2021 19:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53C96C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Dec 2021 19:26:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbhLRTRs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Dec 2021 14:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S230024AbhLRT0d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Dec 2021 14:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbhLRTRr (ORCPT
+        with ESMTP id S231161AbhLRT0d (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Dec 2021 14:17:47 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4305EC061574;
-        Sat, 18 Dec 2021 11:17:47 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id b19so8777457ljr.12;
-        Sat, 18 Dec 2021 11:17:47 -0800 (PST)
+        Sat, 18 Dec 2021 14:26:33 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0B1C061574;
+        Sat, 18 Dec 2021 11:26:32 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id i63so8850655lji.3;
+        Sat, 18 Dec 2021 11:26:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EBPWLDrmWt8WxfoZz3IAG8qTJNa/i7zgdvu9LHgBwvc=;
-        b=ObZa0ts8sMBh5R9GvS2jVda0J1X/Pv40mMDRbJwcWTyVKNi8yk67OLtBsI5aSxBsik
-         VjsGpUhnNh2cMfuO4P+k9tgCfRVF8Gdw8k/ltvzjqSzuwlNole1yvfaacmN+lpsZ1Sle
-         6RMbwW3XE4qxRjZXQa5Jeq2pZrO3itwpoiuJuhwBYNFS0pWbHPRdM6h5W1sPxy+oOx8u
-         52gldMGFcEqFvW3U+OCjMEa7WogKSCZlMM6iBWesYA3f0zEe9ODyfw/cyERGjhlvLzcj
-         xZ0FsMRJtLjU9SRf/GLI3MALh/712qzv7iw6qIzywyh1vNAMCSBh68plxWhIPEX3l6Yb
-         itDQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VdBuTypFEGfAMSy+A4AKKlfEyqqDYZjRKJiYFiXcMZM=;
+        b=ixRi07RkxZ3BO6jpkf0IGLvKFIFeKIM1xnjRlUvPC9YqbnoknX7hq+pC2tyz8Rv2ka
+         hXKPmbDYLQv8/JGQb69SY3W6laGPqVpDgIaVQpZkzVqaYFuPEJ/NNcdILd0uW3emu1Wd
+         iqaUqLny0zt1nuaNdSI+cHrdZGgGVI462Ya/2m0jmKm/3lKTwuhcM4s6VnWzUybSxcKp
+         MmkCIfRC3jwEMehhCiDg1AreRBGGBUTac2Sft1yz+xBSBdO6icEXdQH27YibBdqgH+GA
+         U3lqNXIgGL6w0TO4ZP4QiQgG4np444JrP2VInkCFHI4aBUWQ4osJvwSasyp0aAAaCtNF
+         sQoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EBPWLDrmWt8WxfoZz3IAG8qTJNa/i7zgdvu9LHgBwvc=;
-        b=UZCVERIKK6Ilk3fJpc0goH8jmuDR1xiE08gYpI6u/+Ns785pg/GjI9o7I3mHqL/tUK
-         q6RnE79TziiQkgxs69kvneX6r0t0vKnoW46ZCmi6eZ9kbajciDMrr0Z/cVB8wSdeCz9a
-         5puzk9q2ChmO11iBkYGIo5JN8pc9acyG83WgX9TNJ1tfLn1MyC6PdbRSWuKDRp71DgsJ
-         qrCm95SHIfUlzdEA3AUn6dppIRejXUnZR8D3hjjt/hbESe1dheGQDkt2LLUakYIXtzWx
-         57AITDYexc//ZDYOfB6ffWU8FeG+hoAWD0yN7t1p79v1fNgT9ZfB+i6dD1LTnMFwL2it
-         9ZIQ==
-X-Gm-Message-State: AOAM533w+HIPM8fAMQSsSQsb7n0pPT9G/CE1TJbAO9JtfDKUdt1+8VwH
-        hga3iEsDYH40bFCNCT4DFlM=
-X-Google-Smtp-Source: ABdhPJymHqcvjUwHO2Xn31VAgBsb12T2rDXqwYGoX56MiGburf52u26FBME7bH2ParFR9s09Oxyg+A==
-X-Received: by 2002:a2e:a54d:: with SMTP id e13mr7735109ljn.319.1639855065325;
-        Sat, 18 Dec 2021 11:17:45 -0800 (PST)
-Received: from netbook-debian ([94.179.28.1])
-        by smtp.gmail.com with ESMTPSA id p20sm1796504lfu.151.2021.12.18.11.17.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VdBuTypFEGfAMSy+A4AKKlfEyqqDYZjRKJiYFiXcMZM=;
+        b=bcE1KxBFmzHLhK6sgV0LIfdrNZsJHsVV/hrXfiBzxgBoXC4kTGwIfxFn1hBTho5w0w
+         E+eIqMiKwqbNVMDeNPmBRT62qBwYo5unxE/nodx/FDWSkkbJc49gRDNk73Inrdj9Nr15
+         BrWJUf26B7TqfUL7505lGfVjBawet8amj8GbPbZiLL+by+4zayYzehuSP7CfDzwqRBLB
+         ObAx+6epNlEj3Uj412hhD6+lmAQtxnbb8UKXMgYKwE/wVet2+Zar3tjiKx1MnhmSvZ9/
+         /rpxT4vWG/RhXwfDC5FVPKl1WI1qSo4YmKL7dpGW9U8Pc2rO6BPh2plI/8wz+cA+99k8
+         HOWg==
+X-Gm-Message-State: AOAM532Z664bKTCGC5Nsbxp9zCAsrW3TkaBQGtFVKt6xERubpaXsyod2
+        DIetKen7UFeOQK3Ui/jeEy12ngoZVDYizA==
+X-Google-Smtp-Source: ABdhPJx0KaimcPkKWfv/oiS6HZvKEzAACDz+JxWJJ2JiTmb4zV7vMvAqDpxpQniZTP+U4YSzoWXV/w==
+X-Received: by 2002:a2e:9608:: with SMTP id v8mr8002162ljh.392.1639855590880;
+        Sat, 18 Dec 2021 11:26:30 -0800 (PST)
+Received: from localhost.localdomain ([94.179.28.1])
+        by smtp.gmail.com with ESMTPSA id q4sm1799027lfh.277.2021.12.18.11.26.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 11:17:45 -0800 (PST)
-Date:   Sat, 18 Dec 2021 21:17:41 +0200
+        Sat, 18 Dec 2021 11:26:30 -0800 (PST)
 From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        platform-driver-x86@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] hwmon: (nct6775) Support lock by ACPI mutex
-Message-ID: <20211218211741.5eb0c608@netbook-debian>
-In-Reply-To: <CAB95QARN=iYNW5cUK+gsBj7NUdZG2pFXbqWsXsdjE-hqNiSXSQ@mail.gmail.com>
-References: <20211128184549.9161-1-pauk.denis@gmail.com>
-        <20211217002223.63b1e0a7@netbook-debian>
-        <c6bf6ce9-8b45-e4a2-7167-83bdc8437fca@roeck-us.net>
-        <CAB95QARN=iYNW5cUK+gsBj7NUdZG2pFXbqWsXsdjE-hqNiSXSQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] hwmon: (nct6775) Additional check for ChipID before ASUS WMI usage
+Date:   Sat, 18 Dec 2021 21:26:16 +0200
+Message-Id: <20211218192616.611878-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 17 Dec 2021 18:14:19 +0100
-Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+WMI monitoring methods can be changed or removed in new ASUS boards
+BIOS versions. Such versions return zero instead of a real one as
+Chip ID.
 
-> On Fri, 17 Dec 2021 at 17:23, Guenter Roeck <linux@roeck-us.net>
-> wrote:
-> 
-> > At some point, we have to face it: ASUS doesn't support Linux, and
-> > they make it hard to access chips like this. I think the chip
-> > should be accessed through "official" channels only if provided (ie
-> > WMI/ACPI), or not at all.  
-> 
-> My two cents, if you please. Unfortunately, ASUS doesn't support
-> Windows as well, they only support their own shitty software, and they
-> change the WMI methods (both names and logic). For example, just
-> recently they packed a full hardware monitoring solution in X470
-> boards in WMI, then removed it in X570 and changed hardware access
-> function names. In order to add support for their next WMI
-> implementation, one needs to thoroughly read the decompiled DSDT code,
-> find functions, learn their logic and test. This is hard to do
-> remotely, without the hardware, obviously. On the other hand it is
-> much easier to find the required mutex name from the DSDT code and
-> access the chip normally.
-> 
-> Best regards,
-> Eugene
+Commit adds additional validation for the result of Chip ID call
+before enabling access by ASUS WMI methods.
 
-I will try to continue to support patch as part of
-https://bugzilla.kernel.org/show_bug.cgi?id=204807. 
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+---
+ drivers/hwmon/nct6775.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-And If we will have some better solution or ideas, I will send updated
-patch. 
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 57ce8633a725..034347ed51c4 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -5038,7 +5038,8 @@ static int __init sensors_nct6775_init(void)
+ 				   board_name);
+ 		if (err >= 0) {
+ 			/* if reading chip id via WMI succeeds, use WMI */
+-			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
++			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) &&
++			    tmp) {
+ 				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
+ 				access = access_asuswmi;
+ 			} else {
 
-Thank you!
+base-commit: 2585cf9dfaaddf00b069673f27bb3f8530e2039c
+-- 
+2.34.1
 
-Best regards,
-             Denis.
