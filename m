@@ -2,203 +2,119 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6B63C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Dec 2021 06:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6855DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Dec 2021 18:48:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbhLRGAh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Dec 2021 01:00:37 -0500
-Received: from mga04.intel.com ([192.55.52.120]:3037 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231213AbhLRGAg (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Dec 2021 01:00:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639807236; x=1671343236;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0qoY2oayU1ywj9AA5NhDBbjK2GYf969elJQOtNg6KAY=;
-  b=cusE3CWiGSBxswmNl/OUG71LMUcV02G1eMyZ8JD5LZtrx2GXsBVH75vE
-   T9Witv25qof/2Whepdvh14R1gx8D9xAU47OpHPmpo0kA0hy0fq8fMZLsD
-   jJKxBeO0zjxTu591mVA478kC7P1gT4eGRd1p3eBQYGv9LbEhQD/helm6a
-   gUbWll4/WlCy17baIq9JRtKX5wuhPLP3LPqtQcSy4aQYmGa90Ka+VQW5c
-   FU9wdQKMJPVOQew21xD2axv498B36rXCO3Ks6qLgyVFn5p1seCIG3CYK1
-   3PfrsbjlknQ6FE4rR3nwkeDb3JrkZBOWFuBiHDjF/az5E4jmZSvRIQb4f
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="238635166"
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="238635166"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 22:00:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="465363617"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 17 Dec 2021 22:00:35 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mySlm-0005fs-Go; Sat, 18 Dec 2021 06:00:34 +0000
-Date:   Sat, 18 Dec 2021 14:00:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- b90233e7e9bcb6e02ed748f74cb7934bb01e7576
-Message-ID: <61bd78ed.4PoicdU2hWOThohf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233875AbhLRSsr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Dec 2021 13:48:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232070AbhLRSsq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 18 Dec 2021 13:48:46 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235ACC061574;
+        Sat, 18 Dec 2021 10:48:46 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id d38so12027474lfv.0;
+        Sat, 18 Dec 2021 10:48:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=s8ZuRLchSjCjtxD7Je0HJYPmmo0B43cEQtP95CkNaPA=;
+        b=IuS5LRbV61GyBBM+xZqDfsfW9vrQ0lQrBSLifptXWV/JQt8EwQ7eyAFQo/t9/OQqRG
+         4cqz3xSRPgZS48G7Va7rbDoIFWhECbpWtuZ0k/G1QAeeK+vTVqFx6mo8/gyx8FYCZU78
+         +4JYVJA4867ZS5MqLX5NsMszfyddk2qEW1jX1VHcDlCi1wV4pgxAUO2HS0tNjYYgnhQc
+         v2ul42q+DFkTALNywEF/GaXkmUZXMV073rNVjcC6CXcrzbD+CsxgAGdcGndtBRD/3h+j
+         bqdx4j13PqgtMBpz9sPTZNL/QRnJjrPrdG6ndagst95WIba7PFCZMG156Vs1OH1IhbE6
+         6f1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=s8ZuRLchSjCjtxD7Je0HJYPmmo0B43cEQtP95CkNaPA=;
+        b=15aWtxysDSxp1DARmUYP84XBRu5mIskz5YjjmM4eb2MiFsAGCmU8l9WMx/hCgyVXgb
+         zh1oSdqII38aDctzWUCyE6HgWBaQ8/6WzH5kUuauam9sMdQ4QEPCUIw8IYIn6VNRfhlF
+         Ue3G7E/lhwYCxtYyOcYFA0rOpsQspNgdCF75FeMMOgcuD1vFaqSL0N08ioIPtnkCMgQ+
+         TvV+sfESF9c78S0obuWIKqiTONTOQalZ1mMJro24NDehZ1B8xovif/2L4YyayoP6xpHP
+         fGbykCy1Cmpz4yovilUC8pmOM3nSP+dEadppM6nD9/CgzYQfg6PQeIsIoDmROznBeSiY
+         YpKg==
+X-Gm-Message-State: AOAM530pp7eno3g9t4QfgZgqHDaFTbpVr5myvN5Cq3seZLAVZwfIk6id
+        +43a+mmcoG32Sc0LmWE4Gqo=
+X-Google-Smtp-Source: ABdhPJzDrWPEcfKQVE72MJH6QotZdCZY8m4TenSI7c83i7pxMSv6D3RXNeLX+FODRerFA6s1RdRVyA==
+X-Received: by 2002:ac2:4557:: with SMTP id j23mr8455350lfm.382.1639853324248;
+        Sat, 18 Dec 2021 10:48:44 -0800 (PST)
+Received: from netbook-debian ([94.179.28.1])
+        by smtp.gmail.com with ESMTPSA id m19sm10169lfu.267.2021.12.18.10.48.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 10:48:44 -0800 (PST)
+Date:   Sat, 18 Dec 2021 20:48:39 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
+Message-ID: <20211218204839.609bf329@netbook-debian>
+In-Reply-To: <CAB95QAQs5=t37UTv2r=ewj1QaaD5LQckGXG1zL+wWYxYTgBdtA@mail.gmail.com>
+References: <20211216205303.768991-1-eugene.shalygin@gmail.com>
+        <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
+        <20211217000424.41da446e@netbook-debian>
+        <CAB95QAQs5=t37UTv2r=ewj1QaaD5LQckGXG1zL+wWYxYTgBdtA@mail.gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: b90233e7e9bcb6e02ed748f74cb7934bb01e7576  hwmon/pmbus: (ir38064) Expose a regulator
+Hi Eugene,
 
-elapsed time: 723m
+I see. Thank you.
 
-configs tested: 132
-configs skipped: 3
+On Thu, 16 Dec 2021 23:58:40 +0100
+Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Hi Denis,
+> 
+> On Thu, 16 Dec 2021 at 23:04, Denis Pauk <pauk.denis@gmail.com> wrote:
+> >
+> > Hi Eugene,
+> >
+> > Have you found some issues with idea of usage ACPI WMI methods as
+> > failback solution, like in case when ASUS will release some BIOS
+> > with different mutex path or different motherboard where will be
+> > same WMI methods but fully different internal logic?  
+> 
+> Not direct ones, but yes. First of all, I still don't understand what
+> causes the big slowdown in ec_read() calls. I learned that Fedora and
+> Arch kernel configs result in the slowdown, while my custom minimal
+> kernel does not (well, it is still slow but nevertheless). I tried to
+> unload all the modules I do not have in my custom kernel, I tried to
+> disable every option which is related to ACPI in the Fedora config,
+> but the slowdown did not disappear. Then it is not that simple to
+> gather information from other users, because one needs the ec_sys
+> module to measure ec_read() performance, but it is not available in
+> many distribution kernels it seems.
+> 
+> Instead of that I've changed data structures for board description to
+> include the mutex path there, so that we can handle various paths or
+> version dependent paths for each motherboard. I can add code to select
+> the mutex path based on the BIOS version for the next iteration. Also
+> considering adding a module parameter to override that path. I think
+> that will be maintainable and give users a way for a local fix while
+> waiting for kernel update. Would you agree?
+> 
+> That way, I believe, the WMI fallback is rendered barely useful and I
+> decided to drop it.
+> 
+> Best regards,
+> Eugene
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-i386                 randconfig-c001-20211216
-sh                          rsk7203_defconfig
-powerpc                    amigaone_defconfig
-arm                            lart_defconfig
-arc                         haps_hs_defconfig
-sh                            titan_defconfig
-xtensa                         virt_defconfig
-powerpc                       ppc64_defconfig
-powerpc                      ppc6xx_defconfig
-microblaze                      mmu_defconfig
-arc                        nsimosci_defconfig
-mips                            ar7_defconfig
-powerpc                 mpc8560_ads_defconfig
-m68k                       bvme6000_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                              alldefconfig
-sparc                               defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                      cm5200_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                        multi_v7_defconfig
-powerpc                      tqm8xx_defconfig
-mips                         tb0219_defconfig
-mips                           rs90_defconfig
-arc                           tb10x_defconfig
-nds32                             allnoconfig
-h8300                       h8s-sim_defconfig
-powerpc                       ebony_defconfig
-m68k                            mac_defconfig
-arm                          pxa168_defconfig
-i386                             alldefconfig
-powerpc                     powernv_defconfig
-m68k                         apollo_defconfig
-m68k                        m5407c3_defconfig
-mips                       capcella_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                    maltaup_xpa_defconfig
-riscv                          rv32_defconfig
-m68k                        stmark2_defconfig
-powerpc                      makalu_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                      walnut_defconfig
-mips                        omega2p_defconfig
-arm                         lubbock_defconfig
-arm                        magician_defconfig
-sh                           se7721_defconfig
-arm                         s3c6400_defconfig
-mips                      pic32mzda_defconfig
-powerpc                    mvme5100_defconfig
-arm                          iop32x_defconfig
-arm                         vf610m4_defconfig
-arm                         assabet_defconfig
-arm                  randconfig-c002-20211216
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20211216
-i386                 randconfig-a002-20211216
-i386                 randconfig-a005-20211216
-i386                 randconfig-a003-20211216
-i386                 randconfig-a006-20211216
-i386                 randconfig-a004-20211216
-i386                 randconfig-a013-20211217
-i386                 randconfig-a011-20211217
-i386                 randconfig-a016-20211217
-i386                 randconfig-a014-20211217
-i386                 randconfig-a015-20211217
-i386                 randconfig-a012-20211217
-x86_64               randconfig-a006-20211216
-x86_64               randconfig-a005-20211216
-x86_64               randconfig-a001-20211216
-x86_64               randconfig-a002-20211216
-x86_64               randconfig-a003-20211216
-x86_64               randconfig-a004-20211216
-arc                  randconfig-r043-20211217
-s390                 randconfig-r044-20211217
-riscv                randconfig-r042-20211217
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
 
-clang tested configs:
-hexagon              randconfig-r045-20211216
-s390                 randconfig-r044-20211216
-riscv                randconfig-r042-20211216
-hexagon              randconfig-r041-20211216
-hexagon              randconfig-r045-20211217
-hexagon              randconfig-r041-20211217
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+             Denis.
