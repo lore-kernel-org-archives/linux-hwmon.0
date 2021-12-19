@@ -2,100 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 778F4C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Dec 2021 20:52:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBEAAC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Dec 2021 06:29:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbhLRUwY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Dec 2021 15:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbhLRUwX (ORCPT
+        id S235305AbhLSG3s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Dec 2021 01:29:48 -0500
+Received: from thorn.bewilderbeest.net ([71.19.156.171]:46387 "EHLO
+        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229756AbhLSG3r (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Dec 2021 15:52:23 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E8DC061574;
-        Sat, 18 Dec 2021 12:52:23 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id br40so9921377lfb.1;
-        Sat, 18 Dec 2021 12:52:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VpWnDkebbYNbsKX740q2/iT+lv5h0q6cn65ZZyjJ7dM=;
-        b=PxKKTDENviWUpBiSzpJyrddL33wvxt/6ek9gcO0P1tvUxCmhgP2147ve7O4mJP0Z0j
-         WazzwDa7y8NwfpiGEEvOFSug4Dj28pAxGbDgpj2SgfZZqZUzJ4uBt9FH6p9GY6wPMM3H
-         rilPjlxYaAT1t7yAgbS8Cw10x8ZTmDefYsk7fnUe1TnPSnfiIL20pQKEmXeJ2RXi3vuH
-         NRFRILZODSwfD/9qMd07NLffZPUnyZialRVSxQzdB5I01MBZEeSNKtZPNzYl4K29O0FQ
-         OixG2aXqcb/jKSFyeTtTYSLnb0i8g7f6pjwpJVASCbhNT6u/sormVm7n7q02StyRsv37
-         99HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VpWnDkebbYNbsKX740q2/iT+lv5h0q6cn65ZZyjJ7dM=;
-        b=S7TMR03PvDZfRqL+HFrtgfWlQGbZjpmVx606rfKHkHef3Wg+K5BF+zdXoha1FQ14vA
-         LPuHxZf9ddHEru8QsbmECEwqpGuB0cQ1x7F1gO8cwr+kL1o5OPKxyMdrF1MeY8P5dWtW
-         Y3uLADYbJjwB1d4FR255ARNo/qzDUBPVyDiJilI74rHTnEf0J5YuXPI7lzLKohkEGND0
-         Ffp1GxNrk7NX9r2QdwxfpQN4vUQmYJDgArulSM8PGIdVx8vZoxdbugVbKzkMhcQVS1bs
-         gHmy5YsTDX2bUqxxOpFDXOOPkndFQMkh/wGvyybyddGOsrXgya7kdpAtu9PjSpf9tdmq
-         1Arg==
-X-Gm-Message-State: AOAM532yABq/OS9lAIOetuPNeDjN3/dWi39LookS+FWHOEX5/tyD+L1u
-        1kCSELozKQzFarW/vZPzmxc=
-X-Google-Smtp-Source: ABdhPJyY95oIdrt0mY2/3033r9wtDrC6yoFGTk4gut8zC1Pc15HOq0twSIWTVniJTKrUgiv6t/su5w==
-X-Received: by 2002:ac2:58e1:: with SMTP id v1mr8949095lfo.627.1639860741632;
-        Sat, 18 Dec 2021 12:52:21 -0800 (PST)
-Received: from localhost.localdomain ([94.179.28.1])
-        by smtp.gmail.com with ESMTPSA id z3sm1239243lfd.258.2021.12.18.12.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 12:52:21 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
-        platform-driver-x86@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Sun, 19 Dec 2021 01:29:47 -0500
+Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id E5E8B198;
+        Sat, 18 Dec 2021 22:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1639895387;
+        bh=A1Y33nDJNLUYMQCBlzG4WqjqBHb/XRonsXCmK42MlY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RC+dzFxEVA3PeOeFV4u7gqdqGe763tGypKU2fSYtRn2sTVlr6bZT8uACpjJqkbI6q
+         XWsfp3gBHtPWkEvUt2cgrCaCVWlIK29MtVnMMyoxfzMaZJXVKY4sYGkTP0uv5khA32
+         lSp0yQFu/fOfnSTB7vQVpcBoXiDF5HNuOKqpFa+s=
+Date:   Sat, 18 Dec 2021 22:29:42 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Bernhard Seibold <mail@bernhard-seibold.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] hwmon: (nct6775) Additional check for ChipID before ASUS WMI usage
-Date:   Sat, 18 Dec 2021 22:52:06 +0200
-Message-Id: <20211218205206.615865-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] hwmon: (nct6775) add support for TSI temperature
+ registers
+Message-ID: <Yb7RVu6fQc+tLIAg@hatter.bewilderbeest.net>
+References: <20211110231440.17309-1-zev@bewilderbeest.net>
+ <20211217214043.GA489498@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20211217214043.GA489498@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-WMI monitoring methods can be changed or removed in new ASUS boards
-BIOS versions. Such versions return zero instead of a real one as
-Chip ID.
+On Fri, Dec 17, 2021 at 01:40:43PM PST, Guenter Roeck wrote:
+>On Wed, Nov 10, 2021 at 03:14:39PM -0800, Zev Weiss wrote:
+>> @@ -1490,6 +1516,7 @@ static bool is_word_sized(struct nct6775_data 
+>> *data, u16 reg)
+>>  		    (reg & 0x00ff) == 0x55)) ||
+>>  		  (reg & 0xfff0) == 0x630 ||
+>>  		  reg == 0x402 ||
+>> +		  (reg >= 0x409 && reg <= 0x419 && (reg & 1)) ||
+>>  		  reg == 0x640 || reg == 0x642 ||
+>>  		  ((reg & 0xfff0) == 0x650 && (reg & 0x000f) >= 0x06) ||
+>>  		  reg == 0x73 || reg == 0x75 || reg == 0x77;
+>> @@ -1497,13 +1524,18 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
+>>  	case nct6791:
+>>  	case nct6792:
+>>  	case nct6793:
+>> +		num_tsi_regs = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
+>> +		goto check;
+>
+>This is unnecessarily pendantic. We did not do that for other chips
+>with different array sizes, and we should not start doing it for this
+>unless there is evidence that the same registers are 8-bit wide for
+>some of the chips (instead of being unused).
+>
 
-Commit adds additional validation for the result of Chip ID call
-before enabling access by ASUS WMI methods.
+Ack, will fix in v2 -- thanks for the review.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
----
-Changes in v2:
-- Drop the continuation line.
----
- drivers/hwmon/nct6775.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 57ce8633a725..831d5c8fe8cd 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -5038,7 +5038,7 @@ static int __init sensors_nct6775_init(void)
- 				   board_name);
- 		if (err >= 0) {
- 			/* if reading chip id via WMI succeeds, use WMI */
--			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
-+			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) && tmp) {
- 				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
- 				access = access_asuswmi;
- 			} else {
-
-base-commit: 2585cf9dfaaddf00b069673f27bb3f8530e2039c
--- 
-2.34.1
+Zev
 
