@@ -2,71 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB49C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 15:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4774FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 16:09:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbhLUPep (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Dec 2021 10:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S239503AbhLUQJD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Dec 2021 11:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbhLUPep (ORCPT
+        with ESMTP id S239498AbhLUQJC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:34:45 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B30CC061574;
-        Tue, 21 Dec 2021 07:34:45 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso17047056ots.6;
-        Tue, 21 Dec 2021 07:34:45 -0800 (PST)
+        Tue, 21 Dec 2021 11:09:02 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E15C061574;
+        Tue, 21 Dec 2021 08:09:02 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id v22-20020a9d4e96000000b005799790cf0bso4720106otk.5;
+        Tue, 21 Dec 2021 08:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3MV0ltKVU5aGiovL6mP/hE02wLbeXe6GiccWT7VEyLM=;
-        b=CygjRde86CXvQdW/9kK6zkk6ia8MJY0Uy+XAczhvIetNN5d+y2Mu1L66EtGC/82E87
-         eUXp6JnZIHr6v51hdP6Lq8HI054AAXYkma1buvIFvH2Y04E8YhGs/TxSGt3EuW3PxOUm
-         X96pnV2jQ0FKBD0UllB7s/CuYO7nhx1TksGrmRnnvJx3CEZ6HaM/rXkSU8DfUSsDwpFR
-         5Kgh6lFxbi8Y1SJ4gBrU1VvI7x/SZBLKNhUPX6h1YsE3EDSEcATUic5OPgaF3Y05kKF5
-         a6arYLSLZ00XLt4f42oOrQThdR2wePg5jKS/AyWLQKk538Ml+IIow4TqXUVUsE87E4/h
-         7RAQ==
+        bh=i/peC/Cg7dwfJK3Tu9ie4F9EPKhlVGPQSGQJFHbXFxs=;
+        b=inN65pOqgxQ5wY8vnXA2qIuyBP+fTPsocbE8v4UPhPPQhQe2KXu6QQGF5hpXCo2XMV
+         Gi8WXqjzS4Tzh6BddOS8f7ibOIBFB9yvuC/NGds6dM3W1SzYGthHoaUajux7C5x8bwHA
+         0HKULHLHu0s6N70tNNGYeVc8WS5/WsxUDRvCEHR8jd04rdXaFJ0dHlPri5WM8LZK5Wo+
+         QG1VqaYDSrLTGm5CIZCnCzeACWIYkUj1pgPu9jf7kv9Ahp4oEa9fZHSxrGlE5aZfwSZo
+         jkh2U5AUJxgzeHyFl9WdEG/kVshe9iTh8c3O9+Je90QZ6uejE+qo3XbB1BxmUVKUNcdh
+         3lBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3MV0ltKVU5aGiovL6mP/hE02wLbeXe6GiccWT7VEyLM=;
-        b=RvZIIVNqO/iIc6VH6TgsN0eWuzQR+wy1PezsYvnv3CoE+Pu0nOnUu6bRWlU3qC5kXR
-         xsEEA+XKbWNijEE9zMf3O80votqiCmLBsnWCZaSJAIzCci2c2ReUvzYhqyN+v2nX9Y06
-         b2Bu2mhT7Z9pF9rjrbijf61mZzXDrpmd60GvxzQxkj94APpFs1I54NA3nxBLDv6lDvO7
-         kknw+WuHOVMd9p0y9FYij8ysHzT/+vy/KRHGx9eZv3RDjciejt8cr6+5K8NBl8Toa18T
-         owM5ZBPCFYqBqoGL0wS3hw2ujtv/afPUR547WeivGfCd4ZfnIpnwSMK9cyie9jOQlZnq
-         IX4A==
-X-Gm-Message-State: AOAM530B1d4Wui38nuzXJKi3bJrcxfAdjcWrrC6KxTcsVvCbSKjELCtc
-        gBBJFq+j+0TR1t3HreEbW2KmfMhyoFY=
-X-Google-Smtp-Source: ABdhPJxl9DTMybpYm1Ogu0bm4PEwfZNvP96siDes7hTrMy3PHVURoscfqPeplPOYgenMXh1LDNVr5g==
-X-Received: by 2002:a9d:6190:: with SMTP id g16mr2605685otk.54.1640100884458;
-        Tue, 21 Dec 2021 07:34:44 -0800 (PST)
+        bh=i/peC/Cg7dwfJK3Tu9ie4F9EPKhlVGPQSGQJFHbXFxs=;
+        b=qU1ViMhq8pJXa+0ywlz20MVos+flFhPRaCtAcqUw/yM8KOql9xTcU4p7jb3kfBMV0q
+         X/Sh9vSw8OQtOkmKGDIziYLH7sqIn+HBMxxdO7syUCBoaxTVXr5yPSH+IGqhPdRIgrLb
+         FYw9kbLIhbYlGRFDWbMY0uUb2IFiLN1HINKNwpJoOsG0q1HnUPYOv73p4bVs7OdPJw9f
+         R8UPoZHdaQd5q2FjwwFrpFAqlr6/FVTvQT87drgW43JYSClQspIDwWDkqjzW/BHZ7mHv
+         QMxinx5ff5cFv1L6H4U6PjG4ofIqKMlreMoTR+lsLavpejlw1R3WPNfa3DRWH+CnQ0se
+         nV/Q==
+X-Gm-Message-State: AOAM532SKmX5LQ8ZrHY4Yc6/RZocQh7gO/23UI3MHEpEGVtLM5+qLDTj
+        w6/p3bSh43suY4O5pPHN7iCAD+Q65og=
+X-Google-Smtp-Source: ABdhPJyNhDjuYoRCMItZZHobOSSmR+1sxjpBnjjQF01bP8c9M4LmgLwX+PJ3xhk8sWagsWEga2m9cg==
+X-Received: by 2002:a05:6830:1605:: with SMTP id g5mr2814511otr.46.1640102941534;
+        Tue, 21 Dec 2021 08:09:01 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q5sm114441oiv.2.2021.12.21.07.34.43
+        by smtp.gmail.com with ESMTPSA id w18sm3761656otm.1.2021.12.21.08.08.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 07:34:43 -0800 (PST)
+        Tue, 21 Dec 2021 08:09:00 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v1 03/10] hwmon: adt7x10: use devm_request_threaded_irq
 To:     Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20211221123944.2683245-1-demonsingur@gmail.com>
- <20211221123944.2683245-9-demonsingur@gmail.com>
+ <20211221123944.2683245-3-demonsingur@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 09/10] hwmon: adt7x10: use
- devm_hwmon_device_register_with_info
-Message-ID: <3532ca31-55e9-b000-ec18-910197f13c4f@roeck-us.net>
-Date:   Tue, 21 Dec 2021 07:34:42 -0800
+Message-ID: <82012996-b266-873a-699a-26d77bcb7e5a@roeck-us.net>
+Date:   Tue, 21 Dec 2021 08:08:58 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211221123944.2683245-9-demonsingur@gmail.com>
+In-Reply-To: <20211221123944.2683245-3-demonsingur@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -74,70 +73,50 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 On 12/21/21 4:39 AM, Cosmin Tanislav wrote:
 > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > 
-> To simplify core driver remove function.
+> To simplify the core driver remove function.
 > 
 > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > ---
->   drivers/hwmon/adt7x10.c | 12 +++---------
->   1 file changed, 3 insertions(+), 9 deletions(-)
+>   drivers/hwmon/adt7x10.c | 11 +++++------
+>   1 file changed, 5 insertions(+), 6 deletions(-)
 > 
 > diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-> index dd4901299590..c03805c72906 100644
+> index dbe9f1ad7db0..48adc0344e88 100644
 > --- a/drivers/hwmon/adt7x10.c
 > +++ b/drivers/hwmon/adt7x10.c
-> @@ -54,7 +54,6 @@
->   /* Each client has this additional data */
->   struct adt7x10_data {
->   	const struct adt7x10_ops *ops;
-> -	struct device		*hwmon_dev;
->   	struct device		*bus_dev;
->   	struct mutex		update_lock;
->   	u8			config;
-> @@ -430,8 +429,8 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
->   	if (ret)
->   		goto exit_restore;
->   
-> -	hdev = hwmon_device_register_with_info(dev, name, data,
-> -					       &adt7x10_chip_info, NULL);
-> +	hdev = devm_hwmon_device_register_with_info(dev, name, data,
-> +						    &adt7x10_chip_info, NULL);
->   
->   	if (IS_ERR(hdev)) {
->   		ret = PTR_ERR(hdev);
-> @@ -445,15 +444,11 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
->   						IRQF_ONESHOT,
->   						dev_name(dev), hdev);
->   		if (ret)
-> -			goto exit_hwmon_device_unregister;
-> +			goto exit_restore;
+> @@ -402,9 +402,11 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
 >   	}
 >   
-> -	data->hwmon_dev = hdev;
-> -
->   	return 0;
->   
-> -exit_hwmon_device_unregister:
-> -	hwmon_device_unregister(hdev);
->   exit_restore:
->   	adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
->   	return ret;
-> @@ -464,7 +459,6 @@ void adt7x10_remove(struct device *dev, int irq)
+>   	if (irq > 0) {
+> -		ret = request_threaded_irq(irq, NULL, adt7x10_irq_handler,
+> -				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+> -				dev_name(dev), dev);
+> +		ret = devm_request_threaded_irq(dev, irq, NULL,
+> +						adt7x10_irq_handler,
+> +						IRQF_TRIGGER_FALLING |
+> +						IRQF_ONESHOT,
+> +						dev_name(dev), dev);
+>   		if (ret)
+>   			goto exit_hwmon_device_unregister;
+>   	}
+> @@ -425,9 +427,6 @@ void adt7x10_remove(struct device *dev, int irq)
 >   {
 >   	struct adt7x10_data *data = dev_get_drvdata(dev);
 >   
-> -	hwmon_device_unregister(data->hwmon_dev);
+> -	if (irq > 0)
+> -		free_irq(irq, dev);
+> -
+>   	hwmon_device_unregister(data->hwmon_dev);
+>   	sysfs_remove_group(&dev->kobj, &adt7x10_group);
 >   	if (data->oldconfig != data->config)
->   		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
+> 
 
-This doesn't work as-is because the hwmon device still exists at this point
-and at least in theory userspace could still write into the device
-after the old configuration was restored.
+This will keep the interrupt running after the hwmon device was removed,
+and after the configuration was restored. If an interrupt occurs at that time,
+the handler may potentially access released data. I don't mind making those
+changes, but the patches will have to be well sequenced to ensure that each
+patch on its own doesn't leave a crippled driver behind. Again, "oh, this will
+be ok after the entire series was applied" is not acceptable.
 
-To fix this, you'll need a preceding patch to introduce adt7x10_restore_config()
-or similar, and call it through devm_add_action_or_reset() after updating the
-chip configuration. You can then drop the restore code from here and from
-the exist_restore code in the probe function.
-After that, you can use devm_hwmon_device_register_with_info() and drop the
-remove function entirely.
-
+Thanks,
 Guenter
