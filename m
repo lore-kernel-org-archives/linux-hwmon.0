@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A48C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85158C43219
 	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 21:05:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235800AbhLUVE6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Dec 2021 16:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S235906AbhLUVFA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Dec 2021 16:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235412AbhLUVE5 (ORCPT
+        with ESMTP id S235835AbhLUVE7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:04:57 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBF6C061574;
-        Tue, 21 Dec 2021 13:04:56 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id o6so200841edc.4;
-        Tue, 21 Dec 2021 13:04:56 -0800 (PST)
+        Tue, 21 Dec 2021 16:04:59 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F21C061574;
+        Tue, 21 Dec 2021 13:04:58 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y13so51023edd.13;
+        Tue, 21 Dec 2021 13:04:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dJbcpdnDDMMTdDCFrmCCsQpcL+qTK/8WeB+Pk+8w5E4=;
-        b=ahXmpG1e/FJAPO0+XmSPXXwt38Y+SOz9yvH7JUZmK/RgXPRiaAx1O+a/dLqNTvtvU6
-         0YNl2xTv51nmPyflVpKQTv5v1tNzAP4i2+fCaWNghVJsn8F1aRwvVh0oK4XVD7krEzXp
-         Wd5GxBlKw22EZYq/myzz8EGSoO61QZhV46z29exB+OwsmHxLia/Vbs9mkvCI2Wty8HBV
-         EGJaG2A0Yu9WlkOdZk3i2rg1vxK8e9nJXNFi6I7JKNA/gzYJrcmeeoF9G+hcEzUgAkKO
-         W9eCgQYGPcbWK3cR7w+AI8LSpr3xo/hNJZUV0sWsdZ9GLL95MQzKr/4iBzh9n8aGg7Td
-         YYFg==
+        bh=86w3eyiKacs5uaGphCz79xA1hlTYBtSnubTIMb1PBmo=;
+        b=NX7xCB8Aex6XzSuYGWqRHcYEon+NkTDZ8fmUSilRev/npT7EUQw97FTSHfa2OvA1FL
+         09d6d7GsJ2x6UaAPGPMcktUhk1ouJtu85K9ys5YlfvJPWf8QhAqdtWUF/Zr9lDvehvYx
+         7fLdoMbZ8bHo/UCH9HYPxzKFKn07eYG3orXU5hfkSD/pwe1gI3PUkaeogO7hZJKPO83n
+         ZUjNAelWqUIx1lEkc4WqwGn+IqxcYPmqfFgQAy1vchIUoTa1soz4x9WpwX8XQESHf3xk
+         HO8j9KKKtokt2uAOGGKue27O7rF7uh0rs2BhdCJQU/mEFwiHtHN2Sc0NkwUzozFj8DIY
+         8WAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dJbcpdnDDMMTdDCFrmCCsQpcL+qTK/8WeB+Pk+8w5E4=;
-        b=09EhqJgo9BuHAB//aN8FZKx2Gr7v/1a03Wn73BXSLJ++8m40prGP2ZIGSjIcxfP/NG
-         p4L62/aOKCZ4yKAdNi+wZhEWpLsgY0dCMfo6Xn+wQwHmbZul/nIJ8FGpFY7F1JDvETRw
-         YZKt8jfoI1ps/oGkilWqmmfPajo66utD5FyQs/O/hTKnZcB8eo6y4R/qmTqobgNZPMV0
-         5JvDw1UOXdzH/prNtm9lavNsj+U04b8IrtsNlR0V7grxGe62HmQ7TrWbPgV6t/cN4nRp
-         bZ9p6U6ojheUpMXeS6ogvESGWyTeblp4LeUttLDu5wgshSSY8yeJ4RgNm5G0qnMylBOC
-         jBPg==
-X-Gm-Message-State: AOAM530FYj7JbEzwQFuvnaR8FaNlavPx5APkcQsn5pLRn+jd9boI/ywl
-        VQ/HgqTk7GX+KO9ZcMCdw3g=
-X-Google-Smtp-Source: ABdhPJyukoCDTR66KhUgA4WN9oCzhbkGVhBrNVa0NA9NSfBNWJpS2AvVsUrcMTGnvHmxQ7WzKLMkpw==
-X-Received: by 2002:a05:6402:4302:: with SMTP id m2mr69541edc.349.1640120695134;
-        Tue, 21 Dec 2021 13:04:55 -0800 (PST)
+        bh=86w3eyiKacs5uaGphCz79xA1hlTYBtSnubTIMb1PBmo=;
+        b=3nLREtmV7tIcAkRZQHHq9qbm1F6Jn0QXOa/aPzmL6jacLPvWvOTNB/BZNWnyH6Xe8S
+         hgi53C0AyFFkHd2zJgkM7rR8ChekKPm2n7fFMjRmVWVETLhMOCY8mAahJjhz6tcOz6Rc
+         +tdmo3E3kg/Se4Lup5AHeveCO6FlNDU7WbfeRbonW+/4oPN0AlGsN9gkJiYTLxMzyNLb
+         BSXs3plBPvY6pyZuRhiwK3G3g7ilRWboHrR2a4UOGsCVZoYU7EHN9Ge0L51Q63nwnwmD
+         EoxktMHicWV8lVQl+m8A0K/IoPryhX7iiQiPRlLD577I6tDg8zT1MzqtATxLBZ66j+Sb
+         iJYA==
+X-Gm-Message-State: AOAM5319u3blAaKWKi/HB8u9AEKbDgLuTNAE40gjM0M/PsDoHDs/+MGw
+        5oqrQIuIe901P1qFVPRVsPQ=
+X-Google-Smtp-Source: ABdhPJziDgJtitq2IfFdP6PBQ0inrdNJj/TOlJ4S7JkXy9qgbL/gvATdzwO36GseeKS1d/Hn0VSTVw==
+X-Received: by 2002:a17:907:9694:: with SMTP id hd20mr84497ejc.360.1640120697164;
+        Tue, 21 Dec 2021 13:04:57 -0800 (PST)
 Received: from demon-pc.localdomain ([188.24.42.157])
-        by smtp.gmail.com with ESMTPSA id c3sm6355041edr.33.2021.12.21.13.04.54
+        by smtp.gmail.com with ESMTPSA id c3sm6355041edr.33.2021.12.21.13.04.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 13:04:54 -0800 (PST)
+        Tue, 21 Dec 2021 13:04:56 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/8] hwmon: (adt7x10) Add device managed action for restoring config
-Date:   Tue, 21 Dec 2021 23:04:33 +0200
-Message-Id: <20211221210438.2637430-4-demonsingur@gmail.com>
+Subject: [PATCH v2 5/8] hwmon: (adt7x10) Use devm_request_threaded_irq
+Date:   Tue, 21 Dec 2021 23:04:35 +0200
+Message-Id: <20211221210438.2637430-6-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211221210438.2637430-1-demonsingur@gmail.com>
 References: <20211221210438.2637430-1-demonsingur@gmail.com>
@@ -72,67 +72,34 @@ To simplify the core driver remove function.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- drivers/hwmon/adt7x10.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ drivers/hwmon/adt7x10.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 2439da9b64e6..e8a6c541a590 100644
+index 2e6e54bf1d15..84e8879d4ca7 100644
 --- a/drivers/hwmon/adt7x10.c
 +++ b/drivers/hwmon/adt7x10.c
-@@ -357,6 +357,17 @@ static const struct attribute_group adt7x10_group = {
- 	.attrs = adt7x10_attributes,
- };
- 
-+static void adt7x10_restore_config(void *private)
-+{
-+	struct adt7x10_data *data = private;
-+	struct device *dev = data->bus_dev;
-+
-+	if (data->oldconfig == data->config)
-+		return;
-+
-+	adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
-+}
-+
- int adt7x10_probe(struct device *dev, const char *name, int irq,
- 		  const struct adt7x10_ops *ops)
- {
-@@ -397,14 +408,18 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+@@ -450,9 +450,11 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
  	}
- 	dev_dbg(dev, "Config %02x\n", data->config);
  
-+	ret = devm_add_action_or_reset(dev, adt7x10_restore_config, data);
-+	if (ret)
-+		return ret;
-+
- 	ret = adt7x10_fill_cache(dev);
- 	if (ret)
--		goto exit_restore;
-+		return ret;
+ 	if (irq > 0) {
+-		ret = request_threaded_irq(irq, NULL, adt7x10_irq_handler,
+-				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+-				dev_name(dev), dev);
++		ret = devm_request_threaded_irq(dev, irq, NULL,
++						adt7x10_irq_handler,
++						IRQF_TRIGGER_FALLING |
++						IRQF_ONESHOT,
++						dev_name(dev), dev);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -463,8 +465,6 @@ EXPORT_SYMBOL_GPL(adt7x10_probe);
  
- 	/* Register sysfs hooks */
- 	ret = sysfs_create_group(&dev->kobj, &adt7x10_group);
- 	if (ret)
--		goto exit_restore;
-+		return ret;
- 
- 	/*
- 	 * The I2C device will already have it's own 'name' attribute, but for
-@@ -440,8 +455,6 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
- 		device_remove_file(dev, &dev_attr_name);
- exit_remove:
- 	sysfs_remove_group(&dev->kobj, &adt7x10_group);
--exit_restore:
--	adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(adt7x10_probe);
-@@ -457,8 +470,6 @@ void adt7x10_remove(struct device *dev, int irq)
- 	if (data->name)
- 		device_remove_file(dev, &dev_attr_name);
- 	sysfs_remove_group(&dev->kobj, &adt7x10_group);
--	if (data->oldconfig != data->config)
--		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
+ void adt7x10_remove(struct device *dev, int irq)
+ {
+-	if (irq > 0)
+-		free_irq(irq, dev);
  }
  EXPORT_SYMBOL_GPL(adt7x10_remove);
  
