@@ -2,169 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 444E0C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 11:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46DC8C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 12:39:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236858AbhLULAH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Dec 2021 06:00:07 -0500
-Received: from mga01.intel.com ([192.55.52.88]:32402 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236854AbhLULAG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:00:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640084406; x=1671620406;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=h7YV3c7pzwFbg1nPWrFJ0QIp3MgGmmZ2xfInsujrkV4=;
-  b=jiE2ckcPmui+QT/VHtuY195G3ofS+JWPEPwXYL3JhfMawZJk8Ckfwgeg
-   l74h7rWSxIc6APs2eGrjSH860nMEWpUazLEuES0AAKaUBw8LkXOBAwqyB
-   nc2uj0jTM3A6eVfyNW5VZjX2bNImki0n3FweSkZAtOcpP341CvpnMnTzP
-   /4THawEfzk409gK/7R7IlUb+HWGUqae9PQTFPcUsWLsjb64zAZk/5aJdn
-   H+St3zjSH9iekQ+iveXhhhCmijBxHxMwwvmrzOhfTPOyPL/vhPXNXPlwk
-   I+Yv/82zWgxoMrWPtLZdv0a5lz/Ir2J5thGlFmQ3QY8EbxlXxcY7FBvom
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="264562862"
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="264562862"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 02:59:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="508034049"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 02:59:54 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzcs5-00090X-BU; Tue, 21 Dec 2021 10:59:53 +0000
-Date:   Tue, 21 Dec 2021 18:59:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- dbefb9ac3a3ae06f4e74be3257537865279788a0
-Message-ID: <61c1b376./QGbmu8bvlg9Uflu%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237673AbhLUMjz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Dec 2021 07:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237669AbhLUMjz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:39:55 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0839DC061574;
+        Tue, 21 Dec 2021 04:39:55 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id b13so22919314edd.8;
+        Tue, 21 Dec 2021 04:39:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TZKAtR6UT3uSpTIEo5wgVOep5oODFFJr46+sXEmJhnY=;
+        b=cYxoDmd5pHtB+fdeCXL9u3p5LFjnVJR5wWCzVbFPhtTY9S/iLZRItpeZndrhGfP8Ou
+         wod5QyiZj5cZo3KzXTC2oh5ojx2nq3qv3Q7ZYlbGPKCbbNeM36LnxiQDcFj8oxjfYvcp
+         m/3VCJppwjLApDFwsc8K2tCNG6yN8R3dcLJ1R/UhQFboRB5fRo9SL1cbOdcr6xJTTz2D
+         5ItNdNhyo/48uiGphLRwG5EBXFh/nkyWxxc+WVt6g52mIkNGRDIvJTcxwcT1Gyy+ykLq
+         byKe4OSmmhskIRhLUtTSyGrCLsGBEmFkzdFYEV74FI7t3dkSiplTBKnf4YVXyxLYwUVj
+         vB2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TZKAtR6UT3uSpTIEo5wgVOep5oODFFJr46+sXEmJhnY=;
+        b=yxT4he0hhq9OFFXYKbpNBWWkBTBNE4n0RNG3ubjx0sKPKyPDKfKuVwEBh2cOVpxPvu
+         3BkdCS8/C7AsEuOMq49HVJGFmaN6EIWd2rbVTWwTZzVmdmJKYAhFJXxU6vS0AYWk04G0
+         khtM8mdmYxquC7Yb70XaIjfmVk44Ov8y3ZfqLryg2LmGHAJcZY1rv8I58JV0bBZFat4O
+         OFTkeEl13cir+uDiQMEWomnCvXLYDqRh4nH2Ywu311cyaq7ifCY6XQQkKbfcZWO0Uwmy
+         zyO/AJO2kbO08yzHqOA83CZP+smweF+IM+fA3LVGHDcmdBSjeF3OCTBnS///kX4fMEAG
+         mKgQ==
+X-Gm-Message-State: AOAM530M/LhhhDEYEr1N+6/26IWRaqzlq208Nzlmz4tKyaKMFAf8z68Y
+        tdJ2j4EHsCapltQ8+5/OCKY=
+X-Google-Smtp-Source: ABdhPJxorBbs+ZOY4zrPiT3tvXwEQD7t8LKd8Ic0fGCMm81ZtPpPeeNsDQVKo+AeLchg5K1AYcLStw==
+X-Received: by 2002:a17:906:544f:: with SMTP id d15mr2521978ejp.373.1640090393563;
+        Tue, 21 Dec 2021 04:39:53 -0800 (PST)
+Received: from demon-pc.localdomain ([188.24.42.157])
+        by smtp.gmail.com with ESMTPSA id bx6sm2849438edb.78.2021.12.21.04.39.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 04:39:53 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 01/10] hwmon: adt7x10: store bus_dev in private data
+Date:   Tue, 21 Dec 2021 14:39:35 +0200
+Message-Id: <20211221123944.2683245-1-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: dbefb9ac3a3ae06f4e74be3257537865279788a0  hwmon: (nct6775) Additional check for ChipID before ASUS WMI usage
+From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-elapsed time: 824m
+It will later be used to access the bus device because
+callbacks only provide the hwmon device.
 
-configs tested: 98
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-arc                     haps_hs_smp_defconfig
-sh                ecovec24-romimage_defconfig
-ia64                        generic_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                      rts7751r2d1_defconfig
-mips                           ip27_defconfig
-csky                             alldefconfig
-powerpc                       eiger_defconfig
-arm                           tegra_defconfig
-arm                        mvebu_v5_defconfig
-arm                     am200epdkit_defconfig
-mips                          rb532_defconfig
-openrisc                 simple_smp_defconfig
-m68k                          amiga_defconfig
-arm                  randconfig-c002-20211220
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a001-20211220
-x86_64               randconfig-a003-20211220
-x86_64               randconfig-a002-20211220
-x86_64               randconfig-a004-20211220
-x86_64               randconfig-a005-20211220
-x86_64               randconfig-a006-20211220
-i386                 randconfig-a002-20211220
-i386                 randconfig-a003-20211220
-i386                 randconfig-a001-20211220
-i386                 randconfig-a004-20211220
-i386                 randconfig-a005-20211220
-i386                 randconfig-a006-20211220
-arc                  randconfig-r043-20211220
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-x86_64               randconfig-a013-20211220
-x86_64               randconfig-a015-20211220
-x86_64               randconfig-a014-20211220
-x86_64               randconfig-a012-20211220
-x86_64               randconfig-a011-20211220
-x86_64               randconfig-a016-20211220
-i386                 randconfig-a012-20211220
-i386                 randconfig-a011-20211220
-i386                 randconfig-a013-20211220
-i386                 randconfig-a014-20211220
-i386                 randconfig-a016-20211220
-i386                 randconfig-a015-20211220
-hexagon              randconfig-r045-20211220
-riscv                randconfig-r042-20211220
-s390                 randconfig-r044-20211220
-hexagon              randconfig-r041-20211220
-
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hwmon/adt7x10.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
+index e9d33aa78a19..2439da9b64e6 100644
+--- a/drivers/hwmon/adt7x10.c
++++ b/drivers/hwmon/adt7x10.c
+@@ -56,6 +56,7 @@ struct adt7x10_data {
+ 	const struct adt7x10_ops *ops;
+ 	const char		*name;
+ 	struct device		*hwmon_dev;
++	struct device		*bus_dev;
+ 	struct mutex		update_lock;
+ 	u8			config;
+ 	u8			oldconfig;
+@@ -368,6 +369,7 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 
+ 	data->ops = ops;
+ 	data->name = name;
++	data->bus_dev = dev;
+ 
+ 	dev_set_drvdata(dev, data);
+ 	mutex_init(&data->update_lock);
+-- 
+2.34.1
+
