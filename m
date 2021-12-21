@@ -2,97 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAC8DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 16:28:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBD79C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 16:55:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbhLUQ2b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Dec 2021 11:28:31 -0500
-Received: from mout.gmx.net ([212.227.17.20]:36229 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232746AbhLUQ2b (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Dec 2021 11:28:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1640104092;
-        bh=DFcXh7aXLsFLWtrJ5eOcz1/TB0F8U0Tsd3glb5s6YZo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=XdeVDPeFSFsD5azJHaeC/rtfwNKbBlAgLQwmGAv8r05M4dF1RPHHXpO1hh3W3EPt1
-         sI818TQAlIeB94n6UGcyCjK3SQvrwHvxpRkjTuXJIkn0oXxnGHKxU4c6YSNpRERMAY
-         b0ptEk5tJ/MUv0ylNb3PibXmNyMtKr0rqyPsDNd0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N17UQ-1mJc2L45f8-012XJi; Tue, 21 Dec 2021 17:28:12 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        id S240049AbhLUQzE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Dec 2021 11:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240051AbhLUQzD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 21 Dec 2021 11:55:03 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4719C061574;
+        Tue, 21 Dec 2021 08:55:03 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso17368964otj.11;
+        Tue, 21 Dec 2021 08:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ommc8MskJCYD1b6XfwqmC6n7elGkDZf9UHDrOS3ZKME=;
+        b=GdkMRiKmCztW3nPSFXwXp1vTneXL5Bz9hkaMJO/Xs4ZwsI98sCkf243Zg9KFfrrIoR
+         09PNGoFUM3xVSvtIl6rxFB2kXEw3mXMw0PzqpogdHJZTQn682Misjj8ZVk29iV2/0IFl
+         cBQPA5vSby4rxsYhHkEDQ9vj66VSZP6UFa54Rhv4xakNtN8yGhvn6vVpvdOeZJzAVOs2
+         PK37CgvbXvbAjc7s67usvHTjCHYI96j+ZmCfTVeh9iVZ187ZFPixvu78ditfBP3v0NQX
+         XnHC9KI8y5HtrOQNWQmJwuLY8y0n9zcPoh9dLfkNIGwnB4DQkzVtH5sMAXUalQDhcg8S
+         h3lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ommc8MskJCYD1b6XfwqmC6n7elGkDZf9UHDrOS3ZKME=;
+        b=11P2lG4YAWBolNrzSPQj3wZ3kwB2mt7bWoaEygo/r60Q5GpEo6BufW0z45BLQc+CNM
+         oD03AcYphVKThKZy8FhRDgCGQNxb/nH8iL/fCxLjQK5gk2v9Q5r9LDYOu+AzbAwVnfA0
+         PoSwOPkhm0oUTL+kq2l/acvWuiUOgw/Ot1zUqldlti5ireflLrGsR5wk4f74Pe62s/hp
+         I/DU289jVe+yxdu7iL/EZHNKL++VrSQ6QLKovV5gUDbg9TRPGyvElAH5CqGIrZYsINrN
+         7HDtFC/a6Dbw5Z41ix+qs+Bx6fg9aHILsS/78BPl2n6cxqdZCYUQtKpIBFwrxvI5hPFv
+         WNww==
+X-Gm-Message-State: AOAM532ZbKtWn2qvVJfWrsphhok/r8KwYfsYBi2P8J6LIGQDWGn7Luwj
+        H/CVUdcw/+KYYwYPxQfXI6Q=
+X-Google-Smtp-Source: ABdhPJw51DHynkKTy4Y8oHfx5/Rp9zowaTo87vINfrDxs2OLtZXj2k1+drtIbo+5Orywdom2OTT8QQ==
+X-Received: by 2002:a9d:4e93:: with SMTP id v19mr2841676otk.146.1640105703058;
+        Tue, 21 Dec 2021 08:55:03 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s17sm3539771ooj.42.2021.12.21.08.55.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 08:55:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 21 Dec 2021 08:55:00 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Pack the whole smm_regs struct
-Date:   Tue, 21 Dec 2021 17:28:05 +0100
-Message-Id: <20211221162805.104202-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH] hwmon: (dell-smm) Pack the whole smm_regs struct
+Message-ID: <20211221165500.GA295319@roeck-us.net>
+References: <20211221162805.104202-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4zVViJ8ypvkTcSFsZgOJVsB7crmm04kRBsmcai3l2H1yiLU9P29
- 0rfnPSsBRLYNWnX1EHHL8Tr1F8oG5hVs1zfLLM6Btv3nfUN5Sp0fdlQxBusMBb/r9dlRxh6
- btGK+pwEpk9yIPwJREVuwuGC2Q7Q87eqqIWgRAw+y5TBMhsVzxQizm7r+Mv8zM+cdoYC4BZ
- PsVwJCEoItzyfujf/JKvQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hRiNSVv3KBA=:vpRYmGPPKoyVhKoVwKl7Ka
- XcTF6KxUK0EIbFCaro3CZNaNtvLy4toV+yJVm4GqQC0k9zOBMWJzf5mm2cv5IRvlGLuzVrv6e
- kcgilqK5Q9iCLc2cFd4isJsCQoJhKtAQ7SJIoCst7Es0XyV8y6p98d33HRDFwGtYk0atx21DC
- tzgKSIi6Gl4B/TlaQv4oenNih+HjW4vFu4sSiTbQgUsd79aveVL/YVx7KAyI91ESWKy3qvJWh
- hg/6zRneP+P/9/yY4u9I/HBRqL/t+uQ66FkUehOYjwhAgJ5wT66xegi/vOEsyVZEzoaYPgZK9
- j9AK6q42/wWT5gGSnTGmaTm/6SPjTvxXJFf8229CKfYBKoiWRvU7+sVbfnBSVxi8tGsfjmGpo
- +t8KpZKpwopWzQt62qFV4t0M8JTr/tQEJ3ubxYvlVwfINl/XYocLM1m+9iS7PFrsAhFPpigfC
- pwAKu54gx5P4tiuqKMYkO9ZpXefQ8aS2XsI/V28rVnC1pKwJNGPAKeptJc7ObpllVSwI4UJMO
- /emkzKazS+JuU8vcs5KK4ZpcxzQOZ/jPh/zWkeEfiFmdOTicfkcWa2YsUWbGjQpEJqA57IYn4
- yN9F3zykINT1mgtH+0dyfC3v2x2fiVDxoYBPz45C/udsazASRSKu1699M37HVjMEfmXufku8e
- RjL1C+8ZyPoUsMwNeovR/ZMD9qIZw5IkuWIgQyEYlJGSrfevpeesJwJOqKGMrpdlk79vMBrvd
- crC52omZ1ziKXAX9u4KCA0YS0/xOqkWT+ocBiF6CeT8dNkDV+5LO3HPGqb35p8tiUbFP59N27
- bOeco5YEcAgAQ3X+TyZPsdr8ekmkljG8p/CMVZbvk1VJlZo1iHbf7UrfMH8DfQS7QhJCuINgs
- dTkbtH/dTY/ARHXcsO7bxN6gbw4nVSCfr6VWtiWNYdzVg2ob0yvR85L0YkYOI+N4EhLFq1E+b
- vldh7eol3OJ3YR4qTkpfItdSWasV9vood0SB4S0RB0DybjorEMi0BWBLs0Sf9dqMJ2xhFDjBK
- IxmO3Ltpg88hTBOVu1s7dx0923ODjbiOvanS+NonPYq23+mwLfXongt8aUtKK/d4PG6Uos+X/
- 9geKdMyYK+oWy0=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221162805.104202-1-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-When desiring the whole struct to be packed, __packed
-should be applied to the whole struct, not just
-every struct member except the first one.
+On Tue, Dec 21, 2021 at 05:28:05PM +0100, Armin Wolf wrote:
+> When desiring the whole struct to be packed, __packed
+> should be applied to the whole struct, not just
+> every struct member except the first one.
+> 
+> Tested on a Dell Inspiron 3505.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Tested on a Dell Inspiron 3505.
+Applied to hwmon-next.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index d8c6e75bb374..d401f9acf450 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -113,12 +113,12 @@ MODULE_PARM_DESC(fan_max, "Maximum configurable fan =
-speed (default: autodetect)"
-
- struct smm_regs {
- 	unsigned int eax;
--	unsigned int ebx __packed;
--	unsigned int ecx __packed;
--	unsigned int edx __packed;
--	unsigned int esi __packed;
--	unsigned int edi __packed;
--};
-+	unsigned int ebx;
-+	unsigned int ecx;
-+	unsigned int edx;
-+	unsigned int esi;
-+	unsigned int edi;
-+} __packed;
-
- static const char * const temp_labels[] =3D {
- 	"CPU",
-=2D-
-2.30.2
-
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> --
+> 2.30.2
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index d8c6e75bb374..d401f9acf450 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -113,12 +113,12 @@ MODULE_PARM_DESC(fan_max, "Maximum configurable fan speed (default: autodetect)"
+> 
+>  struct smm_regs {
+>  	unsigned int eax;
+> -	unsigned int ebx __packed;
+> -	unsigned int ecx __packed;
+> -	unsigned int edx __packed;
+> -	unsigned int esi __packed;
+> -	unsigned int edi __packed;
+> -};
+> +	unsigned int ebx;
+> +	unsigned int ecx;
+> +	unsigned int edx;
+> +	unsigned int esi;
+> +	unsigned int edi;
+> +} __packed;
+> 
+>  static const char * const temp_labels[] = {
+>  	"CPU",
