@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBCFBC43217
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 12:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A0C1C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 12:40:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237669AbhLUMkF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S237761AbhLUMkF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 21 Dec 2021 07:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbhLUMkC (ORCPT
+        with ESMTP id S237692AbhLUMkE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:40:02 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9E3C061747;
-        Tue, 21 Dec 2021 04:40:01 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id f5so28352980edq.6;
-        Tue, 21 Dec 2021 04:40:01 -0800 (PST)
+        Tue, 21 Dec 2021 07:40:04 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C77C061574;
+        Tue, 21 Dec 2021 04:40:03 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id z5so51534893edd.3;
+        Tue, 21 Dec 2021 04:40:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IyNVKXDWR36ykQcClTsSbztRleUEblizENFlHFdt5IA=;
-        b=TbmZ3FEnJJhfZTBC2nxDLfieJ/gZf8DFoEe4NTn0luMUu9vG5m9hM4HfxGeRsxn3aL
-         hXDAjSQ0HqNZ6r3zuS9FVw8REsS1G/q/Y69ECCD1YXlt5f2e/sDRo8SAvcakw3+iKZFJ
-         9zB+Zju2zwnsmp+6G00plfdfyofSmECNX/Vy5crFqOKdiFUuzQP6+3D27Xrb8BTcGQ0L
-         o6RQa3kIr/5erkedjn1EooC1rjXaMCmy4BX8/mYBljPvgnBZDHwMS8lpFE2nKlEABGVj
-         qjve7xyDXbNH6LeI96F3VCVh4/ghs0C1PkARC+xuXeKhCb5xOBxpCNpHhXTf2SxR4X3+
-         jkZA==
+        bh=BDU6EJnDi6WvDkKmHwhya2IVRURBubZ/mSUv5bglbg4=;
+        b=qHvP+2Q2Qfb+Y3QOhtSDJKJVIKl4tRJlReBpbrSXA9xTsPDbENJUjdXSdstuxr9ker
+         FU3oKs/pwwzn1wBIdcAYkksLlCIdibs1C3U/lb9s4Em+KkNqtKuaH09v+MbBO8TuJZIv
+         WxqJslFndp+SyH9VWHjPdwyLNIa0qKhvnQ07v/c5CbAc/n2psQe2nuQi3tdFIvlsb58u
+         5TUMKLuK83O5hy8rkT5Ig8NWRFyDJdOGFpW8oc2XG/+cc3GaVz6iFU3cmHKJSvlaBXtS
+         Iin+tI1kqJmRV/s1nDkJVdnVU+F85oDBWLa0A0aBBXXcl0A72Gr5B19gUYCuRKmvpiWx
+         KmTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IyNVKXDWR36ykQcClTsSbztRleUEblizENFlHFdt5IA=;
-        b=ACmnG3nPbPhAxKIMTO9xNjVGcuOoHG7liAK72H6E8cqFx9AfH4ZbbZiqOkeyctQWCY
-         us2uDyFqXzEGr2zkb0jXMe2jAGkRAxbqlTQUzIr/xmJ5MHqLwuWBJRcs/7tve25xmqez
-         kh5SiDC3tfheAahxgsAsbnA/QcZWFMuBVBMgz3vo5IRGsKje2Q5fxqNm6L9/An78BOU5
-         BlFEVOUVGoFDGiUOadsD55yphMwErj2hPZAEsoEU/S+8vOcn7zhPi+p8uF6RTq+3DW1f
-         T9nE9TZC24v2bB87FAEk3Htr//JeIgRwpomtmrY+mmcTdWTD93K0BSEwyZM/dCwy6fsB
-         I29g==
-X-Gm-Message-State: AOAM530vFG/F5BovQyvb6WS1IeNLc7OgKL2Nottws1gl7l9FtF3b+KBq
-        q6tgUpH8IAoL9pA5dqD5uAE=
-X-Google-Smtp-Source: ABdhPJxDfYl3wI6S0e0cy8glih1BjFWnHK50u77PY7PQxb/u7j+1hcF3tZnMmzLxT5yH3qWzfzR8gg==
-X-Received: by 2002:a05:6402:d05:: with SMTP id eb5mr3117833edb.360.1640090400452;
-        Tue, 21 Dec 2021 04:40:00 -0800 (PST)
+        bh=BDU6EJnDi6WvDkKmHwhya2IVRURBubZ/mSUv5bglbg4=;
+        b=nqg2lCvItlPxF9oW+bcAaruEvfcN59GHSXXQon9rhoYbvjVUP/G/CAjb3umJveAC2c
+         62W44r3PwB4WhHlJYRGPXU29gjO6Oyv9ApG/N2lgvkXmr1Aqh8xSMTTz8Jm7hSPNlaMR
+         lNyrGs8vIpGQ1+pikowMTPQXIQPrYhIuZ4l/cQWVSqJ1JxcLyZ+dU9F9JvNzmMeiJeSn
+         M+Aw/zfBFXGDuhRhqOetGUnMlXckZUfJRyIXra+0q1SZZFW2TOKasRdbZkEe8Ar5c8Z5
+         0SMwg8m0y697DYYyKB1V+bX0d4MuBWCXsmAAHgeT24r7NktRVaovg+MC0bglDNE4Q2KX
+         2rbQ==
+X-Gm-Message-State: AOAM531vCxX3X4laSMQeU21PObgW1Ugj8HqjApHTivYSZKk4y8xqu/4D
+        D79bQ7DAA0lddgtU2SKLP4dqd4CTBxw=
+X-Google-Smtp-Source: ABdhPJzMaIlI84TReDumH3BOgLnU3Oh89XQvF84HO5TTuwZQ0X6qFNocxBcU4p1/NV0hkGgnSgn+Gg==
+X-Received: by 2002:aa7:d94d:: with SMTP id l13mr3054747eds.208.1640090402531;
+        Tue, 21 Dec 2021 04:40:02 -0800 (PST)
 Received: from demon-pc.localdomain ([188.24.42.157])
-        by smtp.gmail.com with ESMTPSA id bx6sm2849438edb.78.2021.12.21.04.39.59
+        by smtp.gmail.com with ESMTPSA id bx6sm2849438edb.78.2021.12.21.04.40.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 04:40:00 -0800 (PST)
+        Tue, 21 Dec 2021 04:40:02 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 08/10] hwmon: adt7x10: use hwmon_device_register_with_info
-Date:   Tue, 21 Dec 2021 14:39:42 +0200
-Message-Id: <20211221123944.2683245-8-demonsingur@gmail.com>
+Subject: [PATCH v1 10/10] hwmon: adt7x10: use hwmon_notify_event
+Date:   Tue, 21 Dec 2021 14:39:44 +0200
+Message-Id: <20211221123944.2683245-10-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211221123944.2683245-1-demonsingur@gmail.com>
 References: <20211221123944.2683245-1-demonsingur@gmail.com>
@@ -68,125 +68,33 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-Describe the only available channel, implement read, write
-and is_visible callbacks.
+The hwmon subsystem provides means of notifying userspace
+about events. Use it.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- drivers/hwmon/adt7x10.c | 93 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 92 insertions(+), 1 deletion(-)
+ drivers/hwmon/adt7x10.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 2d36088e1a07..dd4901299590 100644
+index c03805c72906..1a99989a744d 100644
 --- a/drivers/hwmon/adt7x10.c
 +++ b/drivers/hwmon/adt7x10.c
-@@ -297,6 +297,95 @@ static int adt7x10_alarm_read(struct adt7x10_data *data, unsigned int index,
- 	return 0;
+@@ -111,11 +111,11 @@ static irqreturn_t adt7x10_irq_handler(int irq, void *private)
+ 		return IRQ_HANDLED;
+ 
+ 	if (status & ADT7X10_STAT_T_HIGH)
+-		sysfs_notify(&dev->kobj, NULL, "temp1_max_alarm");
++		hwmon_notify_event(hdev, hwmon_temp, hwmon_temp_max_alarm, 0);
+ 	if (status & ADT7X10_STAT_T_LOW)
+-		sysfs_notify(&dev->kobj, NULL, "temp1_min_alarm");
++		hwmon_notify_event(hdev, hwmon_temp, hwmon_temp_min_alarm, 0);
+ 	if (status & ADT7X10_STAT_T_CRIT)
+-		sysfs_notify(&dev->kobj, NULL, "temp1_crit_alarm");
++		hwmon_notify_event(hdev, hwmon_temp, hwmon_temp_crit_alarm, 0);
+ 
+ 	return IRQ_HANDLED;
  }
- 
-+static umode_t adt7x10_is_visible(const void *data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
-+{
-+	umode_t mode = 0444;
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+	case hwmon_temp_min:
-+	case hwmon_temp_crit:
-+	case hwmon_temp_max_hyst:
-+		mode |= 0200;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return mode;
-+}
-+
-+static int adt7x10_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	struct adt7x10_data *data = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return adt7x10_temp_read(data, 0, val);
-+	case hwmon_temp_max:
-+		return adt7x10_temp_read(data, 1, val);
-+	case hwmon_temp_min:
-+		return adt7x10_temp_read(data, 2, val);
-+	case hwmon_temp_crit:
-+		return adt7x10_temp_read(data, 3, val);
-+	case hwmon_temp_max_hyst:
-+		return adt7x10_hyst_read(data, 1, val);
-+	case hwmon_temp_min_hyst:
-+		return adt7x10_hyst_read(data, 2, val);
-+	case hwmon_temp_crit_hyst:
-+		return adt7x10_hyst_read(data, 3, val);
-+	case hwmon_temp_min_alarm:
-+		return adt7x10_alarm_read(data, ADT7X10_STAT_T_LOW, val);
-+	case hwmon_temp_max_alarm:
-+		return adt7x10_alarm_read(data, ADT7X10_STAT_T_HIGH, val);
-+	case hwmon_temp_crit_alarm:
-+		return adt7x10_alarm_read(data, ADT7X10_STAT_T_CRIT, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int adt7x10_write(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long val)
-+{
-+	struct adt7x10_data *data = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+		return adt7x10_temp_write(data, 1, val);
-+	case hwmon_temp_min:
-+		return adt7x10_temp_write(data, 2, val);
-+	case hwmon_temp_crit:
-+		return adt7x10_temp_write(data, 3, val);
-+	case hwmon_temp_max_hyst:
-+		return adt7x10_hyst_write(data, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_channel_info *adt7x10_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN |
-+			   HWMON_T_CRIT | HWMON_T_MAX_HYST | HWMON_T_MIN_HYST |
-+			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
-+			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM),
-+	NULL,
-+};
-+
-+static const struct hwmon_ops adt7x10_hwmon_ops = {
-+	.is_visible = adt7x10_is_visible,
-+	.read = adt7x10_read,
-+	.write = adt7x10_write,
-+};
-+
-+static const struct hwmon_chip_info adt7x10_chip_info = {
-+	.ops = &adt7x10_hwmon_ops,
-+	.info = adt7x10_info,
-+};
-+
- int adt7x10_probe(struct device *dev, const char *name, int irq,
- 		  const struct adt7x10_ops *ops)
- {
-@@ -341,7 +430,9 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
- 	if (ret)
- 		goto exit_restore;
- 
--	hdev = hwmon_device_register(dev);
-+	hdev = hwmon_device_register_with_info(dev, name, data,
-+					       &adt7x10_chip_info, NULL);
-+
- 	if (IS_ERR(hdev)) {
- 		ret = PTR_ERR(hdev);
- 		goto exit_restore;
 -- 
 2.34.1
 
