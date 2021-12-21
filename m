@@ -2,98 +2,170 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7E4C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Dec 2021 21:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D59AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 10:59:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbhLTVDP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Dec 2021 16:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbhLTVDN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:03:13 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFB6C061574;
-        Mon, 20 Dec 2021 13:03:13 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id be32so17613284oib.11;
-        Mon, 20 Dec 2021 13:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d0EHoym5IC+t/qKMmsUTt4d7U7D/y3iCG5mxuWttzRU=;
-        b=iTO1/0e2oe6Hd4OoH8wVEgbHSUGUUjmvl523TmqR365zaCRM0z6MYGzx7JPgWLzi3G
-         MSPifjVWGpLQVER5WjS8d264MdPUE+pXawgNnoGXIN75yk5DF/gFFN43CNcpuJrXejqy
-         n5qZpAt2noI7PF8gXG8ZCX/TY5j2KSRS2NhJvaGM60UTaAPF9epGUqe6m3iucgwmunDS
-         U3EWLnE0qu6arPxYHLxmtg8/gMlQKkGxCgPO2p/i6xHvYR5uhfBcgEYfxXTNT6ld9aq8
-         bcMGPK39AM0cYCVfLIPkvsLMGJI7ptgYQKHbd8Jlm9YxNraE3I1CcgeJIMHU15OfpcGb
-         naCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=d0EHoym5IC+t/qKMmsUTt4d7U7D/y3iCG5mxuWttzRU=;
-        b=CZP/pt2AHWBEBu3+0NEuEFd0QlRb1SFEjaXw6EDLcKEAZDF5qdz4KeXsobnUpzmPV5
-         0erJmybOFOSVH8fwqO5pnGi2S5wT+/o4I38agFf7fYE4U38h731pAUNlR9E1dg/R1Aq2
-         3NfVAoX3M6/tK40ggRV5d7tOaK6rL3P7eN1c7R6hjX8F0LBBrpK21ZtgFijF6gjFSSad
-         qH4J/I03ui6G+Ef2f/cB4ZPuml6c7CQdg/C8A5TLskxrImzsoO1H6PYKPBaSjXi3R+lS
-         yVfbCJGyCjkwvWZiNFUH0YLhiknR4/EjEDnxTaZFkO1UtzWA9WhURYJpxrhDLroYeurK
-         SX8g==
-X-Gm-Message-State: AOAM531eulGjFoAolypubcz+ccT77/nxiFxOpfDe0cY+Y/1y9VElLnK1
-        3vOq9aQQ10BMPMR8WLRYv7U=
-X-Google-Smtp-Source: ABdhPJz46MDuaRscwO0z1pSXL1cGIaE5XtiuhnkDZnpFGGF05vZgvAufYRPEiClW3/hvCYub2nnbPw==
-X-Received: by 2002:aca:1a04:: with SMTP id a4mr656965oia.153.1640034192906;
-        Mon, 20 Dec 2021 13:03:12 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s6sm3826196ois.3.2021.12.20.13.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 13:03:12 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 20 Dec 2021 13:03:11 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arseny Demidov <arsdemal@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, rahul.tanwar@linux.intel.com,
-        andriy.shevchenko@intel.com, Arseny Demidov <a.demidov@yadro.com>
-Subject: Re: [PATCH v1 1/1] hwmon : (mr75203) fix wrong power-up delay value
-Message-ID: <20211220210311.GA194769@roeck-us.net>
-References: <20211219102239.1112-1-a.demidov@yadro.com>
+        id S236831AbhLUK74 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Dec 2021 05:59:56 -0500
+Received: from mga04.intel.com ([192.55.52.120]:47837 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230391AbhLUK7z (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 21 Dec 2021 05:59:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640084395; x=1671620395;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=L40GZQtN43aDenQYN52Vhc3Btdw6V1tCiGM3OSLFh9c=;
+  b=fmUF6RfwmcevP8TeGMTDK4mukyeqdxFbopOPJsDl/iZqXIsgYYRh98gW
+   eZw/tNN21/HTb6MFK3b7eDfBIHz3IqgNeF/gapQwfg22B7tsVXmB+0BVD
+   F/zzBcKzeeg4w5LxKyiyaZrLlvnROzvXhbSRVvZuezsUZGnWUOEs+0AjR
+   +1g5dPI9I3NJOKzsCFRr+jL/mfD+t5M/U5PHSScacphOEOJdoQmZyBlLO
+   snvwFPHrIL+wL7vije5ZV5A1A5MfC+eu9S9AKZW3v67Bd22fjA7NOrx0h
+   Qtwc9TZ0sdmOUA20d22AXXY/tCC964qZ5EdPMcxf4OBSDNiNNqyrYPRZH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="239120651"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="239120651"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 02:59:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="467753291"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 21 Dec 2021 02:59:54 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzcs5-00090Z-CD; Tue, 21 Dec 2021 10:59:53 +0000
+Date:   Tue, 21 Dec 2021 18:59:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ c2c94abe099d234010dea98c038e034fead84c4a
+Message-ID: <61c1b379.AnTKwYgTRyUHT2TQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211219102239.1112-1-a.demidov@yadro.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 01:22:39PM +0300, Arseny Demidov wrote:
-> In the file mr75203.c we have a macro named POWER_DELAY_CYCLE_256,
-> the correct value should be 0x100. The register ip_tmr is expressed
-> in units of IP clk cycles, in accordance with the datasheet.
-> Typical power-up delays for Temperature Sensor are 256 cycles i.e. 0x100.
-> 
-> Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
-> Signed-off-by: Arseny Demidov <a.demidov@yadro.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: c2c94abe099d234010dea98c038e034fead84c4a  watchdog: Add Apple SoC watchdog driver
 
-Applied.
+elapsed time: 824m
 
-Thanks,
-Guenter
+configs tested: 99
+configs skipped: 3
 
-> ---
->  drivers/hwmon/mr75203.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 868243dba1ee..1ba1e3145969 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -93,7 +93,7 @@
->  #define VM_CH_REQ	BIT(21)
->  
->  #define IP_TMR			0x05
-> -#define POWER_DELAY_CYCLE_256	0x80
-> +#define POWER_DELAY_CYCLE_256	0x100
->  #define POWER_DELAY_CYCLE_64	0x40
->  
->  #define PVT_POLL_DELAY_US	20
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+powerpc                      chrp32_defconfig
+mips                           ip27_defconfig
+csky                             alldefconfig
+powerpc                       eiger_defconfig
+arm                           tegra_defconfig
+powerpc                     tqm8541_defconfig
+m68k                             alldefconfig
+sh                          urquell_defconfig
+sh                             shx3_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                         lubbock_defconfig
+powerpc                   currituck_defconfig
+arm                          exynos_defconfig
+sh                     magicpanelr2_defconfig
+sh                           se7750_defconfig
+arm                  randconfig-c002-20211220
+ia64                                defconfig
+ia64                             allyesconfig
+ia64                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                 randconfig-a002-20211220
+i386                 randconfig-a003-20211220
+i386                 randconfig-a001-20211220
+i386                 randconfig-a004-20211220
+i386                 randconfig-a005-20211220
+i386                 randconfig-a006-20211220
+x86_64               randconfig-a001-20211220
+x86_64               randconfig-a003-20211220
+x86_64               randconfig-a002-20211220
+x86_64               randconfig-a004-20211220
+x86_64               randconfig-a006-20211220
+x86_64               randconfig-a005-20211220
+arc                  randconfig-r043-20211220
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+x86_64               randconfig-a013-20211220
+x86_64               randconfig-a012-20211220
+x86_64               randconfig-a011-20211220
+x86_64               randconfig-a016-20211220
+x86_64               randconfig-a015-20211220
+x86_64               randconfig-a014-20211220
+i386                 randconfig-a012-20211220
+i386                 randconfig-a011-20211220
+i386                 randconfig-a013-20211220
+i386                 randconfig-a016-20211220
+i386                 randconfig-a015-20211220
+i386                 randconfig-a014-20211220
+hexagon              randconfig-r045-20211220
+riscv                randconfig-r042-20211220
+s390                 randconfig-r044-20211220
+hexagon              randconfig-r041-20211220
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
