@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A91BC4321E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69671C4332F
 	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 21:05:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbhLUVFB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Dec 2021 16:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S235782AbhLUVFA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Dec 2021 16:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235412AbhLUVE7 (ORCPT
+        with ESMTP id S235693AbhLUVE6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:04:59 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A89C061574;
-        Tue, 21 Dec 2021 13:04:59 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id y13so51204edd.13;
-        Tue, 21 Dec 2021 13:04:59 -0800 (PST)
+        Tue, 21 Dec 2021 16:04:58 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BCC061574;
+        Tue, 21 Dec 2021 13:04:57 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id y13so50893edd.13;
+        Tue, 21 Dec 2021 13:04:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BA+v3goAVRURICMHVlSY017b1rgwX+hSP8YzYWtBDZY=;
-        b=mSiUnTv5w8enX0b6/8PFH7o2UKqfd/ZnuYkWlWm2rTNcqT2nP63+87lcDFw89xn8t0
-         fofeZCh77i//ggBh5SiSRyPOvYAPilwof2iW1RkqZUuRWfVb5Qch4+3V+FescsgZGa5Y
-         +Ro2B8b7O7MuG4rLliCsgPcJZR+FSRUFtxDYParJnCfanU5nYevGkAzPoY3v/6OWYrep
-         iYCGaJ3LmzAVIQsHuv3aD5E1iNNbJ7VGmzquMlu/EGzmGGc4qLUCI7HmjorFTq3qCTXe
-         uiIvlyitqD+aNiJIVMF4/kTm1pOEHdt/yxrNVyFPeA9QEHk/OEDAeRTuRY7BB08WLS3V
-         wh3w==
+        bh=3hzVVNNTwrq5MeJGsLzNhP86bxCeJA6LTvVaw5X/r10=;
+        b=OskEJq3/KW0MjeBrRUj3nwaN1hCEx/JS5FDibN8BKckUHdzuLbgpfC9w90XWXZOI0K
+         eF/P/q5GyEH/B/dLv+G40qyTekRs1M3J7ZyFXXgLwYrid688fzMyhmzG7fJyjikg6whD
+         l47Mp9bTmsh29mZ6yUwaByz9bI/qpD2zz8H73t4HDJ73jWQCkPC3Hoe2Q4UgOD8bkDBt
+         v4jiW5qP1jWPs7Dw4pFwj3EmOFj3ikJcbZcvCOnAvkTiXeSs3ETZRvvyLz8eMsAuqRgD
+         Cm53eLPplQdAD56pAul16B1D67+mvCsGQnUpfpSS4+0T+aAWYw/1WPtt4B/BQD0rGRh0
+         SMSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BA+v3goAVRURICMHVlSY017b1rgwX+hSP8YzYWtBDZY=;
-        b=VXzXuJ548CjRkjmmQNgtpyl9rXY7/tQ41SzrMdU8+fQ1CRcUeF60QPRzMAwN3IvAhf
-         X7db5zDymfcOgiTGI3zicAruG+DG8M4Gkha+O3w9uPMopRngTqv0sbAV1jR3wUSbTpyj
-         QiJA9yuwAp0zASh0Cf7FrRbxYRJDw1AyIzfU+Ro/HduMfg8qsSQlvmV4Nie78oSUhqLH
-         N8QCUNGSZ3cU1BLnsAj+fEDtZugDAgRjOKgB+fZ8sJ61TVwNync1K9+k19GgZVR0slEE
-         Ir5LY3nW8D7Jep22Hdkfq9uH03XnZP0Fc7kPtrgKr0G87O0LTtN5EekFUIIDTryJFLCA
-         Q9yg==
-X-Gm-Message-State: AOAM533nojMQFMg9xtlJTRUbetM8GsJnyn6PR5aV9q5jKZeVCeVQQJNd
-        YdUJijVsQ3luSpPA/f9WMbg=
-X-Google-Smtp-Source: ABdhPJyitlYUpvhWvCVjI1iSiy0RIei5/ke1CSbDRQOK2r9PgLzKBzV+blp3rzf6lSBwHtnXGlVA6w==
-X-Received: by 2002:a05:6402:3589:: with SMTP id y9mr118876edc.44.1640120698122;
-        Tue, 21 Dec 2021 13:04:58 -0800 (PST)
+        bh=3hzVVNNTwrq5MeJGsLzNhP86bxCeJA6LTvVaw5X/r10=;
+        b=RY4tObGq1btJuhPWZKeiYYdi9PYgO+zWpX702rxePa2yGWXq4OwidC9XWFe4bxodGh
+         yuRwKD0LIBBh4zFGOsuBZmZRKUFr8iTZsRhLAFMFjtg09LN3n96uDXYsAqgJkyCXeaDh
+         piQWozd3DBInGS7nNANcIm3zqtX55qsASyiB4nbjQqHaj3/uDtYaTIkX2GEQJKLl+l20
+         PYLaMoOPySdb4Pw7zgTsUQvd1wPrc1q8yjZ0SDGDV2VViIcAnCwHtpwpwcY+kC1zUzM7
+         TfgiNLsmC7bPO6Vk8tqjalv7S8cY4SbPk3fdLzgBjsaiu+t26GZRfvrW2VprczrDKdcA
+         0SRg==
+X-Gm-Message-State: AOAM532ITYLQP998J4MY2r0tztIN6bLQdIj+zwOxbA8clatM1ihVvqBh
+        q0vZbCcRlBYV2AKYu3E06BM=
+X-Google-Smtp-Source: ABdhPJxWGRdFKqq/zWCWc/m1Az1dr/zE11NNWeTLyh9L4cbqYAdCcCSr+/Wrcp/sg5q+mPOg7m3G9A==
+X-Received: by 2002:a17:906:ca44:: with SMTP id jx4mr72640ejb.135.1640120696190;
+        Tue, 21 Dec 2021 13:04:56 -0800 (PST)
 Received: from demon-pc.localdomain ([188.24.42.157])
-        by smtp.gmail.com with ESMTPSA id c3sm6355041edr.33.2021.12.21.13.04.57
+        by smtp.gmail.com with ESMTPSA id c3sm6355041edr.33.2021.12.21.13.04.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 13:04:57 -0800 (PST)
+        Tue, 21 Dec 2021 13:04:55 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/8] hwmon: (adt7x10) Remove empty driver removal callback
-Date:   Tue, 21 Dec 2021 23:04:36 +0200
-Message-Id: <20211221210438.2637430-7-demonsingur@gmail.com>
+Subject: [PATCH v2 4/8] hwmon: (adt7x10) Use devm_hwmon_device_register_with_info
+Date:   Tue, 21 Dec 2021 23:04:34 +0200
+Message-Id: <20211221210438.2637430-5-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211221210438.2637430-1-demonsingur@gmail.com>
 References: <20211221210438.2637430-1-demonsingur@gmail.com>
@@ -68,94 +68,358 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-Not used to do anything anymore.
+Describe the only available channel, implement read, write
+and is_visible callbacks.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- drivers/hwmon/adt7310.c | 7 -------
- drivers/hwmon/adt7410.c | 7 -------
- drivers/hwmon/adt7x10.c | 5 -----
- drivers/hwmon/adt7x10.h | 1 -
- 4 files changed, 20 deletions(-)
+ drivers/hwmon/adt7x10.c | 233 ++++++++++++++++++++--------------------
+ 1 file changed, 114 insertions(+), 119 deletions(-)
 
-diff --git a/drivers/hwmon/adt7310.c b/drivers/hwmon/adt7310.c
-index c40cac16af68..4a69b394525b 100644
---- a/drivers/hwmon/adt7310.c
-+++ b/drivers/hwmon/adt7310.c
-@@ -88,12 +88,6 @@ static int adt7310_spi_probe(struct spi_device *spi)
- 			&adt7310_spi_ops);
- }
- 
--static int adt7310_spi_remove(struct spi_device *spi)
--{
--	adt7x10_remove(&spi->dev, spi->irq);
--	return 0;
--}
--
- static const struct spi_device_id adt7310_id[] = {
- 	{ "adt7310", 0 },
- 	{ "adt7320", 0 },
-@@ -107,7 +101,6 @@ static struct spi_driver adt7310_driver = {
- 		.pm	= ADT7X10_DEV_PM_OPS,
- 	},
- 	.probe		= adt7310_spi_probe,
--	.remove		= adt7310_spi_remove,
- 	.id_table	= adt7310_id,
- };
- module_spi_driver(adt7310_driver);
-diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
-index ef4b5af865e9..2ad79533a384 100644
---- a/drivers/hwmon/adt7410.c
-+++ b/drivers/hwmon/adt7410.c
-@@ -48,12 +48,6 @@ static int adt7410_i2c_probe(struct i2c_client *client)
- 	return adt7x10_probe(&client->dev, client->name, client->irq, &adt7410_i2c_ops);
- }
- 
--static int adt7410_i2c_remove(struct i2c_client *client)
--{
--	adt7x10_remove(&client->dev, client->irq);
--	return 0;
--}
--
- static const struct i2c_device_id adt7410_ids[] = {
- 	{ "adt7410", 0 },
- 	{ "adt7420", 0 },
-@@ -68,7 +62,6 @@ static struct i2c_driver adt7410_driver = {
- 		.pm	= ADT7X10_DEV_PM_OPS,
- 	},
- 	.probe_new	= adt7410_i2c_probe,
--	.remove		= adt7410_i2c_remove,
- 	.id_table	= adt7410_ids,
- 	.address_list	= I2C_ADDRS(0x48, 0x49, 0x4a, 0x4b),
- };
 diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 84e8879d4ca7..72d3a5de359e 100644
+index e8a6c541a590..2e6e54bf1d15 100644
 --- a/drivers/hwmon/adt7x10.c
 +++ b/drivers/hwmon/adt7x10.c
-@@ -463,11 +463,6 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+@@ -54,8 +54,6 @@
+ /* Each client has this additional data */
+ struct adt7x10_data {
+ 	const struct adt7x10_ops *ops;
+-	const char		*name;
+-	struct device		*hwmon_dev;
+ 	struct device		*bus_dev;
+ 	struct mutex		update_lock;
+ 	u8			config;
+@@ -218,14 +216,11 @@ static int ADT7X10_REG_TO_TEMP(struct adt7x10_data *data, s16 reg)
+ 
+ /* sysfs attributes for hwmon */
+ 
+-static ssize_t adt7x10_temp_show(struct device *dev,
+-				 struct device_attribute *da, char *buf)
++static int adt7x10_temp_read(struct adt7x10_data *data, int index, long *val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+-	struct adt7x10_data *data = dev_get_drvdata(dev);
+-
++	struct device *dev = data->bus_dev;
+ 
+-	if (attr->index == 0) {
++	if (index == 0) {
+ 		int ret;
+ 
+ 		ret = adt7x10_update_temp(dev);
+@@ -233,39 +228,28 @@ static ssize_t adt7x10_temp_show(struct device *dev,
+ 			return ret;
+ 	}
+ 
+-	return sprintf(buf, "%d\n", ADT7X10_REG_TO_TEMP(data,
+-		       data->temp[attr->index]));
++	*val = ADT7X10_REG_TO_TEMP(data, data->temp[index]);
++
++	return 0;
+ }
+ 
+-static ssize_t adt7x10_temp_store(struct device *dev,
+-				  struct device_attribute *da,
+-				  const char *buf, size_t count)
++static int adt7x10_temp_write(struct adt7x10_data *data, unsigned int nr,
++			      long temp)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+-	struct adt7x10_data *data = dev_get_drvdata(dev);
+-	int nr = attr->index;
+-	long temp;
++	struct device *dev = data->bus_dev;
+ 	int ret;
+ 
+-	ret = kstrtol(buf, 10, &temp);
+-	if (ret)
+-		return ret;
+-
+ 	mutex_lock(&data->update_lock);
+ 	data->temp[nr] = ADT7X10_TEMP_TO_REG(temp);
+ 	ret = adt7x10_write_word(dev, ADT7X10_REG_TEMP[nr], data->temp[nr]);
+-	if (ret)
+-		count = ret;
+ 	mutex_unlock(&data->update_lock);
+-	return count;
++
++	return ret;
+ }
+ 
+-static ssize_t adt7x10_t_hyst_show(struct device *dev,
+-				   struct device_attribute *da, char *buf)
++static int adt7x10_hyst_read(struct adt7x10_data *data, unsigned int nr,
++			     long *val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+-	struct adt7x10_data *data = dev_get_drvdata(dev);
+-	int nr = attr->index;
+ 	int hyst;
+ 
+ 	hyst = (data->hyst & ADT7X10_T_HYST_MASK) * 1000;
+@@ -276,85 +260,127 @@ static ssize_t adt7x10_t_hyst_show(struct device *dev,
+ 	 */
+ 	if (nr == 2)	/* min has positive offset, others have negative */
+ 		hyst = -hyst;
+-	return sprintf(buf, "%d\n",
+-		       ADT7X10_REG_TO_TEMP(data, data->temp[nr]) - hyst);
++
++	*val = ADT7X10_REG_TO_TEMP(data, data->temp[nr]) - hyst;
++
++	return 0;
+ }
+ 
+-static ssize_t adt7x10_t_hyst_store(struct device *dev,
+-				    struct device_attribute *da,
+-				    const char *buf, size_t count)
++static int adt7x10_hyst_write(struct adt7x10_data *data, long hyst)
+ {
+-	struct adt7x10_data *data = dev_get_drvdata(dev);
+-	int limit, ret;
+-	long hyst;
++	struct device *dev = data->bus_dev;
++	int limit;
+ 
+-	ret = kstrtol(buf, 10, &hyst);
+-	if (ret)
+-		return ret;
+ 	/* convert absolute hysteresis value to a 4 bit delta value */
+ 	limit = ADT7X10_REG_TO_TEMP(data, data->temp[1]);
+ 	hyst = clamp_val(hyst, ADT7X10_TEMP_MIN, ADT7X10_TEMP_MAX);
+ 	data->hyst = clamp_val(DIV_ROUND_CLOSEST(limit - hyst, 1000),
+-				   0, ADT7X10_T_HYST_MASK);
+-	ret = adt7x10_write_byte(dev, ADT7X10_T_HYST, data->hyst);
+-	if (ret)
+-		return ret;
+-
+-	return count;
++			       0, ADT7X10_T_HYST_MASK);
++	return adt7x10_write_byte(dev, ADT7X10_T_HYST, data->hyst);
+ }
+ 
+-static ssize_t adt7x10_alarm_show(struct device *dev,
+-				  struct device_attribute *da, char *buf)
++static int adt7x10_alarm_read(struct adt7x10_data *data, unsigned int index,
++			      long *val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
++	struct device *dev = data->bus_dev;
+ 	int ret;
+ 
+ 	ret = adt7x10_read_byte(dev, ADT7X10_STATUS);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return sprintf(buf, "%d\n", !!(ret & attr->index));
++	*val = !!(ret & index);
++
++	return 0;
++}
++
++static umode_t adt7x10_is_visible(const void *data,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	umode_t mode = 0444;
++
++	switch (attr) {
++	case hwmon_temp_max:
++	case hwmon_temp_min:
++	case hwmon_temp_crit:
++	case hwmon_temp_max_hyst:
++		mode |= 0200;
++		break;
++	default:
++		break;
++	}
++
++	return mode;
++}
++
++static int adt7x10_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct adt7x10_data *data = dev_get_drvdata(dev);
++
++	switch (attr) {
++	case hwmon_temp_input:
++		return adt7x10_temp_read(data, 0, val);
++	case hwmon_temp_max:
++		return adt7x10_temp_read(data, 1, val);
++	case hwmon_temp_min:
++		return adt7x10_temp_read(data, 2, val);
++	case hwmon_temp_crit:
++		return adt7x10_temp_read(data, 3, val);
++	case hwmon_temp_max_hyst:
++		return adt7x10_hyst_read(data, 1, val);
++	case hwmon_temp_min_hyst:
++		return adt7x10_hyst_read(data, 2, val);
++	case hwmon_temp_crit_hyst:
++		return adt7x10_hyst_read(data, 3, val);
++	case hwmon_temp_min_alarm:
++		return adt7x10_alarm_read(data, ADT7X10_STAT_T_LOW, val);
++	case hwmon_temp_max_alarm:
++		return adt7x10_alarm_read(data, ADT7X10_STAT_T_HIGH, val);
++	case hwmon_temp_crit_alarm:
++		return adt7x10_alarm_read(data, ADT7X10_STAT_T_CRIT, val);
++	default:
++		return -EOPNOTSUPP;
++	}
+ }
+ 
+-static ssize_t name_show(struct device *dev, struct device_attribute *da,
+-			 char *buf)
++static int adt7x10_write(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long val)
+ {
+ 	struct adt7x10_data *data = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%s\n", data->name);
++	switch (attr) {
++	case hwmon_temp_max:
++		return adt7x10_temp_write(data, 1, val);
++	case hwmon_temp_min:
++		return adt7x10_temp_write(data, 2, val);
++	case hwmon_temp_crit:
++		return adt7x10_temp_write(data, 3, val);
++	case hwmon_temp_max_hyst:
++		return adt7x10_hyst_write(data, val);
++	default:
++		return -EOPNOTSUPP;
++	}
+ }
+ 
+-static SENSOR_DEVICE_ATTR_RO(temp1_input, adt7x10_temp, 0);
+-static SENSOR_DEVICE_ATTR_RW(temp1_max, adt7x10_temp, 1);
+-static SENSOR_DEVICE_ATTR_RW(temp1_min, adt7x10_temp, 2);
+-static SENSOR_DEVICE_ATTR_RW(temp1_crit, adt7x10_temp, 3);
+-static SENSOR_DEVICE_ATTR_RW(temp1_max_hyst, adt7x10_t_hyst, 1);
+-static SENSOR_DEVICE_ATTR_RO(temp1_min_hyst, adt7x10_t_hyst, 2);
+-static SENSOR_DEVICE_ATTR_RO(temp1_crit_hyst, adt7x10_t_hyst, 3);
+-static SENSOR_DEVICE_ATTR_RO(temp1_min_alarm, adt7x10_alarm,
+-			     ADT7X10_STAT_T_LOW);
+-static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, adt7x10_alarm,
+-			     ADT7X10_STAT_T_HIGH);
+-static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, adt7x10_alarm,
+-			     ADT7X10_STAT_T_CRIT);
+-static DEVICE_ATTR_RO(name);
+-
+-static struct attribute *adt7x10_attributes[] = {
+-	&sensor_dev_attr_temp1_input.dev_attr.attr,
+-	&sensor_dev_attr_temp1_max.dev_attr.attr,
+-	&sensor_dev_attr_temp1_min.dev_attr.attr,
+-	&sensor_dev_attr_temp1_crit.dev_attr.attr,
+-	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
+-	&sensor_dev_attr_temp1_min_hyst.dev_attr.attr,
+-	&sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
+-	&sensor_dev_attr_temp1_min_alarm.dev_attr.attr,
+-	&sensor_dev_attr_temp1_max_alarm.dev_attr.attr,
+-	&sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
+-	NULL
++static const struct hwmon_channel_info *adt7x10_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN |
++			   HWMON_T_CRIT | HWMON_T_MAX_HYST | HWMON_T_MIN_HYST |
++			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
++			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM),
++	NULL,
++};
++
++static const struct hwmon_ops adt7x10_hwmon_ops = {
++	.is_visible = adt7x10_is_visible,
++	.read = adt7x10_read,
++	.write = adt7x10_write,
+ };
+ 
+-static const struct attribute_group adt7x10_group = {
+-	.attrs = adt7x10_attributes,
++static const struct hwmon_chip_info adt7x10_chip_info = {
++	.ops = &adt7x10_hwmon_ops,
++	.info = adt7x10_info,
+ };
+ 
+ static void adt7x10_restore_config(void *private)
+@@ -372,6 +398,7 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 		  const struct adt7x10_ops *ops)
+ {
+ 	struct adt7x10_data *data;
++	struct device *hdev;
+ 	int ret;
+ 
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+@@ -379,7 +406,6 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 		return -ENOMEM;
+ 
+ 	data->ops = ops;
+-	data->name = name;
+ 	data->bus_dev = dev;
+ 
+ 	dev_set_drvdata(dev, data);
+@@ -416,26 +442,11 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Register sysfs hooks */
+-	ret = sysfs_create_group(&dev->kobj, &adt7x10_group);
+-	if (ret)
++	hdev = devm_hwmon_device_register_with_info(dev, name, data,
++						    &adt7x10_chip_info, NULL);
++	if (IS_ERR(hdev)) {
++		ret = PTR_ERR(hdev);
+ 		return ret;
+-
+-	/*
+-	 * The I2C device will already have it's own 'name' attribute, but for
+-	 * the SPI device we need to register it. name will only be non NULL if
+-	 * the device doesn't register the 'name' attribute on its own.
+-	 */
+-	if (name) {
+-		ret = device_create_file(dev, &dev_attr_name);
+-		if (ret)
+-			goto exit_remove;
+-	}
+-
+-	data->hwmon_dev = hwmon_device_register(dev);
+-	if (IS_ERR(data->hwmon_dev)) {
+-		ret = PTR_ERR(data->hwmon_dev);
+-		goto exit_remove_name;
+ 	}
+ 
+ 	if (irq > 0) {
+@@ -443,33 +454,17 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+ 				dev_name(dev), dev);
+ 		if (ret)
+-			goto exit_hwmon_device_unregister;
++			return ret;
+ 	}
+ 
+ 	return 0;
+-
+-exit_hwmon_device_unregister:
+-	hwmon_device_unregister(data->hwmon_dev);
+-exit_remove_name:
+-	if (name)
+-		device_remove_file(dev, &dev_attr_name);
+-exit_remove:
+-	sysfs_remove_group(&dev->kobj, &adt7x10_group);
+-	return ret;
  }
  EXPORT_SYMBOL_GPL(adt7x10_probe);
  
--void adt7x10_remove(struct device *dev, int irq)
--{
--}
--EXPORT_SYMBOL_GPL(adt7x10_remove);
+ void adt7x10_remove(struct device *dev, int irq)
+ {
+-	struct adt7x10_data *data = dev_get_drvdata(dev);
 -
- #ifdef CONFIG_PM_SLEEP
+ 	if (irq > 0)
+ 		free_irq(irq, dev);
+-
+-	hwmon_device_unregister(data->hwmon_dev);
+-	if (data->name)
+-		device_remove_file(dev, &dev_attr_name);
+-	sysfs_remove_group(&dev->kobj, &adt7x10_group);
+ }
+ EXPORT_SYMBOL_GPL(adt7x10_remove);
  
- static int adt7x10_suspend(struct device *dev)
-diff --git a/drivers/hwmon/adt7x10.h b/drivers/hwmon/adt7x10.h
-index a1ae682eb32e..bde674e24ca0 100644
---- a/drivers/hwmon/adt7x10.h
-+++ b/drivers/hwmon/adt7x10.h
-@@ -26,7 +26,6 @@ struct adt7x10_ops {
- 
- int adt7x10_probe(struct device *dev, const char *name, int irq,
- 	const struct adt7x10_ops *ops);
--void adt7x10_remove(struct device *dev, int irq);
- 
- #ifdef CONFIG_PM_SLEEP
- extern const struct dev_pm_ops adt7x10_dev_pm_ops;
 -- 
 2.34.1
 
