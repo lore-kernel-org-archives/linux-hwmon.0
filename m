@@ -2,110 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59643C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 21:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4307C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Dec 2021 21:58:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234732AbhLUVrE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Dec 2021 16:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S237170AbhLUV6o (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Dec 2021 16:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhLUVrE (ORCPT
+        with ESMTP id S230251AbhLUV6o (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:47:04 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6083BC061574;
-        Tue, 21 Dec 2021 13:47:04 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id y13-20020a4a624d000000b002daae38b0b5so76248oog.9;
-        Tue, 21 Dec 2021 13:47:04 -0800 (PST)
+        Tue, 21 Dec 2021 16:58:44 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD901C061574;
+        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z5so668148edd.3;
+        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gbEZC/qpFquSdFLdQ91cxIA6QX3OHSXfVk58kDJD3mY=;
-        b=aaVVXfpeTL3rBx1G0uXZui/hhVysI/7PRQh2jZuDwl5Y3SzyPh2UqBSUVsLjzbCIvs
-         G20AWoQOqmV5hnH2foOtu1+fXPWGXcr8mqdpQWmiqEuHnp7i83zdy4uT6NMzfZvbuQNR
-         qepWKzizKY3APu8VJ4deyOiVPWt7B7dVtaFseX+TvT5qFi4pBB6e2TDqjQLpGlJk77za
-         cgUWdAom9SasDj5BtJMu0E0xnzWFYMJSB8hr4Kartp/1/ugH4GVsMWcpfvzy0HNqziVD
-         jyUmYxJJVW1Z+ROpuNJR4K5cvpNYFgEXiFRxVOFDRRlZx21IGr89JkHbBmVPqcgxnfYF
-         xJhA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hhfHR54p1zqpF7NId8kxEyF9NRPoraDa4HvuJbnAmbk=;
+        b=bd6HqV3UMrb9sepofinLvIt3WmGL1zLxlImvORLg3MLxjF4VdIicCOoe5H/r4czjT0
+         YWmTS5mwJZVhzpbfnzy6G4OiVXAdz1epYplAv8OMgDhWa0Uc647rrCFCeHTLJ1YhqXzw
+         ehCWuxNzAzF1w2mNqmfwp2e8EtTfD1qrG2K02KRLKgmxz5HuE3/ABqxVpoayIMmV4Dqe
+         HClwT9OQ+Hm42rODUtzgAeulz59Ej8oTAmL/tVRX/MtNzilGq0/XJt2hiOm+Es+XlOJg
+         HrMAytl6vbn85HrMJHsoxPKRL8W15ONi/sanX3gytv0z2fM506ACQw6DwVLxjvODq1He
+         9q5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gbEZC/qpFquSdFLdQ91cxIA6QX3OHSXfVk58kDJD3mY=;
-        b=YFiYzqcu5c6Hb0G9ovHlRIMzd5/SQVlNbUY65qWwKkBJrB0D3FKhsGWF9Li6+fjtft
-         uuV17CwdyST6IqJLs8ejXp1/Iog5yar4GeT36tDhnRRsBTNF9McXbSfJ6p2WyA0xcUGo
-         Mee09Fiul5LQmY8Um5Ar89yoL399O9WmW/SvPDg5q/FHovVBef2fcsb/cqYtWxbEZ5yk
-         S89BOrACscy0K9EpyZ9/Or4s1wWqWPtySap9EE2II3IZZwb2hUcWUy5nVKN+rEh0Racl
-         wD326Ak2LHcHfKNxfSak1hCEybEgfhQYYIPwPrXKdWYyut6WFcWMGQGXlE4a18jmPqWB
-         5Pbw==
-X-Gm-Message-State: AOAM533/YQVmgk86fabMVJ/JlBkYyodNVJPXWrpDh2nw7RFNGQt8o2+Z
-        8uCB6fWrWo4tNNXulYsmqYf8R+0Whd0=
-X-Google-Smtp-Source: ABdhPJwB74Y+t1CrzMZTffpgC80Ikyj38XIipOQyqdXoj4KURdv5CPm+Rz9zNLQN0YH1djZ0WQWL4Q==
-X-Received: by 2002:a4a:a88d:: with SMTP id q13mr175832oom.5.1640123223533;
-        Tue, 21 Dec 2021 13:47:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m6sm38545ooe.24.2021.12.21.13.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 13:47:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        bh=hhfHR54p1zqpF7NId8kxEyF9NRPoraDa4HvuJbnAmbk=;
+        b=w9/PcNpvb6l64aZg5e9pNXOU6JEF6oXLU+JyK51vdPcc7vwnpov/1xzgSAvo0S5D+j
+         bLa3HkX83HyX7DF+HKBlb+HsofUFrscnk7Qiya8smOijGidQCWWP4BeVg8enAp5Gbk4/
+         LMN1982B3USQnYHsTL4ySgZEsjkUTjh+CSYKyK3xz0mbbiZgxfBw1qZR6WREXu7npMFz
+         gWEJriOW1eLAAAQsYkEHic8CDFUGof2sjz7BAGWBa/L9twPCCxV6h57hHb+yuPtKRZXE
+         RnHVSGCSO80BBTZTLDWgeZF9ShDl/xL8Z4mR36rHHhMaJ7+mZM4k8P6ZMeDMh7F6v0O0
+         mypA==
+X-Gm-Message-State: AOAM531Nr7s+6Z75lhlb719r0C6eA7x58YuX4BN/dtTBu0VHyFb1ReXl
+        bkwK1stIsOCQaEVnXqk3XIA=
+X-Google-Smtp-Source: ABdhPJyeBIXVTijWSWWT3bHWlHikQP2eP6zx9tIYJhbsevUfsN85qkZw4V8E1PP8plVaIhlzCL7RwA==
+X-Received: by 2002:a05:6402:184c:: with SMTP id v12mr254883edy.154.1640123922503;
+        Tue, 21 Dec 2021 13:58:42 -0800 (PST)
+Received: from demon-pc.localdomain ([188.24.42.157])
+        by smtp.gmail.com with ESMTPSA id nc29sm41640ejc.3.2021.12.21.13.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 13:58:42 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211221210438.2637430-1-demonsingur@gmail.com>
- <20211221210438.2637430-2-demonsingur@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/8] hwmon: (adt7410) Pass name to core driver
-Message-ID: <d7b4192f-da61-d0a5-ac72-db36e1f5708a@roeck-us.net>
-Date:   Tue, 21 Dec 2021 13:47:01 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: [PATCH v3 0/7] Refactor ADT7X10
+Date:   Tue, 21 Dec 2021 23:58:34 +0200
+Message-Id: <20211221215841.2641417-1-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211221210438.2637430-2-demonsingur@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/21/21 1:04 PM, Cosmin Tanislav wrote:
-> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> 
-> It will later be used to register hwmon device using
-> hwmon_device_register_with_info.
-> 
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> ---
->   drivers/hwmon/adt7410.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
-> index 973db057427b..ef4b5af865e9 100644
-> --- a/drivers/hwmon/adt7410.c
-> +++ b/drivers/hwmon/adt7410.c
-> @@ -45,7 +45,7 @@ static int adt7410_i2c_probe(struct i2c_client *client)
->   			I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
->   		return -ENODEV;
->   
-> -	return adt7x10_probe(&client->dev, NULL, client->irq, &adt7410_i2c_ops);
-> +	return adt7x10_probe(&client->dev, client->name, client->irq, &adt7410_i2c_ops);
->   }
->   
->   static int adt7410_i2c_remove(struct i2c_client *client)
-> 
+V1 -> V2:
+ * add device managed action for restoring config
+ * merge multiple small related patches into a single patch
+   that converts the driver to use devm_hwmon_device_register_with_info
+ * switch to devm_request_threaded_irq after switching to
+   devm_hwmon_device_register_with_info to make sure that it is impossible
+   for the interrupt handler to access the freed hwmon device
+ * drop core driver remove callback
 
-Did you test this patch on its own ? It should result in a duplicate
-attribute error from sysfs if an i2c device tries to register.
+V2 -> V3:
+ * merge patch that passes name from i2c driver into the
+   devm_hwmon_device_register_with_info patch
 
-Again, that is unacceptable. The patches have to apply on their own
-and must not cause any problems.
+Cosmin Tanislav (7):
+  hwmon: (adt7x10) Store bus_dev in private data
+  hwmon: (adt7x10) Add device managed action for restoring config
+  hwmon: (adt7x10) Use devm_hwmon_device_register_with_info
+  hwmon: (adt7x10) Use devm_request_threaded_irq
+  hwmon: (adt7x10) Remove empty driver removal callback
+  hwmon: (adt7x10) Pass hwinfo dev to irq handler
+  hwmon: (adt7x10) Use hwmon_notify_event
 
-On a side note, it seems that your e-mails do not have a To: address.
+ drivers/hwmon/adt7310.c |   7 -
+ drivers/hwmon/adt7410.c |   9 +-
+ drivers/hwmon/adt7x10.c | 281 ++++++++++++++++++++--------------------
+ drivers/hwmon/adt7x10.h |   1 -
+ 4 files changed, 144 insertions(+), 154 deletions(-)
 
-To:     unlisted-recipients:; (no To-header on input)
+-- 
+2.34.1
 
-This results in an error when trying to reply to all.
-
-Guenter
