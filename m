@@ -2,128 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86EF3C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Dec 2021 06:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32CE6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Dec 2021 06:35:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239263AbhLVGOH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Dec 2021 01:14:07 -0500
-Received: from out1.migadu.com ([91.121.223.63]:36310 "EHLO out1.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239241AbhLVGOG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:14:06 -0500
-Subject: Re: [PATCH 1/5] hwmon: (corsair-cpro) Use devres function
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640153645;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=onT/D9t8fWQePQSwMqVBaTMnqS5PItTpnPuANW2w+Gk=;
-        b=eBhK31wIqKP4DsaZuL1jgk6/RYWcmj85YGP6FgmY3qd8YvACXiZWAmmW9XOMwp1jFoFxgb
-        O45phsAPCYTBuURh633FpBuplLcwJFhMC73WBPiwLlu8f8IFwbQJmcUNVQ9cRC1nXly6qV
-        zfwDdemv9dPByB4hXuHNymHP/mSB0B0=
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-References: <20211222020114.3524736-1-liu.yun@linux.dev>
- <b2797eb5-e87a-918a-2232-8be943bcac69@roeck-us.net>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jackie Liu <liu.yun@linux.dev>
-Message-ID: <6ad836b9-519c-0095-879f-20393e8d2e17@linux.dev>
-Date:   Wed, 22 Dec 2021 14:13:56 +0800
+        id S239189AbhLVGfd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Dec 2021 01:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233215AbhLVGfd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 22 Dec 2021 01:35:33 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C447C061574;
+        Tue, 21 Dec 2021 22:35:33 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id o20so4452743eds.10;
+        Tue, 21 Dec 2021 22:35:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xEapk50ifuXBbTxNfc6D2mliKNWBBXhcN1w8lp7MAfQ=;
+        b=TDGRKkhGj4YL1dapChD6fSZRGEpPyZjt7hbEslO+MX9Ewmpk7A8ER7jwBRzX0Rw07R
+         bL0DiHOfJi3EyBLk4NAUbPquXZl5B7Eox0ZngerQaiw5r11uW2Aai1u1LKStJG+8ROAv
+         OPeEd7tNcjKFeh3tJtL4eMcnCgsfv9Fnsa8n2iV9HHnG1pWP25za1SS3mANPeWufYwht
+         f1ml51USgYuUjx0J0xYkaxmZvbsmJPoAxRuPPxbE8Lvi9VUcbn1AVxGhG+KP3haGgTs/
+         /WjGMwjjs8l89F61oGg+BGYLZ4aY1OOInNVkePmtGhCLGEy5enRy3Xm8yGBAGtxEnUuK
+         XYuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xEapk50ifuXBbTxNfc6D2mliKNWBBXhcN1w8lp7MAfQ=;
+        b=2OV2OrzvL1ckxg5XGnoL0oxhTOnj0XFhHgc3X0Hw2Wh/2zoONAzG08iAEq4zllqkQj
+         p3gkX7cQxfyyFqRAPzg7R+7DjrSGNQDxr/e9rQ2WL5d56LfyQ4bLxn4id/xv0qE6J7bl
+         awjXdheazRBwcqBt0bopfW3cPislpirCxJEoCzI/zrV+YKAtjymfe2aGHrmcrc6ugTyz
+         K/e0hYbGS3A0Muf6X9XAgOmmduTws8UhJbNJz+bXokTqpznip0/a336LfBPS4SUOJD1y
+         ojFBNDb/dXEFIO7l/yoJGWly+ujos5Zvw2EUFMYGoFKlF4LtjdxKl7iXoa42Jz9qV5kZ
+         tzcg==
+X-Gm-Message-State: AOAM532+jUVMrglNgImjkeFtX/cwoz0kn0OSccNGW1bdneftAZJFjg5a
+        CrY01ajvdyTLU6nl7r/8WJs=
+X-Google-Smtp-Source: ABdhPJxdPpMJcaer3j8CVjCJbiT1oZiZjxN3vL5MlCbDl+Lm7Cs0kK7/PJizy0g9ydoQDZLff1hHZQ==
+X-Received: by 2002:a17:906:cb11:: with SMTP id lk17mr1341890ejb.654.1640154931502;
+        Tue, 21 Dec 2021 22:35:31 -0800 (PST)
+Received: from [192.168.0.182] ([188.24.42.157])
+        by smtp.gmail.com with ESMTPSA id sh11sm347661ejc.17.2021.12.21.22.35.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 22:35:31 -0800 (PST)
+Message-ID: <03bf1d99-5411-daca-bc96-319e30b5e836@gmail.com>
+Date:   Wed, 22 Dec 2021 08:35:32 +0200
 MIME-Version: 1.0
-In-Reply-To: <b2797eb5-e87a-918a-2232-8be943bcac69@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 3/7] hwmon: (adt7x10) Use
+ devm_hwmon_device_register_with_info
 Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211221215841.2641417-1-demonsingur@gmail.com>
+ <20211221215841.2641417-4-demonsingur@gmail.com>
+ <ff8b73b0-0c28-e1f3-d254-ea03fb594ffc@roeck-us.net>
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+In-Reply-To: <ff8b73b0-0c28-e1f3-d254-ea03fb594ffc@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
 
-在 2021/12/22 上午10:58, Guenter Roeck 写道:
-> On 12/21/21 6:01 PM, Jackie Liu wrote:
->> From: Jackie Liu <liuyun01@kylinos.cn>
+On 12/22/21 05:08, Guenter Roeck wrote:
+> On 12/21/21 1:58 PM, Cosmin Tanislav wrote:
+>> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 >>
->> Use devm_hwmon_device_register_with_info() and remove hwmon_dev
->> from ccp_device struct as it is not needed anymore.
->>
->> Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
->> ---
->>   drivers/hwmon/corsair-cpro.c | 15 ++++++---------
->>   1 file changed, 6 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
->> index fa6aa4fc8b52..f476367ba6cf 100644
->> --- a/drivers/hwmon/corsair-cpro.c
->> +++ b/drivers/hwmon/corsair-cpro.c
->> @@ -76,7 +76,6 @@
->>   struct ccp_device {
->>       struct hid_device *hdev;
->> -    struct device *hwmon_dev;
->>       struct completion wait_input_report;
->>       struct mutex mutex; /* whenever buffer is used, lock before 
->> send_usb_cmd */
->>       u8 *buffer;
->> @@ -486,6 +485,7 @@ static int get_temp_cnct(struct ccp_device *ccp)
->>   static int ccp_probe(struct hid_device *hdev, const struct 
->> hid_device_id *id)
->>   {
->>       struct ccp_device *ccp;
->> +    struct device *hwmon_dev;
->>       int ret;
->>       ccp = devm_kzalloc(&hdev->dev, sizeof(*ccp), GFP_KERNEL);
->> @@ -523,12 +523,12 @@ static int ccp_probe(struct hid_device *hdev, 
->> const struct hid_device_id *id)
->>       ret = get_fan_cnct(ccp);
->>       if (ret)
->>           goto out_hw_close;
->> -    ccp->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, 
->> "corsaircpro",
->> -                             ccp, &ccp_chip_info, 0);
->> -    if (IS_ERR(ccp->hwmon_dev)) {
->> -        ret = PTR_ERR(ccp->hwmon_dev);
->> +    hwmon_dev =
->> +        devm_hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
->> +                             ccp, &ccp_chip_info, 0);
->> +    ret = PTR_ERR_OR_ZERO(hwmon_dev);
->> +    if (ret)
->>           goto out_hw_close;
->> -    }
->>       return 0;
->> @@ -541,9 +541,6 @@ static int ccp_probe(struct hid_device *hdev, 
->> const struct hid_device_id *id)
->>   static void ccp_remove(struct hid_device *hdev)
->>   {
->> -    struct ccp_device *ccp = hid_get_drvdata(hdev);
->> -
->> -    hwmon_device_unregister(ccp->hwmon_dev);
->>       hid_hw_close(hdev);
->>       hid_hw_stop(hdev);
+> [ ... ]
 > 
-> The point is that the above two functions need to be called _after_ the 
-> hwmon device
-> was removed. This patch changes the order and removes the hwmon device 
-> after the hid
-> functions have been removed.
+>> +
+>> +static int adt7x10_read(struct device *dev, enum hwmon_sensor_types 
+>> type,
+>> +            u32 attr, int channel, long *val)
+>> +{
+>> +    struct adt7x10_data *data = dev_get_drvdata(dev);
+>> +
+>> +    switch (attr) {
+>> +    case hwmon_temp_input:
+>> +        return adt7x10_temp_read(data, 0, val);
+>> +    case hwmon_temp_max:
+>> +        return adt7x10_temp_read(data, 1, val);
+>> +    case hwmon_temp_min:
+>> +        return adt7x10_temp_read(data, 2, val);
+>> +    case hwmon_temp_crit:
+>> +        return adt7x10_temp_read(data, 3, val);
 > 
-> If you think this is valid you'll need to explain in detail why removal 
-> order
-> does not matter. Otherwise this patch deserves a NACK.
+> Ok, so you want to keep using the internal "index" to indicate the
+> array position in the register cache. I _did_ specifically ask
+> to use defines for index values in this case. You did not explain
+> why you ignored this. So now you'll have to explain 1) why you
+> ignored my request and 2) why you want to keep the code as is.
+> 
+> And, _please_, add a To: recipient to your patches. I am getting
+> tired having to handle the fallout.
 > 
 > Guenter
-> 
-> 
 
-Hi Guenter
 
-After adjusting the order here, there will be a small window for sysfs 
-to continue to provide services. However, because hid has been
-disconnected, the read and write interfaces will not get the actual data 
-and returned by timeout. IMO this is not a big issue, but it's okay to 
-not change it.
+First of all, maybe you should compare the time these patches were
+sent to the time that your reply that "I ignored" was sent.
+I sent the patches before you "specifically asked me to use defines for
+index values in this case".
 
---
-BR, Jackie Liu
+Second of all, this specific place is a 1:1 conversion from the original 
+code. If I change to using defines here, I'll have to change to using
+defines everywhere else in the code, which doesn't seem to be the scope
+of this exact patch. Of course it looks bad, but it looked equally bad
+before. I can introduce more following patches that fix some obvious
+non-functional problems with the driver.
+
+Third of all, why are you so tense? You're making both of our lives
+harder. I understand being an upstream maintainer is hard work, but
+everyone's job is hard work. It's not like I wanted to work on
+refactoring ADT7x10, I just had to so I can later introduce a
+patch that implements debugfs reg access...
