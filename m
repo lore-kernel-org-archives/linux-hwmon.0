@@ -2,230 +2,150 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91BA4C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Dec 2021 15:28:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8077C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Dec 2021 16:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237709AbhLVP2z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Dec 2021 10:28:55 -0500
-Received: from mga18.intel.com ([134.134.136.126]:48269 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233787AbhLVP2z (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Dec 2021 10:28:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640186934; x=1671722934;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hdwBDHbnG0X7Q/XxhTeDn1rDz+265uxI3p5aThMKqiw=;
-  b=BHM+FeuLqE0FnxKlEcPlVqluzFNYLn1hNpxRlg/Ed0rKWhcPHEc8tIrE
-   BUQGeBzDXcvxeKmhbY8KjwrlIDNFPDIOheuDJCJyKWhdAIUny+F9PZq17
-   PrytJerY6Lz0DfssOQEEH1hLwXcSq0iXgxPM6N2w2NnME9LOOGZ4kdPQG
-   r6FfPgZY2LF9gH/wHXfQ98hFFnrlgRDblgg2GfyhjCQqLrb42wZYwAPbb
-   zJ0E+wPbzi6eVygG8cdKnNTjPHopYipbDv6NC6SuM8+sURmPowXHPFhfh
-   XHKKPk4VgiuOww0iz2EIGQoVg424pWIU9fLm0G9XRaRgUfwjLlJRA5Dzf
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227491275"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="227491275"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 07:28:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="549511067"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Dec 2021 07:28:53 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n03Xw-0000hl-JM; Wed, 22 Dec 2021 15:28:52 +0000
-Date:   Wed, 22 Dec 2021 23:27:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 01b619f3c6399948f118d5f2886a44e517d1606b
-Message-ID: <61c343fc.vqw+AW0Y7W4brq/I%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S234070AbhLVQKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Dec 2021 11:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232944AbhLVQKQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:10:16 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AE5C061574
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Dec 2021 08:10:15 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id c18-20020a4a3812000000b002da81004c1cso955912ooa.13
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Dec 2021 08:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IUUTeh2RSBiIFGixr1bPxwGb4HfWS17YoTPxIJfkvVw=;
+        b=Kx4fcniLDeWRvk4t+U+/HWlxu0GvomBB7+g1EU9Z9fqprOcKTfX6fSSDthg/MCKqIy
+         UucAV1Sy8x6PLfEi7g3aDJxtM1oyYE2FQRh8nV7NBB/rWcAeQGHS5nFUd4+JWMKoDImv
+         JUTqVy4MRvgv+th0NFODR2EVPBsFKhAKSDCmmpesE7WcnNTb3s1mvcBPGsjfRpQt1hBB
+         t4yDfvmkJjBU+oa51qMUXSQYo0WevVaxqwqAGM+DorhyBGTBQKmU3P+SFK5VJOSDC+TT
+         R7RIetrAumpg0q0qq41lGx7oGYH4KDxoV5UK9fGRRzkXTtnvJjbXW31eFfjRTqyEJOUE
+         ZauA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IUUTeh2RSBiIFGixr1bPxwGb4HfWS17YoTPxIJfkvVw=;
+        b=UgsjA7WC+kxa2OWxzHtU8v0/dEkoS+Tk+GvNDm1Gajt3lmgs88ytbUvTDoIino4B5r
+         RCnKwJPd2CkfZ71aevszja2faa3+m56TqE1zvJ0iX+ZTRltTALOGdwNAzitShQJ37zds
+         Mf7I4ZPWz4NKVnapSnZLssiNoo7Nyq02MkDm3xSGsHx4DjnQDRv4K7Dvh2S6ztOkdhyc
+         C1lGsCEG2NfBZeZI4McphFEdfChfPV1Vodr/Z3Kv3SkyaKn7FE7lhGh8QEJyGxyvESua
+         briVIKj+9wvTjYG5FW1l7SdtN4BMYd2gTBkACAmmT2DhWN8HS4QhR0RYOjmHuQJMRtFL
+         UeVQ==
+X-Gm-Message-State: AOAM533UNVvbHSpimJfNcr1sFSMSUKo7ecK2NSrUnlVYJj5srf2SrRYy
+        lCY5Nq33D7MNRU4dJOcYXetCuFHRKgA=
+X-Google-Smtp-Source: ABdhPJyfxJS2Yagj3QgCV+I7PeW0fOjf3Owg90D+ehoMcT54snRNFMPUICi0EONZD00/8zG+igPbpw==
+X-Received: by 2002:a4a:d0af:: with SMTP id t15mr2252465oor.12.1640189414378;
+        Wed, 22 Dec 2021 08:10:14 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b17sm419311ots.66.2021.12.22.08.10.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 08:10:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 1/5] hwmon: (corsair-cpro) Use devres function
+To:     Jackie Liu <liu.yun@linux.dev>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+References: <20211222020114.3524736-1-liu.yun@linux.dev>
+ <b2797eb5-e87a-918a-2232-8be943bcac69@roeck-us.net>
+ <6ad836b9-519c-0095-879f-20393e8d2e17@linux.dev>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <d51754d4-4fdb-ac22-2e48-e68651de0a05@roeck-us.net>
+Date:   Wed, 22 Dec 2021 08:10:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <6ad836b9-519c-0095-879f-20393e8d2e17@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 01b619f3c6399948f118d5f2886a44e517d1606b  hwmon: (dell-smm) Pack the whole smm_regs struct
+On 12/21/21 10:13 PM, Jackie Liu wrote:
+> 
+> 
+> 在 2021/12/22 上午10:58, Guenter Roeck 写道:
+>> On 12/21/21 6:01 PM, Jackie Liu wrote:
+>>> From: Jackie Liu <liuyun01@kylinos.cn>
+>>>
+>>> Use devm_hwmon_device_register_with_info() and remove hwmon_dev
+>>> from ccp_device struct as it is not needed anymore.
+>>>
+>>> Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+>>> ---
+>>>   drivers/hwmon/corsair-cpro.c | 15 ++++++---------
+>>>   1 file changed, 6 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+>>> index fa6aa4fc8b52..f476367ba6cf 100644
+>>> --- a/drivers/hwmon/corsair-cpro.c
+>>> +++ b/drivers/hwmon/corsair-cpro.c
+>>> @@ -76,7 +76,6 @@
+>>>   struct ccp_device {
+>>>       struct hid_device *hdev;
+>>> -    struct device *hwmon_dev;
+>>>       struct completion wait_input_report;
+>>>       struct mutex mutex; /* whenever buffer is used, lock before send_usb_cmd */
+>>>       u8 *buffer;
+>>> @@ -486,6 +485,7 @@ static int get_temp_cnct(struct ccp_device *ccp)
+>>>   static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>>>   {
+>>>       struct ccp_device *ccp;
+>>> +    struct device *hwmon_dev;
+>>>       int ret;
+>>>       ccp = devm_kzalloc(&hdev->dev, sizeof(*ccp), GFP_KERNEL);
+>>> @@ -523,12 +523,12 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>>>       ret = get_fan_cnct(ccp);
+>>>       if (ret)
+>>>           goto out_hw_close;
+>>> -    ccp->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
+>>> -                             ccp, &ccp_chip_info, 0);
+>>> -    if (IS_ERR(ccp->hwmon_dev)) {
+>>> -        ret = PTR_ERR(ccp->hwmon_dev);
+>>> +    hwmon_dev =
+>>> +        devm_hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
+>>> +                             ccp, &ccp_chip_info, 0);
+>>> +    ret = PTR_ERR_OR_ZERO(hwmon_dev);
+>>> +    if (ret)
+>>>           goto out_hw_close;
+>>> -    }
+>>>       return 0;
+>>> @@ -541,9 +541,6 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>>>   static void ccp_remove(struct hid_device *hdev)
+>>>   {
+>>> -    struct ccp_device *ccp = hid_get_drvdata(hdev);
+>>> -
+>>> -    hwmon_device_unregister(ccp->hwmon_dev);
+>>>       hid_hw_close(hdev);
+>>>       hid_hw_stop(hdev);
+>>
+>> The point is that the above two functions need to be called _after_ the hwmon device
+>> was removed. This patch changes the order and removes the hwmon device after the hid
+>> functions have been removed.
+>>
+>> If you think this is valid you'll need to explain in detail why removal order
+>> does not matter. Otherwise this patch deserves a NACK.
+>>
+>> Guenter
+>>
+>>
+> 
+> Hi Guenter
+> 
+> After adjusting the order here, there will be a small window for sysfs to continue to provide services. However, because hid has been
+> disconnected, the read and write interfaces will not get the actual data and returned by timeout. IMO this is not a big issue, but it's okay to not change it.
+> 
 
-elapsed time: 1165m
+That is not how kernel development works. I just hope you don't introduce such "not a big issue"
+problems in other areas of the kernel.
 
-configs tested: 159
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211222
-arm                       aspeed_g4_defconfig
-m68k                         apollo_defconfig
-powerpc                     pseries_defconfig
-parisc                              defconfig
-arm                         shannon_defconfig
-openrisc                  or1klitex_defconfig
-mips                            gpr_defconfig
-ia64                            zx1_defconfig
-arm                          ixp4xx_defconfig
-microblaze                          defconfig
-powerpc                     tqm8541_defconfig
-sh                          r7780mp_defconfig
-sh                         apsh4a3a_defconfig
-arm                           stm32_defconfig
-arm                             pxa_defconfig
-sh                          rsk7203_defconfig
-m68k                       m5249evb_defconfig
-arm64                            alldefconfig
-powerpc                      katmai_defconfig
-arm                  colibri_pxa300_defconfig
-sh                          landisk_defconfig
-xtensa                  audio_kc705_defconfig
-sh                            shmin_defconfig
-mips                        vocore2_defconfig
-arm                         cm_x300_defconfig
-powerpc                       ebony_defconfig
-arm                            pleb_defconfig
-xtensa                          iss_defconfig
-mips                           ip32_defconfig
-m68k                             allyesconfig
-mips                          rm200_defconfig
-mips                       bmips_be_defconfig
-mips                        bcm47xx_defconfig
-sh                             shx3_defconfig
-arm                           sunxi_defconfig
-mips                           ip22_defconfig
-powerpc                      chrp32_defconfig
-arm                            qcom_defconfig
-powerpc                      mgcoge_defconfig
-sh                            titan_defconfig
-powerpc                       ppc64_defconfig
-xtensa                           alldefconfig
-sh                               j2_defconfig
-arm                          exynos_defconfig
-ia64                      gensparse_defconfig
-arm                    vt8500_v6_v7_defconfig
-xtensa                generic_kc705_defconfig
-arm                         socfpga_defconfig
-arm                            dove_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                    amigaone_defconfig
-m68k                          amiga_defconfig
-powerpc                     tqm8555_defconfig
-alpha                               defconfig
-openrisc                    or1ksim_defconfig
-powerpc                       maple_defconfig
-powerpc                    mvme5100_defconfig
-sh                   sh7770_generic_defconfig
-mips                      loongson3_defconfig
-ia64                         bigsur_defconfig
-m68k                          multi_defconfig
-arm                  randconfig-c002-20211222
-arm                  randconfig-c002-20211220
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-csky                                defconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a001-20211222
-x86_64               randconfig-a003-20211222
-x86_64               randconfig-a005-20211222
-x86_64               randconfig-a006-20211222
-x86_64               randconfig-a004-20211222
-x86_64               randconfig-a002-20211222
-i386                 randconfig-a006-20211222
-i386                 randconfig-a004-20211222
-i386                 randconfig-a002-20211222
-i386                 randconfig-a003-20211222
-i386                 randconfig-a001-20211222
-i386                 randconfig-a002-20211220
-i386                 randconfig-a003-20211220
-i386                 randconfig-a001-20211220
-i386                 randconfig-a005-20211220
-i386                 randconfig-a006-20211220
-i386                 randconfig-a004-20211220
-i386                 randconfig-a005-20211222
-x86_64               randconfig-a001-20211220
-x86_64               randconfig-a003-20211220
-x86_64               randconfig-a005-20211220
-x86_64               randconfig-a006-20211220
-x86_64               randconfig-a004-20211220
-x86_64               randconfig-a002-20211220
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-i386                 randconfig-a006-20211221
-i386                 randconfig-a004-20211221
-i386                 randconfig-a002-20211221
-i386                 randconfig-a003-20211221
-i386                 randconfig-a005-20211221
-i386                 randconfig-a001-20211221
-i386                 randconfig-a012-20211222
-i386                 randconfig-a011-20211222
-i386                 randconfig-a014-20211222
-i386                 randconfig-a016-20211222
-i386                 randconfig-a015-20211222
-i386                 randconfig-a013-20211222
-hexagon              randconfig-r041-20211222
-hexagon              randconfig-r045-20211222
-riscv                randconfig-r042-20211222
-s390                 randconfig-r044-20211222
-hexagon              randconfig-r041-20211220
-hexagon              randconfig-r045-20211220
-riscv                randconfig-r042-20211220
-s390                 randconfig-r044-20211220
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Guenter
