@@ -2,67 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8077C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Dec 2021 16:10:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77D7BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Dec 2021 17:07:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbhLVQKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Dec 2021 11:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S1344204AbhLVRHu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Dec 2021 12:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbhLVQKQ (ORCPT
+        with ESMTP id S230314AbhLVRHu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:10:16 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AE5C061574
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Dec 2021 08:10:15 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id c18-20020a4a3812000000b002da81004c1cso955912ooa.13
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Dec 2021 08:10:15 -0800 (PST)
+        Wed, 22 Dec 2021 12:07:50 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E17C061574;
+        Wed, 22 Dec 2021 09:07:49 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so1020179oof.3;
+        Wed, 22 Dec 2021 09:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IUUTeh2RSBiIFGixr1bPxwGb4HfWS17YoTPxIJfkvVw=;
-        b=Kx4fcniLDeWRvk4t+U+/HWlxu0GvomBB7+g1EU9Z9fqprOcKTfX6fSSDthg/MCKqIy
-         UucAV1Sy8x6PLfEi7g3aDJxtM1oyYE2FQRh8nV7NBB/rWcAeQGHS5nFUd4+JWMKoDImv
-         JUTqVy4MRvgv+th0NFODR2EVPBsFKhAKSDCmmpesE7WcnNTb3s1mvcBPGsjfRpQt1hBB
-         t4yDfvmkJjBU+oa51qMUXSQYo0WevVaxqwqAGM+DorhyBGTBQKmU3P+SFK5VJOSDC+TT
-         R7RIetrAumpg0q0qq41lGx7oGYH4KDxoV5UK9fGRRzkXTtnvJjbXW31eFfjRTqyEJOUE
-         ZauA==
+        bh=VOxC90hitMyTuXvblMg9yAHe4TtcUlIgp6x0D9OBaGI=;
+        b=ATOLoT/3SZPbvSAsD4ZN/H6utIrJvC89DPfkccE2uaB+35npNE+NdFElVbAJbemzNk
+         phSzpgLy9LcNMiSz8eMB4OXByGIOSI6Ch7oKOluZIT4Kl/A5w2s4XZYBdfOERD2nwM4T
+         lGebXhQYyNhiQxDr/Tut/jW1KgAdlDxjnikXkkQydrBe73lJQH6ZY7HtUbSyp0jXCs0e
+         q4ghKmkCwyypRfgZLo4A6TAISbJsxyEDYtL80Yux5LBAIEx0swfAJ4tPgt1sU5RJVjHH
+         PE9ldC15gyUIvUS0xPnXnEKCw3Vnpsb6uMVk66ExJ/PF0sssX4BpIZyCNtkv4bBQJ0yM
+         LG+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=IUUTeh2RSBiIFGixr1bPxwGb4HfWS17YoTPxIJfkvVw=;
-        b=UgsjA7WC+kxa2OWxzHtU8v0/dEkoS+Tk+GvNDm1Gajt3lmgs88ytbUvTDoIino4B5r
-         RCnKwJPd2CkfZ71aevszja2faa3+m56TqE1zvJ0iX+ZTRltTALOGdwNAzitShQJ37zds
-         Mf7I4ZPWz4NKVnapSnZLssiNoo7Nyq02MkDm3xSGsHx4DjnQDRv4K7Dvh2S6ztOkdhyc
-         C1lGsCEG2NfBZeZI4McphFEdfChfPV1Vodr/Z3Kv3SkyaKn7FE7lhGh8QEJyGxyvESua
-         briVIKj+9wvTjYG5FW1l7SdtN4BMYd2gTBkACAmmT2DhWN8HS4QhR0RYOjmHuQJMRtFL
-         UeVQ==
-X-Gm-Message-State: AOAM533UNVvbHSpimJfNcr1sFSMSUKo7ecK2NSrUnlVYJj5srf2SrRYy
-        lCY5Nq33D7MNRU4dJOcYXetCuFHRKgA=
-X-Google-Smtp-Source: ABdhPJyfxJS2Yagj3QgCV+I7PeW0fOjf3Owg90D+ehoMcT54snRNFMPUICi0EONZD00/8zG+igPbpw==
-X-Received: by 2002:a4a:d0af:: with SMTP id t15mr2252465oor.12.1640189414378;
-        Wed, 22 Dec 2021 08:10:14 -0800 (PST)
+        bh=VOxC90hitMyTuXvblMg9yAHe4TtcUlIgp6x0D9OBaGI=;
+        b=WGOdGVynxs2Uedx+0u9TbVadQSclSB0yLC+dP4/F0AQ48+6h0TGJAUZ3AvnsRf+b19
+         FCOU2SHghL2hcPTbsDgY6gAl5u/zFLS7EIHOFFHFROGFpx63x6yQCmWxjA0r1ayanApi
+         WpUXXYVNJhUrdvuUYymkmiUF58dPVEE2oWw/ggMdBsT5ETRw3NH9C0urF47LKlPKmF+Y
+         QSSQMICxHcaOd3KZJlGD5t8RMTmGPITE6XU7DiHNugaVBsMPG1N23bWn+nhawtS2zYwD
+         K8jVPUiEVpPg7zU8Wk3h5uRXiIwyARw2it2YZFQVlp1DhuncSB+F1lrq4IrRyNGLpxHf
+         EO4g==
+X-Gm-Message-State: AOAM531HaW7aKlIXMxZ9RWTf69xU9tFbHHs6aaOHvm08Pq22ru23fNGg
+        Y3yFm0+O8bw3P6kzIXQKy7fqpdh9p30=
+X-Google-Smtp-Source: ABdhPJz3het8XefkHRa6MkEqx+gBbNhog3ICW4VxjtI0CHQeu7ghLPL5QX6Eht9ce9e2HgRraIMC3g==
+X-Received: by 2002:a4a:c695:: with SMTP id m21mr2433724ooq.58.1640192868513;
+        Wed, 22 Dec 2021 09:07:48 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b17sm419311ots.66.2021.12.22.08.10.12
+        by smtp.gmail.com with ESMTPSA id v10sm466385oor.33.2021.12.22.09.07.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 08:10:13 -0800 (PST)
+        Wed, 22 Dec 2021 09:07:47 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/5] hwmon: (corsair-cpro) Use devres function
-To:     Jackie Liu <liu.yun@linux.dev>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-References: <20211222020114.3524736-1-liu.yun@linux.dev>
- <b2797eb5-e87a-918a-2232-8be943bcac69@roeck-us.net>
- <6ad836b9-519c-0095-879f-20393e8d2e17@linux.dev>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211221215841.2641417-1-demonsingur@gmail.com>
+ <20211221215841.2641417-4-demonsingur@gmail.com>
+ <ff8b73b0-0c28-e1f3-d254-ea03fb594ffc@roeck-us.net>
+ <03bf1d99-5411-daca-bc96-319e30b5e836@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d51754d4-4fdb-ac22-2e48-e68651de0a05@roeck-us.net>
-Date:   Wed, 22 Dec 2021 08:10:11 -0800
+Subject: Re: [PATCH v3 3/7] hwmon: (adt7x10) Use
+ devm_hwmon_device_register_with_info
+Message-ID: <792f0265-4c4c-ce71-9a6a-a20d3ee61f41@roeck-us.net>
+Date:   Wed, 22 Dec 2021 09:07:45 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <6ad836b9-519c-0095-879f-20393e8d2e17@linux.dev>
+In-Reply-To: <03bf1d99-5411-daca-bc96-319e30b5e836@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,82 +73,84 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/21/21 10:13 PM, Jackie Liu wrote:
+On 12/21/21 10:35 PM, Cosmin Tanislav wrote:
 > 
 > 
-> 在 2021/12/22 上午10:58, Guenter Roeck 写道:
->> On 12/21/21 6:01 PM, Jackie Liu wrote:
->>> From: Jackie Liu <liuyun01@kylinos.cn>
+> On 12/22/21 05:08, Guenter Roeck wrote:
+>> On 12/21/21 1:58 PM, Cosmin Tanislav wrote:
+>>> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 >>>
->>> Use devm_hwmon_device_register_with_info() and remove hwmon_dev
->>> from ccp_device struct as it is not needed anymore.
->>>
->>> Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
->>> ---
->>>   drivers/hwmon/corsair-cpro.c | 15 ++++++---------
->>>   1 file changed, 6 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
->>> index fa6aa4fc8b52..f476367ba6cf 100644
->>> --- a/drivers/hwmon/corsair-cpro.c
->>> +++ b/drivers/hwmon/corsair-cpro.c
->>> @@ -76,7 +76,6 @@
->>>   struct ccp_device {
->>>       struct hid_device *hdev;
->>> -    struct device *hwmon_dev;
->>>       struct completion wait_input_report;
->>>       struct mutex mutex; /* whenever buffer is used, lock before send_usb_cmd */
->>>       u8 *buffer;
->>> @@ -486,6 +485,7 @@ static int get_temp_cnct(struct ccp_device *ccp)
->>>   static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->>>   {
->>>       struct ccp_device *ccp;
->>> +    struct device *hwmon_dev;
->>>       int ret;
->>>       ccp = devm_kzalloc(&hdev->dev, sizeof(*ccp), GFP_KERNEL);
->>> @@ -523,12 +523,12 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->>>       ret = get_fan_cnct(ccp);
->>>       if (ret)
->>>           goto out_hw_close;
->>> -    ccp->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
->>> -                             ccp, &ccp_chip_info, 0);
->>> -    if (IS_ERR(ccp->hwmon_dev)) {
->>> -        ret = PTR_ERR(ccp->hwmon_dev);
->>> +    hwmon_dev =
->>> +        devm_hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
->>> +                             ccp, &ccp_chip_info, 0);
->>> +    ret = PTR_ERR_OR_ZERO(hwmon_dev);
->>> +    if (ret)
->>>           goto out_hw_close;
->>> -    }
->>>       return 0;
->>> @@ -541,9 +541,6 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->>>   static void ccp_remove(struct hid_device *hdev)
->>>   {
->>> -    struct ccp_device *ccp = hid_get_drvdata(hdev);
->>> -
->>> -    hwmon_device_unregister(ccp->hwmon_dev);
->>>       hid_hw_close(hdev);
->>>       hid_hw_stop(hdev);
+>> [ ... ]
 >>
->> The point is that the above two functions need to be called _after_ the hwmon device
->> was removed. This patch changes the order and removes the hwmon device after the hid
->> functions have been removed.
+>>> +
+>>> +static int adt7x10_read(struct device *dev, enum hwmon_sensor_types type,
+>>> +            u32 attr, int channel, long *val)
+>>> +{
+>>> +    struct adt7x10_data *data = dev_get_drvdata(dev);
+>>> +
+>>> +    switch (attr) {
+>>> +    case hwmon_temp_input:
+>>> +        return adt7x10_temp_read(data, 0, val);
+>>> +    case hwmon_temp_max:
+>>> +        return adt7x10_temp_read(data, 1, val);
+>>> +    case hwmon_temp_min:
+>>> +        return adt7x10_temp_read(data, 2, val);
+>>> +    case hwmon_temp_crit:
+>>> +        return adt7x10_temp_read(data, 3, val);
 >>
->> If you think this is valid you'll need to explain in detail why removal order
->> does not matter. Otherwise this patch deserves a NACK.
+>> Ok, so you want to keep using the internal "index" to indicate the
+>> array position in the register cache. I _did_ specifically ask
+>> to use defines for index values in this case. You did not explain
+>> why you ignored this. So now you'll have to explain 1) why you
+>> ignored my request and 2) why you want to keep the code as is.
+>>
+>> And, _please_, add a To: recipient to your patches. I am getting
+>> tired having to handle the fallout.
 >>
 >> Guenter
->>
->>
 > 
-> Hi Guenter
 > 
-> After adjusting the order here, there will be a small window for sysfs to continue to provide services. However, because hid has been
-> disconnected, the read and write interfaces will not get the actual data and returned by timeout. IMO this is not a big issue, but it's okay to not change it.
+> First of all, maybe you should compare the time these patches were
+> sent to the time that your reply that "I ignored" was sent.
+> I sent the patches before you "specifically asked me to use defines for
+> index values in this case".
 > 
 
-That is not how kernel development works. I just hope you don't introduce such "not a big issue"
-problems in other areas of the kernel.
+Maybe it would be beneficial to wait a few minutes to give me time
+to review all patches of a series before sending a new series.
+
+> Second of all, this specific place is a 1:1 conversion from the original code. If I change to using defines here, I'll have to change to using
+> defines everywhere else in the code, which doesn't seem to be the scope
+> of this exact patch. Of course it looks bad, but it looked equally bad
+
+As suggested, you could have dropped the use of 'index' entirely.
+Its use was a side effect of the old hwmon API, where extra fields
+in sensor attributes were used to separate attributes. Using the
+with_info API, that is no longer necessary. You chose to keep that
+part of the code, which is fine, but then I am also asking for
+changing the hard coded constants to make it easier to understand
+the code going forward. This is especially necessary because "index"
+now has two meanings: First, it is the sensor channel, as passed
+from the hwmon subsystem and, second, it is the index into
+the register cache. Those different use cases now need to be
+clearly separated, and the best way to do that is to use an enum
+or define to indicate the index into the register cache.
+
+... and I specifically asked for that because I got confused
+about it while reviewing the code. People looking at the code
+at a later time should not have that problem.
+
+> before. I can introduce more following patches that fix some obvious
+> non-functional problems with the driver.
+> 
+> Third of all, why are you so tense? You're making both of our lives
+> harder. I understand being an upstream maintainer is hard work, but
+> everyone's job is hard work. It's not like I wanted to work on
+> refactoring ADT7x10, I just had to so I can later introduce a
+> patch that implements debugfs reg access...
+
+I tend to get more tense if people give me extra work, and do so
+repeatedly (like sending follow-up patch series tagged as v1 and
+with no change log). I am human, after all, Sorry for that.
 
 Guenter
