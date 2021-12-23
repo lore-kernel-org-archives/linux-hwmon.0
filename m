@@ -2,53 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD6BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Dec 2021 07:56:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B650C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Dec 2021 09:19:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239189AbhLWHz7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Dec 2021 02:55:59 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:56444 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhLWHz7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Dec 2021 02:55:59 -0500
-X-Greylist: delayed 478 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:55:59 EST
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id 6F9C982BFB; Thu, 23 Dec 2021 02:45:52 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1640245681; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
-        h=Date:From:To:Subject:From;
-        b=JPFIPIrwHlpQsYtKlfqXPKo2tn4C9waZ8RE9CpaCilYCiBFv1iHrlnEnJPbw0nEqH
-         giKjxAJYbWamgqgTFsAOABNBc1NyuzM/mw36WXZHXMYfT6uN4JAK9f7xw2qD/I97ef
-         ojDZ+BRLWr/ihoeAHlVdMbER5BVL/f2trADQcZSBW4z638J1mLjuIdVBFjwxu896fI
-         Bd8fRFdhglM/wJETQfqOVTdf5EMMEkF/o6TU4KEA64Lo5wDm0JD9hgMNSs5FgJqS/0
-         M8EdGX950A/gq1Vb8/wp9OHEkqpUWP5/dR46igAN+/iR7zaDvYEB+4iH1jKeJvWPFU
-         vW1dPg4Bhsbfw==
-Received: by mail.betterbiz.pl for <linux-hwmon@vger.kernel.org>; Thu, 23 Dec 2021 07:45:46 GMT
-Message-ID: <20211223024500-0.1.f.1027.0.ul727fmhsc@betterbiz.pl>
-Date:   Thu, 23 Dec 2021 07:45:46 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+        id S1347384AbhLWJTv convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Dec 2021 04:19:51 -0500
+Received: from aposti.net ([89.234.176.197]:33056 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239245AbhLWJTv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 23 Dec 2021 04:19:51 -0500
+Date:   Thu, 23 Dec 2021 09:19:43 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Introduce common properties
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <VW9K4R.K71G6V70Q9T81@crapouillou.net>
+In-Reply-To: <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
+References: <20211221175029.144906-1-paul@crapouillou.net>
+        <20211221175029.144906-2-paul@crapouillou.net>
+        <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi Rob,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Le mer., déc. 22 2021 at 15:36:23 -0400, Rob Herring <robh@kernel.org> 
+a écrit :
+> On Tue, Dec 21, 2021 at 05:50:28PM +0000, Paul Cercueil wrote:
+>>  Introduce a file for common properties of hwmon sensors.
+>> 
+>>  As of now it contains only the "label" property, which can contain a
+>>  descriptive label that allows to uniquely identify a device within 
+>> the
+>>  system.
+> 
+> I don't think we need this. What we need is a global (in dtschema)
+> type definition and then any users just add 'label: true'.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Well, users would also need to set an actual label, otherwise this 
+defeats the point :)
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Cheers,
+-Paul
+
+> 
+>> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   .../devicetree/bindings/hwmon/common.yaml     | 31 
+>> +++++++++++++++++++
+>>   1 file changed, 31 insertions(+)
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/hwmon/common.yaml
+>> 
+>>  diff --git a/Documentation/devicetree/bindings/hwmon/common.yaml 
+>> b/Documentation/devicetree/bindings/hwmon/common.yaml
+>>  new file mode 100644
+>>  index 000000000000..997f74127d8c
+>>  --- /dev/null
+>>  +++ b/Documentation/devicetree/bindings/hwmon/common.yaml
+>>  @@ -0,0 +1,31 @@
+>>  +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>  +%YAML 1.2
+>>  +---
+>>  +$id: http://devicetree.org/schemas/hwmon/common.yaml#
+>>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>  +
+>>  +title: Common properties for hwmon sensors
+>>  +
+>>  +maintainers:
+>>  +  - Jean Delvare <jdelvare@suse.com>
+>>  +  - Guenter Roeck <linux@roeck-us.net>
+>>  +
+>>  +description: |
+>>  +  This document defines device tree properties common to several 
+>> hwmon
+>>  +  sensors. It doesn't constitue a device tree binding 
+>> specification by itself but
+>>  +  is meant to be referenced by device tree bindings.
+>>  +
+>>  +  When referenced from sensor tree bindings the properties defined 
+>> in this
+>>  +  document are defined as follows. The sensor tree bindings are 
+>> responsible for
+>>  +  defining whether each property is required or optional.
+>>  +
+>>  +properties:
+>>  +  label:
+>>  +    $ref: /schemas/types.yaml#/definitions/string
+>>  +    description: >
+>>  +      Descriptive label that allows to uniquely identify a device 
+>> within
+>>  +      the system.
+>>  +
+>>  +additionalProperties: true
+>>  +
+>>  +...
+>>  --
+>>  2.34.1
+>> 
+>> 
 
 
-Pozdrawiam,
-Jakub Daroch
