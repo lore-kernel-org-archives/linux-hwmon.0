@@ -2,114 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A45C8C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Dec 2021 19:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD6BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Dec 2021 07:56:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345252AbhLVTg1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Dec 2021 14:36:27 -0500
-Received: from mail-qk1-f179.google.com ([209.85.222.179]:43917 "EHLO
-        mail-qk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbhLVTg0 (ORCPT
+        id S239189AbhLWHz7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Dec 2021 02:55:59 -0500
+Received: from mail.BETTERBIZ.PL ([45.86.209.138]:56444 "EHLO
+        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbhLWHz7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:36:26 -0500
-Received: by mail-qk1-f179.google.com with SMTP id f138so3332665qke.10;
-        Wed, 22 Dec 2021 11:36:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DQXkbqnZiEcUh+/jcIs4LSNWY6G1vGofSkBZyjGU8cQ=;
-        b=R7zWbvk82wDCaUtKlcZGIARJVV6KhxDWi5AglA5393WLRbmHwpiWKMnbpM+OM3YfR9
-         BaNZURHf2TyYhjRPB3BvZpcoBoQUJn3xl5dFe78g+4ggCLDLR6BH1wWPDeT13R+qlpAI
-         q5ya7fzKDRQD+8YaDlrh8eDbhbgvwUzyFh+HfXe+L9Yj0lv+13oNiYGVuvUyaihRtu10
-         q8n3U7MBuE/tS1KXlzuwvNd6JF7kZbC8+tGGg/7Xzg55C0UtZYzzvKQyqvrtgB2fqtZg
-         JT38gcGdU47ZyCB5KrVdHFtUq66JuOdfvKmS/ppv+/PXdHlEUYmtI4yqKM5vVRA8r/IJ
-         RArw==
-X-Gm-Message-State: AOAM533IfhnLgKbzF60qQuj2fgRErd/P5P34NR5oP0sy//tzt8XkvMtf
-        rAjI44QZI7cRG6QUPXw18iGQZWtFh7Kj
-X-Google-Smtp-Source: ABdhPJweKvH4XP+FIgEnwNQb2TWPZgo9az0S6H2t7eFK6avipIRvJ+Y3o6DS8ZLkH1cDVPiRc2/IbQ==
-X-Received: by 2002:a37:a305:: with SMTP id m5mr2075895qke.86.1640201785488;
-        Wed, 22 Dec 2021 11:36:25 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id r187sm2375814qke.11.2021.12.22.11.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 11:36:25 -0800 (PST)
-Received: (nullmailer pid 2574361 invoked by uid 1000);
-        Wed, 22 Dec 2021 19:36:23 -0000
-Date:   Wed, 22 Dec 2021 15:36:23 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Introduce common properties
-Message-ID: <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
-References: <20211221175029.144906-1-paul@crapouillou.net>
- <20211221175029.144906-2-paul@crapouillou.net>
+        Thu, 23 Dec 2021 02:55:59 -0500
+X-Greylist: delayed 478 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:55:59 EST
+Received: by mail.betterbiz.pl (Postfix, from userid 1001)
+        id 6F9C982BFB; Thu, 23 Dec 2021 02:45:52 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
+        t=1640245681; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=JPFIPIrwHlpQsYtKlfqXPKo2tn4C9waZ8RE9CpaCilYCiBFv1iHrlnEnJPbw0nEqH
+         giKjxAJYbWamgqgTFsAOABNBc1NyuzM/mw36WXZHXMYfT6uN4JAK9f7xw2qD/I97ef
+         ojDZ+BRLWr/ihoeAHlVdMbER5BVL/f2trADQcZSBW4z638J1mLjuIdVBFjwxu896fI
+         Bd8fRFdhglM/wJETQfqOVTdf5EMMEkF/o6TU4KEA64Lo5wDm0JD9hgMNSs5FgJqS/0
+         M8EdGX950A/gq1Vb8/wp9OHEkqpUWP5/dR46igAN+/iR7zaDvYEB+4iH1jKeJvWPFU
+         vW1dPg4Bhsbfw==
+Received: by mail.betterbiz.pl for <linux-hwmon@vger.kernel.org>; Thu, 23 Dec 2021 07:45:46 GMT
+Message-ID: <20211223024500-0.1.f.1027.0.ul727fmhsc@betterbiz.pl>
+Date:   Thu, 23 Dec 2021 07:45:46 GMT
+From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.betterbiz.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221175029.144906-2-paul@crapouillou.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 05:50:28PM +0000, Paul Cercueil wrote:
-> Introduce a file for common properties of hwmon sensors.
-> 
-> As of now it contains only the "label" property, which can contain a
-> descriptive label that allows to uniquely identify a device within the
-> system.
+Dzie=C5=84 dobry,
 
-I don't think we need this. What we need is a global (in dtschema) 
-type definition and then any users just add 'label: true'.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  .../devicetree/bindings/hwmon/common.yaml     | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/common.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/common.yaml b/Documentation/devicetree/bindings/hwmon/common.yaml
-> new file mode 100644
-> index 000000000000..997f74127d8c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/common.yaml
-> @@ -0,0 +1,31 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common properties for hwmon sensors
-> +
-> +maintainers:
-> +  - Jean Delvare <jdelvare@suse.com>
-> +  - Guenter Roeck <linux@roeck-us.net>
-> +
-> +description: |
-> +  This document defines device tree properties common to several hwmon
-> +  sensors. It doesn't constitue a device tree binding specification by itself but
-> +  is meant to be referenced by device tree bindings.
-> +
-> +  When referenced from sensor tree bindings the properties defined in this
-> +  document are defined as follows. The sensor tree bindings are responsible for
-> +  defining whether each property is required or optional.
-> +
-> +properties:
-> +  label:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: >
-> +      Descriptive label that allows to uniquely identify a device within
-> +      the system.
-> +
-> +additionalProperties: true
-> +
-> +...
-> -- 
-> 2.34.1
-> 
-> 
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Jakub Daroch
