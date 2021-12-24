@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B0B5C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Dec 2021 08:32:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EDB4C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Dec 2021 13:19:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351985AbhLXIcy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Dec 2021 03:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343611AbhLXIcx (ORCPT
+        id S239247AbhLXNTr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Dec 2021 08:19:47 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40826 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230463AbhLXNTr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Dec 2021 03:32:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E67C061401;
-        Fri, 24 Dec 2021 00:32:53 -0800 (PST)
+        Fri, 24 Dec 2021 08:19:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 698B1B82234;
-        Fri, 24 Dec 2021 08:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7584DC36AE5;
-        Fri, 24 Dec 2021 08:32:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640334770;
-        bh=oAGJa1eQZdR4k8gaHp+oWjXb51Y31FZ01er7yJKkMOI=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B242862043;
+        Fri, 24 Dec 2021 13:19:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF53C36AE5;
+        Fri, 24 Dec 2021 13:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640351985;
+        bh=RRC0/259fcqHbTn1tWwd3RXhY57VSROcl0lc6qKKWdY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eUv9EiLyLp7rAXeV2DY3PM6Ci3kQf/LPxlARr3ea+c4lU8gY7hDvWmUxS0p6/3XWm
-         q4w4vwFGH6Rk/InS30d/o3V5XGw7C0s4P7lCU8xHnsO65KgGJFTpUrCUndyg6YFy/1
-         lmHAOe6plivc/xHjQWNEqw7aYRNmmztia9FBkrXU=
-Date:   Fri, 24 Dec 2021 09:32:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        b=EEJ8KMwBUMwKQVwvE8D34Otw7cDN5W5yRIX4/F/mJXKzKsHAlFf2b/ujW+9dkkq9m
+         nvwlgHv29Gs1iv1gzJHkweZW3DN3N6qgfMmviBXMCEDKw0Dq52WZHYiyAKffwqoBb8
+         qG0kyPcnBpujUGB+4SC5+LJvN+/+bNqtuV16aaWYfkZzf/b/i0VVr51Dpi5ZGQt9Jy
+         oIshsV73npxECqQXUFaT1DRB46FwXtTWvK6Sn4e1yKxWcEn4imNsszFopXtZFNJrm2
+         pkjABeo5XycsVYISnnjbIQZK+DajbUAnL+DPZUJ7/YOTykmQJW+MQNSMFJfVlRRg46
+         wwoSQXY6bt+ng==
+Date:   Fri, 24 Dec 2021 13:19:43 +0000
+From:   Mark Brown <broonie@kernel.org>
 To:     Quan Nguyen <quan@os.amperecomputing.com>
 Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         Jean Delvare <jdelvare@suse.com>,
@@ -40,7 +40,8 @@ Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, Mark Brown <broonie@kernel.org>,
+        openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Derek Kiernan <derek.kiernan@xilinx.com>,
         Dragan Cvetic <dragan.cvetic@xilinx.com>,
@@ -49,42 +50,48 @@ Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v6 6/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Message-ID: <YcWFrCjWSG65KQgb@kroah.com>
+Subject: Re: [PATCH v6 5/9] regmap: Introduces regmap lock helpers
+Message-ID: <YcXI73GKNdx/gvUb@sirena.org.uk>
 References: <20211224041352.29405-1-quan@os.amperecomputing.com>
- <20211224041352.29405-7-quan@os.amperecomputing.com>
+ <20211224041352.29405-6-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mlX9XU0JAkRu6gCR"
 Content-Disposition: inline
-In-Reply-To: <20211224041352.29405-7-quan@os.amperecomputing.com>
+In-Reply-To: <20211224041352.29405-6-quan@os.amperecomputing.com>
+X-Cookie: I brake for chezlogs!
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 11:13:49AM +0700, Quan Nguyen wrote:
-> This commit adds Ampere's SMpro error monitor driver for monitoring
-> and reporting RAS-related errors as reported by SMpro co-processor
-> found on Ampere's Altra processor family.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> Change in v6:
->   + First introduced in v6 [Quan]
-> 
->  drivers/mfd/smpro-mfd.c     |   1 +
->  drivers/misc/Kconfig        |   7 +
->  drivers/misc/Makefile       |   1 +
->  drivers/misc/smpro-errmon.c | 571 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 580 insertions(+)
->  create mode 100644 drivers/misc/smpro-errmon.c
 
-You need Documentation/ABI/ updates when you add sysfs files.  Please do
-that for your next version of this patch.
+--mlX9XU0JAkRu6gCR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Also remember that sysfs is only "one value per file", this driver seems
-to violate that in huge ways and is not ok.
+On Fri, Dec 24, 2021 at 11:13:48AM +0700, Quan Nguyen wrote:
+> This commit introduces regmap_acquire/release_lock() functions and makes
+> them available for drivers that need atomic access of regmap registers
 
-thanks,
+You've not explained what something would need this for and how
+it's expected to work - we don't provide unlocked access to the
+regmap to client drivers so I don't see how one could safely use
+this.  It's unclear to me what this would mean or why it's not
+better implemented in the client driver.
 
-greg k-h
+--mlX9XU0JAkRu6gCR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHFyO4ACgkQJNaLcl1U
+h9DaeAf+LrT+e8nVJuT7C0PxLOgU/FymUBhAX0UdyOknH3zdIG0c7DcvOXau1O1x
+Kld90ZKSql9M73A3NpWy7ZnamQwLSd+7ik25B9lSL6lY7yRK7Or2N5YL0yWWg9Tl
+fJq5v7gTLRLHk5DYQaO7OGXpW5GHKuE4VB7u2aoiWGH1/ovF1odyGVRhbFz6Yn2c
+8PaAz4+ja4FDk77vird8NbSpHWOTFVPJg1hq9Kl1ru/ylihcqcNQOlYdubCxLudc
+LZSmGUv3WYRRq6ruyjGgQblUkYdlakLVTk8lNi5LaJamD2gKBqPOi1Q1NvPGrhZi
+JIMOd8EICA6jR9Hj+s1SIxK4RJNPDQ==
+=Dgc1
+-----END PGP SIGNATURE-----
+
+--mlX9XU0JAkRu6gCR--
