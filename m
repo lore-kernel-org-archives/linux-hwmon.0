@@ -2,121 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4220BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Dec 2021 13:29:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2F6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Dec 2021 16:07:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241845AbhLXN3F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Dec 2021 08:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
+        id S232192AbhLYQH2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Dec 2021 11:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235765AbhLXN3F (ORCPT
+        with ESMTP id S232141AbhLYQH2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Dec 2021 08:29:05 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E366EC061401;
-        Fri, 24 Dec 2021 05:29:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9035CE22C2;
-        Fri, 24 Dec 2021 13:29:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1579AC36AE5;
-        Fri, 24 Dec 2021 13:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640352541;
-        bh=UoajXc+CrR3PRknu7vySK5yIyh1YJBGaJyOtLXOzKGM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VY2cEJRMR/FqszYdH46i/IcbzJjXbzRFxvm67I4wcZogI/x1PCQ4tRx6H6S8F12yR
-         Sw8qpqFmBL8l+x5SG/vchXb75Od27/QRQ8ZsFZM4gTMtDKtNaf98MF0hcHbOhcMgGM
-         EsqYZFB7l4IAFL9K6FmQishn700Z45I9uz1MYR9JH10TOvlQE6FZa/G5RDpU5dtGns
-         6gTZMf9Av5XRrIIylR0k4c+kTJz4uDI6Svzly6SUbamBxyaS7KbSOOdF1lNyK8j8Yc
-         4+Sa0kt+HGL17b7stSuFoR12QfbjwUQS3vgmKE8lVBse4JeikaYsGgRNF+vE5PgnnB
-         s7Z+mI1aLilcg==
-Date:   Fri, 24 Dec 2021 13:28:57 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v6 6/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Message-ID: <YcXLGYWx4gYq/Y+J@sirena.org.uk>
-References: <20211224041352.29405-1-quan@os.amperecomputing.com>
- <20211224041352.29405-7-quan@os.amperecomputing.com>
+        Sat, 25 Dec 2021 11:07:28 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF1C061401;
+        Sat, 25 Dec 2021 08:07:28 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id s73so18191447oie.5;
+        Sat, 25 Dec 2021 08:07:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OWAr+F/sFkIDhJFUa/ld0SbXsdO26UYsk+EaKlbiKfA=;
+        b=GBg0LFKpw5VRsyFNZMK4SrFgzX5teZB3rwK8OJeGKz+xNCJuAgPKCtz5pN2QjKTq2g
+         k2Wxt/OYRVR/6S/KS8RrlfJj0fKCB3QxXZFtk+ndbm7SGIMWXSieu8ojBnAsjcKr4/KI
+         +zGU8H5RSslaYRy8qO17U8hwaf5HVNMQ+VpTkJwSeteEIMwPDzPcWx+zfml79kbyLzbO
+         //vzfpnTrwOfOzHp9sXnjalJG189uvs1X46PYq34BSinoVJvYw+bCUv5sC4fSiQYTTKA
+         FrG544lYI6314TfAyAum/1Jswxu+vgJsxqWgPRHKO2uEiAnJqedC5c74sW2vNyFvBsjG
+         I3BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=OWAr+F/sFkIDhJFUa/ld0SbXsdO26UYsk+EaKlbiKfA=;
+        b=idxHhpH9TIJSXracx4ktQ9MMyMRM0b8MnHZv8eoJyEJRNr12LDzpwyUkgli7lM3Up+
+         SvBbymQi6sTqHDky9vgAcSKLylw1RcdAdc3ozc9k+Vj4gm4Y8cs4ExJc133iBhoB4gl7
+         Q/fTSwJPtgMQclt9vdI3rIDqIP3heO8YlXk7+kkddV+spHggTU6jlAw7H28bBuY63u9W
+         ChCpP+LmpR4ojoJxWcPxziWCy+63w3PRz9H6qDod8rmwZ5JO0r6yYpGuHxilV5OOSa7g
+         5kVS8mV74s2ZhlQBxzDVEsxg6mW42/bHjMX+IT9yjVRu994gBLt4jZualZ63MM0ldawe
+         Vjow==
+X-Gm-Message-State: AOAM533Rew+JNs+zzUronHYQzCewAyD087V/uZA2ES7sGqQUQ9YLPeTJ
+        0Zg/Ce07pic4yFeDZjeF9hTS/HvBRCY=
+X-Google-Smtp-Source: ABdhPJxSluJxEpJF8+ipkK9HmPg9F1/zbF3qYQDjrIkcVC2lnf7iBV+iVnp/JsN+9i0WvRhcabSoGw==
+X-Received: by 2002:aca:1708:: with SMTP id j8mr7737469oii.62.1640448447306;
+        Sat, 25 Dec 2021 08:07:27 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v19sm1979551ott.13.2021.12.25.08.07.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Dec 2021 08:07:26 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.16-rc7
+Date:   Sat, 25 Dec 2021 08:07:24 -0800
+Message-Id: <20211225160724.3120253-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p1TkcOZIYZMx6FNy"
-Content-Disposition: inline
-In-Reply-To: <20211224041352.29405-7-quan@os.amperecomputing.com>
-X-Cookie: I brake for chezlogs!
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Linus,
 
---p1TkcOZIYZMx6FNy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Please pull hwmon fixes for Linux v5.16-rc7 from signed tag:
 
-On Fri, Dec 24, 2021 at 11:13:49AM +0700, Quan Nguyen wrote:
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc7
 
-> +static int read_i2c_block_data(struct i2c_client *client, u16 address, u16 length, u8 *data)
-> +{
-> +	unsigned char outbuf[MAX_READ_BLOCK_LENGTH];
-> +	unsigned char inbuf[2];
-> +	struct i2c_msg msgs[2];
-> +	ssize_t ret;
-> +
-> +	inbuf[0] = (address & 0xff);
-> +	inbuf[1] = length;
-> +
-> +	msgs[0].addr = client->addr;
-> +	msgs[0].flags = client->flags & I2C_M_TEN;
-> +	msgs[0].len = 2;
-> +	msgs[0].buf = inbuf;
-> +
-> +	msgs[1].addr = client->addr;
-> +	msgs[1].flags = (client->flags  & I2C_M_TEN) | I2C_M_RD;
-> +	msgs[1].len = length;
-> +	msgs[1].buf = outbuf;
-> +
-> +	ret = i2c_transfer(client->adapter, msgs, NUM_I2C_MESSAGES);
-> +	if (ret < 0)
+Thanks,
+Guenter
+------
 
-regmap already supports bulk data access so it's not clear why we
-would open code this.  Given that this is a single I2C transfer
-it's also unclear why we'd need to export the regmap lock - a
-single I2C transfer is atomic at the bus level so the regmap lock
-isn't providing any additional concurrency protection.
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
 
---p1TkcOZIYZMx6FNy
-Content-Type: application/pgp-signature; name="signature.asc"
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
 
------BEGIN PGP SIGNATURE-----
+are available in the Git repository at:
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHFyxkACgkQJNaLcl1U
-h9DP9gf/Q0bcZ3lkRyxjxhgET9fowIKusHVDbL3su16XSlv5Rt4Tih9Rf9nu8FBm
-oHmRlAtBCP9ZuA+7I743tz+/H2BeISzoGI8aF3h+MPdh2darno04pVGedC2XR1jn
-9Q9cu4/TZhXOt7pazpkfUCmxHT4kn3tMDZ8u9XSWHpDX9mh80/IHwyZ6NFgMruKF
-RHWAu9RjAeUCOy8tlembNTm+G9EMDKFS2XI44T3/BtW8u3c7WyiMqdr3EICCyHbd
-PjXo5uAjGCljZoVoJ7L0+zUYjzvdQvYuRZ+kQfXEX8MPnE7WyV1MREkMSwl/dqXN
-0M6wsXHhdztUM4b2EtWrp6M0kem1tg==
-=hzut
------END PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.16-rc7
 
---p1TkcOZIYZMx6FNy--
+for you to fetch changes up to cdc5287acad9ede121924a9c9313544b80d15842:
+
+  hwmon: (lm90) Do not report 'busy' status bit as alarm (2021-12-12 16:22:53 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v5.16-rc7
+
+A couple of lm90 driver fixes. None of them are critical,
+but they should nevertheless be fixed.
+
+----------------------------------------------------------------
+Guenter Roeck (5):
+      hwmon: (lm90) Fix usage of CONFIG2 register in detect function
+      hwmon: (lm90) Prevent integer overflow/underflow in hysteresis calculations
+      hwmon: (lm90) Drop critical attribute support for MAX6654
+      hwmom: (lm90) Fix citical alarm status for MAX6680/MAX6681
+      hwmon: (lm90) Do not report 'busy' status bit as alarm
+
+ drivers/hwmon/lm90.c | 106 ++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 62 insertions(+), 44 deletions(-)
