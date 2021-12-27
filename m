@@ -2,44 +2,44 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6838BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Dec 2021 19:07:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD0EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Dec 2021 19:08:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233621AbhL0THr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Dec 2021 14:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
+        id S232762AbhL0TIF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Dec 2021 14:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbhL0TGn (ORCPT
+        with ESMTP id S230471AbhL0THH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Dec 2021 14:06:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE38FC061396;
-        Mon, 27 Dec 2021 11:06:42 -0800 (PST)
+        Mon, 27 Dec 2021 14:07:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCD6C0698C5;
+        Mon, 27 Dec 2021 11:06:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ED5160FB3;
-        Mon, 27 Dec 2021 19:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 345D1C36AEA;
-        Mon, 27 Dec 2021 19:06:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ED3CB81141;
+        Mon, 27 Dec 2021 19:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B0FC36AEA;
+        Mon, 27 Dec 2021 19:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640632001;
-        bh=3/bHUArtfA9kPI8eIXQoRUaDIyjxb4NxuVGOJC8ByD0=;
+        s=k20201202; t=1640632009;
+        bh=xKxYooWvMUUL6Ma3cy88s8Xg2Dv7KBdhu+oV5B8tclg=;
         h=From:To:Cc:Subject:Date:From;
-        b=qiT3vC5/K8n+x2CSA/XaZv7be1lVN3/AKe8e2GopnMJOmCkCpd/KuU8L95elp1x+p
-         U/Z+/livE5vI4sUB2sxO0vMTggEljxDKFL7Q+IkDlRPuykuWLAQen1kM0A2uc/TjDC
-         bGo7B7H11rBIDaxZE2pZPIKrJ7xPVhuUZIHG3sDP7+PFRG0x7Ry7TUGGoAPeo2eiG4
-         fDdwi3hVb2gmpiQTCxFGavPViKHJjcH3gZ9Xqdd/pQ67hjPEn93ZUBLtCs8g2tOBPf
-         dZvhYVtQFtYKJgMAblsP7iphy0HWbi/WUbhNbO0D/mmIVTkWkzf3nlyVO8vqVbUw/c
-         /3dD2FJRMGSeA==
+        b=rEcsL2AJe8Xd/O6nuBXZQE7IiYVnmNLIvLjMAIObshUTHGME8zJhvYySA3jzU1jWJ
+         /IKUREnn0VVE5PdlJ+I4uidNbt0LN/Qc7/McWVX/Ox3Scu+qHOL5pJgqtK9OI4KyOF
+         WTDNySLZrglXzVXXlFM1eojXgI6PzsjIan6a16py6R0VXjq4MK4MzszZmthJb9I4SO
+         0MtEznjgYUGCORO8XRvgl9efwzeigGhR/mEAy4kIYvumdqPKt+Xb46O5uI42mFQJ27
+         YEN+H7bAza4GMoGjMEv3FgjekesInPfuIBOuomGsCNMGfma0QCfZCPMkwV2ls767A+
+         KVc+E4rZ3Yrgg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 1/4] hwmon: (lm90) Do not report 'busy' status bit as alarm
-Date:   Mon, 27 Dec 2021 14:06:26 -0500
-Message-Id: <20211227190629.1043445-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 1/4] hwmon: (lm90) Do not report 'busy' status bit as alarm
+Date:   Mon, 27 Dec 2021 14:06:43 -0500
+Message-Id: <20211227190647.1043514-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-stable: review
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index c187e557678ef..fee0783ef36e6 100644
+index 293d1184976b3..ba659182d77a0 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -197,6 +197,7 @@ enum chips { lm90, adm1032, lm99, lm86, max6657, max6659, adt7461, max6680,
+@@ -196,6 +196,7 @@ enum chips { lm90, adm1032, lm99, lm86, max6657, max6659, adt7461, max6680,
  #define LM90_STATUS_RHIGH	(1 << 4) /* remote high temp limit tripped */
  #define LM90_STATUS_LLOW	(1 << 5) /* local low temp limit tripped */
  #define LM90_STATUS_LHIGH	(1 << 6) /* local high temp limit tripped */
@@ -75,7 +75,7 @@ index c187e557678ef..fee0783ef36e6 100644
  
  #define MAX6696_STATUS2_R2THRM	(1 << 1) /* remote2 THERM limit tripped */
  #define MAX6696_STATUS2_R2OPEN	(1 << 2) /* remote2 is an open circuit */
-@@ -786,7 +787,7 @@ static int lm90_update_device(struct device *dev)
+@@ -692,7 +693,7 @@ static int lm90_update_device(struct device *dev)
  		val = lm90_read_reg(client, LM90_REG_R_STATUS);
  		if (val < 0)
  			return val;
