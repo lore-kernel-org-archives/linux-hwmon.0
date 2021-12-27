@@ -2,47 +2,45 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D49C7C43217
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Dec 2021 19:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6838BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Dec 2021 19:07:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbhL0TH1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Dec 2021 14:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S233621AbhL0THr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Dec 2021 14:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbhL0TGd (ORCPT
+        with ESMTP id S233161AbhL0TGn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Dec 2021 14:06:33 -0500
+        Mon, 27 Dec 2021 14:06:43 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAA2C06137F;
-        Mon, 27 Dec 2021 11:06:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE38FC061396;
+        Mon, 27 Dec 2021 11:06:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D8A161159;
-        Mon, 27 Dec 2021 19:06:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158C4C36AE7;
-        Mon, 27 Dec 2021 19:06:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ED5160FB3;
+        Mon, 27 Dec 2021 19:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 345D1C36AEA;
+        Mon, 27 Dec 2021 19:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640631984;
+        s=k20201202; t=1640632001;
         bh=3/bHUArtfA9kPI8eIXQoRUaDIyjxb4NxuVGOJC8ByD0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MbN4RYfRkZSINs/3oXv6Tkfag47N3zw5GGQqkFDEXdEUcqpVQemF8EKuXo6Osfs/F
-         pKuNLUnEORwzezM+kZDEJcZ/XYmC0HXnDH84vJrG7FdVWBnreHNWCjDM66zJGZ1F1t
-         bbN9oAJON/SiW+nAoy3a65w2RbkLpyA70+rQlgk/9X1Pxf+VZdSrbKJdOHO4nOyn3t
-         dY9hGaGnjjb3lrNueeJibAft+wDPeufxtB+eJHbyB5E+ln39toJ5ruhg+uqHUSbqbi
-         Neu+saSupLypcPY5XrBMOHCcWUC0OSqBw6wRv+WqVobGMyZTOri5nrifBHtZ4G9peC
-         aL0f4h53MBVJA==
+        h=From:To:Cc:Subject:Date:From;
+        b=qiT3vC5/K8n+x2CSA/XaZv7be1lVN3/AKe8e2GopnMJOmCkCpd/KuU8L95elp1x+p
+         U/Z+/livE5vI4sUB2sxO0vMTggEljxDKFL7Q+IkDlRPuykuWLAQen1kM0A2uc/TjDC
+         bGo7B7H11rBIDaxZE2pZPIKrJ7xPVhuUZIHG3sDP7+PFRG0x7Ry7TUGGoAPeo2eiG4
+         fDdwi3hVb2gmpiQTCxFGavPViKHJjcH3gZ9Xqdd/pQ67hjPEn93ZUBLtCs8g2tOBPf
+         dZvhYVtQFtYKJgMAblsP7iphy0HWbi/WUbhNbO0D/mmIVTkWkzf3nlyVO8vqVbUw/c
+         /3dD2FJRMGSeA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 3/6] hwmon: (lm90) Do not report 'busy' status bit as alarm
-Date:   Mon, 27 Dec 2021 14:06:07 -0500
-Message-Id: <20211227190615.1043350-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 1/4] hwmon: (lm90) Do not report 'busy' status bit as alarm
+Date:   Mon, 27 Dec 2021 14:06:26 -0500
+Message-Id: <20211227190629.1043445-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227190615.1043350-1-sashal@kernel.org>
-References: <20211227190615.1043350-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
