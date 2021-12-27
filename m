@@ -2,88 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD0EC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Dec 2021 19:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BE76C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Dec 2021 22:42:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbhL0TIF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Dec 2021 14:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S233878AbhL0WmY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Dec 2021 17:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbhL0THH (ORCPT
+        with ESMTP id S229643AbhL0WmY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Dec 2021 14:07:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCD6C0698C5;
-        Mon, 27 Dec 2021 11:06:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6ED3CB81141;
-        Mon, 27 Dec 2021 19:06:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B0FC36AEA;
-        Mon, 27 Dec 2021 19:06:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640632009;
-        bh=xKxYooWvMUUL6Ma3cy88s8Xg2Dv7KBdhu+oV5B8tclg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rEcsL2AJe8Xd/O6nuBXZQE7IiYVnmNLIvLjMAIObshUTHGME8zJhvYySA3jzU1jWJ
-         /IKUREnn0VVE5PdlJ+I4uidNbt0LN/Qc7/McWVX/Ox3Scu+qHOL5pJgqtK9OI4KyOF
-         WTDNySLZrglXzVXXlFM1eojXgI6PzsjIan6a16py6R0VXjq4MK4MzszZmthJb9I4SO
-         0MtEznjgYUGCORO8XRvgl9efwzeigGhR/mEAy4kIYvumdqPKt+Xb46O5uI42mFQJ27
-         YEN+H7bAza4GMoGjMEv3FgjekesInPfuIBOuomGsCNMGfma0QCfZCPMkwV2ls767A+
-         KVc+E4rZ3Yrgg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 1/4] hwmon: (lm90) Do not report 'busy' status bit as alarm
-Date:   Mon, 27 Dec 2021 14:06:43 -0500
-Message-Id: <20211227190647.1043514-1-sashal@kernel.org>
+        Mon, 27 Dec 2021 17:42:24 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513DC06173E;
+        Mon, 27 Dec 2021 14:42:24 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id l5so32044068edj.13;
+        Mon, 27 Dec 2021 14:42:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OwiD+8MtWY8Pqmar0N4b53PuKkAH1xe83oiwId1E51s=;
+        b=VB9opFMHRwuMUj5ujn4mjXXXF05rjvg+y1luDO9AwLMjyY67cMh8vEDrzK/1BrozK/
+         47JtXqkogW4i7bDay0boNAMamQLFTDMMbuY9kg5CGqMxlHp7Cj3B7qUXTP7U99Io37gM
+         aBuQ/vaJbXgiQf2eISY1717j/AM5bOen8zTBG3Hm5QoSZPQWeSjRENTzLjsK04SibYJS
+         vYZLgpDSVw4GmgE+CUU06prf93G745e/4YmXZl7izYSkzIV+ca+6f6YO7SvgMJur/djZ
+         bVCtQeN8KJyLkTQ9HvYilymLnTBReRTLLheAFKGkNnCYqtLxJXx3OkqvmR7lmGasrKn+
+         /mMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OwiD+8MtWY8Pqmar0N4b53PuKkAH1xe83oiwId1E51s=;
+        b=knkandZCzcL26XRwZ1QZXKPnDM7yGPTBOwSzu7UxKVMxqhmLd7VhntefpslIoE+xot
+         QHgm5Z6WjwA83Tn1BMs9y5UJTkhSg9oxnV0IvtkNXPh74DP6O0sn28ClPD2DvDnEaqe6
+         uAIqLFKB/T0v/hDg7zOdzMSgEJmPviL8wO15gn1PVLqCbn30NZIdbi785pyQLWRqdVHk
+         KVeBZeXQiFU39rMkQNJjwWfKzNCVnW9B6VlxnWHWvNcpcYl2Ux+FfD1o7oX0gI9nrmgw
+         V7pBWR1h3YzYMXaNAHwqdRPS1YYZbSaMcWyCE0jfnAyZQbqqbSxSMhRbtXc/J8cDJnRW
+         n/0g==
+X-Gm-Message-State: AOAM533j1uY+hp/MdXoVBoNgHsq8EKVFUxG1QCVQKeWvO3gQNCXLekif
+        YuNc2naGnP0nfztFhiOEyXnUAigsGQY=
+X-Google-Smtp-Source: ABdhPJy/f/q7FmQyh3vK6dX3eqx8W+3Xuw54NOU+L5HR3BRMqA5EpTvci7qF1luuP5+axrVY47mEIg==
+X-Received: by 2002:a17:906:9753:: with SMTP id o19mr15201632ejy.243.1640644942688;
+        Mon, 27 Dec 2021 14:42:22 -0800 (PST)
+Received: from demon-pc.localdomain ([79.112.215.103])
+        by smtp.gmail.com with ESMTPSA id sb13sm5566806ejc.26.2021.12.27.14.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 14:42:22 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] Add hwmon debugfs register access
+Date:   Tue, 28 Dec 2021 00:42:00 +0200
+Message-Id: <20211227224201.508331-1-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+V1 -> V2:
+ * remove error messages that are reported to userspace
+ * remove IS_ERR checks that are already done by called functions
+ * unconditionally define hwmon_device_{un,}register_debugfs
+ * unconditionally define struct hwmon_device members
+ * match hwmon_debugfs_read_reg parameter indentation with
+   hwmon_debugfs_write_reg parameter indentation
+ * inline hdev in reg_access calls
+ * remove useless initialization of val inside hwmon_debugfs_read_reg
+ * move checks outside of hwmon_device_register_debugfs
+ * debugfs_reg_access -> reg_access
+ * lookup device debugfs dentry rather than storing it in
+   struct hwmon_device
 
-[ Upstream commit cdc5287acad9ede121924a9c9313544b80d15842 ]
+Cosmin Tanislav (1):
+  hwmon: Add debugfs register access
 
-Bit 7 of the status register indicates that the chip is busy
-doing a conversion. It does not indicate an alarm status.
-Stop reporting it as alarm status bit.
+ Documentation/hwmon/hwmon-kernel-api.rst |  9 +++
+ drivers/hwmon/hwmon.c                    | 99 ++++++++++++++++++++++++
+ include/linux/hwmon.h                    | 12 +++
+ 3 files changed, 120 insertions(+)
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/lm90.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 293d1184976b3..ba659182d77a0 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -196,6 +196,7 @@ enum chips { lm90, adm1032, lm99, lm86, max6657, max6659, adt7461, max6680,
- #define LM90_STATUS_RHIGH	(1 << 4) /* remote high temp limit tripped */
- #define LM90_STATUS_LLOW	(1 << 5) /* local low temp limit tripped */
- #define LM90_STATUS_LHIGH	(1 << 6) /* local high temp limit tripped */
-+#define LM90_STATUS_BUSY	(1 << 7) /* conversion is ongoing */
- 
- #define MAX6696_STATUS2_R2THRM	(1 << 1) /* remote2 THERM limit tripped */
- #define MAX6696_STATUS2_R2OPEN	(1 << 2) /* remote2 is an open circuit */
-@@ -692,7 +693,7 @@ static int lm90_update_device(struct device *dev)
- 		val = lm90_read_reg(client, LM90_REG_R_STATUS);
- 		if (val < 0)
- 			return val;
--		data->alarms = val;	/* lower 8 bit of alarms */
-+		data->alarms = val & ~LM90_STATUS_BUSY;
- 
- 		if (data->kind == max6696) {
- 			val = lm90_select_remote_channel(client, data, 1);
 -- 
 2.34.1
 
