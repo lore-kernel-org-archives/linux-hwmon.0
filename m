@@ -2,95 +2,164 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EECB8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Dec 2021 01:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6787FC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Dec 2021 02:10:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbhL1BtH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Dec 2021 20:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbhL1BtH (ORCPT
+        id S234552AbhL1CKJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Dec 2021 21:10:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43708 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232504AbhL1CKJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Dec 2021 20:49:07 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDB1C06173E
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Dec 2021 17:49:06 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bu9so38218169lfb.7
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Dec 2021 17:49:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IA1S8WhCnv6XXwdP7S0rQgr61umt+tbq/VcbdQJNAAo=;
-        b=LwUysz9Lx6pEWfacLdPTJKjTGpqBGxT1XT6SeqpTjvRzrpCmRLpSy00VYBHvlmtuBS
-         c5G9+KTs2ie+PhzwUUKJkZOZc98/jb9jh5Z1/YZiJhflmkdT72pwwaCV90ChtJBt7H/L
-         dh4Mi8U7t5YgLdzjCg/QSKZyDI+64S7EOvfYL+RU5f/rTnWT1sgUwCAKk8K6vh6qai6A
-         m5dU3B4Mh4gXBJ+VhLoDVaz5Wr+b9QWnsyds6cEz1uhqBLsyoCYr82OWbTHigoUe8XLH
-         xUkcanU0HQgxfCokqS8Ba6qA2ulpFxy6e91baKa74HMcvXtJDbQVZ5nesG+l6pysEzDX
-         u4pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IA1S8WhCnv6XXwdP7S0rQgr61umt+tbq/VcbdQJNAAo=;
-        b=y6Nq2t3tQLYIw0ewyHBnOr6UnxCE7g3ehoB327UhQnTpfqMDr5qS2o1Yg0cs/PgZHx
-         16IU64gVEmZIiSG4ErDw7l/J9n72/YUtkPjGPSXkntgrtbbzzoG3MdgdSSwsAfnaGeg0
-         IyNW4hwLwgh3TA+AzyVrT2p5HRPgfVhxhhfldYiEjLtoC48Y/li/jeXX5pZQmkVOsE1j
-         TAVfnGkytK6HdcPBpBj+vzr7r7fhq0pPAwLyhPgs7yGNdCISQx1QA6AZ1I/48oGu7tNQ
-         1xxsuPVMUeXBOBWMfY4moCKwzDc7muVzghyXAwW3qKwoBAwM7qfv0z0gMMnlk36llRGs
-         YZsA==
-X-Gm-Message-State: AOAM530ta3e1DBu6lSWq3NMUEI1+KT88Yuox40WcZNOXeQR3TUBdIvsD
-        SvdtNySmM8/BVrKFhS3KcR+liIRCIW7bgg==
-X-Google-Smtp-Source: ABdhPJyR+uaQwe2dmMgb6uX8XjJS3CEJ2a3kyTMxlrpOhwhPo0ZRK/lmZsdVGdZ3GOnfjxDTZJJIRA==
-X-Received: by 2002:a05:6512:39cf:: with SMTP id k15mr14377111lfu.664.1640656144672;
-        Mon, 27 Dec 2021 17:49:04 -0800 (PST)
-Received: from trx40.home.arpa ([2a03:1ac0:5cff:b78d:39e7:5dcb:5b3a:ff32])
-        by smtp.gmail.com with ESMTPSA id s29sm1785710lfc.227.2021.12.27.17.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 17:49:04 -0800 (PST)
-From:   Aleksandr Mezin <mezin.alexander@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Mon, 27 Dec 2021 21:10:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B799B8117D;
+        Tue, 28 Dec 2021 02:10:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19A8C36AEA;
+        Tue, 28 Dec 2021 02:09:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640657404;
+        bh=SWYw07zmaaDNu+bU6UjWMUGttSEKl48ssAwYr917Irk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AP7PTZtlYcp1DDFFD9oOox44rlGILxnZhjrWGoppO9nx889cG994Anev93Fi8avnE
+         QKDjPgXQd+0j5ryyJUZRF2fBwkLwO80XrnSF/7Fx+x50yneeRCMv+6NTewDTm+M3mY
+         UmjlUI3lKpBa+eY+azArRNs2im3Ff4KiJ7Zi2yf5dhhdWeFi5sankCfKs3hH/NkcWY
+         C3nDae4xyYfSY866Hl7iueZkbXg7sQjQFFHeioueEr+2zR+wkgXwGDiPuaIoio9xml
+         rwSFGRLZ2Ry45efsPcHYEzY5Wj/FdpgdsOlVeG8/L54LBpew0o0F/pJgWb5CCAbMPX
+         5d9alQgd1Ngqw==
+Date:   Tue, 28 Dec 2021 03:09:46 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Jean Delvare <jdelvare@suse.com>,
-        Aleksandr Mezin <mezin.alexander@gmail.com>
-Subject: [PATCH v2] hwmon: (nzxt-smart2) Fix "unused function" warning
-Date:   Tue, 28 Dec 2021 07:48:13 +0600
-Message-Id: <20211228014813.832491-1-mezin.alexander@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <20211228030946.65932d2e@coco.lan>
+In-Reply-To: <20211227164317.4146918-2-schnelle@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        <20211227164317.4146918-2-schnelle@linux.ibm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix warning when building with CONFIG_PM=n (and CONFIG_WERROR=y):
+Em Mon, 27 Dec 2021 17:42:46 +0100
+Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
 
-drivers/hwmon/nzxt-smart2.c:707:12: error: ‘nzxt_smart2_hid_reset_resume’
-defined but not used [-Werror=unused-function]
-  707 | static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Introduce a new LEGACY_PCI Kconfig option which gates support for legacy
+> PCI devices including those attached to a PCI-to-PCI Express bridge and
+> PCI Express devices using legacy I/O spaces. Note that this is different
+> from non PCI uses of I/O ports such as by ACPI.
+> 
+> Add dependencies on LEGACY_PCI for all PCI drivers which only target
+> legacy PCI devices and ifdef legacy PCI specific functions in ata
+> handling.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/ata/Kconfig                          | 34 ++++++++--------
+>  drivers/ata/ata_generic.c                    |  3 +-
+>  drivers/ata/libata-sff.c                     |  2 +
+>  drivers/comedi/Kconfig                       | 42 +++++++++++++++++++
+>  drivers/gpio/Kconfig                         |  2 +-
+>  drivers/hwmon/Kconfig                        |  6 +--
+>  drivers/i2c/busses/Kconfig                   | 24 +++++------
+>  drivers/input/gameport/Kconfig               |  4 +-
+>  drivers/isdn/hardware/mISDN/Kconfig          | 14 +++----
 
-Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
----
-v2: __maybe_unused instead of #ifdef
+>  drivers/media/cec/platform/Kconfig           |  2 +-
+>  drivers/media/pci/dm1105/Kconfig             |  2 +-
+>  drivers/media/radio/Kconfig                  |  2 +-
 
- drivers/hwmon/nzxt-smart2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not sure what you meant by "legacy I/O spaces" on this patch. 
+I mean, I would expect non-PCIe devices - like bttv and other
+devices developed at the past millennium or so to be "legacy",
+but at least on media, it is touching some drivers that aren't
+that old, while keeping the really old ones untouched. Instead,
+it is touching a driver developed in 2017 plus two other ones
+that are a way newer than other drivers.
 
-diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-index 534d39b8908e..6e67da766969 100644
---- a/drivers/hwmon/nzxt-smart2.c
-+++ b/drivers/hwmon/nzxt-smart2.c
-@@ -704,7 +704,7 @@ static int nzxt_smart2_hid_raw_event(struct hid_device *hdev,
- 	return 0;
- }
- 
--static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
-+static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
- {
- 	struct drvdata *drvdata = hid_get_drvdata(hdev);
- 
--- 
-2.34.1
+The support for the Bt8xx chipset, in particular, is really 
+weird, as a sound driver for such chipset:
 
+> @@ -172,6 +177,7 @@ config SND_AZT3328
+>  
+>  config SND_BT87X
+>  	tristate "Bt87x Audio Capture"
+> +	depends on LEGACY_PCI
+>  	select SND_PCM
+>  	help
+>  	  If you want to record audio from TV cards based on
+
+was marked as dependent of LEGACY_PCI, while the DVB and V4L2 ones 
+weren't.
+
+Sounds confusing to me, as the PCI bridge used by a Bt87x device 
+should be the same for all three subdevices.
+
+I'm confused...
+
+Regards,
+Mauro
