@@ -2,101 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26747C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Dec 2021 02:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF655C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Dec 2021 08:21:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhL1CWY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Dec 2021 21:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbhL1CWY (ORCPT
+        id S235588AbhL1IVe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Dec 2021 03:21:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36784 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235547AbhL1IVd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Dec 2021 21:22:24 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C015C06173E
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Dec 2021 18:22:24 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so22102493oti.11
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Dec 2021 18:22:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ryrfOj2a5ZGjBJFYyO/1SzBTanYs5m1Q4SjMqm4AYcs=;
-        b=Bxoi3m4NWnM3RD/NfQi7xtuw9sGv4UpIpRy3Yz+eVkNaMGsLM05JC/wSl08Hy6c0Ze
-         wOJD6Aojyh7G0l80K9XaPICJGHd+Vvlw2V0T4UPnHXSdlZ641IgVW2WuPgisiloP+ntn
-         L19ti8I5IoZxL14UAL96oAIqFluuGQMinmhAM70ChQEn2xCnTrsjcedMKz4ckZ06zzJR
-         vmYoWxbys9GJV/gAPex2FCau5DrkBoIvJdstZSQdYVbiZj0LcJuNZoOWbYmTqyrLlQ3+
-         EIOTBQgQqDDAMsDz8mijwaYcJ0nltwSb1Y5eWhJApUo0+WL8Uf36Q/wOUk0AjhoZoDTx
-         vEqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=ryrfOj2a5ZGjBJFYyO/1SzBTanYs5m1Q4SjMqm4AYcs=;
-        b=XDvSz3RhkBebNDxEzxkbM28etgr+ME0OZy73vubCeje5y7OhPRliV/IZfzcCGJ+rHg
-         wXzNSQiGmm3/gOikeRrDixnoGCPaAp+ySNpUnBSiO0BzwnE9h49iLtGEZ5QxLVvsSr7S
-         f80zgISFaHPE1rHXp8X7WGG/KnsYrTy+93RjQzYl1X6sYfmltxCz3degfTX3OGTf7fHr
-         dV39Wd79KmH6vZ7utoJarXiSX3ViQQz2B2gIK8X0VF15Bq3pugTELrqx2CszqntdWZIg
-         0hbvTyMKIZONMD/0g8J4bJGoGESbAqIIO28avEZZ93t0bIKYEYVqxFA3vEemZ3kRJ0+2
-         Y1Zg==
-X-Gm-Message-State: AOAM533HlID3FdazzhzgID+BA+zz71xSSFhfzAxqAsp4QUYKcqdayrA/
-        c9lf0vCiswpNoHo15EHQZ/+wpPSBNUM=
-X-Google-Smtp-Source: ABdhPJxAo2uE004/OeUAcn2oR6rZ4GUlsPytiz0stil1+FAm3ZGGJjsJAkxMBwAZxw5IEZl+8+wshg==
-X-Received: by 2002:a9d:5a12:: with SMTP id v18mr13963569oth.265.1640658143496;
-        Mon, 27 Dec 2021 18:22:23 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3sm3378782oiw.52.2021.12.27.18.22.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 18:22:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 27 Dec 2021 18:22:21 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksandr Mezin <mezin.alexander@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2] hwmon: (nzxt-smart2) Fix "unused function" warning
-Message-ID: <20211228022221.GA737761@roeck-us.net>
-References: <20211228014813.832491-1-mezin.alexander@gmail.com>
+        Tue, 28 Dec 2021 03:21:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 147D76118E;
+        Tue, 28 Dec 2021 08:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB991C36AE8;
+        Tue, 28 Dec 2021 08:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640679691;
+        bh=AyTvVvui2qlcHtQrKzueO2aVJtq3B/0n6NTMMAVaPv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kH6mvQE+CbYxtdqKfYIrcnXRRkMOKzNgkkDI4Qj231PIqAVKah1gnHZGbf7pyzYif
+         5Fy29Whi1PzPFIz42NBP1CwIg6Czpkv7Hvsk4tV4vJc5VHnlaMIkb+39JrPmPYspb6
+         8Fb7cSFih5JdAhKULSvypMAJ71q6QDfYXW2GEFIA=
+Date:   Tue, 28 Dec 2021 09:21:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <YcrJAwsKIxxX18pW@kroah.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-2-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211228014813.832491-1-mezin.alexander@gmail.com>
+In-Reply-To: <20211227164317.4146918-2-schnelle@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 07:48:13AM +0600, Aleksandr Mezin wrote:
-> Fix warning when building with CONFIG_PM=n (and CONFIG_WERROR=y):
-> 
-> drivers/hwmon/nzxt-smart2.c:707:12: error: ‘nzxt_smart2_hid_reset_resume’
-> defined but not used [-Werror=unused-function]
->   707 | static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
-
-Applied.
-
-Thanks,
-Guenter
-
-> ---
-> v2: __maybe_unused instead of #ifdef
-> 
->  drivers/hwmon/nzxt-smart2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 534d39b8908e..6e67da766969 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -704,7 +704,7 @@ static int nzxt_smart2_hid_raw_event(struct hid_device *hdev,
->  	return 0;
->  }
+On Mon, Dec 27, 2021 at 05:42:46PM +0100, Niklas Schnelle wrote:
+> --- a/drivers/pci/Kconfig
+> +++ b/drivers/pci/Kconfig
+> @@ -23,6 +23,17 @@ menuconfig PCI
 >  
-> -static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
-> +static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->  {
->  	struct drvdata *drvdata = hid_get_drvdata(hdev);
+>  if PCI
 >  
+> +config LEGACY_PCI
+> +	bool "Enable support for legacy PCI devices"
+> +	depends on HAVE_PCI
+> +	help
+> +	   This option enables support for legacy PCI devices. This includes
+> +	   PCI devices attached directly or via a bridge on a PCI Express bus.
+> +	   It also includes compatibility features on PCI Express devices which
+> +	   make use of legacy I/O spaces.
+
+All you really care about is the "legacy" I/O spaces here, this isn't
+tied to PCI specifically at all, right?
+
+So why not just have a OLD_STYLE_IO config option or something like
+that, to show that it's the i/o functions we care about here, not PCI at
+all?
+
+And maybe not call it "old" or "legacy" as time constantly goes forward,
+just describe it as it is, "DIRECT_IO"?
+
+thanks,
+
+greg k-h
