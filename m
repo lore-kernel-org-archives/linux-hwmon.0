@@ -2,104 +2,162 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF1BC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Dec 2021 15:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39998C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Dec 2021 15:54:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235329AbhL1Ph4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Dec 2021 10:37:56 -0500
-Received: from mout.gmx.net ([212.227.17.21]:39765 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235294AbhL1Phy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Dec 2021 10:37:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1640705848;
-        bh=kPS5EfnGgwXkGrSWtnVSZACxfMp0WTeu7Ps3qWfybCs=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=AxezTGMHEE8qUVhmpA6i9S53cdQ5suMw/zET/+XNHe6QAeBCU9GX06JEDV26fabp+
-         BAhsJW5Ealo/0SGPBZupDbGDQy20JphQhfBKTV3hvOQp4M3/vJoGEbfSQ25mVZqR3L
-         2qOih7++M530cOGQ/q6NnuTx/gKa+pJX061zqKmE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MIMbU-1nGVjw1Pmu-00EPw3; Tue, 28 Dec 2021 16:37:28 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] Documentation: ABI: Add ABI file for legacy /proc/i8k interface
-Date:   Tue, 28 Dec 2021 16:37:09 +0100
-Message-Id: <20211228153709.18317-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211228153709.18317-1-W_Armin@gmx.de>
+        id S235338AbhL1PyK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Dec 2021 10:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235314AbhL1PyK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 28 Dec 2021 10:54:10 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C72C061574;
+        Tue, 28 Dec 2021 07:54:10 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso24821783otf.12;
+        Tue, 28 Dec 2021 07:54:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ll7027buisW0NEWTSu1htpdHZWakTW3q/gcHMjuQDGI=;
+        b=TcS6V3hxsa1YUx7s1/czOLg55PDca3cg6Akh8vcVgfcMj46CzLVlITBJMcoAzowHqU
+         H0uCYAdMDg2omZQnU9IOZvhQOS4zNfR5dJwPNIndBBKktk5PRKuC7J5abvxwwvFKgC5J
+         caO8Pw/u040StcnZYxj8ZGJWiAMEYO6vj+PtcMf3GYHPR6hZoGox9wZ3dLgwcIm/oMa2
+         BeA9Nj7rddVhXUSfp+KpsrBzFw/cCkmKyxKvu18r6xvcefn4IbnMpmOU6dwckzKvA3Y5
+         rRIr7gZ8R4sb4DGFCFiiUU+kcBO2PmlDDZbxRI2biQ/4F68DwOYt8b2my5XAyUy8ykFl
+         Fm5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ll7027buisW0NEWTSu1htpdHZWakTW3q/gcHMjuQDGI=;
+        b=1Qiao5/F6OF097FEfJ0p4RERcfuKsPQazEn5Aa+cuW3yCpEITITXDzqZshD1rUvDGT
+         dBANMQHlP5lYJtJqNxDL/8F3K9pAd7aAKV7hgp5wJy9y7OzKRapweY3lonAEf/6Rj21N
+         7XMfRozmojxhbl5xfOMVhl21VHJ78P9TkoQBCDGL1RHzFnqFtO8vUpw4GERUydPvfyri
+         kK95AypBxN0lQQ5LPfxEYCaIf2TMhEIYHEOhbLH+pKUkTwSUQL3PhhCSL7XI+tRzhGBB
+         pKxL0B1GspAceV0HlJl4WuCaFE92wjSQwK+YcQigfcPdpw4yPjXjwsoFKJIif9njZURQ
+         Qwlw==
+X-Gm-Message-State: AOAM532RD8l4/rO5V7fG/VY2mJXpjo0SaQtgL3IgalIqpGNMPsgyrDuU
+        /Uix+j6SBUYjsnWqBhi73yfrvUg1V94=
+X-Google-Smtp-Source: ABdhPJzRsbhZh2e9+uxsN6mhSV/t6R2O5Bpi7DxRAhoMG4kvfKotX7tbLl3XFWns3Dk6Hy/U9we+8g==
+X-Received: by 2002:a05:6830:1e11:: with SMTP id s17mr15259608otr.361.1640706847864;
+        Tue, 28 Dec 2021 07:54:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n26sm3948825oij.5.2021.12.28.07.54.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 07:54:07 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 3/4] docs: hwmon: dell-smm-hwmon.rst: Replace ascii table
+ with flat-table
+To:     Armin Wolf <W_Armin@gmx.de>, pali@kernel.org
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20211228153709.18317-1-W_Armin@gmx.de>
+ <20211228153709.18317-3-W_Armin@gmx.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <3e2be661-093f-fe75-465b-1cc54e0d9f22@roeck-us.net>
+Date:   Tue, 28 Dec 2021 07:54:05 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:J8mEQ+c6SYPp6i+YcC5PdV4fZjzfTA7dETIjgKMS0Ake3y1WPs7
- r5CvpWr0oaVR2gjhz0lnRyRkLC5q8mh7vkS8JEQNdAfKyCCAhVdas+2WtEMCiIcqZakngFT
- sPZ4ixdk9hx+OaX1+P3jMx70thOGPjy4gJhDBx83l/aKONcVavDqZbKCnZEMig83PnQuIIv
- i2/arFfQMLGzdprsDjVXA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZFUnXvHw6fc=:kDORSavUAMP82jiIR3Hxcz
- OvCX6QXgSl9/IZa/Je/EO1VEbNFksfDBZxehXvFW1gFiF31digrPYR9rzfSgFXpTnYJUgJdAi
- lvcTchuk5mJlTAGgk56MBC7sCeAyoas/PSPLf82hJ7jNlCyMfT5alQLCNLg3WaVK5iFQj+0Se
- GMQfesR7MbJ6SKICgeQpZy15F3ojvAlWlCSi1WhVpSomTgLSo0nlETsH9EuHNczIy+xoXFh2u
- i5lZtcW8GaSYbnfpNCe5Mn1mfialfQLeCgVpb2AjxbCcnRJBPdvEkCZ8xDBkmxSx6B5BtxR/v
- cCAPNnQ5fLw6Wuq67gI2cl17bOzdsGyBu2DJSo0CfuRGGlucPvZ1pg5QURCg+Y+ZEcEYF7Txg
- cLAthr3MZhWLu050uaEMsN8EeejDiX/mgWZL4CXJY7WEmSO+mvvD4BeZ4W+dSSFHnIdhsDUth
- ww+cZmtnibW3RBJFnJQ/uDi4Oyng3JMt48JKamhNGFMNyFJ659WRta5rRC6bX9DUYim4yQlXN
- IQsx52EsY4m3kMKnG285gcSvW5K/WE1xJIk5b/a+qeizQ0TzvF+9nHFp5vx/IqPMzbx1gUAyu
- LxA1kXGulAiyBJuVVIiM3M8zuY+lwJqIVKd8eqDrWv3BYN2ds+eAEg8pAvenOUlWlyqkxE5DL
- orUlOx/ecRGr9z+d7xShZdOVd6KFZDX1eqe8lZy2dnyzFNRe0AzSzt3UeND7F1YdIg6BqDiF/
- PzGKpaLbT3BTHlHDqPMPSHQsuzLGEHNqWXEm2HXuH0jP/HS0mbufXb7Elrjg2qgiawstGvPv9
- 2s5GpdDkLYuG4c0yZozVSFlqDq+plk4OxW07g1kL4eO+jFbeDmitpUqjk80u3kU5QmVuxuvHR
- bzcxQD7Z50FYBWr3JVh3QeDvh+7zN9UKjddcalPdpQvx9a/+9zdn0iUDvNE4Fc67NXWpZLY/J
- P3Y7VKxFx6CJgn98Jc539TEnatIAIok4ahiihZVq0fDIhjpGcbmQicGtG/dkIpk8n7IH3PdDJ
- QqBwufv0GR0lF8VF92Hsgc6aC56+oW4eMsGO35Va6WxrS8FOVzc+/KNZDo2O0danNE26uNYvy
- 5JSsXXuolY8tYM=
+In-Reply-To: <20211228153709.18317-3-W_Armin@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add ABI file for informing remaining users of the
-deprecation of the legacy /proc/i8k interface.
+On 12/28/21 7:37 AM, Armin Wolf wrote:
+> flat-table is recommended over ascii art tables.
+> 
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/ABI/obsolete/procfs-i8k | 10 ++++++++++
- MAINTAINERS                           |  1 +
- 2 files changed, 11 insertions(+)
- create mode 100644 Documentation/ABI/obsolete/procfs-i8k
+I really don't want to encourage people sending me such patches,
+so please don't do that unless there is a technical reason
+to make those changes.
 
-diff --git a/Documentation/ABI/obsolete/procfs-i8k b/Documentation/ABI/obs=
-olete/procfs-i8k
-new file mode 100644
-index 000000000000..32df4d5bdd15
-=2D-- /dev/null
-+++ b/Documentation/ABI/obsolete/procfs-i8k
-@@ -0,0 +1,10 @@
-+What:		/proc/i8k
-+Date:		November 2001
-+KernelVersion:	2.4.14
-+Contact:	Pali Roh=C3=A1r <pali@kernel.org>
-+Description:	Legacy interface for getting/setting sensor information like
-+		fan speed, temperature, serial number, hotkey status etc
-+		on Dell Laptops.
-+		Since the driver is now using the standard hwmon sysfs interface,
-+		the procfs interface is deprecated.
-+Users:		https://github.com/vitorafsr/i8kutils
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e7e40563498f..468ee16ee778 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5365,6 +5365,7 @@ F:	drivers/platform/x86/dell/dell-rbtn.*
- DELL LAPTOP SMM DRIVER
- M:	Pali Roh=C3=A1r <pali@kernel.org>
- S:	Maintained
-+F:	Documentation/ABI/obsolete/procfs-i8k
- F:	drivers/hwmon/dell-smm-hwmon.c
- F:	include/uapi/linux/i8k.h
+Guenter
 
-=2D-
-2.30.2
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>   Documentation/hwmon/dell-smm-hwmon.rst | 60 +++++++++++++++++++-------
+>   1 file changed, 44 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
+> index beec88491171..f1e185e8a3f7 100644
+> --- a/Documentation/hwmon/dell-smm-hwmon.rst
+> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
+> @@ -29,22 +29,50 @@ Temperature sensors and fans can be queried and set via the standard
+>   ``X`` such that ``/sys/class/hwmon/hwmonX/name`` has content
+>   ``dell_smm``). A number of other attributes can be read or written:
+> 
+> -=============================== ======= =======================================
+> -Name				Perm	Description
+> -=============================== ======= =======================================
+> -fan[1-3]_input                  RO      Fan speed in RPM.
+> -fan[1-3]_label                  RO      Fan label.
+> -fan[1-3]_min                    RO      Minimal Fan speed in RPM
+> -fan[1-3]_max                    RO      Maximal Fan speed in RPM
+> -fan[1-3]_target                 RO      Expected Fan speed in RPM
+> -pwm[1-3]                        RW      Control the fan PWM duty-cycle.
+> -pwm1_enable                     WO      Enable or disable automatic BIOS fan
+> -                                        control (not supported on all laptops,
+> -                                        see below for details).
+> -temp[1-10]_input                RO      Temperature reading in milli-degrees
+> -                                        Celsius.
+> -temp[1-10]_label                RO      Temperature sensor label.
+> -=============================== ======= =======================================
+> +.. flat-table::
+> +   :header-rows: 1
+> +   :widths: 4 1 5
+> +
+> +   * - Name
+> +     - Perm
+> +     - Description
+> +
+> +   * - fan[1-3]_input
+> +     - RO
+> +     - Fan speed in RPM
+> +
+> +   * - fan[1-3]_label
+> +     - RO
+> +     - Fan label
+> +
+> +   * - fan[1-3]_min
+> +     - RO
+> +     - Minimal Fan speed in RPM
+> +
+> +   * - fan[1-3]_max
+> +     - RO
+> +     - Maximal Fan speed in RPM
+> +
+> +   * - fan[1-3]_target
+> +     - RO
+> +     - Expected Fan speed in RPM
+> +
+> +   * - pwm[1-3]
+> +     - RW
+> +     - Control the fan PWM duty-cycle
+> +
+> +   * - pwm1_enable
+> +     - WO
+> +     - Enable or disable automatic BIOS fan control (not supported
+> +       on all laptops, see below for details)
+> +
+> +   * - temp[1-10]_input
+> +     - RO
+> +     - Temperature reading in milli-degrees Celsius
+> +
+> +   * - temp[1-10]_label
+> +     - RO
+> +     - Temperature sensor label
+> 
+>   Disabling automatic BIOS fan control
+>   ------------------------------------
+> --
+> 2.30.2
+> 
 
