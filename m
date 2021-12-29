@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCFCDC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Dec 2021 10:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52AF5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Dec 2021 10:18:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbhL2KQt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Dec 2021 05:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S239699AbhL2KSm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Dec 2021 05:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbhL2KQs (ORCPT
+        with ESMTP id S239697AbhL2KSm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Dec 2021 05:16:48 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774F6C06173F
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Dec 2021 02:16:48 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id t26so43461628wrb.4
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Dec 2021 02:16:48 -0800 (PST)
+        Wed, 29 Dec 2021 05:18:42 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49BEC06173F
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Dec 2021 02:18:41 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id g132so13260035wmg.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Dec 2021 02:18:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=b+zE01u0JpXpyPFug8aJeTgsvJdxFWBY5Ed+UEXJSbA=;
-        b=nFApkzhsRA48nGUu+5m10zgx/O8dTMBvvVv1kZzQwiqMHrMxHsItuQb0vBSLa7PUz0
-         H5wJ9THDs0vtzxZRwJMcrBdgc05TslxDqhMj0PLv5Rl5bvj0mjFHBxn4Rv768Oj9gyAX
-         OO63YnO6HU7LFncpBZ9CNKqug1Ps4gJRdVgHkSqt1rcMUtwoqpWiVS2I8zw0DKquhvmq
-         DUBOUyj7NmEMqPSqH8kKTbjsCVw3cJy06PWUmLM5SrVJFDr5XinFywfp1IfAIOX3EnD6
-         hYwt1IgD0ZTXATvchXACobxPOQh9Ib2lra6iAMhic7D2RvBRaF2UU0NU8HVzXJeTSvQq
-         o6Ow==
+        bh=DhXo7kMC0uPR2/PxJNBSCPHqufGQVkkQQH3q6s5xJ5w=;
+        b=fTW0JdR1ykzRRIY9dw57yS/8M99GGw9D5WoARy8fmCk5IFEFao0lWGNbbjQJkYt+Xy
+         3MNWPza2N21Cne2wpHD7iYG6Tc3pZFdHBl6alGSWaeBja4XGfd2dQLtkK5lYdBoAVuGN
+         7BFoU68lYLsNk0WNUFm6RUb7/Fmudi5PwInGqMFkncUajsRgjCOgl0/Eza4QJQ+7GZt0
+         DG+Us1/Dk7SO2aaYbGqoEo0noHRSFuaycOvCLnGZ6NidMlPa3IKnEhDEZtHpkQvt4wy1
+         fXT9/t0kqPyp+R9mVR+CmJj+0vOOR2/h0+awCHcbxM4HFsiu9vuhjXG6XErcuhQrPAjb
+         NHZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=b+zE01u0JpXpyPFug8aJeTgsvJdxFWBY5Ed+UEXJSbA=;
-        b=rgmD9lbn9aaRVRyGwc/l6ltdmxtVtzrsYEzbHJyTKqzcC7tx2DdqMDybcPvpIlhkd4
-         D5wWm37iNMvdOd9IoIWF0Z8AdJaOxXvNHDk1XoA16IBehtKdSrSpz6ny0OsJKMu6hbB/
-         7cRm08lBCwaUEGevtM4Vf3p6agbROIdwNGMZSN8KCWIQOaITck3n8UIPO5cwSnjCAVLv
-         QpTGh/spUwbMiScsfZ768D8ejneu5mHOxFYar7uNou9mjDP64KbGUJu4zaoGNvFyZiYT
-         dv8XtYjNa1I2L6+RsWGJSe0PPToel2iTrkt+nq/Q/xYFL0VNkOthUswpJ1zT7jgTctsy
-         S72w==
-X-Gm-Message-State: AOAM533aiQ3jZVuxU6I5IzaTRO+1kNmYAGuggSdweiD9TV07YKoHeTYP
-        z8Wd7W3cJEMQ+2x7TU39hlmNSA==
-X-Google-Smtp-Source: ABdhPJx0iWeXqxZaRi6Rm3ozmbJecqRY7o7RGp5qWfmkkNU1k7L7xFc8xl0Wrcp57XJhzm0SxQHnJw==
-X-Received: by 2002:a5d:56c2:: with SMTP id m2mr20111241wrw.313.1640773006492;
-        Wed, 29 Dec 2021 02:16:46 -0800 (PST)
+        bh=DhXo7kMC0uPR2/PxJNBSCPHqufGQVkkQQH3q6s5xJ5w=;
+        b=tzzpbywuIgkdtfzmPC93UIQbw+JZA+9BbZbE66qRLokqHMVY684UP4d0BsBPPxCeVa
+         QNH1eBiqh/nFc1onplR2bshfqmDOdrXglnA3l2V8OKbU2YqaUBYa/FFaJuOK7vzHTmj3
+         ts8hAgdQHLatYJg4LRBIM4ozrDeMn1dXDI3XzR0u8AR8y+0i/YDdlv28m+n4/tDCNCQu
+         swRLOS/R4qWdD6ZYuLmlGUSHV+/okLPFbeGKG+Qfh3GLbA0ljuw1ZHuSGMfF7+HPvaqg
+         Ly+Yd1wY0jCGB9KvpPIS6twm1TACMYt7JUFXttMBzWWWpnTn7+TEmHS8lnZzXyYhGQys
+         PAAg==
+X-Gm-Message-State: AOAM532mRs72nkjYn2NvBugfUyUE5fN/h2b9Z/h7KN6VjC1AVVhFFjCg
+        t1g6YeVLDqHWrV2zoayrFdmDUg==
+X-Google-Smtp-Source: ABdhPJxlh/wswgV+eWD3Uf/3R7henCTK2h+kQsStrI5za04QhH9jaGk/3Wx/qaAyCvETvukN4Wz1CQ==
+X-Received: by 2002:a05:600c:a54:: with SMTP id c20mr20967140wmq.48.1640773120328;
+        Wed, 29 Dec 2021 02:18:40 -0800 (PST)
 Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id o5sm3040713wmc.39.2021.12.29.02.16.45
+        by smtp.gmail.com with ESMTPSA id k6sm19938299wrc.38.2021.12.29.02.18.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 02:16:46 -0800 (PST)
-Date:   Wed, 29 Dec 2021 10:16:44 +0000
+        Wed, 29 Dec 2021 02:18:39 -0800 (PST)
+Date:   Wed, 29 Dec 2021 10:18:37 +0000
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Quan Nguyen <quan@os.amperecomputing.com>
 Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
@@ -69,40 +69,56 @@ Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v6 6/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Message-ID: <Ycw1jNNGlkaj3QnI@google.com>
+Subject: Re: [PATCH v6 8/9] misc: smpro-misc: Add Ampere's Altra SMpro misc
+ driver
+Message-ID: <Ycw1/XufNWq/FUss@google.com>
 References: <20211224041352.29405-1-quan@os.amperecomputing.com>
- <20211224041352.29405-7-quan@os.amperecomputing.com>
+ <20211224041352.29405-9-quan@os.amperecomputing.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211224041352.29405-7-quan@os.amperecomputing.com>
+In-Reply-To: <20211224041352.29405-9-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On Fri, 24 Dec 2021, Quan Nguyen wrote:
 
-> This commit adds Ampere's SMpro error monitor driver for monitoring
-> and reporting RAS-related errors as reported by SMpro co-processor
-> found on Ampere's Altra processor family.
+> This commit adds driver support for accessing various information
+> reported by Ampere's SMpro co-processor such as Boot Progress and
+> other miscellaneous data.
 > 
 > Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 > ---
 > Change in v6:
 >   + First introduced in v6 [Quan]
 > 
->  drivers/mfd/smpro-mfd.c     |   1 +
+>  drivers/mfd/smpro-mfd.c   |   1 +
 
-Separate patch please.
+Please pull all of these patches out.
 
->  drivers/misc/Kconfig        |   7 +
->  drivers/misc/Makefile       |   1 +
->  drivers/misc/smpro-errmon.c | 571 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 580 insertions(+)
->  create mode 100644 drivers/misc/smpro-errmon.c
+There are no build dependencies here.
+
+>  drivers/misc/Kconfig      |   7 ++
+>  drivers/misc/Makefile     |   1 +
+>  drivers/misc/smpro-misc.c | 177 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 186 insertions(+)
+>  create mode 100644 drivers/misc/smpro-misc.c
+> 
+> diff --git a/drivers/mfd/smpro-mfd.c b/drivers/mfd/smpro-mfd.c
+> index a7cd64bf9eaa..5611dd30f8f4 100644
+> --- a/drivers/mfd/smpro-mfd.c
+> +++ b/drivers/mfd/smpro-mfd.c
+> @@ -28,6 +28,7 @@ static const struct regmap_config simple_word_regmap_config = {
+>  static const struct mfd_cell smpro_devs[] = {
+>  	MFD_CELL_NAME("smpro-hwmon"),
+>  	MFD_CELL_NAME("smpro-errmon"),
+> +	MFD_CELL_NAME("smpro-misc"),
+
+Misc is a Linuxisum which are not allowed in DT.
+
+What does this driver actually do?
 
 -- 
 Lee Jones [李琼斯]
