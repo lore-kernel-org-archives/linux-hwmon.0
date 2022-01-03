@@ -2,132 +2,139 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CADCC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  1 Jan 2022 22:03:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE338C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Jan 2022 16:41:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiAAWDX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 1 Jan 2022 17:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiAAWDX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 1 Jan 2022 17:03:23 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8884C061574;
-        Sat,  1 Jan 2022 14:03:22 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id o7so34476765ioo.9;
-        Sat, 01 Jan 2022 14:03:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=THNuUA/tawUOChSQp/rfs6Latr7Yv/+qgS3Y2JmuUGA=;
-        b=ZacxIIWNUo+AbuiIdxvpb5y8+2CauYGT7/ignb/84oOsyae5r5y0/6F49APuiqyCge
-         iC6ThtbrG8wvoUZj3S17tSfs8M6m8K9vrMDFIit0V/T161s8UyTpn23HQGzt8FFl8oLx
-         WeRbWB8f4UL/MdFpPF+0fnjDjRUFldX+scN+68dc4tdBYW9OalEH+xWNHAEW/B/Ubq+B
-         Fr6yfs+lO3HKMbIQ2ieISXgBBZaPg11Ma3gygL9jOT2SLfFzx+q5kma9bKNs8pRiIiwi
-         B9UCN4pmXkPwJiuWsntwI5Tcr1/kD+R2BIGLXiC66IECZfe8BtTadXdAg6AgX3ppRDpy
-         Zcrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=THNuUA/tawUOChSQp/rfs6Latr7Yv/+qgS3Y2JmuUGA=;
-        b=b7SYMqzNxkp3nSIqP56d0+yiwkXQiUB1DriZNOr2OXJpGz5cdLMDP6C48wddgaDZ1e
-         rvf3l3Rv0yZbEZNXBnT3UybFSYPio/Qbk23pTuTui879yrY1BHZADXQoldltEx97Rm0R
-         Yl8Ms65DhnKxNfXnLGQEtFKtYftz18iTBbL+62At6+kOTTjT+wB/Vdi8cLk8tx0fCzpS
-         h8heqh42CHVEjumwvpX5FHIjGpnYzprhhjuzoA2+pJIPjnrHL1Tg9WEml4LmQTNTV1+W
-         8a9LGZPv/xBG9DRMBFH09372ev7mVLsm5pcUTtIC4VgCOyHtx+c9J8l22JakTGxzEOiM
-         ttJA==
-X-Gm-Message-State: AOAM533xKfWmrY8sW0W6rleWNUTtkI+BDxHJHrbG3xq2BgTE3Hx4zBNk
-        klAl9T821PYKkgEoO2RZe/XsyLmiQG9em5I9XD0=
-X-Google-Smtp-Source: ABdhPJxcG0EXw2tagv/W5t5LK62AU4A1PFcHqm07qBTmFiz/YbDF7BDVZZrWch9dJLDeK5Yf7lZp6YvMCElQropPc50=
-X-Received: by 2002:a05:6602:140c:: with SMTP id t12mr18092473iov.187.1641074601679;
- Sat, 01 Jan 2022 14:03:21 -0800 (PST)
+        id S230210AbiACQlk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 Jan 2022 11:41:40 -0500
+Received: from mout-y-111.mailbox.org ([91.198.250.236]:47502 "EHLO
+        mout-y-111.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230149AbiACQlk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Jan 2022 11:41:40 -0500
+X-Greylist: delayed 418 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 11:41:39 EST
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4JSLvD4QBgzQlLT;
+        Mon,  3 Jan 2022 17:35:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1641227704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jGg109/SdVHAGsrAmpzH9OY+vbgtukVPEWTK0WDru0U=;
+        b=JPiCmn4viCFV5AgGgiXuMVhdjihzp9zD9mToOIWkQ7kOssdUJ1uVQatFtHPjjemejZNm2m
+        jXJyqbGr54wvezf4JWOUBqZ3BwI9+Fly+lcQNTnFCBCZB5Sas++7/kIneb/bDm0sprKHs/
+        CZaZwDbd8LYSvaZIFsb0rMpgmCyLJ/wTkWCJ4Bs3yyvGCRHVsuiCzFPtFxUO2/AN6+5b5F
+        ydQDl4vJhHeTirNyUBWOah+uWAb2RhTBcVlryyt4HOe9U7Xe7xBOygEredkuIA6mc23Gtb
+        obvY8yKyyxy3Lt/jq0JDUe2NqzV/XsNFMiTlCNP6Fat+DWikEbbtjfdhb+deAA==
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 4/4] hwmon: (max6639) Add devicetree support
+Date:   Mon,  3 Jan 2022 17:33:54 +0100
+Message-Id: <18f099abda66841042d71739c6ffd41c84434106.1641224715.git.sylv@sylv.io>
+In-Reply-To: <cover.1641224715.git.sylv@sylv.io>
+References: <cover.1641224715.git.sylv@sylv.io>
 MIME-Version: 1.0
-References: <20211216122525.136139-1-alistair@alistair23.me>
-In-Reply-To: <20211216122525.136139-1-alistair@alistair23.me>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Sun, 2 Jan 2022 08:02:55 +1000
-Message-ID: <CAKmqyKP79x-PdEiBAye3tBtYgj17T6WF6pM84vXVHYwPNXshgg@mail.gmail.com>
-Subject: Re: [PATCH v17 0/8] Add support for the silergy,sy7636a
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        linux-hwmon@vger.kernel.org, amitk@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 10:25 PM Alistair Francis
-<alistair@alistair23.me> wrote:
->
-> v17:
->  - Rebase and fix build issues
-> v16:
->  - Improve vdd regulator comments
-> v15:
->  - Address comments on the patches
-> v14:
->  - Merge the thermal driver and hwmon
-> v13:
->  - Address comments on thermal driver
->  - Rebase on master (without other patches)
-> v12:
->  - Rebase
-> v11:
->  - Address comments on hwmon
->  - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
-> v10:
->  - Use dev_get_regmap() instead of dev_get_drvdata()
-> v9:
->  - Convert to use the simple-mfd-i2c instead
->
-> Alistair Francis (8):
->   dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
->   mfd: simple-mfd-i2c: Add a Kconfig name
->   mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a
->   regulator: sy7636a: Remove requirement on sy7636a mfd
->   hwmon: sy7636a: Add temperature driver for sy7636a
->   ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
->   ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
->   ARM: dts: imx7d-remarkable2: Enable lcdif
+Allow the driver to work with device tree support.
 
-All of the code changes have been reviewed or acked. Could some of
-these patches go into 5.17?
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ drivers/hwmon/max6639.c | 47 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-Alistair
+diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+index d733c35b5bcf..f84ee4a05f80 100644
+--- a/drivers/hwmon/max6639.c
++++ b/drivers/hwmon/max6639.c
+@@ -412,6 +412,38 @@ static int rpm_range_to_reg(int range)
+ 	return 1; /* default: 4000 RPM */
+ }
+ 
++static struct max6639_platform_data *get_pdata_from_dt_node(struct device *dev)
++{
++	struct max6639_platform_data *pdata;
++	u32 pol, ppr, rpm;
++	int ret;
++
++	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return ERR_PTR(-ENOMEM);
++
++	pdata->pwm_polarity = true;
++	ret = of_property_read_u32(dev->of_node, "polarity", &pol);
++	if (!ret && !pol)
++		pdata->pwm_polarity = false;
++
++	ret = of_property_read_u32(dev->of_node, "pulses-per-revolution", &ppr);
++	if (ret < 0)
++		dev_warn(dev, "No pulses-per-revolution property\n");
++	else
++		pdata->ppr = ppr;
++
++	ret = of_property_read_u32(dev->of_node, "rpm-range", &rpm);
++	if (ret < 0) {
++		dev_warn(dev, "no rpm-range property\n");
++		pdata->rpm_range = 4000;
++	} else {
++		pdata->rpm_range = rpm;
++	}
++
++	return pdata;
++}
++
+ static int max6639_init_client(struct i2c_client *client,
+ 			       struct max6639_data *data)
+ {
+@@ -421,6 +453,12 @@ static int max6639_init_client(struct i2c_client *client,
+ 	int rpm_range = 1; /* default: 4000 RPM */
+ 	int err;
+ 
++	if (!max6639_info && client->dev.of_node) {
++		max6639_info = get_pdata_from_dt_node(&client->dev);
++		if (IS_ERR(max6639_info))
++			return PTR_ERR(max6639_info);
++	}
++
+ 	/* Reset chip to default values, see below for GCONFIG setup */
+ 	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
+ 				  MAX6639_GCONFIG_POR);
+@@ -631,6 +669,14 @@ static const struct i2c_device_id max6639_id[] = {
+ 
+ MODULE_DEVICE_TABLE(i2c, max6639_id);
+ 
++#ifdef CONFIG_OF
++static const struct of_device_id maxim_of_platform_match[] = {
++	{.compatible = "maxim,max6639"},
++	{},
++};
++MODULE_DEVICE_TABLE(of, maxim_of_platform_match);
++#endif
++
+ static SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
+ 
+ static struct i2c_driver max6639_driver = {
+@@ -638,6 +684,7 @@ static struct i2c_driver max6639_driver = {
+ 	.driver = {
+ 		   .name = "max6639",
+ 		   .pm = &max6639_pm_ops,
++		   .of_match_table = of_match_ptr(maxim_of_platform_match),
+ 		   },
+ 	.probe_new = max6639_probe,
+ 	.id_table = max6639_id,
+-- 
+2.33.1
 
->
->  .../bindings/mfd/silergy,sy7636a.yaml         |  82 +++++++++++
->  Documentation/hwmon/index.rst                 |   1 +
->  Documentation/hwmon/sy7636a-hwmon.rst         |  26 ++++
->  arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++
->  arch/arm/configs/imx_v6_v7_defconfig          |   3 +
->  drivers/hwmon/Kconfig                         |   9 ++
->  drivers/hwmon/Makefile                        |   1 +
->  drivers/hwmon/sy7636a-hwmon.c                 | 106 ++++++++++++++
->  drivers/mfd/Kconfig                           |   2 +-
->  drivers/mfd/simple-mfd-i2c.c                  |  11 ++
->  drivers/regulator/Kconfig                     |   1 -
->  drivers/regulator/sy7636a-regulator.c         |   7 +-
->  include/linux/mfd/sy7636a.h                   |  34 +++++
->  13 files changed, 415 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
->  create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst
->  create mode 100644 drivers/hwmon/sy7636a-hwmon.c
->  create mode 100644 include/linux/mfd/sy7636a.h
->
-> --
-> 2.31.1
->
