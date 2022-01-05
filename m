@@ -2,177 +2,237 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58EA0C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jan 2022 19:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ABEEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jan 2022 22:28:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243658AbiAETry (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jan 2022 14:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243651AbiAETrx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jan 2022 14:47:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3FAC061245;
-        Wed,  5 Jan 2022 11:47:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C357DB81D6D;
-        Wed,  5 Jan 2022 19:47:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8F0C36AE0;
-        Wed,  5 Jan 2022 19:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641412069;
-        bh=t/Luv/nk2DzaSNkJU//u39w5XVRhppoSx5pKsM3k/v4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VUv9O2qdqKxA+jG4CFc2u3LsBBtVCfotavPXFO/fA1pTVEWrxgynepfFoNwDmpPe3
-         gm6mzSwrf0Mu9v8LI0ep1L8d0gF07n+txTEieNZIGWxOqW9SiL4CAOcvJbfSVMhQ+3
-         AXwKESLwYk/C/VLxQ9B09ONeiabtURx+gn19Ju8IEKSa/0hYllteATy6HWhv5F/Jtp
-         78FWTCTutn0mw70OCHpRgC8L6tBrcnnp3ILK1zuW9o6rgJRHSCKyS7qdLXCdCEZ3Sf
-         pZgJlDurZwMThwqJkqgUgnGVT16YwqrnJM1KhaMG1e1LQ7K8PhR9cgiSRWv4dC4Mip
-         cFT1uhvBqjObQ==
-Date:   Wed, 5 Jan 2022 13:47:48 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        id S244955AbiAEW2P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jan 2022 17:28:15 -0500
+Received: from mga02.intel.com ([134.134.136.20]:51551 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244956AbiAEW2M (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 5 Jan 2022 17:28:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641421692; x=1672957692;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6LIBXyaKFJEHPtRwlnepVZes39DKURgaN+zkOlHhy5M=;
+  b=itTYGYP7HGjB6JtNrnbcZrAJvLH/8snqKbnaEObiHh8cFfYA0WsZH96O
+   pywFiIRsyuKvgfRROIbpQKiFizNL6wm4PrAW/yupwlAouR/9JVu9rh+tM
+   nog4/jPe/et3aYOkE/cotTVa0DQ6YGHZF3+BBfGocA+mxzopkO2UeIIMz
+   /N4DhhAFMDjyeZPr0OGd/4yTra0rBLxO7hyZQv06KTetJ/3kcOLyzBvLp
+   ZzSJKyZUN9exT8E2bX7d4YtAf8L6kn8bq1EmSOy5SVWMK4tQZvJDyOtxJ
+   htd+u6AGUujV19kJ5cj+STtlIih3UPpE/GJ1CqazrAVWBltuJHVhhTJsw
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229870981"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="229870981"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 14:27:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="470732360"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2022 14:27:55 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5El8-000H5a-Vi; Wed, 05 Jan 2022 22:27:54 +0000
+Date:   Thu, 6 Jan 2022 06:27:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-Message-ID: <20220105194748.GA215560@bhelgaas>
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, list@opendingux.net,
+        Paul Cercueil <paul@crapouillou.net>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH v2 2/2] hwmon: Add "label" attribute
+Message-ID: <202201060630.vsp02mfB-lkp@intel.com>
+References: <20220105151551.20285-3-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3f39d8a2-2e57-a671-2926-eb4f2bf20c76@huawei.com>
+In-Reply-To: <20220105151551.20285-3-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 05:42:16PM +0000, John Garry wrote:
-> On 29/12/2021 16:55, Niklas Schnelle wrote:
-> > On Wed, 2021-12-29 at 10:03 -0600, Bjorn Helgaas wrote:
-> > > On Wed, Dec 29, 2021 at 01:12:07PM +0100, Mauro Carvalho Chehab wrote:
-> > > > Em Wed, 29 Dec 2021 12:45:38 +0100
-> > > > Niklas Schnelle<schnelle@linux.ibm.com>  escreveu:
-> > > > > ...
-> > > > > I do think we agree that once done correctly there is value in
-> > > > > such an option independent of HAS_IOPORT only gating inb() etc uses.
-> > > I'm not sure I'm convinced about this.  For s390, you could do this
-> > > patch series, where you don't define inb() at all, and you add new
-> > > dependencies to prevent compile errors.  Or you could define inb() to
-> > > return ~0, which is what happens on other platforms when the device is
-> > > not present.
-> > > 
-> > > > Personally, I don't see much value on a Kconfig var for legacy PCI I/O
-> > > > space. From maintenance PoV, bots won't be triggered if someone use
-> > > > HAS_IOPORT instead of the PCI specific one - or vice-versa. So, we
-> > > > could end having a mix of both at the wrong places, in long term.
-> > > > 
-> > > > Also, assuming that PCIe hardware will some day abandon support for
-> > > > "legacy" PCI I/O space, I guess some runtime logic would be needed,
-> > > > in order to work with both kinds of PCIe controllers. So, having a
-> > > > Kconfig option won't help much, IMO.
-> > > > 
-> > > > So, my personal preference would be to have just one Kconfig var, but
-> > > > I'm ok if the PCI maintainers decide otherwise.
-> > > I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
-> > > means something old and out of favor; it doesn't say*what*  that
-> > > something is.
-> > > 
-> > > I think you're specifically interested in I/O port space usage, and it
-> > > seems that you want all PCI drivers that *only* use I/O port space to
-> > > depend on LEGACY_PCI?  Drivers that can use either I/O or memory
-> > > space or both would not depend on LEGACY_PCI?  This seems a little
-> > > murky and error-prone.
-> > I'd like to hear Arnd's opinion on this but you're the PCI maintainer
-> > so of course your buy-in would be quite important for such an option.
+Hi Paul,
 
-I'd like to hear Arnd's opinion, too.  If we do add LEGACY_PCI, I
-think we need a clear guide for when to use it, e.g., "a PCI driver
-that uses inb() must depend on LEGACY_PCI" or whatever it is.
+I love your patch! Perhaps something to improve:
 
-I must be missing something because I don't see what we gain from
-this.  We have PCI drivers, e.g., megaraid [1], for devices that have
-either MEM or I/O BARs.  I think we want to build drivers like that on
-any arch that supports PCI.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on v5.16-rc8 next-20220105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-If the arch doesn't support I/O port space, devices that only have I/O
-BARs won't work, of course, and hopefully the PCI core and driver can
-figure that out and gracefully fail the probe.
+url:    https://github.com/0day-ci/linux/commits/Paul-Cercueil/hwmon-Add-label-attribute-v2/20220105-231930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: arm64-randconfig-r026-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060630.vsp02mfB-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/57dab49995d01d638d9fa9aaddb5fa48e17b3c48
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Paul-Cercueil/hwmon-Add-label-attribute-v2/20220105-231930
+        git checkout 57dab49995d01d638d9fa9aaddb5fa48e17b3c48
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwmon/
 
-But that same driver should still work with devices that have MEM
-BARs.  If inb() isn't always present, I guess we could litter these
-drivers with #ifdefs, but that would be pretty ugly.  IMO inb() should
-be present but do something innocuous like return ~0, as it would if
-I/O port space is supported but there's no device at that address.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
+All warnings (new ones prefixed by >>):
 
-> I can't see the value in the LEGACY_PCI config - however I don't really
-> understand Arnd's original intention.
-> 
-> It was written that it would allow us to control "whether we have any
-> pre-PCIe devices or those PCIe drivers that need PIO accessors other than
-> ioport_map()/pci_iomap()".
-> 
-> However I just don't see why CONFIG_PCI=y and CONFIG_HAS_IOPORT=y aren't
-> always the gating factor here. Arnd?
-> 
-> Thanks,
-> John
+>> drivers/hwmon/hwmon.c:777:7: warning: variable 'hdev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (hwdev->label == NULL) {
+                       ^~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/hwmon.c:851:20: note: uninitialized use occurs here
+           hwmon_dev_release(hdev);
+                             ^~~~
+   drivers/hwmon/hwmon.c:777:3: note: remove the 'if' if its condition is always false
+                   if (hwdev->label == NULL) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/hwmon.c:773:7: warning: variable 'hdev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (err < 0)
+                       ^~~~~~~
+   drivers/hwmon/hwmon.c:851:20: note: uninitialized use occurs here
+           hwmon_dev_release(hdev);
+                             ^~~~
+   drivers/hwmon/hwmon.c:773:3: note: remove the 'if' if its condition is always false
+                   if (err < 0)
+                   ^~~~~~~~~~~~
+   drivers/hwmon/hwmon.c:752:21: note: initialize the variable 'hdev' to silence this warning
+           struct device *hdev;
+                              ^
+                               = NULL
+   2 warnings generated.
+
+
+vim +777 drivers/hwmon/hwmon.c
+
+   744	
+   745	static struct device *
+   746	__hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+   747				const struct hwmon_chip_info *chip,
+   748				const struct attribute_group **groups)
+   749	{
+   750		struct hwmon_device *hwdev;
+   751		const char *label;
+   752		struct device *hdev;
+   753		int i, err, id;
+   754	
+   755		/* Complain about invalid characters in hwmon name attribute */
+   756		if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
+   757			dev_warn(dev,
+   758				 "hwmon: '%s' is not a valid name attribute, please fix\n",
+   759				 name);
+   760	
+   761		id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
+   762		if (id < 0)
+   763			return ERR_PTR(id);
+   764	
+   765		hwdev = kzalloc(sizeof(*hwdev), GFP_KERNEL);
+   766		if (hwdev == NULL) {
+   767			err = -ENOMEM;
+   768			goto ida_remove;
+   769		}
+   770	
+   771		if (device_property_present(dev, "label")) {
+   772			err = device_property_read_string(dev, "label", &label);
+   773			if (err < 0)
+   774				goto free_hwmon;
+   775	
+   776			hwdev->label = kstrdup(label, GFP_KERNEL);
+ > 777			if (hwdev->label == NULL) {
+   778				err = -ENOMEM;
+   779				goto free_hwmon;
+   780			}
+   781		}
+   782	
+   783		hdev = &hwdev->dev;
+   784	
+   785		if (chip) {
+   786			struct attribute **attrs;
+   787			int ngroups = 2; /* terminating NULL plus &hwdev->groups */
+   788	
+   789			if (groups)
+   790				for (i = 0; groups[i]; i++)
+   791					ngroups++;
+   792	
+   793			hwdev->groups = kcalloc(ngroups, sizeof(*groups), GFP_KERNEL);
+   794			if (!hwdev->groups) {
+   795				err = -ENOMEM;
+   796				goto free_hwmon;
+   797			}
+   798	
+   799			attrs = __hwmon_create_attrs(drvdata, chip);
+   800			if (IS_ERR(attrs)) {
+   801				err = PTR_ERR(attrs);
+   802				goto free_hwmon;
+   803			}
+   804	
+   805			hwdev->group.attrs = attrs;
+   806			ngroups = 0;
+   807			hwdev->groups[ngroups++] = &hwdev->group;
+   808	
+   809			if (groups) {
+   810				for (i = 0; groups[i]; i++)
+   811					hwdev->groups[ngroups++] = groups[i];
+   812			}
+   813	
+   814			hdev->groups = hwdev->groups;
+   815		} else {
+   816			hdev->groups = groups;
+   817		}
+   818	
+   819		hwdev->name = name;
+   820		hdev->class = &hwmon_class;
+   821		hdev->parent = dev;
+   822		hdev->of_node = dev ? dev->of_node : NULL;
+   823		hwdev->chip = chip;
+   824		dev_set_drvdata(hdev, drvdata);
+   825		dev_set_name(hdev, HWMON_ID_FORMAT, id);
+   826		err = device_register(hdev);
+   827		if (err) {
+   828			put_device(hdev);
+   829			goto ida_remove;
+   830		}
+   831	
+   832		INIT_LIST_HEAD(&hwdev->tzdata);
+   833	
+   834		if (dev && dev->of_node && chip && chip->ops->read &&
+   835		    chip->info[0]->type == hwmon_chip &&
+   836		    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+   837			err = hwmon_thermal_register_sensors(hdev);
+   838			if (err) {
+   839				device_unregister(hdev);
+   840				/*
+   841				 * Don't worry about hwdev; hwmon_dev_release(), called
+   842				 * from device_unregister(), will free it.
+   843				 */
+   844				goto ida_remove;
+   845			}
+   846		}
+   847	
+   848		return hdev;
+   849	
+   850	free_hwmon:
+   851		hwmon_dev_release(hdev);
+   852	ida_remove:
+   853		ida_simple_remove(&hwmon_ida, id);
+   854		return ERR_PTR(err);
+   855	}
+   856	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
