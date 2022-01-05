@@ -2,113 +2,65 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18257C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jan 2022 09:41:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B6E0C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jan 2022 15:16:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiAEJlz convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jan 2022 04:41:55 -0500
-Received: from aposti.net ([89.234.176.197]:39238 "EHLO aposti.net"
+        id S236858AbiAEPQN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jan 2022 10:16:13 -0500
+Received: from aposti.net ([89.234.176.197]:42226 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234299AbiAEJlz (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:41:55 -0500
-Date:   Wed, 05 Jan 2022 09:41:44 +0000
+        id S237011AbiAEPQI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 5 Jan 2022 10:16:08 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Introduce common properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <KLD85R.XE2Q0KBUK4KF1@crapouillou.net>
-In-Reply-To: <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
-References: <20211221175029.144906-1-paul@crapouillou.net>
-        <20211221175029.144906-2-paul@crapouillou.net>
-        <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, list@opendingux.net,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 0/2] hwmon: Add "label" attribute v2
+Date:   Wed,  5 Jan 2022 15:15:49 +0000
+Message-Id: <20220105151551.20285-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob,
+Hi Jean, Guenter,
 
-Le mer., déc. 22 2021 at 15:36:23 -0400, Rob Herring <robh@kernel.org> 
-a écrit :
-> On Tue, Dec 21, 2021 at 05:50:28PM +0000, Paul Cercueil wrote:
->>  Introduce a file for common properties of hwmon sensors.
->> 
->>  As of now it contains only the "label" property, which can contain a
->>  descriptive label that allows to uniquely identify a device within 
->> the
->>  system.
-> 
-> I don't think we need this. What we need is a global (in dtschema)
-> type definition and then any users just add 'label: true'.
+A V2 of my patchset which allows specifying a hwmon device's label from
+Device Tree. When the "label" device property is present, its value is
+exported to the userspace via the "label" sysfs attribute.
 
-I created a PR there: 
-https://github.com/devicetree-org/dt-schema/pull/65
+This is useful for userspace to be able to identify an individual device
+when multiple individual chips are present in the system.
+
+Note that this mechanism already exists in IIO.
+
+Patch [1/2] documents the ABI change.
+Patch [2/2] adds the change to the core drivers/hwmon/hwmon.c file.
+
+Changes from v1:
+- The label is cached into the hwmon_device structure
+- hwmon_dev_name_is_visible() renamed to hwmon_dev_attr_is_visible()
+- Add missing <linux/property.h> include
+- The DT binding documentation of the "label" property has been dropped,
+  and the "label" property is now supported directly in dtschema.
 
 Cheers,
 -Paul
 
-> 
->> 
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   .../devicetree/bindings/hwmon/common.yaml     | 31 
->> +++++++++++++++++++
->>   1 file changed, 31 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/hwmon/common.yaml
->> 
->>  diff --git a/Documentation/devicetree/bindings/hwmon/common.yaml 
->> b/Documentation/devicetree/bindings/hwmon/common.yaml
->>  new file mode 100644
->>  index 000000000000..997f74127d8c
->>  --- /dev/null
->>  +++ b/Documentation/devicetree/bindings/hwmon/common.yaml
->>  @@ -0,0 +1,31 @@
->>  +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>  +%YAML 1.2
->>  +---
->>  +$id: http://devicetree.org/schemas/hwmon/common.yaml#
->>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>  +
->>  +title: Common properties for hwmon sensors
->>  +
->>  +maintainers:
->>  +  - Jean Delvare <jdelvare@suse.com>
->>  +  - Guenter Roeck <linux@roeck-us.net>
->>  +
->>  +description: |
->>  +  This document defines device tree properties common to several 
->> hwmon
->>  +  sensors. It doesn't constitue a device tree binding 
->> specification by itself but
->>  +  is meant to be referenced by device tree bindings.
->>  +
->>  +  When referenced from sensor tree bindings the properties defined 
->> in this
->>  +  document are defined as follows. The sensor tree bindings are 
->> responsible for
->>  +  defining whether each property is required or optional.
->>  +
->>  +properties:
->>  +  label:
->>  +    $ref: /schemas/types.yaml#/definitions/string
->>  +    description: >
->>  +      Descriptive label that allows to uniquely identify a device 
->> within
->>  +      the system.
->>  +
->>  +additionalProperties: true
->>  +
->>  +...
->>  --
->>  2.34.1
->> 
->> 
 
+Paul Cercueil (2):
+  ABI: hwmon: Document "label" sysfs attribute
+  hwmon: Add "label" attribute
+
+ Documentation/ABI/testing/sysfs-class-hwmon |  8 +++++
+ Documentation/hwmon/sysfs-interface.rst     |  4 +++
+ drivers/hwmon/hwmon.c                       | 34 +++++++++++++++++++--
+ 3 files changed, 43 insertions(+), 3 deletions(-)
+
+-- 
+2.34.1
 
