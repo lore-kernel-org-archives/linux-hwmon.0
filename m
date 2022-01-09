@@ -2,134 +2,81 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C290C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Jan 2022 17:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 333A4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Jan 2022 19:44:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240694AbiAGRQq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Jan 2022 12:16:46 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4373 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348501AbiAGRQp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Jan 2022 12:16:45 -0500
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVqWg6H9Pz67ZhV;
-        Sat,  8 Jan 2022 01:11:43 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 18:16:40 +0100
-Received: from [10.47.89.210] (10.47.89.210) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 7 Jan
- 2022 17:16:37 +0000
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "Teddy Wang" <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
-        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
-        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20220106181409.GA297735@bhelgaas>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <b0e772ed-4c21-3d5a-d890-aba05c41904c@huawei.com>
-Date:   Fri, 7 Jan 2022 17:16:23 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S236758AbiAIToa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 9 Jan 2022 14:44:30 -0500
+Received: from mout.gmx.net ([212.227.15.19]:49943 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230438AbiAIToa (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 9 Jan 2022 14:44:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1641757448;
+        bh=6hjWSn6vmUVLyAF7IMDX2R0jY+t6+fnYhD+TCZaKHbk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=DwB5Q5ofY6ZoefwRRUVhEHkkcUxxk2I3gAzPaHWzycwfnYbgXfLE8QoA4SaUzB6if
+         xA3pnc6VA54vIsZDq72CmrlOlUpVJpNue6+/a2zVykBIe92AvUbzLlBJs2YMJ0tM+Q
+         oZ70qZHgsSEIfX0NLKqdsLy8/Xzg1a4QvjScHQ2k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MjjCL-1mdJZr1OYN-00lFw7; Sun, 09 Jan 2022 20:44:08 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v2 0/3] Documenation: Update documentation regarding dell_smm_hwmon
+Date:   Sun,  9 Jan 2022 20:43:57 +0100
+Message-Id: <20220109194400.58725-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220106181409.GA297735@bhelgaas>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.89.210]
-X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:YEeFL7cYrOpaJgtjOsDlsB5O/0QWSPXiLfMIhawUd0NWc4Znhbu
+ QN0sZhuNJ/j9m0u3hrR90JfKSTR2rEjzME1TS+tbyJs+qSjRhkcYDSAns5ZF/BhaoyD8txc
+ C4hoLK5RQKNlmCZAzK4N/TbM/phm2zM5vYupIFT5LgCRnrjDmmw5zVQSjj4qPt7PdlmQG4q
+ boh7YS3m2CycM5oUO4ZNg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:o/Dxu9PFLE8=:SZiv42uMujpm1pBQmc0hgk
+ 90wXCfkvjeOhWLSFXGxzCAPZAdBUj6c2iVq3y3Wzk7ztTEGdGLQKz5kVMWqLRiC68aPWmKVoX
+ yyXIqBFGKfdprKHa2ayhZoB4olkdrmvg+KQb4VEMw+OVOtxVTlAw0dy2GfYxdJxpkpyaeLRLJ
+ pivuSoCYmUAhK+CoUEp0MAzuDplyAuIEBVyzWxtEXZLq2L9xhU4m4GczvrokYYk2GMl8wWTWo
+ hrtdhhfiVn7oPvxuVgLEMFEuCQ7KzFWFKkMXOHevTY8oQLeGH+44p2GU6XvNfMbvBdMS8+ypG
+ oPb6s7Od8zWlksvmtCsPB6kmjDFa4Tr//6rQj+6Iz+wBYB/GBfzQhshzTFwsE7lHTiYCVR5sw
+ aNGlXHJcdcbLhvjeVu0MUHsOuKWWR4THs1+urmbKApbJc4LfXT7lTw31A3gfEd+j5uXV0hff6
+ EbbnMfzD2SIsMZqe1KaTx7YSiG6wpwGMZ8V7HRVQmJ6WEUGy/j+zyJg2A4sUVMDtN9Qa6Ku6q
+ HZ2x0Gp6acaN4T+tz7ALyLJglzrWrNnPCuQZHaRVOsYnGZtksRD4LpEvLmf8Ico/ff23HPtoy
+ 4bB7keSw9aUsq3ldAF8aWW0uWl+dgvSL2qyGBRBMmVVcWxvoII0kcrkW+0PQDMNPSSJ8gQ1c1
+ Hgz8Cnpj+YoNB8CZjE1afR5nxhVn3u8YsH/U1rS6eOEeBg4diwzDnmTB97taFZLMALs1bMCNO
+ EHrIAzavp2VK/GcfxcOmQSfmzHhc/bTSpsUisBEibxx1+0dVp2LjMtbX+70R0vI2Jf3tqrGY9
+ y03bPZL1iUxxuagYThZSwR8cW117dg56nOL1ms0ME1s1anpEht+cDj53uk4Nz4hA36qgWhvl2
+ EuNVvM4QhjWp9VP/H/gc4EuqsHUAeBebHSHjj2DFbDL4kbBLn2ZvnGosTpYAm9phoDNRasxP5
+ HoA/r1WuTuL2q+Nqd/VmaUuqY5gJqlounw95XgRG/hxGFf6LbH+uM9Z7SmdMhheGOYIGRl34c
+ IlxyRIYJ2U5J/xZZa0+6zPEnprMZRZGToWJ2iP2ehtLpJN6MLpD7HB37SlMmWgwM8BJlLDs1M
+ nE0sdVxeftlnmo=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 06/01/2022 18:14, Bjorn Helgaas wrote:
->> That driver would prob not be used on systems which does not support PIO,
->> and so could have a HAS_IOPORT dependency. But it is not strictly necessary.
-> I don't want the path of "this driver isn't needed because the device
-> is unlikely to be used on this arch."
+Update documentation regarding dell_smm_hwmon in preparation for
+future changes.
 
-Sure, that was just a one off example. As I mentioned before, I think 
-that Arnd already did most of the ifdeffery work, but it was not 
-included in this series.
+=2D--
+Changes in v2:
+- omit unneccessary patch
 
-> 
-> Maybe it's not_always_  possible, but if the device can be plugged
-> into the platform, I think we should be able to build the driver for
-> it.
-> 
-> If the device requires I/O port space and the platform doesn't support
-> it, the PCI core or the driver should detect that and give a useful
-> diagnostic.
-> 
+Armin Wolf (3):
+  Documentation: admin-guide: Update i8k driver name
+  Documentation: admin-guide: Add Documentation for undocumented
+    dell_smm_hwmon parameters
+  Documentation: ABI: Add ABI file for legacy /proc/i8k interface
 
-I'm not sure what the driver can say apart from -ENODEV. Or IO port 
-management in resource.c could warn for requesting IO port region when 
-it's unsupported.
+ Documentation/ABI/obsolete/procfs-i8k         | 10 ++++++
+ .../admin-guide/kernel-parameters.txt         | 35 +++++++++++++------
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 35 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/ABI/obsolete/procfs-i8k
 
-Anyway, this same conversion was had with Linus before I got involved. 
-If you think it is worth discussing again then I suppose the authors 
-here need to gain consensus.
+=2D-
+2.30.2
 
-Thanks,
-John
