@@ -2,118 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D912C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Jan 2022 21:50:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FD19C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Jan 2022 01:11:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiAIVus (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 9 Jan 2022 16:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S232593AbiAJBL3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 9 Jan 2022 20:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiAIVus (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Jan 2022 16:50:48 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AEEC06173F;
-        Sun,  9 Jan 2022 13:50:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=8A9EBuuFLCjf49rIJT7a1YTOiOCs0PjdbuyZU9+YH7s=; b=Ej2FV30VKUe0A674Wm3Bg2w5aR
-        fkF1MGVG6cms6XSAw9i1X/er9Vy6Bng92VdEOvwQQ+4fcYxQc/m8aiK6QfAgZKIwugT6rV5ATww7e
-        8eXDC+kgDxry1bvNqnjPc6Ho410LCvWlwknNKTCLsFIUHIV8l4VnwIOE43tO9Wp4UXizwAgU1Gmp7
-        5jtZK0hiCHKOZxZvwwvswZRqW//MPCzq4sUlyhW6CIAcrm1uMz8dl3GzwRy1uSBBkcqJrowwmg24h
-        IVv2HH2iNhuI3cavtXlqdd90SHxNCxIvm+n0AbZD+uwL4lUr6f/AKwf61ZeOUhyQG+2UWFHLDUwOR
-        dagjdU5g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n6g5E-001t01-Km; Sun, 09 Jan 2022 21:50:37 +0000
-Message-ID: <56f9081a-bb0d-deb1-09cf-da34b4e9e776@infradead.org>
-Date:   Sun, 9 Jan 2022 13:50:33 -0800
+        with ESMTP id S229729AbiAJBL3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Jan 2022 20:11:29 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCAFC06173F;
+        Sun,  9 Jan 2022 17:11:28 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id t204so17175962oie.7;
+        Sun, 09 Jan 2022 17:11:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F6urcwiu2eUOJWSMLNJN+g7iFfO+F3fQ+xSPdkGivsU=;
+        b=i1NboyVOoXP7d8zeEGiKH71dQVdT+b3sik2aZQvmr5V4h/yGFicfqYsFIskErXzgGz
+         AAu+ZWCixjtM140UQ59LvHcAGpBJvjEBvISFWBRX+uK9p+dpgE4VhiHCos6otcjyQpU4
+         fod9Tth3xnd8EGCLLOgPMNc0eefzXbNkljFdEkJ12UWaaJzFuJ1QutUMvuiv63Oh1/M2
+         GC1bIdQzLR989luRb1WH6b7+OcnHXzwEhSnLBCsJxVxBzyiaVRS7Us7U9WulnnXfUfnc
+         nBeALM9HSMwcyqHxhLZ25Ruh5dzbwKoMTbXGyLjrz2Kbn2KbE/nZ/Fbvy60lnX2Zgake
+         E4kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=F6urcwiu2eUOJWSMLNJN+g7iFfO+F3fQ+xSPdkGivsU=;
+        b=IXJHA85IJmvmS9TnAIlCSZ9AHmHDdIOV/PdxvbL35pVML/jJuM9OP9JA5OvB8IkKLA
+         hTnwRL+SB32M4hOTnimIgTXAGxuxf8AO7+ftqx28Eu+iPhuAGr+SPbGPrRQcYVin+LnF
+         AFOqAToGyZd/kWsERoSL3/Ppe2TcYIG/7EHksFKxd8oL5d4iZisQS62/LCB1x+wlfIpb
+         YM0ls1OQCmZlQYV1ZiZNRSvAXfw8Q56V4zRHudZhwLVJq6NtKg0B5NWOa03JUB6l6d+c
+         Fq71xzlcP+zs+WNkiqi3fzyOVw+h6KHYp/54Ah7eKDgtJC23aNo/udAPjY4DkR2gmlnU
+         CT7Q==
+X-Gm-Message-State: AOAM530WLsnNbWZvik/EaV/GEHAVWUyaC2PX7/3Lo99vtF+5Xd1BA5E5
+        8C3ZPGZ/oDYyzl/xkV1dRv8=
+X-Google-Smtp-Source: ABdhPJxpbKB5Y78UBzmf/TRkogz4RExWkq7xaURE9tcac2IeGrvBrM4DUofkEAV3vldfVEfqZ52Fug==
+X-Received: by 2002:a05:6808:b0e:: with SMTP id s14mr7521871oij.61.1641777088121;
+        Sun, 09 Jan 2022 17:11:28 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o145sm1056686ooo.1.2022.01.09.17.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 17:11:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 9 Jan 2022 17:11:25 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Aleksandr Mezin <mezin.alexander@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] hwmon: nzxt-smart2: make array detect_fans_report
+ static const
+Message-ID: <20220110011125.GA841668@roeck-us.net>
+References: <20220109194558.45811-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 1/3] Documentation: admin-guide: Update i8k driver name
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220109214248.61759-1-W_Armin@gmx.de>
- <20220109214248.61759-2-W_Armin@gmx.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220109214248.61759-2-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220109194558.45811-1-colin.i.king@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-
-On 1/9/22 13:42, Armin Wolf wrote:
-> The driver should be called dell_smm_hwmon, i8k is only
-> an alias now.
+On Sun, Jan 09, 2022 at 07:45:58PM +0000, Colin Ian King wrote:
+> Don't populate the read-only array detect_fans_report on the stack but
+> instead it static const. Also makes the object code a little smaller.
 > 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Applied.
 
-Thanks.
+Thanks,
+Guenter
 
 > ---
->  .../admin-guide/kernel-parameters.txt         | 29 ++++++++++++-------
->  1 file changed, 18 insertions(+), 11 deletions(-)
+>  drivers/hwmon/nzxt-smart2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 2fba82431efb..52de7cd06858 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -935,6 +935,24 @@
->  			dump out devices still on the deferred probe list after
->  			retrying.
-> 
-> +	dell_smm_hwmon.ignore_dmi=
-> +			[HW] Continue probing hardware even if DMI data
-> +			indicates that the driver is running on unsupported
-> +			hardware.
-> +
-> +	dell_smm_hwmon.force=
-> +			[HW] Activate driver even if SMM BIOS signature does
-> +			not match list of supported models and enable otherwise
-> +			blacklisted features.
-> +
-> +	dell_smm_hwmon.power_status=
-> +			[HW] Report power status in /proc/i8k
-> +			(disabled by default).
-> +
-> +	dell_smm_hwmon.restricted=
-> +			[HW] Allow controlling fans only if SYS_ADMIN
-> +			capability is set.
-> +
->  	dfltcc=		[HW,S390]
->  			Format: { on | off | def_only | inf_only | always }
->  			on:       s390 zlib hardware support for compression on
-> @@ -1694,17 +1712,6 @@
-> 
->  	i810=		[HW,DRM]
-> 
-> -	i8k.ignore_dmi	[HW] Continue probing hardware even if DMI data
-> -			indicates that the driver is running on unsupported
-> -			hardware.
-> -	i8k.force	[HW] Activate i8k driver even if SMM BIOS signature
-> -			does not match list of supported models.
-> -	i8k.power_status
-> -			[HW] Report power status in /proc/i8k
-> -			(disabled by default)
-> -	i8k.restricted	[HW] Allow controlling fans only if SYS_ADMIN
-> -			capability is set.
-> -
->  	i915.invert_brightness=
->  			[DRM] Invert the sense of the variable that is used to
->  			set the brightness of the panel backlight. Normally a
-> --
-> 2.30.2
-> 
-
--- 
-~Randy
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index 6e67da766969..dd892ff5a3e8 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -583,7 +583,7 @@ static int set_update_interval(struct drvdata *drvdata, long val)
+>  static int init_device(struct drvdata *drvdata, long update_interval)
+>  {
+>  	int ret;
+> -	u8 detect_fans_report[] = {
+> +	static const u8 detect_fans_report[] = {
+>  		OUTPUT_REPORT_ID_INIT_COMMAND,
+>  		INIT_COMMAND_DETECT_FANS,
+>  	};
