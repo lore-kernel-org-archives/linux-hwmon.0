@@ -2,85 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6323EC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 16:51:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10943C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 16:51:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238722AbiAKQvW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jan 2022 11:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S239436AbiAKQvY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jan 2022 11:51:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238513AbiAKQvW (ORCPT
+        with ESMTP id S238513AbiAKQvY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:51:22 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BB3C06173F
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jan 2022 08:51:22 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id r131so23266060oig.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jan 2022 08:51:22 -0800 (PST)
+        Tue, 11 Jan 2022 11:51:24 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3E5C06173F
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jan 2022 08:51:24 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id s21-20020a05683004d500b0058f585672efso19271730otd.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jan 2022 08:51:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W863SJaHOdM1EqM597on+K8xaYf5so8unGiy3KBX7hw=;
-        b=ctd717kkGpODdMQ/aRtvP1T+pkF3jgioSp3aB+zT09QrtTNFEN3qFPfsLfa3+PEa9m
-         5IBLNNJSpuhkMzkflO50k+bNnJKJLnlB5jLO+aj5znlkVMm9qKuzu0T/6Aj+ghE18P+r
-         9O4qPrCOUvm0uTzT+foUR7dpZaCwTOXOqH4O9/aXH9Fq/L1gbS7STtcLbmDD4Am4bwqi
-         3y094ki+VuKTgwl80ijmm0Y3i4tQU1X2o6qbo6HLJ52FupA8ZJ5d3PAcbFDrr2QPUdHc
-         ZDgVd7MnxTjjvulcb0VmusU7n2P5X77KnI+wWY53/3XnYLfwOkMC+EqTPl5eVitFJU6q
-         oGoQ==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nDLdRvmB3dM6G7qkWrksPE++6DCBZiL1lfTPNl7o1NY=;
+        b=ZDYcSC50n35hJYdATnR4gvNcRW4hvG3xW8yBuC564F8wN1OYAiHY2f2yJyvBAF6+U9
+         HfAcxuhBdZ6UEpefYadnbr1VFw9Cj11zI3tGz8CXN34SCBs3MdP7qaiCTGuYghhtCF3Q
+         vyMD3o2dClPK/4znMtEGnH9TNSeWsV8xme3lcgB0yR+nzbLR/I7IW9cRFxO/ROj0iXdQ
+         qLnxQ9V728p/cV6lnZyZ9jwfm61uAZUEcqChfKWIvOQCEk2+mvEFHW+Ra8ebo6NaMxtG
+         BJrhMTf2CsbI1lhyqeST4qy215iBferaesykf37B2YHHPxgJ0lKu5ayVrB0Yp4mPloBv
+         dRAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=W863SJaHOdM1EqM597on+K8xaYf5so8unGiy3KBX7hw=;
-        b=QTcXKF/Ow1dcz+l8l49WCeDT8f9WVTZsjxoWxa9wSMO86wcVpA53pmHsvkBP5teivM
-         U+SKWI97NM0YoI2fVHUsMXMCuPI+AUItwCGSspUwa/e4kHnQbvNmiYGFqWBKT8a50Q2y
-         akh9Hsb3P0lo2GNL2N92A76tpIGZUCoXFHmj5rZr3z5vtOQyj07BIyi5Po97v5FT4HGD
-         lZmYX8+SaBFlaxLonzr3xS4TOf6Tjy0LHn2K14BVYqXyTIFLtHYBfUIguGzRM11WBRi8
-         LZfJP6daXXFZfbx/UOlEkHDIinF+Zf1+vJrnGBkwwgN/+1KIaeJiQOpD1WNsGw+w+yES
-         7utw==
-X-Gm-Message-State: AOAM533Jnx2CHVyDWIidK7uCTuId5JdQAt/ae9mWGen2XiVaxGkLIvbP
-        3j91Vw4P25ovEO35nADzDnd+BoPWAV8=
-X-Google-Smtp-Source: ABdhPJw2zDxwnkb2SUBajcF7TSoy/cCAM26Pdxwu0ELkbrL9HA6UQ1Q7AOWA7pCxNdS2VVCd7pkFeA==
-X-Received: by 2002:a05:6808:1293:: with SMTP id a19mr2486053oiw.29.1641919881441;
-        Tue, 11 Jan 2022 08:51:21 -0800 (PST)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=nDLdRvmB3dM6G7qkWrksPE++6DCBZiL1lfTPNl7o1NY=;
+        b=KJdtEPsPpKMuWSq0KOYqKyfEyBRdHAdU6M38KTgt/kshyso510GRgq8fSUehuq92AE
+         4G263tfMbV4GfncVsOXqRiOaJQLnpJLxc54PRH4pfJlCNxdsfiSMqUHdNkgDJ/EhY/D4
+         Fl4AH3iz3pw+rG7cehqO6gw27ofWwa4f2THJ4aaQWkeCN2mYXbe2NfRfgJlOGR3LRRHw
+         5MbooRJmdih04BDmSY1iG6cE7I3dLvYsKUaSes0y5y6cBu153wB+/mG1YE7rwreqoiaO
+         NTeloe5yTZ1tn3ThGyubQbDtwvsMc+90TOMhuK3MCIp4PQQpsEnpm8plfe8dPMhdb1yp
+         82NA==
+X-Gm-Message-State: AOAM531GlyQbq6LZpUxBjf8aAix8QtpfP6oxq2KXIToyfR0twsIAs5Ia
+        XMoFMvEtTb9Vs9D+w5fi4LQCgs2fsnE=
+X-Google-Smtp-Source: ABdhPJwbSd9WWx6fZCF0hdjF/KdeJt3a/6Hy1r4F/kBSctX/3lRqBHQe/1EYIFfRGYUEXbrnKviqmg==
+X-Received: by 2002:a9d:3603:: with SMTP id w3mr3979988otb.59.1641919883327;
+        Tue, 11 Jan 2022 08:51:23 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s8sm1745976oij.31.2022.01.11.08.51.20
+        by smtp.gmail.com with ESMTPSA id c4sm2030636ook.16.2022.01.11.08.51.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 08:51:21 -0800 (PST)
+        Tue, 11 Jan 2022 08:51:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 0/6] hwmon: Fixes for lm90 driver
-Date:   Tue, 11 Jan 2022 08:51:10 -0800
-Message-Id: <20220111165116.1298459-1-linux@roeck-us.net>
+Subject: [PATCH 1/6] hwmon: (lm90) Reduce maximum conversion rate for G781
+Date:   Tue, 11 Jan 2022 08:51:11 -0800
+Message-Id: <20220111165116.1298459-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220111165116.1298459-1-linux@roeck-us.net>
+References: <20220111165116.1298459-1-linux@roeck-us.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This series fixes a number of issues with the lm90 driver.
+According to its datasheet, G781 supports a maximum conversion rate value
+of 8 (62.5 ms). However, chips labeled G781 and G780 were found to only
+support a maximum conversion rate value of 7 (125 ms). On the other side,
+chips labeled G781-1 and G784 were found to support a conversion rate value
+of 8. There is no known means to distinguish G780 from G781 or G784; all
+chips report the same manufacturer ID and chip revision.
+Setting the conversion rate register value to 8 on chips not supporting
+it causes unexpected behavior since the real conversion rate is set to 0
+(16 seconds) if a value of 8 is written into the conversion rate register.
+Limit the conversion rate register value to 7 for all G78x chips to avoid
+the problem.
 
-- Not all versions of G781 and compatible chips support a conversion rate
-  of 8 (62.5 ms). Limit its value to 0..7.
-- Re-enable interrupts/alerts for devices supporting interrupts and with
-  broken ALERT after the alert(s) clear.
-- Various chips have a buggy ALERT implementation. Mark them accordingly.
-- The attributes for sending alarm notifications should be the alarm
-  attributes, not the associated value attributes.
+Fixes: ae544f64cc7b ("hwmon: (lm90) Add support for GMT G781")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/lm90.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-----------------------------------------------------------------
-Guenter Roeck (6):
-      hwmon: (lm90) Reduce maximum conversion rate for G781
-      hwmon: (lm90) Re-enable interrupts after alert clears
-      hwmon: (lm90) Mark alert as broken for MAX6654
-      hwmon: (lm90) Mark alert as broken for MAX6680
-      hwmon: (lm90) Mark alert as broken for MAX6646/6647/6649
-      hwmon: (lm90) Fix sysfs and udev notifications
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 74019dff2550..cc5e48fe304b 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -373,7 +373,7 @@ static const struct lm90_params lm90_params[] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+ 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+-		.max_convrate = 8,
++		.max_convrate = 7,
+ 	},
+ 	[lm86] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+-- 
+2.33.0
 
- drivers/hwmon/lm90.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
