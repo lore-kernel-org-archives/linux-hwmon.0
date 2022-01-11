@@ -2,123 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40B59C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 18:34:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65505C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 18:43:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245210AbiAKSex (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jan 2022 13:34:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S1345726AbiAKSnd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jan 2022 13:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242309AbiAKSex (ORCPT
+        with ESMTP id S241456AbiAKSnc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:34:53 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA93C06173F;
-        Tue, 11 Jan 2022 10:34:53 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id i82so58722ioa.8;
-        Tue, 11 Jan 2022 10:34:53 -0800 (PST)
+        Tue, 11 Jan 2022 13:43:32 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE8AC06173F;
+        Tue, 11 Jan 2022 10:43:32 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id i9so313967oih.4;
+        Tue, 11 Jan 2022 10:43:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1B++ptGdknwRzhnTn04GeoJQVrlb8tb2vjVRjIkM6yc=;
-        b=J2T33pibJC/uxDyYnfN1MTZTjFu5phmVoe3EHfvcxvQKZ5SBAlpXZTFBiWYweguDUk
-         s20sW0iR8DOjBXV4YihCbmjCMp/MqgP1xtC2YgzGEvzNIRUXQTyee8RWFIb2cqEQRW9f
-         pHO7MnawHeE9Pom7k/5eav8A5pML9zXfQxwvWvhRdX1NWo8CJEhC57wetpetK653QZII
-         sM3bIOsHp4ZqBzG8clrdoYLaYsYYbTZjG2M+NGtoivrF5uUt4Rxl1s4itDPlEBIhNJjn
-         xakQqOgsP+91V01kKXVAS5AR/wCgUx12lWagElqV/e9zkBrs6w6zNgQ8coVL7Og/q2y7
-         Op1A==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GpNeYP+ZR6OUFLEINi1QUPQn4aQI/nnpx2oqcRjgaxU=;
+        b=iXtmUgCbRBiqCTxwl9mhU5tmBHeY1kdq5WxbJ9Tnt6nUCoK/PUm8R+ebm5j32BIssm
+         KThQ94Aday13xrQCZ3HeWQDPbdCc8iUVSn7ciANsDZAYpZ8LT1dBq1zZ6MUvROQQ0Ubu
+         A53s86jfbuFFNGgseo+pL4iqTh/XScWb3i2Pych5ObQIfId0n4kReymLPZt762LSI5/M
+         asF1eUpzud+wOJxvZh7L/SW+hLAIkXoqomagGaz3klzQYuMCDwmmqsJbzTjZuGYLavWn
+         F3UoJPJvgyEYVd6Rt4TBvxLuTa6+hhw2QgHJKmuPrQ0cRXrcmC6JvNfL9FToapSmR6T5
+         wHAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1B++ptGdknwRzhnTn04GeoJQVrlb8tb2vjVRjIkM6yc=;
-        b=SodgzzsQWN6AHZ1g0xffoxILiGjrhntV3+QE4RL+0uSMaLkZceEd6jHJsWg/UkoBVo
-         b2JJZtDZIjYIlUlO1TEIT6j3Yl0iudwbVafuBPNkyBUYML1bAwTQBKIIZGQ96ZrZHoBH
-         Kd2ku/wqCj/HgJb7qt54yQudfuQcuDdEENI6iwX8AsQ1Gq+4OQ/lvplYBDNS2CqR4sRO
-         /ICDwYfxzetw4yqADzwBuz01CC6ZMbNDHqBY6bl7y5kRQHV4+KmvV9oOfwQjTPO92dl+
-         HHYCHROQ9uykDs6mPikmSMFQ+ybIibVtYb3Y/ltSQdA6h3vUmtgdjftMJCnlyKQCBUqL
-         YZ0Q==
-X-Gm-Message-State: AOAM5304iUVnh3Bv3WAMqOuqJreavnB0pdBg6BdDYUp2ODJifYLGD+t8
-        IIokqDvzwhY4Ki2684wE4CafFgKJGBKjOKNrHl0=
-X-Google-Smtp-Source: ABdhPJwlRaY5cJw6+DPJSMl9a7gTOgZ2MF6nLF/OAaw21iVWhPrXjRNRb6xEMYegKPxEZO6XD2PBO9uhNbPfGhIhpBk=
-X-Received: by 2002:a02:c734:: with SMTP id h20mr3034797jao.256.1641926092747;
- Tue, 11 Jan 2022 10:34:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20220111180347.1245774-1-eugene.shalygin@gmail.com> <0uakBuv1oBXoq7hUQxghKrFabqWebbG437WBNMuBVpYRL4vCE-IxwsbH16I82L-hq4xLtuSvBM1UaPfUy1HxmoFJYFHkDuJPxh3dZ_P8LuM=@protonmail.com>
-In-Reply-To: <0uakBuv1oBXoq7hUQxghKrFabqWebbG437WBNMuBVpYRL4vCE-IxwsbH16I82L-hq4xLtuSvBM1UaPfUy1HxmoFJYFHkDuJPxh3dZ_P8LuM=@protonmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Tue, 11 Jan 2022 19:34:41 +0100
-Message-ID: <CAB95QARvshfae_wwECr-5wEHxgyoc-2QWHUsK6N7LLE1n_DbZQ@mail.gmail.com>
-Subject: Re: PATCH v4 ASUS EC Sensors
-To:     =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GpNeYP+ZR6OUFLEINi1QUPQn4aQI/nnpx2oqcRjgaxU=;
+        b=lqLc7WHeTUigadU7+k/CucSKCFsBWZV+yyV2e1L84fH981ylHodLgrqQ/5MWGBJSMH
+         wc5XcoSMeDTAVQIsJqPXLzVLglrYExIhMmJ9uscOMvaODiVVdEQJYI1BwGaDXckEK77i
+         NK0YrF/Sxt/d4KpxiiBbReIlVkB5IO8AAx6xIUqBIRJsQi4RshsEoKTeqTFw4ANXds6h
+         Gx8a+k2TITHK5N/zHS0J2sC1mFscWUbdC4iOBENAb49cJUshwaxNAozc1CDrJWBJXi4p
+         6uYQtZk0OVgklke4aPzF7CH3+isMFCfAYzJZiDlsZp+cWXv9AN0Ne3hbI54oyPl4J63T
+         9aug==
+X-Gm-Message-State: AOAM531VFJKJxTIii8lMXrl0yGBsUPZTQNezIxi/rVsKaqBLT48FtNrY
+        viwB8d7amxGKWLmCDq4Iwm90k9GcZxA=
+X-Google-Smtp-Source: ABdhPJxwckguTkCT8dwP3PfVIySLsZPGEz1d7gHoayyU787C6SF/f7MnkSj/JjnPasb5GqJsqqIwiA==
+X-Received: by 2002:a05:6808:13ca:: with SMTP id d10mr2793573oiw.62.1641926611830;
+        Tue, 11 Jan 2022 10:43:31 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j20sm539128otp.52.2022.01.11.10.43.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 10:43:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Denis Pauk <pauk.denis@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20220111160900.1150050-1-eugene.shalygin@gmail.com>
+ <20220111160900.1150050-2-eugene.shalygin@gmail.com>
+ <805dd382-262c-36f0-fcf5-5776223040c8@roeck-us.net>
+ <CAB95QATsy2ACgyxWLy2PM2peqoYDEa_j96VNSHBG6GMd+x3LzQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <050ee3ed-4c30-afb9-d7ce-898d634284be@roeck-us.net>
+Date:   Tue, 11 Jan 2022 10:43:28 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAB95QATsy2ACgyxWLy2PM2peqoYDEa_j96VNSHBG6GMd+x3LzQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+On 1/11/22 9:22 AM, Eugene Shalygin wrote:
+>> I do not see the point of marking this as doc strings
+> …
+>> and neither this one, nor anywhere else where "**" is used.
+>> The resulting "documentation" is just confusing and provides no value.
+> 
+> My editor shows nice tooltips for /** comments and I did not realise
+> kernel doc processes
+> all the source unconditionally. Anyway, I removed them.
+> 
+>> Why not just "sensors" directly ? Is there ever going to be anything else ?
+>> If not, the value could be added to the dmi array directly without pointer
+>> indirection.
+> 
+> I once had an ASUS board where they changed board headers in some
+> hardware revision. I suspect the EC sensors
+> interface is valid for their other boards too, we just need users to
+> collect those data. It's quite possible that the DMI
+> board version would change in that case, so that we can add another
+> DMI match if required.
+> So, I'll take your advice and move the sensors to the driver_data field.
+> 
+>> FWIW, MODULE_VERSION tends to have zero value since it tends to end up
+>> not being updated.
+> 
+> Setting the value to 0 then :)
+> 
 
-Yes, my mistake, and thank you for the hint!
+Just drop it.
 
-Regards,
-Eugene
+Guenter
 
-On Tue, 11 Jan 2022 at 19:17, Barnab=C3=A1s P=C5=91cze <pobrn@protonmail.co=
-m> wrote:
->
-> 2022. janu=C3=A1r 11., kedd 19:03 keltez=C3=A9ssel, Eugene Shalygin =C3=
-=ADrta:
->
-> > This patchset replaces the HWMON asus_wmi_ec_sensors driver with
-> > an implementation that does not use WMI but queries the embedded
-> > controller directly.
-> >
-> > That provides two enhancements: sensor reading became quicker (on some
-> > systems or kernel configuration it took almost a full second to read
-> > all the sensors, that transfers less than 15 bytes of data), the driver
-> > became more fexible. The driver now relies on ACPI mutex to lock access
-> > to the EC, in the same way as the WMI DSDT code does.
-> >
-> > Chenges in v5:
-> >  - Place the sensors bitset directly into the driver_data field of the
-> >        dmi_system_id struct.
-> >  - Replace doc comments with regular ones.
-> >
-> > Changes in v4:
-> >  - Deprecate the wmi driver rather than removing it.
-> >
-> > Changes in v3:
-> >  - Remove BIOS version checks and BIOS version dependent mutex path.
-> >
-> > Changes in v2:
-> >  - Replace sensor flags enum with bitset
-> >  - Replace module init/probe functions with module_platform_driver_prob=
-e
-> >    and ask the platform drivers framework to load the driver when ACPI
-> >    EC is found (ACPI ID "PNP0C09").
-> >  - Extend board data with BIOS version attribute for the mutex path to =
-be
-> >    BIOS version dependent.
-> >  - Add module parameter to override the mutex path.
-> >
->
-> Hi
->
->
-> I believe the subject should say "v5" and not "v4". In any case, FYI, `gi=
-t format-patch`
-> has the `--cover-letter` option, which will generate a cover letter templ=
-ate
-> with the right patch version, etc.
->
->
-> Regards,
-> Barnab=C3=A1s P=C5=91cze
