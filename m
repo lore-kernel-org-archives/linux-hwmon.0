@@ -2,76 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 848B5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 19:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EDD6C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 20:53:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235227AbiAKTUK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jan 2022 14:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S244340AbiAKUx0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jan 2022 15:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346557AbiAKTTt (ORCPT
+        with ESMTP id S235828AbiAKUxJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:19:49 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE8AC061201;
-        Tue, 11 Jan 2022 11:18:22 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id e8so36091ilm.13;
-        Tue, 11 Jan 2022 11:18:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fjmViiIBre3Or1MpUA0C99w6YePtgf2gP2ZSnyWyE3o=;
-        b=AP1fc59Vkj1I/G06/1HC4PEXXUIDoxAWst8d2ysF1zSa34JQnuUPJJOTK8Eq8atiRb
-         ZFPGJcjtDRpNCLOwDM2vHnWI7E/5HreM3GwGSdQX+Lbp+JBOBM2E7oQ6gx1J7pOKdQ1B
-         1WRAIH4TS2FvYTuJPuk+suMxn3az2DWE5ZgHCvXCb+7peolxoiz8KCiVZX20mi735KxX
-         WK6AtqBV4wPQhUwj90mGDSII7nF4lTfgUrPjLE+kTfVliPqVT3HdDJaAJA1ca2J8zKCG
-         iFalmcMG5UfsyM0NgoIiv1V2OyJsa0QXkMdZo+kiTHXMmBSZ6NrsS+BXrqLQ0iZCOeph
-         4qWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fjmViiIBre3Or1MpUA0C99w6YePtgf2gP2ZSnyWyE3o=;
-        b=QiQSHdWceoGEne0TdbKel/hkE2Tb0ccCwykw1QBGM3H5BQUCdTKy8a1ZLdXSHsZLRx
-         zh1bkBH2ve6S1QHMW4MyCCJVUwFTnaj1lCU+ylkrL/lm515y+gzDgeMqYUnSKMH21rOk
-         s4M/yNRTynaowSFBoHAF7/YISIlJRTbAmcxIdQ5kosXJg9jGoeaId7VKrARSdBYABFUS
-         N8wp7TKEEmuUjzL2j+PrZu3dPFzGDvKlaCycZ0+Nn4eW0hlPoBL6epWQ7xuiuMeARCVo
-         FJKH3MckXMp7AILivW7wMP9/42zfiW2H324A38D8n/9sdcjOP0AfDPZ2J1vdqY6Rkd4q
-         l2dg==
-X-Gm-Message-State: AOAM5309hxqgZ4y3Exfykl7lnPXrm4AIwf2jKBxDvNOQPhO8o7F+akQO
-        Itu5fMtSUecj1Dk3c4ZKgSGKEHXYD6HVgfn+ICs=
-X-Google-Smtp-Source: ABdhPJwSdhQyKPvc4HjAwuZlim8TG/NSju7MtylKfE0hXQtQyfSKCwH86iWlgikX1Em8ozt+YEMiX9MRVdc3tXsAhhk=
-X-Received: by 2002:a05:6e02:1a08:: with SMTP id s8mr3277389ild.164.1641928701627;
- Tue, 11 Jan 2022 11:18:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20220111160900.1150050-1-eugene.shalygin@gmail.com>
- <20220111160900.1150050-2-eugene.shalygin@gmail.com> <805dd382-262c-36f0-fcf5-5776223040c8@roeck-us.net>
- <CAB95QATsy2ACgyxWLy2PM2peqoYDEa_j96VNSHBG6GMd+x3LzQ@mail.gmail.com>
- <050ee3ed-4c30-afb9-d7ce-898d634284be@roeck-us.net> <CAB95QATb_En0KqXRktY99q8UXmosCftMrekpFiAKrAocwFEKmg@mail.gmail.com>
- <b5753e72-fe0d-1102-64cb-49de242184bb@roeck-us.net>
-In-Reply-To: <b5753e72-fe0d-1102-64cb-49de242184bb@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Tue, 11 Jan 2022 20:18:10 +0100
-Message-ID: <CAB95QAQk=fqVtqWGzoe57=G=sOvFXvjfo9s43z7grVTce8qyMQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
+        Tue, 11 Jan 2022 15:53:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFD0C034000;
+        Tue, 11 Jan 2022 12:53:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 295FB616B7;
+        Tue, 11 Jan 2022 20:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D22DC36AE9;
+        Tue, 11 Jan 2022 20:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641934387;
+        bh=SC5aelwjnHnDj54LGOzD6PRK4LTHsKbl8BmqQufhD9g=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=CiySeMNFSzLMRTzUB8BCVrU4HBH7lXZws7aBtRp+lP54JmRaCaYjjqEx+3ieEN0SK
+         mMMu/JXWMQd8MKvXcRNdkzwic27gCE4lMRjvIElm0j6h5yje9pDw4Jg6vP3URxeRyw
+         QZFiZBwJXjBGpZ0mvUAdw/CHPhLpiaRzX5aOaUZPKw3XU1IhSn74uMgqIVYnqBTJ9E
+         sA+uGKO0V25537cdFTSIaJU43YcdkkXsbU6ExliJwK/bepYs1wBxXLePYResqIZwZZ
+         I6VYSVVYpaDKd54b+rboL/CWS8c6l6XLufVuEFKxHQBXSqmr+aehFLNeL8fPj5wkjd
+         leBmXn2adUvzg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C7D8F6078C;
+        Tue, 11 Jan 2022 20:53:07 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon updates for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220110041722.2095990-1-linux@roeck-us.net>
+References: <20220110041722.2095990-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220110041722.2095990-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17
+X-PR-Tracked-Commit-Id: 00f5117c5f785b95b13663e52dcdcf684a47d4e3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4a110907a118346cfafc3aa3a75a632fac11b7a9
+Message-Id: <164193438750.11435.13217514998372229845.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Jan 2022 20:53:07 +0000
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> No need to resend because of this; I can drop it myself. No,
-> I don't have any further comments at this point, but I would
-> like to see (test/review) feedback by others before applying
-> the series.
+The pull request you sent on Sun,  9 Jan 2022 20:17:22 -0800:
 
-Great! Thank you!
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17
 
-Regards,
-Eugene
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4a110907a118346cfafc3aa3a75a632fac11b7a9
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
