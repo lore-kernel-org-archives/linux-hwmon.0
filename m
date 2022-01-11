@@ -2,68 +2,67 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A5F0C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 16:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B160C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jan 2022 16:38:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242401AbiAKQgs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jan 2022 11:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S1350066AbiAKQi1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jan 2022 11:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240478AbiAKQgs (ORCPT
+        with ESMTP id S1350053AbiAKQiY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:36:48 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C2EC06173F;
-        Tue, 11 Jan 2022 08:36:48 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso19216492otf.0;
-        Tue, 11 Jan 2022 08:36:48 -0800 (PST)
+        Tue, 11 Jan 2022 11:38:24 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF51C06173F;
+        Tue, 11 Jan 2022 08:38:24 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id w188so2308293oib.7;
+        Tue, 11 Jan 2022 08:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=aMa1K6iPjPAPg08ZLNGEeXUTDyEHDQxHzcN0Cbel3LA=;
-        b=N7mA7/ot7qu3Hv4IX53R47Xaa//rwaA+r9eNJAAoRUqhB2mWljL2dra45sIlpeiOWI
-         3tAIzbjT27fAZFAePiy7HYw0eU6Vt0pRnVxUKZJD/UcagreU/dWk5pBj5UQhIx4eUrb0
-         K/JEluujfChIFeBKCHpHOBvMkg6dxjKNsapf3L+u33BcIvs1tTbuUHwSskPgfbBERcDa
-         pUPGfHLxAuONfIMAwXvsgx9XRbRSQo7uC2EV+8eZ5Jqcp50Sn0cAD/qkhCuLoN1c992s
-         iJkfVgHUO0S2RK6LLeWeeOaV9VIkhZZf7LWPcCJV0jRn9w+/5QmJ+LxAxRSsQTKlMbfF
-         k6QA==
+        bh=42h2BzV4OudUpbHBWx6uWYa35E6/jTpt7Oqh0+V9eCY=;
+        b=LfxEIQmZ5D1o6iVdXJCvryq2pBjf/TTUwC3yvuRMxcWcKQEfF8+IGnIR+piRDqYl3g
+         R4B27dkbbyR92UxzKuHALMpDNs0PrmX1gSWVklcpSbm3+sg79W0nidWYhqMSj4OnC7zs
+         TLez9X7QHYDrxREMY02aP04jqkapSWr8kf5KKw+Rp6JKh9bOaSCvORta77m5MuHS3UKi
+         6IPq+3aagdAW+986jt4aJNDDUQG9VT5ZCKpHli12mVXlx2W3vrCX+0V0gslVIFb5QJQn
+         tRYx9CYVrepA1e9rmvAekPPxYpNx5NX/nQeUMzY0ICtNceduWPqmscPBctkoDbIyWL7z
+         zu9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=aMa1K6iPjPAPg08ZLNGEeXUTDyEHDQxHzcN0Cbel3LA=;
-        b=Wzb462q0VVoiE4rvCXwspr6WgDy20cQgWuyV99ERlBChV385nK7iMFIv78wpc8pqpO
-         rvGaUf9SKsfLuluQJnOoX1mcCpAEyHNiA0K4BZOgtQzINUONHB15AUoLZ9gsk04Z+sQK
-         m0QuF1N5graSwd/ZwyVizcRwXbjveBBZqpWVP/ZoGO6rUmAo4xUtvPgcSKioz4h0MMKE
-         B/XcebPPp5JUsrvMBDVwP0g5R6eBUSq+4M6V3g1iDojznsBmyK3dW8rfMMEwVmaN0LOW
-         dtxF/wDAK7mvc9e8FLxUPAFUI5Akp6oCKgm6NPIZOVmVgPP5sxOM7hzeNEBVZedGhr0v
-         Ol0Q==
-X-Gm-Message-State: AOAM5317te/5Ors+/ihTS+R8oQfocuozqLbdPoD1plipkWQ3Q6icZEvX
-        Ezlj7MCiYCCVDsx9bRwdVtoi3RKiIM4=
-X-Google-Smtp-Source: ABdhPJy1pN5AnEEJ4Qw68vtybJ5C8F9mRbhQNR18RQVZqxMCscmOx+Njpeuu+3pVfGAp0kkTzakYzQ==
-X-Received: by 2002:a9d:6e0a:: with SMTP id e10mr3890350otr.323.1641919007232;
-        Tue, 11 Jan 2022 08:36:47 -0800 (PST)
+        bh=42h2BzV4OudUpbHBWx6uWYa35E6/jTpt7Oqh0+V9eCY=;
+        b=8IGFCsGrHFfrxMpw1CKKSaNaH/quYMlgxhHxlpbtm/Ak9ijZgHTwaB/21w5a2JcrxR
+         KbCN8njHQW+G3qDZNFy60l4Wm/4vxo0fELxmwAw1mK+KxV/GDKUohCA+bxyM1FRUGL8a
+         SfwztMQlj3ZnLq57av5RXkmT7ep4KJCbdnapoZ50qJH/GFhYBKZPvaiYjU4k4U3Dy2uz
+         VEs23vTT9EZCAlCZIpSsVvdbTeGEJrWuUrEcAEyNUeCuPsxD+hsqIh709hHq54rJwNee
+         b37Gz0WC+TLJykctwpzISvg+vMPpZDWh1ZB7AN1X3TxajW9n1g6IF0aTIp50dACQiuiF
+         x1oA==
+X-Gm-Message-State: AOAM530VuG26GwSKaIGG2OUXYoFsBu1/bcBI+ujuNdorHcofMEEAWoG4
+        pt8FHQrMBLQsIwgCAm8Ka1XJPWng9T0=
+X-Google-Smtp-Source: ABdhPJy5fggybeRefMggpwkNd1KgbBJ96Nz/FLADWcBOYt62C1b/Gz5zj1G5r7OwOfRfi9XU8kFbbg==
+X-Received: by 2002:aca:ad17:: with SMTP id w23mr804974oie.38.1641919103342;
+        Tue, 11 Jan 2022 08:38:23 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id be30sm1721139oib.50.2022.01.11.08.36.45
+        by smtp.gmail.com with ESMTPSA id x14sm252507oiv.39.2022.01.11.08.38.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 08:36:46 -0800 (PST)
+        Tue, 11 Jan 2022 08:38:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 3/3] hwmon: (asus_wmi_ec_sensors) remove the driver
+Subject: Re: PATCH v3 ASUS EC Sensors
 To:     Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
         Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org
 References: <20220111160900.1150050-1-eugene.shalygin@gmail.com>
- <20220111160900.1150050-4-eugene.shalygin@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f291e622-2812-1842-64ec-0e185aef6a15@roeck-us.net>
-Date:   Tue, 11 Jan 2022 08:36:44 -0800
+Message-ID: <a520f11e-c495-b456-0216-e57ad21c4182@roeck-us.net>
+Date:   Tue, 11 Jan 2022 08:38:21 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220111160900.1150050-4-eugene.shalygin@gmail.com>
+In-Reply-To: <20220111160900.1150050-1-eugene.shalygin@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,16 +71,12 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 1/11/22 8:08 AM, Eugene Shalygin wrote:
-> The driver is superceeded by asus-ec-sensors
+> Changes in v3:
+>      - Removed BIOS version checks and BIOS version dependent mutex path.
 > 
-superseded
+> 
+Subject should start with [PATCH v3 0/3], and there should be a proper introduction,
+not just a brief change log for the last version.
 
-I want to have this handled differently: In Kconfig, mark the
-SENSORS_ASUS_WMI_EC driver as depending on !SENSORS_ASUS_EC,
-and add a note to Kconfig stating that the driver is replaced
-by SENSORS_ASUS_EC, which should be used instead. Then, in a couple
-of releases, we can remove the obsolete driver. This will give
-us some test coverage of the new driver but still provide an alternative.
-
-Thanks,
 Guenter
+
