@@ -2,107 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE2CFC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jan 2022 16:47:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DC96C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jan 2022 21:49:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349760AbiALQrd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jan 2022 11:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
+        id S229993AbiALVts (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jan 2022 16:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239986AbiALQrc (ORCPT
+        with ESMTP id S230093AbiALVts (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:47:32 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D62C06173F;
-        Wed, 12 Jan 2022 08:47:32 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id 60-20020a9d0142000000b0059103eb18d4so3197217otu.2;
-        Wed, 12 Jan 2022 08:47:32 -0800 (PST)
+        Wed, 12 Jan 2022 16:49:48 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9337C06173F;
+        Wed, 12 Jan 2022 13:49:47 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id s30so12874310lfo.7;
+        Wed, 12 Jan 2022 13:49:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lN/J8rputKQp3jJ7yCi1FIi8yjN6Bxzqjn/tTbNlKC8=;
-        b=IaxXXiu/sSqOIbs17E4K1xWDLeO9OnsqekmORdGbRanZkzPucA4pKniqCg9mWUYPQl
-         gZYDrwOMh3Dl6FmG4VjWF0brODaxM2rvP6DlJy8YTKKhBkjCf9mTJwN8xLtnpC9pouwy
-         z545yuEIJEA+nJMGgo3+bekW2HR2x2+T9BSB1wfRvB7aFrm/gs2CXgC4kAzWNzAIP++o
-         tit59RPKDB0AlEnqw/kqVTT1mvK5ViQAhTTQ15n2A4JgKB4hdrDiXohbcjgxikcp7W3D
-         lJwcHjlgIknQcNZoTbV7E7s/MBibysZeOg8wXW/kle/pVBclV54x4CQRwg5+LpAaBvBh
-         lAjQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q3rnP+krtV/CZXNrZMFcoh1rVGhR/Cm40MPurpzxHec=;
+        b=ICzV5OZYp0axM8E6tZ33uQ1jSCGg0ziJmWRJkme4+K+JYbuKy3SpgdNMwn/IuGcnIP
+         xB8FDtisPkBpgLb7lsA9852CmM7+tccq52mZneXn1iPrjvpj1fcWv+nWrYqt2yLECqxq
+         /fkbRF4YKwZyIXRHTiN5EfoWL/msEa1Zf0hkV2JbOo5rfNg5c17k5g4tyuDajR0vcvpd
+         B0k0iqR1Cvq9xblFapdI0Ee1Bc3nvFUS6F5/9GF2avrCiGtMORKegjwD7IMiztga1qNA
+         4SX9ZxCcD14dsuGECUcGEjZVp4Jm3lQZxhNsV85d34BqVMeJD2HabE9ZXiDFu7EMNOYz
+         r5tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=lN/J8rputKQp3jJ7yCi1FIi8yjN6Bxzqjn/tTbNlKC8=;
-        b=yT2Xcz/bOmc3YCSfYF5fnWUFrYtvfSPsDhEjHsaP2ILWrlM8UuBh46LkEYITo3Z3UB
-         aWnbCsfpP6y8xz2jX+5Lspf88158Ro5Zf4OCMQzRvoKVSsukeajVZQIh4CcATVjFAy2G
-         KxQO/NOPNqdSww7BSDC+quer3ZlLA82WGiu151Td2F+shZoknQ1qABE7PMRc/TR1Q0O8
-         nzG34e8gu1661Iqr8dMf4HaZaHzBoUJJw9gRAbLSf3vfCmCLhVa5AbpUsdwQJinVpE6h
-         TkUDOsaie6f+aHAm5FzeuP+t5g4FrX+sjmXBSUpF8ZdmdeJIT113Wxnvgou8FhMZlxY+
-         /KDQ==
-X-Gm-Message-State: AOAM530+iWcKWRIkOxUPGI8sV2NSZG8fSkgrpwGXTns4Nlq+Z1iZlCN0
-        JNvCPfPRf2ViZQWwSY/dl4s=
-X-Google-Smtp-Source: ABdhPJyFV+79hmv6ZxS5TVvuE33S7LnADsy1BbPzkzxadGkmDiXNyNSamsxAPv2oM+oyKeUyVGBamQ==
-X-Received: by 2002:a05:6830:1649:: with SMTP id h9mr436149otr.135.1642006051555;
-        Wed, 12 Jan 2022 08:47:31 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6sm53018ots.53.2022.01.12.08.47.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q3rnP+krtV/CZXNrZMFcoh1rVGhR/Cm40MPurpzxHec=;
+        b=G//CeA1zj6cc3mH5G0nXQPI60w8J6qAK9LP3hkE9G/LkXS1y12e/C3CZaNM1Ef0Mx5
+         T5ZtNtBDmjVnZv0D2jyowVGLmqHyl+bGCUJ0HheoxAIhDUDHTAkYuB0cmAYwmwtqy751
+         kKBaBdeYkC5/0jEjXKScQQwtIunYMtMIDi3cN+FRrPxUp0SXdIq159Xrb5IwfrSqqpuc
+         tO4lhUqbq+zEoK27HyZn+PLHEkD/xrnkaUXK7RXtWzoOyOsx8alyf/k7iUqhfCUHDLZe
+         uWJGIjhCzGfjFCA3hrAQwaZpWOgSNl2bWKNtssTcdElQ3UFvUba2tmfqlSPLIfvw72IK
+         p6Dg==
+X-Gm-Message-State: AOAM5311CsaA9DtJRhT2fvHQWEvA/NI6yP/Tf1Mr5TP0B9BvKF+lLOIb
+        wNRZbzzH02wATc7Sy2A6NV18G4dWqLc=
+X-Google-Smtp-Source: ABdhPJztV4IHyOuCpVBVrqzOm7BUaqURkhK+Iy6jboiq/uvgtHCOCTPV8O9TS44tCxhZVInQO61Opw==
+X-Received: by 2002:ac2:5e85:: with SMTP id b5mr1299812lfq.0.1642024186144;
+        Wed, 12 Jan 2022 13:49:46 -0800 (PST)
+Received: from localhost.localdomain ([94.179.50.100])
+        by smtp.gmail.com with ESMTPSA id m21sm99399lfg.121.2022.01.12.13.49.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 08:47:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Jan 2022 08:47:29 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        linux-kernel@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>
-Subject: Re: [PATCH v3] hwmon: (nct6775) add support for TSI temperature
- registers
-Message-ID: <20220112164729.GA399472@roeck-us.net>
-References: <20220112034824.3467-1-zev@bewilderbeest.net>
+        Wed, 12 Jan 2022 13:49:45 -0800 (PST)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     pauk.denis@gmail.com, Aleksa Savic <savicaleksa83@gmail.com>,
+        Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus_wmi_sensors) add ASUS ROG STRIX B450-F GAMING II
+Date:   Wed, 12 Jan 2022 23:49:17 +0200
+Message-Id: <20220112214917.11662-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112034824.3467-1-zev@bewilderbeest.net>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 07:48:24PM -0800, Zev Weiss wrote:
-> These registers report CPU temperatures (and, depending on the system,
-> sometimes chipset temperatures) via the TSI interface on AMD systems.
-> They're distinct from most of the other Super-IO temperature readings
-> (CPUTIN, SYSTIN, etc.) in that they're not a selectable source for
-> monitoring and are in a different (higher resolution) format, but can
-> still provide useful temperature data.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Tested-by: Renze Nicolai <renze@rnplus.nl>
-> ---
-> 
-[ ... ]
+ASUS ROG STRIX B450-F GAMING II has support of the same WMI
+monitoring method as ASUS ROG STRIX B450-F GAMING.
 
-> +		switch (data->kind) {
-> +		case nct6791:
-> +		case nct6792:
-> +		case nct6793:
-> +			data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
-> +			num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
-> +			break;
-> +		case nct6795:
-> +		case nct6796:
-> +		case nct6797:
-> +		case nct6798:
-> +			data->REG_TSI_TEMP = NCT6796_REG_TSI_TEMP;
-> +			num_reg_tsi_temp = ARRAY_SIZE(NCT6796_REG_TSI_TEMP);
-> +			break;
-> +		default:
-> +			dev_warn(dev, "unknown number of TSI temp registers for %s\n", data->name);
-> +			num_reg_tsi_temp = 0;
-> +			break;
+This commit adds "ASUS ROG STRIX B450-F GAMING II" to
+the list of boards that can be monitored using ASUS WMI.
 
-Please drop the message. This is new functionality which should not
-suddenly produce a warning for chips which possibly do not support those
-registers in the first place. For users with those chips the warning
-is just confusing.
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Tested-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+ drivers/hwmon/asus_wmi_sensors.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Guenter
+diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+index c80eee874b6c..8fdcb62ae52d 100644
+--- a/drivers/hwmon/asus_wmi_sensors.c
++++ b/drivers/hwmon/asus_wmi_sensors.c
+@@ -77,6 +77,7 @@ static const struct dmi_system_id asus_wmi_dmi_table[] = {
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-E GAMING"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-F GAMING"),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-F GAMING II"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B450-I GAMING"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X399-E GAMING"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X470-F GAMING"),
+
+base-commit: 00f5117c5f785b95b13663e52dcdcf684a47d4e3
+-- 
+2.34.1
+
