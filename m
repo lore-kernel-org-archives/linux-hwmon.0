@@ -2,270 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19B83C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jan 2022 02:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B8E5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jan 2022 02:51:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiAMCuc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jan 2022 21:50:32 -0500
-Received: from mga06.intel.com ([134.134.136.31]:21669 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231812AbiAMCub (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jan 2022 21:50:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642042231; x=1673578231;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CjGIAnPErPoqCWx24UZNSUZoXpJ44eoH7yZTYnHRTGM=;
-  b=RQexFpuOXNNH+/XQO5lAF/omJUrNAUiVabAQNxwX6J4V7yPNWkOcOAZf
-   v5e/bhjYdJsW5fhWLRST5rl4rKQTSwFMchY5ZyysnvHAvvsuMqWzGb9Yi
-   DbQI2XE0jsbfjOKoeQ7g3uTigoOV2UD64vJyWjBj6jtL4viGxwiNKGlN5
-   ZjmEIm9lBXLVXUj94Q9NVxRF96U3H+w3ISzYU2xH2PmyemWaEF/Pt5RfS
-   lOzteGM6eSNk1bEE6YjvHpKIIM+jPLqI3E+W3rzy/uZxNoz2OdtZXtUuc
-   xo0DZZ81nIrI9APPS+JPhzRMmBiHWKUG1uzKRs4yP6kUcoKo/c1D3DW/e
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="304649772"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="304649772"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 18:50:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="475147390"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jan 2022 18:50:30 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7qC4-0006kh-Rk; Thu, 13 Jan 2022 02:50:28 +0000
-Date:   Thu, 13 Jan 2022 10:50:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- a7e54735ac4398285215ee263638cea0435c80ee
-Message-ID: <61df9362.uKQkzpzq4dxxDKwP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231812AbiAMCvv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jan 2022 21:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231815AbiAMCvv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 12 Jan 2022 21:51:51 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ED0C06173F;
+        Wed, 12 Jan 2022 18:51:50 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id i9so5970627oih.4;
+        Wed, 12 Jan 2022 18:51:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5FspLJRD1mfTtVmG8jofxIl0TqdWH9PjoPfFz13cPbY=;
+        b=bMTVHbnmenwmjEpx9DAXoNej8qPqk/ly5dOLsu4w0cQBnhvLKcDGPyESIm06BaF/8e
+         LkfSzfIpZvCH0FnkT3u+y3OlvP0Bu6DdcQQrhI9H50ESuEYuzDW+WGe4BoLWPwU9hS+d
+         rWofWWTSSZXYRcBQdn8uXCysp/HOfNjGuEAIijB6O1fHdW0l6SwcEvCZGmkOCvNGL33A
+         koXayCxl3Z8BDLBS4lNBZ5bbEztT5HWTfJNnJz6Ld3dpHuQaVws3XWs5+Kh4IWA8RVtG
+         WRKfq9qI/8DAgZleZeL84caxKKPcjQRBBG5zTJhducLNlf1qEVQAG5JKsO+Fh7KvEt7Z
+         g3uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5FspLJRD1mfTtVmG8jofxIl0TqdWH9PjoPfFz13cPbY=;
+        b=iE/YudLr84ElVN0TlNwV6KmHZ1GBCBnDCB/prME1NhxYUGiX8nIaW28ReHrewA3dPt
+         OZdZ+uRmdNq/z2J2D2+OfWoof5pt64zT1ziJyv2pjlWQdiXYbtwxPGv06dvul7inJS6u
+         bKj4B/J/f9EJTvInmosEWgqOE8CDKCIIxPEh8zSAIoMvFWgc9ZVx8R+0hOrd/ZXEck5t
+         IPx1F7SP8KQpT3IxaPOIJTcrXqkFgzoay8sFrIcEFgrMEtoH7uWSimlQtZYG9aux9DIz
+         bWWiaVqhF5fXSQVbEVgo1lq3mYr6Q/iLSaT/oyL+sFX2+DDun1LU4CeUeAgsDcejH1RY
+         +FqQ==
+X-Gm-Message-State: AOAM5302aBE4hkMNphpzf+kJ1/RpnHubG5iAWkIxJoSUiS+ufxa5AHgQ
+        F+qFPlvVQSb/tThrseglNkD3X3L4fxU=
+X-Google-Smtp-Source: ABdhPJyfuKmp30/9hMSNIJDjRDN2Q2GXHpOZoNENUHbo8yamhaGDueRih+aUQwpJj7oudpzShoBHhQ==
+X-Received: by 2002:a05:6808:1119:: with SMTP id e25mr1790235oih.30.1642042310046;
+        Wed, 12 Jan 2022 18:51:50 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 4sm298923otl.26.2022.01.12.18.51.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 18:51:49 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
+ <20220111180347.1245774-4-eugene.shalygin@gmail.com>
+ <2224186.ElGaqSPkdT@natalenko.name>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v5 3/3] hwmon: deprecate asis_wmi_ec_sensors driver
+Message-ID: <a95919c0-6a89-18bc-e8ba-2165414e096b@roeck-us.net>
+Date:   Wed, 12 Jan 2022 18:51:47 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <2224186.ElGaqSPkdT@natalenko.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: a7e54735ac4398285215ee263638cea0435c80ee  hwmon: (lm90) Fix sysfs and udev notifications
+On 1/12/22 1:51 PM, Oleksandr Natalenko wrote:
+> Hello.
+> 
+> On úterý 11. ledna 2022 19:03:46 CET Eugene Shalygin wrote:
+>> ---
+>>   drivers/hwmon/Kconfig | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 2c16b19d2c03..5e693c93d43a 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -2243,13 +2243,16 @@ config SENSORS_ASUS_WMI
+>>   
+>>   config SENSORS_ASUS_WMI_EC
+>>   	tristate "ASUS WMI B550/X570"
+>> -	depends on ACPI_WMI
+>> +	depends on ACPI_WMI && !SENSORS_ASUS_EC
+> 
+> Not sure how it handles `SENSORS_ASUS_EC=m`. Probably, it should be:
+> 
+> ```
+> depends on ACPI_WMI && SENSORS_ASUS_EC=n
+> ```
+> 
 
-elapsed time: 1503m
+Odd language, and good catch. If I understand correctly, the result
+of !SENSORS_ASUS_EC is 'm' if SENSORS_ASUS_EC=m. So, yes, it looks
+like this needs to be "ACPI_WMI && SENSORS_ASUS_EC=n".
 
-configs tested: 197
-configs skipped: 3
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> ?
+> 
+>>   	help
+>>   	  If you say yes here you get support for the ACPI embedded controller
+>>   	  hardware monitoring interface found in B550/X570 ASUS motherboards.
+>>   	  This driver will provide readings of fans, voltages and temperatures
+>>   	  through the system firmware.
+>>   
+>> +	  This driver is deprecated in favor of the ASUS EC Sensors driver
+>> +	  which provides fully compatible output.
+>> +
+>>   	  This driver can also be built as a module. If so, the module
+>>   	  will be called asus_wmi_sensors_ec.
+> 
+> Thanks.
+> 
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-mips                 randconfig-c004-20220111
-arm                         cm_x300_defconfig
-csky                             alldefconfig
-powerpc                      ppc6xx_defconfig
-powerpc                         wii_defconfig
-nds32                               defconfig
-arm                           u8500_defconfig
-h8300                     edosk2674_defconfig
-sh                           se7724_defconfig
-m68k                           sun3_defconfig
-m68k                             alldefconfig
-sh                          sdk7780_defconfig
-ia64                        generic_defconfig
-ia64                         bigsur_defconfig
-sh                     magicpanelr2_defconfig
-arm                            pleb_defconfig
-arc                    vdk_hs38_smp_defconfig
-h8300                               defconfig
-sh                          r7785rp_defconfig
-arc                     haps_hs_smp_defconfig
-sh                         microdev_defconfig
-powerpc                     rainier_defconfig
-sparc                            alldefconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                      mgcoge_defconfig
-powerpc                    klondike_defconfig
-arm                           stm32_defconfig
-powerpc                      bamboo_defconfig
-m68k                       m5275evb_defconfig
-sh                        edosk7705_defconfig
-sh                          rsk7203_defconfig
-powerpc                 mpc834x_itx_defconfig
-m68k                       bvme6000_defconfig
-sh                        apsh4ad0a_defconfig
-sh                              ul2_defconfig
-arm                        realview_defconfig
-powerpc                       holly_defconfig
-powerpc                  storcenter_defconfig
-arm                         assabet_defconfig
-sh                          rsk7269_defconfig
-um                           x86_64_defconfig
-sh                               j2_defconfig
-powerpc64                        alldefconfig
-arm                      footbridge_defconfig
-arm                       multi_v4t_defconfig
-ia64                             alldefconfig
-mips                     decstation_defconfig
-csky                                defconfig
-powerpc                        warp_defconfig
-h8300                       h8s-sim_defconfig
-sh                           se7751_defconfig
-microblaze                          defconfig
-arm                       omap2plus_defconfig
-sparc64                             defconfig
-mips                          rb532_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                          landisk_defconfig
-sh                           se7722_defconfig
-sh                           se7712_defconfig
-powerpc                    adder875_defconfig
-ia64                                defconfig
-sh                     sh7710voipgw_defconfig
-arm                      integrator_defconfig
-powerpc                  iss476-smp_defconfig
-mips                      fuloong2e_defconfig
-mips                           jazz_defconfig
-arm64                            alldefconfig
-m68k                        m5272c3_defconfig
-powerpc                 mpc834x_mds_defconfig
-sh                             shx3_defconfig
-m68k                        stmark2_defconfig
-arm                        trizeps4_defconfig
-microblaze                      mmu_defconfig
-sh                           se7721_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                       ppc64_defconfig
-powerpc                      pasemi_defconfig
-arm                            hisi_defconfig
-xtensa                generic_kc705_defconfig
-nios2                            allyesconfig
-mips                           ip32_defconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                           se7705_defconfig
-xtensa                  nommu_kc705_defconfig
-m68k                            q40_defconfig
-sh                        edosk7760_defconfig
-mips                        jmr3927_defconfig
-xtensa                           alldefconfig
-h8300                            alldefconfig
-mips                     loongson1b_defconfig
-powerpc                      cm5200_defconfig
-arm                  randconfig-c002-20220112
-arm                  randconfig-c002-20220111
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220111
-arc                  randconfig-r043-20220112
-arc                  randconfig-r043-20220111
-s390                 randconfig-r044-20220111
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-arm                  randconfig-c002-20220112
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220112
-powerpc              randconfig-c003-20220112
-i386                          randconfig-c001
-mips                 randconfig-c004-20220112
-powerpc                     akebono_defconfig
-mips                   sb1250_swarm_defconfig
-mips                        workpad_defconfig
-mips                          ath79_defconfig
-arm                          pcm027_defconfig
-arm                     am200epdkit_defconfig
-arm                         palmz72_defconfig
-arm                          imote2_defconfig
-arm                             mxs_defconfig
-arm                          pxa168_defconfig
-powerpc                      katmai_defconfig
-powerpc                  mpc866_ads_defconfig
-mips                      pic32mzda_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc                 mpc836x_mds_defconfig
-mips                        bcm63xx_defconfig
-powerpc                      pmac32_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-hexagon              randconfig-r045-20220112
-riscv                randconfig-r042-20220112
-hexagon              randconfig-r041-20220112
-s390                 randconfig-r044-20220112
-hexagon              randconfig-r045-20220111
-hexagon              randconfig-r041-20220111
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
