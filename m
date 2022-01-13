@@ -2,52 +2,52 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D855C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jan 2022 03:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6030C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jan 2022 04:14:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbiAMDSE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jan 2022 22:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S232656AbiAMEOv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jan 2022 23:14:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbiAMDRz (ORCPT
+        with ESMTP id S233102AbiAMENi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jan 2022 22:17:55 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B12C06173F;
-        Wed, 12 Jan 2022 19:17:55 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id b127so5824800qkd.0;
-        Wed, 12 Jan 2022 19:17:55 -0800 (PST)
+        Wed, 12 Jan 2022 23:13:38 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3603AC06175B;
+        Wed, 12 Jan 2022 20:12:29 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id bl18so5882521qkb.5;
+        Wed, 12 Jan 2022 20:12:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FiBmD87n7smzQMQDeZHB6mm8SdQHhbXrtoGI/254RyQ=;
-        b=LAWyJiaGMbnBlzy67ihXukao4c1KRhHhCn7RfEdKQmEB40gT9JXyb6m157EiuvGVOE
-         /PxN/hDiidM+VCLuf096XyBuxV5fBMNQuE67JFw2JIHMchRo1nAfLGU5Sib4chnHUsTM
-         UdPsB8Z6kyZU001GWuXDhnmxNFTos+4aw59Aw=
+        bh=pbtW5GNEznZHiafA75unnHcFZvdczANI1PgQ6YwC50I=;
+        b=ibjmvFEuzUnUj0P4/dhygtlpXkwqsmCbtqtSnsfMo8cpFNuhzqPWC58ZSdU3L1JTwt
+         0JbiyhvXcxCguvtxAY6qa9hCdayN57icMXEHv5DOV32DSMkflySg0TSy0Uod6ngnhHaT
+         A+M5uaveL8e8wlbe7AJqTbAjOrKQ1vG8fia6k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FiBmD87n7smzQMQDeZHB6mm8SdQHhbXrtoGI/254RyQ=;
-        b=rJ5WVWdB/pkRE23bHxbwrYeNkZ8F+0DfNVpMHOV47u25noGHHwbgmUZduH/+5nUJ6c
-         uBmkXdsm26b3mnDUxGLEFE+jRBUlI/Buz9xGQ8HpFTav1IpM9b765zBR4vUaK2vb1VyI
-         f0ZwJp7t2prKjhoeQ2QQCSlZ2+vgLc3cSy4NyEaxTGysY5z8biHcs7URvo7Muj22VkBC
-         /yqY+RDgBMVfMGlkLUdZu+Yd9pL7KmGKMRKSi2WGhzHgj9DZfYCBHLoXrR6bXscO62/j
-         1BrMO81uic9hUV2DbdmdS9CjAOqdfcQa7KAcy6YyiXz4N8pKPCaugXiIT/nVa8KLJ7es
-         y8Vg==
-X-Gm-Message-State: AOAM531I2oH29PegoIIY0/jHfNIJibavaf6IRPjNu1lXoaXsGPAKzauv
-        DRewcM9D3EdwhxrRaqt8hfvn3zuKgrCgHSPVCWU=
-X-Google-Smtp-Source: ABdhPJwZHZYgvotm7oygzzdLm6RLj5EtzqmsCy8jzni/Q69ijc8yVKgxipA6k47FweFIb1bMy8Eht1BD/2/myLO/Jsg=
-X-Received: by 2002:a37:94c2:: with SMTP id w185mr1904124qkd.666.1642043874271;
- Wed, 12 Jan 2022 19:17:54 -0800 (PST)
+        bh=pbtW5GNEznZHiafA75unnHcFZvdczANI1PgQ6YwC50I=;
+        b=DCSq349x/8mLa4oBTbhmPe9amY8CCKiXSqQY2EkMvaLiFTOQE0/rYViIkX1Y652tl+
+         vH3UWVYsvRaDPFvzEIS1eTQ9QLY+mAfmUHx8y7za9oZschFQS1SALOqXBz9J3wIiCzX6
+         L+Wg1IW+iI4lvpS+XORYkK58G3LjNIQUD0RxAKGF0KtI71UjL8xgvTjaxyaRjYKuEYnG
+         WLauJ95mxDtL0VB7xKwA8LXYH3eO8vPeTb+PHLS3p0OoRvw8zMVc5e+4eLvdBw3+MzXl
+         +XoEUyMDkMr+KoywviXWaVJUP7HN6eTGvkaOh4ojGymnTynf4EcPSW9VJD2pY6Lvbaqw
+         KEtQ==
+X-Gm-Message-State: AOAM532ze74qwpbmEdKRkKuOS4rL1JIpPwTBz2H8Orr/gtXUImxuzPBB
+        czWX/QQH1g1OY/5T8a12PiQqldo5szdPS4pHibE=
+X-Google-Smtp-Source: ABdhPJwOVBaayKDH/i9TEqiJA4jUpG5Q9ZPM20KYYIs0XA0wcVXkAniMBmivwNgSlbtXPJKggVHdozQRsoV+5JJNw5E=
+X-Received: by 2002:a37:a342:: with SMTP id m63mr272966qke.347.1642047148268;
+ Wed, 12 Jan 2022 20:12:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20220112230247.982212-1-iwona.winiarska@intel.com> <20220112230247.982212-2-iwona.winiarska@intel.com>
-In-Reply-To: <20220112230247.982212-2-iwona.winiarska@intel.com>
+References: <20220112230247.982212-1-iwona.winiarska@intel.com> <20220112230247.982212-6-iwona.winiarska@intel.com>
+In-Reply-To: <20220112230247.982212-6-iwona.winiarska@intel.com>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 13 Jan 2022 03:17:42 +0000
-Message-ID: <CACPK8Xfi33mr38_sdxF_Hi8Pw7VHzxH0zJd09gQz0voJm2xDBA@mail.gmail.com>
-Subject: Re: [PATCH v5 01/13] dt-bindings: Add generic bindings for PECI
+Date:   Thu, 13 Jan 2022 04:12:16 +0000
+Message-ID: <CACPK8XewQJBvwssM6zQKQoxT=JLpk-qjGhsiTAa980OtbU7JBw@mail.gmail.com>
+Subject: Re: [PATCH v5 05/13] peci: Add peci-aspeed controller driver
 To:     Iwona Winiarska <iwona.winiarska@intel.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
@@ -72,65 +72,154 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         David Muller <d.mueller@elsoft.ch>,
         Dave Hansen <dave.hansen@intel.com>,
         Billy Tsai <billy_tsai@aspeedtech.com>,
-        Rob Herring <robh@kernel.org>
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 12 Jan 2022 at 23:03, Iwona Winiarska <iwona.winiarska@intel.com> wrote:
+On Wed, 12 Jan 2022 at 23:06, Iwona Winiarska <iwona.winiarska@intel.com> wrote:
 >
-> Add device tree bindings for the PECI controller.
+> From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 >
+> ASPEED AST24xx/AST25xx/AST26xx SoCs support the PECI electrical
+> interface (a.k.a PECI wire) that provides a communication channel with
+> Intel processors.
+> This driver allows BMC to discover devices connected to it and
+> communicate with them using PECI protocol.
+>
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Co-developed-by: Iwona Winiarska <iwona.winiarska@intel.com>
 > Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+The driver looks good to me. I would be happy to see it merged in its
+current state.
 
 Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-> ---
->  .../bindings/peci/peci-controller.yaml        | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/peci/peci-controller.yaml
->
-> diff --git a/Documentation/devicetree/bindings/peci/peci-controller.yaml b/Documentation/devicetree/bindings/peci/peci-controller.yaml
-> new file mode 100644
-> index 000000000000..bbc3d3f3a929
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/peci/peci-controller.yaml
-> @@ -0,0 +1,33 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/peci/peci-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+I've a few questions below that can be followed up later if need be.
+
 > +
-> +title: Generic Device Tree Bindings for PECI
+> +static void aspeed_peci_init_regs(struct aspeed_peci *priv)
+> +{
+> +       u32 val;
 > +
-> +maintainers:
-> +  - Iwona Winiarska <iwona.winiarska@intel.com>
+> +       /* Clear interrupts */
+> +       val = readl(priv->base + ASPEED_PECI_INT_STS) | ASPEED_PECI_INT_MASK;
+
+Should that be & MASK?
+
+As you're just sanitising the registers, you could clear the status
+unconditionally:
+
+ writel(ASPEED_PECI_INT_MASK, priv->base + ASPEED_PECI_INT_STS);
+
+> +       writel(val, priv->base + ASPEED_PECI_INT_STS);
 > +
-> +description:
-> +  PECI (Platform Environment Control Interface) is an interface that provides a
-> +  communication channel from Intel processors and chipset components to external
-> +  monitoring or control devices.
+> +       /* Set timing negotiation mode and enable interrupts */
+> +       val = FIELD_PREP(ASPEED_PECI_TIMING_NEGO_SEL_MASK, ASPEED_PECI_1ST_BIT_OF_ADDR_NEGO);
+
+That's a complicated way to set val to zero :)
+
+> +       val |= ASPEED_PECI_INT_MASK;
+> +       writel(val, priv->base + ASPEED_PECI_INT_CTRL);
 > +
-> +properties:
-> +  $nodename:
-> +    pattern: "^peci-controller(@.*)?$"
+> +       val = FIELD_PREP(ASPEED_PECI_CTRL_SAMPLING_MASK, ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT);
+> +       writel(val, priv->base + ASPEED_PECI_CTRL);
+
+This will clear the rest of the ctrl register, including the divisor
+settings. Was that your intention?
+
+Reading the rest of your driver you only call _init_regs after
+_controller_enable, so I guess you're fine.
+
+> +}
 > +
-> +  cmd-timeout-ms:
-> +    description:
-> +      Command timeout in units of ms.
+> +static int aspeed_peci_check_idle(struct aspeed_peci *priv)
+> +{
+> +       u32 cmd_sts = readl(priv->base + ASPEED_PECI_CMD);
+> +       int ret;
 > +
-> +additionalProperties: true
+> +       /*
+> +        * Under normal circumstances, we expect to be idle here.
+> +        * In case there were any errors/timeouts that led to the situation
+> +        * where the hardware is not in idle state - we need to reset and
+> +        * reinitialize it to avoid potential controller hang.
+> +        */
+> +       if (FIELD_GET(ASPEED_PECI_CMD_STS_MASK, cmd_sts)) {
+> +               reset_control_assert(priv->rst);
 > +
-> +examples:
-> +  - |
-> +    peci-controller@1e78b000 {
-> +      reg = <0x1e78b000 0x100>;
-> +      cmd-timeout-ms = <500>;
-> +    };
-> +...
-> --
-> 2.31.1
->
+> +               ret = reset_control_deassert(priv->rst);
+> +               if (ret) {
+> +                       dev_err(priv->dev, "cannot deassert reset control\n");
+> +                       return ret;
+> +               }
+> +
+> +               aspeed_peci_init_regs(priv);
+> +
+> +               ret = clk_set_rate(priv->clk, priv->clk_frequency);
+> +               if (ret < 0) {
+> +                       dev_err(priv->dev, "cannot set clock frequency\n");
+> +                       return ret;
+> +               }
+> +
+> +               aspeed_peci_controller_enable(priv);
+> +       }
+> +
+> +       return readl_poll_timeout(priv->base + ASPEED_PECI_CMD,
+> +                                 cmd_sts,
+> +                                 !(cmd_sts & ASPEED_PECI_CMD_IDLE_MASK),
+> +                                 ASPEED_PECI_IDLE_CHECK_INTERVAL_US,
+> +                                 ASPEED_PECI_IDLE_CHECK_TIMEOUT_US);
+> +}
+> +
+> +static int aspeed_peci_xfer(struct peci_controller *controller,
+> +                           u8 addr, struct peci_request *req)
+> +{
+> +       struct aspeed_peci *priv = dev_get_drvdata(controller->dev.parent);
+> +       unsigned long timeout = msecs_to_jiffies(priv->cmd_timeout_ms);
+> +       u32 peci_head;
+> +       int ret;
+> +
+> +       if (req->tx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX ||
+> +           req->rx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX)
+> +               return -EINVAL;
+> +
+> +       /* Check command sts and bus idle state */
+> +       ret = aspeed_peci_check_idle(priv);
+> +       if (ret)
+> +               return ret; /* -ETIMEDOUT */
+> +
+> +       spin_lock_irq(&priv->lock);
+> +       reinit_completion(&priv->xfer_complete);
+> +
+> +       peci_head = FIELD_PREP(ASPEED_PECI_TARGET_ADDR_MASK, addr) |
+> +                   FIELD_PREP(ASPEED_PECI_WR_LEN_MASK, req->tx.len) |
+> +                   FIELD_PREP(ASPEED_PECI_RD_LEN_MASK, req->rx.len);
+> +
+> +       writel(peci_head, priv->base + ASPEED_PECI_RW_LENGTH);
+> +
+> +       memcpy_toio(priv->base + ASPEED_PECI_WR_DATA0, req->tx.buf, min_t(u8, req->tx.len, 16));
+> +       if (req->tx.len > 16)
+> +               memcpy_toio(priv->base + ASPEED_PECI_WR_DATA4, req->tx.buf + 16,
+> +                           req->tx.len - 16);
+> +
+> +#if IS_ENABLED(CONFIG_DYNAMIC_DEBUG)
+> +       dev_dbg(priv->dev, "HEAD : %#08x\n", peci_head);
+> +       print_hex_dump_bytes("TX : ", DUMP_PREFIX_NONE, req->tx.buf, req->tx.len);
+> +#endif
+
+The ifdef is unfortunate. Could you do this?
+
+dev_dbg(priv->dev, "HEAD : %#08x\n", peci_head);
+if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG))
+       print_hex_dump_bytes("TX : ", DUMP_PREFIX_NONE, req->tx.buf,
+req->tx.len);
+
+Not a biggie though, don't let this hold up merging.
+
+> +       priv->status = 0;
+> +       writel(ASPEED_PECI_CMD_FIRE, priv->base + ASPEED_PECI_CMD);
+> +       spin_unlock_irq(&priv->lock);
+> +
