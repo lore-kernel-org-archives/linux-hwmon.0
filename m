@@ -2,224 +2,142 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6030C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jan 2022 04:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1C7C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jan 2022 07:54:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbiAMEOv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jan 2022 23:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbiAMENi (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jan 2022 23:13:38 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3603AC06175B;
-        Wed, 12 Jan 2022 20:12:29 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id bl18so5882521qkb.5;
-        Wed, 12 Jan 2022 20:12:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pbtW5GNEznZHiafA75unnHcFZvdczANI1PgQ6YwC50I=;
-        b=ibjmvFEuzUnUj0P4/dhygtlpXkwqsmCbtqtSnsfMo8cpFNuhzqPWC58ZSdU3L1JTwt
-         0JbiyhvXcxCguvtxAY6qa9hCdayN57icMXEHv5DOV32DSMkflySg0TSy0Uod6ngnhHaT
-         A+M5uaveL8e8wlbe7AJqTbAjOrKQ1vG8fia6k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pbtW5GNEznZHiafA75unnHcFZvdczANI1PgQ6YwC50I=;
-        b=DCSq349x/8mLa4oBTbhmPe9amY8CCKiXSqQY2EkMvaLiFTOQE0/rYViIkX1Y652tl+
-         vH3UWVYsvRaDPFvzEIS1eTQ9QLY+mAfmUHx8y7za9oZschFQS1SALOqXBz9J3wIiCzX6
-         L+Wg1IW+iI4lvpS+XORYkK58G3LjNIQUD0RxAKGF0KtI71UjL8xgvTjaxyaRjYKuEYnG
-         WLauJ95mxDtL0VB7xKwA8LXYH3eO8vPeTb+PHLS3p0OoRvw8zMVc5e+4eLvdBw3+MzXl
-         +XoEUyMDkMr+KoywviXWaVJUP7HN6eTGvkaOh4ojGymnTynf4EcPSW9VJD2pY6Lvbaqw
-         KEtQ==
-X-Gm-Message-State: AOAM532ze74qwpbmEdKRkKuOS4rL1JIpPwTBz2H8Orr/gtXUImxuzPBB
-        czWX/QQH1g1OY/5T8a12PiQqldo5szdPS4pHibE=
-X-Google-Smtp-Source: ABdhPJwOVBaayKDH/i9TEqiJA4jUpG5Q9ZPM20KYYIs0XA0wcVXkAniMBmivwNgSlbtXPJKggVHdozQRsoV+5JJNw5E=
-X-Received: by 2002:a37:a342:: with SMTP id m63mr272966qke.347.1642047148268;
- Wed, 12 Jan 2022 20:12:28 -0800 (PST)
+        id S232828AbiAMHyk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Jan 2022 02:54:40 -0500
+Received: from mga04.intel.com ([192.55.52.120]:4776 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229533AbiAMHyk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 13 Jan 2022 02:54:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642060480; x=1673596480;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tBSjCUr5LQ/WmW8KrgBUGf3PU+8WqY/65bcLq1A2bvk=;
+  b=LOY91u2qL5NheFbGAl+yXrXoXvWKt9xQbN5wYA6pTXxyWMhq4w8MCVgo
+   0E4Y//D//4i/jAY0Teut3eUB7ENDnXDsLTD7ex2Kh05L+kdlw0yvQZ8kO
+   ecjdykkqnWDYjkvOI73rlrO8AmJOq2jCYjzf+1UbafFc+/JECCKaRrwxF
+   MQFCmXfJKdpuJcFiwbTg6dDY5icudY5J1SqsGxZ2ed+em8tU9YSyqCIJO
+   ExReC7Q7YnHNQtF/tGge+RB/Av+DG95YZ9AuVa2yJ0DrxhoqwsFqEheIN
+   nZz8WHqJa2c49IsJoLYJ6awn3AlvgmOQFT+4riOqvEPvOBkYLQQqzhQ2u
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242770800"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="242770800"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 23:54:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="623769451"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 12 Jan 2022 23:54:36 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7uwN-0006yg-Jf; Thu, 13 Jan 2022 07:54:35 +0000
+Date:   Thu, 13 Jan 2022 15:54:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v5 08/13] peci: Add support for PECI device drivers
+Message-ID: <202201131534.HcDrC30f-lkp@intel.com>
+References: <20220112230247.982212-9-iwona.winiarska@intel.com>
 MIME-Version: 1.0
-References: <20220112230247.982212-1-iwona.winiarska@intel.com> <20220112230247.982212-6-iwona.winiarska@intel.com>
-In-Reply-To: <20220112230247.982212-6-iwona.winiarska@intel.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 13 Jan 2022 04:12:16 +0000
-Message-ID: <CACPK8XewQJBvwssM6zQKQoxT=JLpk-qjGhsiTAa980OtbU7JBw@mail.gmail.com>
-Subject: Re: [PATCH v5 05/13] peci: Add peci-aspeed controller driver
-To:     Iwona Winiarska <iwona.winiarska@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zev Weiss <zweiss@equinix.com>,
-        David Muller <d.mueller@elsoft.ch>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112230247.982212-9-iwona.winiarska@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 12 Jan 2022 at 23:06, Iwona Winiarska <iwona.winiarska@intel.com> wrote:
->
-> From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->
-> ASPEED AST24xx/AST25xx/AST26xx SoCs support the PECI electrical
-> interface (a.k.a PECI wire) that provides a communication channel with
-> Intel processors.
-> This driver allows BMC to discover devices connected to it and
-> communicate with them using PECI protocol.
->
-> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Co-developed-by: Iwona Winiarska <iwona.winiarska@intel.com>
-> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Hi Iwona,
 
-The driver looks good to me. I would be happy to see it merged in its
-current state.
+I love your patch! Perhaps something to improve:
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linux/master linus/master v5.16 next-20220112]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I've a few questions below that can be followed up later if need be.
+url:    https://github.com/0day-ci/linux/commits/Iwona-Winiarska/Introduce-PECI-subsystem/20220113-071131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: hexagon-randconfig-r033-20220113 (https://download.01.org/0day-ci/archive/20220113/202201131534.HcDrC30f-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0c9888d465568adc8526df1407c9a75be5ce6cd4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Iwona-Winiarska/Introduce-PECI-subsystem/20220113-071131
+        git checkout 0c9888d465568adc8526df1407c9a75be5ce6cd4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/peci/
 
-> +
-> +static void aspeed_peci_init_regs(struct aspeed_peci *priv)
-> +{
-> +       u32 val;
-> +
-> +       /* Clear interrupts */
-> +       val = readl(priv->base + ASPEED_PECI_INT_STS) | ASPEED_PECI_INT_MASK;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Should that be & MASK?
+All warnings (new ones prefixed by >>):
 
-As you're just sanitising the registers, you could clear the status
-unconditionally:
+>> drivers/peci/request.c:111:23: warning: address of array 'req->rx.buf' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (WARN_ON(!req->rx.buf))
+                       ~~~~~~~~~^~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   1 warning generated.
 
- writel(ASPEED_PECI_INT_MASK, priv->base + ASPEED_PECI_INT_STS);
 
-> +       writel(val, priv->base + ASPEED_PECI_INT_STS);
-> +
-> +       /* Set timing negotiation mode and enable interrupts */
-> +       val = FIELD_PREP(ASPEED_PECI_TIMING_NEGO_SEL_MASK, ASPEED_PECI_1ST_BIT_OF_ADDR_NEGO);
+vim +111 drivers/peci/request.c
 
-That's a complicated way to set val to zero :)
+   101	
+   102	static int peci_request_xfer_retry(struct peci_request *req)
+   103	{
+   104		long wait_interval = PECI_RETRY_INTERVAL_MIN;
+   105		struct peci_device *device = req->device;
+   106		struct peci_controller *controller = to_peci_controller(device->dev.parent);
+   107		unsigned long start = jiffies;
+   108		int ret;
+   109	
+   110		/* Don't try to use it for ping */
+ > 111		if (WARN_ON(!req->rx.buf))
+   112			return 0;
+   113	
+   114		do {
+   115			ret = peci_request_xfer(req);
+   116			if (ret) {
+   117				dev_dbg(&controller->dev, "xfer error: %d\n", ret);
+   118				return ret;
+   119			}
+   120	
+   121			if (peci_request_status(req) != -EAGAIN)
+   122				return 0;
+   123	
+   124			/* Set the retry bit to indicate a retry attempt */
+   125			req->tx.buf[1] |= PECI_RETRY_BIT;
+   126	
+   127			if (schedule_timeout_interruptible(wait_interval))
+   128				return -ERESTARTSYS;
+   129	
+   130			wait_interval = min_t(long, wait_interval * 2, PECI_RETRY_INTERVAL_MAX);
+   131		} while (time_before(jiffies, start + PECI_RETRY_TIMEOUT));
+   132	
+   133		dev_dbg(&controller->dev, "request timed out\n");
+   134	
+   135		return -ETIMEDOUT;
+   136	}
+   137	
 
-> +       val |= ASPEED_PECI_INT_MASK;
-> +       writel(val, priv->base + ASPEED_PECI_INT_CTRL);
-> +
-> +       val = FIELD_PREP(ASPEED_PECI_CTRL_SAMPLING_MASK, ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT);
-> +       writel(val, priv->base + ASPEED_PECI_CTRL);
-
-This will clear the rest of the ctrl register, including the divisor
-settings. Was that your intention?
-
-Reading the rest of your driver you only call _init_regs after
-_controller_enable, so I guess you're fine.
-
-> +}
-> +
-> +static int aspeed_peci_check_idle(struct aspeed_peci *priv)
-> +{
-> +       u32 cmd_sts = readl(priv->base + ASPEED_PECI_CMD);
-> +       int ret;
-> +
-> +       /*
-> +        * Under normal circumstances, we expect to be idle here.
-> +        * In case there were any errors/timeouts that led to the situation
-> +        * where the hardware is not in idle state - we need to reset and
-> +        * reinitialize it to avoid potential controller hang.
-> +        */
-> +       if (FIELD_GET(ASPEED_PECI_CMD_STS_MASK, cmd_sts)) {
-> +               reset_control_assert(priv->rst);
-> +
-> +               ret = reset_control_deassert(priv->rst);
-> +               if (ret) {
-> +                       dev_err(priv->dev, "cannot deassert reset control\n");
-> +                       return ret;
-> +               }
-> +
-> +               aspeed_peci_init_regs(priv);
-> +
-> +               ret = clk_set_rate(priv->clk, priv->clk_frequency);
-> +               if (ret < 0) {
-> +                       dev_err(priv->dev, "cannot set clock frequency\n");
-> +                       return ret;
-> +               }
-> +
-> +               aspeed_peci_controller_enable(priv);
-> +       }
-> +
-> +       return readl_poll_timeout(priv->base + ASPEED_PECI_CMD,
-> +                                 cmd_sts,
-> +                                 !(cmd_sts & ASPEED_PECI_CMD_IDLE_MASK),
-> +                                 ASPEED_PECI_IDLE_CHECK_INTERVAL_US,
-> +                                 ASPEED_PECI_IDLE_CHECK_TIMEOUT_US);
-> +}
-> +
-> +static int aspeed_peci_xfer(struct peci_controller *controller,
-> +                           u8 addr, struct peci_request *req)
-> +{
-> +       struct aspeed_peci *priv = dev_get_drvdata(controller->dev.parent);
-> +       unsigned long timeout = msecs_to_jiffies(priv->cmd_timeout_ms);
-> +       u32 peci_head;
-> +       int ret;
-> +
-> +       if (req->tx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX ||
-> +           req->rx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX)
-> +               return -EINVAL;
-> +
-> +       /* Check command sts and bus idle state */
-> +       ret = aspeed_peci_check_idle(priv);
-> +       if (ret)
-> +               return ret; /* -ETIMEDOUT */
-> +
-> +       spin_lock_irq(&priv->lock);
-> +       reinit_completion(&priv->xfer_complete);
-> +
-> +       peci_head = FIELD_PREP(ASPEED_PECI_TARGET_ADDR_MASK, addr) |
-> +                   FIELD_PREP(ASPEED_PECI_WR_LEN_MASK, req->tx.len) |
-> +                   FIELD_PREP(ASPEED_PECI_RD_LEN_MASK, req->rx.len);
-> +
-> +       writel(peci_head, priv->base + ASPEED_PECI_RW_LENGTH);
-> +
-> +       memcpy_toio(priv->base + ASPEED_PECI_WR_DATA0, req->tx.buf, min_t(u8, req->tx.len, 16));
-> +       if (req->tx.len > 16)
-> +               memcpy_toio(priv->base + ASPEED_PECI_WR_DATA4, req->tx.buf + 16,
-> +                           req->tx.len - 16);
-> +
-> +#if IS_ENABLED(CONFIG_DYNAMIC_DEBUG)
-> +       dev_dbg(priv->dev, "HEAD : %#08x\n", peci_head);
-> +       print_hex_dump_bytes("TX : ", DUMP_PREFIX_NONE, req->tx.buf, req->tx.len);
-> +#endif
-
-The ifdef is unfortunate. Could you do this?
-
-dev_dbg(priv->dev, "HEAD : %#08x\n", peci_head);
-if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG))
-       print_hex_dump_bytes("TX : ", DUMP_PREFIX_NONE, req->tx.buf,
-req->tx.len);
-
-Not a biggie though, don't let this hold up merging.
-
-> +       priv->status = 0;
-> +       writel(ASPEED_PECI_CMD_FIRE, priv->base + ASPEED_PECI_CMD);
-> +       spin_unlock_irq(&priv->lock);
-> +
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
