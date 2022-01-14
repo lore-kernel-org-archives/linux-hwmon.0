@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8321EC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jan 2022 16:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E8CDC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jan 2022 16:35:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243409AbiANQf2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Jan 2022 11:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S243405AbiANQfc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Jan 2022 11:35:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243424AbiANQf2 (ORCPT
+        with ESMTP id S243424AbiANQfa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:35:28 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E239C061574
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 08:35:28 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id v10-20020a4a244a000000b002ddfb22ab49so2392342oov.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 08:35:28 -0800 (PST)
+        Fri, 14 Jan 2022 11:35:30 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D786C061574
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 08:35:30 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so10610466oti.11
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 08:35:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Dmevg3985+oCjOlGzgO9q/KJUcVhHLIyP6bMnt1osD8=;
-        b=aD85WCiPJJajsgAASIlylz8yt7Xtdt6trooDpmYeG2uWUVztfXghwgUe4egN7/YAn2
-         RGSPcSJxhHcz2fvOz4ob8s7a0zCJ6wjKx49vkCIFbVqY8qFG4Cj/tAoKjUjrhmify1G+
-         AEijeDCaz6Oqo4w8zbX+UT3IFafTkeyBq+DDKMbw4FEmd7fvZqTfKlwBDGsJS2FO0kAm
-         It1jHcEBEe4agAt5077YlW01t4iX0fK/kSVdam1/T1xVenRhzKNiSE4ye+Q4ZK+KotmB
-         bv3jh1GcqvZLjQSwclhubQzQxi9JpVS7U20YF2xNsk0Ktog1WvEZFVx9DaRBEQJCjP7Y
-         ZlsA==
+        bh=ElDBSJutI34QIghs6GJJ5wG5TUz1qMgXiR9SDemwGRo=;
+        b=l/tRkEuHdp/KBm15qsHylQIZTudu16i+VMAGEGG6xclSJ8cqk4+3CxQrw970CyHZzo
+         9xROEDtYIoW47h05Jv0i0yTCfOGRmSSMmyPzgJp5hfOKxQVeLYTe8fMLjuhugZr3V9rp
+         roC7kMRiE0UETDb2BKAyNN32VAhOm24vaq+HKMjg55Lgn5WePM4K+1R+yDYiIVn2VtLh
+         bVDyU3kJYZUcUh1Y5Wou4/oyOwCR+2hTGLiCGOniRiaSh4d9Pod+YfYZbWQFbIHsANJB
+         TgwvYcXnom/OwFHVq8b1ZSNJAU4SmJGSmY95Oum56x610i/khqncGXaY8nuey2XaG3SA
+         7Xig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Dmevg3985+oCjOlGzgO9q/KJUcVhHLIyP6bMnt1osD8=;
-        b=y3kRjMlRTPAM0xqPzR+pFqZLTnyT0VjgCQnGyzoKEVcxz1YOr6XQa6WX97RvzPvEdt
-         pVZIas80mfZ4Vveg0YUq4t7892v124rqVA+qKSPK+bU7XYCmCE9k/VJGz69lgVIvCD+u
-         6kz/5Anzy7/XLEZrYNvRMm6IoKaDPpu9jJGxdQqFajkeMu5NaP4kYC3HV2mkw/81UMnU
-         ocKhV8JQydcjOmCp5YkcV8OoDw08eBVkSByZh6uVF+TShupnuRIgMt/s02aubQnsrpeV
-         hJhCCA+xEV7nSnT2Na9rgyxWTm9A6vbq8i58m6vqdDZ3q1/JGE4ko7kPTdmZdsO9uvx/
-         FYlw==
-X-Gm-Message-State: AOAM533iuWAkurDUFukfg7Owk7uab1kC8i7KPA6FNp+nW0bSxBeP/ma4
-        t88E14SMMfwhkrtnDPnAYxJr8ph3Zf0=
-X-Google-Smtp-Source: ABdhPJw+U2VZ4kzBMbuhOIEm7e5SlUBlaHf7xspW9cG3wr3H5Yu5Lgj6EN5dcMHWquavsGv/8UtjtA==
-X-Received: by 2002:a4a:2a45:: with SMTP id x5mr2372372oox.64.1642178127464;
-        Fri, 14 Jan 2022 08:35:27 -0800 (PST)
+        bh=ElDBSJutI34QIghs6GJJ5wG5TUz1qMgXiR9SDemwGRo=;
+        b=T7SzArRoKvTivfenUOUCGbJ9V51893135fP9Q2Hnpr74gGqluQ0Zg+yMwyrPeVIPDf
+         WzdEeNFLs9XNOWucEnnLTq6x2ENGM+5UBLX92dRhqLERInQdK6dYKmQpfFPdO50soldH
+         CthbF7p5c0XQITJkqQ6DFhfrj4pnzjhcf8XcUpE+w/USFNCtqdEcwjIlA7c9iIzN19+F
+         R+CmILWkrEpQ70qtneBq0oQsMYTplwK57xpUbX8xwA8WlvrlflM0ct6tVZKhnGm7hDmO
+         rDKk4dqmZgwxbXXTRo/zPdbW3kkofFEm+gFGMnuS1rr1p5rGbXrYw/WH3Xv1MoIL5apg
+         Jeig==
+X-Gm-Message-State: AOAM5308os5bcetbiHPdt/dO0Ahhwx5Peh1XwO0xjBZT3EHv4M+7vuqD
+        DxmoDuOhCBKFH2xl8rBIfYeo/L4BmGI=
+X-Google-Smtp-Source: ABdhPJzokufWn4XKNnkliBpCABPgNbyJUF7/6/VmWjSTNMwitlR8EPnBTqf5JmjwzdDFLaB3q9M+KQ==
+X-Received: by 2002:a9d:685a:: with SMTP id c26mr7433124oto.239.1642178129369;
+        Fri, 14 Jan 2022 08:35:29 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c27sm2040822ooe.45.2022.01.14.08.35.26
+        by smtp.gmail.com with ESMTPSA id a2sm2026383oon.37.2022.01.14.08.35.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:35:26 -0800 (PST)
+        Fri, 14 Jan 2022 08:35:28 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 6/8] hwmon: (lm83) Demote log message if chip identification fails
-Date:   Fri, 14 Jan 2022 08:35:10 -0800
-Message-Id: <20220114163512.1094472-7-linux@roeck-us.net>
+Subject: [PATCH 7/8] hwmon: (lm83) Explain why LM82 may be misdetected as LM83
+Date:   Fri, 14 Jan 2022 08:35:11 -0800
+Message-Id: <20220114163512.1094472-8-linux@roeck-us.net>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220114163512.1094472-1-linux@roeck-us.net>
 References: <20220114163512.1094472-1-linux@roeck-us.net>
@@ -65,32 +65,36 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-There should be no message in the kernel function if the detect function
-fails to identify a chip; this is perfectly normal and does not warrant
-a kernel log entry. Demote message to debug.
+According to the March 2013 revision of the LM82 datasheet, the latest
+LM82 die revision is 0x03. This was confirmed and observed with a real
+chip. Further details in this revision of the LM82 datasheet suggest that
+LM82 is now just a repackaged LM83. Such versions of LM82 will be detected
+as LM83. Add comment to the code explaining why this may happen.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm83.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hwmon/lm83.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
-index 434bd5b903d2..82d7ef264f6f 100644
+index 82d7ef264f6f..d9ee01ca8aed 100644
 --- a/drivers/hwmon/lm83.c
 +++ b/drivers/hwmon/lm83.c
-@@ -341,9 +341,9 @@ static int lm83_detect(struct i2c_client *client,
+@@ -334,6 +334,14 @@ static int lm83_detect(struct i2c_client *client,
+ 	chip_id = i2c_smbus_read_byte_data(client, LM83_REG_R_CHIP_ID);
+ 	switch (chip_id) {
+ 	case 0x03:
++		/*
++		 * According to the LM82 datasheet dated March 2013, recent
++		 * revisions of LM82 have a die revision of 0x03. This was
++		 * confirmed with a real chip. Further details in this revision
++		 * of the LM82 datasheet strongly suggest that LM82 is just a
++		 * repackaged LM83. It is therefore impossible to distinguish
++		 * those chips from LM83, and they will be misdetected as LM83.
++		 */
+ 		name = "lm83";
  		break;
- 	default:
- 		/* identification failed */
--		dev_info(&adapter->dev,
--			 "Unsupported chip (man_id=0x%02X, chip_id=0x%02X)\n",
--			 man_id, chip_id);
-+		dev_dbg(&adapter->dev,
-+			"Unsupported chip (man_id=0x%02X, chip_id=0x%02X)\n",
-+			man_id, chip_id);
- 		return -ENODEV;
- 	}
- 
+ 	case 0x01:
 -- 
 2.33.0
 
