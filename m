@@ -2,210 +2,372 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F965C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jan 2022 18:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F13B0C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jan 2022 18:49:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243198AbiANSon (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Jan 2022 13:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        id S239563AbiANStP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Jan 2022 13:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236181AbiANSol (ORCPT
+        with ESMTP id S236181AbiANStP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jan 2022 13:44:41 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49634C061574
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 10:44:41 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id e81so13371455oia.6
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 10:44:41 -0800 (PST)
+        Fri, 14 Jan 2022 13:49:15 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13EBC061574
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 10:49:14 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id s127so13436951oig.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jan 2022 10:49:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:to:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gScBbqyWDw0+3dyvIkzTNA2FCfCiH4nq9v23IRn2GuU=;
-        b=ESxvp7bCxRMRFfLQ18zOc7AEbPfhV6ZF9tLMHDj4mPMny/goGyd97PKWU0jaiiFNuK
-         q3hL45OddBHbKyfTniawt8B0eZOurvTuvebpMnz9cWZ5HgtEKtAzkjqZUicOVdQfjSm9
-         PHebqRaFeCfk/BltA4LxOreqb7lAN+IeYiDuL+qH330t8kA8qTCfwDiFY82MhNiFYdNb
-         eInsJIJ/f71YcgZbMC/ZM/kOA904nOmhe2rGMXoP/JnhPdfmh7ywGo/nFp1sxzV4GfJd
-         Tx0H5Caj0x7tSFP5oJ58ywU1pqu4B52kFCp8X2NdWkiNkiFwLIfzg+bWnWX7yKkB+4NO
-         I/Hw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3pl9qK0eTiTBKn75THXQU0tfikTYm7SZURYcV1D93hU=;
+        b=jJokCdpc7nQLXBBSF32SteNBGzFnMwFt4+5aUwe5HV4b4YnVL/ycspkUYlPnAmL83L
+         j3WHkgTerMn5VbUEXB+0tc3aoXK5FYFFZhYaRhu8YmyBQuEJV39N68lSPydI20pJudx7
+         iRGlLMQCS4WsCrD7Rmx2BrnGukqI0ahl43jL4Urw4crhyisa1mt4ghcMMH0RbeQcHDUN
+         uyCkeU9aJBg4rWigUXTUcywVmh6H+zdWHAc3gWRVJMnaJQ0bjRnec6G5LZI7YM+LYZ/a
+         +mJfhalgQaamBT2fgHXK2V1NekNQV70U7je2teLgnNC6+vPJqZQSt64pQcGVGt98ci8M
+         EE5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gScBbqyWDw0+3dyvIkzTNA2FCfCiH4nq9v23IRn2GuU=;
-        b=4p/95QP9eZeHaiFI0hylPSD7Ycok00yhcT6gpG6ZTYiKguAth95ZIWfBarwbRsof5V
-         kDwH2mWbxegRM6D6R1Tp8IhZu1+owNVUjwkfRqc2aBNSTrQ1l8yez0CUP5n/vUUZNvkA
-         guggAbUO9QgGpFUKALqlKnvpXIuywxPIailD35fIqQzXJaNtfwitVnSIzgl2zM21Cgp6
-         bDvDSXBr26vVaT66NrCLX6PKyxupwD+LCnoBk/z/2dZPXAd0gOq1QzFbBZ7IDl4yl44v
-         AuE3BQ2HSrax30MJsp9WD0UpVUhqJfadsu1ycmPaRV4U4u0QJuaPTI7TAOLFXbzfigqC
-         ydyw==
-X-Gm-Message-State: AOAM5309AW30LnfmfHJA6RBH/HFCJkj2nJAAnVEZCgxEkdrqV+ybdR2P
-        j2/9OV/PXyMeDpc+pDc8QEdsIdRHt4E=
-X-Google-Smtp-Source: ABdhPJzt2+a0xVUw8YMZ3R7UV/e9nEkMdVKRtqdrrR2mgad7gAEJ1pd9/My6QnQMzUFaYg23mCFpvw==
-X-Received: by 2002:a05:6808:200d:: with SMTP id q13mr6369193oiw.81.1642185880611;
-        Fri, 14 Jan 2022 10:44:40 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3pl9qK0eTiTBKn75THXQU0tfikTYm7SZURYcV1D93hU=;
+        b=n8eyakFk5L7ngq7yO0NGB+OYfbAKiYkZMu54c48BUmcbaVHos7BrDLkwtvUMOHPL8K
+         qqMA0vxkdGCBaYhP7knSEsvwUaFGd3Jae9U/pRkAeKC5StPWTMmfu/9SMUx6w6XD8K3Y
+         ovjeucH9xqS4Hza1WdYXIUgCRnKMvn8qTF9qb6MmJa8OKfjh23N6kxcAbM1QzI2Du7iO
+         aex68k64eosR4u8vrbdm/QGIblHHXWHzhgakLJRTPfzC70sLelRlcW9VTjgcZTU3ivYY
+         Q4SgPPAeC13Jv5XP1Y3dxV20HPiKhOvXdeXB10+aM+CWoFCmEM6NTfkGSDUF0SUxpXRN
+         rZmg==
+X-Gm-Message-State: AOAM530Gz6XhPrS7ZzSQcv8ENYPZkgiYzPIjFiGR5eKYfM5VXlfrYHy9
+        +WKMilKioXb9pdabXhhsDHpqLWGywTY=
+X-Google-Smtp-Source: ABdhPJydgDgcnY1pOyn9u8LFF4F48JlmjfZxR10Vul6BCjU2xJtBGZLnkh4MyFtTBN5YgEq/tEmdaw==
+X-Received: by 2002:a05:6808:10c4:: with SMTP id s4mr13900195ois.57.1642186153979;
+        Fri, 14 Jan 2022 10:49:13 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c26sm2065951otr.65.2022.01.14.10.44.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 10:44:39 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id y2sm2221855otq.27.2022.01.14.10.49.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 10:49:13 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-To:     michaelsh@nvidia.com, linux-hwmon@vger.kernel.org,
-        vadimp@nvidia.com
-References: <20220111173239.21006-1-michaelsh@nvidia.com>
- <20220111173239.21006-3-michaelsh@nvidia.com>
+Date:   Fri, 14 Jan 2022 10:49:12 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/2] hwmon: powr1220: Add support for Lattice's
- POWR1014 power manager IC
-Message-ID: <fddc8fb4-a78e-9036-cb42-a3f9b675f07f@roeck-us.net>
-Date:   Fri, 14 Jan 2022 10:44:38 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+To:     michaelsh@nvidia.com
+Cc:     linux-hwmon@vger.kernel.org, vadimp@nvidia.com
+Subject: Re: [PATCH v2 1/2] hwmon: powr1220: Upgrade driver to support hwmon
+ info infrastructure
+Message-ID: <20220114184912.GA1751258@roeck-us.net>
+References: <20220111173239.21006-1-michaelsh@nvidia.com>
+ <20220111173239.21006-2-michaelsh@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20220111173239.21006-3-michaelsh@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111173239.21006-2-michaelsh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/11/22 9:32 AM, michaelsh@nvidia.com wrote:
+On Tue, Jan 11, 2022 at 07:32:38PM +0200, michaelsh@nvidia.com wrote:
 > From: Michael Shych <michaelsh@nvidia.com>
 > 
-> This patch adds support for Lattice's POWR1014 power manager IC.
-> Read access to all the ADCs on the chip are supported through
-> the "hwmon" "sysfs" files.
+> Reduce code by using devm_hwmon_device_register_with_groups() API by
+> devm_hwmon_device_register_with_info() API.
+> The motivation is to reduce code and to allow easy support for similar
+> devices by the same driver.
 > 
-> The main difference of POWR1014 compared to POWR1220 is amount
-> of VMON input lines: 10 on POWR1014 and 12 lines on POWR1220.
-> 
-> Extend wait time for conversion to complete, since for POWR1014 it
-> could be longer.
-> 
-
-That is not correct, according to the POWR1014 datasheet, and
-the change is wrong anyway. More on that see below.
-
 > Signed-off-by: Michael Shych <michaelsh@nvidia.com>
 > Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+
+There are vaious unrelated changes in this patch: Multi-line alignment
+changes, and udelay() -> usleep(). Especially tyhe latter may introduce
+a significant additional delay; it often results in long sleep times
+(the kernel may sleep as long as it wants). This can have significant
+performance impact. It would probably be much better to use usleep_range()
+since that provides an upper bound for the sleep time.
+
+Please split unrelated changes into separate patch(es).
+
+Thanks,
+Guenter
+
 > ---
-> v1->v2
-> Fix added by Michael: Fix incorrect device id.
-> ---
->   drivers/hwmon/powr1220.c | 27 +++++++++++++++++++++------
->   1 file changed, 21 insertions(+), 6 deletions(-)
+>  drivers/hwmon/powr1220.c | 216 +++++++++++++++++++++--------------------------
+>  1 file changed, 95 insertions(+), 121 deletions(-)
 > 
 > diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
-> index 1b833781e89d..84f1508f1cbd 100644
+> index 9e086338dcba..1b833781e89d 100644
 > --- a/drivers/hwmon/powr1220.c
 > +++ b/drivers/hwmon/powr1220.c
-> @@ -22,6 +22,8 @@
->   #define ADC_STEP_MV			2
->   #define ADC_MAX_LOW_MEASUREMENT_MV	2000
->   
-> +enum powr1xxx_chips { powr1220, powr1014 };
-
-Please put these into (alpha)numberic order, ie powr1014 first.
-Same everywhere below.
-
+> @@ -111,7 +111,7 @@ static int powr1220_read_adc(struct device *dev, int ch_num)
+>  	mutex_lock(&data->update_lock);
+>  
+>  	if (time_after(jiffies, data->adc_last_updated[ch_num] + HZ) ||
+> -			!data->adc_valid[ch_num]) {
+> +	    !data->adc_valid[ch_num]) {
+>  		/*
+>  		 * figure out if we need to use the attenuator for
+>  		 * high inputs or inputs that we don't yet have a measurement
+> @@ -119,12 +119,12 @@ static int powr1220_read_adc(struct device *dev, int ch_num)
+>  		 * max reading.
+>  		 */
+>  		if (data->adc_maxes[ch_num] > ADC_MAX_LOW_MEASUREMENT_MV ||
+> -				data->adc_maxes[ch_num] == 0)
+> +		    data->adc_maxes[ch_num] == 0)
+>  			adc_range = 1 << 4;
+>  
+>  		/* set the attenuator and mux */
+>  		result = i2c_smbus_write_byte_data(data->client, ADC_MUX,
+> -				adc_range | ch_num);
+> +						   adc_range | ch_num);
+>  		if (result)
+>  			goto exit;
+>  
+> @@ -132,7 +132,7 @@ static int powr1220_read_adc(struct device *dev, int ch_num)
+>  		 * wait at least Tconvert time (200 us) for the
+>  		 * conversion to complete
+>  		 */
+> -		udelay(200);
+> +		usleep(200);
+>  
+>  		/* get the ADC reading */
+>  		result = i2c_smbus_read_byte_data(data->client, ADC_VALUE_LOW);
+> @@ -163,139 +163,112 @@ static int powr1220_read_adc(struct device *dev, int ch_num)
+>  
+>  exit:
+>  	mutex_unlock(&data->update_lock);
+> -
+>  	return result;
+>  }
+>  
+> -/* Shows the voltage associated with the specified ADC channel */
+> -static ssize_t powr1220_voltage_show(struct device *dev,
+> -				     struct device_attribute *dev_attr,
+> -				     char *buf)
+> +static umode_t
+> +powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+> +		    attr, int channel)
+>  {
+> -	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> -	int adc_val = powr1220_read_adc(dev, attr->index);
+> -
+> -	if (adc_val < 0)
+> -		return adc_val;
+> +	switch (type) {
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_input:
+> +		case hwmon_in_highest:
+> +		case hwmon_in_label:
+> +			return 0444;
+> +		default:
+> +			break;
+> +		}
 > +
->   enum powr1220_regs {
->   	VMON_STATUS0,
->   	VMON_STATUS1,
-> @@ -74,6 +76,7 @@ enum powr1220_adc_values {
->   struct powr1220_data {
->   	struct i2c_client *client;
->   	struct mutex update_lock;
-> +	u8 max_channels;
->   	bool adc_valid[MAX_POWR1220_ADC_VALUES];
->   	 /* the next value is in jiffies */
->   	unsigned long adc_last_updated[MAX_POWR1220_ADC_VALUES];
-> @@ -128,11 +131,8 @@ static int powr1220_read_adc(struct device *dev, int ch_num)
->   		if (result)
->   			goto exit;
->   
-> -		/*
-> -		 * wait at least Tconvert time (200 us) for the
-> -		 * conversion to complete
-> -		 */
-> -		usleep(200);
-> +		/* wait Tconvert time (200us - 400us) for the conversion to complete */
-> +		usleep_range(200, 400);
-
-This is confusing. I don't mind using usleep_range(), but usleep_range means
-that it is the kernel's choice how long to wait, and it may return after
-200uS. If the chip specification states that the conversion may take up to
-400uS to complete, the above may return before the conversion is complete.
-
-So please clarify what the chip actually specifies. If the conversion time for
-POWR1014 can indeed be 400uS but is only 200uS for POWR1220, the minimum sleep
-time would have to be 400uS. If the above is just a personal preference change
-to relax sleep time, please make it a separate patch.
-
-Follow-up: I looked up the datasheets. The maximum conversion time for POWR1014
-is 100uS, and the maximum conversion time for POWR1220 is 200uS. The above really
-doesn't make sense in this context. Tconvert is never "200us - 400us" for any
-of the supported chips. Please don't do that as part of an unrelated patch.
-If you want to relax wait time, please submit a separate patch that includes
-a rationale (and one that is correct and backed up by a datasheet).
-
->   
->   		/* get the ADC reading */
->   		result = i2c_smbus_read_byte_data(data->client, ADC_VALUE_LOW);
-> @@ -170,6 +170,9 @@ static umode_t
->   powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
->   		    attr, int channel)
->   {
-> +	if (((struct powr1220_data *)data)->max_channels <= channel)
-> +		return 0;
-> +
-
-I would prefer to have a separate variable for struct powr1220_data *
-here, and please don't use Joda programming. Something like
-
-	struct powr1220_data *data = _data;
-
-	if (channel >= data->max_channels)
-		return 0;
-
->   	switch (type) {
->   	case hwmon_in:
->   		switch (attr) {
-> @@ -270,6 +273,8 @@ static const struct hwmon_chip_info powr1220_chip_info = {
->   	.info = powr1220_info,
->   };
->   
-> +static const struct i2c_device_id powr1220_ids[];
-> +
->   static int powr1220_probe(struct i2c_client *client)
->   {
->   	struct powr1220_data *data;
-> @@ -282,6 +287,15 @@ static int powr1220_probe(struct i2c_client *client)
->   	if (!data)
->   		return -ENOMEM;
->   
-> +	switch (i2c_match_id(powr1220_ids, client)->driver_data) {
-> +	case powr1014:
-> +		data->max_channels = 10;
-> +		break;
 > +	default:
-> +		data->max_channels = 12;
 > +		break;
 > +	}
+>  
+> -	return sprintf(buf, "%d\n", adc_val);
+> +	return 0;
+>  }
+>  
+> -/* Shows the maximum setting associated with the specified ADC channel */
+> -static ssize_t powr1220_max_show(struct device *dev,
+> -				 struct device_attribute *dev_attr, char *buf)
+> +static int
+> +powr1220_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +		     int channel, const char **str)
+>  {
+> -	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> -	struct powr1220_data *data = dev_get_drvdata(dev);
+> +	switch (type) {
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_label:
+> +			*str = input_names[channel];
+> +			return 0;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+>  
+> -	return sprintf(buf, "%d\n", data->adc_maxes[attr->index]);
+> +	return -EOPNOTSUPP;
+>  }
+>  
+> -/* Shows the label associated with the specified ADC channel */
+> -static ssize_t powr1220_label_show(struct device *dev,
+> -				   struct device_attribute *dev_attr,
+> -				   char *buf)
+> +static int
+> +powr1220_read(struct device *dev, enum hwmon_sensor_types type, u32
+> +	      attr, int channel, long *val)
+>  {
+> -	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> +	struct powr1220_data *data = dev_get_drvdata(dev);
+> +	int ret;
 > +
->   	mutex_init(&data->update_lock);
->   	data->client = client;
->   
-> @@ -293,7 +307,8 @@ static int powr1220_probe(struct i2c_client *client)
->   }
->   
->   static const struct i2c_device_id powr1220_ids[] = {
-> -	{ "powr1220", 0, },
-> +	{ "powr1220", powr1220, },
-> +	{ "powr1014", powr1014, },
->   	{ }
->   };
->   
-> 
-
+> +	switch (type) {
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_input:
+> +			ret = powr1220_read_adc(dev, channel);
+> +			if (ret < 0)
+> +				return ret;
+> +			*val = ret;
+> +			break;
+> +		case hwmon_in_highest:
+> +			*val = data->adc_maxes[channel];
+> +			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+>  
+> -	return sprintf(buf, "%s\n", input_names[attr->index]);
+> +	return 0;
+>  }
+>  
+> -static SENSOR_DEVICE_ATTR_RO(in0_input, powr1220_voltage, VMON1);
+> -static SENSOR_DEVICE_ATTR_RO(in1_input, powr1220_voltage, VMON2);
+> -static SENSOR_DEVICE_ATTR_RO(in2_input, powr1220_voltage, VMON3);
+> -static SENSOR_DEVICE_ATTR_RO(in3_input, powr1220_voltage, VMON4);
+> -static SENSOR_DEVICE_ATTR_RO(in4_input, powr1220_voltage, VMON5);
+> -static SENSOR_DEVICE_ATTR_RO(in5_input, powr1220_voltage, VMON6);
+> -static SENSOR_DEVICE_ATTR_RO(in6_input, powr1220_voltage, VMON7);
+> -static SENSOR_DEVICE_ATTR_RO(in7_input, powr1220_voltage, VMON8);
+> -static SENSOR_DEVICE_ATTR_RO(in8_input, powr1220_voltage, VMON9);
+> -static SENSOR_DEVICE_ATTR_RO(in9_input, powr1220_voltage, VMON10);
+> -static SENSOR_DEVICE_ATTR_RO(in10_input, powr1220_voltage, VMON11);
+> -static SENSOR_DEVICE_ATTR_RO(in11_input, powr1220_voltage, VMON12);
+> -static SENSOR_DEVICE_ATTR_RO(in12_input, powr1220_voltage, VCCA);
+> -static SENSOR_DEVICE_ATTR_RO(in13_input, powr1220_voltage, VCCINP);
+> -
+> -static SENSOR_DEVICE_ATTR_RO(in0_highest, powr1220_max, VMON1);
+> -static SENSOR_DEVICE_ATTR_RO(in1_highest, powr1220_max, VMON2);
+> -static SENSOR_DEVICE_ATTR_RO(in2_highest, powr1220_max, VMON3);
+> -static SENSOR_DEVICE_ATTR_RO(in3_highest, powr1220_max, VMON4);
+> -static SENSOR_DEVICE_ATTR_RO(in4_highest, powr1220_max, VMON5);
+> -static SENSOR_DEVICE_ATTR_RO(in5_highest, powr1220_max, VMON6);
+> -static SENSOR_DEVICE_ATTR_RO(in6_highest, powr1220_max, VMON7);
+> -static SENSOR_DEVICE_ATTR_RO(in7_highest, powr1220_max, VMON8);
+> -static SENSOR_DEVICE_ATTR_RO(in8_highest, powr1220_max, VMON9);
+> -static SENSOR_DEVICE_ATTR_RO(in9_highest, powr1220_max, VMON10);
+> -static SENSOR_DEVICE_ATTR_RO(in10_highest, powr1220_max, VMON11);
+> -static SENSOR_DEVICE_ATTR_RO(in11_highest, powr1220_max, VMON12);
+> -static SENSOR_DEVICE_ATTR_RO(in12_highest, powr1220_max, VCCA);
+> -static SENSOR_DEVICE_ATTR_RO(in13_highest, powr1220_max, VCCINP);
+> -
+> -static SENSOR_DEVICE_ATTR_RO(in0_label, powr1220_label, VMON1);
+> -static SENSOR_DEVICE_ATTR_RO(in1_label, powr1220_label, VMON2);
+> -static SENSOR_DEVICE_ATTR_RO(in2_label, powr1220_label, VMON3);
+> -static SENSOR_DEVICE_ATTR_RO(in3_label, powr1220_label, VMON4);
+> -static SENSOR_DEVICE_ATTR_RO(in4_label, powr1220_label, VMON5);
+> -static SENSOR_DEVICE_ATTR_RO(in5_label, powr1220_label, VMON6);
+> -static SENSOR_DEVICE_ATTR_RO(in6_label, powr1220_label, VMON7);
+> -static SENSOR_DEVICE_ATTR_RO(in7_label, powr1220_label, VMON8);
+> -static SENSOR_DEVICE_ATTR_RO(in8_label, powr1220_label, VMON9);
+> -static SENSOR_DEVICE_ATTR_RO(in9_label, powr1220_label, VMON10);
+> -static SENSOR_DEVICE_ATTR_RO(in10_label, powr1220_label, VMON11);
+> -static SENSOR_DEVICE_ATTR_RO(in11_label, powr1220_label, VMON12);
+> -static SENSOR_DEVICE_ATTR_RO(in12_label, powr1220_label, VCCA);
+> -static SENSOR_DEVICE_ATTR_RO(in13_label, powr1220_label, VCCINP);
+> -
+> -static struct attribute *powr1220_attrs[] = {
+> -	&sensor_dev_attr_in0_input.dev_attr.attr,
+> -	&sensor_dev_attr_in1_input.dev_attr.attr,
+> -	&sensor_dev_attr_in2_input.dev_attr.attr,
+> -	&sensor_dev_attr_in3_input.dev_attr.attr,
+> -	&sensor_dev_attr_in4_input.dev_attr.attr,
+> -	&sensor_dev_attr_in5_input.dev_attr.attr,
+> -	&sensor_dev_attr_in6_input.dev_attr.attr,
+> -	&sensor_dev_attr_in7_input.dev_attr.attr,
+> -	&sensor_dev_attr_in8_input.dev_attr.attr,
+> -	&sensor_dev_attr_in9_input.dev_attr.attr,
+> -	&sensor_dev_attr_in10_input.dev_attr.attr,
+> -	&sensor_dev_attr_in11_input.dev_attr.attr,
+> -	&sensor_dev_attr_in12_input.dev_attr.attr,
+> -	&sensor_dev_attr_in13_input.dev_attr.attr,
+> -
+> -	&sensor_dev_attr_in0_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in1_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in2_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in3_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in4_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in5_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in6_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in7_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in8_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in9_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in10_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in11_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in12_highest.dev_attr.attr,
+> -	&sensor_dev_attr_in13_highest.dev_attr.attr,
+> -
+> -	&sensor_dev_attr_in0_label.dev_attr.attr,
+> -	&sensor_dev_attr_in1_label.dev_attr.attr,
+> -	&sensor_dev_attr_in2_label.dev_attr.attr,
+> -	&sensor_dev_attr_in3_label.dev_attr.attr,
+> -	&sensor_dev_attr_in4_label.dev_attr.attr,
+> -	&sensor_dev_attr_in5_label.dev_attr.attr,
+> -	&sensor_dev_attr_in6_label.dev_attr.attr,
+> -	&sensor_dev_attr_in7_label.dev_attr.attr,
+> -	&sensor_dev_attr_in8_label.dev_attr.attr,
+> -	&sensor_dev_attr_in9_label.dev_attr.attr,
+> -	&sensor_dev_attr_in10_label.dev_attr.attr,
+> -	&sensor_dev_attr_in11_label.dev_attr.attr,
+> -	&sensor_dev_attr_in12_label.dev_attr.attr,
+> -	&sensor_dev_attr_in13_label.dev_attr.attr,
+> +static const struct hwmon_channel_info *powr1220_info[] = {
+> +	HWMON_CHANNEL_INFO(in,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL),
+>  
+>  	NULL
+>  };
+>  
+> -ATTRIBUTE_GROUPS(powr1220);
+> +static const struct hwmon_ops powr1220_hwmon_ops = {
+> +	.read = powr1220_read,
+> +	.read_string = powr1220_read_string,
+> +	.is_visible = powr1220_is_visible,
+> +};
+> +
+> +static const struct hwmon_chip_info powr1220_chip_info = {
+> +	.ops = &powr1220_hwmon_ops,
+> +	.info = powr1220_info,
+> +};
+>  
+>  static int powr1220_probe(struct i2c_client *client)
+>  {
+> @@ -312,9 +285,10 @@ static int powr1220_probe(struct i2c_client *client)
+>  	mutex_init(&data->update_lock);
+>  	data->client = client;
+>  
+> -	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
+> -			client->name, data, powr1220_groups);
+> -
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
+> +							 client->name, data,
+> +							 &powr1220_chip_info,
+> +							 NULL);
+>  	return PTR_ERR_OR_ZERO(hwmon_dev);
+>  }
+>  
