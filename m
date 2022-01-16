@@ -2,153 +2,102 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D52C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Jan 2022 18:20:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50339C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Jan 2022 19:29:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiAPSUp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 Jan 2022 13:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S233640AbiAPT3F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Jan 2022 14:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbiAPSUp (ORCPT
+        with ESMTP id S230076AbiAPT3E (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Jan 2022 13:20:45 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E2FC061574
-        for <linux-hwmon@vger.kernel.org>; Sun, 16 Jan 2022 10:20:44 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id x7so49284946lfu.8
-        for <linux-hwmon@vger.kernel.org>; Sun, 16 Jan 2022 10:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=z+IuK0+2S1NqsfbtfKCeHv1P96bT3AHasq7MGR5mveg=;
-        b=nLweSchUrfVhUdmq0CuAILXYQwgmpe2SkKS04wwpIEhX91j31slOk2YusjOxyfVGr3
-         AbQo9Akm9qqzYQL3Mg4BoUo88kclDNr7r/cxaEFoAMCBK2iCGtjAWkE2ltLysevTXHfg
-         4toJfAEm9Vhmsrkz8oOZdo12KYYb3UBkvVB27U7OktxWbWBXalfdYzsjsRcOyWpPR1x9
-         64dQDC5rD13zJDJqjXUa5R2n1tFYpc8iLOaHPjNFRc2PTmWA6Y1VnN4bJd09D/z40trY
-         qYgF+p8kHhsnek1F56lHNlWUOzJIIeAdAoLxcHlxg3ZwjmZvSNMkPLVU82L6LtAtwepF
-         2ICQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=z+IuK0+2S1NqsfbtfKCeHv1P96bT3AHasq7MGR5mveg=;
-        b=CNUqt9OAsFoHgZbduK1hm4d1JelpQaAcaQpEXK4wQo/yWJbVQInRCrQVIDltuXGJM/
-         GgdMI57t3vgtEdSdm9zJ4HBcd3PPeH+/FKdj7cyBRdUAmhamro9F9XWtqGNz8eD6Rlsc
-         DcpklPfoEgLIcGFbC9uqm+iOKKEOpcM9ep4yv0RMi3gcMsguZVcwA96H/hywYViZ4dCd
-         EqBNXg8cQrKZrhB6Rmgk14hHlMlK6PkD0yUN//kjkhRNM5xqIK6laUbaCgsKMvbrMS4c
-         a3OBPL4mxdPxNX9BqIZ/dfF2DEF21GEJg3wzcjnTdmfzX8uwcWM0OBoZ4wiMhhUFZPXX
-         qKag==
-X-Gm-Message-State: AOAM532AJhdNAziabJPSLamhgoLSOmMcbuA7q5wzQFSp5WyOJcuA0Hqh
-        TD3IpGgzkjrx8FXgkyIv40Y=
-X-Google-Smtp-Source: ABdhPJzLagCWyW97y9T+SlbJU+OOolrwd3O5dxau2LI0Lcz+MO18SgyhtarI9VCJ1/hyb3r0lZAX9A==
-X-Received: by 2002:a2e:5d6:: with SMTP id 205mr10637746ljf.270.1642357242869;
-        Sun, 16 Jan 2022 10:20:42 -0800 (PST)
-Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
-        by smtp.googlemail.com with ESMTPSA id n6sm776624lji.121.2022.01.16.10.20.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 10:20:42 -0800 (PST)
-Subject: Re: [PATCH 6/6] hwmon: (lm90) Fix sysfs and udev notifications
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>
-References: <20220111165116.1298459-1-linux@roeck-us.net>
- <20220111165116.1298459-7-linux@roeck-us.net>
- <e67010f7-6934-8d89-d8de-7d06793ddff3@gmail.com>
- <0842cd57-9060-eb18-3ec5-c67542fdfa55@gmail.com>
- <93718b89-5b79-1d24-45ed-ada964429e2e@roeck-us.net>
- <ae0dff3a-fb19-1dae-6e74-07ed50161fc6@gmail.com>
- <147d69f8-6465-1e19-c1a3-a8ab18a72bc0@roeck-us.net>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a3811a06-6399-b71c-8031-13f8765dffea@gmail.com>
-Date:   Sun, 16 Jan 2022 21:20:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 16 Jan 2022 14:29:04 -0500
+X-Greylist: delayed 111399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Jan 2022 11:29:03 PST
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07B7C061574;
+        Sun, 16 Jan 2022 11:29:03 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 2F194D64DC7;
+        Sun, 16 Jan 2022 20:29:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1642361341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GIoSTxudl4ORprjRcu++GnE1IFzgu7Qi36PinduD8GM=;
+        b=Sdahs2igqjBvlecM/tslBBQJ0uRu18YInEwW24OOIFbu949Ic24DGux3jNRAFnYUyCmoz3
+        q9ZNzZ369O8CoiEnYlCGxXLhzoalCRYFxrd87QuI4xa5brnLaVgY2cbpqHhlNuzhwM2TVK
+        xjJ6/Bil4wB4YV++v9NcvXc08ut+UUg=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: PATCH v4 ASUS EC Sensors
+Date:   Sun, 16 Jan 2022 20:28:59 +0100
+Message-ID: <2613330.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
+References: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <147d69f8-6465-1e19-c1a3-a8ab18a72bc0@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-16.01.2022 18:58, Guenter Roeck пишет:
-> On 1/16/22 12:14 AM, Dmitry Osipenko wrote:
->> 16.01.2022 00:11, Guenter Roeck пишет:
->>> On 1/15/22 12:41 PM, Dmitry Osipenko wrote:
->>>> 15.01.2022 23:33, Dmitry Osipenko пишет:
->>>>> 11.01.2022 19:51, Guenter Roeck пишет:
->>>>>> sysfs and udev notifications need to be sent to the _alarm
->>>>>> attributes, not to the value attributes.
->>>>>>
->>>>>> Fixes: 94dbd23ed88c ("hwmon: (lm90) Use hwmon_notify_event()")
->>>>>> Cc: Dmitry Osipenko <digetx@gmail.com>
->>>>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>>>>> ---
->>>>>>    drivers/hwmon/lm90.c | 12 ++++++------
->>>>>>    1 file changed, 6 insertions(+), 6 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
->>>>>> index ba01127c1deb..1c9493c70813 100644
->>>>>> --- a/drivers/hwmon/lm90.c
->>>>>> +++ b/drivers/hwmon/lm90.c
->>>>>> @@ -1808,22 +1808,22 @@ static bool lm90_is_tripped(struct
->>>>>> i2c_client *client, u16 *status)
->>>>>>          if (st & LM90_STATUS_LLOW)
->>>>>>            hwmon_notify_event(data->hwmon_dev, hwmon_temp,
->>>>>> -                   hwmon_temp_min, 0);
->>>>>> +                   hwmon_temp_min_alarm, 0);
->>>>>>        if (st & LM90_STATUS_RLOW)
->>>>>>            hwmon_notify_event(data->hwmon_dev, hwmon_temp,
->>>>>> -                   hwmon_temp_min, 1);
->>>>>> +                   hwmon_temp_min_alarm, 1);
->>>>>>        if (st2 & MAX6696_STATUS2_R2LOW)
->>>>>>            hwmon_notify_event(data->hwmon_dev, hwmon_temp,
->>>>>> -                   hwmon_temp_min, 2);
->>>>>> +                   hwmon_temp_min_alarm, 2);
->>>>>>        if (st & LM90_STATUS_LHIGH)
->>>>>>            hwmon_notify_event(data->hwmon_dev, hwmon_temp,
->>>>>> -                   hwmon_temp_max, 0);
->>>>>> +                   hwmon_temp_max_alarm, 0);
->>>>>>        if (st & LM90_STATUS_RHIGH)
->>>>>>            hwmon_notify_event(data->hwmon_dev, hwmon_temp,
->>>>>> -                   hwmon_temp_max, 1);
->>>>>> +                   hwmon_temp_max_alarm, 1);
->>>>>>        if (st2 & MAX6696_STATUS2_R2HIGH)
->>>>>>            hwmon_notify_event(data->hwmon_dev, hwmon_temp,
->>>>>> -                   hwmon_temp_max, 2);
->>>>>> +                   hwmon_temp_max_alarm, 2);
->>>>>
->>>>>
->>>>> IIUC, "alarm" is about the T_CRIT output line. While these attributes
->>>>> are about the ALERT line. Hence why "alert" notifications need to be
->>>>> sent to the unrelated "alarm" attributes? This change doesn't look
->>>>> right.
->>>>>
->>>>
->>>> Although, no. I see now that the "alarm_bits" in the code are about the
->>>> alerts. Should be okay then.
->>>>
->>>
->>> Alarm attributes are really neither about interrupts nor about alerts.
->>> Alarm attributes alert userspace that a limit has been exceeded.
->>> How and if the driver notices that a limit has been exceeded is
->>> an implementation detail. In a specific implementation, alerts
->>> or interrupts can be used to notify a driver that a notable event
->>> has occurred on a given device, but technically that is not
->>> necessary. Polling would do just as well.
->>
->> Datasheet refers to T_CRIT using the "alarm" term, this confused me a
->> tad.
->>
->> BTW, we don't have events wired for the temp_crit_alarm attribute.
->>
-> And not for for emergency alarms either. I have a patch prepared to address
-> this, as part of a larger patch series. Unlike the patches in this series,
-> I considered adding events for those attributes an enhancement and not
-> a bug fix.
+Hello.
 
-Alright
+On =FAter=FD 11. ledna 2022 19:03:43 CET Eugene Shalygin wrote:
+> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
+> an implementation that does not use WMI but queries the embedded
+> controller directly.
+>=20
+> That provides two enhancements: sensor reading became quicker (on some
+> systems or kernel configuration it took almost a full second to read
+> all the sensors, that transfers less than 15 bytes of data), the driver
+> became more fexible. The driver now relies on ACPI mutex to lock access
+> to the EC, in the same way as the WMI DSDT code does.
+>=20
+> Chenges in v5:
+>  - Place the sensors bitset directly into the driver_data field of the
+> 	 dmi_system_id struct.
+>  - Replace doc comments with regular ones.
+
+BTW, is this OK:
+
+```
+[   11.104396] asus-ec-sensors PNP0C09:00: board has 6 EC sensors that span=
+ 7 registers
+[   11.104400] asus-ec-sensors PNP0C09:00: hwmon: 'asus-ec-sensors' is not =
+a valid name attribute, please fix
+```
+
+?
+
+>=20
+> Changes in v4:
+>  - Deprecate the wmi driver rather than removing it.
+>=20
+> Changes in v3:
+>  - Remove BIOS version checks and BIOS version dependent mutex path.
+>=20
+> Changes in v2:
+>  - Replace sensor flags enum with bitset
+>  - Replace module init/probe functions with module_platform_driver_probe
+>    and ask the platform drivers framework to load the driver when ACPI
+>    EC is found (ACPI ID "PNP0C09").
+>  - Extend board data with BIOS version attribute for the mutex path to be
+>    BIOS version dependent.
+>  - Add module parameter to override the mutex path.
+
+Thanks.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 
