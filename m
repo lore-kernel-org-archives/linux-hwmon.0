@@ -2,114 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6069C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jan 2022 07:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1556C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jan 2022 10:41:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiAQHWC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jan 2022 02:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S233028AbiAQKlC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jan 2022 05:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235053AbiAQHWA (ORCPT
+        with ESMTP id S238692AbiAQKlB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:22:00 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D47FC06173E;
-        Sun, 16 Jan 2022 23:22:00 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
+        Mon, 17 Jan 2022 05:41:01 -0500
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37C1C06161C;
+        Mon, 17 Jan 2022 02:41:01 -0800 (PST)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id D52FCD65F61;
-        Mon, 17 Jan 2022 08:21:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1642404117;
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4JcpNB4vD9zQjkB;
+        Mon, 17 Jan 2022 11:40:58 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1642416056;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qOHlb7+VIx9AOuvxs7zLpRtZalu6CAyHFVjBEJu2Ono=;
-        b=OrVForQuXhMrI+PUqGng0F97r7QPH7DD6aXd2MdBVzq46qyEIdYgOTk5sdE1MfRmQmOGg8
-        5FSoJiuI+cxcY96Dsjv/ldZeIBN5IsVe1HFM3KK+k5N482q0Tsw+bZx0aZNnNvFt/F6GlQ
-        /e5ZFIFjdWIFi7O4esULkivutEPa2Vw=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cDzYSUJDO2JROZgv4pR6tf401FGHg7SSdGbGmrMTzjU=;
+        b=aLZ2cqSjG7C97vZnvs4oKTxcKb4947DUXrYjD/Cofvpy5uk2J21alb6zz7B4Nx+QLC9/SE
+        SRK+K3wSLwoAn+jJ1zHIV+QS+9t++6TBqYFDkr1Ac7jAoqJBzN+/iisZ4PolJmFR4036wu
+        ZIl3fv5wFcfW9GcX8YIamox6cRN68+II7zGjY2rdQ97yd2f4tZGaNjOz7bWU47ojmFeusf
+        FvfzO8EnVRwqJVwuIrY3MvvgfqgcP87PUu+IQvMwzE4bH1ZmTN21vVq4hlFrWuZb9urSc0
+        uBFN3Kxg2DE/i/dduzUCUlnqgZ0Qm+K+sAX89tSM1LsHw3OmJK29R+vQ+yIBtw==
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [ASUS EC Sensors V6 v6 0/3]
-Date:   Mon, 17 Jan 2022 08:21:55 +0100
-Message-ID: <2613447.mvXUDI8C0e@natalenko.name>
-In-Reply-To: <20220116201843.2301438-1-eugene.shalygin@gmail.com>
-References: <20220116201843.2301438-1-eugene.shalygin@gmail.com>
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 0/4] Add max6639 regulator and devicetree support
+Date:   Mon, 17 Jan 2022 11:40:22 +0100
+Message-Id: <cover.1642413668.git.sylv@sylv.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello.
+these patches add devicetree support for the Maxim MAX6639.
+In addition, it includes optional regulator support for the fan-supply and
+updates the URL to the datasheet.
 
-On ned=C4=9Ble 16. ledna 2022 21:18:38 CET Eugene Shalygin wrote:
-> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
-> an implementation that does not use WMI but queries the embedded
-> controller directly.
->=20
-> That provides two enhancements: sensor reading became quicker (on some
-> systems or kernel configuration it took almost a full second to read
-> all the sensors, that transfers less than 15 bytes of data), the driver
-> became more fexible. The driver now relies on ACPI mutex to lock access
-> to the EC, in the same way as the WMI DSDT code does.
->=20
-> Changes in v6:
->  - Fixed hwmon device name replacing dashes with underscores.
->  - Removed module verion.
->  - Fixed condition for asus_wmi_ec_Sensors in KBuild.
+Changes in v2:
+- dt: Rename polarity to pwm-polarity
+- Remove unused platform_data header.
+- Remove regulator enable/disable calls in pwm_store due to imbalance of
+  calls.
+- Move to strict per channel dt configuration without defaults.
 
-=46or the series:
+Marcello Sylvester Bauer (4):
+  hwmon: (max6639) Update Datasheet URL
+  hwmon: (max6639) Add regulator support
+  dt-bindings: hwmon: Add binding for max6639
+  hwmon: (max6639) Change from pdata to dt configuration
 
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+ .../bindings/hwmon/maxim,max6639.yaml         | 112 +++++++++
+ Documentation/hwmon/max6639.rst               |   2 +-
+ drivers/hwmon/max6639.c                       | 235 ++++++++++++++----
+ include/linux/platform_data/max6639.h         |  15 --
+ 4 files changed, 297 insertions(+), 67 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+ delete mode 100644 include/linux/platform_data/max6639.h
 
-> Changes in v5:
->  - Place the sensors bitset directly into the driver_data field of the
->          dmi_system_id struct.
->  - Replace doc comments with regular ones.
->=20
-> Changes in v4:
->  - Deprecate the wmi driver rather than removing it.
->=20
-> Changes in v3:
->  - Remove BIOS version checks and BIOS version dependent mutex path.
->=20
-> Changes in v2:
->  - Replace sensor flags enum with bitset
->  - Replace module init/probe functions with module_platform_driver_probe
->    and ask the platform drivers framework to load the driver when ACPI
->    EC is found (ACPI ID "PNP0C09").
->  - Extend board data with BIOS version attribute for the mutex path to be
->    BIOS version dependent.
->  - Add module parameter to override the mutex path.
->=20
-> Eugene Shalygin (3):
->   hwmon: (asus-ec-sensors) add driver for ASUS EC
->   hwmon: (asus-ec-sensors) update documentation
->   hwmon: deprecate asis_wmi_ec_sensors driver
->=20
->  Documentation/hwmon/asus_ec_sensors.rst     |  51 ++
->  Documentation/hwmon/asus_wmi_ec_sensors.rst |  38 --
->  MAINTAINERS                                 |   6 +
->  drivers/hwmon/Kconfig                       |  16 +-
->  drivers/hwmon/Makefile                      |   1 +
->  drivers/hwmon/asus-ec-sensors.c             | 690 ++++++++++++++++++++
->  6 files changed, 763 insertions(+), 39 deletions(-)
->  create mode 100644 Documentation/hwmon/asus_ec_sensors.rst
->  delete mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
->  create mode 100644 drivers/hwmon/asus-ec-sensors.c
-
-Thanks.
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
+-- 
+2.33.1
 
