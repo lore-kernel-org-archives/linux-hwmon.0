@@ -2,48 +2,46 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04112C4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jan 2022 16:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ACECC433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jan 2022 16:13:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240930AbiAQQNc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jan 2022 11:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
+        id S240933AbiAQQNg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jan 2022 11:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240909AbiAQQNa (ORCPT
+        with ESMTP id S240935AbiAQQNd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:13:30 -0500
-Received: from mout-y-209.mailbox.org (mout-y-209.mailbox.org [IPv6:2001:67c:2050:1::465:209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B01C06161C;
-        Mon, 17 Jan 2022 08:13:30 -0800 (PST)
+        Mon, 17 Jan 2022 11:13:33 -0500
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3595C061574;
+        Mon, 17 Jan 2022 08:13:32 -0800 (PST)
 Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-y-209.mailbox.org (Postfix) with ESMTPS id 4Jcxlr4Ctgz9scp;
-        Mon, 17 Jan 2022 17:13:28 +0100 (CET)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jcxlt1PXKzQkjD;
+        Mon, 17 Jan 2022 17:13:30 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1642436006;
+        t=1642436008;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PeyOtioc+HMGOCLtGIToDJpGx5LhgE+HjONIButej2I=;
-        b=FEUv+9mT8jrC475KPKqZckBgK5ik+cRAxH4LG1Lz8SEWLUTN23vGcEJ2rmNkJrW6tuV0Za
-        jE2iOrJ+KGRHWbuO2Ep+P967C60CUrI+e/74lJ+1ZGkTNq43KQwOM3u01CpX1EDl31cwoz
-        rVc/IJrDAhHmT2HQmg7zIh2zPKmP9dxEqsYah2SZabO5ysOvHIL+QIoLgkM32bEHUy4qkS
-        dBr30yfH2dCi5CP0Zdb1vZ1tn/Lhbl7sxRcSw+rQrDwq3GmAFU1DotRWYnhWbWJRYfeH+y
-        2oz56oSm2EoQ8WZ1JI4ibUKQgiN/plMIoBtG97lx2hUc7clcaPFLs1rjdAbxCA==
+        bh=5bVOXCL2pZNunkAFXt1lXg86764+54YuO1hqIIS1yLY=;
+        b=1ivOzRS/ndOFvUhV3eT53xTajKVkINaGrlRRubrtttZXI58xzF5xJ1MjDpBD8tfPQtHMfr
+        JRE/9oQJHDxKfiu5fM0dZDbZXlyVVPTtzPYo+UV3G1TJ2hKQU1OLvQn+R5G3Q744hUlxzl
+        WKdYtXtb+ZhsxhIWY57guW+sr2xmJHtXlD21kes7O5PJ0pv8bFtl2BDk3o+yWsznOxTGPx
+        Rikf+wMFWPOXW5zVidDu/mlx7feh88ot+MIL75mXjGN9kdivlaOeqr00c8TzZ/PgPWcdn9
+        vO+elHfDT4E3aUEhp8qORQiqBZRwBtbgBdlr/qqm11UHvYNCx24QJP/lvD3z9A==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/4] dt-bindings: vendor-prefixes: add Vicor Corporation
-Date:   Mon, 17 Jan 2022 17:12:47 +0100
-Message-Id: <58d2c7501edf746f3677681327c283fc3faaf872.1642434222.git.sylv@sylv.io>
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 3/4] pmbus: remove trailing whitespaces
+Date:   Mon, 17 Jan 2022 17:12:49 +0100
+Message-Id: <c984b88b136a1cde16ce52c5f818886653b0f84a.1642434222.git.sylv@sylv.io>
 In-Reply-To: <cover.1642434222.git.sylv@sylv.io>
 References: <cover.1642434222.git.sylv@sylv.io>
 MIME-Version: 1.0
@@ -52,26 +50,28 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add vendor prefix for Vicor Corporation.
+Fix checkpatch issues by removing trailing whitespaces in Kconfig.
 
 Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwmon/pmbus/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 66d6432fd781..8a2a205d6d34 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1273,6 +1273,8 @@ patternProperties:
-   "^vdl,.*":
-     description: Van der Laan b.v.
-   "^via,.*":
-+    description: Vicor Corporation
-+  "^vicor,.*":
-     description: VIA Technologies, Inc.
-   "^videostrong,.*":
-     description: Videostrong Technology Co., Ltd.
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 41f6cbf96d3b..c96f7b7338bd 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -189,8 +189,8 @@ config SENSORS_LTC2978_REGULATOR
+ 	depends on SENSORS_LTC2978 && REGULATOR
+ 	help
+ 	  If you say yes here you get regulator support for Linear Technology
+-	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880, 
+-	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686, 
++	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880,
++	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686,
+ 	  and LTM4700.
+ 
+ config SENSORS_LTC3815
 -- 
 2.33.1
 
