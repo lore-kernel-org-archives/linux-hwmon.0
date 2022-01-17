@@ -2,241 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 903D4C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jan 2022 17:02:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B15C4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jan 2022 17:12:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241837AbiAQRCd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jan 2022 12:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S238998AbiAQRMK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jan 2022 12:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241703AbiAQRBU (ORCPT
+        with ESMTP id S244051AbiAQRKr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:01:20 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B6BC06175F;
-        Mon, 17 Jan 2022 09:01:20 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so3399498otu.0;
-        Mon, 17 Jan 2022 09:01:20 -0800 (PST)
+        Mon, 17 Jan 2022 12:10:47 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4062C061342;
+        Mon, 17 Jan 2022 09:06:38 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso7976705otl.3;
+        Mon, 17 Jan 2022 09:06:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EBGqX//gdJ9dDcyQcFJ1+S8K91sxfz9HwY6Hed4kq/8=;
-        b=UuA1oVC7z1sbz8HicmtlVZV62sByxjLCTo9CbQOHcxdtu6HpNBJCU+o2whEj0xf2Yh
-         Z8RFPYYPxkjhQOBbkfTBbpPs+H89H3vNmVzg3twiQ5KkHACvIS1ZHYbuO6X6oV5j7Xjy
-         r0B1gKDITLihuf/j4+5ixn7Cot1a8CYN46wf6yL9YBahtumUR8yjlaCHaHNGFT6/ghsE
-         XRpFGnWg/fEpCi2PILQFLleUoyvKogTGLY+AfoGQ6la6XzD0wefBNxtkFO3SdmNNbFkT
-         WwgQ0pmmMgqbdRTw4Iw00urwSqYV2K9/j077tve73Hv7SyJ8x7359Tl7HmvwSmpyDV8I
-         woug==
+        bh=tUhw/y9cZXgqGz/p/76i9xXoBkiXwqUAFGmdf6IDvoM=;
+        b=GCtZdCtolPb+Z3CiCF5Eqji9SMjeidwEOCV3iarm5Mi0nitLtq8isRWE6rMhIXe/L+
+         ubbvMRnMpdgehm7urlVQieaTAzPrwprKMH/nMDojm/eDRLLxeFiRDYsm4ig5zuVKUotB
+         Pn66DczcGpAeU7uE1LjIA+BFbEr1SoePM/xJSCeNtA3cVVU8bKjRuW9ApVlW9B++gwW4
+         lQf5B5exSqi5I4EMzDkB3A3CKAI73wWV7TQb/BBo6p1oUPI43o0h03wnkwOzUdwDa86E
+         ea90YOiOHNFPn2dcOjgHaC0/ef0PEarhQDf6PIdOF4GXx/0AJQpW5IbV9HdaaMd+ZcJS
+         BHLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=EBGqX//gdJ9dDcyQcFJ1+S8K91sxfz9HwY6Hed4kq/8=;
-        b=b9N33F9KmgmrQbbvcx9EhGdjGvQdRYn+8XTIpKme9C/0OU5R2d3lj2GwCTESA5hxL3
-         5GFIvOMrJmkeQ4jJmcUv3LA9/1InVN6M2OgmcOjGnWe5ZVS70RJzzzFac05AMb/r7NuP
-         6+RQnArvd1pKAyZlA8n3ee6ilPdTdEZqCYghen5N5I0y4vo3O/VlKBxjUqF2LF+qzKuj
-         x4UNXr+ahq+j0MmAx2stg3IAhWIyE1MXTT6GUqs9oRKMsr3oDgMYf8/TOOFpU+BvGyk2
-         KbcTslVwmYE9kGaK9qjGgLPGGyelpWVeU9apWwuj9M+kNbihSuSfIJaa6V+ceqDC/WW+
-         61jw==
-X-Gm-Message-State: AOAM533qdLQuDYeQyfM+lKxjo9ED7xVQkQWkvcAg5th2DsFZBrHytjuF
-        dFBz/9Vg4X0X0EXSEpjujEJWQz13qD4=
-X-Google-Smtp-Source: ABdhPJwiKeQ2ObSK4DghQ2YRGrtrnfscg7tzal3Mq0R1vRT5apNN48kFo16NeVPWSdDVcSE2vLTThg==
-X-Received: by 2002:a05:6830:1d47:: with SMTP id p7mr1755167oth.211.1642438879445;
-        Mon, 17 Jan 2022 09:01:19 -0800 (PST)
+        bh=tUhw/y9cZXgqGz/p/76i9xXoBkiXwqUAFGmdf6IDvoM=;
+        b=q+wNtR1uzy3UMWrwY5Keks4UAsI/pM1bnKvf7HZyfDhwxGbGxsHD2502kUMC98lWnD
+         TamoDG/BOws9qVnUBn2csyID/3fSqqW98utpW8nCVJQkXedMwMl4kA9wPM3UIAHhAeFB
+         lqtoVOzqwgStmgdsyPdAb1ebSJg9cHMIknpIY32GpnofWBnffUIsmpFcdSW+66FT202d
+         9NYD+TDfto/J6Ug2Xv1drS3jlZwP00vC991Cv3IQrXth2avP0Mln1+oONDtczxwh17gG
+         /dUs+L784owJL0U9fzkOslC1Q2C+DPUIxdMM3+1dwyI26U3uQ/8qkiwh2OCwNOAQRbYF
+         7bNw==
+X-Gm-Message-State: AOAM531iflgwrfIskANwBq+JasFD/OziimJN+1rNVPzPIcylJcAojtNY
+        z0WnrUM1fWCwOiD444O3TKf+h/UYLRg=
+X-Google-Smtp-Source: ABdhPJytJTLfP4k/pRT8QJ3PlRapfIbnUhnUlxgMu42sN7AAmRgePdon66eY7UHO3OmJ96LnGO6/Hw==
+X-Received: by 2002:a05:6830:22c8:: with SMTP id q8mr16951562otc.54.1642439197830;
+        Mon, 17 Jan 2022 09:06:37 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d12sm5140476otl.80.2022.01.17.09.01.17
+        by smtp.gmail.com with ESMTPSA id 6sm6583224oif.16.2022.01.17.09.06.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 09:01:18 -0800 (PST)
+        Mon, 17 Jan 2022 09:06:37 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v1 2/4] dt-bindings: hwmon/pmbus: Add vicor,bcm6123 Bus
+ Converter
 To:     Marcello Sylvester Bauer <sylv@sylv.io>,
         linux-hwmon@vger.kernel.org
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <cover.1642434222.git.sylv@sylv.io>
- <db9cb6a43de9b248b76f815c6c173d1eefd42ad0.1642434222.git.sylv@sylv.io>
+ <ba6346942dfed14440e0243a6da510581389fbdd.1642434222.git.sylv@sylv.io>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 4/4] pmbus: Add support for bcm6123 Bus Converter
-Message-ID: <c04086b8-7948-c1d9-56ee-e20455e8c92b@roeck-us.net>
-Date:   Mon, 17 Jan 2022 09:01:16 -0800
+Message-ID: <e5ddd3f1-61c9-862d-8973-484c91b7718e@roeck-us.net>
+Date:   Mon, 17 Jan 2022 09:06:35 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <db9cb6a43de9b248b76f815c6c173d1eefd42ad0.1642434222.git.sylv@sylv.io>
+In-Reply-To: <ba6346942dfed14440e0243a6da510581389fbdd.1642434222.git.sylv@sylv.io>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 1/17/22 8:12 AM, Marcello Sylvester Bauer wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Add bindings for BCM6123 Bus Converter from Vicor Corporation.
 > 
-> BCM6123 is an Fixed-Ratio DC-DC Converter.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+
+Can this be added to trivial devices instead ?
+
+Guenter
+
 > ---
->   drivers/hwmon/pmbus/Kconfig   |  9 ++++
->   drivers/hwmon/pmbus/Makefile  |  1 +
->   drivers/hwmon/pmbus/bcm6123.c | 90 +++++++++++++++++++++++++++++++++++
-
-Documentation/hwmon/bcm6123 is missing.
-
->   3 files changed, 100 insertions(+)
->   create mode 100644 drivers/hwmon/pmbus/bcm6123.c
+>   .../bindings/hwmon/pmbus/vicor,bcm6123.yaml   | 41 +++++++++++++++++++
+>   1 file changed, 41 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index c96f7b7338bd..62dac90631c5 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -48,6 +48,15 @@ config SENSORS_ADM1275
->   	  This driver can also be built as a module. If so, the module will
->   	  be called adm1275.
->   
-> +config SENSORS_BCM6123
-> +	tristate "Vicor BCM6123 Compatible Power Supplies"
-
-Is this a power supply or a chip ? It can't be both.
-
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Vicor
-> +	  BCM6123 Power Supplies.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called bcm6123.
-> +
->   config SENSORS_BEL_PFE
->   	tristate "Bel PFE Compatible Power Supplies"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index e5935f70c9e0..2918c2ea7bc5 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -7,6 +7,7 @@ obj-$(CONFIG_PMBUS)		+= pmbus_core.o
->   obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
->   obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
->   obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
-> +obj-$(CONFIG_SENSORS_BCM6123)	+= bcm6123.o
->   obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
->   obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
->   obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
-> diff --git a/drivers/hwmon/pmbus/bcm6123.c b/drivers/hwmon/pmbus/bcm6123.c
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
 > new file mode 100644
-> index 000000000000..78fc259bc40f
+> index 000000000000..5559d22e00f1
 > --- /dev/null
-> +++ b/drivers/hwmon/pmbus/bcm6123.c
-> @@ -0,0 +1,90 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for Infineon bcm6123
-> + *
-Infineon ?
-
-> + * Copyright (c) 2021 9elements GmbH
-> + *
-> + * VOUT_MODE is not supported by the device. The driver fakes VOUT linear16
-> + * mode with exponent value -8 as direct mode with m=256/b=0/R=0.
-> + *
-
-Does it not ? The datasheet doesn't say, and the code below doesn't match
-this description.
-
-> + * The device supports VOUT_PEAK, IOUT_PEAK, and TEMPERATURE_PEAK, however
-> + * this driver does not currently support them.
-
-Does it ? There is no reference for this in the datasheet.
-
-Overall it seems like there is a lot of cut-and-paste. Please clean this up.
-
-> + */
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
 > +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/vicor,bcm6123.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +static struct pmbus_platform_data bcm6123_plat_data = {
-> +	.flags = PMBUS_NO_CAPABILITY,
-> +};
-
-We should only set this flag if it is really needed.
-
+> +title: Vicor Corporation BCM6123 Bus Converter
 > +
-> +static struct pmbus_driver_info bcm6123_info = {
-> +	.pages = 2,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_CURRENT_IN] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_POWER] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.m[PSC_VOLTAGE_IN] = 1,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 1,
-> +	.m[PSC_VOLTAGE_OUT] = 1,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 1,
-> +	.m[PSC_CURRENT_IN] = 1,
-> +	.b[PSC_CURRENT_IN] = 0,
-> +	.R[PSC_CURRENT_IN] = 3,
-> +	.m[PSC_CURRENT_OUT] = 1,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +	.R[PSC_CURRENT_OUT] = 2,
-> +	.func[0] = 0, /* Summing page without voltage readings */
-
-This needs further explanation. The public datasheet doesn't say anything
-about multiple pages, and it doesn't really make much sense to have an
-"empty" page with no information in it.
-
-> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-> +	    | PMBUS_HAVE_IIN | PMBUS_HAVE_POUT,
-> +};
+> +description: |
+> +  The BCM6123 is an isolated Fixed-Ratio DC-DC Converter,
+> +  operating from a 260V to 410V primary bus to deliver an unregulated
+> +  ratiometric secondary voltage.
 > +
-> +static int bcm6123_probe(struct i2c_client *client)
-> +{
-> +	client->dev.platform_data = &bcm6123_plat_data;
+> +  Datasheet: https://www.vicorpower.com/documents/datasheets/ds_BCM6123xD1E5135yzz.pdf
 > +
-> +	return pmbus_do_probe(client, &bcm6123_info);
-> +}
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - vicor,bcm6123
 > +
-> +static const struct i2c_device_id bcm6123_id[] = {
-> +	{"bcm6123", 0},
-> +	{}
-> +};
+> +  reg:
+> +    maxItems: 1
 > +
-> +MODULE_DEVICE_TABLE(i2c, bcm6123_id);
+> +required:
+> +  - compatible
+> +  - reg
 > +
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id bcm6123_of_match[] = {
-> +	{ .compatible = "vicor,bcm6123" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, bcm6123_of_match);
-> +#endif
+> +additionalProperties: false
 > +
-> +/* This is the driver that will be inserted */
-> +static struct i2c_driver bcm6123_driver = {
-> +	.driver = {
-> +		   .name = "bcm6123",
-> +		   .of_match_table = of_match_ptr(bcm6123_of_match),
-> +		   },
-> +	.probe_new = bcm6123_probe,
-> +	.id_table = bcm6123_id,
-> +};
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
 > +
-> +module_i2c_driver(bcm6123_driver);
-> +
-> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Vicor bcm6123");
-> +MODULE_LICENSE("GPL");
+> +        bcm6123@5f {
+> +            compatible = "vicor,bcm6123";
+> +            reg = <0x5f>;
+> +        };
+> +    };
 > 
 
