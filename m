@@ -2,93 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F90DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jan 2022 15:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31C87C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jan 2022 16:02:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346102AbiARP7E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jan 2022 10:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S236407AbiARQCI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jan 2022 11:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346095AbiARP7A (ORCPT
+        with ESMTP id S233506AbiARQCI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:59:00 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C72CC06161C;
-        Tue, 18 Jan 2022 07:59:00 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so18087113oto.4;
-        Tue, 18 Jan 2022 07:59:00 -0800 (PST)
+        Tue, 18 Jan 2022 11:02:08 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8C5C061574;
+        Tue, 18 Jan 2022 08:02:08 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id z25-20020a0568301db900b005946f536d85so15809795oti.9;
+        Tue, 18 Jan 2022 08:02:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6zBK9Ap0MPjjgj20gZD2ZZPJ47JigEwNp1b7g+RZyNk=;
-        b=ewamlKh/o6u6/IdyzYPLbpttc9ObpKVou5F73R+/LRh8Bd9dRriL+7mtG22yIlrKzy
-         6wRS2zq6NKJelgOkZLvg5LzWnxOamM6c69ep+vW/KeHS2Vbq1gAE7t0wNFYFi1loU0z8
-         23T42Y4HWJpk5p+CO9/AD6sJMh5Ucxq5NyeL6GLaW9MbMjweMtAw6x8FEBiNLvTCkIEK
-         J6J3HXOVcUclVrZHxx+J0LUbo9eneats9edQJ4i49XbR+uc58j17gEBchNJqo9/26Tsq
-         4dbbEHu/7yLJw6HFLWWLEMaRYH40lD4HpWwj24RBk7iD8c4N0laHIR+HT1xpHf/nP4ve
-         eUIw==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DRWvJqJCJB2zDMiflQ0w0m6dxBHwwBYShSFfH7UqcLk=;
+        b=peU65y+/8o9dTYfTioMQ4LSpvEhuJx6xNloR8e5IispZZSomPalSG3yTpB0b6b6MQT
+         Nw0uGbiMW1uX8hP0gDkJMp+ZniJUpKFBIilMAusIbHdA00IIfHlWEoDmli7l9bdNzPsB
+         cUBhndmqq8n1bSInmeMFGH6Uv4L5n3357ykRMYZewgoJMvhaKsBxi0PSrveeZlN4Nkh0
+         So0ngNa5doNyZU+mJboiZ1wKZKPUmDOsM8dZgqjdNSmrYNhPYV7VOxjglgfjglKV2HSR
+         tWpQDRN/j0A5LgB1uwCZ3ya45TAuliAzjULrhpBBYfflig0T+ebqMRaaTklND+pjO9sU
+         3Fxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=6zBK9Ap0MPjjgj20gZD2ZZPJ47JigEwNp1b7g+RZyNk=;
-        b=TCEz1pBxAjfMEPh4lzX3VXlcbS7NU8CgPkcuvZZk9G8PvSKOSC/cRv7+EN7qz9NCD9
-         rK0BJpTtaBNiKEy0zoEC6LXZmKu1P7nw7RaS24noWQrYCCXZzCxD7gBVnLFCh5kgWJd7
-         Baar+iUixwKcM7l+gk/aNrEa+1H2Kso0lh0GBlUZd2VxyHhMBaGEylXMSarz45xHzlMY
-         DQ6j8906m6cQGrLhgwSoa2qNYF8t40LU0lWdA6uTmHqRfHbsexOb4bHugD3ylwRuoxUc
-         M64hFB1xNBWOw6zXCw2SmpSvdI29d26hETA3hAUxrJjeQtacBB3LkdJz+Z0JTFTFsWPx
-         q//w==
-X-Gm-Message-State: AOAM533H4gNpTzOHwtQXVJrN1ss5thxhyj+cI9keLLem21Hhk5d/K69U
-        6nYjxN5+O6TfT7oFc950QJ8+xqW7vMM=
-X-Google-Smtp-Source: ABdhPJwYvko+oWvGn29Y6w7HoXmhnCowumyb0cXX9LyGbqM9Y/Trvqz2CrsLfveJQLFpRhBp6GC55w==
-X-Received: by 2002:a9d:4718:: with SMTP id a24mr19922023otf.381.1642521539721;
-        Tue, 18 Jan 2022 07:58:59 -0800 (PST)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DRWvJqJCJB2zDMiflQ0w0m6dxBHwwBYShSFfH7UqcLk=;
+        b=wvUa9YIYJ77faQca5bsdj5TjdC3mLmX/+wIPupUCqWTJmORTbt/IhGtvn/Nvm/VT7z
+         t6UzbNzhEHmL+t4Fs/r1U4ubTt3pP5mUWJi0i8YzsM8K8Rgrc4Iy1S70cqIKHb8ZyY78
+         NUItpxUbZ/fjx5W6ht8Z/w1gvqIpBNKxcZsN/HZA+1MEa6z1U8LURfG1ss16SvCAFzq6
+         8RI1eKgn2S0RZbCaJrG49+bRgAEVIm4Vkwt4atqaicCIUnA6DzVMM7860Tu9GV50vhI4
+         XohHTUxtD4HN4qgTTJkeWBuwTi+dcpxebEmpoyVLlj9KkESTJLcudgWDXpbqPfqcBvan
+         ELeQ==
+X-Gm-Message-State: AOAM533YC1LGvraYvitFl+kZCLy3ERqDYoT3Rqw+oYawfCo0DayOW59t
+        jHyzreXkk0jyHizuw0rDdG7aCJ2+piI=
+X-Google-Smtp-Source: ABdhPJzy9v7kvJYI0+MuBDbD9FB49K/5OA24lyxf9WbKymoD40fCrr9UBa8MIMOc0pWZcCbLwUbGRg==
+X-Received: by 2002:a9d:6242:: with SMTP id i2mr12390212otk.127.1642521727248;
+        Tue, 18 Jan 2022 08:02:07 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n19sm7003095otq.11.2022.01.18.07.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 07:58:59 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id d12sm6972682otq.67.2022.01.18.08.02.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 08:02:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Jan 2022 07:58:57 -0800
+Subject: Re: [ASUS EC Sensors V6 v6 3/3] hwmon: deprecate asis_wmi_ec_sensors
+ driver
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20220116201843.2301438-1-eugene.shalygin@gmail.com>
+ <20220116201843.2301438-4-eugene.shalygin@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/4] pmbus: remove trailing whitespaces
-Message-ID: <20220118155857.GA4114390@roeck-us.net>
-References: <cover.1642434222.git.sylv@sylv.io>
- <c984b88b136a1cde16ce52c5f818886653b0f84a.1642434222.git.sylv@sylv.io>
+Message-ID: <08d4e523-d4c2-f0a4-c681-179cd6051527@roeck-us.net>
+Date:   Tue, 18 Jan 2022 08:02:05 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c984b88b136a1cde16ce52c5f818886653b0f84a.1642434222.git.sylv@sylv.io>
+In-Reply-To: <20220116201843.2301438-4-eugene.shalygin@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 05:12:49PM +0100, Marcello Sylvester Bauer wrote:
-> Fix checkpatch issues by removing trailing whitespaces in Kconfig.
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 
-Applied, after updating Kconfig file. No need to resend.
+No description, no Signed-off-by:. Sorry, you'll have to resend.
 
+Guenter
+
+On 1/16/22 12:18 PM, Eugene Shalygin wrote:
 > ---
->  drivers/hwmon/pmbus/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/hwmon/Kconfig | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 41f6cbf96d3b..c96f7b7338bd 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -189,8 +189,8 @@ config SENSORS_LTC2978_REGULATOR
->  	depends on SENSORS_LTC2978 && REGULATOR
->  	help
->  	  If you say yes here you get regulator support for Linear Technology
-> -	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880, 
-> -	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686, 
-> +	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880,
-> +	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686,
->  	  and LTM4700.
->  
->  config SENSORS_LTC3815
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 2c16b19d2c03..38094c702e4d 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -2243,13 +2243,16 @@ config SENSORS_ASUS_WMI
+>   
+>   config SENSORS_ASUS_WMI_EC
+>   	tristate "ASUS WMI B550/X570"
+> -	depends on ACPI_WMI
+> +	depends on ACPI_WMI && SENSORS_ASUS_EC=n
+>   	help
+>   	  If you say yes here you get support for the ACPI embedded controller
+>   	  hardware monitoring interface found in B550/X570 ASUS motherboards.
+>   	  This driver will provide readings of fans, voltages and temperatures
+>   	  through the system firmware.
+>   
+> +	  This driver is deprecated in favor of the ASUS EC Sensors driver
+> +	  which provides fully compatible output.
+> +
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called asus_wmi_sensors_ec.
+>   
+> 
+
