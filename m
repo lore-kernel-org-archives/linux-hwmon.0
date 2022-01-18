@@ -2,189 +2,264 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88BB1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jan 2022 16:13:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E9EFC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jan 2022 16:47:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243937AbiARQNa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jan 2022 11:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
+        id S244207AbiARQr6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jan 2022 11:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347490AbiARQLo (ORCPT
+        with ESMTP id S236908AbiARQr6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:11:44 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A9FC06177E;
-        Tue, 18 Jan 2022 08:11:11 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so18143522oto.4;
-        Tue, 18 Jan 2022 08:11:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wp6HFxmyH+W1ub29ho80GpkYopfq9hva3FLC/4l8FAI=;
-        b=Y3ZbxNIsunSk1AHrzp1Mc9h6nqKhsJ4J6fsnt8ib777zelc+5dHRP++k37sepQ8wJp
-         wcMn84UMvEeeFV28PCgjriUw6EUKM9RjNunjfnUhBCEF5QcYwoEGkm3s3Y6BA2+HRRl6
-         xyL1BnRZHYUKduCq4THIUZrB7F1xLlikdweabk4NBkzMQ1TJW7afz1VEW1WG0IYLexkg
-         kHeavdjYpdte4ZnZBWIj0gXOZAn2wKLgESfPlKBSM1iA+/F99hFH8oqjLyfHkLue+fqa
-         nwcOCg5DEv6X/lH2Cfoyg6tDqmVBM6QuJ+zyBp3yxIoC5qh9OErg4qjPApfU9Ymr5yRv
-         HeGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=wp6HFxmyH+W1ub29ho80GpkYopfq9hva3FLC/4l8FAI=;
-        b=u80AqGi8WiXlm6lUwp6w8m4Vd4QEVLO52eDAgcGL9Cg9IdghuIKS7AcnqiaobqPds4
-         nq/oYc0DvTJSk4KxY/6HsjEBsy8XTjagb+11GNAoYwH3L+t+vEqLUm5x0Ti2BkL9pY/o
-         N9/cbH9aJkzXrD1J5Un/vNH3NZR7pw9FRQi6K/vJu7+TPILvImkRety3whxRIHfZJfAi
-         5FFrrhMomFBPVcpeovv+4rADT+ymoXa+ekMMtMd1AnvY1ECack61JVyziy4celY4K41N
-         WRmLzrQa6vU2YSmepbc5B53M+MWKhbO/CWhVKNqjAbs/1ruuxBJ9Y0p6Q0RG4jhQFrSz
-         IVZg==
-X-Gm-Message-State: AOAM532/X69by2XBioWiIPVvQGnIqkxPyaKf7BLFP2x49USLc8oIlm+a
-        BqGMAHJbzIx3j8Wkpm/3Olw=
-X-Google-Smtp-Source: ABdhPJyEgmj04xdOjN6O4U9ka462CxxomuI4/G8OQRGIvZpx9Z1YP7sW8q29W0lPsmKYCic96MtcLA==
-X-Received: by 2002:a9d:37a2:: with SMTP id x31mr20698547otb.51.1642522270894;
-        Tue, 18 Jan 2022 08:11:10 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s14sm2403902otd.0.2022.01.18.08.11.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 08:11:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Jan 2022 08:11:08 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 2/4] hwmon: (max6639) Add regulator support
-Message-ID: <20220118161108.GA4115171@roeck-us.net>
-References: <cover.1642413668.git.sylv@sylv.io>
- <4c644f279f6e205d3c9540a4ad35825e4d5f2da1.1642413668.git.sylv@sylv.io>
+        Tue, 18 Jan 2022 11:47:58 -0500
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BFDC061574;
+        Tue, 18 Jan 2022 08:47:57 -0800 (PST)
+Received: from smtp102.mailbox.org (unknown [91.198.250.119])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4JdZT72kt8z9scy;
+        Tue, 18 Jan 2022 17:47:55 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1642524473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qljFJMkFb9d7vcqEyz7OUbcIm/7My2BmlvxkxLSAZkg=;
+        b=KMMG7u9zaBjNqC+zKqbjUoeW2obA/AJmi7FYLauC1NSgMu8saMSpaXVFaW5pCQLAQOG/fV
+        3qDSr6tw4bt0wEIsITSnKJdIHy2VWnF4G8+fY/o4Wmy3adVBqbVJHuhGoMTWHu5ykFMewp
+        2ZQxtS99FYdWLI0ENQEppTEP0QW9u4zQVxJz8rXZkyhS/HNeXhDDmLmqEIs63jVVuOTc3i
+        Wi4btrK7eve/L/iifUQ5MvYaRh77zX4m5qIvLMCN9u6Bq1kqXwrlvzoeL6YnnbEUVojHOZ
+        jWKTw88sWcHaLQWjyofrLYJZwkBywEmX6eaJ7CZGgFSFRMFl9OJzxDvqRzJK3Q==
+Message-ID: <b7ef895cdfd261dd248bcf0d0da22dc38881f8bc.camel@sylv.io>
+Subject: Re: [PATCH v1 4/4] pmbus: Add support for bcm6123 Bus Converter
+From:   sylv <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Date:   Tue, 18 Jan 2022 17:47:49 +0100
+In-Reply-To: <31890e5b-29f6-2ff0-f15d-a92c02c1e60c@roeck-us.net>
+References: <cover.1642434222.git.sylv@sylv.io>
+         <db9cb6a43de9b248b76f815c6c173d1eefd42ad0.1642434222.git.sylv@sylv.io>
+         <c04086b8-7948-c1d9-56ee-e20455e8c92b@roeck-us.net>
+         <31890e5b-29f6-2ff0-f15d-a92c02c1e60c@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c644f279f6e205d3c9540a4ad35825e4d5f2da1.1642413668.git.sylv@sylv.io>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 11:40:24AM +0100, Marcello Sylvester Bauer wrote:
-> Add regulator support for boards where the fan-supply have to be
-> powered up before it can be used.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> ---
->  drivers/hwmon/max6639.c | 64 +++++++++++++++++++++++++++++++++++------
->  1 file changed, 56 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-> index ccc0f047bd44..0b241f029229 100644
-> --- a/drivers/hwmon/max6639.c
-> +++ b/drivers/hwmon/max6639.c
-> @@ -87,6 +87,9 @@ struct max6639_data {
->  	/* Register values initialized only once */
->  	u8 ppr;			/* Pulses per rotation 0..3 for 1..4 ppr */
->  	u8 rpm_range;		/* Index in above rpm_ranges table */
-> +
-> +	/* Optional regulator for FAN supply */
-> +	struct regulator *reg;
->  };
->  
->  static struct max6639_data *max6639_update_device(struct device *dev)
-> @@ -516,6 +519,11 @@ static int max6639_detect(struct i2c_client *client,
->  	return 0;
->  }
->  
-> +static void max6639_regulator_disable(void *data)
-> +{
-> +	regulator_disable(data);
-> +}
-> +
->  static int max6639_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
-> @@ -528,6 +536,30 @@ static int max6639_probe(struct i2c_client *client)
->  		return -ENOMEM;
->  
->  	data->client = client;
-> +
-> +	data->reg = devm_regulator_get_optional(dev, "fan");
-> +	if (IS_ERR(data->reg)) {
-> +		if (PTR_ERR(data->reg) != -ENODEV) {
-> +			err = (int)PTR_ERR(data->reg);
-> +			dev_warn(dev, "Failed looking up fan supply: %d\n", err);
+On Mon, 2022-01-17 at 09:21 -0800, Guenter Roeck wrote:
+> On 1/17/22 9:01 AM, Guenter Roeck wrote:
+> > On 1/17/22 8:12 AM, Marcello Sylvester Bauer wrote:
+> > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > 
+> > > BCM6123 is an Fixed-Ratio DC-DC Converter.
+> > > 
+> > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > ---
+> > >   drivers/hwmon/pmbus/Kconfig   |  9 ++++
+> > >   drivers/hwmon/pmbus/Makefile  |  1 +
+> > >   drivers/hwmon/pmbus/bcm6123.c | 90 +++++++++++++++++++++++++++++++++++
+> > 
+> > Documentation/hwmon/bcm6123 is missing.
+> > 
+> > >   3 files changed, 100 insertions(+)
+> > >   create mode 100644 drivers/hwmon/pmbus/bcm6123.c
+> > > 
+> > > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > > index c96f7b7338bd..62dac90631c5 100644
+> > > --- a/drivers/hwmon/pmbus/Kconfig
+> > > +++ b/drivers/hwmon/pmbus/Kconfig
+> > > @@ -48,6 +48,15 @@ config SENSORS_ADM1275
+> > >         This driver can also be built as a module. If so, the module will
+> > >         be called adm1275.
+> > > +config SENSORS_BCM6123
+> > > +    tristate "Vicor BCM6123 Compatible Power Supplies"
+> > 
+> > Is this a power supply or a chip ? It can't be both.
+> > 
+> > > +    help
+> > > +      If you say yes here you get hardware monitoring support for Vicor
+> > > +      BCM6123 Power Supplies.
+> > > +
+> > > +      This driver can also be built as a module. If so, the module will
+> > > +      be called bcm6123.
+> > > +
+> > >   config SENSORS_BEL_PFE
+> > >       tristate "Bel PFE Compatible Power Supplies"
+> > >       help
+> > > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> > > index e5935f70c9e0..2918c2ea7bc5 100644
+> > > --- a/drivers/hwmon/pmbus/Makefile
+> > > +++ b/drivers/hwmon/pmbus/Makefile
+> > > @@ -7,6 +7,7 @@ obj-$(CONFIG_PMBUS)        += pmbus_core.o
+> > >   obj-$(CONFIG_SENSORS_PMBUS)    += pmbus.o
+> > >   obj-$(CONFIG_SENSORS_ADM1266)    += adm1266.o
+> > >   obj-$(CONFIG_SENSORS_ADM1275)    += adm1275.o
+> > > +obj-$(CONFIG_SENSORS_BCM6123)    += bcm6123.o
+> > >   obj-$(CONFIG_SENSORS_BEL_PFE)    += bel-pfe.o
+> > >   obj-$(CONFIG_SENSORS_BPA_RS600)    += bpa-rs600.o
+> > >   obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
+> > > diff --git a/drivers/hwmon/pmbus/bcm6123.c b/drivers/hwmon/pmbus/bcm6123.c
+> > > new file mode 100644
+> > > index 000000000000..78fc259bc40f
+> > > --- /dev/null
+> > > +++ b/drivers/hwmon/pmbus/bcm6123.c
+> > > @@ -0,0 +1,90 @@
+> > > +// SPDX-License-Identifier: GPL-2.0+
+> > > +/*
+> > > + * Hardware monitoring driver for Infineon bcm6123
+> > > + *
+> > Infineon ?
+> > 
+> > > + * Copyright (c) 2021 9elements GmbH
+> > > + *
+> > > + * VOUT_MODE is not supported by the device. The driver fakes VOUT linear16
+> > > + * mode with exponent value -8 as direct mode with m=256/b=0/R=0.
+> > > + *
+> > 
+> > Does it not ? The datasheet doesn't say, and the code below doesn't match
+> > this description.
+> > 
+> > > + * The device supports VOUT_PEAK, IOUT_PEAK, and TEMPERATURE_PEAK, however
+> > > + * this driver does not currently support them.
+> > 
+> > Does it ? There is no reference for this in the datasheet.
+> > 
+> > Overall it seems like there is a lot of cut-and-paste. Please clean this up.
 
-This could be -EPROBE_DEFER. I do not think that warrants
-an error message.
+Sorry. Looks like it is not related to this driver and should be
+removed.
 
-> +			return err;
-> +		}
-> +		data->reg = NULL;
-> +	} else {
-> +		/* Spin up fans */
-> +		err = regulator_enable(data->reg);
-> +		if (err) {
-> +			dev_err(dev, "Failed to enable fan supply: %d\n", err);
-> +			return err;
-> +		}
-> +		err = devm_add_action_or_reset(dev, max6639_regulator_disable,
-> +					       data->reg);
-> +		if (err) {
-> +			dev_err(dev, "Failed to register action: %d\n", err);
-> +			return err;
-> +		}
-> +	}
-> +
->  	mutex_init(&data->update_lock);
->  
->  	/* Initialize the max6639 chip */
-> @@ -545,23 +577,39 @@ static int max6639_probe(struct i2c_client *client)
->  static int max6639_suspend(struct device *dev)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> -	if (data < 0)
-> -		return data;
-> +	struct max6639_data *data = dev_get_drvdata(dev);
-> +	int ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (data->reg)
-> +		regulator_disable(data->reg);
->  
->  	return i2c_smbus_write_byte_data(client,
-> -			MAX6639_REG_GCONFIG, data | MAX6639_GCONFIG_STANDBY);
-> +			MAX6639_REG_GCONFIG, ret | MAX6639_GCONFIG_STANDBY);
->  }
->  
->  static int max6639_resume(struct device *dev)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> -	if (data < 0)
-> -		return data;
-> +	struct max6639_data *data = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (data->reg) {
-> +		ret = regulator_enable(data->reg);
-> +		if (ret) {
-> +			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> +	if (ret < 0)
-> +		return ret;
->  
->  	return i2c_smbus_write_byte_data(client,
-> -			MAX6639_REG_GCONFIG, data & ~MAX6639_GCONFIG_STANDBY);
-> +			MAX6639_REG_GCONFIG, ret & ~MAX6639_GCONFIG_STANDBY);
->  }
->  #endif /* CONFIG_PM_SLEEP */
->  
+> > 
+> > > + */
+> > > +
+> > > +#include <linux/err.h>
+> > > +#include <linux/i2c.h>
+> > > +#include <linux/init.h>
+> > > +#include <linux/kernel.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/pmbus.h>
+> > > +#include "pmbus.h"
+> > > +
+> > > +static struct pmbus_platform_data bcm6123_plat_data = {
+> > > +    .flags = PMBUS_NO_CAPABILITY,
+> > > +};
+> > 
+> > We should only set this flag if it is really needed.
+
+The capability command did not return valid information during testing.
+e.g. it claimed PEC is supported and caused therefore unexpected
+issues. I'll test it again to see if it's necessary for the driver to
+work.
+
+> > 
+> > > +
+> > > +static struct pmbus_driver_info bcm6123_info = {
+> > > +    .pages = 2,
+> > > +    .format[PSC_VOLTAGE_IN] = direct,
+> > > +    .format[PSC_VOLTAGE_OUT] = direct,
+> > > +    .format[PSC_CURRENT_IN] = direct,
+> > > +    .format[PSC_CURRENT_OUT] = direct,
+> > > +    .format[PSC_POWER] = linear,
+> > > +    .format[PSC_TEMPERATURE] = linear,
+> > > +    .m[PSC_VOLTAGE_IN] = 1,
+> > > +    .b[PSC_VOLTAGE_IN] = 0,
+> > > +    .R[PSC_VOLTAGE_IN] = 1,
+> > > +    .m[PSC_VOLTAGE_OUT] = 1,
+> > > +    .b[PSC_VOLTAGE_OUT] = 0,
+> > > +    .R[PSC_VOLTAGE_OUT] = 1,
+> > > +    .m[PSC_CURRENT_IN] = 1,
+> > > +    .b[PSC_CURRENT_IN] = 0,
+> > > +    .R[PSC_CURRENT_IN] = 3,
+> > > +    .m[PSC_CURRENT_OUT] = 1,
+> > > +    .b[PSC_CURRENT_OUT] = 0,
+> > > +    .R[PSC_CURRENT_OUT] = 2,
+> > > +    .func[0] = 0, /* Summing page without voltage readings */
+> > 
+> > This needs further explanation. The public datasheet doesn't say anything
+> > about multiple pages, and it doesn't really make much sense to have an
+> > "empty" page with no information in it.
+> > 
+> 
+> Digging further, there is actually a digital supervisor (D44TL1A0) which is used
+> to access BCM6123, and there can be up to 4 BCM6123 connected to D44TL1A0.
+> Page 0 is the supervisor, and pages 1..4 provide data for the connected BCM6123s.
+> Page 0 does report various telemetry values, which should be supported. Pages
+> 2..4 should be supported as well.
+> 
+> Question is if the driver should be named after the supervisor or after
+> the voltage converter; I'll leave that up to you. Either case it needs
+> to support all five pages.
+> 
+> Guenter
+
+After Digging further ourselves, it looks like our hardware also
+contains a digital supervisor IC (PLI1209BC), which is connected to one
+BCM6123 only. Unfortunately, we were not able to find the data sheet
+before:
+
+https://www.vicorpower.com/documents/datasheets/ds-PLI1209BCxyzz-VICOR.pdf
+This explains why there are two pages in our case. Since there are
+different hardware configurations it would make more sense to name this
+driver after the supervisor.
+
+I'll rework this patch set and implement the PLI1209BC properly.
+
+Marcello
+
+> 
+> > > +    .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> > > +        | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> > > +        | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> > > +        | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> > > +        | PMBUS_HAVE_IIN | PMBUS_HAVE_POUT,
+> > > +};
+> > > +
+> > > +static int bcm6123_probe(struct i2c_client *client)
+> > > +{
+> > > +    client->dev.platform_data = &bcm6123_plat_data;
+> > > +
+> > > +    return pmbus_do_probe(client, &bcm6123_info);
+> > > +}
+> > > +
+> > > +static const struct i2c_device_id bcm6123_id[] = {
+> > > +    {"bcm6123", 0},
+> > > +    {}
+> > > +};
+> > > +
+> > > +MODULE_DEVICE_TABLE(i2c, bcm6123_id);
+> > > +
+> > > +#ifdef CONFIG_OF
+> > > +static const struct of_device_id bcm6123_of_match[] = {
+> > > +    { .compatible = "vicor,bcm6123" },
+> > > +    { },
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, bcm6123_of_match);
+> > > +#endif
+> > > +
+> > > +/* This is the driver that will be inserted */
+> > > +static struct i2c_driver bcm6123_driver = {
+> > > +    .driver = {
+> > > +           .name = "bcm6123",
+> > > +           .of_match_table = of_match_ptr(bcm6123_of_match),
+> > > +           },
+> > > +    .probe_new = bcm6123_probe,
+> > > +    .id_table = bcm6123_id,
+> > > +};
+> > > +
+> > > +module_i2c_driver(bcm6123_driver);
+> > > +
+> > > +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
+> > > +MODULE_DESCRIPTION("PMBus driver for Vicor bcm6123");
+> > > +MODULE_LICENSE("GPL");
+> > > 
+> > 
+> 
+
