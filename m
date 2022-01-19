@@ -2,84 +2,102 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A58A3C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jan 2022 01:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 194FCC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jan 2022 03:25:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350801AbiASBzY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jan 2022 20:55:24 -0500
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:40555 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350794AbiASBzV (ORCPT
+        id S240542AbiASDZy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jan 2022 22:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236375AbiASDZx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:55:21 -0500
-Received: by mail-oo1-f46.google.com with SMTP id v10-20020a4a860a000000b002ddc59f8900so306893ooh.7;
-        Tue, 18 Jan 2022 17:55:21 -0800 (PST)
+        Tue, 18 Jan 2022 22:25:53 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5ECC061574;
+        Tue, 18 Jan 2022 19:25:53 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id y22so1197263iof.7;
+        Tue, 18 Jan 2022 19:25:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MeiComjozb3H7WSxPqG06uMRQklbE67gyAu/I34ENgQ=;
+        b=jgNvzz76xJCkVXydAIVX7OWcya80MX4FkUlnfTt69NAHcd5sfhGJOmk+1IbuG4iqYh
+         ciNg9xp3ceJ2p/CUqhnKqtlPjrOLjyaTB2a+v3KqeQzqpDigXDt/rIMDdcTOvEMhzEi0
+         SVGoCOnIsHUDoi2xqwQptsLhk8eHrLJxkdyJ+zNjZ/IiLt3DgBZggKESqkzrOVnI2E1i
+         YmQRsxnS4EGJOtIhSF69c5qj0g4Tm0lR1dYfeTgmDyWJ2owfiulJAZ0FIXNTEcWwAcvc
+         5LJhqJ1UVtdKel5z3FHlBwNz5rEwTrmDw5I4DnncmnVI2aTpsTmz3iMGrBOy11KgeiVF
+         Ucvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FDFvNpRcxcRiXHoR8iY7a3oJbQYZ0Hd88REO6KoIzUs=;
-        b=r7k/7J8CjLoq+dwiNOl8CnCUoTLDPo/0Osl9dgf6wj/Wmtme9H3Npe44Y5zcHbQofx
-         KcWGJcwgAZVMBWMyMhsQTg+JDW17qp/PXuttfM88AbAzDe2+hU6ZASPFZyBSn9FlYoAP
-         rqVpgx7zkNwlMmXsMbLu+BnniJiYsStIBTkAuOg8x6DkZqO3y3DveXaWXFZ25DndZzj5
-         EJbrha0ZsvQlaa2vlWJXN3daAc6W1EvODdIHV0R94UbKBl/cBf6lrQ1Gn/VF60tPc95o
-         TZkTKxqhjcbiBSJ0EdaHR59w6SrlU1+Vx9O/EXEuURTP0UGdttWn6zd53EDdlXWoNBzv
-         D5Sw==
-X-Gm-Message-State: AOAM530jv+bV2ifeAmMgBTArQZ1RGlzAdaUtR8l7kcqIjGWvtWjw3iMv
-        jzUMrM85r8yDrbEQFO76VQ==
-X-Google-Smtp-Source: ABdhPJyIkjaF5D1ayxhHq/GXg3NF4Mcjtn5miWb4tjIttgOUmnukw2u3sVMTHlix67afNbkf453Gew==
-X-Received: by 2002:a4a:d184:: with SMTP id j4mr20125402oor.20.1642557320567;
-        Tue, 18 Jan 2022 17:55:20 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id g22sm6683714otp.38.2022.01.18.17.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 17:55:19 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: hwmon: lm90: Drop Tegra specifics from example
-Date:   Tue, 18 Jan 2022 19:55:13 -0600
-Message-Id: <20220119015514.2441231-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MeiComjozb3H7WSxPqG06uMRQklbE67gyAu/I34ENgQ=;
+        b=L83cki/rk2Qf9SAue25vnw2VR7oD+/giOt6b1XzxPvkuJGSE2bS7DPnEyPK4uefb5W
+         RejIwBrfWYwEJ/sShNzgvheAL/tRRJGYcKLP2jm9HoQlA97vSEJKeeRtet2OKv+l4nqP
+         2Ufjp/VqJiuCksJJIQWkNALeLLyAvALcVjJun0icqFfQ5p4znCAtgQCxdsKHKq/wJIS3
+         lDswb837x5U315K4aze2jIA0ghgVkiEWKNAfssZ8MFamrr26VX4M4G0/GfdIFwEmjYdp
+         j6muLiuY2+Xf4YvriD+Hhu6pv1C0Yrfm8j33p8bImiE39dJyDtOnh6F68lidGBWc9xU1
+         ySeg==
+X-Gm-Message-State: AOAM532pzyqRoNAXGxAMnWkK305s37rEAQMk6IEKJFJDIDt3Pl/xca5e
+        lQntNVlfimZkhJDVkMHWfqfcKShBTaTaNrJfzJWfomi4ptM=
+X-Google-Smtp-Source: ABdhPJxIDFjP40161aTqo0wOL9CTmpWqkkVSLuQI2Z/DvEaqQm3/uGIbWUtljLEYQi/3zOP6jvIQ+H/p06UZO/IzynY=
+X-Received: by 2002:a02:2205:: with SMTP id o5mr5908069jao.241.1642562752380;
+ Tue, 18 Jan 2022 19:25:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220118165316.412735-1-eugene.shalygin@gmail.com> <20220118165316.412735-2-eugene.shalygin@gmail.com>
+In-Reply-To: <20220118165316.412735-2-eugene.shalygin@gmail.com>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Wed, 19 Jan 2022 04:25:41 +0100
+Message-ID: <CAB95QATvQPZ-s4dCWeqKcSZ9Rfx9uK1AyoM9Kk3biPfvXh5r5g@mail.gmail.com>
+Subject: Re: [ASUS EC Sensors v7 1/3] hwmon: (asus-ec-sensors) add driver for
+ ASUS EC
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-There's no need to complicate examples with a platform specific macro.
-It also complicates example parsing to figure out the number of
-interrupt cells in examples (based on bracketing).
+I did not read carefully what I committed and now two small
+corrections are required (see inline). Should I resend again?
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/hwmon/national,lm90.yaml | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Tue, 18 Jan 2022 at 17:53, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+> +       DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-F GAMING",
+> +               SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+> +               SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET
+Redundant line break.
+> +       ),
+> +       DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-I GAMING",
+> +               SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
+> +               SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
 
-diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-index 6e1d54ff5d5b..30db92977937 100644
---- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-@@ -60,7 +60,6 @@ additionalProperties: false
- 
- examples:
-   - |
--    #include <dt-bindings/gpio/tegra-gpio.h>
-     #include <dt-bindings/interrupt-controller/irq.h>
- 
-     i2c {
-@@ -71,8 +70,7 @@ examples:
-             compatible = "onnn,nct1008";
-             reg = <0x4c>;
-             vcc-supply = <&palmas_ldo6_reg>;
--            interrupt-parent = <&gpio>;
--            interrupts = <TEGRA_GPIO(O, 4) IRQ_TYPE_LEVEL_LOW>;
-+            interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
-             #thermal-sensor-cells = <1>;
-         };
-     };
--- 
-2.32.0
 
+> +struct ec_sensors_data {
+> +       unsigned long board_sensors;
+> +       struct ec_sensor *sensors;
+> +       /** EC registers to read from */
+> +       u16 *registers;
+> +       u8 *read_buffer;
+> +       /** sorted list of unique register banks */
+> +       u8 banks[ASUS_EC_MAX_BANK + 1];
+> +       /** in jiffies */
+> +       unsigned long last_updated;
+> +       acpi_handle aml_mutex;
+> +       /** number of board EC sensors */
+> +       u8 nr_sensors;
+> +       /** number of EC registers to read (sensor might span more than 1 register) */
+> +       u8 nr_registers;
+> +       /** number of unique register banks */
+> +       u8 nr_banks;
+> +};
+
+Forgot to remove doc-comments.
+
+Thanks,
+Eugene
