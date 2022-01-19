@@ -2,180 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B34C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jan 2022 09:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84C18C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jan 2022 09:54:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbiASJnC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Jan 2022 04:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S1352916AbiASJyX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Jan 2022 04:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353044AbiASJm4 (ORCPT
+        with ESMTP id S1352824AbiASJyU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:42:56 -0500
+        Wed, 19 Jan 2022 04:54:20 -0500
 Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375D3C061574;
-        Wed, 19 Jan 2022 01:42:56 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337BEC061574
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Jan 2022 01:54:20 -0800 (PST)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jf10G3v44z9scy;
-        Wed, 19 Jan 2022 10:42:54 +0100 (CET)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jf1FN67V6z9sjM;
+        Wed, 19 Jan 2022 10:54:16 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1642585372;
+        t=1642586055;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6yUiafitayqG9qVxmPKvPhVi5mgDkb14L3ujh+Xnamc=;
-        b=bgviz6d/ghsnghYiGAol8hFucAxD3VeMHq9rtMsJhC5CwnT+LfZrvR/nIKhfVSoxpH2BZT
-        j1QSF7QrSx+BTRUnZHDdUUxEwe4toBtiMlN4ftQshqD0c5ohEq5vF3nSHfQ2D9T8RRGs4+
-        yLjXw3qbZl/FIO0S5MdEZg7w0eQtrCQ9GCKJweZXnqfXoOfKdWmQsOBGBhdiY++4Usykfp
-        qdJ9ZiifZlCNL0bl0Ph91+IWXyR0XHjzZlSmcIjcHXkp77CLF9CWMd5A5+VEmJotHcOk4q
-        5muYsiathCc04rciGRZsLxJTZN4r17zQTTJNS8EErfe+xNi7JSFzYbsBydghPw==
-Message-ID: <06b7adc5612d9d0436cfb57e47518ad835b4fc62.camel@sylv.io>
-Subject: Re: [PATCH v2 2/4] hwmon: (max6639) Add regulator support
-From:   sylv <sylv@sylv.io>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9EZRZt5cKrrHLDj85utYbbaGFfLVXTvquovrmZ367m8=;
+        b=p1OH/Ybb1zeBAkBiZ1hzmmpet2t2ANlqynp27p7iHtPPNzsgONuFfYiYrjTyjHEVyh3Mum
+        X6w03wFzy+tkohVLQDgW4p0HZssDCsLCUjljn8NNm2Sta1bm7PlFjxovll3kuhcUtpg3Fk
+        uEiH7KxEiBovLuT3oDi1p2+LxEDf4Q3DI8HHYZJAKqJ17BXX/sop/JbmGAml9x/Z6fDtTc
+        bSAiBWfjQsKPFuxL3dzOaD6p3IXzn5aM6mqyk0ur875LrtRfIu3gr0jVacYyce1UW0TfBM
+        1Hw7jEpl9ffJkEOMPWGz2bhD79ar4YPJN6m0nm0qVD0zfSfh6IBWBzyvEZL6fA==
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Date:   Wed, 19 Jan 2022 10:42:49 +0100
-In-Reply-To: <20220118161108.GA4115171@roeck-us.net>
-References: <cover.1642413668.git.sylv@sylv.io>
-         <4c644f279f6e205d3c9540a4ad35825e4d5f2da1.1642413668.git.sylv@sylv.io>
-         <20220118161108.GA4115171@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v3 0/4] Add max6639 regulator and devicetree support
+Date:   Wed, 19 Jan 2022 10:53:51 +0100
+Message-Id: <cover.1642585539.git.sylv@sylv.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 2022-01-18 at 08:11 -0800, Guenter Roeck wrote:
-> On Mon, Jan 17, 2022 at 11:40:24AM +0100, Marcello Sylvester Bauer wrote:
-> > Add regulator support for boards where the fan-supply have to be
-> > powered up before it can be used.
-> > 
-> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > ---
-> >  drivers/hwmon/max6639.c | 64 +++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 56 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-> > index ccc0f047bd44..0b241f029229 100644
-> > --- a/drivers/hwmon/max6639.c
-> > +++ b/drivers/hwmon/max6639.c
-> > @@ -87,6 +87,9 @@ struct max6639_data {
-> >  	/* Register values initialized only once */
-> >  	u8 ppr;			/* Pulses per rotation 0..3 for 1..4 ppr */
-> >  	u8 rpm_range;		/* Index in above rpm_ranges table */
-> > +
-> > +	/* Optional regulator for FAN supply */
-> > +	struct regulator *reg;
-> >  };
-> >  
-> >  static struct max6639_data *max6639_update_device(struct device *dev)
-> > @@ -516,6 +519,11 @@ static int max6639_detect(struct i2c_client *client,
-> >  	return 0;
-> >  }
-> >  
-> > +static void max6639_regulator_disable(void *data)
-> > +{
-> > +	regulator_disable(data);
-> > +}
-> > +
-> >  static int max6639_probe(struct i2c_client *client)
-> >  {
-> >  	struct device *dev = &client->dev;
-> > @@ -528,6 +536,30 @@ static int max6639_probe(struct i2c_client *client)
-> >  		return -ENOMEM;
-> >  
-> >  	data->client = client;
-> > +
-> > +	data->reg = devm_regulator_get_optional(dev, "fan");
-> > +	if (IS_ERR(data->reg)) {
-> > +		if (PTR_ERR(data->reg) != -ENODEV) {
-> > +			err = (int)PTR_ERR(data->reg);
-> > +			dev_warn(dev, "Failed looking up fan supply: %d\n", err);
-> 
-> This could be -EPROBE_DEFER. I do not think that warrants
-> an error message.
+these patches add devicetree support for the Maxim MAX6639.
+In addition, it includes optional regulator support for the fan-supply and
+updates the URL to the datasheet.
 
-I see. I'll adapt it analog to: drivers/hwmon/pwm-fan.c:323
+Changes in v3:
+- Remove warning if devm_regulator_get_optional returns an error.
 
-> 
-> > +			return err;
-> > +		}
-> > +		data->reg = NULL;
-> > +	} else {
-> > +		/* Spin up fans */
-> > +		err = regulator_enable(data->reg);
-> > +		if (err) {
-> > +			dev_err(dev, "Failed to enable fan supply: %d\n", err);
-> > +			return err;
-> > +		}
-> > +		err = devm_add_action_or_reset(dev, max6639_regulator_disable,
-> > +					       data->reg);
-> > +		if (err) {
-> > +			dev_err(dev, "Failed to register action: %d\n", err);
-> > +			return err;
-> > +		}
-> > +	}
-> > +
-> >  	mutex_init(&data->update_lock);
-> >  
-> >  	/* Initialize the max6639 chip */
-> > @@ -545,23 +577,39 @@ static int max6639_probe(struct i2c_client *client)
-> >  static int max6639_suspend(struct device *dev)
-> >  {
-> >  	struct i2c_client *client = to_i2c_client(dev);
-> > -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > -	if (data < 0)
-> > -		return data;
-> > +	struct max6639_data *data = dev_get_drvdata(dev);
-> > +	int ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > +
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	if (data->reg)
-> > +		regulator_disable(data->reg);
-> >  
-> >  	return i2c_smbus_write_byte_data(client,
-> > -			MAX6639_REG_GCONFIG, data | MAX6639_GCONFIG_STANDBY);
-> > +			MAX6639_REG_GCONFIG, ret | MAX6639_GCONFIG_STANDBY);
-> >  }
-> >  
-> >  static int max6639_resume(struct device *dev)
-> >  {
-> >  	struct i2c_client *client = to_i2c_client(dev);
-> > -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > -	if (data < 0)
-> > -		return data;
-> > +	struct max6639_data *data = dev_get_drvdata(dev);
-> > +	int ret;
-> > +
-> > +	if (data->reg) {
-> > +		ret = regulator_enable(data->reg);
-> > +		if (ret) {
-> > +			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
-> > +			return ret;
-> > +		}
-> > +	}
-> > +
-> > +	ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > +	if (ret < 0)
-> > +		return ret;
-> >  
-> >  	return i2c_smbus_write_byte_data(client,
-> > -			MAX6639_REG_GCONFIG, data & ~MAX6639_GCONFIG_STANDBY);
-> > +			MAX6639_REG_GCONFIG, ret & ~MAX6639_GCONFIG_STANDBY);
-> >  }
-> >  #endif /* CONFIG_PM_SLEEP */
-> >  
+Changes in v2:
+- dt: Rename polarity to pwm-polarity.
+- Remove unused platform_data header.
+- Remove regulator enable/disable calls in pwm_store due to imbalance of
+  calls.
+- Move to strict per channel dt configuration without defaults.
+
+Marcello Sylvester Bauer (4):
+  hwmon: (max6639) Update Datasheet URL
+  hwmon: (max6639) Add regulator support
+  dt-bindings: hwmon: Add binding for max6639
+  hwmon: (max6639) Change from pdata to dt configuration
+
+ .../bindings/hwmon/maxim,max6639.yaml         | 112 +++++++++
+ Documentation/hwmon/max6639.rst               |   2 +-
+ drivers/hwmon/max6639.c                       | 233 ++++++++++++++----
+ include/linux/platform_data/max6639.h         |  15 --
+ 4 files changed, 295 insertions(+), 67 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+ delete mode 100644 include/linux/platform_data/max6639.h
+
+-- 
+2.33.1
 
