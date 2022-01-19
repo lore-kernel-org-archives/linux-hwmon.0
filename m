@@ -2,48 +2,49 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2F87C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jan 2022 09:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42ACEC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jan 2022 09:55:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352945AbiASJzC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Jan 2022 04:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S1353304AbiASJzE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Jan 2022 04:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352824AbiASJyi (ORCPT
+        with ESMTP id S1353280AbiASJyl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:54:38 -0500
+        Wed, 19 Jan 2022 04:54:41 -0500
 Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AECC061574;
-        Wed, 19 Jan 2022 01:54:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6282C06161C;
+        Wed, 19 Jan 2022 01:54:40 -0800 (PST)
 Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jf1Fm3Lv0z9sjM;
-        Wed, 19 Jan 2022 10:54:36 +0100 (CET)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jf1Fq3xRyz9skH;
+        Wed, 19 Jan 2022 10:54:39 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1642586074;
+        t=1642586076;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eVaFMeMetbF2chCKkaAP7mGT+Mpn+9qurXFgcY31yEw=;
-        b=Wn2z4t0Bynb27/W1kT3sX4oE6Xuve9dyq25J2jYcpbaobAaPsJYsOs1QX5ghn8Gus+GXzo
-        X7MmyL6gQXZ8aruFTklwe8GDoUDpG2FVe2ma0qYDHFGgq3iYgUDdToJ9sXw/uR43jyhxFM
-        K1yqXcL8xl9JsvHRMZ7PJS6bAr5XWWuygN3y2HuKqWECAip83UD8i21GkuEl5DC5sE7gYm
-        lzotMBG6AMzA9f72o/XotVuoYpxIzVJmE9Kup52EN2wytfQn7xXlOsgX8RncAvInUJz8l3
-        SOV720WChEjDgP0Boyoq40PFua2EJTlvskQg4Ic9plVHJNU1QyKlB7EtMhCe3Q==
+        bh=qZJi/osAAu0OVjnYoaQ3BbmTK05bonU6IA6ijl0CzXg=;
+        b=UJ/mI0uH63OoIP3e6EtEERSETByDr99jbpOoGG8RZNRKZzagwFGdDA8AmiapatGZW81Tb2
+        LHsBCMlMVbnElR0vd2HB7x/tBbUfncQoAnOoR2bH0e8JZEzzRy1JKiXWIThHmDgJUogQHX
+        Qr/I2nrGdxxdM+0Qzka/2qsjdaEA2wyYz4quUXU4LoEiJzivN5A0UClGZLD+iPPejmYS7v
+        G3DjO0v0NaCNOIYdOSB7lyw01KbvYV5LRiyDwy+G9gRCgK6uNytMDoNArJ1lcxeP3OhhNM
+        WefCG19S9XK9hvL6AnPCfOMb3Kx9Ddl2gXh0/TbUCmxEmtmEuW91uty8C7XEZA==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH v3 1/4] hwmon: (max6639) Update Datasheet URL
-Date:   Wed, 19 Jan 2022 10:53:52 +0100
-Message-Id: <76025f40d2684dc0d3ec02c8899b726b07a0e7da.1642585539.git.sylv@sylv.io>
+        Rob Herring <robh+dt@kernel.org>,
+        Roland Stigge <stigge@antcom.de>, devicetree@vger.kernel.org
+Subject: [PATCH v3 3/4] dt-bindings: hwmon: Add binding for max6639
+Date:   Wed, 19 Jan 2022 10:53:54 +0100
+Message-Id: <24e812dc80983ce20cd51a446c4f6d4a1db7da37.1642585539.git.sylv@sylv.io>
 In-Reply-To: <cover.1642585539.git.sylv@sylv.io>
 References: <cover.1642585539.git.sylv@sylv.io>
 MIME-Version: 1.0
@@ -52,26 +53,135 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The old Datasheet does not exist anymore.
+Add Devicetree binding documentation for Maxim MAX6639 temperature
+monitor with PWM fan-speed controller.
+
+The devicetree documentation for the SD3078 device tree.
 
 Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 ---
- Documentation/hwmon/max6639.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
+ 1 file changed, 112 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 
-diff --git a/Documentation/hwmon/max6639.rst b/Documentation/hwmon/max6639.rst
-index 3da54225f83c..c85d285a3489 100644
---- a/Documentation/hwmon/max6639.rst
-+++ b/Documentation/hwmon/max6639.rst
-@@ -9,7 +9,7 @@ Supported chips:
- 
-     Addresses scanned: I2C 0x2c, 0x2e, 0x2f
- 
--    Datasheet: http://pdfserv.maxim-ic.com/en/ds/MAX6639.pdf
-+    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
- 
- Authors:
-     - He Changqing <hechangqing@semptian.com>
+diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+new file mode 100644
+index 000000000000..7093cbeba44b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+@@ -0,0 +1,112 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Maxim max6639
++
++maintainers:
++  - Roland Stigge <stigge@antcom.de>
++
++description: |
++  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
++  fan-speed controller.  It monitors its own temperature and one external
++  diode-connected transistor or the temperatures of two external diode-connected
++  transistors, typically available in CPUs, FPGAs, or GPUs.
++
++  Datasheets:
++    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
++
++properties:
++  compatible:
++    enum:
++      - maxim,max6639
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - "channel@0"
++  - "channel@1"
++
++additionalProperties: false
++
++patternProperties:
++  "^channel@[0-1]$":
++    type: object
++    description: |
++      Represents the two fans and their specific configuration.
++
++    properties:
++      reg:
++        description: |
++          The fan number.
++        items:
++          minimum: 0
++          maximum: 1
++
++      pwm-polarity:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        enum: [0, 1]
++        description:
++          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
++          output is high at 100% duty cycle when this bit is set to 1.
++
++      pulses-per-revolution:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        enum: [1, 2, 3, 4]
++        description:
++          Value specifying the number of pulses per revolution of the controlled
++          FAN.
++
++      rpm-range:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        enum: [2000, 4000, 8000, 16000]
++        description:
++          Scales the tachometer counter by setting the maximum (full-scale) value
++          of the RPM range.
++
++    required:
++      - reg
++      - pwm-polarity
++      - pulses-per-revolution
++      - rpm-range
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      max6639@10 {
++        compatible = "maxim,max6639";
++        reg = <0x10>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        channel@0 {
++          reg = <0x0>;
++          pwm-polarity = <1>;
++          pulses-per-revolution = <2>;
++          rpm-range = <4000>;
++        };
++
++        channel@1 {
++          reg = <0x1>;
++          pwm-polarity = <1>;
++          pulses-per-revolution = <2>;
++          rpm-range = <4000>;
++        };
++      };
++    };
++...
 -- 
 2.33.1
 
