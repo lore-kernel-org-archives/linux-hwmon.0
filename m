@@ -2,144 +2,148 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0ADDC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jan 2022 02:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48D7DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jan 2022 08:25:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbiAXCdJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 Jan 2022 21:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236069AbiAXCcx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 Jan 2022 21:32:53 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E8AC06173D
-        for <linux-hwmon@vger.kernel.org>; Sun, 23 Jan 2022 18:32:52 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso20347890otr.6
-        for <linux-hwmon@vger.kernel.org>; Sun, 23 Jan 2022 18:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZXSeE62U5G+y1B4/C94NFntmOoBBzCntlQnIT4b6lLo=;
-        b=ESUlOI0TK2OvUD5zntRRIDCBXsWFnu/Xax+4SVccrQszoONHDruDEzFeByot6p0IST
-         RRdI+7qIzvdtOeoZrWtrsZte5fM8XA/QGw/67dC3sWdwSgBBaHLMY4QIxfxkjxfnAb1J
-         TFzZwKNdyjZyk9HWp7bKm9JLsuGIaPV/IiQ89fHSND/sIYqnU95P8JGFbejAN2eUB/E0
-         gB/atNzSzXphNWsFoQVQWru06jtCWtaf1kT/JxQpIf+OHCISIootlRaQlJFYNFbjPZ0I
-         SmyQqVN2UzSZnD/xkkOq6dMPOhy+LzWw5lbt7C3uI/5Tmpuj+16yF040vSFrVNvyampJ
-         P2PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=ZXSeE62U5G+y1B4/C94NFntmOoBBzCntlQnIT4b6lLo=;
-        b=g9x1jt1OoVBTgkWSiKqxFoOYyBIClKf+qai71C2S7OZpr18+mG+IDQqrQlPpH9kHM8
-         t7mP1HPu7Z7mCNo84X9VvnkXLfGr3N45bz59Bhrow+yIz8YBnzT+A5jidJmwNAgpQ7pX
-         9cGtSGQhoITdNzGPC8ih1MXGEw6gwD9tD2PHQ6YPIaVosi1DmUffRdtbG5Faqlvu5WVZ
-         u2gI+lsm88LaTxZvo0XnFBlD3BnnbYFwUC24EEDDYsAe1FpXqYh2rKWO+akKHXkmbztx
-         hk6UKiBcI66dYCnr1+XOOBAuKvL4xlPvIE2iZERnyp3ooajD8V7Kj+hFO/z1G7yPoeLB
-         JI3Q==
-X-Gm-Message-State: AOAM532bilW+X9MyyJYWp/QXjfX601UHR4lIxim+qEpK9xTGX9DTM4/0
-        tkkNXT/ZZU29kHlDEhWMqwxAeRv7EZg=
-X-Google-Smtp-Source: ABdhPJxiiVf/Dr2z6lOvlNvYdEFY/ZqdHEIV4kfKxz/w2A7dcY+zQvrxKREaJHFTHfauktIQ260Nag==
-X-Received: by 2002:a05:6830:12c1:: with SMTP id a1mr10174122otq.286.1642991571449;
-        Sun, 23 Jan 2022 18:32:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s64sm385142oos.0.2022.01.23.18.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 18:32:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Bernhard Seibold <mail@bernhard-seibold.de>,
-        =?UTF-8?q?Pawe=C5=82=20Marciniak?= <pmarciniak@lodz.home.pl>
-Subject: [PATCH] hwmon: (nct6775) Fix crash in clear_caseopen
-Date:   Sun, 23 Jan 2022 18:32:48 -0800
-Message-Id: <20220124023248.475734-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+        id S231373AbiAXIZf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jan 2022 03:25:35 -0500
+Received: from mga01.intel.com ([192.55.52.88]:28912 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229588AbiAXIZf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jan 2022 03:25:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643012735; x=1674548735;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rSVIYh7xGniAGpVzk8mlhjaQG3wydscI9t8Bm8gP2Hg=;
+  b=iNZhmobiPMbWn2OyWXcFQGgIEtDspksSB7VuV1CQpZFYbdUb8Ywdn5yQ
+   TPXKQ9kcM6vfz82Qz/g+5n/9Whh0T/E/5qAC1oicxgXs23+qFiIOEi7xz
+   rF1DUS4sSx3F/SCL7kdHQjxBGEjia9OR+WR7HQST2Rciq4mMbU26nsYnJ
+   xcgNVHGdWPjCVDveW3tqIdQ0qmN/ly83Z6lsURqXjbeTX8ruANr3JoVhx
+   LdnP/OgIBO5mjJKC9GfR6/F8E7jITXq8FDiKMtrbSZyznsV9IrkTsrRTn
+   aFvLVpPD1pO1X3locMZSrhH1KbHstlE0HN8Mnvs9QFLH6hTOe9euNoGNu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="270429129"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="270429129"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:25:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="617159673"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2022 00:25:22 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBufC-000HzT-Ax; Mon, 24 Jan 2022 08:25:22 +0000
+Date:   Mon, 24 Jan 2022 16:25:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next 14/33] drivers/hwmon/lm83.c:160:21:
+ warning: excess elements in struct initializer
+Message-ID: <202201241606.4m6075np-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Paweł Marciniak reports the following crash, observed when clearing
-the chassis intrusion alarm.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   9b9f1e670d2c61c676039474fd2d98ca0a54ff75
+commit: 165aace2ebd0b55c5589f213d55e3ac28b7aa588 [14/33] hwmon: (lm83) Use regmap
+config: mips-gpr_defconfig (https://download.01.org/0day-ci/archive/20220124/202201241606.4m6075np-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=165aace2ebd0b55c5589f213d55e3ac28b7aa588
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging hwmon-next
+        git checkout 165aace2ebd0b55c5589f213d55e3ac28b7aa588
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/hwmon/
 
-BUG: kernel NULL pointer dereference, address: 0000000000000028
-PGD 0 P4D 0
-Oops: 0000 [#1] PREEMPT SMP PTI
-CPU: 3 PID: 4815 Comm: bash Tainted: G S                5.16.2-200.fc35.x86_64 #1
-Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./Z97 Extreme4, BIOS P2.60A 05/03/2018
-RIP: 0010:clear_caseopen+0x5a/0x120 [nct6775]
-Code: 68 70 e8 e9 32 b1 e3 85 c0 0f 85 d2 00 00 00 48 83 7c 24 ...
-RSP: 0018:ffffabcb02803dd8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: ffff8e8808192880 RSI: 0000000000000000 RDI: ffff8e87c7509a68
-RBP: 0000000000000000 R08: 0000000000000001 R09: 000000000000000a
-R10: 000000000000000a R11: f000000000000000 R12: 000000000000001f
-R13: ffff8e87c7509828 R14: ffff8e87c7509a68 R15: ffff8e88494527a0
-FS:  00007f4db9151740(0000) GS:ffff8e8ebfec0000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000028 CR3: 0000000166b66001 CR4: 00000000001706e0
-Call Trace:
- <TASK>
- kernfs_fop_write_iter+0x11c/0x1b0
- new_sync_write+0x10b/0x180
- vfs_write+0x209/0x2a0
- ksys_write+0x4f/0xc0
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The problem is that the device passed to clear_caseopen() is the hwmon
-device, not the platform device, and the platform data is not set in the
-hwmon device. Store the pointer to sio_data in struct nct6775_data and
-get if from there if needed.
+All warnings (new ones prefixed by >>):
 
-Fixes: 2e7b9886968b ("hwmon: (nct6775) Use superio_*() function pointers in sio_data.")
-Cc: Denis Pauk <pauk.denis@gmail.com>
-Cc: Bernhard Seibold <mail@bernhard-seibold.de>
-Reported-by: Paweł Marciniak <pmarciniak@lodz.home.pl>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+   drivers/hwmon/lm83.c:159:21: error: variable 'lm83_regmap_config' has initializer but incomplete type
+     159 | static const struct regmap_config lm83_regmap_config = {
+         |                     ^~~~~~~~~~~~~
+   drivers/hwmon/lm83.c:160:10: error: 'const struct regmap_config' has no member named 'reg_bits'
+     160 |         .reg_bits = 8,
+         |          ^~~~~~~~
+>> drivers/hwmon/lm83.c:160:21: warning: excess elements in struct initializer
+     160 |         .reg_bits = 8,
+         |                     ^
+   drivers/hwmon/lm83.c:160:21: note: (near initialization for 'lm83_regmap_config')
+   drivers/hwmon/lm83.c:161:10: error: 'const struct regmap_config' has no member named 'val_bits'
+     161 |         .val_bits = 8,
+         |          ^~~~~~~~
+   drivers/hwmon/lm83.c:161:21: warning: excess elements in struct initializer
+     161 |         .val_bits = 8,
+         |                     ^
+   drivers/hwmon/lm83.c:161:21: note: (near initialization for 'lm83_regmap_config')
+   drivers/hwmon/lm83.c:162:10: error: 'const struct regmap_config' has no member named 'cache_type'
+     162 |         .cache_type = REGCACHE_RBTREE,
+         |          ^~~~~~~~~~
+   drivers/hwmon/lm83.c:162:23: warning: excess elements in struct initializer
+     162 |         .cache_type = REGCACHE_RBTREE,
+         |                       ^~~~~~~~~~~~~~~
+   drivers/hwmon/lm83.c:162:23: note: (near initialization for 'lm83_regmap_config')
+   drivers/hwmon/lm83.c:163:10: error: 'const struct regmap_config' has no member named 'volatile_reg'
+     163 |         .volatile_reg = lm83_regmap_is_volatile,
+         |          ^~~~~~~~~~~~
+   drivers/hwmon/lm83.c:163:25: warning: excess elements in struct initializer
+     163 |         .volatile_reg = lm83_regmap_is_volatile,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/lm83.c:163:25: note: (near initialization for 'lm83_regmap_config')
+   drivers/hwmon/lm83.c:164:10: error: 'const struct regmap_config' has no member named 'reg_read'
+     164 |         .reg_read = lm83_regmap_reg_read,
+         |          ^~~~~~~~
+   drivers/hwmon/lm83.c:164:21: warning: excess elements in struct initializer
+     164 |         .reg_read = lm83_regmap_reg_read,
+         |                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/lm83.c:164:21: note: (near initialization for 'lm83_regmap_config')
+   drivers/hwmon/lm83.c:165:10: error: 'const struct regmap_config' has no member named 'reg_write'
+     165 |         .reg_write = lm83_regmap_reg_write,
+         |          ^~~~~~~~~
+   drivers/hwmon/lm83.c:165:22: warning: excess elements in struct initializer
+     165 |         .reg_write = lm83_regmap_reg_write,
+         |                      ^~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/lm83.c:165:22: note: (near initialization for 'lm83_regmap_config')
+   drivers/hwmon/lm83.c: In function 'lm83_probe':
+   drivers/hwmon/lm83.c:383:24: error: implicit declaration of function 'devm_regmap_init' [-Werror=implicit-function-declaration]
+     383 |         data->regmap = devm_regmap_init(dev, NULL, client, &lm83_regmap_config);
+         |                        ^~~~~~~~~~~~~~~~
+>> drivers/hwmon/lm83.c:383:22: warning: assignment to 'struct regmap *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     383 |         data->regmap = devm_regmap_init(dev, NULL, client, &lm83_regmap_config);
+         |                      ^
+   drivers/hwmon/lm83.c: At top level:
+   drivers/hwmon/lm83.c:159:35: error: storage size of 'lm83_regmap_config' isn't known
+     159 | static const struct regmap_config lm83_regmap_config = {
+         |                                   ^~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +160 drivers/hwmon/lm83.c
+
+   158	
+   159	static const struct regmap_config lm83_regmap_config = {
+ > 160		.reg_bits = 8,
+   161		.val_bits = 8,
+   162		.cache_type = REGCACHE_RBTREE,
+   163		.volatile_reg = lm83_regmap_is_volatile,
+   164		.reg_read = lm83_regmap_reg_read,
+   165		.reg_write = lm83_regmap_reg_write,
+   166	};
+   167	
+
 ---
- drivers/hwmon/nct6775.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index fd3f91cb01c6..098d12b9ecda 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -1175,7 +1175,7 @@ static inline u8 in_to_reg(u32 val, u8 nr)
- 
- struct nct6775_data {
- 	int addr;	/* IO base of hw monitor block */
--	int sioreg;	/* SIO register address */
-+	struct nct6775_sio_data *sio_data;
- 	enum kinds kind;
- 	const char *name;
- 
-@@ -3559,7 +3559,7 @@ clear_caseopen(struct device *dev, struct device_attribute *attr,
- 	       const char *buf, size_t count)
- {
- 	struct nct6775_data *data = dev_get_drvdata(dev);
--	struct nct6775_sio_data *sio_data = dev_get_platdata(dev);
-+	struct nct6775_sio_data *sio_data = data->sio_data;
- 	int nr = to_sensor_dev_attr(attr)->index - INTRUSION_ALARM_BASE;
- 	unsigned long val;
- 	u8 reg;
-@@ -3967,7 +3967,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	data->kind = sio_data->kind;
--	data->sioreg = sio_data->sioreg;
-+	data->sio_data = sio_data;
- 
- 	if (sio_data->access == access_direct) {
- 		data->addr = res->start;
--- 
-2.33.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
