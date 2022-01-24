@@ -2,114 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8687C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jan 2022 08:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5633EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jan 2022 09:16:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236401AbiAXIg1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jan 2022 03:36:27 -0500
-Received: from mga02.intel.com ([134.134.136.20]:23805 "EHLO mga02.intel.com"
+        id S229474AbiAXJQ0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jan 2022 04:16:26 -0500
+Received: from mail.portyid.pl ([192.36.61.58]:53364 "EHLO mail.portyid.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236382AbiAXIg0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:36:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643013385; x=1674549385;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wGMxF+c6CA6XbZj+hG6y0ZML5wA7ZQmrneegWvMtmuM=;
-  b=FovFJ/cZKlwTGaeL0IRvcl0kNdkEjvL4+YAk5zFFhwFLpf/lR4s0/UEK
-   sltmhk1oftQ9RkTkOVc2lSAeaW3gX311me+5nON8h2RVlOuO/K9XP8J3Q
-   46Ryr40M8ZOpTM8oRXIhv0HDPevShpXxvVbApeAWZj6u93vIgAwzeahXb
-   6D5xQuXucPZ6ccPbcJTtsyDQLqho97a4qz4DdKdPRMtpO+x5t8HDRDRQQ
-   E6FecUoHKg8WREAGdvLL4C4rEtCOldaHD7AX0zPQgyN+yzm4T2ADHAsLK
-   JSeSZlgnOWv17J1+29jysVGtXYETBBCkvQn1174QBsarRp/vhJ1r0nnO+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="233354936"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="233354936"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:36:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="768608766"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Jan 2022 00:36:23 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBupr-000I1W-8s; Mon, 24 Jan 2022 08:36:23 +0000
-Date:   Mon, 24 Jan 2022 16:35:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Shych <michaelsh@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Vadim Pasternak <vadimp@nvidia.com>
-Subject: [groeck-staging:hwmon-next 32/33] drivers/hwmon/powr1220.c:185:2:
- warning: unannotated fall-through between switch labels
-Message-ID: <202201241605.pf50OsUm-lkp@intel.com>
+        id S229759AbiAXJQ0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jan 2022 04:16:26 -0500
+Received: by mail.portyid.pl (Postfix, from userid 1001)
+        id 42FCF412FF; Mon, 24 Jan 2022 10:16:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=portyid.pl; s=mail;
+        t=1643015785; bh=+PMi7irkA4XlRgpdW2HqpqcJeZNxKGysf407T0katTE=;
+        h=Date:From:To:Subject:From;
+        b=w8HKWe9T6LZ9+rTWPCLUWvHTfOpiaSyVd5ALIn7q7plW1UU5b+D4nP0i/EM53Do9Q
+         D9Ou6aApkX4HgDkB7RRRlpZuuqW/YqtQ11K7AgvxYgh66XHhlDCE1FuZKUB8kUY/v3
+         PKKK/BXbahEjMe0PBxJpX+f1OY5FPYAILzEFjRPY/obZPwXmMT7+gCqQtqUUl/rRmw
+         BnEYAHkr8/HH8H5Ysy/oTLBl6Z/YGy7HHvVi5I/oHE/lJNOdh1aEGtP9fM/zez3urw
+         nR0N9unTDcAecFq2Pq0f9nVkz9U8I4GmvVrd7oj3hHAvE+9YX9u7yDJsnhB2Buchyl
+         w2L9I4GnZtJxA==
+Received: by mail.portyid.pl for <linux-hwmon@vger.kernel.org>; Mon, 24 Jan 2022 09:16:23 GMT
+Message-ID: <20220124084500-0.1.1b.5fnr.0.iccgl6ik4p@portyid.pl>
+Date:   Mon, 24 Jan 2022 09:16:23 GMT
+From:   =?UTF-8?Q? "Pawe=C5=82_Jasi=C5=84ski" ?= 
+        <pawel.jasinski@portyid.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Fotowoltaika - nowe warunki
+X-Mailer: mail.portyid.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   9b9f1e670d2c61c676039474fd2d98ca0a54ff75
-commit: 19d8ebde288924d3385763832ea99396c8b4fe8c [32/33] hwmon: (powr1220) Upgrade driver to support hwmon info infrastructure
-config: hexagon-randconfig-r032-20220123 (https://download.01.org/0day-ci/archive/20220124/202201241605.pf50OsUm-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9006bf424847bf91f0a624ffc27ad165c7b804c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=19d8ebde288924d3385763832ea99396c8b4fe8c
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging hwmon-next
-        git checkout 19d8ebde288924d3385763832ea99396c8b4fe8c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/
+Dzie=C5=84 dobry,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+jeszcze w pierwszej po=C5=82owie 2022 roku wzrosn=C4=85 ceny za wykup ene=
+rgii dla posiadaczy fotowoltaiki.=20
 
-All warnings (new ones prefixed by >>):
+Aby unikn=C4=85=C4=87 umowy na nowych zasadach trzeba zdecydowa=C4=87 si=C4=
+=99 na instalacj=C4=99 paneli PV do ko=C5=84ca marca.=20
 
->> drivers/hwmon/powr1220.c:185:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/hwmon/powr1220.c:185:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   1 warning generated.
+Jako firma specjalizuj=C4=85ca si=C4=99 w monta=C5=BCu i serwisie fotowol=
+taiki ch=C4=99tnie podejmiemy si=C4=99 realizacji ca=C5=82ego projektu. S=
+=C4=85 Pa=C5=84stwo zainteresowani?
 
 
-vim +185 drivers/hwmon/powr1220.c
-
-   169	
-   170	static umode_t
-   171	powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
-   172			    attr, int channel)
-   173	{
-   174		switch (type) {
-   175		case hwmon_in:
-   176			switch (attr) {
-   177			case hwmon_in_input:
-   178			case hwmon_in_highest:
-   179			case hwmon_in_label:
-   180				return 0444;
-   181			default:
-   182				break;
-   183			}
-   184	
- > 185		default:
-   186			break;
-   187		}
-   188	
-   189		return 0;
-   190	}
-   191	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Pozdrawiam
+Pawe=C5=82 Jasi=C5=84ski
