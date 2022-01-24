@@ -2,310 +2,152 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0502CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jan 2022 17:16:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FE06C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jan 2022 03:44:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbiAXRQJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jan 2022 12:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
+        id S1385201AbiAYDmZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jan 2022 22:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiAXRQJ (ORCPT
+        with ESMTP id S3413313AbiAYAit (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:16:09 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A653C06173B
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 Jan 2022 09:16:08 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id x193so26616079oix.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 Jan 2022 09:16:08 -0800 (PST)
+        Mon, 24 Jan 2022 19:38:49 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9776C061345
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 Jan 2022 14:22:07 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id z14so12463956ljc.13
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 Jan 2022 14:22:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=sOTcEiKx2Rs+mvqB/bnUj7+fkBdCgeaTelhQfpOatY0=;
-        b=ea7svJ5yvrjbT6lKUKaSjU0SzQyuuRY9rvxA3hnQBd/dpYt3Zi+NIB5f7MyNSd+euW
-         8D46ZQbtEZKB0ya8y+jNbKRJ2tpe0twIrWCQdBw5LYACcr0tGhvZ9z0NvnxQCAN8m8iI
-         vGpx0QfY2t/3CwOFBdBNfIh4JGkwD4i7fINRpyrOj4owi87dAi+NCHKsfSdCZRNxbpB+
-         kJ+5ocwbtS4itcSDGwyF5pneuxJQalXvcQPTsR40PsqVN+QKihEXVReFkh4kEpP1MUd7
-         lqVEp6Fx7wr0iM98nJmFAsaRTL5osgicBdoCf1G+knfQleQ+JYQychDYPMozJjiIhTKj
-         2ijg==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NJhIoIPY1h73x4Or/3ayh8CG35jR6sYNrRpXzjz3bvI=;
+        b=JQDBTzW6QEl8y4CGc2ZWoibdy3RReZ3ngtEJkzMXyYUN7IZDK4ACY+ZLNS6MWmRNI6
+         Pl53v0mDipx0uPDYzkJDoS7ldxEZfI/q9YjVQWbUG9xx0kaLfMwPYHNZZuiZR3kEoK7t
+         0SN0qBWy06BfoE6qcdslTr+dHWzyx6QbcrlIGoA5E014M8DPEqr0xKgBFuyWuUdsQmTF
+         Q22wOWorWelA58s5+Iafnn2ZBFIRJQ7KzjQBPWL0f+TMB8VuBP9/ueOFo1D5jy27omx8
+         ltQCLIixQk+EbqiP6snFdoRKB9umfPpFRQRcHnpzakBIS7pL4TZaUIbHZn3vFa+20Pru
+         kChQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=sOTcEiKx2Rs+mvqB/bnUj7+fkBdCgeaTelhQfpOatY0=;
-        b=hvzYmqbf1HHiPKB4hDAI+UZxULMUye5wZiaSXBclQmJElvTcL6KUklmrvb4Ea+PsZB
-         7ChbrSMvK7mglQ6Uf4BEYCie43zk45URxZ8W6nO8ysKCO8pkIdSw8aR0c1S9It28wsCh
-         XJmQFtiCyDN+FCUlUpTF6HUHrippLJPDwZMutFS6nVF8f0RoZE3+V5RWU3srVA1Haw+Z
-         1dMfHDf4kMmt1G6aRci9AzaPtBZpgW6+R+csSLjRHXPhzPjpkSNjDqJbIRICU4EQqpM4
-         e7msX8kfM1kMkMxU26d8/1rSFn9htPWgk+uE1zlfjB2LgdkIq6ECs2lBxLjYWhvHxNrX
-         sxbQ==
-X-Gm-Message-State: AOAM530EmxTi4v13jLuTEciWb95TTLxA+1gC0vJlCTx/om5JJS3/BFOn
-        i8HHa445ERksxUK8AiL4Mjw=
-X-Google-Smtp-Source: ABdhPJzGn4VqLZBIytbwoFpuwOQCTcGOF5jxY7YmpnPDrmMIlqvoWxg0nE/5+W4xBzXdzIKmf/3pYw==
-X-Received: by 2002:a05:6808:b38:: with SMTP id t24mr2298573oij.25.1643044567713;
-        Mon, 24 Jan 2022 09:16:07 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w7sm4500857oou.13.2022.01.24.09.16.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 09:16:06 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <70f24710-9efb-5002-22de-718f67a8537a@roeck-us.net>
-Date:   Mon, 24 Jan 2022 09:16:04 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NJhIoIPY1h73x4Or/3ayh8CG35jR6sYNrRpXzjz3bvI=;
+        b=rlMS69gOpGGg7zd2o9H6klR/cqeYaPxpyEYssvMAKLt5OAlhLgUGU3+oCbnSkrkL4c
+         MhcLs89WsOLgOn+9s07zGJxPjtKKpBYTcsAylcTr4ANqN55MRTOQNemvQslRuSyju14M
+         p3DYuscMZXZ8mwUMKOfHbmiATkB4nEK0SMuq7dbMI0lSB0+CQpe9YUNbCOlOtZSrBDcM
+         +tsWveS+0P5WreEmsybpsatFG4K+BMufIMlnRVIcDlPKGx8KXFicKbLsAfXNOY868uwP
+         j2oF3lFxmoz1+HGAOmzoi7EzNd94zKRRsOXc8HJY+jDloE0JaBZSpdFESZVDvgMKUx1z
+         SyNg==
+X-Gm-Message-State: AOAM53247Up+iMMtZY1eOQJiIOLpc/XlKBhFcvGW78pZSi8OAvWdbHri
+        r5/N2UgKNRUbX3zHZWs7ShI=
+X-Google-Smtp-Source: ABdhPJzpJnOzPXrD0ey4Fx1n3PQGe0YNFdiqvEiUSHlgK3VKvEVXe0+UeP9p7L/zu4itSF/qP94Y8A==
+X-Received: by 2002:a2e:96c5:: with SMTP id d5mr12474774ljj.527.1643062925996;
+        Mon, 24 Jan 2022 14:22:05 -0800 (PST)
+Received: from netbook-debian ([94.179.21.60])
+        by smtp.gmail.com with ESMTPSA id h15sm1297139lfk.20.2022.01.24.14.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 14:22:05 -0800 (PST)
+Date:   Tue, 25 Jan 2022 00:21:57 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Bernhard Seibold <mail@bernhard-seibold.de>,
+        =?UTF-8?B?UGF3ZcWC?= Marciniak <pmarciniak@lodz.home.pl>
+Subject: Re: [PATCH] hwmon: (nct6775) Fix crash in clear_caseopen
+Message-ID: <20220125002157.0d6823d1@netbook-debian>
+In-Reply-To: <20220124023248.475734-1-linux@roeck-us.net>
+References: <20220124023248.475734-1-linux@roeck-us.net>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     linux-hwmon@vger.kernel.org
-References: <20220124112744.27950-1-vadimp@nvidia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH hwmon-next 1/1] hwmon: (mlxreg-fan) Use pwm attribute for
- setting fan speed low limit
-In-Reply-To: <20220124112744.27950-1-vadimp@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/24/22 03:27, Vadim Pasternak wrote:
-> Currently driver uses 'thermal' attribute 'cur_state' to set low limit
-> for fan speed from user space. Such limit is set due to system wise
-> considerations, like absence of power supply unit, faults received for
-> transceivers, power supplies, or some other devices.
-> 
-> Recently 'cur_state' interface has been deprecated, while the speed
-> limit feature is required for Nvidia systems.
-> 
-Unless I am missing something, what is deprecated is setting cur_state
-from userspace, not setting it from the kernel. So this is misleading
-and needs to be explained further. What exactly is needed for Nvidia
-systems, and why can those systems not use the recommended mechanisms
-to control the system state ?
+On Sun, 23 Jan 2022 18:32:48 -0800
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-> Use 'hwmon' 'pwm' attribute for setting low limit for fan speed in
-> case 'thermal' subsystem is configured in kernel. In this case setting
-
-"pwm" is supposed to set the current pwm value, not a minimum pwm value.
-What I think (suspect ?) this is doing is to never let the thermal
-subsystem select a lower duty cycle than the duty cycle selected
-with the pwm attribute, which makes more sense and should be explained
-accordingly. If so, I think it should be possible to simplify the code
-significantly: For example, assuming that cooling levels 0..10 translate
-to pwm duty cycles 0%..100%, just let the resulting pwm value never
-be lower than the pwm value selected with the pwm attribute.
-There should be no need to keep changing cooling_levels[].
-
-> fan speed through 'hwmon' is used for setting fan low speed limit:
-> - Fan speed is to be updated in hardware in case the requested fan
->    speed is above of the last cooling level, set by 'thermal' subsystem.
->    Thermal cooling levels array is to be updated accordingly, thus
->    if cooling state has been set to 'n', fan->cooling_levels[0..n] are
->    to be converted to the same RPM value.
-> - Otherwise, the requested fan speed is only to be stored in thermal
->    cooling levels array with no update in hardware.
-> 
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+> Pawe=C5=82 Marciniak reports the following crash, observed when clearing
+> the chassis intrusion alarm.
+>=20
+> BUG: kernel NULL pointer dereference, address: 0000000000000028
+> PGD 0 P4D 0
+> Oops: 0000 [#1] PREEMPT SMP PTI
+> CPU: 3 PID: 4815 Comm: bash Tainted: G S
+> 5.16.2-200.fc35.x86_64 #1 Hardware name: To Be Filled By O.E.M. To Be
+> Filled By O.E.M./Z97 Extreme4, BIOS P2.60A 05/03/2018 RIP:
+> 0010:clear_caseopen+0x5a/0x120 [nct6775] Code: 68 70 e8 e9 32 b1 e3
+> 85 c0 0f 85 d2 00 00 00 48 83 7c 24 ... RSP: 0018:ffffabcb02803dd8
+> EFLAGS: 00010246 RAX: 0000000000000000 RBX: 0000000000000002 RCX:
+> 0000000000000000 RDX: ffff8e8808192880 RSI: 0000000000000000 RDI:
+> ffff8e87c7509a68 RBP: 0000000000000000 R08: 0000000000000001 R09:
+> 000000000000000a R10: 000000000000000a R11: f000000000000000 R12:
+> 000000000000001f R13: ffff8e87c7509828 R14: ffff8e87c7509a68 R15:
+> ffff8e88494527a0 FS:  00007f4db9151740(0000)
+> GS:ffff8e8ebfec0000(0000) knlGS:0000000000000000 CS:  0010 DS: 0000
+> ES: 0000 CR0: 0000000080050033 CR2: 0000000000000028 CR3:
+> 0000000166b66001 CR4: 00000000001706e0 Call Trace:
+>  <TASK>
+>  kernfs_fop_write_iter+0x11c/0x1b0
+>  new_sync_write+0x10b/0x180
+>  vfs_write+0x209/0x2a0
+>  ksys_write+0x4f/0xc0
+>  do_syscall_64+0x3b/0x90
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>=20
+> The problem is that the device passed to clear_caseopen() is the hwmon
+> device, not the platform device, and the platform data is not set in
+> the hwmon device. Store the pointer to sio_data in struct
+> nct6775_data and get if from there if needed.
+>=20
+> Fixes: 2e7b9886968b ("hwmon: (nct6775) Use superio_*() function
+> pointers in sio_data.") Cc: Denis Pauk <pauk.denis@gmail.com>
+> Cc: Bernhard Seibold <mail@bernhard-seibold.de>
+> Reported-by: Pawe=C5=82 Marciniak <pmarciniak@lodz.home.pl>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->   drivers/hwmon/mlxreg-fan.c | 96 +++++++++++++++++++-------------------
->   1 file changed, 47 insertions(+), 49 deletions(-)
-> 
-> diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-> index 4a8becdb0d58..daae8741ff2b 100644
-> --- a/drivers/hwmon/mlxreg-fan.c
-> +++ b/drivers/hwmon/mlxreg-fan.c
-> @@ -18,15 +18,6 @@
->   #define MLXREG_FAN_MAX_STATE		10
->   #define MLXREG_FAN_MIN_DUTY		51	/* 20% */
->   #define MLXREG_FAN_MAX_DUTY		255	/* 100% */
-> -/*
-> - * Minimum and maximum FAN allowed speed in percent: from 20% to 100%. Values
-> - * MLXREG_FAN_MAX_STATE + x, where x is between 2 and 10 are used for
-> - * setting FAN speed dynamic minimum. For example, if value is set to 14 (40%)
-> - * cooling levels vector will be set to 4, 4, 4, 4, 4, 5, 6, 7, 8, 9, 10 to
-> - * introduce PWM speed in percent: 40, 40, 40, 40, 40, 50, 60. 70, 80, 90, 100.
-> - */
-> -#define MLXREG_FAN_SPEED_MIN			(MLXREG_FAN_MAX_STATE + 2)
-> -#define MLXREG_FAN_SPEED_MAX			(MLXREG_FAN_MAX_STATE * 2)
->   #define MLXREG_FAN_SPEED_MIN_LEVEL		2	/* 20 percent */
->   #define MLXREG_FAN_TACHO_SAMPLES_PER_PULSE_DEF	44
->   #define MLXREG_FAN_TACHO_DIV_MIN		283
-> @@ -87,6 +78,7 @@ struct mlxreg_fan_tacho {
->    * @connected: indicates if PWM is connected;
->    * @reg: register offset;
->    * @cooling: cooling device levels;
-> + * @last_thermal_state: last cooling state set by thermal subsystem;
->    * @cdev: cooling device;
->    */
->   struct mlxreg_fan_pwm {
-> @@ -94,6 +86,7 @@ struct mlxreg_fan_pwm {
->   	bool connected;
->   	u32 reg;
->   	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
-> +	unsigned long last_thermal_state;
->   	struct thermal_cooling_device *cdev;
->   };
->   
-> @@ -107,6 +100,7 @@ struct mlxreg_fan_pwm {
->    * @tachos_per_drwr - number of tachometers per drawer;
->    * @samples: minimum allowed samples per pulse;
->    * @divider: divider value for tachometer RPM calculation;
-> + * @pwm_limit_set: callback to set minimum limit for PWM;
->    */
->   struct mlxreg_fan {
->   	struct device *dev;
-> @@ -117,6 +111,7 @@ struct mlxreg_fan {
->   	int tachos_per_drwr;
->   	int samples;
->   	int divider;
-> +	int (*pwm_limit_set)(struct mlxreg_fan *fan, struct mlxreg_fan_pwm *pwm, long val);
+>  drivers/hwmon/nct6775.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+> index fd3f91cb01c6..098d12b9ecda 100644
+> --- a/drivers/hwmon/nct6775.c
+> +++ b/drivers/hwmon/nct6775.c
+> @@ -1175,7 +1175,7 @@ static inline u8 in_to_reg(u32 val, u8 nr)
+> =20
+>  struct nct6775_data {
+>  	int addr;	/* IO base of hw monitor block */
+> -	int sioreg;	/* SIO register address */
+> +	struct nct6775_sio_data *sio_data;
+>  	enum kinds kind;
+What do you think about remove kind field also from struct
+nct6775_data? Code has copy of this field inside of the struct
+nct6775_sio_data.=20
+>  	const char *name;
+> =20
+> @@ -3559,7 +3559,7 @@ clear_caseopen(struct device *dev, struct
+> device_attribute *attr, const char *buf, size_t count)
+>  {
+>  	struct nct6775_data *data =3D dev_get_drvdata(dev);
+> -	struct nct6775_sio_data *sio_data =3D dev_get_platdata(dev);
+> +	struct nct6775_sio_data *sio_data =3D data->sio_data;
+>  	int nr =3D to_sensor_dev_attr(attr)->index -
+> INTRUSION_ALARM_BASE; unsigned long val;
+>  	u8 reg;
+> @@ -3967,7 +3967,7 @@ static int nct6775_probe(struct platform_device
+> *pdev) return -ENOMEM;
+> =20
+>  	data->kind =3D sio_data->kind;
+> -	data->sioreg =3D sio_data->sioreg;
+> +	data->sio_data =3D sio_data;
+> =20
+>  	if (sio_data->access =3D=3D access_direct) {
+>  		data->addr =3D res->start;
 
-Are we at any time in the future expecting a different callback
-function ? If not, using a callback is not warranted. Just use
-if (IS_REACHABLE(CONFIG_THERMAL)) instead.
+Tested-by: Denis Pauk <pauk.denis@gmail.com>
 
->   };
->   
->   static int
-> @@ -204,6 +199,7 @@ mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   {
->   	struct mlxreg_fan *fan = dev_get_drvdata(dev);
->   	struct mlxreg_fan_pwm *pwm;
-> +	int err;
->   
->   	switch (type) {
->   	case hwmon_pwm:
-> @@ -213,7 +209,11 @@ mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   			    val > MLXREG_FAN_MAX_DUTY)
->   				return -EINVAL;
->   			pwm = &fan->pwm[channel];
-> -			return regmap_write(fan->regmap, pwm->reg, val);
-> +			/* If thermal is configured - handle PWM limit setting. */
-> +			if (!err && fan->pwm_limit_set)
-
-I don't see where 'err' is set. Doesn't the compiler complain about
-using an uninitialized variable ?
-
-> +				return fan->pwm_limit_set(fan, pwm, val);
-> +			err = regmap_write(fan->regmap, pwm->reg, val);
-> +			return err;
-
-Why not just keep the original code ?
-			return regmap_write(fan->regmap, pwm->reg, val);
-			
->   		default:
->   			return -EOPNOTSUPP;
->   		}
-> @@ -338,49 +338,13 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
-
-If this API
->   {
->   	struct mlxreg_fan_pwm *pwm = cdev->devdata;
->   	struct mlxreg_fan *fan = pwm->fan;
-> -	unsigned long cur_state;
-> -	int i, config = 0;
-> -	u32 regval;
->   	int err;
->   
-> -	/*
-> -	 * Verify if this request is for changing allowed FAN dynamical
-> -	 * minimum. If it is - update cooling levels accordingly and update
-> -	 * state, if current state is below the newly requested minimum state.
-> -	 * For example, if current state is 5, and minimal state is to be
-> -	 * changed from 4 to 6, fan->cooling_levels[0 to 5] will be changed all
-> -	 * from 4 to 6. And state 5 (fan->cooling_levels[4]) should be
-> -	 * overwritten.
-> -	 */
-> -	if (state >= MLXREG_FAN_SPEED_MIN && state <= MLXREG_FAN_SPEED_MAX) {
-> -		/*
-> -		 * This is configuration change, which is only supported through sysfs.
-> -		 * For configuration non-zero value is to be returned to avoid thermal
-> -		 * statistics update.
-> -		 */
-> -		config = 1;
-> -		state -= MLXREG_FAN_MAX_STATE;
-> -		for (i = 0; i < state; i++)
-> -			pwm->cooling_levels[i] = state;
-> -		for (i = state; i <= MLXREG_FAN_MAX_STATE; i++)
-> -			pwm->cooling_levels[i] = i;
-> -
-> -		err = regmap_read(fan->regmap, pwm->reg, &regval);
-> -		if (err) {
-> -			dev_err(fan->dev, "Failed to query PWM duty\n");
-> -			return err;
-> -		}
-> -
-> -		cur_state = MLXREG_FAN_PWM_DUTY2STATE(regval);
-> -		if (state < cur_state)
-> -			return config;
-> -
-> -		state = cur_state;
-> -	}
-> -
->   	if (state > MLXREG_FAN_MAX_STATE)
->   		return -EINVAL;
->   
-> +	/* Save requested thermal state. */
-> +	pwm->last_thermal_state = state;
->   	/* Normalize the state to the valid speed range. */
->   	state = pwm->cooling_levels[state];
->   	err = regmap_write(fan->regmap, pwm->reg,
-> @@ -389,7 +353,7 @@ static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cdev,
->   		dev_err(fan->dev, "Failed to write PWM duty\n");
->   		return err;
->   	}
-> -	return config;
-> +	return 0;
->   }
->   
->   static const struct thermal_cooling_device_ops mlxreg_fan_cooling_ops = {
-> @@ -562,6 +526,38 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
->   	return 0;
->   }
->   
-> +static int mlxreg_pwm_limit_set(struct mlxreg_fan *fan, struct mlxreg_fan_pwm *pwm, long val)
-> +{
-> +	unsigned long new_state;
-> +	int i, err = 0;
-> +	u32 regval;
-> +
-> +	/*
-> +	 * In case thermal subsystem is configured, access for PWM setting through hwmon is used
-> +	 * for setting fan minimum speed limit. For such case update cooling levels accordingly,
-> +	 * thus if cooling state has been set to 'n', fan->cooling_levels[0..n] are to be
-> +	 * converted to the same RPM value. Update PWM in case requested speed is above cooling
-> +	 * state set by thermal driver.
-> +	 */
-> +	err = regmap_read(fan->regmap, pwm->reg, &regval);
-> +	if (err) {
-> +		dev_err(fan->dev, "Failed to query PWM duty\n");
-> +		return err;
-> +	}
-> +
-> +	new_state = MLXREG_FAN_PWM_DUTY2STATE(val);
-> +
-> +	for (i = 0; i < new_state; i++)
-> +		pwm->cooling_levels[i] = new_state;
-> +	for (i = new_state; i <= MLXREG_FAN_MAX_STATE; i++)
-> +		pwm->cooling_levels[i] = i;
-> +	/* Update PWM only in case requested state is above last thermal state. */
-> +	if (new_state >= pwm->last_thermal_state)
-> +		err = regmap_write(fan->regmap, pwm->reg, MLXREG_FAN_PWM_STATE2DUTY(new_state));
-> +
-> +	return err;
-> +}
-> +
->   static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
->   {
->   	int i, j;
-> @@ -586,6 +582,8 @@ static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
->   			pwm->cooling_levels[j] = j;
->   	}
->   
-> +	fan->pwm_limit_set = mlxreg_pwm_limit_set;
-> +
->   	return 0;
->   }
->   
-
+Best regards,
+             Denis.
