@@ -2,282 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E62E8C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01116C41535
 	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jan 2022 03:44:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1326858AbiAYDnT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jan 2022 22:43:19 -0500
-Received: from mga17.intel.com ([192.55.52.151]:60177 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S3420300AbiAYCXu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:23:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643077430; x=1674613430;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Wi7YgSoegjpyU0XA1btyBrAIx4jskMfW08fhaWOcJVs=;
-  b=krq09NW1dNNUVqylIGoF5Kz87dgHbSwiWlpYF8a5cA0gyksrf59283c4
-   eIpAw7v77eQ1D3lFXyVooaGVI6FyHKSYdPRiQkWnzDC3jgHo18eeYGw6B
-   OO12OopUWO3xu7Km9ONBJ/ck1dqV/U4Je4pzEzMx5pNoYzOzrjHRjIROF
-   Rs8vPOoTmNHmF3unseV7vSXrFidWpJVTGExeCYgdzgV4fLn8iE3eY49oe
-   arJHRbCUoo3gqrVmJTbmL6Ob5UUxVEL8ueA/8JOmTllOuIIbIvT0aC9NR
-   kOOHuwxhJED90hNh34qdfDe+kh2WXqJcRra4ysQYkIyJNgkRj9nOHSjIv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226860221"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="226860221"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:14:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="532265894"
-Received: from kerguder-mobl.ger.corp.intel.com (HELO localhost) ([10.249.158.133])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:14:44 -0800
-From:   Iwona Winiarska <iwona.winiarska@intel.com>
-To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zev Weiss <zweiss@equinix.com>,
-        David Muller <d.mueller@elsoft.ch>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH v6 07/13] peci: Add sysfs interface for PECI bus
-Date:   Tue, 25 Jan 2022 02:10:58 +0100
-Message-Id: <20220125011104.2480133-8-iwona.winiarska@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220125011104.2480133-1-iwona.winiarska@intel.com>
-References: <20220125011104.2480133-1-iwona.winiarska@intel.com>
+        id S1326872AbiAYDnW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jan 2022 22:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3420425AbiAYCYS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jan 2022 21:24:18 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D94C067A7C;
+        Mon, 24 Jan 2022 18:03:58 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id s185so11715860oie.3;
+        Mon, 24 Jan 2022 18:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4d+4TLddh1iILo0iPjAzyUaE64ZZAAUgPh4mjdb7zyo=;
+        b=Lc6oqAUSjft7lGStVs9/NSozsAJW50sCPctsh1WZEziI2d7idluVCBhxfWMtC4L+Xf
+         tJs6hIdkf0JYxQns/LWb5BY0wbYYlW0mKkO5jTLB5Ws0bkdVsFvHP7loaqNJ4UImpAiP
+         Wx2c+a7Lz5/KzDYHNuZYG3k3QZI4isAMvit2ZHbIJQPtc80o/3orwfySWrp2s5gwsHxF
+         b2TR/BLTP3VB6A4t95aAv4T4tWQIK1a2bKqPBRqt6akvXFT80rHAODYKpqOp/XxX/6pf
+         sOKzAV3aXcAZH/u6yTpvRxn+Qc4SbMhcK6NzBgEs16ukXtuaCPJIsQ06oak1Ldgieo6/
+         kIkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=4d+4TLddh1iILo0iPjAzyUaE64ZZAAUgPh4mjdb7zyo=;
+        b=FifHe7NuResyxzRfa0v/LGdH61a3n7A0FbR+LuUy8jLUD64JP96Cfcv9on84+jSVGc
+         jc0peTPbQEK657GBcQ7e7NGFsBpSHZ77DfLKejd3XsmePuk2x1nktWpxO0Bo3relHbkL
+         pkRE9/D9HbEwa82vZFnelubOHdSovLt5ZDGUh9oD4XHlojNJbYE7jBuEVPt0RcwVTGLm
+         YqMtiZCf9u8Y+FhTWXW+2O6HEmEEAxJCVQXpFDCrlY6Qu336F1koKUNCIYPdLCUPd6gX
+         1B+MYTV3hr5eFJ/C/HfMKQo1kfYBYWy2i2SVCrl7Ms3l6FchauAmGT6LCoXZ/VRsSoNj
+         R0Jw==
+X-Gm-Message-State: AOAM530hP6fWNdQiYTqmwreVqPtJ6YDcSAg+d2ENmmn8gx4FffoCZq2b
+        +MNHJCF2Maqzoc8ns0UrzeledMCXOBU=
+X-Google-Smtp-Source: ABdhPJxdUJEVns1KUuKUlAhBTewdl4UDYa5y5d4AWRYG9z57CPRk+j1G9ysAd0X250DH74alCBHGcg==
+X-Received: by 2002:aca:eb88:: with SMTP id j130mr3721074oih.75.1643076238238;
+        Mon, 24 Jan 2022 18:03:58 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j4sm737292oon.8.2022.01.24.18.03.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 18:03:57 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 24 Jan 2022 18:03:55 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luiz Sampaio <sampaio.ime@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 03/31] hwmon: pmbus: changing LED_* from enum
+ led_brightness to actual value
+Message-ID: <20220125020355.GA355320@roeck-us.net>
+References: <20220121165436.30956-1-sampaio.ime@gmail.com>
+ <20220121165436.30956-4-sampaio.ime@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121165436.30956-4-sampaio.ime@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-PECI devices may not be discoverable at the time when PECI controller is
-being added (e.g. BMC can boot up when the Host system is still in S5).
-Since we currently don't have the capabilities to figure out the Host
-system state inside the PECI subsystem itself, we have to rely on
-userspace to do it for us.
+On Fri, Jan 21, 2022 at 01:54:08PM -0300, Luiz Sampaio wrote:
+> The enum led_brightness, which contains the declaration of LED_OFF,
+> LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
+> max_brightness.
 
-In the future, PECI subsystem may be expanded with mechanisms that allow
-us to avoid depending on userspace interaction (e.g. CPU presence could
-be detected using GPIO, and the information on whether it's discoverable
-could be obtained over IPMI).
-Unfortunately, those methods may ultimately not be available (support
-will vary from platform to platform), which means that we still need
-platform independent method triggered by userspace.
+There is no Signed-off-by:, so this is not not a valid/acceptable patch.
 
-Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
----
- Documentation/ABI/testing/sysfs-bus-peci | 16 +++++
- drivers/peci/Makefile                    |  2 +-
- drivers/peci/core.c                      |  3 +-
- drivers/peci/device.c                    |  1 +
- drivers/peci/internal.h                  |  5 ++
- drivers/peci/sysfs.c                     | 82 ++++++++++++++++++++++++
- 6 files changed, 107 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-peci
- create mode 100644 drivers/peci/sysfs.c
+> ---
+>  drivers/hwmon/pmbus/ibm-cffps.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> index e3294a1a54bb..cc20a70c723b 100644
+> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> @@ -382,10 +382,10 @@ static int ibm_cffps_led_brightness_set(struct led_classdev *led_cdev,
+>  	u8 next_led_state;
+>  	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
+>  
+> -	if (brightness == LED_OFF) {
+> +	if (brightness == 0) {
+>  		next_led_state = CFFPS_LED_OFF;
+>  	} else {
+> -		brightness = LED_FULL;
+> +		brightness = 255;
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-peci b/Documentation/ABI/testing/sysfs-bus-peci
-new file mode 100644
-index 000000000000..56c2b2216bbd
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-peci
-@@ -0,0 +1,16 @@
-+What:		/sys/bus/peci/rescan
-+Date:		July 2021
-+KernelVersion:	5.15
-+Contact:	Iwona Winiarska <iwona.winiarska@intel.com>
-+Description:
-+		Writing a non-zero value to this attribute will
-+		initiate scan for PECI devices on all PECI controllers
-+		in the system.
-+
-+What:		/sys/bus/peci/devices/<controller_id>-<device_addr>/remove
-+Date:		July 2021
-+KernelVersion:	5.15
-+Contact:	Iwona Winiarska <iwona.winiarska@intel.com>
-+Description:
-+		Writing a non-zero value to this attribute will
-+		remove the PECI device and any of its children.
-diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
-index c5f9d3fe21bb..917f689e147a 100644
---- a/drivers/peci/Makefile
-+++ b/drivers/peci/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
- # Core functionality
--peci-y := core.o request.o device.o
-+peci-y := core.o request.o device.o sysfs.o
- obj-$(CONFIG_PECI) += peci.o
- 
- # Hardware specific bus drivers
-diff --git a/drivers/peci/core.c b/drivers/peci/core.c
-index c3361e6e043a..e993615cf521 100644
---- a/drivers/peci/core.c
-+++ b/drivers/peci/core.c
-@@ -29,7 +29,7 @@ struct device_type peci_controller_type = {
- 	.release	= peci_controller_dev_release,
- };
- 
--static int peci_controller_scan_devices(struct peci_controller *controller)
-+int peci_controller_scan_devices(struct peci_controller *controller)
- {
- 	int ret;
- 	u8 addr;
-@@ -162,6 +162,7 @@ EXPORT_SYMBOL_NS_GPL(devm_peci_controller_add, PECI);
- 
- struct bus_type peci_bus_type = {
- 	.name		= "peci",
-+	.bus_groups	= peci_bus_groups,
- };
- 
- static int __init peci_init(void)
-diff --git a/drivers/peci/device.c b/drivers/peci/device.c
-index 2b3a2d893aaf..d10ed1cfcd48 100644
---- a/drivers/peci/device.c
-+++ b/drivers/peci/device.c
-@@ -116,5 +116,6 @@ static void peci_device_release(struct device *dev)
- }
- 
- struct device_type peci_device_type = {
-+	.groups		= peci_device_groups,
- 	.release	= peci_device_release,
- };
-diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
-index 57d11a902c5d..978e12c8e1d3 100644
---- a/drivers/peci/internal.h
-+++ b/drivers/peci/internal.h
-@@ -8,6 +8,7 @@
- #include <linux/types.h>
- 
- struct peci_controller;
-+struct attribute_group;
- struct peci_device;
- struct peci_request;
- 
-@@ -19,12 +20,16 @@ struct peci_request *peci_request_alloc(struct peci_device *device, u8 tx_len, u
- void peci_request_free(struct peci_request *req);
- 
- extern struct device_type peci_device_type;
-+extern const struct attribute_group *peci_device_groups[];
- 
- int peci_device_create(struct peci_controller *controller, u8 addr);
- void peci_device_destroy(struct peci_device *device);
- 
- extern struct bus_type peci_bus_type;
-+extern const struct attribute_group *peci_bus_groups[];
- 
- extern struct device_type peci_controller_type;
- 
-+int peci_controller_scan_devices(struct peci_controller *controller);
-+
- #endif /* __PECI_INTERNAL_H */
-diff --git a/drivers/peci/sysfs.c b/drivers/peci/sysfs.c
-new file mode 100644
-index 000000000000..db9ef05776e3
---- /dev/null
-+++ b/drivers/peci/sysfs.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2021 Intel Corporation
-+
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/peci.h>
-+
-+#include "internal.h"
-+
-+static int rescan_controller(struct device *dev, void *data)
-+{
-+	if (dev->type != &peci_controller_type)
-+		return 0;
-+
-+	return peci_controller_scan_devices(to_peci_controller(dev));
-+}
-+
-+static ssize_t rescan_store(struct bus_type *bus, const char *buf, size_t count)
-+{
-+	bool res;
-+	int ret;
-+
-+	ret = kstrtobool(buf, &res);
-+	if (ret)
-+		return ret;
-+
-+	if (!res)
-+		return count;
-+
-+	ret = bus_for_each_dev(&peci_bus_type, NULL, NULL, rescan_controller);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+static BUS_ATTR_WO(rescan);
-+
-+static struct attribute *peci_bus_attrs[] = {
-+	&bus_attr_rescan.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group peci_bus_group = {
-+	.attrs = peci_bus_attrs,
-+};
-+
-+const struct attribute_group *peci_bus_groups[] = {
-+	&peci_bus_group,
-+	NULL
-+};
-+
-+static ssize_t remove_store(struct device *dev, struct device_attribute *attr,
-+			    const char *buf, size_t count)
-+{
-+	struct peci_device *device = to_peci_device(dev);
-+	bool res;
-+	int ret;
-+
-+	ret = kstrtobool(buf, &res);
-+	if (ret)
-+		return ret;
-+
-+	if (res && device_remove_file_self(dev, attr))
-+		peci_device_destroy(device);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_IGNORE_LOCKDEP(remove, 0200, NULL, remove_store);
-+
-+static struct attribute *peci_device_attrs[] = {
-+	&dev_attr_remove.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group peci_device_group = {
-+	.attrs = peci_device_attrs,
-+};
-+
-+const struct attribute_group *peci_device_groups[] = {
-+	&peci_device_group,
-+	NULL
-+};
--- 
-2.31.1
+If the LED subsystem no longer likes defines, we should have local constants
+instead and not just use magic numbers. At the same time, this LED only supports
+two states, off or on. There will have to be an explanation why the full range of
+0..255 is still used and not just 0/1.
 
+>  
+>  		if (psu->led_state != CFFPS_LED_BLINK)
+>  			next_led_state = CFFPS_LED_ON;
+> @@ -426,7 +426,7 @@ static int ibm_cffps_led_blink_set(struct led_classdev *led_cdev,
+>  		return rc;
+>  
+>  	psu->led_state = CFFPS_LED_BLINK;
+> -	led_cdev->brightness = LED_FULL;
+> +	led_cdev->brightness = 255;
+>  	*delay_on = CFFPS_BLINK_RATE_MS;
+>  	*delay_off = CFFPS_BLINK_RATE_MS;
+>  
+> @@ -442,7 +442,7 @@ static void ibm_cffps_create_led_class(struct ibm_cffps *psu)
+>  	snprintf(psu->led_name, sizeof(psu->led_name), "%s-%02x", client->name,
+>  		 client->addr);
+>  	psu->led.name = psu->led_name;
+> -	psu->led.max_brightness = LED_FULL;
+> +	psu->led.max_brightness = 255;
+>  	psu->led.brightness_set_blocking = ibm_cffps_led_brightness_set;
+>  	psu->led.blink_set = ibm_cffps_led_blink_set;
+>  
