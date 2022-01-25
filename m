@@ -2,37 +2,37 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6DFEC4167D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jan 2022 03:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 202F8C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jan 2022 03:45:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1326843AbiAYDnR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jan 2022 22:43:17 -0500
-Received: from mga12.intel.com ([192.55.52.136]:22031 "EHLO mga12.intel.com"
+        id S1326863AbiAYDnU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jan 2022 22:43:20 -0500
+Received: from mga17.intel.com ([192.55.52.151]:60361 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S3420126AbiAYCWr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:22:47 -0500
+        id S3420301AbiAYCXu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jan 2022 21:23:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643077367; x=1674613367;
+  t=1643077430; x=1674613430;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qGotw2GBrBBBYCP1jR7RZISLfp2fzY+3NpEYtRDAb2w=;
-  b=hcdY4f01/kmJHBuBAIoIEO2iNO7iUtk9RrIRsEjl8MG6BdoOop34ZLXb
-   imh+qn6G29f8q0WpDokBLAgbN8tAPnWg4sg7kPiLpnEXe6fR1y3gU1k+K
-   7IQS7IzHC960MecchTw1M9TvnXi35IY+IRLyUDiI1mTe50EDsenfB2Kad
-   9WAIOmukP4I7fPjfi6O7COvqQsyAwwKvdS6jFPE3wD7uiABN9o5a2WTme
-   W9dTykIMEQEEOLw73CqdvDVuTrOLowKbS6SNHPB3oURn6ggp9YoSZ2TM+
-   PfeVAll0v7z3nBQxLlbrpDAJeZB0wmKcJo1788RQ/fPc7g+cw/oV8og2N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226168589"
+  bh=lDTtdGWFQv4uFojxTe9KdWfMrnPjgBNJKJQElnyr7lA=;
+  b=UcecmeRPABMJE/v+SHre8D11F83oYYOFP3iOBs551EGXdIPmYW73PyZl
+   Bd/eLCJOl1LpIfVPYFhoreBvjMp41dzXnAxdLVIvGEHs9smGcrZd6nMe3
+   33ulQ6lF+oivs+QDHq2pVVI4s+O5byx3ONeN4JSAR2Hhko861iWONS51h
+   1ZtxsOUar8JVRYVhuks8gaTDBGsJ7Dr8m9OAFgYnBAOlupr+3t57Sou3j
+   I63e2vKyU9k39Gw7D8Hn+gf/28lkEnJcce60JVfA/4Ujfx2x15JSavDis
+   fpW0QRxKrIJGYBuyo2o2FO7MjxmNAuHp7U8QiwjSQl/Q5wfU7G929jus/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226860279"
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="226168589"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:16:52 -0800
+   d="scan'208";a="226860279"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:15:15 -0800
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="479302265"
+   d="scan'208";a="617444132"
 Received: from kerguder-mobl.ger.corp.intel.com (HELO localhost) ([10.249.158.133])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:16:42 -0800
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:15:05 -0800
 From:   Iwona Winiarska <iwona.winiarska@intel.com>
 To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -55,11 +55,10 @@ Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         David Muller <d.mueller@elsoft.ch>,
         Dave Hansen <dave.hansen@intel.com>,
         Billy Tsai <billy_tsai@aspeedtech.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v6 10/13] hwmon: peci: Add cputemp driver
-Date:   Tue, 25 Jan 2022 02:11:01 +0100
-Message-Id: <20220125011104.2480133-11-iwona.winiarska@intel.com>
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH v6 08/13] peci: Add support for PECI device drivers
+Date:   Tue, 25 Jan 2022 02:10:59 +0100
+Message-Id: <20220125011104.2480133-9-iwona.winiarska@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220125011104.2480133-1-iwona.winiarska@intel.com>
 References: <20220125011104.2480133-1-iwona.winiarska@intel.com>
@@ -69,772 +68,614 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add peci-cputemp driver for Digital Thermal Sensor (DTS) thermal
-readings of the processor package and processor cores that are
-accessible via the PECI interface.
+Add support for PECI device drivers, which unlike PECI controller
+drivers are actually able to provide functionalities to userspace.
 
-The main use case for the driver (and PECI interface) is out-of-band
-management, where we're able to obtain the DTS readings from an external
-entity connected with PECI, e.g. BMC on server platforms.
+Also, extend peci_request API to allow querying more details about PECI
+device (e.g. model/family), that's going to be used to find a compatible
+peci_driver.
 
-Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
 ---
- MAINTAINERS                  |   6 +
- drivers/hwmon/Kconfig        |   2 +
- drivers/hwmon/Makefile       |   1 +
- drivers/hwmon/peci/Kconfig   |  18 ++
- drivers/hwmon/peci/Makefile  |   5 +
- drivers/hwmon/peci/common.h  |  58 ++++
- drivers/hwmon/peci/cputemp.c | 592 +++++++++++++++++++++++++++++++++++
- 7 files changed, 682 insertions(+)
- create mode 100644 drivers/hwmon/peci/Kconfig
- create mode 100644 drivers/hwmon/peci/Makefile
- create mode 100644 drivers/hwmon/peci/common.h
- create mode 100644 drivers/hwmon/peci/cputemp.c
+ drivers/peci/core.c     |  44 +++++++++
+ drivers/peci/device.c   | 130 ++++++++++++++++++++++++
+ drivers/peci/internal.h |  74 ++++++++++++++
+ drivers/peci/request.c  | 214 ++++++++++++++++++++++++++++++++++++++++
+ include/linux/peci.h    |  19 ++++
+ 5 files changed, 481 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7c31e29c885a..369ac3524f33 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15099,6 +15099,12 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/peaq-wmi.c
+diff --git a/drivers/peci/core.c b/drivers/peci/core.c
+index e993615cf521..9c8cf07e51c7 100644
+--- a/drivers/peci/core.c
++++ b/drivers/peci/core.c
+@@ -160,8 +160,52 @@ struct peci_controller *devm_peci_controller_add(struct device *dev,
+ }
+ EXPORT_SYMBOL_NS_GPL(devm_peci_controller_add, PECI);
  
-+PECI HARDWARE MONITORING DRIVERS
-+M:	Iwona Winiarska <iwona.winiarska@intel.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+F:	drivers/hwmon/peci/
-+
- PECI SUBSYSTEM
- M:	Iwona Winiarska <iwona.winiarska@intel.com>
- L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 8df25f1079ba..af6c3bd65ebd 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1538,6 +1538,8 @@ config SENSORS_PCF8591
- 	  These devices are hard to detect and rarely found on mainstream
- 	  hardware. If unsure, say N.
- 
-+source "drivers/hwmon/peci/Kconfig"
-+
- source "drivers/hwmon/pmbus/Kconfig"
- 
- config SENSORS_PWM_FAN
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 185f946d698b..6139e5a5aa00 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -208,6 +208,7 @@ obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
- obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
- 
- obj-$(CONFIG_SENSORS_OCC)	+= occ/
-+obj-$(CONFIG_SENSORS_PECI)	+= peci/
- obj-$(CONFIG_PMBUS)		+= pmbus/
- 
- ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-diff --git a/drivers/hwmon/peci/Kconfig b/drivers/hwmon/peci/Kconfig
-new file mode 100644
-index 000000000000..e10eed68d70a
---- /dev/null
-+++ b/drivers/hwmon/peci/Kconfig
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config SENSORS_PECI_CPUTEMP
-+	tristate "PECI CPU temperature monitoring client"
-+	depends on PECI
-+	select SENSORS_PECI
-+	select PECI_CPU
-+	help
-+	  If you say yes here you get support for the generic Intel PECI
-+	  cputemp driver which provides Digital Thermal Sensor (DTS) thermal
-+	  readings of the CPU package and CPU cores that are accessible via
-+	  the processor PECI interface.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called peci-cputemp.
-+
-+config SENSORS_PECI
-+	tristate
-diff --git a/drivers/hwmon/peci/Makefile b/drivers/hwmon/peci/Makefile
-new file mode 100644
-index 000000000000..e8a0ada5ab1f
---- /dev/null
-+++ b/drivers/hwmon/peci/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+peci-cputemp-y := cputemp.o
-+
-+obj-$(CONFIG_SENSORS_PECI_CPUTEMP)	+= peci-cputemp.o
-diff --git a/drivers/hwmon/peci/common.h b/drivers/hwmon/peci/common.h
-new file mode 100644
-index 000000000000..734506b0eca2
---- /dev/null
-+++ b/drivers/hwmon/peci/common.h
-@@ -0,0 +1,58 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2021 Intel Corporation */
-+
-+#include <linux/mutex.h>
-+#include <linux/types.h>
-+
-+#ifndef __PECI_HWMON_COMMON_H
-+#define __PECI_HWMON_COMMON_H
-+
-+#define PECI_HWMON_UPDATE_INTERVAL	HZ
-+
-+/**
-+ * struct peci_sensor_state - PECI state information
-+ * @valid: flag to indicate the sensor value is valid
-+ * @last_updated: time of the last update in jiffies
-+ * @lock: mutex to protect sensor access
-+ */
-+struct peci_sensor_state {
-+	bool valid;
-+	unsigned long last_updated;
-+	struct mutex lock; /* protect sensor access */
-+};
-+
-+/**
-+ * struct peci_sensor_data - PECI sensor information
-+ * @value: sensor value in milli units
-+ * @state: sensor update state
-+ */
-+
-+struct peci_sensor_data {
-+	s32 value;
-+	struct peci_sensor_state state;
-+};
-+
-+/**
-+ * peci_sensor_need_update() - check whether sensor update is needed or not
-+ * @sensor: pointer to sensor data struct
-+ *
-+ * Return: true if update is needed, false if not.
-+ */
-+
-+static inline bool peci_sensor_need_update(struct peci_sensor_state *state)
++static const struct peci_device_id *
++peci_bus_match_device_id(const struct peci_device_id *id, struct peci_device *device)
 +{
-+	return !state->valid ||
-+	       time_after(jiffies, state->last_updated + PECI_HWMON_UPDATE_INTERVAL);
++	while (id->family != 0) {
++		if (id->family == device->info.family &&
++		    id->model == device->info.model)
++			return id;
++		id++;
++	}
++
++	return NULL;
 +}
 +
-+/**
-+ * peci_sensor_mark_updated() - mark the sensor is updated
-+ * @sensor: pointer to sensor data struct
-+ */
-+static inline void peci_sensor_mark_updated(struct peci_sensor_state *state)
++static int peci_bus_device_match(struct device *dev, struct device_driver *drv)
 +{
-+	state->valid = true;
-+	state->last_updated = jiffies;
-+}
++	struct peci_device *device = to_peci_device(dev);
++	struct peci_driver *peci_drv = to_peci_driver(drv);
 +
-+#endif /* __PECI_HWMON_COMMON_H */
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-new file mode 100644
-index 000000000000..12156328f5cf
---- /dev/null
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -0,0 +1,592 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2018-2021 Intel Corporation
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/hwmon.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+#include <linux/peci.h>
-+#include <linux/peci-cpu.h>
-+#include <linux/units.h>
-+
-+#include "common.h"
-+
-+#define CORE_NUMS_MAX		64
-+
-+#define BASE_CHANNEL_NUMS	5
-+#define CPUTEMP_CHANNEL_NUMS	(BASE_CHANNEL_NUMS + CORE_NUMS_MAX)
-+
-+#define TEMP_TARGET_FAN_TEMP_MASK	GENMASK(15, 8)
-+#define TEMP_TARGET_REF_TEMP_MASK	GENMASK(23, 16)
-+#define TEMP_TARGET_TJ_OFFSET_MASK	GENMASK(29, 24)
-+
-+#define DTS_MARGIN_MASK		GENMASK(15, 0)
-+#define PCS_MODULE_TEMP_MASK	GENMASK(15, 0)
-+
-+struct resolved_cores_reg {
-+	u8 bus;
-+	u8 dev;
-+	u8 func;
-+	u8 offset;
-+};
-+
-+struct cpu_info {
-+	struct resolved_cores_reg *reg;
-+	u8 min_peci_revision;
-+	s32 (*thermal_margin_to_millidegree)(u16 val);
-+};
-+
-+struct peci_temp_target {
-+	s32 tcontrol;
-+	s32 tthrottle;
-+	s32 tjmax;
-+	struct peci_sensor_state state;
-+};
-+
-+enum peci_temp_target_type {
-+	tcontrol_type,
-+	tthrottle_type,
-+	tjmax_type,
-+	crit_hyst_type,
-+};
-+
-+struct peci_cputemp {
-+	struct peci_device *peci_dev;
-+	struct device *dev;
-+	const char *name;
-+	const struct cpu_info *gen_info;
-+	struct {
-+		struct peci_temp_target target;
-+		struct peci_sensor_data die;
-+		struct peci_sensor_data dts;
-+		struct peci_sensor_data core[CORE_NUMS_MAX];
-+	} temp;
-+	const char **coretemp_label;
-+	DECLARE_BITMAP(core_mask, CORE_NUMS_MAX);
-+};
-+
-+enum cputemp_channels {
-+	channel_die,
-+	channel_dts,
-+	channel_tcontrol,
-+	channel_tthrottle,
-+	channel_tjmax,
-+	channel_core,
-+};
-+
-+static const char * const cputemp_label[BASE_CHANNEL_NUMS] = {
-+	"Die",
-+	"DTS",
-+	"Tcontrol",
-+	"Tthrottle",
-+	"Tjmax",
-+};
-+
-+static int update_temp_target(struct peci_cputemp *priv)
-+{
-+	s32 tthrottle_offset, tcontrol_margin;
-+	u32 pcs;
-+	int ret;
-+
-+	if (!peci_sensor_need_update(&priv->temp.target.state))
++	if (dev->type != &peci_device_type)
 +		return 0;
 +
-+	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_TEMP_TARGET, 0, &pcs);
++	return !!peci_bus_match_device_id(peci_drv->id_table, device);
++}
++
++static int peci_bus_device_probe(struct device *dev)
++{
++	struct peci_device *device = to_peci_device(dev);
++	struct peci_driver *driver = to_peci_driver(dev->driver);
++
++	return driver->probe(device, peci_bus_match_device_id(driver->id_table, device));
++}
++
++static void peci_bus_device_remove(struct device *dev)
++{
++	struct peci_device *device = to_peci_device(dev);
++	struct peci_driver *driver = to_peci_driver(dev->driver);
++
++	if (driver->remove)
++		driver->remove(device);
++}
++
+ struct bus_type peci_bus_type = {
+ 	.name		= "peci",
++	.match		= peci_bus_device_match,
++	.probe		= peci_bus_device_probe,
++	.remove		= peci_bus_device_remove,
+ 	.bus_groups	= peci_bus_groups,
+ };
+ 
+diff --git a/drivers/peci/device.c b/drivers/peci/device.c
+index d10ed1cfcd48..184b5e650b0b 100644
+--- a/drivers/peci/device.c
++++ b/drivers/peci/device.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ // Copyright (c) 2018-2021 Intel Corporation
+ 
++#include <linux/bitfield.h>
+ #include <linux/peci.h>
+ #include <linux/slab.h>
+ 
+@@ -13,6 +14,104 @@
+  */
+ static DEFINE_MUTEX(peci_device_del_lock);
+ 
++#define REVISION_NUM_MASK GENMASK(15, 8)
++static int peci_get_revision(struct peci_device *device, u8 *revision)
++{
++	struct peci_request *req;
++	u64 dib;
++
++	req = peci_xfer_get_dib(device);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
++
++	/*
++	 * PECI device may be in a state where it is unable to return a proper
++	 * DIB, in which case it returns 0 as DIB value.
++	 * Let's treat this as an error to avoid carrying on with the detection
++	 * using invalid revision.
++	 */
++	dib = peci_request_dib_read(req);
++	if (dib == 0) {
++		peci_request_free(req);
++		return -EIO;
++	}
++
++	*revision = FIELD_GET(REVISION_NUM_MASK, dib);
++
++	peci_request_free(req);
++
++	return 0;
++}
++
++static int peci_get_cpu_id(struct peci_device *device, u32 *cpu_id)
++{
++	struct peci_request *req;
++	int ret;
++
++	req = peci_xfer_pkg_cfg_readl(device, PECI_PCS_PKG_ID, PECI_PKG_ID_CPU_ID);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
++
++	ret = peci_request_status(req);
++	if (ret)
++		goto out_req_free;
++
++	*cpu_id = peci_request_data_readl(req);
++out_req_free:
++	peci_request_free(req);
++
++	return ret;
++}
++
++static unsigned int peci_x86_cpu_family(unsigned int sig)
++{
++	unsigned int x86;
++
++	x86 = (sig >> 8) & 0xf;
++
++	if (x86 == 0xf)
++		x86 += (sig >> 20) & 0xff;
++
++	return x86;
++}
++
++static unsigned int peci_x86_cpu_model(unsigned int sig)
++{
++	unsigned int fam, model;
++
++	fam = peci_x86_cpu_family(sig);
++
++	model = (sig >> 4) & 0xf;
++
++	if (fam >= 0x6)
++		model += ((sig >> 16) & 0xf) << 4;
++
++	return model;
++}
++
++static int peci_device_info_init(struct peci_device *device)
++{
++	u8 revision;
++	u32 cpu_id;
++	int ret;
++
++	ret = peci_get_cpu_id(device, &cpu_id);
 +	if (ret)
 +		return ret;
 +
-+	priv->temp.target.tjmax =
-+		FIELD_GET(TEMP_TARGET_REF_TEMP_MASK, pcs) * MILLIDEGREE_PER_DEGREE;
++	device->info.family = peci_x86_cpu_family(cpu_id);
++	device->info.model = peci_x86_cpu_model(cpu_id);
 +
-+	tcontrol_margin = FIELD_GET(TEMP_TARGET_FAN_TEMP_MASK, pcs);
-+	tcontrol_margin = sign_extend32(tcontrol_margin, 7) * MILLIDEGREE_PER_DEGREE;
-+	priv->temp.target.tcontrol = priv->temp.target.tjmax - tcontrol_margin;
++	ret = peci_get_revision(device, &revision);
++	if (ret)
++		return ret;
++	device->info.peci_revision = revision;
 +
-+	tthrottle_offset = FIELD_GET(TEMP_TARGET_TJ_OFFSET_MASK, pcs) * MILLIDEGREE_PER_DEGREE;
-+	priv->temp.target.tthrottle = priv->temp.target.tjmax - tthrottle_offset;
-+
-+	peci_sensor_mark_updated(&priv->temp.target.state);
++	device->info.socket_id = device->addr - PECI_BASE_ADDR;
 +
 +	return 0;
 +}
 +
-+static int get_temp_target(struct peci_cputemp *priv, enum peci_temp_target_type type, long *val)
+ static int peci_detect(struct peci_controller *controller, u8 addr)
+ {
+ 	/*
+@@ -82,6 +181,10 @@ int peci_device_create(struct peci_controller *controller, u8 addr)
+ 	device->dev.bus = &peci_bus_type;
+ 	device->dev.type = &peci_device_type;
+ 
++	ret = peci_device_info_init(device);
++	if (ret)
++		goto err_put;
++
+ 	ret = dev_set_name(&device->dev, "%d-%02x", controller->id, device->addr);
+ 	if (ret)
+ 		goto err_put;
+@@ -108,6 +211,33 @@ void peci_device_destroy(struct peci_device *device)
+ 	mutex_unlock(&peci_device_del_lock);
+ }
+ 
++int __peci_driver_register(struct peci_driver *driver, struct module *owner,
++			   const char *mod_name)
 +{
++	driver->driver.bus = &peci_bus_type;
++	driver->driver.owner = owner;
++	driver->driver.mod_name = mod_name;
++
++	if (!driver->probe) {
++		pr_err("peci: trying to register driver without probe callback\n");
++		return -EINVAL;
++	}
++
++	if (!driver->id_table) {
++		pr_err("peci: trying to register driver without device id table\n");
++		return -EINVAL;
++	}
++
++	return driver_register(&driver->driver);
++}
++EXPORT_SYMBOL_NS_GPL(__peci_driver_register, PECI);
++
++void peci_driver_unregister(struct peci_driver *driver)
++{
++	driver_unregister(&driver->driver);
++}
++EXPORT_SYMBOL_NS_GPL(peci_driver_unregister, PECI);
++
+ static void peci_device_release(struct device *dev)
+ {
+ 	struct peci_device *device = to_peci_device(dev);
+diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
+index 978e12c8e1d3..52c02e12874f 100644
+--- a/drivers/peci/internal.h
++++ b/drivers/peci/internal.h
+@@ -19,6 +19,35 @@ struct peci_request;
+ struct peci_request *peci_request_alloc(struct peci_device *device, u8 tx_len, u8 rx_len);
+ void peci_request_free(struct peci_request *req);
+ 
++int peci_request_status(struct peci_request *req);
++
++u64 peci_request_dib_read(struct peci_request *req);
++
++u8 peci_request_data_readb(struct peci_request *req);
++u16 peci_request_data_readw(struct peci_request *req);
++u32 peci_request_data_readl(struct peci_request *req);
++u64 peci_request_data_readq(struct peci_request *req);
++
++struct peci_request *peci_xfer_get_dib(struct peci_device *device);
++struct peci_request *peci_xfer_get_temp(struct peci_device *device);
++
++struct peci_request *peci_xfer_pkg_cfg_readb(struct peci_device *device, u8 index, u16 param);
++struct peci_request *peci_xfer_pkg_cfg_readw(struct peci_device *device, u8 index, u16 param);
++struct peci_request *peci_xfer_pkg_cfg_readl(struct peci_device *device, u8 index, u16 param);
++struct peci_request *peci_xfer_pkg_cfg_readq(struct peci_device *device, u8 index, u16 param);
++
++/**
++ * struct peci_device_id - PECI device data to match
++ * @data: pointer to driver private data specific to device
++ * @family: device family
++ * @model: device model
++ */
++struct peci_device_id {
++	const void *data;
++	u16 family;
++	u8 model;
++};
++
+ extern struct device_type peci_device_type;
+ extern const struct attribute_group *peci_device_groups[];
+ 
+@@ -28,6 +57,51 @@ void peci_device_destroy(struct peci_device *device);
+ extern struct bus_type peci_bus_type;
+ extern const struct attribute_group *peci_bus_groups[];
+ 
++/**
++ * struct peci_driver - PECI driver
++ * @driver: inherit device driver
++ * @probe: probe callback
++ * @remove: remove callback
++ * @id_table: PECI device match table to decide which device to bind
++ */
++struct peci_driver {
++	struct device_driver driver;
++	int (*probe)(struct peci_device *device, const struct peci_device_id *id);
++	void (*remove)(struct peci_device *device);
++	const struct peci_device_id *id_table;
++};
++
++static inline struct peci_driver *to_peci_driver(struct device_driver *d)
++{
++	return container_of(d, struct peci_driver, driver);
++}
++
++int __peci_driver_register(struct peci_driver *driver, struct module *owner,
++			   const char *mod_name);
++/**
++ * peci_driver_register() - register PECI driver
++ * @driver: the driver to be registered
++ *
++ * PECI drivers that don't need to do anything special in module init should
++ * use the convenience "module_peci_driver" macro instead
++ *
++ * Return: zero on success, else a negative error code.
++ */
++#define peci_driver_register(driver) \
++	__peci_driver_register(driver, THIS_MODULE, KBUILD_MODNAME)
++void peci_driver_unregister(struct peci_driver *driver);
++
++/**
++ * module_peci_driver() - helper macro for registering a modular PECI driver
++ * @__peci_driver: peci_driver struct
++ *
++ * Helper macro for PECI drivers which do not do anything special in module
++ * init/exit. This eliminates a lot of boilerplate. Each module may only
++ * use this macro once, and calling it replaces module_init() and module_exit()
++ */
++#define module_peci_driver(__peci_driver) \
++	module_driver(__peci_driver, peci_driver_register, peci_driver_unregister)
++
+ extern struct device_type peci_controller_type;
+ 
+ int peci_controller_scan_devices(struct peci_controller *controller);
+diff --git a/drivers/peci/request.c b/drivers/peci/request.c
+index 7dee51c50dd2..a49eb351cda3 100644
+--- a/drivers/peci/request.c
++++ b/drivers/peci/request.c
+@@ -1,13 +1,140 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ // Copyright (c) 2021 Intel Corporation
+ 
++#include <linux/bug.h>
+ #include <linux/export.h>
+ #include <linux/peci.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+ 
++#include <asm/unaligned.h>
++
+ #include "internal.h"
+ 
++#define PECI_GET_DIB_CMD		0xf7
++#define  PECI_GET_DIB_WR_LEN		1
++#define  PECI_GET_DIB_RD_LEN		8
++
++#define PECI_RDPKGCFG_CMD		0xa1
++#define  PECI_RDPKGCFG_WR_LEN		5
++#define  PECI_RDPKGCFG_RD_LEN_BASE	1
++#define PECI_WRPKGCFG_CMD		0xa5
++#define  PECI_WRPKGCFG_WR_LEN_BASE	6
++#define  PECI_WRPKGCFG_RD_LEN		1
++
++/* Device Specific Completion Code (CC) Definition */
++#define PECI_CC_SUCCESS				0x40
++#define PECI_CC_NEED_RETRY			0x80
++#define PECI_CC_OUT_OF_RESOURCE			0x81
++#define PECI_CC_UNAVAIL_RESOURCE		0x82
++#define PECI_CC_INVALID_REQ			0x90
++#define PECI_CC_MCA_ERROR			0x91
++#define PECI_CC_CATASTROPHIC_MCA_ERROR		0x93
++#define PECI_CC_FATAL_MCA_ERROR			0x94
++#define PECI_CC_PARITY_ERR_GPSB_OR_PMSB		0x98
++#define PECI_CC_PARITY_ERR_GPSB_OR_PMSB_IERR	0x9B
++#define PECI_CC_PARITY_ERR_GPSB_OR_PMSB_MCA	0x9C
++
++#define PECI_RETRY_BIT			BIT(0)
++
++#define PECI_RETRY_TIMEOUT		msecs_to_jiffies(700)
++#define PECI_RETRY_INTERVAL_MIN		msecs_to_jiffies(1)
++#define PECI_RETRY_INTERVAL_MAX		msecs_to_jiffies(128)
++
++static u8 peci_request_data_cc(struct peci_request *req)
++{
++	return req->rx.buf[0];
++}
++
++/**
++ * peci_request_status() - return -errno based on PECI completion code
++ * @req: the PECI request that contains response data with completion code
++ *
++ * It can't be used for Ping(), GetDIB() and GetTemp() - for those commands we
++ * don't expect completion code in the response.
++ *
++ * Return: -errno
++ */
++int peci_request_status(struct peci_request *req)
++{
++	u8 cc = peci_request_data_cc(req);
++
++	if (cc != PECI_CC_SUCCESS)
++		dev_dbg(&req->device->dev, "ret: %#02x\n", cc);
++
++	switch (cc) {
++	case PECI_CC_SUCCESS:
++		return 0;
++	case PECI_CC_NEED_RETRY:
++	case PECI_CC_OUT_OF_RESOURCE:
++	case PECI_CC_UNAVAIL_RESOURCE:
++		return -EAGAIN;
++	case PECI_CC_INVALID_REQ:
++		return -EINVAL;
++	case PECI_CC_MCA_ERROR:
++	case PECI_CC_CATASTROPHIC_MCA_ERROR:
++	case PECI_CC_FATAL_MCA_ERROR:
++	case PECI_CC_PARITY_ERR_GPSB_OR_PMSB:
++	case PECI_CC_PARITY_ERR_GPSB_OR_PMSB_IERR:
++	case PECI_CC_PARITY_ERR_GPSB_OR_PMSB_MCA:
++		return -EIO;
++	}
++
++	WARN_ONCE(1, "Unknown PECI completion code: %#02x\n", cc);
++
++	return -EIO;
++}
++EXPORT_SYMBOL_NS_GPL(peci_request_status, PECI);
++
++static int peci_request_xfer(struct peci_request *req)
++{
++	struct peci_device *device = req->device;
++	struct peci_controller *controller = to_peci_controller(device->dev.parent);
 +	int ret;
 +
-+	mutex_lock(&priv->temp.target.state.lock);
-+
-+	ret = update_temp_target(priv);
-+	if (ret)
-+		goto unlock;
-+
-+	switch (type) {
-+	case tcontrol_type:
-+		*val = priv->temp.target.tcontrol;
-+		break;
-+	case tthrottle_type:
-+		*val = priv->temp.target.tthrottle;
-+		break;
-+	case tjmax_type:
-+		*val = priv->temp.target.tjmax;
-+		break;
-+	case crit_hyst_type:
-+		*val = priv->temp.target.tjmax - priv->temp.target.tcontrol;
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
-+	}
-+unlock:
-+	mutex_unlock(&priv->temp.target.state.lock);
++	mutex_lock(&controller->bus_lock);
++	ret = controller->ops->xfer(controller, device->addr, req);
++	mutex_unlock(&controller->bus_lock);
 +
 +	return ret;
 +}
 +
-+/*
-+ * Error codes:
-+ *   0x8000: General sensor error
-+ *   0x8001: Reserved
-+ *   0x8002: Underflow on reading value
-+ *   0x8003-0x81ff: Reserved
-+ */
-+static bool dts_valid(u16 val)
++static int peci_request_xfer_retry(struct peci_request *req)
 +{
-+	return val < 0x8000 || val > 0x81ff;
-+}
++	long wait_interval = PECI_RETRY_INTERVAL_MIN;
++	struct peci_device *device = req->device;
++	struct peci_controller *controller = to_peci_controller(device->dev.parent);
++	unsigned long start = jiffies;
++	int ret;
 +
-+/*
-+ * Processors return a value of DTS reading in S10.6 fixed point format
-+ * (16 bits: 10-bit signed magnitude, 6-bit fraction).
-+ */
-+static s32 dts_ten_dot_six_to_millidegree(u16 val)
-+{
-+	return sign_extend32(val, 15) * MILLIDEGREE_PER_DEGREE / 64;
-+}
-+
-+/*
-+ * For older processors, thermal margin reading is returned in S8.8 fixed
-+ * point format (16 bits: 8-bit signed magnitude, 8-bit fraction).
-+ */
-+static s32 dts_eight_dot_eight_to_millidegree(u16 val)
-+{
-+	return sign_extend32(val, 15) * MILLIDEGREE_PER_DEGREE / 256;
-+}
-+
-+static int get_die_temp(struct peci_cputemp *priv, long *val)
-+{
-+	int ret = 0;
-+	long tjmax;
-+	u16 temp;
-+
-+	mutex_lock(&priv->temp.die.state.lock);
-+	if (!peci_sensor_need_update(&priv->temp.die.state))
-+		goto skip_update;
-+
-+	ret = peci_temp_read(priv->peci_dev, &temp);
-+	if (ret)
-+		goto err_unlock;
-+
-+	if (!dts_valid(temp)) {
-+		ret = -EIO;
-+		goto err_unlock;
-+	}
-+
-+	ret = get_temp_target(priv, tjmax_type, &tjmax);
-+	if (ret)
-+		goto err_unlock;
-+
-+	priv->temp.die.value = (s32)tjmax + dts_ten_dot_six_to_millidegree(temp);
-+
-+	peci_sensor_mark_updated(&priv->temp.die.state);
-+
-+skip_update:
-+	*val = priv->temp.die.value;
-+err_unlock:
-+	mutex_unlock(&priv->temp.die.state.lock);
-+	return ret;
-+}
-+
-+static int get_dts(struct peci_cputemp *priv, long *val)
-+{
-+	int ret = 0;
-+	u16 thermal_margin;
-+	long tcontrol;
-+	u32 pcs;
-+
-+	mutex_lock(&priv->temp.dts.state.lock);
-+	if (!peci_sensor_need_update(&priv->temp.dts.state))
-+		goto skip_update;
-+
-+	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_THERMAL_MARGIN, 0, &pcs);
-+	if (ret)
-+		goto err_unlock;
-+
-+	thermal_margin = FIELD_GET(DTS_MARGIN_MASK, pcs);
-+	if (!dts_valid(thermal_margin)) {
-+		ret = -EIO;
-+		goto err_unlock;
-+	}
-+
-+	ret = get_temp_target(priv, tcontrol_type, &tcontrol);
-+	if (ret)
-+		goto err_unlock;
-+
-+	/* Note that the tcontrol should be available before calling it */
-+	priv->temp.dts.value =
-+		(s32)tcontrol - priv->gen_info->thermal_margin_to_millidegree(thermal_margin);
-+
-+	peci_sensor_mark_updated(&priv->temp.dts.state);
-+
-+skip_update:
-+	*val = priv->temp.dts.value;
-+err_unlock:
-+	mutex_unlock(&priv->temp.dts.state.lock);
-+	return ret;
-+}
-+
-+static int get_core_temp(struct peci_cputemp *priv, int core_index, long *val)
-+{
-+	int ret = 0;
-+	u16 core_dts_margin;
-+	long tjmax;
-+	u32 pcs;
-+
-+	mutex_lock(&priv->temp.core[core_index].state.lock);
-+	if (!peci_sensor_need_update(&priv->temp.core[core_index].state))
-+		goto skip_update;
-+
-+	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_MODULE_TEMP, core_index, &pcs);
-+	if (ret)
-+		goto err_unlock;
-+
-+	core_dts_margin = FIELD_GET(PCS_MODULE_TEMP_MASK, pcs);
-+	if (!dts_valid(core_dts_margin)) {
-+		ret = -EIO;
-+		goto err_unlock;
-+	}
-+
-+	ret = get_temp_target(priv, tjmax_type, &tjmax);
-+	if (ret)
-+		goto err_unlock;
-+
-+	/* Note that the tjmax should be available before calling it */
-+	priv->temp.core[core_index].value =
-+		(s32)tjmax + dts_ten_dot_six_to_millidegree(core_dts_margin);
-+
-+	peci_sensor_mark_updated(&priv->temp.core[core_index].state);
-+
-+skip_update:
-+	*val = priv->temp.core[core_index].value;
-+err_unlock:
-+	mutex_unlock(&priv->temp.core[core_index].state.lock);
-+	return ret;
-+}
-+
-+static int cputemp_read_string(struct device *dev, enum hwmon_sensor_types type,
-+			       u32 attr, int channel, const char **str)
-+{
-+	struct peci_cputemp *priv = dev_get_drvdata(dev);
-+
-+	if (attr != hwmon_temp_label)
-+		return -EOPNOTSUPP;
-+
-+	*str = channel < channel_core ?
-+		cputemp_label[channel] : priv->coretemp_label[channel - channel_core];
-+
-+	return 0;
-+}
-+
-+static int cputemp_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	struct peci_cputemp *priv = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		switch (channel) {
-+		case channel_die:
-+			return get_die_temp(priv, val);
-+		case channel_dts:
-+			return get_dts(priv, val);
-+		case channel_tcontrol:
-+			return get_temp_target(priv, tcontrol_type, val);
-+		case channel_tthrottle:
-+			return get_temp_target(priv, tthrottle_type, val);
-+		case channel_tjmax:
-+			return get_temp_target(priv, tjmax_type, val);
-+		default:
-+			return get_core_temp(priv, channel - channel_core, val);
-+		}
-+		break;
-+	case hwmon_temp_max:
-+		return get_temp_target(priv, tcontrol_type, val);
-+	case hwmon_temp_crit:
-+		return get_temp_target(priv, tjmax_type, val);
-+	case hwmon_temp_crit_hyst:
-+		return get_temp_target(priv, crit_hyst_type, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static umode_t cputemp_is_visible(const void *data, enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
-+{
-+	const struct peci_cputemp *priv = data;
-+
-+	if (channel > CPUTEMP_CHANNEL_NUMS)
++	/* Don't try to use it for ping */
++	if (WARN_ON(req->tx.len == 0))
 +		return 0;
 +
-+	if (channel < channel_core)
-+		return 0444;
++	do {
++		ret = peci_request_xfer(req);
++		if (ret) {
++			dev_dbg(&controller->dev, "xfer error: %d\n", ret);
++			return ret;
++		}
 +
-+	if (test_bit(channel - channel_core, priv->core_mask))
-+		return 0444;
++		if (peci_request_status(req) != -EAGAIN)
++			return 0;
 +
-+	return 0;
++		/* Set the retry bit to indicate a retry attempt */
++		req->tx.buf[1] |= PECI_RETRY_BIT;
++
++		if (schedule_timeout_interruptible(wait_interval))
++			return -ERESTARTSYS;
++
++		wait_interval = min_t(long, wait_interval * 2, PECI_RETRY_INTERVAL_MAX);
++	} while (time_before(jiffies, start + PECI_RETRY_TIMEOUT));
++
++	dev_dbg(&controller->dev, "request timed out\n");
++
++	return -ETIMEDOUT;
 +}
 +
-+static int init_core_mask(struct peci_cputemp *priv)
+ /**
+  * peci_request_alloc() - allocate &struct peci_requests
+  * @device: PECI device to which request is going to be sent
+@@ -53,3 +180,90 @@ void peci_request_free(struct peci_request *req)
+ 	kfree(req);
+ }
+ EXPORT_SYMBOL_NS_GPL(peci_request_free, PECI);
++
++struct peci_request *peci_xfer_get_dib(struct peci_device *device)
 +{
-+	struct peci_device *peci_dev = priv->peci_dev;
-+	struct resolved_cores_reg *reg = priv->gen_info->reg;
-+	u64 core_mask;
-+	u32 data;
++	struct peci_request *req;
 +	int ret;
 +
-+	/* Get the RESOLVED_CORES register value */
-+	switch (peci_dev->info.model) {
-+	case INTEL_FAM6_ICELAKE_X:
-+	case INTEL_FAM6_ICELAKE_D:
-+		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
-+					     reg->func, reg->offset + 4, &data);
-+		if (ret)
-+			return ret;
++	req = peci_request_alloc(device, PECI_GET_DIB_WR_LEN, PECI_GET_DIB_RD_LEN);
++	if (!req)
++		return ERR_PTR(-ENOMEM);
 +
-+		core_mask = (u64)data << 32;
++	req->tx.buf[0] = PECI_GET_DIB_CMD;
 +
-+		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
-+					     reg->func, reg->offset, &data);
-+		if (ret)
-+			return ret;
-+
-+		core_mask |= data;
-+
-+		break;
-+	default:
-+		ret = peci_pci_local_read(peci_dev, reg->bus, reg->dev,
-+					  reg->func, reg->offset, &data);
-+		if (ret)
-+			return ret;
-+
-+		core_mask = data;
-+
-+		break;
++	ret = peci_request_xfer(req);
++	if (ret) {
++		peci_request_free(req);
++		return ERR_PTR(ret);
 +	}
 +
-+	if (!core_mask)
-+		return -EIO;
-+
-+	bitmap_from_u64(priv->core_mask, core_mask);
-+
-+	return 0;
++	return req;
 +}
++EXPORT_SYMBOL_NS_GPL(peci_xfer_get_dib, PECI);
 +
-+static int create_temp_label(struct peci_cputemp *priv)
++static struct peci_request *
++__pkg_cfg_read(struct peci_device *device, u8 index, u16 param, u8 len)
 +{
-+	unsigned long core_max = find_last_bit(priv->core_mask, CORE_NUMS_MAX);
-+	int i;
++	struct peci_request *req;
++	int ret;
 +
-+	priv->coretemp_label = devm_kzalloc(priv->dev, core_max * sizeof(char *), GFP_KERNEL);
-+	if (!priv->coretemp_label)
-+		return -ENOMEM;
++	req = peci_request_alloc(device, PECI_RDPKGCFG_WR_LEN, PECI_RDPKGCFG_RD_LEN_BASE + len);
++	if (!req)
++		return ERR_PTR(-ENOMEM);
 +
-+	for_each_set_bit(i, priv->core_mask, CORE_NUMS_MAX) {
-+		priv->coretemp_label[i] = devm_kasprintf(priv->dev, GFP_KERNEL, "Core %d", i);
-+		if (!priv->coretemp_label[i])
-+			return -ENOMEM;
++	req->tx.buf[0] = PECI_RDPKGCFG_CMD;
++	req->tx.buf[1] = 0;
++	req->tx.buf[2] = index;
++	put_unaligned_le16(param, &req->tx.buf[3]);
++
++	ret = peci_request_xfer_retry(req);
++	if (ret) {
++		peci_request_free(req);
++		return ERR_PTR(ret);
 +	}
 +
-+	return 0;
++	return req;
 +}
 +
-+static void check_resolved_cores(struct peci_cputemp *priv)
++u8 peci_request_data_readb(struct peci_request *req)
 +{
-+	/*
-+	 * Failure to resolve cores is non-critical, we're still able to
-+	 * provide other sensor data.
-+	 */
-+
-+	if (init_core_mask(priv))
-+		return;
-+
-+	if (create_temp_label(priv))
-+		bitmap_zero(priv->core_mask, CORE_NUMS_MAX);
++	return req->rx.buf[1];
 +}
++EXPORT_SYMBOL_NS_GPL(peci_request_data_readb, PECI);
 +
-+static void sensor_init(struct peci_cputemp *priv)
++u16 peci_request_data_readw(struct peci_request *req)
 +{
-+	int i;
-+
-+	mutex_init(&priv->temp.target.state.lock);
-+	mutex_init(&priv->temp.die.state.lock);
-+	mutex_init(&priv->temp.dts.state.lock);
-+
-+	for_each_set_bit(i, priv->core_mask, CORE_NUMS_MAX)
-+		mutex_init(&priv->temp.core[i].state.lock);
++	return get_unaligned_le16(&req->rx.buf[1]);
 +}
++EXPORT_SYMBOL_NS_GPL(peci_request_data_readw, PECI);
 +
-+static const struct hwmon_ops peci_cputemp_ops = {
-+	.is_visible = cputemp_is_visible,
-+	.read_string = cputemp_read_string,
-+	.read = cputemp_read,
-+};
-+
-+static const u32 peci_cputemp_temp_channel_config[] = {
-+	/* Die temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST,
-+	/* DTS margin */
-+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST,
-+	/* Tcontrol temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_CRIT,
-+	/* Tthrottle temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT,
-+	/* Tjmax temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT,
-+	/* Core temperature - for all core channels */
-+	[channel_core ... CPUTEMP_CHANNEL_NUMS - 1] = HWMON_T_LABEL | HWMON_T_INPUT,
-+	0
-+};
-+
-+static const struct hwmon_channel_info peci_cputemp_temp_channel = {
-+	.type = hwmon_temp,
-+	.config = peci_cputemp_temp_channel_config,
-+};
-+
-+static const struct hwmon_channel_info *peci_cputemp_info[] = {
-+	&peci_cputemp_temp_channel,
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info peci_cputemp_chip_info = {
-+	.ops = &peci_cputemp_ops,
-+	.info = peci_cputemp_info,
-+};
-+
-+static int peci_cputemp_probe(struct auxiliary_device *adev,
-+			      const struct auxiliary_device_id *id)
++u32 peci_request_data_readl(struct peci_request *req)
 +{
-+	struct device *dev = &adev->dev;
-+	struct peci_device *peci_dev = to_peci_device(dev->parent);
-+	struct peci_cputemp *priv;
-+	struct device *hwmon_dev;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->name = devm_kasprintf(dev, GFP_KERNEL, "peci_cputemp.cpu%d",
-+				    peci_dev->info.socket_id);
-+	if (!priv->name)
-+		return -ENOMEM;
-+
-+	priv->dev = dev;
-+	priv->peci_dev = peci_dev;
-+	priv->gen_info = (const struct cpu_info *)id->driver_data;
-+
-+	/*
-+	 * This is just a sanity check. Since we're using commands that are
-+	 * guaranteed to be supported on a given platform, we should never see
-+	 * revision lower than expected.
-+	 */
-+	if (peci_dev->info.peci_revision < priv->gen_info->min_peci_revision)
-+		dev_warn(priv->dev,
-+			 "Unexpected PECI revision %#x, some features may be unavailable\n",
-+			 peci_dev->info.peci_revision);
-+
-+	check_resolved_cores(priv);
-+
-+	sensor_init(priv);
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(priv->dev, priv->name,
-+							 priv, &peci_cputemp_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
++	return get_unaligned_le32(&req->rx.buf[1]);
 +}
++EXPORT_SYMBOL_NS_GPL(peci_request_data_readl, PECI);
 +
-+/*
-+ * RESOLVED_CORES PCI configuration register may have different location on
-+ * different platforms.
-+ */
-+static struct resolved_cores_reg resolved_cores_reg_hsx = {
-+	.bus = 1,
-+	.dev = 30,
-+	.func = 3,
-+	.offset = 0xb4,
-+};
++u64 peci_request_data_readq(struct peci_request *req)
++{
++	return get_unaligned_le64(&req->rx.buf[1]);
++}
++EXPORT_SYMBOL_NS_GPL(peci_request_data_readq, PECI);
 +
-+static struct resolved_cores_reg resolved_cores_reg_icx = {
-+	.bus = 14,
-+	.dev = 30,
-+	.func = 3,
-+	.offset = 0xd0,
-+};
++u64 peci_request_dib_read(struct peci_request *req)
++{
++	return get_unaligned_le64(&req->rx.buf[0]);
++}
++EXPORT_SYMBOL_NS_GPL(peci_request_dib_read, PECI);
 +
-+static const struct cpu_info cpu_hsx = {
-+	.reg		= &resolved_cores_reg_hsx,
-+	.min_peci_revision = 0x33,
-+	.thermal_margin_to_millidegree = &dts_eight_dot_eight_to_millidegree,
-+};
++#define __read_pkg_config(x, type) \
++struct peci_request *peci_xfer_pkg_cfg_##x(struct peci_device *device, u8 index, u16 param) \
++{ \
++	return __pkg_cfg_read(device, index, param, sizeof(type)); \
++} \
++EXPORT_SYMBOL_NS_GPL(peci_xfer_pkg_cfg_##x, PECI)
 +
-+static const struct cpu_info cpu_icx = {
-+	.reg		= &resolved_cores_reg_icx,
-+	.min_peci_revision = 0x40,
-+	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
-+};
++__read_pkg_config(readb, u8);
++__read_pkg_config(readw, u16);
++__read_pkg_config(readl, u32);
++__read_pkg_config(readq, u64);
+diff --git a/include/linux/peci.h b/include/linux/peci.h
+index 7e35673f3786..4eda423ba10c 100644
+--- a/include/linux/peci.h
++++ b/include/linux/peci.h
+@@ -14,6 +14,14 @@
+  */
+ #define PECI_REQUEST_MAX_BUF_SIZE 32
+ 
++#define PECI_PCS_PKG_ID			0  /* Package Identifier Read */
++#define  PECI_PKG_ID_CPU_ID		0x0000  /* CPUID Info */
++#define  PECI_PKG_ID_PLATFORM_ID	0x0001  /* Platform ID */
++#define  PECI_PKG_ID_DEVICE_ID		0x0002  /* Uncore Device ID */
++#define  PECI_PKG_ID_MAX_THREAD_ID	0x0003  /* Max Thread ID */
++#define  PECI_PKG_ID_MICROCODE_REV	0x0004  /* CPU Microcode Update Revision */
++#define  PECI_PKG_ID_MCA_ERROR_LOG	0x0005  /* Machine Check Status */
 +
-+static const struct auxiliary_device_id peci_cputemp_ids[] = {
-+	{
-+		.name = "peci_cpu.cputemp.hsx",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.bdx",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.bdxd",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.skx",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.icx",
-+		.driver_data = (kernel_ulong_t)&cpu_icx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.icxd",
-+		.driver_data = (kernel_ulong_t)&cpu_icx,
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
-+
-+static struct auxiliary_driver peci_cputemp_driver = {
-+	.probe		= peci_cputemp_probe,
-+	.id_table	= peci_cputemp_ids,
-+};
-+
-+module_auxiliary_driver(peci_cputemp_driver);
-+
-+MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
-+MODULE_AUTHOR("Iwona Winiarska <iwona.winiarska@intel.com>");
-+MODULE_DESCRIPTION("PECI cputemp driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PECI_CPU);
+ struct peci_controller;
+ struct peci_request;
+ 
+@@ -59,6 +67,11 @@ static inline struct peci_controller *to_peci_controller(void *d)
+  * struct peci_device - PECI device
+  * @dev: device object to register PECI device to the device model
+  * @controller: manages the bus segment hosting this PECI device
++ * @info: PECI device characteristics
++ * @info.family: device family
++ * @info.model: device model
++ * @info.peci_revision: PECI revision supported by the PECI device
++ * @info.socket_id: the socket ID represented by the PECI device
+  * @addr: address used on the PECI bus connected to the parent controller
+  * @deleted: indicates that PECI device was already deleted
+  *
+@@ -68,6 +81,12 @@ static inline struct peci_controller *to_peci_controller(void *d)
+  */
+ struct peci_device {
+ 	struct device dev;
++	struct {
++		u16 family;
++		u8 model;
++		u8 peci_revision;
++		u8 socket_id;
++	} info;
+ 	u8 addr;
+ 	bool deleted;
+ };
 -- 
 2.31.1
 
