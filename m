@@ -2,208 +2,178 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53E07C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jan 2022 06:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33FF6C43217
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jan 2022 09:12:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359686AbiAYGtb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Jan 2022 01:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S1456617AbiAYJMG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Jan 2022 04:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358766AbiAYGqY (ORCPT
+        with ESMTP id S1455337AbiAYJE0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:46:24 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0536FC061768;
-        Mon, 24 Jan 2022 21:08:08 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id m9so14566685oia.12;
-        Mon, 24 Jan 2022 21:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3zHucago0KMMDuM1xTqy4nCKeA990ZoKYszzwxXx8QU=;
-        b=e1AGsOImoW62Z6UyZe7p2l6YPlcnvx6g/nIuSQSdi/XYa3TTV+nY9W8z6DADAP0JVE
-         VUh6Qq0HcNfWX387y7iSi1K1bt1elTu6fULQQ9W9po5JsADOF51n7OaMHkZ4wYrqL1HB
-         vaFkSwj+c/gYsX5Ju89hozmvgd0B9QBFlj4gRxmMXqHdutwMkdtN3PinQdRDce2XhnXj
-         qfdA2G363UFjEuhDdlkEJyL6cXpiIAizkpaszUN9b6D2ayq05TdGovMhlYkNo/Gdrvsu
-         aBkOjeVvg2cHdyGC01/Wh75K+D5x0rn5HQ3WDPlg8fgyXv+CFGtKZDaZYv9c0l2ymY4R
-         KPNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3zHucago0KMMDuM1xTqy4nCKeA990ZoKYszzwxXx8QU=;
-        b=4M21OsoPHiqqjQl11zGZbu9FbdoIQPjlfyRW0kIfFGnAO1lIcs4OycRg8XLcup/cVw
-         HweFMCAucY0dUrBkV0mGbxUPZb7J3GKjNoDTWSSHUXxv46GahNtITbVyl15EFBXt9Gn1
-         IpFuR3WyNrKf+HFWfN1Y7R709sgxkdmUGKm3GPO9quSk4jEq1IOcRr88kHzLGNDzCeoo
-         IJEDKrzdIbO9DMxwrxOYxKf1rzBslhQLzhTqAcerut5CwhuY7hlenXkaqJj8jatuwITG
-         v/qdIAHlohnOZPBRjtBLkznUHLQZHKTpV40fXjA8j8oYTohj+FMYFafmfnmLx0aLDBYl
-         +axg==
-X-Gm-Message-State: AOAM531GhaMpYym8OvVfby6k8/nJhdYDvMgR+IumpjsAjBAVDrhfmSdS
-        SaIDKEa3wAX++edxHwrZh/7EOjLXVek=
-X-Google-Smtp-Source: ABdhPJzQBU266dsrRyi7Zm+emdQWA7jSFil+VBcZsUvevT+3WEtUHcKDluHwBW7H6Yl46X0oah0TWQ==
-X-Received: by 2002:a05:6808:1a23:: with SMTP id bk35mr4282567oib.52.1643087287369;
-        Mon, 24 Jan 2022 21:08:07 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k11sm2137125otb.68.2022.01.24.21.08.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 21:08:06 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 24 Jan 2022 21:08:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Tue, 25 Jan 2022 04:04:26 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574A3C061362;
+        Tue, 25 Jan 2022 00:48:21 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id F0923D845E3;
+        Tue, 25 Jan 2022 09:48:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1643100497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DNGmSgajX3AV7tac/NHRSny7ZKSXgCu8THN38jSPcJY=;
+        b=uVvpTJENujv89DwH1ydCqmX64nzGHF10t5qSormK78RR5uxmWBRxvlAfQ21pylsjVvnGcj
+        aJkXQBxb0eQeHVnNpV92VFOlITkBIXclTAiMTKakcLGVGwF+iYqN8UZacbblUxxCdtzqZJ
+        K6KFOu0kypEE5l0r6etqlVkwq6mr7Mk=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Roland Stigge <stigge@antcom.de>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] dt-bindings: hwmon: Add binding for max6639
-Message-ID: <20220125050804.GA361944@roeck-us.net>
-References: <cover.1642585539.git.sylv@sylv.io>
- <24e812dc80983ce20cd51a446c4f6d4a1db7da37.1642585539.git.sylv@sylv.io>
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [ASUS EC Sensors v8 2/3] hwmon: (asus-ec-sensors) update documentation
+Date:   Tue, 25 Jan 2022 09:48:15 +0100
+Message-ID: <5534652.DvuYhMxLoT@natalenko.name>
+In-Reply-To: <20220124015658.687309-3-eugene.shalygin@gmail.com>
+References: <20220124015658.687309-1-eugene.shalygin@gmail.com> <20220124015658.687309-3-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24e812dc80983ce20cd51a446c4f6d4a1db7da37.1642585539.git.sylv@sylv.io>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:53:54AM +0100, Marcello Sylvester Bauer wrote:
-> Add Devicetree binding documentation for Maxim MAX6639 temperature
-> monitor with PWM fan-speed controller.
-> 
-> The devicetree documentation for the SD3078 device tree.
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+On pond=C4=9Bl=C3=AD 24. ledna 2022 2:56:44 CET Eugene Shalygin wrote:
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+
+I believe some commit message is desired here.
+
 > ---
->  .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
->  1 file changed, 112 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>  Documentation/hwmon/asus_ec_sensors.rst     | 52 +++++++++++++++++++++
+>  Documentation/hwmon/asus_wmi_ec_sensors.rst | 38 ---------------
+>  2 files changed, 52 insertions(+), 38 deletions(-)
+>  create mode 100644 Documentation/hwmon/asus_ec_sensors.rst
+>  delete mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+>=20
+> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmo=
+n/asus_ec_sensors.rst
 > new file mode 100644
-> index 000000000000..7093cbeba44b
+> index 000000000000..b12ac7ebeb1a
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
+> +++ b/Documentation/hwmon/asus_ec_sensors.rst
+> @@ -0,0 +1,52 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
 > +
-> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +Kernel driver asus_ec_sensors
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +title: Maxim max6639
+> +Supported boards:
+> + * PRIME X570-PRO,
+> + * Pro WS X570-ACE,
+> + * ROG CROSSHAIR VIII DARK HERO,
+> + * ROG CROSSHAIR VIII FORMULA,
+> + * ROG CROSSHAIR VIII HERO,
+> + * ROG CROSSHAIR VIII IMPACT,
+> + * ROG STRIX B550-E GAMING,
+> + * ROG STRIX B550-I GAMING,
+> + * ROG STRIX X570-E GAMING,
+> + * ROG STRIX X570-F GAMING,
+> + * ROG STRIX X570-I GAMING
 > +
-> +maintainers:
-> +  - Roland Stigge <stigge@antcom.de>
+> +Authors:
+> +    - Eugene Shalygin <eugene.shalygin@gmail.com>
 > +
-> +description: |
-> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
-> +  fan-speed controller.  It monitors its own temperature and one external
-> +  diode-connected transistor or the temperatures of two external diode-connected
-> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> +Description:
+> +------------
+> +ASUS mainboards publish hardware monitoring information via Super I/O
+> +chip and the ACPI embedded controller (EC) registers. Some of the sensors
+> +are only available via the EC.
 > +
-> +  Datasheets:
-> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+> +The driver is aware of and reads the following sensors:
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - maxim,max6639
+> +1. Chipset (PCH) temperature
+> +2. CPU package temperature
+> +3. Motherboard temperature
+> +4. Readings from the T_Sensor header
+> +5. VRM temperature
+> +6. CPU_Opt fan RPM
+> +7. VRM heatsink fan RPM
+> +8. Chipset fan RPM
+> +9. Readings from the "Water flow meter" header (RPM)
+> +10. Readings from the "Water In" and "Water Out" temperature headers
+> +11. CPU current
 > +
-> +  reg:
-> +    maxItems: 1
+> +Sensor values are read from EC registers, and to avoid race with the boa=
+rd
+> +firmware the driver acquires ACPI mutex, the one used by the WMI when its
+> +methods access the EC.
 > +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "channel@0"
-> +  - "channel@1"
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
-> +  "^channel@[0-1]$":
-> +    type: object
-> +    description: |
-> +      Represents the two fans and their specific configuration.
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          The fan number.
-> +        items:
-> +          minimum: 0
-> +          maximum: 1
-> +
-> +      pwm-polarity:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1]
-> +        description:
-> +          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
-> +          output is high at 100% duty cycle when this bit is set to 1.
-> +
-> +      pulses-per-revolution:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [1, 2, 3, 4]
-> +        description:
-> +          Value specifying the number of pulses per revolution of the controlled
-> +          FAN.
-> +
+> +Module Parameters
+> +-----------------
+> + * mutex_path: string
+> +		The driver holds path to the ACPI mutex for each board (actually,
+> +		the path is mostly identical for them). If ASUS changes this path
+> +		in a future BIOS update, this parameter can be used to override
+> +		the stored in the driver value until it gets updated.
+> diff --git a/Documentation/hwmon/asus_wmi_ec_sensors.rst b/Documentation/=
+hwmon/asus_wmi_ec_sensors.rst
+> deleted file mode 100644
+> index 1b287f229e86..000000000000
+> --- a/Documentation/hwmon/asus_wmi_ec_sensors.rst
+> +++ /dev/null
+> @@ -1,38 +0,0 @@
+> -.. SPDX-License-Identifier: GPL-2.0-or-later
+> -
+> -Kernel driver asus_wmi_ec_sensors
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> -
+> -Supported boards:
+> - * PRIME X570-PRO,
+> - * Pro WS X570-ACE,
+> - * ROG CROSSHAIR VIII DARK HERO,
+> - * ROG CROSSHAIR VIII FORMULA,
+> - * ROG CROSSHAIR VIII HERO,
+> - * ROG STRIX B550-E GAMING,
+> - * ROG STRIX B550-I GAMING,
+> - * ROG STRIX X570-E GAMING.
+> -
+> -Authors:
+> -    - Eugene Shalygin <eugene.shalygin@gmail.com>
+> -
+> -Description:
+> -------------
+> -ASUS mainboards publish hardware monitoring information via Super I/O
+> -chip and the ACPI embedded controller (EC) registers. Some of the sensors
+> -are only available via the EC.
+> -
+> -ASUS WMI interface provides a method (BREC) to read data from EC registe=
+rs,
+> -which is utilized by this driver to publish those sensor readings to the
+> -HWMON system. The driver is aware of and reads the following sensors:
+> -
+> -1. Chipset (PCH) temperature
+> -2. CPU package temperature
+> -3. Motherboard temperature
+> -4. Readings from the T_Sensor header
+> -5. VRM temperature
+> -6. CPU_Opt fan RPM
+> -7. Chipset fan RPM
+> -8. Readings from the "Water flow meter" header (RPM)
+> -9. Readings from the "Water In" and "Water Out" temperature headers
+> -10. CPU current
+>=20
 
-I think the above two properties should be optional.
-pulses-per-revolution is 2 for almost all fans out there,
-and pwm polarity is positive almost all the time.
 
-> +      rpm-range:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [2000, 4000, 8000, 16000]
-> +        description:
-> +          Scales the tachometer counter by setting the maximum (full-scale) value
-> +          of the RPM range.
-> +
-Isn't this the maximum rpm ? Using the term "range" seems to be
-a bit misleading.
+=2D-=20
+Oleksandr Natalenko (post-factum)
 
-> +    required:
-> +      - reg
-> +      - pwm-polarity
-> +      - pulses-per-revolution
-> +      - rpm-range
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      max6639@10 {
-> +        compatible = "maxim,max6639";
-> +        reg = <0x10>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        channel@0 {
-> +          reg = <0x0>;
-> +          pwm-polarity = <1>;
-> +          pulses-per-revolution = <2>;
-> +          rpm-range = <4000>;
-> +        };
-> +
-> +        channel@1 {
-> +          reg = <0x1>;
-> +          pwm-polarity = <1>;
-> +          pulses-per-revolution = <2>;
-> +          rpm-range = <4000>;
-> +        };
-> +      };
-> +    };
-> +...
+
