@@ -2,37 +2,37 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F19AC43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49440C4332F
 	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Jan 2022 03:44:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1326734AbiAYDm6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jan 2022 22:42:58 -0500
-Received: from mga17.intel.com ([192.55.52.151]:60177 "EHLO mga17.intel.com"
+        id S1326718AbiAYDmz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jan 2022 22:42:55 -0500
+Received: from mga05.intel.com ([192.55.52.43]:15022 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349258AbiAYCVo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:21:44 -0500
+        id S242093AbiAYCUr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jan 2022 21:20:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643077303; x=1674613303;
+  t=1643077234; x=1674613234;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DFog99p9w5RfMCl9zbzJJWS6lzmpaZgRL91ADPd3II4=;
-  b=MWjqxI1IwpzddGUjBpEe/AodtEZxCJASJC0TZypYbMHReYA7VOE8JuxG
-   8dbDIvx2jnDDI6veI+YZNRX0QcBvDqPzdVuOSZUjZNQ6EbnOqIqkKdHrj
-   XVW7qH0JTIYn4UYiVqqwkWs0vnSeM0q2It4VXFnSd1hZFoI+MNz3NUhC5
-   bWP1dq78oyeiHlqjN+vlCXcxy2+QDX2rfih1SbaMDiDMDwhmfPB9p3m6w
-   3mlw8yGeVytTRzmPriyZBDKMJK/QxQRIs7SW2ro+9/BVhiHKP92FeZ+MU
-   ZEQhMgwOu5JkrsrDaATk+iVyAYPTj/DdZR8ASHi0REawiaxvDoBNcABo3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226860168"
+  bh=ClZrQhQZaKvcyN7ooHQhychEaCJBiYEkFxsQCwQ6hag=;
+  b=NMeFhOAo0CJxekugkp+H3+YcTmb6/2saatjUAfYom/qp7h0X10JP+Rnb
+   Qj61S/8Bz3vYrYblYGklRlufgQ8gUUFQvAdrx48/cASbu/OdRDKOO8BQ7
+   mNk2MIgX5JEImwKPfsOc7nxCFbPYo26QG/sV6l3ZPg77CJz1OkjgsAXDN
+   70u9HHJIhcNHx1BUDt4xCa3APnotXAruz5qGdx+ZgNSG51AdqTAAsRX9O
+   D6tKtxZ8xSj6JTkdyT/KKBnY1QWBDpwlHiPIbUCxYjoXHDveIi+psTeB/
+   +ta7RauDARRZ1hccKNexDo6il9RT8VfPLYfGbjnGrvtMxj7iEP2kgjPw7
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332544573"
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="226860168"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:14:25 -0800
+   d="scan'208";a="332544573"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:15:34 -0800
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="596969675"
+   d="scan'208";a="695634451"
 Received: from kerguder-mobl.ger.corp.intel.com (HELO localhost) ([10.249.158.133])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:14:17 -0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:15:22 -0800
 From:   Iwona Winiarska <iwona.winiarska@intel.com>
 To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -55,11 +55,10 @@ Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         David Muller <d.mueller@elsoft.ch>,
         Dave Hansen <dave.hansen@intel.com>,
         Billy Tsai <billy_tsai@aspeedtech.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
         Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH v6 05/13] peci: Add peci-aspeed controller driver
-Date:   Tue, 25 Jan 2022 02:10:56 +0100
-Message-Id: <20220125011104.2480133-6-iwona.winiarska@intel.com>
+Subject: [PATCH v6 09/13] peci: Add peci-cpu driver
+Date:   Tue, 25 Jan 2022 02:11:00 +0100
+Message-Id: <20220125011104.2480133-10-iwona.winiarska@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220125011104.2480133-1-iwona.winiarska@intel.com>
 References: <20220125011104.2480133-1-iwona.winiarska@intel.com>
@@ -69,713 +68,812 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+PECI is an interface that may be used by different types of devices.
+Add a peci-cpu driver compatible with Intel processors. The driver is
+responsible for handling auxiliary devices that can subsequently be used
+by other drivers (e.g. hwmons).
 
-ASPEED AST24xx/AST25xx/AST26xx SoCs support the PECI electrical
-interface (a.k.a PECI wire) that provides a communication channel with
-Intel processors.
-This driver allows BMC to discover devices connected to it and
-communicate with them using PECI protocol.
-
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Co-developed-by: Iwona Winiarska <iwona.winiarska@intel.com>
 Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
 ---
- MAINTAINERS                           |   8 +
- drivers/peci/Kconfig                  |   6 +
- drivers/peci/Makefile                 |   3 +
- drivers/peci/controller/Kconfig       |  18 +
- drivers/peci/controller/Makefile      |   3 +
- drivers/peci/controller/peci-aspeed.c | 599 ++++++++++++++++++++++++++
- 6 files changed, 637 insertions(+)
- create mode 100644 drivers/peci/controller/Kconfig
- create mode 100644 drivers/peci/controller/Makefile
- create mode 100644 drivers/peci/controller/peci-aspeed.c
+ MAINTAINERS              |   1 +
+ drivers/peci/Kconfig     |  15 ++
+ drivers/peci/Makefile    |   2 +
+ drivers/peci/cpu.c       | 343 +++++++++++++++++++++++++++++++++++++++
+ drivers/peci/device.c    |   1 +
+ drivers/peci/internal.h  |  27 +++
+ drivers/peci/request.c   | 213 ++++++++++++++++++++++++
+ include/linux/peci-cpu.h |  40 +++++
+ include/linux/peci.h     |   8 -
+ 9 files changed, 642 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/peci/cpu.c
+ create mode 100644 include/linux/peci-cpu.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index aa7ae643fdb0..6c9b12004e4e 100644
+index 6c9b12004e4e..7c31e29c885a 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2985,6 +2985,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/net/asix,ax88796c.yaml
- F:	drivers/net/ethernet/asix/ax88796c_*
+@@ -15105,6 +15105,7 @@ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Supported
+ F:	Documentation/devicetree/bindings/peci/
+ F:	drivers/peci/
++F:	include/linux/peci-cpu.h
+ F:	include/linux/peci.h
  
-+ASPEED PECI CONTROLLER
-+M:	Iwona Winiarska <iwona.winiarska@intel.com>
-+L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
-+L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
-+S:	Supported
-+F:	Documentation/devicetree/bindings/peci/peci-aspeed.yaml
-+F:	drivers/peci/controller/peci-aspeed.c
-+
- ASPEED PINCTRL DRIVERS
- M:	Andrew Jeffery <andrew@aj.id.au>
- L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+ PENSANDO ETHERNET DRIVERS
 diff --git a/drivers/peci/Kconfig b/drivers/peci/Kconfig
-index 71a4ad81225a..99279df97a78 100644
+index 99279df97a78..89872ad83320 100644
 --- a/drivers/peci/Kconfig
 +++ b/drivers/peci/Kconfig
-@@ -13,3 +13,9 @@ menuconfig PECI
+@@ -16,6 +16,21 @@ menuconfig PECI
  
- 	  This support is also available as a module. If so, the module
- 	  will be called peci.
+ if PECI
+ 
++config PECI_CPU
++	tristate "PECI CPU"
++	select AUXILIARY_BUS
++	help
++	  This option enables peci-cpu driver for Intel processors. It is
++	  responsible for creating auxiliary devices that can subsequently
++	  be used by other drivers in order to perform various
++	  functionalities such as e.g. temperature monitoring.
 +
-+if PECI
++	  Additional drivers must be enabled in order to use the functionality
++	  of the device.
 +
-+source "drivers/peci/controller/Kconfig"
++	  This driver can also be built as a module. If so, the module
++	  will be called peci-cpu.
 +
-+endif # PECI
+ source "drivers/peci/controller/Kconfig"
+ 
+ endif # PECI
 diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
-index e789a354e842..926d8df15cbd 100644
+index 917f689e147a..7de18137e738 100644
 --- a/drivers/peci/Makefile
 +++ b/drivers/peci/Makefile
-@@ -3,3 +3,6 @@
+@@ -3,6 +3,8 @@
  # Core functionality
- peci-y := core.o
+ peci-y := core.o request.o device.o sysfs.o
  obj-$(CONFIG_PECI) += peci.o
-+
-+# Hardware specific bus drivers
-+obj-y += controller/
-diff --git a/drivers/peci/controller/Kconfig b/drivers/peci/controller/Kconfig
++peci-cpu-y := cpu.o
++obj-$(CONFIG_PECI_CPU) += peci-cpu.o
+ 
+ # Hardware specific bus drivers
+ obj-y += controller/
+diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
 new file mode 100644
-index 000000000000..32bd8d685c0d
+index 000000000000..68eb61c65d34
 --- /dev/null
-+++ b/drivers/peci/controller/Kconfig
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config PECI_ASPEED
-+	tristate "ASPEED PECI support"
-+	depends on ARCH_ASPEED || COMPILE_TEST
-+	depends on OF
-+	depends on HAS_IOMEM
-+	select COMMON_CLK
-+	help
-+	  This option enables PECI controller driver for ASPEED AST2400,
-+	  AST2500 and AST2600 SoCs. It allows BMC to discover devices
-+	  connected to it, and communicate with them using PECI protocol.
-+
-+	  Say Y here if your system runs on ASPEED SoC and you are using it
-+	  as BMC for Intel platform.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called peci-aspeed.
-diff --git a/drivers/peci/controller/Makefile b/drivers/peci/controller/Makefile
-new file mode 100644
-index 000000000000..022c28ef1bf0
---- /dev/null
-+++ b/drivers/peci/controller/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-$(CONFIG_PECI_ASPEED)	+= peci-aspeed.o
-diff --git a/drivers/peci/controller/peci-aspeed.c b/drivers/peci/controller/peci-aspeed.c
-new file mode 100644
-index 000000000000..1925ddc13f00
---- /dev/null
-+++ b/drivers/peci/controller/peci-aspeed.c
-@@ -0,0 +1,599 @@
++++ b/drivers/peci/cpu.c
+@@ -0,0 +1,343 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2012-2017 ASPEED Technology Inc.
-+// Copyright (c) 2018-2021 Intel Corporation
++// Copyright (c) 2021 Intel Corporation
 +
-+#include <asm/unaligned.h>
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/clkdev.h>
-+#include <linux/clk-provider.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/jiffies.h>
-+#include <linux/math.h>
++#include <linux/auxiliary_bus.h>
 +#include <linux/module.h>
-+#include <linux/of.h>
 +#include <linux/peci.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+
-+/* ASPEED PECI Registers */
-+/* Control Register */
-+#define ASPEED_PECI_CTRL			0x00
-+#define   ASPEED_PECI_CTRL_SAMPLING_MASK	GENMASK(19, 16)
-+#define   ASPEED_PECI_CTRL_RD_MODE_MASK		GENMASK(13, 12)
-+#define     ASPEED_PECI_CTRL_RD_MODE_DBG	BIT(13)
-+#define     ASPEED_PECI_CTRL_RD_MODE_COUNT	BIT(12)
-+#define   ASPEED_PECI_CTRL_CLK_SRC_HCLK		BIT(11)
-+#define   ASPEED_PECI_CTRL_CLK_DIV_MASK		GENMASK(10, 8)
-+#define   ASPEED_PECI_CTRL_INVERT_OUT		BIT(7)
-+#define   ASPEED_PECI_CTRL_INVERT_IN		BIT(6)
-+#define   ASPEED_PECI_CTRL_BUS_CONTENTION_EN	BIT(5)
-+#define   ASPEED_PECI_CTRL_PECI_EN		BIT(4)
-+#define   ASPEED_PECI_CTRL_PECI_CLK_EN		BIT(0)
-+
-+/* Timing Negotiation Register */
-+#define ASPEED_PECI_TIMING_NEGOTIATION		0x04
-+#define   ASPEED_PECI_T_NEGO_MSG_MASK		GENMASK(15, 8)
-+#define   ASPEED_PECI_T_NEGO_ADDR_MASK		GENMASK(7, 0)
-+
-+/* Command Register */
-+#define ASPEED_PECI_CMD				0x08
-+#define   ASPEED_PECI_CMD_PIN_MONITORING	BIT(31)
-+#define   ASPEED_PECI_CMD_STS_MASK		GENMASK(27, 24)
-+#define     ASPEED_PECI_CMD_STS_ADDR_T_NEGO	0x3
-+#define   ASPEED_PECI_CMD_IDLE_MASK		\
-+	  (ASPEED_PECI_CMD_STS_MASK | ASPEED_PECI_CMD_PIN_MONITORING)
-+#define   ASPEED_PECI_CMD_FIRE			BIT(0)
-+
-+/* Read/Write Length Register */
-+#define ASPEED_PECI_RW_LENGTH			0x0c
-+#define   ASPEED_PECI_AW_FCS_EN			BIT(31)
-+#define   ASPEED_PECI_RD_LEN_MASK		GENMASK(23, 16)
-+#define   ASPEED_PECI_WR_LEN_MASK		GENMASK(15, 8)
-+#define   ASPEED_PECI_TARGET_ADDR_MASK		GENMASK(7, 0)
-+
-+/* Expected FCS Data Register */
-+#define ASPEED_PECI_EXPECTED_FCS		0x10
-+#define   ASPEED_PECI_EXPECTED_RD_FCS_MASK	GENMASK(23, 16)
-+#define   ASPEED_PECI_EXPECTED_AW_FCS_AUTO_MASK	GENMASK(15, 8)
-+#define   ASPEED_PECI_EXPECTED_WR_FCS_MASK	GENMASK(7, 0)
-+
-+/* Captured FCS Data Register */
-+#define ASPEED_PECI_CAPTURED_FCS		0x14
-+#define   ASPEED_PECI_CAPTURED_RD_FCS_MASK	GENMASK(23, 16)
-+#define   ASPEED_PECI_CAPTURED_WR_FCS_MASK	GENMASK(7, 0)
-+
-+/* Interrupt Register */
-+#define ASPEED_PECI_INT_CTRL			0x18
-+#define   ASPEED_PECI_TIMING_NEGO_SEL_MASK	GENMASK(31, 30)
-+#define     ASPEED_PECI_1ST_BIT_OF_ADDR_NEGO	0
-+#define     ASPEED_PECI_2ND_BIT_OF_ADDR_NEGO	1
-+#define     ASPEED_PECI_MESSAGE_NEGO		2
-+#define   ASPEED_PECI_INT_MASK			GENMASK(4, 0)
-+#define     ASPEED_PECI_INT_BUS_TIMEOUT		BIT(4)
-+#define     ASPEED_PECI_INT_BUS_CONTENTION	BIT(3)
-+#define     ASPEED_PECI_INT_WR_FCS_BAD		BIT(2)
-+#define     ASPEED_PECI_INT_WR_FCS_ABORT	BIT(1)
-+#define     ASPEED_PECI_INT_CMD_DONE		BIT(0)
-+
-+/* Interrupt Status Register */
-+#define ASPEED_PECI_INT_STS			0x1c
-+#define   ASPEED_PECI_INT_TIMING_RESULT_MASK	GENMASK(29, 16)
-+	  /* bits[4..0]: Same bit fields in the 'Interrupt Register' */
-+
-+/* Rx/Tx Data Buffer Registers */
-+#define ASPEED_PECI_WR_DATA0			0x20
-+#define ASPEED_PECI_WR_DATA1			0x24
-+#define ASPEED_PECI_WR_DATA2			0x28
-+#define ASPEED_PECI_WR_DATA3			0x2c
-+#define ASPEED_PECI_RD_DATA0			0x30
-+#define ASPEED_PECI_RD_DATA1			0x34
-+#define ASPEED_PECI_RD_DATA2			0x38
-+#define ASPEED_PECI_RD_DATA3			0x3c
-+#define ASPEED_PECI_WR_DATA4			0x40
-+#define ASPEED_PECI_WR_DATA5			0x44
-+#define ASPEED_PECI_WR_DATA6			0x48
-+#define ASPEED_PECI_WR_DATA7			0x4c
-+#define ASPEED_PECI_RD_DATA4			0x50
-+#define ASPEED_PECI_RD_DATA5			0x54
-+#define ASPEED_PECI_RD_DATA6			0x58
-+#define ASPEED_PECI_RD_DATA7			0x5c
-+#define   ASPEED_PECI_DATA_BUF_SIZE_MAX		32
-+
-+/* Timing Negotiation */
-+#define ASPEED_PECI_CLK_FREQUENCY_MIN		2000
-+#define ASPEED_PECI_CLK_FREQUENCY_DEFAULT	1000000
-+#define ASPEED_PECI_CLK_FREQUENCY_MAX		2000000
-+#define ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT	8
-+/* Timeout */
-+#define ASPEED_PECI_IDLE_CHECK_TIMEOUT_US	(50 * USEC_PER_MSEC)
-+#define ASPEED_PECI_IDLE_CHECK_INTERVAL_US	(10 * USEC_PER_MSEC)
-+#define ASPEED_PECI_CMD_TIMEOUT_MS_DEFAULT	1000
-+#define ASPEED_PECI_CMD_TIMEOUT_MS_MAX		1000
-+
-+#define ASPEED_PECI_CLK_DIV1(msg_timing) (4 * (msg_timing) + 1)
-+#define ASPEED_PECI_CLK_DIV2(clk_div_exp) BIT(clk_div_exp)
-+#define ASPEED_PECI_CLK_DIV(msg_timing, clk_div_exp) \
-+	(4 * ASPEED_PECI_CLK_DIV1(msg_timing) * ASPEED_PECI_CLK_DIV2(clk_div_exp))
-+
-+struct aspeed_peci {
-+	struct peci_controller *controller;
-+	struct device *dev;
-+	void __iomem *base;
-+	struct reset_control *rst;
-+	int irq;
-+	spinlock_t lock; /* to sync completion status handling */
-+	struct completion xfer_complete;
-+	struct clk *clk;
-+	u32 clk_frequency;
-+	u32 status;
-+	u32 cmd_timeout_ms;
-+};
-+
-+struct clk_aspeed_peci {
-+	struct clk_hw hw;
-+	struct aspeed_peci *aspeed_peci;
-+};
-+
-+static void aspeed_peci_controller_enable(struct aspeed_peci *priv)
-+{
-+	u32 val = readl(priv->base + ASPEED_PECI_CTRL);
-+
-+	val |= ASPEED_PECI_CTRL_PECI_CLK_EN;
-+	val |= ASPEED_PECI_CTRL_PECI_EN;
-+
-+	writel(val, priv->base + ASPEED_PECI_CTRL);
-+}
-+
-+static void aspeed_peci_init_regs(struct aspeed_peci *priv)
-+{
-+	u32 val;
-+
-+	/* Clear interrupts */
-+	writel(ASPEED_PECI_INT_MASK, priv->base + ASPEED_PECI_INT_STS);
-+
-+	/* Set timing negotiation mode and enable interrupts */
-+	val = FIELD_PREP(ASPEED_PECI_TIMING_NEGO_SEL_MASK, ASPEED_PECI_1ST_BIT_OF_ADDR_NEGO);
-+	val |= ASPEED_PECI_INT_MASK;
-+	writel(val, priv->base + ASPEED_PECI_INT_CTRL);
-+
-+	val = FIELD_PREP(ASPEED_PECI_CTRL_SAMPLING_MASK, ASPEED_PECI_RD_SAMPLING_POINT_DEFAULT);
-+	writel(val, priv->base + ASPEED_PECI_CTRL);
-+}
-+
-+static int aspeed_peci_check_idle(struct aspeed_peci *priv)
-+{
-+	u32 cmd_sts = readl(priv->base + ASPEED_PECI_CMD);
-+	int ret;
-+
-+	/*
-+	 * Under normal circumstances, we expect to be idle here.
-+	 * In case there were any errors/timeouts that led to the situation
-+	 * where the hardware is not in idle state - we need to reset and
-+	 * reinitialize it to avoid potential controller hang.
-+	 */
-+	if (FIELD_GET(ASPEED_PECI_CMD_STS_MASK, cmd_sts)) {
-+		ret = reset_control_assert(priv->rst);
-+		if (ret) {
-+			dev_err(priv->dev, "cannot assert reset control\n");
-+			return ret;
-+		}
-+
-+		ret = reset_control_deassert(priv->rst);
-+		if (ret) {
-+			dev_err(priv->dev, "cannot deassert reset control\n");
-+			return ret;
-+		}
-+
-+		aspeed_peci_init_regs(priv);
-+
-+		ret = clk_set_rate(priv->clk, priv->clk_frequency);
-+		if (ret < 0) {
-+			dev_err(priv->dev, "cannot set clock frequency\n");
-+			return ret;
-+		}
-+
-+		aspeed_peci_controller_enable(priv);
-+	}
-+
-+	return readl_poll_timeout(priv->base + ASPEED_PECI_CMD,
-+				  cmd_sts,
-+				  !(cmd_sts & ASPEED_PECI_CMD_IDLE_MASK),
-+				  ASPEED_PECI_IDLE_CHECK_INTERVAL_US,
-+				  ASPEED_PECI_IDLE_CHECK_TIMEOUT_US);
-+}
-+
-+static int aspeed_peci_xfer(struct peci_controller *controller,
-+			    u8 addr, struct peci_request *req)
-+{
-+	struct aspeed_peci *priv = dev_get_drvdata(controller->dev.parent);
-+	unsigned long timeout = msecs_to_jiffies(priv->cmd_timeout_ms);
-+	u32 peci_head;
-+	int ret, i;
-+
-+	if (req->tx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX ||
-+	    req->rx.len > ASPEED_PECI_DATA_BUF_SIZE_MAX)
-+		return -EINVAL;
-+
-+	/* Check command sts and bus idle state */
-+	ret = aspeed_peci_check_idle(priv);
-+	if (ret)
-+		return ret; /* -ETIMEDOUT */
-+
-+	spin_lock_irq(&priv->lock);
-+	reinit_completion(&priv->xfer_complete);
-+
-+	peci_head = FIELD_PREP(ASPEED_PECI_TARGET_ADDR_MASK, addr) |
-+		    FIELD_PREP(ASPEED_PECI_WR_LEN_MASK, req->tx.len) |
-+		    FIELD_PREP(ASPEED_PECI_RD_LEN_MASK, req->rx.len);
-+
-+	writel(peci_head, priv->base + ASPEED_PECI_RW_LENGTH);
-+
-+	for (i = 0; i < req->tx.len; i += 4) {
-+		u32 reg = (i < 16 ? ASPEED_PECI_WR_DATA0 : ASPEED_PECI_WR_DATA4) + i % 16;
-+
-+		writel(get_unaligned_le32(&req->tx.buf[i]), priv->base + reg);
-+	}
-+
-+#if IS_ENABLED(CONFIG_DYNAMIC_DEBUG)
-+	dev_dbg(priv->dev, "HEAD : %#08x\n", peci_head);
-+	print_hex_dump_bytes("TX : ", DUMP_PREFIX_NONE, req->tx.buf, req->tx.len);
-+#endif
-+
-+	priv->status = 0;
-+	writel(ASPEED_PECI_CMD_FIRE, priv->base + ASPEED_PECI_CMD);
-+	spin_unlock_irq(&priv->lock);
-+
-+	ret = wait_for_completion_interruptible_timeout(&priv->xfer_complete, timeout);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret == 0) {
-+		dev_dbg(priv->dev, "timeout waiting for a response\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	spin_lock_irq(&priv->lock);
-+
-+	if (priv->status != ASPEED_PECI_INT_CMD_DONE) {
-+		spin_unlock_irq(&priv->lock);
-+		dev_dbg(priv->dev, "no valid response, status: %#02x\n", priv->status);
-+		return -EIO;
-+	}
-+
-+	spin_unlock_irq(&priv->lock);
-+
-+	/*
-+	 * We need to use dword reads for register access, make sure that the
-+	 * buffer size is multiple of 4-bytes.
-+	 */
-+	BUILD_BUG_ON(PECI_REQUEST_MAX_BUF_SIZE % 4);
-+
-+	for (i = 0; i < req->rx.len; i += 4) {
-+		u32 reg = (i < 16 ? ASPEED_PECI_RD_DATA0 : ASPEED_PECI_RD_DATA4) + i % 16;
-+		u32 rx_data = readl(priv->base + reg);
-+
-+		put_unaligned_le32(rx_data, &req->rx.buf[i]);
-+	}
-+
-+#if IS_ENABLED(CONFIG_DYNAMIC_DEBUG)
-+	print_hex_dump_bytes("RX : ", DUMP_PREFIX_NONE, req->rx.buf, req->rx.len);
-+#endif
-+	return 0;
-+}
-+
-+static irqreturn_t aspeed_peci_irq_handler(int irq, void *arg)
-+{
-+	struct aspeed_peci *priv = arg;
-+	u32 status;
-+
-+	spin_lock(&priv->lock);
-+	status = readl(priv->base + ASPEED_PECI_INT_STS);
-+	writel(status, priv->base + ASPEED_PECI_INT_STS);
-+	priv->status |= (status & ASPEED_PECI_INT_MASK);
-+
-+	/*
-+	 * All commands should be ended up with a ASPEED_PECI_INT_CMD_DONE bit
-+	 * set even in an error case.
-+	 */
-+	if (status & ASPEED_PECI_INT_CMD_DONE)
-+		complete(&priv->xfer_complete);
-+
-+	writel(0, priv->base + ASPEED_PECI_CMD);
-+
-+	spin_unlock(&priv->lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void clk_aspeed_peci_find_div_values(unsigned long rate, int *msg_timing, int *clk_div_exp)
-+{
-+	unsigned long best_diff = ~0ul, diff;
-+	int msg_timing_temp, clk_div_exp_temp, i, j;
-+
-+	for (i = 1; i <= 255; i++)
-+		for (j = 0; j < 8; j++) {
-+			diff = abs(rate - ASPEED_PECI_CLK_DIV1(i) * ASPEED_PECI_CLK_DIV2(j));
-+			if (diff < best_diff) {
-+				msg_timing_temp = i;
-+				clk_div_exp_temp = j;
-+				best_diff = diff;
-+			}
-+		}
-+
-+	*msg_timing = msg_timing_temp;
-+	*clk_div_exp = clk_div_exp_temp;
-+}
-+
-+static int clk_aspeed_peci_get_div(unsigned long rate, const unsigned long *prate)
-+{
-+	unsigned long this_rate = *prate / (4 * rate);
-+	int msg_timing, clk_div_exp;
-+
-+	clk_aspeed_peci_find_div_values(this_rate, &msg_timing, &clk_div_exp);
-+
-+	return ASPEED_PECI_CLK_DIV(msg_timing, clk_div_exp);
-+}
-+
-+static int clk_aspeed_peci_set_rate(struct clk_hw *hw, unsigned long rate,
-+				    unsigned long prate)
-+{
-+	struct clk_aspeed_peci *peci_clk = container_of(hw, struct clk_aspeed_peci, hw);
-+	struct aspeed_peci *aspeed_peci = peci_clk->aspeed_peci;
-+	unsigned long this_rate = prate / (4 * rate);
-+	int clk_div_exp, msg_timing;
-+	u32 val;
-+
-+	clk_aspeed_peci_find_div_values(this_rate, &msg_timing, &clk_div_exp);
-+
-+	val = readl(aspeed_peci->base + ASPEED_PECI_CTRL);
-+	val |= FIELD_PREP(ASPEED_PECI_CTRL_CLK_DIV_MASK, clk_div_exp);
-+	writel(val, aspeed_peci->base + ASPEED_PECI_CTRL);
-+
-+	val = FIELD_PREP(ASPEED_PECI_T_NEGO_MSG_MASK, msg_timing);
-+	val |= FIELD_PREP(ASPEED_PECI_T_NEGO_ADDR_MASK, msg_timing);
-+	writel(val, aspeed_peci->base + ASPEED_PECI_TIMING_NEGOTIATION);
-+
-+	return 0;
-+}
-+
-+static long clk_aspeed_peci_round_rate(struct clk_hw *hw, unsigned long rate,
-+				       unsigned long *prate)
-+{
-+	int div = clk_aspeed_peci_get_div(rate, prate);
-+
-+	return DIV_ROUND_UP_ULL(*prate, div);
-+}
-+
-+static unsigned long clk_aspeed_peci_recalc_rate(struct clk_hw *hw, unsigned long prate)
-+{
-+	struct clk_aspeed_peci *peci_clk = container_of(hw, struct clk_aspeed_peci, hw);
-+	struct aspeed_peci *aspeed_peci = peci_clk->aspeed_peci;
-+	int div, msg_timing, addr_timing, clk_div_exp;
-+	u32 reg;
-+
-+	reg = readl(aspeed_peci->base + ASPEED_PECI_TIMING_NEGOTIATION);
-+	msg_timing = FIELD_GET(ASPEED_PECI_T_NEGO_MSG_MASK, reg);
-+	addr_timing = FIELD_GET(ASPEED_PECI_T_NEGO_ADDR_MASK, reg);
-+
-+	if (msg_timing != addr_timing)
-+		return 0;
-+
-+	reg = readl(aspeed_peci->base + ASPEED_PECI_CTRL);
-+	clk_div_exp = FIELD_GET(ASPEED_PECI_CTRL_CLK_DIV_MASK, reg);
-+
-+	div = ASPEED_PECI_CLK_DIV(msg_timing, clk_div_exp);
-+
-+	return DIV_ROUND_UP_ULL(prate, div);
-+}
-+
-+static const struct clk_ops clk_aspeed_peci_ops = {
-+	.set_rate = clk_aspeed_peci_set_rate,
-+	.round_rate = clk_aspeed_peci_round_rate,
-+	.recalc_rate = clk_aspeed_peci_recalc_rate,
-+};
-+
-+/*
-+ * PECI HW contains a clock divider which is a combination of:
-+ *  div0: 4 (fixed divider)
-+ *  div1: x + 1
-+ *  div2: 1 << y
-+ * In other words, out_clk = in_clk / (div0 * div1 * div2)
-+ * The resulting frequency is used by PECI Controller to drive the PECI bus to
-+ * negotiate optimal transfer rate.
++#include <linux/peci-cpu.h>
++#include <linux/slab.h>
++
++#include "internal.h"
++
++/**
++ * peci_temp_read() - read the maximum die temperature from PECI target device
++ * @device: PECI device to which request is going to be sent
++ * @temp_raw: where to store the read temperature
++ *
++ * It uses GetTemp PECI command.
++ *
++ * Return: 0 if succeeded, other values in case errors.
 + */
-+static struct clk *devm_aspeed_peci_register_clk_div(struct device *dev, struct clk *parent,
-+						     struct aspeed_peci *priv)
++int peci_temp_read(struct peci_device *device, s16 *temp_raw)
 +{
-+	struct clk_aspeed_peci *peci_clk;
-+	struct clk_init_data init;
-+	const char *parent_name;
-+	char name[32];
++	struct peci_request *req;
++
++	req = peci_xfer_get_temp(device);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
++
++	*temp_raw = peci_request_temp_read(req);
++
++	peci_request_free(req);
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(peci_temp_read, PECI_CPU);
++
++/**
++ * peci_pcs_read() - read PCS register
++ * @device: PECI device to which request is going to be sent
++ * @index: PCS index
++ * @param: PCS parameter
++ * @data: where to store the read data
++ *
++ * It uses RdPkgConfig PECI command.
++ *
++ * Return: 0 if succeeded, other values in case errors.
++ */
++int peci_pcs_read(struct peci_device *device, u8 index, u16 param, u32 *data)
++{
++	struct peci_request *req;
 +	int ret;
 +
-+	snprintf(name, sizeof(name), "%s_div", dev_name(dev));
++	req = peci_xfer_pkg_cfg_readl(device, index, param);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
 +
-+	parent_name = __clk_get_name(parent);
++	ret = peci_request_status(req);
++	if (ret)
++		goto out_req_free;
 +
-+	init.ops = &clk_aspeed_peci_ops;
-+	init.name = name;
-+	init.parent_names = (const char* []) { parent_name };
-+	init.num_parents = 1;
-+	init.flags = 0;
++	*data = peci_request_data_readl(req);
++out_req_free:
++	peci_request_free(req);
 +
-+	peci_clk = devm_kzalloc(dev, sizeof(struct clk_aspeed_peci), GFP_KERNEL);
-+	if (!peci_clk)
++	return ret;
++}
++EXPORT_SYMBOL_NS_GPL(peci_pcs_read, PECI_CPU);
++
++/**
++ * peci_pci_local_read() - read 32-bit memory location using raw address
++ * @device: PECI device to which request is going to be sent
++ * @bus: bus
++ * @dev: device
++ * @func: function
++ * @reg: register
++ * @data: where to store the read data
++ *
++ * It uses RdPCIConfigLocal PECI command.
++ *
++ * Return: 0 if succeeded, other values in case errors.
++ */
++int peci_pci_local_read(struct peci_device *device, u8 bus, u8 dev, u8 func,
++			u16 reg, u32 *data)
++{
++	struct peci_request *req;
++	int ret;
++
++	req = peci_xfer_pci_cfg_local_readl(device, bus, dev, func, reg);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
++
++	ret = peci_request_status(req);
++	if (ret)
++		goto out_req_free;
++
++	*data = peci_request_data_readl(req);
++out_req_free:
++	peci_request_free(req);
++
++	return ret;
++}
++EXPORT_SYMBOL_NS_GPL(peci_pci_local_read, PECI_CPU);
++
++/**
++ * peci_ep_pci_local_read() - read 32-bit memory location using raw address
++ * @device: PECI device to which request is going to be sent
++ * @seg: PCI segment
++ * @bus: bus
++ * @dev: device
++ * @func: function
++ * @reg: register
++ * @data: where to store the read data
++ *
++ * Like &peci_pci_local_read, but it uses RdEndpointConfig PECI command.
++ *
++ * Return: 0 if succeeded, other values in case errors.
++ */
++int peci_ep_pci_local_read(struct peci_device *device, u8 seg,
++			   u8 bus, u8 dev, u8 func, u16 reg, u32 *data)
++{
++	struct peci_request *req;
++	int ret;
++
++	req = peci_xfer_ep_pci_cfg_local_readl(device, seg, bus, dev, func, reg);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
++
++	ret = peci_request_status(req);
++	if (ret)
++		goto out_req_free;
++
++	*data = peci_request_data_readl(req);
++out_req_free:
++	peci_request_free(req);
++
++	return ret;
++}
++EXPORT_SYMBOL_NS_GPL(peci_ep_pci_local_read, PECI_CPU);
++
++/**
++ * peci_mmio_read() - read 32-bit memory location using 64-bit bar offset address
++ * @device: PECI device to which request is going to be sent
++ * @bar: PCI bar
++ * @seg: PCI segment
++ * @bus: bus
++ * @dev: device
++ * @func: function
++ * @address: 64-bit MMIO address
++ * @data: where to store the read data
++ *
++ * It uses RdEndpointConfig PECI command.
++ *
++ * Return: 0 if succeeded, other values in case errors.
++ */
++int peci_mmio_read(struct peci_device *device, u8 bar, u8 seg,
++		   u8 bus, u8 dev, u8 func, u64 address, u32 *data)
++{
++	struct peci_request *req;
++	int ret;
++
++	req = peci_xfer_ep_mmio64_readl(device, bar, seg, bus, dev, func, address);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
++
++	ret = peci_request_status(req);
++	if (ret)
++		goto out_req_free;
++
++	*data = peci_request_data_readl(req);
++out_req_free:
++	peci_request_free(req);
++
++	return ret;
++}
++EXPORT_SYMBOL_NS_GPL(peci_mmio_read, PECI_CPU);
++
++static const char * const peci_adev_types[] = {
++	"cputemp",
++	"dimmtemp",
++};
++
++struct peci_cpu {
++	struct peci_device *device;
++	const struct peci_device_id *id;
++};
++
++static void adev_release(struct device *dev)
++{
++	struct auxiliary_device *adev = to_auxiliary_dev(dev);
++
++	auxiliary_device_uninit(adev);
++
++	kfree(adev->name);
++	kfree(adev);
++}
++
++static struct auxiliary_device *adev_alloc(struct peci_cpu *priv, int idx)
++{
++	struct peci_controller *controller = to_peci_controller(priv->device->dev.parent);
++	struct auxiliary_device *adev;
++	const char *name;
++	int ret;
++
++	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
++	if (!adev)
 +		return ERR_PTR(-ENOMEM);
 +
-+	peci_clk->hw.init = &init;
-+	peci_clk->aspeed_peci = priv;
-+
-+	ret = devm_clk_hw_register(dev, &peci_clk->hw);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return peci_clk->hw.clk;
-+}
-+
-+static void aspeed_peci_property_sanitize(struct device *dev, const char *propname,
-+					  u32 min, u32 max, u32 default_val, u32 *propval)
-+{
-+	u32 val;
-+	int ret;
-+
-+	ret = device_property_read_u32(dev, propname, &val);
-+	if (ret) {
-+		val = default_val;
-+	} else if (val > max || val < min) {
-+		dev_warn(dev, "invalid %s: %u, falling back to: %u\n",
-+			 propname, val, default_val);
-+
-+		val = default_val;
++	name = kasprintf(GFP_KERNEL, "%s.%s", peci_adev_types[idx], (const char *)priv->id->data);
++	if (!name) {
++		ret = -ENOMEM;
++		goto free_adev;
 +	}
 +
-+	*propval = val;
++	adev->name = name;
++	adev->dev.parent = &priv->device->dev;
++	adev->dev.release = adev_release;
++	adev->id = (controller->id << 16) | (priv->device->addr);
++
++	ret = auxiliary_device_init(adev);
++	if (ret)
++		goto free_name;
++
++	return adev;
++
++free_name:
++	kfree(name);
++free_adev:
++	kfree(adev);
++	return ERR_PTR(ret);
 +}
 +
-+static void aspeed_peci_property_setup(struct aspeed_peci *priv)
++static void unregister_adev(void *_adev)
 +{
-+	aspeed_peci_property_sanitize(priv->dev, "clock-frequency",
-+				      ASPEED_PECI_CLK_FREQUENCY_MIN, ASPEED_PECI_CLK_FREQUENCY_MAX,
-+				      ASPEED_PECI_CLK_FREQUENCY_DEFAULT, &priv->clk_frequency);
-+	aspeed_peci_property_sanitize(priv->dev, "cmd-timeout-ms",
-+				      1, ASPEED_PECI_CMD_TIMEOUT_MS_MAX,
-+				      ASPEED_PECI_CMD_TIMEOUT_MS_DEFAULT, &priv->cmd_timeout_ms);
++	struct auxiliary_device *adev = _adev;
++
++	auxiliary_device_delete(adev);
 +}
 +
-+static struct peci_controller_ops aspeed_ops = {
-+	.xfer = aspeed_peci_xfer,
-+};
-+
-+static void aspeed_peci_reset_control_release(void *data)
++static int devm_adev_add(struct device *dev, int idx)
 +{
-+	reset_control_assert(data);
-+}
-+
-+static int devm_aspeed_peci_reset_control_deassert(struct device *dev, struct reset_control *rst)
-+{
++	struct peci_cpu *priv = dev_get_drvdata(dev);
++	struct auxiliary_device *adev;
 +	int ret;
 +
-+	ret = reset_control_deassert(rst);
++	adev = adev_alloc(priv, idx);
++	if (IS_ERR(adev))
++		return PTR_ERR(adev);
++
++	ret = auxiliary_device_add(adev);
++	if (ret) {
++		auxiliary_device_uninit(adev);
++		return ret;
++	}
++
++	ret = devm_add_action_or_reset(&priv->device->dev, unregister_adev, adev);
 +	if (ret)
 +		return ret;
 +
-+	return devm_add_action_or_reset(dev, aspeed_peci_reset_control_release, rst);
++	return 0;
 +}
 +
-+static void aspeed_peci_clk_release(void *data)
++static void peci_cpu_add_adevices(struct peci_cpu *priv)
 +{
-+	clk_disable_unprepare(data);
++	struct device *dev = &priv->device->dev;
++	int ret, i;
++
++	for (i = 0; i < ARRAY_SIZE(peci_adev_types); i++) {
++		ret = devm_adev_add(dev, i);
++		if (ret) {
++			dev_warn(dev, "Failed to register PECI auxiliary: %s, ret = %d\n",
++				 peci_adev_types[i], ret);
++			continue;
++		}
++	}
 +}
 +
-+static int devm_aspeed_peci_clk_enable(struct device *dev, struct clk *clk)
++static int
++peci_cpu_probe(struct peci_device *device, const struct peci_device_id *id)
 +{
-+	int ret;
++	struct device *dev = &device->dev;
++	struct peci_cpu *priv;
 +
-+	ret = clk_prepare_enable(clk);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(dev, aspeed_peci_clk_release, clk);
-+}
-+
-+static int aspeed_peci_probe(struct platform_device *pdev)
-+{
-+	struct peci_controller *controller;
-+	struct aspeed_peci *priv;
-+	struct clk *ref_clk;
-+	int ret;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
 +	if (!priv)
 +		return -ENOMEM;
 +
-+	priv->dev = &pdev->dev;
-+	dev_set_drvdata(priv->dev, priv);
++	dev_set_drvdata(dev, priv);
++	priv->device = device;
++	priv->id = id;
 +
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->irq = platform_get_irq(pdev, 0);
-+	if (!priv->irq)
-+		return priv->irq;
-+
-+	ret = devm_request_irq(&pdev->dev, priv->irq, aspeed_peci_irq_handler,
-+			       0, "peci-aspeed", priv);
-+	if (ret)
-+		return ret;
-+
-+	init_completion(&priv->xfer_complete);
-+	spin_lock_init(&priv->lock);
-+
-+	priv->rst = devm_reset_control_get(&pdev->dev, NULL);
-+	if (IS_ERR(priv->rst))
-+		return dev_err_probe(priv->dev, PTR_ERR(priv->rst),
-+				     "failed to get reset control\n");
-+
-+	ret = devm_aspeed_peci_reset_control_deassert(priv->dev, priv->rst);
-+	if (ret)
-+		return dev_err_probe(priv->dev, ret, "cannot deassert reset control\n");
-+
-+	aspeed_peci_property_setup(priv);
-+
-+	aspeed_peci_init_regs(priv);
-+
-+	ref_clk = devm_clk_get(priv->dev, NULL);
-+	if (IS_ERR(ref_clk))
-+		return dev_err_probe(priv->dev, PTR_ERR(ref_clk), "failed to get ref clock\n");
-+
-+	priv->clk = devm_aspeed_peci_register_clk_div(priv->dev, ref_clk, priv);
-+	if (IS_ERR(priv->clk))
-+		return dev_err_probe(priv->dev, PTR_ERR(priv->clk), "cannot register clock\n");
-+
-+	ret = clk_set_rate(priv->clk, priv->clk_frequency);
-+	if (ret < 0)
-+		return dev_err_probe(priv->dev, ret, "cannot set clock frequency\n");
-+
-+	ret = devm_aspeed_peci_clk_enable(priv->dev, priv->clk);
-+	if (ret)
-+		return dev_err_probe(priv->dev, ret, "failed to enable clock\n");
-+
-+	aspeed_peci_controller_enable(priv);
-+
-+	controller = devm_peci_controller_add(priv->dev, &aspeed_ops);
-+	if (IS_ERR(controller))
-+		return dev_err_probe(priv->dev, PTR_ERR(controller),
-+				     "failed to add aspeed peci controller\n");
-+
-+	priv->controller = controller;
++	peci_cpu_add_adevices(priv);
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id aspeed_peci_of_table[] = {
-+	{ .compatible = "aspeed,ast2400-peci", },
-+	{ .compatible = "aspeed,ast2500-peci", },
-+	{ .compatible = "aspeed,ast2600-peci", },
++static const struct peci_device_id peci_cpu_device_ids[] = {
++	{ /* Haswell Xeon */
++		.family	= 6,
++		.model	= INTEL_FAM6_HASWELL_X,
++		.data	= "hsx",
++	},
++	{ /* Broadwell Xeon */
++		.family	= 6,
++		.model	= INTEL_FAM6_BROADWELL_X,
++		.data	= "bdx",
++	},
++	{ /* Broadwell Xeon D */
++		.family	= 6,
++		.model	= INTEL_FAM6_BROADWELL_D,
++		.data	= "bdxd",
++	},
++	{ /* Skylake Xeon */
++		.family	= 6,
++		.model	= INTEL_FAM6_SKYLAKE_X,
++		.data	= "skx",
++	},
++	{ /* Icelake Xeon */
++		.family	= 6,
++		.model	= INTEL_FAM6_ICELAKE_X,
++		.data	= "icx",
++	},
++	{ /* Icelake Xeon D */
++		.family	= 6,
++		.model	= INTEL_FAM6_ICELAKE_D,
++		.data	= "icxd",
++	},
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(of, aspeed_peci_of_table);
++MODULE_DEVICE_TABLE(peci, peci_cpu_device_ids);
 +
-+static struct platform_driver aspeed_peci_driver = {
-+	.probe  = aspeed_peci_probe,
-+	.driver = {
-+		.name           = "peci-aspeed",
-+		.of_match_table = aspeed_peci_of_table,
++static struct peci_driver peci_cpu_driver = {
++	.probe		= peci_cpu_probe,
++	.id_table	= peci_cpu_device_ids,
++	.driver		= {
++		.name		= "peci-cpu",
 +	},
 +};
-+module_platform_driver(aspeed_peci_driver);
++module_peci_driver(peci_cpu_driver);
 +
-+MODULE_AUTHOR("Ryan Chen <ryan_chen@aspeedtech.com>");
-+MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
-+MODULE_DESCRIPTION("ASPEED PECI driver");
++MODULE_AUTHOR("Iwona Winiarska <iwona.winiarska@intel.com>");
++MODULE_DESCRIPTION("PECI CPU driver");
 +MODULE_LICENSE("GPL");
 +MODULE_IMPORT_NS(PECI);
+diff --git a/drivers/peci/device.c b/drivers/peci/device.c
+index 184b5e650b0b..e6b0bffb14f4 100644
+--- a/drivers/peci/device.c
++++ b/drivers/peci/device.c
+@@ -3,6 +3,7 @@
+ 
+ #include <linux/bitfield.h>
+ #include <linux/peci.h>
++#include <linux/peci-cpu.h>
+ #include <linux/slab.h>
+ 
+ #include "internal.h"
+diff --git a/drivers/peci/internal.h b/drivers/peci/internal.h
+index 52c02e12874f..9d75ea54504c 100644
+--- a/drivers/peci/internal.h
++++ b/drivers/peci/internal.h
+@@ -22,6 +22,7 @@ void peci_request_free(struct peci_request *req);
+ int peci_request_status(struct peci_request *req);
+ 
+ u64 peci_request_dib_read(struct peci_request *req);
++s16 peci_request_temp_read(struct peci_request *req);
+ 
+ u8 peci_request_data_readb(struct peci_request *req);
+ u16 peci_request_data_readw(struct peci_request *req);
+@@ -36,6 +37,32 @@ struct peci_request *peci_xfer_pkg_cfg_readw(struct peci_device *device, u8 inde
+ struct peci_request *peci_xfer_pkg_cfg_readl(struct peci_device *device, u8 index, u16 param);
+ struct peci_request *peci_xfer_pkg_cfg_readq(struct peci_device *device, u8 index, u16 param);
+ 
++struct peci_request *peci_xfer_pci_cfg_local_readb(struct peci_device *device,
++						   u8 bus, u8 dev, u8 func, u16 reg);
++struct peci_request *peci_xfer_pci_cfg_local_readw(struct peci_device *device,
++						   u8 bus, u8 dev, u8 func, u16 reg);
++struct peci_request *peci_xfer_pci_cfg_local_readl(struct peci_device *device,
++						   u8 bus, u8 dev, u8 func, u16 reg);
++
++struct peci_request *peci_xfer_ep_pci_cfg_local_readb(struct peci_device *device, u8 seg,
++						      u8 bus, u8 dev, u8 func, u16 reg);
++struct peci_request *peci_xfer_ep_pci_cfg_local_readw(struct peci_device *device, u8 seg,
++						      u8 bus, u8 dev, u8 func, u16 reg);
++struct peci_request *peci_xfer_ep_pci_cfg_local_readl(struct peci_device *device, u8 seg,
++						      u8 bus, u8 dev, u8 func, u16 reg);
++
++struct peci_request *peci_xfer_ep_pci_cfg_readb(struct peci_device *device, u8 seg,
++						u8 bus, u8 dev, u8 func, u16 reg);
++struct peci_request *peci_xfer_ep_pci_cfg_readw(struct peci_device *device, u8 seg,
++						u8 bus, u8 dev, u8 func, u16 reg);
++struct peci_request *peci_xfer_ep_pci_cfg_readl(struct peci_device *device, u8 seg,
++						u8 bus, u8 dev, u8 func, u16 reg);
++
++struct peci_request *peci_xfer_ep_mmio32_readl(struct peci_device *device, u8 bar, u8 seg,
++					       u8 bus, u8 dev, u8 func, u64 offset);
++
++struct peci_request *peci_xfer_ep_mmio64_readl(struct peci_device *device, u8 bar, u8 seg,
++					       u8 bus, u8 dev, u8 func, u64 offset);
+ /**
+  * struct peci_device_id - PECI device data to match
+  * @data: pointer to driver private data specific to device
+diff --git a/drivers/peci/request.c b/drivers/peci/request.c
+index a49eb351cda3..8d6dd7b6b559 100644
+--- a/drivers/peci/request.c
++++ b/drivers/peci/request.c
+@@ -3,6 +3,7 @@
+ 
+ #include <linux/bug.h>
+ #include <linux/export.h>
++#include <linux/pci.h>
+ #include <linux/peci.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+@@ -15,6 +16,10 @@
+ #define  PECI_GET_DIB_WR_LEN		1
+ #define  PECI_GET_DIB_RD_LEN		8
+ 
++#define PECI_GET_TEMP_CMD		0x01
++#define  PECI_GET_TEMP_WR_LEN		1
++#define  PECI_GET_TEMP_RD_LEN		2
++
+ #define PECI_RDPKGCFG_CMD		0xa1
+ #define  PECI_RDPKGCFG_WR_LEN		5
+ #define  PECI_RDPKGCFG_RD_LEN_BASE	1
+@@ -22,6 +27,45 @@
+ #define  PECI_WRPKGCFG_WR_LEN_BASE	6
+ #define  PECI_WRPKGCFG_RD_LEN		1
+ 
++#define PECI_RDIAMSR_CMD		0xb1
++#define  PECI_RDIAMSR_WR_LEN		5
++#define  PECI_RDIAMSR_RD_LEN		9
++#define PECI_WRIAMSR_CMD		0xb5
++#define PECI_RDIAMSREX_CMD		0xd1
++#define  PECI_RDIAMSREX_WR_LEN		6
++#define  PECI_RDIAMSREX_RD_LEN		9
++
++#define PECI_RDPCICFG_CMD		0x61
++#define  PECI_RDPCICFG_WR_LEN		6
++#define  PECI_RDPCICFG_RD_LEN		5
++#define  PECI_RDPCICFG_RD_LEN_MAX	24
++#define PECI_WRPCICFG_CMD		0x65
++
++#define PECI_RDPCICFGLOCAL_CMD			0xe1
++#define  PECI_RDPCICFGLOCAL_WR_LEN		5
++#define  PECI_RDPCICFGLOCAL_RD_LEN_BASE		1
++#define PECI_WRPCICFGLOCAL_CMD			0xe5
++#define  PECI_WRPCICFGLOCAL_WR_LEN_BASE		6
++#define  PECI_WRPCICFGLOCAL_RD_LEN		1
++
++#define PECI_ENDPTCFG_TYPE_LOCAL_PCI		0x03
++#define PECI_ENDPTCFG_TYPE_PCI			0x04
++#define PECI_ENDPTCFG_TYPE_MMIO			0x05
++#define PECI_ENDPTCFG_ADDR_TYPE_PCI		0x04
++#define PECI_ENDPTCFG_ADDR_TYPE_MMIO_D		0x05
++#define PECI_ENDPTCFG_ADDR_TYPE_MMIO_Q		0x06
++#define PECI_RDENDPTCFG_CMD			0xc1
++#define  PECI_RDENDPTCFG_PCI_WR_LEN		12
++#define  PECI_RDENDPTCFG_MMIO_WR_LEN_BASE	10
++#define  PECI_RDENDPTCFG_MMIO_D_WR_LEN		14
++#define  PECI_RDENDPTCFG_MMIO_Q_WR_LEN		18
++#define  PECI_RDENDPTCFG_RD_LEN_BASE		1
++#define PECI_WRENDPTCFG_CMD			0xc5
++#define  PECI_WRENDPTCFG_PCI_WR_LEN_BASE	13
++#define  PECI_WRENDPTCFG_MMIO_D_WR_LEN_BASE	15
++#define  PECI_WRENDPTCFG_MMIO_Q_WR_LEN_BASE	19
++#define  PECI_WRENDPTCFG_RD_LEN			1
++
+ /* Device Specific Completion Code (CC) Definition */
+ #define PECI_CC_SUCCESS				0x40
+ #define PECI_CC_NEED_RETRY			0x80
+@@ -202,6 +246,27 @@ struct peci_request *peci_xfer_get_dib(struct peci_device *device)
+ }
+ EXPORT_SYMBOL_NS_GPL(peci_xfer_get_dib, PECI);
+ 
++struct peci_request *peci_xfer_get_temp(struct peci_device *device)
++{
++	struct peci_request *req;
++	int ret;
++
++	req = peci_request_alloc(device, PECI_GET_TEMP_WR_LEN, PECI_GET_TEMP_RD_LEN);
++	if (!req)
++		return ERR_PTR(-ENOMEM);
++
++	req->tx.buf[0] = PECI_GET_TEMP_CMD;
++
++	ret = peci_request_xfer(req);
++	if (ret) {
++		peci_request_free(req);
++		return ERR_PTR(ret);
++	}
++
++	return req;
++}
++EXPORT_SYMBOL_NS_GPL(peci_xfer_get_temp, PECI);
++
+ static struct peci_request *
+ __pkg_cfg_read(struct peci_device *device, u8 index, u16 param, u8 len)
+ {
+@@ -226,6 +291,108 @@ __pkg_cfg_read(struct peci_device *device, u8 index, u16 param, u8 len)
+ 	return req;
+ }
+ 
++static u32 __get_pci_addr(u8 bus, u8 dev, u8 func, u16 reg)
++{
++	return reg | PCI_DEVID(bus, PCI_DEVFN(dev, func)) << 12;
++}
++
++static struct peci_request *
++__pci_cfg_local_read(struct peci_device *device, u8 bus, u8 dev, u8 func, u16 reg, u8 len)
++{
++	struct peci_request *req;
++	u32 pci_addr;
++	int ret;
++
++	req = peci_request_alloc(device, PECI_RDPCICFGLOCAL_WR_LEN,
++				 PECI_RDPCICFGLOCAL_RD_LEN_BASE + len);
++	if (!req)
++		return ERR_PTR(-ENOMEM);
++
++	pci_addr = __get_pci_addr(bus, dev, func, reg);
++
++	req->tx.buf[0] = PECI_RDPCICFGLOCAL_CMD;
++	req->tx.buf[1] = 0;
++	put_unaligned_le24(pci_addr, &req->tx.buf[2]);
++
++	ret = peci_request_xfer_retry(req);
++	if (ret) {
++		peci_request_free(req);
++		return ERR_PTR(ret);
++	}
++
++	return req;
++}
++
++static struct peci_request *
++__ep_pci_cfg_read(struct peci_device *device, u8 msg_type, u8 seg,
++		  u8 bus, u8 dev, u8 func, u16 reg, u8 len)
++{
++	struct peci_request *req;
++	u32 pci_addr;
++	int ret;
++
++	req = peci_request_alloc(device, PECI_RDENDPTCFG_PCI_WR_LEN,
++				 PECI_RDENDPTCFG_RD_LEN_BASE + len);
++	if (!req)
++		return ERR_PTR(-ENOMEM);
++
++	pci_addr = __get_pci_addr(bus, dev, func, reg);
++
++	req->tx.buf[0] = PECI_RDENDPTCFG_CMD;
++	req->tx.buf[1] = 0;
++	req->tx.buf[2] = msg_type;
++	req->tx.buf[3] = 0;
++	req->tx.buf[4] = 0;
++	req->tx.buf[5] = 0;
++	req->tx.buf[6] = PECI_ENDPTCFG_ADDR_TYPE_PCI;
++	req->tx.buf[7] = seg; /* PCI Segment */
++	put_unaligned_le32(pci_addr, &req->tx.buf[8]);
++
++	ret = peci_request_xfer_retry(req);
++	if (ret) {
++		peci_request_free(req);
++		return ERR_PTR(ret);
++	}
++
++	return req;
++}
++
++static struct peci_request *
++__ep_mmio_read(struct peci_device *device, u8 bar, u8 addr_type, u8 seg,
++	       u8 bus, u8 dev, u8 func, u64 offset, u8 tx_len, u8 len)
++{
++	struct peci_request *req;
++	int ret;
++
++	req = peci_request_alloc(device, tx_len, PECI_RDENDPTCFG_RD_LEN_BASE + len);
++	if (!req)
++		return ERR_PTR(-ENOMEM);
++
++	req->tx.buf[0] = PECI_RDENDPTCFG_CMD;
++	req->tx.buf[1] = 0;
++	req->tx.buf[2] = PECI_ENDPTCFG_TYPE_MMIO;
++	req->tx.buf[3] = 0; /* Endpoint ID */
++	req->tx.buf[4] = 0; /* Reserved */
++	req->tx.buf[5] = bar;
++	req->tx.buf[6] = addr_type;
++	req->tx.buf[7] = seg; /* PCI Segment */
++	req->tx.buf[8] = PCI_DEVFN(dev, func);
++	req->tx.buf[9] = bus; /* PCI Bus */
++
++	if (addr_type == PECI_ENDPTCFG_ADDR_TYPE_MMIO_D)
++		put_unaligned_le32(offset, &req->tx.buf[10]);
++	else
++		put_unaligned_le64(offset, &req->tx.buf[10]);
++
++	ret = peci_request_xfer_retry(req);
++	if (ret) {
++		peci_request_free(req);
++		return ERR_PTR(ret);
++	}
++
++	return req;
++}
++
+ u8 peci_request_data_readb(struct peci_request *req)
+ {
+ 	return req->rx.buf[1];
+@@ -256,6 +423,12 @@ u64 peci_request_dib_read(struct peci_request *req)
+ }
+ EXPORT_SYMBOL_NS_GPL(peci_request_dib_read, PECI);
+ 
++s16 peci_request_temp_read(struct peci_request *req)
++{
++	return get_unaligned_le16(&req->rx.buf[0]);
++}
++EXPORT_SYMBOL_NS_GPL(peci_request_temp_read, PECI);
++
+ #define __read_pkg_config(x, type) \
+ struct peci_request *peci_xfer_pkg_cfg_##x(struct peci_device *device, u8 index, u16 param) \
+ { \
+@@ -267,3 +440,43 @@ __read_pkg_config(readb, u8);
+ __read_pkg_config(readw, u16);
+ __read_pkg_config(readl, u32);
+ __read_pkg_config(readq, u64);
++
++#define __read_pci_config_local(x, type) \
++struct peci_request * \
++peci_xfer_pci_cfg_local_##x(struct peci_device *device, u8 bus, u8 dev, u8 func, u16 reg) \
++{ \
++	return __pci_cfg_local_read(device, bus, dev, func, reg, sizeof(type)); \
++} \
++EXPORT_SYMBOL_NS_GPL(peci_xfer_pci_cfg_local_##x, PECI)
++
++__read_pci_config_local(readb, u8);
++__read_pci_config_local(readw, u16);
++__read_pci_config_local(readl, u32);
++
++#define __read_ep_pci_config(x, msg_type, type) \
++struct peci_request * \
++peci_xfer_ep_pci_cfg_##x(struct peci_device *device, u8 seg, u8 bus, u8 dev, u8 func, u16 reg) \
++{ \
++	return __ep_pci_cfg_read(device, msg_type, seg, bus, dev, func, reg, sizeof(type)); \
++} \
++EXPORT_SYMBOL_NS_GPL(peci_xfer_ep_pci_cfg_##x, PECI)
++
++__read_ep_pci_config(local_readb, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u8);
++__read_ep_pci_config(local_readw, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u16);
++__read_ep_pci_config(local_readl, PECI_ENDPTCFG_TYPE_LOCAL_PCI, u32);
++__read_ep_pci_config(readb, PECI_ENDPTCFG_TYPE_PCI, u8);
++__read_ep_pci_config(readw, PECI_ENDPTCFG_TYPE_PCI, u16);
++__read_ep_pci_config(readl, PECI_ENDPTCFG_TYPE_PCI, u32);
++
++#define __read_ep_mmio(x, y, addr_type, type1, type2) \
++struct peci_request *peci_xfer_ep_mmio##y##_##x(struct peci_device *device, u8 bar, u8 seg, \
++					   u8 bus, u8 dev, u8 func, u64 offset) \
++{ \
++	return __ep_mmio_read(device, bar, addr_type, seg, bus, dev, func, \
++			      offset, PECI_RDENDPTCFG_MMIO_WR_LEN_BASE + sizeof(type1), \
++			      sizeof(type2)); \
++} \
++EXPORT_SYMBOL_NS_GPL(peci_xfer_ep_mmio##y##_##x, PECI)
++
++__read_ep_mmio(readl, 32, PECI_ENDPTCFG_ADDR_TYPE_MMIO_D, u32, u32);
++__read_ep_mmio(readl, 64, PECI_ENDPTCFG_ADDR_TYPE_MMIO_Q, u64, u32);
+diff --git a/include/linux/peci-cpu.h b/include/linux/peci-cpu.h
+new file mode 100644
+index 000000000000..ff8ae9c26c80
+--- /dev/null
++++ b/include/linux/peci-cpu.h
+@@ -0,0 +1,40 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (c) 2021 Intel Corporation */
++
++#ifndef __LINUX_PECI_CPU_H
++#define __LINUX_PECI_CPU_H
++
++#include <linux/types.h>
++
++#include "../../arch/x86/include/asm/intel-family.h"
++
++#define PECI_PCS_PKG_ID			0  /* Package Identifier Read */
++#define  PECI_PKG_ID_CPU_ID		0x0000  /* CPUID Info */
++#define  PECI_PKG_ID_PLATFORM_ID	0x0001  /* Platform ID */
++#define  PECI_PKG_ID_DEVICE_ID		0x0002  /* Uncore Device ID */
++#define  PECI_PKG_ID_MAX_THREAD_ID	0x0003  /* Max Thread ID */
++#define  PECI_PKG_ID_MICROCODE_REV	0x0004  /* CPU Microcode Update Revision */
++#define  PECI_PKG_ID_MCA_ERROR_LOG	0x0005  /* Machine Check Status */
++#define PECI_PCS_MODULE_TEMP		9  /* Per Core DTS Temperature Read */
++#define PECI_PCS_THERMAL_MARGIN		10 /* DTS thermal margin */
++#define PECI_PCS_DDR_DIMM_TEMP		14 /* DDR DIMM Temperature */
++#define PECI_PCS_TEMP_TARGET		16 /* Temperature Target Read */
++#define PECI_PCS_TDP_UNITS		30 /* Units for power/energy registers */
++
++struct peci_device;
++
++int peci_temp_read(struct peci_device *device, s16 *temp_raw);
++
++int peci_pcs_read(struct peci_device *device, u8 index,
++		  u16 param, u32 *data);
++
++int peci_pci_local_read(struct peci_device *device, u8 bus, u8 dev,
++			u8 func, u16 reg, u32 *data);
++
++int peci_ep_pci_local_read(struct peci_device *device, u8 seg,
++			   u8 bus, u8 dev, u8 func, u16 reg, u32 *data);
++
++int peci_mmio_read(struct peci_device *device, u8 bar, u8 seg,
++		   u8 bus, u8 dev, u8 func, u64 address, u32 *data);
++
++#endif /* __LINUX_PECI_CPU_H */
+diff --git a/include/linux/peci.h b/include/linux/peci.h
+index 4eda423ba10c..06e6ef935297 100644
+--- a/include/linux/peci.h
++++ b/include/linux/peci.h
+@@ -14,14 +14,6 @@
+  */
+ #define PECI_REQUEST_MAX_BUF_SIZE 32
+ 
+-#define PECI_PCS_PKG_ID			0  /* Package Identifier Read */
+-#define  PECI_PKG_ID_CPU_ID		0x0000  /* CPUID Info */
+-#define  PECI_PKG_ID_PLATFORM_ID	0x0001  /* Platform ID */
+-#define  PECI_PKG_ID_DEVICE_ID		0x0002  /* Uncore Device ID */
+-#define  PECI_PKG_ID_MAX_THREAD_ID	0x0003  /* Max Thread ID */
+-#define  PECI_PKG_ID_MICROCODE_REV	0x0004  /* CPU Microcode Update Revision */
+-#define  PECI_PKG_ID_MCA_ERROR_LOG	0x0005  /* Machine Check Status */
+-
+ struct peci_controller;
+ struct peci_request;
+ 
 -- 
 2.31.1
 
