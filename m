@@ -2,93 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78749C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jan 2022 22:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9977C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jan 2022 05:39:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiAZWLH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Jan 2022 17:11:07 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:43693 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbiAZWLC (ORCPT
+        id S232505AbiA0FjV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jan 2022 00:39:21 -0500
+Received: from webmail.amiindia.co.in ([14.98.235.2]:59183 "EHLO
+        IMSVA.IN.MEGATRENDS.COM" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229801AbiA0FjU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:11:02 -0500
-Received: by mail-oi1-f182.google.com with SMTP id p203so2296284oih.10;
-        Wed, 26 Jan 2022 14:11:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=QEBmmXY/w14IkJPvP4tfoWBs7S4k/e361MpXKSCcDwQ=;
-        b=pTvqzFBbL24wrN7/yqy1OILZvymXIMjqjzIXE+HoOe4COyksQmHwkAuoYBBHG+Muqt
-         ZefWTUVm+UOOJawDWFi64ggIRzIbEO+QwFbOOSvl2Jszg9AmhfKaCztG1VN93X18oUSZ
-         6EAlb5UN5NiXkn8mLE9IwfvYDT2mv8Nbzr/5MH97dxadYFoQecQiTkTnEnszphAlcCME
-         n6piDJ5bXNtcD5Eox+IW6weMcYJyagLY+GBQO7f1CSV071z70vUkXQUVbSbS+G+XF1Ja
-         vf/gb9/Py6Q1UAtv8SyygWBH6zjyd1n5HSobTrbXM/j1JDDk4Cg6GFuqqrTm2RvA/jXA
-         4RhA==
-X-Gm-Message-State: AOAM531rXTGAPE+FqtuHF6JIz9emvkoC6gUOfrtdu/8ZFvwov+HFsr2c
-        bSTtms8C1fKF3ImMuY/fapVtczHivA==
-X-Google-Smtp-Source: ABdhPJxs9I0NzNRvqp2+Lx+8NbRjWD0I/BTpvalZLOrPhW0GxvleuRy5CNXcqTpBOW70lA8yWRXm/A==
-X-Received: by 2002:a54:4e06:: with SMTP id a6mr428051oiy.224.1643235061535;
-        Wed, 26 Jan 2022 14:11:01 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k13sm1074619ots.48.2022.01.26.14.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:11:00 -0800 (PST)
-Received: (nullmailer pid 1535102 invoked by uid 1000);
-        Wed, 26 Jan 2022 22:10:52 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, jdelvare@suse.com
-In-Reply-To: <20220126200350.3633576-1-clabbe@baylibre.com>
-References: <20220126200350.3633576-1-clabbe@baylibre.com>
-Subject: Re: [PATCH] dt-bindings: hwmon: gpio-fan: convert to YAML
-Date:   Wed, 26 Jan 2022 16:10:52 -0600
-Message-Id: <1643235052.887619.1535101.nullmailer@robh.at.kernel.org>
+        Thu, 27 Jan 2022 00:39:20 -0500
+Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1EA5782047;
+        Thu, 27 Jan 2022 11:20:27 +0530 (IST)
+Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF95282046;
+        Thu, 27 Jan 2022 11:20:26 +0530 (IST)
+Received: from webmail.amiindia.co.in (venus1.in.megatrends.com [10.0.0.5])
+        by IMSVA.IN.MEGATRENDS.COM (Postfix) with ESMTPS;
+        Thu, 27 Jan 2022 11:20:26 +0530 (IST)
+Received: from msgubuntu-OptiPlex-5060.in.megatrends.com (10.0.124.83) by
+ VENUS1.in.megatrends.com (10.0.0.5) with Microsoft SMTP Server id 14.3.468.0;
+ Thu, 27 Jan 2022 11:09:11 +0530
+From:   krishnar4 <krishnar@ami.com>
+To:     Krishna Raj <krishnar@ami.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-hwmon@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>,
+        Deepak Kodihalli <dkodihalli@nvidia.com>,
+        Shakeeb Pasha <spasha@nvidia.com>,
+        Vinodhini J <vinodhinij@ami.com>,
+        Pravinash Jeyapaul <pravinashj@ami.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH linux dev-5.15] hwmon: (pmbus) modify PSU fan_target convert value to false
+Date:   Thu, 27 Jan 2022 11:09:08 +0530
+Message-ID: <20220127053908.16587-1-krishnar@ami.com>
+X-Mailer: git-send-email 2.35.0
+In-Reply-To: <git-send-email-krishnar@ami.com>
+References: <git-send-email-krishnar@ami.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSVA-9.1.0.1817-8.6.0.1013-26114.002
+X-TM-AS-Result: No--1.662-5.0-31-10
+X-imss-scan-details: No--1.662-5.0-31-10
+X-TMASE-Version: IMSVA-9.1.0.1817-8.6.1013-26114.002
+X-TMASE-Result: 10--1.662300-10.000000
+X-TMASE-MatchedRID: 8muszqLoCjtHoOzJ1oF1dqiUivh0j2Pvljgw/8s6b3cHZBaLwEXlKGlF
+        7OhYLlctcwePA9FSeTz9k6grZ0shf9zmfZUrwTrUngIgpj8eDcBpkajQR5gb3savT21DsLD/UEh
+        Wy9W70AEnRE+fI6etkituBDgcniIfegbcIIrT/+G8mBZdhaNLqDiyY/5MU8oBTzs4VfHSjec5fl
+        oBUgk06Ga7J9YRB75owdF1Ue2Jr/JPZRTsEKEvt4pebMSk1UmKlmXPgyQocYp5E1G2nFNyeETBf
+        0diyKhk7DIVgUu7mCo=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 26 Jan 2022 20:03:50 +0000, Corentin Labbe wrote:
-> Converts hwmon/gpio-fan.txt to YAML
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> 
-> I didnt found any clear maintainer and since DT yaml mandates a
-> maintainer section, I set devicetree@vger.kernel.org.
-> 
->  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 --------
->  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 96 +++++++++++++++++++
->  2 files changed, 96 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> 
+Description: PSU can't use sysfs fan_target to control PSU fan duty.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: krishnar4 <krishnar@ami.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/hwmon/gpio-fan.example.dt.yaml:0:0: /example-0/gpio@4d000000: failed to match any schema with compatible: ['cortina,gemini-gpio', 'faraday,ftgpio010']
-Documentation/devicetree/bindings/hwmon/gpio-fan.example.dt.yaml:0:0: /example-0/gpio@4d000000: failed to match any schema with compatible: ['cortina,gemini-gpio', 'faraday,ftgpio010']
-Documentation/devicetree/bindings/hwmon/gpio-fan.example.dt.yaml:0:0: /example-1/gpio@4d000000: failed to match any schema with compatible: ['cortina,gemini-gpio', 'faraday,ftgpio010']
-Documentation/devicetree/bindings/hwmon/gpio-fan.example.dt.yaml:0:0: /example-1/gpio@4d000000: failed to match any schema with compatible: ['cortina,gemini-gpio', 'faraday,ftgpio010']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1584654
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 776ee2237be2..a56c2e1c4079 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1889,7 +1889,7 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
+ 
+ 	sensor = pmbus_add_sensor(data, "fan", "target", index, page,
+ 				  0xff, PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
+-				  false, false, true);
++				  false, false, false);
+ 
+ 	if (!sensor)
+ 		return -ENOMEM;
+-- 
+2.17.1
 
