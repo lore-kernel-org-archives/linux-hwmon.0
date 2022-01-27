@@ -2,102 +2,222 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D38D6C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jan 2022 14:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B922C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jan 2022 14:49:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237763AbiA0O2a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jan 2022 09:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S238164AbiA0OtT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jan 2022 09:49:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiA0O23 (ORCPT
+        with ESMTP id S238121AbiA0OtT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:28:29 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE59C061714
-        for <linux-hwmon@vger.kernel.org>; Thu, 27 Jan 2022 06:28:29 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id d18-20020a9d51d2000000b005a09728a8c2so2718622oth.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 27 Jan 2022 06:28:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=S6BTydlraWZWCt2NifxG5jc5VWppyr71C1FZw86bWWg=;
-        b=Ll8ZluxD7MjaXvKOlKW9/LO7Ja1rBc2hTbX+7F0PKEmKYjSzyyOEc13f1xpc9spxsd
-         xEWDJpBg62mmENtg+oEqUmdNk9D2SWyOvzURcaoRB5xrEahOp451EYBdDKkvMbXirxmC
-         4SekfKN3/ZxYUIdHv7COeqfFAPZb5Dclm6JLxZZGtU3zLgF/1Q30jrbImiAGJJnd5gIS
-         D7PBBf/4M/MMWACrAHDdXfBodopl82Bcac+RUKfyB/MwYKFGfzPc41NE5bcT3OPOS38q
-         zBu8F8cN/aCgZDiPuYzsEakUCf7SL5iKkOE0htzriTIVkLsLV4hxr+AjOLinhHECYMw+
-         /ryw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=S6BTydlraWZWCt2NifxG5jc5VWppyr71C1FZw86bWWg=;
-        b=HanfZHPGXn3/Xi00Gm/Vmv4KTRQrsvkuEr52i5ZxRMwQAcNytSJCkWIjFeIMZTTWH/
-         RmU90XgT51obDoHDrxJYfLD26KRgTgbPSqwsiJqI78X0bJOxT64vS/ThyRjY4qVLd2BF
-         6Hv9iiMuT7YQbdgFuijZJkeSKdzwGVny9GIUmeBDKC3ySNnmzzKqQ8S7acy4VOhweRYZ
-         iJcRs99c9LA0BnOFmTyxaV+c/87yBJ5hC1+3nnWasZNhYIQQKuZnAbuLCDhy3gai8v7P
-         7IvCTSj3uSo/pt7a1GJzkG/HbNk9ksKSopo1eq/PFNanpJN7Op4SxeOE6zekhZURGw8L
-         YGgA==
-X-Gm-Message-State: AOAM530hmB4sigAho0WK2peh2xLb28DnfAEE/jWtVu6Kdz9HipX3OvqI
-        3B+mD0hMButoNQ0se89wnqhz+zoZVulRVw==
-X-Google-Smtp-Source: ABdhPJwCM3WYEmaiD7EJU1UUmDodKh7LbtIUZIkH9oX3ocLocFTLP0j9xOixH5XO5dIWmRBWrEVqCw==
-X-Received: by 2002:a05:6830:3148:: with SMTP id c8mr2281589ots.380.1643293708752;
-        Thu, 27 Jan 2022 06:28:28 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q188sm7918822oig.15.2022.01.27.06.28.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 06:28:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <73331bd3-a252-4e11-e84c-8dfad3f62eb0@roeck-us.net>
-Date:   Thu, 27 Jan 2022 06:28:26 -0800
+        Thu, 27 Jan 2022 09:49:19 -0500
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF684C061714;
+        Thu, 27 Jan 2022 06:49:18 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jl3Q41Tljz9sH1;
+        Thu, 27 Jan 2022 15:49:16 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1643294954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FF8+oawUKMaz29IqMMpfs7eXCdT8kpzrL/KwN7xVNoM=;
+        b=BeYOZ0kOBuvx9QAzastIyIuEFpvagGoZXTeSxm4rFcvZhJuOpi/JVj5oyJ/GpsHzhFDNpu
+        roV6dsCAa9sKvVsHR1iUcFXdmIesEAt4JYntO/vUIwMEYYw05zHj5PRcpDi54ASJgXhBom
+        uVQ724yu/3GJg5IocKB6D72tvf9XtLcgUQRxo+ySDvAC7s0pxl0+QcaScvzS0pMD+Crb7S
+        pG6CThrNm3HIEwJ4yqsjJFMeqMJVuYlHe7AJNjlawnuZ0egbPKVOet+3TkrquZWSqURXjA
+        gahE0hS7i/0SRCLApZhG2pUlk8/gfVAt/kcH7YYH2Rjb5s5okRqB1AdGeytxEQ==
+Message-ID: <9f1f48ac68f0afed92d7fa114fb8af74c81aa581.camel@sylv.io>
+Subject: Re: [PATCH v3 3/4] dt-bindings: hwmon: Add binding for max6639
+From:   sylv <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Roland Stigge <stigge@antcom.de>, devicetree@vger.kernel.org
+Date:   Thu, 27 Jan 2022 15:49:08 +0100
+In-Reply-To: <20220125050804.GA361944@roeck-us.net>
+References: <cover.1642585539.git.sylv@sylv.io>
+         <24e812dc80983ce20cd51a446c4f6d4a1db7da37.1642585539.git.sylv@sylv.io>
+         <20220125050804.GA361944@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-hwmon@vger.kernel.org
-References: <20220127085245.GF25644@kili>
- <TI4D6R.WEHYEPI3R49G3@crapouillou.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [bug report] hwmon: Add "label" attribute
-In-Reply-To: <TI4D6R.WEHYEPI3R49G3@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/27/22 01:47, Paul Cercueil wrote:
-> Hi,
+On Mon, 2022-01-24 at 21:08 -0800, Guenter Roeck wrote:
+> On Wed, Jan 19, 2022 at 10:53:54AM +0100, Marcello Sylvester Bauer
+> wrote:
+> > Add Devicetree binding documentation for Maxim MAX6639 temperature
+> > monitor with PWM fan-speed controller.
+> > 
+> > The devicetree documentation for the SD3078 device tree.
+> > 
+> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > ---
+> >  .../bindings/hwmon/maxim,max6639.yaml         | 112
+> > ++++++++++++++++++
+> >  1 file changed, 112 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > new file mode 100644
+> > index 000000000000..7093cbeba44b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > @@ -0,0 +1,112 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Maxim max6639
+> > +
+> > +maintainers:
+> > +  - Roland Stigge <stigge@antcom.de>
+> > +
+> > +description: |
+> > +  The MAX6639 is a 2-channel temperature monitor with dual,
+> > automatic, PWM
+> > +  fan-speed controller.  It monitors its own temperature and one
+> > external
+> > +  diode-connected transistor or the temperatures of two external
+> > diode-connected
+> > +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> > +
+> > +  Datasheets:
+> > +   
+> > https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - maxim,max6639
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#address-cells':
+> > +    const: 1
+> > +
+> > +  '#size-cells':
+> > +    const: 0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "channel@0"
+> > +  - "channel@1"
+> > +
+> > +additionalProperties: false
+> > +
+> > +patternProperties:
+> > +  "^channel@[0-1]$":
+> > +    type: object
+> > +    description: |
+> > +      Represents the two fans and their specific configuration.
+> > +
+> > +    properties:
+> > +      reg:
+> > +        description: |
+> > +          The fan number.
+> > +        items:
+> > +          minimum: 0
+> > +          maximum: 1
+> > +
+> > +      pwm-polarity:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        enum: [0, 1]
+> > +        description:
+> > +          PWM output is low at 100% duty cycle when this bit is
+> > set to zero. PWM
+> > +          output is high at 100% duty cycle when this bit is set
+> > to 1.
+> > +
+> > +      pulses-per-revolution:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        enum: [1, 2, 3, 4]
+> > +        description:
+> > +          Value specifying the number of pulses per revolution of
+> > the controlled
+> > +          FAN.
+> > +
 > 
-> Le jeu., janv. 27 2022 at 11:52:45 +0300, Dan Carpenter <dan.carpenter@oracle.com> a écrit :
->> Hello Paul Cercueil,
->>
->> This is a semi-automatic email about new static checker warnings.
->>
->> The patch 073c3ea6c530: "hwmon: Add "label" attribute" from Jan 10,
->> 2022, leads to the following Smatch complaint:
->>
->>     drivers/hwmon/hwmon.c:825 __hwmon_device_register()
->>     warn: variable dereferenced before check 'dev' (see line 810)
->>
->> drivers/hwmon/hwmon.c
->>    809
->>    810        if (device_property_present(dev, "label")) {
->>                                             ^^^
->> The patch adds a new unchecked dereference
-> 
-> I will send a patch to address that.
-> 
-> I'm surprised that this function can be called with dev == NULL in the first place, though.
-> 
+> I think the above two properties should be optional.
+> pulses-per-revolution is 2 for almost all fans out there,
+> and pwm polarity is positive almost all the time.
 
-Originally it was needed for the thermal subsystem, which did not provide a parent
-device. By the time that was reworked, it was (mis-)used by the Loongson-3 hwmon
-driver (which was never reviewed by a hwmon maintainer and does pretty much
-everything wrong).
+makes sense. I guess I'll keep the default values like before and
+also set rpm-range (resp. rpm-max) to 4000.
 
-Guenter
+> 
+> > +      rpm-range:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        enum: [2000, 4000, 8000, 16000]
+> > +        description:
+> > +          Scales the tachometer counter by setting the maximum
+> > (full-scale) value
+> > +          of the RPM range.
+> > +
+> Isn't this the maximum rpm ? Using the term "range" seems to be
+> a bit misleading.
+
+Yeah, the data sheet explicitly calls this register "rpm fan range".
+But since this is not a vendor specific property and the purpose is
+to set a maximum rpm value, it should rather be called "rpm-max".
+
+Thanks!
+
+Marcello
+
+> 
+> > +    required:
+> > +      - reg
+> > +      - pwm-polarity
+> > +      - pulses-per-revolution
+> > +      - rpm-range
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +      #address-cells = <1>;
+> > +      #size-cells = <0>;
+> > +
+> > +      max6639@10 {
+> > +        compatible = "maxim,max6639";
+> > +        reg = <0x10>;
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        channel@0 {
+> > +          reg = <0x0>;
+> > +          pwm-polarity = <1>;
+> > +          pulses-per-revolution = <2>;
+> > +          rpm-range = <4000>;
+> > +        };
+> > +
+> > +        channel@1 {
+> > +          reg = <0x1>;
+> > +          pwm-polarity = <1>;
+> > +          pulses-per-revolution = <2>;
+> > +          rpm-range = <4000>;
+> > +        };
+> > +      };
+> > +    };
+> > +...
+
