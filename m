@@ -2,31 +2,30 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9977C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jan 2022 05:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E557EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jan 2022 06:05:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbiA0FjV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jan 2022 00:39:21 -0500
-Received: from webmail.amiindia.co.in ([14.98.235.2]:59183 "EHLO
+        id S232585AbiA0GFJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jan 2022 01:05:09 -0500
+Received: from webmail.amiindia.co.in ([14.98.235.2]:61358 "EHLO
         IMSVA.IN.MEGATRENDS.COM" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229801AbiA0FjU (ORCPT
+        with ESMTP id S229776AbiA0GFJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jan 2022 00:39:20 -0500
+        Thu, 27 Jan 2022 01:05:09 -0500
 Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1EA5782047;
-        Thu, 27 Jan 2022 11:20:27 +0530 (IST)
+        by IMSVA (Postfix) with ESMTP id 6952082047;
+        Thu, 27 Jan 2022 11:46:15 +0530 (IST)
 Received: from IMSVA.IN.MEGATRENDS.COM (IMSVA.IN.MEGATRENDS.COM [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF95282046;
-        Thu, 27 Jan 2022 11:20:26 +0530 (IST)
+        by IMSVA (Postfix) with ESMTP id 4D13B82046;
+        Thu, 27 Jan 2022 11:46:15 +0530 (IST)
 Received: from webmail.amiindia.co.in (venus1.in.megatrends.com [10.0.0.5])
         by IMSVA.IN.MEGATRENDS.COM (Postfix) with ESMTPS;
-        Thu, 27 Jan 2022 11:20:26 +0530 (IST)
+        Thu, 27 Jan 2022 11:46:15 +0530 (IST)
 Received: from msgubuntu-OptiPlex-5060.in.megatrends.com (10.0.124.83) by
  VENUS1.in.megatrends.com (10.0.0.5) with Microsoft SMTP Server id 14.3.468.0;
- Thu, 27 Jan 2022 11:09:11 +0530
+ Thu, 27 Jan 2022 11:35:02 +0530
 From:   krishnar4 <krishnar@ami.com>
-To:     Krishna Raj <krishnar@ami.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
         Linus Walleij <linus.walleij@linaro.org>
@@ -34,13 +33,13 @@ CC:     <linux-hwmon@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-aspeed@lists.ozlabs.org>,
         Deepak Kodihalli <dkodihalli@nvidia.com>,
-        Shakeeb Pasha <spasha@nvidia.com>,
         Vinodhini J <vinodhinij@ami.com>,
         Pravinash Jeyapaul <pravinashj@ami.com>,
-        <linux-kernel@vger.kernel.org>
+        Krishna Raj <krishnar@ami.com>, <linux-kernel@vger.kernel.org>,
+        Shakeeb Pasha <spasha@nvidia.com>
 Subject: [PATCH linux dev-5.15] hwmon: (pmbus) modify PSU fan_target convert value to false
-Date:   Thu, 27 Jan 2022 11:09:08 +0530
-Message-ID: <20220127053908.16587-1-krishnar@ami.com>
+Date:   Thu, 27 Jan 2022 11:34:59 +0530
+Message-ID: <20220127060459.17310-1-krishnar@ami.com>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <git-send-email-krishnar@ami.com>
 References: <git-send-email-krishnar@ami.com>
