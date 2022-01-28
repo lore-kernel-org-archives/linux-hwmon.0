@@ -2,245 +2,112 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D73EC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jan 2022 04:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FA58C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jan 2022 05:54:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236975AbiA1EMz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Jan 2022 23:12:55 -0500
-Received: from mga09.intel.com ([134.134.136.24]:14065 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231222AbiA1EMy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jan 2022 23:12:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643343174; x=1674879174;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tTvh7kj3C/3vfcqqSLgP5U0IElXRsBzKJFpHLTJ6eh8=;
-  b=QT4o+AdIlzA8UaHtPwGhxqOkE/h8nK9nokhTWSKMgFukFbVC3nJkWJVl
-   aq2x4g16X2EHJPKCe3OQnfyDU0DHmOrqWpV4r6w1PtamR/wtTEhkuOK/V
-   A7wc+m13fERlXWnxTnA3IxNNVd96fW2nZU6irn7eNEPo/8HhauJyEvA9D
-   5qgHOkfHKRNHmxi0uOF6frLSNLzWBnO9xKqit7QJl9riYrPIehcpXp7hy
-   tGb3f3+KmiDMwlP5o42t0EVcgPhmkDkWa0tt1Z6xfQwrRZCDS8PAKhMRe
-   cFK0umQQFfzbbmHrGNfSOmNVTKW62wQFZ4e7nziR3BM033kEJXEyAXogf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="246815947"
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="246815947"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 20:12:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="535980507"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Jan 2022 20:12:53 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDId2-000NRM-Kj; Fri, 28 Jan 2022 04:12:52 +0000
-Date:   Fri, 28 Jan 2022 12:12:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 468630091675964e6178462407108dafdda06d54
-Message-ID: <61f36d14.IeZO3m3hYvwltldp%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1346240AbiA1Fyn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Jan 2022 00:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346225AbiA1Fyn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 28 Jan 2022 00:54:43 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74196C061714;
+        Thu, 27 Jan 2022 21:54:43 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so4805114otf.1;
+        Thu, 27 Jan 2022 21:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5iUJxIm11wuHAjAk/U9qyVK8Q1/8AM34mvlFMQ0jz4o=;
+        b=KRSAJ86fpotWcMMhPUusYEY+q06d7as4lj5/hcbJt1raSYhIvkAZaU19dkaL485lMr
+         sBNeNnVBau4qvFPu7wa8kaAy4SjiyyO2p4P3vXtBp0pIm7Ko2O5ZwutvWFqd7BwF72ol
+         yFnHAB8ZyI45av3Yhlo/EYPkViFldnAiaT+HkovsEYbBy64+TJzdY1zMksT66Wt4OYZ7
+         jmLzYEHHpjTNm10vk5hM8BgB1rYIp/Hd6Oh49UsbnRRLMjbROlhNiCqYGmsC7b1bGLUN
+         d1OgxkkWkKreXYkkHHEl+Iq+76tqocApLUcPlzPm/rwo7ic9CzlruR6nca1GEepxYuLf
+         mOXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=5iUJxIm11wuHAjAk/U9qyVK8Q1/8AM34mvlFMQ0jz4o=;
+        b=nGYOAekLOWtAZPh/dgKvX9zpJ+Zq+LueS4AHxwLu3F7aUpghNnpb4WXLlV8GkII9gQ
+         CQExFOfN/0twY/+mtGi1ly6tegfyYJMAkB6gJHuxkGJgpxj6I5xg9oOyM4O9eT1syTzo
+         pL1n97MDQDcprgyDjWHTKXAezq59H3y0tL5GqtolcuJ08R9gRUateElkPTyBTEitjZL4
+         kBgRBiopG3LQRaZsreEf7dn8tbqyLHZCYFhPUNpKg3ENksilAJpdLzrvjTqdx7nN3Uos
+         x4wMtZTw2/6WO5hcEYTbGoquzHqg0vYw7q7x6BwLFbZ8uvX77jm6fPYylJddAp0wk9cb
+         7ihQ==
+X-Gm-Message-State: AOAM532W6zTX3OnhUZ7AnOlF8LQJWaDMz3ACvGBHTlmcZnXqhcIknT9X
+        bgEW+SQeR/9kFJcAhLwyb2OJZGZiqmi4lw==
+X-Google-Smtp-Source: ABdhPJwf9vtCL5ExNiA9UPs7QW/7lgXdB/HZmMOEwRB1zbVDepF5m+ckMxZ51vjWndG8rSWGM/ZxOA==
+X-Received: by 2002:a05:6830:1153:: with SMTP id x19mr3831256otq.321.1643349282858;
+        Thu, 27 Jan 2022 21:54:42 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n22sm9902538ooq.27.2022.01.27.21.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 21:54:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.17-rc2
+Date:   Thu, 27 Jan 2022 21:54:40 -0800
+Message-Id: <20220128055440.3947883-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 468630091675964e6178462407108dafdda06d54  hwmon: (powr1220) Add support for Lattice's POWR1014 power manager IC
+Hi Linus,
 
-elapsed time: 725m
+Please pull hwmon fixes for Linux v5.17-rc2 from signed tag:
 
-configs tested: 169
-configs skipped: 3
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc2
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Guenter
+------
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-powerpc                 mpc834x_itx_defconfig
-arm                         at91_dt_defconfig
-mips                         mpc30x_defconfig
-xtensa                              defconfig
-mips                        vocore2_defconfig
-um                             i386_defconfig
-h8300                    h8300h-sim_defconfig
-parisc                generic-64bit_defconfig
-sparc                       sparc64_defconfig
-mips                        bcm47xx_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-sh                               allmodconfig
-powerpc                  storcenter_defconfig
-arm                        keystone_defconfig
-sh                     sh7710voipgw_defconfig
-sh                 kfr2r09-romimage_defconfig
-parisc                generic-32bit_defconfig
-arm                           viper_defconfig
-sh                         ecovec24_defconfig
-riscv                            allmodconfig
-sh                        sh7763rdp_defconfig
-arm                          pxa910_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                     tqm8541_defconfig
-mips                           xway_defconfig
-powerpc                      ppc6xx_defconfig
-arc                              alldefconfig
-arc                        nsimosci_defconfig
-arm                             pxa_defconfig
-arm                            pleb_defconfig
-arm                         assabet_defconfig
-s390                          debug_defconfig
-h8300                     edosk2674_defconfig
-nios2                         3c120_defconfig
-xtensa                    xip_kc705_defconfig
-sh                         apsh4a3a_defconfig
-mips                           ci20_defconfig
-arm                  randconfig-c002-20220127
-arm                  randconfig-c002-20220124
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20220124
-x86_64               randconfig-a003-20220124
-x86_64               randconfig-a004-20220124
-x86_64               randconfig-a005-20220124
-x86_64               randconfig-a006-20220124
-i386                 randconfig-a002-20220124
-i386                 randconfig-a005-20220124
-i386                 randconfig-a003-20220124
-i386                 randconfig-a004-20220124
-i386                 randconfig-a001-20220124
-i386                 randconfig-a006-20220124
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64               randconfig-a001-20220124
-riscv                randconfig-r042-20220127
-riscv                randconfig-r042-20220125
-arc                  randconfig-r043-20220127
-arc                  randconfig-r043-20220125
-arc                  randconfig-r043-20220124
-s390                 randconfig-r044-20220127
-s390                 randconfig-r044-20220125
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-clang tested configs:
-arm                  randconfig-c002-20220124
-riscv                randconfig-c006-20220124
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-mips                 randconfig-c004-20220124
-x86_64               randconfig-c007-20220124
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220125
-riscv                randconfig-c006-20220125
-powerpc              randconfig-c003-20220125
-mips                 randconfig-c004-20220125
-i386                          randconfig-c001
-powerpc                     powernv_defconfig
-powerpc                 mpc8313_rdb_defconfig
-powerpc                   bluestone_defconfig
-mips                           ip27_defconfig
-powerpc                      ppc44x_defconfig
-arm                     davinci_all_defconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                          allmodconfig
-arm                                 defconfig
-mips                     cu1830-neo_defconfig
-powerpc                     kilauea_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                      katmai_defconfig
-arm                         bcm2835_defconfig
-powerpc                       ebony_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a011-20220124
-x86_64               randconfig-a013-20220124
-x86_64               randconfig-a015-20220124
-x86_64               randconfig-a016-20220124
-x86_64               randconfig-a014-20220124
-x86_64               randconfig-a012-20220124
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                 randconfig-a011-20220124
-i386                 randconfig-a016-20220124
-i386                 randconfig-a013-20220124
-i386                 randconfig-a014-20220124
-i386                 randconfig-a015-20220124
-i386                 randconfig-a012-20220124
-riscv                randconfig-r042-20220126
-riscv                randconfig-r042-20220124
-hexagon              randconfig-r045-20220124
-hexagon              randconfig-r045-20220127
-hexagon              randconfig-r045-20220126
-hexagon              randconfig-r041-20220124
-hexagon              randconfig-r041-20220127
-hexagon              randconfig-r041-20220126
-hexagon              randconfig-r045-20220125
-hexagon              randconfig-r041-20220125
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.17-rc2
+
+for you to fetch changes up to 79da533d3cc717ccc05ddbd3190da8a72bc2408b:
+
+  hwmon: (nct6775) Fix crash in clear_caseopen (2022-01-24 14:32:47 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v5.17-rc2
+
+- Fix crash in nct6775 driver
+- Prevent divide by zero in adt7470 driver
+- Fix conditional compile warning in pmbus/ir38064 driver
+- Various minor fixes in lm90 driver
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      hwmon: (adt7470) Prevent divide by zero in adt7470_fan_write()
+
+Guenter Roeck (8):
+      hwmon: (lm90) Reduce maximum conversion rate for G781
+      hwmon: (lm90) Re-enable interrupts after alert clears
+      hwmon: (lm90) Mark alert as broken for MAX6654
+      hwmon: (lm90) Mark alert as broken for MAX6680
+      hwmon: (lm90) Mark alert as broken for MAX6646/6647/6649
+      hwmon: (lm90) Fix sysfs and udev notifications
+      hwmon: (pmbus/ir38064) Mark ir38064_of_match as __maybe_unused
+      hwmon: (nct6775) Fix crash in clear_caseopen
+
+ drivers/hwmon/adt7470.c       |  3 +++
+ drivers/hwmon/lm90.c          | 21 +++++++++++----------
+ drivers/hwmon/nct6775.c       |  6 +++---
+ drivers/hwmon/pmbus/ir38064.c |  2 +-
+ 4 files changed, 18 insertions(+), 14 deletions(-)
