@@ -2,68 +2,75 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3AC8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jan 2022 08:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0C6EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jan 2022 13:00:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347109AbiA1IBz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Jan 2022 03:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242915AbiA1IBz (ORCPT
+        id S230466AbiA1NAH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Jan 2022 08:00:07 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36046 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229869AbiA1NAH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:01:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111E0C061714;
-        Fri, 28 Jan 2022 00:01:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A491A61D2B;
-        Fri, 28 Jan 2022 08:01:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 179FBC340E8;
-        Fri, 28 Jan 2022 08:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643356914;
-        bh=OjCmcRObEmogx6SH4Qut1KQ549pRZmSJtfj70AU6IGg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NzfDkCXVScPbr1kgkZ9H+biirqI43oD2WmA89DNgrAAxYcYo6qfspdef3FQ7Seauf
-         5dE4mp89EvhxwkMnVPX7WEyTaRSYU0ka6o71kS19NZuUodS6L5Z5VjQfqt8Xh0lyP/
-         KHrDOKIBeRFvS+fY4JQtpQNH62DUTD82o+LkpKH3BAerZDsevnxyCzBy8KD0pJHTyN
-         DnupO2CRNZ0JSbNuJG9NV/3M9r3n0/nIcozkw6Z9Ar4O0BbRzxt/XSzmSdGzXm/Mba
-         xPBBncuvk3zZHCiVqRWKxb1OqNegp3JLn4niZIqron0oLGx/GGbyrrO3pRn8B3WNvJ
-         en0/MfSVvj7qw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 050C9F60799;
-        Fri, 28 Jan 2022 08:01:54 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v5.17-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220128055440.3947883-1-linux@roeck-us.net>
-References: <20220128055440.3947883-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220128055440.3947883-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc2
-X-PR-Tracked-Commit-Id: 79da533d3cc717ccc05ddbd3190da8a72bc2408b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 374630e3f94efc8184a727694276088f52bcc3d1
-Message-Id: <164335691401.26371.6391816821881752961.pr-tracker-bot@kernel.org>
-Date:   Fri, 28 Jan 2022 08:01:54 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Fri, 28 Jan 2022 08:00:07 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id AD94F1F45F31
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643374800;
+        bh=qpjsngu8uHb7twpIdfcS2cTWB2a6x0Zf7hcMkNFCCDg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ka8jRs3ohT4RnrJ4hfU0FL2r3gzE/orqRLHZRhPg9LOki6toywWd0J3osiikd8jfi
+         ZXv46gsxUWTMc4vx78IZx5Cd00/OOEUQWOrZXD4+E49ceBjRlhzl3SvheaG1KjrS9c
+         +kVmVBafu2sXXCvuJZAUzdby9rLYgrVgjbVynoedKTI8YZJH6B695rb2/SmH4hzXdv
+         tcuDOMnSJbAdH1MVrOjEvp0+j41LZZE05+d3n7s+fcmpeXereu3oXLUPmolTx07lmr
+         37rLEVI5223LsaDML8LjRAoFqhQO4vRtAnSkIYwD2t5f6L/uKUdCr6hAsOtN5ZqILL
+         M90tZDOopcKjQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernel-janitors@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: Remove checks for validity of dev
+Date:   Fri, 28 Jan 2022 17:59:13 +0500
+Message-Id: <20220128125913.1291533-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Thu, 27 Jan 2022 21:54:40 -0800:
+dev is being dereferenced in device_property_present() which means that
+it is valid. Don't check its validity again and simplify the code.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc2
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ drivers/hwmon/hwmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/374630e3f94efc8184a727694276088f52bcc3d1
-
-Thank you!
-
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index e36ea82da1474..aec32abd0a89f 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -822,7 +822,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 	hwdev->name = name;
+ 	hdev->class = &hwmon_class;
+ 	hdev->parent = dev;
+-	hdev->of_node = dev ? dev->of_node : NULL;
++	hdev->of_node = dev->of_node;
+ 	hwdev->chip = chip;
+ 	dev_set_drvdata(hdev, drvdata);
+ 	dev_set_name(hdev, HWMON_ID_FORMAT, id);
+@@ -834,7 +834,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 
+ 	INIT_LIST_HEAD(&hwdev->tzdata);
+ 
+-	if (dev && dev->of_node && chip && chip->ops->read &&
++	if (dev->of_node && chip && chip->ops->read &&
+ 	    chip->info[0]->type == hwmon_chip &&
+ 	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+ 		err = hwmon_thermal_register_sensors(hdev);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.30.2
+
