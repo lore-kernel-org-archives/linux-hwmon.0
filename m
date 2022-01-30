@@ -2,48 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCD54C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jan 2022 14:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C989BC4167B
+	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jan 2022 14:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238286AbiA3Ohm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S239166AbiA3Ohm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sun, 30 Jan 2022 09:37:42 -0500
-Received: from mga05.intel.com ([192.55.52.43]:46148 "EHLO mga05.intel.com"
+Received: from mga18.intel.com ([134.134.136.126]:8133 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239166AbiA3Ohl (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1347167AbiA3Ohl (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Sun, 30 Jan 2022 09:37:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643553461; x=1675089461;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=ashMO1JnH7E14uT7cojwXJid0hwTAJPlpuKA9zCGU6w=;
-  b=PTZgzW8DZwiwI2Ng5fWunq6rLs5l37zDNZfp0CPi5sIaBd4lfp8oXChX
-   kpABHRbE7l+8BwSVh6ula4QP1EdVNQK3jSXqxnwFMJt/wnlYBLqH4EFlw
-   W6AY7CcyATnwMDDqQKAz7nKx9Bce7/EKJeoVvjpAvXzAa8A6H1ttg82at
-   9zZFZbVSXPz3B/OoKJ1kfMe4xc0PjyzF+U7WtRe8BS60koIExBZQUns8T
-   RrYLALGZog6C4OaPgIkUrEvA0o6gqe1f6uyrsYWv/+MDEJfxvyK1YcbJS
-   sr/o5rSZOzMKGfAMOzEKVniw+yr0RinZzgEXzk6rMS+I6+h3qF9dNWIM6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="333708646"
+  bh=QDIzAnRhPSt5FukMjJBRyFKpZ63huhskVYu7Jz6ZvqU=;
+  b=RngAiS105RgboijRur4E0uPd8hR2dmIyW7GyO4lk7e5LcoblB60WYmNE
+   P9marsw9ryWU4pWrJucb5fZIS2LGkMvChmpAE/IVxmuWww2Qo2bgF/V3H
+   LBg4GvAQAPUwqd71kJwax1VxYGKud2qWYelzUjqzcUlBAxyAKdW0mOG9a
+   z6FJ8V/JZjk2NUcY4mIZVEuBuAcel4ddJdOTWC3B9MihE5qtQj6LsR1+t
+   SnOwbMdWjo/1ObRdO6a2UU9puDgL43VKPQcixWgpVkEtkhlQG6ODMlIBW
+   KKtW1LvTLp6T1jcxV1vBb9eRBgtsvQjignQE3vYzXx9tKomfXDGpxaCeU
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="230924833"
 X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="333708646"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 06:37:40 -0800
+   d="scan'208";a="230924833"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 06:37:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="564688419"
+   d="scan'208";a="533964160"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 30 Jan 2022 06:37:39 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jan 2022 06:37:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nEBKk-000Qc3-KF; Sun, 30 Jan 2022 14:37:38 +0000
-Date:   Sun, 30 Jan 2022 22:36:41 +0800
+        id 1nEBKk-000QcH-Nf; Sun, 30 Jan 2022 14:37:38 +0000
+Date:   Sun, 30 Jan 2022 22:36:37 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD REGRESSION
- c00ed93a33886a91023b17f2503d72de49303063
-Message-ID: <61f6a279.Uu8SL0hHG5fTzuGn%lkp@intel.com>
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 8f8b63b0f29ddc89955c03faba202b7e0459716b
+Message-ID: <61f6a275.dyzIj4bbBPj9uhv1%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -52,99 +52,16 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: c00ed93a33886a91023b17f2503d72de49303063  watchdog: rti-wdt: Add missing pm_runtime_disable() in probe function
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 8f8b63b0f29ddc89955c03faba202b7e0459716b  hwmon: (powr1220) Add support for Lattice's POWR1014 power manager IC
 
-Error/Warning reports:
+elapsed time: 724m
 
-https://lore.kernel.org/linux-hwmon/202201301352.Ip59nzT8-lkp@intel.com
-https://lore.kernel.org/llvm/202201301330.qrjqfMhi-lkp@intel.com
-
-Error/Warning in current branch:
-
-drivers/watchdog/max77620_wdt.c:18:10: fatal error: 'linux/mfd/max77714.h' file not found
-drivers/watchdog/max77620_wdt.c:18:10: fatal error: linux/mfd/max77714.h: No such file or directory
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- arc-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- arm-allmodconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- arm-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- arm64-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- arm64-randconfig-c024-20220130
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- csky-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- csky-randconfig-r036-20220130
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- h8300-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- i386-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- ia64-allmodconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- ia64-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- m68k-allmodconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- m68k-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- microblaze-buildonly-randconfig-r001-20220130
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- mips-allmodconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- mips-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- nios2-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- parisc-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- powerpc-allmodconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- powerpc-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- riscv-allmodconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- riscv-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- s390-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- sh-allmodconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- sparc-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- sparc-randconfig-r031-20220130
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- x86_64-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- x86_64-randconfig-a011
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-|-- xtensa-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-`-- xtensa-buildonly-randconfig-r004-20220130
-    `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h:No-such-file-or-directory
-
-clang_recent_errors
-|-- hexagon-allyesconfig
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h-file-not-found
-|-- hexagon-randconfig-r041-20220130
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h-file-not-found
-|-- i386-randconfig-a002
-|   `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h-file-not-found
-`-- i386-randconfig-a015
-    `-- drivers-watchdog-max77620_wdt.c:fatal-error:linux-mfd-max77714.h-file-not-found
-
-elapsed time: 722m
-
-configs tested: 109
+configs tested: 106
 configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
 gcc tested configs:
 arm                                 defconfig
@@ -218,9 +135,6 @@ powerpc                           allnoconfig
 x86_64                        randconfig-a006
 x86_64                        randconfig-a004
 x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
 i386                          randconfig-a012
 i386                          randconfig-a014
 i386                          randconfig-a016
