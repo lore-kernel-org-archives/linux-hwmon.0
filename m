@@ -2,93 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14802C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Jan 2022 16:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BAFCC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jan 2022 05:34:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245610AbiA1Q7s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Jan 2022 11:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245576AbiA1Q7s (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Jan 2022 11:59:48 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD50C061714;
-        Fri, 28 Jan 2022 08:59:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 660761F46376
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643389187;
-        bh=zsFOqNJXl1POjN770OSH/AQ4HY1FlkWlk167Y5ylJlI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=LgxMYS1GnF1HKHlWvC7pamz/kp8UyaHru3kXZzji+FL/DZ06HizwWldfi/lB17xts
-         3yDjqhn/H5jxjTl3Rs+Kv6dn2ohhqI0y65vTA0rDy1HbUtY8UEYXi9dTJ0KnTPTtt4
-         kzwUQZBbbg1bwb7j1apphwPTQzJyg7TYQEjSioqC2NKGBS+Q7R/HjuJiVDySyRewJM
-         g/JdAPTaqDbXaTcl+krXqhlGrSThU/YYsnwHCTLzoqgffkswZmAVIjHFMPOFBI1Gvr
-         lxKSOf+PmopiNVbRiQYQrU5v4dFcraIEbSV5iJkVO5yefYHsyGVE/SsF810kafr0QD
-         tAwajJvnaBvPg==
-Message-ID: <d7686623-c5ab-ce2a-386c-f35ec167ca81@collabora.com>
-Date:   Fri, 28 Jan 2022 21:59:39 +0500
+        id S235695AbiA3FeW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 30 Jan 2022 00:34:22 -0500
+Received: from mga05.intel.com ([192.55.52.43]:44438 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240678AbiA3FeW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 30 Jan 2022 00:34:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643520862; x=1675056862;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aduGOJcXsxcxdxjpVqpSmhbJxwuYDU745GkOwzVMwE8=;
+  b=aMbpkvJNYByF0GHXuvmUJAgbeNzMHbjNnmd4JuLVyWjYuqASAiLQMzlf
+   G9DeuM/K41gaieP4Mo7ZEJtGmxUhUCNYAf4+TZymgKt3o0uiP1hum+hEH
+   ppoK15gdKaLZHNTG2mywItJtqRk7srpCUpAWZIpYk18zVMNTDn7vk2p8q
+   TlTqQrQH1DPi/h2YgwFtiVVOqWUt6D2eCNxxloUeLGtn3xTWGKwSHQRBb
+   SMlO4ZP+mpkZt/PiORV5DD6UkX+7CVUPPY2n29wQC2qlaIsBaJK+7d60q
+   fTNqw8JMzE6tPQBstw06Q5UcWClQjogpIs3rOKIK20z0J0li57HdCLeBM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="333676182"
+X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
+   d="scan'208";a="333676182"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 21:34:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
+   d="scan'208";a="533890477"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Jan 2022 21:34:20 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nE2qy-000Q6E-2p; Sun, 30 Jan 2022 05:34:20 +0000
+Date:   Sun, 30 Jan 2022 13:33:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:watchdog-next 1/4]
+ drivers/watchdog/max77620_wdt.c:18:10: fatal error: 'linux/mfd/max77714.h'
+ file not found
+Message-ID: <202201301330.qrjqfMhi-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Remove checks for validity of dev
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-References: <20220128125913.1291533-1-usama.anjum@collabora.com>
- <6c0335ca-eb16-b4de-1f2c-8bdc82219b57@roeck-us.net>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <6c0335ca-eb16-b4de-1f2c-8bdc82219b57@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/28/22 8:05 PM, Guenter Roeck wrote:
-> On 1/28/22 04:59, Muhammad Usama Anjum wrote:
->> dev is being dereferenced in device_property_present() which means that
->> it is valid. Don't check its validity again and simplify the code.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>   drivers/hwmon/hwmon.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
->> index e36ea82da1474..aec32abd0a89f 100644
->> --- a/drivers/hwmon/hwmon.c
->> +++ b/drivers/hwmon/hwmon.c
->> @@ -822,7 +822,7 @@ __hwmon_device_register(struct device *dev, const
->> char *name, void *drvdata,
->>       hwdev->name = name;
->>       hdev->class = &hwmon_class;
->>       hdev->parent = dev;
->> -    hdev->of_node = dev ? dev->of_node : NULL;
->> +    hdev->of_node = dev->of_node;
->>       hwdev->chip = chip;
->>       dev_set_drvdata(hdev, drvdata);
->>       dev_set_name(hdev, HWMON_ID_FORMAT, id);
->> @@ -834,7 +834,7 @@ __hwmon_device_register(struct device *dev, const
->> char *name, void *drvdata,
->>         INIT_LIST_HEAD(&hwdev->tzdata);
->>   -    if (dev && dev->of_node && chip && chip->ops->read &&
->> +    if (dev->of_node && chip && chip->ops->read &&
->>           chip->info[0]->type == hwmon_chip &&
->>           (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
->>           err = hwmon_thermal_register_sensors(hdev);
-> 
-> Wrong fix, sorry. While I would love to make dev mandatory, the function
-> is called with dev == NULL from at least one place, and the check is
-> (still)
-> needed. Even if/when it is removed we would have to add an early check
-> and return -EINVAL if it is NULL.
-> 
-Thank you for the reply. I've looked at the code again. You are correct.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+head:   c00ed93a33886a91023b17f2503d72de49303063
+commit: 4b35b464fe64f6dd5bf8d5df14090961fdf63a07 [1/4] watchdog: max77620: add support for the max77714 variant
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220130/202201301330.qrjqfMhi-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=4b35b464fe64f6dd5bf8d5df14090961fdf63a07
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging watchdog-next
+        git checkout 4b35b464fe64f6dd5bf8d5df14090961fdf63a07
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/watchdog/
 
-> Guenter
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/watchdog/max77620_wdt.c:18:10: fatal error: 'linux/mfd/max77714.h' file not found
+   #include <linux/mfd/max77714.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +18 drivers/watchdog/max77620_wdt.c
+
+  > 18	#include <linux/mfd/max77714.h>
+    19	#include <linux/platform_device.h>
+    20	#include <linux/regmap.h>
+    21	#include <linux/slab.h>
+    22	#include <linux/watchdog.h>
+    23	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
