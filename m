@@ -2,94 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55E33C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jan 2022 09:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A645C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jan 2022 09:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240738AbiAaJib (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 31 Jan 2022 04:38:31 -0500
-Received: from mout.gmx.net ([212.227.17.21]:44793 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240686AbiAaJia (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 31 Jan 2022 04:38:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643621893;
-        bh=M8VxZrM69T8fzVT7HtYVnghJWaulQqQeYn5dd1DXrAA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=CwMBW/ysfcJWiL+ER3SYZ17Eknj9kDFRU98lseUJd7akCMQZq9t6t3gSNYS+azKp+
-         sKZHexUhCMyV6QUZMdgtGGoCtcEd6StwA7hikEwNNB5ILAyrz9Jqfrlo5KeJhucyXh
-         KWE3sl7RitsxNtc1te/R+eS6RsCIsZmizzBF530Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N4hzj-1mCqAc24vP-011gXw; Mon, 31 Jan 2022 10:38:13 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com
+        id S241933AbiAaJpu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Jan 2022 04:45:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24730 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232005AbiAaJpu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:45:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643622349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MS/uqP/Od1Nlu6Xgt3P/am5tNhPsIAozU+ROOQPNswY=;
+        b=jDkqT5e51+M22iUPbXZrbIvBpMNsAC1etlOuHh3uvJkN+Gh5wjZHPSc9oteYz5C9BP6I9U
+        5SxgE4sQ+0UcSxhpW2A18IvA4+IazFO4/+HXpJPiKLdkpYHBGDPeBdmnJvj+77uOx54iby
+        IdmJz9+QHeZoMyVCwt8uiQU698UbYc0=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-aorGzff9NgOHAv8dWStSlA-1; Mon, 31 Jan 2022 04:45:48 -0500
+X-MC-Unique: aorGzff9NgOHAv8dWStSlA-1
+Received: by mail-ej1-f71.google.com with SMTP id v2-20020a1709062f0200b006a5f725efc1so4752536eji.23
+        for <linux-hwmon@vger.kernel.org>; Mon, 31 Jan 2022 01:45:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MS/uqP/Od1Nlu6Xgt3P/am5tNhPsIAozU+ROOQPNswY=;
+        b=E6CF+ytS4ffekWPLg2/x87fbH6hH8BbmaE0CBurgXXHBEsnbjDTJ26LobyCD5N8X5L
+         Ygx3r+6fjzRTbF67O0H24wNZ9j/UCIVjTCQaGjufIKlMzha76AEbaJ8zatHPaq526a06
+         06rqMuNFBeJ7fWOmsRY/Kk5dJ+X3tZKX3dbKCPSv6CYmbNWDkIWVfUWPj65Qdko65J8q
+         jwx5joo5n8Brgv21KP07DYpX5mWEP3UwkXPCuGeH3M6RKHXoUyL2qdFDbjOQI0k/GkDq
+         QrC10wVHUuxoPrCCk6blIokKz+HeQFzzE0PKCqMPJUJfJXwwPZxQd/PtBH0fuqP0gC1o
+         xXhQ==
+X-Gm-Message-State: AOAM533hVhDMLohOjCpa6JniyIyYjWbOnv8rmSfVSbKDEFbRbf0rSsOi
+        hOgm+txCnTYw8cdwtwZeI7G13vEWq4Uytq13PjG7/SuplzbqGUnq+aTjSEbpGV1H/ceuH/A+dUs
+        no8iYB2mP9DgNCYONCW9Nf1A=
+X-Received: by 2002:a17:906:4789:: with SMTP id cw9mr16417607ejc.250.1643622347053;
+        Mon, 31 Jan 2022 01:45:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw/EY6ZaH5hwm0kmvPneK0n45X4YN/TXoMl7+aRZg1eI1bhcDIZTx2UL87/mgth0TSdDZhAWw==
+X-Received: by 2002:a17:906:4789:: with SMTP id cw9mr16417600ejc.250.1643622346875;
+        Mon, 31 Jan 2022 01:45:46 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id b16sm13263370eja.211.2022.01.31.01.45.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 01:45:46 -0800 (PST)
+Message-ID: <f5a96b96-d9e2-2381-3673-632ae85c8b24@redhat.com>
+Date:   Mon, 31 Jan 2022 10:45:45 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH RESEND 0/4] hwmon: (sch56xx) Automatically load on
+ supported hardware
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND 4/4] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
-Date:   Mon, 31 Jan 2022 10:37:56 +0100
-Message-Id: <20220131093756.8075-5-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220131093756.8075-1-W_Armin@gmx.de>
 References: <20220131093756.8075-1-W_Armin@gmx.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9QBdxLpwQraj2RF0DjGnbPUr64KV/UJiV0ngLb/rPcGIGhUtmZY
- aOgreswTTk/TemZzQEUZPuN6ImKxtTkRFQf1G+/iBzdb/iL8dfUbrmN6VA67l+hutHAcCl4
- htrWaSDwRm102+DqcHVdqBTsjVL4E7v08tDrXFJ/uelCqGXAUPu8JfDBSsdPmsoKeHP2CPW
- 2NZNlBoP+QBJdGHZymrxw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wruDPY0hL/E=:FSYCl1tY/CCeoaGaTWlljW
- d6efG0vEpOG5Carnk4rXdjqAvWslHAi7FiqN9cL4EvaQhzxVvXz32aJmmW8GikZurQP4OjS0f
- Bul/BaDtHFojGcLrW5/MdFEIw0Dv3HsgXAadLRkU1gN1jlKKDwTryfipmNo4b3GoC1lOz3UZ9
- lwnVNfNAHL6HRN4pbyVmuUWYl+5b655jOl0xhTFDx5MoIMaIx0KsL0xmqnBdi7LIc99yCviDN
- 4OX7lLzRlfNOUeIMCo3NGiv3G7pZcn050o2GW7DhDidfyNzfj49rtq/c3n5QQOGgDCG+4glj7
- iXaDLFzPuANANK2Gbg8XgyJqNOZxyo9G67yMWmU1Lgf5ygbMGI1xeWwQ3+11wXwipEeV6NFEq
- H2som6psHeh7GZhW99V9+ex+NG3DCFUFC29wJ5E/KjRVVRqECbel1bH9yijKcO+tNeZ+UMWFJ
- ai/77bgFbxyL86vK9FDre8xAVfn4RPvNAncirWoo7xMyL9eZvCUpdx5YTj0/9Uvay5fkqqaMD
- sfge8efI+JbfAhoQiKxiotd8XmGrBsw2bE+NYQxuyZ1sUKseFK1OZT8PG/0/c+2EW5JOX3Wag
- b0jYkC8fH9LDenmNkJD9TLUigRoOxf4chUQEWINqgOTInT06Y9p0kPluYzPUekRnJknQZ45if
- sYP+jYdGgnjEGAUdUhLu5GsgkTDC1vi5j8nW9+1jwnFvVAWF1VHTGQ1uoDC8hyF3rfo00TilH
- xxk876pKFRIjnWfXlp2Vu0W5EODwqBifXKkRDYhzKcMIG9RC6JUHO/aKDvb7ZSi78n/abuCWw
- P/n5Lm4bZrGVZNW/EpE1yF/wWTbVDMhkI/O1yhYYZ6ZivAGKWZBJ9OY31GZ7z8DZ8qvXYDHPS
- z6E2b9bbBQILHFY48hsKlpCistgTQaE9k3P/yho8UiSPK/Hx1wIOsf9v4bReJ36cXFddRNV3w
- hxlQfBzHZvN1qPZ/C4PlTqNwVD6SH9/ovTymnk6GYBOix+JXqUfvXV0CDCTaeu/YnwOdylvHa
- 42TbVG8VWHnGS6Zwle9LCciMTc6ix9QoUkbbwOjWjaeBdd9nAhXZqJgS4a7R6kIB80wCIBk3s
- v3VSX5/b3DLaNY=
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220131093756.8075-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If the watchdog was already enabled by the BIOS after booting, the
-watchdog infrastructure needs to regularly send keepalives to
-prevent a unexpected reset.
-WDOG_ACTIVE only serves as an status indicator for userspace,
-we want to use WDOG_HW_RUNNING instead.
+Hi Armin,
 
-Since my Fujitsu Esprimo P720 does not support the watchdog,
-this change is compile-tested only.
+On 1/31/22 10:37, Armin Wolf wrote:
+> The hardware monitoring solutions supported by the sch5627 and
+> sch5636 drivers are Fujitsu-specific.
+> After some online searching, i found out that the solution used
+> with the SCH5627 is called "Antiope" by Fujitsu, just like the
+> "Theseus" solution inside the SCH5636.
+> I also found out that "Antiope" and "Theseus" are listed as
+> DMI onboard devices on supported Fujitsu devices, so the
+> sch56xx_common module can be loaded automatically an check
+> for the DMI devices. However some devices like the Esprimo C700
+> have both devices, so after verifying that at least one onboard
+> device is present, sch56xx_common still has to detect which chip
+> is present.
+> This is safe however if at least one device is present.
+> 
+> Tested on a Fujitsu Esprimo P720.
+> 
+> Armin Wolf (4):
+>   hwmon: (sch56xx) Autoload modules on platform device creation
+>   hwmon: (sch56xx-common) Add automatic module loading on supported
+>     devices
+>   hwmon: (sch56xx-common) Replace msleep() with usleep_range()
+>   hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
 
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/sch56xx-common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not sure why you did a resend? I received the original just fine ?
 
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
-.c
-index f66e1ed4b1aa..2cd146fd0562 100644
-=2D-- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -427,7 +427,7 @@ void sch56xx_watchdog_register(struct device *parent, =
-u16 addr, u32 revision,
- 	data->wddev.max_timeout =3D 255 * 60;
- 	watchdog_set_nowayout(&data->wddev, nowayout);
- 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
--		set_bit(WDOG_ACTIVE, &data->wddev.status);
-+		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
+With that said the entire series looks good to me:
 
- 	/* Since the watchdog uses a downcounter there is no register to read
- 	   the BIOS set timeout from (if any was set at all) ->
-=2D-
-2.30.2
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+for the series.
+
+Regards,
+
+Hans
+
+> 
+>  drivers/hwmon/sch5627.c        |  9 +++++++
+>  drivers/hwmon/sch5636.c        |  9 +++++++
+>  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++++++----
+>  3 files changed, 58 insertions(+), 4 deletions(-)
+> 
+> --
+> 2.30.2
+> 
 
