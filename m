@@ -2,94 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A46A5C4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jan 2022 19:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A16C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jan 2022 20:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376730AbiAaTcP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 31 Jan 2022 14:32:15 -0500
-Received: from mout.gmx.net ([212.227.15.18]:34937 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376841AbiAaTcO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 31 Jan 2022 14:32:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643657517;
-        bh=M8VxZrM69T8fzVT7HtYVnghJWaulQqQeYn5dd1DXrAA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=bF86srVel9qMm4UJ+cyEqgH/yBbxUdgo0HwK7MVyXWou73CBq43PL8hUgHCEb+BAk
-         55bzcMFeKSrVRJlmsEJpOl7couN7p4YG/rr53tu++P690IB1DKy5rM3TofBQQVGdT4
-         fGNuw4ge1EibMvS3hRMF5Q8/J+3XDrZYa6RLE8Go=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M5wLZ-1n8oqc2lh5-007UBB; Mon, 31 Jan 2022 20:31:57 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
-Date:   Mon, 31 Jan 2022 20:31:37 +0100
-Message-Id: <20220131193137.3684-5-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220131193137.3684-1-W_Armin@gmx.de>
-References: <20220131193137.3684-1-W_Armin@gmx.de>
+        id S233898AbiAaUKQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Jan 2022 15:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbiAaUKP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 31 Jan 2022 15:10:15 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2FC061714;
+        Mon, 31 Jan 2022 12:10:15 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id q8so14439538oiw.7;
+        Mon, 31 Jan 2022 12:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=md82yNcHzb9hUMdO0D3wtsJDnKHtblS8Ove1AcpVwL4=;
+        b=oXTOBWrpW2gl4tIhPPYXSYCdP3/cyVxxxJjLIU/H6PIvlisO2smazTA843hl8ym1lu
+         UQ7nFj5dP4YilaIX47t5/UUo3/rF1VOovK3M3N2EaKiJGlRHmJX3+FjlpirLm3l1VzQJ
+         rTInEmWelM97XSI0pjbfRPDkUZWpKI/Dx/4W61B0pNtP215V96YLYxf9HE8o5Kuboq3Z
+         NIit3Xta78XA6PRj0xsV3mDcMaibY61xh8H5qnodjaHfE+ADK0mi2swPIdYKxgmuVmXr
+         yMBQfMmLflXEcCe0vR8b9sX+XFzGMouCZTpVbj0PuFA78c5fM8NvMXqdOtzsD4X4snjM
+         EA7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=md82yNcHzb9hUMdO0D3wtsJDnKHtblS8Ove1AcpVwL4=;
+        b=cMFAB+MOAzCT6M1T3tWMF6FduCB+S5wbtnRvUWBY/KID8MS6abpH4V0xP1DraTPsL9
+         xENOacZXbdo3xRUSM9Q+6+S/ncOZVvqC4+cKcVRXAzEbNNCHRSfgTgjJETiNuIz8p5+m
+         8NAUCV0lIIlX5TxhPtMFOR31EaYik0PzZW2hHr+IrANvfm3Fm+vPbePo/IFrrHXOWmYB
+         AtgyHhvJkF6HDxhSgdCgKpTsec79PPsv+xCMQWaH2h9q1wAzAw6FCjMZli3VjLJnOllR
+         oA2xs4lC535jMWg78vwBGRIMDfZOJfhX7lwAkHqSlbuEv9T4bJcrk0j2z2jyr13b9n6V
+         S2YQ==
+X-Gm-Message-State: AOAM533nCrcqHOoJbyWAHsai8wFTlMSF7RA2HZU7TDit3IAv2kJ9a82v
+        jJvSrih4ETqA3YotkPUfuVagiuYp1/pWRQ==
+X-Google-Smtp-Source: ABdhPJxGKaP8CEQPw0ggAidZHCs0odovFzUCuaCNznTdQv7o1VKhCNXQn2SGRGodc/39NDolZDqXOA==
+X-Received: by 2002:a05:6808:1443:: with SMTP id x3mr13850490oiv.40.1643659814832;
+        Mon, 31 Jan 2022 12:10:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t21sm8177727otq.81.2022.01.31.12.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 12:10:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3af7602a-1703-4ff2-3905-dfd35742dd90@roeck-us.net>
+Date:   Mon, 31 Jan 2022 12:10:12 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:EVlEM/o2j4ih3tYP1AEJiMC8rIk32vvZTCzjpa4NBx1+hZB4vtx
- JJTBBoW3yuerS1F5Deib520NoWkps9QX9scjB3TEkU6xAfgCER8L7EHtcfsICirVLYi7wJx
- OEluf1hYsFD3ifbSgSlqxpSd9Pk6/OYpRpYoGA0EKVb8rQYKpgekWHPUpVW8czorIMYlOzX
- 8RuPS5rHY6Nj5ci6+vnXw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gJ61MFJziLA=:kP4t8y1BzCOAu5fBJHUWF/
- YEcsVMbkXuSeEd1yIuc3ehKVFnYhiuP8oDeSkrm9rKPlAFHYOboSZGN1h+aZtg237Rw8mCKO0
- BUNw7AmS2cPks/3kCwJeXtKJ5I1tmPPTr9VYm5foeNg4o2Rb4PDAkLfQTfqtKaPH0Y5iIS300
- lACUQc3CiPMVldyhDvnlc8ElKMsnp36cf/5o9NUY2VMWvoWlgrlY+8RTIwJylQ8fbjCyuJUDA
- a3tMHLMkNhQZKDFooYBZtPvB/plJiA5iyTMMjmBac0sVNSjp8xwBKzUQd+eGYcJs9JwldBuxd
- c8tsl3X9YXpc9/rK/0YF2fS6aPZTeHSHwPie8Q66PUGZmX+0anNZx+c4dROAxepNqAparRIUc
- jO9HqzcpxIqwOi9PsNAvdjMagldkX2QysKKXIFoY6Hhpfcqzg1WddGmPsDr4zBzctsHf/ZWeO
- IhWj5jxaYGWAw23PmpWBew1tzqBsMAG4cmlaxwbUpV374DmE7arffL7PvBL9f5MUstjbGDg0R
- nC2RYoEJM2ollX8pvuCsMEPYlIxT7IHw0vWKer5dNUlO7BSZ3QBxS4H7YMZGHW2NxPP1PSL4E
- Ls3RiMNQntyYWHOglrRCJIoTGx4thm1aH9P3V6zxzDUAA0BJvBUlb2ihiTPQPZ9Zs0avfV5d4
- BU6Sv0WjOvmKjUYGUsMUjzHUvK3wCR3WdxIjM8kS/07vVgpeJ9FNna+yfMXuz1La7/Mi4Quj+
- cBdnu6aBRdP9cTwvM6+QQLJp2/lwu7ng6Hp/F8DKs36aNEKVoqrjoVEWg2YnfC05Nvn+Zidkr
- kdG2T+Q7I/Ts0sR68/em3UtOwPhouwOXLrPHTaUGbyV/8PF+Rd+i8N7wcKsrDV0kr++IVclAQ
- 1Gbhu593ZO4j3FkaXrXanr5osAZTnHxXxCGTsdKD8iXyF6Hv/IqbM5VoGZJefgD2IzaUgMQoq
- hEHGSz8rVZLYULsAvKxpSBykWMvggLgEtNwgbXkgXVYcXUjqnAhG5ZTnVYsVRF3mzBur31UJL
- zxzZUh8l/9Eg+Glp4vJBb0bXfdY4KVeEicVv1az7+Jq59OiDn3mDfPRexW5+W+051X7XL9eSq
- iRGPdIJboreXpY=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/4] hwmon: (sch56xx-common) Replace msleep() with
+ usleep_range()
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220131193137.3684-1-W_Armin@gmx.de>
+ <20220131193137.3684-4-W_Armin@gmx.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220131193137.3684-4-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If the watchdog was already enabled by the BIOS after booting, the
-watchdog infrastructure needs to regularly send keepalives to
-prevent a unexpected reset.
-WDOG_ACTIVE only serves as an status indicator for userspace,
-we want to use WDOG_HW_RUNNING instead.
+On 1/31/22 11:31, Armin Wolf wrote:
+> msleep(1) will often sleep more than 20ms, slowing down sensor
+> and watchdog reads/writes. Use usleep_range() as recommended
+> in timers-howto.rst to fix that.
+> 
+> Tested on a Fujitsu Esprimo P720.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>   drivers/hwmon/sch56xx-common.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
+> index 0172aa16dc0c..f66e1ed4b1aa 100644
+> --- a/drivers/hwmon/sch56xx-common.c
+> +++ b/drivers/hwmon/sch56xx-common.c
+> @@ -139,7 +139,7 @@ static int sch56xx_send_cmd(u16 addr, u8 cmd, u16 reg, u8 v)
+>   	/* EM Interface Polling "Algorithm" */
+>   	for (i = 0; i < max_busy_polls + max_lazy_polls; i++) {
+>   		if (i >= max_busy_polls)
+> -			msleep(1);
+> +			usleep_range(1, 2);
 
-Since my Fujitsu Esprimo P720 does not support the watchdog,
-this change is compile-tested only.
+This replaces a 1-millisecond sleep with a 1-2 microsecond sleep.
 
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/sch56xx-common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Are you sure this is what you want to do ? Given that task switches typically
+take several microseconds, the new code is pretty much identical to a busy
+loop, and the maximum sleep time is reduced significantly.
 
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
-.c
-index f66e1ed4b1aa..2cd146fd0562 100644
-=2D-- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -427,7 +427,7 @@ void sch56xx_watchdog_register(struct device *parent, =
-u16 addr, u32 revision,
- 	data->wddev.max_timeout =3D 255 * 60;
- 	watchdog_set_nowayout(&data->wddev, nowayout);
- 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
--		set_bit(WDOG_ACTIVE, &data->wddev.status);
-+		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
+Guenter
 
- 	/* Since the watchdog uses a downcounter there is no register to read
- 	   the BIOS set timeout from (if any was set at all) ->
-=2D-
-2.30.2
+>   		/* Read Interrupt source Register */
+>   		val = inb(addr + 8);
+>   		/* Write Clear the interrupt source bits */
+> --
+> 2.30.2
+> 
 
