@@ -2,158 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32630C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jan 2022 21:20:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E48FC4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jan 2022 21:20:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380248AbiAaVUA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 31 Jan 2022 16:20:00 -0500
-Received: from mout.gmx.net ([212.227.17.22]:34189 "EHLO mout.gmx.net"
+        id S1380560AbiAaVUB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Jan 2022 16:20:01 -0500
+Received: from mout.gmx.net ([212.227.17.20]:42841 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380369AbiAaVT6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:19:58 -0500
+        id S1380419AbiAaVUA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 31 Jan 2022 16:20:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643663981;
-        bh=q1ugW5vj4OYyvuTgfzR5w8vCHi9Ca6RP1hz9efhCLfY=;
+        s=badeba3b8450; t=1643663983;
+        bh=KFKNxulkFsQgbVrro+Hj9vsIrT+XYodV/8shEDASERA=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ik/+xU1+MdpEVMHHCRflF6H7q0mAt6mNPyfkAGbBJuP5RIRhjuU/CoWnSMlxT9K4Y
-         +oO0Uaku7XH+U7MKBEcqSAP+jq/oGTyRvVBHf43cGRN0q8CZhgqeS+e0QWf5AiZ7xI
-         /434A1M1YrYvPV0l0k+vDd4W8LGB4EYeuS2SVRuk=
+        b=CaHSLl+fUeZrrbURLZM/mbFhNzhjg15xgb6ACDWbpMvMPcfzHOOexA4tvvctmTtF9
+         FCCInpc0Ujk5SLcr7crmfoxtdWGtDUH/QoGHjIBKoz/BnNC71Lz0jtlfF42bQJOQmH
+         s34lD5GxkLmYoBMyjos4WnHXXTF3RzBd+SbmIfpY=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M2wGi-1nDYga3JzI-003QXG; Mon, 31 Jan 2022 22:19:40 +0100
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M4b1y-1nGIVl2CSU-001fc2; Mon, 31 Jan 2022 22:19:43 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     hdegoede@redhat.com
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/4] hwmon: (sch56xx-common) Add automatic module loading on supported devices
-Date:   Mon, 31 Jan 2022 22:19:33 +0100
-Message-Id: <20220131211935.3656-3-W_Armin@gmx.de>
+Subject: [PATCH v3 4/4] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
+Date:   Mon, 31 Jan 2022 22:19:35 +0100
+Message-Id: <20220131211935.3656-5-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220131211935.3656-1-W_Armin@gmx.de>
 References: <20220131211935.3656-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:82WFjN7VINhCE2s5WpqADCg9uhIkpzAYVYVznlgZ15UE2mHAWu8
- QEp08FXJIotP/2dQq9OGgOw62wMTYlHvY9dvRfhSXNtuEZEQRepS63C58YvhuU/kYT9Ee5/
- 9febMv5M66sK72iiIsC3cOv2+lc8t427E+Nm5W/dgDeWJMBqowb5FE3bLzjMpWfrjaYao8Z
- t30m32qrgOMSRoDEuQTcA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9PYPnszt44c=:y8DJg1mU+1kqaq+jrzMdXp
- ZaEN5g1qk/8tda3GNAv9LIBK0ByM9h09emd5t2jD5UTt7Xnc3+V14mnSM83uW1D3Snku5PNQe
- Ls+XhWPFQUpAMHrp55ZX0891pgXnpJQvRRZ8f4bJrn6txNHcaUt5f3dlIJqRmo8ron5mRxt9n
- wEQd6QlrPZI/xDm5nlAE6m9LgUr85d48et4gzZGW5bAKEdvatRMYYGlPhelvj042dIwkyfcbA
- fDS4XNrKpWlN873SP+2jssRU9PvDx6v23oxjxYmU+qGNauf2eoq5wwRZ4XFKVPY5VlnrA3YX1
- 4WcSJRZCuvLhWDYQC4lmUMZ2T9lr4zmkMPBS0+ERHVkO6WA1WjKSmsWvEHC+kiXvxEmVJBL8L
- sbUjFMpes14mCKxVAo+qj7PAgLx6JgaKLghgPc/fczU19ZdBYADNOm3AZKyCri33EKjHNx/iO
- pAvhJJP+DMefw32ECNUqjPciA1sHsuB/Q0st6RkInyTugvrIGZqAN/vkXeVQbGXAJOHHWTkaA
- D3NnoJigLLxL06XXfzR66TkvnnAwJ70FR2rbC0q2QBXATTkYoaTk4g9ZZlbzCBY83WbGGGbnu
- 5IFtWWvS0mM5YpkM0n8rHQaV1HDXDKFPdoQSDiCuzuRagkQyS7xCykAf3xXQDLYAmndD6FJGS
- ibI+5AY8/RiJuJxk4GWdaDvFA8jv8ndhrPaj+v9SbjZ+rBYOvJ0DHilTzFYMc2hL4yywMltMt
- ky5imzgdpIN7NkSR+NIbt2xjJae7FGSSTGzHnJAWAJArPC8BhZ5BLATSmf5wGU78M34nqr9vh
- /e5eNJJhjkLMURdDeguV/+ste9jWh0R++LZUbPgbOzl1FpN5Qz2B54s1ezJR07ihbHLOGSd+r
- G4bopAxGfcmkr9FVwda+779RghIabl6W4WxPDouKUQebzRrrn2wACFShlzHqSzobyfpRwED6Q
- pDIRfZNcNvMxuMhr8cpmvyuFGJQIfcL4ADQh97SfTEeDPhkrc3cHMGP/YA6+KpjiCEkF2Tjt7
- cTbsXFJGW7cUGhpUAg6ZmqVi39HjiUH92lkJbokaYs6ftTdJ+6mP7g1o9KAbda5MbiC1f4/du
- TOSAhVL0Bt51Yg=
+X-Provags-ID: V03:K1:t4tk4mQCSQWmqlSfMaZpny3UuhF4SikNlxrTsxlWeo50KS3qfgk
+ VU709XbR4elpVs7J2iFGcFBBBbfOT025ZuV1k+h4oLZG10l6nZMyZmHbdG7J1qtbGGCronO
+ geXsmhKlI/Gy5fEUrlX/H6XeDZfNDrdqIVR/9l7+pjdUyMjrjCEXPmIXc2IgzjzAOCx0PeI
+ Em+7G0Z0NZc2g8sKnhczw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PvxdLDpb9p8=:dA3fqGSf9bIg5nhbPlamM8
+ 35goMEbfqGI/1QGDt+Tu4xyzyB0d8zfS2MhManGqCPFTTVGwbM1x75JZ4JYp6MS0KxeeuWGex
+ NIBpLdKDNE45Zz+QpLxzsP+RFlw4qvEIi4dnCzCS7WXIMdJypr+QQdQY34P/3aD6ZgqL0JOXU
+ Q3XAo3LihLetxOR8Gf4i2wKTnF819HPWa32BCTccZ+tvyYic9xeF1EnkJ7c57Jdp3GcxVDael
+ i4/eRNMsKivIaf6MKHuxN8jnxQn7u6J7e2gjkxMRjryakJXuCyEZoI+g1mRcvXh5EAZGd3crC
+ rbkawmeapyQM3LK9w+2gJ0L3U3dg+ogZ1EQyH6INU6TjW/OrDAtaUZrfAIqsKBVd05/OXh+21
+ uJgtW6c7CxcEeuGL+aYvaiR7VpncqGonJrcG77TKC+F+9PrFd9Zl//RLkE2qB2eePLOFr/PTu
+ TsGIj5Xi6kcCxoxbpjizCvDfwr0fCBE5iGurk+EaPXJHGEJEWNC5AUrY3jNyWS8O/Qm4LlAcG
+ 9V6zvhjnxshFFSlhpQT4v265RwEGp0UcU5Li0EjbhT5mwKc7job34CzbtUTM5hCKjLJBBr+/6
+ iMEQTY+jnKNq0pP028jrvHIv4je2x6gh6llDYT/GSCsm2H5iPoqXUZzsJWS4BpQEQ/qfkAsdQ
+ gNpz98l8yhQqVoOof+A73PiqfHkPrKHhYfpdg/vARI9agWwp+8o4bhc/4Hetqa3WEyKCtoZI9
+ nwef40ekr18KHqhuHbygmfQvuzuicQxpTuI0vVDHZtpF9uOrlGUq0TyPXsH/tZgu7JVpVvXkF
+ sD689BTO16Ehip4NLP4TrmpKYDM0V+ODCFTliagIF0U5KcwSbtF22tSKLCOyRlnHBVtyWNOLI
+ OanEX/RVWgSNypFSRzRVRPi6ZnDhIc0Mtf3dEmBXRdMrsVx9pE0fZ0C8K6kGUmI/xZK9U7A73
+ kZ+PgZV5nUmgotDOLVB2ldrT/9OCHVDgsKvFBLPBUfRoFUgZ5nj65sdEapuQa+cEKASg5BJAR
+ lMwqasr0G1ma81Z3RTLqQIt2g1ye6cb3EmZFJFNiO+kmVHJLpApjrm/soV0iLaPU6cyNBijvG
+ iaUgp687H//qhU=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch enables the sch56xx-common module to get automatically
-loaded on supported machines.
-If a machine supports Fujitsu's SCH56XX-based hardware monitoring
-solutions, it contains a "Antiope"/" Antiope" dmi onboard device
-in case of the sch5627 or a "Theseus"/" Theseus" dmi onboard device
-in case of the sch5636.
-Since some machines like the Esprimo C700 have a seemingly faulty
-DMI table containing both onboard devices, the driver still needs
-to probe for the individual superio chip, which in presence of at
-least one DMI onboard device however can be considered safe.
-Also add a module parameter allowing for bypassing the
-DMI check.
+If the watchdog was already enabled by the BIOS after booting, the
+watchdog infrastructure needs to regularly send keepalives to
+prevent a unexpected reset.
+WDOG_ACTIVE only serves as an status indicator for userspace,
+we want to use WDOG_HW_RUNNING instead.
 
-Tested on a Fujitsu Esprimo P720.
+Since my Fujitsu Esprimo P720 does not support the watchdog,
+this change is compile-tested only.
 
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/sch56xx-common.c | 40 ++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
+ drivers/hwmon/sch56xx-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
 .c
-index 40cdadad35e5..0172aa16dc0c 100644
+index 82602b74c7ed..3ece53adabd6 100644
 =2D-- a/drivers/hwmon/sch56xx-common.c
 +++ b/drivers/hwmon/sch56xx-common.c
-@@ -7,8 +7,10 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+@@ -427,7 +427,7 @@ void sch56xx_watchdog_register(struct device *parent, =
+u16 addr, u32 revision,
+ 	data->wddev.max_timeout =3D 255 * 60;
+ 	watchdog_set_nowayout(&data->wddev, nowayout);
+ 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
+-		set_bit(WDOG_ACTIVE, &data->wddev.status);
++		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
 
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/init.h>
- #include <linux/platform_device.h>
-+#include <linux/dmi.h>
- #include <linux/err.h>
- #include <linux/io.h>
- #include <linux/acpi.h>
-@@ -19,7 +21,10 @@
- #include <linux/slab.h>
- #include "sch56xx-common.h"
-
--/* Insmod parameters */
-+static bool ignore_dmi;
-+module_param(ignore_dmi, bool, 0);
-+MODULE_PARM_DESC(ignore_dmi, "Omit DMI check for supported devices (defau=
-lt=3D0)");
-+
- static bool nowayout =3D WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (defa=
-ult=3D"
-@@ -518,11 +523,42 @@ static int __init sch56xx_device_add(int address, co=
-nst char *name)
- 	return PTR_ERR_OR_ZERO(sch56xx_pdev);
- }
-
-+/* For autoloading only */
-+static const struct dmi_system_id sch56xx_dmi_table[] __initconst =3D {
-+	{
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-+		},
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dmi, sch56xx_dmi_table);
-+
- static int __init sch56xx_init(void)
- {
--	int address;
- 	const char *name =3D NULL;
-+	int address;
-
-+	if (!ignore_dmi) {
-+		if (!dmi_check_system(sch56xx_dmi_table))
-+			return -ENODEV;
-+
-+		/*
-+		 * Some machines like the Esprimo P720 and Esprimo C700 have
-+		 * onboard devices named " Antiope"/" Theseus" instead of
-+		 * "Antiope"/"Theseus", so we need to check for both.
-+		 */
-+		if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-+		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-+		    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-+		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-+			return -ENODEV;
-+	}
-+
-+	/*
-+	 * Some devices like the Esprimo C700 have both onboard devices,
-+	 * so we still have to check manually
-+	 */
- 	address =3D sch56xx_find(0x4e, &name);
- 	if (address < 0)
- 		address =3D sch56xx_find(0x2e, &name);
+ 	/* Since the watchdog uses a downcounter there is no register to read
+ 	   the BIOS set timeout from (if any was set at all) ->
 =2D-
 2.30.2
 
