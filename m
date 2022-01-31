@@ -2,179 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C989BC4167B
-	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jan 2022 14:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3BFBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Jan 2022 09:34:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239166AbiA3Ohm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 30 Jan 2022 09:37:42 -0500
-Received: from mga18.intel.com ([134.134.136.126]:8133 "EHLO mga18.intel.com"
+        id S232167AbiAaJeh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Jan 2022 04:34:37 -0500
+Received: from mout.gmx.net ([212.227.17.22]:53447 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347167AbiA3Ohl (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 30 Jan 2022 09:37:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643553461; x=1675089461;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QDIzAnRhPSt5FukMjJBRyFKpZ63huhskVYu7Jz6ZvqU=;
-  b=RngAiS105RgboijRur4E0uPd8hR2dmIyW7GyO4lk7e5LcoblB60WYmNE
-   P9marsw9ryWU4pWrJucb5fZIS2LGkMvChmpAE/IVxmuWww2Qo2bgF/V3H
-   LBg4GvAQAPUwqd71kJwax1VxYGKud2qWYelzUjqzcUlBAxyAKdW0mOG9a
-   z6FJ8V/JZjk2NUcY4mIZVEuBuAcel4ddJdOTWC3B9MihE5qtQj6LsR1+t
-   SnOwbMdWjo/1ObRdO6a2UU9puDgL43VKPQcixWgpVkEtkhlQG6ODMlIBW
-   KKtW1LvTLp6T1jcxV1vBb9eRBgtsvQjignQE3vYzXx9tKomfXDGpxaCeU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="230924833"
-X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="230924833"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 06:37:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="533964160"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jan 2022 06:37:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEBKk-000QcH-Nf; Sun, 30 Jan 2022 14:37:38 +0000
-Date:   Sun, 30 Jan 2022 22:36:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 8f8b63b0f29ddc89955c03faba202b7e0459716b
-Message-ID: <61f6a275.dyzIj4bbBPj9uhv1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229915AbiAaJeg (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:34:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643621655;
+        bh=OjrkrSWBU2ng8J708jeI3QCHtaitPEpoZ70TuD9iCio=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=fOE94qgzUb6+14SJE9u5Uq5C3k/Mt18wT2alR9DYLRe108FlLJ0+nfYVQY2n5sOdB
+         KKGiDJ1yF9p+KCzl7e4iImii+Q8f+2DgIWgxSCJ9gpkeKD6IaQ3rpS2dsF/zP1d2Ad
+         +CsN6ix2O3fglw2n9THoQnYAxBXnhMh6EXXLT5c8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Mj8mb-1mZN1W0AQX-00f6r6; Mon, 31 Jan 2022 10:34:15 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] hwmon: (sch56xx) Automatically load on supported hardware
+Date:   Mon, 31 Jan 2022 10:33:51 +0100
+Message-Id: <20220131093355.4151-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7oWG449qOzBQwxJhfKhxcGEJGKpByZP4s7gi7xI1iGlNXH0n4PY
+ ud67mOwyjqxCu84VZ3nNl1Madj0+sYXhP9Mv9uD4vUmHMUyG4tONki1i6yBFo/y7gzsG3Vx
+ zg3FDg+X411vVrVQHVNNlccLMcaOgd1I/J+dvIQnTBoOTiPsKAHYqRWnS0FzTy1sgKN/K6J
+ HGLKnC8Yy1snSS2jJS0ZQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/ep8DF6JX5k=:nWIyqZOwT9AFFv+MfFloO+
+ LH7dnAP8uxbuGn0Hu31oBMtWuFU/u8ycMVvRyszR+5Y/4ESPPlvA4/Vq1lNavzx02oVGst12v
+ JPWUj0L8Sfq6urdoiUPWbPQggQRYOh6McJA1GjIg9V/KP6U7MtzoMNprrRdXF+Cd4Ys9w8mrV
+ cNHvo2VezGr5og2C2VQfq9JosrRxVTpAvlVNFwnOREKKrFmmiVvsM7G5EsOi0sADmQeBXFjj5
+ fwDbjjhIKb0ruw78Rdb3aGZFxBy54RWV2lOlF2js6zcd86y9s5lv4G6Et+AtnPilNL14AC0wR
+ AL7W+cxvLfPR9rE/MPMVbjUEm18nLBX5GyGPe3BvjTS9Ofw8wjm8d6TTya3KFaTRqE3/C5oNt
+ FvMcs3NDSaHgP7qSUoYlPulL+BWlGJZu2pwPtCAeWnK4USfHDWOakPYjc1vkyWomJy1dLfJah
+ qhxBTkOhQCzEX0+mi4fzq/UkKFyqRer2k0F3y0Pd/mIRRuceuZ/ZmWmWg6Rrbn+WfI8UGK5b2
+ gETOoivf6Hxl7bO22GyHauKHWD0CIL+pI9Pg/28a1DayMmQMxTLSmaMDAk/BTyvYHC0npfOjl
+ JadudlGKG245kvdIfCb3hXUizcjQ12KuCvihZb0GYYzrRI+SLHaQiBZCKbYTfFlLW0++3WTc8
+ xj5g6HqXcI5k4N0oSet3mI9GgooDK9VNPH5iQN7ZP65qOGsnAAzS/U7xRkWe3NuAPKj2xFb5C
+ qqr1miTM3g+oupPlScEfwhDtoelqJq/2gkPyAgRjv+/SfXaoaa/478Nhtv+7+loF7DIrLlCA6
+ wHZwfzIU4jmYea+FmzfTvP4Fpmj/5rzHF5+Hlha3tlTcLfaAsMufGazo6aqwALyfReZm7vpdY
+ eeGN/5M11msN4N09NFqQ8xqzCohhVrJfPiDV7GjmbMR4zaSa9ySmrjygRpBri3D9ZwV4fCQjX
+ Q2c8Kw3vnHofAKgTkJLqklq5WVzDfKNU6PkT+UsGxvX9XG2mI3ZzbxKOOVN+lr9zrDkUKExbA
+ 2Rn7yHXCthYMVPg8DiJgMyZqn2IJst+j2ySHZtJgLem7gTSeaXKBaW3Vn1shyMG5EGY6WJqTF
+ +HEmBvIz4WkWUU=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 8f8b63b0f29ddc89955c03faba202b7e0459716b  hwmon: (powr1220) Add support for Lattice's POWR1014 power manager IC
+The hardware monitoring solutions supported by the sch5627 and
+sch5636 drivers are Fujitsu-specific.
+After some online searching, i found out that the solution used
+with the SCH5627 is called "Antiope" by Fujitsu, just like the
+"Theseus" solution inside the SCH5636.
+I also found out that "Antiope" and "Theseus" are listed as
+DMI onboard devices on supported Fujitsu devices, so the
+sch56xx_common module can be loaded automatically an check
+for the DMI devices. However some devices like the Esprimo C700
+have both devices, so after verifying that at least one onboard
+device is present, sch56xx_common still has to detect which chip
+is present.
+This is safe however if at least one device is present.
+The last two patches are fixing some minor issues.
 
-elapsed time: 724m
+Tested on a Fujitsu Esprimo P720.
 
-configs tested: 106
-configs skipped: 3
+Armin Wolf (4):
+  hwmon: (sch56xx) Autoload modules on platform device creation
+  hwmon: sch56xx-common: Add automatic module loading on supported
+    devices
+  hwmon: sch56xx-common: Replace msleep() with usleep_range()
+  hwmon: sch56xx-common: Replace WDOG_ACTIVE with WDOG_HW_RUNNING
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ drivers/hwmon/sch5627.c        |  9 +++++++
+ drivers/hwmon/sch5636.c        |  9 +++++++
+ drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++++++----
+ 3 files changed, 58 insertions(+), 4 deletions(-)
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-powerpc                 mpc8540_ads_defconfig
-m68k                          amiga_defconfig
-arm                           u8500_defconfig
-sparc64                             defconfig
-powerpc                        cell_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                           sama5_defconfig
-parisc                generic-32bit_defconfig
-powerpc                     tqm8541_defconfig
-arm                        spear6xx_defconfig
-xtensa                           alldefconfig
-m68k                                defconfig
-i386                             alldefconfig
-arm                             rpc_defconfig
-powerpc                       eiger_defconfig
-powerpc                      pcm030_defconfig
-sh                               allmodconfig
-sh                      rts7751r2d1_defconfig
-arm                         lpc18xx_defconfig
-powerpc                      ep88xc_defconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                     ep8248e_defconfig
-riscv                    nommu_k210_defconfig
-sh                           se7206_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                 mpc834x_mds_defconfig
-sh                          rsk7264_defconfig
-sh                             espt_defconfig
-sh                           se7712_defconfig
-m68k                             allmodconfig
-i386                                defconfig
-arm                  randconfig-c002-20220130
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220130
-arc                  randconfig-r043-20220130
-s390                 randconfig-r044-20220130
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+=2D-
+2.30.2
 
-clang tested configs:
-riscv                randconfig-c006-20220130
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220130
-powerpc              randconfig-c003-20220130
-mips                 randconfig-c004-20220130
-i386                          randconfig-c001
-hexagon                             defconfig
-powerpc                 mpc8315_rdb_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
