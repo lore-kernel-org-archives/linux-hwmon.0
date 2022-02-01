@@ -2,225 +2,58 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EE3EC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Feb 2022 17:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD12FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Feb 2022 11:02:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241496AbiBAR3G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Feb 2022 12:29:06 -0500
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:42708 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiBAR3G (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Feb 2022 12:29:06 -0500
-Received: by mail-oo1-f46.google.com with SMTP id w5-20020a4a9785000000b0030956914befso114372ooi.9;
-        Tue, 01 Feb 2022 09:29:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iMYzAJDNaV/gptZ3or49lK9EJLg7H9JXnTy+JftInwE=;
-        b=V2XxgBmKCXqn4L7X20maCj1r/2OKIFYwgv3Sve0WVc5IRfXqWaIjxn2jgakqP5BsiF
-         MEWT2yIBqJZPZOPvDJ+k616tUkQ/pvqecx18FlnuTHVYosA+pGN0COpY13sIiql5Yi5B
-         EouKG9+/QcirgKCh2yU0uf4x/dFV7rgKBcOiuaMYlQXCtjonULe3pLxyv/qj8EodqdGI
-         q50LbDq6aYw5PqmgKhRvdHPU1arq50Ac6p5eNRPNpJa58BwtlFySZvfyGl0O4pDNJ+9u
-         sErghFLqfNllrKE89nFSv+PwrGNUq7FiWfXG/M3E0lxmknxNsEihKuEvc2qy7ipj9vAi
-         /0xg==
-X-Gm-Message-State: AOAM530ETtj1UubVdVS5tm5vJ/PkW6VkrIgmeSo5BufH+sFw7UlsXl3i
-        0P9X3Qca35jtIDOTQltJxneBpNjXzA==
-X-Google-Smtp-Source: ABdhPJxaDofsHCoDc63WiBgkP6sKeiud4f2oJ4Ih7vvph+GKzrueFLxq7DJxC6JjxnQAG3WR7HrTHw==
-X-Received: by 2002:a4a:ddc1:: with SMTP id i1mr13006229oov.96.1643736545500;
-        Tue, 01 Feb 2022 09:29:05 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d22sm14160141otp.79.2022.02.01.09.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:29:04 -0800 (PST)
-Received: (nullmailer pid 243935 invoked by uid 1000);
-        Tue, 01 Feb 2022 17:29:03 -0000
-Date:   Tue, 1 Feb 2022 11:29:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: gpio-fan: convert to YAML
-Message-ID: <Yflt302QEqs5gabI@robh.at.kernel.org>
-References: <20220126200350.3633576-1-clabbe@baylibre.com>
+        id S1343666AbiBBLCW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Feb 2022 06:02:22 -0500
+Received: from mail.profitfirm24.com.pl ([212.237.10.110]:59884 "EHLO
+        mail.profitfirm24.com.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343662AbiBBLCV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Feb 2022 06:02:21 -0500
+Received: by mail.profitfirm24.com.pl (Postfix, from userid 1001)
+        id 4FEA4AA6D4; Tue,  1 Feb 2022 09:17:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitfirm24.com.pl;
+        s=mail; t=1643707463;
+        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
+        h=Date:From:To:Subject:From;
+        b=aNnBbpJ1XdC5dC5qEMLdqMJGAVSlXR9k24/akOgBhVVVKO6AHncC1dwDyqUaC8HOn
+         ZAD6FT+tbL3nS/teV48k/eic2OejVrmEVQveZqbQ3oVRYNdhdE+yfh68CDCmCiTcAt
+         Wv2xD46dy4LJgt4j79BXsc9WXoOyuQBLnrxiaDPYS9813ZBFopwd+ICwg+b+cDr+qw
+         loO4gDqpzR9xgwKWD7hMWZgH279TwAo4fwfmpbGd+USgSsEXKZiOOokSjfC5CwgOIX
+         ErEpwk+lq7vvJ1rlbcyK6F8bqEVseltqi78THTmb29w739DlkIKWV0OKEkwJMl1qMB
+         KgqtYVGGzEyDA==
+Received: by profitfirm24.com.pl for <linux-hwmon@vger.kernel.org>; Tue,  1 Feb 2022 09:17:20 GMT
+Message-ID: <20220201074652-0.1.b.2yut.0.ao2vqkl6mf@profitfirm24.com.pl>
+Date:   Tue,  1 Feb 2022 09:17:20 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@profitfirm24.com.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.profitfirm24.com.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126200350.3633576-1-clabbe@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 08:03:50PM +0000, Corentin Labbe wrote:
-> Converts hwmon/gpio-fan.txt to YAML
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> 
-> I didnt found any clear maintainer and since DT yaml mandates a
-> maintainer section, I set devicetree@vger.kernel.org.
-> 
->  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 --------
->  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 96 +++++++++++++++++++
->  2 files changed, 96 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-> deleted file mode 100644
-> index f4cfa350f6a1..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-> +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -Bindings for fan connected to GPIO lines
-> -
-> -Required properties:
-> -- compatible : "gpio-fan"
-> -
-> -Optional properties:
-> -- gpios: Specifies the pins that map to bits in the control value,
-> -  ordered MSB-->LSB.
-> -- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
-> -  control value that should be set to achieve them. This array
-> -  must have the RPM values in ascending order.
-> -- alarm-gpios: This pin going active indicates something is wrong with
-> -  the fan, and a udev event will be fired.
-> -- #cooling-cells: If used as a cooling device, must be <2>
-> -  Also see:
-> -  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
-> -  min and max states are derived from the speed-map of the fan.
-> -
-> -Note: At least one the "gpios" or "alarm-gpios" properties must be set.
-> -
-> -Examples:
-> -
-> -	gpio_fan {
-> -		compatible = "gpio-fan";
-> -		gpios = <&gpio1 14 1
-> -			 &gpio1 13 1>;
-> -		gpio-fan,speed-map = <0    0
-> -				      3000 1
-> -				      6000 2>;
-> -		alarm-gpios = <&gpio1 15 1>;
-> -	};
-> -	gpio_fan_cool: gpio_fan {
-> -		compatible = "gpio-fan";
-> -		gpios = <&gpio2 14 1
-> -			 &gpio2 13 1>;
-> -		gpio-fan,speed-map =	<0    0>,
-> -					<3000 1>,
-> -					<6000 2>;
-> -		alarm-gpios = <&gpio2 15 1>;
-> -		#cooling-cells = <2>; /* min followed by max */
-> -	};
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> new file mode 100644
-> index 000000000000..15bb5efd3cb4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> @@ -0,0 +1,96 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/gpio-fan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for fan connected to GPIO lines
-> +
-> +maintainers:
-> +  - OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetree@vger.kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: gpio-fan
-> +
-> +  gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: Specifies the pins that map to bits in the control value,
-> +      ordered MSB-->LSB.
-> +
-> +  gpio-fan,speed-map:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    description: A mapping of possible fan RPM speeds and the
-> +      control value that should be set to achieve them. This array
-> +      must have the RPM values in ascending order.
-> +
-> +  alarm-gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: This pin going active indicates something is wrong with
-> +      the fan, and a udev event will be fired.
-> +
-> +  "#cooling-cells":
-> +    const: 2
-> +    description: If used as a cooling device, must be <2>
-> +      Also see Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
-> +      min and max states are derived from the speed-map of the fan.
-> +
-> +anyOf:
-> +  - required:
-> +      - gpios
-> +  - required:
-> +      - alarm-gpios
-> +
-> +additionalProperties: False
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
-> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    gpio1: gpio@4d000000 {
-> +      compatible = "cortina,gemini-gpio", "faraday,ftgpio010";
-> +      reg = <0x4d000000 0x100>;
-> +      interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
-> +      resets = <&syscon GEMINI_RESET_GPIO0>;
-> +      clocks = <&syscon GEMINI_CLK_APB>;
-> +      gpio-controller;
-> +      #gpio-cells = <2>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +    };
+Dzie=C5=84 dobry,
 
-No need to show providers in examples.
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
 
-And one example is probably sufficient here.
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-> +    gpio_fan {
-> +      compatible = "gpio-fan";
-> +        gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
-> +        gpio-fan,speed-map = <0    0>,
-> +                             <3000 1>,
-> +                             <6000 2>;
-> +        alarm-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
-> +    };
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
-> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    gpio2: gpio@4d000000 {
-> +      compatible = "cortina,gemini-gpio", "faraday,ftgpio010";
-> +      reg = <0x4d000000 0x100>;
-> +      interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
-> +      resets = <&syscon GEMINI_RESET_GPIO0>;
-> +      clocks = <&syscon GEMINI_CLK_APB>;
-> +      gpio-controller;
-> +      #gpio-cells = <2>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +    };
-> +    gpio_fan_cool: gpio_fan {
-> +      compatible = "gpio-fan";
-> +      gpios = <&gpio2 8 GPIO_ACTIVE_HIGH
-> +               &gpio2 1 GPIO_ACTIVE_HIGH>;
-> +      gpio-fan,speed-map = <0    0
-> +                           3000 1
-> +                           6000 2>;
-> +      alarm-gpios = <&gpio2 15 GPIO_ACTIVE_HIGH>;
-> +      #cooling-cells = <2>; /* min followed by max */
-> +    };
-> -- 
-> 2.34.1
-> 
-> 
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
+
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
+
+
+Pozdrawiam
+Arkadiusz Soko=C5=82owski
