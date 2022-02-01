@@ -2,129 +2,222 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E3E3C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Feb 2022 12:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92D30C4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Feb 2022 15:07:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238219AbiBAM5H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Feb 2022 07:57:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32065 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229725AbiBAM5H (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:57:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643720226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KQ6uizHs+T+wChsJ+DeQUo8BHktCkFmAePt89tVO1n8=;
-        b=ADMKW1aG1TCJFDOZ01rveUJzNJcUF8cscxkn08cC7LI2DiX3TwISSm73vBYWKk1eOfaZRk
-        5iZB4/1vm1wnHE0au+jn2goEWd7vDS19Euh01jL42jniGfuhAvhmKWh/ITOrgmScUky2Bw
-        GZPmQAzaid8Ykxurd9Ldu0bcssPdo3g=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-Fx2BjAIrPu6iShREgEM9XQ-1; Tue, 01 Feb 2022 07:57:05 -0500
-X-MC-Unique: Fx2BjAIrPu6iShREgEM9XQ-1
-Received: by mail-ed1-f69.google.com with SMTP id v15-20020a50a44f000000b004094f4a8f3bso8672425edb.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 01 Feb 2022 04:57:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KQ6uizHs+T+wChsJ+DeQUo8BHktCkFmAePt89tVO1n8=;
-        b=uROxQk5Lk+wZopqzUEwA8Y4IQ+YTZYIJIuGzZ5kAb8As9RcgMwJLcujgRJKUoQMtbX
-         jJmv2nZzTROJLNd+L8HpH5VjuWZxm+IovExfZxhn+ScXDhodMhjbWnFcQquEDPDZGN1u
-         cSPsFih+fKrh6hLbZgzF494+SPk0pvuwrYGL1tbzA0Mv8r+5kEdXV295sJpSB+VlYkto
-         TaP72CFjkbyxD0bRNqSKYhMdd5Bmb203Nt19IRdvmGjyNiko2uAHcj0jXlmyGdemO++/
-         P+3CGpWgTLudsZuQ/PcgrP1NoXYp72bz+BonKyLmiGDxybuauQ7DjeQnLWi+b767gKpI
-         bD0A==
-X-Gm-Message-State: AOAM532s5aB0XFjwrZgsSF2hQyfkGOVbZ9p/KRlFFSHk767CzEAsDiau
-        CuBgJCxDQsct7TtsS6Th5/+1pzmJUdHq/aZLNcJinVXk+aipp349TiyfRCMabVPwHneo5Vqq3t1
-        1PB+9N1e7j+KLPnZ1GlxVXcI=
-X-Received: by 2002:a17:907:9816:: with SMTP id ji22mr12429459ejc.749.1643720224024;
-        Tue, 01 Feb 2022 04:57:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWjr5Jp9grpxqx8hkic0kbma5PCsPcdjCNZZ93EtP+eq3QIEt7zcDM5f5WOomgiSu9D2jh4A==
-X-Received: by 2002:a17:907:9816:: with SMTP id ji22mr12429451ejc.749.1643720223833;
-        Tue, 01 Feb 2022 04:57:03 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id lm6sm14439602ejb.46.2022.02.01.04.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 04:57:02 -0800 (PST)
-Message-ID: <01e51bfa-5107-fbd0-6a0b-82bca6c78e8e@redhat.com>
-Date:   Tue, 1 Feb 2022 13:57:02 +0100
+        id S240114AbiBAPHx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Feb 2022 10:07:53 -0500
+Received: from mga14.intel.com ([192.55.52.115]:29086 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240166AbiBAPHv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:07:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643728071; x=1675264071;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lSOCVo5/Z5Pudu20SKBaNstiid3wdcrr31OUsvyAIfM=;
+  b=c6uoFHaoE7IilwqeyHpNmXauwtfuGfoMiF2ACghadmaUFIQZvz78Pd3t
+   2C6YTc3XGv8vix7wG/cz+LtYreMmiqmCvKxiL0n5aSC5+8kG3uXPhDU3w
+   EKQOsVAumGRQfdWWB+1ApwGQnTcIox3ROSW7lRSmZFuaYEz3sYnfgrRbg
+   5jpTD0FKEuxAxdQ5J8HrtrSfLSd0Y+GQ3G3kE6Oj5G373sC1XskcQDBOW
+   Uua5lWYTbjGRdTTPtJ2TMnyci3mSdPiL0NvKPJXmucpoGtm+urxg8smjP
+   lnS+nSNiWlZXzWY0s3sfyCKQb3DBB//OpCb3jdaLcGPxlSxLNafrPQc+c
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247926186"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="247926186"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 07:07:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="599247202"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 01 Feb 2022 07:07:50 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEul3-000TO4-IB; Tue, 01 Feb 2022 15:07:49 +0000
+Date:   Tue, 01 Feb 2022 23:07:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 3c5412cdec9f6e417e7757974040e461df4a7238
+Message-ID: <61f94ca1.BL8pKIoTkFGlMfX2%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3 0/4] hwmon: (sch56xx) Automatically load on supported
- hardware
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220131211935.3656-1-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220131211935.3656-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 3c5412cdec9f6e417e7757974040e461df4a7238  pinctrl-sunxi: sunxi_pinctrl_gpio_direction_in/output: use correct offset
 
-On 1/31/22 22:19, Armin Wolf wrote:
-> The hardware monitoring solutions supported by the sch5627 and
-> sch5636 drivers are Fujitsu-specific.
-> After some online searching, i found out that the solution used
-> with the SCH5627 is called "Antiope" by Fujitsu, just like the
-> "Theseus" solution inside the SCH5636.
-> I also found out that "Antiope" and "Theseus" are listed as
-> DMI onboard devices on supported Fujitsu devices, so the
-> sch56xx_common module can be loaded automatically an check
-> for the DMI devices. However some devices like the Esprimo C700
-> have both devices, so after verifying that at least one onboard
-> device is present, sch56xx_common still has to detect which chip
-> is present.
-> This is safe however if at least one device is present.
-> 
-> Tested on a Fujitsu Esprimo P720.
+elapsed time: 720m
 
-Thanks, the new version of the entire series looks good to me:
+configs tested: 148
+configs skipped: 3
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-for the series.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+i386                 randconfig-c001-20220131
+sh                          rsk7203_defconfig
+mips                           xway_defconfig
+um                               alldefconfig
+powerpc                 mpc834x_mds_defconfig
+sh                            titan_defconfig
+m68k                           sun3_defconfig
+xtensa                       common_defconfig
+arc                        nsimosci_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                        warp_defconfig
+powerpc                     sequoia_defconfig
+arm                       multi_v4t_defconfig
+arc                          axs103_defconfig
+powerpc                    sam440ep_defconfig
+mips                      fuloong2e_defconfig
+arm                       aspeed_g5_defconfig
+mips                         tb0226_defconfig
+parisc                           alldefconfig
+m68k                       m5208evb_defconfig
+powerpc                      arches_defconfig
+arm                           stm32_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                 mpc837x_rdb_defconfig
+powerpc                     asp8347_defconfig
+arm                      footbridge_defconfig
+sh                          kfr2r09_defconfig
+sh                           se7724_defconfig
+ia64                        generic_defconfig
+sh                           se7343_defconfig
+sh                             shx3_defconfig
+sh                     sh7710voipgw_defconfig
+h8300                            allyesconfig
+arm                          gemini_defconfig
+powerpc                       eiger_defconfig
+powerpc                        cell_defconfig
+microblaze                      mmu_defconfig
+sh                               alldefconfig
+m68k                          sun3x_defconfig
+mips                      maltasmvp_defconfig
+arm                  randconfig-c002-20220130
+arm                  randconfig-c002-20220131
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20220131
+x86_64               randconfig-a003-20220131
+x86_64               randconfig-a001-20220131
+x86_64               randconfig-a006-20220131
+x86_64               randconfig-a005-20220131
+x86_64               randconfig-a002-20220131
+i386                 randconfig-a006-20220131
+i386                 randconfig-a005-20220131
+i386                 randconfig-a003-20220131
+i386                 randconfig-a002-20220131
+i386                 randconfig-a001-20220131
+i386                 randconfig-a004-20220131
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220130
+arc                  randconfig-r043-20220130
+arc                  randconfig-r043-20220131
+s390                 randconfig-r044-20220130
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-Regards,
+clang tested configs:
+riscv                randconfig-c006-20220130
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220130
+powerpc              randconfig-c003-20220130
+mips                 randconfig-c004-20220130
+i386                          randconfig-c001
+powerpc                          allyesconfig
+arm                             mxs_defconfig
+arm                        spear3xx_defconfig
+powerpc                        fsp2_defconfig
+powerpc                          allmodconfig
+arm                  colibri_pxa270_defconfig
+arm                           spitz_defconfig
+arm                       versatile_defconfig
+arm                         orion5x_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                        vexpress_defconfig
+mips                       lemote2f_defconfig
+x86_64               randconfig-a013-20220131
+x86_64               randconfig-a015-20220131
+x86_64               randconfig-a014-20220131
+x86_64               randconfig-a016-20220131
+x86_64               randconfig-a011-20220131
+x86_64               randconfig-a012-20220131
+i386                 randconfig-a011-20220131
+i386                 randconfig-a013-20220131
+i386                 randconfig-a014-20220131
+i386                 randconfig-a012-20220131
+i386                 randconfig-a015-20220131
+i386                 randconfig-a016-20220131
+riscv                randconfig-r042-20220131
+hexagon              randconfig-r045-20220130
+hexagon              randconfig-r045-20220131
+hexagon              randconfig-r041-20220130
+hexagon              randconfig-r041-20220131
+s390                 randconfig-r044-20220131
 
-Hans
-
-> 
-> ---
-> Changes in v3:
-> - fix usleep_range using the same value as msleep
-> 
-> Changes in v2:
-> - fix unused variable issue reported by the kernel test robot
-> by assinging the platform device id list in sch5627/sch5636
-> to platform_driver->id_table.
-> 
-> Armin Wolf (4):
->   hwmon: (sch56xx) Autoload modules on platform device creation
->   hwmon: (sch56xx-common) Add automatic module loading on supported
->     devices
->   hwmon: (sch56xx-common) Replace msleep() with usleep_range()
->   hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
-> 
->  drivers/hwmon/sch5627.c        | 10 ++++++++
->  drivers/hwmon/sch5636.c        | 10 ++++++++
->  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++++++----
->  3 files changed, 60 insertions(+), 4 deletions(-)
-> 
-> --
-> 2.30.2
-> 
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
