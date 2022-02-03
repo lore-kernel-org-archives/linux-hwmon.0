@@ -2,80 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6481CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Feb 2022 20:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09DABC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Feb 2022 20:24:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244549AbiBCUBo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Feb 2022 15:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S1352352AbiBCUYT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Feb 2022 15:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiBCUBo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Feb 2022 15:01:44 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86319C061714;
-        Thu,  3 Feb 2022 12:01:44 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id i62so4738972ioa.1;
-        Thu, 03 Feb 2022 12:01:44 -0800 (PST)
+        with ESMTP id S238135AbiBCUYT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Feb 2022 15:24:19 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB26C061714;
+        Thu,  3 Feb 2022 12:24:18 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x23so8534159lfc.0;
+        Thu, 03 Feb 2022 12:24:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eRblNJegboCG+i2EsjugPeMU0FiVsFIMNmO+UoooOjA=;
-        b=DR73SbfoHawndl9MmDdSxj/hgAe8Jb3I6+WUPsfIaAkeoVSj8h9SgWZxO0JJSxXN2l
-         VylXpcuX0h79K+MMtXaUxp9vaTg4VYpdZD5Y872z6XmsIDusiDFc9IHGeN4I20R/+tiK
-         kjHin+9aqYqQh5k+OscqyKFnLprTmqRbP5ShSzv5njhlT9kwt27PXALfs7JrBl/fsPnn
-         uckYb2p+TBSRpJCUtUa2aqc+ji/fMOtsTruY7Yn8qS0/uj5RpGHVhewybPVmr7JCDMs5
-         fHsBWA5BAVWSmgQTToLn5rEiok79o9uZCu7We/C94m7nF4bFXog4pOjUqEnA0YRXHrOd
-         pPVg==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Rx0Z3OZF6cdCvnNOFKcvDv4fh1yVj/gL1s1KEoNipV0=;
+        b=q1e/O08IwI8RzNptGiEsgHPC0MgRunmHl07k0HQXYytegHHRqVauUTkdafucC36X+f
+         Gv0dT65WI0X6RF3+NCaSNjlDzu0lJEFyDoekDJbE/m/Ch/sgOhFG2W90CGQ9erhWG7VC
+         jSXgf6KbxYxCxidao1jmYY3kmPYkS8MMk8j2Z+h1Xkq0lYAKzLup5soP85aP1t9WvUOw
+         zp6ae8qYfISWE4/VvOUBZU35ksDftO6ij2d0DMJoVK/x62v/YanFkJFlW0XA4ryfdlLc
+         lQlIrxLbMmf2gzGcTnPWwV/zkqbQnhmcHrBJQMhWpCwiUmreS9hP39FcAGzUQx2Kmp10
+         L2YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eRblNJegboCG+i2EsjugPeMU0FiVsFIMNmO+UoooOjA=;
-        b=77ObulpMDtGCPnSq9HcMOU3senBQJ+bXuK0uQBEUavG52YAgYbae+FVUW+8VceF+sx
-         IWnIHVO37+4L2ZBd5DNYQQhyDofCN7vppVIWl9oL1ndVLPIdR2WgQAaFbiVaqR407o05
-         kHv6iIs6fyOdVicQrsp790ZV7X5EYLxZLhsk/vsASIWhO7CnWqC4v0Et99pEhfMpABM8
-         kIo41Y6GY4nGn1MidXy1zZxMpMrJPiExVsnOhCYCE+R1RZ5ssqKl5fEkv/1ybkQyhx6a
-         fJuJoWf+yTsp4LL1EdnoonTP8d5eGJpVhl1+yAIvlBHa+LY/0UVERhll3cvkZbhvjaHD
-         clNw==
-X-Gm-Message-State: AOAM533k4TkNiiMhdz1CBNYP/rKit0rseO3dY+/Bmyym64sLLJjPed+a
-        kQnmoJamOT3Ywyd8A/++FTbRkDWo2Vvb64o0UAc=
-X-Google-Smtp-Source: ABdhPJziu9nSOSiyoZO2PLLg3TsphttGjYFb341qLRbUmxAwvMH5+exfoLb+Rb0+Qdp2BEOvSdV0SZtyYcJVbMXdJYM=
-X-Received: by 2002:a6b:8e89:: with SMTP id q131mr19284770iod.77.1643918503934;
- Thu, 03 Feb 2022 12:01:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
- <7c8f311f-a2e4-584f-eb29-7f0d2a335e8f@roeck-us.net> <CAB95QARyz_sp9MoMsakfAK+PRBnVVnyOQzm2ZwJwwLE5vvAUFg@mail.gmail.com>
- <8022383.T7Z3S40VBb@natalenko.name> <13a9d0fd-1b2c-b9c1-24a7-ff4fc5f4b8cc@roeck-us.net>
-In-Reply-To: <13a9d0fd-1b2c-b9c1-24a7-ff4fc5f4b8cc@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 3 Feb 2022 21:01:32 +0100
-Message-ID: <CAB95QATUK+q01TLuubqR9D1fLJM=C6VjxpabnkseQRUvsd-9YA@mail.gmail.com>
-Subject: Re: [ASUS EC Sensors v8 0/3]
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Oleksandr Natalenko <oleksandr@natalenko.name>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Rx0Z3OZF6cdCvnNOFKcvDv4fh1yVj/gL1s1KEoNipV0=;
+        b=SehqcCqtiQh+bDfCDCERfS+tXtVG810FnQf3Q2r4pQW9BQWS3e8PRY1wp4XLS4mxZK
+         fd4SQn5On1xd/LFzjS0Re2nfoXs3npnKaGhmG1Q50cr+xDeGd3x8h5DOQqzgN5qhhbbP
+         /R1qJrLc6Vzj8SqwBxDDbSt7U2QR69XJqulVSN+tvw82g/r5ykS7IdQLMKIfOrINEzqb
+         kal5q8DXc74H242mCOxydU5klthoAdPe24xXZVokVajWWeSsNBHO7lrleoI1ETu9KBn8
+         xP43uQkinKUmyf5hj6LxBrLrC+8x/5acU2PSWKIqQ+Dud7mY9aGS3rux3s0zw2W7g7fS
+         AM8Q==
+X-Gm-Message-State: AOAM531qA+9P6n2rj6xzS2uwnezPwZBEMSihSrlNhlk2lv3mGnGGgXyj
+        soTXOLdxpDj7+I49ZUoYCbE5/O0G/45G9Q==
+X-Google-Smtp-Source: ABdhPJxFpVox1E9TWI44exKhGjHJS2MwhEQ2QcOo/FjH7tH8Y+OKw9kx9t+lSINF1E0/bWMt23niDA==
+X-Received: by 2002:a05:6512:3f8f:: with SMTP id x15mr14461735lfa.363.1643919856967;
+        Thu, 03 Feb 2022 12:24:16 -0800 (PST)
+Received: from netbook-debian ([94.179.41.53])
+        by smtp.gmail.com with ESMTPSA id o17sm3774802lfl.16.2022.02.03.12.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 12:24:16 -0800 (PST)
+Date:   Thu, 3 Feb 2022 22:24:10 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [ASUS EC Sensors v8 0/3]
+Message-ID: <20220203222310.6a025c5d@netbook-debian>
+In-Reply-To: <CAB95QATUK+q01TLuubqR9D1fLJM=C6VjxpabnkseQRUvsd-9YA@mail.gmail.com>
+References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
+        <7c8f311f-a2e4-584f-eb29-7f0d2a335e8f@roeck-us.net>
+        <CAB95QARyz_sp9MoMsakfAK+PRBnVVnyOQzm2ZwJwwLE5vvAUFg@mail.gmail.com>
+        <8022383.T7Z3S40VBb@natalenko.name>
+        <13a9d0fd-1b2c-b9c1-24a7-ff4fc5f4b8cc@roeck-us.net>
+        <CAB95QATUK+q01TLuubqR9D1fLJM=C6VjxpabnkseQRUvsd-9YA@mail.gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> >> Oleksandre, could you, please, let us know did you actually test the
-> >> v8 code and if so provide us with the Tested-by: tag?
-> >
-> > Yes, I do run this version now, and it works fine for me.
-> >
-> > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> >
->
-> Ok, based on that I'll apply the series on top of hwmon-next with your
-> Tested-by:.
->
+On Thu, 3 Feb 2022 21:01:32 +0100
+Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
 
-Great! Thank you both!
+> > >> Oleksandre, could you, please, let us know did you actually test
+> > >> the v8 code and if so provide us with the Tested-by: tag?  
+> > >
+> > > Yes, I do run this version now, and it works fine for me.
+> > >
+> > > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> > >  
+> >
+> > Ok, based on that I'll apply the series on top of hwmon-next with
+> > your Tested-by:.
+> >  
+> 
+> Great! Thank you both!
+> 
+> Eugene
 
-Eugene
+I have also retested code, it works for my case.
+
+Tested-by: Denis Pauk <pauk.denis@gmail.com>
+
+What about other B550/X570 boards?
+
+We have such candidates with same WMI methods in nct6775:
+	"ROG STRIX B550-A GAMING",
+	"ROG STRIX B550-E GAMING",
+	"ROG STRIX B550-F GAMING",
+	"ROG STRIX B550-F GAMING (WI-FI)",
+	"ROG STRIX B550-I GAMING",
+
+B550-A does not support asus-wmi-ec-interface("ERROR: Can't get value
+of subfeature fan1_input: I/O error"), but what about others? 
+
+Best regards,
+             Denis.
