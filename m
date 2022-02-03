@@ -2,78 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D93EBC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Feb 2022 23:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB7A4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Feb 2022 01:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbiBBX6a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Feb 2022 18:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
+        id S1348713AbiBCBGi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Feb 2022 20:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348206AbiBBX62 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Feb 2022 18:58:28 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC6AC061714;
-        Wed,  2 Feb 2022 15:58:28 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id 15so742275ilg.8;
-        Wed, 02 Feb 2022 15:58:28 -0800 (PST)
+        with ESMTP id S233773AbiBCBGg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Feb 2022 20:06:36 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC2FC061714;
+        Wed,  2 Feb 2022 17:06:36 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id q186so1640068oih.8;
+        Wed, 02 Feb 2022 17:06:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AdTtbIqSZjs9ClhOQAZBfTgtubt8OVGF8JKyL/jJ7V0=;
-        b=Cu1prVIBVuddk030FRqPYJCdmpLFK+ZapKsL7G8Qki5M2zVktzCjGDafHdwe+wTk7c
-         MWqzVSst22/op2BEIOcj2nOFqrz8MouzzkAJUiXrq3b1AKImg3DvshVb2QnqIGfbLp9b
-         CYnNRcu065vN1Rq0qHgECg9kkPe5aKWVIwub2L2W7nJrGPXnhm51Juo1m5BaruYju1Y4
-         1YqI6xLLPeUHJ8KqcMGDAPXaa7QAwfgDmmoWjzjqJp6Kl5/N73j4OhbUYwCfsqLUbHmD
-         gc2g/S4uqguv1TLSnHI+59C5RKfanWK7X9wF1BdgdvlZdm3P/kMrxbDR0FI3VC/9V0Ay
-         g2/w==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XRZmM+yaTnrVXpm5gsPPe5Kc/OSxRoCOhAGPC+u+DTs=;
+        b=Ek7bPRQrd0HW3noavBdgbZo2tj2V4Pyo1Msu4prfYQ+zOxE1PPHLUoKAywMSAwP+1f
+         83EdRigiIJCiwxcTJcr6dYTaXN216dgrGX7p22dKU7uv/LLQ7o7MnOP3WvxDzOpgBshV
+         vCyGyNLc0tTYN3PvPfnwq4PuAzBh9VWl6H8BKH9Ug3kkwkJIwD6xd+W9c2oj29s/wyXY
+         tcJxZwVjsWoC8LpeYItd60/N+vjXXRSPUZMbeY+Ale1ZmMlK0eaP9tpgeF2TBWsjZmYu
+         /spSxhZS9MTZnUFrenvRObWQP/K6fQoLclV3cPxaYfVCHF9QerDRERsi1Uov1/2ni+b8
+         +HFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AdTtbIqSZjs9ClhOQAZBfTgtubt8OVGF8JKyL/jJ7V0=;
-        b=ipLV7GqTfPFYdj96pbURTbnjmGcHBt23VabrbDCbHsUuzqd/iJ8rSxWWIf5B0SDjN8
-         z350t64OmESgFmS4cYhQ9gtsVMAvdfydvIz/8SIJxUjc/+O5vMv2HMPfuG2adQziIDVm
-         fyUwFL9IhL7yE8Ecw6t/fhn+jkAP8F6hqdH6JpWkZgaIp/c3wioOJ0FGcTITtwaZ5lai
-         h7T74FW2Cduyo+M/bOn44IMGAq6GbBHnVJgJhePYkwab9EXF2zIcpCYnedetf1JFoZuH
-         ww58IMBKeU4AJ5taZoutpQTnoiEqWrflC3cx6AHtk2Hm8iqOq46pPfkDTukVd+cqyxGe
-         V1EA==
-X-Gm-Message-State: AOAM5306auwAs3dgi3n+sJyOsWMBRNBIZrGtF+Q2eQBTMftUjkpPS/wW
-        eFuK/OYQQzDuUMsFPJp6DgkPGFr5INj93gB/Tyfwt8XkxcNwV0Ry
-X-Google-Smtp-Source: ABdhPJzmzB7VX5tXIealvb/Do4WUvYa0OUn0WDj3I1hGPakbCJ2Q+gYaFEZ5L+NIYPdrkd5FCWbc05TBgScswoFsKc4=
-X-Received: by 2002:a92:d350:: with SMTP id a16mr19720157ilh.187.1643846308079;
- Wed, 02 Feb 2022 15:58:28 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=XRZmM+yaTnrVXpm5gsPPe5Kc/OSxRoCOhAGPC+u+DTs=;
+        b=I7iyztx0bpyd/L0e7sDvMN+ENWX7AdI1H1Jf1Hct6jNy3V7Zmh+bj2z6LUio/jO3mK
+         BkYRKQ1TkeBAdKCLiXhbqZ30Um7Ec9qM7i+BoFLmX0WSmdKdh+UYZgxSq9QBw35mBigY
+         VCCUeBrWMlDXcnPrNB2Is9SKvjFVazIuE9TuVeM/C90kBolkxYp8XZAW4NwDhHqNktYX
+         PUEluMUZWqj+SuT6oB40okeIsYcK/FpIjfxDUqhKLEjdA5BPXDm3GpIW57bDQW3cTOVn
+         UfFfOaGMfF1XQa5T80H8VpLs7x0bRcpo1V0FDddQ9aY3lMtawaXCpZJwf5xUdRmJxeRM
+         lAvQ==
+X-Gm-Message-State: AOAM5326XwiqW/LdAhbOL6XXPsrzwh0xq/b8DDaUvQ6lQP9ldKuyHmHT
+        +Dk0FoQEwuItdyJCB6aGHKg=
+X-Google-Smtp-Source: ABdhPJwSh5vIjruqCfqk69xhz9sxRAo88Qskj8Gn+aZPY77LL7QnhQT0OYPxGsN+CFPC16BYXeT/dw==
+X-Received: by 2002:a05:6808:23c9:: with SMTP id bq9mr6280196oib.138.1643850395728;
+        Wed, 02 Feb 2022 17:06:35 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j6sm7040088otq.76.2022.02.02.17.06.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 17:06:34 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 2 Feb 2022 17:06:33 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Armin Wolf <W_Armin@gmx.de>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] hwmon: (sch56xx) Automatically load on supported
+ hardware
+Message-ID: <20220203010633.GA2544812@roeck-us.net>
+References: <20220131211935.3656-1-W_Armin@gmx.de>
+ <01e51bfa-5107-fbd0-6a0b-82bca6c78e8e@redhat.com>
 MIME-Version: 1.0
-References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
-In-Reply-To: <20220124015658.687309-1-eugene.shalygin@gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 3 Feb 2022 00:58:17 +0100
-Message-ID: <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com>
-Subject: Re: [ASUS EC Sensors v8 0/3]
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01e51bfa-5107-fbd0-6a0b-82bca6c78e8e@redhat.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 24 Jan 2022 at 02:57, Eugene Shalygin <eugene.shalygin@gmail.com> w=
-rote:
->
-> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
-> an implementation that does not use WMI but queries the embedded
-> controller directly.
+On Tue, Feb 01, 2022 at 01:57:02PM +0100, Hans de Goede wrote:
+> Hi,
+> 
+> On 1/31/22 22:19, Armin Wolf wrote:
+> > The hardware monitoring solutions supported by the sch5627 and
+> > sch5636 drivers are Fujitsu-specific.
+> > After some online searching, i found out that the solution used
+> > with the SCH5627 is called "Antiope" by Fujitsu, just like the
+> > "Theseus" solution inside the SCH5636.
+> > I also found out that "Antiope" and "Theseus" are listed as
+> > DMI onboard devices on supported Fujitsu devices, so the
+> > sch56xx_common module can be loaded automatically an check
+> > for the DMI devices. However some devices like the Esprimo C700
+> > have both devices, so after verifying that at least one onboard
+> > device is present, sch56xx_common still has to detect which chip
+> > is present.
+> > This is safe however if at least one device is present.
+> > 
+> > Tested on a Fujitsu Esprimo P720.
+> 
+> Thanks, the new version of the entire series looks good to me:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> 
 
-G=C3=BCnter, I would like to add support for one more board model. What
-should I do? Another version update or could you, please, merge this
-patchset already?
+Series applied.
 
-Thank you,
-Eugene
+Thanks,
+Guenter
