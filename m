@@ -2,99 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49743C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Feb 2022 05:35:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C3AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Feb 2022 13:49:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243479AbiBDFfz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Feb 2022 00:35:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S1358995AbiBDNto (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Feb 2022 08:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238339AbiBDFfz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Feb 2022 00:35:55 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257A1C061714;
-        Thu,  3 Feb 2022 21:35:55 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id m9so7280973oia.12;
-        Thu, 03 Feb 2022 21:35:55 -0800 (PST)
+        with ESMTP id S1358974AbiBDNto (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Feb 2022 08:49:44 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52F5C061714;
+        Fri,  4 Feb 2022 05:49:43 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id x6so4843745ilg.9;
+        Fri, 04 Feb 2022 05:49:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K+717NKX936wQ1aYhlbjA5VAAzQM/QdZyfYA0VeTi10=;
-        b=oUE/v0USlPhaF9IzRS9lk/8QMhs7pXCzKx30YtcCe7gFcN6f5UFMlZzer0dX6qlMaj
-         gGv4xOXpcYdozXkqo+/+hv0wnpMS3Efghlh0w1zrSLO3jRf/3R0/HvIkOuW9Qv33ptE/
-         5riQNQ5TWTokR2hbd+TgCQT5I0dw61jofJO6GeSHT+XdRHNFbqLSTs4BF0YnvVpztFjS
-         b76LPscq2NXSTydadFMHWO+ql3ludW8406u6N0viTAJ8/P1MwRr4ZxMVcgiRqr8IOGht
-         IS9FjBPPyxdPm2fW0L3CKhF9MU5bO0GVRZd/cT38Y3PeNXg91ozB2JcRkEg8mLwVZjj7
-         ocWw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qDivMS+R3wRgbfvv5KdwSS+OOaGla1Hngqzf/2B/UyM=;
+        b=TdrGjLFiOh3Tsr1dbbQgwstXuPBI8fQpm7mKNCWwmEXxubaeLu40JnPtxuC3wu6Cun
+         ABrFE/nbMaKQ6Xi7CkQS9xBxjVpOCnhx4WEdnntX1pyTEXcL0EdIqOsyTUtdeBhf3YBW
+         ZBYkbWbIdZxKOaglG56lRDF6Y9/AbWENQTzr1bN7P1O8x3YYaTFMMDsdIytuVTZjoFh+
+         k+IHxGWlzM9JXuhdQmcTr1QG5kFb0rNhl2TKzThjBaz+K4//8DDMP1R2IVQcI0Tpjg6S
+         1ULpCnIvEyCealyR5YpaoXlO7aDKOLU8fD79SUHiJ3tbRYxK08cLoTvdSNWHO9W7t6gO
+         hRkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K+717NKX936wQ1aYhlbjA5VAAzQM/QdZyfYA0VeTi10=;
-        b=hrVpejFTtV+p0Id6wK6hqcBz/Jq7bCDvoC4x51IiNBUS105NlsFQQUGWw7+wuGZw4K
-         YXVEv6Z+CEli/iIpat9SYeRkZ4Vtnl75V6FatL/uuwPd1GRGwDmXEDPvFyZkuQ4caNQm
-         N1Lw+Qu39SgylgolDiHg4UHaBVw0o/DufIreN8+kaxo+/FtOO+/RNhUAH8iHUMNydAjp
-         wZPHa1wtXgg4usm+Ulz1Q1psIHunoTOyVI7qTtLY52oiLGIZ5Y8II5S3BFtOB9wGrTbY
-         mWhtcd5zCaaDFSJKSdPbi/d5ZHoiBLg0G0h+mOPkdo4/Q02j+3wYvjcph8pUbysOA8wQ
-         +p0g==
-X-Gm-Message-State: AOAM532O+1frp83QnHVnusVU94cXBwnRKI/YHHYV5JA7I98YiVByoX+v
-        xMvL3UbPXrCPVVMPign+E78=
-X-Google-Smtp-Source: ABdhPJxpSJ2QjgGxli1SQHTBRsLg11FwHnNq2TrL6ikekVJq6dxaC7aBqzF+Ppo30pGgGyNIqrpx3A==
-X-Received: by 2002:a54:4785:: with SMTP id o5mr585592oic.96.1643952954302;
-        Thu, 03 Feb 2022 21:35:54 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g34sm360552ooi.48.2022.02.03.21.35.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 21:35:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <40c67c87-3929-b042-0cdd-429bb002d864@roeck-us.net>
-Date:   Thu, 3 Feb 2022 21:35:51 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qDivMS+R3wRgbfvv5KdwSS+OOaGla1Hngqzf/2B/UyM=;
+        b=Vel4etfpfjWQE9byQm2ixSnlQDD+I3bjeIWpZRNXkBNCepDewf94i67VSM0p5DU9rQ
+         HdqN9SqIHKs+3XZAKdynzAXawmPo+hOI6QSnSy6E5rkChxbumoxA/tF2uePo2xcrRXOR
+         VoazZ6P2tE2m84cgaORsMvQacA+d+fcWTejUKrohogBOvcvRsXPIazaXgFuas5flKY1/
+         ouovGkV9Q6SvEBN/td2Eg2pVYSQketDsWLiI2rg7VWDFQ/Nv6ky+9a4tbbUM9JbAZZvY
+         wpoX6dXAtt75t0dKf7oBFdm96lTS2B/jOWN8GiAdVx/mX7aK24NHxvfOR1wS/BRmU1WI
+         g66Q==
+X-Gm-Message-State: AOAM5327giEbndY7MXtd7zXlFu9Kkwbp7U4by3cfvrzXaGpVP1vSVNB9
+        DuVemE85B376tM4deqh/7RQLP+t2HSTXSJ86DN4=
+X-Google-Smtp-Source: ABdhPJwTBmXQ9PU+NTWkgrnaLoYIM7nlHkfMIVD2BM3G3kLGoxow3Mvcu1IcjLoLDVJF9BhB3y2tlF2BOW3gGqsUBdw=
+X-Received: by 2002:a05:6e02:19c5:: with SMTP id r5mr1455540ill.164.1643982583014;
+ Fri, 04 Feb 2022 05:49:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+References: <20220204052258.556667-1-eugene.shalygin@gmail.com> <40c67c87-3929-b042-0cdd-429bb002d864@roeck-us.net>
+In-Reply-To: <40c67c87-3929-b042-0cdd-429bb002d864@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 4 Feb 2022 14:49:31 +0100
+Message-ID: <CAB95QASywzktCq_vM8esmuSktPErLzKUVsqSTLV-f3sDOoY2bQ@mail.gmail.com>
 Subject: Re: [PATCH] hwmon: fix documentation index
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220204052258.556667-1-eugene.shalygin@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220204052258.556667-1-eugene.shalygin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        linux-hwmon@vger.kernel.org,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/3/22 21:22, Eugene Shalygin wrote:
-> Replace asus_wmi_ec_sensors with asus_ec_sensors, which should have been
-> done in d4b4bb104d12.
-> 
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> ---
->   Documentation/hwmon/index.rst | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index df20022c741f..1bad4e6116e4 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -43,7 +43,7 @@ Hardware Monitoring Kernel Drivers
->      asb100
->      asc7621
->      aspeed-pwm-tacho
-> -   asus_wmi_ec_sensors
-> +   asus_ec_sensors
->      asus_wmi_sensors
->      bcm54140
->      bel-pfe
+On Fri, 4 Feb 2022 at 06:35, Guenter Roeck <linux@roeck-us.net> wrote:
+> I already did that in the original patch, and I undid the removal of
+> asus_wmi_ec_sensors.
 
-I already did that in the original patch, and I undid the removal of
-asus_wmi_ec_sensors.
+Thank you and sorry for the mistake!
 
-Guenter
-
+Regards,
+Eugene
