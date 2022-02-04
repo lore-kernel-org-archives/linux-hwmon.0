@@ -2,141 +2,263 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CE8BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Feb 2022 16:31:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D66CFC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Feb 2022 20:06:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239389AbiBDQbE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Feb 2022 11:31:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239260AbiBDQbD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Feb 2022 11:31:03 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E62C061714;
-        Fri,  4 Feb 2022 08:31:03 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id p12so14216191edq.9;
-        Fri, 04 Feb 2022 08:31:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V7y7UvDThZqE9ABD6sPcRiftcOsF+0/rjlQVw86foiA=;
-        b=q5y0XjOB8ZUQ0d5M6GMB6FgbnQsza9GiZCyt9hJ7Gaa1PHjNyCHETl/Fg+MoxEkCpL
-         ttQbUcJOJnE/bF2fFXs62LMCg3/ZkHLgaHl3+TpTrJ74HIfoIgn9XVbQ7zSDIYYS8WxS
-         tVy1z/GUCZDj0Nv3ZVIIbsxVTJowVusiMFQUiQAT/65o2+y8KKSDYgO12Y8PouZcL3HG
-         gSKssFDIOiDV8ybRVlM9T9AbSRyThixpbjB7B2P1Il0Qoi+iiPSZr2rzJQOqF+nxlyfr
-         Wc5xNseL8euwRjlt0iKubTax3oQKCoXSHFUDyxfdruUDR+D6vGLlToushpdGUSk2if1V
-         xiBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V7y7UvDThZqE9ABD6sPcRiftcOsF+0/rjlQVw86foiA=;
-        b=V6wspIWn3Tfs/iUDnHQIq/R+S23tcmwd8r5MzuXpz6IsTjCwdDzbgzOj6iBp2HDfSk
-         hXp+HfjhcYwvnVm2iPdKFrxpdZ15WktQArDhFW3yGas75vIvPC7fLn8MR9e61nfcpqey
-         k6C1c7qiUJDBxXWRxyGJP8yd27icq8HdF2KvR0qXYS9inxqqVvSsxsFrpWZanUMa93b/
-         qXyfWUy0+CqN8fGzU+OttS/g7UqPtA9rJOO4VEthN7YTMOoh36q3SpDJkHYzizt2/FSM
-         vKsTzIH1k6VqjzqJJC2NeaIBoIlt97d+1n8WC0wXpIjIQ8Ej8mY67BBHfIAtTo+apne1
-         5o5A==
-X-Gm-Message-State: AOAM5329ccvEriJyKGyepdvn5NwT4siqTzFsKt37I1D7LVjaSqmk2zwh
-        0aqSpN8EQU6q6wFUWTcq/tA=
-X-Google-Smtp-Source: ABdhPJyqDTlGFj1/81likfeAtFfM+w/saUkneHzuKnI25nekRGoT53ju4Gyhbd1RvzXXQ/2UdShMiA==
-X-Received: by 2002:a50:ab10:: with SMTP id s16mr3863526edc.382.1643992261596;
-        Fri, 04 Feb 2022 08:31:01 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id d16sm819383eje.131.2022.02.04.08.31.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 08:31:01 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) read sensors as signed ints
-Date:   Fri,  4 Feb 2022 17:30:45 +0100
-Message-Id: <20220204163045.576903-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        id S238833AbiBDUGy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Feb 2022 15:06:54 -0500
+Received: from mga12.intel.com ([192.55.52.136]:18125 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238955AbiBDUGA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 4 Feb 2022 15:06:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644005160; x=1675541160;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LpSHzVbfZeiTeKV9epKHzK2i16MVuGL4aVtfNPSniSw=;
+  b=AmloEM4MPgzZlwcm6HMi9rHGnaR826KZs7oLE+M4m/xlOgJ42rDpKGNT
+   3GuLiLj8ULxeY0dcyF3j3VcnBKRoD75dUagdhG1JUes3ZF24uZkGdvTyE
+   5W81v7z1LvO/m0l4K1VS4Oey7cgXOrvBqWTpkaMZU06l+XX3LP79cs9Hw
+   4tFy1ZEwPLxw254nEeY4xA/qJIe9LmGKjTdfHzSZryUdX9VaxDQY27pv5
+   tgV63Gvr42RlF3vgFdtNZmyf9cKo3msIF8QSYOkHdAn3luuV3Bjkb+phb
+   YVgYsUoNMEE6TG5CZC+x9pShI2GRBmYebwJC2guao9UcGo7zHnEFsStyr
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="228405603"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="228405603"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 12:03:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="584236166"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Feb 2022 12:03:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG4o5-000Y71-BI; Fri, 04 Feb 2022 20:03:45 +0000
+Date:   Sat, 05 Feb 2022 04:02:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 37ed278a9530c856c98d55cfd262a8679dbdd6d8
+Message-ID: <61fd866a.qSZX86dEYFk+rfkA%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Temperature sensor readings are signed, which is hinted by their blank
-value (oxd8, 216 as unsigned and -40 as signed). T_Sensor, Crosshair
-VIII Hero, and a freezer were used to confirm that.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 37ed278a9530c856c98d55cfd262a8679dbdd6d8  hwmon: (asus-ec-sensors) Add Crosshair VIII Hero WiFi
 
-Here we read fan sensors as signed too, because with their typical
-values and 2-byte width, I can't tell a difference between signed and
-unsigned, as I don't have a high speed chipset fan.
+elapsed time: 826m
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+configs tested: 190
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20220131
+powerpc              randconfig-c003-20220131
+m68k                          hp300_defconfig
+sh                   sh7724_generic_defconfig
+arc                    vdk_hs38_smp_defconfig
+xtensa                          iss_defconfig
+mips                      fuloong2e_defconfig
+arm                         vf610m4_defconfig
+powerpc64                        alldefconfig
+sh                        sh7757lcr_defconfig
+sh                          r7780mp_defconfig
+sh                ecovec24-romimage_defconfig
+arm                            hisi_defconfig
+arm                           tegra_defconfig
+mips                 decstation_r4k_defconfig
+ia64                        generic_defconfig
+mips                    maltaup_xpa_defconfig
+openrisc                  or1klitex_defconfig
+sparc64                             defconfig
+arc                           tb10x_defconfig
+sh                     sh7710voipgw_defconfig
+sh                         ap325rxa_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                         db1xxx_defconfig
+sh                           se7206_defconfig
+sh                             sh03_defconfig
+arm                       aspeed_g5_defconfig
+powerpc                      cm5200_defconfig
+arm                      footbridge_defconfig
+powerpc                      ppc6xx_defconfig
+sh                           se7750_defconfig
+sh                         microdev_defconfig
+arc                            hsdk_defconfig
+parisc                           allyesconfig
+powerpc                mpc7448_hpc2_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                     stx_gp3_defconfig
+mips                         bigsur_defconfig
+powerpc                   currituck_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                      ep88xc_defconfig
+arm                         lubbock_defconfig
+mips                          rb532_defconfig
+powerpc                      ppc40x_defconfig
+sh                   rts7751r2dplus_defconfig
+nds32                               defconfig
+arm                            qcom_defconfig
+powerpc                     pq2fads_defconfig
+m68k                            q40_defconfig
+sh                              ul2_defconfig
+mips                           gcw0_defconfig
+powerpc                    klondike_defconfig
+mips                      loongson3_defconfig
+xtensa                  cadence_csp_defconfig
+m68k                          multi_defconfig
+arc                 nsimosci_hs_smp_defconfig
+m68k                       m5249evb_defconfig
+arm                             rpc_defconfig
+arm                             pxa_defconfig
+sh                             espt_defconfig
+mips                           ip32_defconfig
+microblaze                      mmu_defconfig
+xtensa                           allyesconfig
+powerpc                     rainier_defconfig
+openrisc                 simple_smp_defconfig
+nios2                         10m50_defconfig
+ia64                         bigsur_defconfig
+um                                  defconfig
+arm                         nhk8815_defconfig
+arm                  randconfig-c002-20220202
+arm                  randconfig-c002-20220130
+arm                  randconfig-c002-20220131
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                                defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20220131
+x86_64               randconfig-a003-20220131
+x86_64               randconfig-a001-20220131
+x86_64               randconfig-a006-20220131
+x86_64               randconfig-a005-20220131
+x86_64               randconfig-a002-20220131
+i386                 randconfig-a006-20220131
+i386                 randconfig-a005-20220131
+i386                 randconfig-a003-20220131
+i386                 randconfig-a002-20220131
+i386                 randconfig-a001-20220131
+i386                 randconfig-a004-20220131
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+powerpc                     mpc512x_defconfig
+mips                     loongson1c_defconfig
+powerpc                          allyesconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                        icon_defconfig
+mips                        bcm63xx_defconfig
+x86_64                           allyesconfig
+arm                         shannon_defconfig
+powerpc                     tqm5200_defconfig
+arm                           sama7_defconfig
+arm                       spear13xx_defconfig
+mips                        omega2p_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                         orion5x_defconfig
+mips                          ath79_defconfig
+powerpc                     ppa8548_defconfig
+mips                      maltaaprp_defconfig
+arm                         socfpga_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                          pcm027_defconfig
+arm                           spitz_defconfig
+arm                     davinci_all_defconfig
+powerpc                   microwatt_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a013-20220131
+x86_64               randconfig-a015-20220131
+x86_64               randconfig-a014-20220131
+x86_64               randconfig-a016-20220131
+x86_64               randconfig-a011-20220131
+x86_64               randconfig-a012-20220131
+i386                 randconfig-a011-20220131
+i386                 randconfig-a013-20220131
+i386                 randconfig-a014-20220131
+i386                 randconfig-a012-20220131
+i386                 randconfig-a015-20220131
+i386                 randconfig-a016-20220131
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+riscv                randconfig-r042-20220131
+hexagon              randconfig-r045-20220203
+hexagon              randconfig-r041-20220203
+hexagon              randconfig-r045-20220130
+hexagon              randconfig-r045-20220131
+hexagon              randconfig-r041-20220130
+hexagon              randconfig-r041-20220131
+
 ---
- drivers/hwmon/asus-ec-sensors.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 05244209c0c6..8a04c76527a4 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -221,7 +221,7 @@ static const struct dmi_system_id asus_ec_dmi_table[] __initconst = {
- 
- struct ec_sensor {
- 	unsigned int info_index;
--	u32 cached_value;
-+	s32 cached_value;
- };
- 
- struct ec_sensors_data {
-@@ -408,15 +408,15 @@ static int asus_ec_block_read(const struct device *dev,
- 	return status;
- }
- 
--static inline u32 get_sensor_value(const struct ec_sensor_info *si, u8 *data)
-+static inline s32 get_sensor_value(const struct ec_sensor_info *si, u8 *data)
- {
- 	switch (si->addr.components.size) {
- 	case 1:
--		return *data;
-+		return (s8)*data;
- 	case 2:
--		return get_unaligned_be16(data);
-+		return (s16)get_unaligned_be16(data);
- 	case 4:
--		return get_unaligned_be32(data);
-+		return (s32)get_unaligned_be32(data);
- 	default:
- 		return 0;
- 	}
-@@ -462,7 +462,7 @@ static int update_ec_sensors(const struct device *dev,
- 	return status;
- }
- 
--static int scale_sensor_value(u32 value, int data_type)
-+static long scale_sensor_value(s32 value, int data_type)
- {
- 	switch (data_type) {
- 	case hwmon_curr:
-@@ -476,7 +476,7 @@ static int scale_sensor_value(u32 value, int data_type)
- 
- static int get_cached_value_or_update(const struct device *dev,
- 				      int sensor_index,
--				      struct ec_sensors_data *state, u32 *value)
-+				      struct ec_sensors_data *state, s32 *value)
- {
- 	if (time_after(jiffies, state->last_updated + HZ)) {
- 		if (update_ec_sensors(dev, state)) {
-@@ -499,7 +499,7 @@ static int asus_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, long *val)
- {
- 	int ret;
--	u32 value = 0;
-+	s32 value = 0;
- 
- 	struct ec_sensors_data *state = dev_get_drvdata(dev);
- 	int sidx = find_ec_sensor_index(state, type, channel);
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
