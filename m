@@ -2,91 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1219BC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Feb 2022 20:14:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B45BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Feb 2022 22:08:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiBDUOC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Feb 2022 15:14:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236182AbiBDUOC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Feb 2022 15:14:02 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954FBC061714;
-        Fri,  4 Feb 2022 12:14:01 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id w5so5822933ilo.2;
-        Fri, 04 Feb 2022 12:14:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X2uXHEXxkIh5tNExzXTu5EghPbGd7VDbfe3S2Sv7xCc=;
-        b=fnLJ3lfCBhZWjwvbFgIkfsnyiL9ktZvZDrWLyTqF3ZlucU8LzhWoOtmwbNZITEid4U
-         9ldVb6EmipGN53PSf1D/W8NXm9x87zkxKWiYUAAG9brTVP9jSAmNdr5YUYQbFGbRl2BM
-         lvZcYrJe0iVo+8xvm6Oji5QFQiQoyqsPjKZCv8HkBU2/T6PhZFcMWw3J74py4cS22rnC
-         YFIwwzIFtR104G/qyLpCOGU2Pc/91QtLF1dHzApyGW4Goo0ulOY7HcZUg0HY4bpOa/bS
-         7Zl9TpY8DzVl4PuoyYYhIdjrcJzikzgMyTpW9NA0iHWm0grsdBai8suk9qS5rlj0Q77b
-         hHfg==
+        id S233316AbiBDWIb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Feb 2022 17:08:31 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:35463 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233137AbiBDWIa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Feb 2022 17:08:30 -0500
+Received: by mail-oo1-f51.google.com with SMTP id p4-20020a4a8e84000000b002e598a51d60so6209942ook.2;
+        Fri, 04 Feb 2022 14:08:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X2uXHEXxkIh5tNExzXTu5EghPbGd7VDbfe3S2Sv7xCc=;
-        b=S1Csc6xaOwDmDzKkHh79qaBHisTJwu4h9zipda7J/Ezd90M/PY4i+ZPw1zljoH/qBn
-         xlYg74GrZ+oECk/Sj5V1DrgPF2oaQ4TDvkzczVdaACSimapK5XdOkT2PsLi+FyqquYAP
-         cJoW34XQHB8cgFKC1PQvQ2igHueSfvrRyr9RktxOAiXMJgChr45RUQ+vGQ4Dn5F1j9Rc
-         FPb0pIjSePa2wYfakAcsbh2QugW3CL6Vx87TYf0HFGKJQ7YxGrn5L1hukcmE8vGftMDO
-         wNCesavxXR7fA+lU2BqOkfoh5kUAAMTrRAflUPGlWGUuzrKU99iGVAn5MBEyGSmFBBUO
-         ASMQ==
-X-Gm-Message-State: AOAM533D7tUOCeriBPlNV19X5/QtrO65PAAFPA3wQksLKduI31+VBU4q
-        +BiuhzOz0RWg+25sqQVzO7nYxf3OXhMKlS/MyAv7dHRN7CoV4w==
-X-Google-Smtp-Source: ABdhPJzl9oRSx3T2VGieg1N4jpSkaB52LiEiGAAxb3wWJxSk4dNYztmtGp1NEkhbIHkLkzXPgvA59lxt2TZxsONUwe4=
-X-Received: by 2002:a05:6e02:19c5:: with SMTP id r5mr423289ill.164.1644005641067;
- Fri, 04 Feb 2022 12:14:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
- <7c8f311f-a2e4-584f-eb29-7f0d2a335e8f@roeck-us.net> <CAB95QARyz_sp9MoMsakfAK+PRBnVVnyOQzm2ZwJwwLE5vvAUFg@mail.gmail.com>
- <8022383.T7Z3S40VBb@natalenko.name> <13a9d0fd-1b2c-b9c1-24a7-ff4fc5f4b8cc@roeck-us.net>
- <CAB95QATUK+q01TLuubqR9D1fLJM=C6VjxpabnkseQRUvsd-9YA@mail.gmail.com>
- <20220203222310.6a025c5d@netbook-debian> <CAB95QAT2iZexNF__dwJQHWoeFACcCMPGFGQQyF_9weATkfeJ+A@mail.gmail.com>
-In-Reply-To: <CAB95QAT2iZexNF__dwJQHWoeFACcCMPGFGQQyF_9weATkfeJ+A@mail.gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Fri, 4 Feb 2022 21:13:49 +0100
-Message-ID: <CAB95QASd5QLBUvkKLKW3_b-L4qKEAKarHTuk_5PtcoubSGTitg@mail.gmail.com>
-Subject: Re: [ASUS EC Sensors v8 0/3]
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JQ7WYZ4Zqg4HCtyNEPmfKDttwiehHxrZDO82/S7zZVE=;
+        b=jnQhOSC0FhFR83UKDiozz7nYJNNRJEWCOltmX0HUQ4lsxvBnT/imsUvhBm3kRdFNL2
+         0H2q7mVYe+8E4zzPmXel85gKHdffB9IR5wf0tlcEesZfGqGkeANPYNIZYaYyZcATZN0l
+         jFKVQBoPf/5pjgnAHcByYekT8SCA8DV+jgIerSQwSdJnK3SWe+9bB9i5HADpIT7oRFbj
+         +65/v0xyjYR1sZui3bxqciOdYkNcjDlFe8BGn9DyOnnh6LMjKH8dPQ1GmabSHbmEoJJW
+         UE2I8m2qV3JVwLEDYvFV3UBafHs+Dh7qcCkad5v/Fut54cdfNTBeUzQ/aV1YpzcuFACi
+         xJpQ==
+X-Gm-Message-State: AOAM5326sOqab8cFYDu9K7DPSV34yPT3a/wi9VNi8aZi7un8mUQt1IuG
+        h1j7Bk4dgV6n594k/M0I90iP5IQbow==
+X-Google-Smtp-Source: ABdhPJzCR5b4do+sC8vu/Kn5Ig8ZQCwMphWuSpBEn7uPBasp5qvvVQX+Sgl9UoFUkOwZhnxHZ1k+PQ==
+X-Received: by 2002:a4a:ca98:: with SMTP id x24mr322821ooq.43.1644012509912;
+        Fri, 04 Feb 2022 14:08:29 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id cv13sm1005610oab.7.2022.02.04.14.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 14:08:29 -0800 (PST)
+Received: (nullmailer pid 3267244 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:08:27 -0000
+Date:   Fri, 4 Feb 2022 16:08:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Muller <d.mueller@elsoft.ch>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-aspeed@lists.ozlabs.org,
+        Zev Weiss <zweiss@equinix.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Tony Luck <tony.luck@intel.com>, devicetree@vger.kernel.org,
+        Olof Johansson <olof@lixom.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
         linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v7 02/13] dt-bindings: Add bindings for peci-aspeed
+Message-ID: <Yf2j2+QbO9kg0E1E@robh.at.kernel.org>
+References: <20220202144838.163875-1-iwona.winiarska@intel.com>
+ <20220202144838.163875-3-iwona.winiarska@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202144838.163875-3-iwona.winiarska@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> What about other B550/X570 boards?
-My previous reply is incorrect, in fact we already have information
-for some of them, it is just me who can't remember or distinguish
-those board names.
+On Wed, 02 Feb 2022 15:48:27 +0100, Iwona Winiarska wrote:
+> Add device tree bindings for the peci-aspeed controller driver.
+> 
+> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> ---
+>  .../devicetree/bindings/peci/peci-aspeed.yaml | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+> 
 
-> We have such candidates with same WMI methods in nct6775:
->         "ROG STRIX B550-A GAMING",
-No data.
-
->         "ROG STRIX B550-E GAMING",
-Already included.
-
->         "ROG STRIX B550-F GAMING",
-No data, the X570-F differs significantly from X570-E, maybe this one
-is not like other B550 models too.
-
->         "ROG STRIX B550-F GAMING (WI-FI)",
-Probably is identical to the non-wifi model.
-
->         "ROG STRIX B550-I GAMING",
-Already included.
-
-Best regards,
-Eugene
+Reviewed-by: Rob Herring <robh@kernel.org>
