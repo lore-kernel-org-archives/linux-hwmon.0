@@ -2,70 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51BF2C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Feb 2022 09:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39C20C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Feb 2022 17:52:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243455AbiBEJ7X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Feb 2022 04:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S241974AbiBERww (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Feb 2022 12:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbiBEJ7X (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Feb 2022 04:59:23 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A04C061346;
-        Sat,  5 Feb 2022 01:59:22 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id q204so10426715iod.8;
-        Sat, 05 Feb 2022 01:59:22 -0800 (PST)
+        with ESMTP id S235159AbiBERww (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Feb 2022 12:52:52 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF8DC061348;
+        Sat,  5 Feb 2022 09:52:50 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s24so4824707oic.6;
+        Sat, 05 Feb 2022 09:52:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RBLeD/NBJxubi8leudvRrXMCAHD66lE4PTd6qbSu0lc=;
-        b=mg+GhqJg7GA4AeXUnFf7wp5xs9uu0IC4CWduUfBomQNB5c7qnSZwkS7K2BxipROs+k
-         +b0j1vBsldv8OhFA0ESuV/NuNQPmuLVlM5U0zn5tN272rctjTda1T6auEV/iQHqCYF7g
-         Cx/290ZlaNVWOH8gcULi0x2ZMipAsYhp8VJ3YEo668xfrZKB9iqhb8hXN4OxCw3h2Bb+
-         QpkrmNt/hKNlZtPe9NN5D0LzWSLdm/NMJsJdK5759WjVRFFCVqqJVglI6pmKrKGOeq1Y
-         i4W6pvec/2Zhg1VAiOhq8JL4PZeueLrHJUUVbq7qTj8Aa8FtyXS53J7jSzGCOLqvn2eq
-         DVGA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LvqLl3sI/qDNvWJAgisIMWIxaUXxt0qalK1P5E2CFVg=;
+        b=gDOw4LiyScccEzKP2Nggc+ncLFVz10V47V4W1GjHF58fUWsAvlRctEcp5Z/UQPowf9
+         UMuwdEyIC/8C7O1QnUVdTLNvAg2cSEwlZFx9NdhrAP41L8G7eAeLRaSQ45auT6lHjDLy
+         1xgZnVmO7SH1M4DLa3jcJWRapCM2JriJlmZnry7OGQhN2FaPRVWaCfPsjTOAHbwvEv8M
+         7I9DyaXxv6EAZJW4+1e2MAgZYVRO0v89cuxrxLQqdolVXiw6sR8ILsmTJOpjkWsKtmzE
+         nTNrJTLYA/40Yi50dVBWPnntH1hh05w9Pd6evV4k3gl8z02OdiijsSJk6P6VyBzmSWY5
+         S1AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RBLeD/NBJxubi8leudvRrXMCAHD66lE4PTd6qbSu0lc=;
-        b=iXM/Yqa2xseCDKaAhMl6RM9DpRXZZRLm8PbBF+iDSvNdsLDAj+C1xzy13QIa1j/kBv
-         eSwdQMJ5yjPBgL1minS/MealKKlbwS0409Kb+I9j8Ok0vDJ+tzYhXCaIW262IWNtd1av
-         FB5nlwMSZECUd0ECUCuENjsBMsIeN4OM7vyWSMLfjf7YZSWyAzQ7H8nccwD+0ZwvWQA2
-         oB6nR2DX6dWcX4XbsFPUTf7kGbv5A455hm+Zy/YpY/fPTk+ZPepdL/xv4L2p1J7EIdIg
-         rEuswWRRdgeivyZnRrZbSZLRKzu4+7LaPcyy69M9PmZ7ncpgv7Ig5DUWUiO2Lg5AinZ5
-         HjuA==
-X-Gm-Message-State: AOAM530TJcIbuNwyjoKdmT6F/5UpUx1qTj3Ej17sFgYETRoILuBPZQf2
-        H2TnMAAbvTq0BY8WCzqaR+Pu0sESGu00dENN/LITckgxq5g=
-X-Google-Smtp-Source: ABdhPJygNOZWphuiQY33yiIq+K2TCMt/A8kKsixHpxEEaSsaDxBUgs5394R+pNDuIx3NjdoE9mD9VbwQg6RIrfpqju4=
-X-Received: by 2002:a02:b0d8:: with SMTP id w24mr1545089jah.241.1644055161651;
- Sat, 05 Feb 2022 01:59:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20220205092015.GA612@kili>
-In-Reply-To: <20220205092015.GA612@kili>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Sat, 5 Feb 2022 10:59:10 +0100
-Message-ID: <CAB95QAS8LxMeWGFqZ3MGHBBxxBafz3w9L1GxxdP16XjZKLVAuw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) fix a typo in asus_ec_probe()
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=LvqLl3sI/qDNvWJAgisIMWIxaUXxt0qalK1P5E2CFVg=;
+        b=QUqQplYh8Fhl5d7WejCE+gt+oB63k7OfliXghQPOKKHjgDkXAPcPh7IuTTOCYoSLwd
+         Q2ovemCaBdS7EPVJVTy1/qfBj3JFsvklSPdGQ7IuhwHHItw9IWv1z+bDnPX+PlB8wPCr
+         9f+4OUQtKsLC616e9FlHzK0hyviMhYFLyHhRmmRw4z9oCu+saiIXKvFwD4OBzSjmGolW
+         V3IzfiqBFXzjybq3jtdLII2tK3UxNXEPPST/GCc1UQYQcUbCf2HhgXMn3Pm83I+SJxdR
+         L/Z+8RB8lTIg1zSmhdwJURw/9SuAAKLIo9/XsjVcAjdwhxbqZ7+IumYWzaM5RadeTz79
+         8Hkw==
+X-Gm-Message-State: AOAM532GkHQAPXccWTJvyv2/HQuMHG9C5qlboyPh+Y+OtFHnQPaGFh7Z
+        Q8mZofvK6l59k7/2+/J241E=
+X-Google-Smtp-Source: ABdhPJwZRfIpz294jcHfnACRMR37oxFqBKstiwFbDMiFaMMQRuruLtEB23L+EozAR0gQPjexDB3rWA==
+X-Received: by 2002:a05:6808:3022:: with SMTP id ay34mr3991421oib.37.1644083569532;
+        Sat, 05 Feb 2022 09:52:49 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t21sm2072765oor.4.2022.02.05.09.52.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 09:52:48 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 5 Feb 2022 09:52:47 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) fix a typo in asus_ec_probe()
+Message-ID: <20220205175247.GA3075896@roeck-us.net>
+References: <20220205092015.GA612@kili>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220205092015.GA612@kili>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, 5 Feb 2022 at 10:20, Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
+On Sat, Feb 05, 2022 at 12:20:15PM +0300, Dan Carpenter wrote:
 > There is no such struct as "asus_ec_sensors", it was supposed to be
 > "ec_sensors_data".  This typo does not affect either build or runtime.
+> 
+> Fixes: c4b1687d6897 ("hwmon: (asus-ec-sensors) add driver for ASUS EC")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Thank you for the fix! Perhaps you could also replace the sizeof
-argument below with *state to make the compiler check the declaration
-type?
+Applied.
 
-Eugene
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/asus-ec-sensors.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 7285334c7d80..cb266ba30c97 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -653,7 +653,7 @@ static int __init configure_sensor_setup(struct device *dev)
+>  
+>  static int __init asus_ec_probe(struct platform_device *pdev)
+>  {
+> -	struct asus_ec_sensors *state;
+> +	struct ec_sensors_data *state;
+>  	int status = 0;
+>  
+>  	state = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
