@@ -2,226 +2,232 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B20FBC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Feb 2022 17:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06F5FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Feb 2022 19:05:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344712AbiBFRvX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Feb 2022 12:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S230336AbiBFTFW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Feb 2022 14:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236478AbiBFRvV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Feb 2022 12:51:21 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7768CC06173B;
-        Sun,  6 Feb 2022 09:51:20 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id r27so14759689oiw.4;
-        Sun, 06 Feb 2022 09:51:20 -0800 (PST)
+        with ESMTP id S229904AbiBFTFV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Feb 2022 14:05:21 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFC1C06173B
+        for <linux-hwmon@vger.kernel.org>; Sun,  6 Feb 2022 11:05:20 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id w14so25504820edd.10
+        for <linux-hwmon@vger.kernel.org>; Sun, 06 Feb 2022 11:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=8d4aoAMxSo7HSTaBUTBVt7QQDEWKLHoC2XmqWjCbM1s=;
-        b=NJ8Ne+eOf4mOuh9t+V3b7sHoIaQ9e5iye2gnHPM1kP7Dtv9H4iTmymPzkDyXyy55x4
-         wWpOm3l8NRbJZH/39+oiZ6zCTSIPorZMjqH8EDlG/BHMvkz45wptFIS+hg8q/zv3pm/u
-         0c+6M8Et5mpgtgynPP7b4K7y5JFVxuA81gY+OV7mROzwGlGBS9L1TeJB+rT/l68DgOE9
-         oAwHyLLiMcvAWXK/cVDqvkeFZWDb7RiAXJIsqkSp5ZaeaDIgv57uyD/IsXK/qHJLsAV6
-         GhcEQUgS11Te7Xa916V9H3RwOX7CBmv+EDf3W5mCvO9QwvlFUYIhWkGM/ZXUFOaNqc8A
-         fJzg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FHE1T//c1O5XpnPOZmLsq7sGCvgprbczeVe58chbPBM=;
+        b=iXaQMoUQFsZM6wkyOMk22XlKKlqSK5505QRvxFBElAqfF4sFlZUXbBDgiPW6pyDAex
+         d9mosRdyaXEeLR3OiomWOQ9nzXrtJ/P5TBBkQ43SeRMKfwW4luTQsecI/p3GUk2/TL9g
+         8B+0DQ1kkD+gttgGUl+OE+nBqpuAM/lgmkvuC9wqund8oAN0rqNZVbYh0aBxXcrS21KS
+         rC6G850NShMCGgfaiiv8EJ7bph8j7G9EOV6coJyJ/3AwFRXfKeIukUh7nVv+CyEkoYaL
+         /7zsKJNsjd6y/73SqViu5Q0tpDxICkbk1gIxx/tyLNH+8Sk3koFohnrb3bzLh6u3L+Ae
+         ShaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8d4aoAMxSo7HSTaBUTBVt7QQDEWKLHoC2XmqWjCbM1s=;
-        b=j3de3RQH3aRezdooqMebcIMY72UrHIaNTyxkQGuzmdbDZ6H1simdBXUe/J/rbwB1Ec
-         ZnOxGgSMVtTY9tPcJ2Uk8u+MdkECi8SjgDWW66xdojCjy0gIbEq71/UAHqFPQRj3za27
-         NAB6psC4iI46+LD+bW88jRqpPGFmKI/KwBUVu28fp4fBFKfhzSp11eWDeCr30PAxZP0v
-         NKcnf+H/BzCMmTmCW2hpklmPy0XgT1YIN0gNX9DY358bQBHbvmdPO4NiHv04Gt/z0KNl
-         qPLyP+ab8SuqqshtUbfcgYibZoFacmdunOVmMy7kjDHpLnYIeCeCHGUrFdD5iVm17dPy
-         0KQg==
-X-Gm-Message-State: AOAM531TuvzuHUtApPCgGhM1zXy7b+9IpFovVkBu+cGvVx4BOoiYODLj
-        MTWBDKzDAjtoolLzcawTEz4=
-X-Google-Smtp-Source: ABdhPJzO5VM3ko/6A7BUyOiMIr3hpCZ6njtpOYiBH3wHupxEo0yu2HFJiFFSO7VFCIi09cPwEv5vMA==
-X-Received: by 2002:a05:6808:e89:: with SMTP id k9mr5705620oil.263.1644169879745;
-        Sun, 06 Feb 2022 09:51:19 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z40sm3139056oap.37.2022.02.06.09.51.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Feb 2022 09:51:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <258c224c-c543-1756-4c1e-fe9d81e24e4c@roeck-us.net>
-Date:   Sun, 6 Feb 2022 09:51:16 -0800
+        bh=FHE1T//c1O5XpnPOZmLsq7sGCvgprbczeVe58chbPBM=;
+        b=2TVtGy3infxyasEJsO11hjNyEKp8OsbobTuSoeKEnU+ZV13Vvd7BKSHz4MBre6tBcc
+         GNZXF5U18VfdK+BhlxOIxOmqCtcswTP2DKvr9pe9+S8cdUXMxDPdlCF4Grc8o4QkB9DX
+         qBvpTiYAxuM8GttZUNY045cIHgrePZ1wTglXl0UdLEr8ZUcNLSi+HlztYEz1FrrIiwgZ
+         DuhtLV9remdpIgipyePAzNRt2lOn/yxY0BJ/yDx54D1pIUs81Hp8DWn9DgUPsZwDW/Nd
+         CmgqL78/HXpPqLxNqpjyGYrC9bjngcieaW/GLIsrNVynS9ezr9A1MDrvLercP9ESnjFM
+         bqJg==
+X-Gm-Message-State: AOAM533VBfFU/Jg2bs/bCJFa4HSCJ7aZ9FwxyZ42rgS13CVa8hQNQJ7g
+        nbyxTm+0WKZW7S1oPILvCk7969Nj2u0=
+X-Google-Smtp-Source: ABdhPJx3rsGnp7DAt6e6bsSjRkBFqs9RTyQPGegG47oNiF/rf2FDWQ+Hu/Z7qJhCFcFPT37bqKo7ug==
+X-Received: by 2002:a05:6402:219:: with SMTP id t25mr10214006edv.62.1644174318584;
+        Sun, 06 Feb 2022 11:05:18 -0800 (PST)
+Received: from debian64.daheim (pd9e294e9.dip0.t-ipconnect.de. [217.226.148.233])
+        by smtp.gmail.com with ESMTPSA id q5sm802209eds.82.2022.02.06.11.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 11:05:18 -0800 (PST)
+Received: from chuck by debian64.daheim with local (Exim 4.95)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1nGmqb-001Gx3-RA;
+        Sun, 06 Feb 2022 20:05:17 +0100
+From:   Christian Lamparter <chunkeey@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2] hwmon: (tc654) Add thermal_cooling device support
+Date:   Sun,  6 Feb 2022 20:05:17 +0100
+Message-Id: <20220206190517.303483-1-chunkeey@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        platform-driver-x86@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
-In-Reply-To: <20220206022023.376142-1-andrew.smirnov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/5/22 18:20, Andrey Smirnov wrote:
-> Add a driver exposing various bits and pieces of functionality
-> provided by Steam Deck specific VLV0100 device presented by EC
-> firmware. This includes but not limited to:
-> 
->      - CPU/device's fan control
->      - Read-only access to DDIC registers
->      - Battery tempreature measurements
->      - Various display related control knobs
->      - USB Type-C connector event notification
-> 
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-kernel@vger.kernel.org (open list)
-> Cc: platform-driver-x86@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
-> 
-...
+Adds thermal_cooling device support to the tc654/tc655
+driver. This make it possible to integrate it into a
+device-tree supported thermal-zone node as a
+cooling device.
 
- > +config STEAMDECK
- > +       tristate "Valve Steam Deck platform driver"
- > +       depends on X86_64
- > +       help
- > +         Driver exposing various bits and pieces of functionality
- > +	 provided by Steam Deck specific VLV0100 device presented by
- > +	 EC firmware. This includes but not limited to:
+I have been using this patch as part of the Netgear WNDR4700
+Centria NAS Router support within OpenWrt since 2016.
 
-There seems to be some indentation issue.
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+---
+v1 -> v2: - Drop imply THERMAL
+	  - aligned ( so . everything is lining up
+---
+ drivers/hwmon/tc654.c | 94 +++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 77 insertions(+), 17 deletions(-)
 
- > +	     - CPU/device's fan control
- > +	     - Read-only access to DDIC registers
- > +	     - Battery tempreature measurements
- > +	     - Various display related control knobs
- > +	     - USB Type-C connector event notification
- > +
- > +	 Say N unless you are running on a Steam Deck.
- > +
+diff --git a/drivers/hwmon/tc654.c b/drivers/hwmon/tc654.c
+index cf2a3acd5c91..c8f511a60769 100644
+--- a/drivers/hwmon/tc654.c
++++ b/drivers/hwmon/tc654.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/slab.h>
++#include <linux/thermal.h>
+ #include <linux/util_macros.h>
+ 
+ enum tc654_regs {
+@@ -367,36 +368,30 @@ static ssize_t pwm_mode_store(struct device *dev, struct device_attribute *da,
+ static const int tc654_pwm_map[16] = { 77,  88, 102, 112, 124, 136, 148, 160,
+ 				      172, 184, 196, 207, 219, 231, 243, 255};
+ 
++static int get_pwm(struct tc654_data *data)
++{
++	if (data->config & TC654_REG_CONFIG_SDM)
++		return 0;
++	else
++		return tc654_pwm_map[data->duty_cycle];
++}
++
+ static ssize_t pwm_show(struct device *dev, struct device_attribute *da,
+ 			char *buf)
+ {
+ 	struct tc654_data *data = tc654_update_client(dev);
+-	int pwm;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	if (data->config & TC654_REG_CONFIG_SDM)
+-		pwm = 0;
+-	else
+-		pwm = tc654_pwm_map[data->duty_cycle];
+-
+-	return sprintf(buf, "%d\n", pwm);
++	return sprintf(buf, "%d\n", get_pwm(data));
+ }
+ 
+-static ssize_t pwm_store(struct device *dev, struct device_attribute *da,
+-			 const char *buf, size_t count)
++static int _set_pwm(struct tc654_data *data, unsigned long val)
+ {
+-	struct tc654_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
+-	unsigned long val;
+ 	int ret;
+ 
+-	if (kstrtoul(buf, 10, &val))
+-		return -EINVAL;
+-	if (val > 255)
+-		return -EINVAL;
+-
+ 	mutex_lock(&data->update_lock);
+ 
+ 	if (val == 0)
+@@ -416,6 +411,22 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *da,
+ 
+ out:
+ 	mutex_unlock(&data->update_lock);
++	return ret;
++}
++
++static ssize_t pwm_store(struct device *dev, struct device_attribute *da,
++			 const char *buf, size_t count)
++{
++	struct tc654_data *data = dev_get_drvdata(dev);
++	unsigned long val;
++	int ret;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++	if (val > 255)
++		return -EINVAL;
++
++	ret = _set_pwm(data, val);
+ 	return ret < 0 ? ret : count;
+ }
+ 
+@@ -447,6 +458,44 @@ static struct attribute *tc654_attrs[] = {
+ 
+ ATTRIBUTE_GROUPS(tc654);
+ 
++/* cooling device */
++
++static int tc654_get_max_state(struct thermal_cooling_device *cdev,
++			       unsigned long *state)
++{
++	*state = 255;
++	return 0;
++}
++
++static int tc654_get_cur_state(struct thermal_cooling_device *cdev,
++			       unsigned long *state)
++{
++	struct tc654_data *data = tc654_update_client(cdev->devdata);
++
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
++	*state = get_pwm(data);
++	return 0;
++}
++
++static int tc654_set_cur_state(struct thermal_cooling_device *cdev,
++			       unsigned long state)
++{
++	struct tc654_data *data = tc654_update_client(cdev->devdata);
++
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
++	return _set_pwm(data, clamp_val(state, 0, 255));
++}
++
++static const struct thermal_cooling_device_ops tc654_fan_cool_ops = {
++	.get_max_state = tc654_get_max_state,
++	.get_cur_state = tc654_get_cur_state,
++	.set_cur_state = tc654_set_cur_state,
++};
++
+ /*
+  * device probe and removal
+  */
+@@ -477,7 +526,18 @@ static int tc654_probe(struct i2c_client *client)
+ 	hwmon_dev =
+ 	    devm_hwmon_device_register_with_groups(dev, client->name, data,
+ 						   tc654_groups);
+-	return PTR_ERR_OR_ZERO(hwmon_dev);
++	if (IS_ERR(hwmon_dev))
++		return PTR_ERR(hwmon_dev);
++
++	if (IS_ENABLED(CONFIG_THERMAL)) {
++		struct thermal_cooling_device *cdev;
++
++		cdev = devm_thermal_of_cooling_device_register(dev, dev->of_node, client->name,
++							       hwmon_dev, &tc654_fan_cool_ops);
++		return PTR_ERR_OR_ZERO(cdev);
++	}
++
++	return 0;
+ }
+ 
+ static const struct i2c_device_id tc654_id[] = {
+-- 
+2.34.1
 
-This doesn't depend on hwmon, yet it fails if devm_hwmon_device_register_with_info()
-returns an eror. That has a couple of problems: if HWMON=n, it won't compile,
-and if STEAMDECK=y and HWMON=m it won't compile either. You'll have to provide
-some dependency against HWMON to make this work.
-
-...
-
-> +
-> +static int steamdeck_read_fan_speed(struct steamdeck *jup, long *speed)
-> +{
-> +	unsigned long long val;
-> +
-> +	if (ACPI_FAILURE(acpi_evaluate_integer(jup->adev->handle,
-> +					       "FANR", NULL, &val)))
-> +		return -EIO;
-> +
-> +	*speed = val;
-> +	return 0;
-> +}
-> +
-> +static int
-> +steamdeck_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> +		     u32 attr, int channel, long *out)
-> +{
-> +	struct steamdeck *sd = dev_get_drvdata(dev);
-> +	unsigned long long val;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (attr != hwmon_temp_input)
-> +			return -EOPNOTSUPP;
-> +
-> +		if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
-> +						       "BATT", NULL, &val)))
-> +			return -EIO;
-> +		/*
-> +		 * Assuming BATT returns deg C we need to mutiply it
-> +		 * by 1000 to convert to mC
-> +		 */
-> +		*out = val * 1000;
-> +		break;
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +			return steamdeck_read_fan_speed(sd, out);
-
-There is a bit of inconsistency here: All other atributes are handled directly,
-except for this one, yet there isn't really a difference in the actual operation.
-Maybe I am missing something. What is the reason for using a function here
-but not for the other attributes ?
-
-> +		case hwmon_fan_target:
-> +			*out = sd->fan_target;
-> +			break;
-> +		case hwmon_fan_fault:
-> +			if (ACPI_FAILURE(acpi_evaluate_integer(
-> +						 sd->adev->handle,
-> +						 "FANC", NULL, &val)))
-> +				return -EIO;
-> +			/*
-> +			 * FANC (Fan check):
-> +			 * 0: Abnormal
-> +			 * 1: Normal
-> +			 */
-> +			*out = !val;
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +steamdeck_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +			    u32 attr, int channel, const char **str)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		*str = "Battery Temp";
-> +		break;
-> +	case hwmon_fan:
-> +		*str = "System Fan";
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +steamdeck_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-> +		      u32 attr, int channel, long val)
-> +{
-> +	struct steamdeck *sd = dev_get_drvdata(dev);
-> +
-> +	if (type != hwmon_fan ||
-> +	    attr != hwmon_fan_target)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (val > U16_MAX)
-> +		return -EINVAL;
-
-This accepts negative values, and it expects the user to find
-valid ranges. I suggest to use clamp_val() instead.
-
-Guenter
