@@ -2,61 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4FEBC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Feb 2022 21:27:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4DE3C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Feb 2022 21:48:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239196AbiBGV1n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Feb 2022 16:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S229798AbiBGVs2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Feb 2022 16:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239169AbiBGV1m (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Feb 2022 16:27:42 -0500
+        with ESMTP id S241763AbiBGVs1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Feb 2022 16:48:27 -0500
 Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D86AC06173B;
-        Mon,  7 Feb 2022 13:27:41 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id o12so45963995eju.13;
-        Mon, 07 Feb 2022 13:27:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4912EC0612A4;
+        Mon,  7 Feb 2022 13:48:26 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id p24so8428284ejo.1;
+        Mon, 07 Feb 2022 13:48:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gyoX70viWcISJKTm1q/6fX8AdMTRX67Z6K886m2paA4=;
-        b=bxZD76ydAG36dw8EHhlZJK0pOS8dKpyktaZj7qpkYRim7yRlyjbKy9aqNygVZ+pJIp
-         8rMJM6w2STI6yyA9rdM+du/pypvNUOJc9ObmqwMc6+8AQlOfjTSpHjwCsBqKEu4z2qTG
-         9IoKVn/TwWyPfF7BDPor8RmpNXE85SoBMy6F1lpOTN1onRH+tBRGZDSQ6Aj3BWIz79JU
-         QDgb5WEt1fpeNnizIHM/QDxB0R9F2NugskJfVFskrmLQmu9MFhyrE7+Jd2EFjNIWi5iA
-         gVLaSDlllAtRab6ELriV3pnpYpFHAw/rWgcba9xuaIeSokCxTJBbyXHACYGQ/ucSRpq0
-         dP0Q==
+        bh=TA2tCHxBtL+GNLM2iu5etsizYFK9h2SqH5H/ePAisPI=;
+        b=iOZaeLr0JVActyoQUwFar0O4NBbIHuc/3U9jGwpQTpNT3RFDTLUU2OUWoN/BK9lIAD
+         6MyAAOjjknbVj8XjY9Qd/3w6NLIQmW6MH2ZIdToBcIgwixB2fC6FvXDyj/MzzD76sv6c
+         2CZ2iz6i8fhKZITSiyW0ReKr1w+Uoya7xm2SjCXcsGOPSczgev/c2B25gZi0EYCwThp3
+         MfS+8DW6eZfEPMI809tsefpKQOU/bCKbN4khHqVnjRps+QHFaDTgyVTwomRCztirOiti
+         iFaNvX4sIWFJ64L7JfZCK3XN+SRHaYjpuM5eWBxWCPzCVSopMWfqfkJOzATpYqa9WQx7
+         UnIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gyoX70viWcISJKTm1q/6fX8AdMTRX67Z6K886m2paA4=;
-        b=MMiOOYG+oE9r0IwPZSg3ygAIOhHyNtHLlbzg2h56cTNUuRpGo0BzYRgdIVzAGzLIEz
-         Lme2AD4AzGoUMKe2bzN1RvTPD7kQVU0BesGwiy+a6UnZUm5fzU6RGY01jeOVXMaBQK5F
-         NyS/P1O6ADMyRewI68KGIwrs0LdowW97+hdExEQlIgJ5+b7e+S8qwO9T/tBRrmy387IQ
-         C9GxkZnzQBzf20neY59tzjmK2m/Gj1J6PZRG86trHgX5sj4Km0r4yZbmS1nGNXrtRa0F
-         yvJy+BRAQp3yq0N/3s29yGVUVs7jKDyehH7qs1IUUIo0i52ieTudgBisU2/YNomtJk0G
-         5EaA==
-X-Gm-Message-State: AOAM530FpPYZSzhuddkoie/SbVvn3IdFpSRtpb/zA0wrg14BBWl0cQZV
-        LXjPCVU6kE0gtdgicfOFCJ0=
-X-Google-Smtp-Source: ABdhPJyRjBcXCnHm986FOfpo04veZN5uaGA9kjkDf7xRhASkRNj08RR2GTpAn9kg/KEwJZ2t3/AI7g==
-X-Received: by 2002:a17:906:cede:: with SMTP id si30mr1233209ejb.669.1644269259720;
-        Mon, 07 Feb 2022 13:27:39 -0800 (PST)
+        bh=TA2tCHxBtL+GNLM2iu5etsizYFK9h2SqH5H/ePAisPI=;
+        b=LlUCELalvYU5Le4DcREWvfYaE5QcM38pL2Sr2yIC6fUjseeGWqNnL5D7d7Yv/1uhat
+         lSmSKWbZPR5SO3mg0pjyaQJhfX8Igx/FP8wGBE4b9EF76fB9SrdaVsIF1XefhLiur0A1
+         RgvbUDkczDooYWkzTpzi+6cHn9h3+ZBdxMoA34Nmndh6rL4EggEYIet2LYvQEInobbGO
+         6S5NvFAAFq1Td4A6iy7kEM4btSHP60TQjfc2gznWHMhhoTzgCMfoFiF41ZFs7Re1XEdp
+         EGLn2QUFjNFc3fXgtUTb1DJBLaOSdYFsBwSBByusoqKiZyP6i9ul0jDwPGrlIZIh5YfT
+         loVg==
+X-Gm-Message-State: AOAM533Tp71yO8nY8R/KopYC2Kg9uZFxMmRHoN1LV6JNSomIm7UYoPqB
+        0FhsX6gR6wOduEHRp0/Tx+c=
+X-Google-Smtp-Source: ABdhPJzj6OQmhljMT82gf4rsUtp0LbiixERpC+ZA4NpekGHODdFJJhOCyimW6ogQhAcE0wQC/FS9fg==
+X-Received: by 2002:a17:906:6b0c:: with SMTP id q12mr1249316ejr.640.1644270504735;
+        Mon, 07 Feb 2022 13:48:24 -0800 (PST)
 Received: from localhost.localdomain ([178.94.5.59])
-        by smtp.gmail.com with ESMTPSA id c20sm3968086edy.41.2022.02.07.13.27.37
+        by smtp.gmail.com with ESMTPSA id f19sm5714378edu.22.2022.02.07.13.48.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 13:27:39 -0800 (PST)
+        Mon, 07 Feb 2022 13:48:24 -0800 (PST)
 From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     pauk.denis@gmail.com, eugene.shalygin@gmail.com,
-        Per Melin <kernel@melin.net>,
+Cc:     pauk.denis@gmail.com, Per Melin <kernel@melin.net>,
         Jaap de Haan <jaap.dehaan@freenet.de>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6775) add ASUS ROG STRIX Z390/Z490/X570-* / PRIME X570-P
-Date:   Mon,  7 Feb 2022 23:27:28 +0200
-Message-Id: <20220207212728.9749-1-pauk.denis@gmail.com>
+Subject: [PATCH v2] hwmon: (nct6775) add ASUS ROG STRIX Z390/Z490/X570-* / PRIME X570-P
+Date:   Mon,  7 Feb 2022 23:48:15 +0200
+Message-Id: <20220207214815.10995-1-pauk.denis@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,6 +66,8 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Boards such as
 * PRIME X570-P,
+* ROG STRIX B550-F GAMING WIFI II,
+* ROG STRIX B550-XE GAMING (WI-FI),
 * ROG STRIX X570-E GAMING,
 * ROG STRIX Z390-F GAMING,
 * ROG STRIX Z390-H GAMING,
@@ -77,7 +78,7 @@ Boards such as
 * ROG STRIX Z490-G GAMING,
 * ROG STRIX Z490-G GAMING (WI-FI),
 * ROG STRIX Z490-H GAMING
-boards have got a nct6775 chip, but by default there's no use of it
+have got a nct6775 chip, but by default there's no use of it
 because of resource conflict with WMI method.
 
 This commit adds such boards to the WMI monitoring list.
@@ -88,22 +89,22 @@ Tested-by: Per Melin <kernel@melin.net>
 Tested-by: Jaap de Haan <jaap.dehaan@freenet.de>
 
 ---
+Changes in v2:
+- Added ROG STRIX B550-F GAMING WIFI II, ROG STRIX B550-XE GAMING (WI-FI).
 
-I have rechecked all the boards by extracting[1] all DSDT files from UEFI 
-CAP files that can be downloaded from asus.com site. And all boards have
-fully same WMI methods implementation. I have saved dumps to [2].
-
-[1]: https://github.com/theopolis/uefi-firmware-parser
-[2]: https://github.com/asus-wmi-boards-sensors/asus-board-dsdt
-
-PRIME X570-P and ROG STRIX Z390-F GAMING are checked with real boards.
-
+Comments for v1:
+- I have rechecked all the boards by extracting[1] all DSDT files from UEFI
+  CAP files that can be downloaded from asus.com site. And all boards have
+  fully same WMI methods implementation. I have saved dumps to [2].
+  [1]: https://github.com/theopolis/uefi-firmware-parser
+  [2]: https://github.com/asus-wmi-boards-sensors/asus-board-dsdt
+- PRIME X570-P and ROG STRIX Z390-F GAMING are checked with real boards.
 ---
- drivers/hwmon/nct6775.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/hwmon/nct6775.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index fbf6266c7ba7..1d63ad363658 100644
+index fbf6266c7ba7..2b91f7e05126 100644
 --- a/drivers/hwmon/nct6775.c
 +++ b/drivers/hwmon/nct6775.c
 @@ -5109,6 +5109,7 @@ static const char * const asus_wmi_boards[] = {
@@ -114,10 +115,13 @@ index fbf6266c7ba7..1d63ad363658 100644
  	"PRIME X570-PRO",
  	"ROG CROSSHAIR VIII DARK HERO",
  	"ROG CROSSHAIR VIII FORMULA",
-@@ -5119,9 +5120,19 @@ static const char * const asus_wmi_boards[] = {
+@@ -5118,10 +5119,22 @@ static const char * const asus_wmi_boards[] = {
+ 	"ROG STRIX B550-E GAMING",
  	"ROG STRIX B550-F GAMING",
  	"ROG STRIX B550-F GAMING (WI-FI)",
++	"ROG STRIX B550-F GAMING WIFI II",
  	"ROG STRIX B550-I GAMING",
++	"ROG STRIX B550-XE GAMING (WI-FI)",
 +	"ROG STRIX X570-E GAMING",
  	"ROG STRIX X570-F GAMING",
  	"ROG STRIX X570-I GAMING",
