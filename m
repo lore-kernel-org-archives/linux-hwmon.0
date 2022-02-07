@@ -2,50 +2,52 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C5E8C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Feb 2022 18:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17336C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Feb 2022 18:52:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiBGSub (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Feb 2022 13:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S232011AbiBGSwT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Feb 2022 13:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbiBGSra (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Feb 2022 13:47:30 -0500
+        with ESMTP id S235927AbiBGSva (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Feb 2022 13:51:30 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CFDC0401DA;
-        Mon,  7 Feb 2022 10:47:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FABC0401DA;
+        Mon,  7 Feb 2022 10:51:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
         In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
         :Reply-To:Content-ID:Content-Description;
-        bh=QN6yfdo8RIWM0BFuvlpHBuhEA39RjktPtMeJoHOPZ3k=; b=FhiBYuqQqKT3nv9OEbw64uUrre
-        dkZnveEyOXp6nG2wEHaxtG8QUm2SiisUAuMu3Z6EjbybxnyNV/gJYFQ/q5RjcaIiMsVTc0nSBm5ZW
-        z0gr5pT0cFtRc1bDQxNO7e+aKjIU80WgSlcXdNGIpGmTFZJf0Cny5Z+0NoqGKkmaNA6YZDQuHq5ui
-        XIpkEh2CIRhp0jcpduFORv1lBxpEnJB8dYfRSqg2QPO+ZyV/Yni5ke903nRPZRADlKI2fE/dPUEmP
-        sCHBND9foCAEYyzQGNRnWJFegsszhRKXLPb+wXfVwOXFmx7AQyvIjDzatos2kzr0JbNuNzctfqHXt
-        Re+MJDWQ==;
+        bh=YjnxRU9OsPHWFPB45I1omyCSwPagOekaYsZVmBqtP5Y=; b=Bmva/cOPXrRluFmWOKioi5vMqp
+        DGjVCFFUfrcyOKSesEGKFY4bzyTtp+0K6F9jUhsCUgP7gzNOYDIysro5PeAcq30EsEl7tyC6l7FpE
+        HVrhcsBDkXyoWaJV5aD+fodgQ67U/bRDwGI9gXVtl2KwB1LFxoGPntTK5IJkS0G3vWM2kVC/y1gQE
+        T0qofu2kIQ5G+hLsQh0whyWK9MF+IZHCpWU4fw5tawKYtmctPczvOpmT0qD/xhhWNWnWj4RjZVvzr
+        uyFNfivxVVAlxvJZLzph92Ekss0THyo2svpr5S+4UWTbxB8caXw9hzN6CMzy1T1vI4eAdcjzmMJaw
+        7fDRj2Tw==;
 Received: from [2601:1c0:6280:3f0::aa0b]
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nH92s-001mkC-AN; Mon, 07 Feb 2022 18:47:26 +0000
-Message-ID: <7753c65a-ce16-eb4f-395b-bc5e54c647c6@infradead.org>
-Date:   Mon, 7 Feb 2022 10:47:21 -0800
+        id 1nH96l-001nqs-SX; Mon, 07 Feb 2022 18:51:28 +0000
+Message-ID: <d38afc1a-331f-ff0e-be81-71bec617d85c@infradead.org>
+Date:   Mon, 7 Feb 2022 10:51:22 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] dell-smm-hwmon: rewrite CONFIG_I8K description
+Subject: Re: [PATCH 1/2] x86/Kconfig: move and modify CONFIG_I8K
 Content-Language: en-US
 To:     =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>,
         linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-hwmon@vger.kernel.org
 Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>
 References: <20220207182940.242838-1-mat.jonczyk@o2.pl>
- <20220207182940.242838-2-mat.jonczyk@o2.pl>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220207182940.242838-2-mat.jonczyk@o2.pl>
+In-Reply-To: <20220207182940.242838-1-mat.jonczyk@o2.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -54,59 +56,118 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Hi--
 
+I like it. (I had a note to myself to do this also.)
+
+
 On 2/7/22 10:29, Mateusz Jończyk wrote:
-> It is not the laptops, but the /proc/i8k interface that is legacy. The
-> old description was confusing, fix this.
+> In Kconfig, inside the "Processor type and features" menu, there is
+> the CONFIG_I8K option: "Dell i8k legacy laptop support". This is
+> very confusing - enabling CONFIG_I8K is not required for the kernel to
+> support old Dell laptops. This option is specific to the dell-smm-hwmon
+> driver, which mostly exports some hardware monitoring information and
+> allows the user to change fan speed.
 > 
-> I'm not a native English speaker, so I'd like that someone proofread
-> this description.
+> This option is misplaced, so move CONFIG_I8K to drivers/hwmon/Kconfig,
+> where it belongs.
+> 
+> Also, modify the dependency order - change
+>         select SENSORS_DELL_SMM
+> to
+>         depends on SENSORS_DELL_SMM
+> as it is just a configuration option of dell-smm-hwmon. This includes
+> changing the option type from tristate to bool. It was tristate because
+> it could select CONFIG_SENSORS_DELL_SMM=m .
+> 
+> When running "make oldconfig" on configurations with
+> CONFIG_SENSORS_DELL_SMM enabled , this change will result in an
+> additional question (which could be printed several times during
+> bisecting). I think that tidying up the configuration is worth it,
+> though.
+> 
+> Next patch tweaks the description of CONFIG_I8K.
 > 
 > Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
 > Cc: Pali Rohár <pali@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
 > Cc: Jean Delvare <jdelvare@suse.com>
 > Cc: Guenter Roeck <linux@roeck-us.net>
 > Cc: Hans de Goede <hdegoede@redhat.com>
 > Cc: Mark Gross <markgross@kernel.org>
 > ---
->  drivers/hwmon/Kconfig | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
+>  arch/x86/Kconfig      | 17 -----------------
+>  drivers/hwmon/Kconfig | 15 +++++++++++++++
+>  2 files changed, 15 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index dd244aa747ad..8f9f41a9ef70 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -506,18 +506,17 @@ config SENSORS_DELL_SMM
->  	  userspace interface for i8kutils package.
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 9f5bd41bf660..71d4ddd48c02 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1275,23 +1275,6 @@ config TOSHIBA
+>  	  Say Y if you intend to run this kernel on a Toshiba portable.
+>  	  Say N otherwise.
 >  
->  config I8K
-> -	bool "Dell i8k legacy laptop support"
-> +	bool "Legacy /proc/i8k interface of Dell laptop SMM BIOS hwmon driver"
->  	depends on SENSORS_DELL_SMM
->  	help
+> -config I8K
+> -	tristate "Dell i8k legacy laptop support"
+> -	depends on HWMON
+> -	depends on PROC_FS
+> -	select SENSORS_DELL_SMM
+> -	help
 > -	  This option enables legacy /proc/i8k userspace interface in hwmon
 > -	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
 > -	  temperature and allows controlling fan speeds of Dell laptops via
 > -	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
 > -	  it reports also power and hotkey status. For fan speed control is
 > -	  needed userspace package i8kutils.
-> +	  This option enables the legacy /proc/i8k userspace interface of the
-> +	  dell-smm-hwmon driver. The character file /proc/i8k exposes the BIOS
-> +	  version, temperatures and allows control of fan speeds of some Dell
-> +	  laptops. Sometimes, it reports also power and hotkey status.
-
-	  Comma not needed ^^^; "it also reports ..." would be more common.
-
->  
+> -
 > -	  Say Y if you intend to run this kernel on old Dell laptops or want to
 > -	  use userspace package i8kutils.
-> +	  This interface is required to run programs from the i8kutils package.
-> +
-> +	  Say Y if you intend to run userspace programs that use this interface.
->  	  Say N otherwise.
+> -	  Say N otherwise.
+> -
+>  config X86_REBOOTFIXUPS
+>  	bool "Enable X86 board specific fixups for reboot"
+>  	depends on X86_32
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 8df25f1079ba..dd244aa747ad 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -505,6 +505,21 @@ config SENSORS_DELL_SMM
+>  	  When option I8K is also enabled this driver provides legacy /proc/i8k
+>  	  userspace interface for i8kutils package.
 >  
+> +config I8K
+> +	bool "Dell i8k legacy laptop support"
+> +	depends on SENSORS_DELL_SMM
+> +	help
+> +	  This option enables legacy /proc/i8k userspace interface in hwmon
+> +	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+
+	                                                          BIOS
+
+> +	  temperature and allows controlling fan speeds of Dell laptops via
+> +	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> +	  it reports also power and hotkey status. For fan speed control is
+> +	  needed userspace package i8kutils.
+
+Last sentence above is awkward. How about:
+
+	  it also reports power and hotkey status. For fan speed control, the
+	  i8kutils userspace package is needed.
+
+> +
+> +	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> +	  use userspace package i8kutils.
+> +	  Say N otherwise.
+> +
 >  config SENSORS_DA9052_ADC
+>  	tristate "Dialog DA9052/DA9053 ADC"
+>  	depends on PMIC_DA9052
+
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
 thanks.
-
 -- 
 ~Randy
