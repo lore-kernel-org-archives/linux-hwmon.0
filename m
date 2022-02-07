@@ -2,159 +2,74 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45898C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Feb 2022 18:57:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE85C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Feb 2022 19:00:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234759AbiBGS5K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Feb 2022 13:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S234923AbiBGTAS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Feb 2022 14:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbiBGSxy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Feb 2022 13:53:54 -0500
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5455C0401E0
-        for <linux-hwmon@vger.kernel.org>; Mon,  7 Feb 2022 10:53:53 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 9078 invoked from network); 7 Feb 2022 19:53:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1644260031; bh=C7fW8I2zJOoNbXcMCI53B+cZB01UmuIiKpOEwjmOTfs=;
-          h=Subject:To:Cc:From;
-          b=d0aTf10SHoLYHl5f1uWt9vhYjAH8ZvuwEG6b98/iqXbQPCm3xoYS8tW8zZ4PLKGnl
-           eDOz+4fvms8RQrRz6xS6+ynlISSCIANA8ASHliYZhLvNczqT9pzGNvw3V4FQWgQSxA
-           lQEn10mmymxtNtj+XBWZV/1K82VvpZsTojewJYRg=
-Received: from aaem217.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.116.217])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <linux-kernel@vger.kernel.org>; 7 Feb 2022 19:53:50 +0100
-Message-ID: <d5cedee5-5f1e-8a11-1f4d-82e43f0753ed@o2.pl>
-Date:   Mon, 7 Feb 2022 19:53:40 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 1/2] x86/Kconfig: move and modify CONFIG_I8K
-Content-Language: en-GB
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        with ESMTP id S235497AbiBGS5g (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Feb 2022 13:57:36 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E38C0401F5
+        for <linux-hwmon@vger.kernel.org>; Mon,  7 Feb 2022 10:57:22 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BF1601EC02B9;
+        Mon,  7 Feb 2022 19:57:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644260234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PPFoq/KfBO2kowrqfUfB0TFIrcrDCEWeUZ4fipD381w=;
+        b=g31qGmHOW9+Y86dMxZ3u2lfC7Rc6TLQA4ocDZ1uCP24sEBgPz/ODaXfQ2P7DWSVrcjW6wW
+        nfED86Z5aROr6s8U/0Krw+L0Q+LW4qisQc2QBgzhXdVaefLnuBIuyaiJVzz5uRaC5rSZZn
+        whRZn8AsqTe2TGeZE5aboySxs8SQXGc=
+Date:   Mon, 7 Feb 2022 19:57:13 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH 1/2] x86/Kconfig: move and modify CONFIG_I8K
+Message-ID: <YgFrieUmgaw1yGkf@zn.tnic>
 References: <20220207182940.242838-1-mat.jonczyk@o2.pl>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <20220207182940.242838-1-mat.jonczyk@o2.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: e0a24d67e65ad5b12b7fef12da7af879
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [8UM0]                               
+ <43bfd6d9-58a3-6f9c-0848-4ef147552afb@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <43bfd6d9-58a3-6f9c-0848-4ef147552afb@redhat.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-W dniu 07.02.2022 o 19:29, Mateusz Jończyk pisze:
-> In Kconfig, inside the "Processor type and features" menu, there is
-> the CONFIG_I8K option: "Dell i8k legacy laptop support". This is
-> very confusing - enabling CONFIG_I8K is not required for the kernel to
-> support old Dell laptops. This option is specific to the dell-smm-hwmon
-> driver, which mostly exports some hardware monitoring information and
-> allows the user to change fan speed.
->
-> This option is misplaced, so move CONFIG_I8K to drivers/hwmon/Kconfig,
-> where it belongs.
->
-> Also, modify the dependency order - change
->         select SENSORS_DELL_SMM
-> to
->         depends on SENSORS_DELL_SMM
-> as it is just a configuration option of dell-smm-hwmon. This includes
-> changing the option type from tristate to bool. It was tristate because
-> it could select CONFIG_SENSORS_DELL_SMM=m .
->
-> When running "make oldconfig" on configurations with
-> CONFIG_SENSORS_DELL_SMM enabled , this change will result in an
-> additional question (which could be printed several times during
-> bisecting). I think that tidying up the configuration is worth it,
-> though.
->
-> Next patch tweaks the description of CONFIG_I8K.
->
-> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-> Cc: Pali Rohár <pali@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> ---
->  arch/x86/Kconfig      | 17 -----------------
->  drivers/hwmon/Kconfig | 15 +++++++++++++++
->  2 files changed, 15 insertions(+), 17 deletions(-)
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 9f5bd41bf660..71d4ddd48c02 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1275,23 +1275,6 @@ config TOSHIBA
->  	  Say Y if you intend to run this kernel on a Toshiba portable.
->  	  Say N otherwise.
->  
-> -config I8K
-> -	tristate "Dell i8k legacy laptop support"
-> -	depends on HWMON
-> -	depends on PROC_FS
-> -	select SENSORS_DELL_SMM
-> -	help
-> -	  This option enables legacy /proc/i8k userspace interface in hwmon
-> -	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
-> -	  temperature and allows controlling fan speeds of Dell laptops via
-> -	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
-> -	  it reports also power and hotkey status. For fan speed control is
-> -	  needed userspace package i8kutils.
-> -
-> -	  Say Y if you intend to run this kernel on old Dell laptops or want to
-> -	  use userspace package i8kutils.
-> -	  Say N otherwise.
-> -
->  config X86_REBOOTFIXUPS
->  	bool "Enable X86 board specific fixups for reboot"
->  	depends on X86_32
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 8df25f1079ba..dd244aa747ad 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -505,6 +505,21 @@ config SENSORS_DELL_SMM
->  	  When option I8K is also enabled this driver provides legacy /proc/i8k
->  	  userspace interface for i8kutils package.
->  
-> +config I8K
-> +	bool "Dell i8k legacy laptop support"
-> +	depends on SENSORS_DELL_SMM
+On Mon, Feb 07, 2022 at 07:51:10PM +0100, Hans de Goede wrote:
+> For other reviewers, the only consumer of the CONFIG_I8K
+> option is drivers/hwmon/dell-smm-hwmon.c
+> which has a couple of:
+> "#if IS_ENABLED(CONFIG_I8K)" checks to enable its old
+> legacy /proc/i8k interface.
+> 
+> So this move definitely makes sense.
 
-Oops, I dropped "depends on PROC_FS". Will fix this in next revision.
+I love patches removing code from arch/x86/ so for the move:
 
-> +	help
-> +	  This option enables legacy /proc/i8k userspace interface in hwmon
-> +	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
-> +	  temperature and allows controlling fan speeds of Dell laptops via
-> +	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
-> +	  it reports also power and hotkey status. For fan speed control is
-> +	  needed userspace package i8kutils.
-> +
-> +	  Say Y if you intend to run this kernel on old Dell laptops or want to
-> +	  use userspace package i8kutils.
-> +	  Say N otherwise.
-> +
->  config SENSORS_DA9052_ADC
->  	tristate "Dialog DA9052/DA9053 ADC"
->  	depends on PMIC_DA9052
+Acked-by: Borislav Petkov <bp@suse.de>
 
-Greetings,
+Thx.
 
-Mateusz
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
