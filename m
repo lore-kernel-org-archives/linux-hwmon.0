@@ -2,193 +2,217 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B579C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Feb 2022 15:42:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DCABC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Feb 2022 16:15:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381322AbiBHPmU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Feb 2022 10:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S1352129AbiBHQP5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Feb 2022 11:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381476AbiBHPmR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Feb 2022 10:42:17 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46794C0612B9;
-        Tue,  8 Feb 2022 07:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644334933; x=1675870933;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4GFjvUMiVMcumvdOgAlzmh492IdarzKncsOwfSSWUls=;
-  b=d3ZHEdZ3XkH+gQrXw5FmwH3LcJoGIB/nc4KwuJoSDSiYaD/oXfHH6XJn
-   uM8jv8A80rqFyYgxO/5LzqnAD8aHpwzAkNLASD6dqmR99hf1PYdKNqdpy
-   hZ5WJjlRhk5n9bnIJFtoA/7U48QxjS7RBjdU5WLZ9h50aaMAUkj4BlWnp
-   VX9QHuAWekNhld3LfkTQ869E2APSUmBLTGd6VuD1/Cq4kPlp+ySWnVvyp
-   zmZG14lnYg4ryoBElIYHvVc9xH/HAlTcL1kdPBPF21scIeKUciJPBpLeU
-   jIgohHIg9IsuErx4LHM4V0x3hVRYiPwRHJHVRtOLJqki/mX0AtUxZVk6i
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="228940640"
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="228940640"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:42:13 -0800
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="601273985"
-Received: from mgorzkow-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.139.232])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:42:07 -0800
-From:   Iwona Winiarska <iwona.winiarska@intel.com>
-To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
+        with ESMTP id S239418AbiBHQPz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Feb 2022 11:15:55 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F68C061576
+        for <linux-hwmon@vger.kernel.org>; Tue,  8 Feb 2022 08:15:54 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 0B749DB99D7;
+        Tue,  8 Feb 2022 17:15:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1644336948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=beiYUnGsDRVtxVBC1NGXGzh4TXiSTexf+TKx1Nk5pm8=;
+        b=r+ez8ddTKjhSE1z57mA3aHTc9FJYVvjZwZEJaHgBYDb28KQxUEnasb2Cddd3I4CwhsWPPe
+        FV2WEyMPISklKzo3NXP65EzQTgeJkJc+RxT+8OoAd7gMZWmvNILNWrq1/2+OagQoxZ8XtT
+        lThTd853wv3mS0YnshUusKiZrhiJgyQ=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zev Weiss <zweiss@equinix.com>,
-        David Muller <d.mueller@elsoft.ch>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH v8 13/13] docs: Add PECI documentation
-Date:   Tue,  8 Feb 2022 16:36:39 +0100
-Message-Id: <20220208153639.255278-14-iwona.winiarska@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220208153639.255278-1-iwona.winiarska@intel.com>
-References: <20220208153639.255278-1-iwona.winiarska@intel.com>
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add CPU core voltage
+Date:   Tue, 08 Feb 2022 17:15:46 +0100
+Message-ID: <11918951.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <20220208094244.1106312-1-eugene.shalygin@gmail.com>
+References: <20220208094244.1106312-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add a brief overview of PECI and PECI wire interface.
-The documentation also contains kernel-doc for PECI subsystem internals
-and PECI CPU Driver API.
+Hello.
 
-Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
----
- Documentation/index.rst      |  1 +
- Documentation/peci/index.rst | 16 +++++++++++
- Documentation/peci/peci.rst  | 51 ++++++++++++++++++++++++++++++++++++
- MAINTAINERS                  |  1 +
- 4 files changed, 69 insertions(+)
- create mode 100644 Documentation/peci/index.rst
- create mode 100644 Documentation/peci/peci.rst
+On =C3=BAter=C3=BD 8. =C3=BAnora 2022 10:42:43 CET Eugene Shalygin wrote:
+> A user discovered [1] the CPU Core voltage sensor, which spans 2
+> registers and provides output in mV. Althroug the discovery was made
+> with a X470 chipset, the sensor is present in X570 (tested with C8H).
+> For now simply add it to each board with the CPU current sensor present.
+>=20
+> [1] https://github.com/zeule/asus-ec-sensors/issues/12
+>=20
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> ---
+>  Documentation/hwmon/asus_ec_sensors.rst |  1 +
+>  drivers/hwmon/asus-ec-sensors.c         | 29 ++++++++++++++++---------
+>  2 files changed, 20 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmo=
+n/asus_ec_sensors.rst
+> index 22de1b037cfb..e7e8f1640f45 100644
+> --- a/Documentation/hwmon/asus_ec_sensors.rst
+> +++ b/Documentation/hwmon/asus_ec_sensors.rst
+> @@ -39,6 +39,7 @@ The driver is aware of and reads the following sensors:
+>  9. Readings from the "Water flow meter" header (RPM)
+>  10. Readings from the "Water In" and "Water Out" temperature headers
+>  11. CPU current
+> +12. CPU core voltage
+> =20
+>  Sensor values are read from EC registers, and to avoid race with the boa=
+rd
+>  firmware the driver acquires ACPI mutex, the one used by the WMI when its
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sens=
+ors.c
+> index dd7b207d062f..bfac08a5dc57 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -18,6 +18,7 @@
+>   * - VRM Heat Sink fan RPM
+>   * - Water Flow fan RPM
+>   * - CPU current
+> + * - CPU core voltage
+>   */
+> =20
+>  #include <linux/acpi.h>
+> @@ -100,6 +101,8 @@ enum ec_sensors {
+>  	ec_sensor_temp_t_sensor,
+>  	/* VRM temperature [=E2=84=83] */
+>  	ec_sensor_temp_vrm,
+> +	/* CPU Core voltage [mV] */
+> +	ec_sensor_in_cpu_core,
+>  	/* CPU_Opt fan [RPM] */
+>  	ec_sensor_fan_cpu_opt,
+>  	/* VRM heat sink fan [RPM] */
+> @@ -121,6 +124,7 @@ enum ec_sensors {
+>  #define SENSOR_TEMP_MB BIT(ec_sensor_temp_mb)
+>  #define SENSOR_TEMP_T_SENSOR BIT(ec_sensor_temp_t_sensor)
+>  #define SENSOR_TEMP_VRM BIT(ec_sensor_temp_vrm)
+> +#define SENSOR_IN_CPU_CORE BIT(ec_sensor_in_cpu_core)
+>  #define SENSOR_FAN_CPU_OPT BIT(ec_sensor_fan_cpu_opt)
+>  #define SENSOR_FAN_VRM_HS BIT(ec_sensor_fan_vrm_hs)
+>  #define SENSOR_FAN_CHIPSET BIT(ec_sensor_fan_chipset)
+> @@ -139,6 +143,8 @@ static const struct ec_sensor_info known_ec_sensors[]=
+ =3D {
+>  	[ec_sensor_temp_t_sensor] =3D
+>  		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
+>  	[ec_sensor_temp_vrm] =3D EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
+> +	[ec_sensor_in_cpu_core] =3D
+> +		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
+>  	[ec_sensor_fan_cpu_opt] =3D
+>  		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
+>  	[ec_sensor_fan_vrm_hs] =3D EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2=
+),
+> @@ -172,32 +178,34 @@ static const struct dmi_system_id asus_ec_dmi_table=
+[] __initconst =3D {
+>  		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "Pro WS X570-ACE",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
+> -		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
+> +		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
 
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index b58692d687f6..1988c19d9daf 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -138,6 +138,7 @@ needed).
-    scheduler/index
-    mhi/index
-    tty/index
-+   peci/index
- 
- Architecture-agnostic documentation
- -----------------------------------
-diff --git a/Documentation/peci/index.rst b/Documentation/peci/index.rst
-new file mode 100644
-index 000000000000..989de10416e7
---- /dev/null
-+++ b/Documentation/peci/index.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+====================
-+Linux PECI Subsystem
-+====================
-+
-+.. toctree::
-+
-+   peci
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
-diff --git a/Documentation/peci/peci.rst b/Documentation/peci/peci.rst
-new file mode 100644
-index 000000000000..331b1ec00e22
---- /dev/null
-+++ b/Documentation/peci/peci.rst
-@@ -0,0 +1,51 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+========
-+Overview
-+========
-+
-+The Platform Environment Control Interface (PECI) is a communication
-+interface between Intel processor and management controllers
-+(e.g. Baseboard Management Controller, BMC).
-+PECI provides services that allow the management controller to
-+configure, monitor and debug platform by accessing various registers.
-+It defines a dedicated command protocol, where the management
-+controller is acting as a PECI originator and the processor - as
-+a PECI responder.
-+PECI can be used in both single processor and multiple-processor based
-+systems.
-+
-+NOTE:
-+Intel PECI specification is not released as a dedicated document,
-+instead it is a part of External Design Specification (EDS) for given
-+Intel CPU. External Design Specifications are usually not publicly
-+available.
-+
-+PECI Wire
-+---------
-+
-+PECI Wire interface uses a single wire for self-clocking and data
-+transfer. It does not require any additional control lines - the
-+physical layer is a self-clocked one-wire bus signal that begins each
-+bit with a driven, rising edge from an idle near zero volts. The
-+duration of the signal driven high allows to determine whether the bit
-+value is logic '0' or logic '1'. PECI Wire also includes variable data
-+rate established with every message.
-+
-+For PECI Wire, each processor package will utilize unique, fixed
-+addresses within a defined range and that address should
-+have a fixed relationship with the processor socket ID - if one of the
-+processors is removed, it does not affect addresses of remaining
-+processors.
-+
-+PECI subsystem internals
-+------------------------
-+
-+.. kernel-doc:: include/linux/peci.h
-+.. kernel-doc:: drivers/peci/internal.h
-+.. kernel-doc:: drivers/peci/core.c
-+.. kernel-doc:: drivers/peci/request.c
-+
-+PECI CPU Driver API
-+-------------------
-+.. kernel-doc:: drivers/peci/cpu.c
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c666ef7ea5a5..9d248d55ac30 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15122,6 +15122,7 @@ M:	Iwona Winiarska <iwona.winiarska@intel.com>
- L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/peci/
-+F:	Documentation/peci/
- F:	drivers/peci/
- F:	include/linux/peci-cpu.h
- F:	include/linux/peci.h
--- 
-2.34.1
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+on Pro WS X570-ACE:
+
+```
+asusec-isa-0000
+Adapter: ISA adapter
+CPU Core:      1.47 V
+=E2=80=A6
+```
+
+Thanks.
+
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
+>  			      "ROG CROSSHAIR VIII DARK HERO",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+>  		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+> -		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU),
+> +		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
+> +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
+>  			      "ROG CROSSHAIR VIII FORMULA",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+>  		SENSOR_TEMP_VRM | SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
+> -		SENSOR_CURR_CPU),
+> +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG CROSSHAIR VIII HERO",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+>  		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+>  		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
+> -		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU),
+> +		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
+>  			      "ROG CROSSHAIR VIII HERO (WI-FI)",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+>  		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+>  		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
+> -		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU),
+> +		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
+>  			      "ROG CROSSHAIR VIII IMPACT",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+> -		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
+> +		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
+> +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX B550-E GAMING",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+>  		SENSOR_TEMP_T_SENSOR |
+> @@ -205,17 +213,19 @@ static const struct dmi_system_id asus_ec_dmi_table=
+[] __initconst =3D {
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX B550-I GAMING",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+>  		SENSOR_TEMP_T_SENSOR |
+> -		SENSOR_TEMP_VRM | SENSOR_FAN_VRM_HS | SENSOR_CURR_CPU),
+> +		SENSOR_TEMP_VRM | SENSOR_FAN_VRM_HS |
+> +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-E GAMING",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+>  		SENSOR_TEMP_T_SENSOR |
+> -		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
+> +		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
+> +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-F GAMING",
+>  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+>  		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
+>  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-I GAMING",
+>  		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
+> -		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
+> +		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
+>  	{}
+>  };
+> =20
+> @@ -467,7 +477,6 @@ static long scale_sensor_value(s32 value, int data_ty=
+pe)
+>  	switch (data_type) {
+>  	case hwmon_curr:
+>  	case hwmon_temp:
+> -	case hwmon_in:
+>  		return value * MILLI;
+>  	default:
+>  		return value;
+>=20
+
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 
