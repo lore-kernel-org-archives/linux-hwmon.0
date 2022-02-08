@@ -2,243 +2,293 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22135C352A8
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Feb 2022 22:26:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FE08C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Feb 2022 23:10:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234688AbiBHW0h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S235380AbiBHXKo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Feb 2022 18:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386543AbiBHUyU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Feb 2022 15:54:20 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43431C0612C3;
-        Tue,  8 Feb 2022 12:54:16 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s7so956653edd.3;
-        Tue, 08 Feb 2022 12:54:16 -0800 (PST)
+        with ESMTP id S235138AbiBHXKn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Feb 2022 18:10:43 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8E5C0612C2;
+        Tue,  8 Feb 2022 15:10:41 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id l14so444763qtp.7;
+        Tue, 08 Feb 2022 15:10:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PDhjQ85RPBAN8gdoe5LBgB+KXAQiKOAIVei1JjMNISU=;
-        b=KlypnIg2Q4TNPY7ywPtIVAaC6gRlZf6/GaS4h98jSWnLdWAidpxxul8Dh8RxnzInIB
-         FxFlGMNuADDHiTj1ewb1BRF9aaR5XLlHuz2/sVe6MErGo3JBZhwGf3/3pyC74jJUe/AU
-         ISjM5AFHdUg4pyXoFg9Qv4DHHrrXRF9/FGaSIcgOSflfHRjXYLzo55WHkUo3Yl7smqnF
-         vOJWuKEk7HTt+0s3/+vvS+NBxUN1vEh5xKLL2O4TeJCTdxLrZkt7q+2iaZjfvz6d2j6c
-         JVALpU/Xt00xdIc0NKJ0q7Z1+8bsP84m40fU9rIJfDFRB8BKYDyzClp0/Sh/iFL/IF4v
-         gkSw==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H4AnW21UTOBpl9IT37GON9GbIZ1V0rMPgsXoaPMebDo=;
+        b=QTbpsk9PRPSO+jL6VeAS/zIqycwhiMi8VI9kFSQ8mz+rJ0Sgl9r+2qTBwIX+W0FPku
+         K3Xe6YfZUw+pzU6PXxC1A1Gc3oyQxKQR6x9VEwI3kmTBdD0AALVccl9qYTy6fd/50fyq
+         6ttWICxKb8l00IHv8Q8i9FfPBoKi4ItMhqFFc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PDhjQ85RPBAN8gdoe5LBgB+KXAQiKOAIVei1JjMNISU=;
-        b=h0j3UXdmolw3xPe1fJRItIbVqrmZ/BiOeZPPxRpXtZN9E3liDjbee+4KsDHlJhRzDd
-         GNJWvS6JV9FMHKOL5BU1OLpZSqtCWl6X7UeiCdKBELlC9jhJ++1NE2vk8t/+AGidc//k
-         AQsk6bGl9RmWiSjvMvDVZLLtVFjBGw2uqtVDG/2JLz2DX71GNjVFO29pgu8bLX9A8Onh
-         BW8YKHkhrRPD/hVmAZDOjcLJI9dYK+si+KYXaQEbpiNvYfGaTVV/lpDT8Wr2Schpcc82
-         Ms3w4R/LOClJHpN92LnuEmPcCXPLle9RdK/Ss2e7mqo7WvoGomlUDYM4B+eUKNwe87Ce
-         QY3A==
-X-Gm-Message-State: AOAM530vQF7dJrG4m9Ck5v2vVBP6XFZPjTW94OW1/bQ1F8vxcbSD8qmF
-        /zcjvXiJXvYXdy5Ovq1ZXOeiRe3PLQ/FMA==
-X-Google-Smtp-Source: ABdhPJzKxy1DftrC9Hdvyz71ZUjBbAQJvqevq1dibwVr5XOxE/w6Jr5uhIT+BNs11hMybA1XTWmzhw==
-X-Received: by 2002:aa7:dbc3:: with SMTP id v3mr6404848edt.32.1644353654531;
-        Tue, 08 Feb 2022 12:54:14 -0800 (PST)
-Received: from netbook-debian ([94.179.49.215])
-        by smtp.gmail.com with ESMTPSA id gj8sm2329107ejc.186.2022.02.08.12.54.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 12:54:14 -0800 (PST)
-Date:   Tue, 8 Feb 2022 22:54:09 +0200
-From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H4AnW21UTOBpl9IT37GON9GbIZ1V0rMPgsXoaPMebDo=;
+        b=H8/p8KIB7xg49orLnyYPeOgIoxlWcQcGyvvC4l5egOBEC7JMSTJOq+kFBjlagf/FsS
+         9iFBAsWkZ/KUE8vVOVcO6FilrhCAC5GsVc35kA67OzpkB1yqGJHJuoPRdIau50V7pW97
+         i2OXFsSjD0ZGxHEgt8GrrvPnp7gsljKaD4T1Svv4An7shEeRUkkf8xsy3vhAWR7kfExL
+         JGMOgQ0kFcpSnevCRCNnrpJp/YcFhqwrPwZ67P/UuLbFifwhPkCsPlx982Ld5HJ6V3bj
+         EiJNP040WwAXezQhR+Yo4kRv3yM/KCP5NF5mXMXy5oXlRKmwp0XAbuPYdRcxskC+okTd
+         KfzQ==
+X-Gm-Message-State: AOAM5328dcML2esI+87ViFai8JxF9KBswASraV8c4ePbg+fIaGEBLEMi
+        ibV6q+9slISjRf8IvluCiDmhGHB2+LVTpvJsEYE2WX/oEG0=
+X-Google-Smtp-Source: ABdhPJxkCZok6w5MQZS9BOo+D+4Sd3aja5mP4w7wQ435bkoOoCphhvgl5XGJsyBlfcRdrsRN27hO+AY0/gaqcez1v4w=
+X-Received: by 2002:ac8:7c4c:: with SMTP id o12mr4613615qtv.475.1644361840346;
+ Tue, 08 Feb 2022 15:10:40 -0800 (PST)
+MIME-Version: 1.0
+References: <20220208153639.255278-1-iwona.winiarska@intel.com>
+In-Reply-To: <20220208153639.255278-1-iwona.winiarska@intel.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 8 Feb 2022 23:10:28 +0000
+Message-ID: <CACPK8Xe46DiorxRhrLejVp1M8oE5055cfAnMH48dsnf+poTNTw@mail.gmail.com>
+Subject: Re: [PATCH v8 00/13] Introduce PECI subsystem
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add CPU core voltage
-Message-ID: <20220208225409.5285adf9@netbook-debian>
-In-Reply-To: <11918951.O9o76ZdvQC@natalenko.name>
-References: <20220208094244.1106312-1-eugene.shalygin@gmail.com>
-        <11918951.O9o76ZdvQC@natalenko.name>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Billy Tsai <billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 08 Feb 2022 17:15:46 +0100
-Oleksandr Natalenko <oleksandr@natalenko.name> wrote:
+On Tue, 8 Feb 2022 at 15:37, Iwona Winiarska <iwona.winiarska@intel.com> wrote:
+>
+> Hi Greg,
+>
+> I applied the fixups to sysfs ABI docs, I would appreciate if PECI
+> could go through your tree into v5.18.
 
-> Hello.
->=20
-> On =C3=BAter=C3=BD 8. =C3=BAnora 2022 10:42:43 CET Eugene Shalygin wrote:
-> > A user discovered [1] the CPU Core voltage sensor, which spans 2
-> > registers and provides output in mV. Althroug the discovery was made
-> > with a X470 chipset, the sensor is present in X570 (tested with
-> > C8H). For now simply add it to each board with the CPU current
-> > sensor present.
-> >=20
-> > [1] https://github.com/zeule/asus-ec-sensors/issues/12
-> >=20
-> > Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> > ---
-> >  Documentation/hwmon/asus_ec_sensors.rst |  1 +
-> >  drivers/hwmon/asus-ec-sensors.c         | 29
-> > ++++++++++++++++--------- 2 files changed, 20 insertions(+), 10
-> > deletions(-)
-> >=20
-> > diff --git a/Documentation/hwmon/asus_ec_sensors.rst
-> > b/Documentation/hwmon/asus_ec_sensors.rst index
-> > 22de1b037cfb..e7e8f1640f45 100644 ---
-> > a/Documentation/hwmon/asus_ec_sensors.rst +++
-> > b/Documentation/hwmon/asus_ec_sensors.rst @@ -39,6 +39,7 @@ The
-> > driver is aware of and reads the following sensors: 9. Readings
-> > from the "Water flow meter" header (RPM) 10. Readings from the
-> > "Water In" and "Water Out" temperature headers 11. CPU current
-> > +12. CPU core voltage
-> > =20
-> >  Sensor values are read from EC registers, and to avoid race with
-> > the board firmware the driver acquires ACPI mutex, the one used by
-> > the WMI when its diff --git a/drivers/hwmon/asus-ec-sensors.c
-> > b/drivers/hwmon/asus-ec-sensors.c index dd7b207d062f..bfac08a5dc57
-> > 100644 --- a/drivers/hwmon/asus-ec-sensors.c
-> > +++ b/drivers/hwmon/asus-ec-sensors.c
-> > @@ -18,6 +18,7 @@
-> >   * - VRM Heat Sink fan RPM
-> >   * - Water Flow fan RPM
-> >   * - CPU current
-> > + * - CPU core voltage
-> >   */
-> > =20
-> >  #include <linux/acpi.h>
-> > @@ -100,6 +101,8 @@ enum ec_sensors {
-> >  	ec_sensor_temp_t_sensor,
-> >  	/* VRM temperature [=E2=84=83] */
-> >  	ec_sensor_temp_vrm,
-> > +	/* CPU Core voltage [mV] */
-> > +	ec_sensor_in_cpu_core,
-> >  	/* CPU_Opt fan [RPM] */
-> >  	ec_sensor_fan_cpu_opt,
-> >  	/* VRM heat sink fan [RPM] */
-> > @@ -121,6 +124,7 @@ enum ec_sensors {
-> >  #define SENSOR_TEMP_MB BIT(ec_sensor_temp_mb)
-> >  #define SENSOR_TEMP_T_SENSOR BIT(ec_sensor_temp_t_sensor)
-> >  #define SENSOR_TEMP_VRM BIT(ec_sensor_temp_vrm)
-> > +#define SENSOR_IN_CPU_CORE BIT(ec_sensor_in_cpu_core)
-> >  #define SENSOR_FAN_CPU_OPT BIT(ec_sensor_fan_cpu_opt)
-> >  #define SENSOR_FAN_VRM_HS BIT(ec_sensor_fan_vrm_hs)
-> >  #define SENSOR_FAN_CHIPSET BIT(ec_sensor_fan_chipset)
-> > @@ -139,6 +143,8 @@ static const struct ec_sensor_info
-> > known_ec_sensors[] =3D { [ec_sensor_temp_t_sensor] =3D
-> >  		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> >  	[ec_sensor_temp_vrm] =3D EC_SENSOR("VRM", hwmon_temp, 1,
-> > 0x00, 0x3e),
-> > +	[ec_sensor_in_cpu_core] =3D
-> > +		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
-> >  	[ec_sensor_fan_cpu_opt] =3D
-> >  		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-> >  	[ec_sensor_fan_vrm_hs] =3D EC_SENSOR("VRM HS", hwmon_fan, 2,
-> > 0x00, 0xb2), @@ -172,32 +178,34 @@ static const struct
-> > dmi_system_id asus_ec_dmi_table[] __initconst =3D {
-> > SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
-> > DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "Pro WS X570-ACE",
-> > SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-> > -		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), =20
->=20
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
->=20
-> on Pro WS X570-ACE:
->=20
-> ```
-> asusec-isa-0000
-> Adapter: ISA adapter
-> CPU Core:      1.47 V
-> =E2=80=A6
-> ```
->=20
-> Thanks.
->=20
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII DARK HERO",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> > -		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII FORMULA",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_FAN_CPU_OPT |
-> > SENSOR_FAN_CHIPSET |
-> > -		SENSOR_CURR_CPU),
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG
-> > CROSSHAIR VIII HERO", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> >  		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
-> > -		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII HERO (WI-FI)",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> >  		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
-> > -		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII IMPACT",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR |
-> > -		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > B550-E GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> >  		SENSOR_TEMP_T_SENSOR |
-> > @@ -205,17 +213,19 @@ static const struct dmi_system_id
-> > asus_ec_dmi_table[] __initconst =3D {
-> > DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX B550-I
-> > GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
-> > -		SENSOR_TEMP_VRM | SENSOR_FAN_VRM_HS |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_TEMP_VRM | SENSOR_FAN_VRM_HS |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > X570-E GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> >  		SENSOR_TEMP_T_SENSOR |
-> > -		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > X570-F GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> >  		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > X570-I GAMING", SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
-> > -		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), {}
-> >  };
-> > =20
-> > @@ -467,7 +477,6 @@ static long scale_sensor_value(s32 value, int
-> > data_type) switch (data_type) {
-> >  	case hwmon_curr:
-> >  	case hwmon_temp:
-> > -	case hwmon_in:
-> >  		return value * MILLI;
-> >  	default:
-> >  		return value;
-> >  =20
->=20
->=20
+Acked-by: Joel Stanley <joel@jms.id.au>
 
-Tested-by: Denis Pauk <pauk.denis@gmail.com>
-
-Best regards,
-             Denis.
+>
+> Here is the usual cover letter from the previous revision:
+>
+> The Platform Environment Control Interface (PECI) is a communication
+> interface between Intel processors and management controllers (e.g.
+> Baseboard Management Controller, BMC).
+>
+> This series adds a PECI subsystem and introduces drivers which run in
+> the Linux instance on the management controller (not the main Intel
+> processor) and is intended to be used by the OpenBMC [1], a Linux
+> distribution for BMC devices.
+> The information exposed over PECI (like processor and DIMM
+> temperature) refers to the Intel processor and can be consumed by
+> daemons running on the BMC to, for example, display the processor
+> temperature in its web interface.
+>
+> The PECI bus is collection of code that provides interface support
+> between PECI devices (that actually represent processors) and PECI
+> controllers (such as the "peci-aspeed" controller) that allow to
+> access physical PECI interface. PECI devices are bound to PECI
+> drivers that provides access to PECI services. This series introduces
+> a generic "peci-cpu" driver that exposes hardware monitoring "cputemp"
+> and "dimmtemp" using the auxiliary bus.
+>
+> Exposing "raw" PECI to userspace, either to write userspace drivers or
+> for debug/testing purpose was left out of this series to encourage
+> writing kernel drivers instead, but may be pursued in the future.
+>
+> Introducing PECI to upstream Linux was already attempted before [2].
+> Since it's been over a year since last revision, and the series
+> changed quite a bit in the meantime, I've decided to start from v1.
+>
+> I would also like to give credit to everyone who helped me with
+> different aspects of preliminary review:
+> - Pierre-Louis Bossart,
+> - Tony Luck,
+> - Andy Shevchenko,
+> - Dave Hansen.
+>
+> [1] https://github.com/openbmc/openbmc
+> [2] https://lore.kernel.org/openbmc/20191211194624.2872-1-jae.hyun.yoo@linux.intel.com/
+>
+> Changes v7 -> v8:
+> * Updated "KernelVersion" in sysfs ABI docs (Greg)
+>
+> Changes v6 -> v7:
+> * Fixed Kconfig warnings (lkp@intel.com)
+>
+> Changes v5 -> v6:
+> * Added missing COMMON_CLK selection (lkp@intel.com)
+> * Fixed WARN_ON always evaluated to true (lkp@intel.com)
+> * Clean interrupt status unconditionally (Joel)
+> * Replaced memcpy_toio()/memcpy_fromio() with writel()/readl() to
+>   avoid issues when submitting unaligned PECI commands
+>
+> Changes v4 -> v5:
+> * Added clk_aspeed_peci to express controller programming using common
+>   clock framework (Billy)
+> * Modified peci-aspeed DTS schema to match clock changes (Billy)
+> * Added workaround for peci-aspeed controller hang (Billy)
+> * Removed unnecessary "else after return" (Guenter)
+>
+> Changes v3 -> v4:
+> * Fixed an issue where peci doesn't work after host shutdown (Zev)
+> * Replaced kill_device() with peci_device_del_lock (Greg)
+> * Fixed dts_valid() parameter type (Guenter)
+> * Removed Jae from MAINTAINERS file (Jae)
+>
+> Changes v2 -> v3:
+>
+> * Dropped x86/cpu patches (Boris)
+> * Dropped pr_fmt() for PECI module (Dan)
+> * Fixed releasing peci controller device flow (Dan)
+> * Improved peci-aspeed commit-msg and Kconfig help (Dan)
+> * Fixed aspeed_peci_xfer() to use the proper spin_lock function (Dan)
+> * Wrapped print_hex_dump_bytes() in CONFIG_DYNAMIC_DEBUG (Dan)
+> * Removed debug status logs from aspeed_peci_irq_handler() (Dan)
+> * Renamed functions using devres to start with "devm" (Dan)
+> * Changed request to be allocated on stack in peci_detect (Dan)
+> * Removed redundant WARN_ON on invalid PECI addr (Dan)
+> * Changed peci_device_create() to use device_initialize() + device_add() pattern (Dan)
+> * Fixed peci_device_destroy() to use kill_device() avoiding double-free (Dan)
+> * Renamed functions that perform xfer using "peci_xfer_*" prefix (Dan)
+> * Renamed peci_request_data_dib(temp) -> peci_request_dib(temp)_read (Dan)
+> * Fixed thermal margin readings for older Intel processors (Zev)
+> * Misc hwmon simplifications (Guenter)
+> * Used BIT_PER_TYPE to verify macro value constrains (Guenter)
+> * Improved WARN_ON message to print chan_rank_max and idx_dimm_max (Guenter)
+> * Improved dimmtemp to not reattempt probe if no dimms are populated
+>
+> Changes v1 -> v2:
+>
+> Biggest changes when it comes to diffstat are locking in HWMON
+> (I decided to clean things up a bit while adding it), switching to
+> devres usage in more places and exposing sysfs interface in separate patch.
+>
+> * Moved extending X86 ARCHITECTURE MAINTAINERS earlier in series (Dan)
+> * Removed "default n" for GENERIC_LIB_X86 (Dan)
+> * Added vendor prefix for peci-aspeed specific properties (Rob)
+> * Refactored PECI to use devres consistently (Dan)
+> * Added missing sysfs documentation and excluded adding peci-sysfs to
+>   separate patch (Dan)
+> * Used module_init() instead of subsys_init() for peci module initialization (Dan)
+> * Removed redundant struct peci_device member (Dan)
+> * Improved PECI Kconfig help (Randy/Dan)
+> * Fixed/removed log messages (Dan, Guenter)
+> * Refactored peci-cputemp and peci-dimmtemp and added missing locks (Guenter)
+> * Removed unused dev_set_drvdata() in peci-cputemp and peci-dimmtemp (Guenter)
+> * Fixed used types, names, fixed broken and added additional comments
+>   to peci-hwmon (Guenter, Zev)
+> * Refactored peci-dimmtemp to not return -ETIMEDOUT (Guenter)
+> * Added sanity check for min_peci_revision in peci-hwmon drivers (Zev)
+> * Added assert for DIMM_NUMS_MAX and additional warning in peci-dimmtemp (Zev)
+> * Fixed macro names in peci-aspeed (Zev)
+> * Refactored peci-aspeed sanitizing properties to a single helper function (Zev)
+> * Fixed peci_cpu_device_ids definition for Broadwell Xeon D (David)
+> * Refactor peci_request to use a single allocation (Zev)
+> * Used min_t() to improve code readability (Zev)
+> * Added macro for PECI_RDENDPTCFG_MMIO_WR_LEN_BASE and fixed adev type
+>   array name to more descriptive (Zev)
+> * Fixed peci-hwmon commit-msg and documentation (Zev)
+>
+> Thanks
+> -Iwona
+>
+> Iwona Winiarska (11):
+>   dt-bindings: Add generic bindings for PECI
+>   dt-bindings: Add bindings for peci-aspeed
+>   ARM: dts: aspeed: Add PECI controller nodes
+>   peci: Add core infrastructure
+>   peci: Add device detection
+>   peci: Add sysfs interface for PECI bus
+>   peci: Add support for PECI device drivers
+>   peci: Add peci-cpu driver
+>   hwmon: peci: Add cputemp driver
+>   hwmon: peci: Add dimmtemp driver
+>   docs: Add PECI documentation
+>
+> Jae Hyun Yoo (2):
+>   peci: Add peci-aspeed controller driver
+>   docs: hwmon: Document PECI drivers
+>
+>  Documentation/ABI/testing/sysfs-bus-peci      |  16 +
+>  .../devicetree/bindings/peci/peci-aspeed.yaml |  72 ++
+>  .../bindings/peci/peci-controller.yaml        |  33 +
+>  Documentation/hwmon/index.rst                 |   2 +
+>  Documentation/hwmon/peci-cputemp.rst          |  90 +++
+>  Documentation/hwmon/peci-dimmtemp.rst         |  57 ++
+>  Documentation/index.rst                       |   1 +
+>  Documentation/peci/index.rst                  |  16 +
+>  Documentation/peci/peci.rst                   |  51 ++
+>  MAINTAINERS                                   |  26 +
+>  arch/arm/boot/dts/aspeed-g4.dtsi              |  11 +
+>  arch/arm/boot/dts/aspeed-g5.dtsi              |  11 +
+>  arch/arm/boot/dts/aspeed-g6.dtsi              |  11 +
+>  drivers/Kconfig                               |   3 +
+>  drivers/Makefile                              |   1 +
+>  drivers/hwmon/Kconfig                         |   2 +
+>  drivers/hwmon/Makefile                        |   1 +
+>  drivers/hwmon/peci/Kconfig                    |  31 +
+>  drivers/hwmon/peci/Makefile                   |   7 +
+>  drivers/hwmon/peci/common.h                   |  58 ++
+>  drivers/hwmon/peci/cputemp.c                  | 592 ++++++++++++++++
+>  drivers/hwmon/peci/dimmtemp.c                 | 630 ++++++++++++++++++
+>  drivers/peci/Kconfig                          |  36 +
+>  drivers/peci/Makefile                         |  10 +
+>  drivers/peci/controller/Kconfig               |  18 +
+>  drivers/peci/controller/Makefile              |   3 +
+>  drivers/peci/controller/peci-aspeed.c         | 599 +++++++++++++++++
+>  drivers/peci/core.c                           | 236 +++++++
+>  drivers/peci/cpu.c                            | 343 ++++++++++
+>  drivers/peci/device.c                         | 252 +++++++
+>  drivers/peci/internal.h                       | 136 ++++
+>  drivers/peci/request.c                        | 482 ++++++++++++++
+>  drivers/peci/sysfs.c                          |  82 +++
+>  include/linux/peci-cpu.h                      |  40 ++
+>  include/linux/peci.h                          | 112 ++++
+>  35 files changed, 4071 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-peci
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-controller.yaml
+>  create mode 100644 Documentation/hwmon/peci-cputemp.rst
+>  create mode 100644 Documentation/hwmon/peci-dimmtemp.rst
+>  create mode 100644 Documentation/peci/index.rst
+>  create mode 100644 Documentation/peci/peci.rst
+>  create mode 100644 drivers/hwmon/peci/Kconfig
+>  create mode 100644 drivers/hwmon/peci/Makefile
+>  create mode 100644 drivers/hwmon/peci/common.h
+>  create mode 100644 drivers/hwmon/peci/cputemp.c
+>  create mode 100644 drivers/hwmon/peci/dimmtemp.c
+>  create mode 100644 drivers/peci/Kconfig
+>  create mode 100644 drivers/peci/Makefile
+>  create mode 100644 drivers/peci/controller/Kconfig
+>  create mode 100644 drivers/peci/controller/Makefile
+>  create mode 100644 drivers/peci/controller/peci-aspeed.c
+>  create mode 100644 drivers/peci/core.c
+>  create mode 100644 drivers/peci/cpu.c
+>  create mode 100644 drivers/peci/device.c
+>  create mode 100644 drivers/peci/internal.h
+>  create mode 100644 drivers/peci/request.c
+>  create mode 100644 drivers/peci/sysfs.c
+>  create mode 100644 include/linux/peci-cpu.h
+>  create mode 100644 include/linux/peci.h
+>
+> --
+> 2.34.1
+>
