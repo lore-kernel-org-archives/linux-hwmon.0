@@ -2,50 +2,46 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78CA4C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Feb 2022 09:17:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C271C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Feb 2022 09:28:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiBIJRy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Feb 2022 04:17:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48236 "EHLO
+        id S231177AbiBIJ22 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Feb 2022 04:28:28 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiBIJRv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Feb 2022 04:17:51 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8632BC0DE7E0;
-        Wed,  9 Feb 2022 01:17:43 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [80.241.60.233])
+        with ESMTP id S229544AbiBIJ21 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Feb 2022 04:28:27 -0500
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050::465:103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FD7E040DF7;
+        Wed,  9 Feb 2022 01:28:22 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4JtvRG3HCWz9sq8;
-        Wed,  9 Feb 2022 10:17:30 +0100 (CET)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4JtvXs5xjjz9sks;
+        Wed,  9 Feb 2022 10:22:21 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1644398248;
+        t=1644398539;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Z0oOnGnZNW4E43AWDbU3YQ3rIFI9kV+U/+S0E/9n4M8=;
-        b=nH3ARItDa0KrY1Mq9FasHYsBBwiTdmGysdfN3UHtvWsPXXBSvuDo0U+lrsBvYhZHw5fqns
-        Nmnz90GqtyTzJipRnAkOky434kf6pXQseaXCp9oGwqRW8LGKIcZaEqDtr8l/ZHG5+o0jw1
-        /KrT3s7UNcBwo9w3nZ2AeSVMaKSUo5Vj2FIw1dzzhpd2Ix5FQnwbgfbHB66YE8WvaECObn
-        9uaF/TCpgtjIDp+tJGnZ8GIxRJResMHFydT89AftNz8dppSLSpz+b8ene2RDPtnBDdOgqi
-        I9Va0fBE13s1plv6SPZisVj+rVvZcLCyFDKsvlf5vYRbh7WBJ2GlsmYNz1s70Q==
-Message-ID: <45823dddd3cf4a93a640b646026a89d1b7fed7f3.camel@sylv.io>
-Subject: Re: [PATCH v1 1/4] dt-bindings: vendor-prefixes: add Vicor
- Corporation
+        bh=CgbpLpaaEGPG47I00MAmDGZQfBwt9YRqZQjIkK1jtMg=;
+        b=UkIoleO0FfNvl+C1vKOXO28em+LOYURsmKJpnglQz5VNxESxpVa6x19Rh2ECJhgCE60NiO
+        6dZCoqq9C/qHDJX7eLAactdnDlgtJ8S5geppzhlG7avqviUefgnDp9Jk8Pcf6MjQnnrV89
+        TK2A+VcF67IbvQj4zfl7PfVHyw5OioDp9yeHQ5GgStzQFbkreQISSw5Q8GmIgPiCSBkxag
+        4KEnKexJIUEqqVQBTswnWqpEaK4TGcG8qPfhDf44Px5AEwudNxuD6WExWYQDtD+uTZWrS+
+        Ah/YLnnP7ROJhm0xLhwJlcdLgB4Io332vv/nJOKLoxy++ZeGh4iY99Fev2W4Iw==
+Message-ID: <b213a0f4a2baac25f5758acbce222d0ace0e5b35.camel@sylv.io>
+Subject: Re: [PATCH v1 0/4] Support bcm6123 Bus Converter
 From:   sylv <sylv@sylv.io>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 09 Feb 2022 10:17:24 +0100
-In-Reply-To: <YgMr84b8BKHBNQwq@robh.at.kernel.org>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Date:   Wed, 09 Feb 2022 10:22:02 +0100
+In-Reply-To: <cover.1642434222.git.sylv@sylv.io>
 References: <cover.1642434222.git.sylv@sylv.io>
-         <58d2c7501edf746f3677681327c283fc3faaf872.1642434222.git.sylv@sylv.io>
-         <YgMr84b8BKHBNQwq@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,38 +49,38 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 2022-02-08 at 20:50 -0600, Rob Herring wrote:
-> On Mon, Jan 17, 2022 at 05:12:47PM +0100, Marcello Sylvester Bauer
-> wrote:
-> > Add vendor prefix for Vicor Corporation.
-> > 
-> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > ---
-> >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > index 66d6432fd781..8a2a205d6d34 100644
-> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > @@ -1273,6 +1273,8 @@ patternProperties:
-> >    "^vdl,.*":
-> >      description: Van der Laan b.v.
-> >    "^via,.*":
-> > +    description: Vicor Corporation
-> 
-> You just changed the description for VIA.
+Hi,
 
-Indeed. My bad.
+since this driver actually implements the supervisor pli1209bc,
+see this patch set as discontinued. A new patch set will be uploaded
+soon.
 
+Thanks,
+Marcello
+
+On Mon, 2022-01-17 at 17:12 +0100, Marcello Sylvester Bauer wrote:
+> Hi,
 > 
-> > +  "^vicor,.*":
-> >      description: VIA Technologies, Inc.
-> >    "^videostrong,.*":
-> >      description: Videostrong Technology Co., Ltd.
-> > -- 
-> > 2.33.1
-> > 
-> > 
+> This patchset adds support for BCM6123 Bus Converter from Vicor
+> Corporation.
+> 
+> Marcello Sylvester Bauer (3):
+>   dt-bindings: vendor-prefixes: add Vicor Corporation
+>   dt-bindings: hwmon/pmbus: Add vicor,bcm6123 Bus Converter
+>   pmbus: remove trailing whitespaces
+> 
+> Patrick Rudolph (1):
+>   pmbus: Add support for bcm6123 Bus Converter
+> 
+>  .../bindings/hwmon/pmbus/vicor,bcm6123.yaml   | 41 +++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>  drivers/hwmon/pmbus/Kconfig                   | 13 ++-
+>  drivers/hwmon/pmbus/Makefile                  |  1 +
+>  drivers/hwmon/pmbus/bcm6123.c                 | 90
+> +++++++++++++++++++
+>  5 files changed, 145 insertions(+), 2 deletions(-)
+>  create mode 100644
+> Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
+>  create mode 100644 drivers/hwmon/pmbus/bcm6123.c
+> 
 
