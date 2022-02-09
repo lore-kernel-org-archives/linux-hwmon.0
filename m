@@ -2,72 +2,86 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA822C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Feb 2022 23:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0484AC3527C
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Feb 2022 03:08:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237062AbiBHXdU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Feb 2022 18:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S242696AbiBIDD2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Feb 2022 22:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiBHXdU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Feb 2022 18:33:20 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA57C061576;
-        Tue,  8 Feb 2022 15:33:20 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id p63so1032558iod.11;
-        Tue, 08 Feb 2022 15:33:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PXvAMfTXEgJYMeJO/Tzvz+YQNaqSUZ+oxlMGctoDxCU=;
-        b=d7lWWs4xju1UA+H0DYJ4BECcJarJwtvs3ajF8h4fEcMbCfCozaJ3t1gGWpz4N81cX7
-         9uHFkAewCLPXW+7BBCw/ItQ3xARjfq71TrFkRb/Uh/+Kp8qPJVvqUlFExtkUWXCl24Ks
-         0dkH7M4VDFah4LWKhM/ktMIGNGfUR0SOK0Z7CxMXxQOAZN16OCKfaiBNYHkPNsm6wUBC
-         vQocxuJ9AutjMimyR/UHlMk27a0hqIHIIjrlATZnbwiM6DQ+Mliu7TpFsvgDqAxosrQD
-         ew/Y69D8/AH3nQcp0Lb4/RwMVdZpZd6EsH2p3fCh0oF1RJTIQQtCL+D03yfQIxvOCQsW
-         Ltrw==
+        with ESMTP id S1359748AbiBICvY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Feb 2022 21:51:24 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4D5C061355;
+        Tue,  8 Feb 2022 18:50:29 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id q8so1143420oiw.7;
+        Tue, 08 Feb 2022 18:50:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PXvAMfTXEgJYMeJO/Tzvz+YQNaqSUZ+oxlMGctoDxCU=;
-        b=oIO1kd5HOhEoJCh0T0djfxRQZYKCoxcXEUqTlbPKCUQjoOiFfU5FrvW3GdkUJhPU5q
-         ZXqtOhqD2wbaCCt/+nNlaof/bNJTA13HkhTa2aylN9qPnEGD0AKweMOmmQP899kV6G7m
-         9ivxZ0bfb93cD0WuAFX4R/TQb1KOve+gQ6jWfSc7B/dyrluNf6eloplD1qk3NnTkATi1
-         tCB11Vl0P+Rjg6Fxyzq8BcgmZZQQZAu2UzF/wvrZMD1NT5PGDTyQRfnIeRv+dGCFt+t8
-         E+4/DiTrkXoRUH6+6Vko+MiYP3gEwyC9lFSmJxccJgH+vedA1ZIofelmZcO3mou3QohB
-         2rVQ==
-X-Gm-Message-State: AOAM531ORbUqGOVDPvYOik5xSTiO64vtVBIREkIg4WAKwB1C39QHNmDO
-        dOIpVtQNlwyn3SGToOkfQIT/2tqXnn9hEuArVZs=
-X-Google-Smtp-Source: ABdhPJxCyWbgZyjiypFhW2jm1bsfm/W+HCdtvL2kNPU4/iSckqCEimjnpHM4fEJ36t1gQgneCo7Op3wWNwtwaZj2ROc=
-X-Received: by 2002:a02:b0d8:: with SMTP id w24mr3296125jah.241.1644363199474;
- Tue, 08 Feb 2022 15:33:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eZEq/8mCOjzwD9orqDe6jz1KcZnSjH/KbDDATUNgRXs=;
+        b=60WVH3fjF2nh+OBiYMCJFuUgFjNojCT3qpp3AvHCl2iKDn1JlydG7szmTbHYUdOWFh
+         j8MujpjjIoCUEb5I+h1M83u0JvAS2d+TgsTZ5wxxboazyZ1/peIinmq27dfDuAbvkAC4
+         jQ/5NCFkkn7+T6EVFd7kyv34MyChPAGQh96hunTXGFGoerHriC7pGXPF9UWEVPklhm+e
+         f7oUdAXNZO/AN0li8Fic+tuObxUUegTFTGVui8V1HYyu6c9dBpBGGvjGkus6BDHJLL3z
+         YrIXvXhJvI5CruA/sFFQKVf1YkQx0lauNzO4+4FBBA3gr/9rzoSUDdJj5RPW/Zg0sGw0
+         y89w==
+X-Gm-Message-State: AOAM532Hu6yzXoF+L3uM8Bm+j+PVtNlgIUosOhsFqbG/6AuWxfI2uW++
+        7bdllDT68kC/j3qYuHIyUg==
+X-Google-Smtp-Source: ABdhPJzDEYPyns9BvQ6gTLcGbC5N/bskfIdJfxxkiSmrX8PqpKdHv731s/65kutbSlVvehqXCGGzMg==
+X-Received: by 2002:aca:b708:: with SMTP id h8mr69166oif.137.1644375028706;
+        Tue, 08 Feb 2022 18:50:28 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 5sm2226607oag.11.2022.02.08.18.50.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 18:50:27 -0800 (PST)
+Received: (nullmailer pid 3520304 invoked by uid 1000);
+        Wed, 09 Feb 2022 02:50:27 -0000
+Date:   Tue, 8 Feb 2022 20:50:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>
+Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] dt-bindings: vendor-prefixes: add Vicor
+ Corporation
+Message-ID: <YgMr84b8BKHBNQwq@robh.at.kernel.org>
+References: <cover.1642434222.git.sylv@sylv.io>
+ <58d2c7501edf746f3677681327c283fc3faaf872.1642434222.git.sylv@sylv.io>
 MIME-Version: 1.0
-References: <20220208094244.1106312-1-eugene.shalygin@gmail.com> <20220208233048.GA2970774@roeck-us.net>
-In-Reply-To: <20220208233048.GA2970774@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 9 Feb 2022 00:33:08 +0100
-Message-ID: <CAB95QASONk_s-xO0bz7P+tq_9-KOfA2y41+mnQg9suN4LFd4CA@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add CPU core voltage
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58d2c7501edf746f3677681327c283fc3faaf872.1642434222.git.sylv@sylv.io>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 9 Feb 2022 at 00:30, Guenter Roeck <linux@roeck-us.net> wrote:
-> > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > Tested-by: Denis Pauk <pauk.denis@gmail.com>
-> Applied to hwmon-next.
+On Mon, Jan 17, 2022 at 05:12:47PM +0100, Marcello Sylvester Bauer wrote:
+> Add vendor prefix for Vicor Corporation.
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 66d6432fd781..8a2a205d6d34 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -1273,6 +1273,8 @@ patternProperties:
+>    "^vdl,.*":
+>      description: Van der Laan b.v.
+>    "^via,.*":
+> +    description: Vicor Corporation
 
-I thank you all!
+You just changed the description for VIA.
 
-Best regards,
-Eugene
+> +  "^vicor,.*":
+>      description: VIA Technologies, Inc.
+>    "^videostrong,.*":
+>      description: Videostrong Technology Co., Ltd.
+> -- 
+> 2.33.1
+> 
+> 
