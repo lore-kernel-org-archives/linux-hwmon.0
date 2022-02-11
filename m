@@ -2,140 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F5EEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Feb 2022 00:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C4A7C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Feb 2022 00:40:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346392AbiBKAg4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Feb 2022 19:36:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32992 "EHLO
+        id S1343924AbiBKAkV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Feb 2022 19:40:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245125AbiBKAgz (ORCPT
+        with ESMTP id S1346446AbiBKAkU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:36:55 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1445F6E;
-        Thu, 10 Feb 2022 16:36:55 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id e7so15144274ejn.13;
-        Thu, 10 Feb 2022 16:36:55 -0800 (PST)
+        Thu, 10 Feb 2022 19:40:20 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF725F8A
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Feb 2022 16:40:19 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id i62so9607054ioa.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Feb 2022 16:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kv1dGBIwMVSJth+1nhxNVUaq58J6hWvLjV/FKpV6bvk=;
-        b=hKdQIt2Icq2rygEQgAcjwPGIcbFKLqUWrpVWZxyNuRgaaPyfPzC6hvDWrJxqSdsOcp
-         g3yBzhvdrb1bQGsL6aastzuiGIYSdhAvWksalNLMsXLwZ/pH+t9Kf+ZhWi37udgsSEyu
-         yQerh6SzoKALw/rOOIGB9efBWoOHM08towXDWmCLQd3z4yD3aMB1CLSQ1munvUqUVuJg
-         3GqRnmVDjO5Oa9uXaljqS2OZ7wZxfCgvGismqKldHpnLjpmVoKfdAqMG74SNePHsFbCS
-         DBlWkSG8eIxZyucowmiaK2Wch7MOQLJkQlrS7VeHQ5QmVLm+y9/yMciZPW3TVYh4zjJh
-         4KvQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc;
+        bh=lFCvE5g2JTD7Wl81REd7Gq5kC+E/CgUSaN7wy6qbWOE=;
+        b=VtYPNobKD09wldiKKvTu91rXQCR0IYONn5V1OzDhc2Cdc3IOtrLo6mBgEZ3sqH3Pfa
+         IN32zk1uZODJ1Jz7OyVbpEuHVXgb5hv+WW3p7NOcK6LMcaHhnw5NAWexF1O+I5tuYFVj
+         wTtYO5MC8v2Ogp0J+wzT5vCnkG16XHFKJq57XSh2W1WiT5X0FhwmNAUz7xLMdkCJI/vj
+         I8Dcr88qlqQkPLTrgDMQJMX4N3mwKi5bKAxTAOf1Z8rBOflBExxdGoTXIhAMLz6Jebzv
+         YxCvRShMHjL0tmfzkpChHFXTGv6ykKmpjblS3sTwUu4QMmEgWBGVQv0LUr8Fexfh3w/e
+         BnvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kv1dGBIwMVSJth+1nhxNVUaq58J6hWvLjV/FKpV6bvk=;
-        b=bCL7lM5xoTnhAQH8A6Sl3UW+j0RtLQ17YRxYu/Oxmkzd3uQJHSzCYIOh0wFuxUQ+E+
-         y5eENTi/hfuj8K2cJp2bgOGdTH7wc+qCs+odJaFG8RHfi76mSDobrRiKGMFA2cp22tml
-         NkKGMpVniYcybzDS4FYkvXRo8/Qh5cG079ldWhDqsEnaBvgO6x2BSoAENMe4dvWpZkfx
-         nhQqHY5OgkZnkilehULpcV92e3EYY5CJiiQ8qQyriaFpYIWC4EhOigIWD7NE9KdzxpM6
-         GZhxcjYq03rR6QZ0TRU0VCbW+qFda5FUhmlsq39CrL7UJL/zzm5eIaFvydeuwOUXWWxB
-         s3jA==
-X-Gm-Message-State: AOAM530mALdqZTdRNzSkoMafxxmz4FR1PPzyl3d0DJIP3yhQZeLqN+Xu
-        kVqy26Q/9vZm7A0JstbR3dQ=
-X-Google-Smtp-Source: ABdhPJxM21xH/Q7n+t6LRSsdxbriX78/1XN92rY3TSvcB2vZPFGnsm6nRin0+jpifM5TlUVusYN8dw==
-X-Received: by 2002:a17:906:738f:: with SMTP id f15mr8174635ejl.121.1644539813679;
-        Thu, 10 Feb 2022 16:36:53 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id s1sm10493527edt.49.2022.02.10.16.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:36:52 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:cc;
+        bh=lFCvE5g2JTD7Wl81REd7Gq5kC+E/CgUSaN7wy6qbWOE=;
+        b=cpPHdwRI+9yKmhG8p9GpNJFg+1ZiG62hEWkCMxyR4blnRJYoyIwsBZlDM4m6GusXi3
+         PWcgYWxnLTgeVMC8Ds22McRq9ZiaRw2kRGi1VDoNXzR2LFFIQn8KqLDhMp6tHSOPcuwS
+         PmmvbnNxhFwjJxU+5ARr0Jn4BtFdE7WEdV8Vd48KNIWviS9bINmDJNWVr5VYkT8uIzO4
+         iFpHWTsb+3MQLsxn70aC2R6Se+WGE1UbgniBABHHQboVOYMoZNhWRR8YCQ+XO+lO6LNL
+         gTWrqwWY5qJM09hp+3NTCjtWDGWyDLM2tNj5A+hnB6p4Os047oABl1JJkspm2JdZ7qIx
+         7AxA==
+X-Gm-Message-State: AOAM532hZyuJ4X9fLZHnJK4Q7Y9wp1iz8fDZtTU5lIRei6FJhKAduuTH
+        WnRxAqOT3fdBHmhMBjGjZbbXMXRO5TplnnC4Aeg=
+X-Received: by 2002:a5d:9d9e:: with SMTP id ay30mt5247366iob.192.1644540018688;
+ Thu, 10 Feb 2022 16:40:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20220211003641.73111-1-eugene.shalygin@gmail.com>
+In-Reply-To: <20220211003641.73111-1-eugene.shalygin@gmail.com>
 From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 11 Feb 2022 01:40:07 +0100
+Message-ID: <CAB95QAS4ow16O6Fb8Q_q5yoZaUzVaBWF59PgmdBCfOsxM0ugpA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) deduce sensor signess from its type
 Cc:     Oleksandr Natalenko <oleksandr@natalenko.name>,
         Denis Pauk <pauk.denis@gmail.com>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) deduce sensor signess from its type
-Date:   Fri, 11 Feb 2022 01:36:39 +0100
-Message-Id: <20220211003641.73111-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Reading DSDT code for ASUS X470-based boards (the ones served by the
-asus_wmi_Sensors driver), where ASUS put hardware monitoring functions
-into the WMI code, reveals that fan and current sensors data is
-unsigned. For the current sensor that was cofirmed by a user who showed
-high enough current value for overflow.
+On Fri, 11 Feb 2022 at 01:36, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+>
+> Reading DSDT code for ASUS X470-based boards (the ones served by the
+> asus_wmi_Sensors driver), where ASUS put hardware monitoring functions
+> into the WMI code, reveals that fan and current sensors data is
+> unsigned. For the current sensor that was confirmed by a user who showed
+> high enough current value for overflow.
 
-Thus let's assume that the signess of the sensors is determined by its
-type and that only temperature ones provide signed numbers.
+Denis, you might be interested in fixing temperature sensors in the
+asus_wmi_sensors driver too.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 38 +++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 9 deletions(-)
+>  static inline s32 get_sensor_value(const struct ec_sensor_info *si, u8 *data)
+>  {
+> -       switch (si->addr.components.size) {
+> -       case 1:
+> -               return (s8)*data;
+> -       case 2:
+> -               return (s16)get_unaligned_be16(data);
+> -       case 4:
+> -               return (s32)get_unaligned_be32(data);
+> -       default:
+> -               return 0;
+> +       if (is_sensor_data_signed(si)) {
+> +               switch (si->addr.components.size) {
+> +               case 1:
+> +                       return (s8)*data;
+> +               case 2:
+> +                       return (s16)get_unaligned_be16(data);
+> +               case 4:
+> +                       return (s32)get_unaligned_be32(data);
+> +               default:
+> +                       return 0;
+> +               }
+> +       } else {
+> +               switch (si->addr.components.size) {
+> +               case 1:
+> +                       return *data;
+> +               case 2:
+> +                       return get_unaligned_be16(data);
+> +               case 4:
+> +                       return get_unaligned_be32(data);
+> +               default:
+> +                       return 0;
+> +               }
+>         }
+>  }
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index bfac08a5dc57..a1b13fe149ac 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -266,6 +266,13 @@ static u8 register_index(u16 reg)
- 	return reg & 0x00ff;
- }
- 
-+static bool is_sensor_data_signed(const struct ec_sensor_info *si)
-+{
-+	// guessed from WMI functions in DSDT code for boards
-+	// of the X470 generation
-+	return si->type == hwmon_temp;
-+}
-+
- static const struct ec_sensor_info *
- get_sensor_info(const struct ec_sensors_data *state, int index)
- {
-@@ -420,15 +427,28 @@ static int asus_ec_block_read(const struct device *dev,
- 
- static inline s32 get_sensor_value(const struct ec_sensor_info *si, u8 *data)
- {
--	switch (si->addr.components.size) {
--	case 1:
--		return (s8)*data;
--	case 2:
--		return (s16)get_unaligned_be16(data);
--	case 4:
--		return (s32)get_unaligned_be32(data);
--	default:
--		return 0;
-+	if (is_sensor_data_signed(si)) {
-+		switch (si->addr.components.size) {
-+		case 1:
-+			return (s8)*data;
-+		case 2:
-+			return (s16)get_unaligned_be16(data);
-+		case 4:
-+			return (s32)get_unaligned_be32(data);
-+		default:
-+			return 0;
-+		}
-+	} else {
-+		switch (si->addr.components.size) {
-+		case 1:
-+			return *data;
-+		case 2:
-+			return get_unaligned_be16(data);
-+		case 4:
-+			return get_unaligned_be32(data);
-+		default:
-+			return 0;
-+		}
- 	}
- }
- 
--- 
-2.35.1
+I would appreciate it if anyone could help me to collapse this
+ugliness somehow, without multi-level macros, please.
 
+Thank you,
+Eugene
