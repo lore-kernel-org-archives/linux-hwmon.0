@@ -2,100 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AA60C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Feb 2022 22:36:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01E83C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Feb 2022 23:14:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiBLWgu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 12 Feb 2022 17:36:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45570 "EHLO
+        id S232384AbiBLXOi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 12 Feb 2022 18:14:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiBLWgu (ORCPT
+        with ESMTP id S230143AbiBLXOi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 12 Feb 2022 17:36:50 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791AD3B8;
-        Sat, 12 Feb 2022 14:36:45 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id d27so17137313wrb.5;
-        Sat, 12 Feb 2022 14:36:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=13OnRY73/Sj7aehxhk7RNR/sxx8XmpLARA6MyBb5ERM=;
-        b=k/YKZdVzt4a9Asp2WwYWEiTDA22I8UN8Wc1Wr7NYJ29N8mudCUAwE3Z6FHq+la+ygZ
-         eWynlWHgyMv4J0KDxMtOwYB6uVx2+BQKSqZ8eggIj8PeBRO3RJLPABl4MrjXHYyNsWvK
-         acr92nXrIsxXxTlgEG3lBKpR1b5oAVw9FYeZ/koruq1Y68RMMzU+Ncfms9IEN0Vn7KNd
-         rsRYL6f+JQ4++ORs5CIphbhtkpXg29n6u9Rmd0W4zzvzpe41anbKJ4BVckSFDcNXwE77
-         GqiwWZfgYOjpFQVGDog9t/e8OL7rSIUb/y3UXPjw9XA+8eDGUeyduYF2zfPVrpuKWn+P
-         UUFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=13OnRY73/Sj7aehxhk7RNR/sxx8XmpLARA6MyBb5ERM=;
-        b=BhF9tgPOE7l7jC7PTghmcA1a6l8c1qrAFgs6COhWaCHQmUIetUW3CYATFuvI+wt/HB
-         H7tEuycQ3XDn3eXHWUwLf7vbfhQKc/PeP3Vr4cwI/saKCIW6/6OjfEMyj65eC8X/sdaB
-         b6EfdyAWMtGwC1Mne8z5dcQR7RgkpLXoHFz0XIknCukXbIHxYDyxG4oulkNtrKPq8gJ4
-         ojkKvlFos5EfmrIi0Y5klYRejVZB7LCqkuETy/VHMYo+dccBgSxv7byWl6aW0qX20lTw
-         6RCCetNry0cOaiWMOY4i2J9ko9RxzMSwTIkZULu5Iqqpounvh6SQ5KjLRdoyEQQcNH2x
-         0uUQ==
-X-Gm-Message-State: AOAM532rOtBZ1gkMOvAilGyEF6ZgJEX0ZlfBpI4Lpzq/00mNQc6DvIKw
-        Y49jUWRy5O+hs96PE8PWzRfb8vlvg5doMouPjDo=
-X-Google-Smtp-Source: ABdhPJxLJgWdo4q9+0lxA0BMrZs5AFnqi8cM8j+QYF1QjjO/vz14WaljbQwtCTNrNeMJaWINZrJmAeov72Jk+xGZ3mM=
-X-Received: by 2002:a5d:4601:: with SMTP id t1mr6161158wrq.301.1644705404003;
- Sat, 12 Feb 2022 14:36:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com> <20220206053309.GA3140643@roeck-us.net>
-In-Reply-To: <20220206053309.GA3140643@roeck-us.net>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Sat, 12 Feb 2022 14:36:32 -0800
-Message-ID: <CAHQ1cqFcL0coZBY=A9gf1Y3dqaZrSU=y2tmJtivM3rk1ZDZdKw@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     platform-driver-x86@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
+        Sat, 12 Feb 2022 18:14:38 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7E85F8CE;
+        Sat, 12 Feb 2022 15:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644707673; x=1676243673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gd+aFqfmOKSD6/n5omvf69+8KOB5SRxFpZkpzwn8bwU=;
+  b=MQ1JBM+sOkaQJCH7+Xc1Wf9YFDSpIrmQgSE68Ys2sZ26A6wca7ijXGv8
+   9DtDFACCwoTGXo4/0IVZyGeg6hGumZmtkQMOOBD3JjcJBqU3kVSSGejZC
+   GQznzPfGryg4swlOlQs11IIo9pOJBLqIZgmJjCRSepXh5WRYDXEM1UcBa
+   EDHKdHELJw1kaw+JcGtBlsIEOFkZgcNgyLompFjd9s+Ndwl+6JT80AohY
+   E2KTb/pZw4YE/aZkTe+zLLPkvmOk+KqX3ZalVBdkLzxezzlARFowWxpjk
+   A+Qsmv59F6GSPmflwKOakQxq/h/4zIzZzVo9dAAHPbkKzEEBS9K8PmL/q
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="274471837"
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="274471837"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 15:14:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="774573109"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Feb 2022 15:14:32 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJ1b5-0006jp-Gx; Sat, 12 Feb 2022 23:14:31 +0000
+Date:   Sun, 13 Feb 2022 07:13:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>,
         linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/4] pmbus: Add support for pli1209bc
+Message-ID: <202202130705.3YDPfyow-lkp@intel.com>
+References: <e4d83b95cfb0cc0c6acb65bd1263cf0131b6ce51.1644597670.git.sylv@sylv.io>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4d83b95cfb0cc0c6acb65bd1263cf0131b6ce51.1644597670.git.sylv@sylv.io>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 9:33 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Sat, Feb 05, 2022 at 06:20:23PM -0800, Andrey Smirnov wrote:
-> > Add a driver exposing various bits and pieces of functionality
-> > provided by Steam Deck specific VLV0100 device presented by EC
-> > firmware. This includes but not limited to:
-> >
-> >     - CPU/device's fan control
-> >     - Read-only access to DDIC registers
-> >     - Battery tempreature measurements
-> >     - Various display related control knobs
-> >     - USB Type-C connector event notification
-> >
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Mark Gross <markgross@kernel.org>
-> > Cc: Jean Delvare <jdelvare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: linux-kernel@vger.kernel.org (open list)
-> > Cc: platform-driver-x86@vger.kernel.org
-> > Cc: linux-hwmon@vger.kernel.org
-> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> > ---
-> >
-> ...
-> > +
-> > +static umode_t
-> > +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
-> > +{
-> > +     return attr->mode;
-> > +}
->
-> This is unnecessary. Using attr->mode is the default operation if there
-> is no is_visible function.
->
+Hi Marcello,
 
-Thanks, will drop
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on robh/for-next v5.17-rc3 next-20220211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Marcello-Sylvester-Bauer/Support-pli1209bc-Digital-Supervisor/20220212-011956
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: hexagon-randconfig-r024-20220213 (https://download.01.org/0day-ci/archive/20220213/202202130705.3YDPfyow-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c7eb84634519e6497be42f5fe323f9a04ed67127)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0b0d15e123c13b2eb898502661b18d81ed87e325
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Marcello-Sylvester-Bauer/Support-pli1209bc-Digital-Supervisor/20220212-011956
+        git checkout 0b0d15e123c13b2eb898502661b18d81ed87e325
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: module pli1209bc uses symbol pmbus_read_word_data from namespace PMBUS, but does not import it.
+>> ERROR: modpost: module pli1209bc uses symbol pmbus_do_probe from namespace PMBUS, but does not import it.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
