@@ -2,253 +2,192 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACD20C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Feb 2022 00:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CBD4C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Feb 2022 15:25:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiBMArl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 12 Feb 2022 19:47:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58528 "EHLO
+        id S233396AbiBMPZw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 13 Feb 2022 10:25:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiBMArk (ORCPT
+        with ESMTP id S236739AbiBMPZu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 12 Feb 2022 19:47:40 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1111860054
-        for <linux-hwmon@vger.kernel.org>; Sat, 12 Feb 2022 16:47:36 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id jg20so5257331ejc.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 12 Feb 2022 16:47:35 -0800 (PST)
+        Sun, 13 Feb 2022 10:25:50 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B555D1B9;
+        Sun, 13 Feb 2022 07:25:42 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso16493306oop.9;
+        Sun, 13 Feb 2022 07:25:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mcjHssrhQlWhBXi/uniOBpuJ3klG0mfxZRLPtoOyx4U=;
-        b=mnf9gQbEzGcTsBz10kfOHr+ZD76PSQgUIJ45GQ5ZGx1+Saui7x+ClPWpOM+/sbixQz
-         QwI/O/qzGBpeDrWVCES+XyMenbLOHXROHMlkSM0xPlY2ZnQc4KoS9pQx7NzRgiiRVaUL
-         +T9ZfkY4h3EB04LlE+5bh6jSPDKnRULVXaOwR/briVmvGIvHumCGvcqKqGyKeQmbA+14
-         Ex0TrLYH8g+NymIdsdRCWHlKq2AGLIEJdhsE/JJh1E2tiCgaBd27D8F+Icswq00kBSpW
-         K9llAia4SiiNf1IKEg+idOshhdIY4m9Y57BL7I0vX6LceB8edkua/X4P8oX5r2Te3nHq
-         Ekiw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=adMLYytTCKC3gqDM6D8p4KEVfO3ISmY1G9RhS8Y69iQ=;
+        b=daAL2ANc88CpmbW5sUgvtX5T2+7fvq59RDG4KnZySasi5YzGURtgORy6A0t/6af/VM
+         GIijk3tHQ9ZEnAvxcJ/NoRWCPpvOppb5grLJaoSvBkZO2Q4QglI4RcoNydq37g9GZjeL
+         6c4B25d3RNpuZmlnAkEHQjUIAwZYJJtnvJJR5ITnMrzkx9jtMC2NrcJ6JAHTUTLMvDvD
+         hCMmwHSRjfwYgJuu2l5l/8nYXmXffoiHyvzG8Ek4JFY6KlocyCROlzXv9mbn+3asIhYg
+         9vM0Xy8Eplg+2TadryBapqjAUR2G7VlQqYE3Ah5x6W+7W2vBOYoO8w50UcWfa1LOjBtW
+         885w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mcjHssrhQlWhBXi/uniOBpuJ3klG0mfxZRLPtoOyx4U=;
-        b=7WIQROUdwMUhryRprz6ptbcrpT6bGaN8w6A2ipsNEd7qP4nskEA+SGrwJ5GxcxkMU2
-         6IwUpFV3ApqXrBRtGkvF+7G8lwMEZYSGaKj7fysD7wDRcLzrDDMerpiWLvzkTGOeVlER
-         +n+EsEZNsscpk8koGwPJgau5bXViVTd7iwSz23ahRAYZwzJpS35Yi0Ft57z013lmczvX
-         F/wKTXWrB4fmJtWQZiZDJ0EtVjsUCMtrjkFbjsjjle9iFlrdW30fJYUKvEAeBFnLqHe8
-         plf0p30XZDCm4hTdhGO5cII8x15CmnacZAqOTXBI1bvzf7Vjk8QO35fVlnNp4Cy306hZ
-         fNIA==
-X-Gm-Message-State: AOAM530SadohI+WbPdjuzYSnQ3eEm7KvGkl4z/mI1egvuqViSpaNaMfW
-        ZMzhCWXXWbgWlH9yMG2LgizcNoZaFWE=
-X-Google-Smtp-Source: ABdhPJzQian0rlzVKoLZNAnQ3IY4XNK3+iFAMvb//kLtA/Q3T1d7+gXx3zFIPStH1trzmQL/xvbKww==
-X-Received: by 2002:a17:906:b151:: with SMTP id bt17mr6384202ejb.657.1644713254444;
-        Sat, 12 Feb 2022 16:47:34 -0800 (PST)
-Received: from debian64.daheim (p4fd09148.dip0.t-ipconnect.de. [79.208.145.72])
-        by smtp.gmail.com with ESMTPSA id ev23sm7513620ejc.215.2022.02.12.16.47.33
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=adMLYytTCKC3gqDM6D8p4KEVfO3ISmY1G9RhS8Y69iQ=;
+        b=JhYh+0uZ5G1XoD/yON0ke0tO3oikXEO1zDqcrPH38LsmEeasLTIT75+2lNJZr3xa5q
+         ydYhn7lenjZXj988otoLAzMRyQsr7bLK0Ys4+tvVtPnE2ZwMvWnvBL955OdktDVsPMdN
+         BrpfjDaVf9Z2/F3uJJ3Gl4C+MJjGwsTgD29Xey1RYGfYRUkBdIJVwAAPv1j2do870qJS
+         oUGPgaVOT5+2w1nfuqq7D5YnA4PpLFeLFHiWkh71mnHzb4vXst6u8uRPRsMOXVRA8Ko7
+         mM2ZAdKickz7t1hRXe+A3TE5njCXa8YBq4lnz8eV03qrGcjfpU8V2Q5G255lGYpa1usB
+         nfRw==
+X-Gm-Message-State: AOAM530sp51xNsVCQUMxh7LH+VWhU/8BbMPyuvJOD/i1ib/q0deaa5e1
+        sRvowS3EhTrjhb5fMfpbUXLJfhf9MfQJQA==
+X-Google-Smtp-Source: ABdhPJweZfHH4NZqZqzYGaeCrsI+94F2UKdAxxdYiTf+tNgiOFZ24QAdV46zeWxdBi1mi+271cRu2g==
+X-Received: by 2002:a05:6870:479e:: with SMTP id c30mr505499oaq.113.1644765942204;
+        Sun, 13 Feb 2022 07:25:42 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2sm11802326ook.33.2022.02.13.07.25.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 16:47:33 -0800 (PST)
-Received: from chuck by debian64.daheim with local (Exim 4.95)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1nJ337-00A9rf-6k;
-        Sun, 13 Feb 2022 01:47:33 +0100
-From:   Christian Lamparter <chunkeey@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v3] hwmon: (tc654) Add thermal_cooling device support
-Date:   Sun, 13 Feb 2022 01:47:33 +0100
-Message-Id: <20220213004733.2421193-1-chunkeey@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 13 Feb 2022 07:25:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 13 Feb 2022 07:25:39 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, x86@kernel.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH 1/2] x86/Kconfig: move and modify CONFIG_I8K
+Message-ID: <20220213152539.GA4073589@roeck-us.net>
+References: <20220212125654.357408-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220212125654.357408-1-mat.jonczyk@o2.pl>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adds thermal_cooling device support to the tc654/tc655
-driver. This make it possible to integrate it into a
-device-tree supported thermal-zone node as a
-cooling device.
+On Sat, Feb 12, 2022 at 01:56:53PM +0100, Mateusz Jończyk wrote:
+> In Kconfig, inside the "Processor type and features" menu, there is
+> the CONFIG_I8K option: "Dell i8k legacy laptop support". This is
+> very confusing - enabling CONFIG_I8K is not required for the kernel to
+> support old Dell laptops. This option is specific to the dell-smm-hwmon
+> driver, which mostly exports some hardware monitoring information and
+> allows the user to change fan speed.
+> 
+> This option is misplaced, so move CONFIG_I8K to drivers/hwmon/Kconfig,
+> where it belongs.
+> 
+> Also, modify the dependency order - change
+>         select SENSORS_DELL_SMM
+> to
+>         depends on SENSORS_DELL_SMM
+> as it is just a configuration option of dell-smm-hwmon. This includes
+> changing the option type from tristate to bool. It was tristate because
+> it could select CONFIG_SENSORS_DELL_SMM=m .
+> 
+> When running "make oldconfig" on configurations with
+> CONFIG_SENSORS_DELL_SMM enabled , this change will result in an
+> additional question (which could be printed several times during
+> bisecting). I think that tidying up the configuration is worth it,
+> though.
+> 
+> Next patch tweaks the description of CONFIG_I8K.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Pali Rohár <pali@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Mark Gross <markgross@kernel.org>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> Acked-by: Borislav Petkov <bp@suse.de>
 
-I have been using this patch as part of the Netgear WNDR4700
-Centria NAS Router support within OpenWrt since 2016.
+Applied  to hwmon-next.
 
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
----
-v1 -> v2: - Drop imply THERMAL
-	  - aligned ( so . everything is lining up
+Thanks,
+Guenter
 
-v2 -> v3: - spelling fixes
-	  - set duty_cycle=0 when in SDM
-	  - TC654_COOLING_MAX_STATES => TC654_COOLING_MAX_STATE
-
-Note: I've checked if the setting the duty_cycle to 0 when
-switching off makes a difference. The result was: No.
-
-When it was switched back on: The fan(s) will always do a
-"full second on full blast". The TC654/TC655's datasheet
-describes this in "4.3 Fan Start-up" as follows:
-
-"Since the fan is at a rest position, the fan’s inertia must
-be overcome to get it started. The best way to accomplish this
-is to apply the full rated voltage to the fan for one second."
----
- drivers/hwmon/tc654.c | 104 ++++++++++++++++++++++++++++++++++++------
- 1 file changed, 89 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/hwmon/tc654.c b/drivers/hwmon/tc654.c
-index cf2a3acd5c91..814bc6a4d251 100644
---- a/drivers/hwmon/tc654.c
-+++ b/drivers/hwmon/tc654.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/slab.h>
-+#include <linux/thermal.h>
- #include <linux/util_macros.h>
- 
- enum tc654_regs {
-@@ -384,28 +385,20 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *da,
- 	return sprintf(buf, "%d\n", pwm);
- }
- 
--static ssize_t pwm_store(struct device *dev, struct device_attribute *da,
--			 const char *buf, size_t count)
-+static int _set_pwm(struct tc654_data *data, unsigned long val)
- {
--	struct tc654_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
--	unsigned long val;
- 	int ret;
- 
--	if (kstrtoul(buf, 10, &val))
--		return -EINVAL;
--	if (val > 255)
--		return -EINVAL;
--
- 	mutex_lock(&data->update_lock);
- 
--	if (val == 0)
-+	if (val == 0) {
- 		data->config |= TC654_REG_CONFIG_SDM;
--	else
-+		data->duty_cycle = 0;
-+	} else {
- 		data->config &= ~TC654_REG_CONFIG_SDM;
--
--	data->duty_cycle = find_closest(val, tc654_pwm_map,
--					ARRAY_SIZE(tc654_pwm_map));
-+		data->duty_cycle = val - 1;
-+	}
- 
- 	ret = i2c_smbus_write_byte_data(client, TC654_REG_CONFIG, data->config);
- 	if (ret < 0)
-@@ -416,6 +409,24 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *da,
- 
- out:
- 	mutex_unlock(&data->update_lock);
-+	return ret;
-+}
-+
-+static ssize_t pwm_store(struct device *dev, struct device_attribute *da,
-+			 const char *buf, size_t count)
-+{
-+	struct tc654_data *data = dev_get_drvdata(dev);
-+	unsigned long val;
-+	int ret;
-+
-+	if (kstrtoul(buf, 10, &val))
-+		return -EINVAL;
-+	if (val > 255)
-+		return -EINVAL;
-+	if (val > 0)
-+		val = find_closest(val, tc654_pwm_map, ARRAY_SIZE(tc654_pwm_map)) + 1;
-+
-+	ret = _set_pwm(data, val);
- 	return ret < 0 ? ret : count;
- }
- 
-@@ -447,6 +458,58 @@ static struct attribute *tc654_attrs[] = {
- 
- ATTRIBUTE_GROUPS(tc654);
- 
-+/*
-+ * thermal cooling device functions
-+ *
-+ * Account for the "ShutDown Mode (SDM)" state by offsetting
-+ * the 16 PWM duty cycle states by 1.
-+ *
-+ * State  0 =   0% PWM | Shutdown - Fan(s) are off
-+ * State  1 =  30% PWM | duty_cycle =  0
-+ * State  2 = ~35% PWM | duty_cycle =  1
-+ * [...]
-+ * State 15 = ~95% PWM | duty_cycle = 14
-+ * State 16 = 100% PWM | duty_cycle = 15
-+ */
-+#define TC654_MAX_COOLING_STATE	16
-+
-+static int tc654_get_max_state(struct thermal_cooling_device *cdev, unsigned long *state)
-+{
-+	*state = TC654_MAX_COOLING_STATE;
-+	return 0;
-+}
-+
-+static int tc654_get_cur_state(struct thermal_cooling_device *cdev, unsigned long *state)
-+{
-+	struct tc654_data *data = tc654_update_client(cdev->devdata);
-+
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
-+	if (data->config & TC654_REG_CONFIG_SDM)
-+		*state = 0;	/* FAN is off */
-+	else
-+		*state = data->duty_cycle + 1;	/* offset PWM States by 1 */
-+
-+	return 0;
-+}
-+
-+static int tc654_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
-+{
-+	struct tc654_data *data = tc654_update_client(cdev->devdata);
-+
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
-+	return _set_pwm(data, clamp_val(state, 0, TC654_MAX_COOLING_STATE));
-+}
-+
-+static const struct thermal_cooling_device_ops tc654_fan_cool_ops = {
-+	.get_max_state = tc654_get_max_state,
-+	.get_cur_state = tc654_get_cur_state,
-+	.set_cur_state = tc654_set_cur_state,
-+};
-+
- /*
-  * device probe and removal
-  */
-@@ -477,7 +540,18 @@ static int tc654_probe(struct i2c_client *client)
- 	hwmon_dev =
- 	    devm_hwmon_device_register_with_groups(dev, client->name, data,
- 						   tc654_groups);
--	return PTR_ERR_OR_ZERO(hwmon_dev);
-+	if (IS_ERR(hwmon_dev))
-+		return PTR_ERR(hwmon_dev);
-+
-+	if (IS_ENABLED(CONFIG_THERMAL)) {
-+		struct thermal_cooling_device *cdev;
-+
-+		cdev = devm_thermal_of_cooling_device_register(dev, dev->of_node, client->name,
-+							       hwmon_dev, &tc654_fan_cool_ops);
-+		return PTR_ERR_OR_ZERO(cdev);
-+	}
-+
-+	return 0;
- }
- 
- static const struct i2c_device_id tc654_id[] = {
--- 
-2.34.1
-
+> ---
+> 
+> v2:
+>   - do not drop "depends on PROC_FS" from CONFIG_I8K
+> 
+> Thanks to all for reviewing.
+> Mr Randy Dunlap: The first patch just moves CONFIG_I8K, without modifying
+> the help text.
+> 
+>  arch/x86/Kconfig      | 17 -----------------
+>  drivers/hwmon/Kconfig | 16 ++++++++++++++++
+>  2 files changed, 16 insertions(+), 17 deletions(-)
+> 
+> 
+> base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 9f5bd41bf660..71d4ddd48c02 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1275,23 +1275,6 @@ config TOSHIBA
+>  	  Say Y if you intend to run this kernel on a Toshiba portable.
+>  	  Say N otherwise.
+>  
+> -config I8K
+> -	tristate "Dell i8k legacy laptop support"
+> -	depends on HWMON
+> -	depends on PROC_FS
+> -	select SENSORS_DELL_SMM
+> -	help
+> -	  This option enables legacy /proc/i8k userspace interface in hwmon
+> -	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+> -	  temperature and allows controlling fan speeds of Dell laptops via
+> -	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> -	  it reports also power and hotkey status. For fan speed control is
+> -	  needed userspace package i8kutils.
+> -
+> -	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> -	  use userspace package i8kutils.
+> -	  Say N otherwise.
+> -
+>  config X86_REBOOTFIXUPS
+>  	bool "Enable X86 board specific fixups for reboot"
+>  	depends on X86_32
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 8df25f1079ba..1ee4e5eff567 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -505,6 +505,22 @@ config SENSORS_DELL_SMM
+>  	  When option I8K is also enabled this driver provides legacy /proc/i8k
+>  	  userspace interface for i8kutils package.
+>  
+> +config I8K
+> +	bool "Dell i8k legacy laptop support"
+> +	depends on SENSORS_DELL_SMM
+> +	depends on PROC_FS
+> +	help
+> +	  This option enables legacy /proc/i8k userspace interface in hwmon
+> +	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+> +	  temperature and allows controlling fan speeds of Dell laptops via
+> +	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> +	  it reports also power and hotkey status. For fan speed control is
+> +	  needed userspace package i8kutils.
+> +
+> +	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> +	  use userspace package i8kutils.
+> +	  Say N otherwise.
+> +
+>  config SENSORS_DA9052_ADC
+>  	tristate "Dialog DA9052/DA9053 ADC"
+>  	depends on PMIC_DA9052
