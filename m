@@ -2,77 +2,86 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 639EEC4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Feb 2022 12:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FBEEC4321E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Feb 2022 12:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbiBNMld (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Feb 2022 07:41:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35598 "EHLO
+        id S1353292AbiBNMle (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Feb 2022 07:41:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiBNMlc (ORCPT
+        with ESMTP id S233427AbiBNMld (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:41:32 -0500
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050::465:202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B341C9;
-        Mon, 14 Feb 2022 04:41:22 -0800 (PST)
+        Mon, 14 Feb 2022 07:41:33 -0500
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050::465:103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEB5B864;
+        Mon, 14 Feb 2022 04:41:23 -0800 (PST)
 Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Jy3k83bjXz9sQR;
-        Mon, 14 Feb 2022 13:41:20 +0100 (CET)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4Jy3kB0pJgz9sS8;
+        Mon, 14 Feb 2022 13:41:22 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1644842478;
+        t=1644842479;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QlxYiSQLXtOgUJhWdCR53g7RwR21q6ocLhh0OLfCWng=;
-        b=indUhyCVGN3Aj1m3rLW3oo6ZHul1YJYnVRC1ahcOYuMoA9kPgaHUqFxV+46igduhF9UKn1
-        Bk/QSzYsf8aEzy/LnsNH90tHVfww2088LR9EFSjO0GWWj1rQB7KqVopBfhSmPo65qTk1BW
-        49eDzgjKC/sIr8xJKbCAeJAWNj1m5yXH5Mih3kUEGxJMx9iI3yaiv1W4Ml7MQ2cJTEXaSh
-        3APhY2FeSwAlvkP3NhPMFYGeilH78y1RTnBUEnoCHy/FpxlIlw0v3zHYXAeMkmcdysXlUN
-        TPFYesUlE6HdyqScJh7vlNvqQInrnPhXdHiUR/ku0hCQbvR5Lb+YHIGJarAriQ==
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qoKWzDcOtobuMVSuCwxsjzVdagEa1CNaMRsJTTX1MhU=;
+        b=sdpc0OcrYv60UWTNkK3VRawd7k4XyduYovw2+0vrA5eY7fZO41S4KcuTvYtyqumlk99tNw
+        l+JByCSXt+MtswdjUDMepFSBBD6KurpOd82eON4ld/ZTSuQvDnj3Z4yLKf5xW5nfh5gkVo
+        0ZYGTQIjelIwDZD7mQFYwKLM/63AePLmtlCZdgJ+IL9DsZWSK24ezuTc9ZQSxxYbCSN6fU
+        vPYP/G0o6BRcaa5opT7hV4P9fV5R8zt51+cgm94c3otYSnaKI70OHzyOjoPHFpRokx9El4
+        NUh9l/Ejy17aMkN/9bP4V43qs/3tSU/PGViyXEqVKKvUPgAAs/NVzYyjTwL5kQ==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
+        Jean Delvare <jdelvare@suse.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v2 1/4] dt-bindings: vendor-prefixes: add Vicor Corporation
-Date:   Mon, 14 Feb 2022 13:40:32 +0100
-Message-Id: <d000eb43e403f1bd4a94141b94f68305b4965a33.1644834803.git.sylv@sylv.io>
-In-Reply-To: <cover.1644834803.git.sylv@sylv.io>
-References: <cover.1644834803.git.sylv@sylv.io>
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: [PATCH v2 0/4] Support pli1209bc Digital Supervisor
+Date:   Mon, 14 Feb 2022 13:40:31 +0100
+Message-Id: <cover.1644834803.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add vendor prefix for Vicor Corporation.
+Hi,
 
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+This patch set adds support for PLI1209BC Digital Supervisor from Vicor
+Corporation. It replaces the previous submitted driver "bcm6123" [1],
+since there are multiple digital supervisors, which uses BCMs in different
+configurations [2].
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 294093d45a23..047a83a089ce 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1298,6 +1298,8 @@ patternProperties:
-     description: Vertexcom Technologies, Inc.
-   "^via,.*":
-     description: VIA Technologies, Inc.
-+  "^vicor,.*":
-+    description: Vicor Corporation
-   "^videostrong,.*":
-     description: Videostrong Technology Co., Ltd.
-   "^virtio,.*":
+Changes in v2:
+- Multiply PMBUS_READ_POUT with 10 (R=1)
+  instead of dividing PMBUS_READ_PIN by 10.
+- Set all pmbus formats to direct.
+- Comment reason why page 0 is redundant.
+- Import pmbus namespace.
+
+
+[1]: https://www.spinics.net/lists/linux-hwmon/msg14097.html
+[2]: https://www.spinics.net/lists/linux-hwmon/msg14123.html
+
+Marcello Sylvester Bauer (4):
+  dt-bindings: vendor-prefixes: add Vicor Corporation
+  dt-bindings:trivial-devices: Add pli1209bc
+  pmbus: Add support for pli1209bc
+  pmbus (pli1209bc): Add regulator support
+
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ Documentation/hwmon/pli1209bc.rst             |  73 +++++++++
+ drivers/hwmon/pmbus/Kconfig                   |  16 ++
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/pli1209bc.c               | 145 ++++++++++++++++++
+ 6 files changed, 239 insertions(+)
+ create mode 100644 Documentation/hwmon/pli1209bc.rst
+ create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
+
 -- 
 2.34.1
 
