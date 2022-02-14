@@ -2,88 +2,142 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 283BDC4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Feb 2022 21:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 953DAC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Feb 2022 21:45:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiBNVpa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Feb 2022 16:45:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58652 "EHLO
+        id S231585AbiBNVpg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Feb 2022 16:45:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiBNVp3 (ORCPT
+        with ESMTP id S231557AbiBNVpc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:45:29 -0500
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050::465:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C9018462D;
-        Mon, 14 Feb 2022 13:45:19 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
+        Mon, 14 Feb 2022 16:45:32 -0500
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B020D1867CD;
+        Mon, 14 Feb 2022 13:45:23 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [80.241.60.233])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4JyHnn48nNz9sPp;
-        Mon, 14 Feb 2022 22:45:17 +0100 (CET)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4JyHnt2vN8z9sSf;
+        Mon, 14 Feb 2022 22:45:22 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1644875115;
+        t=1644875120;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oRr78yIBPxY77+I5AuoDVOFQS9ad7sIPGYxZpt1x9Ws=;
-        b=s4lNrCnZ79xMhCyGsG/v/JFzek6MJhnrRCzr71iFa2YSfHBoOvnlCqFBHuHNFyiAV5Zz+N
-        l+Ia+TNt3KObZLrxTmqtqtEa4Ueqn/DslRUXZgYEdBcrHFhK6GkCyP4r4nDWDGSaSpfojH
-        a6CWJ+O+Z/hBd1wwfibrF/2e2pLT49iyUpzBJjIC9hrD3PFP1ngW7krrHWkG4gzhEZtEi1
-        Ql/1ALNYt5KZtUzbWf/vBtGeWNC2aLChOkc3iq8zHQdk19MELWGGDIkV00P4K6r1nveRbI
-        oqEQQOFhCEDVkF8sYskSeML9PgFoi6zsBROKD8gWZnxfiz9tHCJiZmMeYxIj6w==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o3OnkfNIlxKTfWCDh3v7NYShsHsY2PCO/uVwUGHHgd8=;
+        b=vL3AOWXHN+KPGHlRoySohmFay58jWxca4fYr8IiIrG+9o3aeAUzWrzPknMIvhbYiaPt0gL
+        B6t3tbaCACj0FY8AZK45EteP2yi8/iGEw9xASpolI6pJ7qqGsJjcJRSaMN9nu6ASsfEQS+
+        iM6B0NftLREklFaUa7iO2Yet1yvapnjLUBKLWXbOpXrUd6eJe8ZT0lvmWnYHk2m+WgvwDo
+        GkBqS6rF2ycohLAKnwPUZygGmf0bhvRvCIrPUxXPFixOkKZbsC15XgbjVynjQ0SqRz1bxJ
+        6KVp4LYF5ifioTBHbkLEiaPqpcjM1b+/Y8lIrZ/cqjYhr2e3Jqa+6m7seyKJoQ==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: [PATCH v3 0/4] Support pli1209bc Digital Supervisor
-Date:   Mon, 14 Feb 2022 22:44:52 +0100
-Message-Id: <cover.1644874828.git.sylv@sylv.io>
+Subject: [PATCH v3 4/4] pmbus (pli1209bc): Add regulator support
+Date:   Mon, 14 Feb 2022 22:44:56 +0100
+Message-Id: <2b4127730fc53fceed0a6506900439f501ca42cf.1644874828.git.sylv@sylv.io>
+In-Reply-To: <cover.1644874828.git.sylv@sylv.io>
+References: <cover.1644874828.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Add regulator support for PLI1209BC Digital Supervisor.
 
-This patch set adds support for PLI1209BC Digital Supervisor from Vicor
-Corporation. It replaces the previous submitted driver "bcm6123" [1],
-since there are multiple digital supervisors, which uses BCMs in different
-configurations [2].
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ drivers/hwmon/pmbus/Kconfig     |  7 +++++++
+ drivers/hwmon/pmbus/pli1209bc.c | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-Change in v3:
-- prevent potential over- or underflow of PMBUS_READ_POUT
-
-Changes in v2:
-- Multiply PMBUS_READ_POUT with 10 (R=1)
-  instead of dividing PMBUS_READ_PIN by 10.
-- Set all pmbus formats to direct.
-- Comment reason why page 0 is redundant.
-- Import pmbus namespace.
-
-[1]: https://www.spinics.net/lists/linux-hwmon/msg14097.html
-[2]: https://www.spinics.net/lists/linux-hwmon/msg14123.html
-
-Marcello Sylvester Bauer (4):
-  dt-bindings: vendor-prefixes: add Vicor Corporation
-  dt-bindings:trivial-devices: Add pli1209bc
-  pmbus: Add support for pli1209bc
-  pmbus (pli1209bc): Add regulator support
-
- .../devicetree/bindings/trivial-devices.yaml  |   2 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- Documentation/hwmon/pli1209bc.rst             |  73 +++++++++
- drivers/hwmon/pmbus/Kconfig                   |  16 ++
- drivers/hwmon/pmbus/Makefile                  |   1 +
- drivers/hwmon/pmbus/pli1209bc.c               | 146 ++++++++++++++++++
- 6 files changed, 240 insertions(+)
- create mode 100644 Documentation/hwmon/pli1209bc.rst
- create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
-
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 831db423bea0..8b8f0d8733b2 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -319,6 +319,13 @@ config SENSORS_PLI1209BC
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called pli1209bc.
+ 
++config SENSORS_PLI1209BC_REGULATOR
++	bool "Regulator support for PLI1209BC"
++	depends on SENSORS_PLI1209BC && REGULATOR
++	help
++	  If you say yes here you get regulator support for Vicor PLI1209BC
++	  Digital Supervisor.
++
+ config SENSORS_PM6764TR
+ 	tristate "ST PM6764TR"
+ 	help
+diff --git a/drivers/hwmon/pmbus/pli1209bc.c b/drivers/hwmon/pmbus/pli1209bc.c
+index 5f8847307e55..05b4ee35ba27 100644
+--- a/drivers/hwmon/pmbus/pli1209bc.c
++++ b/drivers/hwmon/pmbus/pli1209bc.c
+@@ -8,6 +8,7 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pmbus.h>
++#include <linux/regulator/driver.h>
+ #include "pmbus.h"
+ 
+ /*
+@@ -33,11 +34,37 @@ static int pli1209bc_read_word_data(struct i2c_client *client, int page,
+ 			return data;
+ 		data = sign_extend32(data, 15) * 10;
+ 		return clamp_val(data, -32768, 32767) & 0xffff;
++	/*
++	 * PMBUS_READ_VOUT and PMBUS_READ_TEMPERATURE_1 return invalid data
++	 * when the BCM is turned off. Since it is not possible to return
++	 * ENODATA error, return zero instead.
++	 */
++	case PMBUS_READ_VOUT:
++	case PMBUS_READ_TEMPERATURE_1:
++		data = pmbus_read_word_data(client, page, phase,
++					    PMBUS_STATUS_WORD);
++		if (data < 0)
++			return data;
++		if (data & PB_STATUS_POWER_GOOD_N)
++			return 0;
++		return pmbus_read_word_data(client, page, phase, reg);
+ 	default:
+ 		return -ENODATA;
+ 	}
+ }
+ 
++#if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
++static const struct regulator_desc pli1209bc_reg_desc = {
++	.name = "vout2",
++	.id = 1,
++	.of_match = of_match_ptr("vout2"),
++	.regulators_node = of_match_ptr("regulators"),
++	.ops = &pmbus_regulator_ops,
++	.type = REGULATOR_VOLTAGE,
++	.owner = THIS_MODULE,
++};
++#endif
++
+ static struct pmbus_driver_info pli1209bc_info = {
+ 	.pages = 2,
+ 	.format[PSC_VOLTAGE_IN] = direct,
+@@ -75,6 +102,10 @@ static struct pmbus_driver_info pli1209bc_info = {
+ 	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+ 	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
+ 	.read_word_data = pli1209bc_read_word_data,
++#if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
++	.num_regulators = 1,
++	.reg_desc = &pli1209bc_reg_desc,
++#endif
+ };
+ 
+ static int pli1209bc_probe(struct i2c_client *client)
 -- 
 2.34.1
 
