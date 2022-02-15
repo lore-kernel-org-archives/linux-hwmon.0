@@ -2,112 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54AA4C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 14:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F813C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 15:11:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbiBOON7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Feb 2022 09:13:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56806 "EHLO
+        id S239353AbiBOPL1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Feb 2022 10:11:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiBOON7 (ORCPT
+        with ESMTP id S239639AbiBOPL0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:13:59 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689799AE61
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Feb 2022 06:13:48 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id l43-20020a9d1cab000000b005aa50ff5869so13895998ota.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Feb 2022 06:13:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3jYIcQU0BEJFXgQgZzodj4ZJoQpS9kX+hwQIg5ZIeRk=;
-        b=J1Jks/nKzH6zy39+6jp9TZRxepsjIdmvuf6RA8ZXEdVmTtV/bYajseDAwMzMycPPzA
-         O5zpPWl7QPsMJNAU7AXfyCBcvmxeIi2RQtZbpc0V1fElUrnqe4c0Tof6uSzr8+SRbhLR
-         k0VsK+6WgkGVCNc2TrNRt/zdOPi7fwozntdWc+vmnkHD2KCn2BfjOdqg8ccQVuvTPUIa
-         JC9OV4zvp8yK7sp48KWnp3A4SYkx8D0fmHKGC3PvEacaJckIBmjzzaL+ijUDJ6mPFwNO
-         /t+57i330bP0raAxDC8BbcDHdEsPnUqGhV3D++HNfdKMRJOnHq0+8tRsFLY2XUvkPcXO
-         j41w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3jYIcQU0BEJFXgQgZzodj4ZJoQpS9kX+hwQIg5ZIeRk=;
-        b=RWvdypkETyLILCkl/pfsgPQtjTFv4ULD6ABkGeCELEALMS3tRarYgTqMPIZa0zsPlk
-         7zXRLTUWm+at4i4FCT68xTlWIGnTrDf6P5Tnqk+n3VkNNWw3bVpVI3diqAbnDNAhxW1D
-         Ev/s8Y0BExA1M+rA7gVK/+plU1gXZwAHD8icgHo+UD7FHWFGT5FBY+Q99VRjz9MWVgH4
-         wPmfd40hhVZNbjObi5WWmwp2oXeqHtKCNIQg7KwXr4KEqyqt2JPDWSHEwC5aunCUuQyC
-         EUpZCQ4An4GQTKkjhLARWW9/ek9oKXd6PPFPwYbFqXXV+BjIW3yUchaZKMNE6M3lOnE5
-         98YA==
-X-Gm-Message-State: AOAM532sMqGPPcK6t8+jZuraXL2HDxHkaAr6Eq/j9M7ON4K19l3cihKM
-        jIxz+9NpvF5CVF4xGV1wrZw=
-X-Google-Smtp-Source: ABdhPJz3hO8Mgj/aRK/srYGcUTA9YNXvqLNZucTp0pWWWJTBiFjdDnC+SqpHuCZx9SZ1Hyu7ZYLyuw==
-X-Received: by 2002:a9d:4f0a:: with SMTP id d10mr1362150otl.292.1644934427711;
-        Tue, 15 Feb 2022 06:13:47 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a8sm13965862otj.47.2022.02.15.06.13.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 06:13:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8542b4c2-3aa3-c276-4cc4-b9b08ffb9c2b@roeck-us.net>
-Date:   Tue, 15 Feb 2022 06:13:44 -0800
+        Tue, 15 Feb 2022 10:11:26 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E7F108572;
+        Tue, 15 Feb 2022 07:11:16 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FF9kj2003390;
+        Tue, 15 Feb 2022 15:11:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=inQ7ERtewt1fTYCyG4tNrmkbS9COvMX3pRhHsOkVZg4=;
+ b=pRRGXAAa3p2hdFVPw6hyAUAJxHdKg4pN+iKSwGWS2yVfE+IzQxoxY8ofv2ZXL81Yqa9v
+ vQLAh9vDX2um7qp2Qusnk1dWFJVoXRlTwXxy7Rg+bJjGUEgdFCiF8m/U3UuIwzpwhpA/
+ ConaK2d73G0OOkzormIGuK58XS71FIJGsn8RRvPiUrET4X5grAKLB8jvIjb/P2agfhwH
+ K7iOdEHOWRbtUizAiWppbxe4F7Qw5mQYIyRZSkLpOfi5GPe0LwuNSfuOctLVf1lf1LhY
+ ZqrnBDxyXr/MRz9L0OswCEORzj7dcLuFobNdkk1+BmCsBHmILc8U+jUofkIVFeQYVgZg /g== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8atse3wk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 15:11:00 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FF8G8U026375;
+        Tue, 15 Feb 2022 15:10:58 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma03wdc.us.ibm.com with ESMTP id 3e64hatv7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 15:10:58 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FFAv1S29884810
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 15:10:57 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 67A5412405C;
+        Tue, 15 Feb 2022 15:10:57 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CFF911240C4;
+        Tue, 15 Feb 2022 15:10:55 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.156.4])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 15:10:55 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, joel@jms.id.au, eajames@linux.ibm.com
+Subject: [PATCH 0/4] hwmon: (occ) Add various poll response data in sysfs
+Date:   Tue, 15 Feb 2022 09:10:18 -0600
+Message-Id: <20220215151022.7498-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] hwmon: Add driver for Texas Instruments TMP464
- sensor chip
-Content-Language: en-US
-To:     Agathe Porte <agathe.porte@nokia.com>, linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>
-References: <20220209133617.67297-1-agathe.porte@nokia.com>
- <20220209155308.88938-1-agathe.porte@nokia.com>
- <20220209155308.88938-2-agathe.porte@nokia.com>
- <53861f0c-6447-7a50-39c3-924290a6f9bf@roeck-us.net>
- <fec8df49-5ab1-c55a-b2ad-28f7591cf768@nokia.com>
- <1e28b6e1-8675-1059-1a79-7148e2a91e83@roeck-us.net>
- <277f551b-b732-8f9b-db8e-3432798e0984@nokia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <277f551b-b732-8f9b-db8e-3432798e0984@nokia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: d3h5qVoRoBTNrQBraY9ZpZl0JH9yF3FS
+X-Proofpoint-GUID: d3h5qVoRoBTNrQBraY9ZpZl0JH9yF3FS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 mlxlogscore=512
+ adultscore=0 mlxscore=0 phishscore=0 spamscore=0 clxscore=1011 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150088
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Agathe,
+BMC control applications need to check various additional bits in the
+extended status in the poll response, as well as the OCC mode and IPS
+status bytes. Export all those through sysfs. In addition, add the "soft"
+minimum power cap attribute through hwmon.
 
-On 2/15/22 05:40, Agathe Porte wrote:
-> Hi Guenter,
-> 
-> Le 12/02/2022 à 00:53, Guenter Roeck a écrit :
->> Turns out the chip is by default locked, meaning all those configuration writes
->> fail unless I explicitly unlock the chip. How would you suggest to handle that
->> situation, and how do you handle it in your application ?
->>
-> After reading the TMP464 datasheet, the device seems locked by default indeed:
-> 
->> All of the configuration and limit registers may be locked for writes (making the registers write-protected), which
->> decreases the chance of software runaway from issuing false changes to these registers. The Lock column in
->> Table 3 identifies which registers may be locked. Lock mode does not effect read operations. To activate the lock
->> mode, Lock Register C4h must be set to 0x5CA6. The lock only remains active while the TMP464 device is
->> powered up. Because the TMP464 device does not contain nonvolatile memory, the settings of the configuration
->> and limit registers are lost once a power cycle occurs regardless if the registers are locked or unlocked.
->> In lock mode, the TMP464 device ignores a write operation to configuration and limit registers except for Lock
->> Register C4h. The TMP464 device does not acknowledge the data bytes during a write operation to a locked
->> register. To unlock the TMP464 registers, write 0xEB19 to register C4h. The TMP464 device powers up in locked
->> mode, so the registers must be unlocked before the registers accept writes of new data.
-> 
->  From my deduction, since we do not unlock it with software, I guess that our local FPGA is doing the job of disabling the lock during power-on procedure.
-> 
-> I guess we could read and unlock the device when probing, and relock it after rmmod if it was locked during probing (store initial lock state). We do not want to relock it if it was unlocked before probe — like in our usecase — because other applications may use this "already unlocked" assumption (bootloader, FPGA code, …).
-> 
-> What do you think?
-> 
+Eddie James (4):
+  hwmon: (occ) Add sysfs entry for IPS (Idle Power Saver) status
+  hwmon: (occ) Add sysfs entry for OCC mode
+  hwmon: (occ) Add sysfs entries for additional extended status bits
+  hwmon: (occ) Add soft minimum power cap attribute
 
-Yes, that is exactly what I ended up doing.
+ drivers/hwmon/occ/common.c | 19 +++++++++++++---
+ drivers/hwmon/occ/common.h |  2 ++
+ drivers/hwmon/occ/sysfs.c  | 46 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+), 3 deletions(-)
 
-Thanks,
-Guenter
+-- 
+2.27.0
+
