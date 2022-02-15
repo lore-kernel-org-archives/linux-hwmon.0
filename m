@@ -2,172 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D15C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 19:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D525AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 19:12:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243405AbiBOTMB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Feb 2022 14:12:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53990 "EHLO
+        id S243433AbiBOTMM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Feb 2022 14:12:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243402AbiBOTMA (ORCPT
+        with ESMTP id S243407AbiBOTMB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:12:00 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726AB7A9AD;
-        Tue, 15 Feb 2022 11:11:49 -0800 (PST)
+        Tue, 15 Feb 2022 14:12:01 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A747D001;
+        Tue, 15 Feb 2022 11:11:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644952290;
-        bh=piF//2eS4Ky3pAJp+1bPy+qGO6OmU+pXfnFC9nwV+0w=;
+        s=badeba3b8450; t=1644952292;
+        bh=/eV7B6nrTJsDMEC0tTMXkXZvwysGHhyPjyGcel2jtG8=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=IP8roPnJPfL5+Bg2kmmogQT6GRIAypuF2Qxja2WPE38sGinjxzUzaU7/ATnQsPiTz
-         QwlVGxTUQ18BqDfzjmLeJ4SRZuNPiYS0Kf0TTkq8/WWrghqJ0XZYF+E6bOUfVO8vCt
-         Yv+LqDfqUmanZYfEgf2zqsKur036YISVJKwVvmo4=
+        b=OYyQtFa+u82O/ty5Op/RvnngfxFHUrRzGCpNlT+e4ks0KIOqoUB8XtdLhYF4ghpK1
+         SGlux5Ms6VHy2ehKV05NDiDcpgjTvhx7e0JNNOtn68VxotjJL9PM0JZYZjbxnXxL9p
+         pYR1xy7Pfhd/a2GE9MS0kOpxM3x8du8sHOYvdfCA=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MrhQ6-1o7MXu0e8a-00nkXG; Tue, 15 Feb 2022 20:11:30 +0100
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N1wlv-1oGvJF1VUn-012Kgc; Tue, 15 Feb 2022 20:11:32 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] hwmon: (dell-smm) Improve assembly code
-Date:   Tue, 15 Feb 2022 20:11:11 +0100
-Message-Id: <20220215191113.16640-6-W_Armin@gmx.de>
+Subject: [PATCH 7/7] hwmon: (dell-smm) Reword and mark parameter "force" as unsafe
+Date:   Tue, 15 Feb 2022 20:11:13 +0100
+Message-Id: <20220215191113.16640-8-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220215191113.16640-1-W_Armin@gmx.de>
 References: <20220215191113.16640-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:TPkHDCY2XjIMWm7XLGt0M2XcEpZdlfGfNupt6prvJ0b3/F7j8Ku
- /ZstF8pTeB+xIp9bwmvuXXUXFHEJkKu4cWpY0Gz/bg5MC86eDp2CCUeRK2yUyqTnJm/Aqzu
- ZGkfqnjpR3T+c5wJkQTK9z5jbTDhefl8ZXQ2cqiyegax6ayTxjExnTW2ucvqlz9MjGqxd9N
- 2DeLBZY8QwcJeHEhtfQCA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LyH3HjHAY2k=:LFypqImYl+lS8Zu1DCUzc6
- w1f8vECAfAG+wAONXZZ+1lqNS4897wWN+zwT+5yIb1wD/AcsbEG9+5gMcHqqY6g9/8fup3KSg
- iA0tXrsX3ulbPOper8gWpSEguPKwnWBel1O2l3UEmVIoT70ASJDMCLfWXVTM0TNaqASOBetPd
- 9M2HoPGgxB1hTAuBoAnJnCDCtBhQLSORzPe278etp2fzU2p0gt8ZeWqntkn0TVL86l6gz6wtf
- O+OITwvrv7EKbF3tSynz3rvkS0AraOPuc2syu9uQi+dzNRSP9P/V373s/myMjV+QDSxbWtaX1
- 0SQ4AtJIHGq9032LXhPcXELvRuxpL7+piLnDQ7tkzFtJMU0HOIVHGktAFCxy9cvs/LWo3kq1O
- tqWWPdGkzljV5Br0ppjBh6tFWOG8vbMiu+F7wYZXns64icg4Qtz9e7b9QIJ3a4yFsdSXISmB1
- dahr9qOABEDEfUcfAvTnx+DfPEKJw5SDSJXBYEw8RoOcEUI1GtVaS3jy3cFienbAM4Flq/0CN
- LzC2iqYNf+YvDy53Mm/uPFKdf01w6Y4/Mk4BTT3lnMUW9Qb7IkIvN9kHLM0fm4+EYaW5mFuHU
- jNf7KvA2nSXm6Bd9PAINDih9zz5+5gTNFmOgJ0kAzXCSu+zFytdOgBCtNU9+mIfzxt3/C+oTD
- L/SWQh4jjpq8+RsYbCMkU+4WOEhR8jPdCg4poIi0J60awtXYujSrf33nUq10Jd7K8GNejp7JC
- w0Atz16tE0HEga7DoJhycA3GTr6iABIQoNH1yIT1RTCI/cihmhDI/dPRSmtEviyEhCblDQyG7
- hYmQdHEZ2p6x3aqlz09yAM9Oxs9fUvaEi+Y3qtCC6NngUPSBXFSnm5bJSz8f4A8/us4l533Vi
- cyxoJv0cqLPMXgxYq4Ex5UYQx9EAYYHVxBBIYGldd2F81yOc0593RJ19/8ABDXlecy4m11J1o
- PDlGhzamTGhkQ5mZE+/q850nncGYv+34JKHeYVyjGKUsL6vhe7Ab6bLr5cbxLiwt+0tatYOQm
- 3k7tU8SMp5slNJxqyvrByWvpG3JHqwuF6lUN6sU5yn4vjmz4qVq978kO3/P2i2JAFn9s4SVkP
- J484sr4P11Muls=
+X-Provags-ID: V03:K1:7ISU5hKPe7evY9qmt1TMbBMXI1ApEqd0bkfnSvgIh8Lb6ZCHpuk
+ moCZk5IfXhdUDyyXdbAI4LgCQQoEmfNv/Cz0+VzkNPUB+FmU60IpKRRtiQd7mUQqPgzpufE
+ Q4RXsen1hWEhnzqLiqhuY6BBz1gyuLBvySErxpFbZyHWtEshuk7YrG7gOxtnYOWuDoVWYyu
+ +PAUrRqmkPxE4K9xv3Ohg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Gq5iSvW7Glc=:8jfwzbfJW0xHAV0d0ZCrdk
+ hLUFlDuhGiHUA34cU6vexpzsgslpsc9Yxd2ZiZc1OM0WsOQ5aVCji6qi6cHJ6g4cppleuSVmV
+ QY+lwK8QAZh0BeHQpVBDNcd3+PR+Hdet0c64s9fRp5I0A3N+R+wGdi3ceeIcLGrvyr1vtqjpI
+ y6bTt3WEU0v/SqLsVR7oE4iJaq/FR9F0ZbhUjaTcYZ5nrC1+FebI+Kev0Y2png2lB7slhpN5b
+ OPMs3Q5LtOYVDcB90gnNnYTqZwpHwr1lfNkMw3+3QQ+S1Uwjbqy+mdsGZ/70CM1Jki+aZQgM+
+ pl8eLu8aSiarETTbGl7Nm00Ncsl6icJXtbyTF8Kintir30JX8NAEckmZkvCZgMpmDGo1jkzpH
+ vQehC5OhudVB/8vw4rrpYwR1iwscRFZlmfb8npLwyiRDMTXcvevkHpuhzMQSn1NzeyvZKsq2P
+ 1zl2fvYKaSDYohTodeSQ8HQE4MK6U6oUSWwiQICj/VjUQhz+ohNUwVIS3H5lWh0nuddzosved
+ jpv/rZ3Wau2v1s+Z2xxG8FIHTsd1CzqioCrSgYObHTBAM5kyGGeYgOFS4JyLTDk7TFTMG5PJn
+ RIN7vDWDW2f7lcW6O4RMsRXgzGuLqndhfpyQfnzvDOPFF9ci1vZW6U6yvHgFUpds1I2YZGCOC
+ 4NG+btVVQafohVLVJ8vnQnj5S2835O2LBeXMaRFGr0bmSUV8liY7Mmn2pY2nugtSv7LEZrW4w
+ TLpe3nWWfimFDNo+/hbOdXpOwK6a8cf4WyJW3LJ8ngna/u/XhAtMYeKlQfMgmugsHd16ucm29
+ Lqe/x2eXnlVR5N+iNLyIaoG3jjyFXLTHbjL9TdzGCma7INvSl02rRJhrZ8WWqz+PR5hgYSegi
+ 3Koi1LdY+mJLy+NSQo5d/ybetTLRmpGvoGjB+h9g/v3+T8fCYd2PMxP58Rn1UXRZSRUmE2soU
+ 4MapHt4JfcbdsMuNfbj1Kv2/Nil9v5gKe+eS1PSFMjIhWozOh26jVrttf5uaCd5/WLVVT0pKF
+ wELUeFVxIoTmIObzGbqI1DVlnJZiK9Bu+k/GHOiTgO4UIvBDI44rZAJ0MDIKamsK6vz640XBo
+ Kgwvj74nsPjpCI=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The new assembly code works on both 32bit and 64bit cpus
-and allows for more compiler optimisations by not
-requiring smm_regs to be packed. Also since the
-SMM handler seems to modify the carry flag, the new
-code informs the compiler that the flags register
-needs to be saved/restored.
+When enabling said module parameter, the driver ignores
+all feature blacklists on relevant models, which has the
+potential for strange side effects. Also there seems to
+be a slight chance for unsupported devices to behave
+badly when probed for features.
+In such cases, the kernel should be tainted to inform
+people that these issues might have been caused by
+the dell_smm_hwmon driver with "force" enabled.
+Also reword the parameter description to remind users
+that enabling "force" also enables blacklisted features.
 
-Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
+Tested on a Dell Inspiron 3505.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 71 ++++++++--------------------------
- 1 file changed, 17 insertions(+), 54 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index b7016971bb2e..04a41d59da60 100644
+index 04a41d59da60..67d63932b48a 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -123,7 +123,7 @@ struct smm_regs {
- 	unsigned int edx;
- 	unsigned int esi;
- 	unsigned int edi;
--} __packed;
-+};
+@@ -87,8 +87,8 @@ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("i8k");
 
- static const char * const temp_labels[] =3D {
- 	"CPU",
-@@ -175,59 +175,22 @@ static int i8k_smm_func(void *par)
- 	if (smp_processor_id() !=3D 0)
- 		return -EBUSY;
+ static bool force;
+-module_param(force, bool, 0);
+-MODULE_PARM_DESC(force, "Force loading without checking for supported mod=
+els");
++module_param_unsafe(force, bool, 0);
++MODULE_PARM_DESC(force, "Force loading without checking for supported mod=
+els and features");
 
--#if defined(CONFIG_X86_64)
--	asm volatile("pushq %%rax\n\t"
--		"movl 0(%%rax),%%edx\n\t"
--		"pushq %%rdx\n\t"
--		"movl 4(%%rax),%%ebx\n\t"
--		"movl 8(%%rax),%%ecx\n\t"
--		"movl 12(%%rax),%%edx\n\t"
--		"movl 16(%%rax),%%esi\n\t"
--		"movl 20(%%rax),%%edi\n\t"
--		"popq %%rax\n\t"
--		"out %%al,$0xb2\n\t"
--		"out %%al,$0x84\n\t"
--		"xchgq %%rax,(%%rsp)\n\t"
--		"movl %%ebx,4(%%rax)\n\t"
--		"movl %%ecx,8(%%rax)\n\t"
--		"movl %%edx,12(%%rax)\n\t"
--		"movl %%esi,16(%%rax)\n\t"
--		"movl %%edi,20(%%rax)\n\t"
--		"popq %%rdx\n\t"
--		"movl %%edx,0(%%rax)\n\t"
--		"pushfq\n\t"
--		"popq %%rax\n\t"
--		"andl $1,%%eax\n"
--		: "=3Da"(rc)
--		:    "a"(regs)
--		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
--#else
--	asm volatile("pushl %%eax\n\t"
--	    "movl 0(%%eax),%%edx\n\t"
--	    "push %%edx\n\t"
--	    "movl 4(%%eax),%%ebx\n\t"
--	    "movl 8(%%eax),%%ecx\n\t"
--	    "movl 12(%%eax),%%edx\n\t"
--	    "movl 16(%%eax),%%esi\n\t"
--	    "movl 20(%%eax),%%edi\n\t"
--	    "popl %%eax\n\t"
--	    "out %%al,$0xb2\n\t"
--	    "out %%al,$0x84\n\t"
--	    "xchgl %%eax,(%%esp)\n\t"
--	    "movl %%ebx,4(%%eax)\n\t"
--	    "movl %%ecx,8(%%eax)\n\t"
--	    "movl %%edx,12(%%eax)\n\t"
--	    "movl %%esi,16(%%eax)\n\t"
--	    "movl %%edi,20(%%eax)\n\t"
--	    "popl %%edx\n\t"
--	    "movl %%edx,0(%%eax)\n\t"
--	    "lahf\n\t"
--	    "shrl $8,%%eax\n\t"
--	    "andl $1,%%eax\n"
--	    : "=3Da"(rc)
--	    :    "a"(regs)
--	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
--#endif
-+	asm volatile("out %%al,$0xb2\n\t"
-+		     "out %%al,$0x84\n"
-+		     : "=3Da" (regs->eax),
-+		       "=3Db" (regs->ebx),
-+		       "=3Dc" (regs->ecx),
-+		       "=3Dd" (regs->edx),
-+		       "=3DS" (regs->esi),
-+		       "=3DD" (regs->edi),
-+		       CC_OUT(c) (rc)
-+		     : "a" (regs->eax),
-+		       "b" (regs->ebx),
-+		       "c" (regs->ecx),
-+		       "d" (regs->edx),
-+		       "S" (regs->esi),
-+		       "D" (regs->edi));
-+
- 	if (rc !=3D 0 || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D =
-eax)
- 		rc =3D -EINVAL;
-
+ static bool ignore_dmi;
+ module_param(ignore_dmi, bool, 0);
 =2D-
 2.30.2
 
