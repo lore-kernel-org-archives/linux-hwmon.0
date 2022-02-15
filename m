@@ -2,69 +2,63 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A1F8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 19:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FFB0C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 19:37:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242205AbiBOTgQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Feb 2022 14:36:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35766 "EHLO
+        id S239859AbiBOTiB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Feb 2022 14:38:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243697AbiBOTgO (ORCPT
+        with ESMTP id S234094AbiBOTiB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:36:14 -0500
+        Tue, 15 Feb 2022 14:38:01 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2833C24A2;
-        Tue, 15 Feb 2022 11:36:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414C9627D;
+        Tue, 15 Feb 2022 11:37:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78E81B818F3;
-        Tue, 15 Feb 2022 19:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE494C340EB;
-        Tue, 15 Feb 2022 19:36:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7091FB81BE4;
+        Tue, 15 Feb 2022 19:37:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD099C340EB;
+        Tue, 15 Feb 2022 19:37:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644953761;
-        bh=mXUYdWjAyAGnzfunbLEvRbzhk1LQeTeub57on144Gog=;
+        s=k20201202; t=1644953867;
+        bh=u5Q7TysgiABO3PGXeNAE+IzNlfP0uAbXnbfmkzC94zE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AQoUEG2PH9XDgvj9VgWfsiL+cXnmIUszgtgnX63DIOexHgyIxzm547vKPwBi55Rrg
-         PlTl+2N2Su3Hhflt3+9AF6yjE0fPI+yWtvhvMsuQxAQdq0VjXg7PF9IDrlTrGcj4fU
-         ss1Bl+2fP8Y0FobCLBxm7cUocwNLkc39f1vA8C9TmP1+LsMwU8aGEMg95cA2R4Rplc
-         SfFCbWyQK7eeSqhYbdqJGdqQ0qW2EbDgfB3/WGJiearA3RcOwaOLM44eHqM17duxDJ
-         PZ8MymJ/Y7F7EZmIZSt/ANDUP9lBpgIE3HPC/cQVNPgmAe3+wvA2u0U4i2Lm7sioQp
-         cc7rhegLmsd4A==
+        b=C9yFTdediVIWwyRutFDlHJg8aVVgNvPfleRB+SfdsZAwVVuu01gQXZUCOjJ66HYb8
+         4WUViBK8nPWBV+DO7KJo1hbqrRbyE/GW1+g54+V74v2baLQGqlV3mNtF8If9/+k9by
+         yO6nGP4UUgknqdBD2dilEzq/Z9L4BwaIFTc3ry56/Xf+5FxbSvM/F43PIdeJHIvJf7
+         AH3ViUsJDoPP/Ov1kmxsYULlMpBtw7XksbfviT62adSApnhb5e0USWX5dTE8yuHGeG
+         XpjXZKzp393hKTVyGo1J66/PB7txcaODk9Twxgo6uhoKc75Dbs+V/AEVSRFjSoAJ0v
+         i2PkoEhAkWx4w==
 Received: by pali.im (Postfix)
-        id D05BCF13; Tue, 15 Feb 2022 20:35:58 +0100 (CET)
-Date:   Tue, 15 Feb 2022 20:35:58 +0100
+        id 77405F13; Tue, 15 Feb 2022 20:37:44 +0100 (CET)
+Date:   Tue, 15 Feb 2022 20:37:44 +0100
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
 To:     Armin Wolf <W_Armin@gmx.de>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] hwmon: (dell-smm) Reword and mark parameter "force"
- as unsafe
-Message-ID: <20220215193558.rorm3vrwyxa4gkj7@pali>
+Subject: Re: [PATCH 3/7] hwmon: (dell-smm) Make fan/temp sensor number a u8
+Message-ID: <20220215193744.vujcuuc3l52unvxf@pali>
 References: <20220215191113.16640-1-W_Armin@gmx.de>
- <20220215191113.16640-8-W_Armin@gmx.de>
+ <20220215191113.16640-4-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220215191113.16640-8-W_Armin@gmx.de>
+In-Reply-To: <20220215191113.16640-4-W_Armin@gmx.de>
 User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tuesday 15 February 2022 20:11:13 Armin Wolf wrote:
-> When enabling said module parameter, the driver ignores
-> all feature blacklists on relevant models, which has the
-> potential for strange side effects. Also there seems to
-> be a slight chance for unsupported devices to behave
-> badly when probed for features.
-> In such cases, the kernel should be tainted to inform
-> people that these issues might have been caused by
-> the dell_smm_hwmon driver with "force" enabled.
-> Also reword the parameter description to remind users
-> that enabling "force" also enables blacklisted features.
+On Tuesday 15 February 2022 20:11:09 Armin Wolf wrote:
+> Right now, we only use bits 0 to 7 of the fan/temp sensor number
+> by doing number & 0xff. Passing the value as a u8 makes this
+> step unnecessary. Also add checks to the ioctl handler since
+> users might get confused when passing 0x00000101 does the same
+> as passing 0x00000001.
 > 
 > Tested on a Dell Inspiron 3505.
 > 
@@ -73,24 +67,206 @@ On Tuesday 15 February 2022 20:11:13 Armin Wolf wrote:
 Reviewed-by: Pali Rohár <pali@kernel.org>
 
 > ---
->  drivers/hwmon/dell-smm-hwmon.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/hwmon/dell-smm-hwmon.c | 68 ++++++++++++++++++++++------------
+>  1 file changed, 45 insertions(+), 23 deletions(-)
 > 
 > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 04a41d59da60..67d63932b48a 100644
+> index 3b49e55d060f..a102034a1d38 100644
 > --- a/drivers/hwmon/dell-smm-hwmon.c
 > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -87,8 +87,8 @@ MODULE_LICENSE("GPL");
->  MODULE_ALIAS("i8k");
+> @@ -21,6 +21,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/init.h>
+> +#include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/platform_device.h>
+> @@ -254,46 +255,52 @@ static int i8k_smm(struct smm_regs *regs)
+>  /*
+>   * Read the fan status.
+>   */
+> -static int i8k_get_fan_status(const struct dell_smm_data *data, int fan)
+> +static int i8k_get_fan_status(const struct dell_smm_data *data, u8 fan)
+>  {
+> -	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN, };
+> +	struct smm_regs regs = {
+> +		.eax = I8K_SMM_GET_FAN,
+> +		.ebx = fan,
+> +	};
 > 
->  static bool force;
-> -module_param(force, bool, 0);
-> -MODULE_PARM_DESC(force, "Force loading without checking for supported models");
-> +module_param_unsafe(force, bool, 0);
-> +MODULE_PARM_DESC(force, "Force loading without checking for supported models and features");
+>  	if (data->disallow_fan_support)
+>  		return -EINVAL;
 > 
->  static bool ignore_dmi;
->  module_param(ignore_dmi, bool, 0);
+> -	regs.ebx = fan & 0xff;
+>  	return i8k_smm(&regs) ? : regs.eax & 0xff;
+>  }
+> 
+>  /*
+>   * Read the fan speed in RPM.
+>   */
+> -static int i8k_get_fan_speed(const struct dell_smm_data *data, int fan)
+> +static int i8k_get_fan_speed(const struct dell_smm_data *data, u8 fan)
+>  {
+> -	struct smm_regs regs = { .eax = I8K_SMM_GET_SPEED, };
+> +	struct smm_regs regs = {
+> +		.eax = I8K_SMM_GET_SPEED,
+> +		.ebx = fan,
+> +	};
+> 
+>  	if (data->disallow_fan_support)
+>  		return -EINVAL;
+> 
+> -	regs.ebx = fan & 0xff;
+>  	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * data->i8k_fan_mult;
+>  }
+> 
+>  /*
+>   * Read the fan type.
+>   */
+> -static int _i8k_get_fan_type(const struct dell_smm_data *data, int fan)
+> +static int _i8k_get_fan_type(const struct dell_smm_data *data, u8 fan)
+>  {
+> -	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN_TYPE, };
+> +	struct smm_regs regs = {
+> +		.eax = I8K_SMM_GET_FAN_TYPE,
+> +		.ebx = fan,
+> +	};
+> 
+>  	if (data->disallow_fan_support || data->disallow_fan_type_call)
+>  		return -EINVAL;
+> 
+> -	regs.ebx = fan & 0xff;
+>  	return i8k_smm(&regs) ? : regs.eax & 0xff;
+>  }
+> 
+> -static int i8k_get_fan_type(struct dell_smm_data *data, int fan)
+> +static int i8k_get_fan_type(struct dell_smm_data *data, u8 fan)
+>  {
+>  	/* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
+>  	if (data->fan_type[fan] == INT_MIN)
+> @@ -305,14 +312,16 @@ static int i8k_get_fan_type(struct dell_smm_data *data, int fan)
+>  /*
+>   * Read the fan nominal rpm for specific fan speed.
+>   */
+> -static int __init i8k_get_fan_nominal_speed(const struct dell_smm_data *data, int fan, int speed)
+> +static int __init i8k_get_fan_nominal_speed(const struct dell_smm_data *data, u8 fan, int speed)
+>  {
+> -	struct smm_regs regs = { .eax = I8K_SMM_GET_NOM_SPEED, };
+> +	struct smm_regs regs = {
+> +		.eax = I8K_SMM_GET_NOM_SPEED,
+> +		.ebx = fan | (speed << 8),
+> +	};
+> 
+>  	if (data->disallow_fan_support)
+>  		return -EINVAL;
+> 
+> -	regs.ebx = (fan & 0xff) | (speed << 8);
+>  	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * data->i8k_fan_mult;
+>  }
+> 
+> @@ -333,7 +342,7 @@ static int i8k_enable_fan_auto_mode(const struct dell_smm_data *data, bool enabl
+>  /*
+>   * Set the fan speed (off, low, high, ...).
+>   */
+> -static int i8k_set_fan(const struct dell_smm_data *data, int fan, int speed)
+> +static int i8k_set_fan(const struct dell_smm_data *data, u8 fan, int speed)
+>  {
+>  	struct smm_regs regs = { .eax = I8K_SMM_SET_FAN, };
+> 
+> @@ -341,33 +350,35 @@ static int i8k_set_fan(const struct dell_smm_data *data, int fan, int speed)
+>  		return -EINVAL;
+> 
+>  	speed = (speed < 0) ? 0 : ((speed > data->i8k_fan_max) ? data->i8k_fan_max : speed);
+> -	regs.ebx = (fan & 0xff) | (speed << 8);
+> +	regs.ebx = fan | (speed << 8);
+> 
+>  	return i8k_smm(&regs);
+>  }
+> 
+> -static int __init i8k_get_temp_type(int sensor)
+> +static int __init i8k_get_temp_type(u8 sensor)
+>  {
+> -	struct smm_regs regs = { .eax = I8K_SMM_GET_TEMP_TYPE, };
+> +	struct smm_regs regs = {
+> +		.eax = I8K_SMM_GET_TEMP_TYPE,
+> +		.ebx = sensor,
+> +	};
+> 
+> -	regs.ebx = sensor & 0xff;
+>  	return i8k_smm(&regs) ? : regs.eax & 0xff;
+>  }
+> 
+>  /*
+>   * Read the cpu temperature.
+>   */
+> -static int _i8k_get_temp(int sensor)
+> +static int _i8k_get_temp(u8 sensor)
+>  {
+>  	struct smm_regs regs = {
+>  		.eax = I8K_SMM_GET_TEMP,
+> -		.ebx = sensor & 0xff,
+> +		.ebx = sensor,
+>  	};
+> 
+>  	return i8k_smm(&regs) ? : regs.eax & 0xff;
+>  }
+> 
+> -static int i8k_get_temp(int sensor)
+> +static int i8k_get_temp(u8 sensor)
+>  {
+>  	int temp = _i8k_get_temp(sensor);
+> 
+> @@ -500,6 +511,9 @@ static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
+>  		if (copy_from_user(&val, argp, sizeof(int)))
+>  			return -EFAULT;
+> 
+> +		if (val > U8_MAX || val < 0)
+> +			return -EINVAL;
+> +
+>  		val = i8k_get_fan_speed(data, val);
+>  		break;
+> 
+> @@ -507,6 +521,9 @@ static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
+>  		if (copy_from_user(&val, argp, sizeof(int)))
+>  			return -EFAULT;
+> 
+> +		if (val > U8_MAX || val < 0)
+> +			return -EINVAL;
+> +
+>  		val = i8k_get_fan_status(data, val);
+>  		break;
+> 
+> @@ -517,6 +534,9 @@ static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
+>  		if (copy_from_user(&val, argp, sizeof(int)))
+>  			return -EFAULT;
+> 
+> +		if (val > U8_MAX || val < 0)
+> +			return -EINVAL;
+> +
+>  		if (copy_from_user(&speed, argp + 1, sizeof(int)))
+>  			return -EFAULT;
+> 
+> @@ -924,7 +944,8 @@ static int __init dell_smm_init_hwmon(struct device *dev)
+>  {
+>  	struct dell_smm_data *data = dev_get_drvdata(dev);
+>  	struct device *dell_smm_hwmon_dev;
+> -	int i, state, err;
+> +	int state, err;
+> +	u8 i;
+> 
+>  	for (i = 0; i < DELL_SMM_NO_TEMP; i++) {
+>  		data->temp_type[i] = i8k_get_temp_type(i);
+> @@ -1245,7 +1266,8 @@ static int __init dell_smm_probe(struct platform_device *pdev)
+>  {
+>  	struct dell_smm_data *data;
+>  	const struct dmi_system_id *id, *fan_control;
+> -	int fan, ret;
+> +	int ret;
+> +	u8 fan;
+> 
+>  	data = devm_kzalloc(&pdev->dev, sizeof(struct dell_smm_data), GFP_KERNEL);
+>  	if (!data)
 > --
 > 2.30.2
 > 
