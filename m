@@ -2,189 +2,274 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26152C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 19:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3234EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Feb 2022 19:35:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243614AbiBOTT5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Feb 2022 14:19:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53872 "EHLO
+        id S236392AbiBOTfM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Feb 2022 14:35:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243606AbiBOTT4 (ORCPT
+        with ESMTP id S235333AbiBOTfL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:19:56 -0500
+        Tue, 15 Feb 2022 14:35:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6281C111FA6;
-        Tue, 15 Feb 2022 11:19:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87876B91E9;
+        Tue, 15 Feb 2022 11:35:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2A9A61786;
-        Tue, 15 Feb 2022 19:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD28C340EB;
-        Tue, 15 Feb 2022 19:19:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B0B7617A5;
+        Tue, 15 Feb 2022 19:35:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40041C340EB;
+        Tue, 15 Feb 2022 19:34:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644952784;
-        bh=cQeVp2Uorr1VqCWrtUYRdec9lyODCH6aCatH65p8hvM=;
+        s=k20201202; t=1644953699;
+        bh=pdGYi1kiXeivN1s3yIpxJfm+hVDHt8bzmd6OOqgmGng=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cInfFJZJtE4Yu/SlazAQPEPheZIU4zU8o4fuITT5GU4mHLGWrpOty3uY+xf0beAmo
-         bZBel0LtkoCziJzxmx/PpRxIiRcs866tLJcd71L+zP6UpF0FFraB034xXR1L7w10L2
-         PTFdXN7uNPPwPOUVaPtnsZXCiALXMg6vg0oy32N1dJpq3kLc37jg4eM53xqUl05Aeh
-         d5YH16VmN4VzDaP3Vw5Qhmko4KHojTLCFA6C1sYcGM2EtiTLCg/13FSfz2Ts6DwY6y
-         MwA4+FZneMOr+mAtcmMR4nIp9Mx5Wof4cv6syhzJFPNYLerKGVxj5UMnUg5hLAb4li
-         QrejTbVH2TRHw==
+        b=HhBFe/n5Ms1MtXMAwyJtCKUykcvg1AkjwZ579/0jN9N6qrrMFFkKfKOGJlEZZ+EqC
+         7yF6D7/I8gaT1kNBVNwpPXXdZCERQ7Vd9O4y5x7NZCnB9sO6eqTnv94KJsepGKLzFU
+         8S42gcf64MPTdVP+zUYL3uXHTU59lzj2n+VN8dXRa5Tuh+7Si46BJpMLiUvXOp5Zlv
+         B4l1+JK5l3+YgHp/s7T2zETOafdIPsQCv5jeI+5WFMVzfwwWHqwdDrFo7rQ+XBR2V6
+         FRUc0BtMNrMfOrvoKWliAsV8K+ipM5iRd+Bdxz/UwZ98sK1w1QWsdW0sOphHcOYiu/
+         VhtF6kjqnBZNA==
 Received: by pali.im (Postfix)
-        id B0700F13; Tue, 15 Feb 2022 20:19:41 +0100 (CET)
-Date:   Tue, 15 Feb 2022 20:19:41 +0100
+        id AD11EF13; Tue, 15 Feb 2022 20:34:56 +0100 (CET)
+Date:   Tue, 15 Feb 2022 20:34:56 +0100
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
 To:     Armin Wolf <W_Armin@gmx.de>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] hwmon: (dell-smm) Allow for specifying fan control
- method as module parameter
-Message-ID: <20220215191941.azk5gpcn42ahcnna@pali>
+Subject: Re: [PATCH 6/7] hwmon: (dell-smm) Add SMM interface documentation
+Message-ID: <20220215193456.ye7odehxa3ijpqtk@pali>
 References: <20220215191113.16640-1-W_Armin@gmx.de>
- <20220215191113.16640-2-W_Armin@gmx.de>
+ <20220215191113.16640-7-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220215191113.16640-2-W_Armin@gmx.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220215191113.16640-7-W_Armin@gmx.de>
 User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tuesday 15 February 2022 20:11:07 Armin Wolf wrote:
-> Right now, the only way to test if setting manual/auto fan control works
-> is to edit and recompile the module, which may be too cumbersome for
-> the average user.
-
-There is also another way suitable for testing purposes which do not
-requires any kernel patch. Call iopl(3) syscall which changes I/O
-privilege level to 3 and which allows to poke I/O registers.
-
-> Allow for specifying the desired fan mode control method when loading
-> the module, but taint the kernel if so since there is the possibility
-> for strange side effects on non-whitelisted models.
-> Also update docs and kernel-parameters.txt accordingly.
+On Tuesday 15 February 2022 20:11:12 Armin Wolf wrote:
+> Document the SMM interface as requested by Pali Rohar.
+> Since Dell does not offer any offical documentation
+> regarding the SMM interface, the necessary information
+> was extracted from the dell_smm_hwmon driver and other
+> sources.
 > 
-> Tested on a Dell Inspiron 3505.
-> 
+> Suggested-by: Pali Rohár <pali@kernel.org>
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+
+Perfect!
+
+Reviewed-by: Pali Rohár <pali@kernel.org>
+
+I have info about some more commands but I'm not sure if they are
+implement on new machines:
+
+0x00a6  get SMBIOS version
+0x22a3  get charger info (1 arg)
+0x24a3  get adaptor info status (1 arg oder 0x03)
+0x32a3  restore normal Fn key mode (no args)
+0x33a3  put the Fn key in "raw" mode (sends the scancode e009 instead of activating the Fn- functions) (no args)
+0x36a3  get hotkey scancode list (args see diags; returns number of hotkeys)
+0x40a3  get docking state (no args)
+
 > ---
->  .../admin-guide/kernel-parameters.txt         |  3 +++
->  Documentation/hwmon/dell-smm-hwmon.rst        | 21 ++++++++++------
->  drivers/hwmon/dell-smm-hwmon.c                | 25 +++++++++++++------
->  3 files changed, 35 insertions(+), 14 deletions(-)
+>  Documentation/hwmon/dell-smm-hwmon.rst | 180 +++++++++++++++++++++++++
+>  1 file changed, 180 insertions(+)
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index d68053db21cc..4f1b6c2b7ed1 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -968,6 +968,9 @@
->  	dell_smm_hwmon.fan_max=
->  			[HW] Maximum configurable fan speed.
-> 
-> +	dell_smm_hwmon.fan_mode_method=
-> +			[HW] Method to use for changing fan mode.
-> +
->  	dfltcc=		[HW,S390]
->  			Format: { on | off | def_only | inf_only | always }
->  			on:       s390 zlib hardware support for compression on
 > diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-> index beec88491171..564d99cda869 100644
+> index cfaee682a245..12bba5fd1447 100644
 > --- a/Documentation/hwmon/dell-smm-hwmon.rst
 > +++ b/Documentation/hwmon/dell-smm-hwmon.rst
-> @@ -67,13 +67,16 @@ for your hardware. It is possible that codes that work for other
->  laptops actually work for yours as well, or that you have to discover
->  new codes.
-> 
-> -Check the list ``i8k_whitelist_fan_control`` in file
-> -``drivers/hwmon/dell-smm-hwmon.c`` in the kernel tree: as a first
-> -attempt you can try to add your machine and use an already-known code
-> -pair. If, after recompiling the kernel, you see that ``pwm1_enable``
-> -is present and works (i.e., you can manually control the fan speed),
-> -then please submit your finding as a kernel patch, so that other users
-> -can benefit from it. Please see
-> +As a first step, you can load the module with the module parameter
-> +``fan_mode_method`` set to 1 to test if your hardware works with
-> +an already know method for disabling automatic BIOS fan control.
-> +If ``pwm1_enable`` is now present and works (i.e., you can
-> +manually control the fan speed), then please submit your finding
-> +as a kernel patch, so that other users can benefit from it.
-> +Just add your model to the list ``i8k_whitelist_fan_control`` in
-> +file ``drivers/hwmon/dell-smm-hwmon.c`` in the kernel tree and use
-> +the already known code pair.
-> +Please read
->  :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
->  for information on submitting patches.
-> 
-> @@ -120,6 +123,10 @@ Module parameters
->                     Maximum configurable fan speed. (default:
->                     autodetect)
-> 
-> +* fan_mode_method:uint
-> +                   Method to use for changing fan mode (default:
-> +                   from whitelist)
+> @@ -173,3 +173,183 @@ obtain the same information and to control the fan status. The ioctl
+>  interface can be accessed from C programs or from shell using the
+>  i8kctl utility. See the source file of ``i8kutils`` for more
+>  information on how to use the ioctl interface.
 > +
->  Legacy ``/proc`` interface
->  --------------------------
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 9949eeb79378..1c4cc516c8b2 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -111,6 +111,10 @@ static uint fan_max;
->  module_param(fan_max, uint, 0);
->  MODULE_PARM_DESC(fan_max, "Maximum configurable fan speed (default: autodetect)");
-> 
-> +static uint fan_mode_method;
-> +module_param_unsafe(fan_mode_method, uint, 0);
-> +MODULE_PARM_DESC(fan_mode_method, "Method to use for changing fan mode (default: from whitelist)");
-
-No, please really do not introduce another kernel parameter for this
-driver. There are already many and we do not need to extend this list.
-
+> +SMM Interface
+> +-------------
 > +
->  struct smm_regs {
->  	unsigned int eax;
->  	unsigned int ebx;
-> @@ -677,7 +681,7 @@ static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor_types
-> 
->  			break;
->  		case hwmon_pwm_enable:
-> -			if (data->auto_fan)
-> +			if (data->auto_fan && data->manual_fan)
->  				/*
->  				 * There is no command for retrieve the current status
->  				 * from BIOS, and userspace/firmware itself can change
-> @@ -1282,14 +1286,21 @@ static int __init dell_smm_probe(struct platform_device *pdev)
->  	data->i8k_fan_max = fan_max ? : I8K_FAN_HIGH;	/* Must not be 0 */
->  	data->i8k_pwm_mult = DIV_ROUND_UP(255, data->i8k_fan_max);
-> 
-> -	fan_control = dmi_first_match(i8k_whitelist_fan_control);
-> -	if (fan_control && fan_control->driver_data) {
-> -		const struct i8k_fan_control_data *control = fan_control->driver_data;
-> +	/* value specified via module param overrides whitelist */
-> +	if (fan_mode_method > 0 && fan_mode_method <= ARRAY_SIZE(i8k_fan_control_data)) {
-> +		data->manual_fan = i8k_fan_control_data[fan_mode_method - 1].manual_fan;
-> +		data->auto_fan = i8k_fan_control_data[fan_mode_method - 1].auto_fan;
-> +	} else {
-> +		fan_control = dmi_first_match(i8k_whitelist_fan_control);
-> +		if (fan_control && fan_control->driver_data) {
-> +			const struct i8k_fan_control_data *control = fan_control->driver_data;
-> 
-> -		data->manual_fan = control->manual_fan;
-> -		data->auto_fan = control->auto_fan;
-> -		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan control\n");
-> +			data->manual_fan = control->manual_fan;
-> +			data->auto_fan = control->auto_fan;
-> +		}
->  	}
-> +	if (data->manual_fan && data->auto_fan)
-> +		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan control\n");
-> 
->  	if (!fan_mult) {
->  		/*
+> +.. warning:: The SMM interface was reverse-engineered by trial-and-error
+> +             since Dell did not provide any Documentation,
+> +             please keep that in mind.
+> +
+> +The driver uses the SMM interface to send commands to the system BIOS.
+> +This interface is normally used by Dell's 32-bit diagnostic program or
+> +on newer notebook models by the buildin BIOS diagnostics.
+> +The SMM is triggered by writing to the special ioports ``0xb2`` and ``0x84``,
+> +and may cause short hangs when the BIOS code is taking too long to
+> +execute.
+> +
+> +The SMM handler inside the system BIOS looks at the contents of the
+> +``eax``, ``ebx``, ``ecx``, ``edx``, ``esi`` and ``edi`` registers.
+> +Each register has a special purpose:
+> +
+> +=============== ==================================
+> +Register        Purpose
+> +=============== ==================================
+> +eax             Holds the command code before SMM,
+> +                holds the first result after SMM.
+> +ebx             Holds the arguments.
+> +ecx             Unknown, set to 0.
+> +edx             Holds the second result after SMM.
+> +esi             Unknown, set to 0.
+> +edi             Unknown, set to 0.
+> +=============== ==================================
+> +
+> +The SMM handler can signal a failure by either:
+> +
+> +- setting the lower sixteen bits of ``eax`` to ``0xffff``
+> +- not modifying ``eax`` at all
+> +- setting the carry flag
+> +
+> +SMM command codes
+> +-----------------
+> +
+> +=============== ======================= ================================================
+> +Command Code    Command Name            Description
+> +=============== ======================= ================================================
+> +``0x0025``      Get Fn key status       Returns the Fn key pressed after SMM:
+> +
+> +                                        - 9th bit in ``eax`` indicates Volume up
+> +                                        - 10th bit in ``eax`` indicates Volume down
+> +                                        - both bits indicate Volume mute
+> +
+> +``0xa069``      Get power status        Returns current power status after SMM:
+> +
+> +                                        - 1st bit in ``eax`` indicates Battery connected
+> +                                        - 3th bit in ``eax`` indicates AC connected
+> +
+> +``0x00a3``      Get fan state           Returns current fan state after SMM:
+> +
+> +                                        - 1st byte in ``eax`` holds the current
+> +                                          fan state (0 - 2 or 3)
+> +
+> +``0x01a3``      Set fan state           Sets the fan speed:
+> +
+> +                                        - 1st byte in ``ebx`` holds the fan number
+> +                                        - 2nd byte in ``ebx`` holds the desired
+> +                                          fan state (0 - 2 or 3)
+> +
+> +``0x02a3``      Get fan speed           Returns the current fan speed in RPM:
+> +
+> +                                        - 1st byte in ``ebx`` holds the fan number
+> +                                        - 1st word in ``eax`` holds the current
+> +                                          fan speed in RPM (after SMM)
+> +
+> +``0x03a3``      Get fan type            Returns the fan type:
+> +
+> +                                        - 1st byte in ``ebx`` holds the fan number
+> +                                        - 1st byte in ``eax`` holds the
+> +                                          fan type (after SMM):
+> +
+> +                                          - 5th bit indicates docking fan
+> +                                          - 1 indicates Processor fan
+> +                                          - 2 indicates Motherboard fan
+> +                                          - 3 indicates Video fan
+> +                                          - 4 indicates Power supply fan
+> +                                          - 5 indicates Chipset fan
+> +                                          - 6 indicates other fan type
+> +
+> +``0x04a3``      Get nominal fan speed   Returns the nominal RPM in each fan state:
+> +
+> +                                        - 1st byte in ``ebx`` holds the fan number
+> +                                        - 2nd byte in ``ebx`` holds the fan state
+> +                                          in question (0 - 2 or 3)
+> +                                        - 1st word in ``eax`` holds the nominal
+> +                                          fan speed in RPM (after SMM)
+> +
+> +``0x05a3``      Get fan speed tolerance Returns the speed tolerance for each fan state:
+> +
+> +                                        - 1st byte in ``ebx`` holds the fan number
+> +                                        - 2nd byte in ``ebx`` holds the fan state
+> +                                          in question (0 - 2 or 3)
+> +                                        - 1st byte in ``eax`` returns the speed
+> +                                          tolerance
+> +
+> +``0x10a3``      Get sensor temperature  Returns the measured temperature:
+> +
+> +                                        - 1st byte in ``ebx`` holds the sensor number
+> +                                        - 1st byte in ``eax`` holds the measured
+> +                                          temperature (after SMM)
+> +
+> +``0x11a3``      Get sensor type         Returns the sensor type:
+> +
+> +                                        - 1st byte in ``ebx`` holds the sensor number
+> +                                        - 1st byte in ``eax`` holds the
+> +                                          temperature type (after SMM):
+> +
+> +                                          - 1 indicates CPU sensor
+> +                                          - 2 indicates GPU sensor
+> +                                          - 3 indicates SODIMM sensor
+> +                                          - 4 indicates other sensor type
+> +                                          - 5 indicates Ambient sensor
+> +                                          - 6 indicates other sensor type
+> +
+> +``0xfea3``      Get SMM signature       Returns Dell signature if interface
+> +                                        is supported (after SMM):
+> +
+> +                                        - ``eax`` holds 1145651527
+> +                                          (0x44494147 or "DIAG")
+> +                                        - ``edx`` holds 1145392204
+> +                                          (0x44454c4c or "DELL")
+> +
+> +``0xffa3``      Get SMM signature       Same as ``0xfea3``, check both.
+> +=============== ======================= ================================================
+> +
+> +There are additional commands for enabling (``0x31a3`` or ``0x35a3``) and
+> +disabling (``0x30a3`` or ``0x34a3``) automatic fan speed control.
+> +The commands are however causing severe sideeffects on many machines, so
+> +they are not used by default.
+> +
+> +On several machines (Inspiron 3505, Precision 490, Vostro 1720, ...), the
+> +fans supports a 4th "magic" state, which signals the BIOS that automatic
+> +fan control should be enabled for a specific fan.
+> +However there are also some machines who do support a 4th regular fan state too,
+> +but in case of the "magic" state, the nominal RPM reported for this state is a
+> +placeholder value, which however is not always detectable.
+> +
+> +Firmware Bugs
+> +-------------
+> +
+> +The SMM calls can behave erratic on some machines:
+> +
+> +======================================================= =================
+> +Firmware Bug                                            Affected Machines
+> +======================================================= =================
+> +Reading of fan states return spurious errors.           Precision 490
+> +
+> +Reading of fan types causes erratic fan behaviour.      Studio XPS 8000
+> +
+> +                                                        Studio XPS 8100
+> +
+> +                                                        Inspiron 580
+> +
+> +Fan-related SMM calls take too long (about 500ms).      Inspiron 7720
+> +
+> +                                                        Vostro 3360
+> +
+> +                                                        XPS 13 9333
+> +
+> +                                                        XPS 15 L502X
+> +======================================================= =================
+> +
+> +In case you experience similar issues on your Dell machine, please
+> +submit a bugreport on bugzilla to we can apply workarounds.
+> +
+> +Limitations
+> +-----------
+> +
+> +The SMM calls can take too long to execute on some machines, causing
+> +short hangs and/or audio glitches.
+> +Also the fan state needs to be restored after suspend, as well as
+> +the automatic mode settings.
+> +When reading a temperature sensor, values above 127 degrees indicate
+> +a BIOS read error or a deactivated sensor.
 > --
 > 2.30.2
 > 
