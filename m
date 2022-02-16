@@ -2,206 +2,147 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B628C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 15:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C66BC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 15:34:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235484AbiBPPSD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Feb 2022 10:18:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45488 "EHLO
+        id S234704AbiBPPed (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Feb 2022 10:34:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiBPPSC (ORCPT
+        with ESMTP id S235357AbiBPPec (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:18:02 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9387BE38AF;
-        Wed, 16 Feb 2022 07:17:49 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so2796554ooo.13;
-        Wed, 16 Feb 2022 07:17:49 -0800 (PST)
+        Wed, 16 Feb 2022 10:34:32 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B987D267241;
+        Wed, 16 Feb 2022 07:34:17 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id x5so4510658edd.11;
+        Wed, 16 Feb 2022 07:34:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LZUBzMlbYHA3s2eTK5GN4Due0r2pYlR1eEia/95E5GQ=;
-        b=oztqwJWE4vWoFq9v6sNpYViA9/nQfzcHN0dqDZhtc1rQIZ0kshsUbjfJKK7CdQ752b
-         CEly7MWfx6nbRmUf6G11XsKT8C0V4mFSPQTVjjSKQ3HBnVeW5iW4Q1O7gt/34F2ncu32
-         lSKrdGbRXIBcOB7KzivfaQ4iB5P1I8qWQsXme8K4q6Z2hopA7476l3eiFBpt3R6BysIg
-         NCZ0rJxcJj7GiN7odHx61RUMxsyeo/JGiuUuet0TxWjEV/6OJ+FL/kNsrdiidzRVU32N
-         tC/NruDvpCIl8AAuw0wuV0mnMoh8ipyhP9wmoPXLKWT8zjtfbNCuKRyDhBTJNWlxsm3b
-         E9wQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=F/pXocPlPW+FFunz/4FMFMPXTdLFh4fHOr4OnvdvivY=;
+        b=oParpqTNSlFICkmQ0iqmliF9rhpfMnS6GO4B4rBlYMXgq29oKvAfRA0we1EepFr8Ql
+         6qpMDGZLp2AxPErewlrGcV0dCFUiM7L7sxazVAPtMQLlpEMH3UIV6HCEKE5rNr/huAep
+         a5sdp+eHATv6HFMyFQMvffq49MxjbkdB9p1BzWmE5rGUWuJvU0oSYdsjCh5LSfxptDjb
+         TpPsBETB/nDKDUsQId43N2HqiCn2hyn2hhNj1oVlbyFlHbba5VnFp2zhtNJk2DPuF/u8
+         WcRC7BWr1/20m72mpGuzgBlpBVFGrdnbd5eY84WyCjF+LpukKS2G0HIOHVQzUJLvGCGb
+         lXvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LZUBzMlbYHA3s2eTK5GN4Due0r2pYlR1eEia/95E5GQ=;
-        b=ixBVlAs8gu1sx9yjOVSD0os+zdWqsxAhkpoBTZgXv7Xf/MFtqCuKy2YXU+J5s0AA5S
-         yqQpOlqOdwWyyRU2FHqDloVpZgPlg/nsuK5iSBYAiClz2OJtd0qXiyWtzESmzbaeFwKI
-         go3vg5m0snEpBlD28kLdy5srrTYHl4hSgnpD8csocIMUaKpEinZ+MQ2l0lSOzcP5KvYL
-         Ar/ZfN0z0XBqwGof27Nfyuy3gd+uqLTji4Ak4UY2XxRkQiUmGuRAr6gym/tSOr1FYQ5J
-         T+gH9iy4PVFwM0bNh2k+tqaSOeF7E8arEHzwGEydngaLMIQapaYK/3YYvxr/ZklAkVWu
-         5JSw==
-X-Gm-Message-State: AOAM533/R2c8QvujoJnNM+fQfz2am6PS6ENZcjwdZ5qZrxqhzBNUA+Aq
-        XyC9Qv3EuC+MLo/5km0EZWG2YbDFB/mbRA==
-X-Google-Smtp-Source: ABdhPJx2mICbj/HwJWEoYyd8mFTkNNGNhAq5HxeNVsU6HF94JynQVqT/2i673guEM6jJ5KxpGRPiVg==
-X-Received: by 2002:a05:6870:e612:b0:ce:c0c9:6e1 with SMTP id q18-20020a056870e61200b000cec0c906e1mr645703oag.307.1645024668919;
-        Wed, 16 Feb 2022 07:17:48 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e16sm15267855otr.11.2022.02.16.07.17.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 07:17:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d720b4a6-e318-8738-d9f4-5017acd558e6@roeck-us.net>
-Date:   Wed, 16 Feb 2022 07:17:46 -0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=F/pXocPlPW+FFunz/4FMFMPXTdLFh4fHOr4OnvdvivY=;
+        b=iwXuZRIWsGubZbV3MUgw1cj0lguVfHDD5wqlp8nGrAOBFMYBFHbJWN1tIF1mHOwAcr
+         dOeu3eKIwhVXKWKNXPjaKKT2nNOhDM4FxPj3eIOWHjq2Briomih7Ev1k9/8G3iEG2YAE
+         w2zOLic2Gn2Ollhgg1LynARqFAknqqJrcTF9tmHWoTGd/k35v04ri/jaVKRVL16Jt0ZD
+         wgDVba2R8MLOUZR06YHrVdzXb2BbSDyaAbctm+gX7odvveBPnIXpG+cSuxYoGgcaZJdG
+         2/6a3BgpQ/9jE4D+8pmKrcSK1zKnU9C6vGHFBdGSfzdlY1ILZoq2NJItOVWLIvbAH79O
+         u+Ew==
+X-Gm-Message-State: AOAM532/pupo2sOBW8Gp7JHZ6Xb0wd0nqikdi3f6jdui1W8BvG2sCFLL
+        ckK1SLVpsXxld9jYGf+UFYU=
+X-Google-Smtp-Source: ABdhPJyI9L2ZEvl5Uj8rZ3RMzGr/8WnQcW8tusGLLRei4CyopyqbmcUZobhj8GukEDktjVV6Ru5r3w==
+X-Received: by 2002:a05:6402:349:b0:410:a0bd:35ad with SMTP id r9-20020a056402034900b00410a0bd35admr3546737edw.12.1645025656186;
+        Wed, 16 Feb 2022 07:34:16 -0800 (PST)
+Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
+        by smtp.googlemail.com with ESMTPSA id f3sm356717edy.72.2022.02.16.07.34.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 07:34:15 -0800 (PST)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (asus-ec-sensors) merge setup functions
+Date:   Wed, 16 Feb 2022 16:34:07 +0100
+Message-Id: <20220216153407.2412409-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <d720b4a6-e318-8738-d9f4-5017acd558e6@roeck-us.net>
+References: <d720b4a6-e318-8738-d9f4-5017acd558e6@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) merge setup functions
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220216081920.2334468-1-eugene.shalygin@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220216081920.2334468-1-eugene.shalygin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/16/22 00:19, Eugene Shalygin wrote:
-> Merge configure_sensor_setup() into probe().
-> 
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> ---
->   drivers/hwmon/asus-ec-sensors.c | 55 ++++++++++++++-------------------
->   1 file changed, 24 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index bfac08a5dc57..45de8d34a588 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -589,31 +589,40 @@ get_board_sensors(const struct device *dev)
->   	return (unsigned long)dmi_entry->driver_data;
->   }
->   
-> -static int __init configure_sensor_setup(struct device *dev)
-> +static int __init asus_ec_probe(struct platform_device *pdev)
->   {
-> -	struct ec_sensors_data *ec_data = dev_get_drvdata(dev);
-> +	const struct hwmon_channel_info **ptr_asus_ec_ci;
->   	int nr_count[hwmon_max] = { 0 }, nr_types = 0;
-> -	struct device *hwdev;
->   	struct hwmon_channel_info *asus_ec_hwmon_chan;
-> -	const struct hwmon_channel_info **ptr_asus_ec_ci;
->   	const struct hwmon_chip_info *chip_info;
->   	const struct ec_sensor_info *si;
-> +	struct ec_sensors_data *ec_data;
->   	enum hwmon_sensor_types type;
-> +	unsigned long board_sensors;
-> +	struct device *hwdev;
->   	unsigned int i;
->   
-> -	ec_data->board_sensors = get_board_sensors(dev);
-> -	if (!ec_data->board_sensors) {
-> +	board_sensors = get_board_sensors(&pdev->dev);
-> +	if (!board_sensors) {
->   		return -ENODEV;
->   	}
->   
-> +	ec_data = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
-> +			     GFP_KERNEL);
-> +	if (!ec_data) {
-> +		return -ENOMEM;
-> +	}
-> +
-> +	dev_set_drvdata(&pdev->dev, ec_data);
-> +	ec_data->board_sensors = board_sensors;
->   	ec_data->nr_sensors = board_sensors_count(ec_data->board_sensors);
-> -	ec_data->sensors = devm_kcalloc(dev, ec_data->nr_sensors,
-> +	ec_data->sensors = devm_kcalloc(&pdev->dev, ec_data->nr_sensors,
->   					sizeof(struct ec_sensor), GFP_KERNEL);
+Merge configure_sensor_setup() into probe().
 
-Almost the entire change consists of replacing "dev" with "&pdev->dev".
-Please add
-	struct device *dev = &pdev->dev;
-at the beginning of this function to avoid this.
+Change in v2: add local struct device *dev = &pdev->dev;
 
-Guenter
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ drivers/hwmon/asus-ec-sensors.c | 39 ++++++++++++++-------------------
+ 1 file changed, 17 insertions(+), 22 deletions(-)
 
->   
->   	setup_sensor_data(ec_data);
-> -	ec_data->registers = devm_kcalloc(dev, ec_data->nr_registers,
-> +	ec_data->registers = devm_kcalloc(&pdev->dev, ec_data->nr_registers,
->   					  sizeof(u16), GFP_KERNEL);
-> -	ec_data->read_buffer = devm_kcalloc(dev, ec_data->nr_registers,
-> +	ec_data->read_buffer = devm_kcalloc(&pdev->dev, ec_data->nr_registers,
->   					    sizeof(u8), GFP_KERNEL);
->   
->   	if (!ec_data->registers || !ec_data->read_buffer) {
-> @@ -622,7 +631,7 @@ static int __init configure_sensor_setup(struct device *dev)
->   
->   	fill_ec_registers(ec_data);
->   
-> -	ec_data->aml_mutex = asus_hw_access_mutex(dev);
-> +	ec_data->aml_mutex = asus_hw_access_mutex(&pdev->dev);
->   
->   	for (i = 0; i < ec_data->nr_sensors; ++i) {
->   		si = get_sensor_info(ec_data, i);
-> @@ -635,11 +644,11 @@ static int __init configure_sensor_setup(struct device *dev)
->   		nr_count[hwmon_chip]++, nr_types++;
->   
->   	asus_ec_hwmon_chan = devm_kcalloc(
-> -		dev, nr_types, sizeof(*asus_ec_hwmon_chan), GFP_KERNEL);
-> +		&pdev->dev, nr_types, sizeof(*asus_ec_hwmon_chan), GFP_KERNEL);
->   	if (!asus_ec_hwmon_chan)
->   		return -ENOMEM;
->   
-> -	ptr_asus_ec_ci = devm_kcalloc(dev, nr_types + 1,
-> +	ptr_asus_ec_ci = devm_kcalloc(&pdev->dev, nr_types + 1,
->   				       sizeof(*ptr_asus_ec_ci), GFP_KERNEL);
->   	if (!ptr_asus_ec_ci)
->   		return -ENOMEM;
-> @@ -651,37 +660,21 @@ static int __init configure_sensor_setup(struct device *dev)
->   		if (!nr_count[type])
->   			continue;
->   
-> -		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
-> +		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, &pdev->dev,
->   					     nr_count[type], type,
->   					     hwmon_attributes[type]);
->   		*ptr_asus_ec_ci++ = asus_ec_hwmon_chan++;
->   	}
->   
-> -	dev_info(dev, "board has %d EC sensors that span %d registers",
-> +	dev_info(&pdev->dev, "board has %d EC sensors that span %d registers",
->   		 ec_data->nr_sensors, ec_data->nr_registers);
->   
-> -	hwdev = devm_hwmon_device_register_with_info(dev, "asusec",
-> +	hwdev = devm_hwmon_device_register_with_info(&pdev->dev, "asusec",
->   						     ec_data, chip_info, NULL);
->   
->   	return PTR_ERR_OR_ZERO(hwdev);
->   }
->   
-> -static int __init asus_ec_probe(struct platform_device *pdev)
-> -{
-> -	struct ec_sensors_data *state;
-> -	int status = 0;
-> -
-> -	state = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
-> -			     GFP_KERNEL);
-> -
-> -	if (!state) {
-> -		return -ENOMEM;
-> -	}
-> -
-> -	dev_set_drvdata(&pdev->dev, state);
-> -	status = configure_sensor_setup(&pdev->dev);
-> -	return status;
-> -}
->   
->   static const struct acpi_device_id acpi_ec_ids[] = {
->   	/* Embedded Controller Device */
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index bfac08a5dc57..300328d97a0c 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -589,23 +589,34 @@ get_board_sensors(const struct device *dev)
+ 	return (unsigned long)dmi_entry->driver_data;
+ }
+ 
+-static int __init configure_sensor_setup(struct device *dev)
++static int __init asus_ec_probe(struct platform_device *pdev)
+ {
+-	struct ec_sensors_data *ec_data = dev_get_drvdata(dev);
++	const struct hwmon_channel_info **ptr_asus_ec_ci;
+ 	int nr_count[hwmon_max] = { 0 }, nr_types = 0;
+-	struct device *hwdev;
+ 	struct hwmon_channel_info *asus_ec_hwmon_chan;
+-	const struct hwmon_channel_info **ptr_asus_ec_ci;
+ 	const struct hwmon_chip_info *chip_info;
+ 	const struct ec_sensor_info *si;
++	struct ec_sensors_data *ec_data;
+ 	enum hwmon_sensor_types type;
++	unsigned long board_sensors;
++	struct device *hwdev;
++	struct device *dev;
+ 	unsigned int i;
+ 
+-	ec_data->board_sensors = get_board_sensors(dev);
+-	if (!ec_data->board_sensors) {
++	dev = &pdev->dev;
++	board_sensors = get_board_sensors(dev);
++	if (!board_sensors) {
+ 		return -ENODEV;
+ 	}
+ 
++	ec_data = devm_kzalloc(dev, sizeof(struct ec_sensors_data),
++			     GFP_KERNEL);
++	if (!ec_data) {
++		return -ENOMEM;
++	}
++
++	dev_set_drvdata(dev, ec_data);
++	ec_data->board_sensors = board_sensors;
+ 	ec_data->nr_sensors = board_sensors_count(ec_data->board_sensors);
+ 	ec_data->sensors = devm_kcalloc(dev, ec_data->nr_sensors,
+ 					sizeof(struct ec_sensor), GFP_KERNEL);
+@@ -666,22 +677,6 @@ static int __init configure_sensor_setup(struct device *dev)
+ 	return PTR_ERR_OR_ZERO(hwdev);
+ }
+ 
+-static int __init asus_ec_probe(struct platform_device *pdev)
+-{
+-	struct ec_sensors_data *state;
+-	int status = 0;
+-
+-	state = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
+-			     GFP_KERNEL);
+-
+-	if (!state) {
+-		return -ENOMEM;
+-	}
+-
+-	dev_set_drvdata(&pdev->dev, state);
+-	status = configure_sensor_setup(&pdev->dev);
+-	return status;
+-}
+ 
+ static const struct acpi_device_id acpi_ec_ids[] = {
+ 	/* Embedded Controller Device */
+-- 
+2.35.1
 
