@@ -2,187 +2,206 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EDBFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 15:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B628C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 15:17:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235418AbiBPPMg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Feb 2022 10:12:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55124 "EHLO
+        id S235484AbiBPPSD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Feb 2022 10:18:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbiBPPMf (ORCPT
+        with ESMTP id S233873AbiBPPSC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:12:35 -0500
+        Wed, 16 Feb 2022 10:18:02 -0500
 Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E5425E89;
-        Wed, 16 Feb 2022 07:12:23 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so2784030oos.9;
-        Wed, 16 Feb 2022 07:12:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9387BE38AF;
+        Wed, 16 Feb 2022 07:17:49 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so2796554ooo.13;
+        Wed, 16 Feb 2022 07:17:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=8EagOatwpnloVBLpvuiKwC6cqbSfSGAyVDbY82VfmWY=;
-        b=jMVJG6jmB956M6R2glFKs7DuDGfAEIwnDxhZnoKiWbN8B5UtumCOqFPrqlRtMkD0hM
-         5ofS1qBPXRvdPdBL3uBDr5BHI0q31ncP7fr3ka1gzZecIcIS8o6f+xW5nma18gR7TIsV
-         FnCpn1czuwMDEIWDEL3+3/BxPIvWOpkG5KEgmodBzqlBT4zlsGUcB3lKIXE42VoGaDC7
-         uouj2+tF00W/LJ1eC/WXF12DJJ7WKQAnQmuiYR3QLdddl+BU+U3sm2Vm88+t8aSyYDpi
-         3obsm1gNbaS1NwK+rfUPV65680+TNuEsqWBOk6SfAF3qzkl2BPYx54gD52QKw1EKfP0I
-         Xd6Q==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LZUBzMlbYHA3s2eTK5GN4Due0r2pYlR1eEia/95E5GQ=;
+        b=oztqwJWE4vWoFq9v6sNpYViA9/nQfzcHN0dqDZhtc1rQIZ0kshsUbjfJKK7CdQ752b
+         CEly7MWfx6nbRmUf6G11XsKT8C0V4mFSPQTVjjSKQ3HBnVeW5iW4Q1O7gt/34F2ncu32
+         lSKrdGbRXIBcOB7KzivfaQ4iB5P1I8qWQsXme8K4q6Z2hopA7476l3eiFBpt3R6BysIg
+         NCZ0rJxcJj7GiN7odHx61RUMxsyeo/JGiuUuet0TxWjEV/6OJ+FL/kNsrdiidzRVU32N
+         tC/NruDvpCIl8AAuw0wuV0mnMoh8ipyhP9wmoPXLKWT8zjtfbNCuKRyDhBTJNWlxsm3b
+         E9wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=8EagOatwpnloVBLpvuiKwC6cqbSfSGAyVDbY82VfmWY=;
-        b=NfEJ1Q8VVQ5LwC0uCDxbwZ0cfyzkOOv/0FdB4ovMkY32sA9d2GCfQv8FoujcVkO4qf
-         h33RDTt8Ewmh9ajfVzw+2jn8NkZg1CQ3SPBVWuNIqRPOaStM5CkaKoJK+NSzZHkmtBtt
-         xC7c136lvym52c2Fz8E/LmlehBN0XOjlcm3aZPX6TXCdQ5GhppcMU3IaqftgwD51/EbH
-         7+4V5HS1+VF9WL/a8oho6c/qKXfYGUQEDeNCqqvW0K4yg4uZKYc2OqTaqK1X984mUBOx
-         HuCg02aAOv6BtdjdNuE12lfUH6Du7EcnTVtPqGQY/QF6kBQZ9VqFh2T9V2ScvXD6jX2v
-         60gQ==
-X-Gm-Message-State: AOAM532dpQMCIEavnIMDoGcvsgDdLmHnExM2SWtAvVtpTQHeUrzbNEuc
-        whFJt4LJ8yfjLrJHpjMOWKk=
-X-Google-Smtp-Source: ABdhPJw48DZ1orM9cbn6ZFn7AiWfOVbGIy7a36NIzJQkXx0dVyF5qE8kcJHqasvZEJe8HaZY0eeQZw==
-X-Received: by 2002:a05:6870:41d4:b0:d1:2682:277c with SMTP id z20-20020a05687041d400b000d12682277cmr632495oac.206.1645024342369;
-        Wed, 16 Feb 2022 07:12:22 -0800 (PST)
+        bh=LZUBzMlbYHA3s2eTK5GN4Due0r2pYlR1eEia/95E5GQ=;
+        b=ixBVlAs8gu1sx9yjOVSD0os+zdWqsxAhkpoBTZgXv7Xf/MFtqCuKy2YXU+J5s0AA5S
+         yqQpOlqOdwWyyRU2FHqDloVpZgPlg/nsuK5iSBYAiClz2OJtd0qXiyWtzESmzbaeFwKI
+         go3vg5m0snEpBlD28kLdy5srrTYHl4hSgnpD8csocIMUaKpEinZ+MQ2l0lSOzcP5KvYL
+         Ar/ZfN0z0XBqwGof27Nfyuy3gd+uqLTji4Ak4UY2XxRkQiUmGuRAr6gym/tSOr1FYQ5J
+         T+gH9iy4PVFwM0bNh2k+tqaSOeF7E8arEHzwGEydngaLMIQapaYK/3YYvxr/ZklAkVWu
+         5JSw==
+X-Gm-Message-State: AOAM533/R2c8QvujoJnNM+fQfz2am6PS6ENZcjwdZ5qZrxqhzBNUA+Aq
+        XyC9Qv3EuC+MLo/5km0EZWG2YbDFB/mbRA==
+X-Google-Smtp-Source: ABdhPJx2mICbj/HwJWEoYyd8mFTkNNGNhAq5HxeNVsU6HF94JynQVqT/2i673guEM6jJ5KxpGRPiVg==
+X-Received: by 2002:a05:6870:e612:b0:ce:c0c9:6e1 with SMTP id q18-20020a056870e61200b000cec0c906e1mr645703oag.307.1645024668919;
+        Wed, 16 Feb 2022 07:17:48 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e11sm2245139oiw.3.2022.02.16.07.12.20
+        by smtp.gmail.com with ESMTPSA id e16sm15267855otr.11.2022.02.16.07.17.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 07:12:21 -0800 (PST)
+        Wed, 16 Feb 2022 07:17:48 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <130a9cbe-ee0c-1908-1d62-0f3c674ca648@roeck-us.net>
-Date:   Wed, 16 Feb 2022 07:12:19 -0800
+Message-ID: <d720b4a6-e318-8738-d9f4-5017acd558e6@roeck-us.net>
+Date:   Wed, 16 Feb 2022 07:17:46 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) merge setup functions
 Content-Language: en-US
-To:     Agathe Porte <agathe.porte@nokia.com>, linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>
-References: <20220216070720.2131761-1-linux@roeck-us.net>
- <20220216070720.2131761-2-linux@roeck-us.net>
- <2f7780b8-ce67-6cd6-4097-d8113f557444@nokia.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220216081920.2334468-1-eugene.shalygin@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 2/2] hwmon: Add driver for Texas Instruments TMP464 and
- TMP468
-In-Reply-To: <2f7780b8-ce67-6cd6-4097-d8113f557444@nokia.com>
+In-Reply-To: <20220216081920.2334468-1-eugene.shalygin@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/16/22 04:42, Agathe Porte wrote:
-> Hi Guenter,
+On 2/16/22 00:19, Eugene Shalygin wrote:
+> Merge configure_sensor_setup() into probe().
 > 
-> Le 16/02/2022 à 08:07, Guenter Roeck a écrit :
->> Add support for Texas Instruments TMP464 and TMP468 temperature sensor
->> ICs.
->>
->> TI's TMP464 is an I2C temperature sensor chip. This chip is
->> similar to TI's TMP421 chip, but with 16bit-wide registers (instead
->> of 8bit-wide registers). The chip has one local sensor and four
->> remote sensors. TMP468 is similar to TMP464 but has one local and
->> eight remote sensors.
->>
->> Originally-from: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v3:
->> - Added support for TMP468
->> - Added support for various limits, temperature hysteresis, alarm attributes,
->>    and update interval
->> - Use regmap instead of local caching
->> - Use static chip configuration
->> - Unlock check if needed when loading driver, and lock it when unloading it
->>    - Call tmp464_init_client() before calling tmp464_probe_from_dt()
->>      since the latter changes registers, which requires the chip to be
->>      unlocked.
->> - Restore configuration register when unloading driver
->> - ti,n-factor is optional, so don't fail if the property is not present
->>
->> Notes:
->> - Tested with real TMP468. Module tested for TMP464.
->> - I was not able to test with a system supporting devicetree;
->>    especially negative values for "ti,n-factor" need testing
->>    (and I wonder if of_property_read_s8() would be needed to
->>     support this properly).
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> ---
+>   drivers/hwmon/asus-ec-sensors.c | 55 ++++++++++++++-------------------
+>   1 file changed, 24 insertions(+), 31 deletions(-)
 > 
-> I just did the test on our system and both positive and negative value n-factor fails.
-> 
-> With the following overlay:
-> 
-> /dts-v1/;
-> /plugin/;
-> / {
->          fragment@0 {
->                  target-path = "/soc/.../i2c@4/tmp464@49";
->                  __overlay__ {
->                          #address-cells = <1>;
->                          #size-cells = <0>;
-> 
->                          channel@0 {
->                                  reg = <0x0>;
->                                  label = "local";
->                                  ti,n-factor = /bits/ 8 <(-10)>;
->                          };
-> 
->                          channel@1 {
->                                  reg = <0x1>;
->                                  label = "ch1";
->                          };
-> 
->                          channel@2 {
->                                  reg = <0x2>;
->                                  label = "ch2";
->                          };
-> 
->                          channel@3 {
->                                  reg = <0x3>;
->                                  label = "ch3";
->                          };
-> 
->                          channel@4 {
->                                  reg = <0x4>;
->                                  label = "ch4";
->                          };
->                  };
->          };
-> 
-> };
-> 
-> I get the following probing error:
-> 
-> [ 3580.557425] tmp464: probe of 16-0049 failed with error -75
-> 
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index bfac08a5dc57..45de8d34a588 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -589,31 +589,40 @@ get_board_sensors(const struct device *dev)
+>   	return (unsigned long)dmi_entry->driver_data;
+>   }
+>   
+> -static int __init configure_sensor_setup(struct device *dev)
+> +static int __init asus_ec_probe(struct platform_device *pdev)
+>   {
+> -	struct ec_sensors_data *ec_data = dev_get_drvdata(dev);
+> +	const struct hwmon_channel_info **ptr_asus_ec_ci;
+>   	int nr_count[hwmon_max] = { 0 }, nr_types = 0;
+> -	struct device *hwdev;
+>   	struct hwmon_channel_info *asus_ec_hwmon_chan;
+> -	const struct hwmon_channel_info **ptr_asus_ec_ci;
+>   	const struct hwmon_chip_info *chip_info;
+>   	const struct ec_sensor_info *si;
+> +	struct ec_sensors_data *ec_data;
+>   	enum hwmon_sensor_types type;
+> +	unsigned long board_sensors;
+> +	struct device *hwdev;
+>   	unsigned int i;
+>   
+> -	ec_data->board_sensors = get_board_sensors(dev);
+> -	if (!ec_data->board_sensors) {
+> +	board_sensors = get_board_sensors(&pdev->dev);
+> +	if (!board_sensors) {
+>   		return -ENODEV;
+>   	}
+>   
+> +	ec_data = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
+> +			     GFP_KERNEL);
+> +	if (!ec_data) {
+> +		return -ENOMEM;
+> +	}
+> +
+> +	dev_set_drvdata(&pdev->dev, ec_data);
+> +	ec_data->board_sensors = board_sensors;
+>   	ec_data->nr_sensors = board_sensors_count(ec_data->board_sensors);
+> -	ec_data->sensors = devm_kcalloc(dev, ec_data->nr_sensors,
+> +	ec_data->sensors = devm_kcalloc(&pdev->dev, ec_data->nr_sensors,
+>   					sizeof(struct ec_sensor), GFP_KERNEL);
 
-I think that may be caused by using of_property_read_s32() for reading
-an 8-bit property. Can you try and replace of_property_read_s32()
-with of_property_read_u8() and the variable it points to to s8 ?
+Almost the entire change consists of replacing "dev" with "&pdev->dev".
+Please add
+	struct device *dev = &pdev->dev;
+at the beginning of this function to avoid this.
 
-	s8 val;
-	...
-	err = of_property_read_u8(child, "ti,n-factor", &val);
-
-There is no of_property_read_s8(), so we can not use that,
-but maybe using of_property_read_u8() does the trick.
-
-Thanks,
 Guenter
 
-> With a positive n-factor in the overlay (<(10)> instead of <(-10)>), the driver *does not load either*, with the same error message.
-> 
-> Without any n-factor set, the v3 driver you proposed loads just fine with the DT.
-> 
-> Any idea of where this could come from? This was probably not working in my own implementation either.
-> 
-> PS: check your spam folder eventually for my mail asking delivery details of the TMP464 samples.
-> 
-> Bests,
-> 
-> Agathe.
-> 
+>   
+>   	setup_sensor_data(ec_data);
+> -	ec_data->registers = devm_kcalloc(dev, ec_data->nr_registers,
+> +	ec_data->registers = devm_kcalloc(&pdev->dev, ec_data->nr_registers,
+>   					  sizeof(u16), GFP_KERNEL);
+> -	ec_data->read_buffer = devm_kcalloc(dev, ec_data->nr_registers,
+> +	ec_data->read_buffer = devm_kcalloc(&pdev->dev, ec_data->nr_registers,
+>   					    sizeof(u8), GFP_KERNEL);
+>   
+>   	if (!ec_data->registers || !ec_data->read_buffer) {
+> @@ -622,7 +631,7 @@ static int __init configure_sensor_setup(struct device *dev)
+>   
+>   	fill_ec_registers(ec_data);
+>   
+> -	ec_data->aml_mutex = asus_hw_access_mutex(dev);
+> +	ec_data->aml_mutex = asus_hw_access_mutex(&pdev->dev);
+>   
+>   	for (i = 0; i < ec_data->nr_sensors; ++i) {
+>   		si = get_sensor_info(ec_data, i);
+> @@ -635,11 +644,11 @@ static int __init configure_sensor_setup(struct device *dev)
+>   		nr_count[hwmon_chip]++, nr_types++;
+>   
+>   	asus_ec_hwmon_chan = devm_kcalloc(
+> -		dev, nr_types, sizeof(*asus_ec_hwmon_chan), GFP_KERNEL);
+> +		&pdev->dev, nr_types, sizeof(*asus_ec_hwmon_chan), GFP_KERNEL);
+>   	if (!asus_ec_hwmon_chan)
+>   		return -ENOMEM;
+>   
+> -	ptr_asus_ec_ci = devm_kcalloc(dev, nr_types + 1,
+> +	ptr_asus_ec_ci = devm_kcalloc(&pdev->dev, nr_types + 1,
+>   				       sizeof(*ptr_asus_ec_ci), GFP_KERNEL);
+>   	if (!ptr_asus_ec_ci)
+>   		return -ENOMEM;
+> @@ -651,37 +660,21 @@ static int __init configure_sensor_setup(struct device *dev)
+>   		if (!nr_count[type])
+>   			continue;
+>   
+> -		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
+> +		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, &pdev->dev,
+>   					     nr_count[type], type,
+>   					     hwmon_attributes[type]);
+>   		*ptr_asus_ec_ci++ = asus_ec_hwmon_chan++;
+>   	}
+>   
+> -	dev_info(dev, "board has %d EC sensors that span %d registers",
+> +	dev_info(&pdev->dev, "board has %d EC sensors that span %d registers",
+>   		 ec_data->nr_sensors, ec_data->nr_registers);
+>   
+> -	hwdev = devm_hwmon_device_register_with_info(dev, "asusec",
+> +	hwdev = devm_hwmon_device_register_with_info(&pdev->dev, "asusec",
+>   						     ec_data, chip_info, NULL);
+>   
+>   	return PTR_ERR_OR_ZERO(hwdev);
+>   }
+>   
+> -static int __init asus_ec_probe(struct platform_device *pdev)
+> -{
+> -	struct ec_sensors_data *state;
+> -	int status = 0;
+> -
+> -	state = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
+> -			     GFP_KERNEL);
+> -
+> -	if (!state) {
+> -		return -ENOMEM;
+> -	}
+> -
+> -	dev_set_drvdata(&pdev->dev, state);
+> -	status = configure_sensor_setup(&pdev->dev);
+> -	return status;
+> -}
+>   
+>   static const struct acpi_device_id acpi_ec_ids[] = {
+>   	/* Embedded Controller Device */
 
