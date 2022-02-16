@@ -2,193 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6873C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 08:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2544C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 12:01:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiBPITq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Feb 2022 03:19:46 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59854 "EHLO
+        id S232938AbiBPMBc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Feb 2022 07:01:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiBPITq (ORCPT
+        with ESMTP id S232926AbiBPMBb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:19:46 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138F82701AD;
-        Wed, 16 Feb 2022 00:19:34 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id hw13so2771626ejc.9;
-        Wed, 16 Feb 2022 00:19:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MOCLKH0tLyLf/g2Of1HbBCGxzF/AcevMxYdNg5s8qfI=;
-        b=PVhAGsp/nsGsciyj2Bx+3BctQOUtxJ/qbFlYRj7iBg6X/ZmDRVU/+0Z7uQKU8lOMZK
-         NINkfKrw6bN4Fqu5+XlthtdXlGUlxsXJOFLEzHSw3iWXA27ODl6+0jDcjrmHYUAUb+YJ
-         R+eU9Ca2JTS9UZhQaGGPQUS8fPTNxI8BrS+B3IpfiDLigr/Ib+I6h5r5z662CjupoBGP
-         +LwBXIBOKvyWov3n2cSsMFGpAyvOWE6qHRuX/ArqObLUcodNGvTRrEWFmBQzImTe6TcF
-         fsJEeMxm5Jo6Et9+5OY795vmlCnfpRPsF1Px7YG1V3ekqbp2uU6wLwhdqd3BJxHEJm2A
-         DpEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MOCLKH0tLyLf/g2Of1HbBCGxzF/AcevMxYdNg5s8qfI=;
-        b=nS84kEQ/IHv0Kq5tr6leaKcJYSmjnySSx3YMZI9MAy91Sq3RgRqqHtlRxV7VpBKOFb
-         yMdwIALOw5Qw8dE+Y6N+iFGmKS85DRhdPLSsOe2JWNfYBg38c6Q0LhisNsV8BsCn6vfC
-         jjAPP13qAfhtXf9zhqyHK/cC5gDsXBFRSXFNMFdxrIzvLsX3nVfd/0T7aK/avgbBwRia
-         lOcwiC31Att1r3eVVGl1gEPUN4Cv7EbWJPJlpO/FNUI7q7muJ9Z1LOMxDWQfuqxvJupF
-         +CcfRmqbPj3TP6RFwVFHPOWM+FqODSLHywFCFfvcvMbx/LuLpcsglEBG/NwAlr0tfFnO
-         kSuQ==
-X-Gm-Message-State: AOAM530jgzFFy25V9TV/pmp5qVrEhjIVxc4lTz7U8svKh5FGPDOwv3Cy
-        U9Dsb21rMKHAA8191J+Y0Vs=
-X-Google-Smtp-Source: ABdhPJwB+bL8BkzbKvMj4xc/P6Hoc/CcYTWThHUVGi0TmTBtgTTxgneZDMj2QpS8wbXXtwUfJbNnmA==
-X-Received: by 2002:a17:906:da1b:b0:6b8:7826:3fa0 with SMTP id fi27-20020a170906da1b00b006b878263fa0mr1348055ejb.516.1644999572516;
-        Wed, 16 Feb 2022 00:19:32 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id e27sm4470048ejm.18.2022.02.16.00.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 00:19:32 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        Wed, 16 Feb 2022 07:01:31 -0500
+X-Greylist: delayed 325 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 04:01:19 PST
+Received: from smtp.outgoing.loopia.se (smtp.outgoing.loopia.se [93.188.3.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BFF27019B
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Feb 2022 04:01:19 -0800 (PST)
+Received: from s807.loopia.se (localhost [127.0.0.1])
+        by s807.loopia.se (Postfix) with ESMTP id E2E932F0929B
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Feb 2022 12:55:50 +0100 (CET)
+Received: from s934.loopia.se (unknown [172.22.191.5])
+        by s807.loopia.se (Postfix) with ESMTP id D2BB83087ED8;
+        Wed, 16 Feb 2022 12:55:50 +0100 (CET)
+Received: from s473.loopia.se (unknown [172.22.191.6])
+        by s934.loopia.se (Postfix) with ESMTP id CEB4F7DCE6A;
+        Wed, 16 Feb 2022 12:55:50 +0100 (CET)
+X-Virus-Scanned: amavisd-new at amavis.loopia.se
+Received: from s645.loopia.se ([172.22.191.6])
+        by s473.loopia.se (s473.loopia.se [172.22.190.13]) (amavisd-new, port 10024)
+        with LMTP id rQd6l0OMW_jy; Wed, 16 Feb 2022 12:55:50 +0100 (CET)
+X-Loopia-Auth: user
+X-Loopia-User: carl@hgsystem.se
+X-Loopia-Originating-IP: 94.234.42.160
+Received: from localhost.localdomain (unknown [94.234.42.160])
+        (Authenticated sender: carl@hgsystem.se)
+        by s645.loopia.se (Postfix) with ESMTPSA id 8B62F1577923;
+        Wed, 16 Feb 2022 12:55:49 +0100 (CET)
+From:   Erik Rosen <erik.rosen@metormote.com>
+To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) merge setup functions
-Date:   Wed, 16 Feb 2022 09:19:20 +0100
-Message-Id: <20220216081920.2334468-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chu Lin <linchuyuan@google.com>,
+        Jason Ling <jasonling@google.com>
+Cc:     Erik Rosen <erik.rosen@metormote.com>
+Subject: [PATCH 0/1] hwmon: (pmbus) Try to match MFR_MODEL to pmbus device id
+Date:   Wed, 16 Feb 2022 12:55:36 +0100
+Message-Id: <20220216115537.44205-1-erik.rosen@metormote.com>
+X-Mailer: git-send-email 2.11.0 (Apple Git-81)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Merge configure_sensor_setup() into probe().
+The UCD3138 chip from TI used in a number of Flex pmbus converters
+(BMR310, BMR458, BMR480, BMR490 and BMR491) has a bug in the PMBus
+interface hardware that causes it to not respond properly after
+trying to read a register that does not exist
+(see the 'UCD3138 Integrated Power Controller Family Errata').
+This will mess up the pmbus driver's auto-detection process.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 55 ++++++++++++++-------------------
- 1 file changed, 24 insertions(+), 31 deletions(-)
+To remedy this situation the current version of the driver
+supports a flag named PMBUS_READ_STATUS_AFTER_FAILED_CHECK.
+If this flag is set the driver will read the STATUS register
+after each failed register check with the assumption that this
+will reset the hardware interface to a known state.
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index bfac08a5dc57..45de8d34a588 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -589,31 +589,40 @@ get_board_sensors(const struct device *dev)
- 	return (unsigned long)dmi_entry->driver_data;
- }
- 
--static int __init configure_sensor_setup(struct device *dev)
-+static int __init asus_ec_probe(struct platform_device *pdev)
- {
--	struct ec_sensors_data *ec_data = dev_get_drvdata(dev);
-+	const struct hwmon_channel_info **ptr_asus_ec_ci;
- 	int nr_count[hwmon_max] = { 0 }, nr_types = 0;
--	struct device *hwdev;
- 	struct hwmon_channel_info *asus_ec_hwmon_chan;
--	const struct hwmon_channel_info **ptr_asus_ec_ci;
- 	const struct hwmon_chip_info *chip_info;
- 	const struct ec_sensor_info *si;
-+	struct ec_sensors_data *ec_data;
- 	enum hwmon_sensor_types type;
-+	unsigned long board_sensors;
-+	struct device *hwdev;
- 	unsigned int i;
- 
--	ec_data->board_sensors = get_board_sensors(dev);
--	if (!ec_data->board_sensors) {
-+	board_sensors = get_board_sensors(&pdev->dev);
-+	if (!board_sensors) {
- 		return -ENODEV;
- 	}
- 
-+	ec_data = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
-+			     GFP_KERNEL);
-+	if (!ec_data) {
-+		return -ENOMEM;
-+	}
-+
-+	dev_set_drvdata(&pdev->dev, ec_data);
-+	ec_data->board_sensors = board_sensors;
- 	ec_data->nr_sensors = board_sensors_count(ec_data->board_sensors);
--	ec_data->sensors = devm_kcalloc(dev, ec_data->nr_sensors,
-+	ec_data->sensors = devm_kcalloc(&pdev->dev, ec_data->nr_sensors,
- 					sizeof(struct ec_sensor), GFP_KERNEL);
- 
- 	setup_sensor_data(ec_data);
--	ec_data->registers = devm_kcalloc(dev, ec_data->nr_registers,
-+	ec_data->registers = devm_kcalloc(&pdev->dev, ec_data->nr_registers,
- 					  sizeof(u16), GFP_KERNEL);
--	ec_data->read_buffer = devm_kcalloc(dev, ec_data->nr_registers,
-+	ec_data->read_buffer = devm_kcalloc(&pdev->dev, ec_data->nr_registers,
- 					    sizeof(u8), GFP_KERNEL);
- 
- 	if (!ec_data->registers || !ec_data->read_buffer) {
-@@ -622,7 +631,7 @@ static int __init configure_sensor_setup(struct device *dev)
- 
- 	fill_ec_registers(ec_data);
- 
--	ec_data->aml_mutex = asus_hw_access_mutex(dev);
-+	ec_data->aml_mutex = asus_hw_access_mutex(&pdev->dev);
- 
- 	for (i = 0; i < ec_data->nr_sensors; ++i) {
- 		si = get_sensor_info(ec_data, i);
-@@ -635,11 +644,11 @@ static int __init configure_sensor_setup(struct device *dev)
- 		nr_count[hwmon_chip]++, nr_types++;
- 
- 	asus_ec_hwmon_chan = devm_kcalloc(
--		dev, nr_types, sizeof(*asus_ec_hwmon_chan), GFP_KERNEL);
-+		&pdev->dev, nr_types, sizeof(*asus_ec_hwmon_chan), GFP_KERNEL);
- 	if (!asus_ec_hwmon_chan)
- 		return -ENOMEM;
- 
--	ptr_asus_ec_ci = devm_kcalloc(dev, nr_types + 1,
-+	ptr_asus_ec_ci = devm_kcalloc(&pdev->dev, nr_types + 1,
- 				       sizeof(*ptr_asus_ec_ci), GFP_KERNEL);
- 	if (!ptr_asus_ec_ci)
- 		return -ENOMEM;
-@@ -651,37 +660,21 @@ static int __init configure_sensor_setup(struct device *dev)
- 		if (!nr_count[type])
- 			continue;
- 
--		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
-+		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, &pdev->dev,
- 					     nr_count[type], type,
- 					     hwmon_attributes[type]);
- 		*ptr_asus_ec_ci++ = asus_ec_hwmon_chan++;
- 	}
- 
--	dev_info(dev, "board has %d EC sensors that span %d registers",
-+	dev_info(&pdev->dev, "board has %d EC sensors that span %d registers",
- 		 ec_data->nr_sensors, ec_data->nr_registers);
- 
--	hwdev = devm_hwmon_device_register_with_info(dev, "asusec",
-+	hwdev = devm_hwmon_device_register_with_info(&pdev->dev, "asusec",
- 						     ec_data, chip_info, NULL);
- 
- 	return PTR_ERR_OR_ZERO(hwdev);
- }
- 
--static int __init asus_ec_probe(struct platform_device *pdev)
--{
--	struct ec_sensors_data *state;
--	int status = 0;
--
--	state = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
--			     GFP_KERNEL);
--
--	if (!state) {
--		return -ENOMEM;
--	}
--
--	dev_set_drvdata(&pdev->dev, state);
--	status = configure_sensor_setup(&pdev->dev);
--	return status;
--}
- 
- static const struct acpi_device_id acpi_ec_ids[] = {
- 	/* Embedded Controller Device */
+This strategy significantly improves the situation but does
+not completely resolve the issue. In rare cases this seems
+to be insufficient to reset the interface and the auto-detection
+still fails.
+
+In addition to this, to use this workaround one must explicitly
+instruct the driver to expect for instance a BMR490 module.
+Otherwise the driver will default to the generic behaviour.
+
+We have a situation where the client wants to use the generic
+pmbus driver to monitor the temperature of the converter,
+but does not know a priori exactly what converter model is
+actually installed; only that it supports PMBus.
+
+To solve this problem, it is possible to use the MFR_MODEL
+command to try and match the model name to the device id name
+and predefine the functions supported by this specific converter.
+In this way one can avoid the auto-detection process
+altogether for the problematic models. If there is no match,
+the driver reverts to auto-detection.
+
+Erik Rosen (1):
+  Try to match MFR_MODEL to pmbus device id
+
+ drivers/hwmon/pmbus/pmbus.c | 57 +++++++++++++++++++++++++++++++------
+ 1 file changed, 49 insertions(+), 8 deletions(-)
+
+
+base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
 -- 
-2.35.1
+2.20.1
 
