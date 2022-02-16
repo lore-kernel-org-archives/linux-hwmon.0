@@ -2,233 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C65C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 03:10:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36577C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 06:10:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiBPDKf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Feb 2022 22:10:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42008 "EHLO
+        id S229484AbiBPGK4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Feb 2022 01:10:56 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234897AbiBPDKe (ORCPT
+        with ESMTP id S229462AbiBPGKz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:10:34 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8755A9A998
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Feb 2022 19:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644981023; x=1676517023;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PSRosTnhWn86QVBCrzwR7hsrvw+bxFaCdNCQZ/VudDE=;
-  b=IRhiwtduYKF+c835od1Q1yb5riaeORQg1TggTmj57inKjS7oKnPuxFkU
-   uuZZqVC/s0VSe10iXgGPI5RKkB/zV2wCMo4VNCxYldNvW2X9TPmohbJh0
-   1cnQX+Vg6AjU8wgKLMH45F+ljbw6xQkWph+Ur8VrTv7hhCgHKIfPUdMAn
-   uybMbKX3sacJCOrOpA7W8MzuWTPVuQtAoaJk2H1rxX8DRDTe3w/w+u5xv
-   Jm75k9PiIytCdq8YfI4u1rT0vn/+zFflSzHxqO6Yqx12Cuyik8gSdwZvp
-   G5GItKe5NnP4rCSYip3ioMs0+ZM+4zHwV01E5OUcuRV15+0C74iFeXDvu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249343902"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="249343902"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 19:10:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="681318045"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2022 19:10:22 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKAhx-000ALA-JU; Wed, 16 Feb 2022 03:10:21 +0000
-Date:   Wed, 16 Feb 2022 11:10:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 4cd16de2667ab2aba623e9d559185ddc31191f78
-Message-ID: <620c6b10.dz6pFbCRS0X5BE9I%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 16 Feb 2022 01:10:55 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321E618405F;
+        Tue, 15 Feb 2022 22:10:44 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id m25so886559qka.9;
+        Tue, 15 Feb 2022 22:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9GHn97tmKkFKT0TLBTqaZhFGKQxKmA3Zsz3j3x81qAg=;
+        b=hphw9V4prrwZoOCWfZ7wVEQvkuBOCmDwCUIapwfqb43ibC8owgqK5pc9TCEswQGpdX
+         kZW6UCz9PjP+Va0G6Ec9HSqkuNayL9noyeuWKTuAHYyipaQHHxo3UR9IpGRX4NYuOQau
+         FtmdJc69bZanaXiz9L1pu0g9thNr3VAbkGDMg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9GHn97tmKkFKT0TLBTqaZhFGKQxKmA3Zsz3j3x81qAg=;
+        b=rQZ9m9CtgIvH8Uj4t2jWC9xyRjsWee7A7KHDaL3pQ4zNem4CfqZPd8PeVMBVlJoDjx
+         7icq1i/MUQBaVjzw30rPBI5jqCe4Kx3TToCWoIgE4nZgqtA5IgmpIlXvdnfmcJdoJmKZ
+         w6oe73GcoYKMQ6OhvI7MlKyyuGjLVtawhB0TvqYIUkPgcScBqPZZjMyZ0VV9DpiKl0i0
+         +iRHiD2ZpkKKyLJI+Zky1P6NJNVuwi1b1TyM3xGXbWXtXy9LVq5V8r9hsak3eHGax6MS
+         5uo8tmty2l40IGPCuOU9vj92QlL1WZvNN9ybPUQPMiG2AcxEDJGlsHQPRlZIH61Qhk2i
+         Ouig==
+X-Gm-Message-State: AOAM533BIySkPQvtC0tk18OiR8IW5pUbhWA5KEJB6oITV1RpMo9RgQyE
+        3OHUIcXVyKa4jTRVp7GORCyZSEK8TksxErecZe8R377M
+X-Google-Smtp-Source: ABdhPJyac4sOvY/FhUgGOQxoDzMAcC6vVEcQ9z4mWvdX01D3T4kamGjlGDUdmPFpFA+7c+Nvmq7aAUWOmWA+tB6sk5s=
+X-Received: by 2002:a37:a147:0:b0:47a:be0e:4a0c with SMTP id
+ k68-20020a37a147000000b0047abe0e4a0cmr557442qke.165.1644991843234; Tue, 15
+ Feb 2022 22:10:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20220215151022.7498-1-eajames@linux.ibm.com> <20220215151022.7498-2-eajames@linux.ibm.com>
+In-Reply-To: <20220215151022.7498-2-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 16 Feb 2022 06:10:31 +0000
+Message-ID: <CACPK8Xfs8=MnsmJU6WkBXdwMJ0eQvJHEVrN5AGS0YB6LUO3TZQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] hwmon: (occ) Add sysfs entry for IPS (Idle Power
+ Saver) status
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 4cd16de2667ab2aba623e9d559185ddc31191f78  watchdog: ixp4xx: Implement restart
+On Tue, 15 Feb 2022 at 15:11, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> BMC control applications need to check the Idle Power Saver status
+> byte returned by the OCC poll response, so export it in sysfs with
+> the other OCC-specific data.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-elapsed time: 723m
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-configs tested: 154
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220214
-mips                 randconfig-c004-20220214
-mips                      fuloong2e_defconfig
-sh                        sh7763rdp_defconfig
-arm                        realview_defconfig
-arm                          iop32x_defconfig
-arm                          simpad_defconfig
-csky                                defconfig
-nios2                               defconfig
-arm                        spear6xx_defconfig
-mips                         mpc30x_defconfig
-powerpc                     mpc83xx_defconfig
-sh                   sh7724_generic_defconfig
-mips                  maltasmvp_eva_defconfig
-arm                         s3c6400_defconfig
-h8300                    h8300h-sim_defconfig
-mips                        vocore2_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                       imx_v6_v7_defconfig
-sh                            shmin_defconfig
-arm                          gemini_defconfig
-m68k                             allmodconfig
-powerpc                         wii_defconfig
-mips                       bmips_be_defconfig
-powerpc                      arches_defconfig
-arm                          pxa910_defconfig
-arm                            pleb_defconfig
-mips                           xway_defconfig
-mips                          rb532_defconfig
-sh                           se7721_defconfig
-xtensa                    xip_kc705_defconfig
-mips                         db1xxx_defconfig
-sh                            titan_defconfig
-sh                          kfr2r09_defconfig
-arm                            xcep_defconfig
-m68k                        stmark2_defconfig
-s390                                defconfig
-sh                        edosk7705_defconfig
-nds32                               defconfig
-arm                        shmobile_defconfig
-openrisc                 simple_smp_defconfig
-m68k                          atari_defconfig
-arm64                            alldefconfig
-sh                        sh7757lcr_defconfig
-openrisc                  or1klitex_defconfig
-powerpc                        warp_defconfig
-arm                        keystone_defconfig
-powerpc                        cell_defconfig
-sparc                            allyesconfig
-sh                             espt_defconfig
-mips                       capcella_defconfig
-arm                        cerfcube_defconfig
-mips                      loongson3_defconfig
-sh                          rsk7269_defconfig
-powerpc                      ppc6xx_defconfig
-microblaze                          defconfig
-arm                  randconfig-c002-20220214
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allmodconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a013-20220214
-x86_64               randconfig-a014-20220214
-x86_64               randconfig-a012-20220214
-x86_64               randconfig-a015-20220214
-x86_64               randconfig-a011-20220214
-x86_64               randconfig-a016-20220214
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-i386                 randconfig-a013-20220214
-i386                 randconfig-a016-20220214
-i386                 randconfig-a012-20220214
-i386                 randconfig-a015-20220214
-i386                 randconfig-a011-20220214
-i386                 randconfig-a014-20220214
-riscv                randconfig-r042-20220214
-arc                  randconfig-r043-20220214
-s390                 randconfig-r044-20220214
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-riscv                randconfig-c006-20220214
-i386                 randconfig-c001-20220214
-x86_64               randconfig-c007-20220214
-powerpc              randconfig-c003-20220214
-arm                  randconfig-c002-20220214
-mips                 randconfig-c004-20220214
-arm                        neponset_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                  mpc866_ads_defconfig
-powerpc                 mpc832x_mds_defconfig
-riscv                             allnoconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                          rm200_defconfig
-arm                         palmz72_defconfig
-arm                         mv78xx0_defconfig
-powerpc                     kmeter1_defconfig
-powerpc                     tqm8560_defconfig
-arm                          ep93xx_defconfig
-arm                        spear3xx_defconfig
-arm                         lpc32xx_defconfig
-x86_64               randconfig-a002-20220214
-x86_64               randconfig-a006-20220214
-x86_64               randconfig-a005-20220214
-x86_64               randconfig-a004-20220214
-x86_64               randconfig-a003-20220214
-x86_64               randconfig-a001-20220214
-i386                 randconfig-a004-20220214
-i386                 randconfig-a005-20220214
-i386                 randconfig-a006-20220214
-i386                 randconfig-a002-20220214
-i386                 randconfig-a003-20220214
-i386                 randconfig-a001-20220214
-hexagon              randconfig-r045-20220214
-hexagon              randconfig-r041-20220214
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/hwmon/occ/common.h |  1 +
+>  drivers/hwmon/occ/sysfs.c  | 11 +++++++++++
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+> index 5020117be740..a88c66d36e38 100644
+> --- a/drivers/hwmon/occ/common.h
+> +++ b/drivers/hwmon/occ/common.h
+> @@ -119,6 +119,7 @@ struct occ {
+>         u8 prev_stat;
+>         u8 prev_ext_stat;
+>         u8 prev_occs_present;
+> +       u8 prev_ips_status;
+>  };
+>
+>  int occ_setup(struct occ *occ, const char *name);
+> diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
+> index 03b16abef67f..6dc69c9aa4c2 100644
+> --- a/drivers/hwmon/occ/sysfs.c
+> +++ b/drivers/hwmon/occ/sysfs.c
+> @@ -63,6 +63,9 @@ static ssize_t occ_sysfs_show(struct device *dev,
+>                 else
+>                         val = 1;
+>                 break;
+> +       case 8:
+> +               val = header->ips_status;
+> +               break;
+>         default:
+>                 return -EINVAL;
+>         }
+> @@ -88,6 +91,7 @@ static SENSOR_DEVICE_ATTR(occ_mem_throttle, 0444, occ_sysfs_show, NULL, 4);
+>  static SENSOR_DEVICE_ATTR(occ_quick_pwr_drop, 0444, occ_sysfs_show, NULL, 5);
+>  static SENSOR_DEVICE_ATTR(occ_state, 0444, occ_sysfs_show, NULL, 6);
+>  static SENSOR_DEVICE_ATTR(occs_present, 0444, occ_sysfs_show, NULL, 7);
+> +static SENSOR_DEVICE_ATTR(occ_ips_status, 0444, occ_sysfs_show, NULL, 8);
+>  static DEVICE_ATTR_RO(occ_error);
+>
+>  static struct attribute *occ_attributes[] = {
+> @@ -99,6 +103,7 @@ static struct attribute *occ_attributes[] = {
+>         &sensor_dev_attr_occ_quick_pwr_drop.dev_attr.attr,
+>         &sensor_dev_attr_occ_state.dev_attr.attr,
+>         &sensor_dev_attr_occs_present.dev_attr.attr,
+> +       &sensor_dev_attr_occ_ips_status.dev_attr.attr,
+>         &dev_attr_occ_error.attr,
+>         NULL
+>  };
+> @@ -162,6 +167,11 @@ void occ_sysfs_poll_done(struct occ *occ)
+>                 sysfs_notify(&occ->bus_dev->kobj, NULL, name);
+>         }
+>
+> +       if (header->ips_status != occ->prev_ips_status) {
+> +               name = sensor_dev_attr_occ_ips_status.dev_attr.attr.name;
+> +               sysfs_notify(&occ->bus_dev->kobj, NULL, name);
+> +       }
+> +
+>         if (occ->error && occ->error != occ->prev_error) {
+>                 name = dev_attr_occ_error.attr.name;
+>                 sysfs_notify(&occ->bus_dev->kobj, NULL, name);
+> @@ -174,6 +184,7 @@ void occ_sysfs_poll_done(struct occ *occ)
+>         occ->prev_stat = header->status;
+>         occ->prev_ext_stat = header->ext_status;
+>         occ->prev_occs_present = header->occs_present;
+> +       occ->prev_ips_status = header->ips_status;
+>  }
+>
+>  int occ_setup_sysfs(struct occ *occ)
+> --
+> 2.27.0
+>
