@@ -2,170 +2,228 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AEF0C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 20:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB7DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Feb 2022 23:17:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiBPUJq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Feb 2022 15:09:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56898 "EHLO
+        id S237393AbiBPXRn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Feb 2022 18:17:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiBPUJq (ORCPT
+        with ESMTP id S229553AbiBPXRm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:09:46 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C82243121;
-        Wed, 16 Feb 2022 12:09:32 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GK8GS8030613;
-        Wed, 16 Feb 2022 20:09:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=eSWTTXSEJyiw9ZzT+BZ/pD5Pj09opHDFvBiwAFYH+QY=;
- b=o1RD9i2cP9xzap8gkAWHs7zUErh0fzDCp6F632QBUVMCi6pBiyszh+T359OjV8lzk81q
- NmpsKagiyN/nEJlSnSWMknKO/36ke9YBEn7RmewMl46JEQJf/qXxk5T+efLBUSxP/Ocq
- QyBDIzsrcsuJQQ6yQMEciEyBA8PuHTXVFiI4rfxmzrwTPyrHjOBYFvHOWjPeCKxKNrPS
- 9tOJSmyLPW/TsBt0zG0XnvI+et4yWDp9Gldm9Z/6cZcmBfbdGgdgqXXVdjNisIpwvhQY
- 8nx2Mh403bP4LtuxhoS0Zk6B2KUAX5xGUaw9oPKRyQqCoyIshpZQ4FR7ujHNog/ABUp8 ag== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e95hykq8b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 20:09:17 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GK2DmH018666;
-        Wed, 16 Feb 2022 20:09:16 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma04wdc.us.ibm.com with ESMTP id 3e64hbquqw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 20:09:16 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GK9FHj32834038
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Feb 2022 20:09:15 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8294AE071;
-        Wed, 16 Feb 2022 20:09:15 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D4B6AE066;
-        Wed, 16 Feb 2022 20:09:15 +0000 (GMT)
-Received: from [9.211.63.35] (unknown [9.211.63.35])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Feb 2022 20:09:15 +0000 (GMT)
-Message-ID: <19ac1b85-842f-dfcf-93db-489ab6598ff8@linux.ibm.com>
-Date:   Wed, 16 Feb 2022 14:09:14 -0600
+        Wed, 16 Feb 2022 18:17:42 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8031FFF71;
+        Wed, 16 Feb 2022 15:17:29 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so4397533oor.12;
+        Wed, 16 Feb 2022 15:17:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=793XOJWyfkqhx93nW4Pi5xj2jcIm27dgvSlGDaWmZOE=;
+        b=XF76RW97wRBysaGUL5ieC7SPJ86Jc2FN74NDgnL+a0CCEw2uhimoG5O22SkSeMjNgW
+         JGkJHCNcxt0uEkKR+XsPN7ptOq41BeEFh1lnKZj2t+KjzO8OGARt0u4TA4lQMM4OEb8s
+         5HQy7BpTRNY9V5E+OCTCzBcH7PASkANqjAfl7BAZLzkwQ7MYOFu1P6nr1uyg0aVCU+HD
+         OS9Q9EYnYFX4p7hs0lhygGjRKESRgD8UneBKZ+ApA4cdg+DJDbaySqc4gV3OgRAIzwPh
+         LLtawCt861TRLLpaIdg5tthIqaVHEaOXUDOkK2CVuWyBDtVHXq5nwWHhpPPFMmqAO+yA
+         I0gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=793XOJWyfkqhx93nW4Pi5xj2jcIm27dgvSlGDaWmZOE=;
+        b=b8VlGyFePFuXWzB57QhvtTbLpUmCSOBqLhP9Ac6v2sitatfk7VmP/rb4SAgB72TXEw
+         UmDQoa0MT7R+zKh9C4AvJwz9ugj+V/mdbKusvWbiO32DPTJngwU4QYikg5ZT6t4Za2hS
+         UDL/7vSYvv0F2A3U4jfA4c/dLxltvnYO4ZGe7gI9OqHqWTJ5vWdesm3zdCiuFNMVvsi1
+         h+QRRqbtHBkbN5BcrTjlmHN1ggU5SwY2vGhb1pLlfkY2QPMobFFF3unQANhtYFdJ2Plw
+         1d3Ax2zRa+1cOlgavu6OcCjHTPRNS44rlNy0wgPPOxlWrTWjMIQNIKUjoCyr70ACvGIi
+         X0Iw==
+X-Gm-Message-State: AOAM5325nk8pP+0CZgXaACz5j3tC0BQlq/AfjH7p/7tEf/jqdTYvzcTr
+        mCNAJfC41psKPc8ypZPMt80=
+X-Google-Smtp-Source: ABdhPJxwftOeyM2rxRz+JYIN9RIYcjRTwi3lMH7kk/w5jI/whyZ53Q7FbOmoD1p88ITsE5Rm1XcQbw==
+X-Received: by 2002:a05:6870:172c:b0:ce:c0c9:67f with SMTP id h44-20020a056870172c00b000cec0c9067fmr1401591oae.209.1645053448576;
+        Wed, 16 Feb 2022 15:17:28 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o14sm6762221oaq.37.2022.02.16.15.17.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 15:17:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <82add6a8-cd4f-f331-5b54-e0a6bf633cd1@roeck-us.net>
+Date:   Wed, 16 Feb 2022 15:17:25 -0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 4/4] hwmon: (occ) Add soft minimum power cap attribute
 Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20220215151022.7498-1-eajames@linux.ibm.com>
- <20220215151022.7498-5-eajames@linux.ibm.com>
- <CACPK8Xe+M97Covu0+Qc9M-8vdCc9pTXfZjJ9y6_Xm-j1E4GUPQ@mail.gmail.com>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <CACPK8Xe+M97Covu0+Qc9M-8vdCc9pTXfZjJ9y6_Xm-j1E4GUPQ@mail.gmail.com>
+To:     Erik Rosen <erik.rosen@metormote.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chu Lin <linchuyuan@google.com>,
+        Jason Ling <jasonling@google.com>
+References: <20220216115537.44205-1-erik.rosen@metormote.com>
+ <20220216115537.44205-2-erik.rosen@metormote.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/1] hwmon: (pmbus) Try to match MFR_MODEL to pmbus device
+ id
+In-Reply-To: <20220216115537.44205-2-erik.rosen@metormote.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Gi6UGGVu4auYO_b-mzz8tI279musCwPx
-X-Proofpoint-GUID: Gi6UGGVu4auYO_b-mzz8tI279musCwPx
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_09,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0 spamscore=0
- bulkscore=0 adultscore=0 malwarescore=0 priorityscore=1501 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202160112
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 2/16/22 03:55, Erik Rosen wrote:
+> Add a new device id to  read the MFR_MODEL command
+> to try and match the model name to the device id name and
+> predefine the functions supported by this specific converter.
+> In this way one can avoid the auto-detection process
+> altogether for the problematic models.
+> If there is no match, the driver reverts to auto-detection.
+> 
+> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
 
-On 2/16/22 00:33, Joel Stanley wrote:
-> On Tue, 15 Feb 2022 at 15:11, Eddie James <eajames@linux.ibm.com> wrote:
->> Export the power caps data for the soft minimum power cap through hwmon.
->>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/hwmon/occ/common.c | 19 ++++++++++++++++---
->>   1 file changed, 16 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
->> index 0cb4a0a6cbc1..f00cd59f1d19 100644
->> --- a/drivers/hwmon/occ/common.c
->> +++ b/drivers/hwmon/occ/common.c
->> @@ -674,6 +674,9 @@ static ssize_t occ_show_caps_3(struct device *dev,
->>          case 7:
->>                  val = caps->user_source;
->>                  break;
->> +       case 8:
->> +               val = get_unaligned_be16(&caps->soft_min) * 1000000ULL;
->> +               break;
->>          default:
->>                  return -EINVAL;
->>          }
->> @@ -835,12 +838,13 @@ static int occ_setup_sensor_attrs(struct occ *occ)
->>          case 1:
->>                  num_attrs += (sensors->caps.num_sensors * 7);
->>                  break;
->> -       case 3:
->> -               show_caps = occ_show_caps_3;
->> -               fallthrough;
->>          case 2:
->>                  num_attrs += (sensors->caps.num_sensors * 8);
->>                  break;
->> +       case 3:
->> +               show_caps = occ_show_caps_3;
->> +               num_attrs += (sensors->caps.num_sensors * 9);
-> How do we know this changed from 8 to 9?
+That looks really messy, and it does more than it claims to do.
+Really, if the bcm chips need special treatment they should not
+use the generic driver but use their own front-end driver like
+other chips. The required flags can then be provided in that driver.
+Also "pmbus_match_model" is _really_ not acceptable. Those names
+are expected to match chips, not some arbitrary string.
 
+If we have a separate driver, and assuming the customer using
+different modules uses various BMR chips, a separate driver could
+check PMBUS_MFR_MODEL and use it to match the exact chip (if that is
+even needed since all the BMR chips seem to have the same
+configuration data). Maybe PMBUS_READ_STATUS_AFTER_FAILED_CHECK
+could then be dropped entirely.
 
-Well we made the structure change a while back when adding P10 support, 
-but didn't bother to export the "soft min" field. Now it's needed.
+Guenter
 
+> ---
+>   drivers/hwmon/pmbus/pmbus.c | 57 +++++++++++++++++++++++++++++++------
+>   1 file changed, 49 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+> index d0d386990af5..278b2a927ce0 100644
+> --- a/drivers/hwmon/pmbus/pmbus.c
+> +++ b/drivers/hwmon/pmbus/pmbus.c
+> @@ -18,9 +18,11 @@
+>   struct pmbus_device_info {
+>   	int pages;
+>   	u32 flags;
+> +	u32 func[PMBUS_PAGES];
+>   };
+>   
+>   static const struct i2c_device_id pmbus_id[];
+> +static const struct pmbus_device_info pmbus_info_zero;
+>   
+>   /*
+>    * Find sensor groups and status registers on each page.
+> @@ -156,13 +158,18 @@ static int pmbus_identify(struct i2c_client *client,
+>   	}
+>   
+>   	/* Try to find sensor groups  */
+> -	pmbus_find_sensor_groups(client, info);
+> +	if (info->func[0] == 0)
+> +		pmbus_find_sensor_groups(client, info);
+> +
+>   abort:
+>   	return ret;
+>   }
+>   
+>   static int pmbus_probe(struct i2c_client *client)
+>   {
+> +	int ret, i;
+> +	u8 mfr_model[I2C_SMBUS_BLOCK_MAX + 1];
+> +	const struct i2c_device_id *device_id = NULL;
+>   	struct pmbus_driver_info *info;
+>   	struct pmbus_platform_data *pdata = NULL;
+>   	struct device *dev = &client->dev;
+> @@ -173,6 +180,30 @@ static int pmbus_probe(struct i2c_client *client)
+>   		return -ENOMEM;
+>   
+>   	device_info = (struct pmbus_device_info *)i2c_match_id(pmbus_id, client)->driver_data;
+> +	if (!device_info) {
+> +		if (!i2c_check_functionality(client->adapter,
+> +					     I2C_FUNC_SMBUS_BLOCK_DATA))
+> +			return -ENODEV;
+> +
+> +		ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, mfr_model);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		for (device_id = pmbus_id; device_id->name[0]; device_id++) {
+> +			if (device_id->driver_data &&
+> +			    !strncasecmp(device_id->name, mfr_model, strlen(device_id->name)))
+> +				break;
+> +		}
+> +
+> +		if (device_id->name[0])
+> +			device_info = (struct pmbus_device_info *)device_id->driver_data;
+> +		else
+> +			device_info = (struct pmbus_device_info *)&pmbus_info_zero;
+> +
+> +		dev_info(dev, "Use pmbus device id: %s\n",
+> +			 device_id->name[0] ? device_id->name : "pmbus");
+> +	}
+> +
+>   	if (device_info->flags) {
+>   		pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
+>   				     GFP_KERNEL);
+> @@ -183,6 +214,8 @@ static int pmbus_probe(struct i2c_client *client)
+>   	}
+>   
+>   	info->pages = device_info->pages;
+> +	for (i = 0; i < info->pages; i++)
+> +		info->func[i] = device_info->func[i];
+>   	info->identify = pmbus_identify;
+>   	dev->platform_data = pdata;
+>   
+> @@ -204,9 +237,16 @@ static const struct pmbus_device_info pmbus_info_one_skip = {
+>   	.flags = PMBUS_SKIP_STATUS_CHECK
+>   };
+>   
+> -static const struct pmbus_device_info pmbus_info_one_status = {
+> +static const struct pmbus_device_info pmbus_info_bmr458 = {
+>   	.pages = 1,
+> -	.flags = PMBUS_READ_STATUS_AFTER_FAILED_CHECK
+> +	.flags = PMBUS_READ_STATUS_AFTER_FAILED_CHECK,
+> +	.func = {
+> +			PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> +		      | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +		      | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +		      | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
+> +		      | PMBUS_HAVE_STATUS_TEMP
+> +		}
+>   };
+>   
+>   /*
+> @@ -214,15 +254,15 @@ static const struct pmbus_device_info pmbus_info_one_status = {
+>    */
+>   static const struct i2c_device_id pmbus_id[] = {
+>   	{"adp4000", (kernel_ulong_t)&pmbus_info_one},
+> -	{"bmr310", (kernel_ulong_t)&pmbus_info_one_status},
+> +	{"bmr310", (kernel_ulong_t)&pmbus_info_bmr458},
+>   	{"bmr453", (kernel_ulong_t)&pmbus_info_one},
+>   	{"bmr454", (kernel_ulong_t)&pmbus_info_one},
+>   	{"bmr456", (kernel_ulong_t)&pmbus_info_one},
+>   	{"bmr457", (kernel_ulong_t)&pmbus_info_one},
+> -	{"bmr458", (kernel_ulong_t)&pmbus_info_one_status},
+> -	{"bmr480", (kernel_ulong_t)&pmbus_info_one_status},
+> -	{"bmr490", (kernel_ulong_t)&pmbus_info_one_status},
+> -	{"bmr491", (kernel_ulong_t)&pmbus_info_one_status},
+> +	{"bmr458", (kernel_ulong_t)&pmbus_info_bmr458},
+> +	{"bmr480", (kernel_ulong_t)&pmbus_info_bmr458},
+> +	{"bmr490", (kernel_ulong_t)&pmbus_info_bmr458},
+> +	{"bmr491", (kernel_ulong_t)&pmbus_info_bmr458},
+>   	{"bmr492", (kernel_ulong_t)&pmbus_info_one},
+>   	{"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
+>   	{"dps650ab", (kernel_ulong_t)&pmbus_info_one_skip},
+> @@ -235,6 +275,7 @@ static const struct i2c_device_id pmbus_id[] = {
+>   	{"pdt006", (kernel_ulong_t)&pmbus_info_one},
+>   	{"pdt012", (kernel_ulong_t)&pmbus_info_one},
+>   	{"pmbus", (kernel_ulong_t)&pmbus_info_zero},
+> +	{"pmbus_match_model", (kernel_ulong_t)0},
+>   	{"sgd009", (kernel_ulong_t)&pmbus_info_one_skip},
+>   	{"tps40400", (kernel_ulong_t)&pmbus_info_one},
+>   	{"tps544b20", (kernel_ulong_t)&pmbus_info_one},
 
->
-> We should start adding links to the occ source code, or a similar
-> reference, when making these changes so they can be reviewed.
-
-
-I would but it doesn't appear to be public for P10 yet... at least, no 
-one has updated the P9 OCC spec hosted in the open-power repo: 
-https://github.com/open-power/docs
-
-
-Thanks,
-
-Eddie
-
-
->
->> +               break;
->>          default:
->>                  sensors->caps.num_sensors = 0;
->>          }
->> @@ -1047,6 +1051,15 @@ static int occ_setup_sensor_attrs(struct occ *occ)
->>                          attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
->>                                                       show_caps, NULL, 7, 0);
->>                          attr++;
->> +
->> +                       if (sensors->caps.version > 2) {
->> +                               snprintf(attr->name, sizeof(attr->name),
->> +                                        "power%d_cap_min_soft", s);
->> +                               attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
->> +                                                            show_caps, NULL,
->> +                                                            8, 0);
->> +                               attr++;
->> +                       }
->>                  }
->>          }
->>
->> --
->> 2.27.0
->>
