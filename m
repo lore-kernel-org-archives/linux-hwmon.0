@@ -2,98 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C526CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 19:49:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E2C7C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 21:25:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiBQTuH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 14:50:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58844 "EHLO
+        id S242293AbiBQV0L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 16:26:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244989AbiBQTuG (ORCPT
+        with ESMTP id S239342AbiBQV0K (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:50:06 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E273043EF5;
-        Thu, 17 Feb 2022 11:49:50 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id m8so3062529ilg.7;
-        Thu, 17 Feb 2022 11:49:50 -0800 (PST)
+        Thu, 17 Feb 2022 16:26:10 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E4980227;
+        Thu, 17 Feb 2022 13:25:55 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id b35so6045013qkp.6;
+        Thu, 17 Feb 2022 13:25:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vzK5esxwKtf3QmXFi7RB++PMzIXUAMKz2NRvQ5MKEaI=;
-        b=EhcTn0QU/eiiY9W/4pqfmCWtP1aqNeeOFQiFjNmwIG2A+4Y9cifyV5Q5P/U14YMQ+G
-         LII84Odsy3gdt/LpqG5ioA2pPbn7DiwyWaHe7vO/2BfUewUndEyJvAaiynmtMNb/KHzN
-         8qMO/TQcTcL+tavqk2kw8Mjsv1eho4SsTqbG/X041K0DG/SMeqy/StDFOZqziM35PukU
-         F8BqwzS6T3zOy076/5CZ8xpVEbK3Z/oXUU6/LVSZgN7SpX1DNLVo1WDzSEnhQOL9OJhU
-         x5tZkJZFnXdMhU0Ng9D8LxYShhPVi+XTmcAGdvwN2so+ErlbN0eqTriXUtntqorHgQg5
-         uwGA==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KMFuxuk03fCSFsGh1kSJQRwXBhWVHJQbdI9sh3/6j9A=;
+        b=OQLFMrEDM/2zBL1GhNQX7Ep77Dbfysoac5IcRFB9mdiPAWf9JMAu/S5fyCEXS58JeP
+         bv1RxMBwbzaefx+B1mFnYlZ2WuIfY/LTb4xlPVA6rMn+4trOHclwqCDWMnQgwOjdz0AP
+         SefWRfxcFOAfBZtOGQsv+D2F7EDtF6U5l9hjay3hskdY7fU7M2k7w1rtRr++72lSKVYg
+         +nGhlyA+qY3WM0oDvGNeNS53hS2UJTplbuwYgZxIDMDvqRt6OyEg+69zy+m0k8pA1R9J
+         Odm7UEYI0bTKup6Ibta55MZV/RWnSyyxhc4r3i1xof88S28vdOzBm1q/q2qkzfTTGt94
+         v53w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vzK5esxwKtf3QmXFi7RB++PMzIXUAMKz2NRvQ5MKEaI=;
-        b=IXwyhAblbe0KsL9TAVoXwbHmDwamy9LUvrxGHVdpcaKsoJJh2FrgbaSlyTZWkPitvy
-         ssFJFcKGDeGj1OhyLl+BRw7/2fiRHG9iPNQVwewskGJryKO7l7ZP1qTiCJjH9SyZwtWG
-         S19BRD3R7g17EUo9cSWdK5WadCpb1JN+y8Upjf/zk3jd7F7JyQe6IXBZWQEDybmlY0zf
-         0LjP1Skta2AQmy8ZmT0+wB/FbNPX98xzSayqK8R1X5kcxdso/AFWIhw2zCAIr0BfYAvw
-         zihUKMGtAvk1NIetCq2m5Yz6glf1CdOJJ+ng2s0BtkEOj+rDzKBBWu9WcJ3gsD+LG94T
-         oY0w==
-X-Gm-Message-State: AOAM530PLx31syXLKEZjMGf3AUpvqoAdIoufYY6AvgY2isJFVVAJ0CiM
-        6SBLQDxTez84l/JsL99uPGyE+rYJSHy8/UOOiNg=
-X-Google-Smtp-Source: ABdhPJx+vEr7tgoxzCWZbd3TV9zPoXSRZOeL4GOANK/HcO8WBcdHN68CuicWsiWBWi07vMICwkzVtKYLOrR+vkwpYNs=
-X-Received: by 2002:a92:cf12:0:b0:2be:3a27:67c7 with SMTP id
- c18-20020a92cf12000000b002be3a2767c7mr3098661ilo.187.1645127390329; Thu, 17
- Feb 2022 11:49:50 -0800 (PST)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KMFuxuk03fCSFsGh1kSJQRwXBhWVHJQbdI9sh3/6j9A=;
+        b=f5mCr3TKab0us3ExgooykhDllGt3/Xv6Gp1zfUV8gX8MV7pr3TOVPsFHHhp5ZHvmXV
+         2yhwLCOJWolwprzKqQdAQN6v1ZfqeuUnkrTDqcPzemlG8ml6TtWHSzyi5xP+ssQOfeEb
+         FaGUAH2N2/s7cA3fioCWAb0Xr1poqggWRBaLLIX6iSJrxSpoBATJWyYGTyyMXd8PyVAx
+         yuEvfFsjiykmW3t50MVJ47UNkOd0NXUs8ZThrkkUqXJT0u+zhfNJrLeqAhpYLGHKDSrC
+         VaeCRYb5Da1EquYBSTCVeYxSF9C1dmy7mzI4u/wz9YRC6k/EGlFKdvH68P/iklAITPOK
+         iaOw==
+X-Gm-Message-State: AOAM531jkO3J0RUS2VQoKffhTCAaH7W+lMl83rdfItYL6gVcSEXcUyvu
+        ffkUDZHBn52KPppsJM9sKvE=
+X-Google-Smtp-Source: ABdhPJwSKzgs8mdR8C62N3+17pK2x3y1iAvtl94tQ+1L+wNkegVQus1Avu2yhcfRczcDHv9KhLRuUA==
+X-Received: by 2002:a05:620a:d4c:b0:47d:b38e:7a8f with SMTP id o12-20020a05620a0d4c00b0047db38e7a8fmr2894989qkl.48.1645133154947;
+        Thu, 17 Feb 2022 13:25:54 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g20sm21525559qko.27.2022.02.17.13.25.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 13:25:53 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <791af285-ad53-625a-8d3a-2be8d0022c75@roeck-us.net>
+Date:   Thu, 17 Feb 2022 13:25:52 -0800
 MIME-Version: 1.0
-References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
- <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net> <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
- <a8e9e6f1-e7a0-d40d-8065-b72f60c72a32@roeck-us.net>
-In-Reply-To: <a8e9e6f1-e7a0-d40d-8065-b72f60c72a32@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 17 Feb 2022 20:49:39 +0100
-Message-ID: <CAB95QATVnZMQLCU_eTr7=ASVmJ+aYayQGJ0xZ=OtowdhPZQKSw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
-To:     Guenter Roeck <linux@roeck-us.net>
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
+ <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
+ <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
+ <a8e9e6f1-e7a0-d40d-8065-b72f60c72a32@roeck-us.net>
+ <CAB95QATVnZMQLCU_eTr7=ASVmJ+aYayQGJ0xZ=OtowdhPZQKSw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAB95QATVnZMQLCU_eTr7=ASVmJ+aYayQGJ0xZ=OtowdhPZQKSw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 17 Feb 2022 at 20:33, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 2/17/22 10:43, Eugene Shalygin wrote:
-> > On Thu, 17 Feb 2022 at 19:26, Guenter Roeck <linux@roeck-us.net> wrote:
-> >> Looks like you did not run checkpatch.
-> >
-> > I did (0 errors/warnings/checks). What needs to be corrected?
-> >
->
-> Interesting. It appears that the continuation line in the declaration
-> confuses it. Otherwise you would get:
->
-> WARNING: Missing a blank line after declarations
+On 2/17/22 11:49, Eugene Shalygin wrote:
+> On Thu, 17 Feb 2022 at 20:33, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 2/17/22 10:43, Eugene Shalygin wrote:
+>>> On Thu, 17 Feb 2022 at 19:26, Guenter Roeck <linux@roeck-us.net> wrote:
+>>>> Looks like you did not run checkpatch.
+>>>
+>>> I did (0 errors/warnings/checks). What needs to be corrected?
+>>>
+>>
+>> Interesting. It appears that the continuation line in the declaration
+>> confuses it. Otherwise you would get:
+>>
+>> WARNING: Missing a blank line after declarations
+> 
+> Added in v2, thank you!
+> 
+>>>> Either case, I think you should just drop this function In probe:
+>>>
+>>> Yes, currently that function is tiny, but some tests with motherboards
+>>> from other families are done by users and if I add other families, the
+>>> information required for each board model will grow and in that case
+>>> I'd switch from dmi_system_id array to a custom struct to define all
+>>> the board-related data at at the same place, and to save some space in
+>>> the module binary, as unused parts of the dmi_system_id array already
+>>> take a quarter of the total binary size. So, the function will likely
+>>> get some more code soon.
+>>>
+>>
+>> Hmm, ok. Wouldn't you still need some kind of dmi match ?
+> 
+> Of course, just not via dmi_first_match():
+> https://github.com/zeule/asus-ec-sensors/blob/feature/prime-x470-pro-no-dmi/asus-ec-sensors.c#L787
+> 
 
-Added in v2, thank you!
+!strcmp(), and, yes, dmi functions can return NULL.
 
-> >> Either case, I think you should just drop this function In probe:
-> >
-> > Yes, currently that function is tiny, but some tests with motherboards
-> > from other families are done by users and if I add other families, the
-> > information required for each board model will grow and in that case
-> > I'd switch from dmi_system_id array to a custom struct to define all
-> > the board-related data at at the same place, and to save some space in
-> > the module binary, as unused parts of the dmi_system_id array already
-> > take a quarter of the total binary size. So, the function will likely
-> > get some more code soon.
-> >
->
-> Hmm, ok. Wouldn't you still need some kind of dmi match ?
-
-Of course, just not via dmi_first_match():
-https://github.com/zeule/asus-ec-sensors/blob/feature/prime-x470-pro-no-dmi/asus-ec-sensors.c#L787
-
-Regards,
-Eugene
+Guenter
