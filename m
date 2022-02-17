@@ -2,244 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8243C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 18:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC2F8C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 18:43:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242597AbiBQSjN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 13:39:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57126 "EHLO
+        id S244569AbiBQSno (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 13:43:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbiBQSjM (ORCPT
+        with ESMTP id S244601AbiBQSnn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:39:12 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C89A3C4A3;
-        Thu, 17 Feb 2022 10:38:56 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4K03WL2nd1z9sTY;
-        Thu, 17 Feb 2022 19:38:54 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645123132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EgWc3WkMkguU7yvRw6CZKxzatgcIdPvwCqsyOWk1H20=;
-        b=iLEz4iADA9eM8A266QaL9InVrb6VLx3JwJZK+IcaVOFmAHHAgIH39hIbly71v8rimf9Dfs
-        hQcPhurdp7NReErZtw+fnShmXQ9pucmk5A4Wl449a/pwUa9KEEAVoY6QTD7+JjBUpbHhAZ
-        Cscv1ZlP/GiVocqD+wkmuERDsPfnvMGzl72IHTBawyV/U3EnKhMnkDXvlzm9vA//circpt
-        aaFhoKtJJEiNFkPSkR9f2rqsPbfFRPxrD/0KkDeh8WcFxlL8IpUcRDuk7AIAR7s/xybfmD
-        lQLvRTq7qOE4Us7oe2waVvlLFhczVc3pvpE6Mw2OGlin0DSqaCg+c8GR90gBsw==
-Message-ID: <7a567823d62b6ed00cbdc2ce239dc4a69e48b411.camel@sylv.io>
-Subject: Re: [PATCH v2 2/3] hwmon (xdpe12284): Add support for xdpe11280
-From:   sylv <sylv@sylv.io>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-doc@vger.kernel.org
-Date:   Thu, 17 Feb 2022 19:38:47 +0100
-In-Reply-To: <66d4ea0b-0377-c9ae-68eb-7303c32cf87e@roeck-us.net>
-References: <cover.1645108566.git.sylv@sylv.io>
-         <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
-         <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
-         <246de83631dd5e165f95904d7f1628502f030e02.camel@sylv.io>
-         <66d4ea0b-0377-c9ae-68eb-7303c32cf87e@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 17 Feb 2022 13:43:43 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A1E5131F;
+        Thu, 17 Feb 2022 10:43:27 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id q8so4811771iod.2;
+        Thu, 17 Feb 2022 10:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jdYgdQe4oczZK33AfyD+pmbhRlarULisZsDe4vobqxg=;
+        b=DeWAwZZqus9lRrZ+u8FOuSEDBcXyqA5DUgD6GrHpNf44cGiNE9fgkl1FrXrnmGjfBe
+         Y4cWjV1WUjXBgD7DmLxd/ONfzLyVVk0Si7ANnIMy8X76Eq37tM7ctnvUgiEpz7GR2RFD
+         iKd0o2RBIzn+BW9UwLzFnSJSXrI3ohhAhCVWHbTzCldPwifG2OXMz5o8mGu8doTCs1r9
+         qfltEvsp/7QTHucweSdZBUgWcItY1taLeN7gYP8BT+/nZZ/jk4FG6sssaV74ir1A5xhf
+         IysQIUqJe1kRU57kiqpoxHwwI8/RZ9Tw3UwNFjeENRjtTjli/Kys20zytw2e4yTEiKJV
+         Popg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jdYgdQe4oczZK33AfyD+pmbhRlarULisZsDe4vobqxg=;
+        b=noerU4Dx4wM+X98QsMb82b/SJ9Lkj/y2ydtWok8Gaparzx1m2Absfw7uZb+DyukWCo
+         rKqz0MPDi03rzZ+fKlLZuoJlJ/8STmCVL3vOGeorSxpyeFOG4WA2/bsOSCHmDXzBGKVb
+         cf2wLbQUfPDuaIv9IPbOZU7aw9daWuF47Ht4MHYub2BqqBpdXuYUUht6mHEXWiW+YtGE
+         +Ezp9GC2AME3hyjKTIcWkxjRugyXdddC4Ohz1FOv6lBu07Dl/WoXbW0jZjSih71HR9HW
+         Q1oABMHZuQKNSAty1Dz36pcQeGI+JlgCx8Dzp8iivpb7s1bl82O3geb2lVNXara5kEAe
+         eD+A==
+X-Gm-Message-State: AOAM533AIVZK+mQAd/qYHJxVm+rX4aBXdA4yCRUqqBU+jotJWDoAyDSY
+        eqeQ9CFiAXB4RA9zdrYDd5Jcx4Tcjv5/CziOK80=
+X-Google-Smtp-Source: ABdhPJxISherzAJec28qVkLzKLJDkzOcgeSXKA+FxQU/zcvK95BGvfJGEbBSSHxj0g8eg7R37+SFfBtaNodf93WBCpU=
+X-Received: by 2002:a02:11c1:0:b0:310:4239:ae67 with SMTP id
+ 184-20020a0211c1000000b003104239ae67mr2766041jaf.108.1645123405854; Thu, 17
+ Feb 2022 10:43:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220217072340.2472987-1-eugene.shalygin@gmail.com> <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
+In-Reply-To: <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Thu, 17 Feb 2022 19:43:14 +0100
+Message-ID: <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 2022-02-17 at 10:11 -0800, Guenter Roeck wrote:
-> On 2/17/22 08:39, sylv wrote:
-> > On Thu, 2022-02-17 at 07:20 -0800, Guenter Roeck wrote:
-> > > On 2/17/22 06:41, Marcello Sylvester Bauer wrote:
-> > > > Add support for another family of Infineon Multi-phase
-> > > > controllers.
-> > > > The xdpe11280 uses linear instead of vid data format for VOUT.
-> > > > Add the required logic to detect VOUT_MODE during
-> > > > identification,
-> > > > and set the format accordingly.
-> > > > 
-> > > This talks about the chip, but ...
-> > 
-> > Oh, sure. I should be more clear that it is a chip of a different
-> > family.
-> > 
-> > > 
-> > > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > > ---
-> > > >    Documentation/hwmon/xdpe12284.rst | 10 +++++++---
-> > > >    drivers/hwmon/pmbus/xdpe12284.c   | 17 ++++++++++++++++-
-> > > >    2 files changed, 23 insertions(+), 4 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/hwmon/xdpe12284.rst
-> > > > b/Documentation/hwmon/xdpe12284.rst
-> > > > index 67d1f87808e5..e9a5a19b0c3d 100644
-> > > > --- a/Documentation/hwmon/xdpe12284.rst
-> > > > +++ b/Documentation/hwmon/xdpe12284.rst
-> > > > @@ -5,6 +5,10 @@ Kernel driver xdpe122
-> > > >    
-> > > >    Supported chips:
-> > > >    
-> > > > +  * Infineon XDPE11280
-> > > > +
-> > > > +    Prefix: 'xdpe11280'
-> > > > +
-> > > >      * Infineon XDPE12254
-> > > >    
-> > > >        Prefix: 'xdpe12254'
-> > > > @@ -20,9 +24,9 @@ Authors:
-> > > >    Description
-> > > >    -----------
-> > > >    
-> > > > -This driver implements support for Infineon Multi-phase
-> > > > XDPE122
-> > > > family
-> > > > -dual loop voltage regulators.
-> > > > -The family includes XDPE12284 and XDPE12254 devices.
-> > > > +This driver implements support for Infineon Multi-phase
-> > > > XDPE112
-> > > > and XDPE122
-> > > > +family dual loop voltage regulators.
-> > > > +These families include XDPE11280, XDPE12284 and XDPE12254
-> > > > devices.
-> > > >    The devices from this family complaint with:
-> > > 
-> > > Hmm, s/complaint/compliant/.
-> > 
-> > ack
-> > 
-> > > 
-> > > Anyway, is it still correct that the XDPE11280 is compliant with
-> > > the
-> > > Intel specifications ? The datasheet isn't public, so I can not
-> > > check
-> > > myself
-> > > what the chip actually supports.
-> > 
-> > The hardware we are testing on is an Intel Cascade Lake, which uses
-> > this chip. The datasheet tells us it is compliant:
-> > 
-> > ```
-> > The XDPE11280B implements a fully compliant Intel® VR 13, VR12, VR
-> > 12.5, VR13.HC, and IMVP8 Serial VID (SVID)
-> > interface.
-> > ```
-> > 
-> 
-> This seems to be one of those chips where the vendor doesn't even
-> admit
-> that it exists unless one signs an NDA. Sigh :-(.
+On Thu, 17 Feb 2022 at 19:26, Guenter Roeck <linux@roeck-us.net> wrote:
+> Looks like you did not run checkpatch.
 
-Yeah, it's pretty... We do not understand the reasoning.
+I did (0 errors/warnings/checks). What needs to be corrected?
 
-> 
-> > > 
-> > > >    
-> > > >    - Intel VR13 and VR13HC rev 1.3, IMVP8 rev 1.2 and IMPVP9
-> > > > rev 1.3
-> > > > DC-DC
-> > > > diff --git a/drivers/hwmon/pmbus/xdpe12284.c
-> > > > b/drivers/hwmon/pmbus/xdpe12284.c
-> > > > index b07da06a40c9..ec947c697670 100644
-> > > > --- a/drivers/hwmon/pmbus/xdpe12284.c
-> > > > +++ b/drivers/hwmon/pmbus/xdpe12284.c
-> > > > @@ -27,6 +27,9 @@ static int xdpe122_read_word_data(struct
-> > > > i2c_client *client, int page,
-> > > >          s32 mantissa;
-> > > >          int ret;
-> > > >    
-> > > > +       if (info->format[PSC_VOLTAGE_OUT] == linear)
-> > > > +               return -ENODATA;
-> > > > +
-> > > >          switch (reg) {
-> > > >          case PMBUS_VOUT_OV_FAULT_LIMIT:
-> > > >          case PMBUS_VOUT_UV_FAULT_LIMIT:
-> > > > @@ -75,9 +78,19 @@ static int xdpe122_read_word_data(struct
-> > > > i2c_client *client, int page,
-> > > >    static int xdpe122_identify(struct i2c_client *client,
-> > > >                              struct pmbus_driver_info *info)
-> > > >    {
-> > > > -       u8 vout_params;
-> > > > +       u8 vout_mode, vout_params;
-> > > >          int i, ret;
-> > > >    
-> > > > +       ret = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
-> > > > +       if (ret < 0)
-> > > > +               return ret;
-> > > > +
-> > > > +       vout_mode = ret >> 5;
-> > > > +       if (vout_mode == 0) {
-> > > > +               info->format[PSC_VOLTAGE_OUT] = linear;
-> > > > +               return 0;
-> > > > +       }
-> > > 
-> > > .... the code above is not chip dependent but this code checks
-> > > the
-> > > mode register on page 0. At the very least this is confusing.
-> > > 
-> > > What the driver should do instead is to check the chip type
-> > > during
-> > > probe and make the necessary changes there, ie set the output
-> > > format
-> > > for xdpe11280 to linear and drop the pointers to the .identify
-> > > and .read_word_data.
-> > 
-> > Sgtm. This sounds like a better approach indeed.
-> > 
-> 
-> That makes me wonder if the chip needs to be added to this driver in
-> the first
-> place, or if it could be added to pmbus.c instead. Any idea ?
+> Either case, I think you should just drop this function In probe:
 
-Oh, we did wrote a standalone driver too, and it works fine.
-Maybe it's better to upsteam it instead. :)
+Yes, currently that function is tiny, but some tests with motherboards
+from other families are done by users and if I add other families, the
+information required for each board model will grow and in that case
+I'd switch from dmi_system_id array to a custom struct to define all
+the board-related data at at the same place, and to save some space in
+the module binary, as unused parts of the dmi_system_id array already
+take a quarter of the total binary size. So, the function will likely
+get some more code soon.
 
-> 
-> Thanks,
-> Guenter
-> 
-> > Thanks,
-> > Marcello
-> > 
-> > > 
-> > > Guenter
-> > > 
-> > > > +
-> > > >          for (i = 0; i < XDPE122_PAGE_NUM; i++) {
-> > > >                  /* Read the register with VOUT scaling
-> > > > value.*/
-> > > >                  ret = pmbus_read_byte_data(client, i,
-> > > > PMBUS_VOUT_MODE);
-> > > > @@ -140,6 +153,7 @@ static int xdpe122_probe(struct i2c_client
-> > > > *client)
-> > > >    }
-> > > >    
-> > > >    static const struct i2c_device_id xdpe122_id[] = {
-> > > > +       {"xdpe11280", 0},
-> > > >          {"xdpe12254", 0},
-> > > >          {"xdpe12284", 0},
-> > > >          {}
-> > > > @@ -148,6 +162,7 @@ static const struct i2c_device_id
-> > > > xdpe122_id[]
-> > > > = {
-> > > >    MODULE_DEVICE_TABLE(i2c, xdpe122_id);
-> > > >    
-> > > >    static const struct of_device_id __maybe_unused
-> > > > xdpe122_of_match[] = {
-> > > > +       {.compatible = "infineon,xdpe11280"},
-> > > >          {.compatible = "infineon,xdpe12254"},
-> > > >          {.compatible = "infineon,xdpe12284"},
-> > > >          {}
-> > > 
-> > 
-> 
-
+Regards,
+Eugene
