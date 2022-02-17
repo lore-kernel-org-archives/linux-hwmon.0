@@ -2,113 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E2C7C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 21:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD80EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 22:35:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242293AbiBQV0L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 16:26:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36142 "EHLO
+        id S234606AbiBQWfd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 17:35:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239342AbiBQV0K (ORCPT
+        with ESMTP id S232023AbiBQWfa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 16:26:10 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E4980227;
-        Thu, 17 Feb 2022 13:25:55 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id b35so6045013qkp.6;
-        Thu, 17 Feb 2022 13:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KMFuxuk03fCSFsGh1kSJQRwXBhWVHJQbdI9sh3/6j9A=;
-        b=OQLFMrEDM/2zBL1GhNQX7Ep77Dbfysoac5IcRFB9mdiPAWf9JMAu/S5fyCEXS58JeP
-         bv1RxMBwbzaefx+B1mFnYlZ2WuIfY/LTb4xlPVA6rMn+4trOHclwqCDWMnQgwOjdz0AP
-         SefWRfxcFOAfBZtOGQsv+D2F7EDtF6U5l9hjay3hskdY7fU7M2k7w1rtRr++72lSKVYg
-         +nGhlyA+qY3WM0oDvGNeNS53hS2UJTplbuwYgZxIDMDvqRt6OyEg+69zy+m0k8pA1R9J
-         Odm7UEYI0bTKup6Ibta55MZV/RWnSyyxhc4r3i1xof88S28vdOzBm1q/q2qkzfTTGt94
-         v53w==
+        Thu, 17 Feb 2022 17:35:30 -0500
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3EC1688E4;
+        Thu, 17 Feb 2022 14:35:15 -0800 (PST)
+Received: by mail-io1-f49.google.com with SMTP id e79so5457101iof.13;
+        Thu, 17 Feb 2022 14:35:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KMFuxuk03fCSFsGh1kSJQRwXBhWVHJQbdI9sh3/6j9A=;
-        b=f5mCr3TKab0us3ExgooykhDllGt3/Xv6Gp1zfUV8gX8MV7pr3TOVPsFHHhp5ZHvmXV
-         2yhwLCOJWolwprzKqQdAQN6v1ZfqeuUnkrTDqcPzemlG8ml6TtWHSzyi5xP+ssQOfeEb
-         FaGUAH2N2/s7cA3fioCWAb0Xr1poqggWRBaLLIX6iSJrxSpoBATJWyYGTyyMXd8PyVAx
-         yuEvfFsjiykmW3t50MVJ47UNkOd0NXUs8ZThrkkUqXJT0u+zhfNJrLeqAhpYLGHKDSrC
-         VaeCRYb5Da1EquYBSTCVeYxSF9C1dmy7mzI4u/wz9YRC6k/EGlFKdvH68P/iklAITPOK
-         iaOw==
-X-Gm-Message-State: AOAM531jkO3J0RUS2VQoKffhTCAaH7W+lMl83rdfItYL6gVcSEXcUyvu
-        ffkUDZHBn52KPppsJM9sKvE=
-X-Google-Smtp-Source: ABdhPJwSKzgs8mdR8C62N3+17pK2x3y1iAvtl94tQ+1L+wNkegVQus1Avu2yhcfRczcDHv9KhLRuUA==
-X-Received: by 2002:a05:620a:d4c:b0:47d:b38e:7a8f with SMTP id o12-20020a05620a0d4c00b0047db38e7a8fmr2894989qkl.48.1645133154947;
-        Thu, 17 Feb 2022 13:25:54 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g20sm21525559qko.27.2022.02.17.13.25.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 13:25:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <791af285-ad53-625a-8d3a-2be8d0022c75@roeck-us.net>
-Date:   Thu, 17 Feb 2022 13:25:52 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QJCJJkJqtOsQ/CSbeUuObYQcThTPRTm035a09VI6ZJ4=;
+        b=f/9n2LwuAs550FqOKTRMdD/7R0l2o+0y6+sk7ZCzkiymb5Fk/hXL5cbeM813WdhnKL
+         cpj2/GwWukiAIRyYncpjrxqDWCZRbCy4TXk2L5nWjq2OeNsLV4e4ORxk527gYk1bTx3Q
+         2IoXoiWwwVIpYd0eIZfmUFDFUJprPVym/Q5uvlEE1oAldkLgF1DkW02rtOdp83yN5lZm
+         T95Gn87NQ/g7Ia365IFRBUcSy72mn5w48lqNkk8jJ6oaAS5AD3ViNQbj/K7KRnTmiBdm
+         9rmWN0HWm0J/Bp7dYOMPeSAKgYqnWPdd/q48jz6iMLY0DUWzo11ExOYcwijc9YA1bj0f
+         Rqfw==
+X-Gm-Message-State: AOAM530IBrfaH9/9K70Ofq2iU01V4wWoP6rhWn4isjHzU/Hn1CMBeP+o
+        ZqEkXUPQsy8V/yKyuoH0VQ==
+X-Google-Smtp-Source: ABdhPJy0BMvl0r/0X5Zc06+9xSfxyHJxRc8f8yEbFq5HYdWl/tpmNswA1NCuOnIwtqi5NIlgpfhMVw==
+X-Received: by 2002:a02:7a16:0:b0:313:f2f9:2ebc with SMTP id a22-20020a027a16000000b00313f2f92ebcmr3370002jac.136.1645137315031;
+        Thu, 17 Feb 2022 14:35:15 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id u15sm2891106ill.75.2022.02.17.14.35.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 14:35:14 -0800 (PST)
+Received: (nullmailer pid 3892127 invoked by uid 1000);
+        Thu, 17 Feb 2022 22:35:12 -0000
+Date:   Thu, 17 Feb 2022 16:35:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: Add power-efuse binding
+Message-ID: <Yg7NoLzC7zt2oihV@robh.at.kernel.org>
+References: <20220217104444.7695-1-zev@bewilderbeest.net>
+ <20220217104444.7695-4-zev@bewilderbeest.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
- <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
- <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
- <a8e9e6f1-e7a0-d40d-8065-b72f60c72a32@roeck-us.net>
- <CAB95QATVnZMQLCU_eTr7=ASVmJ+aYayQGJ0xZ=OtowdhPZQKSw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAB95QATVnZMQLCU_eTr7=ASVmJ+aYayQGJ0xZ=OtowdhPZQKSw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217104444.7695-4-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/17/22 11:49, Eugene Shalygin wrote:
-> On Thu, 17 Feb 2022 at 20:33, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 2/17/22 10:43, Eugene Shalygin wrote:
->>> On Thu, 17 Feb 2022 at 19:26, Guenter Roeck <linux@roeck-us.net> wrote:
->>>> Looks like you did not run checkpatch.
->>>
->>> I did (0 errors/warnings/checks). What needs to be corrected?
->>>
->>
->> Interesting. It appears that the continuation line in the declaration
->> confuses it. Otherwise you would get:
->>
->> WARNING: Missing a blank line after declarations
+On Thu, Feb 17, 2022 at 02:44:43AM -0800, Zev Weiss wrote:
+> This can be used to describe a power output supplied by a regulator
+> device that the system controls.
 > 
-> Added in v2, thank you!
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+>  .../devicetree/bindings/misc/power-efuse.yaml | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
 > 
->>>> Either case, I think you should just drop this function In probe:
->>>
->>> Yes, currently that function is tiny, but some tests with motherboards
->>> from other families are done by users and if I add other families, the
->>> information required for each board model will grow and in that case
->>> I'd switch from dmi_system_id array to a custom struct to define all
->>> the board-related data at at the same place, and to save some space in
->>> the module binary, as unused parts of the dmi_system_id array already
->>> take a quarter of the total binary size. So, the function will likely
->>> get some more code soon.
->>>
->>
->> Hmm, ok. Wouldn't you still need some kind of dmi match ?
-> 
-> Of course, just not via dmi_first_match():
-> https://github.com/zeule/asus-ec-sensors/blob/feature/prime-x470-pro-no-dmi/asus-ec-sensors.c#L787
-> 
+> diff --git a/Documentation/devicetree/bindings/misc/power-efuse.yaml b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+> new file mode 100644
+> index 000000000000..cadce15d2ce7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/power-efuse.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic power efuse device
 
-!strcmp(), and, yes, dmi functions can return NULL.
+No idea what this is, but I doubt any such generic device exists. This 
+needs sufficient description to be convincing that it is indeed generic.
 
-Guenter
+> +
+> +maintainers:
+> + - Zev Weiss <zev@bewilderbeest.net>
+> +
+> +properties:
+> +  compatible:
+> +    const: power-efuse
+> +
+> +  vout-supply:
+> +    description:
+> +      phandle to the regulator providing power for the efuse
+> +
+> +  error-flags-cache-ttl-ms:
+> +    description:
+> +      The number of milliseconds the vout-supply regulator's error
+> +      flags should be cached before re-fetching them.
+
+What are 'error flags'? Not something I've heard with respect to 
+regulators.
+
+> +
+> +required:
+> +  - compatible
+> +  - vout-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    efuse {
+> +        compatible = "power-efuse";
+> +        vout-supply = <&efuse_reg>;
+> +        error-flags-cache-ttl-ms = <500>;
+> +    };
+> -- 
+> 2.35.1
+> 
+> 
