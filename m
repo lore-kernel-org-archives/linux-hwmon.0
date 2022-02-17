@@ -2,50 +2,47 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10BB5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 14:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77092C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 14:42:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241964AbiBQOm3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S241969AbiBQOm3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Thu, 17 Feb 2022 09:42:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37846 "EHLO
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233259AbiBQOmZ (ORCPT
+        with ESMTP id S241962AbiBQOm1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:42:25 -0500
-X-Greylist: delayed 18850 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 06:42:10 PST
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434091EA710;
-        Thu, 17 Feb 2022 06:42:10 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [80.241.60.233])
+        Thu, 17 Feb 2022 09:42:27 -0500
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2BE1EA726;
+        Thu, 17 Feb 2022 06:42:12 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4JzyG81ts4z9sW9;
-        Thu, 17 Feb 2022 15:42:08 +0100 (CET)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4JzyGB60hTz9sWV;
+        Thu, 17 Feb 2022 15:42:10 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645108925;
+        t=1645108928;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=P3WOWoBkW9fNOW7y5qawru7527uDPIT2KJWNbGZXIZU=;
-        b=P53Xwlqo9K0bhRWOP+bBgy0KgnFYBK1w1Zkli3EzRyysM7MZW+XyvwUSTA5a5O/vRRb+Ku
-        FbPuIcKEAc3VzcVcQ4foatjtxakoO8p2Or+hrvT7J3DygCjFZPuExEx0SriVVTwom0SS1M
-        XaDv+JLw4TjuUCiverfZqCiB/czEjkeoJ6dHxgshRerBSzA5mEubHrnDKD/gL+lDYzpetK
-        /UR2UB2sMSVwT3GmRMqLbdoCcoskUqzip7qONgmz+1+zPQRwkJIJUqe2GyKUYgELAasgQM
-        //iUrNYV2zCFesBLPF6PabFEMdO3CsIjMwSWODy24G87AFlYzC9lo3MxMB2DNw==
+        bh=tfcNRSGnkJBjMPrtUucPQRJFz/s/Ce0jeEEdQxko2do=;
+        b=hbe5PyNN5TcRut/wYg70JE31bV5uOPYSAbIn+YTdzjXGE2Z2nR70GNffW9F4z5oxQpiZCz
+        /vphoAUu8eOI7tupr0VgFoa1SR5DSyRFbeV0byAEILrgpOYRAmYREju6sK6RjtpN45/nnY
+        tx9RKL+iMtZmR2SN9R3Dlfxl+EaiOJsWTvkn7cM8nkAQAxHTyxRT+E1jBIm0jBN4vhYUg2
+        m+yN0dxUmjrfxS3sD+nLdjZK9oLlJYUIM1RaCOoVR/j/Ab0JHHbzWcJUaOGqctRM27dCDQ
+        FTgVAEKC1bAmcNp/gK7qhFkegh86Uj1mww2g/rz6HshMnymEgpeqGk2duMNdsw==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
+        Jean Delvare <jdelvare@suse.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v2 1/3] dt-bindings: trivial-devices: Add xdpe11280
-Date:   Thu, 17 Feb 2022 15:41:33 +0100
-Message-Id: <cbef5619ca8bb1edef32532ac22a5803248036ee.1645108566.git.sylv@sylv.io>
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: [PATCH v2 3/3] hwmon (xdpe12284): Add regulator support
+Date:   Thu, 17 Feb 2022 15:41:35 +0100
+Message-Id: <e8839386e9e5daa5f3df746003d80f613d130947.1645108566.git.sylv@sylv.io>
 In-Reply-To: <cover.1645108566.git.sylv@sylv.io>
 References: <cover.1645108566.git.sylv@sylv.io>
 MIME-Version: 1.0
@@ -54,26 +51,68 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add Infineon Multi-phase Digital Controller XDPE11280.
+Add simple on/off regulator support for xdpe12284 and
+other pmbus parts supported by the xdpe12284 driver.
 
 Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwmon/pmbus/Kconfig     |  6 ++++++
+ drivers/hwmon/pmbus/xdpe12284.c | 11 +++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 091792ba993e..8a42aea3b8a6 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -137,6 +137,8 @@ properties:
-           - infineon,slb9645tt
-             # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
-           - infineon,tlv493d-a1b6
-+            # Infineon Multi-phase Digital VR Controller xdpe11280
-+          - infineon,xdpe11280
-             # Infineon Multi-phase Digital VR Controller xdpe12254
-           - infineon,xdpe12254
-             # Infineon Multi-phase Digital VR Controller xdpe12284
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index c96f7b7338bd..e0e9b67bf3eb 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -394,6 +394,12 @@ config SENSORS_XDPE122
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called xdpe12284.
+ 
++config SENSORS_XDPE122_REGULATOR
++	bool "Regulator support for XDPE122 and compatibles"
++	depends on SENSORS_XDPE122 && REGULATOR
++	help
++	  Uses the xdpe12284 or compatible as regulator.
++
+ config SENSORS_ZL6100
+ 	tristate "Intersil ZL6100 and compatibles"
+ 	help
+diff --git a/drivers/hwmon/pmbus/xdpe12284.c b/drivers/hwmon/pmbus/xdpe12284.c
+index ec947c697670..c58776ef0311 100644
+--- a/drivers/hwmon/pmbus/xdpe12284.c
++++ b/drivers/hwmon/pmbus/xdpe12284.c
+@@ -10,6 +10,8 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/regulator/driver.h>
++
+ #include "pmbus.h"
+ 
+ #define XDPE122_PROT_VR12_5MV		0x01 /* VR12.0 mode, 5-mV DAC */
+@@ -120,6 +122,11 @@ static int xdpe122_identify(struct i2c_client *client,
+ 	return 0;
+ }
+ 
++static const struct regulator_desc xdpe122_reg_desc[] = {
++	PMBUS_REGULATOR("vout", 0),
++	PMBUS_REGULATOR("vout", 1),
++};
++
+ static struct pmbus_driver_info xdpe122_info = {
+ 	.pages = XDPE122_PAGE_NUM,
+ 	.format[PSC_VOLTAGE_IN] = linear,
+@@ -138,6 +145,10 @@ static struct pmbus_driver_info xdpe122_info = {
+ 		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+ 	.identify = xdpe122_identify,
+ 	.read_word_data = xdpe122_read_word_data,
++#if IS_ENABLED(CONFIG_SENSORS_XDPE122_REGULATOR)
++	.num_regulators = 2,
++	.reg_desc = xdpe122_reg_desc,
++#endif
+ };
+ 
+ static int xdpe122_probe(struct i2c_client *client)
 -- 
 2.34.1
 
