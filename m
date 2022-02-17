@@ -2,106 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11BDAC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 17:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EF6C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 17:40:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241377AbiBQRhJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 12:37:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55970 "EHLO
+        id S243816AbiBQRlM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 12:41:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiBQRhI (ORCPT
+        with ESMTP id S243813AbiBQRlL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:37:08 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADB6CE;
-        Thu, 17 Feb 2022 09:36:54 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id d7so9682219qvk.2;
-        Thu, 17 Feb 2022 09:36:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=YT6i6zAvuPIDw8rTT9iPdqVsfeJV5gVLu6Dx+ZSH/OY=;
-        b=aHY3iAwP93+Sffc+Iy8H+y3Z4UBYKxmRouQbVIphbflwD79lzkmL+AgV8pHerrz9vq
-         dP2nar/x4c829KAcM6P/Tzbc4HhUF8pnkv1LCSsZnWUhNtR63xDihqzO1yLBZ6Kx84An
-         eReDKqiFv3cFlOwwmu/Da6lHjgav6pNLtbLaqX6v2no4MYDje6wbn2ukVBO5hRokx3dr
-         BZuqYDxVuqmQ76ih4pputFZLJU1jKbfg7omosoBlFj9zw/GrPSy+72wcoy+Lquc0DZwy
-         Yxlc2Ew+rFsprXE/P5h5/apHK0KvmD+kd98Oz3kAGUChU7/eCf2krAu3WV2XPE/BRszj
-         EGJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=YT6i6zAvuPIDw8rTT9iPdqVsfeJV5gVLu6Dx+ZSH/OY=;
-        b=fmP/z57fiU3el3jmCbejEDeBNGkKHg8cOSgXW77KCJQgF7EEus+yW575ZVRQWOgvwZ
-         0ANOsgTXV5jyZuKr8jPIunE2Q27G5bEtd3YU9hhJmKYoBNoUyDqclU9lbtOKV5jVaLaG
-         9dzR5OJlQrewZa4p6qgcfHMUgzf/UxuCn8xhZvekJeG9huJcVYuFbSo5p8LoENlaRFE5
-         6yiTR48S7rgrgMRMOoC4o6yUT90+I+3YFgwaMGgjU/7YHFCpO3XOLqdyTOXka2UxOVoq
-         46sXgiasFdRPH9t07CZ7P4OcMq3wHfnbgjwkig45OKwlU+lfxAPw2BN2BEr44qJ5uT+I
-         28MA==
-X-Gm-Message-State: AOAM530M8YFdELg3dIU618n8qyrl5Knf7tnrC8cVnc3y5p9M4NFYWr17
-        7vpTYFvvzpzt4Q1QF5Up3bs=
-X-Google-Smtp-Source: ABdhPJw2puxE1pTENCjPFJTErkM68D0PT+SquQSdWLfxjixiX0Wd0bm45v2Us+WFviI2Rul3eZuBvg==
-X-Received: by 2002:ac8:5907:0:b0:2dc:62f:27c7 with SMTP id 7-20020ac85907000000b002dc062f27c7mr3451592qty.315.1645119413377;
-        Thu, 17 Feb 2022 09:36:53 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 84sm3611257qkk.32.2022.02.17.09.36.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 09:36:52 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <15b95695-6fbc-1916-ff39-abf13e989fc4@roeck-us.net>
-Date:   Thu, 17 Feb 2022 09:36:51 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        Thu, 17 Feb 2022 12:41:11 -0500
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF402B3ACC;
+        Thu, 17 Feb 2022 09:40:56 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4K02DQ0K4Wz9sWF;
+        Thu, 17 Feb 2022 18:40:54 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1645119651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QH+uxp2J6kpD1HokNKgqcYwu1J2p2T1tcY6BL3c2JJI=;
+        b=tWMx6MoaUZD0xNqqttpCvHypOW3bPemVIgFcEg9b+EF1Dcu00QWebmZnU0ptkv1EVYs4X2
+        SPgZS4F+pEDYw6xQ7TYgyS7BIcafyGYESYfN6xKhbxeg4+nwl3ti+Qqdnj9kD3Wxyd1OIm
+        PiE5jGDzflOumX0npgI8HmjcBvUjc3Gu9r/9uCBs5sHeD+elncay5UvO1ruEhEIpL100py
+        7Gp6s11xuBr2kgoeOyxshRBhydENqvvBbVKAXrrXz+m5tilWZ2nI/+D+xOs0YHSxsdmPz8
+        Zzg4Vj/Gen8Z6q5/K4QpnRH6fAN9pN8byy/2xKJAEidbJ8L9iYzzRBv00Zwekg==
+Message-ID: <abfcdd863bb0166a6828c5742bf651eb9409c31b.camel@sylv.io>
+Subject: Re: [PATCH v1 1/1] hwmon: (pmbus) Add regulator supply into macro
+From:   sylv <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>
+Date:   Thu, 17 Feb 2022 18:40:47 +0100
+In-Reply-To: <15b95695-6fbc-1916-ff39-abf13e989fc4@roeck-us.net>
 References: <cover.1645092563.git.sylv@sylv.io>
- <d3563864d03a3d3450cf00b3be05465dc506e161.1645092563.git.sylv@sylv.io>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 1/1] hwmon: (pmbus) Add regulator supply into macro
-In-Reply-To: <d3563864d03a3d3450cf00b3be05465dc506e161.1645092563.git.sylv@sylv.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+         <d3563864d03a3d3450cf00b3be05465dc506e161.1645092563.git.sylv@sylv.io>
+         <15b95695-6fbc-1916-ff39-abf13e989fc4@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/17/22 02:23, Marcello Sylvester Bauer wrote:
-> Add optional regulator supply into PWBUS_REGULATOR macro. This makes it
-
-The code doesn't look optional to me. What exactly is optional ?
-
-> possible to define a vin-supply in DT. Not defining a supply will only
-> cause the following debug output:
+On Thu, 2022-02-17 at 09:36 -0800, Guenter Roeck wrote:
+> On 2/17/22 02:23, Marcello Sylvester Bauer wrote:
+> > Add optional regulator supply into PWBUS_REGULATOR macro. This
+> > makes it
 > 
-> ```
-> Looking up vin-supply property in node [...] failed
-> ```
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> ---
->   drivers/hwmon/pmbus/pmbus.h | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index e0aa8aa46d8c..38f049d68d32 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -464,6 +464,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
->   #define PMBUS_REGULATOR(_name, _id)				\
->   	[_id] = {						\
->   		.name = (_name # _id),				\
-> +		.supply_name = "vin",				\
->   		.id = (_id),					\
->   		.of_match = of_match_ptr(_name # _id),		\
->   		.regulators_node = of_match_ptr("regulators"),	\
+> The code doesn't look optional to me. What exactly is optional ?
 
-That seems to be quite far reaching. How does this affect / change behavior
-of existing systems which so far did not expect supply_name to be set ?
+I mean, it is optional to add a supply. It should not cause errors if
+you don't. I should probably reword this, too.
 
-Guenter
+> 
+> > possible to define a vin-supply in DT. Not defining a supply will
+> > only
+> > cause the following debug output:
+> > 
+> > ```
+> > Looking up vin-supply property in node [...] failed
+> > ```
+> > 
+> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > ---
+> >   drivers/hwmon/pmbus/pmbus.h | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/hwmon/pmbus/pmbus.h
+> > b/drivers/hwmon/pmbus/pmbus.h
+> > index e0aa8aa46d8c..38f049d68d32 100644
+> > --- a/drivers/hwmon/pmbus/pmbus.h
+> > +++ b/drivers/hwmon/pmbus/pmbus.h
+> > @@ -464,6 +464,7 @@ extern const struct regulator_ops
+> > pmbus_regulator_ops;
+> >   #define PMBUS_REGULATOR(_name, _id)                           \
+> >         [_id] = {                                               \
+> >                 .name = (_name # _id),                          \
+> > +               .supply_name = "vin",                           \
+> >                 .id = (_id),                                    \
+> >                 .of_match = of_match_ptr(_name # _id),          \
+> >                 .regulators_node = of_match_ptr("regulators"),  \
+> 
+> That seems to be quite far reaching. How does this affect / change
+> behavior
+> of existing systems which so far did not expect supply_name to be set
+> ?
+> 
+> Guenter
+
