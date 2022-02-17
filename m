@@ -2,143 +2,133 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87E10C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 18:14:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D131CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 18:26:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbiBQSOi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 13:14:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56404 "EHLO
+        id S244385AbiBQS1G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 13:27:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbiBQSOg (ORCPT
+        with ESMTP id S244375AbiBQS1A (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:14:36 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BB320A897;
-        Thu, 17 Feb 2022 10:14:21 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id c14so9874257qvl.12;
-        Thu, 17 Feb 2022 10:14:21 -0800 (PST)
+        Thu, 17 Feb 2022 13:27:00 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B890FD0B;
+        Thu, 17 Feb 2022 10:26:45 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id o5so9976879qvm.3;
+        Thu, 17 Feb 2022 10:26:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K49iyUfP87GUSWjSsQDrw9184z8W1wX9twPD7fJ5DdI=;
-        b=bjgBJHKoVTIzjZh3TmK6la8r3vIUyGMNAK24MTaOPb6docls8lRqvD/AFi3e5NyXKK
-         TCmevyglQ7g2F+IgIKqpwf2V03nQF7ZYx/2bbI5ANGBUOvEj6r7kkCOaxKMSaJ54VmV4
-         zSf1LBF4o4KnEon7TGh3bpCsrjUVq4L8zOoQKnArLV+7gihJNitVkreWa62ch2IcbGsW
-         dl4tYq3tA8CN5ZNC9W7eTZy01p0d8u0VSek5TbY+n7krrC5zO2DZNUA7qlTfLzocbpYY
-         CIgRnEv1xGZNwHcQ1Ux8m5OCFxxdcd5WoGljDECICzITVLL1o9rX9HB1O2J2XynHQiFg
-         Kdjw==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=MMOEkIqPd1GFJyB2Iu2RQtVB2AJeO/QpJFoJ7mGMrXA=;
+        b=lylzI3Jz7qhGeRMG6kHWouq6A9rI6JMcfy8RRpNKlJ6iqMiTrHWImTIw7Tl2OkJNAL
+         FnXv4khs6J7dlM2ENloaTxYg+qZoK7RgJZnpz8kdYRfxyzYMa+7bobgEhNHAaxwvK0FS
+         rA1sTiMy03cII0lGyHRvtqtmfVzvKWOMIWC9sOP+SeZ7rY0DKTUKlGzaSaxDCrcMkSU1
+         jGmZtm3QErNogH3Dbg9hf1F+3J46J+1rOMX/b4QpRlULs6xpMyAUyPh29BJz+4Km9gxy
+         NDRgaRLyOHbOWBNLhJbwgZUtQoYg1jORZK4E6io+w5NClKliVIzdv9oxA/DT38HilmpL
+         HD1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=K49iyUfP87GUSWjSsQDrw9184z8W1wX9twPD7fJ5DdI=;
-        b=tbkW6j3BKOK2TdX5pz16K4zuLMHADRgbr1iSTbV+fHFpdm+JWb79i2PdWijxAMTOgs
-         H9IA1Cz8PPhLH/SUxm3307mK+jLB0NjI2qJUxDVyRiDurrNHHqatoU8ge/CeVuZrMe/n
-         NfaYuv0bIMqeIcnBlmbyHQ/X2axAGe87IxDHYVWD/wLdHTxMqVs2yWdh4ZQeumkAK1f8
-         XCoUDZPPfkV3RqZ8xZcjOI2su56lvJi6JMI23VJmndq6GHq3pmaWBT6jKJXu1aQRpgxW
-         oQt75bNL82DTTZ31GNr4pjKEkNF9eB05TimHq2h3W/2a1g3p6Dghi7HYGaaIOhJIDCeI
-         b20g==
-X-Gm-Message-State: AOAM533+pqIm+HbPmVwheJiAgVvVB81IJXDTNLPual3m7tlhu2ADQQaM
-        +vlcV+0hza6H4aG2Vy0ZnDM=
-X-Google-Smtp-Source: ABdhPJx9Kr9K7CaT4uf99J5p6k4IB7qjpuwkNpxc9I74+w8uJKlDLM85H41UC8A+sKnvawNpUmdEKQ==
-X-Received: by 2002:a05:622a:1007:b0:2d6:5ac4:6b78 with SMTP id d7-20020a05622a100700b002d65ac46b78mr3534147qte.668.1645121661036;
-        Thu, 17 Feb 2022 10:14:21 -0800 (PST)
+        bh=MMOEkIqPd1GFJyB2Iu2RQtVB2AJeO/QpJFoJ7mGMrXA=;
+        b=EaooKzVzcjRsxaSwyIKoUGlftC4ZlvTDh+XoAeuUmZTF4HlTz2SyfW+REVcX4HLkVu
+         WZmq8w3xD5FzPRWLig3U9XHLM6Zqz3lVM2Xaf4TyI0RGkHqBPW9niSH+RFLUEvAgToiY
+         PccvwhR80ICBgOKU3wIc/Oh8dLNJW7pw5/UpmuRU0Pn6Fnwa9n/IxGSnFX9G8X9YkImA
+         67mZhO/vxdf92ujHD+j6TUPiNSO0BaUUwNhi8kid6dBUt6GRHglH4B9cXW+R3irKC38N
+         3HciVqdfZguy6wX+9hihIMnP8G94v8Udrw8k6iNpa2c6Nj1HsnXjx12YkrWxoDiiyQ9C
+         polg==
+X-Gm-Message-State: AOAM532+Ia95CGl4LnDT3yoLhbPbIXKQBgJ3j2Wmy7D69d/kHpszPDpF
+        qNZ0jk4urYI+aP/xv04o9Kc=
+X-Google-Smtp-Source: ABdhPJyKX7TgIu3p4sKaHKL9k0lsYrXDoCyiEEFlrq6MGLGg7g6x1FBr/xl+JpiUjvRG3sUT9/C4WA==
+X-Received: by 2002:a05:6214:c82:b0:42c:c5f3:b162 with SMTP id r2-20020a0562140c8200b0042cc5f3b162mr3226713qvr.116.1645122404767;
+        Thu, 17 Feb 2022 10:26:44 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y5sm20490979qkp.37.2022.02.17.10.14.19
+        by smtp.gmail.com with ESMTPSA id x13sm21686688qko.114.2022.02.17.10.26.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 10:14:20 -0800 (PST)
+        Thu, 17 Feb 2022 10:26:44 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5b0b69cf-5688-3679-dd77-49179e0b17bb@roeck-us.net>
-Date:   Thu, 17 Feb 2022 10:14:18 -0800
+Message-ID: <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
+Date:   Thu, 17 Feb 2022 10:26:42 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 0/4] misc: Add power-efuse driver
 Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     openbmc@lists.ozlabs.org, Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-References: <20220217104444.7695-1-zev@bewilderbeest.net>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220217104444.7695-1-zev@bewilderbeest.net>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
+In-Reply-To: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/17/22 02:44, Zev Weiss wrote:
-> Hello,
+On 2/16/22 23:23, Eugene Shalygin wrote:
+> Remove the call to dev_info() from the board detection function, which
+> is called from probe(), not only to be in line with hwmon driver rules, but
+> also because the message duplicates the error code returned from probe()
+> for that case (ENODEV).
 > 
-> This patch series is another incarnation of some previous efforts [0]
-> at enabling userspace access to the OPERATION state (and now status
-> flags) of PMBus devices, specifically with respect to efuses
-> protecting general-purpose power outputs.  This functionality is an
-> important component enabling a port of OpenBMC to the Delta AHE-50DC
-> Open19 power shelf [1].
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> ---
+>   drivers/hwmon/asus-ec-sensors.c | 17 +++++------------
+>   1 file changed, 5 insertions(+), 12 deletions(-)
 > 
-> The first patch extends the pmbus core's regulator support with an
-> implementation of the .get_error_flags() operation, mapping PMBus
-> status flags to REGULATOR_ERROR_* flags where possible, and the second
-> patch adds regulator support for the lm25066 driver.  These two
-> patches are essentially independent of the power-efuse driver (and
-> each other) and could potentially be applicable individually, but are
-> necessary for the power-efuse driver to be useful on the AHE-50DC.
-> 
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 0701ade16227..cbe1b987144a 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -597,18 +597,11 @@ static struct hwmon_chip_info asus_ec_chip_info = {
+>   	.ops = &asus_ec_hwmon_ops,
+>   };
+>   
+> -static unsigned long __init
+> -get_board_sensors(const struct device *dev)
+> +static unsigned long __init get_board_sensors(void)
+>   {
+> -	const struct dmi_system_id *dmi_entry;
+> -
+> -	dmi_entry = dmi_first_match(asus_ec_dmi_table);
+> -	if (!dmi_entry) {
+> -		dev_info(dev, "Unsupported board");
+> -		return 0;
+> -	}
+> -
+> -	return (unsigned long)dmi_entry->driver_data;
+> +	const struct dmi_system_id *dmi_entry =
+> +		dmi_first_match(asus_ec_dmi_table);
+> +	return dmi_entry ? (unsigned long)dmi_entry->driver_data : 0;
 
-Nevertheless, the first two patches are orthogonal to the remaining
-two patches and should be separate.
+Looks like you did not run checkpatch.
+
+Either case, I think you should just drop this function In probe:
+
+	const struct dmi_system_id *dmi_entry = dmi_first_match(asus_ec_dmi_table);
+
+	...
+	if (!dmi_entry)
+		return -ENODEV;
+	...
+	ec_data->board_sensors = (unsigned long)dmi_entry->driver_data;
 
 Guenter
 
-> The third and fourth patches add dt-bindings and the implementation of
-> the power-efuse driver, respectively.  The driver is fairly simple; it
-> merely provides a sysfs interface to enable, disable, and retrieve
-> error flags from an underlying regulator.
-> 
-> There is one aspect of its usage of the regulator API I'm a bit
-> uncertain about, however: this driver seems like a case where an
-> exclusive 'get' of the regulator (i.e. devm_regulator_get_exclusive()
-> instead of devm_regulator_get() in efuse_probe()) would be
-> appropriate, since in the intended usage no other device should be
-> using an efuse's regulator.  With an exclusive get though, the
-> regulator's use_count and the consumer's enable_count don't balance
-> out properly to allow the enable/disable operations to work properly
-> (the former ending up one more than the latter, leading to
-> enable_count underflows on attempts to disable the regulator).  So at
-> least for now it's using a non-exclusive get -- I'd be happy to hear
-> any pointers on a way to allow an exclusive get to work here, though.
-> 
-> 
-> Thanks,
-> Zev
-> 
-> [0] https://lore.kernel.org/openbmc/YGLepYLvtlO6Ikzs@hatter.bewilderbeest.net/
-> [1] https://www.open19.org/marketplace/delta-16kw-power-shelf/
-> 
-> Zev Weiss (4):
->    hwmon: (pmbus) Add get_error_flags support to regulator ops
->    hwmon: (pmbus) lm25066: Add regulator support
->    dt-bindings: Add power-efuse binding
->    misc: Add power-efuse driver
-> 
->   .../devicetree/bindings/misc/power-efuse.yaml |  37 +++
->   MAINTAINERS                                   |   5 +
->   drivers/hwmon/pmbus/Kconfig                   |   7 +
->   drivers/hwmon/pmbus/lm25066.c                 |  14 ++
->   drivers/hwmon/pmbus/pmbus_core.c              |  97 ++++++++
->   drivers/misc/Kconfig                          |  15 ++
->   drivers/misc/Makefile                         |   1 +
->   drivers/misc/power-efuse.c                    | 221 ++++++++++++++++++
->   8 files changed, 397 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
->   create mode 100644 drivers/misc/power-efuse.c
-> 
+>   }
+>   
+>   static int __init asus_ec_probe(struct platform_device *pdev)
+> @@ -625,7 +618,7 @@ static int __init asus_ec_probe(struct platform_device *pdev)
+>   	struct device *hwdev;
+>   	unsigned int i;
+>   
+> -	board_sensors = get_board_sensors(dev);
+> +	board_sensors = get_board_sensors();
+>   	if (!board_sensors)
+>   		return -ENODEV;
+>   
 
