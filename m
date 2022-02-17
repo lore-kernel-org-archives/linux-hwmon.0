@@ -2,87 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 184E9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 07:32:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2C18C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 09:28:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbiBQHc5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 02:32:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55226 "EHLO
+        id S238635AbiBQJ2P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 04:28:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbiBQHc5 (ORCPT
+        with ESMTP id S238134AbiBQJ2O (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:32:57 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2C209D2F;
-        Wed, 16 Feb 2022 23:32:43 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id qx21so4925554ejb.13;
-        Wed, 16 Feb 2022 23:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OdwrWOrEdwiMMYGpBIS4fJP8/7wOvnlAzLGSpTwQbl8=;
-        b=E0Pzt+TrC0hs8egvDVPuY7K5vH+NKUaV8qof//O22zvXO9UyYLDFazEeg8cE0CMAJ2
-         0rI/PKYCdzT3tXnhBKnC97iiHh0lpr/TqFatp5+Sgo0e2F24AGSoI3wd5ApFfzTxCx2+
-         nQ6BptuAC4C6UXGYg+o/gOcsIUHb8sGy6HkZqrVONDjcaBYGpgiSJ7MjN9sZzB/zH61P
-         O96yi5F2ni00IAfoJ5J0U7BJiTlDa36grFqL9jh+rvwOQjYA5+w+0Ew4gvjfHYutVh3g
-         YMPy/shPsIBWG3x0+3iXBedde2kfptsjSYxbjHyM0uzSaOvPDYXf7i1921ubnh/ICF6M
-         LaXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OdwrWOrEdwiMMYGpBIS4fJP8/7wOvnlAzLGSpTwQbl8=;
-        b=8MbxaNXy6v4p7phZq3SydY4fcvH0b0+AQOwcm1EwhhnPxlVm1TZAPcKGhcBfDTQN4o
-         iGGLRpLVaIIkfLFWjAK5GRtvLb/v/FhlfaKVfrDNy5rZE3B1SGLD4Q3BMmyQMLR0pq/X
-         pJOzKajNe8PWBS0/KZkzRL6VSSoOJgxUQtO7zCMcnxWuw9OADzSjJ5t2apC1P4/Kxfq+
-         1B569Ls4lDmGhBduZZqrG6edENPEw/wfT2Ha3X9jRAS1CJizqqABbjngHr3FQlbUP/l1
-         iJJWgT5fAL6kst8yFKftOmVhP80yQYinVl5TLmxFaOfd/BM5lAQs+tOxqfCNnzC9LIj2
-         MRrA==
-X-Gm-Message-State: AOAM533fGQF5pHiVYNFfi6O1IIg/HQaafTWrRrK8mPiuguUCrz5zPiM9
-        aZNdeBRfITjk5BUBYrndgIY=
-X-Google-Smtp-Source: ABdhPJxthUt8R6DtAvZkHZw8oQS0b2DrKQR6ztXC+JXuymJum5MeryM9Myb82M/Ua5QFK4FBtTeCJA==
-X-Received: by 2002:a17:906:2ac9:b0:6ce:dc0f:9139 with SMTP id m9-20020a1709062ac900b006cedc0f9139mr1341927eje.206.1645083161784;
-        Wed, 16 Feb 2022 23:32:41 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id m4sm892028ejl.45.2022.02.16.23.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 23:32:41 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) depend on X86 in KConfig
-Date:   Thu, 17 Feb 2022 08:32:38 +0100
-Message-Id: <20220217073238.2479005-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 17 Feb 2022 04:28:14 -0500
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA071B1D00;
+        Thu, 17 Feb 2022 01:27:59 -0800 (PST)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4JzqHc3s6Rz9sVt;
+        Thu, 17 Feb 2022 10:27:56 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1645090074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lZBW8/OdtoSbB7RijRn6Z2UlrNUdNxfBaT5VLpRPy0Y=;
+        b=eRdbSJijIC3IeNhSnIW4k/b1WSTBmxwZvHQiW3Cw6DXBDjsa52fyQ33gBfqc/2V0804ozJ
+        pW0yF6y6SSnr6Nm7RJI/YDzRbaMNyRbjzJs5f0AmSMV/loGHog1OIJJFaqNafjlrnkqO2x
+        USbr5saBe7bATrMVkFQ5XjYT+yw17WKm5AYYtCo5P8UALr7ZMVbaXBhLdgE+cUlMdrC2+Y
+        r29LKvVMscEqTSgZS7di4UtsVHlWGpMePDSbRq7/tmz6SfBAd6I//IZK135didvavCpKlb
+        kJ4rMWkM+L6BaXvC0NSlSdj0/cnf9gRxTlfusVAHR/C7xr4YIbpSdPQkgElH+Q==
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: [PATCH v1 0/3] Support XDPE112
+Date:   Thu, 17 Feb 2022 10:27:27 +0100
+Message-Id: <cover.1645088804.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-All the supported mainboards are for the X86 platform
+Add support for Infineon Multi-phase XDPE112 family regulator. The main
+difference to the XDPE122 family is it uses a different format for
+voltage out. Add the required logic to the existing  xdpe12284 driver
+accordingly.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Marcello Sylvester Bauer (3):
+  dt-bindings: trivial-devices: Add xdpe11280
+  hwmon (xdpe12284): Add support for xdpe11280
+  hwmon (xdpe12284): Add regulator support
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index ce9149e0648f..b3597ba66ddb 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2284,6 +2284,7 @@ config SENSORS_ASUS_WMI_EC
- 
- config SENSORS_ASUS_EC
- 	tristate "ASUS EC Sensors"
-+	depends on X86
- 	help
- 	  If you say yes here you get support for the ACPI embedded controller
- 	  hardware monitoring interface found in ASUS motherboards. The driver
+ .../devicetree/bindings/trivial-devices.yaml  |  2 ++
+ Documentation/hwmon/xdpe12284.rst             | 10 +++++--
+ drivers/hwmon/pmbus/Kconfig                   |  6 ++++
+ drivers/hwmon/pmbus/xdpe12284.c               | 28 ++++++++++++++++++-
+ 4 files changed, 42 insertions(+), 4 deletions(-)
+
 -- 
-2.35.1
+2.34.1
 
