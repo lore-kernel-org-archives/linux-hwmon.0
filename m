@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 253F8C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 07:23:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 184E9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 07:32:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiBQHYE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 02:24:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57096 "EHLO
+        id S236272AbiBQHc5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 02:32:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236168AbiBQHYD (ORCPT
+        with ESMTP id S234954AbiBQHc5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:24:03 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C532A0D6E;
-        Wed, 16 Feb 2022 23:23:47 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id qx21so4876174ejb.13;
-        Wed, 16 Feb 2022 23:23:46 -0800 (PST)
+        Thu, 17 Feb 2022 02:32:57 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2C209D2F;
+        Wed, 16 Feb 2022 23:32:43 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id qx21so4925554ejb.13;
+        Wed, 16 Feb 2022 23:32:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+1tQoEbr0D4gsHzJpM3PLoZgJhPWb7Ob/NQyGQcPRV0=;
-        b=AVHpUSUxFrjY67mV9VDo6jxANROTNpGQPjL259CTMW5H/t8rg5FjY0m+XOIt326ks6
-         NxEe5VjSpk2XF4p3aOMIdFM+8EssZkVuM2y73Wgd1Sb7oNSLWF4f3JVewqpgdm1+lBZS
-         0e+UIaxz7qhHfELSvkFzxpQSTzej8laVwAdJIA9nnu+3kd1vL6JCnYjhRFm4fByAXJm7
-         u3oesos0n9ggoB8x/bLB7Ap3WDFlIJe1iHwZMHQ2/9fSDPzkIshEegYcYj//Gmxe5oQP
-         TYFmw0ZPYswGkClx5D5Q8KsqybKcHdXU95kL5D8bEQ+5fAx8DadqJJupT9Q8uC2ezTJE
-         k0aQ==
+        bh=OdwrWOrEdwiMMYGpBIS4fJP8/7wOvnlAzLGSpTwQbl8=;
+        b=E0Pzt+TrC0hs8egvDVPuY7K5vH+NKUaV8qof//O22zvXO9UyYLDFazEeg8cE0CMAJ2
+         0rI/PKYCdzT3tXnhBKnC97iiHh0lpr/TqFatp5+Sgo0e2F24AGSoI3wd5ApFfzTxCx2+
+         nQ6BptuAC4C6UXGYg+o/gOcsIUHb8sGy6HkZqrVONDjcaBYGpgiSJ7MjN9sZzB/zH61P
+         O96yi5F2ni00IAfoJ5J0U7BJiTlDa36grFqL9jh+rvwOQjYA5+w+0Ew4gvjfHYutVh3g
+         YMPy/shPsIBWG3x0+3iXBedde2kfptsjSYxbjHyM0uzSaOvPDYXf7i1921ubnh/ICF6M
+         LaXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+1tQoEbr0D4gsHzJpM3PLoZgJhPWb7Ob/NQyGQcPRV0=;
-        b=uDyghDOsDg3J6OV1Mkeat034wTc1cVIsJSkWyp38FgPuzwNixKEpsmtRrkCW0JGXrm
-         kOn8LKxsNfiO1V632Ex6LwbVK+Ly7IMs6DrQNPKYcaVV21/RzZa2TSZJDL1fWBsuZDiw
-         wcCFWcUkGOqx3YRn02JXOhVH0ipmYoBV5kplpP0VMNVkI+7+fQJZuIcMyOxXXivh/D6i
-         nUwaAfv1B+VNYa5/3TpyWZzPQgWFxO8m5KNQZLCicjttUDf6etZuRVSqDHFr4p04iTrv
-         FX3pJc/Qjs/u/CO7fvNafmySWHjdRPfWhExC2WOmsLsoQKH/oh2Lo3o2lbJ2V7rY1GHn
-         sp8w==
-X-Gm-Message-State: AOAM531Ozm2Wx2Vkvt15EWSPgFp4HQXSl0xEwUZIHLoB7plLhAj2B7Dw
-        AFwgDgUfbmmgSnbaosp479AvRfjn1Xw=
-X-Google-Smtp-Source: ABdhPJxVo7JRo26jY1QTKJuLOg+ynEscWbCQktB7QAvvN6yZyc7IZS32ivj2YEdrX/YvRWfxSJbmgw==
-X-Received: by 2002:a17:906:dd7:b0:6b8:783f:a49d with SMTP id p23-20020a1709060dd700b006b8783fa49dmr1265069eji.623.1645082625536;
-        Wed, 16 Feb 2022 23:23:45 -0800 (PST)
+        bh=OdwrWOrEdwiMMYGpBIS4fJP8/7wOvnlAzLGSpTwQbl8=;
+        b=8MbxaNXy6v4p7phZq3SydY4fcvH0b0+AQOwcm1EwhhnPxlVm1TZAPcKGhcBfDTQN4o
+         iGGLRpLVaIIkfLFWjAK5GRtvLb/v/FhlfaKVfrDNy5rZE3B1SGLD4Q3BMmyQMLR0pq/X
+         pJOzKajNe8PWBS0/KZkzRL6VSSoOJgxUQtO7zCMcnxWuw9OADzSjJ5t2apC1P4/Kxfq+
+         1B569Ls4lDmGhBduZZqrG6edENPEw/wfT2Ha3X9jRAS1CJizqqABbjngHr3FQlbUP/l1
+         iJJWgT5fAL6kst8yFKftOmVhP80yQYinVl5TLmxFaOfd/BM5lAQs+tOxqfCNnzC9LIj2
+         MRrA==
+X-Gm-Message-State: AOAM533fGQF5pHiVYNFfi6O1IIg/HQaafTWrRrK8mPiuguUCrz5zPiM9
+        aZNdeBRfITjk5BUBYrndgIY=
+X-Google-Smtp-Source: ABdhPJxthUt8R6DtAvZkHZw8oQS0b2DrKQR6ztXC+JXuymJum5MeryM9Myb82M/Ua5QFK4FBtTeCJA==
+X-Received: by 2002:a17:906:2ac9:b0:6ce:dc0f:9139 with SMTP id m9-20020a1709062ac900b006cedc0f9139mr1341927eje.206.1645083161784;
+        Wed, 16 Feb 2022 23:32:41 -0800 (PST)
 Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id o11sm2726316edq.101.2022.02.16.23.23.44
+        by smtp.googlemail.com with ESMTPSA id m4sm892028ejl.45.2022.02.16.23.32.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 23:23:44 -0800 (PST)
+        Wed, 16 Feb 2022 23:32:41 -0800 (PST)
 From:   Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
-Date:   Thu, 17 Feb 2022 08:23:39 +0100
-Message-Id: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
+Subject: [PATCH] hwmon: (asus-ec-sensors) depend on X86 in KConfig
+Date:   Thu, 17 Feb 2022 08:32:38 +0100
+Message-Id: <20220217073238.2479005-1-eugene.shalygin@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -64,52 +64,25 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Remove the call to dev_info() from the board detection function, which
-is called from probe(), not only to be in line with hwmon driver rules, but
-also because the message duplicates the error code returned from probe()
-for that case (ENODEV).
+All the supported mainboards are for the X86 platform
 
 Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
- drivers/hwmon/asus-ec-sensors.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+ drivers/hwmon/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 0701ade16227..cbe1b987144a 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -597,18 +597,11 @@ static struct hwmon_chip_info asus_ec_chip_info = {
- 	.ops = &asus_ec_hwmon_ops,
- };
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index ce9149e0648f..b3597ba66ddb 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2284,6 +2284,7 @@ config SENSORS_ASUS_WMI_EC
  
--static unsigned long __init
--get_board_sensors(const struct device *dev)
-+static unsigned long __init get_board_sensors(void)
- {
--	const struct dmi_system_id *dmi_entry;
--
--	dmi_entry = dmi_first_match(asus_ec_dmi_table);
--	if (!dmi_entry) {
--		dev_info(dev, "Unsupported board");
--		return 0;
--	}
--
--	return (unsigned long)dmi_entry->driver_data;
-+	const struct dmi_system_id *dmi_entry =
-+		dmi_first_match(asus_ec_dmi_table);
-+	return dmi_entry ? (unsigned long)dmi_entry->driver_data : 0;
- }
- 
- static int __init asus_ec_probe(struct platform_device *pdev)
-@@ -625,7 +618,7 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	struct device *hwdev;
- 	unsigned int i;
- 
--	board_sensors = get_board_sensors(dev);
-+	board_sensors = get_board_sensors();
- 	if (!board_sensors)
- 		return -ENODEV;
- 
+ config SENSORS_ASUS_EC
+ 	tristate "ASUS EC Sensors"
++	depends on X86
+ 	help
+ 	  If you say yes here you get support for the ACPI embedded controller
+ 	  hardware monitoring interface found in ASUS motherboards. The driver
 -- 
 2.35.1
 
