@@ -2,43 +2,44 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A4AC43217
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 10:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CCE2C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 10:46:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbiBQKq1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 05:46:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60382 "EHLO
+        id S239320AbiBQKqf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 05:46:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239271AbiBQKqZ (ORCPT
+        with ESMTP id S239291AbiBQKq2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:46:25 -0500
+        Thu, 17 Feb 2022 05:46:28 -0500
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08A2294114
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Feb 2022 02:46:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5168929410F
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Feb 2022 02:46:14 -0800 (PST)
 Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id E2F3FB10;
-        Thu, 17 Feb 2022 02:46:09 -0800 (PST)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id E4264C68;
+        Thu, 17 Feb 2022 02:46:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1645094770;
-        bh=k2uD7BYduSjipdEcL2Koh9IwXWlXmu34APxpIgOo/M0=;
+        s=thorn; t=1645094771;
+        bh=g0HlU7fIoDEJJj/W+s6LzkNdT7A+UPzuBZZId3sSDXI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ETB8cvRO/ymbjLAvw0i90ILe/BawTknLjnIdlNuS+l0LHklhq+EER5ANvTDfokZBP
-         DJmFLVZTD+CnF1S4y7NOr01Oitch4Ho5x3sFJOM4Vp8sKh5BHxo7+IpRKPwoexW9Sz
-         f4PXv2y5yy/WzxvILlg3isIO2A3PurYgpD73mFto=
+        b=L9fQKgQXdpvd4Ip9j+0C0LhtLbwg8gSPdLtL1ZarGAKMGk/gf5w5iQifLnDGXbE1L
+         KZNAJSrg6c77OItmmqajNc3gWgePE6N5dSJxAtGW0sCVlZmNeH8vgqAOm+zcPRBJCd
+         2K0uwKyT1si3rQ2y4YzP1I7C71BLDZzHu7Ems50U=
 From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
 Cc:     Zev Weiss <zev@bewilderbeest.net>, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>
-Subject: [PATCH 1/4] hwmon: (pmbus) Add get_error_flags support to regulator ops
-Date:   Thu, 17 Feb 2022 02:44:41 -0800
-Message-Id: <20220217104444.7695-2-zev@bewilderbeest.net>
+Subject: [PATCH 4/4] misc: Add power-efuse driver
+Date:   Thu, 17 Feb 2022 02:44:44 -0800
+Message-Id: <20220217104444.7695-5-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220217104444.7695-1-zev@bewilderbeest.net>
 References: <20220217104444.7695-1-zev@bewilderbeest.net>
@@ -48,127 +49,297 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The various PMBus status bits don't all map perfectly to the more
-limited set of REGULATOR_ERROR_* flags, but there's a reasonable
-number where they correspond well enough.
+This driver provides a sysfs interface to access the on/off state and
+error flags of a regulator supplying a power output controlled by the
+system.
 
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 97 ++++++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+ MAINTAINERS                |   5 +
+ drivers/misc/Kconfig       |  15 +++
+ drivers/misc/Makefile      |   1 +
+ drivers/misc/power-efuse.c | 221 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 242 insertions(+)
+ create mode 100644 drivers/misc/power-efuse.c
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..a274e8e524a5 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2417,10 +2417,107 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
- 	return _pmbus_regulator_on_off(rdev, 0);
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fca970a46e77..d1153a0389d2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7064,6 +7064,11 @@ S:	Orphan
+ W:	http://aeschi.ch.eu.org/efs/
+ F:	fs/efs/
  
-+/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
-+struct pmbus_regulator_status_assoc {
-+	int pflag, rflag;
++POWER EFUSE DRIVER
++M:	Zev Weiss <zev@bewilderbeest.net>
++S:	Maintained
++F:	drivers/misc/power-efuse.c
++
+ EHEA (IBM pSeries eHEA 10Gb ethernet adapter) DRIVER
+ M:	Douglas Miller <dougmill@linux.ibm.com>
+ L:	netdev@vger.kernel.org
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 0f5a49fc7c9e..45fc3e8ad35d 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -470,6 +470,21 @@ config HISI_HIKEY_USB
+ 	  switching between the dual-role USB-C port and the USB-A host ports
+ 	  using only one USB controller.
+ 
++config POWER_EFUSE
++	tristate "Power efuse driver support"
++	depends on OF && REGULATOR
++	help
++	  This driver supports a regulator device functioning as a
++	  power efuse, with status bits and an on/off switch available
++	  via sysfs.
++
++	  A typical use for this would be for an efuse controlling a
++	  generic power output for supplying power to devices external
++	  to the system running this driver (such as in the management
++	  controller of a "smart" PDU or similar), allowing the
++	  operator to manually turn the output on and off, check if
++	  the efuse has tripped due to overload, etc.
++
+ source "drivers/misc/c2port/Kconfig"
+ source "drivers/misc/eeprom/Kconfig"
+ source "drivers/misc/cb710/Kconfig"
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index a086197af544..7bd784b89ef8 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
+ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+ obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+ obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
++obj-$(CONFIG_POWER_EFUSE)	+= power-efuse.o
+diff --git a/drivers/misc/power-efuse.c b/drivers/misc/power-efuse.c
+new file mode 100644
+index 000000000000..e974dde57615
+--- /dev/null
++++ b/drivers/misc/power-efuse.c
+@@ -0,0 +1,221 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This module provides a thin wrapper around a regulator device that exposes
++ * status bits and on/off state via sysfs.
++ *
++ * Copyright (C) 2022 Zev Weiss <zev@bewilderbeest.net>
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regulator/consumer.h>
++
++struct efuse {
++	struct regulator *reg;
++	struct {
++		unsigned int cache;
++		unsigned long ttl;
++		unsigned long fetch_time;
++		struct mutex lock;
++	} error_flags;
 +};
 +
-+/* PMBus->regulator bit mappings for a PMBus status register */
-+struct pmbus_regulator_status_category {
-+	int func;
-+	int reg;
-+	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
-+};
-+
-+static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
-+	{
-+		.func = PMBUS_HAVE_STATUS_VOUT,
-+		.reg = PMBUS_STATUS_VOUT,
-+		.bits = (const struct pmbus_regulator_status_assoc[]) {
-+			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-+			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-+			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-+			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
-+			{ },
-+		},
-+	}, {
-+		.func = PMBUS_HAVE_STATUS_IOUT,
-+		.reg = PMBUS_STATUS_IOUT,
-+		.bits = (const struct pmbus_regulator_status_assoc[]) {
-+			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
-+			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
-+			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
-+			{ },
-+		},
-+	}, {
-+		.func = PMBUS_HAVE_STATUS_TEMP,
-+		.reg = PMBUS_STATUS_TEMPERATURE,
-+		.bits = (const struct pmbus_regulator_status_assoc[]) {
-+			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
-+			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
-+			{ },
-+		},
-+	},
-+};
-+
-+static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
++/* Ensure that the next error_flags access fetches them from the device */
++static void efuse_invalidate_error_flags(struct efuse *efuse)
 +{
-+	int i, status, statusreg;
-+	const struct pmbus_regulator_status_category *cat;
-+	const struct pmbus_regulator_status_assoc *bit;
-+	struct device *dev = rdev_get_dev(rdev);
-+	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	u8 page = rdev_get_id(rdev);
-+	int func = data->info->func[page];
++	mutex_lock(&efuse->error_flags.lock);
++	efuse->error_flags.fetch_time = 0;
++	mutex_unlock(&efuse->error_flags.lock);
++}
 +
-+	*flags = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
-+		cat = &pmbus_regulator_flag_map[i];
-+		if (!(func & cat->func))
-+			continue;
-+
-+		status = pmbus_read_byte_data(client, page, cat->reg);
-+		if (status < 0)
-+			return status;
-+
-+		for (bit = cat->bits; bit->pflag; bit++) {
-+			if (status & bit->pflag)
-+				*flags |= bit->rflag;
-+		}
-+	}
-+
-+	/*
-+	 * Map what bits of STATUS_{WORD,BYTE} we can to REGULATOR_ERROR_*
-+	 * bits.  Some of the other bits are tempting (especially for cases
-+	 * where we don't have the relevant PMBUS_HAVE_STATUS_*
-+	 * functionality), but there's an unfortunate ambiguity in that
-+	 * they're defined as indicating a fault *or* a warning, so we can't
-+	 * easily determine whether to report REGULATOR_ERROR_<foo> or
-+	 * REGULATOR_ERROR_<foo>_WARN.
-+	 */
-+	statusreg = data->has_status_word ? PMBUS_STATUS_WORD : PMBUS_STATUS_BYTE;
-+	status = pmbus_get_status(client, page, statusreg);
++static ssize_t efuse_show_operstate(struct device *dev, struct device_attribute *attr,
++				    char *buf)
++{
++	struct efuse *efuse = dev_get_drvdata(dev);
++	int status = regulator_is_enabled(efuse->reg);
 +
 +	if (status < 0)
 +		return status;
 +
-+	if (pmbus_regulator_is_enabled(rdev) && (status & PB_STATUS_OFF))
-+		*flags |= REGULATOR_ERROR_FAIL;
-+	if (status & PB_STATUS_IOUT_OC)
-+		*flags |= REGULATOR_ERROR_OVER_CURRENT;
-+	if (status & PB_STATUS_VOUT_OV)
-+		*flags |= REGULATOR_ERROR_REGULATION_OUT;
++	return sysfs_emit(buf, "%s\n", status ? "on" : "off");
++}
 +
++static ssize_t efuse_set_operstate(struct device *dev, struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	int status, wantstate;
++	struct efuse *efuse = dev_get_drvdata(dev);
++	struct regulator *reg = efuse->reg;
++
++	if (sysfs_streq(buf, "on"))
++		wantstate = 1;
++	else if (sysfs_streq(buf, "off"))
++		wantstate = 0;
++	else
++		return -EINVAL;
++
++	status = regulator_is_enabled(reg);
++
++	/*
++	 * We need to ensure our enable/disable calls don't get imbalanced, so
++	 * bail if we can't determine the current state.
++	 */
++	if (status < 0)
++		return status;
++
++	/* Return early if we're already in the desired state */
++	if (!!status == wantstate)
++		return count;
++
++	if (wantstate)
++		status = regulator_enable(reg);
++	else
++		status = regulator_disable(reg);
++
++	/*
++	 * Toggling operstate can reset latched status flags, so invalidate
++	 * the cached value.
++	 */
++	efuse_invalidate_error_flags(efuse);
++
++	if (!status && regulator_is_enabled(reg) != wantstate) {
++		/*
++		 * We could do
++		 *
++		 *   if (!wantstate)
++		 *     regulator_force_disable(reg);
++		 *
++		 * here, but it's likely to leave it such that it can't then
++		 * be re-enabled, so we'll just report the error and leave it
++		 * as it is (and hopefully as long as our enable/disable calls
++		 * remain balanced and nobody registers another consumer for
++		 * the same supply we won't end up in this situation anyway).
++		 */
++		dev_err(dev, "regulator_%sable() didn't take effect\n", wantstate ? "en" : "dis");
++		status = -EIO;
++	}
++
++	return status ? : count;
++}
++
++static int efuse_update_error_flags(struct efuse *efuse)
++{
++	int status = 0;
++	unsigned long cache_expiry;
++
++	mutex_lock(&efuse->error_flags.lock);
++
++	cache_expiry = efuse->error_flags.fetch_time + efuse->error_flags.ttl;
++
++	if (!efuse->error_flags.ttl || !efuse->error_flags.fetch_time ||
++	    time_after(jiffies, cache_expiry)) {
++		status = regulator_get_error_flags(efuse->reg, &efuse->error_flags.cache);
++		if (!status)
++			efuse->error_flags.fetch_time = jiffies;
++	}
++
++	mutex_unlock(&efuse->error_flags.lock);
++
++	return status;
++}
++
++static DEVICE_ATTR(operstate, 0644, efuse_show_operstate, efuse_set_operstate);
++
++#define EFUSE_ERROR_ATTR(name, bit)							    \
++	static ssize_t efuse_show_##name(struct device *dev, struct device_attribute *attr, \
++					 char *buf)                                         \
++	{                                                                                   \
++		struct efuse *efuse = dev_get_drvdata(dev);                                 \
++		int status = efuse_update_error_flags(efuse);                               \
++		if (status)                                                                 \
++			return status;                                                      \
++		return sysfs_emit(buf, "%d\n", !!(efuse->error_flags.cache & bit));         \
++	}                                                                                   \
++	static DEVICE_ATTR(name, 0444, efuse_show_##name, NULL)
++
++EFUSE_ERROR_ATTR(under_voltage, REGULATOR_ERROR_UNDER_VOLTAGE);
++EFUSE_ERROR_ATTR(over_current, REGULATOR_ERROR_OVER_CURRENT);
++EFUSE_ERROR_ATTR(regulation_out, REGULATOR_ERROR_REGULATION_OUT);
++EFUSE_ERROR_ATTR(fail, REGULATOR_ERROR_FAIL);
++EFUSE_ERROR_ATTR(over_temp, REGULATOR_ERROR_OVER_TEMP);
++EFUSE_ERROR_ATTR(under_voltage_warn, REGULATOR_ERROR_UNDER_VOLTAGE_WARN);
++EFUSE_ERROR_ATTR(over_current_warn, REGULATOR_ERROR_OVER_CURRENT_WARN);
++EFUSE_ERROR_ATTR(over_voltage_warn, REGULATOR_ERROR_OVER_VOLTAGE_WARN);
++EFUSE_ERROR_ATTR(over_temp_warn, REGULATOR_ERROR_OVER_TEMP_WARN);
++
++static struct attribute *attributes[] = {
++	&dev_attr_operstate.attr,
++	&dev_attr_under_voltage.attr,
++	&dev_attr_over_current.attr,
++	&dev_attr_regulation_out.attr,
++	&dev_attr_fail.attr,
++	&dev_attr_over_temp.attr,
++	&dev_attr_under_voltage_warn.attr,
++	&dev_attr_over_current_warn.attr,
++	&dev_attr_over_voltage_warn.attr,
++	&dev_attr_over_temp_warn.attr,
++	NULL,
++};
++
++static const struct attribute_group attr_group = {
++	.attrs = attributes,
++};
++
++static int efuse_probe(struct platform_device *pdev)
++{
++	int status;
++	struct regulator *reg;
++	struct efuse *efuse;
++	u32 cache_ttl_ms;
++
++	reg = devm_regulator_get(&pdev->dev, "vout");
++	if (IS_ERR(reg))
++		return PTR_ERR(reg);
++
++	status = regulator_enable(reg);
++	if (status) {
++		dev_err(&pdev->dev, "failed to enable regulator\n");
++		return status;
++	}
++
++	efuse = devm_kzalloc(&pdev->dev, sizeof(*efuse), GFP_KERNEL);
++	if (!efuse)
++		return -ENOMEM;
++
++	efuse->reg = reg;
++	mutex_init(&efuse->error_flags.lock);
++
++	if (!of_property_read_u32(pdev->dev.of_node, "error-flags-cache-ttl-ms", &cache_ttl_ms))
++		efuse->error_flags.ttl = msecs_to_jiffies(cache_ttl_ms);
++
++	platform_set_drvdata(pdev, efuse);
++
++	return sysfs_create_group(&pdev->dev.kobj, &attr_group);
++}
++
++static int efuse_remove(struct platform_device *pdev)
++{
++	sysfs_remove_group(&pdev->dev.kobj, &attr_group);
 +	return 0;
 +}
 +
- const struct regulator_ops pmbus_regulator_ops = {
- 	.enable = pmbus_regulator_enable,
- 	.disable = pmbus_regulator_disable,
- 	.is_enabled = pmbus_regulator_is_enabled,
-+	.get_error_flags = pmbus_regulator_get_error_flags,
- };
- EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
- 
++static const struct of_device_id efuse_of_match_table[] = {
++	{ .compatible = "power-efuse" },
++	{ },
++};
++
++static struct platform_driver efuse_driver = {
++	.driver = {
++		.name = "power-efuse",
++		.of_match_table = efuse_of_match_table,
++	},
++	.probe = efuse_probe,
++	.remove = efuse_remove,
++};
++module_platform_driver(efuse_driver);
++
++MODULE_AUTHOR("Zev Weiss <zev@bewilderbeest.net>");
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Power efuse driver");
 -- 
 2.35.1
 
