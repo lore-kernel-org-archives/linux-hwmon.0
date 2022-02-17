@@ -2,80 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9B08C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 16:28:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32521C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 16:35:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243147AbiBQQ27 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 11:28:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38684 "EHLO
+        id S241264AbiBQQfc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 11:35:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243235AbiBQQ25 (ORCPT
+        with ESMTP id S243263AbiBQQfb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:28:57 -0500
+        Thu, 17 Feb 2022 11:35:31 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90FFBB65E8
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Feb 2022 08:28:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AA612B2E06
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Feb 2022 08:35:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645115316;
+        s=mimecast20190719; t=1645115716;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OJgq/KDxxDOjnZUJexh0KDqV30PHIV148TQLzey+mso=;
-        b=dEam0yCRoCsB7y58Z0FKG4PO3Vz6SMIWpTVWYScmXpV1TOXf4b+FL9m5b1kgf4GUrpcNIm
-        WOVGpz1NSoOHyysIGG7+WO4B8iU28APiabSJR50jNsLT+elxnjyCQzsxxIq8KoRoQIR/Nj
-        HSOcRGjWNPeC8qZw5ltnxgR4TXPim8M=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=c2fq/Ny4lMJaIMatRd00hK6MYEHazev14fwhUdBFReI=;
+        b=f/ASZwQzKkhi9PI2IXiMlOH/VWH/XCCGOs7VRLaxRB5AN9aakkft+FdRpXXYfKevAeRNEW
+        ERKS8xVi0c0Md21jYZVdHZgwONevVFkcFFq7y3qpMfp0ph+urYmKwnVjtwXCdv/hRQVjxJ
+        I98EZGKbeJy/vS4J7pGdB6/QaIuVxWE=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-6hL4SkaxNdSsmOF3dBRjog-1; Thu, 17 Feb 2022 11:28:35 -0500
-X-MC-Unique: 6hL4SkaxNdSsmOF3dBRjog-1
-Received: by mail-ed1-f72.google.com with SMTP id n7-20020a05640205c700b0040b7be76147so3838125edx.10
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Feb 2022 08:28:34 -0800 (PST)
+ us-mta-618-Goo2CVAKNku-7M_VOElLuw-1; Thu, 17 Feb 2022 11:35:15 -0500
+X-MC-Unique: Goo2CVAKNku-7M_VOElLuw-1
+Received: by mail-ej1-f70.google.com with SMTP id o4-20020a170906768400b006a981625756so1804914ejm.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Feb 2022 08:35:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=OJgq/KDxxDOjnZUJexh0KDqV30PHIV148TQLzey+mso=;
-        b=xk9jZB0Baywe45keq01jpdqYAJ8TxjnmU+AMF3wCezj/42lYTOKYwy6m+0jFHYn/Rg
-         vzuKeAD9rFzrybiYm1WrbAXQDsjXLDyPwRyQ4U0JmOM3yGXD/LtwN7S3kRFWtxuQeHMz
-         g3Nv7+hmsxghTS/vDRVeIiOwwG2WMBnPMOsoDroEkTjPR54Ts+mur3HqjEPwa1gwkjuN
-         IgeAVBm6k/A39din86FniiBYHSSs0quEtR0+OKQzrgP2sO4hZgPQuW4xaXXeCabNKw8f
-         /FCmbhMhdFB+LPg8Vhpq0UPc7s87KKQGX4Kh2OUseSz1oej7Us+q9NU1w4VYI5Lkj8kf
-         H6gg==
-X-Gm-Message-State: AOAM530SQsTi0SyoMUamm8QE6/3AOCStt1/jvFKlO7//1HWZdFQ5+u+E
-        T8aB7d1GbfOzjNF+7AhzVebTMLtkLZM4Asoqpb8Urtl4EVm01QFyuR+3efcWeOGYAOysxiAo1NK
-        6klaGq8EYTWLaUOnsw0w33d8=
-X-Received: by 2002:a17:907:70c1:b0:6ce:78ff:bad4 with SMTP id yk1-20020a17090770c100b006ce78ffbad4mr2958944ejb.68.1645115313579;
-        Thu, 17 Feb 2022 08:28:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzHk0mBIn5UH4jO+7vKeoLKOM8666LODusd64tZnougD4T+k/q3YUvhnxrSBAizbwwT0+edxw==
-X-Received: by 2002:a17:907:70c1:b0:6ce:78ff:bad4 with SMTP id yk1-20020a17090770c100b006ce78ffbad4mr2958934ejb.68.1645115313445;
-        Thu, 17 Feb 2022 08:28:33 -0800 (PST)
+        bh=c2fq/Ny4lMJaIMatRd00hK6MYEHazev14fwhUdBFReI=;
+        b=Da3POCATEOzPdW3AHQaOqIiHE4BOIKJFwqooCPHj05rr0C8PbAMlVwZCiXS+/rAND0
+         BHWiOtq8BiSprbdMtaRIkb1zeebZK8P0T2iCklneODWWPytkYCo+ni/THLVUNnPzOtKX
+         nBgRLRG/HEDvgI6XVbbP2oXzrViaRWjaEjVg1njaYV/aIvuAkB7EpmyZTgxoAjj4Dqpf
+         sjji6annbuigIKdCJEaqxYO2DYESGQiwgLIgeEze4KznTTlK3c09BdvA1ac3n4Uk1G6E
+         JXchtxJpHAidi/MLTUFY2oZ5PPQx3Bim+EmWqzF9Tj5WCBx0K3kJlt37bdj1nXdMtycd
+         oXdQ==
+X-Gm-Message-State: AOAM530zu+3kgdhKFiAbDwEBanSUods7cwmz8Xz6r/fvIj6R5/ooEsBn
+        5rdwCLWJlAhly09Iq6qLw2afSci8O6IQlCER5+W/pacKu9zV89AGyKq3V8Owo51HzOcijeMOc88
+        XVztdb2CBlbWvPhFUb6+GhC4=
+X-Received: by 2002:a50:d79d:0:b0:410:82a0:5d76 with SMTP id w29-20020a50d79d000000b0041082a05d76mr3531292edi.130.1645115713910;
+        Thu, 17 Feb 2022 08:35:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwy1XOj60hZ2Xgf9leB0ov3CtVqqw7iUj8h3GXaY1TNAUOjvJWy/8ifdMYStkE127/Ixy5g6A==
+X-Received: by 2002:a50:d79d:0:b0:410:82a0:5d76 with SMTP id w29-20020a50d79d000000b0041082a05d76mr3531272edi.130.1645115713760;
+        Thu, 17 Feb 2022 08:35:13 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id ee30sm3403540edb.4.2022.02.17.08.28.32
+        by smtp.gmail.com with ESMTPSA id q5sm1319255ejc.115.2022.02.17.08.35.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 08:28:32 -0800 (PST)
-Message-ID: <84de2a98-3051-82ec-6686-ef4161535d23@redhat.com>
-Date:   Thu, 17 Feb 2022 17:28:32 +0100
+        Thu, 17 Feb 2022 08:35:13 -0800 (PST)
+Message-ID: <2482eae0-ad8c-3fda-1d0e-f8794c50192d@redhat.com>
+Date:   Thu, 17 Feb 2022 17:35:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
 Content-Language: en-US
 To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
-Cc:     platform-driver-x86@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org
+Cc:     Mark Gross <markgross@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
 References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
- <gfQUxZHzyr7uH4TwqJwXGsxCIYa-VvrN955036G3kKr6ligJYTAI3dqhf-FJddyHVBomp3JUUBNFMmmR8rwm7WzSxprlclT9Cbkrr2dknP0=@protonmail.com>
- <CAHQ1cqF5HCJVsmyMHMxU85Uwv_Yd8qoAUVMz7R_zo0S9_pFZfg@mail.gmail.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHQ1cqF5HCJVsmyMHMxU85Uwv_Yd8qoAUVMz7R_zo0S9_pFZfg@mail.gmail.com>
+In-Reply-To: <20220206022023.376142-1-andrew.smirnov@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -84,42 +80,62 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Hi,
 
-On 2/13/22 00:30, Andrey Smirnov wrote:
+On 2/6/22 03:20, Andrey Smirnov wrote:
+> Add a driver exposing various bits and pieces of functionality
+> provided by Steam Deck specific VLV0100 device presented by EC
+> firmware. This includes but not limited to:
+> 
+>     - CPU/device's fan control
+>     - Read-only access to DDIC registers
+>     - Battery tempreature measurements
+>     - Various display related control knobs
+>     - USB Type-C connector event notification
+> 
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-kernel@vger.kernel.org (open list)
+> Cc: platform-driver-x86@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+
+The .c file says: "Copyright (C) 2021-2022 Valve Corporation", yet
+you use a personal email address here. This is not really a problem,
+but it does look a bit weird.
+
+> ---
+> 
+> This driver is really a kitchen sink of various small bits. Maybe it
+> is worth splitting into an MFD + child drivers/devices?
+
+With the extcon stuff thrown in the mix I think you definitely should
+go for using MFD here.
+
+Then you can submit a MFD driver under drivers/mfd for registering the
+regmap + the cells + separate extcon + LED + backlight + hwmon drivers to
+their resp. subsystems.
+
+As drivers/platform/x86/ maintainer I would be happy to take a driver
+for a "misc" cell for any remaining bits if there are any...
 
 <snip>
 
->>> +static struct attribute *steamdeck_attributes[] = {
->>> +     &dev_attr_target_cpu_temp.attr,
->>> +     &dev_attr_gain.attr,
->>> +     &dev_attr_ramp_rate.attr,
->>> +     &dev_attr_hysteresis.attr,
->>> +     &dev_attr_maximum_battery_charge_rate.attr,
->>> +     &dev_attr_recalculate.attr,
->>> +     &dev_attr_power_cycle_display.attr,
->>> +
->>> +     &dev_attr_led_brightness.attr,
->>
->> Have you considered using a led class device instead? I think that should
->> work even without the ability to query the brightness.
->>
-> 
-> Not very seriously. Will take another look.
-> 
->>
->>> +     &dev_attr_content_adaptive_brightness.attr,
->>> +     &dev_attr_gamma_set.attr,
->>> +     &dev_attr_display_brightness.attr,
->>
->> Have you considered using a backlight class device?
->>
-> 
-> Ditto.
+> +struct steamdeck {
+> +	struct acpi_device *adev;
+> +	struct device *hwmon;
+> +	void *regmap;
 
-Note that for both of these I would go a bit further then
-"have you considered?". Since you are implementing standardized
-userspace APIs here you *must* use the shared subsystem code
-for registering a LED resp backlight class device here so that
-everything is guaranteed to behave as expected by userspace.
+That should be:
+
+	struct regmap *regmap;
+
+
+> +	long fan_target;
+> +	struct delayed_work role_work;
+> +	struct extcon_dev *edev;
+> +	struct device *dev;
+> +};
 
 Regards,
 
