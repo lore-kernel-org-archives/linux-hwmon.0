@@ -2,113 +2,71 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35F2AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 14:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9811C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 14:42:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241599AbiBQO33 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 09:29:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55154 "EHLO
+        id S238291AbiBQOmX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 09:42:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiBQO32 (ORCPT
+        with ESMTP id S233259AbiBQOmX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:29:28 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE212B167D;
-        Thu, 17 Feb 2022 06:29:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645108154; x=1676644154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+R1AK/gkRyoYr+8UNtwo0B5YbNI0hu+NA3H6Pu/+d1c=;
-  b=loA/krPHMJXzFmSTthy/MKwV7mebxl8rZIibsxOvXARcZQBUswmV8FTA
-   9ggiAjMIRB+d4+VVNpc8pbWxywdlQYDqB6q8s39fnk+Zcw7/n1OlPyfif
-   VjDfWCaCAjCwpOr+CQJGEglOQVqCw7EZWjWpGGB2ppfqCE77IaIq1Kyeh
-   QJcDJMzCm4TAFQviS7nA7g6p42h6f4oqGzjjMVWqWi5+Tmeae9Fdspr+z
-   xDZtVO6pfV2saQH1SJJZI9ngYy2QNuNwTwiOWB4f46g0yWaYI4RccELUQ
-   xYht6MwbhgRZpygt8qfm1t3IutFk/rym8VuMzmY+GyVOKVzUHYoO0V1vf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="311627099"
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="311627099"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 06:29:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="488309143"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 06:28:51 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKhm6-0000Gj-SC; Thu, 17 Feb 2022 14:28:50 +0000
-Date:   Thu, 17 Feb 2022 22:28:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Thu, 17 Feb 2022 09:42:23 -0500
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB061EA710;
+        Thu, 17 Feb 2022 06:42:08 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4JzyG60XHQz9sWB;
+        Thu, 17 Feb 2022 15:42:06 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1645108923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gpf50Zv3BHRX4hF0cZ15cmgZdclv11k5Xc52gVV7KaE=;
+        b=QiwCXvJlJPBqK0impV023JvyJdC9kHqWKrrMRvStqP2uZ4y8E6I5jq8hAxtn8SwFy/Zxut
+        ruaJpewA8a0MNYY5Fp41X6EckDgPEUDAfcc5/8Spyk6zA37HJoSwwZgBn6XRMX2pOcetgH
+        iJOwMYVvUraj4pThLV7FNTD4pdsOom9KtwTbRnpbqNxR5Zkg+Kg89F4EcqFhRSrmw27+9y
+        TEnToN13IKEJ3ycSkiZNJXJuyBRkEpI2u47bTWJDHHjBysucqdArgQBiAx+P25q06clZSB
+        IoQ7CXuNGYK7XDrAtWLbuSDSAOGyAC7112z4zXTbTQgLhPPOwY/m8OK7MDgzSg==
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: Re: [PATCH v1 3/3] hwmon (xdpe12284): Add regulator support
-Message-ID: <202202172254.TL5ZxxMO-lkp@intel.com>
-References: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
+Subject: [PATCH v2 0/3] Support XDPE112
+Date:   Thu, 17 Feb 2022 15:41:32 +0100
+Message-Id: <cover.1645108566.git.sylv@sylv.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Marcello,
+Add support for Infineon Multi-phase XDPE112 family regulator. The main
+difference to the XDPE122 family is it uses a different format for
+voltage out. Add the required logic to the existing  xdpe12284 driver
+accordingly.
 
-Thank you for the patch! Perhaps something to improve:
+Changes in v2:
+- Rebase on current hwmon-next branch
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linux/master linus/master v5.17-rc4 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Marcello Sylvester Bauer (3):
+  dt-bindings: trivial-devices: Add xdpe11280
+  hwmon (xdpe12284): Add support for xdpe11280
+  hwmon (xdpe12284): Add regulator support
 
-url:    https://github.com/0day-ci/linux/commits/Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: s390-randconfig-r044-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172254.TL5ZxxMO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7d607e48fd68499470da6630cff4d23f43f29aa9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
-        git checkout 7d607e48fd68499470da6630cff4d23f43f29aa9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/hwmon/pmbus/
+ .../devicetree/bindings/trivial-devices.yaml  |  2 ++
+ Documentation/hwmon/xdpe12284.rst             | 10 +++++--
+ drivers/hwmon/pmbus/Kconfig                   |  6 ++++
+ drivers/hwmon/pmbus/xdpe12284.c               | 28 ++++++++++++++++++-
+ 4 files changed, 42 insertions(+), 4 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-- 
+2.34.1
 
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/pmbus/xdpe12284.c:125:36: warning: unused variable 'xdpe122_reg_desc' [-Wunused-const-variable]
-   static const struct regulator_desc xdpe122_reg_desc[] = {
-                                      ^
-   1 warning generated.
-
-
-vim +/xdpe122_reg_desc +125 drivers/hwmon/pmbus/xdpe12284.c
-
-   124	
- > 125	static const struct regulator_desc xdpe122_reg_desc[] = {
-   126		PMBUS_REGULATOR("vout", 0),
-   127		PMBUS_REGULATOR("vout", 1),
-   128	};
-   129	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
