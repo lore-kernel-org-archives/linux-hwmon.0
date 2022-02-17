@@ -2,102 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12869C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 19:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CD36C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 19:33:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245138AbiBQTZy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 14:25:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35838 "EHLO
+        id S235726AbiBQTd1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 14:33:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243029AbiBQTZq (ORCPT
+        with ESMTP id S230171AbiBQTdY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:25:46 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2150BF94D9;
-        Thu, 17 Feb 2022 11:25:32 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id h9so10320877qvm.0;
-        Thu, 17 Feb 2022 11:25:32 -0800 (PST)
+        Thu, 17 Feb 2022 14:33:24 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C8F1598FF;
+        Thu, 17 Feb 2022 11:33:08 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id a19so10331836qvm.4;
+        Thu, 17 Feb 2022 11:33:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:content-language:to
          :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=/WM3d+d6P+GlLRzeppghOHiUa2w7JBeq4LDjhr4En7U=;
-        b=kjizsqFv/9oBwihdSQeFIAD+OJ9Kw3pJSSfkKDQWqKKLi9nG2I14YulYAN4O2VCtQj
-         Chx8PsBd7EJiUKe0w7cGW1IVGYU9ldkPHukNdF+nRiB7Aur+rDZf8CSMZD6wzUl2B5/Y
-         ok91XKSgaK6PuA2nh1CbRLLEB0TWzP6QZimMBsmel0uLzllYlWBiagYS2ixCALv2BfQu
-         HwjQakopfMvn+gpa4m5hrN38U/DAUtU4FHfL3j+tvrm5KD7oUo5cY/FGzTeM3x4/HCVt
-         rvJjMQ1vRJ8JWTCWuNzE86PPPGn+Tc7G5csHc5wyLbEv1ByoCCjzCMry7g0CAzuVnl+d
-         pEdQ==
+        bh=rBxmT3+5CTt9IdhylIa0a5TlmY8jTHgnD/JXk7m1eDE=;
+        b=Do8oVw2kp2yEl4I8UGBfELOtUezWrLbMjFLltSg307aAXy5a21BwcnrRlAUNOwgrpp
+         lUrxx06H40fwQBf/AE3F02b7I/sH+MmnTUQzbbR6gvlj5rHYV5fCDnVUv3FeRRJjVx6L
+         8kRammeTn3TLN0gbUzBCnaP2ZlgRXHBCgfYiBxMFesT24QFN1DK83jirH+dk2OghHw0R
+         1rt4H2SByGWOmb+HIrSudTg+JxOcKboecm68cGS3dfqPzd7m3Vj3mvfnbeoYQCtxOquB
+         5ym/3iSV06R6sxy5R5vILvQZ8JnWDcBjRDqFDNFtcTtlv4bZF0y25XV5V5Ad6p4FYedW
+         xDlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=/WM3d+d6P+GlLRzeppghOHiUa2w7JBeq4LDjhr4En7U=;
-        b=L9bfFEJdcPK5L6VeJS9VWTVP8vA8T9ZPESKdSvFwgrCBt6rE7IWNsrTUKgZN+rvbOt
-         +ScU897daRUuEgBnc18ej69IAB8uOrVEi2bbvJkg2981Q54MdpfLDpl3PSZLoxZZSfwi
-         tf+ytiL/WlfL0fcvmXY91ANwR4tC3mlZCRjLNah6EPvCAb65gMUJKwHHroirDfAPc1DU
-         v7y6+9no3DMv5UzVSb2qBzsaJxxFBvHyHeTX9MfI2kWaB3rYMzaYR6RDJ0UqMNUqWBmo
-         ANn4BQtOhT21KA2u5ku95/p3+YZ5f9ywnrOspzYevknlsLyccroSL0o5WRBcTX9JEwLw
-         D/Hw==
-X-Gm-Message-State: AOAM532R89wQZa2nPByehwwVpQ6PNFrml1w3cJWpCqFCssI7zX+0mcJ0
-        WhU1zT2dq98r0gn2N3eFN5U=
-X-Google-Smtp-Source: ABdhPJww3RWBaldGY4hF3DwN5pm3E8izPdvrNGRQIk5/nvfAMVmR8XtzEBy2d0TygnEIyQ7rrm2olw==
-X-Received: by 2002:ad4:58af:0:b0:42c:2c20:c717 with SMTP id ea15-20020ad458af000000b0042c2c20c717mr3393103qvb.31.1645125931270;
-        Thu, 17 Feb 2022 11:25:31 -0800 (PST)
+        bh=rBxmT3+5CTt9IdhylIa0a5TlmY8jTHgnD/JXk7m1eDE=;
+        b=VicuAaZBww6Dlel/DW7mIqAb5xPs4YPgGCVWuqyoL4sy2f5gLG1H7Sd8V5sTUavovU
+         XYqFezVwKRu07cG0wnIo132MvmsEuP7HGjYbmaupR3vcER1KYaYA1PO2t16QYLoDHOMo
+         NN0J2th3YuTYhAwN6HRzw5MhEsamGa3wR6iiInDRTg4a94O6VvDPzANRJK0cN54rk8ix
+         Guc4hox5zLfl5ZsOHMuPCVpWbi2qaIJluwu9sR0gDKR74r4EXLpR4CxbpagSiAjinlyW
+         I8zrr2nz2Zd0VyfCIJaiZGx4PA0pL+LJwHc3CShEQrja1S35t/nC29wYwrNpgDH6ziC7
+         dOsA==
+X-Gm-Message-State: AOAM5302PfxlmxYJoBSHdyqHEBae2WTJzOo6hNLP5x3ITFPFI4k8Dhfq
+        NVLI4xfrprDOeUQXYy8f2RBUwRsPUISgDw==
+X-Google-Smtp-Source: ABdhPJzCwNOh0o4gHu5fbDAM9egA9v84qNxeFoF+LbuJQYWgydkUFjf+wf5ljJbSERkA55PYYM3a1A==
+X-Received: by 2002:a05:6214:581:b0:42d:7ccf:220b with SMTP id bx1-20020a056214058100b0042d7ccf220bmr3222930qvb.9.1645126387949;
+        Thu, 17 Feb 2022 11:33:07 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z17sm24079120qta.11.2022.02.17.11.25.29
+        by smtp.gmail.com with ESMTPSA id j14sm22031729qko.10.2022.02.17.11.33.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 11:25:30 -0800 (PST)
+        Thu, 17 Feb 2022 11:33:07 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <aa82f347-1b1a-8c40-b5cb-9efe292ae0ec@roeck-us.net>
-Date:   Thu, 17 Feb 2022 11:25:28 -0800
+Message-ID: <a8e9e6f1-e7a0-d40d-8065-b72f60c72a32@roeck-us.net>
+Date:   Thu, 17 Feb 2022 11:33:05 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Content-Language: en-US
-To:     sylv <sylv@sylv.io>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-doc@vger.kernel.org
-References: <cover.1645108566.git.sylv@sylv.io>
- <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
- <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
- <246de83631dd5e165f95904d7f1628502f030e02.camel@sylv.io>
- <66d4ea0b-0377-c9ae-68eb-7303c32cf87e@roeck-us.net>
- <7a567823d62b6ed00cbdc2ce239dc4a69e48b411.camel@sylv.io>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
+ <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
+ <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/3] hwmon (xdpe12284): Add support for xdpe11280
-In-Reply-To: <7a567823d62b6ed00cbdc2ce239dc4a69e48b411.camel@sylv.io>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
+In-Reply-To: <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/17/22 10:38, sylv wrote:
-[ ... ]
-
->>
->> That makes me wonder if the chip needs to be added to this driver in
->> the first
->> place, or if it could be added to pmbus.c instead. Any idea ?
+On 2/17/22 10:43, Eugene Shalygin wrote:
+> On Thu, 17 Feb 2022 at 19:26, Guenter Roeck <linux@roeck-us.net> wrote:
+>> Looks like you did not run checkpatch.
 > 
-> Oh, we did wrote a standalone driver too, and it works fine.
-> Maybe it's better to upsteam it instead. :)
+> I did (0 errors/warnings/checks). What needs to be corrected?
+> 
 
-No, I meant if it would make sense to just add something like
+Interesting. It appears that the continuation line in the declaration
+confuses it. Otherwise you would get:
 
-	{"xdpe11280", (kernel_ulong_t)&pmbus_info_one },
+WARNING: Missing a blank line after declarations
 
-to drivers/hwmon/pmbus/pmbus.c.
+>> Either case, I think you should just drop this function In probe:
+> 
+> Yes, currently that function is tiny, but some tests with motherboards
+> from other families are done by users and if I add other families, the
+> information required for each board model will grow and in that case
+> I'd switch from dmi_system_id array to a custom struct to define all
+> the board-related data at at the same place, and to save some space in
+> the module binary, as unused parts of the dmi_system_id array already
+> take a quarter of the total binary size. So, the function will likely
+> get some more code soon.
+> 
 
-You only really need a standalone driver if it does something
-special, such as a workaround for some register access (like
-the xdpe12284 driver), or if support for manufacturer specific
-registers is desired or needed. That would, for example, be useful
-if the xdpe11280 supports per-phase sensors.
+Hmm, ok. Wouldn't you still need some kind of dmi match ?
 
 Thanks,
 Guenter
+
+> Regards,
+> Eugene
+
