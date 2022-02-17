@@ -2,117 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95CA0C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 09:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95BFBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 10:24:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbiBQJ2Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 04:28:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48594 "EHLO
+        id S239180AbiBQKYo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 05:24:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238705AbiBQJ2S (ORCPT
+        with ESMTP id S239015AbiBQKYi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:28:18 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE161B4463;
-        Thu, 17 Feb 2022 01:28:04 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        Thu, 17 Feb 2022 05:24:38 -0500
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543A1279093;
+        Thu, 17 Feb 2022 02:24:19 -0800 (PST)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [80.241.60.245])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4JzqHj33TPz9sV8;
-        Thu, 17 Feb 2022 10:28:01 +0100 (CET)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4JzrXd5VH7z9sTX;
+        Thu, 17 Feb 2022 11:24:17 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645090079;
+        t=1645093456;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tfcNRSGnkJBjMPrtUucPQRJFz/s/Ce0jeEEdQxko2do=;
-        b=W/4Z9LsWwZSggFpzAJTcohaVSsG8VgG9f7OHWmXrACGInXlKyR8hVQ+EKFZ9gaKi3xaJDe
-        pvVCHB+fc4OpBOYn2H6dGzAp4mg0x7UodrX2lyFMvrWTH7CZkzdDTOwA+nWRig2Am26saG
-        FgWFEWPB6P/+nfEKBly9nMJfFxrRq0WNGg7MC1VexKHNxnge7rCIUhP1sSPyHZz8rxfAv8
-        rSkPrqKeTPdTTc2XfxGQVPGXFM6kacsnkDkw2KMOykXgMvON50R5QYHq+B9X/KnQqkujXL
-        AvifHbZata4OkqLY6f5MHchxXT82mgHi6qNFxwfxRQz8YGhAzjdGUdr4k6al6w==
+        bh=nbvCasmUFqvTSL2/pps15VXLcbVxmyd1SHRFolaNqP8=;
+        b=Cb+b5k/E/wvw4yuJsBjyZIkinG6PnTSn0HUPUoHFvYVAcoOXIGO6xHDXe9eLVQ4jEkwstt
+        jWxwfLFfJl6pCieYQA+eG76s3r3y6WwSlVh04h5Tj99U1yJl/0NsZLZklZdO6XUfITqmcK
+        Nhle+PTGB3Hcye3jSHIJoa+BuqpcZrxwCBoHo2MKwukB6tLtiC8IOiZA0sn3Bi6GVgalIj
+        Krp6505oObvHIwV8tGNesFIUywxmSe0cCvnKRYMCPNnEsW9cVCfzKtQsknd0I8SND4pfkz
+        6Zzqem7G4+0UPR207J7mZjpOUEfclDdGZ6/+Vcoy4lbq9aY93vYXWNYnxY0RIg==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: [PATCH v1 3/3] hwmon (xdpe12284): Add regulator support
-Date:   Thu, 17 Feb 2022 10:27:30 +0100
-Message-Id: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
-In-Reply-To: <cover.1645088804.git.sylv@sylv.io>
-References: <cover.1645088804.git.sylv@sylv.io>
+Subject: [PATCH v1 1/1] hwmon: (pmbus) Add regulator supply into macro
+Date:   Thu, 17 Feb 2022 11:23:49 +0100
+Message-Id: <d3563864d03a3d3450cf00b3be05465dc506e161.1645092563.git.sylv@sylv.io>
+In-Reply-To: <cover.1645092563.git.sylv@sylv.io>
+References: <cover.1645092563.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add simple on/off regulator support for xdpe12284 and
-other pmbus parts supported by the xdpe12284 driver.
+Add optional regulator supply into PWBUS_REGULATOR macro. This makes it
+possible to define a vin-supply in DT. Not defining a supply will only
+cause the following debug output:
+
+```
+Looking up vin-supply property in node [...] failed
+```
 
 Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 ---
- drivers/hwmon/pmbus/Kconfig     |  6 ++++++
- drivers/hwmon/pmbus/xdpe12284.c | 11 +++++++++++
- 2 files changed, 17 insertions(+)
+ drivers/hwmon/pmbus/pmbus.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index c96f7b7338bd..e0e9b67bf3eb 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -394,6 +394,12 @@ config SENSORS_XDPE122
- 	  This driver can also be built as a module. If so, the module will
- 	  be called xdpe12284.
- 
-+config SENSORS_XDPE122_REGULATOR
-+	bool "Regulator support for XDPE122 and compatibles"
-+	depends on SENSORS_XDPE122 && REGULATOR
-+	help
-+	  Uses the xdpe12284 or compatible as regulator.
-+
- config SENSORS_ZL6100
- 	tristate "Intersil ZL6100 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/xdpe12284.c b/drivers/hwmon/pmbus/xdpe12284.c
-index ec947c697670..c58776ef0311 100644
---- a/drivers/hwmon/pmbus/xdpe12284.c
-+++ b/drivers/hwmon/pmbus/xdpe12284.c
-@@ -10,6 +10,8 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/regulator/driver.h>
-+
- #include "pmbus.h"
- 
- #define XDPE122_PROT_VR12_5MV		0x01 /* VR12.0 mode, 5-mV DAC */
-@@ -120,6 +122,11 @@ static int xdpe122_identify(struct i2c_client *client,
- 	return 0;
- }
- 
-+static const struct regulator_desc xdpe122_reg_desc[] = {
-+	PMBUS_REGULATOR("vout", 0),
-+	PMBUS_REGULATOR("vout", 1),
-+};
-+
- static struct pmbus_driver_info xdpe122_info = {
- 	.pages = XDPE122_PAGE_NUM,
- 	.format[PSC_VOLTAGE_IN] = linear,
-@@ -138,6 +145,10 @@ static struct pmbus_driver_info xdpe122_info = {
- 		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
- 	.identify = xdpe122_identify,
- 	.read_word_data = xdpe122_read_word_data,
-+#if IS_ENABLED(CONFIG_SENSORS_XDPE122_REGULATOR)
-+	.num_regulators = 2,
-+	.reg_desc = xdpe122_reg_desc,
-+#endif
- };
- 
- static int xdpe122_probe(struct i2c_client *client)
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index e0aa8aa46d8c..38f049d68d32 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -464,6 +464,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+ #define PMBUS_REGULATOR(_name, _id)				\
+ 	[_id] = {						\
+ 		.name = (_name # _id),				\
++		.supply_name = "vin",				\
+ 		.id = (_id),					\
+ 		.of_match = of_match_ptr(_name # _id),		\
+ 		.regulators_node = of_match_ptr("regulators"),	\
 -- 
 2.34.1
 
