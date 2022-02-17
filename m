@@ -2,333 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06364C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 13:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35F2AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Feb 2022 14:29:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240127AbiBQNfR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 08:35:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39856 "EHLO
+        id S241599AbiBQO33 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Feb 2022 09:29:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237546AbiBQNfR (ORCPT
+        with ESMTP id S229623AbiBQO32 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:35:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFA22AED93;
-        Thu, 17 Feb 2022 05:35:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10683B82129;
-        Thu, 17 Feb 2022 13:35:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09914C340E8;
-        Thu, 17 Feb 2022 13:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645104899;
-        bh=9v/KY6UyxRTPcd6xOwvubbzjjW378d+/ijseTAzwTdE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t3snuqycXMWKEzd88XrfHtB+yFflxAl8hWqwjRuKtZH35L8IriV/eNXU2ZP9IvAhL
-         KstUeXTse0qpq6gI+t3aXevmBwUqrT324UkL4opX9TSYI6wNISHaq8wRKRmVq7F8Uh
-         uE7NDjSZdy0A3tcaU8YXh2FeMwdvfo5prkAH1e3E=
-Date:   Thu, 17 Feb 2022 14:34:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 4/4] misc: Add power-efuse driver
-Message-ID: <Yg5PALyUv6qHPz//@kroah.com>
-References: <20220217104444.7695-1-zev@bewilderbeest.net>
- <20220217104444.7695-5-zev@bewilderbeest.net>
+        Thu, 17 Feb 2022 09:29:28 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE212B167D;
+        Thu, 17 Feb 2022 06:29:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645108154; x=1676644154;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+R1AK/gkRyoYr+8UNtwo0B5YbNI0hu+NA3H6Pu/+d1c=;
+  b=loA/krPHMJXzFmSTthy/MKwV7mebxl8rZIibsxOvXARcZQBUswmV8FTA
+   9ggiAjMIRB+d4+VVNpc8pbWxywdlQYDqB6q8s39fnk+Zcw7/n1OlPyfif
+   VjDfWCaCAjCwpOr+CQJGEglOQVqCw7EZWjWpGGB2ppfqCE77IaIq1Kyeh
+   QJcDJMzCm4TAFQviS7nA7g6p42h6f4oqGzjjMVWqWi5+Tmeae9Fdspr+z
+   xDZtVO6pfV2saQH1SJJZI9ngYy2QNuNwTwiOWB4f46g0yWaYI4RccELUQ
+   xYht6MwbhgRZpygt8qfm1t3IutFk/rym8VuMzmY+GyVOKVzUHYoO0V1vf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="311627099"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="311627099"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 06:29:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="488309143"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 06:28:51 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKhm6-0000Gj-SC; Thu, 17 Feb 2022 14:28:50 +0000
+Date:   Thu, 17 Feb 2022 22:28:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: Re: [PATCH v1 3/3] hwmon (xdpe12284): Add regulator support
+Message-ID: <202202172254.TL5ZxxMO-lkp@intel.com>
+References: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217104444.7695-5-zev@bewilderbeest.net>
+In-Reply-To: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 02:44:44AM -0800, Zev Weiss wrote:
-> This driver provides a sysfs interface to access the on/off state and
-> error flags of a regulator supplying a power output controlled by the
-> system.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  MAINTAINERS                |   5 +
->  drivers/misc/Kconfig       |  15 +++
->  drivers/misc/Makefile      |   1 +
->  drivers/misc/power-efuse.c | 221 +++++++++++++++++++++++++++++++++++++
->  4 files changed, 242 insertions(+)
->  create mode 100644 drivers/misc/power-efuse.c
+Hi Marcello,
 
-You add sysfs files, yet have no Documentation/ABI/ entry updates
-documenting what those sysfs files do?  Please fix.
+Thank you for the patch! Perhaps something to improve:
 
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fca970a46e77..d1153a0389d2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7064,6 +7064,11 @@ S:	Orphan
->  W:	http://aeschi.ch.eu.org/efs/
->  F:	fs/efs/
->  
-> +POWER EFUSE DRIVER
-> +M:	Zev Weiss <zev@bewilderbeest.net>
-> +S:	Maintained
-> +F:	drivers/misc/power-efuse.c
-> +
->  EHEA (IBM pSeries eHEA 10Gb ethernet adapter) DRIVER
->  M:	Douglas Miller <dougmill@linux.ibm.com>
->  L:	netdev@vger.kernel.org
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 0f5a49fc7c9e..45fc3e8ad35d 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -470,6 +470,21 @@ config HISI_HIKEY_USB
->  	  switching between the dual-role USB-C port and the USB-A host ports
->  	  using only one USB controller.
->  
-> +config POWER_EFUSE
-> +	tristate "Power efuse driver support"
-> +	depends on OF && REGULATOR
-> +	help
-> +	  This driver supports a regulator device functioning as a
-> +	  power efuse, with status bits and an on/off switch available
-> +	  via sysfs.
-> +
-> +	  A typical use for this would be for an efuse controlling a
-> +	  generic power output for supplying power to devices external
-> +	  to the system running this driver (such as in the management
-> +	  controller of a "smart" PDU or similar), allowing the
-> +	  operator to manually turn the output on and off, check if
-> +	  the efuse has tripped due to overload, etc.
-> +
->  source "drivers/misc/c2port/Kconfig"
->  source "drivers/misc/eeprom/Kconfig"
->  source "drivers/misc/cb710/Kconfig"
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index a086197af544..7bd784b89ef8 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
->  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
->  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
->  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
-> +obj-$(CONFIG_POWER_EFUSE)	+= power-efuse.o
-> diff --git a/drivers/misc/power-efuse.c b/drivers/misc/power-efuse.c
-> new file mode 100644
-> index 000000000000..e974dde57615
-> --- /dev/null
-> +++ b/drivers/misc/power-efuse.c
-> @@ -0,0 +1,221 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * This module provides a thin wrapper around a regulator device that exposes
-> + * status bits and on/off state via sysfs.
-> + *
-> + * Copyright (C) 2022 Zev Weiss <zev@bewilderbeest.net>
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +struct efuse {
-> +	struct regulator *reg;
-> +	struct {
-> +		unsigned int cache;
-> +		unsigned long ttl;
-> +		unsigned long fetch_time;
-> +		struct mutex lock;
-> +	} error_flags;
-> +};
-> +
-> +/* Ensure that the next error_flags access fetches them from the device */
-> +static void efuse_invalidate_error_flags(struct efuse *efuse)
-> +{
-> +	mutex_lock(&efuse->error_flags.lock);
-> +	efuse->error_flags.fetch_time = 0;
-> +	mutex_unlock(&efuse->error_flags.lock);
-> +}
-> +
-> +static ssize_t efuse_show_operstate(struct device *dev, struct device_attribute *attr,
-> +				    char *buf)
-> +{
-> +	struct efuse *efuse = dev_get_drvdata(dev);
-> +	int status = regulator_is_enabled(efuse->reg);
-> +
-> +	if (status < 0)
-> +		return status;
-> +
-> +	return sysfs_emit(buf, "%s\n", status ? "on" : "off");
-> +}
-> +
-> +static ssize_t efuse_set_operstate(struct device *dev, struct device_attribute *attr,
-> +				   const char *buf, size_t count)
-> +{
-> +	int status, wantstate;
-> +	struct efuse *efuse = dev_get_drvdata(dev);
-> +	struct regulator *reg = efuse->reg;
-> +
-> +	if (sysfs_streq(buf, "on"))
-> +		wantstate = 1;
-> +	else if (sysfs_streq(buf, "off"))
-> +		wantstate = 0;
-> +	else
-> +		return -EINVAL;
-> +
-> +	status = regulator_is_enabled(reg);
-> +
-> +	/*
-> +	 * We need to ensure our enable/disable calls don't get imbalanced, so
-> +	 * bail if we can't determine the current state.
-> +	 */
-> +	if (status < 0)
-> +		return status;
-> +
-> +	/* Return early if we're already in the desired state */
-> +	if (!!status == wantstate)
-> +		return count;
-> +
-> +	if (wantstate)
-> +		status = regulator_enable(reg);
-> +	else
-> +		status = regulator_disable(reg);
-> +
-> +	/*
-> +	 * Toggling operstate can reset latched status flags, so invalidate
-> +	 * the cached value.
-> +	 */
-> +	efuse_invalidate_error_flags(efuse);
-> +
-> +	if (!status && regulator_is_enabled(reg) != wantstate) {
-> +		/*
-> +		 * We could do
-> +		 *
-> +		 *   if (!wantstate)
-> +		 *     regulator_force_disable(reg);
-> +		 *
-> +		 * here, but it's likely to leave it such that it can't then
-> +		 * be re-enabled, so we'll just report the error and leave it
-> +		 * as it is (and hopefully as long as our enable/disable calls
-> +		 * remain balanced and nobody registers another consumer for
-> +		 * the same supply we won't end up in this situation anyway).
-> +		 */
-> +		dev_err(dev, "regulator_%sable() didn't take effect\n", wantstate ? "en" : "dis");
-> +		status = -EIO;
-> +	}
-> +
-> +	return status ? : count;
-> +}
-> +
-> +static int efuse_update_error_flags(struct efuse *efuse)
-> +{
-> +	int status = 0;
-> +	unsigned long cache_expiry;
-> +
-> +	mutex_lock(&efuse->error_flags.lock);
-> +
-> +	cache_expiry = efuse->error_flags.fetch_time + efuse->error_flags.ttl;
-> +
-> +	if (!efuse->error_flags.ttl || !efuse->error_flags.fetch_time ||
-> +	    time_after(jiffies, cache_expiry)) {
-> +		status = regulator_get_error_flags(efuse->reg, &efuse->error_flags.cache);
-> +		if (!status)
-> +			efuse->error_flags.fetch_time = jiffies;
-> +	}
-> +
-> +	mutex_unlock(&efuse->error_flags.lock);
-> +
-> +	return status;
-> +}
-> +
-> +static DEVICE_ATTR(operstate, 0644, efuse_show_operstate, efuse_set_operstate);
-> +
-> +#define EFUSE_ERROR_ATTR(name, bit)							    \
-> +	static ssize_t efuse_show_##name(struct device *dev, struct device_attribute *attr, \
-> +					 char *buf)                                         \
-> +	{                                                                                   \
-> +		struct efuse *efuse = dev_get_drvdata(dev);                                 \
-> +		int status = efuse_update_error_flags(efuse);                               \
-> +		if (status)                                                                 \
-> +			return status;                                                      \
-> +		return sysfs_emit(buf, "%d\n", !!(efuse->error_flags.cache & bit));         \
-> +	}                                                                                   \
-> +	static DEVICE_ATTR(name, 0444, efuse_show_##name, NULL)
-> +
-> +EFUSE_ERROR_ATTR(under_voltage, REGULATOR_ERROR_UNDER_VOLTAGE);
-> +EFUSE_ERROR_ATTR(over_current, REGULATOR_ERROR_OVER_CURRENT);
-> +EFUSE_ERROR_ATTR(regulation_out, REGULATOR_ERROR_REGULATION_OUT);
-> +EFUSE_ERROR_ATTR(fail, REGULATOR_ERROR_FAIL);
-> +EFUSE_ERROR_ATTR(over_temp, REGULATOR_ERROR_OVER_TEMP);
-> +EFUSE_ERROR_ATTR(under_voltage_warn, REGULATOR_ERROR_UNDER_VOLTAGE_WARN);
-> +EFUSE_ERROR_ATTR(over_current_warn, REGULATOR_ERROR_OVER_CURRENT_WARN);
-> +EFUSE_ERROR_ATTR(over_voltage_warn, REGULATOR_ERROR_OVER_VOLTAGE_WARN);
-> +EFUSE_ERROR_ATTR(over_temp_warn, REGULATOR_ERROR_OVER_TEMP_WARN);
-> +
-> +static struct attribute *attributes[] = {
-> +	&dev_attr_operstate.attr,
-> +	&dev_attr_under_voltage.attr,
-> +	&dev_attr_over_current.attr,
-> +	&dev_attr_regulation_out.attr,
-> +	&dev_attr_fail.attr,
-> +	&dev_attr_over_temp.attr,
-> +	&dev_attr_under_voltage_warn.attr,
-> +	&dev_attr_over_current_warn.attr,
-> +	&dev_attr_over_voltage_warn.attr,
-> +	&dev_attr_over_temp_warn.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group attr_group = {
-> +	.attrs = attributes,
-> +};
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linux/master linus/master v5.17-rc4 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-ATTRIBUTE_GROUPS()?
+url:    https://github.com/0day-ci/linux/commits/Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: s390-randconfig-r044-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172254.TL5ZxxMO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/7d607e48fd68499470da6630cff4d23f43f29aa9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
+        git checkout 7d607e48fd68499470da6630cff4d23f43f29aa9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/hwmon/pmbus/
 
-> +
-> +static int efuse_probe(struct platform_device *pdev)
-> +{
-> +	int status;
-> +	struct regulator *reg;
-> +	struct efuse *efuse;
-> +	u32 cache_ttl_ms;
-> +
-> +	reg = devm_regulator_get(&pdev->dev, "vout");
-> +	if (IS_ERR(reg))
-> +		return PTR_ERR(reg);
-> +
-> +	status = regulator_enable(reg);
-> +	if (status) {
-> +		dev_err(&pdev->dev, "failed to enable regulator\n");
-> +		return status;
-> +	}
-> +
-> +	efuse = devm_kzalloc(&pdev->dev, sizeof(*efuse), GFP_KERNEL);
-> +	if (!efuse)
-> +		return -ENOMEM;
-> +
-> +	efuse->reg = reg;
-> +	mutex_init(&efuse->error_flags.lock);
-> +
-> +	if (!of_property_read_u32(pdev->dev.of_node, "error-flags-cache-ttl-ms", &cache_ttl_ms))
-> +		efuse->error_flags.ttl = msecs_to_jiffies(cache_ttl_ms);
-> +
-> +	platform_set_drvdata(pdev, efuse);
-> +
-> +	return sysfs_create_group(&pdev->dev.kobj, &attr_group);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-You just raced with userspace and lost :(
+All warnings (new ones prefixed by >>):
 
-Set the default groups for your platform driver and then the driver core
-will automatically create/remove them for you, no need for you to do
-anything directly with them at all.
+>> drivers/hwmon/pmbus/xdpe12284.c:125:36: warning: unused variable 'xdpe122_reg_desc' [-Wunused-const-variable]
+   static const struct regulator_desc xdpe122_reg_desc[] = {
+                                      ^
+   1 warning generated.
 
-thanks,
 
-greg k-h
+vim +/xdpe122_reg_desc +125 drivers/hwmon/pmbus/xdpe12284.c
+
+   124	
+ > 125	static const struct regulator_desc xdpe122_reg_desc[] = {
+   126		PMBUS_REGULATOR("vout", 0),
+   127		PMBUS_REGULATOR("vout", 1),
+   128	};
+   129	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
