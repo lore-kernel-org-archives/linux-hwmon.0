@@ -2,129 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAAB1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Feb 2022 15:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E9FDC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Feb 2022 15:07:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbiBRPG5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Feb 2022 10:06:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36008 "EHLO
+        id S236796AbiBRPHp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Feb 2022 10:07:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiBRPG4 (ORCPT
+        with ESMTP id S236795AbiBRPHo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:06:56 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ECF64F8;
-        Fri, 18 Feb 2022 07:06:39 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id f10so4063729qkg.9;
-        Fri, 18 Feb 2022 07:06:39 -0800 (PST)
+        Fri, 18 Feb 2022 10:07:44 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4517E95F;
+        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id n6so15224244qvk.13;
+        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=p9R4Qbl1+Fke2USVYBHOXtByycRkBlwvs/en1SwU+yY=;
-        b=Tl8dQyBGtTQFt6p3x17y1IbiNg6fWCjxF+z4FvgOb95smC9cy6zRRfEGncEBf1lYHL
-         zgXtBjq+a+eq4McOh7/D0GPSOa320B57fhxQk7/qD2VwfQg1gZymAhgzuUu3tktYfetZ
-         Q5uMe7H9LGJuVFzH8vxZG25AVfHbvJhy23P9YotFMZdvCw7r3eE6Ml9XT8Q7rSq+4Vsl
-         xc6N2PVZg1z20Jw3aPw/nQg1zPz97PSulvHTh+EWqJJf5pq5USbEZZPSWvt7JjJ4MHnl
-         04PMvLEKYBvXPoCjTC5Hm+kcyl5tToPdQTySumYm843NRvBq1Plq/Pd+3cTo+U+tMSnV
-         5LAg==
+        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
+        b=qIQG3afKmJFnM9d3UiPVX2r/wN+GvKrRzK9THFQwXH7zo8J0hGAPaVTzGJG3XLQFSJ
+         UQuRKlMxrk6pfFphfO72D78g3ZlzMzxFMxzY73RGTBbG13vrPxs8+nlwKpF2kBVqwexF
+         jxhcBxYU18xdnW0+wS+LTM8e9j8ipOAbb1X7nlb864lcUZLCYBManADJ8Zx1PMq9cOXt
+         ySZ6g0v5SfGozDHhNoO0xTQWq07i9pRQ8dFcZLKUsYsCInYH1oyKITrlWswW9XAohpEW
+         Wd7VIuftDM6nlCOyvLBoqlhZdFcE7fui9ZxrdVqM+LBJ8BTRniMAU47qeTCd8M2VynLx
+         1UfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=p9R4Qbl1+Fke2USVYBHOXtByycRkBlwvs/en1SwU+yY=;
-        b=T0fC/t+qIOU6tuNzfvSco1oSCIk55kAVpfNBQh9H5SpBqlYBtrFeUimAW2xiuL4JLr
-         RTeAEJZ7aPrGTY/yzA/lNi/qxdEnY4PJqE5loPmcBz2lR/vUBlPdURpKqWZJhInVUh4y
-         PhXv+1JtC5B6bZdLc2OJ+EPlGwmE/7szXyazoOKfgij9FHgc3kSleKPkfFrOXIVTBOMV
-         IEN24g7A5clO1vPIraFgiDDOTcVk9WYKv9KHnM04OT+QsvJrsDyb8AGyFg7s2DnaJV41
-         4E42rb01TkCwkHCfeZ0ObWLrn+zX031ihrR0s3Sy6tk9z/SlcrKktmALy81G6vJLRVz6
-         O72g==
-X-Gm-Message-State: AOAM533gFxdXIoiy5dQ1HhrKnpcoi4FPI5tZ2I0TAXJVpBEHyuUNOQgk
-        QxG5X95+JJcxGfglyC8Ptzk=
-X-Google-Smtp-Source: ABdhPJwQkiB/rQP8ZOfhhYoYc1AfwVl+tt/gpiSIQWKLCM2/tgvrrSYLFfQNTnH9ZYJqbTIR8JUlcA==
-X-Received: by 2002:a37:63cf:0:b0:60d:274b:5211 with SMTP id x198-20020a3763cf000000b0060d274b5211mr4801529qkb.725.1645196798491;
-        Fri, 18 Feb 2022 07:06:38 -0800 (PST)
+        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
+        b=oK0U3G0rr8PNkJcYN4aRsToQDtV2fOArPMj4To+B6G8dt54ADWw/ly5mwnlo/ss4GB
+         5l113q7LL15Foe195ijIzq1/mqrmhPXl4dyQoUuWeF5OyEzESVtOze5JENCEXqomCdoX
+         MFK7nIFMf5l1NGVEsSwmOt2iwi9GiEzw5ZC7hpLN3xMtR/Pc4f88dDOBwUPjZeA/XT+x
+         h7wOzN5SwvDpH9Z5lGWlGmWYI4hfZh/esRNwAvEpNiwf98hvWLom5oikUQ21pj1v8Jks
+         wQ1uZJTt30QuZWd+hsORVbfmduBIGK+H72kQG7qLsVbH/Ef/J3h238KkYk/LE7hlb5dQ
+         YQsg==
+X-Gm-Message-State: AOAM530BUuEPHQpoVhySrhmNIvMYpnmsYcT0XhlXwuT7qU5qv1z5QY6s
+        YP3XTDySEVonT3RtfpE0CXU=
+X-Google-Smtp-Source: ABdhPJxPj6KFAgVZSXo8bZyFDqRGlFPG7D+gFGABIvifLDj63FEusJTipGPOb92u+mICxFnGhItHvg==
+X-Received: by 2002:a05:622a:164f:b0:2d5:8e77:8050 with SMTP id y15-20020a05622a164f00b002d58e778050mr6994063qtj.481.1645196845785;
+        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 10sm1168531qkf.46.2022.02.18.07.06.36
+        by smtp.gmail.com with ESMTPSA id z17sm25490999qta.11.2022.02.18.07.07.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 07:06:37 -0800 (PST)
+        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1f5236a5-93be-a35e-e86a-450e5e98f9ba@roeck-us.net>
-Date:   Fri, 18 Feb 2022 07:06:35 -0800
+Message-ID: <1c0b1562-aeca-52d1-96cb-93e4a252604c@roeck-us.net>
+Date:   Fri, 18 Feb 2022 07:07:22 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: add tmp464.yaml
+Subject: Re: [PATCH v4 2/2] hwmon: Add driver for Texas Instruments TMP464 and
+ TMP468
 Content-Language: en-US
 To:     Agathe Porte <agathe.porte@nokia.com>, linux-hwmon@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Krzysztof Adamski <krzysztof.adamski@nokia.com>
 References: <20220218065856.1899086-1-linux@roeck-us.net>
- <a828b1b2-9e32-57b2-6d60-b1b8de90222a@nokia.com>
+ <20220218065856.1899086-2-linux@roeck-us.net>
+ <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <a828b1b2-9e32-57b2-6d60-b1b8de90222a@nokia.com>
+In-Reply-To: <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/18/22 01:41, Agathe Porte wrote:
+On 2/18/22 01:50, Agathe Porte wrote:
 > Hi Guenter,
 > 
 > Le 18/02/2022 à 07:58, Guenter Roeck a écrit :
->> From: Agathe Porte <agathe.porte@nokia.com>
+>> Add support for Texas Instruments TMP464 and TMP468 temperature sensor
+>> ICs.
 >>
->> Add basic description of the tmp464 driver DT bindings.
+>> TI's TMP464 is an I2C temperature sensor chip. This chip is similar
+>> to TI's TMP421 chip, but with 16bit-wide registers (instead of
+>> 8bit-wide registers). The chip has one local sensor and four remote
+>> sensors. TMP468 is similar to TMP464 but has one local and eight
+>> remote sensors.
 >>
->> Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
+>> Originally-from: Agathe Porte <agathe.porte@nokia.com>
+>> Cc: Agathe Porte <agathe.porte@nokia.com>
 >> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 >> ---
 >> v4:
->> - No changes
->>
->> +        channel@0 {
->> +          reg = <0x0>;
->> +          ti,n-factor = /bits/ 8 <(-10)>;
->> +          label = "local";
->> +        };
+>> - Fixed reading n-factor information from devicetree
+>>    [Use of_property_read_u8 instead of of_property_read_s32 to read the
+>>     property value, and write n-factor value into the upper 8 bit of the
+>>     n-factor register]
 > 
-> Setting the n-factor for the local channel is not supported, so we should remove this attribute for this example and move it to another channel.
+> Changing n-factor with DT seems to work:
+> 
+> temp2_input=38500 (nfactor=10)
+> temp2_input=35500 (nfactor=-10)
+> 
+> Driver probes just fine with this attribute set.
+> 
+>> +static int tmp464_probe_child_from_dt(struct device *dev,
+>> +                      struct device_node *child,
+>> +                      struct tmp464_data *data)
+>> +
+>> +{
+>> +    struct regmap *regmap = data->regmap;
+>> +    u32 channel;
+>> +    u8 nfactor;
+>> +    s32 val;
+> 
+> val is not used according to the compiler, and thus should be removed (module does not compile with -Werror)
 > 
 
-Done, thanks!
+Fixed.
+
+> PS: TMP464 samples will be sent by DHL today and should arrive to you on Feb, 23rd.
+> 
+Thanks a lot!
 
 Guenter
-
-> Here is the output on a hardware test:
-> 
-> [165599.122883] tmp464 16-0049: n-factor can't be set for internal channel
-> [165599.123833] tmp464: probe of 16-0049 failed with error -22
-> 
->> +
->> +        channel@1 {
->> +          reg = <0x1>;
->> +          ti,n-factor = /bits/ 8 <0x0>;
->> +          label = "somelabel";
->> +        };
-> No particular issue when defining a property for channel that is not internal during driver probe.
->> +
->> +        channel@2 {
->> +          reg = <0x2>;
->> +          status = "disabled";
->> +        };
-> 
-> Works as expected on target:
-> 
-> root@fct-0a:/sys/class/hwmon/hwmon2 >cat temp3_input
-> cat: temp3_input: No data available
-> 
-> Best regards,
-> 
-> Agathe.
-> 
-
