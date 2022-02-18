@@ -2,126 +2,237 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E9FDC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Feb 2022 15:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CFDC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Feb 2022 15:09:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236796AbiBRPHp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Feb 2022 10:07:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38206 "EHLO
+        id S236844AbiBRPJa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Feb 2022 10:09:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236795AbiBRPHo (ORCPT
+        with ESMTP id S236689AbiBRPJa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:07:44 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4517E95F;
-        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id n6so15224244qvk.13;
-        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
+        Fri, 18 Feb 2022 10:09:30 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094E12B1A9E;
+        Fri, 18 Feb 2022 07:09:12 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id t21so1838745qkg.6;
+        Fri, 18 Feb 2022 07:09:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=sender:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
-        b=qIQG3afKmJFnM9d3UiPVX2r/wN+GvKrRzK9THFQwXH7zo8J0hGAPaVTzGJG3XLQFSJ
-         UQuRKlMxrk6pfFphfO72D78g3ZlzMzxFMxzY73RGTBbG13vrPxs8+nlwKpF2kBVqwexF
-         jxhcBxYU18xdnW0+wS+LTM8e9j8ipOAbb1X7nlb864lcUZLCYBManADJ8Zx1PMq9cOXt
-         ySZ6g0v5SfGozDHhNoO0xTQWq07i9pRQ8dFcZLKUsYsCInYH1oyKITrlWswW9XAohpEW
-         Wd7VIuftDM6nlCOyvLBoqlhZdFcE7fui9ZxrdVqM+LBJ8BTRniMAU47qeTCd8M2VynLx
-         1UfQ==
+        bh=L+c8s0EjYkyxnfYNSAqg9hu3fSNA58Ks2lBfRjv9VfU=;
+        b=djMc4wKdAPeU1YOMlgW/P1JNYMDyIUSWaMvVVy9WoimPqdT0EfrKZELxh2lgUpUsRO
+         ZCPU8Mc/ughc8ugef1/n9R+q4Xko2PkNWkx537xwMfV11oz8gIoQr5hSRvNVaNCRvMxB
+         9NTBYvPtQnT5RCs/chYAFRHH9fceF4bnuLyriKYnWdlPjor/URAtuswjwU+z9IMa/nG7
+         WsH2CnxDyVDbycg7h5XHdIttjoVo9NQ6hp8Z/SyfQT6M1Xyjvk84+ikl9rwdGLYYr/Zt
+         EqPpSe/p9/v3n26WcnffFwWeYmO5yrGDhYGnf4h9GKB/2ojiJ1TKCaiVSPen7P0aY+yj
+         NRJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
-        b=oK0U3G0rr8PNkJcYN4aRsToQDtV2fOArPMj4To+B6G8dt54ADWw/ly5mwnlo/ss4GB
-         5l113q7LL15Foe195ijIzq1/mqrmhPXl4dyQoUuWeF5OyEzESVtOze5JENCEXqomCdoX
-         MFK7nIFMf5l1NGVEsSwmOt2iwi9GiEzw5ZC7hpLN3xMtR/Pc4f88dDOBwUPjZeA/XT+x
-         h7wOzN5SwvDpH9Z5lGWlGmWYI4hfZh/esRNwAvEpNiwf98hvWLom5oikUQ21pj1v8Jks
-         wQ1uZJTt30QuZWd+hsORVbfmduBIGK+H72kQG7qLsVbH/Ef/J3h238KkYk/LE7hlb5dQ
-         YQsg==
-X-Gm-Message-State: AOAM530BUuEPHQpoVhySrhmNIvMYpnmsYcT0XhlXwuT7qU5qv1z5QY6s
-        YP3XTDySEVonT3RtfpE0CXU=
-X-Google-Smtp-Source: ABdhPJxPj6KFAgVZSXo8bZyFDqRGlFPG7D+gFGABIvifLDj63FEusJTipGPOb92u+mICxFnGhItHvg==
-X-Received: by 2002:a05:622a:164f:b0:2d5:8e77:8050 with SMTP id y15-20020a05622a164f00b002d58e778050mr6994063qtj.481.1645196845785;
-        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z17sm25490999qta.11.2022.02.18.07.07.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=L+c8s0EjYkyxnfYNSAqg9hu3fSNA58Ks2lBfRjv9VfU=;
+        b=bEWfpee7Vj6YyYPeXCgZPIpmB0igCxwC1myBmR6Ul1SWAAi4O9BQ9afkOhC+5l+ff7
+         aXNC0O3rzENiR0vNMhsSO1cJ2s9LSuZ6+2ETMf2yG5VQGk80IHtrT814/rzoX7DVUFo3
+         7HyYnsrTcpdaLGBP2ln9EhPRxOTV+2y9Q16+1PRLEikMelV9FA8bqA3KhF+vfdDG34zm
+         trt00b9h9NM9iWG0LIYhCtQXlbbDK+ANgkCadcsS4VxRMPtCWAmElT95KY88a21qUl18
+         UM4EEaypQIZZ8TLWbWeerAmf9ZZ47i22khja0QzFZA65n6KEzaIq0AVjl8yTFeQb35+X
+         E4bQ==
+X-Gm-Message-State: AOAM532sWuLqSvg4R6pkqtYCDkW9QlpRehs5SrKhPbLKXYFZF8M3v5xK
+        8ieLzoCJmctxh5NPWOzv6u1dhHvOOpIs3w==
+X-Google-Smtp-Source: ABdhPJy34H3DievOaDVqStbNJDf7EHYM+soXVumHSfhGX63n+hnnLMGqWm+uPqn5mBaQpit2HPrUyA==
+X-Received: by 2002:a37:713:0:b0:47e:3a22:85ad with SMTP id 19-20020a370713000000b0047e3a2285admr4911247qkh.70.1645196951850;
+        Fri, 18 Feb 2022 07:09:11 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b186sm606081qkd.16.2022.02.18.07.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 07:09:11 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1c0b1562-aeca-52d1-96cb-93e4a252604c@roeck-us.net>
-Date:   Fri, 18 Feb 2022 07:07:22 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] hwmon: Add driver for Texas Instruments TMP464 and
- TMP468
-Content-Language: en-US
-To:     Agathe Porte <agathe.porte@nokia.com>, linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>
-References: <20220218065856.1899086-1-linux@roeck-us.net>
- <20220218065856.1899086-2-linux@roeck-us.net>
- <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     linux-hwmon@vger.kernel.org
+Cc:     Agathe Porte <agathe.porte@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
+Date:   Fri, 18 Feb 2022 07:09:07 -0800
+Message-Id: <20220218150908.1947772-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/18/22 01:50, Agathe Porte wrote:
-> Hi Guenter,
-> 
-> Le 18/02/2022 à 07:58, Guenter Roeck a écrit :
->> Add support for Texas Instruments TMP464 and TMP468 temperature sensor
->> ICs.
->>
->> TI's TMP464 is an I2C temperature sensor chip. This chip is similar
->> to TI's TMP421 chip, but with 16bit-wide registers (instead of
->> 8bit-wide registers). The chip has one local sensor and four remote
->> sensors. TMP468 is similar to TMP464 but has one local and eight
->> remote sensors.
->>
->> Originally-from: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v4:
->> - Fixed reading n-factor information from devicetree
->>    [Use of_property_read_u8 instead of of_property_read_s32 to read the
->>     property value, and write n-factor value into the upper 8 bit of the
->>     n-factor register]
-> 
-> Changing n-factor with DT seems to work:
-> 
-> temp2_input=38500 (nfactor=10)
-> temp2_input=35500 (nfactor=-10)
-> 
-> Driver probes just fine with this attribute set.
-> 
->> +static int tmp464_probe_child_from_dt(struct device *dev,
->> +                      struct device_node *child,
->> +                      struct tmp464_data *data)
->> +
->> +{
->> +    struct regmap *regmap = data->regmap;
->> +    u32 channel;
->> +    u8 nfactor;
->> +    s32 val;
-> 
-> val is not used according to the compiler, and thus should be removed (module does not compile with -Werror)
-> 
+From: Agathe Porte <agathe.porte@nokia.com>
 
-Fixed.
+Add basic description of the tmp464 driver DT bindings.
 
-> PS: TMP464 samples will be sent by DHL today and should arrive to you on Feb, 23rd.
-> 
-Thanks a lot!
+Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
+Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v5:
+- Dropped ti,n-factor from channel@0 example. Added additional
+  channel to examples to show positive ti,n-factor property.
 
-Guenter
+v4:
+- No changes
+
+v3:
+- Addedd support for TMP468.
+- Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
+- Changed value range for ti,n-factor to int8, with an example for
+  a negative value.
+- Added myself as driver maintainer.
+
+ .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
+ MAINTAINERS                                   |   7 ++
+ 2 files changed, 121 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+new file mode 100644
+index 000000000000..14f6a3412b8c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+@@ -0,0 +1,114 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/ti,tmp464.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TMP464 and TMP468 temperature sensors
++
++maintainers:
++  - Agathe Porte <agathe.porte@nokia.com>
++
++description: |
++  ±0.0625°C Remote and Local temperature sensor
++  https://www.ti.com/lit/ds/symlink/tmp464.pdf
++  https://www.ti.com/lit/ds/symlink/tmp468.pdf
++
++properties:
++  compatible:
++    enum:
++      - ti,tmp464
++      - ti,tmp468
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++patternProperties:
++  "^channel@([0-8])$":
++    type: object
++    description: |
++      Represents channels of the device and their specific configuration.
++
++    properties:
++      reg:
++        description: |
++          The channel number. 0 is local channel, 1-8 are remote channels.
++        items:
++          minimum: 0
++          maximum: 8
++
++      label:
++        description: |
++          A descriptive name for this channel, like "ambient" or "psu".
++
++      ti,n-factor:
++        description: |
++          The value (two's complement) to be programmed in the channel specific N correction register.
++          For remote channels only.
++        $ref: /schemas/types.yaml#/definitions/int8
++        items:
++          minimum: -128
++          maximum: 127
++
++    required:
++      - reg
++
++    additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      sensor@4b {
++        compatible = "ti,tmp464";
++        reg = <0x4b>;
++      };
++    };
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      sensor@4b {
++        compatible = "ti,tmp464";
++        reg = <0x4b>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        channel@0 {
++          reg = <0x0>;
++          label = "local";
++        };
++
++        channel@1 {
++          reg = <0x1>;
++          ti,n-factor = /bits/ 8 <(-10)>;
++          label = "external";
++        };
++
++        channel@2 {
++          reg = <0x2>;
++          ti,n-factor = /bits/ 8 <0x10>;
++          label = "somelabel";
++        };
++
++        channel@3 {
++          reg = <0x3>;
++          status = "disabled";
++        };
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fca970a46e77..f51bc7c7e439 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19489,6 +19489,13 @@ S:	Maintained
+ F:	Documentation/hwmon/tmp401.rst
+ F:	drivers/hwmon/tmp401.c
+ 
++TMP464 HARDWARE MONITOR DRIVER
++M:	Agathe Porte <agathe.porte@nokia.com>
++M:	Guenter Roeck <linux@roeck-us.net>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
++
+ TMP513 HARDWARE MONITOR DRIVER
+ M:	Eric Tremblay <etremblay@distech-controls.com>
+ L:	linux-hwmon@vger.kernel.org
+-- 
+2.35.1
+
