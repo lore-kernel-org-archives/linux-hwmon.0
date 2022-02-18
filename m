@@ -2,224 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BDA0C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Feb 2022 00:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2452C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Feb 2022 05:48:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiBRAYC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Feb 2022 19:24:02 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46076 "EHLO
+        id S229768AbiBRFs5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Feb 2022 00:48:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiBRAYA (ORCPT
+        with ESMTP id S229850AbiBRFs5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Feb 2022 19:24:00 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E6D377DC;
-        Thu, 17 Feb 2022 16:23:44 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 319D3FA;
-        Thu, 17 Feb 2022 16:23:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1645143824;
-        bh=b+69uaIlAfYvUutHI5tZxpP8eKuLZSiDYTF3PppxEac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9kSLMcpXIb8BgmOmcCk0mpT/vYbtrX5je5KCdkidZJRInS65T8cKISj2rY/LzhAg
-         XEfJxkqHxQV2FQx0n5qE8duGmjxVuQaIs5xrAP8kvVFWBQ8oX1MavlanSDr2yghP+g
-         w24eCmHVJTCJ4KdP5mUpMnyaALzjWNhlBCdbpLpY=
-Date:   Thu, 17 Feb 2022 16:23:42 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
+        Fri, 18 Feb 2022 00:48:57 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272353D4B1;
+        Thu, 17 Feb 2022 21:48:41 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id p11so3909307ils.1;
+        Thu, 17 Feb 2022 21:48:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JkelnnNWFdmlOy0YURyWaxyjcYrMZ7pqMNYxTFdN3zQ=;
+        b=D1aB2EWyPDG50+7eK0MQDNi4coUnzbSQDMoYtWPazGXjMV/9OBlL4aTXFXweFJUBLK
+         1W4JbcSwwv8BzpKALFuqIxMI3RxJee3imNrmO80mHYwUHIfC6XjkNv2UFZ44Y34yc6HT
+         YbbjfReRTGBcjit2/D6vtD6kASy6cN8oLifCQlnqA7DFjW5nvmlRQDXoUVYyBBGqyKkk
+         BrkEA1rbznv1io9HgRQGkLmQQKhb+vkbRpb/t4UJrqBbEy+R4DnWQLxRCAV6sb+CRNHi
+         Ihx9l4hqC2LDunUue5+ZegU02/GUv0NSAPqD+LsoyCGcdk15jov1wNWwaP2Ei7b9sVPf
+         79IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JkelnnNWFdmlOy0YURyWaxyjcYrMZ7pqMNYxTFdN3zQ=;
+        b=JtVItqIhuw4Xas97pPMHbcK0b3hfQHX0DPThoBXJz0HFtlm1L3atHN/ZZgu5V86uA3
+         Zkl935Wrcb/9vQzkCRVlgwO5Eap5SfXhoZetFQyo3dJ2LA/TGbvZ0WFZdtjibVlwyRXx
+         bBe0TsCp1+CChchh+6Xokpb1Trby1ea+R2BIwc6XeIOr+EZdFHpdo/MxMAUJj2XSzdnH
+         9s+AgGoczVfAS3giPlL6QmCX/M0mR5rKL0jXpplI1hUapZaoRBpCd0AhqY+TxzJKOUAW
+         qrMvNOB36b6LoQHhWzG4+hGOi1dD1pP6QYxY6HMa8A2gIONkuRk+qweLfxYapS8fFW7s
+         f1FA==
+X-Gm-Message-State: AOAM530VVJxxm7HAVnt4bjpkpEUGNmUUu0lLyerDI60/uS7YzThuNQuS
+        2iApcBxgiHZd63FELCsr9YK4HIFkZnv4tqJ8Vx6iGLFgV24=
+X-Google-Smtp-Source: ABdhPJwKsPjxWNGiqxndALni5PS9Yb50kfiSvl/lqnSnPBWQNWYknPZRbjTDApbXznajh5T1JvWnc7T5QwvKxRrmnUk=
+X-Received: by 2002:a05:6e02:1c26:b0:2be:a5ac:2985 with SMTP id
+ m6-20020a056e021c2600b002bea5ac2985mr4231690ilh.125.1645163320584; Thu, 17
+ Feb 2022 21:48:40 -0800 (PST)
+MIME-Version: 1.0
+References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
+ <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net> <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
+ <a8e9e6f1-e7a0-d40d-8065-b72f60c72a32@roeck-us.net> <CAB95QATVnZMQLCU_eTr7=ASVmJ+aYayQGJ0xZ=OtowdhPZQKSw@mail.gmail.com>
+ <791af285-ad53-625a-8d3a-2be8d0022c75@roeck-us.net>
+In-Reply-To: <791af285-ad53-625a-8d3a-2be8d0022c75@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 18 Feb 2022 06:48:29 +0100
+Message-ID: <CAB95QAQegNNJ3H_iXyR3niaeCitZG-FMrWK9mAWEtj+OXE1JFw@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 1/4] hwmon: (pmbus) Add get_error_flags support to
- regulator ops
-Message-ID: <Yg7nDpJuH0XkessL@hatter.bewilderbeest.net>
-References: <20220217104444.7695-1-zev@bewilderbeest.net>
- <20220217104444.7695-2-zev@bewilderbeest.net>
- <b22ca322-c8f2-d17c-75ff-54ee26b0041b@roeck-us.net>
- <Yg7cQwA+i5oTYqHJ@hatter.bewilderbeest.net>
- <3bfa7f1f-ef5d-b222-894b-b15a2270996d@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3bfa7f1f-ef5d-b222-894b-b15a2270996d@roeck-us.net>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 04:02:58PM PST, Guenter Roeck wrote:
->On 2/17/22 15:37, Zev Weiss wrote:
->>On Thu, Feb 17, 2022 at 10:11:32AM PST, Guenter Roeck wrote:
->>>On 2/17/22 02:44, Zev Weiss wrote:
->>>>The various PMBus status bits don't all map perfectly to the more
->>>>limited set of REGULATOR_ERROR_* flags, but there's a reasonable
->>>>number where they correspond well enough.
->>>>
->>>>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->>>>---
->>>> drivers/hwmon/pmbus/pmbus_core.c | 97 ++++++++++++++++++++++++++++++++
->>>> 1 file changed, 97 insertions(+)
->>>>
->>>>diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->>>>index 776ee2237be2..a274e8e524a5 100644
->>>>--- a/drivers/hwmon/pmbus/pmbus_core.c
->>>>+++ b/drivers/hwmon/pmbus/pmbus_core.c
->>>>@@ -2417,10 +2417,107 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
->>>>     return _pmbus_regulator_on_off(rdev, 0);
->>>> }
->>>>+/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
->>>>+struct pmbus_regulator_status_assoc {
->>>>+    int pflag, rflag;
->>>>+};
->>>>+
->>>>+/* PMBus->regulator bit mappings for a PMBus status register */
->>>>+struct pmbus_regulator_status_category {
->>>>+    int func;
->>>>+    int reg;
->>>>+    const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
->>>>+};
->>>>+
->>>>+static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
->>>>+    {
->>>>+        .func = PMBUS_HAVE_STATUS_VOUT,
->>>>+        .reg = PMBUS_STATUS_VOUT,
->>>>+        .bits = (const struct pmbus_regulator_status_assoc[]) {
->>>>+            { PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
->>>>+            { PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
->>>>+            { PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
->>>>+            { PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
->>>>+            { },
->>>>+        },
->>>>+    }, {
->>>>+        .func = PMBUS_HAVE_STATUS_IOUT,
->>>>+        .reg = PMBUS_STATUS_IOUT,
->>>>+        .bits = (const struct pmbus_regulator_status_assoc[]) {
->>>>+            { PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
->>>>+            { PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
->>>>+            { PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
->>>>+            { },
->>>>+        },
->>>>+    }, {
->>>>+        .func = PMBUS_HAVE_STATUS_TEMP,
->>>>+        .reg = PMBUS_STATUS_TEMPERATURE,
->>>>+        .bits = (const struct pmbus_regulator_status_assoc[]) {
->>>>+            { PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
->>>>+            { PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
->>>>+            { },
->>>>+        },
->>>>+    },
->>>>+};
->>>>+
->>>>+static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
->>>>+{
->>>>+    int i, status, statusreg;
->>>>+    const struct pmbus_regulator_status_category *cat;
->>>>+    const struct pmbus_regulator_status_assoc *bit;
->>>>+    struct device *dev = rdev_get_dev(rdev);
->>>>+    struct i2c_client *client = to_i2c_client(dev->parent);
->>>>+    struct pmbus_data *data = i2c_get_clientdata(client);
->>>>+    u8 page = rdev_get_id(rdev);
->>>>+    int func = data->info->func[page];
->>>>+
->>>>+    *flags = 0;
->>>>+
->>>>+    for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
->>>>+        cat = &pmbus_regulator_flag_map[i];
->>>>+        if (!(func & cat->func))
->>>>+            continue;
->>>>+
->>>>+        status = pmbus_read_byte_data(client, page, cat->reg);
->>>>+        if (status < 0)
->>>>+            return status;
->>>>+
->>>>+        for (bit = cat->bits; bit->pflag; bit++) {
->>>>+            if (status & bit->pflag)
->>>>+                *flags |= bit->rflag;
->>>>+        }
->>>>+    }
->>>>+
->>>>+    /*
->>>>+     * Map what bits of STATUS_{WORD,BYTE} we can to REGULATOR_ERROR_*
->>>>+     * bits.  Some of the other bits are tempting (especially for cases
->>>>+     * where we don't have the relevant PMBUS_HAVE_STATUS_*
->>>>+     * functionality), but there's an unfortunate ambiguity in that
->>>>+     * they're defined as indicating a fault *or* a warning, so we can't
->>>>+     * easily determine whether to report REGULATOR_ERROR_<foo> or
->>>>+     * REGULATOR_ERROR_<foo>_WARN.
->>>>+     */
->>>>+    statusreg = data->has_status_word ? PMBUS_STATUS_WORD : PMBUS_STATUS_BYTE;
->>>>+    status = pmbus_get_status(client, page, statusreg);
->>>>+
->>>
->>>pmbus_get_status() calls data->read_status if PMBUS_STATUS_WORD is provided
->>>as parameter, and data->read_status is set to pmbus_read_status_byte()
->>>if reading the word status is not supported. Given that, why not just call
->>>pmbus_get_status(client, page, PMBUS_STATUS_WORD) ?
->>
->>Good point, I'll change it to do that instead.  (And send v2 separately from the power-efuse driver patches.)
->>
->>>
->>>>+    if (status < 0)
->>>>+        return status;
->>>>+
->>>>+    if (pmbus_regulator_is_enabled(rdev) && (status & PB_STATUS_OFF))
->>>>+        *flags |= REGULATOR_ERROR_FAIL;
->>>>+    if (status & PB_STATUS_IOUT_OC)
->>>>+        *flags |= REGULATOR_ERROR_OVER_CURRENT;
->>>
->>>If the current status register is supported, this effectively means that
->>>an overcurrent warning is always reported as both REGULATOR_ERROR_OVER_CURRENT
->>>and REGULATOR_ERROR_OVER_CURRENT_WARN. Is that intentional ?
->>>
->>
->>No, but I don't think (by my reading of the spec) that's what would happen?
->>
->>I'm looking at table 16 ("STATUS_WORD Message Contents") in section 17.2 ("STATUS_WORD") of Part II of revision 1.3.1 of the PMBus spec, which says that bit 4 of the low byte (PB_STATUS_IOUT_OC) indicates an output overcurrent fault, not a warning (in contrast to most of the other bits, which may indicate either).
->>
->>>
->>>>+    if (status & PB_STATUS_VOUT_OV)
->>>>+        *flags |= REGULATOR_ERROR_REGULATION_OUT;
->>>
->>>Same for voltage.
->>
->>Likewise, PB_STATUS_VOUT_OV is specified as indicating a fault, not a warning.
->>
->
->Ok, that makes sense.
->
->>>On the other side, temperature limit violations are not
->>>reported at all unless the temperature status register exists.
->>>That seems to be a bit inconsistent to me.
->>>
->>
->>Right -- that's because PB_STATUS_TEMPERATURE is one of the "fault or warning" bits (unlike VOUT_OV and IOUT_OC), and hence it's an ambiguous case as described in the comment before the pmbus_get_status() call.
->>
->>It's certainly not ideal, but it seemed like the best approach I could see given the semantics of the available flags -- I'm open to other possibilities though if there's something else that would work better.
->>
->
->My approach would be to report a warning if no temperature warning/fault
->is set from PMBUS_STATUS_TEMPERATURE but PB_STATUS_TEMPERATURE is set
->in the status register.
->
->Something like
->
->	if (!(*flags & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN))
->	    && (status & PB_STATUS_TEMPERATURE))
->		*flags |= REGULATOR_ERROR_OVER_TEMP_WARN;
->
->While not perfect, it would be better than reporting nothing.
->
+On Thu, 17 Feb 2022 at 22:25, Guenter Roeck <linux@roeck-us.net> wrote:
 
-That sounds like a good idea -- I'll add it in v2.
+> !strcmp(), and, yes, dmi functions can return NULL.
 
+Thanks!
 
-Thanks,
-Zev
-
+Regards,
+Eugene
