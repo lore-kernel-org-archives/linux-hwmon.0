@@ -2,242 +2,198 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B5DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Feb 2022 15:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27629C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Feb 2022 16:25:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbiBTPa3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Feb 2022 10:30:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50164 "EHLO
+        id S241230AbiBTQ0A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Feb 2022 11:26:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiBTPa0 (ORCPT
+        with ESMTP id S241219AbiBTQ0A (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:30:26 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8CA4E39C;
-        Sun, 20 Feb 2022 07:30:05 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id q5so8432550oij.6;
-        Sun, 20 Feb 2022 07:30:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v9yDxdXjwfjcEmcv6Q/zczMsjG6fgA4wk/0Tx7xP4sI=;
-        b=VTR+1+ba8QimGg/EB+ymwC2T9QsjGhjmRL6ovuUPN6kP0SriqXjo+4hPkFKzZ77HoZ
-         szTVyzhp8ly4R5KMheLHsUtEpwyn49rKDEE1qS5BhDcGbaXgpBQZdFxF6pFcw4EXZE3D
-         CdaWZllJIgMu0vVdidOmWzqlyxry/CZMcLVHDw0XvDOd/08WA0BHHXW9V+c6KejzNNUz
-         jzfCcmUtADW272OqxkUkVNzSzzYDKg6iGVmXSHrs+0Na87vi6Yti3FvwArZ0VSW1C737
-         5tfODeTf98+O6Uv8fFXA0P+2XROJFZubNsCxmBX5T36QFfwXJT+Lp5OgPL6w71sf6HJ3
-         4EGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v9yDxdXjwfjcEmcv6Q/zczMsjG6fgA4wk/0Tx7xP4sI=;
-        b=Ipm/MOprtvXOvlmzP3X9zEAYwZ8qoDZaFLuDpagsQoklirYusYbVAftcrY8qxzy69h
-         9NAvE4KucEJMFne6IX+ILadbrO16pDeb+2uozQkzWtJKXoDPiefV2uDRK6XX6OB4Gvu7
-         Dd9NccftU6EeZ0IovJPE71RB2Qy4Q/nj5419Gb7zkiL5/+hhIVm72bs6XiqC1BZDWIBf
-         ZbENp5HubXj8n+bLaRV6d//45ErySb9tYv62kQB7FTidD/4gxu0W45Il4QORS871iyBk
-         i3xbPHvGuDt8HD9OotkvPCjI4eREC2N9pvpT+FAD/V1sysV7kxdDwGJWOop6OQFeKiiD
-         erXA==
-X-Gm-Message-State: AOAM531RPDGC+qvn86Zp1y8cJD4Xhjx34fXgnElAxHDqel6eVTa8NQE0
-        rldsBZvf8+XuPVMPy5TaoLE=
-X-Google-Smtp-Source: ABdhPJyR+bX5VZ+syJd8ZHj/h8NztoAD3ZKegIwwy3YXx8xIVyUo7wJTOXMgM4mdO2KfGmc7k3dSrg==
-X-Received: by 2002:a05:6808:11c4:b0:2d4:9b19:6940 with SMTP id p4-20020a05680811c400b002d49b196940mr5895550oiv.199.1645371004879;
-        Sun, 20 Feb 2022 07:30:04 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id be19sm5921088oib.31.2022.02.20.07.30.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 07:30:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7d387f96-1561-2eec-43e2-b971ff79d734@roeck-us.net>
-Date:   Sun, 20 Feb 2022 07:30:01 -0800
+        Sun, 20 Feb 2022 11:26:00 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A76034670;
+        Sun, 20 Feb 2022 08:25:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645374311;
+        bh=BfygSnNwPAsAKQCAw5L3JdsdO7mVJKJ8bDLaDqAzUrA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=jhXEhKTAGfZ0I7cNJxZJ2P/QrnsTw78fF5fvO2CqWCnngzAnCim4irlBjyBkHumYO
+         3acpO1GBeYyrrgpjQXxW0LpKS4b9DUb5eIccEYgMR8CIcHHKmDhUB4udzKY+yvoYDE
+         lEcOAvJshuiaBiur04jcaCvHWgY0oIF7hc96xOhA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N6siz-1oK5TU0287-018MRL; Sun, 20 Feb 2022 17:25:11 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, David.Laight@ACULAB.COM,
+        linux-hwmon@vger.kernel.org, linux-assembly@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: (dell-smm) Improve assembly code
+Date:   Sun, 20 Feb 2022 17:25:01 +0100
+Message-Id: <20220220162501.13591-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Improve assembly code
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Armin Wolf' <W_Armin@gmx.de>,
-        "pali@kernel.org" <pali@kernel.org>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220219211011.16600-1-W_Armin@gmx.de>
- <d66ab183f32c49b2b901b432d284edc5@AcuMS.aculab.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <d66ab183f32c49b2b901b432d284edc5@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:YYE3Y1t7E/v+TbPbO3Pew4TlRjvWWgsfwHnXN7m7LxHEo/guQfa
+ g77mgYXSlVA9wvthfRFmMR4v/jPD/Ci5yuUbd50imTZNPCVDqtZbZdIj6ieEQg30oPcRymH
+ J/arJBCX7oLIyjIDUyObG6m5zDT7lrnOgHqwNVqM4CNiYXT+u18OSXpA2Bb7EK0ok8ejis6
+ FN1Zu6iCWV2PjyNOoZSnQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4lABhImsNQo=:79pPa9/6WmoEcx6HgOn7P9
+ +a9uhjlPzPnctIYNCnfDlYQ4TLdtcpAWtzDn9HoVHUMZhThn5gkXUjt5YWwyRAue/C6xEC5Nm
+ Ol7xkJO2ujQe6HCCl7rhfXCtNv1/O/CopYaSOXKCJhS9mRvAR7FnNZYN04y0eAtiFvN2x9xwQ
+ kTOLdLctYnon9FNrYVmqUHBrirw2cbX9Jjk8pCUwOUnqovgsQob3XYlCdZftLlgImVgPJm1I7
+ DGeFTzEhhx63yrTJs8wx6nYG6FYLgQgJAheR8pL550SzxRInd5i9JlMxB8rlShe56EdNtXcSr
+ 9QkgIsrgOuB7kcE1GMnqLd128igvAdqCPfKf+W0AeN/GApfX4GNcBLdmwJkra1WnYf+wR+4lp
+ KdDNGHohlrGFoSO0NHN+gYrIXb9QUJetpDBgAvAXGN33n0qSzAUoO70VeTUCDDazQk7RDqhDM
+ oF2y4o2UcqVOJ/ePSbrIilvH+4bK+fR+Vm2rUVbjgcMpoxodrDX+6zckXwrjGH7QDInwC+r88
+ 9fH4qJSW0cqD+aIMRHBDKymrLy4n6WzHby/mqnck2QI+ptZrk9aYeifSgbD7XPV5NFaAJswey
+ Mh5g+5K8UPFRwvilxKbEY9JcLU2fQXM9efks8d8qk2eyZAK23Exc7yTUgSyMuplRfmoSQxhYi
+ GP09/fEk2iXsBrkYRrfDMzysqmkzhew5VW6JlhKQrNMmXTP45JxWAtuC35wdd5o4nd21E0pm4
+ 4Y3KmxHTs3QYgOhrzb3FkiQDg6Pky2NyZ3DJYXLCJai74dL42lRcb4Yy8Qg9Pz4z6TMPUyP5U
+ qi4OPyLeFBmpGwtMcpTiftFEMJ/0rRQsYIkOI1faI1aUnH9WcuENqlBIxIrOrGMuKMxiLKNwL
+ mv52D9/QxXkIIYTapS/PAGdNT4gKMKpKoHVedvo2izcQCu+GFY8BgfsZdvm8S0+JpZgkHhk9l
+ +YWBTuksD4xtA7BAT80J+r42prs4SPg7r2pcEEQfd7VfFtQyOwyFbqRN9lX5BmzpCrPS58Pw+
+ lQ9nCGe65Tj7C8UW7vcP11J7DAMSgep4jTx9dotrrLpkPt1CJB1FsTHSa6+Nvg+nKduFeRF1f
+ nONiyrlRuRZeDM=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/20/22 04:20, David Laight wrote:
-> From: Armin Wolf
->> Sent: 19 February 2022 21:10
->>
->> The new assembly code works on both 32 bit and 64 bit
->> cpus and allows for more compiler optimisations by not
->> requiring smm_regs to be packed. Also since the
->> SMM handler seems to modify the carry flag, the new
->> code informs the compiler that the flags register
->> needs to be saved/restored. Since clang runs out of
->> registers on 32 bit x86 when using CC_OUT, we need
->> to execute "setc" ourself.
-> 
-> You always need to save anything from the flags register
-> inside the asm block - it is never valit afterwards.
-> 
+The new assembly code works on both 32 bit and 64 bit
+cpus and allows for more compiler optimisations by not
+requiring smm_regs to be packed. Since clang runs out
+of registers on 32 bit x86 when using CC_OUT, we need
+to execute "setc" ourself.
+Also modify the debug message so we can still see
+the result (eax) when the carry flag was set.
 
-Does that matter here ? I thought setcc is used to get the carry flag.
+Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
 
-Guenter
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+Changes in v3:
+- make carry an unsigned char
+- use "+a", ... for output registers
+- drop "cc" from clobbered list
 
->> Also modify the debug message so we can still see
->> the result (eax) when the carry flag was set.
->>
->> Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->> Changes in v2:
->> - fix clang running out of registers on 32 bit x86
->> - modify debug message
->> ---
->>   drivers/hwmon/dell-smm-hwmon.c | 85 ++++++++++------------------------
->>   1 file changed, 25 insertions(+), 60 deletions(-)
->>
->> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
->> index c5939e68586d..f1538a46bfc9 100644
->> --- a/drivers/hwmon/dell-smm-hwmon.c
->> +++ b/drivers/hwmon/dell-smm-hwmon.c
->> @@ -119,7 +119,7 @@ struct smm_regs {
->>   	unsigned int edx;
->>   	unsigned int esi;
->>   	unsigned int edi;
->> -} __packed;
->> +};
->>
->>   static const char * const temp_labels[] = {
->>   	"CPU",
->> @@ -165,73 +165,38 @@ static int i8k_smm_func(void *par)
->>   	int eax = regs->eax;
->>   	int ebx = regs->ebx;
->>   	long long duration;
->> -	int rc;
->> +	bool carry;
-> 
-> I'd use an explicit 'unsigned char' not bool.
-> Matches the type of the 'setcc' instriction.
-> 
->>   	/* SMM requires CPU 0 */
->>   	if (smp_processor_id() != 0)
->>   		return -EBUSY;
->>
->> -#if defined(CONFIG_X86_64)
->> -	asm volatile("pushq %%rax\n\t"
->> -		"movl 0(%%rax),%%edx\n\t"
->> -		"pushq %%rdx\n\t"
->> -		"movl 4(%%rax),%%ebx\n\t"
->> -		"movl 8(%%rax),%%ecx\n\t"
->> -		"movl 12(%%rax),%%edx\n\t"
->> -		"movl 16(%%rax),%%esi\n\t"
->> -		"movl 20(%%rax),%%edi\n\t"
->> -		"popq %%rax\n\t"
->> -		"out %%al,$0xb2\n\t"
->> -		"out %%al,$0x84\n\t"
->> -		"xchgq %%rax,(%%rsp)\n\t"
->> -		"movl %%ebx,4(%%rax)\n\t"
->> -		"movl %%ecx,8(%%rax)\n\t"
->> -		"movl %%edx,12(%%rax)\n\t"
->> -		"movl %%esi,16(%%rax)\n\t"
->> -		"movl %%edi,20(%%rax)\n\t"
->> -		"popq %%rdx\n\t"
->> -		"movl %%edx,0(%%rax)\n\t"
->> -		"pushfq\n\t"
->> -		"popq %%rax\n\t"
->> -		"andl $1,%%eax\n"
->> -		: "=a"(rc)
->> -		:    "a"(regs)
->> -		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
->> -#else
->> -	asm volatile("pushl %%eax\n\t"
->> -	    "movl 0(%%eax),%%edx\n\t"
->> -	    "push %%edx\n\t"
->> -	    "movl 4(%%eax),%%ebx\n\t"
->> -	    "movl 8(%%eax),%%ecx\n\t"
->> -	    "movl 12(%%eax),%%edx\n\t"
->> -	    "movl 16(%%eax),%%esi\n\t"
->> -	    "movl 20(%%eax),%%edi\n\t"
->> -	    "popl %%eax\n\t"
->> -	    "out %%al,$0xb2\n\t"
->> -	    "out %%al,$0x84\n\t"
->> -	    "xchgl %%eax,(%%esp)\n\t"
->> -	    "movl %%ebx,4(%%eax)\n\t"
->> -	    "movl %%ecx,8(%%eax)\n\t"
->> -	    "movl %%edx,12(%%eax)\n\t"
->> -	    "movl %%esi,16(%%eax)\n\t"
->> -	    "movl %%edi,20(%%eax)\n\t"
->> -	    "popl %%edx\n\t"
->> -	    "movl %%edx,0(%%eax)\n\t"
->> -	    "lahf\n\t"
->> -	    "shrl $8,%%eax\n\t"
->> -	    "andl $1,%%eax\n"
->> -	    : "=a"(rc)
->> -	    :    "a"(regs)
->> -	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
->> -#endif
->> -	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
->> -		rc = -EINVAL;
->> +	asm volatile("out %%al,$0xb2\n\t"
->> +		     "out %%al,$0x84\n\t"
->> +		     "setc %0\n"
->> +		     : "=mr" (carry),
->> +		       "=a" (regs->eax),
->> +		       "=b" (regs->ebx),
->> +		       "=c" (regs->ecx),
->> +		       "=d" (regs->edx),
->> +		       "=S" (regs->esi),
->> +		       "=D" (regs->edi)
->> +		     : "a" (regs->eax),
->> +		       "b" (regs->ebx),
->> +		       "c" (regs->ecx),
->> +		       "d" (regs->edx),
->> +		       "S" (regs->esi),
->> +		       "D" (regs->edi)
-> 
-> If you use "+a" (etc) for the output registers you don't
-> need to respecify them as input registers.
-> 
->> +		     : "cc");
-> 
-> No need to specify "cc", it is always assumed clobbered.
-> 
-> 	David
-> 
->>
->>   	duration = ktime_us_delta(ktime_get(), calltime);
->> -	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
->> -		 (rc ? 0xffff : regs->eax & 0xffff), duration);
->> +	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x carry: %d (took %7lld usecs)\n",
->> +		 eax, ebx, regs->eax & 0xffff, carry, duration);
->>
->> -	return rc;
->> +	if (carry || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
->> +		return -EINVAL;
->> +
->> +	return 0;
->>   }
->>
->>   /*
->> --
->> 2.30.2
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
+Changes in v2:
+- fix clang running out of registers on 32 bit x86
+- modify debug message
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 78 ++++++++--------------------------
+ 1 file changed, 18 insertions(+), 60 deletions(-)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index c5939e68586d..38d23a8e83f2 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -119,7 +119,7 @@ struct smm_regs {
+ 	unsigned int edx;
+ 	unsigned int esi;
+ 	unsigned int edi;
+-} __packed;
++};
+
+ static const char * const temp_labels[] =3D {
+ 	"CPU",
+@@ -164,74 +164,32 @@ static int i8k_smm_func(void *par)
+ 	struct smm_regs *regs =3D par;
+ 	int eax =3D regs->eax;
+ 	int ebx =3D regs->ebx;
++	unsigned char carry;
+ 	long long duration;
+-	int rc;
+
+ 	/* SMM requires CPU 0 */
+ 	if (smp_processor_id() !=3D 0)
+ 		return -EBUSY;
+
+-#if defined(CONFIG_X86_64)
+-	asm volatile("pushq %%rax\n\t"
+-		"movl 0(%%rax),%%edx\n\t"
+-		"pushq %%rdx\n\t"
+-		"movl 4(%%rax),%%ebx\n\t"
+-		"movl 8(%%rax),%%ecx\n\t"
+-		"movl 12(%%rax),%%edx\n\t"
+-		"movl 16(%%rax),%%esi\n\t"
+-		"movl 20(%%rax),%%edi\n\t"
+-		"popq %%rax\n\t"
+-		"out %%al,$0xb2\n\t"
+-		"out %%al,$0x84\n\t"
+-		"xchgq %%rax,(%%rsp)\n\t"
+-		"movl %%ebx,4(%%rax)\n\t"
+-		"movl %%ecx,8(%%rax)\n\t"
+-		"movl %%edx,12(%%rax)\n\t"
+-		"movl %%esi,16(%%rax)\n\t"
+-		"movl %%edi,20(%%rax)\n\t"
+-		"popq %%rdx\n\t"
+-		"movl %%edx,0(%%rax)\n\t"
+-		"pushfq\n\t"
+-		"popq %%rax\n\t"
+-		"andl $1,%%eax\n"
+-		: "=3Da"(rc)
+-		:    "a"(regs)
+-		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
+-#else
+-	asm volatile("pushl %%eax\n\t"
+-	    "movl 0(%%eax),%%edx\n\t"
+-	    "push %%edx\n\t"
+-	    "movl 4(%%eax),%%ebx\n\t"
+-	    "movl 8(%%eax),%%ecx\n\t"
+-	    "movl 12(%%eax),%%edx\n\t"
+-	    "movl 16(%%eax),%%esi\n\t"
+-	    "movl 20(%%eax),%%edi\n\t"
+-	    "popl %%eax\n\t"
+-	    "out %%al,$0xb2\n\t"
+-	    "out %%al,$0x84\n\t"
+-	    "xchgl %%eax,(%%esp)\n\t"
+-	    "movl %%ebx,4(%%eax)\n\t"
+-	    "movl %%ecx,8(%%eax)\n\t"
+-	    "movl %%edx,12(%%eax)\n\t"
+-	    "movl %%esi,16(%%eax)\n\t"
+-	    "movl %%edi,20(%%eax)\n\t"
+-	    "popl %%edx\n\t"
+-	    "movl %%edx,0(%%eax)\n\t"
+-	    "lahf\n\t"
+-	    "shrl $8,%%eax\n\t"
+-	    "andl $1,%%eax\n"
+-	    : "=3Da"(rc)
+-	    :    "a"(regs)
+-	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
+-#endif
+-	if (rc !=3D 0 || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D =
+eax)
+-		rc =3D -EINVAL;
++	asm volatile("out %%al,$0xb2\n\t"
++		     "out %%al,$0x84\n\t"
++		     "setc %0\n"
++		     : "=3Dmr" (carry),
++		       "+a" (regs->eax),
++		       "+b" (regs->ebx),
++		       "+c" (regs->ecx),
++		       "+d" (regs->edx),
++		       "+S" (regs->esi),
++		       "+D" (regs->edi));
+
+ 	duration =3D ktime_us_delta(ktime_get(), calltime);
+-	pr_debug("smm(0x%.4x 0x%.4x) =3D 0x%.4x  (took %7lld usecs)\n", eax, ebx=
+,
+-		 (rc ? 0xffff : regs->eax & 0xffff), duration);
++	pr_debug("smm(0x%.4x 0x%.4x) =3D 0x%.4x carry: %d (took %7lld usecs)\n",
++		 eax, ebx, regs->eax & 0xffff, carry, duration);
+
+-	return rc;
++	if (carry || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D eax)
++		return -EINVAL;
++
++	return 0;
+ }
+
+ /*
+=2D-
+2.30.2
 
