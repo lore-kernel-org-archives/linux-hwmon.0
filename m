@@ -2,198 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27629C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Feb 2022 16:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E738C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Feb 2022 18:03:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbiBTQ0A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Feb 2022 11:26:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54564 "EHLO
+        id S239235AbiBTSDo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Feb 2022 13:03:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241219AbiBTQ0A (ORCPT
+        with ESMTP id S234398AbiBTSDn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Feb 2022 11:26:00 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A76034670;
-        Sun, 20 Feb 2022 08:25:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645374311;
-        bh=BfygSnNwPAsAKQCAw5L3JdsdO7mVJKJ8bDLaDqAzUrA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=jhXEhKTAGfZ0I7cNJxZJ2P/QrnsTw78fF5fvO2CqWCnngzAnCim4irlBjyBkHumYO
-         3acpO1GBeYyrrgpjQXxW0LpKS4b9DUb5eIccEYgMR8CIcHHKmDhUB4udzKY+yvoYDE
-         lEcOAvJshuiaBiur04jcaCvHWgY0oIF7hc96xOhA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1N6siz-1oK5TU0287-018MRL; Sun, 20 Feb 2022 17:25:11 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, David.Laight@ACULAB.COM,
-        linux-hwmon@vger.kernel.org, linux-assembly@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] hwmon: (dell-smm) Improve assembly code
-Date:   Sun, 20 Feb 2022 17:25:01 +0100
-Message-Id: <20220220162501.13591-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Sun, 20 Feb 2022 13:03:43 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 071DD41635
+        for <linux-hwmon@vger.kernel.org>; Sun, 20 Feb 2022 10:03:20 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-17-xCk5Y2ofP4uDn5acdcKC0A-1; Sun, 20 Feb 2022 18:03:17 +0000
+X-MC-Unique: xCk5Y2ofP4uDn5acdcKC0A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Sun, 20 Feb 2022 18:03:15 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Sun, 20 Feb 2022 18:03:15 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guenter Roeck' <linux@roeck-us.net>,
+        'Armin Wolf' <W_Armin@gmx.de>,
+        "pali@kernel.org" <pali@kernel.org>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] hwmon: (dell-smm) Improve assembly code
+Thread-Topic: [PATCH v2] hwmon: (dell-smm) Improve assembly code
+Thread-Index: AQHYJdVCkKl8QQjZ0kWJRwIdNPLg26ycWRjggAA4sICAACqL4A==
+Date:   Sun, 20 Feb 2022 18:03:15 +0000
+Message-ID: <075c56861e1e454188db1088b78d3ee2@AcuMS.aculab.com>
+References: <20220219211011.16600-1-W_Armin@gmx.de>
+ <d66ab183f32c49b2b901b432d284edc5@AcuMS.aculab.com>
+ <7d387f96-1561-2eec-43e2-b971ff79d734@roeck-us.net>
+In-Reply-To: <7d387f96-1561-2eec-43e2-b971ff79d734@roeck-us.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:YYE3Y1t7E/v+TbPbO3Pew4TlRjvWWgsfwHnXN7m7LxHEo/guQfa
- g77mgYXSlVA9wvthfRFmMR4v/jPD/Ci5yuUbd50imTZNPCVDqtZbZdIj6ieEQg30oPcRymH
- J/arJBCX7oLIyjIDUyObG6m5zDT7lrnOgHqwNVqM4CNiYXT+u18OSXpA2Bb7EK0ok8ejis6
- FN1Zu6iCWV2PjyNOoZSnQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4lABhImsNQo=:79pPa9/6WmoEcx6HgOn7P9
- +a9uhjlPzPnctIYNCnfDlYQ4TLdtcpAWtzDn9HoVHUMZhThn5gkXUjt5YWwyRAue/C6xEC5Nm
- Ol7xkJO2ujQe6HCCl7rhfXCtNv1/O/CopYaSOXKCJhS9mRvAR7FnNZYN04y0eAtiFvN2x9xwQ
- kTOLdLctYnon9FNrYVmqUHBrirw2cbX9Jjk8pCUwOUnqovgsQob3XYlCdZftLlgImVgPJm1I7
- DGeFTzEhhx63yrTJs8wx6nYG6FYLgQgJAheR8pL550SzxRInd5i9JlMxB8rlShe56EdNtXcSr
- 9QkgIsrgOuB7kcE1GMnqLd128igvAdqCPfKf+W0AeN/GApfX4GNcBLdmwJkra1WnYf+wR+4lp
- KdDNGHohlrGFoSO0NHN+gYrIXb9QUJetpDBgAvAXGN33n0qSzAUoO70VeTUCDDazQk7RDqhDM
- oF2y4o2UcqVOJ/ePSbrIilvH+4bK+fR+Vm2rUVbjgcMpoxodrDX+6zckXwrjGH7QDInwC+r88
- 9fH4qJSW0cqD+aIMRHBDKymrLy4n6WzHby/mqnck2QI+ptZrk9aYeifSgbD7XPV5NFaAJswey
- Mh5g+5K8UPFRwvilxKbEY9JcLU2fQXM9efks8d8qk2eyZAK23Exc7yTUgSyMuplRfmoSQxhYi
- GP09/fEk2iXsBrkYRrfDMzysqmkzhew5VW6JlhKQrNMmXTP45JxWAtuC35wdd5o4nd21E0pm4
- 4Y3KmxHTs3QYgOhrzb3FkiQDg6Pky2NyZ3DJYXLCJai74dL42lRcb4Yy8Qg9Pz4z6TMPUyP5U
- qi4OPyLeFBmpGwtMcpTiftFEMJ/0rRQsYIkOI1faI1aUnH9WcuENqlBIxIrOrGMuKMxiLKNwL
- mv52D9/QxXkIIYTapS/PAGdNT4gKMKpKoHVedvo2izcQCu+GFY8BgfsZdvm8S0+JpZgkHhk9l
- +YWBTuksD4xtA7BAT80J+r42prs4SPg7r2pcEEQfd7VfFtQyOwyFbqRN9lX5BmzpCrPS58Pw+
- lQ9nCGe65Tj7C8UW7vcP11J7DAMSgep4jTx9dotrrLpkPt1CJB1FsTHSa6+Nvg+nKduFeRF1f
- nONiyrlRuRZeDM=
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The new assembly code works on both 32 bit and 64 bit
-cpus and allows for more compiler optimisations by not
-requiring smm_regs to be packed. Since clang runs out
-of registers on 32 bit x86 when using CC_OUT, we need
-to execute "setc" ourself.
-Also modify the debug message so we can still see
-the result (eax) when the carry flag was set.
-
-Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
-
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
-Changes in v3:
-- make carry an unsigned char
-- use "+a", ... for output registers
-- drop "cc" from clobbered list
-
-Changes in v2:
-- fix clang running out of registers on 32 bit x86
-- modify debug message
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 78 ++++++++--------------------------
- 1 file changed, 18 insertions(+), 60 deletions(-)
-
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index c5939e68586d..38d23a8e83f2 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -119,7 +119,7 @@ struct smm_regs {
- 	unsigned int edx;
- 	unsigned int esi;
- 	unsigned int edi;
--} __packed;
-+};
-
- static const char * const temp_labels[] =3D {
- 	"CPU",
-@@ -164,74 +164,32 @@ static int i8k_smm_func(void *par)
- 	struct smm_regs *regs =3D par;
- 	int eax =3D regs->eax;
- 	int ebx =3D regs->ebx;
-+	unsigned char carry;
- 	long long duration;
--	int rc;
-
- 	/* SMM requires CPU 0 */
- 	if (smp_processor_id() !=3D 0)
- 		return -EBUSY;
-
--#if defined(CONFIG_X86_64)
--	asm volatile("pushq %%rax\n\t"
--		"movl 0(%%rax),%%edx\n\t"
--		"pushq %%rdx\n\t"
--		"movl 4(%%rax),%%ebx\n\t"
--		"movl 8(%%rax),%%ecx\n\t"
--		"movl 12(%%rax),%%edx\n\t"
--		"movl 16(%%rax),%%esi\n\t"
--		"movl 20(%%rax),%%edi\n\t"
--		"popq %%rax\n\t"
--		"out %%al,$0xb2\n\t"
--		"out %%al,$0x84\n\t"
--		"xchgq %%rax,(%%rsp)\n\t"
--		"movl %%ebx,4(%%rax)\n\t"
--		"movl %%ecx,8(%%rax)\n\t"
--		"movl %%edx,12(%%rax)\n\t"
--		"movl %%esi,16(%%rax)\n\t"
--		"movl %%edi,20(%%rax)\n\t"
--		"popq %%rdx\n\t"
--		"movl %%edx,0(%%rax)\n\t"
--		"pushfq\n\t"
--		"popq %%rax\n\t"
--		"andl $1,%%eax\n"
--		: "=3Da"(rc)
--		:    "a"(regs)
--		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
--#else
--	asm volatile("pushl %%eax\n\t"
--	    "movl 0(%%eax),%%edx\n\t"
--	    "push %%edx\n\t"
--	    "movl 4(%%eax),%%ebx\n\t"
--	    "movl 8(%%eax),%%ecx\n\t"
--	    "movl 12(%%eax),%%edx\n\t"
--	    "movl 16(%%eax),%%esi\n\t"
--	    "movl 20(%%eax),%%edi\n\t"
--	    "popl %%eax\n\t"
--	    "out %%al,$0xb2\n\t"
--	    "out %%al,$0x84\n\t"
--	    "xchgl %%eax,(%%esp)\n\t"
--	    "movl %%ebx,4(%%eax)\n\t"
--	    "movl %%ecx,8(%%eax)\n\t"
--	    "movl %%edx,12(%%eax)\n\t"
--	    "movl %%esi,16(%%eax)\n\t"
--	    "movl %%edi,20(%%eax)\n\t"
--	    "popl %%edx\n\t"
--	    "movl %%edx,0(%%eax)\n\t"
--	    "lahf\n\t"
--	    "shrl $8,%%eax\n\t"
--	    "andl $1,%%eax\n"
--	    : "=3Da"(rc)
--	    :    "a"(regs)
--	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
--#endif
--	if (rc !=3D 0 || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D =
-eax)
--		rc =3D -EINVAL;
-+	asm volatile("out %%al,$0xb2\n\t"
-+		     "out %%al,$0x84\n\t"
-+		     "setc %0\n"
-+		     : "=3Dmr" (carry),
-+		       "+a" (regs->eax),
-+		       "+b" (regs->ebx),
-+		       "+c" (regs->ecx),
-+		       "+d" (regs->edx),
-+		       "+S" (regs->esi),
-+		       "+D" (regs->edi));
-
- 	duration =3D ktime_us_delta(ktime_get(), calltime);
--	pr_debug("smm(0x%.4x 0x%.4x) =3D 0x%.4x  (took %7lld usecs)\n", eax, ebx=
-,
--		 (rc ? 0xffff : regs->eax & 0xffff), duration);
-+	pr_debug("smm(0x%.4x 0x%.4x) =3D 0x%.4x carry: %d (took %7lld usecs)\n",
-+		 eax, ebx, regs->eax & 0xffff, carry, duration);
-
--	return rc;
-+	if (carry || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D eax)
-+		return -EINVAL;
-+
-+	return 0;
- }
-
- /*
-=2D-
-2.30.2
+RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAyMCBGZWJydWFyeSAyMDIyIDE1OjMwDQo+IA0K
+PiBPbiAyLzIwLzIyIDA0OjIwLCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4gRnJvbTogQXJtaW4g
+V29sZg0KPiA+PiBTZW50OiAxOSBGZWJydWFyeSAyMDIyIDIxOjEwDQo+ID4+DQo+ID4+IFRoZSBu
+ZXcgYXNzZW1ibHkgY29kZSB3b3JrcyBvbiBib3RoIDMyIGJpdCBhbmQgNjQgYml0DQo+ID4+IGNw
+dXMgYW5kIGFsbG93cyBmb3IgbW9yZSBjb21waWxlciBvcHRpbWlzYXRpb25zIGJ5IG5vdA0KPiA+
+PiByZXF1aXJpbmcgc21tX3JlZ3MgdG8gYmUgcGFja2VkLiBBbHNvIHNpbmNlIHRoZQ0KPiA+PiBT
+TU0gaGFuZGxlciBzZWVtcyB0byBtb2RpZnkgdGhlIGNhcnJ5IGZsYWcsIHRoZSBuZXcNCj4gPj4g
+Y29kZSBpbmZvcm1zIHRoZSBjb21waWxlciB0aGF0IHRoZSBmbGFncyByZWdpc3Rlcg0KPiA+PiBu
+ZWVkcyB0byBiZSBzYXZlZC9yZXN0b3JlZC4gU2luY2UgY2xhbmcgcnVucyBvdXQgb2YNCj4gPj4g
+cmVnaXN0ZXJzIG9uIDMyIGJpdCB4ODYgd2hlbiB1c2luZyBDQ19PVVQsIHdlIG5lZWQNCj4gPj4g
+dG8gZXhlY3V0ZSAic2V0YyIgb3Vyc2VsZi4NCj4gPg0KPiA+IFlvdSBhbHdheXMgbmVlZCB0byBz
+YXZlIGFueXRoaW5nIGZyb20gdGhlIGZsYWdzIHJlZ2lzdGVyDQo+ID4gaW5zaWRlIHRoZSBhc20g
+YmxvY2sgLSBpdCBpcyBuZXZlciB2YWxpdCBhZnRlcndhcmRzLg0KPiA+DQo+IA0KPiBEb2VzIHRo
+YXQgbWF0dGVyIGhlcmUgPyBJIHRob3VnaHQgc2V0Y2MgaXMgdXNlZCB0byBnZXQgdGhlIGNhcnJ5
+IGZsYWcuDQoNClRoZSBjb2RlIGlzIG9rLCBqdXN0IHRoZSBjb21tZW50IGlzIG5vdCByZWFsbHkg
+cmlnaHQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1s
+ZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJh
+dGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
