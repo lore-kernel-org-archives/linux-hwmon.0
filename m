@@ -2,172 +2,175 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C1BCC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 20:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17577C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 21:25:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbiBUUMb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Feb 2022 15:12:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53722 "EHLO
+        id S234712AbiBUVZ1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Feb 2022 16:25:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiBUUMa (ORCPT
+        with ESMTP id S234725AbiBUVZZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:12:30 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0976BCC2
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Feb 2022 12:12:07 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id e22so34828124qvf.9
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Feb 2022 12:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lDOdm5114jrEZABngkYtNG+ZpHfKvBKmU7TcZmMbUlA=;
-        b=l+Nj6xoSyHN/4D83coweal4HnxED+CL7UAiUYY1zYJ/cDsPKeFaClEgb9Q6BFAuqgU
-         ezP09Ro4d4PU/uuxCIo4Rc6hybkNAwyB4ayxhlL8aBGnkTZ/ocJmhX49oe+Bc5i+nY1t
-         vc38jGNo2+kyFRAuJtVU72kYnKXpW2V4H8oETcOo8Y7vgakRLGlfUgqRZfgOeCnaCLai
-         3Sb0zfzef/bl8006k6NqH34Ij8CqMMseTTICHI533eeGwo4o08aoDEUTpYjQSDTzwhrU
-         ZgsDXbIPSJQ/lZJ+1Knti1cQWWR4OQ3bQ6MRxfK1r8seP6NfqAcur2z5aAODnqa+iV72
-         5cuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lDOdm5114jrEZABngkYtNG+ZpHfKvBKmU7TcZmMbUlA=;
-        b=PGW5psp3/mBVwtOW60aUE5dWvckvpqKJ8eoDvTIKZiuJgM0P8Zv2wslITFd2OYGdA8
-         G/8ZCcjCJhcOGRQq9jnvzbsmn+tX46TinwZEL/CdrYQOxiMKGzIvTmxE7zaxG9pVpZ4S
-         4hplYhNMkbY8NvhhCuSUpF6od7wxnbjnG+F6q1e/u+8Cvf+LPzXUlhpD5ljllW0W3bLP
-         N4Cb17GaaWukJfG8aRECu08mCLdNMdEPXnihKGvjhojS2eMFRcAXhhIi/WITknr3RC/J
-         +Xt4YjnRfhBcCMQA+GO3V9fd+B5xjtbCAImd/Kb/4f6LH++iVC0WCidBRib1RiYOJrvv
-         FBYg==
-X-Gm-Message-State: AOAM530MouOg6H55RVY+1V20ppYocIfJxHUrkkGHXIA7x5s1augvqd5l
-        NSi4ILINLfI4G7S7AHUmeDE=
-X-Google-Smtp-Source: ABdhPJyvvghm1tNLj/Hp1x94peEmAmT2YceHcLttNtj6KzHXkgXBmbRNcK1G0zLL61G98l4G6EQeUg==
-X-Received: by 2002:a05:622a:198c:b0:2de:707:b1d9 with SMTP id u12-20020a05622a198c00b002de0707b1d9mr7274731qtc.233.1645474326124;
-        Mon, 21 Feb 2022 12:12:06 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 5sm31406166qtp.81.2022.02.21.12.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 12:12:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <bc5d2eb5-d403-adcc-610e-2a6bf5bc01d3@roeck-us.net>
-Date:   Mon, 21 Feb 2022 12:12:03 -0800
+        Mon, 21 Feb 2022 16:25:25 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80108.outbound.protection.outlook.com [40.107.8.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B27312763;
+        Mon, 21 Feb 2022 13:24:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P88GQg4ZSpxlF/omxUXduZ+rbn/hm/8aR31sa1HcO4DmwyrkRclLK9BZi+jFj4D0wWwyk1avbedwvn4hxux3i7idHFqypsiVquQCRbQ90Uu/Y+pc1pcz6kKAfeR4R4Ithnsz0jpa55rLXGeNipTxGZZkZF40DNUSZVmfn7V6jTC0TFHnusRrEGJE1aWhsVJmDKu5Ecf2Im2fIQRRZaxIWsnDx433YtLSKeTp4XLjAysPm6F7NFk6CLnM7P2ICu7X+hezl2PWEGDs19EiXFiBBDs/qrRfJRz4C4Ag6NiQb47y4J6kNNFNZZ79zMpKBXqYrK4AskMaTwPb1+yqX60YHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9gkmhI8XLj07bbFVOSstD1s29zeHRwR+PKtsmMjMpSM=;
+ b=TYUqSUJXXeh7mYuOqhkZ3kULf1bsGh40/7JNAr85XOEDAhoF/+5Bo0IFbc6BNxoVRd0rAc3UKlbGU6wFSvD0PLa5V6P8eeCBMb/fzyuV+F+2lMOchOX9cop3bhKUSxcJ+p2EN+gllkGbqDPyZkVSfLi+lSNMx59TFifXfrfxfWZgpCFS6blTu4pRtspWFH0zvjjpNUhMgkWruUttKVlTOVx7S2wZGTZY7JOpl0zWtSVU9/V7NlCj9veBQWt57EpqbgE1Fn8j78QXXf9lPhYLkqeBLKJxn8s34rlilOBxPV30n9iZ+6mFBgPlGUJZpNafBbX0zvh/lOGqQ5DPfojxuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9gkmhI8XLj07bbFVOSstD1s29zeHRwR+PKtsmMjMpSM=;
+ b=lzPcdxLggxpRTbNfB+GL1p27qmTPf/yKFnLAXVh0FsJ3UcVO0AjitunqnSgFjJblR2YunrjBtADsSWJ3xUOBZn1A8hKBQ5wzuKUkNpc+jkF0rampzz2t5uDDE5JTY1Cgj7mPbGA5Nzb0c9zyo1Y7tBogaSh4YPM9L8mPGIMrMlk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by DB7PR07MB4635.eurprd07.prod.outlook.com (2603:10a6:5:38::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Mon, 21 Feb
+ 2022 21:24:51 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::99a2:6f44:700b:b796]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::99a2:6f44:700b:b796%3]) with mapi id 15.20.5017.021; Mon, 21 Feb 2022
+ 21:24:51 +0000
+Date:   Mon, 21 Feb 2022 22:24:40 +0100
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
+Message-ID: <YhQDGHD3S0qwP2OB@localhost.localdomain>
+References: <20220218150908.1947772-1-linux@roeck-us.net>
+ <YhNWVLHYVtCvdGhi@localhost.localdomain>
+ <66e6b131-274f-454b-44f6-17df879d71a9@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <66e6b131-274f-454b-44f6-17df879d71a9@roeck-us.net>
+X-ClientProxiedBy: MA0PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:80::20) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] hwmon: Handle failure to register sensor with thermal
- zone correctly
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220221182209.1795242-1-linux@roeck-us.net>
- <b9c9f2e2-508d-e34c-c0a1-ec0b579ad3b6@collabora.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <b9c9f2e2-508d-e34c-c0a1-ec0b579ad3b6@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c36eb6ad-fa58-458b-ef85-08d9f58098af
+X-MS-TrafficTypeDiagnostic: DB7PR07MB4635:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR07MB4635F9BF53B3250DECB400EFEF3A9@DB7PR07MB4635.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YTnf7KKWHXfJe5l5M9BHpmATuGsMPYiN1TFXTi+zOH5yer1AVumN4/JlsxeC5nFti6XuKO5w8QuZGME4Vv4hng9zqUj7LBf52yyhszL32OA1+fBMCjONtjrQ1aIROX8YrKqDPO9adkDNzGgiCBf6GDF7Jl8Mka3TpmhmSp9u2gtyASLBvMe5yzJ6oOgHp5jhRe8oFB/pGgwCFNIlCpYewrsnD8oCdw2g1nr76vNInpyGGDOBqkicSV77bN8Zxs54gUfsuUbFdBqTuf6j0Gi1nc4N5nXDVpNdeRlacdPlZJgXpoGQqeTA/Zrnt+ce+gUSJTvCNGhBZaz+Z0ZNelR2MFO72iAOyGJbu84LFq7rpiaR4/Syy6AKVrxCSs+rAODle0JrTg1YeTKAopRGoYteI/5hdHkpAeoVtB9oc+r1qJhE6c0ZHYA5gDI7PD88ALgw2cZL1JJf4UCvJS8OPgNxIc2E+isOdnB3ZIs6tAXIDFHj1KacH2jM7Pud65SZon6KOtqOigAICf6M4cObJXiPNOaEjk/RQW9BLlj0+iHYlQqXj5RrOMYGnwVWu/3UIJtS2dDJ4jhM87bA2oyl3InLAhVy3syGxQCMomMJTYPcdG/BZN+X1H/pTruvT9AFHefC6eAVsFFB2/e3yI1nlAPz8HquC6TW+6PYbewALdnTl9QheDl1Oog4q/JRqT/wbynaInKdvWTDBcs8Up5CItytGoR8rVNpc9HwHnyoFbTy/qoLjAz+gGxNcEQYzE6XuQa9xwkTU83pAuzwIKu+n0ItXivp9kuU2Ms3xvF8PM5dPjQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(508600001)(9686003)(316002)(6512007)(6506007)(6916009)(6666004)(54906003)(66946007)(52116002)(6486002)(8676002)(66476007)(66556008)(4326008)(966005)(5660300002)(2906002)(8936002)(44832011)(86362001)(83380400001)(82960400001)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NHpGcHptZk5Cbi9aTzBNMVc2VG83cU8xbERhNnZJWEpOYiswc3M5eDdoY3R2?=
+ =?utf-8?B?QVE3eHB5S2k1SGtYbjFQcXM1UGtYVnR3NmJxK0NHL05LNzdtU1RpeWJPS3Z2?=
+ =?utf-8?B?eG8yc25VMGw5UmJ0ZFgrb2x6c3hGSk1iNkJINVJMdXZwZGdTZVNZZmhtK01D?=
+ =?utf-8?B?Q056MGRYMEpGS1FPRXljNWlHUzZBclNFQ3VKQlBXeGJVdUdwV0J2bUpITXE4?=
+ =?utf-8?B?VmdOS0liajhHNkV0MzNVZXVUTXBDMnA4N1NLYzg4MVJEQjJQZU10c3pJQ0Zm?=
+ =?utf-8?B?azNBdzNGL09zbFdtUHVMeitxYWhxQlZLOWJzU3owS05uNUxhR2N4T2FwOGMz?=
+ =?utf-8?B?NDcrVkUwUnIyOXkzZnN0d1RqdFl1dnM1QXJjajAxaEEwUERIMmFYNzJEOUsx?=
+ =?utf-8?B?UEx1NDRaaTA5dUp2bG0yOFQvU2xVMWZYLzdDeFptZFhJQXRvMm5GUkp0Zk85?=
+ =?utf-8?B?NkU1UWhBc2hXOURiTHova2swbVYraEQyWXBta2JyZlcxNEk1OUxjSVowZklW?=
+ =?utf-8?B?WWUzeFVMcGZ4VklLVHlUekJ0d1owaGNsTnlMSkN0dVNTSjlsejB4T2pyUkVw?=
+ =?utf-8?B?Q2k1MGQyS2lYamtlcDlRc0NjRkZOMVdZT2dZdVNtUHZ5MWVEU2xHamJsOC9C?=
+ =?utf-8?B?WUhSWjBrUCtrTUhVSW1vby8rdzNYUFdhUnRwTHZCWHJ6d1J4WG1ZMWFhckI3?=
+ =?utf-8?B?d2FKVm10emMwdzZHeFhFenZsVlI2ajFkMVdIZnhYUDJjRGFmdS9Gd2hIUjR3?=
+ =?utf-8?B?ZXlIM2RvRmFDTGh3R2FqdmsxQzBOaHVzUWlZam5TVklLK0ZMbE8rWTN5Vm9L?=
+ =?utf-8?B?Y3kwWVh0ZldYRGJzTFo4ZFAzVEZYdldjV0VQU1laUUpQYmUxelNHOUFlWGNo?=
+ =?utf-8?B?UnZtTG1iOXdWZGRKcUVLSlMyVENFTSs5WEU4TDVzQU1vcytsQnA4OUM2bEZy?=
+ =?utf-8?B?c2xGQko5YnQ1SGp6bWlkYzJVK2Y3WHphbm5TWW9VUjZscGx5VkcrZXliZFBR?=
+ =?utf-8?B?UmRDbCtydHhwV1E1bVNRVXhqVlF0Z1FFcGUvV1U1OGd3S0FCbloyODNIRGtX?=
+ =?utf-8?B?dzc5SDc4WEtKZ2RSRlZ5NTIzcnFnU3R1cklibXpleHNtNmdCNk5mcDF2VDkr?=
+ =?utf-8?B?Q3EwYnl4SUpURWRoUEM4Z1Z0dDNyLzhHMnNQOXltM0F5RjV6MFRtKzBkYitI?=
+ =?utf-8?B?cXUrNk4yOUJhSlYrOGFzTy90RjZNeGhUblF5K1hjbGVWV21KNUFZUGQ2R1VG?=
+ =?utf-8?B?MEJ0RVNzdlpxVTB3eW9rczlmUkNWS3JmNVk5UjltamRjb2txVzlpSnBJYjdY?=
+ =?utf-8?B?TFBBMWlLcXlIV2tiWnF5dEVCaTVpb001a2VIb0ZUYWR3UDRVNXkvbS8welBy?=
+ =?utf-8?B?WWZ3NlRQak5qM3BVNm5pU2xrUmRCaEpOS3JyK2NCYjFGWjFiSGR1RUxlMjZG?=
+ =?utf-8?B?bmx0NGR0Wi9zaWdwdXdSNE9YM3Z1Umo3c3YwMUl2U25aN1pMREREZUVaNjJM?=
+ =?utf-8?B?alNuaG9ia3VPcFV1T2ttZDU1Umw1bmpuZFo2VGcrRnhCY0NDbFlGc051ZU4v?=
+ =?utf-8?B?bmZMK3JlNzVQZStMNS9KT3lOR1VJeGVhKy8xalNxSitwS1JFZUc3OEgrK29w?=
+ =?utf-8?B?aE03NUV4UXU5QlN4Q2dsV2poWVNjNjZYSllieHJGa01xWW4zeTNuTElWRGx0?=
+ =?utf-8?B?TU5LUHRCTTBkNDc5Si9rN0owZmxvNG5zajhvbWdvR0ZabnBBakFOUjNZTlZa?=
+ =?utf-8?B?dFhhUmtwYzZXWW5UaVdyTUFhRGVGM3JhSTZhTzZWNXlpYmFVSXZSK0VVN3Bx?=
+ =?utf-8?B?OStlbXlCTytWdHprb3V4Z29zVVZMM3RLZ3JUaG94cEozMXFicjgwa2RZTStL?=
+ =?utf-8?B?dEtEVmZhZFNOQldoYzVNbUxIM095TUNUTktRakZIS2VyK2VJbnFheUlwQm9R?=
+ =?utf-8?B?Skl0RkJjaEo4ZmRWSFg3MUk1L3ZOTnU5UEU0RzFOWjkzeGo3U3V2NXYrcUlK?=
+ =?utf-8?B?Q0ZtaGVpOUVOdk0zNldSQ2tWWkdQMlJmeUNDS0tiYWtWZ0x5c0VnbVRqNHpy?=
+ =?utf-8?B?UTNDWUlGVnpka1RIcVBjOVZ2T1huTVp2ajJXdkdXeDlabWZtRWQ2dUtOUk1Z?=
+ =?utf-8?B?LzU4Rkx6dUkwSkM4c3Y0SG5UQVpPL3Q3c0tjbmRqcG9DcHM0RjI0T1E2S0lS?=
+ =?utf-8?B?ZllISmFLSWtVTHZjemlFcVRIZkVXLzBTd3NxUVBieGptTVIvNGF5b2J6MHIx?=
+ =?utf-8?B?OWZKOG8yUVhLWk5uTlEyblhzR2Z3PT0=?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c36eb6ad-fa58-458b-ef85-08d9f58098af
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 21:24:51.7796
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EFvfBXlglyk0AiZtgp+AnK9ZHx3IAHs6wWa+LcABQgAUXQRpTEEs0eWORE8SdQ28eglNnS/Cp3ypBuoeDUtSk8vl1ft8uceA+4oE1hl9Rmw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR07MB4635
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/21/22 10:49, Dmitry Osipenko wrote:
-> 
-> On 2/21/22 21:22, Guenter Roeck wrote:
->> If an attempt is made to a sensor with a thermal zone and it fails,
->> the call to devm_thermal_zone_of_sensor_register() may return -ENODEV.
->> This may result in crashes similar to the following.
+Dnia Mon, Feb 21, 2022 at 08:16:15AM -0800, Guenter Roeck napisał(a):
+>>I still thing we should have the same format here and in tmp421, for
+>>consistency. If use the same property name, "ti,n-factor" but on tmp421
+>>you have use 32bit value while here you have to use 8bit (which is weird
+>>in DT, BTW), it might be confusing.
+>>Back when we did this for TMP421, there was some discussion and we
+>>settled on this approach, why do it differently now?
 >>
->> Unable to handle kernel NULL pointer dereference at virtual address 00000000000003cd
->> ...
->> Internal error: Oops: 96000021 [#1] PREEMPT SMP
->> ...
->> pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> pc : mutex_lock+0x18/0x60
->> lr : thermal_zone_device_update+0x40/0x2e0
->> sp : ffff800014c4fc60
->> x29: ffff800014c4fc60 x28: ffff365ee3f6e000 x27: ffffdde218426790
->> x26: ffff365ee3f6e000 x25: 0000000000000000 x24: ffff365ee3f6e000
->> x23: ffffdde218426870 x22: ffff365ee3f6e000 x21: 00000000000003cd
->> x20: ffff365ee8bf3308 x19: ffffffffffffffed x18: 0000000000000000
->> x17: ffffdde21842689c x16: ffffdde1cb7a0b7c x15: 0000000000000040
->> x14: ffffdde21a4889a0 x13: 0000000000000228 x12: 0000000000000000
->> x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
->> x8 : 0000000001120000 x7 : 0000000000000001 x6 : 0000000000000000
->> x5 : 0068000878e20f07 x4 : 0000000000000000 x3 : 00000000000003cd
->> x2 : ffff365ee3f6e000 x1 : 0000000000000000 x0 : 00000000000003cd
->> Call trace:
->>   mutex_lock+0x18/0x60
->>   hwmon_notify_event+0xfc/0x110
->>   0xffffdde1cb7a0a90
->>   0xffffdde1cb7a0b7c
->>   irq_thread_fn+0x2c/0xa0
->>   irq_thread+0x134/0x240
->>   kthread+0x178/0x190
->>   ret_from_fork+0x10/0x20
->> Code: d503201f d503201f d2800001 aa0103e4 (c8e47c02)
->>
->> Jon Hunter reports that the exact call sequence is:
->>
->> hwmon_notify_event()
->>    --> hwmon_thermal_notify()
->>      --> thermal_zone_device_update()
->>        --> update_temperature()
->>          --> mutex_lock()
->>
->> The hwmon core needs to handle all errors returned from calls
->> to devm_thermal_zone_of_sensor_register(). If the call fails
->> with -ENODEV, report that the sensor was not attached to a
->> thermal zone  but continue to register the hwmon device.
->>
->> Reported-by: Jon Hunter <jonathanh@nvidia.com>
->> Cc: Dmitry Osipenko <digetx@gmail.com>
->> Fixes: 1597b374af222 ("hwmon: Add notification support")
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v2: Use dev_info instead of dev_warn, and change message to be
->>      less alarming.
->>
->>   drivers/hwmon/hwmon.c | 14 ++++++++------
->>   1 file changed, 8 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
->> index 3501a3ead4ba..3ae961986fc3 100644
->> --- a/drivers/hwmon/hwmon.c
->> +++ b/drivers/hwmon/hwmon.c
->> @@ -214,12 +214,14 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
->>   
->>   	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
->>   						   &hwmon_thermal_ops);
->> -	/*
->> -	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
->> -	 * so ignore that error but forward any other error.
->> -	 */
->> -	if (IS_ERR(tzd) && (PTR_ERR(tzd) != -ENODEV))
->> -		return PTR_ERR(tzd);
->> +	if (IS_ERR(tzd)) {
->> +		if (PTR_ERR(tzd) != -ENODEV)
->> +			return PTR_ERR(tzd);
->> +		dev_info(dev, "temp%d_input not attached to any thermal zone\n",
->> +			 index + 1);
->> +		devm_kfree(dev, tdata);
->> +		return 0;
->> +	}
->>   
->>   	err = devm_add_action(dev, hwmon_thermal_remove_sensor, &tdata->node);
->>   	if (err)
-> 
-> LGTM, thank you. But still needs a t-b from Jon.
-> 
+>
+>I seem to recall from that discussion that there was supposedly no way to
+>express negative numbers in devicetree. Obviously that is incorrect.
 
-Yes, I'll wait for a tested-by: tag before sending the patch upstream
-to make sure that it actually fixes the problem.
+Well, I would still argue it *is* correct. DT only support unsigned
+numbers and, really, only 32 or 64 bit. See the chapter 2.2.4 Properties
+in:
+https://github.com/devicetree-org/devicetree-specification/releases/download/v0.4-rc1/devicetree-specification-v0.4-rc1.pdf
 
-Thanks,
-Guenter
+Devicetree also supports array of bytes, and this is how we get the
+/bits/ magic but this is just a syntactic suggar. The same is true about
+negative values. Just decompile your compiled DTB and you will see.
+To put it in other words - DTS does support negative values, DTB don't.j
 
-> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>In addition to that, I strongly suspect that the tmp421 code as written
+>does not work. Its value range is specified as 0..255, but it is read with
+>	err = of_property_read_s32(child, "ti,n-factor", &val);
+>and range checked with
+>	if (val > 127 || val < -128) {
+>                dev_err(dev, "n-factor for channel %d invalid (%d)\n",
+>                       i, val);
+>                return -EINVAL;
+>        }
+>
+>That just looks wrong. Either the value range is 0..255 and checked
+>as 0 .. 255, or it is -128 .. 127 and must be both checked and specified
+>accordingly. This made me look into the code and I found how negative
+>numbers are supposed to be handled.
 
+It worked for me when I tested that. I could redo the test, if you are
+unsure. The code also looks good to me. I wasn't convinced for this
+format in yaml but after the whole discussion we had, we settled on
+that, with Robs blessing :)
+
+Here's the actual discussion where all this was considered:
+https://patchwork.kernel.org/project/linux-hwmon/patch/3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com/
+
+I'm not saying the way we do this for tmp421 is better or even right,
+all I say is that it would make sense to be consistent and not redo this
+discussion every time we have this problem.
+
+Krzysztof
