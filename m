@@ -2,136 +2,201 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACC37C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 16:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 757E9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 16:16:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379951AbiBUQN3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Feb 2022 11:13:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37832 "EHLO
+        id S1380053AbiBUQQo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Feb 2022 11:16:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235938AbiBUQN2 (ORCPT
+        with ESMTP id S1380052AbiBUQQn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:13:28 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15242BF40;
-        Mon, 21 Feb 2022 08:13:05 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id f37so19520010lfv.8;
-        Mon, 21 Feb 2022 08:13:04 -0800 (PST)
+        Mon, 21 Feb 2022 11:16:43 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E4A27B2B;
+        Mon, 21 Feb 2022 08:16:19 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id n185so17361223qke.5;
+        Mon, 21 Feb 2022 08:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9svlVloIRFTm0V9CmprJDnoHOsTYF2+BAhlCr5Fme5A=;
-        b=FfE3wxk/bEL8UTmlDO/hRc28DE6CbLUk0akjgMW+NOVFnCAL3skLaYD4L4OknYwUn6
-         qpffpoihf89dfHeln61E5gIpe5CA5UERdHev6OrUqkGTVjy8z7Ypaj0cxGDV6DvFqel0
-         5BSHV6mrl+fcJ1cbgEMTYdjgjBY5LM4uKYg0luNZiKRqEaB1U0/9Z7UgQeX33JsGFmlV
-         w0Cb4ZLsYICEM0OuQwNbHxiLwBhGbI1Ym5QbdLe5wm/QZugosE5SGU3rcU3yjHNVD1WU
-         7CMDUdUMld4hOcxsXBPhJhcpQBNU7IMfPUt04MUj6+ewMDsOMiC8vg4NnuGotnDVIOlA
-         LksA==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=0//CVz6gk3WJBaFfbakgy/AkhXMrrOJmbYrtOzjKFkE=;
+        b=N/JFzI/+U+wnEsmJb7DivTCxpnLwNBrtF95c3bX5Xxy01+suQFUHC/HxctxMu1wW2P
+         e4MMh9JeVtPoc8QEw6mvP7LAVf6swYi/rp3uYu/sM25J8tH4ngeahei3orV6dHkPUI1S
+         TBGONE6vwWh5fsiyA/rLugS7SiSJyyIpcStMF9WFM9yE3b4Vnwq2yies4KdzZJc9Cdux
+         /YHxvtZbZQD0HMEN93mAuXISuFTkSzQTjbx4UPqrAgc+EotwC55p5+oxcylXN6RN31oO
+         ErswE/PEFJMrYnCwoxyexgcLinTbvFHDXyj2ntTPHjDKtEMKQxAYOt4WsO5IkZrOyGFA
+         ELmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=9svlVloIRFTm0V9CmprJDnoHOsTYF2+BAhlCr5Fme5A=;
-        b=vnOPxkwEtE8dST6BPkwrnk0+dQ1MM0HcGIoJd0r5Y7Efyg/Szwgsh5dv+nPj7+YrVl
-         lQh+2wqcgQFzX33XRdABYcil+IiklFqxvLkwqGgifKxCQmOjOj8fGG555FS/97tOnh4R
-         OnEQmb1rtk+YEh+iEzKFnshAGy4nQwJ7YWNoH3GHbAucOh9E0J8taeyZYC7zzgDpun0W
-         kdp8MAy+KUzkTtL4oMEylcNcQ9mbNA1eiF16ONoIbzhBnd7m5LNQwpf7a61YiMcLjnyp
-         4BLFel8qovHaZHiCrMXVVI8aHlL6wxoHl7MqQ+wLPfey/zGtZTXo56GzFbOFwzhQyqkA
-         FMFA==
-X-Gm-Message-State: AOAM531PugxsBWBg+tzVmjS7IC0cGjhB8PmRb6tlMNzAZNIXMczHjgYA
-        IeyeyAP12CVkam1W7lNlmcQ=
-X-Google-Smtp-Source: ABdhPJwNZJrEg1y0eTIOwei9jZ+BJ3p5jeQ6ORrtvrmOUkahCLjrtgLftda6GwQtMMvTU/J9imqkyQ==
-X-Received: by 2002:a05:6512:b91:b0:443:922a:c93b with SMTP id b17-20020a0565120b9100b00443922ac93bmr14640778lfv.121.1645459983314;
-        Mon, 21 Feb 2022 08:13:03 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id s17sm1389500ljc.20.2022.02.21.08.13.02
+        bh=0//CVz6gk3WJBaFfbakgy/AkhXMrrOJmbYrtOzjKFkE=;
+        b=0nLFd+AaHmlfzNcMtPhfrvk45c7q8hSCdnD5rAp67tt3T8boITzZVPLaQ5SDCG4H2s
+         T0lvbu96Aw+MmCUwxGl3LoeHYvWrwIXGZxInNEHYbor5sSUZtoZaI3crTz4oNVHUj4PY
+         EoJt5qDh2dCQHM3z4AyfHYUAomxvum5Tb6dRdy9aKmRjx4QANzajizHLcaXXdmLiJxWm
+         Fk70GoV+Qm+DShdSu71RyQtlW4Rdfu1HO8QAKYMgGOk9sjFQd11sA3/8mokVzqO0J/h3
+         iWBTBo8f64+1n/+p+t9Y/ALVAnbkSgJ3tQYuGRdqSht65KapnCJbdP2dJCdAbCkv6uYy
+         /Z0g==
+X-Gm-Message-State: AOAM532TjHTg7skkXq0YueYTvjwknRljka4Xg85GtjZRVc2+pSHyhhLX
+        wJuPYR2e6rQNzm1pHYOBAVnjJeL0N3v1tw==
+X-Google-Smtp-Source: ABdhPJwoEOTVBrQQIyosl5WPPTTmhHfA/ViqBve4fuHNiKzkl3QtZ10AyQ61BippJHp6qpKmyYD5Qg==
+X-Received: by 2002:a37:6712:0:b0:49b:4bb0:ea32 with SMTP id b18-20020a376712000000b0049b4bb0ea32mr12662896qkc.132.1645460178673;
+        Mon, 21 Feb 2022 08:16:18 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o10sm2154992qtk.84.2022.02.21.08.16.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 08:13:02 -0800 (PST)
-Message-ID: <c55b15c8-df49-6458-56ea-a753ae578d18@gmail.com>
-Date:   Mon, 21 Feb 2022 19:13:01 +0300
+        Mon, 21 Feb 2022 08:16:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <66e6b131-274f-454b-44f6-17df879d71a9@roeck-us.net>
+Date:   Mon, 21 Feb 2022 08:16:15 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/4] hwmon: (lm90) Use hwmon_notify_event()
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20210618215455.19986-1-digetx@gmail.com>
- <20210618215455.19986-3-digetx@gmail.com>
- <9580f660-2a11-40e4-2986-f05703822d72@nvidia.com>
- <2aae3bac-c9b3-ab47-aae4-a3c7b6fb4bb5@roeck-us.net>
- <84ddad27-eb22-0ba6-594f-2fc6d098dc2a@nvidia.com>
- <bdb8b51f-93ac-9f99-914e-e1ce16c0076d@roeck-us.net>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <bdb8b51f-93ac-9f99-914e-e1ce16c0076d@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220218150908.1947772-1-linux@roeck-us.net>
+ <YhNWVLHYVtCvdGhi@localhost.localdomain>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
+In-Reply-To: <YhNWVLHYVtCvdGhi@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-21.02.2022 19:02, Guenter Roeck пишет:
-> On 2/21/22 07:49, Jon Hunter wrote:
+On 2/21/22 01:07, Krzysztof Adamski wrote:
+> Dnia Fri, Feb 18, 2022 at 07:09:07AM -0800, Guenter Roeck napisał(a):
+>> From: Agathe Porte <agathe.porte@nokia.com>
 >>
->> On 21/02/2022 15:43, Guenter Roeck wrote:
+>> Add basic description of the tmp464 driver DT bindings.
 >>
->> ...
+>> Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
+>> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> v5:
+>> - Dropped ti,n-factor from channel@0 example. Added additional
+>>  channel to examples to show positive ti,n-factor property.
 >>
->>>> We observed a random null pointer deference crash somewhere in the
->>>> thermal core (crash log below is not very helpful) when calling
->>>> mutex_lock(). It looks like we get an interrupt when this crash
->>>> happens.
->>>>
->>>> Looking at the lm90 driver, per the above, I now see we are calling
->>>> hwmon_notify_event() from the lm90 interrupt handler. Looking at
->>>> hwmon_notify_event() I see that ...
->>>>
->>>> hwmon_notify_event()
->>>>    --> hwmon_thermal_notify()
->>>>      --> thermal_zone_device_update()
->>>>        --> update_temperature()
->>>>          --> mutex_lock()
->>>>
->>>> So although I don't completely understand the crash, it does seem
->>>> that we should not be calling hwmon_notify_event() from the
->>>> interrupt handler.
->>>>
->>> As mentioned separately, this is not the problem.
+>> v4:
+>> - No changes
 >>
->> Yes I can see that now.
+>> v3:
+>> - Addedd support for TMP468.
+>> - Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
+>> - Changed value range for ti,n-factor to int8, with an example for
+>>  a negative value.
+>> - Added myself as driver maintainer.
 >>
->>> I think the problem may be that this is not a devicetree system
->>> (or the lm90 devide does not have a devicetree node), but thermal
->>> notification currently only works in such systems because the hwmon
->>> subsystem uses the devicetree registration method. At the same time,
->>> CONFIG_THERMAL_OF is obviously enabled. Unfortunately, the hwmon code
->>> does not bail out in that situation due to another bug.
+>> .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
+>> MAINTAINERS                                   |   7 ++
+>> 2 files changed, 121 insertions(+)
+>> create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
 >>
->> The platform I see this on does use device-tree and it does have a
->> node for the ti,tmp451 device which uses the lm90 device. This
->> platform uses the device-tree source
->> arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts and the tmp451 node
->> is in arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi.
->>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>> new file mode 100644
+>> index 000000000000..14f6a3412b8c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>> @@ -0,0 +1,114 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/hwmon/ti,tmp464.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: TMP464 and TMP468 temperature sensors
+>> +
+>> +maintainers:
+>> +  - Agathe Porte <agathe.porte@nokia.com>
+>> +
+>> +description: |
+>> +  ±0.0625°C Remote and Local temperature sensor
+>> +  https://www.ti.com/lit/ds/symlink/tmp464.pdf
+>> +  https://www.ti.com/lit/ds/symlink/tmp468.pdf
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - ti,tmp464
+>> +      - ti,tmp468
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +patternProperties:
+>> +  "^channel@([0-8])$":
+>> +    type: object
+>> +    description: |
+>> +      Represents channels of the device and their specific configuration.
+>> +
+>> +    properties:
+>> +      reg:
+>> +        description: |
+>> +          The channel number. 0 is local channel, 1-8 are remote channels.
+>> +        items:
+>> +          minimum: 0
+>> +          maximum: 8
+>> +
+>> +      label:
+>> +        description: |
+>> +          A descriptive name for this channel, like "ambient" or "psu".
+>> +
+>> +      ti,n-factor:
+>> +        description: |
+>> +          The value (two's complement) to be programmed in the channel specific N correction register.
+>> +          For remote channels only.
+>> +        $ref: /schemas/types.yaml#/definitions/int8
+>> +        items:
+>> +          minimum: -128
+>> +          maximum: 127
 > 
-> Interesting. It appears that the call to
-> devm_thermal_zone_of_sensor_register()
-> in the hwmon core nevertheless returns -ENODEV which is not handled
-> properly
-> in the hwmon core. I can see a number of reasons for this to happen:
-> - there is no devicetree node for the lm90 device
-> - there is no thermal-zones devicetree node
-> - there is no thermal zone entry in the thermal-zones node which matches
->   the sensor
+> I still thing we should have the same format here and in tmp421, for
+> consistency. If use the same property name, "ti,n-factor" but on tmp421
+> you have use 32bit value while here you have to use 8bit (which is weird
+> in DT, BTW), it might be confusing.
+> Back when we did this for TMP421, there was some discussion and we
+> settled on this approach, why do it differently now?
 > 
-> We'll have to revert the lm90 changes until this is sorted out.
 
-Oh, yeah. Seems there is a problem there and tzd pointer could be
--ENODEV. But it's a hwmon core problem, which apparently existed for a
-long time, not the lm90 problem.
+I seem to recall from that discussion that there was supposedly no way to
+express negative numbers in devicetree. Obviously that is incorrect.
+In addition to that, I strongly suspect that the tmp421 code as written
+does not work. Its value range is specified as 0..255, but it is read with
+	err = of_property_read_s32(child, "ti,n-factor", &val);
+and range checked with
+	if (val > 127 || val < -128) {
+                 dev_err(dev, "n-factor for channel %d invalid (%d)\n",
+                        i, val);
+                 return -EINVAL;
+         }
 
+That just looks wrong. Either the value range is 0..255 and checked
+as 0 .. 255, or it is -128 .. 127 and must be both checked and specified
+accordingly. This made me look into the code and I found how negative
+numbers are supposed to be handled.
+
+We can go either way, but whatever it is should be correct and be confirmed
+to work. Rob, any thoughts ?
+
+Guenter
