@@ -2,113 +2,139 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBFEEC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 18:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A3DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 18:51:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbiBUSkv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Feb 2022 13:40:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56520 "EHLO
+        id S232343AbiBUSvb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Feb 2022 13:51:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbiBUSjF (ORCPT
+        with ESMTP id S233257AbiBUSuD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:39:05 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D58B195;
-        Mon, 21 Feb 2022 10:38:41 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id d7so34157193qvk.2;
-        Mon, 21 Feb 2022 10:38:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=RN31mHdSa5wYyQSVLhAEYvtn+xnOanN4vGFOLl7R7B0=;
-        b=GdM6CDQL60eI3AHBnGebNcB+QkmJyOrwN7E1TWLw0qjkxf5D4ioQcnniehfJ4n4MMG
-         XWypBmEqNbz6ScOOdyiWsrob0WScNUWOrCeN79a6AZmcOAo0ElvvA1jJR9DTLl4k6de3
-         K6k5D6dlAsESvyC91bNBLzXR89PxF3swfSEjeDn/fjCQ+u67IhVYrh9JKDp3swk+xzld
-         M+jdWbfIZG6rji1WXAfqfwFfFxBiFCTjHqsMeVGa2nCpr66PHztsdNCnObU7l6yHbbUc
-         Mhw8B72LadlYXhWdFMrMFhsXjqJ3JdSTCjYv60gQhyLbxeh0Db/TbcJDeWrC3jkyabDS
-         0Azg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=RN31mHdSa5wYyQSVLhAEYvtn+xnOanN4vGFOLl7R7B0=;
-        b=lDsHDH+vgSJVuc5DhjU8wtKJTuhO4W2u4jzXnXbK8kA/Y5unBzAbYDLtqxtldB4WzS
-         z5JtQOviEli9AvRbDiTONPzSupO73K4yCCvj4VdWF7LxYMpOWQftusnFK46EVtzK5kfn
-         SnEkgh8zutDzxEg9OD4QcxiPOdfOwsTQRfj+Fcx8CBzX34km2fBotR6Cc5cCUnIq8Mur
-         dKnE8G5gL7mVMVEGFRhOMKIsT1J7qFFllS/pCzg1nF0N7jtF6WOaJYZvcKHSejLWpD09
-         J85bSdaGFLhUNMkp11mHNICikp6s5NicI+IU4oX15cweRgGzSc8VCTU+oXARI0C9Qj5D
-         8N8Q==
-X-Gm-Message-State: AOAM53194x8WjYkh+laRQwlyc/nKwHB97ztCGVHtMIMGN0m1Q5htoCZx
-        QqKwypYDsqmBBKJOJ1cI6Cs=
-X-Google-Smtp-Source: ABdhPJwADDy5QP1mBjAbLYzYSKO2QHI0N9Z1xnyVErkrXnybkR5RTq0By2lQ3/JYd/giBhL4IMi7Dg==
-X-Received: by 2002:a05:6214:27c2:b0:42d:adf:ab1c with SMTP id ge2-20020a05621427c200b0042d0adfab1cmr16174650qvb.83.1645468720769;
-        Mon, 21 Feb 2022 10:38:40 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n19sm20182350qtk.66.2022.02.21.10.38.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 10:38:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e776981b-e729-b027-7512-5d5555c2ff74@roeck-us.net>
-Date:   Mon, 21 Feb 2022 10:38:38 -0800
+        Mon, 21 Feb 2022 13:50:03 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A16195
+        for <linux-hwmon@vger.kernel.org>; Mon, 21 Feb 2022 10:49:39 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 1793F1F439B5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645469377;
+        bh=6ztFYaaL2BBqOqeyy8kujNy6tQkLluxFCGLm26clzmo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UjBmxC7MSROtj9TE1IQ65ykvKvXwAsGRWOjmz7Essj74w8nmgoZrlZ0K8UxVVDG+O
+         xvw6GTxJcgvpKnCcZis0Cz2xVqOPps275bTbIPMzr9K1LyiCctcoU0McnwxddEK84B
+         RnC3m9CdhCGZwQKldC0fJMNhOljauG/zpnf0fcU/oKsGxd0IDSQRmvpkWdXVAgZ3ov
+         to4Xlm9H4GiG1NPW0eYsSOIiTtKCUGqV9XXtuYYPEdynBHbdUyEAfivmoiXCJM9yun
+         OaUF+vXvsqvHm875YXbcI+hEBlkmng/grg589GMta9XfWpg8SG2F06SGAD9QlLxKSg
+         Q6v7//K4XoGow==
+Message-ID: <b9c9f2e2-508d-e34c-c0a1-ec0b579ad3b6@collabora.com>
+Date:   Mon, 21 Feb 2022 21:49:34 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
+Subject: Re: [PATCH v2] hwmon: Handle failure to register sensor with thermal
+ zone correctly
 Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20210618215455.19986-1-digetx@gmail.com>
- <20210618215455.19986-3-digetx@gmail.com>
- <9580f660-2a11-40e4-2986-f05703822d72@nvidia.com>
- <2aae3bac-c9b3-ab47-aae4-a3c7b6fb4bb5@roeck-us.net>
- <84ddad27-eb22-0ba6-594f-2fc6d098dc2a@nvidia.com>
- <bdb8b51f-93ac-9f99-914e-e1ce16c0076d@roeck-us.net>
- <20da6f55-682f-4b30-7be7-f425f8efa995@nvidia.com>
- <6b5e4dfd-ca60-b934-527a-8ccc994047dc@nvidia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 2/4] hwmon: (lm90) Use hwmon_notify_event()
-In-Reply-To: <6b5e4dfd-ca60-b934-527a-8ccc994047dc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220221182209.1795242-1-linux@roeck-us.net>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220221182209.1795242-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/21/22 08:22, Jon Hunter wrote:
-> 
-> On 21/02/2022 16:16, Jon Hunter wrote:
->>
->> On 21/02/2022 16:02, Guenter Roeck wrote:
->>
->> ...
->>
->>>> The platform I see this on does use device-tree and it does have a node for the ti,tmp451 device which uses the lm90 device. This platform uses the device-tree source arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts and the tmp451 node is in arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi.
->>>>
->>>
->>> Interesting. It appears that the call to devm_thermal_zone_of_sensor_register()
->>> in the hwmon core nevertheless returns -ENODEV which is not handled properly
->>> in the hwmon core. I can see a number of reasons for this to happen:
->>> - there is no devicetree node for the lm90 device
->>> - there is no thermal-zones devicetree node
->>> - there is no thermal zone entry in the thermal-zones node which matches
->>>    the sensor
->>
->>
->> So we definitely have the node for the lm90 device and a thermal-zones node, but I do not see a thermal-sensor node. Maybe this is what we are missing?
-> 
-> Actually, that is not true. We do have thermal-sensor nodes in arch/arm64/boot/dts/nvidia/tegra194.dtsi.
-> 
 
-There is probably a zone to sensor id mismatch. hwmon sends the sensor index
-as sensor_id to the thermal subsystem. Those sensor IDs would be 0, 1, and
-possibly 2 for the lm90 driver. Assuming this should match the thermal-sensors
-values in arch/arm64/boot/dts/nvidia/tegra194.dtsi, those start with 2,
-so there would be a likely mismatch. Also, all those dtsi entries match
-against pbmp/thermal, not against the lm90 sensor(s).
+On 2/21/22 21:22, Guenter Roeck wrote:
+> If an attempt is made to a sensor with a thermal zone and it fails,
+> the call to devm_thermal_zone_of_sensor_register() may return -ENODEV.
+> This may result in crashes similar to the following.
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address 00000000000003cd
+> ...
+> Internal error: Oops: 96000021 [#1] PREEMPT SMP
+> ...
+> pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : mutex_lock+0x18/0x60
+> lr : thermal_zone_device_update+0x40/0x2e0
+> sp : ffff800014c4fc60
+> x29: ffff800014c4fc60 x28: ffff365ee3f6e000 x27: ffffdde218426790
+> x26: ffff365ee3f6e000 x25: 0000000000000000 x24: ffff365ee3f6e000
+> x23: ffffdde218426870 x22: ffff365ee3f6e000 x21: 00000000000003cd
+> x20: ffff365ee8bf3308 x19: ffffffffffffffed x18: 0000000000000000
+> x17: ffffdde21842689c x16: ffffdde1cb7a0b7c x15: 0000000000000040
+> x14: ffffdde21a4889a0 x13: 0000000000000228 x12: 0000000000000000
+> x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+> x8 : 0000000001120000 x7 : 0000000000000001 x6 : 0000000000000000
+> x5 : 0068000878e20f07 x4 : 0000000000000000 x3 : 00000000000003cd
+> x2 : ffff365ee3f6e000 x1 : 0000000000000000 x0 : 00000000000003cd
+> Call trace:
+>  mutex_lock+0x18/0x60
+>  hwmon_notify_event+0xfc/0x110
+>  0xffffdde1cb7a0a90
+>  0xffffdde1cb7a0b7c
+>  irq_thread_fn+0x2c/0xa0
+>  irq_thread+0x134/0x240
+>  kthread+0x178/0x190
+>  ret_from_fork+0x10/0x20
+> Code: d503201f d503201f d2800001 aa0103e4 (c8e47c02)
+> 
+> Jon Hunter reports that the exact call sequence is:
+> 
+> hwmon_notify_event()
+>   --> hwmon_thermal_notify()
+>     --> thermal_zone_device_update()
+>       --> update_temperature()
+>         --> mutex_lock()
+> 
+> The hwmon core needs to handle all errors returned from calls
+> to devm_thermal_zone_of_sensor_register(). If the call fails
+> with -ENODEV, report that the sensor was not attached to a
+> thermal zone  but continue to register the hwmon device.
+> 
+> Reported-by: Jon Hunter <jonathanh@nvidia.com>
+> Cc: Dmitry Osipenko <digetx@gmail.com>
+> Fixes: 1597b374af222 ("hwmon: Add notification support")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v2: Use dev_info instead of dev_warn, and change message to be
+>     less alarming.
+> 
+>  drivers/hwmon/hwmon.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 3501a3ead4ba..3ae961986fc3 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -214,12 +214,14 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
+>  
+>  	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
+>  						   &hwmon_thermal_ops);
+> -	/*
+> -	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
+> -	 * so ignore that error but forward any other error.
+> -	 */
+> -	if (IS_ERR(tzd) && (PTR_ERR(tzd) != -ENODEV))
+> -		return PTR_ERR(tzd);
+> +	if (IS_ERR(tzd)) {
+> +		if (PTR_ERR(tzd) != -ENODEV)
+> +			return PTR_ERR(tzd);
+> +		dev_info(dev, "temp%d_input not attached to any thermal zone\n",
+> +			 index + 1);
+> +		devm_kfree(dev, tdata);
+> +		return 0;
+> +	}
+>  
+>  	err = devm_add_action(dev, hwmon_thermal_remove_sensor, &tdata->node);
+>  	if (err)
 
-Thanks,
-Guenter
+LGTM, thank you. But still needs a t-b from Jon.
+
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
