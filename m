@@ -2,355 +2,229 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6944C4167B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 09:10:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C77EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Feb 2022 09:22:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347755AbiBUJKj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Feb 2022 04:10:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33972 "EHLO
+        id S244749AbiBUJWz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Feb 2022 04:22:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347942AbiBUJKH (ORCPT
+        with ESMTP id S1349309AbiBUJVN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:10:07 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EA91D30F;
-        Mon, 21 Feb 2022 01:02:31 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K2GXP552Nz9sQY;
-        Mon, 21 Feb 2022 10:02:29 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645434147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wEZ76kGSwSq5Wb4rRjccaeTPhaIObqPlN/MOOW3VPhk=;
-        b=uZQ8LMcMBT9oxmgLlM7ejy4iHa61SJVdQKomL126T+USo6k9wMltyZIMsdv6RJuSNGYFiM
-        S1dDaLLtAAYeps1yeehJYUM9B1b13ztJHt1UVevaGB3FgufO1NXMMpTvBQhyorRgEd2+Lt
-        DfL+TufSWx+Tj6Uzk+iX/7Tv2pugG9uoUy2rSPLP1Yfsen8Ek0iHiq228vBMMEwUSB9zf2
-        8dUQ33R3D9UOOtB5GO0QZa12hhADkxFx/xK+O/OhgFhdNOhzd+5mcOILWlRAzUsmtigumC
-        P5ciVoGn3UwkhyNQhsVw1KsqLZ+oSE4fJ8/aWZHtg+y2qCBBw0hxLN71LCj9kw==
-Message-ID: <3c931f2f23546f17ea232346b43550ee42d6d7dc.camel@sylv.io>
-Subject: Re: [PATCH v3 3/4] pmbus: Add support for pli1209bc
-From:   sylv <sylv@sylv.io>
+        Mon, 21 Feb 2022 04:21:13 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150125.outbound.protection.outlook.com [40.107.15.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782B436156;
+        Mon, 21 Feb 2022 01:08:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CepL/Oluyk2X8DYdXihYiMZ6niAtIcs4Tpn9N/nN2m2tVTyf3xOiLgwK1pFdQPq+WE5LDsEY3STkbmQAt4MZ4HA2d9zGM75KxpWTttzOsMwiEJGNXoccGi/n+kOOraFBq28L0K4OzJKjv5WimLwMVIEJIw7Jp0Qc/NP6yESjKlmv0vwzPLmCsZBcLPiC5p4cdk45XLx9wzXw9W8Spay3/TM9+pHmRu0miWi3EcCbWKAVmT7KBkYEju+L6CqbpmD6hIEZO+ZYzlpm1ScizHrXQHa/kB/jgKBWyD4+p/nVayvXHuejZ8GunUkCJA297bgpyU7g7rOlkXUz51EBge3Gqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Dw0vsA8BDgjDXLZ07tLY6bwFEg8/PQbyB4cD62Njg2U=;
+ b=fhEjeCAwosBFiZdGgsz2tQ9LqWdlvVGtN/i3fqntIl1BJ1jGrRWUSIzEu2vJMZwH5jELqYQj2hVZx6VT+kx2ihL9HQuQv8ZuVbZKZe0p0Y7exWvsp4cCeTj8SqcYIpo5qrUMELhTha7Kml142s8jNv0ZdGYN0nRLuxGAaKxQJOc5dmDCBkeSBMg+U2458NdrQQLuSHcL6dlgV65dk08s/rfhTaD2u3lWdADBiygO/1tUlPXHc283OWJU83s2PzBhFlLX2tfkCwKqRcbiC5VktZ1qCOdYrpwoFJxIxWy4gZeiEe9RNJKnZOn6gq8jaTaCBuVCnb0HJLAslTeUSavF3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dw0vsA8BDgjDXLZ07tLY6bwFEg8/PQbyB4cD62Njg2U=;
+ b=GVFkixZummEl0010T/0amOhOYTFxDk1/LZjfHmY3E7VWlIh+OJ7NpZJlX+S+H2Rdu2K9UgY/s34zIdgCcmH9HvNPUx/oNIWP/bJD9wXKfMgnY0P1hfxWGcbQKzctLSHO3sy0d9HpBsevJmT20BaR6dJYpauSQHHrUq3qYDQrjp8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by HE1PR07MB4201.eurprd07.prod.outlook.com (2603:10a6:7:98::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.19; Mon, 21 Feb
+ 2022 09:07:57 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::99a2:6f44:700b:b796]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::99a2:6f44:700b:b796%3]) with mapi id 15.20.5017.021; Mon, 21 Feb 2022
+ 09:07:57 +0000
+Date:   Mon, 21 Feb 2022 10:07:32 +0100
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-doc@vger.kernel.org
-Date:   Mon, 21 Feb 2022 10:02:17 +0100
-In-Reply-To: <20220219144110.GA1032070@roeck-us.net>
-References: <cover.1644874828.git.sylv@sylv.io>
-         <8d44098e7b8ca5d4c13733267836d5a147539277.1644874828.git.sylv@sylv.io>
-         <20220219144110.GA1032070@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-MIME-Version: 1.0
+Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
+Message-ID: <YhNWVLHYVtCvdGhi@localhost.localdomain>
+References: <20220218150908.1947772-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220218150908.1947772-1-linux@roeck-us.net>
+X-ClientProxiedBy: MA0PR01CA0001.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:80::14) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b18c3831-a318-4bba-7fdd-08d9f519a6f3
+X-MS-TrafficTypeDiagnostic: HE1PR07MB4201:EE_
+X-Microsoft-Antispam-PRVS: <HE1PR07MB4201AB2E8D5E7C2CA8A49E94EF3A9@HE1PR07MB4201.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HUQXYZ5B9etPj3qK/EcwvvgqNJtWLpXklyjkGwCVnCJb3XN8+FajHscqtDfnbHTEwGWqUTHhjaqSv4T9h4gJec7nDRM0czTfzExOH3WN9I4uQjuWTnZWo62O+whQT0i8eRThylfJl10cgyFDJd/dPey4mqu7aMQn2n/kcUiJOr1yrhwpvZ8Y0OxvbaerX0Hi3Uc2jn2e54yXn+mW4SlsbiosHDi77i3/GwlHc8ObaHZUz1OGbolrxKrJLQ0AFkM/aBfT1KXxBiSh59BjbyAu2UG8JT/KVranL4E+lDNPtlKTNLtfSU8v2D8RCxKLpsieZaQOfcDM/YvUWB66gdNYGqlffa6aNlvXBIuttDXLCtwJlX0YhPkPxovp2Hgh554scFLkDvm9DsuU7xhXXrT/IhAGIdWTseqqjdw/Pd0rHesLZ2NzGH/dCjCnqT1WAJrW2DnqyXGdLWgiuoeVkRqtWhoOGjLOi0Yce+AXmjWvsUVDBVG5G6q8HLAuW43LZGAtrdQX5SZHVhb1O7cTDQAxVe+JN9LoGovC/wY1gUz9TFcFaRRNgmIFNNPxXgpwqozdlbQqPbqISTeEgloxbzdv0b+LXNFCE+Ob95+XxZmJipc079re8/Ut50/rWhakpnQmBIsly7BpwbrqU8LNJTAnElBA6xBIgGZfsqeQL7yi8ZdKeUhOlL7w6KqYQWtgaFwiPUWr/vJ/mJvsSQ4QEGJ3o7iFIcmLujn0pqQ5L0TZwuONO2nO8OtYHXwTC3dnaDXpXKbgowoqXa/pncCp4txV6Cp2blwTHcUZ8sYAKx59I7A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(316002)(83380400001)(6512007)(86362001)(8936002)(6506007)(52116002)(66556008)(66946007)(66476007)(4326008)(8676002)(5660300002)(9686003)(6666004)(26005)(38350700002)(38100700002)(966005)(6486002)(2906002)(508600001)(82960400001)(6916009)(186003)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eGV2aGdkYW9wTXovaUtvL1I5eW5nSWpaUkRaMU1xWlhMTVBDNHNrWlp6RE1o?=
+ =?utf-8?B?YnFSMDdqY205S05QcEx5QmJsSHVjd00rSitEWmRnZnJNN2RWei9HT1JTTVVF?=
+ =?utf-8?B?ZXZxOURjZGdiQytkM1B0U0JLcGhxcytnNm1NT2dDZ2E0K1JTU1hCVHNYM2s3?=
+ =?utf-8?B?SithNlJhRnhCdUUwUkJUNTJ5elh6NDJwdWc3dGZoNHMrcDZ6djVzQ2FXMzN5?=
+ =?utf-8?B?enJtTmltQ3ZTSnV1SDFJVkExbi9STzJzMy9NeStsRUpXK09WNjBTS2t6RUpN?=
+ =?utf-8?B?U1ZNRjRVSEwzVDl3TEUvN0xFMTVhUGtRNG82RGV0cUtBQnZyOTVWUDdML2xi?=
+ =?utf-8?B?ZXdkTGpaTlU0Z1NBWHBLQmtlcEQvYkNNM0g0RTdueDBXYkVPanAvTE9DeHNW?=
+ =?utf-8?B?clk3bHRLSmdkajh2RWZVWVl4V2JhVWtUbS9taDdvV1ozZFRJSXBPWjJ3bC9j?=
+ =?utf-8?B?SlZyTUVtNmg2OUFocS9sS3ZxUnZPdUpoRVlqc2RQT0ZZMDFEWWF1TnFvSzN5?=
+ =?utf-8?B?UVcySTIvQzhwME95b2lIVjVVb1RqTkRjdXhXQ09ldE9oRUJ0RlpMWkF3K1ls?=
+ =?utf-8?B?cEg2SlhqUFZIL1p5TzJ0WFpObytjZ3pnMFE0RGtDdFMxN0ZqZzVvMk5iU04w?=
+ =?utf-8?B?MVVqYldVclorNk91L2ZCV2NNazA0ZE1iUWxYZnZ3NUZIcnoyZ3QzTFJ3a094?=
+ =?utf-8?B?ZkRlbjdiOUROeW5zQm5mNnFIU0VUeHkyK2NGN050UEtaZk5IU2JEQ3J3TjFB?=
+ =?utf-8?B?NWI1cERKMVVuVmthZUxqTDZuNGc5OGNYMjIyc2lKS053NEdWa0tuZENKRmJt?=
+ =?utf-8?B?Ukw1UzJ5UWxhYkxhUVFsaEpnU0U3OUd3RWgxZFdPcUhGNi9DaFFCQVRVbEtF?=
+ =?utf-8?B?SEQyMlhBbE95em5IV01vbjh3dlgvTUdYdUlWRzRJK0lnUWJEZFB6VkFiRVVL?=
+ =?utf-8?B?cFVvdlNCQ24wK3c2NW5tV1VXWEdsM2V5aDdXcDVlVmsvcUQrNkZGSm9JbWho?=
+ =?utf-8?B?N3Fmem8ranlDbFA1L2xvOVZxT2d0czB4c09CNFBUMUFLMG9qTEFIN3c2cXVj?=
+ =?utf-8?B?Ni93MmhSRFpVVCsyMTQyaGJMUTFjMk5lWmdSMDRXRE1CckU3cFRqc3Q1eENs?=
+ =?utf-8?B?cldjYnd6RXdoQ2ZiQ0Jod2FIM3ovTTE4UHkyL3kzZXlDT3BCM1lLeGwwbER1?=
+ =?utf-8?B?UkFtOHRNcHVvSjB5am1sTHdYUnZ1L20vYzF5RWxGWEUyTUVSK3NIOS9jODVG?=
+ =?utf-8?B?T0N4N3hPU0Z4TVpaWVpmTS9ML0FFanJvaTZ4S3B1aW52eFJsKzdCMzhqTzNE?=
+ =?utf-8?B?WmMwbGdleS8yd3d6N3RVSXlPZzlnSmd5bCtZQ09oNmlJc3VWb3JLb1pGSk9Q?=
+ =?utf-8?B?K05TdTg4S0hKVGIxcjVJck42UUVYNTUzbVVPTGRXWEpucmdWa0pON296OENY?=
+ =?utf-8?B?WVlTc1E0dnJUekwvckFkTzRiV3ZRNTBEYjhvVUQ0NC85ek1nZTIyd2owQTNY?=
+ =?utf-8?B?T1FGbVRCdEtidlNGTlJ6d2pOMDZydmNrMDQyN1ZQYWhqUjB4cHFMTldRNTFY?=
+ =?utf-8?B?eHUyQTJtSmhwSGRTQlAwWHFFTGZweWxkN2NPQnVMZ3FrcmxUZFZnajlqeGF2?=
+ =?utf-8?B?eVlvaG5uRytYOEVlS2FZVWNPazAvOWZJakg4K3JhMDNLbDlnbU9oaXg3czht?=
+ =?utf-8?B?SkZnMzg1ZTE2K2M4dWd0WU5QNUNQcXZlS2h1QnBYMlZWbzRBU2dnV2s0TGp3?=
+ =?utf-8?B?Z3dNcFJuS042NUt4SXhBQU11TFY4N2tOTHdtcG5YM0FjNHV2NEM3NU1vcXpz?=
+ =?utf-8?B?R243blBLQkpLYmdCb1FmMW5JME9IWnR6MFQ3dzl1SDUrMnBGWEdkNndkcmN5?=
+ =?utf-8?B?R2pnRGZMTXQxRytJemVHVXZtZXRoSTdaQUtRNWkzU2w0TVZEY1d1MVlBMFdK?=
+ =?utf-8?B?T1FNcWxTS25jd042cnNnQnJlMnJJQXh5a242SjgweTNuUzUvd2VRNHJ3S3gx?=
+ =?utf-8?B?VEFEbVVSdE1RR0puamFtbGNpVmFES0NsUU9TU1B2a2tMd1BNT2ZFa3JJUnRx?=
+ =?utf-8?B?NHpQSDhSUmhYTXlFWkh1aG4yVWs1V3U1VFJ2MnBjQWRJelFreHNUWDVNb3I0?=
+ =?utf-8?B?anI3MTVqRE9KNjZyRnBSRDdkM0hORXg2cm1zcHlQYUgzTWFkS1p5QUFwMCs1?=
+ =?utf-8?B?MlRkTks2T0dsczVLRVE4ZnExQkYxWWVlMkYzZUNQVnAzUFRPV28zUXhJTm9r?=
+ =?utf-8?B?WnNPS1U3LzlpSWJ1QWE5UHV0VG1BPT0=?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b18c3831-a318-4bba-7fdd-08d9f519a6f3
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 09:07:57.5648
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fp305uiDTMInUJNGCP7Ev9KWB7Jdm0s4VexqqT168M9Sq/ayyqrRgB0Uj8oMlrOg2QpHwshcDsqLapVJ3bpn+maVZjzA1o93AV79VhDFYGQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB4201
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, 2022-02-19 at 06:41 -0800, Guenter Roeck wrote:
-> On Mon, Feb 14, 2022 at 10:44:55PM +0100, Marcello Sylvester Bauer
-> wrote:
-> > PLI1209BC is a Digital Supervisor from Vicor Corporation.
-> > 
-> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> 
-> checkpatch says:
-> 
-> WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
-> #82: FILE: Documentation/hwmon/pli1209bc.rst:1:
-> +Kernel driver pli1209bc
-> 
-> I can not accept the patch without license identifier.
+Dnia Fri, Feb 18, 2022 at 07:09:07AM -0800, Guenter Roeck napisał(a):
+>From: Agathe Porte <agathe.porte@nokia.com>
+>
+>Add basic description of the tmp464 driver DT bindings.
+>
+>Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
+>Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>---
+>v5:
+>- Dropped ti,n-factor from channel@0 example. Added additional
+>  channel to examples to show positive ti,n-factor property.
+>
+>v4:
+>- No changes
+>
+>v3:
+>- Addedd support for TMP468.
+>- Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
+>- Changed value range for ti,n-factor to int8, with an example for
+>  a negative value.
+>- Added myself as driver maintainer.
+>
+> .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
+> MAINTAINERS                                   |   7 ++
+> 2 files changed, 121 insertions(+)
+> create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>
+>diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>new file mode 100644
+>index 000000000000..14f6a3412b8c
+>--- /dev/null
+>+++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>@@ -0,0 +1,114 @@
+>+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>+%YAML 1.2
+>+---
+>+$id: http://devicetree.org/schemas/hwmon/ti,tmp464.yaml#
+>+$schema: http://devicetree.org/meta-schemas/core.yaml#
+>+
+>+title: TMP464 and TMP468 temperature sensors
+>+
+>+maintainers:
+>+  - Agathe Porte <agathe.porte@nokia.com>
+>+
+>+description: |
+>+  ±0.0625°C Remote and Local temperature sensor
+>+  https://www.ti.com/lit/ds/symlink/tmp464.pdf
+>+  https://www.ti.com/lit/ds/symlink/tmp468.pdf
+>+
+>+properties:
+>+  compatible:
+>+    enum:
+>+      - ti,tmp464
+>+      - ti,tmp468
+>+
+>+  reg:
+>+    maxItems: 1
+>+
+>+  '#address-cells':
+>+    const: 1
+>+
+>+  '#size-cells':
+>+    const: 0
+>+
+>+required:
+>+  - compatible
+>+  - reg
+>+
+>+additionalProperties: false
+>+
+>+patternProperties:
+>+  "^channel@([0-8])$":
+>+    type: object
+>+    description: |
+>+      Represents channels of the device and their specific configuration.
+>+
+>+    properties:
+>+      reg:
+>+        description: |
+>+          The channel number. 0 is local channel, 1-8 are remote channels.
+>+        items:
+>+          minimum: 0
+>+          maximum: 8
+>+
+>+      label:
+>+        description: |
+>+          A descriptive name for this channel, like "ambient" or "psu".
+>+
+>+      ti,n-factor:
+>+        description: |
+>+          The value (two's complement) to be programmed in the channel specific N correction register.
+>+          For remote channels only.
+>+        $ref: /schemas/types.yaml#/definitions/int8
+>+        items:
+>+          minimum: -128
+>+          maximum: 127
 
-oh, sure. I thought it is still optional for documentation entries.
+I still thing we should have the same format here and in tmp421, for
+consistency. If use the same property name, "ti,n-factor" but on tmp421
+you have use 32bit value while here you have to use 8bit (which is weird
+in DT, BTW), it might be confusing.
+Back when we did this for TMP421, there was some discussion and we
+settled on this approach, why do it differently now?
 
-> 
-> > ---
-> >  Documentation/hwmon/pli1209bc.rst |  73 +++++++++++++++++++
-> 
-> This needs to be added to Documentation/hwmon/index.rst.
-> 
-> >  drivers/hwmon/pmbus/Kconfig       |   9 +++
-> >  drivers/hwmon/pmbus/Makefile      |   1 +
-> >  drivers/hwmon/pmbus/pli1209bc.c   | 115
-> > ++++++++++++++++++++++++++++++
-> >  4 files changed, 198 insertions(+)
-> >  create mode 100644 Documentation/hwmon/pli1209bc.rst
-> >  create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
-> > 
-> > diff --git a/Documentation/hwmon/pli1209bc.rst
-> > b/Documentation/hwmon/pli1209bc.rst
-> > new file mode 100644
-> > index 000000000000..a3f686d03cf2
-> > --- /dev/null
-> > +++ b/Documentation/hwmon/pli1209bc.rst
-> > @@ -0,0 +1,73 @@
-> > +Kernel driver pli1209bc
-> > +=======================
-> > +
-> > +Supported chips:
-> > +
-> > +  * Digital Supervisor PLI1209BC
-> > +
-> > +    Prefix: 'pli1209bc'
-> > +
-> > +    Addresses scanned: 0x50 - 0x5F
-> > +
-> > +    Datasheet:
-> > https://www.vicorpower.com/documents/datasheets/ds-PLI1209BCxyzz-VICOR.pdf
-> > +
-> > +Authors:
-> > +    - Marcello Sylvester Bauer <sylv@sylv.io>
-> > +
-> > +Description
-> > +-----------
-> > +
-> > +The Vicor PLI1209BC is an isolated digital power system supervisor
-> > thatprovides
-> 
-> that provides
-
-ack.
-
-> 
-> > +a communication interface between a host processor and one Bus
-> > Converter Module
-> > +(BCM). The PLI communicates with a system controller via a PMBus
-> > compatible
-> > +interface over an isolated UART interface. Through the PLI, the
-> > host processor
-> > +can configure, set protection limits, and monitor the BCM.
-> > +
-> > +Sysfs entries
-> > +-------------
-> > +
-> > +=======================
-> > ========================================================
-> > +in1_label              "vin2"
-> > +in1_input              Input voltage.
-> > +in1_rated_min          Minimum rated input voltage.
-> > +in1_rated_max          Maximum rated input voltage.
-> > +in1_max                        Maximum input voltage.
-> > +in1_max_alarm          Input voltage high alarm.
-> > +in1_crit               Critical input voltage.
-> > +in1_crit_alarm         Input voltage critical alarm.
-> > +
-> > +in2_label              "vout2"
-> > +in2_input              Output voltage.
-> > +in2_rated_min          Minimum rated output voltage.
-> > +in2_rated_max          Maximum rated output voltage.
-> > +in2_alarm              Output voltage alarm
-> > +
-> > +curr1_label            "iin2"
-> > +curr1_input            Input current.
-> > +curr1_max              Maximum input current.
-> > +curr1_max_alarm                Maximum input current high alarm.
-> > +curr1_crit             Critical input current.
-> > +curr1_crit_alarm       Input current critical alarm.
-> > +
-> > +curr2_label            "iout2"
-> > +curr2_input            Output current.
-> > +curr2_crit             Critical output current.
-> > +curr2_crit_alarm       Output current critical alarm.
-> > +curr2_max              Maximum output current.
-> > +curr2_max_alarm                Output current high alarm.
-> > +
-> > +power1_label           "pin2"
-> > +power1_input           Input power.
-> > +power1_alarm           Input power alarm.
-> > +
-> > +power2_label           "pout2"
-> > +power2_input           Output power.
-> > +power2_rated_max       Maximum rated output power.
-> > +
-> > +temp1_input            Die temperature.
-> > +temp1_alarm            Die temperature alarm.
-> > +temp1_max              Maximum die temperature.
-> > +temp1_max_alarm                Die temperature high alarm.
-> > +temp1_crit             Critical die temperature.
-> > +temp1_crit_alarm       Die temperature critical alarm.
-> > +=======================
-> > ========================================================
-> > diff --git a/drivers/hwmon/pmbus/Kconfig
-> > b/drivers/hwmon/pmbus/Kconfig
-> > index c96f7b7338bd..831db423bea0 100644
-> > --- a/drivers/hwmon/pmbus/Kconfig
-> > +++ b/drivers/hwmon/pmbus/Kconfig
-> > @@ -310,6 +310,15 @@ config SENSORS_PIM4328
-> >           This driver can also be built as a module. If so, the
-> > module will
-> >           be called pim4328.
-> >  
-> > +config SENSORS_PLI1209BC
-> > +       tristate "Vicor PLI1209BC"
-> > +       help
-> > +         If you say yes here you get hardware monitoring support
-> > for Vicor
-> > +         PLI1209BC Digital Supervisor.
-> > +
-> > +         This driver can also be built as a module. If so, the
-> > module will
-> > +         be called pli1209bc.
-> > +
-> >  config SENSORS_PM6764TR
-> >         tristate "ST PM6764TR"
-> >         help
-> > diff --git a/drivers/hwmon/pmbus/Makefile
-> > b/drivers/hwmon/pmbus/Makefile
-> > index e5935f70c9e0..7ce74e3b8552 100644
-> > --- a/drivers/hwmon/pmbus/Makefile
-> > +++ b/drivers/hwmon/pmbus/Makefile
-> > @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MP2888)  += mp2888.o
-> >  obj-$(CONFIG_SENSORS_MP2975)   += mp2975.o
-> >  obj-$(CONFIG_SENSORS_MP5023)   += mp5023.o
-> >  obj-$(CONFIG_SENSORS_PM6764TR) += pm6764tr.o
-> > +obj-$(CONFIG_SENSORS_PLI1209BC)        += pli1209bc.o
-> 
-> Alphabetic order please.
-
-ack.
-
-Thanks,
-Marcello
-
-> 
-> >  obj-$(CONFIG_SENSORS_PXE1610)  += pxe1610.o
-> >  obj-$(CONFIG_SENSORS_Q54SJ108A2)       += q54sj108a2.o
-> >  obj-$(CONFIG_SENSORS_STPDDC60) += stpddc60.o
-> > diff --git a/drivers/hwmon/pmbus/pli1209bc.c
-> > b/drivers/hwmon/pmbus/pli1209bc.c
-> > new file mode 100644
-> > index 000000000000..5f8847307e55
-> > --- /dev/null
-> > +++ b/drivers/hwmon/pmbus/pli1209bc.c
-> > @@ -0,0 +1,115 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Hardware monitoring driver for Vicor PLI1209BC Digital
-> > Supervisor
-> > + *
-> > + * Copyright (c) 2022 9elements GmbH
-> > + */
-> > +
-> > +#include <linux/i2c.h>
-> > +#include <linux/module.h>
-> > +#include <linux/pmbus.h>
-> > +#include "pmbus.h"
-> > +
-> > +/*
-> > + * The capability command is only supported at page 0. Probing the
-> > device while
-> > + * the page register is set to 1 will falsely enable PEC support.
-> > Disable
-> > + * capability probing accordingly, since the PLI1209BC does not
-> > have any
-> > + * additional capabilities.
-> > + */
-> > +static struct pmbus_platform_data pli1209bc_plat_data = {
-> > +       .flags = PMBUS_NO_CAPABILITY,
-> > +};
-> > +
-> > +static int pli1209bc_read_word_data(struct i2c_client *client, int
-> > page,
-> > +                                   int phase, int reg)
-> > +{
-> > +       int data;
-> > +
-> > +       switch (reg) {
-> > +       /* PMBUS_READ_POUT uses a direct format with R=0 */
-> > +       case PMBUS_READ_POUT:
-> > +               data = pmbus_read_word_data(client, page, phase,
-> > reg);
-> > +               if (data < 0)
-> > +                       return data;
-> > +               data = sign_extend32(data, 15) * 10;
-> > +               return clamp_val(data, -32768, 32767) & 0xffff;
-> > +       default:
-> > +               return -ENODATA;
-> > +       }
-> > +}
-> > +
-> > +static struct pmbus_driver_info pli1209bc_info = {
-> > +       .pages = 2,
-> > +       .format[PSC_VOLTAGE_IN] = direct,
-> > +       .format[PSC_VOLTAGE_OUT] = direct,
-> > +       .format[PSC_CURRENT_IN] = direct,
-> > +       .format[PSC_CURRENT_OUT] = direct,
-> > +       .format[PSC_POWER] = direct,
-> > +       .format[PSC_TEMPERATURE] = direct,
-> > +       .m[PSC_VOLTAGE_IN] = 1,
-> > +       .b[PSC_VOLTAGE_IN] = 0,
-> > +       .R[PSC_VOLTAGE_IN] = 1,
-> > +       .m[PSC_VOLTAGE_OUT] = 1,
-> > +       .b[PSC_VOLTAGE_OUT] = 0,
-> > +       .R[PSC_VOLTAGE_OUT] = 1,
-> > +       .m[PSC_CURRENT_IN] = 1,
-> > +       .b[PSC_CURRENT_IN] = 0,
-> > +       .R[PSC_CURRENT_IN] = 3,
-> > +       .m[PSC_CURRENT_OUT] = 1,
-> > +       .b[PSC_CURRENT_OUT] = 0,
-> > +       .R[PSC_CURRENT_OUT] = 2,
-> > +       .m[PSC_POWER] = 1,
-> > +       .b[PSC_POWER] = 0,
-> > +       .R[PSC_POWER] = 1,
-> > +       .m[PSC_TEMPERATURE] = 1,
-> > +       .b[PSC_TEMPERATURE] = 0,
-> > +       .R[PSC_TEMPERATURE] = 0,
-> > +       /*
-> > +        * Page 0 sums up all attributes except voltage readings.
-> > +        * The pli1209 digital supervisor only contains a single
-> > BCM, making
-> > +        * page 0 redundant.
-> > +        */
-> > +       .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-> > +           | PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-> > +           | PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-> > +           | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-> > +           | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
-> > +       .read_word_data = pli1209bc_read_word_data,
-> > +};
-> > +
-> > +static int pli1209bc_probe(struct i2c_client *client)
-> > +{
-> > +       client->dev.platform_data = &pli1209bc_plat_data;
-> > +       return pmbus_do_probe(client, &pli1209bc_info);
-> > +}
-> > +
-> > +static const struct i2c_device_id pli1209bc_id[] = {
-> > +       {"pli1209bc", 0},
-> > +       {}
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(i2c, pli1209bc_id);
-> > +
-> > +#ifdef CONFIG_OF
-> > +static const struct of_device_id pli1209bc_of_match[] = {
-> > +       { .compatible = "vicor,pli1209bc" },
-> > +       { },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, pli1209bc_of_match);
-> > +#endif
-> > +
-> > +static struct i2c_driver pli1209bc_driver = {
-> > +       .driver = {
-> > +                  .name = "pli1209bc",
-> > +                  .of_match_table =
-> > of_match_ptr(pli1209bc_of_match),
-> > +                  },
-> > +       .probe_new = pli1209bc_probe,
-> > +       .id_table = pli1209bc_id,
-> > +};
-> > +
-> > +module_i2c_driver(pli1209bc_driver);
-> > +
-> > +MODULE_AUTHOR("Marcello Sylvester Bauer <sylv@sylv.io>");
-> > +MODULE_DESCRIPTION("PMBus driver for Vicor PLI1209BC");
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_IMPORT_NS(PMBUS);
+Krzysztof
