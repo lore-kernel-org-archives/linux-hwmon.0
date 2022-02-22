@@ -2,257 +2,240 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D088C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Feb 2022 19:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B2E7C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Feb 2022 22:09:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiBVTrZ convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Feb 2022 14:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S235976AbiBVWKJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Feb 2022 17:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235250AbiBVTrY (ORCPT
+        with ESMTP id S230097AbiBVWKJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:47:24 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9458FB1AAB
-        for <linux-hwmon@vger.kernel.org>; Tue, 22 Feb 2022 11:46:57 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-306-2WeA3KeLOciB1wQtZYeJKA-1; Tue, 22 Feb 2022 19:46:54 +0000
-X-MC-Unique: 2WeA3KeLOciB1wQtZYeJKA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 22 Feb 2022 19:46:53 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 22 Feb 2022 19:46:53 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?iso-8859-1?Q?=27Pali_Roh=E1r=27?= <pali@kernel.org>,
+        Tue, 22 Feb 2022 17:10:09 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C13CB2E14;
+        Tue, 22 Feb 2022 14:09:42 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id h13so3246694qvk.12;
+        Tue, 22 Feb 2022 14:09:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DA2WaHDLjtAnfp5uNDM/As932Zm4BFXnD/04M02DANU=;
+        b=blNKS6g6JsgjJK3AVag9E7T3PHEnN9Ft+yYpLVRVVxC2RKk820z2XNK1fieivKujmx
+         oyABVC5k0eH6ar+vLJ2wEqP9nYiad7OgiNAoq00nRooRgCn7BQSXWjzalZVr9IHHm145
+         PGsMVfWsP0OD5JA3TkImwOLsGzYG9oMCNtQdCXzyNOSKPxrxTbno+oxgUDBzRrheDkMT
+         XBUqoCOAQ8WvPu5pXjGWMrPMWjE4I4jb1GVQS+Ujfv1M2xCQfpH4XKlEeHcVtn0JT9oA
+         we33cl+5dvDMpypH1cS/2/IDhcm/e8jr6jNaudosFyQzcjGPyMJ0ynzR/amoBD4QfvKb
+         dejA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=DA2WaHDLjtAnfp5uNDM/As932Zm4BFXnD/04M02DANU=;
+        b=hyt+MEX8E9MBIMDQ0HlyHSBr5rMhFd7I8Mp3xlM8ft8hBACac9wxaqkXnxd9Czx2eP
+         SXlkYp43rgPluVC8FztlHssIE9lj1QYV9aRJK4YtbN/P7W1vkFC5yHAYXqIiruTGB0lt
+         SEx0sOHsS/B51AJYHlIGuQWBheulcaT3ylAFw4/nee74tZEaWjE3qYEbPMGc6Sn4Yapw
+         9M5Wjc7vTfJj5dSI6rGvhh0+b8Bsc9vN7zOxejEAcnZkTrE/EYNKM6DhkhcxQGb310Zu
+         S4sAf2YKw3aCXL4tQ38miLXDEckZ0xy8wFKH6FJ9S2ryrqGmNKqk5rnckG0dT71l8+qP
+         6ErQ==
+X-Gm-Message-State: AOAM530ux7WeWMcXOIRDtYvbx0s07nuBNWovDr6nKHjQ6UvyzcnusMeC
+        s2WGiLrjXeoaSIGqUzNK4/IcWVpddVQ7ag==
+X-Google-Smtp-Source: ABdhPJysVuVHXSolUJgVCzaLPZxMSvXGuru7lN6dHDtZElcf/LK0BpLvoNjihbwutNeUJJZi0znN2A==
+X-Received: by 2002:a05:6214:768:b0:42d:7b49:61b6 with SMTP id f8-20020a056214076800b0042d7b4961b6mr21095274qvz.26.1645567781415;
+        Tue, 22 Feb 2022 14:09:41 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x83sm596419qkb.68.2022.02.22.14.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 14:09:40 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Agathe Porte <agathe.porte@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
         Guenter Roeck <linux@roeck-us.net>
-CC:     Armin Wolf <W_Armin@gmx.de>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Topic: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Index: AQHYKBTirAZeqAMZek+3xwZDQ1am1ayf9nqA
-Date:   Tue, 22 Feb 2022 19:46:53 +0000
-Message-ID: <b3cecea1376f4080929f47da2529685c@AcuMS.aculab.com>
-References: <20220220190851.17965-1-W_Armin@gmx.de>
- <20220222165432.GA255373@roeck-us.net> <20220222175150.qs32v4outislnqj6@pali>
-In-Reply-To: <20220222175150.qs32v4outislnqj6@pali>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+Subject: [PATCH v6 1/2] dt-bindings: hwmon: add tmp464.yaml
+Date:   Tue, 22 Feb 2022 14:09:36 -0800
+Message-Id: <20220222220937.18728-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Pali Rohár
-> Sent: 22 February 2022 17:52
-> 
-> On Tuesday 22 February 2022 08:54:32 Guenter Roeck wrote:
-> > On Sun, Feb 20, 2022 at 08:08:51PM +0100, Armin Wolf wrote:
-> > > The new assembly code works on both 32 bit and 64 bit
-> > > cpus and allows for more compiler optimisations.
-> > > Since clang runs out of registers on 32 bit x86 when
-> > > using CC_OUT, we need to execute "setc" ourself.
-> > > Also modify the debug message so we can still see
-> > > the result (eax) when the carry flag was set.
-> > >
-> > > Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
-> > >
-> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> >
-> > It would be great if I can get some Tested-by/Acked-by/Reviewed-by
-> > tags for this patch.
-> 
-> Well, I know about this driver asm code for a long time and it since
-> beginning it was suspicious for me, why there is such huge code with
-> stack and registers manipulation and why it cannot be implemented easily
-> via just two "out" instructions. This patch is exactly doing it.
-> But question reminds why it was written in this simple way since
-> beginning.
-> 
-> If this change is correct then I have no problem with it.
-> 
-> But I would rather see review of this asm change by skilled x86 asm
-> developer. We are dealing here with CPU 0, SMM x86 mode, I/O ports and
-> stack manipulation in inline gcc asm which sounds like a trap. And I'm
-> not feeling skilled for reviewing this change.
-> 
-> May I ask somebody to review this change? Is there some linux x86 ML?
+From: Agathe Porte <agathe.porte@nokia.com>
 
-On the face of it the new asm code is basically the same as the old
-asm code - and both are probably equivalent to the reverse engineered
-windows code.
+Add basic description of the tmp464 driver DT bindings.
 
-The real problem isn't the new code, it is more 'WTF is actually going on'.
-Somehow the pair of outb are generating a synchronous (or synchronous
-enough) trap that the trap handler (in the smm code in the bios)
-can change the registers before the code following the outb saves
-them back to memory.
+Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
+Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v6:
+- Model ti,n-factor as int32 instead of int8.
 
-SMM mode is a semi-hidden cpu mode usually entered by an interrupt.
-It is horrid and nasty because it has access to the cpu memory and
-registers, but is hidden and unknown (I think in the bios).
+v5:
+- Dropped ti,n-factor from channel@0 example. Added additional
+  channel to examples to show positive ti,n-factor property.
 
-Normal bios calls can (usually) be executed using a cpu emulator
-(especially useful for doing real-mode call from 64bit mode) so
-the kernel can limit what they can do.
+v4:
+- No changes
 
-But SMM mode is nearly as bad as the ME processor on newer systems.
-If you worry about security you really want it disabled - but you can't.
+v3:
+- Addedd support for TMP468.
+- Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
+- Changed value range for ti,n-factor to int8, with an example for
+  a negative value.
+- Added myself as driver maintainer.
 
-As far as this patch goes I think I'd add a 'stc' (set carry)
-instruction before the first 'outb'.
-Then if the 'something magic happens here' doesn't happen (because
-you aren't on the right kind of motherboard) the action fails.
+ .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
+ MAINTAINERS                                   |   7 ++
+ 2 files changed, 121 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
 
-	David
-
-> 
-> > Thanks,
-> > Guenter
-> >
-> > > ---
-> > > Changes in v4:
-> > > - reword commit message
-> > >
-> > > Changes in v3:
-> > > - make carry an unsigned char
-> > > - use "+a", ... for output registers
-> > > - drop "cc" from clobbered list
-> > >
-> > > Changes in v2:
-> > > - fix clang running out of registers on 32 bit x86
-> > > - modify debug message
-> > > ---
-> > >  drivers/hwmon/dell-smm-hwmon.c | 78 ++++++++--------------------------
-> > >  1 file changed, 18 insertions(+), 60 deletions(-)
-> > >
-> > > --
-> > > 2.30.2
-> > >
-> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > > index c5939e68586d..38d23a8e83f2 100644
-> > > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > > @@ -119,7 +119,7 @@ struct smm_regs {
-> > >  	unsigned int edx;
-> > >  	unsigned int esi;
-> > >  	unsigned int edi;
-> > > -} __packed;
-> > > +};
-> > >
-> > >  static const char * const temp_labels[] = {
-> > >  	"CPU",
-> > > @@ -164,74 +164,32 @@ static int i8k_smm_func(void *par)
-> > >  	struct smm_regs *regs = par;
-> > >  	int eax = regs->eax;
-> > >  	int ebx = regs->ebx;
-> > > +	unsigned char carry;
-> > >  	long long duration;
-> > > -	int rc;
-> > >
-> > >  	/* SMM requires CPU 0 */
-> > >  	if (smp_processor_id() != 0)
-> > >  		return -EBUSY;
-> > >
-> > > -#if defined(CONFIG_X86_64)
-> > > -	asm volatile("pushq %%rax\n\t"
-> > > -		"movl 0(%%rax),%%edx\n\t"
-> > > -		"pushq %%rdx\n\t"
-> > > -		"movl 4(%%rax),%%ebx\n\t"
-> > > -		"movl 8(%%rax),%%ecx\n\t"
-> > > -		"movl 12(%%rax),%%edx\n\t"
-> > > -		"movl 16(%%rax),%%esi\n\t"
-> > > -		"movl 20(%%rax),%%edi\n\t"
-> > > -		"popq %%rax\n\t"
-> > > -		"out %%al,$0xb2\n\t"
-> > > -		"out %%al,$0x84\n\t"
-> > > -		"xchgq %%rax,(%%rsp)\n\t"
-> > > -		"movl %%ebx,4(%%rax)\n\t"
-> > > -		"movl %%ecx,8(%%rax)\n\t"
-> > > -		"movl %%edx,12(%%rax)\n\t"
-> > > -		"movl %%esi,16(%%rax)\n\t"
-> > > -		"movl %%edi,20(%%rax)\n\t"
-> > > -		"popq %%rdx\n\t"
-> > > -		"movl %%edx,0(%%rax)\n\t"
-> > > -		"pushfq\n\t"
-> > > -		"popq %%rax\n\t"
-> > > -		"andl $1,%%eax\n"
-> > > -		: "=a"(rc)
-> > > -		:    "a"(regs)
-> > > -		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
-> > > -#else
-> > > -	asm volatile("pushl %%eax\n\t"
-> > > -	    "movl 0(%%eax),%%edx\n\t"
-> > > -	    "push %%edx\n\t"
-> > > -	    "movl 4(%%eax),%%ebx\n\t"
-> > > -	    "movl 8(%%eax),%%ecx\n\t"
-> > > -	    "movl 12(%%eax),%%edx\n\t"
-> > > -	    "movl 16(%%eax),%%esi\n\t"
-> > > -	    "movl 20(%%eax),%%edi\n\t"
-> > > -	    "popl %%eax\n\t"
-> > > -	    "out %%al,$0xb2\n\t"
-> > > -	    "out %%al,$0x84\n\t"
-> > > -	    "xchgl %%eax,(%%esp)\n\t"
-> > > -	    "movl %%ebx,4(%%eax)\n\t"
-> > > -	    "movl %%ecx,8(%%eax)\n\t"
-> > > -	    "movl %%edx,12(%%eax)\n\t"
-> > > -	    "movl %%esi,16(%%eax)\n\t"
-> > > -	    "movl %%edi,20(%%eax)\n\t"
-> > > -	    "popl %%edx\n\t"
-> > > -	    "movl %%edx,0(%%eax)\n\t"
-> > > -	    "lahf\n\t"
-> > > -	    "shrl $8,%%eax\n\t"
-> > > -	    "andl $1,%%eax\n"
-> > > -	    : "=a"(rc)
-> > > -	    :    "a"(regs)
-> > > -	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
-> > > -#endif
-> > > -	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-> > > -		rc = -EINVAL;
-> > > +	asm volatile("out %%al,$0xb2\n\t"
-> > > +		     "out %%al,$0x84\n\t"
-> > > +		     "setc %0\n"
-> > > +		     : "=mr" (carry),
-> > > +		       "+a" (regs->eax),
-> > > +		       "+b" (regs->ebx),
-> > > +		       "+c" (regs->ecx),
-> > > +		       "+d" (regs->edx),
-> > > +		       "+S" (regs->esi),
-> > > +		       "+D" (regs->edi));
-> > >
-> > >  	duration = ktime_us_delta(ktime_get(), calltime);
-> > > -	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
-> > > -		 (rc ? 0xffff : regs->eax & 0xffff), duration);
-> > > +	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x carry: %d (took %7lld usecs)\n",
-> > > +		 eax, ebx, regs->eax & 0xffff, carry, duration);
-> > >
-> > > -	return rc;
-> > > +	if (carry || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-> > > +		return -EINVAL;
-> > > +
-> > > +	return 0;
-> > >  }
-> > >
-> > >  /*
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+new file mode 100644
+index 000000000000..801ca9ba7d34
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+@@ -0,0 +1,114 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/ti,tmp464.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TMP464 and TMP468 temperature sensors
++
++maintainers:
++  - Agathe Porte <agathe.porte@nokia.com>
++
++description: |
++  ±0.0625°C Remote and Local temperature sensor
++  https://www.ti.com/lit/ds/symlink/tmp464.pdf
++  https://www.ti.com/lit/ds/symlink/tmp468.pdf
++
++properties:
++  compatible:
++    enum:
++      - ti,tmp464
++      - ti,tmp468
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++patternProperties:
++  "^channel@([0-8])$":
++    type: object
++    description: |
++      Represents channels of the device and their specific configuration.
++
++    properties:
++      reg:
++        description: |
++          The channel number. 0 is local channel, 1-8 are remote channels.
++        items:
++          minimum: 0
++          maximum: 8
++
++      label:
++        description: |
++          A descriptive name for this channel, like "ambient" or "psu".
++
++      ti,n-factor:
++        description: |
++          The value (two's complement) to be programmed in the channel specific N correction register.
++          For remote channels only.
++        $ref: /schemas/types.yaml#/definitions/int32
++        items:
++          minimum: -128
++          maximum: 127
++
++    required:
++      - reg
++
++    additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      sensor@4b {
++        compatible = "ti,tmp464";
++        reg = <0x4b>;
++      };
++    };
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      sensor@4b {
++        compatible = "ti,tmp464";
++        reg = <0x4b>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        channel@0 {
++          reg = <0x0>;
++          label = "local";
++        };
++
++        channel@1 {
++          reg = <0x1>;
++          ti,n-factor = <(-10)>;
++          label = "external";
++        };
++
++        channel@2 {
++          reg = <0x2>;
++          ti,n-factor = <0x10>;
++          label = "somelabel";
++        };
++
++        channel@3 {
++          reg = <0x3>;
++          status = "disabled";
++        };
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fca970a46e77..f51bc7c7e439 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19489,6 +19489,13 @@ S:	Maintained
+ F:	Documentation/hwmon/tmp401.rst
+ F:	drivers/hwmon/tmp401.c
+ 
++TMP464 HARDWARE MONITOR DRIVER
++M:	Agathe Porte <agathe.porte@nokia.com>
++M:	Guenter Roeck <linux@roeck-us.net>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
++
+ TMP513 HARDWARE MONITOR DRIVER
+ M:	Eric Tremblay <etremblay@distech-controls.com>
+ L:	linux-hwmon@vger.kernel.org
+-- 
+2.35.1
 
