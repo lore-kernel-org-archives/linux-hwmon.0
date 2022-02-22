@@ -2,114 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F18C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Feb 2022 16:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3081FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Feb 2022 16:51:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233953AbiBVQQY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Feb 2022 11:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S234348AbiBVQve (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Feb 2022 11:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbiBVQQX (ORCPT
+        with ESMTP id S234344AbiBVQvd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:16:23 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7818C1662FA;
-        Tue, 22 Feb 2022 08:15:55 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id d84so80824qke.8;
-        Tue, 22 Feb 2022 08:15:55 -0800 (PST)
+        Tue, 22 Feb 2022 11:51:33 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3739516AA7C;
+        Tue, 22 Feb 2022 08:51:07 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id x3so511919qvd.8;
+        Tue, 22 Feb 2022 08:51:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=UWtT6xKER+DvpZW0lXvn6f8vSNtev/dB5lCJohKQPOM=;
-        b=oZ6Ryqexq35v/xGN4BjFPj8OOgCtUt+SyumS9l/DMnx9LQQaqSZHyk1+FcBkauTiDK
-         0wysqc8avBJ4sEqIwqAiDww6LO7vTNcbLF5GdHvuTi7/HxSdLJ/DBhb6D3c/9NzbA08E
-         QZyu9u7Y0zpxeHMAaxo5GxgtW5nChthUVEo4HOhCqM1oHJZCLU7FNPoWvDvr7tvsN3Wg
-         UdpdH9YqbGciDNp/oqalTQxrLE+2vWHwI7E75xNShRM0cnFteGm6aCt8ipYhW//biggt
-         rnutVcTGID6QUXZx814vHaVuLmSshzj5biRr8JpOltJMul1JEPhsnPOaHwEguJYACzRS
-         g73A==
+        bh=7lwww6qytMHobo/IrTZR1dCVgaY8SomLUb6wdjfR/YU=;
+        b=XEm4WkG0oOgN8AUZzTVDbHzgu0/VcD27pX2Zf07bKZN6JejHr9JLwlByKexE7+JKyb
+         3OtNgcJb1jefCbzI4oG77LpcI5JOBxmAZ1nP95MrR7+NFJeP0u/UrVkxzHE+9QDcwvMW
+         YAPsKvEn1ZArVMPvnDUTQCXlLkLtkPiLHjhydgHLK+fakg8veEo2B8R/Jv2JsGIw11Fg
+         FvvzTdV0RMP8W0Gy3e6Gt1e2Y/Baf5RQ/BS5wElA26uzSd+NpzcRVfqCASIADP+th5XR
+         wfHc8Z1mXHKeSdYq3X39YHXHLYqmZQRj50bIeVvrnRyfBLRRpaCmXMV/j+v8nD+3ne2M
+         gPQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=UWtT6xKER+DvpZW0lXvn6f8vSNtev/dB5lCJohKQPOM=;
-        b=LlvdYtaFCdWmV/NmpkQTL8inUJIHEOiWOC3QiNnb6qQixon0k5YXxyWLbjnC5KoBDt
-         8KOWED0WEZQZGXvjRAQaj8GSmmKEK0PH4Kd7HctC/w4ZfSogiK8ChZJ3P3FrJY/eACJj
-         6eJQCt2GBrnDqOSLnsDd5nBcbkVStyN28KXSicDak8KtdWokB9C3KyfqqLUPWAtBAphD
-         3w33agr+tAWMcFVlgI2wfieR+qrkPF1hdqrQraR/idFju7HvfOQp+mWIeB7L5M39AQt7
-         n4qXx+TEjNu33vLvIq/qrZJcP4c9Mpw+vzKTXISIPd6D0nyn7kiPtatX64/xmn3sORC1
-         f4dQ==
-X-Gm-Message-State: AOAM532Zeo2+GsIZ48hrIiJQDMvfdtW29AdIQRVEstNpl52I8ldmDY7b
-        8OOC8DfElVwdBaeJg+UTvKk=
-X-Google-Smtp-Source: ABdhPJzk4uPD+ivitZf+tYykOXeYxxrqm1d6eByI01S4V/Azt9iqOTqTWGAtvKac/nCJI+xixVoRNA==
-X-Received: by 2002:a37:a5c6:0:b0:46c:e3c1:7216 with SMTP id o189-20020a37a5c6000000b0046ce3c17216mr15814898qke.721.1645546554583;
-        Tue, 22 Feb 2022 08:15:54 -0800 (PST)
+        bh=7lwww6qytMHobo/IrTZR1dCVgaY8SomLUb6wdjfR/YU=;
+        b=8LFfLp6TApoVzVuNWLoRZ17rXgMO0KLLauGMWiQneLWbJfTxfYRwKtntzX0LMQEyH9
+         Hi0/IQ4bb4dT1E4QaIKCO4AtGqDjdQ0ciyCs7MMbnDOpJd3SnWrwlD5rBljcJIrd/3/V
+         f0FMPQ714ly4UPlgK49oACxaJvfF12nY/h/wevws17vW48W1p2lzOSqH5kXcZWNby3lW
+         NIcacefZ5/qJXmUA7O5wijV3vjjQq9/pgbLkY+5FXEN/SbqdAaucXVPlizhCFgMXSHkt
+         jU7ciMXcS8uaeoQbfGuxeESKDrSo1+jLTF4sijOeCADsAAIVzgYZ2Wdi8Y7eE6vrgH7L
+         mFGw==
+X-Gm-Message-State: AOAM531DQePtmUp6e7trF7wMb1DeuACw4Y5agCFVDxFDDMQeA5UDwGLZ
+        hGdNRBgnH1sbrzSDnjU7EFU=
+X-Google-Smtp-Source: ABdhPJzZcvVD+NCKZ0vruo8lkGr1oAcRpmZERWxk29emUz6sQM6wb/kwUTfw9zfwMbcuR7DKh7bbLg==
+X-Received: by 2002:a05:622a:153:b0:2de:4ddc:8a73 with SMTP id v19-20020a05622a015300b002de4ddc8a73mr3393641qtw.636.1645548666401;
+        Tue, 22 Feb 2022 08:51:06 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g8sm25292qki.47.2022.02.22.08.15.53
+        by smtp.gmail.com with ESMTPSA id bs39sm80972qkb.24.2022.02.22.08.51.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 08:15:53 -0800 (PST)
+        Tue, 22 Feb 2022 08:51:05 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 22 Feb 2022 08:15:52 -0800
+Date:   Tue, 22 Feb 2022 08:51:04 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vikash Chandola <vikash.chandola@linux.intel.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iwona.winiarska@intel.com
-Subject: Re: [PATCH v2] hwmon: (pmbus) Clear pmbus fault/warning bits after
- read
-Message-ID: <20220222161552.GA243421@roeck-us.net>
-References: <20220222131253.2426834-1-vikash.chandola@linux.intel.com>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v2 1/1] hwmon: (pmbus) Add regulator supply into macro
+Message-ID: <20220222165104.GA255067@roeck-us.net>
+References: <cover.1645437439.git.sylv@sylv.io>
+ <58f2ff7b90233fad3d7ae2e9d66d5192e2c1ac01.1645437439.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222131253.2426834-1-vikash.chandola@linux.intel.com>
+In-Reply-To: <58f2ff7b90233fad3d7ae2e9d66d5192e2c1ac01.1645437439.git.sylv@sylv.io>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 01:12:53PM +0000, Vikash Chandola wrote:
-> Almost all fault/warning bits in pmbus status registers remain set even
-> after fault/warning condition are removed. As per pmbus specification
-> these faults must be cleared by user.
-> Modify hwmon behavior to clear fault/warning bit after fetching data if
-> fault/warning bit was set. This allows to get fresh data in next read.
+On Mon, Feb 21, 2022 at 12:09:56PM +0100, Marcello Sylvester Bauer wrote:
+> Add regulator supply into PWBUS_REGULATOR macro. This makes it optional
+> to define a vin-supply in DT. Not defining a supply will add a dummy
+> regulator supply instead and only cause the following debug output:
 > 
-> Signed-off-by: Vikash Chandola <vikash.chandola@linux.intel.com>
+> ```
+> Looking up vin-supply property in node [...] failed
+> ```
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 
-Applied.
+Applied to hwmon-next. That should give it some time to mature,
+and we can pull or modify it if it causes any problems.
 
 Thanks,
 Guenter
 
 > ---
-> changes since v1:
-> v1 patch was clearing all the faults. That would have lead faults not
-> getting reported to user at all. This change clears only current fault
-> and that too after reporting it at least once. This way all the faults
-> will be reported to user space at least once.
+>  drivers/hwmon/pmbus/pmbus.h | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Behaviour has been verified with following PSU
-> FRU Device Description : IS162F22 (ID 84)
-> Product Manufacturer   : SOLUM CO., LTD.
-> Product Name           : IS162F22
-> Product Part Number    : G36234-015
-> Product Version        : 10A
-> 
->  drivers/hwmon/pmbus/pmbus_core.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 776ee2237be2..ac2fbee1ba9c 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -911,6 +911,11 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
->  		pmbus_update_sensor_data(client, s2);
->  
->  	regval = status & mask;
-> +	if (regval) {
-> +		ret = pmbus_write_byte_data(client, page, reg, regval);
-> +		if (ret)
-> +			goto unlock;
-> +	}
->  	if (s1 && s2) {
->  		s64 v1, v2;
->  
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index e0aa8aa46d8c..38f049d68d32 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -464,6 +464,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>  #define PMBUS_REGULATOR(_name, _id)				\
+>  	[_id] = {						\
+>  		.name = (_name # _id),				\
+> +		.supply_name = "vin",				\
+>  		.id = (_id),					\
+>  		.of_match = of_match_ptr(_name # _id),		\
+>  		.regulators_node = of_match_ptr("regulators"),	\
