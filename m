@@ -2,204 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D581C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Feb 2022 22:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77064C433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Feb 2022 22:35:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243478AbiBWWOe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Feb 2022 17:14:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S244490AbiBWWf4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Feb 2022 17:35:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243412AbiBWWOc (ORCPT
+        with ESMTP id S244199AbiBWWfq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Feb 2022 17:14:32 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5797506F4;
-        Wed, 23 Feb 2022 14:14:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645654426;
-        bh=+cTbGTbHIG9AuxX1N/8CTj6GaxahkL2vJGZG6ewkOvE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=KCazj3dmDGh05/FjxirTOTB3hpBbyq23KnwwCh3yg2SymrUOVMVGV81a8QbXuyHIL
-         9os3cEG9SNn7dMiinikz290kbb2Phd9k4gB3gaSvDWPJdFlO+yPlSQqvIh0NZggbPK
-         XefhjEbmN2e4+fBUFt2x1vISIZ7BN9BY8gqaSPlA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N5mKJ-1oK0X43Jut-017IAI; Wed, 23 Feb 2022 23:13:45 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (sch5627) Add pwmX_auto_channels_temp support
-Date:   Wed, 23 Feb 2022 23:13:34 +0100
-Message-Id: <20220223221334.3993-3-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220223221334.3993-1-W_Armin@gmx.de>
-References: <20220223221334.3993-1-W_Armin@gmx.de>
+        Wed, 23 Feb 2022 17:35:46 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2160050E0F
+        for <linux-hwmon@vger.kernel.org>; Wed, 23 Feb 2022 14:35:14 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-317-KFU4k30iPlqkQIaat-4inA-1; Wed, 23 Feb 2022 22:35:12 +0000
+X-MC-Unique: KFU4k30iPlqkQIaat-4inA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 23 Feb 2022 22:35:11 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 23 Feb 2022 22:35:11 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Armin Wolf' <W_Armin@gmx.de>,
+        =?utf-8?B?J1BhbGkgUm9ow6FyJw==?= <pali@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4] hwmon: (dell-smm) Improve assembly code
+Thread-Topic: [PATCH v4] hwmon: (dell-smm) Improve assembly code
+Thread-Index: AQHYKBTirAZeqAMZek+3xwZDQ1am1ayf9nqAgAG05QCAAA5MMA==
+Date:   Wed, 23 Feb 2022 22:35:11 +0000
+Message-ID: <63a04993864f4c08923ed753d83cdf37@AcuMS.aculab.com>
+References: <20220220190851.17965-1-W_Armin@gmx.de>
+ <20220222165432.GA255373@roeck-us.net> <20220222175150.qs32v4outislnqj6@pali>
+ <b3cecea1376f4080929f47da2529685c@AcuMS.aculab.com>
+ <4b5ca065-06a4-c1ff-ed16-3bbb038ee6e0@gmx.de>
+In-Reply-To: <4b5ca065-06a4-c1ff-ed16-3bbb038ee6e0@gmx.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:M1PgcwCpZ4QXnE7r4Zqy4DVYSeBDK0siG6XRiiwZU7aTg11P10x
- zNx01QA1Ra8XelVopZXLI0SP4iQXpWs5qe/uXaL7HxJlF+Wga99h3OLPLHel0KcBpPqyKpA
- L7JjvJh9/jo2CZb3lYdDcVff9E5d+jHRlUzM60Fd4W/qEeYwF4TG/ahgPfAEjyRGtyNPXjQ
- VHPbWj/zsWBSlbtyK+axg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:k+8zKpcnUak=:Z6b1gEBgo6XTR27Xr51o9o
- 7ad9x7nqhSkSAptJt53ZkqxbXjqScXXYxbTySK24LmQxjCAOLuZ+uw52m3l9A9IXAR1KrnoyU
- Wl2vzPYVAeIn0PRe0+067HFScBEp1alCcYrNAXVQlj2XJFeuGgMb4te3FF4qPmaXnYwp1yxO1
- yFBayrdNlRCoZYqwOnRW8jAfLgKZDLUM3IedKHenafC+L8SthJ/cMPYfBh9FbALbpCKIHWHb6
- tMw6hlcpGYgA3gc1w5AUCQOVrDjIGd4+UxYC+t6ehZoOiKAGr/xwmTU6zvHYi9vJgNsSWsS6E
- CetH5Rcd8FjAGgmGvRjEppyjApACieQGqhVJZwS3gpihrYtMCPKrIs4uc8X267mMiqUjdhTVV
- ExjdP170gXfPdvWObHM43Z4uNhMCKdM/5AWEe3lypK20h0yxoDi4Z/NAfeGhwBy/h3XMHmjVr
- FXZdoWzwfDydHgnVXXYignTMRgMHGZb5oBnElQzGqevRTWvEITWXQyAwP/XT+mlUCDLcfIhY1
- 4B5hxycynWTUP4EquhCTmJxEw3OFzJzLPwHNH8MQeZaCGK3Qt8YW81FpBgROnqQ0yUe4D17+q
- Ka5aMgbFAUTpAAYx8sx4MehKLu/k6OsXSVoC41Iphn7+vQi/WQRIjdnUa8Y5FY8LImY809znK
- TSdbbSi+Mib1SIwiiOdvR9uRQRRjno2xPBQd/xEIYgqbrVL/P46XKvv3iZLwAzitPG3Z2+Ecy
- jiPwfJjAkj2q8mEzVuLNvr06fFwXK3rbkhNlDtZz7YBTGgGllODxMWHmDgwOctKKX23nNplDT
- KAWdYe+fU1/fEYBnFu5CnzPAO5RbM52Q8R4TJwGt38TC6vrJus1cM0JZV1mnUug2BI3RmvQza
- nGZrb0UjZU/tcgWTMNEtwUyT+YKb3tb7j6z376F6bw0IbMagHfOID8ohcZQMwpXqPMJa9v3Fv
- tthE0mYuUZB9Z0ZgFGx+nhCKzHPHO8Fx7B7R57XaQeAdNis/dVh+l4gq2IwL/jw7w5COxXyhd
- DuZ9aVafItVquTQxk4UiLpPosKP+oLLGanfsnMkSnE78Vxr6JT5hpEiSMhBe2mBWXttK1RdpD
- DsD6lZ+tuDP01Q=
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-After doing some research, it seems that Fujitsu's
-hardware monitoring solution exports data describing
-which temperature sensors affect which fans, similar
-to the data in fan_source of the ftsteutates driver.
-Writing 0 into these registers forces the fans to
-full speed.
-Export this data with standard attributes.
-
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/sch5627.rst |  4 +++
- drivers/hwmon/sch5627.c         | 53 +++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
-
-diff --git a/Documentation/hwmon/sch5627.rst b/Documentation/hwmon/sch5627=
-.rst
-index 187682e99114..ecb4fc84d045 100644
-=2D-- a/Documentation/hwmon/sch5627.rst
-+++ b/Documentation/hwmon/sch5627.rst
-@@ -20,6 +20,10 @@ Description
- SMSC SCH5627 Super I/O chips include complete hardware monitoring
- capabilities. They can monitor up to 5 voltages, 4 fans and 8 temperature=
-s.
-
-+In addition, the SCH5627 exports data describing which temperature sensor=
-s
-+affect the speed of each fan. Setting pwmX_auto_channels_temp to 0 forces
-+the corresponding fan to full speed until another value is written.
-+
- The SMSC SCH5627 hardware monitoring part also contains an integrated
- watchdog. In order for this watchdog to function some motherboard specifi=
-c
- initialization most be done by the BIOS, so if the watchdog is not enable=
-d
-diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
-index 72c3f6757e34..d166b6398645 100644
-=2D-- a/drivers/hwmon/sch5627.c
-+++ b/drivers/hwmon/sch5627.c
-@@ -52,6 +52,9 @@ static const u16 SCH5627_REG_FAN[SCH5627_NO_FANS] =3D {
- static const u16 SCH5627_REG_FAN_MIN[SCH5627_NO_FANS] =3D {
- 	0x62, 0x64, 0x66, 0x68 };
-
-+static const u16 SCH5627_REG_PWM_MAP[SCH5627_NO_FANS] =3D {
-+	0xA0, 0xA1, 0xA2, 0xA3 };
-+
- static const u16 SCH5627_REG_IN_MSB[SCH5627_NO_IN] =3D {
- 	0x22, 0x23, 0x24, 0x25, 0x189 };
- static const u16 SCH5627_REG_IN_LSN[SCH5627_NO_IN] =3D {
-@@ -223,6 +226,9 @@ static int reg_to_rpm(u16 reg)
- static umode_t sch5627_is_visible(const void *drvdata, enum hwmon_sensor_=
-types type, u32 attr,
- 				  int channel)
- {
-+	if (type =3D=3D hwmon_pwm && attr =3D=3D hwmon_pwm_auto_channels_temp)
-+		return 0644;
-+
- 	return 0444;
- }
-
-@@ -278,6 +284,20 @@ static int sch5627_read(struct device *dev, enum hwmo=
-n_sensor_types type, u32 at
- 			break;
- 		}
- 		break;
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_auto_channels_temp:
-+			ret =3D sch56xx_read_virtual_reg(data->addr, SCH5627_REG_PWM_MAP[chann=
-el]);
-+			if (ret < 0)
-+				return ret;
-+
-+			*val =3D ret;
-+
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
- 	case hwmon_in:
- 		ret =3D sch5627_update_in(data);
- 		if (ret < 0)
-@@ -318,10 +338,37 @@ static int sch5627_read_string(struct device *dev, e=
-num hwmon_sensor_types type,
- 	return -EOPNOTSUPP;
- }
-
-+static int sch5627_write(struct device *dev, enum hwmon_sensor_types type=
-, u32 attr, int channel,
-+			 long val)
-+{
-+	struct sch5627_data *data =3D dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_auto_channels_temp:
-+			/* registers are 8 bit wide */
-+			if (val > U8_MAX || val < 0)
-+				return -EINVAL;
-+
-+			return sch56xx_write_virtual_reg(data->addr, SCH5627_REG_PWM_MAP[chann=
-el],
-+							 val);
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
- static const struct hwmon_ops sch5627_ops =3D {
- 	.is_visible =3D sch5627_is_visible,
- 	.read =3D sch5627_read,
- 	.read_string =3D sch5627_read_string,
-+	.write =3D sch5627_write,
- };
-
- static const struct hwmon_channel_info *sch5627_info[] =3D {
-@@ -342,6 +389,12 @@ static const struct hwmon_channel_info *sch5627_info[=
-] =3D {
- 			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT,
- 			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT
- 			   ),
-+	HWMON_CHANNEL_INFO(pwm,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP
-+			   ),
- 	HWMON_CHANNEL_INFO(in,
- 			   HWMON_I_INPUT | HWMON_I_LABEL,
- 			   HWMON_I_INPUT | HWMON_I_LABEL,
-=2D-
-2.30.2
+RnJvbTogQXJtaW4gV29sZg0KPiBTZW50OiAyMyBGZWJydWFyeSAyMDIyIDIxOjM5DQouLi4NCj4g
+PiBBcyBmYXIgYXMgdGhpcyBwYXRjaCBnb2VzIEkgdGhpbmsgSSdkIGFkZCBhICdzdGMnIChzZXQg
+Y2FycnkpDQo+ID4gaW5zdHJ1Y3Rpb24gYmVmb3JlIHRoZSBmaXJzdCAnb3V0YicuDQo+ID4gVGhl
+biBpZiB0aGUgJ3NvbWV0aGluZyBtYWdpYyBoYXBwZW5zIGhlcmUnIGRvZXNuJ3QgaGFwcGVuIChi
+ZWNhdXNlDQo+ID4geW91IGFyZW4ndCBvbiB0aGUgcmlnaHQga2luZCBvZiBtb3RoZXJib2FyZCkg
+dGhlIGFjdGlvbiBmYWlscy4NCj4gPg0KPiA+IAlEYXZpZA0KPiANCj4gV2UgYWxyZWFkeSBjaGVj
+ayBmb3Igc3VjaCBzY2VuYXJpb3MgYnkgY2hlY2tpbmcgaWYgZWF4IGNoYW5nZWQuDQo+IEkgd291
+bGQgbm90IHNldCB0aGUgY2FycnkgZmxhZyBiZWZvcmUgZG9pbmcgYSBTTU0gY2FsbCBzaW5jZSBp
+bQ0KPiBub3Qgc3VyZSBpZiB0aGUgZmlybXdhcmUgY29kZSBhbHdheXMgY2xlYXJzIHRoZSBjYXJy
+eSBmbGFnIHdoZW4NCj4gdGhlIGNhbGwgd2FzIHN1Y2Nlc3NmdWwuDQo+IElmIGZvciBleGFtcGxl
+IHRoZSBmaXJtd2FyZSBjb2RlIG9ubHkgc2V0cyB0aGUgY2FycnkgZmxhZyBvbg0KPiBlcnJvciBh
+bmQgb3RoZXJ3aXNlIGlnbm9yZXMgdGhlIGNhcnJ5IGZsYWcsIHdlIG1pZ2h0IGNyZWF0ZSBzb21l
+DQo+IGZhbHNlIG5lZ2F0aXZlcyB3aGVuIGEgc3VjY2Vzc2Z1bCBTTU0gY2FsbCBsZWF2ZXMgdGhl
+IGNhcnJ5IGZsYWcgc2V0Lg0KDQpJZiB5b3UgYXJlIHdvcnJpZWQgYWJvdXQgdGhhdCB5b3Ugc2hv
+dWxkIGJlIGNsZWFyaW5nIGNhcnJ5IG9uIGVudHJ5Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
+ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
+ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
