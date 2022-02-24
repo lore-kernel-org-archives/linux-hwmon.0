@@ -2,95 +2,71 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43971C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Feb 2022 16:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0F56C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Feb 2022 19:13:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiBXQ3H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Feb 2022 11:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S233365AbiBXTNo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Feb 2022 14:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiBXQ3G (ORCPT
+        with ESMTP id S233368AbiBXTNm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:29:06 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682D11965C4;
-        Thu, 24 Feb 2022 08:28:35 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id j24so3205356oii.11;
-        Thu, 24 Feb 2022 08:28:35 -0800 (PST)
+        Thu, 24 Feb 2022 14:13:42 -0500
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E405B1B45E0;
+        Thu, 24 Feb 2022 11:13:09 -0800 (PST)
+Received: by mail-oi1-f169.google.com with SMTP id j2so4324349oie.7;
+        Thu, 24 Feb 2022 11:13:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=9Hw+IXRYrnzmeFFNG8Nc9XPQ/h/ngGDlwqtlbBJf7gQ=;
-        b=Sh2QGzb683l2ieej21t4GkmLUpBtgnqaVjfpogjOvadOwHiZ8n8vsYYMBrF6OPZHXm
-         B2uxEUVAYMV/PDjX+g/6f5eSl96IDJwaUCAQZOL2KTtT/rf0GelfH2sOZMHnCg8gKa8t
-         gqzu9XJwKMqVjxfsSJlagv9oTzJ0kC/2EbI6mMAhJoaErENbgpVM8ZMZzc9RIUq5jI5K
-         Ps6rCYYLAO1WRpipIjIcaydl4SxgiNJRAuJPTtLn1qs1gzRnDfiJhCpYUajqYyXVvWJO
-         ltj3wKLM35bXEwKVcaPb2eMWRUKl5JtE7jUxn0BRG+D6/x2p075GZIJVxiv9mLvCLP16
-         3OYw==
-X-Gm-Message-State: AOAM530LRqDAybgoR6pzCfJCwDKerD97x0PybH8TCxEOks7SZddX5ZU/
-        Q3eITvaDixVF6jAaZZWWpBpsI39ltg==
-X-Google-Smtp-Source: ABdhPJyBSuL4dpeG7BPV2Y0QipvRylf1FyFsNnew64rw4tYkMJ1gXBOSoDp7AJ29P+p4sn9gv7D7Wg==
-X-Received: by 2002:aca:b9d5:0:b0:2ce:6ee7:2cde with SMTP id j204-20020acab9d5000000b002ce6ee72cdemr7756180oif.268.1645719063709;
-        Thu, 24 Feb 2022 08:11:03 -0800 (PST)
+        bh=gO8mKD6oJQ6SsGZ1I3LRYKRxuk0QWc4mtMbDlxXHmEM=;
+        b=pOutkRGX+/pdJLCYtne1o8lIgMRc97Ah3bm5Nd+IgYYrGB5QQfcMWCA49Zy5dF25pG
+         uZzdb9/m5Ee2lq6x44+45J12TC6LiG7EyCGcNFZW1Ctnll+kgHV75Eb4/Xq8jfDCMuXu
+         TF4ZanIZZUjVwYrStQdgnOEyhiFH5f89bzGZJ0R3Sio5LFWJXt2JZ7HdKJDbz9HuPi0t
+         1Gp257ecbZQ1OiIadeOpRDuK8zGOBaQzKQbn5GJ/sI6Odq3/YcybaGfQ24VI8vWnRbsm
+         zCftI8MxhA337ghZD3bWebQLPWBpwpAiIRF6DL8jyHYIp+wshihWM9qnwH85Qr6a5qEb
+         OoHw==
+X-Gm-Message-State: AOAM530bUFrufUBEv2aBI7O+LpC+OolmdwyUIh54nATanNFTKlgzMFM/
+        59xLDV7d7IBZIh/IHnFF0g==
+X-Google-Smtp-Source: ABdhPJxSE2V4KzoGxO8uB42dcagdW3rigyxskipbEsYfE+yS/5sBDwcT03JhXoRbpihZKx8vJtrYDg==
+X-Received: by 2002:a05:6870:1114:b0:d6:d4df:ce9c with SMTP id 20-20020a056870111400b000d6d4dfce9cmr1396319oaf.19.1645729989268;
+        Thu, 24 Feb 2022 11:13:09 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d60sm1352253otb.29.2022.02.24.08.11.02
+        by smtp.gmail.com with ESMTPSA id 9-20020a9d0c09000000b005afabd759cfsm76526otr.65.2022.02.24.11.13.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 08:11:03 -0800 (PST)
-Received: (nullmailer pid 3169955 invoked by uid 1000);
-        Thu, 24 Feb 2022 16:11:02 -0000
-Date:   Thu, 24 Feb 2022 10:11:02 -0600
+        Thu, 24 Feb 2022 11:13:08 -0800 (PST)
+Received: (nullmailer pid 3424377 invoked by uid 1000);
+        Thu, 24 Feb 2022 19:13:07 -0000
+Date:   Thu, 24 Feb 2022 13:13:07 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Agathe Porte <agathe.porte@nokia.com>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v7 1/2] dt-bindings: hwmon: add tmp464.yaml
-Message-ID: <YheuFuVz38Rcy5Q1@robh.at.kernel.org>
-References: <20220222223610.23098-1-linux@roeck-us.net>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: vendor-prefixes: add Vicor
+ Corporation
+Message-ID: <YhfYw/Q6v3K1uCvV@robh.at.kernel.org>
+References: <cover.1645435888.git.sylv@sylv.io>
+ <5b487a0b68d58b64022662f1e527ac80a6ad81ef.1645435888.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222223610.23098-1-linux@roeck-us.net>
+In-Reply-To: <5b487a0b68d58b64022662f1e527ac80a6ad81ef.1645435888.git.sylv@sylv.io>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 22 Feb 2022 14:36:09 -0800, Guenter Roeck wrote:
-> From: Agathe Porte <agathe.porte@nokia.com>
+On Mon, 21 Feb 2022 10:42:04 +0100, Marcello Sylvester Bauer wrote:
+> Add vendor prefix for Vicor Corporation.
 > 
-> Add basic description of the tmp464 driver DT bindings.
-> 
-> Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
-> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 > ---
-> v7:
-> - No change
-> 
-> v6:
-> - Model ti,n-factor as int32 instead of int8.
-> 
-> v5:
-> - Dropped ti,n-factor from channel@0 example. Added additional
->   channel to examples to show positive ti,n-factor property.
-> 
-> v4:
-> - No changes
-> 
-> v3:
-> - Addedd support for TMP468.
-> - Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
-> - Changed value range for ti,n-factor to int8, with an example for
->   a negative value.
-> - Added myself as driver maintainer.
-> 
->  .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
->  MAINTAINERS                                   |   7 ++
->  2 files changed, 121 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
