@@ -2,107 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A8DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Feb 2022 00:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16846C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Feb 2022 06:12:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiBXAsj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Feb 2022 19:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
+        id S230511AbiBXGNA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Feb 2022 01:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiBXAsj (ORCPT
+        with ESMTP id S230383AbiBXGM7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:48:39 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8077C107AAF;
-        Wed, 23 Feb 2022 16:48:00 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso1167289oon.5;
-        Wed, 23 Feb 2022 16:48:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oLxhe1+/q/ffytS2x1bnbij1SrGOn3CdIxFKv6xoCNQ=;
-        b=T1Pc4B23cN3s1FGEyr9jrL0b8gag+JUNzErCsCXYOhNTaC9lMQqhiVTDrXqC4kcDz5
-         4GBMrIYL7Oez63vIGGSOU70kgfUEkiQknd2HqL2t+N5Ohdln0utp/KlJrvhl3Fa6GBN0
-         bXyabAAVmmb/lusrMmTE/7s5MPg2a0nVzjeQ8lFHlDtm/rMXUSXXdHYL9PJWGDwEFc8Q
-         gMeg9uCvhL9izTnstMr83iWz8QKqjZuYYdZ0Vj/t9PB/vqMMjO2t+9w9mL5DHIM+lXpi
-         7RlG8RwYAdWVYIa7GH8QBsQuVeq6TKZYoWcEFiEucaDJB7l8XuAN21bWA0fpIxEUIqDD
-         kCgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oLxhe1+/q/ffytS2x1bnbij1SrGOn3CdIxFKv6xoCNQ=;
-        b=Y/WT2rb2o1wmAN++/ly2RnqTZnbDK1aIOaXY3JQxzU3UN3F4nVosVCwo1I34zXICMu
-         0Qs3ziwsoMjDzAMXLq5+oQSh+7UgP6pybJ4rIb6NzyCbyw5HQfJe6vfOF7mlnOxEJL+j
-         Vx2V9EoWdq/AUPklixYNzrkMbe5kdzNQV6pwamrrSo4A/tfVdE3CATuQ6z10tntprBvs
-         gZp3tHqNEpXs7y3ReHuPYCQmXezwc2medut4Eo7UaA9JROwZ2R0jw7l4YJda3YrKMGmc
-         jCx4MmbdcwcblhfeShXWBXWC70llzXqORBBtpMoHz1uV1OAhkussAcQB9D4VJenJ9Iwl
-         UzLQ==
-X-Gm-Message-State: AOAM530swnl5ETu4WebBiC83VgWgkxXM5u6SdR0qMRnI3i2jjMPKblll
-        vrIjQYjwsG29DsikUGzOl88=
-X-Google-Smtp-Source: ABdhPJy6H3eQot88I8lZuYMy6ofwOtngNCOg+LNyNN4ORGIy4QzWOecyi1QiCR5UB7B0KiqEg7u+Wg==
-X-Received: by 2002:a05:6870:aa8a:b0:d6:c3ca:7e9c with SMTP id gr10-20020a056870aa8a00b000d6c3ca7e9cmr52765oab.118.1645663530391;
-        Wed, 23 Feb 2022 16:45:30 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p13sm578119oiv.23.2022.02.23.16.45.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 16:45:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e0c0eac9-a66a-fc35-0864-2ca1ba7cb32f@roeck-us.net>
-Date:   Wed, 23 Feb 2022 16:45:27 -0800
+        Thu, 24 Feb 2022 01:12:59 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057C423400B;
+        Wed, 23 Feb 2022 22:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645683132;
+        bh=REa265nvh/komFD1FcTmecbeNI5/kSivlQxcjQiFZVY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Gn2h/79sOF7rYJ/e+u3Q8BwcS/vNJeOXyeXY1+wIr/uxAwDqeUDbXnSC8QKP7GjHc
+         2voLo0styqVF+jyBSIUzU5ZvzOOcIaMlYnA+gtnQ5R4+r9XgA0cooqADf6jYAovLOv
+         iatW3bp9v1qJIsUPTVYXrswHJuIBsER/rVv+VR+w=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N3bSj-1oM3rj0XDv-010cxR; Thu, 24 Feb 2022 07:12:12 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: (sch5627) Add pwmX_auto_channels_temp attributes
+Date:   Thu, 24 Feb 2022 07:12:08 +0100
+Message-Id: <20220224061210.16452-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Armin Wolf' <W_Armin@gmx.de>,
-        =?UTF-8?B?J1BhbGkgUm9ow6FyJw==?= <pali@kernel.org>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220220190851.17965-1-W_Armin@gmx.de>
- <20220222165432.GA255373@roeck-us.net> <20220222175150.qs32v4outislnqj6@pali>
- <b3cecea1376f4080929f47da2529685c@AcuMS.aculab.com>
- <4b5ca065-06a4-c1ff-ed16-3bbb038ee6e0@gmx.de>
- <63a04993864f4c08923ed753d83cdf37@AcuMS.aculab.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <63a04993864f4c08923ed753d83cdf37@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:BhB520CYWe2mZI4epOlS9mHcJhtS+XBEdoV+hY7QubDV/OWdK18
+ vzGayCqEYMbQFDmH61Slh0wOd/jDD3+jkl94i7KnOI6+jby/hXlRw+szwWBb5RNetP4wXzi
+ I9VRir36hit0dgiivCqd3kQqOesi2RueDv9JGjn9Gn4s5ifnfZNQD8T3Pvq45VGSC/yoy77
+ qS9af6lFWAxzsO390Km+Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oWGNQgN8jSQ=:HulgLGAOPEHJuH2j11YeUD
+ B6Q6pPE5/NSaUbw3H5AGMGAOlx3NXHIoBpAxJ/qcuUZGGP9EPP8Yf84b0DG44wv1MDHExp0sB
+ HncL6DS3sYnAiNPLWVzAZr1Lg9V1AjCY79DYXGyNrRFdWCz95aJW0x5cuQEmqyLA/UvjoroaN
+ QsBZBTuZ9YqPX0oUGtKp9ZLAUnD637zKegC34nxkY5Ma3cB49NsKNd+Ns1J3BNhgrIF3TGqJe
+ 1lEp0Uhgw2I7czQfi5tjWGRx5DWWCCw9DzxTFsFKO5U0LWvqmQIqEt5WKOAxTGt1b2d8M0cVk
+ RZoTXeBvSikRVN+zvwJqM8AZr+EbIid0UPs1mSHC8IfIyvpxtplwgMEI1o1YZPn8aJiEEO1FY
+ H8jyWZhowwsi5RHid3Q67asbP8x0QdzXlf6TquujmjIIk7zVZrsmSh8gqzadaMklJsvAaHz75
+ UaKWlwvJ7OINhihHAzlL5J92EsaCJqG0G/dDOS/zOrW2n1Eb1ECFn+ppbF2HgSQQebEeOd20r
+ nYvZUmV1R+0uZAfbLDYGVomNFkyVkMVUXCX6A+/thlJLbhScfXThIKnSwIw3FuedYlILmdYa8
+ EpW88f1B9ffKIIxUD4KVS3TaA15oL85Bt2fucd+XYDjdBLVImhHQ6KBYw2M7bwnzclNGhgfjL
+ obr9tCqr10WYr2TgRh2938zKR5NqfBtLxGl8KNbnQbwUbzeT8gzAqawl65EEOcdKk4FWWgvoK
+ rA+j+p+lED0vb8/3OGWvxI2fkLZV4AT3s6Jr3F31X/sHz8Y6wTRtBM6VvtJFfpGlthQ374obf
+ wat+eTD5V47MYFOjaHWVihNQ0ACrdwL7mH44XTW0dMCNB1Jm6ffsu4mjtSmVm3Khmbn4p68iV
+ usVvrDbIjQ/mu7/MgBrGo2u8YIdBK4E0eHB4XF3H/QmCsrZFMDiL05/pt29cN93putBxFEkwc
+ uF/L/75pwMv9ie02waMIl+xMc22fq68xEA9oNmkVJporacMGo3weU/OYAcjcZY9++N5k/xHJl
+ NsZhbsU/9xchsVWUK/NElzsQHPhI4ZZk3jvSxDBItrfjiJgIUI9MdrED2Ipn4Kd+vcMPlUDSt
+ mXFKWpHfuep4fg=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/23/22 14:35, David Laight wrote:
-> From: Armin Wolf
->> Sent: 23 February 2022 21:39
-> ...
->>> As far as this patch goes I think I'd add a 'stc' (set carry)
->>> instruction before the first 'outb'.
->>> Then if the 'something magic happens here' doesn't happen (because
->>> you aren't on the right kind of motherboard) the action fails.
->>>
->>> 	David
->>
->> We already check for such scenarios by checking if eax changed.
->> I would not set the carry flag before doing a SMM call since im
->> not sure if the firmware code always clears the carry flag when
->> the call was successful.
->> If for example the firmware code only sets the carry flag on
->> error and otherwise ignores the carry flag, we might create some
->> false negatives when a successful SMM call leaves the carry flag set.
-> 
-> If you are worried about that you should be clearing carry on entry.
-> 
+After doing some research, i found out that Fujitsu's hardware
+mointoring solution inside the SCH5627 exports data thru
+registers 0xA0 - 0xA3 regarding the mapping between temperature
+sensors and fans. If those registers are set to 0, the fans
+are forced to full speed.
+The first patch adds support for pwmX_auto_channels_temp
+attributes to the hwmon core, while the second patch does
+extend the sch5627 driver.
 
-I agree, but now we have an argument for clearing carry (because the
-SMM code might not do it) and for setting carry (because the SMM code
-might not execute). I don't know which way to go, if any, but that
-would be a functional change and should be submitted as separate patch.
+Both patches have been tested on a Fujitsu Esprimo P720.
 
-Guenter
+=2D--
+Changes in v2:
+- acquire mutex before doing register reads/writes
+
+Armin Wolf (2):
+  hwmon: (core) Add support for pwm auto channels attribute
+  hwmon: (sch5627) Add pwmX_auto_channels_temp support
+
+ Documentation/hwmon/sch5627.rst |  4 +++
+ drivers/hwmon/hwmon.c           |  1 +
+ drivers/hwmon/sch5627.c         | 61 +++++++++++++++++++++++++++++++++
+ include/linux/hwmon.h           |  2 ++
+ 4 files changed, 68 insertions(+)
+
+=2D-
+2.30.2
+
