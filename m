@@ -2,71 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 104D1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Feb 2022 19:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31412C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Feb 2022 19:25:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233391AbiBXTPm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Feb 2022 14:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        id S233832AbiBXTZd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Feb 2022 14:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiBXTPk (ORCPT
+        with ESMTP id S231326AbiBXTZc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:15:40 -0500
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ADD22BE82;
-        Thu, 24 Feb 2022 11:15:10 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id y7so4356543oih.5;
-        Thu, 24 Feb 2022 11:15:10 -0800 (PST)
+        Thu, 24 Feb 2022 14:25:32 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EB22465C8;
+        Thu, 24 Feb 2022 11:25:02 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id 12so4363113oix.12;
+        Thu, 24 Feb 2022 11:25:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vP2xKeCsORmMtAW2DgHTh/5I0mgPHdrCnA1D3ZoaL+E=;
+        b=TfvbR1hTGY9d21xx4NBbtasn8vIqQO6Eq6w3H00Y2dhCu2yQ0vjk5+PlUUFn0TVlBl
+         1Xxe49orXUmxeTIoCbF0XlAOCO3pLvxMIQ52Ec7mrpcHmXChGHnQ8vDsZDBe5npHYbVF
+         3PnfGas5HCnqB3fMfePxSwJNkvLwMLvT8wc0chVmZlsfKY1IRAHMMiafRZSW+drbi4iQ
+         y08CTle2K3qM8m8dzvhQ39mVpLknkf+vnDNyIg5hMq1+7DWqY60zoGD7Zk33VBtle8v1
+         iS6VOvem6AP9qQer2B8BamlTdzwX9mJPQ1bwaP2t1uqJcxde7lybR8JoHc0WEIVD/aGe
+         WY3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NTCiOCCJn/25u/gDAaL+aslgvQuySItwfpofAwJoXSQ=;
-        b=wXVMNUaU9pw4/1AbrFxqlZ59+YhgzOt926lQ69p4ozHHHYQgLPK4XJkMD30T57cW8o
-         dueZoA2I8u7Qv+195YZyo1nLXyrKyZFGHtThVtH3HOMC6JHm1WVH+j2VKJAvY2lTbj/W
-         IILk6mgVQ8hx/Ek5pWJ3pri/Q9oe3qSrbvanTLOQ54T1OQ+d0YHdKAlPCIwy4al/YNtz
-         WvFK7nY70XXbhKhsFcnHjAXKP01CiJp5QLvyomCPXweePBXU5xGVl+pqVIIThQZLf8nQ
-         cJQNT+jneVCvmcEJBu7gq2J71dXs0V7fnawB6fejsAT+1ISNO1xV6JkjwdxRJszAywoV
-         qKjQ==
-X-Gm-Message-State: AOAM532O2juAi5s93Y+uA/BPpldrPLQ5oEBX9jC7ibdygTwxK6XwyqkC
-        J+khSuza6jRLDm2OZuQafA==
-X-Google-Smtp-Source: ABdhPJxVSqjNIib1O+EL12DTHVCZEOfigenOk7mTlZRGXCWO/1h2HNKQ/llAkHApckaT6ctOhVx38w==
-X-Received: by 2002:aca:3543:0:b0:2cf:95f0:66ad with SMTP id c64-20020aca3543000000b002cf95f066admr8413596oia.113.1645730110019;
-        Thu, 24 Feb 2022 11:15:10 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056808114300b002d51f9b3263sm176500oiu.28.2022.02.24.11.15.08
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=vP2xKeCsORmMtAW2DgHTh/5I0mgPHdrCnA1D3ZoaL+E=;
+        b=LE6/erBHR0KeV9giTEPq75+qf25oSrutAxsb9Up3gwJF2mQls3DRLyaxg/ZmmiAaf8
+         4Mpt+q0tv1FRLL/usIc2780UsahuVHy4Zc+5pl/7DAXKNhTdRqzWD7twFRzI+w9hD+rB
+         qTq8002tZkjFVN3c6MFUH4ReZu8zKitDGyHu/Qc05ITvHVlszbTB7DtkNw+9nsvBfapT
+         AxMaMxVlCnGZxY5UkN78vACdNEzg2zvnCzJW3/2yGwEjVW4tPvQHUt2Zz4YddBgnXxKs
+         VrZ0RI5e0tqEGIGvgWjZ1P2F/Wod26koyu3pruF8CUL9YVNbXcD3iqVu1BVvCV3cpDdx
+         eGEg==
+X-Gm-Message-State: AOAM5335MoVSYi1UTmBCys6HXShv67qI0SJdD/3qTuFLucqKy+4wEajf
+        bHbCnwTyMKAg4xaEmsKbIeU=
+X-Google-Smtp-Source: ABdhPJxyyKLH2WhuX64EZoK63S8MYtuPm9ktSotyRHHh4i8keiox1wQFUQeu2xE8pAqtTvIBC0wErg==
+X-Received: by 2002:a05:6808:3091:b0:2d4:c180:d586 with SMTP id bl17-20020a056808309100b002d4c180d586mr2274873oib.120.1645730701604;
+        Thu, 24 Feb 2022 11:25:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j1-20020a4aea41000000b002e140d2d96esm118404ooe.13.2022.02.24.11.25.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 11:15:09 -0800 (PST)
-Received: (nullmailer pid 3427138 invoked by uid 1000);
-        Thu, 24 Feb 2022 19:15:08 -0000
-Date:   Thu, 24 Feb 2022 13:15:08 -0600
-From:   Rob Herring <robh@kernel.org>
+        Thu, 24 Feb 2022 11:25:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 24 Feb 2022 11:24:59 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org,
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 2/4] dt-bindings:trivial-devices: Add pli1209bc
-Message-ID: <YhfZPCVRPBgmmasK@robh.at.kernel.org>
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: vendor-prefixes: add Vicor
+ Corporation
+Message-ID: <20220224192459.GA1942646@roeck-us.net>
 References: <cover.1645435888.git.sylv@sylv.io>
- <15a9fcfb5b9592c6d87f12c2a4c77fd069f5cfff.1645435888.git.sylv@sylv.io>
+ <5b487a0b68d58b64022662f1e527ac80a6ad81ef.1645435888.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <15a9fcfb5b9592c6d87f12c2a4c77fd069f5cfff.1645435888.git.sylv@sylv.io>
+In-Reply-To: <5b487a0b68d58b64022662f1e527ac80a6ad81ef.1645435888.git.sylv@sylv.io>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 21 Feb 2022 10:42:05 +0100, Marcello Sylvester Bauer wrote:
-> Add trivial device entry for PLI1209BC Digital Supervisor from Vicor
-> Corporation.
+On Mon, Feb 21, 2022 at 10:42:04AM +0100, Marcello Sylvester Bauer wrote:
+> Add vendor prefix for Vicor Corporation.
 > 
 > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
 > ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
 >  1 file changed, 2 insertions(+)
 > 
-
-Acked-by: Rob Herring <robh@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 294093d45a23..047a83a089ce 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -1298,6 +1298,8 @@ patternProperties:
+>      description: Vertexcom Technologies, Inc.
+>    "^via,.*":
+>      description: VIA Technologies, Inc.
+> +  "^vicor,.*":
+> +    description: Vicor Corporation
+>    "^videostrong,.*":
+>      description: Videostrong Technology Co., Ltd.
+>    "^virtio,.*":
