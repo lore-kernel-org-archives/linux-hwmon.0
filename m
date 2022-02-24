@@ -2,80 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77064C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Feb 2022 22:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A8DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Feb 2022 00:48:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244490AbiBWWf4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Feb 2022 17:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        id S229589AbiBXAsj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Feb 2022 19:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244199AbiBWWfq (ORCPT
+        with ESMTP id S229526AbiBXAsj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Feb 2022 17:35:46 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2160050E0F
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Feb 2022 14:35:14 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-317-KFU4k30iPlqkQIaat-4inA-1; Wed, 23 Feb 2022 22:35:12 +0000
-X-MC-Unique: KFU4k30iPlqkQIaat-4inA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 23 Feb 2022 22:35:11 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 23 Feb 2022 22:35:11 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Armin Wolf' <W_Armin@gmx.de>,
-        =?utf-8?B?J1BhbGkgUm9ow6FyJw==?= <pali@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        Wed, 23 Feb 2022 19:48:39 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8077C107AAF;
+        Wed, 23 Feb 2022 16:48:00 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso1167289oon.5;
+        Wed, 23 Feb 2022 16:48:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oLxhe1+/q/ffytS2x1bnbij1SrGOn3CdIxFKv6xoCNQ=;
+        b=T1Pc4B23cN3s1FGEyr9jrL0b8gag+JUNzErCsCXYOhNTaC9lMQqhiVTDrXqC4kcDz5
+         4GBMrIYL7Oez63vIGGSOU70kgfUEkiQknd2HqL2t+N5Ohdln0utp/KlJrvhl3Fa6GBN0
+         bXyabAAVmmb/lusrMmTE/7s5MPg2a0nVzjeQ8lFHlDtm/rMXUSXXdHYL9PJWGDwEFc8Q
+         gMeg9uCvhL9izTnstMr83iWz8QKqjZuYYdZ0Vj/t9PB/vqMMjO2t+9w9mL5DHIM+lXpi
+         7RlG8RwYAdWVYIa7GH8QBsQuVeq6TKZYoWcEFiEucaDJB7l8XuAN21bWA0fpIxEUIqDD
+         kCgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oLxhe1+/q/ffytS2x1bnbij1SrGOn3CdIxFKv6xoCNQ=;
+        b=Y/WT2rb2o1wmAN++/ly2RnqTZnbDK1aIOaXY3JQxzU3UN3F4nVosVCwo1I34zXICMu
+         0Qs3ziwsoMjDzAMXLq5+oQSh+7UgP6pybJ4rIb6NzyCbyw5HQfJe6vfOF7mlnOxEJL+j
+         Vx2V9EoWdq/AUPklixYNzrkMbe5kdzNQV6pwamrrSo4A/tfVdE3CATuQ6z10tntprBvs
+         gZp3tHqNEpXs7y3ReHuPYCQmXezwc2medut4Eo7UaA9JROwZ2R0jw7l4YJda3YrKMGmc
+         jCx4MmbdcwcblhfeShXWBXWC70llzXqORBBtpMoHz1uV1OAhkussAcQB9D4VJenJ9Iwl
+         UzLQ==
+X-Gm-Message-State: AOAM530swnl5ETu4WebBiC83VgWgkxXM5u6SdR0qMRnI3i2jjMPKblll
+        vrIjQYjwsG29DsikUGzOl88=
+X-Google-Smtp-Source: ABdhPJy6H3eQot88I8lZuYMy6ofwOtngNCOg+LNyNN4ORGIy4QzWOecyi1QiCR5UB7B0KiqEg7u+Wg==
+X-Received: by 2002:a05:6870:aa8a:b0:d6:c3ca:7e9c with SMTP id gr10-20020a056870aa8a00b000d6c3ca7e9cmr52765oab.118.1645663530391;
+        Wed, 23 Feb 2022 16:45:30 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p13sm578119oiv.23.2022.02.23.16.45.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 16:45:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e0c0eac9-a66a-fc35-0864-2ca1ba7cb32f@roeck-us.net>
+Date:   Wed, 23 Feb 2022 16:45:27 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4] hwmon: (dell-smm) Improve assembly code
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Armin Wolf' <W_Armin@gmx.de>,
+        =?UTF-8?B?J1BhbGkgUm9ow6FyJw==?= <pali@kernel.org>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Topic: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Index: AQHYKBTirAZeqAMZek+3xwZDQ1am1ayf9nqAgAG05QCAAA5MMA==
-Date:   Wed, 23 Feb 2022 22:35:11 +0000
-Message-ID: <63a04993864f4c08923ed753d83cdf37@AcuMS.aculab.com>
 References: <20220220190851.17965-1-W_Armin@gmx.de>
  <20220222165432.GA255373@roeck-us.net> <20220222175150.qs32v4outislnqj6@pali>
  <b3cecea1376f4080929f47da2529685c@AcuMS.aculab.com>
  <4b5ca065-06a4-c1ff-ed16-3bbb038ee6e0@gmx.de>
-In-Reply-To: <4b5ca065-06a4-c1ff-ed16-3bbb038ee6e0@gmx.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+ <63a04993864f4c08923ed753d83cdf37@AcuMS.aculab.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <63a04993864f4c08923ed753d83cdf37@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-RnJvbTogQXJtaW4gV29sZg0KPiBTZW50OiAyMyBGZWJydWFyeSAyMDIyIDIxOjM5DQouLi4NCj4g
-PiBBcyBmYXIgYXMgdGhpcyBwYXRjaCBnb2VzIEkgdGhpbmsgSSdkIGFkZCBhICdzdGMnIChzZXQg
-Y2FycnkpDQo+ID4gaW5zdHJ1Y3Rpb24gYmVmb3JlIHRoZSBmaXJzdCAnb3V0YicuDQo+ID4gVGhl
-biBpZiB0aGUgJ3NvbWV0aGluZyBtYWdpYyBoYXBwZW5zIGhlcmUnIGRvZXNuJ3QgaGFwcGVuIChi
-ZWNhdXNlDQo+ID4geW91IGFyZW4ndCBvbiB0aGUgcmlnaHQga2luZCBvZiBtb3RoZXJib2FyZCkg
-dGhlIGFjdGlvbiBmYWlscy4NCj4gPg0KPiA+IAlEYXZpZA0KPiANCj4gV2UgYWxyZWFkeSBjaGVj
-ayBmb3Igc3VjaCBzY2VuYXJpb3MgYnkgY2hlY2tpbmcgaWYgZWF4IGNoYW5nZWQuDQo+IEkgd291
-bGQgbm90IHNldCB0aGUgY2FycnkgZmxhZyBiZWZvcmUgZG9pbmcgYSBTTU0gY2FsbCBzaW5jZSBp
-bQ0KPiBub3Qgc3VyZSBpZiB0aGUgZmlybXdhcmUgY29kZSBhbHdheXMgY2xlYXJzIHRoZSBjYXJy
-eSBmbGFnIHdoZW4NCj4gdGhlIGNhbGwgd2FzIHN1Y2Nlc3NmdWwuDQo+IElmIGZvciBleGFtcGxl
-IHRoZSBmaXJtd2FyZSBjb2RlIG9ubHkgc2V0cyB0aGUgY2FycnkgZmxhZyBvbg0KPiBlcnJvciBh
-bmQgb3RoZXJ3aXNlIGlnbm9yZXMgdGhlIGNhcnJ5IGZsYWcsIHdlIG1pZ2h0IGNyZWF0ZSBzb21l
-DQo+IGZhbHNlIG5lZ2F0aXZlcyB3aGVuIGEgc3VjY2Vzc2Z1bCBTTU0gY2FsbCBsZWF2ZXMgdGhl
-IGNhcnJ5IGZsYWcgc2V0Lg0KDQpJZiB5b3UgYXJlIHdvcnJpZWQgYWJvdXQgdGhhdCB5b3Ugc2hv
-dWxkIGJlIGNsZWFyaW5nIGNhcnJ5IG9uIGVudHJ5Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On 2/23/22 14:35, David Laight wrote:
+> From: Armin Wolf
+>> Sent: 23 February 2022 21:39
+> ...
+>>> As far as this patch goes I think I'd add a 'stc' (set carry)
+>>> instruction before the first 'outb'.
+>>> Then if the 'something magic happens here' doesn't happen (because
+>>> you aren't on the right kind of motherboard) the action fails.
+>>>
+>>> 	David
+>>
+>> We already check for such scenarios by checking if eax changed.
+>> I would not set the carry flag before doing a SMM call since im
+>> not sure if the firmware code always clears the carry flag when
+>> the call was successful.
+>> If for example the firmware code only sets the carry flag on
+>> error and otherwise ignores the carry flag, we might create some
+>> false negatives when a successful SMM call leaves the carry flag set.
+> 
+> If you are worried about that you should be clearing carry on entry.
+> 
 
+I agree, but now we have an argument for clearing carry (because the
+SMM code might not do it) and for setting carry (because the SMM code
+might not execute). I don't know which way to go, if any, but that
+would be a functional change and should be submitted as separate patch.
+
+Guenter
