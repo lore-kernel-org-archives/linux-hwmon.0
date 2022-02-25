@@ -2,61 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 266B6C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Feb 2022 08:41:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4329CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Feb 2022 08:56:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238594AbiBYImM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Feb 2022 03:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S234987AbiBYI4k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Feb 2022 03:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238588AbiBYImE (ORCPT
+        with ESMTP id S232659AbiBYI4j (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Feb 2022 03:42:04 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548BB24FBBB;
-        Fri, 25 Feb 2022 00:41:31 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id j2so6618458oie.7;
-        Fri, 25 Feb 2022 00:41:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=F5TvTHEzfjts7n7xwWtLjAIecr0LIjz0bAVcaxg/icE=;
-        b=gS2Vx5LulnThHrcvwVNn5kj05DndGf1i3cMCQ7DqE8kBOenLNs7mhCqVGypU73KKFB
-         uJAA+ZvJlRR9ABBDxaTONy8ytiyWG0PDt8AdyeH5/JuMg3L2xulp/q+aIzUu0ZjazkVV
-         tHt4ZLzplTtYn4S2L7FWJqCU0FEEy/ueWFFRllRtgfWe/jzja8JbL/1YL2ZoBtQk/Nii
-         tAH6pax3uWH4JGoeSJv7lXqRMNMGKlm+btUI9braDxQsFSJO5aMf1ebMGpkg9KTp1/9j
-         fG0ncuCxCzJHXWdGDDIW3BSzkKAAuq4vaOcq8yl8D7zDEXlcHHGlXYeG8EBfAB3vVRFE
-         8G6g==
+        Fri, 25 Feb 2022 03:56:39 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48435225002;
+        Fri, 25 Feb 2022 00:56:08 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id m3so6390530eda.10;
+        Fri, 25 Feb 2022 00:56:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=F5TvTHEzfjts7n7xwWtLjAIecr0LIjz0bAVcaxg/icE=;
-        b=e0CupBjkIPjCrAJSo6b3PYWnxD4ZcRnwG8eJodYMxAIn9Ekj17edS3W927yYScc8Jj
-         zlKmBy2mtFVDwohSum/lAHSvf6SXjZMilY+aYwcTl1kM0+FIs8kW2F8m9E940hDHtJ0R
-         oEdVahGhuGoM2tZrHVghsEt7p7nEx4dK/TYpxB+A/92lAug5OkH8B0v1K2Z8vWgHgi+W
-         UCeI251QPynAd6qoIhdooBQnvqqHCRmkrrWUqnZ0FdvOpEljts4b71bJF4e6/Ir/PqdO
-         3O/FZOhbdf+j5zyrGUpKdxG3QVRvPN229WmowZkVKXPxJmaWLEevpRTuZ0KfcoQiHCdd
-         TxHQ==
-X-Gm-Message-State: AOAM533eMGAL1IUh3C8MJ+5vU3xsdNYjR3N6tKo2tMCSeDIcDyC24VMV
-        j+Von51LfrNuGRwUMYf7nfE=
-X-Google-Smtp-Source: ABdhPJyJZ9j+S8dqGSLrVdG0PIZmRZROBmy5/gCqEY/5ztqHZCc3/AnTLe0ZTrBQwJgCWns6I7ejTA==
-X-Received: by 2002:a05:6808:1586:b0:2d5:1211:5785 with SMTP id t6-20020a056808158600b002d512115785mr944779oiw.0.1645778490691;
-        Fri, 25 Feb 2022 00:41:30 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c8-20020a4ad788000000b0031ce69b1640sm774069oou.10.2022.02.25.00.41.28
+        bh=S27aJRS83juI73kqWU0BxLGP8P3u79JStBDKAuIXFhk=;
+        b=BUSEpEhuOkhpppOXNXT+BdPEpe0kBH3iNchfYBbsC6y9Tkl5wzy7/5bmyTC81UCd3w
+         k/H7U2PPBCOWOV1rjRa+4TtBG7TOFNRbqveJQJD8tf++JN+msReM1iWfeuTbxy2Agvgy
+         LTcb6gY93DtI1wzO+FgJnxlu9eTSqPYkOC1bSKSpkjhb2qNkr8QM2mzTGfybW2Ojm5qW
+         3f5GoDePgPJIgMlTTlUEhl97WvMJEwUC5/AeqA/QY1Np1a/Z9eXe+sct40rS/ycrNdA1
+         z99y7ARB9cfh3D5HiciUPZsuphghzs0W/S3JAXaDNQYzcYoj7ypg3eTk2faNETy63g7Y
+         fHKg==
+X-Gm-Message-State: AOAM531sTq3c3YlZMy6BxwaBoRN8NpMZftXm1LrA03m6kXnmSCpg/AU8
+        dEh5YKsKYsdpITaohIi5IpeiMs/3bPQ=
+X-Google-Smtp-Source: ABdhPJyoLJT8Or8rEnWPT56mqaT7iWjipB/VQRiQnuSeper/ezx7KtfhXCBHPXRwKEykdvb/PXvTsg==
+X-Received: by 2002:a05:6402:438e:b0:410:a8bd:fee0 with SMTP id o14-20020a056402438e00b00410a8bdfee0mr6084025edc.426.1645779366594;
+        Fri, 25 Feb 2022 00:56:06 -0800 (PST)
+Received: from [192.168.0.130] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id gb11-20020a170907960b00b006d20acf7e36sm763580ejc.144.2022.02.25.00.56.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 00:41:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <91e35667-5203-271b-8a0e-b9ddf71561d6@roeck-us.net>
-Date:   Fri, 25 Feb 2022 00:41:27 -0800
+        Fri, 25 Feb 2022 00:56:05 -0800 (PST)
+Message-ID: <82d76824-ef5b-23f9-149e-2c5d9f88e94a@kernel.org>
+Date:   Fri, 25 Feb 2022 09:56:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add sample averaging property
+ for ADM1275
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
+To:     Guenter Roeck <linux@roeck-us.net>,
         Potin Lai <potin.lai@quantatw.com>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>
@@ -66,69 +56,74 @@ References: <20220224154329.9755-1-potin.lai@quantatw.com>
  <20220224154329.9755-3-potin.lai@quantatw.com>
  <c6607953-927e-4d85-21cb-72e01a121453@kernel.org>
  <b527a418-b807-7afa-9ed0-2ac4271ff79e@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add sample averaging property
- for ADM1275
-In-Reply-To: <b527a418-b807-7afa-9ed0-2ac4271ff79e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <91e35667-5203-271b-8a0e-b9ddf71561d6@roeck-us.net>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <91e35667-5203-271b-8a0e-b9ddf71561d6@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/24/22 23:31, Krzysztof Kozlowski wrote:
-> On 25/02/2022 08:06, Krzysztof Kozlowski wrote:
->> On 24/02/2022 16:43, Potin Lai wrote:
->>> Add new properties for binding sample averaging in PMON_CONFIG register
+On 25/02/2022 09:41, Guenter Roeck wrote:
+> On 2/24/22 23:31, Krzysztof Kozlowski wrote:
+>> On 25/02/2022 08:06, Krzysztof Kozlowski wrote:
+>>> On 24/02/2022 16:43, Potin Lai wrote:
+>>>> Add new properties for binding sample averaging in PMON_CONFIG register
+>>>>
+>>>> - adi,volt-curr-sample-average
+>>>> - adi,power-sample-average
+>>>>
+>>>> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+>>>> ---
+>>>>   .../bindings/hwmon/adi,adm1275.yaml           | 44 +++++++++++++++++++
+>>>>   1 file changed, 44 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+>>>> index 223393d7cafd..325f6827648f 100644
+>>>> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+>>>> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+>>>> @@ -37,6 +37,48 @@ properties:
+>>>>       description:
+>>>>         Shunt resistor value in micro-Ohm.
+>>>>   
+>>>> +  adi,volt-curr-sample-average:
+>>>> +    description: |
+>>>> +      A value to configure VI_AVG in PMON_CONFIG register to indicate a
+>>>> +      number of samples to be used to report voltage and currentvalues.
 >>>
->>> - adi,volt-curr-sample-average
->>> - adi,power-sample-average
+>>> missing space after current.
 >>>
->>> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
->>> ---
->>>   .../bindings/hwmon/adi,adm1275.yaml           | 44 +++++++++++++++++++
->>>   1 file changed, 44 insertions(+)
+>>>> +      If set to 7, the 128 samples averaging would be used.
+>>>> +
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint8
 >>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> index 223393d7cafd..325f6827648f 100644
->>> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> @@ -37,6 +37,48 @@ properties:
->>>       description:
->>>         Shunt resistor value in micro-Ohm.
->>>   
->>> +  adi,volt-curr-sample-average:
->>> +    description: |
->>> +      A value to configure VI_AVG in PMON_CONFIG register to indicate a
->>> +      number of samples to be used to report voltage and currentvalues.
+>>> Make it a uint32.
+>>>
+>>> The previous usage of this field was more appropriate. Instead of
+>>> keeping register values in DT, it's better to keep logical value. What
+>>> if in next cheap the register values have calculation method?
+>>>
+>>> This should be like in v1 - enum for number of samples to take in averaging.
+>>>
 >>
->> missing space after current.
+>> One more thought: this field could also stay in current approach if you
+>> change the meaning from "value to configure VI_AVG" to something like
+>> "the exponent used to determine the number of samples, where the base is 2".
 >>
->>> +      If set to 7, the 128 samples averaging would be used.
->>> +
->>> +    $ref: /schemas/types.yaml#/definitions/uint8
->>
->> Make it a uint32.
->>
->> The previous usage of this field was more appropriate. Instead of
->> keeping register values in DT, it's better to keep logical value. What
->> if in next cheap the register values have calculation method?
->>
->> This should be like in v1 - enum for number of samples to take in averaging.
+>> This approach would allow you to skip the "ilog" in the code. It sill
+>> won't be that easily scalable if another chip comes with different
+>> formula, but I think that's unlikely.
 >>
 > 
-> One more thought: this field could also stay in current approach if you
-> change the meaning from "value to configure VI_AVG" to something like
-> "the exponent used to determine the number of samples, where the base is 2".
-> 
-> This approach would allow you to skip the "ilog" in the code. It sill
-> won't be that easily scalable if another chip comes with different
-> formula, but I think that's unlikely.
-> 
+> The standard hwmon ABI expects the number of samples, it isn't always a
+> power of 2, and the driver already implements it (with ilog2) as sysfs
+> attribute. I don't really see the point of "optimizing" something
+> like this to be chip specific just to avoid some error checking.
 
-The standard hwmon ABI expects the number of samples, it isn't always a
-power of 2, and the driver already implements it (with ilog2) as sysfs
-attribute. I don't really see the point of "optimizing" something
-like this to be chip specific just to avoid some error checking.
+Thanks for confirming. +1
 
-Guenter
+
+
+Best regards,
+Krzysztof
