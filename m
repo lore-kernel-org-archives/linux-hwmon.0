@@ -2,211 +2,133 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E72E7C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Feb 2022 02:10:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 263D9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Feb 2022 07:06:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236689AbiBYCLL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Feb 2022 21:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S238007AbiBYHGr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Feb 2022 02:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236663AbiBYCLK (ORCPT
+        with ESMTP id S237991AbiBYHGq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Feb 2022 21:11:10 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112621EC98A;
-        Thu, 24 Feb 2022 18:10:40 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id 12so5858829oix.12;
-        Thu, 24 Feb 2022 18:10:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i+L8lnOZSA8pmywpv3S4jjt7n2Ef0gqDV24qQiOWShs=;
-        b=V94ymVd2eobEOAb3mUMVoN0ua8PGdVGmMHg3x2g7g4iwQh/P0K1KSiVwoTiCbyScQu
-         Pd+EEtbcVivlwHxkHzzU1Eqiia9jeenSP0fA/pWL7bJs+g3SIhTZm5DoFbbP+4x+mol5
-         w0Jb9r7nu3VLlt0ofaPA/T1euQ9qliV8wr93pY/B1VOsprtYC9F6e+37tNweAa4MRyos
-         nNYF8eWCCVa7PmXbOhHPJsH/viQGY2Ec3C8WM2qcog/G67jnaiaBzpO1D4/sT+pSd7TD
-         Dpo4JkN6xN45rWNWdRigzFIoyTw/7tDp55w7wC2p/4eP69Mtiv7cDktum0YVSbFI0f/q
-         YpFw==
+        Fri, 25 Feb 2022 02:06:46 -0500
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9581E14BF;
+        Thu, 24 Feb 2022 23:06:15 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a8so8983599ejc.8;
+        Thu, 24 Feb 2022 23:06:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=i+L8lnOZSA8pmywpv3S4jjt7n2Ef0gqDV24qQiOWShs=;
-        b=ZBEn5lLht8z2XrNrUqPcws4EEC6AwiOGH2qhTTdheoB4sxOyDOH6/E2pVgfxI/ultQ
-         anHw2r4FxBtwVXk4eWjrUFYGcmWi4JtpjpQImocdfDSgcZwn7JHbzWNLl3HFU8sV1Lmh
-         gHOm0dnY/giS1EWuqX6mvyzNX9tOnh0cLeR2BGmml6RUutaHD8pyJDjj0RXkI+mwFzOe
-         5bM4ttXxkSmouQonJg7XiiZtXB0HyagwKqppU+4sWL+Zf8hz5YbL4l4SkpyuU2QMl41W
-         HnbFK0FKPdWgcqmH14iFFmWmW/HXhv2wbOY8tdBSsF0iebUj5WQQcIHM0TWHiDcOL/f5
-         vsKg==
-X-Gm-Message-State: AOAM53291nAKu9VpI/TGvIMlWM3cFvN9g56x1h3mHX+LyndncDKexov8
-        ldrZdKCripOvgOrFXslJZZo=
-X-Google-Smtp-Source: ABdhPJwk2lVSTqtSZF2hGn40lGoYAil5s1DUfTaimRcZ1DuyaVLDpABRFqjPw8WpSFRIPaEe4jzj2A==
-X-Received: by 2002:a05:6808:1207:b0:2d3:3c51:2a43 with SMTP id a7-20020a056808120700b002d33c512a43mr489558oil.237.1645755039362;
-        Thu, 24 Feb 2022 18:10:39 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 67-20020aca0546000000b002d46e151b9bsm579604oif.18.2022.02.24.18.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 18:10:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 24 Feb 2022 18:10:37 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     hdegoede@redhat.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (sch5627) Add pwmX_auto_channels_temp
- support
-Message-ID: <20220225021037.GA1976317@roeck-us.net>
-References: <20220224061210.16452-1-W_Armin@gmx.de>
- <20220224061210.16452-3-W_Armin@gmx.de>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JDaN7T5a5SMQ/lOcHwZ3iJ4ce75iqqbIoOIHiwveTKo=;
+        b=c96gCPG5Y/tQfdRBC9u0UrvqKXz5O8eh9Twj7TgGZpiciHYLP8BSWOBQkGQBgSt2Uy
+         hXHDjUMzqm8AS4dNjMJqYjVfpFFZzelMMw3GPuh4Bb2zqXwqAHBIt1yWpoMJkdy5kYAF
+         opjbD3pSFDICcUYexXj6a5fMBbnNtxvMSfyfx/jNWnqzkKIsieS0egjKkfyeKSY/IXyS
+         26VzBbhbpP4VQHVUdYAqn8bkg//B5TkEiDiZ/eZDrqIgdJkeyJ4kOAbrJ3Iex/p6WVS8
+         M7Xl7lSs8LeEktJ7HgAA44J822/uxk5O7Xh8hSCV7OQAcprlo06ehm01/uJ8zbHG/lgj
+         JQSA==
+X-Gm-Message-State: AOAM532PhANhrK8uRK5uoZWb2KXCALMbv9zKv5jKo2YRnw8wY+h59eUM
+        zWjqACJGECz8CfTj8MlRMZhvwOvqnZI=
+X-Google-Smtp-Source: ABdhPJxxrOBNQcNwFo2aVjJ+AbwXnC5WVqb7SCBZSef51+r9okC3As9UhHyBUCIpUkgb0puyfUK3tg==
+X-Received: by 2002:a17:907:78cc:b0:6b4:ecc1:42fb with SMTP id kv12-20020a17090778cc00b006b4ecc142fbmr4808647ejc.248.1645772773371;
+        Thu, 24 Feb 2022 23:06:13 -0800 (PST)
+Received: from [192.168.0.128] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id h12-20020a1709060f4c00b006b4ec988cc3sm664190ejj.4.2022.02.24.23.06.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 23:06:12 -0800 (PST)
+Message-ID: <c6607953-927e-4d85-21cb-72e01a121453@kernel.org>
+Date:   Fri, 25 Feb 2022 08:06:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224061210.16452-3-W_Armin@gmx.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add sample averaging property
+ for ADM1275
+Content-Language: en-US
+To:     Potin Lai <potin.lai@quantatw.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220224154329.9755-1-potin.lai@quantatw.com>
+ <20220224154329.9755-3-potin.lai@quantatw.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220224154329.9755-3-potin.lai@quantatw.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 07:12:10AM +0100, Armin Wolf wrote:
-> After doing some research, it seems that Fujitsu's
-> hardware monitoring solution exports data describing
-> which temperature sensors affect which fans, similar
-> to the data in fan_source of the ftsteutates driver.
-> Writing 0 into these registers forces the fans to
-> full speed.
-> Export this data with standard attributes.
+On 24/02/2022 16:43, Potin Lai wrote:
+> Add new properties for binding sample averaging in PMON_CONFIG register
 > 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
+> - adi,volt-curr-sample-average
+> - adi,power-sample-average
+> 
+> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
 > ---
->  Documentation/hwmon/sch5627.rst |  4 +++
->  drivers/hwmon/sch5627.c         | 61 +++++++++++++++++++++++++++++++++
->  2 files changed, 65 insertions(+)
+>  .../bindings/hwmon/adi,adm1275.yaml           | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
 > 
-> --
-> 2.30.2
-> 
-> diff --git a/Documentation/hwmon/sch5627.rst b/Documentation/hwmon/sch5627.rst
-> index 187682e99114..ecb4fc84d045 100644
-> --- a/Documentation/hwmon/sch5627.rst
-> +++ b/Documentation/hwmon/sch5627.rst
-> @@ -20,6 +20,10 @@ Description
->  SMSC SCH5627 Super I/O chips include complete hardware monitoring
->  capabilities. They can monitor up to 5 voltages, 4 fans and 8 temperatures.
-> 
-> +In addition, the SCH5627 exports data describing which temperature sensors
-> +affect the speed of each fan. Setting pwmX_auto_channels_temp to 0 forces
-> +the corresponding fan to full speed until another value is written.
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+> index 223393d7cafd..325f6827648f 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+> @@ -37,6 +37,48 @@ properties:
+>      description:
+>        Shunt resistor value in micro-Ohm.
+>  
+> +  adi,volt-curr-sample-average:
+> +    description: |
+> +      A value to configure VI_AVG in PMON_CONFIG register to indicate a
+> +      number of samples to be used to report voltage and currentvalues.
+
+missing space after current.
+
+> +      If set to 7, the 128 samples averaging would be used.
 > +
->  The SMSC SCH5627 hardware monitoring part also contains an integrated
->  watchdog. In order for this watchdog to function some motherboard specific
->  initialization most be done by the BIOS, so if the watchdog is not enabled
-> diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
-> index 72c3f6757e34..25fbbd4c9a2b 100644
-> --- a/drivers/hwmon/sch5627.c
-> +++ b/drivers/hwmon/sch5627.c
-> @@ -52,6 +52,9 @@ static const u16 SCH5627_REG_FAN[SCH5627_NO_FANS] = {
->  static const u16 SCH5627_REG_FAN_MIN[SCH5627_NO_FANS] = {
->  	0x62, 0x64, 0x66, 0x68 };
-> 
-> +static const u16 SCH5627_REG_PWM_MAP[SCH5627_NO_FANS] = {
-> +	0xA0, 0xA1, 0xA2, 0xA3 };
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+
+Make it a uint32.
+
+The previous usage of this field was more appropriate. Instead of
+keeping register values in DT, it's better to keep logical value. What
+if in next cheap the register values have calculation method?
+
+This should be like in v1 - enum for number of samples to take in averaging.
+
+> +    enum:
+> +      - 0 # 1 sample averaging
+> +      - 1 # 2 sample averaging
+> +      - 2 # 4 sample averaging
+> +      - 3 # 8 sample averaging
+> +      - 4 # 16 sample averaging
+> +      - 5 # 32 sample averaging
+> +      - 6 # 64 sample averaging
+> +      - 7 # 128 sample averaging
+> +    default: 0
 > +
->  static const u16 SCH5627_REG_IN_MSB[SCH5627_NO_IN] = {
->  	0x22, 0x23, 0x24, 0x25, 0x189 };
->  static const u16 SCH5627_REG_IN_LSN[SCH5627_NO_IN] = {
-> @@ -223,6 +226,9 @@ static int reg_to_rpm(u16 reg)
->  static umode_t sch5627_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
->  				  int channel)
->  {
-> +	if (type == hwmon_pwm && attr == hwmon_pwm_auto_channels_temp)
-> +		return 0644;
+> +  adi,power-sample-average:
+> +    description: |
+> +      A value to configure PWR_AVG in PMON_CONFIG register to indicate a
+> +      number of samples to be used to report power values.
+> +      If set to 7, the 128 samples averaging would be used.
+
+The same.
+
 > +
->  	return 0444;
->  }
-> 
-> @@ -278,6 +284,23 @@ static int sch5627_read(struct device *dev, enum hwmon_sensor_types type, u32 at
->  			break;
->  		}
->  		break;
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_auto_channels_temp:
-> +			mutex_lock(&data->update_lock);
-> +			ret = sch56xx_read_virtual_reg(data->addr, SCH5627_REG_PWM_MAP[channel]);
-> +			mutex_unlock(&data->update_lock);
-> +
-> +			if (ret < 0)
-> +				return ret;
-> +
-> +			*val = ret;
-> +
-> +			return 0;
-> +		default:
-> +			break;
-> +		}
-> +		break;
->  	case hwmon_in:
->  		ret = sch5627_update_in(data);
->  		if (ret < 0)
-> @@ -318,10 +341,42 @@ static int sch5627_read_string(struct device *dev, enum hwmon_sensor_types type,
->  	return -EOPNOTSUPP;
->  }
-> 
-> +static int sch5627_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
-> +			 long val)
-> +{
-> +	struct sch5627_data *data = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_auto_channels_temp:
-> +			/* registers are 8 bit wide */
-> +			if (val > U8_MAX || val < 0)
-> +				return -EINVAL;
-> +
-> +			mutex_lock(&data->update_lock);
-> +			ret = sch56xx_write_virtual_reg(data->addr, SCH5627_REG_PWM_MAP[channel],
-> +							val);
-> +			mutex_unlock(&data->update_lock);
-> +
-> +			return ret;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
->  static const struct hwmon_ops sch5627_ops = {
->  	.is_visible = sch5627_is_visible,
->  	.read = sch5627_read,
->  	.read_string = sch5627_read_string,
-> +	.write = sch5627_write,
->  };
-> 
->  static const struct hwmon_channel_info *sch5627_info[] = {
-> @@ -342,6 +397,12 @@ static const struct hwmon_channel_info *sch5627_info[] = {
->  			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT,
->  			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT
->  			   ),
-> +	HWMON_CHANNEL_INFO(pwm,
-> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-> +			   HWMON_PWM_AUTO_CHANNELS_TEMP
-> +			   ),
->  	HWMON_CHANNEL_INFO(in,
->  			   HWMON_I_INPUT | HWMON_I_LABEL,
->  			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +      The chip supports power sample averaging:
+> +        "adi,adm1272"
+> +        "adi,adm1278"
+> +        "adi,adm1293"
+> +        "adi,adm1294"
+
+This should be in if-block like here:
+https://lore.kernel.org/linux-devicetree/YheqjZQHq0T%2FRSIz@robh.at.kernel.org/T/#m0672807a08c95aba2bccb927d37ff24fde471b8b
+
+
+Best regards,
+Krzysztof
