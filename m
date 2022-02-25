@@ -2,107 +2,138 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC4D8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Feb 2022 16:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 195D8C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Feb 2022 16:39:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242610AbiBYQGx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Feb 2022 11:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
+        id S236348AbiBYQkP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Feb 2022 11:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242557AbiBYQGx (ORCPT
+        with ESMTP id S235766AbiBYQkP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:06:53 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD19211316;
-        Fri, 25 Feb 2022 08:06:20 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [80.241.60.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K4vlZ0rVwz9sWK;
-        Fri, 25 Feb 2022 17:06:18 +0100 (CET)
-From:   Marcello Sylvester Bauer <sylv@sylv.io>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645805176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ajwrqPctCAOf/kug9ZVs1DEHHuF8348gK83QTGUqptI=;
-        b=KCNt/EfdLPcJfwqy5b1g/yEK2Ah7JfyFJ7UcVVzVphXU9maItGbXKPPVSxvOj8frnHZPaZ
-        7i9mtV0eQpr9kRyYKJlMWGJ2OYW2aHzvnwm9yZLNBgi4VmMbgafcpxdisTLRTE6JA8N0Wr
-        z6PwPiyfsstpCPaB4Vwua+BVtb9yO2FroH8ssrklXRUt79yqpim3DrTWyKdl77Izz1X+ht
-        lRP7h7eTwJSH+/E94Pw6LytvcN9/FCKXbXceBaYAkVhQEUpb+/Dl1qw0ZC/S13vCkkC9Zm
-        rZaJjN/KeBjV1aDVqajGsS7N52cmzRoIiRFn0Y8ouM2tCa6GFiYE3PgLtGbvTw==
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
+        Fri, 25 Feb 2022 11:40:15 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F249218CCD;
+        Fri, 25 Feb 2022 08:39:43 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id k22-20020a9d4b96000000b005ad5211bd5aso3973592otf.8;
+        Fri, 25 Feb 2022 08:39:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=11tzMfBXZWTEFu0SmCPnVL2TtZRM1lacEuBs47JGN18=;
+        b=Q6lPdNvWOYVkVMB+Ob8pAsRnWU/khUVxcYPwQX0huyQVohoS8PLdmrTbEv09/SZGgp
+         mWKO0aCv7XXrbhBVIeeoZTYYJjj1/kEp54eyn8sMmXVVFCPhmgisKe1i8788iMwVtPRb
+         niJMPyHXbrsUwvHlnHH9vUAJv1zzsm+2G/HNwIgyDQbb4hsPhwPElKPf1jDW5U6Xsrru
+         JkHvzTlu9ah+fW8nREllsscdRyXJoxmOhTudcQ/1DYOcG+Co+uQVAMwq1mXhb8EMOdtl
+         gtNv6Gf4J5LD8x5Dt/RVCPiljOwBOVdCIdliwKvnSrPfV5VDHwMuoYjbN1xgzUbWonOx
+         OW0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=11tzMfBXZWTEFu0SmCPnVL2TtZRM1lacEuBs47JGN18=;
+        b=hR+kyNvH2Vx8ysJeuTEC7Ql8hW5tClxxOPEVLh+TAMY+eFfnrg4hXjTu3qbUrM86AT
+         lIzm4KTrZXR4wRPtuoZ1EsC2SuO2JEuDDT6fBx5RoEgRWvIsAP9tGhoPnPY/h4Norr63
+         kk2qr7eL5L0CP9rjCL74ocQv5Q1EXUCN2M3X68E4zRhCAWLak5AauT9AOr8TtQPuY+wR
+         iDsfXA+p2JWpMWEvs5h7tHwG9KZkYOWY7t1Jq1BHWIUlCjydnK8VCEfeL8LKAgtag9N7
+         V9TTO/Kvw55pvGga6CWiH6+zWeirhr0HJkgmrgFCmqCbUchYkXQKMrTH02zdGyIvFkQN
+         hteA==
+X-Gm-Message-State: AOAM532TBiriF18NfyAWvntPGa0Blahc/jQRmg3f62cFbL9ZsS8Yc9N4
+        onO5fEXdmvg+r9BlqnzvV6g=
+X-Google-Smtp-Source: ABdhPJxMkjgJv2VmxqbfWtbBsi6ys5WBHUI32OD7DBNlP/O58zz+KZ7xJlkp3YvZhuqxzoMRUH1vXQ==
+X-Received: by 2002:a05:6830:4126:b0:5af:b9dd:14be with SMTP id w38-20020a056830412600b005afb9dd14bemr2864627ott.366.1645807182651;
+        Fri, 25 Feb 2022 08:39:42 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s4-20020a056808208400b002d54070f170sm1416054oiw.37.2022.02.25.08.39.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 08:39:42 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8656b67c-e093-0a18-9c5f-02f5b4264bb2@roeck-us.net>
+Date:   Fri, 25 Feb 2022 08:39:40 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/3] hwmon (xdpe12284): Add support for xdpe11280
+Content-Language: en-US
+To:     sylv <sylv@sylv.io>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: [PATCH v1 1/1] drivers/hwmon/pmbus: Add mutex to regulator ops
-Date:   Fri, 25 Feb 2022 17:06:09 +0100
-Message-Id: <b991506bcbf665f7af185945f70bf9d5cf04637c.1645804976.git.sylv@sylv.io>
-MIME-Version: 1.0
+        linux-doc@vger.kernel.org
+References: <cover.1645108566.git.sylv@sylv.io>
+ <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
+ <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
+ <246de83631dd5e165f95904d7f1628502f030e02.camel@sylv.io>
+ <66d4ea0b-0377-c9ae-68eb-7303c32cf87e@roeck-us.net>
+ <7a567823d62b6ed00cbdc2ce239dc4a69e48b411.camel@sylv.io>
+ <aa82f347-1b1a-8c40-b5cb-9efe292ae0ec@roeck-us.net>
+ <337fe0598837b35ee96773339e9cdc8345a7c16e.camel@sylv.io>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <337fe0598837b35ee96773339e9cdc8345a7c16e.camel@sylv.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 2/21/22 04:13, sylv wrote:
+> On Thu, 2022-02-17 at 11:25 -0800, Guenter Roeck wrote:
+>> On 2/17/22 10:38, sylv wrote:
+>> [ ... ]
+>>
+>>>>
+>>>> That makes me wonder if the chip needs to be added to this driver
+>>>> in
+>>>> the first
+>>>> place, or if it could be added to pmbus.c instead. Any idea ?
+>>>
+>>> Oh, we did wrote a standalone driver too, and it works fine.
+>>> Maybe it's better to upsteam it instead. :)
+>>
+>> No, I meant if it would make sense to just add something like
+>>
+>>          {"xdpe11280", (kernel_ulong_t)&pmbus_info_one },
+>>
+>> to drivers/hwmon/pmbus/pmbus.c.
+>>
+>> You only really need a standalone driver if it does something
+>> special, such as a workaround for some register access (like
+>> the xdpe12284 driver), or if support for manufacturer specific
+>> registers is desired or needed. That would, for example, be useful
+>> if the xdpe11280 supports per-phase sensors.
+>>
+>> Thanks,
+>> Guenter
+> 
+> Hi,
+> 
+> I tested if the xdpe11280 can use the generic pmbus driver. Everything
+> works fine except it does only detect READ_TEMPERATURE_1 on page 0.
+> Looking at the pmbus_find_sensor_groups function it looks like only
+> some commands are probed on each page (READ_VOUT, READ_IOUT, and
+> READ_POUT) but not READ_TEMPERATURE_1.
+> The PMBus spec 1.3.1 tells us: "Each page may offer the full range of
+> PMBus commands available for each output or non-PMBus device." How
+> could we adapt the generic driver so that it is possible to probe
+> commands for each page?
+> 
 
-On PMBUS devices with multiple pages, the regulator ops need to be
-protected with the update mutex. This prevents accidentally changing
-the page in a separate thread while operating on the PMBUS_OPERATION
-register.
+The problem is the "may". Some chips don't implement multi-page
+support especially for temperature sensors. So we'll have to go
+with adding support to the existing driver.
 
-Tested on Infineon xdpe11280 while a separate thread polls for sensor
-data.
+Guenter
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
----
- drivers/hwmon/pmbus/pmbus_core.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..f79930162256 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2386,10 +2386,14 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
- 	int ret;
- 
-+	mutex_lock(&data->update_lock);
- 	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-+	mutex_unlock(&data->update_lock);
-+
- 	if (ret < 0)
- 		return ret;
- 
-@@ -2400,11 +2404,17 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
-+	int ret;
- 
--	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
--				      PB_OPERATION_CONTROL_ON,
--				      enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_lock(&data->update_lock);
-+	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-+				     PB_OPERATION_CONTROL_ON,
-+				     enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_unlock(&data->update_lock);
-+
-+	return ret;
- }
- 
- static int pmbus_regulator_enable(struct regulator_dev *rdev)
--- 
-2.35.1
+> Furthermore, It would be great to add regulator and DT support. I
+> created a WIP branch on GitHub with a possible way to implement this:
+> https://github.com/9elements/linux/tree/upstreaming_pmbus_regulator_wip
+> 
+> What do you think?
+> 
+> Thanks,
+> Marcello
+> 
 
