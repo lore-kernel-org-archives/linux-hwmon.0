@@ -2,138 +2,73 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 195D8C433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Feb 2022 16:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8BBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 10:44:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236348AbiBYQkP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Feb 2022 11:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S231174AbiBZKon (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Feb 2022 05:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiBYQkP (ORCPT
+        with ESMTP id S231148AbiBZKon (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:40:15 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F249218CCD;
-        Fri, 25 Feb 2022 08:39:43 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id k22-20020a9d4b96000000b005ad5211bd5aso3973592otf.8;
-        Fri, 25 Feb 2022 08:39:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=11tzMfBXZWTEFu0SmCPnVL2TtZRM1lacEuBs47JGN18=;
-        b=Q6lPdNvWOYVkVMB+Ob8pAsRnWU/khUVxcYPwQX0huyQVohoS8PLdmrTbEv09/SZGgp
-         mWKO0aCv7XXrbhBVIeeoZTYYJjj1/kEp54eyn8sMmXVVFCPhmgisKe1i8788iMwVtPRb
-         niJMPyHXbrsUwvHlnHH9vUAJv1zzsm+2G/HNwIgyDQbb4hsPhwPElKPf1jDW5U6Xsrru
-         JkHvzTlu9ah+fW8nREllsscdRyXJoxmOhTudcQ/1DYOcG+Co+uQVAMwq1mXhb8EMOdtl
-         gtNv6Gf4J5LD8x5Dt/RVCPiljOwBOVdCIdliwKvnSrPfV5VDHwMuoYjbN1xgzUbWonOx
-         OW0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=11tzMfBXZWTEFu0SmCPnVL2TtZRM1lacEuBs47JGN18=;
-        b=hR+kyNvH2Vx8ysJeuTEC7Ql8hW5tClxxOPEVLh+TAMY+eFfnrg4hXjTu3qbUrM86AT
-         lIzm4KTrZXR4wRPtuoZ1EsC2SuO2JEuDDT6fBx5RoEgRWvIsAP9tGhoPnPY/h4Norr63
-         kk2qr7eL5L0CP9rjCL74ocQv5Q1EXUCN2M3X68E4zRhCAWLak5AauT9AOr8TtQPuY+wR
-         iDsfXA+p2JWpMWEvs5h7tHwG9KZkYOWY7t1Jq1BHWIUlCjydnK8VCEfeL8LKAgtag9N7
-         V9TTO/Kvw55pvGga6CWiH6+zWeirhr0HJkgmrgFCmqCbUchYkXQKMrTH02zdGyIvFkQN
-         hteA==
-X-Gm-Message-State: AOAM532TBiriF18NfyAWvntPGa0Blahc/jQRmg3f62cFbL9ZsS8Yc9N4
-        onO5fEXdmvg+r9BlqnzvV6g=
-X-Google-Smtp-Source: ABdhPJxMkjgJv2VmxqbfWtbBsi6ys5WBHUI32OD7DBNlP/O58zz+KZ7xJlkp3YvZhuqxzoMRUH1vXQ==
-X-Received: by 2002:a05:6830:4126:b0:5af:b9dd:14be with SMTP id w38-20020a056830412600b005afb9dd14bemr2864627ott.366.1645807182651;
-        Fri, 25 Feb 2022 08:39:42 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056808208400b002d54070f170sm1416054oiw.37.2022.02.25.08.39.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 08:39:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8656b67c-e093-0a18-9c5f-02f5b4264bb2@roeck-us.net>
-Date:   Fri, 25 Feb 2022 08:39:40 -0800
+        Sat, 26 Feb 2022 05:44:43 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Feb 2022 02:44:07 PST
+Received: from ipmail03.adl6.internode.on.net (ipmail03.adl6.internode.on.net [150.101.137.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3333029752F
+        for <linux-hwmon@vger.kernel.org>; Sat, 26 Feb 2022 02:44:05 -0800 (PST)
+X-SMTP-MATCH: 0
+IronPort-Data: =?us-ascii?q?A9a23=3AoHlSn6zfuS+sAItPbgZ6t+f+xCrEfRIJ4+Muj?=
+ =?us-ascii?q?C+fZmUNrF6WrkVTxzBKWzyGOf6CYDDyL4hzaYrjpEMH6p7XxtZmTAQ4/iExE?=
+ =?us-ascii?q?CIQopTMVY+TdheuZC3OIJSbR0lrv51FMNXJfc5pZ3KN/R3F3prJ9Ckkj/vUL?=
+ =?us-ascii?q?lbf5E8oAs3CLONdYH9JZS9LwobVvKY42bBVPCvV0T/Ci5W31G6Ng1aYAEpNg?=
+ =?us-ascii?q?06wgEsHUMDJhd8tlgdWicanHbPpvyJ94Jo3fcldJpZjK2VeNrbSq+3rlNlV8?=
+ =?us-ascii?q?o5FlirBBO9Jkp6jGqELarTTIRPIgWBfRKalmBQEqykvlKc3cvMBAatVo2vR2?=
+ =?us-ascii?q?YotkpMX5drqFVtB0q7kwYzxVzFWCSh4PoVN4rbYL3+lvYqeylCAcneqyugG4?=
+ =?us-ascii?q?EQeZ91HorguXj8fnRAfAGtVNUDZ3bPeLKiAYu1tgNkzacn0OYQZkm9vwCufD?=
+ =?us-ascii?q?vs8R53HBaLQ6rdlMJ0Y7ixVNaiGIpBFM381PFGaP0EJIUseFJM12vuwiXi5e?=
+ =?us-ascii?q?Dpd7luIzZfbKlP7lGRZuIUB+vKMEjBSefhoow=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A7+dsUa85GXzbysLo93puk+DlI+orL9Y04l?=
+ =?us-ascii?q?Q7vn2ZLiYlEPBw9vrOoB1173HJYVoqNE3I+urwW5VoI0m3yXcd2+B4VotKNz?=
+ =?us-ascii?q?OKhILHFu5fBMfZowEJlEDFh4stsZuIa5IOcOEYE2IK9PoSPzPIdOrJEbG8gc?=
+ =?us-ascii?q?aVuds=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2CxAwA4Ahpi//Qc8jxagQkJgVGBeod?=
+ =?us-ascii?q?VrXWBfAsBUgQBAYR9hB0mNQgOAQIEFQEBBgEBAQEBBgSBHIV1hmyBCwImArZ?=
+ =?us-ascii?q?qgTGBAYRsgyuBZIEQLIczh1Q/gU6EP4VQgkuCZQSUPoM3B4ExoWOecYNSgT+?=
+ =?us-ascii?q?eXIFCgh8BEaQyllKCSaAJhgUBghNNHxmDJVAZD50EgRkCBgsBAQMJkw0BAQ?=
+Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
+  by ipmail03.adl6.internode.on.net with ESMTP; 26 Feb 2022 21:09:01 +1030
+Received: from sac.crawford.emu.id.au (sac.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc02])
+        by bits.crawford.emu.id.au (8.17.1/8.16.1) with ESMTP id 21QAcod9034648;
+        Sat, 26 Feb 2022 21:38:52 +1100
+Message-ID: <6c8b5fbd514df708af84630544eca6ee12766bbd.camel@crawford.emu.id.au>
+Subject: Reviving Support for it87.c
+From:   Frank Crawford <frank@crawford.emu.id.au>
+To:     linux-hwmon@vger.kernel.org
+Date:   Sat, 26 Feb 2022 21:38:50 +1100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/3] hwmon (xdpe12284): Add support for xdpe11280
-Content-Language: en-US
-To:     sylv <sylv@sylv.io>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-doc@vger.kernel.org
-References: <cover.1645108566.git.sylv@sylv.io>
- <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
- <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
- <246de83631dd5e165f95904d7f1628502f030e02.camel@sylv.io>
- <66d4ea0b-0377-c9ae-68eb-7303c32cf87e@roeck-us.net>
- <7a567823d62b6ed00cbdc2ce239dc4a69e48b411.camel@sylv.io>
- <aa82f347-1b1a-8c40-b5cb-9efe292ae0ec@roeck-us.net>
- <337fe0598837b35ee96773339e9cdc8345a7c16e.camel@sylv.io>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <337fe0598837b35ee96773339e9cdc8345a7c16e.camel@sylv.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Greylist: inspected by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 26 Feb 2022 21:38:52 +1100 (AEDT) for IP:'fdd2:7aad:d478:1::cb10:cc02' DOMAIN:'sac.crawford.emu.id.au' HELO:'sac.crawford.emu.id.au' FROM:'frank@crawford.emu.id.au' RCPT:''
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 26 Feb 2022 21:38:52 +1100 (AEDT)
+X-Virus-Scanned: clamav-milter 0.103.5 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/21/22 04:13, sylv wrote:
-> On Thu, 2022-02-17 at 11:25 -0800, Guenter Roeck wrote:
->> On 2/17/22 10:38, sylv wrote:
->> [ ... ]
->>
->>>>
->>>> That makes me wonder if the chip needs to be added to this driver
->>>> in
->>>> the first
->>>> place, or if it could be added to pmbus.c instead. Any idea ?
->>>
->>> Oh, we did wrote a standalone driver too, and it works fine.
->>> Maybe it's better to upsteam it instead. :)
->>
->> No, I meant if it would make sense to just add something like
->>
->>          {"xdpe11280", (kernel_ulong_t)&pmbus_info_one },
->>
->> to drivers/hwmon/pmbus/pmbus.c.
->>
->> You only really need a standalone driver if it does something
->> special, such as a workaround for some register access (like
->> the xdpe12284 driver), or if support for manufacturer specific
->> registers is desired or needed. That would, for example, be useful
->> if the xdpe11280 supports per-phase sensors.
->>
->> Thanks,
->> Guenter
-> 
-> Hi,
-> 
-> I tested if the xdpe11280 can use the generic pmbus driver. Everything
-> works fine except it does only detect READ_TEMPERATURE_1 on page 0.
-> Looking at the pmbus_find_sensor_groups function it looks like only
-> some commands are probed on each page (READ_VOUT, READ_IOUT, and
-> READ_POUT) but not READ_TEMPERATURE_1.
-> The PMBus spec 1.3.1 tells us: "Each page may offer the full range of
-> PMBus commands available for each output or non-PMBus device." How
-> could we adapt the generic driver so that it is possible to probe
-> commands for each page?
-> 
+Folks,
 
-The problem is the "may". Some chips don't implement multi-page
-support especially for temperature sensors. So we'll have to go
-with adding support to the existing driver.
+For sometime there has been no activity to update the it87 module, but
+for I've been collecting the various suggested patches and I've tested a
+number of them and am keen get these into the official kernel.
 
-Guenter
+In fact the biggest set of patches are the set that seems to have come
+from here in late 2016 but never seems to have made it into the official
+kernel.
 
-> Furthermore, It would be great to add regulator and DT support. I
-> created a WIP branch on GitHub with a possible way to implement this:
-> https://github.com/9elements/linux/tree/upstreaming_pmbus_regulator_wip
-> 
-> What do you think?
-> 
-> Thanks,
-> Marcello
-> 
+How can I go about getting this moving again?
 
+Regards
+Frank
