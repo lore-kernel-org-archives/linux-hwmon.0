@@ -2,41 +2,41 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60E78C43219
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 13:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0FA9C4167B
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 13:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbiBZNbg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S231833AbiBZNbg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sat, 26 Feb 2022 08:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbiBZNbf (ORCPT
+        with ESMTP id S231817AbiBZNbf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Sat, 26 Feb 2022 08:31:35 -0500
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181744D634;
-        Sat, 26 Feb 2022 05:30:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3ACF4D62E;
+        Sat, 26 Feb 2022 05:31:00 -0800 (PST)
 Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 5FCF265A;
-        Sat, 26 Feb 2022 05:30:59 -0800 (PST)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 9587471C;
+        Sat, 26 Feb 2022 05:31:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1645882259;
-        bh=tRdON2JMEu6p1PaqCs46C7UgeqnqwrwysosqhUASnuI=;
+        s=thorn; t=1645882260;
+        bh=wUYYxDY8AGbMdMwS9eyQ30HcvFh6YtT2MmyW4AB2xgY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HbJvkbRrIeFV0L6raX0HOnLsOUpLHmSNjviIEyGH1ey4NbfabpzWNAzdaXjfjEmHA
-         x9cUWdujxyeV5T/0pTQIp75GYmwEr1jk8P/VJVF9RjLBnlo1PGATljcId+2s8c7mq8
-         DwO1D+DkPQo2XA+kLTqDejlHPoilRSVHSGFpFHO8=
+        b=TLXfDMLheV+mFxBoMkTU5Jt9VbzT9pxVA5qX2dBA++F1mnZOjteNpNhZvBHQ5IyqA
+         fVOU3WIbAdCckRtrlOUstZ53F9gBItsyoYIOuEoCQPHuUafT6+K0EPbTcktbLElBQS
+         Obx4IIzGfcoINzllQJm8BnB6X1SwXWWhvyDVFNAw=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
         openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] hwmon: (nct6775) Rearrange attr-group initialization
-Date:   Sat, 26 Feb 2022 05:30:43 -0800
-Message-Id: <20220226133047.6226-2-zev@bewilderbeest.net>
+Subject: [PATCH 5/5] hwmon: (nct6775) Add i2c driver
+Date:   Sat, 26 Feb 2022 05:30:47 -0800
+Message-Id: <20220226133047.6226-6-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220226133047.6226-1-zev@bewilderbeest.net>
 References: <20220226133047.6226-1-zev@bewilderbeest.net>
@@ -46,176 +46,276 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-We now track the number of attribute groups in nct6775_data, as a
-measure to simplify handling differences in the set of enabled
-attribute groups between nct6775 drivers (platform & i2c).  As a side
-effect, we also reduce the amount of IS_ERR()/PTR_ERR() boilerplate a
-bit.
+This driver provides an i2c I/O mechanism for the core nct6775 driver,
+as might be used by a BMC.  Because the Super I/O chip is shared with
+the host CPU in such a scenario (and the host should ultimately be in
+control of it), the i2c driver is strictly read-only to avoid
+interfering with any usage by the host (aside from the bank-select
+register, which seems to be replicated for the i2c interface).
 
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/hwmon/nct6775.c | 84 ++++++++++++++++++++---------------------
- 1 file changed, 42 insertions(+), 42 deletions(-)
+ MAINTAINERS                 |   6 ++
+ drivers/hwmon/Kconfig       |  17 ++++
+ drivers/hwmon/Makefile      |   1 +
+ drivers/hwmon/nct6775-i2c.c | 191 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 215 insertions(+)
+ create mode 100644 drivers/hwmon/nct6775-i2c.c
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 2b91f7e05126..139b2fe5ca4d 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -1198,6 +1198,7 @@ struct nct6775_data {
- 	const char *name;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d318a5580df9..d8a1f8f65df1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13293,6 +13293,12 @@ F:	drivers/hwmon/nct6775-core.c
+ F:	drivers/hwmon/nct6775-platform.c
+ F:	drivers/hwmon/nct6775.h
  
- 	const struct attribute_group *groups[7];
-+	u8 num_groups;
- 
- 	u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
- 				    * 3=temp_crit, 4=temp_lcrit
-@@ -1405,10 +1406,18 @@ struct sensor_template_group {
- 	int base;
- };
- 
--static struct attribute_group *
--nct6775_create_attr_group(struct device *dev,
--			  const struct sensor_template_group *tg,
--			  int repeat)
-+static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
-+{
-+	/* Need to leave a NULL terminator at the end of data->groups */
-+	if (WARN_ON(data->num_groups == ARRAY_SIZE(data->groups) - 1))
-+		return -ENOSPC;
++NCT6775 HARDWARE MONITOR DRIVER - I2C DRIVER
++M:	Zev Weiss <zev@bewilderbeest.net>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	drivers/hwmon/nct6775-i2c.c
 +
-+	data->groups[data->num_groups++] = group;
+ NETDEVSIM
+ M:	Jakub Kicinski <kuba@kernel.org>
+ S:	Maintained
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 11822e8a2cda..1c0bd536b9b3 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1483,6 +1483,23 @@ config SENSORS_NCT6775_PLATFORM
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nct6775-platform.
+ 
++config SENSORS_NCT6775_I2C
++	tristate "I2C driver for Nuvoton NCT6775F and compatibles"
++	depends on I2C
++	select REGMAP_I2C
++	select SENSORS_NCT6775
++	help
++	  If you say yes here you get support for the hardware monitoring
++	  functionality of the Nuvoton NCT6106D, NCT6775F, NCT6776F, NCT6779D,
++	  NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D, and compatible
++	  Super-I/O chips via their I2C interface.
++
++	  If you're not building a kernel for a BMC, this is probably
++	  not the driver you want (see CONFIG_SENSORS_NCT6775_PLATFORM).
++
++	  This driver can also be built as a module. If so, the module
++	  will be called nct6775-i2c.
++
+ config SENSORS_NCT7802
+ 	tristate "Nuvoton NCT7802Y"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 5f37b2c0f79a..385b211471e4 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -156,6 +156,7 @@ obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
+ obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
+ obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775-core.o
+ obj-$(CONFIG_SENSORS_NCT6775_PLATFORM) += nct6775-platform.o
++obj-$(CONFIG_SENSORS_NCT6775_I2C) += nct6775-i2c.o
+ obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
+ obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
+ obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
+diff --git a/drivers/hwmon/nct6775-i2c.c b/drivers/hwmon/nct6775-i2c.c
+new file mode 100644
+index 000000000000..efee78cb16f3
+--- /dev/null
++++ b/drivers/hwmon/nct6775-i2c.c
+@@ -0,0 +1,191 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * nct6775-i2c - I2C driver for the hardware monitoring functionality of
++ *	         Nuvoton NCT677x Super-I/O chips
++ *
++ * Copyright (C) 2021 Zev Weiss <zev@bewilderbeest.net>
++ *
++ * This driver interacts with the chip via it's "back door" i2c interface, as
++ * is often exposed to a BMC.  Because the host may still be operating the
++ * chip via the ("front door") LPC interface, this driver cannot assume that
++ * it actually has full control of the chip, and in particular must avoid
++ * making any changes that could confuse the host's LPC usage of it.  It thus
++ * operates in a strictly read-only fashion, with the only exception being the
++ * bank-select register (which seems, thankfully, to be replicated for the i2c
++ * interface so it doesn't affect the LPC interface).
++ */
++
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/i2c.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/err.h>
++#include <linux/of_device.h>
++#include <linux/regmap.h>
++#include "nct6775.h"
++
++static u16 nct6775_i2c_read_value(struct nct6775_data *data, u16 reg)
++{
++	int ret;
++	u32 tmp, val;
++	u8 bank = reg >> 8;
++	struct regmap *regmap = data->driver_data;
++	struct device *dev = regmap_get_device(regmap);
++
++	if (bank != data->bank) {
++		ret = regmap_write(regmap, NCT6775_REG_BANK, bank);
++		if (ret) {
++			dev_warn_ratelimited(dev, "bank %02x select regmap_write() failed: %d\n",
++					     bank, ret);
++			return 0;
++		}
++		data->bank = bank;
++	}
++
++	ret = regmap_read(regmap, reg & 0xff, &val);
++	if (ret) {
++		dev_warn_ratelimited(dev, "regmap_read(%03x) failed: %d\n", reg, ret);
++		return 0;
++	}
++
++	if (nct6775_reg_is_word_sized(data, reg)) {
++		ret = regmap_read(regmap, (reg & 0xff) + 1, &tmp);
++		if (ret) {
++			dev_warn_ratelimited(dev, "second-byte regmap_read(%03x) failed: %d\n",
++					     reg, ret);
++			return 0;
++		}
++		val = (val << 8) | tmp;
++	}
++
++	return val;
++}
++
++/*
++ * The write operation is a dummy so as not to disturb anything being done
++ * with the chip via LPC.
++ */
++static int nct6775_i2c_write_value(struct nct6775_data *data, u16 reg, u16 value)
++{
++	struct device *dev = regmap_get_device(data->driver_data);
++
++	dev_dbg(dev, "skipping attempted write: %02x -> %03x\n", value, reg);
++
++	/*
++	 * This is a lie, but writing anything but the bank-select register is
++	 * something this driver shouldn't be doing.  (Though at least at time
++	 * of writing no callers actually check this return value anyway.)
++	 */
 +	return 0;
 +}
 +
-+static int nct6775_add_template_attr_group(struct device *dev, struct nct6775_data *data,
-+					   const struct sensor_template_group *tg, int repeat)
- {
- 	struct attribute_group *group;
- 	struct sensor_device_attr_u *su;
-@@ -1419,28 +1428,28 @@ nct6775_create_attr_group(struct device *dev,
- 	int i, count;
- 
- 	if (repeat <= 0)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
- 	t = tg->templates;
- 	for (count = 0; *t; t++, count++)
- 		;
- 
- 	if (count == 0)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
- 	group = devm_kzalloc(dev, sizeof(*group), GFP_KERNEL);
- 	if (group == NULL)
--		return ERR_PTR(-ENOMEM);
++static const struct regmap_config nct6775_i2c_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++};
++
++static const struct of_device_id __maybe_unused nct6775_i2c_of_match[] = {
++	{ .compatible = "nuvoton,nct6106", .data = (void *)nct6106, },
++	{ .compatible = "nuvoton,nct6116", .data = (void *)nct6116, },
++	{ .compatible = "nuvoton,nct6775", .data = (void *)nct6775, },
++	{ .compatible = "nuvoton,nct6776", .data = (void *)nct6776, },
++	{ .compatible = "nuvoton,nct6779", .data = (void *)nct6779, },
++	{ .compatible = "nuvoton,nct6791", .data = (void *)nct6791, },
++	{ .compatible = "nuvoton,nct6792", .data = (void *)nct6792, },
++	{ .compatible = "nuvoton,nct6793", .data = (void *)nct6793, },
++	{ .compatible = "nuvoton,nct6795", .data = (void *)nct6795, },
++	{ .compatible = "nuvoton,nct6796", .data = (void *)nct6796, },
++	{ .compatible = "nuvoton,nct6797", .data = (void *)nct6797, },
++	{ .compatible = "nuvoton,nct6798", .data = (void *)nct6798, },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, nct6775_i2c_of_match);
++
++static const struct i2c_device_id nct6775_i2c_id[] = {
++	{ "nct6106", nct6106 },
++	{ "nct6116", nct6116 },
++	{ "nct6775", nct6775 },
++	{ "nct6776", nct6776 },
++	{ "nct6779", nct6779 },
++	{ "nct6791", nct6791 },
++	{ "nct6792", nct6792 },
++	{ "nct6793", nct6793 },
++	{ "nct6795", nct6795 },
++	{ "nct6796", nct6796 },
++	{ "nct6797", nct6797 },
++	{ "nct6798", nct6798 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, nct6775_i2c_id);
++
++static int nct6775_i2c_probe_init(struct nct6775_data *data)
++{
++	/*
++	 * The i2c interface doesn't provide access to the control registers
++	 * needed to determine the presence of other fans, but fans 1 and 2
++	 * are (in principle) always there.
++	 *
++	 * In practice this is perhaps a little silly, because the system
++	 * using this driver is mostly likely a BMC, and hence probably has
++	 * totally separate fan tachs & pwms of its own that are actually
++	 * controlling/monitoring the fans -- these are thus unlikely to be
++	 * doing anything actually useful.
++	 */
++	data->has_fan = 0x03;
++	data->has_fan_min = 0x03;
++	data->has_pwm = 0x03;
++	return 0;
++}
++
++static int nct6775_i2c_probe(struct i2c_client *client)
++{
++	struct nct6775_data *data;
++	const struct of_device_id *of_id;
++	const struct i2c_device_id *i2c_id;
++	struct regmap *regmap;
++	struct device *dev = &client->dev;
++
++	of_id = of_match_device(nct6775_i2c_of_match, dev);
++	i2c_id = i2c_match_id(nct6775_i2c_id, client);
++
++	if (of_id && (unsigned long)of_id->data != i2c_id->driver_data)
++		dev_notice(dev, "Device mismatch: %s in device tree, %s detected\n",
++			   of_id->name, i2c_id->name);
++
++	regmap = devm_regmap_init_i2c(client, &nct6775_i2c_regmap_config);
++	if (IS_ERR(regmap)) {
++		dev_err(dev, "failed to init regmap\n");
++		return PTR_ERR(regmap);
++	}
++
++	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
 +		return -ENOMEM;
- 
- 	attrs = devm_kcalloc(dev, repeat * count + 1, sizeof(*attrs),
- 			     GFP_KERNEL);
- 	if (attrs == NULL)
--		return ERR_PTR(-ENOMEM);
-+		return -ENOMEM;
- 
- 	su = devm_kzalloc(dev, array3_size(repeat, count, sizeof(*su)),
- 			       GFP_KERNEL);
- 	if (su == NULL)
--		return ERR_PTR(-ENOMEM);
-+		return -ENOMEM;
- 
- 	group->attrs = attrs;
- 	group->is_visible = tg->is_visible;
-@@ -1478,7 +1487,7 @@ nct6775_create_attr_group(struct device *dev,
- 		}
- 	}
- 
--	return group;
-+	return nct6775_add_attr_group(data, group);
- }
- 
- static bool is_word_sized(struct nct6775_data *data, u16 reg)
-@@ -4020,10 +4029,8 @@ static int nct6775_probe(struct platform_device *pdev)
- 	const u16 *reg_temp_crit_l = NULL, *reg_temp_crit_h = NULL;
- 	int num_reg_temp, num_reg_temp_mon, num_reg_tsi_temp;
- 	u8 cr2a;
--	struct attribute_group *group;
- 	struct device *hwmon_dev;
- 	struct sensor_template_group tsi_temp_tg;
--	int num_attr_groups = 0;
- 
- 	if (sio_data->access == access_direct) {
- 		res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-@@ -4844,46 +4851,39 @@ static int nct6775_probe(struct platform_device *pdev)
- 	nct6775_init_fan_common(dev, data);
- 
- 	/* Register sysfs hooks */
--	group = nct6775_create_attr_group(dev, &nct6775_pwm_template_group,
--					  data->pwm_num);
--	if (IS_ERR(group))
--		return PTR_ERR(group);
--
--	data->groups[num_attr_groups++] = group;
--
--	group = nct6775_create_attr_group(dev, &nct6775_in_template_group,
--					  fls(data->have_in));
--	if (IS_ERR(group))
--		return PTR_ERR(group);
--
--	data->groups[num_attr_groups++] = group;
--
--	group = nct6775_create_attr_group(dev, &nct6775_fan_template_group,
--					  fls(data->has_fan));
--	if (IS_ERR(group))
--		return PTR_ERR(group);
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_pwm_template_group,
-+					      data->pwm_num);
-+	if (err)
-+		return err;
- 
--	data->groups[num_attr_groups++] = group;
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_in_template_group,
-+					      fls(data->have_in));
-+	if (err)
-+		return err;
- 
--	group = nct6775_create_attr_group(dev, &nct6775_temp_template_group,
--					  fls(data->have_temp));
--	if (IS_ERR(group))
--		return PTR_ERR(group);
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_fan_template_group,
-+					      fls(data->has_fan));
-+	if (err)
-+		return err;
- 
--	data->groups[num_attr_groups++] = group;
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_temp_template_group,
-+					      fls(data->have_temp));
-+	if (err)
-+		return err;
- 
- 	if (data->have_tsi_temp) {
- 		tsi_temp_tg.templates = nct6775_tsi_temp_template;
- 		tsi_temp_tg.is_visible = nct6775_tsi_temp_is_visible;
- 		tsi_temp_tg.base = fls(data->have_temp) + 1;
--		group = nct6775_create_attr_group(dev, &tsi_temp_tg, fls(data->have_tsi_temp));
--		if (IS_ERR(group))
--			return PTR_ERR(group);
--
--		data->groups[num_attr_groups++] = group;
-+		err = nct6775_add_template_attr_group(dev, data, &tsi_temp_tg,
-+						      fls(data->have_tsi_temp));
-+		if (err)
-+			return err;
- 	}
- 
--	data->groups[num_attr_groups++] = &nct6775_group_other;
-+	err = nct6775_add_attr_group(data, &nct6775_group_other);
-+	if (err)
-+		return err;
- 
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, data->name,
- 							   data, data->groups);
++
++	data->kind = i2c_id->driver_data;
++	data->read_value = nct6775_i2c_read_value;
++	data->write_value = nct6775_i2c_write_value;
++
++	data->read_only = true;
++	data->driver_data = regmap;
++	data->driver_init = nct6775_i2c_probe_init;
++
++	return nct6775_probe(dev, data);
++}
++
++static struct i2c_driver nct6775_i2c_driver = {
++	.class = I2C_CLASS_HWMON,
++	.driver = {
++		.name = "nct6775-i2c",
++		.of_match_table = of_match_ptr(nct6775_i2c_of_match),
++	},
++	.probe_new = nct6775_i2c_probe,
++	.id_table = nct6775_i2c_id,
++};
++
++module_i2c_driver(nct6775_i2c_driver);
++
++MODULE_AUTHOR("Zev Weiss <zev@bewilderbeest.net>");
++MODULE_DESCRIPTION("I2C driver for NCT6775F and compatible chips");
++MODULE_LICENSE("GPL");
 -- 
 2.35.1
 
