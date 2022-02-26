@@ -2,129 +2,121 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 668B3C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 15:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66439C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 17:01:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiBZPdZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Feb 2022 10:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S232390AbiBZRBj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Feb 2022 12:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbiBZPdY (ORCPT
+        with ESMTP id S231722AbiBZRBj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Feb 2022 10:33:24 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC2638BF;
-        Sat, 26 Feb 2022 07:32:47 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K5VyN4DZVz9sTJ;
-        Sat, 26 Feb 2022 16:32:44 +0100 (CET)
-Message-ID: <c8c6391ce70ad5940b4951e3329b4f525e12252e.camel@sylv.io>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645889562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H1OH+fwFMAkE5HnuGiQoI6sTW5eya7KfWghjENThRfs=;
-        b=MUu68CU7dDpmpyscqcIa0HgfC1hvfLrGo3MegEINHcIt17xtaM9qACnMixKUCvjXIfWr+P
-        74phmknj19WQ/Co1slOWCX/r0L91B6+aJESY/oLXU182z1F6Ec2BkkLz3lK4/+7XkbhJJA
-        8pqFWJQlDoUo0B33eq1ONGMUhKtarZP/FhKeovXmsZdqvl39kMa9/3cMY+bbYpEMS6oJ+b
-        Ur5q1VSWrb5pEkFIDalYYmDgtMAeTnZYLQ/jR7F4x/bTEnC8lUR5aPjms9uQpSjtFu9BV8
-        eFNYYidp+xz7Fgy1ed9/pCdFIS5cP2m+uk1XFqGf4xYkz+rmspXjQAK83HnOGQ==
-Subject: Re: [PATCH v2 2/3] hwmon (xdpe12284): Add support for xdpe11280
-From:   Marcello Sylvester Bauer <sylv@sylv.io>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-doc@vger.kernel.org
-Date:   Sat, 26 Feb 2022 16:32:37 +0100
-In-Reply-To: <8656b67c-e093-0a18-9c5f-02f5b4264bb2@roeck-us.net>
-References: <cover.1645108566.git.sylv@sylv.io>
-         <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
-         <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
-         <246de83631dd5e165f95904d7f1628502f030e02.camel@sylv.io>
-         <66d4ea0b-0377-c9ae-68eb-7303c32cf87e@roeck-us.net>
-         <7a567823d62b6ed00cbdc2ce239dc4a69e48b411.camel@sylv.io>
-         <aa82f347-1b1a-8c40-b5cb-9efe292ae0ec@roeck-us.net>
-         <337fe0598837b35ee96773339e9cdc8345a7c16e.camel@sylv.io>
-         <8656b67c-e093-0a18-9c5f-02f5b4264bb2@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 26 Feb 2022 12:01:39 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4418949F9B;
+        Sat, 26 Feb 2022 09:01:01 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id p14so16727232ejf.11;
+        Sat, 26 Feb 2022 09:01:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VPASw0Pjg3A9RSZK9b9pwu/T/TyfBQMtAUoZ8ftIZpE=;
+        b=S1FxSs+Ns1mvcG1GZiXmi/OLdfcHSI0aEKJDAnNS8Nr6lJ3VtE0KkcV46XaATYKf3Y
+         Xcy8Dc3kx9/bqw28H+d0AWHHOAbOrvLeGMF/fqyPH3waHJPvX5JdFfF1NxEBqfWU65TB
+         ZOjjOmtT+IqBTHiL5FlXaktRDS7DZz+qKvHfUVzKGQl5BD6ZoTjiPI4QNAXl+niiC1Ky
+         6t9TLSOIg9rXRhjNIAVSkmXm757Rd717FhuzWwiSl23JMWg6z0Orz8jSKR0xm/dGenOY
+         y86Y7Kup+afPuafNQn+Zsw3ZROCjhpGMEcn1vKeM6Plms7fCkg1eaK5RNOJzD5L7zkJT
+         tVCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VPASw0Pjg3A9RSZK9b9pwu/T/TyfBQMtAUoZ8ftIZpE=;
+        b=s48IaTbXw9RiUe4V5fEhfPUKzOGymZxwR3g+S8uixLXl83LpGWpZDj2gTmnO8X/FuG
+         CxBoNQci0vXeeqEmCdcOlDtPmUv0r0KqHCLXNrsXXTucZJDIlMxx96xHP9b3OpyC/UGt
+         ag5b/OPTRMzBIcJitd2IyLKZ8ofYS5FQ9T3cd1WgtVvVD7BUzAeTfYyPrax6058tUD8h
+         9C+ViNT8qThUNFU5f9Tr0DAFF47bPsJjnEC5OVoBt+3hEimFb+z7yjWuk3Z4tGNwD1Xa
+         uCR2txIs5neFRrtAIwcnAB79flDIbdzGmlPx0Z2YUzfbAkdiHRhatJBPf1XJAOQNTU+P
+         quGg==
+X-Gm-Message-State: AOAM532O+NBEHwzGlC8MYL4VKlP9E4ZS99fcDqof96Raet1phpWKWY+T
+        NKsefji6I4yoSp1GzlxrAi+j/mbP24Vy0RNb
+X-Google-Smtp-Source: ABdhPJzhyQMrwRwDl2geq4aP16/Ku6RYmQjlO4Fzg4EN6xIJWOP+nL7Vvfo9aCVWCciU6IK5rKmVfw==
+X-Received: by 2002:a17:906:edb5:b0:6b8:1a5a:f3a0 with SMTP id sa21-20020a170906edb500b006b81a5af3a0mr10313283ejb.501.1645894859782;
+        Sat, 26 Feb 2022 09:00:59 -0800 (PST)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id g2-20020aa7c842000000b0041314b98872sm3028126edt.22.2022.02.26.09.00.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 09:00:59 -0800 (PST)
+Date:   Sat, 26 Feb 2022 18:00:57 +0100
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: add driver for Aquacomputer Farbwerk 360
+Message-ID: <YhpcyU+9Rc+FmaFk@fedora>
+References: <20220221102157.13574-1-savicaleksa83@gmail.com>
+ <5fa0a22c-5f55-bd38-8d76-a4ea31898bca@roeck-us.net>
+ <YhpCrNhjfb0E8rLn@fedora>
+ <fd9710d4-73a1-2b9d-7848-4c6291f6b2e1@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd9710d4-73a1-2b9d-7848-4c6291f6b2e1@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 2022-02-25 at 08:39 -0800, Guenter Roeck wrote:
-> On 2/21/22 04:13, sylv wrote:
-> > On Thu, 2022-02-17 at 11:25 -0800, Guenter Roeck wrote:
-> > > On 2/17/22 10:38, sylv wrote:
-> > > [ ... ]
+On Sat, Feb 26, 2022 at 07:31:34AM -0800, Guenter Roeck wrote:
+> On 2/26/22 07:09, Aleksa Savic wrote:
+> > Hi,
+> > 
+> > On Thu, Feb 24, 2022 at 11:57:47AM -0800, Guenter Roeck wrote:
+> > > Hi,
 > > > 
-> > > > > 
-> > > > > That makes me wonder if the chip needs to be added to this
-> > > > > driver
-> > > > > in
-> > > > > the first
-> > > > > place, or if it could be added to pmbus.c instead. Any idea ?
+> > > On 2/21/22 02:21, Aleksa Savic wrote:
+> > > > This driver exposes hardware temperature sensors of the Aquacomputer
+> > > > Farbwerk 360 RGB controller, which communicates through a proprietary
+> > > > USB HID protocol.
 > > > > 
-> > > > Oh, we did wrote a standalone driver too, and it works fine.
-> > > > Maybe it's better to upsteam it instead. :)
+> > > > Four temperature sensors are available. If a sensor is not connected,
+> > > > it will report zeroes. Additionally, serial number and firmware version
+> > > > are exposed through debugfs.
+> > > > 
+> > > > This driver has been tested on x86_64.
+> > > > 
+> > > > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 > > > 
-> > > No, I meant if it would make sense to just add something like
+> > > Unless I amm missing something, this driver is quite similar to the
+> > > d5next driver (drivers/hwmon/aquacomputer_d5next.c), except that there
+> > > are 4 instead of 1 temperature sensor, the sensor data is in a different place,
+> > > and there is _only_ temperature data. It should be quite straightforward
+> > > to merge the two drivers into one, so please  do that.
 > > > 
-> > >          {"xdpe11280", (kernel_ulong_t)&pmbus_info_one },
-> > > 
-> > > to drivers/hwmon/pmbus/pmbus.c.
-> > > 
-> > > You only really need a standalone driver if it does something
-> > > special, such as a workaround for some register access (like
-> > > the xdpe12284 driver), or if support for manufacturer specific
-> > > registers is desired or needed. That would, for example, be
-> > > useful
-> > > if the xdpe11280 supports per-phase sensors.
+> > > Additional comment inline.
 > > > 
 > > > Thanks,
 > > > Guenter
 > > 
-> > Hi,
+> > Yes, it's very similar, I based this one on that. I'll send a patch for
+> > the original driver. I also have code ready for Aquacomputer Octo (8 fans, 4
+> > temperature sensors, very similar to all this as well) with PWM write control
+> > support for the fans. And there is also WIP code for PWM and curve support for
+> > the D5 Next from contributors on my github repo, though we're working on that.
 > > 
-> > I tested if the xdpe11280 can use the generic pmbus driver.
-> > Everything
-> > works fine except it does only detect READ_TEMPERATURE_1 on page 0.
-> > Looking at the pmbus_find_sensor_groups function it looks like only
-> > some commands are probed on each page (READ_VOUT, READ_IOUT, and
-> > READ_POUT) but not READ_TEMPERATURE_1.
-> > The PMBus spec 1.3.1 tells us: "Each page may offer the full range
-> > of
-> > PMBus commands available for each output or non-PMBus device." How
-> > could we adapt the generic driver so that it is possible to probe
-> > commands for each page?
+> > Considering that the driver would then contain support for more devices (the D5
+> > Next and the Farbwerk 360 for now), can it be renamed to just aquacomputer or
+> > something similar?
 > > 
 > 
-> The problem is the "may". Some chips don't implement multi-page
-> support especially for temperature sensors. So we'll have to go
-> with adding support to the existing driver.
+> We don't normally do that (because the Kconfig symbol is already established)
+> and just name the driver for the first chip (or, in this case, controller)
+> it supports.
 > 
 > Guenter
 
-sgtm. So I'll continue working on this patch set.
+Got it.
 
-> 
-> > Furthermore, It would be great to add regulator and DT support. I
-> > created a WIP branch on GitHub with a possible way to implement
-> > this:
-> > https://github.com/9elements/linux/tree/upstreaming_pmbus_regulator_wip
-> > 
-> > What do you think?
-> > 
-> > Thanks,
-> > Marcello
-> > 
-> 
-
+Thanks,
+Aleksa
