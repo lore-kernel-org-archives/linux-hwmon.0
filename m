@@ -2,125 +2,140 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D552C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 13:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41791C4332F
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 13:31:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiBZNbe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Feb 2022 08:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S231809AbiBZNbf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Feb 2022 08:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbiBZNbe (ORCPT
+        with ESMTP id S231799AbiBZNbe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Sat, 26 Feb 2022 08:31:34 -0500
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B385D4D62E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227AE4D9FF;
         Sat, 26 Feb 2022 05:30:59 -0800 (PST)
 Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 1338A3BA;
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 9FB1866F;
         Sat, 26 Feb 2022 05:30:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
         s=thorn; t=1645882259;
-        bh=C+88ICGJ2CM+8gAdRSkBM1aU4I+DeyuU0rJ/rCPlNqc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=V6j6ZnaFOcJ1CDozfbaYJuIP3pOk3KpXKvAWZcBj16w+zNxWxR4vuRzlFWl+q1FPY
-         3W+8pXrCWGHz2MsfEfgDKxnZ0RsKu37V9nv2ebcrOOVdHjyaP0eOeSw+63Zd7G9dVG
-         PRlvnqAslV6hMBkwfbpJGm/EwJaZtIDdfdBh0plI=
+        bh=dvWhM0j4c/M5NbkEfml3xflGbASqE3fz2afcQu4V7N0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iuoEBbxSYoEGXbejWzvCvAMBKnATSd7HftDVykqi9FkOgsVY0hMdqw2GlMre+YR/I
+         8Pm1bhURCHr6HLmQ22a/utuV/vGiXAWpoZh+OVg4m18q3kj64u0aQY5ivwO4Mby5fR
+         mjcd2QdTbEUw/AI2J4CAgvUgwncmPNduvljrB2UE=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
-Cc:     Zev Weiss <zev@bewilderbeest.net>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH 0/5] hwmon: (nct6775) Add i2c support
-Date:   Sat, 26 Feb 2022 05:30:42 -0800
-Message-Id: <20220226133047.6226-1-zev@bewilderbeest.net>
+Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/5] hwmon: (nct6775) Add read-only mode
+Date:   Sat, 26 Feb 2022 05:30:44 -0800
+Message-Id: <20220226133047.6226-3-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220226133047.6226-1-zev@bewilderbeest.net>
+References: <20220226133047.6226-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+When enabled, all write bits are removed from the modes of all sysfs
+attribute files.  This provides a bit of infrastructure for the
+upcoming i2c version of this driver, which should generally avoid
+writes to device registers so as not to interfere with simultaneous
+use of the device via the LPC interface.
 
-This patch series augments the existing nct6775 driver with support
-for the hardware's i2c interface.
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
+ drivers/hwmon/nct6775.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-Thus far the nct6775 driver has only supported the LPC interface,
-which is the main interface by which the Super-I/O chip is typically
-connected to the host (x86) processor.
-
-However, these chips also provide an i2c interface, which can provide
-a way for a BMC to also monitor sensor readings from them.  On some
-systems (such as the ASRock Rack ROMED8HM3 and X570-D4U) this may be
-the only way for the BMC to monitor host CPU temperatures (e.g. to
-indirectly access a TSI interface); this functionality is thus an
-important component of enabling OpenBMC to support such systems.
-
-In such an arrangement the Super-I/O chip is simultaneously controlled
-by two independent processors (the host and the BMC) which typically
-do not coordinate their accesses with each other.  In order to avoid
-conflicts between the two, the i2c driver avoids all writes to the
-device, since the BMC's needs with the hardware are merely that it be
-able to retrieve sensor readings.  This allows the host processor to
-remain ultimately in control of the chip and unaware of the BMC's use
-of it at all.
-
-The sole exception to the "no writes" rule for the i2c driver is for
-the bank-select register -- while I haven't been able to find any
-explicit statement in the Nuvoton datasheets guaranteeing this, all
-experiments I've done have indicated that, as one might hope, the i2c
-interface has its own bank-select register independent of the one used
-by the LPC interface.
-
-In terms of code structure, the approach taken in this series is to
-split the LPC-specific parts of the driver out into a separate module
-(called nct6775-platform), leaving the interface-independent parts in
-a generic driver (called nct6775-core).  The nct6775-i2c driver is
-then added as an additional consumer of the nct6775-core module's
-functionality.
-
-The first two patches make some relatively small infrastructural
-changes to the nct6775 driver; the bulk of the core/platform driver
-split is in the third patch.  The final two patches add DT bindings
-and the i2c driver itself.
-
-I've tested the nct6775-platform and nct6775-i2c drivers with the
-NCT6779D in an ASRock ROMED8HM3 system (the latter driver on its
-AST2500 BMC); both seem to work as expected.  Broader testing would of
-course be welcome though, as is review feedback.
-
-
-Thanks,
-Zev
-
-
-Zev Weiss (5):
-  hwmon: (nct6775) Rearrange attr-group initialization
-  hwmon: (nct6775) Add read-only mode
-  hwmon: (nct6775) Split core and platform driver
-  dt-bindings: hwmon: Add nuvoton,nct6775
-  hwmon: (nct6775) Add i2c driver
-
- .../bindings/hwmon/nuvoton,nct6775.yaml       |   48 +
- MAINTAINERS                                   |   12 +-
- drivers/hwmon/Kconfig                         |   32 +-
- drivers/hwmon/Makefile                        |    4 +-
- drivers/hwmon/{nct6775.c => nct6775-core.c}   | 1464 +----------------
- drivers/hwmon/nct6775-i2c.c                   |  191 +++
- drivers/hwmon/nct6775-platform.c              | 1185 +++++++++++++
- drivers/hwmon/nct6775.h                       |  233 +++
- 8 files changed, 1763 insertions(+), 1406 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
- rename drivers/hwmon/{nct6775.c => nct6775-core.c} (75%)
- create mode 100644 drivers/hwmon/nct6775-i2c.c
- create mode 100644 drivers/hwmon/nct6775-platform.c
- create mode 100644 drivers/hwmon/nct6775.h
-
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 139b2fe5ca4d..c5b28a693461 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -1349,6 +1349,8 @@ struct nct6775_data {
+ 	/* nct6775_*() callbacks  */
+ 	u16 (*read_value)(struct nct6775_data *data, u16 reg);
+ 	int (*write_value)(struct nct6775_data *data, u16 reg, u16 value);
++
++	bool read_only;
+ };
+ 
+ struct sensor_device_template {
+@@ -1406,6 +1408,11 @@ struct sensor_template_group {
+ 	int base;
+ };
+ 
++static inline umode_t nct6775_attr_mode(struct nct6775_data *data, struct attribute *attr)
++{
++	return data->read_only ? (attr->mode & ~0222) : attr->mode;
++}
++
+ static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
+ {
+ 	/* Need to leave a NULL terminator at the end of data->groups */
+@@ -2246,7 +2253,7 @@ static umode_t nct6775_in_is_visible(struct kobject *kobj,
+ 	if (!(data->have_in & BIT(in)))
+ 		return 0;
+ 
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
+ 
+ SENSOR_TEMPLATE_2(in_input, "in%d_input", S_IRUGO, show_in_reg, NULL, 0, 0);
+@@ -2464,7 +2471,7 @@ static umode_t nct6775_fan_is_visible(struct kobject *kobj,
+ 	if (nr == 5 && data->kind != nct6775)
+ 		return 0;
+ 
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
+ 
+ SENSOR_TEMPLATE(fan_input, "fan%d_input", S_IRUGO, show_fan, NULL, 0);
+@@ -2665,7 +2672,7 @@ static umode_t nct6775_temp_is_visible(struct kobject *kobj,
+ 	if (nr > 7 && !(data->have_temp_fixed & BIT(temp)))
+ 		return 0;
+ 
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
+ 
+ SENSOR_TEMPLATE_2(temp_input, "temp%d_input", S_IRUGO, show_temp, NULL, 0, 0);
+@@ -2736,7 +2743,7 @@ static umode_t nct6775_tsi_temp_is_visible(struct kobject *kobj, struct attribut
+ 	struct nct6775_data *data = dev_get_drvdata(dev);
+ 	int temp = index / 2;
+ 
+-	return (data->have_tsi_temp & BIT(temp)) ? attr->mode : 0;
++	return (data->have_tsi_temp & BIT(temp)) ? nct6775_attr_mode(data, attr) : 0;
+ }
+ 
+ /*
+@@ -3509,7 +3516,7 @@ static umode_t nct6775_pwm_is_visible(struct kobject *kobj,
+ 		if (api > data->auto_pwm_num)
+ 			return 0;
+ 	}
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
+ 
+ SENSOR_TEMPLATE_2(pwm_stop_time, "pwm%d_stop_time", S_IWUSR | S_IRUGO,
+@@ -3704,7 +3711,7 @@ static umode_t nct6775_other_is_visible(struct kobject *kobj,
+ 			return 0;
+ 	}
+ 
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
+ 
+ /*
 -- 
 2.35.1
 
