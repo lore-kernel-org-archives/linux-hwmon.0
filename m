@@ -2,121 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66439C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 17:01:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A563AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 18:48:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbiBZRBj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Feb 2022 12:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S232018AbiBZSsh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Feb 2022 13:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiBZRBj (ORCPT
+        with ESMTP id S230359AbiBZSsf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Feb 2022 12:01:39 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4418949F9B;
-        Sat, 26 Feb 2022 09:01:01 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id p14so16727232ejf.11;
-        Sat, 26 Feb 2022 09:01:01 -0800 (PST)
+        Sat, 26 Feb 2022 13:48:35 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523A21F5863
+        for <linux-hwmon@vger.kernel.org>; Sat, 26 Feb 2022 10:48:00 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso11828322ooc.12
+        for <linux-hwmon@vger.kernel.org>; Sat, 26 Feb 2022 10:48:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VPASw0Pjg3A9RSZK9b9pwu/T/TyfBQMtAUoZ8ftIZpE=;
-        b=S1FxSs+Ns1mvcG1GZiXmi/OLdfcHSI0aEKJDAnNS8Nr6lJ3VtE0KkcV46XaATYKf3Y
-         Xcy8Dc3kx9/bqw28H+d0AWHHOAbOrvLeGMF/fqyPH3waHJPvX5JdFfF1NxEBqfWU65TB
-         ZOjjOmtT+IqBTHiL5FlXaktRDS7DZz+qKvHfUVzKGQl5BD6ZoTjiPI4QNAXl+niiC1Ky
-         6t9TLSOIg9rXRhjNIAVSkmXm757Rd717FhuzWwiSl23JMWg6z0Orz8jSKR0xm/dGenOY
-         y86Y7Kup+afPuafNQn+Zsw3ZROCjhpGMEcn1vKeM6Plms7fCkg1eaK5RNOJzD5L7zkJT
-         tVCg==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=BfaW59z6SUHrrfIIRGnCtdtKdZwkkemMWwrLAvvQwuI=;
+        b=EhdessRoNr05le3kbRWgXahRyOx4/zRJ+TZB1ulcFG9PjvxKVyETnBXCTMzVCknC+/
+         xSfV0cT8ZL+V4dqrecJUvEXlhT6Jm3Jok/5eLfEyERQ0ikIvafSTAqlkSK9J9H4ZwK/P
+         m4yncP0AJyVvQnrERe6deOsN4grAxNaYNhQD6E5JnLMltod45HkfezxcP+A6uTW4gran
+         JK4ugVJRjq8oehMAruAJeD6knholvq5WSHEvvefxD6WQ6kMXTy6irOV/k+9YONc+h8uL
+         f826l9Oq7+8qq/MdYGgKQhS3zTqPlJb7BUCm3amWjkJMP8unyOBIyb+nBZQ6ITKD5ePA
+         qsLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VPASw0Pjg3A9RSZK9b9pwu/T/TyfBQMtAUoZ8ftIZpE=;
-        b=s48IaTbXw9RiUe4V5fEhfPUKzOGymZxwR3g+S8uixLXl83LpGWpZDj2gTmnO8X/FuG
-         CxBoNQci0vXeeqEmCdcOlDtPmUv0r0KqHCLXNrsXXTucZJDIlMxx96xHP9b3OpyC/UGt
-         ag5b/OPTRMzBIcJitd2IyLKZ8ofYS5FQ9T3cd1WgtVvVD7BUzAeTfYyPrax6058tUD8h
-         9C+ViNT8qThUNFU5f9Tr0DAFF47bPsJjnEC5OVoBt+3hEimFb+z7yjWuk3Z4tGNwD1Xa
-         uCR2txIs5neFRrtAIwcnAB79flDIbdzGmlPx0Z2YUzfbAkdiHRhatJBPf1XJAOQNTU+P
-         quGg==
-X-Gm-Message-State: AOAM532O+NBEHwzGlC8MYL4VKlP9E4ZS99fcDqof96Raet1phpWKWY+T
-        NKsefji6I4yoSp1GzlxrAi+j/mbP24Vy0RNb
-X-Google-Smtp-Source: ABdhPJzhyQMrwRwDl2geq4aP16/Ku6RYmQjlO4Fzg4EN6xIJWOP+nL7Vvfo9aCVWCciU6IK5rKmVfw==
-X-Received: by 2002:a17:906:edb5:b0:6b8:1a5a:f3a0 with SMTP id sa21-20020a170906edb500b006b81a5af3a0mr10313283ejb.501.1645894859782;
-        Sat, 26 Feb 2022 09:00:59 -0800 (PST)
-Received: from fedora ([95.180.24.23])
-        by smtp.gmail.com with ESMTPSA id g2-20020aa7c842000000b0041314b98872sm3028126edt.22.2022.02.26.09.00.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 09:00:59 -0800 (PST)
-Date:   Sat, 26 Feb 2022 18:00:57 +0100
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: add driver for Aquacomputer Farbwerk 360
-Message-ID: <YhpcyU+9Rc+FmaFk@fedora>
-References: <20220221102157.13574-1-savicaleksa83@gmail.com>
- <5fa0a22c-5f55-bd38-8d76-a4ea31898bca@roeck-us.net>
- <YhpCrNhjfb0E8rLn@fedora>
- <fd9710d4-73a1-2b9d-7848-4c6291f6b2e1@roeck-us.net>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=BfaW59z6SUHrrfIIRGnCtdtKdZwkkemMWwrLAvvQwuI=;
+        b=GLJEUfDwOMMYXL9Js+1bDU7sWhQPcZ9WG4jihgu/KqdnaBcu2P7dc6a6YtjiG4Lku3
+         0fc7fAd1ulRgDtgDD+9DwDvHcMvxm53IQcWFLgGQTMuOXzCLYhY3TmhIUXoNKAci/zgP
+         q5JWV1q6C1od73e+ctDGAb7E3oYMxFC4vGzveskHimmDKyCVuRsijcYmx0n//96E7JYD
+         YtCchodHz82XSvyFGs4dgNhd02zpJ8z1cr6jCxzgLm6ICPCkgBtMjOQPEvp46RWQF5e8
+         VqVimPVhqoxyiF6Kd9Pbh4lZBxhUBZxddU/i47y1lsCfK9Hfx5pQ1WRked7iu0wI6oqe
+         ZGcQ==
+X-Gm-Message-State: AOAM531R7RdyiM8aIxMMDc8NULvd3QyUOz0iyDkJcFNA8iNrpOdaHDSr
+        /3bFDkNb8gKUoM0QdCME+wj84qp5BUQ=
+X-Google-Smtp-Source: ABdhPJxIKZtHydAuqYohkoBPBKU1WDx6yNxmrY/Ds3fMVTR8jtN5IC7PbtpQmSm0kSVF4lYNBkZVcQ==
+X-Received: by 2002:a05:6870:3853:b0:d7:391:b1ce with SMTP id z19-20020a056870385300b000d70391b1cemr1530070oal.141.1645901279642;
+        Sat, 26 Feb 2022 10:47:59 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r4-20020a9d5cc4000000b005af6f4ff5e2sm2723149oti.61.2022.02.26.10.47.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Feb 2022 10:47:59 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e8e5bca6-9014-ae36-ad02-b2edaf5e046e@roeck-us.net>
+Date:   Sat, 26 Feb 2022 10:47:57 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd9710d4-73a1-2b9d-7848-4c6291f6b2e1@roeck-us.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Frank Crawford <frank@crawford.emu.id.au>,
+        linux-hwmon@vger.kernel.org
+References: <6c8b5fbd514df708af84630544eca6ee12766bbd.camel@crawford.emu.id.au>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: Reviving Support for it87.c
+In-Reply-To: <6c8b5fbd514df708af84630544eca6ee12766bbd.camel@crawford.emu.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 07:31:34AM -0800, Guenter Roeck wrote:
-> On 2/26/22 07:09, Aleksa Savic wrote:
-> > Hi,
-> > 
-> > On Thu, Feb 24, 2022 at 11:57:47AM -0800, Guenter Roeck wrote:
-> > > Hi,
-> > > 
-> > > On 2/21/22 02:21, Aleksa Savic wrote:
-> > > > This driver exposes hardware temperature sensors of the Aquacomputer
-> > > > Farbwerk 360 RGB controller, which communicates through a proprietary
-> > > > USB HID protocol.
-> > > > 
-> > > > Four temperature sensors are available. If a sensor is not connected,
-> > > > it will report zeroes. Additionally, serial number and firmware version
-> > > > are exposed through debugfs.
-> > > > 
-> > > > This driver has been tested on x86_64.
-> > > > 
-> > > > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
-> > > 
-> > > Unless I amm missing something, this driver is quite similar to the
-> > > d5next driver (drivers/hwmon/aquacomputer_d5next.c), except that there
-> > > are 4 instead of 1 temperature sensor, the sensor data is in a different place,
-> > > and there is _only_ temperature data. It should be quite straightforward
-> > > to merge the two drivers into one, so please  do that.
-> > > 
-> > > Additional comment inline.
-> > > 
-> > > Thanks,
-> > > Guenter
-> > 
-> > Yes, it's very similar, I based this one on that. I'll send a patch for
-> > the original driver. I also have code ready for Aquacomputer Octo (8 fans, 4
-> > temperature sensors, very similar to all this as well) with PWM write control
-> > support for the fans. And there is also WIP code for PWM and curve support for
-> > the D5 Next from contributors on my github repo, though we're working on that.
-> > 
-> > Considering that the driver would then contain support for more devices (the D5
-> > Next and the Farbwerk 360 for now), can it be renamed to just aquacomputer or
-> > something similar?
-> > 
+On 2/26/22 02:38, Frank Crawford wrote:
+> Folks,
 > 
-> We don't normally do that (because the Kconfig symbol is already established)
-> and just name the driver for the first chip (or, in this case, controller)
-> it supports.
+> For sometime there has been no activity to update the it87 module, but
+> for I've been collecting the various suggested patches and I've tested a
+> number of them and am keen get these into the official kernel.
 > 
-> Guenter
+> In fact the biggest set of patches are the set that seems to have come
+> from here in late 2016 but never seems to have made it into the official
+> kernel.
+> 
+> How can I go about getting this moving again?
+> 
 
-Got it.
+If you refer to my earlier patches, there are two problems with them.
+First, they were not in a form acceptable for upstream submission
+(one patch per logical change).
+Second, and more severe, a lot of the code is experimental and
+sometimes caused problems (restarts) on my systems. This was
+especially the case if the hardware had a second device (another
+it87xx or an embedded controller) accessing the chip in parallel.
+I had tried some workarounds, but never really managed to stabilize
+the code. While this is kind of ok for out-of-tree code, it isn't
+acceptable for the upstream kernel. Getting support from ITE and/or
+from a board vendor was all but impossible. ITE typically doesn't
+even admit that a chip exists, and all I got from board vendors
+- if anything - was "we don't support Linux". I don't know if it
+is even remotely possible to fix those problems without support
+from ITE and/or board vendors.
 
-Thanks,
-Aleksa
+Guenter
