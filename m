@@ -2,72 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0BF5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 10:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D552C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Feb 2022 13:31:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiBZKsT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Feb 2022 05:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S231805AbiBZNbe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Feb 2022 08:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiBZKsS (ORCPT
+        with ESMTP id S231795AbiBZNbe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Feb 2022 05:48:18 -0500
-Received: from ipmail03.adl6.internode.on.net (ipmail03.adl6.internode.on.net [150.101.137.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 877A55B888
-        for <linux-hwmon@vger.kernel.org>; Sat, 26 Feb 2022 02:47:42 -0800 (PST)
-X-SMTP-MATCH: 0
-IronPort-Data: =?us-ascii?q?A9a23=3Apx1Zbqn0MpDJPvstfshef1Lo5gxIJERdPkR7X?=
- =?us-ascii?q?Q2eYbSJt1+Wr1GztxIZD2qCPPaPMDP8KI8jbY21ox4DsMeBxoVjGVNpry89Q?=
- =?us-ascii?q?i8a+ZaUVIiQJU6uYHmbdMGaEU5u5JVDOtKQds1uEXWEjxr8abKJQVtUjPHQH?=
- =?us-ascii?q?OCgYALn1oGdfeLXIcsYoUoLd9MR2+aEv/DpW2thhvuqyyHvEAfNNw9cagr42?=
- =?us-ascii?q?YrawP9clKyaVAcjg7ALTasjUGkyNpUiJMl3yamZdxMUS2TPdwKwb76rILqRp?=
- =?us-ascii?q?gs18/qxY+5JnIoXcmVSKlLTFQKPlmEQULKrnRZFvCB036MmcvsQL05K49mLt?=
- =?us-ascii?q?44pjo8R79rqGUFzYvGkdOc1CnG0FwlwJ6RA+5fMO3Ggv8uJwwvLdmaqwvkoB?=
- =?us-ascii?q?Vxe0YgwoLYoWT8XpKZGQNwKRkvb3LLsmuPTpvNXrsAiKtT7eYMAv3Zm5S/WA?=
- =?us-ascii?q?OxgQp3ZRajOo9hC018NampmdRrFT5RBLGAzNlGaM1gVZgtRE443gOajwGXnf?=
- =?us-ascii?q?Dweo1WQ46Mqi1U/BTdZiNDFWOc5sPTTLSmNonulmw=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AsFDf9qqEhHsOKyEfSWef0yoaV5oWeYIsim?=
- =?us-ascii?q?QD101hICG9Ffbo9fxG/c576faaslgssR0b9exoW5PwIk80l6Qe3WB5B97LNz?=
- =?us-ascii?q?UO01HEEGgN1+TfKnHbexEXeYNmpMIQF5SWEOeAdWSSk/yKmTVQzOxQp+VuIc?=
- =?us-ascii?q?iT9IHj80s=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2DABACtBBpi//Qc8jxagQkJhHeGKa9?=
- =?us-ascii?q?xCwFCEAQBAYkaJjgTAQIEFQEBBgEBAQEBBgSBHIVoDYZscRoCJgKDd4Mlr0G?=
- =?us-ascii?q?BMYEBg08BgRyDK4FeBoEQLIczh1Q/gU6EDzA+gQWBXgKCLYJLgmUElWCBECK?=
- =?us-ascii?q?CG6FjnnGDUoE/iUiVFIFCgh+DI6EhhxePO4pGgkyUS4cQgX5NHxk7gmpQGQ+?=
- =?us-ascii?q?ON4NbinKBGQIGCwEBAwmTDQEB?=
-Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail03.adl6.internode.on.net with ESMTP; 26 Feb 2022 21:17:42 +1030
-Received: from sac.crawford.emu.id.au (sac.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc02])
-        by bits.crawford.emu.id.au (8.17.1/8.16.1) with ESMTP id 21QAlPOh036177;
-        Sat, 26 Feb 2022 21:47:25 +1100
-Message-ID: <8a3732f6e76dc3abf9fc90b36cb847794d03d653.camel@crawford.emu.id.au>
-Subject: Re: New hardware support - ITE IT8689
-From:   Frank Crawford <frank@crawford.emu.id.au>
-To:     linux-hwmon@vger.kernel.org
-Date:   Sat, 26 Feb 2022 21:47:25 +1100
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Sat, 26 Feb 2022 08:31:34 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B385D4D62E;
+        Sat, 26 Feb 2022 05:30:59 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 1338A3BA;
+        Sat, 26 Feb 2022 05:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1645882259;
+        bh=C+88ICGJ2CM+8gAdRSkBM1aU4I+DeyuU0rJ/rCPlNqc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V6j6ZnaFOcJ1CDozfbaYJuIP3pOk3KpXKvAWZcBj16w+zNxWxR4vuRzlFWl+q1FPY
+         3W+8pXrCWGHz2MsfEfgDKxnZ0RsKu37V9nv2ebcrOOVdHjyaP0eOeSw+63Zd7G9dVG
+         PRlvnqAslV6hMBkwfbpJGm/EwJaZtIDdfdBh0plI=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Zev Weiss <zev@bewilderbeest.net>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH 0/5] hwmon: (nct6775) Add i2c support
+Date:   Sat, 26 Feb 2022 05:30:42 -0800
+Message-Id: <20220226133047.6226-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Greylist: inspected by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 26 Feb 2022 21:47:25 +1100 (AEDT) for IP:'fdd2:7aad:d478:1::cb10:cc02' DOMAIN:'sac.crawford.emu.id.au' HELO:'sac.crawford.emu.id.au' FROM:'frank@crawford.emu.id.au' RCPT:''
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 26 Feb 2022 21:47:25 +1100 (AEDT)
-X-Virus-Scanned: clamav-milter 0.103.5 at bits.crawford.emu.id.au
-X-Virus-Status: Clean
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Pozdrawiam,
+Hello,
 
-I've only just joined this list, so didn't see your request previously,
-but contact me about monitoring an IT8689, as I have that in the set I'm
-trying to get into the kernel, or you can test yourself if you grab it
-from my git repo https://github.com/frankcrawford/it87
+This patch series augments the existing nct6775 driver with support
+for the hardware's i2c interface.
 
-Note that as Guenter says, this is all from testing and guessing, and
-there is the possibility that it may cause stability issues, although I
-haven't seen any in my use.
+Thus far the nct6775 driver has only supported the LPC interface,
+which is the main interface by which the Super-I/O chip is typically
+connected to the host (x86) processor.
 
-Regards
-Frank
+However, these chips also provide an i2c interface, which can provide
+a way for a BMC to also monitor sensor readings from them.  On some
+systems (such as the ASRock Rack ROMED8HM3 and X570-D4U) this may be
+the only way for the BMC to monitor host CPU temperatures (e.g. to
+indirectly access a TSI interface); this functionality is thus an
+important component of enabling OpenBMC to support such systems.
+
+In such an arrangement the Super-I/O chip is simultaneously controlled
+by two independent processors (the host and the BMC) which typically
+do not coordinate their accesses with each other.  In order to avoid
+conflicts between the two, the i2c driver avoids all writes to the
+device, since the BMC's needs with the hardware are merely that it be
+able to retrieve sensor readings.  This allows the host processor to
+remain ultimately in control of the chip and unaware of the BMC's use
+of it at all.
+
+The sole exception to the "no writes" rule for the i2c driver is for
+the bank-select register -- while I haven't been able to find any
+explicit statement in the Nuvoton datasheets guaranteeing this, all
+experiments I've done have indicated that, as one might hope, the i2c
+interface has its own bank-select register independent of the one used
+by the LPC interface.
+
+In terms of code structure, the approach taken in this series is to
+split the LPC-specific parts of the driver out into a separate module
+(called nct6775-platform), leaving the interface-independent parts in
+a generic driver (called nct6775-core).  The nct6775-i2c driver is
+then added as an additional consumer of the nct6775-core module's
+functionality.
+
+The first two patches make some relatively small infrastructural
+changes to the nct6775 driver; the bulk of the core/platform driver
+split is in the third patch.  The final two patches add DT bindings
+and the i2c driver itself.
+
+I've tested the nct6775-platform and nct6775-i2c drivers with the
+NCT6779D in an ASRock ROMED8HM3 system (the latter driver on its
+AST2500 BMC); both seem to work as expected.  Broader testing would of
+course be welcome though, as is review feedback.
+
+
+Thanks,
+Zev
+
+
+Zev Weiss (5):
+  hwmon: (nct6775) Rearrange attr-group initialization
+  hwmon: (nct6775) Add read-only mode
+  hwmon: (nct6775) Split core and platform driver
+  dt-bindings: hwmon: Add nuvoton,nct6775
+  hwmon: (nct6775) Add i2c driver
+
+ .../bindings/hwmon/nuvoton,nct6775.yaml       |   48 +
+ MAINTAINERS                                   |   12 +-
+ drivers/hwmon/Kconfig                         |   32 +-
+ drivers/hwmon/Makefile                        |    4 +-
+ drivers/hwmon/{nct6775.c => nct6775-core.c}   | 1464 +----------------
+ drivers/hwmon/nct6775-i2c.c                   |  191 +++
+ drivers/hwmon/nct6775-platform.c              | 1185 +++++++++++++
+ drivers/hwmon/nct6775.h                       |  233 +++
+ 8 files changed, 1763 insertions(+), 1406 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+ rename drivers/hwmon/{nct6775.c => nct6775-core.c} (75%)
+ create mode 100644 drivers/hwmon/nct6775-i2c.c
+ create mode 100644 drivers/hwmon/nct6775-platform.c
+ create mode 100644 drivers/hwmon/nct6775.h
+
+-- 
+2.35.1
+
