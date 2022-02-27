@@ -2,70 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43524C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 18:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE924C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 18:52:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiB0SMF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Feb 2022 13:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S231313AbiB0Swl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Feb 2022 13:52:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiB0SME (ORCPT
+        with ESMTP id S230214AbiB0Swk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Feb 2022 13:12:04 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02835AA66;
-        Sun, 27 Feb 2022 10:11:27 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id h15so14491640edv.7;
-        Sun, 27 Feb 2022 10:11:27 -0800 (PST)
+        Sun, 27 Feb 2022 13:52:40 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A0157B36;
+        Sun, 27 Feb 2022 10:52:03 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so15602982ooi.0;
+        Sun, 27 Feb 2022 10:52:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z+phHXBhP7sUmpqoJ5E/GXm8zjzTONi6SCknpLMTWwk=;
-        b=mCna3VHZDBV/ehGjjh9gJuiZ3d6mSnMU2mTQiVRUzLnpUZXSrvNDm3RgzYDVLRv06S
-         it9lTLQNhOBn0INuUc5ymovisl4lZfXFmTAx0ra/VvBuH/6uPfcoUkE8CO/2puVYSuHv
-         zu4+ApFs3TbrRcSuwUzt8MvAvfkcM9kso09rJ3ln/rQtpXANZTTfbSXSWOkRVglOyPeY
-         mSi83bei30FD+a6oRcb1Sq7a91dqsF0edmCvcIdJPA0/2KZKcRG1/iAWQxLhLwUd/lNS
-         RCkp62emiSkTIGlHNnu4D97ST1q3ADKg5VpwKpAct8Ota64KDztJ5iUce2oIsOtjUmmE
-         AsXQ==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=g389SAYe0hAJZkmC0RLt66EI40xFc/FeNBhIEw+0+VU=;
+        b=QAl7avJ8lmrokQB1U1PI08LlkfQ6AvD534j6IfrB5foQjV/CJqQETQS22eD38kKmfO
+         5z05c8t7yk4mRudBRev0sBEBrnE3ojbCmjirB1Gr8rL3zgej7dl7oX8mCWL0weMOR2sf
+         iA1zyfcdRjmqp987QlzgTPgXfYKnAwTX+oYxrH0Ci3DRP4A0K1GahMFsV9RSmEJ5y/kk
+         oNAbTpOEdWr0Oreprwc3lTbBYFbzpYNFzvHhO/Qu1zbREEgtS7Ft2CSGlQ05bX0PLIro
+         qaPP2R8grt9ndJQoH3Fhp8ErkU0xV7MhvqbTENCjuHelVZ4fUtoFw9c0v9oN8tDPh4cA
+         V78Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z+phHXBhP7sUmpqoJ5E/GXm8zjzTONi6SCknpLMTWwk=;
-        b=ZSW4sjG9cxjeThQ+e9fVvlZKjBAsQBDRJTf+lvLDYU0jJSFDKUjM4MkB7d6bEZC+Ip
-         RnVpm69Atjxxe2pVDwJy4OQOqsX6Gnl/lEiCnHPJuGOVxyqtkzSSXOhgeVjUZbszkUBa
-         7VlJg0D7yT1SLp92+7H0LOh+aup9O4+JmIW+EBAUG0kZpYqBF+2ZEKcIl0gQJuIBua08
-         WFLdCtFi2w/x2xWUNlXqW+XUOCLUEjfjExIcsj2utzh+hh/cCn/B6E5UBIS5kQRgPlYb
-         00xvul8eBGRyvmloyfe+L8KqiqRBptsO/vhkg7qhiFKikfATF8JJj00QJ4SGFkXchldu
-         GgwA==
-X-Gm-Message-State: AOAM533sUC0ANZkmFbheA3SwaUJ0T2ZIjg2fnrE52Z6VrYCXYAdyYc9D
-        9/zkG7Aj0DMl5UJ+qMIQAZhi7EsxWcocAyJp
-X-Google-Smtp-Source: ABdhPJwkoKI9LGdfq+SBKpPijHSVg3658GE2tCtyAPH5wnbfF0ml4bQtTLWyBhjQAjIWnbB9pKVKFA==
-X-Received: by 2002:aa7:d694:0:b0:410:d89a:656e with SMTP id d20-20020aa7d694000000b00410d89a656emr16664734edr.402.1645985486517;
-        Sun, 27 Feb 2022 10:11:26 -0800 (PST)
-Received: from fedora ([95.180.24.23])
-        by smtp.gmail.com with ESMTPSA id by10-20020a0564021b0a00b00412ddfc6d12sm5068591edb.0.2022.02.27.10.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 10:11:26 -0800 (PST)
-Date:   Sun, 27 Feb 2022 19:11:23 +0100
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=g389SAYe0hAJZkmC0RLt66EI40xFc/FeNBhIEw+0+VU=;
+        b=FG84q5Afj/fS+hjJwO+QE6Tl9FBm308wPvadQLy0ZKOEZmXAlFVucCjK+mOpKyUBYG
+         d/thTLAN8db4WzeUV7XMj4Ix7s+axZx7gpiYwGU81CNM330Id33ugWrN6JCF6VNOITvq
+         uqy9I8u43OcQg/GZhx/ZvRSHbJdrUgasysvmFUJZnhHfYrx97HaLx6ZGxgIs7gmcC5C8
+         t8hZztpD7s1XlhzUtCpTGb+8O7pq6yKh00ZJljhf/I5hr+XL50IY7VLontxpumILLu/C
+         KXGuvC6rmkWqqZ3RvIUL/SxRi4oEWrdRpao2ACufrhlpxifwrH0qmcCcm8argyorIF9n
+         FPCg==
+X-Gm-Message-State: AOAM533vHUVJ/FQwOI4tr565ydW0QzIC7r66u2qzqDuSw2eWqROL625X
+        507VTp/sn5u1Qw54COY7HJGDK4Pc5S8=
+X-Google-Smtp-Source: ABdhPJy1HvJuV3xXzuXui7cBmi7vBlWZtfzMRqCto5q2gGLjjYqC0HZzyAa4++hxojj5fg/wB0UiNQ==
+X-Received: by 2002:a05:6870:c594:b0:d3:6bff:a925 with SMTP id ba20-20020a056870c59400b000d36bffa925mr6407113oab.1.1645987923260;
+        Sun, 27 Feb 2022 10:52:03 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c26-20020a4ae25a000000b0031c268c5436sm3895196oot.16.2022.02.27.10.52.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Feb 2022 10:52:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ae4f358a-5e44-435a-a569-a5bd1c2128ee@roeck-us.net>
+Date:   Sun, 27 Feb 2022 10:52:00 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] hwmon: add driver for Aquacomputer Farbwerk 360
+Content-Language: en-US
+To:     Aleksa Savic <savicaleksa83@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: add driver for Aquacomputer Farbwerk 360
-Message-ID: <Yhu+ywPYqkzMQUZv@fedora>
 References: <20220227105926.64862-1-savicaleksa83@gmail.com>
- <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net>
+ <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net> <Yhu+ywPYqkzMQUZv@fedora>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <Yhu+ywPYqkzMQUZv@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Thanks. I'll send a v3.
+On 2/27/22 10:11, Aleksa Savic wrote:
+> Thanks. I'll send a v3.
+> 
 
-Aleksa
+
+Oh, and please update the subject to something like
+"hwmon: (aquacomputer_d5next) Add support for Aquacomputer Farbwerk 360"
+
+Thanks,
+Guenter
+
+
