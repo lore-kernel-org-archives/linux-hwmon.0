@@ -2,196 +2,253 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0E7AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 12:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C458DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 15:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbiB0MpY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Feb 2022 07:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S229635AbiB0PCM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Feb 2022 10:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiB0MpW (ORCPT
+        with ESMTP id S229569AbiB0PCM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Feb 2022 07:45:22 -0500
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB2E6E28D;
-        Sun, 27 Feb 2022 04:44:45 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4F57958021E;
-        Sun, 27 Feb 2022 07:44:45 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 27 Feb 2022 07:44:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=KIEoATxbMV81kK
-        7/dQqdRokzAvfbjIR76Q+BP8xavdo=; b=H8o0maa3XW7eLDbng5NZuWaEMAg9Hc
-        iRfZVWJiySjT1XNrfN96UkOHnnJcl8VEfQ21lUTsOWiCQnibuZk7J7xFpte9YX0f
-        v1ROUSmiZ++zMfc7T4wSN5Th3+IEoAfTDzJYCXWnbDDi6gbm0OHOdMqU9E03bXLG
-        bMrf+YBv2gsGdiUtOWwESnqrIhpyAfEiVltj+l5s766T9+LqlYS2BOlp+GiZY0zW
-        VKUFnj0EcrLih+ZGgmXvOurV+juCjJYVgmvc4dPhgnsihbzzu4NSWgvMIDT6FlUj
-        N7QKzn1oOXST7u0Jp86i2srwfgdVxNX5/MZ4IQL38X1++TMWsxvH31qQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=KIEoAT
-        xbMV81kK7/dQqdRokzAvfbjIR76Q+BP8xavdo=; b=Hj2BIsy/lJw/HbBv+jc/H3
-        eEAjPw3JUI2KGEDnPn8Q7sYWjIERu4rRBQYPWljsHfaoSI63iZAK0nRniVVqHBWY
-        gUt8Tk/eBcoqS36DezmHYGUPwgizKSibMZ6Pb1rqD28N0oWF2BbqsA08kOL9HknF
-        h/2U0e78tJSrHMLYd8dsQM6dJCA4wNvv2QpC2LI8TDecLK2jyqgz1JUvnh/0WBxb
-        UzpyBAhZRGm0/6VzGWKAG0vpYI1d+pUKwGmXoC8xFTQqSBA9vXtway/+/CnHjx8h
-        rA+1xiUUTnZk2M9pQLw0x5uFVoqFDPYdmlNEQhah0ZLlDJO6zRPVEIEwqjCEyaow
-        ==
-X-ME-Sender: <xms:PXIbYhWKAy9Nkr_AD8ko_NozmLZZZYiAm-vvKRDxZ5mTbn531yUd9w>
-    <xme:PXIbYhnF4vsNHmGA9dGz3jSYym7z2jaDTzlZq47u3638vQeECFHbHbinQnECqDsG0
-    8rKn4O8jcVuFQ-qUxQ>
-X-ME-Received: <xmr:PXIbYta5DlXRHm6ZjgSx1nEwWYyG7z_PTrJkOex175a8pIA57kA_bRfAm_J9PmRv49rjS3WsPEwXxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleekgdegfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
-    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepgeegtdetjeekge
-    eguefgheeuvedugedvteejveeiudegvddtkeffkeehtdetudfhnecuvehluhhsthgvrhfu
-    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
-    htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:PXIbYkXQZpxP9QQ32sAEomrOla_rqfaBR63eZNGvVyyk104D2O9BPA>
-    <xmx:PXIbYrlvxAi2WJuJ2I9x2OsrI02mnj7av4Hn5QPHrZm6rEve5GvftA>
-    <xmx:PXIbYhdkdiX-DtQzQ2jzvdgKsh0ArOVoCaTGM9FXbTUYMIpM5-W1Qw>
-    <xmx:PXIbYkiMFOBTK28VHQJMnF_YWczeLMy59zLAv40M9Ni9NVHK3OKf8w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 27 Feb 2022 07:44:41 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     kernel@pengutronix.de, s.hauer@pengutronix.de, linux-imx@nxp.com,
-        shawnguo@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, andreas@kemnade.info,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v19 3/3] ARM: dts: imx7d-remarkable2: Enable lcdif
-Date:   Sun, 27 Feb 2022 22:44:25 +1000
-Message-Id: <20220227124425.331030-4-alistair@alistair23.me>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220227124425.331030-1-alistair@alistair23.me>
-References: <20220227124425.331030-1-alistair@alistair23.me>
+        Sun, 27 Feb 2022 10:02:12 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505836D1B2;
+        Sun, 27 Feb 2022 07:01:35 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id y7so11365326oih.5;
+        Sun, 27 Feb 2022 07:01:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=Dt2CstZbDRcILlp2OTf0pybA98dCd6PGokRHBgdlVeU=;
+        b=Z0/QYD5v+W0JQR26MU3psLvCzSgxvwfy6QorRfXtGO94pjLH6PCFG68ybQDsXHMdey
+         03ab7QUHqPwX9Q5UNU/MD6QzUL9DU9f30keUji0X24JE/x/+oVVXwDCO8ecGP/kD1j6i
+         fswrfo1qctAmerKHd42Z20BmCyEQkdouzolfjQTnMdAtLGQRQQo59xCotcgEgI2KkO9E
+         KWjs0tNgAL0g3D+FusU6T3r8V9IT1WcFuvlA9FzO9EAdIWTK0pIuEP8Cl0Fht2lbl241
+         /QySGBc7AxiqB7vuYtq4YcbT1FbAuO6YISoVTdUolEVsoBHijwlpX2c9bT6hrnZqZ+/X
+         gTyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=Dt2CstZbDRcILlp2OTf0pybA98dCd6PGokRHBgdlVeU=;
+        b=MEXfSVvPhE1WNhFBV0asBpsq0Aqzue4n2vZV2zvnuye2mIwgIWxZ9qGtobKgSz2vg3
+         sl80DE1Cbe+IHIsBsiYR+3fLJ/+8VVoLCorQSB6JT5XWsLbympkEHx1rgoXY1KbK/Hp7
+         wb96jhN8fxHLzKRhFoFYWtF+xGC3Yyr3weilDF4vdYzTTNtBV0dKjC30UQF4WUh20I0I
+         fVmoW70ujExxgzYFbqzbkxKIi0SHOuf0Hd27HfXUdO3Lg9O5eT9xn0qoxvTooMqnrZwk
+         0sdoiku2iF+F8mWabETNlJS2EknCUK7ZbVvc7gdyaRRm+M5Z5idMMSef95jZyFZqCT9H
+         lAaQ==
+X-Gm-Message-State: AOAM533KoKITzoX+NVoOUWQqwZLQeRXVwYkhrkVIshlqUsOUnfkkSZrK
+        IQi4D7InqTaJWFbZTABJGCbXclehDHM=
+X-Google-Smtp-Source: ABdhPJzpivHohiXlZVbdqCFZmP1Z3O8YXb5tSedGhroFC/BjJOsw1girvHKIC5KY7IRixipBELl++w==
+X-Received: by 2002:a05:6808:1402:b0:2d3:4a20:3dfa with SMTP id w2-20020a056808140200b002d34a203dfamr7533400oiv.143.1645974094602;
+        Sun, 27 Feb 2022 07:01:34 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j10-20020a4ad2ca000000b0031c515672d0sm3647286oos.23.2022.02.27.07.01.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Feb 2022 07:01:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b4a1d4e1-a7b9-00f9-75d2-56003138883f@roeck-us.net>
+Date:   Sun, 27 Feb 2022 07:01:32 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Zev Weiss <zev@bewilderbeest.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Renze Nicolai <renze@rnplus.nl>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20220226133047.6226-1-zev@bewilderbeest.net>
+ <20220226133047.6226-2-zev@bewilderbeest.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/5] hwmon: (nct6775) Rearrange attr-group initialization
+In-Reply-To: <20220226133047.6226-2-zev@bewilderbeest.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
+On 2/26/22 05:30, Zev Weiss wrote:
+> We now track the number of attribute groups in nct6775_data, as a
+> measure to simplify handling differences in the set of enabled
+> attribute groups between nct6775 drivers (platform & i2c).  As a side
+> effect, we also reduce the amount of IS_ERR()/PTR_ERR() boilerplate a
+> bit.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+>   drivers/hwmon/nct6775.c | 84 ++++++++++++++++++++---------------------
+>   1 file changed, 42 insertions(+), 42 deletions(-)
+> 
+> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+> index 2b91f7e05126..139b2fe5ca4d 100644
+> --- a/drivers/hwmon/nct6775.c
+> +++ b/drivers/hwmon/nct6775.c
+> @@ -1198,6 +1198,7 @@ struct nct6775_data {
+>   	const char *name;
+>   
+>   	const struct attribute_group *groups[7];
+> +	u8 num_groups;
+>   
+>   	u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
+>   				    * 3=temp_crit, 4=temp_lcrit
+> @@ -1405,10 +1406,18 @@ struct sensor_template_group {
+>   	int base;
+>   };
+>   
+> -static struct attribute_group *
+> -nct6775_create_attr_group(struct device *dev,
+> -			  const struct sensor_template_group *tg,
+> -			  int repeat)
+> +static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
+> +{
+> +	/* Need to leave a NULL terminator at the end of data->groups */
+> +	if (WARN_ON(data->num_groups == ARRAY_SIZE(data->groups) - 1))
+> +		return -ENOSPC;
+> +
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+At work we are struggling with a whopping 500,000+ (!) WARN backtraces
+_each day_. I would be happy if you send me patches removing some of
+those, but I am not inclined to accept patches adding them. If people
+don't notice that the driver doesn't load, they won't notice the warning
+either, and it will just add to all the other warning backtrace noise.
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 99ac0d242936..03a4029e1e57 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
- 		startup-delay-us = <100000>; /* 100 ms */
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -132,6 +152,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.34.1
+Guenter
+
+> +	data->groups[data->num_groups++] = group;
+> +	return 0;
+> +}
+> +
+> +static int nct6775_add_template_attr_group(struct device *dev, struct nct6775_data *data,
+> +					   const struct sensor_template_group *tg, int repeat)
+>   {
+>   	struct attribute_group *group;
+>   	struct sensor_device_attr_u *su;
+> @@ -1419,28 +1428,28 @@ nct6775_create_attr_group(struct device *dev,
+>   	int i, count;
+>   
+>   	if (repeat <= 0)
+> -		return ERR_PTR(-EINVAL);
+> +		return -EINVAL;
+>   
+>   	t = tg->templates;
+>   	for (count = 0; *t; t++, count++)
+>   		;
+>   
+>   	if (count == 0)
+> -		return ERR_PTR(-EINVAL);
+> +		return -EINVAL;
+>   
+>   	group = devm_kzalloc(dev, sizeof(*group), GFP_KERNEL);
+>   	if (group == NULL)
+> -		return ERR_PTR(-ENOMEM);
+> +		return -ENOMEM;
+>   
+>   	attrs = devm_kcalloc(dev, repeat * count + 1, sizeof(*attrs),
+>   			     GFP_KERNEL);
+>   	if (attrs == NULL)
+> -		return ERR_PTR(-ENOMEM);
+> +		return -ENOMEM;
+>   
+>   	su = devm_kzalloc(dev, array3_size(repeat, count, sizeof(*su)),
+>   			       GFP_KERNEL);
+>   	if (su == NULL)
+> -		return ERR_PTR(-ENOMEM);
+> +		return -ENOMEM;
+>   
+>   	group->attrs = attrs;
+>   	group->is_visible = tg->is_visible;
+> @@ -1478,7 +1487,7 @@ nct6775_create_attr_group(struct device *dev,
+>   		}
+>   	}
+>   
+> -	return group;
+> +	return nct6775_add_attr_group(data, group);
+>   }
+>   
+>   static bool is_word_sized(struct nct6775_data *data, u16 reg)
+> @@ -4020,10 +4029,8 @@ static int nct6775_probe(struct platform_device *pdev)
+>   	const u16 *reg_temp_crit_l = NULL, *reg_temp_crit_h = NULL;
+>   	int num_reg_temp, num_reg_temp_mon, num_reg_tsi_temp;
+>   	u8 cr2a;
+> -	struct attribute_group *group;
+>   	struct device *hwmon_dev;
+>   	struct sensor_template_group tsi_temp_tg;
+> -	int num_attr_groups = 0;
+>   
+>   	if (sio_data->access == access_direct) {
+>   		res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+> @@ -4844,46 +4851,39 @@ static int nct6775_probe(struct platform_device *pdev)
+>   	nct6775_init_fan_common(dev, data);
+>   
+>   	/* Register sysfs hooks */
+> -	group = nct6775_create_attr_group(dev, &nct6775_pwm_template_group,
+> -					  data->pwm_num);
+> -	if (IS_ERR(group))
+> -		return PTR_ERR(group);
+> -
+> -	data->groups[num_attr_groups++] = group;
+> -
+> -	group = nct6775_create_attr_group(dev, &nct6775_in_template_group,
+> -					  fls(data->have_in));
+> -	if (IS_ERR(group))
+> -		return PTR_ERR(group);
+> -
+> -	data->groups[num_attr_groups++] = group;
+> -
+> -	group = nct6775_create_attr_group(dev, &nct6775_fan_template_group,
+> -					  fls(data->has_fan));
+> -	if (IS_ERR(group))
+> -		return PTR_ERR(group);
+> +	err = nct6775_add_template_attr_group(dev, data, &nct6775_pwm_template_group,
+> +					      data->pwm_num);
+> +	if (err)
+> +		return err;
+>   
+> -	data->groups[num_attr_groups++] = group;
+> +	err = nct6775_add_template_attr_group(dev, data, &nct6775_in_template_group,
+> +					      fls(data->have_in));
+> +	if (err)
+> +		return err;
+>   
+> -	group = nct6775_create_attr_group(dev, &nct6775_temp_template_group,
+> -					  fls(data->have_temp));
+> -	if (IS_ERR(group))
+> -		return PTR_ERR(group);
+> +	err = nct6775_add_template_attr_group(dev, data, &nct6775_fan_template_group,
+> +					      fls(data->has_fan));
+> +	if (err)
+> +		return err;
+>   
+> -	data->groups[num_attr_groups++] = group;
+> +	err = nct6775_add_template_attr_group(dev, data, &nct6775_temp_template_group,
+> +					      fls(data->have_temp));
+> +	if (err)
+> +		return err;
+>   
+>   	if (data->have_tsi_temp) {
+>   		tsi_temp_tg.templates = nct6775_tsi_temp_template;
+>   		tsi_temp_tg.is_visible = nct6775_tsi_temp_is_visible;
+>   		tsi_temp_tg.base = fls(data->have_temp) + 1;
+> -		group = nct6775_create_attr_group(dev, &tsi_temp_tg, fls(data->have_tsi_temp));
+> -		if (IS_ERR(group))
+> -			return PTR_ERR(group);
+> -
+> -		data->groups[num_attr_groups++] = group;
+> +		err = nct6775_add_template_attr_group(dev, data, &tsi_temp_tg,
+> +						      fls(data->have_tsi_temp));
+> +		if (err)
+> +			return err;
+>   	}
+>   
+> -	data->groups[num_attr_groups++] = &nct6775_group_other;
+> +	err = nct6775_add_attr_group(data, &nct6775_group_other);
+> +	if (err)
+> +		return err;
+>   
+>   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, data->name,
+>   							   data, data->groups);
 
