@@ -2,254 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42F56C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 12:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE76C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 12:44:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiB0M0b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Feb 2022 07:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S230516AbiB0MpJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Feb 2022 07:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiB0M0a (ORCPT
+        with ESMTP id S229643AbiB0MpI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Feb 2022 07:26:30 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D105C878;
-        Sun, 27 Feb 2022 04:25:53 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 447234C8;
-        Sun, 27 Feb 2022 04:25:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1645964753;
-        bh=wo/iYc5Rj0WB0BCZG3h8F6UMkaWVrC9rsTLBbIndKoE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jOut9LSgvaQkPxYUu/EcCAHbmQBpr4ygNxj03CyJkWtco91hZtcD6zg0cTvgTJVGy
-         NVlukIvYRLGt3QcbJjBYxjpO8ykyn0uYQcl71k2XKFpH44WrC4/Jf9tZA9E25U3Cx1
-         DFVgdT1G+J6KCjUkrLayCs4vhx+BNcrNdCTbeXDs=
-Date:   Sun, 27 Feb 2022 04:25:50 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Renze Nicolai <renze@rnplus.nl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Denis Pauk <pauk.denis@gmail.com>
-Subject: Re: [PATCH 0/5] hwmon: (nct6775) Add i2c support
-Message-ID: <YhttzgDtGpcTniyw@hatter.bewilderbeest.net>
-References: <20220226133047.6226-1-zev@bewilderbeest.net>
- <bcb89a9c-62d0-15b8-b46a-d3181db9dbe7@roeck-us.net>
+        Sun, 27 Feb 2022 07:45:08 -0500
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C618C1DA61;
+        Sun, 27 Feb 2022 04:44:32 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2F05558021E;
+        Sun, 27 Feb 2022 07:44:32 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 27 Feb 2022 07:44:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm3; bh=Zpwy63EZq/PZqrmOJiv+M1KlZ/diaH
+        9UUk5HgEqIYiA=; b=o3diIFAMznst0P83jqbDaWFMah59ZgUujhYW4OaUJgoX9s
+        Cjub5uj4au5prvBDxL8JjmcBCXaEuDUH4ZPvcs653SDKSdyABidJbFnGpQFBBTs2
+        yjoervg75LpjYHPtQ5Zc3lZcE40/PQx0j6QrX9znu7rFRvy1Nj4epY+OYmJvMCSD
+        lnf4kCpgFkkAtiaNSD+UuABdhx5pUvXphp84RipCua36aYh/rtu/EkMP0xDGpicQ
+        lbqSatNiGG7EbUf6IwhuBqBpeKpWKoXgJ/BK2xWME822wnvyCseRtNMVfFyC0Zwa
+        gU0bNxcPnkn/1WqU3CupvJnjtpBXpE2vHqrjvvzw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Zpwy63
+        EZq/PZqrmOJiv+M1KlZ/diaH9UUk5HgEqIYiA=; b=Fp423x9nLQo/35FuWftj+c
+        IsLzGDb0HepOLsp5ANDOF31oXu5/hMYz6t1+NhkIMIZDo2mZsgkEEUCO3JKClrX7
+        vxoZ1FqXxYYwm0jvNAAxBN0bx8tp7SUfv9SByFpq4DsyUxDDVKka3y8r2Jlgww4o
+        2su/I7F2BMlMlcWt812OfnzTtgXTZbpbYrM4bjEfiQFBy3kVXUtK754E0kvETAkj
+        7+qE74lHTAdRzf4mPXQS8Am6BwaWbvK6XsSLOi7Wr0a3u5xloOJD13pXal2w6gpq
+        eyT1ncdFZtwluToaf3rCfPVrSTTrsoZP+23VWSSoKVLE3uI+NcjrlmHm08lU4GlA
+        ==
+X-ME-Sender: <xms:L3IbYjQtZ2ONji1pcNppBNiuqEV13XhpYUMCwwK5inFjEXpZsCldNQ>
+    <xme:L3IbYkwTcRFNkqaPyo8CwnTG_t8jd3vk3Fs4N9c5UneVI340_1VqVpfhJjghjQiBu
+    bZONxUDKXLuH0DNOnY>
+X-ME-Received: <xmr:L3IbYo3X660dZwBea5UZRQAGx4CGk2APvFV63Kyi1-fDFRUYfaJ0UMVJOASRix71_fNJ3m_0F6RSDA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleekgdegvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffotggggfesthhqredtre
+    dtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
+    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehteefgfejueejtd
+    egvdfggefhiefgheffvdffudevveetjeduhfdukeduteevjeenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
+    grihhrvdefrdhmvg
+X-ME-Proxy: <xmx:L3IbYjDh8jFJIPRMQZvb3EyfSgQTMmmLr3zzWmuPkphTDVFB3PWv_A>
+    <xmx:L3IbYsjFPu9shGvNJ1uAheyWQ4UifBtAzUdgXhUIfZsREFTeuLS28g>
+    <xmx:L3IbYnqCsoiK_8njxF3L7af_QXUTFWPWE5TBaI5FHlbEceZZczbKJg>
+    <xmx:MHIbYvOtQru4RgMvD_L9RJ_LydxXLqCadERmgNRurScTDf_utYgWpA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 27 Feb 2022 07:44:27 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     kernel@pengutronix.de, s.hauer@pengutronix.de, linux-imx@nxp.com,
+        shawnguo@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, andreas@kemnade.info,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v19 0/3] Add support for the silergy,sy7636a
+Date:   Sun, 27 Feb 2022 22:44:22 +1000
+Message-Id: <20220227124425.331030-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <bcb89a9c-62d0-15b8-b46a-d3181db9dbe7@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-[Adding Denis re: wmi discussion below...]
-
-On Sat, Feb 26, 2022 at 03:54:42PM PST, Guenter Roeck wrote:
->On 2/26/22 05:30, Zev Weiss wrote:
->>Hello,
->>
->>This patch series augments the existing nct6775 driver with support
->>for the hardware's i2c interface.
->>
->>Thus far the nct6775 driver has only supported the LPC interface,
->>which is the main interface by which the Super-I/O chip is typically
->>connected to the host (x86) processor.
->>
->>However, these chips also provide an i2c interface, which can provide
->>a way for a BMC to also monitor sensor readings from them.  On some
->>systems (such as the ASRock Rack ROMED8HM3 and X570-D4U) this may be
->>the only way for the BMC to monitor host CPU temperatures (e.g. to
->>indirectly access a TSI interface); this functionality is thus an
->>important component of enabling OpenBMC to support such systems.
->>
->>In such an arrangement the Super-I/O chip is simultaneously controlled
->>by two independent processors (the host and the BMC) which typically
->>do not coordinate their accesses with each other.  In order to avoid
->>conflicts between the two, the i2c driver avoids all writes to the
->>device, since the BMC's needs with the hardware are merely that it be
->>able to retrieve sensor readings.  This allows the host processor to
->>remain ultimately in control of the chip and unaware of the BMC's use
->>of it at all.
->>
->>The sole exception to the "no writes" rule for the i2c driver is for
->>the bank-select register -- while I haven't been able to find any
->>explicit statement in the Nuvoton datasheets guaranteeing this, all
->>experiments I've done have indicated that, as one might hope, the i2c
->>interface has its own bank-select register independent of the one used
->>by the LPC interface.
->>
->
->That will a more detailed confirmation. Please explain in detail
->the experiments you have done.
->
->Other chips (specifically those served by the it87 driver) have the
->same problem, and there it was never really solved. That resulted
->in random crashes. I don't want to end up in the same situation.
->
-
-On an ASRock Rack ROMED8HM3, I used the following program to manually 
-peek and poke device registers from the host:
-
-host# cat port.c
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <sys/io.h>
-
-int main(int argc, char** argv)
-{
-	unsigned long addr, val;
-
-	if (iopl(3)) {
-		perror("iopl");
-		exit(1);
-	}
-
-	if (argc == 3 && !strcmp(argv[1], "r")) {
-		addr = strtoul(argv[2], NULL, 0);
-		printf("%03lx: %02x\n", addr, inb(addr));
-	} else if (argc == 4 && !strcmp(argv[1], "w")) {
-		addr = strtoul(argv[2], NULL, 0);
-		val = strtoul(argv[3], NULL, 0);
-		printf("%03lx <- %02lx\n", addr, val);
-		outb(val, addr);
-	} else {
-		fprintf(stderr, "Usage: %s [rw] ADDR [VALUE]\n", argv[0]);
-		exit(1);
-	}
-
-	return 0;
-}
-host# cc -o port port.c
-
-At the same time, I used i2cget & i2cset to do the same from the BMC 
-(the nct6779 is at address 0x2d on bus 1).
-
-Interleaving some shell transcripts chronologically (no drivers bound on 
-either processor):
-
-   host# ./port w 0x295 0x4e && ./port r 0x296
-   295 <- 4e
-   296: 08
-
-   bmc# i2cget -y 1 0x2d 0x4e
-   0x02
-   bmc# i2cset -y 1 0x2d 0x4e 0x01
-   bmc# i2cget -y 1 0x2d 0x4e
-   0x01
-
-   host# ./port w 0x295 0x4e && ./port r 0x296
-   295 <- 4e
-   296: 08
-
-So, starting from an initial state where the two sides were reporting 
-different values for the bank select register, a write to the bank 
-select register via the BMC's i2c interface is seen by a subsequent read 
-over that same interface, but the host still sees the same value it saw 
-initially.
-
-Reversing the roles (host writing the bank-select register), the BMC is 
-likewise unaffected:
-
-   bmc# i2cget -y 1 0x2d 0x4e
-   0x01
-
-   host# ./port w 0x295 0x4e && ./port r 0x296
-   295 <- 4e
-   296: 08
-   host# ./port w 0x295 0x4e && ./port w 0x296 0x06
-   295 <- 4e
-   296 <- 06
-   host# ./port w 0x295 0x4e && ./port r 0x296
-   295 <- 4e
-   296: 06
-
-   bmc# i2cget -y 1 0x2d 0x4e
-   0x01
-
-In contrast, looking at a different read/write register (the config 
-register at 0x40 in bank 0, for example), writes from each side are seen 
-by the other:
-
-   host# ./port w 0x295 0x4e && ./port w 0x296 0x00
-   295 <- 4e
-   296 <- 00
-   host# ./port w 0x295 0x40 && ./port r 0x296
-   295 <- 40
-   296: 03
-
-   bmc# i2cset -y 1 0x2d 0x4e 0x00
-   bmc# i2cget -y 1 0x2d 0x40
-   0x03
-   bmc# i2cset -y 1 0x2d 0x40 0x01
-   bmc# i2cget -y 1 0x2d 0x40
-   0x01
-
-   host# ./port w 0x295 0x40 && ./port r 0x296
-   295 <- 40
-   296: 01
-   host# ./port w 0x295 0x40 && ./port w 0x296 0x03
-   295 <- 40
-   296 <- 03
-   host# ./port w 0x295 0x40 && ./port r 0x296
-   295 <- 40
-   296: 03
-
-   bmc# i2cget -y 1 0x2d 0x40
-   0x03
-
-To be cautious we could perhaps trim down the list of supported chips in 
-the i2c driver to include only the models that are known to pass tests 
-like the above; I can certainly make that change if that would be 
-preferred.
-
->>In terms of code structure, the approach taken in this series is to
->>split the LPC-specific parts of the driver out into a separate module
->>(called nct6775-platform), leaving the interface-independent parts in
->>a generic driver (called nct6775-core).  The nct6775-i2c driver is
->>then added as an additional consumer of the nct6775-core module's
->>functionality.
->>
->
->How about wmi ? Shouldn't that be separated as well ?
->
-
-I admittedly don't know much about wmi, but from what I could see in the 
-code it looked to me like it essentially just acts as an alternate 
-software/firmware path to the same underlying LPC interface, so I 
-figured it would make sense to leave it integrated with the rest of the 
-platform driver as it is currently.  If there's a particular benefit to 
-be gained from splitting it out as well I can look into doing so, but 
-from my current understanding it seems like it would lead to either:
-
-  - duplication between the wmi and bare inb/outb versions of the 
-    platform driver, or
-
-  - to eliminate the duplication, a third (intermediate) module 
-    containing the code that was common to the two of them, leaving the 
-    two platform driver modules as little else than the bare register I/O 
-    routines (superio_[wmi_]inb, nct6775_[wmi_]read_value, etc.), i.e.  
-    the differences that are already handled via the indirection of the 
-    function pointers Denis added recently.
-
-I suppose the hypothetical intermediate module in the second scenario 
-above could also be integrated back into nct6775-core, though that part 
-of it would then be needless dead weight for the typically more 
-resource-constrained systems (e.g. BMCs) that are only going to use the 
-i2c driver.
-
-Anyway, none of the above possibilities seemed terribly appealing to me, 
-but if there's something I've misunderstood or factors I haven't taken 
-into account please let me know.
-
-
-Thanks,
-Zev
-
+v19:=0D
+ - Rebase on linux-next=0D
+v18:=0D
+ - Rebase=0D
+v17:=0D
+ - Rebase and fix build issues=0D
+v16:=0D
+ - Improve vdd regulator comments=0D
+v15:=0D
+ - Address comments on the patches=0D
+v14:=0D
+ - Merge the thermal driver and hwmon=0D
+v13:=0D
+ - Address comments on thermal driver=0D
+ - Rebase on master (without other patches)=0D
+v12:=0D
+ - Rebase=0D
+v11:=0D
+ - Address comments on hwmon=0D
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
+v10:=0D
+ - Use dev_get_regmap() instead of dev_get_drvdata()=0D
+v9:=0D
+ - Convert to use the simple-mfd-i2c instead=0D
+=0D
+Alistair Francis (3):=0D
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable lcdif=0D
+=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 136 ++++++++++++++++++++++++=0D
+ arch/arm/configs/imx_v6_v7_defconfig    |   3 +=0D
+ 2 files changed, 139 insertions(+)=0D
+=0D
+-- =0D
+2.34.1=0D
+=0D
