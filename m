@@ -2,73 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0C66C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 21:00:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35D9EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 21:38:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiB0VAg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Feb 2022 16:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S231290AbiB0VjS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Feb 2022 16:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiB0VAg (ORCPT
+        with ESMTP id S229549AbiB0VjR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Feb 2022 16:00:36 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E1932EF3;
-        Sun, 27 Feb 2022 12:59:58 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id r13so21048835ejd.5;
-        Sun, 27 Feb 2022 12:59:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HsbxMs8YWXLbNrp0FlklyOehGgNvH9xmK+gSlCK/Cz8=;
-        b=qHDYuVGZR8koybF04aOtV3q2BloahUejQInSu46+wmA754cyMNmV5THRqIm4Uwbk1+
-         rRprU3MDxnCzUS5KXJPcKyc3JRu13TqorcG2BEoFUk1ZfLoQ4vLkcchNfluTRHF+k/kX
-         EkfVdw/ZBviyMdfe7Hn2HMSTmA+Wd+2LElrcFOuoFY/iwhKFDnjdTYSVvieAEI+peWU7
-         8IO8f3RSvojYyYQQg84c4CF/MVfpkNZn47DG185PvAqu3wLLqmecilaGIoNasv8FStbO
-         TW3ZZkfa9l22xjQJ+3luA/jstjxR9wSTZuodqlmuDQwjZs/1r3dJesNZGN7fpoNSOYdK
-         robg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HsbxMs8YWXLbNrp0FlklyOehGgNvH9xmK+gSlCK/Cz8=;
-        b=2JH2S42jRkhEa7DDYdpNJlosY8JMWlJhCznhI1eB+YMuVWXX7h4RSNa+18athYfW8J
-         ORQJ0ebSr4SlEuapzbHQ3bwFq3Zkavi1/pxI/RksSE1Z6WKCBvAu8S0NUAf9nNHhCO9x
-         nxW7ybss80lkCV9i6+MTjP89tSBkosFUcg2FP649rf0t6UfrggFeWChzKH6AYVlb32b+
-         NztPGcaxO5rptI+vTPRsdo2DSK3oKrkzZpG1uSaVxHOSRzCajRqfgRB+z70IS19M7YTe
-         XDqX/9nggpQpds+qxxfAFfYWulJlppvKVufJIQYWEYQVmZqRJw3XZ2iNy8JiAjpiS0t3
-         iwuw==
-X-Gm-Message-State: AOAM530w/J2XAS8KbtwVjzX23ce/fn3tESX9Sck2vtO4hrj3nxubyupj
-        BkUooY0WIlVUDsEzYfHxwms=
-X-Google-Smtp-Source: ABdhPJwCEhZZP4xVgVxCbFZmVcel5oOzCffL3oDmnl0u8Cch0C2URQ+sWn/bjcRooAdDU4rsvJVgKg==
-X-Received: by 2002:a17:906:6d09:b0:6b9:2e0e:5bdd with SMTP id m9-20020a1709066d0900b006b92e0e5bddmr12532411ejr.246.1645995596931;
-        Sun, 27 Feb 2022 12:59:56 -0800 (PST)
-Received: from fedora ([95.180.24.23])
-        by smtp.gmail.com with ESMTPSA id k18-20020a50ce52000000b0040f75ad0e60sm5205791edj.83.2022.02.27.12.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 12:59:56 -0800 (PST)
-Date:   Sun, 27 Feb 2022 21:59:54 +0100
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Farbwerk 360
-Message-ID: <YhvmSgQCiaIZdwsj@fedora>
-References: <20220227203242.GA792093@roeck-us.net>
+        Sun, 27 Feb 2022 16:39:17 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7F44BFF4;
+        Sun, 27 Feb 2022 13:38:35 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 1EF44DF7491;
+        Sun, 27 Feb 2022 22:38:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1645997913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=auuyEhFvI9O6E7K0eY+/3pvXha2pZMkC/DntTyWHWHY=;
+        b=DDQ+6xSh7odwZlp+syE+bHr9FuZmMlX3tbJ1AZvewGDaiDeGgV8ouwsBt9ykPM5e/XyqsR
+        Z2UVkHJd3PFAtTuycKSjfXpU1SFBSnCWPItkTWvGf8PkFWPU+u3yU1O09OEN8vti4/8axe
+        zZ4KQy3G2OEbXqnU/yDPiN13ORLeA2E=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/5] hwmon: (nct6775) Add i2c support
+Date:   Sun, 27 Feb 2022 22:38:31 +0100
+Message-ID: <4719747.31r3eYUQgx@natalenko.name>
+In-Reply-To: <YhrFizhgOpZbi3dE@hatter.bewilderbeest.net>
+References: <20220226133047.6226-1-zev@bewilderbeest.net> <2620147.mvXUDI8C0e@natalenko.name> <YhrFizhgOpZbi3dE@hatter.bewilderbeest.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220227203242.GA792093@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Sorry, this definitely wasn't intended. Looks like VS Code decided
-to reformat the code on its own - I'll switch to Kate for the time
-being. This is hopefully fixed in v4.
+Hello.
 
-Thanks,
-Aleksa
+On ned=C4=9Ble 27. =C3=BAnora 2022 1:27:55 CET Zev Weiss wrote:
+> On Sat, Feb 26, 2022 at 04:14:12PM PST, Oleksandr Natalenko wrote:
+> >Hello.
+> >
+> >On sobota 26. =C3=BAnora 2022 14:30:42 CET Zev Weiss wrote:
+> >> Hello,
+> >>
+> >> This patch series augments the existing nct6775 driver with support
+> >> for the hardware's i2c interface.
+> >
+> >Is it something I can test on my ASUS Pro WS X570-ACE board as an ordina=
+ry user, and if so, how?
+> >
+>=20
+> You could certainly test that the nct6775-platform driver still works as=
+=20
+> it did previously, which would be good to confirm -- you'll need to=20
+> enable CONFIG_SENSORS_NCT6775_PLATFORM now to build it.
+
+Ack.
+
+>  From what I've been able to find about that board though it looks like=20
+> it doesn't have a BMC, so testing the i2c driver on it probably isn't=20
+> going to be possible.  (Even if it does in fact have a BMC, it would=20
+> require at least a partial port of OpenBMC or similar, and re-flashing=20
+> your BMC firmware with that, and is hence a non-trivial undertaking.)
+
+It should have, the BMC is based on RTL8117, although I have no idea if it =
+is something that can be called true IPMI as I've never enabled/used it.
+
+Thanks.
+
+>=20
+>=20
+> Zev
+>=20
+>=20
+
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+
