@@ -2,146 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F25CBC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 16:53:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43524C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Feb 2022 18:11:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiB0Qx5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Feb 2022 11:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S230150AbiB0SMF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Feb 2022 13:12:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiB0Qx4 (ORCPT
+        with ESMTP id S229489AbiB0SME (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Feb 2022 11:53:56 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D664161D;
-        Sun, 27 Feb 2022 08:53:17 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id l25so11429115oic.13;
-        Sun, 27 Feb 2022 08:53:16 -0800 (PST)
+        Sun, 27 Feb 2022 13:12:04 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02835AA66;
+        Sun, 27 Feb 2022 10:11:27 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id h15so14491640edv.7;
+        Sun, 27 Feb 2022 10:11:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DLB+KjA+36FGogaPpx9tIXiVFKHZ9ogYrk3Bus4BHP0=;
-        b=qWGBB4hiNQqW8gdR7/0UwngjJT+6gqYg7TB4J+LXyigNwiSQ6G4KwvMrGUDi8bbtAZ
-         +30xHBPqF4ou2ZrvZWe2uEPQEgRPmYMbzugy0iJhb3PvEKbOVx6O/1ZdJLYQAmvgiNu+
-         fDwI/bxBN1inANF8wj3VM+51fkDm6m+tdegOyUbXqO/bhOep8ETiEgyTYWb2JHdFh5C3
-         Pki5V5teVw0LZP+b+k5BZgUekFEBpeuSvGgq2JxyisL/37FiM3Naumpup5pagvUnYQDA
-         IqWwJQTT+MTOsYhAXSuLBCZNTShqGjc5OA1EAY2RzKI/SCteimOmfKMYzchW9bfUELXF
-         XHjg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z+phHXBhP7sUmpqoJ5E/GXm8zjzTONi6SCknpLMTWwk=;
+        b=mCna3VHZDBV/ehGjjh9gJuiZ3d6mSnMU2mTQiVRUzLnpUZXSrvNDm3RgzYDVLRv06S
+         it9lTLQNhOBn0INuUc5ymovisl4lZfXFmTAx0ra/VvBuH/6uPfcoUkE8CO/2puVYSuHv
+         zu4+ApFs3TbrRcSuwUzt8MvAvfkcM9kso09rJ3ln/rQtpXANZTTfbSXSWOkRVglOyPeY
+         mSi83bei30FD+a6oRcb1Sq7a91dqsF0edmCvcIdJPA0/2KZKcRG1/iAWQxLhLwUd/lNS
+         RCkp62emiSkTIGlHNnu4D97ST1q3ADKg5VpwKpAct8Ota64KDztJ5iUce2oIsOtjUmmE
+         AsXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DLB+KjA+36FGogaPpx9tIXiVFKHZ9ogYrk3Bus4BHP0=;
-        b=eGrrDcJ6DaV8zkgDw20LOuiHBL4AklsQLYqEYJ8TT598YXsAuCvwDD4G+bBN0k8KSA
-         VmxtXoa+NUfAZp1JQKQR9X8thwl/MpNtXhk/IzppIdpTwN5DgCwBcgixLHaXe+nbAs+q
-         0p1L2hg17vcwA4juyLeK1+Ys0aUYhbFLo1iCGRsUVaKJlW1X465OVy4jrClycozoyEuE
-         dKdf0ToG7YKu1ZdUvV8FpK/QsuRI/o4PviCmTHZvIIupJjuDz8/pAK5iZi8KtkBXtJLt
-         n1JNMcrnxm1DUM7Km0igGLDgX6jlzcEiau/Ai8kYvRYUJrhdQn9Ph75APyib4LR+S9G8
-         lbyA==
-X-Gm-Message-State: AOAM531A7t3Whg2YIafHQ6iUWzuZVxQZMNfkYkwnjExxJDGuNojbhEFV
-        kFeCQEgWwTn113QT/mWW6LE=
-X-Google-Smtp-Source: ABdhPJx9tE9vO89tCY1gqpvCC0eLKudt/2Yql6y4vG1v5SvmDtWMY1I+odPma2cbzqLN+JuXZ29jAQ==
-X-Received: by 2002:a05:6808:1718:b0:2d7:416e:d9d9 with SMTP id bc24-20020a056808171800b002d7416ed9d9mr7845154oib.76.1645980796337;
-        Sun, 27 Feb 2022 08:53:16 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r4-20020a9d5cc4000000b005af6f4ff5e2sm3973316oti.61.2022.02.27.08.53.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 08:53:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a45f4294-8f2d-e0ac-abf5-b48f13c3d49e@roeck-us.net>
-Date:   Sun, 27 Feb 2022 08:53:14 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z+phHXBhP7sUmpqoJ5E/GXm8zjzTONi6SCknpLMTWwk=;
+        b=ZSW4sjG9cxjeThQ+e9fVvlZKjBAsQBDRJTf+lvLDYU0jJSFDKUjM4MkB7d6bEZC+Ip
+         RnVpm69Atjxxe2pVDwJy4OQOqsX6Gnl/lEiCnHPJuGOVxyqtkzSSXOhgeVjUZbszkUBa
+         7VlJg0D7yT1SLp92+7H0LOh+aup9O4+JmIW+EBAUG0kZpYqBF+2ZEKcIl0gQJuIBua08
+         WFLdCtFi2w/x2xWUNlXqW+XUOCLUEjfjExIcsj2utzh+hh/cCn/B6E5UBIS5kQRgPlYb
+         00xvul8eBGRyvmloyfe+L8KqiqRBptsO/vhkg7qhiFKikfATF8JJj00QJ4SGFkXchldu
+         GgwA==
+X-Gm-Message-State: AOAM533sUC0ANZkmFbheA3SwaUJ0T2ZIjg2fnrE52Z6VrYCXYAdyYc9D
+        9/zkG7Aj0DMl5UJ+qMIQAZhi7EsxWcocAyJp
+X-Google-Smtp-Source: ABdhPJwkoKI9LGdfq+SBKpPijHSVg3658GE2tCtyAPH5wnbfF0ml4bQtTLWyBhjQAjIWnbB9pKVKFA==
+X-Received: by 2002:aa7:d694:0:b0:410:d89a:656e with SMTP id d20-20020aa7d694000000b00410d89a656emr16664734edr.402.1645985486517;
+        Sun, 27 Feb 2022 10:11:26 -0800 (PST)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id by10-20020a0564021b0a00b00412ddfc6d12sm5068591edb.0.2022.02.27.10.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 10:11:26 -0800 (PST)
+Date:   Sun, 27 Feb 2022 19:11:23 +0100
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: add driver for Aquacomputer Farbwerk 360
+Message-ID: <Yhu+ywPYqkzMQUZv@fedora>
+References: <20220227105926.64862-1-savicaleksa83@gmail.com>
+ <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/1] drivers/hwmon/pmbus: Add mutex to regulator ops
-Content-Language: en-US
-To:     Zev Weiss <zweiss@equinix.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <b991506bcbf665f7af185945f70bf9d5cf04637c.1645804976.git.sylv@sylv.io>
- <20220226234220.GV5754@packtop>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220226234220.GV5754@packtop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a54a19e1-703c-5cdf-0a13-ff3f4cbd81a2@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/26/22 15:42, Zev Weiss wrote:
-> On Fri, Feb 25, 2022 at 08:06:09AM PST, Marcello Sylvester Bauer wrote:
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>
->> On PMBUS devices with multiple pages, the regulator ops need to be
->> protected with the update mutex. This prevents accidentally changing
->> the page in a separate thread while operating on the PMBUS_OPERATION
->> register.
->>
->> Tested on Infineon xdpe11280 while a separate thread polls for sensor
->> data.
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> ---
->> drivers/hwmon/pmbus/pmbus_core.c | 16 +++++++++++++---
->> 1 file changed, 13 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index 776ee2237be2..f79930162256 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2386,10 +2386,14 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
->> {
->> 	struct device *dev = rdev_get_dev(rdev);
->> 	struct i2c_client *client = to_i2c_client(dev->parent);
->> +	struct pmbus_data *data = i2c_get_clientdata(client);
->> 	u8 page = rdev_get_id(rdev);
->> 	int ret;
->>
->> +	mutex_lock(&data->update_lock);
->> 	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
->> +	mutex_unlock(&data->update_lock);
->> +
->> 	if (ret < 0)
->> 		return ret;
->>
->> @@ -2400,11 +2404,17 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
->> {
->> 	struct device *dev = rdev_get_dev(rdev);
->> 	struct i2c_client *client = to_i2c_client(dev->parent);
->> +	struct pmbus_data *data = i2c_get_clientdata(client);
->> 	u8 page = rdev_get_id(rdev);
->> +	int ret;
->>
->> -	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
->> -				      PB_OPERATION_CONTROL_ON,
->> -				      enable ? PB_OPERATION_CONTROL_ON : 0);
->> +	mutex_lock(&data->update_lock);
->> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
->> +				     PB_OPERATION_CONTROL_ON,
->> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
->> +	mutex_unlock(&data->update_lock);
->> +
->> +	return ret;
->> }
->>
->> static int pmbus_regulator_enable(struct regulator_dev *rdev)
->> -- 
->> 2.35.1
->>
->>
-> 
-> Looks like this doesn't cover pmbus_regulator_get_error_flags(), which
-> was added recently -- perhaps rebase onto hwmon-next?
-> 
+Thanks. I'll send a v3.
 
-I applied the patch and made the necessary changes in
-pmbus_regulator_get_error_flags(), so no need to send a patch for it.
-
-Guenter
+Aleksa
