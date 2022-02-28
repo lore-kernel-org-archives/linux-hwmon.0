@@ -2,67 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B5FDC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 14:25:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 992C4C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 14:54:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbiB1O0b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Feb 2022 09:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S236963AbiB1Oyo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Feb 2022 09:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiB1O0b (ORCPT
+        with ESMTP id S232561AbiB1Oyn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:26:31 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3E76AA71;
-        Mon, 28 Feb 2022 06:25:52 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id p15so25117161ejc.7;
-        Mon, 28 Feb 2022 06:25:52 -0800 (PST)
+        Mon, 28 Feb 2022 09:54:43 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02379424A6;
+        Mon, 28 Feb 2022 06:54:05 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso18941234ooc.12;
+        Mon, 28 Feb 2022 06:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=2NpcbtVausRghlc2AF5Qk8ViAeV3CmmMKoQv0S/ZKco=;
+        b=e4hQZRDoDSvjOTGyDC3NZH8J2agWHdGzO/Ys1xnWTiuprlAxF6MwS+woRFaG9MeigN
+         74c/cdJVK4s2CZfcgu9MFw9a9gaPcrL8kYRI8b2u2YBgzA8VSDGT2cOoqQCIFGZ/Zx+J
+         3ocQ22ZXwdjF69EQVwhDL5f+jD5T4hWUGtcxhk5OxuCOryzJWuB9tIuEV8qsW0FRUV+c
+         7kU7bUYmixGQAhcoOMyj9XhAzcyYrSEnxcdmyZDjULb4/ztsTAKP+IuuP8Y7AgZm8rHd
+         PE3Z8adfBcg19EdC6wETI5E+l3l5Bv1HG5/U0I0Hx9S9yKkP2VlXFfXQlhzxPDC78k65
+         Lv9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=lAuE/qWfK53nr/4CQntZKh4zmnsfMTK0BgEe79BZdgg=;
-        b=jwjQ90dS3pg1eqsPtQnsfpqGCpAo23rMAh7ls5TWo48Rl/Xx36rdF8116v+3EFCtSI
-         R84SJTQyqRJc0qMnD/hO1HLzr9jMfWgYRASQHl0mqJ78wVLkPz8Ka+EZzqdfrYwKPL3I
-         jMYbE6c/PR9HazhCJLXVwgrVxMI19Aa+V0VyMMVqe/B5Bkv4Oax45Rv4jbWpECamHEg3
-         cP01/QYq/jS+f4Ez5Ilg22Hb521BPzbEoFR1LqDTn7TJlVDrlm2DNr0S+uI+/oQ8siQd
-         G7cvOAhP3vJcxBaBRE4D5dNOZbfA2A7VMoNdg39OVrz27h10Pnl7/7j9VCZeCxyZs+s0
-         nu7w==
-X-Gm-Message-State: AOAM5305I+uop1gbgHrXTFoQVrsG4+IzH7Ko86XbTPw/qM3Cd3oJoTCi
-        QM2kljXVeO+Fs/ub7ONmRDiv5aeJL/s=
-X-Google-Smtp-Source: ABdhPJySZ0lqLr7LKuNxlomzEKr6mkyIZMYR0oEQIrGjIlkgFoKRqnxSJJTPoXL0XXQx408yZqErPw==
-X-Received: by 2002:a17:906:2b58:b0:6d0:938:887e with SMTP id b24-20020a1709062b5800b006d00938887emr14624518ejg.644.1646058350913;
-        Mon, 28 Feb 2022 06:25:50 -0800 (PST)
-Received: from [192.168.0.135] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id u10-20020a50d94a000000b004131aa2525esm6213540edj.49.2022.02.28.06.25.48
+        bh=2NpcbtVausRghlc2AF5Qk8ViAeV3CmmMKoQv0S/ZKco=;
+        b=4OG8VZ29oP1rZQQVyHM2CBDMT+mbKnBRjPUoRGWf+IgVk0F1KIPFrAGgTwrHMJ88eL
+         C1Q+WGCsRRHDfX02/ovQmXs4/ovtgEuDvC4JEcqTYLoq/aOIGVBzPZgc5Fh3rbd+0nPR
+         37NCUtZ4iHql0+YGStyG7LCQibsCgl9y0+p5R843Q487QyocfM24Z3xQ/Ior+wl/UTGg
+         IWnPfus7+HXbV0ardCrvgdITSMqAguC2M9Lr+LEK6VGCjMXhUBSFhnWvRd9A+izK/Y1e
+         A9Qf1/3/68DTxCt8gOXlW3sple5OMXDB9Qtna6ydodPyOdTiRd8zA4sR+OUvL6wyVWcw
+         099w==
+X-Gm-Message-State: AOAM533GL07UqZ2C1bnf3hGeiLTnD3mRvG0+Qk1TuHeT9WrlFAP7Mk6j
+        kHYbsuKnP3ClX/OtrUbvqtw=
+X-Google-Smtp-Source: ABdhPJw5p564wo1FNct20/m8JSOhTn/r/zg8QD5FiplZuhydA8Gvqhwc9cyDH8tncVS6Nt+1026Yuw==
+X-Received: by 2002:a05:6870:218a:b0:d7:3be1:b842 with SMTP id l10-20020a056870218a00b000d73be1b842mr1414568oae.0.1646060044314;
+        Mon, 28 Feb 2022 06:54:04 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v24-20020a9d5a18000000b005ad458facbdsm5231148oth.27.2022.02.28.06.54.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:25:49 -0800 (PST)
-Message-ID: <062ad1fb-269f-2a43-0f47-46894bca426c@kernel.org>
-Date:   Mon, 28 Feb 2022 15:25:48 +0100
+        Mon, 28 Feb 2022 06:54:03 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <eb049c6f-f196-95de-265e-c3454fcb808a@roeck-us.net>
+Date:   Mon, 28 Feb 2022 06:54:01 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: Add sample averaging
- properties for ADM1275
 Content-Language: en-US
 To:     Potin Lai <potin.lai@quantatw.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <20220228103716.10774-1-potin.lai@quantatw.com>
  <20220228103716.10774-3-potin.lai@quantatw.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: Add sample averaging
+ properties for ADM1275
 In-Reply-To: <20220228103716.10774-3-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 28/02/2022 11:37, Potin Lai wrote:
+On 2/28/22 02:37, Potin Lai wrote:
 > Add documentation of new properties for sample averaging in PMON_CONFIG
 > register.
 > 
@@ -73,21 +85,18 @@ On 28/02/2022 11:37, Potin Lai wrote:
 > Signed-off-by: Potin Lai <potin.lai@quantatw.com>
 > 
 > doc
-
-You have weirdly formatted commit msg.
-
 > ---
->  .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
+>   .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
+>   1 file changed, 39 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
 > index 223393d7cafd..bc4206b257a8 100644
 > --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
 > +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
 > @@ -37,6 +37,43 @@ properties:
->      description:
->        Shunt resistor value in micro-Ohm.
->  
+>       description:
+>         Shunt resistor value in micro-Ohm.
+>   
 > +  adi,volt-curr-sample-average:
 > +    description: |
 > +      Number of samples to be used to report voltage and current values.
@@ -105,19 +114,31 @@ You have weirdly formatted commit msg.
 > +      If the configured value is not a power of 2, sample averaging number
 > +      will be configured with smaller and closest power of 2.
 > +
+
+Both properties should only accept 1, 2, 4, 8, 16, 32, 64, and 128.
+
+We accept non-exact numbers in sysfs attributes because we can not
+expect the end users to know permitted values, but devicetree authors
+should know what is acceptable. Valid values can be expressed here
+easily with something like
+	enum: [1, 2, 4, 8, 16, 32, 64, 128]
+
+This can also be easily tested in the code by ensuring that
+the devicetree property is in the range of 1..128 and has exactly
+one bit set, such as
+	if (!val || val > 128 || hweight32(val) != 1)
+or with something like
+	if (!val || val > 128 || BIT(__fls(val)) != val)
+
+Guenter
+
 > +    $ref: /schemas/types.yaml#/definitions/uint32
 > +    minimum: 1
 > +    maximum: 128
 > +    default: 1
 > +
 > +if:
-
-This should be in allOf.
-
 > +  not:
-
-Remove negation and list devices where it is not allowed.
-
 > +    properties:
 > +      compatible:
 > +        contains:
@@ -130,26 +151,16 @@ Remove negation and list devices where it is not allowed.
 > +  properties:
 > +    adi,power-sample-average:
 > +      description: This property is not allowed.
-
-This does not work. Please test it - add not allowed property to such
-devices and look for error. I gave you the example how it should be
-done. Why doing it in a different way which does not work?
-
-
-
 > +
->  required:
->    - compatible
->    - reg
+>   required:
+>     - compatible
+>     - reg
 > @@ -53,5 +90,7 @@ examples:
->              compatible = "adi,adm1272";
->              reg = <0x10>;
->              shunt-resistor-micro-ohms = <500>;
+>               compatible = "adi,adm1272";
+>               reg = <0x10>;
+>               shunt-resistor-micro-ohms = <500>;
 > +            adi,volt-curr-sample-average = <128>;
 > +            adi,power-sample-average = <128>;
->          };
->      };
+>           };
+>       };
 
-
-Best regards,
-Krzysztof
