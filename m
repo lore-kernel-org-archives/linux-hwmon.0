@@ -2,109 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73123C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 02:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 415F0C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 08:24:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiB1Css (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Feb 2022 21:48:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S233961AbiB1IYw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Feb 2022 03:24:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiB1Csr (ORCPT
+        with ESMTP id S233954AbiB1IYv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Feb 2022 21:48:47 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C831A826;
-        Sun, 27 Feb 2022 18:48:08 -0800 (PST)
+        Mon, 28 Feb 2022 03:24:51 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEDF3C48B;
+        Mon, 28 Feb 2022 00:24:11 -0800 (PST)
 Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 7B336516;
-        Sun, 27 Feb 2022 18:48:08 -0800 (PST)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 30F91185;
+        Mon, 28 Feb 2022 00:24:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1646016488;
-        bh=/iervmZzRL0Mt5kpC3j8ZiRbpDgGTMM0VaPpylf5tJA=;
+        s=thorn; t=1646036651;
+        bh=nnBN0dGrBVyqWTSRs7wxqWLOPD9yMdE1ClJpxLloK24=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DJjeBa0PqiIPgHj9xQr4Sl7aIEu8ufRb7o8PjRh9Zgo3XBWsk2SDHUB0UarokWdO1
-         dO0u2xCPJ76B3QJc8ropLkDBqt/9Xvkq98/Mr+tB5BgfydrmeQpumdUkI/RiTtiIxL
-         fkelbIxetoTFB86c5AF1TbWuRHDbIFJT3lHBXcRE=
-Date:   Sun, 27 Feb 2022 18:48:05 -0800
+        b=Z5obv454FzMLve6yKLSFEJ65pf1vEvmMRk112EdsRcl1PXOg/EgUAxkBtOCliMhW7
+         XoUkl096b9oO2nGCait93mHXdMCWqTiCA2KslzcfY04A9CpuWgODXzg3oM8jgE4A/R
+         xzbIf70iH/hNL9AcQOvn8eKrFiH0s5McgsJ8tb2M=
+Date:   Mon, 28 Feb 2022 00:24:07 -0800
 From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/5] hwmon: (nct6775) Add i2c support
-Message-ID: <Yhw35Wq5r5KiNWyM@hatter.bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Renze Nicolai <renze@rnplus.nl>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] hwmon: (nct6775) Rearrange attr-group initialization
+Message-ID: <YhyGp0zu9OBOWt/M@hatter.bewilderbeest.net>
 References: <20220226133047.6226-1-zev@bewilderbeest.net>
- <2620147.mvXUDI8C0e@natalenko.name>
- <YhrFizhgOpZbi3dE@hatter.bewilderbeest.net>
- <4719747.31r3eYUQgx@natalenko.name>
+ <20220226133047.6226-2-zev@bewilderbeest.net>
+ <b4a1d4e1-a7b9-00f9-75d2-56003138883f@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4719747.31r3eYUQgx@natalenko.name>
+In-Reply-To: <b4a1d4e1-a7b9-00f9-75d2-56003138883f@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 01:38:31PM PST, Oleksandr Natalenko wrote:
->Hello.
->
->On neděle 27. února 2022 1:27:55 CET Zev Weiss wrote:
->> On Sat, Feb 26, 2022 at 04:14:12PM PST, Oleksandr Natalenko wrote:
->> >Hello.
->> >
->> >On sobota 26. února 2022 14:30:42 CET Zev Weiss wrote:
->> >> Hello,
->> >>
->> >> This patch series augments the existing nct6775 driver with support
->> >> for the hardware's i2c interface.
->> >
->> >Is it something I can test on my ASUS Pro WS X570-ACE board as an ordinary user, and if so, how?
->> >
+On Sun, Feb 27, 2022 at 07:01:32AM PST, Guenter Roeck wrote:
+>On 2/26/22 05:30, Zev Weiss wrote:
+>>We now track the number of attribute groups in nct6775_data, as a
+>>measure to simplify handling differences in the set of enabled
+>>attribute groups between nct6775 drivers (platform & i2c).  As a side
+>>effect, we also reduce the amount of IS_ERR()/PTR_ERR() boilerplate a
+>>bit.
 >>
->> You could certainly test that the nct6775-platform driver still works as
->> it did previously, which would be good to confirm -- you'll need to
->> enable CONFIG_SENSORS_NCT6775_PLATFORM now to build it.
+>>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>>---
+>>  drivers/hwmon/nct6775.c | 84 ++++++++++++++++++++---------------------
+>>  1 file changed, 42 insertions(+), 42 deletions(-)
+>>
+>>diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+>>index 2b91f7e05126..139b2fe5ca4d 100644
+>>--- a/drivers/hwmon/nct6775.c
+>>+++ b/drivers/hwmon/nct6775.c
+>>@@ -1198,6 +1198,7 @@ struct nct6775_data {
+>>  	const char *name;
+>>  	const struct attribute_group *groups[7];
+>>+	u8 num_groups;
+>>  	u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
+>>  				    * 3=temp_crit, 4=temp_lcrit
+>>@@ -1405,10 +1406,18 @@ struct sensor_template_group {
+>>  	int base;
+>>  };
+>>-static struct attribute_group *
+>>-nct6775_create_attr_group(struct device *dev,
+>>-			  const struct sensor_template_group *tg,
+>>-			  int repeat)
+>>+static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
+>>+{
+>>+	/* Need to leave a NULL terminator at the end of data->groups */
+>>+	if (WARN_ON(data->num_groups == ARRAY_SIZE(data->groups) - 1))
+>>+		return -ENOSPC;
+>>+
 >
->Ack.
->
->>  From what I've been able to find about that board though it looks like
->> it doesn't have a BMC, so testing the i2c driver on it probably isn't
->> going to be possible.  (Even if it does in fact have a BMC, it would
->> require at least a partial port of OpenBMC or similar, and re-flashing
->> your BMC firmware with that, and is hence a non-trivial undertaking.)
->
->It should have, the BMC is based on RTL8117, although I have no idea if it is something that can be called true IPMI as I've never enabled/used it.
+>At work we are struggling with a whopping 500,000+ (!) WARN backtraces
+>_each day_. I would be happy if you send me patches removing some of
+>those, but I am not inclined to accept patches adding them. If people
+>don't notice that the driver doesn't load, they won't notice the warning
+>either, and it will just add to all the other warning backtrace noise.
 >
 
-Ah, interesting -- I hadn't heard of that chip before, and web searches 
-mostly seem to turn up discussions of that particular board (and sibling 
-models), so I guess it's probably not very widely used elsewhere.  It 
-does appear to run an OpenWRT-based firmware with source available 
-(https://gitlab.com/gplmirror/rtl8117), though apparently with a rather 
-old (4.4) kernel (and with added fun goodies like what looks to be a 
-partial implementation of an in-kernel VNC server??).
+Okay, I can remove that -- I mostly just added it out of concern that 
+"no space left on device" would be a fairly confusing error for someone 
+to potentially end up with modprobe reporting, and some further 
+indication of what went wrong could perhaps make it less mystifying 
+(though yes, with any luck it can hopefully remain unreachable in 
+practice as long as data->groups gets expanded when needed).
 
-So I guess in theory if you were feeling adventurous and wanted to 
-backport these patches to that kernel, recompile the firmware, and flash 
-the result onto your hardware you could *maybe* test out the i2c driver, 
-though it's probably a much deeper rabbit hole than is likely to be 
-worthwhile, and with significant risk of leaving your hardware in an 
-awkward (potentially bricked) state if things go awry, so it's not 
-something I'd recommend taking on casually.  There would also still be 
-the process of figuring out at what i2c bus/address the Super-I/O chip 
-lives for the rtl8117, if its i2c interface is even attached at all, 
-which I don't think is guaranteed -- the rtl8117 might not need it if 
-it's not in charge of thermal monitoring/fan control on that board, and 
-even if it is handling that it might have a direct connection to the TSI 
-interface instead of going through the Super-I/O chip as is done on the 
-ASRock boards I'm familiar with.
+I'd certainly also be open to suggestions of a more appropriate errno 
+value to return in that case, though I couldn't find one that seemed 
+clearly better to me.  ENOMEM seemed vaguely more appropriate in some 
+ways given that it's an in-memory array that's full rather than a 
+storage device, but it's also definitely not the usual ENOMEM meaning of 
+a dynamic allocation failure due to memory pressure, so...(shrug).  I 
+think FreedBSD's got an EDOOFUS errno value, but as far as I can see 
+Linux doesn't have one for indicating a purely internal error like this.
 
 
+Thanks,
 Zev
 
