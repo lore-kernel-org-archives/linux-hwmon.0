@@ -2,72 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE212C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 08:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7B97C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 08:38:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbiB1IdE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Feb 2022 03:33:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S232142AbiB1Iiv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Feb 2022 03:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233963AbiB1IdE (ORCPT
+        with ESMTP id S231856AbiB1Iiu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:33:04 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DC021AA;
-        Mon, 28 Feb 2022 00:32:24 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id AA922586;
-        Mon, 28 Feb 2022 00:32:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1646037144;
-        bh=CCCJGLwREFudXAQ71006Rww33yHRQbbj3lk5h/iUP7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DSLlx5cpu6/a3Z/YK5BUN+3pKJVP2HvMkrVnWDg5ngfiReScKDSrUrRYagxb8EEAV
-         xlTlmYlbiISSanrSe/gT5KWmFVlnlIxpwqWTPLSgGkA6JG9Z7UkN3ha1pckO11vYyY
-         9ttb1mGvnXpmAnThWty/HDef4OFb6Ngeo8xXY20E=
-Date:   Mon, 28 Feb 2022 00:32:23 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
+        Mon, 28 Feb 2022 03:38:50 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7E61401E;
+        Mon, 28 Feb 2022 00:38:12 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id p9so23196619ejd.6;
+        Mon, 28 Feb 2022 00:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JQm0tlsam6bm+m6NkO8osPqj5frrgEizwleEw0BE+6I=;
+        b=hJvGQln7bh9326jk67+hT7mJBgmr3JpEMrx3g7eGB+6QqZhlqkwcRYMbT+nGWXBPUj
+         D01tOmT4cVzzZ3ygjS5Idwjj3vU/LDP37IOeMis3gXDTRQOSZyaT95RVE/3S3Q9t+TwT
+         4M2QKS/gJ81rm+1xiUwiZlsWpWe2mcrk7hauBVfu9IOt8cwZ6Zma6XJfcb9Ao3JQoQKu
+         zPefLV+Bv2fR/ui0TcY8PDrs5ZKYnsOGNsPfonkiafGaQH5/oohOWYpUg+Km1OIETjJT
+         LMk4yNzD+5xvwFQ1Y5PXUx7obthXJpQmcmHPF8ne7gGgph/rxC7jbIp0Bj0TzCj4moMO
+         o2QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JQm0tlsam6bm+m6NkO8osPqj5frrgEizwleEw0BE+6I=;
+        b=KfY+dEp6xKGGteoh5ngQU619ReeBDwVx/KZDYB8pHwArioslH2dTfSnTdZnU74K6hn
+         D8bFSQ9FIGf9+ONmA4adt3ugRouKs03re1gW9PRx/92jlmADBg+qQz7k4KWKRlO0u3AX
+         dHY1srxmz9acOVQvRk13ryw3zF/oDrWZY+LaymdrFyhYLlMMin0bURRMRxIufRkmYCwL
+         x8nZpJXVR60CFo+9gRtcIZbYtkAmhIp24sOYTuNYfn5kLeb9QemQFtw4Yijwm9bjeCGQ
+         ZAFDtpaaC3YOlAWJL2gG4WmbicsLiUdqouPo5nGgx9nuAvaENdnK8qnumEFMsfBuYe+7
+         /UCA==
+X-Gm-Message-State: AOAM5328tsPgTTGc0QculK0/++2yuzQGJ8FUFf9Wfwq1oQDqgP5NqNpr
+        ixyFxxf2SgpFm10ZslMmPoClpMkdBu9orxg9
+X-Google-Smtp-Source: ABdhPJz8gPVvl7f5HAN4QOcl+qy5YQZJWDuw/pJcAR1YkK2ontVlkQ+eof5T88SnAPq+ByRNm/8Pbg==
+X-Received: by 2002:a17:906:3e90:b0:6b6:829b:577c with SMTP id a16-20020a1709063e9000b006b6829b577cmr14908062ejj.711.1646037491294;
+        Mon, 28 Feb 2022 00:38:11 -0800 (PST)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id n24-20020a509358000000b00410bedd9eb4sm5866886eda.88.2022.02.28.00.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 00:38:10 -0800 (PST)
+Date:   Mon, 28 Feb 2022 09:38:08 +0100
+From:   Aleksa Savic <savicaleksa83@gmail.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Renze Nicolai <renze@rnplus.nl>, openbmc@lists.ozlabs.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] hwmon: (nct6775) Split core and platform driver
-Message-ID: <YhyIlz5hW4u6qrDc@hatter.bewilderbeest.net>
-References: <20220227154447.GA766647@roeck-us.net>
+Subject: Re: [PATCH v4] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Farbwerk 360
+Message-ID: <YhyJ8OY+7fjoK/mK@fedora>
+References: <20220228010358.GA169239@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220227154447.GA766647@roeck-us.net>
+In-Reply-To: <20220228010358.GA169239@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 07:44:47AM PST, Guenter Roeck wrote:
->On Sat, Feb 26, 2022 at 05:30:45AM -0800, Zev Weiss wrote:
->> This splits the nct6775 driver into an interface-independent core and
->> a separate platform driver that wraps inb/outb port I/O (or asuswmi
->> methods) around that core.
->>
->> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->
->I think it would be much better to convert the entire driver to regmap
->and not just use regmap for i2c. This way all register read/write
->operations can be hidden behind regmap, and the read/write callbacks
->are unnecessary. The tmp401 driver gives an example how to do this -
->essentially implement reg_read and reg_write functions in struct
->regmap_config, then handle all register accesses through regmap.
->
->Couple of additional comments inline.
->
+Thank you, much appreciated! Sorry about the mangled patch earlier.
 
-Alright, that sounds reasonable -- I'll work on an entirely regmap-based 
-v2 (and address the other points as well).
-
-
-Thanks,
-Zev
-
+Aleksa
