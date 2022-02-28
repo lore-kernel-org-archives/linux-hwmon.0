@@ -2,136 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29733C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 15:16:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE74C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 15:26:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiB1PQr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Feb 2022 10:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S233887AbiB1P1h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Feb 2022 10:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiB1PQq (ORCPT
+        with ESMTP id S232172AbiB1P1g (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Feb 2022 10:16:46 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CDC8093F;
-        Mon, 28 Feb 2022 07:16:07 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so19160081ooi.0;
-        Mon, 28 Feb 2022 07:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=GXTP6WRaYgXcjvYzSElyj285X0K6M37vtW5QgfC8A08=;
-        b=n5OSBhcuUJpDIK00HLJQdrhKgpinMQfw9ndbqNSrlPr/FF5I+FhRy7idkGL4F4U2jp
-         YiB32put77mHt0HmqFspvvTDWEJtx2BvxE7YWG7yB1AwtwWznsB0TiSez0eXFCGQwPoT
-         gmkjlZAaM8GY6cByvZ+xAR9T0S9nKMDU6BXwaDIby//LAgEF4+b0/sLB9z25IyRCpqbs
-         mNOlzoPHMaoUSI2YYFCJVIJ6ENTw11q+oOLQh5omGSoVofubyUZFMqyiI5ztwkCtDAAi
-         Vq8t3YCyWNtr1ZNPES/DXq1FVXAEVz/rQRpEFYz+dLcJTCQPzwVQPLxKvm5wmLs81pbZ
-         5tvA==
+        Mon, 28 Feb 2022 10:27:36 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F897EA1F;
+        Mon, 28 Feb 2022 07:26:58 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id l25so13455999oic.13;
+        Mon, 28 Feb 2022 07:26:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=GXTP6WRaYgXcjvYzSElyj285X0K6M37vtW5QgfC8A08=;
-        b=xMNNOmU7aBsRfok1N1j+0xDZ4lEjV2lSqS8Vcq34Uc1rUIJAkVzTnetjmmQ6/BgF26
-         ugVxLpnMTNnlNlKp3X2vKrVWN39OlLApvobAGRxSgXmPU7q+anQqtHOulRka3Z0o6mtv
-         THrSoIe/o51BTpf3Y2DzDuGiRisgUybZkGc/GRqBUNtlxNQomCXrAK5qhuT/UCY+9vJs
-         /PnXzLP5e84bbZzAA/49tN1DnkhkwfGiZ9kADA1y8nZNq21Gch+lJ1wS9q3l+WErlBGh
-         5xK8NwK3xL1JtbHqIkSWufgYjY/Z3GnCC9B8lntk+voG/x9tkECGSsSsX6ux2NcGdYSt
-         oBtg==
-X-Gm-Message-State: AOAM533hWOIV5ITmxTkkxy4hBPbWtAmPQVMaoJoBEicYZv52JnRapo2N
-        pgwC0FUpmXFBX3bXl+7WoBU=
-X-Google-Smtp-Source: ABdhPJymkIo3X9fEwZ10x1T9p+r03XqFNxRjtydoOvAx+l0L+a4gfHrr5Bv2TG77OociyT6PgACJ0w==
-X-Received: by 2002:a05:6870:1704:b0:d7:11b7:5ec with SMTP id h4-20020a056870170400b000d711b705ecmr4368841oae.151.1646061367103;
-        Mon, 28 Feb 2022 07:16:07 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id be40-20020a05680821a800b002d06df28063sm6598421oib.5.2022.02.28.07.16.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 07:16:06 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <314f6804-b4f4-9668-613d-7481d60b4abb@roeck-us.net>
-Date:   Mon, 28 Feb 2022 07:16:04 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Renze Nicolai <renze@rnplus.nl>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-References: <20220226133047.6226-1-zev@bewilderbeest.net>
- <20220226133047.6226-2-zev@bewilderbeest.net>
- <b4a1d4e1-a7b9-00f9-75d2-56003138883f@roeck-us.net>
- <YhyGp0zu9OBOWt/M@hatter.bewilderbeest.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/5] hwmon: (nct6775) Rearrange attr-group initialization
-In-Reply-To: <YhyGp0zu9OBOWt/M@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=I87Fjts+rpNlg39YY3+tnxuJdwSRLJLguMw++XeNFIg=;
+        b=pZQVk6Q1OsBDnd6jtsXO0GseRMyEuph5nFUMF55QSKOAqa/q8AU23THpojWsSw1wBe
+         fyEPYPBHOynzU4iBPtDdYOoGJfVpPR90DqCU3m4kV+IM7RAobIHpfOqwpMKUAXoIYHzg
+         lAeREwT33nC6pRNsL/Vj0O4sdta1HdGta5lOi20ERnJdmfTH8L04p+bAwr2BdnCEkfVx
+         QxxHFRy3delX+al5S6gKtkaaeXqjCNYhauuoCXtEh/WcOFegPHZ9tnVjUyguyCPBOYQL
+         8N0YvtM058ocf0mwDzuMtwDgjxN2nIaKujhIBSzH6GpczBeqgSw8UMxQAeIqhlU4hDSr
+         bMOw==
+X-Gm-Message-State: AOAM533yMwb7PzR4xZhWbuYdCmYzSI+9CU9sN/3jq/TWiMFh2DHRzuvt
+        7NFPf76Fg08CLRU6QJqC9w==
+X-Google-Smtp-Source: ABdhPJyW4S0Ic5zGxvFgmna5a0fy2EDagMuNav85rX4OIYGZLIrUok5+XAS/lrttQvtGHYh80ZPRYw==
+X-Received: by 2002:a05:6808:903:b0:2d4:8451:d651 with SMTP id w3-20020a056808090300b002d48451d651mr9173464oih.29.1646062017625;
+        Mon, 28 Feb 2022 07:26:57 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c1-20020a056808138100b002d4b30ab04esm6534610oiw.32.2022.02.28.07.26.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 07:26:57 -0800 (PST)
+Received: (nullmailer pid 1049704 invoked by uid 1000);
+        Mon, 28 Feb 2022 15:26:56 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Potin Lai <potin.lai@quantatw.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+In-Reply-To: <20220228103716.10774-3-potin.lai@quantatw.com>
+References: <20220228103716.10774-1-potin.lai@quantatw.com> <20220228103716.10774-3-potin.lai@quantatw.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: Add sample averaging properties for ADM1275
+Date:   Mon, 28 Feb 2022 09:26:56 -0600
+Message-Id: <1646062016.577370.1049703.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/28/22 00:24, Zev Weiss wrote:
-> On Sun, Feb 27, 2022 at 07:01:32AM PST, Guenter Roeck wrote:
->> On 2/26/22 05:30, Zev Weiss wrote:
->>> We now track the number of attribute groups in nct6775_data, as a
->>> measure to simplify handling differences in the set of enabled
->>> attribute groups between nct6775 drivers (platform & i2c).  As a side
->>> effect, we also reduce the amount of IS_ERR()/PTR_ERR() boilerplate a
->>> bit.
->>>
->>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->>> ---
->>>  drivers/hwmon/nct6775.c | 84 ++++++++++++++++++++---------------------
->>>  1 file changed, 42 insertions(+), 42 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
->>> index 2b91f7e05126..139b2fe5ca4d 100644
->>> --- a/drivers/hwmon/nct6775.c
->>> +++ b/drivers/hwmon/nct6775.c
->>> @@ -1198,6 +1198,7 @@ struct nct6775_data {
->>>      const char *name;
->>>      const struct attribute_group *groups[7];
->>> +    u8 num_groups;
->>>      u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
->>>                      * 3=temp_crit, 4=temp_lcrit
->>> @@ -1405,10 +1406,18 @@ struct sensor_template_group {
->>>      int base;
->>>  };
->>> -static struct attribute_group *
->>> -nct6775_create_attr_group(struct device *dev,
->>> -              const struct sensor_template_group *tg,
->>> -              int repeat)
->>> +static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
->>> +{
->>> +    /* Need to leave a NULL terminator at the end of data->groups */
->>> +    if (WARN_ON(data->num_groups == ARRAY_SIZE(data->groups) - 1))
->>> +        return -ENOSPC;
->>> +
->>
->> At work we are struggling with a whopping 500,000+ (!) WARN backtraces
->> _each day_. I would be happy if you send me patches removing some of
->> those, but I am not inclined to accept patches adding them. If people
->> don't notice that the driver doesn't load, they won't notice the warning
->> either, and it will just add to all the other warning backtrace noise.
->>
+On Mon, 28 Feb 2022 18:37:16 +0800, Potin Lai wrote:
+> Add documentation of new properties for sample averaging in PMON_CONFIG
+> register.
 > 
-> Okay, I can remove that -- I mostly just added it out of concern that "no space left on device" would be a fairly confusing error for someone to potentially end up with modprobe reporting, and some further indication of what went wrong could perhaps make it less mystifying (though yes, with any luck it can hopefully remain unreachable in practice as long as data->groups gets expanded when needed).
+> New properties:
+> - adi,volt-curr-sample-average
+> - adi,power-sample-average
 > 
-> I'd certainly also be open to suggestions of a more appropriate errno value to return in that case, though I couldn't find one that seemed clearly better to me.  ENOMEM seemed vaguely more appropriate in some ways given that it's an in-memory array that's full rather than a storage device, but it's also definitely not the usual ENOMEM meaning of a dynamic allocation failure due to memory pressure, so...(shrug).  I think FreedBSD's got an EDOOFUS errno value, but as far as I can see Linux doesn't have one for indicating a purely internal error like this.
+> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+> 
+> doc
+> ---
+>  .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
 > 
 
-If this is encountered, it would indicate a severe programming error.
-What _user_ do you expect to see that error message ? If this makes it
-into a release, it only means that the code was not tested well enough,
-since any even casual testing should have exposed it.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I'd even argue that the check is unnecessary to start with because
-the number of required groups is well known in advance.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml:68:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
 
-Anyway, if you don't like ENOSPC, there is also ENOBUFS as possible
-alternative.
+dtschema/dtc warnings/errors:
 
-Guenter
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1598637
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
