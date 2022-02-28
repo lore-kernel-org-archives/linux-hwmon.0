@@ -2,177 +2,493 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AED7C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 16:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BEC1C43219
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 17:44:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237593AbiB1QVI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Feb 2022 11:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S237046AbiB1RpO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Feb 2022 12:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237591AbiB1QVH (ORCPT
+        with ESMTP id S239474AbiB1RoP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:21:07 -0500
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777B37DABF;
-        Mon, 28 Feb 2022 08:20:28 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id q17so18346716edd.4;
-        Mon, 28 Feb 2022 08:20:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P9w2sABEp/WOpEUZx07FlpoTnPYsNU6bWSHX6sDtljo=;
-        b=Rxa8FZSQ2LC0/JvUhw6qnW0zw3TFaubwOKS2ekkhAZMzlyQK02rc4utO0U0g3JkrTc
-         gYFVYgkIn1nJEAXVEiYaI2PStK2WmCB3fk5Tq9X+2fF8FyT4e+2iTzV2QtgAG6UcMfAy
-         UDvxP8dN4ewcqanG5eyF5HArzP6FL0u4k9U8vx3w2Hy6qgOVAdqSWM2K2xvj6uix157q
-         pXa5QcAxbQYFkQGNEL47r4aabHMRDIqbbErSNNEUr3VqmgH+nyt9obPueTkwSaPzc96S
-         +188vPhmS0oUqjMQZlIesgGSJggVFZXvvLgVyd0cDBxibKvL+YbzK2TQ/xp8bHjNRnZF
-         9TJw==
-X-Gm-Message-State: AOAM530qKqHoZ9oQc08WnLuNnbXW/raCS1QdNhJvjMY7vSIEuKI57T5O
-        ETq5yHYikTJaOL+KIzmxExc=
-X-Google-Smtp-Source: ABdhPJzrs1dQNtccJPLhdeapL/ze/0/SWQ0EdlMjYvwVWpaNhVg3Zn9bLWQFNv98b3cFuMXZ4r9K9A==
-X-Received: by 2002:aa7:c983:0:b0:410:d314:6451 with SMTP id c3-20020aa7c983000000b00410d3146451mr19811851edt.56.1646065226872;
-        Mon, 28 Feb 2022 08:20:26 -0800 (PST)
-Received: from [192.168.0.135] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id ec21-20020a170906b6d500b006d170a3444csm4476468ejb.164.2022.02.28.08.20.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 08:20:25 -0800 (PST)
-Message-ID: <accfbf05-f0ff-7802-6c99-00ccff4e7809@kernel.org>
-Date:   Mon, 28 Feb 2022 17:20:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: Add sample averaging
- properties for ADM1275
-Content-Language: en-US
-To:     POTIN LAI <potin.lai@quantatw.com>,
+        Mon, 28 Feb 2022 12:44:15 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFC89D4F1;
+        Mon, 28 Feb 2022 09:36:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646069786; x=1677605786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cGOfW2D/IgbYKpicSNs2f28FE08ecgJ11Y9ztjKulYE=;
+  b=P/3XOmEFzzddyD5QsKvPOk/+i0GzLlTU/G4eJM3VoTdZuFfiSiDtHC2a
+   ScYnSRCVeE0dI8fhXYgPNjF5w+P/5TqRZMj0A3xpn8Esj1C+ZukudEfYK
+   88WzEBFH53/E6TLo0FsQpAz9I3zzvgr45MbbaHdWfvwJ6PxTrfi5Skhub
+   zBLfSfAoLk/2QHUbFKglzZs874iPaeyHifDpNXZKKZTr2NC6JwylfgBhv
+   SbXlXCqgRiKsXNqlpbSrfIUvn51gVXYddXOjkJ5QDYjCe0S1okM4vcW0h
+   AuVqlOJNLFO9AvoTQwGItuVg0JGkbas9w+Y29AE/wTZylXILTdVkCUdcO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="236446046"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="236446046"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:36:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="510174501"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Feb 2022 09:36:15 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOjwU-0007b3-Ej; Mon, 28 Feb 2022 17:36:14 +0000
+Date:   Tue, 1 Mar 2022 01:35:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Potin Lai <potin.lai@quantatw.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220228103716.10774-1-potin.lai@quantatw.com>
- <20220228103716.10774-3-potin.lai@quantatw.com>
- <062ad1fb-269f-2a43-0f47-46894bca426c@kernel.org>
- <aca659c8-558c-7091-f2b6-37ef478a14db@quantatw.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <aca659c8-558c-7091-f2b6-37ef478a14db@quantatw.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Patrick Williams <patrick@stwcx.xyz>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Potin Lai <potin.lai@quantatw.com>
+Subject: Re: [PATCH v3 1/2] hwmon: (adm1275) Allow setting sample averaging
+Message-ID: <202202282133.tDaIrm2N-lkp@intel.com>
+References: <20220228103716.10774-2-potin.lai@quantatw.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228103716.10774-2-potin.lai@quantatw.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 28/02/2022 17:13, POTIN LAI wrote:
-> 
-> Krzysztof Kozlowski 於 28/02/2022 10:25 pm 寫道:
->> On 28/02/2022 11:37, Potin Lai wrote:
->>> Add documentation of new properties for sample averaging in PMON_CONFIG
->>> register.
->>>
->>> New properties:
->>> - adi,volt-curr-sample-average
->>> - adi,power-sample-average
->>>
->>> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
->>>
->>> doc
->> You have weirdly formatted commit msg.
-> It must be pasted from somewhere accidentally, sorry.
->>> ---
->>>  .../bindings/hwmon/adi,adm1275.yaml           | 39 +++++++++++++++++++
->>>  1 file changed, 39 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> index 223393d7cafd..bc4206b257a8 100644
->>> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->>> @@ -37,6 +37,43 @@ properties:
->>>      description:
->>>        Shunt resistor value in micro-Ohm.
->>>  
->>> +  adi,volt-curr-sample-average:
->>> +    description: |
->>> +      Number of samples to be used to report voltage and current values.
->>> +      If the configured value is not a power of 2, sample averaging number
->>> +      will be configured with smaller and closest power of 2.
->>> +
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 1
->>> +    maximum: 128
->>> +    default: 1
->>> +
->>> +  adi,power-sample-average:
->>> +    description: |
->>> +      Number of samples to be used to report power values.
->>> +      If the configured value is not a power of 2, sample averaging number
->>> +      will be configured with smaller and closest power of 2.
->>> +
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 1
->>> +    maximum: 128
->>> +    default: 1
->>> +
->>> +if:
->> This should be in allOf.
-> will add it.
->>
->>> +  not:
->> Remove negation and list devices where it is not allowed.
-> will remove it.
->>
->>> +    properties:
->>> +      compatible:
->>> +        contains:
->>> +          enum:
->>> +          - adi,adm1272
->>> +          - adi,adm1278
->>> +          - adi,adm1293
->>> +          - adi,adm1294
->>> +then:
->>> +  properties:
->>> +    adi,power-sample-average:
->>> +      description: This property is not allowed.
->> This does not work. Please test it - add not allowed property to such
->> devices and look for error. I gave you the example how it should be
->> done. Why doing it in a different way which does not work?
->>
-> Sorry for misunderstanding from original example. I rechecked the example and made a modification as below, before sending out new patch, would you mind help me review it and let me know if anything improper? Thank you.
+Hi Potin,
 
-Don't take the example by copying and pasting. It has to be adjusted, I
-just explained there in example how to disallow a property.
+Thank you for the patch! Perhaps something to improve:
 
-> 
-> 
-> dependencies:
->   adi,enable-power-sample-average: [ 'adi,power-sample-average' ]
->   adi,power-sample-average: [ 'adi,enable-power-sample-average' ]
-> 
-> allOf:
->   - if:
->       properties:
->         compatible:
->           contains:
->             enum:
->               - adi,adm1272
->               - adi,adm1278
->               - adi,adm1293
->               - adi,adm1294
->     then:
->       required:
->         - adi,enable-power-sample-average
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next v5.17-rc6 next-20220225]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This does not look correct, because it is not a required property.
+url:    https://github.com/0day-ci/linux/commits/Potin-Lai/hwmon-adm1275-Add-sample-averaging-binding-support/20220228-183914
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: i386-randconfig-a003-20220228 (https://download.01.org/0day-ci/archive/20220228/202202282133.tDaIrm2N-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e64fc74c4ca9f31e72265039c6bce3497169c8a2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Potin-Lai/hwmon-adm1275-Add-sample-averaging-binding-support/20220228-183914
+        git checkout e64fc74c4ca9f31e72265039c6bce3497169c8a2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/pmbus/
 
-You should have "if:then: adi,enable-power-sample-average: false" etc"
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->     else:
->       properties:
->         adi,enable-power-sample-average: false
-> 
-> 
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/adm1275.c:767:4: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                           BIT(ilog2(avg)));
+                           ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                   ^~~~~~~~~~~~~~~
+   drivers/hwmon/pmbus/adm1275.c:784:4: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                           BIT(ilog2(avg)));
+                           ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                    ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                   ^~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-Best regards,
-Krzysztof
+vim +767 drivers/hwmon/pmbus/adm1275.c
+
+   464	
+   465	static int adm1275_probe(struct i2c_client *client)
+   466	{
+   467		s32 (*config_read_fn)(const struct i2c_client *client, u8 reg);
+   468		u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
+   469		int config, device_config;
+   470		int ret;
+   471		struct pmbus_driver_info *info;
+   472		struct adm1275_data *data;
+   473		const struct i2c_device_id *mid;
+   474		const struct coefficients *coefficients;
+   475		int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
+   476		int tindex = -1;
+   477		u32 shunt;
+   478		u32 avg;
+   479	
+   480		if (!i2c_check_functionality(client->adapter,
+   481					     I2C_FUNC_SMBUS_READ_BYTE_DATA
+   482					     | I2C_FUNC_SMBUS_BLOCK_DATA))
+   483			return -ENODEV;
+   484	
+   485		ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
+   486		if (ret < 0) {
+   487			dev_err(&client->dev, "Failed to read Manufacturer ID\n");
+   488			return ret;
+   489		}
+   490		if (ret != 3 || strncmp(block_buffer, "ADI", 3)) {
+   491			dev_err(&client->dev, "Unsupported Manufacturer ID\n");
+   492			return -ENODEV;
+   493		}
+   494	
+   495		ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
+   496		if (ret < 0) {
+   497			dev_err(&client->dev, "Failed to read Manufacturer Model\n");
+   498			return ret;
+   499		}
+   500		for (mid = adm1275_id; mid->name[0]; mid++) {
+   501			if (!strncasecmp(mid->name, block_buffer, strlen(mid->name)))
+   502				break;
+   503		}
+   504		if (!mid->name[0]) {
+   505			dev_err(&client->dev, "Unsupported device\n");
+   506			return -ENODEV;
+   507		}
+   508	
+   509		if (strcmp(client->name, mid->name) != 0)
+   510			dev_notice(&client->dev,
+   511				   "Device mismatch: Configured %s, detected %s\n",
+   512				   client->name, mid->name);
+   513	
+   514		if (mid->driver_data == adm1272 || mid->driver_data == adm1278 ||
+   515		    mid->driver_data == adm1293 || mid->driver_data == adm1294)
+   516			config_read_fn = i2c_smbus_read_word_data;
+   517		else
+   518			config_read_fn = i2c_smbus_read_byte_data;
+   519		config = config_read_fn(client, ADM1275_PMON_CONFIG);
+   520		if (config < 0)
+   521			return config;
+   522	
+   523		device_config = config_read_fn(client, ADM1275_DEVICE_CONFIG);
+   524		if (device_config < 0)
+   525			return device_config;
+   526	
+   527		data = devm_kzalloc(&client->dev, sizeof(struct adm1275_data),
+   528				    GFP_KERNEL);
+   529		if (!data)
+   530			return -ENOMEM;
+   531	
+   532		if (of_property_read_u32(client->dev.of_node,
+   533					 "shunt-resistor-micro-ohms", &shunt))
+   534			shunt = 1000; /* 1 mOhm if not set via DT */
+   535	
+   536		if (shunt == 0)
+   537			return -EINVAL;
+   538	
+   539		data->id = mid->driver_data;
+   540	
+   541		info = &data->info;
+   542	
+   543		info->pages = 1;
+   544		info->format[PSC_VOLTAGE_IN] = direct;
+   545		info->format[PSC_VOLTAGE_OUT] = direct;
+   546		info->format[PSC_CURRENT_OUT] = direct;
+   547		info->format[PSC_POWER] = direct;
+   548		info->format[PSC_TEMPERATURE] = direct;
+   549		info->func[0] = PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+   550				PMBUS_HAVE_SAMPLES;
+   551	
+   552		info->read_word_data = adm1275_read_word_data;
+   553		info->read_byte_data = adm1275_read_byte_data;
+   554		info->write_word_data = adm1275_write_word_data;
+   555	
+   556		switch (data->id) {
+   557		case adm1075:
+   558			if (device_config & ADM1275_IOUT_WARN2_SELECT)
+   559				data->have_oc_fault = true;
+   560			else
+   561				data->have_uc_fault = true;
+   562			data->have_pin_max = true;
+   563			data->have_vaux_status = true;
+   564	
+   565			coefficients = adm1075_coefficients;
+   566			vindex = 0;
+   567			switch (config & ADM1075_IRANGE_MASK) {
+   568			case ADM1075_IRANGE_25:
+   569				cindex = 1;
+   570				pindex = 3;
+   571				break;
+   572			case ADM1075_IRANGE_50:
+   573				cindex = 2;
+   574				pindex = 4;
+   575				break;
+   576			default:
+   577				dev_err(&client->dev, "Invalid input current range");
+   578				break;
+   579			}
+   580	
+   581			info->func[0] |= PMBUS_HAVE_VIN | PMBUS_HAVE_PIN
+   582			  | PMBUS_HAVE_STATUS_INPUT;
+   583			if (config & ADM1275_VIN_VOUT_SELECT)
+   584				info->func[0] |=
+   585				  PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+   586			break;
+   587		case adm1272:
+   588			data->have_vout = true;
+   589			data->have_pin_max = true;
+   590			data->have_temp_max = true;
+   591			data->have_power_sampling = true;
+   592	
+   593			coefficients = adm1272_coefficients;
+   594			vindex = (config & ADM1275_VRANGE) ? 1 : 0;
+   595			cindex = (config & ADM1272_IRANGE) ? 3 : 2;
+   596			/* pindex depends on the combination of the above */
+   597			switch (config & (ADM1275_VRANGE | ADM1272_IRANGE)) {
+   598			case 0:
+   599			default:
+   600				pindex = 4;
+   601				break;
+   602			case ADM1275_VRANGE:
+   603				pindex = 5;
+   604				break;
+   605			case ADM1272_IRANGE:
+   606				pindex = 6;
+   607				break;
+   608			case ADM1275_VRANGE | ADM1272_IRANGE:
+   609				pindex = 7;
+   610				break;
+   611			}
+   612			tindex = 8;
+   613	
+   614			info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+   615				PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+   616				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+   617	
+   618			/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
+   619			if ((config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) !=
+   620			    (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) {
+   621				config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
+   622				ret = i2c_smbus_write_byte_data(client,
+   623								ADM1275_PMON_CONFIG,
+   624								config);
+   625				if (ret < 0) {
+   626					dev_err(&client->dev,
+   627						"Failed to enable VOUT monitoring\n");
+   628					return -ENODEV;
+   629				}
+   630			}
+   631			if (config & ADM1278_VIN_EN)
+   632				info->func[0] |= PMBUS_HAVE_VIN;
+   633			break;
+   634		case adm1275:
+   635			if (device_config & ADM1275_IOUT_WARN2_SELECT)
+   636				data->have_oc_fault = true;
+   637			else
+   638				data->have_uc_fault = true;
+   639			data->have_vout = true;
+   640	
+   641			coefficients = adm1275_coefficients;
+   642			vindex = (config & ADM1275_VRANGE) ? 0 : 1;
+   643			cindex = 2;
+   644	
+   645			if (config & ADM1275_VIN_VOUT_SELECT)
+   646				info->func[0] |=
+   647				  PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+   648			else
+   649				info->func[0] |=
+   650				  PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT;
+   651			break;
+   652		case adm1276:
+   653			if (device_config & ADM1275_IOUT_WARN2_SELECT)
+   654				data->have_oc_fault = true;
+   655			else
+   656				data->have_uc_fault = true;
+   657			data->have_vout = true;
+   658			data->have_pin_max = true;
+   659	
+   660			coefficients = adm1276_coefficients;
+   661			vindex = (config & ADM1275_VRANGE) ? 0 : 1;
+   662			cindex = 2;
+   663			pindex = (config & ADM1275_VRANGE) ? 3 : 4;
+   664	
+   665			info->func[0] |= PMBUS_HAVE_VIN | PMBUS_HAVE_PIN
+   666			  | PMBUS_HAVE_STATUS_INPUT;
+   667			if (config & ADM1275_VIN_VOUT_SELECT)
+   668				info->func[0] |=
+   669				  PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+   670			break;
+   671		case adm1278:
+   672			data->have_vout = true;
+   673			data->have_pin_max = true;
+   674			data->have_temp_max = true;
+   675			data->have_power_sampling = true;
+   676	
+   677			coefficients = adm1278_coefficients;
+   678			vindex = 0;
+   679			cindex = 1;
+   680			pindex = 2;
+   681			tindex = 3;
+   682	
+   683			info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+   684				PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+   685				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+   686	
+   687			/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
+   688			if ((config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) !=
+   689			    (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) {
+   690				config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
+   691				ret = i2c_smbus_write_byte_data(client,
+   692								ADM1275_PMON_CONFIG,
+   693								config);
+   694				if (ret < 0) {
+   695					dev_err(&client->dev,
+   696						"Failed to enable VOUT monitoring\n");
+   697					return -ENODEV;
+   698				}
+   699			}
+   700	
+   701			if (config & ADM1278_VIN_EN)
+   702				info->func[0] |= PMBUS_HAVE_VIN;
+   703			break;
+   704		case adm1293:
+   705		case adm1294:
+   706			data->have_iout_min = true;
+   707			data->have_pin_min = true;
+   708			data->have_pin_max = true;
+   709			data->have_mfr_vaux_status = true;
+   710			data->have_power_sampling = true;
+   711	
+   712			coefficients = adm1293_coefficients;
+   713	
+   714			voindex = 0;
+   715			switch (config & ADM1293_VIN_SEL_MASK) {
+   716			case ADM1293_VIN_SEL_012:	/* 1.2V */
+   717				vindex = 0;
+   718				break;
+   719			case ADM1293_VIN_SEL_074:	/* 7.4V */
+   720				vindex = 1;
+   721				break;
+   722			case ADM1293_VIN_SEL_210:	/* 21V */
+   723				vindex = 2;
+   724				break;
+   725			default:			/* disabled */
+   726				break;
+   727			}
+   728	
+   729			switch (config & ADM1293_IRANGE_MASK) {
+   730			case ADM1293_IRANGE_25:
+   731				cindex = 3;
+   732				break;
+   733			case ADM1293_IRANGE_50:
+   734				cindex = 4;
+   735				break;
+   736			case ADM1293_IRANGE_100:
+   737				cindex = 5;
+   738				break;
+   739			case ADM1293_IRANGE_200:
+   740				cindex = 6;
+   741				break;
+   742			}
+   743	
+   744			if (vindex >= 0)
+   745				pindex = 7 + vindex * 4 + (cindex - 3);
+   746	
+   747			if (config & ADM1293_VAUX_EN)
+   748				info->func[0] |=
+   749					PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+   750	
+   751			info->func[0] |= PMBUS_HAVE_PIN |
+   752				PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT;
+   753	
+   754			break;
+   755		default:
+   756			dev_err(&client->dev, "Unsupported device\n");
+   757			return -ENODEV;
+   758		}
+   759	
+   760		if (data->have_power_sampling &&
+   761		    of_property_read_u32(client->dev.of_node,
+   762					"adi,power-sample-average", &avg) == 0) {
+   763			if (avg > ADM1275_SAMPLES_AVG_MAX || avg < 1)
+   764				return -EINVAL;
+   765			dev_info(&client->dev,
+   766				"Setting power sample averaging number to %u",
+ > 767				BIT(ilog2(avg)));
+   768			ret = adm1275_write_pmon_config(data, client, true,
+   769							ilog2(avg));
+   770			if (ret < 0) {
+   771				dev_err(&client->dev,
+   772					"Setting power sample averaging failed with error %d",
+   773					ret);
+   774				return ret;
+   775			}
+   776		}
+   777	
+   778		if (of_property_read_u32(client->dev.of_node,
+   779					"adi,volt-curr-sample-average", &avg) == 0) {
+   780			if (avg > ADM1275_SAMPLES_AVG_MAX || avg < 1)
+   781				return -EINVAL;
+   782			dev_info(&client->dev,
+   783				"Setting voltage and current sample averaging number to %u",
+   784				BIT(ilog2(avg)));
+   785			ret = adm1275_write_pmon_config(data, client, false,
+   786							ilog2(avg));
+   787			if (ret < 0) {
+   788				dev_err(&client->dev,
+   789					"Setting voltage and current sample averaging failed with error %d",
+   790					ret);
+   791				return ret;
+   792			}
+   793		}
+   794	
+   795		if (voindex < 0)
+   796			voindex = vindex;
+   797		if (vindex >= 0) {
+   798			info->m[PSC_VOLTAGE_IN] = coefficients[vindex].m;
+   799			info->b[PSC_VOLTAGE_IN] = coefficients[vindex].b;
+   800			info->R[PSC_VOLTAGE_IN] = coefficients[vindex].R;
+   801		}
+   802		if (voindex >= 0) {
+   803			info->m[PSC_VOLTAGE_OUT] = coefficients[voindex].m;
+   804			info->b[PSC_VOLTAGE_OUT] = coefficients[voindex].b;
+   805			info->R[PSC_VOLTAGE_OUT] = coefficients[voindex].R;
+   806		}
+   807		if (cindex >= 0) {
+   808			/* Scale current with sense resistor value */
+   809			info->m[PSC_CURRENT_OUT] =
+   810				coefficients[cindex].m * shunt / 1000;
+   811			info->b[PSC_CURRENT_OUT] = coefficients[cindex].b;
+   812			info->R[PSC_CURRENT_OUT] = coefficients[cindex].R;
+   813		}
+   814		if (pindex >= 0) {
+   815			info->m[PSC_POWER] =
+   816				coefficients[pindex].m * shunt / 1000;
+   817			info->b[PSC_POWER] = coefficients[pindex].b;
+   818			info->R[PSC_POWER] = coefficients[pindex].R;
+   819		}
+   820		if (tindex >= 0) {
+   821			info->m[PSC_TEMPERATURE] = coefficients[tindex].m;
+   822			info->b[PSC_TEMPERATURE] = coefficients[tindex].b;
+   823			info->R[PSC_TEMPERATURE] = coefficients[tindex].R;
+   824		}
+   825	
+   826		return pmbus_do_probe(client, info);
+   827	}
+   828	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
