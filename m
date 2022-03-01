@@ -2,47 +2,47 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95CC1C4321E
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Mar 2022 20:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E76C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Mar 2022 20:21:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237982AbiCAUSp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Mar 2022 15:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        id S238203AbiCAUWM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Mar 2022 15:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238272AbiCAUST (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Mar 2022 15:18:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE7A26C2;
-        Tue,  1 Mar 2022 12:17:37 -0800 (PST)
+        with ESMTP id S238094AbiCAUWD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Mar 2022 15:22:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609DB90248;
+        Tue,  1 Mar 2022 12:19:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 98FDECE1E66;
-        Tue,  1 Mar 2022 20:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA528C340EE;
-        Tue,  1 Mar 2022 20:17:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC9266175F;
+        Tue,  1 Mar 2022 20:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47354C340EE;
+        Tue,  1 Mar 2022 20:19:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646165854;
-        bh=VO1C+e/5L5lf/6EQ/5yySf3EkTEEUGy03TlZvu8CiEk=;
+        s=k20201202; t=1646165949;
+        bh=gP5r6uGW4ntjRrb20ZZ/mknKWD98RuT3ui1eEtmxEbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sMbem5sCIEbYMoCuf7zfLApLj9P2oN60Q5qHdTL3f5SJwf9EbLZAB8z7WcQ91mNmU
-         6w7hao/e24s18vYj1hSs8KVezaNEwN2AEcIOjyYBB/e37vHPm9VjL/XsMdnI2ZFntt
-         EgUk+uuDRD3BlFzRt5lnS1QVJ2U8eXFyQJ4ncJPwrZi9+9JOWiz82lU3FqIIt7ePEv
-         9EYz+nN3FkzWF/TPFS7SsNH07S6cdbbGim5Pud/8QaFnpw1DvFC63nLNhemkHlTdb5
-         J4hURTVSteYHA/vMYgKDT6lW3ID7YQVKYqfSNPQ3x6vtuCRueWtx5hmrk6oRxDJS0r
-         n+Vybbz4FKNqA==
+        b=qpeny9w6eYw/d1aO0QedaiZZeovE08qUPWeq4DMCw0fC5cmXPUZXDHtbwTq7Mrow5
+         OkWk+dOrR55IhQLVNLmq891NMQ27jEfYWXAtrAqITM2rrMJuoCgZASQBwRRyUty3Nn
+         70Dw2McbOoMP67jNNRqegE/WqPBwbeqJ2LzgUf4oI78WI/v0bqqbL8jToJkK/qf9FP
+         0JUWdDpQ21e3yehVyafubsJHom7X3lYU744+wz6KqKQQ2JbXmbI60ULwb9o2u5+Oic
+         lWIs8ZjfutFJCXsY6hx5Bdzb1M9ae+j64zJjI6K62trKaok0s4t6LMLyeYQs6cPsZw
+         Yrbik5Bs6Mm4A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vikash Chandola <vikash.chandola@linux.intel.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 13/23] hwmon: (pmbus) Clear pmbus fault/warning bits after read
-Date:   Tue,  1 Mar 2022 15:16:12 -0500
-Message-Id: <20220301201629.18547-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 07/14] hwmon: (pmbus) Clear pmbus fault/warning bits after read
+Date:   Tue,  1 Mar 2022 15:18:19 -0500
+Message-Id: <20220301201833.18841-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220301201629.18547-1-sashal@kernel.org>
-References: <20220301201629.18547-1-sashal@kernel.org>
+In-Reply-To: <20220301201833.18841-1-sashal@kernel.org>
+References: <20220301201833.18841-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -70,10 +70,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be20..ac2fbee1ba9c0 100644
+index b0e2820a2d578..71798fde2ef0c 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -911,6 +911,11 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
+@@ -898,6 +898,11 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
  		pmbus_update_sensor_data(client, s2);
  
  	regval = status & mask;
