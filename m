@@ -2,154 +2,155 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F667C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Feb 2022 18:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43546C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Mar 2022 10:39:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238457AbiB1S3g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Feb 2022 13:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S231611AbiCAKkW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Mar 2022 05:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiB1S3Z (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Feb 2022 13:29:25 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2549EE61F0;
-        Mon, 28 Feb 2022 10:12:43 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so19745767ooi.2;
-        Mon, 28 Feb 2022 10:12:43 -0800 (PST)
+        with ESMTP id S231378AbiCAKkV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Mar 2022 05:40:21 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB8A53E21;
+        Tue,  1 Mar 2022 02:39:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jbpGLYwlyKhATi5jKOzpdR4oGAYtTftiq4eal7TJAH7AD5+p7LmIZ6uqI9IM4zsgClFCJ8Lq7QEzL93lm+Ztl1iuUWYphC/naLnJlCK5H3FdW/wWp0Q6b7XwshrioRvN6688ECZA2DEmDIh/oEbA41QQtxt4DYqHpahD9KuaqkiTFBXmLg06xXVaXadvVawyG3O5lcESlNp669tTKIV+mjNzItN2Dfp8I7vZvUX7Hg29bhcl/0bm9UDQrstP7Q2ooMrRyuiZ9UfWX63VCHA46EgJsd73xHPoz12NkacEEJtrxNtq/SxzZ7VU0fxq1IVGNnq2Ih+b8ECmQEIKcYv+og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u300+XqTGS4GD8QjeIFQHtEjW9HYeGw7hLOJTHhin+k=;
+ b=KQfS/uytx/O6hPllBIYOA1E+hW9QKHwOgIDBCpXLvId8lVYB+rOlXSUNS4bVahyPCcr2k+k2lCgHsrFXChEpXF0p+DQaa18Os70+x2GLyoNcEhjKbSTCV2gyOqPIGJCftI6N0teFqo3LEOVqdj24aJNwSGpjzIFx3fnrZXkJKcyijib477LNmReDL0S/FD2+y9Rz50JUZPcmvCxltT1dmLG1D0d4TJJYtAQpSezRVOO8eU5b79SEn8UZH7ZdfGP0T8OakG1YEzgWEcdt01XSpNtDJgZt8WYCd9gheYN7z4Wh3ftQy+n7eQAQ8PA56Cgi+XSfTv0ZYdsT3As+v162bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quantatw.com; dmarc=pass action=none header.from=quantatw.com;
+ dkim=pass header.d=quantatw.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=d1AmaAaEMdz2x5BUvuXaCe1mKX/9fT+CrQaw2mHcoFY=;
-        b=W/zV0DlBABRfKVI0YNf8QA1qRNlRfMuu2wPwwoPVjjgfZw1aFcV0K0J7KBighDG7mL
-         jxnY/NZajJCuKB18+ubTx2H7eS/Ug0kUF9L/eYmqUjXMHzch3EaP2sXyGtf1FMdCASH0
-         P351C/3mVw4EYJizPlxIu1kgAh8Q+jUUWsGO/jvzSKL5J5x/yALc1kPYEOlubG+rhZO7
-         8IbN2GbHfob4dHmiBcv+O+8dnVmMalfo3bPoJwT7SdsoTPSoH7jw+cggk4PbwiuhquVR
-         pATVs5/S0lO/ONWFC9FaeYd1XvLNOskQvRRE0JFd+U9LHfdRITq5993j7cLE2RrBQ5Qf
-         MFhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=d1AmaAaEMdz2x5BUvuXaCe1mKX/9fT+CrQaw2mHcoFY=;
-        b=aPw1tXdJ+6lxRKOUHQmN2uVah9d4PdGazae0FHvdPOgTXLrcoinORBc1gPbVdnbC/3
-         hkzrnKCBZYu23ylXgzquHVX6N0pVo0E7BXQ0qGu7NlVj6ym1WfiiVAhknmRTam0KZGhm
-         54byVRwcP4shfuRsaNnI8xLmROt1ZxQgT5u+JJrbpi9IrF2CdLKWY6zGcFX3CQn00WMo
-         9iS+vY8JxpXC4NwftDPQYr+YoVhH7nCcY8iMVQLjcPfEc588224Q9lcfdUnG1ALmVnfM
-         0fg5NsIffvJoGVWig7zfTEtGsKdYjCokYE/FCJkOL9VAKJjD161yera/iZttx2XmN+HS
-         yfNw==
-X-Gm-Message-State: AOAM53263LZ+P4htGst9DcGNTz1GPfeWOlrs1fpp14vOsU/kCbw88nLG
-        AtA0dykzb7SEXAvScCzU5qg=
-X-Google-Smtp-Source: ABdhPJwmoUnIffAb5nrphZJusLTJz2elU/3FWrlM/T4jVYqkvoAU1hB08H8w+irkNjs4vWj6V9TmIg==
-X-Received: by 2002:a4a:95d1:0:b0:317:9a32:fd21 with SMTP id p17-20020a4a95d1000000b003179a32fd21mr9502562ooi.89.1646071962172;
-        Mon, 28 Feb 2022 10:12:42 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a4-20020a9d6e84000000b005afe328af91sm3900287otr.54.2022.02.28.10.12.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 10:12:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ad5fe94a-bfa2-8cda-058d-92545cead239@roeck-us.net>
-Date:   Mon, 28 Feb 2022 10:12:39 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/2] hwmon: (adm1275) Allow setting sample averaging
-Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Jean Delvare <jdelvare@suse.com>,
+ d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u300+XqTGS4GD8QjeIFQHtEjW9HYeGw7hLOJTHhin+k=;
+ b=g3YSzDdEm0C7sFx5loXwqF+CNMzfhApJVEOI01sm4iN/xMiVnQTBEas09LIsOeHll1QaiX0odk8IZVO63tOaEf1tcUofrqFXu9p9VUfXyxv77RHIOgf32cns1gkkuRugKBbMI6+/GG8stcpDffAbac8Q8lPkKqnQVNtg/ZBwxsI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quantatw.com;
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
+ by TYZPR04MB4925.apcprd04.prod.outlook.com (2603:1096:400:125::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Tue, 1 Mar
+ 2022 10:39:31 +0000
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::b57e:962a:3820:eab]) by HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::b57e:962a:3820:eab%3]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
+ 10:39:31 +0000
+From:   Potin Lai <potin.lai@quantatw.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220228103716.10774-1-potin.lai@quantatw.com>
- <20220228103716.10774-2-potin.lai@quantatw.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220228103716.10774-2-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Potin Lai <potin.lai@quantatw.com>
+Subject: [PATCH v4 0/2] hwmon: (adm1275) Add sample averaging binding support
+Date:   Tue,  1 Mar 2022 18:38:58 +0800
+Message-Id: <20220301103900.12637-1-potin.lai@quantatw.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0129.apcprd02.prod.outlook.com
+ (2603:1096:202:16::13) To HK0PR04MB3282.apcprd04.prod.outlook.com
+ (2603:1096:203:89::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4701194d-6b98-4fc3-47b2-08d9fb6fc4d9
+X-MS-TrafficTypeDiagnostic: TYZPR04MB4925:EE_
+X-Microsoft-Antispam-PRVS: <TYZPR04MB492594BC729886BE9EE8A62E8E029@TYZPR04MB4925.apcprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GBu/HsaKu3/ixGD8dgDRAm8bTQHbmu44llBrTMAgWeIMiD1ADCRTRIZH0ZsfOaGDjbhi3bs+8zF7NnHbIxWZ3n3FfKA403DNWAYZ3gHiP/0AQDJBjZBugjRZBc3ZW9EflvlbLOCgX0xr0XFLDyVaF9XzlgTjiO9LyzB4W1d8V/Quo8ygJZHAi2DKMRKNaScTqJYxhNoh4zCh5uWHuKfYCYYSCbSxdn+AfES4J30rvrlSz/+DVI96rKUWgvmB097wMO/05Jc7OTU3cmod1l/fabMStxlHUqMp+dX7zagCMwiXI9gOqE3kPAe6bSNJkT20lZlBlBHJ+shb/B9fTGRHBXuEl7bZhDxSB0/QCMCvK5GeS/bisIKKwdIrdBEID4GRsBFF7TfzgkEOjyWDh7ZHP6zFUjizq9yjbwDaZhzaGTex0sXVlOXT8le0vY/qaCADUZoNjWEtJR3bd1lHGFoFDf6EA2s6v/Zd8n/w3msSKzFVrx5TjbZsFQspg9r+HykbqiSbBy6MCiqMO/fjiSRnNDKX9EpHgf40fZtXOrsdWtmQ1ns7jrUuDyyvXE+4Q/3DkqjkOvzeJT7+ce3X96Dn5WFwSQ8BXLWhlrx9r9JVSt+1zh393X8BEMODOgWjbtNkQ2e4so82SWgu/xxCARKjL31jlWuMqyryIilPD2AYLIbEiTy+bbfiWlb3xAiXIcO2jJEtNfS7oz/3oMbJFwQ5rzfGkK412MJaRAtVvYYSf4phl+nlVguFzZGTtALAMa8433BF8gRqZIEWzyf/of6Xoa3Nnypy/AeHMf5CQOkOPVbzEATR+eusb6MSCFu3BqIL6OuzUAxqNQ9hCG5HBgyRvA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(6666004)(966005)(4326008)(8676002)(38350700002)(52116002)(36756003)(6512007)(508600001)(83380400001)(110136005)(54906003)(316002)(1076003)(8936002)(38100700002)(6506007)(44832011)(86362001)(2616005)(107886003)(5660300002)(2906002)(26005)(186003)(66476007)(66556008)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3eWxFhCHpClSNhFBIOxFoUbm4dK/0T8+JSBtbBk5Rh44xbsyK2GRo8erG13k?=
+ =?us-ascii?Q?5qb5mYUWBNv8ykf0HmEC3xpoPXECEOKDLvKeax5z16gjPw29ehGDVX+ey55+?=
+ =?us-ascii?Q?Ltmd0MWLLgu3Boe6KXEP9rrsMTUlWblGyUyqRZkczQoBW/TlekA09ol2A+B2?=
+ =?us-ascii?Q?uRSGGu5enILxCeSd2EGTe5eERAWjqq1gmZEDTZpD4iLJG+QAokQDi3Guqs0O?=
+ =?us-ascii?Q?9AjqD0LQncFGf7En81qJloMewQmdlJ5DcfpGj4dUA5gju9Z/ecchA8wkVEBQ?=
+ =?us-ascii?Q?s8qaP2SzLMEZ4yNR8RzLkwXTf64b5kKZi0x9oC+R8Byz4bwP6jgP1YD26eej?=
+ =?us-ascii?Q?il2vZiL8ZkmMWWNHTrvaizKAcHZCVASG3G3xgvmxwhisRatXHE9KG1OU5ufY?=
+ =?us-ascii?Q?YrmQaVdyx0uq9exIah9PN2zDKyeyiYsv9psUW6MgynvX5deFTwtazdGKBouz?=
+ =?us-ascii?Q?qnTy9o+JM5VxWweb9tbjytz7YxZcxO60W+PHzuJoXZXzYGD165PiiZAREIgq?=
+ =?us-ascii?Q?4/5e08E9q5WA/gxkG2g6dTS2BhSIA1YMMd+gbs+SXJLvfNwUz/VVMH7EuMvk?=
+ =?us-ascii?Q?MdhRQnjyGmgSIi7ETit1aUBDt8ue63HteV6JNdFw85Abyk0CKJymdKStlmjQ?=
+ =?us-ascii?Q?YwP11WSVEkCsNomN67J0iwDzn7tA6wMRxmaRPVoz+KgXFxOMaiVlCJJTDFBM?=
+ =?us-ascii?Q?sYLR1+Ve0Fo9+8iuumK3LrWiXgVe0p1HXbcocHm7v/0DJn9ihZ2f7FaXPxM/?=
+ =?us-ascii?Q?xDb/2PDBm1TZLl6GrGGzcwa4pC4PyGMFJkXtNtoXJzmfThexbM8RZr9VDfRc?=
+ =?us-ascii?Q?K+5yd1EVOykhLWaJdGRtwBuIG5ydut5CNqgop4lJxXsx+3h4mHLW1gOLGooI?=
+ =?us-ascii?Q?+K9O0mc3wpXDINcX8xN7Sv4eCtXG+n97nSRMjqcfQwcuLSvsVX/cKiTCKN6g?=
+ =?us-ascii?Q?nquVUo4u6EKa9PiDmP6ORew8x12bskhpMJJTLmzYzg1xUsAXBDqJ2ONrJsHF?=
+ =?us-ascii?Q?yoCDlIA0RWIMKXACYjlmz50m9LXf2ThPpZpohTi9+hOQg+gp+vd6fV73a9LE?=
+ =?us-ascii?Q?S1++IOAnOC/Ry4OakBoXiFpzrBjMZsZgFZy5nVyfAcOZDS97Z0zL3rBvTN/d?=
+ =?us-ascii?Q?d6s4skxPDzxJ45f9Nwv7HYhoEZqpOFZWmD2mvAUhIV8ckN9lVfXzHq0hIR+t?=
+ =?us-ascii?Q?iSttKYtzHg1qJGyoYDMO1txG1LmKmcpTgbyu6KPbV6MrkOiDycrMgfvvE0rQ?=
+ =?us-ascii?Q?kluZ6bDDigmyA+m6/HQ2mmPouDLTJ7y3HHjoHCoLNH4o3rHmXyTJB0kVQNVI?=
+ =?us-ascii?Q?8MZrljaFNVHKlpFRlkyEB6xfv596hDAeZ4jgNvDBok83sPiuaEgy8UBrN9bQ?=
+ =?us-ascii?Q?XDxhbfuTU2yvyHxeDxz2jZA3nWcAWqiRUwZdCDS+hiLuyVVz5FKf8Y1jhfMO?=
+ =?us-ascii?Q?d/xO2MDehiPXObAHWqDIndsU1oTq12+hWqRWQaXr6SoWII/HdwEyNGzqKXIX?=
+ =?us-ascii?Q?a9LqKVxmHRkbvt7OW01Dcm7A3NsKCqoDmCHojnemT5P5S7DC/K1bossn6fmm?=
+ =?us-ascii?Q?pgC227aN6wskK9Ee/KHEkRM7PVFB+h4PyqGJWCrJGODiyZFD2DomzSumg6eO?=
+ =?us-ascii?Q?L3hRNkTRPN/vBR3/NXhjAf4=3D?=
+X-OriginatorOrg: quantatw.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4701194d-6b98-4fc3-47b2-08d9fb6fc4d9
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 10:39:31.6369
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2jOJ/r+Js5Cy6i6M61mmoDABhhqeDnT2wzfYY6ViSRyf0cOb2O8/tqWcEw9UVX3HDNM1ufUEWyB/Z5KJeRylRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB4925
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/28/22 02:37, Potin Lai wrote:
-> Current driver assume PWR_AVG and VI_AVG as 1 by default, and user needs
-> to set sample averaging via sysfs manually.
-> 
-> This patch parses the properties below from device tree, and setting
-> sample averaging during probe. Allowed input value from 1 to 128. If the
-> inputed value is not power of 2, the sample averaging number will be
-> configured with the smaller and cloest power of 2.
-> 
-> - adi,power-sample-average
-> - adi,volt-curr-sample-average
-> 
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->   drivers/hwmon/pmbus/adm1275.c | 36 +++++++++++++++++++++++++++++++++++
->   1 file changed, 36 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-> index d311e0557401..212c7f3c59b0 100644
-> --- a/drivers/hwmon/pmbus/adm1275.c
-> +++ b/drivers/hwmon/pmbus/adm1275.c
-> @@ -475,6 +475,7 @@ static int adm1275_probe(struct i2c_client *client)
->   	int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
->   	int tindex = -1;
->   	u32 shunt;
-> +	u32 avg;
->   
->   	if (!i2c_check_functionality(client->adapter,
->   				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-> @@ -756,6 +757,41 @@ static int adm1275_probe(struct i2c_client *client)
->   		return -ENODEV;
->   	}
->   
-> +	if (data->have_power_sampling &&
-> +	    of_property_read_u32(client->dev.of_node,
-> +				"adi,power-sample-average", &avg) == 0) {
-> +		if (avg > ADM1275_SAMPLES_AVG_MAX || avg < 1)
-> +			return -EINVAL;
-> +		dev_info(&client->dev,
-> +			"Setting power sample averaging number to %u",
-> +			BIT(ilog2(avg)));
-> +		ret = adm1275_write_pmon_config(data, client, true,
-> +						ilog2(avg));
-> +		if (ret < 0) {
-> +			dev_err(&client->dev,
-> +				"Setting power sample averaging failed with error %d",
-> +				ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (of_property_read_u32(client->dev.of_node,
-> +				"adi,volt-curr-sample-average", &avg) == 0) {
-> +		if (avg > ADM1275_SAMPLES_AVG_MAX || avg < 1)
-> +			return -EINVAL;
-> +		dev_info(&client->dev,
-> +			"Setting voltage and current sample averaging number to %u",
-> +			BIT(ilog2(avg)));
+This patch series allow user config PWR_AVG and VI_AVG in PMON_CONF
+register by adding properties in device tree.
 
-Please no such logging noise. Imagine if everyone would do that -
-the log would be full with similar messages.
+Example:
+	adm1278@11 {
+		compatible = "adi,adm1278";
+		......
+		adi,volt-curr-sample-average = <128>;
+		adi,power-sample-average = <128>;
+    adi,power-sample-average-enable;
+	};
 
-Thanks,
-Guenter
+LINK: [v1] https://lore.kernel.org/all/20220223163817.30583-1-potin.lai@quantatw.com/
+LINK: [v2] https://lore.kernel.org/all/20220224154329.9755-1-potin.lai@quantatw.com/
+LINK: [v3] https://lore.kernel.org/all/20220228103716.10774-1-potin.lai@quantatw.com/
 
-> +		ret = adm1275_write_pmon_config(data, client, false,
-> +						ilog2(avg));
-> +		if (ret < 0) {
-> +			dev_err(&client->dev,
-> +				"Setting voltage and current sample averaging failed with error %d",
-> +				ret);
-> +			return ret;
-> +		}
-> +	}
-> +
->   	if (voindex < 0)
->   		voindex = vindex;
->   	if (vindex >= 0) {
+Changes v3 --> v4:
+- add "adi,power-sample-average-enable" property
+- add sample number cehcking in driver, only allow listed value
+- remove info logging, add error log when invalid number detected
+
+Changes v2 --> v3:
+- change property type back to u32, use logical value instead of register
+  value
+- fix typo in properties description
+- add if-block to descript "adi,power-sample-average" not alloed if
+  compatible not in the enum list
+
+Changes v1 --> v2:
+- use more descriptive property name
+- change property type from u32 to u8 
+- add property value check, valid range between 1 and 7
+
+Potin Lai (2):
+  hwmon: (adm1275) Allow setting sample averaging
+  dt-bindings: hwmon: Add sample averaging properties for ADM1275
+
+ .../bindings/hwmon/adi,adm1275.yaml           | 44 +++++++++++++++++++
+ drivers/hwmon/pmbus/adm1275.c                 | 40 +++++++++++++++++
+ 2 files changed, 84 insertions(+)
+
+-- 
+2.17.1
 
