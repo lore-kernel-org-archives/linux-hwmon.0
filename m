@@ -2,66 +2,65 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED13C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Mar 2022 13:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0100FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Mar 2022 17:44:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240780AbiCBNsg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Mar 2022 08:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S244110AbiCBRo4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Mar 2022 12:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236210AbiCBNsf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Mar 2022 08:48:35 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A31A3914E;
-        Wed,  2 Mar 2022 05:47:49 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id h15so2325964edv.7;
-        Wed, 02 Mar 2022 05:47:49 -0800 (PST)
+        with ESMTP id S244178AbiCBRo4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Mar 2022 12:44:56 -0500
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E95CE926;
+        Wed,  2 Mar 2022 09:44:12 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso2716114ooc.12;
+        Wed, 02 Mar 2022 09:44:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AcALeRLgruJraoqYkSDWeD6cogilR50XrL0fln3VffM=;
-        b=Zt/DO+Bq20//tVb2JU+hu8hHyEkmNc1bCqbD+5AM+Cc5TzPLsHYHf8Ecjg2JQ2TAcM
-         xdLnPGzSZJIlB1Etlp6Q8H28Ft7xBv0kRPV6MnqFKPDPxcQG4gLWXfEW/g6/SeQq5Jq0
-         cJWyIcE6vBvTq9qMxPUnLbJrj3uwx9PWJGEjabaN/Z+6E9Hk4ocbuSDmcpuxF7l/TcbR
-         6Joh9pPAYeBCTZx4QJ/s9RPN5QKF9EYoyfFSxxJLxBNhw0ngP7oR7eze2+blMf9RHpDa
-         mwcwewOu0RXHn3pTlW+EuvImKy5LfoaK1ND3JETVwDX5QeYKBi/Ak7dvHUqKT5VMhn72
-         xBIg==
-X-Gm-Message-State: AOAM530wSp+qQftMjLT2l/+oX1MLFIxVnIsf+qt9L/wv+IkWjVpm3cI9
-        tje5s2moolIG/7FeFG6rIb1RFQgwYBQ=
-X-Google-Smtp-Source: ABdhPJyLon6u9lLsCunawYR20XfDf0xqCgLlH9uQfjZDDHBev+/9Kxx+h6PWJ1DRu4mFMN+J2Sl/Iw==
-X-Received: by 2002:a05:6402:520c:b0:412:7f7d:b06b with SMTP id s12-20020a056402520c00b004127f7db06bmr29985652edd.91.1646228867527;
-        Wed, 02 Mar 2022 05:47:47 -0800 (PST)
-Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id l5-20020a170906644500b006ce6b73ffd2sm6364627ejn.84.2022.03.02.05.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 05:47:46 -0800 (PST)
-Message-ID: <5476022d-6cac-82b4-b17e-23160689ea38@kernel.org>
-Date:   Wed, 2 Mar 2022 14:47:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NaGiNGbuhPv36bcxSC61InozAJyKj+sMziQgYlBPwso=;
+        b=oy1AccwiOuv6Tke0G9LKf07y+0EB8auo3OPkHWr0s+rD06ITlL5gB1UxovQzhPHHWy
+         /6i8hHGeOWRsPKpA1B9dXFEhKw6RaXdvzcrV4NYqbGLQ6fH8XbhutTtN9AkZ9t/SvaHn
+         vo1COKkMT+T7dxE5harOv9eVL2jO9Odi/35aty2mEeDShvJfFkPuRSg70i4a7JYb1R/+
+         Xp/e3NkNQyJZm+Nn49xzvfX0HyUPKjYH0umUG1GivrZUJrbVym0uoAvUjcyg6bwA71yg
+         05yPUSzDDb345y7vgFJODkvB7//kC9vuLWES44T9lVR0TEy+j+oP8rg73kBWljMomrjm
+         ScIw==
+X-Gm-Message-State: AOAM533HbkpQKYmfKOg6DULiNFNY/s0sNgo1RrxQb2Bxvz2Z5l7qdNXO
+        zLUtmlcKg+Ltdp92crLZOQ==
+X-Google-Smtp-Source: ABdhPJxGvTFCUheMgvJRxWJfrx6CTJdeQJJvZMGRp6tHjLz5GXnN9bxP7C2rcTHm3K9HWVzLFVhBMA==
+X-Received: by 2002:a05:6871:720:b0:d9:a14c:7ca6 with SMTP id f32-20020a056871072000b000d9a14c7ca6mr786532oap.70.1646243051311;
+        Wed, 02 Mar 2022 09:44:11 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j9-20020a4aa649000000b0031ca80c6e60sm7887973oom.24.2022.03.02.09.44.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 09:44:10 -0800 (PST)
+Received: (nullmailer pid 3944112 invoked by uid 1000);
+        Wed, 02 Mar 2022 17:44:09 -0000
+Date:   Wed, 2 Mar 2022 11:44:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Potin Lai <potin.lai@quantatw.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
 Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: Add sample averaging
  properties for ADM1275
-Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Message-ID: <Yh+s6TME/NJw1GDM@robh.at.kernel.org>
 References: <20220302123817.27025-1-potin.lai@quantatw.com>
  <20220302123817.27025-3-potin.lai@quantatw.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20220302123817.27025-3-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 02/03/2022 13:38, Potin Lai wrote:
+On Wed, Mar 02, 2022 at 08:38:17PM +0800, Potin Lai wrote:
 > Add documentation of new properties for sample averaging in PMON_CONFIG
 > register.
 > 
@@ -73,11 +72,5 @@ On 02/03/2022 13:38, Potin Lai wrote:
 > ---
 >  .../bindings/hwmon/adi,adm1275.yaml           | 68 +++++++++++++++++++
 >  1 file changed, 68 insertions(+)
-> 
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Rob Herring <robh@kernel.org>
