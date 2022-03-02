@@ -2,99 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3093C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Mar 2022 17:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8482C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Mar 2022 17:58:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240910AbiCBRxc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Mar 2022 12:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S244254AbiCBR64 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Mar 2022 12:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiCBRxb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Mar 2022 12:53:31 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35395DFDF;
-        Wed,  2 Mar 2022 09:52:48 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id j2so2420859oie.7;
-        Wed, 02 Mar 2022 09:52:48 -0800 (PST)
+        with ESMTP id S229674AbiCBR6z (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Mar 2022 12:58:55 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657364D255;
+        Wed,  2 Mar 2022 09:58:11 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id j8-20020a056830014800b005ad00ef6d5dso2385382otp.0;
+        Wed, 02 Mar 2022 09:58:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=DHY7VhQT9qgEOgLNTzp5elUV+Jbj7LJzyVtU0MTV7u0=;
-        b=g0Sypa3YZdvUNqPWk96PKSCJoH/f25NWGfg49/dnqFxSTEzr1DvRckN9/3j6eV4E+J
-         Lz5L8MUGvA5B+UHdHqg9a3xgDErG3VWm13D15YVZqqvxbyjZhc+5KquLgzC/UV2xWnup
-         933KBI3pNA1IIT6OZBgxG6ZYz1gkcSztHgd4aQxfhuYMc0Uixh90wTvizaW6qWPGVkjb
-         My0mQ5FcZzfQHVHRUAhcW3Ef0bD3vzfv+SOMcV8wShZ/MOes6+Gy7hmlAnj0meu0Ugdy
-         +4TqXbihb1abqPz7Ikc+1c1bo0yoKJmJsaiqv1YdjbATVWTvTOZEJWbztqPdJMV7xNMH
-         UfnA==
+        bh=YqVBhVqe5MYviwVOxLCvP7dI88ZNTXrDmSDZWqdPlQM=;
+        b=K5AI8uJfZvHjAN5SUvZTjirGEItnDBilpvwDyqwnP7ROHQ5bTfyVsgUTjY8RYkMwro
+         l5/KhYRHRGK7ZKVr7ZX41OxxINlyzkSEPg/G3HiemevuUeSQfqAtljCiH+gCYSjso/kP
+         kyVvUCJRUm9Dp2o8FSfs88qWavdqSbUhgeCVonktDqw8PmX5xWarHyE1DkHEzxb3GAt5
+         adO79z8533eW6NzeS7XsuXznP0hWqcTewmb5Jwj19ZVAww5xzg6VIU+97q9oAYHmrG1p
+         ZlNQOXbfumpUoKsMIZi4wFoaPv9mBJkWPX51XZ/tmLudx+8y90Cyvr14BqracCdgRxn1
+         zOLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=DHY7VhQT9qgEOgLNTzp5elUV+Jbj7LJzyVtU0MTV7u0=;
-        b=3Vy3SMQHifTU02lfQrnBckGaUB8f/qmc1M3aMfalDOE9kkaKOH25JJHNIMPi+N9nxR
-         x2rqGFGb9G6jAFEumKDNaVkE8wPWdgkCrSGL4MjTiK4GkMYw4pkwgdgtibWEVWNxPV/+
-         yNCONQd/jZM5UC+IQHcHCk9SWCoHGSIdxy8olS02Ep0Z6xhl0WLJRw8weWLURKTTNaGX
-         nBfbistakosGonzSerabzE4s/NOQGH60yDHJe6Q3vLSs7ZFMrS2P2ief5lk1gN2WXzNW
-         mMxzsTz86BHt6eeE4tuxX90BUjSuXKlsJ15gJxNDIE/ZZyQW9xb7uZjGBJoK12jE0XEz
-         q9Dw==
-X-Gm-Message-State: AOAM532yR/VNlXDU5MbBsmDC2vnlHpE6mFrQxXFWAy6gJTtbq/gmtoXM
-        3Nu+FnCxiTfL4vyht74KcDE=
-X-Google-Smtp-Source: ABdhPJynHpROhEGrP3XoKGr8nXoImP0Gk3bV0Le6WzH86xThLA4c7sYZmfBOVPsWKAeZ8J5UYiQ62w==
-X-Received: by 2002:a05:6808:13c6:b0:2cf:84a3:fdfa with SMTP id d6-20020a05680813c600b002cf84a3fdfamr915319oiw.55.1646243567518;
-        Wed, 02 Mar 2022 09:52:47 -0800 (PST)
+        bh=YqVBhVqe5MYviwVOxLCvP7dI88ZNTXrDmSDZWqdPlQM=;
+        b=jUgjGXiF0Uia3IjxLiTHbp+rgvKCeTCRRGmqQnsw0GRq89RWl4xglacrjnacqUWEcE
+         znqDnpY8U1E9HTNq3oiodCVlHfOIM/xzc64HHZUvAhlxL0XjlzIYdjUOhzkPw3ctDYyY
+         ArMklaVyudkwu+7BEqCuRoza56LWVrn/Qn7W8o5l+0E13HQDNJQiXJg+7xJSGi1MxorP
+         rI1+s7C3btvAIwcXbhK0SgSCZZ6OHTK5wAps5Mk6zpuQDwcYQ7lDypK1jYVt6D7nb76Z
+         YL8WYvN3fW8+dV+IGh9IynYTSzKS004x2LtwcVRWgQxavR3YFyn4V8riZLv8kG+qDf9d
+         sJBg==
+X-Gm-Message-State: AOAM532+B+GoDEFgks+E7iWE3NcJeEkYIJWw70yPu7O9g2uTzOuFpVys
+        0GLeQDNqZFLZH6NygRkN6yQ=
+X-Google-Smtp-Source: ABdhPJx1trZa9r7MEYprOsxVsJZc9cwS3IrXTYhcFKbfOXt+fAN5NkPwoItGLYWqwdWOG7OR/7c0cg==
+X-Received: by 2002:a05:6830:192:b0:5af:898b:3f88 with SMTP id q18-20020a056830019200b005af898b3f88mr16884037ota.100.1646243890822;
+        Wed, 02 Mar 2022 09:58:10 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bl26-20020a056808309a00b002d4f48e3799sm10233983oib.12.2022.03.02.09.52.45
+        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000d6bd82a92fsm8209636oab.18.2022.03.02.09.58.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 09:52:46 -0800 (PST)
+        Wed, 02 Mar 2022 09:58:10 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Mar 2022 09:52:42 -0800
+Date:   Wed, 2 Mar 2022 09:58:09 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v4 0/3] Support XDPE112
-Message-ID: <20220302175242.GA2522403@roeck-us.net>
-References: <cover.1646214248.git.sylv@sylv.io>
+To:     Potin Lai <potin.lai@quantatw.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 0/2] hwmon: (adm1275) Add sample averaging binding
+ support
+Message-ID: <20220302175809.GA2522981@roeck-us.net>
+References: <20220302123817.27025-1-potin.lai@quantatw.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1646214248.git.sylv@sylv.io>
+In-Reply-To: <20220302123817.27025-1-potin.lai@quantatw.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:49:18AM +0100, Marcello Sylvester Bauer wrote:
-> Add support for Infineon Multi-phase XDPE112 family regulator. The main
-> difference to the XDPE122 family is it uses a different format for
-> voltage out. Add the required logic to the existing xdpe12284 driver
-> accordingly.
-> 
-> Changes in v4:
-> - move VOUT_MODE format detection into identify function
-> 
-> Changes in v3:
-> - detect VOUT_MODE during probing
-> - set xdpe122_identify/xdpe122_read_word_data only if VOUT is vid
-> 
-> Changes in v2:
-> - rebase on current hwmon-next branch
-> 
-> Marcello Sylvester Bauer (3):
->   dt-bindings: trivial-devices: Add xdpe11280
->   hwmon (xdpe12284): Add support for xdpe11280
->   hwmon (xdpe12284): Add regulator support
-> 
->  .../devicetree/bindings/trivial-devices.yaml  |  2 ++
->  Documentation/hwmon/xdpe12284.rst             | 12 ++++---
->  drivers/hwmon/pmbus/Kconfig                   |  6 ++++
->  drivers/hwmon/pmbus/xdpe12284.c               | 32 +++++++++++++++++--
->  4 files changed, 45 insertions(+), 7 deletions(-)
+On Wed, Mar 02, 2022 at 08:38:15PM +0800, Potin Lai wrote:
+> This patch series allow user config PWR_AVG and VI_AVG in PMON_CONF
+> register by adding properties in device tree.
 > 
 
 Series applied to hwmon-next.
 
 Thanks,
 Guenter
-
