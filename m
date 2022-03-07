@@ -2,104 +2,181 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5F7BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Mar 2022 03:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2A90C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Mar 2022 06:16:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbiCGDhd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Mar 2022 22:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S235388AbiCGGRd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Mar 2022 01:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiCGDhc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Mar 2022 22:37:32 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057785E155;
-        Sun,  6 Mar 2022 19:36:39 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id t28so12244288qtc.7;
-        Sun, 06 Mar 2022 19:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=82smPzrd64J4jzkvd+yj19VF5/h1TZU7TJD+nXhzeao=;
-        b=EB52k5R1jCqgYGxUBEzfQwSS27kJTyQxieIz8/Sk76Hdvgl7HvRBvZnYsB6zrB8iOU
-         bD4u20Uq8qaoDU9Zkk2RaYAkMbvLvWz3s++zcy4Zbf7i52UBWehzqZagVjOFQp8e5Ov9
-         cAENGzuF4njRdgshvzQ00LubouM31bVWhS8MsmGTGLtoCLFB6tyXZG41wmzvGy6GojM8
-         ZOQEO6BX0EHxsXg5oavlPw7ypBY/2ND5MqSgfESBXcOr9oj/ofmZKpdJOlinZe1zS/kq
-         xAr9SA0ULBig8C1WN+zj0VLt/+UOz6AvlR2Heoi+RtpvR03UgZiTzsFG/KaalcsnZB/V
-         KyfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=82smPzrd64J4jzkvd+yj19VF5/h1TZU7TJD+nXhzeao=;
-        b=nr9GXy6AHTpBHchlpjLd4enjl1QfOncFXl1eEWio1ONxRoL0sGHl+xPq5KLvpPxDTD
-         adJDHs6td63GCQyFtrKnl5fzEGJ11sjmxM1Xve7YpU5uh/MoZiloZPt+7T1BER+8h2iu
-         EXltZmEZmTlcppK0toogm0ze4OmQHbr6vMCn+roCRb1XZwdeqWmBOvxt6M7tki8nvjqd
-         ETXN9gfixMs6Z3v0puqE4GEUXtLW5PkaHViLRJweN63vk0q4R8nm/ahuFlz1wJEeCsdz
-         EC2EsLU5c9SCFYglc8afjVpHCYSVoyetWshVetRDtnBS0K1RMKPG1pVp9NGFLZzTmHw/
-         cWdg==
-X-Gm-Message-State: AOAM530pw15TZpccxQpeQNIy5DRQv/Pm48Z0FRXf8gsbKDebqepmpUjl
-        1hCt2EM/d7JdBiNGlq94ioU=
-X-Google-Smtp-Source: ABdhPJyx+HrJ/v0m+NvujWpkdlALDPsI5utM6IpKvzEADyhwjfVMTm679Qa1jNal9keTg1lRHRWDFw==
-X-Received: by 2002:ac8:4e82:0:b0:2dd:e5a1:3b2a with SMTP id 2-20020ac84e82000000b002dde5a13b2amr8010971qtp.196.1646624198218;
-        Sun, 06 Mar 2022 19:36:38 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id t2-20020a05622a01c200b002de5098fbaesm8180122qtw.26.2022.03.06.19.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 19:36:37 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jdelvare@suse.com
-Cc:     linux@roeck-us.net, liviu.dudau@arm.com, sudeep.holla@arm.com,
-        lorenzo.pieralisi@arm.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drivers/hwmon: Use of_device_get_match_data()
-Date:   Mon,  7 Mar 2022 03:36:31 +0000
-Message-Id: <20220307033631.2075160-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233044AbiCGGRd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Mar 2022 01:17:33 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326763BBD3
+        for <linux-hwmon@vger.kernel.org>; Sun,  6 Mar 2022 22:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646633799; x=1678169799;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8+zP0wL4ZYUvvih3/B0sJTmQgjC8LJ3CaSnSkP+O1DU=;
+  b=apSNHMmuIa9v97PpouufSrLdevqXMA8MeW6C/sRq/BKJZ7TTxMj9gkD2
+   6hrYJwt9M15lxzhJb21x2UwAOoDR2GOy+ySzhGeP3KLlufoxpr7IhFJHz
+   KG1VB388Kzz4aioFYVef5VeucgbFgyr8BWC4DvOBXMn1dlUPkYYxzgwwh
+   K6y7yuy2BaLejXTnV37z1M5BRa1K0XqtL+0ZadsMbVdayFg4TpR2FsrM1
+   Ii4mv4f9UtMnj1mOMQk2g2aZxHFOwqwTrsiGSa+KHAsWqsz5iHBJ+V9qY
+   0XlyhcgW73DAcyV0uISwqyOeCD/XaGzZ5Hsxrq3iBJF2bIy02yZU//VXV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254504002"
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="254504002"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 22:16:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="780212832"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 06 Mar 2022 22:16:37 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nR6fY-00001V-4F; Mon, 07 Mar 2022 06:16:32 +0000
+Date:   Mon, 07 Mar 2022 13:40:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 007e433cf0373334a2bef1b0c9831647184906ba
+Message-ID: <62259ac1.6J+FwC0BF84rO/ES%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 007e433cf0373334a2bef1b0c9831647184906ba  hwmon: Add driver for Texas Instruments TMP464 and TMP468
 
-Use of_device_get_match_data() to simplify the code.
+elapsed time: 4818m
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+configs tested: 107
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+arm                         axm55xx_defconfig
+arm                        mvebu_v7_defconfig
+arm                        cerfcube_defconfig
+h8300                            alldefconfig
+powerpc                  iss476-smp_defconfig
+sh                           se7751_defconfig
+riscv                            allmodconfig
+sh                          kfr2r09_defconfig
+sh                          r7780mp_defconfig
+arm                           sama5_defconfig
+arm                         lubbock_defconfig
+sparc                       sparc64_defconfig
+riscv             nommu_k210_sdcard_defconfig
+sh                          urquell_defconfig
+powerpc                     ep8248e_defconfig
+arm                         vf610m4_defconfig
+m68k                          multi_defconfig
+sh                ecovec24-romimage_defconfig
+sh                   secureedge5410_defconfig
+arm                           u8500_defconfig
+m68k                          sun3x_defconfig
+powerpc                        cell_defconfig
+arm                       omap2plus_defconfig
+s390                          debug_defconfig
+arm                           h5000_defconfig
+arm                            mps2_defconfig
+arm                        clps711x_defconfig
+m68k                        m5407c3_defconfig
+sh                           se7712_defconfig
+arm                  randconfig-c002-20220302
+arm                  randconfig-c002-20220304
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                                  kexec
+
+clang tested configs:
+arm                  colibri_pxa270_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220304
+hexagon              randconfig-r041-20220304
+hexagon              randconfig-r045-20220302
+hexagon              randconfig-r041-20220302
+hexagon              randconfig-r045-20220303
+riscv                randconfig-r042-20220303
+hexagon              randconfig-r041-20220303
+
 ---
- drivers/hwmon/vexpress-hwmon.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/vexpress-hwmon.c b/drivers/hwmon/vexpress-hwmon.c
-index 44d798be3d59..2ac5fb96bba4 100644
---- a/drivers/hwmon/vexpress-hwmon.c
-+++ b/drivers/hwmon/vexpress-hwmon.c
-@@ -207,7 +207,6 @@ MODULE_DEVICE_TABLE(of, vexpress_hwmon_of_match);
- 
- static int vexpress_hwmon_probe(struct platform_device *pdev)
- {
--	const struct of_device_id *match;
- 	struct vexpress_hwmon_data *data;
- 	const struct vexpress_hwmon_type *type;
- 
-@@ -216,10 +215,9 @@ static int vexpress_hwmon_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	platform_set_drvdata(pdev, data);
- 
--	match = of_match_device(vexpress_hwmon_of_match, &pdev->dev);
--	if (!match)
-+	type = of_device_get_match_data(&pdev->dev);
-+	if (!type)
- 		return -ENODEV;
--	type = match->data;
- 
- 	data->reg = devm_regmap_init_vexpress_config(&pdev->dev);
- 	if (IS_ERR(data->reg))
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
