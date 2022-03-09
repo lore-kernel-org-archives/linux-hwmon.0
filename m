@@ -2,139 +2,154 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11025C43217
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Mar 2022 01:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44166C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Mar 2022 01:09:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiCIBJz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Mar 2022 20:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S229923AbiCIBJ4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Mar 2022 20:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiCIBJP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Mar 2022 20:09:15 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E28710BBE0;
-        Tue,  8 Mar 2022 16:51:00 -0800 (PST)
+        with ESMTP id S230153AbiCIBJO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Mar 2022 20:09:14 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9F5148666;
+        Tue,  8 Mar 2022 16:50:59 -0800 (PST)
 Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 0A43EB23;
-        Tue,  8 Mar 2022 16:51:00 -0800 (PST)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id A4D0AD7;
+        Tue,  8 Mar 2022 16:50:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1646787060;
-        bh=YIZv9+SIesyx8doHGzmEElUtCe6o5nXvWYN+qH+1//E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iwypJDTSxCkHuV1nER7CiajiD6Alq/GrJXuHyvXRcN+KMWkM3MruZFHFKkcKnqnHc
-         zU1+Vg1rQ18Wvw4NAAA4M1CZ9nhhcnji7Gmk8vQoD4XgH4ZSHNj6sx9LBh1kMCpj8f
-         Gzy5hJNSq/zhSsaX4wJU5zEdz+DuAW62hw5T19Bk=
+        s=thorn; t=1646787058;
+        bh=88A/q9YoQ5WMTxMFERK2y7lEn0PdOr7oN0oRctbP9po=;
+        h=From:To:Cc:Subject:Date:From;
+        b=m5U+UlFPrDcM7YDWRANnkU94pp3HPe4AX4k3fn925CdUVwXX/nXP6A8aK/dByWFfW
+         EWmGNeqmlF0gmyxWZxpS6HmDcXSUqns9QDxG1BTkFZ+GtdEOjgEY0tPdRdDfa6vfFo
+         l6+UTp+Im9PiXbUxzO20gO1M7za8+oJoAPvYbVn4=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
 Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] hwmon: (nct6775) Add read-only mode
-Date:   Tue,  8 Mar 2022 16:50:45 -0800
-Message-Id: <20220309005047.5107-5-zev@bewilderbeest.net>
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/6] hwmon: (nct6775) Convert to regmap, add i2c support
+Date:   Tue,  8 Mar 2022 16:50:41 -0800
+Message-Id: <20220309005047.5107-1-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309005047.5107-1-zev@bewilderbeest.net>
-References: <20220309005047.5107-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-When enabled, all write bits are removed from the modes of all sysfs
-attribute files.  This provides a bit of infrastructure for the
-upcoming i2c version of this driver, which should generally avoid
-writes to device registers so as not to interfere with simultaneous
-use of the device via the LPC interface.
+Hello,
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
----
- drivers/hwmon/nct6775.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+This is v2 of my patches to add i2c support to the nct6775 driver.
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 36bdbb176601..99b4e308a053 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -1348,6 +1348,7 @@ struct nct6775_data {
- 	u8 sio_reg_enable;
- 
- 	struct regmap *regmap;
-+	bool read_only;
- };
- 
- struct sensor_device_template {
-@@ -1405,6 +1406,11 @@ struct sensor_template_group {
- 	int base;
- };
- 
-+static inline umode_t nct6775_attr_mode(struct nct6775_data *data, struct attribute *attr)
-+{
-+	return data->read_only ? (attr->mode & ~0222) : attr->mode;
-+}
-+
- static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
- {
- 	/* Need to leave a NULL terminator at the end of data->groups */
-@@ -2371,7 +2377,7 @@ static umode_t nct6775_in_is_visible(struct kobject *kobj,
- 	if (!(data->have_in & BIT(in)))
- 		return 0;
- 
--	return attr->mode;
-+	return nct6775_attr_mode(data, attr);
- }
- 
- SENSOR_TEMPLATE_2(in_input, "in%d_input", S_IRUGO, show_in_reg, NULL, 0, 0);
-@@ -2607,7 +2613,7 @@ static umode_t nct6775_fan_is_visible(struct kobject *kobj,
- 	if (nr == 5 && data->kind != nct6775)
- 		return 0;
- 
--	return attr->mode;
-+	return nct6775_attr_mode(data, attr);
- }
- 
- SENSOR_TEMPLATE(fan_input, "fan%d_input", S_IRUGO, show_fan, NULL, 0);
-@@ -2834,7 +2840,7 @@ static umode_t nct6775_temp_is_visible(struct kobject *kobj,
- 	if (nr > 7 && !(data->have_temp_fixed & BIT(temp)))
- 		return 0;
- 
--	return attr->mode;
-+	return nct6775_attr_mode(data, attr);
- }
- 
- SENSOR_TEMPLATE_2(temp_input, "temp%d_input", S_IRUGO, show_temp, NULL, 0, 0);
-@@ -2908,7 +2914,7 @@ static umode_t nct6775_tsi_temp_is_visible(struct kobject *kobj, struct attribut
- 	struct nct6775_data *data = dev_get_drvdata(dev);
- 	int temp = index / 2;
- 
--	return (data->have_tsi_temp & BIT(temp)) ? attr->mode : 0;
-+	return (data->have_tsi_temp & BIT(temp)) ? nct6775_attr_mode(data, attr) : 0;
- }
- 
- /*
-@@ -3766,7 +3772,7 @@ static umode_t nct6775_pwm_is_visible(struct kobject *kobj,
- 		if (api > data->auto_pwm_num)
- 			return 0;
- 	}
--	return attr->mode;
-+	return nct6775_attr_mode(data, attr);
- }
- 
- SENSOR_TEMPLATE_2(pwm_stop_time, "pwm%d_stop_time", S_IWUSR | S_IRUGO,
-@@ -3961,7 +3967,7 @@ static umode_t nct6775_other_is_visible(struct kobject *kobj,
- 			return 0;
- 	}
- 
--	return attr->mode;
-+	return nct6775_attr_mode(data, attr);
- }
- 
- /*
+Changes since v1 [0]:
+ - Added preparatory patch converting driver to regmap API [Guenter]
+ - Replaced ENOSPC with ENOBUFS and removed WARN_ON() in
+   nct6775_add_attr_group() [Guenter]
+ - Added dedicated symbol namespace [Guenter]
+ - Removed nct6775_write_temp() and nct6775_update_device() symbol
+   exports [Guenter]
+ - Reordered patches to put dt-bindings patch first [Krzysztof]
+
+The nct6775-platform and nct6775-i2c drivers have both been tested on
+the NCT6779D in an ASRock ROMED8HM3 system and the NCT6798 [1] in an
+ASRock X570-D4U (the latter thanks to Renze, CCed); both seem to work
+as expected on both systems.  I don't have access to any asuswmi
+hardware, so testing of the nct6775-platform driver on that to ensure
+it doesn't break there would be appreciated (Oleksandr, perhaps?).
+
+[0] https://lore.kernel.org/linux-hwmon/20220226133047.6226-1-zev@bewilderbeest.net/
+[1] Though it's physically labeled (mislabeled?) as an NCT6796, for
+    what that's worth.
+
+A slightly edited version of the previous cover letter follows:
+
+
+This patch series augments the existing nct6775 driver with support
+for the hardware's i2c interface; along the way it converts the driver
+to use the regmap API, and splits the LPC-specific platform driver
+into a separate module from the interface-independent core.
+
+Thus far the nct6775 driver has only supported the LPC interface,
+which is the main interface by which the Super-I/O chip is typically
+connected to the host (x86) processor.
+
+However, these chips also provide an i2c interface, which can provide
+a way for a BMC to also monitor sensor readings from them.  On some
+systems (such as the ASRock Rack ROMED8HM3 and X570-D4U) this may be
+the only way for the BMC to monitor host CPU temperatures (e.g. to
+indirectly access a TSI interface); this functionality is thus an
+important component of enabling OpenBMC to support such systems.
+
+In such an arrangement the Super-I/O chip is simultaneously controlled
+by two independent processors (the host and the BMC) which typically
+do not coordinate their accesses with each other.  In order to avoid
+conflicts between the two, the i2c driver avoids all writes to the
+device, since the BMC's needs with the hardware are merely that it be
+able to retrieve sensor readings.  This allows the host processor to
+remain ultimately in control of the chip and unaware of the BMC's use
+of it at all.
+
+The sole exception to the "no writes" rule for the i2c driver is for
+the bank-select register -- while I haven't been able to find any
+explicit statement in the Nuvoton datasheets guaranteeing this,
+testing via manual register accesses (as detailed in [2]) has
+indicated that, as one might hope, the i2c interface has its own
+bank-select register independent of the one used by the LPC interface.
+
+In terms of code structure, the approach taken in this series is to
+first convert the driver's register accesses to the regmap API, and
+then split the LPC-specific parts of it out into a separate module
+(called nct6775-platform), leaving the interface-independent parts in
+a generic driver (called nct6775-core).  The nct6775-i2c driver is
+then added as an additional consumer of the nct6775-core module's
+functionality (essentially just providing its own set of regmap
+read/write callback functions).
+
+The first patch provides DT bindings for the nct6775, the second
+contains the change to convert all register accesses to use a regmap.
+The third and fourth patches make some relatively small
+infrastructural changes to the driver.  The core/platform driver split
+is in the fifth patch, and the final patch adds the i2c driver itself.
+
+
+Thanks,
+Zev
+
+[2] https://lore.kernel.org/linux-hwmon/YhttzgDtGpcTniyw@hatter.bewilderbeest.net/
+
+Zev Weiss (6):
+  dt-bindings: hwmon: Add nuvoton,nct6775
+  hwmon: (nct6775) Convert register access to regmap API
+  hwmon: (nct6775) Rearrange attr-group initialization
+  hwmon: (nct6775) Add read-only mode
+  hwmon: (nct6775) Split core and platform driver
+  hwmon: (nct6775) Add i2c driver
+
+ .../bindings/hwmon/nuvoton,nct6775.yaml       |   48 +
+ MAINTAINERS                                   |   12 +-
+ drivers/hwmon/Kconfig                         |   32 +-
+ drivers/hwmon/Makefile                        |    4 +-
+ drivers/hwmon/{nct6775.c => nct6775-core.c}   | 2310 +++++------------
+ drivers/hwmon/nct6775-i2c.c                   |  179 ++
+ drivers/hwmon/nct6775-platform.c              | 1232 +++++++++
+ drivers/hwmon/nct6775.h                       |  252 ++
+ 8 files changed, 2382 insertions(+), 1687 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+ rename drivers/hwmon/{nct6775.c => nct6775-core.c} (69%)
+ create mode 100644 drivers/hwmon/nct6775-i2c.c
+ create mode 100644 drivers/hwmon/nct6775-platform.c
+ create mode 100644 drivers/hwmon/nct6775.h
+
 -- 
 2.35.1
 
