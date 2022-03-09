@@ -2,88 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F54C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Mar 2022 08:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD8EBC433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Mar 2022 08:55:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiCIINh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Mar 2022 03:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S229848AbiCII4j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Mar 2022 03:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiCIINg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Mar 2022 03:13:36 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EAD457AC;
-        Wed,  9 Mar 2022 00:12:35 -0800 (PST)
-Received: from [192.168.0.3] (ip5f5aef7a.dynamic.kabel-deutschland.de [95.90.239.122])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4B77E61E64846;
-        Wed,  9 Mar 2022 09:12:33 +0100 (CET)
-Message-ID: <05667284-42f7-0df2-8fa0-463ad6ad9601@molgen.mpg.de>
-Date:   Wed, 9 Mar 2022 09:12:32 +0100
+        with ESMTP id S231136AbiCII4i (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Mar 2022 03:56:38 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D988B13D933;
+        Wed,  9 Mar 2022 00:55:39 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id m42-20020a05600c3b2a00b00382ab337e14so2890493wms.3;
+        Wed, 09 Mar 2022 00:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VH9AbBrPXRG109H3QebLiQf4Jg9EHI5Sz6/Yo6+8NsA=;
+        b=VPMBOQlnUt1n7P8I/nP8Gdn21loCOt0IttXY9rYtqPBUop6slFNYZFf1ftNacgwfkP
+         DX1xPpygGOmn6kD0m6LG2ZIh1MnPrdhvFasl6D/EcZi4rO+XiH1Lsui+G9kDEKXe9/5d
+         1hWUYPj8M/bZW6iNlAnBmwW03M6MVAgTLVcI9nEPreTXq5SeKJJmFToK3xaP92d+bACh
+         jxMvjBTGptaQBHFPg7tKXxBhBlujBQYLFTHok5KZShnrh+LPsdHX+0giCfqdX4oDxkyf
+         gEEBWM0LXbGDU2nsbRWJEvmwsDlZHM4O8TMRQ/13nQkscaqeLyJGjqM/B/n9+QbwXIfU
+         1C5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VH9AbBrPXRG109H3QebLiQf4Jg9EHI5Sz6/Yo6+8NsA=;
+        b=mq/8cinWhGjH4zDPYr/lyg5GrqMl20m6KZVkFE/+Zo+0p9aSZHFIUhHInNpzCpx2cE
+         PBbm16vGt2epfL0H850x77fZME+ahDoR2pceSmbhABcDUZcpTtC56tstMju79++QJoku
+         mTpJvz5/usvoHsnn5+VGExB+rJGh6G6vzUsEYatdF772fdWsmRCyUKi+3gr09x4lGwB+
+         c+mg6dLvhs34pXnCjIhrmJaEXWrQfLNCHJoMfoX24Shzm3y5wsnqc/jN9O7T7tq+SEm/
+         IrAkzmg0Ob5uLOSb9K8b6A7RCO+urHOHIaqRAU8waQ0u2r8vzi2skR6xGLC2SnbIq6Tj
+         dY3Q==
+X-Gm-Message-State: AOAM53191aczBUy0kFmrFiGx6MG+hwWa62lypnuopQ+L97st5DXl9Ko4
+        5XFu20U2iRNqnLVkNkgeJr4=
+X-Google-Smtp-Source: ABdhPJxny+69U+uASjszCj8L/yA9TbdRFQxtV0w/a/mmkaS77KwOUP35uyP17mMJWChGufGKW2illA==
+X-Received: by 2002:a05:600c:22c9:b0:381:3b27:89be with SMTP id 9-20020a05600c22c900b003813b2789bemr2510045wmg.83.1646816138352;
+        Wed, 09 Mar 2022 00:55:38 -0800 (PST)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm1129989wre.22.2022.03.09.00.55.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 00:55:37 -0800 (PST)
+Date:   Wed, 9 Mar 2022 09:55:35 +0100
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Octo
+Message-ID: <YihrhwBeS5i8ehGV@fedora>
+References: <20220308105225.24178-1-savicaleksa83@gmail.com>
+ <f13f68eb-d208-9df2-80ea-6aedd686cbc1@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 0/6] hwmon: (nct6775) Convert to regmap, add i2c
- support
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Rob Herring <robh+dt@kernel.org>,
-        Renze Nicolai <renze@rnplus.nl>
-References: <20220309005047.5107-1-zev@bewilderbeest.net>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220309005047.5107-1-zev@bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f13f68eb-d208-9df2-80ea-6aedd686cbc1@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dear Zev,
+Hi,
 
+Thanks. I'll fix and resubmit.
 
-Am 09.03.22 um 01:50 schrieb Zev Weiss:
-
-> This is v2 of my patches to add i2c support to the nct6775 driver.
-> 
-> Changes since v1 [0]:
->   - Added preparatory patch converting driver to regmap API [Guenter]
->   - Replaced ENOSPC with ENOBUFS and removed WARN_ON() in
->     nct6775_add_attr_group() [Guenter]
->   - Added dedicated symbol namespace [Guenter]
->   - Removed nct6775_write_temp() and nct6775_update_device() symbol
->     exports [Guenter]
->   - Reordered patches to put dt-bindings patch first [Krzysztof]
-> 
-> The nct6775-platform and nct6775-i2c drivers have both been tested on
-> the NCT6779D in an ASRock ROMED8HM3 system and the NCT6798 [1] in an
-> ASRock X570-D4U (the latter thanks to Renze, CCed); both seem to work
-> as expected on both systems.  I don't have access to any asuswmi
-> hardware, so testing of the nct6775-platform driver on that to ensure
-> it doesn't break there would be appreciated (Oleksandr, perhaps?).
-
-I have an ASUS F2A85-M PRO with that Super I/O. (It’s running coreboot 
-right now, but I can test with the proprietary vendor firmware, if you 
-tell me what and how I can test this.
-
-
-Kind regards,
-
-Paul
-
-
-> [0] https://lore.kernel.org/linux-hwmon/20220226133047.6226-1-zev@bewilderbeest.net/
-> [1] Though it's physically labeled (mislabeled?) as an NCT6796, for
->      what that's worth.
-> 
-> A slightly edited version of the previous cover letter follows:
-
-[…]
+Aleksa
