@@ -2,114 +2,211 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DA8BC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Mar 2022 07:23:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6432C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Mar 2022 15:36:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238725AbiCJHYk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Mar 2022 02:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        id S233084AbiCJPha (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Mar 2022 10:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238574AbiCJHYj (ORCPT
+        with ESMTP id S232453AbiCJPh3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Mar 2022 02:24:39 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04DF5AEFA
-        for <linux-hwmon@vger.kernel.org>; Wed,  9 Mar 2022 23:23:38 -0800 (PST)
+        Thu, 10 Mar 2022 10:37:29 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D85D16AA60
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 07:36:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646897018; x=1678433018;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8DW4ZkjykbyMj9hKtNQeQHVqLXxJ1uy9HK9dUIuuugg=;
-  b=SMeUNKVXC2LZsP21EFm6kvMRwGuGizOB7qETTOq7vBkVWek3A7N+5gVT
-   s2mVvAORL4PZCfSuN8Iq4Ke2Nrfl/PUBA7S87lfsfqzbyW0uGwULDxygW
-   7LEv9nBqi/FmNZX4nH/5pez+vKwOasZQrKmNx+S1lYz/3iXbHebHzhyd4
-   Dl1SmMHCHJRRv4xoQb+mhaThFFFR5IknZEcBrXxN27Bcd2BjooCk8b40m
-   tvZytwvevEgRG4i60uDbWZ7zlAnFOVhyr9LfT92XK0lttCI1ym/Ukd68F
-   te9fvTlBrsEw4XlVRxOjHwYyDySBAzORHuG/U2/xmawAd6K+Nzs2zGUXa
+  t=1646926588; x=1678462588;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u0lKqP9JXiz4WJBFFP1fX3YlwgsutnpMyFZM9ak5aQs=;
+  b=BIIAWpEHYSSKF+DxZuEy8vO2wTFBxilCqUd2Xt9/KG75BGFPAOlk9+Nn
+   WCo3xdh+AwE7HwTjV63pBjaZiB3V+wmWfT4bqdlOm7WSAuspHVxbILg05
+   trCK+0v7ZMC+971HRMRaq/naxe8NbqQNJK49+3xAZvKohjKcZPdoV0Qku
+   JFMYmW/2vO4sjTmWbcxVkJ0Rttpp5kytjvYasBmLUaV983oVt8EkE09IX
+   mGr0jvYvsI+UHyPFcG/Mfa02H7YH6YxTNCV0fC012nOkMLYaR+57IZ6YN
+   rGRg8c4nj9q9/w/GNZCt2r0w7ArjKnymt4yJUYxkIdx9AT4PpFtvwraEs
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="252749207"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="252749207"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 23:23:38 -0800
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255226076"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="255226076"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 07:36:27 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="554517163"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="642597446"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2022 23:23:36 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 10 Mar 2022 07:36:26 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nSD96-0004XS-4D; Thu, 10 Mar 2022 07:23:36 +0000
-Date:   Thu, 10 Mar 2022 15:23:06 +0800
+        id 1nSKq1-000542-OX; Thu, 10 Mar 2022 15:36:25 +0000
+Date:   Thu, 10 Mar 2022 23:35:51 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Sam Shih <sam.shih@mediatek.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [groeck-staging:watchdog-next 22/33]
- drivers/watchdog/mtk_wdt.c:13:10: fatal error:
- 'dt-bindings/reset/mt7986-resets.h' file not found
-Message-ID: <202203101530.3l4W0JyC-lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD REGRESSION
+ b6447e51682d2d364b82ba35606888e39251dfcf
+Message-ID: <622a1ad7.Q+sQJmkJGkEnRQOe%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-head:   b6447e51682d2d364b82ba35606888e39251dfcf
-commit: 6c2b372365e1e64170e209a1e903c5cb64bebc63 [22/33] watchdog: mtk_wdt: mt7986: Add toprgu reset controller support
-config: arm-randconfig-r001-20220310 (https://download.01.org/0day-ci/archive/20220310/202203101530.3l4W0JyC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=6c2b372365e1e64170e209a1e903c5cb64bebc63
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging watchdog-next
-        git checkout 6c2b372365e1e64170e209a1e903c5cb64bebc63
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/watchdog/
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: b6447e51682d2d364b82ba35606888e39251dfcf  dt-bindings: watchdog: renesas,wdt: Document RZ/V2L SoC
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Error/Warning reports:
 
-All errors (new ones prefixed by >>):
+https://lore.kernel.org/llvm/202203101530.3l4W0JyC-lkp@intel.com
 
->> drivers/watchdog/mtk_wdt.c:13:10: fatal error: 'dt-bindings/reset/mt7986-resets.h' file not found
-   #include <dt-bindings/reset/mt7986-resets.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+Error/Warning:
 
+drivers/watchdog/mtk_wdt.c:13:10: fatal error: 'dt-bindings/reset/mt7986-resets.h' file not found
 
-vim +13 drivers/watchdog/mtk_wdt.c
+Error/Warning ids grouped by kconfigs:
 
-  > 13	#include <dt-bindings/reset/mt7986-resets.h>
-    14	#include <dt-bindings/reset/mt8183-resets.h>
-    15	#include <dt-bindings/reset/mt8186-resets.h>
-    16	#include <dt-bindings/reset/mt8192-resets.h>
-    17	#include <dt-bindings/reset/mt8195-resets.h>
-    18	#include <linux/delay.h>
-    19	#include <linux/err.h>
-    20	#include <linux/init.h>
-    21	#include <linux/io.h>
-    22	#include <linux/kernel.h>
-    23	#include <linux/module.h>
-    24	#include <linux/moduleparam.h>
-    25	#include <linux/of.h>
-    26	#include <linux/of_device.h>
-    27	#include <linux/platform_device.h>
-    28	#include <linux/reset-controller.h>
-    29	#include <linux/types.h>
-    30	#include <linux/watchdog.h>
-    31	#include <linux/interrupt.h>
-    32	
+clang_recent_errors
+|-- arm-randconfig-r001-20220310
+|   `-- drivers-watchdog-mtk_wdt.c:fatal-error:dt-bindings-reset-mt7986-resets.h-file-not-found
+`-- arm64-randconfig-r024-20220310
+    `-- drivers-watchdog-mtk_wdt.c:fatal-error:dt-bindings-reset-mt7986-resets.h-file-not-found
+
+elapsed time: 731m
+
+configs tested: 123
+configs skipped: 3
+
+gcc tested configs:
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+m68k                          atari_defconfig
+alpha                            alldefconfig
+sh                 kfr2r09-romimage_defconfig
+ia64                      gensparse_defconfig
+powerpc                    sam440ep_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                      makalu_defconfig
+powerpc64                           defconfig
+sparc64                          alldefconfig
+m68k                        stmark2_defconfig
+h8300                       h8s-sim_defconfig
+mips                            gpr_defconfig
+mips                 decstation_r4k_defconfig
+h8300                    h8300h-sim_defconfig
+powerpc                  storcenter_defconfig
+sh                           se7722_defconfig
+m68k                        mvme16x_defconfig
+arm                           h5000_defconfig
+mips                     loongson1b_defconfig
+um                               alldefconfig
+xtensa                    xip_kc705_defconfig
+m68k                                defconfig
+sh                     magicpanelr2_defconfig
+csky                                defconfig
+powerpc                        warp_defconfig
+ia64                         bigsur_defconfig
+arm                        oxnas_v6_defconfig
+arm                  randconfig-c002-20220310
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+alpha                               defconfig
+nds32                               defconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+parisc                              defconfig
+s390                                defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                   debian-10.3-kselftests
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220310
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+arm                          ixp4xx_defconfig
+arm                        vexpress_defconfig
+arm                          collie_defconfig
+arm                            mmp2_defconfig
+mips                        bcm63xx_defconfig
+arm                    vt8500_v6_v7_defconfig
+powerpc                     ppa8548_defconfig
+powerpc                      ppc44x_defconfig
+arm                         shannon_defconfig
+mips                        maltaup_defconfig
+powerpc                     kmeter1_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220310
+hexagon              randconfig-r041-20220310
+s390                 randconfig-r044-20220310
+riscv                randconfig-r042-20220310
 
 ---
-0-DAY CI Kernel Test Service
+0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
