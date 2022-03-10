@@ -2,197 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 150D1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Mar 2022 20:01:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74099C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Mar 2022 21:31:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243296AbiCJUCh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Mar 2022 15:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S240780AbiCJVcI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Mar 2022 16:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343815AbiCJUCg (ORCPT
+        with ESMTP id S1343964AbiCJVcH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:02:36 -0500
-X-Greylist: delayed 1497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 12:01:33 PST
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C412197B55
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 12:01:32 -0800 (PST)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id 0377E24547
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 13:15:45 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id SOEKnrvj822u3SOEKnaFu7; Thu, 10 Mar 2022 13:13:44 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mb2llu6cUqKPxTlbEIr1Yx2wzBP2FczZ/P1WdCDimwo=; b=icOiBMOVuWpAcU57dA4s8wdshx
-        IA9xojyJTcwSPcVILmNhsMjlBz30tPcOCQBz9XVzj61RMgs+SOIhAwC64md/R/MlRqG34uvgh+rEu
-        sJHIeyDQeUcCozNULY/wqGo1azEog6vdBGH7U7KZfI3fH5Dbat0Fo0/Ta5vglwEgf/uhEidQR0k5p
-        DaqAiM+pmMmFqMY86j44may4ioxUCayWX2NxNh318QRFbtkC5W+JblazESYXiTqRU+O1cCYZARF5Q
-        Ey9c+7Jxmd4cJfkBsQF1IC7tGEKCXujsiCvyfTB89CXXLoiNexwlE73avvDMtC5PT3WEIJWD8LTOJ
-        PRUwN7dA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57420 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nSOEJ-001yY6-NT; Thu, 10 Mar 2022 19:13:43 +0000
-Date:   Thu, 10 Mar 2022 11:13:42 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] hwmon: (nct6775) Convert to regmap, add i2c
- support
-Message-ID: <20220310191342.GB803893@roeck-us.net>
-References: <20220309005047.5107-1-zev@bewilderbeest.net>
+        Thu, 10 Mar 2022 16:32:07 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB462192CB4
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 13:31:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646947865; x=1678483865;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EB8dIZFppbK+DL9XwZFi9S3vQv90aDPZqke7LiwZqJM=;
+  b=YFum5RBXJGdL9vhZu6hDY2xG3Z5CGNJwA25YVXlDq+jrYwAF8UC2aItC
+   paeiZMHmuAaArJHXSQ5SdneSBVkLXnE4wQBPJjyL8pi2y6qAvqRVz97tj
+   THIyOeldi8zwdcJW+fSywSdP2y9HdpMM9Y48Qy73kJ5gY2CEQqDfRT6cX
+   HbLe8SqscP7GCQBhMB//z560EHGOrtmlegP7zOX2uqRqc6B+8DENIPUqZ
+   iN0e7NTIoMv2xrvWrSt1vTY7k5TRyKUkYKKv8/4kXw62elp1q113tJBdH
+   XG9AR6K9WWpbps5Cl6wRBq2Tzdc3VwSEKW0+vfnsOLdYjCG8fjII6BM14
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="280124218"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="280124218"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 13:31:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="514165793"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2022 13:31:03 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSQNC-0005Py-OG; Thu, 10 Mar 2022 21:31:02 +0000
+Date:   Fri, 11 Mar 2022 05:30:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [groeck-staging:watchdog-next 22/34]
+ drivers/watchdog/mtk_wdt.c:13:10: fatal error:
+ dt-bindings/reset/mt7986-resets.h: No such file or directory
+Message-ID: <202203110514.1vOt36pD-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220309005047.5107-1-zev@bewilderbeest.net>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nSOEJ-001yY6-NT
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57420
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 13
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+head:   d7e5876bf57044f8be42e2eecae47ea1d3e46f8d
+commit: 6c2b372365e1e64170e209a1e903c5cb64bebc63 [22/34] watchdog: mtk_wdt: mt7986: Add toprgu reset controller support
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220311/202203110514.1vOt36pD-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=6c2b372365e1e64170e209a1e903c5cb64bebc63
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging watchdog-next
+        git checkout 6c2b372365e1e64170e209a1e903c5cb64bebc63
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/
 
-On Tue, Mar 08, 2022 at 04:50:41PM -0800, Zev Weiss wrote:
-> Hello,
-> 
-> This is v2 of my patches to add i2c support to the nct6775 driver.
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Just to let you know, I won't have time to review - much less test - the series 
-before the commit window opens. Also, it is way too late for the upcoming release;
-the changes are substantial enough to warrant a large soak time in linux-next.
-The series will have to wait for v5.19.
+Note: the groeck-staging/watchdog-next HEAD d7e5876bf57044f8be42e2eecae47ea1d3e46f8d builds fine.
+      It only hurts bisectability.
 
-Guenter
+All errors (new ones prefixed by >>):
 
-> Changes since v1 [0]:
->  - Added preparatory patch converting driver to regmap API [Guenter]
->  - Replaced ENOSPC with ENOBUFS and removed WARN_ON() in
->    nct6775_add_attr_group() [Guenter]
->  - Added dedicated symbol namespace [Guenter]
->  - Removed nct6775_write_temp() and nct6775_update_device() symbol
->    exports [Guenter]
->  - Reordered patches to put dt-bindings patch first [Krzysztof]
-> 
-> The nct6775-platform and nct6775-i2c drivers have both been tested on
-> the NCT6779D in an ASRock ROMED8HM3 system and the NCT6798 [1] in an
-> ASRock X570-D4U (the latter thanks to Renze, CCed); both seem to work
-> as expected on both systems.  I don't have access to any asuswmi
-> hardware, so testing of the nct6775-platform driver on that to ensure
-> it doesn't break there would be appreciated (Oleksandr, perhaps?).
-> 
-> [0] https://lore.kernel.org/linux-hwmon/20220226133047.6226-1-zev@bewilderbeest.net/
-> [1] Though it's physically labeled (mislabeled?) as an NCT6796, for
->     what that's worth.
-> 
-> A slightly edited version of the previous cover letter follows:
-> 
-> 
-> This patch series augments the existing nct6775 driver with support
-> for the hardware's i2c interface; along the way it converts the driver
-> to use the regmap API, and splits the LPC-specific platform driver
-> into a separate module from the interface-independent core.
-> 
-> Thus far the nct6775 driver has only supported the LPC interface,
-> which is the main interface by which the Super-I/O chip is typically
-> connected to the host (x86) processor.
-> 
-> However, these chips also provide an i2c interface, which can provide
-> a way for a BMC to also monitor sensor readings from them.  On some
-> systems (such as the ASRock Rack ROMED8HM3 and X570-D4U) this may be
-> the only way for the BMC to monitor host CPU temperatures (e.g. to
-> indirectly access a TSI interface); this functionality is thus an
-> important component of enabling OpenBMC to support such systems.
-> 
-> In such an arrangement the Super-I/O chip is simultaneously controlled
-> by two independent processors (the host and the BMC) which typically
-> do not coordinate their accesses with each other.  In order to avoid
-> conflicts between the two, the i2c driver avoids all writes to the
-> device, since the BMC's needs with the hardware are merely that it be
-> able to retrieve sensor readings.  This allows the host processor to
-> remain ultimately in control of the chip and unaware of the BMC's use
-> of it at all.
-> 
-> The sole exception to the "no writes" rule for the i2c driver is for
-> the bank-select register -- while I haven't been able to find any
-> explicit statement in the Nuvoton datasheets guaranteeing this,
-> testing via manual register accesses (as detailed in [2]) has
-> indicated that, as one might hope, the i2c interface has its own
-> bank-select register independent of the one used by the LPC interface.
-> 
-> In terms of code structure, the approach taken in this series is to
-> first convert the driver's register accesses to the regmap API, and
-> then split the LPC-specific parts of it out into a separate module
-> (called nct6775-platform), leaving the interface-independent parts in
-> a generic driver (called nct6775-core).  The nct6775-i2c driver is
-> then added as an additional consumer of the nct6775-core module's
-> functionality (essentially just providing its own set of regmap
-> read/write callback functions).
-> 
-> The first patch provides DT bindings for the nct6775, the second
-> contains the change to convert all register accesses to use a regmap.
-> The third and fourth patches make some relatively small
-> infrastructural changes to the driver.  The core/platform driver split
-> is in the fifth patch, and the final patch adds the i2c driver itself.
-> 
-> 
-> Thanks,
-> Zev
-> 
-> [2] https://lore.kernel.org/linux-hwmon/YhttzgDtGpcTniyw@hatter.bewilderbeest.net/
-> 
-> Zev Weiss (6):
->   dt-bindings: hwmon: Add nuvoton,nct6775
->   hwmon: (nct6775) Convert register access to regmap API
->   hwmon: (nct6775) Rearrange attr-group initialization
->   hwmon: (nct6775) Add read-only mode
->   hwmon: (nct6775) Split core and platform driver
->   hwmon: (nct6775) Add i2c driver
-> 
->  .../bindings/hwmon/nuvoton,nct6775.yaml       |   48 +
->  MAINTAINERS                                   |   12 +-
->  drivers/hwmon/Kconfig                         |   32 +-
->  drivers/hwmon/Makefile                        |    4 +-
->  drivers/hwmon/{nct6775.c => nct6775-core.c}   | 2310 +++++------------
->  drivers/hwmon/nct6775-i2c.c                   |  179 ++
->  drivers/hwmon/nct6775-platform.c              | 1232 +++++++++
->  drivers/hwmon/nct6775.h                       |  252 ++
->  8 files changed, 2382 insertions(+), 1687 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
->  rename drivers/hwmon/{nct6775.c => nct6775-core.c} (69%)
->  create mode 100644 drivers/hwmon/nct6775-i2c.c
->  create mode 100644 drivers/hwmon/nct6775-platform.c
->  create mode 100644 drivers/hwmon/nct6775.h
-> 
-> -- 
-> 2.35.1
-> 
+>> drivers/watchdog/mtk_wdt.c:13:10: fatal error: dt-bindings/reset/mt7986-resets.h: No such file or directory
+      13 | #include <dt-bindings/reset/mt7986-resets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +13 drivers/watchdog/mtk_wdt.c
+
+  > 13	#include <dt-bindings/reset/mt7986-resets.h>
+    14	#include <dt-bindings/reset/mt8183-resets.h>
+    15	#include <dt-bindings/reset/mt8186-resets.h>
+    16	#include <dt-bindings/reset/mt8192-resets.h>
+    17	#include <dt-bindings/reset/mt8195-resets.h>
+    18	#include <linux/delay.h>
+    19	#include <linux/err.h>
+    20	#include <linux/init.h>
+    21	#include <linux/io.h>
+    22	#include <linux/kernel.h>
+    23	#include <linux/module.h>
+    24	#include <linux/moduleparam.h>
+    25	#include <linux/of.h>
+    26	#include <linux/of_device.h>
+    27	#include <linux/platform_device.h>
+    28	#include <linux/reset-controller.h>
+    29	#include <linux/types.h>
+    30	#include <linux/watchdog.h>
+    31	#include <linux/interrupt.h>
+    32	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
