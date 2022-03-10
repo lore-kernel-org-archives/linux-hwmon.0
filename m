@@ -2,25 +2,26 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D50BC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Mar 2022 19:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 150D1C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Mar 2022 20:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiCJTfd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Mar 2022 14:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
+        id S243296AbiCJUCh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Mar 2022 15:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241534AbiCJTfd (ORCPT
+        with ESMTP id S1343815AbiCJUCg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:35:33 -0500
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C235C153386
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 11:34:27 -0800 (PST)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id C0043307AD
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 13:11:04 -0600 (CST)
+        Thu, 10 Mar 2022 15:02:36 -0500
+X-Greylist: delayed 1497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 12:01:33 PST
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C412197B55
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 12:01:32 -0800 (PST)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 0377E24547
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 13:15:45 -0600 (CST)
 Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id SOBkndT9NRnrrSOBknHu7w; Thu, 10 Mar 2022 13:11:04 -0600
+        id SOEKnrvj822u3SOEKnaFu7; Thu, 10 Mar 2022 13:13:44 -0600
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
@@ -28,29 +29,35 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bq7BG72EDQNmyfq6ywxcPBztyaxXwjmdEEu2oOwaaG8=; b=SJXJ/gBK32nhu8sm7tRRsEy+Ba
-        DgjpwRFXuwg8iS7XdUP0wa1EYhSlOS10HHKJ6D4rOJwtLDT6jYd5hsgvqwGC6UkYOpHuK155RTyTs
-        006Vae5nz15+tznPpTDt+iByaiqIbifa3N7JW+uuUkonjC8Dk4kWwwLRNuyPgfpAQzn62kpO6aLD7
-        Qm/JB2COdB4x1+4eEfVd+lEA21cGd1d0nEjVQY50Vxitn0IFMt/u0FvnjfaWh+Z1mjWQZCKk2FW7s
-        K9FB9lam/M8fisTOFaOe6Zk7wcv54BKgX0qjykrZoVl+/y9WLFPhu7Nw9WiZVRX5fXLqOzcWocl21
-        dVZWGjOQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57418 helo=localhost)
+        bh=mb2llu6cUqKPxTlbEIr1Yx2wzBP2FczZ/P1WdCDimwo=; b=icOiBMOVuWpAcU57dA4s8wdshx
+        IA9xojyJTcwSPcVILmNhsMjlBz30tPcOCQBz9XVzj61RMgs+SOIhAwC64md/R/MlRqG34uvgh+rEu
+        sJHIeyDQeUcCozNULY/wqGo1azEog6vdBGH7U7KZfI3fH5Dbat0Fo0/Ta5vglwEgf/uhEidQR0k5p
+        DaqAiM+pmMmFqMY86j44may4ioxUCayWX2NxNh318QRFbtkC5W+JblazESYXiTqRU+O1cCYZARF5Q
+        Ey9c+7Jxmd4cJfkBsQF1IC7tGEKCXujsiCvyfTB89CXXLoiNexwlE73avvDMtC5PT3WEIJWD8LTOJ
+        PRUwN7dA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57420 helo=localhost)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@roeck-us.net>)
-        id 1nSOBj-001wUA-Vt; Thu, 10 Mar 2022 19:11:04 +0000
-Date:   Thu, 10 Mar 2022 11:11:02 -0800
+        id 1nSOEJ-001yY6-NT; Thu, 10 Mar 2022 19:13:43 +0000
+Date:   Thu, 10 Mar 2022 11:13:42 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "jiajia.feng" <jiajia.feng@deltaww.com>
-Cc:     xiao.mx.ma@deltaww.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] hwmon:Driver for Delta power supplies D380S840A
-Message-ID: <20220310191102.GA803893@roeck-us.net>
-References: <20220309062704.6056-1-jiajia.feng@deltaww.com>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] hwmon: (nct6775) Convert to regmap, add i2c
+ support
+Message-ID: <20220310191342.GB803893@roeck-us.net>
+References: <20220309005047.5107-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220309062704.6056-1-jiajia.feng@deltaww.com>
+In-Reply-To: <20220309005047.5107-1-zev@bewilderbeest.net>
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -59,780 +66,133 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1nSOBj-001wUA-Vt
+X-Exim-ID: 1nSOEJ-001yY6-NT
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57418
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57420
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 13
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 06:27:04AM +0000, jiajia.feng wrote:
-> The driver supports D380S840A series modules of Delta.
-> Standard attributes are in sysfs, and other attributes are in debugfs.
+Hi,
+
+On Tue, Mar 08, 2022 at 04:50:41PM -0800, Zev Weiss wrote:
+> Hello,
 > 
-> Signed-off-by: jiajia.feng <jiajia.feng@deltaww.com>
+> This is v2 of my patches to add i2c support to the nct6775 driver.
+> 
 
-I won't have time to review this patch before the commit window opens.
-
-Quick feedback, though: A number of the debugfs files are not acceptable.
-Specifically,
-- Energy should be reported as sysfs attribute. If that is wanted, it needs
-  to be added to the pmbus core.
-- Power control should be implemented through regulator support.
-- Several debugfs read and write commands are not acceptable.
-  This especially applies to the commands that go above the ones in the
-  q54sj108a2 (and I regret approving those; I should ahave realized that
-  it openend a flood door for abuse). In general, I won't approve anything
-  that reports standard PMBus parameters/values, and anything that risks
-  bricking the system. If you want to make a case for those, add to PMBus
-  core and add them to the standard debugfs attributes reported for all
-  PMBus devices. The same applies to reporting energy or max attributes,
-  which should be reported via standard sysfs attributes.
+Just to let you know, I won't have time to review - much less test - the series 
+before the commit window opens. Also, it is way too late for the upcoming release;
+the changes are substantial enough to warrant a large soak time in linux-next.
+The series will have to wait for v5.19.
 
 Guenter
 
-> ---
->  Documentation/hwmon/d380s840a.rst |  72 ++++
->  Documentation/hwmon/index.rst     |   1 +
->  drivers/hwmon/pmbus/Kconfig       |   9 +
->  drivers/hwmon/pmbus/Makefile      |   1 +
->  drivers/hwmon/pmbus/d380s840a.c   | 598 ++++++++++++++++++++++++++++++
->  5 files changed, 681 insertions(+)
->  create mode 100644 Documentation/hwmon/d380s840a.rst
->  create mode 100644 drivers/hwmon/pmbus/d380s840a.c
+> Changes since v1 [0]:
+>  - Added preparatory patch converting driver to regmap API [Guenter]
+>  - Replaced ENOSPC with ENOBUFS and removed WARN_ON() in
+>    nct6775_add_attr_group() [Guenter]
+>  - Added dedicated symbol namespace [Guenter]
+>  - Removed nct6775_write_temp() and nct6775_update_device() symbol
+>    exports [Guenter]
+>  - Reordered patches to put dt-bindings patch first [Krzysztof]
 > 
-> diff --git a/Documentation/hwmon/d380s840a.rst b/Documentation/hwmon/d380s840a.rst
-> new file mode 100644
-> index 000000000000..b4175bd5083d
-> --- /dev/null
-> +++ b/Documentation/hwmon/d380s840a.rst
-> @@ -0,0 +1,72 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver d380s840a
-> +========================
-> +
-> +Supported chips:
-> +
-> +  * DELTA D380S840A, D380S840C
-> +
-> +    Prefix: 'd380s840a'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://filecenter.delta-china.com.cn/products/download/01/0102/datasheet/DS_D380S840A.pdf
-> +
-> +Authors:
-> +    jiajia.Feng <jiajia.Feng@deltaww.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for DELTA D380S840A, D380S840C isolated Regulated Power
-> +Module with PMBus support.
-> +
-> +The driver is a client driver to the core PMBus driver.
-> +Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-> +
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate the
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-> +details.
-> +
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +===================== ===== ==================================================
-> +curr1_alarm           RO    Input current alarm
-> +curr1_input           RO    Input current
-> +curr1_label           RO    'iin'
-> +curr2_crit            RW    Output current limit
-> +curr2_crit_alarm      RO    Output current alarm state
-> +curr2_input           RO    Output current
-> +curr2_label           RO    'iout1'
-> +curr2_max             RW    Output current warning
-> +curr2_max_alarm       RO    Output current warning state
-> +curr2_rated_max       RO    Output current rated value
-> +in1_alarm             RO    Input voltage alarm state
-> +in1_input             RO    Input voltage
-> +in1_label             RO    'vin'
-> +in2_crit              RW    Output voltage limit
-> +in2_crit_alarm        RO    Output voltage alarm state
-> +in2_input             RO    Output voltage
-> +in2_label             RO    'vout1'
-> +in2_max               RW    Output voltage warning
-> +in2_max_alarm         RO    Output voltage warning state
-> +power1_alarm          RO    Input power alarm state
-> +power1_input          RO    Input power
-> +power1_label          RO    'pin'
-> +power2_input          RO    Output power
-> +power2_label          RO    'pout'
-> +power2_rated_max      RO    Output power rated value
-> +temp1_crit            RW    Temperature limit
-> +temp1_crit_alarm      RO    Temperature alarm state
-> +temp1_input           RO    temperature
-> +temp1_max             RW    temperature warning
-> +temp1_max_alarm       RO    temperature warning state
-> +===================== ===== ==================================================
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index df20022c741f..354d1d250dea 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -52,6 +52,7 @@ Hardware Monitoring Kernel Drivers
->     coretemp
->     corsair-cpro
->     corsair-psu
-> +   d380s840a
->     da9052
->     da9055
->     dell-smm-hwmon
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 41f6cbf96d3b..5ed150ad2ae0 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -66,6 +66,15 @@ config SENSORS_BPA_RS600
->  	  This driver can also be built as a module. If so, the module will
->  	  be called bpa-rs600.
->  
-> +config SENSORS_D380S840A
-> +	tristate "Delta Power Supplies D380S840A"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Delta
-> +	  D380S840A series Power Supplies.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called d380s840a.
-> +
->  config SENSORS_DELTA_AHE50DC_FAN
->  	tristate "Delta AHE-50DC fan control module"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index e5935f70c9e0..8d4417869adc 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
->  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
->  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
->  obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
-> +obj-$(CONFIG_SENSORS_D380S840A)	+= d380s840a.o
->  obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
->  obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
->  obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
-> diff --git a/drivers/hwmon/pmbus/d380s840a.c b/drivers/hwmon/pmbus/d380s840a.c
-> new file mode 100644
-> index 000000000000..674705d7ce79
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/d380s840a.c
-> @@ -0,0 +1,598 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Driver for Delta modules, D380S840A - High Voltage
-> + * Node Intermediate Voltage Converter
-> + *
-> + * Copyright 2022 Delta LLC.
-> + */
-> +
-> +#include <linux/debugfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include "pmbus.h"
-> +
-> +#define PAGE_PLUS_WRITE          0x05
-> +#define PAGE_PLUS_READ           0x06
-> +#define STORE_DEFAULT_ALL        0x11
-> +#define RESTORE_DEFAULT_ALL      0x12
-> +#define TON_DELAY                0x60
-> +#define TON_RISE                 0x61
-> +#define READ_EIN                 0x86
-> +#define READ_EOUT                0x87
-> +#define APP_PROFILE_SUPPORT      0x9F
-> +#define MFR_FW_REVISION          0xD9
-> +#define MFR_IOUT_MAX_CAPABILITY  0xF1
-> +
-> +#define VOUT_EXP                 9
-> +#define TEMPERATURE_EXP          2
-> +#define TON_DELAY_EXP            1
-> +#define TON_RISE_EXP             1
-> +
-> +enum chips {
-> +	d380s840a
-> +};
-> +
-> +enum {
-> +	D380S840A_DEBUGFS_OPERATION = 0,
-> +	D380S840A_DEBUGFS_ON_OFF_CONFIG,
-> +	D380S840A_DEBUGFS_CLEARFAULT,
-> +	D380S840A_DEBUGFS_PAGE_PLUS_WRITE,
-> +	D380S840A_DEBUGFS_PAGE_PLUS_READ,
-> +	D380S840A_DEBUGFS_STOREDEFAULT,
-> +	D380S840A_DEBUGFS_RESTOREDEFAULT,
-> +	D380S840A_DEBUGFS_CAPABILITY,
-> +	D380S840A_DEBUGFS_QUERY,
-> +	D380S840A_DEBUGFS_VOUT_MODE,
-> +	D380S840A_DEBUGFS_VOUT_COMMAND,
-> +	D380S840A_DEBUGFS_COEFFICIENTS,
-> +	D380S840A_DEBUGFS_TON_DELAY,
-> +	D380S840A_DEBUGFS_TON_RISE,
-> +	D380S840A_DEBUGFS_EIN,
-> +	D380S840A_DEBUGFS_EOUT,
-> +	D380S840A_DEBUGFS_PMBUS_REVISION,
-> +	D380S840A_DEBUGFS_APP_PROFILE,
-> +	D380S840A_DEBUGFS_POUT_MAX,
-> +	D380S840A_DEBUGFS_TEMP_MAX2,
-> +	D380S840A_DEBUGFS_FW_REVISION,
-> +	D380S840A_DEBUGFS_IOUT_CAPABILITY,
-> +	D380S840A_DEBUGFS_NUM_ENTRIES
-> +};
-> +
-> +struct d380s840a_data {
-> +	enum chips chip;
-> +	struct i2c_client *client;
-> +
-> +	int debugfs_entries[D380S840A_DEBUGFS_NUM_ENTRIES];
-> +};
-> +
-> +#define to_psu(x, y) container_of((x), struct d380s840a_data, debugfs_entries[(y)])
-> +
-> +static struct pmbus_driver_info d380s840a_info[] = {
-> +	[d380s840a] = {
-> +		.pages = 1,
-> +
-> +		/* Source : Delta D380S840A */
-> +		.format[PSC_TEMPERATURE] = linear,
-> +		.format[PSC_VOLTAGE_IN] = linear,
-> +		.format[PSC_CURRENT_OUT] = linear,
-> +		.format[PSC_CURRENT_IN] = linear,
-> +		.format[PSC_POWER] = linear,
-> +
-> +		.func[0] = PMBUS_HAVE_VIN |
-> +		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> +		PMBUS_HAVE_IIN  | PMBUS_HAVE_STATUS_INPUT |
-> +		PMBUS_HAVE_PIN  | PMBUS_HAVE_POUT,
-> +	},
-> +};
-> +
-> +static ssize_t d380s840a_debugfs_read(struct file *file, char __user *buf,
-> +				       size_t count, loff_t *ppos)
-> +{
-> +	int rc;
-> +	int *idxp = file->private_data;
-> +	int idx = *idxp;
-> +	struct d380s840a_data *psu = to_psu(idxp, idx);
-> +	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-> +	char data_char[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-> +	char *res;
-> +	u8 byte_num;
-> +	u8 index;
-> +	u16 word_data;
-> +	u32 long_data;
-> +	union i2c_smbus_data process_data;
-> +	struct i2c_client *client = psu->client;
-> +
-> +	switch (idx) {
-> +	case D380S840A_DEBUGFS_OPERATION:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_ON_OFF_CONFIG:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_ON_OFF_CONFIG);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_PAGE_PLUS_READ:
-> +		rc = kstrtou32_from_user(buf, count, 0, &long_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		process_data.block[0] = (long_data & 0x00FF0000) >> 16;
-> +		process_data.block[1] = (long_data & 0x0000FF00) >> 8;
-> +		process_data.block[2] = long_data & 0x000000FF;
-> +
-> +		if (process_data.block[2] == PMBUS_STATUS_WORD)
-> +			byte_num = 3;
-> +		else
-> +			byte_num = 2;
-> +
-> +		rc = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-> +				I2C_SMBUS_READ, PMBUS_QUERY,
-> +				I2C_SMBUS_BLOCK_PROC_CALL, &process_data);
-> +
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		for (index = 0; index < byte_num; index++)
-> +			data_char[index] = process_data.block[index];
-> +
-> +		res = bin2hex(data, data_char, byte_num);
-> +		rc = res - data;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_CAPABILITY:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_CAPABILITY);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_QUERY:
-> +		rc = kstrtou16_from_user(buf, count, 0, &word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		process_data.word = word_data;
-> +
-> +		rc = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-> +					I2C_SMBUS_READ, PMBUS_QUERY,
-> +					I2C_SMBUS_BLOCK_PROC_CALL, &process_data);
-> +
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		data_char[0] = process_data.block[0];
-> +		data_char[1] = process_data.block[1];
-> +
-> +		res = bin2hex(data, data_char, 2);
-> +		rc = res - data;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_VOUT_MODE:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_MODE);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_VOUT_COMMAND:
-> +		rc = i2c_smbus_read_word_data(psu->client, PMBUS_VOUT_COMMAND);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = rc * 1000 / (1 << VOUT_EXP);
-> +
-> +		rc = snprintf(data, 6, "%05d", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_COEFFICIENTS:
-> +		rc = kstrtou16_from_user(buf, count, 0, &word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		process_data.word = word_data;
-> +
-> +		rc = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-> +					I2C_SMBUS_READ, PMBUS_COEFFICIENTS,
-> +					I2C_SMBUS_BLOCK_PROC_CALL, &process_data);
-> +
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		data_char[0] = process_data.block[0];
-> +		data_char[1] = process_data.block[1];
-> +		data_char[2] = process_data.block[2];
-> +		data_char[3] = process_data.block[3];
-> +		data_char[4] = process_data.block[4];
-> +		data_char[5] = process_data.block[5];
-> +
-> +		res = bin2hex(data, data_char, 6);
-> +		rc = res - data;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_TON_DELAY:
-> +		rc = i2c_smbus_read_word_data(psu->client, TON_DELAY);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = (rc & (0x07FF)) / (1 << TON_DELAY_EXP);
-> +
-> +		rc = snprintf(data, 3, "%d", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_TON_RISE:
-> +		rc = i2c_smbus_read_word_data(psu->client, TON_RISE);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = (rc & (0x07FF)) / (1 << TON_RISE_EXP);
-> +
-> +		rc = snprintf(data, 4, "%d", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_EIN:
-> +		rc = i2c_smbus_read_block_data(psu->client, READ_EIN, data_char);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		res = bin2hex(data, data_char, 6);
-> +		rc = res - data;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_EOUT:
-> +		rc = i2c_smbus_read_block_data(psu->client, READ_EOUT, data_char);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		res = bin2hex(data, data_char, 6);
-> +		rc = res - data;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_PMBUS_REVISION:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_REVISION);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_APP_PROFILE:
-> +		rc = i2c_smbus_read_block_data(psu->client, APP_PROFILE_SUPPORT, data_char);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		res = bin2hex(data, data_char, 1);
-> +		rc = res - data;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_POUT_MAX:
-> +		rc = i2c_smbus_read_word_data(psu->client, PMBUS_MFR_POUT_MAX);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 4, "%03d", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_TEMP_MAX2:
-> +		rc = i2c_smbus_read_word_data(psu->client, PMBUS_MFR_MAX_TEMP_2);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = (rc & (0x07FF)) / (1 << TEMPERATURE_EXP);
-> +
-> +		rc = snprintf(data, 4, "%03d", rc);
-> +		break;
-> +	case D380S840A_DEBUGFS_FW_REVISION:
-> +		rc = i2c_smbus_read_block_data(psu->client, MFR_FW_REVISION, data_char);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		res = bin2hex(data, data_char, 3);
-> +		rc = res - data;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_IOUT_CAPABILITY:
-> +		rc = i2c_smbus_read_block_data(psu->client, MFR_IOUT_MAX_CAPABILITY, data_char);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		res = bin2hex(data, data_char, 14);
-> +		rc = res - data;
-> +
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	data[rc] = '\n';
-> +	rc += 2;
-> +
-> +	return simple_read_from_buffer(buf, count, ppos, data, rc);
-> +}
-> +
-> +static ssize_t d380s840a_debugfs_write(struct file *file, const char __user *buf,
-> +					size_t count, loff_t *ppos)
-> +{
-> +	u8 data_buff[4];
-> +	u8 dst_data;
-> +	u16 word_data;
-> +	u32 long_data;
-> +	ssize_t rc;
-> +	int *idxp = file->private_data;
-> +	int idx = *idxp;
-> +	struct d380s840a_data *psu = to_psu(idxp, idx);
-> +
-> +	switch (idx) {
-> +	case D380S840A_DEBUGFS_OPERATION:
-> +		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_OPERATION, dst_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_ON_OFF_CONFIG:
-> +		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_ON_OFF_CONFIG, dst_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_CLEARFAULT:
-> +		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_PAGE_PLUS_WRITE:
-> +		rc = kstrtou32_from_user(buf, count, 0, &long_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		data_buff[0] = (u8)((long_data & 0xFF000000) >> 24);
-> +		data_buff[1] = (u8)((long_data & 0x00FF0000) >> 16);
-> +		data_buff[2] = (u8)((long_data & 0x0000FF00) >> 8);
-> +		data_buff[3] = (u8)(long_data & 0x000000FF);
-> +
-> +		rc = i2c_smbus_write_block_data(psu->client, PAGE_PLUS_WRITE, 3, (data_buff + 1));
-> +		if (rc < 0)
-> +			return rc;
-> +		break;
-> +	case D380S840A_DEBUGFS_STOREDEFAULT:
-> +		rc = i2c_smbus_write_byte(psu->client, STORE_DEFAULT_ALL);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_RESTOREDEFAULT:
-> +		rc = i2c_smbus_write_byte(psu->client, RESTORE_DEFAULT_ALL);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_VOUT_COMMAND:
-> +		rc = kstrtou16_from_user(buf, count, 0, &word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		word_data = (int)word_data * (1 << VOUT_EXP) / 1000;
-> +
-> +		rc = i2c_smbus_write_word_data(psu->client, PMBUS_VOUT_COMMAND, word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_TON_DELAY:
-> +		rc = kstrtou16_from_user(buf, count, 0, &word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		word_data = (word_data * (1 << TON_DELAY_EXP)) + 0xF800;
-> +
-> +		rc = i2c_smbus_write_word_data(psu->client, TON_DELAY, word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	case D380S840A_DEBUGFS_TON_RISE:
-> +		rc = kstrtou16_from_user(buf, count, 0, &word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		word_data = (word_data * (1 << TON_RISE_EXP)) + 0xF800;
-> +
-> +		rc = i2c_smbus_write_word_data(psu->client, TON_RISE, word_data);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations d380s840a_fops = {
-> +	.llseek = noop_llseek,
-> +	.read = d380s840a_debugfs_read,
-> +	.write = d380s840a_debugfs_write,
-> +	.open = simple_open,
-> +};
-> +
-> +static const struct i2c_device_id d380s840a_id[] = {
-> +	{ "d380s840a", d380s840a },
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, d380s840a_id);
-> +
-> +static int d380s840a_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-> +	enum chips chip_id;
-> +	int ret, i;
-> +	struct dentry *debugfs;
-> +	struct dentry *d380s840a_dir;
-> +	struct d380s840a_data *psu;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_BYTE_DATA |
-> +				     I2C_FUNC_SMBUS_WORD_DATA |
-> +				     I2C_FUNC_SMBUS_BLOCK_DATA))
-> +		return -ENODEV;
-> +
-> +	if (client->dev.of_node)
-> +		chip_id = (enum chips)(unsigned long)of_device_get_match_data(dev);
-> +	else
-> +		chip_id = i2c_match_id(d380s840a_id, client)->driver_data;
-> +
-> +	ret = i2c_smbus_read_block_data(client, MFR_FW_REVISION, buf);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to read Manufacturer Revision\n");
-> +		return ret;
-> +	}
-> +	if (ret != 3) {
-> +		buf[ret] = '\0';
-> +		dev_err(dev, "Unsupported Manufacturer Revision '%s'\n", buf);
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = pmbus_do_probe(client, &d380s840a_info[chip_id]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-> +	if (!psu)
-> +		return 0;
-> +
-> +	psu->client = client;
-> +
-> +	debugfs = pmbus_get_debugfs_dir(client);
-> +
-> +	d380s840a_dir = debugfs_create_dir(client->name, debugfs);
-> +
-> +	for (i = 0; i < D380S840A_DEBUGFS_NUM_ENTRIES; ++i)
-> +		psu->debugfs_entries[i] = i;
-> +
-> +	debugfs_create_file("operation", 0644, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_OPERATION],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("on_off_config", 0644, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_ON_OFF_CONFIG],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("clear_fault", 0200, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_CLEARFAULT],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("page_plus_write", 0200, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_PAGE_PLUS_WRITE],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("page_plus_read", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_PAGE_PLUS_READ],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("store_default", 0200, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_STOREDEFAULT],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("restore_default", 0200, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_RESTOREDEFAULT],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("capability", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_CAPABILITY],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("query", 0644, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_QUERY],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("vout_mode", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_VOUT_MODE],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("vout_command", 0644, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_VOUT_COMMAND],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("coefficients", 0644, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_COEFFICIENTS],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("ton_delay", 0644, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_TON_DELAY],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("ton_rise", 0644, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_TON_RISE],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("ein", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_EIN],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("eout", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_EOUT],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("pmbus_revision", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_PMBUS_REVISION],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("app_profile_support", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_APP_PROFILE],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("mfr_pout_max", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_POUT_MAX],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("mfr_max_temperature", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_TEMP_MAX2],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("mfr_fw_revision", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_FW_REVISION],
-> +			    &d380s840a_fops);
-> +
-> +	debugfs_create_file("mfr_iout_capability", 0444, d380s840a_dir,
-> +			    &psu->debugfs_entries[D380S840A_DEBUGFS_IOUT_CAPABILITY],
-> +			    &d380s840a_fops);
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id d380s840a_of_match[] = {
-> +	{ .compatible = "delta,d380s840a", .data = (void *)d380s840a },
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, d380s840a_of_match);
-> +
-> +static struct i2c_driver d380s840a_driver = {
-> +	.driver = {
-> +		.name = "d380s840a",
-> +		.of_match_table = d380s840a_of_match,
-> +	},
-> +	.probe_new = d380s840a_probe,
-> +	.id_table = d380s840a_id,
-> +};
-> +
-> +module_i2c_driver(d380s840a_driver);
-> +
-> +MODULE_AUTHOR("Jiajia.Feng <jiajia.Feng@deltaww.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Delta D380S840A series modules");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
+> The nct6775-platform and nct6775-i2c drivers have both been tested on
+> the NCT6779D in an ASRock ROMED8HM3 system and the NCT6798 [1] in an
+> ASRock X570-D4U (the latter thanks to Renze, CCed); both seem to work
+> as expected on both systems.  I don't have access to any asuswmi
+> hardware, so testing of the nct6775-platform driver on that to ensure
+> it doesn't break there would be appreciated (Oleksandr, perhaps?).
+> 
+> [0] https://lore.kernel.org/linux-hwmon/20220226133047.6226-1-zev@bewilderbeest.net/
+> [1] Though it's physically labeled (mislabeled?) as an NCT6796, for
+>     what that's worth.
+> 
+> A slightly edited version of the previous cover letter follows:
+> 
+> 
+> This patch series augments the existing nct6775 driver with support
+> for the hardware's i2c interface; along the way it converts the driver
+> to use the regmap API, and splits the LPC-specific platform driver
+> into a separate module from the interface-independent core.
+> 
+> Thus far the nct6775 driver has only supported the LPC interface,
+> which is the main interface by which the Super-I/O chip is typically
+> connected to the host (x86) processor.
+> 
+> However, these chips also provide an i2c interface, which can provide
+> a way for a BMC to also monitor sensor readings from them.  On some
+> systems (such as the ASRock Rack ROMED8HM3 and X570-D4U) this may be
+> the only way for the BMC to monitor host CPU temperatures (e.g. to
+> indirectly access a TSI interface); this functionality is thus an
+> important component of enabling OpenBMC to support such systems.
+> 
+> In such an arrangement the Super-I/O chip is simultaneously controlled
+> by two independent processors (the host and the BMC) which typically
+> do not coordinate their accesses with each other.  In order to avoid
+> conflicts between the two, the i2c driver avoids all writes to the
+> device, since the BMC's needs with the hardware are merely that it be
+> able to retrieve sensor readings.  This allows the host processor to
+> remain ultimately in control of the chip and unaware of the BMC's use
+> of it at all.
+> 
+> The sole exception to the "no writes" rule for the i2c driver is for
+> the bank-select register -- while I haven't been able to find any
+> explicit statement in the Nuvoton datasheets guaranteeing this,
+> testing via manual register accesses (as detailed in [2]) has
+> indicated that, as one might hope, the i2c interface has its own
+> bank-select register independent of the one used by the LPC interface.
+> 
+> In terms of code structure, the approach taken in this series is to
+> first convert the driver's register accesses to the regmap API, and
+> then split the LPC-specific parts of it out into a separate module
+> (called nct6775-platform), leaving the interface-independent parts in
+> a generic driver (called nct6775-core).  The nct6775-i2c driver is
+> then added as an additional consumer of the nct6775-core module's
+> functionality (essentially just providing its own set of regmap
+> read/write callback functions).
+> 
+> The first patch provides DT bindings for the nct6775, the second
+> contains the change to convert all register accesses to use a regmap.
+> The third and fourth patches make some relatively small
+> infrastructural changes to the driver.  The core/platform driver split
+> is in the fifth patch, and the final patch adds the i2c driver itself.
+> 
+> 
+> Thanks,
+> Zev
+> 
+> [2] https://lore.kernel.org/linux-hwmon/YhttzgDtGpcTniyw@hatter.bewilderbeest.net/
+> 
+> Zev Weiss (6):
+>   dt-bindings: hwmon: Add nuvoton,nct6775
+>   hwmon: (nct6775) Convert register access to regmap API
+>   hwmon: (nct6775) Rearrange attr-group initialization
+>   hwmon: (nct6775) Add read-only mode
+>   hwmon: (nct6775) Split core and platform driver
+>   hwmon: (nct6775) Add i2c driver
+> 
+>  .../bindings/hwmon/nuvoton,nct6775.yaml       |   48 +
+>  MAINTAINERS                                   |   12 +-
+>  drivers/hwmon/Kconfig                         |   32 +-
+>  drivers/hwmon/Makefile                        |    4 +-
+>  drivers/hwmon/{nct6775.c => nct6775-core.c}   | 2310 +++++------------
+>  drivers/hwmon/nct6775-i2c.c                   |  179 ++
+>  drivers/hwmon/nct6775-platform.c              | 1232 +++++++++
+>  drivers/hwmon/nct6775.h                       |  252 ++
+>  8 files changed, 2382 insertions(+), 1687 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+>  rename drivers/hwmon/{nct6775.c => nct6775-core.c} (69%)
+>  create mode 100644 drivers/hwmon/nct6775-i2c.c
+>  create mode 100644 drivers/hwmon/nct6775-platform.c
+>  create mode 100644 drivers/hwmon/nct6775.h
+> 
 > -- 
-> 2.20.1
+> 2.35.1
 > 
