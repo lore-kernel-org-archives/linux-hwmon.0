@@ -2,113 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD17EC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Mar 2022 00:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A490C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Mar 2022 01:21:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236938AbiCKAUO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Mar 2022 19:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S238151AbiCKBWh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Mar 2022 20:22:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245492AbiCKAUN (ORCPT
+        with ESMTP id S240140AbiCKBWf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Mar 2022 19:20:13 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850D2199D5F;
-        Thu, 10 Mar 2022 16:19:11 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so8759341oot.11;
-        Thu, 10 Mar 2022 16:19:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U0AZdJmAf3KnMnmaCT6PVX8yffxCxk1VkTp4io1uedY=;
-        b=T7XZ0yttiyIczz6uUfertqFXDorsdoEbYKOzkVYQ4f1F0sSgHVZNGmWLUQqMWopSCw
-         wCpJDGiczXpAGxAsxY3eh0v/y887FlVKpRsp/JNqLeG2+Zmd5JxE911nGx+vfQEF5zM1
-         +80MRU0TCJmvCYirCevEPleQn6VQTfqBeGCJ5dhEeoc1rtmnhNyGg4lyJTS0Vtk5vPO8
-         8KRdPxSVo8vFGT069tWZdJOZnxS6uJ85vsdm6VJgXFM33/FzsOpM44QPc31dC4XjqRro
-         UfeNcYV585i3AoBTSWSC4m1MXE/IkZ1GhXcrfc3RSUtkF1vJ839aBiR4+MZYKOwaG9dP
-         jrrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U0AZdJmAf3KnMnmaCT6PVX8yffxCxk1VkTp4io1uedY=;
-        b=dwNUH+nJ5iaqfvUvZa4RNPf0PdEa5yigK0q0U/2CpXSEOJkNCK5wRJVviAhRLqI+O2
-         m98996fmAH0VJQRpoil9dzHr3qwFY5dJgXF9TsixELrc0nFRnzMW60oNEI8Y2yxCXSye
-         M1zxeSUhRAiatP0UMqVMNr3LSMaVAyhejfmMe1GcHxFw0xO8E6+3B4fYs4Lqx8h5H6Xa
-         uVzot2IG9YV143ZmWguggN08yR/BBoChyhPrlr8wNdnExWBVgGkwpXJoU3xn+ynWmKId
-         sTk0G0QKBQXrTxKqi1cn1DdTC5P8GOj9MZ/mEbrIWXcxAKC4xP6KO48BACAfHR5L0yZV
-         u5+w==
-X-Gm-Message-State: AOAM531PN3OA5FSLAOk3J+VA/j+77ipkeZlYz2m9OvGtFDBENE/khMfm
-        Zt1gRws0wSYq3/76AuSxP5c=
-X-Google-Smtp-Source: ABdhPJyiVhuWhrH8JIV4+a4K60XF6nqM1KS+9cIGeBeVK6gpoCOYo1uIgDu+V3vdeOg8/+HhKcvR+A==
-X-Received: by 2002:a05:6870:590:b0:d7:b0:7412 with SMTP id m16-20020a056870059000b000d700b07412mr9849300oap.115.1646957950797;
-        Thu, 10 Mar 2022 16:19:10 -0800 (PST)
-Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
-        by smtp.gmail.com with ESMTPSA id m17-20020a0568080f1100b002d71e151e51sm3211000oiw.0.2022.03.10.16.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 16:19:10 -0800 (PST)
-From:   Brandon Wyman <bjwyman@gmail.com>
-To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Eddie James <eajames@linux.ibm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Thu, 10 Mar 2022 20:22:35 -0500
+X-Greylist: delayed 1283 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 17:21:33 PST
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.48.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD827F65DC
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 17:21:33 -0800 (PST)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 2D20941E3
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 19:00:10 -0600 (CST)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id STdancOV8HnotSTdanxzBG; Thu, 10 Mar 2022 19:00:10 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YrYcmX1/YLKPFplyGX4juPlh6LZE8D01pZWFuhgPaPo=; b=bfXiwVit+FdkOiMo8rqatyjIx5
+        Hj+itje0sHNCV089kohxPRKB7bSSNrl3ChZ/+Mi8vVmUl7MKyJNdLxUDx/qSqIXzfYHK8EBACrmuQ
+        ubvMIz3c3SdJuC5onEYF6cOzSuEBewaqTwz4+oqH8ta+DuKKGk9BZDuW/yWskAcpJNb3wA+BTSAkz
+        BKKn0ha2ou57FBO9SFksMjms5ebQEp54rSVId7eBqMq647syMiFIIbSLdCViRLwC+3i1UvxNMj1Ie
+        k2fyl1rYlbLOXi+rUIbQnYR3403exhCZSMX0S1jwCluUoiPaPSdYUssldDpyVjYdSyZ+9G8Kaoz4Q
+        7UdPFSlw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54240)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nSTdZ-001lMl-KX; Fri, 11 Mar 2022 01:00:09 +0000
+Message-ID: <3602c1b2-1335-0663-c96a-c524c555ccc9@roeck-us.net>
+Date:   Thu, 10 Mar 2022 17:00:08 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+Content-Language: en-US
+To:     Brandon Wyman <bjwyman@gmail.com>, Joel Stanley <joel@jms.id.au>,
+        openbmc@lists.ozlabs.org, Eddie James <eajames@linux.ibm.com>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Brandon Wyman <bjwyman@gmail.com>
-Subject: [PATCH] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
-Date:   Fri, 11 Mar 2022 00:18:58 +0000
-Message-Id: <20220311001858.4166205-1-bjwyman@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220311001858.4166205-1-bjwyman@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220311001858.4166205-1-bjwyman@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nSTdZ-001lMl-KX
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54240
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add a clear_faults write-only debugfs entry for the ibm-cffps device
-driver.
+On 3/10/22 16:18, Brandon Wyman wrote:
+> Add a clear_faults write-only debugfs entry for the ibm-cffps device
+> driver.
+> 
 
-Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
----
- drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+This does not explain _why_ this would be needed.
 
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index e3294a1a54bb..fca2642a8ed4 100644
---- a/drivers/hwmon/pmbus/ibm-cffps.c
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -67,6 +67,7 @@ enum {
- 	CFFPS_DEBUGFS_CCIN,
- 	CFFPS_DEBUGFS_FW,
- 	CFFPS_DEBUGFS_ON_OFF_CONFIG,
-+	CFFPS_DEBUGFS_CLEAR_FAULTS,
- 	CFFPS_DEBUGFS_NUM_ENTRIES
- };
- 
-@@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
- 		if (rc)
- 			return rc;
- 
-+		rc = 1;
-+		break;
-+	case CFFPS_DEBUGFS_CLEAR_FAULTS:
-+		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
-+		if (rc < 0)
-+			return rc;
-+
- 		rc = 1;
- 		break;
- 	default:
-@@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
- 	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
- 			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
- 			    &ibm_cffps_fops);
-+	debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
-+			    &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
-+			    &ibm_cffps_fops);
- 
- 	return 0;
- }
--- 
-2.25.1
+Guenter
+
+> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+> ---
+>   drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> index e3294a1a54bb..fca2642a8ed4 100644
+> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> @@ -67,6 +67,7 @@ enum {
+>   	CFFPS_DEBUGFS_CCIN,
+>   	CFFPS_DEBUGFS_FW,
+>   	CFFPS_DEBUGFS_ON_OFF_CONFIG,
+> +	CFFPS_DEBUGFS_CLEAR_FAULTS,
+>   	CFFPS_DEBUGFS_NUM_ENTRIES
+>   };
+>   
+> @@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
+>   		if (rc)
+>   			return rc;
+>   
+> +		rc = 1;
+> +		break;
+> +	case CFFPS_DEBUGFS_CLEAR_FAULTS:
+> +		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
+> +		if (rc < 0)
+> +			return rc;
+> +
+>   		rc = 1;
+>   		break;
+>   	default:
+> @@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+>   	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+>   			    &ibm_cffps_fops);
+> +	debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
+> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
+> +			    &ibm_cffps_fops);
+>   
+>   	return 0;
+>   }
 
