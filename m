@@ -2,115 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74099C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Mar 2022 21:31:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD17EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Mar 2022 00:19:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240780AbiCJVcI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Mar 2022 16:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S236938AbiCKAUO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Mar 2022 19:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343964AbiCJVcH (ORCPT
+        with ESMTP id S245492AbiCKAUN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:32:07 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB462192CB4
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Mar 2022 13:31:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646947865; x=1678483865;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EB8dIZFppbK+DL9XwZFi9S3vQv90aDPZqke7LiwZqJM=;
-  b=YFum5RBXJGdL9vhZu6hDY2xG3Z5CGNJwA25YVXlDq+jrYwAF8UC2aItC
-   paeiZMHmuAaArJHXSQ5SdneSBVkLXnE4wQBPJjyL8pi2y6qAvqRVz97tj
-   THIyOeldi8zwdcJW+fSywSdP2y9HdpMM9Y48Qy73kJ5gY2CEQqDfRT6cX
-   HbLe8SqscP7GCQBhMB//z560EHGOrtmlegP7zOX2uqRqc6B+8DENIPUqZ
-   iN0e7NTIoMv2xrvWrSt1vTY7k5TRyKUkYKKv8/4kXw62elp1q113tJBdH
-   XG9AR6K9WWpbps5Cl6wRBq2Tzdc3VwSEKW0+vfnsOLdYjCG8fjII6BM14
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="280124218"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="280124218"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 13:31:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="514165793"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2022 13:31:03 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSQNC-0005Py-OG; Thu, 10 Mar 2022 21:31:02 +0000
-Date:   Fri, 11 Mar 2022 05:30:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sam Shih <sam.shih@mediatek.com>
-Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        Thu, 10 Mar 2022 19:20:13 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850D2199D5F;
+        Thu, 10 Mar 2022 16:19:11 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so8759341oot.11;
+        Thu, 10 Mar 2022 16:19:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U0AZdJmAf3KnMnmaCT6PVX8yffxCxk1VkTp4io1uedY=;
+        b=T7XZ0yttiyIczz6uUfertqFXDorsdoEbYKOzkVYQ4f1F0sSgHVZNGmWLUQqMWopSCw
+         wCpJDGiczXpAGxAsxY3eh0v/y887FlVKpRsp/JNqLeG2+Zmd5JxE911nGx+vfQEF5zM1
+         +80MRU0TCJmvCYirCevEPleQn6VQTfqBeGCJ5dhEeoc1rtmnhNyGg4lyJTS0Vtk5vPO8
+         8KRdPxSVo8vFGT069tWZdJOZnxS6uJ85vsdm6VJgXFM33/FzsOpM44QPc31dC4XjqRro
+         UfeNcYV585i3AoBTSWSC4m1MXE/IkZ1GhXcrfc3RSUtkF1vJ839aBiR4+MZYKOwaG9dP
+         jrrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U0AZdJmAf3KnMnmaCT6PVX8yffxCxk1VkTp4io1uedY=;
+        b=dwNUH+nJ5iaqfvUvZa4RNPf0PdEa5yigK0q0U/2CpXSEOJkNCK5wRJVviAhRLqI+O2
+         m98996fmAH0VJQRpoil9dzHr3qwFY5dJgXF9TsixELrc0nFRnzMW60oNEI8Y2yxCXSye
+         M1zxeSUhRAiatP0UMqVMNr3LSMaVAyhejfmMe1GcHxFw0xO8E6+3B4fYs4Lqx8h5H6Xa
+         uVzot2IG9YV143ZmWguggN08yR/BBoChyhPrlr8wNdnExWBVgGkwpXJoU3xn+ynWmKId
+         sTk0G0QKBQXrTxKqi1cn1DdTC5P8GOj9MZ/mEbrIWXcxAKC4xP6KO48BACAfHR5L0yZV
+         u5+w==
+X-Gm-Message-State: AOAM531PN3OA5FSLAOk3J+VA/j+77ipkeZlYz2m9OvGtFDBENE/khMfm
+        Zt1gRws0wSYq3/76AuSxP5c=
+X-Google-Smtp-Source: ABdhPJyiVhuWhrH8JIV4+a4K60XF6nqM1KS+9cIGeBeVK6gpoCOYo1uIgDu+V3vdeOg8/+HhKcvR+A==
+X-Received: by 2002:a05:6870:590:b0:d7:b0:7412 with SMTP id m16-20020a056870059000b000d700b07412mr9849300oap.115.1646957950797;
+        Thu, 10 Mar 2022 16:19:10 -0800 (PST)
+Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
+        by smtp.gmail.com with ESMTPSA id m17-20020a0568080f1100b002d71e151e51sm3211000oiw.0.2022.03.10.16.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 16:19:10 -0800 (PST)
+From:   Brandon Wyman <bjwyman@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [groeck-staging:watchdog-next 22/34]
- drivers/watchdog/mtk_wdt.c:13:10: fatal error:
- dt-bindings/reset/mt7986-resets.h: No such file or directory
-Message-ID: <202203110514.1vOt36pD-lkp@intel.com>
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Brandon Wyman <bjwyman@gmail.com>
+Subject: [PATCH] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+Date:   Fri, 11 Mar 2022 00:18:58 +0000
+Message-Id: <20220311001858.4166205-1-bjwyman@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-head:   d7e5876bf57044f8be42e2eecae47ea1d3e46f8d
-commit: 6c2b372365e1e64170e209a1e903c5cb64bebc63 [22/34] watchdog: mtk_wdt: mt7986: Add toprgu reset controller support
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220311/202203110514.1vOt36pD-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=6c2b372365e1e64170e209a1e903c5cb64bebc63
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging watchdog-next
-        git checkout 6c2b372365e1e64170e209a1e903c5cb64bebc63
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+Add a clear_faults write-only debugfs entry for the ibm-cffps device
+driver.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the groeck-staging/watchdog-next HEAD d7e5876bf57044f8be42e2eecae47ea1d3e46f8d builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
->> drivers/watchdog/mtk_wdt.c:13:10: fatal error: dt-bindings/reset/mt7986-resets.h: No such file or directory
-      13 | #include <dt-bindings/reset/mt7986-resets.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +13 drivers/watchdog/mtk_wdt.c
-
-  > 13	#include <dt-bindings/reset/mt7986-resets.h>
-    14	#include <dt-bindings/reset/mt8183-resets.h>
-    15	#include <dt-bindings/reset/mt8186-resets.h>
-    16	#include <dt-bindings/reset/mt8192-resets.h>
-    17	#include <dt-bindings/reset/mt8195-resets.h>
-    18	#include <linux/delay.h>
-    19	#include <linux/err.h>
-    20	#include <linux/init.h>
-    21	#include <linux/io.h>
-    22	#include <linux/kernel.h>
-    23	#include <linux/module.h>
-    24	#include <linux/moduleparam.h>
-    25	#include <linux/of.h>
-    26	#include <linux/of_device.h>
-    27	#include <linux/platform_device.h>
-    28	#include <linux/reset-controller.h>
-    29	#include <linux/types.h>
-    30	#include <linux/watchdog.h>
-    31	#include <linux/interrupt.h>
-    32	
-
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index e3294a1a54bb..fca2642a8ed4 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -67,6 +67,7 @@ enum {
+ 	CFFPS_DEBUGFS_CCIN,
+ 	CFFPS_DEBUGFS_FW,
+ 	CFFPS_DEBUGFS_ON_OFF_CONFIG,
++	CFFPS_DEBUGFS_CLEAR_FAULTS,
+ 	CFFPS_DEBUGFS_NUM_ENTRIES
+ };
+ 
+@@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
+ 		if (rc)
+ 			return rc;
+ 
++		rc = 1;
++		break;
++	case CFFPS_DEBUGFS_CLEAR_FAULTS:
++		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
++		if (rc < 0)
++			return rc;
++
+ 		rc = 1;
+ 		break;
+ 	default:
+@@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+ 	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+ 			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+ 			    &ibm_cffps_fops);
++	debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
++			    &ibm_cffps_fops);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
+
