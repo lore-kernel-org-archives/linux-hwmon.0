@@ -2,114 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 555CCC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Mar 2022 01:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38DBEC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Mar 2022 02:34:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbiCOBp1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Mar 2022 21:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S1344444AbiCOCfa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Mar 2022 22:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235808AbiCOBp0 (ORCPT
+        with ESMTP id S237373AbiCOCfa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Mar 2022 21:45:26 -0400
-X-Greylist: delayed 1287 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Mar 2022 18:44:16 PDT
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C79B5FC4
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Mar 2022 18:44:16 -0700 (PDT)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 03D8814426
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Mar 2022 20:22:49 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id TvtgnlIle9AGSTvtgntPkG; Mon, 14 Mar 2022 20:22:49 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fc/4aRBBd782zT03Q+OtnIHUlfYCyQpFz9VTJ95xqw0=; b=Aiu4sgtrBZIxQom1IJFTXQlYMf
-        XXEPlmcOo8p2oLHBKqBakYnc/m6R2+1Bs1YAFCGPUv9wiGxMT+zfj1fDo/ctGcbyALGZyohE9Ov3k
-        m3FF6CTCZlluksBwui4rwcBUsJiAI1uvn4xsnFP5yO6bL9e0GgvRRb2ZZQZrrLL0TC+iNaGV1bxqS
-        vwnTfpixjFmG0Hludn9z+JWyMK6BDMSgPiHCn5rEOKEJtcZt6EcgSTtULEkKJftYMFjWMUXdCeA1t
-        Fig+BTUMo6mIFyW1m0EfdAI0ToWtfkNepcUoZEFBRIrdL47brqEBVLwts9JT0Jk8L9dZ7Lo7ptTlp
-        7uzqgc1A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54266)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nTvtg-004GEG-E6; Tue, 15 Mar 2022 01:22:48 +0000
-Message-ID: <3dac349c-6470-1673-effb-354da2b52481@roeck-us.net>
-Date:   Mon, 14 Mar 2022 18:22:47 -0700
+        Mon, 14 Mar 2022 22:35:30 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734D44754F;
+        Mon, 14 Mar 2022 19:34:19 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so1039548pjb.5;
+        Mon, 14 Mar 2022 19:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jv/uO4ktRhHgJvY0t9qThitrZmG/d53V0zX21g8e8ks=;
+        b=IvCkPDBcj3XHekHZSIEmUfeoOwo5PQoUgdF9NMN0BZ6hse1Gvhr+Lgz4EjZM/1rRf1
+         LI0CxvyJHHy5HOxvNGPWjYudiSnKW/mC+Ffw3cQqjzE+yMN/aOUkmXN1YF+pBz50s8OU
+         eaxMA27/d/Z5hydW5QFhjbQJdpCjRMsUmiTRxTFOKYF2FXWUWjGWUD+6+230UBNWwVyC
+         zplXG+cVFXaBUuY8LLjfHdWokC02rCXPpIhcd6uquiIK3D12myiJXHGamCdqidQZB+98
+         VUliAGfIFvWKHD480hyp4Kbr1zptNMZx3cknMfyEy/sRS1WfVCe4+y+IdKhwfeJk6ld/
+         wmMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jv/uO4ktRhHgJvY0t9qThitrZmG/d53V0zX21g8e8ks=;
+        b=SXZlATPFPd0ZZfkzc/Yvf7P8WOqSFX8DyXp31ftjsVXiaIJGQx1kIgROh1KteJeaDM
+         NPIBCvVvJlBRFqqyjum5UJFKaephaazB0GQX/0bmLSUr5KxIe2aTivt9HJeqo1ClpZP9
+         fThWUH6XtEyrLix4d/vFz0iZ/J/M20YEmvdsisy66NZpkX03DJYs90gAzq/kFLHGlxyG
+         3G2oHXC09R33moUiYqWhyEt/Mk6uVOYOxO48ehTyHutjAC1YmOxMokz7/s3TGhtJgleT
+         /89lMCNzOeVUDyA6ATffV0tVVLLJZBCER0SCNYFMiHfyfXkDX5QvAEyjP8/MszVfkeV+
+         9ZOw==
+X-Gm-Message-State: AOAM533LOlC0Jp9XmNh7t6/0WN/MB7+XjbKfpURTdeva3OGZSKgXLxRg
+        M59UQmiPuphHvUWgFlEHHbY=
+X-Google-Smtp-Source: ABdhPJx6LgLHKafIvEvSSeHextJqmzgrHBJJsu3z9XjfEglz0xHEf5YQwhEC2yYUdbu7u2Sft+XxCQ==
+X-Received: by 2002:a17:902:7fc5:b0:151:863e:44ee with SMTP id t5-20020a1709027fc500b00151863e44eemr25924553plb.163.1647311658821;
+        Mon, 14 Mar 2022 19:34:18 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id oj2-20020a17090b4d8200b001bef79ea006sm875759pjb.29.2022.03.14.19.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 19:34:18 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     jdelvare@suse.com
+Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] hwmon: (scpi-hwmon): Use of_device_get_match_data()
+Date:   Tue, 15 Mar 2022 02:34:12 +0000
+Message-Id: <20220315023412.2118415-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Agathe Porte <agathe.porte@nokia.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-References: <20220222223610.23098-1-linux@roeck-us.net>
- <20220222223610.23098-2-linux@roeck-us.net>
- <51ea03f0-627b-2e9d-5972-2053fa12b9b5@nokia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v7 2/2] hwmon: Add driver for Texas Instruments TMP464 and
- TMP468
-In-Reply-To: <51ea03f0-627b-2e9d-5972-2053fa12b9b5@nokia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nTvtg-004GEG-E6
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54266
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 16
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Agathe,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On 3/14/22 08:46, Agathe Porte wrote:
-> Hi,
-> 
-> Le 2/22/2022 à 11:36 PM, Guenter Roeck a écrit :
->>   of_property_read_string(child,"label", &data->channel[channel].label);
-> 
-> Upon trying to merge v7 in our codebase, our static analyzer tool detected that the return code of this function was not checked.
-> 
-> As I guess putting a label is optional, maybe we should add a `(void)` on the same line just before the function call to clearly indicate that not checking the return value is intentional and that it is not a coding mistake?
-> 
-> EDIT: As I was reading the implementation of of_property_read_string [1], it will not touch the destination string in case of error. Which means that labels may sit uninitialized and contain garbage data?
-> 
+Use of_device_get_match_data() to simplify the code.
 
-Thanks for the feedback.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/hwmon/scpi-hwmon.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-If of_property_read_string() returns an error, it will not set the pointer
-to &data->channel[channel].label, which by default is NULL because the
-data structure was allocated with devm_kzalloc(). That means tmp464_is_visible()
-will disable the label attribute. I don't see a problem with the current
-code.
+diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+index 919877970ae3..5187c6dd5a4f 100644
+--- a/drivers/hwmon/scpi-hwmon.c
++++ b/drivers/hwmon/scpi-hwmon.c
+@@ -141,7 +141,6 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
+ 	struct scpi_ops *scpi_ops;
+ 	struct device *hwdev, *dev = &pdev->dev;
+ 	struct scpi_sensors *scpi_sensors;
+-	const struct of_device_id *of_id;
+ 	int idx, ret;
+ 
+ 	scpi_ops = get_scpi_ops();
+@@ -171,12 +170,11 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
+ 
+ 	scpi_sensors->scpi_ops = scpi_ops;
+ 
+-	of_id = of_match_device(scpi_of_match, &pdev->dev);
+-	if (!of_id) {
++	scale = of_device_get_match_data(&pdev->dev);
++	if (!scale) {
+ 		dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
+ 		return -ENODEV;
+ 	}
+-	scale = of_id->data;
+ 
+ 	for (i = 0, idx = 0; i < nr_sensors; i++) {
+ 		struct sensor_data *sensor = &scpi_sensors->data[idx];
+-- 
+2.25.1
 
-There are lots of examples in the kernel where the return value from
-of_property_read_string() is silently ignored. Not a single one of
-those uses a (void) typecast. I don't really want to start making
-such changes just to make static analyzers happy.
-
-Thanks,
-Guenter
