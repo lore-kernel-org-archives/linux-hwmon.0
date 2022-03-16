@@ -2,182 +2,138 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84869C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Mar 2022 15:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28D54C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Mar 2022 20:03:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239846AbiCPPkT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Mar 2022 11:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S1345129AbiCPUFA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Mar 2022 16:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348244AbiCPPkS (ORCPT
+        with ESMTP id S244611AbiCPUE6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:40:18 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B13834675
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Mar 2022 08:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647445144; x=1678981144;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Gh6RIx6JYoVZNr3PbvztJui7PIWbIxzHQjKmTG2pIJw=;
-  b=Twu0QjKnrM4QxZ7UXylCxPkWyPReCvuwSG332CTm5heh8w5vIZgleONO
-   cll7isJu5CJTdDA+NJISw7hvE/FWASNzr4PsTsbwbKIpwZiBHe3vy6Ld2
-   KiuLJDEuOAaJ6vCBV0M72+E0+wzGqEOUIbDhJF+NbvjONsrYF2v1N7AYy
-   juzUvZBiMW61TmH5qgG4x12S031RTGtexerIXGneMWEiJR6oXo77euU6j
-   COpd3O7moF2ETqSX14xtRwDXZ7VgqOPd/jqmDKvAsS8qySvl7B7dE88n4
-   lXDqw9nDqb4060n+kCxf9CeI1PQbc1P0NVhSDmnFG/kd4Fb39BmPL/On+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="244088266"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="244088266"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 08:39:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="646705577"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 08:39:00 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUVjn-000CZF-De; Wed, 16 Mar 2022 15:38:59 +0000
-Date:   Wed, 16 Mar 2022 23:38:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- fd6ca3f5b80f6dda381fe84211be3b491f28bf0f
-Message-ID: <62320467.gUswPNQhAosZYkVw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 16 Mar 2022 16:04:58 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08822CCA;
+        Wed, 16 Mar 2022 13:03:43 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id t11so4517090wrm.5;
+        Wed, 16 Mar 2022 13:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xRrmSaXTPuHNH4vczPmmM5RurjEif4JresYAJudYvWc=;
+        b=FqfD0qVQyY2JzhSPaxqS+ifkhnrgmFYU8pFZiQ5Ld/+ajw2zlH3GxSV49hEgPXm2wp
+         QH7feBbRLhu/He4VjdQ6QDME1HBxtBUCBB88Bu7xziemX5wIBBXic1xJWuOIuDiXgnBg
+         mfohjMUO82cePSELJ7ANo6/q/IZTc2BmK9hB2PcDLWjlo2JAKJEaILrqAO5KbX7lyw7W
+         WeFdd6YuuH3/puhFwFRu1RwRadoeZd7XLBoQdz46Tmj4vABMEA8A/1gtHoqWBposDlws
+         lfI8KvHTvsRdIS2VuX2fVZasA+oz7bMpHfRUTKcBDqFZhOj1QImcT1SIyQI++DGdjces
+         RhJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xRrmSaXTPuHNH4vczPmmM5RurjEif4JresYAJudYvWc=;
+        b=R3x/LkoDb/z0jRmBf+IMDIvPUNq974fgbkYRXMvX/gX0ll2vCsZxAZ6pPU+9m1H0Za
+         7KeEgQSfxbzlh9AjavSTtBhbFsSoFPpd2YZbMuuyIGAGUbCf5exbcr0mGjymntijepIf
+         E1ZmxNe7gVTKEqhukvxsyrDtdlsPumPAiyPosU83f7HEDSJzpOP0gONkB+nsm1jiNHbC
+         O0LPbPkJqqkx2YhiC9lGw8jGl1hP7MRWXmgp/TVCf/eAFvuigWD6NP/z6IILIcdt5xLq
+         4E5pbt4r/B+QWIIwS8J+mWDiEcRNTYOXBX3zxZ4CLXIX90x9xvKnz6O1txmmpI9puZWx
+         mN1A==
+X-Gm-Message-State: AOAM5324nWvSbW1WmHJcpvCtJ4gaE547Z0g2c7BhgGIQ7zk0O4TJz91j
+        QuWTzntWKa61yi2axmYwvvsMlvCYNXeqWNnxxU275QPqZPw=
+X-Google-Smtp-Source: ABdhPJwe/qOmXM9fRYbfR0TjwFrwz2y+p/GQCaKzJzgfLqeXm63idcDnub/1584eptHtzSB+GwGei7Si0y9PArMPYsY=
+X-Received: by 2002:a5d:47a7:0:b0:203:d1b4:8f6 with SMTP id
+ 7-20020a5d47a7000000b00203d1b408f6mr1298090wrb.36.1647461021390; Wed, 16 Mar
+ 2022 13:03:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20220311181014.3448936-1-bjwyman@gmail.com> <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
+In-Reply-To: <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
+From:   Brandon Wyman <bjwyman@gmail.com>
+Date:   Wed, 16 Mar 2022 15:03:05 -0500
+Message-ID: <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: fd6ca3f5b80f6dda381fe84211be3b491f28bf0f  hwmon: (scpi-hwmon): Use of_device_get_match_data()
+On Sun, Mar 13, 2022 at 11:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/11/22 10:10, Brandon Wyman wrote:
+> > Add a clear_faults write-only debugfs entry for the ibm-cffps device
+> > driver.
+> >
+> > Certain IBM power supplies require clearing some latched faults in order
+> > to indicate that the fault has indeed been observed/noticed.
+> >
+>
+> That is insufficient, sorry. Please provide the affected power supplies as
+> well as the affected faults, and confirm that the problem still exists
+> in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
+> includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
+> bits after read").
+>
+> Thanks,
+> Guenter
 
-elapsed time: 752m
+Sorry for the delay in responding. I did some testing with commit
+35f165f08950. I could not get that code to send the CLEAR_FAULTS
+command to the power supplies.
 
-configs tested: 106
-configs skipped: 3
+I can update the commit message to be more specific about which power
+supplies need this CLEAR_FAULTS sent, and which faults. It is observed
+with the 1600W power supplies (2B1E model). The faults that latch are
+the VIN_UV and INPUT faults in the STATUS_WORD. The corresponding
+STATUS_INPUT fault bits are VIN_UV_FAULT and Unit is Off.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-powerpc64                           defconfig
-mips                  decstation_64_defconfig
-sh                          landisk_defconfig
-powerpc                    amigaone_defconfig
-h8300                            alldefconfig
-sh                          rsk7201_defconfig
-arm                         axm55xx_defconfig
-powerpc                      pcm030_defconfig
-arm                        shmobile_defconfig
-arm                          pxa910_defconfig
-sparc                            alldefconfig
-openrisc                 simple_smp_defconfig
-powerpc                     pq2fads_defconfig
-sh                        sh7763rdp_defconfig
-sh                     sh7710voipgw_defconfig
-mips                           ci20_defconfig
-arm                  randconfig-c002-20220314
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20220314
-i386                 randconfig-a005-20220314
-i386                 randconfig-a002-20220314
-i386                 randconfig-a004-20220314
-i386                 randconfig-a006-20220314
-i386                 randconfig-a003-20220314
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-arc                  randconfig-r043-20220313
-riscv                randconfig-r042-20220313
-s390                 randconfig-r044-20220313
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
-
-clang tested configs:
-arm                  randconfig-c002-20220313
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220313
-riscv                randconfig-c006-20220313
-mips                 randconfig-c004-20220313
-i386                          randconfig-c001
-mips                      maltaaprp_defconfig
-x86_64               randconfig-a014-20220314
-x86_64               randconfig-a015-20220314
-x86_64               randconfig-a016-20220314
-x86_64               randconfig-a012-20220314
-x86_64               randconfig-a013-20220314
-x86_64               randconfig-a011-20220314
-i386                 randconfig-a013-20220314
-i386                 randconfig-a015-20220314
-i386                 randconfig-a014-20220314
-i386                 randconfig-a011-20220314
-i386                 randconfig-a016-20220314
-i386                 randconfig-a012-20220314
-hexagon              randconfig-r045-20220313
-hexagon              randconfig-r041-20220313
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> > Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+> > ---
+> > V1 -> V2: Explain why this change is needed
+> >
+> >   drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
+> >   1 file changed, 11 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> > index e3294a1a54bb..3f02dde02a4b 100644
+> > --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> > +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> > @@ -67,6 +67,7 @@ enum {
+> >       CFFPS_DEBUGFS_CCIN,
+> >       CFFPS_DEBUGFS_FW,
+> >       CFFPS_DEBUGFS_ON_OFF_CONFIG,
+> > +     CFFPS_DEBUGFS_CLEAR_FAULTS,
+> >       CFFPS_DEBUGFS_NUM_ENTRIES
+> >   };
+> >
+> > @@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
+> >               if (rc)
+> >                       return rc;
+> >
+> > +             rc = 1;
+> > +             break;
+> > +     case CFFPS_DEBUGFS_CLEAR_FAULTS:
+> > +             rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
+> > +             if (rc < 0)
+> > +                     return rc;
+> > +
+> >               rc = 1;
+> >               break;
+> >       default:
+> > @@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+> >       debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+> >                           &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+> >                           &ibm_cffps_fops);
+> > +     debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
+> > +                         &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
+> > +                         &ibm_cffps_fops);
+> >
+> >       return 0;
+> >   }
+>
