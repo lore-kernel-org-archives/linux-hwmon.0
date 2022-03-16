@@ -2,296 +2,182 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABEC9C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Mar 2022 23:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84869C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Mar 2022 15:39:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239050AbiCOXsL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Mar 2022 19:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S239846AbiCPPkT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Mar 2022 11:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiCOXsK (ORCPT
+        with ESMTP id S1348244AbiCPPkS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Mar 2022 19:48:10 -0400
-X-Greylist: delayed 1213 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Mar 2022 16:46:57 PDT
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.49.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7270D5C853
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Mar 2022 16:46:57 -0700 (PDT)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id CA4F818728
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Mar 2022 18:26:43 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id UGYtnG5F39AGSUGYtnMRW3; Tue, 15 Mar 2022 18:26:43 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FMz4dv/MLCPqxMquT9pFk6KUEVB5ed9lWVOqB/G2Qsw=; b=5lgvZgsRcs9SGWnnx6JtY06wdS
-        zNXTyuY4WPr1wuvZdRXTiodbvM++DqqAvJyC19CA1efn2LGgFXA5qswXI8+H5ekOniOW4LesN/j9c
-        MOLxvpN0OUjSoIQtD2nynya5Z+MpWX7hY0+xSke5stHgb/hj87kik5FoJ+WSanS7i4229VDCICafa
-        FpS6GM3T4sp7pPNRFf1ZKKt7C2hqPvlWWwBvComWpmZ8BAlO2Uh4UK6DwxqNpaxM51BUQSCIFiM/u
-        ZNCUOiYA+JF/3hjMpkpc9Whgk7qsXtGL4Z09OfHF1aVB6HSuN8siwqS7wVzAwtMpZY6c+Z9LoMT+5
-        fWYrEG3A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54298)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nUGYs-002Vpc-Bh; Tue, 15 Mar 2022 23:26:42 +0000
-Message-ID: <4af362d3-999d-cc3c-50e2-5a91d888f09f@roeck-us.net>
-Date:   Tue, 15 Mar 2022 16:26:38 -0700
+        Wed, 16 Mar 2022 11:40:18 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B13834675
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Mar 2022 08:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647445144; x=1678981144;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Gh6RIx6JYoVZNr3PbvztJui7PIWbIxzHQjKmTG2pIJw=;
+  b=Twu0QjKnrM4QxZ7UXylCxPkWyPReCvuwSG332CTm5heh8w5vIZgleONO
+   cll7isJu5CJTdDA+NJISw7hvE/FWASNzr4PsTsbwbKIpwZiBHe3vy6Ld2
+   KiuLJDEuOAaJ6vCBV0M72+E0+wzGqEOUIbDhJF+NbvjONsrYF2v1N7AYy
+   juzUvZBiMW61TmH5qgG4x12S031RTGtexerIXGneMWEiJR6oXo77euU6j
+   COpd3O7moF2ETqSX14xtRwDXZ7VgqOPd/jqmDKvAsS8qySvl7B7dE88n4
+   lXDqw9nDqb4060n+kCxf9CeI1PQbc1P0NVhSDmnFG/kd4Fb39BmPL/On+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="244088266"
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="244088266"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 08:39:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="646705577"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 08:39:00 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUVjn-000CZF-De; Wed, 16 Mar 2022 15:38:59 +0000
+Date:   Wed, 16 Mar 2022 23:38:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ fd6ca3f5b80f6dda381fe84211be3b491f28bf0f
+Message-ID: <62320467.gUswPNQhAosZYkVw%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8 03/16] hwmon: Make use of devm_clk_get_enabled()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        =?UTF-8?Q?Andr=c3=a9_Gustavo_Nakagomi_Lopez?= <andregnl@usp.br>,
-        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
- <20220314141643.22184-4-u.kleine-koenig@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220314141643.22184-4-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nUGYs-002Vpc-Bh
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54298
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 24
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/14/22 07:16, Uwe Kleine-König wrote:
-> Several drivers manually register a devm handler to disable their clk.
-> Convert them to devm_clk_get_enabled().
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: fd6ca3f5b80f6dda381fe84211be3b491f28bf0f  hwmon: (scpi-hwmon): Use of_device_get_match_data()
 
-Let's see if it goes anywhere this time.
+elapsed time: 752m
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+configs tested: 106
+configs skipped: 3
 
-> ---
->   drivers/hwmon/axi-fan-control.c | 15 +--------------
->   drivers/hwmon/ltc2947-core.c    | 17 +----------------
->   drivers/hwmon/mr75203.c         | 26 +-------------------------
->   drivers/hwmon/sparx5-temp.c     | 19 +------------------
->   4 files changed, 4 insertions(+), 73 deletions(-)
-> 
-> diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
-> index d2092c17d993..ce404ed9c53e 100644
-> --- a/drivers/hwmon/axi-fan-control.c
-> +++ b/drivers/hwmon/axi-fan-control.c
-> @@ -393,11 +393,6 @@ static int axi_fan_control_init(struct axi_fan_control_data *ctl,
->   	return ret;
->   }
->   
-> -static void axi_fan_control_clk_disable(void *clk)
-> -{
-> -	clk_disable_unprepare(clk);
-> -}
-> -
->   static const struct hwmon_channel_info *axi_fan_control_info[] = {
->   	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT),
->   	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_LABEL),
-> @@ -477,20 +472,12 @@ static int axi_fan_control_probe(struct platform_device *pdev)
->   	if (IS_ERR(ctl->base))
->   		return PTR_ERR(ctl->base);
->   
-> -	clk = devm_clk_get(&pdev->dev, NULL);
-> +	clk = devm_clk_get_enabled(&pdev->dev, NULL);
->   	if (IS_ERR(clk)) {
->   		dev_err(&pdev->dev, "clk_get failed with %ld\n", PTR_ERR(clk));
->   		return PTR_ERR(clk);
->   	}
->   
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = devm_add_action_or_reset(&pdev->dev, axi_fan_control_clk_disable, clk);
-> -	if (ret)
-> -		return ret;
-> -
->   	ctl->clk_rate = clk_get_rate(clk);
->   	if (!ctl->clk_rate)
->   		return -EINVAL;
-> diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
-> index 5423466de697..626f5bf2c9c7 100644
-> --- a/drivers/hwmon/ltc2947-core.c
-> +++ b/drivers/hwmon/ltc2947-core.c
-> @@ -956,13 +956,6 @@ static struct attribute *ltc2947_attrs[] = {
->   };
->   ATTRIBUTE_GROUPS(ltc2947);
->   
-> -static void ltc2947_clk_disable(void *data)
-> -{
-> -	struct clk *extclk = data;
-> -
-> -	clk_disable_unprepare(extclk);
-> -}
-> -
->   static int ltc2947_setup(struct ltc2947_data *st)
->   {
->   	int ret;
-> @@ -989,7 +982,7 @@ static int ltc2947_setup(struct ltc2947_data *st)
->   		return ret;
->   
->   	/* check external clock presence */
-> -	extclk = devm_clk_get_optional(st->dev, NULL);
-> +	extclk = devm_clk_get_optional_enabled(st->dev, NULL);
->   	if (IS_ERR(extclk))
->   		return dev_err_probe(st->dev, PTR_ERR(extclk),
->   				     "Failed to get external clock\n");
-> @@ -1007,14 +1000,6 @@ static int ltc2947_setup(struct ltc2947_data *st)
->   			return -EINVAL;
->   		}
->   
-> -		ret = clk_prepare_enable(extclk);
-> -		if (ret)
-> -			return ret;
-> -
-> -		ret = devm_add_action_or_reset(st->dev, ltc2947_clk_disable,
-> -					       extclk);
-> -		if (ret)
-> -			return ret;
->   		/* as in table 1 of the datasheet */
->   		if (rate_hz >= LTC2947_CLK_MIN && rate_hz <= 1000000)
->   			pre = 0;
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 1ba1e3145969..0c691f291a64 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -461,24 +461,6 @@ static int pvt_get_regmap(struct platform_device *pdev, char *reg_name,
->   	return 0;
->   }
->   
-> -static void pvt_clk_disable(void *data)
-> -{
-> -	struct pvt_device *pvt = data;
-> -
-> -	clk_disable_unprepare(pvt->clk);
-> -}
-> -
-> -static int pvt_clk_enable(struct device *dev, struct pvt_device *pvt)
-> -{
-> -	int ret;
-> -
-> -	ret = clk_prepare_enable(pvt->clk);
-> -	if (ret)
-> -		return ret;
-> -
-> -	return devm_add_action_or_reset(dev, pvt_clk_disable, pvt);
-> -}
-> -
->   static void pvt_reset_control_assert(void *data)
->   {
->   	struct pvt_device *pvt = data;
-> @@ -515,16 +497,10 @@ static int mr75203_probe(struct platform_device *pdev)
->   	if (ret)
->   		return ret;
->   
-> -	pvt->clk = devm_clk_get(dev, NULL);
-> +	pvt->clk = devm_clk_get_enabled(dev, NULL);
->   	if (IS_ERR(pvt->clk))
->   		return dev_err_probe(dev, PTR_ERR(pvt->clk), "failed to get clock\n");
->   
-> -	ret = pvt_clk_enable(dev, pvt);
-> -	if (ret) {
-> -		dev_err(dev, "failed to enable clock\n");
-> -		return ret;
-> -	}
-> -
->   	pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
->   	if (IS_ERR(pvt->rst))
->   		return dev_err_probe(dev, PTR_ERR(pvt->rst),
-> diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
-> index 98be48e3a22a..04fd8505e5d6 100644
-> --- a/drivers/hwmon/sparx5-temp.c
-> +++ b/drivers/hwmon/sparx5-temp.c
-> @@ -26,13 +26,6 @@ struct s5_hwmon {
->   	struct clk *clk;
->   };
->   
-> -static void s5_temp_clk_disable(void *data)
-> -{
-> -	struct clk *clk = data;
-> -
-> -	clk_disable_unprepare(clk);
-> -}
-> -
->   static void s5_temp_enable(struct s5_hwmon *hwmon)
->   {
->   	u32 val = readl(hwmon->base + TEMP_CFG);
-> @@ -113,7 +106,6 @@ static int s5_temp_probe(struct platform_device *pdev)
->   {
->   	struct device *hwmon_dev;
->   	struct s5_hwmon *hwmon;
-> -	int ret;
->   
->   	hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
->   	if (!hwmon)
-> @@ -123,19 +115,10 @@ static int s5_temp_probe(struct platform_device *pdev)
->   	if (IS_ERR(hwmon->base))
->   		return PTR_ERR(hwmon->base);
->   
-> -	hwmon->clk = devm_clk_get(&pdev->dev, NULL);
-> +	hwmon->clk = devm_clk_get_enabled(&pdev->dev, NULL);
->   	if (IS_ERR(hwmon->clk))
->   		return PTR_ERR(hwmon->clk);
->   
-> -	ret = clk_prepare_enable(hwmon->clk);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = devm_add_action_or_reset(&pdev->dev, s5_temp_clk_disable,
-> -				       hwmon->clk);
-> -	if (ret)
-> -		return ret;
-> -
->   	s5_temp_enable(hwmon);
->   
->   	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+powerpc64                           defconfig
+mips                  decstation_64_defconfig
+sh                          landisk_defconfig
+powerpc                    amigaone_defconfig
+h8300                            alldefconfig
+sh                          rsk7201_defconfig
+arm                         axm55xx_defconfig
+powerpc                      pcm030_defconfig
+arm                        shmobile_defconfig
+arm                          pxa910_defconfig
+sparc                            alldefconfig
+openrisc                 simple_smp_defconfig
+powerpc                     pq2fads_defconfig
+sh                        sh7763rdp_defconfig
+sh                     sh7710voipgw_defconfig
+mips                           ci20_defconfig
+arm                  randconfig-c002-20220314
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20220314
+i386                 randconfig-a005-20220314
+i386                 randconfig-a002-20220314
+i386                 randconfig-a004-20220314
+i386                 randconfig-a006-20220314
+i386                 randconfig-a003-20220314
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+arc                  randconfig-r043-20220313
+riscv                randconfig-r042-20220313
+s390                 randconfig-r044-20220313
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                                  kexec
+
+clang tested configs:
+arm                  randconfig-c002-20220313
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220313
+riscv                randconfig-c006-20220313
+mips                 randconfig-c004-20220313
+i386                          randconfig-c001
+mips                      maltaaprp_defconfig
+x86_64               randconfig-a014-20220314
+x86_64               randconfig-a015-20220314
+x86_64               randconfig-a016-20220314
+x86_64               randconfig-a012-20220314
+x86_64               randconfig-a013-20220314
+x86_64               randconfig-a011-20220314
+i386                 randconfig-a013-20220314
+i386                 randconfig-a015-20220314
+i386                 randconfig-a014-20220314
+i386                 randconfig-a011-20220314
+i386                 randconfig-a016-20220314
+i386                 randconfig-a012-20220314
+hexagon              randconfig-r045-20220313
+hexagon              randconfig-r041-20220313
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
