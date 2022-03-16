@@ -2,114 +2,73 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0BFBC433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC49AC433EF
 	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Mar 2022 23:41:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238342AbiCPXnE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Mar 2022 19:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S1349101AbiCPXnF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Mar 2022 19:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351493AbiCPXnD (ORCPT
+        with ESMTP id S1351439AbiCPXnD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 16 Mar 2022 19:43:03 -0400
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D111A81E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61A71A832
         for <linux-hwmon@vger.kernel.org>; Wed, 16 Mar 2022 16:41:46 -0700 (PDT)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0F4DA2C0C1E;
-        Wed, 16 Mar 2022 23:41:44 +0000 (UTC)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EC0252C082B;
+        Wed, 16 Mar 2022 23:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1647474104;
-        bh=nVcp3cB00aWvtsu3vJBxU+P4/JWMysUbwbvfhFJcak4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tdGmLkb5X2uMoGAv163MveTWgjZ3PlY160oswvBI1jLqnmNnVurmmyQYrY7YfxXVE
-         EyXA15/svaomRHT88e6H/lyEfsYkEYJMo8ZMrU62pR+DJBwkZJUlq+LNWigqzt6ugM
-         hXEuPVVN7yUoBF2PnudJXiKdyD4LIb7C+XiyULm2kfTx1WJnySrhrMuW/ImyveoKi+
-         99OPKSKzB9CEFnsltn/ayyvfpQ0WQz2Qp4SmgZxYfoLXWWvwQEWKV13szez/wZLMZG
-         8d1muaJYjUMv1m4MXXwXO2NTQWFfZ6Kvt6DG6pZ8erWwyLYcQd3Kzqwh97M9ce2E0t
-         5UxcsAo8lTV6A==
+        s=mail181024; t=1647474103;
+        bh=q1zQy4dxcm7f5Y+SuIYAFb4zrm2UtZwA5QnElXfnssg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lwCfTRJVGRYQ4N5kgwDk4maKz/MRd9eR++E8TYa+XPlhA8PATYKtZ+qYFpsFiymrN
+         qjq3/tHCgoLFnPqW8rlyYm68COcbwDs8si/Y3WeZlqac4RHfJA8SV52GGapz0FGEe5
+         QqOAcpBee8VgYqbXCmFzVV77uyYD0FTfdVeZFUSYTImOrIr2y2UbWhP4uhvXK2h6vQ
+         Pm0gbFeNl76wVUgUl1OsaJxXTi1A7pNEaQAwsRx1Zj1yUlom/lBJcuQ6g2J4kPu065
+         jVK6jFUYCAYe6x9VdwBvsfC/7luOy98X67HtimZ9EBMv0NZ9LHqN6JMroBVYcdHjIK
+         tnumnhCFufnfg==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B623275b70001>; Thu, 17 Mar 2022 12:41:43 +1300
+        id <B623275b70000>; Thu, 17 Mar 2022 12:41:43 +1300
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id BB0EF13EE3F;
+        by pat.atlnz.lc (Postfix) with ESMTP id BA03E13EE36;
         Thu, 17 Mar 2022 12:41:43 +1300 (NZDT)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 46EE62A004D; Thu, 17 Mar 2022 12:41:41 +1300 (NZDT)
+        id 452AA2A2679; Thu, 17 Mar 2022 12:41:41 +1300 (NZDT)
 From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
 To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 1/2] dt-bindings: hwmon: Document adt7475 pin-function properties
-Date:   Thu, 17 Mar 2022 12:41:33 +1300
-Message-Id: <20220316234134.290492-2-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] hwmon: (adt7475) pin configuration
+Date:   Thu, 17 Mar 2022 12:41:32 +1300
+Message-Id: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
-References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=XrEdriJqPTbsqx2b3kgA:9
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=_3ioNcgKDktiekeMNxwA:9
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
-different functions. Add bindings so that it is possible to describe
-what pin functions are intended by the hardware design.
+This series adds support for configuring the ADT7475 based on the
+hardware description provided. The ADT7475 driver has always supported
+detecting the configuration. This adds support for configuring the chip
+based on the hardware design.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- .../devicetree/bindings/hwmon/adt7475.yaml    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Chris Packham (2):
+  dt-bindings: hwmon: Document adt7475 pin-function properties
+  hwmon: (adt7475) Add support for pin configuration
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
-entation/devicetree/bindings/hwmon/adt7475.yaml
-index 7d9c083632b9..22beb37f1bf1 100644
---- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-@@ -61,6 +61,26 @@ patternProperties:
-     $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [0, 1]
-=20
-+  "adi,pin(5|10)-function":
-+    description: |
-+      Configures the function for pin 5 on the adi,adt7473 and adi,adt74=
-75. Or
-+      pin 10 on the adi,adt7476 and adi,adt7490.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum:
-+      - pwm2
-+      - smbalert#
-+
-+  "adi,pin(9|14)-function":
-+    description: |
-+      Configures the function for pin 9 on the adi,adt7473 and adi,adt74=
-75. Or
-+      pin 14 on the adi,adt7476 and adi,adt7490
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum:
-+      - tach4
-+      - therm#
-+      - smbalert#
-+      - gpio
-+
- required:
-   - compatible
-   - reg
-@@ -79,6 +99,8 @@ examples:
-         adi,bypass-attenuator-in0 =3D <1>;
-         adi,bypass-attenuator-in1 =3D <0>;
-         adi,pwm-active-state =3D <1 0 1>;
-+        adi,pin10-function =3D "smbalert#";
-+        adi,pin14-function =3D "tach4";
-       };
-     };
-=20
+ .../devicetree/bindings/hwmon/adt7475.yaml    | 22 +++++
+ drivers/hwmon/adt7475.c                       | 95 +++++++++++++++++++
+ 2 files changed, 117 insertions(+)
+
 --=20
 2.35.1
 
