@@ -2,174 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC5A5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Mar 2022 21:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0BFBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Mar 2022 23:41:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348324AbiCPVC1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Mar 2022 17:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S238342AbiCPXnE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Mar 2022 19:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239427AbiCPVC0 (ORCPT
+        with ESMTP id S1351493AbiCPXnD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Mar 2022 17:02:26 -0400
-X-Greylist: delayed 1497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Mar 2022 14:01:11 PDT
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.62.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D5921BE
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Mar 2022 14:01:10 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 8AF43400D3740
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Mar 2022 15:12:01 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id Ua01nNz4mdx86Ua01nHfFU; Wed, 16 Mar 2022 15:12:01 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tgGDz0arRuPsKFZcF95+McsnxVvuF34elrSQDilLy6M=; b=kZCvQUupt1LN8jucSGsOFqkUH+
-        54NPNCu4PZ7Fzh6dw8pKdfiUKkm6oQilGnoOH6K+h8zSdnEBoQguwDKkRj+KTPBBVt1DtK92kgQ7+
-        TGK7ud9mr6W9Q+D2+G/4xSrEnUa8vIgXNICPlW8wDVMlOaR239/L4G2c87rd4tKrmQOas+UMyBh12
-        aeYyKy2Li6+PiXw6wgl6VjuGsnXK7hEKsmJNfHMPQ9RDR0vfJALk2heRBTx4tdx8jXSSSjdz8BHus
-        5udkttlxlOF7Y40FxEH6jSFu2iZwnRjdktepHQ8WCZevA1WedSaQnGdgsehYLrBRjoFg1zuYff2Hk
-        FID1UFQg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54306)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nUa00-000Zgt-Tk; Wed, 16 Mar 2022 20:12:00 +0000
-Message-ID: <582086fe-1cc3-d161-a866-f4726d04a254@roeck-us.net>
-Date:   Wed, 16 Mar 2022 13:11:59 -0700
+        Wed, 16 Mar 2022 19:43:03 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D111A81E
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Mar 2022 16:41:46 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0F4DA2C0C1E;
+        Wed, 16 Mar 2022 23:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1647474104;
+        bh=nVcp3cB00aWvtsu3vJBxU+P4/JWMysUbwbvfhFJcak4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tdGmLkb5X2uMoGAv163MveTWgjZ3PlY160oswvBI1jLqnmNnVurmmyQYrY7YfxXVE
+         EyXA15/svaomRHT88e6H/lyEfsYkEYJMo8ZMrU62pR+DJBwkZJUlq+LNWigqzt6ugM
+         hXEuPVVN7yUoBF2PnudJXiKdyD4LIb7C+XiyULm2kfTx1WJnySrhrMuW/ImyveoKi+
+         99OPKSKzB9CEFnsltn/ayyvfpQ0WQz2Qp4SmgZxYfoLXWWvwQEWKV13szez/wZLMZG
+         8d1muaJYjUMv1m4MXXwXO2NTQWFfZ6Kvt6DG6pZ8erWwyLYcQd3Kzqwh97M9ce2E0t
+         5UxcsAo8lTV6A==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B623275b70001>; Thu, 17 Mar 2022 12:41:43 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id BB0EF13EE3F;
+        Thu, 17 Mar 2022 12:41:43 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 46EE62A004D; Thu, 17 Mar 2022 12:41:41 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 1/2] dt-bindings: hwmon: Document adt7475 pin-function properties
+Date:   Thu, 17 Mar 2022 12:41:33 +1300
+Message-Id: <20220316234134.290492-2-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
+References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Brandon Wyman <bjwyman@gmail.com>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Eddie James <eajames@linux.ibm.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220311181014.3448936-1-bjwyman@gmail.com>
- <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
- <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs
- entry
-In-Reply-To: <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nUa00-000Zgt-Tk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54306
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=XrEdriJqPTbsqx2b3kgA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/16/22 13:03, Brandon Wyman wrote:
-> On Sun, Mar 13, 2022 at 11:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 3/11/22 10:10, Brandon Wyman wrote:
->>> Add a clear_faults write-only debugfs entry for the ibm-cffps device
->>> driver.
->>>
->>> Certain IBM power supplies require clearing some latched faults in order
->>> to indicate that the fault has indeed been observed/noticed.
->>>
->>
->> That is insufficient, sorry. Please provide the affected power supplies as
->> well as the affected faults, and confirm that the problem still exists
->> in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
->> includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
->> bits after read").
->>
->> Thanks,
->> Guenter
-> 
-> Sorry for the delay in responding. I did some testing with commit
-> 35f165f08950. I could not get that code to send the CLEAR_FAULTS
-> command to the power supplies.
-> 
-> I can update the commit message to be more specific about which power
-> supplies need this CLEAR_FAULTS sent, and which faults. It is observed
-> with the 1600W power supplies (2B1E model). The faults that latch are
-> the VIN_UV and INPUT faults in the STATUS_WORD. The corresponding
-> STATUS_INPUT fault bits are VIN_UV_FAULT and Unit is Off.
-> 
+The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
+different functions. Add bindings so that it is possible to describe
+what pin functions are intended by the hardware design.
 
-The point is that the respective fault bits should be reset when the
-corresponding alarm attributes are read. This isn't about executing
-a CLEAR_FAULTS command, but about selectively resetting fault bits
-while ensuring that faults are reported at least once. Executing
-CLEAR_FAULTS is a big hammer.
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ .../devicetree/bindings/hwmon/adt7475.yaml    | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-With the patch I pointed to in place, input (and other) faults should
-be reset after the corresponding alarm attributes are read, assuming
-that the condition no longer exists. If that does not happen, we should
-fix the problem instead of deploying the big hammer.
-
-Thanks,
-Guenter
-
->>
->>> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
->>> ---
->>> V1 -> V2: Explain why this change is needed
->>>
->>>    drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
->>>    1 file changed, 11 insertions(+)
->>>
->>> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
->>> index e3294a1a54bb..3f02dde02a4b 100644
->>> --- a/drivers/hwmon/pmbus/ibm-cffps.c
->>> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
->>> @@ -67,6 +67,7 @@ enum {
->>>        CFFPS_DEBUGFS_CCIN,
->>>        CFFPS_DEBUGFS_FW,
->>>        CFFPS_DEBUGFS_ON_OFF_CONFIG,
->>> +     CFFPS_DEBUGFS_CLEAR_FAULTS,
->>>        CFFPS_DEBUGFS_NUM_ENTRIES
->>>    };
->>>
->>> @@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
->>>                if (rc)
->>>                        return rc;
->>>
->>> +             rc = 1;
->>> +             break;
->>> +     case CFFPS_DEBUGFS_CLEAR_FAULTS:
->>> +             rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
->>> +             if (rc < 0)
->>> +                     return rc;
->>> +
->>>                rc = 1;
->>>                break;
->>>        default:
->>> @@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
->>>        debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
->>>                            &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
->>>                            &ibm_cffps_fops);
->>> +     debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
->>> +                         &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
->>> +                         &ibm_cffps_fops);
->>>
->>>        return 0;
->>>    }
->>
+diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
+entation/devicetree/bindings/hwmon/adt7475.yaml
+index 7d9c083632b9..22beb37f1bf1 100644
+--- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+@@ -61,6 +61,26 @@ patternProperties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     enum: [0, 1]
+=20
++  "adi,pin(5|10)-function":
++    description: |
++      Configures the function for pin 5 on the adi,adt7473 and adi,adt74=
+75. Or
++      pin 10 on the adi,adt7476 and adi,adt7490.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum:
++      - pwm2
++      - smbalert#
++
++  "adi,pin(9|14)-function":
++    description: |
++      Configures the function for pin 9 on the adi,adt7473 and adi,adt74=
+75. Or
++      pin 14 on the adi,adt7476 and adi,adt7490
++    $ref: /schemas/types.yaml#/definitions/string
++    enum:
++      - tach4
++      - therm#
++      - smbalert#
++      - gpio
++
+ required:
+   - compatible
+   - reg
+@@ -79,6 +99,8 @@ examples:
+         adi,bypass-attenuator-in0 =3D <1>;
+         adi,bypass-attenuator-in1 =3D <0>;
+         adi,pwm-active-state =3D <1 0 1>;
++        adi,pin10-function =3D "smbalert#";
++        adi,pin14-function =3D "tach4";
+       };
+     };
+=20
+--=20
+2.35.1
 
