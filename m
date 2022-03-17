@@ -2,244 +2,180 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39711C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 13:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 913D8C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 16:13:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiCQNaP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Mar 2022 09:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S236427AbiCQQOv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Mar 2022 12:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbiCQNaO (ORCPT
+        with ESMTP id S236400AbiCQQOm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:30:14 -0400
-Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359D912298B
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 06:28:56 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id AE074A5642
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 08:28:55 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id UqBTnm2L2HnotUqBTnx5ux; Thu, 17 Mar 2022 08:28:55 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ZWlDpJ1jKpFqrvBTDx/wTo26QSvpgwcabfkWM+NH5jc=; b=R+oy9LMWd0I1peoGYqliO/5hmz
-        wQqYKKAVATe4jzNwfnXWcwcUxsK0iayujfDu1DhAGbkcKuxcxG3BcuxhoF2Ldd6DhJAsI1nHogiiR
-        ELc5oE2J0AeM4kDEOB9RPoZ2seXSgtglbrfhqJIZJ64KuzGW2ThqK9OJAgeOyXfTMrQWszVUlrT5r
-        ID3MpjXQetLxRMQDbS3PXtxw+5ialhhJvcaaWGzYhXJ95GUW47CsxYQGkyv0fZAUHJemZuYLRIl9j
-        2f9s731PyYBEL8MXToAMGABS1V+9PXMPixVTFMKDpebGr+TGNe8wUDmA5ZnR2apweiycHaieGTyLQ
-        HWsKB0Vg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54312)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nUqBT-003zon-5m; Thu, 17 Mar 2022 13:28:55 +0000
-Message-ID: <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
-Date:   Thu, 17 Mar 2022 06:28:53 -0700
+        Thu, 17 Mar 2022 12:14:42 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E3D19C19;
+        Thu, 17 Mar 2022 09:13:25 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id a1so6659882wrh.10;
+        Thu, 17 Mar 2022 09:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jF/+b29n2k6QwgY1N7ytCrLXHO8Y7Zm3vkBb+Xdt3qs=;
+        b=Uj7KjY3fF36OqFiimwFYxV7pRXYGE7AoLg7hDmDZIemHwqwiVsCR+j/WWUNbrL2svN
+         VccqsNnUcjCUctBn5gJI90IFOf0axEhmCIRsp8lwM4NkqzRg+lVVir9qDtHi/yuaodTo
+         fj2rECP9DlQ/7zNZjDwipzNOUfJ3fZqc8X1f7GmHZdNM3jpA1KC2dMtcqLj2wWs5FBnD
+         rBjDFroMyz9qtRxBdM6v4DB35E8pdkXr9abM4RSmas/nx+Pv8b/ERsaPJ7mUdnWF5wc4
+         sQVFPx09LZIiOruCkiMwfcUgZVtmHpFzaWOCqWByzXaG91bAOnlOmDi/OsjJsVGWztfi
+         aorA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jF/+b29n2k6QwgY1N7ytCrLXHO8Y7Zm3vkBb+Xdt3qs=;
+        b=CYj9stgUX6Fu7Zhci9VlNOWVkHhHVFXV8ynxe+u1d8bvEzerSbiyazo2pVJ67pm3Yo
+         7Gn9CsdnMK7yFZxjbuNl5yOCiAGHjHgOHTkTmAv+05qMOROUAnmsoxTD0CDV5KaIK6HL
+         YEuRFukgadP9KvkAsJMAmGvvbnra4cGArY/h7z0GlXIQu1zJ/vBr5PIokwmTcu36r4pz
+         DY2nuK6Z3BB7oOQU+RmF/WLIZMO8EfLVRc5nedv2Ga6uhRA6QNzvcUBglrw+uCsrDACp
+         4Q5pyioOYxJhG7zvZujW2LFbqXvVWIYZC2yg3MPegzetxtyeDtl1ys6vwhwbwmb5re8u
+         mQWg==
+X-Gm-Message-State: AOAM532ArcmSVcmciv5nfbAc09bZiq7T1eDTTL92yAA+kmSgs2sXkoE2
+        SVb0dTFlRLnNQEPG+5ElaQLzqvXTjwsyevRy04jk7P5ylDitog==
+X-Google-Smtp-Source: ABdhPJzoKDyBbVV/h3RA8+GrQf9PozlA+frXzSHUXmbwV0v7vgqz+5I9Hmz1OQYOvh9UQdtU2mwZGkNja2h4nbhPbNk=
+X-Received: by 2002:a5d:47a7:0:b0:203:d1b4:8f6 with SMTP id
+ 7-20020a5d47a7000000b00203d1b408f6mr4862024wrb.36.1647533604016; Thu, 17 Mar
+ 2022 09:13:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        jdelvare@suse.com, robh+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+References: <20220311181014.3448936-1-bjwyman@gmail.com> <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
+ <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com> <582086fe-1cc3-d161-a866-f4726d04a254@roeck-us.net>
+In-Reply-To: <582086fe-1cc3-d161-a866-f4726d04a254@roeck-us.net>
+From:   Brandon Wyman <bjwyman@gmail.com>
+Date:   Thu, 17 Mar 2022 11:12:49 -0500
+Message-ID: <CAK_vbW1Lfroo91cMxsLpuf-uuDwcsssG1=fjp3an_O5-FUHjMQ@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
- <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
-In-Reply-To: <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nUqBT-003zon-5m
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54312
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 3
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/16/22 16:41, Chris Packham wrote:
-> The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
-> different functions. On the adt7473 and  adt7475 this is pins 5 and 9.
-> On the adt7476 and adt7490 this is pins 10 and 14.
-> 
-> The first pin can either be PWM2(default) or SMBALERT#. The second pin
-> can be TACH4(default), THERM#, SMBALERT# or GPIO.
-> 
-> The adt7475 driver has always been able to detect the configuration if
-> it had been done by an earlier boot stage. Add support for configuring
-> the pins based on the hardware description in the device tree.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->   drivers/hwmon/adt7475.c | 95 +++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 95 insertions(+)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 9d5b019651f2..ad5e5a7a844b 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -112,6 +112,8 @@
->   #define CONFIG3_THERM		0x02
->   
->   #define CONFIG4_PINFUNC		0x03
-> +#define CONFIG4_THERM		0x01
-> +#define CONFIG4_SMBALERT	0x02
->   #define CONFIG4_MAXDUTY		0x08
->   #define CONFIG4_ATTN_IN10	0x30
->   #define CONFIG4_ATTN_IN43	0xC0
-> @@ -1460,6 +1462,95 @@ static int adt7475_update_limits(struct i2c_client *client)
->   	return 0;
->   }
->   
-> +static int load_pin10_config(const struct i2c_client *client, const char *propname)
-> +{
+On Wed, Mar 16, 2022 at 3:14 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/16/22 13:03, Brandon Wyman wrote:
+> > On Sun, Mar 13, 2022 at 11:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >>
+> >> On 3/11/22 10:10, Brandon Wyman wrote:
+> >>> Add a clear_faults write-only debugfs entry for the ibm-cffps device
+> >>> driver.
+> >>>
+> >>> Certain IBM power supplies require clearing some latched faults in order
+> >>> to indicate that the fault has indeed been observed/noticed.
+> >>>
+> >>
+> >> That is insufficient, sorry. Please provide the affected power supplies as
+> >> well as the affected faults, and confirm that the problem still exists
+> >> in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
+> >> includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
+> >> bits after read").
+> >>
+> >> Thanks,
+> >> Guenter
+> >
+> > Sorry for the delay in responding. I did some testing with commit
+> > 35f165f08950. I could not get that code to send the CLEAR_FAULTS
+> > command to the power supplies.
+> >
+> > I can update the commit message to be more specific about which power
+> > supplies need this CLEAR_FAULTS sent, and which faults. It is observed
+> > with the 1600W power supplies (2B1E model). The faults that latch are
+> > the VIN_UV and INPUT faults in the STATUS_WORD. The corresponding
+> > STATUS_INPUT fault bits are VIN_UV_FAULT and Unit is Off.
+> >
+>
+> The point is that the respective fault bits should be reset when the
+> corresponding alarm attributes are read. This isn't about executing
+> a CLEAR_FAULTS command, but about selectively resetting fault bits
+> while ensuring that faults are reported at least once. Executing
+> CLEAR_FAULTS is a big hammer.
+>
+> With the patch I pointed to in place, input (and other) faults should
+> be reset after the corresponding alarm attributes are read, assuming
+> that the condition no longer exists. If that does not happen, we should
+> fix the problem instead of deploying the big hammer.
+>
+> Thanks,
+> Guenter
 
-A better function name would probably be load_config3() or similar.
+Okay, I see what you are pointing out there. I had been mostly looking
+at the "files" in the debugfs paths. Those do not end up running
+through that pmbus_get_boolean() function, so the individual fault
+clearing was not being attempted. The fault I was interested in
+appears to be associated with in1_lcrti_alarm. Reading that will give
+me a 1 if there is a VIN_UV fault, and then it sends 0x10 to
+STATUS_INPUT. That clears out VIN_UV, but the STATUS_INPUT command was
+returning 0x18. Nothing appears to handle clearing BIT(3), that 0x08
+mask.
 
-> +	const char *function;
-> +	u8 config3;
-> +	int err;
-> +
-> +	err = of_property_read_string(client->dev.of_node, propname, &function);
-> +	if (!err) {
-> +		config3 = adt7475_read(REG_CONFIG3);
+Should there be some kind of define for BIT(3) over in pmbus.h?
+Something like PB_VOLTAGE_OFF? Somehow we need something using that in
+sbit of the attributes. I had a quick hack that just OR'ed BIT(3) with
+BIT(4) for that PB_VOLTAGE_UV_FAULT. That resulted in a clear of both
+bits in STATUS_INPUT, and the faults clearing in STATUS_WORD.
 
-error check missing (I see the driver is notorious for that, but that is not
-a reason to keep doing it).
+It is not clear if there should be a separate alarm for that "Unit Off
+For Insufficient Input Voltage", or if the one for in1_lcrit_alarm
+could just be the two bits OR'ed into one mask. I can send a patch
+with a proposal on how to fix this one bit not getting cleared.
 
-> +
-> +		if (!strcmp("pwm2", function))
-> +			config3 &= ~CONFIG3_SMBALERT;
-> +		else if (!strcmp("smbalert#", function))
-> +			config3 |= CONFIG3_SMBALERT;
-> +		else
-> +			return -EINVAL;
-> +
-> +		return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int load_pin14_config(const struct i2c_client *client, const char *propname)
-> +{
-
-load_config4() ?
-
-> +	const char *function;
-> +	u8 config4;
-> +	int err;
-> +
-> +	err = of_property_read_string(client->dev.of_node, propname, &function);
-> +	if (!err) {
-> +		config4 = adt7475_read(REG_CONFIG4);
-
-error check
-
-> +		config4 &= ~CONFIG4_PINFUNC;
-> +
-> +		if (!strcmp("tach4", function))
-> +			;
-> +		else if (!strcmp("therm#", function))
-> +			config4 |= CONFIG4_THERM;
-> +		else if (!strcmp("smbalert#", function))
-> +			config4 |= CONFIG4_SMBALERT;
-> +		else if (!strcmp("gpio", function))
-> +			config4 |= CONFIG4_PINFUNC;
-> +		else
-> +			return -EINVAL;
-> +
-> +		return i2c_smbus_write_byte_data(client, REG_CONFIG4, config4);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int load_config(const struct i2c_client *client, int chip)
-> +{
-> +	int err;
-> +	const char *conf_prop1, *conf_prop2;
-
-conf_ prefix is unnecessary.
-
-> +
-> +	switch (chip) {
-> +	case adt7473:
-> +	case adt7475:
-> +		conf_prop1 = "adi,pin5-function";
-> +		conf_prop2 = "adi,pin9-function";
-> +		break;
-> +	case adt7476:
-> +	case adt7490:
-> +		conf_prop1 = "adi,pin10-function";
-> +		conf_prop2 = "adi,pin14-function";
-> +		break;
-> +	default:
-> +		return -EINVAL;
-
-It doesn't seem right to return -EINVAL here.
-
-> +	}
-> +
-> +	if (chip != adt7476 && chip != adt7490)
-> +		return 0;
-> +
-
-Why not check this first, and what is the point of assigning values to
-conf_prop1 and conf_prop2 for the other chips in the case statement above
-only to return 0 here ? It would be much simpler to drop the other chips
-from the case statement and have default: return 0.
-
-> +	err = load_pin10_config(client, conf_prop1);
-> +	if (err) {
-> +		dev_err(&client->dev, "failed to configure PIN10\n");
-
-The messages are misleading. This isn't always pin 10/14.
-
-> +		return err;
-> +	}
-> +
-> +	err = load_pin14_config(client, conf_prop2);
-> +	if (err) {
-> +		dev_err(&client->dev, "failed to configure PIN14\n");
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static int set_property_bit(const struct i2c_client *client, char *property,
->   			    u8 *config, u8 bit_index)
->   {
-> @@ -1585,6 +1676,10 @@ static int adt7475_probe(struct i2c_client *client)
->   		revision = adt7475_read(REG_DEVID2) & 0x07;
->   	}
->   
-> +	ret = load_config(client, chip);
-> +	if (ret)
-> +		return ret;
-> +
->   	config3 = adt7475_read(REG_CONFIG3);
->   	/* Pin PWM2 may alternatively be used for ALERT output */
->   	if (!(config3 & CONFIG3_SMBALERT))
-
+>
+> >>
+> >>> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+> >>> ---
+> >>> V1 -> V2: Explain why this change is needed
+> >>>
+> >>>    drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
+> >>>    1 file changed, 11 insertions(+)
+> >>>
+> >>> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> >>> index e3294a1a54bb..3f02dde02a4b 100644
+> >>> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> >>> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> >>> @@ -67,6 +67,7 @@ enum {
+> >>>        CFFPS_DEBUGFS_CCIN,
+> >>>        CFFPS_DEBUGFS_FW,
+> >>>        CFFPS_DEBUGFS_ON_OFF_CONFIG,
+> >>> +     CFFPS_DEBUGFS_CLEAR_FAULTS,
+> >>>        CFFPS_DEBUGFS_NUM_ENTRIES
+> >>>    };
+> >>>
+> >>> @@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
+> >>>                if (rc)
+> >>>                        return rc;
+> >>>
+> >>> +             rc = 1;
+> >>> +             break;
+> >>> +     case CFFPS_DEBUGFS_CLEAR_FAULTS:
+> >>> +             rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
+> >>> +             if (rc < 0)
+> >>> +                     return rc;
+> >>> +
+> >>>                rc = 1;
+> >>>                break;
+> >>>        default:
+> >>> @@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+> >>>        debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+> >>>                            &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+> >>>                            &ibm_cffps_fops);
+> >>> +     debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
+> >>> +                         &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
+> >>> +                         &ibm_cffps_fops);
+> >>>
+> >>>        return 0;
+> >>>    }
+> >>
+>
