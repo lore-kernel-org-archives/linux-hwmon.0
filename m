@@ -2,189 +2,284 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DF15C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 21:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69AFAC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 22:01:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiCQVhC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Mar 2022 17:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S229457AbiCQWC2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Mar 2022 18:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiCQVhB (ORCPT
+        with ESMTP id S229437AbiCQWC2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:37:01 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9321AFEA4
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 14:35:43 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7F3102C0AE0;
-        Thu, 17 Mar 2022 21:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1647552939;
-        bh=DlueJLxm9RcO/tRmC2VtXRzjrDErf+I1jJMg4aCB1kM=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=2ePZXTRNg+QVavVMFpbvctvcLVPEh2KRYA49jE5V9UCnxaJtSlPk0ipUHAeXckQiq
-         U2ixilxyPOxwg3XPkCGs9zjUFdI+7GqG3DFqcpw2USpL+CBSnkqBnITNhI1sHm+s37
-         uFWE2nNq0v19j34KP5xWwT/1f3O4k6H8BR+wEEDVhikOboVjcXnHMiu0cUF2+BNvPt
-         O1Cd2je+uY0tXBuVvxwaFVC5Urr8cNj53o+6AXthJmxnm2k6Z4mGi9TmYEtcGkDrNp
-         xuzSU3v3ren7svVNGXLk0Rmc8J62hwCaxb+A/hg/hhi1bzFBepGVZcSoKCOPs4Gy2F
-         5pxZ2vHn+KxEw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6233a9ab0001>; Fri, 18 Mar 2022 10:35:39 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 18 Mar 2022 10:35:39 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Fri, 18 Mar 2022 10:35:39 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Guenter Roeck <linux@roeck-us.net>,
+        Thu, 17 Mar 2022 18:02:28 -0400
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59CE1834E4
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 15:01:10 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id CD69114A695
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 17:01:09 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id UyBBn08GeHnotUyBBnARvG; Thu, 17 Mar 2022 17:01:09 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=G8PPz3EEXerG6wcqjyGRnyJnAFhn2RgK8hinJVsi3pM=; b=uaiaHXcGBrTw3r48iBpIHB3z8Y
+        jUiNXzO8DCvvwLRyqjh4Gj636gajTuYecScIHnIqGiXzzhF8XHitjyGwn0YxjbKzeU/6SrIusEom7
+        0E0r675MJEnCzRyUNHm9A4/c5Mt8ROAdhIm0qyM619fGozd6yRbXiAGwUnpwbl8MLYFxq2OyWJKm7
+        9mF5L3/t7Y7WUr492ZY/8xLV2ljg3zvMku3aSWMuZf7SbVE6Y2vtjy1NoOD06WSw3tikjrehEyiYM
+        pV7UEp61jllsqXo05CBfAYemP0MeeyJ+bOgjKoJGlGOfNzEAoBbIjuVMPnYJCoQ+6oWdCZtAgJPmQ
+        w+ARFqCw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54316)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nUyBB-000tNv-9X; Thu, 17 Mar 2022 22:01:09 +0000
+Message-ID: <cbc028bd-8b4f-5cc1-3bcf-a195ae7cebd9@roeck-us.net>
+Date:   Thu, 17 Mar 2022 15:01:07 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
+Content-Language: en-US
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
-Thread-Topic: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
-Thread-Index: AQHYOY9kLKbL3RzLBkeZC7t5/EMPlKzCuNeAgACH+gA=
-Date:   Thu, 17 Mar 2022 21:35:38 +0000
-Message-ID: <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
 References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
  <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
  <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
-In-Reply-To: <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B6A5DA8C65BEE047A726C46EBBE6D2B4@atlnz.lc>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=r7lCqylzDVdJZBd3QE4A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+ <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nUyBB-000tNv-9X
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54316
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 3
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQpPbiAxOC8wMy8yMiAwMjoyOCwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gMy8xNi8yMiAx
-Njo0MSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IFRoZSBhZHQ3NDczLCBhZHQ3NDc1LCBhZHQ3
-NDc2IGFuZCBhZHQ3NDkwIGhhdmUgcGlucyB0aGF0IGNhbiBiZSB1c2VkIGZvcg0KPj4gZGlmZmVy
-ZW50IGZ1bmN0aW9ucy4gT24gdGhlIGFkdDc0NzMgYW5kwqAgYWR0NzQ3NSB0aGlzIGlzIHBpbnMg
-NSBhbmQgOS4NCj4+IE9uIHRoZSBhZHQ3NDc2IGFuZCBhZHQ3NDkwIHRoaXMgaXMgcGlucyAxMCBh
-bmQgMTQuDQo+Pg0KPj4gVGhlIGZpcnN0IHBpbiBjYW4gZWl0aGVyIGJlIFBXTTIoZGVmYXVsdCkg
-b3IgU01CQUxFUlQjLiBUaGUgc2Vjb25kIHBpbg0KPj4gY2FuIGJlIFRBQ0g0KGRlZmF1bHQpLCBU
-SEVSTSMsIFNNQkFMRVJUIyBvciBHUElPLg0KPj4NCj4+IFRoZSBhZHQ3NDc1IGRyaXZlciBoYXMg
-YWx3YXlzIGJlZW4gYWJsZSB0byBkZXRlY3QgdGhlIGNvbmZpZ3VyYXRpb24gaWYNCj4+IGl0IGhh
-ZCBiZWVuIGRvbmUgYnkgYW4gZWFybGllciBib290IHN0YWdlLiBBZGQgc3VwcG9ydCBmb3IgY29u
-ZmlndXJpbmcNCj4+IHRoZSBwaW5zIGJhc2VkIG9uIHRoZSBoYXJkd2FyZSBkZXNjcmlwdGlvbiBp
-biB0aGUgZGV2aWNlIHRyZWUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hhbSA8
-Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4gLS0tDQo+PiDCoCBkcml2ZXJz
-L2h3bW9uL2FkdDc0NzUuYyB8IDk1ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrDQo+PiDCoCAxIGZpbGUgY2hhbmdlZCwgOTUgaW5zZXJ0aW9ucygrKQ0KPj4NCj4+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYyBiL2RyaXZlcnMvaHdtb24vYWR0NzQ3
-NS5jDQo+PiBpbmRleCA5ZDViMDE5NjUxZjIuLmFkNWU1YTdhODQ0YiAxMDA2NDQNCj4+IC0tLSBh
-L2RyaXZlcnMvaHdtb24vYWR0NzQ3NS5jDQo+PiArKysgYi9kcml2ZXJzL2h3bW9uL2FkdDc0NzUu
-Yw0KPj4gQEAgLTExMiw2ICsxMTIsOCBAQA0KPj4gwqAgI2RlZmluZSBDT05GSUczX1RIRVJNwqDC
-oMKgwqDCoMKgwqAgMHgwMg0KPj4gwqAgwqAgI2RlZmluZSBDT05GSUc0X1BJTkZVTkPCoMKgwqDC
-oMKgwqDCoCAweDAzDQo+PiArI2RlZmluZSBDT05GSUc0X1RIRVJNwqDCoMKgwqDCoMKgwqAgMHgw
-MQ0KPj4gKyNkZWZpbmUgQ09ORklHNF9TTUJBTEVSVMKgwqDCoCAweDAyDQo+PiDCoCAjZGVmaW5l
-IENPTkZJRzRfTUFYRFVUWcKgwqDCoMKgwqDCoMKgIDB4MDgNCj4+IMKgICNkZWZpbmUgQ09ORklH
-NF9BVFROX0lOMTDCoMKgwqAgMHgzMA0KPj4gwqAgI2RlZmluZSBDT05GSUc0X0FUVE5fSU40M8Kg
-wqDCoCAweEMwDQo+PiBAQCAtMTQ2MCw2ICsxNDYyLDk1IEBAIHN0YXRpYyBpbnQgYWR0NzQ3NV91
-cGRhdGVfbGltaXRzKHN0cnVjdCANCj4+IGkyY19jbGllbnQgKmNsaWVudCkNCj4+IMKgwqDCoMKg
-wqAgcmV0dXJuIDA7DQo+PiDCoCB9DQo+PiDCoCArc3RhdGljIGludCBsb2FkX3BpbjEwX2NvbmZp
-Zyhjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCANCj4+IGNvbnN0IGNoYXIgKnByb3Bu
-YW1lKQ0KPj4gK3sNCj4NCj4gQSBiZXR0ZXIgZnVuY3Rpb24gbmFtZSB3b3VsZCBwcm9iYWJseSBi
-ZSBsb2FkX2NvbmZpZzMoKSBvciBzaW1pbGFyLg0KDQpZZXAgdGhhdCdkIGJlIGEgYmV0dGVyIG5h
-bWUuDQoNCj4NCj4+ICvCoMKgwqAgY29uc3QgY2hhciAqZnVuY3Rpb247DQo+PiArwqDCoMKgIHU4
-IGNvbmZpZzM7DQo+PiArwqDCoMKgIGludCBlcnI7DQo+PiArDQo+PiArwqDCoMKgIGVyciA9IG9m
-X3Byb3BlcnR5X3JlYWRfc3RyaW5nKGNsaWVudC0+ZGV2Lm9mX25vZGUsIHByb3BuYW1lLCANCj4+
-ICZmdW5jdGlvbik7DQo+PiArwqDCoMKgIGlmICghZXJyKSB7DQo+PiArwqDCoMKgwqDCoMKgwqAg
-Y29uZmlnMyA9IGFkdDc0NzVfcmVhZChSRUdfQ09ORklHMyk7DQo+DQo+IGVycm9yIGNoZWNrIG1p
-c3NpbmcgKEkgc2VlIHRoZSBkcml2ZXIgaXMgbm90b3Jpb3VzIGZvciB0aGF0LCBidXQgdGhhdCAN
-Cj4gaXMgbm90DQo+IGEgcmVhc29uIHRvIGtlZXAgZG9pbmcgaXQpLg0KDQpJa2VnYW1pLXNhbiBh
-bmQgRGFuIGRpZCB0byBzb21lIGdvb2Qgd29yayB0byBhZGRyZXNzIHNvbWUgb2YgdGhhdC4gVGhl
-IA0KcHJvYmUgZnVuY3Rpb24gaXMgc3RpbGwgcXVpdGUgY2FyZWxlc3MuDQoNCkknbGwgc2VlIHdo
-YXQgSSBjYW4gZG8gdG8gbWFrZSBzdXJlIG15IGFkZGl0aW9ucyBkb24ndCBtYWtlIGl0IHdvcnNl
-Lg0KPg0KPj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmICghc3RyY21wKCJwd20yIiwgZnVuY3Rp
-b24pKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29uZmlnMyAmPSB+Q09ORklHM19TTUJB
-TEVSVDsNCj4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlIGlmICghc3RyY21wKCJzbWJhbGVydCMiLCBm
-dW5jdGlvbikpDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25maWczIHw9IENPTkZJRzNf
-U01CQUxFUlQ7DQo+PiArwqDCoMKgwqDCoMKgwqAgZWxzZQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgcmV0dXJuIC1FSU5WQUw7DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGky
-Y19zbWJ1c193cml0ZV9ieXRlX2RhdGEoY2xpZW50LCBSRUdfQ09ORklHMywgY29uZmlnMyk7DQo+
-PiArwqDCoMKgIH0NCj4+ICsNCj4+ICvCoMKgwqAgcmV0dXJuIDA7DQo+PiArfQ0KPj4gKw0KPj4g
-K3N0YXRpYyBpbnQgbG9hZF9waW4xNF9jb25maWcoY29uc3Qgc3RydWN0IGkyY19jbGllbnQgKmNs
-aWVudCwgY29uc3QgDQo+PiBjaGFyICpwcm9wbmFtZSkNCj4+ICt7DQo+DQo+IGxvYWRfY29uZmln
-NCgpID8NCj4NCj4+ICvCoMKgwqAgY29uc3QgY2hhciAqZnVuY3Rpb247DQo+PiArwqDCoMKgIHU4
-IGNvbmZpZzQ7DQo+PiArwqDCoMKgIGludCBlcnI7DQo+PiArDQo+PiArwqDCoMKgIGVyciA9IG9m
-X3Byb3BlcnR5X3JlYWRfc3RyaW5nKGNsaWVudC0+ZGV2Lm9mX25vZGUsIHByb3BuYW1lLCANCj4+
-ICZmdW5jdGlvbik7DQo+PiArwqDCoMKgIGlmICghZXJyKSB7DQo+PiArwqDCoMKgwqDCoMKgwqAg
-Y29uZmlnNCA9IGFkdDc0NzVfcmVhZChSRUdfQ09ORklHNCk7DQo+DQo+IGVycm9yIGNoZWNrDQo+
-DQo+PiArwqDCoMKgwqDCoMKgwqAgY29uZmlnNCAmPSB+Q09ORklHNF9QSU5GVU5DOw0KPj4gKw0K
-Pj4gK8KgwqDCoMKgwqDCoMKgIGlmICghc3RyY21wKCJ0YWNoNCIsIGZ1bmN0aW9uKSkNCj4+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIDsNCj4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlIGlmICghc3Ry
-Y21wKCJ0aGVybSMiLCBmdW5jdGlvbikpDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25m
-aWc0IHw9IENPTkZJRzRfVEhFUk07DQo+PiArwqDCoMKgwqDCoMKgwqAgZWxzZSBpZiAoIXN0cmNt
-cCgic21iYWxlcnQjIiwgZnVuY3Rpb24pKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29u
-ZmlnNCB8PSBDT05GSUc0X1NNQkFMRVJUOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGVsc2UgaWYgKCFz
-dHJjbXAoImdwaW8iLCBmdW5jdGlvbikpDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25m
-aWc0IHw9IENPTkZJRzRfUElORlVOQzsNCj4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlDQo+PiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVJTlZBTDsNCj4+ICsNCj4+ICvCoMKgwqDCoMKg
-wqDCoCByZXR1cm4gaTJjX3NtYnVzX3dyaXRlX2J5dGVfZGF0YShjbGllbnQsIFJFR19DT05GSUc0
-LCBjb25maWc0KTsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCByZXR1cm4gMDsNCj4+
-ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBsb2FkX2NvbmZpZyhjb25zdCBzdHJ1Y3QgaTJjX2Ns
-aWVudCAqY2xpZW50LCBpbnQgY2hpcCkNCj4+ICt7DQo+PiArwqDCoMKgIGludCBlcnI7DQo+PiAr
-wqDCoMKgIGNvbnN0IGNoYXIgKmNvbmZfcHJvcDEsICpjb25mX3Byb3AyOw0KPg0KPiBjb25mXyBw
-cmVmaXggaXMgdW5uZWNlc3NhcnkuDQo+DQo+PiArDQo+PiArwqDCoMKgIHN3aXRjaCAoY2hpcCkg
-ew0KPj4gK8KgwqDCoCBjYXNlIGFkdDc0NzM6DQo+PiArwqDCoMKgIGNhc2UgYWR0NzQ3NToNCj4+
-ICvCoMKgwqDCoMKgwqDCoCBjb25mX3Byb3AxID0gImFkaSxwaW41LWZ1bmN0aW9uIjsNCj4+ICvC
-oMKgwqDCoMKgwqDCoCBjb25mX3Byb3AyID0gImFkaSxwaW45LWZ1bmN0aW9uIjsNCj4+ICvCoMKg
-wqDCoMKgwqDCoCBicmVhazsNCj4+ICvCoMKgwqAgY2FzZSBhZHQ3NDc2Og0KPj4gK8KgwqDCoCBj
-YXNlIGFkdDc0OTA6DQo+PiArwqDCoMKgwqDCoMKgwqAgY29uZl9wcm9wMSA9ICJhZGkscGluMTAt
-ZnVuY3Rpb24iOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGNvbmZfcHJvcDIgPSAiYWRpLHBpbjE0LWZ1
-bmN0aW9uIjsNCj4+ICvCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+ICvCoMKgwqAgZGVmYXVsdDoN
-Cj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVJTlZBTDsNCj4NCj4gSXQgZG9lc24ndCBzZWVt
-IHJpZ2h0IHRvIHJldHVybiAtRUlOVkFMIGhlcmUuDQo+DQpIYXZlIHlvdSBnb3QgYSBiZXR0ZXIg
-c3VnZ2VzdGlvbj8gSSB3YXMgdHJ5aW5nIHRvIGF2b2lkIHNvbWVvbmUgDQpzcGVjaWZ5aW5nIGNv
-bXBhdGlibGUgPSAiYWRpLGFkdDc0NzYiIHdpdGggImFkaSxwaW41LWZ1bmN0aW9uIi4gSXMgeW91
-ciANCmNvbmNlcm4gdGhhdCBJIHNob3VsZCB1c2UgLUVOT0RFViBvciB0aGF0IEkgc2hvdWxkIGp1
-c3QgcGljayBtb3JlIA0KZ2VuZXJpYyBuYW1lcyBmb3IgdGhlIGNvbmZpZ3VyYWJsZSBwaW5zIChu
-YW1pbmcgdGhpbmdzIGlzIGhhcmQpLg0KDQpPciBwZXJoYXBzIGp1c3QgZGV2X3dhcm4oKSBhbmQg
-cmV0dXJuIDA/DQoNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCBpZiAoY2hpcCAhPSBh
-ZHQ3NDc2ICYmIGNoaXAgIT0gYWR0NzQ5MCkNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsN
-Cj4+ICsNCj4NCj4gV2h5IG5vdCBjaGVjayB0aGlzIGZpcnN0LCBhbmQgd2hhdCBpcyB0aGUgcG9p
-bnQgb2YgYXNzaWduaW5nIHZhbHVlcyB0bw0KPiBjb25mX3Byb3AxIGFuZCBjb25mX3Byb3AyIGZv
-ciB0aGUgb3RoZXIgY2hpcHMgaW4gdGhlIGNhc2Ugc3RhdGVtZW50IGFib3ZlDQo+IG9ubHkgdG8g
-cmV0dXJuIDAgaGVyZSA/IEl0IHdvdWxkIGJlIG11Y2ggc2ltcGxlciB0byBkcm9wIHRoZSBvdGhl
-ciBjaGlwcw0KPiBmcm9tIHRoZSBjYXNlIHN0YXRlbWVudCBhbmQgaGF2ZSBkZWZhdWx0OiByZXR1
-cm4gMC4NCj4NClNvcnJ5IHRoYXQgaXMgb2xkLiBJIGluaXRpYWxseSB3YXMgdW5kZXIgdGhlIGlt
-cHJlc3Npb24gdGhhdCBvbmx5IHRoZXNlIA0KMiBoYWQgY29uZmlndXJhYmxlIHBpbnMgYnV0IHRo
-ZW4gSSByZWFkIHRoZSBvdGhlciBkYXRhc2hlZXRzIG1vcmUgY2xvc2VseS4NCj4+ICvCoMKgwqAg
-ZXJyID0gbG9hZF9waW4xMF9jb25maWcoY2xpZW50LCBjb25mX3Byb3AxKTsNCj4+ICvCoMKgwqAg
-aWYgKGVycikgew0KPj4gK8KgwqDCoMKgwqDCoMKgIGRldl9lcnIoJmNsaWVudC0+ZGV2LCAiZmFp
-bGVkIHRvIGNvbmZpZ3VyZSBQSU4xMFxuIik7DQo+DQo+IFRoZSBtZXNzYWdlcyBhcmUgbWlzbGVh
-ZGluZy4gVGhpcyBpc24ndCBhbHdheXMgcGluIDEwLzE0Lg0KPg0KTm93IEkndmUgZ290IHRoZSBw
-cm9wIG5hbWVzIEkgY2FuIHVzZSB0aGF0IGluc3RlYWQuDQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0
-dXJuIGVycjsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCBlcnIgPSBsb2FkX3BpbjE0
-X2NvbmZpZyhjbGllbnQsIGNvbmZfcHJvcDIpOw0KPj4gK8KgwqDCoCBpZiAoZXJyKSB7DQo+PiAr
-wqDCoMKgwqDCoMKgwqAgZGV2X2VycigmY2xpZW50LT5kZXYsICJmYWlsZWQgdG8gY29uZmlndXJl
-IFBJTjE0XG4iKTsNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gZXJyOw0KPj4gK8KgwqDCoCB9
-DQo+PiArDQo+PiArwqDCoMKgIHJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+IMKgIHN0YXRpYyBp
-bnQgc2V0X3Byb3BlcnR5X2JpdChjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCBjaGFy
-IA0KPj4gKnByb3BlcnR5LA0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1
-OCAqY29uZmlnLCB1OCBiaXRfaW5kZXgpDQo+PiDCoCB7DQo+PiBAQCAtMTU4NSw2ICsxNjc2LDEw
-IEBAIHN0YXRpYyBpbnQgYWR0NzQ3NV9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCANCj4+ICpjbGll
-bnQpDQo+PiDCoMKgwqDCoMKgwqDCoMKgwqAgcmV2aXNpb24gPSBhZHQ3NDc1X3JlYWQoUkVHX0RF
-VklEMikgJiAweDA3Ow0KPj4gwqDCoMKgwqDCoCB9DQo+PiDCoCArwqDCoMKgIHJldCA9IGxvYWRf
-Y29uZmlnKGNsaWVudCwgY2hpcCk7DQo+PiArwqDCoMKgIGlmIChyZXQpDQo+PiArwqDCoMKgwqDC
-oMKgwqAgcmV0dXJuIHJldDsNCj4+ICsNCj4+IMKgwqDCoMKgwqAgY29uZmlnMyA9IGFkdDc0NzVf
-cmVhZChSRUdfQ09ORklHMyk7DQo+PiDCoMKgwqDCoMKgIC8qIFBpbiBQV00yIG1heSBhbHRlcm5h
-dGl2ZWx5IGJlIHVzZWQgZm9yIEFMRVJUIG91dHB1dCAqLw0KPj4gwqDCoMKgwqDCoCBpZiAoIShj
-b25maWczICYgQ09ORklHM19TTUJBTEVSVCkpDQo+
+On 3/17/22 14:35, Chris Packham wrote:
+> 
+> On 18/03/22 02:28, Guenter Roeck wrote:
+>> On 3/16/22 16:41, Chris Packham wrote:
+>>> The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
+>>> different functions. On the adt7473 and  adt7475 this is pins 5 and 9.
+>>> On the adt7476 and adt7490 this is pins 10 and 14.
+>>>
+>>> The first pin can either be PWM2(default) or SMBALERT#. The second pin
+>>> can be TACH4(default), THERM#, SMBALERT# or GPIO.
+>>>
+>>> The adt7475 driver has always been able to detect the configuration if
+>>> it had been done by an earlier boot stage. Add support for configuring
+>>> the pins based on the hardware description in the device tree.
+>>>
+>>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>> ---
+>>>    drivers/hwmon/adt7475.c | 95 +++++++++++++++++++++++++++++++++++++++++
+>>>    1 file changed, 95 insertions(+)
+>>>
+>>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+>>> index 9d5b019651f2..ad5e5a7a844b 100644
+>>> --- a/drivers/hwmon/adt7475.c
+>>> +++ b/drivers/hwmon/adt7475.c
+>>> @@ -112,6 +112,8 @@
+>>>    #define CONFIG3_THERM        0x02
+>>>      #define CONFIG4_PINFUNC        0x03
+>>> +#define CONFIG4_THERM        0x01
+>>> +#define CONFIG4_SMBALERT    0x02
+>>>    #define CONFIG4_MAXDUTY        0x08
+>>>    #define CONFIG4_ATTN_IN10    0x30
+>>>    #define CONFIG4_ATTN_IN43    0xC0
+>>> @@ -1460,6 +1462,95 @@ static int adt7475_update_limits(struct
+>>> i2c_client *client)
+>>>        return 0;
+>>>    }
+>>>    +static int load_pin10_config(const struct i2c_client *client,
+>>> const char *propname)
+>>> +{
+>>
+>> A better function name would probably be load_config3() or similar.
+> 
+> Yep that'd be a better name.
+> 
+>>
+>>> +    const char *function;
+>>> +    u8 config3;
+>>> +    int err;
+>>> +
+>>> +    err = of_property_read_string(client->dev.of_node, propname,
+>>> &function);
+>>> +    if (!err) {
+>>> +        config3 = adt7475_read(REG_CONFIG3);
+>>
+>> error check missing (I see the driver is notorious for that, but that
+>> is not
+>> a reason to keep doing it).
+> 
+> Ikegami-san and Dan did to some good work to address some of that. The
+> probe function is still quite careless.
+> 
+> I'll see what I can do to make sure my additions don't make it worse.
+>>
+>>> +
+>>> +        if (!strcmp("pwm2", function))
+>>> +            config3 &= ~CONFIG3_SMBALERT;
+>>> +        else if (!strcmp("smbalert#", function))
+>>> +            config3 |= CONFIG3_SMBALERT;
+>>> +        else
+>>> +            return -EINVAL;
+>>> +
+>>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int load_pin14_config(const struct i2c_client *client, const
+>>> char *propname)
+>>> +{
+>>
+>> load_config4() ?
+>>
+>>> +    const char *function;
+>>> +    u8 config4;
+>>> +    int err;
+>>> +
+>>> +    err = of_property_read_string(client->dev.of_node, propname,
+>>> &function);
+>>> +    if (!err) {
+>>> +        config4 = adt7475_read(REG_CONFIG4);
+>>
+>> error check
+>>
+>>> +        config4 &= ~CONFIG4_PINFUNC;
+>>> +
+>>> +        if (!strcmp("tach4", function))
+>>> +            ;
+>>> +        else if (!strcmp("therm#", function))
+>>> +            config4 |= CONFIG4_THERM;
+>>> +        else if (!strcmp("smbalert#", function))
+>>> +            config4 |= CONFIG4_SMBALERT;
+>>> +        else if (!strcmp("gpio", function))
+>>> +            config4 |= CONFIG4_PINFUNC;
+>>> +        else
+>>> +            return -EINVAL;
+>>> +
+>>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG4, config4);
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int load_config(const struct i2c_client *client, int chip)
+>>> +{
+>>> +    int err;
+>>> +    const char *conf_prop1, *conf_prop2;
+>>
+>> conf_ prefix is unnecessary.
+>>
+>>> +
+>>> +    switch (chip) {
+>>> +    case adt7473:
+>>> +    case adt7475:
+>>> +        conf_prop1 = "adi,pin5-function";
+>>> +        conf_prop2 = "adi,pin9-function";
+>>> +        break;
+>>> +    case adt7476:
+>>> +    case adt7490:
+>>> +        conf_prop1 = "adi,pin10-function";
+>>> +        conf_prop2 = "adi,pin14-function";
+>>> +        break;
+>>> +    default:
+>>> +        return -EINVAL;
+>>
+>> It doesn't seem right to return -EINVAL here.
+>>
+> Have you got a better suggestion? I was trying to avoid someone
+> specifying compatible = "adi,adt7476" with "adi,pin5-function". Is your
+> concern that I should use -ENODEV or that I should just pick more
+> generic names for the configurable pins (naming things is hard).
+> 
+> Or perhaps just dev_warn() and return 0?
+> 
+
+If you use "enum chips" as function parameter you should not need
+a default: case. Otherwise -EINVAL is fine _if_ the code below is
+removed. I didn't understand what you wanted to accomplish by
+returning 0 for known (but unsupported) devices but -EINVAL for
+non-existing ones.
+
+Guenter
+
+>>> +    }
+>>> +
+>>> +    if (chip != adt7476 && chip != adt7490)
+>>> +        return 0;
+>>> +
+>>
+>> Why not check this first, and what is the point of assigning values to
+>> conf_prop1 and conf_prop2 for the other chips in the case statement above
+>> only to return 0 here ? It would be much simpler to drop the other chips
+>> from the case statement and have default: return 0.
+>>
+> Sorry that is old. I initially was under the impression that only these
+> 2 had configurable pins but then I read the other datasheets more closely.
+>>> +    err = load_pin10_config(client, conf_prop1);
+>>> +    if (err) {
+>>> +        dev_err(&client->dev, "failed to configure PIN10\n");
+>>
+>> The messages are misleading. This isn't always pin 10/14.
+>>
+> Now I've got the prop names I can use that instead.
+>>> +        return err;
+>>> +    }
+>>> +
+>>> +    err = load_pin14_config(client, conf_prop2);
+>>> +    if (err) {
+>>> +        dev_err(&client->dev, "failed to configure PIN14\n");
+>>> +        return err;
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>>    static int set_property_bit(const struct i2c_client *client, char
+>>> *property,
+>>>                    u8 *config, u8 bit_index)
+>>>    {
+>>> @@ -1585,6 +1676,10 @@ static int adt7475_probe(struct i2c_client
+>>> *client)
+>>>            revision = adt7475_read(REG_DEVID2) & 0x07;
+>>>        }
+>>>    +    ret = load_config(client, chip);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +
+>>>        config3 = adt7475_read(REG_CONFIG3);
+>>>        /* Pin PWM2 may alternatively be used for ALERT output */
+>>>        if (!(config3 & CONFIG3_SMBALERT))
+>>
+
