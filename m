@@ -2,78 +2,244 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47125C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 09:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39711C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 13:29:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiCQJZQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Mar 2022 05:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S233722AbiCQNaP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Mar 2022 09:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiCQJZQ (ORCPT
+        with ESMTP id S232975AbiCQNaO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:25:16 -0400
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC8F13EFAE;
-        Thu, 17 Mar 2022 02:24:00 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so4564781wme.5;
-        Thu, 17 Mar 2022 02:24:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RKYv39Dz6kpsbqvNDiuEP28ERy33QsF4e6gcs7JiHOM=;
-        b=6YrfeHC3Nc0krZmm5yqRh27TVwtIh7vUXVZJ2ZExaSplOk8fgKVN5h77UwSmVzx4Xd
-         NuyJoLeEH8SGrBz2gsVlpx7KgZ1vnyGpx1VNMC0t2kq8goceBOyzIUnflyaWgu7dy9LP
-         wNR7cii5/aFxiNg9c5ZiviMYyOOKQifd0jh4gCNk1TpUtk0bLJlWpJ6s/m+GafMeEaYJ
-         E9Zroziltxl+vXN96aqqAhWv6T1kfYz4lQ0RTQu4llvjvihLfpYdywLf/kcCRQfcSc9k
-         2mV5BGj2zA9Pv/ZhG/5vtmmutb02nc5y/ed5w4Ie0vVP3zrH4l09UD1xKuNXjyukuE68
-         L0WQ==
-X-Gm-Message-State: AOAM532gsh1HriTuiIIonvIJso8otTZZrrHOF3mc3vr19DOgaCIT4aO6
-        M2rgZdNiBT7z1i78lxKiKBs=
-X-Google-Smtp-Source: ABdhPJzhyiiwvo2SSiFiEF0/qXF7GuGh2tYwpapsxhJcGaoaDIimLViYPpX1jf/eOTjJYQf6rwtraw==
-X-Received: by 2002:a05:600c:21d1:b0:381:4fed:159a with SMTP id x17-20020a05600c21d100b003814fed159amr3057114wmj.143.1647509038800;
-        Thu, 17 Mar 2022 02:23:58 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id f4-20020a5d4dc4000000b001d8e67e5214sm3609644wru.48.2022.03.17.02.23.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 02:23:56 -0700 (PDT)
-Message-ID: <e95a3743-3285-1d36-9f27-3504beaf176a@kernel.org>
-Date:   Thu, 17 Mar 2022 10:23:45 +0100
+        Thu, 17 Mar 2022 09:30:14 -0400
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359D912298B
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 06:28:56 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id AE074A5642
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 08:28:55 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id UqBTnm2L2HnotUqBTnx5ux; Thu, 17 Mar 2022 08:28:55 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ZWlDpJ1jKpFqrvBTDx/wTo26QSvpgwcabfkWM+NH5jc=; b=R+oy9LMWd0I1peoGYqliO/5hmz
+        wQqYKKAVATe4jzNwfnXWcwcUxsK0iayujfDu1DhAGbkcKuxcxG3BcuxhoF2Ldd6DhJAsI1nHogiiR
+        ELc5oE2J0AeM4kDEOB9RPoZ2seXSgtglbrfhqJIZJ64KuzGW2ThqK9OJAgeOyXfTMrQWszVUlrT5r
+        ID3MpjXQetLxRMQDbS3PXtxw+5ialhhJvcaaWGzYhXJ95GUW47CsxYQGkyv0fZAUHJemZuYLRIl9j
+        2f9s731PyYBEL8MXToAMGABS1V+9PXMPixVTFMKDpebGr+TGNe8wUDmA5ZnR2apweiycHaieGTyLQ
+        HWsKB0Vg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54312)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nUqBT-003zon-5m; Thu, 17 Mar 2022 13:28:55 +0000
+Message-ID: <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
+Date:   Thu, 17 Mar 2022 06:28:53 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Document adt7475 pin-function
- properties
 Content-Language: en-US
 To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
+        jdelvare@suse.com, robh+dt@kernel.org
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
- <20220316234134.290492-2-chris.packham@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220316234134.290492-2-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
+ <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
+In-Reply-To: <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nUqBT-003zon-5m
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54312
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 3
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 17/03/2022 00:41, Chris Packham wrote:
+On 3/16/22 16:41, Chris Packham wrote:
 > The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
-> different functions. Add bindings so that it is possible to describe
-> what pin functions are intended by the hardware design.
+> different functions. On the adt7473 and  adt7475 this is pins 5 and 9.
+> On the adt7476 and adt7490 this is pins 10 and 14.
+> 
+> The first pin can either be PWM2(default) or SMBALERT#. The second pin
+> can be TACH4(default), THERM#, SMBALERT# or GPIO.
+> 
+> The adt7475 driver has always been able to detect the configuration if
+> it had been done by an earlier boot stage. Add support for configuring
+> the pins based on the hardware description in the device tree.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
->  .../devicetree/bindings/hwmon/adt7475.yaml    | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
+>   drivers/hwmon/adt7475.c | 95 +++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 95 insertions(+)
 > 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 9d5b019651f2..ad5e5a7a844b 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -112,6 +112,8 @@
+>   #define CONFIG3_THERM		0x02
+>   
+>   #define CONFIG4_PINFUNC		0x03
+> +#define CONFIG4_THERM		0x01
+> +#define CONFIG4_SMBALERT	0x02
+>   #define CONFIG4_MAXDUTY		0x08
+>   #define CONFIG4_ATTN_IN10	0x30
+>   #define CONFIG4_ATTN_IN43	0xC0
+> @@ -1460,6 +1462,95 @@ static int adt7475_update_limits(struct i2c_client *client)
+>   	return 0;
+>   }
+>   
+> +static int load_pin10_config(const struct i2c_client *client, const char *propname)
+> +{
 
+A better function name would probably be load_config3() or similar.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> +	const char *function;
+> +	u8 config3;
+> +	int err;
+> +
+> +	err = of_property_read_string(client->dev.of_node, propname, &function);
+> +	if (!err) {
+> +		config3 = adt7475_read(REG_CONFIG3);
 
+error check missing (I see the driver is notorious for that, but that is not
+a reason to keep doing it).
 
-Best regards,
-Krzysztof
+> +
+> +		if (!strcmp("pwm2", function))
+> +			config3 &= ~CONFIG3_SMBALERT;
+> +		else if (!strcmp("smbalert#", function))
+> +			config3 |= CONFIG3_SMBALERT;
+> +		else
+> +			return -EINVAL;
+> +
+> +		return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int load_pin14_config(const struct i2c_client *client, const char *propname)
+> +{
+
+load_config4() ?
+
+> +	const char *function;
+> +	u8 config4;
+> +	int err;
+> +
+> +	err = of_property_read_string(client->dev.of_node, propname, &function);
+> +	if (!err) {
+> +		config4 = adt7475_read(REG_CONFIG4);
+
+error check
+
+> +		config4 &= ~CONFIG4_PINFUNC;
+> +
+> +		if (!strcmp("tach4", function))
+> +			;
+> +		else if (!strcmp("therm#", function))
+> +			config4 |= CONFIG4_THERM;
+> +		else if (!strcmp("smbalert#", function))
+> +			config4 |= CONFIG4_SMBALERT;
+> +		else if (!strcmp("gpio", function))
+> +			config4 |= CONFIG4_PINFUNC;
+> +		else
+> +			return -EINVAL;
+> +
+> +		return i2c_smbus_write_byte_data(client, REG_CONFIG4, config4);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int load_config(const struct i2c_client *client, int chip)
+> +{
+> +	int err;
+> +	const char *conf_prop1, *conf_prop2;
+
+conf_ prefix is unnecessary.
+
+> +
+> +	switch (chip) {
+> +	case adt7473:
+> +	case adt7475:
+> +		conf_prop1 = "adi,pin5-function";
+> +		conf_prop2 = "adi,pin9-function";
+> +		break;
+> +	case adt7476:
+> +	case adt7490:
+> +		conf_prop1 = "adi,pin10-function";
+> +		conf_prop2 = "adi,pin14-function";
+> +		break;
+> +	default:
+> +		return -EINVAL;
+
+It doesn't seem right to return -EINVAL here.
+
+> +	}
+> +
+> +	if (chip != adt7476 && chip != adt7490)
+> +		return 0;
+> +
+
+Why not check this first, and what is the point of assigning values to
+conf_prop1 and conf_prop2 for the other chips in the case statement above
+only to return 0 here ? It would be much simpler to drop the other chips
+from the case statement and have default: return 0.
+
+> +	err = load_pin10_config(client, conf_prop1);
+> +	if (err) {
+> +		dev_err(&client->dev, "failed to configure PIN10\n");
+
+The messages are misleading. This isn't always pin 10/14.
+
+> +		return err;
+> +	}
+> +
+> +	err = load_pin14_config(client, conf_prop2);
+> +	if (err) {
+> +		dev_err(&client->dev, "failed to configure PIN14\n");
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int set_property_bit(const struct i2c_client *client, char *property,
+>   			    u8 *config, u8 bit_index)
+>   {
+> @@ -1585,6 +1676,10 @@ static int adt7475_probe(struct i2c_client *client)
+>   		revision = adt7475_read(REG_DEVID2) & 0x07;
+>   	}
+>   
+> +	ret = load_config(client, chip);
+> +	if (ret)
+> +		return ret;
+> +
+>   	config3 = adt7475_read(REG_CONFIG3);
+>   	/* Pin PWM2 may alternatively be used for ALERT output */
+>   	if (!(config3 & CONFIG3_SMBALERT))
+
