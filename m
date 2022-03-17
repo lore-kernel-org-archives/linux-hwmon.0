@@ -2,284 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69AFAC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 22:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A86F4C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 22:31:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiCQWC2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Mar 2022 18:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S229843AbiCQWcW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Mar 2022 18:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiCQWC2 (ORCPT
+        with ESMTP id S229821AbiCQWcU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:02:28 -0400
-Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59CE1834E4
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 15:01:10 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id CD69114A695
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 17:01:09 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id UyBBn08GeHnotUyBBnARvG; Thu, 17 Mar 2022 17:01:09 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=G8PPz3EEXerG6wcqjyGRnyJnAFhn2RgK8hinJVsi3pM=; b=uaiaHXcGBrTw3r48iBpIHB3z8Y
-        jUiNXzO8DCvvwLRyqjh4Gj636gajTuYecScIHnIqGiXzzhF8XHitjyGwn0YxjbKzeU/6SrIusEom7
-        0E0r675MJEnCzRyUNHm9A4/c5Mt8ROAdhIm0qyM619fGozd6yRbXiAGwUnpwbl8MLYFxq2OyWJKm7
-        9mF5L3/t7Y7WUr492ZY/8xLV2ljg3zvMku3aSWMuZf7SbVE6Y2vtjy1NoOD06WSw3tikjrehEyiYM
-        pV7UEp61jllsqXo05CBfAYemP0MeeyJ+bOgjKoJGlGOfNzEAoBbIjuVMPnYJCoQ+6oWdCZtAgJPmQ
-        w+ARFqCw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54316)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nUyBB-000tNv-9X; Thu, 17 Mar 2022 22:01:09 +0000
-Message-ID: <cbc028bd-8b4f-5cc1-3bcf-a195ae7cebd9@roeck-us.net>
-Date:   Thu, 17 Mar 2022 15:01:07 -0700
+        Thu, 17 Mar 2022 18:32:20 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BBD18006B
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 15:31:01 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 01FFB2C0AE0;
+        Thu, 17 Mar 2022 22:31:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1647556260;
+        bh=CB9o5+iAQCH3vvVKMRvsbRs7DvyhBXWTzdG/VJgZrQI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DqMZa1NQkjW9x3ndN2WpCPdlTImxyUrB9k3h48QYxcxCGFZn+aecnwp3E5nscaCNd
+         lVfsmi4gpFaSzCMh+uCAXHjVOYC5gnX+treV3T3VXHP9TCHk7/9CxeZV9i3BPzZvA6
+         FHM4cjbwjWRpepb7/MJDREWnZoNwLEeCAiE1K304t2LcVKNFdXhtVdlhN/nS1P7IBT
+         G5oUhFlTzfMoehjSten+SuSe9/Vaeidxavoeo8GV4s4hamB1tU0UvpQ1gENhBwHxk6
+         18c4wVqqO2o4oxeqmCbft5QqJo6nhMzgGJOGC65RrncYMV8WIieFD+9Ia4VoXB9f3x
+         1py/vFxz58Mcg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6233b6a30001>; Fri, 18 Mar 2022 11:30:59 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id A23B213EE37;
+        Fri, 18 Mar 2022 11:30:59 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id A1E892A004D; Fri, 18 Mar 2022 11:30:56 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v2 1/3] dt-bindings: hwmon: Document adt7475 pin-function properties
+Date:   Fri, 18 Mar 2022 11:30:48 +1300
+Message-Id: <20220317223051.1227110-2-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
+References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
-Content-Language: en-US
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
- <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
- <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
- <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nUyBB-000tNv-9X
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54316
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 3
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=VwQbUJbxAAAA:8 a=XrEdriJqPTbsqx2b3kgA:9 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/17/22 14:35, Chris Packham wrote:
-> 
-> On 18/03/22 02:28, Guenter Roeck wrote:
->> On 3/16/22 16:41, Chris Packham wrote:
->>> The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
->>> different functions. On the adt7473 and  adt7475 this is pins 5 and 9.
->>> On the adt7476 and adt7490 this is pins 10 and 14.
->>>
->>> The first pin can either be PWM2(default) or SMBALERT#. The second pin
->>> can be TACH4(default), THERM#, SMBALERT# or GPIO.
->>>
->>> The adt7475 driver has always been able to detect the configuration if
->>> it had been done by an earlier boot stage. Add support for configuring
->>> the pins based on the hardware description in the device tree.
->>>
->>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>> ---
->>>    drivers/hwmon/adt7475.c | 95 +++++++++++++++++++++++++++++++++++++++++
->>>    1 file changed, 95 insertions(+)
->>>
->>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
->>> index 9d5b019651f2..ad5e5a7a844b 100644
->>> --- a/drivers/hwmon/adt7475.c
->>> +++ b/drivers/hwmon/adt7475.c
->>> @@ -112,6 +112,8 @@
->>>    #define CONFIG3_THERM        0x02
->>>      #define CONFIG4_PINFUNC        0x03
->>> +#define CONFIG4_THERM        0x01
->>> +#define CONFIG4_SMBALERT    0x02
->>>    #define CONFIG4_MAXDUTY        0x08
->>>    #define CONFIG4_ATTN_IN10    0x30
->>>    #define CONFIG4_ATTN_IN43    0xC0
->>> @@ -1460,6 +1462,95 @@ static int adt7475_update_limits(struct
->>> i2c_client *client)
->>>        return 0;
->>>    }
->>>    +static int load_pin10_config(const struct i2c_client *client,
->>> const char *propname)
->>> +{
->>
->> A better function name would probably be load_config3() or similar.
-> 
-> Yep that'd be a better name.
-> 
->>
->>> +    const char *function;
->>> +    u8 config3;
->>> +    int err;
->>> +
->>> +    err = of_property_read_string(client->dev.of_node, propname,
->>> &function);
->>> +    if (!err) {
->>> +        config3 = adt7475_read(REG_CONFIG3);
->>
->> error check missing (I see the driver is notorious for that, but that
->> is not
->> a reason to keep doing it).
-> 
-> Ikegami-san and Dan did to some good work to address some of that. The
-> probe function is still quite careless.
-> 
-> I'll see what I can do to make sure my additions don't make it worse.
->>
->>> +
->>> +        if (!strcmp("pwm2", function))
->>> +            config3 &= ~CONFIG3_SMBALERT;
->>> +        else if (!strcmp("smbalert#", function))
->>> +            config3 |= CONFIG3_SMBALERT;
->>> +        else
->>> +            return -EINVAL;
->>> +
->>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int load_pin14_config(const struct i2c_client *client, const
->>> char *propname)
->>> +{
->>
->> load_config4() ?
->>
->>> +    const char *function;
->>> +    u8 config4;
->>> +    int err;
->>> +
->>> +    err = of_property_read_string(client->dev.of_node, propname,
->>> &function);
->>> +    if (!err) {
->>> +        config4 = adt7475_read(REG_CONFIG4);
->>
->> error check
->>
->>> +        config4 &= ~CONFIG4_PINFUNC;
->>> +
->>> +        if (!strcmp("tach4", function))
->>> +            ;
->>> +        else if (!strcmp("therm#", function))
->>> +            config4 |= CONFIG4_THERM;
->>> +        else if (!strcmp("smbalert#", function))
->>> +            config4 |= CONFIG4_SMBALERT;
->>> +        else if (!strcmp("gpio", function))
->>> +            config4 |= CONFIG4_PINFUNC;
->>> +        else
->>> +            return -EINVAL;
->>> +
->>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG4, config4);
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int load_config(const struct i2c_client *client, int chip)
->>> +{
->>> +    int err;
->>> +    const char *conf_prop1, *conf_prop2;
->>
->> conf_ prefix is unnecessary.
->>
->>> +
->>> +    switch (chip) {
->>> +    case adt7473:
->>> +    case adt7475:
->>> +        conf_prop1 = "adi,pin5-function";
->>> +        conf_prop2 = "adi,pin9-function";
->>> +        break;
->>> +    case adt7476:
->>> +    case adt7490:
->>> +        conf_prop1 = "adi,pin10-function";
->>> +        conf_prop2 = "adi,pin14-function";
->>> +        break;
->>> +    default:
->>> +        return -EINVAL;
->>
->> It doesn't seem right to return -EINVAL here.
->>
-> Have you got a better suggestion? I was trying to avoid someone
-> specifying compatible = "adi,adt7476" with "adi,pin5-function". Is your
-> concern that I should use -ENODEV or that I should just pick more
-> generic names for the configurable pins (naming things is hard).
-> 
-> Or perhaps just dev_warn() and return 0?
-> 
+The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
+different functions. Add bindings so that it is possible to describe
+what pin functions are intended by the hardware design.
 
-If you use "enum chips" as function parameter you should not need
-a default: case. Otherwise -EINVAL is fine _if_ the code below is
-removed. I didn't understand what you wanted to accomplish by
-returning 0 for known (but unsupported) devices but -EINVAL for
-non-existing ones.
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
 
-Guenter
+Notes:
+    Changes in v2:
+    - Add review from Krzysztof
 
->>> +    }
->>> +
->>> +    if (chip != adt7476 && chip != adt7490)
->>> +        return 0;
->>> +
->>
->> Why not check this first, and what is the point of assigning values to
->> conf_prop1 and conf_prop2 for the other chips in the case statement above
->> only to return 0 here ? It would be much simpler to drop the other chips
->> from the case statement and have default: return 0.
->>
-> Sorry that is old. I initially was under the impression that only these
-> 2 had configurable pins but then I read the other datasheets more closely.
->>> +    err = load_pin10_config(client, conf_prop1);
->>> +    if (err) {
->>> +        dev_err(&client->dev, "failed to configure PIN10\n");
->>
->> The messages are misleading. This isn't always pin 10/14.
->>
-> Now I've got the prop names I can use that instead.
->>> +        return err;
->>> +    }
->>> +
->>> +    err = load_pin14_config(client, conf_prop2);
->>> +    if (err) {
->>> +        dev_err(&client->dev, "failed to configure PIN14\n");
->>> +        return err;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>>    static int set_property_bit(const struct i2c_client *client, char
->>> *property,
->>>                    u8 *config, u8 bit_index)
->>>    {
->>> @@ -1585,6 +1676,10 @@ static int adt7475_probe(struct i2c_client
->>> *client)
->>>            revision = adt7475_read(REG_DEVID2) & 0x07;
->>>        }
->>>    +    ret = load_config(client, chip);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>        config3 = adt7475_read(REG_CONFIG3);
->>>        /* Pin PWM2 may alternatively be used for ALERT output */
->>>        if (!(config3 & CONFIG3_SMBALERT))
->>
+ .../devicetree/bindings/hwmon/adt7475.yaml    | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
+entation/devicetree/bindings/hwmon/adt7475.yaml
+index 7d9c083632b9..22beb37f1bf1 100644
+--- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+@@ -61,6 +61,26 @@ patternProperties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     enum: [0, 1]
+=20
++  "adi,pin(5|10)-function":
++    description: |
++      Configures the function for pin 5 on the adi,adt7473 and adi,adt74=
+75. Or
++      pin 10 on the adi,adt7476 and adi,adt7490.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum:
++      - pwm2
++      - smbalert#
++
++  "adi,pin(9|14)-function":
++    description: |
++      Configures the function for pin 9 on the adi,adt7473 and adi,adt74=
+75. Or
++      pin 14 on the adi,adt7476 and adi,adt7490
++    $ref: /schemas/types.yaml#/definitions/string
++    enum:
++      - tach4
++      - therm#
++      - smbalert#
++      - gpio
++
+ required:
+   - compatible
+   - reg
+@@ -79,6 +99,8 @@ examples:
+         adi,bypass-attenuator-in0 =3D <1>;
+         adi,bypass-attenuator-in1 =3D <0>;
+         adi,pwm-active-state =3D <1 0 1>;
++        adi,pin10-function =3D "smbalert#";
++        adi,pin14-function =3D "tach4";
+       };
+     };
+=20
+--=20
+2.35.1
 
