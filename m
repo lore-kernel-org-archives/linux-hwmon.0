@@ -2,99 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38A0FC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 22:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C2DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 23:21:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiCQWc0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Mar 2022 18:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S229672AbiCQXWz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Mar 2022 19:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiCQWcU (ORCPT
+        with ESMTP id S229555AbiCQXWv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:32:20 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D90D180073
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 15:31:01 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0FB442C0C23;
-        Thu, 17 Mar 2022 22:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1647556260;
-        bh=5yzcYUXA1wnj+z0MDGmniYGpzv7rc9CIlYccVyLXRjE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bl2yLBAlym2GIxAbqdK9FeXyK0q7GXittuf5QdUPpLQ/qOq9rdV9au0y/vaaQGrGL
-         oKy1rOUlWBDgTqJA8/rTYi7oLWH0N1iddQhHBcDsTuLeinNYeYK+zSEazkQKVmbkz2
-         nbitzFPdylzq1d0hn23FlZeDSBylLasZ9HLtEgdwpPbSm/q1N/jPAkoMU5B5zcYbkg
-         ePm6LXfSuXCmIPrCVOoEkgiTAq2KvfmvE/LN2+t+r3p5mB7ZcMsbt/k5SQsqw0yy7L
-         o5fpkZ9zP2ZYbAU2TKgKVReBYS5RoPscaAe+rc9vRtTBqLNlrWnyyJc8qlIvYD6cUN
-         33VDvC3RFKmOw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6233b6a30003>; Fri, 18 Mar 2022 11:30:59 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id A769E13EE8E;
-        Fri, 18 Mar 2022 11:30:59 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id A8E0A2A2679; Fri, 18 Mar 2022 11:30:56 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading attenuator settings
-Date:   Fri, 18 Mar 2022 11:30:50 +1300
-Message-Id: <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
-References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
+        Thu, 17 Mar 2022 19:22:51 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904551FD2D8;
+        Thu, 17 Mar 2022 16:21:33 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id w3-20020a4ac183000000b0031d806bbd7eso8301764oop.13;
+        Thu, 17 Mar 2022 16:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cV2G53aQ8gy5xgFrzeVM67TOnDJP6UFgv7JOAg+ZKWQ=;
+        b=M7g23SMXsoBSpy5meppRZhZ9iJd6A1uiBr9hvVMVpqk+LXXZx6qHDtr5tv8/j5pqXl
+         18GJFWFYcUiH8MfsMi05vmvsjihNU6mF10W/KnfcwystkmUCBfcHc3Dzelei1Dv2kyI3
+         9LhhVYktOShrLdOw4kqCJ/cOlOAkM1C1+kzA/Uw93daCZYZaHrpxIQq4LB4w1eLL2rSe
+         vu/DLza6h8iMKOUrFA+LYcKYBfb8X/5zXDwDYP7ZRCUKjry2F8oeEzUxHHdBeW0Chje1
+         GTEVVwGXVwXMuFP0sDOqDOaGErYFIDJ7ejZYdgkkwtUyBhwf94QX16auJz1djyhta7P4
+         SsEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cV2G53aQ8gy5xgFrzeVM67TOnDJP6UFgv7JOAg+ZKWQ=;
+        b=qrrFrxh+EFYIMfStyOxYALZzeV65H7TaujNOcJX9wZoQmLQUs1jXUxImTH3BWHokUy
+         CUAuWJ1JofSGG8x3FFomx5u8JQ8fv9efqqMk77ak7FrwDALBjyoRRLI4dBg++0vLMuVZ
+         /5LVDKAfYOUqeXeaAsgXofIjnx9pHnx67PhYklWWfdrEyzEYOJOW5ZnmYI46Lw3EKzoH
+         L+aNtD00Y9Zg+zbl1WlxLLhLPqTJY2rodQ8fKEneB1/9GgEKXwb174VjZYuG5SncQBny
+         etJu2fx9D+sIFd1Gbojhje9kHCzQG8ypTTvsP7feIfWLF9pAqkaFp3n1Toj9lcTKx9Ha
+         OXPw==
+X-Gm-Message-State: AOAM533Hl0znHYDb8RncHgEuLYsXz3FYlc2t1/21FhTUy+TDoamZ3b4O
+        S4cXLv/dWuEa+NyXZ0FNpeg6TYfbjJe+mA==
+X-Google-Smtp-Source: ABdhPJxJ+l9rTlCJYd2wVYy2pwNS7uAh2Sp5Ne51ph7mT/7XNCauNvYRHmWpLePy55iAhu00t0gKlw==
+X-Received: by 2002:a05:6870:c10b:b0:da:40b:9d92 with SMTP id f11-20020a056870c10b00b000da040b9d92mr2800341oad.31.1647559292787;
+        Thu, 17 Mar 2022 16:21:32 -0700 (PDT)
+Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.15])
+        by smtp.gmail.com with ESMTPSA id 2-20020a056870124200b000dd9ac0d61esm2869159oao.24.2022.03.17.16.21.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 16:21:32 -0700 (PDT)
+From:   Brandon Wyman <bjwyman@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Brandon Wyman <bjwyman@gmail.com>
+Subject: [PATCH] hwmon: (pmbus) Add Vin unit off handling
+Date:   Thu, 17 Mar 2022 23:21:23 +0000
+Message-Id: <20220317232123.2103592-1-bjwyman@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=1utJVCOB_o5uIfT7QvUA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Simplify load_attenuators() by making use of enum chips instead of int.
+If there is an input undervoltage fault, reported in STATUS_INPUT
+command response, there is quite likely a "Unit Off For Insufficient
+Input Voltage" condition as well.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
+attributes to include both bits in the mask for clearing faults.
+
+If an input undervoltage fault occurs, causing a unit off for
+insufficient input voltage, but the unit is off bit is not cleared, the
+STATUS_WORD will not be updated to clear the input fault condition.
+Including the unit is off bit (bit 3) allows for the input fault
+condition to completely clear.
+
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
 ---
+ drivers/hwmon/pmbus/pmbus.h      | 1 +
+ drivers/hwmon/pmbus/pmbus_core.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Notes:
-    Changes in v2:
-    - New
-
- drivers/hwmon/adt7475.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 6de501de41b2..ebe4a85eb62e 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -1569,7 +1569,7 @@ static int set_property_bit(const struct i2c_client=
- *client, char *property,
- 	return ret;
- }
-=20
--static int load_attenuators(const struct i2c_client *client, int chip,
-+static int load_attenuators(const struct i2c_client *client, enum chips =
-chip,
- 			    struct adt7475_data *data)
- {
- 	int ret;
-@@ -1588,7 +1588,7 @@ static int load_attenuators(const struct i2c_client=
- *client, int chip,
- 						data->config4);
- 		if (ret < 0)
- 			return ret;
--	} else if (chip =3D=3D adt7473 || chip =3D=3D adt7475) {
-+	} else {
- 		set_property_bit(client, "adi,bypass-attenuator-in1",
- 				 &data->config2, 5);
-=20
---=20
-2.35.1
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index e0aa8aa46d8c..ef3a8ecde4df 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -319,6 +319,7 @@ enum pmbus_fan_mode { percent = 0, rpm };
+ /*
+  * STATUS_VOUT, STATUS_INPUT
+  */
++#define PB_VOLTAGE_VIN_OFF		BIT(3)
+ #define PB_VOLTAGE_UV_FAULT		BIT(4)
+ #define PB_VOLTAGE_UV_WARNING		BIT(5)
+ #define PB_VOLTAGE_OV_WARNING		BIT(6)
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index ac2fbee1ba9c..a0d899dc81f0 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1373,7 +1373,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
+ 		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
+ 		.attr = "lcrit",
+ 		.alarm = "lcrit_alarm",
+-		.sbit = PB_VOLTAGE_UV_FAULT,
++		.sbit = (PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF),
+ 	}, {
+ 		.reg = PMBUS_VIN_OV_WARN_LIMIT,
+ 		.attr = "max",
+-- 
+2.25.1
 
