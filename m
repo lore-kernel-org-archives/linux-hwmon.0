@@ -2,26 +2,26 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78153C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 05:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88AEFC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 14:58:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbiCRF4y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Mar 2022 01:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S233905AbiCRO75 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Mar 2022 10:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiCRF4y (ORCPT
+        with ESMTP id S237491AbiCRO7y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Mar 2022 01:56:54 -0400
-X-Greylist: delayed 1304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Mar 2022 22:55:36 PDT
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704EA2E35A2
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 22:55:36 -0700 (PDT)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 01143288C680
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 00:33:52 -0500 (CDT)
+        Fri, 18 Mar 2022 10:59:54 -0400
+X-Greylist: delayed 1447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 07:58:34 PDT
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.60.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9EAB1A8B
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 07:58:32 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 015A7400D4542
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 09:34:25 -0500 (CDT)
 Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id V5DLnQwj89AGSV5DLnTUMz; Fri, 18 Mar 2022 00:31:51 -0500
+        id VDeSnJlz3HnotVDeSnTA7m; Fri, 18 Mar 2022 09:32:24 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
@@ -29,31 +29,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nHjdoFFbTloWbSbcTB9Xd34hQqBVAfoUskKY6xI1CyI=; b=2bqIbxx7e306+T8LJxWfDkxoYc
-        w3cumUWMA3SAP46t8b0qOMPbYPHfC4hBJ7EDHLxF/OmFeL17WTO9yqB1exvoVb6wvFaFjiQHbduz4
-        PTpbxVn3q+XvcH9OaK0tWBFSHIOKuz6lV7UD6N3Hkky0sErv/l8EuEOBxiKBV6kK7b9SdVViHovuN
-        qnJo2FF8NWNEDbCBMdtaWcFDShg6mHpHtRyH8zhGyBSO+a6o6SH5Y83NcJyDtTg+AEQAWwLxi+V6P
-        HNUJ76elTgs03NEPvqMrdHdkYFHi4MbSEafi7Oa2Yrj22ymSYT5EDMZjWEbRyR4xq+NCqS8NDDd1M
-        EciZt6Ag==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57536 helo=localhost)
+        bh=xJSeFXEv0MsCLMmIo+zvVtrl7PN3UrB1l3mugyJKHT8=; b=zDm9kuwnQlobpoDtn2XNjkBuPZ
+        hUW1s395q3X7TtFciXA0KaKMOC09DkwYKrt1mI8zX9Ngk6dPNp22n0S7xnXHA2ST9ydFJcMRaxrR+
+        qw9B1LLQ0fvW6PlUlkvcLR60xIbZ9xVRfLs1CsaNLxAi3wVEoC/64XfwWsue19hkCThxEyV0hxf86
+        NeK6hrcmkhB8cQz3CndoVI+/XAARVzugXiaz46L2j9IJX88NIM+bhHdyVgx79nnqdELWHpTsRIdBb
+        VLcjqKgSa5NitiU6P4xhT7hpVnA0pSHlY9/CDqC+cBtpvJ7ZVRn5/mAIXm/3Zd1AMZCQtgIY0ZJf9
+        kjCt9Fqw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57538 helo=localhost)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@roeck-us.net>)
-        id 1nV5DK-001Put-W5; Fri, 18 Mar 2022 05:31:51 +0000
-Date:   Thu, 17 Mar 2022 22:31:49 -0700
+        id 1nVDeS-003Wqy-Am; Fri, 18 Mar 2022 14:32:24 +0000
+Date:   Fri, 18 Mar 2022 07:32:23 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Brandon Wyman <bjwyman@gmail.com>
-Cc:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Eddie James <eajames@linux.ibm.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus) Add Vin unit off handling
-Message-ID: <20220318053149.GA3333429@roeck-us.net>
-References: <20220317232123.2103592-1-bjwyman@gmail.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
+ attenuator settings
+Message-ID: <20220318143223.GA673001@roeck-us.net>
+References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
+ <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220317232123.2103592-1-bjwyman@gmail.com>
+In-Reply-To: <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -62,67 +62,65 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1nV5DK-001Put-W5
+X-Exim-ID: 1nVDeS-003Wqy-Am
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57536
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57538
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 3
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 11:21:23PM +0000, Brandon Wyman wrote:
-> If there is an input undervoltage fault, reported in STATUS_INPUT
-> command response, there is quite likely a "Unit Off For Insufficient
-> Input Voltage" condition as well.
+On Fri, Mar 18, 2022 at 11:30:50AM +1300, Chris Packham wrote:
+> Simplify load_attenuators() by making use of enum chips instead of int.
 > 
-> Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
-> attributes to include both bits in the mask for clearing faults.
-> 
-> If an input undervoltage fault occurs, causing a unit off for
-> insufficient input voltage, but the unit is off bit is not cleared, the
-> STATUS_WORD will not be updated to clear the input fault condition.
-> Including the unit is off bit (bit 3) allows for the input fault
-> condition to completely clear.
-> 
-> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
 
-Applied.
+That isn't the only thing the patch is doing.
+
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v2:
+>     - New
+> 
+>  drivers/hwmon/adt7475.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 6de501de41b2..ebe4a85eb62e 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -1569,7 +1569,7 @@ static int set_property_bit(const struct i2c_client *client, char *property,
+>  	return ret;
+>  }
+>  
+> -static int load_attenuators(const struct i2c_client *client, int chip,
+> +static int load_attenuators(const struct i2c_client *client, enum chips chip,
+>  			    struct adt7475_data *data)
+>  {
+>  	int ret;
+> @@ -1588,7 +1588,7 @@ static int load_attenuators(const struct i2c_client *client, int chip,
+>  						data->config4);
+>  		if (ret < 0)
+>  			return ret;
+> -	} else if (chip == adt7473 || chip == adt7475) {
+> +	} else {
+
+This is the real change. Well, in theory. It doesn't really make a difference,
+it is just (currently) unnecessary but clarifies that the following code only
+applies to the two chips. It may be better to replace the if/else with a switch
+statement to clarify this. Dropping the conditional would not require to change
+the parameter type. That only really adds value if you also use a switch
+statement (without dummy default).
 
 Thanks,
 Guenter
 
-> ---
->  drivers/hwmon/pmbus/pmbus.h      | 1 +
->  drivers/hwmon/pmbus/pmbus_core.c | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index e0aa8aa46d8c..ef3a8ecde4df 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -319,6 +319,7 @@ enum pmbus_fan_mode { percent = 0, rpm };
->  /*
->   * STATUS_VOUT, STATUS_INPUT
->   */
-> +#define PB_VOLTAGE_VIN_OFF		BIT(3)
->  #define PB_VOLTAGE_UV_FAULT		BIT(4)
->  #define PB_VOLTAGE_UV_WARNING		BIT(5)
->  #define PB_VOLTAGE_OV_WARNING		BIT(6)
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index ac2fbee1ba9c..a0d899dc81f0 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -1373,7 +1373,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
->  		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
->  		.attr = "lcrit",
->  		.alarm = "lcrit_alarm",
-> -		.sbit = PB_VOLTAGE_UV_FAULT,
-> +		.sbit = (PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF),
->  	}, {
->  		.reg = PMBUS_VIN_OV_WARN_LIMIT,
->  		.attr = "max",
+>  		set_property_bit(client, "adi,bypass-attenuator-in1",
+>  				 &data->config2, 5);
+>  
