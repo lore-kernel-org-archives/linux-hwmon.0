@@ -2,113 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 699DFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 22:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1259DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 23:30:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241277AbiCRWP7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Mar 2022 18:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        id S235653AbiCRXbs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Mar 2022 19:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiCRWP7 (ORCPT
+        with ESMTP id S233316AbiCRXbr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Mar 2022 18:15:59 -0400
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.50.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FC97B124
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 15:14:39 -0700 (PDT)
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 419592872A
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 17:14:39 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id VKpqnCVV0b6UBVKpqnXSMA; Fri, 18 Mar 2022 17:12:38 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GRPVpTHvVEeX6p+AEuSP52hez17GUKK9iaB30l27MG8=; b=2XjXDVBSRkdiz3LnzBXfQfZP04
-        NhS71MvfXMszSgdmaOFTwU4/AUhEzMgpHGY9BljziOCfjmSscosBl5f9E3t2x5T1aH6wEw0iyqKu/
-        oeyZcySmK4Ua/9u0dj7EEkUQ6CMunjJno6+05HNwLgtIPKCr4kE131O32RKv8WP7/oPL+wJ3HbXUy
-        LJrBXMrNo943BlCkPTW0TE2YZS5wLRHMWaxweFJyxooLYrYZFbaxAAYN1jjPw6s1a/kwKlU+Q+RKp
-        Ntcq5v9jK1rL1uC85IHjwW4EEXBsYRdjBJ6SncGL8+Y25DKbp4gzrheOeSdCvAnBRmsOxVUoKObRX
-        dWEdX+FQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57550 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nVKpp-003sFy-VY; Fri, 18 Mar 2022 22:12:38 +0000
-Date:   Fri, 18 Mar 2022 15:12:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Inspiron 3505 to fan type blacklist
-Message-ID: <20220318221236.GA703928@roeck-us.net>
-References: <20220318183408.13286-1-W_Armin@gmx.de>
+        Fri, 18 Mar 2022 19:31:47 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADF230A8B1;
+        Fri, 18 Mar 2022 16:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1647646228; x=1679182228;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=xwumcGSYcilYb6+k6/WZ9RV1PXr81UV2X4Vb+5HM/wo=;
+  b=Ee3xzFMtPShrzLnEqkPoepikoazEbLkggY6CBApFByKx2lEgGsUO2Skp
+   sDpm7AheZ5wz+LL515UeDnE0Q2Nt8BSvvtewfrZnQwmJdfld3uBP4Bmd7
+   jqm7IT6nQqLYrdkwYT3Lp/t338ROCkj7ehD1aw/bvXUskP6iEznP7NXnv
+   k=;
+X-IronPort-AV: E=Sophos;i="5.90,192,1643673600"; 
+   d="scan'208";a="187295308"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 18 Mar 2022 23:30:27 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id 03A69261674;
+        Fri, 18 Mar 2022 23:30:27 +0000 (UTC)
+Received: from EX13D05UWB002.ant.amazon.com (10.43.161.50) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 18 Mar 2022 23:30:26 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
+ EX13D05UWB002.ant.amazon.com (10.43.161.50) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 18 Mar 2022 23:30:26 +0000
+Received: from localhost (10.85.222.179) by mail-relay.amazon.com
+ (10.43.61.169) with Microsoft SMTP Server id 15.0.1497.32 via Frontend
+ Transport; Fri, 18 Mar 2022 23:30:25 +0000
+From:   Eduardo Valentin <eduval@amazon.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Eduardo Valentin <eduval@amazon.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Eduardo Valentin" <evalenti@kernel.org>
+Subject: [PATCH 1/1] drivers: hwmon: jc42: add HWMON_C_TZ_REGISTER
+Date:   Fri, 18 Mar 2022 16:30:11 -0700
+Message-ID: <20220318233011.13980-1-eduval@amazon.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318183408.13286-1-W_Armin@gmx.de>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nVKpp-003sFy-VY
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57550
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 07:34:08PM +0100, Armin Wolf wrote:
-> Sadly, while firmware 1.5 fixed temperature labels on my
-> Inspiron 3505, it also caused fan type calls to take
-> ca. 4 seconds with the fan being at full speed.
-> Fix the resulting delays by adding the model to the
-> blacklist.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Add a thermal zone interface to the devices added
+under jc42 driver. This way, thermal zones described
+in device tree can make use of the of nodes of these
+devices.
 
-Applied.
+Cc: Guenter Roeck <linux@roeck-us.net> (maintainer:JC42.4 TEMPERATURE SENSOR DRIVER)
+Cc: Jean Delvare <jdelvare@suse.com> (maintainer:HARDWARE MONITORING)
+Cc: linux-hwmon@vger.kernel.org (open list:JC42.4 TEMPERATURE SENSOR DRIVER)
+Cc: linux-kernel@vger.kernel.org (open list)
 
-Thanks,
-Guenter
+Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+Signed-off-by: Eduardo Valentin <evalenti@kernel.org>
+---
+ drivers/hwmon/jc42.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index a14e810f5598..c34342253d6e 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1165,6 +1165,13 @@ static const struct dmi_system_id i8k_blacklist_fan_type_dmi_table[] __initconst
->  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 580 "),
->  		},
->  	},
-> +	{
-> +		.ident = "Dell Inspiron 3505",
-> +		.matches = {
-> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 3505"),
-> +		},
-> +	},
->  	{ }
->  };
+diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+index cb347a6bd8d9..f40df2f29d41 100644
+--- a/drivers/hwmon/jc42.c
++++ b/drivers/hwmon/jc42.c
+@@ -443,6 +443,8 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
+ }
+ 
+ static const struct hwmon_channel_info *jc42_info[] = {
++	HWMON_CHANNEL_INFO(chip,
++			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+ 			   HWMON_T_CRIT | HWMON_T_MAX_HYST |
+-- 
+2.17.1
+
