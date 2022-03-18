@@ -2,216 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA38C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 22:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 699DFC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 22:14:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241254AbiCRWLM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Mar 2022 18:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S241277AbiCRWP7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Mar 2022 18:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241253AbiCRWLL (ORCPT
+        with ESMTP id S233782AbiCRWP7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Mar 2022 18:11:11 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C0A2DE7BD
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 15:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647641392; x=1679177392;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eak8FwVQdaFIFQh9MOmRiYQlKYMbWKDZJ4bIvdYkLuI=;
-  b=bGjwaqH/Yp3Hml8rmN+NXsouGYuLAg4y76IkAVX7VK5FmqBbFnjaVch+
-   9yGl5qRyANTCKHmNHfX9Er0eoEPprXL7Z08fYSx8HgGce+PWtTxXqcP9F
-   8EOWK1qTyDxCrY5o9uSTe1/YiLOGujmgsahZwW1VnM28vHU1cxa8dsfjn
-   IhYIq/CzAxNr22wSnYETPXluflASyBj/xdqS9vD8EZJ9PwoOvtjjKPNE5
-   dw1WB44O9MZfziwI/TDbj6mTHf718gieyMB9lOln0HpkebK36RamW1r5/
-   rd4qAve/q6IXJviqAJalvUvnOLmgZJih1uo8E1ZVC2iR/vaz8kBhBowP2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="239396280"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="239396280"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:09:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="647653808"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2022 15:09:50 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVKn7-000FCl-Op; Fri, 18 Mar 2022 22:09:49 +0000
-Date:   Sat, 19 Mar 2022 06:09:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- a5436af598779219b375c1977555c82def1c35d0
-Message-ID: <6235031b.5Idce8hvqr6Tgc1W%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 18 Mar 2022 18:15:59 -0400
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.50.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FC97B124
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 15:14:39 -0700 (PDT)
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 419592872A
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 17:14:39 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id VKpqnCVV0b6UBVKpqnXSMA; Fri, 18 Mar 2022 17:12:38 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=GRPVpTHvVEeX6p+AEuSP52hez17GUKK9iaB30l27MG8=; b=2XjXDVBSRkdiz3LnzBXfQfZP04
+        NhS71MvfXMszSgdmaOFTwU4/AUhEzMgpHGY9BljziOCfjmSscosBl5f9E3t2x5T1aH6wEw0iyqKu/
+        oeyZcySmK4Ua/9u0dj7EEkUQ6CMunjJno6+05HNwLgtIPKCr4kE131O32RKv8WP7/oPL+wJ3HbXUy
+        LJrBXMrNo943BlCkPTW0TE2YZS5wLRHMWaxweFJyxooLYrYZFbaxAAYN1jjPw6s1a/kwKlU+Q+RKp
+        Ntcq5v9jK1rL1uC85IHjwW4EEXBsYRdjBJ6SncGL8+Y25DKbp4gzrheOeSdCvAnBRmsOxVUoKObRX
+        dWEdX+FQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57550 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nVKpp-003sFy-VY; Fri, 18 Mar 2022 22:12:38 +0000
+Date:   Fri, 18 Mar 2022 15:12:36 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Inspiron 3505 to fan type blacklist
+Message-ID: <20220318221236.GA703928@roeck-us.net>
+References: <20220318183408.13286-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220318183408.13286-1-W_Armin@gmx.de>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nVKpp-003sFy-VY
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57550
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: a5436af598779219b375c1977555c82def1c35d0  hwmon: (pmbus) Add Vin unit off handling
+On Fri, Mar 18, 2022 at 07:34:08PM +0100, Armin Wolf wrote:
+> Sadly, while firmware 1.5 fixed temperature labels on my
+> Inspiron 3505, it also caused fan type calls to take
+> ca. 4 seconds with the fan being at full speed.
+> Fix the resulting delays by adding the model to the
+> blacklist.
+> 
+> Tested on a Dell Inspiron 3505.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-elapsed time: 721m
+Applied.
 
-configs tested: 138
-configs skipped: 4
+Thanks,
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-arm64                            alldefconfig
-arm                            xcep_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                         ap325rxa_defconfig
-mips                       capcella_defconfig
-arm                      footbridge_defconfig
-m68k                          multi_defconfig
-arm                            zeus_defconfig
-sh                           se7751_defconfig
-arm                        shmobile_defconfig
-powerpc                      pasemi_defconfig
-riscv                               defconfig
-sparc                            alldefconfig
-openrisc                         alldefconfig
-m68k                        m5307c3_defconfig
-arc                         haps_hs_defconfig
-powerpc                           allnoconfig
-arm                          lpd270_defconfig
-arc                                 defconfig
-mips                         mpc30x_defconfig
-m68k                           sun3_defconfig
-sh                        edosk7705_defconfig
-powerpc                   motionpro_defconfig
-arc                 nsimosci_hs_smp_defconfig
-sh                           sh2007_defconfig
-powerpc                        cell_defconfig
-ia64                             alldefconfig
-arm                           corgi_defconfig
-ia64                          tiger_defconfig
-powerpc                  storcenter_defconfig
-m68k                       m5208evb_defconfig
-sh                          rsk7201_defconfig
-arm                        clps711x_defconfig
-sh                             espt_defconfig
-sh                           se7619_defconfig
-arm                        trizeps4_defconfig
-powerpc                      bamboo_defconfig
-arm                         lubbock_defconfig
-sh                          sdk7780_defconfig
-sh                           se7705_defconfig
-arm                  randconfig-c002-20220318
-arm                  randconfig-c002-20220317
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                    nommu_virt_defconfig
-riscv                            allyesconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-arm                  randconfig-c002-20220318
-s390                 randconfig-c005-20220317
-s390                 randconfig-c005-20220318
-arm                  randconfig-c002-20220317
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220318
-riscv                randconfig-c006-20220318
-riscv                randconfig-c006-20220317
-powerpc              randconfig-c003-20220317
-mips                 randconfig-c004-20220317
-mips                 randconfig-c004-20220318
-i386                          randconfig-c001
-mips                        qi_lb60_defconfig
-hexagon                          alldefconfig
-powerpc                     tqm8540_defconfig
-mips                           ip22_defconfig
-powerpc                     skiroot_defconfig
-powerpc                       ebony_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220318
-hexagon              randconfig-r045-20220317
-hexagon              randconfig-r041-20220318
-riscv                randconfig-r042-20220318
-hexagon              randconfig-r041-20220317
-s390                 randconfig-r044-20220318
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> --
+> 2.30.2
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index a14e810f5598..c34342253d6e 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1165,6 +1165,13 @@ static const struct dmi_system_id i8k_blacklist_fan_type_dmi_table[] __initconst
+>  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 580 "),
+>  		},
+>  	},
+> +	{
+> +		.ident = "Dell Inspiron 3505",
+> +		.matches = {
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 3505"),
+> +		},
+> +	},
+>  	{ }
+>  };
