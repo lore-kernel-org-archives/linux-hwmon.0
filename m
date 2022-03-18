@@ -2,125 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88AEFC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 14:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C87C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 18:34:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbiCRO75 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Mar 2022 10:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
+        id S235913AbiCRSfx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Mar 2022 14:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237491AbiCRO7y (ORCPT
+        with ESMTP id S236954AbiCRSfw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:59:54 -0400
-X-Greylist: delayed 1447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 07:58:34 PDT
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.60.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9EAB1A8B
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 07:58:32 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 015A7400D4542
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 09:34:25 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id VDeSnJlz3HnotVDeSnTA7m; Fri, 18 Mar 2022 09:32:24 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xJSeFXEv0MsCLMmIo+zvVtrl7PN3UrB1l3mugyJKHT8=; b=zDm9kuwnQlobpoDtn2XNjkBuPZ
-        hUW1s395q3X7TtFciXA0KaKMOC09DkwYKrt1mI8zX9Ngk6dPNp22n0S7xnXHA2ST9ydFJcMRaxrR+
-        qw9B1LLQ0fvW6PlUlkvcLR60xIbZ9xVRfLs1CsaNLxAi3wVEoC/64XfwWsue19hkCThxEyV0hxf86
-        NeK6hrcmkhB8cQz3CndoVI+/XAARVzugXiaz46L2j9IJX88NIM+bhHdyVgx79nnqdELWHpTsRIdBb
-        VLcjqKgSa5NitiU6P4xhT7hpVnA0pSHlY9/CDqC+cBtpvJ7ZVRn5/mAIXm/3Zd1AMZCQtgIY0ZJf9
-        kjCt9Fqw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57538 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nVDeS-003Wqy-Am; Fri, 18 Mar 2022 14:32:24 +0000
-Date:   Fri, 18 Mar 2022 07:32:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
- attenuator settings
-Message-ID: <20220318143223.GA673001@roeck-us.net>
-References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
- <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
+        Fri, 18 Mar 2022 14:35:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB44171790;
+        Fri, 18 Mar 2022 11:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647628451;
+        bh=ZtsPop+g0Zry4luXEYbjWFE5Bk+3qkCDzOGOdMK8b/w=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=RXj7qCmnq60WouHAUuvXOF3hB3i3YeTYytPX0akdz0CQ8Xusy/PFAzii4Qm0im8Sf
+         PZqfELdAhmvLkTFhnYE199d7EizFJfJy03/tD6bdBsVRTZQEs9coW0992uHvqCAZzh
+         IbaisNPXeKPQgXTD4l9rnZ4sHJCwW2SrFS0kEddk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MNbox-1nlQjo1hyl-00P6qY; Fri, 18 Mar 2022 19:34:11 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add Inspiron 3505 to fan type blacklist
+Date:   Fri, 18 Mar 2022 19:34:08 +0100
+Message-Id: <20220318183408.13286-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nVDeS-003Wqy-Am
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57538
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 3
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:LtUJNltOgob3JcDmitMuumEm09A/7QK9hg/LmVS7cmUXKk2SJO8
+ 7RdRvbZ9WvixFupTeb89WbPAKctL7Hhc14Aj/PeeVsJB4eMJP6Mm6UyN39GYuawRcF2N5jV
+ n+Tssf3QaFh03tLz/s31G96vEe6OSkmMbLGooMXd+C+bYZNTPtPU33Q5wk8T89GLTFKdNj6
+ eLqAruu2towvbX2CBFYIw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UrNlZpohNkI=:By9tbtr9fP6a8/tG2/lZN3
+ JaTFot3rXwTamB9H52VNYFQX3q6BsFIG/XprG5lWuXT5nvFmLJPMkr6ZoMJoHRXs+WH7tx3nP
+ PlOIKAKZyzcOfhpBgNRAYl8mOpCHsVwJ4kwdA1hvGSi/E7lsv4S0sHNsjwX7C7UFQCzN7Qb7O
+ Fk1GdPNsk3+VdxyNuT1AAM7rBcwLpcgcy5MdsMiX4YZNppjk+kOxcaqW2IY5cPa/3OG8/MjVC
+ OLlMqsdZ9F7EBAdOIVJYqPr8riL0lQnn43HAK3joy0piDRwKZXyiaXCBjQaRXK3NlYN7EdVII
+ 9xzxsLZgnIedyvQqBQO6j2A3ngZ022fQBvJlzQUrrhu/48SpfEjFTxU+W4Lt/Mymi/P2qJu10
+ oKl5cM+ukoGds7bbjzlzPH3Uh6KJRCGl88EuWHpQiAPLZsnqWuACFlfSB/79K3YpW3WfoMZ2v
+ bV8ejKRo+tY1aXpBzSYZVNEKKf31oxdaEQX9BGOi8LQ+RoSh/a/OsPjB6mzhxjJAt6ZuhDgJp
+ SipX5Lc08ocDBI9KtINYFYPLoB+KuRkQWoQHpeL6wnn1SxaRiaxNyp0bajvqjpj40OFIIFpCA
+ +i3ko3e0IUljnTPLNugZV//s47e6Fr2oZHPOEOKgEk0XMeDxTBTH1EgGWsokmjC9hK/boRjZz
+ GhOVN4rH+tOyONVsR32JB9XcPA7pCI2TTEHx58VKoa9OgGL6CCxZPPqHgUrvryJZI648fy/rR
+ tlGdNqt0MBLmpb3srJAIbm4NaoifTDvH3ulJbRZdX13io4ReKcWNKnQ+xmvDaDRBz2Nqxracm
+ f5ibjj+FN0AHh9h8HwT/ulgdT+xKE7/0AIDPvNPK0XOYkb10uOR0HArE3p50MLdPVT4EuK9j9
+ 0InETFbZhikHtDctWxRPq6wM5d3lf0reYiRIZK/8YOoQLkLj6+qgXo69Z+3nUh3P/FcdHDYYa
+ 5I8eN0km07Nr0721ZSaJFrZGEdQHhJJ3pRDFrLAOes6y+3goWaa86INtpvl1gw7YggLMAZhm+
+ lJOPvBYk2I9rHQ84ntUiXhh9Z1ZEjmyrUXPGna+KC85gykpZ621Dadedlubgj/qHIoC/gzmu7
+ 8u0o8oWzgpr73Q=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:30:50AM +1300, Chris Packham wrote:
-> Simplify load_attenuators() by making use of enum chips instead of int.
-> 
+Sadly, while firmware 1.5 fixed temperature labels on my
+Inspiron 3505, it also caused fan type calls to take
+ca. 4 seconds with the fan being at full speed.
+Fix the resulting delays by adding the model to the
+blacklist.
 
-That isn't the only thing the patch is doing.
+Tested on a Dell Inspiron 3505.
 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v2:
->     - New
-> 
->  drivers/hwmon/adt7475.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 6de501de41b2..ebe4a85eb62e 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1569,7 +1569,7 @@ static int set_property_bit(const struct i2c_client *client, char *property,
->  	return ret;
->  }
->  
-> -static int load_attenuators(const struct i2c_client *client, int chip,
-> +static int load_attenuators(const struct i2c_client *client, enum chips chip,
->  			    struct adt7475_data *data)
->  {
->  	int ret;
-> @@ -1588,7 +1588,7 @@ static int load_attenuators(const struct i2c_client *client, int chip,
->  						data->config4);
->  		if (ret < 0)
->  			return ret;
-> -	} else if (chip == adt7473 || chip == adt7475) {
-> +	} else {
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-This is the real change. Well, in theory. It doesn't really make a difference,
-it is just (currently) unnecessary but clarifies that the following code only
-applies to the two chips. It may be better to replace the if/else with a switch
-statement to clarify this. Dropping the conditional would not require to change
-the parameter type. That only really adds value if you also use a switch
-statement (without dummy default).
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index a14e810f5598..c34342253d6e 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1165,6 +1165,13 @@ static const struct dmi_system_id i8k_blacklist_fan=
+_type_dmi_table[] __initconst
+ 			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 580 "),
+ 		},
+ 	},
++	{
++		.ident =3D "Dell Inspiron 3505",
++		.matches =3D {
++			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 3505"),
++		},
++	},
+ 	{ }
+ };
 
-Thanks,
-Guenter
+=2D-
+2.30.2
 
->  		set_property_bit(client, "adi,bypass-attenuator-in1",
->  				 &data->config2, 5);
->  
