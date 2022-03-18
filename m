@@ -2,150 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A6FFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Mar 2022 23:30:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78153C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 05:55:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiCQXcE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Mar 2022 19:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S232433AbiCRF4y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Mar 2022 01:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiCQXcE (ORCPT
+        with ESMTP id S229912AbiCRF4y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:32:04 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC748185943;
-        Thu, 17 Mar 2022 16:30:46 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id a1so8172668wrh.10;
-        Thu, 17 Mar 2022 16:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kf+pDBs2nbvt7GpmUkQZXtJLUtopEEIfY3t5/TWUWOc=;
-        b=VVucs9qDmdDKge+F191+fRNzExdWb3Lo0N2rleaCXYe5S0r3FlfewC8VZQaIkE1og2
-         4dYejnaeMwMLg//7nWTWkMEyzx69MgJoFupSrhvFuJLx+zV8G/7lOqdAjI9f+sv/gtBr
-         vd2yPqB75GUyX0wzkJLJdZjfMrlP3dNJOKxhjcU1TJtcGAqp7iry2ppem4lPYVyd9XAQ
-         nawvWAF5kNDi9cWN+Lonvq0Sq3snbL9ka/pSeuACez2tdq3d/Vo0KTa6eIjsVFiqMlm5
-         NbIavEJ6xnrkQoKSrDkO/0cv4mk0wi0kfDgeXR0Q+5iRXAiGqxv884In4ldMkCEQVdd6
-         p8og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kf+pDBs2nbvt7GpmUkQZXtJLUtopEEIfY3t5/TWUWOc=;
-        b=4a91MPaXYme+JDNwnQ2bB/5BigyTitGGPgcZnTqWxcUy3WaTH7A+kGrxNOTv1br1A/
-         TAGtnTmg/GgyiXkCx5HjQzQtDXBR1V4RZpwXnBubC5p85TCkr8QDGhwXfT7xh/LeEtyg
-         TzSG5Tct0KRaTx6uUmJHuasqrpDZRqKlchupFHL7ptbFFHsB0wsBumdsg7IjL7QlKW+T
-         ttf75maryYMqdV8zQhn33yK68FOaZ0HstUdMQT4NhsjT3VuLmKb7Via18z7IxkR3HZ8f
-         7162yiNC5eUEt/Bn2rSohbdl/ySQTytHGlb7MPaoFGoAMmL5VFDgIP2MKti7/9ZXPe52
-         i3/w==
-X-Gm-Message-State: AOAM530hlQFaEmOTsMcA5LEnNh5Mc+0ON8pZZv3Mrl5jzyl7NCSbuO04
-        ZxcyjGCd4BhvC4WP3ggmNiRVCHXELOLxKU75J2I=
-X-Google-Smtp-Source: ABdhPJxmSMSY2cEFdzhlD4Ik29HDsWr2Tb3B+hhEsTAKkWNrSEDmy8KicWxkB2svfRU2gNRkUX3PymoBsz1AmB02/v0=
-X-Received: by 2002:adf:c54c:0:b0:203:ed16:2570 with SMTP id
- s12-20020adfc54c000000b00203ed162570mr3845609wrf.646.1647559845276; Thu, 17
- Mar 2022 16:30:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220311181014.3448936-1-bjwyman@gmail.com> <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
- <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com>
- <582086fe-1cc3-d161-a866-f4726d04a254@roeck-us.net> <CAK_vbW1Lfroo91cMxsLpuf-uuDwcsssG1=fjp3an_O5-FUHjMQ@mail.gmail.com>
- <b284838a-6987-273c-ce00-592aa9ab51b2@roeck-us.net>
-In-Reply-To: <b284838a-6987-273c-ce00-592aa9ab51b2@roeck-us.net>
-From:   Brandon Wyman <bjwyman@gmail.com>
-Date:   Thu, 17 Mar 2022 18:30:10 -0500
-Message-ID: <CAK_vbW2QFk8wJrK6X+Xyvefx1XDPLHOFoh0VpKnSCNN43knwMw@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Fri, 18 Mar 2022 01:56:54 -0400
+X-Greylist: delayed 1304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Mar 2022 22:55:36 PDT
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704EA2E35A2
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Mar 2022 22:55:36 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 01143288C680
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Mar 2022 00:33:52 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id V5DLnQwj89AGSV5DLnTUMz; Fri, 18 Mar 2022 00:31:51 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nHjdoFFbTloWbSbcTB9Xd34hQqBVAfoUskKY6xI1CyI=; b=2bqIbxx7e306+T8LJxWfDkxoYc
+        w3cumUWMA3SAP46t8b0qOMPbYPHfC4hBJ7EDHLxF/OmFeL17WTO9yqB1exvoVb6wvFaFjiQHbduz4
+        PTpbxVn3q+XvcH9OaK0tWBFSHIOKuz6lV7UD6N3Hkky0sErv/l8EuEOBxiKBV6kK7b9SdVViHovuN
+        qnJo2FF8NWNEDbCBMdtaWcFDShg6mHpHtRyH8zhGyBSO+a6o6SH5Y83NcJyDtTg+AEQAWwLxi+V6P
+        HNUJ76elTgs03NEPvqMrdHdkYFHi4MbSEafi7Oa2Yrj22ymSYT5EDMZjWEbRyR4xq+NCqS8NDDd1M
+        EciZt6Ag==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57536 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nV5DK-001Put-W5; Fri, 18 Mar 2022 05:31:51 +0000
+Date:   Thu, 17 Mar 2022 22:31:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Brandon Wyman <bjwyman@gmail.com>
+Cc:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
         Eddie James <eajames@linux.ibm.com>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] hwmon: (pmbus) Add Vin unit off handling
+Message-ID: <20220318053149.GA3333429@roeck-us.net>
+References: <20220317232123.2103592-1-bjwyman@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317232123.2103592-1-bjwyman@gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nV5DK-001Put-W5
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57536
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 1:50 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/17/22 09:12, Brandon Wyman wrote:
-> > On Wed, Mar 16, 2022 at 3:14 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On 3/16/22 13:03, Brandon Wyman wrote:
-> >>> On Sun, Mar 13, 2022 at 11:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>>>
-> >>>> On 3/11/22 10:10, Brandon Wyman wrote:
-> >>>>> Add a clear_faults write-only debugfs entry for the ibm-cffps device
-> >>>>> driver.
-> >>>>>
-> >>>>> Certain IBM power supplies require clearing some latched faults in order
-> >>>>> to indicate that the fault has indeed been observed/noticed.
-> >>>>>
-> >>>>
-> >>>> That is insufficient, sorry. Please provide the affected power supplies as
-> >>>> well as the affected faults, and confirm that the problem still exists
-> >>>> in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
-> >>>> includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
-> >>>> bits after read").
-> >>>>
-> >>>> Thanks,
-> >>>> Guenter
-> >>>
-> >>> Sorry for the delay in responding. I did some testing with commit
-> >>> 35f165f08950. I could not get that code to send the CLEAR_FAULTS
-> >>> command to the power supplies.
-> >>>
-> >>> I can update the commit message to be more specific about which power
-> >>> supplies need this CLEAR_FAULTS sent, and which faults. It is observed
-> >>> with the 1600W power supplies (2B1E model). The faults that latch are
-> >>> the VIN_UV and INPUT faults in the STATUS_WORD. The corresponding
-> >>> STATUS_INPUT fault bits are VIN_UV_FAULT and Unit is Off.
-> >>>
-> >>
-> >> The point is that the respective fault bits should be reset when the
-> >> corresponding alarm attributes are read. This isn't about executing
-> >> a CLEAR_FAULTS command, but about selectively resetting fault bits
-> >> while ensuring that faults are reported at least once. Executing
-> >> CLEAR_FAULTS is a big hammer.
-> >>
-> >> With the patch I pointed to in place, input (and other) faults should
-> >> be reset after the corresponding alarm attributes are read, assuming
-> >> that the condition no longer exists. If that does not happen, we should
-> >> fix the problem instead of deploying the big hammer.
-> >>
-> >> Thanks,
-> >> Guenter
-> >
-> > Okay, I see what you are pointing out there. I had been mostly looking
-> > at the "files" in the debugfs paths. Those do not end up running
-> > through that pmbus_get_boolean() function, so the individual fault
-> > clearing was not being attempted. The fault I was interested in
-> > appears to be associated with in1_lcrti_alarm. Reading that will give
-> > me a 1 if there is a VIN_UV fault, and then it sends 0x10 to
-> > STATUS_INPUT. That clears out VIN_UV, but the STATUS_INPUT command was
-> > returning 0x18. Nothing appears to handle clearing BIT(3), that 0x08
-> > mask.
-> >
-> > Should there be some kind of define for BIT(3) over in pmbus.h?
-> > Something like PB_VOLTAGE_OFF? Somehow we need something using that in
-> > sbit of the attributes. I had a quick hack that just OR'ed BIT(3) with
-> > BIT(4) for that PB_VOLTAGE_UV_FAULT. That resulted in a clear of both
-> > bits in STATUS_INPUT, and the faults clearing in STATUS_WORD.
-> >
-> > It is not clear if there should be a separate alarm for that "Unit Off
-> > For Insufficient Input Voltage", or if the one for in1_lcrit_alarm
-> > could just be the two bits OR'ed into one mask. I can send a patch
-> > with a proposal on how to fix this one bit not getting cleared.
-> >
->
-> We don't have a separate standard attribute. I think the best approach
-> would be to add a mask for bit 3 and or that mask for lcrit in
-> vin_limit_attrs with PB_VOLTAGE_UV_FAULT. I'd suggest to name the
-> define something like PB_VOLTAGE_VIN_OFF or PB_VOLTAGE_VIN_FAULT
-> to clarify that the bit applies to the input.
+On Thu, Mar 17, 2022 at 11:21:23PM +0000, Brandon Wyman wrote:
+> If there is an input undervoltage fault, reported in STATUS_INPUT
+> command response, there is quite likely a "Unit Off For Insufficient
+> Input Voltage" condition as well.
+> 
+> Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
+> attributes to include both bits in the mask for clearing faults.
+> 
+> If an input undervoltage fault occurs, causing a unit off for
+> insufficient input voltage, but the unit is off bit is not cleared, the
+> STATUS_WORD will not be updated to clear the input fault condition.
+> Including the unit is off bit (bit 3) allows for the input fault
+> condition to completely clear.
+> 
+> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
 
-Done. See: https://lore.kernel.org/linux-hwmon/20220317232123.2103592-1-bjwyman@gmail.com/T/#u
+Applied.
 
->
-> Thanks,
-> Guenter
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/pmbus/pmbus.h      | 1 +
+>  drivers/hwmon/pmbus/pmbus_core.c | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index e0aa8aa46d8c..ef3a8ecde4df 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -319,6 +319,7 @@ enum pmbus_fan_mode { percent = 0, rpm };
+>  /*
+>   * STATUS_VOUT, STATUS_INPUT
+>   */
+> +#define PB_VOLTAGE_VIN_OFF		BIT(3)
+>  #define PB_VOLTAGE_UV_FAULT		BIT(4)
+>  #define PB_VOLTAGE_UV_WARNING		BIT(5)
+>  #define PB_VOLTAGE_OV_WARNING		BIT(6)
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index ac2fbee1ba9c..a0d899dc81f0 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -1373,7 +1373,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
+>  		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
+>  		.attr = "lcrit",
+>  		.alarm = "lcrit_alarm",
+> -		.sbit = PB_VOLTAGE_UV_FAULT,
+> +		.sbit = (PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF),
+>  	}, {
+>  		.reg = PMBUS_VIN_OV_WARN_LIMIT,
+>  		.attr = "max",
