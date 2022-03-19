@@ -2,89 +2,147 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1259DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Mar 2022 23:30:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F5B2C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Mar 2022 02:36:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbiCRXbs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Mar 2022 19:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S241826AbiCSCh7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Mar 2022 22:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbiCRXbr (ORCPT
+        with ESMTP id S241825AbiCSCh5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Mar 2022 19:31:47 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADF230A8B1;
-        Fri, 18 Mar 2022 16:30:28 -0700 (PDT)
+        Fri, 18 Mar 2022 22:37:57 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EBC2F09F7;
+        Fri, 18 Mar 2022 19:36:37 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id z7so11325322iom.1;
+        Fri, 18 Mar 2022 19:36:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1647646228; x=1679182228;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=xwumcGSYcilYb6+k6/WZ9RV1PXr81UV2X4Vb+5HM/wo=;
-  b=Ee3xzFMtPShrzLnEqkPoepikoazEbLkggY6CBApFByKx2lEgGsUO2Skp
-   sDpm7AheZ5wz+LL515UeDnE0Q2Nt8BSvvtewfrZnQwmJdfld3uBP4Bmd7
-   jqm7IT6nQqLYrdkwYT3Lp/t338ROCkj7ehD1aw/bvXUskP6iEznP7NXnv
-   k=;
-X-IronPort-AV: E=Sophos;i="5.90,192,1643673600"; 
-   d="scan'208";a="187295308"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 18 Mar 2022 23:30:27 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id 03A69261674;
-        Fri, 18 Mar 2022 23:30:27 +0000 (UTC)
-Received: from EX13D05UWB002.ant.amazon.com (10.43.161.50) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Fri, 18 Mar 2022 23:30:26 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D05UWB002.ant.amazon.com (10.43.161.50) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Fri, 18 Mar 2022 23:30:26 +0000
-Received: from localhost (10.85.222.179) by mail-relay.amazon.com
- (10.43.61.169) with Microsoft SMTP Server id 15.0.1497.32 via Frontend
- Transport; Fri, 18 Mar 2022 23:30:25 +0000
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Eduardo Valentin <eduval@amazon.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Eduardo Valentin" <evalenti@kernel.org>
-Subject: [PATCH 1/1] drivers: hwmon: jc42: add HWMON_C_TZ_REGISTER
-Date:   Fri, 18 Mar 2022 16:30:11 -0700
-Message-ID: <20220318233011.13980-1-eduval@amazon.com>
-X-Mailer: git-send-email 2.17.1
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hksZ8fkTnVC+iLKSKOlUhg9nGWitwWRHnaDyhB4h4Pg=;
+        b=g66+r1BJWlshRZkKYwtPULVp3mQ1VwlYXQ4D9MJwGaHowURbHjq0dOMl69kYYb7lCT
+         7lxkMLsvyPf7gZVXKQhzJwflM+msbLFO3H8C+l3Drq7CamkPmBT/eO/HaNjecx4HTKrn
+         YDiQj0polI1MsNHTVDIFsm9EugzKsYbam7g/bSujZM54HUZnigSwxnAoe7SGWLiKE8pO
+         HecqnwqyZXRqZqF9BwgWCQU/CPvphNYkMtmovMAyPgnu7JrVqoJ7ZyiA3dVcQ+zspWWc
+         Et7NPRBGgdzmkPTJJS7h3iWgAo1kD3X35t/IdNsKdoWZFDyzK6TkF2VQKFiouK05/TTR
+         2Bpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hksZ8fkTnVC+iLKSKOlUhg9nGWitwWRHnaDyhB4h4Pg=;
+        b=CxWX9aoGSIOW+ybnetFwpwtFmF8wnZb+yrUvxmjW7ZX40M/onwPLGo/k94E04zlVMU
+         aXab9QVw6zMXWfJZ/F2aLjrt25F1XvgjYe0NR4McjBdakR++EZ884mdtUJWapCmZCWLS
+         s3hsdrlceIywZ9OPx0XZu8Bs2EXV6CeW1ZEZ42Y85ozVQwY9c0tQ0KkrloMzH8fubCiG
+         xReQHgbjb1zMI/rICnOEaGj4UKr+OiXUqM+zExSKkGN8dT1GKUYY0meGeLtl5qHZnR6F
+         4mTOGw+m8YehQjQpUW37huXC2YEm3+ysuVkyhxQJ+bf+3qkdcmKjZcWVRj8iQW1P6A9t
+         3yJQ==
+X-Gm-Message-State: AOAM532N/KA3KCwesQoD9EGGyaEvr9z1h0uRKDDZRs1AXJDqGBYp/GQ9
+        jVflHTh78+S+hQty/TNbMU6Uqg3H7GktJBklvUU=
+X-Google-Smtp-Source: ABdhPJxpIip6zDEZ8J1RXAr5LxvqrRgvizQzejGBwtvtghdpSilJKqPD5vWbehMXS8Dwwq0PlcpkiLZQNNRRU3MUyMY=
+X-Received: by 2002:a6b:d60a:0:b0:63a:be64:c652 with SMTP id
+ w10-20020a6bd60a000000b0063abe64c652mr5754958ioa.27.1647657397334; Fri, 18
+ Mar 2022 19:36:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220124121009.108649-1-alistair@alistair23.me>
+ <20220124121009.108649-3-alistair@alistair23.me> <CAMuHMdVNgVQzjrdybbnfCEr+G5Q4ztjRCC29RF9HwGnhKkPn3Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdVNgVQzjrdybbnfCEr+G5Q4ztjRCC29RF9HwGnhKkPn3Q@mail.gmail.com>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Sat, 19 Mar 2022 12:36:11 +1000
+Message-ID: <CAKmqyKOnezw8_dDY-c69F77KVxmb-C3t=N3H23GurKbrxWDAgg@mail.gmail.com>
+Subject: Re: [PATCH v18 2/8] mfd: simple-mfd-i2c: Add a Kconfig name
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add a thermal zone interface to the devices added
-under jc42 driver. This way, thermal zones described
-in device tree can make use of the of nodes of these
-devices.
+On Tue, Mar 8, 2022 at 8:53 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Alistair,
+>
+> Thanks for your patch, which is now commit bae5a4acef67db88
+> ("mfd: simple-mfd-i2c: Add a Kconfig name") in mfd/for-mfd-next.
+>
+> On Mon, Jan 24, 2022 at 1:24 PM Alistair Francis <alistair@alistair23.me> wrote:
+> > Add a Kconfig name to the "Simple Multi-Functional Device support (I2C)"
+> > device so that it can be enabled via menuconfig.
+>
+> Which still does not explain why this would be needed...
+>
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+>
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -1188,7 +1188,7 @@ config MFD_SI476X_CORE
+> >           module will be called si476x-core.
+> >
+> >  config MFD_SIMPLE_MFD_I2C
+> > -       tristate
+> > +       tristate "Simple Multi-Functional Device support (I2C)"
+> >         depends on I2C
+> >         select MFD_CORE
+> >         select REGMAP_I2C
+>
+> The help text states:
+>
+> | This driver creates a single register map with the intention for it
+> | to be shared by all sub-devices.
+>
+> Yes, that's what MFD does?
+>
+> | Once the register map has been successfully initialised, any
+> | sub-devices represented by child nodes in Device Tree will be
+> | subsequently registered.
+>
+> OK...?
+>
+> Still, no clue about what this driver really does, and why and when
+> it would be needed.
+>
+> There is one driver symbol that selects MFD_SIMPLE_MFD_I2C.
+> There are no driver symbols that depend on this symbol.
+>
+> If you have a driver in the pipeline that can make use of this,
+> can't it just select MFD_SIMPLE_MFD_I2C, so the symbol itself can
+> stay invisible?
 
-Cc: Guenter Roeck <linux@roeck-us.net> (maintainer:JC42.4 TEMPERATURE SENSOR DRIVER)
-Cc: Jean Delvare <jdelvare@suse.com> (maintainer:HARDWARE MONITORING)
-Cc: linux-hwmon@vger.kernel.org (open list:JC42.4 TEMPERATURE SENSOR DRIVER)
-Cc: linux-kernel@vger.kernel.org (open list)
+My patch "mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a"
+allows using this driver for the silergy,sy7636a MFD. So it's nice to
+be able to enable and disable it as required.
 
-Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-Signed-off-by: Eduardo Valentin <evalenti@kernel.org>
----
- drivers/hwmon/jc42.c | 2 ++
- 1 file changed, 2 insertions(+)
+Alistair
 
-diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index cb347a6bd8d9..f40df2f29d41 100644
---- a/drivers/hwmon/jc42.c
-+++ b/drivers/hwmon/jc42.c
-@@ -443,6 +443,8 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
- }
- 
- static const struct hwmon_channel_info *jc42_info[] = {
-+	HWMON_CHANNEL_INFO(chip,
-+			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
- 			   HWMON_T_CRIT | HWMON_T_MAX_HYST |
--- 
-2.17.1
-
+>
+> Thanks!
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
