@@ -2,189 +2,336 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9908C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Mar 2022 15:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB5BC43219
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Mar 2022 18:22:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242398AbiCSPLo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 19 Mar 2022 11:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S243879AbiCSSXy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 19 Mar 2022 14:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243414AbiCSPLl (ORCPT
+        with ESMTP id S243868AbiCSSXx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 19 Mar 2022 11:11:41 -0400
-X-Greylist: delayed 1317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Mar 2022 08:10:20 PDT
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9772655206
-        for <linux-hwmon@vger.kernel.org>; Sat, 19 Mar 2022 08:10:20 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id DA3A518E0
-        for <linux-hwmon@vger.kernel.org>; Sat, 19 Mar 2022 09:48:20 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id VaNQnmC1qHnotVaNQnu9YS; Sat, 19 Mar 2022 09:48:20 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xAPnHyisEBlf12nKzoY8EKe+L0PL5+6puEZB3ZDCOZU=; b=4mS90JFxF/87wPGGEIimTb7bFp
-        klXjGFs9jxjHTkq7L2wPjaQy2wID/9QUnizJl1LCnOpmvUeh9xaD9uM3ZIjX1bR0aZWUGqeJWU9E4
-        0x1J5J0j6529gkF4FnuOpwnfUQG5wIcWDcTvCrYuvqN5Lbuqpq1/sKo0nzJtqBionZx6weZBEYWpx
-        rDYayTySgpA3AyRukvsIapZ8d1Kgt55s4JR+WIOJBC23eGQ88nkm8M/RjURiXcbxEOhCLYC5nN1/9
-        +efwLSb8Z2Oj5wraHA1V1togcbw54r0EkNxW5kLMMYU7sI9OF+4gzXcJVZbONpXPpLluk2PChcRxp
-        j/FkEhEQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54330)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nVaNP-001v1r-UN; Sat, 19 Mar 2022 14:48:20 +0000
-Message-ID: <7792b3b6-e196-c3c7-5875-9eb4da488a95@roeck-us.net>
-Date:   Sat, 19 Mar 2022 07:48:17 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alistair Francis <alistair23@gmail.com>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        Sat, 19 Mar 2022 14:23:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FED2689A8;
+        Sat, 19 Mar 2022 11:22:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1A85B80D9B;
+        Sat, 19 Mar 2022 18:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32FEC340EC;
+        Sat, 19 Mar 2022 18:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647714148;
+        bh=hhu+iiM+PEsCTNMjvrEDz1ucmDg+Fr+55HCY0c8/UsU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NXtiYgj8z1V7NwGkSTBqzfcsA2AcF0FUaqWmKBlbJdkZlY+5X/Y+POt10MISO2kS/
+         +1wBVMn6in+UaYxrsB+ld5KedeYkHNIj02KA2XruXSe2eHDPJ8URwB8AcSYSv8ps+Z
+         Ifuohar81D4hwwl9tgfqOVucJpMb+IwOwfp/yuzmcpASxtg1A0RlMGefuRRTYs6DZ8
+         Xkap8/jSbiLBifie7GY6O1b3vhEHaGasq6nPAxrFZ7DCPkDSnV0SrTrqs0Z0rxACg7
+         vwu2sYtiP3sQddRlnOw3C8WIjDKnbeTbeq2k5N++3G6fabIoEi1fRpinli5QNuYYzo
+         nvfjeQZ5q5TAQ==
+Date:   Sat, 19 Mar 2022 18:29:36 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>
-References: <20220124121009.108649-1-alistair@alistair23.me>
- <20220124121009.108649-3-alistair@alistair23.me>
- <CAMuHMdVNgVQzjrdybbnfCEr+G5Q4ztjRCC29RF9HwGnhKkPn3Q@mail.gmail.com>
- <CAKmqyKOnezw8_dDY-c69F77KVxmb-C3t=N3H23GurKbrxWDAgg@mail.gmail.com>
- <CAMuHMdVy4E1pX+VLLq_05FX4pM+BPZycQgn68ArGh2s8qL24=w@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v18 2/8] mfd: simple-mfd-i2c: Add a Kconfig name
-In-Reply-To: <CAMuHMdVy4E1pX+VLLq_05FX4pM+BPZycQgn68ArGh2s8qL24=w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nVaNP-001v1r-UN
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54330
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 10
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        =?UTF-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
+        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Amireddy Mallikarjuna reddy 
+        <mallikarjunax.reddy@linux.intel.com>, dmaengine@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>
+Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
+ and enabled clocks
+Message-ID: <20220319182936.06d75742@jic23-huawei>
+In-Reply-To: <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
+References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+        <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/19/22 02:28, Geert Uytterhoeven wrote:
-> Hi Alistair,
-> 
-> On Sat, Mar 19, 2022 at 3:36 AM Alistair Francis <alistair23@gmail.com> wrote:
->> On Tue, Mar 8, 2022 at 8:53 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>> Thanks for your patch, which is now commit bae5a4acef67db88
->>> ("mfd: simple-mfd-i2c: Add a Kconfig name") in mfd/for-mfd-next.
->>>
->>> On Mon, Jan 24, 2022 at 1:24 PM Alistair Francis <alistair@alistair23.me> wrote:
->>>> Add a Kconfig name to the "Simple Multi-Functional Device support (I2C)"
->>>> device so that it can be enabled via menuconfig.
->>>
->>> Which still does not explain why this would be needed...
->>>
->>>> Signed-off-by: Alistair Francis <alistair@alistair23.me>
->>>> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
->>>
->>>> --- a/drivers/mfd/Kconfig
->>>> +++ b/drivers/mfd/Kconfig
->>>> @@ -1188,7 +1188,7 @@ config MFD_SI476X_CORE
->>>>            module will be called si476x-core.
->>>>
->>>>   config MFD_SIMPLE_MFD_I2C
->>>> -       tristate
->>>> +       tristate "Simple Multi-Functional Device support (I2C)"
->>>>          depends on I2C
->>>>          select MFD_CORE
->>>>          select REGMAP_I2C
->>>
->>> The help text states:
->>>
->>> | This driver creates a single register map with the intention for it
->>> | to be shared by all sub-devices.
->>>
->>> Yes, that's what MFD does?
->>>
->>> | Once the register map has been successfully initialised, any
->>> | sub-devices represented by child nodes in Device Tree will be
->>> | subsequently registered.
->>>
->>> OK...?
->>>
->>> Still, no clue about what this driver really does, and why and when
->>> it would be needed.
->>>
->>> There is one driver symbol that selects MFD_SIMPLE_MFD_I2C.
->>> There are no driver symbols that depend on this symbol.
->>>
->>> If you have a driver in the pipeline that can make use of this,
->>> can't it just select MFD_SIMPLE_MFD_I2C, so the symbol itself can
->>> stay invisible?
->>
->> My patch "mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a"
->> allows using this driver for the silergy,sy7636a MFD. So it's nice to
->> be able to enable and disable it as required.
-> 
-> So after that patch, enabling MFD_SIMPLE_MFD_I2C will enable
-> support for an ever-growing random bunch of devices, none of which
-> is described in the help text?
-> To me, ghat doesn't look like the way to go forward...
-> 
+On Mon, 14 Mar 2022 15:16:29 +0100
+Uwe Kleine-K=C3=B6nig         <u.kleine-koenig@pengutronix.de> wrote:
 
-I am probably missing something. Why not something like the following ?
+> When a driver keeps a clock prepared (or enabled) during the whole
+> lifetime of the driver, these helpers allow to simplify the drivers.
+>=20
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-config MFD_SY7636A
-         tristate "Silergy SY7636A voltage regulator"
-         depends on I2C
-         select MFD_SIMPLE_MFD_I2C
-         help
-           Enable support for Silergy SY7636A voltage regulator.
+One trivial thing below.
 
-           To enable support for building sub-devices as modules,
-           choose M here.
+> ---
+>  drivers/clk/clk-devres.c | 31 ++++++++++++++
+>  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 120 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
+> index fb7761888b30..4707fe718f0b 100644
+> --- a/drivers/clk/clk-devres.c
+> +++ b/drivers/clk/clk-devres.c
+> @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const ch=
+ar *id)
+>  }
+>  EXPORT_SYMBOL(devm_clk_get);
+> =20
+> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
 
+Nitpick but this spacing before } in functions is rather unusual and not
+in keeping with the existing code in this file.
 
-This would be quite similar to MFD_SL28CPLD which essentially does
-the same (and, unless I am missing something, doesn't have its own
-driver either). Sub-devices would then depend on MFD_SY7636A.
-
-Guenter
-
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_prepared);
+> +
+> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get,
+> +			      clk_prepare_enable, clk_disable_unprepare);
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_enabled);
+> +
+>  struct clk *devm_clk_get_optional(struct device *dev, const char *id)
+>  {
+>  	return __devm_clk_get(dev, id, clk_get_optional, NULL, NULL);
+>  }
+>  EXPORT_SYMBOL(devm_clk_get_optional);
+> =20
+> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
+r *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get_optional,
+> +			      clk_prepare, clk_unprepare);
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_optional_prepared);
+> +
+> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
+ *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get_optional,
+> +			      clk_prepare_enable, clk_disable_unprepare);
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_optional_enabled);
+> +
+>  struct clk_bulk_devres {
+>  	struct clk_bulk_data *clks;
+>  	int num_clks;
+> diff --git a/include/linux/clk.h b/include/linux/clk.h
+> index 266e8de3cb51..b011dbba7109 100644
+> --- a/include/linux/clk.h
+> +++ b/include/linux/clk.h
+> @@ -449,7 +449,7 @@ int __must_check devm_clk_bulk_get_all(struct device =
+*dev,
+>   * the clock producer.  (IOW, @id may be identical strings, but
+>   * clk_get may return different clock producers depending on @dev.)
+>   *
+> - * Drivers must assume that the clock source is not enabled.
+> + * Drivers must assume that the clock source is neither prepared nor ena=
+bled.
+>   *
+>   * devm_clk_get should not be called from within interrupt context.
+>   *
+> @@ -458,6 +458,47 @@ int __must_check devm_clk_bulk_get_all(struct device=
+ *dev,
+>   */
+>  struct clk *devm_clk_get(struct device *dev, const char *id);
+> =20
+> +/**
+> + * devm_clk_get_prepared - devm_clk_get() + clk_prepare()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Returns a struct clk corresponding to the clock producer, or
+> + * valid IS_ERR() condition containing errno.  The implementation
+> + * uses @dev and @id to determine the clock consumer, and thereby
+> + * the clock producer.  (IOW, @id may be identical strings, but
+> + * clk_get may return different clock producers depending on @dev.)
+> + *
+> + * The returned clk (if valid) is prepared. Drivers must however assume =
+that the
+> + * clock is not enabled.
+> + *
+> + * devm_clk_get_prepared should not be called from within interrupt cont=
+ext.
+> + *
+> + * The clock will automatically be unprepared and freed when the
+> + * device is unbound from the bus.
+> + */
+> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id);
+> +
+> +/**
+> + * devm_clk_get_enabled - devm_clk_get() + clk_prepare_enable()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Returns a struct clk corresponding to the clock producer, or valid IS=
+_ERR()
+> + * condition containing errno.  The implementation uses @dev and @id to
+> + * determine the clock consumer, and thereby the clock producer.  (IOW, =
+@id may
+> + * be identical strings, but clk_get may return different clock producers
+> + * depending on @dev.)
+> + *
+> + * The returned clk (if valid) is prepared and enabled.
+> + *
+> + * devm_clk_get_prepared should not be called from within interrupt cont=
+ext.
+> + *
+> + * The clock will automatically be disabled, unprepared and freed when t=
+he
+> + * device is unbound from the bus.
+> + */
+> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id);
+> +
+>  /**
+>   * devm_clk_get_optional - lookup and obtain a managed reference to an o=
+ptional
+>   *			   clock producer.
+> @@ -469,6 +510,29 @@ struct clk *devm_clk_get(struct device *dev, const c=
+har *id);
+>   */
+>  struct clk *devm_clk_get_optional(struct device *dev, const char *id);
+> =20
+> +/**
+> + * devm_clk_get_optional_prepared - devm_clk_get_optional() + clk_prepar=
+e()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Behaves the same as devm_clk_get_prepared() except where there is no =
+clock
+> + * producer.  In this case, instead of returning -ENOENT, the function r=
+eturns
+> + * NULL.
+> + */
+> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
+r *id);
+> +
+> +/**
+> + * devm_clk_get_optional_enabled - devm_clk_get_optional() +
+> + *                                 clk_prepare_enable()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Behaves the same as devm_clk_get_enabled() except where there is no c=
+lock
+> + * producer.  In this case, instead of returning -ENOENT, the function r=
+eturns
+> + * NULL.
+> + */
+> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
+ *id);
+> +
+>  /**
+>   * devm_get_clk_from_child - lookup and obtain a managed reference to a
+>   *			     clock producer from child node.
+> @@ -813,12 +877,36 @@ static inline struct clk *devm_clk_get(struct devic=
+e *dev, const char *id)
+>  	return NULL;
+>  }
+> =20
+> +static inline struct clk *devm_clk_get_prepared(struct device *dev,
+> +						const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline struct clk *devm_clk_get_enabled(struct device *dev,
+> +					       const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline struct clk *devm_clk_get_optional(struct device *dev,
+>  						const char *id)
+>  {
+>  	return NULL;
+>  }
+> =20
+> +static inline struct clk *devm_clk_get_optional_prepared(struct device *=
+dev,
+> +							 const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline struct clk *devm_clk_get_optional_enabled(struct device *d=
+ev,
+> +							const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline int __must_check devm_clk_bulk_get(struct device *dev, int=
+ num_clks,
+>  						 struct clk_bulk_data *clks)
+>  {
 
