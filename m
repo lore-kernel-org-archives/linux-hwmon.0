@@ -2,336 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB5BC43219
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Mar 2022 18:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28D35C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Mar 2022 01:26:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243879AbiCSSXy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 19 Mar 2022 14:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S244606AbiCTB1a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 19 Mar 2022 21:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243868AbiCSSXx (ORCPT
+        with ESMTP id S234519AbiCTB13 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 19 Mar 2022 14:23:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FED2689A8;
-        Sat, 19 Mar 2022 11:22:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1A85B80D9B;
-        Sat, 19 Mar 2022 18:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32FEC340EC;
-        Sat, 19 Mar 2022 18:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647714148;
-        bh=hhu+iiM+PEsCTNMjvrEDz1ucmDg+Fr+55HCY0c8/UsU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NXtiYgj8z1V7NwGkSTBqzfcsA2AcF0FUaqWmKBlbJdkZlY+5X/Y+POt10MISO2kS/
-         +1wBVMn6in+UaYxrsB+ld5KedeYkHNIj02KA2XruXSe2eHDPJ8URwB8AcSYSv8ps+Z
-         Ifuohar81D4hwwl9tgfqOVucJpMb+IwOwfp/yuzmcpASxtg1A0RlMGefuRRTYs6DZ8
-         Xkap8/jSbiLBifie7GY6O1b3vhEHaGasq6nPAxrFZ7DCPkDSnV0SrTrqs0Z0rxACg7
-         vwu2sYtiP3sQddRlnOw3C8WIjDKnbeTbeq2k5N++3G6fabIoEi1fRpinli5QNuYYzo
-         nvfjeQZ5q5TAQ==
-Date:   Sat, 19 Mar 2022 18:29:36 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        =?UTF-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
-        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>, dmaengine@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>
-Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
- and enabled clocks
-Message-ID: <20220319182936.06d75742@jic23-huawei>
-In-Reply-To: <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
-        <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 19 Mar 2022 21:27:29 -0400
+X-Greylist: delayed 1476 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Mar 2022 18:26:06 PDT
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.145.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F0A186150
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Mar 2022 18:26:06 -0700 (PDT)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 50A90F680
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Mar 2022 20:01:29 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id Vjwnnxt9wXvvJVjwnn3CMy; Sat, 19 Mar 2022 20:01:29 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=97ckXJWSbFWlyPLu7x4hQXrKqLD7BzyxnLplgIRpISY=; b=1dw2GQO5iXUJj8EQVLW1w3DzKj
+        p9fs284lq4mq+zcqotJcYKnQCGUkb/GOYowvCHOPKKkiHxnLJ7WK9PSDhbl6sRLAlUptOwGwpUKJV
+        0V2/ENKz0rHcxjfCpM6kYGyBKVaWTiwvQt8KHEHD3HoZf75Oy6XmaeRlsIBQcJaDDNyZzUOZEBI8F
+        526qkrfHsUaAaCOW0QfJLCLJLM/EfGomYcfQlrLJH0vz1yI5q9ectpcdXLJ08EYzuLBjjOqDFdJGt
+        8Ym/8TUg1dfGku6+F9xYYNx9+8uuXbOJEx25n0EKyYBzHTCC++1yr3XURlrff2sltuh9jMGtYU9My
+        CF0P8G2Q==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54346)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nVjwm-004JcH-RX; Sun, 20 Mar 2022 01:01:28 +0000
+Message-ID: <9cec7367-e6ec-5fe4-94ce-c908452c9385@roeck-us.net>
+Date:   Sat, 19 Mar 2022 18:01:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/1] drivers: hwmon: jc42: add HWMON_C_TZ_REGISTER
+Content-Language: en-US
+To:     Eduardo Valentin <eduval@amazon.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Eduardo Valentin <evalenti@kernel.org>
+References: <20220318233011.13980-1-eduval@amazon.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220318233011.13980-1-eduval@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nVjwm-004JcH-RX
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54346
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 3
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 14 Mar 2022 15:16:29 +0100
-Uwe Kleine-K=C3=B6nig         <u.kleine-koenig@pengutronix.de> wrote:
+On 3/18/22 16:30, Eduardo Valentin wrote:
+> Add a thermal zone interface to the devices added
+> under jc42 driver. This way, thermal zones described
+> in device tree can make use of the of nodes of these
+> devices.
+> 
 
-> When a driver keeps a clock prepared (or enabled) during the whole
-> lifetime of the driver, these helpers allow to simplify the drivers.
->=20
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Makes sense. I'll apply the patch, but it is a functional change
+and a bit too risky to include in the upcoming commit window.
+I'll apply it after the commit window closes.
 
-One trivial thing below.
+Thanks,
+Guenter
 
+> Cc: Guenter Roeck <linux@roeck-us.net> (maintainer:JC42.4 TEMPERATURE SENSOR DRIVER)
+> Cc: Jean Delvare <jdelvare@suse.com> (maintainer:HARDWARE MONITORING)
+> Cc: linux-hwmon@vger.kernel.org (open list:JC42.4 TEMPERATURE SENSOR DRIVER)
+> Cc: linux-kernel@vger.kernel.org (open list)
+> 
+> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> Signed-off-by: Eduardo Valentin <evalenti@kernel.org>
 > ---
->  drivers/clk/clk-devres.c | 31 ++++++++++++++
->  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 120 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
-> index fb7761888b30..4707fe718f0b 100644
-> --- a/drivers/clk/clk-devres.c
-> +++ b/drivers/clk/clk-devres.c
-> @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const ch=
-ar *id)
->  }
->  EXPORT_SYMBOL(devm_clk_get);
-> =20
-> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
-
-Nitpick but this spacing before } in functions is rather unusual and not
-in keeping with the existing code in this file.
-
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_prepared);
-> +
-> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get,
-> +			      clk_prepare_enable, clk_disable_unprepare);
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_enabled);
-> +
->  struct clk *devm_clk_get_optional(struct device *dev, const char *id)
->  {
->  	return __devm_clk_get(dev, id, clk_get_optional, NULL, NULL);
->  }
->  EXPORT_SYMBOL(devm_clk_get_optional);
-> =20
-> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
-r *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get_optional,
-> +			      clk_prepare, clk_unprepare);
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_optional_prepared);
-> +
-> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
- *id)
-> +{
-> +	return __devm_clk_get(dev, id, clk_get_optional,
-> +			      clk_prepare_enable, clk_disable_unprepare);
-> +
-> +}
-> +EXPORT_SYMBOL(devm_clk_get_optional_enabled);
-> +
->  struct clk_bulk_devres {
->  	struct clk_bulk_data *clks;
->  	int num_clks;
-> diff --git a/include/linux/clk.h b/include/linux/clk.h
-> index 266e8de3cb51..b011dbba7109 100644
-> --- a/include/linux/clk.h
-> +++ b/include/linux/clk.h
-> @@ -449,7 +449,7 @@ int __must_check devm_clk_bulk_get_all(struct device =
-*dev,
->   * the clock producer.  (IOW, @id may be identical strings, but
->   * clk_get may return different clock producers depending on @dev.)
->   *
-> - * Drivers must assume that the clock source is not enabled.
-> + * Drivers must assume that the clock source is neither prepared nor ena=
-bled.
->   *
->   * devm_clk_get should not be called from within interrupt context.
->   *
-> @@ -458,6 +458,47 @@ int __must_check devm_clk_bulk_get_all(struct device=
- *dev,
->   */
->  struct clk *devm_clk_get(struct device *dev, const char *id);
-> =20
-> +/**
-> + * devm_clk_get_prepared - devm_clk_get() + clk_prepare()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Returns a struct clk corresponding to the clock producer, or
-> + * valid IS_ERR() condition containing errno.  The implementation
-> + * uses @dev and @id to determine the clock consumer, and thereby
-> + * the clock producer.  (IOW, @id may be identical strings, but
-> + * clk_get may return different clock producers depending on @dev.)
-> + *
-> + * The returned clk (if valid) is prepared. Drivers must however assume =
-that the
-> + * clock is not enabled.
-> + *
-> + * devm_clk_get_prepared should not be called from within interrupt cont=
-ext.
-> + *
-> + * The clock will automatically be unprepared and freed when the
-> + * device is unbound from the bus.
-> + */
-> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id);
-> +
-> +/**
-> + * devm_clk_get_enabled - devm_clk_get() + clk_prepare_enable()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Returns a struct clk corresponding to the clock producer, or valid IS=
-_ERR()
-> + * condition containing errno.  The implementation uses @dev and @id to
-> + * determine the clock consumer, and thereby the clock producer.  (IOW, =
-@id may
-> + * be identical strings, but clk_get may return different clock producers
-> + * depending on @dev.)
-> + *
-> + * The returned clk (if valid) is prepared and enabled.
-> + *
-> + * devm_clk_get_prepared should not be called from within interrupt cont=
-ext.
-> + *
-> + * The clock will automatically be disabled, unprepared and freed when t=
-he
-> + * device is unbound from the bus.
-> + */
-> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id);
-> +
->  /**
->   * devm_clk_get_optional - lookup and obtain a managed reference to an o=
-ptional
->   *			   clock producer.
-> @@ -469,6 +510,29 @@ struct clk *devm_clk_get(struct device *dev, const c=
-har *id);
->   */
->  struct clk *devm_clk_get_optional(struct device *dev, const char *id);
-> =20
-> +/**
-> + * devm_clk_get_optional_prepared - devm_clk_get_optional() + clk_prepar=
-e()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Behaves the same as devm_clk_get_prepared() except where there is no =
-clock
-> + * producer.  In this case, instead of returning -ENOENT, the function r=
-eturns
-> + * NULL.
-> + */
-> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
-r *id);
-> +
-> +/**
-> + * devm_clk_get_optional_enabled - devm_clk_get_optional() +
-> + *                                 clk_prepare_enable()
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Behaves the same as devm_clk_get_enabled() except where there is no c=
-lock
-> + * producer.  In this case, instead of returning -ENOENT, the function r=
-eturns
-> + * NULL.
-> + */
-> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
- *id);
-> +
->  /**
->   * devm_get_clk_from_child - lookup and obtain a managed reference to a
->   *			     clock producer from child node.
-> @@ -813,12 +877,36 @@ static inline struct clk *devm_clk_get(struct devic=
-e *dev, const char *id)
->  	return NULL;
->  }
-> =20
-> +static inline struct clk *devm_clk_get_prepared(struct device *dev,
-> +						const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline struct clk *devm_clk_get_enabled(struct device *dev,
-> +					       const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
->  static inline struct clk *devm_clk_get_optional(struct device *dev,
->  						const char *id)
->  {
->  	return NULL;
->  }
-> =20
-> +static inline struct clk *devm_clk_get_optional_prepared(struct device *=
-dev,
-> +							 const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline struct clk *devm_clk_get_optional_enabled(struct device *d=
-ev,
-> +							const char *id)
-> +{
-> +	return NULL;
-> +}
-> +
->  static inline int __must_check devm_clk_bulk_get(struct device *dev, int=
- num_clks,
->  						 struct clk_bulk_data *clks)
->  {
+>   drivers/hwmon/jc42.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+> index cb347a6bd8d9..f40df2f29d41 100644
+> --- a/drivers/hwmon/jc42.c
+> +++ b/drivers/hwmon/jc42.c
+> @@ -443,6 +443,8 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
+>   }
+>   
+>   static const struct hwmon_channel_info *jc42_info[] = {
+> +	HWMON_CHANNEL_INFO(chip,
+> +			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+>   	HWMON_CHANNEL_INFO(temp,
+>   			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+>   			   HWMON_T_CRIT | HWMON_T_MAX_HYST |
 
