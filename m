@@ -2,152 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93A36C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 17:39:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3AF1C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 23:45:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347499AbiCURlH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Mar 2022 13:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S233161AbiCUXq0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Mar 2022 19:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245499AbiCURlG (ORCPT
+        with ESMTP id S233103AbiCUXqZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:41:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5730150E37;
-        Mon, 21 Mar 2022 10:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647884380; x=1679420380;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=93ScEXCpyveWIKDjm3CXxJUD3n+Kkxyy8pTNpHBuZjg=;
-  b=RC2vxF5HXTAwOBq98TPibdqxiSsoaML0M1R93+v3fyt2jc3k2YJoXziB
-   xo7u6ZlOkMj43N3mVrEaWFxNo3g9sAhtfiChnzCwWx5jZPL79hBl+tHqe
-   NIWu8W2yoe5bRgV4QZCJGZRmyvbmcUkyKd/+erENui1IPM6C/wBbhZ0FH
-   7gZfNa0OZW5A20JVIdX0aV7jkbnZcJH4Epp08+Q5cjgid4kklDb4o+OIw
-   kX/CCameEIJr+jLCfQBd0kCvtsvBySzQYifJkcmP401NbxdT/Rq7RSNju
-   iA7ILzVH/tJ9XBQf2TyXMPdU9bVgTc75RAuKP+xkBbcDyBC2iiVo7gZ/6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257561102"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="257561102"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 10:39:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="515015749"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 10:39:15 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWLzu-000I1T-Vq; Mon, 21 Mar 2022 17:39:15 +0000
-Date:   Tue, 22 Mar 2022 01:38:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mon, 21 Mar 2022 19:46:25 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640AF44A02;
+        Mon, 21 Mar 2022 16:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1647906299; x=1679442299;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=ueRSuVzTY8ZsDESSE/vsPM+hyCtCDS7Tl3WulToFkI8=;
+  b=GB1TaDgn+z44qqUDYD64I8R5BqFrcPn48LMeMyvG+z0+apHDhOwmA3jA
+   CsyISfhmQk1g5KXUAnevEjXGIRkvPcVS48cfPlSuptAURSN2fZpcEgqiS
+   zrhpbfMV8yrPoMTJY4foF/qjeSMdpmAkuQfL1k0+zaXHrAkN8blARuRrk
+   U=;
+X-IronPort-AV: E=Sophos;i="5.90,199,1643673600"; 
+   d="scan'208";a="72903802"
+Subject: Re: [PATCH 1/1] drivers: hwmon: jc42: add HWMON_C_TZ_REGISTER
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 21 Mar 2022 23:44:58 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com (Postfix) with ESMTPS id B594481AF0;
+        Mon, 21 Mar 2022 23:44:56 +0000 (UTC)
+Received: from EX13D05UWC003.ant.amazon.com (10.43.162.226) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 21 Mar 2022 23:44:56 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D05UWC003.ant.amazon.com (10.43.162.226) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 21 Mar 2022 23:44:55 +0000
+Received: from localhost (10.119.251.239) by mail-relay.amazon.com
+ (10.43.162.232) with Microsoft SMTP Server id 15.0.1497.32 via Frontend
+ Transport; Mon, 21 Mar 2022 23:44:55 +0000
+Date:   Mon, 21 Mar 2022 16:44:55 -0700
+From:   Eduardo Valentin <eduval@amazon.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Eduardo Valentin <eduval@amazon.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v7 8/9] mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD
- driver
-Message-ID: <202203220139.67ewF74A-lkp@intel.com>
-References: <20220321081355.6802-9-quan@os.amperecomputing.com>
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Eduardo Valentin" <evalenti@kernel.org>
+Message-ID: <20220321234455.GB3248@uf8f119305bce5e.ant.amazon.com>
+References: <20220318233011.13980-1-eduval@amazon.com>
+ <9cec7367-e6ec-5fe4-94ce-c908452c9385@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220321081355.6802-9-quan@os.amperecomputing.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <9cec7367-e6ec-5fe4-94ce-c908452c9385@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Quan,
+On Sat, Mar 19, 2022 at 06:01:27PM -0700, Guenter Roeck wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> On 3/18/22 16:30, Eduardo Valentin wrote:
+> > Add a thermal zone interface to the devices added
+> > under jc42 driver. This way, thermal zones described
+> > in device tree can make use of the of nodes of these
+> > devices.
+> > 
+> 
+> Makes sense. I'll apply the patch, but it is a functional change
+> and a bit too risky to include in the upcoming commit window.
+> I'll apply it after the commit window closes.
 
-I love your patch! Perhaps something to improve:
+Thank you Guenter. Yeah, this can go on the next window.
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on groeck-staging/hwmon-next lee-mfd/for-mfd-next v5.17 next-20220321]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220322/202203220139.67ewF74A-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/20d62dfe69d4a3a0cb64bf97df0062d050d6a4d4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
-        git checkout 20d62dfe69d4a3a0cb64bf97df0062d050d6a4d4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/smpro-hwmon.c:378:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   1 warning generated.
-
-
-vim +378 drivers/hwmon/smpro-hwmon.c
-
-91d3fe230bebb1c Quan Nguyen 2022-03-21  359  
-91d3fe230bebb1c Quan Nguyen 2022-03-21  360  static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
-91d3fe230bebb1c Quan Nguyen 2022-03-21  361  				u32 attr, int channel)
-91d3fe230bebb1c Quan Nguyen 2022-03-21  362  {
-91d3fe230bebb1c Quan Nguyen 2022-03-21  363  	const struct smpro_hwmon *hwmon = data;
-91d3fe230bebb1c Quan Nguyen 2022-03-21  364  	unsigned int value;
-91d3fe230bebb1c Quan Nguyen 2022-03-21  365  	int ret;
-91d3fe230bebb1c Quan Nguyen 2022-03-21  366  
-91d3fe230bebb1c Quan Nguyen 2022-03-21  367  	switch (type) {
-91d3fe230bebb1c Quan Nguyen 2022-03-21  368  	case hwmon_temp:
-91d3fe230bebb1c Quan Nguyen 2022-03-21  369  		switch (attr) {
-91d3fe230bebb1c Quan Nguyen 2022-03-21  370  		case hwmon_temp_input:
-91d3fe230bebb1c Quan Nguyen 2022-03-21  371  		case hwmon_temp_label:
-91d3fe230bebb1c Quan Nguyen 2022-03-21  372  		case hwmon_temp_crit:
-91d3fe230bebb1c Quan Nguyen 2022-03-21  373  			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
-91d3fe230bebb1c Quan Nguyen 2022-03-21  374  			if (ret || value == 0xFFFF)
-91d3fe230bebb1c Quan Nguyen 2022-03-21  375  				return 0;
-91d3fe230bebb1c Quan Nguyen 2022-03-21  376  		break;
-91d3fe230bebb1c Quan Nguyen 2022-03-21  377  		}
-91d3fe230bebb1c Quan Nguyen 2022-03-21 @378  	default:
-91d3fe230bebb1c Quan Nguyen 2022-03-21  379  		break;
-91d3fe230bebb1c Quan Nguyen 2022-03-21  380  	}
-91d3fe230bebb1c Quan Nguyen 2022-03-21  381  
-91d3fe230bebb1c Quan Nguyen 2022-03-21  382  	return 0444;
-91d3fe230bebb1c Quan Nguyen 2022-03-21  383  }
-91d3fe230bebb1c Quan Nguyen 2022-03-21  384  
+> 
+> Thanks,
+> Guenter
+> 
+> > Cc: Guenter Roeck <linux@roeck-us.net> (maintainer:JC42.4 TEMPERATURE SENSOR DRIVER)
+> > Cc: Jean Delvare <jdelvare@suse.com> (maintainer:HARDWARE MONITORING)
+> > Cc: linux-hwmon@vger.kernel.org (open list:JC42.4 TEMPERATURE SENSOR DRIVER)
+> > Cc: linux-kernel@vger.kernel.org (open list)
+> > 
+> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> > Signed-off-by: Eduardo Valentin <evalenti@kernel.org>
+> > ---
+> >   drivers/hwmon/jc42.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+> > index cb347a6bd8d9..f40df2f29d41 100644
+> > --- a/drivers/hwmon/jc42.c
+> > +++ b/drivers/hwmon/jc42.c
+> > @@ -443,6 +443,8 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
+> >   }
+> > 
+> >   static const struct hwmon_channel_info *jc42_info[] = {
+> > +     HWMON_CHANNEL_INFO(chip,
+> > +                        HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+> >       HWMON_CHANNEL_INFO(temp,
+> >                          HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+> >                          HWMON_T_CRIT | HWMON_T_MAX_HYST |
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+All the best,
+Eduardo Valentin
