@@ -2,109 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58069C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 00:17:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2573EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 00:27:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343865AbiCUASz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Mar 2022 20:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S239874AbiCUA3B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Mar 2022 20:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243388AbiCUASx (ORCPT
+        with ESMTP id S1343934AbiCUA26 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Mar 2022 20:18:53 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1CF81646
-        for <linux-hwmon@vger.kernel.org>; Sun, 20 Mar 2022 17:17:29 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id DE76413AB0
-        for <linux-hwmon@vger.kernel.org>; Sun, 20 Mar 2022 19:17:28 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id W5jknFJUedx86W5jkn3EeV; Sun, 20 Mar 2022 19:17:28 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ecO3yvU1sN9BhHnDS+OAnk2gdWyz05j+mGunBoVxdsw=; b=kC7pxC+BHUygbCM6s0B4FdDa7t
-        exmZuZIxlRbH7isY4UI/kaWTiOB4E9r5eU+OecS7lZsHFazZ+mChDqZhpaAyzFAIQ3O+GSuqD3KWU
-        al8na3h3EQPI3cXaFHhGLuqxA8VGNCMPQbbuioHSgtAltTUPvpvtWQXO6wdwws6X2r92q/qmL5P4k
-        /VnXWnuMTrsCf2+a6pcZDi9FfonAqFJlse44eMw3JrfzgHSn9ejtYOOkmokMB6DP3KqUfXQPWc7eh
-        teTlHJ8Ek0up3yavxbcthCM0pObdscdI7j92KewltzYpU1D/KbNZ3uGsvCeOE7eB//mCUbRHVyweR
-        Nxf7j/FA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54386)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nW5jk-003Wxe-Gm; Mon, 21 Mar 2022 00:17:28 +0000
-Message-ID: <6b25c446-6df3-c90c-7e22-b6af9758ee89@roeck-us.net>
-Date:   Sun, 20 Mar 2022 17:17:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [GIT PULL] hwmon updates for v5.18
+        Sun, 20 Mar 2022 20:28:58 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74197DEBAF
+        for <linux-hwmon@vger.kernel.org>; Sun, 20 Mar 2022 17:27:28 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 830512C05F3;
+        Mon, 21 Mar 2022 00:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1647822445;
+        bh=Rz96f5sjJQKWQ0HhnNfpbrE6GlGWm8SFIyHhy6QKXrg=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=PKiSthMC+Bm36Tj/3T5Ruc29yxDAWuwTrPm7ZjVFdzP8/QH7WJkOZXmCdssoK8MZR
+         i/uJAPLqE7eKB4SFVHAVlXcFkGLwZjcU1wQehDhFrr/fyWkfOfW87hjcM5tNom2rDq
+         qijlMvZlSkBtx7NsM358QZ1cCuFy64TI4UP3L2XuUnOHBwapB4T/P1a7WG/7y78LeJ
+         +vUieyRzhZPqwNTQr/TGCfa2efUQt9DI404xE+K42om89AtD5heL7u6EmXKMFGMZ+z
+         hijfXpnq/zbnVMrDzj4J5pJrynOulNii0Z5gRexVW4FQ+Rv8D/Njrt0/p31CwyW6CZ
+         WB6x11EWtrx+Q==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6237c66d0001>; Mon, 21 Mar 2022 13:27:25 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 21 Mar 2022 13:27:25 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Mon, 21 Mar 2022 13:27:25 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
+ attenuator settings
+Thread-Topic: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
+ attenuator settings
+Thread-Index: AQHYOk6t2MAzos32V0mfrGePR/IVEazEW2uAgAPK54A=
+Date:   Mon, 21 Mar 2022 00:27:24 +0000
+Message-ID: <84514187-1170-0932-3a31-9e8ce6b07e9d@alliedtelesis.co.nz>
+References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
+ <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
+ <20220318143223.GA673001@roeck-us.net>
+In-Reply-To: <20220318143223.GA673001@roeck-us.net>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220320231317.2171300-1-linux@roeck-us.net>
-In-Reply-To: <20220320231317.2171300-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nW5jk-003Wxe-Gm
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54386
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C4915410CF2A284680B5EA72E2BB5226@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=Q6Hju86AWDR5xJoMpMYA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/20/22 16:13, Guenter Roeck wrote:
-> Hi Linus,
-> 
-> Please pull hwmon updates for Linux v5.18 from signed tag:
-> 
->      git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18
-> 
-
-I forgot to mention:
-
-there will be a conflict against spi-next. from Stephen Rothwell:
-
- > Today's linux-next merge of the spi tree got a conflict in:
- >
- >   drivers/hwmon/adt7310.c
- >
- > between commits:
- >
- >   9c950b125f78 ("hwmon: (adt7x10) Remove empty driver removal callback")
- >
- > from the hwmon-staging tree and commit:
- >
- >  a0386bba7093 ("spi: make remove callback a void function")
- >
- > from the spi tree.
- >
- > I fixed it up (I just used the former version) and can carry the fix as
- > necessary. This is now fixed as far as linux-next is concerned, but any
- > non trivial conflicts should be mentioned to your upstream maintainer
- > when your tree is submitted for merging.  You may also want to consider
- > cooperating with the maintainer of the conflicting tree to minimise any
- > particularly complex conflicts.
-
-Guenter
+DQpPbiAxOS8wMy8yMiAwMzozMiwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gRnJpLCBNYXIg
+MTgsIDIwMjIgYXQgMTE6MzA6NTBBTSArMTMwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IFNp
+bXBsaWZ5IGxvYWRfYXR0ZW51YXRvcnMoKSBieSBtYWtpbmcgdXNlIG9mIGVudW0gY2hpcHMgaW5z
+dGVhZCBvZiBpbnQuDQo+Pg0KPiBUaGF0IGlzbid0IHRoZSBvbmx5IHRoaW5nIHRoZSBwYXRjaCBp
+cyBkb2luZy4NCj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2to
+YW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+IC0tLQ0KPj4NCj4+IE5vdGVzOg0KPj4gICAgICBD
+aGFuZ2VzIGluIHYyOg0KPj4gICAgICAtIE5ldw0KPj4NCj4+ICAgZHJpdmVycy9od21vbi9hZHQ3
+NDc1LmMgfCA0ICsrLS0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBk
+ZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9hZHQ3NDc1LmMg
+Yi9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPj4gaW5kZXggNmRlNTAxZGU0MWIyLi5lYmU0YTg1
+ZWI2MmUgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPj4gKysrIGIv
+ZHJpdmVycy9od21vbi9hZHQ3NDc1LmMNCj4+IEBAIC0xNTY5LDcgKzE1NjksNyBAQCBzdGF0aWMg
+aW50IHNldF9wcm9wZXJ0eV9iaXQoY29uc3Qgc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgY2hh
+ciAqcHJvcGVydHksDQo+PiAgIAlyZXR1cm4gcmV0Ow0KPj4gICB9DQo+PiAgIA0KPj4gLXN0YXRp
+YyBpbnQgbG9hZF9hdHRlbnVhdG9ycyhjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCBp
+bnQgY2hpcCwNCj4+ICtzdGF0aWMgaW50IGxvYWRfYXR0ZW51YXRvcnMoY29uc3Qgc3RydWN0IGky
+Y19jbGllbnQgKmNsaWVudCwgZW51bSBjaGlwcyBjaGlwLA0KPj4gICAJCQkgICAgc3RydWN0IGFk
+dDc0NzVfZGF0YSAqZGF0YSkNCj4+ICAgew0KPj4gICAJaW50IHJldDsNCj4+IEBAIC0xNTg4LDcg
+KzE1ODgsNyBAQCBzdGF0aWMgaW50IGxvYWRfYXR0ZW51YXRvcnMoY29uc3Qgc3RydWN0IGkyY19j
+bGllbnQgKmNsaWVudCwgaW50IGNoaXAsDQo+PiAgIAkJCQkJCWRhdGEtPmNvbmZpZzQpOw0KPj4g
+ICAJCWlmIChyZXQgPCAwKQ0KPj4gICAJCQlyZXR1cm4gcmV0Ow0KPj4gLQl9IGVsc2UgaWYgKGNo
+aXAgPT0gYWR0NzQ3MyB8fCBjaGlwID09IGFkdDc0NzUpIHsNCj4+ICsJfSBlbHNlIHsNCj4gVGhp
+cyBpcyB0aGUgcmVhbCBjaGFuZ2UuIFdlbGwsIGluIHRoZW9yeS4gSXQgZG9lc24ndCByZWFsbHkg
+bWFrZSBhIGRpZmZlcmVuY2UsDQo+IGl0IGlzIGp1c3QgKGN1cnJlbnRseSkgdW5uZWNlc3Nhcnkg
+YnV0IGNsYXJpZmllcyB0aGF0IHRoZSBmb2xsb3dpbmcgY29kZSBvbmx5DQo+IGFwcGxpZXMgdG8g
+dGhlIHR3byBjaGlwcy4gSXQgbWF5IGJlIGJldHRlciB0byByZXBsYWNlIHRoZSBpZi9lbHNlIHdp
+dGggYSBzd2l0Y2gNCj4gc3RhdGVtZW50IHRvIGNsYXJpZnkgdGhpcy4gRHJvcHBpbmcgdGhlIGNv
+bmRpdGlvbmFsIHdvdWxkIG5vdCByZXF1aXJlIHRvIGNoYW5nZQ0KPiB0aGUgcGFyYW1ldGVyIHR5
+cGUuIFRoYXQgb25seSByZWFsbHkgYWRkcyB2YWx1ZSBpZiB5b3UgYWxzbyB1c2UgYSBzd2l0Y2gN
+Cj4gc3RhdGVtZW50ICh3aXRob3V0IGR1bW15IGRlZmF1bHQpLg0KDQpJJ3ZlIHdyaXR0ZW4gYSB2
+MyB0aGF0IHVwZGF0ZXMgdGhpcyB0byB1c2UgYSBzd2l0Y2ggc3RhdGVtZW50IGJ1dCBJJ2xsIA0K
+d2FpdCB0byBzZW5kIGl0IGluIGNhc2UgdGhlcmUgaXMgYW55IGZlZWRiYWNrIG9uIHRoZSBmaXJz
+dCAyIHBhdGNoZXMuDQoNCj4gVGhhbmtzLA0KPiBHdWVudGVyDQo+DQo+PiAgIAkJc2V0X3Byb3Bl
+cnR5X2JpdChjbGllbnQsICJhZGksYnlwYXNzLWF0dGVudWF0b3ItaW4xIiwNCj4+ICAgCQkJCSAm
+ZGF0YS0+Y29uZmlnMiwgNSk7DQo+PiAgIA==
