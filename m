@@ -2,186 +2,241 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 714F4C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 08:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF42FC4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 09:46:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345430AbiCUItq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Mar 2022 04:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S1345985AbiCUJsQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Mar 2022 05:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345423AbiCUItp (ORCPT
+        with ESMTP id S235734AbiCUJsP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:49:45 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2236E36324
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Mar 2022 01:48:18 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id n35so6443366wms.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Mar 2022 01:48:18 -0700 (PDT)
+        Mon, 21 Mar 2022 05:48:15 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2128.outbound.protection.outlook.com [40.107.102.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85FE72E0C;
+        Mon, 21 Mar 2022 02:46:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RYrUiMFLd7nOUZDfH43VI16lOLZff3PgohhyQy/LXhAMGrhBk95K0/e9ZRLPab3klYwGNuLjrYgEnzbsscIppXptzcSGuIl32341m0nBKIiPdbIHw20NXyxU7zsY9xRjHBZ1F9JC8tRzky0pmvd2Wvs6feX8OA3x2TnFSVcpauej4hmDTPOMYluwnFgGt8OT0mdG4+omdhlT6Ys21WAYp+YubqL9wXJn/pAWSkTdIVPPl5Skl3c0M/Hro/8l1NhHh7HwMn2eDQNSYD1bxkmU4YwnkEJZr0J0BOukTsNDAEbuY/M2J/T/Os/cdPYl2G0DVfTyWEK9xrq2mmx0mcgZCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nlXjFh9ZGSYjymspz3NVf/3Iii+bAImAkYO6nQ6oZU0=;
+ b=XqspCN5oX3kc8st98HuwHcRCG0w64/Xw/OIVNBxq0D1axIO2kaM9ZjghyBgu56qxQ+ehuJ3IQhHin41DET2odxehTFgbtj04exCZsvz5oyKtBe/MLhWgN/wUHBODPMb1ajmjOmLjiiC1ef59FXdVobo33Cvlw0sgEglBXk1aRqYAd4oUmnea+HON+qfBZXs+ABL7Cmd+YWH99ROi+AvIIaHTDv0tzdW2HN0YKEbWLMiLKcFrnvGOmBWaObsW1PQXeyCQtiXW9VuiAHerZJxMYkWfE21K0IBcz2ic0WY4v7i3TPFPwDOm93K7ca8+Qczp8M68eVCGzEsNS+L8/OWUHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=brnXMh1CbWOf98YxRTTsbDywHUHYCG+alkGn638zm4M=;
-        b=BlvyFCPLzsBlbqrGCBKMzUMgqnN4kBv+EO9dx8QQtssv6ckryQh3ESbB0tYPRif6dL
-         PQn/As6uwDdRoWY21u8wppLgTnZykIXKGSFnDgt5Po/mkiunB+qy9MsDY0yTY/uKF3WB
-         sAs24txOAa24hCWmiTH5GQ5e/6zgUSgXaQ/s5vHQCnF7ZqYuBFE8jlJ271X3Ifp3kSbk
-         oRviKWNDfWLbKPJgE5HwmEtlVjLHpSWY8BjQzOumsFJdcizDE0EhG6WrDquo1l55Bjhb
-         01MutrJ5hAhUt8Zx0TeSLGebmKBFqikFDcqdcQ5V9/MzSWjEheVNeNdpOQPPiqstNcwj
-         MpQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=brnXMh1CbWOf98YxRTTsbDywHUHYCG+alkGn638zm4M=;
-        b=BnKXtFq4rjlJpp1xDr5+F1z/O/iiagtMzqEbAg0r6DQZAnX4YOpVNxQvGstNstrEXg
-         yQOWoVBd0gO9zdjMx8IIs/CLCF2j+/vKzAPRpxzz2ZSH9HO9e26q1faNnaPBMI8kKmpK
-         gtH1OBIgaZtAKljeiEaAWE8grLrIOzkz/UamYEeXx0GlsBxwOo7I/cMvwrhKFw5ZcM8N
-         KZZBBawx/1irSL8Zazct+em5GweDIKK2GrJGNyrdME8T2ZyoXPhdZOIA3S3swOZF4ExD
-         +H/S6/0/3s76Afb0TUiXhhqpeq/ngrTHGMQn5qYkt8N3avzbGdj6mtV44p32DNtxWl5P
-         YS5Q==
-X-Gm-Message-State: AOAM531ylt7bUbTYktvk39CliUQ1+nUS46Em/kkYawsUhk3BHEx7VN03
-        veUQUxwJBFGzypbrFuCznxCiag==
-X-Google-Smtp-Source: ABdhPJxnXFWsEU7vaoMmlVg9NGIu10kQCl58O2xgYQ/I7PBvG0Dpr0PE2qPzya1IuKdxtEa00L4u6A==
-X-Received: by 2002:a7b:c14d:0:b0:38c:801a:a8b3 with SMTP id z13-20020a7bc14d000000b0038c801aa8b3mr15884385wmi.40.1647852496516;
-        Mon, 21 Mar 2022 01:48:16 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm8691375wry.53.2022.03.21.01.48.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 01:48:15 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 08:48:13 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Alistair Francis <alistair23@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alistair Francis <alistair@alistair23.me>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nlXjFh9ZGSYjymspz3NVf/3Iii+bAImAkYO6nQ6oZU0=;
+ b=GRNQ3syM9DITzMpnM4fXQ6T4lsjzmbSmS+AzO45D8349mrdrLSHLf539T5dCul82FEHJLwEa0RM5pHKKU8Eel7tQRzeOqH3nMllRDNiLqL9JlKrz4M/i0tzeKOPFwgqWXED6kxbTIOLQwSBmwHTkvhUk6rQGUyvLLjAYrjvDjWY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (13.101.206.88) by
+ PH0PR01MB6667.prod.exchangelabs.com (13.101.39.79) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5081.17; Mon, 21 Mar 2022 09:46:48 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::cd24:39ed:7042:46d6]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::cd24:39ed:7042:46d6%8]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
+ 09:46:48 +0000
+Message-ID: <8f01a63d-0d10-81ee-7398-b69e496964f8@os.amperecomputing.com>
+Date:   Mon, 21 Mar 2022 16:46:36 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH v7 9/9] docs: ABI: testing: Document the Ampere Altra
+ Family's SMpro sysfs interfaces
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        open list <linux-kernel@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v18 2/8] mfd: simple-mfd-i2c: Add a Kconfig name
-Message-ID: <Yjg7zS0kFAM0EhZO@google.com>
-References: <20220124121009.108649-1-alistair@alistair23.me>
- <20220124121009.108649-3-alistair@alistair23.me>
- <CAMuHMdVNgVQzjrdybbnfCEr+G5Q4ztjRCC29RF9HwGnhKkPn3Q@mail.gmail.com>
- <CAKmqyKOnezw8_dDY-c69F77KVxmb-C3t=N3H23GurKbrxWDAgg@mail.gmail.com>
- <CAMuHMdVy4E1pX+VLLq_05FX4pM+BPZycQgn68ArGh2s8qL24=w@mail.gmail.com>
- <7792b3b6-e196-c3c7-5875-9eb4da488a95@roeck-us.net>
- <CAKmqyKO2x0V6p8LVsgq54f1KcghVhW2jw6zmUOFxbf6Zh+0BNA@mail.gmail.com>
+        <devicetree@vger.kernel.org>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220321081355.6802-1-quan@os.amperecomputing.com>
+ <20220321081355.6802-10-quan@os.amperecomputing.com>
+ <Yjg2AkYOCTi2CXc1@kroah.com>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+In-Reply-To: <Yjg2AkYOCTi2CXc1@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR06CA0005.apcprd06.prod.outlook.com
+ (2603:1096:202:2e::17) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKmqyKO2x0V6p8LVsgq54f1KcghVhW2jw6zmUOFxbf6Zh+0BNA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 55cd84e3-361f-4b7a-67a0-08da0b1fb771
+X-MS-TrafficTypeDiagnostic: PH0PR01MB6667:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR01MB6667D7F5035F6759862A801EF2169@PH0PR01MB6667.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iel9N90c92GVQLQJBxGSXQks1dvmkwlF9+i1fUeVO288oOEpfFLCuLNznGZDl3Q9Ud5jmPL6Em0mus6UEREUaJZqi0Xho9wkyuMLBFGF1JWevqoWzkJKj9aHyXX14sD6zj18OM8UDf1jEq+SONvldEHViQqoMvDWWhHyXxb3ZHpeJd3giP7yqmko0L9WpUAp0IQ4lqLL+nKLr/fdH/NB4dOsTmMgNMgLvq0RIhhLvN3qM6EGPuhPLY6GCLN7ePLBVrRjerpCaaoSbZXXxPSdeMsIWfls4YQMAMUMQXxbsfPvWVXtnMp17y2a/7D0SGIeQMCNd9qnX+NEvEkZ99VFhOrOJwOlOGtt3ry28APRKXBF5WrQAqd7YugTQ4mb49hF/+HYFGOvn5So/XFFk1actQFvjP0OYa8qC6k4izOxPpSzEdJj5ZaHCP+4c7d02uwEuIlLVrCn9/U9imlw6Ddo0DxZ2Up3vOKdkWpNKVl5k7zxKdUaZnA6Pi4aUWCoybfZIBAxRLn7VUmGC1+yq5dnoZsrLJ7qYaB1Nq8H6yS7y+IcO0dwFWL1fBpqIDnxb5XXz6t5jnqkE5LwPaad8yXlgm8C32e7W/GnUlTCWs5xDR/5OPHdsLWi4cUc9GnJVM2PS9m98zzdx9GnNA4XLiPbt+fSeLXo74AdQAXsvxR2sQ8Lhh9W6ywyPTyTcDqCialFHgcD6Dv4nV5UuHmUmD/Nfu0JMvWtqYcxqmTdWvV7dQRyrg0XZ5c4JGj21r0GGlvgHn0sdrknj8nVB6ddBRQ+mrQ0q49IlCANviY/P1Miqm7R+Gp3KhmgbIJbBBaN+8Jf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(66476007)(66556008)(66946007)(8676002)(8936002)(2616005)(6666004)(6916009)(54906003)(107886003)(316002)(2906002)(31686004)(52116002)(53546011)(31696002)(38350700002)(38100700002)(6512007)(508600001)(86362001)(6506007)(186003)(26005)(7416002)(5660300002)(6486002)(966005)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N3ZuT2oyMzMzekVCREl0R2ZpZkVnYVI1MytLZGRqcEc3LzFseVJ3TkRQdXJ0?=
+ =?utf-8?B?SnZ1TVM4QVk1WGZGZnBNWHF5OGZEYmRMZ2djeENiK1duNG9mb2JySGhreDRH?=
+ =?utf-8?B?WmVSdHAraWVjSEVTa0wxQ0FxS09NS2QwdXpzWUgzbmJBRnlqTHBmMEducmhG?=
+ =?utf-8?B?QkZRWTVxa2s2RmxTbkNMR1U2cDhjWFJMUkErM1NOUGZpRk5vbFlEbjBMeWM4?=
+ =?utf-8?B?dmxmVy9zQURoMXB0dHRubGdXbXAvSzZZY0pyYUJSN0h0MC9aZ3crcmh6MWow?=
+ =?utf-8?B?dXRnbHZvMmtRMGpjYUw4Q09pRmVWNHVkUE9rZU80a08yWDVIVC9TbVY4bEJ3?=
+ =?utf-8?B?Tit0T0Vlb3hvVU00Q2NkMjFCTFAwWGZiZWpwMGlyUGsyam5ReHlFZUg0Z2Jr?=
+ =?utf-8?B?ZXFRMlB6bTMrd21BYndtZVVuZ1krblY3L1JaclRGU2I4ZjBXdEhmUmgrcWdP?=
+ =?utf-8?B?RkcyaEYzUnkxcHJ4SDVPQndXbTdaZjhlWFM1OHh0dU9FcHpUWC9zcDNOdFlI?=
+ =?utf-8?B?dlkxMWdCS0JkM0VraGRpaUo3OUd4WFlZei9zWHc4QmhYTjFYUTFkYllIcTFP?=
+ =?utf-8?B?UitCODI1RHlLRCtKSy8yYTZscnFNUmMrVHlDSlpHU0o0LzRsNnQ1SG80VTUv?=
+ =?utf-8?B?cUZZakt3NkprZCtvcFR4cmdqOFY5SnJLOGpmdHlIL0J6d3RjWC9DRWptNXRu?=
+ =?utf-8?B?eElVQ1FLMCtjc2h4QnFsbzRQeDN2R0JRLzBJYUdIenVBUWsvekFqNUNuOS93?=
+ =?utf-8?B?MmRUcXhyMkhZK1B5NWRQelBqcmxwWEdTbjA5YWJQaUhKMTd2SjhaYjlOeWpO?=
+ =?utf-8?B?YmRlaTdidkxuVERGb0l2NHlzOVdFRGxBTFYrMVZDQ0lYMnl2K0RnQmRFc2h2?=
+ =?utf-8?B?c2dDMFhPTXNvMHJTQUREcmE0MW5GWmNwSlZmNm4vLzZNQmlGK0tnZkIxZG5p?=
+ =?utf-8?B?bk1EOXNic3ZEYldtT2NKK0pyTnVpbnJOcmErMG84a2pUcVpnd1VFQnplTTA4?=
+ =?utf-8?B?b29xU0prRGY1enZQdWFUeVN6UXlkbXNoT1dZN1RwVFBEL0doVHNEZGRGMTR4?=
+ =?utf-8?B?cHRPcjZhVjgwMzFSWnNsc2lVRE1KRWlXRU5EWEFsN202Y0ZDd2pnRmExM09R?=
+ =?utf-8?B?LzdHQTdZUFo4QlptZ2xNUnY5RG1MNUcvL2NPbGt4MHhncW1GUHdxMVNKSFYw?=
+ =?utf-8?B?czNFdkdkekNPb3JrSkJLbWlwQzROeFp3SFVFMzhBREJHdDVUUDVuQmtZanZQ?=
+ =?utf-8?B?ZGluY0pYeUhkYWU4by9VbkZzT2lXbE5UU0s0OS9kN0hjdE96WGJ4QjdKU3pD?=
+ =?utf-8?B?QlhqNnVaUnZ3U3ZZMVBONVp2UFV2Y2txS1dNdXg2RWNJM25KVi9aak9QY1Bt?=
+ =?utf-8?B?ZXlGK2QvRXk2RFd2Sks5MmhIQmFQVG1TejhKMmlJVVhoNWFBS2NUcHl1RXUz?=
+ =?utf-8?B?dVY0OGUweUhSYUx5SVB5WlJEdEExNG42anRrcTQxNEtYUFM2RXdWS0tDRmhs?=
+ =?utf-8?B?aW40UUN1T2poSDY1RnlYa0pROVlFR0d1NUNKdWxlcC9ISEZBdnl6RG5mblE4?=
+ =?utf-8?B?U2g2dmZCZGttbkkvL2RKUTRZa09yU0R3MHZKS3NBNUNRL0h4c1ZQWEYvYlVQ?=
+ =?utf-8?B?eTdNTDRKVnVnWHJnT1pNMFJGeEpVY28xaUVjcVZwT3BiQzBndzRGTjIrMmZh?=
+ =?utf-8?B?TWVSSmV1MzZJOTNzb3Z3K2FjeU5XOERXaWZTaE9SWEI4NFUvNmphV1owQkp4?=
+ =?utf-8?B?WVQ5WEsvRGQwQXRhUTZXQWMveG5FQjJ1Umg2WnJnYmMrUGhyOU5teDlDYjUr?=
+ =?utf-8?B?alplcGVUd1VxdXZPR2hFc1luN1pVQ0RYa1BLM2tva3BlbVdHcGo4b3hUV2lN?=
+ =?utf-8?B?eThkdXZ3V25OdkhWSG1VZHlVTm9TWnhtdXlhYXZvRUtRdXZLKzFMRzk0OXgx?=
+ =?utf-8?B?eWVic0NjcG52UDltR2h4NlFBZlhqRkl1MTZlWTNrNld0YzZIWkpqNm5kSCtv?=
+ =?utf-8?Q?HqAywV6SHKETKR6cL7WizF+o0jA1w4=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55cd84e3-361f-4b7a-67a0-08da0b1fb771
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 09:46:47.9963
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3tHxSEjWFwNwpjs6uxZ0yBDeAKQYSRXXbEJ7X/QQkUeBS88XmZw+K+pVer6N1ifW/juPWRSthfgSiS6cHoFxhoYWNMgKiuDKicED4ywKLSo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6667
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 21 Mar 2022, Alistair Francis wrote:
 
-> On Sun, Mar 20, 2022 at 12:48 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On 3/19/22 02:28, Geert Uytterhoeven wrote:
-> > > Hi Alistair,
-> > >
-> > > On Sat, Mar 19, 2022 at 3:36 AM Alistair Francis <alistair23@gmail.com> wrote:
-> > >> On Tue, Mar 8, 2022 at 8:53 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > >>> Thanks for your patch, which is now commit bae5a4acef67db88
-> > >>> ("mfd: simple-mfd-i2c: Add a Kconfig name") in mfd/for-mfd-next.
-> > >>>
-> > >>> On Mon, Jan 24, 2022 at 1:24 PM Alistair Francis <alistair@alistair23.me> wrote:
-> > >>>> Add a Kconfig name to the "Simple Multi-Functional Device support (I2C)"
-> > >>>> device so that it can be enabled via menuconfig.
-> > >>>
-> > >>> Which still does not explain why this would be needed...
-> > >>>
-> > >>>> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > >>>> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> > >>>
-> > >>>> --- a/drivers/mfd/Kconfig
-> > >>>> +++ b/drivers/mfd/Kconfig
-> > >>>> @@ -1188,7 +1188,7 @@ config MFD_SI476X_CORE
-> > >>>>            module will be called si476x-core.
-> > >>>>
-> > >>>>   config MFD_SIMPLE_MFD_I2C
-> > >>>> -       tristate
-> > >>>> +       tristate "Simple Multi-Functional Device support (I2C)"
-> > >>>>          depends on I2C
-> > >>>>          select MFD_CORE
-> > >>>>          select REGMAP_I2C
-> > >>>
-> > >>> The help text states:
-> > >>>
-> > >>> | This driver creates a single register map with the intention for it
-> > >>> | to be shared by all sub-devices.
-> > >>>
-> > >>> Yes, that's what MFD does?
-> > >>>
-> > >>> | Once the register map has been successfully initialised, any
-> > >>> | sub-devices represented by child nodes in Device Tree will be
-> > >>> | subsequently registered.
-> > >>>
-> > >>> OK...?
-> > >>>
-> > >>> Still, no clue about what this driver really does, and why and when
-> > >>> it would be needed.
-> > >>>
-> > >>> There is one driver symbol that selects MFD_SIMPLE_MFD_I2C.
-> > >>> There are no driver symbols that depend on this symbol.
-> > >>>
-> > >>> If you have a driver in the pipeline that can make use of this,
-> > >>> can't it just select MFD_SIMPLE_MFD_I2C, so the symbol itself can
-> > >>> stay invisible?
-> > >>
-> > >> My patch "mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a"
-> > >> allows using this driver for the silergy,sy7636a MFD. So it's nice to
-> > >> be able to enable and disable it as required.
-> > >
-> > > So after that patch, enabling MFD_SIMPLE_MFD_I2C will enable
-> > > support for an ever-growing random bunch of devices, none of which
-> > > is described in the help text?
-> > > To me, ghat doesn't look like the way to go forward...
-> > >
-> >
-> > I am probably missing something. Why not something like the following ?
-> >
-> > config MFD_SY7636A
-> >          tristate "Silergy SY7636A voltage regulator"
-> >          depends on I2C
-> >          select MFD_SIMPLE_MFD_I2C
-> >          help
-> >            Enable support for Silergy SY7636A voltage regulator.
-> >
-> >            To enable support for building sub-devices as modules,
-> >            choose M here.
-> >
-> >
-> > This would be quite similar to MFD_SL28CPLD which essentially does
-> > the same (and, unless I am missing something, doesn't have its own
-> > driver either). Sub-devices would then depend on MFD_SY7636A.
+
+On 21/03/2022 15:23, Greg Kroah-Hartman wrote:
+> On Mon, Mar 21, 2022 at 03:13:55PM +0700, Quan Nguyen wrote:
+>> Add documentation for the Ampere(R)'s Altra(R) SMpro sysfs interfaces
+>>
+>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>> ---
+>> Changes in v7:
+>>    + First introduce in v7     [Greg]
+>>
+>>   .../sysfs-bus-platform-devices-ampere-smpro   | 133 ++++++++++++++++++
+>>   1 file changed, 133 insertions(+)
+>>   create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+>> new file mode 100644
+>> index 000000000000..9bfd8d6d0f71
+>> --- /dev/null
+>> +++ b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+>> @@ -0,0 +1,133 @@
+>> +What:		/sys/bus/platform/devices/smpro-errmon.*/errors_[core|mem|pcie|other]_[ce|ue]
 > 
-> That's fine with me.
+> Please split this out as one entry per file.
 > 
-> As you said this patch is already in the mfd/for-mfd-next tree, should
-> I resend the series?
 
-Making the symbol selectable-only is fine with me also.
+These sysfs share same format of HW errors (the 48-byte Arm vendor 
+specific HW error record) but for separate HW domains: Core, PCIe, 
+Mem... etc
 
-Please send a subsequent patch.
+>> +KernelVersion:	5.14
+> 
+> 5.14 is a long time ago.
+> 
+>> +Contact:	quan@os.amperecomputing.com
+>> +Description:
+>> +		(RO) Contains the 48-byte Ampere (Vendor-Specific) Error Record, see [1]
+>> +		printed in hex format as below:
+>> +
+>> +		AA BB CCCC DDDDDDDD DDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDD \
+>> +		   DDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDD
+>> +		Where:
+>> +		  AA       : Error Type
+>> +		  BB       : Subtype
+>> +		  CCCC     : Instance
+>> +		  DDD...DDD: Similar to the Arm RAS standard error record
+> 
+> No, this is not a valid sysfs file, sorry.  This should just be one
+> value per file.
+> 
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+This 48-byte value is unable to separate into smaller values because it 
+contain all information necessary to indicate a single HW error as per 
+ARM RAS supplement document [1]. The format is to make it read-able 
+other than a single 48-byte hex value.
+
+[1] https://developer.arm.com/documentation/ddi0587/latest/
+
+> 
+>> +
+>> +		See [1] below for the format details.
+>> +
+>> +		The detail of each sysfs entries is as below:
+>> +		+-------------+---------------------------------------------------------+
+>> +		|   Error     |                   Sysfs entry                           |
+>> +		+-------------+---------------------------------------------------------+
+>> +		| Core's CE   | /sys/bus/platform/devices/smpro-errmon.*/errors_core_ce |
+>> +		| Core's UE   | /sys/bus/platform/devices/smpro-errmon.*/errors_core_ue |
+>> +		| Memory's CE | /sys/bus/platform/devices/smpro-errmon.*/errors_mem_ce  |
+>> +		| Memory's UE | /sys/bus/platform/devices/smpro-errmon.*/errors_mem_ue  |
+>> +		| PCIe's CE   | /sys/bus/platform/devices/smpro-errmon.*/errors_pcie_ce |
+>> +		| PCIe's UE   | /sys/bus/platform/devices/smpro-errmon.*/errors_pcie_ue |
+>> +		| Other's CE  | /sys/bus/platform/devices/smpro-errmon.*/errors_other_ce|
+>> +		| Other's UE  | /sys/bus/platform/devices/smpro-errmon.*/errors_other_ue|
+>> +		+-------------+---------------------------------------------------------+
+>> +		UE: Uncorrect-able Error
+>> +		CE: Correct-able Error
+>> +
+>> +		[1] Section 3.3 Ampere (Vendor-Specific) Error Record Formats,
+>> +		    Altra Family RAS Supplement.
+>> +
+>> +
+>> +What:           /sys/bus/platform/devices/smpro-errmon.*/errors_[smpro|pmpro]
+>> +KernelVersion:	5.14
+>> +Contact:	quan@os.amperecomputing.com
+>> +Description:
+>> +		(RO) Contains the internal firmware error record printed as hex format
+>> +		as below:
+>> +
+>> +		A BB C DD EEEE FFFFFFFF
+> 
+> Again this isn't a good sysfs entry.  You should never have to parse a
+> sysfs file except for a single value.
+> 
+> thanks,
+> 
+> greg k-h
+
+This error is also unable to separate further as well.
+
+Thanks Greg for the review.
+- Quan
