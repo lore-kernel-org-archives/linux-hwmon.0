@@ -2,129 +2,241 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEF8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 08:03:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3314C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Mar 2022 08:14:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242195AbiCUIEi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Mar 2022 04:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S1345104AbiCUIQC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Mar 2022 04:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240711AbiCUIEh (ORCPT
+        with ESMTP id S233809AbiCUIQC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:04:37 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20632988;
-        Mon, 21 Mar 2022 01:03:11 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id v19so3189004qtw.9;
-        Mon, 21 Mar 2022 01:03:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=teTz6hR8vkK2RK+SXqwF1pvHE4MUy9t3M4zQfofPznY=;
-        b=DFpu9wElW+LSQm+kp9zGFnsCRsu9mH+ch9zIuHCHGBp43rQNVzSGe7N/N7thvGKoDQ
-         XT/UMWnYJPIUOm7nmlnabVB6x7Pw9pEwg2Gaim5kB+Vlq+yanwrcDjHUH6zJ750kyVYL
-         2FLA5WQ/mNtDKKl6XyrEOXbCwkbC2RmoQSy0WXvbbZJtumFV3igssztvNQBmKT+5mTf9
-         VburAVXp9aGk7hu/Zbtdqkib79FpDecBPw+zVdO0w0TB6gr6E12oJQvuvkc2tnd+zKU2
-         IkhapE3BhlGRbjuJAftjA/y8Mw8LPviciQtOgEtxC0JRyKZyaBysJaXxCWBbHW43Eh1K
-         Q6fQ==
-X-Gm-Message-State: AOAM531Nsc2WTKzZHZDDoQ49VFaIO2xDkxgvk54e40+IeMKBXAIQ6Jhv
-        5rqdmH/TJSsqTexHZaWJrq3x6yXXonVhHg==
-X-Google-Smtp-Source: ABdhPJyV54O+hByVFp+yMQW3WbgAtXSbTgYmo/1lNbaxkADDT69H/t3jNwYhR8Ijbgx5fJR2aJeQcg==
-X-Received: by 2002:ac8:578a:0:b0:2e1:a0d2:c3a with SMTP id v10-20020ac8578a000000b002e1a0d20c3amr15480073qta.261.1647849789907;
-        Mon, 21 Mar 2022 01:03:09 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id w17-20020ac857d1000000b002e19feda592sm10901470qta.85.2022.03.21.01.03.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 01:03:09 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id z8so26552627ybh.7;
-        Mon, 21 Mar 2022 01:03:09 -0700 (PDT)
-X-Received: by 2002:a25:aa0e:0:b0:633:7c3b:94a0 with SMTP id
- s14-20020a25aa0e000000b006337c3b94a0mr22974180ybi.546.1647849788969; Mon, 21
- Mar 2022 01:03:08 -0700 (PDT)
+        Mon, 21 Mar 2022 04:16:02 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2098.outbound.protection.outlook.com [40.107.92.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601744F9D3;
+        Mon, 21 Mar 2022 01:14:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TfNabEBF8n+/16qurOO3a6yhDU5OdHYvc++EYmCLhYtXdwDPSBQU3YOz2FuMVkn/n8gvy7j4G6xOWbLENEIC7oCCMyOiMxIL7QBZShrLOKN7uGRBE+W8rWMV3VU4Apl3IJYiQHZMNEXPuqH9O30a4YZqbqYfykfdG1cwGu21TY5P9iWx9t8PE3UK3w6za4c8hyNqGdWTgxauYaiM9Q+yY9J79rqYPpz5dYmGKTIaaN+keGxhPyl4Z1T32+PvpmcDgHFOnkU7Hl78gAUxt+MePT5d/N6/yNGbT84LL/G+h65WXeD3msHnpji6x+synmUFkw0PT48+PPbcPe3l4CvEQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=STqtF5nkbDBMoESOnwi6xIY9VrkPK2Gt2YkGRSobuI4=;
+ b=dyLOjWxcaFQK4HCuN9w/2p+ac1J2chLFucP79y+qClmYEP0WFYtiNksby7uqCz8gumVoPE3whZMHQ8GkV+GTOF99OV2AS2fCyqwpxfrR/YQV9FuCSdrFeIlq7yEpW2KUEI97uAMgrxgPm7i5aw/TpNoyOG3KRybGceqtjboz9WkQUMjmMNetSqAeCEjCI+HSni/10jhcT9gkS5qGXI0X05CWgCIpGuvX0oVnNTQAp5LXfSolzVgOVfJc0AQu70WcAP2IZMs3+I4kEhoPq4LR2AgtgAoOt5TY4Ttafev0ARAhY3fxAbRUq4D77Sv2E00ZrUTJaWTn6po7A/RLfNW8Fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=STqtF5nkbDBMoESOnwi6xIY9VrkPK2Gt2YkGRSobuI4=;
+ b=DNhYiLDuH62Cmqkiobavylrz7GP0q0bjw7U+Nne/CTRoLW5tE1tgZkx+NiKFf1KUb1zC9/jRGHE2Hyh9C7fts56ef1Z+ACr+fXdvHFIw2oN/6S5O+Uet+42v/U2SowjBtDfUzdo/GLG4/UTKD7YAG3uc44mUUFfX3gNOgPUsnY4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BN6PR01MB2738.prod.exchangelabs.com (2603:10b6:404:ce::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5081.14; Mon, 21 Mar 2022 08:14:33 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::cd24:39ed:7042:46d6]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::cd24:39ed:7042:46d6%8]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
+ 08:14:32 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        linux-kernel@vger.kernel.org (open list),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: [PATCH v7 0/9] Add Ampere's Altra SMPro MFD and its child drivers
+Date:   Mon, 21 Mar 2022 15:13:46 +0700
+Message-Id: <20220321081355.6802-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGXP274CA0010.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::22)
+ To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-References: <20220124121009.108649-1-alistair@alistair23.me>
- <20220124121009.108649-6-alistair@alistair23.me> <CAMuHMdUe-z-6_=W5AFtWMug-cqTZKJhd-iLbdoRnSKoXwm27Uw@mail.gmail.com>
- <CAKmqyKNtE8=Jna78+L2a8BwsgM+LZVPi4ppg8Z0RGJ-21RqPtw@mail.gmail.com>
-In-Reply-To: <CAKmqyKNtE8=Jna78+L2a8BwsgM+LZVPi4ppg8Z0RGJ-21RqPtw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Mar 2022 09:02:57 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWF5z7oYpsBybeAGRA2jWToZD=7wnvtiULg9irQ=rbQSQ@mail.gmail.com>
-Message-ID: <CAMuHMdWF5z7oYpsBybeAGRA2jWToZD=7wnvtiULg9irQ=rbQSQ@mail.gmail.com>
-Subject: Re: [PATCH v18 5/8] hwmon: sy7636a: Add temperature driver for sy7636a
-To:     Alistair Francis <alistair23@gmail.com>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b04e44e8-8557-4cfc-c24c-08da0b12d410
+X-MS-TrafficTypeDiagnostic: BN6PR01MB2738:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR01MB273866D0787057D916E628ACF2169@BN6PR01MB2738.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2Zatu/ayNy1IXpO4A5Gxx4s5OCyRWumFtwoiTCgrNjuW7+rA/thz2Yau6w5pUudhfm4wQQQgvlFAE6izdVJV71kdoNyfH4mY99Jj5bRyRXNkIJA9v4YSNogtyFrxQ6gCXJQztJsE7mYQw34eXOVT5QnKBwMRphCthtJA0VYhYzzdq0rmsALHh3jNAv4hYazjuxdAqWt5k5D8xhWo+xGJk2raGAG3FiTL+1dJD9Ou54TFgV84cgxGZURUOfsoCD9ntMJTlMVjOfhm2ahGF35i/Xqx99Cx6A4osuyW8jkfIhTXZ12def1KdUXwbGkhmt12ocCfvfds5cajn8KW7xjJZZioCFLTi92X0VKHmb9LQEiMgpZVOyo85QZ/+ZMhAU/xaTIuJZeg3quHft5kGx3tSBpfE/B5VtSSFs+G9ix4zQKLXZZjftSaoEbV7Hsnf9kaLcnrxrBMJwrTxKJR78uKQ8gZFgjKl/rc4WxYPTae9ugl6x6P52dibC6XuqvfMqiPp337TO1kGMEbKSw2z3UApWMdWE1ei9p12+c1nrfzaYVR22JqeiHTmvuTDS+SSIiTkoP4OjOqRSGTMDEvrxcPkLaZwuP8Emm3gi0flU3RfYfIfallrOjb80JhR4GYiFvZyEu8+bfhaRj2n4XAi8oDYdL9g6zX/4Mu2lLIt5W/P89FNLRYB401sSJX73xO0I6k00BJa1Br580Qo3U5Vu4YO7TIgb8WCmDDj4iKkklqDab1QpVEiqe4qcDdzr3M2ravnWsg/Xj9LjK/Gx2YBzm3e1QvP1K9xqqhAozaHzk7sYpJ8aTJdavhsK0oJ4M7fhBJ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(66476007)(66556008)(6512007)(66946007)(7416002)(107886003)(186003)(1076003)(86362001)(38350700002)(4326008)(5660300002)(8676002)(26005)(316002)(52116002)(110136005)(921005)(54906003)(2616005)(2906002)(508600001)(8936002)(6486002)(6506007)(966005)(6666004)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HH3M20RRi1bEPj+AACgJ6qxz9allBrGbIczGieByaERi7fhzkY7uXYpFYUEA?=
+ =?us-ascii?Q?TbvWEQuG6EuBP8Br8Jy+Py4SoiFt1Hg51YjK/NDP0QQ3VXWdGQ/B3Qdmi+vC?=
+ =?us-ascii?Q?1pv2u+4W5emXyHD5Tt39CYin4tTdAzj1/rsCbJLojcw9TolMbtgIvQDcqlHc?=
+ =?us-ascii?Q?Jw34K/Yrv9B7SCBQ4vvMfMua5cjwl4FR6Kqofqc1QjnXiuuZ8PCwPVpBNIU1?=
+ =?us-ascii?Q?efSKQyYzkWhmAsoKYizuHMxMnmyKQOHQxLb7FuKuH4l1JnPhLlgBEiMJf9WK?=
+ =?us-ascii?Q?uklZejmA4C8syt2mjbF7l1369n0FC6bnJKK5edIRpgKjj5lO2T7q1Q/+bclx?=
+ =?us-ascii?Q?3OMrfOHwJNFX32wCUWEWUUYFmEiE2MgEGnf68VdTAbJCGau4E7PERnMjh32y?=
+ =?us-ascii?Q?LyQq9ntAZYQIT0P/agNWIbvYDcVg3NH10/r2cYpOhIbvD6CDldcHtovobjAC?=
+ =?us-ascii?Q?wrwFnKqlhHa+dgqzBLon7yTdwsiXQGe/XNPpuk5SsumyL/2+RstUJQYZGd2f?=
+ =?us-ascii?Q?WqFIeE3XRDOlUDcZ9/YUWmN8KIHeNz+uMCPXeh0EhcHGd4RGfzWKfbJb7HoG?=
+ =?us-ascii?Q?7mlrFtGDW3kzR2Abxxx1DhcokvxFzlH4QUsHAHi1p3AC4JiJ91orhG1Ifwqq?=
+ =?us-ascii?Q?+EXHf8opQQXAg/eeIqKkRQXHYZEJ5GSTC/CkR57xJSWTUCfBmvHKs3TPpcyT?=
+ =?us-ascii?Q?SOpjUGjxpLY9PGGVllorKNE2YzV6+9MTR2ZB16KgxoV/E0Pf+lNN/ofRm99V?=
+ =?us-ascii?Q?lLVdDVkD0uADJaBrmWtgeIsJOVwHkpRIdpjKOj1fIs6P3R10Q3bKXqyVKFGE?=
+ =?us-ascii?Q?dQklPt5U9ejKwQ0Vuwn6/MXhsyNLGkZah8f6XURmtPzDbXDdAcKmD64/vh85?=
+ =?us-ascii?Q?owp+e46Bj2IOsmHqpAjmEcXGXrvnTiUTJZDGQaDw0he4jjMU39LcLJkcVtwc?=
+ =?us-ascii?Q?qxRGJgGg3oTbR61oUqndPBcSQqx0DnORV5Ta1CjweNFbI0XoMjEkSr+qmcf3?=
+ =?us-ascii?Q?cu3Q7dZZa8iUQg3KKJmpUUJgJuEqD8XSFXtl947NxQfm/AmWnc6KROwGNm0z?=
+ =?us-ascii?Q?MpysdzLn2jIlXg9jJJxYccl5c0I2sPxzR97PZyXch5TQEDzJna9TT8Qy3Mt3?=
+ =?us-ascii?Q?xlSrcReHzG8hDdfUdhb+NM16dMp8zrW11K7caJosIrcSjN6f654gKTe7b2ns?=
+ =?us-ascii?Q?Rub1lWqov97lIK39+xlOfMrth8oVCH2V/R+8VKRNJdW1HLWasw5mfr9wsQOu?=
+ =?us-ascii?Q?MsNoP+5bDxLxZAncFhbgP8QQ1FSQd/Y90xFrffJ2iv/IzFDW8CWapPG+phcr?=
+ =?us-ascii?Q?TQpolyXW9tFjyrDa+VoCp7sdL18drKXbfALnJx9YFvkjfMvnUSSFePRkCgap?=
+ =?us-ascii?Q?hAfPpYL6jQd6O7HdY3P0y/6h7ovBDDP84lDn2OMNCiUcEu6CG4AgO65mZ8KW?=
+ =?us-ascii?Q?8wfGB2xHw6Au2a/EVsaOhgbbVHj7W2yiIbCLTGaNJfr52uhqzmPoEe1iZasv?=
+ =?us-ascii?Q?kdJWqQaDFzNc8zg=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b04e44e8-8557-4cfc-c24c-08da0b12d410
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 08:14:32.4655
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XodbWveoAKEuKo2ch0ZFK+Er7IWbVoQZzXubLp05Y8Ida08XW9MRHn9oFzV9qYLGFXwrm8PysnW7+KFyAoKee9UvThC8hdBSg1BVLeThqhw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR01MB2738
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Alistair,
+The SMpro co-processor on Ampere Altra processor family is to monitor
+and report various data included hwmon-related info, RAS errors, and
+other miscellaneous information. The SMPro MFD driver intializes the
+register map and instantiates all sub-devices. All the specifics will
+be handled in the child drivers.
 
-On Mon, Mar 21, 2022 at 8:35 AM Alistair Francis <alistair23@gmail.com> wrote:
-> On Tue, Mar 8, 2022 at 9:21 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Mon, Jan 24, 2022 at 1:25 PM Alistair Francis <alistair@alistair23.me> wrote:
-> > > This is a multi-function device to interface with the sy7636a
-> > > EPD PMIC chip from Silergy.
-> > >
-> > > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >
-> > Thanks for your patch, which is now commit de34a40532507814 ("hwmon:
-> > sy7636a: Add temperature driver for sy7636a") in mfd/for-mfd-next.
-> >
-> > > --- a/drivers/hwmon/Kconfig
-> > > +++ b/drivers/hwmon/Kconfig
-> > > @@ -1672,6 +1672,15 @@ config SENSORS_SIS5595
-> > >           This driver can also be built as a module. If so, the module
-> > >           will be called sis5595.
-> > >
-> > > +config SENSORS_SY7636A
-> > > +       tristate "Silergy SY7636A"
-> > > +       help
-> > > +         If you say yes here you get support for the thermistor readout of
-> > > +         the Silergy SY7636A PMIC.
-> >
-> > As this is an i2c mfd device, you do need a dependency on MFD and I2C,
-> > or some other symbol, unless compile-testing?
->
-> It doesn't depend on either to build though. It can be built independently.
+This patch set includes support for Ampere SMpro hwmon, errmon, and
+misc as the child drivers. The hwmon driver supports accessing various
+CPU sensors provided by the SMpro co-processor including temperature,
+power, voltages, and current found on Ampere Altra processor family.
+The errmon driver supports monitoring and reporting RAS-related errors.
+The misc driver is to support reporting boot progress and other
+miscellaneous information.
 
-That is true.
+Discuss for v6: https://lkml.org/lkml/2021/12/23/760
 
-But do you think all users configuring their kernel should be asked
-about all (thousands) of config symbols for drivers that can be built,
-but won't work or are irrelevant otherwise?
+v7:
+  + Add docs to Documentation/ABI/testing                       [Greg]
+  + Re-order patches to avoid compile dependency           [Lee Jones]
+  + Remove regmap_acquire/release_lock()                        [Quan]
+  + Install regmap bus->read/write() to handle multiple types of bus
+    access                                                      [Quan]
+  + Replace i2c block read by regmap_noinc_read()               [Quan]
+  + Fix wrong return type of *show/store()         [kernel test robot]
+  + Update GPL version                                          [Quan]
+  + Add some others minor code refactor                         [Quan]
 
-Please read
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/kbuild/kconfig-language.rst#n541
+v6:
+  + Introduced smpro-errmon, smpro-misc as smpro-mfd sub-device [Quan]
 
-Thanks!
+v5:
+  + Introduced the smpro-mfd driver and drop the use of
+  simple-mfd-i2c driver to avoid DT node with no resource in child
+  device DT nodes [Rob]
+  + Removed the use of reg DT property in child driver [Quan]
+  + Validated ManufactureID when probing smpro-mfd drivers [Quan]
+  + As child devices are instantiated by SMPro MFD driver, drop the
+  ManufacturerID checking in child driver, ie: smpro-hwmon [Quan]
+  + Revised commit messages [Quan]
 
-Gr{oetje,eeting}s,
+v4:
+  + Revised commit message [Quan]
+  + Fixed build issue found by kernel test robot [Guenter]
+  + Returned regmap_read() error code [Guenter]
 
-                        Geert
+v3:
+  + Supported list of compatible string [Rob]
+  + Introduced reg property in DT to specify reg offset [Rob]
+  + Updated description and other minor changes in yaml file [Rob]
+  + Handled negative temperature value [Guenter]
+  + Returned -ENODEV if Manufacturer ID is wrong [Guenter]
+  + Refactored smpro_read_string() and smpro_temp_read() [Guenter]
+  + Removed smpro_write() function [Guenter]
+  + Added minor refactor changes [Quan]
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+v2:
+  + Used 'struct of_device_id's .data attribute [Lee Jones]
+  + Removed "virtual" sensors [Guenter]
+  + Fixed typo "mili" to "milli", "nanoWatt" to "microWatt" [Guenter]
+  + Reported SOC_TDP as "Socket TDP" using max attributes [Guenter]
+  + Clarified "highest" meaning in documentation [Guenter]
+  + Corrected return error code when host is turn off [Guenter]
+  + Reported MEM HOT Threshold for all DIMMs as temp*_crit [Guenter]
+  + Removed license info as SPDX-License-Identifier existed [Guenter]
+  + Added is_visible() support [Guenter]
+  + Used HWMON_CHANNEL_INFO() macro and LABEL attributes [Guenter]
+  + Made is_valid_id() return boolean [Guenter]
+  + Returned -EPROBE_DEFER when smpro reg inaccessible [Guenter]
+  + Removed unnecessary error message when dev register fail [Guenter]
+  + Removed Socket TDP sensor [Quan]
+  + Changed "ampere,ac01-smpro" to "ampere,smpro" [Quan]
+  + Included sensor type and channel in labels [Quan]
+  + Refactorized code to fix checkpatch.pl --strict complaint [Quan]
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Quan Nguyen (9):
+  hwmon: smpro: Add Ampere's Altra smpro-hwmon driver
+  docs: hwmon: (smpro-hwmon) Add documentation
+  misc: smpro-errmon: Add Ampere's SMpro error monitor driver
+  docs: misc-devices: (smpro-errmon) Add documentation
+  misc: smpro-misc: Add Ampere's Altra SMpro misc driver
+  docs: misc-devices: (smpro-misc) Add documentation
+  dt-bindings: mfd: Add bindings for Ampere Altra SMPro MFD driver
+  mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD driver
+  docs: ABI: testing: Document the Ampere Altra Family's SMpro sysfs
+    interfaces
+
+ .../sysfs-bus-platform-devices-ampere-smpro   | 133 +++++
+ .../devicetree/bindings/mfd/ampere,smpro.yaml |  48 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/smpro-hwmon.rst           | 101 ++++
+ Documentation/misc-devices/index.rst          |   2 +
+ Documentation/misc-devices/smpro-errmon.rst   | 206 +++++++
+ Documentation/misc-devices/smpro-misc.rst     |  82 +++
+ drivers/hwmon/Kconfig                         |   8 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/smpro-hwmon.c                   | 463 ++++++++++++++++
+ drivers/mfd/Kconfig                           |  12 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/smpro-mfd.c                       | 134 +++++
+ drivers/misc/Kconfig                          |  14 +
+ drivers/misc/Makefile                         |   2 +
+ drivers/misc/smpro-errmon.c                   | 517 ++++++++++++++++++
+ drivers/misc/smpro-misc.c                     | 177 ++++++
+ 17 files changed, 1902 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+ create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+ create mode 100644 Documentation/hwmon/smpro-hwmon.rst
+ create mode 100644 Documentation/misc-devices/smpro-errmon.rst
+ create mode 100644 Documentation/misc-devices/smpro-misc.rst
+ create mode 100644 drivers/hwmon/smpro-hwmon.c
+ create mode 100644 drivers/mfd/smpro-mfd.c
+ create mode 100644 drivers/misc/smpro-errmon.c
+ create mode 100644 drivers/misc/smpro-misc.c
+
+-- 
+2.35.1
+
