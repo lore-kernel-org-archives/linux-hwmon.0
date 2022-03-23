@@ -2,114 +2,128 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48AC4C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Mar 2022 01:48:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95AC4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Mar 2022 03:41:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235102AbiCVBt5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Mar 2022 21:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S241630AbiCWDmg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Mar 2022 23:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235097AbiCVBt4 (ORCPT
+        with ESMTP id S231629AbiCWDme (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Mar 2022 21:49:56 -0400
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.47.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C101A82A
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Mar 2022 18:48:30 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 1D9B9400C65DB
-        for <linux-hwmon@vger.kernel.org>; Mon, 21 Mar 2022 20:48:29 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id WTdMnvRSsRnrrWTdNnIaLc; Mon, 21 Mar 2022 20:48:29 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=uywUMPoBYXp6PjZ9nM9SBumqFsG3gbfJp1KNVLB3onA=; b=4gTC9WJ7KGNBp7piv1YTtUa3lw
-        zLkOpNlQGAfi6oNWBaU+2qz0Cwg6xK2vbmA3X9jjkzdYj3OoXdFH02dQTAdVh8aenAQ0V2c1bDASh
-        4NUTQ06Gj9ymwWxBHnonpZI1WJWHn6+iRDyCm59aaw3hxIGDZ9vP1h0Tbanq2ELpdxcRO0MeJZnNJ
-        75rqt5K+62bPy2zSXFOb74fzzOp9mDkkH+wleqpt1E+3hjMqmCm5XD+tOWEC3JzLnfEiEqdfelZZF
-        38Q4I8uQ1I1p3epGbWPnzHuetZeq3J7Tt5IL1gNVpdILyqv+tqo4E78aM/Mbz12howATwzSyAS3IO
-        DqMcCM5A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54388)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nWTdM-001yfU-Lc; Tue, 22 Mar 2022 01:48:28 +0000
-Message-ID: <b3830750-f534-0c1c-f09b-3cce7fc6208b@roeck-us.net>
-Date:   Mon, 21 Mar 2022 18:48:27 -0700
+        Tue, 22 Mar 2022 23:42:34 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE066C1F2
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Mar 2022 20:41:04 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5D6F82C0821;
+        Wed, 23 Mar 2022 03:41:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1648006861;
+        bh=3kRD+oortahrXsHkmlIWk4d3La4jPOGfcWeSyoZ6p3c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BXefxU0NqTGdouL3WTTHJ0pjo7CiBySqtxTe/ys2bdFwuc7+UpSjPs2XDp2cOeQrp
+         QMYm5kSN3wFifxu9ehHK4H0nB4yeHiGqFriwrqZGP79mb5zmUG6D5uQtPvqsYCBNZa
+         Bz5RBxzsJm47Uj8K9jdYDyjQPXp6EoU+RnnJ48wsvMzFGmDK9rNwnUP+jKVtLrXfCv
+         3hfoZ37yE4fZQre/PENuBRv0UukL3YfsZp1D7nvTB3pzPfk96yO84P6erHQbhMcUnp
+         iSLt8vW3t1iTTYZD0jIS5U125wZwiK1nkjwwuLSFhhjv1BqwZsLS/GPUp1eCI3ngA3
+         xz3vHUd5wq+SA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B623a96cc0003>; Wed, 23 Mar 2022 16:41:00 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id E113B13EE8E;
+        Wed, 23 Mar 2022 16:41:00 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 276AB2A2678; Wed, 23 Mar 2022 16:40:59 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v3 3/3] hwmon: (adt7475) Use enum chips when loading attenuator settings
+Date:   Wed, 23 Mar 2022 16:40:56 +1300
+Message-Id: <20220323034056.260455-4-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220323034056.260455-1-chris.packham@alliedtelesis.co.nz>
+References: <20220323034056.260455-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [GIT PULL] hwmon updates for v5.18
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220320231317.2171300-1-linux@roeck-us.net>
- <CAHk-=wgM1uHH1WJ47Zt5OGK5qjtFkvVCZLff+TKA2ahXAM1xQg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAHk-=wgM1uHH1WJ47Zt5OGK5qjtFkvVCZLff+TKA2ahXAM1xQg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nWTdM-001yfU-Lc
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54388
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=LMJ1QkyDWGgx0nKO9dUA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/21/22 18:21, Linus Torvalds wrote:
-> On Sun, Mar 20, 2022 at 4:13 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> Improvements to existing drivers:
->> - adt7x10: Convert to use regmap, convert to use with_info API,
->>    use hwmon_notify_event, and other cleanup
->> - aquacomputer_d5next: Add support for Aquacomputer Farbwerk 360
->> - asus_wmi_sensors: Add ASUS ROG STRIX B450-F GAMING II
->> - asus_wmi_ec_sensors: Support T_Sensor on Prime X570-Pro
->>    Deprecate driver (replaced by new driver)
-> [...]
-> 
-> To make my life easier, can I ask you to try to format these things a
-> bit more sanely and legibly?
-> 
-> You had this odd mix of sometimes using new lines to separate
-> different things (eg that asus_wmi_ec_sensors entry), and sometimes
-> just multiple different things in a list that then had line-breaks in
-> the middle.
-> 
-> That kind of stuff is _very_ hard to parse as anything but a random
-> jumble of words all crammed together.
-> 
-> Whitespace to separate things is good, and some kind of consistent
-> indentation makes it more legible. I edited it all up (hopefully
-> correctly), but it would be nice to get it in a readable form to begin
-> with..
-> 
-> Yeah, if everything does well, nobody will ever need to read that
-> merge message, but let's try to aim for nice and informative commit
-> messages anyway.
-> 
+Make use of enum chips and use a switch statement in load_attenuators()
+so that the compiler can tell us if we've failed to cater for a
+supported chip.
 
-Sorry for that. I'll use your reformatting as example and use
-the same format in the future.
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
 
-Guenter
+Notes:
+    Changes in v3:
+    - Reword commit message
+    - Use switch instead of if/else
+    Changes in v2:
+    - New
+
+ drivers/hwmon/adt7475.c | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 6de501de41b2..ac480e6e4818 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -1569,12 +1569,12 @@ static int set_property_bit(const struct i2c_clie=
+nt *client, char *property,
+ 	return ret;
+ }
+=20
+-static int load_attenuators(const struct i2c_client *client, int chip,
++static int load_attenuators(const struct i2c_client *client, enum chips =
+chip,
+ 			    struct adt7475_data *data)
+ {
+-	int ret;
+-
+-	if (chip =3D=3D adt7476 || chip =3D=3D adt7490) {
++	switch (chip) {
++	case adt7476:
++	case adt7490:
+ 		set_property_bit(client, "adi,bypass-attenuator-in0",
+ 				 &data->config4, 4);
+ 		set_property_bit(client, "adi,bypass-attenuator-in1",
+@@ -1584,18 +1584,15 @@ static int load_attenuators(const struct i2c_clie=
+nt *client, int chip,
+ 		set_property_bit(client, "adi,bypass-attenuator-in4",
+ 				 &data->config4, 7);
+=20
+-		ret =3D i2c_smbus_write_byte_data(client, REG_CONFIG4,
+-						data->config4);
+-		if (ret < 0)
+-			return ret;
+-	} else if (chip =3D=3D adt7473 || chip =3D=3D adt7475) {
++		return i2c_smbus_write_byte_data(client, REG_CONFIG4,
++						 data->config4);
++	case adt7473:
++	case adt7475:
+ 		set_property_bit(client, "adi,bypass-attenuator-in1",
+ 				 &data->config2, 5);
+=20
+-		ret =3D i2c_smbus_write_byte_data(client, REG_CONFIG2,
+-						data->config2);
+-		if (ret < 0)
+-			return ret;
++		return i2c_smbus_write_byte_data(client, REG_CONFIG2,
++						 data->config2);
+ 	}
+=20
+ 	return 0;
+--=20
+2.35.1
+
