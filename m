@@ -2,172 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 371FFC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Mar 2022 12:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C85D8C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Mar 2022 12:57:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbiCZMiz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Mar 2022 08:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
+        id S233001AbiCZM6n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Mar 2022 08:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiCZMiy (ORCPT
+        with ESMTP id S232993AbiCZM6m (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Mar 2022 08:38:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ABAE09B6;
-        Sat, 26 Mar 2022 05:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648298238; x=1679834238;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2qNhWmWOmaV+zWM8jy09FHg0w+HKEVvZwyYHcKgSC8Q=;
-  b=X03IYnbGpccpyxjrIC3IUFr+exE2UUkTeG6fNyTaEZJvw6+A/bQplN5L
-   vlvA0JjtEGNjEAK/iO/oVuZrKuO+HnU2/+bBNMP/XBN/ZMk1KC2axTAZc
-   r9YUjcUelet/m3cnLeBz1oBMysbVBCcupPQ1R2Sz9o6Zm6AfMJVSr+qqH
-   uivbm5N2evC3jBsPLi73C9im95ae94vhUiqqNV9zgpRg4J4hX0pxgfkxU
-   e4P33lu/WOg2nhb8steAv4ie80IUTDcpIM4EEs14FqJv8f3PaEpaw7xXL
-   7cNgPa9fvGgsa5aEMXuym1fR729Syguw66My4MxzOfN1HUEkOcLrP3eSA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="321971161"
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="321971161"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 05:37:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="520488065"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2022 05:37:15 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY5fP-000NMv-5B; Sat, 26 Mar 2022 12:37:15 +0000
-Date:   Sat, 26 Mar 2022 20:36:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Jean Delvare <jdelvare@suse.com>,
+        Sat, 26 Mar 2022 08:58:42 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35034D256;
+        Sat, 26 Mar 2022 05:57:02 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r23so12035637edb.0;
+        Sat, 26 Mar 2022 05:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+IqwQrreaIW02AJS03/xoNmlaUlmZ/vkoMhCtmeGgTY=;
+        b=d0L1mFtnsWjkMbp1xeTZO4YLbtRG3luGFyq51W2lvdnCjC90b6HlUw4oDmRuFvyc7+
+         +A622rpmAHOWESqkmAWdkdku6NAY3rBo51vzQSC4MTVZf9SnvDMflXXR8cU5H5mlyjKn
+         E7FDjggoKQtZkCz9r2UOuDgfuxS8EHOPTIh+/DiLFNKdH4oCVaQ+qFdOTwRx/2qa/D+v
+         2LjpknmG3SuOnKQrAQ//g48ottG98DxLBAJmUR7GL5xvdQdBjn56WpYuomFsoB8yes/d
+         owzQU/zU7Xr1vUI2e6FzpQ7b4AcXh3iMhaX/1a0ZD/r9s1ujHtbLHlLeLJF2DYKXDmw8
+         dhQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+IqwQrreaIW02AJS03/xoNmlaUlmZ/vkoMhCtmeGgTY=;
+        b=PMkqUMZBWAXXhsiul84YjZ+A5QGuhyHsa+CFgshh3eBIVZvOqhc1XzBE7t85aeZLqQ
+         3I1kyB+4KNZo691loM/o4kJal/zXq6d3AcMqfxAaen9R0Xjqy0TAdiZ6EqMeBuhPELKR
+         qvbbFPVnYFvF+TUzCEiVo8xAq6M550z0+JHhkr/ZtX1rFUq3n72d9gEu1qqOFm59AW5C
+         D9RmFTHA3VUkK4V3f+9byz3cT6X4kJfQmpm/sl/h8ryy38jRL1M7P1AGOsCsTo+cyYD4
+         IPkVQ/oVeKeAUDV4J8eYuhlx+8/u0A35xY+G/SiS2DIZCCnrQqbYqwsU/I7v8IWFzQkq
+         d27Q==
+X-Gm-Message-State: AOAM532CYf+ItG0kKTux8gzlrX6Bnw9pRLOIWhIlwP3REZ762NAU4cuo
+        ygCtUJndmy9Ka+o+2Ms7OkY=
+X-Google-Smtp-Source: ABdhPJxr0dkQZIrXSHuQZKoprFCK5SlvrCOgT6kBLhnZZAJezIzj7jUgr6MBFobFAhnoto6sj+vKgg==
+X-Received: by 2002:a05:6402:1385:b0:413:2bc6:4400 with SMTP id b5-20020a056402138500b004132bc64400mr4520809edv.94.1648299421216;
+        Sat, 26 Mar 2022 05:57:01 -0700 (PDT)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id u4-20020a170906780400b006ce69ff6050sm3504795ejm.69.2022.03.26.05.57.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 05:57:00 -0700 (PDT)
+Date:   Sat, 26 Mar 2022 13:56:58 +0100
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-hwmon@vger.kernel.org, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for
  Aquacomputer Octo
-Message-ID: <202203262032.UaIhk6RY-lkp@intel.com>
+Message-ID: <Yj8Nmhw7gITs+I6U@fedora>
 References: <20220326101250.8076-1-savicaleksa83@gmail.com>
+ <202203262032.UaIhk6RY-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220326101250.8076-1-savicaleksa83@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <202203262032.UaIhk6RY-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Aleksa,
+Hi all,
 
-I love your patch! Perhaps something to improve:
+Sorry for the mess, this one is on me. :(
+Please ignore, I'll fix and resend a proper patch later.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on next-20220325]
-[cannot apply to v5.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-Octo/20220326-181328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220326/202203262032.UaIhk6RY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ffb6d76f23a93a5875a427d03dc6a67538277e19
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-Octo/20220326-181328
-        git checkout ffb6d76f23a93a5875a427d03dc6a67538277e19
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/aquacomputer_d5next.c:420:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-                   default:
-                   ^
-   drivers/hwmon/aquacomputer_d5next.c:420:3: note: insert 'break;' to avoid fall-through
-                   default:
-                   ^
-                   break; 
-   drivers/hwmon/aquacomputer_d5next.c:489:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-                   default:
-                   ^
-   drivers/hwmon/aquacomputer_d5next.c:489:3: note: insert 'break;' to avoid fall-through
-                   default:
-                   ^
-                   break; 
-   drivers/hwmon/aquacomputer_d5next.c:698:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/hwmon/aquacomputer_d5next.c:698:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   3 warnings generated.
-
-
-vim +420 drivers/hwmon/aquacomputer_d5next.c
-
-   389	
-   390	static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-   391			    int channel, long *val)
-   392	{
-   393		int ret;
-   394		struct aqc_data *priv = dev_get_drvdata(dev);
-   395	
-   396		if (time_after(jiffies, priv->updated + STATUS_UPDATE_INTERVAL))
-   397			return -ENODATA;
-   398	
-   399		switch (type) {
-   400		case hwmon_temp:
-   401			if (priv->temp_input[channel] == -ENODATA)
-   402				return -ENODATA;
-   403	
-   404			*val = priv->temp_input[channel];
-   405			break;
-   406		case hwmon_fan:
-   407			*val = priv->speed_input[channel];
-   408			break;
-   409		case hwmon_power:
-   410			*val = priv->power_input[channel];
-   411			break;
-   412		case hwmon_pwm:
-   413			switch (priv->kind) {
-   414			case octo:
-   415				ret = aqc_get_ctrl_val(priv, octo_ctrl_fan_offsets[channel]);
-   416				if (ret < 0)
-   417					return ret;
-   418	
-   419				*val = aqc_percent_to_pwm(ret);
- > 420			default:
-   421				break;
-   422			}
-   423			break;
-   424		case hwmon_in:
-   425			*val = priv->voltage_input[channel];
-   426			break;
-   427		case hwmon_curr:
-   428			*val = priv->current_input[channel];
-   429			break;
-   430		default:
-   431			return -EOPNOTSUPP;
-   432		}
-   433	
-   434		return 0;
-   435	}
-   436	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Aleksa
