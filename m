@@ -2,216 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE156C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Mar 2022 19:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1246C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 00:49:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234010AbiCZT2O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Mar 2022 15:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        id S231366AbiC0AvY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Mar 2022 20:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbiCZT2N (ORCPT
+        with ESMTP id S231383AbiC0AvW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Mar 2022 15:28:13 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3D457498;
-        Sat, 26 Mar 2022 12:26:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648322775;
-        bh=BhYwGJesufnhB1BugiBJY7l8WrEGuEqC2mGAreqhWuE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=DMR8XN6EnCWR38zGCa+LYRE1rVwuxxtXvGENMiZk/YAVBHNEotdDmRKfvNRJM4vzd
-         1wQ3qnDliXLXTTE+oQvtPfZtR5LLcOI0ig77GsaImVznnzOPaeSrmKp+v/KpS8cFzv
-         SFgyJtFqoKLCi2Kh+IPV5cRigY0dX+qpZ1CW+Mx8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M1Ygt-1nVABI0X6J-0034Md; Sat, 26 Mar 2022 20:26:15 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC] hwmon: (dell_smm) Add cooling device support
-Date:   Sat, 26 Mar 2022 20:25:09 +0100
-Message-Id: <20220326192509.23175-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Sat, 26 Mar 2022 20:51:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2470AFD29;
+        Sat, 26 Mar 2022 17:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648342185; x=1679878185;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dxvmqHpgoKoSM3oeOZwtiuPqLp1SG2yKyDRHdmBQRhY=;
+  b=Iqt2TuDSkkylBukBgbO192w9RKlwzfswKC3nD1Xxtmr9N9MpX9c5MvmL
+   qASsBhcTmqmSL9GTaX7QoANfxJMZ3PXMB7rj+gax8IziQ/Q09gJw7KliO
+   4QRrT2CGQs89+NhEjBggk6fxMooytIFlYobrLtzIr8NRefRdQrKT6/Olc
+   /A6FePzN5EYchQUvYGVizTdRplRPNEkCpDB+oXJx1K8ZnjkUZwRG9lzfl
+   ewRBuf7YNvCZEctqSNHnjsLIGmQEb5KW7LNtnGElRLF1SwcBFfr7nwLCI
+   dw9SHKBXXk27MXF5aDfyeobXfWkH+PBaV0mOJlOWKOvw+rZwuB5TekKJA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="238748202"
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="238748202"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 17:49:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="602403742"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2022 17:49:42 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYH6D-0000ZH-Ok; Sun, 27 Mar 2022 00:49:41 +0000
+Date:   Sun, 27 Mar 2022 08:49:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v1 2/4] hwmon: (bt1-pvt) use generic polynomial functions
+Message-ID: <202203270834.xEWniPdY-lkp@intel.com>
+References: <20220326192347.2940747-3-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XNw4w5M70AJchJrK8wKkebOiS3TxRSb0azt4ds2uX4w3jAmQv+k
- 0o6JtT7HnaI0itW31f1ABeovugR/pcg+pON3VWjbRmKNqi5DtIioUszO3qjZfHOT2kZS6sb
- aAzEAvsZdUwEbNumQYciugjkx6b2qQmYON+hFGeUXV2nsF3hsAiFgwvnoPmtKhvrpPD5Njq
- IAqWZsSG27W2xmk11+aKQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:B132diyDJ4A=:0ujCpCgsjuRQf/LUXKrs9C
- 8N5xrD9xD2H6HwEDEE9V28N4TehDnkl0UYvAl6uIc/yAY7ETeYCs9KG+/cLo+6DKRQ+7wYPy8
- AYnevOnYEKyaMLfYuNwAcwFIMuGK11zz9HDLN2sVCrEsyAMFxgnIImAsu7PfeFGKHRjXy6TOS
- 44V9DCx0WticGTbnXWUZtlP/5H4BSdUx9B36ulWRJ63n4n3g3UCnWV7LvaN/IhAeP5I+Lm9id
- z68wItR59tkdtTXyqTxbfDafPqF1S842nM9pYc7TUFQfaydlzUmk7hjK8wQxNXR2EyEmTkkX/
- F+uCV06sN+8Ujp8pzA6Un8J/xsE/zT/poLJzODHeHrWh9cfoykfDrM0VfAk3H3Qm5ZCHE6H1g
- rPteKghBpLvNMxSt0z0Lfa4ss7JBO+awZwWmCDH2KO5NARPn7svqsyfZm2l8Be5XUK8oF0+Bt
- hUhVHI+GVPoiWXqlI0fShcosg41YU4IGspPFUOkK0EPD4baBta1VxWBXTkN6BLGfCZBXwLTd+
- zhlfX5vCDO1MPrhdHuwDGaGG1W1SpkI25Xt7GmUaT2pYNMrt5WR0l5mSK1MeEUOe81dUla8fX
- TSR9ZSj/kuZ97KnVxE1T/PfcDcuATx/EdNr4QdwevLNs5wwoFUJJsd43LKzIjUajl9Nc6rpjo
- S3c8gO/WTqTAgJCGZ04W2NdNa48pZA3u8aQyHDtNU0Qcx8ETWPLmEa+IS2UDrbjc3O8ejHXS8
- OGoFEL+e5k0YdMEFCu/e/ONjE2ZXWvS089nM47XVUSwrflZAXbziJZ/4/o6RVzZdoA++QdxkW
- 1V1mkSACAjHNryOka6xoKS3qHCRrvsoXJdRb+vSUkR/T1AonWiETGb2Uy5KXDG4LlVxEUwoUC
- TXCIqFRROu1O3k+hzS/hgpOkr230XR9l+g+lCbwzWc6PjprfxuS191oGGCL0BxHXZfB81pOGG
- dgL3QaO5XRXAjQFLmT7/lyUndhiZSia4F+N1naGs+jrdVY3MlLxv4uj6IawZO+NAn1ilChtCW
- Wg/VnN+jSiTPos/Lg/TU9eiWG2LiIp95Mb+QsQn9udvUqdmrA4JJUsJku5KmH96inaYrgW6rq
- vLkLt5vNlAs42Y=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220326192347.2940747-3-michael@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Until now, only the temperature sensors where exported thru
-the thermal subsystem. Export the fans as "dell-smm-fan" too
-to make them available as cooling devices. This could be a
-potential successor of the nonstandard procfs interface
-currently provided by the driver.
-Also update Documentation.
+Hi Michael,
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/dell-smm-hwmon.rst |  7 +++
- drivers/hwmon/dell-smm-hwmon.c         | 68 ++++++++++++++++++++++++--
- 2 files changed, 72 insertions(+), 3 deletions(-)
+I love your patch! Yet something to improve:
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
-dell-smm-hwmon.rst
-index d3323a96665d..da07e39935f1 100644
-=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -86,6 +86,13 @@ probe the BIOS on your machine and discover the appropr=
-iate codes.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on robh/for-next linus/master v5.17 next-20220325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
- Again, when you find new codes, we'd be happy to have your patches!
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Walle/hwmon-add-lan9668-driver/20220327-032606
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220327/202203270834.xEWniPdY-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/51d4d93c8777a757e21386aa76ccc128a6bd85af
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Michael-Walle/hwmon-add-lan9668-driver/20220327-032606
+        git checkout 51d4d93c8777a757e21386aa76ccc128a6bd85af
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
 
-+``thermal`` interface
-+---------------------------
-+
-+The driver also exports the fans as thermal cooling devices with
-+``type`` set to ``dell-smm-fan``. This allows for easy fan control
-+using one of the thermal governors.
-+
- Module parameters
- -----------------
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 84cb1ede7bc0..fb2c70875c0a 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -29,6 +29,7 @@
- #include <linux/seq_file.h>
- #include <linux/string.h>
- #include <linux/smp.h>
-+#include <linux/thermal.h>
- #include <linux/types.h>
- #include <linux/uaccess.h>
+All errors (new ones prefixed by >>):
 
-@@ -80,6 +81,11 @@ struct dell_smm_data {
- 	int *fan_nominal_speed[DELL_SMM_NO_FANS];
- };
+   ia64-linux-ld: drivers/hwmon/bt1-pvt.o: in function `pvt_read_data':
+   bt1-pvt.c:(.text+0xa32): undefined reference to `polynomial_calc'
+   ia64-linux-ld: drivers/hwmon/bt1-pvt.o: in function `pvt_write_limit':
+   bt1-pvt.c:(.text+0xae2): undefined reference to `polynomial_calc'
+>> ia64-linux-ld: bt1-pvt.c:(.text+0xb22): undefined reference to `polynomial_calc'
+   ia64-linux-ld: drivers/hwmon/bt1-pvt.o: in function `pvt_hwmon_read':
+   bt1-pvt.c:(.text+0x2532): undefined reference to `polynomial_calc'
+   ia64-linux-ld: bt1-pvt.c:(.text+0x2732): undefined reference to `polynomial_calc'
+   ia64-linux-ld: drivers/hwmon/bt1-pvt.o:bt1-pvt.c:(.text+0x27e2): more undefined references to `polynomial_calc' follow
+   `adc3xxx_i2c_remove' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
 
-+struct dell_smm_cooling_data {
-+	u8 fan_num;
-+	struct dell_smm_data *data;
-+};
-+
- MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
- MODULE_AUTHOR("Pali Roh=C3=A1r <pali@kernel.org>");
- MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
-@@ -638,9 +644,50 @@ static void __init i8k_init_procfs(struct device *dev=
-)
-
- #endif
-
--/*
-- * Hwmon interface
-- */
-+static int dell_smm_get_max_state(struct thermal_cooling_device *dev, uns=
-igned long *state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+
-+	*state =3D cdata->data->i8k_fan_max;
-+
-+	return 0;
-+}
-+
-+static int dell_smm_get_cur_state(struct thermal_cooling_device *dev, uns=
-igned long *state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+	int ret;
-+
-+	ret =3D i8k_get_fan_speed(cdata->data, cdata->fan_num);
-+	if (ret < 0)
-+		return ret;
-+
-+	*state =3D ret;
-+
-+	return 0;
-+}
-+
-+static int dell_smm_set_cur_state(struct thermal_cooling_device *dev, uns=
-igned long state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+	struct dell_smm_data *data =3D cdata->data;
-+	int ret;
-+
-+	if (state > data->i8k_fan_max)
-+		return -EINVAL;
-+
-+	mutex_lock(&data->i8k_mutex);
-+	ret =3D i8k_set_fan(data, cdata->fan_num, (int)state);
-+	mutex_unlock(&data->i8k_mutex);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_cooling_device_ops dell_smm_cooling_ops =3D {
-+	.get_max_state =3D dell_smm_get_max_state,
-+	.get_cur_state =3D dell_smm_get_cur_state,
-+	.set_cur_state =3D dell_smm_set_cur_state,
-+};
-
- static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor=
-_types type, u32 attr,
- 				   int channel)
-@@ -944,6 +991,8 @@ static const struct hwmon_chip_info dell_smm_chip_info=
- =3D {
- static int __init dell_smm_init_hwmon(struct device *dev)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
-+	struct thermal_cooling_device *cdev;
-+	struct dell_smm_cooling_data *cdata;
- 	struct device *dell_smm_hwmon_dev;
- 	int state, err;
- 	u8 i;
-@@ -967,6 +1016,19 @@ static int __init dell_smm_init_hwmon(struct device =
-*dev)
- 			continue;
-
- 		data->fan[i] =3D true;
-+
-+		/* the cooling device it not critical, ignore failures */
-+		cdata =3D devm_kmalloc(dev, sizeof(*cdata), GFP_KERNEL);
-+		if (cdata) {
-+			cdata->fan_num =3D i;
-+			cdata->data =3D data;
-+			cdev =3D devm_thermal_of_cooling_device_register(dev, NULL, "dell-smm-=
-fan",
-+								       cdata,
-+								       &dell_smm_cooling_ops);
-+			if (IS_ERR(cdev))
-+				devm_kfree(dev, cdata);
-+		}
-+
- 		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan_ma=
-x + 1,
- 								sizeof(*data->fan_nominal_speed[i]),
- 								GFP_KERNEL);
-=2D-
-2.30.2
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
