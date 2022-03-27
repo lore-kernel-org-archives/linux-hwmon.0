@@ -2,79 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF78AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 18:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D9FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 23:25:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbiC0Sxd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Mar 2022 14:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        id S230135AbiC0X0p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Mar 2022 19:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbiC0Sxc (ORCPT
+        with ESMTP id S229989AbiC0X0o (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:53:32 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087AB11C0B;
-        Sun, 27 Mar 2022 11:51:54 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id p22so14688049iod.2;
-        Sun, 27 Mar 2022 11:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8I+2ns0un2e60TlXXzfgEVDdONbJVSoJmH+3QGKhKNM=;
-        b=pLYaeKfFYg+eu6o7YPDnD+gtmlzQrB1Ri/UH6Ksemjj9NlvLCb3h7Vjoo7fo8F/AE7
-         Vv2XuFVNrbti9HTM01Y5PfRaTnm3qiTql/FtfLDHwd0Xp7pMsO6j4ygtXpaQvc63mQ7h
-         9fonCBXLVN9E1wSPxJ8d/IdPh2jk0OHbbV2pD1WMMDL8Bx60jYy4IP2BOK/mKp2mu2EW
-         eG8z9TPGoCpnM83rQk3BUVRzuU4yXFKZt7aabmkMTgONNWaN8O2BXCJaaiHHapmDDWRE
-         1ScubAqDP/gLDDLz8EvUXxGV0NaQVZkS88OTAU0sfgOBtkGMe6/2HXyTn66srKNLr0Rj
-         cS3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8I+2ns0un2e60TlXXzfgEVDdONbJVSoJmH+3QGKhKNM=;
-        b=nHloiEtlMzzf243sV0Jim1yLbzreE2O+Gz0669RDRgp7meHOCZU0vNLaguXiL7+oic
-         dKTY4xY79e+wGN2cZamnxAhx/8MklRmdq9xOevKu62Ep3Jq8DicVbzzwjnbpqrPjWmex
-         Cq+Ua+U17wKzzSVDXH6FmJdCULigA18c21ssMxq7kfoVf3NPooZmuRRwNeQL9w+FwFu4
-         YBrhtxdF7/opSom2IJ4KPlirzMW/ZyNKT/zUEPxNf4lOK+joccUezRfm96Ze4v4WZnQL
-         vLBi6bgEIrBy4OMrQF9yWCWLLvXke0a3vplNa3+4FHf1AlGX4URZUj/XwIXdcUMC3fOK
-         he1w==
-X-Gm-Message-State: AOAM531AUMoIkLSXSQy8ZrU+M6ZWxdJkgoZL7fHpdVUFl1NWntYZt9/r
-        lRS/xMBRPcacPJQ0bIzKDkXHTzDGSvSe2rkaOhMZIAoR
-X-Google-Smtp-Source: ABdhPJxbtXAcVweEeYoLpLzEzFIdDk9c9agfXcXi6WPaWcL6INT6GlZQ9rqnHsjVVh7DQpHyA+DMqbkeZ8+6JVMYcOc=
-X-Received: by 2002:a5d:9d44:0:b0:645:b6e9:4bbb with SMTP id
- k4-20020a5d9d44000000b00645b6e94bbbmr4688865iok.77.1648407113439; Sun, 27 Mar
- 2022 11:51:53 -0700 (PDT)
+        Sun, 27 Mar 2022 19:26:44 -0400
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.49.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F204ECEB
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Mar 2022 16:25:04 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 4F4E828DD7
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Mar 2022 18:25:03 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YcFpnpTaH22u3YcFqn7WE9; Sun, 27 Mar 2022 18:25:03 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gauRBf2vhf2Cx2zI8ZsLSbYehhbV2o8Kb5BqMRkcLJA=; b=D2RWCf63CwlLxQaDf6hcYt75sl
+        oeFt6KgJpogO1HRIZFwL03lVXV3O4PvF6v/rlA3Z0YhO2Oz52YYe/f7rYjCmI+vvx3S0ICC0uRNMB
+        wykLIhe6wWvoILnmaxnRbxF2OrMUgtgaqraSnwi03f8u5SSOZc9wP0oNBEdjOfl5oI5OpfTY4hRdm
+        vI4Sdt9AipjKO9K9vDtYxqrU6c98fW0lhEtw7fH1QQjjDN+CCZMNgiko6loG/21YrMwYyhxgdZAcC
+        fDdp+MxRcmT+6cWzq0EUEHEdxLQ5yLDoH38S0outxvQifvmYgBngSdW8E9zmLtqatigdA540api4I
+        NF1182PQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54520)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nYcFp-003RWH-HQ; Sun, 27 Mar 2022 23:25:01 +0000
+Message-ID: <a2a3ab35-7e21-51f9-fee2-67f6686b13c8@roeck-us.net>
+Date:   Sun, 27 Mar 2022 16:25:00 -0700
 MIME-Version: 1.0
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-3-eugene.shalygin@gmail.com> <CAB95QASpZTz4eMger46WEa9xWJNmARShBUNb7edJA1eij3KBwA@mail.gmail.com>
- <a1607f0d-9d6c-fb55-d0d2-b57e4fdfda23@roeck-us.net>
-In-Reply-To: <a1607f0d-9d6c-fb55-d0d2-b57e4fdfda23@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Sun, 27 Mar 2022 20:51:42 +0200
-Message-ID: <CAB95QAQTtVWMs3dOx87G+D_GzGuMjnmPGiYQLqqQiCHT939Upw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
  ACPI global lock
-To:     Guenter Roeck <linux@roeck-us.net>
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+ <20220327121404.1702631-3-eugene.shalygin@gmail.com>
+ <CAB95QASpZTz4eMger46WEa9xWJNmARShBUNb7edJA1eij3KBwA@mail.gmail.com>
+ <a1607f0d-9d6c-fb55-d0d2-b57e4fdfda23@roeck-us.net>
+ <CAB95QAQTtVWMs3dOx87G+D_GzGuMjnmPGiYQLqqQiCHT939Upw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAB95QAQTtVWMs3dOx87G+D_GzGuMjnmPGiYQLqqQiCHT939Upw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nYcFp-003RWH-HQ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54520
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 27 Mar 2022 at 20:04, Guenter Roeck <linux@roeck-us.net> wrote:
+On 3/27/22 11:51, Eugene Shalygin wrote:
+> On Sun, 27 Mar 2022 at 20:04, Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> What is the problem other than that the string is split across
+>> multiple lines ? That can easily be fixed by not splitting it,
+>> so you'll have to be more specific.
+> 
+> Yes, the problem is that it is split. When merged it exceeds the 80-th
+> column and creates problems for editors instructed to format text on
+> paste. And I would not like to neither split the string onto two debug
+> messages, nor shorten the debug message itself. Maybe there is an
+> elegant solution I'm not aware of?
+> 
 
-> What is the problem other than that the string is split across
-> multiple lines ? That can easily be fixed by not splitting it,
-> so you'll have to be more specific.
+First, you can go up to 100 columns nowadays. Second, the column
+limit is waived for strings because it is more important to not
+split them. If you _still_ want to stick with 80 columns, sorry,
+no, I don't have a solution. Your problem is with the editor,
+not with kernel formatting rules.
 
-Yes, the problem is that it is split. When merged it exceeds the 80-th
-column and creates problems for editors instructed to format text on
-paste. And I would not like to neither split the string onto two debug
-messages, nor shorten the debug message itself. Maybe there is an
-elegant solution I'm not aware of?
-
-Thanks,
-Eugene
+Guenter
