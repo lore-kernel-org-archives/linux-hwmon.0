@@ -2,46 +2,46 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1246C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 00:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0A40C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 01:10:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiC0AvY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Mar 2022 20:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S231447AbiC0BM0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Mar 2022 21:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiC0AvW (ORCPT
+        with ESMTP id S231217AbiC0BMY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Mar 2022 20:51:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2470AFD29;
-        Sat, 26 Mar 2022 17:49:45 -0700 (PDT)
+        Sat, 26 Mar 2022 21:12:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE84E9FFE;
+        Sat, 26 Mar 2022 18:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648342185; x=1679878185;
+  t=1648343445; x=1679879445;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dxvmqHpgoKoSM3oeOZwtiuPqLp1SG2yKyDRHdmBQRhY=;
-  b=Iqt2TuDSkkylBukBgbO192w9RKlwzfswKC3nD1Xxtmr9N9MpX9c5MvmL
-   qASsBhcTmqmSL9GTaX7QoANfxJMZ3PXMB7rj+gax8IziQ/Q09gJw7KliO
-   4QRrT2CGQs89+NhEjBggk6fxMooytIFlYobrLtzIr8NRefRdQrKT6/Olc
-   /A6FePzN5EYchQUvYGVizTdRplRPNEkCpDB+oXJx1K8ZnjkUZwRG9lzfl
-   ewRBuf7YNvCZEctqSNHnjsLIGmQEb5KW7LNtnGElRLF1SwcBFfr7nwLCI
-   dw9SHKBXXk27MXF5aDfyeobXfWkH+PBaV0mOJlOWKOvw+rZwuB5TekKJA
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="238748202"
+  bh=AE7+oETOuwbPdUhVZvvudlGhaJZZJhYbDc2eIov7KrM=;
+  b=SQly/4B2UKqyEQB0U4PRUYJnv7h3RHEodrJ2hsTBkOC8uICOZq38GPC+
+   H739M57p1ltzq5EjB4v15ZMu66Flw4xSjmnlfKNqEOntgaUhL7zGU95CX
+   Ccvf/zR9BPEvonuHHIGIvoJnSJa+QDpSPifpg9+ZteGtTORIHia1747kD
+   IIP2bulhf8DHbRtEzQ//vp++O5K741kqX8Viuq4wfRp96QKcg96Pf/iY5
+   ZGolZX734q5R2yWiDIHeQ+vRKhqpScaOHfiot1aRPCRUasfwVFO4gEX/e
+   KUg1hxy5Ufj84HnzI4X0sRnOEB+nsvcGUKudLamxypwIKE2LUsx/NQWMC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="283697058"
 X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="238748202"
+   d="scan'208";a="283697058"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 17:49:44 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 18:10:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="602403742"
+   d="scan'208";a="602406271"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2022 17:49:42 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2022 18:10:43 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nYH6D-0000ZH-Ok; Sun, 27 Mar 2022 00:49:41 +0000
-Date:   Sun, 27 Mar 2022 08:49:39 +0800
+        id 1nYHQY-0000b4-Da; Sun, 27 Mar 2022 01:10:42 +0000
+Date:   Sun, 27 Mar 2022 09:10:14 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -51,7 +51,7 @@ Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Michael Walle <michael@walle.cc>
 Subject: Re: [PATCH v1 2/4] hwmon: (bt1-pvt) use generic polynomial functions
-Message-ID: <202203270834.xEWniPdY-lkp@intel.com>
+Message-ID: <202203270925.NrqU6SE8-lkp@intel.com>
 References: <20220326192347.2940747-3-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -74,7 +74,7 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Walle/hwmon-add-lan9668-driver/20220327-032606
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220327/202203270834.xEWniPdY-lkp@intel.com/config)
+config: ia64-buildonly-randconfig-r002-20220327 (https://download.01.org/0day-ci/archive/20220327/202203270925.NrqU6SE8-lkp@intel.com/config)
 compiler: ia64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -93,15 +93,7 @@ Reported-by: kernel test robot <lkp@intel.com>
 All errors (new ones prefixed by >>):
 
    ia64-linux-ld: drivers/hwmon/bt1-pvt.o: in function `pvt_read_data':
-   bt1-pvt.c:(.text+0xa32): undefined reference to `polynomial_calc'
-   ia64-linux-ld: drivers/hwmon/bt1-pvt.o: in function `pvt_write_limit':
-   bt1-pvt.c:(.text+0xae2): undefined reference to `polynomial_calc'
->> ia64-linux-ld: bt1-pvt.c:(.text+0xb22): undefined reference to `polynomial_calc'
-   ia64-linux-ld: drivers/hwmon/bt1-pvt.o: in function `pvt_hwmon_read':
-   bt1-pvt.c:(.text+0x2532): undefined reference to `polynomial_calc'
-   ia64-linux-ld: bt1-pvt.c:(.text+0x2732): undefined reference to `polynomial_calc'
-   ia64-linux-ld: drivers/hwmon/bt1-pvt.o:bt1-pvt.c:(.text+0x27e2): more undefined references to `polynomial_calc' follow
-   `adc3xxx_i2c_remove' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
+>> bt1-pvt.c:(.text+0xeb2): undefined reference to `polynomial_calc'
 
 -- 
 0-DAY CI Kernel Test Service
