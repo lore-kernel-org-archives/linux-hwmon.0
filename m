@@ -2,79 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECEFBC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 11:17:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3921C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 12:15:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiC0LS7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Mar 2022 07:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
+        id S231663AbiC0MQq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Mar 2022 08:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiC0LS6 (ORCPT
+        with ESMTP id S230495AbiC0MQq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Mar 2022 07:18:58 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410C39825;
-        Sun, 27 Mar 2022 04:17:18 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id h4so16470467wrc.13;
-        Sun, 27 Mar 2022 04:17:18 -0700 (PDT)
+        Sun, 27 Mar 2022 08:16:46 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FC737A04;
+        Sun, 27 Mar 2022 05:15:07 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id lr4so15053825ejb.11;
+        Sun, 27 Mar 2022 05:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BiW08mGrW/P2Qfz12hcyjdp5Im5rBtj/BzAioF2K6ok=;
+        b=GvdAGJNFZbFBKz4XXMJ2vU7F8YMboGHFplP8NxflbV3EAWaem2FlkQ/CqvKHcYGBUU
+         1Bf3Zt6WPy4T0u/lIT8UoCbnorFZx5LBFM/MTOl8LqqI6LHhvruAjeqmgd7EVt2MFsJO
+         WHrNDOp7e/aHW4g0TvxZ0GBoD1GJMvN/ogijD5h5KVM7BYU1m74TvRKBuhdmjBbV5s7y
+         B277Vsg49RknWnxHLSd3BWzDNu74VjjblmrAlBj5xxR0vOux2GfmDKDfKsVaxyR/hhmi
+         VczFavVFbHokr6tthKV1MLvWhCyX7yA/H6JYI4+0Su/K/ncXO71K/2Eb5bC8krylgezk
+         9XbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Yo4Qxz57xPmfJcP7ucWBN2Y163R/nwHjuNzzvflm4rU=;
-        b=CW8S7mQujMa7SA7TD5fPDu8Lzlci8oo09qDkAjITX7n7HLSNWXeFjJN9lz1rMS2G4q
-         fDYYD2tKhmoZQj+Z+fQFeKSwIu0BNreeeZH8Ku+w3INlcYhB/IRWxVVRciTkbBohmBXL
-         xMwgRkU5IyvPpupHDxXqEwIg/az7Vs08P3oXCf+hLMenZNreA4+pCfoalSoRK6Ygkkqi
-         zwhrGdefuomPuv49TSaUFEtGXiMJSMDfkj/g20O7utrs5saKQXicgaV2SimlHSxfkNle
-         NSmhdowH6dTdjpgIpWKdtxwRNm1WuHc251hieFyIbzle8eEIPzYrZnIUt5QqfdptxcaH
-         6ikA==
-X-Gm-Message-State: AOAM531ms9pHw7FW8gOm+UyzZAM6wZnQbkMy/E5a9kIf+RsmLxlZp1We
-        GXH+JB19ptNB1M9NZtc2pIUf4JQJ4AM=
-X-Google-Smtp-Source: ABdhPJz8x6R8DUBdB2seJZmTkt1ay+PlI0jnhgdDgynlwHgHCu3xzK8Nsc8tACfQh0xFCNq9DpppTQ==
-X-Received: by 2002:a05:6000:1d82:b0:203:e5cc:c19b with SMTP id bk2-20020a0560001d8200b00203e5ccc19bmr16740081wrb.553.1648379836536;
-        Sun, 27 Mar 2022 04:17:16 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id w7-20020a1cf607000000b00389a5390180sm8925535wmc.25.2022.03.27.04.17.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 04:17:15 -0700 (PDT)
-Message-ID: <015bac04-4378-b4b8-c7d1-b0e2615fbe45@kernel.org>
-Date:   Sun, 27 Mar 2022 13:17:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 3/4] dt-bindings: hwmon: add Microchip LAN966x bindings
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        bh=BiW08mGrW/P2Qfz12hcyjdp5Im5rBtj/BzAioF2K6ok=;
+        b=4jCBChIUPLvAfKdya1TRIlfcAFh9lLExNDRQbp2I+QRk9uAgh9ab4WWf0hySPnFXfg
+         cPvIKxyVAoQRK6eBMuuVzOsY9SxnAHyFdDkF5dPyU5gtBS2y9V+IMHvOPSsN8mWFG6dI
+         Dqg4uHUS508xZmSSTZ3JzIWPODGwtrFca9hxyeo6Aym2QCH6EjD52VbLZnZ9qfRZTyQq
+         +z0i+1Hw7N6KvlVVdZ9Vf3UMzb8h5Mj/8gak80xhsFd66jDQDUnGriFDgxVFBzIw7pnr
+         HPc6+VzKuoSDzxvIeM504Ib0zs2cbHHObCYIWReNHFV7D0XB5N23DaSa0aKwTzRtoQjE
+         vzgA==
+X-Gm-Message-State: AOAM530HRRipCVvJAolVUOby/AAG8xDsVcjncdtNu5ZooT85Gfaj46MU
+        5XzYJaBLrU5Hyg4siSkUm5utSSLXhEUDyw==
+X-Google-Smtp-Source: ABdhPJy0x7yednyiZPiZ6exwcVYQOdquEz2Xnh5haQQ/MHARxitoeV9Oqx3aP4UEEGAFrJVFGJ8O2A==
+X-Received: by 2002:a17:906:1384:b0:6df:c7d0:9131 with SMTP id f4-20020a170906138400b006dfc7d09131mr21231034ejc.134.1648383305620;
+        Sun, 27 Mar 2022 05:15:05 -0700 (PDT)
+Received: from tiger.museclub.art (p200300cf9f06c2008407e4c213cb9d01.dip0.t-ipconnect.de. [2003:cf:9f06:c200:8407:e4c2:13cb:9d01])
+        by smtp.googlemail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm4530127ejc.64.2022.03.27.05.15.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 05:15:04 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220326192347.2940747-1-michael@walle.cc>
- <20220326192347.2940747-4-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220326192347.2940747-4-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] asus-ec-sensors: add support for board families
+Date:   Sun, 27 Mar 2022 14:14:00 +0200
+Message-Id: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 26/03/2022 20:23, Michael Walle wrote:
-> Add a binding for the temperature sensor and the fan controller on the
-> Microchip LAN966x family.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  .../bindings/hwmon/microchip,lan966x.yaml     | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
-> 
+Users provided information for boards from AMD-400 and sTRX40 families
+and demonstrated that sensor addresses differ from those for the AMD-500
+family. Also the AMD-400 family board uses the global ACPI lock instead
+of a dedicated mutex to guard access to the hardware. 
 
+This patchset implements required changes to support other board
+families:
+ - per-family sensor definitions
+ - options to choose hardware/state guard mutex: an AML mutex, the
+	 global ACPI lock, and a regular mutex in case no ACPI lock required.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+These changes are used to add support for the PRIME X470-PRO board.
 
+Eugene Shalygin (4):
+  hwmon: (asus-ec-sensors) introduce ec_board_info struct for board data
+  hwmon: (asus-ec-sensors) implement locking via the ACPI global lock
+  hwmon: (asus-ec-sensors) add support for board families
+  hwmon: (asus-ec-sensors) add PRIME X470-PRO board
 
-Best regards,
-Krzysztof
+ drivers/hwmon/asus-ec-sensors.c | 431 +++++++++++++++++++++++---------
+ 1 file changed, 310 insertions(+), 121 deletions(-)
+
+-- 
+2.35.1
+
