@@ -2,93 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A41E1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Mar 2022 15:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89AD1C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Mar 2022 16:27:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239628AbiC1PwW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Mar 2022 11:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S238359AbiC1Q3h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Mar 2022 12:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbiC1PwV (ORCPT
+        with ESMTP id S234778AbiC1Q3f (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:52:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B10CD5;
-        Mon, 28 Mar 2022 08:50:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F629613FB;
-        Mon, 28 Mar 2022 15:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CC1C004DD;
-        Mon, 28 Mar 2022 15:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648482638;
-        bh=cfmzoeuc0V8BTCkvRfj2S2digY7zbrgxq081UFRKSiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B/S6hrX0lFQCyAH8QUge1wrf1MquW+Br4gd7ulK2dCOB410WfDouWGyQV4rp7zO7V
-         9guwMf+mZHGsCXtesW95MsOTt2ErcUQ4G9I5twWpOJIzggciko9EgW9BDedb5+TJbh
-         9AkvZW8AzxWThc7mRbbuSf/O+ooz8awzqL7n//hW9D7Y2WKLJX8mRjn4WXQ1pdTSEI
-         YbdtewqJkRavHBKy5Zyr3qXtrMttCyO4rB9ORUpc0ytauDDe3FrQh5bQ31oU93b3Zf
-         uWVL9Ia0rOjxsnH1V9SIDkkJn6Q9chZ523TM+zOFsthJbZnSuv6dl6yDkrJia+9OCW
-         Tq8qJQDzqCBaQ==
-Date:   Mon, 28 Mar 2022 08:50:31 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, darcagn@protonmail.com,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
- ACPI global lock
-Message-ID: <YkHZRzbi54t0pZkO@thelio-3990X>
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-3-eugene.shalygin@gmail.com>
- <CAB95QASpZTz4eMger46WEa9xWJNmARShBUNb7edJA1eij3KBwA@mail.gmail.com>
- <a1607f0d-9d6c-fb55-d0d2-b57e4fdfda23@roeck-us.net>
- <CAB95QAQTtVWMs3dOx87G+D_GzGuMjnmPGiYQLqqQiCHT939Upw@mail.gmail.com>
- <a2a3ab35-7e21-51f9-fee2-67f6686b13c8@roeck-us.net>
- <CAB95QARqSm=TLsynwfoXUS2+rfi6ghUHekSoPv3JHn0GyaDTdw@mail.gmail.com>
+        Mon, 28 Mar 2022 12:29:35 -0400
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.149.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7841560071
+        for <linux-hwmon@vger.kernel.org>; Mon, 28 Mar 2022 09:27:54 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id D7F821B7FF
+        for <linux-hwmon@vger.kernel.org>; Mon, 28 Mar 2022 11:27:53 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YsDhn2N2X9AGSYsDhnpiOK; Mon, 28 Mar 2022 11:27:53 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wDN9VpzJLwYt/LpVw9pBXbbKy8BbkXAy+je0SIOYHx0=; b=Cax9ptlpBRhAzMgWEOh0rBPvcS
+        K5tzDhyEcBrW4gRtr/2NbnIpSjaxRXAXaJpnKLOJpGMkTHEk6+1BjdSxohgyBmUgI4sauOtjOH/cN
+        IsP8hmZwDXU8GuX8310rr3YFKG5wldlPEPdzlf9FUN8Ky8ZhBHUaUtIZrrdropCUUyFWHWb0CFxoZ
+        ozzBDb0AQX4y2cF/z7uehKc4E9X6xl9KfnZUoN3uHki3ngK+QKfFofeiGdnWSfXHrgy4WrR4jWRUv
+        3umBGMIYhqQcaIYpmcDfT9EbIJpSMR/noScFhWGvVy0EeW200Stlt6bqyoeSnWumwQpwWly6Dl2dq
+        wEsSeJaw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54526)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nYsDh-001dPE-4p; Mon, 28 Mar 2022 16:27:53 +0000
+Message-ID: <ab64105b-c48d-cdf2-598a-3e0a2e261b27@roeck-us.net>
+Date:   Mon, 28 Mar 2022 09:27:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB95QARqSm=TLsynwfoXUS2+rfi6ghUHekSoPv3JHn0GyaDTdw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/2] hwmon: introduce hwmon_sanitize()
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>, Michael Walle <michael@walle.cc>
+Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20220328115226.3042322-1-michael@walle.cc>
+ <YkGwjjUz+421O2E1@lunn.ch>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YkGwjjUz+421O2E1@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nYsDh-001dPE-4p
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54526
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 3
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 04:44:24PM +0200, Eugene Shalygin wrote:
-> > First, you can go up to 100 columns nowadays. Second, the column
-> > limit is waived for strings because it is more important to not
-> > split them. If you _still_ want to stick with 80 columns, sorry,
-> > no, I don't have a solution. Your problem is with the editor,
-> > not with kernel formatting rules.
+On 3/28/22 05:56, Andrew Lunn wrote:
+>> I'm not sure how to handle this correctly, as this touches both the
+>> network tree and the hwmon tree. Also, the GPY PHY temperature senors
+>> driver would use it.
 > 
-> Thank you, Günter, 100 is better than 80 and the string fits. I
-> wonder, why is the .clang-format file not updated and still says the
-> limit is 80?
+> There are a few options:
+> 
+> 1) Get the hwmon_sanitize_name() merged into hwmon, ask for a stable
+> branch, and get it merged into netdev net-next.
+> 
+> 2) Have the hwmon maintainers ACK the change and agree that it can be
+> merged via netdev.
+> 
+> Probably the second option is easiest, and since it is not touching
+> the core of hwmon, it is unlikely to cause merge conflicts.
+> 
 
-Because the documentation still says that 80 is preferred:
+No, it isn't the easiest solution because it also modifies a hwmon
+driver to use it.
 
-https://kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
-
-"The preferred limit on the length of a single line is 80 columns.
-
-Statements longer than 80 columns should be broken into sensible chunks,
-unless exceeding 80 columns significantly increases readability and does
-not hide information."
-
-There have been a few different times that people have tried to update
-the .clang-format file, which ultimately leads back to that paragraph in
-the documentation.
-
-https://lore.kernel.org/r/20200610125147.2782142-1-christian.brauner@ubuntu.com/
-https://lore.kernel.org/r/03d462504887401ffbcdb58a392ad01923a2be7b.camel@perches.com/
-
-A somewhat recent patch to try and update the documentation to match
-checkpatch was posted but did not really go anywhere:
-
-https://lore.kernel.org/r/d7130556-a8a4-76c0-0fde-b6b1439efda6@infradead.org/
-
-Cheers,
-Nathan
+Guenter
