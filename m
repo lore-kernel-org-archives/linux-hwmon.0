@@ -2,103 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D9FC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Mar 2022 23:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FF7DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Mar 2022 11:39:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiC0X0p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Mar 2022 19:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S235568AbiC1Lky (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Mar 2022 07:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiC0X0o (ORCPT
+        with ESMTP id S243460AbiC1Lgd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Mar 2022 19:26:44 -0400
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.49.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F204ECEB
-        for <linux-hwmon@vger.kernel.org>; Sun, 27 Mar 2022 16:25:04 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 4F4E828DD7
-        for <linux-hwmon@vger.kernel.org>; Sun, 27 Mar 2022 18:25:03 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YcFpnpTaH22u3YcFqn7WE9; Sun, 27 Mar 2022 18:25:03 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gauRBf2vhf2Cx2zI8ZsLSbYehhbV2o8Kb5BqMRkcLJA=; b=D2RWCf63CwlLxQaDf6hcYt75sl
-        oeFt6KgJpogO1HRIZFwL03lVXV3O4PvF6v/rlA3Z0YhO2Oz52YYe/f7rYjCmI+vvx3S0ICC0uRNMB
-        wykLIhe6wWvoILnmaxnRbxF2OrMUgtgaqraSnwi03f8u5SSOZc9wP0oNBEdjOfl5oI5OpfTY4hRdm
-        vI4Sdt9AipjKO9K9vDtYxqrU6c98fW0lhEtw7fH1QQjjDN+CCZMNgiko6loG/21YrMwYyhxgdZAcC
-        fDdp+MxRcmT+6cWzq0EUEHEdxLQ5yLDoH38S0outxvQifvmYgBngSdW8E9zmLtqatigdA540api4I
-        NF1182PQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54520)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nYcFp-003RWH-HQ; Sun, 27 Mar 2022 23:25:01 +0000
-Message-ID: <a2a3ab35-7e21-51f9-fee2-67f6686b13c8@roeck-us.net>
-Date:   Sun, 27 Mar 2022 16:25:00 -0700
+        Mon, 28 Mar 2022 07:36:33 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D9F201BB;
+        Mon, 28 Mar 2022 04:28:14 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 18E1B2223A;
+        Mon, 28 Mar 2022 13:28:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648466893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0izGFsz6GTIJ5k2/n2+LlCxCAa9dPx6ye+X401jvCCo=;
+        b=LA0PS2WzebEJVJScqJ1xVF2JEHiJGr2Rpc6A7e6LUh/msDLe1WTf0AZJuHkUhnqESnQh0g
+        KV3h8UtNVnC8KTxYm5ylF0GRycj60zu9SwMX4uQTHSAOtB8Ovo5UbriTEX5jAkUmZTBUwT
+        u9IWuJdw3C2E48QWNF4fAeScOCYpn8k=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
- ACPI global lock
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-3-eugene.shalygin@gmail.com>
- <CAB95QASpZTz4eMger46WEa9xWJNmARShBUNb7edJA1eij3KBwA@mail.gmail.com>
- <a1607f0d-9d6c-fb55-d0d2-b57e4fdfda23@roeck-us.net>
- <CAB95QAQTtVWMs3dOx87G+D_GzGuMjnmPGiYQLqqQiCHT939Upw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAB95QAQTtVWMs3dOx87G+D_GzGuMjnmPGiYQLqqQiCHT939Upw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nYcFp-003RWH-HQ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54520
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 28 Mar 2022 13:28:12 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] hwmon: add driver for the Microchip LAN966x SoC
+In-Reply-To: <4455ca4c-1ebb-41df-5f04-72a48e8ca7dc@roeck-us.net>
+References: <20220326192347.2940747-1-michael@walle.cc>
+ <20220326192347.2940747-5-michael@walle.cc>
+ <2442b460-4c6d-0ac9-af08-ae4c25aed812@roeck-us.net>
+ <9aab54bc48284c9e20cd76085cb9d83a@walle.cc>
+ <4455ca4c-1ebb-41df-5f04-72a48e8ca7dc@roeck-us.net>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <4e5c78ce651c258a4be33c01ec07a0c3@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/27/22 11:51, Eugene Shalygin wrote:
-> On Sun, 27 Mar 2022 at 20:04, Guenter Roeck <linux@roeck-us.net> wrote:
+Am 2022-03-27 20:22, schrieb Guenter Roeck:
+> On 3/27/22 07:18, Michael Walle wrote:
+>> Am 2022-03-27 03:34, schrieb Guenter Roeck:
+>> 
+>>>> +    /*
+>>>> +     * Data is given in pulses per second. According to the hwmon 
+>>>> ABI we
+>>>> +     * have to assume two pulses per revolution.
+>>> 
+>>> The hwmon ABI doesn't make any such assumptions. It wants to see RPM,
+>>> that is all. Pulses per revolution is a fan property.
+>> 
+>> There is fanY_pulses according to 
+>> Documentation/ABI/testing/sysfs-class-hwmon:
+>> 
+>>    Should only be created if the chip has a register to configure
+>>    the number of pulses. In the absence of such a register (and
+>>    thus attribute) the value assumed by all devices is 2 pulses
+>>    per fan revolution.
+>> 
+>> The hardware returns just the pulses per second. Doesn't that
+>> mean I have to divide that value by two?
+>> 
 > 
->> What is the problem other than that the string is split across
->> multiple lines ? That can easily be fixed by not splitting it,
->> so you'll have to be more specific.
+> The above refers to hardware which reports RPM.
 > 
-> Yes, the problem is that it is split. When merged it exceeds the 80-th
-> column and creates problems for editors instructed to format text on
-> paste. And I would not like to neither split the string onto two debug
-> messages, nor shorten the debug message itself. Maybe there is an
-> elegant solution I'm not aware of?
+> It is up to the driver to calculate and return RPM. How you do it is 
+> your
+> decision. Drivers should report the most likely correct RPM value to
+> userspace, one that rarely needs manual adjustment. Almost all fans
+> report two pulses per revolution, so normally that assumption is used
+> to convert PPM to RPM. That isn't mandated (or supposed to be mandated)
+> by the ABI. I would call it common sense.
 > 
+> I'll be happy to accept a patch clarifying this.
 
-First, you can go up to 100 columns nowadays. Second, the column
-limit is waived for strings because it is more important to not
-split them. If you _still_ want to stick with 80 columns, sorry,
-no, I don't have a solution. Your problem is with the editor,
-not with kernel formatting rules.
+Where would that go? into the sysfs abi description of the
+fanY_input?
 
-Guenter
+>>>> +     */
+>>>> +    *val = FIELD_GET(FAN_CNT_DATA, data) * 60 / 2;
+>> 
+>> .. otherwise this should then be
+>> *val = FIELD_GET(FAN_CNT_DATA, data) * 60;
+>> 
+> 
+> If you really want to do this, make sure it is well documented that 
+> users
+> will need to adjust the fan speed via sensors3.conf to get the real fan 
+> speed.
+> 
+>> 
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int lan966x_hwmon_read_pwm(struct device *dev, long *val)
+>>>> +{
+>>>> +    struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+>>>> +    unsigned int data;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = regmap_read(hwmon->regmap_fan, FAN_CFG, &data);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    *val = FIELD_GET(FAN_CFG_DUTY_CYCLE, data);
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int lan966x_hwmon_read_pwm_freq(struct device *dev, long 
+>>>> *val)
+>>>> +{
+>>>> +    struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+>>>> +    unsigned long rate = clk_get_rate(hwmon->clk);
+>>> 
+>>> Is that a dynamic frequency ? If not, it would be better to read it 
+>>> once
+>>> and store it in struct lan966x_hwmon.
+>> 
+>> yes it is configurable, actually. See lan966x_hwmon_write_pwm_freq().
+>> 
+> 
+> That is the pwm frequency, not the clock frequency. I don't see any
+> code which updates the clock frequency reported by 
+> clk_get_rate(hwmon->clk),
+> ie I don't see a call to clk_set_rate().
+
+Ahh sorry, missunderstood you. Yeah, in v2 it will be read
+during probe.
+
+-michael
