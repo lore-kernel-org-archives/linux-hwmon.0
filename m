@@ -2,53 +2,43 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 325ADC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Mar 2022 16:50:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6549AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Mar 2022 22:46:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239886AbiC1Qvk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Mar 2022 12:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
+        id S230104AbiC1WsV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Mar 2022 18:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236419AbiC1Qvi (ORCPT
+        with ESMTP id S230101AbiC1WsV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:51:38 -0400
-X-Greylist: delayed 1236 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 09:49:57 PDT
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.44.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3523FD80
-        for <linux-hwmon@vger.kernel.org>; Mon, 28 Mar 2022 09:49:57 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id D5083400EF82F
-        for <linux-hwmon@vger.kernel.org>; Mon, 28 Mar 2022 11:29:20 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YsF6nkn9JHnotYsF6nfXxx; Mon, 28 Mar 2022 11:29:20 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ravsT/aucKnVvzJpwttquM0/aEFh0FetHl00O2h6aXw=; b=xjQx8mzlpwruVmELyTRwD22SWX
-        kE/e3LznR+m0Or0Nb7PZ7nns/mYp12f7xAyY0VLe/P2ZoUhENAbhbNDmr9XrdC7f7jydWJz2XegyI
-        ub9qpi2oAwbgnhxNHfp+ptZHItnYLoDwaU3Fj6t87naGkABB8saz7f9p4UDnWWP0drZxMBg1IWub5
-        WtYGFj7gO13wOP1p3OwFGHomD9uX+AhwUoRnSF4pBLXMT+tl+fBg4mp7vxuv9u27Jl9cHMZEsDSP4
-        FqjLL2+JaHF8DKpw9y1o4h3X9d8ozgyHgJq9Io/l1DBwADJ+dwY6fA0mto8wiT6qkO7rABuPtNvwW
-        IsDyTWGw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54530)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nYsF5-001eOc-VK; Mon, 28 Mar 2022 16:29:20 +0000
-Message-ID: <d589a8e5-c297-b03a-41f8-8bb573ec9824@roeck-us.net>
-Date:   Mon, 28 Mar 2022 09:29:18 -0700
+        Mon, 28 Mar 2022 18:48:21 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274F4C74AA;
+        Mon, 28 Mar 2022 15:46:40 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D82EF2223A;
+        Tue, 29 Mar 2022 00:46:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648507598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HDu381pRR0agv3tRC4rxYFKnPByM+nZCMTshkpw92fU=;
+        b=UcQsgGiCk/vnobpIEFjlRmqkCrWqDsPOoAMEhpR0atrtcaJkgwtq8Ps70hTKCZuqjJ4inQ
+        xMSvUGTmrjXMeOUKJPUiqbuF9N0Y1IBoxj7uDx43gkd6MAsaJUOSdqli2SpW0dFpMEYX/w
+        hjeDGZN50zKJLbC06I+zAJUEpMd7ins=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/2] hwmon: introduce hwmon_sanitize_name()
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Xu Yilun <yilun.xu@intel.com>,
-        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 29 Mar 2022 00:46:37 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -57,97 +47,29 @@ To:     Michael Walle <michael@walle.cc>, Xu Yilun <yilun.xu@intel.com>,
         Paolo Abeni <pabeni@redhat.com>
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] net: phy: use hwmon_sanitize_name()
+In-Reply-To: <20220328115226.3042322-3-michael@walle.cc>
 References: <20220328115226.3042322-1-michael@walle.cc>
- <20220328115226.3042322-2-michael@walle.cc>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220328115226.3042322-2-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nYsF5-001eOc-VK
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54530
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 16
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+ <20220328115226.3042322-3-michael@walle.cc>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <7e03397465a5c95cb9cd3a0f6c53b845@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/28/22 04:52, Michael Walle wrote:
-> More and more drivers will check for bad characters in the hwmon name
-> and all are using the same code snippet. Consolidate that code by adding
-> a new hwmon_sanitize_name() function.
+Am 2022-03-28 13:52, schrieb Michael Walle:
+> Instead of open-coding it, use the new hwmon_sanitize_name() in th
+
+s/th/the/ btw, will be fixed in the next version.
+
+> nxp-tja11xx and sfp driver.
 > 
 > Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
->   drivers/hwmon/intel-m10-bmc-hwmon.c |  5 +----
->   include/linux/hwmon.h               | 16 ++++++++++++++++
+>  drivers/net/phy/nxp-tja11xx.c | 5 +----
+>  drivers/net/phy/sfp.c         | 6 ++----
 
-Separate patches please, and the new function needs to be documented
-in Documentation/hwmon/hwmon-kernel-api.rst.
+Andrew, do you also prefer two seperate patches?
 
-Thanks,
-Guenter
-
->   2 files changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 7a08e4c44a4b..e6e55fc30153 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -515,7 +515,6 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
->   	struct device *hwmon_dev, *dev = &pdev->dev;
->   	struct m10bmc_hwmon *hw;
-> -	int i;
->   
->   	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
->   	if (!hw)
-> @@ -532,9 +531,7 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   	if (!hw->hw_name)
->   		return -ENOMEM;
->   
-> -	for (i = 0; hw->hw_name[i]; i++)
-> -		if (hwmon_is_bad_char(hw->hw_name[i]))
-> -			hw->hw_name[i] = '_';
-> +	hwmon_sanitize_name(hw->hw_name);
->   
->   	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
->   							 hw, &hw->chip, NULL);
-> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index eba380b76d15..210b8c0b2827 100644
-> --- a/include/linux/hwmon.h
-> +++ b/include/linux/hwmon.h
-> @@ -484,4 +484,20 @@ static inline bool hwmon_is_bad_char(const char ch)
->   	}
->   }
->   
-> +/**
-> + * hwmon_sanitize_name - Replaces invalid characters in a hwmon name
-> + * @name: NUL-terminated name
-> + *
-> + * Invalid characters in the name will be overwritten in-place by an
-> + * underscore.
-> + */
-> +static inline void hwmon_sanitize_name(char *name)
-> +{
-> +	while (*name) {
-> +		if (hwmon_is_bad_char(*name))
-> +			*name = '_';
-> +		name++;
-> +	};
-> +}
-> +
->   #endif
-
+-michael
