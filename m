@@ -2,127 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FC7C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Mar 2022 13:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 758F9C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Mar 2022 16:07:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbiC2Nyh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Mar 2022 09:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S239347AbiC2QJh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Mar 2022 12:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbiC2Nyg (ORCPT
+        with ESMTP id S239327AbiC2QJc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:54:36 -0400
-Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818001B608F
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2022 06:52:53 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id E3E682441A
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2022 08:52:52 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZCHEn8FVKHnotZCHEn1dRR; Tue, 29 Mar 2022 08:52:52 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=R8VF1083Jml6bSlqQeVvGDZxIbXB4VClUDd8cNl8HqA=; b=ycg/a9dlJnrsrXw2QIi/hOynJz
-        YapMKagNgi0vMp0GKaSr32e2PIXcmtWBEGCIkRUbEDIFRzkBAbqKOr9vwcCt/gwl2/RmYmxlbDwkc
-        9irvStDtwQR1PmxXGudquz6OypiepTQyImdwe86pa2qNZ+RBuuzFhvfjW8UYrAbVPqd0T9MNXdgU2
-        GsCNUaso2xsF8byuJGCZZ8Fu7zTMQHxp0LxKZ+T7dZRFOegM8Xv9lhn0dn2oyMuj+gfN5KuX2d71l
-        /zHjs+zTOn4H2vXsh38qxOjPkyq6NOLnzP08v7IukXPeYIKRnd3vSoZ22hmGWKFxT6imnN4wfFsHq
-        9C00d64A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54542)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZCHD-00353G-Re; Tue, 29 Mar 2022 13:52:51 +0000
-Message-ID: <ad6373ce-ad60-e54c-139c-b4b807f3531c@roeck-us.net>
-Date:   Tue, 29 Mar 2022 06:52:50 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Xu Yilun <yilun.xu@intel.com>,
-        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
+        Tue, 29 Mar 2022 12:09:32 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0785725ECB6;
+        Tue, 29 Mar 2022 09:07:47 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D22702224D;
+        Tue, 29 Mar 2022 18:07:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648570066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m8voqXgytYyDMBr4Anf3saVzxi+gWiv76fTQ2j03gg4=;
+        b=XfVp/4GxL4q+U/mutEbzMeEqYACGjzV4JkukcMsoPiomBUljaLDvgwNHo9D7HzAVFs39Rb
+        1QFQMiQpZho4oywGBA1K1Sc30FQ2iz8e5GwUV6Mi0/iuNQH2xKgzFMWZp8gL3KmwqIVnKQ
+        Lg6NPD2YtubzncZNVh/isn8JfjoLkys=
+From:   Michael Walle <michael@walle.cc>
+To:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20220328115226.3042322-1-michael@walle.cc>
- <YkGwjjUz+421O2E1@lunn.ch>
- <ab64105b-c48d-cdf2-598a-3e0a2e261b27@roeck-us.net>
- <e87c3ab2a0c188dced27bf83fc444c40@walle.cc>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 0/2] hwmon: introduce hwmon_sanitize()
-In-Reply-To: <e87c3ab2a0c188dced27bf83fc444c40@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZCHD-00353G-Re
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54542
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 9
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH v2 3/5] net: sfp: use hwmon_sanitize_name()
+Date:   Tue, 29 Mar 2022 18:07:28 +0200
+Message-Id: <20220329160730.3265481-4-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220329160730.3265481-1-michael@walle.cc>
+References: <20220329160730.3265481-1-michael@walle.cc>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/28/22 15:50, Michael Walle wrote:
-> Am 2022-03-28 18:27, schrieb Guenter Roeck:
->> On 3/28/22 05:56, Andrew Lunn wrote:
->>>> I'm not sure how to handle this correctly, as this touches both the
->>>> network tree and the hwmon tree. Also, the GPY PHY temperature senors
->>>> driver would use it.
->>>
->>> There are a few options:
->>>
->>> 1) Get the hwmon_sanitize_name() merged into hwmon, ask for a stable
->>> branch, and get it merged into netdev net-next.
->>>
->>> 2) Have the hwmon maintainers ACK the change and agree that it can be
->>> merged via netdev.
->>>
->>> Probably the second option is easiest, and since it is not touching
->>> the core of hwmon, it is unlikely to cause merge conflicts.
->>>
->>
->> No, it isn't the easiest solution because it also modifies a hwmon
->> driver to use it.
-> 
-> So that leaves us with option 1? The next version will contain the
-> additional patch which moves the hwmon_is_bad_char() from the include
-> to the core and make it private. That will then need an immutable
-> branch from netdev to get merged back into hwmon before that patch
-> can be applied, right?
+Instead of open-coding the bad characters replacement in the hwmon name,
+use the new hwmon_sanitize_name().
 
-We can not control if someone else starts using the function before
-it is removed. As pointed out, the immutable branch needs to be from hwmon,
-and the patch to make hwmon_is_bad_char private can only be applied
-after all of its users are gone from the mainline kernel.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/net/phy/sfp.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-I would actually suggest to allocate the new string as part of the
-function and have it return a pointer to a new string. Something like
-	char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
-and
-         char *hwmon_sanitize_name(const char *name);
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 4dfb79807823..0d5dba30444d 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -1289,7 +1289,7 @@ static const struct hwmon_chip_info sfp_hwmon_chip_info = {
+ static void sfp_hwmon_probe(struct work_struct *work)
+ {
+ 	struct sfp *sfp = container_of(work, struct sfp, hwmon_probe.work);
+-	int err, i;
++	int err;
+ 
+ 	/* hwmon interface needs to access 16bit registers in atomic way to
+ 	 * guarantee coherency of the diagnostic monitoring data. If it is not
+@@ -1317,16 +1317,12 @@ static void sfp_hwmon_probe(struct work_struct *work)
+ 		return;
+ 	}
+ 
+-	sfp->hwmon_name = kstrdup(dev_name(sfp->dev), GFP_KERNEL);
++	sfp->hwmon_name = hwmon_sanitize_name(dev_name(sfp->dev));
+ 	if (!sfp->hwmon_name) {
+ 		dev_err(sfp->dev, "out of memory for hwmon name\n");
+ 		return;
+ 	}
+ 
+-	for (i = 0; sfp->hwmon_name[i]; i++)
+-		if (hwmon_is_bad_char(sfp->hwmon_name[i]))
+-			sfp->hwmon_name[i] = '_';
+-
+ 	sfp->hwmon_dev = hwmon_device_register_with_info(sfp->dev,
+ 							 sfp->hwmon_name, sfp,
+ 							 &sfp_hwmon_chip_info,
+-- 
+2.30.2
 
-because the string duplication is also part of all calling code.
-
-Guenter
