@@ -2,107 +2,134 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40CDEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Mar 2022 19:22:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30349C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Mar 2022 20:50:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240923AbiC2TYP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Mar 2022 15:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S232402AbiC2Uvm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Mar 2022 16:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234102AbiC2TYP (ORCPT
+        with ESMTP id S232034AbiC2Uvm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:24:15 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E496F3B3FD;
-        Tue, 29 Mar 2022 12:22:31 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id q11so22197652iod.6;
-        Tue, 29 Mar 2022 12:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vx6btCVYHPVyAnWMa8UET2qF2wjGK6uBYbb8Ohcu3BM=;
-        b=kWIjIPL5b8sItwV/jXE6ocblWjihZ88AkbLV8aV0tRZJId0HHri87QJpw3a3+7LN7K
-         cbhP6k6jBlXVrJYjyCAvoDNSq057wt7EwRPcYiL9bS0KF/L+HfDbX9Cim4MnPyERXOXX
-         Agjf8Mq7Q7P0QJJFA6jjWgd1X9PCGohtRZOEmCj+7sUhzKZda2CaDy/i1NEGIiQsfR5L
-         OLLcWDtuseG/wpPSw3eDVE4+aqPqm0oNE1IlEVT5mKk4LPK9P2ReQJVed80wQgqNFGjw
-         E6Pk6GqgotMnjyaK/1wzfCxjI6PQVkpJyPJyasj9R3tyq70Fz0GTUY9uLcOALCV8AZ66
-         dfCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vx6btCVYHPVyAnWMa8UET2qF2wjGK6uBYbb8Ohcu3BM=;
-        b=EeLF325OboSoKWBQpCbJkRgd8jzYZnJO8BeU9hrK+BIfdVeFvgRfJI1DhAjuklWXSk
-         kaeBm2P2s66KJRVZqN/0LTclzBGjQbijRJpTcoS4qqGsz535qLw9qa4gSv8JOY8VO6B2
-         484JHgIPqxLXFnP63SNEMR90K2XAwG/Ncp7/Z6JhLYyghr/YMtSSE8Ge+FVkNuWzoC9h
-         vb+rJpn0jYUP4e0MbS/jNn+zRmtrfN8Jia9AWKxek0GCzsvuPQC0Gy2WEiuBVLRXX3QM
-         iKoKtUiEFywWsJ0+2RvO18703JyFSJoTWk/mN5whhYBZ5L+W9Ts4gGzP1iOGsprsdwtC
-         YnfA==
-X-Gm-Message-State: AOAM530oCJtP6JxKtpEHOpBfXi/iUq1meCOLyKyrGLyH6p8mSPsGuCtD
-        r7O2POki8Tj9Obnl9d/XOzgwaC5fkq+J+ss5ftBHErsO+Kg=
-X-Google-Smtp-Source: ABdhPJxJOiaqiGXi+j2rZ7zXXqxf5U/2OOuNVDmTcfTT760sqa9voylVxS3MRCURCWi4xP16P28PDZfbWWrHUyB3EbA=
-X-Received: by 2002:a02:844d:0:b0:317:397b:1765 with SMTP id
- l13-20020a02844d000000b00317397b1765mr17723862jah.67.1648581751380; Tue, 29
- Mar 2022 12:22:31 -0700 (PDT)
+        Tue, 29 Mar 2022 16:51:42 -0400
+X-Greylist: delayed 1367 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Mar 2022 13:49:58 PDT
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.193.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70311DD01
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2022 13:49:58 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 004E44FC6F
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2022 15:26:27 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZIQ6nenfA22u3ZIQ6ntrQp; Tue, 29 Mar 2022 15:26:26 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MGJIj6LR5/dj1D1aLADvu0DWbqeTReXZvYG/C4cvdVo=; b=QGOkJb7I8X80501zSDB5EFAY4E
+        L4ufW5Y9FDmz81Fy9SxBS3aWcox5IeQki2CmpD5G1natHax563ajwCgivzn7nOD6ll32rQO4RBVEB
+        n/xJvTPuNzB7LlpzKrrRZSaRLt7vkX30reLuM0bCjwukH5CTq1SDJINQiY49NpMbyAwqNOD7CFo5v
+        lkAsWB5TxUdESYcNqks529rxyEz+EL9NFuSLflRyiUpZOfS7nyxceIQyKIm4fJwt+HAnzEfKViIed
+        s/eHKpX82de4jKJZv8GaIzIJe/gB92NWZchKZn5GFAWjhtZgbRINUy6VgRMc3TJO7S7ZxdzmP+vHo
+        tXikhR7Q==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54544)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nZIQ6-003Biv-K6; Tue, 29 Mar 2022 20:26:26 +0000
+Message-ID: <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
+Date:   Tue, 29 Mar 2022 13:26:25 -0700
 MIME-Version: 1.0
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-2-eugene.shalygin@gmail.com> <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
-In-Reply-To: <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Tue, 29 Mar 2022 21:22:20 +0200
-Message-ID: <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-To:     Guenter Roeck <linux@roeck-us.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+ <20220327121404.1702631-2-eugene.shalygin@gmail.com>
+ <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
+ <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
+ struct for board data
+In-Reply-To: <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nZIQ6-003Biv-K6
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54544
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> >   struct ec_sensors_data {
-> > -     unsigned long board_sensors;
-> > +     struct ec_board_info board_info;
->
-> Please explain why this needs to be the entire structure and not
-> just a pointer to it.
+On 3/29/22 12:22, Eugene Shalygin wrote:
+> On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
+>>>
+>>>    struct ec_sensors_data {
+>>> -     unsigned long board_sensors;
+>>> +     struct ec_board_info board_info;
+>>
+>> Please explain why this needs to be the entire structure and not
+>> just a pointer to it.
+> 
+> I marked the board_info array as __initconst assuming that this large
+> array will be unloaded from memory after the init phase, while we keep
+> only a single element. Is that assumption incorrect?
+> 
 
-I marked the board_info array as __initconst assuming that this large
-array will be unloaded from memory after the init phase, while we keep
-only a single element. Is that assumption incorrect?
+What happens if you build the driver into the kernel and then instantiate
+and de-instantiate it multiple times ?
 
-> > +static int sensor_count(const struct ec_board_info *board)
-> > +{
-> > +     return hweight_long(board->sensors);
-> > +}
->
-> This function is called several times. Does it really make sense, or is it
-> necessary, to re-calculate the number of sensors over and over again
-> instead of keeping it in ec->nr_sensors as before ? What are the benefits ?
-> Unless there is a good explanation I see that as unrelated and unnecessary
-> change.
+>>> +static int sensor_count(const struct ec_board_info *board)
+>>> +{
+>>> +     return hweight_long(board->sensors);
+>>> +}
+>>
+>> This function is called several times. Does it really make sense, or is it
+>> necessary, to re-calculate the number of sensors over and over again
+>> instead of keeping it in ec->nr_sensors as before ? What are the benefits ?
+>> Unless there is a good explanation I see that as unrelated and unnecessary
+>> change.
+> 
+> This had something to do with data deduplication. However, I need the
+> count value only for looping over the sensor array, thus I can as well
+> add an invalid element to the end of the array. I rushed to submit
+> this driver to replace the wmi one, and it still has an artifact for
+> the WMI code I'd like to get rid of eventually, which is the read
+> buffer and the registers array. This will remove all the nr_ variables
+> and two dynamically allocated arrays. I will understand, of course, if
+> you ask to submit that refactoring separately.
+> 
 
-This had something to do with data deduplication. However, I need the
-count value only for looping over the sensor array, thus I can as well
-add an invalid element to the end of the array. I rushed to submit
-this driver to replace the wmi one, and it still has an artifact for
-the WMI code I'd like to get rid of eventually, which is the read
-buffer and the registers array. This will remove all the nr_ variables
-and two dynamically allocated arrays. I will understand, of course, if
-you ask to submit that refactoring separately.
+The rule of "one logical change per patch" still applies. If you start
+intermixing parts of future clean-up efforts into current patches, you'll
+see a very unhappy maintainer - especially since this change makes up
+a significant part of this patch, complicates review significantly,
+and makes me wonder if other unrelated changes are included that I don't
+see right now due to all the noise.
 
-> > -MODULE_DEVICE_TABLE(dmi, asus_ec_dmi_table);
-> >   module_platform_driver_probe(asus_ec_sensors_platform_driver, asus_ec_probe);
-> > +MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
->
-> Why is MODULE_DEVICE_TABLE moved ?
-Accidentally, probably. Thank you, will be corrected.
+Besides, at least in this patch, I don't buy the "deduplication" argument.
+Keeping a single additional variable in a data structure is much simpler
+and straightforward than calling hweight_long() several times. I'd call
+that "complification".
 
-
-Thanks,
-Eugene
+Guenter
