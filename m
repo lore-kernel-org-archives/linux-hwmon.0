@@ -2,131 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F677C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Mar 2022 16:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40CDEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Mar 2022 19:22:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239450AbiC2QJt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Mar 2022 12:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
+        id S240923AbiC2TYP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Mar 2022 15:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiC2QJe (ORCPT
+        with ESMTP id S234102AbiC2TYP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:09:34 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18F1E2F65;
-        Tue, 29 Mar 2022 09:07:51 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id CCA752224F;
-        Tue, 29 Mar 2022 18:07:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648570067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ICyBKbcIANIRXFbM3XwImZyH8BggKJrVFsuGIGCnPIc=;
-        b=ndwGVfNH2rpEswAMlPNbXXbh/lBTRKacuLkziFr1tB0krx0Qj0RmAAFSztGBTn5oG4mnfc
-        rnuNqBGNCVjI0QIYPpga+VJw129Ccp6ZtVBazrxSplfXu/MizJRnretLRYOLt2ng95IQyk
-        F7Cj3FuQCCEFWj8jXdm3l44NR4jOMyM=
-From:   Michael Walle <michael@walle.cc>
-To:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH RFC v2 5/5] hwmon: move hwmon_is_bad_char() into core
-Date:   Tue, 29 Mar 2022 18:07:30 +0200
-Message-Id: <20220329160730.3265481-6-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220329160730.3265481-1-michael@walle.cc>
-References: <20220329160730.3265481-1-michael@walle.cc>
+        Tue, 29 Mar 2022 15:24:15 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E496F3B3FD;
+        Tue, 29 Mar 2022 12:22:31 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id q11so22197652iod.6;
+        Tue, 29 Mar 2022 12:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vx6btCVYHPVyAnWMa8UET2qF2wjGK6uBYbb8Ohcu3BM=;
+        b=kWIjIPL5b8sItwV/jXE6ocblWjihZ88AkbLV8aV0tRZJId0HHri87QJpw3a3+7LN7K
+         cbhP6k6jBlXVrJYjyCAvoDNSq057wt7EwRPcYiL9bS0KF/L+HfDbX9Cim4MnPyERXOXX
+         Agjf8Mq7Q7P0QJJFA6jjWgd1X9PCGohtRZOEmCj+7sUhzKZda2CaDy/i1NEGIiQsfR5L
+         OLLcWDtuseG/wpPSw3eDVE4+aqPqm0oNE1IlEVT5mKk4LPK9P2ReQJVed80wQgqNFGjw
+         E6Pk6GqgotMnjyaK/1wzfCxjI6PQVkpJyPJyasj9R3tyq70Fz0GTUY9uLcOALCV8AZ66
+         dfCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vx6btCVYHPVyAnWMa8UET2qF2wjGK6uBYbb8Ohcu3BM=;
+        b=EeLF325OboSoKWBQpCbJkRgd8jzYZnJO8BeU9hrK+BIfdVeFvgRfJI1DhAjuklWXSk
+         kaeBm2P2s66KJRVZqN/0LTclzBGjQbijRJpTcoS4qqGsz535qLw9qa4gSv8JOY8VO6B2
+         484JHgIPqxLXFnP63SNEMR90K2XAwG/Ncp7/Z6JhLYyghr/YMtSSE8Ge+FVkNuWzoC9h
+         vb+rJpn0jYUP4e0MbS/jNn+zRmtrfN8Jia9AWKxek0GCzsvuPQC0Gy2WEiuBVLRXX3QM
+         iKoKtUiEFywWsJ0+2RvO18703JyFSJoTWk/mN5whhYBZ5L+W9Ts4gGzP1iOGsprsdwtC
+         YnfA==
+X-Gm-Message-State: AOAM530oCJtP6JxKtpEHOpBfXi/iUq1meCOLyKyrGLyH6p8mSPsGuCtD
+        r7O2POki8Tj9Obnl9d/XOzgwaC5fkq+J+ss5ftBHErsO+Kg=
+X-Google-Smtp-Source: ABdhPJxJOiaqiGXi+j2rZ7zXXqxf5U/2OOuNVDmTcfTT760sqa9voylVxS3MRCURCWi4xP16P28PDZfbWWrHUyB3EbA=
+X-Received: by 2002:a02:844d:0:b0:317:397b:1765 with SMTP id
+ l13-20020a02844d000000b00317397b1765mr17723862jah.67.1648581751380; Tue, 29
+ Mar 2022 12:22:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+ <20220327121404.1702631-2-eugene.shalygin@gmail.com> <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
+In-Reply-To: <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Tue, 29 Mar 2022 21:22:20 +0200
+Message-ID: <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
+Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
+ struct for board data
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-With the last user of this function converted to hwmon_sanitize_name(),
-move the function into the core itself and make it private.
+On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> >   struct ec_sensors_data {
+> > -     unsigned long board_sensors;
+> > +     struct ec_board_info board_info;
+>
+> Please explain why this needs to be the entire structure and not
+> just a pointer to it.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/hwmon/hwmon.c | 20 ++++++++++++++++++++
- include/linux/hwmon.h | 23 -----------------------
- 2 files changed, 20 insertions(+), 23 deletions(-)
+I marked the board_info array as __initconst assuming that this large
+array will be unloaded from memory after the init phase, while we keep
+only a single element. Is that assumption incorrect?
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 619ef9f9a16e..f19b69b066ef 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -1057,6 +1057,26 @@ void devm_hwmon_device_unregister(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(devm_hwmon_device_unregister);
- 
-+/**
-+ * hwmon_is_bad_char - Is the char invalid in a hwmon name
-+ * @ch: the char to be considered
-+ *
-+ * Returns true if the char is invalid, false otherwise.
-+ */
-+static bool hwmon_is_bad_char(const char ch)
-+{
-+	switch (ch) {
-+	case '-':
-+	case '*':
-+	case ' ':
-+	case '\t':
-+	case '\n':
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static char *__hwmon_sanitize_name(struct device *dev, const char *old_name)
- {
- 	char *name, *p;
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 4efaf06fd2b8..6a60e3a4acc0 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -464,27 +464,4 @@ int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
- char *hwmon_sanitize_name(const char *name);
- char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
- 
--/**
-- * hwmon_is_bad_char - Is the char invalid in a hwmon name
-- * @ch: the char to be considered
-- *
-- * hwmon_is_bad_char() can be used to determine if the given character
-- * may not be used in a hwmon name.
-- *
-- * Returns true if the char is invalid, false otherwise.
-- */
--static inline bool hwmon_is_bad_char(const char ch)
--{
--	switch (ch) {
--	case '-':
--	case '*':
--	case ' ':
--	case '\t':
--	case '\n':
--		return true;
--	default:
--		return false;
--	}
--}
--
- #endif
--- 
-2.30.2
+> > +static int sensor_count(const struct ec_board_info *board)
+> > +{
+> > +     return hweight_long(board->sensors);
+> > +}
+>
+> This function is called several times. Does it really make sense, or is it
+> necessary, to re-calculate the number of sensors over and over again
+> instead of keeping it in ec->nr_sensors as before ? What are the benefits ?
+> Unless there is a good explanation I see that as unrelated and unnecessary
+> change.
 
+This had something to do with data deduplication. However, I need the
+count value only for looping over the sensor array, thus I can as well
+add an invalid element to the end of the array. I rushed to submit
+this driver to replace the wmi one, and it still has an artifact for
+the WMI code I'd like to get rid of eventually, which is the read
+buffer and the registers array. This will remove all the nr_ variables
+and two dynamically allocated arrays. I will understand, of course, if
+you ask to submit that refactoring separately.
+
+> > -MODULE_DEVICE_TABLE(dmi, asus_ec_dmi_table);
+> >   module_platform_driver_probe(asus_ec_sensors_platform_driver, asus_ec_probe);
+> > +MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
+>
+> Why is MODULE_DEVICE_TABLE moved ?
+Accidentally, probably. Thank you, will be corrected.
+
+
+Thanks,
+Eugene
