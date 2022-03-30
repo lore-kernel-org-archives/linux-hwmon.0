@@ -2,128 +2,152 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8661EC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 07:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FF65C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 09:20:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243835AbiC3HxY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 03:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S236421AbiC3JWW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 05:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiC3HxW (ORCPT
+        with ESMTP id S239060AbiC3JWW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:53:22 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7F2B39;
-        Wed, 30 Mar 2022 00:51:37 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id z10so990616iln.0;
-        Wed, 30 Mar 2022 00:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iB4dSEsEFAg9ox27q446TXSy+mzYtY4Er+pD2+PDVBg=;
-        b=oDpdH2Vm5BHkAYypGCGmfKvtGwKPS85qRwHN0oZ49oB/SBH+ynRCoRZKMzDcPME/z5
-         zO2vkwktQD9AF7ydD5P5aRzs3Z5ECR4q1QHmM5kWtEBtppFOFfFzbNXHsXMFAdAtiFWV
-         mvlTRE82vJ9Ymygaupp3INjc8uIJoOLoicncobStBHGbh/htZNqJSGycPB+jQAKFpzdO
-         QzmjDnHBHVsPwIDVbSkFKDNWWiEHSKGHHZY+j9vS4YtEHW7cj8qPtPlHVkDPIN1ykOiq
-         5hPu8FnYHfPF88ksGmt37RgGt/lXOuHX0EP6iVjSl72sD6oNWEddcQCLJ+xT2KgqG5js
-         fGrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iB4dSEsEFAg9ox27q446TXSy+mzYtY4Er+pD2+PDVBg=;
-        b=opn8UlzfPiUHv4X+sPmdVVEX2+HZb2app4WYok9APjEvwuTjjW3JhX82U0NerWNX3c
-         E3EUGUhWXjrETahpqUyZL/9ggDjGeMFxJLj8NF8lxnN3ePM9Fna4ihCoN7Asxj7mpgYq
-         DI/SHrlDrjX2g3gMvwdCNc7oujNYAsktH0Mam2TvSsb5RWuEQp+kuph+PFFeKOeccdLV
-         g9MxIxzZPPX5TL93MLm6qvhT/SU4rMKcgb3eJt0aUM33OsXPwnPo/0Z4FTWHrYs9/lvS
-         mX/tEK93cM1bZPwD6Hk/xeVr8zeif4//badatt0TBptWs8mXLFKqXSOEtS8bjuRn+aoN
-         +85w==
-X-Gm-Message-State: AOAM533UvcYaqobCUpnlrSJ0PYD7yK3e9hH4np5cKcuOquOqDfHYFsSX
-        eTTqu9nJhmOG7/xzUsOde4vauYs7fFvbXcryiQs=
-X-Google-Smtp-Source: ABdhPJxxLLvBQX5aIBjJbJitqy7IOYbpVTWOVOXL5J7uxYwL0CqGJAH1EE1pB5MDy6EVdg+dzFI9j9k5GCXcshxiXSU=
-X-Received: by 2002:a05:6e02:1c2f:b0:2c9:ac72:b4b3 with SMTP id
- m15-20020a056e021c2f00b002c9ac72b4b3mr8436849ilh.246.1648626697086; Wed, 30
- Mar 2022 00:51:37 -0700 (PDT)
+        Wed, 30 Mar 2022 05:22:22 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63CB32AE0B
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 02:20:36 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-238-PvzMciuTPwSAX9RYfRl6uw-1; Wed, 30 Mar 2022 10:20:33 +0100
+X-MC-Unique: PvzMciuTPwSAX9RYfRl6uw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 10:20:31 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 30 Mar 2022 10:20:31 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guenter Roeck' <linux@roeck-us.net>,
+        'Michael Walle' <michael@walle.cc>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Topic: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Index: AQHYQ4dUrIB0cQMH/kajVzJ0H3I8wazXOSsggAAAkwCAAGuLAA==
+Date:   Wed, 30 Mar 2022 09:20:31 +0000
+Message-ID: <cf6f672fbaf645f780ae5eab1a955871@AcuMS.aculab.com>
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-2-michael@walle.cc>
+ <16d8b45eba7b44e78fa8205e6666f2bd@AcuMS.aculab.com>
+ <fa1f64d2-32a1-b8f9-0929-093fbd45d219@roeck-us.net>
+In-Reply-To: <fa1f64d2-32a1-b8f9-0929-093fbd45d219@roeck-us.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-2-eugene.shalygin@gmail.com> <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
- <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com> <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
-In-Reply-To: <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 30 Mar 2022 09:51:24 +0200
-Message-ID: <CAB95QAQGWRT=UsXPn65oiiwBRa1RKj61sg7wq9d7VntnFWzaOg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 29 Mar 2022 at 22:28, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/29/22 12:22, Eugene Shalygin wrote:
-> > On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>>
-> >>>    struct ec_sensors_data {
-> >>> -     unsigned long board_sensors;
-> >>> +     struct ec_board_info board_info;
-> >>
-> >> Please explain why this needs to be the entire structure and not
-> >> just a pointer to it.
-> >
-> > I marked the board_info array as __initconst assuming that this large
-> > array will be unloaded from memory after the init phase, while we keep
-> > only a single element. Is that assumption incorrect?
-> >
->
-> What happens if you build the driver into the kernel and then instantiate
-> and de-instantiate it multiple times ?
+RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAzMCBNYXJjaCAyMDIyIDA0OjQ3DQo+IA0KPiBP
+biAzLzI5LzIyIDE5OjU3LCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4gRnJvbTogTWljaGFlbCBX
+YWxsZQ0KPiA+PiBTZW50OiAyOSBNYXJjaCAyMDIyIDE3OjA3DQo+ID4+DQo+ID4+IE1vcmUgYW5k
+IG1vcmUgZHJpdmVycyB3aWxsIGNoZWNrIGZvciBiYWQgY2hhcmFjdGVycyBpbiB0aGUgaHdtb24g
+bmFtZQ0KPiA+PiBhbmQgYWxsIGFyZSB1c2luZyB0aGUgc2FtZSBjb2RlIHNuaXBwZXQuIENvbnNv
+bGlkYXRlIHRoYXQgY29kZSBieSBhZGRpbmcNCj4gPj4gYSBuZXcgaHdtb25fc2FuaXRpemVfbmFt
+ZSgpIGZ1bmN0aW9uLg0KPiA+DQo+ID4gSSdtIGFzc3VtaW5nIHRoZXNlICdiYWQnIGh3bW9uIG5h
+bWVzIGNvbWUgZnJvbSB1c2Vyc3BhY2U/DQo+ID4gTGlrZSBldGhlcm5ldCBpbnRlcmZhY2UgbmFt
+ZXM/Pw0KPiA+DQo+ID4gSXMgc2lsZW50bHkgY2hhbmdpbmcgdGhlIG5hbWUgb2YgdGhlIGh3bW9u
+IGVudHJpZXMgdGhlIHJpZ2h0DQo+ID4gdGhpbmcgdG8gZG8gYXQgYWxsPw0KPiA+DQo+ID4gV2hh
+dCBoYXBwZW5zIGlmIHRoZSB1c2VyIHRyaWVzIHRvIGNyZWF0ZSBib3RoICJmb29fYmFyIiBhbmQg
+ImZvby1iYXIiPw0KPiA+IEknbSBzdXJlIHRoYXQgaXMgZ29pbmcgdG8gZ28gaG9ycmlibHkgd3Jv
+bmcgc29tZXdoZXJlLg0KPiA+DQo+ID4gSXQgd291bGQgY2VydGFpbmx5IG1ha2Ugc2Vuc2UgdG8g
+aGF2ZSBhIGZ1bmN0aW9uIHRvIHZlcmlmeSB0aGUgbmFtZQ0KPiA+IGlzIGFjdHVhbGx5IHZhbGlk
+Lg0KPiA+IFRoZW4gYmFkIG5hbWVzIGNhbiBiZSByZWplY3RlZCBlYXJsaWVyIG9uLg0KPiA+DQo+
+ID4gSSdtIGFsc28gaW50cmlndWVkIGFib3V0IHRoZSBsaXN0IG9mIGludmFsaWQgY2hhcmFjdGVy
+czoNCj4gPg0KPiA+ICtzdGF0aWMgYm9vbCBod21vbl9pc19iYWRfY2hhcihjb25zdCBjaGFyIGNo
+KQ0KPiA+ICt7DQo+ID4gKwlzd2l0Y2ggKGNoKSB7DQo+ID4gKwljYXNlICctJzoNCj4gPiArCWNh
+c2UgJyonOg0KPiA+ICsJY2FzZSAnICc6DQo+ID4gKwljYXNlICdcdCc6DQo+ID4gKwljYXNlICdc
+bic6DQo+ID4gKwkJcmV0dXJuIHRydWU7DQo+ID4gKwlkZWZhdWx0Og0KPiA+ICsJCXJldHVybiBm
+YWxzZTsNCj4gPiArCX0NCj4gPiArfQ0KPiA+DQo+ID4gSWYgJ1x0JyBhbmQgJ1xuJyBhcmUgaW52
+YWxpZCB3aHkgYXJlIGFsbCB0aGUgb3RoZXIgY29udHJvbCBjaGFyYWN0ZXJzDQo+ID4gYWxsb3dl
+ZD8NCj4gPiBJJ20gZ3Vlc3NpbmcgJyonIGlzIGRpc2FsbG93ZWQgYmVjYXVzZSBpdCBpcyB0aGUg
+c2hlbGwgd2lsZGNhcmQ/DQo+ID4gU28gd2hhdCBhYm91dCAnPycuDQo+ID4gVGhlbiBJJ2QgZXhw
+ZWN0ICcvJyB0byBiZSBpbnZhbGlkIC0gYnV0IHRoYXQgaXNuJ3QgY2hlY2tlZC4NCj4gPiBOZXZl
+ciBtaW5kIGFsbCB0aGUgdmFsdWVzIDB4ODAgdG8gMHhmZiAtIHRoZXkgYXJlIHByb2JhYmx5IHdv
+cnNlDQo+ID4gdGhhbiB3aGl0ZXNwYWNlLg0KPiA+DQo+ID4gT1RPSCB3aHkgYXJlIGFueSBjaGFy
+YWN0ZXJzIGludmFsaWQgYXQgYWxsIC0gZXhjZXB0ICcvJz8NCj4gPg0KPiANCj4gVGhlIG5hbWUg
+aXMgc3VwcG9zZWQgdG8gcmVmbGVjdCBhIGRyaXZlciBuYW1lLiBVc3VhbGx5IGRyaXZlciBuYW1l
+cw0KPiBhcmUgbm90IGRlZmluZWQgYnkgdXNlcnNwYWNlIGJ1dCBieSBkcml2ZXIgYXV0aG9ycy4g
+VGhlIG5hbWUgaXMgdXNlZA0KPiBieSBsaWJzZW5zb3JzIHRvIGRpc3Rpbmd1aXNoIGEgZHJpdmVy
+IGZyb20gaXRzIGluc3RhbnRpYXRpb24uDQo+IGxpYnNlbnNvcnMgdXNlcyB3aWxkY2FyZHMgaW4g
+L2V0Yy9zZW5zb3JzMy5jb25mLiBEdXBsaWNhdGUgbmFtZXMNCj4gYXJlIGV4cGVjdGVkOyB0aGVy
+ZSBjYW4gYmUgbWFueSBpbnN0YW5jZXMgb2YgdGhlIHNhbWUgZHJpdmVyIGluDQo+IHRoZSBzeXN0
+ZW0uIEZvciBleGFtcGxlLCBvbiB0aGUgc3lzdGVtIEkgYW0gdHlwaW5nIHRoaXMgb24sIEkgaGF2
+ZToNCj4gDQo+IC9zeXMvY2xhc3MvaHdtb24vaHdtb24wL25hbWU6bnZtZQ0KPiAvc3lzL2NsYXNz
+L2h3bW9uL2h3bW9uMS9uYW1lOm52bWUNCj4gL3N5cy9jbGFzcy9od21vbi9od21vbjIvbmFtZTpu
+b3V2ZWF1DQo+IC9zeXMvY2xhc3MvaHdtb24vaHdtb24zL25hbWU6bmN0Njc5Nw0KPiAvc3lzL2Ns
+YXNzL2h3bW9uL2h3bW9uNC9uYW1lOmpjNDINCj4gL3N5cy9jbGFzcy9od21vbi9od21vbjUvbmFt
+ZTpqYzQyDQo+IC9zeXMvY2xhc3MvaHdtb24vaHdtb242L25hbWU6amM0Mg0KPiAvc3lzL2NsYXNz
+L2h3bW9uL2h3bW9uNy9uYW1lOmpjNDINCj4gL3N5cy9jbGFzcy9od21vbi9od21vbjgvbmFtZTpr
+MTB0ZW1wDQo+IA0KPiBod21vbl9pc19iYWRfY2hhcigpIGZpbHRlcnMgb3V0IGNoYXJhY3RlcnMg
+d2hpY2ggaW50ZXJmZXJlIHdpdGgNCj4gbGlic2Vuc29yJ3MgdmlldyBvZiBkcml2ZXIgaW5zdGFu
+Y2VzIGFuZCB0aGUgY29uZmlndXJhdGlvbiBkYXRhDQo+IGluIC9ldGMvc2Vuc29yczMuY29uZi4g
+Rm9yIGV4YW1wbGUsIGFnYWluIG9uIG15IHN5c3RlbSwgdGhlDQo+ICJzZW5zb3JzIiBjb21tYW5k
+IHJlcG9ydHMgdGhlIGZvbGxvd2luZyBqYzQyIGFuZCBudm1lIHNlbnNvcnMuDQo+IA0KPiBqYzQy
+LWkyYy0wLTFhDQo+IGpjNDItaTJjLTAtMTgNCj4gamM0Mi1pMmMtMC0xYg0KPiBqYzQyLWkyYy0w
+LTE5DQo+IG52bWUtcGNpLTAxMDANCj4gbnZtZS1wY2ktMjUwMA0KPiANCj4gSW4gL2V0Yy9zZW5z
+b3JzMy5jb25mLCB0aGVyZSBtaWdodCBiZSBlbnRyaWVzIGZvciAiamM0Mi0qIiBvciAibnZtZS0q
+Ii4NCj4gSSBkb24ndCB0aGluayBsaWJzZW5zb3JzIGNhcmVzIGlmIGEgZHJpdmVyIGlzIG5hbWVk
+ICJ0aGlzL2lzL215L2RyaXZlciIuDQo+IFRoYXQgZHJpdmVyIHdvdWxkIHRoZW4sIGFzc3VtaW5n
+IGl0IGlzIGFuIGkyYyBkcml2ZXIsIHNob3cgdXANCj4gd2l0aCB0aGUgc2Vuc29ycyBjb21tYW5k
+IGFzICJ0aGlzL2lzL215L2RyaXZlci1pMmMtMC0yNSIgb3Igc2ltaWxhci4NCj4gSWYgaXQgaXMg
+bmFtZWQgInRoaXMlaXMlbXklZHJpdmVyIiwgaXQgd291bGQgYmUgc29tZXRoaW5nIGxpa2UNCj4g
+InRoaXMlaXMlbXklZHJpdmVyLWkyYy0wLTI1Ii4gQW5kIHNvIG9uLiBXZSBjYW4gbm90IHBlcm1p
+dCAiamMtNDIiDQo+IGJlY2F1c2UgbGlic2Vuc29ycyB3b3VsZCBub3QgYmUgYWJsZSB0byBwYXJz
+ZSBzb21ldGhpbmcgbGlrZQ0KPiAiamMtNDItKiIgb3IgImpjLTQyLWkyYy0qIi4NCj4gDQo+IFRh
+a2luZyB5b3VyIGV4YW1wbGUsIGlmIGRyaXZlciBhdXRob3JzIGltcGxlbWVudCB0d28gZHJpdmVy
+cywgb25lDQo+IG5hbWVkIGZvby1iYXIgYW5kIHRoZSBvdGhlciBmb29fYmFyLCBpdCB3b3VsZCBi
+ZSB0aGUgZHJpdmVyIGF1dGhvcnMnDQo+IHJlc3BvbnNpYmlsaXR5IHRvIHByb3ZpZGUgdmFsaWQg
+ZHJpdmVyIG5hbWVzIHRvIHRoZSBod21vbiBzdWJzeXN0ZW0sDQo+IHdoYXRldmVyIHRob3NlIG5h
+bWVzIG1pZ2h0IGJlLiBJZiBib3RoIGVuZCB1cCBuYW1lZCAiZm9vX2JhciIgYW5kIGNhbg0KPiBh
+cyByZXN1bHQgbm90IGJlIGRpc3Rpbmd1aXNoZWQgZnJvbSBlYWNoIG90aGVyIGJ5IGxpYnNlbnNv
+cnMsDQo+IG9yIGEgdXNlciBvZiB0aGUgInNlbnNvcnMiIGNvbW1hbmQsIHRoYXQgd291bGQgYmUg
+ZW50aXJlbHkgdGhlDQo+IHJlc3BvbnNpYmlsaXR5IG9mIHRoZSBkcml2ZXIgYXV0aG9ycy4gVGhl
+IG9ubHkgaW52b2x2ZW1lbnQgb2YgdGhlDQo+IGh3bW9uIHN1YnN5c3RlbSAtIGFuZCB0aGF0IGlz
+IG9wdGlvbmFsIC0gd291bGQgYmUgdG8gcHJvdmlkZSBtZWFucw0KPiB0byB0aGUgZHJpdmVycyB0
+byBoZWxwIHRoZW0gZW5zdXJlIHRoYXQgdGhlIG5hbWVzIGFyZSB2YWxpZCwgYnV0DQo+IG5vdCB0
+aGF0IHRoZXkgYXJlIHVuaXF1ZS4NCj4gDQo+IElmIHRoZXJlIGlzIGV2ZXIgYSBkcml2ZXIgd2l0
+aCBhIGRyaXZlciBuYW1lIHRoYXQgaW50ZXJmZXJlcyB3aXRoDQo+IGxpYnNlbnNvcnMnIGFiaWxp
+dHkgdG8gZGlzdGluZ3Vpc2ggdGhlIGRyaXZlciBuYW1lIGZyb20gaW50ZXJmYWNlL3BvcnQNCj4g
+aW5mb3JtYXRpb24sIHdlJ2xsIGJlIGhhcHB5IHRvIGFkZCB0aGUgb2ZmZW5kaW5nIGNoYXJhY3Rl
+cihzKQ0KPiB0byBod21vbl9pc19iYWRfY2hhcigpLiBVbnRpbCB0aGVuLCBiZWluZyBwaWNreSBk
+b2Vzbid0IHJlYWxseQ0KPiBhZGQgYW55IHZhbHVlIGFuZCBhcHBlYXJzIHBvaW50bGVzcy4NCg0K
+U28gYWN0dWFsbHksIHRoZSBvbmx5IG9uZSBvZiB0aGUgY2hhcmFjdGVycyB0aGF0IGlzIGFjdHVh
+bGx5DQpsaWtlbHkgYXQgYWxsIGlzICctJy4NCkFuZCBldmVuIHRoYXQgY2FuIGJlIGRlZW1lZCB0
+byBiZSBhbiBlcnJvciBpbiB0aGUgY2FsbGVyPw0KT3IgYSAnYnVnJyBpbiB0aGUgbGlic2Vuc29y
+cyBjb2RlIC0gd2hpY2ggY291bGQgaXRzZWxmIHRyZWF0ICctJyBhcyAnXycuDQoNClNvIHdoeSBu
+b3QgZXJyb3IgdGhlIHJlcXVlc3QgdG8gY3JlYXRlZCB0aGUgaHdtb24gZGV2aWNlIHdpdGgNCmFu
+IGludmFsaWQgbmFtZS4NClRoZSBuYW1lIHN1cHBsaWVkIHdpbGwgc29vbiBnZXQgZml4ZWQgLSBz
+aW5jZSBpdCBpcyBhIGxpdGVyYWwNCnN0cmluZyBpbiB0aGUgY2FsbGluZyBkcml2ZXIuDQoNCglE
+YXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91
+bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5
+NzM4NiAoV2FsZXMpDQo=
 
-Sorry, I have no idea because I don't know how to load a built-in
-driver multiple times. But since this driver is attached to a
-motherboard device, which is persistent and always single, do I need
-to consider such a scenario?
-
->
-> >>> +static int sensor_count(const struct ec_board_info *board)
-> >>> +{
-> >>> +     return hweight_long(board->sensors);
-> >>> +}
-> >>
-> >> This function is called several times. Does it really make sense, or is it
-> >> necessary, to re-calculate the number of sensors over and over again
-> >> instead of keeping it in ec->nr_sensors as before ? What are the benefits ?
-> >> Unless there is a good explanation I see that as unrelated and unnecessary
-> >> change.
-> >
-> > This had something to do with data deduplication. However, I need the
-> > count value only for looping over the sensor array, thus I can as well
-> > add an invalid element to the end of the array. I rushed to submit
-> > this driver to replace the wmi one, and it still has an artifact for
-> > the WMI code I'd like to get rid of eventually, which is the read
-> > buffer and the registers array. This will remove all the nr_ variables
-> > and two dynamically allocated arrays. I will understand, of course, if
-> > you ask to submit that refactoring separately.
-> >
->
-> The rule of "one logical change per patch" still applies. If you start
-> intermixing parts of future clean-up efforts into current patches, you'll
-> see a very unhappy maintainer - especially since this change makes up
-> a significant part of this patch, complicates review significantly,
-> and makes me wonder if other unrelated changes are included that I don't
-> see right now due to all the noise.
->
-> Besides, at least in this patch, I don't buy the "deduplication" argument.
-> Keeping a single additional variable in a data structure is much simpler
-> and straightforward than calling hweight_long() several times. I'd call
-> that "complification".
-
-OK, I'll roll it back until I remove the other size variables and arrays.
-
-Best regards,
-Eugene
