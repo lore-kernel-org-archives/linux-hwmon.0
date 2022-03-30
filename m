@@ -2,139 +2,131 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24206C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 14:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F816C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 15:11:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347680AbiC3PAl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 11:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S1348029AbiC3PNZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 11:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244697AbiC3PAk (ORCPT
+        with ESMTP id S1347941AbiC3PMq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:00:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8976434;
-        Wed, 30 Mar 2022 07:58:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648652335; x=1680188335;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LGbzP3xToIyBP1rsfYxryrKuymJX1Ma/5d6WvH8bQgg=;
-  b=ltR2Hb3UzFADOEWfsrf8Wvr//Fuf9Dcidst4Ozfi0iRCjQG4bP64GxKY
-   JmNjJEQrnDNQrLOkJv5AUFAuj6IZdyER0qLZe5m9uZsYLZWzEf/PM60ae
-   wU4BYaU28zMTNJmrWGfg+MXxABGlyVp1chHq+9vN/T+TzEYUBzt3tt6Iw
-   p30HWtRGSaNLviqj+vbG9chzYNuAUpDeM23YRAp8sfS7tK0QbUmx0Ysp4
-   /9jTHucDfKAU5/+fDI1H03vYM6vA8+0O7JdeUEcb8R2f7zWYQG7v2zrAD
-   XTwRXx3gzIJJaUIpecYMpyGO50W3H4eu2ubqjWZdGRRjrWtSzGxGD8NNi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="241717829"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="241717829"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 07:58:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="565574065"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2022 07:58:50 -0700
-Date:   Wed, 30 Mar 2022 22:51:37 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Michael Walle <michael@walle.cc>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Wed, 30 Mar 2022 11:12:46 -0400
+X-Greylist: delayed 1497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 08:11:01 PDT
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.55.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F08D1CC7
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 08:11:00 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id EF00E400E9EB2
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 09:23:24 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZZEKnZPy2dx86ZZEKn8b7R; Wed, 30 Mar 2022 09:23:24 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Z+bIz9+dq3nQBsL1agtcS4DmcA/Nw5QI0/tqVKvaifg=; b=TAmA30h2ztJwuOkkbQI6/GJWvG
+        u+bhCgdv2vG6ZvQY1NptupTAonDS2Ye5tA8Z+ObNokWMwLIAjs5zrCTKUWnjFlXJ6Gf+a4loIPxb8
+        vkucgzRBajBpiLEth5uVDWCXSTJeIgrN52Kn4N8IdcYyyvn19w2QxnNK8tAOjyQp0spZXDHF2mu02
+        dGqkNLKbCNyqvijb0LI10q5DZcI80Neiq++ZIrvrKMKB1SU3N3purLRsmuAvYnhAssWo9aHcCpfs1
+        uTg2KVBFxrEUD+2t5okTKLVydtTVZmNx0T6nB5WuDveoRg7RETDjz5eoKIf+pfvW8qj+MA6cexSwK
+        CXdNH4Pg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54566)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nZZEK-002NjM-7j; Wed, 30 Mar 2022 14:23:24 +0000
+Message-ID: <75093b82-4625-d806-a4ea-372b74e60c3b@roeck-us.net>
+Date:   Wed, 30 Mar 2022 07:23:22 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Message-ID: <20220330145137.GA214615@yilunxu-OptiPlex-7050>
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
 References: <20220329160730.3265481-1-michael@walle.cc>
  <20220329160730.3265481-2-michael@walle.cc>
- <20220330065047.GA212503@yilunxu-OptiPlex-7050>
- <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+In-Reply-To: <20220329160730.3265481-2-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nZZEK-002NjM-7j
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54566
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 8
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 10:11:39AM +0000, David Laight wrote:
-> From: Xu Yilun
-> > Sent: 30 March 2022 07:51
-> > 
-> > On Tue, Mar 29, 2022 at 06:07:26PM +0200, Michael Walle wrote:
-> > > More and more drivers will check for bad characters in the hwmon name
-> > > and all are using the same code snippet. Consolidate that code by adding
-> > > a new hwmon_sanitize_name() function.
-> > >
-> > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > ---
-> > >  Documentation/hwmon/hwmon-kernel-api.rst |  9 ++++-
-> > >  drivers/hwmon/hwmon.c                    | 49 ++++++++++++++++++++++++
-> > >  include/linux/hwmon.h                    |  3 ++
-> > >  3 files changed, 60 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> > > index c41eb6108103..12f4a9bcef04 100644
-> > > --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> > > +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> > > @@ -50,6 +50,10 @@ register/unregister functions::
-> > >
-> > >    void devm_hwmon_device_unregister(struct device *dev);
-> > >
-> > > +  char *hwmon_sanitize_name(const char *name);
-> > > +
-> > > +  char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
-> > > +
-> > >  hwmon_device_register_with_groups registers a hardware monitoring device.
-> > >  The first parameter of this function is a pointer to the parent device.
-> > >  The name parameter is a pointer to the hwmon device name. The registration
-> > > @@ -93,7 +97,10 @@ removal would be too late.
-> > >
-> > >  All supported hwmon device registration functions only accept valid device
-> > >  names. Device names including invalid characters (whitespace, '*', or '-')
-> > > -will be rejected. The 'name' parameter is mandatory.
-> > > +will be rejected. The 'name' parameter is mandatory. Before calling a
-> > > +register function you should either use hwmon_sanitize_name or
-> > > +devm_hwmon_sanitize_name to replace any invalid characters with an
-> > 
-> > I suggest                   to duplicate the name and replace ...
+On 3/29/22 09:07, Michael Walle wrote:
+> More and more drivers will check for bad characters in the hwmon name
+> and all are using the same code snippet. Consolidate that code by adding
+> a new hwmon_sanitize_name() function.
 > 
-> You are now going to get code that passed in NULL when the kmalloc() fails.
-> If 'sanitizing' the name is the correct thing to do then sanitize it
-> when the copy is made into the allocated structure.
-
-Then the driver is unaware of the name change, which makes more
-confusing.
-
-> (I'm assuming that the 'const char *name' parameter doesn't have to
-> be persistent - that would be another bug just waiting to happen.)
-
-The hwmon core does require a persistent "name" parameter now. No name
-copy is made when hwmon dev register.
-
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>   Documentation/hwmon/hwmon-kernel-api.rst |  9 ++++-
+>   drivers/hwmon/hwmon.c                    | 49 ++++++++++++++++++++++++
+>   include/linux/hwmon.h                    |  3 ++
+>   3 files changed, 60 insertions(+), 1 deletion(-)
 > 
-> Seems really pointless to be do a kmalloc() just to pass a string
-> into a function.
+> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+> index c41eb6108103..12f4a9bcef04 100644
+> --- a/Documentation/hwmon/hwmon-kernel-api.rst
+> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
+> @@ -50,6 +50,10 @@ register/unregister functions::
+>   
+>     void devm_hwmon_device_unregister(struct device *dev);
+>   
+> +  char *hwmon_sanitize_name(const char *name);
+> +
+> +  char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+> +
+>   hwmon_device_register_with_groups registers a hardware monitoring device.
+>   The first parameter of this function is a pointer to the parent device.
+>   The name parameter is a pointer to the hwmon device name. The registration
+> @@ -93,7 +97,10 @@ removal would be too late.
+>   
+>   All supported hwmon device registration functions only accept valid device
+>   names. Device names including invalid characters (whitespace, '*', or '-')
+> -will be rejected. The 'name' parameter is mandatory.
+> +will be rejected. The 'name' parameter is mandatory. Before calling a
+> +register function you should either use hwmon_sanitize_name or
+> +devm_hwmon_sanitize_name to replace any invalid characters with an
+> +underscore.
 
-Maybe we should not force a kmalloc() when the sanitizing is needed, let
-the driver decide whether to duplicate the string or not.
+That needs more details and deserves its own paragraph. Calling one of
+the functions is only necessary if the original name does or can include
+unsupported characters; an unconditional "should" is therefore a bit
+strong. Also, it is important to mention that the function duplicates
+the name, and that it is the responsibility of the caller to release
+the name if hwmon_sanitize_name() was called and the device is removed.
 
 Thanks,
-Yilun
-
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+Guenter
