@@ -2,169 +2,260 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FB38C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 15:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B40F3C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 16:34:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245429AbiC3P2Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 11:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S1348830AbiC3Qfr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 12:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348202AbiC3P14 (ORCPT
+        with ESMTP id S1348711AbiC3Qfq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:27:56 -0400
-X-Greylist: delayed 3765 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 08:26:10 PDT
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.46.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837081AD1F9
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 08:26:10 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 9F40C657B
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 10:23:38 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZaAcnlmVWRnrrZaAcnvgZY; Wed, 30 Mar 2022 10:23:38 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MdHWXaxnfXMbT4dGtxOke852Tfh2I+Qj/Hn4tovXMKI=; b=OpHb4H8PkxkvcVUoESQWRYuGEG
-        SO/ven6U6l04uXCHxDi572vzwdWjSViNGsrrJktRFu8dHCfRaFpCdHXQ//Mrl0yUQ77GUOESG1QxM
-        dpOLQ5XAioqMyvYFgEpwnWLT4qWrYXiOYEtBMLr7QBFWLczZEAATnzfits91r2bUiDFGm0OFzUUQE
-        Kd+B1Xmq15wIjp0pAmOUnD1wo0YDcCxDNEUE8NudAwOqVS0tocYysIDKuZpS1p/UJDeEYQf+0Ko0G
-        eWXQ5now840rT5FhcIbyM1mfpVA65voncsCiCmNdp1szsrZon7hUM/dmW76HVjTeibF32AkSKkGfd
-        9sRL102A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54570)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZaAb-0031qE-PN; Wed, 30 Mar 2022 15:23:37 +0000
-Message-ID: <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
-Date:   Wed, 30 Mar 2022 08:23:35 -0700
+        Wed, 30 Mar 2022 12:35:46 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED15E2;
+        Wed, 30 Mar 2022 09:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648658021;
+        bh=Aw52GudjzfV6DBA1f+n4H6s9lkEEzRPi45KdcBXLxZ0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=LNkfa0reL5HBrPFyXfSnVY+Aw2Bl3LXKaR5hv9nJ4c1sBBUxk/ni44ICmOMbHgAQT
+         ll/vxykhy0Y2bfO9uTxDmEsuTbj9IosozgHiqKm7GmA4VTqR4PZwOJ7GiEikkc25CC
+         txrSR15lgDefdi3dsU0wV9YC8nDi5Bh4eqlI8oes=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1Mj8qd-1oCFXN3IxR-00f9s0; Wed, 30 Mar 2022 18:33:40 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add cooling device support
+Date:   Wed, 30 Mar 2022 18:33:24 +0200
+Message-Id: <20220330163324.572437-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Xu Yilun <yilun.xu@intel.com>,
-        David Laight <David.Laight@ACULAB.COM>
-Cc:     Michael Walle <michael@walle.cc>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <20220330065047.GA212503@yilunxu-OptiPlex-7050>
- <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
- <20220330145137.GA214615@yilunxu-OptiPlex-7050>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-In-Reply-To: <20220330145137.GA214615@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZaAb-0031qE-PN
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54570
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 17
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tbSqy/9T9ZBldJcHFKXCEAyFh5LU2EBIRmdONn/JNv3Z+98KbMw
+ Izfpr/J+cJWyUOdsRgMG1s96WSJqu7tXUs+KJYpVBRnvfSYS+t9X9KMY+xf4UX43vJEOTWo
+ BqeSxpbPmfKf0OdqDU7VQbdDNQQ0rJGM1guQ8CilLwHhd4zfnTXP5nbYuXpF+L5ghIrMT2Q
+ BvjnI+P7WBuZ+sW6RI43Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TX1inUXOY+g=:Q4a1QCJ8KXVnRJYHeHMC3g
+ Ykq5Na8Y+mjHCtCePKOaLFLWPpBPtB/BjW6dGXuKB9IkUS1wTinJGdy4gO4Ev6oh2PA8vbHEa
+ 6Z+eWhlNNRbM2s5uVQiNafbwfjgdHS/bpxpTwN1KB70pkfJdZ6UPNbQUBCZ8C2Ydog1/ZtQAt
+ vqnjml3b9Py8MmqtK9qwscRW1CjfUvGBArmi1PB5+GL+SUzmcszm5d1JIhDwgEQjJVF8khSO5
+ Gp2WUEmCft0Vv5B3AFbyvapphQfEPCb3k6gkGqX8aK2qJB8qWWcjjamSKVr6svgpMoYNxjW/G
+ xkTy/iXcLbFHK5jId/MLrXa6ife3tUNNIoqH0030GXABcepnjJLfXYNJaweZzLAqI1vi1dv3B
+ NCPoAAvQTAZ6+JQnZf1tP51VN+0e5Qs/89tR7X20JG4rTc9fYKKh75JGNb7mjOvedLcqxM/HZ
+ Y84Lj/aBZKt7+81S/UFiIAPeLsHcuYq50jXNxo+CSVHqj9zd9pTAJ67/R2nJcJLQAGxomGZqf
+ XaU5GbMvtm6FKCTFs3BgU33aCMTZEvQey7Fy5wiOQoNCzeJ/VEH1So6Ge0FHu5w4mLbNHtBNB
+ a4QzvIX4UqGjfiy/ZYtdzsIhYY43XMk/0D+Ok0nveJDQj6j6m/BHEdF+h0qAFFie5Qfjc44ng
+ ZQjUGZ186KnI4OjGWd7iykx6ZStrWlEJAbp+hZIv/zJmojY3TNpPaxC7CrXOL+c/wYvYCu9Dk
+ gERIsF2pfYkspJEqqhYL4NKNKvV/V7Q6fpKGcolEWc+YnHRa3J2v6dLUvDgEOo12QcN21NCyf
+ 4b0SpR+yIgfyz7URxc0nq3VdrjTMmmhdp+85NuaKPbqWP4yFls3K8i3apqLDipXpbhimOUAfP
+ F+qogR1vxdF8/EeVOOkjG/LJCbFhJw+NitOaBoUhVJiQu+YuxIx5kjCLOjvbYVKuPYNnTxh5J
+ pC+jA26vYBMlGj7xyAnFwKUIyhU4Go5FUfGT20ixP+IFhXGZMb6/vpcORhDRAE12EUPyGxJWB
+ TaQBYvjIYYgXxhqdwBtTM82j4+0nrE5kfCfTMyUUiPpMX7feZfdda69GD2l9ivAAF1ikBo9zw
+ 27corAm0O1RiGA=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/30/22 07:51, Xu Yilun wrote:
-> On Wed, Mar 30, 2022 at 10:11:39AM +0000, David Laight wrote:
->> From: Xu Yilun
->>> Sent: 30 March 2022 07:51
->>>
->>> On Tue, Mar 29, 2022 at 06:07:26PM +0200, Michael Walle wrote:
->>>> More and more drivers will check for bad characters in the hwmon name
->>>> and all are using the same code snippet. Consolidate that code by adding
->>>> a new hwmon_sanitize_name() function.
->>>>
->>>> Signed-off-by: Michael Walle <michael@walle.cc>
->>>> ---
->>>>   Documentation/hwmon/hwmon-kernel-api.rst |  9 ++++-
->>>>   drivers/hwmon/hwmon.c                    | 49 ++++++++++++++++++++++++
->>>>   include/linux/hwmon.h                    |  3 ++
->>>>   3 files changed, 60 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
->>>> index c41eb6108103..12f4a9bcef04 100644
->>>> --- a/Documentation/hwmon/hwmon-kernel-api.rst
->>>> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
->>>> @@ -50,6 +50,10 @@ register/unregister functions::
->>>>
->>>>     void devm_hwmon_device_unregister(struct device *dev);
->>>>
->>>> +  char *hwmon_sanitize_name(const char *name);
->>>> +
->>>> +  char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
->>>> +
->>>>   hwmon_device_register_with_groups registers a hardware monitoring device.
->>>>   The first parameter of this function is a pointer to the parent device.
->>>>   The name parameter is a pointer to the hwmon device name. The registration
->>>> @@ -93,7 +97,10 @@ removal would be too late.
->>>>
->>>>   All supported hwmon device registration functions only accept valid device
->>>>   names. Device names including invalid characters (whitespace, '*', or '-')
->>>> -will be rejected. The 'name' parameter is mandatory.
->>>> +will be rejected. The 'name' parameter is mandatory. Before calling a
->>>> +register function you should either use hwmon_sanitize_name or
->>>> +devm_hwmon_sanitize_name to replace any invalid characters with an
->>>
->>> I suggest                   to duplicate the name and replace ...
->>
->> You are now going to get code that passed in NULL when the kmalloc() fails.
->> If 'sanitizing' the name is the correct thing to do then sanitize it
->> when the copy is made into the allocated structure.
-> 
-> Then the driver is unaware of the name change, which makes more
-> confusing.
-> 
->> (I'm assuming that the 'const char *name' parameter doesn't have to
->> be persistent - that would be another bug just waiting to happen.)
-> 
-> The hwmon core does require a persistent "name" parameter now. No name
-> copy is made when hwmon dev register.
-> 
->>
->> Seems really pointless to be do a kmalloc() just to pass a string
->> into a function.
-> 
-> Maybe we should not force a kmalloc() when the sanitizing is needed, let
-> the driver decide whether to duplicate the string or not.
-> 
+Until now, only the temperature sensors where exported thru
+the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
+to make them available as cooling devices.
+Also update Documentation.
 
-Drivers can do that today, and in all existing cases they do so
-(which is why I had suggested to handle the duplication in the
-convenience function in the first place). Drivers don't _have_
-to use the provided convenience functions. At the same time,
-convenience functions should cover the most common use cases.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ Documentation/hwmon/dell-smm-hwmon.rst |  7 ++
+ drivers/hwmon/Kconfig                  |  1 +
+ drivers/hwmon/dell-smm-hwmon.c         | 94 +++++++++++++++++++++++++-
+ 3 files changed, 99 insertions(+), 3 deletions(-)
 
-Michael, let's just drop the changes outside drivers/hwmon from
-the series, and let's keep hwmon_is_bad_char() in the include file.
-Let's just document it, explaining its use case.
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
+dell-smm-hwmon.rst
+index d3323a96665d..41839b7de2c1 100644
+=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -86,6 +86,13 @@ probe the BIOS on your machine and discover the appropr=
+iate codes.
 
-Code outside drivers/hwmon can then be independently modified or not
-at a later time, based on driver author and/or maintainer preference.
+ Again, when you find new codes, we'd be happy to have your patches!
 
-Thanks,
-Guenter
++``thermal`` interface
++---------------------------
++
++The driver also exports the fans as thermal cooling devices with
++``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
++using one of the thermal governors.
++
+ Module parameters
+ -----------------
+
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 9ab4e9b3d27b..1175b8e38c45 100644
+=2D-- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -498,6 +498,7 @@ config SENSORS_DS1621
+ config SENSORS_DELL_SMM
+ 	tristate "Dell laptop SMM BIOS hwmon driver"
+ 	depends on X86
++	imply THERMAL
+ 	help
+ 	  This hwmon driver adds support for reporting temperature of different
+ 	  sensors and controls the fans on Dell laptops via System Management
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 84cb1ede7bc0..0c29386f4bd3 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -21,6 +21,7 @@
+ #include <linux/errno.h>
+ #include <linux/hwmon.h>
+ #include <linux/init.h>
++#include <linux/kconfig.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+@@ -29,6 +30,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/string.h>
+ #include <linux/smp.h>
++#include <linux/thermal.h>
+ #include <linux/types.h>
+ #include <linux/uaccess.h>
+
+@@ -80,6 +82,11 @@ struct dell_smm_data {
+ 	int *fan_nominal_speed[DELL_SMM_NO_FANS];
+ };
+
++struct dell_smm_cooling_data {
++	u8 fan_num;
++	struct dell_smm_data *data;
++};
++
+ MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
+ MODULE_AUTHOR("Pali Roh=C3=A1r <pali@kernel.org>");
+ MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
+@@ -638,9 +645,50 @@ static void __init i8k_init_procfs(struct device *dev=
+)
+
+ #endif
+
+-/*
+- * Hwmon interface
+- */
++static int dell_smm_get_max_state(struct thermal_cooling_device *dev, uns=
+igned long *state)
++{
++	struct dell_smm_cooling_data *cdata =3D dev->devdata;
++
++	*state =3D cdata->data->i8k_fan_max;
++
++	return 0;
++}
++
++static int dell_smm_get_cur_state(struct thermal_cooling_device *dev, uns=
+igned long *state)
++{
++	struct dell_smm_cooling_data *cdata =3D dev->devdata;
++	int ret;
++
++	ret =3D i8k_get_fan_status(cdata->data, cdata->fan_num);
++	if (ret < 0)
++		return ret;
++
++	*state =3D ret;
++
++	return 0;
++}
++
++static int dell_smm_set_cur_state(struct thermal_cooling_device *dev, uns=
+igned long state)
++{
++	struct dell_smm_cooling_data *cdata =3D dev->devdata;
++	struct dell_smm_data *data =3D cdata->data;
++	int ret;
++
++	if (state > data->i8k_fan_max)
++		return -EINVAL;
++
++	mutex_lock(&data->i8k_mutex);
++	ret =3D i8k_set_fan(data, cdata->fan_num, (int)state);
++	mutex_unlock(&data->i8k_mutex);
++
++	return ret;
++}
++
++static const struct thermal_cooling_device_ops dell_smm_cooling_ops =3D {
++	.get_max_state =3D dell_smm_get_max_state,
++	.get_cur_state =3D dell_smm_get_cur_state,
++	.set_cur_state =3D dell_smm_set_cur_state,
++};
+
+ static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor=
+_types type, u32 attr,
+ 				   int channel)
+@@ -941,6 +989,37 @@ static const struct hwmon_chip_info dell_smm_chip_inf=
+o =3D {
+ 	.info =3D dell_smm_info,
+ };
+
++static int __init dell_smm_init_cdev(struct device *dev, u8 fan_num)
++{
++	struct dell_smm_data *data =3D dev_get_drvdata(dev);
++	struct thermal_cooling_device *cdev;
++	struct dell_smm_cooling_data *cdata;
++	int ret =3D 0;
++	char *name;
++
++	name =3D kasprintf(GFP_KERNEL, "dell-smm-fan%u", fan_num + 1);
++	if (!name)
++		return -ENOMEM;
++
++	cdata =3D devm_kmalloc(dev, sizeof(*cdata), GFP_KERNEL);
++	if (cdata) {
++		cdata->fan_num =3D fan_num;
++		cdata->data =3D data;
++		cdev =3D devm_thermal_of_cooling_device_register(dev, NULL, name, cdata=
+,
++							       &dell_smm_cooling_ops);
++		if (IS_ERR(cdev)) {
++			devm_kfree(dev, cdata);
++			ret =3D PTR_ERR(cdev);
++		}
++	} else {
++		ret =3D -ENOMEM;
++	}
++
++	kfree(name);
++
++	return ret;
++}
++
+ static int __init dell_smm_init_hwmon(struct device *dev)
+ {
+ 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
+@@ -967,6 +1046,15 @@ static int __init dell_smm_init_hwmon(struct device =
+*dev)
+ 			continue;
+
+ 		data->fan[i] =3D true;
++
++		/* the cooling device it not critical, ignore failures */
++		if (IS_REACHABLE(CONFIG_THERMAL)) {
++			err =3D dell_smm_init_cdev(dev, i);
++			if (err < 0)
++				dev_err(dev, "Failed to register cooling device for fan %u\n",
++					i + 1);
++		}
++
+ 		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan_ma=
+x + 1,
+ 								sizeof(*data->fan_nominal_speed[i]),
+ 								GFP_KERNEL);
+=2D-
+2.30.2
+
