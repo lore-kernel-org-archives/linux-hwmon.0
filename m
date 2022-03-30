@@ -2,59 +2,59 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C6F6C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 07:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8661EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 07:51:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243899AbiC3HiI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 03:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S243835AbiC3HxY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 03:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243896AbiC3HiE (ORCPT
+        with ESMTP id S231300AbiC3HxW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:38:04 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0023B55BE0;
-        Wed, 30 Mar 2022 00:36:18 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9so13996005ilu.9;
-        Wed, 30 Mar 2022 00:36:18 -0700 (PDT)
+        Wed, 30 Mar 2022 03:53:22 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7F2B39;
+        Wed, 30 Mar 2022 00:51:37 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id z10so990616iln.0;
+        Wed, 30 Mar 2022 00:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=K4jqbVE230M9wS+1QXIPRjVS4MYSGVkCyAOthMzzuT8=;
-        b=NdX1PJx79ceLi53HWoka1JaM+2R9nUAaulmuuGNGSXDWk/ZLlchEF0lgouHL3SrPUx
-         cXgivj92UK2ugRw0qCpIPkaphY97RGnb3cDtRBFdKtEusG2csEkg/ocbKfiwzf8uLsYh
-         +bkh+5M3oRdQq/gJtJQUGM66Pgv1ZAlPR4H8xJSNmoB1AHqqqEbWMoECXc7OSo9da4+y
-         qlkS5AXnoguqnqNBAG7FzqVjEkM3CRFkpKKW3qRXjSS4B9FzOZLEjZXaEWoqJ2qs7rNL
-         24WgjHYrMvxs4vMR7mgqhDldrvzsn5Oej6F+eb0octlfFWvbZOJcqNvEgSN7zLKcvUjr
-         ix6w==
+        bh=iB4dSEsEFAg9ox27q446TXSy+mzYtY4Er+pD2+PDVBg=;
+        b=oDpdH2Vm5BHkAYypGCGmfKvtGwKPS85qRwHN0oZ49oB/SBH+ynRCoRZKMzDcPME/z5
+         zO2vkwktQD9AF7ydD5P5aRzs3Z5ECR4q1QHmM5kWtEBtppFOFfFzbNXHsXMFAdAtiFWV
+         mvlTRE82vJ9Ymygaupp3INjc8uIJoOLoicncobStBHGbh/htZNqJSGycPB+jQAKFpzdO
+         QzmjDnHBHVsPwIDVbSkFKDNWWiEHSKGHHZY+j9vS4YtEHW7cj8qPtPlHVkDPIN1ykOiq
+         5hPu8FnYHfPF88ksGmt37RgGt/lXOuHX0EP6iVjSl72sD6oNWEddcQCLJ+xT2KgqG5js
+         fGrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=K4jqbVE230M9wS+1QXIPRjVS4MYSGVkCyAOthMzzuT8=;
-        b=Vt0NvpuPJxfD4gQf2IddAi17YifMUEamc0HdWtQV+P3Ywu3k/NYOAYS7xd48xoXv5L
-         krWdEDSZAQQqbe5hTZMDcSv3IhottPRrtQRKu9jQawlBmQ61QS5yr8s7oYkZBaODTuwL
-         CsP6Bn2opFYuukSFzbyzB2f1kK1BTrA7jm8iTfsYp4c69KLIl5vWlr5sZS2YD6r6qz9Q
-         xvhhEIasdTiD97Mnp3Z/+xtBygw6NWA+7HdCyzCl/NUOTS27RSG7yxMyMkuxWFdTRDEy
-         VIX1PfDJBMeJU8UKvSryzrFv+AElDfRyEavksjxQ7vgMZ1m+Q4UY1OMOUvOSER6rzIwB
-         4IfA==
-X-Gm-Message-State: AOAM532BwH+ASTVvdshoyM9skIYGK6ao3p1AT6XwseeneFJy+3fkLgBI
-        XXsGNrRz6lfRvMeYdH5iwA/K50IlqEaYO/vW+1O1OiwHgss=
-X-Google-Smtp-Source: ABdhPJzILfjbvZouqSmF9BbpFgISbz1vhLK8IKxTWZkYOnBLLHk90MwqMsffPeqph/YKwubQzseyj2lyXH0FBB958EQ=
-X-Received: by 2002:a05:6e02:d88:b0:2c8:713f:dcff with SMTP id
- i8-20020a056e020d8800b002c8713fdcffmr10307147ilj.289.1648625778394; Wed, 30
- Mar 2022 00:36:18 -0700 (PDT)
+        bh=iB4dSEsEFAg9ox27q446TXSy+mzYtY4Er+pD2+PDVBg=;
+        b=opn8UlzfPiUHv4X+sPmdVVEX2+HZb2app4WYok9APjEvwuTjjW3JhX82U0NerWNX3c
+         E3EUGUhWXjrETahpqUyZL/9ggDjGeMFxJLj8NF8lxnN3ePM9Fna4ihCoN7Asxj7mpgYq
+         DI/SHrlDrjX2g3gMvwdCNc7oujNYAsktH0Mam2TvSsb5RWuEQp+kuph+PFFeKOeccdLV
+         g9MxIxzZPPX5TL93MLm6qvhT/SU4rMKcgb3eJt0aUM33OsXPwnPo/0Z4FTWHrYs9/lvS
+         mX/tEK93cM1bZPwD6Hk/xeVr8zeif4//badatt0TBptWs8mXLFKqXSOEtS8bjuRn+aoN
+         +85w==
+X-Gm-Message-State: AOAM533UvcYaqobCUpnlrSJ0PYD7yK3e9hH4np5cKcuOquOqDfHYFsSX
+        eTTqu9nJhmOG7/xzUsOde4vauYs7fFvbXcryiQs=
+X-Google-Smtp-Source: ABdhPJxxLLvBQX5aIBjJbJitqy7IOYbpVTWOVOXL5J7uxYwL0CqGJAH1EE1pB5MDy6EVdg+dzFI9j9k5GCXcshxiXSU=
+X-Received: by 2002:a05:6e02:1c2f:b0:2c9:ac72:b4b3 with SMTP id
+ m15-20020a056e021c2f00b002c9ac72b4b3mr8436849ilh.246.1648626697086; Wed, 30
+ Mar 2022 00:51:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-3-eugene.shalygin@gmail.com> <df43bce6-b1bc-1abc-307b-878ee7acb261@roeck-us.net>
- <CAB95QASgzUSaLjZuxWauiSvNK7Or=1Kz8htJcjWqU+HrRutvJg@mail.gmail.com> <fef5c154-2b1b-0a2b-52c3-c3fe0b4c2abf@roeck-us.net>
-In-Reply-To: <fef5c154-2b1b-0a2b-52c3-c3fe0b4c2abf@roeck-us.net>
+ <20220327121404.1702631-2-eugene.shalygin@gmail.com> <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
+ <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com> <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
+In-Reply-To: <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
 From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 30 Mar 2022 09:36:06 +0200
-Message-ID: <CAB95QAR+shnkC=QjmxYzdr69WuzW41aXmrGg-j7kfXM9+zGCuw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
- ACPI global lock
+Date:   Wed, 30 Mar 2022 09:51:24 +0200
+Message-ID: <CAB95QAQGWRT=UsXPn65oiiwBRa1RKj61sg7wq9d7VntnFWzaOg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
+ struct for board data
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org,
@@ -64,40 +64,66 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 30 Mar 2022 at 01:37, Guenter Roeck <linux@roeck-us.net> wrote:
+On Tue, 29 Mar 2022 at 22:28, Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On 3/29/22 15:11, Eugene Shalygin wrote:
-> > On Tue, 29 Mar 2022 at 23:23, Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> >>> +/* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
-> >>> +#define ACPI_GLOBAL_LOCK_PSEUDO_PATH ":GLOBAL_LOCK"
-> >>> +
+> On 3/29/22 12:22, Eugene Shalygin wrote:
+> > On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
+> >>>
+> >>>    struct ec_sensors_data {
+> >>> -     unsigned long board_sensors;
+> >>> +     struct ec_board_info board_info;
 > >>
-> >> That needs to be documented.
+> >> Please explain why this needs to be the entire structure and not
+> >> just a pointer to it.
 > >
-> > Do you mean a note in the /Documentation/..../...rst or adding details
-> > here? There is an additional bit of information on this identifier
-> > below, in the ec_board_info struct declaration.
-> >
-> My understanding was that the user would/could request its use via
-> the module parameter, so it needs to be documented in the rst file.
-I see now, thank you.
-
-> >>> +     if (!mutex_path || !strlen(mutex_path)) {
-> >>
-> >> When would mutex_path be NULL ?
-> > When it is set to NULL in the board definition struct ec_board_info.
+> > I marked the board_info array as __initconst assuming that this large
+> > array will be unloaded from memory after the init phase, while we keep
+> > only a single element. Is that assumption incorrect?
 > >
 >
-> Are there any such board definitions ? I don't recall seeing any.
+> What happens if you build the driver into the kernel and then instantiate
+> and de-instantiate it multiple times ?
 
-You are right, there are no such definitions neither in this
-submission nor before. I'm messaging with a user who showed a hint
-that such boards might exist [1]. We have not confirmed it yet, but I
-thought this little test is obvious enough to be put in the code
-already.
+Sorry, I have no idea because I don't know how to load a built-in
+driver multiple times. But since this driver is attached to a
+motherboard device, which is persistent and always single, do I need
+to consider such a scenario?
+
+>
+> >>> +static int sensor_count(const struct ec_board_info *board)
+> >>> +{
+> >>> +     return hweight_long(board->sensors);
+> >>> +}
+> >>
+> >> This function is called several times. Does it really make sense, or is it
+> >> necessary, to re-calculate the number of sensors over and over again
+> >> instead of keeping it in ec->nr_sensors as before ? What are the benefits ?
+> >> Unless there is a good explanation I see that as unrelated and unnecessary
+> >> change.
+> >
+> > This had something to do with data deduplication. However, I need the
+> > count value only for looping over the sensor array, thus I can as well
+> > add an invalid element to the end of the array. I rushed to submit
+> > this driver to replace the wmi one, and it still has an artifact for
+> > the WMI code I'd like to get rid of eventually, which is the read
+> > buffer and the registers array. This will remove all the nr_ variables
+> > and two dynamically allocated arrays. I will understand, of course, if
+> > you ask to submit that refactoring separately.
+> >
+>
+> The rule of "one logical change per patch" still applies. If you start
+> intermixing parts of future clean-up efforts into current patches, you'll
+> see a very unhappy maintainer - especially since this change makes up
+> a significant part of this patch, complicates review significantly,
+> and makes me wonder if other unrelated changes are included that I don't
+> see right now due to all the noise.
+>
+> Besides, at least in this patch, I don't buy the "deduplication" argument.
+> Keeping a single additional variable in a data structure is much simpler
+> and straightforward than calling hweight_long() several times. I'd call
+> that "complification".
+
+OK, I'll roll it back until I remove the other size variables and arrays.
 
 Best regards,
 Eugene
-
-[1] https://github.com/zeule/asus-ec-sensors/issues/19
