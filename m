@@ -2,121 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CDDFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 14:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C52C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 14:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244749AbiC3OLu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 10:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S1347246AbiC3OwH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 10:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346658AbiC3OK5 (ORCPT
+        with ESMTP id S1347279AbiC3Ovz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:10:57 -0400
-Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.145.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1811B0BED
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 07:09:12 -0700 (PDT)
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id 091DAC54B
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 09:09:12 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZZ0ZnIXYlb6UBZZ0anMQgH; Wed, 30 Mar 2022 09:09:12 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Xz8yh43Ee8bsOdPZexT5kTM/Pf85kWOgS2F3siy5ElI=; b=aZfwJyVTrvxuIj2Xy5lLmW9lGF
-        oSbJ8KcTuJsaxOQvWhts64PnQAC89U8Gm9zFnwM8evUriD5z5Cv+wbLGuYDBu1aCikJidQ+ghmxBb
-        /GRbW61Vkvuyt1tSJobZs8U56+9uoNo85akwQN0cPKvr/TiYVpEnBqkZ6hQsJRozECHvERv6AScBd
-        puMg6xlrzorqgKqo0XrkuYf9QR1khL+y3l79icnm8F2ZgcU4K8kZmuOxPME38nrUPNtdTi8UOcti1
-        UT7j238IcDi2/nfcxwoZnDz78w+55EYoq341m3EPo97yrL90SJf0L6C/7vk+bg45o1t06Hp5ZK3rG
-        L4SNGJtw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54564)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZZ0Z-002Dzr-K2; Wed, 30 Mar 2022 14:09:11 +0000
-Message-ID: <679dfcda-a0b4-b420-b45b-2ccdc21a579d@roeck-us.net>
-Date:   Wed, 30 Mar 2022 07:09:10 -0700
+        Wed, 30 Mar 2022 10:51:55 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1883348321
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 07:50:07 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-136-sIRC0DlJN0S4pc-bPv8wSQ-1; Wed, 30 Mar 2022 15:50:04 +0100
+X-MC-Unique: sIRC0DlJN0S4pc-bPv8wSQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 15:50:02 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 30 Mar 2022 15:50:02 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guenter Roeck' <linux@roeck-us.net>,
+        Michael Walle <michael@walle.cc>,
+        "Xu Yilun" <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Topic: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Index: AQHYREG1rIB0cQMH/kajVzJ0H3I8wazYAMOg
+Date:   Wed, 30 Mar 2022 14:50:02 +0000
+Message-ID: <02545bf1c21b45f78eba5e8b37951748@AcuMS.aculab.com>
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-2-michael@walle.cc>
+ <75093b82-4625-d806-a4ea-372b74e60c3b@roeck-us.net>
+In-Reply-To: <75093b82-4625-d806-a4ea-372b74e60c3b@roeck-us.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-2-eugene.shalygin@gmail.com>
- <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
- <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
- <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
- <CAB95QAQGWRT=UsXPn65oiiwBRa1RKj61sg7wq9d7VntnFWzaOg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-In-Reply-To: <CAB95QAQGWRT=UsXPn65oiiwBRa1RKj61sg7wq9d7VntnFWzaOg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZZ0Z-002Dzr-K2
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54564
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/30/22 00:51, Eugene Shalygin wrote:
-> On Tue, 29 Mar 2022 at 22:28, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 3/29/22 12:22, Eugene Shalygin wrote:
->>> On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
->>>>>
->>>>>     struct ec_sensors_data {
->>>>> -     unsigned long board_sensors;
->>>>> +     struct ec_board_info board_info;
->>>>
->>>> Please explain why this needs to be the entire structure and not
->>>> just a pointer to it.
->>>
->>> I marked the board_info array as __initconst assuming that this large
->>> array will be unloaded from memory after the init phase, while we keep
->>> only a single element. Is that assumption incorrect?
->>>
->>
->> What happens if you build the driver into the kernel and then instantiate
->> and de-instantiate it multiple times ?
-> 
-> Sorry, I have no idea because I don't know how to load a built-in
-> driver multiple times. But since this driver is attached to a
-> motherboard device, which is persistent and always single, do I need
-> to consider such a scenario?
-> 
+RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAzMCBNYXJjaCAyMDIyIDE1OjIzDQo+IE9uIDMv
+MjkvMjIgMDk6MDcsIE1pY2hhZWwgV2FsbGUgd3JvdGU6DQo+ID4gTW9yZSBhbmQgbW9yZSBkcml2
+ZXJzIHdpbGwgY2hlY2sgZm9yIGJhZCBjaGFyYWN0ZXJzIGluIHRoZSBod21vbiBuYW1lDQo+ID4g
+YW5kIGFsbCBhcmUgdXNpbmcgdGhlIHNhbWUgY29kZSBzbmlwcGV0LiBDb25zb2xpZGF0ZSB0aGF0
+IGNvZGUgYnkgYWRkaW5nDQo+ID4gYSBuZXcgaHdtb25fc2FuaXRpemVfbmFtZSgpIGZ1bmN0aW9u
+Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBXYWxsZSA8bWljaGFlbEB3YWxsZS5j
+Yz4NCj4gPiAtLS0NCj4gPiAgIERvY3VtZW50YXRpb24vaHdtb24vaHdtb24ta2VybmVsLWFwaS5y
+c3QgfCAgOSArKysrLQ0KPiA+ICAgZHJpdmVycy9od21vbi9od21vbi5jICAgICAgICAgICAgICAg
+ICAgICB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAgaW5jbHVkZS9saW51eC9o
+d21vbi5oICAgICAgICAgICAgICAgICAgICB8ICAzICsrDQo+ID4gICAzIGZpbGVzIGNoYW5nZWQs
+IDYwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9E
+b2N1bWVudGF0aW9uL2h3bW9uL2h3bW9uLWtlcm5lbC1hcGkucnN0IGIvRG9jdW1lbnRhdGlvbi9o
+d21vbi9od21vbi1rZXJuZWwtYXBpLnJzdA0KPiA+IGluZGV4IGM0MWViNjEwODEwMy4uMTJmNGE5
+YmNlZjA0IDEwMDY0NA0KPiA+IC0tLSBhL0RvY3VtZW50YXRpb24vaHdtb24vaHdtb24ta2VybmVs
+LWFwaS5yc3QNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2h3bW9uL2h3bW9uLWtlcm5lbC1hcGku
+cnN0DQo+ID4gQEAgLTUwLDYgKzUwLDEwIEBAIHJlZ2lzdGVyL3VucmVnaXN0ZXIgZnVuY3Rpb25z
+OjoNCj4gPg0KPiA+ICAgICB2b2lkIGRldm1faHdtb25fZGV2aWNlX3VucmVnaXN0ZXIoc3RydWN0
+IGRldmljZSAqZGV2KTsNCj4gPg0KPiA+ICsgIGNoYXIgKmh3bW9uX3Nhbml0aXplX25hbWUoY29u
+c3QgY2hhciAqbmFtZSk7DQo+ID4gKw0KPiA+ICsgIGNoYXIgKmRldm1faHdtb25fc2FuaXRpemVf
+bmFtZShzdHJ1Y3QgZGV2aWNlICpkZXYsIGNvbnN0IGNoYXIgKm5hbWUpOw0KPiA+ICsNCj4gPiAg
+IGh3bW9uX2RldmljZV9yZWdpc3Rlcl93aXRoX2dyb3VwcyByZWdpc3RlcnMgYSBoYXJkd2FyZSBt
+b25pdG9yaW5nIGRldmljZS4NCj4gPiAgIFRoZSBmaXJzdCBwYXJhbWV0ZXIgb2YgdGhpcyBmdW5j
+dGlvbiBpcyBhIHBvaW50ZXIgdG8gdGhlIHBhcmVudCBkZXZpY2UuDQo+ID4gICBUaGUgbmFtZSBw
+YXJhbWV0ZXIgaXMgYSBwb2ludGVyIHRvIHRoZSBod21vbiBkZXZpY2UgbmFtZS4gVGhlIHJlZ2lz
+dHJhdGlvbg0KPiA+IEBAIC05Myw3ICs5NywxMCBAQCByZW1vdmFsIHdvdWxkIGJlIHRvbyBsYXRl
+Lg0KPiA+DQo+ID4gICBBbGwgc3VwcG9ydGVkIGh3bW9uIGRldmljZSByZWdpc3RyYXRpb24gZnVu
+Y3Rpb25zIG9ubHkgYWNjZXB0IHZhbGlkIGRldmljZQ0KPiA+ICAgbmFtZXMuIERldmljZSBuYW1l
+cyBpbmNsdWRpbmcgaW52YWxpZCBjaGFyYWN0ZXJzICh3aGl0ZXNwYWNlLCAnKicsIG9yICctJykN
+Cj4gPiAtd2lsbCBiZSByZWplY3RlZC4gVGhlICduYW1lJyBwYXJhbWV0ZXIgaXMgbWFuZGF0b3J5
+Lg0KPiA+ICt3aWxsIGJlIHJlamVjdGVkLiBUaGUgJ25hbWUnIHBhcmFtZXRlciBpcyBtYW5kYXRv
+cnkuIEJlZm9yZSBjYWxsaW5nIGENCj4gPiArcmVnaXN0ZXIgZnVuY3Rpb24geW91IHNob3VsZCBl
+aXRoZXIgdXNlIGh3bW9uX3Nhbml0aXplX25hbWUgb3INCj4gPiArZGV2bV9od21vbl9zYW5pdGl6
+ZV9uYW1lIHRvIHJlcGxhY2UgYW55IGludmFsaWQgY2hhcmFjdGVycyB3aXRoIGFuDQo+ID4gK3Vu
+ZGVyc2NvcmUuDQo+IA0KPiBUaGF0IG5lZWRzIG1vcmUgZGV0YWlscyBhbmQgZGVzZXJ2ZXMgaXRz
+IG93biBwYXJhZ3JhcGguIENhbGxpbmcgb25lIG9mDQo+IHRoZSBmdW5jdGlvbnMgaXMgb25seSBu
+ZWNlc3NhcnkgaWYgdGhlIG9yaWdpbmFsIG5hbWUgZG9lcyBvciBjYW4gaW5jbHVkZQ0KPiB1bnN1
+cHBvcnRlZCBjaGFyYWN0ZXJzOyBhbiB1bmNvbmRpdGlvbmFsICJzaG91bGQiIGlzIHRoZXJlZm9y
+ZSBhIGJpdA0KPiBzdHJvbmcuIEFsc28sIGl0IGlzIGltcG9ydGFudCB0byBtZW50aW9uIHRoYXQg
+dGhlIGZ1bmN0aW9uIGR1cGxpY2F0ZXMNCj4gdGhlIG5hbWUsIGFuZCB0aGF0IGl0IGlzIHRoZSBy
+ZXNwb25zaWJpbGl0eSBvZiB0aGUgY2FsbGVyIHRvIHJlbGVhc2UNCj4gdGhlIG5hbWUgaWYgaHdt
+b25fc2FuaXRpemVfbmFtZSgpIHdhcyBjYWxsZWQgYW5kIHRoZSBkZXZpY2UgaXMgcmVtb3ZlZC4N
+Cg0KTW9yZSB3b3JyeWluZywgYW5kIG5vdCBkb2N1bWVudGVkLCBpcyB0aGF0IHRoZSBidWZmZXIg
+J25hbWUnIHBvaW50cw0KdG8gbXVzdCBwZXJzaXN0Lg0KDQpJU1RNIHRoYXQgdGhlIGttYWxsb2Mo
+KSBpbiBfX2h3bW9uX2RldmljZV9yZWdpc3RlcigpIHNob3VsZCBpbmNsdWRlDQpzcGFjZSBmb3Ig
+YSBjb3B5IG9mIHRoZSBuYW1lLg0KSXQgY2FuIHRoZW4gZG8gd2hhdCBpdCB3aWxsIHdpdGggd2hh
+dGV2ZXIgaXMgcGFzc2VkIGluLg0KDQpPaCB5ZXMsIGl0IGhhcyBteSAnZmF2b3VyaXRlIGNvbnN0
+cnVjdCc6ICBpZiAoIXN0cmxlbihuYW1lKSkgLi4uDQood2VsbCBzdHJbc3RybGVuKHN0cildID0g
+MCBhbHNvIGhhcHBlbnMhKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
+aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
+DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-Drivers have "unbind" and "bind" attributes, which can be used to unbind/bind
-the driver mutliple times. That is quite useful for testing, including for
-built-in drivers. As long as the attributes exists, they have to be supported.
-This is not about having to consider a scenario, it is about preventing crashes
-if existing functionality is used.
-
-Having said that, I notice that the probe function is marked __init. I guess
-I didn't pay attention. It may be interesting to build the driver into the
-kernel, unbind/bind it, and see what happens.
-
-Guenter
