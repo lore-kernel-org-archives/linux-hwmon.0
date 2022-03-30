@@ -2,114 +2,288 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA1F9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 19:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAD6AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 19:59:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiC3TnH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 15:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S1347232AbiC3UB1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 16:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiC3TnG (ORCPT
+        with ESMTP id S231614AbiC3UBV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 15:43:06 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B0613F5F;
-        Wed, 30 Mar 2022 12:41:20 -0700 (PDT)
+        Wed, 30 Mar 2022 16:01:21 -0400
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.48.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3412228E
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 12:59:34 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 4E190ABB6
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 14:59:34 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZeTen0fMN9AGSZeTenkVeA; Wed, 30 Mar 2022 14:59:34 -0500
+X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0PR2zYdjHpnbzPpGDX73PfezrreUjmJPOTEhSKYO1Pw=; b=aP7MVBYYOC3fOr70nal+KO/51m
-        fgs1qb4ZsYgXHfhoN5IOujYhXV8HWcqMADXtQLoZO8wpDxQqueubIhcTk1+HGj90A7mcMcxS8Z3ww
-        f9EGTMCdpw4jZrLXAoG3bsz+Psqt1PfWmeEF/rWLvZV1V37RCkohiYgQaZGp+119J2IDuL13p9Nr9
-        msUyKTtnZNkgwYcE1IrvgOp1J34tP1nmWz2VhM+607A28flKZjhPm4+hu7q5Bet2u9gMH4kz/yriC
-        EL7MSFc1LV28ceElh9CZwmjb2X7USUzKVHkwA1IX9Lm9WX8wqHZl4SHgu0JZG/zDErpNCsJ7hw4eo
-        jpx6RMiA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58030)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=OQjGvqorK7/g/+J6T4BKoUNC6ieXNGRyMFvlaC1kuuc=; b=MYQp1Qwj6IzRVOvh4MKognFZiU
+        AMVqXiZdxwBpXy1v1CtcHRNbBZ4UmS0xOPkY1nMMczWyH4OqyiXl+i1qGa+yZw4yBVfozQ9OGOkXU
+        +w4cFaYhrdxoNwDG39rBhh8A1zomCLRSy3myZNvgEY6EBE9khMZUvJAm78nKXE9bcUzrC7Z5ysVIH
+        vGwfKZn8HJJ3Ltt7a5TxDxJv0ifO+Dbm4O6BFLyiyKKMJA8UNPFmwzV9rXA5bywOWbpYZ8hNZVqUR
+        gTlvrTqjd2+NQnLS+keYPR2drHI7UnAumQZt8VFmPFaxYR3UE6F6bf7iX+fBvGwcTxf42vjvQvNG/
+        eTcjZuBg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54578)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nZeBj-0003ek-2P; Wed, 30 Mar 2022 20:41:02 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nZeBf-0006uy-77; Wed, 30 Mar 2022 20:40:59 +0100
-Date:   Wed, 30 Mar 2022 20:40:59 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] net: sfp: use hwmon_sanitize_name()
-Message-ID: <YkSyS1g48TlB3XpB@shell.armlinux.org.uk>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-4-michael@walle.cc>
+        (envelope-from <linux@roeck-us.net>)
+        id 1nZeTd-001V1L-QO; Wed, 30 Mar 2022 19:59:33 +0000
+Message-ID: <a6d2a293-ccfe-b919-c168-7d4f7143b623@roeck-us.net>
+Date:   Wed, 30 Mar 2022 12:59:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329160730.3265481-4-michael@walle.cc>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/4] lib: add generic polynomial calculation
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220328112505.3025374-1-michael@walle.cc>
+ <20220328112505.3025374-2-michael@walle.cc>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220328112505.3025374-2-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nZeTd-001V1L-QO
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54578
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 4
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 06:07:28PM +0200, Michael Walle wrote:
-> Instead of open-coding the bad characters replacement in the hwmon name,
-> use the new hwmon_sanitize_name().
+On 3/28/22 04:25, Michael Walle wrote:
+> Some temperature and voltage sensors use a polynomial to convert between
+> raw data points and actual temperature or voltage. The polynomial is
+> usually the result of a curve fitting of the diode characteristic.
+> 
+> The BT1 PVT hwmon driver already uses such a polynonmial calculation
+> which is rather generic. Move it to lib/ so other drivers can reuse it.
 > 
 > Signed-off-by: Michael Walle <michael@walle.cc>
 
-Assuming hwmon_sanitize_name() gets settled, then:
+For my reference:
 
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+I don't see who owns lib/, so I'll just take this patch through hwmon
+unless someone objects.
+
+Thanks,
+Guenter
 
 > ---
->  drivers/net/phy/sfp.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+>   include/linux/polynomial.h |  35 ++++++++++++
+>   lib/Kconfig                |   3 ++
+>   lib/Makefile               |   2 +
+>   lib/polynomial.c           | 108 +++++++++++++++++++++++++++++++++++++
+>   4 files changed, 148 insertions(+)
+>   create mode 100644 include/linux/polynomial.h
+>   create mode 100644 lib/polynomial.c
 > 
-> diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-> index 4dfb79807823..0d5dba30444d 100644
-> --- a/drivers/net/phy/sfp.c
-> +++ b/drivers/net/phy/sfp.c
-> @@ -1289,7 +1289,7 @@ static const struct hwmon_chip_info sfp_hwmon_chip_info = {
->  static void sfp_hwmon_probe(struct work_struct *work)
->  {
->  	struct sfp *sfp = container_of(work, struct sfp, hwmon_probe.work);
-> -	int err, i;
-> +	int err;
->  
->  	/* hwmon interface needs to access 16bit registers in atomic way to
->  	 * guarantee coherency of the diagnostic monitoring data. If it is not
-> @@ -1317,16 +1317,12 @@ static void sfp_hwmon_probe(struct work_struct *work)
->  		return;
->  	}
->  
-> -	sfp->hwmon_name = kstrdup(dev_name(sfp->dev), GFP_KERNEL);
-> +	sfp->hwmon_name = hwmon_sanitize_name(dev_name(sfp->dev));
->  	if (!sfp->hwmon_name) {
->  		dev_err(sfp->dev, "out of memory for hwmon name\n");
->  		return;
->  	}
->  
-> -	for (i = 0; sfp->hwmon_name[i]; i++)
-> -		if (hwmon_is_bad_char(sfp->hwmon_name[i]))
-> -			sfp->hwmon_name[i] = '_';
-> -
->  	sfp->hwmon_dev = hwmon_device_register_with_info(sfp->dev,
->  							 sfp->hwmon_name, sfp,
->  							 &sfp_hwmon_chip_info,
-> -- 
-> 2.30.2
-> 
-> 
+> diff --git a/include/linux/polynomial.h b/include/linux/polynomial.h
+> new file mode 100644
+> index 000000000000..9e074a0bb6fa
+> --- /dev/null
+> +++ b/include/linux/polynomial.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+> + */
+> +
+> +#ifndef _POLYNOMIAL_H
+> +#define _POLYNOMIAL_H
+> +
+> +/*
+> + * struct polynomial_term - one term descriptor of a polynomial
+> + * @deg: degree of the term.
+> + * @coef: multiplication factor of the term.
+> + * @divider: distributed divider per each degree.
+> + * @divider_leftover: divider leftover, which couldn't be redistributed.
+> + */
+> +struct polynomial_term {
+> +	unsigned int deg;
+> +	long coef;
+> +	long divider;
+> +	long divider_leftover;
+> +};
+> +
+> +/*
+> + * struct polynomial - a polynomial descriptor
+> + * @total_divider: total data divider.
+> + * @terms: polynomial terms, last term must have degree of 0
+> + */
+> +struct polynomial {
+> +	long total_divider;
+> +	struct polynomial_term terms[];
+> +};
+> +
+> +long polynomial_calc(const struct polynomial *poly, long data);
+> +
+> +#endif
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index 087e06b4cdfd..6a843639814f 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -737,3 +737,6 @@ config PLDMFW
+>   
+>   config ASN1_ENCODER
+>          tristate
+> +
+> +config POLYNOMIAL
+> +       tristate
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 6b9ffc1bd1ee..89fcae891361 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -263,6 +263,8 @@ obj-$(CONFIG_MEMREGION) += memregion.o
+>   obj-$(CONFIG_STMP_DEVICE) += stmp_device.o
+>   obj-$(CONFIG_IRQ_POLL) += irq_poll.o
+>   
+> +obj-$(CONFIG_POLYNOMIAL) += polynomial.o
+> +
+>   # stackdepot.c should not be instrumented or call instrumented functions.
+>   # Prevent the compiler from calling builtins like memcmp() or bcmp() from this
+>   # file.
+> diff --git a/lib/polynomial.c b/lib/polynomial.c
+> new file mode 100644
+> index 000000000000..66d383445fec
+> --- /dev/null
+> +++ b/lib/polynomial.c
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Generic polynomial calculation using integer coefficients.
+> + *
+> + * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+> + *
+> + * Authors:
+> + *   Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
+> + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> + *
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/polynomial.h>
+> +
+> +/*
+> + * Originally this was part of drivers/hwmon/bt1-pvt.c.
+> + * There the following conversion is used and should serve as an example here:
+> + *
+> + * The original translation formulae of the temperature (in degrees of Celsius)
+> + * to PVT data and vice-versa are following:
+> + *
+> + * N = 1.8322e-8*(T^4) + 2.343e-5*(T^3) + 8.7018e-3*(T^2) + 3.9269*(T^1) +
+> + *     1.7204e2
+> + * T = -1.6743e-11*(N^4) + 8.1542e-8*(N^3) + -1.8201e-4*(N^2) +
+> + *     3.1020e-1*(N^1) - 4.838e1
+> + *
+> + * where T = [-48.380, 147.438]C and N = [0, 1023].
+> + *
+> + * They must be accordingly altered to be suitable for the integer arithmetics.
+> + * The technique is called 'factor redistribution', which just makes sure the
+> + * multiplications and divisions are made so to have a result of the operations
+> + * within the integer numbers limit. In addition we need to translate the
+> + * formulae to accept millidegrees of Celsius. Here what they look like after
+> + * the alterations:
+> + *
+> + * N = (18322e-20*(T^4) + 2343e-13*(T^3) + 87018e-9*(T^2) + 39269e-3*T +
+> + *     17204e2) / 1e4
+> + * T = -16743e-12*(D^4) + 81542e-9*(D^3) - 182010e-6*(D^2) + 310200e-3*D -
+> + *     48380
+> + * where T = [-48380, 147438] mC and N = [0, 1023].
+> + *
+> + * static const struct polynomial poly_temp_to_N = {
+> + *         .total_divider = 10000,
+> + *         .terms = {
+> + *                 {4, 18322, 10000, 10000},
+> + *                 {3, 2343, 10000, 10},
+> + *                 {2, 87018, 10000, 10},
+> + *                 {1, 39269, 1000, 1},
+> + *                 {0, 1720400, 1, 1}
+> + *         }
+> + * };
+> + *
+> + * static const struct polynomial poly_N_to_temp = {
+> + *         .total_divider = 1,
+> + *         .terms = {
+> + *                 {4, -16743, 1000, 1},
+> + *                 {3, 81542, 1000, 1},
+> + *                 {2, -182010, 1000, 1},
+> + *                 {1, 310200, 1000, 1},
+> + *                 {0, -48380, 1, 1}
+> + *         }
+> + * };
+> + */
+> +
+> +/**
+> + * polynomial_calc - calculate a polynomial using integer arithmetic
+> + *
+> + * @poly: pointer to the descriptor of the polynomial
+> + * @data: input value of the polynimal
+> + *
+> + * Calculate the result of a polynomial using only integer arithmetic. For
+> + * this to work without too much loss of precision the coefficients has to
+> + * be altered. This is called factor redistribution.
+> + *
+> + * Returns the result of the polynomial calculation.
+> + */
+> +long polynomial_calc(const struct polynomial *poly, long data)
+> +{
+> +	const struct polynomial_term *term = poly->terms;
+> +	long total_divider = poly->total_divider ?: 1;
+> +	long tmp, ret = 0;
+> +	int deg;
+> +
+> +	/*
+> +	 * Here is the polynomial calculation function, which performs the
+> +	 * redistributed terms calculations. It's pretty straightforward.
+> +	 * We walk over each degree term up to the free one, and perform
+> +	 * the redistributed multiplication of the term coefficient, its
+> +	 * divider (as for the rationale fraction representation), data
+> +	 * power and the rational fraction divider leftover. Then all of
+> +	 * this is collected in a total sum variable, which value is
+> +	 * normalized by the total divider before being returned.
+> +	 */
+> +	do {
+> +		tmp = term->coef;
+> +		for (deg = 0; deg < term->deg; ++deg)
+> +			tmp = mult_frac(tmp, data, term->divider);
+> +		ret += tmp / term->divider_leftover;
+> +	} while ((term++)->deg);
+> +
+> +	return ret / total_divider;
+> +}
+> +EXPORT_SYMBOL_GPL(polynomial_calc);
+> +
+> +MODULE_DESCRIPTION("Generic polynomial calculations");
+> +MODULE_LICENSE("GPL");
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
