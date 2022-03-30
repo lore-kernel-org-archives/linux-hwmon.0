@@ -2,260 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B40F3C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 16:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA1F9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 19:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348830AbiC3Qfr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 12:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
+        id S229743AbiC3TnH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 15:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348711AbiC3Qfq (ORCPT
+        with ESMTP id S229505AbiC3TnG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:35:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED15E2;
-        Wed, 30 Mar 2022 09:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648658021;
-        bh=Aw52GudjzfV6DBA1f+n4H6s9lkEEzRPi45KdcBXLxZ0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=LNkfa0reL5HBrPFyXfSnVY+Aw2Bl3LXKaR5hv9nJ4c1sBBUxk/ni44ICmOMbHgAQT
-         ll/vxykhy0Y2bfO9uTxDmEsuTbj9IosozgHiqKm7GmA4VTqR4PZwOJ7GiEikkc25CC
-         txrSR15lgDefdi3dsU0wV9YC8nDi5Bh4eqlI8oes=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mj8qd-1oCFXN3IxR-00f9s0; Wed, 30 Mar 2022 18:33:40 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Add cooling device support
-Date:   Wed, 30 Mar 2022 18:33:24 +0200
-Message-Id: <20220330163324.572437-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Wed, 30 Mar 2022 15:43:06 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B0613F5F;
+        Wed, 30 Mar 2022 12:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0PR2zYdjHpnbzPpGDX73PfezrreUjmJPOTEhSKYO1Pw=; b=aP7MVBYYOC3fOr70nal+KO/51m
+        fgs1qb4ZsYgXHfhoN5IOujYhXV8HWcqMADXtQLoZO8wpDxQqueubIhcTk1+HGj90A7mcMcxS8Z3ww
+        f9EGTMCdpw4jZrLXAoG3bsz+Psqt1PfWmeEF/rWLvZV1V37RCkohiYgQaZGp+119J2IDuL13p9Nr9
+        msUyKTtnZNkgwYcE1IrvgOp1J34tP1nmWz2VhM+607A28flKZjhPm4+hu7q5Bet2u9gMH4kz/yriC
+        EL7MSFc1LV28ceElh9CZwmjb2X7USUzKVHkwA1IX9Lm9WX8wqHZl4SHgu0JZG/zDErpNCsJ7hw4eo
+        jpx6RMiA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58030)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nZeBj-0003ek-2P; Wed, 30 Mar 2022 20:41:02 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nZeBf-0006uy-77; Wed, 30 Mar 2022 20:40:59 +0100
+Date:   Wed, 30 Mar 2022 20:40:59 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] net: sfp: use hwmon_sanitize_name()
+Message-ID: <YkSyS1g48TlB3XpB@shell.armlinux.org.uk>
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-4-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:tbSqy/9T9ZBldJcHFKXCEAyFh5LU2EBIRmdONn/JNv3Z+98KbMw
- Izfpr/J+cJWyUOdsRgMG1s96WSJqu7tXUs+KJYpVBRnvfSYS+t9X9KMY+xf4UX43vJEOTWo
- BqeSxpbPmfKf0OdqDU7VQbdDNQQ0rJGM1guQ8CilLwHhd4zfnTXP5nbYuXpF+L5ghIrMT2Q
- BvjnI+P7WBuZ+sW6RI43Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TX1inUXOY+g=:Q4a1QCJ8KXVnRJYHeHMC3g
- Ykq5Na8Y+mjHCtCePKOaLFLWPpBPtB/BjW6dGXuKB9IkUS1wTinJGdy4gO4Ev6oh2PA8vbHEa
- 6Z+eWhlNNRbM2s5uVQiNafbwfjgdHS/bpxpTwN1KB70pkfJdZ6UPNbQUBCZ8C2Ydog1/ZtQAt
- vqnjml3b9Py8MmqtK9qwscRW1CjfUvGBArmi1PB5+GL+SUzmcszm5d1JIhDwgEQjJVF8khSO5
- Gp2WUEmCft0Vv5B3AFbyvapphQfEPCb3k6gkGqX8aK2qJB8qWWcjjamSKVr6svgpMoYNxjW/G
- xkTy/iXcLbFHK5jId/MLrXa6ife3tUNNIoqH0030GXABcepnjJLfXYNJaweZzLAqI1vi1dv3B
- NCPoAAvQTAZ6+JQnZf1tP51VN+0e5Qs/89tR7X20JG4rTc9fYKKh75JGNb7mjOvedLcqxM/HZ
- Y84Lj/aBZKt7+81S/UFiIAPeLsHcuYq50jXNxo+CSVHqj9zd9pTAJ67/R2nJcJLQAGxomGZqf
- XaU5GbMvtm6FKCTFs3BgU33aCMTZEvQey7Fy5wiOQoNCzeJ/VEH1So6Ge0FHu5w4mLbNHtBNB
- a4QzvIX4UqGjfiy/ZYtdzsIhYY43XMk/0D+Ok0nveJDQj6j6m/BHEdF+h0qAFFie5Qfjc44ng
- ZQjUGZ186KnI4OjGWd7iykx6ZStrWlEJAbp+hZIv/zJmojY3TNpPaxC7CrXOL+c/wYvYCu9Dk
- gERIsF2pfYkspJEqqhYL4NKNKvV/V7Q6fpKGcolEWc+YnHRa3J2v6dLUvDgEOo12QcN21NCyf
- 4b0SpR+yIgfyz7URxc0nq3VdrjTMmmhdp+85NuaKPbqWP4yFls3K8i3apqLDipXpbhimOUAfP
- F+qogR1vxdF8/EeVOOkjG/LJCbFhJw+NitOaBoUhVJiQu+YuxIx5kjCLOjvbYVKuPYNnTxh5J
- pC+jA26vYBMlGj7xyAnFwKUIyhU4Go5FUfGT20ixP+IFhXGZMb6/vpcORhDRAE12EUPyGxJWB
- TaQBYvjIYYgXxhqdwBtTM82j4+0nrE5kfCfTMyUUiPpMX7feZfdda69GD2l9ivAAF1ikBo9zw
- 27corAm0O1RiGA=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329160730.3265481-4-michael@walle.cc>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Until now, only the temperature sensors where exported thru
-the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
-to make them available as cooling devices.
-Also update Documentation.
+On Tue, Mar 29, 2022 at 06:07:28PM +0200, Michael Walle wrote:
+> Instead of open-coding the bad characters replacement in the hwmon name,
+> use the new hwmon_sanitize_name().
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/dell-smm-hwmon.rst |  7 ++
- drivers/hwmon/Kconfig                  |  1 +
- drivers/hwmon/dell-smm-hwmon.c         | 94 +++++++++++++++++++++++++-
- 3 files changed, 99 insertions(+), 3 deletions(-)
+Assuming hwmon_sanitize_name() gets settled, then:
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
-dell-smm-hwmon.rst
-index d3323a96665d..41839b7de2c1 100644
-=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -86,6 +86,13 @@ probe the BIOS on your machine and discover the appropr=
-iate codes.
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
- Again, when you find new codes, we'd be happy to have your patches!
+> ---
+>  drivers/net/phy/sfp.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+> index 4dfb79807823..0d5dba30444d 100644
+> --- a/drivers/net/phy/sfp.c
+> +++ b/drivers/net/phy/sfp.c
+> @@ -1289,7 +1289,7 @@ static const struct hwmon_chip_info sfp_hwmon_chip_info = {
+>  static void sfp_hwmon_probe(struct work_struct *work)
+>  {
+>  	struct sfp *sfp = container_of(work, struct sfp, hwmon_probe.work);
+> -	int err, i;
+> +	int err;
+>  
+>  	/* hwmon interface needs to access 16bit registers in atomic way to
+>  	 * guarantee coherency of the diagnostic monitoring data. If it is not
+> @@ -1317,16 +1317,12 @@ static void sfp_hwmon_probe(struct work_struct *work)
+>  		return;
+>  	}
+>  
+> -	sfp->hwmon_name = kstrdup(dev_name(sfp->dev), GFP_KERNEL);
+> +	sfp->hwmon_name = hwmon_sanitize_name(dev_name(sfp->dev));
+>  	if (!sfp->hwmon_name) {
+>  		dev_err(sfp->dev, "out of memory for hwmon name\n");
+>  		return;
+>  	}
+>  
+> -	for (i = 0; sfp->hwmon_name[i]; i++)
+> -		if (hwmon_is_bad_char(sfp->hwmon_name[i]))
+> -			sfp->hwmon_name[i] = '_';
+> -
+>  	sfp->hwmon_dev = hwmon_device_register_with_info(sfp->dev,
+>  							 sfp->hwmon_name, sfp,
+>  							 &sfp_hwmon_chip_info,
+> -- 
+> 2.30.2
+> 
+> 
 
-+``thermal`` interface
-+---------------------------
-+
-+The driver also exports the fans as thermal cooling devices with
-+``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
-+using one of the thermal governors.
-+
- Module parameters
- -----------------
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 9ab4e9b3d27b..1175b8e38c45 100644
-=2D-- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -498,6 +498,7 @@ config SENSORS_DS1621
- config SENSORS_DELL_SMM
- 	tristate "Dell laptop SMM BIOS hwmon driver"
- 	depends on X86
-+	imply THERMAL
- 	help
- 	  This hwmon driver adds support for reporting temperature of different
- 	  sensors and controls the fans on Dell laptops via System Management
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 84cb1ede7bc0..0c29386f4bd3 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -21,6 +21,7 @@
- #include <linux/errno.h>
- #include <linux/hwmon.h>
- #include <linux/init.h>
-+#include <linux/kconfig.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -29,6 +30,7 @@
- #include <linux/seq_file.h>
- #include <linux/string.h>
- #include <linux/smp.h>
-+#include <linux/thermal.h>
- #include <linux/types.h>
- #include <linux/uaccess.h>
-
-@@ -80,6 +82,11 @@ struct dell_smm_data {
- 	int *fan_nominal_speed[DELL_SMM_NO_FANS];
- };
-
-+struct dell_smm_cooling_data {
-+	u8 fan_num;
-+	struct dell_smm_data *data;
-+};
-+
- MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
- MODULE_AUTHOR("Pali Roh=C3=A1r <pali@kernel.org>");
- MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
-@@ -638,9 +645,50 @@ static void __init i8k_init_procfs(struct device *dev=
-)
-
- #endif
-
--/*
-- * Hwmon interface
-- */
-+static int dell_smm_get_max_state(struct thermal_cooling_device *dev, uns=
-igned long *state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+
-+	*state =3D cdata->data->i8k_fan_max;
-+
-+	return 0;
-+}
-+
-+static int dell_smm_get_cur_state(struct thermal_cooling_device *dev, uns=
-igned long *state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+	int ret;
-+
-+	ret =3D i8k_get_fan_status(cdata->data, cdata->fan_num);
-+	if (ret < 0)
-+		return ret;
-+
-+	*state =3D ret;
-+
-+	return 0;
-+}
-+
-+static int dell_smm_set_cur_state(struct thermal_cooling_device *dev, uns=
-igned long state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+	struct dell_smm_data *data =3D cdata->data;
-+	int ret;
-+
-+	if (state > data->i8k_fan_max)
-+		return -EINVAL;
-+
-+	mutex_lock(&data->i8k_mutex);
-+	ret =3D i8k_set_fan(data, cdata->fan_num, (int)state);
-+	mutex_unlock(&data->i8k_mutex);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_cooling_device_ops dell_smm_cooling_ops =3D {
-+	.get_max_state =3D dell_smm_get_max_state,
-+	.get_cur_state =3D dell_smm_get_cur_state,
-+	.set_cur_state =3D dell_smm_set_cur_state,
-+};
-
- static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor=
-_types type, u32 attr,
- 				   int channel)
-@@ -941,6 +989,37 @@ static const struct hwmon_chip_info dell_smm_chip_inf=
-o =3D {
- 	.info =3D dell_smm_info,
- };
-
-+static int __init dell_smm_init_cdev(struct device *dev, u8 fan_num)
-+{
-+	struct dell_smm_data *data =3D dev_get_drvdata(dev);
-+	struct thermal_cooling_device *cdev;
-+	struct dell_smm_cooling_data *cdata;
-+	int ret =3D 0;
-+	char *name;
-+
-+	name =3D kasprintf(GFP_KERNEL, "dell-smm-fan%u", fan_num + 1);
-+	if (!name)
-+		return -ENOMEM;
-+
-+	cdata =3D devm_kmalloc(dev, sizeof(*cdata), GFP_KERNEL);
-+	if (cdata) {
-+		cdata->fan_num =3D fan_num;
-+		cdata->data =3D data;
-+		cdev =3D devm_thermal_of_cooling_device_register(dev, NULL, name, cdata=
-,
-+							       &dell_smm_cooling_ops);
-+		if (IS_ERR(cdev)) {
-+			devm_kfree(dev, cdata);
-+			ret =3D PTR_ERR(cdev);
-+		}
-+	} else {
-+		ret =3D -ENOMEM;
-+	}
-+
-+	kfree(name);
-+
-+	return ret;
-+}
-+
- static int __init dell_smm_init_hwmon(struct device *dev)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
-@@ -967,6 +1046,15 @@ static int __init dell_smm_init_hwmon(struct device =
-*dev)
- 			continue;
-
- 		data->fan[i] =3D true;
-+
-+		/* the cooling device it not critical, ignore failures */
-+		if (IS_REACHABLE(CONFIG_THERMAL)) {
-+			err =3D dell_smm_init_cdev(dev, i);
-+			if (err < 0)
-+				dev_err(dev, "Failed to register cooling device for fan %u\n",
-+					i + 1);
-+		}
-+
- 		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan_ma=
-x + 1,
- 								sizeof(*data->fan_nominal_speed[i]),
- 								GFP_KERNEL);
-=2D-
-2.30.2
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
