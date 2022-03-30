@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 780DCC433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 20:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A698EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 20:02:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350808AbiC3UB4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 16:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
+        id S1350860AbiC3UEK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 16:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346007AbiC3UBv (ORCPT
+        with ESMTP id S1350844AbiC3UEF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:01:51 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8684C2AC4D
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 13:00:05 -0700 (PDT)
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 2E7D133185
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 15:00:03 -0500 (CDT)
+        Wed, 30 Mar 2022 16:04:05 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.145.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E932F40A36
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 13:02:19 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 75B39138B203
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 15:02:19 -0500 (CDT)
 Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id ZeU5nkSVJXvvJZeU5nuIIZ; Wed, 30 Mar 2022 15:00:03 -0500
+        id ZeWJnjAj0HnotZeWJnaRCu; Wed, 30 Mar 2022 15:02:19 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -28,33 +28,37 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eXKZchLq+5LAGT1CxaeWrPz836JWwoNXNHtPmYfC0Zo=; b=JCyTECsdx3bl2Vioe5IuGnejLk
-        plknHaucGbgrqi0zPkmebDyQwB8l8dJzO9Aji68ic99WsSsg7lV8X6KeQQQAIPgVxqzn7WBO5XtuC
-        ZfEPqFdPCKYYnUoezIDXs/ZbAtCZhSOvX9m+oqI63Wu0kQycj0Xh2EDsNn/HiE/2OFiShGkJQfhuc
-        yC6q807BIaNz4sGTsq6w2ymycnwtW3D8jWRRF6o9UDPoAZLLLOv6vqNXRrNdfegvwlHKjDrnRIvvz
-        Zz7xAfZGh264XVDuPE7Y5YTZsVoQpfkuLP2ksDisqi1EmAEonQZPE+dmcSIrskVdJ9iOuOuk82rnj
-        WmYj9CzQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54580)
+        bh=DrUu3f6Vg70A9S/e0ENsULeFLvIkUNgEiXVJ565JLzM=; b=dDDchv22UZx7S9aVL6BuhPFHoX
+        K+2861O1HC8rPmzN2ZaiTGoflxh53IzGBZ5EdHlqW5L6ICtftxsebDPSzuFktdght6c9yH2mECk3o
+        hLsWYXTJn9H3SwYhiHZfPPOXC/1lXTRDSYoEX9pJoM8dxdCPLPVLqms0Qt098Vul4I53VkR3nQVHI
+        wOMhdbWDZT9nLBtwTF0hK4AV+ZtXbiviUIGWNDFCZsx/+6f8zcp0aGaHlMR2wswTvg4dBO+7CezGy
+        6Ss2GnHToaslE/5DM42PTv+ri9c94/USznJ3FiAGdSgbE30796l7gzBBI1tqHXmOyusJoumjPqycM
+        5A2964cA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54582)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@roeck-us.net>)
-        id 1nZeU4-001VGm-VT; Wed, 30 Mar 2022 20:00:01 +0000
-Message-ID: <2fbefb5f-a53c-ea68-0a1d-90c60f90d667@roeck-us.net>
-Date:   Wed, 30 Mar 2022 12:59:59 -0700
+        id 1nZeWI-001X75-Mk; Wed, 30 Mar 2022 20:02:18 +0000
+Message-ID: <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
+Date:   Wed, 30 Mar 2022 13:02:16 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/4] hwmon: (bt1-pvt) use generic polynomial functions
+Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220328112505.3025374-1-michael@walle.cc>
- <20220328112505.3025374-3-michael@walle.cc>
+To:     Alistair Francis <alistair@alistair23.me>, lgirdwood@gmail.com,
+        robh+dt@kernel.org, kernel@pengutronix.de, lee.jones@linaro.org,
+        broonie@kernel.org
+Cc:     linux-hwmon@vger.kernel.org, geert@linux-m68k.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        alistair23@gmail.com, s.hauer@pengutronix.de, andreas@kemnade.info,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-imx@nxp.com, amitk@kernel.org
+References: <20220330094126.30252-1-alistair@alistair23.me>
+ <20220330094126.30252-2-alistair@alistair23.me>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220328112505.3025374-3-michael@walle.cc>
+In-Reply-To: <20220330094126.30252-2-alistair@alistair23.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -65,173 +69,88 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1nZeU4-001VGm-VT
+X-Exim-ID: 1nZeWI-001X75-Mk
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54580
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54582
 X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 3
+X-Email-Count: 20
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/28/22 04:25, Michael Walle wrote:
-> The polynomial calculation function was moved into lib/ to be able to
-> reuse it. Move over to this one.
+On 3/30/22 02:41, Alistair Francis wrote:
+> Add a specific MFD_SY7636A config option.
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-
-For my reference:
+> As part of this change we can use MFD_SY7636A as a dependency for all
+> SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
+> it no longer needs to be selectable.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/hwmon/Kconfig   |  1 +
->   drivers/hwmon/bt1-pvt.c | 50 +++++++++++------------------------------
->   2 files changed, 14 insertions(+), 37 deletions(-)
+>   drivers/hwmon/Kconfig     |  1 +
+>   drivers/mfd/Kconfig       | 12 +++++++++++-
+>   drivers/regulator/Kconfig |  1 +
+>   3 files changed, 13 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 68a8a27ab3b7..be9773270e53 100644
+> index 68a8a27ab3b7..74b60d24e740 100644
 > --- a/drivers/hwmon/Kconfig
 > +++ b/drivers/hwmon/Kconfig
-> @@ -415,6 +415,7 @@ config SENSORS_ATXP1
->   config SENSORS_BT1_PVT
->   	tristate "Baikal-T1 Process, Voltage, Temperature sensor driver"
->   	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-> +	select POLYNOMIAL
+> @@ -1693,6 +1693,7 @@ config SENSORS_SIS5595
+>   
+>   config SENSORS_SY7636A
+>   	tristate "Silergy SY7636A"
+> +	depends on MFD_SY7636A
 >   	help
->   	  If you say yes here you get support for Baikal-T1 PVT sensor
->   	  embedded into the SoC.
-> diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
-> index 74ce5211eb75..21ab172774ec 100644
-> --- a/drivers/hwmon/bt1-pvt.c
-> +++ b/drivers/hwmon/bt1-pvt.c
-> @@ -26,6 +26,7 @@
->   #include <linux/mutex.h>
->   #include <linux/of.h>
->   #include <linux/platform_device.h>
-> +#include <linux/polynomial.h>
->   #include <linux/seqlock.h>
->   #include <linux/sysfs.h>
->   #include <linux/types.h>
-> @@ -65,7 +66,7 @@ static const struct pvt_sensor_info pvt_info[] = {
->    *     48380,
->    * where T = [-48380, 147438] mC and N = [0, 1023].
->    */
-> -static const struct pvt_poly __maybe_unused poly_temp_to_N = {
-> +static const struct polynomial __maybe_unused poly_temp_to_N = {
->   	.total_divider = 10000,
->   	.terms = {
->   		{4, 18322, 10000, 10000},
-> @@ -76,7 +77,7 @@ static const struct pvt_poly __maybe_unused poly_temp_to_N = {
->   	}
->   };
+>   	  If you say yes here you get support for the thermistor readout of
+>   	  the Silergy SY7636A PMIC.
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 3b59456f5545..c47cb755757b 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1095,6 +1095,16 @@ config MFD_SPMI_PMIC
+>   	  Say M here if you want to include support for the SPMI PMIC
+>   	  series as a module.  The module will be called "qcom-spmi-pmic".
 >   
-> -static const struct pvt_poly poly_N_to_temp = {
-> +static const struct polynomial poly_N_to_temp = {
->   	.total_divider = 1,
->   	.terms = {
->   		{4, -16743, 1000, 1},
-> @@ -97,7 +98,7 @@ static const struct pvt_poly poly_N_to_temp = {
->    * N = (18658e-3*V - 11572) / 10,
->    * V = N * 10^5 / 18658 + 11572 * 10^4 / 18658.
->    */
-> -static const struct pvt_poly __maybe_unused poly_volt_to_N = {
-> +static const struct polynomial __maybe_unused poly_volt_to_N = {
->   	.total_divider = 10,
->   	.terms = {
->   		{1, 18658, 1000, 1},
-> @@ -105,7 +106,7 @@ static const struct pvt_poly __maybe_unused poly_volt_to_N = {
->   	}
->   };
+> +config MFD_SY7636A
+> +	tristate "Silergy SY7636A voltage regulator"
+> +	depends on I2C
+> +	select MFD_SIMPLE_MFD_I2C
+> +	help
+> +	  Enable support for Silergy SY7636A voltage regulator.
+> +
+> +	  To enable support for building sub-devices as modules,
+> +	  choose M here.
+> +
+>   config MFD_RDC321X
+>   	tristate "RDC R-321x southbridge"
+>   	select MFD_CORE
+> @@ -1202,7 +1212,7 @@ config MFD_SI476X_CORE
+>   	  module will be called si476x-core.
 >   
-> -static const struct pvt_poly poly_N_to_volt = {
-> +static const struct polynomial poly_N_to_volt = {
->   	.total_divider = 10,
->   	.terms = {
->   		{1, 100000, 18658, 1},
-> @@ -113,31 +114,6 @@ static const struct pvt_poly poly_N_to_volt = {
->   	}
->   };
+>   config MFD_SIMPLE_MFD_I2C
+> -	tristate "Simple Multi-Functional Device support (I2C)"
+> +	tristate
+>   	depends on I2C
+>   	select MFD_CORE
+>   	select REGMAP_I2C
+> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+> index 5ef2306fce04..c8ce6e5eea24 100644
+> --- a/drivers/regulator/Kconfig
+> +++ b/drivers/regulator/Kconfig
+> @@ -1219,6 +1219,7 @@ config REGULATOR_STW481X_VMMC
 >   
-> -/*
-> - * Here is the polynomial calculation function, which performs the
-> - * redistributed terms calculations. It's pretty straightforward. We walk
-> - * over each degree term up to the free one, and perform the redistributed
-> - * multiplication of the term coefficient, its divider (as for the rationale
-> - * fraction representation), data power and the rational fraction divider
-> - * leftover. Then all of this is collected in a total sum variable, which
-> - * value is normalized by the total divider before being returned.
-> - */
-> -static long pvt_calc_poly(const struct pvt_poly *poly, long data)
-> -{
-> -	const struct pvt_poly_term *term = poly->terms;
-> -	long tmp, ret = 0;
-> -	int deg;
-> -
-> -	do {
-> -		tmp = term->coef;
-> -		for (deg = 0; deg < term->deg; ++deg)
-> -			tmp = mult_frac(tmp, data, term->divider);
-> -		ret += tmp / term->divider_leftover;
-> -	} while ((term++)->deg);
-> -
-> -	return ret / poly->total_divider;
-> -}
-> -
->   static inline u32 pvt_update(void __iomem *reg, u32 mask, u32 data)
->   {
->   	u32 old;
-> @@ -324,9 +300,9 @@ static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   	} while (read_seqretry(&cache->data_seqlock, seq));
+>   config REGULATOR_SY7636A
+>   	tristate "Silergy SY7636A voltage regulator"
+> +	depends on MFD_SY7636A
+>   	help
+>   	  This driver supports Silergy SY3686A voltage regulator.
 >   
->   	if (type == PVT_TEMP)
-> -		*val = pvt_calc_poly(&poly_N_to_temp, data);
-> +		*val = polynomial_calc(&poly_N_to_temp, data);
->   	else
-> -		*val = pvt_calc_poly(&poly_N_to_volt, data);
-> +		*val = polynomial_calc(&poly_N_to_volt, data);
->   
->   	return 0;
->   }
-> @@ -345,9 +321,9 @@ static int pvt_read_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   		data = FIELD_GET(PVT_THRES_HI_MASK, data);
->   
->   	if (type == PVT_TEMP)
-> -		*val = pvt_calc_poly(&poly_N_to_temp, data);
-> +		*val = polynomial_calc(&poly_N_to_temp, data);
->   	else
-> -		*val = pvt_calc_poly(&poly_N_to_volt, data);
-> +		*val = polynomial_calc(&poly_N_to_volt, data);
->   
->   	return 0;
->   }
-> @@ -360,10 +336,10 @@ static int pvt_write_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   
->   	if (type == PVT_TEMP) {
->   		val = clamp(val, PVT_TEMP_MIN, PVT_TEMP_MAX);
-> -		data = pvt_calc_poly(&poly_temp_to_N, val);
-> +		data = polynomial_calc(&poly_temp_to_N, val);
->   	} else {
->   		val = clamp(val, PVT_VOLT_MIN, PVT_VOLT_MAX);
-> -		data = pvt_calc_poly(&poly_volt_to_N, val);
-> +		data = polynomial_calc(&poly_volt_to_N, val);
->   	}
->   
->   	/* Serialize limit update, since a part of the register is changed. */
-> @@ -522,9 +498,9 @@ static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   		return -ETIMEDOUT;
->   
->   	if (type == PVT_TEMP)
-> -		*val = pvt_calc_poly(&poly_N_to_temp, data);
-> +		*val = polynomial_calc(&poly_N_to_temp, data);
->   	else
-> -		*val = pvt_calc_poly(&poly_N_to_volt, data);
-> +		*val = polynomial_calc(&poly_N_to_volt, data);
->   
->   	return 0;
->   }
 
