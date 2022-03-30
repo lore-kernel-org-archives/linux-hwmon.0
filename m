@@ -2,152 +2,118 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13B80C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Mar 2022 23:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA5FC433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 02:57:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237334AbiC2Xiu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Mar 2022 19:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
+        id S242167AbiC3C7H convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Mar 2022 22:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiC2Xis (ORCPT
+        with ESMTP id S241180AbiC3C7H (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:38:48 -0400
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.47.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5841B2C642
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2022 16:37:04 -0700 (PDT)
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id CEFB8400D18EE
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2022 18:37:03 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZLOZn2lf3b6UBZLOZn7XWl; Tue, 29 Mar 2022 18:37:03 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=s6j/BhgIkwBUzXe+DvwFH/oKdI/HQ5L9CcN/nCwmPoo=; b=yv2b13u2GyeOm/0Fnctklxkctt
-        6bDiqvkeSvt2XVQM8bzPttH9oL8xUVHKY1gm1IIVOMmOCgKaWDxGmwW2pSU96FvfSUrHMaA0sf7RQ
-        k1ZSkkpGmJJuWFfXxsE+fU9G2D/8PVmlmjsdTppTH8ExU0pohnyeEdtZm4bYcsBrBw3KuMaW9gOhs
-        NWW02Ld+b4jHWiaXSJ3Z/+lj/VmGDiBR0on1GzuYlQcitjNz8yHBKrEfJYnPpdWwe3WcBdIGTTRAZ
-        1FTcfvZNaJRM0V38zmDfgMke//xpnUnPVkHlk/DfZ1lJk8qEfPGDuI+RQYX8pCDEFYreoBzWvYlDZ
-        XWmpjF2g==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54548)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZLOZ-0010Uk-Dv; Tue, 29 Mar 2022 23:37:03 +0000
-Message-ID: <fef5c154-2b1b-0a2b-52c3-c3fe0b4c2abf@roeck-us.net>
-Date:   Tue, 29 Mar 2022 16:37:02 -0700
+        Tue, 29 Mar 2022 22:59:07 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6300C637D
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2022 19:57:20 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-260-sKBCBKFINtqPnd_8YrB5ZA-1; Wed, 30 Mar 2022 03:57:17 +0100
+X-MC-Unique: sKBCBKFINtqPnd_8YrB5ZA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 03:57:16 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 30 Mar 2022 03:57:15 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Michael Walle' <michael@walle.cc>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Topic: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Index: AQHYQ4dUrIB0cQMH/kajVzJ0H3I8wazXOSsg
+Date:   Wed, 30 Mar 2022 02:57:15 +0000
+Message-ID: <16d8b45eba7b44e78fa8205e6666f2bd@AcuMS.aculab.com>
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-2-michael@walle.cc>
+In-Reply-To: <20220329160730.3265481-2-michael@walle.cc>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
- ACPI global lock
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-3-eugene.shalygin@gmail.com>
- <df43bce6-b1bc-1abc-307b-878ee7acb261@roeck-us.net>
- <CAB95QASgzUSaLjZuxWauiSvNK7Or=1Kz8htJcjWqU+HrRutvJg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAB95QASgzUSaLjZuxWauiSvNK7Or=1Kz8htJcjWqU+HrRutvJg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZLOZ-0010Uk-Dv
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54548
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/29/22 15:11, Eugene Shalygin wrote:
-> On Tue, 29 Mar 2022 at 23:23, Guenter Roeck <linux@roeck-us.net> wrote:
+From: Michael Walle
+> Sent: 29 March 2022 17:07
 > 
->>> +/* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
->>> +#define ACPI_GLOBAL_LOCK_PSEUDO_PATH ":GLOBAL_LOCK"
->>> +
->>
->> That needs to be documented.
-> 
-> Do you mean a note in the /Documentation/..../...rst or adding details
-> here? There is an additional bit of information on this identifier
-> below, in the ec_board_info struct declaration.
-> 
-My understanding was that the user would/could request its use via
-the module parameter, so it needs to be documented in the rst file.
+> More and more drivers will check for bad characters in the hwmon name
+> and all are using the same code snippet. Consolidate that code by adding
+> a new hwmon_sanitize_name() function.
 
->> There is some type confusion in the above lock functions. Some return
->> ACPI error codes, some return Linux error codes. Please make return
->> values consistent.
->>
->> Also, why use mutex_trylock() instead of mutex_lock() ? This is
->> unusual since it will result in errors if more than one user
->> tries to access the data (eg multiple processes reading sysfs
->> attributes at the same time), and thus warrants a detailed
->> explanation.
-> OK.
-> 
->>> +     struct lock_data lock_data;
->>> +     /* number of board EC sensors */
->>> +     u8 nr_sensors;
->>
->> Ok, I must admit I am more than a bit lost. In patch 1/4
->> you removed this variable (and argued that removing it was
->> for "deduplication"), only to re-introduce it here.
->> Sorry, I don't follow the logic.
-> 
-> Sorry for that. This is my mistake which I tried to warn you about in
-> my first reply to the email with this patch.
-> 
->>> +     if (!mutex_path || !strlen(mutex_path)) {
->>
->> When would mutex_path be NULL ?
-> When it is set to NULL in the board definition struct ec_board_info.
-> 
+I'm assuming these 'bad' hwmon names come from userspace?
+Like ethernet interface names??
 
-Are there any such board definitions ? I don't recall seeing any.
+Is silently changing the name of the hwmon entries the right
+thing to do at all?
 
-Thanks,
-Guenter
+What happens if the user tries to create both "foo_bar" and "foo-bar"?
+I'm sure that is going to go horribly wrong somewhere.
 
->>> +             if (ACPI_FAILURE(status)) {
->>> +                     dev_err(dev,
->>> +                             "Failed to get hardware access guard AML mutex"
->>> +                             "'%s': error %d",
->>
->> Please no string splits. And the negative impact can be seen here:
->> No space between "mutex" and "'%s'".
-> 
-> Yes, of course.
-> 
->>>                dev_warn(dev,
->>> -                     "Concurrent access to the ACPI EC detected.\nRace condition possible.");
->>> +                     "Concurrent access to the ACPI EC detected.\n"
->>> +                     "Race condition possible.");
->>
->> Why this change, and how is it related to this patch ?
-> Same as above, will be corrected.
-> 
-> Thank you,
-> Eugene
+It would certainly make sense to have a function to verify the name
+is actually valid.
+Then bad names can be rejected earlier on.
+
+I'm also intrigued about the list of invalid characters:
+
++static bool hwmon_is_bad_char(const char ch)
++{
++	switch (ch) {
++	case '-':
++	case '*':
++	case ' ':
++	case '\t':
++	case '\n':
++		return true;
++	default:
++		return false;
++	}
++}
+
+If '\t' and '\n' are invalid why are all the other control characters
+allowed?
+I'm guessing '*' is disallowed because it is the shell wildcard?
+So what about '?'.
+Then I'd expect '/' to be invalid - but that isn't checked.
+Never mind all the values 0x80 to 0xff - they are probably worse
+than whitespace.
+
+OTOH why are any characters invalid at all - except '/'?
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
