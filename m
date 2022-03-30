@@ -2,106 +2,102 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CCC2C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 07:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C6F6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 07:36:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiC3HCR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 03:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S243899AbiC3HiI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Mar 2022 03:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241845AbiC3HB5 (ORCPT
+        with ESMTP id S243896AbiC3HiE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:01:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879A6DF484;
-        Wed, 30 Mar 2022 00:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648623612; x=1680159612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a/yS06E/f5TlhFE99MfmA8gjZt8NoZmWScc2/+Gac5Y=;
-  b=Kab4Gj2KqZ/uTuU+hBH93dJhAMs2RwDVp19DAwGfPHOgldPZoDcDP7/r
-   ZXzW9UC84qQuHAJFU5Wkzvgn6oxO4chjZb83ZEhLEusb5nStVN2KtmnG+
-   DetFxe2EBcvyKxOL5iQZtGHGuMwEaZuGdAmDlELJ8cjAH5N/iPxLR3FgC
-   NfVNaI46e5pKfPGBpU8Gk29YeJZEsZRFId505tw9oMEpsUgu3GfAJ51Ch
-   Q+2yqNW7E/AveLwBlkdzJtpeP3SSZsJIbc+v2+8CLZJNp/VCGfm6FPYkj
-   5BckXYOoDj5xnhxZ9H7ktKwmjRikcszTCeZD+ZQm2DdaIuT8spfvKIL4+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="258293974"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="258293974"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 00:00:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="565346120"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2022 00:00:05 -0700
-Date:   Wed, 30 Mar 2022 14:52:51 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] hwmon: intel-m10-bmc-hwmon: use
- devm_hwmon_sanitize_name()
-Message-ID: <20220330065251.GB212503@yilunxu-OptiPlex-7050>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-3-michael@walle.cc>
+        Wed, 30 Mar 2022 03:38:04 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0023B55BE0;
+        Wed, 30 Mar 2022 00:36:18 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9so13996005ilu.9;
+        Wed, 30 Mar 2022 00:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K4jqbVE230M9wS+1QXIPRjVS4MYSGVkCyAOthMzzuT8=;
+        b=NdX1PJx79ceLi53HWoka1JaM+2R9nUAaulmuuGNGSXDWk/ZLlchEF0lgouHL3SrPUx
+         cXgivj92UK2ugRw0qCpIPkaphY97RGnb3cDtRBFdKtEusG2csEkg/ocbKfiwzf8uLsYh
+         +bkh+5M3oRdQq/gJtJQUGM66Pgv1ZAlPR4H8xJSNmoB1AHqqqEbWMoECXc7OSo9da4+y
+         qlkS5AXnoguqnqNBAG7FzqVjEkM3CRFkpKKW3qRXjSS4B9FzOZLEjZXaEWoqJ2qs7rNL
+         24WgjHYrMvxs4vMR7mgqhDldrvzsn5Oej6F+eb0octlfFWvbZOJcqNvEgSN7zLKcvUjr
+         ix6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K4jqbVE230M9wS+1QXIPRjVS4MYSGVkCyAOthMzzuT8=;
+        b=Vt0NvpuPJxfD4gQf2IddAi17YifMUEamc0HdWtQV+P3Ywu3k/NYOAYS7xd48xoXv5L
+         krWdEDSZAQQqbe5hTZMDcSv3IhottPRrtQRKu9jQawlBmQ61QS5yr8s7oYkZBaODTuwL
+         CsP6Bn2opFYuukSFzbyzB2f1kK1BTrA7jm8iTfsYp4c69KLIl5vWlr5sZS2YD6r6qz9Q
+         xvhhEIasdTiD97Mnp3Z/+xtBygw6NWA+7HdCyzCl/NUOTS27RSG7yxMyMkuxWFdTRDEy
+         VIX1PfDJBMeJU8UKvSryzrFv+AElDfRyEavksjxQ7vgMZ1m+Q4UY1OMOUvOSER6rzIwB
+         4IfA==
+X-Gm-Message-State: AOAM532BwH+ASTVvdshoyM9skIYGK6ao3p1AT6XwseeneFJy+3fkLgBI
+        XXsGNrRz6lfRvMeYdH5iwA/K50IlqEaYO/vW+1O1OiwHgss=
+X-Google-Smtp-Source: ABdhPJzILfjbvZouqSmF9BbpFgISbz1vhLK8IKxTWZkYOnBLLHk90MwqMsffPeqph/YKwubQzseyj2lyXH0FBB958EQ=
+X-Received: by 2002:a05:6e02:d88:b0:2c8:713f:dcff with SMTP id
+ i8-20020a056e020d8800b002c8713fdcffmr10307147ilj.289.1648625778394; Wed, 30
+ Mar 2022 00:36:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329160730.3265481-3-michael@walle.cc>
+References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+ <20220327121404.1702631-3-eugene.shalygin@gmail.com> <df43bce6-b1bc-1abc-307b-878ee7acb261@roeck-us.net>
+ <CAB95QASgzUSaLjZuxWauiSvNK7Or=1Kz8htJcjWqU+HrRutvJg@mail.gmail.com> <fef5c154-2b1b-0a2b-52c3-c3fe0b4c2abf@roeck-us.net>
+In-Reply-To: <fef5c154-2b1b-0a2b-52c3-c3fe0b4c2abf@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Wed, 30 Mar 2022 09:36:06 +0200
+Message-ID: <CAB95QAR+shnkC=QjmxYzdr69WuzW41aXmrGg-j7kfXM9+zGCuw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
+ ACPI global lock
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 06:07:27PM +0200, Michael Walle wrote:
-> Instead of open-coding the bad characters replacement in the hwmon name,
-> use the new devm_hwmon_sanitize_name().
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On Wed, 30 Mar 2022 at 01:37, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/29/22 15:11, Eugene Shalygin wrote:
+> > On Tue, 29 Mar 2022 at 23:23, Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> >>> +/* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
+> >>> +#define ACPI_GLOBAL_LOCK_PSEUDO_PATH ":GLOBAL_LOCK"
+> >>> +
+> >>
+> >> That needs to be documented.
+> >
+> > Do you mean a note in the /Documentation/..../...rst or adding details
+> > here? There is an additional bit of information on this identifier
+> > below, in the ec_board_info struct declaration.
+> >
+> My understanding was that the user would/could request its use via
+> the module parameter, so it needs to be documented in the rst file.
+I see now, thank you.
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+> >>> +     if (!mutex_path || !strlen(mutex_path)) {
+> >>
+> >> When would mutex_path be NULL ?
+> > When it is set to NULL in the board definition struct ec_board_info.
+> >
+>
+> Are there any such board definitions ? I don't recall seeing any.
 
-> ---
->  drivers/hwmon/intel-m10-bmc-hwmon.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 7a08e4c44a4b..29370108fa1c 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -515,7 +515,6 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->  	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
->  	struct device *hwmon_dev, *dev = &pdev->dev;
->  	struct m10bmc_hwmon *hw;
-> -	int i;
->  
->  	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
->  	if (!hw)
-> @@ -528,14 +527,10 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->  	hw->chip.info = hw->bdata->hinfo;
->  	hw->chip.ops = &m10bmc_hwmon_ops;
->  
-> -	hw->hw_name = devm_kstrdup(dev, id->name, GFP_KERNEL);
-> +	hw->hw_name = devm_hwmon_sanitize_name(dev, id->name);
->  	if (!hw->hw_name)
->  		return -ENOMEM;
->  
-> -	for (i = 0; hw->hw_name[i]; i++)
-> -		if (hwmon_is_bad_char(hw->hw_name[i]))
-> -			hw->hw_name[i] = '_';
-> -
->  	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
->  							 hw, &hw->chip, NULL);
->  	return PTR_ERR_OR_ZERO(hwmon_dev);
-> -- 
-> 2.30.2
+You are right, there are no such definitions neither in this
+submission nor before. I'm messaging with a user who showed a hint
+that such boards might exist [1]. We have not confirmed it yet, but I
+thought this little test is obvious enough to be put in the code
+already.
+
+Best regards,
+Eugene
+
+[1] https://github.com/zeule/asus-ec-sensors/issues/19
