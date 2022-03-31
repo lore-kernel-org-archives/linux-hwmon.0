@@ -2,155 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A698EC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Mar 2022 20:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5EE8C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Mar 2022 14:46:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350860AbiC3UEK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Mar 2022 16:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S237794AbiCaOr4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Mar 2022 10:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350844AbiC3UEF (ORCPT
+        with ESMTP id S233883AbiCaOrt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:04:05 -0400
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.145.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E932F40A36
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 13:02:19 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id 75B39138B203
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Mar 2022 15:02:19 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZeWJnjAj0HnotZeWJnaRCu; Wed, 30 Mar 2022 15:02:19 -0500
-X-Authority-Reason: nr=8
+        Thu, 31 Mar 2022 10:47:49 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B0E21FC45;
+        Thu, 31 Mar 2022 07:46:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DrUu3f6Vg70A9S/e0ENsULeFLvIkUNgEiXVJ565JLzM=; b=dDDchv22UZx7S9aVL6BuhPFHoX
-        K+2861O1HC8rPmzN2ZaiTGoflxh53IzGBZ5EdHlqW5L6ICtftxsebDPSzuFktdght6c9yH2mECk3o
-        hLsWYXTJn9H3SwYhiHZfPPOXC/1lXTRDSYoEX9pJoM8dxdCPLPVLqms0Qt098Vul4I53VkR3nQVHI
-        wOMhdbWDZT9nLBtwTF0hK4AV+ZtXbiviUIGWNDFCZsx/+6f8zcp0aGaHlMR2wswTvg4dBO+7CezGy
-        6Ss2GnHToaslE/5DM42PTv+ri9c94/USznJ3FiAGdSgbE30796l7gzBBI1tqHXmOyusJoumjPqycM
-        5A2964cA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54582)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=qdHqQPCvCaEY29ep3FNBmeTqw9YdP41bA8ZWKcRp9uM=; b=NeyA/0q7PtDyu9hi76uQhW7+fI
+        +AzPlCx+E8xV/KXICaUwlDHcjgsyxh5almwTV2SDOUWQ4k5b06IEAmHc6C6JyI3NCt9+Zy34g817U
+        2v2BLBOxkmhsHuO0MNtl0QXx3DqAGEsMj93apZKjL7N/zG5RyPNvaBrgMZ21F6Bh8b285BdjhFa0V
+        kGpHtfuP3ed5xSCEuHrJULE/nDBaKaPV/nOJFGxFsrvdN0bsZYi+LqTpvLnMejntlspgWTVWlJhfu
+        3ejxi1QsmtWuHDLZQrgdGCe7lnCO6yF33efwZsJos9w+86xqUhH0M5xHKxn4KstSpdQ4GIqj6KOZO
+        m4yNPoKg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58062)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZeWI-001X75-Mk; Wed, 30 Mar 2022 20:02:18 +0000
-Message-ID: <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
-Date:   Wed, 30 Mar 2022 13:02:16 -0700
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nZw3S-0004yl-9B; Thu, 31 Mar 2022 15:45:42 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nZw3N-0007iG-My; Thu, 31 Mar 2022 15:45:37 +0100
+Date:   Thu, 31 Mar 2022 15:45:37 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Xu Yilun <yilun.xu@intel.com>,
+        David Laight <David.Laight@aculab.com>,
+        Michael Walle <michael@walle.cc>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Message-ID: <YkW+kWXrkAttCbsm@shell.armlinux.org.uk>
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-2-michael@walle.cc>
+ <20220330065047.GA212503@yilunxu-OptiPlex-7050>
+ <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
+ <20220330145137.GA214615@yilunxu-OptiPlex-7050>
+ <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
-Content-Language: en-US
-To:     Alistair Francis <alistair@alistair23.me>, lgirdwood@gmail.com,
-        robh+dt@kernel.org, kernel@pengutronix.de, lee.jones@linaro.org,
-        broonie@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, geert@linux-m68k.org,
-        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
-        alistair23@gmail.com, s.hauer@pengutronix.de, andreas@kemnade.info,
-        rui.zhang@intel.com, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, amitk@kernel.org
-References: <20220330094126.30252-1-alistair@alistair23.me>
- <20220330094126.30252-2-alistair@alistair23.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220330094126.30252-2-alistair@alistair23.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZeWI-001X75-Mk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54582
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 20
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/30/22 02:41, Alistair Francis wrote:
-> Add a specific MFD_SY7636A config option.
-> 
-> As part of this change we can use MFD_SY7636A as a dependency for all
-> SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
-> it no longer needs to be selectable.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+On Wed, Mar 30, 2022 at 08:23:35AM -0700, Guenter Roeck wrote:
+> Michael, let's just drop the changes outside drivers/hwmon from
+> the series, and let's keep hwmon_is_bad_char() in the include file.
+> Let's just document it, explaining its use case.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Why? There hasn't been any objection to the change. All the discussion
+seems to be around the new function (this patch) rather than the actual
+conversions in drivers.
 
-> ---
->   drivers/hwmon/Kconfig     |  1 +
->   drivers/mfd/Kconfig       | 12 +++++++++++-
->   drivers/regulator/Kconfig |  1 +
->   3 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 68a8a27ab3b7..74b60d24e740 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1693,6 +1693,7 @@ config SENSORS_SIS5595
->   
->   config SENSORS_SY7636A
->   	tristate "Silergy SY7636A"
-> +	depends on MFD_SY7636A
->   	help
->   	  If you say yes here you get support for the thermistor readout of
->   	  the Silergy SY7636A PMIC.
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456f5545..c47cb755757b 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1095,6 +1095,16 @@ config MFD_SPMI_PMIC
->   	  Say M here if you want to include support for the SPMI PMIC
->   	  series as a module.  The module will be called "qcom-spmi-pmic".
->   
-> +config MFD_SY7636A
-> +	tristate "Silergy SY7636A voltage regulator"
-> +	depends on I2C
-> +	select MFD_SIMPLE_MFD_I2C
-> +	help
-> +	  Enable support for Silergy SY7636A voltage regulator.
-> +
-> +	  To enable support for building sub-devices as modules,
-> +	  choose M here.
-> +
->   config MFD_RDC321X
->   	tristate "RDC R-321x southbridge"
->   	select MFD_CORE
-> @@ -1202,7 +1212,7 @@ config MFD_SI476X_CORE
->   	  module will be called si476x-core.
->   
->   config MFD_SIMPLE_MFD_I2C
-> -	tristate "Simple Multi-Functional Device support (I2C)"
-> +	tristate
->   	depends on I2C
->   	select MFD_CORE
->   	select REGMAP_I2C
-> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> index 5ef2306fce04..c8ce6e5eea24 100644
-> --- a/drivers/regulator/Kconfig
-> +++ b/drivers/regulator/Kconfig
-> @@ -1219,6 +1219,7 @@ config REGULATOR_STW481X_VMMC
->   
->   config REGULATOR_SY7636A
->   	tristate "Silergy SY7636A voltage regulator"
-> +	depends on MFD_SY7636A
->   	help
->   	  This driver supports Silergy SY3686A voltage regulator.
->   
+I'm entirely in favour of cleaning this up - it irks me that we're doing
+exactly the same cleanup everywhere we have a hwmon.
 
+At the very least, I would be completely in favour of keeping the
+changes in the sfp and phy code.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
