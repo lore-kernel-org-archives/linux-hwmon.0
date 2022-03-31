@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4748DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Mar 2022 17:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 327F1C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Mar 2022 17:28:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiCaRNU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Mar 2022 13:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S230349AbiCaRao (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Mar 2022 13:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbiCaRNS (ORCPT
+        with ESMTP id S230347AbiCaRao (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:13:18 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E57165498
-        for <linux-hwmon@vger.kernel.org>; Thu, 31 Mar 2022 10:11:30 -0700 (PDT)
+        Thu, 31 Mar 2022 13:30:44 -0400
+Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3BA483AB
+        for <linux-hwmon@vger.kernel.org>; Thu, 31 Mar 2022 10:28:55 -0700 (PDT)
 Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 5337D2EC7D6
-        for <linux-hwmon@vger.kernel.org>; Thu, 31 Mar 2022 12:11:25 -0500 (CDT)
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id 1B2D91343EA
+        for <linux-hwmon@vger.kernel.org>; Thu, 31 Mar 2022 12:28:07 -0500 (CDT)
 Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id ZyKTnU5kc22u3ZyKTngEAS; Thu, 31 Mar 2022 12:11:25 -0500
+        id ZyacnUTHG22u3ZyadngaIp; Thu, 31 Mar 2022 12:28:07 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -28,46 +28,33 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aI+bV8VGhtRiaWJK4Xog9eYqwu1fuRPuRDubJJk73ag=; b=c0sezV+TbXC1QwszWGrATQAgiE
-        0jgkWUUd6BbxqDO+EjXgTMimyq86tP0QHgrkwh/fdgv2dcoCizLW9iQY3UjATcpTyQGemT1pF/nnX
-        tbRNrf86txWyX+N4V/p5CVbqCC0ShTYTKybgmUM18V2HM3cUIOpmHsTs28WbH8IFCv4KEkYOUlJZf
-        RdRTlWgP6Ouq75QBvgVEZuftBnRcyOa3uTIweNHxc866NyynaZOJZYEg3GCDT27yQyHipY/pR5jWM
-        +xFR+50w4G4UxqwHji7U57A8oTvRngZH8DD9sf46URRBQbi+iRz/h4RRPZYRhlJmTQ4xGihNjlE/W
-        IWfLcSrw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54590)
+        bh=iKRVXIzZRvKruOlaX4BmKswo52GCI/eUZ3uapGK411U=; b=kAH7bfswY411LDM/Lv/I2H28lW
+        MqT0qSuK8XIInXqMJ1apZXGAJi2Wasn/Rp+XBTGEwr+2NydHU0NPJNbR2nNFhf8iqrfIAJiQ9Smv0
+        frpiIB8tmWpwrx4d5860Trynp7zprzLonYYkQ0M9w0JkjTeI3YVTNlzAcB852LQ77eDKUG5ADxDi6
+        LQazoOhteRQI7f7aTO65tOSjb7b6gPpqb5uHNhulfN41cWhRjeWQQb9Bv4zYOP5LRlGVqM6zxrUpp
+        5wi1lAubZsAfudJtdqw9/4eUOhjdVfkcpPlURNlsUSKEgqifRD4mIWsZ8aPg6wB6+suZLMp6YDkm7
+        1dOCCn8g==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54592)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@roeck-us.net>)
-        id 1nZyKS-002ePL-N9; Thu, 31 Mar 2022 17:11:24 +0000
-Message-ID: <68f0b4b6-59ed-34ac-bc69-810668a979de@roeck-us.net>
-Date:   Thu, 31 Mar 2022 10:11:22 -0700
+        id 1nZyac-002oU8-JF; Thu, 31 Mar 2022 17:28:06 +0000
+Message-ID: <06ff3ca0-9d2b-205f-064d-24bcb86e5362@roeck-us.net>
+Date:   Thu, 31 Mar 2022 10:28:05 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Michael Walle <michael@walle.cc>
-Cc:     Xu Yilun <yilun.xu@intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <20220330065047.GA212503@yilunxu-OptiPlex-7050>
- <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
- <20220330145137.GA214615@yilunxu-OptiPlex-7050>
- <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
- <YkW+kWXrkAttCbsm@shell.armlinux.org.uk>
- <7b3edeabb66e50825cc42ca1edf86bb7@walle.cc>
- <YkXBgTXRIFpE+YDL@shell.armlinux.org.uk>
+To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220331162431.3648535-1-michael@walle.cc>
+ <20220331162431.3648535-5-michael@walle.cc>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-In-Reply-To: <YkXBgTXRIFpE+YDL@shell.armlinux.org.uk>
+Subject: Re: [PATCH v3 4/4] hwmon: add driver for the Microchip LAN966x SoC
+In-Reply-To: <20220331162431.3648535-5-michael@walle.cc>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -78,75 +65,535 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1nZyKS-002ePL-N9
+X-Exim-ID: 1nZyac-002oU8-JF
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54590
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54592
 X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 3
+X-Email-Count: 17
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/31/22 07:58, Russell King (Oracle) wrote:
-> On Thu, Mar 31, 2022 at 04:51:47PM +0200, Michael Walle wrote:
->> Am 2022-03-31 16:45, schrieb Russell King (Oracle):
->>> On Wed, Mar 30, 2022 at 08:23:35AM -0700, Guenter Roeck wrote:
->>>> Michael, let's just drop the changes outside drivers/hwmon from
->>>> the series, and let's keep hwmon_is_bad_char() in the include file.
->>>> Let's just document it, explaining its use case.
->>>
->>> Why? There hasn't been any objection to the change. All the discussion
->>> seems to be around the new function (this patch) rather than the actual
->>> conversions in drivers.
->>>
->>> I'm entirely in favour of cleaning this up - it irks me that we're doing
->>> exactly the same cleanup everywhere we have a hwmon.
->>>
->>> At the very least, I would be completely in favour of keeping the
->>> changes in the sfp and phy code.
->>
->> FWIW, my plan was to send the hwmon patches first, by then my other
->> series (the polynomial_calc() one) will also be ready to be picked.
->> Then I'd ask Guenter for a stable branch with these two series which
->> hopefully get merged into net-next. Then I can repost the missing
->> patches on net-next along with the new sensors support for the GPY
->> and LAN8814 PHYs.
+On 3/31/22 09:24, Michael Walle wrote:
+> Add support for the temperatur sensor and the fan controller on the
+> Microchip LAN966x SoC. Apparently, an Analog Bits PVT sensor is used
+> which can measure temperature and process voltages. But only a forumlae
+> for the temperature sensor is known. Additionally, the SoC support a fan
+> tacho input as well as a PWM signal to control the fan.
 > 
-> Okay, that's fine. It just sounded like the conversion of other drivers
-> outside drivers/hwmon was being dropped.
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> Just in case someone is curious why the I state the datasheet is wrong
+> on the PWM frequency: The actual PWM frequency was verified by measuring
+> the output with an oscilloscope. Also you can write a '0' as the PWM
+> frequency which would result in div-by-zero; but what happens is that
+> the output frequency will be half the frequency of a setting of '1'.
 > 
-
-Not dropped, just disconnected. From hwmon perspective, we want a certain
-set of characters to be dropped or replaced. Also, from hwmon perspective,
-it makes sense to have the helper function allocate the replacement data.
-There was disagreement about which characters should be replaced, and if
-the helper function should allocate the replacement string or not.
-I have no intention to change the set of characters without good reason,
-and I feel quite strongly about allocating the replacement in the helper
-function. Since potential callers don't _have_ to use the helper and don't
-_have_ to provide valid names (and are responsible for the consequences),
-I would like that discussion to be separate from hwmon changes.
-
-> Note that there's another "sanitisation" of hwmon names in
-> drivers/net/phy/marvell.c - that converts any non-alnum character to
-> an underscore. Not sure why the different approach was chosen there.
+>   Documentation/hwmon/lan966x.rst |  40 ++++
+>   drivers/hwmon/Kconfig           |  12 +
+>   drivers/hwmon/Makefile          |   1 +
+>   drivers/hwmon/lan966x-hwmon.c   | 390 ++++++++++++++++++++++++++++++++
+>   4 files changed, 443 insertions(+)
+>   create mode 100644 Documentation/hwmon/lan966x.rst
+>   create mode 100644 drivers/hwmon/lan966x-hwmon.c
 > 
+> diff --git a/Documentation/hwmon/lan966x.rst b/Documentation/hwmon/lan966x.rst
+> new file mode 100644
+> index 000000000000..1d1724afa5d2
+> --- /dev/null
+> +++ b/Documentation/hwmon/lan966x.rst
+> @@ -0,0 +1,40 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver lan966x-hwmon
+> +===========================
+> +
+> +Supported chips:
+> +
+> +  * Microchip LAN9668 (sensor in SoC)
+> +
+> +    Prefix: 'lan9668-hwmon'
+> +
+> +    Datasheet: https://microchip-ung.github.io/lan9668_reginfo
+> +
+> +Authors:
+> +
+> +	Michael Walle <michael@walle.cc>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements support for the Microchip LAN9668 on-chip
+> +temperature sensor as well as its fan controller. It provides one
+> +temperature sensor and one fan controller. The temperature range
+> +of the sensor is specified from -40 to +125 degrees Celsius and
+> +its accuracy is +/- 5 degrees Celsius. The fan controller has a
+> +tacho input and a PWM output with a customizable PWM output
+> +frequency ranging from ~20Hz to ~650kHz.
+> +
+> +No alarms are supported by the SoC.
+> +
+> +The driver exports temperature values, fan tacho input and PWM
+> +settings via the following sysfs files:
+> +
+> +**temp1_input**
+> +
+> +**fan1_input**
+> +
+> +**pwm1**
+> +
+> +**pwm1_freq**
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index be9773270e53..052b37b78919 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -815,6 +815,18 @@ config SENSORS_POWR1220
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called powr1220.
+>   
+> +config SENSORS_LAN966X
+> +	tristate "Microchip LAN966x Hardware Monitoring"
+> +	depends on SOC_LAN966 || COMPILE_TEST
+> +	select REGMAP
+> +	select POLYNOMIAL
+> +	help
+> +	  If you say yes here you get support for temperature monitoring
+> +	  on the Microchip LAN966x SoC.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called lan966x-hwmon.
+> +
+>   config SENSORS_LINEAGE
+>   	tristate "Lineage Compact Power Line Power Entry Module"
+>   	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 8a03289e2aa4..51ca6956f8b7 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -100,6 +100,7 @@ obj-$(CONFIG_SENSORS_IT87)	+= it87.o
+>   obj-$(CONFIG_SENSORS_JC42)	+= jc42.o
+>   obj-$(CONFIG_SENSORS_K8TEMP)	+= k8temp.o
+>   obj-$(CONFIG_SENSORS_K10TEMP)	+= k10temp.o
+> +obj-$(CONFIG_SENSORS_LAN966X)	+= lan966x-hwmon.o
+>   obj-$(CONFIG_SENSORS_LINEAGE)	+= lineage-pem.o
+>   obj-$(CONFIG_SENSORS_LOCHNAGAR)	+= lochnagar-hwmon.o
+>   obj-$(CONFIG_SENSORS_LM63)	+= lm63.o
+> diff --git a/drivers/hwmon/lan966x-hwmon.c b/drivers/hwmon/lan966x-hwmon.c
+> new file mode 100644
+> index 000000000000..d0db2de6c7e8
+> --- /dev/null
+> +++ b/drivers/hwmon/lan966x-hwmon.c
+> @@ -0,0 +1,390 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/polynomial.h>
+> +#include <linux/regmap.h>
+> +
+> +/*
+> + * The original translation formulae of the temperature (in degrees of Celsius)
+> + * are as follows:
+> + *
+> + *   T = -3.4627e-11*(N^4) + 1.1023e-7*(N^3) + -1.9165e-4*(N^2) +
+> + *       3.0604e-1*(N^1) + -5.6197e1
+> + *
+> + * where [-56.197, 136.402]C and N = [0, 1023].
+> + *
+> + * They must be accordingly altered to be suitable for the integer arithmetics.
+> + * The technique is called 'factor redistribution', which just makes sure the
+> + * multiplications and divisions are made so to have a result of the operations
+> + * within the integer numbers limit. In addition we need to translate the
+> + * formulae to accept millidegrees of Celsius. Here what it looks like after
+> + * the alterations:
+> + *
+> + *   T = -34627e-12*(N^4) + 110230e-9*(N^3) + -191650e-6*(N^2) +
+> + *       306040e-3*(N^1) + -56197
+> + *
+> + * where T = [-56197, 136402]mC and N = [0, 1023].
+> + */
+> +
+> +static const struct polynomial poly_N_to_temp = {
+> +	.terms = {
+> +		{4,  -34627, 1000, 1},
+> +		{3,  110230, 1000, 1},
+> +		{2, -191650, 1000, 1},
+> +		{1,  306040, 1000, 1},
+> +		{0,  -56197,    1, 1}
+> +	}
+> +};
+> +
+> +#define PVT_SENSOR_CTRL		0x0 /* unused */
+> +#define PVT_SENSOR_CFG		0x4
+> +#define   SENSOR_CFG_CLK_CFG		GENMASK(27, 20)
+> +#define   SENSOR_CFG_TRIM_VAL		GENMASK(13, 9)
+> +#define   SENSOR_CFG_SAMPLE_ENA		BIT(8)
+> +#define   SENSOR_CFG_START_CAPTURE	BIT(7)
+> +#define   SENSOR_CFG_CONTINIOUS_MODE	BIT(6)
+> +#define   SENSOR_CFG_PSAMPLE_ENA	GENMASK(1, 0)
+> +#define PVT_SENSOR_STAT		0x8
+> +#define   SENSOR_STAT_DATA_VALID	BIT(10)
+> +#define   SENSOR_STAT_DATA		GENMASK(9, 0)
+> +
+> +#define FAN_CFG			0x0
+> +#define   FAN_CFG_DUTY_CYCLE		GENMASK(23, 16)
+> +#define   INV_POL			BIT(3)
+> +#define   GATE_ENA			BIT(2)
+> +#define   PWM_OPEN_COL_ENA		BIT(1)
+> +#define   FAN_STAT_CFG			BIT(0)
+> +#define FAN_PWM_FREQ		0x4
+> +#define   FAN_PWM_CYC_10US		GENMASK(25, 15)
+> +#define   FAN_PWM_FREQ_FREQ		GENMASK(14, 0)
+> +#define FAN_CNT			0xc
+> +#define   FAN_CNT_DATA			GENMASK(15, 0)
+> +
+> +struct lan966x_hwmon {
+> +	struct regmap *regmap_pvt;
+> +	struct regmap *regmap_fan;
+> +	struct clk *clk;
+> +	unsigned long clk_rate;
+> +};
+> +
+> +static int lan966x_hwmon_read_temp(struct device *dev, long *val)
+> +{
+> +	struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	ret = regmap_read(hwmon->regmap_pvt, PVT_SENSOR_STAT, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (!(data & SENSOR_STAT_DATA_VALID))
+> +		return -ENODATA;
+> +
+> +	*val = polynomial_calc(&poly_N_to_temp,
+> +			       FIELD_GET(SENSOR_STAT_DATA, data));
+> +
+> +	return 0;
+> +}
+> +
+> +static int lan966x_hwmon_read_fan(struct device *dev, long *val)
+> +{ > +	struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	ret = regmap_read(hwmon->regmap_fan, FAN_CNT, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * Data is given in pulses per second. Assume two pulses
+> +	 * per revolution.
+> +	 */
+> +	*val = FIELD_GET(FAN_CNT_DATA, data) * 60 / 2;
+> +
+> +	return 0;
+> +}
+> +
+> +static int lan966x_hwmon_read_pwm(struct device *dev, long *val)
+> +{
+> +	struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	ret = regmap_read(hwmon->regmap_fan, FAN_CFG, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val = FIELD_GET(FAN_CFG_DUTY_CYCLE, data);
+> +
+> +	return 0;
+> +}
+> +
+> +static int lan966x_hwmon_read_pwm_freq(struct device *dev, long *val)
+> +{
+> +	struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned long tmp;
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	ret = regmap_read(hwmon->regmap_fan, FAN_PWM_FREQ, &data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * Datasheet says it is sys_clk / 256 / pwm_freq. But in reality
+> +	 * it is sys_clk / 256 / (pwm_freq + 1).
+> +	 */
+> +	data = FIELD_GET(FAN_PWM_FREQ_FREQ, data) + 1;
+> +	tmp = DIV_ROUND_CLOSEST(hwmon->clk_rate, 256);
+> +	*val = DIV_ROUND_CLOSEST(tmp, data);
+> +
+> +	return 0;
+> +}
+> +
+> +static int lan966x_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, long *val)
+> +{
+> +
 
-It actually drops non-alphanumeric characters. The name is derived
-from the phy device name, which I think is derived from the name field
-in struct phy_driver. That includes spaces and '(', ')'. I honestly
-have no idea what libsensors would do with '(' and ')'. Either case,
-even if that would create a hiccup in libsensors and we would add
-'(' and ')' to the 'forbidden' list of characters, the fact that the
-code doesn't replace but drop non-alphanumeric characters means
-it won't be able to use a helper anyway since that would result
-in a hwmon 'name' attribute change and thus not be backward
-compatible. Besides, "Marvell_88E1111__Finisar_" would look a bit
-odd anyway, and "Marvell88E1111Finisar" may be at least slightly
-better.
+Unnecessary empty line (checkpatch --strict)
 
-Guenter
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		return lan966x_hwmon_read_temp(dev, val);
+> +	case hwmon_fan:
+> +		return lan966x_hwmon_read_fan(dev, val);
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			return lan966x_hwmon_read_pwm(dev, val);
+> +		case hwmon_pwm_freq:
+> +			return lan966x_hwmon_read_pwm_freq(dev, val);
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int lan966x_hwmon_write_pwm(struct device *dev, long val)
+> +{
+> +	struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+> +
+> +	if (val < 0 || val > 255)
+> +		return -EINVAL;
+> +
+> +	return regmap_update_bits(hwmon->regmap_fan, FAN_CFG,
+> +				  FAN_CFG_DUTY_CYCLE,
+> +				  FIELD_PREP(FAN_CFG_DUTY_CYCLE, val));
+> +}
+> +
+> +static int lan966x_hwmon_write_pwm_freq(struct device *dev, long val)
+> +{
+> +	struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
+> +
+> +	val = DIV_ROUND_CLOSEST(hwmon->clk_rate, val);
+
+I must have looked at this for an hour, but I didn't see the problem.
+Sorry for that. Try writing "0" as new pwm frequency.
+
+> +	val = DIV_ROUND_CLOSEST(val, 256) - 1;
+> +	val = clamp_val(val, 0, FAN_PWM_FREQ_FREQ);
+> +
+> +	return regmap_update_bits(hwmon->regmap_fan, FAN_PWM_FREQ,
+> +				  FAN_PWM_FREQ_FREQ,
+> +				  FIELD_PREP(FAN_PWM_FREQ_FREQ, val));
+> +}
+> +
+> +static int lan966x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+> +			       u32 attr, int channel, long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			return lan966x_hwmon_write_pwm(dev, val);
+> +		case hwmon_pwm_freq:
+> +			return lan966x_hwmon_write_pwm_freq(dev, val);
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t lan966x_hwmon_is_visible(const void *data,
+> +					enum hwmon_sensor_types type,
+> +					u32 attr, int channel)
+> +{
+> +	umode_t mode = 0;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +			mode = 0444;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			mode = 0444;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +		case hwmon_pwm_freq:
+> +			mode = 0644;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return mode;
+> +}
+> +
+> +
+
+Extra empty line. Run checkpatch --strict to catch those.
+
+> +static const struct hwmon_channel_info *lan966x_hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_FREQ),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops lan966x_hwmon_ops = {
+> +	.is_visible = lan966x_hwmon_is_visible,
+> +	.read = lan966x_hwmon_read,
+> +	.write = lan966x_hwmon_write,
+> +};
+> +
+> +static const struct hwmon_chip_info lan966x_hwmon_chip_info = {
+> +	.ops = &lan966x_hwmon_ops,
+> +	.info = lan966x_hwmon_info,
+> +};
+> +
+> +static int lan966x_hwmon_enable(struct lan966x_hwmon *hwmon)
+> +{
+> +	unsigned int mask = SENSOR_CFG_SAMPLE_ENA |
+> +			    SENSOR_CFG_START_CAPTURE |
+> +			    SENSOR_CFG_CONTINIOUS_MODE |
+> +			    SENSOR_CFG_PSAMPLE_ENA;
+> +	unsigned int val;
+> +
+> +	/* enable continuous mode */
+> +	val = SENSOR_CFG_SAMPLE_ENA | SENSOR_CFG_CONTINIOUS_MODE;
+> +
+
+I am curious: Why not as part of the assignment, similar to 'mask' ?
+
+> +	return regmap_update_bits(hwmon->regmap_pvt, PVT_SENSOR_CFG,
+> +				  mask, val);
+> +}
+> +
+> +static struct regmap *lan966x_init_regmap(struct platform_device *pdev,
+> +					  const char *name)
+> +{
+> +	struct regmap_config regmap_config = {
+> +		.reg_bits = 32,
+> +		.reg_stride = 4,
+> +		.val_bits = 32,
+> +	};
+> +	void __iomem *base;
+> +
+> +	base = devm_platform_ioremap_resource_byname(pdev, name);
+> +	if (IS_ERR(base))
+> +		return ERR_CAST(base);
+> +
+> +	regmap_config.name = name;
+> +
+> +	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
+> +}
+> +
+> +static void lan966x_clk_disable(void *data)
+> +{
+> +	struct lan966x_hwmon *hwmon = data;
+> +
+> +	clk_disable_unprepare(hwmon->clk);
+> +}
+> +
+> +static int lan966x_clk_enable(struct device *dev, struct lan966x_hwmon *hwmon)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(hwmon->clk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return devm_add_action_or_reset(dev, lan966x_clk_disable, hwmon);
+> +}
+> +
+> +static int lan966x_hwmon_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct lan966x_hwmon *hwmon;
+> +	struct device *hwmon_dev;
+> +	int ret;
+> +
+> +	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
+> +	if (!hwmon)
+> +		return -ENOMEM;
+> +
+> +	hwmon->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(hwmon->clk))
+> +		return dev_err_probe(dev, PTR_ERR(hwmon->clk),
+> +				     "failed to get clock\n");
+> +
+> +	ret = lan966x_clk_enable(dev, hwmon);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to enable clock\n");
+> +
+> +	hwmon->clk_rate = clk_get_rate(hwmon->clk);
+> +
+> +	hwmon->regmap_pvt = lan966x_init_regmap(pdev, "pvt");
+> +	if (IS_ERR(hwmon->regmap_pvt))
+> +		return dev_err_probe(dev, PTR_ERR(hwmon->regmap_pvt),
+> +				     "failed to get regmap for PVT registers\n");
+> +
+> +	hwmon->regmap_fan = lan966x_init_regmap(pdev, "fan");
+> +	if (IS_ERR(hwmon->regmap_fan))
+> +		return dev_err_probe(dev, PTR_ERR(hwmon->regmap_fan),
+> +				     "failed to get regmap for fan registers\n");
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +				"lan966x_hwmon", hwmon,
+> +				&lan966x_hwmon_chip_info, NULL);
+> +	if (IS_ERR(hwmon_dev))
+> +		return dev_err_probe(dev, PTR_ERR(hwmon_dev),
+> +				     "failed to register hwmon device\n");
+> +
+> +	return lan966x_hwmon_enable(hwmon);
+
+Since I am nitpicking: It may make sense to call this function before
+registering the hwmon device, and it may make sense to disable sampling
+when unloading the driver (you could trigger that by calling
+devm_add_action_or_reset() from lan966x_hwmon_enable).
+
+> +}
+> +
+> +static const struct of_device_id lan966x_hwmon_of_match[] = {
+> +	{ .compatible = "microchip,lan9668-hwmon" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, lan966x_hwmon_of_match);
+> +
+> +static struct platform_driver lan966x_hwmon_driver = {
+> +	.probe = lan966x_hwmon_probe,
+> +	.driver = {
+> +		.name = "lan966x-hwmon",
+> +		.of_match_table = lan966x_hwmon_of_match,
+> +	},
+> +};
+> +module_platform_driver(lan966x_hwmon_driver);
+> +
+> +MODULE_DESCRIPTION("LAN966x Hardware Monitoring Driver");
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_LICENSE("GPL");
+
