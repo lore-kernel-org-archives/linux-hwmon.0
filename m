@@ -2,184 +2,112 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67732C433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Apr 2022 15:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33511C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Apr 2022 21:40:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349424AbiDAP5l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Apr 2022 11:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
+        id S1352797AbiDAVmd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Apr 2022 17:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353643AbiDAPuf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Apr 2022 11:50:35 -0400
-Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCEC278
-        for <linux-hwmon@vger.kernel.org>; Fri,  1 Apr 2022 08:23:21 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id 4273810879E
-        for <linux-hwmon@vger.kernel.org>; Fri,  1 Apr 2022 10:23:21 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id aJ7RneQg8RnrraJ7RnlCDb; Fri, 01 Apr 2022 10:23:21 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=us+dnlysbc7Q3Qvt0JVnL+wmstazMUpPbiUvh87DKYQ=; b=E4S9V9nXDBy1+pXjy9gIRIqFUN
-        PacMyGS98VVMpJJ7VwS3fXGPgb975C20Jcs0oTqBkoaWiZgb5ocRO+URmHR9wu1XB1O2+cqoTD7d+
-        YXMfTo/WmU0lyvFtdz0LPDNBjB4qle0J89GODt3LgnOn0NlwQvOOXZSdOvQWgr2a/GoCcpv/SPza2
-        Ubmz7ki9VtRQLhiCnsOO2UI01PC22lr7tUoP+7gyg67wbEIu5nowYzamYFUnt/yA/dFRh3uSMYmFT
-        5N+MI4c2oYIiWDBLqxuoCE7fE5VBBxtQn8nKNJJYWSzg6WmPZuoiem5t+yHeVfxpuuvYIKckrrzoG
-        oHq+JzEg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54650)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1naJ7Q-0042Nx-Qk; Fri, 01 Apr 2022 15:23:20 +0000
-Message-ID: <e4267787-4e71-6122-db3e-ce34110cccbb@roeck-us.net>
-Date:   Fri, 1 Apr 2022 08:23:19 -0700
+        with ESMTP id S234406AbiDAVmc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Apr 2022 17:42:32 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF210264F7E;
+        Fri,  1 Apr 2022 14:40:41 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 26C4122175;
+        Fri,  1 Apr 2022 23:40:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648849239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A4r7gbpLPTw7uIVHGZDL1psjd1Qy6q/owkzUh+0E5Lk=;
+        b=loWxT5ONk/ZsI3rHaw9O20y+SGezp66XDSqu+aap4deITrN/tsZFsKhWYrVn1R+6v4tFMC
+        LMVmzwTcPgpQl4JVHIsyY0P2QDbgvmlFUtnUd/0haEix9nurugvXxTuVrcyGStPHZCrsYB
+        MmN3m2r66k7uuMcrNte9HwYGRpcIu5Y=
+From:   Michael Walle <michael@walle.cc>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH v4 0/4] hwmon: add lan9668 driver
+Date:   Fri,  1 Apr 2022 23:40:28 +0200
+Message-Id: <20220401214032.3738095-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/4] hwmon: add driver for the Microchip LAN966x SoC
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220331162431.3648535-1-michael@walle.cc>
- <20220331162431.3648535-5-michael@walle.cc>
- <06ff3ca0-9d2b-205f-064d-24bcb86e5362@roeck-us.net>
- <415334e3278a610bc603b316d4af6502@walle.cc>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <415334e3278a610bc603b316d4af6502@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1naJ7Q-0042Nx-Qk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54650
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 17
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/1/22 05:57, Michael Walle wrote:
-> Am 2022-03-31 19:28, schrieb Guenter Roeck:
-> 
->>> +static int lan966x_hwmon_write_pwm_freq(struct device *dev, long val)
->>> +{
->>> +    struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
->>> +
->>> +    val = DIV_ROUND_CLOSEST(hwmon->clk_rate, val);
->>
->> I must have looked at this for an hour, but I didn't see the problem.
->> Sorry for that. Try writing "0" as new pwm frequency.
-> 
-> Ohh, and negative values..
-> 
-> I'll add a
-> 
-> if (val <= 0)
->      return -EINVAL;
-> 
->>> +static int lan966x_hwmon_enable(struct lan966x_hwmon *hwmon)
->>> +{
->>> +    unsigned int mask = SENSOR_CFG_SAMPLE_ENA |
->>> +                SENSOR_CFG_START_CAPTURE |
->>> +                SENSOR_CFG_CONTINIOUS_MODE |
->>> +                SENSOR_CFG_PSAMPLE_ENA;
->>> +    unsigned int val;
->>> +
->>> +    /* enable continuous mode */
->>> +    val = SENSOR_CFG_SAMPLE_ENA | SENSOR_CFG_CONTINIOUS_MODE;
->>> +
->>
->> I am curious: Why not as part of the assignment, similar to 'mask' ?
-> 
-> There was code to set the clock divider, but I've removed
-> it as the hardware has a sane default. That left just that one
-> line, but moving the comment above the declaration looked
-> weird.
-> 
-> Now thinking about it again, it might make sense to bring
-> back the code to set the clock divider in case someone
-> will fiddle around with it before the driver is probed.
-> 
-> #define LAN966X_PVT_CLK 1200000 /* 1.2 MHz */
-> 
-> /* set PVT clock to be between 1.15 and 1.25 MHz */
-> div = DIV_ROUND_CLOSEST(hwmon->clk_rate, LAN966X_PVT_CLK);
-> val |= FIELD_PREP(SENSOR_CFG_CLK_CFG, div);
-> 
+Add a temperature and fan controller driver for the Microchip LAN9668 SoC.
 
-Yes, that would be a good idea.
+The temperature sensor uses a polynomial to calculate the actual
+temperature. Fortunately, the bt1-pvt already has such a calculation.
+It seems that the LAN9668 uses the same Analog Bits sensor as the
+BT1 although with a different characteristic. To be able to reuse the
+code move it to lib/ as it seems pretty generic to calculate any
+polynomial using integers only, which might also be used by other parts
+of the kernel. Another option might be to move the code to hwmon-poly.c,
+I'm not sure. Thoughts?
 
-Thanks,
-Guenter
+I also plan on submitting patches to add temperature sensor support for
+the GPYxxx and LAN8814 PHYs which also use polynomial_calc().
 
->>> +static int lan966x_hwmon_probe(struct platform_device *pdev)
->>> +{
->>> +    struct device *dev = &pdev->dev;
->>> +    struct lan966x_hwmon *hwmon;
->>> +    struct device *hwmon_dev;
->>> +    int ret;
->>> +
->>> +    hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
->>> +    if (!hwmon)
->>> +        return -ENOMEM;
->>> +
->>> +    hwmon->clk = devm_clk_get(dev, NULL);
->>> +    if (IS_ERR(hwmon->clk))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon->clk),
->>> +                     "failed to get clock\n");
->>> +
->>> +    ret = lan966x_clk_enable(dev, hwmon);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret, "failed to enable clock\n");
->>> +
->>> +    hwmon->clk_rate = clk_get_rate(hwmon->clk);
->>> +
->>> +    hwmon->regmap_pvt = lan966x_init_regmap(pdev, "pvt");
->>> +    if (IS_ERR(hwmon->regmap_pvt))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon->regmap_pvt),
->>> +                     "failed to get regmap for PVT registers\n");
->>> +
->>> +    hwmon->regmap_fan = lan966x_init_regmap(pdev, "fan");
->>> +    if (IS_ERR(hwmon->regmap_fan))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon->regmap_fan),
->>> +                     "failed to get regmap for fan registers\n");
->>> +
->>> +    hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
->>> +                "lan966x_hwmon", hwmon,
->>> +                &lan966x_hwmon_chip_info, NULL);
->>> +    if (IS_ERR(hwmon_dev))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon_dev),
->>> +                     "failed to register hwmon device\n");
->>> +
->>> +    return lan966x_hwmon_enable(hwmon);
->>
->> Since I am nitpicking: It may make sense to call this function before
->> registering the hwmon device, and it may make sense to disable sampling
->> when unloading the driver (you could trigger that by calling
->> devm_add_action_or_reset() from lan966x_hwmon_enable).
-> 
-> sure
-> 
-> -michael
+The last two patches adds the actual driver and the dt-binding for it.
+
+changes since v3:
+ - validate input frequency in lan966x_hwmon_write_pwm_freq()
+ - enable sensor before registering hwmon device
+ - automatically disable sensor when driver is removed
+ - set the required clock devider in case someone changed the
+   hardware default before the driver is loaded
+ - remove extra empty lines
+
+changes since v2:
+ - strip unwanted copy pasta.. oops
+ - use "select REGMAP" instead of "depends on"
+
+changes since v1:
+ - add doc string to polynomial_calc(), moved the comment
+   into the function.
+ - add missing "select POLYNOMIAL" to the bt1_pvt driver
+   Kconfig symbol
+ - add hwmon driver documentation
+ - cache sys_clk rate during probe
+ - add missing ERR_CAST()
+ - adapted comment for the PPS->RPM calculation
+ - add temporary variable in lan966x_hwmon_read_pwm_freq()
+
+Michael Walle (4):
+  lib: add generic polynomial calculation
+  hwmon: (bt1-pvt) use generic polynomial functions
+  dt-bindings: hwmon: add Microchip LAN966x bindings
+  hwmon: add driver for the Microchip LAN966x SoC
+
+ .../bindings/hwmon/microchip,lan966x.yaml     |  53 +++
+ Documentation/hwmon/lan966x.rst               |  40 ++
+ drivers/hwmon/Kconfig                         |  13 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/bt1-pvt.c                       |  50 +--
+ drivers/hwmon/lan966x-hwmon.c                 | 418 ++++++++++++++++++
+ include/linux/polynomial.h                    |  35 ++
+ lib/Kconfig                                   |   3 +
+ lib/Makefile                                  |   2 +
+ lib/polynomial.c                              | 108 +++++
+ 10 files changed, 686 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+ create mode 100644 Documentation/hwmon/lan966x.rst
+ create mode 100644 drivers/hwmon/lan966x-hwmon.c
+ create mode 100644 include/linux/polynomial.h
+ create mode 100644 lib/polynomial.c
+
+-- 
+2.30.2
 
