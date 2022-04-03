@@ -2,97 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93DD4C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Apr 2022 19:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD28C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Apr 2022 21:24:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbiDCThe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 3 Apr 2022 15:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
+        id S1358074AbiDCVZ5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Apr 2022 17:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234929AbiDCThd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Apr 2022 15:37:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1148813D70;
-        Sun,  3 Apr 2022 12:35:39 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id p15so13607727lfk.8;
-        Sun, 03 Apr 2022 12:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t8Pl8fQJAqqHWL8r7us0/7exv1W99GG2mi8uIF4DTLk=;
-        b=oltd4lRXHltEO/SVMPlYiF9iOVp97IALEEDHJ754PCavoAfpfIZpXV7KKlHt2w5gPs
-         WQOwMoisZ6DDB56FVI/I2C0nLdu5Xf/jyXLOubfjSgWBTWFlvtZHssRV7nQox3gf+Nvi
-         UqxGcJTKwe4V9WmIWI+88ZVXFNhIicHXmFhV+8/SPevWQNBDzprDjMteeLrgWiJeZFhV
-         CIytmcTryYUZxthfI50RjEAOkG4HiXG1LLxsDwLUfYNHnmCly83ZIm/RaeejtvQbJSKs
-         thfu17/LXXEBoNK5eX9s1dU0AIJQ0U0gDee2UUevm80P7G1zKCaakhIqGW82SC34Wc+h
-         OSeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t8Pl8fQJAqqHWL8r7us0/7exv1W99GG2mi8uIF4DTLk=;
-        b=ZZ/dU66Rt95jCWqOBo0uBz1dZ3ZqGUoh+LKzz4Y4KilTBH3TbhBjAUrvOHMpkd321T
-         qxUA9oLEZvRnt29f0oypGejb8VaoqERDx0sIGRf3GoFgHghI4F/YSHdfld+dTValwN+7
-         3v3MU3q9ofbA5ZGWIpy1DfalH+G/hwxIpAdj4KiTBTjjCL5iIntOh72K9GCHmWBlvU0Q
-         T+kfD6GphnxEuTR1ugAoB02PTBGUHRfzhxwMk2BmnVE0wGrF+sH0b36JWsE8VBAshGKC
-         Uf4UUIREQhgy3qZvXeVZ3cfVvz3LWU/Wp+kHPpG8QHt87c5EWXYZZ6aDFm19EvkzHkq/
-         GGZQ==
-X-Gm-Message-State: AOAM533Bp3Dli6CnJWXtxwUfmTAk6B/4u+7YWF0OefKsXEHmkfwPp9/o
-        umFcuU5Rr17mSjFUeHFiHfE=
-X-Google-Smtp-Source: ABdhPJzqms4wPEjogwWW7uy9LOgZMZcwthXQYf7Mykloph8Qi4f5Mbt447Rmy9fttBzsey4VNL3riw==
-X-Received: by 2002:a05:6512:ad5:b0:44a:614e:9d61 with SMTP id n21-20020a0565120ad500b0044a614e9d61mr20713431lfu.677.1649014537059;
-        Sun, 03 Apr 2022 12:35:37 -0700 (PDT)
-Received: from localhost.localdomain ([178.136.134.212])
-        by smtp.googlemail.com with ESMTPSA id e11-20020a2e984b000000b00249b8b68f61sm875353ljj.74.2022.04.03.12.35.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 12:35:36 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
-        Ed Brindley <kernel@maidavale.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (asus_wmi_sensors) Fix CROSSHAIR VI HERO name
-Date:   Sun,  3 Apr 2022 22:34:54 +0300
-Message-Id: <20220403193455.1363-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S232993AbiDCVZ4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Apr 2022 17:25:56 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.145.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF940366B2
+        for <linux-hwmon@vger.kernel.org>; Sun,  3 Apr 2022 14:24:00 -0700 (PDT)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id E003326465
+        for <linux-hwmon@vger.kernel.org>; Sun,  3 Apr 2022 16:23:59 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id b7hXnM0mIXvvJb7hXnQUx5; Sun, 03 Apr 2022 16:23:59 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=l94gkmhdFIeBvR1XcjMXTxmeKAsZIjPuc3bANEGaXH0=; b=38g9OeClcRZHqNz8qkUu1JPwvs
+        GVdi/1i+FOFqjCdSHmFx/xgCCjPq6ATWk5WxXfHlLlYzfQBxpLipA8unlbTkFxfgHDxxijuAXMN/t
+        +moOX/SK5AqXgzdjpJs9X3aej1pAgn7iOvDzNnMun8RbR7CwqNUurxWso6/UYWG/f3zlO1XHIUyR1
+        +mBZ+lHFQ/Zzlq1tcYbtmP05zKY4NdjW+CEnyFjTZ0h+tWo7Zh+c65izNsWQ50i8JhsH52MVf+SAC
+        pjLL7ElD+DxtPS6r3H0adfg5wv8MFdDBSakixR0bnMxKRpj2WjKMbKh8oDS/H2fPC2jesKOT0GDxs
+        qdMkC0DA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54710)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nb7hX-0032yA-Gu; Sun, 03 Apr 2022 21:23:59 +0000
+Message-ID: <71b929fd-2a4a-f2ce-8dbd-35e51235723e@roeck-us.net>
+Date:   Sun, 3 Apr 2022 14:23:57 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220403193455.1363-1-pauk.denis@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] hwmon: (asus_wmi_sensors) Fix CROSSHAIR VI HERO name
+In-Reply-To: <20220403193455.1363-1-pauk.denis@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nb7hX-0032yA-Gu
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54710
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-CROSSHAIR VI HERO motherboard is incorrectly named as
-ROG CROSSHAIR VI HERO. Issue is found by github user in [1].
+On 4/3/22 12:34, Denis Pauk wrote:
+> CROSSHAIR VI HERO motherboard is incorrectly named as
+> ROG CROSSHAIR VI HERO. Issue is found by github user in [1].
+> 
+> [1]: https://github.com/electrified/asus-wmi-sensors/pull/79
+> 
 
-[1]: https://github.com/electrified/asus-wmi-sensors/pull/79
+We have an official Reported-by: tag to give credit to reporters.
+I don't see value in deviating from that. I can understand
+if a reporter wants to remain anonymous, but then a link
+to the anonymous report is pointless.
 
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> 
+> ---
+> Changes in v2:
+> - fix base commit.
 
----
-Changes in v2:
-- fix base commit.
----
- drivers/hwmon/asus_wmi_sensors.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That would not be a reason to send v2. Did this otherwise cause a conflict,
+or is there some other problem with v1 ? If so, please provide such
+information in the change log. I tried to apply v1 on top of mainline,
+though, and it didn't report a conflict for me, so I am a bit confused.
 
-diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-index c80eee874b6c..49784a6ea23a 100644
---- a/drivers/hwmon/asus_wmi_sensors.c
-+++ b/drivers/hwmon/asus_wmi_sensors.c
-@@ -71,7 +71,7 @@ static const struct dmi_system_id asus_wmi_dmi_table[] = {
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
--	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("CROSSHAIR VI HERO"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
+Thanks,
+Guenter
 
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
--- 
-2.35.1
+> ---
+>   drivers/hwmon/asus_wmi_sensors.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+> index c80eee874b6c..49784a6ea23a 100644
+> --- a/drivers/hwmon/asus_wmi_sensors.c
+> +++ b/drivers/hwmon/asus_wmi_sensors.c
+> @@ -71,7 +71,7 @@ static const struct dmi_system_id asus_wmi_dmi_table[] = {
+>   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
+>   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
+>   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
+> -	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
+> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("CROSSHAIR VI HERO"),
+>   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
+>   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
+>   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
+> 
+> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 
