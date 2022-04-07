@@ -2,114 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24171C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Apr 2022 09:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABFC7C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Apr 2022 10:13:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbiDGJZr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Apr 2022 05:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S234891AbiDGKPf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Apr 2022 06:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiDGJZq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Apr 2022 05:25:46 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF86130C30;
-        Thu,  7 Apr 2022 02:23:46 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-de3ca1efbaso5710770fac.9;
-        Thu, 07 Apr 2022 02:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L1w6g0t9FF80meM/9r7z+LlSCIy7b2uDRiP07nJn9L0=;
-        b=J6p8c79vkyK244uIiZ/IBFH4dh2YZ5jsqsA8b1VUzQuKxDDC2yfDFAAuqFls+g7wAS
-         PJttXpW0nCmBj6MFi6MUfxkRNFpx+jxE01M5uAlZ05uPAdxxj2ylXp0gNztaPyFd8Vc1
-         uGHfaTo7G/pfJcjc/G/xQe9crjLpJl4VNdMg+HaTbILFGIDplqA3TLr8KA2jDxcACy4n
-         BvZBmXrewlin9ebJmDpXqDIvETvlnH884Lcogvg2gHcE8NyhC6a+Qu/LVsxUU1erPEhj
-         X9O2Y15C+axDopkbBJD819NChgSbITcwQteJZJL8tw9rkPkqF4weB6oVXJrnuif5q7L3
-         jg0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L1w6g0t9FF80meM/9r7z+LlSCIy7b2uDRiP07nJn9L0=;
-        b=evDga7ZSeoYhYxAPpKXuQS8TBd9+C6Z53Y90xB5fRhx2zGT69mG6JFj1eVf7VKoDMo
-         bf3pjB2pzuu3DChK0Tbm2SDGeEZZwr/ls0co8HNwvT2rMHkVsPO4wMHsvznP6s5Njoix
-         N7uJkN32GfOtmvEEjyOCXSECRk3lV4Uu58qo846ZNd019CnlHrgnJSij2taFLWP/NZI4
-         nLAm7WmqruZr8MqwXFiVGkt0cfA3n3FvbpIgkVoVVR487h76U2vHurbgR+GS3X5b8Pgl
-         I8wrzqahnO9EK2f1wKgp/YM4YWt9pEBgQeh5vpYdqSTA8wt3gg9yZ+8byO4+bYzDJra+
-         BVlA==
-X-Gm-Message-State: AOAM531lZNiCf/x6pA1yYXNVLGBsRdv3i4W4pyLUvxDYFhaUIZMNWcXS
-        JBSs7/3BEBee1G1Gbj7tOn0=
-X-Google-Smtp-Source: ABdhPJwrmKKcltCph41MdlupwYebDSCmSwCE2jQhwB8toShtovejm4ezDZKUJI4sngvRzFaiJLPKIg==
-X-Received: by 2002:a05:6870:232a:b0:db:360c:7f5a with SMTP id w42-20020a056870232a00b000db360c7f5amr5576580oao.230.1649323425082;
-        Thu, 07 Apr 2022 02:23:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k1-20020a05687015c100b000e210c5170fsm3741232oad.6.2022.04.07.02.23.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 02:23:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0202486d-cf86-c9d3-04bb-8b1e596462f7@roeck-us.net>
-Date:   Thu, 7 Apr 2022 02:23:42 -0700
+        with ESMTP id S230034AbiDGKPf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Apr 2022 06:15:35 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0AA46143;
+        Thu,  7 Apr 2022 03:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649326398;
+        bh=NzbJ6LCovM7vad+GoSqmD1yRVSeHyd9Cr+QnKLRutCo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=UHTLyZknjq/Lwysg1lfr1ofEeO/1/nQYoI09NvqfynS06FGp1kE4sMsluuYH7279I
+         hWBQbrci3PyLV7qf6yz3pbmkvg/aAmONviwB9PoTQ9LhVdWObNXC8nDf1sXE2T1nX+
+         w7rjYHCeqyKyAM9mT2xJK1qQ4wY6o9uzsWi3yc9Y=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MDhlf-1njneT1zPj-00AjHx; Thu, 07 Apr 2022 12:13:18 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     zheyuma97@gmail.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (adt7470) Fix warning on module removal
+Date:   Thu,  7 Apr 2022 12:13:12 +0200
+Message-Id: <20220407101312.13331-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [BUG] hwmon: (adt7470) warning when removing the module
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, Zheyu Ma <zheyuma97@gmail.com>,
-        jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAMhUBjmTObCwaF=enLNkRSzxqSzK6KdkHf+4cWo5fqOO7B40iw@mail.gmail.com>
- <5f3a3672-6b99-7e24-9003-443c571f2dcc@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <5f3a3672-6b99-7e24-9003-443c571f2dcc@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3ovxuFu8CEf0F/03MIBREb5S34SEezFsSkmtGRm0P10lTl2Oeu5
+ XbexovcfCSCv/9/3le3RFlkFuN95u0B01kzYugjm8KH8K0tVaSzPBIn0Nw4kNWFJtvT/DNK
+ 2t1cKD0dF3dO1j7VjpVMdnYFbN38b1db8CCuP/7XoY7ZNDSdw03jR6hZPm8hjkhZOrc+ITB
+ WrAnpEs5Ks7Aeo3ivfpcw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ic4wrSCOd88=:lTToyKaCXOpBWmB1zpEV1l
+ +BoD+IgPTXSM3xxgJHGQKpT89Yw5DH4411051A09xNtIwtpGUcfqlZ8noywCCqyiZtH8BUgHw
+ 6pfx5OJ6JBgSu2PlmShYAR3s/ze4BsOWxHnlW8QdVEPMoMmVjCbVrTXY1EQ8lrZM45AQ4k8Dy
+ RA6vN7EO9xuanqNTBtFnILoAN11RfKCvx/41pR87l5KsYGgKdq/piySYOt+SHvcinnTK+4k/V
+ pl54w7b1jv+u5FVRaq9CvZjJsulcrmzqubaICZomijRKeAfk6of0bagCbFw6fuQdqXypLo2k4
+ g6hqpghhbHw1lAlEY4SPhWbI33vxs3oN4GX2cxlp2YAPkfeTHosS80B7VODMpQX77eurVWlPD
+ SFtHQeiH1rBGSEuOY0jiFHkGJbKuOEFe1uucliHcGG3PK0v+/wunOm6xOVC/g2Y+B2q1Skq58
+ QXCI1CuA5+k7Iq1j+Ajfytrg9GsVoiwR9Qlq6+FNKCQjvawwJewjCRG5OIthhzd7W8dVcykWT
+ 1lsOzoAg7/iYNk0uH6mie1e74Sa0tDDK3/2qi3eKL5BlmzqIOi2MO6RXNQ667wkMyULSCmSeC
+ phC6F58CVv+yhvmJiaI9Z6SXyJ2OaAZJFT8e2JW0tUx0hZAw4v+g1xRphs2tpSjoQqNuC0MPw
+ NTwPX1OzoJfM3/hsSxEEzE32AV5QQqYLUyvLXbqdIRtIsmdVKhNeSlF6fxnVzCPWwCFvz2DPH
+ iYID2qfW5lWT9udET+PiEurk56qUPxR2AtwXMQ2CQNRmgfmB2ewjZUsSZPB3yOjs6ybP+O+jw
+ odtVYkOJ2/q+tq/OgPYCofgUNR3TV2CdLtW6Xgp8HFNjJZ8wED5ryV5GSNtuA08LocaseyDHP
+ 4s8vhFAQ8QyFnKeE36UVYif7LFjclw0N58tY3z+urilmTkQgN2KXLA92dznJIGOWcCgnNZqI7
+ 24ziY+E2FCRnRziC3V/6alAVAN1wZSJKMlPLTPI5reMYbxroIDUziW+cBfmwGlLEbUNS8X0Gz
+ lzuCc0SG4QKwfNlvBDkowrOMWlp3JvkiSc9ncPENLxINv3AvHcfrZaCW4OBBu97qcPZTYlZ0v
+ 555ROtZojEwM8I=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/6/22 22:01, Armin Wolf wrote:
-> Am 07.04.22 um 05:17 schrieb Zheyu Ma:
-> 
->> I found a bug when removing the adt7470 module.
->>
->> The following log can reveal it:
->>
->> [   18.459479] ------------[ cut here ]------------
->> [   18.459852] do not call blocking ops when !TASK_RUNNING; state=1
->> set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
->> [   18.460857] WARNING: CPU: 7 PID: 365 at kernel/sched/core.c:9660
->> __might_sleep+0x96/0xb0
->> [   18.461523] Modules linked in: adt7470(-)
->> [   18.464568] RIP: 0010:__might_sleep+0x96/0xb0
->> [   18.472577] Call Trace:
->> [   18.472778]  <TASK>
->> [   18.472957]  exit_signals+0x2f/0x3b0
->> [   18.473251]  do_exit+0xcd/0x18c0
->> [   18.473534]  ? __mutex_unlock_slowpath+0x1b8/0x740
->> [   18.473927]  kthread_exit+0x42/0x60
->> [   18.474212]  ? adt7470_detect+0x140/0x140 [adt7470]
->> [   18.474622]  kthread+0x272/0x2e0
->> [   18.474885]  ? adt7470_detect+0x140/0x140 [adt7470]
->> [   18.475277]  ? kthread_blkcg+0xa0/0xa0
->> [   18.475601]  ret_from_fork+0x22/0x30
->> [   18.475901]  </TASK>
->>
->> Regards,
->> Zheyu Ma
-> 
-> Please correct me if i am wrong, but i think the issue lies in adt7470_update_thread()
-> leaving the kthread in TASK_INTERRUPTIBLE state when the second check for kthread_should_stop()
-> returns true and causes the kthread to exit. Since kthread_exit() might sleep in exit_signals(),
-> we get this warning.
-> Maybe moving set_current_state(TASK_INTERRUPTIBLE) below the second check for kthread_should_stop()
-> would fix the issue?
-> 
+When removing the adt7470 module, a warning might be printed:
 
-Agreed. Care to send a patch ?
+do not call blocking ops when !TASK_RUNNING; state=3D1
+set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
 
-Thanks,
-Guenter
+This happens because adt7470_update_thread() can leave the kthread in
+TASK_INTERRUPTIBLE state when the kthread is being stopped before
+the call of set_current_state(). Since kthread_exit() might sleep in
+exit_signals(), the warning is printed.
+Fix that by using schedule_timeout_interruptible() and removing
+the call of set_current_state().
+This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
+which might cause the kthread to exit.
+
+Compile-tested only.
+
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/adt7470.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index fb6d14d213a1..c67cd037a93f 100644
+=2D-- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -19,6 +19,7 @@
+ #include <linux/log2.h>
+ #include <linux/kthread.h>
+ #include <linux/regmap.h>
++#include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/util_macros.h>
+
+@@ -294,11 +295,10 @@ static int adt7470_update_thread(void *p)
+ 		adt7470_read_temperatures(data);
+ 		mutex_unlock(&data->lock);
+
+-		set_current_state(TASK_INTERRUPTIBLE);
+ 		if (kthread_should_stop())
+ 			break;
+
+-		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
++		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_inter=
+val));
+ 	}
+
+ 	return 0;
+=2D-
+2.30.2
+
