@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B59E7C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Apr 2022 15:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC8BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Apr 2022 15:44:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbiDHPoz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Apr 2022 11:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S231933AbiDHPqG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Apr 2022 11:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbiDHPoz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Apr 2022 11:44:55 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DB8A312;
-        Fri,  8 Apr 2022 08:42:51 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id t21so9174547oie.11;
-        Fri, 08 Apr 2022 08:42:51 -0700 (PDT)
+        with ESMTP id S234655AbiDHPqF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Apr 2022 11:46:05 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16279939D4;
+        Fri,  8 Apr 2022 08:44:02 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id y3-20020a056830070300b005cd9c4d03feso6364056ots.3;
+        Fri, 08 Apr 2022 08:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=IkU27LeDLz1RvhbmUhGboZx0hYH9VeuwztKc/NAi28Y=;
-        b=ZgjJSDCTKUDLDc3NBo4hhtsyBJmI0DCpouMvDza23ZSEfWsBN65jJJAXiNOoGmJEPB
-         PHdneJ8eKLEtGwpawftqCwu2+NObvHFymZCi0xkuTZYDjX7Ab5Lm0VsmtVq/L7mL8M0s
-         bCre+Pkrm/pbVlxEjwBsxsWNLB0F+spcVIXmToy4Y7pNWp/XKEZ18R/H/5dBX1N4VA81
-         Q+uuBQ34KDX69pvfMo3gLAEkpolBKD/1kJ7ANtRRd+QiCpSme04heEM5nX1CvKUjYc31
-         2Y36vcD6NLOyPMzucqkZRqgsVTe3aA22He/aFbnEAmPsd21qksOjxlA90j3D4BZ6CQ39
-         GgTA==
+        bh=ZmDnR4P0jms8okdjduyqjSplf8RRrDLwebVyvapStdM=;
+        b=q04HLZ0LDH775/jL4wmsYosOew3eVyA130Ebf0Hjemgd1xc+/U9TEgVLcxnSj+ezGT
+         RO27hWfcPYerNF1cbbls8Sr9SAh+TxGsBB5vzQtgJzwgPY3/6bbDTXS/390mSOa376IL
+         D1fOnKZMFzAhy/G/TNlC65f0Er83SPQyuq9WJEkrd4TX5oE1QO1HT1IqsAjLdsIeD+81
+         tg9py5fSdk0FNoNl3T1IwxaoFKPkindCLVPjrPXS/zXO/IHCfRjamSo01YOBGKvsgz7V
+         lnNK8C+O9nPZZBkM9TbDrJk1i9TaEEeKfJ5/iIOq0pAQq3DiUezlVTb6zyNJPZdR+65f
+         lLaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=IkU27LeDLz1RvhbmUhGboZx0hYH9VeuwztKc/NAi28Y=;
-        b=Sv5q5auHjZKWTfHF+KHKj5pvEmO9R++83Y7ij1JeXlw7CqVeVNfpUKFuSff2ZGxIsT
-         2Db4QW6BHFHpU3+KiPGZ340JRuFxIeaukFkdzADW98cNJzQ/baL4uoFr0E9piUC2NDSN
-         4u7a57eRLXHJyii1od6agjCkgNES6vzZZj0Hr84XiL0Qi19i6+gUWPxq/Az8qcMeZJXv
-         sDhxUNGOZeUvv/ZHlx8jc6OowpQFUdA3kg6+/6yD+fnjqUEFXCiWif+1X59kCh5dZVsS
-         Nik2T16AvjUYGS1WDtJXFw1RB755R1IKcQIf9zw4f3Fn/NilJzLn+hrRan284ECJTG7B
-         G8gg==
-X-Gm-Message-State: AOAM531OYdVPRAzHjy1SN8ikHmwUmbOSai0aeBHc1emNAEMyDNlwP5Cz
-        3yHb+bUBDtWUcQnLcnrBzb4=
-X-Google-Smtp-Source: ABdhPJzjzjlked1QPV0x7+JOmHshn9p8AeCfIVQkMdGb85D7s9fLmVl9Q+yR6LC2W643I02P4wb11w==
-X-Received: by 2002:a05:6808:11c2:b0:2f9:b58f:5ac7 with SMTP id p2-20020a05680811c200b002f9b58f5ac7mr135549oiv.132.1649432570787;
-        Fri, 08 Apr 2022 08:42:50 -0700 (PDT)
+        bh=ZmDnR4P0jms8okdjduyqjSplf8RRrDLwebVyvapStdM=;
+        b=XB1EHPbDgSWqL3mKSQvsEBQUf3BHe6xsvNlBENTeonHWbl2u1OnxvxJdbqd0QjMgLG
+         XqhJsRZGW1ewXbRJyPbtypPPpCHG961G8Hg1K+PdqpC5P9LDuMyXMI1G7ToJlhauy59C
+         BCwp7+BB4GdvLm8gBvcPX2Nf0T6on6gIzBULkeImSLZ+yzUsvLxLofvjDbPGR+R/BxmV
+         7yAFFn28nrd65oo9xZsFZu3h2omlXlll6mAS6NKTt5kxqk5mQWRLqutKpVIy8clS3Dqz
+         8DYT2Ma6Ivi+iGzSyU8U4rQxm2whluUX7+kZuESX53WXpX65LCu7i4j3aQY1o3rFlzyj
+         7Hhw==
+X-Gm-Message-State: AOAM533zrefyqUOTjwtltzqSBBIKpuLPShJPARNZLGdge1lftdCCVubV
+        eeHvm+Ba8lNLsrwqIs45Ab4=
+X-Google-Smtp-Source: ABdhPJwAhyxaAiIKxBPRZFRdw0ZKo8GeUCAUQI4jHqQfPoMxYJvlz3V23XIq5jt8T0X3tIrVa11CWA==
+X-Received: by 2002:a9d:75cc:0:b0:5cd:9f3a:6ee6 with SMTP id c12-20020a9d75cc000000b005cd9f3a6ee6mr6791592otl.10.1649432641469;
+        Fri, 08 Apr 2022 08:44:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 1-20020a056870104100b000dd9a2eb20asm8843248oaj.21.2022.04.08.08.42.03
+        by smtp.gmail.com with ESMTPSA id v12-20020a05687105cc00b000e215a2e957sm5074156oan.17.2022.04.08.08.43.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 08:42:15 -0700 (PDT)
+        Fri, 08 Apr 2022 08:43:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Apr 2022 08:42:00 -0700
+Date:   Fri, 8 Apr 2022 08:43:43 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Michael Walle <michael@walle.cc>
 Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -60,27 +60,28 @@ Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
         Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         David Laight <David.Laight@ACULAB.COM>
-Subject: Re: [PATCH v4 1/2] hwmon: introduce hwmon_sanitize_name()
-Message-ID: <20220408154200.GA105453@roeck-us.net>
+Subject: Re: [PATCH v4 2/2] hwmon: intel-m10-bmc-hwmon: use
+ devm_hwmon_sanitize_name()
+Message-ID: <20220408154343.GA105850@roeck-us.net>
 References: <20220405092452.4033674-1-michael@walle.cc>
- <20220405092452.4033674-2-michael@walle.cc>
+ <20220405092452.4033674-3-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405092452.4033674-2-michael@walle.cc>
+In-Reply-To: <20220405092452.4033674-3-michael@walle.cc>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 11:24:51AM +0200, Michael Walle wrote:
-> More and more drivers will check for bad characters in the hwmon name
-> and all are using the same code snippet. Consolidate that code by adding
-> a new hwmon_sanitize_name() function.
+On Tue, Apr 05, 2022 at 11:24:52AM +0200, Michael Walle wrote:
+> Instead of open-coding the bad characters replacement in the hwmon name,
+> use the new devm_hwmon_sanitize_name().
 > 
 > Signed-off-by: Michael Walle <michael@walle.cc>
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
 > Reviewed-by: Tom Rix <trix@redhat.com>
 
-Applied to hwmon-next.
+Applied.
 
 Thanks,
 Guenter
