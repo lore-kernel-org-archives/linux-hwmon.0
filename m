@@ -2,124 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15B85C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Apr 2022 15:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B59E7C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Apr 2022 15:42:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237689AbiDHPlV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Apr 2022 11:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S237717AbiDHPoz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Apr 2022 11:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237687AbiDHPlT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Apr 2022 11:41:19 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E82286E3;
-        Fri,  8 Apr 2022 08:39:15 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so6329441otj.10;
-        Fri, 08 Apr 2022 08:39:15 -0700 (PDT)
+        with ESMTP id S232562AbiDHPoz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Apr 2022 11:44:55 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DB8A312;
+        Fri,  8 Apr 2022 08:42:51 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id t21so9174547oie.11;
+        Fri, 08 Apr 2022 08:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=HJkMiY5MRtcxuQKthWd6Y5lY7ndKbY+OeERDaDIJqOo=;
-        b=jFOJx+q4Zt4u1lJcDiOp1VLNrxGZSfiKCbV6YNKIB/RJV6ry3KrS01DZ4sqG3zpyM5
-         b2C5OdwOpnlqUFxp8fSRhb9+5qICpIgAxcu3bup1QL5/QV6akHuK8+pCR6AcSFVj9Hyz
-         jqkiqpbUEkeMphwmjK4dJqewAPu/vvHNPzyn2zySLiWdg+fxnVWp9MRiZv6DxyrUM3QP
-         v/AmSVjtmxlsKFxsvqX0u+TocrOvUUdq/Ulz+oAd91y3VSNJG+EIfXaOs4JKlkcbT94P
-         SHyRTcDEhimN/XVexoDB2AwrZBYq7rFQYR5p6CwWLbm24cm2QkACnZGdpRRFFCaljZ5p
-         GxwA==
+        bh=IkU27LeDLz1RvhbmUhGboZx0hYH9VeuwztKc/NAi28Y=;
+        b=ZgjJSDCTKUDLDc3NBo4hhtsyBJmI0DCpouMvDza23ZSEfWsBN65jJJAXiNOoGmJEPB
+         PHdneJ8eKLEtGwpawftqCwu2+NObvHFymZCi0xkuTZYDjX7Ab5Lm0VsmtVq/L7mL8M0s
+         bCre+Pkrm/pbVlxEjwBsxsWNLB0F+spcVIXmToy4Y7pNWp/XKEZ18R/H/5dBX1N4VA81
+         Q+uuBQ34KDX69pvfMo3gLAEkpolBKD/1kJ7ANtRRd+QiCpSme04heEM5nX1CvKUjYc31
+         2Y36vcD6NLOyPMzucqkZRqgsVTe3aA22He/aFbnEAmPsd21qksOjxlA90j3D4BZ6CQ39
+         GgTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=HJkMiY5MRtcxuQKthWd6Y5lY7ndKbY+OeERDaDIJqOo=;
-        b=7Oc3FQxF3+ySPJG9bDIrRFqbWbXOi1+qXtHlXiDIRAvdLQpncnN7GK/sMOk5p51Zgv
-         2Wz5s97IjTHqrJDQ+og59c3EItjyK3Aova9R9tG5YB5xdkwzGjuWxQUmgGcuSVCbbi7Y
-         fUTxygYVeCw6U4xcZvsfkSRtrYEDkOdRZfIIMvEMqbdyp1rIqUrDNUOM2RjeaUIIVI2O
-         trTtx0ZjOTnQWixzdPUu+E2Y9+yNEYobCXvn/SJ7RBySSufxDwUQYzCPsa/8sOdjs0EH
-         ryp/vSykvO96J20H+c3cJ21PP35z/1gwUtrBP+WvJzaMBHxTRvpul96T0Yo6tvAjBR62
-         UDoA==
-X-Gm-Message-State: AOAM5321md87eoaYqU5+huLtUNfmiQaSnq8VFCgDtQrJ7oH93t9r9YM/
-        nido2OTT3bQvBuVJXvNE7Zk=
-X-Google-Smtp-Source: ABdhPJwERHX0Pdnxfba2PC3ATgsU43ZA/ZVFRBrpqnZR6EyNfI52/S0jTQVtzGOMIi8uuxsrVFxBbw==
-X-Received: by 2002:a05:6830:1341:b0:5cd:b7d1:65f8 with SMTP id r1-20020a056830134100b005cdb7d165f8mr6566254otq.266.1649432354617;
-        Fri, 08 Apr 2022 08:39:14 -0700 (PDT)
+        bh=IkU27LeDLz1RvhbmUhGboZx0hYH9VeuwztKc/NAi28Y=;
+        b=Sv5q5auHjZKWTfHF+KHKj5pvEmO9R++83Y7ij1JeXlw7CqVeVNfpUKFuSff2ZGxIsT
+         2Db4QW6BHFHpU3+KiPGZ340JRuFxIeaukFkdzADW98cNJzQ/baL4uoFr0E9piUC2NDSN
+         4u7a57eRLXHJyii1od6agjCkgNES6vzZZj0Hr84XiL0Qi19i6+gUWPxq/Az8qcMeZJXv
+         sDhxUNGOZeUvv/ZHlx8jc6OowpQFUdA3kg6+/6yD+fnjqUEFXCiWif+1X59kCh5dZVsS
+         Nik2T16AvjUYGS1WDtJXFw1RB755R1IKcQIf9zw4f3Fn/NilJzLn+hrRan284ECJTG7B
+         G8gg==
+X-Gm-Message-State: AOAM531OYdVPRAzHjy1SN8ikHmwUmbOSai0aeBHc1emNAEMyDNlwP5Cz
+        3yHb+bUBDtWUcQnLcnrBzb4=
+X-Google-Smtp-Source: ABdhPJzjzjlked1QPV0x7+JOmHshn9p8AeCfIVQkMdGb85D7s9fLmVl9Q+yR6LC2W643I02P4wb11w==
+X-Received: by 2002:a05:6808:11c2:b0:2f9:b58f:5ac7 with SMTP id p2-20020a05680811c200b002f9b58f5ac7mr135549oiv.132.1649432570787;
+        Fri, 08 Apr 2022 08:42:50 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m3-20020a4ae3c3000000b00320d7c78b01sm8506843oov.20.2022.04.08.08.38.37
+        by smtp.gmail.com with ESMTPSA id 1-20020a056870104100b000dd9a2eb20asm8843248oaj.21.2022.04.08.08.42.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 08:38:42 -0700 (PDT)
+        Fri, 08 Apr 2022 08:42:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Apr 2022 08:38:35 -0700
+Date:   Fri, 8 Apr 2022 08:42:00 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     zheyuma97@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adt7470) Fix warning on module removal
-Message-ID: <20220408153835.GA104977@roeck-us.net>
-References: <20220407101312.13331-1-W_Armin@gmx.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        David Laight <David.Laight@ACULAB.COM>
+Subject: Re: [PATCH v4 1/2] hwmon: introduce hwmon_sanitize_name()
+Message-ID: <20220408154200.GA105453@roeck-us.net>
+References: <20220405092452.4033674-1-michael@walle.cc>
+ <20220405092452.4033674-2-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407101312.13331-1-W_Armin@gmx.de>
+In-Reply-To: <20220405092452.4033674-2-michael@walle.cc>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 12:13:12PM +0200, Armin Wolf wrote:
-> When removing the adt7470 module, a warning might be printed:
+On Tue, Apr 05, 2022 at 11:24:51AM +0200, Michael Walle wrote:
+> More and more drivers will check for bad characters in the hwmon name
+> and all are using the same code snippet. Consolidate that code by adding
+> a new hwmon_sanitize_name() function.
 > 
-> do not call blocking ops when !TASK_RUNNING; state=1
-> set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
-> 
-> This happens because adt7470_update_thread() can leave the kthread in
-> TASK_INTERRUPTIBLE state when the kthread is being stopped before
-> the call of set_current_state(). Since kthread_exit() might sleep in
-> exit_signals(), the warning is printed.
-> Fix that by using schedule_timeout_interruptible() and removing
-> the call of set_current_state().
-> This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
-> which might cause the kthread to exit.
-> 
-> Compile-tested only.
-> 
-> Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-> Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Tom Rix <trix@redhat.com>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/adt7470.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index fb6d14d213a1..c67cd037a93f 100644
-> --- a/drivers/hwmon/adt7470.c
-> +++ b/drivers/hwmon/adt7470.c
-> @@ -19,6 +19,7 @@
->  #include <linux/log2.h>
->  #include <linux/kthread.h>
->  #include <linux/regmap.h>
-> +#include <linux/sched.h>
->  #include <linux/slab.h>
->  #include <linux/util_macros.h>
-> 
-> @@ -294,11 +295,10 @@ static int adt7470_update_thread(void *p)
->  		adt7470_read_temperatures(data);
->  		mutex_unlock(&data->lock);
-> 
-> -		set_current_state(TASK_INTERRUPTIBLE);
->  		if (kthread_should_stop())
->  			break;
-> 
-> -		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
-> +		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_interval));
->  	}
-> 
->  	return 0;
