@@ -2,215 +2,269 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCC0CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Apr 2022 06:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 936B3C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Apr 2022 15:36:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239961AbiDIGLH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 9 Apr 2022 02:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S236231AbiDIPiW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 9 Apr 2022 11:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239970AbiDIGLG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 9 Apr 2022 02:11:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA3C46670
-        for <linux-hwmon@vger.kernel.org>; Fri,  8 Apr 2022 23:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649484540; x=1681020540;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=t642xmY5naOHeCOHzWaVcGG+5HfG98LeNAh+E/+aK/8=;
-  b=GjhS8WD4bVNgVlZrfTXyWFReWB6aRQlNaeAjl0M9XyXplKfR6/0UlNYs
-   +dgrVY5YDjkOsY9FbGZ2M4bKJG4lmB+bvzY8hwYgVPwIdcnmfUCC7/U2d
-   DI6oLXLCF2XGUSmkCKeJX3JfpaprcqhY5VlVCdGurlp10pvnQVHHEW/uB
-   0fwgYVIL+quKvdLiJQTwREPl2r7KgBJUQjM08r58696kNiCYornHpKFOF
-   9fbz10kaG00Zk5HKfhmOi19MO+AXfihQ9484nNgoxryZovNGyeGv3R6LC
-   aY4LPA4bjBF+S3OQjJuo+annZDsLFrzN+e58PfIUIymZ+qCOTG+JT/Gt+
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="261944823"
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="261944823"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 23:08:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="621977138"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2022 23:08:57 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nd4HJ-0000w1-9m;
-        Sat, 09 Apr 2022 06:08:57 +0000
-Date:   Sat, 09 Apr 2022 14:08:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 85958c5f642b55702f6e61cdd6a8f3ddc0f49bfc
-Message-ID: <625122e1.v1Gms5abY8If6Oq/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229504AbiDIPiT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 9 Apr 2022 11:38:19 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0732BE0;
+        Sat,  9 Apr 2022 08:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649518569;
+        bh=AWSiqye97mYi6sUv586l1tMN+wWRer2Pgc3D/ECWV6A=;
+        h=X-UI-Sender-Class:Subject:From:To:References:Date:In-Reply-To;
+        b=Eeh84ME6jM7D95V5ZZUEj835vUcTsY/bM9q/AVBieGrzPleYdntWLNV0vNEHwgq4j
+         vMipLJDkH+/o43ENhD4aiakBwFS6a2CuIefP6Q+O7n8vdYcAAXd5g6NsE0PL99N5MC
+         n6ZPNDE0R7iN/YjDaWyWbNQ37ocHMDOH5P75QfC0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N6KUT-1o13T73QJF-016j0D; Sat, 09
+ Apr 2022 17:36:08 +0200
+Subject: Re: [PATCH] hwmon: (dell-smm) Add cooling device support
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     linux-hwmon@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220330163324.572437-1-W_Armin@gmx.de>
+Message-ID: <19965146-a004-aae5-4448-ec573b227edc@gmx.de>
+Date:   Sat, 9 Apr 2022 17:36:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20220330163324.572437-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:eoIM1SRVBeOvvNBAfc8YeoLXKzA/kU9creonpmTXgNHGjcXQXim
+ ajVWENly9K27ojxeooRHG+QZqY1N15oyg1/As7bF7eYyqkBRnuZDvepnn7oqn6+hjzp8h8J
+ otcaJrIcSDVXnlqazIHd8lVOQSS/BvuGzH72xqyUq2uhzB2bOgrE7xTV0ZRqCCF+8Z8z3gi
+ 60X/L10EHsJ3IADQtj8LA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:S3Ngp4lbYw0=:m0mCMYTJgwLInxaaHQ4AXr
+ /zcg5sSIYt+tu3Wr/ruWKr0d7O2koKnp6x9N4FYVzfBhBkQ8q8pt3Rfnlc4Nv5nshYadKi9dx
+ d9EmlrBtqvm9vzwcoUIYwdE5ejj2fWggTflznrO8YKV7ntdcZQJRKH96ZltuXiacQZt+oN02H
+ a8ZU2XUDXG4iWIaIXfxo3V4/WOGoG8IvlI1e4ioIRyFp7NB8ZfspnGZULGH6lfYCavnIrDe7t
+ C8l5+N4Cz3i0z9Yhpq2fbVkhuNyY95O4R+ebWNgkWNJ/RhSn4fWH43YSVw8lzCeb3xY4iEm1L
+ dGiG1gxpmBhpP5v6ZPt+yUCIdEztTIBvcGj63a38BZN0nj92GVfejpWhOct884v8c/k3Ko6wr
+ 7GXmERuGhF8S2xB11Q2Ca+eXo9ZbVc1Z2hFES7WZKwJKi7OZWMkJbaSBcd9+6RCmjdhHMVpjj
+ TtXGacxvjtPnPRcUPVmfkiM7Wnpop+s6898NZT/hxuR2c51PgEx+vnpZSgRVTQBaipsMf1w+g
+ 1yafGoOc9SiHcBIEutH7Ng55avvTsmXl6oq95NFj1ny+LoG/oM+5wz50hNYtG53jtuc95LoqQ
+ 89bXAqD2uLED/Qc2qHG05HmheJZ5PAU7GyQiqu0zelo2Z2F0uT8nbRdV2VSJWQyhS6cpJ9KDW
+ 8N1LA3l0zlLELc9Chs9bVHM9yiCeoFzKqjttwqrl4Bpu+lY3m5cQfaDhz1BVS87dKztSF4+1Q
+ 1INaI5QyXoWdO3poYs+QgRtzHmRyOj33uu3b1TpUO79SmTcY9gLm8GYQyqWrDjV0AhgKG4VYp
+ 3/RdJ/fiCw/xjJZHhu0PPliokLdjyMQ5WOwoyfm66mA2idXIoYleBJKXx7E+g0k26V8TgwteY
+ NjD5NLvKxe3/MAE4GaxNZ05qwknWJ+STBeZmwCQupv5HNpwawyLvxUp+AVuEavwgIyiOyjERI
+ liYau8nPqPy/BREXM45AoNBfrv7zg8cFzMp3ue3JvBOmpORWPQs8TG5HxqgzaS4dqbTb3sYYM
+ a5TRdRam3iTQtpZFftHr1Glqd49PrkcSBY/iqcRDTmdup1LIrMZUF9zr0tHwc0sZuqoOdOA1o
+ +Mdj88AYbsvKiU=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 85958c5f642b55702f6e61cdd6a8f3ddc0f49bfc  hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo
+Am 30.03.22 um 18:33 schrieb Armin Wolf:
 
-elapsed time: 724m
+> Until now, only the temperature sensors where exported thru
+> the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
+> to make them available as cooling devices.
+> Also update Documentation.
+>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>   Documentation/hwmon/dell-smm-hwmon.rst |  7 ++
+>   drivers/hwmon/Kconfig                  |  1 +
+>   drivers/hwmon/dell-smm-hwmon.c         | 94 +++++++++++++++++++++++++-
+>   3 files changed, 99 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmo=
+n/dell-smm-hwmon.rst
+> index d3323a96665d..41839b7de2c1 100644
+> --- a/Documentation/hwmon/dell-smm-hwmon.rst
+> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
+> @@ -86,6 +86,13 @@ probe the BIOS on your machine and discover the appro=
+priate codes.
+>
+>   Again, when you find new codes, we'd be happy to have your patches!
+>
+> +``thermal`` interface
+> +---------------------------
+> +
+> +The driver also exports the fans as thermal cooling devices with
+> +``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
+> +using one of the thermal governors.
+> +
+>   Module parameters
+>   -----------------
+>
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 9ab4e9b3d27b..1175b8e38c45 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -498,6 +498,7 @@ config SENSORS_DS1621
+>   config SENSORS_DELL_SMM
+>   	tristate "Dell laptop SMM BIOS hwmon driver"
+>   	depends on X86
+> +	imply THERMAL
+>   	help
+>   	  This hwmon driver adds support for reporting temperature of differe=
+nt
+>   	  sensors and controls the fans on Dell laptops via System Management
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwm=
+on.c
+> index 84cb1ede7bc0..0c29386f4bd3 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -21,6 +21,7 @@
+>   #include <linux/errno.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/init.h>
+> +#include <linux/kconfig.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/mutex.h>
+> @@ -29,6 +30,7 @@
+>   #include <linux/seq_file.h>
+>   #include <linux/string.h>
+>   #include <linux/smp.h>
+> +#include <linux/thermal.h>
+>   #include <linux/types.h>
+>   #include <linux/uaccess.h>
+>
+> @@ -80,6 +82,11 @@ struct dell_smm_data {
+>   	int *fan_nominal_speed[DELL_SMM_NO_FANS];
+>   };
+>
+> +struct dell_smm_cooling_data {
+> +	u8 fan_num;
+> +	struct dell_smm_data *data;
+> +};
+> +
+>   MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
+>   MODULE_AUTHOR("Pali Roh=C3=A1r <pali@kernel.org>");
+>   MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
+> @@ -638,9 +645,50 @@ static void __init i8k_init_procfs(struct device *d=
+ev)
+>
+>   #endif
+>
+> -/*
+> - * Hwmon interface
+> - */
+> +static int dell_smm_get_max_state(struct thermal_cooling_device *dev, u=
+nsigned long *state)
+> +{
+> +	struct dell_smm_cooling_data *cdata =3D dev->devdata;
+> +
+> +	*state =3D cdata->data->i8k_fan_max;
+> +
+> +	return 0;
+> +}
+> +
+> +static int dell_smm_get_cur_state(struct thermal_cooling_device *dev, u=
+nsigned long *state)
+> +{
+> +	struct dell_smm_cooling_data *cdata =3D dev->devdata;
+> +	int ret;
+> +
+> +	ret =3D i8k_get_fan_status(cdata->data, cdata->fan_num);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*state =3D ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int dell_smm_set_cur_state(struct thermal_cooling_device *dev, u=
+nsigned long state)
+> +{
+> +	struct dell_smm_cooling_data *cdata =3D dev->devdata;
+> +	struct dell_smm_data *data =3D cdata->data;
+> +	int ret;
+> +
+> +	if (state > data->i8k_fan_max)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->i8k_mutex);
+> +	ret =3D i8k_set_fan(data, cdata->fan_num, (int)state);
+> +	mutex_unlock(&data->i8k_mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct thermal_cooling_device_ops dell_smm_cooling_ops =3D=
+ {
+> +	.get_max_state =3D dell_smm_get_max_state,
+> +	.get_cur_state =3D dell_smm_get_cur_state,
+> +	.set_cur_state =3D dell_smm_set_cur_state,
+> +};
+>
+>   static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sen=
+sor_types type, u32 attr,
+>   				   int channel)
+> @@ -941,6 +989,37 @@ static const struct hwmon_chip_info dell_smm_chip_i=
+nfo =3D {
+>   	.info =3D dell_smm_info,
+>   };
+>
+> +static int __init dell_smm_init_cdev(struct device *dev, u8 fan_num)
+> +{
+> +	struct dell_smm_data *data =3D dev_get_drvdata(dev);
+> +	struct thermal_cooling_device *cdev;
+> +	struct dell_smm_cooling_data *cdata;
+> +	int ret =3D 0;
+> +	char *name;
+> +
+> +	name =3D kasprintf(GFP_KERNEL, "dell-smm-fan%u", fan_num + 1);
+> +	if (!name)
+> +		return -ENOMEM;
+> +
+> +	cdata =3D devm_kmalloc(dev, sizeof(*cdata), GFP_KERNEL);
+> +	if (cdata) {
+> +		cdata->fan_num =3D fan_num;
+> +		cdata->data =3D data;
+> +		cdev =3D devm_thermal_of_cooling_device_register(dev, NULL, name, cda=
+ta,
+> +							       &dell_smm_cooling_ops);
+> +		if (IS_ERR(cdev)) {
+> +			devm_kfree(dev, cdata);
+> +			ret =3D PTR_ERR(cdev);
+> +		}
+> +	} else {
+> +		ret =3D -ENOMEM;
+> +	}
+> +
+> +	kfree(name);
+> +
+> +	return ret;
+> +}
+> +
+>   static int __init dell_smm_init_hwmon(struct device *dev)
+>   {
+>   	struct dell_smm_data *data =3D dev_get_drvdata(dev);
+> @@ -967,6 +1046,15 @@ static int __init dell_smm_init_hwmon(struct devic=
+e *dev)
+>   			continue;
+>
+>   		data->fan[i] =3D true;
+> +
+> +		/* the cooling device it not critical, ignore failures */
+> +		if (IS_REACHABLE(CONFIG_THERMAL)) {
+> +			err =3D dell_smm_init_cdev(dev, i);
+> +			if (err < 0)
+> +				dev_err(dev, "Failed to register cooling device for fan %u\n",
+> +					i + 1);
+> +		}
+> +
+>   		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan=
+_max + 1,
+>   								sizeof(*data->fan_nominal_speed[i]),
+>   								GFP_KERNEL);
+> --
+> 2.30.2
+>
+Any thoughts on this? I tested it on a Dell Inspiron 3505, so i can prove =
+it works.
 
-configs tested: 137
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-m68k                             allyesconfig
-microblaze                      mmu_defconfig
-powerpc                    sam440ep_defconfig
-xtensa                              defconfig
-m68k                        m5407c3_defconfig
-h8300                            alldefconfig
-sh                        edosk7760_defconfig
-sh                           se7722_defconfig
-arc                          axs103_defconfig
-m68k                          atari_defconfig
-ia64                             alldefconfig
-arc                            hsdk_defconfig
-powerpc                    adder875_defconfig
-arm                           stm32_defconfig
-powerpc                       maple_defconfig
-openrisc                            defconfig
-sh                           se7206_defconfig
-arm64                            alldefconfig
-nios2                         10m50_defconfig
-sh                            migor_defconfig
-mips                    maltaup_xpa_defconfig
-powerpc                      chrp32_defconfig
-arm                            xcep_defconfig
-arm                          badge4_defconfig
-sh                        sh7785lcr_defconfig
-s390                       zfcpdump_defconfig
-arm                          exynos_defconfig
-powerpc64                           defconfig
-ia64                          tiger_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                          gemini_defconfig
-powerpc                     ep8248e_defconfig
-sh                          kfr2r09_defconfig
-ia64                             allmodconfig
-xtensa                generic_kc705_defconfig
-arc                     haps_hs_smp_defconfig
-riscv             nommu_k210_sdcard_defconfig
-xtensa                  nommu_kc705_defconfig
-h8300                       h8s-sim_defconfig
-parisc                generic-32bit_defconfig
-m68k                          hp300_defconfig
-mips                         rt305x_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220408
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-alpha                               defconfig
-csky                                defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220408
-s390                 randconfig-r044-20220408
-riscv                randconfig-r042-20220408
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-s390                 randconfig-c005-20220408
-powerpc              randconfig-c003-20220408
-riscv                randconfig-c006-20220408
-mips                 randconfig-c004-20220408
-arm                  randconfig-c002-20220408
-mips                        omega2p_defconfig
-s390                             alldefconfig
-mips                      pic32mzda_defconfig
-powerpc                     pseries_defconfig
-powerpc                   bluestone_defconfig
-powerpc                      obs600_defconfig
-mips                        qi_lb60_defconfig
-mips                     cu1000-neo_defconfig
-riscv                             allnoconfig
-mips                   sb1250_swarm_defconfig
-mips                     loongson1c_defconfig
-powerpc                       ebony_defconfig
-powerpc                     mpc5200_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220408
-hexagon              randconfig-r041-20220408
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
