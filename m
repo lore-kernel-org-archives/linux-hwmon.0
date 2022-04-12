@@ -2,77 +2,66 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7306C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Apr 2022 16:30:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22CB5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Apr 2022 23:26:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357678AbiDLQdG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Apr 2022 12:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S229940AbiDLX2d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Apr 2022 19:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348428AbiDLQc4 (ORCPT
+        with ESMTP id S230262AbiDLX1q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:32:56 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B415DE5F
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 Apr 2022 09:30:38 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bv19so15391842ejb.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 Apr 2022 09:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gAj5xfHelclFReLdPPkYeZY0lE/SV5SVwgS8pMhTnxw=;
-        b=ooxwf1D2Mzc648NR6tfapMy+bq0FJ8IPXHeL8J/mpMDNxQfZMAVKr+BY3nD70ynTzl
-         Zlt/s+voJVfTfwCV02Z25lSnfoaakmM2M5z0gyggFHXn9kAeQcXW0ECD8fj7tGWr2nq1
-         NDcgWq2ShvCntNE4hjUh//ji69yh6AE/leeBXQ5IAtQ1//dIR6MSL3g0kuoAlA4IkR4V
-         qLNhlgx/zisOQbb6Ig3EH3SGK+gC6/fNAr75elsMtsg+BjCzLjRPU/L7y4VVitNYhtKi
-         HqbFuMrLHZU3sW3jrHPdLCbCRRUySxiGI2DKQHijVJE3UBrcBLlgnwaHaf0xik/AtBOm
-         i8mw==
+        Tue, 12 Apr 2022 19:27:46 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E54D1129;
+        Tue, 12 Apr 2022 15:12:43 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id q129so198151oif.4;
+        Tue, 12 Apr 2022 15:12:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gAj5xfHelclFReLdPPkYeZY0lE/SV5SVwgS8pMhTnxw=;
-        b=3qDV0yt4aD2OaAQyK7cD2VYCLnPOLloDOX9OTU0WThFA3pCMnYbwixvahAQ2c/gktu
-         1y/XyzlU3a1IPHkO/Y99eAO8FnIaK9vMt2srxG42CuU7MWmKE+URXnX1lscYgJ4FRAbw
-         wINe1epwzVIJYHFCBV0KA6bYiK3gUOxQLZ2OxB6CT+wf9mDPVwdwTtDo0CXR0Rjd4/qr
-         Xgm2AMD7dQlkO+VNtwKuGMoP3mxAmku7a+U0kz+uNeyCR9EeygYck5ux3RAgVk25Uekb
-         46b2EZ1hTsi1210/y/8ndhBXPJrFQp/E64pSQadQHMsGnAh3nw6+kIMrHZ6S1OrYuxIx
-         gwEQ==
-X-Gm-Message-State: AOAM532nYWruZ4kzE9JOoRCwxgJPatHywNYGUdQi6q9MuXY1wO1SnLTd
-        yQ+DlA31X8MI/o6RW0oL6Bi20Q==
-X-Google-Smtp-Source: ABdhPJwK8gR7AiQ34rV2PoWL7kth4RYbKFkRLOIq1Ammnm02jL+1fJVqgJdWykKP2fbJd9VqevTEYw==
-X-Received: by 2002:a17:907:3f18:b0:6e8:9332:542e with SMTP id hq24-20020a1709073f1800b006e89332542emr9689224ejc.633.1649781036722;
-        Tue, 12 Apr 2022 09:30:36 -0700 (PDT)
-Received: from [192.168.0.197] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id z21-20020a05640240d500b0041d7f66a9cesm3375964edb.41.2022.04.12.09.30.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 09:30:36 -0700 (PDT)
-Message-ID: <11a0ac1f-31a4-841b-6050-7876b784b960@linaro.org>
-Date:   Tue, 12 Apr 2022 18:30:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
-Content-Language: en-US
-To:     Camel Guo <camel.guo@axis.com>, Guenter Roeck <linux@roeck-us.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=47WaZ6kjUZsT9iTQ2UXEwksvZRBMq7QZhouU2/Ai3wA=;
+        b=nn6akzkksEjsEa+Rwnpp2HMTxuAp3mqJeP1ata3p5oLL6UQhqbx1fYcpOjuiA06rXV
+         7a/ohOIYcGO/0U88pNb/2EPA/NyceqrkmSX9XQNY8YibocHcPdlqTJYlCAv7vGAxrxOw
+         /KTzcdPO8BOpSWvaYVvXLC2S0+PpAtXNRKO78SVEFVHe+mxzSXXaSc6rUo1ryCUTgLU6
+         P6XMWUFEowaHzudYvJVmHf3VixN31urF0P84SU2bQKnVO0qDdYbE7GdTTaXIPQJ/Is7h
+         3mKWi3l2La2AJ7Y/CU/lx6sPRxUnCpktdYPIk2JovqyaEd3NLk0n7oxCaa9bGZSWfIc0
+         UniA==
+X-Gm-Message-State: AOAM5326+WAHa28aGa6jdVL1Z1QErbQGuwh6RJWKXJYbXMo1A6mk+I8I
+        eR8PkP40eRK4Yqh8hCBgWe6CNHu7NA==
+X-Google-Smtp-Source: ABdhPJy0+SAQRoWAmj5LECu0tTl+2mffhIhmvVHUT1qzdnR8HC/3zPqvSt1AiEHDsaC+FDvuG0T6Jg==
+X-Received: by 2002:a05:6870:796:b0:da:3d6a:101d with SMTP id en22-20020a056870079600b000da3d6a101dmr2996279oab.20.1649799369047;
+        Tue, 12 Apr 2022 14:36:09 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p18-20020a056830131200b005ccf8ac6207sm13941666otq.80.2022.04.12.14.36.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 14:36:08 -0700 (PDT)
+Received: (nullmailer pid 984530 invoked by uid 1000);
+        Tue, 12 Apr 2022 21:36:08 -0000
+Date:   Tue, 12 Apr 2022 16:36:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Camel Guo <camel.guo@axis.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@axis.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
+Message-ID: <YlXwyKkkC1VoPpjU@robh.at.kernel.org>
 References: <20220412135232.1943677-1-camel.guo@axis.com>
  <20220412135232.1943677-2-camel.guo@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <20220412135232.1943677-2-camel.guo@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/04/2022 15:52, Camel Guo wrote:
+On Tue, Apr 12, 2022 at 03:52:31PM +0200, Camel Guo wrote:
 > Document the TMP401, TMP411 and TMP43x device devicetree bindings
 > 
 > Signed-off-by: Camel Guo <camel.guo@axis.com>
@@ -83,10 +72,159 @@ On 12/04/2022 15:52, Camel Guo wrote:
 >  - Fix format and describe hardware properties instead of programming
 >    models
 > 
+>  .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 112 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 113 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+> new file mode 100644
+> index 000000000000..dae4df36935e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ti,tmp401.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TMP401, TPM411 and TMP43x temperature sensor
+> +
+> +maintainers:
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +description: |
+> +  ±1°C Remote and Local temperature sensor
+> +
+> +  Datasheets:
+> +  https://www.ti.com/lit/ds/symlink/tmp401.pdf
+> +  https://www.ti.com/lit/ds/symlink/tmp411.pdf
+> +  https://www.ti.com/lit/ds/symlink/tmp431.pdf
+> +  https://www.ti.com/lit/ds/symlink/tmp435.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,tmp401
+> +      - ti,tmp411
+> +      - ti,tmp431
+> +      - ti,tmp432
+> +      - ti,tmp435
+> +
+> +  reg:
+> +    maxItems: 1
+> +
 
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+You don't have any child nodes and these are for child nodes with 'reg'.
 
+> +
+> +  ti,extended-range-enable:
+> +    description:
+> +      When set, this sensor measures over extended temperature range.
+> +    type: boolean
+> +
+> +  ti,n-factor:
 
-Best regards,
-Krzysztof
+Funny, I just ran across this property today for tmp421...
+
+Can the schema be shared?
+
+> +    description:
+> +      value to be used for converting remote channel measurements to
+> +      temperature.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    items:
+> +      minimum: 0
+> +      maximum: 255
+
+Isn't this property signed and should be -128 to -127? The code treats 
+the existing cases as signed. One schema is correct and one is like you 
+have it.
+
+> +
+> +  ti,beta-compensation:
+> +    description:
+> +      value to select beta correction range.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    items:
+> +      minimum: 0
+> +      maximum: 15
+
+Drop 'items'. It is not an array.
+
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - ti,tmp401
+> +    then:
+> +      properties:
+> +        ti,n-factor: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - ti,tmp401
+> +              - ti,tmp411
+> +    then:
+> +      properties:
+> +        ti,beta-compensation: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      sensor@4c {
+> +        compatible = "ti,tmp401";
+> +        reg = <0x4c>;
+> +      };
+> +    };
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      sensor@4c {
+> +        compatible = "ti,tmp431";
+> +        reg = <0x4c>;
+> +        ti,extended-range-enable;
+> +        ti,n-factor = <0x3b>;
+> +        ti,beta-compensation = <0x7>;
+> +      };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 61d9f114c37f..6b0d8f5cc68e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19838,6 +19838,7 @@ TMP401 HARDWARE MONITOR DRIVER
+>  M:	Guenter Roeck <linux@roeck-us.net>
+>  L:	linux-hwmon@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+>  F:	Documentation/hwmon/tmp401.rst
+>  F:	drivers/hwmon/tmp401.c
+>  
+> -- 
+> 2.30.2
+> 
+> 
