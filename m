@@ -2,93 +2,121 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01B77C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Apr 2022 14:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F3A9C4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Apr 2022 14:20:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbiDMOSp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Apr 2022 10:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S229668AbiDMOWy convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Apr 2022 10:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiDMOSp (ORCPT
+        with ESMTP id S236157AbiDMOWg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:18:45 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25A060ABE;
-        Wed, 13 Apr 2022 07:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649859380;
-  x=1681395380;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZPsuxCY0ww8JdRko+Z1ABDoedxav4avLT3WBpcD8hQg=;
-  b=bET4vWOYEJ/QuFF1Z1D6Ka9UUdhAiHV6viY7T1fRx/fUIigK+wJLf2T1
-   D0FNJSw/3er1MQz3gEWoTw91vjlQDAmELkm2SXFWP2iAnhWpcWxVQo6tf
-   OqA3RtQpeNhpDk11D9L6r8jXX8WtC+sn+xnDeZeIJLOAV9cZMWrpfif0N
-   KNiaHFa497Kerko82niq10/2icnG4niMwMBsT+W08ewwIvVD3ZfzaJEZl
-   b9qny2fa3CyIVtfV9VAXYCOR8NLsImh8naHHfWrU98k+hwJPNwTj06sfs
-   sbH6nObfeM9pJJd9QBd1Od+DYYd/x4Zqf4yPd1MeZsuJSCZfhGYg1LcHj
-   w==;
-Message-ID: <d399e1a0-1eeb-f4f5-024c-6b29546723e1@axis.com>
-Date:   Wed, 13 Apr 2022 16:16:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Camel Guo <Camel.Guo@axis.com>
-CC:     Guenter Roeck <linux@roeck-us.net>,
+        Wed, 13 Apr 2022 10:22:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105D337022
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 Apr 2022 07:20:15 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nedqK-00064F-1C; Wed, 13 Apr 2022 16:19:36 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nedqH-002nds-0d; Wed, 13 Apr 2022 16:19:31 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nedqE-000Bdk-Kr; Wed, 13 Apr 2022 16:19:30 +0200
+Message-ID: <03af79f89d80d985ebf9adacb77af7c128248d27.camel@pengutronix.de>
+Subject: Re: [PATCH] dt-bindings: Fix array constraints on scalar properties
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Agathe Porte <agathe.porte@nokia.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>
-References: <20220412135232.1943677-1-camel.guo@axis.com>
- <20220412135232.1943677-2-camel.guo@axis.com>
- <YlXwyKkkC1VoPpjU@robh.at.kernel.org>
- <77167ffd-5674-9f6f-df51-3233e67fe9a7@axis.com>
- <YlbRdCXnPPurC2wC@robh.at.kernel.org>
-From:   Camel Guo <camelg@axis.com>
-In-Reply-To: <YlbRdCXnPPurC2wC@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail06w.axis.com (10.20.40.12) To se-mail03w.axis.com
- (10.20.40.9)
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-hwmon@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-spi@vger.kernel.org
+Date:   Wed, 13 Apr 2022 16:19:30 +0200
+In-Reply-To: <20220413140121.3132837-1-robh@kernel.org>
+References: <20220413140121.3132837-1-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/13/22 15:34, Rob Herring wrote:
-> On Wed, Apr 13, 2022 at 09:13:39AM +0000, Camel Guo wrote:
->> On 4/12/22 23:36, Rob Herring wrote:
->> > On Tue, Apr 12, 2022 at 03:52:31PM +0200, Camel Guo wrote:
->> >> Document the TMP401, TMP411 and TMP43x device devicetree bindings
->> >> 
->> >> +      maximum: 15
->> > 
->> > Drop 'items'. It is not an array.
->> 
->> Not sure if I understand correctly. Do you means it should be like this? 
->> If so, I guess ti,n-factor should also be changed like this. Am I right?
->> 
->>    ti,beta-compensation:
->>     description:
->>       value to select beta correction range.
->>       $ref: /schemas/types.yaml#/definitions/uint32
->>       minimum: 0
->>       maximum: 15
+On Mi, 2022-04-13 at 09:01 -0500, Rob Herring wrote:
+> Scalar properties shouldn't have array constraints (minItems, maxItems,
+> items). These constraints can simply be dropped with any constraints under
+> 'items' moved up a level.
+>
+> Cc: Agathe Porte <agathe.porte@nokia.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> Cc: Olivier Moysan <olivier.moysan@foss.st.com>
+> Cc: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml       | 5 ++---
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 +---
+>  Documentation/devicetree/bindings/media/coda.yaml            | 1 -
+>  .../devicetree/bindings/media/mediatek,vcodec-decoder.yaml   | 2 --
+>  .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml   | 2 --
+>  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml       | 1 -
+>  .../devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml | 4 +---
+>  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml  | 2 --
+>  8 files changed, 4 insertions(+), 17 deletions(-)
 > 
-> Yes, except your indentation is off. As-is, it's all 'description'. It
-> should be like this:
-> 
->    ti,beta-compensation:
->      description:
->        value to select beta correction range.
->      $ref: /schemas/types.yaml#/definitions/uint32
->      minimum: 0
->      maximum: 15
-> 
-> Rob
+[...]
+> diff --git a/Documentation/devicetree/bindings/media/coda.yaml b/Documentation/devicetree/bindings/media/coda.yaml
+> index 36781ee4617f..c9d5adbc8c4a 100644
+> --- a/Documentation/devicetree/bindings/media/coda.yaml
+> +++ b/Documentation/devicetree/bindings/media/coda.yaml
+> @@ -65,7 +65,6 @@ properties:
+>    iram:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description: phandle pointing to the SRAM device node
+> -    maxItems: 1
 
-Now v3 is out with fixes on Rob's comments. Please review v3 instead.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+regards
+Philipp
