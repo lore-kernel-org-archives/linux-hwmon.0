@@ -2,104 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79212C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Apr 2022 14:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBC5FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Apr 2022 14:06:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235645AbiDMOG0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Apr 2022 10:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        id S236079AbiDMOIv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Apr 2022 10:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235982AbiDMOGZ (ORCPT
+        with ESMTP id S236093AbiDMOIs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:06:25 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAF5606D8;
-        Wed, 13 Apr 2022 07:04:03 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id bb38so1415799qtb.3;
-        Wed, 13 Apr 2022 07:04:03 -0700 (PDT)
+        Wed, 13 Apr 2022 10:08:48 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F7860DA9
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 Apr 2022 07:06:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id s18so4282710ejr.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 Apr 2022 07:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xclQowK5QbwCO5KzYmDKXFep6DHLbWkFBjvXdbQJZDc=;
+        b=luU37E/8JMHNl4VHIi5MneOzNwctGyKeslQDkG2RJbONP2cISPuohPncjJCMISpSLd
+         JE3lw44w2pubOWRq01DpTW7/WUf4ORBprY9WXREI+Zpr245SkV+0ZNn3PCyCbsLHC7d0
+         s/2eltfPiTse6V0nmcMriwjg+HJ4L6u73/D4uQDNJf30JY0vLCKkZIyhI+rf/5qVE68z
+         KaH6hUAP390HKfdQNawuQeDGju8SxI6imDRDEm4rwN+4bP3ubagIQZjrK93/24UoNF7t
+         Kpfsbvy03tUbdmpahzFBQD292jb53r5SIVjUB2XvsKg7sQfZr3UAwNR4nx5huS2NyDxf
+         R8bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K7k2FVqabmscQZ4JxpUNIhsQJ2p2uLnZJ6vhHbip+cU=;
-        b=KGROf9msqOAvoydijjYn0VeidPRRedB/mo7EKuZx9WddWEVkh6gcf5ZRP+JZvJQb8G
-         ZHI6cTKJfrNVuFYU4TJbMSWEKOGcvWsplxtc4FheLwN5mEkvS69N15S/z4qwmP4hEZiC
-         bV+Fv+iJb9/vGDY36zCF8Ejyk+I6VbGaOq1UM47MOfTZFCSg6A6Dk2osSgihd09YY8CM
-         GdOLwh4aZBJgXxDL6R4tJ9sLuPTQm051klLkyDMFomQXwJvdsd4GdLfZ4LdIHIl6kuxI
-         trcZiTGE+6xfvyBdo1c/ElAi6c2DuVJkGTHFN6DAgAxa/R8htPw8sioheuFOZ/JJ6V54
-         WTYA==
-X-Gm-Message-State: AOAM533miyLkFAmL9cPGgfK7yu7O+y5cJKuVgQd/RKJLvUOjnC3XRf7E
-        3N2dOW4+8kM89HiccqilmzXhH0uWsyACIw==
-X-Google-Smtp-Source: ABdhPJzFfqZxfkKVX8TcauCZOe9gFqky0Z+hrcHzsfRU6bBeQWBcHpU7IBNZyqZHc9HR+FgmZU5iMg==
-X-Received: by 2002:ac8:71ce:0:b0:2f1:d5ee:2f6 with SMTP id i14-20020ac871ce000000b002f1d5ee02f6mr420809qtp.56.1649858642117;
-        Wed, 13 Apr 2022 07:04:02 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id q8-20020a37a708000000b0069bf1337047sm8737536qke.5.2022.04.13.07.04.01
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xclQowK5QbwCO5KzYmDKXFep6DHLbWkFBjvXdbQJZDc=;
+        b=JXyko4hKXLqIFubWjIktszPrIFFUNKeZoG9eQfT4YcFyLQat9+2noa9R+zYpvwfion
+         LVR0J+n7zNzGJCgsh5n+JVWhtE6qP7s71+KtpE+j6xkOzfFQaQnMFAcfia+CVmQxHH2n
+         xCTRmqU/ftKIxf5/u99SMBN51Qu/MC7LQO5n0dvUeaCj1B6oXHg9LD2rGlkTd0ndnHhX
+         9tru9L+EO6IhN2FZFsWxjgoIe9wy9hAN7kgaKWFcl8yD74mti/Do1IbCS/LsbEdu2zwy
+         WN0duOKCPe2gkTlZb9WTsKhjwnj9J3WNAPJcw5wovAS5PswxlJs3PSCkHh9Cm9iyeZTR
+         LguA==
+X-Gm-Message-State: AOAM532FKz4G6BPROqYhvIUfu/Uz6jm4gR5Qywy9bGix3R+8Jt1dWHyv
+        4YbS4XONHSS+6n9H03hUe3MHkA==
+X-Google-Smtp-Source: ABdhPJzjr+0cuBz3KT6Z5/dHflarKqX3dFwJjKeJYoA6U7QJ3txgow0qPdJbiQNrXxDeHEiDBBlb1w==
+X-Received: by 2002:a17:907:16a2:b0:6e8:d283:17d0 with SMTP id hc34-20020a17090716a200b006e8d28317d0mr1658785ejc.445.1649858784172;
+        Wed, 13 Apr 2022 07:06:24 -0700 (PDT)
+Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id d13-20020a50c88d000000b0041d8c0440ebsm1208244edh.95.2022.04.13.07.06.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 07:04:01 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id q19so3910757ybd.6;
-        Wed, 13 Apr 2022 07:04:01 -0700 (PDT)
-X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
- p9-20020a259e89000000b0063cad37a5demr29615442ybq.342.1649858640966; Wed, 13
- Apr 2022 07:04:00 -0700 (PDT)
+        Wed, 13 Apr 2022 07:06:23 -0700 (PDT)
+Message-ID: <ebfe563c-5c3f-d69f-39a3-c8c79616f060@linaro.org>
+Date:   Wed, 13 Apr 2022 16:06:22 +0200
 MIME-Version: 1.0
-References: <20220413140121.3132837-1-robh@kernel.org>
-In-Reply-To: <20220413140121.3132837-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 13 Apr 2022 16:03:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUQK9nQF==3Zg8ikwNfQc=F6gHXabvPCxaKprPMoMO+7A@mail.gmail.com>
-Message-ID: <CAMuHMdUQK9nQF==3Zg8ikwNfQc=F6gHXabvPCxaKprPMoMO+7A@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Fix array constraints on scalar properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Agathe Porte <agathe.porte@nokia.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp421: Fix type for 'ti,n-factor'
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-hwmon@vger.kernel.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-iio@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220413134729.3112190-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220413134729.3112190-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 4:01 PM Rob Herring <robh@kernel.org> wrote:
-> Scalar properties shouldn't have array constraints (minItems, maxItems,
-> items). These constraints can simply be dropped with any constraints under
-> 'items' moved up a level.
+On 13/04/2022 15:47, Rob Herring wrote:
+> 'ti,n-factor' is read as a 32-bit signed value, so the type and constraints
+> are wrong. The same property is also defined for ti,tmp464 and is correct.
+> 
+> The constraints should also not be under 'items' as this property is not an
+> array.
+> 
 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml  | 2 --
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
