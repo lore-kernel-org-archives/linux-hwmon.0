@@ -2,167 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EB5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Apr 2022 13:34:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB86BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Apr 2022 13:47:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbiDMNhI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Apr 2022 09:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S235933AbiDMNuG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Apr 2022 09:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbiDMNhH (ORCPT
+        with ESMTP id S235934AbiDMNuB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:37:07 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A15D40A31;
-        Wed, 13 Apr 2022 06:34:46 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so1190312otj.1;
-        Wed, 13 Apr 2022 06:34:46 -0700 (PDT)
+        Wed, 13 Apr 2022 09:50:01 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F8E606F3;
+        Wed, 13 Apr 2022 06:47:40 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id q189so2089513oia.9;
+        Wed, 13 Apr 2022 06:47:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3y1tBH0uZHiWcDFM/FP1qr/+fsEsYbd599zXEVsCG6c=;
-        b=AjaFty2yypILRWw4RiKgUHPUHSeds+4qRjdywvndYd4KuHTlQtuiOgY8ico7tUIvUu
-         WQ5GhGh9VuX9Qtuhz9ytPL8VItSL/V2+j90xP6xhXlVW4ENW9iYqCUM2ytjKrjo+HP+D
-         0/lUBXRBVs/bNByE0GK8pGpnutWbRS98cnSoH+Mk4rBCdrSN4YBu5imrK2O7GlJPA1Jl
-         J7iORViT4Y6E9lDpBQm5bsS37JIPHoLQMg4eBaU1/ZaPyMc2Ji8EjXE8TmVOhYRvvD3Z
-         uobat7z/jx6TWMCeoT2Z1m27kP6sd/d51xCCCkcZsXoV/o4cdFLqvSR5zMo7kM6YOoVr
-         sOlA==
-X-Gm-Message-State: AOAM53070MeYqu33SE+vxVvuzcl4rr7c0ZvgFBBDfRev2UKgfa9Sa2pa
-        /FOyc1t88kaWNGY9tupJwA==
-X-Google-Smtp-Source: ABdhPJw53nT25tjldjHfake5qVTorjpi6v6nDrY+wLnWDO2+imbSaw5Eo7N2GerPH4nRugMInKmh+w==
-X-Received: by 2002:a05:6830:2081:b0:5ce:ae9:2711 with SMTP id y1-20020a056830208100b005ce0ae92711mr14712746otq.215.1649856885224;
-        Wed, 13 Apr 2022 06:34:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y15-20020a056830208f00b005e6bf82e0b6sm6685084otq.46.2022.04.13.06.34.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kY4KD4feZOwNxnJHGRcEBGCcWQX3CZ6tu6DSxlhTaqw=;
+        b=cwRKaoaEoAU3WDIa1oeFyIpt4Rck6E4JOKDE/2GOz4Lp/MISMFlNCeMo8RqbMRMaMw
+         srOtWFw3u5I3733GXJZd+VJn9bl4YV6rJb23i2C1qMufXmDAq+9Et8jRoQ+Rre+Mx97y
+         aJS46Ej8n9l5nXOzaF28GvPQMRPl6q8WwRNpEiKNd1Qy/QgxON7weDuI+fcV6TjvyRsl
+         gcQsdyOjy4nii82qNhJkrNALWT3lV3v2FzBX18GCo7HNjhCCeWWjLcBkxXXCbhH3vzKn
+         vVxgowISIg5As7SHy4506aGZskpK0yRKO6taiWVwqyOtpZB6e1Q/RzqFbz1H02BR/z11
+         3lAA==
+X-Gm-Message-State: AOAM530qTS6opEwM9esvab2vLnhxXpYCXnnjKk2edI+E0Rs0Qq7qXu6c
+        JzCsCz0OaM2WpC5EoEY7vQ==
+X-Google-Smtp-Source: ABdhPJw+4VxmUFfbEyTc8Y5lYXyGX9A5evtVNQy2ZfeY05If1FDbGWEpaoutUHePvPYQLbsVqxbSrg==
+X-Received: by 2002:a05:6808:168b:b0:2f7:338b:7a55 with SMTP id bb11-20020a056808168b00b002f7338b7a55mr4181281oib.133.1649857660264;
+        Wed, 13 Apr 2022 06:47:40 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id x24-20020a056870a79800b000e2e53716fbsm2850276oao.31.2022.04.13.06.47.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 06:34:44 -0700 (PDT)
-Received: (nullmailer pid 3093338 invoked by uid 1000);
-        Wed, 13 Apr 2022 13:34:44 -0000
-Date:   Wed, 13 Apr 2022 08:34:44 -0500
+        Wed, 13 Apr 2022 06:47:39 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Camel Guo <Camel.Guo@axis.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
-Message-ID: <YlbRdCXnPPurC2wC@robh.at.kernel.org>
-References: <20220412135232.1943677-1-camel.guo@axis.com>
- <20220412135232.1943677-2-camel.guo@axis.com>
- <YlXwyKkkC1VoPpjU@robh.at.kernel.org>
- <77167ffd-5674-9f6f-df51-3233e67fe9a7@axis.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: hwmon: ti,tmp421: Fix type for 'ti,n-factor'
+Date:   Wed, 13 Apr 2022 08:47:29 -0500
+Message-Id: <20220413134729.3112190-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <77167ffd-5674-9f6f-df51-3233e67fe9a7@axis.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:13:39AM +0000, Camel Guo wrote:
-> On 4/12/22 23:36, Rob Herring wrote:
-> > On Tue, Apr 12, 2022 at 03:52:31PM +0200, Camel Guo wrote:
-> >> Document the TMP401, TMP411 and TMP43x device devicetree bindings
-> >> 
-> >> Signed-off-by: Camel Guo <camel.guo@axis.com>
-> >> ---
-> >> 
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - ti,tmp401
-> >> +      - ti,tmp411
-> >> +      - ti,tmp431
-> >> +      - ti,tmp432
-> >> +      - ti,tmp435
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> > 
-> >> +  '#address-cells':
-> >> +    const: 1
-> >> +
-> >> +  '#size-cells':
-> >> +    const: 0
-> > 
-> > You don't have any child nodes and these are for child nodes with 'reg'.
-> 
-> Ack! I will fix it in v3.
-> > 
-> >> +
-> >> +  ti,extended-range-enable:
-> >> +    description:
-> >> +      When set, this sensor measures over extended temperature range.
-> >> +    type: boolean
-> >> +
-> >> +  ti,n-factor:
-> > 
-> > Funny, I just ran across this property today for tmp421...
-> > 
-> > Can the schema be shared?
-> 
-> Yes, this property is in ti,tmp421.yaml and ti,tmp464.yaml as well. But 
-> I guess maybe it is better to separate tmp401 from them.
-> 
-> That is because the chips supported in ti,tmp421,yaml has three channels 
-> and the chips supported in ti,tmp464.yaml has eight channels and this 
-> property n-factor is for each channel/child node. But the chips 
-> supported in ti,tmp401.yaml only has one channel. n-factor is for this 
-> chip.
+'ti,n-factor' is read as a 32-bit signed value, so the type and constraints
+are wrong. The same property is also defined for ti,tmp464 and is correct.
 
-Okay, that makes sense to keep them separate.
+The constraints should also not be under 'items' as this property is not an
+array.
 
-> >> +    description:
-> >> +      value to be used for converting remote channel measurements to
-> >> +      temperature.
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    items:
-> >> +      minimum: 0
-> >> +      maximum: 255
-> > 
-> > Isn't this property signed and should be -128 to -127? The code treats
-> > the existing cases as signed. One schema is correct and one is like you
-> > have it.
-> 
-> Ack! will fix it in v3
-> 
-> > 
-> >> +
-> >> +  ti,beta-compensation:
-> >> +    description:
-> >> +      value to select beta correction range.
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    items:
-> >> +      minimum: 0
-> >> +      maximum: 15
-> > 
-> > Drop 'items'. It is not an array.
-> 
-> Not sure if I understand correctly. Do you means it should be like this? 
-> If so, I guess ti,n-factor should also be changed like this. Am I right?
-> 
->    ti,beta-compensation:
->     description:
->       value to select beta correction range.
->       $ref: /schemas/types.yaml#/definitions/uint32
->       minimum: 0
->       maximum: 15
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Yes, except your indentation is off. As-is, it's all 'description'. It 
-should be like this:
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+index 36f649938fb7..a6f1fa75a67c 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+@@ -58,10 +58,9 @@ patternProperties:
+         description: |
+           The value (two's complement) to be programmed in the channel specific N correction register.
+           For remote channels only.
+-        $ref: /schemas/types.yaml#/definitions/uint32
+-        items:
+-          minimum: 0
+-          maximum: 255
++        $ref: /schemas/types.yaml#/definitions/int32
++        minimum: -128
++        maximum: 127
+ 
+     required:
+       - reg
+-- 
+2.32.0
 
-  ti,beta-compensation:
-    description:
-      value to select beta correction range.
-    $ref: /schemas/types.yaml#/definitions/uint32
-    minimum: 0
-    maximum: 15
-
-Rob
