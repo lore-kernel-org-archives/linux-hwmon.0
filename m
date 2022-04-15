@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BDADC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Apr 2022 01:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1E33C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Apr 2022 01:13:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348410AbiDOBNN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Apr 2022 21:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S231537AbiDOBP3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Apr 2022 21:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348437AbiDOBNL (ORCPT
+        with ESMTP id S231788AbiDOBP2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Apr 2022 21:13:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93AF4E394
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 Apr 2022 18:10:44 -0700 (PDT)
+        Thu, 14 Apr 2022 21:15:28 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EA56B0B9
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 Apr 2022 18:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649985044; x=1681521044;
+  t=1649985182; x=1681521182;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=7Obe5775lustAquSIdGy+sEYV6MfoelVKjABecnvJXM=;
-  b=i+0PUeFvfxmWXis0yIEYG/2XyOiCqwWT0zhovgGHrzbzr/0ZTuJcy5kR
-   GbjS7XqrSsjJEWJVHkZcJiHgmz2651irkoIIDY6PsB576jIKufNBVCJhd
-   2iwfUX3CaxvdXP15w/0z6uZNsT1MnHU5LUGTfQObwTR/Qnq1s094++L3t
-   dV+CG1BHwjw6J7P7AouuBafVAfc3kLnHvFXCNiieNqlb7vsEUFiI+rCHW
-   ms+CYvFi2pAqswdZy1YVtmBGMpJJv+0Zxrnxc4kHXD7Ja3GWKIL8kyMwJ
-   iUpiL0PHX1rsz9oyvjLSG5vRuNxEBdLXlCYzv1aVJyjQ/cBj/AUkItZZm
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="250367508"
+  bh=R4uvzURdzMvz4D+NWuOV59dDeemDc3yGABgqWSlR1zY=;
+  b=AEft/VFyF5M3d06z5gGFuLLYrtI+hhX17f4ZtT3pkdhCBrbArkW/TnTG
+   QswAzAuoA7Ve5IpvM7CzBv3BSsZOtQPa8wGerpK2jvUS/QKKNN/wYk/u6
+   7JJ/hrXE6+aDErmIAtGgHtjlJmnFCnUukTmX8ijpH2UyhZ2NvAZ/11jkE
+   IYns0fctwbrp72qUgiEN546p9W0h4Y/vugNzVTSNzjcI6qyt2clv8N5Mt
+   I9K8c1cKBzP8ZYEjw8GSFjp7YgIGqtZFfIJo7CQnRqAPcaXuPTd0WiMyM
+   WK0Kj/tBBTazhGQ3t28wC0V2cUzGdZn7Ax9JsDW8KcODGvaUME5zFl4iq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="349504404"
 X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="250367508"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 18:10:44 -0700
+   d="scan'208";a="349504404"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 18:13:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="661594184"
+   d="scan'208";a="527124315"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 14 Apr 2022 18:10:43 -0700
+  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2022 18:12:58 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nfATy-0001Md-Hc;
-        Fri, 15 Apr 2022 01:10:42 +0000
-Date:   Fri, 15 Apr 2022 09:09:54 +0800
+        id 1nfAWA-0001N3-3s;
+        Fri, 15 Apr 2022 01:12:58 +0000
+Date:   Fri, 15 Apr 2022 09:11:48 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 1a5bf8273b95e52eceb2c4a398f5e379526d17c6
-Message-ID: <6258c5e2.g3Mm5++bxnzo7UhY%lkp@intel.com>
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 4d0d5c352303a318925ceb84a86818761aa6586b
+Message-ID: <6258c654.1pRSbQRFNSCioohV%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -57,10 +57,10 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 1a5bf8273b95e52eceb2c4a398f5e379526d17c6  hwmon: (intel-m10-bmc-hwmon) use devm_hwmon_sanitize_name()
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 4d0d5c352303a318925ceb84a86818761aa6586b  dt-bindings: hwmon: ti,tmp421: Fix type for 'ti,n-factor'
 
-elapsed time: 2046m
+elapsed time: 2048m
 
 configs tested: 122
 configs skipped: 3
@@ -114,9 +114,9 @@ m68k                                defconfig
 nios2                               defconfig
 arc                              allyesconfig
 alpha                               defconfig
+alpha                            allyesconfig
 csky                                defconfig
 nios2                            allyesconfig
-alpha                            allyesconfig
 h8300                            allyesconfig
 xtensa                           allyesconfig
 arc                                 defconfig
