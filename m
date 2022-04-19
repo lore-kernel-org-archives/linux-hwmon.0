@@ -2,107 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A57A9C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Apr 2022 22:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA3F5C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Apr 2022 22:05:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358142AbiDSWDH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Apr 2022 18:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S1358212AbiDSWH6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Apr 2022 18:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiDSWDG (ORCPT
+        with ESMTP id S1358174AbiDSWHj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:03:06 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7443BA60;
-        Tue, 19 Apr 2022 15:00:23 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id a10so56060oif.9;
-        Tue, 19 Apr 2022 15:00:23 -0700 (PDT)
+        Tue, 19 Apr 2022 18:07:39 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C10646E;
+        Tue, 19 Apr 2022 15:04:53 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e5ca5c580fso94133fac.3;
+        Tue, 19 Apr 2022 15:04:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=eBs7CZQL5YV7OnaTPtslbp1P80YDQjl3qZLiZzB1YUE=;
-        b=gyx4Xa/FJorjPR7T0cDMuH4cSm9a+cnHXKf60tuvv8cj1sjXQhhz5v2LfVyH1GrqJJ
-         TdHTKCFBNLOCt6DUPGakmdgTBYmu7z9C2yKMy3OQRC0YoxW6qtP5r1QOmAebTY+aoPM/
-         khD+KDZjWdvLTpwZ8xkxfj7VtlJw7Ntc/HdtkujRcAelOfF9oPzatxvXiRQl95C1BDAE
-         bOW/UYm+hB74RDAlpscpp3ORnOqh2KH2GddLgqc1Dp5/6Bg7qdxkPao1eQKDFgBOFKbC
-         6ju8qFAsB4vyv8Nui1UeiFSSzTfYJmya9GTFExOCOpMa7coY9AHeys7xNqy/qJtgIzre
-         hRIw==
+        bh=shPrjvmBfJV/T7WWmKj3PU6VNSBfGA7D1G2TTbMSQOc=;
+        b=m3iE7QfTea8SuwCU7MTne66RpoI5fhfi5oyRB5gGp6Uh86MOH045Jeg1wbDqeMx2jc
+         QaWaCTGkMMAxpBM2eL92IehXCdHi3rjgedbPl/qLyoxmAEPGY9VKkCFENE/K9n8qK2O5
+         0eG+IBzGNZ7gtGDM4p+5Gp03rflGTJljRMqAQy8ASgpra/SONXHQtq4e7NNagLMMGGN+
+         P4zF/qVvfv5npn9iajA5WnBt1NsrCbDo0UA7xu9KmZC9LGgI4s8QW3JQclen9s3AZ4fm
+         8EngOFPF6ObNxwY3+3v0+F9Z1W7ZSe6ReMw5R+2PmczunGkS3nFmcIftcor1wGp5tJJI
+         X/Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=eBs7CZQL5YV7OnaTPtslbp1P80YDQjl3qZLiZzB1YUE=;
-        b=LscLGedhUYom0eIb5YtHQ1TIH212+b9YcGEldodLkFWw9U2y4pYDf/lFCRAFsH6xdK
-         qkEHCdBUBq1g7relvZ0muoFyqEhhDSJ4ESkoyh6wZ1RtxOm6ZxkZilR3/q7fw1iBLTrb
-         uAMY/qKl8a/e8vr5Xyx167Lwkg/xduRKhfGWHyzId6fE7gBhpHZscmosAvanphCs2VHZ
-         qVphFADXdjhO9MNrCuX884CaT9FXDrCjUnvzDlqDRaDOSrHPFaADF1dCbDl7nt/Foi1G
-         MbIAZ4QvnH807aaWah1irMY97m9IpgJXg4f4WvcTnhsEL7ooRUBCdOZkLRE0MTE6SzTH
-         b9Eg==
-X-Gm-Message-State: AOAM531CH7D09GYzO0A2QiDPIM5c2ecUlDwbgosORCuw6o5WatalhqIR
-        lG0+89XtIqPewyaJUCK0js/h08KR5CY=
-X-Google-Smtp-Source: ABdhPJxq9tmxUcraw8eslHwRmDcCm6nCvUAZeydUZ0WbOezbkeF71BmUDCyZbidmIJ5rQKwJBCARkA==
-X-Received: by 2002:aca:1117:0:b0:322:4189:8959 with SMTP id 23-20020aca1117000000b0032241898959mr316168oir.254.1650405622469;
-        Tue, 19 Apr 2022 15:00:22 -0700 (PDT)
+        bh=shPrjvmBfJV/T7WWmKj3PU6VNSBfGA7D1G2TTbMSQOc=;
+        b=g37m0WM+I7VpoEwwM/bMCcVl6m5Qrqpue5ucVIFbjvPaUs1ytr/NvDqF8zb4QFiBwE
+         k3LDwQKa/eDaLuh/NQv9cTd3FgpF0abizK9t3jGKRhfF6HEV/rXPKx6HMN12cWf830lW
+         RstEN11vl6rL8UYmPEEpK+1TI5mYo391sBt/mSwiF0uHY6T8Z1isOtBoQ94Mq87YnSOb
+         qM6JvPRDMltdZsw2RGlz5eo+BD3KNqe4pTs19i9nNCeadk4ebLfVCrcBlVnlZRz0Kh0+
+         bLNzCNhb6rYO1cthXBIaPMOl/+T+92j0tMJbnjRYCYuayncGAUI1VebX5kKVSh32HLPD
+         HOTA==
+X-Gm-Message-State: AOAM533jsbBkMUPuRYWLiOdkBnsh7a2Vly9HXvkHqdA0AhJYCrYvEbVT
+        c76CIuQibb0rIXlgQSdmKl4=
+X-Google-Smtp-Source: ABdhPJw3jzGkKA3AeBbTriftNoKzUnHQIIKUyTSeFWX8QG4GRuzMycOIcIHT9nYTA9VjLH50IUw3dg==
+X-Received: by 2002:a05:6870:6006:b0:e5:e6f1:5f2a with SMTP id t6-20020a056870600600b000e5e6f15f2amr317932oaa.160.1650405892044;
+        Tue, 19 Apr 2022 15:04:52 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m65-20020acabc44000000b002ed13d0fe6fsm5512450oif.23.2022.04.19.15.00.20
+        by smtp.gmail.com with ESMTPSA id t12-20020a9d66cc000000b0060448197f6fsm5146374otm.9.2022.04.19.15.04.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 15:00:21 -0700 (PDT)
+        Tue, 19 Apr 2022 15:04:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <734e748b-941c-5ae1-5140-22cc845bdfc1@roeck-us.net>
-Date:   Tue, 19 Apr 2022 15:00:19 -0700
+Message-ID: <1c700e5b-5bf2-f0eb-78f3-12290fd88234@roeck-us.net>
+Date:   Tue, 19 Apr 2022 15:04:49 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] hwmod: (pmbus) disable PEC if not enabled
+Subject: Re: [PATCH v2 2/5] media: v4l: ctrls: Add a control for temperature
 Content-Language: en-US
-To:     Adam Wujek <dev_public@wujek.eu>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220419205228.303952-1-dev_public@wujek.eu>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        linux-media@vger.kernel.org, alain.volmat@foss.st.com,
+        hugues.fruchet@foss.st.com, sylvain.petinot@foss.st.com,
+        dave.stevenson@raspberrypi.com, sakari.ailus@linux.intel.com,
+        kieran.bingham@ideasonboard.com, linux-hwmon@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+References: <20220415111845.27130-1-benjamin.mugnier@foss.st.com>
+ <20220415111845.27130-3-benjamin.mugnier@foss.st.com>
+ <d4c868d5ef05f338bdc2237d9b9304077d268c8b.camel@ndufresne.ca>
+ <3a4fad80-b16a-3780-a0f7-41dd6c80689e@roeck-us.net>
+ <Yl8jF1KLzP6YO6t+@pendragon.ideasonboard.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220419205228.303952-1-dev_public@wujek.eu>
+In-Reply-To: <Yl8jF1KLzP6YO6t+@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/19/22 13:53, Adam Wujek wrote:
-> Explicitly disable PEC when the client does not support it.
-> Without the explicit disable, when the device with the PEC support is removed
-> later when a device without PEC support is inserted into the same address,
-> the driver uses the old value of client->flags which contains the I2C_CLIENT_PEC
-> flag. As a consequence the PEC is used when it should not.
+On 4/19/22 14:01, Laurent Pinchart wrote:
+> On Tue, Apr 19, 2022 at 12:28:06PM -0700, Guenter Roeck wrote:
+>> On 4/19/22 11:24, Nicolas Dufresne wrote:
+>>> Hi,
+>>>
+>>> adding linux-hwmon in CC for a wider feedback.
+>>>
+>>> Le vendredi 15 avril 2022 à 13:18 +0200, Benjamin Mugnier a écrit :
+>>>> Add V4L2_CID_TEMPERATURE control to get temperature from sensor in
+>>>> celsius as a volatile and read-only control, and its documentation.
+>>>> Useful to monitor thermals from v4l controls for sensors that support
+>>>> this.
+>>>
+>>> Any justification to expose a temperature sensor outside of the dedicated kernel
+>>> API hwmon ? I know if may makes it harder to use, as the sensor isn't bound to
+>>> the camera driver, and also the sensor may not work if the camera is not
+>>> streaming. But in the end, the API in hwmon does not look that complex, and is
+>>> perhaps more precise ?
+>>>
+>>> All in all, I think we need a strong justification to implement a custom
+>>> thermometer interface, something described here and documented with care to
+>>> prevent abuse. I would also see opinion from folks outside of the linux-media,
+>>> hence why I have CCed hwmon mailing list.
+>>
+>> All I can say is that this seems to be odd and a bit outside the scope of
+>> v4l2. I would have expected the vgxy61 driver to register a hwmon device
+>> instead.
+> 
+> I don't have a definitive opinion yet, but as Nicolas raised the issue
+> by pushing towards hwmon, I'll offer counter-arguments for the sake of
+> it :-)
+> 
+> The temperature sensor in the imaging sensor is used to measure the die
+> temperature, in order to tune the noise and spectral response model of
+> the imaging sensor. It's thus not a generic-purpose temperature sensor.
+> If the feature were to be exposed through hwmon, userspace would need to
+> associate an hwmon device to the imaging sensor V4L2 subdev (we have a
+> way to do so through the MC API, it doesn't support hwmon at this point,
+> but I suppose it could be added). There are also various constraints
+> that tie the temperature reading to the imaging side, it could be that
+> the temperature would only be readable while capturing frames. That's
+> probably possible to handle too but returning an error from the
+> temperature read.
+> 
+> Code-wise, both the driver and userspace would be more complex, for very
+> little practical gain (I don't dispute a theorical gain).
 > 
 
-How can that happen ? I would assume the I2C device gets deleted and re-created
-in that case, which should clear the PEC flag.
+All I can say is - not my subsystem, not my call to make. If you say this
+is special and is better handled in V4L2, I'll take you by your word.
 
 Guenter
-
-> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 82c3754e21e3..f8ca36759b0a 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2014,6 +2014,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->   	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
->   	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
->   		client->flags |= I2C_CLIENT_PEC;
-> +	else
-> +		client->flags &= ~I2C_CLIENT_PEC;
-> 
->   	pmbus_clear_faults(client);
-> 
-> --
-> 2.17.1
-> 
-> 
-
