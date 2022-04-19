@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 770F5C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Apr 2022 03:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86DBCC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Apr 2022 03:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiDSD4G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 18 Apr 2022 23:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        id S240334AbiDSD40 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 18 Apr 2022 23:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbiDSD4F (ORCPT
+        with ESMTP id S232199AbiDSD40 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 18 Apr 2022 23:56:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FD31C108
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 Apr 2022 20:53:24 -0700 (PDT)
+        Mon, 18 Apr 2022 23:56:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA791BE99
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 Apr 2022 20:53:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650340404; x=1681876404;
+  t=1650340425; x=1681876425;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=t8w1itp6bq6WT2QHkur33Bom+bUZPi20L5a8ud84UkQ=;
-  b=HoJRtVvp8MtUV+/0vKnYm1vklbLk0fM9n3TQ1hEZAa6bDCbL/c8q4E7o
-   BbgmA7nBHcQDZzS52NKLT12uZ6nST6I1IRtfzlmk8B90qepmfDhRlIO7B
-   13EzBwESGK3KBu9grzYr0CWb0PG/waaDBFAQrXmXCsOpZNqu8GWB4FU6s
-   0/gm5+Rdvg5NW19LUMQ+K/C41D+D2FyM5AUilyuvNdfHNxURmCfpO9fb8
-   lxGLnNfZeGW/4qHX7rAkgqDIjVcnFe3D9A7jHLjcdi+ymGOIdERGceHEQ
-   xiMjgF8FuYUNzW4BLh11ZD6AUcuzaOr9S8j3Ug1QxM/ldyd0B/p1Kh1Kp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="244252035"
+  bh=mPMrKVkPOGbnZ3W2JPqp4U5RftwbYPZM6C9Fbk6aoJg=;
+  b=PCeWEKxgiKNiP2QUWkYVycrGwShpGNeATaMQWBnXjLGq0pRMB4O50Wzw
+   JkvhT7cCvk6Rcic6DxUAOFqKNgvnJ+yYAC+d3c2Kwz4xxtmUWNEXKw/v/
+   7Oqe6iZAnEpK9/isnXg55t3JndM4qtSTaZzzuHa4mUaumo5N9DGC+Q2BN
+   63XItCvzKrR5MZcZ3td+x99EjjToM2JgZ8M2U9yMYJBbQtIyM7B3rKEGy
+   1EjPuGCQbabJl5bVwSij8breOT3FJLSBcyoiLoff9szpLPXULutsT7JuO
+   mv+jfwF8/JoAQ5N+NNIgnY7Ki+RVj3aa29tp6KkErTJJFyUYln5/FwDwZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="250970488"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="244252035"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 20:53:23 -0700
+   d="scan'208";a="250970488"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 20:53:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="529135815"
+   d="scan'208";a="657486263"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 Apr 2022 20:53:22 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 18 Apr 2022 20:53:22 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1ngevZ-0005JK-V1;
+        id 1ngevZ-0005JH-UI;
         Tue, 19 Apr 2022 03:53:21 +0000
-Date:   Tue, 19 Apr 2022 11:52:38 +0800
+Date:   Tue, 19 Apr 2022 11:52:28 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 4aaaaf0f279836f06d3b9d0ffeec7a1e1a04ceef
-Message-ID: <625e3206.oXd2ujaNklbshbwr%lkp@intel.com>
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ a1872eb1a376272c39142da0560f2932aded6da8
+Message-ID: <625e31fc.oVsOQdbwNacRhTjd%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -57,23 +57,23 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 4aaaaf0f279836f06d3b9d0ffeec7a1e1a04ceef  hwmon: (f71882fg) Fix negative temperature
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: a1872eb1a376272c39142da0560f2932aded6da8  hwmon: (intel-m10-bmc-hwmon) use devm_hwmon_sanitize_name()
 
-elapsed time: 729m
+elapsed time: 728m
 
-configs tested: 167
+configs tested: 162
 configs skipped: 5
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
 
 gcc tested configs:
-arm                                 defconfig
+arm64                               defconfig
 arm64                            allyesconfig
 arm                              allmodconfig
+arm                                 defconfig
 arm                              allyesconfig
-arm64                               defconfig
 mips                 randconfig-c004-20220418
 i386                 randconfig-c001-20220418
 i386                          randconfig-c001
@@ -138,10 +138,10 @@ m68k                             allyesconfig
 m68k                             allmodconfig
 m68k                                defconfig
 arc                              allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
 csky                                defconfig
 nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
 h8300                            allyesconfig
 xtensa                           allyesconfig
 arc                                 defconfig
@@ -177,10 +177,6 @@ i386                 randconfig-a002-20220418
 riscv                randconfig-r042-20220419
 arc                  randconfig-r043-20220419
 s390                 randconfig-r044-20220419
-arc                  randconfig-r043-20220418
-arc                  randconfig-r043-20220417
-s390                 randconfig-r044-20220417
-riscv                randconfig-r042-20220417
 riscv                               defconfig
 riscv                    nommu_virt_defconfig
 riscv                          rv32_defconfig
@@ -189,8 +185,8 @@ riscv                             allnoconfig
 riscv                            allmodconfig
 riscv                            allyesconfig
 x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
 um                             i386_defconfig
+um                           x86_64_defconfig
 x86_64                          rhel-8.3-func
 x86_64                                  kexec
 x86_64                              defconfig
@@ -242,7 +238,6 @@ hexagon              randconfig-r041-20220417
 hexagon              randconfig-r041-20220418
 hexagon              randconfig-r045-20220417
 hexagon              randconfig-r045-20220418
-s390                 randconfig-r044-20220418
 
 -- 
 0-DAY CI Kernel Test Service
