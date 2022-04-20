@@ -2,71 +2,42 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C62E9C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 16:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BFAC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 16:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380502AbiDTQWo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Apr 2022 12:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
+        id S1351569AbiDTQya (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Apr 2022 12:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380510AbiDTQWm (ORCPT
+        with ESMTP id S241525AbiDTQy3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:22:42 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32213387A8;
-        Wed, 20 Apr 2022 09:19:56 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id l9-20020a056830268900b006054381dd35so1421271otu.4;
-        Wed, 20 Apr 2022 09:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=BcREumxihady40kAsqXjtYOYhBYxsHR0/lhVa2XISrI=;
-        b=Fall6bVNmUjak3/c9cNqoP0Ds+o17tFk78uG2u9+e+N7i5hwjGhKvi3LD1u+kbIVps
-         O7o3QYhlkyRFiWhWVoB7Eh284hQ/lONEmeEayNUJrcV++2XJMp9WxhBLfMCr/KEVDQZL
-         sehAgQzMTII74ZHVTJZ5njja/TwebgN9mibynewvKPBjRvhNtNBc66GEAO8WHKHKsEs4
-         g/TjB1klkqXxnQA3/KGs2cCmc3T96tArH9xNYK50MSDbmZQbYA8zIDcrMvizBLOcxmu7
-         n+Ten2YOaan5xqjAXU4ZGTJUAcpCmT93qLc8YvNc+E7zrDCBthJW95WVm1uERT1b17lW
-         3Csg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=BcREumxihady40kAsqXjtYOYhBYxsHR0/lhVa2XISrI=;
-        b=Lp87sRQIDWqnvjs+spRTjVlKfgjGOBJPP0LdHDp2nRLGDJVmA6IK4kwct55QK3scsc
-         qq+A7Qn9IbkVYbw/O3s+8fhiHwX/uNGCh45B9Dc6U54dBtI3Qv+RXJAdh97ZQEZCwT2H
-         vDKhNWXpFSZVxDKvf5Tb3sd9qo23nxlLjwXOO16KR9GPiSG4KvmcgM5TrkdC1tM45ff6
-         JUvefR8t0zPISxGI3mZn2bgAq8k6l0stkyyY0iJX/rOSDWDkYqBrHS/o84755Zw4helc
-         kcA4VTa74nhp7HDN18dx39vsxn9Pmpqvck+MzEj3jiiSIl6dnyh0whMvqAAYxFsev91X
-         QO6w==
-X-Gm-Message-State: AOAM533IGpQqW/LJfl7hdAq/ReyeVYu0xMq00QPkS29xLIffM6Eb3QNM
-        Vo/35Sh0mtWTgAweHYw0mXY=
-X-Google-Smtp-Source: ABdhPJxVm6wBBiE1m0EVm4wdnJN/qMH3N+ahoOhWU3U68EX210f8sRmon/EJSPiuHhCUdEG4XtPBoA==
-X-Received: by 2002:a9d:734a:0:b0:605:4d25:2e67 with SMTP id l10-20020a9d734a000000b006054d252e67mr5462918otk.258.1650471595579;
-        Wed, 20 Apr 2022 09:19:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z2-20020a05683020c200b00604cd00f91esm5694700otq.44.2022.04.20.09.19.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 09:19:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <57bb64db-9273-0e52-cf6d-0c7ff172ddde@roeck-us.net>
-Date:   Wed, 20 Apr 2022 09:19:53 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Wed, 20 Apr 2022 12:54:29 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE03E5C4;
+        Wed, 20 Apr 2022 09:51:42 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 69A1B25B;
+        Wed, 20 Apr 2022 18:51:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1650473500;
+        bh=iIo4wLto1vt5xoR+vGrIeQIO5gQyyzd0m3pIes+f0P8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kuWG1e3EhoCr5f8oYRJIveR56YEojMLFSq8leqiLfDLJDfrpbdcdRZdVjnxvVCXtZ
+         Cq0rHLkM/95EmxlsrfKHHxOw+iWY8+mE2ZVGDMlG5QeNWiimdjpmJ6ndcoJGEOnk0i
+         Dl99SQywbYmvNQO8Xkz+kEn7XRAYXd2cM/jJh7yA=
+Date:   Wed, 20 Apr 2022 19:51:41 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
         linux-media@vger.kernel.org, alain.volmat@foss.st.com,
         hugues.fruchet@foss.st.com, sylvain.petinot@foss.st.com,
         dave.stevenson@raspberrypi.com, sakari.ailus@linux.intel.com,
         kieran.bingham@ideasonboard.com, linux-hwmon@vger.kernel.org,
         Ricardo Ribalda <ribalda@chromium.org>
-References: <20220415111845.27130-1-benjamin.mugnier@foss.st.com>
- <20220415111845.27130-3-benjamin.mugnier@foss.st.com>
- <d4c868d5ef05f338bdc2237d9b9304077d268c8b.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 2/5] media: v4l: ctrls: Add a control for temperature
+Message-ID: <YmA6HbHybCkhTYFH@pendragon.ideasonboard.com>
+References: <d4c868d5ef05f338bdc2237d9b9304077d268c8b.camel@ndufresne.ca>
  <3a4fad80-b16a-3780-a0f7-41dd6c80689e@roeck-us.net>
  <Yl8jF1KLzP6YO6t+@pendragon.ideasonboard.com>
  <1c700e5b-5bf2-f0eb-78f3-12290fd88234@roeck-us.net>
@@ -75,31 +46,42 @@ References: <20220415111845.27130-1-benjamin.mugnier@foss.st.com>
  <76789333-bb0b-fcc2-6ba9-ab01c9aab62a@roeck-us.net>
  <YmAXd5F2Rm/VDIb5@pendragon.ideasonboard.com>
  <8b8aa915-d08c-9cc6-fc01-2f062a79b078@foss.st.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/5] media: v4l: ctrls: Add a control for temperature
-In-Reply-To: <8b8aa915-d08c-9cc6-fc01-2f062a79b078@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <57bb64db-9273-0e52-cf6d-0c7ff172ddde@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <57bb64db-9273-0e52-cf6d-0c7ff172ddde@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/20/22 08:19, Benjamin Mugnier wrote:
-[ ... ]
->>
->> It's the two most common use cases for imaging sensor temperature
->> measurements that I know of. My question to Benjamin is if he has the
->> same and/or other use cases.
->>
+On Wed, Apr 20, 2022 at 09:19:53AM -0700, Guenter Roeck wrote:
+> On 4/20/22 08:19, Benjamin Mugnier wrote:
+> [ ... ]
+> >>
+> >> It's the two most common use cases for imaging sensor temperature
+> >> measurements that I know of. My question to Benjamin is if he has the
+> >> same and/or other use cases.
+> >>
+> > 
+> > Just like you said in a previous mail. This temperature sensor can
+> > be used to implement a retroactive loop from the host according to
+> > its value, such as noise correction for instance.
+> > We don't have anything in the Linux user space that implements this
+> > yet, this was in anticipation.
+> > So dropping it is fine, I will come back to it if need be ;)
 > 
-> Just like you said in a previous mail. This temperature sensor can be used to implement a retroactive loop from the host according to its value, such as noise correction for instance.
-> We don't have anything in the Linux user space that implements this yet, this was in anticipation.
-> So dropping it is fine, I will come back to it if need be ;)
+> When you implement this in userspace, you might want to consider situations
+> where the temperature is _not_ reported via media controls (which might
+> at least in theory happen if the temperature sensor is not part of the
+> v4l device), or for existing drivers with hwmon support
+> (drivers/media/i2c/video-i2c.c comes into mind).
 
-When you implement this in userspace, you might want to consider situations
-where the temperature is _not_ reported via media controls (which might
-at least in theory happen if the temperature sensor is not part of the
-v4l device), or for existing drivers with hwmon support
-(drivers/media/i2c/video-i2c.c comes into mind).
+That's a good point. I wouldn't expect external temperature sensors to
+be very useful for this use case though, as what we really need is the
+temperature of the camera sensor die.
 
-Guenter
+-- 
+Regards,
+
+Laurent Pinchart
