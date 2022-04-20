@@ -2,99 +2,57 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEC2DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 01:00:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2235C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 07:52:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348195AbiDTBD0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Apr 2022 21:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S1376452AbiDTHy6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Apr 2022 03:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348181AbiDTBD0 (ORCPT
+        with ESMTP id S1376564AbiDTHyV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Apr 2022 21:03:26 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89251275CC;
-        Tue, 19 Apr 2022 18:00:41 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-deb9295679so421944fac.6;
-        Tue, 19 Apr 2022 18:00:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9jqaNc5GS93TqmOq2Cq3d6a6vz0jEdB9F8+DagCs+Co=;
-        b=h8epfsKDDQhn9rNEqVXlRvWdOyABHN1ZbHL/SpuTNNPtHIrikHxXUOWCErWTnFONvX
-         SlUhfrcbJg6m/raBZAEtQcM8ePyH13DkirRtX5k6Zbf3sHs1UGHzHsUGuDHacn6nJ2Jf
-         fY0Xdfla0BXMaGIr5JjjKw5aqvBz+4yQca7hiuDls6LVlnyKIucmogdTH2yNKeWagszR
-         jpzPI3XwdMR0WLj8hijz+kQYs38OpuUrZTlAlby0harTRJ6m/KZxAAe7rvuYSQoo2X4j
-         B2XBhlNQ2ovTwfp3Tp7aWR6/Hg2OIksju+xuHihX3oa4/gdtPN00xm8JZ23CpViEiPeB
-         9MaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9jqaNc5GS93TqmOq2Cq3d6a6vz0jEdB9F8+DagCs+Co=;
-        b=8N5vDBbdIjUFE2S26pu4wpx2sk6odiewqsEMAlO20yLaL0ZjGCK5hchg5Vy1zKFLzh
-         rkxkGumjjNoiRPVNciaVEYE1dbO4XZ3JLgjPNj6StU4LHY/DtyayAxJ7djU/Y8aifweH
-         /ySktLbwOZGF1eFd89B2jwI2zeXKb6oe6hYEb5wRiX4SzYKsUCdPojf5nUp7BIBJZbO2
-         UHbBk8h0lu9IpxOpTrxatXYXgwMOCXGSMt2svVo4208rDCfLcFcL1R1zZnjfuYj9UJUg
-         5FfzLbQut6EQsL9HdjwouIMcHAToGqTKrhhckUrUtNK2lZKQkvVsdUTnlkRdITfnkR+K
-         riQA==
-X-Gm-Message-State: AOAM532UZ5jDOTUJI11KbQtoJVYf5d+lg7THzPmyE4egGAcRacLtyb4J
-        K+1/72Hvzk0oclNBQmSZ0RfCN4EOl9Y=
-X-Google-Smtp-Source: ABdhPJzq/wMmB0JIONSUhoRlRLpkCwI5rH7guTD9k3y5UejmwncJ3nD46HwNX5PJe8t/qOkSUENZfA==
-X-Received: by 2002:a05:6871:b22:b0:e6:49ed:4af0 with SMTP id fq34-20020a0568710b2200b000e649ed4af0mr93723oab.102.1650416440828;
-        Tue, 19 Apr 2022 18:00:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j5-20020a4a7505000000b0033a47bb6a74sm1332178ooc.47.2022.04.19.18.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 18:00:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d2d09fe1-dada-e844-cafa-da48424855a4@roeck-us.net>
-Date:   Tue, 19 Apr 2022 18:00:38 -0700
+        Wed, 20 Apr 2022 03:54:21 -0400
+X-Greylist: delayed 489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 00:51:00 PDT
+Received: from mail.fixingbiz.pl (mail.fixingbiz.pl [217.61.22.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA6A3CFE3
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 Apr 2022 00:51:00 -0700 (PDT)
+Received: by mail.fixingbiz.pl (Postfix, from userid 1001)
+        id 59528A385D; Wed, 20 Apr 2022 08:41:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fixingbiz.pl; s=mail;
+        t=1650440530; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=AgOP1Zk8vq106WuvP0NbbcxEGof0rSnDFH7HeYBB7o+G7Vdus6VOlJZN1gTfEqqSM
+         L9mdpFsjffBK2dDchNH0qHGi349WTyZNNJEPiVFRNDo/q6mmvRr+vur3XtEmnBM4Pm
+         8g/48WqGBhioOgO5mm3EhI+cr1FQfUmfMpNQ/n1NbFDW090MCe7140f3ClnUH2x9+p
+         ER4nDEtN0IgMrfQtbl+h8LIAV28YE3WfEk+FjnHpOj5YmFDKJwyi2bP9OWW+RbUXj0
+         8n/FyI3D1jNfSSxxFFp+wldRSFdIiF3QwQWfoKzB+2Y1Yfe4C5knLFOLA0WliUqBLv
+         0gR5JmPmh4mgg==
+Received: by mail.fixingbiz.pl for <linux-hwmon@vger.kernel.org>; Wed, 20 Apr 2022 07:40:53 GMT
+Message-ID: <20220420074501-0.1.1x.6tcr.0.xld3tk1d2k@fixingbiz.pl>
+Date:   Wed, 20 Apr 2022 07:40:53 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@fixingbiz.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.fixingbiz.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] hwmod: (pmbus) disable PEC if not enabled
-Content-Language: en-US
-To:     Adam Wujek <dev_public@wujek.eu>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220419205228.303952-1-dev_public@wujek.eu>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220419205228.303952-1-dev_public@wujek.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/19/22 13:53, Adam Wujek wrote:
-> Explicitly disable PEC when the client does not support it.
-> Without the explicit disable, when the device with the PEC support is removed
-> later when a device without PEC support is inserted into the same address,
-> the driver uses the old value of client->flags which contains the I2C_CLIENT_PEC
-> flag. As a consequence the PEC is used when it should not.
-> 
-> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 82c3754e21e3..f8ca36759b0a 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2014,6 +2014,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->   	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
->   	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
->   		client->flags |= I2C_CLIENT_PEC;
-> +	else
-> +		client->flags &= ~I2C_CLIENT_PEC;
-> 
+Dzie=C5=84 dobry,
 
-I just realized that this patch is not based on the latest
-kernel version. Please rebase.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Guenter
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
