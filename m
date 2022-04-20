@@ -2,162 +2,152 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8AEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 15:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D97CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 16:06:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380347AbiDTPyl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Apr 2022 11:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S1379895AbiDTQJR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Apr 2022 12:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiDTPyk (ORCPT
+        with ESMTP id S1380158AbiDTQJO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:54:40 -0400
-Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E6540935
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 Apr 2022 08:51:53 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 15:51:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1650469911;
-        bh=0ixJXXvnTgsn0qDHr6/TrGav1WNXehlytEOiTCtxmF0=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=mTLL0lfK5o9bnjeTxBBFyrm4t3CjTJtirqcbNrZZw3S3uPtA1PIeQLvb2W8YbbDhE
-         vcreQA2TpMKmNRF4yPMItYBBAFkdsmTasIf4GtiEe23MVIpUMNX9ev/phxfgZTJX8W
-         XG7e1uCDjFtQzJ/bDMuCkHtLp64v0qMoob3Baz/P7OkEvSTv0LhyNyPM4LUYHjAEyN
-         wAMHMN9mw4yVTBBdr0Ui8SEEXqZPi121jOF4oaEazvAaFG0txgMFxp5Jm+pyw9xcgC
-         pGxqhv3hSIF8SH1dsqq7dzbUXF+sB+tVna770ma1mO3qT4Vu+2NfMs1MTKAhyye+/a
-         Ifab719HOn/3A==
-To:     Guenter Roeck <linux@roeck-us.net>
-From:   wujek dev <dev_public@wujek.eu>
+        Wed, 20 Apr 2022 12:09:14 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DA130552;
+        Wed, 20 Apr 2022 09:06:28 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e2afb80550so2434497fac.1;
+        Wed, 20 Apr 2022 09:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=xUUVhcCV2MnLvckxNQgFIVhxYpI9BwVhaob+8jFGxmE=;
+        b=oc2C+JoZAcCa5ezslIwZxLQJIZwS49mZnJKCFyXLCYAXqB/J9OXfL7g6jibOS/6oNv
+         nr2SE8Z7cH0Zs74f65Er1RV1/K6UdES7yjVwcD7zz+amDcqM1hw9fMxUSQKayJ8Rw+H0
+         NOERztMpRK//cZU5FUbfwBRYEP82fwFwpN6NnyoNzurl1DJCIsB4nxfjXVhpWUbbBA55
+         3wXz/jC9TokskhGMDpoTBTS4PyJym80DvZ7fO77/yR+bbO/FYBt6BmNxJaL0L5EzzCsE
+         59DTCusR7JSquzgssb/im89wP1GziIPHexlplgrAHVU7c39rvEeXBUcCy7VfYDRfl57s
+         ohOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=xUUVhcCV2MnLvckxNQgFIVhxYpI9BwVhaob+8jFGxmE=;
+        b=yCgUQk5su2Bclfo916pybQjtEb/iumdUQvrA4D8WguBjGSURP/rYiiBW0ofYvUduaY
+         lL7hXM2rOPtEGhoPurVhtMcSHSceDQQixGq1Rr3lt40AT+ONcGXZIr5y1846cc2Ayz/5
+         HIWOrTaSQTMWvj9hN2FPa2agdqS9M+ldqKAcNbL6KjOx6YLApdl+WrGSE7QWOSkZpCRO
+         nY1tX+vCTYwTX1OEzoIJ1BLPhkr2XKdsntEV/Y+2VsI21/JEvBTTLVHsfROx9oxl+tBy
+         9f8sKfEhZvDofUH5W+tiqf+IfxbZNoIv/xkVCG9qm2YWaeD/9KdiE2wGl/Ml9NLdqezS
+         Dchg==
+X-Gm-Message-State: AOAM531DUqgpS0N8uRQomnzOVT480pYrxgcw9R/rPn7x5dI18SHIMge3
+        0By1agns+1Sw/mh1HsOgrggWysPmUO4=
+X-Google-Smtp-Source: ABdhPJwc5QKQo8PyoeJVu08zt/5fsKFlXNotL3sz5212wczBacQh9Tvq/6BKTIGJGD0v5RpkOMQhyQ==
+X-Received: by 2002:a05:6871:793:b0:db:360c:7f5e with SMTP id o19-20020a056871079300b000db360c7f5emr1921012oap.218.1650470787745;
+        Wed, 20 Apr 2022 09:06:27 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a3-20020a9d5c83000000b006054c7ecfb6sm3705539oti.34.2022.04.20.09.06.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 09:06:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1b12cb3a-3d87-8254-b229-dcf83ad0bc0a@roeck-us.net>
+Date:   Wed, 20 Apr 2022 09:06:25 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     wujek dev <dev_public@wujek.eu>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Reply-To: wujek dev <dev_public@wujek.eu>
+References: <20220419215326.309991-1-dev_public@wujek.eu>
+ <20220420122128.411757-1-dev_public@wujek.eu>
+ <f34ec7ac-7b34-6d98-25ad-31b13fe08c59@roeck-us.net>
+ <PFzjnraIDClF6umMOqlCKCzxG6q5lIhBLHpynRA6juh6gXSp5Y7SLPpzXZGNU6L7OGCEwl_F-niJn1jTflifWnqm9PX3Rcfqbtdo6rmPAT4=@wujek.eu>
+ <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
+ <Liq6d7nBil1lQx274diOvpjRJ9cEYH6co7ZMjrudPfYn0TTzOsfqsjuVBK-pMpFF5nBC0jhuoFEtbtmUY4Td4uY-a4qn6j-OmQD-Qu_xdck=@wujek.eu>
+From:   Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH 2/2] hwmon: (pmbus) add MFR_* registers to debugfs
-Message-ID: <Liq6d7nBil1lQx274diOvpjRJ9cEYH6co7ZMjrudPfYn0TTzOsfqsjuVBK-pMpFF5nBC0jhuoFEtbtmUY4Td4uY-a4qn6j-OmQD-Qu_xdck=@wujek.eu>
-In-Reply-To: <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
-References: <20220419215326.309991-1-dev_public@wujek.eu> <20220420122128.411757-1-dev_public@wujek.eu> <f34ec7ac-7b34-6d98-25ad-31b13fe08c59@roeck-us.net> <PFzjnraIDClF6umMOqlCKCzxG6q5lIhBLHpynRA6juh6gXSp5Y7SLPpzXZGNU6L7OGCEwl_F-niJn1jTflifWnqm9PX3Rcfqbtdo6rmPAT4=@wujek.eu> <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
-Feedback-ID: 23425257:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Liq6d7nBil1lQx274diOvpjRJ9cEYH6co7ZMjrudPfYn0TTzOsfqsjuVBK-pMpFF5nBC0jhuoFEtbtmUY4Td4uY-a4qn6j-OmQD-Qu_xdck=@wujek.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-------- Original Message -------
-On Wednesday, April 20th, 2022 at 16:15, Guenter Roeck <linux@roeck-us.net>=
- wrote:
+On 4/20/22 08:51, wujek dev wrote:
+> ------- Original Message -------
+> On Wednesday, April 20th, 2022 at 16:15, Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+> 
+>>
+>>
+>> On 4/20/22 06:58, wujek dev wrote:
+>>
+>>> ------- Original Message -------
+>>> On Wednesday, April 20th, 2022 at 15:53, Guenter Roeck linux@roeck-us.net wrote:
+>>>
+>>>> On 4/20/22 05:22, Adam Wujek wrote:
+>>>>
+>>>>> Add registers to debugfs:
+>>>>> PMBUS_MFR_ID
+>>>>> PMBUS_MFR_MODEL
+>>>>> PMBUS_MFR_REVISION
+>>>>> PMBUS_MFR_LOCATION
+>>>>> PMBUS_MFR_DATE
+>>>>> PMBUS_MFR_SERIAL
+>>>>>
+>>>>> Signed-off-by: Adam Wujek dev_public@wujek.eu
+>>>>
+>>>> Where is patch 1/2, and why did you resend this patch ?
+>>>
+>>> There should be no "1/2" since this and the second patch are unrelated.
+>>> I resend it because I rebased it on master.
+>>
+>> Please provide change logs and version your patches in the future.
+> ok, thank you for your patience.
+>>
+>>> Adam
+>>>
+>>>> Guenter
+>>>>
+>>>>> ---
+>>>>> drivers/hwmon/pmbus/pmbus_core.c | 84 ++++++++++++++++++++++++++++++++
+>>>>> 1 file changed, 84 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>>>>> index 0af7a3d74f47..1dc186780ccf 100644
+>>>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>>>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>>>>> @@ -2625,6 +2625,30 @@ static int pmbus_debugfs_get_status(void *data, u64 *val)
+>>>>> DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
+>>>>> NULL, "0x%04llx\n");
+>>>>>
+>>>>> +static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
+>>>>> + size_t count, loff_t *ppos)
+>>>>> +{
+>>>>> + int rc;
+>>>>> + struct pmbus_debugfs_entry *entry = file->private_data;
+>>>>> + char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
+>>>>> +
+>>>>> + rc = i2c_smbus_read_block_data(entry->client, entry->reg, data);
+>>>>> + if (rc < 0)
+>>>>> + return rc;
+>>>>> +
+>>>>> + data[rc] = '\n';
+>>>>> + rc += 2;
+>>
+>>
+>> Why +2 ?
+>>
+> Copied from another driver.
+> +1 due to '\n'
+> +1 due to NULL character (smbus block transfer does not include it in the length)
+> Explanation included in v3 patch.
 
+"copied from another driver" is not really a good argument.
+That other driver might just be buggy.
 
->
->
-> On 4/20/22 06:58, wujek dev wrote:
->
-> > ------- Original Message -------
-> > On Wednesday, April 20th, 2022 at 15:53, Guenter Roeck linux@roeck-us.n=
-et wrote:
-> >
-> > > On 4/20/22 05:22, Adam Wujek wrote:
-> > >
-> > > > Add registers to debugfs:
-> > > > PMBUS_MFR_ID
-> > > > PMBUS_MFR_MODEL
-> > > > PMBUS_MFR_REVISION
-> > > > PMBUS_MFR_LOCATION
-> > > > PMBUS_MFR_DATE
-> > > > PMBUS_MFR_SERIAL
-> > > >
-> > > > Signed-off-by: Adam Wujek dev_public@wujek.eu
-> > >
-> > > Where is patch 1/2, and why did you resend this patch ?
-> >
-> > There should be no "1/2" since this and the second patch are unrelated.
-> > I resend it because I rebased it on master.
->
-> Please provide change logs and version your patches in the future.
-ok, thank you for your patience.
->
-> > Adam
-> >
-> > > Guenter
-> > >
-> > > > ---
-> > > > drivers/hwmon/pmbus/pmbus_core.c | 84 +++++++++++++++++++++++++++++=
-+++
-> > > > 1 file changed, 84 insertions(+)
-> > > >
-> > > > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus=
-/pmbus_core.c
-> > > > index 0af7a3d74f47..1dc186780ccf 100644
-> > > > --- a/drivers/hwmon/pmbus/pmbus_core.c
-> > > > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> > > > @@ -2625,6 +2625,30 @@ static int pmbus_debugfs_get_status(void *da=
-ta, u64 *val)
-> > > > DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_ge=
-t_status,
-> > > > NULL, "0x%04llx\n");
-> > > >
-> > > > +static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __us=
-er *buf,
-> > > > + size_t count, loff_t *ppos)
-> > > > +{
-> > > > + int rc;
-> > > > + struct pmbus_debugfs_entry *entry =3D file->private_data;
-> > > > + char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
-> > > > +
-> > > > + rc =3D i2c_smbus_read_block_data(entry->client, entry->reg, data)=
-;
-> > > > + if (rc < 0)
-> > > > + return rc;
-> > > > +
-> > > > + data[rc] =3D '\n';
-> > > > + rc +=3D 2;
->
->
-> Why +2 ?
->
-Copied from another driver.
-+1 due to '\n'
-+1 due to NULL character (smbus block transfer does not include it in the l=
-ength)
-Explanation included in v3 patch.
-> > > > +
-> > > > + return simple_read_from_buffer(buf, count, ppos, data, rc);
-> > > > +}
-> > > > +
-> > > > +static const struct file_operations pmbus_debugfs_ops_mfr =3D {
-> > > > + .llseek =3D noop_llseek,
-> > > > + .read =3D pmbus_debugfs_mfr_read,
-> > > > + .write =3D NULL,
-> > > > + .open =3D simple_open,
-> > > > +};
-> > > > +
-> > > > static int pmbus_debugfs_get_pec(void *data, u64 *val)
-> > > > {
-> > > > struct i2c_client *client =3D data;
-> > > > @@ -2801,6 +2825,66 @@ static int pmbus_init_debugfs(struct i2c_cli=
-ent *client,
-> > > > &entries[idx++],
-> > > > &pmbus_debugfs_ops);
-> > > > }
-> > > > +
-> > > > + if (pmbus_check_byte_register(client, i, PMBUS_MFR_ID)) {
-> > > > + entries[idx].client =3D client;
-> > > > + entries[idx].page =3D i;
-> > > > + entries[idx].reg =3D PMBUS_MFR_ID;
-> > > > + scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_id", i);
-> > > > + debugfs_create_file(name, 0444, data->debugfs,
-> > > > + &entries[idx++],
-> > > > + &pmbus_debugfs_ops_mfr);
-> > > > + }
->
->
-> You are adding several debugfs entries without increasing the size
-> of the entries array. That means that up to 16 debugfs entries are
-> now created into an array of size 10. That won't work.
-You're right, I just sent another patch.
+What do you see in userspace when you read the data ? A string that ends with
+"\n\0" ? If so, does the "\0" at the end add any value ?
 
-Adam
->
-> Guenter
+Guenter
