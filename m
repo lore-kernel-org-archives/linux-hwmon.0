@@ -2,99 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C49C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Apr 2022 23:46:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEC2DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 01:00:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358149AbiDSXt0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Apr 2022 19:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
+        id S1348195AbiDTBD0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Apr 2022 21:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358101AbiDSXt0 (ORCPT
+        with ESMTP id S1348181AbiDTBD0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Apr 2022 19:49:26 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BD62018A;
-        Tue, 19 Apr 2022 16:46:41 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id a10so289287oif.9;
-        Tue, 19 Apr 2022 16:46:41 -0700 (PDT)
+        Tue, 19 Apr 2022 21:03:26 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89251275CC;
+        Tue, 19 Apr 2022 18:00:41 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-deb9295679so421944fac.6;
+        Tue, 19 Apr 2022 18:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=9Dehn88Ll7BtUdvgyx2lkGmMqT0Tj9xWydgg6NgtluA=;
-        b=VosXpeoVLhzsyAl1blbG4cVIlMyFZ2LqrcBckgME/840WGuIxThIKFbJSA2UGPnTyS
-         ZIgIZlucYr6lRmwCnPuTmTk1SSMkJ0v3T4AYhFFs22yiLuLk3BY4U6y70dwSiMkGvKxA
-         vNdAS8eE+hfs/KHkKvMFrJxHBwtb6w+y9jtgsLJBg/Y7Qq1dGR0LB1yVqtLfe7G7d1V8
-         dBFxbDWwCxIS7cxAIrpQ0Z1j2ljP8PFql2yn6lg35Lr7hTXEX4kO7+Bt+m5EhAJip8Dc
-         2Q66P7CVNl0lnefhQSTHYjaLdFHWaTD4lYZ+RrVQIdmVuJ9VU4EGJ2Nx2xZTzbBmbk6M
-         7htg==
+        bh=9jqaNc5GS93TqmOq2Cq3d6a6vz0jEdB9F8+DagCs+Co=;
+        b=h8epfsKDDQhn9rNEqVXlRvWdOyABHN1ZbHL/SpuTNNPtHIrikHxXUOWCErWTnFONvX
+         SlUhfrcbJg6m/raBZAEtQcM8ePyH13DkirRtX5k6Zbf3sHs1UGHzHsUGuDHacn6nJ2Jf
+         fY0Xdfla0BXMaGIr5JjjKw5aqvBz+4yQca7hiuDls6LVlnyKIucmogdTH2yNKeWagszR
+         jpzPI3XwdMR0WLj8hijz+kQYs38OpuUrZTlAlby0harTRJ6m/KZxAAe7rvuYSQoo2X4j
+         B2XBhlNQ2ovTwfp3Tp7aWR6/Hg2OIksju+xuHihX3oa4/gdtPN00xm8JZ23CpViEiPeB
+         9MaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=9Dehn88Ll7BtUdvgyx2lkGmMqT0Tj9xWydgg6NgtluA=;
-        b=BxLSMYUL3oZczXRyCXZf4dg0q0CyAMRnGbWKHZLcyrIIbEunR7lYqeRGxGMYqlVJ+t
-         e70wH2sj7ln0AW79lo4Kui37/s+PJlm+1hWGz6SF3hntgdP06KG6qdCGYtmEJqTA4zta
-         9rM/uaTe033NtsxH4u7lfc0Ux8xCi2KcXU+qsy1S2PF0tNlE0APnX2BTUw17/ZG97UsH
-         QqD/uhVDEkaLeKTxxO0wFAakbV++ycDjQzzzypUY/wo69Jl0cfMi4lzyeQSfz3riwndI
-         UuSoUHPoa9RjPJntgvBDUAhWf5aYddkHK/YzFDV5BtGxGxmTGnXW3jWzAbVGSbEyYt1H
-         iujw==
-X-Gm-Message-State: AOAM531NnI/Ga0U0CzkofY0UnTYdHlZwloG447UZWphV44TBUS7Sj+ta
-        MS7wwEBZNI5uMomSg+hnuOPZG6sZ2kU=
-X-Google-Smtp-Source: ABdhPJzd0miG+YXnmgDdjRJUJBGUjE5wptjYEpBrlw3JwY72bVLuWtY0gbKIQ8L+GmUwn/JqyN5enQ==
-X-Received: by 2002:a05:6808:16a7:b0:2f9:39c4:c597 with SMTP id bb39-20020a05680816a700b002f939c4c597mr504924oib.101.1650412001256;
-        Tue, 19 Apr 2022 16:46:41 -0700 (PDT)
+        bh=9jqaNc5GS93TqmOq2Cq3d6a6vz0jEdB9F8+DagCs+Co=;
+        b=8N5vDBbdIjUFE2S26pu4wpx2sk6odiewqsEMAlO20yLaL0ZjGCK5hchg5Vy1zKFLzh
+         rkxkGumjjNoiRPVNciaVEYE1dbO4XZ3JLgjPNj6StU4LHY/DtyayAxJ7djU/Y8aifweH
+         /ySktLbwOZGF1eFd89B2jwI2zeXKb6oe6hYEb5wRiX4SzYKsUCdPojf5nUp7BIBJZbO2
+         UHbBk8h0lu9IpxOpTrxatXYXgwMOCXGSMt2svVo4208rDCfLcFcL1R1zZnjfuYj9UJUg
+         5FfzLbQut6EQsL9HdjwouIMcHAToGqTKrhhckUrUtNK2lZKQkvVsdUTnlkRdITfnkR+K
+         riQA==
+X-Gm-Message-State: AOAM532UZ5jDOTUJI11KbQtoJVYf5d+lg7THzPmyE4egGAcRacLtyb4J
+        K+1/72Hvzk0oclNBQmSZ0RfCN4EOl9Y=
+X-Google-Smtp-Source: ABdhPJzq/wMmB0JIONSUhoRlRLpkCwI5rH7guTD9k3y5UejmwncJ3nD46HwNX5PJe8t/qOkSUENZfA==
+X-Received: by 2002:a05:6871:b22:b0:e6:49ed:4af0 with SMTP id fq34-20020a0568710b2200b000e649ed4af0mr93723oab.102.1650416440828;
+        Tue, 19 Apr 2022 18:00:40 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm6044454oos.22.2022.04.19.16.46.39
+        by smtp.gmail.com with ESMTPSA id j5-20020a4a7505000000b0033a47bb6a74sm1332178ooc.47.2022.04.19.18.00.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 16:46:40 -0700 (PDT)
+        Tue, 19 Apr 2022 18:00:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8a8124e0-0789-fcc2-826c-69ef870a42d3@roeck-us.net>
-Date:   Tue, 19 Apr 2022 16:46:38 -0700
+Message-ID: <d2d09fe1-dada-e844-cafa-da48424855a4@roeck-us.net>
+Date:   Tue, 19 Apr 2022 18:00:38 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Subject: Re: [PATCH] hwmod: (pmbus) disable PEC if not enabled
 Content-Language: en-US
-To:     wujek dev <dev_public@wujek.eu>
+To:     Adam Wujek <dev_public@wujek.eu>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220419205228.303952-1-dev_public@wujek.eu>
- <734e748b-941c-5ae1-5140-22cc845bdfc1@roeck-us.net>
- <zNXN2w4xqB6a_14RhNubTjTdcUmzypjeVY-5FXeXlPHsYDuSdQ0qlDjO0CNFnYOrUUAnIlBBIdvMjKURyH4nuthmNQ29ifpaNywsWiU99oQ=@wujek.eu>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <zNXN2w4xqB6a_14RhNubTjTdcUmzypjeVY-5FXeXlPHsYDuSdQ0qlDjO0CNFnYOrUUAnIlBBIdvMjKURyH4nuthmNQ29ifpaNywsWiU99oQ=@wujek.eu>
+In-Reply-To: <20220419205228.303952-1-dev_public@wujek.eu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/19/22 15:10, wujek dev wrote:
-> ------- Original Message -------
-> On Wednesday, April 20th, 2022 at 00:00, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->>
->> On 4/19/22 13:53, Adam Wujek wrote:
->>
->>> Explicitly disable PEC when the client does not support it.
->>> Without the explicit disable, when the device with the PEC support is removed
->>> later when a device without PEC support is inserted into the same address,
->>> the driver uses the old value of client->flags which contains the I2C_CLIENT_PEC
->>> flag. As a consequence the PEC is used when it should not.
->>
->>
->> How can that happen ? I would assume the I2C device gets deleted and re-created
->> in that case, which should clear the PEC flag.
->>
->> Guenter
-> In my case it was when I unloaded the driver for the I2C slave, changed the advertised PEC value in PMBUS_CAPABILITY register on slave. Then loaded the driver. When the switch was from disable->enable it worked as expected (this case was already covered), but when the PEC was set in the slave from enabled->disabled it was still using PEC to communicate.
+On 4/19/22 13:53, Adam Wujek wrote:
+> Explicitly disable PEC when the client does not support it.
+> Without the explicit disable, when the device with the PEC support is removed
+> later when a device without PEC support is inserted into the same address,
+> the driver uses the old value of client->flags which contains the I2C_CLIENT_PEC
+> flag. As a consequence the PEC is used when it should not.
+> 
+> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+> ---
+>   drivers/hwmon/pmbus/pmbus_core.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 82c3754e21e3..f8ca36759b0a 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2014,6 +2014,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+>   	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+>   	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
+>   		client->flags |= I2C_CLIENT_PEC;
+> +	else
+> +		client->flags &= ~I2C_CLIENT_PEC;
+> 
 
-So it is really the same device, only you unload the driver, change the
-device configuration (presumably with i2cset commands), and load it
-again. Please explain that in more detail in the commit description.
+I just realized that this patch is not based on the latest
+kernel version. Please rebase.
 
-Thanks,
 Guenter
