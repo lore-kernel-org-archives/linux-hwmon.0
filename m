@@ -2,195 +2,162 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8501C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 15:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8AEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 15:51:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348229AbiDTPoJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Apr 2022 11:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S1380347AbiDTPyl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Apr 2022 11:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347186AbiDTPoJ (ORCPT
+        with ESMTP id S232903AbiDTPyk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:44:09 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C773033359
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 Apr 2022 08:41:20 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 15:41:10 +0000
+        Wed, 20 Apr 2022 11:54:40 -0400
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E6540935
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 Apr 2022 08:51:53 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 15:51:46 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1650469279;
-        bh=ChZzz3U6POqxEiY+ow/6/HyahMgkvooxvG3ibj7qcN8=;
-        h=Date:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=bP4fjUuexI7vm2jO+snYkWpEsoTLfy1l4vSTxavV+Z0AGyT62Wd1eR4zERq7Kbbbc
-         fSLwTM5e3EXpHIX0gV+T/D1HSlHJsd3LjiNqteTFPDN8rPfs1TibgZmM2u6Dd0Q+iN
-         g0PqS1UvVT5oZhohOkfQ7Fsc3ddGi3ROx4wW9ZQ9rUtbCdVAsZllKsQdfMmHppZDxa
-         OE7f/kA+fm/yP/RHQKtrVgGqBqU0Ylbd+c8wK1TAlvIszPuYQ47ncCShCorhJVM+lG
-         uEWyPSXrFClVT/BJciwV9tsJit3Ksj0dkFUM9NleUEVIVXUQrcB+juTob+ep1wgkYj
-         DI+55vlJNPg4g==
-From:   Adam Wujek <dev_public@wujek.eu>
-Cc:     Adam Wujek <dev_public@wujek.eu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        s=protonmail2; t=1650469911;
+        bh=0ixJXXvnTgsn0qDHr6/TrGav1WNXehlytEOiTCtxmF0=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=mTLL0lfK5o9bnjeTxBBFyrm4t3CjTJtirqcbNrZZw3S3uPtA1PIeQLvb2W8YbbDhE
+         vcreQA2TpMKmNRF4yPMItYBBAFkdsmTasIf4GtiEe23MVIpUMNX9ev/phxfgZTJX8W
+         XG7e1uCDjFtQzJ/bDMuCkHtLp64v0qMoob3Baz/P7OkEvSTv0LhyNyPM4LUYHjAEyN
+         wAMHMN9mw4yVTBBdr0Ui8SEEXqZPi121jOF4oaEazvAaFG0txgMFxp5Jm+pyw9xcgC
+         pGxqhv3hSIF8SH1dsqq7dzbUXF+sB+tVna770ma1mO3qT4Vu+2NfMs1MTKAhyye+/a
+         Ifab719HOn/3A==
+To:     Guenter Roeck <linux@roeck-us.net>
+From:   wujek dev <dev_public@wujek.eu>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [v3 PATCH] hwmon: (pmbus) add MFR_* registers to debugfs
-Message-ID: <20220420154055.437833-1-dev_public@wujek.eu>
+Reply-To: wujek dev <dev_public@wujek.eu>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus) add MFR_* registers to debugfs
+Message-ID: <Liq6d7nBil1lQx274diOvpjRJ9cEYH6co7ZMjrudPfYn0TTzOsfqsjuVBK-pMpFF5nBC0jhuoFEtbtmUY4Td4uY-a4qn6j-OmQD-Qu_xdck=@wujek.eu>
 In-Reply-To: <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
 References: <20220419215326.309991-1-dev_public@wujek.eu> <20220420122128.411757-1-dev_public@wujek.eu> <f34ec7ac-7b34-6d98-25ad-31b13fe08c59@roeck-us.net> <PFzjnraIDClF6umMOqlCKCzxG6q5lIhBLHpynRA6juh6gXSp5Y7SLPpzXZGNU6L7OGCEwl_F-niJn1jTflifWnqm9PX3Rcfqbtdo6rmPAT4=@wujek.eu> <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
 Feedback-ID: 23425257:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add registers to debugfs:
-PMBUS_MFR_ID
-PMBUS_MFR_MODEL
-PMBUS_MFR_REVISION
-PMBUS_MFR_LOCATION
-PMBUS_MFR_DATE
-PMBUS_MFR_SERIAL
-
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
----
-Notes:
-    Changes in v2:
-    - Rebase to the latest kernel
-    - Marked wrongly as a part of series of patches
-
-    Changes in v3:
-    - Submit as a single patch. V2 was wrongly submitted as a part of
-      series of patches
-    - add justification for "rc +=3D 2;"
-    - increase allocated memory for debugfs entries
-
- drivers/hwmon/pmbus/pmbus_core.c | 89 +++++++++++++++++++++++++++++++-
- 1 file changed, 88 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_c=
-ore.c
-index d93574d6a1fb..a791e5f08fb2 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2627,6 +2627,33 @@ static int pmbus_debugfs_get_status(void *data, u64 =
-*val)
- DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_statu=
-s,
- =09=09=09 NULL, "0x%04llx\n");
-
-+static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
-+=09=09=09=09       size_t count, loff_t *ppos)
-+{
-+=09int rc;
-+=09struct pmbus_debugfs_entry *entry =3D file->private_data;
-+=09char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
-+
-+=09rc =3D i2c_smbus_read_block_data(entry->client, entry->reg, data);
-+=09if (rc < 0)
-+=09=09return rc;
-+
-+=09/* Add newline at the end of a string */
-+=09data[rc] =3D '\n';
-+=09/* Include newline and NULL char into the length as block read from
-+=09 * SMBUS does not include null character. */
-+=09rc +=3D 2;
-+
-+=09return simple_read_from_buffer(buf, count, ppos, data, rc);
-+}
-+
-+static const struct file_operations pmbus_debugfs_ops_mfr =3D {
-+=09.llseek =3D noop_llseek,
-+=09.read =3D pmbus_debugfs_mfr_read,
-+=09.write =3D NULL,
-+=09.open =3D simple_open,
-+};
-+
- static int pmbus_debugfs_get_pec(void *data, u64 *val)
- {
- =09struct i2c_client *client =3D data;
-@@ -2693,7 +2720,7 @@ static int pmbus_init_debugfs(struct i2c_client *clie=
-nt,
-
- =09/* Allocate the max possible entries we need. */
- =09entries =3D devm_kcalloc(data->dev,
--=09=09=09       data->info->pages * 10, sizeof(*entries),
-+=09=09=09       data->info->pages * 16, sizeof(*entries),
- =09=09=09       GFP_KERNEL);
- =09if (!entries)
- =09=09return -ENOMEM;
-@@ -2803,6 +2830,66 @@ static int pmbus_init_debugfs(struct i2c_client *cli=
-ent,
- =09=09=09=09=09    &entries[idx++],
- =09=09=09=09=09    &pmbus_debugfs_ops);
- =09=09}
-+
-+=09=09if (pmbus_check_byte_register(client, i, PMBUS_MFR_ID)) {
-+=09=09=09entries[idx].client =3D client;
-+=09=09=09entries[idx].page =3D i;
-+=09=09=09entries[idx].reg =3D PMBUS_MFR_ID;
-+=09=09=09scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_id", i);
-+=09=09=09debugfs_create_file(name, 0444, data->debugfs,
-+=09=09=09=09=09    &entries[idx++],
-+=09=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09=09}
-+
-+=09=09if (pmbus_check_byte_register(client, i, PMBUS_MFR_MODEL)) {
-+=09=09=09entries[idx].client =3D client;
-+=09=09=09entries[idx].page =3D i;
-+=09=09=09entries[idx].reg =3D PMBUS_MFR_MODEL;
-+=09=09=09scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_model", i);
-+=09=09=09debugfs_create_file(name, 0444, data->debugfs,
-+=09=09=09=09=09    &entries[idx++],
-+=09=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09=09}
-+
-+=09=09if (pmbus_check_byte_register(client, i, PMBUS_MFR_REVISION)) {
-+=09=09=09entries[idx].client =3D client;
-+=09=09=09entries[idx].page =3D i;
-+=09=09=09entries[idx].reg =3D PMBUS_MFR_REVISION;
-+=09=09=09scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_revision", i);
-+=09=09=09debugfs_create_file(name, 0444, data->debugfs,
-+=09=09=09=09=09    &entries[idx++],
-+=09=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09=09}
-+
-+=09=09if (pmbus_check_byte_register(client, i, PMBUS_MFR_LOCATION)) {
-+=09=09=09entries[idx].client =3D client;
-+=09=09=09entries[idx].page =3D i;
-+=09=09=09entries[idx].reg =3D PMBUS_MFR_LOCATION;
-+=09=09=09scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_location", i);
-+=09=09=09debugfs_create_file(name, 0444, data->debugfs,
-+=09=09=09=09=09    &entries[idx++],
-+=09=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09=09}
-+
-+=09=09if (pmbus_check_byte_register(client, i, PMBUS_MFR_DATE)) {
-+=09=09=09entries[idx].client =3D client;
-+=09=09=09entries[idx].page =3D i;
-+=09=09=09entries[idx].reg =3D PMBUS_MFR_DATE;
-+=09=09=09scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_date", i);
-+=09=09=09debugfs_create_file(name, 0444, data->debugfs,
-+=09=09=09=09=09    &entries[idx++],
-+=09=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09=09}
-+
-+=09=09if (pmbus_check_byte_register(client, i, PMBUS_MFR_SERIAL)) {
-+=09=09=09entries[idx].client =3D client;
-+=09=09=09entries[idx].page =3D i;
-+=09=09=09entries[idx].reg =3D PMBUS_MFR_SERIAL;
-+=09=09=09scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_serial", i);
-+=09=09=09debugfs_create_file(name, 0444, data->debugfs,
-+=09=09=09=09=09    &entries[idx++],
-+=09=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09=09}
- =09}
-
- =09return devm_add_action_or_reset(data->dev,
---
-2.25.1
+------- Original Message -------
+On Wednesday, April 20th, 2022 at 16:15, Guenter Roeck <linux@roeck-us.net>=
+ wrote:
 
 
+>
+>
+> On 4/20/22 06:58, wujek dev wrote:
+>
+> > ------- Original Message -------
+> > On Wednesday, April 20th, 2022 at 15:53, Guenter Roeck linux@roeck-us.n=
+et wrote:
+> >
+> > > On 4/20/22 05:22, Adam Wujek wrote:
+> > >
+> > > > Add registers to debugfs:
+> > > > PMBUS_MFR_ID
+> > > > PMBUS_MFR_MODEL
+> > > > PMBUS_MFR_REVISION
+> > > > PMBUS_MFR_LOCATION
+> > > > PMBUS_MFR_DATE
+> > > > PMBUS_MFR_SERIAL
+> > > >
+> > > > Signed-off-by: Adam Wujek dev_public@wujek.eu
+> > >
+> > > Where is patch 1/2, and why did you resend this patch ?
+> >
+> > There should be no "1/2" since this and the second patch are unrelated.
+> > I resend it because I rebased it on master.
+>
+> Please provide change logs and version your patches in the future.
+ok, thank you for your patience.
+>
+> > Adam
+> >
+> > > Guenter
+> > >
+> > > > ---
+> > > > drivers/hwmon/pmbus/pmbus_core.c | 84 +++++++++++++++++++++++++++++=
++++
+> > > > 1 file changed, 84 insertions(+)
+> > > >
+> > > > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus=
+/pmbus_core.c
+> > > > index 0af7a3d74f47..1dc186780ccf 100644
+> > > > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > > > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > > > @@ -2625,6 +2625,30 @@ static int pmbus_debugfs_get_status(void *da=
+ta, u64 *val)
+> > > > DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_ge=
+t_status,
+> > > > NULL, "0x%04llx\n");
+> > > >
+> > > > +static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __us=
+er *buf,
+> > > > + size_t count, loff_t *ppos)
+> > > > +{
+> > > > + int rc;
+> > > > + struct pmbus_debugfs_entry *entry =3D file->private_data;
+> > > > + char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
+> > > > +
+> > > > + rc =3D i2c_smbus_read_block_data(entry->client, entry->reg, data)=
+;
+> > > > + if (rc < 0)
+> > > > + return rc;
+> > > > +
+> > > > + data[rc] =3D '\n';
+> > > > + rc +=3D 2;
+>
+>
+> Why +2 ?
+>
+Copied from another driver.
++1 due to '\n'
++1 due to NULL character (smbus block transfer does not include it in the l=
+ength)
+Explanation included in v3 patch.
+> > > > +
+> > > > + return simple_read_from_buffer(buf, count, ppos, data, rc);
+> > > > +}
+> > > > +
+> > > > +static const struct file_operations pmbus_debugfs_ops_mfr =3D {
+> > > > + .llseek =3D noop_llseek,
+> > > > + .read =3D pmbus_debugfs_mfr_read,
+> > > > + .write =3D NULL,
+> > > > + .open =3D simple_open,
+> > > > +};
+> > > > +
+> > > > static int pmbus_debugfs_get_pec(void *data, u64 *val)
+> > > > {
+> > > > struct i2c_client *client =3D data;
+> > > > @@ -2801,6 +2825,66 @@ static int pmbus_init_debugfs(struct i2c_cli=
+ent *client,
+> > > > &entries[idx++],
+> > > > &pmbus_debugfs_ops);
+> > > > }
+> > > > +
+> > > > + if (pmbus_check_byte_register(client, i, PMBUS_MFR_ID)) {
+> > > > + entries[idx].client =3D client;
+> > > > + entries[idx].page =3D i;
+> > > > + entries[idx].reg =3D PMBUS_MFR_ID;
+> > > > + scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_id", i);
+> > > > + debugfs_create_file(name, 0444, data->debugfs,
+> > > > + &entries[idx++],
+> > > > + &pmbus_debugfs_ops_mfr);
+> > > > + }
+>
+>
+> You are adding several debugfs entries without increasing the size
+> of the entries array. That means that up to 16 debugfs entries are
+> now created into an array of size 10. That won't work.
+You're right, I just sent another patch.
+
+Adam
+>
+> Guenter
