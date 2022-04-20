@@ -2,86 +2,144 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BFAC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 16:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B9E6C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Apr 2022 21:37:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351569AbiDTQya (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Apr 2022 12:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S1382546AbiDTVkQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Apr 2022 17:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241525AbiDTQy3 (ORCPT
+        with ESMTP id S1382542AbiDTVkN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:54:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE03E5C4;
-        Wed, 20 Apr 2022 09:51:42 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 69A1B25B;
-        Wed, 20 Apr 2022 18:51:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650473500;
-        bh=iIo4wLto1vt5xoR+vGrIeQIO5gQyyzd0m3pIes+f0P8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kuWG1e3EhoCr5f8oYRJIveR56YEojMLFSq8leqiLfDLJDfrpbdcdRZdVjnxvVCXtZ
-         Cq0rHLkM/95EmxlsrfKHHxOw+iWY8+mE2ZVGDMlG5QeNWiimdjpmJ6ndcoJGEOnk0i
-         Dl99SQywbYmvNQO8Xkz+kEn7XRAYXd2cM/jJh7yA=
-Date:   Wed, 20 Apr 2022 19:51:41 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        Wed, 20 Apr 2022 17:40:13 -0400
+Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053035DEA
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 Apr 2022 14:37:24 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 21:37:16 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
+        s=protonmail2; t=1650490642;
+        bh=IMTEaCLkX65EaOGDF8JEGvzDdRQQF9214T4nBiguiKA=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=ePdmDlESgtZYOn3SVJgnY+HTI5tLpqwuJC6rjIBU3Evzfr+CBpKHv1LlcSqwUL336
+         z/2C0R71UmbKSB/fXKC0AzuC+R5sjYLu6Q6/XDx1L+VpehWoce5g8nX3vJ5ecMYxEl
+         zBo2zh7NSFzxGQDAxWQmrb0mmNsNuSDxk2MwRgPbqja9iq7qcX5OSaBK4+otix7S8d
+         GqDDmNv/NsPvPANg+XZlZvv8opgCdgJBbgfS1S3lfLHg1pzcHg2SYf1nOIEcs6LY5a
+         AOpeoiAbtxPScvzjAiERQ7j0i0Cm9s5QLVMxMLGCZN67aSwLPxz6nE4lBt3ll0hNQf
+         Hd2rRvlC+iUGQ==
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media@vger.kernel.org, alain.volmat@foss.st.com,
-        hugues.fruchet@foss.st.com, sylvain.petinot@foss.st.com,
-        dave.stevenson@raspberrypi.com, sakari.ailus@linux.intel.com,
-        kieran.bingham@ideasonboard.com, linux-hwmon@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: [PATCH v2 2/5] media: v4l: ctrls: Add a control for temperature
-Message-ID: <YmA6HbHybCkhTYFH@pendragon.ideasonboard.com>
-References: <d4c868d5ef05f338bdc2237d9b9304077d268c8b.camel@ndufresne.ca>
- <3a4fad80-b16a-3780-a0f7-41dd6c80689e@roeck-us.net>
- <Yl8jF1KLzP6YO6t+@pendragon.ideasonboard.com>
- <1c700e5b-5bf2-f0eb-78f3-12290fd88234@roeck-us.net>
- <dec71c79-3141-8dcf-6d37-8495f4b7c7e9@foss.st.com>
- <YmAI3QVSPMq3mR7E@pendragon.ideasonboard.com>
- <76789333-bb0b-fcc2-6ba9-ab01c9aab62a@roeck-us.net>
- <YmAXd5F2Rm/VDIb5@pendragon.ideasonboard.com>
- <8b8aa915-d08c-9cc6-fc01-2f062a79b078@foss.st.com>
- <57bb64db-9273-0e52-cf6d-0c7ff172ddde@roeck-us.net>
+From:   wujek dev <dev_public@wujek.eu>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: wujek dev <dev_public@wujek.eu>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus) add MFR_* registers to debugfs
+Message-ID: <Z-u0ylwQsRp0ZsoUL7G1kVcTsQy3yh6ozr4hWbv5ZsV16SIq_rQ6LlVHGWTpJwGubIyzYsmEyPoDkgVrvNgT8bQFTxldAk5oadd-2tuumsY=@wujek.eu>
+In-Reply-To: <1b12cb3a-3d87-8254-b229-dcf83ad0bc0a@roeck-us.net>
+References: <20220419215326.309991-1-dev_public@wujek.eu> <20220420122128.411757-1-dev_public@wujek.eu> <f34ec7ac-7b34-6d98-25ad-31b13fe08c59@roeck-us.net> <PFzjnraIDClF6umMOqlCKCzxG6q5lIhBLHpynRA6juh6gXSp5Y7SLPpzXZGNU6L7OGCEwl_F-niJn1jTflifWnqm9PX3Rcfqbtdo6rmPAT4=@wujek.eu> <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net> <Liq6d7nBil1lQx274diOvpjRJ9cEYH6co7ZMjrudPfYn0TTzOsfqsjuVBK-pMpFF5nBC0jhuoFEtbtmUY4Td4uY-a4qn6j-OmQD-Qu_xdck=@wujek.eu> <1b12cb3a-3d87-8254-b229-dcf83ad0bc0a@roeck-us.net>
+Feedback-ID: 23425257:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <57bb64db-9273-0e52-cf6d-0c7ff172ddde@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 09:19:53AM -0700, Guenter Roeck wrote:
-> On 4/20/22 08:19, Benjamin Mugnier wrote:
-> [ ... ]
-> >>
-> >> It's the two most common use cases for imaging sensor temperature
-> >> measurements that I know of. My question to Benjamin is if he has the
-> >> same and/or other use cases.
-> >>
-> > 
-> > Just like you said in a previous mail. This temperature sensor can
-> > be used to implement a retroactive loop from the host according to
-> > its value, such as noise correction for instance.
-> > We don't have anything in the Linux user space that implements this
-> > yet, this was in anticipation.
-> > So dropping it is fine, I will come back to it if need be ;)
-> 
-> When you implement this in userspace, you might want to consider situations
-> where the temperature is _not_ reported via media controls (which might
-> at least in theory happen if the temperature sensor is not part of the
-> v4l device), or for existing drivers with hwmon support
-> (drivers/media/i2c/video-i2c.c comes into mind).
+------- Original Message -------
+On Wednesday, April 20th, 2022 at 18:06, Guenter Roeck <linux@roeck-us.net>=
+ wrote:
 
-That's a good point. I wouldn't expect external temperature sensors to
-be very useful for this use case though, as what we really need is the
-temperature of the camera sensor die.
 
--- 
-Regards,
+>
+>
+> On 4/20/22 08:51, wujek dev wrote:
+>
+> > ------- Original Message -------
+> > On Wednesday, April 20th, 2022 at 16:15, Guenter Roeck linux@roeck-us.n=
+et wrote:
+> >
+> > > On 4/20/22 06:58, wujek dev wrote:
+> > >
+> > > > ------- Original Message -------
+> > > > On Wednesday, April 20th, 2022 at 15:53, Guenter Roeck linux@roeck-=
+us.net wrote:
+> > > >
+> > > > > On 4/20/22 05:22, Adam Wujek wrote:
+> > > > >
+> > > > > > Add registers to debugfs:
+> > > > > > PMBUS_MFR_ID
+> > > > > > PMBUS_MFR_MODEL
+> > > > > > PMBUS_MFR_REVISION
+> > > > > > PMBUS_MFR_LOCATION
+> > > > > > PMBUS_MFR_DATE
+> > > > > > PMBUS_MFR_SERIAL
+> > > > > >
+> > > > > > Signed-off-by: Adam Wujek dev_public@wujek.eu
+> > > > >
+> > > > > Where is patch 1/2, and why did you resend this patch ?
+> > > >
+> > > > There should be no "1/2" since this and the second patch are unrela=
+ted.
+> > > > I resend it because I rebased it on master.
+> > >
+> > > Please provide change logs and version your patches in the future.
+> > > ok, thank you for your patience.
+> > >
+> > > > Adam
+> > > >
+> > > > > Guenter
+> > > > >
+> > > > > > ---
+> > > > > > drivers/hwmon/pmbus/pmbus_core.c | 84 +++++++++++++++++++++++++=
++++++++
+> > > > > > 1 file changed, 84 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/p=
+mbus/pmbus_core.c
+> > > > > > index 0af7a3d74f47..1dc186780ccf 100644
+> > > > > > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > > > > > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > > > > > @@ -2625,6 +2625,30 @@ static int pmbus_debugfs_get_status(void=
+ *data, u64 *val)
+> > > > > > DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugf=
+s_get_status,
+> > > > > > NULL, "0x%04llx\n");
+> > > > > >
+> > > > > > +static ssize_t pmbus_debugfs_mfr_read(struct file *file, char =
+__user *buf,
+> > > > > > + size_t count, loff_t *ppos)
+> > > > > > +{
+> > > > > > + int rc;
+> > > > > > + struct pmbus_debugfs_entry *entry =3D file->private_data;
+> > > > > > + char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
+> > > > > > +
+> > > > > > + rc =3D i2c_smbus_read_block_data(entry->client, entry->reg, d=
+ata);
+> > > > > > + if (rc < 0)
+> > > > > > + return rc;
+> > > > > > +
+> > > > > > + data[rc] =3D '\n';
+> > > > > > + rc +=3D 2;
+> > >
+> > > Why +2 ?
+> >
+> > Copied from another driver.
+> > +1 due to '\n'
+> > +1 due to NULL character (smbus block transfer does not include it in t=
+he length)
+> > Explanation included in v3 patch.
+>
+>
+> "copied from another driver" is not really a good argument.
+> That other driver might just be buggy.
+yes, you're right. There is a bug in that driver.
+>
+> What do you see in userspace when you read the data ? A string that ends =
+with
+> "\n\0" ? If so, does the "\0" at the end add any value ?
+I confirm I see "\n\0". I will fix it right now. Thank you for pointing it =
+out.
 
-Laurent Pinchart
+Adam
+>
+> Guenter
