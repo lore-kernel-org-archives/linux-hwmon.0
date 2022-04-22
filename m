@@ -2,107 +2,144 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3038BC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Apr 2022 11:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EAF7C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Apr 2022 13:27:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447043AbiDVLU5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 22 Apr 2022 07:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S1447970AbiDVNak (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Apr 2022 09:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446968AbiDVLU4 (ORCPT
+        with ESMTP id S1447968AbiDVNaj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:20:56 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04205522E;
-        Fri, 22 Apr 2022 04:18:03 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so5191585wmn.1;
-        Fri, 22 Apr 2022 04:18:03 -0700 (PDT)
+        Fri, 22 Apr 2022 09:30:39 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57572583B3;
+        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id s16so9081805oie.0;
+        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=E3YdBQ9ZpUopjYmYV/AL6HV3xZl2rS2yg2Mb52GJV7Q=;
-        b=nkyNKt4eBIl//eJdsh1820+smxOo7ndBFZWYoUO4KpZxHQUFjPq7Y9M+qy1cgXn4EX
-         MSJTY2PyuuV86lP6b9oeziMOg8qgbFvVDApu/wgt+FdQDrFypLh2/y8BsGqzuuRGOOFz
-         rsESX5ni0wfbDYJfYQw5+HycoWtTQHiiBTp35+9ha4HZoIO+rXwQeTze1i2kLw8lpOpJ
-         EXnRQfoj5ZL4lwmTXb+qaNQ/+39Aljtl+WTqGJ1gtBjSlBkYUH5RW3vfnBSvAvN1SfBi
-         0yy3ywXYMDReJs6e7Zw8Eta841YHry42TnFNUKeKVZiTtWNiNXinXz1FcxPeAcA3oDHw
-         acUQ==
+        bh=7wD/67zFN01OLjk/4ayvCobKKh+EpoxVKPJMMkQWRKI=;
+        b=cHmV5J4YqPlLXRoviT4VhtrfOzmgaQtvuq3zeGMbQrXja5Cp481sDGvN5TiVtmve48
+         v8dHMZGXsmi0kLN76djZKrxStvINgxF8l1Z3/cm6Pij73tlg7u966jf57MhMel4hFYJ3
+         sYsXiouAZKYCeyY7ogUNIqmcmcF5K+V4j3au6OkS0o9PC9VArkWISnEXsJ2knO0mAk4m
+         qvFQcRDC1h0vROh/Ya4dDQM7bhKLyH7UkxkWvY9+gMi/JQfuo6kJAUlMD5uYJOWYaGpn
+         kEnrkMpaq0TjGsASQlKH9/0SiHrnq6BdwyqZk0v1zDv6/cT+2kxuVE4E3H4mj3XXiD0z
+         kGww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=E3YdBQ9ZpUopjYmYV/AL6HV3xZl2rS2yg2Mb52GJV7Q=;
-        b=VoWj16L54R2r5nWNpAHofgRwQ1GlJDAEnILKlF+P6JMdC0auODYhiwBoDXFOGUx+Sv
-         f5kwL7JAtX3XdohCE9GifZCQJkaZf6sufdaBpw+4mLlGNu+vKfwHe3rKFKfYfwEZpMQY
-         aO4Ur3QYtVkTpVdE+dNgF3ILQaq4amMwvliCA4f5Hmwv4NdxcYxzFhU78FnLnlVjWdWa
-         Ha6J98FVE11qvvNAOw9lIFGNDwb8Uz/E0nwJoqvZZjk8mQ8QH382213/A2LgSqbVBM6y
-         tmpTkz40AlJlMkW33TFoJ+pUCG7S9Q1R3rgpmSsUtpOZBFaO7sK755gmi+l3gPbIOExa
-         lIYQ==
-X-Gm-Message-State: AOAM530YD3X8yGCop0+RabHxegDge5K0J/1/wGFafpDZkymNjvhuLMvO
-        r0S5iPbxmicr7URzNBmgSiijeDgsVFX9lJQ+R2M=
-X-Google-Smtp-Source: ABdhPJz1e2qfHdhk5/SVdMNtSCPg/MNFaNzWF7/TZN+8XPF1HwnfVx+2826zT6EJr/A/ZG7UUFM+TQ==
-X-Received: by 2002:a05:600c:2306:b0:38e:bf1a:a669 with SMTP id 6-20020a05600c230600b0038ebf1aa669mr12696223wmo.11.1650626282193;
-        Fri, 22 Apr 2022 04:18:02 -0700 (PDT)
-Received: from tiger.museclub.art (p200300cf9f2ead004e4488e67f4bd086.dip0.t-ipconnect.de. [2003:cf:9f2e:ad00:4e44:88e6:7f4b:d086])
-        by smtp.googlemail.com with ESMTPSA id u4-20020a5d6da4000000b0020a8c8d3e00sm1513328wrs.73.2022.04.22.04.18.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 04:18:01 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add ProArt X570 Creator WIFI board
-Date:   Fri, 22 Apr 2022 13:17:37 +0200
-Message-Id: <20220422111737.1352610-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=7wD/67zFN01OLjk/4ayvCobKKh+EpoxVKPJMMkQWRKI=;
+        b=VhVFMWTnhlgsEcn1R1TjsjXxFe0QyJqhiwaji9rYQuQjbGStLvTMTinNcDk+wUO8ix
+         k4OIqJ1JIF0gQd/owhYR1HMYLlEVdfkzG96arNYi/TI12ppHGYFY0kBtya+jLuJaspYS
+         TN5U9CyTndMJRJjVjZT9i6K/qRrqGVOcOq76JBqsy7e+WZgyqYypRKAzf7on+b9g0QSK
+         De0JbqOWjBCC+soqeyRzmO6gLLtwrXLpYTDEh6h8vdiDkW6cAogjuBvY7C08Gbll1Esy
+         KbLUQgPVkzPucGk96WmJBwezXvYYNrPIPKcln+/ZcHabworAS5D7vv3Q/yGbIhjU9zp9
+         TAsA==
+X-Gm-Message-State: AOAM532PHepwFk34EtYLBIBenDMj8SdIVjFrq9p7g2jEVxJve5pZwxT8
+        c65NshihBPhv5opW3zjM5GM=
+X-Google-Smtp-Source: ABdhPJxHjKtY6ERH3y1gOTMOcM1o8bf8FqSjwSMj7qG2kbasaAzJuxduFyyUS72VE+pRqoAjXS6WLw==
+X-Received: by 2002:a05:6808:130f:b0:323:1fd5:f381 with SMTP id y15-20020a056808130f00b003231fd5f381mr2968287oiv.121.1650634065336;
+        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a11-20020a056830008b00b0060546411473sm705186oto.75.2022.04.22.06.27.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 06:27:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3896f884-56d9-d0d9-efe6-839c7431e6de@roeck-us.net>
+Date:   Fri, 22 Apr 2022 06:27:41 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 00/20] hwmon: check return value after calling
+ platform_get_resource()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com
+References: <20220422091207.4034406-1-yangyingliang@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220422091207.4034406-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Basing on information and testing provided by users [1] add support for
-another board, ASUS ProArt X570 Creator WiFi.
+On 4/22/22 02:11, Yang Yingliang wrote:
+> This patcheset add check after calling platform_get_resource to avoid null-ptr-deref
+> in drivers/hwmon/.
+> 
+> Yang Yingliang (20):
+>    hwmon: (abituguru) check return value after calling
+>      platform_get_resource()
+>    hwmon: (abituguru3) check return value after calling
+>      platform_get_resource()
+>    hwmon: (dme1737) check return value after calling
+>      platform_get_resource()
+>    hwmon: (f71805f) check return value after calling
+>      platform_get_resource()
+>    hwmon: (f71882fg) check return value after calling
+>      platform_get_resource()
+>    hwmon: (it87) check return value after calling platform_get_resource()
+>    hwmon: (lm78) check return value after calling platform_get_resource()
+>    hwmon: (nct6683) check return value after calling
+>      platform_get_resource()
+>    hwmon: (nct6775) check return value after calling
+>      platform_get_resource()
+>    hwmon: (sch5627) check return value after calling
+>      platform_get_resource()
+>    hwmon: (sch5636) check return value after calling
+>      platform_get_resource()
+>    hwmon: (sis5595) check return value after calling
+>      platform_get_resource()
+>    hwmon: (smsc47b397) check return value after calling
+>      platform_get_resource()
+>    hwmon: (smsc47m1) check return value after calling
+>      platform_get_resource()
+>    hwmon: (via686a) check return value after calling
+>      platform_get_resource()
+>    hwmon: (vt1211) check return value after calling
+>      platform_get_resource()
+>    hwmon: (vt8231) check return value after calling
+>      platform_get_resource()
+>    hwmon: (w83627ehf) check return value after calling
+>      platform_get_resource()
+>    hwmon: (w83627hf) check return value after calling
+>      platform_get_resource()
+>    hwmon: (w83781d) check return value after calling
+>      platform_get_resource()
+> 
+>   drivers/hwmon/abituguru.c  | 6 +++++-
+>   drivers/hwmon/abituguru3.c | 6 +++++-
+>   drivers/hwmon/dme1737.c    | 2 ++
+>   drivers/hwmon/f71805f.c    | 2 ++
+>   drivers/hwmon/f71882fg.c   | 6 +++++-
+>   drivers/hwmon/it87.c       | 2 ++
+>   drivers/hwmon/lm78.c       | 2 ++
+>   drivers/hwmon/nct6683.c    | 2 ++
+>   drivers/hwmon/nct6775.c    | 2 ++
+>   drivers/hwmon/sch5627.c    | 6 +++++-
+>   drivers/hwmon/sch5636.c    | 6 +++++-
+>   drivers/hwmon/sis5595.c    | 2 ++
+>   drivers/hwmon/smsc47b397.c | 2 ++
+>   drivers/hwmon/smsc47m1.c   | 2 ++
+>   drivers/hwmon/via686a.c    | 2 ++
+>   drivers/hwmon/vt1211.c     | 2 ++
+>   drivers/hwmon/vt8231.c     | 2 ++
+>   drivers/hwmon/w83627ehf.c  | 2 ++
+>   drivers/hwmon/w83627hf.c   | 2 ++
+>   drivers/hwmon/w83781d.c    | 2 ++
+>   20 files changed, 55 insertions(+), 5 deletions(-)
+> 
 
-[1] https://github.com/zeule/asus-ec-sensors/issues/17
+This series solves a problem which does not exist in reality and is only theoretic.
+The devices are instantiated from their init functions which always adds the resource.
+Please do not submit such patches.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- drivers/hwmon/asus-ec-sensors.c         | 5 +++++
- 2 files changed, 6 insertions(+)
-
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index e7e8f1640f45..b3469851ab9a 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -6,6 +6,7 @@ Kernel driver asus_ec_sensors
- Supported boards:
-  * PRIME X570-PRO,
-  * Pro WS X570-ACE,
-+ * ProArt X570-CREATOR WIFI
-  * ROG CROSSHAIR VIII DARK HERO,
-  * ROG CROSSHAIR VIII HERO (WI-FI)
-  * ROG CROSSHAIR VIII FORMULA,
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 3ad8eadea68f..e3d794fb0534 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -176,6 +176,11 @@ static const struct dmi_system_id asus_ec_dmi_table[] __initconst = {
- 	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "PRIME X570-PRO",
- 		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
- 		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
-+	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-+			      "ProArt X570-CREATOR WIFI",
-+		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-+		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
-+		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
- 	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "Pro WS X570-ACE",
- 		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
- 		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
--- 
-2.35.1
-
+Guenter
