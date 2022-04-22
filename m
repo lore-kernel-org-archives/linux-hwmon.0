@@ -2,26 +2,26 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85907C433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Apr 2022 02:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 180B4C4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Apr 2022 02:47:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443568AbiDVCup (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Apr 2022 22:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S1443558AbiDVCur (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Apr 2022 22:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443552AbiDVCul (ORCPT
+        with ESMTP id S1443571AbiDVCuq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:50:41 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2101.outbound.protection.outlook.com [40.107.236.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF6D4CD64;
-        Thu, 21 Apr 2022 19:47:45 -0700 (PDT)
+        Thu, 21 Apr 2022 22:50:46 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2095.outbound.protection.outlook.com [40.107.220.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E5A4C7B7;
+        Thu, 21 Apr 2022 19:47:55 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=icIkpMBmjkfhWvC17H2Zur1VKAL4PKcer75X0CiiRa0x7jqiaB6D/ihh034/8XGMGfPI3RW/GbXqustHkMuDGRMxVh2oUadwM3yD63EOQDq6aBpnq0Ci/hIdL+u6QDwh/2VEiezyFC+nCIpqwjzPc4iLojYccDRJUgNAnkO2WoaQ6bWWtUkWW0xCKlnxGmOW/p/BN8lrONox0Wc9kw5Qqz4MyS0lkm+saabURMC9fBqNCqBBSE61gn/XQyJPdebfmWaKY96IwCPaEpqlrwed1oNr14shw4g52MVK9cpdmUB8OCI64ku1fSODT5QmmHa0NRNHJexYINEZRpO2Ewv7FA==
+ b=QyqD8P7Y7WS0pZ2o0diBWPEqwq/DJN1XbKx5e2uMCz62Z5dKXkR40wrc+k6pCPSblBsdCN7InmK5eCfTk3JO0Z9b3LWHEiK+mYGIYDrfR86WOYUSCggbCAL/ICJ9rwglSMU8Uz6Z1bupz+eqE1aKcwh9L4bagu4cF1hvuqPYZ25R4xoHQhXjGGmYyJ23wP72LPotywsf59oLzj0TVd77KFdPC2sD3ikP+z2PsFk/0vw1qZ8tMhsQfHP90sbFH8XdwRRvuoqjm37ofFmPTFJ+1e5cBu7uke31c9NPe2V6oHff30V47Ao0upv5H+E1N+gfg9XdRHc/H3sB2RcxUMe5gw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yt3vnavLIGqOeRC0xyxPDzQAqgQPRKlMeBB6U7bCiEg=;
- b=jSSbdIGq2MkOkldj3auxOM6CE/XW8+MnANP4FBQbejwVWN84Zg5+c2KN6rGhSW3oCLqUaiax5I3SETHkEjP/zrtxC5EFvNrOKTw1EhOrk32xJGGJ/+ILxWhSU4l7b+H97eSCocEAb1OzoFYQA5LEb14YuS+GKTkuklpsRddaZCv4x/im6GOYFJDpkuYpKMzY9VKAKjNzyMbjGYOQeeY4vsRrt8FkWEsDMPI0FY/yGiZlC2KdAzudp35zYWPoXO+OWQi+0INU+9B4nqPvscSBvxTD0r8HZSRbkTgFL3U5HnQyo0HQV8EvPa4rS+l4XlMZu/LuT6ZcDkY8R51XedZqOw==
+ bh=HnrAO+TUBaGQrq9QXlzH6zS1QhvA1MVma3bRyO3j2B8=;
+ b=kuauGSgh946v5fpkvvw1t++nAL9KqsJs2fz0U8U1vo2DaxA/+IL/lDk5d6/rDDOM8UMBwBr/7O3hi0HhX+JBfUzjoBnVZbskb1ZPwubXNkEeNg1ULjvey5/0FpHpi1GlDinQZctCLDS2f8gjGlSeVkFFVjm5uaKKK+RhTc/CFcKTjddTgKyvumPjZo/kgKkEPaIAsuLGTcgSvIhHiEJIS+9FWvpB8smy92ZFpA+FmemmWrzR0Ra0VWJZ8xjVFL3LYzZh86elqgqZjPpYpIdJYMnWnqd4qaPJmkvMd45L5VTCoZq/ePUngmVFlLC2Y4KadsTWggWQ5CFLj9edHlRMpQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -29,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yt3vnavLIGqOeRC0xyxPDzQAqgQPRKlMeBB6U7bCiEg=;
- b=H5oavFUE/Lr4nK92bvJa0Ki3sWH12Mz2uL1SfDrTr7jjXuGk0nicMHCUSRDrV0S+YZ3vN5KPkgcajHgJo/4ekIPeQJcPoAKypVEn8DoizbfFOfoZjC1KDv84DnL+u7uCzfVQYC4C34BqIZxgSEikeBZ1eGM8XhQOBiW/ifVmeEw=
+ bh=HnrAO+TUBaGQrq9QXlzH6zS1QhvA1MVma3bRyO3j2B8=;
+ b=SXNoAiSFcR6kaFvEoLi5g4BJznCFAUE5PNK6ulTgkf3Ks3JQz3jttAAW8Zj5G715nxGriuVmeZrCir9Aa/ZvPc2i2Us1eaHg9NopObIpnfYSZQu5aaEFvkUwd7HMXCBDt4ZBMYJ8566zmS9crGp75ov2nlsnnTA2L+YwN2Z2HOs=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
 Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
  SN6PR01MB4653.prod.exchangelabs.com (2603:10b6:805:cc::28) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.15; Fri, 22 Apr 2022 02:47:43 +0000
+ 15.20.5186.15; Fri, 22 Apr 2022 02:47:53 +0000
 Received: from SJ0PR01MB7282.prod.exchangelabs.com
  ([fe80::319b:4612:e6f4:f22c]) by SJ0PR01MB7282.prod.exchangelabs.com
  ([fe80::319b:4612:e6f4:f22c%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 02:47:43 +0000
+ 02:47:53 +0000
 From:   Quan Nguyen <quan@os.amperecomputing.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,9 +59,9 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
 Cc:     Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v8 6/9] docs: misc-devices: (smpro-misc) Add documentation
-Date:   Fri, 22 Apr 2022 09:46:50 +0700
-Message-Id: <20220422024653.2199489-7-quan@os.amperecomputing.com>
+Subject: [PATCH v8 8/9] mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD driver
+Date:   Fri, 22 Apr 2022 09:46:52 +0700
+Message-Id: <20220422024653.2199489-9-quan@os.amperecomputing.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220422024653.2199489-1-quan@os.amperecomputing.com>
 References: <20220422024653.2199489-1-quan@os.amperecomputing.com>
@@ -71,179 +71,277 @@ X-ClientProxiedBy: SG2P153CA0023.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::10)
  To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1f7d60c1-e2d9-4c13-1fcf-08da240a7952
+X-MS-Office365-Filtering-Correlation-Id: ebc4b520-bfbc-46e8-e751-08da240a7f42
 X-MS-TrafficTypeDiagnostic: SN6PR01MB4653:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR01MB4653DADCA19B1043E9677AC2F2F79@SN6PR01MB4653.prod.exchangelabs.com>
+X-Microsoft-Antispam-PRVS: <SN6PR01MB46533CF55648611041866596F2F79@SN6PR01MB4653.prod.exchangelabs.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Wh53JkTzVj5mHo8D71GHLARgrA8bG9jmsucyLP1Qv4f4xG1vsxPncEy6qNlv570stZQ+rNA8OeHVddvjHwY1FEku22SIzxiXIGl696o+Sny0ZU/bqRf4ua6/6T9PilXwsEAvCa0iEDUb7gYnqjGXFJWoycxXjePYVhXIJ6tF1buPLU1JH460CFUy5JUz0sYhmDGgBpxuyg/ZqjTmd98Q5f9xkNK68Z2NM4ti00b5mM7La7HKReJ9dqRDeqhKhUSwhhkW5U/xFIzTedUJqsGVv9Z3Klgsr8XP7ZlNIvrrPTs6wF7bmY7um3MFigv7Sb7yLG9jgD8JlcSoswkLAf4NeiEKBeWb3SuATR1+184FUISVkTT8DYX5OF89k/v5Alqd/wkjEcfCAaOu2JfxfjHnSSu8Qc9OubfQfwapV+1tzEnc2MdwfULFF1ySYbaOgKk/wdy/1rHSeCoKfkVVsJ7WXKLG9xbbA3ixmDB/U7mhb3mV9ro7k9szNZzfrqs0WIsLQJeKKm0SjQZsZRUdyn4vKAYc+jAdO21U8lIWCskggcvUkhLt4wUc0UIAoC7k7L0JKq8akb6sLbZqkGZ4ePdwXHEgwGnOu8EJ8001rZNNDM50YJGruYhonSEwjvd8pj7xkseckQDTBJTv+5AALvlpqRHZ+gBLTqDP3jg/49jtIsX0RDuz8OVRYN5FAg+yeQQjzo96vXAAYa5l30FwoNBVdw4pV4bJdcvt5WZAetVQVkU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(6506007)(6512007)(508600001)(54906003)(8936002)(7416002)(66946007)(66476007)(107886003)(8676002)(316002)(110136005)(2616005)(1076003)(6666004)(66556008)(52116002)(186003)(26005)(86362001)(2906002)(5660300002)(921005)(83380400001)(4326008)(38350700002)(38100700002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: atkPWbsP70OLKlO8Wx+27osjFpHNnmgcbhaWtLSdQ4quSXhC7pMoGOkeDdFPqEEKQyerYwTsQbA4B0Z4KceXqSpqSCFjPyqsgcwVRt/oGZHa1wy6pVpqmsN9RWSA/3KvqPNhmfgX6rFD+LE+F4Xopqn8IHKuzjcAEbZEgJu1SLrdNTXvHssp38iT5YVl6RoW3Iv7Z8RpqFvVBtPbRFQYYdtQrVZKv24u1Mq09YHU1dA4JsoC1/Lt8YsfMrFjBWOzxHp6405RLzQze21SkrC5qSQG13lrmZNlbk3cwIKMFUlqhEa81ReWStPtaVdtJHINUV3OMyG2tUobzGs2l/1TJEC617LlKvINipKz47Uk/qe0eVf8A3T9l3/c/oYkprp8UQgGou6OdH8rCKf7KUtZHSD2IYJdMqF+tOi4R4u9mJJmioZHGhtrC2ZkC/h62o+rkApVlycX8DvrKrzpbbmXscvnyeFhCtE9YH9iqO+2nIKTqf7+deWeQr61Gsh4e1Ncv5gSxadymA2zghvxwGyDJkMLklDyMrs3PytExKwbxYH0FEU7OT0eUbTe/S1tXGewES0RtGl+sB4maYusD58VjVKzTx43nKrlpA7ZTZPYlItpDH95iGJUVk+YGNrGvqLjs8TUuIr8G3dRkyfZRfDOxKBatH0mC4cOpru9RQwrlQwkyB01oCoPsBRuwfE8+u6ethjnK6tsJejagvGKtHom0UXRXbKNgIwGdsgyTGDQAj0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(6506007)(6512007)(508600001)(54906003)(8936002)(7416002)(66946007)(66476007)(107886003)(8676002)(316002)(110136005)(2616005)(1076003)(66556008)(52116002)(186003)(26005)(86362001)(2906002)(5660300002)(921005)(83380400001)(4326008)(38350700002)(38100700002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n+R54wh9khlwXMTGjv+x/bGXFZ9/DVEPGB8vq6nBxoEFcTTonkOYp1CDP8SE?=
- =?us-ascii?Q?V17ulD9gpEAP2iY5FM7zOl/2CWHsyh+TvUYn3kXKG3LT5sJxc7x8vyscjAw5?=
- =?us-ascii?Q?avVUIumiF1rbfl2v4YFmGeXSKk5KljWJK8HHA6zjZBTOGUt5KQXhH7LGH8HC?=
- =?us-ascii?Q?FSJiRVempGfexmpWPrZhHGYuCoKo9QbqoBgMAkr2pUAdNlkj8WymGzgoETqs?=
- =?us-ascii?Q?a5P2/9TUCGRiPWDqmyFitUObwq5iKTggMMWfut26w61e9+IDl7JwynK5d/eU?=
- =?us-ascii?Q?o2uEanvz84iO/BzkAz5iUp01lMfx/sFkDDLx73e4XKc/kUuOJXGeMUsFSD7E?=
- =?us-ascii?Q?yMmlOjtsp+gUz13L31vNO1nxq8r34uwGjYSTtMFWdLBtX7evqCPxhmF8cv4y?=
- =?us-ascii?Q?aHfV45aDDcJVjcnz1PdxKI6Ve9Y2McYKbThfWnTyPxjobRV+tI9KaYmUfmCs?=
- =?us-ascii?Q?1fUPuisURU60/L5yvzKZAaDZDfbLmuYvGaOWenfPLPim2oVAOLUpzCAlyEbr?=
- =?us-ascii?Q?eEaaygeOaDJpZl9gwUdRbj30egxPLlAWfvZlZNNdyefK/AFC5vOa8WMN2IgC?=
- =?us-ascii?Q?HKI+Lwa7iMoqtRzxoCb6FKr3cJJ+qEsSUI/ibDYmx3CsXq//iMuXXYogU5PT?=
- =?us-ascii?Q?Kr3Jwl4ZHfRgjPjYp6pH3rFqK9GNvMpYHLUp9USqK+P/VtLbFmKCwExSmkYg?=
- =?us-ascii?Q?T/sr5Ky5CkIaQfR6wxv5/z27EtujgD2OHSlADMmKldgXVWT9SpcCns6LTKyj?=
- =?us-ascii?Q?Zo63rTjJuEdF55emey/QHuVOtePfD7xIw1qC2Urmqh46UWfvoG897NqaNGKh?=
- =?us-ascii?Q?4mbU6iZckYRpjgJdXT3M9LL78HF2k+UeWRRJr0ASnx3KPJg19aIEcKGeoHrV?=
- =?us-ascii?Q?u0KvOCzC4ngsNnZgqsyOTRJjZnTTUYHLc15usRkUJmEon4vdoCvU3AnNvghx?=
- =?us-ascii?Q?5r3ThvMRXAEFDZ9PLQ9dwA1GwweCFaVGffTGKVLRLVF3FWgYHGAegMmYo4W/?=
- =?us-ascii?Q?2WmKWYOyz7N7XlrUrM4uo+e/t1C2vzocfBwX4pIRFdSx2MrtvsPH4zOjtj+M?=
- =?us-ascii?Q?FBI5hLQx7TR0OiHqt7fcYwh/6LUuwV7rwl9qdVwUpzB71z4GejREFEvcdfDc?=
- =?us-ascii?Q?Ih13BrCCDRFH1VNWHdzbqVnxgHpynq4Feg3P2BQLVSmBxd+dq7/XpL0OPzIR?=
- =?us-ascii?Q?rn2uXuJSglDJ7nNCtbzodSW8SEdTE/kPJMwv48oGHIKwEo7AmSbpkVnNbhor?=
- =?us-ascii?Q?Yk3jYVCn04Pga0JsJY2J3fJP6vg5ryb/tx7JgxK2TcF/vf+9XiqXZRMic5Zo?=
- =?us-ascii?Q?Ng5Y9pYkQNyiPj7JlqewX4eXKLMvKuNAJdHljs8F5f3lCXyxHcCirw5bsCHM?=
- =?us-ascii?Q?+D0xlbwH30jrBXSzCby24iFhqV/iyzPy3zC2NbdyuG0CyPlr7qDeNKZO8LW7?=
- =?us-ascii?Q?yeLCG+eBVYARwzhKppn75u1e4/jdlYCLf8nhx9hT+iZ8NCE4qtbK50PvlplW?=
- =?us-ascii?Q?P7l8VvMiBQH2jdgS59Glb12oA1WxlWvuo9FA8XP9q5aPbb0x5WOkF7SKtgxc?=
- =?us-ascii?Q?P63PWF824DDc+bqlBleaUgxEBo5y3exxRPtJKL4jgWAyOS8hXFb6qA6MDoaK?=
- =?us-ascii?Q?KsaZt6ssAn9KI1qDR+QarVUy9DR7Daor77Rm5TczwVS0nxHxE246J5rj5gfG?=
- =?us-ascii?Q?RTMaNK6orWN4HpU+E2DCt+9CTHH8Aa1Mf6Rj29jNxyavb8g6SN7d53qgjiYu?=
- =?us-ascii?Q?IfcdWTfM1w6aD6euj3f+oEXoy++oH10zqgHM9mWRyw8QH4MrQOL9?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YBpn9NkGAAouNRFNaU33in19DEwxBlZoT8ucPsXZNmsdtwd6RojCaaRXaAY+?=
+ =?us-ascii?Q?ODmxY4Q4zBypvE1T6Q3d/d8vCJF75HoUwF6R22ichr2rnXQWGIl+1c8xRsW/?=
+ =?us-ascii?Q?6igdZ4uf+cRsIsvoRBOnUN0ptK5DJnSNkjOXSt43OqpdMIRO2gvr/T3znz/c?=
+ =?us-ascii?Q?p8xI4gXoo+0CiHbwLrmJ0Z/Eo5WKeaG4amUpu9c+IkF4ePZVbN7X1mCEnDww?=
+ =?us-ascii?Q?vzr9V2RLD3UgYIgMhVWTG722lcrin8UZw76n8CycAAfhkKXROed8oTi9rHCw?=
+ =?us-ascii?Q?cg29tfoN1F1m5xWQhTCdLzlTRn0yF/pXixYIzBDelN8Qre7H2zTkGGdOM/+I?=
+ =?us-ascii?Q?HQavcW3KEA622lda1mwpueMOpniwbS6AV4+y+Gsga9NLcKDHhU0icb2lSFZt?=
+ =?us-ascii?Q?bLyLbjEhbyEwvc1F5mIcman0Gi/ICBzXtXhc1rstGpd1R9e7kGuehfxtyFrT?=
+ =?us-ascii?Q?kEipLB5ZhnJJ8be2sITqzI9cjsfptypC8lqcIdS+i+7tHb+oo38GNIc5MPF9?=
+ =?us-ascii?Q?5rTct67gL+5UDiWKDRLOZ3mOBrQRmCm6pQR5uit7fvbFiltfWbIQQN3L/6ud?=
+ =?us-ascii?Q?Gt9wQbBts3Y8lATZEbsyHZzJF0n7yBm4YCdCfQ2OV8ZVc+u8HhrEz69afJVW?=
+ =?us-ascii?Q?0t9mEOQ4ri5mrwsOooRg6HrBdJ0uvAiRfPvNGaG6AlR+h5fRXsPatCk4w5HR?=
+ =?us-ascii?Q?Ni8V7Z8BmBJcW32IrHqldLqCJ0ppIUX1oVzDS0z7EfDDkDwWfuJc3SJFubNK?=
+ =?us-ascii?Q?/4qGQ3p18UoFJTVbXAR2yIVkZ6NOCz/o7Lij3cl1nLEJvPyiwR5eF6bsxeaZ?=
+ =?us-ascii?Q?n+Tayuvdtl2oRwsIDIo8aYFSp/JrJqRQ2QNzvPpGKeZOgD3GCSjVSL9HPLi9?=
+ =?us-ascii?Q?Fpsm1Nts0lrcQpsPS8unlviL4MKtuJUTZeNVFhtF8kLEZb9wMXS+3dhaFy/c?=
+ =?us-ascii?Q?6FfZ00XCeK49vW4K3A8AYHSROQI9JdVpGUSRbW9g2xXiaFjFHHqLr76OJW34?=
+ =?us-ascii?Q?qM/QOvcDQ/uV9JV9mX4i31EZGOhx4l7DIeqsAYhAGjylUF7Axy/TATj4Le7O?=
+ =?us-ascii?Q?6VV54U+L2FfFQsc+h1OXJyou4+j7r98fKrxPzfbgjZXXWrTkEEiHCQQTySJM?=
+ =?us-ascii?Q?NFVU0sca9OKGmSMY7uH/UhkYoiLWgDX0T73CdVxOiQwMggmJYO+Hu8Ra+4Lp?=
+ =?us-ascii?Q?iqnRYC9FqA7ZKfS7sugK7qeaVXyVZ0aw8mAnp23yOitlz8uxMRNK/J9Sl80b?=
+ =?us-ascii?Q?H5Q0CucdzcJDtFLEVuCgvNvTX12tPzaTJm3xge8+pRw5d+jNcElbqwRvHOwx?=
+ =?us-ascii?Q?tyyfyLBrMK6U4unUdMEiM0SjdJUn5OWFZoT+Jy95vltByR/yce1D/1Qf0m2E?=
+ =?us-ascii?Q?XjTAxTmOv1hAENjBxo2zj/k6KZeB3qMSRGmE9QuhgfGACL+52suCGdnr13Mo?=
+ =?us-ascii?Q?BvbfYmKbNyGksPc/fpaujz8WMjpj4+hlwxkm/XPN5oFCAS+CiKKeVopa+5Mw?=
+ =?us-ascii?Q?97bnGao36yZYfqntYSE/sFGn1BOMQa+d+rmZxqesqAnDf3MZu0X0qrPhmTID?=
+ =?us-ascii?Q?it91j3GbRHhpn0e/M8iV7r6McHWcQ86Iv8l5gw5tY8O8pGae8tFraZMvsweN?=
+ =?us-ascii?Q?6QOsJ+jpoQCLwYx0FVSAE8au0o1p9S36IjpEZkxB18UuTEGmxfkmT6BE5C6i?=
+ =?us-ascii?Q?/eESBZBnEr2Hh2RR4Ay+AG949JuM+hrTuhvJQv0I4EYEN+VxFdxtjfKK7NHG?=
+ =?us-ascii?Q?ddtYUGlEhp767fcsyWU7sXCfIcQjqY5g814vug9IWQgDdZ2xWSzl?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f7d60c1-e2d9-4c13-1fcf-08da240a7952
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebc4b520-bfbc-46e8-e751-08da240a7f42
 X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 02:47:43.2544
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 02:47:53.3147
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GPP7Dyuj4k3q0F5r2Dp9WWB/eHOrApmLslsQRCRMBuOUmrT08P6AjFXtrDAzIRtGHOAgyzwEWfqV8UAlh5SLlUlLFuKIO764uDyjeKh/Ncc=
+X-MS-Exchange-CrossTenant-UserPrincipalName: pROL/w+CLf/ePWcHK9bpCQaBhs6kS2Z5ZJXdV4T9DO3uXWcxIW25RYO5HihsAbZqXnwdZ94GvXYL9AqxCG9FE04ussmAjdQLQkJKvETm+z8=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR01MB4653
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adds documentation for the Ampere(R)'s Altra(R) SMpro misc driver.
+Adds Multi-function devices driver for SMpro co-processor found on the
+Mt.Jade hardware reference platform with Ampere's Altra processor family.
 
-Signed-off-by: Thu Nguyen <thu@os.amperecomputing.com>
 Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 ---
 Changes in v8:
-  + Update to reflect single value per sysfs     [Quan]
-
-Changes in v7:
   + None
 
+Changes in v7:
+  + Smpro-mfd now significant changes in compare with simple-mfd-i2c
+    driver, remove the copyright note about simple-mfd-i2c    [Quan]
+  + Install bus->read/write()  to handle multiple types of bus
+    access.                                                   [Quan]
+  + Update license to MODULE_LICENSE("GPL")                   [Quan]
+  + Add others minor refactor the code                        [Quan]
+
 Changes in v6:
-  + First introduced in v6 [Quan]
+  + Update license part to reflect that this driver is clone from
+  simple-mfd-i2c driver [Quan]
 
- Documentation/misc-devices/index.rst      |  1 +
- Documentation/misc-devices/smpro-misc.rst | 82 +++++++++++++++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 Documentation/misc-devices/smpro-misc.rst
+Changes in v5:
+  + Dropped the use of simple-mfd-i2c driver [Quan]
+  + Introduced drivers/mfd/smpro-mfd.c driver to instantiate
+  sub-devices. This is to avoid DT nodes without resource issue [Quan]
+  + Revised commit message [Quan]
 
-diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-index 7a6a6263cbab..284568eca747 100644
---- a/Documentation/misc-devices/index.rst
-+++ b/Documentation/misc-devices/index.rst
-@@ -27,6 +27,7 @@ fit into other categories.
-    max6875
-    pci-endpoint-test
-    smpro-errmon
-+   smpro-misc
-    spear-pcie-gadget
-    uacce
-    xilinx_sdfec
-diff --git a/Documentation/misc-devices/smpro-misc.rst b/Documentation/misc-devices/smpro-misc.rst
+Changes in v4:
+  + Add "depends on I2C" to fix build issue found by kernel test
+  robot [Guenter]
+
+Changes in v3:
+  + None
+
+Changes in v2:
+  + Used 'struct of_device_id's .data attribute [Lee Jones]
+
+ drivers/mfd/Kconfig     |  12 ++++
+ drivers/mfd/Makefile    |   1 +
+ drivers/mfd/smpro-mfd.c | 134 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 147 insertions(+)
+ create mode 100644 drivers/mfd/smpro-mfd.c
+
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 3b59456f5545..383d0e6cfb91 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -77,6 +77,18 @@ config MFD_AS3711
+ 	help
+ 	  Support for the AS3711 PMIC from AMS
+ 
++config MFD_SMPRO
++	tristate "Ampere Computing MFD SMpro core driver"
++	depends on I2C
++	select MFD_CORE
++	select REGMAP_I2C
++	help
++	  Say yes here to enable SMpro driver support for Ampere's Altra
++	  processor family.
++
++	  Ampere's Altra SMpro exposes an I2C regmap interface that can
++	  be accessed by child devices.
++
+ config MFD_AS3722
+ 	tristate "ams AS3722 Power Management IC"
+ 	select MFD_CORE
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 858cacf659d6..36f8981cc4fd 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -266,6 +266,7 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+ 
+ obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
++obj-$(CONFIG_MFD_SMPRO)		+= smpro-mfd.o
+ obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
+ 
+ obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+diff --git a/drivers/mfd/smpro-mfd.c b/drivers/mfd/smpro-mfd.c
 new file mode 100644
-index 000000000000..7d4123991c5d
+index 000000000000..485c4f89ebd9
 --- /dev/null
-+++ b/Documentation/misc-devices/smpro-misc.rst
-@@ -0,0 +1,82 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
++++ b/drivers/mfd/smpro-mfd.c
+@@ -0,0 +1,134 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Ampere Altra Family SMPro MFD - I2C
++ *
++ * Copyright (c) 2022, Ampere Computing LLC
++ * Author: Quan Nguyen <quan@os.amperecomputing..com>
++ */
 +
-+Kernel driver Ampere(R) Altra(R) SMpro miscellaneous
-+====================================================
++#include <linux/i2c.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_platform.h>
++#include <linux/mfd/core.h>
++#include <linux/regmap.h>
 +
-+Supported chips:
++/* Identification Registers */
++#define MANUFACTURER_ID_REG     0x02
++#define AMPERE_MANUFACTURER_ID  0xCD3A
 +
-+  * Ampere(R) Altra(R)
++static int smpro_mfd_write(void *context, const void *data, size_t count)
++{
++	struct device *dev = context;
++	struct i2c_client *i2c = to_i2c_client(dev);
++	int ret;
 +
-+    Prefix: 'smpro'
++	ret = i2c_master_send(i2c, data, count);
++	if (ret == count)
++		return 0;
++	else if (ret < 0)
++		return ret;
++	else
++		return -EIO;
++}
 +
-+    Reference: Altra SoC BMC Interface Specification
++static int smpro_mfd_read(void *context, const void *reg, size_t reg_size,
++			  void *val, size_t val_size)
++{
++	struct device *dev = context;
++	struct i2c_client *i2c = to_i2c_client(dev);
++	struct i2c_msg xfer[2];
++	unsigned char buf[2];
++	int ret;
 +
-+Author: Thu Nguyen <thu@os.amperecomputing.com>
++	xfer[0].addr = i2c->addr;
++	xfer[0].flags = 0;
 +
-+Description
-+-----------
++	buf[0] = *(u8 *)reg;
++	buf[1] = val_size;
++	xfer[0].len = 2;
++	xfer[0].buf = buf;
 +
-+This driver support the monitoring and configuration of various miscellaneous
-+data provided by Ampere(R) Altra(R) SMpro processor.
-+At this time, these include:
++	xfer[1].addr = i2c->addr;
++	xfer[1].flags = I2C_M_RD;
++	xfer[1].len = val_size;
++	xfer[1].buf = val;
 +
-+  * Reading Boot Progress information
-+  * Configuring SoC Power Limit
++	ret = i2c_transfer(i2c->adapter, xfer, 2);
++	if (ret == 2)
++		return 0;
++	else if (ret < 0)
++		return ret;
++	else
++		return -EIO;
++}
 +
-+Sysfs entries
-+-------------
++static const struct regmap_bus smpro_regmap_bus = {
++	.read = smpro_mfd_read,
++	.write = smpro_mfd_write,
++	.val_format_endian_default = REGMAP_ENDIAN_BIG,
++};
 +
-+1) Boot progress
++static bool smpro_mfd_readable_noinc_reg(struct device *dev, unsigned int reg)
++{
++	return  (reg == 0x82 || reg == 0x85 || reg == 0x92 || reg == 0x95 ||
++		 reg == 0xC2 || reg == 0xC5 || reg == 0xD2 || reg == 0xDA);
++}
 +
-+SMpro misc driver creates the sysfs files ``boot_progress``.
-+The format of ``boot_progress`` file is as below::
++static const struct regmap_config smpro_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 16,
++	.readable_noinc_reg = smpro_mfd_readable_noinc_reg,
++};
 +
-+<boot stage><boot status><boot progress>
++static const struct mfd_cell smpro_devs[] = {
++	MFD_CELL_NAME("smpro-hwmon"),
++	MFD_CELL_NAME("smpro-errmon"),
++	MFD_CELL_NAME("smpro-misc"),
++};
 +
-+Where:
++static int smpro_mfd_probe(struct i2c_client *i2c)
++{
++	const struct regmap_config *config;
++	struct regmap *regmap;
++	unsigned int val;
++	int ret;
 +
-+* Boot stage::
++	config = device_get_match_data(&i2c->dev);
++	if (!config)
++		config = &smpro_regmap_config;
 +
-+    0: SMpro firmware booting.
-+    1: PMpro firmware booting.
-+    2: ATF BL1 firmware booting.
-+    3: DDR initialization.
-+    4: DDR training report status.
-+    5: ATF BL2 firmware booting.
-+    6: ATF BL31 firmware booting.
-+    7: ATF BL32 firmware booting.
-+    8: UEFI firmware booting.
-+    9: OS booting.
++	regmap = devm_regmap_init(&i2c->dev, &smpro_regmap_bus, &i2c->dev, config);
++	if (IS_ERR(regmap))
++		return PTR_ERR(regmap);
 +
-+* Boot status::
++	/* Check for valid ID */
++	ret = regmap_read(regmap, MANUFACTURER_ID_REG, &val);
++	if (ret)
++		return ret;
 +
-+    0: Not started.
-+    1: Started.
-+    2: Complete without error.
-+    3: Failure.
++	if (val != AMPERE_MANUFACTURER_ID)
++		return -ENODEV;
 +
-+* boot progress: 32 bits boot progress code
++	return devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
++				    smpro_devs, ARRAY_SIZE(smpro_devs), NULL, 0, NULL);
++}
 +
-+The sysfs ``boot_progress`` only reports the boot state when the host is booting.
-+If the host is already booted, it returns latest state.
++static const struct of_device_id smpro_mfd_of_match[] = {
++	{ .compatible = "ampere,smpro", .data = &smpro_regmap_config },
++	{}
++};
++MODULE_DEVICE_TABLE(of, smpro_mfd_of_match);
 +
-+Example::
++static struct i2c_driver smpro_mfd_driver = {
++	.probe_new = smpro_mfd_probe,
++	.driver = {
++		.name = "smpro-mfd-i2c",
++		.of_match_table = smpro_mfd_of_match,
++	},
++};
++module_i2c_driver(smpro_mfd_driver);
 +
-+    #cat boot_progress
-+    0102808454A8
-+
-+2) SoC Power Limit
-+
-+SMpro misc driver creates the sysfs file ``soc_power_limit`` to get/set the SoC Power Limit.
-+
-+Reading this sysfs return the current setting of SoC Power Limit (W) in decimal string.
-+Writing the desired value in decimal string to set the SoC Power Limit in Watt (W).
-+The range of SoC Power Limit is 90-500(W) and will be ignored if out of range.
-+
-+Example::
-+
-+    #cat soc_power_limit
-+    90
-+    #echo 95 > soc_power_limit
-+    #cat soc_power_limit
-+    95
++MODULE_AUTHOR("Quan Nguyen <quan@os.amperecomputing.com>");
++MODULE_DESCRIPTION("SMPRO MFD - I2C driver");
++MODULE_LICENSE("GPL");
 -- 
 2.35.1
 
