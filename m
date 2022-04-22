@@ -2,37 +2,64 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E4A9C433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Apr 2022 06:20:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 612B5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Apr 2022 06:27:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381840AbiDVGX1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 22 Apr 2022 02:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
+        id S1444353AbiDVGa3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Apr 2022 02:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444583AbiDVGXP (ORCPT
+        with ESMTP id S1444354AbiDVGa0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:23:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA0015710;
-        Thu, 21 Apr 2022 23:20:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FEB860E98;
-        Fri, 22 Apr 2022 06:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 309E7C385A0;
-        Fri, 22 Apr 2022 06:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650608420;
-        bh=UkX75BGCyuOB6rEboSSssW8QbDcr3wh9/Lr/10Fgdj8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hgRc1qbpYlD6lLac6bl1xs3QS7ZdBNsn9wO9AngxbMJubajdBi2Igs5GbfMFXBVDm
-         ExDkQBqLSG+X0NshsF16c8VSej2IXEpXrF7ULoc1PsifRaIgAjygHtba8izEkuVP+Z
-         h8Ne8319Jq+aphaQn0gX4DnwjMjF+E5kakc+nhLM=
-Date:   Fri, 22 Apr 2022 08:20:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Fri, 22 Apr 2022 02:30:26 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1F750B1A;
+        Thu, 21 Apr 2022 23:27:33 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id t12so8732649pll.7;
+        Thu, 21 Apr 2022 23:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ANMx7UH+NPfrCbf5cBhjV/dhC+h0aHFxPNEZIAsabjU=;
+        b=k5jhh7JuRVyX9TWrpxlSEbEX0Nt171tL79woBXkQhSEowN/D5gl3ReKtH5hmggd+MK
+         A5YYH1IFGTWHZT5qocCGTFO6Hs3IaMYrJEbRQw9xo/qpzIspmZtbKYfLXkNgDV801L/j
+         Tms9s0xRKbQJPkwz8QOlJEJXqN/3cl7IyJIpjEGIgYVDrwZrttXrvPKse+0mQN40gDPM
+         CI670odqJAdu0tIY3ph6lF6nveSmvj5FI8TzhwXsT5lNCygkJqwCE7JhcHhHM/X5MoLP
+         1KBR74mVof1wQs2cXNf6Q/jaaQ7aFQq1RamEDKZAFasSHv/YwA1rbVcCRx/ocaq1ZlYd
+         KKKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ANMx7UH+NPfrCbf5cBhjV/dhC+h0aHFxPNEZIAsabjU=;
+        b=kUVmYHyiQMeeGTEmhrPpDC18OAt8jiE+If955fkcozst+d91op1+mOVQlkpA1JmOcP
+         WKHrjuHRsuJOs6Qno3RseLrUbX1bD7v94X2M/p7nBPult3Qa5T6r9rHHy60LjRtzU0lT
+         KR/BxaaXlxqMwAHi8r3tnfb2GgJqswxXuB0Sp/8rYNOoBZZUHT4O4TlV3c0Fzgv7c3a5
+         r4vILnwVVjRJr5qPRvQOl2ndhqTGmmCT4djZIUHrD9/sT+Z1qg1OPseMpIvTdtCNL1xi
+         eeXLFf52nWtC+qQsrmo8/bcBSiRnYB18NhjsUYF7bWcFXVt7s/tq9qA5SuKfAub0K+Xw
+         Y3Yw==
+X-Gm-Message-State: AOAM530BY2TaUSnoS/WFrFBPWI8nfMsRrH0yxkNPfj/BbScSB92/sI+p
+        n9k54LDd41FSx7H/qbpd0k8=
+X-Google-Smtp-Source: ABdhPJw5TsqA0mzOzghri1mOJpJnumOn+l0EIBtdBgOzXtpDip5iImbMUpnV0AYWewMwJnUqZZtRfg==
+X-Received: by 2002:a17:90b:3ec8:b0:1d3:e8cd:e8f9 with SMTP id rm8-20020a17090b3ec800b001d3e8cde8f9mr3647578pjb.156.1650608852598;
+        Thu, 21 Apr 2022 23:27:32 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-22.three.co.id. [180.214.232.22])
+        by smtp.gmail.com with ESMTPSA id y5-20020a17090a600500b001cd4989ff62sm4808707pji.41.2022.04.21.23.27.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 23:27:32 -0700 (PDT)
+Message-ID: <07155685-3adf-09c8-9a13-6c8249d5fd74@gmail.com>
+Date:   Fri, 22 Apr 2022 13:27:25 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v8 4/9] docs: misc-devices: (smpro-errmon) Add
+ documentation
+Content-Language: en-US
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -40,468 +67,139 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Derek Kiernan <derek.kiernan@xilinx.com>,
         Dragan Cvetic <dragan.cvetic@xilinx.com>,
         Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thu Nguyen <thu@os.amperecomputing.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Open Source Submission <patches@amperecomputing.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v8 3/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Message-ID: <YmJJIb1DAIq5arCw@kroah.com>
 References: <20220422024653.2199489-1-quan@os.amperecomputing.com>
- <20220422024653.2199489-4-quan@os.amperecomputing.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422024653.2199489-4-quan@os.amperecomputing.com>
+ <20220422024653.2199489-5-quan@os.amperecomputing.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220422024653.2199489-5-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 09:46:47AM +0700, Quan Nguyen wrote:
-> This commit adds Ampere's SMpro error monitor driver for monitoring
-> and reporting RAS-related errors as reported by SMpro co-processor
-> found on Ampere's Altra processor family.
+On 4/22/22 09:46, Quan Nguyen wrote:
+> Adds documentation for Ampere(R)'s Altra(R) SMpro errmon driver.
 > 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> Changes in v8:
->   + Update wording for SMPRO_ERRMON on Kconfig file             [Quan]
->   + Avoid uninitialized variable use               [kernel test robot]
->   + Switch to use sysfs_emit()                                  [Greg]
->   + Make sysfs to return single value                           [Greg]
->   + Change errors_* sysfs to error_*                            [Quan]
->   + Add overflow_[core|mem|pcie|other]_[ce|ue] sysfs to report
->   overflow status of each type of HW errors                     [Quan]
->   + Add some minor refactor                                     [Quan]
-> 
-> Changes in v7:
->   + Remove regmap_acquire/release_lock(), read_i2c_block_data() [Quan]
->   + Use regmap_noinc_read() instead of errmon_read_block()      [Quan]
->   + Validate number of errors before read                       [Quan]
->   + Fix wrong return type of *_show() function     [kernel test robot]
->   + Adjust patch order to avoid dependence with smpro-mfd  [Lee Jones]
->   + Use pointer instead of stack memory                         [Quan]
-> 
-> Changes in v6:
->   + First introduced in v6 [Quan]
-> 
->  drivers/misc/Kconfig        |  12 +
->  drivers/misc/Makefile       |   1 +
->  drivers/misc/smpro-errmon.c | 477 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 490 insertions(+)
->  create mode 100644 drivers/misc/smpro-errmon.c
-> 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 41d2bb0ae23a..9fbe6797c440 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -176,6 +176,18 @@ config SGI_XP
->  	  this feature will allow for direct communication between SSIs
->  	  based on a network adapter and DMA messaging.
->  
-> +config SMPRO_ERRMON
-> +	tristate "Ampere Computing SMPro error monitor driver"
-> +	depends on MFD_SMPRO || COMPILE_TEST
-> +	help
-> +	  Say Y here to get support for the SMpro error monitor function
-> +	  provided by Ampere Computing's Altra and Altra Max SoCs. Upon
-> +	  loading, the driver creates sysfs files which can be use to gather
-> +	  multiple HW error data reported via read and write system calls.
-> +
-> +	  To compile this driver as a module, say M here. The driver will be
-> +	  called smpro-errmon.
-> +
->  config CS5535_MFGPT
->  	tristate "CS5535/CS5536 Geode Multi-Function General Purpose Timer (MFGPT) support"
->  	depends on MFD_CS5535
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index 70e800e9127f..483308a6e113 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -23,6 +23,7 @@ obj-$(CONFIG_ENCLOSURE_SERVICES) += enclosure.o
->  obj-$(CONFIG_KGDB_TESTS)	+= kgdbts.o
->  obj-$(CONFIG_SGI_XP)		+= sgi-xp/
->  obj-$(CONFIG_SGI_GRU)		+= sgi-gru/
-> +obj-$(CONFIG_SMPRO_ERRMON)	+= smpro-errmon.o
->  obj-$(CONFIG_CS5535_MFGPT)	+= cs5535-mfgpt.o
->  obj-$(CONFIG_GEHC_ACHC)		+= gehc-achc.o
->  obj-$(CONFIG_HP_ILO)		+= hpilo.o
-> diff --git a/drivers/misc/smpro-errmon.c b/drivers/misc/smpro-errmon.c
-> new file mode 100644
-> index 000000000000..df7d8fc4ff3f
-> --- /dev/null
-> +++ b/drivers/misc/smpro-errmon.c
-> @@ -0,0 +1,477 @@
-> +// SPDX-License-Identifier: GPL-2.0+
 
-Are you sure you mean "or any later version"?  I have to ask.
+Hi Quan,
 
-> +static struct smpro_int_error_hdr list_smpro_int_error_hdr[2] = {
-> +	{
-> +	 ERR_SMPRO_TYPE,
-> +	 ERR_SMPRO_INFO_LO, ERR_SMPRO_INFO_HI,
-> +	 ERR_SMPRO_DATA_LO, ERR_SMPRO_DATA_HI,
-> +	 WARN_SMPRO_INFO_LO, WARN_SMPRO_INFO_HI
-> +	},
-> +	{
-> +	 ERR_PMPRO_TYPE,
-> +	 ERR_PMPRO_INFO_LO, ERR_PMPRO_INFO_HI,
-> +	 ERR_PMPRO_DATA_LO, ERR_PMPRO_DATA_HI,
-> +	 WARN_PMPRO_INFO_LO, WARN_PMPRO_INFO_HI
-> +	},
+Building htmldocs, I got this new warning:
 
-Odd indentation, checkpatch did not complain?
+/home/bagas/repo/linux-stable/Documentation/misc-devices/smpro-errmon.rst:128: WARNING: Malformed table.
+Column span alignment problem in table line 56.
 
-> +static ssize_t smpro_event_data_read(struct device *dev,
-> +				     struct device_attribute *da, char *buf,
-> +				     int channel)
-> +{
-> +	struct smpro_errmon *errmon = dev_get_drvdata(dev);
-> +	s32 event_data;
-> +	int ret;
-> +
-> +	ret = regmap_read(errmon->regmap, smpro_event_table[channel], &event_data);
-> +	if (ret)
-> +		goto done;
+============   ==========    =========   ===============  ================
+Error Group    Error Type    Sub type    Sub component    Instance
+CPM            0             0           Snoop-Logic      CPM #
+CPM            0             2           Armv8 Core 1     CPM #
+MCU            1             1           ERR1             MCU # | SLOT << 11
+MCU            1             2           ERR2             MCU # | SLOT << 11
+MCU            1             3           ERR3             MCU #
+MCU            1             4           ERR4             MCU #
+MCU            1             5           ERR5             MCU #
+MCU            1             6           ERR6             MCU #
+MCU            1             7           Link Error       MCU #
+Mesh           2             0           Cross Point      X | (Y << 5) | NS <<11
+Mesh           2             1           Home Node(IO)    X | (Y << 5) | NS <<11
+Mesh           2             2           Home Node(Mem)   X | (Y << 5) | NS <<11 | device<<12
+Mesh           2             4           CCIX Node        X | (Y << 5) | NS <<11
+2P Link        3             0           N/A              Altra 2P Link #
+GIC            5             0           ERR0             0
+GIC            5             1           ERR1             0
+GIC            5             2           ERR2             0
+GIC            5             3           ERR3             0
+GIC            5             4           ERR4             0
+GIC            5             5           ERR5             0
+GIC            5             6           ERR6             0
+GIC            5             7           ERR7             0
+GIC            5             8           ERR8             0
+GIC            5             9           ERR9             0
+GIC            5             10          ERR10            0
+GIC            5             11          ERR11            0
+GIC            5             12          ERR12            0
+GIC            5             13-21       ERR13            RC# + 1
+SMMU           6             TCU         100              RC #
+SMMU           6             TBU0        0                RC #
+SMMU           6             TBU1        1                RC #
+SMMU           6             TBU2        2                RC #
+SMMU           6             TBU3        3                RC #
+SMMU           6             TBU4        4                RC #
+SMMU           6             TBU5        5                RC #
+SMMU           6             TBU6        6                RC #
+SMMU           6             TBU7        7                RC #
+SMMU           6             TBU8        8                RC #
+SMMU           6             TBU9        9                RC #
+PCIe AER       7             Root        0                RC #
+PCIe AER       7             Device      1                RC #
+PCIe RC        8             RCA HB      0                RC #
+PCIe RC        8             RCB HB      1                RC #
+PCIe RC        8             RASDP       8                RC #
+OCM            9             ERR0        0                0
+OCM            9             ERR1        1                0
+OCM            9             ERR2        2                0
+SMpro          10            ERR0        0                0
+SMpro          10            ERR1        1                0
+SMpro          10            MPA_ERR     2                0
+PMpro          11            ERR0        0                0
+PMpro          11            ERR1        1                0
+PMpro          11            MPA_ERR     2                0
+=============  ==========    =========   ===============  ================
 
-Just return the error here.
+I have applied the following fixup:
 
-> +
-> +	ret = sysfs_emit(buf, "%02x%04x\n", channel, event_data);
+From f16c63afa2064247507762ffcb623f575043f4a6 Mon Sep 17 00:00:00 2001
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+Date: Fri, 22 Apr 2022 13:16:31 +0700
+Subject: [PATCH] fixup for "docs: misc-devices: (smpro-errmon) Add
+ documentation"
 
-sysfs rules are one value per file.  You know this.
+Fix table syntax warning
 
-> +	/* Clear event after read */
-> +	if (event_data != 0)
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/misc-devices/smpro-errmon.rst | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Why would it be 0?  Isn't 0 a valid value?
+diff --git a/Documentation/misc-devices/smpro-errmon.rst b/Documentation/misc-devices/smpro-errmon.rst
+index 53599904da7008..818f12bd8aca4d 100644
+--- a/Documentation/misc-devices/smpro-errmon.rst
++++ b/Documentation/misc-devices/smpro-errmon.rst
+@@ -70,8 +70,9 @@ The format of the error lines is defended on the alert/event type.
+ 
+ Below table defines the value of Error types, Sub Types, Sub component and instance:
+ 
+-    ============   ==========    =========   ===============  ================
++    ============   ==========    =========   ===============  ====================================
+     Error Group    Error Type    Sub type    Sub component    Instance
++    ============   ==========    =========   ===============  ====================================
+     CPM            0             0           Snoop-Logic      CPM #
+     CPM            0             2           Armv8 Core 1     CPM #
+     MCU            1             1           ERR1             MCU # | SLOT << 11
+@@ -125,7 +126,7 @@ Below table defines the value of Error types, Sub Types, Sub component and insta
+     PMpro          11            ERR0        0                0
+     PMpro          11            ERR1        1                0
+     PMpro          11            MPA_ERR     2                0
+-    =============  ==========    =========   ===============  ================
++    ============   ==========    =========   ===============  ====================================
+ 
+ 
+ 2) Type 2 for the Internal SMpro/PMpro alert types::
+-- 
+An old man doll... just what I always wanted! - Clara
 
+For consistency with the fixup, you need to format the tables so that
+headings will be emphasized, by adding second ='s line before first
+content row.
 
-> +		regmap_write(errmon->regmap, smpro_event_table[channel], event_data);
-> +done:
-> +	return ret;
-> +}
-> +
-> +static ssize_t smpro_overflow_data_read(struct device *dev, struct device_attribute *da,
-> +					char *buf, int channel)
-> +{
-> +	struct smpro_errmon *errmon = dev_get_drvdata(dev);
-> +	struct smpro_error_hdr *err_info;
-> +	s32 err_count;
-> +	int ret;
-> +
-> +	err_info = &smpro_error_table[channel];
-> +
-> +	ret = regmap_read(errmon->regmap, err_info->err_count, &err_count);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Bit 8 indicates the overflow status */
-> +	return sysfs_emit(buf, "%d\n", (err_count & BIT(8)) ? 1 : 0);
-> +}
-> +
-> +static ssize_t smpro_error_data_read(struct device *dev, struct device_attribute *da,
-> +				     char *buf, int channel)
-> +{
-> +	struct smpro_errmon *errmon = dev_get_drvdata(dev);
-> +	unsigned char err_data[MAX_READ_BLOCK_LENGTH];
-> +	struct smpro_error_hdr *err_info;
-> +	s32 err_count, err_length;
-> +	int count = 0;
-> +	int ret;
-> +
-> +	err_info = &smpro_error_table[channel];
-> +
-> +	ret = regmap_read(errmon->regmap, err_info->err_count, &err_count);
-> +	/* Error count is the low byte */
-> +	err_count &= 0xff;
-> +	if (ret || !err_count || err_count > err_info->max_err_cnt)
-> +		goto done;
+Thanks.
 
-Just return the error.
-
-> +
-> +	ret = regmap_read(errmon->regmap, err_info->err_len, &err_length);
-> +	if (ret || err_length <= 0)
-> +		goto done;
-
-return the error.
-
-Wait, you could return 0 here, are you sure about that?
-
-> +
-> +	if (err_length > MAX_READ_BLOCK_LENGTH)
-> +		err_length = MAX_READ_BLOCK_LENGTH;
-> +
-> +	memset(err_data, 0x00, MAX_READ_BLOCK_LENGTH);
-> +	ret = regmap_noinc_read(errmon->regmap, err_info->err_data, err_data, err_length);
-> +	if (ret < 0)
-> +		goto done;
-
-return the error, no need for a goto in this function.
-
-> +
-> +	/*
-> +	 * The output of Core/Memory/PCIe/Others UE/CE errors follows below format:
-> +	 * <Error Type><Error SubType><Instance><Error Status>\
-> +	 * <Error Address><Error Misc 0><Error Misc 1><Error Misc2><Error Misc 3>
-> +	 * Where:
-> +	 *  + Error Type: The hardwares cause the errors. (1 byte)
-> +	 *  + SubType: Sub type of error in the specified hardware error. (1 byte)
-> +	 *  + Instance: Combination of the socket, channel,
-> +	 *    slot cause the error. (2 bytes)
-> +	 *  + Error Status: Encode of error status. (4 bytes)
-> +	 *  + Error Address: The address in device causes the errors. (8 bytes)
-> +	 *  + Error Misc 0/1/2/3: Addition info about the errors. (8 bytes for each)
-> +	 * Reference Altra SOC BMC Interface specification.
-> +	 */
-> +	count = sysfs_emit(buf, "%02x%02x%04x%08x%016llx%016llx%016llx%016llx%016llx\n",
-> +			   err_data[0], err_data[1], *(u16 *)&err_data[2],
-> +			   *(u32 *)&err_data[4], *(u64 *)&err_data[8],
-> +			   *(u64 *)&err_data[16], *(u64 *)&err_data[24],
-> +			   *(u64 *)&err_data[32], *(u64 *)&err_data[40]);
-> +
-> +	/* go to next error */
-> +	ret = regmap_write(errmon->regmap, err_info->err_count, 0x100);
-> +done:
-> +	return ret ? ret : count;
-> +}
-> +
-> +/*
-> + * Output format:
-> + * <errType><image><dir><Location><errorCode><data>
-> + * Where:
-> + *   + errType: SCP Error Type (3 bits)
-> + *      1: Warning
-> + *      2: Error
-> + *      4: Error with data
-> + *   + image: SCP Image Code (8 bits)
-> + *   + dir: Direction (1 bit)
-> + *      0: Enter
-> + *      1: Exit
-> + *   + location: SCP Module Location Code (8 bits)
-> + *   + errorCode: SCP Error Code (16 bits)
-> + *   + data : Extensive data (32 bits)
-> + *      All bits are 0 when errType is warning or error.
-> + */
-> +static ssize_t smpro_internal_err_read(struct device *dev, struct device_attribute *da,
-> +				       char *buf, int channel)
-> +{
-> +	struct smpro_errmon *errmon = dev_get_drvdata(dev);
-> +	struct smpro_int_error_hdr *err_info;
-> +	unsigned int data_lo = 0, data_hi = 0;
-> +	unsigned int ret_hi, ret_lo;
-> +	unsigned int err_type;
-> +	unsigned int value;
-> +	int count = 0;
-> +	int ret;
-> +
-> +	/* read error status */
-> +	ret = regmap_read(errmon->regmap, GPI_RAS_ERR, &value);
-> +	if (ret)
-> +		goto done;
-
-Same mess here, just return the error.
-
-> +
-> +	if (!((channel == RAS_SMPRO_ERRS && (value & BIT(0))) ||
-> +	      (channel == RAS_PMPRO_ERRS && (value & BIT(1)))))
-> +		goto done;
-
-No error?  Are you sure?
-
-> +
-> +	err_info = &list_smpro_int_error_hdr[channel];
-> +	ret = regmap_read(errmon->regmap, err_info->err_type, &err_type);
-> +	if (ret)
-> +		goto done;
-> +
-> +	ret = regmap_read(errmon->regmap, err_info->err_info_low, &ret_lo);
-> +	if (ret)
-> +		goto done;
-> +
-> +	ret = regmap_read(errmon->regmap, err_info->err_info_high, &ret_hi);
-> +	if (ret)
-> +		goto done;
-> +
-> +	if (err_type & BIT(2)) {
-> +		/* Error with data type */
-> +		ret = regmap_read(errmon->regmap, err_info->err_data_low, &data_lo);
-> +		if (ret)
-> +			goto done;
-> +
-> +		ret = regmap_read(errmon->regmap, err_info->err_data_high, &data_hi);
-> +		if (ret)
-> +			goto done;
-> +
-> +		count = sysfs_emit(buf, "%01x%02x%01x%02x%04x%04x%04x\n",
-> +				   4, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
-> +				   ret_hi & 0xff, ret_lo, data_hi, data_lo);
-> +		/* clear the read errors */
-> +		ret = regmap_write(errmon->regmap, err_info->err_type, BIT(2));
-> +
-> +	} else if (err_type & BIT(1)) {
-> +		/* Error type */
-> +		count = sysfs_emit(buf, "%01x%02x%01x%02x%04x%04x%04x\n",
-> +				   2, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
-> +				   ret_hi & 0xff, ret_lo, data_hi, data_lo);
-> +		/* clear the read errors */
-> +		ret = regmap_write(errmon->regmap, err_info->err_type, BIT(1));
-> +
-> +	} else if (err_type & BIT(0)) {
-> +		/* Warning type */
-> +		count = sysfs_emit(buf, "%01x%02x%01x%02x%04x%04x%04x\n",
-> +				   1, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
-> +				   ret_hi & 0xff, ret_lo, data_hi, data_lo);
-> +		/* clear the read errors */
-> +		ret = regmap_write(errmon->regmap, err_info->err_type, BIT(0));
-> +	}
-> +done:
-> +	return ret ? ret : count;
-> +}
-> +
-> +#define ERROR_OVERFLOW_RO(_error, _index) \
-> +	static ssize_t overflow_##_error##_show(struct device *dev,            \
-> +						struct device_attribute *da,   \
-> +						char *buf)                     \
-> +	{                                                                      \
-> +		return smpro_overflow_data_read(dev, da, buf, _index);         \
-> +	}                                                                      \
-> +	static DEVICE_ATTR_RO(overflow_##_error)
-> +
-> +ERROR_OVERFLOW_RO(core_ce, CORE_CE_ERRS);
-> +ERROR_OVERFLOW_RO(core_ue, CORE_UE_ERRS);
-> +ERROR_OVERFLOW_RO(mem_ce, MEM_CE_ERRS);
-> +ERROR_OVERFLOW_RO(mem_ue, MEM_UE_ERRS);
-> +ERROR_OVERFLOW_RO(pcie_ce, PCIE_CE_ERRS);
-> +ERROR_OVERFLOW_RO(pcie_ue, PCIE_UE_ERRS);
-> +ERROR_OVERFLOW_RO(other_ce, OTHER_CE_ERRS);
-> +ERROR_OVERFLOW_RO(other_ue, OTHER_UE_ERRS);
-> +
-> +#define ERROR_RO(_error, _index) \
-> +	static ssize_t error_##_error##_show(struct device *dev,            \
-> +					     struct device_attribute *da,   \
-> +					     char *buf)                     \
-> +	{                                                                   \
-> +		return smpro_error_data_read(dev, da, buf, _index);         \
-> +	}                                                                   \
-> +	static DEVICE_ATTR_RO(error_##_error)
-> +
-> +ERROR_RO(core_ce, CORE_CE_ERRS);
-> +ERROR_RO(core_ue, CORE_UE_ERRS);
-> +ERROR_RO(mem_ce, MEM_CE_ERRS);
-> +ERROR_RO(mem_ue, MEM_UE_ERRS);
-> +ERROR_RO(pcie_ce, PCIE_CE_ERRS);
-> +ERROR_RO(pcie_ue, PCIE_UE_ERRS);
-> +ERROR_RO(other_ce, OTHER_CE_ERRS);
-> +ERROR_RO(other_ue, OTHER_UE_ERRS);
-> +
-> +static ssize_t error_smpro_show(struct device *dev, struct device_attribute *da, char *buf)
-> +{
-> +	return smpro_internal_err_read(dev, da, buf, RAS_SMPRO_ERRS);
-> +}
-> +static DEVICE_ATTR_RO(error_smpro);
-> +
-> +static ssize_t error_pmpro_show(struct device *dev, struct device_attribute *da, char *buf)
-> +{
-> +	return smpro_internal_err_read(dev, da, buf, RAS_PMPRO_ERRS);
-> +}
-> +static DEVICE_ATTR_RO(error_pmpro);
-> +
-> +#define EVENT_RO(_event, _index) \
-> +	static ssize_t event_##_event##_show(struct device *dev,            \
-> +					     struct device_attribute *da,   \
-> +					     char *buf)                     \
-> +	{                                                                   \
-> +		return smpro_event_data_read(dev, da, buf, _index);         \
-> +	}                                                                   \
-> +	static DEVICE_ATTR_RO(event_##_event)
-> +
-> +EVENT_RO(vrd_warn_fault, VRD_WARN_FAULT_EVENTS);
-> +EVENT_RO(vrd_hot, VRD_HOT_EVENTS);
-> +EVENT_RO(dimm_hot, DIMM_HOT_EVENTS);
-> +
-> +static struct attribute *smpro_errmon_attrs[] = {
-> +	&dev_attr_overflow_core_ce.attr,
-> +	&dev_attr_overflow_core_ue.attr,
-> +	&dev_attr_overflow_mem_ce.attr,
-> +	&dev_attr_overflow_mem_ue.attr,
-> +	&dev_attr_overflow_pcie_ce.attr,
-> +	&dev_attr_overflow_pcie_ue.attr,
-> +	&dev_attr_overflow_other_ce.attr,
-> +	&dev_attr_overflow_other_ue.attr,
-> +	&dev_attr_error_core_ce.attr,
-> +	&dev_attr_error_core_ue.attr,
-> +	&dev_attr_error_mem_ce.attr,
-> +	&dev_attr_error_mem_ue.attr,
-> +	&dev_attr_error_pcie_ce.attr,
-> +	&dev_attr_error_pcie_ue.attr,
-> +	&dev_attr_error_other_ce.attr,
-> +	&dev_attr_error_other_ue.attr,
-> +	&dev_attr_error_smpro.attr,
-> +	&dev_attr_error_pmpro.attr,
-> +	&dev_attr_event_vrd_warn_fault.attr,
-> +	&dev_attr_event_vrd_hot.attr,
-> +	&dev_attr_event_dimm_hot.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group smpro_errmon_attr_group = {
-> +	.attrs = smpro_errmon_attrs
-> +};
-
-ATTRIBUTE_GROUPS()?
-
-
-> +
-> +static int smpro_errmon_probe(struct platform_device *pdev)
-> +{
-> +	struct smpro_errmon *errmon;
-> +	int ret;
-> +
-> +	errmon = devm_kzalloc(&pdev->dev, sizeof(struct smpro_errmon), GFP_KERNEL);
-> +	if (!errmon)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, errmon);
-> +
-> +	errmon->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	if (!errmon->regmap)
-> +		return -ENODEV;
-> +
-> +	ret = sysfs_create_group(&pdev->dev.kobj, &smpro_errmon_attr_group);
-
-You just raced with userspace and lost :(
-
-Always use the default groups of the platform driver for this.  That way
-you do not have to do anything special and your files will be created
-properly.
-
-> +	if (ret)
-> +		dev_err(&pdev->dev, "SMPro errmon sysfs registration failed\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int smpro_errmon_remove(struct platform_device *pdev)
-> +{
-> +	sysfs_remove_group(&pdev->dev.kobj, &smpro_errmon_attr_group);
-> +	pr_info("SMPro errmon sysfs entries removed");
-
-Drivers are quiet when all is working properly.
-
-If you set the pointer properly as asked above, you do not have to
-remove the group on your own.
-
-Huge hint, if you ever call sysfs_* from a driver, something is probably
-wrong.
-
-Same goes for the other drivers in this series, please fix them all up
-this way.
-
-thanks,
-
-greg k-h
+-- 
+An old man doll... just what I always wanted! - Clara
