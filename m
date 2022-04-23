@@ -2,91 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8782C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Apr 2022 16:34:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB46C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Apr 2022 19:17:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiDWQh0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 23 Apr 2022 12:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S236604AbiDWTUH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 23 Apr 2022 15:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiDWQhZ (ORCPT
+        with ESMTP id S229491AbiDWTUF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:37:25 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F7B2F025;
-        Sat, 23 Apr 2022 09:34:27 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e5ca5c580fso11819032fac.3;
-        Sat, 23 Apr 2022 09:34:27 -0700 (PDT)
+        Sat, 23 Apr 2022 15:20:05 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94611D92F7;
+        Sat, 23 Apr 2022 12:17:06 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-e5c42b6e31so12049557fac.12;
+        Sat, 23 Apr 2022 12:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=kdKMMnUA+xK7+qfwHy7L8VJH4pn19kuakHSYhLYJsME=;
-        b=d8wFV5HD+2y58md+ggyQwpanQEqyF7bSzJVMjUI0q4LrIA+4CyDu3HAzuyWNH/J3Ot
-         ZxuMuecmx397wyMwBkkVh47jl1PRtzRTvkuQaYa6aw87M4hUXnEhjSSbVnsR4KFg5NOz
-         DV7hME+ajQekX8fP5O5+hoKL+CimiRdFqJTrOPOXE/laJ8BNUqI8tFOLIhoKSc6Ny/WH
-         0reRrM6cagdlMrJ0ROvCq4Wqb5WHnPXD9Vwg6YSsvp6y3eZ6zIDeTAS4waGyWZAblsWa
-         WXtz4nass82V50EW3JZNItl4zE9pyOX4gg58TclpsZ/Jvw64jRAdRaNmJHS2XZCwTWnw
-         AEqw==
+        bh=4KKD44aDbTYnErXQIAdZB1trxRmXyTSu+nMBzwIudCY=;
+        b=IV/5iQpQe05/ci0Bh0/qYL+Qkay9ECCjZ3gZzF1PcUEpHWhRytD63iz2WyGVN7GLW2
+         4kjxM+YEyRr48dj4gmzrRLcUqiyV97S2i0chw3TDPcvn3NMny1mKaa0nSP1/eQSGnByP
+         U4JlqpextZX2hxgnXPhwkpiAPNwWYXpbmVyyukrvjeftftDnRzuNnV6XFAIbTnWii9aq
+         c+qBiP+InFkem1YJxtOGzERE+o9HQ1a7DyVBKh/1qSYKmVpaWtgko01uOShWFNQZ8A5h
+         rMM4YkJ1WCHmhWybEmVZbfZiWD5a78VTmMIeuGLmcXILKLUp9IvxtDIz8PzyEZ4aWWFH
+         KEIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=kdKMMnUA+xK7+qfwHy7L8VJH4pn19kuakHSYhLYJsME=;
-        b=nuc8YS+begyc3TDF6bv8zK0nubCTLOjs1cwBPRvKZk2AZzDC7xmHGBf/xI4XpOH1Fn
-         s8+Cq3PKSYMyiCtx43W7uiX73xPrkWZK5LUxdSzxrIZMQiU18DZa/pTU6rTiLglPzAJ2
-         95nhR9wESjVtjYBh35gOk66/3zuf97tXTKfEtLAc/plDJ+ewP874/lmr0kdIWDZPTi2f
-         Rd+O5fenA98hotom2vXLrBfJfYMTXiHXsUPyCgC6OYk5eOJfFvAPDYyJuLwK/4gAuf8n
-         c/ppPleeyo5up9MCCspcC8KzCS8Re7gOAshbJs3Pe1b8zZMXyzUZYuCjZ5Ti1FGp8bJ6
-         tHww==
-X-Gm-Message-State: AOAM533sepOEXzxu1CZWWQ2QC8Hm99wGYswKiEp01XDAQ/nEBttzXrbS
-        FIA9Jp5lRlZVHBpSRw3vXV0=
-X-Google-Smtp-Source: ABdhPJwGTu/C/RVu0+EetN+MLvLoyqxJzkF96/JACYVXvhk8RVWxScGB3efjBVf6t28JOrghHbzX7Q==
-X-Received: by 2002:a05:6870:580e:b0:e2:7e06:e785 with SMTP id r14-20020a056870580e00b000e27e06e785mr4372716oap.38.1650731666707;
-        Sat, 23 Apr 2022 09:34:26 -0700 (PDT)
+        bh=4KKD44aDbTYnErXQIAdZB1trxRmXyTSu+nMBzwIudCY=;
+        b=YzDBPZOQBsWYRftJCscOyJGkFuJH16hFwAzkxWWAwTV9CfwlVzKw3gVVu1dmwFf4ep
+         ACoVggk8QESCPcDNNa3ZYgvSk9y9zaD5mn9WPvetvfGeCkuOkLRlS8huptrrmTfEMw1G
+         PMNp4vwgSNUn2Sm2yxo5d21+11F9z0LlPuxQHNrENYLnPsHYyjGOMHSwiPwzvUJKBLJh
+         9ETNEJGsRtqk11JA95xLOlOycE/x2eThGXBfN2QUZ99P4eta219NmvK95z1Vvw5I2dj1
+         AipiUAr2+LgYFXhtybp4mKGBtoWa9u6MGd4yI+S/74csShPdbYn1DQY1HpWEcHRP5JER
+         cXVg==
+X-Gm-Message-State: AOAM530zeRs35vC6oj5TlgmQX98yt5B6HC991QGptJvLRgvmr1pZf+KS
+        XvUhe3+nycsJgsBGBz47xlY=
+X-Google-Smtp-Source: ABdhPJwtqAxGRodl4NNQOlWfRGaxk6b4ezEVaz399ot2DLg3L1Qu21f9VHFMP62jDgO4Fx+OTrWgBA==
+X-Received: by 2002:a05:6870:41c9:b0:db:f23:f5e with SMTP id z9-20020a05687041c900b000db0f230f5emr8701653oac.118.1650741425294;
+        Sat, 23 Apr 2022 12:17:05 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v27-20020a056870311b00b000e28bdb81e5sm1716857oaa.44.2022.04.23.09.34.23
+        by smtp.gmail.com with ESMTPSA id j25-20020a9d1919000000b0060549a9ca91sm2023212ota.79.2022.04.23.12.17.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 09:34:24 -0700 (PDT)
+        Sat, 23 Apr 2022 12:17:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 09:34:22 -0700
+Date:   Sat, 23 Apr 2022 12:17:01 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Farbwerk
-Message-ID: <20220423163422.GA3964519@roeck-us.net>
-References: <20220421072743.5058-1-savicaleksa83@gmail.com>
- <20220422183144.GA2637654@roeck-us.net>
- <YmQoEoU1UJ+KPhQ9@fedora>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ProArt X570 Creator WIFI
+ board
+Message-ID: <20220423191701.GA3971291@roeck-us.net>
+References: <20220422111737.1352610-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmQoEoU1UJ+KPhQ9@fedora>
+In-Reply-To: <20220422111737.1352610-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 06:23:46PM +0200, Aleksa Savic wrote:
-[ ... ]
-> > > +	case USB_PRODUCT_ID_FARBWERK:
-> > > +		priv->kind = farbwerk;
-> > > +
-> > 
-> > 
-> > Any special reason for this empty line ? It seems kind of random.
-> > 
-> > Guenter
-> > 
+On Fri, Apr 22, 2022 at 01:17:37PM +0200, Eugene Shalygin wrote:
+> Basing on information and testing provided by users [1] add support for
+> another board, ASUS ProArt X570 Creator WiFi.
 > 
-> That's how code in other cases of that switch is formatted (not visible
-> from this patch directly), setting priv->kind and then the appropriate
-> labels.
+> [1] https://github.com/zeule/asus-ec-sensors/issues/17
 > 
-Ah, ok. Looks odd here, but makes sense.
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+
+Applied.
 
 Thanks,
 Guenter
