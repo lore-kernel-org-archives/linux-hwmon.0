@@ -2,80 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB46C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Apr 2022 19:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37C65C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Apr 2022 19:24:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236604AbiDWTUH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 23 Apr 2022 15:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S236837AbiDWT1A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 23 Apr 2022 15:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiDWTUF (ORCPT
+        with ESMTP id S232641AbiDWT07 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Apr 2022 15:20:05 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94611D92F7;
-        Sat, 23 Apr 2022 12:17:06 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-e5c42b6e31so12049557fac.12;
-        Sat, 23 Apr 2022 12:17:06 -0700 (PDT)
+        Sat, 23 Apr 2022 15:26:59 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF5D26551;
+        Sat, 23 Apr 2022 12:24:02 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id t4so6993176ilo.12;
+        Sat, 23 Apr 2022 12:24:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4KKD44aDbTYnErXQIAdZB1trxRmXyTSu+nMBzwIudCY=;
-        b=IV/5iQpQe05/ci0Bh0/qYL+Qkay9ECCjZ3gZzF1PcUEpHWhRytD63iz2WyGVN7GLW2
-         4kjxM+YEyRr48dj4gmzrRLcUqiyV97S2i0chw3TDPcvn3NMny1mKaa0nSP1/eQSGnByP
-         U4JlqpextZX2hxgnXPhwkpiAPNwWYXpbmVyyukrvjeftftDnRzuNnV6XFAIbTnWii9aq
-         c+qBiP+InFkem1YJxtOGzERE+o9HQ1a7DyVBKh/1qSYKmVpaWtgko01uOShWFNQZ8A5h
-         rMM4YkJ1WCHmhWybEmVZbfZiWD5a78VTmMIeuGLmcXILKLUp9IvxtDIz8PzyEZ4aWWFH
-         KEIQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UA3QohFgoTs+y2joxZ4ax/9P0q1Vw6kdh1yN4oESd/U=;
+        b=HLCK/fwrcM13PWW/3uLxyfR7galgZjfIGI/rIe2u2z0MfnkzlyV3jX3pk4hWRQItJc
+         lG0ruWeh9coqsLcatkvu2czN03g8uqXSwODM3sMrp8V+fh/s8+dASmV+wpjrIFX9DxFB
+         xQzJUNQRRJ0vfJNE/D+f+B6dTmP+cIQ5SAQ2S6A5u7Bf+rONg9bXOljMqtgrsSOT00Xm
+         VtQJYicDk57xs0drIqjKm9SpLbJXmJoVNsrfvr8lYl/YbzvDcg05BV9OB6cy/FkZpLDm
+         pbstwKZijeabcKADOfneBu3Q7vAY3dh5ftGQgC8DRyUb8tS2lQSQFqOGlmJFSum0VCRy
+         AlMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4KKD44aDbTYnErXQIAdZB1trxRmXyTSu+nMBzwIudCY=;
-        b=YzDBPZOQBsWYRftJCscOyJGkFuJH16hFwAzkxWWAwTV9CfwlVzKw3gVVu1dmwFf4ep
-         ACoVggk8QESCPcDNNa3ZYgvSk9y9zaD5mn9WPvetvfGeCkuOkLRlS8huptrrmTfEMw1G
-         PMNp4vwgSNUn2Sm2yxo5d21+11F9z0LlPuxQHNrENYLnPsHYyjGOMHSwiPwzvUJKBLJh
-         9ETNEJGsRtqk11JA95xLOlOycE/x2eThGXBfN2QUZ99P4eta219NmvK95z1Vvw5I2dj1
-         AipiUAr2+LgYFXhtybp4mKGBtoWa9u6MGd4yI+S/74csShPdbYn1DQY1HpWEcHRP5JER
-         cXVg==
-X-Gm-Message-State: AOAM530zeRs35vC6oj5TlgmQX98yt5B6HC991QGptJvLRgvmr1pZf+KS
-        XvUhe3+nycsJgsBGBz47xlY=
-X-Google-Smtp-Source: ABdhPJwtqAxGRodl4NNQOlWfRGaxk6b4ezEVaz399ot2DLg3L1Qu21f9VHFMP62jDgO4Fx+OTrWgBA==
-X-Received: by 2002:a05:6870:41c9:b0:db:f23:f5e with SMTP id z9-20020a05687041c900b000db0f230f5emr8701653oac.118.1650741425294;
-        Sat, 23 Apr 2022 12:17:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j25-20020a9d1919000000b0060549a9ca91sm2023212ota.79.2022.04.23.12.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 12:17:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 12:17:01 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ProArt X570 Creator WIFI
- board
-Message-ID: <20220423191701.GA3971291@roeck-us.net>
-References: <20220422111737.1352610-1-eugene.shalygin@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UA3QohFgoTs+y2joxZ4ax/9P0q1Vw6kdh1yN4oESd/U=;
+        b=p2A/fYhnTxiQ3DRPYZHvAR/1VLvgCAVO6kSyJVEdGdfjnXMjbV4mgHMWt3oCV3oXOi
+         opeJFvgm3XND3kPcxj1yVceCHff10D+1nbD67Nut4fvOPGtPOM39oCNo69V5R4n6Ooa/
+         I1giCaqPkwoMF7HnNcUE58sIY9m9y2++7uu6P4w0fL7QNXmBwxGlufGyAAlZrEEuB7nz
+         pyyHIFnov9bRLqZTcinM3+dvnIrukXa0g0uVgHVQjmBUDNcHuxnOLrNCCWykXP2kAlZO
+         7nKt9Z8JOR+pG6YNiCXg+vi4tO3jMAmBwnajL6H/YF4HecVSsYk3hv3KW/jikzbj5n20
+         V7Qw==
+X-Gm-Message-State: AOAM531MppqkV6g4HnYeJgNv97ahiU3//w6kQPsVENcjx3lzBSC8niRr
+        VmQgvnAT0sR3bTuDDJHN1KL29IPsjc1NM+h3BPXPhBlMIfvqdg==
+X-Google-Smtp-Source: ABdhPJyRicslakAW7kNlD9yO8jbe8tvy0ieEPEVAm4EE5nhWQT7CqRsG1BjQRX5/XvilYkJ5WftsIIqEMK0TMFdkXCQ=
+X-Received: by 2002:a05:6e02:1c2d:b0:2cc:4986:3f61 with SMTP id
+ m13-20020a056e021c2d00b002cc49863f61mr4173291ilh.246.1650741841468; Sat, 23
+ Apr 2022 12:24:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422111737.1352610-1-eugene.shalygin@gmail.com>
+References: <20220422111737.1352610-1-eugene.shalygin@gmail.com> <20220423191701.GA3971291@roeck-us.net>
+In-Reply-To: <20220423191701.GA3971291@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Sat, 23 Apr 2022 21:23:50 +0200
+Message-ID: <CAB95QAS3+m1bw1DwXw3PObyWwD80BqGoQCv_tGupWpAyitAKYQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ProArt X570 Creator WIFI board
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 01:17:37PM +0200, Eugene Shalygin wrote:
-> Basing on information and testing provided by users [1] add support for
-> another board, ASUS ProArt X570 Creator WiFi.
-> 
-> [1] https://github.com/zeule/asus-ec-sensors/issues/17
-> 
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Thank you!
 
-Applied.
-
-Thanks,
-Guenter
+On Sat, 23 Apr 2022 at 21:17, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Fri, Apr 22, 2022 at 01:17:37PM +0200, Eugene Shalygin wrote:
+> > Basing on information and testing provided by users [1] add support for
+> > another board, ASUS ProArt X570 Creator WiFi.
+> >
+> > [1] https://github.com/zeule/asus-ec-sensors/issues/17
+> >
+> > Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+>
+> Applied.
+>
+> Thanks,
+> Guenter
