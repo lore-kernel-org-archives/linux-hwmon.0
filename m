@@ -2,245 +2,282 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFF32C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Apr 2022 23:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 672F0C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Apr 2022 16:24:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiDVXgr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 22 Apr 2022 19:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S235955AbiDWQ1V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 23 Apr 2022 12:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiDVXgW (ORCPT
+        with ESMTP id S232381AbiDWQ1U (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:36:22 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2098.outbound.protection.outlook.com [40.107.243.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A379A1759F0;
-        Fri, 22 Apr 2022 16:21:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q3q1reVAaBujqbP/J/FdlrhflvG0FWrVUwtixWUY83nchLHta27yJyJeZGy/xAaXTI4x0hkHTqYE6wQdk0NEcfNf0s7w0BL7Lp4KBsW4prQcjcZwFkSPinDRvBLiASuWW0CgMXPLlsJAH7BdaTv8AFqkPlxt006xSgBQPJVHxJVsj6ATL0ZVZyLMwt+u3J8Gc1270UZCd/VqcV9G1y3Wr1YW7mo/5i1JZ1gQXImzksJgIoIkcneRZtSRMB+p4aYJwmtKNF6wl4oh/GjqbFc2hyzJmf71shpiX07ImhYE2Byc4TuSr9IxHS6UdCTuH4fzc3pIUKb3NUM4CLBmejIIVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aONITpye+IeJr84qGlAJnqM+jRTCuMmdqzmJ+Qi8sLA=;
- b=Jl7ElWUgrYkhwWjlobVW+A5JJ0HA42BaxrxldOb2Kd/9801GRO4yjf9EVQtZY/l37XmMiPO+Avhij67ytK047sVMkTecdl0G5hqInQK+fPuCHX1Ay0q4CPmgJ/QtI2ENcw/5Xh57tcmBbS76OBBsHB7BUB6dNGhTjUHi+/n22wZr9UfPaR7/aJCkwlbqmBjE/A4nG4lXgPJpdrBwBWc06Wx+dtxHWgF3Zj9o4VgEGZ2QPv6j4HIULPXhqaBK0MKcYNhefd5nDMJnGiOc3b5Ft5JHoipNNtGwb9qLp7dYk/Dnnc4o4rTg+3jqcdQvtc8Z7BoMRk+xetgTioxggLHPeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        Sat, 23 Apr 2022 12:27:20 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872E01CDEE6;
+        Sat, 23 Apr 2022 09:24:22 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id a1so8192310edt.3;
+        Sat, 23 Apr 2022 09:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aONITpye+IeJr84qGlAJnqM+jRTCuMmdqzmJ+Qi8sLA=;
- b=AKASfrCiHGPHw3IjRsTICcVEsqKBPPpjzt1YQyQKK1/p81OPyi4IBDHU5pSpUnD700S6jnMNS7Sa1okWoXZh0V441na/m5AgjvLjhO9PNNM5B3JhmgIp8sz097UMN80qwlIl7dn5bWLck7UWKIDFfQqQxBHgLGK7cxhbq0whNyE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- CH0PR01MB7064.prod.exchangelabs.com (2603:10b6:610:10c::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.15; Fri, 22 Apr 2022 23:21:20 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::319b:4612:e6f4:f22c]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::319b:4612:e6f4:f22c%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 23:21:19 +0000
-Message-ID: <79357f23-443a-c3c9-f084-6db6dda60e92@os.amperecomputing.com>
-Date:   Sat, 23 Apr 2022 06:21:06 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v8 3/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9ppVcIeAAOmwed352sGxya3BOJYGtZNlR1farH+4bFU=;
+        b=dOlySR7580WffaBWqz8gjNUEbOMG+kudDCF/52sKG5IK0LENEIDD60WJpFGYUgvEi+
+         HLsUxtBXgQBWOwu/Nj+CmWk9EYPYOW3YBSLJr3K3FtPKYN41ktnIR/88mlgA5ndk6fGt
+         RJcz5CZrr7UAMjJdhyG5eVECHwi+s3ZsoGJcNQNzXFQYQyetKc/qwvXWXSDvGdEwKCQr
+         jHNBObFvpHnIQDFg5xk92D1rZ1gpvLOSjoRqP4TUqKIStYAMZ9Xczp8SJxNsy1etcDRu
+         74Bv3oYkSY8vERwXC6XY5S75DXHEw/ZpsEQfFE0o5lXzVh6rPpwO72G3UTHSapBlRY4w
+         O/Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9ppVcIeAAOmwed352sGxya3BOJYGtZNlR1farH+4bFU=;
+        b=P899MhSkNyOABuFwSIW1ZQD5jkM8fhAp0kWMJQlKJ4DMCmK/LpF1GArIKL7siGMvh0
+         nrzYL2M28v3599aM/ccM6gZtrlr2kNeAv7aBgLgNojDYQElnsJEJlerimmjTyjxl3gXo
+         ttYLVPW0Qd4m2HO/m9nJbTYwdX8umOYgRPgvet33zQfhtjnasizuWJIKGAKX1i8aedmV
+         F4GIihgXULEgYA/zD3x4FBdDTxXCyagufcoBxT+DGHyk4Jl/MkvDziU994J2KXmyrwy6
+         oM0taDscf6+5wWHVnN5Tcox5CZTXFHhShdW7P3TOSUm9frg1hpeN449nDOKR7EtAQ6FQ
+         3UKg==
+X-Gm-Message-State: AOAM533zfsyBkav2cr28MMOouBwTIvwRHgj48J68lwEXsj0uB5F8qnic
+        I2rsCcp44qvT44qnyhjbRi0=
+X-Google-Smtp-Source: ABdhPJyVE0CNMZrfPGfxJenMu6rNOWh0m8pHA0B5Nlt/cm+nTJ8sq/MSqB5dTV69I1x8g2UtMheV5w==
+X-Received: by 2002:a05:6402:22c4:b0:41d:78b1:349 with SMTP id dm4-20020a05640222c400b0041d78b10349mr10777700edb.365.1650731028923;
+        Sat, 23 Apr 2022 09:23:48 -0700 (PDT)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id bl20-20020a170906c25400b006efeef97b1esm1797616ejb.206.2022.04.23.09.23.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 09:23:48 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 18:23:46 +0200
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20220422024653.2199489-1-quan@os.amperecomputing.com>
- <20220422024653.2199489-4-quan@os.amperecomputing.com>
- <YmJJIb1DAIq5arCw@kroah.com>
- <82a6452a-965b-7fbe-eba2-919f0a6ed73a@os.amperecomputing.com>
- <YmLCcFrrobUJtiLI@kroah.com>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <YmLCcFrrobUJtiLI@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0109.apcprd02.prod.outlook.com
- (2603:1096:4:92::25) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Farbwerk
+Message-ID: <YmQoEoU1UJ+KPhQ9@fedora>
+References: <20220421072743.5058-1-savicaleksa83@gmail.com>
+ <20220422183144.GA2637654@roeck-us.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0c38b247-4c30-4a5f-743c-08da24b6ce01
-X-MS-TrafficTypeDiagnostic: CH0PR01MB7064:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR01MB70649E85B34821A1E23B5AC8F2F79@CH0PR01MB7064.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W3/0k/3KvWxu32wEOXRd0/Z802mwcD4HzDiXfQ1gtIMk61oLW18OPfbQfYxP2Im7mckYH4xy68UJ4uLIYQl9TsiOqrY8dByGRyM3n9qR8bev8XihcQXT97owhzeBmhqDXD8P1psoEyyx9ZFtb7lwStpQpTRwLHu90AdzM4ys2X3D8a9QFs0STQSSdgXwjyHfjYAAhFUI4HXOx+qR3MCDHYEyzjfMMrMEQKgYufGu6iolVKN3/hCC5R+gToyQkl3wp71fyHbNPEqUfVzwB36Jc5K6GgTO3yqJ9qnsGmNVJ0KlmeB03S4p3Rnpeq3uhyLSqJstEnGhTIOA4mai9z9HRo2/2kCqHm3hnAJYc5VtLTPY7X0s8rllC7igG1eHiBAXTgIXOPI+TVqptuOOR91X41nxsYbbC1Ld8MJ71IZ8NX5+XonzY6f8CYmEgVJHVr2D22E2TtlNdcIwk3ivc1bj/jPwdgglWsLVvL1hNZxOSUoeAwasMGRn50Fc+RrKJmepqETmLFgBjNnJE7ya6D2sBMlcr4MZ4DhPOYU/9FXmBH3kS30m+5qB+m6pd0s9s8+07gNXw8zaFeXsfRh7dbL0/AMqCVlLqPgC2JyFFvbJKLNxPCaR3nr+ax96cRWmeyYvp4tnHOt0U5o/L61AnXVY30KuUMywae/RIEoU4a7C26rMDjH3OVH4aVBUKVoClTG/yMX987LtSfazHPZk4i0/jTVregZ84kT9yxWekQtlaxk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(66476007)(66556008)(66946007)(6486002)(4326008)(2906002)(8936002)(7416002)(5660300002)(54906003)(186003)(2616005)(6916009)(26005)(107886003)(8676002)(6666004)(316002)(6506007)(6512007)(53546011)(83380400001)(52116002)(86362001)(31696002)(38100700002)(31686004)(38350700002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGwvNmpwQlpna2czWWdNOWVndDRJUGxRMlVoRUFsc0FvMjZXNVFqMnJGbEhB?=
- =?utf-8?B?MFFKZEhKZE9PckVPL09TVVYyU25qTUNXVUxxSDZScCtzeXdkSTFrckszWTZV?=
- =?utf-8?B?QmlqZk1SVWg1MVJYbzRnMHd6UlUvNVQ0SHU0dUxUdG1YaVd6SHpQblFaRUZK?=
- =?utf-8?B?VlhldURuSUNPTEVPYmoxRlAxSzRQYjhiMEVkS3dDNjhnYTZvZllScXdubnJ1?=
- =?utf-8?B?clREZFRNaHRZYVRCY01pcFNNWTU2OWsrUEE5ZlV6T3NJNHhXcllTL1ZQNStP?=
- =?utf-8?B?ZHlkM3FuNmFQTjRJTmQ1dVR2V3cwbFlkZytLajltK0RBc1VqY3h4aDlUdGVi?=
- =?utf-8?B?OHZaL3pNZmVZMVJZZDZzMnRVMTF5eDNROW11eUFRQU5vT0JLNlFBUDNjUGVC?=
- =?utf-8?B?eHNYTGJlSGV0bklPNFB3eU9Kb2src21mR1N1YUFDQmdVdG1xM1JsYXZsOWRJ?=
- =?utf-8?B?UzA4Vm5lcE5pM0xnQ0lWbnlrTWZhbFJLNTkrY25wZFVhQUgxcEdKbDVSL3M2?=
- =?utf-8?B?dlhkUDZ4SFBLUHNuVUdYUWt4Zlp2amxMUnRyeC9HUXlHTm5OVWlnVi9ZN2R2?=
- =?utf-8?B?QmQrMkdkRC82QU9PaW14MFNFRVdJT3FERThYTE5WZGs4QmhRbjRjNkE3NUFr?=
- =?utf-8?B?cXdJdDVzZVpUSTJZbDk2aHNmcGduai9zYXUvaTMrM2pPR0phRW9ESVdsT01L?=
- =?utf-8?B?R2hlNVJ4MkZlNzBHZ3cvTmVDbnQwWnVRanNzNkxjZGhtajRRdXkxZzA1cElq?=
- =?utf-8?B?Y2FSWXQ2RndaN05maFhXUSsvNHlEOExJY1hydWk1eXZZOW8zdjlDZVBKZDNW?=
- =?utf-8?B?eXVsTGlhMkFjdnN6elRMMkdTRmVxUnVtcEQ1TEhoSUpTSkVocTA1L3N1RXRI?=
- =?utf-8?B?OVBQNWxWUFFlZmNRYnVKdmo5Y1g2RjMvNjNmRHZmTTdTZEU0QU1hYVpxUEdz?=
- =?utf-8?B?MmRnNVMvYlowV3VWS2VmSC9OUHo4TTgyaGpSU1dyU0NNS0ZSNmhjUDFva0tK?=
- =?utf-8?B?UXNseEx1bVhSMnlCQVVDdkZ1VHF1RFVjdzVCekJSSG84L2xUM1RtNmpqZmF2?=
- =?utf-8?B?Si9yc2hoZ2lWR1V2WU1pcFBLNCtQeFp3aHBqRTR3NGlXSVlpOHc3UTJMWGlw?=
- =?utf-8?B?U2hsVG9BSkl1OXozWlQzdURtU2UyeHpXQXYwNGlyZzZMaUV6K1ZDMjlmTSto?=
- =?utf-8?B?NnBaUllIN2NNUkhXcEhVSVE5N3dGWVJlSVpBVmJPajkzQms0eFhVSWN5YURU?=
- =?utf-8?B?dkZIWjJPWGRiYWtIMTltK0p4c1AvVnp0TjMzODFlTk5Fc0NEa3ZvN3h4dGJ5?=
- =?utf-8?B?Z1dSZ0tKam8wOHRkOU5ka1JLbGRnUkRZQnJ5d09sM1RqSm9meXJMcjM5eVpQ?=
- =?utf-8?B?REFrdHVMczhyUnFmUGlsODlGOWpNZmQ0N1ZUSkFnQXYxL04zN2VEd04vNXIw?=
- =?utf-8?B?M0pHOXVsa29oTkFzL1d0Yk4venBsSHYxTWJMd2xxNURlMFZoeTdhbi9adHBZ?=
- =?utf-8?B?ME9XSXdxWVZmWWlvaUliUFFyMW9oS1BjallEUGwxN0lrdkdEQmEzTWVaN2Nh?=
- =?utf-8?B?N3BRTWpnY3hVOGcwc01TaEhFSExQRTdURHAyMTExY0dmR3lYaVhWUWFHN2R0?=
- =?utf-8?B?MUdVSXhCQ3JCU05BQTUrWUdMNnVFcnRycW1Sa3lDdjhxbWxxQXk1QXVtbHlw?=
- =?utf-8?B?VmFvcXVHSENoSzVZcHFXTlBHbkRkbU1ST0xRVkZyWnNiNG5FYjN0bkFEcGk2?=
- =?utf-8?B?SmZIMGIrQVgxL05EUmxDbDFVZENDRUtwMTVNY09hMVc0eXV3dk1PajJVR1Vi?=
- =?utf-8?B?UWJQYzlxRTBTdnduaXFkUHlpQ0xHT3BSeDBVNDl1aU91dEl1T3NwSnFWVU9M?=
- =?utf-8?B?ckt5YnYrMy9rK0tiaGpoNzVhQ2R1c2NaNi91dDNwK1BMWmthengrSE4rZjdW?=
- =?utf-8?B?TlJEcGtaUjFSQW9CdHRlYVdpaXBaMVRFRmdSdVJ3aXVVVHVZSXFHZVpORGQ2?=
- =?utf-8?B?U2NqQW5iOVVzMEM4Tm5QR1ZydkRFRDVkZXBVSWFYekN1TENJUkFRVUM3ZXp5?=
- =?utf-8?B?QnRWTDg5N0VSY25SeGRhTkR6MHFnbjgwOWNNd3pKU3MxWUN6RUo5TUFLSDZj?=
- =?utf-8?B?czhnelNMT3dWVEdvRS9oQkRLb0tKbHFZbTlwL0gwSitQSUhYK3JvR2gvZGNj?=
- =?utf-8?B?aGJaTmUrak1uU0tOTUE3dFJaVTd1K3M0UXc4ZVptYm9uclh5ZmlLaXN1SXBs?=
- =?utf-8?B?RVZDVnNFdGg0YVYvRUxUbVpKVmZJWHRaSDhkVC8yMFhnVUJQc1VCa0NSei81?=
- =?utf-8?B?K2tzMlJ0RjY2d2Q2clc3WjJCeHRDMUhwM3pUVjlPaW9rcUpEUXl5ZGM5bzFp?=
- =?utf-8?Q?VBfZHTcHBUEduv1f1XygWwGpQtwF8S0gM5VIZ?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c38b247-4c30-4a5f-743c-08da24b6ce01
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 23:21:19.1925
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TxfxtwRBoQl7a8Ahb0r9tJHaRBWKNFjprH/W2QxX3mvQoj91GPoDm+ttbfKNxFwNCSdAtgSEn4mk0H/4daNmD0dwLBpjw08V2g1XMAKICkc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7064
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422183144.GA2637654@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-
-On 22/04/2022 21:57, Greg Kroah-Hartman wrote:
-> On Fri, Apr 22, 2022 at 09:43:39PM +0700, Quan Nguyen wrote:
->> On 22/04/2022 13:20, Greg Kroah-Hartman wrote:
->>> On Fri, Apr 22, 2022 at 09:46:47AM +0700, Quan Nguyen wrote:
->>>> This commit adds Ampere's SMpro error monitor driver for monitoring
->>>> and reporting RAS-related errors as reported by SMpro co-processor
->>>> found on Ampere's Altra processor family.
->>>>
->>>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->>>> ---
->>>> Changes in v8:
->>>>     + Update wording for SMPRO_ERRMON on Kconfig file             [Quan]
->>>>     + Avoid uninitialized variable use               [kernel test robot]
->>>>     + Switch to use sysfs_emit()                                  [Greg]
->>>>     + Make sysfs to return single value                           [Greg]
->>>>     + Change errors_* sysfs to error_*                            [Quan]
->>>>     + Add overflow_[core|mem|pcie|other]_[ce|ue] sysfs to report
->>>>     overflow status of each type of HW errors                     [Quan]
->>>>     + Add some minor refactor                                     [Quan]
->>>>
->>>> Changes in v7:
->>>>     + Remove regmap_acquire/release_lock(), read_i2c_block_data() [Quan]
->>>>     + Use regmap_noinc_read() instead of errmon_read_block()      [Quan]
->>>>     + Validate number of errors before read                       [Quan]
->>>>     + Fix wrong return type of *_show() function     [kernel test robot]
->>>>     + Adjust patch order to avoid dependence with smpro-mfd  [Lee Jones]
->>>>     + Use pointer instead of stack memory                         [Quan]
->>>>
->>>> Changes in v6:
->>>>     + First introduced in v6 [Quan]
->>>>
->>>>    drivers/misc/Kconfig        |  12 +
->>>>    drivers/misc/Makefile       |   1 +
->>>>    drivers/misc/smpro-errmon.c | 477 ++++++++++++++++++++++++++++++++++++
->>>>    3 files changed, 490 insertions(+)
->>>>    create mode 100644 drivers/misc/smpro-errmon.c
->>>>
->>>> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
->>>> index 41d2bb0ae23a..9fbe6797c440 100644
->>>> --- a/drivers/misc/Kconfig
->>>> +++ b/drivers/misc/Kconfig
->>>> @@ -176,6 +176,18 @@ config SGI_XP
->>>>    	  this feature will allow for direct communication between SSIs
->>>>    	  based on a network adapter and DMA messaging.
->>>> +config SMPRO_ERRMON
->>>> +	tristate "Ampere Computing SMPro error monitor driver"
->>>> +	depends on MFD_SMPRO || COMPILE_TEST
->>>> +	help
->>>> +	  Say Y here to get support for the SMpro error monitor function
->>>> +	  provided by Ampere Computing's Altra and Altra Max SoCs. Upon
->>>> +	  loading, the driver creates sysfs files which can be use to gather
->>>> +	  multiple HW error data reported via read and write system calls.
->>>> +
->>>> +	  To compile this driver as a module, say M here. The driver will be
->>>> +	  called smpro-errmon.
->>>> +
->>>>    config CS5535_MFGPT
->>>>    	tristate "CS5535/CS5536 Geode Multi-Function General Purpose Timer (MFGPT) support"
->>>>    	depends on MFD_CS5535
->>>> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
->>>> index 70e800e9127f..483308a6e113 100644
->>>> --- a/drivers/misc/Makefile
->>>> +++ b/drivers/misc/Makefile
->>>> @@ -23,6 +23,7 @@ obj-$(CONFIG_ENCLOSURE_SERVICES) += enclosure.o
->>>>    obj-$(CONFIG_KGDB_TESTS)	+= kgdbts.o
->>>>    obj-$(CONFIG_SGI_XP)		+= sgi-xp/
->>>>    obj-$(CONFIG_SGI_GRU)		+= sgi-gru/
->>>> +obj-$(CONFIG_SMPRO_ERRMON)	+= smpro-errmon.o
->>>>    obj-$(CONFIG_CS5535_MFGPT)	+= cs5535-mfgpt.o
->>>>    obj-$(CONFIG_GEHC_ACHC)		+= gehc-achc.o
->>>>    obj-$(CONFIG_HP_ILO)		+= hpilo.o
->>>> diff --git a/drivers/misc/smpro-errmon.c b/drivers/misc/smpro-errmon.c
->>>> new file mode 100644
->>>> index 000000000000..df7d8fc4ff3f
->>>> --- /dev/null
->>>> +++ b/drivers/misc/smpro-errmon.c
->>>> @@ -0,0 +1,477 @@
->>>> +// SPDX-License-Identifier: GPL-2.0+
->>>
->>> Are you sure you mean "or any later version"?  I have to ask.
->>>
->>
->> Thank Greg for the review.
->>
->> Will change all to SPDX-License-Identifier: GPL-2.0-or-later in next
->> version.
+On Fri, Apr 22, 2022 at 11:31:44AM -0700, Guenter Roeck wrote:
+> On Thu, Apr 21, 2022 at 09:27:42AM +0200, Aleksa Savic wrote:
+> > Extend aquacomputer_d5next driver to expose hardware temperature sensors
+> > of the Aquacomputer Farbwerk RGB controller, which communicates through
+> > a proprietary USB HID protocol.
+> > 
+> > Four temperature sensors are available. Additionally, serial number and
+> > firmware version are exposed through debugfs.
+> > 
+> > Also, add Jack Doan to MAINTAINERS for this driver.
+> > 
+> > Signed-off-by: Jack Doan <me@jackdoan.com>
+> > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> > ---
+> > If adding to MAINTAINERS requires a separate commit, I'll send it
+> > separately.
+> > ---
+> >  Documentation/hwmon/aquacomputer_d5next.rst |  3 +-
+> >  MAINTAINERS                                 |  1 +
+> >  drivers/hwmon/Kconfig                       |  5 +--
+> >  drivers/hwmon/aquacomputer_d5next.c         | 37 ++++++++++++++++++---
+> >  4 files changed, 38 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> > index e69f718caf5b..717e28226cde 100644
+> > --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> > +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> > @@ -6,6 +6,7 @@ Kernel driver aquacomputer-d5next
+> >  Supported devices:
+> >  
+> >  * Aquacomputer D5 Next watercooling pump
+> > +* Aquacomputer Farbwerk RGB controller
+> >  * Aquacomputer Farbwerk 360 RGB controller
+> >  * Aquacomputer Octo fan controller
+> >  
+> > @@ -32,7 +33,7 @@ better suited for userspace tools.
+> >  The Octo exposes four temperature sensors and eight PWM controllable fans, along
+> >  with their speed (in RPM), power, voltage and current.
+> >  
+> > -The Farbwerk 360 exposes four temperature sensors. Depending on the device,
+> > +The Farbwerk and Farbwerk 360 expose four temperature sensors. Depending on the device,
+> >  not all sysfs and debugfs entries will be available.
+> >  
+> >  Usage notes
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index ea2cd656ee6c..d8e3ca0fbc3a 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -1389,6 +1389,7 @@ F:	drivers/media/i2c/aptina-pll.*
+> >  
+> >  AQUACOMPUTER D5 NEXT PUMP SENSOR DRIVER
+> >  M:	Aleksa Savic <savicaleksa83@gmail.com>
+> > +M:	Jack Doan <me@jackdoan.com>
+> >  L:	linux-hwmon@vger.kernel.org
+> >  S:	Maintained
+> >  F:	Documentation/hwmon/aquacomputer_d5next.rst
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 5beadd8a0932..01d10c9b633a 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -256,12 +256,13 @@ config SENSORS_AHT10
+> >  	  will be called aht10.
+> >  
+> >  config SENSORS_AQUACOMPUTER_D5NEXT
+> > -	tristate "Aquacomputer D5 Next, Octo and Farbwerk 360"
+> > +	tristate "Aquacomputer D5 Next, Octo, Farbwerk, Farbwerk 360"
+> >  	depends on USB_HID
+> >  	help
+> >  	  If you say yes here you get support for sensors and fans of
+> >  	  the Aquacomputer D5 Next watercooling pump, Octo fan
+> > -	  controller and Farbwerk 360 RGB controller, where available.
+> > +	  controller, Farbwerk and Farbwerk 360 RGB controllers, where
+> > +	  available.
+> >  
+> >  	  This driver can also be built as a module. If so, the module
+> >  	  will be called aquacomputer_d5next.
+> > diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> > index a464473bc981..7d2e7279abfb 100644
+> > --- a/drivers/hwmon/aquacomputer_d5next.c
+> > +++ b/drivers/hwmon/aquacomputer_d5next.c
+> > @@ -1,11 +1,12 @@
+> >  // SPDX-License-Identifier: GPL-2.0+
+> >  /*
+> > - * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360, Octo)
+> > + * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo)
+> >   *
+> >   * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+> >   * sensor values.
+> >   *
+> >   * Copyright 2021 Aleksa Savic <savicaleksa83@gmail.com>
+> > + * Copyright 2022 Jack Doan <me@jackdoan.com>
+> >   */
+> >  
+> >  #include <linux/crc16.h>
+> > @@ -19,14 +20,16 @@
+> >  #include <asm/unaligned.h>
+> >  
+> >  #define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
+> > +#define USB_PRODUCT_ID_FARBWERK		0xf00a
+> >  #define USB_PRODUCT_ID_D5NEXT		0xf00e
+> >  #define USB_PRODUCT_ID_FARBWERK360	0xf010
+> >  #define USB_PRODUCT_ID_OCTO		0xf011
+> >  
+> > -enum kinds { d5next, farbwerk360, octo };
+> > +enum kinds { d5next, farbwerk, farbwerk360, octo };
+> >  
+> >  static const char *const aqc_device_names[] = {
+> >  	[d5next] = "d5next",
+> > +	[farbwerk] = "farbwerk",
+> >  	[farbwerk360] = "farbwerk360",
+> >  	[octo] = "octo"
+> >  };
+> > @@ -69,6 +72,12 @@ static u8 secondary_ctrl_report[] = {
+> >  #define D5NEXT_PUMP_CURRENT		112
+> >  #define D5NEXT_FAN_CURRENT		99
+> >  
+> > +/* Register offsets for the Farbwerk RGB controller */
+> > +#define FARBWERK_NUM_SENSORS		4
+> > +#define FARBWERK_SENSOR_START		0x2f
+> > +#define FARBWERK_SENSOR_SIZE		0x02
+> > +#define FARBWERK_SENSOR_DISCONNECTED	0x7FFF
+> > +
+> >  /* Register offsets for the Farbwerk 360 RGB controller */
+> >  #define FARBWERK360_NUM_SENSORS		4
+> >  #define FARBWERK360_SENSOR_START	0x32
+> > @@ -125,7 +134,7 @@ static const char *const label_d5next_current[] = {
+> >  	"Fan current"
+> >  };
+> >  
+> > -/* Labels for Farbwerk 360 and Octo temperature sensors */
+> > +/* Labels for Farbwerk, Farbwerk 360 and Octo temperature sensors */
+> >  static const char *const label_temp_sensors[] = {
+> >  	"Sensor 1",
+> >  	"Sensor 2",
+> > @@ -319,6 +328,7 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+> >  			if (channel == 0)
+> >  				return 0444;
+> >  			break;
+> > +		case farbwerk:
+> >  		case farbwerk360:
+> >  		case octo:
+> >  			return 0444;
+> > @@ -551,8 +561,7 @@ static const struct hwmon_chip_info aqc_chip_info = {
+> >  	.info = aqc_info,
+> >  };
+> >  
+> > -static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data,
+> > -			 int size)
+> > +static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
+> >  {
+> >  	int i, sensor_value;
+> >  	struct aqc_data *priv;
+> > @@ -587,6 +596,17 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+> >  		priv->current_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_CURRENT);
+> >  		priv->current_input[1] = get_unaligned_be16(data + D5NEXT_FAN_CURRENT);
+> >  		break;
+> > +	case farbwerk:
+> > +		/* Temperature sensor readings */
+> > +		for (i = 0; i < FARBWERK_NUM_SENSORS; i++) {
+> > +			sensor_value = get_unaligned_be16(data + FARBWERK_SENSOR_START +
+> > +							  i * FARBWERK_SENSOR_SIZE);
+> > +			if (sensor_value == FARBWERK_SENSOR_DISCONNECTED)
+> > +				priv->temp_input[i] = -ENODATA;
+> > +			else
+> > +				priv->temp_input[i] = sensor_value * 10;
+> > +		}
+> > +		break;
+> >  	case farbwerk360:
+> >  		/* Temperature sensor readings */
+> >  		for (i = 0; i < FARBWERK360_NUM_SENSORS; i++) {
+> > @@ -733,6 +753,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+> >  		priv->voltage_label = label_d5next_voltages;
+> >  		priv->current_label = label_d5next_current;
+> >  		break;
+> > +	case USB_PRODUCT_ID_FARBWERK:
+> > +		priv->kind = farbwerk;
+> > +
 > 
-> That is not what I am asking (the SPDX tag format).  I mean, do you
-> really mean "or later" for your license as that is not the license of
-> the kernel overall?  If so, wonderful, but I have to ask that as your
-> legal group needs to be aware of it, sorry.
+> 
+> Any special reason for this empty line ? It seems kind of random.
+> 
+> Guenter
 > 
 
-Dear Greg,
+That's how code in other cases of that switch is formatted (not visible
+from this patch directly), setting priv->kind and then the appropriate
+labels.
 
-My sincere thanks for bringing this up. This would need help from our 
-legal team to recheck/review and will make appropriate change in my next 
-version.
+Thanks,
+Aleksa
 
-- Quan
+> > +		priv->temp_label = label_temp_sensors;
+> > +		break;
+> >  	case USB_PRODUCT_ID_FARBWERK360:
+> >  		priv->kind = farbwerk360;
+> >  
+> > @@ -795,6 +820,7 @@ static void aqc_remove(struct hid_device *hdev)
+> >  
+> >  static const struct hid_device_id aqc_table[] = {
+> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_D5NEXT) },
+> > +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK) },
+> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
+> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
+> >  	{ }
+> > @@ -826,4 +852,5 @@ module_exit(aqc_exit);
+> >  
+> >  MODULE_LICENSE("GPL");
+> >  MODULE_AUTHOR("Aleksa Savic <savicaleksa83@gmail.com>");
+> > +MODULE_AUTHOR("Jack Doan <me@jackdoan.com>");
+> >  MODULE_DESCRIPTION("Hwmon driver for Aquacomputer devices");
+> > -- 
+> > 2.35.1
+> > 
