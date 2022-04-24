@@ -2,87 +2,156 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9255C43217
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 04:34:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E05C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 04:56:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238162AbiDXEhy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Apr 2022 00:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S232727AbiDXE5Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Apr 2022 00:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbiDXEhq (ORCPT
+        with ESMTP id S231741AbiDXE5W (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Apr 2022 00:37:46 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC1626A;
-        Sat, 23 Apr 2022 21:34:46 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso8480683otf.12;
-        Sat, 23 Apr 2022 21:34:46 -0700 (PDT)
+        Sun, 24 Apr 2022 00:57:22 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1035A1759D4;
+        Sat, 23 Apr 2022 21:54:23 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id v12-20020a9d7d0c000000b006054b51c3d4so8517552otn.8;
+        Sat, 23 Apr 2022 21:54:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ErfZuYBRCWu7UGDAs1dgWCKIrnFFZmeMA+Cj0r+40SU=;
-        b=lUfwRXGtyBiDQ/KJjl8mfPheqfWD/lxSpOqdh0u4Y0rdgWXiCaolq1aybg7oj/S5t7
-         2BUf6rkj83r5T33gRL4SEHtnAS7UhnyncTe2ABd/mXKiTV0v+1pWC4ZR9iRMJHZCO1GK
-         C8s/RTpvzT+JPam8T9gdUEjeHDgzqUN7xVC+rfisEmWXnfA8X9UqJC2EjYPo/CjDjoc4
-         2coGCQxaY3QdJpq5mcyTCO96Y+d8fNu0aW7rj9OQC3+Jq6BBAisZAgEV1Bh+zmYqLDrF
-         nCCbk1kgkwG9R8bk25G3pAnAGQKiyG2LlSvttmsGyuI1PxwFu0DRBxqcLe1husaj1Jo/
-         zr6Q==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iZlWRIHwaUXUOxN31m6d5GIwgcMFtRtOwVPfSB7BNkQ=;
+        b=UuqoykSaJdeKVO8w8ScxnhtSQ3IFQZqaCvMLZXjxAyDXui49vZoOkNVPVPFlNexZQx
+         cjQHaI6cSn4O59PFZ5yK5ltRF1ODwnO2X97SuipzSYHAIN6MpYp6yknn2Q4tH301shgR
+         nc0A0at+XGR1iMG0zDGvPNscNin6Zm5hMINYmy+zX8lmS7bgV6yhOv1lovnlHve+Sl0b
+         exlqX4DSi5PPzW5oPstFxzFr8Pa1y/unlrqTU7k/CkR3WxWbIHjuF1hGUEgADZ8qbVGs
+         HFQlj8G8NqbX0V6wnJpNQaZ6H4+AOkM3/rv5Ib5Sv7egLDODXXgXSiRELXAMg1sqCpiN
+         5mag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ErfZuYBRCWu7UGDAs1dgWCKIrnFFZmeMA+Cj0r+40SU=;
-        b=qc1usehOyi8vZOtDwLG6qr+yYK0TzBZP2RfaXsBeE8J+QPFLO2W6pKQbGF4vh7KpoP
-         BQgM8u0BtJ23g3CvgzdzBlpdojf3dwUC/k1hHC/mZEsW0uVv7Oq3u3RuRr6YzBstDSv/
-         DfD+khysYSWqcKKsObFIKsTkTKwXLU7WxbTo4b4+kgZcqkKV6Lz+uqQo+NR/6mn5olh8
-         A4wFcTZpKDXFgECWsaTfLMy1GhRtvli+G0bdNZoiS33J0SvaDVfvRbllSJnGLUt9OFaU
-         VlovX9C42PXmpt3euKikntDRu+UVOYoCQYNdwFvhhUxCOvmb+cckZLnlp6JgMKS410j2
-         XPnQ==
-X-Gm-Message-State: AOAM533aa6YpnInIpfyEGSEN6Xrb5SQh2L2ipCWyiW99OvVg3AQZDMKm
-        8CIY6MZ/Ggp6I/EsCcotnsnNAItYRE4=
-X-Google-Smtp-Source: ABdhPJwGTURk0pp704LZTJ19hhlI95VpVZ+N8lWoeZk1qPGfXJW2fH5KInU8o9O+ALBI8WZTzaT+0w==
-X-Received: by 2002:a9d:734c:0:b0:605:5cef:cdf5 with SMTP id l12-20020a9d734c000000b006055cefcdf5mr4581407otk.126.1650774886186;
-        Sat, 23 Apr 2022 21:34:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ps8-20020a0568709e0800b000e910249ee3sm1468537oab.9.2022.04.23.21.34.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 21:34:45 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iZlWRIHwaUXUOxN31m6d5GIwgcMFtRtOwVPfSB7BNkQ=;
+        b=MX7NHuyRwpxNKFpQ4q0doKrIgiNgy3T9FqOx85ToaCohkHjq/6f86jL7ptjRmCJe9y
+         Zpqzo7JVFYxL2lwgMxtprjQ29/uLvryz5xfGCno/d7aUonmlpgVLVO53/c7Eivr1n6WC
+         oifdt7j/jC+QLBnGylLqBR8gCE7vBdMJYltsxfUGxK3EYjESfXoTqoRJwmmV6TWttZdZ
+         w5QlhDkTQPtoKmOB1+J8XDZKkz4TQc2E0eOSE++BtIfB0FkmyutnhLzQEjR4cRDCp0DR
+         PU5of9ZkfUF0Mzhu2bT1x8PLmGIa/5P3ik51ROL48JZp211aV2UyguOt1OccQyxLYhry
+         EQwA==
+X-Gm-Message-State: AOAM532NvrsSIBAi8+5lCEpEBu4jEOM92FzdRy22CjxmKbRB8Y0K98IC
+        7yS07izlZaVn0hZBL2M+ODvlt/x3hMo=
+X-Google-Smtp-Source: ABdhPJx8mXw/Q+AWtxdQMZAqjVOnFjeKGLovtMjfOax21slcp1e3tXZwQinckxoQxyLDlud6esXScQ==
+X-Received: by 2002:a9d:5d15:0:b0:605:5632:1ea5 with SMTP id b21-20020a9d5d15000000b0060556321ea5mr4502984oti.341.1650776061705;
+        Sat, 23 Apr 2022 21:54:21 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x2-20020a4a2a42000000b0033a3c4392c3sm2761165oox.26.2022.04.23.21.54.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 21:54:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 21:34:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Camel Guo <camel.guo@axis.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@axis.com
-Subject: Re: [PATCH v4 2/2] hwmon: (tmp401) Add support of three advanced
- features
-Message-ID: <20220424043444.GA4001077@roeck-us.net>
-References: <20220414075824.2634839-1-camel.guo@axis.com>
- <20220414075824.2634839-3-camel.guo@axis.com>
+Message-ID: <e6fdd042-a84e-ef0d-a042-df04c3fb84e1@roeck-us.net>
+Date:   Sat, 23 Apr 2022 21:54:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414075824.2634839-3-camel.guo@axis.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 00/20] hwmon: check return value after calling
+ platform_get_resource()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com
+References: <20220422091207.4034406-1-yangyingliang@huawei.com>
+ <3896f884-56d9-d0d9-efe6-839c7431e6de@roeck-us.net>
+ <c40e9bff-e28c-58c3-dc09-1a10f24ad440@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <c40e9bff-e28c-58c3-dc09-1a10f24ad440@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 09:58:23AM +0200, Camel Guo wrote:
-> tmp401 driver supports TMP401, TMP411 and TMP43X temperature sensors.
-> According to their datasheet:
-> - all of them support extended temperature range feature;
-> - TMP411 and TPM43X support n-factor correction feature;
-> - TMP43X support beta compensation feature.
+On 4/23/22 20:35, Yang Yingliang wrote:
+> Hi,
 > 
-> In order to support setting them during bootup, this commit reads
-> ti,extended-range-enable, ti,n-factor and ti,beta-compensation and set
-> the corresponding registers during probing.
+> On 2022/4/22 21:27, Guenter Roeck wrote:
+>> On 4/22/22 02:11, Yang Yingliang wrote:
+>>> This patcheset add check after calling platform_get_resource to avoid null-ptr-deref
+>>> in drivers/hwmon/.
+>>>
+>>> Yang Yingliang (20):
+>>>    hwmon: (abituguru) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (abituguru3) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (dme1737) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (f71805f) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (f71882fg) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (it87) check return value after calling platform_get_resource()
+>>>    hwmon: (lm78) check return value after calling platform_get_resource()
+>>>    hwmon: (nct6683) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (nct6775) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (sch5627) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (sch5636) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (sis5595) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (smsc47b397) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (smsc47m1) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (via686a) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (vt1211) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (vt8231) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (w83627ehf) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (w83627hf) check return value after calling
+>>>      platform_get_resource()
+>>>    hwmon: (w83781d) check return value after calling
+>>>      platform_get_resource()
+>>>
+>>>   drivers/hwmon/abituguru.c  | 6 +++++-
+>>>   drivers/hwmon/abituguru3.c | 6 +++++-
+>>>   drivers/hwmon/dme1737.c    | 2 ++
+>>>   drivers/hwmon/f71805f.c    | 2 ++
+>>>   drivers/hwmon/f71882fg.c   | 6 +++++-
+>>>   drivers/hwmon/it87.c       | 2 ++
+>>>   drivers/hwmon/lm78.c       | 2 ++
+>>>   drivers/hwmon/nct6683.c    | 2 ++
+>>>   drivers/hwmon/nct6775.c    | 2 ++
+>>>   drivers/hwmon/sch5627.c    | 6 +++++-
+>>>   drivers/hwmon/sch5636.c    | 6 +++++-
+>>>   drivers/hwmon/sis5595.c    | 2 ++
+>>>   drivers/hwmon/smsc47b397.c | 2 ++
+>>>   drivers/hwmon/smsc47m1.c   | 2 ++
+>>>   drivers/hwmon/via686a.c    | 2 ++
+>>>   drivers/hwmon/vt1211.c     | 2 ++
+>>>   drivers/hwmon/vt8231.c     | 2 ++
+>>>   drivers/hwmon/w83627ehf.c  | 2 ++
+>>>   drivers/hwmon/w83627hf.c   | 2 ++
+>>>   drivers/hwmon/w83781d.c    | 2 ++
+>>>   20 files changed, 55 insertions(+), 5 deletions(-)
+>>>
+>>
+>> This series solves a problem which does not exist in reality and is only theoretic.
+>> The devices are instantiated from their init functions which always adds the resource.
+>> Please do not submit such patches.
+> As you said the resource will be add in init functions, I checked these drivers, the driver
+> sch5627 and sch5636 won't add resource, so need I send patches to fix these drivers ?
 > 
-> Signed-off-by: Camel Guo <camel.guo@axis.com>
+You might want to read the code more carefully. The drivers are instantiated
+from drivers/hwmon/sch56xx-common.c which does add the resource.
 
-Applied to hwmon-next.
-
-Thanks,
 Guenter
+
