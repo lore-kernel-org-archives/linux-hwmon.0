@@ -2,192 +2,150 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 892DFC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 16:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16322C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 16:37:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiDXQWy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Apr 2022 12:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S235279AbiDXQkF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Apr 2022 12:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234208AbiDXQWx (ORCPT
+        with ESMTP id S235178AbiDXQkF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:22:53 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CFF1606AB;
-        Sun, 24 Apr 2022 09:19:52 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id v65so9929156oig.10;
-        Sun, 24 Apr 2022 09:19:52 -0700 (PDT)
+        Sun, 24 Apr 2022 12:40:05 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2A222B1A;
+        Sun, 24 Apr 2022 09:37:03 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e656032735so12552730fac.0;
+        Sun, 24 Apr 2022 09:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4tNCsdnlVnPEJ7/xhc5Cq22tippVdust1ZNiw0N7EtA=;
-        b=Jd1/eSljZ1f2OryQk8wmUVQZbEffQoMUhrL8PFGn1II4+G604oiaQSCWK46EHa9HEi
-         dFCZZKpkd0XjKaUBBgYfpj+kQz8CoEErL6uOC9fo3tc6sx4XtDYoNyqqvLJW6/zSJVat
-         q/64W2dCQK4HoRO5K9teE3c1rbGAGn/e/OlYH/Eqn41+iuKg6FOZrV5563TmXby6FQqW
-         iwvKpGkO5wJ7GqLlEZzhiTbX4bAVElj3/8mwpSTLSvrFxkg8Mohdk9I154arU0sUC5Gt
-         hhkgYyiSkIqRjQtibdB6ggsQtBCWFfbOZmALGKHKvCBTKrSd3z64xBkdCghdAtlI7YLI
-         jxDA==
+        bh=8Fp3HdofZJT+o1V6MRR3ocRbEBQWRw3KcjAOJKB2xZA=;
+        b=mC13yybzcnF/RGafypXhT9+9YUUFRvE2P705dGgEC+lIEDYPu5yhhe3TFphLN/Z45q
+         rAiG4A+KS8Q6rvEALqkGqC0NtkVjAPRuPLxFSFbmXN+4h8yZdS8RRGsHLHtvkqDRmToE
+         PQCRK/uCHFP15NqwTVXHLagR14fuUW/eHSdGpxmlVreknDl+hFBaWIoghOUOfQVTaXyY
+         3Asfu3F0XVbGFhIQ04BNcpS1OvLE8YC5/s0+hSrCMFeG1BHMr539SbJ5RTM4ZbTW/HF3
+         tap/KOvZKK3qjYAHtN//lapheE/SjtrvgglilewB5yMcbO0+4xLwDow6qVfhscWWtGqp
+         4LSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4tNCsdnlVnPEJ7/xhc5Cq22tippVdust1ZNiw0N7EtA=;
-        b=zRjhcTZPyPGbgbrnR15/gDtp4mwEM4L02Gt3gDTpUjKIJDZHuggY7zUVieO7fDfHug
-         ATXccZDhUR52qID34WJI6RL5dnJVGdGEBNjir8aDRGecZ2OiATp59Fz/UGVfWcQCaRVT
-         QSXVfOH0bDbHmYhY9kzpQDpqn/zTYCqOHk2O7OxdPg7Ocjs4wSvnDDp/35GHjq+MU+d7
-         DuWYRcZ55D9w0YSqXNKSMXdlDbDP+UY3bMJOo6lbx/Imv/fayqExjq78epqbL5bQ3krY
-         irgsCRKrpsFZpNDfN/8zUrTyHdsQQgvB8V+y7jAnRthaWkZas0z80I3fbLm2ajIxhYKa
-         H2Dw==
-X-Gm-Message-State: AOAM530HwyQ59ea5GeExbGMoe9u7J7v2bx5mgZfq2W/O0j4t+9GvSAm8
-        /e8XABXNw23pxpqPRt5VBnE=
-X-Google-Smtp-Source: ABdhPJzp5UJS8K9KqriWBEetcOKWxWj90jUPJ370wZJnUrNCtpB65v5aAKHrP6qpIHK5OsSXsIfRzw==
-X-Received: by 2002:aca:f389:0:b0:322:3753:bf51 with SMTP id r131-20020acaf389000000b003223753bf51mr10155645oih.44.1650817191970;
-        Sun, 24 Apr 2022 09:19:51 -0700 (PDT)
+        bh=8Fp3HdofZJT+o1V6MRR3ocRbEBQWRw3KcjAOJKB2xZA=;
+        b=Xg784UtGWezSmxW/D4uZBp1NNcWE6mo4g8cQa7TAW7e1epsFRR4XMFqsvAByXpLPug
+         /Ar2J7ifXO5WBhPEQS3XfrxStkYNe4AHuSSm4ssnaq6jcVVF291qe63u5cUGxOtKDBwK
+         JIKScJk/eBqO0b7gPCnkX1b5xXU13swR9omvolJ9QPBom4aF6bP4EkGyzStRGz6VX/zm
+         CRe+f7+ukduoGnjWT5kMMuFvw1PU2KF7sDIRoZ4kTIlUpjbpAW1B/kYAVcQVBcmOD39W
+         RxYFhaTVeT9v7chtaYeCrUjCqFki7tsICClgO10Oa1Y8SGhxP6pm0UmUqvlCXR9aMD2m
+         t4zQ==
+X-Gm-Message-State: AOAM532Y10qAKb70cUgjbJrszWuASTed5l2wfcaiFBma/vm1jUwPCyIS
+        8mcGNHnLWq7s6K2P5gyar1XbyuE7Pxg=
+X-Google-Smtp-Source: ABdhPJy6aseCExIW1K41OsMFQVY720cNY6Zlhp1FypG4mAGAWlQSlpkXr6JyeZymDOS67DmssI+1bw==
+X-Received: by 2002:a05:6870:460f:b0:dd:cd0e:d931 with SMTP id z15-20020a056870460f00b000ddcd0ed931mr10220637oao.196.1650818223040;
+        Sun, 24 Apr 2022 09:37:03 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u7-20020a4a85c7000000b0035c12c8be73sm3317675ooh.29.2022.04.24.09.19.50
+        by smtp.gmail.com with ESMTPSA id x24-20020a4a9b98000000b0033a70525c35sm3288394ooj.30.2022.04.24.09.37.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 09:19:51 -0700 (PDT)
+        Sun, 24 Apr 2022 09:37:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <665df671-23bb-475d-5148-8613cb6cf16c@roeck-us.net>
-Date:   Sun, 24 Apr 2022 09:19:49 -0700
+Message-ID: <8d9e41b5-a143-eace-72ff-c8e9e399daba@roeck-us.net>
+Date:   Sun, 24 Apr 2022 09:37:00 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] hwmon: (pmbus/max16601) Add MAX16602 support
+Subject: Re: [PATCH v4 3/4] dt-bindings: hwmon: add Microchip LAN966x bindings
 Content-Language: en-US
-To:     "Ofluoglu, Atif" <Atif.Ofluoglu@analog.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-References: <BYAPR03MB40063CFD52C6D8831A8740AD8AEE9@BYAPR03MB4006.namprd03.prod.outlook.com>
+To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+References: <20220401214032.3738095-1-michael@walle.cc>
+ <20220401214032.3738095-4-michael@walle.cc>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <BYAPR03MB40063CFD52C6D8831A8740AD8AEE9@BYAPR03MB4006.namprd03.prod.outlook.com>
+In-Reply-To: <20220401214032.3738095-4-michael@walle.cc>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/15/22 07:06, Ofluoglu, Atif wrote:
->>From e2a1f7d1a836188a9b284fc473af9118aa160ddb Mon Sep 17 00:00:00 2001
-> From: Atif Ofluoglu <mailto:atif.ofluoglu@maximintegrated.com>
-> Date: Fri, 15 Apr 2022 16:34:29 +0300
-> Subject: [PATCH] hwmon: (pmbus/max16601) Add MAX16602 support
+On 4/1/22 14:40, Michael Walle wrote:
+> Add a binding for the temperature sensor and the fan controller on the
+> Microchip LAN966x family.
 > 
-> Adding another MAX16602 chip support to MAX16601 driver
-> Tested with MAX16602 works as expected.
-> 
-> Signed-off-by: Atif Ofluoglu <mailto:atif.ofluoglu@maximintegrated.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Never mind, applied. The problem was that your e-mail system adds
-"mailto:" to all e-mail addresses. See above and in the patch.
-Also, the actual patch was embedded in another e-mail frame which
-confused git. After fixing that up, that the patch applied cleanly.
-In the future, please make sure that your e-mail system leaves
-any patches you send alone.
+Still needs approval by a devicetree maintainer.
 
-Thanks,
 Guenter
 
 > ---
->   Documentation/hwmon/max16601.rst |  8 ++++++++
->   drivers/hwmon/pmbus/Kconfig      |  4 ++--
->   drivers/hwmon/pmbus/max16601.c   | 13 ++++++++-----
->   3 files changed, 18 insertions(+), 7 deletions(-)
+>   .../bindings/hwmon/microchip,lan966x.yaml     | 53 +++++++++++++++++++
+>   1 file changed, 53 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
 > 
-> diff --git a/Documentation/hwmon/max16601.rst b/Documentation/hwmon/max16601.rst
-> index 92c0a7d7808c..6a4eef8efbaf 100644
-> --- a/Documentation/hwmon/max16601.rst
-> +++ b/Documentation/hwmon/max16601.rst
-> @@ -21,6 +21,14 @@ Supported chips:
->   
->       Datasheet: Not published
->   
-> +  * Maxim MAX16602
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml b/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+> new file mode 100644
+> index 000000000000..390dd6755ff5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/microchip,lan966x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +    Prefix: 'max16602'
+> +title: Microchip LAN966x Hardware Monitor
 > +
-> +    Addresses scanned: -
+> +maintainers:
+> +  - Michael Walle <michael@walle.cc>
 > +
-> +    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX16602.pdf
+> +description: |
+> +  Microchip LAN966x temperature monitor and fan controller
 > +
->   Author: Guenter Roeck <mailto:linux@roeck-us.net>
->   
->   
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index a2ea1d5a8765..53683d2d0fb2 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -228,10 +228,10 @@ config SENSORS_MAX16064
->   	  be called max16064.
->   
->   config SENSORS_MAX16601
-> -	tristate "Maxim MAX16508, MAX16601"
-> +	tristate "Maxim MAX16508, MAX16601, MAX16602"
->   	help
->   	  If you say yes here you get hardware monitoring support for Maxim
-> -	  MAX16508 and MAX16601.
-> +	  MAX16508, MAX16601 and MAX16602.
->   
->   	  This driver can also be built as a module. If so, the module will
->   	  be called max16601.
-> diff --git a/drivers/hwmon/pmbus/max16601.c b/drivers/hwmon/pmbus/max16601.c
-> index 5a226a564776..b628405e6586 100644
-> --- a/drivers/hwmon/pmbus/max16601.c
-> +++ b/drivers/hwmon/pmbus/max16601.c
-> @@ -1,6 +1,6 @@
->   // SPDX-License-Identifier: GPL-2.0
->   /*
-> - * Hardware monitoring driver for Maxim MAX16508 and MAX16601.
-> + * Hardware monitoring driver for Maxim MAX16508, MAX16601 and MAX16602.
->    *
->    * Implementation notes:
->    *
-> @@ -31,7 +31,7 @@
->   
->   #include "pmbus.h"
->   
-> -enum chips { max16508, max16601 };
-> +enum chips { max16508, max16601, max16602 };
->   
->   #define REG_DEFAULT_NUM_POP	0xc4
->   #define REG_SETPT_DVID		0xd1
-> @@ -202,7 +202,7 @@ static int max16601_identify(struct i2c_client *client,
->   	else
->   		info->vrm_version[0] = vr12;
->   
-> -	if (data->id != max16601)
-> +	if (data->id != max16601 && data->id != max16602)
->   		return 0;
->   
->   	reg = i2c_smbus_read_byte_data(client, REG_DEFAULT_NUM_POP);
-> @@ -264,6 +264,7 @@ static void max16601_remove(void *_data)
->   static const struct i2c_device_id max16601_id[] = {
->   	{"max16508", max16508},
->   	{"max16601", max16601},
-> +	{"max16602", max16602},
->   	{}
->   };
->   MODULE_DEVICE_TABLE(i2c, max16601_id);
-> @@ -280,13 +281,15 @@ static int max16601_get_id(struct i2c_client *client)
->   		return -ENODEV;
->   
->   	/*
-> -	 * PMBUS_IC_DEVICE_ID is expected to return "MAX16601y.xx"
-> -	 * or "MAX16500y.xx".
-> +	 * PMBUS_IC_DEVICE_ID is expected to return "MAX16601y.xx" or
-> +	 * MAX16602y.xx or "MAX16500y.xx".cdxxcccccccccc
->   	 */
->   	if (!strncmp(buf, "MAX16500", 8)) {
->   		id = max16508;
->   	} else if (!strncmp(buf, "MAX16601", 8)) {
->   		id = max16601;
-> +	} else if (!strncmp(buf, "MAX16602", 8)) {
-> +		id = max16602;
->   	} else {
->   		buf[ret] = '\0';
->   		dev_err(dev, "Unsupported chip '%s'\n", buf);
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,lan9668-hwmon
+> +
+> +  reg:
+> +    items:
+> +      - description: PVT registers
+> +      - description: FAN registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: pvt
+> +      - const: fan
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  '#thermal-sensor-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    hwmon: hwmon@e2010180 {
+> +        compatible = "microchip,lan9668-hwmon";
+> +        reg = <0xe2010180 0xc>,
+> +              <0xe20042a8 0xc>;
+> +        reg-names = "pvt", "fan";
+> +        clocks = <&sys_clk>;
+> +        #thermal-sensor-cells = <0>;
+> +    };
 
