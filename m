@@ -2,79 +2,140 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B97EEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 01:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A625C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 03:35:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236623AbiDXBw7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 23 Apr 2022 21:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S231642AbiDXDiI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 23 Apr 2022 23:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiDXBw6 (ORCPT
+        with ESMTP id S232487AbiDXDiH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Apr 2022 21:52:58 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D894463C4;
-        Sat, 23 Apr 2022 18:49:58 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-e5c42b6e31so12624711fac.12;
-        Sat, 23 Apr 2022 18:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HdDCdJEingdj1BtxscgnBzWm9IeD9qwg7IBZsost16s=;
-        b=l42kw1gmYnAvUPgiz1we0vABR4tN8Zmq+6LT2lVFvUZwiencbyxIPsPUTfzm8brEyN
-         QJnTepcCXLlb8Sc5jkPjLxGhz5xSuEg/vMimqD3Z46kDEiMjpDx80BW2Aqaot/O/BPqv
-         83aJ65IuS/R2L/f5Ek7FnQWFg7BSeQuPT2D1WmQcooBBb7llBsVYXtTmzejOVwoDpykx
-         vj3OEAYKaX6GujKsELOg3of9FIQcdoNTCM0XrqF7wuTBF9OOK7eKhQbT2Qaxj050bHkw
-         nChC5pjZxnLUQ1i31E4QQfLQ9NE12D55L9QLJQF7k5+xQx8HcVsmTISQC19ljud3dMOM
-         8F3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HdDCdJEingdj1BtxscgnBzWm9IeD9qwg7IBZsost16s=;
-        b=xGssTY2xBezH7yFR8ko72s8OqOBrTcqRp2nMkf6lNqfpFqShESCPv0MIAI1wke31Od
-         SNJv1GG7DRKXRIRmA2h4pfD8hG74OajSUoYW62i25S9Fo5zuZVZIcySCmc/HtY8l0e2E
-         kHpUK4typ8yIKkGHsmWxCBX+HCRAob1Va0d4diaPGyzLuEnw3r2L2ZJZE/VQiYrROjZD
-         HH2Gmag0x+lfkH+seZ5P+2Sq/bwAK0j41fBRufsN1H2/jsiGrldV1hZvxvMv7zTEv1p5
-         o3E00bi//YbmVKv8EU41PGEl1+BqSRWZQUOeEgXgvyqVmmBUl3x84X0BmWlW2KYaQvY1
-         V8BA==
-X-Gm-Message-State: AOAM5326Kt+KyAjFeggamczfdwMBz6gHPZxHszS3QQlu57Lw89MLXjKm
-        06q9coQKRZQGmNYLzEVoF/Q=
-X-Google-Smtp-Source: ABdhPJxoSktaRJuA7Ko1CKr2jk8aTGRq/jGF5WkEiuhuaz9dXl92zUa4hbph21RqLF7wZY/67YOOlw==
-X-Received: by 2002:a05:6870:738c:b0:e9:155e:7f40 with SMTP id z12-20020a056870738c00b000e9155e7f40mr2034120oam.124.1650764998232;
-        Sat, 23 Apr 2022 18:49:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id lf13-20020a0568700c4d00b000e9254af871sm505374oab.49.2022.04.23.18.49.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 18:49:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 18:49:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Add cooling device support
-Message-ID: <20220424014956.GA3989878@roeck-us.net>
-References: <20220410163935.7840-1-W_Armin@gmx.de>
+        Sat, 23 Apr 2022 23:38:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9252325D3;
+        Sat, 23 Apr 2022 20:35:05 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KmDH13yfMzFr25;
+        Sun, 24 Apr 2022 11:32:29 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Apr 2022 11:35:03 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Apr 2022 11:35:03 +0800
+Subject: Re: [PATCH 00/20] hwmon: check return value after calling
+ platform_get_resource()
+To:     Guenter Roeck <linux@roeck-us.net>, <linux-kernel@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+CC:     <jdelvare@suse.com>
+References: <20220422091207.4034406-1-yangyingliang@huawei.com>
+ <3896f884-56d9-d0d9-efe6-839c7431e6de@roeck-us.net>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <c40e9bff-e28c-58c3-dc09-1a10f24ad440@huawei.com>
+Date:   Sun, 24 Apr 2022 11:35:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220410163935.7840-1-W_Armin@gmx.de>
+In-Reply-To: <3896f884-56d9-d0d9-efe6-839c7431e6de@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 06:39:35PM +0200, Armin Wolf wrote:
-> Until now, only the temperature sensors where exported thru
-> the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
-> to make them available as cooling devices.
-> Also update Documentation and fix a minor issue with the alphabetic
-> ordering of the includes.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Hi,
 
-Applied to hwmon-next.
+On 2022/4/22 21:27, Guenter Roeck wrote:
+> On 4/22/22 02:11, Yang Yingliang wrote:
+>> This patcheset add check after calling platform_get_resource to avoid 
+>> null-ptr-deref
+>> in drivers/hwmon/.
+>>
+>> Yang Yingliang (20):
+>>    hwmon: (abituguru) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (abituguru3) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (dme1737) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (f71805f) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (f71882fg) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (it87) check return value after calling 
+>> platform_get_resource()
+>>    hwmon: (lm78) check return value after calling 
+>> platform_get_resource()
+>>    hwmon: (nct6683) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (nct6775) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (sch5627) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (sch5636) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (sis5595) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (smsc47b397) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (smsc47m1) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (via686a) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (vt1211) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (vt8231) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (w83627ehf) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (w83627hf) check return value after calling
+>>      platform_get_resource()
+>>    hwmon: (w83781d) check return value after calling
+>>      platform_get_resource()
+>>
+>>   drivers/hwmon/abituguru.c  | 6 +++++-
+>>   drivers/hwmon/abituguru3.c | 6 +++++-
+>>   drivers/hwmon/dme1737.c    | 2 ++
+>>   drivers/hwmon/f71805f.c    | 2 ++
+>>   drivers/hwmon/f71882fg.c   | 6 +++++-
+>>   drivers/hwmon/it87.c       | 2 ++
+>>   drivers/hwmon/lm78.c       | 2 ++
+>>   drivers/hwmon/nct6683.c    | 2 ++
+>>   drivers/hwmon/nct6775.c    | 2 ++
+>>   drivers/hwmon/sch5627.c    | 6 +++++-
+>>   drivers/hwmon/sch5636.c    | 6 +++++-
+>>   drivers/hwmon/sis5595.c    | 2 ++
+>>   drivers/hwmon/smsc47b397.c | 2 ++
+>>   drivers/hwmon/smsc47m1.c   | 2 ++
+>>   drivers/hwmon/via686a.c    | 2 ++
+>>   drivers/hwmon/vt1211.c     | 2 ++
+>>   drivers/hwmon/vt8231.c     | 2 ++
+>>   drivers/hwmon/w83627ehf.c  | 2 ++
+>>   drivers/hwmon/w83627hf.c   | 2 ++
+>>   drivers/hwmon/w83781d.c    | 2 ++
+>>   20 files changed, 55 insertions(+), 5 deletions(-)
+>>
+>
+> This series solves a problem which does not exist in reality and is 
+> only theoretic.
+> The devices are instantiated from their init functions which always 
+> adds the resource.
+> Please do not submit such patches.
+As you said the resource will be add in init functions, I checked these 
+drivers, the driver
+sch5627 and sch5636 won't add resource, so need I send patches to fix 
+these drivers ?
 
 Thanks,
-Guenter
+Yang
+>
+> Guenter
+> .
