@@ -2,148 +2,92 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 139CCC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 06:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 124E5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 15:48:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbiDXGYF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Apr 2022 02:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
+        id S232271AbiDXPv4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Apr 2022 11:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiDXGYE (ORCPT
+        with ESMTP id S229657AbiDXPvz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Apr 2022 02:24:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0186C2AC47;
-        Sat, 23 Apr 2022 23:21:01 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KmJ1F5JzHzhYCv;
-        Sun, 24 Apr 2022 14:20:49 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Apr 2022 14:20:59 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Apr 2022 14:20:59 +0800
-Subject: Re: [PATCH 00/20] hwmon: check return value after calling
- platform_get_resource()
-To:     Guenter Roeck <linux@roeck-us.net>, <linux-kernel@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>
-CC:     <jdelvare@suse.com>
-References: <20220422091207.4034406-1-yangyingliang@huawei.com>
- <3896f884-56d9-d0d9-efe6-839c7431e6de@roeck-us.net>
- <c40e9bff-e28c-58c3-dc09-1a10f24ad440@huawei.com>
- <e6fdd042-a84e-ef0d-a042-df04c3fb84e1@roeck-us.net>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <8355e6fe-0271-eba1-c256-a5582a8e01f9@huawei.com>
-Date:   Sun, 24 Apr 2022 14:20:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 24 Apr 2022 11:51:55 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7554C37034;
+        Sun, 24 Apr 2022 08:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650815310;
+        bh=dM80CE4Hxz/HXDZj9f/WT2hePOrxx+6iBlw5smBqUvU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=hhtVxyceNEJdNpBy0WWvKBsXz53J08znmTwbSELoVwwweiXvNUMrhq4pmWEQG3sOO
+         p03JiFwI0oCpi/MKf5SW99vnCcfhJHZE92hvgya7+lOXomXkK9Da2mPOCQJHfe6Wzr
+         UY1V6emEzAjngBpn08oZaaIkvYZlWBwzT9NyIntQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Mk0NU-1oBMWc0mj2-00kNDx; Sun, 24 Apr 2022 17:48:30 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Update Documentation regarding firmware bugs
+Date:   Sun, 24 Apr 2022 17:48:24 +0200
+Message-Id: <20220424154824.9396-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <e6fdd042-a84e-ef0d-a042-df04c3fb84e1@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rV6AgNBN3rAfW2XGLJW3HrQQl4Cp8C0wEE2JUTT4+NaBbl9WpQs
+ s0ChGobIykCt2Wqv5lYw5t2EwnlE3DAHuYUdugBWI7ccIeUay3i+pl0+wOW1Qu+iWuTCrbX
+ M1uuqY5E066+aGE32SuCamOjn2MFno5fucxD5qW7yBqpyaezRbUehbN27YhY/oS7jkbmbQ/
+ aLYkUBrkzOTCQOp2PG6nA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CYclG5nPRS4=:yiJ/bFmOQH4r2vgZbqFoRO
+ 5LMUsQljpVKXOMUFAcUMnPdw5PDRo/oATaCSykndNIUJlA8FmxmUEdFPBhCw0v0Vd9whJRGjA
+ /akmXbBjnSCca0aQWyFZN07QfhQ8TAelA3vZDk+wEwycrMwtCLGtC9BPz+KrLrlN3U15bf1W7
+ /v42em3m0Ds3BrVt/HHZWbsl8AeKPA5qwzEHFywgDOq/7/IbQYMBr67KRa6yRg7ewjNHfm7no
+ bNrWz/w7FQ6JfEgOjxZMjH+MIsUEUJM0UOjdYlzj5FakBowdyQBsjjFaPbX61+oF7BaihVsLj
+ /m2+jnDHkEtc/qyI8EZr6cz0lD5EtB7R5+mMjXWXrPklaNz4Bk+0mfcpO20v5FrLCtteqNuAk
+ 4f6kNshPBkjeVz9sYB0M9L/IcfWmqUPCpaN4aGvF/RX69e5vBZPaw3+R1WEZyy9j3qZcDCQmJ
+ tzB4BZCOoJvZzZ2qgUxmvaFpgt80aMgY6oM8YNA4ixo8SEnX6dCiASfpaUQcC2YVH+x16mZH4
+ cAKy1iQxwVPnFwhcTMi5SiLsmueAJZ6XKZ5woClhW7lrRadzfzxD5Du/FR980YAwJcijLWRBM
+ yn9+UnHhRIYV1afzqEY4VwtA9JPTRJ6qGs2H+NLmOksThnX2TYIASloscwuava71Y/oDOMRut
+ YcS+523FtCRLUUdCazgaJViZvRmdFAtst9mfWCp2b6wn6vJJoqC4jzvtTayAAJ1ydstOkQJuP
+ babbzlhkoUZImhY3okczUeXVtVTvmBSDe15w6zU5/bc6jZxRABa9FQrf3DS8FrWmUetYQfk3G
+ WM5jvYcahLYdAHmS0S13OnBmXxF+p75u1z49k8OsGvUGNsivrFeJ4JUbMQOTWqdcCaNWx2g7X
+ gu4jXoXmH7uyTXogt5ursDwZ9N909kJhf29ZLWivzQ+79CE/QhpQhvWBRGfNjQUxqXQBh/Gnz
+ F/ZTMszVVG9LSpS9mC4IXiwqK+SmOiI+98aCcUuP8L8j7Z/XvkDcV5K6Ij1lSD9Ngt4i1eyqu
+ MEqLUQ9ZecLy4dyRpU3zYdVN9X9qrmOp1XBXKxlc21SZTv+7KAeqROHUdCid//RUbPNS+ovh2
+ Np+Bwjl/ea9mg8=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+When adding the Inspiron 3505 to the fan type blacklist,
+the Documentation was not updated to mention the firmware
+bug on this machine.
+Fix that.
 
-On 2022/4/24 12:54, Guenter Roeck wrote:
-> On 4/23/22 20:35, Yang Yingliang wrote:
->> Hi,
->>
->> On 2022/4/22 21:27, Guenter Roeck wrote:
->>> On 4/22/22 02:11, Yang Yingliang wrote:
->>>> This patcheset add check after calling platform_get_resource to 
->>>> avoid null-ptr-deref
->>>> in drivers/hwmon/.
->>>>
->>>> Yang Yingliang (20):
->>>>    hwmon: (abituguru) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (abituguru3) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (dme1737) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (f71805f) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (f71882fg) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (it87) check return value after calling 
->>>> platform_get_resource()
->>>>    hwmon: (lm78) check return value after calling 
->>>> platform_get_resource()
->>>>    hwmon: (nct6683) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (nct6775) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (sch5627) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (sch5636) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (sis5595) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (smsc47b397) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (smsc47m1) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (via686a) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (vt1211) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (vt8231) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (w83627ehf) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (w83627hf) check return value after calling
->>>>      platform_get_resource()
->>>>    hwmon: (w83781d) check return value after calling
->>>>      platform_get_resource()
->>>>
->>>>   drivers/hwmon/abituguru.c  | 6 +++++-
->>>>   drivers/hwmon/abituguru3.c | 6 +++++-
->>>>   drivers/hwmon/dme1737.c    | 2 ++
->>>>   drivers/hwmon/f71805f.c    | 2 ++
->>>>   drivers/hwmon/f71882fg.c   | 6 +++++-
->>>>   drivers/hwmon/it87.c       | 2 ++
->>>>   drivers/hwmon/lm78.c       | 2 ++
->>>>   drivers/hwmon/nct6683.c    | 2 ++
->>>>   drivers/hwmon/nct6775.c    | 2 ++
->>>>   drivers/hwmon/sch5627.c    | 6 +++++-
->>>>   drivers/hwmon/sch5636.c    | 6 +++++-
->>>>   drivers/hwmon/sis5595.c    | 2 ++
->>>>   drivers/hwmon/smsc47b397.c | 2 ++
->>>>   drivers/hwmon/smsc47m1.c   | 2 ++
->>>>   drivers/hwmon/via686a.c    | 2 ++
->>>>   drivers/hwmon/vt1211.c     | 2 ++
->>>>   drivers/hwmon/vt8231.c     | 2 ++
->>>>   drivers/hwmon/w83627ehf.c  | 2 ++
->>>>   drivers/hwmon/w83627hf.c   | 2 ++
->>>>   drivers/hwmon/w83781d.c    | 2 ++
->>>>   20 files changed, 55 insertions(+), 5 deletions(-)
->>>>
->>>
->>> This series solves a problem which does not exist in reality and is 
->>> only theoretic.
->>> The devices are instantiated from their init functions which always 
->>> adds the resource.
->>> Please do not submit such patches.
->> As you said the resource will be add in init functions, I checked 
->> these drivers, the driver
->> sch5627 and sch5636 won't add resource, so need I send patches to fix 
->> these drivers ?
->>
-> You might want to read the code more carefully. The drivers are 
-> instantiated
-> from drivers/hwmon/sch56xx-common.c which does add the resource.
-Yes, it does, thanks for pointing it out.
->
-> Guenter
->
-> .
+Fixes: 6ba463edccb9 (hwmon: (dell-smm) Add Inspiron 3505 to fan type black=
+list)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
+dell-smm-hwmon.rst
+index 41839b7de2c1..e5d85e40972c 100644
+=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -331,6 +331,8 @@ Reading of fan types causes erratic fan behaviour.    =
+  Studio XPS 8000
+
+                                                         Inspiron 580
+
++                                                        Inspiron 3505
++
+ Fan-related SMM calls take too long (about 500ms).      Inspiron 7720
+
+                                                         Vostro 3360
+=2D-
+2.30.2
+
