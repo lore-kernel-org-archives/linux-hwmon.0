@@ -2,92 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 124E5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 15:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39D5CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 16:05:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbiDXPv4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Apr 2022 11:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S233845AbiDXQIj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Apr 2022 12:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiDXPvz (ORCPT
+        with ESMTP id S233806AbiDXQIg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Apr 2022 11:51:55 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7554C37034;
-        Sun, 24 Apr 2022 08:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1650815310;
-        bh=dM80CE4Hxz/HXDZj9f/WT2hePOrxx+6iBlw5smBqUvU=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=hhtVxyceNEJdNpBy0WWvKBsXz53J08znmTwbSELoVwwweiXvNUMrhq4pmWEQG3sOO
-         p03JiFwI0oCpi/MKf5SW99vnCcfhJHZE92hvgya7+lOXomXkK9Da2mPOCQJHfe6Wzr
-         UY1V6emEzAjngBpn08oZaaIkvYZlWBwzT9NyIntQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Mk0NU-1oBMWc0mj2-00kNDx; Sun, 24 Apr 2022 17:48:30 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        Sun, 24 Apr 2022 12:08:36 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C1D2183;
+        Sun, 24 Apr 2022 09:05:22 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id e189so14603088oia.8;
+        Sun, 24 Apr 2022 09:05:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ac5EnQuKpLRFocwuDOiyopf1JFrNIjPvay8PD58wgHY=;
+        b=fVtc8R6iX3YyAP6AJ9kz1u++52MqdMBULrH5AyrtMVvrm7bXYrvfwv+REcGr2hE2oL
+         dLCltApQaF199qhPgZspXcjgYmlAfNLcoonKnuu/0pMB690yPuosCOq5krCymER5MhAi
+         SUP2rMT4rfchqMsV29ILZU6ASzReKg0ClgxSWZXxOnqGjfmBCLoV8mpr3eKs7P6tYhn/
+         FZ69GZiduDn/4nuEzc1I62t4UR2iOhJZrJ2pYpxHHEfnBBbc4nzuMddB5HsPv/IkGQr0
+         zBEypu3co2gM6soytAshFUqoxaeAeTp3OT1a59orAfXAKyOfJC54sVdi/Mi5rCb1r44H
+         IR/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Ac5EnQuKpLRFocwuDOiyopf1JFrNIjPvay8PD58wgHY=;
+        b=ikE6bTzzSvU5dXD0e8nyQYj1qrZHmfxTXLfHvvQpQooS5fajzO5gYjSosW4TpfCauD
+         Y6lig/AJK6le6INIOI/rERRYseGZSEz2k0uNGKCw7he25JVHJtrJ6UycSFhEG6UHBvln
+         wk8Jwzgdk4FI0T/p/BaypXV4sZx926eMkMadL684WmDR7YotUQCpyuFa+TXfZxiXCylY
+         1dHYTHjUbnB1N3F/Tu1FCH/f6z3SMTTlVOGJEbgfkssZEdUlngXzg+wp/PBc7QN8MJef
+         fvNL08P7G5+rNzz3F5EW9R02mIPwMuVMvE5/cyVd2IvrXcnZp6xGIFJlPcA2tObok9Dz
+         SWBg==
+X-Gm-Message-State: AOAM532ufZ3XtW5QtEErl2OiNZi76Yd08sr3UAbzUdGV5gyYHdIl8APC
+        Hg/VN8RoJa02LP6jd9bz02I=
+X-Google-Smtp-Source: ABdhPJwpmbpkn9fi0aIt6tFzND53Dos8K/T2Zuv/UkTrefHxO7YC4k6EUAKnGGMDOQLK53ceEBJjXQ==
+X-Received: by 2002:a05:6808:103:b0:322:6d3f:dfe0 with SMTP id b3-20020a056808010300b003226d3fdfe0mr6596469oie.207.1650816322301;
+        Sun, 24 Apr 2022 09:05:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q8-20020a9d57c8000000b006056352c3dbsm2882421oti.29.2022.04.24.09.05.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 09:05:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 24 Apr 2022 09:05:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Update Documentation regarding firmware bugs
-Date:   Sun, 24 Apr 2022 17:48:24 +0200
-Message-Id: <20220424154824.9396-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH] hwmon: (dell-smm) Update Documentation regarding
+ firmware bugs
+Message-ID: <20220424160520.GA718874@roeck-us.net>
+References: <20220424154824.9396-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rV6AgNBN3rAfW2XGLJW3HrQQl4Cp8C0wEE2JUTT4+NaBbl9WpQs
- s0ChGobIykCt2Wqv5lYw5t2EwnlE3DAHuYUdugBWI7ccIeUay3i+pl0+wOW1Qu+iWuTCrbX
- M1uuqY5E066+aGE32SuCamOjn2MFno5fucxD5qW7yBqpyaezRbUehbN27YhY/oS7jkbmbQ/
- aLYkUBrkzOTCQOp2PG6nA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CYclG5nPRS4=:yiJ/bFmOQH4r2vgZbqFoRO
- 5LMUsQljpVKXOMUFAcUMnPdw5PDRo/oATaCSykndNIUJlA8FmxmUEdFPBhCw0v0Vd9whJRGjA
- /akmXbBjnSCca0aQWyFZN07QfhQ8TAelA3vZDk+wEwycrMwtCLGtC9BPz+KrLrlN3U15bf1W7
- /v42em3m0Ds3BrVt/HHZWbsl8AeKPA5qwzEHFywgDOq/7/IbQYMBr67KRa6yRg7ewjNHfm7no
- bNrWz/w7FQ6JfEgOjxZMjH+MIsUEUJM0UOjdYlzj5FakBowdyQBsjjFaPbX61+oF7BaihVsLj
- /m2+jnDHkEtc/qyI8EZr6cz0lD5EtB7R5+mMjXWXrPklaNz4Bk+0mfcpO20v5FrLCtteqNuAk
- 4f6kNshPBkjeVz9sYB0M9L/IcfWmqUPCpaN4aGvF/RX69e5vBZPaw3+R1WEZyy9j3qZcDCQmJ
- tzB4BZCOoJvZzZ2qgUxmvaFpgt80aMgY6oM8YNA4ixo8SEnX6dCiASfpaUQcC2YVH+x16mZH4
- cAKy1iQxwVPnFwhcTMi5SiLsmueAJZ6XKZ5woClhW7lrRadzfzxD5Du/FR980YAwJcijLWRBM
- yn9+UnHhRIYV1afzqEY4VwtA9JPTRJ6qGs2H+NLmOksThnX2TYIASloscwuava71Y/oDOMRut
- YcS+523FtCRLUUdCazgaJViZvRmdFAtst9mfWCp2b6wn6vJJoqC4jzvtTayAAJ1ydstOkQJuP
- babbzlhkoUZImhY3okczUeXVtVTvmBSDe15w6zU5/bc6jZxRABa9FQrf3DS8FrWmUetYQfk3G
- WM5jvYcahLYdAHmS0S13OnBmXxF+p75u1z49k8OsGvUGNsivrFeJ4JUbMQOTWqdcCaNWx2g7X
- gu4jXoXmH7uyTXogt5ursDwZ9N909kJhf29ZLWivzQ+79CE/QhpQhvWBRGfNjQUxqXQBh/Gnz
- F/ZTMszVVG9LSpS9mC4IXiwqK+SmOiI+98aCcUuP8L8j7Z/XvkDcV5K6Ij1lSD9Ngt4i1eyqu
- MEqLUQ9ZecLy4dyRpU3zYdVN9X9qrmOp1XBXKxlc21SZTv+7KAeqROHUdCid//RUbPNS+ovh2
- Np+Bwjl/ea9mg8=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220424154824.9396-1-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-When adding the Inspiron 3505 to the fan type blacklist,
-the Documentation was not updated to mention the firmware
-bug on this machine.
-Fix that.
+On Sun, Apr 24, 2022 at 05:48:24PM +0200, Armin Wolf wrote:
+> When adding the Inspiron 3505 to the fan type blacklist,
+> the Documentation was not updated to mention the firmware
+> bug on this machine.
+> Fix that.
+> 
+> Fixes: 6ba463edccb9 (hwmon: (dell-smm) Add Inspiron 3505 to fan type blacklist)
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Fixes: 6ba463edccb9 (hwmon: (dell-smm) Add Inspiron 3505 to fan type black=
-list)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
- 1 file changed, 2 insertions(+)
+Applied.
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
-dell-smm-hwmon.rst
-index 41839b7de2c1..e5d85e40972c 100644
-=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -331,6 +331,8 @@ Reading of fan types causes erratic fan behaviour.    =
-  Studio XPS 8000
+Thanks,
+Guenter
 
-                                                         Inspiron 580
-
-+                                                        Inspiron 3505
-+
- Fan-related SMM calls take too long (about 500ms).      Inspiron 7720
-
-                                                         Vostro 3360
-=2D-
-2.30.2
-
+> ---
+>  Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> --
+> 2.30.2
+> 
+> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
+> index 41839b7de2c1..e5d85e40972c 100644
+> --- a/Documentation/hwmon/dell-smm-hwmon.rst
+> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
+> @@ -331,6 +331,8 @@ Reading of fan types causes erratic fan behaviour.      Studio XPS 8000
+> 
+>                                                          Inspiron 580
+> 
+> +                                                        Inspiron 3505
+> +
+>  Fan-related SMM calls take too long (about 500ms).      Inspiron 7720
+> 
+>                                                          Vostro 3360
