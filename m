@@ -2,295 +2,227 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 424D1C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 03:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65ADAC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 04:34:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235089AbiDXD7f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 23 Apr 2022 23:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        id S238116AbiDXEh2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Apr 2022 00:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238095AbiDXD7f (ORCPT
+        with ESMTP id S231513AbiDXEhW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Apr 2022 23:59:35 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7F6DF83
-        for <linux-hwmon@vger.kernel.org>; Sat, 23 Apr 2022 20:56:34 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id q129so13570182oif.4
-        for <linux-hwmon@vger.kernel.org>; Sat, 23 Apr 2022 20:56:34 -0700 (PDT)
+        Sun, 24 Apr 2022 00:37:22 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2C1643F;
+        Sat, 23 Apr 2022 21:34:23 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e656032735so11605537fac.0;
+        Sat, 23 Apr 2022 21:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jackdoan-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SI6k7b10AiK1hM0eXBJEIUwBjMbKHQkO/wRH+36ynPU=;
-        b=RDCF2ZXRJuQ4Z4pZpBX4+JmOm1jb1rQNPgvxOoRIFpNG4CZvcvCQIJL7vF2fcDWXL3
-         FYcal0I9FM+zkmks80GEKtbYl/Pkv50vIW4GyS0cz3FKIUWfKEpwN/Zup3ldltW99mZ1
-         Br2BtE86RQnqYYzyECw92ttelf+fxzQkUKKJEqfGTpD0FniAj++lpEKT5Plbx/sSUFl7
-         FrbJUHQSDEyRw9AU0TL95tKnYnAHLn+FMrxtpNGJYApNeycFtBARh+UQwK43SLmvc8a9
-         8Di8CsNqbO1CUjJ0bz+i63hQsoHEv1L6Q3l5ocsrbS6xYU0o/z76PXFSorljzvSqGf9m
-         RwTg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2X1LQAUaG1A9g+OlRp/gW/SPOQ8FED7p/vA2pGz4Lu4=;
+        b=G+UKUkslo+L77OX1S9EGj5QusiatXdL5lW3PgRxOdCwb8LkpUh8zQBfh8GU4tRttA9
+         ELbPhICsSB1c/v9t0pnMBDCjbZAVTE81zB1frgBYrlOI/5L2AyhO7O+npwQohFhbt8WY
+         Kqfot2kWT/vKMYCq8JuIGeP5cft8sPbq4+gu6T/Nhv9aXZCNlooY21YcE8m3LInwD49l
+         Ebutltt+/fZuVHYzqOsJr6eBe33rA34fvkh32nwzZkSozr9PDo+r1BOL1BgG/J6d4mJq
+         rfumrzULwIe6LkyP3EBC3bNfuQ/7IDniF2G6gOXrYSjMyLDxW0t+7bGbK8K29ffKJF/T
+         MunA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SI6k7b10AiK1hM0eXBJEIUwBjMbKHQkO/wRH+36ynPU=;
-        b=Etk2dRR0LNxx/ehhcUaA/UONLU1cu2Wn0+NMHoQ1i+coLfnXhLItMljiCFiSPSi/3x
-         lQdzsyuY+dnq1kXCLZFsIEuPry/h0VbRBmu79kX1PDfjqtjPR7OSJNSuC2Ym6k0DXbVd
-         A+XErwBnafLvGUDAYBBNGaRUfUyehSadaylOzqVF9MAczWLOOGTkOea3cPN9AcbBS38S
-         A2rJwjwKbnTGFIWbPBKNiwLEVOVm4e6AX9a8dQ9T9AJsi1aDJkTz0spylnrmne8b8b84
-         XzX0SqecYdZ9LNeAzbJ8Q6EG0xaXjK5o0nFgd7+XrpLr4uHXOVCgoNFz8E4RJ/+2ESRz
-         3P0g==
-X-Gm-Message-State: AOAM530gcRG6+gmjEHSCJmcVtlxIm8C7KF7DKhpE+W5ENYfKHRujjUKd
-        A0A0jREHPc1B6LKs26GKXYLhGrkUXu7UiNpVf01KGnkL
-X-Google-Smtp-Source: ABdhPJzuAj7ScYB1mYxjUtPsv4e0+tztFjNprqIols0hwsoy9aYTxZG6YpwuXDw6RJBknTznE2NfGg==
-X-Received: by 2002:a05:6808:23d4:b0:323:c21:71fb with SMTP id bq20-20020a05680823d400b003230c2171fbmr5510709oib.261.1650772594221;
-        Sat, 23 Apr 2022 20:56:34 -0700 (PDT)
-Received: from jackdesk ([2600:1700:24d0:1e2f:386a:dfff:fe72:8e55])
-        by smtp.gmail.com with ESMTPSA id x20-20020a4ac594000000b00329a02f2f34sm2671037oop.16.2022.04.23.20.56.33
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=2X1LQAUaG1A9g+OlRp/gW/SPOQ8FED7p/vA2pGz4Lu4=;
+        b=3H6BBsFBfujNGXa5ZOqqrPwKMc1YjysKWLOGGXHZVQ4RCKqXDexA8h33GLso24AVGd
+         qVqKJsQASm9/3hz89sc+KVSbxa5H1kzEFWkRi3vdWZOs07CKsxJOUv5MLIlt3lyF3d2G
+         T1g9/c/Zxp3fddfTQRwjaOYbVXYOk78QV1BOTjoL21X7MVUaS7xvBv/cxk/hjDHaKpWK
+         WnLfyt9afgxYruy1petSJsSKNm5kA3wINoIUCftgtVN7KxniTBfYu56iORMq1GSME+pz
+         MFrNWErvLB8WVncmKzxmipOuemMlzlw+23+02DoSR8L7hRlD+kfplGRBBbr026rHPDDI
+         nDpQ==
+X-Gm-Message-State: AOAM530elJVgsXFNPyULoVuvW2RQdOAWtfZXLKw8ppCe84eG9LApBdtd
+        VrQB6+52bpQmgORtL4uatWYptDhB3ug=
+X-Google-Smtp-Source: ABdhPJznJM+sP0rXPunVhdrPDFSh+zJTm4CagCwBXP4ZICE0usxszO07TyRoLFFy9vHQa0T8Fvq0Uw==
+X-Received: by 2002:a05:6870:33a5:b0:dd:f6e6:7837 with SMTP id w37-20020a05687033a500b000ddf6e67837mr4514655oae.154.1650774862797;
+        Sat, 23 Apr 2022 21:34:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c17-20020a9d6851000000b0060551d14386sm2453167oto.13.2022.04.23.21.34.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 20:56:33 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 22:56:25 -0500
-From:   Jack Doan <me@jackdoan.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Farbwerk
-Message-ID: <YmTKaZwxTRZRnFkq@jackdesk>
-References: <20220421072743.5058-1-savicaleksa83@gmail.com>
- <20220424014206.GA3989097@roeck-us.net>
+        Sat, 23 Apr 2022 21:34:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 23 Apr 2022 21:34:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Camel Guo <camel.guo@axis.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@axis.com
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
+Message-ID: <20220424043420.GA4000967@roeck-us.net>
+References: <20220414075824.2634839-1-camel.guo@axis.com>
+ <20220414075824.2634839-2-camel.guo@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220424014206.GA3989097@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220414075824.2634839-2-camel.guo@axis.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 06:42:06PM -0700, Guenter Roeck wrote:
-> On Thu, Apr 21, 2022 at 09:27:42AM +0200, Aleksa Savic wrote:
-> > Extend aquacomputer_d5next driver to expose hardware temperature sensors
-> > of the Aquacomputer Farbwerk RGB controller, which communicates through
-> > a proprietary USB HID protocol.
-> > 
-> > Four temperature sensors are available. Additionally, serial number and
-> > firmware version are exposed through debugfs.
-> > 
-> > Also, add Jack Doan to MAINTAINERS for this driver.
-> > 
-> > Signed-off-by: Jack Doan <me@jackdoan.com>
-> > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
-> > ---
+On Thu, Apr 14, 2022 at 09:58:22AM +0200, Camel Guo wrote:
+> Document the TMP401, TMP411 and TMP43x device devicetree bindings
 > 
-> This patch doesn't apply. Please rebase to master and resend.
-> 
-Will do! 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Camel Guo <camel.guo@axis.com>
 
-> More comments inline.
-> 
-> > If adding to MAINTAINERS requires a separate commit, I'll send it
-> > separately.
-> > ---
-> >  Documentation/hwmon/aquacomputer_d5next.rst |  3 +-
-> >  MAINTAINERS                                 |  1 +
-> >  drivers/hwmon/Kconfig                       |  5 +--
-> >  drivers/hwmon/aquacomputer_d5next.c         | 37 ++++++++++++++++++---
-> >  4 files changed, 38 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-> > index e69f718caf5b..717e28226cde 100644
-> > --- a/Documentation/hwmon/aquacomputer_d5next.rst
-> > +++ b/Documentation/hwmon/aquacomputer_d5next.rst
-> > @@ -6,6 +6,7 @@ Kernel driver aquacomputer-d5next
-> >  Supported devices:
-> >  
-> >  * Aquacomputer D5 Next watercooling pump
-> > +* Aquacomputer Farbwerk RGB controller
-> >  * Aquacomputer Farbwerk 360 RGB controller
-> >  * Aquacomputer Octo fan controller
-> >  
-> > @@ -32,7 +33,7 @@ better suited for userspace tools.
-> >  The Octo exposes four temperature sensors and eight PWM controllable fans, along
-> >  with their speed (in RPM), power, voltage and current.
-> >  
-> > -The Farbwerk 360 exposes four temperature sensors. Depending on the device,
-> > +The Farbwerk and Farbwerk 360 expose four temperature sensors. Depending on the device,
-> >  not all sysfs and debugfs entries will be available.
-> >  
-> >  Usage notes
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index ea2cd656ee6c..d8e3ca0fbc3a 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -1389,6 +1389,7 @@ F:	drivers/media/i2c/aptina-pll.*
-> >  
-> >  AQUACOMPUTER D5 NEXT PUMP SENSOR DRIVER
-> >  M:	Aleksa Savic <savicaleksa83@gmail.com>
-> > +M:	Jack Doan <me@jackdoan.com>
-> >  L:	linux-hwmon@vger.kernel.org
-> >  S:	Maintained
-> >  F:	Documentation/hwmon/aquacomputer_d5next.rst
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 5beadd8a0932..01d10c9b633a 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -256,12 +256,13 @@ config SENSORS_AHT10
-> >  	  will be called aht10.
-> >  
-> >  config SENSORS_AQUACOMPUTER_D5NEXT
-> > -	tristate "Aquacomputer D5 Next, Octo and Farbwerk 360"
-> > +	tristate "Aquacomputer D5 Next, Octo, Farbwerk, Farbwerk 360"
-> >  	depends on USB_HID
-> >  	help
-> >  	  If you say yes here you get support for sensors and fans of
-> >  	  the Aquacomputer D5 Next watercooling pump, Octo fan
-> > -	  controller and Farbwerk 360 RGB controller, where available.
-> > +	  controller, Farbwerk and Farbwerk 360 RGB controllers, where
-> > +	  available.
-> >  
-> >  	  This driver can also be built as a module. If so, the module
-> >  	  will be called aquacomputer_d5next.
-> > diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> > index a464473bc981..7d2e7279abfb 100644
-> > --- a/drivers/hwmon/aquacomputer_d5next.c
-> > +++ b/drivers/hwmon/aquacomputer_d5next.c
-> > @@ -1,11 +1,12 @@
-> >  // SPDX-License-Identifier: GPL-2.0+
-> >  /*
-> > - * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360, Octo)
-> > + * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo)
-> >   *
-> >   * Aquacomputer devices send HID reports (with ID 0x01) every second to report
-> >   * sensor values.
-> >   *
-> >   * Copyright 2021 Aleksa Savic <savicaleksa83@gmail.com>
-> > + * Copyright 2022 Jack Doan <me@jackdoan.com>
-> 
-> That is a bit aggressive for a few lines of code.
-Addressed below.
+Applied to hwmon-next.
 
-> 
-> >   */
-> >  
-> >  #include <linux/crc16.h>
-> > @@ -19,14 +20,16 @@
-> >  #include <asm/unaligned.h>
-> >  
-> >  #define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
-> > +#define USB_PRODUCT_ID_FARBWERK		0xf00a
-> >  #define USB_PRODUCT_ID_D5NEXT		0xf00e
-> >  #define USB_PRODUCT_ID_FARBWERK360	0xf010
-> >  #define USB_PRODUCT_ID_OCTO		0xf011
-> >  
-> > -enum kinds { d5next, farbwerk360, octo };
-> > +enum kinds { d5next, farbwerk, farbwerk360, octo };
-> >  
-> >  static const char *const aqc_device_names[] = {
-> >  	[d5next] = "d5next",
-> > +	[farbwerk] = "farbwerk",
-> >  	[farbwerk360] = "farbwerk360",
-> >  	[octo] = "octo"
-> >  };
-> > @@ -69,6 +72,12 @@ static u8 secondary_ctrl_report[] = {
-> >  #define D5NEXT_PUMP_CURRENT		112
-> >  #define D5NEXT_FAN_CURRENT		99
-> >  
-> > +/* Register offsets for the Farbwerk RGB controller */
-> > +#define FARBWERK_NUM_SENSORS		4
-> > +#define FARBWERK_SENSOR_START		0x2f
-> > +#define FARBWERK_SENSOR_SIZE		0x02
-> > +#define FARBWERK_SENSOR_DISCONNECTED	0x7FFF
-> > +
-> >  /* Register offsets for the Farbwerk 360 RGB controller */
-> >  #define FARBWERK360_NUM_SENSORS		4
-> >  #define FARBWERK360_SENSOR_START	0x32
-> > @@ -125,7 +134,7 @@ static const char *const label_d5next_current[] = {
-> >  	"Fan current"
-> >  };
-> >  
-> > -/* Labels for Farbwerk 360 and Octo temperature sensors */
-> > +/* Labels for Farbwerk, Farbwerk 360 and Octo temperature sensors */
-> >  static const char *const label_temp_sensors[] = {
-> >  	"Sensor 1",
-> >  	"Sensor 2",
-> > @@ -319,6 +328,7 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
-> >  			if (channel == 0)
-> >  				return 0444;
-> >  			break;
-> > +		case farbwerk:
-> >  		case farbwerk360:
-> >  		case octo:
-> >  			return 0444;
-> > @@ -551,8 +561,7 @@ static const struct hwmon_chip_info aqc_chip_info = {
-> >  	.info = aqc_info,
-> >  };
-> >  
-> > -static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data,
-> > -			 int size)
-> > +static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
-> >  {
-> >  	int i, sensor_value;
-> >  	struct aqc_data *priv;
-> > @@ -587,6 +596,17 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
-> >  		priv->current_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_CURRENT);
-> >  		priv->current_input[1] = get_unaligned_be16(data + D5NEXT_FAN_CURRENT);
-> >  		break;
-> > +	case farbwerk:
-> > +		/* Temperature sensor readings */
-> > +		for (i = 0; i < FARBWERK_NUM_SENSORS; i++) {
-> > +			sensor_value = get_unaligned_be16(data + FARBWERK_SENSOR_START +
-> > +							  i * FARBWERK_SENSOR_SIZE);
-> > +			if (sensor_value == FARBWERK_SENSOR_DISCONNECTED)
-> > +				priv->temp_input[i] = -ENODATA;
-> 
-> Can the sensor be connected dynamically ? If not, this should be handled
-> in an is_visible function.
-> 
-It's a somewhat unlikely use-case, but yes, they can be. The sensors are NTC thermistors that connect to pin-headers. Do we have a better way of representing "open circuit" than -ENODATA?
+Thanks,
+Guenter
 
-> > +			else
-> > +				priv->temp_input[i] = sensor_value * 10;
-> > +		}
-> > +		break;
-> >  	case farbwerk360:
-> >  		/* Temperature sensor readings */
-> >  		for (i = 0; i < FARBWERK360_NUM_SENSORS; i++) {
-> > @@ -733,6 +753,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
-> >  		priv->voltage_label = label_d5next_voltages;
-> >  		priv->current_label = label_d5next_current;
-> >  		break;
-> > +	case USB_PRODUCT_ID_FARBWERK:
-> > +		priv->kind = farbwerk;
-> > +
-> > +		priv->temp_label = label_temp_sensors;
-> > +		break;
-> >  	case USB_PRODUCT_ID_FARBWERK360:
-> >  		priv->kind = farbwerk360;
-> >  
-> > @@ -795,6 +820,7 @@ static void aqc_remove(struct hid_device *hdev)
-> >  
-> >  static const struct hid_device_id aqc_table[] = {
-> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_D5NEXT) },
-> > +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK) },
-> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
-> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
-> >  	{ }
-> > @@ -826,4 +852,5 @@ module_exit(aqc_exit);
-> >  
-> >  MODULE_LICENSE("GPL");
-> >  MODULE_AUTHOR("Aleksa Savic <savicaleksa83@gmail.com>");
-> > +MODULE_AUTHOR("Jack Doan <me@jackdoan.com>");
+> ---
 > 
-> .... as is claiming authorship. I'd be the "author" of hundreds of kernel
-> files if I would do that. Aleksa signed off on it, so I'll accept it,
-> but I don't think it is appropriate.
-
-In the context of just this patch, yes, I agree. But, I felt it was warranted based on my previous contributions. I did a good bit of the reverse-engineering that made writing settings to these devices possible, and a lot of the previously submitted code for writing the setting changes is mine as well.
-
-I didn't mean to make an inappropriate request though! If you'd like, I can submit a version of the patch without these lines.
-
-Also I'm really sorry if you get this email twice. Thunderbird seems to have snuck HTML into my emails and the mailinglist rejected my first reply. I've switched to mutt to prevent this.
-
+> Notes:
+>     v4:
+>     - Add Reviewed-by from Rob H.
+>     
+>     v3:
+>     - Remove unneeded address-cells and size-cells;
+>     - Change range of ti,n-factor to [-128, 127];
+>     - Remove unneeded 'items' of ti,beta-compensation;
+>     - Got Reviewed-by from Krzysztof.
+>     
+>     v2:
+>     - Fix format and describe hardware properties instead of programming
+>       models
 > 
-> >  MODULE_DESCRIPTION("Hwmon driver for Aquacomputer devices");
+>  .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 105 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+> new file mode 100644
+> index 000000000000..fe0ac08faa1a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+> @@ -0,0 +1,105 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ti,tmp401.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TMP401, TPM411 and TMP43x temperature sensor
+> +
+> +maintainers:
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +description: |
+> +  ±1°C Remote and Local temperature sensor
+> +
+> +  Datasheets:
+> +  https://www.ti.com/lit/ds/symlink/tmp401.pdf
+> +  https://www.ti.com/lit/ds/symlink/tmp411.pdf
+> +  https://www.ti.com/lit/ds/symlink/tmp431.pdf
+> +  https://www.ti.com/lit/ds/symlink/tmp435.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,tmp401
+> +      - ti,tmp411
+> +      - ti,tmp431
+> +      - ti,tmp432
+> +      - ti,tmp435
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ti,extended-range-enable:
+> +    description:
+> +      When set, this sensor measures over extended temperature range.
+> +    type: boolean
+> +
+> +  ti,n-factor:
+> +    description:
+> +      value to be used for converting remote channel measurements to
+> +      temperature.
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    items:
+> +      minimum: -128
+> +      maximum: 127
+> +
+> +  ti,beta-compensation:
+> +    description:
+> +      value to select beta correction range.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 15
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - ti,tmp401
+> +    then:
+> +      properties:
+> +        ti,n-factor: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - ti,tmp401
+> +              - ti,tmp411
+> +    then:
+> +      properties:
+> +        ti,beta-compensation: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      sensor@4c {
+> +        compatible = "ti,tmp401";
+> +        reg = <0x4c>;
+> +      };
+> +    };
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      sensor@4c {
+> +        compatible = "ti,tmp431";
+> +        reg = <0x4c>;
+> +        ti,extended-range-enable;
+> +        ti,n-factor = <0x3b>;
+> +        ti,beta-compensation = <0x7>;
+> +      };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 61d9f114c37f..6b0d8f5cc68e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19838,6 +19838,7 @@ TMP401 HARDWARE MONITOR DRIVER
+>  M:	Guenter Roeck <linux@roeck-us.net>
+>  L:	linux-hwmon@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+>  F:	Documentation/hwmon/tmp401.rst
+>  F:	drivers/hwmon/tmp401.c
+>  
