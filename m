@@ -2,100 +2,131 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BCD1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 16:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E327EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 16:52:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbiDXQwO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Apr 2022 12:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S235882AbiDXQzP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Apr 2022 12:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiDXQwN (ORCPT
+        with ESMTP id S235903AbiDXQzM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:52:13 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0137328E0E
-        for <linux-hwmon@vger.kernel.org>; Sun, 24 Apr 2022 09:49:13 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso9220815otk.10
-        for <linux-hwmon@vger.kernel.org>; Sun, 24 Apr 2022 09:49:12 -0700 (PDT)
+        Sun, 24 Apr 2022 12:55:12 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C683E27CF0;
+        Sun, 24 Apr 2022 09:52:11 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id t6-20020a056830224600b00605491a5cd7so9209024otd.13;
+        Sun, 24 Apr 2022 09:52:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DwRo0pGNGvKXUP6YVNPvbQmwvkG+awRzZfzLVTlyqVc=;
-        b=c9kcuc+tSc3aOX+OLa1/KCM/B8EqeaYEth/h31Ww8uNKpQOVjJL8VYRdLUvZXuYpT+
-         IMVoBkb5kVmIrDorLMAVjLXHDSsp0r4DJlu9VtnL658IV9tTUWRVA/tdCajGmWQ8FC1O
-         yAHaZbvsy+BRVajm3jrbu1v3SqqE9g2fy9J7910J6JNutRlIxGuYAHqtG4Y+6wv4ZiUy
-         jc7smmmPOlqNdSkrjYIAdNzsIGEFU+xhRgXYi2nDcYhTNj8QHg0Zv8Wbwf9qiXBwGVZX
-         KuUILWsX5bWnVT9eLjXz+husD0irLCF/Q5ezX/aLHyd5fNauotBmDAZjB7+A3S6Fj+2+
-         mejw==
+         :content-disposition:in-reply-to;
+        bh=canT3iBohVeX3ot0SwCLfDu/Mkppe05iPAa6Ok7QecQ=;
+        b=jDfLzp48SqjbPbmP9kwjtBVRWpVhWgZ4yuNOE8o/CLQYUPKqDq7KGsxduU2ey71xbV
+         N3EW2ByxhSpM+rBDLcIl/S7hXe3WHJpdSxTyAAfyi/UYqu1lLX2IqKwRlPF9puw1GaZv
+         5xLT2f21dwiSpPAQrKjADZGQDRkCfNSeaXkADfXO7tQ+QPvQ7yY6oSkcPsyMx0f8jDpx
+         buC+1ScXoy/H2hEbYC5ULAYe1REkUecnDgOJPOibq6tbvMtObGiN1lSpBhhMiS/tIvDu
+         xUGm8G3JyxGwkZkzn5D3u5JE+OWncIUtGbZZIdXx3f40pfHOS5sX63pltG/Z+JNsc2nX
+         cnMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=DwRo0pGNGvKXUP6YVNPvbQmwvkG+awRzZfzLVTlyqVc=;
-        b=DdsjNbcm6Ca/KNe6KjFmbq81Nsmp+NwIFgWp3IeJlNvh3WD4QioY7V/NywvC8OJzSR
-         5EILNYblHYly4iQ3PbiP9QN8MG19Az9iSTnChIHn0BTiT0ZHfoKbJajG5b3kOqFhpiDl
-         Syw4x9CmB1O24kGzQkM+jJzVLOJL6bmOtlM92M9Ff70w3gu6wcfgdRT+mxriwL6RfpOO
-         Fn1grX1KLKTOQE8ER+8eVlzxslIB+T3saIiKLowl5e22HD4VPZ1KMPo5oCnLc1ZGf/2h
-         M/t8Z4FcrLFJf20C5Gla1bHpmr5RZiANwblng17bWL6S8IaOGo/RlRMyBJQSi+LmX6w4
-         mrQQ==
-X-Gm-Message-State: AOAM530io2hq5BK9rG7ANV8xgG5EPPQPheiOL1Uii+8fqXgEy9vxcs/y
-        kniCGg8KKK0Qpo1UHl6aE4x9erwxeIA=
-X-Google-Smtp-Source: ABdhPJxMIKEzMVjmlPSjeZijS4S/+deMQ1uWzGGTZuI3KbgXYHvz48VJpAA2i29tHxDs+aI8azizUQ==
-X-Received: by 2002:a05:6830:1d61:b0:605:4956:c1b0 with SMTP id l1-20020a0568301d6100b006054956c1b0mr4904321oti.118.1650818952361;
-        Sun, 24 Apr 2022 09:49:12 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=canT3iBohVeX3ot0SwCLfDu/Mkppe05iPAa6Ok7QecQ=;
+        b=n6pNPANYMtQOUF2aQfd1sHcYsElmWUSrMRfkWWCewyT0SLjdEMluuQO5TePNkKnb3+
+         cxGGo8bY/zm8bQXFibe5HNyHqQ00LwtOPcQM84jXvMXtX0nl7XC0s9UOsLIIryMYCt1K
+         RbyQ8wYh5oCQSfP4KNGdDHp/zxpOMVX8Hs8vwKE4ELdrBAfqjCDtI5pbcrLdM0gV07Mb
+         jLDup068/++GjLSBFgpON/loeofqqyI1s1NSLEFyY4DA/5HlbO/4/yCLq7mNshlGjb8L
+         dv3P84QRdrVfvPYU2KQJH25b17++lhLUwygnhDB85MBRV+iNiJcGAB2zmCyvhI/BeO3S
+         wEZA==
+X-Gm-Message-State: AOAM5325L1T38asBsx0fLT7QCUPFzswRiblXMSxCMDn75sO0zaJf+7pG
+        VJ8PPnNHW6IQxYUGFAr5SIg=
+X-Google-Smtp-Source: ABdhPJzURro/CFSKtusa6PPR2ehgq73GKzEvC8GAUpHgYgPio5WPveBqYlBshZkPwqPNbAQ+CNRJEw==
+X-Received: by 2002:a05:6830:19a:b0:605:46ec:949b with SMTP id q26-20020a056830019a00b0060546ec949bmr5052276ota.56.1650819130821;
+        Sun, 24 Apr 2022 09:52:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 123-20020a4a0181000000b00324a1217e96sm3280870oor.35.2022.04.24.09.49.11
+        by smtp.gmail.com with ESMTPSA id o19-20020a4a9593000000b0032176119e65sm3342905ooi.34.2022.04.24.09.52.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 09:49:11 -0700 (PDT)
+        Sun, 24 Apr 2022 09:52:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 24 Apr 2022 09:49:10 -0700
+Date:   Sun, 24 Apr 2022 09:52:09 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?M=E5rten?= Lindahl <marten.lindahl@axis.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH 1/2] hwmon: (pmbus/ltc2978) Add driver specific regulator
- ops
-Message-ID: <20220424164910.GA747863@roeck-us.net>
-References: <20220406124321.1184133-1-marten.lindahl@axis.com>
- <20220406124321.1184133-2-marten.lindahl@axis.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Document adt7475 pin-function
+ properties
+Message-ID: <20220424165209.GA748231@roeck-us.net>
+References: <20220323034056.260455-1-chris.packham@alliedtelesis.co.nz>
+ <20220323034056.260455-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220406124321.1184133-2-marten.lindahl@axis.com>
+In-Reply-To: <20220323034056.260455-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 02:43:20PM +0200, Mårten Lindahl wrote:
-> Several of the manuals for devices supported by this driver describes
-> the need for a minimum wait time before the chip is ready to receive
-> next command.
+On Wed, Mar 23, 2022 at 04:40:54PM +1300, Chris Packham wrote:
+> The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
+> different functions. Add bindings so that it is possible to describe
+> what pin functions are intended by the hardware design.
 > 
-> This wait time is already implemented in the driver as a ltc_wait_ready
-> function with a driver defined wait time of 100 ms, and is considered
-> for specific devices before reading/writing data on the pmbus.
-> 
-> But this driver uses the default pmbus_regulator_ops for the enable/
-> disable/is_enabled functions. By using these functions it bypasses the
-> wait time recommendations for several of the devices managed by the
-> driver (ltc3880/ltc3882/ltc3883/ltc3884/ltc3886/ltc3887/ltc3889/ltm4664/
-> ltm4675/ltm4676/ltm4677/ltm4678/ltm4680/ltm4686/ltm4700/ltc7880).
-> 
-> Lets add driver specific regulator enable/disable/is_enabled ops which
-> takes the wait time into consideration for the specified devices, by
-> overriding pmbus_read_byte_data with internal ltc_read_byte_data.
-> 
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-This patch solves the wrong problem. The real problem is that the
-regulator code in the PMBus core writes direcetly into the chip
-and doesn't use the driver functions to do it if needed, and that
-the PMBus core does not support a chip-specific write_byte_data function
-(because so far it wasn't needed). That needs to get fixed, and then
-we won't need chip specific regulator functions.
+Still waiting for DT maintainer approval.
 
-Thanks,
 Guenter
+
+> ---
+> 
+> Notes:
+>     Changes in v3:
+>     - None
+>     Changes in v2:
+>     - Add review from Krzysztof
+> 
+>  .../devicetree/bindings/hwmon/adt7475.yaml    | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> index 7d9c083632b9..22beb37f1bf1 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> @@ -61,6 +61,26 @@ patternProperties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [0, 1]
+>  
+> +  "adi,pin(5|10)-function":
+> +    description: |
+> +      Configures the function for pin 5 on the adi,adt7473 and adi,adt7475. Or
+> +      pin 10 on the adi,adt7476 and adi,adt7490.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum:
+> +      - pwm2
+> +      - smbalert#
+> +
+> +  "adi,pin(9|14)-function":
+> +    description: |
+> +      Configures the function for pin 9 on the adi,adt7473 and adi,adt7475. Or
+> +      pin 14 on the adi,adt7476 and adi,adt7490
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum:
+> +      - tach4
+> +      - therm#
+> +      - smbalert#
+> +      - gpio
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -79,6 +99,8 @@ examples:
+>          adi,bypass-attenuator-in0 = <1>;
+>          adi,bypass-attenuator-in1 = <0>;
+>          adi,pwm-active-state = <1 0 1>;
+> +        adi,pin10-function = "smbalert#";
+> +        adi,pin14-function = "tach4";
+>        };
+>      };
+>  
