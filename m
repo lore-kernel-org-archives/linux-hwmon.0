@@ -2,154 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F444C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 09:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2BF2C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 10:01:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiDYJO4 convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Apr 2022 05:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S238096AbiDYKEE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Apr 2022 06:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbiDYJNb (ORCPT
+        with ESMTP id S241552AbiDYKDm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:13:31 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAA4DCABAB
-        for <linux-hwmon@vger.kernel.org>; Mon, 25 Apr 2022 02:10:26 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-247-8RX-Qv7WN3KH32ORjUBsfg-1; Mon, 25 Apr 2022 10:10:23 +0100
-X-MC-Unique: 8RX-Qv7WN3KH32ORjUBsfg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 25 Apr 2022 10:10:23 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 25 Apr 2022 10:10:23 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guenter Roeck' <linux@roeck-us.net>,
-        Eddie James <eajames@linux.ibm.com>
-CC:     "linux-fsi@lists.ozlabs.org" <linux-fsi@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "joel@jms.id.au" <joel@jms.id.au>, "jk@ozlabs.org" <jk@ozlabs.org>,
-        "alistair@popple.id.au" <alistair@popple.id.au>
-Subject: RE: [PATCH 2/2] hwmon (occ): Retry for checksum failure
-Thread-Topic: [PATCH 2/2] hwmon (occ): Retry for checksum failure
-Thread-Index: AQHYV/9Rz6RE0zB8xEyMzjBr24t9/60AVjug
-Date:   Mon, 25 Apr 2022 09:10:22 +0000
-Message-ID: <44d4f10249064a28b6cc461e7cbdd402@AcuMS.aculab.com>
-References: <20220321153112.12199-1-eajames@linux.ibm.com>
- <20220321153112.12199-3-eajames@linux.ibm.com>
- <20220424171816.GA749761@roeck-us.net>
-In-Reply-To: <20220424171816.GA749761@roeck-us.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 25 Apr 2022 06:03:42 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399ED627D;
+        Mon, 25 Apr 2022 03:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1650880837;
+  x=1682416837;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2TQZYCx5ikLMtqq9rZGikO1te9HCqCd3K7Ahb1z4JPg=;
+  b=o5TQ2lyp7C6NaGzOBeBg1iA8D4ROI/3VJWc3zFIQgocBLlkQBDpF4z6/
+   ip4hT2Vhd1sXrXxHHhz5tInCs5MQrx8+BNf4SJTNO0scmA7J8PRM1HOCU
+   3g3vIibDZ/jsI8dX4HcGP0/FA3k+TmIWq525N5RicAu6n3n+duwlVeXZO
+   gevAaostmxdl1o0dSDlhFP62eN0q9DO7y1csIObasHOrQ0k5+XDLxzxt5
+   b7i2H7e0f1hVExEb9zGOI0SU33HCLDjKRcgYg0ETLlFfplZh292VXzaUF
+   xAlLN+I/E1updt88Gbc0elw41TiudGkTlNyp3RZBIQxga6J3TzC2S0mAg
+   Q==;
+From:   Camel Guo <camel.guo@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     Camel Guo <camel.guo@axis.com>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
+Subject: [PATCH] hwmon: (tmp401) Fix incorrect return value of tmp401_init_client
+Date:   Mon, 25 Apr 2022 12:00:19 +0200
+Message-ID: <20220425100019.562781-1-camel.guo@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck
-> Sent: 24 April 2022 18:18
-> 
-> On Mon, Mar 21, 2022 at 10:31:12AM -0500, Eddie James wrote:
-> > Due to the OCC communication design with a shared SRAM area,
-> > checkum errors are expected due to corrupted buffer from OCC
-> > communications with other system components. Therefore, retry
-> > the command twice in the event of a checksum failure.
-> >
-> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> 
-> I assume this will be applied together with patch 1 of the series.
-> 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Guenter
-> 
-> > ---
-> >  drivers/hwmon/occ/p9_sbe.c | 28 ++++++++++++++++++----------
-> >  1 file changed, 18 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> > index 49b13cc01073..7f4c3f979c54 100644
-> > --- a/drivers/hwmon/occ/p9_sbe.c
-> > +++ b/drivers/hwmon/occ/p9_sbe.c
-> > @@ -84,17 +84,25 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
-> >  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
-> >  	size_t resp_len = sizeof(*resp);
-> >  	int rc;
-> > -
-> > -	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> > -	if (rc < 0) {
-> > -		if (resp_len) {
-> > -			if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
-> > -				sysfs_notify(&occ->bus_dev->kobj, NULL,
-> > -					     bin_attr_ffdc.attr.name);
-> > +	int tries = 0;
-> > +
-> > +	do {
+When ti,n-factor, ti,beta-compentation are not defined in devicetree,
+of_property_read_u32|s32 returns -EINVAL. In this case,
+tmp401_init_client should return 0 instead of simply pass ret to its
+caller.
 
-Why not use a for() loop?
+Fixes: c825ca044988 ("hwmon: (tmp401) Add support of three advanced features")
+Signed-off-by: Camel Guo <camel.guo@axis.com>
+---
+ drivers/hwmon/tmp401.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > +		rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> > +		if (rc < 0) {
-> > +			if (resp_len) {
-> > +				if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
-> > +					sysfs_notify(&occ->bus_dev->kobj, NULL,
-> > +						     bin_attr_ffdc.attr.name);
-> > +
-> > +				return rc;
-> > +			} else if (rc != -EBADE) {
-> > +				return rc;
-> > +			}
-
-No need for else after return.
-
-> > +			/* retry twice for checksum failures */
-> > +		} else {
-> > +			break;
-
-I'd break on the success path after testing (rc >= 0).
-Saves a level of indent.
-
-> >  		}
-> > -
-> > -		return rc;
-> > -	}
-> > +	} while (++tries < 3);
-> >
-> >  	switch (resp->return_status) {
-> >  	case OCC_RESP_CMD_IN_PRG:
-
-Probably end up with something like:
-	for (tries = 0; tries < 3; tries++) {
-		rc = ...;
-		if (rc >= 0)
-			break;
-		if (resp_len) {
-			...
-			return rc;
-		}
-		if (rc != -EBADE)
-			return rc;
-	}
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+index 8f49da997367..a58a2f31a07e 100644
+--- a/drivers/hwmon/tmp401.c
++++ b/drivers/hwmon/tmp401.c
+@@ -604,7 +604,7 @@ static int tmp401_init_client(struct tmp401_data *data)
+ 			return ret;
+ 	}
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int tmp401_detect(struct i2c_client *client,
+-- 
+2.30.2
 
