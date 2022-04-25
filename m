@@ -2,97 +2,160 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 151E2C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 18:19:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6344C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 18:29:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbiDYSWY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Apr 2022 14:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S244421AbiDYScs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Apr 2022 14:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236782AbiDYSWX (ORCPT
+        with ESMTP id S244280AbiDYScq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:22:23 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B511E762BB;
-        Mon, 25 Apr 2022 11:19:18 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id k29-20020a056830243d00b006040caa0988so11356390ots.6;
-        Mon, 25 Apr 2022 11:19:18 -0700 (PDT)
+        Mon, 25 Apr 2022 14:32:46 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830E5126340;
+        Mon, 25 Apr 2022 11:29:41 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e67799d278so13172646fac.11;
+        Mon, 25 Apr 2022 11:29:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=uvc5bXo42oHV87Iw9NQ/VTqufRs0I0hy2e2+bdje3+g=;
-        b=VUxb4hFjZXiyUmglDD5gpJqRXkW4D39teQmSSqugFTQHRlNDVeiy0RgmlforeYQNn9
-         FPKS98aqWUrOebLtGt+ud/nycq+dyLhGbVJFFsDA8XrRLaKGlkYP1hceFtR8IcMU1XJs
-         x2ngq188gNkg02jCIZBuoYtBPlAokEie23BWlGa8iNgAZ1OAkMQ9iL4cXRmEbw/f9sWy
-         n5UXoUp3st7UxkRQbLl4b2c8EQ2fsE7azOCUIv8RkQt47JWJ9SaBrdoZagQEBDysk+x0
-         Gq6a20E96ap7BRniFuem8Qkr+HSVfE2ItyBkp51oUoAbfsHy0gSeQdce2cR3S1ZrufKY
-         1ZIg==
+        bh=3nXayCuus+0Y6qgslSzmhxQ64gNyfx3yJnoJIyHNR1s=;
+        b=FIINtMByAR9bcyXh9qSk8x7cRJ/2lmzbYJGFnLzVKMGf1bzFO5TdXuN34WyMCslbwC
+         Yo+2532aBO9Y70fsT9wu5qqKWdrrv2SWrrdb0BqJ+C1y/YuZOQUf6MVqDFyFMuC4OmyJ
+         HkKNE9tOI/dpZseL55FW6+oLfklH8+sKXdhFagUkf500X03eijt/ohLrz1bbHXox/XGw
+         7GlAm19x+Lb2/9SlnUPBZlpkP+MA/iAniXjf7zMk044bTx4VQr8Bc6dAGEtK7afMCDkG
+         yCzyedEEihmiPh16l8SwZVJxnAfEQQIakRsFpgfQ8MMnRPbHri6Uwwnni7GOEVt8SfV0
+         A/9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=uvc5bXo42oHV87Iw9NQ/VTqufRs0I0hy2e2+bdje3+g=;
-        b=vEjZjDwMPGf+bJJk6o2W6oQONMybiiodO48eL6uYFWj2teD5F5TP6nhr5so5j09iDY
-         rq3dSnDCIEX/e9jxS1v+Y6juD1SZkk81ncHZtGlFUnNZI/Bykv9NtP+7PSE+aqIDPpFH
-         CSMDbUOH1dADptlzA8eddjKe8+wpBi8jvWg7pYVO273CqCasuj/gu/D/WhdgDQTB7s1n
-         +mNXGbvEX1vxs+EkYu6lj38wiK1Habe1FN1PP8PhohwFCTIVEjrM3G7LQ00zYsZNCkQG
-         2Do4jL7shAQDpvenBq6H+GLlb7NHDm71RrGp/wJLIFDdwcCiPlEliv1yP7qb8qfmS/nw
-         /oog==
-X-Gm-Message-State: AOAM5314RZxa5ZjA/gtW+5l+A9Fvi0Y9zTb6gui6TPDmbsOqiOQCzLC6
-        sP5V2pSzg12TMnlsBK0Cnbw=
-X-Google-Smtp-Source: ABdhPJzc0+Nh5njthZAYBYW8ruRLx2H8O0qHhlQJFMBkpAlDlpy9erArbqSgW3chxUCdDMPo79oiqQ==
-X-Received: by 2002:a9d:5f14:0:b0:5e6:c009:213f with SMTP id f20-20020a9d5f14000000b005e6c009213fmr7163684oti.35.1650910757973;
-        Mon, 25 Apr 2022 11:19:17 -0700 (PDT)
+        bh=3nXayCuus+0Y6qgslSzmhxQ64gNyfx3yJnoJIyHNR1s=;
+        b=rAwIXbi5n/aQI6wkPmjDdwVFSWDAP4WfsXpcaEtxMnLI84rSVlJNs8NKa3zBFrSIC9
+         dObQpjDRLf1rCgUoJCdGWcltJUrebB6QaMfsPRVV8l+M6DDAnpqHGpMGqN7wkhFG29VP
+         2rcEWEZOAAfo3mabc3n+lnfZJrt4l3TrWn4tv2dPpiAfC1Ziw9e/3WOqnoMvEJnbsecw
+         LxmYiMzY1GxZ2/H0WTdDfwGcdIcYuFrK4Z7LWGjZnuzRXMbNRC3jVUCIfFk6EYJVELZ8
+         IZdSxQSgEuOu/aVrwdop5fmCZBsQb9D5Wp1FfFtJJfoozrDIUvOCZG/z4GSAVfWwftwE
+         ai/w==
+X-Gm-Message-State: AOAM531WQmhGGFqRfMw1VQ6ZMUit2E08cd5rdm6TXWq9AQrJ/6cXmR03
+        dbov8ilf1UUf7pVRvLAattVBuu8g7fE=
+X-Google-Smtp-Source: ABdhPJz0XMNoSwdLCNXkq7XgZ5bmm+FFHPuBtSBnKyin5S+OUlxW5flluKYmtNQrG9yfIRLAa9bCHg==
+X-Received: by 2002:a05:6870:2053:b0:e9:3c2f:23d9 with SMTP id l19-20020a056870205300b000e93c2f23d9mr2889907oad.158.1650911380851;
+        Mon, 25 Apr 2022 11:29:40 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05687036c700b000da4bcdae42sm3475587oak.13.2022.04.25.11.19.16
+        by smtp.gmail.com with ESMTPSA id cr15-20020a056870ebcf00b000e912a7b843sm2710470oab.6.2022.04.25.11.29.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 11:19:17 -0700 (PDT)
+        Mon, 25 Apr 2022 11:29:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 25 Apr 2022 11:19:15 -0700
+Date:   Mon, 25 Apr 2022 11:29:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Camel Guo <camel.guo@axis.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@axis.com
-Subject: Re: [PATCH] hwmon: (tmp401) Fix incorrect return value of
- tmp401_init_client
-Message-ID: <20220425181915.GA4175249@roeck-us.net>
-References: <20220425100019.562781-1-camel.guo@axis.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (lm75) Add Atmel AT30TS74 support
+Message-ID: <20220425182938.GA4176298@roeck-us.net>
+References: <e4c15f1c-b2a3-4371-d2de-8205d3dfe972@axentia.se>
+ <7160dc31-1429-1206-ec4b-1d8cc0652b27@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220425100019.562781-1-camel.guo@axis.com>
+In-Reply-To: <7160dc31-1429-1206-ec4b-1d8cc0652b27@axentia.se>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 12:00:19PM +0200, Camel Guo wrote:
-> When ti,n-factor, ti,beta-compentation are not defined in devicetree,
-> of_property_read_u32|s32 returns -EINVAL. In this case,
-> tmp401_init_client should return 0 instead of simply pass ret to its
-> caller.
+Peter,
+
+On Mon, Apr 25, 2022 at 07:59:18AM +0200, Peter Rosin wrote:
+> Atmel (now Microchip) AT30TS74 is an LM75 compatible sensor. Add it.
 > 
-> Fixes: c825ca044988 ("hwmon: (tmp401) Add support of three advanced features")
-> Signed-off-by: Camel Guo <camel.guo@axis.com>
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 
-Good catch. Thanks, applied.
+This and the previous patch of the series fail to apply with
 
+error: patch failed: drivers/hwmon/Kconfig:1248
+error: drivers/hwmon/Kconfig: patch does not apply
+error: patch failed: drivers/hwmon/lm75.c:26
+error: drivers/hwmon/lm75.c: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
+
+when I try to apply with "git am -s -3".
+
+This is probably because MS Exchange tries to be intelligent.
+In the first patch, it added a space at the beginning of each
+unchanged line. It looks like it did the same or something
+similar here. I tried but failed to fix it up.
+
+Please resend as clean patch.
+
+Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/tmp401.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/hwmon/Kconfig |  1 +
+>   drivers/hwmon/lm75.c  | 14 ++++++++++++++
+>   2 files changed, 15 insertions(+)
 > 
-> diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-> index 8f49da997367..a58a2f31a07e 100644
-> --- a/drivers/hwmon/tmp401.c
-> +++ b/drivers/hwmon/tmp401.c
-> @@ -604,7 +604,7 @@ static int tmp401_init_client(struct tmp401_data *data)
->  			return ret;
->  	}
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int tmp401_detect(struct i2c_client *client,
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 68a8a27ab3b7..d8dc58b2c55a 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1248,6 +1248,7 @@ config SENSORS_LM75
+>   	  temperature sensor chip, with models including:
+>   
+>   		- Analog Devices ADT75
+> +		- Atmel (now Microchip) AT30TS74
+>   		- Dallas Semiconductor DS75, DS1775 and DS7505
+>   		- Global Mixed-mode Technology (GMT) G751
+>   		- Maxim MAX6625 and MAX6626
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index afdbb63237b9..66dc826f7962 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -26,6 +26,7 @@
+>   
+>   enum lm75_type {		/* keep sorted in alphabetical order */
+>   	adt75,
+> +	at30ts74,
+>   	ds1775,
+>   	ds75,
+>   	ds7505,
+> @@ -128,6 +129,14 @@ static const struct lm75_params device_params[] = {
+>   		.default_resolution = 12,
+>   		.default_sample_time = MSEC_PER_SEC / 10,
+>   	},
+> +	[at30ts74] = {
+> +		.set_mask = 3 << 5,	/* 12-bit mode*/
+> +		.default_resolution = 12,
+> +		.default_sample_time = 200,
+> +		.num_sample_times = 4,
+> +		.sample_times = (unsigned int []){ 25, 50, 100, 200 },
+> +		.resolutions = (u8 []) {9, 10, 11, 12 },
+> +	},
+>   	[ds1775] = {
+>   		.clr_mask = 3 << 5,
+>   		.set_mask = 2 << 5,	/* 11-bit mode */
+> @@ -645,6 +654,7 @@ static int lm75_probe(struct i2c_client *client)
+>   
+>   static const struct i2c_device_id lm75_ids[] = {
+>   	{ "adt75", adt75, },
+> +	{ "at30ts74", at30ts74, },
+>   	{ "ds1775", ds1775, },
+>   	{ "ds75", ds75, },
+>   	{ "ds7505", ds7505, },
+> @@ -680,6 +690,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
+>   		.compatible = "adi,adt75",
+>   		.data = (void *)adt75
+>   	},
+> +	{
+> +		.compatible = "atmel,at30ts74",
+> +		.data = (void *)at30ts74
+> +	},
+>   	{
+>   		.compatible = "dallas,ds1775",
+>   		.data = (void *)ds1775
