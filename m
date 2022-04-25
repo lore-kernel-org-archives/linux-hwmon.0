@@ -2,126 +2,144 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 535FFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Apr 2022 17:18:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4C1DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 05:59:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiDXRV0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Apr 2022 13:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S230237AbiDYGCC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Apr 2022 02:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbiDXRVV (ORCPT
+        with ESMTP id S229945AbiDYGB5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Apr 2022 13:21:21 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBA86FF77;
-        Sun, 24 Apr 2022 10:18:18 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id z2so14756417oic.6;
-        Sun, 24 Apr 2022 10:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Gs5UTs020l+gW01sKQqLDKCl0tqBUVQZB/K/2Vj/X5s=;
-        b=EcQN96BbT0hS27iiyZji+xL4168i1B2ZY2PpCuEMQkDB0gQxDREY48J/Csx5qOPI0q
-         +LMRwMmYuW+4Ofa4NslwdbGoTzL7TAo2G7BMwoEv35MMkyw9Rm6QuOcpVbbicxvidV4e
-         YziSWciHMsluN74SsmgeCb7gGKsNIwxejIG4UrZZbAHKkSF8WE1Y3plRhEImivL/f62F
-         i6qmSM1wLX5GaaLZbJ4p4I2xToRC1gftU41CWFDxuv2YYry6NE1mvfNjo2SEokfkA6Sd
-         TYhSqAwHiJ2Nmf+u7BXc5odEfdPS703igsrtAP7k49P0sVXMNQ0vcIS6PKaMJy36SwCm
-         VQZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Gs5UTs020l+gW01sKQqLDKCl0tqBUVQZB/K/2Vj/X5s=;
-        b=iwUz/BuS7FXasV/1CjQ42rvesAdMOTnRXVlM/e8G2nVqqNqi9oQaLiHUDFMxGXz5bw
-         e9OE2rZhsLuOU2N6eV84PkS8P6FuYEKNbLpiMIg7FDGHnmAyVqftwCkjjFcenoh8Ux3r
-         5zVKZ4tfyUUSvxwdf9uK1+FkqU6bZ6IBcjVd04fowvBmCQ7FQp+8nD2XJpI0v5m/ou+n
-         clXNMcXkEKwKOuGwUR+1EqvxYpe5felsPA01YIiHxbuSlknbwYlrIMxB2bpmW4OdBNjc
-         KvRVk9KoOBD05qggL14qbEqYCihvssCi9vefT8yn9zCn5WHnbt3mRzeasEJJUIfZku+0
-         GH3Q==
-X-Gm-Message-State: AOAM531GOO1bzhi79wNEvoWLcRvrMESjodOuFv/LXBd+iWMwv30fNnBr
-        uIY5zis4QRx8Lh+xFyUCgqNp7pFqxDI=
-X-Google-Smtp-Source: ABdhPJxPYm6vNc7dijlvCZSMaFALq1sItV+Emb8KLA31LsAUUVnHhzlAb6urX4aS2wHnQfDIuM8ASw==
-X-Received: by 2002:aca:df03:0:b0:2ef:895e:7373 with SMTP id w3-20020acadf03000000b002ef895e7373mr6531638oig.177.1650820697900;
-        Sun, 24 Apr 2022 10:18:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e18-20020a9d7312000000b006054dfa7eb6sm2907397otk.78.2022.04.24.10.18.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 10:18:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 24 Apr 2022 10:18:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com, joel@jms.id.au,
-        jk@ozlabs.org, alistair@popple.id.au
-Subject: Re: [PATCH 2/2] hwmon (occ): Retry for checksum failure
-Message-ID: <20220424171816.GA749761@roeck-us.net>
-References: <20220321153112.12199-1-eajames@linux.ibm.com>
- <20220321153112.12199-3-eajames@linux.ibm.com>
+        Mon, 25 Apr 2022 02:01:57 -0400
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10124.outbound.protection.outlook.com [40.107.1.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B6C3915B;
+        Sun, 24 Apr 2022 22:58:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZCJozGHwLxaLhwmmlaXboLCVPae6PBaf2yrF44N9En2AKi1IC42CupQIQi68jn51O5YQvo6W04Ir7hXv/QZSSUWYn2B/3tuEnL33esbe/Wq7VC55yfYoqmx7uare4TYOZaR6y852H2OBXBMRqUd3vrEThUmj9k+3gbLkdrF6tCXo0zkI6x8IU9FHRxGMQ5tFof+dFJrZ/oNZVaW3LpIeFJOCVPBj8KKWXvi4TQIYlPLg1JtwNS8S47h7EnMEJd/xlvUBGRdE0sJZPSLEP78/X79SQYmkcPfymoobc8DzO9WJA0UVtWlrKfZznFqpTSSDbp2gObZI0lnFRva6Xu1MUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1KPyPmhB5aBqZg54CTuI5fIov4H/L6CIXrxLkIHuWWs=;
+ b=VOAwXdvpd5rjov46MEcFv5+A/uTQAFTpudxLBCIsSKdlIYIT4M5b/SS7WqgDs6xwK51EfnI7Ah5dooLoxZY/uBpwaDwJMhQSk8smQDeWnJ3EMX7ej/tcVVKU+btYTIwmK4XzMwJSy2XLx3klKV7H9CLJrZLrvnuXGkz51TS4tql19iDV7Rcde4WTjNv7Gg5TGDPSLu/ngMaKZdlxERK1HiqHXFFreqCq7MwPecNMETUn+uYbkc6uPTHaSvpw7CFj3a/IMMxrl2Z+BKsSK773HQSVFZyNs2XgTAAPK/+v2eWt11Voh90Y/4aQkk9oGcDfHpuEzsq4nMfWo1h931BtVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1KPyPmhB5aBqZg54CTuI5fIov4H/L6CIXrxLkIHuWWs=;
+ b=gxhlssBUEkQcRoiKo94t1ACGuy2nZEjo302Cs7xMxMwKGyepXToU/KA1ks2JgGvNq0sPQRnfah5TGz/JFb3uaBV1u0IwuVJSOD+ZeE2i1g+gQxIrJGHLhi8lN/T71jvX0MhOxqhhgj7Kk/2g/+oxxXylMUIiTsqVA5n+pVfv/y4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
+ by DB7PR02MB3724.eurprd02.prod.outlook.com (2603:10a6:5:1::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.21; Mon, 25 Apr 2022 05:58:51 +0000
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::d038:3d5c:e37f:4423]) by AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::d038:3d5c:e37f:4423%5]) with mapi id 15.20.5186.020; Mon, 25 Apr 2022
+ 05:58:51 +0000
+Message-ID: <e4c15f1c-b2a3-4371-d2de-8205d3dfe972@axentia.se>
+Date:   Mon, 25 Apr 2022 07:58:49 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+From:   Peter Rosin <peda@axentia.se>
+Subject: [PATCH 0/2] Add support for Atmel AT30TS74
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0036.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:9::23) To AM0PR02MB4436.eurprd02.prod.outlook.com
+ (2603:10a6:208:ed::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321153112.12199-3-eajames@linux.ibm.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 34278c18-f7bc-49f9-4162-08da2680abf2
+X-MS-TrafficTypeDiagnostic: DB7PR02MB3724:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR02MB372454986924D1E975A116CCBCF89@DB7PR02MB3724.eurprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3x2KNFwPftpiWSTPoTjyIMGW7LIdhHozv7HcMMnSawLPUDwTc/1sPmiEvWpVd7QTosjHRqtotp5/layogbYCi6vBgWaeZgyeX33JeC8kqhpIHy+DoH0Sxqg7M/stwGQsVyJO84Vsv3p7phvBOAC8PrWA6s/OqksmIE9cQ8N0AHcOxea8sMmmd1u49SjKqU0e4XecyQzkANK3rgpky5+kCXYg0TaJ9/6HjNyjb1VrLRVfLgnFgaf/T238VkIEtZxdF+obc9pqXXVOoD+Ki6NNuaiTnQro4gIz0qrZ8R691wmH6XH3CTtocVxTM+TkDGZutNOZTfVjwu+k1vh2Lpj4G0umveMlQGr+TmZBYp5kRHPI2liZEUF2beYcLb74Qm/4YZWL5xbNScDCYt7hPqzwSSHj9qUmgoTUZU/uHG+EZpvg7kiNyx1H6iZcS9rdZhpQoTF9XDICGeIFUzp+S6iBaxMgwilWQYKTZhocdRQKWqTCOe/pRnfCD3l30f2bPXycheZl51M8vhPZnczp29q3BVU/saR6sfS4i80M9uYYjNky4g/SWHUK4BQxAdA+W338NRFFuNHSwn7MXhpet5WgPc1S7VtUTG2fsVYYPhYuw5j6KPuvGubtzDbn5ugkk1rH6+Ya8Ve8WnTrMbh2VFAaIWVr1H/14Qwio8PwIgGaVLe1I3tBu5Z1tjt2mj3Mdnt12NSP1KasWkzvS15OCzbEr8GPxrCBMmRGpZ846kgzL10=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(39830400003)(396003)(366004)(346002)(136003)(86362001)(508600001)(8676002)(2616005)(66476007)(66556008)(26005)(4326008)(38100700002)(316002)(6486002)(6512007)(6916009)(54906003)(66946007)(6506007)(5660300002)(31696002)(8936002)(36756003)(31686004)(4744005)(2906002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SGVpRzNLQ0x3cHBnazhsenYwbHBuSmhTWjJZZnVaK1pFd3lUOERVbDVocC9B?=
+ =?utf-8?B?VVgrSHBzL1pKTWN6ZFpaSmIzSFkrcFhaUDBteTA1TGt2UCtQV2crVVE0UjZD?=
+ =?utf-8?B?MmJ6bUJFbFZxU3lrRzZZL0dxdm1qS1M4WE1Ta2FJbTJkZW50ZFdPYTQyajVJ?=
+ =?utf-8?B?d3VyNlhPU0hVVnI0R0R2cHMwSlU3UmNLVnhpaExjZHdiOGY1Y1ZhL2pHcHY0?=
+ =?utf-8?B?NWlNU2JaWTVXS0JILy9VazlhWXZsUjFBV2RCY3ZKQ0JXQ0NvYXN1N0kwK2Fq?=
+ =?utf-8?B?Z0lUTTlCbXdNekNsblk4QVIrUXdvWmRhRVlsRTNic3J1aVRZSzA5dks1ZHQ3?=
+ =?utf-8?B?QjAzKzZzdXBHRitpU2dsRHV3dmE5V3JrTEl4c01iRFdVMlBydDZ4amVoK2hl?=
+ =?utf-8?B?V1Rpb08wbmM1MTBZR0hJSEM0dnFHSlBUaCtlUFVtdnNjd0dIdUtzQlFKaEpo?=
+ =?utf-8?B?VHd6UHQ5YnZCanhtY3lPMERMcG1hOFRqb011S1lnM2M3a3lPVjdDRkpZYkIz?=
+ =?utf-8?B?RDZlTWdOMUZCZU9FWjc0elpFL1hta0w1S1A0M25RczZBZG1Ta3ZiYll4a0dB?=
+ =?utf-8?B?WkFyaGsyRFVuU0hqUFlndVZaVUxQVVNZekc1SHVTb2x3NGt5UFMrbGxRMDZi?=
+ =?utf-8?B?eFZvN3gwUEJTdTViV1ZqRVpnalRDUWlhd2VVcUw1M1dYd0UzcDEzZEpQNmdh?=
+ =?utf-8?B?cEl6TlhpbHRYWHY4WVREekFHZitYTUZwaW45MDhCZDFMSzdEZFNoenFNbm9C?=
+ =?utf-8?B?eGV3ZjZZaEdIZlZsVHUvSitTWXJEbHBwajkxM2dQYzRvdVZrN1crV1RqTkZT?=
+ =?utf-8?B?WkVkSkdkYlN4TTY2d2lZa0RUVjQ5dGMzQ1R0NzBOUXdmL2Y3S0JxY0FpbEpz?=
+ =?utf-8?B?TkNMYkRZdkwxK2FzQU5WNWptQzJGZlFGbDhSUnd3Qm1aWGNsK3MxV1BnNFEw?=
+ =?utf-8?B?WmQrRDVIRGZNMXYxV1dpTDZSQ3ZwNW1jRnV6OEtSQ0ZXRXRzRzdZcllONzg2?=
+ =?utf-8?B?K3VkN1c3bEFHcHYrUTFmUDUvS1pWUkRzY3ZqdnlKSjYzWWNZS0ZJOWx0clFY?=
+ =?utf-8?B?Z1dldUVDUlJleW1jMFJRa085WllLYzM0VEV1eC9xbjRMbm5aNDlZZXUwRWZM?=
+ =?utf-8?B?clpyRkdqUUR4WlJpUTJ6TXRRYWZqUkZGZDF2MjIxZ0xlYWZ0cEF3Nzhpa2dy?=
+ =?utf-8?B?d3JnbStlS2ljS3lzOUZab3NGZDdNOGpYdkJKbURwYXVJa3BCS1NLT2RXb2Vu?=
+ =?utf-8?B?RHBnbGJ1NEFoWHoxM3ZUSzlTNWNnVDg1TWtWS1VsSVZLNWczUjlZdDJ1M05J?=
+ =?utf-8?B?aG5sTXd6L0lsV2o3SExsdlNZWWd4dkxLVUxEVlJHNUJUVXpDUXNnR3dRci9t?=
+ =?utf-8?B?QlpNM1d0eWZacW5uQ3hxeG1ZaVNxNFVoZVVvUG96ZU1JTVlsdk1uWld5YS9p?=
+ =?utf-8?B?NGhrR1NabDN6NFhtR0NCY2E3VGZiWlo2eVZsZmYwZytOamF5clg5aDZYV1JT?=
+ =?utf-8?B?VFhQRkZKZmJ2NVg2Y1NwUkNHRW5MZzBtY28zZ0pGOG1xcUdFZTFVTk9hYitJ?=
+ =?utf-8?B?cFA3bjFpQ0tPSVIyL2NsNlROUFNvalJEbWtkS2hnNmFLY3luNzFTS3ZwN3Ur?=
+ =?utf-8?B?Z2hOVnMyM3lUOW1SMGV2QUVBUHNLaW1Mc251Vmw1VDIvQXdFVTk5NE43UEhs?=
+ =?utf-8?B?MWFXMkNIVW9vVG0rWTFJRitLajB0SFd6SmVsWC9LVURtNG5wdFUwOEpEU2pZ?=
+ =?utf-8?B?TXJjcllDcHRkcDh4eTRibUVJU3pKRGxGdWIvdVk4c0Nrb2lnM3Z0cXVBUkhR?=
+ =?utf-8?B?OXR2R21OVkVVZnBCWk9WYzBqbExzYXluelZsdGNybCtXVFFqNFk0WkhFMGhp?=
+ =?utf-8?B?aWYvNExEVU5WcFhNeklhbS9XMDFDZjVRd1E4Sm5ZL1pDLzdnbWtaRm5Fdmx5?=
+ =?utf-8?B?RWM5UFB1WnhmVlR5Vjg0NTVRRmFiZU4vQzdRTXd5dWxxWU9wM3kvenlQcDh1?=
+ =?utf-8?B?aW1ZanphTk9qT0JkV3dWMGdPeHNVbnkwcFlXMDU0Vi9DSjcySHRhTUhWYnEy?=
+ =?utf-8?B?emlWR3N6L2hmeDJ6eFYwek5IdDZMS0JYd0lDaXp4RUlZbDM4bVZPRlZ1eWwy?=
+ =?utf-8?B?WHhLcTAxM3NXMWpUZjNLK1NscDg4MytDU3JVT3BVNmdjT1RFVyt6RU1UL0JQ?=
+ =?utf-8?B?WFp6OVltZG8wVkllSUMwWm5jRitjNjN6bCthNHZDdFhtcHJnbDYrOGJFRUJ1?=
+ =?utf-8?B?NUlmQ0VVcHk1cjFJNGt2Z25PSkdKMXZLVktERzF5TS9xTGhwSWppUmNZU3Jh?=
+ =?utf-8?B?QU9nejEycGMybjQ0dFlETC94M2dmbWQyaktJbENrVmwvNENqWm9ldz09?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34278c18-f7bc-49f9-4162-08da2680abf2
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 05:58:51.1764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3v1oiwlMDFv3BnAz15ybOyUFcBxwzavZZSRoEJqvQ0SYhMxrmZeJfygLpIHtgPYw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR02MB3724
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:31:12AM -0500, Eddie James wrote:
-> Due to the OCC communication design with a shared SRAM area,
-> checkum errors are expected due to corrupted buffer from OCC
-> communications with other system components. Therefore, retry
-> the command twice in the event of a checksum failure.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Hi!
 
-I assume this will be applied together with patch 1 of the series.
+Yet another LM75 temperature sensor. Add it to the list of
+supported chips.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Cheers,
+Peter
 
-Guenter
+Peter Rosin (2):
+   dt-bindings: hwmon: Add Atmel AT30TS74
+   hwmon: (lm75) Add Atmel AT30TS74 support
 
-> ---
->  drivers/hwmon/occ/p9_sbe.c | 28 ++++++++++++++++++----------
->  1 file changed, 18 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index 49b13cc01073..7f4c3f979c54 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -84,17 +84,25 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
->  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
->  	size_t resp_len = sizeof(*resp);
->  	int rc;
-> -
-> -	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> -	if (rc < 0) {
-> -		if (resp_len) {
-> -			if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
-> -				sysfs_notify(&occ->bus_dev->kobj, NULL,
-> -					     bin_attr_ffdc.attr.name);
-> +	int tries = 0;
-> +
-> +	do {
-> +		rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> +		if (rc < 0) {
-> +			if (resp_len) {
-> +				if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
-> +					sysfs_notify(&occ->bus_dev->kobj, NULL,
-> +						     bin_attr_ffdc.attr.name);
-> +
-> +				return rc;
-> +			} else if (rc != -EBADE) {
-> +				return rc;
-> +			}
-> +			/* retry twice for checksum failures */
-> +		} else {
-> +			break;
->  		}
-> -
-> -		return rc;
-> -	}
-> +	} while (++tries < 3);
->  
->  	switch (resp->return_status) {
->  	case OCC_RESP_CMD_IN_PRG:
+  Documentation/devicetree/bindings/hwmon/lm75.yaml |  1 +
+  drivers/hwmon/Kconfig                             |  1 +
+  drivers/hwmon/lm75.c                              | 14 ++++++++++++++
+  3 files changed, 16 insertions(+)
+
+-- 
+2.20.1
+
