@@ -2,145 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82AC2C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 15:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7593DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 15:12:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242625AbiDYPLL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Apr 2022 11:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S242637AbiDYPPg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Apr 2022 11:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiDYPLK (ORCPT
+        with ESMTP id S232572AbiDYPPf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:11:10 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D81689AA;
-        Mon, 25 Apr 2022 08:08:05 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e5ca5c580fso16355866fac.3;
-        Mon, 25 Apr 2022 08:08:05 -0700 (PDT)
+        Mon, 25 Apr 2022 11:15:35 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549C385961
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Apr 2022 08:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=za1mZHss+li0ybPEY6i/L34F8j+pk+2DumO4nFr5Nqw=;
-        b=HOTPf6CKzKzNtGoZg5BVXqz56lD0FnvFQgQD/QpQp1mfRh5BLZkKlYB/4e+q1voe+D
-         DvtwJpjx10q5fE3em4lCpWGNIECHmNi/ok0z7UsAjJO94VwvAmVWERtLUUF/AVyUCoEN
-         bBB/TG/yuJpuEnfJyvea0qz7bVQhCfUoVb+fh/W4vL4a6B5oXDSiV/0RFgvBJHLaVs05
-         K8vGTzOh2yoHv6De3UwwJoNkzCC8aDfGjjmWOCDv7ugp9P8iT2RbrboATd+nd1ltD4Cd
-         pW5/ti8Yr/Jon7QRkHj4YBoClzCR3Bj+D0+CMCuVVyzlC5/g0jaUrW61hp8+6EtC9f0F
-         8gZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=za1mZHss+li0ybPEY6i/L34F8j+pk+2DumO4nFr5Nqw=;
-        b=5olCd3kCrKoIFbMlk0e2RrhfbtAiUszljHgncmYMPCHNXTuvh249JwvTbYRSyP1pPe
-         6MaxPaz3Un2H01z98DeGAhluSkMG7egTV7ZFzgi4Y5zzHFWcjqAPTwYr0O3RGWJsQa9r
-         rsecOvwMNKY+kN/avneQg1S88M/cZq7JjVMP1++9pC6TQ3p/T3rNDVH8+zA/sqLoljtw
-         xFrBIVB8n+J1s28nTtwCtLy7u10K5WPy80u1xcdhbPYSLAb6z1bB1fu0VBebpJq9KwG1
-         LrCnvJMgI//4i4c0NStqO5SDEk2he3Cscbnf7ZaOyaQwymOuULduPUnlNNXsI5+/0GJ+
-         EVlA==
-X-Gm-Message-State: AOAM531xNR3bGsQzV1PHm/Ip+X9Dj4FIR15ZL5w8rd37h8ZqUxP3lih6
-        0W4ZNhowKdIUXv0uLw5xKRQ21k7CjmE=
-X-Google-Smtp-Source: ABdhPJyzc6gXFrcLW8x8oJ6ozRGcsrCXhmmdRz6dFfIR7Qz8FnM7l8VZx/RvOA7UfN3sl1y6XrSwIA==
-X-Received: by 2002:a05:6870:15d0:b0:e9:12ad:288c with SMTP id k16-20020a05687015d000b000e912ad288cmr4799481oad.223.1650899284840;
-        Mon, 25 Apr 2022 08:08:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e26-20020a056820061a00b0035e46250f56sm3782576oow.13.2022.04.25.08.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 08:07:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 25 Apr 2022 08:07:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: hwmon: Add nuvoton,nct6775
-Message-ID: <20220425150748.GA4165124@roeck-us.net>
-References: <20220309005047.5107-1-zev@bewilderbeest.net>
- <20220309005047.5107-2-zev@bewilderbeest.net>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1650899551;
+  x=1682435551;
+  h=date:to:cc:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:from;
+  bh=+yLLc67DZOFDPqzAzaJ4Dqjsv1ZlA7Xb5pnBcCNvFVs=;
+  b=PcAOStLhBrkAgotk26O2BCzP2AWMJ6HdOqNSa+kZ1ZJ2pkRZhkKZaFyn
+   Pp5/rps95IJarepJA0udqiIcDN/oPNIwn+HPeCrOZDcf1L3Nt+P7pot3X
+   HZcHGhcaQmZFJXspnqvjByiD7T/3DWhbM56cj4dBKlGcMOzRQMMtpJtJT
+   6s+c5GhyjXfI5f12Hu+aYMJP0tZUq14xBlGJon81hYpcmT+x1HcfiEKfq
+   8sQAmC+a9c0SOtnvVAu8wfVVvTo3pvwpBRkNx8qs2MjgsE0gepwFmDRZW
+   +WXe//Iy+jjFcnJzwFB97D2MMHsrRZZzEnABZuqoXb2BifkpHMjrzxuwx
+   Q==;
+Date:   Mon, 25 Apr 2022 17:12:28 +0200
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     =?iso-8859-1?Q?M=E5rten?= Lindahl <Marten.Lindahl@axis.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        kernel <kernel@axis.com>
+Subject: Re: [PATCH 1/2] hwmon: (pmbus/ltc2978) Add driver specific regulator
+ ops
+Message-ID: <Yma6XCxeodboX25V@axis.com>
+References: <20220406124321.1184133-1-marten.lindahl@axis.com>
+ <20220406124321.1184133-2-marten.lindahl@axis.com>
+ <20220424164910.GA747863@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20220309005047.5107-2-zev@bewilderbeest.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220424164910.GA747863@roeck-us.net>
+From:   Marten Lindahl <martenli@axis.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 04:50:42PM -0800, Zev Weiss wrote:
-> These Super I/O chips have an i2c interface that some systems expose
-> to a BMC; the BMC's device tree can now describe that via this
-> binding.
+On Sun, Apr 24, 2022 at 06:49:10PM +0200, Guenter Roeck wrote:
+> On Wed, Apr 06, 2022 at 02:43:20PM +0200, Mårten Lindahl wrote:
+> > Several of the manuals for devices supported by this driver describes
+> > the need for a minimum wait time before the chip is ready to receive
+> > next command.
+> > 
+> > This wait time is already implemented in the driver as a ltc_wait_ready
+> > function with a driver defined wait time of 100 ms, and is considered
+> > for specific devices before reading/writing data on the pmbus.
+> > 
+> > But this driver uses the default pmbus_regulator_ops for the enable/
+> > disable/is_enabled functions. By using these functions it bypasses the
+> > wait time recommendations for several of the devices managed by the
+> > driver (ltc3880/ltc3882/ltc3883/ltc3884/ltc3886/ltc3887/ltc3889/ltm4664/
+> > ltm4675/ltm4676/ltm4677/ltm4678/ltm4680/ltm4686/ltm4700/ltc7880).
+> > 
+> > Lets add driver specific regulator enable/disable/is_enabled ops which
+> > takes the wait time into consideration for the specified devices, by
+> > overriding pmbus_read_byte_data with internal ltc_read_byte_data.
+> > 
+> > Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+
+Hi Guenter!
+Thanks for your comments.
 > 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> This patch solves the wrong problem. The real problem is that the
+> regulator code in the PMBus core writes direcetly into the chip
+> and doesn't use the driver functions to do it if needed, and that
+> the PMBus core does not support a chip-specific write_byte_data function
+> (because so far it wasn't needed). That needs to get fixed, and then
+> we won't need chip specific regulator functions.
 
-This is still waiting for DT maintainer approval.
+Good point. I will add support for driver callback functions in pmbus
+core and remove the ltc2978 enable/disable/is_enabled functions.
 
-Do you expect to add further properties along the line ?
-If not, you might consider adding the chips to trivial devices instead.
-
-Guenter
-
-> ---
->  .../bindings/hwmon/nuvoton,nct6775.yaml       | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+Kind regards
+Mårten
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> new file mode 100644
-> index 000000000000..7b1054db46b3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct6775.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NCT6775 and compatible Super I/O chips
-> +
-> +maintainers:
-> +  - Zev Weiss <zev@bewilderbeest.net>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,nct6106
-> +      - nuvoton,nct6116
-> +      - nuvoton,nct6775
-> +      - nuvoton,nct6776
-> +      - nuvoton,nct6779
-> +      - nuvoton,nct6791
-> +      - nuvoton,nct6792
-> +      - nuvoton,nct6793
-> +      - nuvoton,nct6795
-> +      - nuvoton,nct6796
-> +      - nuvoton,nct6797
-> +      - nuvoton,nct6798
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        superio@4d {
-> +            compatible = "nuvoton,nct6779";
-> +            reg = <0x4d>;
-> +        };
-> +    };
+> Thanks,
+> Guenter
