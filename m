@@ -2,335 +2,359 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F644C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 15:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14A91C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 15:46:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242886AbiDYPkW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Apr 2022 11:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S237740AbiDYPtf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Apr 2022 11:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239039AbiDYPkV (ORCPT
+        with ESMTP id S236180AbiDYPte (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:40:21 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8643D4B8;
-        Mon, 25 Apr 2022 08:37:16 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id t15so17534771oie.1;
-        Mon, 25 Apr 2022 08:37:16 -0700 (PDT)
+        Mon, 25 Apr 2022 11:49:34 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E08E113C8A
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Apr 2022 08:46:30 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id r8so17553786oib.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Apr 2022 08:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=e5PTJeJCNYuORw416nhi+yZ3YmrDs9PcHs4fRVUAraQ=;
-        b=S/0r/sG+69t8vIc4rRd9ip+BWioIzJzL84iN3IZ+2lK1LfEy1xqRUb1f+Gcbqt2caw
-         YUEQhfu7kq+wvTZPUbWoGUT2SPW+ySmK9NbmUC4UZTE1/oW8+IDiEuxIruhJEF/Gddzv
-         RdbCFbiC15tXBpkxpHfDz6nVOwzOF6fZsP7wMf3UA/fAy+/CSmgiwaVpubKmwirhQuKx
-         sl6YQ9M0JL+0Y950FkChdwK8DJHU9LSg/KyAw64NMV/oXPjLSJ+tm9VBMUsGqs/XNusz
-         anBgQjs+QMAbpbH+XBZRZgToxXA8Ja36RzDatYI4xOIgTcoWuH1WZipA9BOBLUslFM0J
-         J9Bg==
+        bh=eGCjlVPTT+5ELKKSFO9pwAm6PHjSmX+fmnwQaSirL6Y=;
+        b=prZzz0wIOaz62WZcc+cbQEp1/VbYd9eP5U/zw4GgOT7I3QVP87tlJivr0JCKUATKW0
+         1/tzEumPw9FxuSIjdaUpJAys9uRyLpiPDrhQrXQjDBd6SvPU/dm4b13dsVUQkdmqoSOp
+         48seTrHexmdThEpOcuymOUtP/a1PODKX/IXeBlZRdvVvPvEG5ijUpwk/TkeQrAf7C+9G
+         hOzoE5MBRUPB0DHFShiJnFHQhGTMVcRq24fCWVeiTilbFYueCNRmCeLhftWzrbbeOV+e
+         8Z4cLJpFOKVHuj5yS9WfOIXcvglPlIuorFWr8XBcd2VQ55LsZZPDMXwB5Xzi9YjNr5Qu
+         Mk1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=e5PTJeJCNYuORw416nhi+yZ3YmrDs9PcHs4fRVUAraQ=;
-        b=ekmm9FCw3DxI9TUEDRlB27nrbyxN2CVGQPiXWgBfg9/hiwb5Bvly7BHb9I5MFsKJTH
-         GNqYqHOAY70kldpLWWRvPChT/AQAh4ZzzPeoZcb++1wfVMAfO7V5CJxj154s7tPGvKYK
-         N0WLEcG57ogGR1eABnjf37/bmPI9OGCwE+j650jZrlhS/m5W7hqz28Vv2NcXGJ9leIeo
-         JgFUBscw0cPKQ0hem7GtT8d/jYTRkHX3q3muHlsfVPB1RYnIMhIV+OGypgFf22Eb9Phh
-         MEk8RtFtwbVkOjCHucuI1VCVMaK4hVYQmHNxO553f/3XXckmnnss8FckhAAKNdg1tOxI
-         6YHw==
-X-Gm-Message-State: AOAM533vdMvrZUaSmoDXbn4EkjRLSkLuHgVcdMM6YD6J+cTHN26OSLuk
-        LldPrY7Gy816wQEpHv5qKjY=
-X-Google-Smtp-Source: ABdhPJzA8s3dOAXlFx4kKXDnyLGHgEKnJAU358v0B7oQlMKqnHOSFsUtzWCB6DHlN3Bsv+7wgUofNA==
-X-Received: by 2002:a05:6808:d48:b0:322:a49f:a7e1 with SMTP id w8-20020a0568080d4800b00322a49fa7e1mr12686501oik.181.1650901036118;
-        Mon, 25 Apr 2022 08:37:16 -0700 (PDT)
+        bh=eGCjlVPTT+5ELKKSFO9pwAm6PHjSmX+fmnwQaSirL6Y=;
+        b=BHApme6hfPwmnAkLqaPBwu6jSW9GT1+aPf8knHQ+59X5Ch/JXs+BHxkVr7MMUoDvBR
+         k5SyKTYaBH7u/1OpttFqhoLI+qsEcDb3oYx87v50Zarn3oB56SQQ2aPtLdXttkZhtuO0
+         oy9CXH9sWSJyDjGmQhE3i5GT4E0ltg7djKNlqS8flvO00TdS4/jWv0a5SYuIrxgrz18i
+         g6hgN+STxIVgwktVmyu2jP25Zx1lcjUKhMqT4fHqRT+OKmtpLbc8dLLNREOsc1mrXVv/
+         1fkl273xjSvdpDm8POxABDcRnWfu8L2FA3t5UIHL1xCwDx6JiDDNzTvFG/IQ9Hi3HdQH
+         re1A==
+X-Gm-Message-State: AOAM533B6z/mWcklKTQ99ox6GyeSlSwx60ZWGp1JrE5fcxf2l4hVFahW
+        30GZVrsCe7uvm0E4PyUcq18=
+X-Google-Smtp-Source: ABdhPJx6JN/HbE2bAhTt+HtbibJVa2906yd0bxg8DDDpLKtUS6b8PJb7LB2vkF5A2MbmUlmsaqhf4A==
+X-Received: by 2002:a05:6808:178d:b0:322:931a:f88e with SMTP id bg13-20020a056808178d00b00322931af88emr13202684oib.173.1650901589671;
+        Mon, 25 Apr 2022 08:46:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m5-20020a056808024500b003222ff73171sm3820741oie.17.2022.04.25.08.37.15
+        by smtp.gmail.com with ESMTPSA id 5-20020a9d0105000000b005fbe5093eb0sm3940112otu.54.2022.04.25.08.46.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 08:37:15 -0700 (PDT)
+        Mon, 25 Apr 2022 08:46:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 25 Apr 2022 08:37:14 -0700
+Date:   Mon, 25 Apr 2022 08:46:27 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] hwmon: (nct6775) Add i2c driver
-Message-ID: <20220425153714.GA4167482@roeck-us.net>
-References: <20220309005047.5107-1-zev@bewilderbeest.net>
- <20220309005047.5107-7-zev@bewilderbeest.net>
+To:     Greg Schwendimann <gschwendimann@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Greg Schwendimann <greg.schwendimann@infineon.com>
+Subject: Re: [PATCH v2] hwmon: (pmbus) Add support for Infineon Digital
+ Multi-phase xdp152 faimly controllers
+Message-ID: <20220425154627.GA4168007@roeck-us.net>
+References: <20220425140323.4135087-1-greg.schwendimann@infineon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220309005047.5107-7-zev@bewilderbeest.net>
+In-Reply-To: <20220425140323.4135087-1-greg.schwendimann@infineon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 04:50:47PM -0800, Zev Weiss wrote:
-> This driver provides an i2c I/O mechanism for the core nct6775 driver,
-> as might be used by a BMC.  Because the Super I/O chip is shared with
-> the host CPU in such a scenario (and the host should ultimately be in
-> control of it), the i2c driver is strictly read-only to avoid
-> interfering with any usage by the host (aside from the bank-select
-> register, which seems to be replicated for the i2c interface).
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Tested-by: Renze Nicolai <renze@rnplus.nl>
+Greg,
+
+On Mon, Apr 25, 2022 at 10:03:23AM -0400, Greg Schwendimann wrote:
+> Add support for devices XDPE152C4 and XDPE15284
 > ---
->  MAINTAINERS                 |   6 ++
->  drivers/hwmon/Kconfig       |  17 ++++
->  drivers/hwmon/Makefile      |   1 +
->  drivers/hwmon/nct6775-i2c.c | 179 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 203 insertions(+)
->  create mode 100644 drivers/hwmon/nct6775-i2c.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f093e40d2b16..02202555ccfe 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13296,6 +13296,12 @@ F:	drivers/hwmon/nct6775-core.c
->  F:	drivers/hwmon/nct6775-platform.c
->  F:	drivers/hwmon/nct6775.h
->  
-> +NCT6775 HARDWARE MONITOR DRIVER - I2C DRIVER
-> +M:	Zev Weiss <zev@bewilderbeest.net>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/hwmon/nct6775-i2c.c
-> +
->  NETDEVSIM
->  M:	Jakub Kicinski <kuba@kernel.org>
->  S:	Maintained
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 1c657100c392..fd2d32140066 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1483,6 +1483,23 @@ config SENSORS_NCT6775_PLATFORM
->  	  This driver can also be built as a module. If so, the module
->  	  will be called nct6775-platform.
->  
-> +config SENSORS_NCT6775_I2C
-> +	tristate "I2C driver for Nuvoton NCT6775F and compatibles"
-> +	depends on I2C
-> +	select REGMAP_I2C
 
-This driver doesn't really use regmap, much less regmap_i2c.
-The core driver should select REGMAP.
+Unfortunately you did not sign your patch. Sorry, I didn't realize this
+before, but your patch needs to be signed for me to apply it.
 
+Also, git complains that the documentation file has a couple of spaces
+at the end of lines, and that there is an empty line at the end.
+
+Please fix and resubmit. Also, please include change logs when you
+send new patch revisions.
+
+Thanks,
 Guenter
 
-> +	select SENSORS_NCT6775
-> +	help
-> +	  If you say yes here you get support for the hardware monitoring
-> +	  functionality of the Nuvoton NCT6106D, NCT6775F, NCT6776F, NCT6779D,
-> +	  NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D, and compatible
-> +	  Super-I/O chips via their I2C interface.
-> +
-> +	  If you're not building a kernel for a BMC, this is probably
-> +	  not the driver you want (see CONFIG_SENSORS_NCT6775_PLATFORM).
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nct6775-i2c.
-> +
->  config SENSORS_NCT7802
->  	tristate "Nuvoton NCT7802Y"
->  	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 2453c087cf1d..e1da423d46d5 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -156,6 +156,7 @@ obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
->  obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
->  obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775-core.o
->  obj-$(CONFIG_SENSORS_NCT6775_PLATFORM) += nct6775-platform.o
-> +obj-$(CONFIG_SENSORS_NCT6775_I2C) += nct6775-i2c.o
->  obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
->  obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
->  obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
-> diff --git a/drivers/hwmon/nct6775-i2c.c b/drivers/hwmon/nct6775-i2c.c
+>  .../devicetree/bindings/trivial-devices.yaml  |   4 +
+>  Documentation/hwmon/index.rst                 |   1 +
+>  Documentation/hwmon/xdpe152c4.rst             | 119 ++++++++++++++++++
+>  drivers/hwmon/pmbus/Kconfig                   |   9 ++
+>  drivers/hwmon/pmbus/Makefile                  |   1 +
+>  drivers/hwmon/pmbus/xdpe152c4.c               |  75 +++++++++++
+>  6 files changed, 209 insertions(+)
+>  create mode 100644 Documentation/hwmon/xdpe152c4.rst
+>  create mode 100644 drivers/hwmon/pmbus/xdpe152c4.c
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 550a2e5c9e05..fc2164c4d108 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -143,6 +143,10 @@ properties:
+>            - infineon,xdpe12254
+>              # Infineon Multi-phase Digital VR Controller xdpe12284
+>            - infineon,xdpe12284
+> +            # Infineon Multi-phase Digital VR Controller xdpe152c4
+> +          - infineon,xdpe152c4
+> +            # Infineon Multi-phase Digital VR Controller xdpe15284
+> +          - infineon,xdpe15284
+>              # Injoinic IP5108 2.0A Power Bank IC with I2C
+>            - injoinic,ip5108
+>              # Injoinic IP5109 2.1A Power Bank IC with I2C
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 863b76289159..355c682f9ec4 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -223,6 +223,7 @@ Hardware Monitoring Kernel Drivers
+>     wm8350
+>     xgene-hwmon
+>     xdpe12284
+> +   xdpe152c4
+>     zl6100
+>  
+>  .. only::  subproject and html
+> diff --git a/Documentation/hwmon/xdpe152c4.rst b/Documentation/hwmon/xdpe152c4.rst
 > new file mode 100644
-> index 000000000000..e36cf814c8e9
+> index 000000000000..ff2db72cae50
 > --- /dev/null
-> +++ b/drivers/hwmon/nct6775-i2c.c
-> @@ -0,0 +1,179 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +++ b/Documentation/hwmon/xdpe152c4.rst
+> @@ -0,0 +1,119 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver xdpe152
+> +=====================
+> +
+> +Supported chips:
+> +
+> +  * Infineon XDPE152C4
+> +
+> +    Prefix: 'xdpe152c4'
+> +
+> +  * Infineon XDPE15284
+> +
+> +    Prefix: 'xdpe15284'
+> +
+> +Authors:
+> +
+> +    Greg Schwendimann <greg.schwendimann@infineon.com>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements support for Infineon Digital Multi-phase Controller 
+> +XDPE152C4 and XDPE15284 dual loop voltage regulators.
+> +The devices are compliant with:
+> +
+> +- Intel VR13, VR13HC and VR14 rev 1.86
+> +  converter specification.
+> +- Intel SVID rev 1.93. protocol.
+> +- PMBus rev 1.3.1 interface.
+> +
+> +Devices support linear format for reading input and output voltage, input 
+> +and output current, input and output power and temperature.
+> +
+> +Devices support two pages for telemetry.
+> +
+> +The driver provides for current: input, maximum and critical thresholds
+> +and maximum and critical alarms. Low Critical thresholds and Low critical alarm are
+> +supported only for current output.
+> +The driver exports the following attributes for via the sysfs files, where
+> +indexes 1, 2 are for "iin" and 3, 4 for "iout":
+> +
+> +**curr[1-4]_crit**
+> +
+> +**curr[1-4]_crit_alarm**
+> +
+> +**curr[1-4]_input**
+> +
+> +**curr[1-4]_label**
+> +
+> +**curr[1-4]_max**
+> +
+> +**curr[1-4]_max_alarm**
+> +
+> +**curr[3-4]_lcrit**
+> +
+> +**curr[3-4]_lcrit_alarm**
+> +
+> +**curr[3-4]_rated_max**
+> +
+> +The driver provides for voltage: input, critical and low critical thresholds
+> +and critical and low critical alarms.
+> +The driver exports the following attributes for via the sysfs files, where
+> +indexes 1, 2 are for "vin" and 3, 4 for "vout":
+> +
+> +**in[1-4]_min**
+> +
+> +**in[1-4]_crit**
+> +
+> +**in[1-4_crit_alarm**
+> +
+> +**in[1-4]_input**
+> +
+> +**in[1-4]_label**
+> +
+> +**in[1-4]_max**
+> +
+> +**in[1-4]_max_alarm**
+> +
+> +**in[1-4]_min**
+> +
+> +**in[1-4]_min_alarm**
+> +
+> +**in[3-4]_lcrit**
+> +
+> +**in[3-4]_lcrit_alarm**
+> +
+> +**in[3-4]_rated_max**
+> +
+> +**in[3-4]_rated_min**
+> +
+> +The driver provides for power: input and alarms.
+> +The driver exports the following attributes for via the sysfs files, where
+> +indexes 1, 2 are for "pin" and 3, 4 for "pout":
+> +
+> +**power[1-2]_alarm**
+> +
+> +**power[1-4]_input**
+> +
+> +**power[1-4]_label**
+> +
+> +**power[1-4]_max**
+> +
+> +**power[1-4]_rated_max**
+> +
+> +The driver provides for temperature: input, maximum and critical thresholds
+> +and maximum and critical alarms.
+> +The driver exports the following attributes for via the sysfs files:
+> +
+> +**temp[1-2]_crit**
+> +
+> +**temp[1-2]_crit_alarm**
+> +
+> +**temp[1-2]_input**
+> +
+> +**temp[1-2]_max**
+> +
+> +**temp[1-2]_max_alarm**
+> +
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index a2ea1d5a8765..fe0d0e44da4f 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -408,6 +408,15 @@ config SENSORS_UCD9200
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called ucd9200.
+>  
+> +config SENSORS_XDPE152
+> +	tristate "Infineon XDPE152 family"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Infineon
+> +	  XDPE15284, XDPE152C4, device.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called xdpe152c4.
+> +
+>  config SENSORS_XDPE122
+>  	tristate "Infineon XDPE122 family"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index a4a96ac71de7..4678fba5012c 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -43,5 +43,6 @@ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+>  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+>  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+>  obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+> +obj-$(CONFIG_SENSORS_XDPE152)	+= xdpe152c4.o
+>  obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
+>  obj-$(CONFIG_SENSORS_PIM4328)	+= pim4328.o
+> diff --git a/drivers/hwmon/pmbus/xdpe152c4.c b/drivers/hwmon/pmbus/xdpe152c4.c
+> new file mode 100644
+> index 000000000000..b8a36ef73e45
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/xdpe152c4.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
 > +/*
-> + * nct6775-i2c - I2C driver for the hardware monitoring functionality of
-> + *	         Nuvoton NCT677x Super-I/O chips
+> + * Hardware monitoring driver for Infineon Multi-phase Digital VR Controllers
 > + *
-> + * Copyright (C) 2022 Zev Weiss <zev@bewilderbeest.net>
-> + *
-> + * This driver interacts with the chip via it's "back door" i2c interface, as
-> + * is often exposed to a BMC.  Because the host may still be operating the
-> + * chip via the ("front door") LPC interface, this driver cannot assume that
-> + * it actually has full control of the chip, and in particular must avoid
-> + * making any changes that could confuse the host's LPC usage of it.  It thus
-> + * operates in a strictly read-only fashion, with the only exception being the
-> + * bank-select register (which seems, thankfully, to be replicated for the i2c
-> + * interface so it doesn't affect the LPC interface).
+> + * Copyright (c) 2022 Infineon Technologies. All rights reserved.
 > + */
 > +
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/i2c.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
 > +#include <linux/err.h>
-> +#include <linux/of_device.h>
-> +#include <linux/regmap.h>
-> +#include "nct6775.h"
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
 > +
-> +static int nct6775_i2c_read(void *ctx, unsigned int reg, unsigned int *val)
-> +{
-> +	int ret;
-> +	u32 tmp;
-> +	u8 bank = reg >> 8;
-> +	struct nct6775_data *data = ctx;
-> +	struct i2c_client *client = data->driver_data;
+> +#define XDPE152_PAGE_NUM 2
 > +
-> +	if (bank != data->bank) {
-> +		ret = i2c_smbus_write_byte_data(client, NCT6775_REG_BANK, bank);
-> +		if (ret)
-> +			return ret;
-> +		data->bank = bank;
-> +	}
-> +
-> +	ret = i2c_smbus_read_byte_data(client, reg & 0xff);
-> +	if (ret < 0)
-> +		return ret;
-> +	tmp = ret;
-> +
-> +	if (nct6775_reg_is_word_sized(data, reg)) {
-> +		ret = i2c_smbus_read_byte_data(client, (reg & 0xff) + 1);
-> +		if (ret < 0)
-> +			return ret;
-> +		tmp = (tmp << 8) | ret;
-> +	}
-> +
-> +	*val = tmp;
-> +	return 0;
-> +}
-> +
-> +/*
-> + * The write operation is a dummy so as not to disturb anything being done
-> + * with the chip via LPC.
-> + */
-> +static int nct6775_i2c_write(void *ctx, unsigned int reg, unsigned int value)
-> +{
-> +	struct nct6775_data *data = ctx;
-> +	struct i2c_client *client = data->driver_data;
-> +
-> +	dev_dbg(&client->dev, "skipping attempted write: %02x -> %03x\n", value, reg);
-> +
-> +	/*
-> +	 * This is a lie, but writing anything but the bank-select register is
-> +	 * something this driver shouldn't be doing.
-> +	 */
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id __maybe_unused nct6775_i2c_of_match[] = {
-> +	{ .compatible = "nuvoton,nct6106", .data = (void *)nct6106, },
-> +	{ .compatible = "nuvoton,nct6116", .data = (void *)nct6116, },
-> +	{ .compatible = "nuvoton,nct6775", .data = (void *)nct6775, },
-> +	{ .compatible = "nuvoton,nct6776", .data = (void *)nct6776, },
-> +	{ .compatible = "nuvoton,nct6779", .data = (void *)nct6779, },
-> +	{ .compatible = "nuvoton,nct6791", .data = (void *)nct6791, },
-> +	{ .compatible = "nuvoton,nct6792", .data = (void *)nct6792, },
-> +	{ .compatible = "nuvoton,nct6793", .data = (void *)nct6793, },
-> +	{ .compatible = "nuvoton,nct6795", .data = (void *)nct6795, },
-> +	{ .compatible = "nuvoton,nct6796", .data = (void *)nct6796, },
-> +	{ .compatible = "nuvoton,nct6797", .data = (void *)nct6797, },
-> +	{ .compatible = "nuvoton,nct6798", .data = (void *)nct6798, },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, nct6775_i2c_of_match);
-> +
-> +static const struct i2c_device_id nct6775_i2c_id[] = {
-> +	{ "nct6106", nct6106 },
-> +	{ "nct6116", nct6116 },
-> +	{ "nct6775", nct6775 },
-> +	{ "nct6776", nct6776 },
-> +	{ "nct6779", nct6779 },
-> +	{ "nct6791", nct6791 },
-> +	{ "nct6792", nct6792 },
-> +	{ "nct6793", nct6793 },
-> +	{ "nct6795", nct6795 },
-> +	{ "nct6796", nct6796 },
-> +	{ "nct6797", nct6797 },
-> +	{ "nct6798", nct6798 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, nct6775_i2c_id);
-> +
-> +static int nct6775_i2c_probe_init(struct nct6775_data *data)
-> +{
-> +	/*
-> +	 * The i2c interface doesn't provide access to the control registers
-> +	 * needed to determine the presence of other fans, but fans 1 and 2
-> +	 * are (in principle) always there.
-> +	 *
-> +	 * In practice this is perhaps a little silly, because the system
-> +	 * using this driver is mostly likely a BMC, and hence probably has
-> +	 * totally separate fan tachs & pwms of its own that are actually
-> +	 * controlling/monitoring the fans -- these are thus unlikely to be
-> +	 * doing anything actually useful.
-> +	 */
-> +	data->has_fan = 0x03;
-> +	data->has_fan_min = 0x03;
-> +	data->has_pwm = 0x03;
-> +	return 0;
-> +}
-> +
-> +static const struct regmap_config nct6775_i2c_regmap_config = {
-> +	.reg_bits = 16,
-> +	.val_bits = 16,
-> +	.reg_read = nct6775_i2c_read,
-> +	.reg_write = nct6775_i2c_write,
+> +static struct pmbus_driver_info xdpe152_info = {
+> +	.pages = XDPE152_PAGE_NUM,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP |
+> +		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
 > +};
 > +
-> +static int nct6775_i2c_probe(struct i2c_client *client)
+> +static int xdpe152_probe(struct i2c_client *client)
 > +{
-> +	struct nct6775_data *data;
-> +	const struct of_device_id *of_id;
-> +	const struct i2c_device_id *i2c_id;
-> +	struct device *dev = &client->dev;
+> +	struct pmbus_driver_info *info;
 > +
-> +	of_id = of_match_device(nct6775_i2c_of_match, dev);
-> +	i2c_id = i2c_match_id(nct6775_i2c_id, client);
-> +
-> +	if (of_id && (unsigned long)of_id->data != i2c_id->driver_data)
-> +		dev_notice(dev, "Device mismatch: %s in device tree, %s detected\n",
-> +			   of_id->name, i2c_id->name);
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
+> +	info = devm_kmemdup(&client->dev, &xdpe152_info, sizeof(*info),
+> +			    GFP_KERNEL);
+> +	if (!info)
 > +		return -ENOMEM;
 > +
-> +	data->kind = i2c_id->driver_data;
-> +
-> +	data->read_only = true;
-> +	data->driver_data = client;
-> +	data->driver_init = nct6775_i2c_probe_init;
-> +
-> +	return nct6775_probe(dev, data, &nct6775_i2c_regmap_config);
+> +	return pmbus_do_probe(client, info);
 > +}
 > +
-> +static struct i2c_driver nct6775_i2c_driver = {
-> +	.class = I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name = "nct6775-i2c",
-> +		.of_match_table = of_match_ptr(nct6775_i2c_of_match),
-> +	},
-> +	.probe_new = nct6775_i2c_probe,
-> +	.id_table = nct6775_i2c_id,
+> +static const struct i2c_device_id xdpe152_id[] = {
+> +	{"xdpe152c4", 0},
+> +	{"xdpe15284", 0},
+> +	{}
 > +};
 > +
-> +module_i2c_driver(nct6775_i2c_driver);
+> +MODULE_DEVICE_TABLE(i2c, xdpe152_id);
 > +
-> +MODULE_AUTHOR("Zev Weiss <zev@bewilderbeest.net>");
-> +MODULE_DESCRIPTION("I2C driver for NCT6775F and compatible chips");
+> +static const struct of_device_id __maybe_unused xdpe152_of_match[] = {
+> +	{.compatible = "infineon,xdpe152c4"},
+> +	{.compatible = "infineon,xdpe15284"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, xdpe152_of_match);
+> +
+> +static struct i2c_driver xdpe152_driver = {
+> +	.driver = {
+> +		.name = "xdpe152c4",
+> +		.of_match_table = of_match_ptr(xdpe152_of_match),
+> +	},
+> +	.probe_new = xdpe152_probe,
+> +	.id_table = xdpe152_id,
+> +};
+> +
+> +module_i2c_driver(xdpe152_driver);
+> +
+> +MODULE_AUTHOR("Greg Schwendimann <greg.schwendimann@infineon.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Infineon XDPE152 family");
 > +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(HWMON_NCT6775);
+> +MODULE_IMPORT_NS(PMBUS);
