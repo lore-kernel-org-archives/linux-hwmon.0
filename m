@@ -2,104 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF042C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 21:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69FA9C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 21:51:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355523AbiDZVfj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 17:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S243564AbiDZVyI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 17:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355533AbiDZVfi (ORCPT
+        with ESMTP id S237427AbiDZVyI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:35:38 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B845848889;
-        Tue, 26 Apr 2022 14:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651008721;
-        bh=Mcqr/T0kmWqg4nAlzOns1D7VSNQP91XAT2oZ/smVtZg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=coZxAAm3p5l3OCIUnUP3qzKkt/u4crbDsUnOxI/vq9/YCes/7sCHhnXHv2vo4w5Dp
-         tP/f1Fu9R81fCxssP6uSpnKuNsxWm3HL03YP/WE4X6c84qFmWXqFcT30FkzoiMjUPr
-         3hHAJ56xU3MOE78J+sCQPi3yekWPgN83cpKdzesQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MFsYx-1nemMg0KSd-00HQ3s; Tue, 26 Apr 2022 23:32:01 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] hwmon: (dell-smm) Warn if SMM call took a very long time to execute
-Date:   Tue, 26 Apr 2022 23:31:54 +0200
-Message-Id: <20220426213154.724708-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220426213154.724708-1-W_Armin@gmx.de>
-References: <20220426213154.724708-1-W_Armin@gmx.de>
+        Tue, 26 Apr 2022 17:54:08 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4F86B090;
+        Tue, 26 Apr 2022 14:50:59 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id n134so322237iod.5;
+        Tue, 26 Apr 2022 14:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fFhxvEKDcp+p+Jf+hKy1k48Hi9OxmwmKYCtCg5xjO34=;
+        b=gydrhvbAvrmqKWEOGZZ8swyxUk51TMy97z+ch9gcoqXwDrzYplo4Epen7SIvfGzz59
+         nDHV5uh8XlqtG+R8ZtPYwJy4GUovL3xazdKha7BX37OyJLvpZRBcaPWWarlNpZEfbiAP
+         OzxIRxf8drhYUHAdTDzWmpGLUYrUeNAgjF50CDCj2+v9midPumJaqO3SqVAVj21b4tUp
+         WDWZfhp2jhAdSftAxleMYBI/CEnBqHs0piSQqtpnZlrExVD74nYRzFDlFmF0C3GshutT
+         DFF6UtxN44M86ztGCclbnNR0uGY6G2Vixz/pTRonGE8f1maV+XTsQxA1O/L3RiUfZ98I
+         9tTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fFhxvEKDcp+p+Jf+hKy1k48Hi9OxmwmKYCtCg5xjO34=;
+        b=SC+BmXZ16blBsrUxJDIvIYqHwmovCjKKSZ6lLYL+jtwzPxlst39+3CeygfNmQBlYLE
+         Y0EBUBM/mbmTsuGbBRiCkUSPkW+iMc99YGONb2MQRz/40+tZvyeC95WRd9ZfLrDwJk2l
+         YzVUphxtqxGXRHnGbQPo74ok0KG7xzsNwgywr6EfuN/QuyI8qA6F0DJSl+fXADtULpAm
+         K4ylB5oBpYl5/PpIpMnG28EmhfUiBx2C1X+e5OWq6356j+z6AJ3LPPQKAOuOLNXNRMKn
+         TXii2f73sb5EP0QdjVTJDZgitLSTWiWMIxqCQGiDR1DIh+gSBNoru0e6wb7Mzk0JdvMn
+         Fo6w==
+X-Gm-Message-State: AOAM5336Fixc6T1a/E5KLsAUrLb3mbCg2Bt23hFOyAMcAA4AywG+wR//
+        HDFJwp6XLJDxaYMJ6ro4zVCg8I5w4/8H4pNFGpc=
+X-Google-Smtp-Source: ABdhPJyXTZIbcS6XsIYv3OXNhY52CgrTfa8TJPzROLHZ8RTWQROxLwBpdNsY0++kqjAOKD7RQlqZLNduWZXtwuILONY=
+X-Received: by 2002:a05:6e02:1888:b0:2c8:713f:dcff with SMTP id
+ o8-20020a056e02188800b002c8713fdcffmr8897423ilu.289.1651009858991; Tue, 26
+ Apr 2022 14:50:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:dVutyZY/BCiotHB/A+1poWq9QgmxatrUFyL3SR9Mal2aDAeVzw8
- k/l3fTLlCyKGohW64XTyP4CqBoeQCNHB03/Vnz2iiRa3HwhS//VF0sNLJHEA7PFDn5MAk8H
- 4qtKE9EitMbQZvK2rkD5bb4Ic0AhFJunvhDydcoRoNvy4c8e6iJW/B9u8gDjiNYGuqNg8tT
- xw3UpiysP4REs+L8nVd+A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9FCWAqq+1vc=:36INr/9RMhrgYme2ZgAqBY
- AvEHpE5W1PyPQuELki3mxfdlI1JKTl0U9XPh04xIAkEww5Ii4Tchw2nwSSZFXhK4MtIDkx8eQ
- WgQYRJBbqrwBuACSHItWSettvE6c1uOces9zJw8fpLeOt9Z6n1i2aNrtP5GhbqlRE2jD68VBd
- qHNg9kB0aj+3uXTgWCfe0QZtmeGOM/uwQz6cE/v3liMv8c7wek0nx886NOkZejX3hjq8dc9jO
- HPOdtcdRicANBjzNK7wjgkv5MtvlCuL0N89d6ZNZ981FRhV4mzrVSfeMV9m1dCHhvm6rBuThQ
- 46wDqKdp+yWutbfJ8K8D9cqfWl9yIQwTRD+9o55/ZmixL+JahBOubRMR+nSbzNP3mxVOkhqOS
- 7+ITIvfy4tzZpDDmFK/HOfZ/T6B9AdKxuL7aq8zlafrhga38HglQSi91Tg1MheYYxTvfFYkVB
- Ir1TBBdqmlEPNQ/jUYuVAoOSE2lt0nvEswefPkxH7BAeuye3A47T+7YOBDwHQBx6jXRGu9Z4o
- HjN4KxtO5IhCDK87t39xs479RvN3wTOK9Hw5mOY7R2lUgfxZqSVsF4+TS+3IpXZO6yshTpwxI
- czywqJ8LzU7D4JchRBcQQphVzoe1puixfr18LlQN4xu5jPiT1oCuq6uCciryJ3djrZkohoQr5
- igThxe9hs7fDW1BzY4ltJeS+ExaE76yHG7N02oP6XYtJqdoT0JelNqJRAdnTDoM6N/9CPC+v9
- getWSQRlI43H3B7XCZk0zNxVRo7ceAXV2rcTdyXCBjuddGuZZ7U8PCWCglORaujyGMDNaEEW2
- 9+pWl3lwrtD4m5httc0gR2+1WW8YS82VrEwRFMG6XAPp6e4Z2NSGxbSmGcEQtMjTj7szoSPJz
- peePJ399I6+WIl8Uejxqtm4usv3DbKD25iNdv++x8U+F3AHV7hCbbFg7FnpjaenL89hmSsiAx
- uwSd97WAZ+cbmv7jgc2qkd5rWw7UB5OTYJBUt6hEtHezIvC7zMZieVjNchMY07udusGqJ3+Hq
- FI3bzv87PkqaDOAaZwg0lrUlcPlQ05Y0bOa6mXsZ/iZBkeH0eMU5j7oFJMMGs4g3mn1Nv5pUv
- 3ygE4FSWhV4qCI=
+References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
+ <20220426092340.495704-4-eugene.shalygin@gmail.com> <20220426152418.GA3344789@roeck-us.net>
+In-Reply-To: <20220426152418.GA3344789@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Tue, 26 Apr 2022 23:50:47 +0200
+Message-ID: <CAB95QARiSNaMU=Z3ZpvgRYfr+XyYiFtfXXV-e4aZU60FUfDcEg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] hwmon: (asus-ec-sensors) add support for board families
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If a particular SMM call takes a very long time to execute,
-the user might experience audio problems. Print a warning
-if a particular SMM call took over 0.250 seconds to execute,
-so the user can check whether or not possible audio problems
-are caused by this driver.
+> > +enum board_family {
+> > +     family_amd_500_series,
+>
+> The default enum value is 0. This means that specifying nothing
+> for .family matches in the structure below always matches the first
+> enum, which doesn't make much sense and might cause trouble in the
+> future. I would suggest to explicitly select a value != 0 as first
+> entry, such as
+>
+> enum board_family {
+>         family_amd_500_series = 1,
+>         ...
+> };
+>
+> to avoid that problem.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Thank you, added family_unknown member ( = 0) instead, to simplify
+adding new members (I want this enum to be alphabetically sorted).
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index f13902414615..071aa6f4e109 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -49,6 +49,9 @@
- #define I8K_SMM_GET_DELL_SIG1	0xfea3
- #define I8K_SMM_GET_DELL_SIG2	0xffa3
-
-+/* in usecs */
-+#define DELL_SMM_MAX_DURATION  250000
-+
- #define I8K_FAN_MULT		30
- #define I8K_FAN_RPM_THRESHOLD	1000
- #define I8K_MAX_TEMP		127
-@@ -239,6 +242,9 @@ static int i8k_smm_func(void *par)
- 	pr_debug("smm(0x%.4x 0x%.4x) =3D 0x%.4x  (took %7lld usecs)\n", eax, ebx=
-,
- 		 (rc ? 0xffff : regs->eax & 0xffff), duration);
-
-+	if (duration > DELL_SMM_MAX_DURATION)
-+		pr_warn_once("SMM call took %lld usecs!\n", duration);
-+
- 	return rc;
- }
-
-=2D-
-2.30.2
-
+Eugene
