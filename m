@@ -2,108 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B0AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 19:38:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0552C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 20:03:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354206AbiDZTl0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 15:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S1354366AbiDZUHB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 16:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354165AbiDZTlZ (ORCPT
+        with ESMTP id S242279AbiDZUG7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:41:25 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1918FAD83;
-        Tue, 26 Apr 2022 12:38:16 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 587D21BA;
-        Tue, 26 Apr 2022 12:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1651001896;
-        bh=0/xW5YXm98VDV8HncQuBWEbdx7lEyK7iJy3W3BVLhnU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HMHQf6pNKw2cRdvulbPi/kjrFzyVJRiY9ldKlILkY+jbUo0IVMzDKoYhm5cNEyZMS
-         PlTMstxErCIk4VDgdyCKeAe5xstMJbUyUgBrwBrd6W/EdOh0L1NxNtHcrMg7+KPRc1
-         2bqnLSxDzQP0usxOicxJLZ4leieK73Kkw8ELCQtU=
-Date:   Tue, 26 Apr 2022 12:38:12 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, webmaster@kernel.org
-Subject: Re: [PATCH v3 0/6] hwmon: (nct6775) Convert to regmap, add i2c
- support
-Message-ID: <YmhKJMebdVAzIGd8@hatter.bewilderbeest.net>
-References: <20220426071848.11619-1-zev@bewilderbeest.net>
- <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
- <dd522f49-89b6-14b2-c402-9cfc93b51d4b@roeck-us.net>
+        Tue, 26 Apr 2022 16:06:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BA8CFB8E;
+        Tue, 26 Apr 2022 13:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651003410;
+        bh=GYjS/gv0IHJ8rSFr5iam6Q9tJCHkTMNvcWZmu5izDow=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=GELv81uJWvr4O/Sf/gnnhpEtKt9w4xLHxcZoP4AriP2EZTWR48tjvvxbl7xfbJicY
+         j68L96tpLkIobJYuPBxj1v4pR4M37f1JqgZMel3ADuKSUfLWiDX1FTyhXpZIPgw8MZ
+         X6HTMojXXjvTIZGw4z+kYu4PDSBouN0dThr+UIl8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MtfJd-1o0qnl02md-00v53Y; Tue, 26 Apr 2022 22:03:30 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] hwmon: (dell-smm) Improve init code
+Date:   Tue, 26 Apr 2022 22:03:17 +0200
+Message-Id: <20220426200320.399435-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dd522f49-89b6-14b2-c402-9cfc93b51d4b@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:aBQsTk+1fzm5DD+3vQNzawaqLa5BRkW+lG4RmLBD0jhd4VhcYDS
+ qRI+XySz2aimYRSyM4eKVIzXwWVnk8FMTGb9aMmExe7mZV8VljULvyxpICMs6rw4IRMgR/f
+ T0Q7iQZrIgUMUBw3klAxgvO2hiVFX6ddssDuVNBgvjK85G8+M4iKbeEngumpGshNAe5xGcJ
+ NLvyICWHJvAbOaa3ciJnA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fXYk06vVGyM=:QPTcWPxLiXM0wu2xLMSMIs
+ cqyKgh5LlCdNb6y34I1JAi+RlZ8hHFP71ePlpCGt4fcOlNMO4Ogi3jGV1+A8RXai9td0G/Phy
+ GmW/3ia0sw5zMJnfQ6K5WtWhheoyVoKcbvAWzMW9jqpnxWUL2FHkMn+6xiJEM8GC188WrlHSx
+ uZ0IffVdIxF90/6DPKRxp5u6E/4MRwMAyZcotu+oViLseWnnRgrlIxlQ3aBn1N/dcxFP8u9Pz
+ DCPTT5jpZcIzSDkZlTI1PMiQWyUlZgAx7CZhROjPG4NzBrtdPCSy08tg60jWJUu/SaMwEW5HR
+ XeQqsmASoI0wxrSWWU2E0XNgjwile+sCmSX4pNl8pvPpqnlxJt7RrWw5HfIs5Bhxkk1aQWjqH
+ 3UWVh289L+VgdOA6OJHk0TnrwhWgk7UUMxK3NLJfk+VATXpLpqMNk5ktCosp/mh7ppIfo8O/u
+ lU7Y9oyvPZvctMC+9WrF+i9f6+CmRkG1GV2O6b/sZedCWZdjXlSMm4z4ICDFXFvcPpCXnFxNq
+ K5S5Ezk6gke1njLIWCOmGo9YycEhr6CLhdV7e7e42sB+rbupcnMqJs+QJoVIn2e7phbB2LQBl
+ Mf/GFThbiaEugq5Nmkjuy4eSpWpAIo7E43rjgXeCh8t8nbOOeZQsVRlKhhrESHQJsDL9kA6XZ
+ nYiAnpyTYtc+nIpBXhin7rI6nXO+mzPO8OTJmXU056ZVAK1U2fhBhj/jgH72TPuHCPM9e1S3m
+ +rwgMPu4UHg+NcD9fmSxqzTOtguULgqfgWYID0vF9Yl97BXiOR/jwuM77pDELzRZ0hlJq3CrS
+ KMH8wY+ikvIwbrolHHtZdBGTWlZp17hrdZ2QeFp3b1rNRjAgk+TxEIksteXGakXaE1BnMuEYf
+ NVwXje1UpA8qPgsGgROkQiVzafVF9ab6ywJKtz6sc19ju5pbYzfs7uWtjop3ORdS6CfrvTt/j
+ XyrwLJwmtoq1GEY30aj3MArZVa7jWqV2jSx/d0sTQr8IHwp8KMTnKO3hXh/SViy44P/B1Huqk
+ pUCcTttK7GcdpNR0H+Xce295YgtsiiF7ndCnHWRPC3XfsfN2lahcL35OaHJkBw11pPN6PRpqN
+ 1DW6rTsSjte8+Y=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 01:57:40AM PDT, Guenter Roeck wrote:
->On 4/26/22 01:29, Zev Weiss wrote:
->>[Adding korg webmaster re: list infrastructure]
->>
->>On Tue, Apr 26, 2022 at 12:18:42AM PDT, Zev Weiss wrote:
->>>Hello,
->>>
->>>This is v3 of my effort to add i2c support to the nct6775 hwmon
->>>driver.
->>>
->>>Changes since v2 [0]:
->>>...
->>>- Renamed drivers and Kconfig symbols to keep existing platform
->>>  driver as "nct6775" (SENSORS_NCT6775) and the core module as
->>>  "nct6775-core" (SENSORS_NCT6775_CORE) [Guenter]
->>
->>Unfortunately while this was a simple enough change to make (a few 'git mv' commands and a handful of actual text changes), it ballooned the size of the diff for patch 5 to the point that vger bounced it for exceeding the 100K message-size limit.  As far as I can tell it looks like it went through elsewhere, but does leave a bit of a gap in the public list archives -- please let me know if there's anything I should try in terms of re-sending it.  (The only combination of 'git format-patch' flags I've been able to find that gets it back down to approximately its previous size is '-B -D', which isn't so useful for actually applying.)
->>
->>I'm not sure how critical a limit that 100K is, or if it's something we might consider raising a bit?
->>
->
->You could split it up further. For example, you could introduce
->the include file first. Also, please run checkpatch --strict on
->your patches. I don't care about commenting the mutex, but there
->should be no double empty lines. Also, while you are at it,
->it would be great if you can add another patch to fix the
->
->WARNING: Symbolic permissions 'S_IWUSR | S_IRUGO' are not preferred. Consider using octal permissions '0644'.
->
->warnings.
+This patch series improves the init code of the dell_smm_hwmon
+driver. The first patch speeds up device initialisation by avoiding
+unnecessary SMM calls during init, which might be slow on some
+machines. The second patch is a small cleanup patch, while the
+third patch allows for easier diagnosis of audio problems caused
+by really slow SMM calls.
 
-Ack -- hadn't been aware of the --strict flag for checkpatch, thanks.  
-I'll do that in v4.
+Tested on a Dell Inspiron 3505.
 
->
->Anyway, I wondered what changed... oh, I see. You didn't rename
->nct6775.c. I didn't suggest that. The new file name was fine.
->I only asked you to change the Kconfig symbols, not the file names.
->It is ok and actually desirable to change the file names.
->The platform driver module can and should still be named nct6775;
->that can be handled in the Makefile with something like
->
->nct6775-objs := nct6775-platform.o
->obj-$(CONFIG_SENSORS_NCT6775)  += nct6775.o
->
+Armin Wolf (3):
+  hwmon: (dell-smm) Avoid unnecessary SMM calls during init
+  hwmon: (dell-smm) Cleanup init code
+  hwmon: (dell-smm) Warn if SMM call took a very long time to execute
 
-Got it, will revert to the previous file names, which should sidestep 
-the message-size problem.
+ drivers/hwmon/dell-smm-hwmon.c | 50 +++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 28 deletions(-)
 
-
-Thanks,
-Zev
+=2D-
+2.30.2
 
