@@ -2,119 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D11B5C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 15:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B0AC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 19:38:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238520AbiDZPxg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 11:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S1354206AbiDZTl0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 15:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352552AbiDZPxd (ORCPT
+        with ESMTP id S1354165AbiDZTlZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:53:33 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C3A1572F;
-        Tue, 26 Apr 2022 08:50:23 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QEC92k013343;
-        Tue, 26 Apr 2022 15:50:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=KI5N6+PYpu61hG9fQctRxXILuP78+G0I85VQgAon75g=;
- b=X/5L4p4Gk3blHJrIdHi7kVjGjO8EXb1XcnFQ/Xk1HpQTVklYGRUDDSSrKsQtKomD4MOR
- jFMZ1k4JEupluPMhmebrk1DHGHXiHS90QcU1tUiGwmS4eSRP+1QBMLo83fEdp5z/2gzb
- KV5eQHBtUrvCufddMExtixgzou8RKil9w1Q++gpr33cGu66BmvY6rRdHvvw6xYnVwBi/
- A5j8Ui10lV3nRJfAEoTg6p085+6/7pL5XGf7h/9RCRc2j0vjhl1N61809l7utVKEcU93
- pWuu7qtPDlhRlVJvN+iHWAVAmg7EIp1QhCSis88siK/+sVtVUq0CBHQSL0CGtgp5ZDkW Vw== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpj9rjb4p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 15:49:59 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QFgQSA002403;
-        Tue, 26 Apr 2022 15:49:59 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 3fm93a3fx9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 15:49:58 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QFnvDb18809158
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 15:49:57 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB50ABE059;
-        Tue, 26 Apr 2022 15:49:57 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6324DBE061;
-        Tue, 26 Apr 2022 15:49:57 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.82.59])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 15:49:57 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net, joel@jms.id.au,
-        jk@ozlabs.org, David.Laight@ACULAB.COM
-Subject: [PATCH v2 1/2] fsi: occ: Fix checksum failure mode
-Date:   Tue, 26 Apr 2022 10:49:55 -0500
-Message-Id: <20220426154956.27205-2-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220426154956.27205-1-eajames@linux.ibm.com>
-References: <20220426154956.27205-1-eajames@linux.ibm.com>
+        Tue, 26 Apr 2022 15:41:25 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1918FAD83;
+        Tue, 26 Apr 2022 12:38:16 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 587D21BA;
+        Tue, 26 Apr 2022 12:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1651001896;
+        bh=0/xW5YXm98VDV8HncQuBWEbdx7lEyK7iJy3W3BVLhnU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HMHQf6pNKw2cRdvulbPi/kjrFzyVJRiY9ldKlILkY+jbUo0IVMzDKoYhm5cNEyZMS
+         PlTMstxErCIk4VDgdyCKeAe5xstMJbUyUgBrwBrd6W/EdOh0L1NxNtHcrMg7+KPRc1
+         2bqnLSxDzQP0usxOicxJLZ4leieK73Kkw8ELCQtU=
+Date:   Tue, 26 Apr 2022 12:38:12 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, webmaster@kernel.org
+Subject: Re: [PATCH v3 0/6] hwmon: (nct6775) Convert to regmap, add i2c
+ support
+Message-ID: <YmhKJMebdVAzIGd8@hatter.bewilderbeest.net>
+References: <20220426071848.11619-1-zev@bewilderbeest.net>
+ <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
+ <dd522f49-89b6-14b2-c402-9cfc93b51d4b@roeck-us.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: d0Ps6vKalp90tN-sNaKjus9ifR3ytqQu
-X-Proofpoint-ORIG-GUID: d0Ps6vKalp90tN-sNaKjus9ifR3ytqQu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_04,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 phishscore=0
- impostorscore=0 clxscore=1015 adultscore=0 bulkscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204260099
+In-Reply-To: <dd522f49-89b6-14b2-c402-9cfc93b51d4b@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Change the checksum errno to something different than the errno
-used for a bad SBE message. In addition, don't set the user's
-response length to the data length in this case, since it's not
-SBE FFDC.
+On Tue, Apr 26, 2022 at 01:57:40AM PDT, Guenter Roeck wrote:
+>On 4/26/22 01:29, Zev Weiss wrote:
+>>[Adding korg webmaster re: list infrastructure]
+>>
+>>On Tue, Apr 26, 2022 at 12:18:42AM PDT, Zev Weiss wrote:
+>>>Hello,
+>>>
+>>>This is v3 of my effort to add i2c support to the nct6775 hwmon
+>>>driver.
+>>>
+>>>Changes since v2 [0]:
+>>>...
+>>>- Renamed drivers and Kconfig symbols to keep existing platform
+>>>  driver as "nct6775" (SENSORS_NCT6775) and the core module as
+>>>  "nct6775-core" (SENSORS_NCT6775_CORE) [Guenter]
+>>
+>>Unfortunately while this was a simple enough change to make (a few 'git mv' commands and a handful of actual text changes), it ballooned the size of the diff for patch 5 to the point that vger bounced it for exceeding the 100K message-size limit.  As far as I can tell it looks like it went through elsewhere, but does leave a bit of a gap in the public list archives -- please let me know if there's anything I should try in terms of re-sending it.  (The only combination of 'git format-patch' flags I've been able to find that gets it back down to approximately its previous size is '-B -D', which isn't so useful for actually applying.)
+>>
+>>I'm not sure how critical a limit that 100K is, or if it's something we might consider raising a bit?
+>>
+>
+>You could split it up further. For example, you could introduce
+>the include file first. Also, please run checkpatch --strict on
+>your patches. I don't care about commenting the mutex, but there
+>should be no double empty lines. Also, while you are at it,
+>it would be great if you can add another patch to fix the
+>
+>WARNING: Symbolic permissions 'S_IWUSR | S_IRUGO' are not preferred. Consider using octal permissions '0644'.
+>
+>warnings.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-occ.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Ack -- hadn't been aware of the --strict flag for checkpatch, thanks.  
+I'll do that in v4.
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index c9cc75fbdfb9..3d04e8baecbb 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -246,7 +246,7 @@ static int occ_verify_checksum(struct occ *occ, struct occ_response *resp,
- 	if (checksum != checksum_resp) {
- 		dev_err(occ->dev, "Bad checksum: %04x!=%04x\n", checksum,
- 			checksum_resp);
--		return -EBADMSG;
-+		return -EBADE;
- 	}
- 
- 	return 0;
-@@ -575,8 +575,11 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 	dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
- 		resp->return_status, resp_data_length);
- 
--	occ->client_response_size = resp_data_length + 7;
- 	rc = occ_verify_checksum(occ, resp, resp_data_length);
-+	if (rc)
-+		goto done;
-+
-+	occ->client_response_size = resp_data_length + 7;
- 
-  done:
- 	*resp_len = occ->client_response_size;
--- 
-2.27.0
+>
+>Anyway, I wondered what changed... oh, I see. You didn't rename
+>nct6775.c. I didn't suggest that. The new file name was fine.
+>I only asked you to change the Kconfig symbols, not the file names.
+>It is ok and actually desirable to change the file names.
+>The platform driver module can and should still be named nct6775;
+>that can be handled in the Makefile with something like
+>
+>nct6775-objs := nct6775-platform.o
+>obj-$(CONFIG_SENSORS_NCT6775)  += nct6775.o
+>
+
+Got it, will revert to the previous file names, which should sidestep 
+the message-size problem.
+
+
+Thanks,
+Zev
 
