@@ -2,118 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B76C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 09:28:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 387FBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 10:00:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347431AbiDZJcC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 05:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S1348305AbiDZKDe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 06:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239643AbiDZJap (ORCPT
+        with ESMTP id S1348284AbiDZKDY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:30:45 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9253CFC0;
-        Tue, 26 Apr 2022 01:57:44 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id n22-20020a4ae1d6000000b0033a6eedbc7bso3259893oot.11;
-        Tue, 26 Apr 2022 01:57:44 -0700 (PDT)
+        Tue, 26 Apr 2022 06:03:24 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AEB18E2D;
+        Tue, 26 Apr 2022 02:23:55 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x18so24594878wrc.0;
+        Tue, 26 Apr 2022 02:23:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=UhT8tbPEkvpYFqLjaGAxMfzwEgHtH4F74036X794IMc=;
-        b=i6xnJ2DMMW5xtgdWwyfkVNppLp7Qcw1O39CirGWCOyUS/UTO546uWtkw6u9wd7aiOr
-         Xo79ZtF7BKawklxyG3vn3MFV5K8id0J4iylYdd/AWDEA8ho06Lau8KiUR0laVoUoUedT
-         4jdoGiOx9e8GYzF4EbX3NLsRLvxTeaVRt4mKb22Da4jN71VUMZzNTfUflI4t4E3oIaOe
-         J1nfEoTjVaGb+U5Jim46ZnFABEXrtxHW8zkcjAy7Sg+id8nO748hVI9fggJ6n9Ju8n6R
-         JaB6LFS1cgdXGVtZ6n/eyWfIJ2oIAzf/UEy58vD7L5fxm+97bh5JjkQqqI0qkt8/SSUZ
-         /VxQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iH1aRwQoSNWyvyr28CgUroKcq9jDojB0qtrBHnljUAQ=;
+        b=IIC3Vu3EZnVI44KLx9yUyQYbDEMUqtbn+CX80FmWuE8OQVVHtpVl2vrXNTeu+N9cCT
+         kq+8TSM0+dZ54Sli1vzjy+CxsiJP4ykTs+2HtrBcACB2FdMl7hQdZP1ASjtLtmycE9wG
+         5xl9I9/GoD9Uk8XMkTi4GZVNeeobuygTgguXLFITEhQM1pEKDGo7oDnxMNp1wS8rQLJ2
+         76wFocyeEXP3cKgDpqMgZTAE5Xa3UAXOlAxaqFUFmJXY629ZHEej4nQDTrvo6DmdhEhl
+         U7jAzzmJ3goOXepDJfoYJl66jH+bEyBXBXv5+rSGI4lomybOQtJNuEs3V9I2ZzdDDt7x
+         0Z4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=UhT8tbPEkvpYFqLjaGAxMfzwEgHtH4F74036X794IMc=;
-        b=fgjSMp8LDJetYVKFYWUrT3WrFzP9ZFgP2TdeeaSD8fCVirC9w+XHobVfmpkRTUp+Wn
-         e4MbmTeCkX1Wh5QEOqTCDRFCgoafRvSUE5z+klLfFm12O+1/K5UQvxyaNPLtV5AI133O
-         +tgvtcfo9pAFiZeSXC7KMZBqGaXv/lLKoUjp2z8rtH9WONLieSASIFt5oBp5LrN6jz9p
-         fGDEceNJ421eZKV7YUlXUeRCP0Q5uiiYLawN4Yee3ipNnoSNP0q+jsXmAKjW3DXufUH8
-         kmhD1gkBAuoMu7/uQdqS6I2qo3PjokBFtC0MBbbmm2HUG3jyEqlpvSZ/2EzH378zxjmY
-         Kyag==
-X-Gm-Message-State: AOAM533opOGpn7eeCORqbsYYlsGD0gmnX2QWLjF1TD2Wo4j1jaK9wPPv
-        jPZtRLrAJhgjaokGofAV/FWzGNPBtQg=
-X-Google-Smtp-Source: ABdhPJzdTEhc0aJvJhe8wZhMn2rau21VcIihwBPtigdjEX8ZOZx1tVt/1+Fnk/B7NmWKDI/nDq55dA==
-X-Received: by 2002:a4a:e82b:0:b0:330:cee9:4a8a with SMTP id d11-20020a4ae82b000000b00330cee94a8amr7806331ood.31.1650963463816;
-        Tue, 26 Apr 2022 01:57:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05683003c100b005c927b6e645sm4662921otc.20.2022.04.26.01.57.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:57:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dd522f49-89b6-14b2-c402-9cfc93b51d4b@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:57:40 -0700
+        bh=iH1aRwQoSNWyvyr28CgUroKcq9jDojB0qtrBHnljUAQ=;
+        b=f5xS7C7hnSJGLqgW9eGS+88ohXRjx7Ny9/GEOOzCKKoc1V1GStsbEomuMRyBWg+rfS
+         Y3gkT4716GcojmFZ2kNdkcvU2NN7Uel/HExkysXdFKyN7L33y9Iw0Yz14qFeKUb0xBK/
+         rvfHHahkOrto0C/+UAoWDnP6qRh3IRZST/rvbWRBwMOszEVmsgAM/Cy2OzpyNiMcDzcO
+         A4ndu3eWyJHHuDxVD08bqTOLFQmMGjAwj+Ons7S0/ELLlG2/pFbqChetGTm+30gaAX1k
+         8ymrcPPg9cELXgMqtoXi8k4K6M6JA7qnnr0CEAfwaRzjz2fzUkVUhNjIk70kTM4+XVLl
+         KMGw==
+X-Gm-Message-State: AOAM5304sVmQ4wf1GrZ2ZSNf+9f+wFQbKzKldn1MVaVE81373uwKaQLe
+        cMG+v3T6yJLOAdsK3nbu/CE=
+X-Google-Smtp-Source: ABdhPJxz1AoymwM7zIaDq09xsU6GJWzGE0DQq4dUUFI2oa56FB+kVFxV8tTo1tLZ6lq7mFtAKeserg==
+X-Received: by 2002:a5d:6d04:0:b0:20a:be1d:20f5 with SMTP id e4-20020a5d6d04000000b0020abe1d20f5mr17794613wrq.153.1650965033925;
+        Tue, 26 Apr 2022 02:23:53 -0700 (PDT)
+Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
+        by smtp.googlemail.com with ESMTPSA id 9-20020a056000154900b0020a849e1c41sm13125094wry.13.2022.04.26.02.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 02:23:53 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] asus-ec-sensors: add support for board families
+Date:   Tue, 26 Apr 2022 11:23:36 +0200
+Message-Id: <20220426092340.495704-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, webmaster@kernel.org
-References: <20220426071848.11619-1-zev@bewilderbeest.net>
- <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 0/6] hwmon: (nct6775) Convert to regmap, add i2c
- support
-In-Reply-To: <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/26/22 01:29, Zev Weiss wrote:
-> [Adding korg webmaster re: list infrastructure]
-> 
-> On Tue, Apr 26, 2022 at 12:18:42AM PDT, Zev Weiss wrote:
->> Hello,
->>
->> This is v3 of my effort to add i2c support to the nct6775 hwmon
->> driver.
->>
->> Changes since v2 [0]:
->> ...
->> - Renamed drivers and Kconfig symbols to keep existing platform
->>   driver as "nct6775" (SENSORS_NCT6775) and the core module as
->>   "nct6775-core" (SENSORS_NCT6775_CORE) [Guenter]
-> 
-> Unfortunately while this was a simple enough change to make (a few 'git mv' commands and a handful of actual text changes), it ballooned the size of the diff for patch 5 to the point that vger bounced it for exceeding the 100K message-size limit.  As far as I can tell it looks like it went through elsewhere, but does leave a bit of a gap in the public list archives -- please let me know if there's anything I should try in terms of re-sending it.  (The only combination of 'git format-patch' flags I've been able to find that gets it back down to approximately its previous size is '-B -D', which isn't so useful for actually applying.)
-> 
-> I'm not sure how critical a limit that 100K is, or if it's something we might consider raising a bit?
-> 
+Users provided information for boards from AMD-400 and sTRX40 families
+and demonstrated that sensor addresses differ from those for the AMD-500
+family. Also the AMD-400 family board uses the global ACPI lock instead
+of a dedicated mutex to guard access to the hardware.
 
-You could split it up further. For example, you could introduce
-the include file first. Also, please run checkpatch --strict on
-your patches. I don't care about commenting the mutex, but there
-should be no double empty lines. Also, while you are at it,
-it would be great if you can add another patch to fix the
+This patchset implements required changes to support other board
+families:
+ - per-family sensor definitions
+ - options to choose hardware/state guard mutex: an AML mutex or the 
+   global ACPI lock.
 
-WARNING: Symbolic permissions 'S_IWUSR | S_IRUGO' are not preferred. Consider using octal permissions '0644'.
+These changes are used to add support for the PRIME X470-PRO board.
 
-warnings.
+Changes in v2:
+ - Removed the case without ACPI mutex where the state was guarded using
+	 the normal mutex. After receiving an update from user that case
+	 turned out to be non-existent.
+ - Removed the __initconst attribute from the board data array.
+ - Updated documentation to include the special string for the mutex
+	 path module parameters which make the driver use the global ACPI
+	 lock.
 
-Anyway, I wondered what changed... oh, I see. You didn't rename
-nct6775.c. I didn't suggest that. The new file name was fine.
-I only asked you to change the Kconfig symbols, not the file names.
-It is ok and actually desirable to change the file names.
-The platform driver module can and should still be named nct6775;
-that can be handled in the Makefile with something like
+Eugene Shalygin (4):
+  hwmon: (asus-ec-sensors) introduce ec_board_info struct for board data
+  hwmon: (asus-ec-sensors) implement locking via the ACPI global lock
+  hwmon: (asus-ec-sensors) add support for board families
+  hwmon: (asus-ec-sensors) add PRIME X470-PRO board
 
-nct6775-objs := nct6775-platform.o
-obj-$(CONFIG_SENSORS_NCT6775)  += nct6775.o
+ Documentation/hwmon/asus_ec_sensors.rst |   2 +
+ drivers/hwmon/asus-ec-sensors.c         | 412 +++++++++++++++++-------
+ 2 files changed, 294 insertions(+), 120 deletions(-)
 
-Guenter
+-- 
+2.35.1
+
