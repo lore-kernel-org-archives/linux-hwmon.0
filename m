@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5612FC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 10:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1191BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 10:00:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345699AbiDZKDh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 06:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S1348284AbiDZKDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 06:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344014AbiDZKDZ (ORCPT
+        with ESMTP id S1348351AbiDZKD1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:03:25 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE189606DC;
-        Tue, 26 Apr 2022 02:23:59 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso975307wmq.0;
-        Tue, 26 Apr 2022 02:23:59 -0700 (PDT)
+        Tue, 26 Apr 2022 06:03:27 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744D422282;
+        Tue, 26 Apr 2022 02:24:02 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id i5so5487746wrc.13;
+        Tue, 26 Apr 2022 02:24:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RWY8t79FX5mobNDnI1bF50+VkLrZpXasZBzUixIW9K4=;
-        b=VZ6VEJiVZRHTXHhvHFXRTkhWZ+fqk2la/dHWB4rnTOycqNfs61lc2f5gmlh7sBkqEE
-         IHwX6sQT0xtjzCRN2y6d8OUrKIDaoVHk6iFu5WvBshFmGfvpP0QutUp2j+hZi55R2UMn
-         K6xMsYnRtGFrIWZKEcT4K9PZD49Cz5orQ07mS6gGoEyPUPBUj41kLLCz1YSWOFE6sFAT
-         XqDuPBaKxGtKq7l4roNUGjZA+MYOqo2oGEUUPBGboPY5o+4enUnTnX5HCZqWws8M7ewU
-         pN1zIC50GIr3RC0pGAMYm+Xyiw4NLHCbDGr5jGHs35jMKL9Rx7pekh1HtU93xRoR+OL5
-         YYJw==
+        bh=5BpQdx7LqZtnrpQOLQZKpg3ZPN9JoGnOuz7V1LQA8IA=;
+        b=XDz1V4Ikd6galbxTyA0j4N9KyNS/jpL2qAztaYQmaAZdBLBuJ38wPSFf5qE8sIy3Z8
+         Z+0Nszymf9TX/bkBKzjLcnQHBufQr2NsGfhyzyB1ZN2hR7BcbN3DNUQlAocC7lCSI1DV
+         Ef08fBbGWbV4IKw4IAuow5Rtelg301JQIRbRhMYEoNR+h1EnsXkWF55F28SLff/Xpz9P
+         JJqkoWkZZiQPIzOOZkMARcgrONculwKlfmqp7XXgxOoCJI1UB2uYoXd9jMoaW15otO4k
+         2xb2zNTALs7Q0tPsGe3T4C1glhx8H0n6iMlT7SyNBBNlTUN9SoSjFdTWfDjiLRZJe6ZD
+         5UFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RWY8t79FX5mobNDnI1bF50+VkLrZpXasZBzUixIW9K4=;
-        b=I4yIMi7iDD7NgsFxk5sCFZOs5uu8P5z7HwF3hiTz30O35NxHtY2kcH48ZNzx1EQZ8N
-         Ww93kBmdgjfpTs+u86YMZzV25xNb4LUCSNgKgjRjESSHyzkR9EbbpcQ1+/TlgVBIcnyh
-         iH6XYYC+WeQWVlU6dAkYtW8osqseYjJoZCnzE4YUA/Sck9n5NHdMPanxElJUbPiQO1Nu
-         6QoDtFNYpp22BNDvoaTtVnZV6D7gsM7GZwPG9sEbAE0z74d3h13ch/NMKcVVKHmPlLOx
-         K9dLXtlcRN94kYSspn++Rc6o6EdVcq+pOPR1CXknLEi5pUbsmxaagp5cjEg28KbbHN9D
-         jhxA==
-X-Gm-Message-State: AOAM533un81xyGLfQ2h9c9I8UemHhl3AhozuQRwm/zSnlzwqwrvpBxNa
-        7qJafr6O+NCj2ZQbY0SxDmc=
-X-Google-Smtp-Source: ABdhPJzW0N5gKqYW8bncy7v5Y5WRaUpPOFzrPibB1GO2Fl08cy4Dgy4vGdc30yOI93tnqN3i1XHnCg==
-X-Received: by 2002:a1c:7703:0:b0:38e:bd95:373c with SMTP id t3-20020a1c7703000000b0038ebd95373cmr28409501wmi.122.1650965038059;
-        Tue, 26 Apr 2022 02:23:58 -0700 (PDT)
+        bh=5BpQdx7LqZtnrpQOLQZKpg3ZPN9JoGnOuz7V1LQA8IA=;
+        b=kbsI/SOB8hv2ubcuwQMR6JVRlhSGdFpb5jB7+ICXFwghE4xdgE3iiEWYsQR2WFx5l/
+         FMK7FqAyzZHB9Ks3scJS22JgBgKQuaBNygij9CKSqYfFcXQmj/nUrlAE373Iez9NeLTe
+         GrLgtRkXz8GBvX4uhkEnJMP60tj3NOpoVGYHnufEUlfhi4LCN+8I3G6rlBPYFVb8qzcM
+         DOvSxPhz/8hHqBaixJYMqqzw3vJmiJ36rwjsBstAHETxAQy4TRbtKgyOcDQXp5WhfmXI
+         2Y9WO/j8rjH8nsCl1sv3iG6Uvy6O6zZWOyfRUq+ZxkXPvENbncHQsKZYvvjZoLxioc86
+         GGbw==
+X-Gm-Message-State: AOAM531HF+D6j/J7vxQBlL+3Du3O4vPdYq+pljJ9CHckdQttpJAOcns6
+        xJmXxsC9vBC6GxRpQKp9WZU=
+X-Google-Smtp-Source: ABdhPJxrp7Ez0lsy4q/vveGi/CfyGypokv38oepO9f5OBkywKPZc8GCgN9k/yFAdtCMHeUKOBuq4Kw==
+X-Received: by 2002:adf:de83:0:b0:20a:cbb5:903a with SMTP id w3-20020adfde83000000b0020acbb5903amr15659591wrl.544.1650965040678;
+        Tue, 26 Apr 2022 02:24:00 -0700 (PDT)
 Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a056000154900b0020a849e1c41sm13125094wry.13.2022.04.26.02.23.57
+        by smtp.googlemail.com with ESMTPSA id 9-20020a056000154900b0020a849e1c41sm13125094wry.13.2022.04.26.02.23.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 02:23:57 -0700 (PDT)
+        Tue, 26 Apr 2022 02:24:00 -0700 (PDT)
 From:   Eugene Shalygin <eugene.shalygin@gmail.com>
 Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info struct for board data
-Date:   Tue, 26 Apr 2022 11:23:37 +0200
-Message-Id: <20220426092340.495704-2-eugene.shalygin@gmail.com>
+Subject: [PATCH v2 3/4] hwmon: (asus-ec-sensors) add support for board families
+Date:   Tue, 26 Apr 2022 11:23:39 +0200
+Message-Id: <20220426092340.495704-4-eugene.shalygin@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220426092340.495704-1-eugene.shalygin@gmail.com>
 References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
@@ -66,314 +66,191 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-We need to keep some more information about the current board than just
-the sensors set, and with more boards to add the dmi id array grows
-quickly. Our probe code is always the same so let's switch to a custom
-test code and a custom board info array. That allows us to omit board
-vendor string (ASUS uses two strings that differ in case) in the board
-info and use case-insensitive comparison, and also do not duplicate
-sensor definitions for such board variants as " (WI-FI)" when sensors
-are identical to the base variant.
-
-Also saves a quarter of the module size by replacing big dmi_system_id
-structs with smaller ones.
+DSDT code for AMD 400-series chipset shows that sensor addresses differ
+for this generation from those for the AMD 500-series boards.
 
 Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
- drivers/hwmon/asus-ec-sensors.c | 205 ++++++++++++++++++--------------
- 1 file changed, 116 insertions(+), 89 deletions(-)
+ drivers/hwmon/asus-ec-sensors.c | 39 ++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index e3d794fb0534..de24dc3d1390 100644
+index 7267682de191..b52e3679476a 100644
 --- a/drivers/hwmon/asus-ec-sensors.c
 +++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -54,8 +54,7 @@ static char *mutex_path_override;
- /* ACPI mutex for locking access to the EC for the firmware */
- #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
+@@ -135,8 +135,12 @@ enum ec_sensors {
+ #define SENSOR_TEMP_WATER_IN BIT(ec_sensor_temp_water_in)
+ #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
  
--/* There are two variants of the vendor spelling */
--#define VENDOR_ASUS_UPPER_CASE	"ASUSTeK COMPUTER INC."
-+#define MAX_IDENTICAL_BOARD_VARIATIONS	2
- 
- typedef union {
- 	u32 value;
-@@ -164,74 +163,94 @@ static const struct ec_sensor_info known_ec_sensors[] = {
- 	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
- #define SENSOR_SET_TEMP_WATER (SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT)
- 
--#define DMI_EXACT_MATCH_BOARD(vendor, name, sensors) {                         \
--	.matches = {                                                           \
--		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, vendor),                     \
--		DMI_EXACT_MATCH(DMI_BOARD_NAME, name),                         \
--	},                                                                     \
--	.driver_data = (void *)(sensors), \
--}
-+struct ec_board_info {
-+	const char *board_names[MAX_IDENTICAL_BOARD_VARIATIONS];
-+	unsigned long sensors;
++enum board_family {
++	family_amd_500_series,
 +};
++
+ /* All the known sensors for ASUS EC controllers */
+-static const struct ec_sensor_info known_ec_sensors[] = {
++static const struct ec_sensor_info sensors_family_amd_500[] = {
+ 	[ec_sensor_temp_chipset] =
+ 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
+ 	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
+@@ -177,6 +181,7 @@ struct ec_board_info {
+ 	 * the hardware is not guarded.
+ 	 */
+ 	const char *mutex_path;
++	enum board_family family;
+ };
  
--static const struct dmi_system_id asus_ec_dmi_table[] __initconst = {
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "PRIME X570-PRO",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
--		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
--			      "ProArt X570-CREATOR WIFI",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
--		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "Pro WS X570-ACE",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
--		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
--			      "ROG CROSSHAIR VIII DARK HERO",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
--		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
--			      "ROG CROSSHAIR VIII FORMULA",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG CROSSHAIR VIII HERO",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
--		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
--		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
--			      "ROG CROSSHAIR VIII HERO (WI-FI)",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
--		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
--		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
--			      "ROG CROSSHAIR VIII IMPACT",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX B550-E GAMING",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_FAN_CPU_OPT),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX B550-I GAMING",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_FAN_VRM_HS |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-E GAMING",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-F GAMING",
--		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
--	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570-I GAMING",
--		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
--		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-+static const struct ec_board_info board_info[] = {
-+	{
-+		.board_names = {"PRIME X570-PRO"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
-+	},
-+	{
-+		.board_names = {"ProArt X570-CREATOR WIFI"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {"Pro WS X570-ACE"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {"ROG CROSSHAIR VIII DARK HERO"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR |
-+			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-+			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {"ROG CROSSHAIR VIII FORMULA"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {
-+			"ROG CROSSHAIR VIII HERO",
-+			"ROG CROSSHAIR VIII HERO (WI-FI)",
-+		},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR |
-+			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-+			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
-+			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
-+			SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-+			SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {"ROG STRIX B550-E GAMING"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_CPU_OPT,
-+	},
-+	{
-+		.board_names = {"ROG STRIX B550-I GAMING"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_VRM_HS | SENSOR_CURR_CPU |
-+			SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {"ROG STRIX X570-E GAMING"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-+			SENSOR_IN_CPU_CORE,
-+	},
-+	{
-+		.board_names = {"ROG STRIX X570-F GAMING"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
-+	},
-+	{
-+		.board_names = {"ROG STRIX X570-I GAMING"},
-+		.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
-+			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-+			SENSOR_IN_CPU_CORE,
-+	},
+ static const struct ec_board_info board_info[] = {
+@@ -185,6 +190,7 @@ static const struct ec_board_info board_info[] = {
+ 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
+ 			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ProArt X570-CREATOR WIFI"},
+@@ -198,6 +204,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
+ 			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG CROSSHAIR VIII DARK HERO"},
+@@ -207,6 +214,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
+ 			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG CROSSHAIR VIII FORMULA"},
+@@ -215,6 +223,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
+ 			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {
+@@ -228,6 +237,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
+ 			SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
+@@ -236,6 +246,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+ 			SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG STRIX B550-E GAMING"},
+@@ -243,6 +254,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+ 			SENSOR_FAN_CPU_OPT,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG STRIX B550-I GAMING"},
+@@ -251,6 +263,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_FAN_VRM_HS | SENSOR_CURR_CPU |
+ 			SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG STRIX X570-E GAMING"},
+@@ -259,12 +272,14 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+ 			SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG STRIX X570-F GAMING"},
+ 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+ 			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
+ 	{
+ 		.board_names = {"ROG STRIX X570-I GAMING"},
+@@ -272,6 +287,7 @@ static const struct ec_board_info board_info[] = {
+ 			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+ 			SENSOR_IN_CPU_CORE,
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
+ 	},
  	{}
  };
- 
-@@ -241,7 +260,7 @@ struct ec_sensor {
- };
+@@ -323,6 +339,7 @@ static bool unlock_global_acpi_lock(struct lock_data *data)
  
  struct ec_sensors_data {
--	unsigned long board_sensors;
-+	const struct ec_board_info *board_info;
+ 	const struct ec_board_info *board_info;
++	const struct ec_sensor_info *sensors_info;
  	struct ec_sensor *sensors;
  	/* EC registers to read from */
  	u16 *registers;
-@@ -307,11 +326,6 @@ static int __init bank_compare(const void *a, const void *b)
- 	return *((const s8 *)a) - *((const s8 *)b);
+@@ -365,7 +382,7 @@ static bool is_sensor_data_signed(const struct ec_sensor_info *si)
+ static const struct ec_sensor_info *
+ get_sensor_info(const struct ec_sensors_data *state, int index)
+ {
+-	return &known_ec_sensors[state->sensors[index].info_index];
++	return state->sensors_info + state->sensors[index].info_index;
  }
  
--static int __init board_sensors_count(unsigned long sensors)
--{
--	return hweight_long(sensors);
--}
--
- static void __init setup_sensor_data(struct ec_sensors_data *ec)
- {
- 	struct ec_sensor *s = ec->sensors;
-@@ -322,8 +336,8 @@ static void __init setup_sensor_data(struct ec_sensors_data *ec)
- 	ec->nr_banks = 0;
- 	ec->nr_registers = 0;
- 
--	for_each_set_bit(i, &ec->board_sensors,
--			  BITS_PER_TYPE(ec->board_sensors)) {
-+	for_each_set_bit(i, &ec->board_info->sensors,
-+			 BITS_PER_TYPE(ec->board_info->sensors)) {
+ static int find_ec_sensor_index(const struct ec_sensors_data *ec,
+@@ -403,9 +420,9 @@ static void __init setup_sensor_data(struct ec_sensors_data *ec)
  		s->info_index = i;
  		s->cached_value = 0;
  		ec->nr_registers +=
-@@ -463,9 +477,10 @@ static inline s32 get_sensor_value(const struct ec_sensor_info *si, u8 *data)
- static void update_sensor_values(struct ec_sensors_data *ec, u8 *data)
- {
- 	const struct ec_sensor_info *si;
--	struct ec_sensor *s;
-+	struct ec_sensor *s, *sensor_end;
+-			known_ec_sensors[s->info_index].addr.components.size;
++			ec->sensors_info[s->info_index].addr.components.size;
+ 		bank_found = false;
+-		bank = known_ec_sensors[s->info_index].addr.components.bank;
++		bank = ec->sensors_info[s->info_index].addr.components.bank;
+ 		for (j = 0; j < ec->nr_banks; j++) {
+ 			if (ec->banks[j] == bank) {
+ 				bank_found = true;
+@@ -556,7 +573,7 @@ static void update_sensor_values(struct ec_sensors_data *ec, u8 *data)
  
--	for (s = ec->sensors; s != ec->sensors + ec->nr_sensors; s++) {
-+	sensor_end = ec->sensors + ec->nr_sensors;
-+	for (s = ec->sensors; s != sensor_end; s++) {
- 		si = &known_ec_sensors[s->info_index];
+ 	sensor_end = ec->sensors + ec->nr_sensors;
+ 	for (s = ec->sensors; s != sensor_end; s++) {
+-		si = &known_ec_sensors[s->info_index];
++		si = ec->sensors_info + s->info_index;
  		s->cached_value = get_sensor_value(si, data);
  		data += si->addr.components.size;
-@@ -603,12 +618,24 @@ static struct hwmon_chip_info asus_ec_chip_info = {
- 	.ops = &asus_ec_hwmon_ops,
- };
- 
--static unsigned long __init get_board_sensors(void)
-+static const struct ec_board_info * __init get_board_info(void)
- {
--	const struct dmi_system_id *dmi_entry =
--		dmi_first_match(asus_ec_dmi_table);
-+	const char *dmi_board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
-+	const char *dmi_board_name = dmi_get_system_info(DMI_BOARD_NAME);
-+	const struct ec_board_info *board;
-+
-+	if (!dmi_board_vendor || !dmi_board_name ||
-+	    strcasecmp(dmi_board_vendor, "ASUSTeK COMPUTER INC."))
-+		return NULL;
-+
-+	for (board = board_info; board->sensors; board++) {
-+		if (match_string(board->board_names,
-+				 MAX_IDENTICAL_BOARD_VARIATIONS,
-+				 dmi_board_name) >= 0)
-+			return board;
-+	}
- 
--	return dmi_entry ? (unsigned long)dmi_entry->driver_data : 0;
-+	return NULL;
- }
- 
- static int __init asus_ec_probe(struct platform_device *pdev)
-@@ -616,17 +643,17 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	const struct hwmon_channel_info **ptr_asus_ec_ci;
- 	int nr_count[hwmon_max] = { 0 }, nr_types = 0;
- 	struct hwmon_channel_info *asus_ec_hwmon_chan;
-+	const struct ec_board_info *pboard_info;
- 	const struct hwmon_chip_info *chip_info;
- 	struct device *dev = &pdev->dev;
- 	struct ec_sensors_data *ec_data;
- 	const struct ec_sensor_info *si;
- 	enum hwmon_sensor_types type;
--	unsigned long board_sensors;
- 	struct device *hwdev;
- 	unsigned int i;
- 
--	board_sensors = get_board_sensors();
--	if (!board_sensors)
-+	pboard_info = get_board_info();
-+	if (!pboard_info)
- 		return -ENODEV;
- 
- 	ec_data = devm_kzalloc(dev, sizeof(struct ec_sensors_data),
-@@ -635,8 +662,8 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+ 	}
+@@ -733,6 +750,17 @@ static int __init asus_ec_probe(struct platform_device *pdev)
  
  	dev_set_drvdata(dev, ec_data);
--	ec_data->board_sensors = board_sensors;
--	ec_data->nr_sensors = board_sensors_count(ec_data->board_sensors);
-+	ec_data->board_info = pboard_info;
-+	ec_data->nr_sensors = hweight_long(ec_data->board_info->sensors);
+ 	ec_data->board_info = pboard_info;
++
++	switch (ec_data->board_info->family) {
++	case family_amd_500_series:
++		ec_data->sensors_info = sensors_family_amd_500;
++		break;
++	default:
++		dev_err(dev, "Unknown board family: %d",
++			ec_data->board_info->family);
++		return -EINVAL;
++	}
++
+ 	ec_data->nr_sensors = hweight_long(ec_data->board_info->sensors);
  	ec_data->sensors = devm_kcalloc(dev, ec_data->nr_sensors,
  					sizeof(struct ec_sensor), GFP_KERNEL);
- 
-@@ -709,7 +736,7 @@ static struct platform_driver asus_ec_sensors_platform_driver = {
- 	},
- };
- 
--MODULE_DEVICE_TABLE(dmi, asus_ec_dmi_table);
-+MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
- module_platform_driver_probe(asus_ec_sensors_platform_driver, asus_ec_probe);
- 
- module_param_named(mutex_path, mutex_path_override, charp, 0);
+@@ -742,6 +770,7 @@ static int __init asus_ec_probe(struct platform_device *pdev)
+ 		dev_err(dev, "Failed to setup state/EC locking: %d", status);
+ 		return status;
+ 	}
++
+ 	setup_sensor_data(ec_data);
+ 	ec_data->registers = devm_kcalloc(dev, ec_data->nr_registers,
+ 					  sizeof(u16), GFP_KERNEL);
 -- 
 2.35.1
 
