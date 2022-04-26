@@ -2,142 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 147BEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Apr 2022 21:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C446BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 01:23:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236206AbiDYVMo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Apr 2022 17:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S239675AbiDZB0d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Apr 2022 21:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245738AbiDYVMg (ORCPT
+        with ESMTP id S229614AbiDZB0c (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:12:36 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E086FA12;
-        Mon, 25 Apr 2022 14:09:31 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so3030161ooj.2;
-        Mon, 25 Apr 2022 14:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ocq/1AaEPjmsxW3YG0qAS81tpEvxdC0fDFi5CkuG//A=;
-        b=h0pi3L6q45NeX3zgY/5PH74u5EEfidYqsoawOueW5t8QmWuLgdnwCvhlqibCTvP7Bi
-         8ARFOmTQ+SHPQoXBDq/J9RHOHa3nNraO/5aNr1n0iFZfSSU9uX8hRnZDoM9/uI9LiGrq
-         sKLvs1EZNNZiTepZxlnGcuSrKd79zS14As0bBxifSxL9zXWR9pCDD9q2mKF9ppN5HHlV
-         PCEsIFJVx2ZB0RTRBODeVACpF53rUn0bwFsiqbu1hzgpE36wso8/jHcXNBxtonnalz/q
-         G2kFsrQkOAKSS2orGXUqL+7p4eJdwwppUWiWJUnrhHRWEm5XW/vfBHlVntSs8FBZgXyT
-         UIDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Ocq/1AaEPjmsxW3YG0qAS81tpEvxdC0fDFi5CkuG//A=;
-        b=ri4svaHpNozBcFOgmkMWt+Cg7c/R19FeNWLj85r23V0CCtWvX650r1nLtbqFHd5phx
-         7yFA+H0guvsJjcyVi5/iShmiqXezQFjiy6mcu0HItxt/kx9rcd3CdCG/qt5BovZkI9iN
-         bhR3C8YOmNWhC0SEkf39cjWOsHgOdM0/AJjRuRFvf0sR8dovjFWgweZo2y/5qjU/xHVR
-         Zcl1VvJyDv9HBCSJVbz7odwZ1rfd6R0eABZy5jAZDlWks9WyhLyUyqj1UjYoiLmbuLSo
-         eW9MLoxznaLQKZRVgyJiSWub0nL4CizVmclLvg9FQFmS0ljtOWXfi3Qwxwe+rE8kbVNZ
-         WpJw==
-X-Gm-Message-State: AOAM532f2w3rh9LpgTEMVTyDrtvDi58zUOyTQkU3iqdp1oPxgRLQFWdD
-        TiCHqSxNWq58AmJkOe3AlUc=
-X-Google-Smtp-Source: ABdhPJypKjn/nHTDqfcBoRBfWeVMhyKZa9XE2BwVZBxp470xIfcDj15/+vmghEJmNRF9ycmkDNMOBw==
-X-Received: by 2002:a4a:2a4c:0:b0:35e:7e88:7850 with SMTP id x12-20020a4a2a4c000000b0035e7e887850mr1014254oox.39.1650920971192;
-        Mon, 25 Apr 2022 14:09:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id eb25-20020a056870a89900b000e686d13881sm117574oab.27.2022.04.25.14.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 14:09:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 25 Apr 2022 14:09:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (lm75) Add Atmel AT30TS74 support
-Message-ID: <20220425210928.GA4184327@roeck-us.net>
-References: <ea4cd16b-4a04-8857-d08a-53be58b00d28@axentia.se>
- <9494dfbc-f506-3e94-501d-6760c487c93d@axentia.se>
+        Mon, 25 Apr 2022 21:26:32 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA650939A5;
+        Mon, 25 Apr 2022 18:23:26 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id CFE121B3;
+        Mon, 25 Apr 2022 18:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1650936206;
+        bh=nMPCdQ5YICk6b3UizKU0CL3dpjIZCdCxutVbgMKfh5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SmUQiZcdTo4s2cU2D1R7/36+bmOZLfzMoSJZ/1tcBqAkDIf8/CEjSSRcI7aM0cqUT
+         10DbMiRvCdnTFBxQ9LTNvVGsRPIBdA0J03udYTHlRJF6CJuvuvaZsYRr4uaaOon3T8
+         Yd6JClM7orwtr30CWvfVpMWlhgJcptNJHQKA6llM=
+Date:   Mon, 25 Apr 2022 18:23:21 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v2 1/6] dt-bindings: hwmon: Add nuvoton,nct6775
+Message-ID: <YmdJibUk2cfOamMk@hatter.bewilderbeest.net>
+References: <20220309005047.5107-1-zev@bewilderbeest.net>
+ <20220309005047.5107-2-zev@bewilderbeest.net>
+ <20220425150748.GA4165124@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <9494dfbc-f506-3e94-501d-6760c487c93d@axentia.se>
+In-Reply-To: <20220425150748.GA4165124@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 10:35:50PM +0200, Peter Rosin wrote:
-> Atmel (now Microchip) AT30TS74 is an LM75 compatible sensor. Add it.
-> 
-> Signed-off-by: Peter Rosin <peda@axentia.se>
+On Mon, Apr 25, 2022 at 08:07:48AM PDT, Guenter Roeck wrote:
+>On Tue, Mar 08, 2022 at 04:50:42PM -0800, Zev Weiss wrote:
+>> These Super I/O chips have an i2c interface that some systems expose
+>> to a BMC; the BMC's device tree can now describe that via this
+>> binding.
+>>
+>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>
+>This is still waiting for DT maintainer approval.
+>
+>Do you expect to add further properties along the line ?
+>If not, you might consider adding the chips to trivial devices instead.
+>
 
-Applied to hwmon-next.
+Additional properties seem possible, though at the moment I don't know 
+exactly what they might be, so trivial-devices.yml probably makes more 
+sense.
+
+I'll send a v3 soon with that change and the Kconfig fixes in the other 
+patches.
+
 
 Thanks,
-Guenter
+Zev
 
-> ---
->  drivers/hwmon/Kconfig |  1 +
->  drivers/hwmon/lm75.c  | 14 ++++++++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 68a8a27ab3b7..d8dc58b2c55a 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1248,6 +1248,7 @@ config SENSORS_LM75
->  	  temperature sensor chip, with models including:
->  
->  		- Analog Devices ADT75
-> +		- Atmel (now Microchip) AT30TS74
->  		- Dallas Semiconductor DS75, DS1775 and DS7505
->  		- Global Mixed-mode Technology (GMT) G751
->  		- Maxim MAX6625 and MAX6626
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index afdbb63237b9..66dc826f7962 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -26,6 +26,7 @@
->  
->  enum lm75_type {		/* keep sorted in alphabetical order */
->  	adt75,
-> +	at30ts74,
->  	ds1775,
->  	ds75,
->  	ds7505,
-> @@ -128,6 +129,14 @@ static const struct lm75_params device_params[] = {
->  		.default_resolution = 12,
->  		.default_sample_time = MSEC_PER_SEC / 10,
->  	},
-> +	[at30ts74] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = 200,
-> +		.num_sample_times = 4,
-> +		.sample_times = (unsigned int []){ 25, 50, 100, 200 },
-> +		.resolutions = (u8 []) {9, 10, 11, 12 },
-> +	},
->  	[ds1775] = {
->  		.clr_mask = 3 << 5,
->  		.set_mask = 2 << 5,	/* 11-bit mode */
-> @@ -645,6 +654,7 @@ static int lm75_probe(struct i2c_client *client)
->  
->  static const struct i2c_device_id lm75_ids[] = {
->  	{ "adt75", adt75, },
-> +	{ "at30ts74", at30ts74, },
->  	{ "ds1775", ds1775, },
->  	{ "ds75", ds75, },
->  	{ "ds7505", ds7505, },
-> @@ -680,6 +690,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
->  		.compatible = "adi,adt75",
->  		.data = (void *)adt75
->  	},
-> +	{
-> +		.compatible = "atmel,at30ts74",
-> +		.data = (void *)at30ts74
-> +	},
->  	{
->  		.compatible = "dallas,ds1775",
->  		.data = (void *)ds1775
