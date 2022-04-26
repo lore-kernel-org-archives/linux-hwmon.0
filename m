@@ -2,82 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0552C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 20:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B081AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 20:03:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354366AbiDZUHB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 16:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S1354373AbiDZUHC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 16:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242279AbiDZUG7 (ORCPT
+        with ESMTP id S1354360AbiDZUHA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:06:59 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BA8CFB8E;
-        Tue, 26 Apr 2022 13:03:49 -0700 (PDT)
+        Tue, 26 Apr 2022 16:07:00 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2A2D0A84;
+        Tue, 26 Apr 2022 13:03:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651003410;
-        bh=GYjS/gv0IHJ8rSFr5iam6Q9tJCHkTMNvcWZmu5izDow=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=GELv81uJWvr4O/Sf/gnnhpEtKt9w4xLHxcZoP4AriP2EZTWR48tjvvxbl7xfbJicY
-         j68L96tpLkIobJYuPBxj1v4pR4M37f1JqgZMel3ADuKSUfLWiDX1FTyhXpZIPgw8MZ
-         X6HTMojXXjvTIZGw4z+kYu4PDSBouN0dThr+UIl8=
+        s=badeba3b8450; t=1651003413;
+        bh=4y7a+bBwn4/79Epm4BmNa0CGyOh0yDIBQXKqeowWuy0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TwYIhOsb2Y/j2NgniRB/kad1ApCnPPxJ2P+gFbRY39Q7CmvklJs7XkmwxIJQNIhOh
+         yQpJLFF4Zc9aO0zEEaJnFgrqvR5AP2MDP08rDsxrnf+k8SiZkTvHOS6b9R/GeqXJ9k
+         f+etfW/fPRVy4LZJEWYjwptQ4KJoYRfY+MAws8Ec=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MtfJd-1o0qnl02md-00v53Y; Tue, 26 Apr 2022 22:03:30 +0200
+ 1MacSe-1oH8bG432Y-00cAoJ; Tue, 26 Apr 2022 22:03:33 +0200
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] hwmon: (dell-smm) Improve init code
-Date:   Tue, 26 Apr 2022 22:03:17 +0200
-Message-Id: <20220426200320.399435-1-W_Armin@gmx.de>
+Subject: [PATCH 2/3] hwmon: (dell-smm) Cleanup init code
+Date:   Tue, 26 Apr 2022 22:03:19 +0200
+Message-Id: <20220426200320.399435-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220426200320.399435-1-W_Armin@gmx.de>
+References: <20220426200320.399435-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:aBQsTk+1fzm5DD+3vQNzawaqLa5BRkW+lG4RmLBD0jhd4VhcYDS
- qRI+XySz2aimYRSyM4eKVIzXwWVnk8FMTGb9aMmExe7mZV8VljULvyxpICMs6rw4IRMgR/f
- T0Q7iQZrIgUMUBw3klAxgvO2hiVFX6ddssDuVNBgvjK85G8+M4iKbeEngumpGshNAe5xGcJ
- NLvyICWHJvAbOaa3ciJnA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fXYk06vVGyM=:QPTcWPxLiXM0wu2xLMSMIs
- cqyKgh5LlCdNb6y34I1JAi+RlZ8hHFP71ePlpCGt4fcOlNMO4Ogi3jGV1+A8RXai9td0G/Phy
- GmW/3ia0sw5zMJnfQ6K5WtWhheoyVoKcbvAWzMW9jqpnxWUL2FHkMn+6xiJEM8GC188WrlHSx
- uZ0IffVdIxF90/6DPKRxp5u6E/4MRwMAyZcotu+oViLseWnnRgrlIxlQ3aBn1N/dcxFP8u9Pz
- DCPTT5jpZcIzSDkZlTI1PMiQWyUlZgAx7CZhROjPG4NzBrtdPCSy08tg60jWJUu/SaMwEW5HR
- XeQqsmASoI0wxrSWWU2E0XNgjwile+sCmSX4pNl8pvPpqnlxJt7RrWw5HfIs5Bhxkk1aQWjqH
- 3UWVh289L+VgdOA6OJHk0TnrwhWgk7UUMxK3NLJfk+VATXpLpqMNk5ktCosp/mh7ppIfo8O/u
- lU7Y9oyvPZvctMC+9WrF+i9f6+CmRkG1GV2O6b/sZedCWZdjXlSMm4z4ICDFXFvcPpCXnFxNq
- K5S5Ezk6gke1njLIWCOmGo9YycEhr6CLhdV7e7e42sB+rbupcnMqJs+QJoVIn2e7phbB2LQBl
- Mf/GFThbiaEugq5Nmkjuy4eSpWpAIo7E43rjgXeCh8t8nbOOeZQsVRlKhhrESHQJsDL9kA6XZ
- nYiAnpyTYtc+nIpBXhin7rI6nXO+mzPO8OTJmXU056ZVAK1U2fhBhj/jgH72TPuHCPM9e1S3m
- +rwgMPu4UHg+NcD9fmSxqzTOtguULgqfgWYID0vF9Yl97BXiOR/jwuM77pDELzRZ0hlJq3CrS
- KMH8wY+ikvIwbrolHHtZdBGTWlZp17hrdZ2QeFp3b1rNRjAgk+TxEIksteXGakXaE1BnMuEYf
- NVwXje1UpA8qPgsGgROkQiVzafVF9ab6ywJKtz6sc19ju5pbYzfs7uWtjop3ORdS6CfrvTt/j
- XyrwLJwmtoq1GEY30aj3MArZVa7jWqV2jSx/d0sTQr8IHwp8KMTnKO3hXh/SViy44P/B1Huqk
- pUCcTttK7GcdpNR0H+Xce295YgtsiiF7ndCnHWRPC3XfsfN2lahcL35OaHJkBw11pPN6PRpqN
- 1DW6rTsSjte8+Y=
+X-Provags-ID: V03:K1:OrM8TIIArC8cx/RIVY+mTjYUJR1mkdJJxuMTfFUCG657uKIXT3K
+ jKTGrkq/jfOAQy6Jm9VhUioM/zFk5piwO1ipISdwHAHCxVWvkW6bzL+UF8L+AmREqXzQU0w
+ fnbTMNJpJPRWXytlqXpCpP6R4XolwkEr4H1oOv3mUQP3yKNd+4lW5ME3iDlt+OCwW2w7jwm
+ OYyEU/7XltrRXiQAjHNqQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:R5xHMep9C80=:8XZmPFdG+vtlId2Jh55crI
+ HHul3s4dc7z7vA07i61nwZ8Eq5eWPp6TaudxY2yAtwE2Bp+0CLA/OP+pLgPyXJu/FFkmTDGZX
+ F+h7wjsSxDdZaw6l6GqWkUo8Osxc+/k0TaVjPlmMmC5cO7HgMdcyuRqvxPuFxVt3v1isONGCa
+ 5dqmzmVU5G93MEzI32WTTtsKrxEMjhYcTmTXX6umOkK/sZTcHjm4Kh2gO1O9w+dv8yRiPaVj9
+ pjhzMKXx85BSWiVrUiZVVG062vRX0YtJpOVzuf9y+IvNpEEwVJnRmAgAbdAkuOMIBhdTry4kE
+ ZYZtwGT6Mvk25FCiLW4A7aBLPuJvArxIV/0wUA97tWePPhEL2fr8i7UQtaEkh2x5MIB6DznAs
+ qNIx882M5gYLH5A4HkRkmfYw0L2JfAsyKp1qbxo2RkooIwv6PKHV905VukrtRiQCsGKBZiuWp
+ UQvlCJ0w52VBbPhJGA6th+b0PyNZSHy+hatzBBFgRr3mH96bx7kf3QnUWrW93Q5zLPtNBX1xa
+ aEygBgvLgZERUijdLRb5jcaWKxb1L7Y4AtxJeI1ahbFdXWk1EwTZq0nnPfylGzuuapZyiO/tE
+ uvdqYyx1jbm/Bl5SX8L1AiBJ8aUGk2o+bRexK/8YjGYL12BdoraJxXaqWyey+Xvu51lqN6J7G
+ wPBlkLJgqM1cy4a1tLsDU08ACPRYyg78KoYys5LEHYxgRo/PIzgIII4SGUWTkJV19i+tc77gX
+ mzHNcDQge1VHWlt2osvJx+1JRSkNefKqa5LIk1itHhV7m4bBpvf0KCAxFZ5CIEUHK8GW849Wu
+ LzQ+W0L3xuym6M8/2xnvizH4ztC3vTbS2LFKns3vNRg+yKKZ4GVpFPKXDWDjSOebdty10ZlKf
+ H9rJ1OxVvnvJ+/dB13HSWqHbC1GTCvrOIHi/BxCkXbcbl0gXJlS6DQ778xzk2wOS/s3qc94mw
+ NJ3mXgjmZAciEvvQuO2JJz2LHYtj6FLzZmv30iFGarzmoufm8dcwmOpjn1CWYmB6ImPlbFvQ0
+ 5KxwxncrXVlGSu97qsSnCBTowgWa4hA4CIVUqSF471hGD2Or/GnCVtArpqVKIjp9Wtwc0iaoQ
+ CpeAad187Euv7A=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch series improves the init code of the dell_smm_hwmon
-driver. The first patch speeds up device initialisation by avoiding
-unnecessary SMM calls during init, which might be slow on some
-machines. The second patch is a small cleanup patch, while the
-third patch allows for easier diagnosis of audio problems caused
-by really slow SMM calls.
+The default values for i8k_fan_mult and i8k_fan_max
+should be assigend only if the values specified as
+module params or in DMI are invalid/missing.
 
-Tested on a Dell Inspiron 3505.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-Armin Wolf (3):
-  hwmon: (dell-smm) Avoid unnecessary SMM calls during init
-  hwmon: (dell-smm) Cleanup init code
-  hwmon: (dell-smm) Warn if SMM call took a very long time to execute
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 202ee884de9e..f13902414615 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1373,8 +1373,6 @@ static int __init dell_smm_probe(struct platform_dev=
+ice *pdev)
+ 		return -ENOMEM;
 
- drivers/hwmon/dell-smm-hwmon.c | 50 +++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 28 deletions(-)
+ 	mutex_init(&data->i8k_mutex);
+-	data->i8k_fan_mult =3D I8K_FAN_MULT;
+-	data->i8k_fan_max =3D I8K_FAN_HIGH;
+ 	platform_set_drvdata(pdev, data);
 
+ 	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
+@@ -1409,7 +1407,9 @@ static int __init dell_smm_probe(struct platform_dev=
+ice *pdev)
+ 			fan_max =3D conf->fan_max;
+ 	}
+
+-	data->i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;	/* Must not be 0 */
++	/* All options must not be 0 */
++	data->i8k_fan_mult =3D fan_mult ? : I8K_FAN_MULT;
++	data->i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;
+ 	data->i8k_pwm_mult =3D DIV_ROUND_UP(255, data->i8k_fan_max);
+
+ 	fan_control =3D dmi_first_match(i8k_whitelist_fan_control);
+@@ -1421,9 +1421,6 @@ static int __init dell_smm_probe(struct platform_dev=
+ice *pdev)
+ 		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan=
+ control\n");
+ 	}
+
+-	if (fan_mult)
+-		data->i8k_fan_mult =3D fan_mult;
+-
+ 	ret =3D dell_smm_init_hwmon(&pdev->dev);
+ 	if (ret)
+ 		return ret;
 =2D-
 2.30.2
 
