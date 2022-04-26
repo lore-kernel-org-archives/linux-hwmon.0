@@ -2,81 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A51C43219
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 15:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75479C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 15:20:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351915AbiDZPLq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 11:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S1352360AbiDZPXN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 11:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351933AbiDZPJz (ORCPT
+        with ESMTP id S1352338AbiDZPXE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:09:55 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9186E15278C
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Apr 2022 08:06:43 -0700 (PDT)
+        Tue, 26 Apr 2022 11:23:04 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C10C1759EE;
+        Tue, 26 Apr 2022 08:17:00 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id j25-20020a4a7519000000b0035e6db06150so1114565ooc.6;
+        Tue, 26 Apr 2022 08:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1650985604;
-  x=1682521604;
-  h=date:to:cc:subject:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to:from;
-  bh=nHkfyfU+8IAS4isZKA7A6htR0IUvryn0lnglvP1Bx8k=;
-  b=AwsTnYFIPknmab//XwzQ2cKDMKy80nR4xbJHYLqOvzVa8OfxFLAE7QCj
-   EN0iL4qLmF1hfOum//IvoHarVYCA/Zc8H1t8IepD3wumU+rt+U83btqLx
-   2Iwk6Hg45bFXoXiVhfx7ZNiuDMVbx3B5HzYFXbF0HpjE8qSOKEhUBlyyf
-   wLYqr8hgwOQCUo+Ml0al0wT/fCEv69pf9sahkwbyu1Vcn0lpU9JV2aw8y
-   1ey1+L4eLPgIntymx7NTd3GlUAumlASXO6+iVZhANvlkNvu/Wuka75ZcJ
-   WwYryPuS/v5r1nikmhMt9ba29q9Ox6oR77H8esLByHdDPoizIFPFTmkyw
-   Q==;
-Date:   Tue, 26 Apr 2022 17:06:41 +0200
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     =?iso-8859-1?Q?M=E5rten?= Lindahl <Marten.Lindahl@axis.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        kernel <kernel@axis.com>
-Subject: Re: [PATCH v2 1/2] hwmon: (pmbus/ltc2978) Use driver specific ops if
- they exist
-Message-ID: <YmgKgYEPMlLRBnRG@axis.com>
-References: <20220426092936.1127114-1-marten.lindahl@axis.com>
- <20220426092936.1127114-2-marten.lindahl@axis.com>
- <a7fa7c5f-578f-480d-a2c3-eecb38032202@roeck-us.net>
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JMv0lACNSYZoaK4Imij/2QqoYoRHCxnEs4tYjd0AuZY=;
+        b=nF81iYuyzj2BsCHaIPslpKnx4nDb5cAJ+C2ZnzS7poY9waQZjFtmRKhfZwY2tByMwa
+         C2CW5JzL3SfXKFhbz5xJKR3DO8ato84l8Z0aMtLcsCe6DOXr1iLv0gJAeGQ2fBd6drbB
+         6mJ+R+JQzHA0w2EFP3M26J8Y0yh4ZFZl6vCXYDeBgZvVOg13WddhnxscdKusx5c2U5oL
+         b/sZdIslprpaRMUF//yyip7DXQUMJjCaxMO6SApZ3JKdT9y+H2QBUPUYqh3X7SBuCGU3
+         xDCvXv8iiJclRUzBSi/0zHp3o0qZZQ4mSqTZlY1r0pSw1DX61zZJQ/0Xh8/ft4i/ZJ2D
+         BmsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=JMv0lACNSYZoaK4Imij/2QqoYoRHCxnEs4tYjd0AuZY=;
+        b=DoFodKVgWG2KPcvj+7ZclXiCulZ2FpByf3x+MkqAjZkTbU/wNQYji1Cl6AxsI3YVnf
+         PstPerdRJj+vVegF4K3LEMl3zGGPI8eEINoeDazlsvXuYdaFjZSndUNSnj9J6jrM/B+L
+         Kbyt8a6eu4tuezfFwH8mQCZ6WBu65LVqh2YfkYH8uArQ4DJ6nGnEOH9c0fmmRElM5Nm9
+         88GZkW804/lo+kVwZkTwNeFFFJeH9/oU2QM63r70GGVlqUGtpS9a7ICmqYksSdkdjfIF
+         ZYS5IsXvcKccoJWjOlTF2fG49MgHqoVP8uYjX556IyLjlI1E/lv45LiMIofM5Ik+el0c
+         il2g==
+X-Gm-Message-State: AOAM533fLYJv3W0euIJqLu5Iqh8plGjUTRdezSox9S+i/13xbnCdxKvh
+        PuC7x/QZLb7i5lkKJ0MZjSk=
+X-Google-Smtp-Source: ABdhPJyHAw9fGB73HaOb1RQA+A+aDbE1QKOQv61rWFhkDPkMLHpMbaUo7MAJPP6SW7kOpAsYEspI3Q==
+X-Received: by 2002:a05:6820:151b:b0:33a:6aa4:2d6e with SMTP id ay27-20020a056820151b00b0033a6aa42d6emr8474432oob.54.1650986219219;
+        Tue, 26 Apr 2022 08:16:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j19-20020a056830271300b006057ca85f79sm4998706otu.62.2022.04.26.08.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 08:16:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 26 Apr 2022 08:16:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
+ struct for board data
+Message-ID: <20220426151656.GA3119637@roeck-us.net>
+References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
+ <20220426092340.495704-2-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7fa7c5f-578f-480d-a2c3-eecb38032202@roeck-us.net>
-From:   Marten Lindahl <martenli@axis.com>
+In-Reply-To: <20220426092340.495704-2-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:39:15PM +0200, Guenter Roeck wrote:
-> On 4/26/22 02:29, Mårten Lindahl wrote:
-> > Several of the manuals for devices supported by this driver describes
-> > the need for a minimum wait time before the chip is ready to receive
-> > next command.
-> > 
-> > This wait time is already implemented in the driver as a ltc_wait_ready
-> > function with a driver defined wait time of 100 ms, and is considered
-> > for specific devices before reading/writing data on the pmbus.
-> > 
-> > Since this driver uses the default pmbus_regulator_ops for the enable/
-> > disable/is_enabled functions and these functions do not check for driver
-> > specific read/write ops, the wait time recommendations are bypassed for
-> > several of the devices managed by this driver (ltc3880/ltc3882/ltc3883/
-> > ltc3884/ltc3886/ltc3887/ltc3889/ltm4664/ltm4675/ltm4676/ltm4677/ltm4678/
-> > ltm4680/ltm4686/ltm4700/ltc7880).
-> > 
-> > Lets add support for driver specific callbacks in pmbus core which takes
-> > the wait time into consideration for the specified devices.
-> > 
+On Tue, Apr 26, 2022 at 11:23:37AM +0200, Eugene Shalygin wrote:
+> We need to keep some more information about the current board than just
+> the sensors set, and with more boards to add the dmi id array grows
+> quickly. Our probe code is always the same so let's switch to a custom
+> test code and a custom board info array. That allows us to omit board
+> vendor string (ASUS uses two strings that differ in case) in the board
+> info and use case-insensitive comparison, and also do not duplicate
+> sensor definitions for such board variants as " (WI-FI)" when sensors
+> are identical to the base variant.
 > 
-> This should be two patches: one patch to add the callback to the pmbus core
-> and a second patch to use it from the ltc2978 driver.
-
-Ok, I will do that. Thanks!
-Kind regards
-Mårten
-
+> Also saves a quarter of the module size by replacing big dmi_system_id
+> structs with smaller ones.
 > 
-> Guenter
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> ---
+...
+>  
+> -MODULE_DEVICE_TABLE(dmi, asus_ec_dmi_table);
+> +MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
+>  module_platform_driver_probe(asus_ec_sensors_platform_driver, asus_ec_probe);
+
+Since this is now tied to MODULE_DEVICE_TABLE(acpi, ...), I think the
+probe function should be referenced in asus_ec_sensors_platform_driver,
+and it should be module_platform_driver() instead of
+module_platform_driver_probe().
+
+Guenter
