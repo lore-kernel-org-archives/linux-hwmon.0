@@ -2,157 +2,201 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D800AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 10:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F20C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 10:04:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348307AbiDZKDn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 06:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S1348339AbiDZKHy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 06:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348355AbiDZKD1 (ORCPT
+        with ESMTP id S1348375AbiDZKHs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:03:27 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523CD60A83;
-        Tue, 26 Apr 2022 02:24:03 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id k36-20020a05600c1ca400b00393f18c8fc5so1118312wms.4;
-        Tue, 26 Apr 2022 02:24:03 -0700 (PDT)
+        Tue, 26 Apr 2022 06:07:48 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDA21B9FBC
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Apr 2022 02:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wgMoFM22a1pXbC0ROfYTg43rXumt1gFFaxfK/H/STx8=;
-        b=aOQkPkeHou/ylBED5XmEHi/6CgtMdRGuPYjJP8ZWscAP7ZS9z6B34xh44u4ixKGYdr
-         FecbKMllrbD1IWOKt7rAi4mau22bY4XnXJimU3+tiqAUsFpqJf1IpoILrnaeM3NU0Pep
-         tMh2yRmzTSEPV+1QcDqj1rlqRRE5vOflQ2GPPjUW4w1Tz5fXOMQELw5/+X2zso27tyOi
-         2+6v/5Nk13Yu1nRxK4wAQwsOifL7oMaD++2/SZLtW1l3P8qnPCefxmayjQNWvWNTwyRT
-         LbECjwJPUKXRBdn3ihtibPR8KEx8TEYh7lnX2guE7VQdMFv+xUwIxHaJsAkk/7ffx+2r
-         8/DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wgMoFM22a1pXbC0ROfYTg43rXumt1gFFaxfK/H/STx8=;
-        b=L+jRjSzReveCaM0JWOALsqruYwpe7ZEtAJDkplbL0wlSCLgbvxCLMIV612PHJm4Di9
-         dT2wNJtA6Hbgp2fHHvHnwTo8X9kK9/qaBOgH7C1HqrZMAE4xiAmhg7f5qw0lVaeNex2b
-         OaeO6RXzgmRau8Tf9SK3RNPGpV/kVD9F1L/54JsY7edMsHmTV9/aaIjU50uNnV+/SuKq
-         aZNhf3NIsFUFkDKUsZbz6opVSCm1GD35pcT7cHHD17MgJQmCJpvULHJFpzIEUY8OsTXm
-         SZ/XJZcZwKdLUUOXioiCeGhhk+agUvsL4if8hy0yaOqNWbtkqNn2uveUNiwzVi3G4rXx
-         FHCg==
-X-Gm-Message-State: AOAM532hQ/2E1+miIzWvPlcDyG5HatpWtqUPAqiNWIZlfUIizDeul05S
-        tgtNpzcfQRoh/cUZZb3tp3s=
-X-Google-Smtp-Source: ABdhPJxdnyUTyQyQdiD4TwO9gOHXMsMOaA4i5pPuVw3EwOAOL1bYkxe9A6O9LE9BPspqUXHQ3fIeGw==
-X-Received: by 2002:a1c:a185:0:b0:392:206d:209d with SMTP id k127-20020a1ca185000000b00392206d209dmr19798036wme.168.1650965041783;
-        Tue, 26 Apr 2022 02:24:01 -0700 (PDT)
-Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a056000154900b0020a849e1c41sm13125094wry.13.2022.04.26.02.24.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 02:24:01 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] hwmon: (asus-ec-sensors) add PRIME X470-PRO board
-Date:   Tue, 26 Apr 2022 11:23:40 +0200
-Message-Id: <20220426092340.495704-5-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220426092340.495704-1-eugene.shalygin@gmail.com>
-References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1650965392;
+  x=1682501392;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=5/GFAkktAUKsGFymzHy0H16xCWc9nk80meKTtOqFBu8=;
+  b=K8yqVtzqQ2CVtQzSqOiq/IMvfM1zvX4QOdCNc7c+4p+DfHA/pCjwmWep
+   QWnZQJZ5M7iWMlMcDFDgPz+wbSpDctcXwTpNSvNELi8S/ONkw/bRtNODH
+   rZK56ns2nEhQAbr3sNqqo1bgICc/r/ONPI5RrdmBtg/CYV4K2rLW0tbGw
+   +IWPPRZpeX9L03w1dBuAy54K+jO4GnkeurfztslFnHTuvQTOWwshSMb0Q
+   XLXdts086KoGWpS4nfTFiYp188Efb41+oJbtTCjI07is7KlvYWoz9Ndb+
+   ihCaLtU7D9AE5fivzbIghFf3Y20pJkUbyr06Rri2g+etAHnDov+bDYlFw
+   g==;
+From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
+        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+Subject: [PATCH v2 1/2] hwmon: (pmbus/ltc2978) Use driver specific ops if they exist
+Date:   Tue, 26 Apr 2022 11:29:35 +0200
+Message-ID: <20220426092936.1127114-2-marten.lindahl@axis.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220426092936.1127114-1-marten.lindahl@axis.com>
+References: <20220426092936.1127114-1-marten.lindahl@axis.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This board is supposed to be handled by the asus-wmi-sensors driver,
-but due to a buggy WMI implementation the driver and the official ASUS
-software make the BIOS hang together with fan controls [1, 2].
+Several of the manuals for devices supported by this driver describes
+the need for a minimum wait time before the chip is ready to receive
+next command.
 
-This driver complements values provided by the SIO chip and does not
-freeze the BIOS, as tested by a user [2].
+This wait time is already implemented in the driver as a ltc_wait_ready
+function with a driver defined wait time of 100 ms, and is considered
+for specific devices before reading/writing data on the pmbus.
 
-[1] https://github.com/electrified/asus-wmi-sensors/blob/master/README.md
-[2] https://github.com/zeule/asus-ec-sensors/issues/12
+Since this driver uses the default pmbus_regulator_ops for the enable/
+disable/is_enabled functions and these functions do not check for driver
+specific read/write ops, the wait time recommendations are bypassed for
+several of the devices managed by this driver (ltc3880/ltc3882/ltc3883/
+ltc3884/ltc3886/ltc3887/ltc3889/ltm4664/ltm4675/ltm4676/ltm4677/ltm4678/
+ltm4680/ltm4686/ltm4700/ltc7880).
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Lets add support for driver specific callbacks in pmbus core which takes
+the wait time into consideration for the specified devices.
+
+Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
 ---
- drivers/hwmon/asus-ec-sensors.c | 43 +++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ drivers/hwmon/pmbus/ltc2978.c    | 12 +++++++
+ drivers/hwmon/pmbus/pmbus.h      |  2 ++
+ drivers/hwmon/pmbus/pmbus_core.c | 58 +++++++++++++++++++++-----------
+ 3 files changed, 52 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index b52e3679476a..3af4b22fd3c5 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -136,10 +136,41 @@ enum ec_sensors {
- #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
+diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
+index 0127273883f0..531aa674a928 100644
+--- a/drivers/hwmon/pmbus/ltc2978.c
++++ b/drivers/hwmon/pmbus/ltc2978.c
+@@ -196,6 +196,17 @@ static int ltc_read_byte_data(struct i2c_client *client, int page, int reg)
+ 	return pmbus_read_byte_data(client, page, reg);
+ }
  
- enum board_family {
-+	family_amd_400_series,
- 	family_amd_500_series,
- };
- 
- /* All the known sensors for ASUS EC controllers */
-+static const struct ec_sensor_info sensors_family_amd_400[] = {
-+	[ec_sensor_temp_chipset] =
-+		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-+	[ec_sensor_temp_cpu] =
-+		EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-+	[ec_sensor_temp_mb] =
-+		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_temp_vrm] =
-+		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-+	[ec_sensor_in_cpu_core] =
-+		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
-+	[ec_sensor_fan_cpu_opt] =
-+		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
-+	[ec_sensor_fan_vrm_hs] =
-+		EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-+	[ec_sensor_fan_chipset] =
-+		/* no chipset fans in this generation */
-+		EC_SENSOR("Chipset", hwmon_fan, 0, 0x00, 0x00),
-+	[ec_sensor_fan_water_flow] =
-+		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xb4),
-+	[ec_sensor_curr_cpu] =
-+		EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
-+	[ec_sensor_temp_water_in] =
-+		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
-+	[ec_sensor_temp_water_out] =
-+		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x0b),
-+};
++static int ltc_write_byte_data(struct i2c_client *client, int page, int reg, u8 value)
++{
++	int ret;
 +
- static const struct ec_sensor_info sensors_family_amd_500[] = {
- 	[ec_sensor_temp_chipset] =
- 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-@@ -185,6 +216,15 @@ struct ec_board_info {
- };
++	ret = ltc_wait_ready(client);
++	if (ret < 0)
++		return ret;
++
++	return pmbus_write_byte_data(client, page, reg, value);
++}
++
+ static int ltc_write_byte(struct i2c_client *client, int page, u8 byte)
+ {
+ 	int ret;
+@@ -681,6 +692,7 @@ static int ltc2978_probe(struct i2c_client *client)
+ 	info = &data->info;
+ 	info->write_word_data = ltc2978_write_word_data;
+ 	info->write_byte = ltc_write_byte;
++	info->write_byte_data = ltc_write_byte_data;
+ 	info->read_word_data = ltc_read_word_data;
+ 	info->read_byte_data = ltc_read_byte_data;
  
- static const struct ec_board_info board_info[] = {
-+	{
-+		.board_names = {"PRIME X470-PRO"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_CPU_OPT |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+		.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+		.family = family_amd_400_series,
-+	},
- 	{
- 		.board_names = {"PRIME X570-PRO"},
- 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-@@ -752,6 +792,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	ec_data->board_info = pboard_info;
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index e74b6ef070f3..c031a9700ace 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -438,6 +438,8 @@ struct pmbus_driver_info {
+ 	int (*read_byte_data)(struct i2c_client *client, int page, int reg);
+ 	int (*read_word_data)(struct i2c_client *client, int page, int phase,
+ 			      int reg);
++	int (*write_byte_data)(struct i2c_client *client, int page, int reg,
++			      u8 byte);
+ 	int (*write_word_data)(struct i2c_client *client, int page, int reg,
+ 			       u16 word);
+ 	int (*write_byte)(struct i2c_client *client, int page, u8 value);
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index b2618b1d529e..1b0728c3c7d8 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -384,25 +384,6 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_write_byte_data, PMBUS);
  
- 	switch (ec_data->board_info->family) {
-+	case family_amd_400_series:
-+		ec_data->sensors_info = sensors_family_amd_400;
-+		break;
- 	case family_amd_500_series:
- 		ec_data->sensors_info = sensors_family_amd_500;
- 		break;
+-int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+-			   u8 mask, u8 value)
+-{
+-	unsigned int tmp;
+-	int rv;
+-
+-	rv = pmbus_read_byte_data(client, page, reg);
+-	if (rv < 0)
+-		return rv;
+-
+-	tmp = (rv & ~mask) | (value & mask);
+-
+-	if (tmp != rv)
+-		rv = pmbus_write_byte_data(client, page, reg, tmp);
+-
+-	return rv;
+-}
+-EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
+-
+ /*
+  * _pmbus_read_byte_data() is similar to pmbus_read_byte_data(), but checks if
+  * a device specific mapping function exists and calls it if necessary.
+@@ -421,6 +402,43 @@ static int _pmbus_read_byte_data(struct i2c_client *client, int page, int reg)
+ 	return pmbus_read_byte_data(client, page, reg);
+ }
+ 
++/*
++ * _pmbus_write_byte_data() is similar to pmbus_write_byte_data(), but checks if
++ * a device specific mapping function exists and calls it if necessary.
++ */
++static int _pmbus_write_byte_data(struct i2c_client *client, int page, int reg, u8 value)
++{
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	const struct pmbus_driver_info *info = data->info;
++	int status;
++
++	if (info->write_byte_data) {
++		status = info->write_byte_data(client, page, reg, value);
++		if (status != -ENODATA)
++			return status;
++	}
++	return pmbus_write_byte_data(client, page, reg, value);
++}
++
++int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
++			   u8 mask, u8 value)
++{
++	unsigned int tmp;
++	int rv;
++
++	rv = _pmbus_read_byte_data(client, page, reg);
++	if (rv < 0)
++		return rv;
++
++	tmp = (rv & ~mask) | (value & mask);
++
++	if (tmp != rv)
++		rv = _pmbus_write_byte_data(client, page, reg, tmp);
++
++	return rv;
++}
++EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
++
+ static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
+ 					      int reg)
+ {
+@@ -2396,7 +2414,7 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+ 	int ret;
+ 
+ 	mutex_lock(&data->update_lock);
+-	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
++	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+ 	mutex_unlock(&data->update_lock);
+ 
+ 	if (ret < 0)
 -- 
-2.35.1
+2.30.2
 
