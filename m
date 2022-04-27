@@ -2,87 +2,92 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC263C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 18:03:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A3EFC433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 18:51:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244627AbiD0SGP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 14:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S229748AbiD0SzC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 14:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244601AbiD0SGG (ORCPT
+        with ESMTP id S231996AbiD0Sxz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:06:06 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCF43A2363;
-        Wed, 27 Apr 2022 11:02:51 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bv19so4963272ejb.6;
-        Wed, 27 Apr 2022 11:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kFl7F+bDiuTXuRK9B+innYEa8c7xLmi165v70TPlxvo=;
-        b=g1+X8ARdAKY3b3yP0X0ZmFyJOuQQ7wyti6Nr/e2OkKjrdDZsnjWpHAeY14DgJtO/BR
-         8AvpI+Sh3u9AEkRpdtrs9/r7ip/p9RiMaG0xn6kuFe7QvYwzgKvC07tLhPGDrpSuKVAV
-         xnmYGCz/Z/Yr473MbHTiRIUBwe1ic0debupuOGp07h6MDlnVt5ZaAz92mYpL1HmXAna3
-         d9vanuE4VpBLovhxee1wq0bLQ8P3ePyu6gQGce8P01S+ZsO8N8xPkCGGz9Sp0B14Kk3r
-         NID2F8DDG7N4TXOeXVUAzGr1jT7AeCdD7WaTctycMSETLmV3+HN7W48FcDZlKCBijWmz
-         3Jmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kFl7F+bDiuTXuRK9B+innYEa8c7xLmi165v70TPlxvo=;
-        b=59q+9JvhWziyqRlexsJUJAwHNmiPiKT4M5CbOuZ4rbgUQEbtFtISnIBcCO7gz5eNwe
-         lpAi64OHLknfANviC33DgApUwD4XQHpcIZCS6H5wTjjzf/zdzFcKOrag33+M6EJZIYFL
-         tie7+NObMeU+S0NdfgRE854Xvf3C/hXlU9yUXD3QKar7oPdg7OkXE5Mr7Flq7UCALBQL
-         zosLZk4d8+mWzUxQkKLX4YqVlPKfxYz/3/MwHJx5pA/VsGMmu1VYekOALYk34haAxzVx
-         jHcEoNTut+tFmmRfdIg1mr7f/jKnB02Kw7kUtl2hjMdancHXlflFvQsPLze1UALWwLQH
-         FJTw==
-X-Gm-Message-State: AOAM530iywWLuxWPrVcTqZCk4dKH0AiOqA+4S3qYTusLH95JXL2n/q9k
-        HfN5bQhRO9LbY4t7Lt1FqWw=
-X-Google-Smtp-Source: ABdhPJxdsVTmlYPCwZAL6LfmspKOKFwpTh0gGX+jG1taFFNxyj+O7zNYFpdayz32BJXR51B834LIFQ==
-X-Received: by 2002:a17:907:7d86:b0:6f3:a92d:7fa4 with SMTP id oz6-20020a1709077d8600b006f3a92d7fa4mr10978810ejc.498.1651082569820;
-        Wed, 27 Apr 2022 11:02:49 -0700 (PDT)
-Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
-        by smtp.googlemail.com with ESMTPSA id lf5-20020a170907174500b006f3806fc9cdsm5638036ejc.39.2022.04.27.11.02.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:02:49 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add doc entry for PRIME X470-PRO
-Date:   Wed, 27 Apr 2022 20:02:36 +0200
-Message-Id: <20220427180237.1475954-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 27 Apr 2022 14:53:55 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84413D827A
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 11:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1651084817; x=1682620817;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=Y+29G8uYUBfj4Ivz6hVazGQtot5C+ZCnmy5ECXTC/qk=;
+  b=lyT+CFVqQHmHZjshJCGXlFPYBXM9e7h2Rv56p9qXk+M/6MLWH/qDhUzt
+   9GPkfU0dWFc27TCVA/YbKP/EyyFZB5acuLXK6lkNLDFRyBNMyNvwo+Tpw
+   sdFU8rWPohm3ww6zcJFhZLUcpmEw9GC0vXEJRPeN3wAJgJ1W8pz6EYKG8
+   I=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="118491656"
+X-IronPort-AV: E=Sophos;i="5.90,293,1643670000"; 
+   d="scan'208";a="118491656"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 20:40:14 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Wed, 27 Apr 2022 20:40:13 +0200 (CEST)
+Received: from MUCSE820.infineon.com (172.23.29.46) by MUCSE819.infineon.com
+ (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
+ 2022 20:40:13 +0200
+Received: from MUCSE820.infineon.com ([172.23.29.46]) by MUCSE820.infineon.com
+ ([172.23.29.46]) with mapi id 15.02.0986.022; Wed, 27 Apr 2022 20:40:13 +0200
+From:   <Greg.Schwendimann@infineon.com>
+To:     <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
+CC:     <Greg.Schwendimann@infineon.com>
+Subject: [PATCH v4 2/2] dt-bindings: trivial-devices: Add xdp152
+Thread-Topic: [PATCH v4 2/2] dt-bindings: trivial-devices: Add xdp152
+Thread-Index: AdhaZYbAD7zkzN9iSWSk88UI7yJf+w==
+Date:   Wed, 27 Apr 2022 18:40:13 +0000
+Message-ID: <871b255e183e4468a9affce6defb0292@infineon.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.23.8.247]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add PRIME X470-PRO to the list of supported boards.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Add Infineon Digital Multi-phase xdp152 family controllers.
+
+Signed-off-by: Greg Schwendimann <Greg.Schwendimann@infineon.com>
 ---
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- 1 file changed, 1 insertion(+)
+Separated the device tree bindings documentation
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 36ca531d32dd..1700fe619597 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -4,6 +4,7 @@ Kernel driver asus_ec_sensors
- =================================
- 
- Supported boards:
-+ * PRIME X470-PRO,
-  * PRIME X570-PRO,
-  * Pro WS X570-ACE,
-  * ProArt X570-CREATOR WIFI
--- 
-2.35.1
+ Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Docum=
+entation/devicetree/bindings/trivial-devices.yaml
+index 550a2e5c9e05..fc2164c4d108 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -143,6 +143,10 @@ properties:
+           - infineon,xdpe12254
+             # Infineon Multi-phase Digital VR Controller xdpe12284
+           - infineon,xdpe12284
++            # Infineon Multi-phase Digital VR Controller xdpe152c4
++          - infineon,xdpe152c4
++            # Infineon Multi-phase Digital VR Controller xdpe15284
++          - infineon,xdpe15284
+             # Injoinic IP5108 2.0A Power Bank IC with I2C
+           - injoinic,ip5108
+             # Injoinic IP5109 2.1A Power Bank IC with I2C
+--=20
+2.25.1
 
