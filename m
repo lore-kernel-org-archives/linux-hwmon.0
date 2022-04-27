@@ -2,82 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69FA9C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Apr 2022 21:51:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38AFFC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 01:02:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbiDZVyI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 17:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S1356557AbiD0BFt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 21:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbiDZVyI (ORCPT
+        with ESMTP id S1349706AbiD0BFt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:54:08 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4F86B090;
-        Tue, 26 Apr 2022 14:50:59 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id n134so322237iod.5;
-        Tue, 26 Apr 2022 14:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fFhxvEKDcp+p+Jf+hKy1k48Hi9OxmwmKYCtCg5xjO34=;
-        b=gydrhvbAvrmqKWEOGZZ8swyxUk51TMy97z+ch9gcoqXwDrzYplo4Epen7SIvfGzz59
-         nDHV5uh8XlqtG+R8ZtPYwJy4GUovL3xazdKha7BX37OyJLvpZRBcaPWWarlNpZEfbiAP
-         OzxIRxf8drhYUHAdTDzWmpGLUYrUeNAgjF50CDCj2+v9midPumJaqO3SqVAVj21b4tUp
-         WDWZfhp2jhAdSftAxleMYBI/CEnBqHs0piSQqtpnZlrExVD74nYRzFDlFmF0C3GshutT
-         DFF6UtxN44M86ztGCclbnNR0uGY6G2Vixz/pTRonGE8f1maV+XTsQxA1O/L3RiUfZ98I
-         9tTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fFhxvEKDcp+p+Jf+hKy1k48Hi9OxmwmKYCtCg5xjO34=;
-        b=SC+BmXZ16blBsrUxJDIvIYqHwmovCjKKSZ6lLYL+jtwzPxlst39+3CeygfNmQBlYLE
-         Y0EBUBM/mbmTsuGbBRiCkUSPkW+iMc99YGONb2MQRz/40+tZvyeC95WRd9ZfLrDwJk2l
-         YzVUphxtqxGXRHnGbQPo74ok0KG7xzsNwgywr6EfuN/QuyI8qA6F0DJSl+fXADtULpAm
-         K4ylB5oBpYl5/PpIpMnG28EmhfUiBx2C1X+e5OWq6356j+z6AJ3LPPQKAOuOLNXNRMKn
-         TXii2f73sb5EP0QdjVTJDZgitLSTWiWMIxqCQGiDR1DIh+gSBNoru0e6wb7Mzk0JdvMn
-         Fo6w==
-X-Gm-Message-State: AOAM5336Fixc6T1a/E5KLsAUrLb3mbCg2Bt23hFOyAMcAA4AywG+wR//
-        HDFJwp6XLJDxaYMJ6ro4zVCg8I5w4/8H4pNFGpc=
-X-Google-Smtp-Source: ABdhPJyXTZIbcS6XsIYv3OXNhY52CgrTfa8TJPzROLHZ8RTWQROxLwBpdNsY0++kqjAOKD7RQlqZLNduWZXtwuILONY=
-X-Received: by 2002:a05:6e02:1888:b0:2c8:713f:dcff with SMTP id
- o8-20020a056e02188800b002c8713fdcffmr8897423ilu.289.1651009858991; Tue, 26
- Apr 2022 14:50:58 -0700 (PDT)
+        Tue, 26 Apr 2022 21:05:49 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259EB46654;
+        Tue, 26 Apr 2022 18:02:38 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id E9170531;
+        Tue, 26 Apr 2022 18:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1651021358;
+        bh=KjNq5t3ZggJMTEA4a0oXHVCceTPLdKxXT7fm3v60f1w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gafOJureGwkGdS7oF7iP8Cp1CJP2vVttE+zYcskh3RqjGczu0rfVyAJoxigGTN8Wj
+         aY1Hk/8JX2e8n29X59ujcrOWe7B7t4aZEkLa2vKUfQ1nRucOnxnJZGsFhjpwSKEl7R
+         nUs2CGHnWyZdpRZigyon5Gz2eR70mQAbaRrz3NWI=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v4 1/7] dt-bindings: hwmon: Add nuvoton,nct6775
+Date:   Tue, 26 Apr 2022 18:01:48 -0700
+Message-Id: <20220427010154.29749-2-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220427010154.29749-1-zev@bewilderbeest.net>
+References: <20220427010154.29749-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
-References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
- <20220426092340.495704-4-eugene.shalygin@gmail.com> <20220426152418.GA3344789@roeck-us.net>
-In-Reply-To: <20220426152418.GA3344789@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Tue, 26 Apr 2022 23:50:47 +0200
-Message-ID: <CAB95QARiSNaMU=Z3ZpvgRYfr+XyYiFtfXXV-e4aZU60FUfDcEg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] hwmon: (asus-ec-sensors) add support for board families
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> > +enum board_family {
-> > +     family_amd_500_series,
->
-> The default enum value is 0. This means that specifying nothing
-> for .family matches in the structure below always matches the first
-> enum, which doesn't make much sense and might cause trouble in the
-> future. I would suggest to explicitly select a value != 0 as first
-> entry, such as
->
-> enum board_family {
->         family_amd_500_series = 1,
->         ...
-> };
->
-> to avoid that problem.
+These Super I/O chips have an i2c interface that some systems expose
+to a BMC; the BMC's device tree can now describe that via this
+binding.
 
-Thank you, added family_unknown member ( = 0) instead, to simplify
-adding new members (I want this enum to be alphabetically sorted).
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
+ .../bindings/hwmon/nuvoton,nct6775.yaml       | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
 
-Eugene
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+new file mode 100644
+index 000000000000..418477374fdb
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/nuvoton,nct6775.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NCT6775 and compatible Super I/O chips
++
++maintainers:
++  - Zev Weiss <zev@bewilderbeest.net>
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,nct6106
++      - nuvoton,nct6116
++      - nuvoton,nct6775
++      - nuvoton,nct6776
++      - nuvoton,nct6779
++      - nuvoton,nct6791
++      - nuvoton,nct6792
++      - nuvoton,nct6793
++      - nuvoton,nct6795
++      - nuvoton,nct6796
++      - nuvoton,nct6797
++      - nuvoton,nct6798
++
++  reg:
++    maxItems: 1
++
++  nuvoton,tsi-channel-mask:
++    description:
++      Bitmask indicating which TSI temperature sensor channels are
++      active.  LSB is TSI0, bit 1 is TSI1, etc.
++    maximum: 0xff
++    default: 0
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        superio@4d {
++            compatible = "nuvoton,nct6779";
++            reg = <0x4d>;
++            nuvoton,tsi-channel-mask = <0x03>;
++        };
++    };
+-- 
+2.36.0
+
