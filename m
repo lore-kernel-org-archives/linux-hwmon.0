@@ -2,102 +2,92 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAE39C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 03:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59B5DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 03:51:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241363AbiD0DiT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 23:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S1357531AbiD0Dyr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Apr 2022 23:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357512AbiD0DiS (ORCPT
+        with ESMTP id S1357483AbiD0Dyq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:38:18 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325E62AD8;
-        Tue, 26 Apr 2022 20:35:09 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id v12-20020a9d7d0c000000b006054b51c3d4so282835otn.8;
-        Tue, 26 Apr 2022 20:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P8TnfAKaWXwsEVz2IHHsmMbXLBYv3keX8jHJkboUhfo=;
-        b=qZNiSAaIYWoTPpTYxcwpNXefkEf7mNKLxvCwi1xVh2iChN4ze5MCJtEHxRLgTNJb5F
-         mm752QHptJJ6JK6+Jn3x3G3OOZqX4a2SXWXYGuUMQCdNlaJMpS41uBLUwpyI0c2d/0qg
-         DNULQ4TzSTEuhVWAddkQegR46qfmDsiIn/y82/C2p2Oya8jUuOLRaAeSY409BlprWHsK
-         rtWsWiqT3INPvItI2M4+Fl65W2TVO9uW3lztKgS2hMQp64dbd0VVDB/VXP78iEliHcyX
-         8ZnjcT3G3+jbmmXtU0ss4wCV4GI9oQnStxLd2vlGuJoHluGsCSareOeM+ImifjMvzy8z
-         KwZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P8TnfAKaWXwsEVz2IHHsmMbXLBYv3keX8jHJkboUhfo=;
-        b=ilbCrxFHe/BYzJNXlxPtIMEzjtA6j3SutHoFBnHBERWU438TRXrFiLHDgK/Sv3/Dt8
-         +vpfBNp7s3gbORrdgIl3bxjd7GxHHeC0B8cPmoI+pMXDDYSPjCSq7jsfJPTh9WgygJuz
-         Wmt6LwS2zPA3+t+Znd1zmFaMwRcizIDVeWqyqGnwcb/8OdbJyc9lSiIlkcE34dR9u+vj
-         XBstQpflpu8+OJdxKxYLPqFTvPCHf1fQzXynT+R3Z3kWzDNWij398q00QIyhGQMimf4x
-         qqp2MrbjxIgBZGsQRersW6QAXoaSHb0KwPHHjSWVtvnGo61OEbkxJDuW+zvxQjNBkuSZ
-         ZpTA==
-X-Gm-Message-State: AOAM533SN2PQEhw+4ijChRYfApKvZbVVK7mEdL8qyptn/dttUisLMURF
-        C7c4xVg2R8CnaWnq747k9gQ=
-X-Google-Smtp-Source: ABdhPJwTIlhigZpiyaVwQ7PYyFEqA5Qa0yAl0iyqicWL9mPHM0WeUeRYURlYcEptTJq5y+wJ5ZkcDQ==
-X-Received: by 2002:a05:6830:2007:b0:605:8c49:a3f3 with SMTP id e7-20020a056830200700b006058c49a3f3mr8625422otp.366.1651030508495;
-        Tue, 26 Apr 2022 20:35:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm5598621oig.52.2022.04.26.20.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 20:35:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2563e20b-7800-086e-73d4-e4cbc7a53c5b@roeck-us.net>
-Date:   Tue, 26 Apr 2022 20:35:05 -0700
+        Tue, 26 Apr 2022 23:54:46 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335483C49F;
+        Tue, 26 Apr 2022 20:51:34 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 4AD74137;
+        Tue, 26 Apr 2022 20:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1651031494;
+        bh=fiHBh/Fh5zEGAH6yN71KI47zEv55JXWMRQICkzrdU2Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JJlNVM5S2ycrHAuvWGNKCO+mC+eSG/qH5Awg4cMw8+4eeMZT3ECtCKsI/ovXbPBGo
+         Vg5TRiNzlq+t0KMUAL7GQWvn4TyqFRkcZ9RBOtNPAlWJU27ol0HfUtw2YQBlyVORYz
+         fGUY4P62bEwjyACYYnycdeBHjLGrlIxugI3lD7ig=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Zev Weiss <zev@bewilderbeest.net>, stable@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk
+Date:   Tue, 26 Apr 2022 20:51:09 -0700
+Message-Id: <20220427035109.3819-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/3] hwmon: (dell-smm) Improve init code
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, pali@kernel.org
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220426213154.724708-1-W_Armin@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220426213154.724708-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/26/22 14:31, Armin Wolf wrote:
-> This patch series improves the init code of the dell_smm_hwmon
-> driver. The first patch speeds up device initialisation by avoiding
-> unnecessary SMM calls during init, which might be slow on some
-> machines. The second patch is a small cleanup patch, while the
-> third patch allows for easier diagnosis of audio problems caused
-> by really slow SMM calls.
-> 
-> Tested on a Dell Inspiron 3505.
+CLEAR_FAULTS commands can apparently sometimes trigger catastrophic
+power output glitches on the ahe-50dc, so block them from being sent
+at all.
 
-Series applied to hwmon-next.
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Cc: stable@vger.kernel.org
+---
+ drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Thanks,
-Guenter
-
-> 
-> Changes in v2:
-> - replace pr_warn() with pr_warn_once()
-> 
-> Armin Wolf (3):
->    hwmon: (dell-smm) Avoid unnecessary SMM calls during init
->    hwmon: (dell-smm) Cleanup init code
->    hwmon: (dell-smm) Warn if SMM call took a very long time to execute
-> 
->   drivers/hwmon/dell-smm-hwmon.c | 50 +++++++++++++++-------------------
->   1 file changed, 22 insertions(+), 28 deletions(-)
-> 
-> --
-> 2.30.2
-> 
+diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+index 40dffd9c4cbf..f546f0c12497 100644
+--- a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
++++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+@@ -14,6 +14,21 @@
+ 
+ #define AHE50DC_PMBUS_READ_TEMP4 0xd0
+ 
++static int ahe50dc_fan_write_byte(struct i2c_client *client, int page, u8 value)
++{
++	/*
++	 * The CLEAR_FAULTS operation seems to sometimes (unpredictably, perhaps
++	 * 5% of the time or so) trigger a problematic phenomenon in which the
++	 * fan speeds surge momentarily and at least some (perhaps all?) of the
++	 * system's power outputs experience a glitch.
++	 *
++	 * However, according to Delta it should be OK to simply not send any
++	 * CLEAR_FAULTS commands (the device doesn't seem to be capable of
++	 * reporting any faults anyway), so just blackhole them unconditionally.
++	 */
++	return value == PMBUS_CLEAR_FAULTS ? -EOPNOTSUPP : -ENODATA;
++}
++
+ static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
+ {
+ 	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
+@@ -68,6 +83,7 @@ static struct pmbus_driver_info ahe50dc_fan_info = {
+ 		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
+ 		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
+ 	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
++	.write_byte = ahe50dc_fan_write_byte,
+ 	.read_word_data = ahe50dc_fan_read_word_data,
+ };
+ 
+-- 
+2.36.0
 
