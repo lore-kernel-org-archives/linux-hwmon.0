@@ -2,56 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FFB6C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 07:29:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 907B1C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 08:34:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358818AbiD0Hcb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 03:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S241218AbiD0Iht (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 04:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358816AbiD0Hca (ORCPT
+        with ESMTP id S229945AbiD0Iht (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:32:30 -0400
-Received: from mail.fixingbiz.pl (mail.fixingbiz.pl [217.61.22.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB9178936
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 00:29:20 -0700 (PDT)
-Received: by mail.fixingbiz.pl (Postfix, from userid 1001)
-        id 9EF3CA519B; Wed, 27 Apr 2022 08:28:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fixingbiz.pl; s=mail;
-        t=1651044558; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
-        h=Date:From:To:Subject:From;
-        b=2h8bAXvtu6CGoOw08lPl3+toeWVVUBOhts/lGXuGzbuhRfNcKPRzaH1AsN5PVE2xI
-         KcJBztzx6bhG/vi/wDFlWTQlazb25QI6YgmOj0OSqMmGEJUW2VsuwSqRrxCDw99+79
-         Ek66qiwD7Z1hFPMihU3c0/x6EWKnD9NwY6Ppopu4xVEtnHxRbAKfCN2x5xAqQO43ci
-         31cV8L3U3iadmMFauxxGcAAqAiA0irmRySu7SNtddEUAbnenHSeLJFXDaGFWBaIOkc
-         X5jDoDoG2S0hMnDa4QElmzsx2Ng/rLg+TIaV06l2wJ+vka6ysBzbBpEijbFh+l1JfY
-         0xxAZ9kyRHPYw==
-Received: by mail.fixingbiz.pl for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 07:28:09 GMT
-Message-ID: <20220427073002-0.1.22.aj1q.0.45e9w9fqg7@fixingbiz.pl>
-Date:   Wed, 27 Apr 2022 07:28:09 GMT
-From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
-        <przemyslaw.wroblewski@fixingbiz.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.fixingbiz.pl
+        Wed, 27 Apr 2022 04:37:49 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132E6644E3;
+        Wed, 27 Apr 2022 01:34:38 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id ke5so605016qvb.5;
+        Wed, 27 Apr 2022 01:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mts8+CXZqKYubrygYyfb7XAxGiHuoGj/BQDg0sBg5ck=;
+        b=OEX1iqG5lS2jmxcFVAzAelcABrA0I4peMSmRW2z2OBvH+oCukYbw5WA7jWS1NODyxU
+         dKZGQiFy8LQSexpzD0Hgn42J1xF5DEW1ragAF+9UIGLgc7Xj9yAQVau55vfsLM/b/eX7
+         VeYrDKtzCH2mJrSWAeOcJaV4g5J8fG+3D5i30=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mts8+CXZqKYubrygYyfb7XAxGiHuoGj/BQDg0sBg5ck=;
+        b=QmaGJpJlAs0zqT37lpgKp8SLk87Ax9FDAGrxrtKCbWTnkAHEqPbp0Wx4yBcBc4BvuO
+         31j+XgCmKd3uN/jmICd1tNu8jSRZKE7dJW09urhl9/82H2/OKRgJPXe9kh+fCjsKr7fS
+         urDFo/VhKLDHQMPU0+8BUy7AOr0WO9w9kxk8yEbSc6PJs1AEV2r2MqsYGt2aIQXVx39Y
+         yxI/P26hprmL2kB162ZXEFQjLT6fD/ibSa7gCQHYuwf6XMfFj2g58Hk6hn8ag2bCtemU
+         BU8EZMxrYdUa/WIrS/4GXQfTA3cV+WU10NpKBZNiUUwcznvIP+JSb5LBQTuWV3mjd18n
+         iLAQ==
+X-Gm-Message-State: AOAM53028d28dDeNIad1YkEPZoV2O5gpYQMDz802rkjcZleC6ahYWGcE
+        M/gzb6JDADk7JiYAbyd/JwSzClP/PY7vPGULhxU=
+X-Google-Smtp-Source: ABdhPJyidkYZn3pks7qlaDMc3LwEDY1SYiqlg58dC9/l3UNI6GnmoBiDPuyd2UEkY/eAHDPGkC/Q10O6MS/Vv02VDYk=
+X-Received: by 2002:a05:6214:624:b0:441:84f3:24e3 with SMTP id
+ a4-20020a056214062400b0044184f324e3mr19162202qvx.27.1651048477102; Wed, 27
+ Apr 2022 01:34:37 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220426154956.27205-1-eajames@linux.ibm.com> <20220426154956.27205-3-eajames@linux.ibm.com>
+In-Reply-To: <20220426154956.27205-3-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 27 Apr 2022 08:34:25 +0000
+Message-ID: <CACPK8XdzznuHFZ_sj3zt4CKcsi02Af4COqa0-JP7=w6Mw_EjVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon (occ): Retry for checksum failure
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        David Laight <David.Laight@aculab.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Tue, 26 Apr 2022 at 15:50, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Due to the OCC communication design with a shared SRAM area,
+> checkum errors are expected due to corrupted buffer from OCC
+> communications with other system components. Therefore, retry
+> the command twice in the event of a checksum failure.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/occ/p9_sbe.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 49b13cc01073..e6ccef2af659 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -14,6 +14,8 @@
+>
+>  #include "common.h"
+>
+> +#define OCC_CHECKSUM_RETRIES   3
+> +
+>  struct p9_sbe_occ {
+>         struct occ occ;
+>         bool sbe_error;
+> @@ -83,17 +85,22 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>         struct occ_response *resp = &occ->resp;
+>         struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+>         size_t resp_len = sizeof(*resp);
+> +       int i;
+>         int rc;
+>
+> -       rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> -       if (rc < 0) {
+> +       for (i = 0; i < OCC_CHECKSUM_RETRIES; ++i) {
+> +               rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> +               if (rc >= 0)
+> +                       break;
+>                 if (resp_len) {
+>                         if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
+>                                 sysfs_notify(&occ->bus_dev->kobj, NULL,
+>                                              bin_attr_ffdc.attr.name);
+> -               }
+>
+> -               return rc;
+> +                       return rc;
+> +               }
+> +               if (rc != -EBADE)
+> +                       return rc;
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Future you might appreciate a comment above the EBADE check clarifying
+why that error is being special cased.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
-
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam,
-Przemys=C5=82aw Wr=C3=B3blewski
+>         }
+>
+>         switch (resp->return_status) {
+> --
+> 2.27.0
+>
