@@ -2,256 +2,468 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AEFCC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 14:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F323C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 14:35:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbiD0Ode (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 10:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S238092AbiD0OiK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 10:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237938AbiD0Oda (ORCPT
+        with ESMTP id S238215AbiD0OiJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:33:30 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712CFB37;
-        Wed, 27 Apr 2022 07:30:15 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id b19so2745468wrh.11;
-        Wed, 27 Apr 2022 07:30:15 -0700 (PDT)
+        Wed, 27 Apr 2022 10:38:09 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0970F17E33;
+        Wed, 27 Apr 2022 07:34:58 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-deb9295679so2123436fac.6;
+        Wed, 27 Apr 2022 07:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2jnubTloA50NBhVPujuweIXddbKN6CZkPHUrLGAPqaI=;
-        b=H9922wGqJwq84wbVnaSaJLWvH2yqxHkhjMKA2X0CcLAh3rNN5Ur65te4IA/jA4OiyD
-         IeWO+vw+E3FvYnxc2FhEUU87/+lyOXdAthjA5NrnM15lG5HtXsg79gLRADK8IgFPX8Hn
-         lkb0uCs25ZgUnGPA2nQBaGVp6K1ewdjzq6LEdGln5ziC37EjiuX2EmthXHpm82K8hKPG
-         4uNEbM4IBZr5TLbXZLq4gdj0if2HIJmfeMhmRpindBrWCe0e6thofEjFxs2gMD8iu++N
-         uEAH6i0rXG+CqrMR2SL6S/KeSgd+rc7CfYv9aaehsgmlVZUFdbMlscoNjI4SN3dbboqK
-         Yg9w==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=v14ZswqCX65CorLHWCr9gjA38OE2bzD4VfrwG8iUt7w=;
+        b=TllCSziW3qK+onrSfSrAVtXHl55vmQh9F39WVjgMu67omBeIKu920K/i24mQTiWuOc
+         D0slxXrNp27lRmjMJn/VTV9F4Tg2lznlzo5Zireun2ctHFBazKsprCEBCDTOw3g9asLK
+         HTwozDlZZC0NOs9BWt5iTPbfmZ8gNrSRnbAurZVW921lEQG9OyVtMjjH2gioyE0JJCXs
+         HNQE+wOSQt45ww9xKRo6CgX4FmwHNPEX2rCRfMa4DxTTTeStZhrg1j0huX5UzjIjnVZj
+         x4mEZYUOr3AiZTCj//ARZFdQ+oZfjYDspaMpViZwk8Y/X+enipppEsRP7GAsroRqq2Qc
+         1WOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2jnubTloA50NBhVPujuweIXddbKN6CZkPHUrLGAPqaI=;
-        b=rz2haoZeSM1/wBjVbs70kPAmzIFLMjdhwBJeyHyEidzQgFuOj64sVKfhKZ4Ta/mtNg
-         jZV87F+nSUh7J+jMZ27AkfLoD8X2MuKye4fAScv8lqTEoJ5J3dIpAEtdAftpHzA0bHcI
-         1JOKnmNcyQPMUuiEPnOOY/IgZeRpUQGiPKjeGHbV25tyLBKLUrjoA5zEMJ3YahwpIwNF
-         f6GoamhJGw7PRf8BowkFx6OMgH6DB0cu5G13lF0zlxOhtTOhgkV9DYr9p1Rc1TkuHa1B
-         URQ0sSJHgVwKjdm2u/Zi4p8xeRgg29r5/OwlYZ2EZK3TzFgaD21Jv37a033zmdkyq+o2
-         Ud2Q==
-X-Gm-Message-State: AOAM533ZwzOsO1CfnKePzA7oFrS0NLnXr33/pp/sqwIKojgBzlw9pchI
-        b4srFfGugKNE6aO8KgNaF5s=
-X-Google-Smtp-Source: ABdhPJxaZpIgD2ck+2+lMm4OwQWforWeo04POHG4mbM7+oFaOPfxxB0EVqfxEogNVWQhS0cwBLZZwg==
-X-Received: by 2002:a5d:434f:0:b0:205:f514:8955 with SMTP id u15-20020a5d434f000000b00205f5148955mr23252494wrr.73.1651069814001;
-        Wed, 27 Apr 2022 07:30:14 -0700 (PDT)
-Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
-        by smtp.googlemail.com with ESMTPSA id i14-20020a1c540e000000b00393dc91e9c9sm1721625wmb.17.2022.04.27.07.30.13
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=v14ZswqCX65CorLHWCr9gjA38OE2bzD4VfrwG8iUt7w=;
+        b=Z8VJVk6NiGiKDzSFdhIDIF/MkI3IUx4CF+A73BQCUMecEat8TbALSDcYsi3zd+Hm6r
+         CQcHR5u4TvosjRin1cDOR3EFMZgq6yCc11qXY/UEHL8YaehHzjz5dqXOut9a29WrGyDp
+         hSZgpgApkQPPUQuY3vIm0j/RfEKjOUR23T67fhvBTNHWPpmIIufGsGNQVs9gV5hRzCpK
+         netGIo83imJTul95l6kvm4BE8slqH0eQtPF+Hr6QkWgfbrA2fGjOBfpSeuoeWK4+mP7v
+         GhW4yxYXR8NUw3om+gXdHAUuPf4y1YfgSdGXEbzLr3JOiMefz2I+dVcCY+bf8HNyQ9yn
+         hXQw==
+X-Gm-Message-State: AOAM532LLKfeNiuUha+kGq2hMLEtzA0L3iT+oLSuuiEmQuykVhQkKF7w
+        +c0KHH1tgcLwR8RuEtCfIng=
+X-Google-Smtp-Source: ABdhPJzYb+aUB7t6QRO027m22JZ/bCOYcJ9p5RxE5K19zrXGUvwt9DxB/o3OpK6IjIfr7uv9TFiRyA==
+X-Received: by 2002:a05:6870:8311:b0:e9:3da:4579 with SMTP id p17-20020a056870831100b000e903da4579mr10289253oae.258.1651070097246;
+        Wed, 27 Apr 2022 07:34:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u3-20020a056870d58300b000e686d1389csm713072oao.54.2022.04.27.07.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:30:13 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/4] hwmon: (asus-ec-sensors) add support for board families
-Date:   Wed, 27 Apr 2022 16:30:00 +0200
-Message-Id: <20220427143001.1443605-4-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
-References: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
+        Wed, 27 Apr 2022 07:34:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 27 Apr 2022 07:34:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, joel@jms.id.au
+Subject: Re: [PATCH v2] hwmon (occ): Delay hwmon registration until user
+ request
+Message-ID: <20220427143454.GA3193568@roeck-us.net>
+References: <20220427140443.11428-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427140443.11428-1-eajames@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DSDT code for AMD 400-series chipset shows that sensor addresses differ
-for this generation from those for the AMD 500-series boards.
+On Wed, Apr 27, 2022 at 09:04:43AM -0500, Eddie James wrote:
+> Instead of registering the hwmon device at probe time, use the
+> existing "occ_active" sysfs file to control when the driver polls
+> the OCC for sensor data and registers with hwmon. The reason for
+> this change is that the SBE, which is the device by which the
+> driver communicates with the OCC, cannot handle communications
+> during certain system state transitions, resulting in
+> unrecoverable system errors.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 40 ++++++++++++++++++++++++++++-----
- 1 file changed, 35 insertions(+), 5 deletions(-)
+Applied to hwmon-next.
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 581df4053060..109c3920d77c 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -135,8 +135,13 @@ enum ec_sensors {
- #define SENSOR_TEMP_WATER_IN BIT(ec_sensor_temp_water_in)
- #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
- 
-+enum board_family {
-+	family_unknown,
-+	family_amd_500_series,
-+};
-+
- /* All the known sensors for ASUS EC controllers */
--static const struct ec_sensor_info known_ec_sensors[] = {
-+static const struct ec_sensor_info sensors_family_amd_500[] = {
- 	[ec_sensor_temp_chipset] =
- 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
- 	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-@@ -177,6 +182,7 @@ struct ec_board_info {
- 	 * the hardware is not guarded.
- 	 */
- 	const char *mutex_path;
-+	enum board_family family;
- };
- 
- static const struct ec_board_info board_info[] = {
-@@ -185,6 +191,7 @@ static const struct ec_board_info board_info[] = {
- 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
- 			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ProArt X570-CREATOR WIFI"},
-@@ -198,6 +205,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
- 			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG CROSSHAIR VIII DARK HERO"},
-@@ -207,6 +215,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
- 			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG CROSSHAIR VIII FORMULA"},
-@@ -215,6 +224,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
- 			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {
-@@ -228,6 +238,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
- 			SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
-@@ -236,6 +247,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
- 			SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG STRIX B550-E GAMING"},
-@@ -243,6 +255,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
- 			SENSOR_FAN_CPU_OPT,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG STRIX B550-I GAMING"},
-@@ -251,6 +264,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_FAN_VRM_HS | SENSOR_CURR_CPU |
- 			SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG STRIX X570-E GAMING"},
-@@ -259,12 +273,14 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
- 			SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG STRIX X570-F GAMING"},
- 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{
- 		.board_names = {"ROG STRIX X570-I GAMING"},
-@@ -272,6 +288,7 @@ static const struct ec_board_info board_info[] = {
- 			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
- 			SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_amd_500_series,
- 	},
- 	{}
- };
-@@ -323,6 +340,7 @@ static bool unlock_global_acpi_lock(struct lock_data *data)
- 
- struct ec_sensors_data {
- 	const struct ec_board_info *board_info;
-+	const struct ec_sensor_info *sensors_info;
- 	struct ec_sensor *sensors;
- 	/* EC registers to read from */
- 	u16 *registers;
-@@ -365,7 +383,7 @@ static bool is_sensor_data_signed(const struct ec_sensor_info *si)
- static const struct ec_sensor_info *
- get_sensor_info(const struct ec_sensors_data *state, int index)
- {
--	return &known_ec_sensors[state->sensors[index].info_index];
-+	return state->sensors_info + state->sensors[index].info_index;
- }
- 
- static int find_ec_sensor_index(const struct ec_sensors_data *ec,
-@@ -403,9 +421,9 @@ static void __init setup_sensor_data(struct ec_sensors_data *ec)
- 		s->info_index = i;
- 		s->cached_value = 0;
- 		ec->nr_registers +=
--			known_ec_sensors[s->info_index].addr.components.size;
-+			ec->sensors_info[s->info_index].addr.components.size;
- 		bank_found = false;
--		bank = known_ec_sensors[s->info_index].addr.components.bank;
-+		bank = ec->sensors_info[s->info_index].addr.components.bank;
- 		for (j = 0; j < ec->nr_banks; j++) {
- 			if (ec->banks[j] == bank) {
- 				bank_found = true;
-@@ -556,7 +574,7 @@ static void update_sensor_values(struct ec_sensors_data *ec, u8 *data)
- 
- 	sensor_end = ec->sensors + ec->nr_sensors;
- 	for (s = ec->sensors; s != sensor_end; s++) {
--		si = &known_ec_sensors[s->info_index];
-+		si = ec->sensors_info + s->info_index;
- 		s->cached_value = get_sensor_value(si, data);
- 		data += si->addr.components.size;
- 	}
-@@ -733,6 +751,17 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 
- 	dev_set_drvdata(dev, ec_data);
- 	ec_data->board_info = pboard_info;
-+
-+	switch (ec_data->board_info->family) {
-+	case family_amd_500_series:
-+		ec_data->sensors_info = sensors_family_amd_500;
-+		break;
-+	default:
-+		dev_err(dev, "Unknown board family: %d",
-+			ec_data->board_info->family);
-+		return -EINVAL;
-+	}
-+
- 	ec_data->nr_sensors = hweight_long(ec_data->board_info->sensors);
- 	ec_data->sensors = devm_kcalloc(dev, ec_data->nr_sensors,
- 					sizeof(struct ec_sensor), GFP_KERNEL);
-@@ -742,6 +771,7 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 		dev_err(dev, "Failed to setup state/EC locking: %d", status);
- 		return status;
- 	}
-+
- 	setup_sensor_data(ec_data);
- 	ec_data->registers = devm_kcalloc(dev, ec_data->nr_registers,
- 					  sizeof(u16), GFP_KERNEL);
--- 
-2.35.1
+Guenter
 
+> ---
+> Changes since v1:
+>  - Update commit message to for clarity.
+> 
+>  drivers/hwmon/occ/common.c | 100 +++++++++++++++++++--------
+>  drivers/hwmon/occ/common.h |   5 +-
+>  drivers/hwmon/occ/p8_i2c.c |   2 +-
+>  drivers/hwmon/occ/p9_sbe.c |   2 +-
+>  drivers/hwmon/occ/sysfs.c  | 137 ++++++++++++++++++++++---------------
+>  5 files changed, 156 insertions(+), 90 deletions(-)
+> 
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index f00cd59f1d19..d78f4bebc718 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -1149,44 +1149,75 @@ static void occ_parse_poll_response(struct occ *occ)
+>  		sizeof(*header), size + sizeof(*header));
+>  }
+>  
+> -int occ_setup(struct occ *occ, const char *name)
+> +int occ_active(struct occ *occ, bool active)
+>  {
+> -	int rc;
+> -
+> -	mutex_init(&occ->lock);
+> -	occ->groups[0] = &occ->group;
+> +	int rc = mutex_lock_interruptible(&occ->lock);
+>  
+> -	/* no need to lock */
+> -	rc = occ_poll(occ);
+> -	if (rc == -ESHUTDOWN) {
+> -		dev_info(occ->bus_dev, "host is not ready\n");
+> -		return rc;
+> -	} else if (rc < 0) {
+> -		dev_err(occ->bus_dev,
+> -			"failed to get OCC poll response=%02x: %d\n",
+> -			occ->resp.return_status, rc);
+> +	if (rc)
+>  		return rc;
+> -	}
+>  
+> -	occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
+> -	occ_parse_poll_response(occ);
+> +	if (active) {
+> +		if (occ->active) {
+> +			rc = -EALREADY;
+> +			goto unlock;
+> +		}
+>  
+> -	rc = occ_setup_sensor_attrs(occ);
+> -	if (rc) {
+> -		dev_err(occ->bus_dev, "failed to setup sensor attrs: %d\n",
+> -			rc);
+> -		return rc;
+> -	}
+> +		occ->error_count = 0;
+> +		occ->last_safe = 0;
+>  
+> -	occ->hwmon = devm_hwmon_device_register_with_groups(occ->bus_dev, name,
+> -							    occ, occ->groups);
+> -	if (IS_ERR(occ->hwmon)) {
+> -		rc = PTR_ERR(occ->hwmon);
+> -		dev_err(occ->bus_dev, "failed to register hwmon device: %d\n",
+> -			rc);
+> -		return rc;
+> +		rc = occ_poll(occ);
+> +		if (rc < 0) {
+> +			dev_err(occ->bus_dev,
+> +				"failed to get OCC poll response=%02x: %d\n",
+> +				occ->resp.return_status, rc);
+> +			goto unlock;
+> +		}
+> +
+> +		occ->active = true;
+> +		occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
+> +		occ_parse_poll_response(occ);
+> +
+> +		rc = occ_setup_sensor_attrs(occ);
+> +		if (rc) {
+> +			dev_err(occ->bus_dev,
+> +				"failed to setup sensor attrs: %d\n", rc);
+> +			goto unlock;
+> +		}
+> +
+> +		occ->hwmon = hwmon_device_register_with_groups(occ->bus_dev,
+> +							       "occ", occ,
+> +							       occ->groups);
+> +		if (IS_ERR(occ->hwmon)) {
+> +			rc = PTR_ERR(occ->hwmon);
+> +			occ->hwmon = NULL;
+> +			dev_err(occ->bus_dev,
+> +				"failed to register hwmon device: %d\n", rc);
+> +			goto unlock;
+> +		}
+> +	} else {
+> +		if (!occ->active) {
+> +			rc = -EALREADY;
+> +			goto unlock;
+> +		}
+> +
+> +		if (occ->hwmon)
+> +			hwmon_device_unregister(occ->hwmon);
+> +		occ->active = false;
+> +		occ->hwmon = NULL;
+>  	}
+>  
+> +unlock:
+> +	mutex_unlock(&occ->lock);
+> +	return rc;
+> +}
+> +
+> +int occ_setup(struct occ *occ)
+> +{
+> +	int rc;
+> +
+> +	mutex_init(&occ->lock);
+> +	occ->groups[0] = &occ->group;
+> +
+>  	rc = occ_setup_sysfs(occ);
+>  	if (rc)
+>  		dev_err(occ->bus_dev, "failed to setup sysfs: %d\n", rc);
+> @@ -1195,6 +1226,15 @@ int occ_setup(struct occ *occ, const char *name)
+>  }
+>  EXPORT_SYMBOL_GPL(occ_setup);
+>  
+> +void occ_shutdown(struct occ *occ)
+> +{
+> +	occ_shutdown_sysfs(occ);
+> +
+> +	if (occ->hwmon)
+> +		hwmon_device_unregister(occ->hwmon);
+> +}
+> +EXPORT_SYMBOL_GPL(occ_shutdown);
+> +
+>  MODULE_AUTHOR("Eddie James <eajames@linux.ibm.com>");
+>  MODULE_DESCRIPTION("Common OCC hwmon code");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+> index 2dd4a4d240c0..64d5ec7e169b 100644
+> --- a/drivers/hwmon/occ/common.h
+> +++ b/drivers/hwmon/occ/common.h
+> @@ -106,6 +106,7 @@ struct occ {
+>  	struct attribute_group group;
+>  	const struct attribute_group *groups[2];
+>  
+> +	bool active;
+>  	int error;                      /* final transfer error after retry */
+>  	int last_error;			/* latest transfer error */
+>  	unsigned int error_count;       /* number of xfr errors observed */
+> @@ -123,9 +124,11 @@ struct occ {
+>  	u8 prev_mode;
+>  };
+>  
+> -int occ_setup(struct occ *occ, const char *name);
+> +int occ_active(struct occ *occ, bool active);
+> +int occ_setup(struct occ *occ);
+>  int occ_setup_sysfs(struct occ *occ);
+>  void occ_shutdown(struct occ *occ);
+> +void occ_shutdown_sysfs(struct occ *occ);
+>  void occ_sysfs_poll_done(struct occ *occ);
+>  int occ_update_response(struct occ *occ);
+>  
+> diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+> index 9e61e1fb5142..da39ea28df31 100644
+> --- a/drivers/hwmon/occ/p8_i2c.c
+> +++ b/drivers/hwmon/occ/p8_i2c.c
+> @@ -223,7 +223,7 @@ static int p8_i2c_occ_probe(struct i2c_client *client)
+>  	occ->poll_cmd_data = 0x10;		/* P8 OCC poll data */
+>  	occ->send_cmd = p8_i2c_occ_send_cmd;
+>  
+> -	return occ_setup(occ, "p8_occ");
+> +	return occ_setup(occ);
+>  }
+>  
+>  static int p8_i2c_occ_remove(struct i2c_client *client)
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 49b13cc01073..42fc7b97bb34 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -145,7 +145,7 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+>  	occ->poll_cmd_data = 0x20;		/* P9 OCC poll data */
+>  	occ->send_cmd = p9_sbe_occ_send_cmd;
+>  
+> -	rc = occ_setup(occ, "p9_occ");
+> +	rc = occ_setup(occ);
+>  	if (rc == -ESHUTDOWN)
+>  		rc = -ENODEV;	/* Host is shutdown, don't spew errors */
+>  
+> diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
+> index b2f788a77746..2317301fc1e9 100644
+> --- a/drivers/hwmon/occ/sysfs.c
+> +++ b/drivers/hwmon/occ/sysfs.c
+> @@ -6,13 +6,13 @@
+>  #include <linux/export.h>
+>  #include <linux/hwmon-sysfs.h>
+>  #include <linux/kernel.h>
+> +#include <linux/kstrtox.h>
+>  #include <linux/sysfs.h>
+>  
+>  #include "common.h"
+>  
+>  /* OCC status register */
+>  #define OCC_STAT_MASTER			BIT(7)
+> -#define OCC_STAT_ACTIVE			BIT(0)
+>  
+>  /* OCC extended status register */
+>  #define OCC_EXT_STAT_DVFS_OT		BIT(7)
+> @@ -22,6 +22,25 @@
+>  #define OCC_EXT_STAT_DVFS_VDD		BIT(3)
+>  #define OCC_EXT_STAT_GPU_THROTTLE	GENMASK(2, 0)
+>  
+> +static ssize_t occ_active_store(struct device *dev,
+> +				struct device_attribute *attr,
+> +				const char *buf, size_t count)
+> +{
+> +	int rc;
+> +	bool active;
+> +	struct occ *occ = dev_get_drvdata(dev);
+> +
+> +	rc = kstrtobool(buf, &active);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = occ_active(occ, active);
+> +	if (rc)
+> +		return rc;
+> +
+> +	return count;
+> +}
+> +
+>  static ssize_t occ_sysfs_show(struct device *dev,
+>  			      struct device_attribute *attr, char *buf)
+>  {
+> @@ -31,54 +50,64 @@ static ssize_t occ_sysfs_show(struct device *dev,
+>  	struct occ_poll_response_header *header;
+>  	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+>  
+> -	rc = occ_update_response(occ);
+> -	if (rc)
+> -		return rc;
+> +	if (occ->active) {
+> +		rc = occ_update_response(occ);
+> +		if (rc)
+> +			return rc;
+>  
+> -	header = (struct occ_poll_response_header *)occ->resp.data;
+> -
+> -	switch (sattr->index) {
+> -	case 0:
+> -		val = !!(header->status & OCC_STAT_MASTER);
+> -		break;
+> -	case 1:
+> -		val = !!(header->status & OCC_STAT_ACTIVE);
+> -		break;
+> -	case 2:
+> -		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_OT);
+> -		break;
+> -	case 3:
+> -		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_POWER);
+> -		break;
+> -	case 4:
+> -		val = !!(header->ext_status & OCC_EXT_STAT_MEM_THROTTLE);
+> -		break;
+> -	case 5:
+> -		val = !!(header->ext_status & OCC_EXT_STAT_QUICK_DROP);
+> -		break;
+> -	case 6:
+> -		val = header->occ_state;
+> -		break;
+> -	case 7:
+> -		if (header->status & OCC_STAT_MASTER)
+> -			val = hweight8(header->occs_present);
+> -		else
+> +		header = (struct occ_poll_response_header *)occ->resp.data;
+> +
+> +		switch (sattr->index) {
+> +		case 0:
+> +			val = !!(header->status & OCC_STAT_MASTER);
+> +			break;
+> +		case 1:
+>  			val = 1;
+> -		break;
+> -	case 8:
+> -		val = header->ips_status;
+> -		break;
+> -	case 9:
+> -		val = header->mode;
+> -		break;
+> -	case 10:
+> -		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_VDD);
+> -		break;
+> -	case 11:
+> -		val = header->ext_status & OCC_EXT_STAT_GPU_THROTTLE;
+> -		break;
+> -	default:
+> -		return -EINVAL;
+> +			break;
+> +		case 2:
+> +			val = !!(header->ext_status & OCC_EXT_STAT_DVFS_OT);
+> +			break;
+> +		case 3:
+> +			val = !!(header->ext_status & OCC_EXT_STAT_DVFS_POWER);
+> +			break;
+> +		case 4:
+> +			val = !!(header->ext_status &
+> +				 OCC_EXT_STAT_MEM_THROTTLE);
+> +			break;
+> +		case 5:
+> +			val = !!(header->ext_status & OCC_EXT_STAT_QUICK_DROP);
+> +			break;
+> +		case 6:
+> +			val = header->occ_state;
+> +			break;
+> +		case 7:
+> +			if (header->status & OCC_STAT_MASTER)
+> +				val = hweight8(header->occs_present);
+> +			else
+> +				val = 1;
+> +			break;
+> +		case 8:
+> +			val = header->ips_status;
+> +			break;
+> +		case 9:
+> +			val = header->mode;
+> +			break;
+> +		case 10:
+> +			val = !!(header->ext_status & OCC_EXT_STAT_DVFS_VDD);
+> +			break;
+> +		case 11:
+> +			val = header->ext_status & OCC_EXT_STAT_GPU_THROTTLE;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	} else {
+> +		if (sattr->index == 1)
+> +			val = 0;
+> +		else if (sattr->index <= 11)
+> +			val = -ENODATA;
+> +		else
+> +			return -EINVAL;
+>  	}
+>  
+>  	return sysfs_emit(buf, "%d\n", val);
+> @@ -95,7 +124,8 @@ static ssize_t occ_error_show(struct device *dev,
+>  }
+>  
+>  static SENSOR_DEVICE_ATTR(occ_master, 0444, occ_sysfs_show, NULL, 0);
+> -static SENSOR_DEVICE_ATTR(occ_active, 0444, occ_sysfs_show, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(occ_active, 0644, occ_sysfs_show, occ_active_store,
+> +			  1);
+>  static SENSOR_DEVICE_ATTR(occ_dvfs_overtemp, 0444, occ_sysfs_show, NULL, 2);
+>  static SENSOR_DEVICE_ATTR(occ_dvfs_power, 0444, occ_sysfs_show, NULL, 3);
+>  static SENSOR_DEVICE_ATTR(occ_mem_throttle, 0444, occ_sysfs_show, NULL, 4);
+> @@ -139,7 +169,7 @@ void occ_sysfs_poll_done(struct occ *occ)
+>  	 * On the first poll response, we haven't yet created the sysfs
+>  	 * attributes, so don't make any notify calls.
+>  	 */
+> -	if (!occ->hwmon)
+> +	if (!occ->active)
+>  		goto done;
+>  
+>  	if ((header->status & OCC_STAT_MASTER) !=
+> @@ -148,12 +178,6 @@ void occ_sysfs_poll_done(struct occ *occ)
+>  		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
+>  	}
+>  
+> -	if ((header->status & OCC_STAT_ACTIVE) !=
+> -	    (occ->prev_stat & OCC_STAT_ACTIVE)) {
+> -		name = sensor_dev_attr_occ_active.dev_attr.attr.name;
+> -		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
+> -	}
+> -
+>  	if ((header->ext_status & OCC_EXT_STAT_DVFS_OT) !=
+>  	    (occ->prev_ext_stat & OCC_EXT_STAT_DVFS_OT)) {
+>  		name = sensor_dev_attr_occ_dvfs_overtemp.dev_attr.attr.name;
+> @@ -227,8 +251,7 @@ int occ_setup_sysfs(struct occ *occ)
+>  	return sysfs_create_group(&occ->bus_dev->kobj, &occ_sysfs);
+>  }
+>  
+> -void occ_shutdown(struct occ *occ)
+> +void occ_shutdown_sysfs(struct occ *occ)
+>  {
+>  	sysfs_remove_group(&occ->bus_dev->kobj, &occ_sysfs);
+>  }
+> -EXPORT_SYMBOL_GPL(occ_shutdown);
