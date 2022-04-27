@@ -2,93 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 844FFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 18:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC263C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 18:03:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244561AbiD0SDo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 14:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S244627AbiD0SGP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 14:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244559AbiD0SDl (ORCPT
+        with ESMTP id S244601AbiD0SGG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:03:41 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEEB3679E4;
-        Wed, 27 Apr 2022 11:00:29 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-e656032735so2827545fac.0;
-        Wed, 27 Apr 2022 11:00:29 -0700 (PDT)
+        Wed, 27 Apr 2022 14:06:06 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCF43A2363;
+        Wed, 27 Apr 2022 11:02:51 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id bv19so4963272ejb.6;
+        Wed, 27 Apr 2022 11:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=w+iH1xab4wTL+42uXpchPfWze+My6KgDF5dcA/kKoW4=;
-        b=P6i52awwu76MSa1SUzsMtEu+jOFheEsZppUqyqwJzhZ9qag1W1vTu9vNbRy6XgLVq/
-         ptVzDHxMd+jtZSe7vbNm1d1RTao+gTw+/k8zzp2BncEXQViGdQtAYpM7LxfKcA4nweFm
-         hNpKPhkb8QdizzC8+RKY5sc05ctB4M/kJhQgfTTOBmiAsNeIr5bVHGrBDFLZvv+axbqs
-         j0ovpekQFG2tN0p88JnuO3wBnn35KqHODrxXR/IYk0GO1gjUJNzsVa2BFHv7bqoLH5L5
-         g6hHd03c+7ev89Nv+eHn9iXMbUR9AnfO4jhz/NEWKBaVx3Xtxw4C9StQBdboA/GRO3hs
-         hilg==
+        bh=kFl7F+bDiuTXuRK9B+innYEa8c7xLmi165v70TPlxvo=;
+        b=g1+X8ARdAKY3b3yP0X0ZmFyJOuQQ7wyti6Nr/e2OkKjrdDZsnjWpHAeY14DgJtO/BR
+         8AvpI+Sh3u9AEkRpdtrs9/r7ip/p9RiMaG0xn6kuFe7QvYwzgKvC07tLhPGDrpSuKVAV
+         xnmYGCz/Z/Yr473MbHTiRIUBwe1ic0debupuOGp07h6MDlnVt5ZaAz92mYpL1HmXAna3
+         d9vanuE4VpBLovhxee1wq0bLQ8P3ePyu6gQGce8P01S+ZsO8N8xPkCGGz9Sp0B14Kk3r
+         NID2F8DDG7N4TXOeXVUAzGr1jT7AeCdD7WaTctycMSETLmV3+HN7W48FcDZlKCBijWmz
+         3Jmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=w+iH1xab4wTL+42uXpchPfWze+My6KgDF5dcA/kKoW4=;
-        b=X0A57EiwII7XZYc7x0H6v6xYTVFSzZr/UouLOChQYKC+t8l45lVPzIxAXX1POgZKF6
-         zGGSjt40xYISMdmdzqfiE7C1tAml+Z5bsHp3WPc38lGmYyjnzkK+KG1gOai5LT2s/R+/
-         UZ6UMupBpwfKpgp4b2cTN9lGbwkc3ehPHEBEfuRLBXp7GAcuEfEI/Weq69a0l2K5XPa7
-         HZee2Yt6ZRxUtpLJdNi7HNstAStvccRX7Em6pdxSa+FvEoKOR9/Dv7AJRINvNyItb8j0
-         fF7Qz9sBNnffG3VSo96iEXIrOdUn/KB2pH6ok1oGFniDUbp6s3h5bpf4Bl5oLFOukY/s
-         WcuA==
-X-Gm-Message-State: AOAM530jKCn47BIGwEL9kmw1BxlA2+k1D7kpJVwJ6u+FXQb5dlu8qPI0
-        kSRjFJ+z2c/d02Zop0LaSjo=
-X-Google-Smtp-Source: ABdhPJyDYgUbJ7/72ydkTciRC3dkHMdZCOH4XDfOWT1PBxw0rCWpea5noaU3gUqViFEE3fUh3k6q7w==
-X-Received: by 2002:a05:6870:8901:b0:e1:de1d:e462 with SMTP id i1-20020a056870890100b000e1de1de462mr12514816oao.294.1651082429059;
-        Wed, 27 Apr 2022 11:00:29 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e7-20020a056808148700b003252f1da45bsm3762147oiw.38.2022.04.27.11.00.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 11:00:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a70a2c6d-4e09-0433-75be-172e261c957f@roeck-us.net>
-Date:   Wed, 27 Apr 2022 11:00:26 -0700
+        bh=kFl7F+bDiuTXuRK9B+innYEa8c7xLmi165v70TPlxvo=;
+        b=59q+9JvhWziyqRlexsJUJAwHNmiPiKT4M5CbOuZ4rbgUQEbtFtISnIBcCO7gz5eNwe
+         lpAi64OHLknfANviC33DgApUwD4XQHpcIZCS6H5wTjjzf/zdzFcKOrag33+M6EJZIYFL
+         tie7+NObMeU+S0NdfgRE854Xvf3C/hXlU9yUXD3QKar7oPdg7OkXE5Mr7Flq7UCALBQL
+         zosLZk4d8+mWzUxQkKLX4YqVlPKfxYz/3/MwHJx5pA/VsGMmu1VYekOALYk34haAxzVx
+         jHcEoNTut+tFmmRfdIg1mr7f/jKnB02Kw7kUtl2hjMdancHXlflFvQsPLze1UALWwLQH
+         FJTw==
+X-Gm-Message-State: AOAM530iywWLuxWPrVcTqZCk4dKH0AiOqA+4S3qYTusLH95JXL2n/q9k
+        HfN5bQhRO9LbY4t7Lt1FqWw=
+X-Google-Smtp-Source: ABdhPJxdsVTmlYPCwZAL6LfmspKOKFwpTh0gGX+jG1taFFNxyj+O7zNYFpdayz32BJXR51B834LIFQ==
+X-Received: by 2002:a17:907:7d86:b0:6f3:a92d:7fa4 with SMTP id oz6-20020a1709077d8600b006f3a92d7fa4mr10978810ejc.498.1651082569820;
+        Wed, 27 Apr 2022 11:02:49 -0700 (PDT)
+Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
+        by smtp.googlemail.com with ESMTPSA id lf5-20020a170907174500b006f3806fc9cdsm5638036ejc.39.2022.04.27.11.02.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 11:02:49 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) add doc entry for PRIME X470-PRO
+Date:   Wed, 27 Apr 2022 20:02:36 +0200
+Message-Id: <20220427180237.1475954-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/4] hwmon: (asus-ec-sensors) add PRIME X470-PRO board
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
- <20220427143001.1443605-5-eugene.shalygin@gmail.com>
- <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/27/22 09:57, Eugene Shalygin wrote:
-> Günter,
-> 
-> I forgot to add PRIME X470-PRO to the list of supported boards in
-> Documentation/hwmon/asus_ec_sensors.rst. Could you, please, add that?
-> It should be the first entry. Commit
-> 8f8db4b5d10cc4a2a801514e677dd5205651b771. Or should I resend this
-> patch?
-> 
+Add PRIME X470-PRO to the list of supported boards.
 
-In this context: Your e-mails always include the following header:
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ Documentation/hwmon/asus_ec_sensors.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-To:     unlisted-recipients:; (no To-header on input)
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 36ca531d32dd..1700fe619597 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -4,6 +4,7 @@ Kernel driver asus_ec_sensors
+ =================================
+ 
+ Supported boards:
++ * PRIME X470-PRO,
+  * PRIME X570-PRO,
+  * Pro WS X570-ACE,
+  * ProArt X570-CREATOR WIFI
+-- 
+2.35.1
 
-If I forget to remove it in a reply, this causes a rejection of
-the reply by the mailing list and may trigger anti-spam filters.
-Please fix your e-mail system/configuration to avoid that.
-
-Thanks,
-Guenter
