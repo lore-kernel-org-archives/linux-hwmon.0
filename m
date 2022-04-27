@@ -2,92 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59B5DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 03:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA8CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 06:04:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357531AbiD0Dyr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Apr 2022 23:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
+        id S1357973AbiD0GHq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 02:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357483AbiD0Dyq (ORCPT
+        with ESMTP id S241556AbiD0GHo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:54:46 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335483C49F;
-        Tue, 26 Apr 2022 20:51:34 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 4AD74137;
-        Tue, 26 Apr 2022 20:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1651031494;
-        bh=fiHBh/Fh5zEGAH6yN71KI47zEv55JXWMRQICkzrdU2Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JJlNVM5S2ycrHAuvWGNKCO+mC+eSG/qH5Awg4cMw8+4eeMZT3ECtCKsI/ovXbPBGo
-         Vg5TRiNzlq+t0KMUAL7GQWvn4TyqFRkcZ9RBOtNPAlWJU27ol0HfUtw2YQBlyVORYz
-         fGUY4P62bEwjyACYYnycdeBHjLGrlIxugI3lD7ig=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Zev Weiss <zev@bewilderbeest.net>, stable@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk
-Date:   Tue, 26 Apr 2022 20:51:09 -0700
-Message-Id: <20220427035109.3819-1-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.36.0
+        Wed, 27 Apr 2022 02:07:44 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7459F58384
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Apr 2022 23:04:33 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id l7so1310541ejn.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Apr 2022 23:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=27SXQOPVAdANNQCQJ4C3V7A5t8g68xh0r46tyDVmRxQ=;
+        b=Y+ClKEHd1wAog5IoYY3pf0agZCvamFvLJJRWh+63FD3Va4L/gV5bKPrXggA6CVBuc0
+         CUQpuZ36BefavI40ZgfscqtRl/Os2+FhhjeQVYA7NnKj5xae7sGtbcehw/F6Tw8T4lL6
+         6CBOoOB+cjLA8LFuMLUB+jhkY9WedHACo5PHIo71xio/tehD9/sqYoT+SlSgHkPGoNo0
+         gAhj4jX0hbwalsFgWOtuyo3tMCG9qAqZ/BDKH2bWApnpvHMqShdaET0Pa91yiPbIGEQQ
+         J95OijOLMO/iV+v1ne9spHnUForaXEpWnY/U6XoLH3DV1IYtXkJClbCiYZS9NHVt+sbK
+         STww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=27SXQOPVAdANNQCQJ4C3V7A5t8g68xh0r46tyDVmRxQ=;
+        b=Mn5VcvSVu89CFsu6VDLV1RN4q5NFI2QpzVSje279k2ziuGxdhJYX++YQG95VgkY/JB
+         yqMAwy9v404KFZSQJEzdyQebzqsVovu2yEejOOjjQppSO6R2aLU9t6td04G0XEQOsCa8
+         /n/kSjTQxXKN+AwNd0mon73SoqRDPccZSXhs0YLg+MgebocnV4BbeTVD2OnUnnUXrPOn
+         qFqFWTPXi1BkX1ifxrEPzL6i1v36SFTjoJvmw9xjQohFMh5Al4RVdSfjA2LqRm8s67tg
+         ovTSF/tdypQtSSxWOjGN9wBwTZNqsvpyezWj8LvFNTLF3qBy99sgJ618m7eb2hRLR1R0
+         yncA==
+X-Gm-Message-State: AOAM532Xi9nF5pZCs3UvQ+yOoHzDjgC64rsIihzJ033HzjZcNdE0F13d
+        h8H2ilwVB75T7j6n0ilySJINRaFOSE2Arg==
+X-Google-Smtp-Source: ABdhPJwWDR9IhrmVQfKp1JkwSdivR59TpiJ9LC3ukLWrvDIX/tdF3PY94O0nR9+ygi9bDJsFjar41A==
+X-Received: by 2002:a17:907:8a0b:b0:6f3:bbab:4ad1 with SMTP id sc11-20020a1709078a0b00b006f3bbab4ad1mr4453194ejc.135.1651039471996;
+        Tue, 26 Apr 2022 23:04:31 -0700 (PDT)
+Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id l3-20020aa7cac3000000b00422c961c8c9sm7564792edt.78.2022.04.26.23.04.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 23:04:31 -0700 (PDT)
+Message-ID: <178b9310-a854-dfa6-a4f3-f971b608abe3@linaro.org>
+Date:   Wed, 27 Apr 2022 08:04:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 1/7] dt-bindings: hwmon: Add nuvoton,nct6775
+Content-Language: en-US
+To:     Zev Weiss <zev@bewilderbeest.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220427010154.29749-1-zev@bewilderbeest.net>
+ <20220427010154.29749-2-zev@bewilderbeest.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220427010154.29749-2-zev@bewilderbeest.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-CLEAR_FAULTS commands can apparently sometimes trigger catastrophic
-power output glitches on the ahe-50dc, so block them from being sent
-at all.
+On 27/04/2022 03:01, Zev Weiss wrote:
+> These Super I/O chips have an i2c interface that some systems expose
+> to a BMC; the BMC's device tree can now describe that via this
+> binding.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Cc: stable@vger.kernel.org
----
- drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+I already reviewed it so I guess you did not include the tag because of
+significant changes?
 
-diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-index 40dffd9c4cbf..f546f0c12497 100644
---- a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-+++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-@@ -14,6 +14,21 @@
- 
- #define AHE50DC_PMBUS_READ_TEMP4 0xd0
- 
-+static int ahe50dc_fan_write_byte(struct i2c_client *client, int page, u8 value)
-+{
-+	/*
-+	 * The CLEAR_FAULTS operation seems to sometimes (unpredictably, perhaps
-+	 * 5% of the time or so) trigger a problematic phenomenon in which the
-+	 * fan speeds surge momentarily and at least some (perhaps all?) of the
-+	 * system's power outputs experience a glitch.
-+	 *
-+	 * However, according to Delta it should be OK to simply not send any
-+	 * CLEAR_FAULTS commands (the device doesn't seem to be capable of
-+	 * reporting any faults anyway), so just blackhole them unconditionally.
-+	 */
-+	return value == PMBUS_CLEAR_FAULTS ? -EOPNOTSUPP : -ENODATA;
-+}
-+
- static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
- {
- 	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
-@@ -68,6 +83,7 @@ static struct pmbus_driver_info ahe50dc_fan_info = {
- 		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
- 		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
- 	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
-+	.write_byte = ahe50dc_fan_write_byte,
- 	.read_word_data = ahe50dc_fan_read_word_data,
- };
- 
--- 
-2.36.0
+> ---
+>  .../bindings/hwmon/nuvoton,nct6775.yaml       | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> new file mode 100644
+> index 000000000000..418477374fdb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct6775.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NCT6775 and compatible Super I/O chips
+> +
+> +maintainers:
+> +  - Zev Weiss <zev@bewilderbeest.net>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,nct6106
+> +      - nuvoton,nct6116
+> +      - nuvoton,nct6775
+> +      - nuvoton,nct6776
+> +      - nuvoton,nct6779
+> +      - nuvoton,nct6791
+> +      - nuvoton,nct6792
+> +      - nuvoton,nct6793
+> +      - nuvoton,nct6795
+> +      - nuvoton,nct6796
+> +      - nuvoton,nct6797
+> +      - nuvoton,nct6798
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nuvoton,tsi-channel-mask:
+> +    description:
+> +      Bitmask indicating which TSI temperature sensor channels are
+> +      active.  LSB is TSI0, bit 1 is TSI1, etc.
 
+Need a type/ref.
+
+> +    maximum: 0xff
+> +    default: 0
+
+Since by default it is disabled, doesn't it make a required property?
+IOW, if you add a node without this mask, will the device operate
+properly and usefully?
+
+
+
+
+Best regards,
+Krzysztof
