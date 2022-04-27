@@ -2,191 +2,118 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80122C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 13:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 331C8C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 13:34:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235800AbiD0Nal (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 09:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S236132AbiD0Nha (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 09:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235860AbiD0NaZ (ORCPT
+        with ESMTP id S236117AbiD0Nh3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:30:25 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3723E5E6
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 06:26:59 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id e4so1956080oif.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 06:26:59 -0700 (PDT)
+        Wed, 27 Apr 2022 09:37:29 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7004A91A;
+        Wed, 27 Apr 2022 06:34:18 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id g21so3160228iom.13;
+        Wed, 27 Apr 2022 06:34:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jwwFB2Z5DuG4GbpUpDpVeuiOtrvg9l04cmnoQZ/MWAk=;
-        b=IvtaRVvmDd1mkNlPo3hEZrMyBf1T2THWWDJ4fTi9Nco0rIF6Ll3+iTHxKHBNc6TnpE
-         xq01U5SAxbc3Sfm5/OqDyUSHWjYlbBdXEQYnnfcxsPRh2Fa97JlMfZQx1vHgkLq5cczv
-         2ZSbLazS2s99c+HVE5nbgLQ1kHWGPLxFFWl3iYyxQJfkLO3GwPWQ1r9mlGLtMO12jJP2
-         zLoGpODpiuNLSu0bMN32mTzzfkW3T6aIVtra2jfHcw8TkVo0aSgJbcT5ozRsNURzc5/J
-         ddqpNpucx33YaPj1sM6Q1scPXGjOYNI2dhDYO3+G+3B5PCQWzh6AbZNtjwt5ZgHgcFgy
-         YPQg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o6Ly0bciV3x7q/Qi0DbDAz5BGaMk+1K+6gSqnWUs+nM=;
+        b=UGSsabq5vlxUKYI+U+QDRVfuj2O91U8yBv+KhvMf7i0YnbTi/pBz65A7phMG9Rzt5q
+         pVg3cq4e1JtmzK4hQy9Un17qLSo7a0PzdAXMsr5cme80BcHJNElZ6NXHu4ouuby8+7rc
+         9yaWUaX/VCU21Vq8Pfx7ehuUYo7SJlczsD3j9095/a4lgUz9GjMe7yMKjtjRLAXZin0x
+         FrjmuninQze3m9yt5xWKoryfnqcreGppkuGawMIpEhOm08xkVjCtfqGIT1yMb3j8pSBY
+         TD/CxqzhvYveaAnhkz9nsXMrwSS1FP8vYhhXp5lvw2VwxX4kLGfEMjHSsteKKEKx7auJ
+         0LJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=jwwFB2Z5DuG4GbpUpDpVeuiOtrvg9l04cmnoQZ/MWAk=;
-        b=b3BvbJW2RDZuVzg2qIIMAku1kvDifF1aHT8uk2UGqygaq8wlVs4uau9cz4sOqSr3TJ
-         q/C/D2S8UDVB7mH9SlsUjIVjYCVUY9dD2nCq7B3koc7xhnzYPsG61I/l8c1rPEF/sV1h
-         QjdlUj034cLIBxHSz37oStJFLAEDQC9KOYREqYoLQ+pYKFTfsishxaQVBrQ0GMA049rc
-         fusttXBL5BNXpTTTBzAnSGssNK1V2fC/qeb54XQhZfn8JGnry7BOYMuo4uIpwBDJhsfx
-         KntVZKngEd3ILCg54ISxyfL7ntFFYP8BwxWW+HjRUi6ZOl6DPcBZCOAVEjLekkxlfL8R
-         PgsA==
-X-Gm-Message-State: AOAM533MZkT+/zkLvoteDoDHql8UUJK2WZSABh29XpZwYWAmCZeZ/dtd
-        l+XQjVxQIm+dDkpMjUHKxSIQEzUAAdQ=
-X-Google-Smtp-Source: ABdhPJwesBp6AythX8m78GhDSuOy09TE/MiyL206MrztPClw7oiept0YNZ1k180kG5gY6TzLpyA2WQ==
-X-Received: by 2002:a05:6808:1244:b0:2f9:e450:4bc4 with SMTP id o4-20020a056808124400b002f9e4504bc4mr13258152oiv.290.1651066018508;
-        Wed, 27 Apr 2022 06:26:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u20-20020a4a9e94000000b003291f6ac4b2sm6750531ook.28.2022.04.27.06.26.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 06:26:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 27 Apr 2022 06:26:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?M=E5rten?= Lindahl <marten.lindahl@axis.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH v3 1/3] hwmon: (pmbus) Use driver specific ops if they
- exist
-Message-ID: <20220427132656.GA3187691@roeck-us.net>
-References: <20220427130213.1557793-1-marten.lindahl@axis.com>
- <20220427130213.1557793-2-marten.lindahl@axis.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o6Ly0bciV3x7q/Qi0DbDAz5BGaMk+1K+6gSqnWUs+nM=;
+        b=4K1mlmdGoCfnpnYiLxYhj5dHRT14jAl0mLA2cfT1T2zk4S7wYi9Jt3LPC9KL0kfyg6
+         91T77TP+9dxo7Pvbh6q417P5BGrXxC+RUJR2rNyJM1ZPrUQfQIDU+aQXYUIjiyYJz5lP
+         4vKqXkf8sXPTIoJqkMs7Y4P2aV+xENMMqcHc9TK7e71LjFZ6KhaGMLG/e9WFlxVtqeQ8
+         2PZRb0QxQtSZiPVRJRaoZopG90q80lL5IFVkzBZCwEsnmoWuaCjZ7LQupOZhCf0PFBuK
+         qrC52vqU6Zb0KnUwKCfCZ4J4YBS/+gRzfNtNLg6sU7F0CjBtWqrjoxvxl61HVwcgmk51
+         FDag==
+X-Gm-Message-State: AOAM532TKO4eVYpRwgkzBxaS9iFdcUBvsnGft7cYHYDRWWd9zDcpgYC8
+        zfPme2gL3RaRLrGXj13znYtvxFnDyZvifRiohWOBaN6vHNusRQ==
+X-Google-Smtp-Source: ABdhPJxIGVa8eEXmjke4daAbIFilhAl3AEb0/xryuw3KeeW10hGOD5zAYhmJMljsaendSHQ0+8msZga3opYx8X20H6c=
+X-Received: by 2002:a05:6638:3d05:b0:32b:35a:2d77 with SMTP id
+ cl5-20020a0566383d0500b0032b035a2d77mr3748136jab.241.1651066457603; Wed, 27
+ Apr 2022 06:34:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220427130213.1557793-2-marten.lindahl@axis.com>
+References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
+ <20220426092340.495704-2-eugene.shalygin@gmail.com> <20220426151656.GA3119637@roeck-us.net>
+ <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com>
+ <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net> <CAB95QARDq1Tr64dvPVemXHRNyu=T5P7LJ_DUn7sdHauUB6daaw@mail.gmail.com>
+ <8a8579df-1fd6-32bb-3e27-297efefe28c4@roeck-us.net>
+In-Reply-To: <8a8579df-1fd6-32bb-3e27-297efefe28c4@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Wed, 27 Apr 2022 15:34:06 +0200
+Message-ID: <CAB95QAQPRVO=Cd27QthFZ_fDTr=Nvzqzrh0QnFs5475yTx+qJw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
+ struct for board data
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 03:02:11PM +0200, Mårten Lindahl wrote:
-> Pmbus drivers using the default pmbus_regulator_ops for the enable/
-> disable/is_enabled functions will use the standard pmbus core functions
-> pmbus_read/write_byte_data. This could potentially influence some
-> specific regulator chips that for example need a time delay before each
-> data access.
-> 
-> Lets add support for drivers to use chip specific read/write operations
-> when using the standard pmbus_regulator_ops.
+Maybe I'd better leave a comment why module_platform_driver_probe() is
+used as opposed to module_platform_driver()? I think that one would be
+more straightforward...
 
-The subject is misleading. It should be something like "introduce and
-use write_byte_data callback". Also, existing code calling
-pmbus_write_byte_data() should call _pmbus_write_byte_data() instead.
-This applies to pmbus_update_fan() and pmbus_get_boolean().
+Regards,
+Eugene
 
-Thanks,
-Guenter
-
-> 
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-> ---
->  drivers/hwmon/pmbus/pmbus.h      |  2 ++
->  drivers/hwmon/pmbus/pmbus_core.c | 58 +++++++++++++++++++++-----------
->  2 files changed, 40 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index e74b6ef070f3..c031a9700ace 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -438,6 +438,8 @@ struct pmbus_driver_info {
->  	int (*read_byte_data)(struct i2c_client *client, int page, int reg);
->  	int (*read_word_data)(struct i2c_client *client, int page, int phase,
->  			      int reg);
-> +	int (*write_byte_data)(struct i2c_client *client, int page, int reg,
-> +			      u8 byte);
->  	int (*write_word_data)(struct i2c_client *client, int page, int reg,
->  			       u16 word);
->  	int (*write_byte)(struct i2c_client *client, int page, u8 value);
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index b2618b1d529e..1b0728c3c7d8 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -384,25 +384,6 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
->  }
->  EXPORT_SYMBOL_NS_GPL(pmbus_write_byte_data, PMBUS);
->  
-> -int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
-> -			   u8 mask, u8 value)
-> -{
-> -	unsigned int tmp;
-> -	int rv;
-> -
-> -	rv = pmbus_read_byte_data(client, page, reg);
-> -	if (rv < 0)
-> -		return rv;
-> -
-> -	tmp = (rv & ~mask) | (value & mask);
-> -
-> -	if (tmp != rv)
-> -		rv = pmbus_write_byte_data(client, page, reg, tmp);
-> -
-> -	return rv;
-> -}
-> -EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
-> -
->  /*
->   * _pmbus_read_byte_data() is similar to pmbus_read_byte_data(), but checks if
->   * a device specific mapping function exists and calls it if necessary.
-> @@ -421,6 +402,43 @@ static int _pmbus_read_byte_data(struct i2c_client *client, int page, int reg)
->  	return pmbus_read_byte_data(client, page, reg);
->  }
->  
-> +/*
-> + * _pmbus_write_byte_data() is similar to pmbus_write_byte_data(), but checks if
-> + * a device specific mapping function exists and calls it if necessary.
-> + */
-> +static int _pmbus_write_byte_data(struct i2c_client *client, int page, int reg, u8 value)
-> +{
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	const struct pmbus_driver_info *info = data->info;
-> +	int status;
-> +
-> +	if (info->write_byte_data) {
-> +		status = info->write_byte_data(client, page, reg, value);
-> +		if (status != -ENODATA)
-> +			return status;
-> +	}
-> +	return pmbus_write_byte_data(client, page, reg, value);
-> +}
-> +
-> +int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
-> +			   u8 mask, u8 value)
-> +{
-> +	unsigned int tmp;
-> +	int rv;
-> +
-> +	rv = _pmbus_read_byte_data(client, page, reg);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	tmp = (rv & ~mask) | (value & mask);
-> +
-> +	if (tmp != rv)
-> +		rv = _pmbus_write_byte_data(client, page, reg, tmp);
-> +
-> +	return rv;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
-> +
->  static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
->  					      int reg)
->  {
-> @@ -2396,7 +2414,7 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
->  	int ret;
->  
->  	mutex_lock(&data->update_lock);
-> -	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
->  	mutex_unlock(&data->update_lock);
->  
->  	if (ret < 0)
+On Wed, 27 Apr 2022 at 15:20, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 4/27/22 05:16, Eugene Shalygin wrote:
+> >> Sorry, I don't follow that part. One can add "__init" or "__initdata",
+> >> as in
+> >>
+> >> static struct platform_driver asus_ec_sensors_platform_driver __initdata = {
+> >>
+> >> to mark a function or data structure as __init. I don't think adding
+> >> "_probe" to the struct platform_driver variable name does that.
+> >>
+> >
+> > __initdata leads to modpost warning:
+> > WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.exit.text+0x3):
+> > Section mismatch in reference from the function cleanup_module() to
+> > the variable .init.data:asus_ec_sensors_platform_driver
+> > The function __exit cleanup_module() references
+> > a variable __initdata asus_ec_sensors_platform_driver.
+> > This is often seen when error handling in the exit function
+> > uses functionality in the init path.
+> > The fix is often to remove the __initdata annotation of
+> > asus_ec_sensors_platform_driver so it may be used outside an init section.
+> >
+> > Compiling without attributes resulted in another message:
+> > WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.data+0x0): Section
+> > mismatch in reference from the variable
+> > asus_ec_sensors_platform_driver to the function
+> > .init.text:asus_ec_probe()
+> > The variable asus_ec_sensors_platform_driver references
+> > the function __init asus_ec_probe()
+> > If the reference is valid then annotate the
+> > variable with __init* or __refdata (see linux/init.h) or name the variable:
+> > *_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
+> >
+> > Here is why I added the "_probe" suffix.
+> >
+> > Eugene
+>
+> Ah yes, I forgot about the exit function. It needs a pointer to
+> the structure, which would be gone if marked __initdata.
+> Please add a comment to the structure name explaining why
+> it is named _probe.
+>
+> Thanks,
+> Guenter
