@@ -2,65 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06B0AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 14:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E306C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 16:37:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238330AbiD0OoI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 10:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
+        id S243168AbiD0Qkf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 12:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbiD0OoI (ORCPT
+        with ESMTP id S242152AbiD0Qke (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:44:08 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EB4340DB;
-        Wed, 27 Apr 2022 07:40:55 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id r17so90117iln.9;
-        Wed, 27 Apr 2022 07:40:55 -0700 (PDT)
+        Wed, 27 Apr 2022 12:40:34 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686A866ACC
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 09:37:23 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id k23so4546567ejd.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 09:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RIP0odJ8FMWTLgnXtzkMr+Uyp/bX3hgDcgXzYlSMea4=;
-        b=AAvSou3Nm0D6ALb5dyylq5aoEcmbA2/xvLmdzqtWL3bNWGX20nhW7UaSNbj9sC1GWs
-         XwwXS28sf5pZoA5Uo9Bpe1Bf+UAw8FewIs6ZqxQh+UuOI8LglJmtEfqlvpcObBXkwF7g
-         7ONPVl8vJcvL+d7REsalbnTr13hI7GuH3jy80GfRROYdlLMx6Y3yiODR8Mqapf+jBWDG
-         Yy1DdaWPa/J63kGID26hoT4pt0NUBDjWssQtPwiQubyjRQyxkyq1GXTg7TA8lsf6/T1M
-         VHpD1g0aANmqNnRCzlLX01NbuaeXDTF0aJtkwlBSU3CPA7mYX4Xb/iLEnRVhzZLQ0XM1
-         jMzA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=J/YKQZJJA+ogT3/a4U1yoxjCA4/ZVLkuY10wH+/url8=;
+        b=Rq0vUpX2noDFfwzl1T7aznlztl4rUv32V26rOZSrnHEUew+gr/+RppDXrUXOCCTJaS
+         zVFbC04LvMH39ZviDMvJJg9XReaz2bTDvX08S8SIuAvjIW+cHu/sCkhFAZEZtAcDt0G+
+         anr07GVzgWFwT0gmCtzza4H03UsEsXAJsby/DLoGMLa5/eF8koOLMTJi4yeeeBF9aYeH
+         Pa3YD0Yf+hOOOaxww2YVyry98d7ZMNLRuHiznjposx9RjhwoZGJBItA/hN+V6PE4WFeP
+         8AEcOTjmoDT54/cgpB+Q8utWh4kR3el/kgl6vPw2HMkkvfHQYKsyY/NMnyPBs4rQzuug
+         UDug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RIP0odJ8FMWTLgnXtzkMr+Uyp/bX3hgDcgXzYlSMea4=;
-        b=11m4AxX1s4EXARx0ey7J2WjWHH5rT4rA1vHeeDUHQ7Qf9gDml+7su7TqJC4COT4JvW
-         Z+KXakkZxUavlncUNySRAej1JSgQrH8OtcvZOyYG5kz3z3GjhZf+Tr0joGIApnJDBTGv
-         3pO8n/lr3MytCF9BmT1tBLr8IIIH6IehcSXl5i8mw9BCnuONBAfT4MZMc8cW0Uoonc9R
-         CDsUTtZutBmtmvJxuDB9REU1NWVcusMSlCKYpt4loc6GcbcLouqF396/JuMbHGm626eR
-         8BaM/y/1B3R2nRM4qvXjL64pMqnZxB3rfIv+RiFs8ISw2cmrtOfUYqnv+5yav42/+a6z
-         05Gg==
-X-Gm-Message-State: AOAM533lD+PeI4eBnHI545LhpthffywyyCrCtKK0VUtjNWfuVbFrLncs
-        u1gUai6DrjNvKHwkfpM34+dLtCThZitSIpv6i7kDQ/f4Gw4=
-X-Google-Smtp-Source: ABdhPJyf7cSAQIZ97hBPEyHZRO+ltdjYyvo4ENwvpOWDYd5w1PlmrMApuiRVL8aq2N2WoXOdbLo8tstJw0F3+LkBLKw=
-X-Received: by 2002:a05:6e02:1888:b0:2c8:713f:dcff with SMTP id
- o8-20020a056e02188800b002c8713fdcffmr10282601ilu.289.1651070454933; Wed, 27
- Apr 2022 07:40:54 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=J/YKQZJJA+ogT3/a4U1yoxjCA4/ZVLkuY10wH+/url8=;
+        b=dsHPQaUSqGQqX+zu8/pzC4Enko+euSMBDMgw3fpvQW7gdNVWiVq/vVp1D/IuSMvoeS
+         KWEo7HcgsQbH7WeW8Ug01w6xQJEKhPZYzYVC651LxnQnlTCMMCC0B1JhxtTV4ieu9t9s
+         BFTWJYH3/MilitFYFn8WcfNlqBMSlIQIwhLhTmBjHjweMFBzuHz8IIKtBOwitiH97olZ
+         I9PRmywZUwsDgzVYf6hoNmqM+xnc5PQLRbArpqEdxy2wRltjdagQyd7woQN/coWlYCyU
+         mV64mPXQIQ9ueOe0OPHlXKTnv4UXeDzkGjzg72CrhlCWNEt2F0OyjCNr0Iyyrcc2SSL8
+         xohw==
+X-Gm-Message-State: AOAM531AzSFsba/tA+gCfA5+0uHZUyhjQR5jRe7MB9tlmn+SBQRzNp9+
+        fjVtb/mFFEIUiQmR5dUMofQyRw==
+X-Google-Smtp-Source: ABdhPJxUeMGT05JDUbQztMtjK+f5XWgcQc6Wt5A/Zx5c82Lq7VCC+s6KhF9pR4qQSR0RhsvcS7E4ZA==
+X-Received: by 2002:a17:906:559:b0:6f3:8ba6:39c8 with SMTP id k25-20020a170906055900b006f38ba639c8mr17537928eja.486.1651077442041;
+        Wed, 27 Apr 2022 09:37:22 -0700 (PDT)
+Received: from [192.168.0.156] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id rb48-20020a170907693000b006f3d4b12d41sm284727ejc.177.2022.04.27.09.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 09:37:21 -0700 (PDT)
+Message-ID: <5139dc9f-96c3-9f20-4c62-feee902cb5e6@linaro.org>
+Date:   Wed, 27 Apr 2022 18:37:20 +0200
 MIME-Version: 1.0
-References: <20220427143001.1443605-1-eugene.shalygin@gmail.com> <8698b0d9-e0c0-65b1-c44c-3cc765e1dfc8@roeck-us.net>
-In-Reply-To: <8698b0d9-e0c0-65b1-c44c-3cc765e1dfc8@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 27 Apr 2022 16:40:43 +0200
-Message-ID: <CAB95QAQ4-+5A5onNUMVN3oDjuTMa71xoTS3TSY-coh7Cc5-6pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] asus-ec-sensors: add support for board families
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 1/7] dt-bindings: hwmon: Add nuvoton,nct6775
+Content-Language: en-US
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220427010154.29749-1-zev@bewilderbeest.net>
+ <20220427010154.29749-2-zev@bewilderbeest.net>
+ <178b9310-a854-dfa6-a4f3-f971b608abe3@linaro.org>
+ <YmjmWNUpCAFYesyk@hatter.bewilderbeest.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YmjmWNUpCAFYesyk@hatter.bewilderbeest.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Thank you, G=C3=BCnter!
+On 27/04/2022 08:44, Zev Weiss wrote:
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  nuvoton,tsi-channel-mask:
+>>> +    description:
+>>> +      Bitmask indicating which TSI temperature sensor channels are
+>>> +      active.  LSB is TSI0, bit 1 is TSI1, etc.
+>>
+>> Need a type/ref.
+>>
+> 
+> Ack, thanks.
 
-> Series applied to hwmon-next.
+Did you test the bindings after the changes? Using reviewers time
+instead of testing by yourself with an automated tool is quite a waste.
+
+Best regards,
+Krzysztof
