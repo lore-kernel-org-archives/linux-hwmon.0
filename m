@@ -2,170 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0C11C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 16:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 205B5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 17:56:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243546AbiD0RBA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 13:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S244550AbiD0R7m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 13:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiD0RAx (ORCPT
+        with ESMTP id S244534AbiD0R7j (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:00:53 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E56215A02
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 09:57:41 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id h8so3860844iov.12
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 09:57:41 -0700 (PDT)
+        Wed, 27 Apr 2022 13:59:39 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CECD2FF8EB;
+        Wed, 27 Apr 2022 10:56:27 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-e656032735so2815607fac.0;
+        Wed, 27 Apr 2022 10:56:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Y1ivuFVRU8wdS3czu8kzEmQaRPo5keRKWPeKEDXR+3o=;
-        b=JZeV1kjxZ/ZzHdw55o2kSE9D+HMmVwGIl8+GAA5u2RUt5s3+o2pIPJM+2f7/XYrKP2
-         SsZXaiw0KbT4pOzj3Anhlj3ZM+A+dMroAbe/jBaT46HdHwfSHCO56i5/Qb+fMvHs3wnD
-         xid6EnijbQI/+T5lNZjVRa1oOHQ/XVB1BMEpNmq4ZsncIJ2diWuwZr+/F6804O+rgAbs
-         qlvm6H9/96S5zGREGS6dCstYxPHHYiPTZC3zfZoVsJWCHQwOqY9i6EicAf1QOvDiRUUY
-         yIT93zZTNidx/xcdigE+cJJrGZgYWwA58I0nML0QxTCfB0LYNHJwh0WoeIzyPy1tVuZH
-         jxcQ==
+        bh=ay70JJfxgI4f1cvx3A4AnPQKdrRnK/Iw4p4S0x3nnCs=;
+        b=OLHjF71WP1J3jvDhuaKlm3iXD/mcjC5RVhiKmJgBGUQ1xKFkLWbrl5AqL8s4exhYvF
+         uUmQK6YlYPorVXyH4XbVv82Nr14izTfeAx4GBFBr0S4CdZF43X/2Bt9j5O8EJfPB7YZP
+         FQxZejmUmpWq88LzHg0ytZLaL+P7UvOIiXvzRqQt6lpnbkRlGb9X2VlqRNMCQ4hl7Cxh
+         /TKiFhg0mNb15LB+hLY00nZIIChJ41lGCrMMjxfrHTP/REPLbodSb2hpj+hx9+fDpJAr
+         s4U0VhwRQTWtC14uh/VlnXAVWpxGfgkR+EYjaOsYp7NzYI5rfOzVC2ClmoacJNvG5RRW
+         pzmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:cc:content-transfer-encoding;
-        bh=Y1ivuFVRU8wdS3czu8kzEmQaRPo5keRKWPeKEDXR+3o=;
-        b=n95s6eFOBO5LVhbyRnQFAvwU5gI3mDNcE2q2gKfBfLdrOCiDFDzrod++ioxc87N7Xq
-         d3qMxFILLaMbI6SSPGtFFesiWoQb5FSvqRGkZkLcNyN9p4zdcmi7S5LWHPnKbudjGf4t
-         lJElPZU74VgpzupFi/mTLS/lmf0KQL5CC9cZx5S4USOmgvMxRaqURPiDtKMuWhfPjEkv
-         J/ZTiMLxq+BQfSc1K3tpw3ALrFpF4FHiZZpWdWdn+ipeRvNr9cL1aIBK1Hc1FrdTfLAn
-         nvkbLYsER89hJdacfUldk4k6m79LlIr7HKXase6Hwz8ijBRZIjTltlPKIePKd8FhBBkQ
-         MYNA==
-X-Gm-Message-State: AOAM530BNa17qrgfkghS+tkB/6N+QJsUHwjnw4uSHIE5FPfVJqckYNTy
-        vwn/y7vbQmqYibeAu1MUb0MUe/H+1oVaf6OrutJuO2IdKYxjVQ==
-X-Received: by 2002:a05:6638:16cc:b0:32a:7375:8472 with SMTP id
- g12-20020a05663816cc00b0032a73758472mt12612388jat.256.1651078660862; Wed, 27
- Apr 2022 09:57:40 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ay70JJfxgI4f1cvx3A4AnPQKdrRnK/Iw4p4S0x3nnCs=;
+        b=2Ev8OclgSmXad/NlvFho7wdEoILWvfmL4UZkhIKE52N8P2jPmC78zDkIrwN7LOHCYu
+         dVWo6avWRTWWcOEbJ4rM+nOHO9Z3E+pAcUCmvP4q0I5WPfVtR9+FnX43fs1WlC2/AQ5J
+         iTJSqVXw4sEW3pIXS9pAjtcKWxHlIDaQJO6GxzzW5q/vkyT9H5m/XRWF8sQre9RzKgIh
+         xgTTLEFTBB1lo7xdk9qRlGW5Kz3NenfLizlKGgQo7xJIOLl1q92/MiBzxGPxq9I/zSAa
+         w5n/8KhZRW3nVxbhaVs2Jl1rkf25mZZAMA2L60OkXhq9ALLrhGMHLJGbv+PWOVuCI5vq
+         mLNg==
+X-Gm-Message-State: AOAM530hBLW0ETmfZ0EqPk3F52Y0odJBWS9bZ7g1Rr1LeUavkwETUyTi
+        bIVLDCYPfxchcLKsgpJg4VA=
+X-Google-Smtp-Source: ABdhPJx74Us6sVSM3wgpFzy70DwQH/Athg2ooakdq3IzGXxabs5U5jeUwxfGbR+8CcSjOp3EALI+fg==
+X-Received: by 2002:a05:6870:3112:b0:ce:c0c9:62b with SMTP id v18-20020a056870311200b000cec0c9062bmr16062307oaa.125.1651082186620;
+        Wed, 27 Apr 2022 10:56:26 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id dv2-20020a056870d88200b000e93d386d97sm915229oab.31.2022.04.27.10.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 10:56:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <588c401c-6b68-53b3-e2d9-542f40b5e4d3@roeck-us.net>
+Date:   Wed, 27 Apr 2022 10:56:22 -0700
 MIME-Version: 1.0
-References: <20220427143001.1443605-1-eugene.shalygin@gmail.com> <20220427143001.1443605-5-eugene.shalygin@gmail.com>
-In-Reply-To: <20220427143001.1443605-5-eugene.shalygin@gmail.com>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 27 Apr 2022 18:57:29 +0200
-Message-ID: <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
 Subject: Re: [PATCH v3 4/4] hwmon: (asus-ec-sensors) add PRIME X470-PRO board
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-To:     unlisted-recipients:; (no To-header on input)
+References: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
+ <20220427143001.1443605-5-eugene.shalygin@gmail.com>
+ <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-G=C3=BCnter,
+On 4/27/22 09:57, Eugene Shalygin wrote:
+> Günter,
+> 
+> I forgot to add PRIME X470-PRO to the list of supported boards in
+> Documentation/hwmon/asus_ec_sensors.rst. Could you, please, add that?
+> It should be the first entry. Commit
+> 8f8db4b5d10cc4a2a801514e677dd5205651b771. Or should I resend this
+> patch?
+> 
 
-I forgot to add PRIME X470-PRO to the list of supported boards in
-Documentation/hwmon/asus_ec_sensors.rst. Could you, please, add that?
-It should be the first entry. Commit
-8f8db4b5d10cc4a2a801514e677dd5205651b771. Or should I resend this
-patch?
+Just send a follow-up patch.
 
-Thank you,
-Eugene
+Guenter
 
-On Wed, 27 Apr 2022 at 16:30, Eugene Shalygin <eugene.shalygin@gmail.com> w=
-rote:
->
-> This board is supposed to be handled by the asus-wmi-sensors driver,
-> but due to a buggy WMI implementation the driver and the official ASUS
-> software make the BIOS hang together with fan controls [1, 2].
->
-> This driver complements values provided by the SIO chip and does not
-> freeze the BIOS, as tested by a user [2].
->
-> [1] https://github.com/electrified/asus-wmi-sensors/blob/master/README.md
-> [2] https://github.com/zeule/asus-ec-sensors/issues/12
->
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> ---
->  drivers/hwmon/asus-ec-sensors.c | 43 +++++++++++++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
->
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sens=
-ors.c
-> index 109c3920d77c..998d49d6b799 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -137,10 +137,41 @@ enum ec_sensors {
->
->  enum board_family {
->         family_unknown,
-> +       family_amd_400_series,
->         family_amd_500_series,
->  };
->
->  /* All the known sensors for ASUS EC controllers */
-> +static const struct ec_sensor_info sensors_family_amd_400[] =3D {
-> +       [ec_sensor_temp_chipset] =3D
-> +               EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-> +       [ec_sensor_temp_cpu] =3D
-> +               EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-> +       [ec_sensor_temp_mb] =3D
-> +               EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-> +       [ec_sensor_temp_t_sensor] =3D
-> +               EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> +       [ec_sensor_temp_vrm] =3D
-> +               EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-> +       [ec_sensor_in_cpu_core] =3D
-> +               EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
-> +       [ec_sensor_fan_cpu_opt] =3D
-> +               EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
-> +       [ec_sensor_fan_vrm_hs] =3D
-> +               EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-> +       [ec_sensor_fan_chipset] =3D
-> +               /* no chipset fans in this generation */
-> +               EC_SENSOR("Chipset", hwmon_fan, 0, 0x00, 0x00),
-> +       [ec_sensor_fan_water_flow] =3D
-> +               EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xb4),
-> +       [ec_sensor_curr_cpu] =3D
-> +               EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
-> +       [ec_sensor_temp_water_in] =3D
-> +               EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
-> +       [ec_sensor_temp_water_out] =3D
-> +               EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x0b),
-> +};
-> +
->  static const struct ec_sensor_info sensors_family_amd_500[] =3D {
->         [ec_sensor_temp_chipset] =3D
->                 EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-> @@ -186,6 +217,15 @@ struct ec_board_info {
->  };
->
->  static const struct ec_board_info board_info[] =3D {
-> +       {
-> +               .board_names =3D {"PRIME X470-PRO"},
-> +               .sensors =3D SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> +                       SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-> +                       SENSOR_FAN_CPU_OPT |
-> +                       SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-> +               .mutex_path =3D ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-> +               .family =3D family_amd_400_series,
-> +       },
->         {
->                 .board_names =3D {"PRIME X570-PRO"},
->                 .sensors =3D SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP=
-_VRM |
-> @@ -753,6 +793,9 @@ static int __init asus_ec_probe(struct platform_devic=
-e *pdev)
->         ec_data->board_info =3D pboard_info;
->
->         switch (ec_data->board_info->family) {
-> +       case family_amd_400_series:
-> +               ec_data->sensors_info =3D sensors_family_amd_400;
-> +               break;
->         case family_amd_500_series:
->                 ec_data->sensors_info =3D sensors_family_amd_500;
->                 break;
-> --
-> 2.35.1
->
+
