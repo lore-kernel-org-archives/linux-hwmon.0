@@ -2,106 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2BA7C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 12:04:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EE4DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 12:16:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233372AbiD0MH3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 08:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S233726AbiD0MUA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 08:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbiD0MH3 (ORCPT
+        with ESMTP id S233725AbiD0MT7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:07:29 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8EE41FBC;
-        Wed, 27 Apr 2022 05:04:17 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e9027efe6aso1659556fac.10;
-        Wed, 27 Apr 2022 05:04:17 -0700 (PDT)
+        Wed, 27 Apr 2022 08:19:59 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE0B66CB0;
+        Wed, 27 Apr 2022 05:16:48 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id i20so1199051ion.0;
+        Wed, 27 Apr 2022 05:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=iO3iPqQTxiKsc9sKOi2OBzzXfrLXQyoF5Zqanj5SxtY=;
-        b=TO6Xopu575eCaZSZbaxgpzRwlvuFPWb3Zwlw0TSKXJtFv9z6ldleZkizSTOqLinUm9
-         ptxWKfykjZA4nhIKBcNfoqmF5wgznC9phQOtGhhIi26BaMBKS3nD3Xifoi1eMJOHwcaJ
-         B1qqoIlOyxv27VLQqxJl4/ra8zIuZUodeBncc6PbVzYo4rEXW59QScBX1Y6VM7u3pxQN
-         /UaAe7Erf19OrfKFMdJarG7IhqwkMYjxYV+YALivIoaZPtrBz5XPIq6KpKXixoCIcXmK
-         pcwPqCA4OYbhnHQf/WAZUObIYYN7yWLdDRGlfx4X3Q+iuCvvOMgKuO7pEVkX3Bq6xuTC
-         uXIA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vR9/a6S/9L9qoG5vKxM2YzI02WzXzNNLg/n2mKuTMEA=;
+        b=Rwo92AOR89AowvwIZRFDJCISlJTT8dV2nKf1oTeQ8FJ1Gh4x8Xi1az8uAxYxxjmiRe
+         EQJcGldpvQbOuC0f4Iu3HpefxfdRNbnV7fWOhVvdOdqbQyOwkkli21vRCfs8BwqHHeNb
+         VVIYUcf0RhIuvTDL2N49xyewWCmzmFIMJZ8bH1mi8jVzfli9YqHPqmbG7UtlzRHUHa0g
+         fcJpNbINaxjCaYMoM73NTt5ZM89fiG2wA3pT7yBKg4wseFXCizFWK7z60EUVp9bZadFZ
+         1h0qSpzRfbXw9rfEV54VaVmhQlgqYhPkNQ0m6H6qsWX3yNs9RrYzlkg9b7Od6CnBaeml
+         WRIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=iO3iPqQTxiKsc9sKOi2OBzzXfrLXQyoF5Zqanj5SxtY=;
-        b=TUZX4k796KeXV/BQq7Ce4+cO9h8CZIhSwjqCQZG1ROXGEa8jmmt6/kUnGru/sJbJgw
-         6+wDoM1OFiu+OqcvBhNtSs5nrnmHWtixtt7fXZmhzXiqfxe5oGo05MBd6sjNrloEqNvg
-         iuC2Qvd24EELqbMBLZeDbjaiy0fo11DT0/WRV6KBenPwRTuZ+hjd0dgxYTmB7bXt6Xut
-         xwinLk7nDLpJBML7qB0qJxUcWbv7L1tjbcJma928bqfx9lr31kpbH5f6W342c16DM5NE
-         lWilkecJPt8E9lpRcJCW3XRcGoIjxrEtwNFFYIx3qhel7h2/vS5jGrpUBfIUVTrQc4S2
-         Rw0A==
-X-Gm-Message-State: AOAM532lMDGX69oK+quka5TUnYL95quVwgNVlSjtFVp+GxJYmtA1PZjd
-        XVRdJOyy00/C0FYN7ZikrDE=
-X-Google-Smtp-Source: ABdhPJxkqSCrCIPyp50+OwSN4J6casg7Ael84jWBU7s2gxupHcTK0FXAGtSbZKCB8ssBIhXO68IgYw==
-X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id fo23-20020a0568709a1700b000e903d1f91amr10111968oab.44.1651061057212;
-        Wed, 27 Apr 2022 05:04:17 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h22-20020a056870539600b000e686d13877sm540202oan.17.2022.04.27.05.04.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 05:04:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net>
-Date:   Wed, 27 Apr 2022 05:04:14 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vR9/a6S/9L9qoG5vKxM2YzI02WzXzNNLg/n2mKuTMEA=;
+        b=7xCkMkuJWdZth2h0/0vxSCv2VOeCjfrJkbkz1kOuXCnd0Xo7Eze/p6y26cwxrrlAHg
+         e4UAYLZAKbY1AGPzt03srJcCL/rYEiyAzq0gO06HY7idBHgUJBUz5YAt2Bwc59+xdzfm
+         w4uLsz+FzqqCp56ExAVZq2gbv90l5Iqy42DSzsZpOuv1qmUEwFU14eFULYGo1PHpa+e/
+         CpwUGgWJXHWjhTI90q0Vi3XR66pFMBdte6um0lQFxYhjgtH6bsSqKSCxgyQ4e9s3ioNL
+         jRA3LtrvIdwua9p8wvc4OnF9GoHmUjwXsY1Ap3xZhYcF6rFZ15SA07Wt8COKAmLjqe3F
+         R4rA==
+X-Gm-Message-State: AOAM5323GqBjlRjzXCKFu9Yii6V/npoQLgGOg5Kf6+0Qkv0ctJrbA6Mo
+        Nw5y+gLLicpx39hvRVwI3aCcn8L73wgE9vfLE//AlAxCBQzNVubY
+X-Google-Smtp-Source: ABdhPJxP3tB/CnUTqnVFqvh6WaO0e5G8sr5EQaqsF3/VuRhQCnK57XGvNoHzUdPgI8BaGHO8ZUaNfFqtKR7ePQHcAWU=
+X-Received: by 2002:a05:6638:16cc:b0:32a:7375:8472 with SMTP id
+ g12-20020a05663816cc00b0032a73758472mr11946126jat.256.1651061807775; Wed, 27
+ Apr 2022 05:16:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
- <20220426092340.495704-2-eugene.shalygin@gmail.com>
- <20220426151656.GA3119637@roeck-us.net>
- <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+ <20220426092340.495704-2-eugene.shalygin@gmail.com> <20220426151656.GA3119637@roeck-us.net>
+ <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com> <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net>
+In-Reply-To: <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Wed, 27 Apr 2022 14:16:36 +0200
+Message-ID: <CAB95QARDq1Tr64dvPVemXHRNyu=T5P7LJ_DUn7sdHauUB6daaw@mail.gmail.com>
 Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
  struct for board data
-In-Reply-To: <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/27/22 02:32, Eugene Shalygin wrote:
->> Since this is now tied to MODULE_DEVICE_TABLE(acpi, ...), I think the
->> probe function should be referenced in asus_ec_sensors_platform_driver,
->> and it should be module_platform_driver() instead of
->> module_platform_driver_probe().
-> 
-> As follows?
-> 
-> static struct platform_driver asus_ec_sensors_platform_driver_probe = {
->      .probe = asus_ec_probe,
->          .driver = {
->          .name = "asus-ec-sensors",
->      .acpi_match_table = acpi_ec_ids,
->      },
-> };
-> 
-> MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
-> module_platform_driver(asus_ec_sensors_platform_driver_probe);
-> 
-> The "_probe" suffix added to keep the asus_ec_probe() code and its
-> deps as __init.
-> 
+> Sorry, I don't follow that part. One can add "__init" or "__initdata",
+> as in
+>
+> static struct platform_driver asus_ec_sensors_platform_driver __initdata = {
+>
+> to mark a function or data structure as __init. I don't think adding
+> "_probe" to the struct platform_driver variable name does that.
+>
 
-Sorry, I don't follow that part. One can add "__init" or "__initdata",
-as in
+__initdata leads to modpost warning:
+WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.exit.text+0x3):
+Section mismatch in reference from the function cleanup_module() to
+the variable .init.data:asus_ec_sensors_platform_driver
+The function __exit cleanup_module() references
+a variable __initdata asus_ec_sensors_platform_driver.
+This is often seen when error handling in the exit function
+uses functionality in the init path.
+The fix is often to remove the __initdata annotation of
+asus_ec_sensors_platform_driver so it may be used outside an init section.
 
-static struct platform_driver asus_ec_sensors_platform_driver __initdata = {
+Compiling without attributes resulted in another message:
+WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.data+0x0): Section
+mismatch in reference from the variable
+asus_ec_sensors_platform_driver to the function
+.init.text:asus_ec_probe()
+The variable asus_ec_sensors_platform_driver references
+the function __init asus_ec_probe()
+If the reference is valid then annotate the
+variable with __init* or __refdata (see linux/init.h) or name the variable:
+*_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
 
-to mark a function or data structure as __init. I don't think adding
-"_probe" to the struct platform_driver variable name does that.
+Here is why I added the "_probe" suffix.
 
-Guenter
+Eugene
