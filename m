@@ -2,98 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EE4DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 12:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E8A3C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 13:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbiD0MUA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 08:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S235210AbiD0NFj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 09:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233725AbiD0MT7 (ORCPT
+        with ESMTP id S235211AbiD0NFi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:19:59 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE0B66CB0;
-        Wed, 27 Apr 2022 05:16:48 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id i20so1199051ion.0;
-        Wed, 27 Apr 2022 05:16:48 -0700 (PDT)
+        Wed, 27 Apr 2022 09:05:38 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA2853E22
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Apr 2022 06:02:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vR9/a6S/9L9qoG5vKxM2YzI02WzXzNNLg/n2mKuTMEA=;
-        b=Rwo92AOR89AowvwIZRFDJCISlJTT8dV2nKf1oTeQ8FJ1Gh4x8Xi1az8uAxYxxjmiRe
-         EQJcGldpvQbOuC0f4Iu3HpefxfdRNbnV7fWOhVvdOdqbQyOwkkli21vRCfs8BwqHHeNb
-         VVIYUcf0RhIuvTDL2N49xyewWCmzmFIMJZ8bH1mi8jVzfli9YqHPqmbG7UtlzRHUHa0g
-         fcJpNbINaxjCaYMoM73NTt5ZM89fiG2wA3pT7yBKg4wseFXCizFWK7z60EUVp9bZadFZ
-         1h0qSpzRfbXw9rfEV54VaVmhQlgqYhPkNQ0m6H6qsWX3yNs9RrYzlkg9b7Od6CnBaeml
-         WRIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vR9/a6S/9L9qoG5vKxM2YzI02WzXzNNLg/n2mKuTMEA=;
-        b=7xCkMkuJWdZth2h0/0vxSCv2VOeCjfrJkbkz1kOuXCnd0Xo7Eze/p6y26cwxrrlAHg
-         e4UAYLZAKbY1AGPzt03srJcCL/rYEiyAzq0gO06HY7idBHgUJBUz5YAt2Bwc59+xdzfm
-         w4uLsz+FzqqCp56ExAVZq2gbv90l5Iqy42DSzsZpOuv1qmUEwFU14eFULYGo1PHpa+e/
-         CpwUGgWJXHWjhTI90q0Vi3XR66pFMBdte6um0lQFxYhjgtH6bsSqKSCxgyQ4e9s3ioNL
-         jRA3LtrvIdwua9p8wvc4OnF9GoHmUjwXsY1Ap3xZhYcF6rFZ15SA07Wt8COKAmLjqe3F
-         R4rA==
-X-Gm-Message-State: AOAM5323GqBjlRjzXCKFu9Yii6V/npoQLgGOg5Kf6+0Qkv0ctJrbA6Mo
-        Nw5y+gLLicpx39hvRVwI3aCcn8L73wgE9vfLE//AlAxCBQzNVubY
-X-Google-Smtp-Source: ABdhPJxP3tB/CnUTqnVFqvh6WaO0e5G8sr5EQaqsF3/VuRhQCnK57XGvNoHzUdPgI8BaGHO8ZUaNfFqtKR7ePQHcAWU=
-X-Received: by 2002:a05:6638:16cc:b0:32a:7375:8472 with SMTP id
- g12-20020a05663816cc00b0032a73758472mr11946126jat.256.1651061807775; Wed, 27
- Apr 2022 05:16:47 -0700 (PDT)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651064547;
+  x=1682600547;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VmamUpVTVhSN7Z1PyeWOu2spnVJSlFbrGllMZKM0Hgg=;
+  b=d29c47tXhO686+zKb9vkknw/DykXNNvrGBrbmi6lZAG9WSdx+AXG6AN8
+   9FiyC4Hk4nbvP1wy233sIhI+SK/y/JxnMsA4tBjtdmdwS0RS5H0fLT1r1
+   twiz8vnI+na2TpDWXv4sarLj73wPjnamBK5rkdJrgIy2RO6TeYn8KHSou
+   CK0wt6+5m6xCHneSAhte/GQYkmz5jGGQ8XDJLbFW/GeNk6+9dwFdec0Os
+   tZ/kIElgs2Uhs6tjzakjILjlM3IQWY6xLyUfwJdDp2fDkhCVscAjDkj6d
+   lynjymOcath+VVgMaItzY57/ejfLTZWm5aydIWUuHoPSVvyiq6QO6bxoT
+   A==;
+From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
+        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+Subject: [PATCH v3 0/3] hwmon: (pmbus/ltc2978) Add regulator ops
+Date:   Wed, 27 Apr 2022 15:02:10 +0200
+Message-ID: <20220427130213.1557793-1-marten.lindahl@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
- <20220426092340.495704-2-eugene.shalygin@gmail.com> <20220426151656.GA3119637@roeck-us.net>
- <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com> <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net>
-In-Reply-To: <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 27 Apr 2022 14:16:36 +0200
-Message-ID: <CAB95QARDq1Tr64dvPVemXHRNyu=T5P7LJ_DUn7sdHauUB6daaw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> Sorry, I don't follow that part. One can add "__init" or "__initdata",
-> as in
->
-> static struct platform_driver asus_ec_sensors_platform_driver __initdata = {
->
-> to mark a function or data structure as __init. I don't think adding
-> "_probe" to the struct platform_driver variable name does that.
->
+Hi!
 
-__initdata leads to modpost warning:
-WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.exit.text+0x3):
-Section mismatch in reference from the function cleanup_module() to
-the variable .init.data:asus_ec_sensors_platform_driver
-The function __exit cleanup_module() references
-a variable __initdata asus_ec_sensors_platform_driver.
-This is often seen when error handling in the exit function
-uses functionality in the init path.
-The fix is often to remove the __initdata annotation of
-asus_ec_sensors_platform_driver so it may be used outside an init section.
+The LTC2978 driver supports a wide range of power regulator chips, but it
+has limited functionality for using it in a dynamic regulator framework.
+Since standard functions for setting and getting voltage are missing as
+pmbus core operations this patchset adds it.
 
-Compiling without attributes resulted in another message:
-WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.data+0x0): Section
-mismatch in reference from the variable
-asus_ec_sensors_platform_driver to the function
-.init.text:asus_ec_probe()
-The variable asus_ec_sensors_platform_driver references
-the function __init asus_ec_probe()
-If the reference is valid then annotate the
-variable with __init* or __refdata (see linux/init.h) or name the variable:
-*_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
+These patches have been tested on an ARTPEC-8 developer board with a group
+of LTC2977 power regulators.
 
-Here is why I added the "_probe" suffix.
+Kind regards
+Mårten Lindahl
 
-Eugene
+Changes in v2:
+ - Add pmbus core _pmbus_write_byte_data to check for driver specific callback
+ - Change pmbus_update_byte_data to use _pmbus_read/write_byte_data
+ - Change pmbus_regulator_is_enabled to use _pmbus_read_byte_data
+ - Export pmbus core functions enable/disable/is_enabled
+
+Changes in v3:
+ - Split patch "hwmon: (pmbus/ltc2978) Use driver specific ops if they exist"
+   into two patches: (1) pmbus core, (2) ltc2978.
+ - Move ltc2978_regulator_get/set_voltage functions to pmbus core.
+
+Mårten Lindahl (3):
+  hwmon: (pmbus) Use driver specific ops if they exist
+  hwmon: (pmbus/ltc2978) Add chip specific write_byte_data
+  hwmon: (pmbus) Add get_voltage/set_voltage ops
+
+ drivers/hwmon/pmbus/ltc2978.c    |  12 ++++
+ drivers/hwmon/pmbus/pmbus.h      |   2 +
+ drivers/hwmon/pmbus/pmbus_core.c | 101 +++++++++++++++++++++++++------
+ 3 files changed, 95 insertions(+), 20 deletions(-)
+
+-- 
+2.30.2
+
