@@ -2,85 +2,118 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 187A2C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 10:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5508C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 11:53:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiD0K6x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 06:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
+        id S233142AbiD0L4u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 07:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbiD0K6t (ORCPT
+        with ESMTP id S233145AbiD0L4t (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:58:49 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DC943AE3A;
-        Wed, 27 Apr 2022 03:50:16 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id z26so2494958iot.8;
-        Wed, 27 Apr 2022 03:50:16 -0700 (PDT)
+        Wed, 27 Apr 2022 07:56:49 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC212085;
+        Wed, 27 Apr 2022 04:53:38 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d39f741ba0so1616542fac.13;
+        Wed, 27 Apr 2022 04:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OAoMj+A6jdvZS9msGVjyudUngTJlnCQJeB43kkAkA4Y=;
-        b=gcv3E13hmuNS18jvZe/CZuaKOJBfS3T0jEG8xir9wWhCSls+WolK0LyI5NNsxZuBk9
-         8DEzE2djwKedo/5fUwHv6Ai4n+uNVUl+AZ5b5I0DaBJISIlNW19Uux9KnB9p4YVchJyC
-         uo879ZqAj9BnnFYeaBL81bxu72vFdzD4lXvWQF+LBM3s+8AISyjNpBBZkOnMLK7xTQVS
-         OMqbMhFCAe6nDA5StMFepfUt23qmu9mhFUdT8MCINA1TudY+enD42jOkJjc0bVqkY7Zf
-         dch1gBG76tqAstwGebweYk/BXcxK5H6eDF4truS3eWkpwCwlzCKPxoqtTb9CZ0jAfLpW
-         aqYA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lDcZaNu3s46BCfyK8AGIWunVVLL0K103UCBfoUiQuSg=;
+        b=PICN4L/bpRW0Ywnxp6EKdRxBPCzwU7brnkiRpdkxe9lXWNaE4lTzPUkUshVAWLTe/N
+         oNxKJ15ESYMJ1IWAQj7eAPSMVvhEvW+ZsVAuaZmliL1pg9Jnx9eacqGVfOzvPrUSGWnZ
+         UWLb0os8sSiInNnyHiHdtt7bXjtVue/jhqp9gJqzj+wVDBNcExTnCjmpS2i1gW3+DoE5
+         nXM6WltKKK1Km8+3wWS1x0YzzPWfDV4y6WWt7BGN2jCv0tjPfkciRgRc1U8l4P3HbEKv
+         8auJ3vFVfpc2iLwnPF1l6lZ4znNqDqASmphwBOE9hCmVPRMTMb8uea5nYIYN9Yx0FBae
+         pDTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OAoMj+A6jdvZS9msGVjyudUngTJlnCQJeB43kkAkA4Y=;
-        b=dvqH9or6XwuxySCs18hEzPY1jQjy/bHb20S9Ypn1nRH99aelJCM7t53e+Ad2XROTWv
-         B/HU0UTI3HId9qX+iS8Pbt6NfJ50DikF9FCi4PogqO1hmCwhMEkYXF/g6SiR2wg7Isra
-         +HkDZeyYBHiceFwUWpxLRXxL0yncwfec9nynbA13UeH0HD0w8yWnyb/jZUbbtEU5aWeB
-         NU1RS9RR70EkWqd9C+T7pYxQDFhS6IkUejE4FtghKhEMjg/Cg4T1vL4f67v1AIyY5TSx
-         fatCtbOquC6egMxkRtukczTqkDQf8l7dfbYdCWAOIPGpcqEKTJ/shCJJjqqvYvMJz3jM
-         PpBA==
-X-Gm-Message-State: AOAM533w5BHnCpuvnP+cpfg9htiOHhRmh/Yd5qtSdLmA5/QR+Yx2dtvm
-        qjFpCBjuK9die3yOtNJWPSlCyHZB63f3mBiTmRTWOq8BHLY/FuAw
-X-Google-Smtp-Source: ABdhPJz49MYR+D1KWm6MxvH1PVC7qWnal3lRMK+gwaDyn+Bh2y5jiqs1HtqWCCCOfh5un6c61CqdAPXDTwFftsuEzh0=
-X-Received: by 2002:a05:6638:470f:b0:32a:d8cf:f7bc with SMTP id
- cs15-20020a056638470f00b0032ad8cff7bcmr8434768jab.108.1651051944817; Wed, 27
- Apr 2022 02:32:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
- <20220426092340.495704-2-eugene.shalygin@gmail.com> <20220426151656.GA3119637@roeck-us.net>
-In-Reply-To: <20220426151656.GA3119637@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 27 Apr 2022 11:32:13 +0200
-Message-ID: <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-To:     Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=lDcZaNu3s46BCfyK8AGIWunVVLL0K103UCBfoUiQuSg=;
+        b=VqB/jkNci1VKAx3/t+5zy2hz0kn8J8qj8GKzLgze/BHu8UU98L1ZBQPA99T3cJLFvv
+         tBi05tbbClx1HgfRe86IadMt9rb9waj4H+FW7rFMy7IpkrCex6jFXq+ktbqmi0a5rRTI
+         cHg2CmFku2O97ajf3HLZkFRamQiy4Ek60HJmAczS0hkNMKN4jlpYpHz+6ctwhIXPawg6
+         2yOZSOWBf3LOIYE+QfvCF6cYW1DtRsZMr/Tbg+Rh/Tmt9bshxDtwsC0Gs4VXgMMkj8t5
+         XH+XHo2oh0cyDgUmc1KPd0qTHrCxae+j7T/asEa4IRp+hg6GlkFNLlVbzeGCKDw8kONQ
+         QWRQ==
+X-Gm-Message-State: AOAM531JXfgyliSJ0bssAj0zMlWeCsVyMGyjQYkiBFKu6sBTSRX8BYJ6
+        kkspg6hya6ejVQjvUAW73vE=
+X-Google-Smtp-Source: ABdhPJxqdW1u4b+HYMVRCPgoviFhCC1pBVd4W3nXiChpfznNK9sGQAYLA/Qj8VRLsCahCdXVQ3ARfw==
+X-Received: by 2002:a05:6870:6324:b0:e9:16de:4053 with SMTP id s36-20020a056870632400b000e916de4053mr8701723oao.164.1651060417408;
+        Wed, 27 Apr 2022 04:53:37 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m22-20020a9d73d6000000b006028f49a6fcsm5779329otk.4.2022.04.27.04.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 04:53:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 27 Apr 2022 04:53:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zev Weiss <zev@bewilderbeest.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH] hwmon: (pmbus) delta-ahe50dc-fan: work around hardware
+ quirk
+Message-ID: <20220427115333.GA2686708@roeck-us.net>
+References: <20220427035109.3819-1-zev@bewilderbeest.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427035109.3819-1-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> Since this is now tied to MODULE_DEVICE_TABLE(acpi, ...), I think the
-> probe function should be referenced in asus_ec_sensors_platform_driver,
-> and it should be module_platform_driver() instead of
-> module_platform_driver_probe().
+On Tue, Apr 26, 2022 at 08:51:09PM -0700, Zev Weiss wrote:
+> CLEAR_FAULTS commands can apparently sometimes trigger catastrophic
+> power output glitches on the ahe-50dc, so block them from being sent
+> at all.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Cc: stable@vger.kernel.org
 
-As follows?
+Applied.
 
-static struct platform_driver asus_ec_sensors_platform_driver_probe = {
-    .probe = asus_ec_probe,
-        .driver = {
-        .name = "asus-ec-sensors",
-    .acpi_match_table = acpi_ec_ids,
-    },
-};
+Thanks,
+Guenter
 
-MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
-module_platform_driver(asus_ec_sensors_platform_driver_probe);
-
-The "_probe" suffix added to keep the asus_ec_probe() code and its
-deps as __init.
-
-Eugene
+> ---
+>  drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+> index 40dffd9c4cbf..f546f0c12497 100644
+> --- a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+> +++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+> @@ -14,6 +14,21 @@
+>  
+>  #define AHE50DC_PMBUS_READ_TEMP4 0xd0
+>  
+> +static int ahe50dc_fan_write_byte(struct i2c_client *client, int page, u8 value)
+> +{
+> +	/*
+> +	 * The CLEAR_FAULTS operation seems to sometimes (unpredictably, perhaps
+> +	 * 5% of the time or so) trigger a problematic phenomenon in which the
+> +	 * fan speeds surge momentarily and at least some (perhaps all?) of the
+> +	 * system's power outputs experience a glitch.
+> +	 *
+> +	 * However, according to Delta it should be OK to simply not send any
+> +	 * CLEAR_FAULTS commands (the device doesn't seem to be capable of
+> +	 * reporting any faults anyway), so just blackhole them unconditionally.
+> +	 */
+> +	return value == PMBUS_CLEAR_FAULTS ? -EOPNOTSUPP : -ENODATA;
+> +}
+> +
+>  static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
+>  {
+>  	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
+> @@ -68,6 +83,7 @@ static struct pmbus_driver_info ahe50dc_fan_info = {
+>  		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
+>  		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
+>  	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
+> +	.write_byte = ahe50dc_fan_write_byte,
+>  	.read_word_data = ahe50dc_fan_read_word_data,
+>  };
+>  
