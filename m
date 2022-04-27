@@ -2,122 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 907B1C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 08:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 187A2C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Apr 2022 10:56:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241218AbiD0Iht (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Apr 2022 04:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S231231AbiD0K6x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Apr 2022 06:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiD0Iht (ORCPT
+        with ESMTP id S231200AbiD0K6t (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:37:49 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132E6644E3;
-        Wed, 27 Apr 2022 01:34:38 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id ke5so605016qvb.5;
-        Wed, 27 Apr 2022 01:34:38 -0700 (PDT)
+        Wed, 27 Apr 2022 06:58:49 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DC943AE3A;
+        Wed, 27 Apr 2022 03:50:16 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id z26so2494958iot.8;
+        Wed, 27 Apr 2022 03:50:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mts8+CXZqKYubrygYyfb7XAxGiHuoGj/BQDg0sBg5ck=;
-        b=OEX1iqG5lS2jmxcFVAzAelcABrA0I4peMSmRW2z2OBvH+oCukYbw5WA7jWS1NODyxU
-         dKZGQiFy8LQSexpzD0Hgn42J1xF5DEW1ragAF+9UIGLgc7Xj9yAQVau55vfsLM/b/eX7
-         VeYrDKtzCH2mJrSWAeOcJaV4g5J8fG+3D5i30=
+        bh=OAoMj+A6jdvZS9msGVjyudUngTJlnCQJeB43kkAkA4Y=;
+        b=gcv3E13hmuNS18jvZe/CZuaKOJBfS3T0jEG8xir9wWhCSls+WolK0LyI5NNsxZuBk9
+         8DEzE2djwKedo/5fUwHv6Ai4n+uNVUl+AZ5b5I0DaBJISIlNW19Uux9KnB9p4YVchJyC
+         uo879ZqAj9BnnFYeaBL81bxu72vFdzD4lXvWQF+LBM3s+8AISyjNpBBZkOnMLK7xTQVS
+         OMqbMhFCAe6nDA5StMFepfUt23qmu9mhFUdT8MCINA1TudY+enD42jOkJjc0bVqkY7Zf
+         dch1gBG76tqAstwGebweYk/BXcxK5H6eDF4truS3eWkpwCwlzCKPxoqtTb9CZ0jAfLpW
+         aqYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mts8+CXZqKYubrygYyfb7XAxGiHuoGj/BQDg0sBg5ck=;
-        b=QmaGJpJlAs0zqT37lpgKp8SLk87Ax9FDAGrxrtKCbWTnkAHEqPbp0Wx4yBcBc4BvuO
-         31j+XgCmKd3uN/jmICd1tNu8jSRZKE7dJW09urhl9/82H2/OKRgJPXe9kh+fCjsKr7fS
-         urDFo/VhKLDHQMPU0+8BUy7AOr0WO9w9kxk8yEbSc6PJs1AEV2r2MqsYGt2aIQXVx39Y
-         yxI/P26hprmL2kB162ZXEFQjLT6fD/ibSa7gCQHYuwf6XMfFj2g58Hk6hn8ag2bCtemU
-         BU8EZMxrYdUa/WIrS/4GXQfTA3cV+WU10NpKBZNiUUwcznvIP+JSb5LBQTuWV3mjd18n
-         iLAQ==
-X-Gm-Message-State: AOAM53028d28dDeNIad1YkEPZoV2O5gpYQMDz802rkjcZleC6ahYWGcE
-        M/gzb6JDADk7JiYAbyd/JwSzClP/PY7vPGULhxU=
-X-Google-Smtp-Source: ABdhPJyidkYZn3pks7qlaDMc3LwEDY1SYiqlg58dC9/l3UNI6GnmoBiDPuyd2UEkY/eAHDPGkC/Q10O6MS/Vv02VDYk=
-X-Received: by 2002:a05:6214:624:b0:441:84f3:24e3 with SMTP id
- a4-20020a056214062400b0044184f324e3mr19162202qvx.27.1651048477102; Wed, 27
- Apr 2022 01:34:37 -0700 (PDT)
+        bh=OAoMj+A6jdvZS9msGVjyudUngTJlnCQJeB43kkAkA4Y=;
+        b=dvqH9or6XwuxySCs18hEzPY1jQjy/bHb20S9Ypn1nRH99aelJCM7t53e+Ad2XROTWv
+         B/HU0UTI3HId9qX+iS8Pbt6NfJ50DikF9FCi4PogqO1hmCwhMEkYXF/g6SiR2wg7Isra
+         +HkDZeyYBHiceFwUWpxLRXxL0yncwfec9nynbA13UeH0HD0w8yWnyb/jZUbbtEU5aWeB
+         NU1RS9RR70EkWqd9C+T7pYxQDFhS6IkUejE4FtghKhEMjg/Cg4T1vL4f67v1AIyY5TSx
+         fatCtbOquC6egMxkRtukczTqkDQf8l7dfbYdCWAOIPGpcqEKTJ/shCJJjqqvYvMJz3jM
+         PpBA==
+X-Gm-Message-State: AOAM533w5BHnCpuvnP+cpfg9htiOHhRmh/Yd5qtSdLmA5/QR+Yx2dtvm
+        qjFpCBjuK9die3yOtNJWPSlCyHZB63f3mBiTmRTWOq8BHLY/FuAw
+X-Google-Smtp-Source: ABdhPJz49MYR+D1KWm6MxvH1PVC7qWnal3lRMK+gwaDyn+Bh2y5jiqs1HtqWCCCOfh5un6c61CqdAPXDTwFftsuEzh0=
+X-Received: by 2002:a05:6638:470f:b0:32a:d8cf:f7bc with SMTP id
+ cs15-20020a056638470f00b0032ad8cff7bcmr8434768jab.108.1651051944817; Wed, 27
+ Apr 2022 02:32:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426154956.27205-1-eajames@linux.ibm.com> <20220426154956.27205-3-eajames@linux.ibm.com>
-In-Reply-To: <20220426154956.27205-3-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 27 Apr 2022 08:34:25 +0000
-Message-ID: <CACPK8XdzznuHFZ_sj3zt4CKcsi02Af4COqa0-JP7=w6Mw_EjVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] hwmon (occ): Retry for checksum failure
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        David Laight <David.Laight@aculab.com>
+References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
+ <20220426092340.495704-2-eugene.shalygin@gmail.com> <20220426151656.GA3119637@roeck-us.net>
+In-Reply-To: <20220426151656.GA3119637@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Wed, 27 Apr 2022 11:32:13 +0200
+Message-ID: <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
+ struct for board data
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 26 Apr 2022 at 15:50, Eddie James <eajames@linux.ibm.com> wrote:
->
-> Due to the OCC communication design with a shared SRAM area,
-> checkum errors are expected due to corrupted buffer from OCC
-> communications with other system components. Therefore, retry
-> the command twice in the event of a checksum failure.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/occ/p9_sbe.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index 49b13cc01073..e6ccef2af659 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -14,6 +14,8 @@
->
->  #include "common.h"
->
-> +#define OCC_CHECKSUM_RETRIES   3
-> +
->  struct p9_sbe_occ {
->         struct occ occ;
->         bool sbe_error;
-> @@ -83,17 +85,22 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
->         struct occ_response *resp = &occ->resp;
->         struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
->         size_t resp_len = sizeof(*resp);
-> +       int i;
->         int rc;
->
-> -       rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> -       if (rc < 0) {
-> +       for (i = 0; i < OCC_CHECKSUM_RETRIES; ++i) {
-> +               rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> +               if (rc >= 0)
-> +                       break;
->                 if (resp_len) {
->                         if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
->                                 sysfs_notify(&occ->bus_dev->kobj, NULL,
->                                              bin_attr_ffdc.attr.name);
-> -               }
->
-> -               return rc;
-> +                       return rc;
-> +               }
-> +               if (rc != -EBADE)
-> +                       return rc;
+> Since this is now tied to MODULE_DEVICE_TABLE(acpi, ...), I think the
+> probe function should be referenced in asus_ec_sensors_platform_driver,
+> and it should be module_platform_driver() instead of
+> module_platform_driver_probe().
 
-Future you might appreciate a comment above the EBADE check clarifying
-why that error is being special cased.
+As follows?
 
->         }
->
->         switch (resp->return_status) {
-> --
-> 2.27.0
->
+static struct platform_driver asus_ec_sensors_platform_driver_probe = {
+    .probe = asus_ec_probe,
+        .driver = {
+        .name = "asus-ec-sensors",
+    .acpi_match_table = acpi_ec_ids,
+    },
+};
+
+MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
+module_platform_driver(asus_ec_sensors_platform_driver_probe);
+
+The "_probe" suffix added to keep the asus_ec_probe() code and its
+deps as __init.
+
+Eugene
