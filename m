@@ -2,40 +2,40 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F1E1C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Apr 2022 14:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA647C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Apr 2022 14:40:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348514AbiD1OoM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Apr 2022 10:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S245313AbiD1OoL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Apr 2022 10:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348544AbiD1OoE (ORCPT
+        with ESMTP id S1348547AbiD1OoE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 28 Apr 2022 10:44:04 -0400
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F1D2229C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758EB222BB
         for <linux-hwmon@vger.kernel.org>; Thu, 28 Apr 2022 07:40:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1651156848;
-  x=1682692848;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651156849;
+  x=1682692849;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ty+/c1GiIMN9adN9mb/HrXR9YcJj4kR5Q/lW3+pbUoQ=;
-  b=U1aAe3uhxij6G/I0MpmMr8ui/GC+Io/2HVhuXWLliOCvVsj9yr5/vAHU
-   aRKm9sxWyn37Scj//95IJNjc0zU7qdhne13FqJd8gAAEt6E0o3gCO3ynn
-   IMyPYRlb4JjzpLwDtnqOx8JT/Hb/KYUunkN9OM/n6LPodKuFIhzUeowmN
-   Knr5IVW0Qy3p2ZD0ritP9xEsznxDiVNio3GU7YqH6omDPVhtV0YvINp2f
-   5Pt/w022dU4AMknGatJjJhOow+RTY6JTZy66GYgr60BBYE5I2P0CTEMHA
-   TUMYLn6jiFZU8h9jStRFf9acwTtz10QckXP+cAOi57P/SnE5bLljRrtrS
-   g==;
+  bh=ZlVj8ie0LYvEGBIGn+eWLru3W3rHSVxuvgia5S2Qr+A=;
+  b=glnWs7ak/c+9w0faMvidFehbhPaBARPjQi6aY76WZSYldPIl8KhgmYPr
+   Fl5JN/BKUwqzWngg8nf76XJ6CZbAkJeh0tHUlPjZIvPdfVq80hO/8Ad/5
+   HEh5tdY5h1+OuybKD1o/GGaAo2VAIkowBVD7vDeRYV2uPUso25DZYHhTu
+   Rq5S3doJ/ZmlUDoHLnmT2ES9JnlE0q+2cq8gf7bTjcd66dUx36SQ+5Seq
+   K9xXyaZL43ZOKaJpPLk7/j3Mjkpmz5flfHAPebZfZqmqxkwu9pL6/Wy2b
+   BgBxY3BLwY622+PDUnBhGJfjAWfthyTCKfJ6xNJgZUO7ulxhSU73aHMt2
+   Q==;
 From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
         =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-Subject: [PATCH v4 3/4] hwmon: (pmbus/ltc2978) Add chip specific write_byte_data
-Date:   Thu, 28 Apr 2022 16:40:38 +0200
-Message-ID: <20220428144039.2464667-4-marten.lindahl@axis.com>
+Subject: [PATCH v4 4/4] hwmon: (pmbus) Add get_voltage/set_voltage ops
+Date:   Thu, 28 Apr 2022 16:40:39 +0200
+Message-ID: <20220428144039.2464667-5-marten.lindahl@axis.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220428144039.2464667-1-marten.lindahl@axis.com>
 References: <20220428144039.2464667-1-marten.lindahl@axis.com>
@@ -46,55 +46,99 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Several of the manuals for devices supported by this driver describes
-the need for a minimum wait time before the chip is ready to receive
-next command.
-
-This wait time is already implemented in the driver as a ltc_wait_ready
-function with a driver defined wait time of 100 ms, and is considered
-for specific devices before reading/writing data on the pmbus.
-
-Since this driver uses the default pmbus_regulator_ops for the enable/
-disable/is_enabled functions we should add a driver specific callback
-for write_byte_data to prevent bypassing the wait time recommendations
-for the following devices: ltc3880/ltc3882/ltc3883/ltc3884/ltc3886/
-ltc3887/ltc3889/ltm4664/ltm4675/ltm4676/ltm4677/ltm4678/ltm4680/ltm4686/
-ltm4700/ltc7880.
+The pmbus core does not have operations for getting or setting voltage.
+Add functions get/set voltage for the dynamic regulator framework.
 
 Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
 ---
- drivers/hwmon/pmbus/ltc2978.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/hwmon/pmbus/pmbus_core.c | 63 ++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-index 0127273883f0..531aa674a928 100644
---- a/drivers/hwmon/pmbus/ltc2978.c
-+++ b/drivers/hwmon/pmbus/ltc2978.c
-@@ -196,6 +196,17 @@ static int ltc_read_byte_data(struct i2c_client *client, int page, int reg)
- 	return pmbus_read_byte_data(client, page, reg);
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index bd143ca0c320..fe7dbb496e3b 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1531,6 +1531,11 @@ static const struct pmbus_sensor_attr voltage_attributes[] = {
+ 		.gbit = PB_STATUS_VOUT_OV,
+ 		.limit = vout_limit_attrs,
+ 		.nlimit = ARRAY_SIZE(vout_limit_attrs),
++	}, {
++		.reg = PMBUS_VOUT_COMMAND,
++		.class = PSC_VOLTAGE_OUT,
++		.paged = true,
++		.func = PMBUS_HAVE_VOUT,
+ 	}
+ };
+ 
+@@ -2563,11 +2568,69 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 	return 0;
  }
  
-+static int ltc_write_byte_data(struct i2c_client *client, int page, int reg, u8 value)
++static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
 +{
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	struct pmbus_sensor *sensor;
++	u8 page = rdev_get_id(rdev);
 +	int ret;
 +
-+	ret = ltc_wait_ready(client);
++	sensor = pmbus_find_sensor(data, page, PMBUS_READ_VOUT);
++	if (IS_ERR(sensor))
++		return -ENODATA;
++
++	mutex_lock(&data->update_lock);
++	pmbus_update_sensor_data(client, sensor);
++	if (sensor->data < 0)
++		ret = sensor->data;
++	else
++		ret = (int)pmbus_reg2data(data, sensor) * 1000; /* unit is uV */
++	mutex_unlock(&data->update_lock);
++
++	return ret;
++}
++
++static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uV,
++					 int max_uV, unsigned int *selector)
++{
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	struct pmbus_sensor *sensor;
++	u8 page = rdev_get_id(rdev);
++	s64 tmp = DIV_ROUND_CLOSEST_ULL(min_uV, 1000); /* convert to mV */
++	u16 val;
++	int ret;
++	*selector = 0;
++
++	sensor = pmbus_find_sensor(data, page, PMBUS_VOUT_COMMAND);
++	if (IS_ERR(sensor))
++		return -ENODATA;
++
++	ret = _pmbus_read_word_data(client, page, 0xff, PMBUS_VOUT_MARGIN_LOW);
 +	if (ret < 0)
 +		return ret;
 +
-+	return pmbus_write_byte_data(client, page, reg, value);
++	val = pmbus_data2reg(data, sensor, tmp);
++
++	/* Do not fall shorter than low margin */
++	if (ret > val)
++		val = ret;
++
++	ret = _pmbus_write_word_data(client, page, PMBUS_VOUT_COMMAND, val);
++
++	return ret;
 +}
 +
- static int ltc_write_byte(struct i2c_client *client, int page, u8 byte)
- {
- 	int ret;
-@@ -681,6 +692,7 @@ static int ltc2978_probe(struct i2c_client *client)
- 	info = &data->info;
- 	info->write_word_data = ltc2978_write_word_data;
- 	info->write_byte = ltc_write_byte;
-+	info->write_byte_data = ltc_write_byte_data;
- 	info->read_word_data = ltc_read_word_data;
- 	info->read_byte_data = ltc_read_byte_data;
+ const struct regulator_ops pmbus_regulator_ops = {
+ 	.enable = pmbus_regulator_enable,
+ 	.disable = pmbus_regulator_disable,
+ 	.is_enabled = pmbus_regulator_is_enabled,
+ 	.get_error_flags = pmbus_regulator_get_error_flags,
++	.get_voltage = pmbus_regulator_get_voltage,
++	.set_voltage = pmbus_regulator_set_voltage,
+ };
+ EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
  
 -- 
 2.30.2
