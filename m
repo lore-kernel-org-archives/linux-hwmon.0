@@ -2,198 +2,143 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88AE5C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Apr 2022 09:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6461C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Apr 2022 13:24:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356873AbiD2Jzg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Apr 2022 05:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
+        id S241580AbiD2N1i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Apr 2022 09:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiD2Jze (ORCPT
+        with ESMTP id S1359773AbiD2N1f (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:55:34 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7108A274
-        for <linux-hwmon@vger.kernel.org>; Fri, 29 Apr 2022 02:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1651225937;
-  x=1682761937;
-  h=date:to:cc:subject:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to:from;
-  bh=3tv51TYQ0Y4lu5ONjuF0LUJfYgcFddxxp1UO9fKOJak=;
-  b=EWwKa0QSORCRKddvhi3eYapCZpw8Y+U2afuoh37mPaF3SS4qUKMdqk38
-   vIGyb8XlDt8bTAdC4t5q5zJA4bwOUE/44Rdx4kR7vaj6ea1z2UVR3F/yo
-   XwqIzVVGyo+rVypMF7QK2qOE4xonXfvrZhkwForqtG9WS9QlIQk2QH2CL
-   QRNlE3hJMwK4UM0EiFNQeGQeS9Z6GBbovLqG4Tf2E457N8KO+ecWinZIv
-   yy7qF1BulT1UGUmTWRxLYwORamEL9GoEv+McR3eCdPTFvQ98Sa4jWr91N
-   AP9JBq05JOuv3Kt+WqXfXT4D27NshdWF61wSkcJk2Gzdbu23P5JKpHUmW
-   A==;
-Date:   Fri, 29 Apr 2022 11:52:15 +0200
+        Fri, 29 Apr 2022 09:27:35 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3796C8A87;
+        Fri, 29 Apr 2022 06:24:16 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KqY4j5gxhz67NKJ;
+        Fri, 29 Apr 2022 21:20:05 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 15:24:14 +0200
+Received: from localhost (10.81.206.67) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Apr
+ 2022 14:24:13 +0100
+Date:   Fri, 29 Apr 2022 14:24:12 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-CC:     =?iso-8859-1?Q?M=E5rten?= Lindahl <Marten.Lindahl@axis.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        kernel <kernel@axis.com>
-Subject: Re: [PATCH v4 4/4] hwmon: (pmbus) Add get_voltage/set_voltage ops
-Message-ID: <Ymu1T/kykl0FwL3j@axis.com>
-References: <20220428144039.2464667-1-marten.lindahl@axis.com>
- <20220428144039.2464667-5-marten.lindahl@axis.com>
- <6cc1561c-c4dc-076d-d9bf-1cc1cc60eac4@roeck-us.net>
+CC:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
+        "Chen-Yu Tsai" <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Samuel Holland" <samuel@sholland.org>,
+        <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+Message-ID: <20220429142412.00001e43@Huawei.com>
+In-Reply-To: <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+        <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6cc1561c-c4dc-076d-d9bf-1cc1cc60eac4@roeck-us.net>
-From:   Marten Lindahl <martenli@axis.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.206.67]
+X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 06:49:21PM +0200, Guenter Roeck wrote:
-> On 4/28/22 07:40, Mårten Lindahl wrote:
-> > The pmbus core does not have operations for getting or setting voltage.
-> > Add functions get/set voltage for the dynamic regulator framework.
-> > 
-> > Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-> > ---
-> >   drivers/hwmon/pmbus/pmbus_core.c | 63 ++++++++++++++++++++++++++++++++
-> >   1 file changed, 63 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> > index bd143ca0c320..fe7dbb496e3b 100644
-> > --- a/drivers/hwmon/pmbus/pmbus_core.c
-> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> > @@ -1531,6 +1531,11 @@ static const struct pmbus_sensor_attr voltage_attributes[] = {
-> >   		.gbit = PB_STATUS_VOUT_OV,
-> >   		.limit = vout_limit_attrs,
-> >   		.nlimit = ARRAY_SIZE(vout_limit_attrs),
-> > +	}, {
-> > +		.reg = PMBUS_VOUT_COMMAND,
-> > +		.class = PSC_VOLTAGE_OUT,
-> > +		.paged = true,
-> > +		.func = PMBUS_HAVE_VOUT,
-> >   	}
+On Thu, 28 Apr 2022 14:30:06 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
+
+> On 4/28/22 14:09, Ruslan Zalata wrote:
+> > Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+> > low rate (6 bit) ADC that is often used for extra keys. There's a driver
+> > for that already implementing standard input device, but it has these
+> > limitations: 1) it cannot be used for general ADC data equisition, and  
 > 
-> Ok, you lost me here. This adds an inX_input attribute. Why ? This is completely
-> unrelated to the intended scope of this patch. It also doesn't report a measured
-> voltage, but a configuration value. If anything, it would have to be a separate
-> patch, and you'd have to argue hard why it makes sense to report it as measured
-> voltage.
-
-I see. The reason for adding this is as simple as I now understand it is wrong.
-Please remember, my first version of the set/get_voltage functions where hardcoded
-with L16 input/output. Then in order to use the already existing convertion functions
-pmbus_data2reg and pmbus_reg2data I added this only for the need of a sensor object,
-as those functions are tailored for a sensor object.
-
-So now I have to ask you for advice. Should I use the existing convertion
-functions, or do you suggest new variants of them? If reusing them, I guess I have
-two options:
- 1: Modify them to take class, page, and data outside of a sensor object as input.
- 2: Use them as they are, but create a local 'dummy' sensor object with class, page,
-    and data to use when calling the convertion functions.
-
-I hope I made it more clear for you now how I was thinking. There is
-absolutely no intention of having sensor inX_input attributes for
-reading the setpoint values. This was just an unwanted sideeffect, and I
-will glady remove it again.
+> acquisition
 > 
-> >   };
-> >   
-> > @@ -2563,11 +2568,69 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
-> >   	return 0;
-> >   }
-> >   
-> > +static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
+> > 2) it uses only one LRADC channel of two available.
+> > 
+> > This driver provides basic hwmon interface to both channels of LRADC on
+> > such Allwinner SoCs.
+> > 
+> > Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>  
+> 
+> Ok, next phase of review.
+> 
+
+One thing noticed whilst randomly glancing at this patch.
+
+
+> > +#ifdef CONFIG_PM
+> > +static int sun4i_lradc_resume(struct device *dev)
 > > +{
-> > +	struct device *dev = rdev_get_dev(rdev);
-> > +	struct i2c_client *client = to_i2c_client(dev->parent);
-> > +	struct pmbus_data *data = i2c_get_clientdata(client);
-> > +	struct pmbus_sensor *sensor;
-> > +	u8 page = rdev_get_id(rdev);
-> > +	int ret;
+> > +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
 > > +
-> > +	sensor = pmbus_find_sensor(data, page, PMBUS_READ_VOUT);
-> > +	if (IS_ERR(sensor))
-> > +		return -ENODATA;
-> > +
-> > +	mutex_lock(&data->update_lock);
-> > +	pmbus_update_sensor_data(client, sensor);
-> > +	if (sensor->data < 0)
-> > +		ret = sensor->data;
-> > +	else
-> > +		ret = (int)pmbus_reg2data(data, sensor) * 1000; /* unit is uV */
-> > +	mutex_unlock(&data->update_lock);
-> > +
-> 
-> Same question. Why ?
-
-Same reason as above. Only to get the sensor object for pmbus_reg2data.
-
-> 
-> > +	return ret;
+> > +	return sun4i_lradc_start(lradc);
 > > +}
 > > +
-> > +static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uV,
-> > +					 int max_uV, unsigned int *selector)
+> > +static int sun4i_lradc_suspend(struct device *dev)
 > > +{
-> > +	struct device *dev = rdev_get_dev(rdev);
-> > +	struct i2c_client *client = to_i2c_client(dev->parent);
-> > +	struct pmbus_data *data = i2c_get_clientdata(client);
-> > +	struct pmbus_sensor *sensor;
-> > +	u8 page = rdev_get_id(rdev);
-> > +	s64 tmp = DIV_ROUND_CLOSEST_ULL(min_uV, 1000); /* convert to mV */
-> > +	u16 val;
-> > +	int ret;
-> > +	*selector = 0;
+> > +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
 > > +
-> > +	sensor = pmbus_find_sensor(data, page, PMBUS_VOUT_COMMAND);
-> > +	if (IS_ERR(sensor))
-> > +		return -ENODATA;
-> > +
-> > +	ret = _pmbus_read_word_data(client, page, 0xff, PMBUS_VOUT_MARGIN_LOW);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> That actually makes me wonder: What about VOUT_MARGIN_HIGH ?
-
-Ok, I will add a check for VOUT_MARGIN_HIGH also.
-
-> Also, there are optional MFR_VOUT_MIN and MFR_VOUT_MAX registers.
-> Would it possibly make sense to determine the valid range once
-> during probe and then compare against it ?
-
-Maybe this could be a good thing, so that we don't need to read both
-margins every time. But I guess that would need a new kind of page list
-with margins added to the pmbus_driver_info struct?
-I would prefer to make that change in a separate patch if it's ok with
-you?
-
-Kind regards
-Mårten
-> 
-> Thanks,
-> Guenter
-> 
-> > +	val = pmbus_data2reg(data, sensor, tmp);
-> > +
-> > +	/* Do not fall shorter than low margin */
-> > +	if (ret > val)
-> > +		val = ret;
-> > +
-> > +	ret = _pmbus_write_word_data(client, page, PMBUS_VOUT_COMMAND, val);
-> > +
-> > +	return ret;
+> > +	sun4i_lradc_stop(lradc);
+> > +	return 0;
 > > +}
 > > +
-> >   const struct regulator_ops pmbus_regulator_ops = {
-> >   	.enable = pmbus_regulator_enable,
-> >   	.disable = pmbus_regulator_disable,
-> >   	.is_enabled = pmbus_regulator_is_enabled,
-> >   	.get_error_flags = pmbus_regulator_get_error_flags,
-> > +	.get_voltage = pmbus_regulator_get_voltage,
-> > +	.set_voltage = pmbus_regulator_set_voltage,
-> >   };
-> >   EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
-> >   
+> > +#define SUN4I_LRADC_DEV_PM_OPS	(&sun4i_lradc_dev_pm_ops)
+> > +#else
+> > +#define SUN4I_LRADC_DEV_PM_OPS	NULL
+> > +#endif /* CONFIG_PM */
+> > +
+> > +static const struct dev_pm_ops sun4i_lradc_dev_pm_ops = {
+
+We have much better infrastructure for this these days.
+
+Take a look at DEFINE_SIMPLE_DEV_PM_OPS()
+and pm_sleep_ptr()
+
+Those two in combination will let you get rid of all the ifdef stuff
+here by letting the compiler remove the unused code automatically.
+
+> > +	.suspend = sun4i_lradc_suspend,
+> > +	.resume = sun4i_lradc_resume,
+> > +};
+> > +
+> > +static const struct of_device_id sun4i_lradc_of_match[] = {
+> > +	{ .compatible = "allwinner,sun4i-a10-lradc-keys", .data = &variant_sun4i_a10_lradc},
+> > +	{ /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, sun4i_lradc_of_match);
+> > +
+> > +static struct platform_driver sun4i_lradc_driver = {
+> > +	.driver = {
+> > +		.name	= "sun4i-lradc-hwmon",
+> > +		.of_match_table = of_match_ptr(sun4i_lradc_of_match),
+> > +		.pm = SUN4I_LRADC_DEV_PM_OPS,
+> > +	},
+> > +	.probe	= sun4i_lradc_probe,
+> > +};
+> > +
+> > +module_platform_driver(sun4i_lradc_driver);
+> > +
+> > +MODULE_DESCRIPTION("Allwinner A13/A20 LRADC hwmon driver");
+> > +MODULE_AUTHOR("Ruslan Zalata <rz@fabmicro.ru>");
+> > +MODULE_LICENSE("GPL");
+> > +No empty line at end, please  
 > 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
