@@ -2,123 +2,471 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82804C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Apr 2022 06:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D9C0C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Apr 2022 07:13:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354351AbiD2GHT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Apr 2022 02:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S1348567AbiD2HQo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Apr 2022 03:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345038AbiD2GHT (ORCPT
+        with ESMTP id S1354984AbiD2HQo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:07:19 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42922B899A;
-        Thu, 28 Apr 2022 23:04:02 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id y63so7584622oia.7;
-        Thu, 28 Apr 2022 23:04:02 -0700 (PDT)
+        Fri, 29 Apr 2022 03:16:44 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF219C1C;
+        Fri, 29 Apr 2022 00:13:25 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id e128so5267081qkd.7;
+        Fri, 29 Apr 2022 00:13:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language
-         :from:to:cc:references:subject:in-reply-to:content-transfer-encoding;
-        bh=X/KcFNZhAHoZ1H6Tr4WvcjaMczJznMSErZBotqKY3jk=;
-        b=PxhNjBOw2ylbQzoWSUcKoIuVMYGb/l6sxtEDteNu6AO+5YMtyA256PNa3JlRIRzM+L
-         ijSIySGeJpUHMeXZTKHsagxc/ujgW+UfOit8Xhfp0WtlPe/tGMEsbntzX149xTm+Ewic
-         njMJr3IjP6E8YT38D97JampAL4qtJ7h7T36pulJNSiy9qSxN10NFsKStjF3H/oHT33QK
-         E/RoWon0gJ6V5OC1x6Ukk7545Tn3PzgVRsSC7Q/gedvTBhSbDewSG9jdr+f6ndDW4HAG
-         8O6LZm2d5LwL7k1kwdzVrSVIt7fWf+QpJ2iyi0OeYDSc9rT25u5SSLRKE1O3FEguyZ02
-         zqJw==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bb+oBMNOxxqVOaPTA6+L4Y0vbb05WWQDCW8hwA5vFgQ=;
+        b=Nd42Ns5WesRWJKyp06bvmPCgqOaEutxbKZ/A+8++ruixIu7ahSblCt079HIslig7xT
+         QIl6VmTSVIuZfDVMEND+9iFClfn41jdxRhYQcFDm63KtGFUBcHVRyLLbxjlubJwRLaLX
+         jdANqfIXStsmUuSDrqfc+ACdkZSj5krsyxZx8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:references:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=X/KcFNZhAHoZ1H6Tr4WvcjaMczJznMSErZBotqKY3jk=;
-        b=WrvkiuecLdZ8EAiE82+QKzFX3Fzt/7H3LgeaHLWQTGV4mVVuTMIKP1bKV+MmvTL4e6
-         ZB+VWQaN60aq6zL0zL822cGU+tPvCVfIorrbYtKqyl8xr+K0aGhxtXXS3eWrJWoP12ah
-         lTHeXgpff1HjQWiq2xnQwa1K+tnEUAeHdonCQSm2Ja75ppOaC60salvw6h5lizMZSeJa
-         VE6PUWeWBsg2MF6ZyZSEG3R7fiH2G48thdziZya7kgd9uDOzj0EaMPVbGhTToUTu/GGh
-         2Ts5b/hqJq3eJv9ZTGeHl25BdjuE339eePvTKR8KKqm2lZi/IxzVT0ImrvX7XOrZn+kG
-         CD0A==
-X-Gm-Message-State: AOAM530k+Mrff2+b1tU+VfMVzmI7Jb6NerRmPgqa0snCdVAHxZ85Q8WU
-        vt3mA64hvJ19iaOgC+qhyzo=
-X-Google-Smtp-Source: ABdhPJwnRWg5pq2rb86Qc8RTFC94blcskTiFA5sttrDQRIupMO1KOk3leXNWAUY1RnkOtxc0Psq7lQ==
-X-Received: by 2002:a05:6808:1912:b0:325:74c4:35e3 with SMTP id bf18-20020a056808191200b0032574c435e3mr788022oib.61.1651212241626;
-        Thu, 28 Apr 2022 23:04:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a8-20020a4ad5c8000000b0035eb4e5a6c6sm429034oot.28.2022.04.28.23.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 23:04:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <59e91f45-7263-eb41-4b47-db217af54910@roeck-us.net>
-Date:   Thu, 28 Apr 2022 23:03:58 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bb+oBMNOxxqVOaPTA6+L4Y0vbb05WWQDCW8hwA5vFgQ=;
+        b=FbUIKqfyoUTo0k8j5JXZCVgvhCKSd/qk4J1izfdWOP8czKwPyvCybMkaSCGE8ScMDF
+         4YfladEcNVPmcI+HmJBPzBwk410wbZJF84EKcAwdmeTzM6a4ax5z1ND+IJzvNncYAlPN
+         vfn1AGZqtD4tI1VpVfhVXFN9SvQp+781jWo4879h++eQnStQI//nV9rqWv+/kVQPi+Gg
+         EUa7QNfpeacEjp1XxOvlhfs4QlB8u7k9dOVGq7f6mhRcfY617RPVtvE8EDyJJb+6tfaB
+         jgL+yaTjEriF7mgX2X/0/lcYbJxyZDBwFy834VAlHoQV6K4w32fA2UXiTggX3truJEyM
+         fD7w==
+X-Gm-Message-State: AOAM5304bHvLB4ickN+v8Jx0t9KZ2D4QhsQVlXvtO2KGo6OrCZU4LQ4b
+        EUWe8VMU18MfxG9FbTa+zwgcXsnHKWQEcrue+6Qzk7fe
+X-Google-Smtp-Source: ABdhPJzTzCR99U2wXSB9bYTodS4RKs9nm0LZr8WdE5tgNvwiDOLhkLXJ/OuLYJUlJE8H2YLzevProUnF51byG9UiMlM=
+X-Received: by 2002:a05:620a:2946:b0:69e:7d2d:1947 with SMTP id
+ n6-20020a05620a294600b0069e7d2d1947mr21605525qkp.533.1651216404817; Fri, 29
+ Apr 2022 00:13:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ruslan Zalata <rz@fabmicro.ru>
-Cc:     Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
- <e0b57c7587dded38a92411994f353b3d@fabmicro.ru>
- <e4d1a6c8-1afd-671e-76bf-b5bde9dc282f@roeck-us.net>
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
-In-Reply-To: <e4d1a6c8-1afd-671e-76bf-b5bde9dc282f@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220427140443.11428-1-eajames@linux.ibm.com> <20220427143454.GA3193568@roeck-us.net>
+In-Reply-To: <20220427143454.GA3193568@roeck-us.net>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Fri, 29 Apr 2022 07:13:12 +0000
+Message-ID: <CACPK8Xcp1wsH_=EST=OhkknuCxhbC2UB9TQ78XtCkUGcS0B6_Q@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon (occ): Delay hwmon registration until user request
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Eddie James <eajames@linux.ibm.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/28/22 22:32, Guenter Roeck wrote:
-> On 4/28/22 17:28, Ruslan Zalata wrote:
->> Thank you Guenter for your valuable time.
->>
->> I have added update_interval option (it's in ms units, right?) and fixed all other issues you pointed to. Will test it on real hardware and send third version of the patch for review.
->>
->> Regarding IRQ. Alternatively the driver would need to sit and poll conversion ready bit in a loop which might cause a much worse load on system, is not it ? Anyway, the real problem with this piece of hardware is that there's no "conversion ready bit" provided, the only way to know data ready status is to receive an interrupt.
->>
-> 
-> Not necessarily. The data does not have to be "current", after all,
-> if the hardware is able to continuously convert. If not, the question
-> is how long a conversion takes. If it doesn't take too long, it would
-> be better to initiate a conversion and then wait for the completion.
-> 
->> I think it still needs a semaphore/seqlock to synchronize conversions and reads. I.e. two consequent reads should not return same old value. Although it's not an issue in my case, but could be a problem for others.
->>
-> Why ? That happens for almost all hwmon devices. They will all report
-> the most recent conversion value. Some of them can take seconds
-> to complete a new conversion, so the reported value is always "old"
-> for a given defition of old (ie any time smaller than a conversion
-> interval).
-> 
-> Sigh. Looks like I'll have to dig up the documentation and read about
-> the ADC myself.
-> 
+On Wed, 27 Apr 2022 at 14:34, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Apr 27, 2022 at 09:04:43AM -0500, Eddie James wrote:
+> > Instead of registering the hwmon device at probe time, use the
+> > existing "occ_active" sysfs file to control when the driver polls
+> > the OCC for sensor data and registers with hwmon. The reason for
+> > this change is that the SBE, which is the device by which the
+> > driver communicates with the OCC, cannot handle communications
+> > during certain system state transitions, resulting in
+> > unrecoverable system errors.
+> >
+> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>
+> Applied to hwmon-next.
 
-I did, for both A13 and A20. The ADC supports continuous mode. That
-means it can be configured accordingly, and reading the ADC value
-just returns the most recent conversion value. There is absolutely
-no need to keep reading the conversion values using interrupts.
+Will this change break existing userspace? As I understand it existing
+systems rely on the driver probing for the occ without extra
+interaction.
 
-Also,
+From your commit message, it sounds like we should inhibit SBE
+communication during the sensitive period. This would stop any
+devices, not just the OCC, from generating unwanted traffic.
 
-+struct lradc_variant {
-+	u32 bits;
-+	u32 resolution;
-+	u32 vref;
-+};
-
-is unnecessary because the values are the same for both supported chips.
-That means that defines can and should be used. Yes, I can see that
-A83T uses a different voltage, but even that doesn't need a structure -
-the voltage can be set in struct sun4i_lradc_data if/when needed,
-and the resolution and number of bits is still the same.
-
-Guenter
+>
+> Guenter
+>
+> > ---
+> > Changes since v1:
+> >  - Update commit message to for clarity.
+> >
+> >  drivers/hwmon/occ/common.c | 100 +++++++++++++++++++--------
+> >  drivers/hwmon/occ/common.h |   5 +-
+> >  drivers/hwmon/occ/p8_i2c.c |   2 +-
+> >  drivers/hwmon/occ/p9_sbe.c |   2 +-
+> >  drivers/hwmon/occ/sysfs.c  | 137 ++++++++++++++++++++++---------------
+> >  5 files changed, 156 insertions(+), 90 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> > index f00cd59f1d19..d78f4bebc718 100644
+> > --- a/drivers/hwmon/occ/common.c
+> > +++ b/drivers/hwmon/occ/common.c
+> > @@ -1149,44 +1149,75 @@ static void occ_parse_poll_response(struct occ *occ)
+> >               sizeof(*header), size + sizeof(*header));
+> >  }
+> >
+> > -int occ_setup(struct occ *occ, const char *name)
+> > +int occ_active(struct occ *occ, bool active)
+> >  {
+> > -     int rc;
+> > -
+> > -     mutex_init(&occ->lock);
+> > -     occ->groups[0] = &occ->group;
+> > +     int rc = mutex_lock_interruptible(&occ->lock);
+> >
+> > -     /* no need to lock */
+> > -     rc = occ_poll(occ);
+> > -     if (rc == -ESHUTDOWN) {
+> > -             dev_info(occ->bus_dev, "host is not ready\n");
+> > -             return rc;
+> > -     } else if (rc < 0) {
+> > -             dev_err(occ->bus_dev,
+> > -                     "failed to get OCC poll response=%02x: %d\n",
+> > -                     occ->resp.return_status, rc);
+> > +     if (rc)
+> >               return rc;
+> > -     }
+> >
+> > -     occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
+> > -     occ_parse_poll_response(occ);
+> > +     if (active) {
+> > +             if (occ->active) {
+> > +                     rc = -EALREADY;
+> > +                     goto unlock;
+> > +             }
+> >
+> > -     rc = occ_setup_sensor_attrs(occ);
+> > -     if (rc) {
+> > -             dev_err(occ->bus_dev, "failed to setup sensor attrs: %d\n",
+> > -                     rc);
+> > -             return rc;
+> > -     }
+> > +             occ->error_count = 0;
+> > +             occ->last_safe = 0;
+> >
+> > -     occ->hwmon = devm_hwmon_device_register_with_groups(occ->bus_dev, name,
+> > -                                                         occ, occ->groups);
+> > -     if (IS_ERR(occ->hwmon)) {
+> > -             rc = PTR_ERR(occ->hwmon);
+> > -             dev_err(occ->bus_dev, "failed to register hwmon device: %d\n",
+> > -                     rc);
+> > -             return rc;
+> > +             rc = occ_poll(occ);
+> > +             if (rc < 0) {
+> > +                     dev_err(occ->bus_dev,
+> > +                             "failed to get OCC poll response=%02x: %d\n",
+> > +                             occ->resp.return_status, rc);
+> > +                     goto unlock;
+> > +             }
+> > +
+> > +             occ->active = true;
+> > +             occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
+> > +             occ_parse_poll_response(occ);
+> > +
+> > +             rc = occ_setup_sensor_attrs(occ);
+> > +             if (rc) {
+> > +                     dev_err(occ->bus_dev,
+> > +                             "failed to setup sensor attrs: %d\n", rc);
+> > +                     goto unlock;
+> > +             }
+> > +
+> > +             occ->hwmon = hwmon_device_register_with_groups(occ->bus_dev,
+> > +                                                            "occ", occ,
+> > +                                                            occ->groups);
+> > +             if (IS_ERR(occ->hwmon)) {
+> > +                     rc = PTR_ERR(occ->hwmon);
+> > +                     occ->hwmon = NULL;
+> > +                     dev_err(occ->bus_dev,
+> > +                             "failed to register hwmon device: %d\n", rc);
+> > +                     goto unlock;
+> > +             }
+> > +     } else {
+> > +             if (!occ->active) {
+> > +                     rc = -EALREADY;
+> > +                     goto unlock;
+> > +             }
+> > +
+> > +             if (occ->hwmon)
+> > +                     hwmon_device_unregister(occ->hwmon);
+> > +             occ->active = false;
+> > +             occ->hwmon = NULL;
+> >       }
+> >
+> > +unlock:
+> > +     mutex_unlock(&occ->lock);
+> > +     return rc;
+> > +}
+> > +
+> > +int occ_setup(struct occ *occ)
+> > +{
+> > +     int rc;
+> > +
+> > +     mutex_init(&occ->lock);
+> > +     occ->groups[0] = &occ->group;
+> > +
+> >       rc = occ_setup_sysfs(occ);
+> >       if (rc)
+> >               dev_err(occ->bus_dev, "failed to setup sysfs: %d\n", rc);
+> > @@ -1195,6 +1226,15 @@ int occ_setup(struct occ *occ, const char *name)
+> >  }
+> >  EXPORT_SYMBOL_GPL(occ_setup);
+> >
+> > +void occ_shutdown(struct occ *occ)
+> > +{
+> > +     occ_shutdown_sysfs(occ);
+> > +
+> > +     if (occ->hwmon)
+> > +             hwmon_device_unregister(occ->hwmon);
+> > +}
+> > +EXPORT_SYMBOL_GPL(occ_shutdown);
+> > +
+> >  MODULE_AUTHOR("Eddie James <eajames@linux.ibm.com>");
+> >  MODULE_DESCRIPTION("Common OCC hwmon code");
+> >  MODULE_LICENSE("GPL");
+> > diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+> > index 2dd4a4d240c0..64d5ec7e169b 100644
+> > --- a/drivers/hwmon/occ/common.h
+> > +++ b/drivers/hwmon/occ/common.h
+> > @@ -106,6 +106,7 @@ struct occ {
+> >       struct attribute_group group;
+> >       const struct attribute_group *groups[2];
+> >
+> > +     bool active;
+> >       int error;                      /* final transfer error after retry */
+> >       int last_error;                 /* latest transfer error */
+> >       unsigned int error_count;       /* number of xfr errors observed */
+> > @@ -123,9 +124,11 @@ struct occ {
+> >       u8 prev_mode;
+> >  };
+> >
+> > -int occ_setup(struct occ *occ, const char *name);
+> > +int occ_active(struct occ *occ, bool active);
+> > +int occ_setup(struct occ *occ);
+> >  int occ_setup_sysfs(struct occ *occ);
+> >  void occ_shutdown(struct occ *occ);
+> > +void occ_shutdown_sysfs(struct occ *occ);
+> >  void occ_sysfs_poll_done(struct occ *occ);
+> >  int occ_update_response(struct occ *occ);
+> >
+> > diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+> > index 9e61e1fb5142..da39ea28df31 100644
+> > --- a/drivers/hwmon/occ/p8_i2c.c
+> > +++ b/drivers/hwmon/occ/p8_i2c.c
+> > @@ -223,7 +223,7 @@ static int p8_i2c_occ_probe(struct i2c_client *client)
+> >       occ->poll_cmd_data = 0x10;              /* P8 OCC poll data */
+> >       occ->send_cmd = p8_i2c_occ_send_cmd;
+> >
+> > -     return occ_setup(occ, "p8_occ");
+> > +     return occ_setup(occ);
+> >  }
+> >
+> >  static int p8_i2c_occ_remove(struct i2c_client *client)
+> > diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> > index 49b13cc01073..42fc7b97bb34 100644
+> > --- a/drivers/hwmon/occ/p9_sbe.c
+> > +++ b/drivers/hwmon/occ/p9_sbe.c
+> > @@ -145,7 +145,7 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
+> >       occ->poll_cmd_data = 0x20;              /* P9 OCC poll data */
+> >       occ->send_cmd = p9_sbe_occ_send_cmd;
+> >
+> > -     rc = occ_setup(occ, "p9_occ");
+> > +     rc = occ_setup(occ);
+> >       if (rc == -ESHUTDOWN)
+> >               rc = -ENODEV;   /* Host is shutdown, don't spew errors */
+> >
+> > diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
+> > index b2f788a77746..2317301fc1e9 100644
+> > --- a/drivers/hwmon/occ/sysfs.c
+> > +++ b/drivers/hwmon/occ/sysfs.c
+> > @@ -6,13 +6,13 @@
+> >  #include <linux/export.h>
+> >  #include <linux/hwmon-sysfs.h>
+> >  #include <linux/kernel.h>
+> > +#include <linux/kstrtox.h>
+> >  #include <linux/sysfs.h>
+> >
+> >  #include "common.h"
+> >
+> >  /* OCC status register */
+> >  #define OCC_STAT_MASTER                      BIT(7)
+> > -#define OCC_STAT_ACTIVE                      BIT(0)
+> >
+> >  /* OCC extended status register */
+> >  #define OCC_EXT_STAT_DVFS_OT         BIT(7)
+> > @@ -22,6 +22,25 @@
+> >  #define OCC_EXT_STAT_DVFS_VDD                BIT(3)
+> >  #define OCC_EXT_STAT_GPU_THROTTLE    GENMASK(2, 0)
+> >
+> > +static ssize_t occ_active_store(struct device *dev,
+> > +                             struct device_attribute *attr,
+> > +                             const char *buf, size_t count)
+> > +{
+> > +     int rc;
+> > +     bool active;
+> > +     struct occ *occ = dev_get_drvdata(dev);
+> > +
+> > +     rc = kstrtobool(buf, &active);
+> > +     if (rc)
+> > +             return rc;
+> > +
+> > +     rc = occ_active(occ, active);
+> > +     if (rc)
+> > +             return rc;
+> > +
+> > +     return count;
+> > +}
+> > +
+> >  static ssize_t occ_sysfs_show(struct device *dev,
+> >                             struct device_attribute *attr, char *buf)
+> >  {
+> > @@ -31,54 +50,64 @@ static ssize_t occ_sysfs_show(struct device *dev,
+> >       struct occ_poll_response_header *header;
+> >       struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+> >
+> > -     rc = occ_update_response(occ);
+> > -     if (rc)
+> > -             return rc;
+> > +     if (occ->active) {
+> > +             rc = occ_update_response(occ);
+> > +             if (rc)
+> > +                     return rc;
+> >
+> > -     header = (struct occ_poll_response_header *)occ->resp.data;
+> > -
+> > -     switch (sattr->index) {
+> > -     case 0:
+> > -             val = !!(header->status & OCC_STAT_MASTER);
+> > -             break;
+> > -     case 1:
+> > -             val = !!(header->status & OCC_STAT_ACTIVE);
+> > -             break;
+> > -     case 2:
+> > -             val = !!(header->ext_status & OCC_EXT_STAT_DVFS_OT);
+> > -             break;
+> > -     case 3:
+> > -             val = !!(header->ext_status & OCC_EXT_STAT_DVFS_POWER);
+> > -             break;
+> > -     case 4:
+> > -             val = !!(header->ext_status & OCC_EXT_STAT_MEM_THROTTLE);
+> > -             break;
+> > -     case 5:
+> > -             val = !!(header->ext_status & OCC_EXT_STAT_QUICK_DROP);
+> > -             break;
+> > -     case 6:
+> > -             val = header->occ_state;
+> > -             break;
+> > -     case 7:
+> > -             if (header->status & OCC_STAT_MASTER)
+> > -                     val = hweight8(header->occs_present);
+> > -             else
+> > +             header = (struct occ_poll_response_header *)occ->resp.data;
+> > +
+> > +             switch (sattr->index) {
+> > +             case 0:
+> > +                     val = !!(header->status & OCC_STAT_MASTER);
+> > +                     break;
+> > +             case 1:
+> >                       val = 1;
+> > -             break;
+> > -     case 8:
+> > -             val = header->ips_status;
+> > -             break;
+> > -     case 9:
+> > -             val = header->mode;
+> > -             break;
+> > -     case 10:
+> > -             val = !!(header->ext_status & OCC_EXT_STAT_DVFS_VDD);
+> > -             break;
+> > -     case 11:
+> > -             val = header->ext_status & OCC_EXT_STAT_GPU_THROTTLE;
+> > -             break;
+> > -     default:
+> > -             return -EINVAL;
+> > +                     break;
+> > +             case 2:
+> > +                     val = !!(header->ext_status & OCC_EXT_STAT_DVFS_OT);
+> > +                     break;
+> > +             case 3:
+> > +                     val = !!(header->ext_status & OCC_EXT_STAT_DVFS_POWER);
+> > +                     break;
+> > +             case 4:
+> > +                     val = !!(header->ext_status &
+> > +                              OCC_EXT_STAT_MEM_THROTTLE);
+> > +                     break;
+> > +             case 5:
+> > +                     val = !!(header->ext_status & OCC_EXT_STAT_QUICK_DROP);
+> > +                     break;
+> > +             case 6:
+> > +                     val = header->occ_state;
+> > +                     break;
+> > +             case 7:
+> > +                     if (header->status & OCC_STAT_MASTER)
+> > +                             val = hweight8(header->occs_present);
+> > +                     else
+> > +                             val = 1;
+> > +                     break;
+> > +             case 8:
+> > +                     val = header->ips_status;
+> > +                     break;
+> > +             case 9:
+> > +                     val = header->mode;
+> > +                     break;
+> > +             case 10:
+> > +                     val = !!(header->ext_status & OCC_EXT_STAT_DVFS_VDD);
+> > +                     break;
+> > +             case 11:
+> > +                     val = header->ext_status & OCC_EXT_STAT_GPU_THROTTLE;
+> > +                     break;
+> > +             default:
+> > +                     return -EINVAL;
+> > +             }
+> > +     } else {
+> > +             if (sattr->index == 1)
+> > +                     val = 0;
+> > +             else if (sattr->index <= 11)
+> > +                     val = -ENODATA;
+> > +             else
+> > +                     return -EINVAL;
+> >       }
+> >
+> >       return sysfs_emit(buf, "%d\n", val);
+> > @@ -95,7 +124,8 @@ static ssize_t occ_error_show(struct device *dev,
+> >  }
+> >
+> >  static SENSOR_DEVICE_ATTR(occ_master, 0444, occ_sysfs_show, NULL, 0);
+> > -static SENSOR_DEVICE_ATTR(occ_active, 0444, occ_sysfs_show, NULL, 1);
+> > +static SENSOR_DEVICE_ATTR(occ_active, 0644, occ_sysfs_show, occ_active_store,
+> > +                       1);
+> >  static SENSOR_DEVICE_ATTR(occ_dvfs_overtemp, 0444, occ_sysfs_show, NULL, 2);
+> >  static SENSOR_DEVICE_ATTR(occ_dvfs_power, 0444, occ_sysfs_show, NULL, 3);
+> >  static SENSOR_DEVICE_ATTR(occ_mem_throttle, 0444, occ_sysfs_show, NULL, 4);
+> > @@ -139,7 +169,7 @@ void occ_sysfs_poll_done(struct occ *occ)
+> >        * On the first poll response, we haven't yet created the sysfs
+> >        * attributes, so don't make any notify calls.
+> >        */
+> > -     if (!occ->hwmon)
+> > +     if (!occ->active)
+> >               goto done;
+> >
+> >       if ((header->status & OCC_STAT_MASTER) !=
+> > @@ -148,12 +178,6 @@ void occ_sysfs_poll_done(struct occ *occ)
+> >               sysfs_notify(&occ->bus_dev->kobj, NULL, name);
+> >       }
+> >
+> > -     if ((header->status & OCC_STAT_ACTIVE) !=
+> > -         (occ->prev_stat & OCC_STAT_ACTIVE)) {
+> > -             name = sensor_dev_attr_occ_active.dev_attr.attr.name;
+> > -             sysfs_notify(&occ->bus_dev->kobj, NULL, name);
+> > -     }
+> > -
+> >       if ((header->ext_status & OCC_EXT_STAT_DVFS_OT) !=
+> >           (occ->prev_ext_stat & OCC_EXT_STAT_DVFS_OT)) {
+> >               name = sensor_dev_attr_occ_dvfs_overtemp.dev_attr.attr.name;
+> > @@ -227,8 +251,7 @@ int occ_setup_sysfs(struct occ *occ)
+> >       return sysfs_create_group(&occ->bus_dev->kobj, &occ_sysfs);
+> >  }
+> >
+> > -void occ_shutdown(struct occ *occ)
+> > +void occ_shutdown_sysfs(struct occ *occ)
+> >  {
+> >       sysfs_remove_group(&occ->bus_dev->kobj, &occ_sysfs);
+> >  }
+> > -EXPORT_SYMBOL_GPL(occ_shutdown);
