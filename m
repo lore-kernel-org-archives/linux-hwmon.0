@@ -2,131 +2,147 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABDCAC433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Apr 2022 12:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 080B2C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Apr 2022 12:58:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377060AbiD3NBW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 30 Apr 2022 09:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S1377377AbiD3NB6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 30 Apr 2022 09:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiD3NBW (ORCPT
+        with ESMTP id S231486AbiD3NB5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:01:22 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95886719C6;
-        Sat, 30 Apr 2022 05:58:00 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id a10so11150131oif.9;
-        Sat, 30 Apr 2022 05:58:00 -0700 (PDT)
+        Sat, 30 Apr 2022 09:01:57 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8BC74DCF;
+        Sat, 30 Apr 2022 05:58:35 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id e189so11161477oia.8;
+        Sat, 30 Apr 2022 05:58:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=JrzcVRiOTtdTztIgt2jm0sav/da1Fi9w94LTpqDYlBc=;
-        b=CX3R5GvqmOQe6UtQi4RF+a7C+Cpgy232C/t6uVzxwsY0+/La15jYmNyW3nsXfdFYjo
-         w8jZDE48bc5lBE857YTb0sTxC8nFnc9zfIkltI/8q0eNeycLzDSBMICp9tHbcvqXyucv
-         Owe/SsO2y4kAz2ep79GuPINalYgPx3O98Y9l2XkacQCTQvoLZ1D85kS1wVmniO3Ga9IW
-         gFTkOCrPo+kiZRnAewl2NQwkzssDA/5sNYR+Xqp8HCXuZvrJydcRmXTq7kR3nIq1UxbR
-         2J+IGkJZ/j+ESVwnvHUQ06oJXcLShy8AR3ySIUHgK7cufXpoqEm/JqkebePUREeBlzDf
-         ajDA==
+        bh=ciKZAgL4Y32fQDktpp8pgT/D9mFOYAbHr7EpiXlwflg=;
+        b=DzZzEmyFRHYyDcTBj0CEp6Ote2vz0QXlAZsSgvWMwZT0wfFWRqDshURzXnHE6+Duyl
+         tGJpoTaoSQBW4Q8SzDhUIAEL5K5AfxaHpVDPEmpHPCOCMaBtzOjsptIH9LPUWt2EJ/qS
+         o6C9kIk3SWXPR1IovAi2Otnq7xK7CmU5G27POuQNgAC9jcfB4coUJa2+9TU32GsKIZvD
+         UCFDKJthobxBw4WU6w+IFNb35Wh7pWTZq0PUNxOLoVI7Cfz3JAMhAr4iYc5kVUz3cCHZ
+         mi6LJCBY166hjWHIvZc7ePz9q+w1fo8l1sYo7CgIdHfgjzQSb0vA/tGEhYhx/S94knFr
+         sN1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=JrzcVRiOTtdTztIgt2jm0sav/da1Fi9w94LTpqDYlBc=;
-        b=pvKwzhX/UGZlxfe6uIQdHK4/tffl9Rsv4Orm59S/CSOITX2iFnxF8Hs5cY6Vd88/nY
-         MJMQX6EHVXcoQrfdDgO2QCcvs0tXmCYoNMNwK2QgPtoK9fAMego00NScCuBsTJACXnWJ
-         Nzbf9VgMG5213m0X/wsOiBJUQDNxOye86UqLfIPlwQpsEq6axgUTujHQWzrxYSu94qKL
-         7gaovwuWPsB5aDwB/y7hAEjOify+7zOdujGdngyoxJSlXkfWJq0EKXnE8eGKfhVZ/h5E
-         BjGOCfI6er7rMNad8ma8Ya63srgKC+kWrr4jDeVCsh0qRay85Qqx1/0hgQh7GNknyCX8
-         Cwiw==
-X-Gm-Message-State: AOAM530ZLBL0TOpVB4Xix2wCkGVXlGfQiR1civ+0EZE29H22acJ1oWN8
-        0nqoQa6rZXkoSRAz2XHW+7J8SgNHr/O+5Q==
-X-Google-Smtp-Source: ABdhPJxpefSoAhMBpyXiHr3two36ghSKpk1L/PJdkZt60mrEz8Whe6YpW8tBWoEG90RyVyXnQ6NYsQ==
-X-Received: by 2002:a05:6808:148a:b0:322:6178:ebe2 with SMTP id e10-20020a056808148a00b003226178ebe2mr3522257oiw.7.1651323479952;
-        Sat, 30 Apr 2022 05:57:59 -0700 (PDT)
+        bh=ciKZAgL4Y32fQDktpp8pgT/D9mFOYAbHr7EpiXlwflg=;
+        b=OLjFIACQAxwOcSRr89WlTLgXf5w3IdCGyJzAae1/i1oLp3xkNZ7pQhS0RVxi4W8YMa
+         g44jZm5Vbre8KuAICU18cY6bD2fuMxhd4bEJtSxMOsV4HTwieU+gLm4aL7I0C5EE4Y6X
+         Iv/HGE4M/GwB18zSOnG8c6ouWcDHXHJlHC9sbOOSBexUqKBGaUgtJALua37pQ/o+h7hI
+         gK89erqQUp8m+Z6S4upPuJrnBAjxnKJA2lMdJ8IQtVTHwkzTGAm6qB24XY8suC+e+/Nm
+         IOnibWI/+7Q/hMCftkM86k6W5CVp28v2pHCjIgZOeaHI9KxJFLbZhkLOt83eiJbrucCE
+         GBww==
+X-Gm-Message-State: AOAM532jfihi2Y72RUlNJV/+wQ1/ZDS1fcH28wpsYlpSOEV6T/UH+ldu
+        Z062HNy4C8/aBlktAjyLpSLkMasT0ofYzg==
+X-Google-Smtp-Source: ABdhPJx+vtwyvt9yAgitgg+Ig7W3fz6/XYc//dfziW9VWg8P8Y9X/4PvCkw/xkuUg7eA3rq2K5jrew==
+X-Received: by 2002:a05:6808:ec2:b0:2f7:34db:691e with SMTP id q2-20020a0568080ec200b002f734db691emr3660139oiv.252.1651323514636;
+        Sat, 30 Apr 2022 05:58:34 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v15-20020a4ae6cf000000b0035eb4e5a6cdsm1856050oot.35.2022.04.30.05.57.58
+        by smtp.gmail.com with ESMTPSA id n44-20020a056870822c00b000e686d13894sm3991394oae.46.2022.04.30.05.58.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 05:57:59 -0700 (PDT)
+        Sat, 30 Apr 2022 05:58:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 30 Apr 2022 05:57:57 -0700
+Date:   Sat, 30 Apr 2022 05:58:32 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     michaelsh@nvidia.com
 Cc:     robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, vadimp@nvidia.com
-Subject: Re: [PATCH v1 3/3] docs: hwmon: add emc2305.rst to docs
-Message-ID: <20220430125757.GB1888736@roeck-us.net>
+Subject: Re: [PATCH v1 2/3] dt-bindings: hwmon: add microchip,emc2306.yaml dt
+ binding description.
+Message-ID: <20220430125832.GC1888736@roeck-us.net>
 References: <20220430114905.53448-1-michaelsh@nvidia.com>
- <20220430114905.53448-4-michaelsh@nvidia.com>
+ <20220430114905.53448-3-michaelsh@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220430114905.53448-4-michaelsh@nvidia.com>
+In-Reply-To: <20220430114905.53448-3-michaelsh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 02:49:05PM +0300, michaelsh@nvidia.com wrote:
+On Sat, Apr 30, 2022 at 02:49:04PM +0300, michaelsh@nvidia.com wrote:
 > From: Michael Shych <michaelsh@nvidia.com>
 > 
-> Add description of emc2305 driver.
+> Add basic description of emc2305 driver device tree binding.
 > 
 > Signed-off-by: Michael Shych <michaelsh@nvidia.com>
 > Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
 > ---
->  Documentation/hwmon/emc2305.rst | 40 ++++++++++++++++++++++++++++++++++++++++
-
-Also add to index.rst.
-
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/hwmon/emc2305.rst
+>  .../bindings/hwmon/microchip,emc2305.yaml          | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
 > 
-> diff --git a/Documentation/hwmon/emc2305.rst b/Documentation/hwmon/emc2305.rst
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
 > new file mode 100644
-> index 000000000000..258da49d18f9
+> index 000000000000..c873172b7268
 > --- /dev/null
-> +++ b/Documentation/hwmon/emc2305.rst
-> @@ -0,0 +1,40 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
 > +
-> +Kernel driver emc2305
-> +=====================
+> +$id: http://devicetree.org/schemas/hwmon/emc2305.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +Supported chips:
-> +   Microchip EMC2305, EMC2303, EMC2302, EMC2301
+> +title: Microchip EMC2305 RPM-based PWM Fan Speed Controller
 > +
-> +   Addresses scanned: I2C 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d
-> +   Prefixes: 'emc2305'
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microcip,emc2305
 > +
-> +   Datasheet: Publicly available at the Microchip website :
-> +      https://www.microchip.com/en-us/product/EMC2305
+> +  emc2305,pwm-min:
+> +    description:
+> +      Min pwm of emc2305
+> +    maxItems: 1
+> +  emc2305,pwm-max:
+> +    description:
+> +      Max pwm of emc2305
+> +    maxItems: 1
+> +  emc2305,pwm-channel:
+> +    description:
+> +      Max number of pwm channels
+> +    maxItems: 1
+
+I think this needs to be explained further.
+
+> +  emcs205,max-state:
+> +    description:
+> +    maxItems: 1
+> +  emc2305,cooling-levels:
+> +    description:
+> +      Quantity of cooling level state.
+> +    maxItems: 1
 > +
-> +Description:
-> +-----------
-> +This driver implements support for Microchip EMC2301/2/3/5 RPM-based PWM Fan Controller.
-> +The EMC2305 Fan Controller supports up to 5 independently controlled PWM fan drives.
-> +Fan rotation speeds are reported in RPM.
-> +The driver supports the RPM-based PWM control to keep a fan at the desired speed.
-> +The driver provides the possibility to have one common PWM interface for all FANs
-> +or up to the maximum available or configured independent PWMs.
+> +required:
+> +  - compatible
 > +
-> +The driver provides the following sysfs interfaces in hwmon subsystem:
+> +optional:
+> +  - emc2305,min-pwm
+> +  - emc2305,max-pwm
+> +  - emc2305,pwm-channels
+> +  - emc2305,cooling-levels
 > +
-> +================= == ===================================================
-> +fan[1-5]_fault    RO files for tachometers TACH1-TACH5 fault indication
-> +fan[1-5]_input    RO files for tachometers TACH1-TACH5 input (in RPM)
-> +pwm[1-5]          RW file for fan[1-5] target duty cycle (0..255)
-> +================= == ===================================================
+> +additionalProperties: false
 > +
-> +sysfs interfaces in thermal subsystem:
+> +examples:
+> +  - |
+> +    fan {
+> +        emc2305,compatible = "microchip,emc2305";
+> +        emc2305,pwm-min = <0>;
+> +        emc2305,pwm-max = <255>;
+> +        emc2305,pwm-channel = <5>
+> +        emc2305,cooling-levels = <10>;
+> +    };
 > +
-> +================= == ========================================================================
-> +cur_state         RW file for the current cooling state of the cooling device (0..max_state)
-> +max_state         RO file for the maximum cooling state of the cooling device
-> +================= == ========================================================================
-> +
-> +Configuration is possible via device tree:
-> +Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
 > -- 
 > 2.14.1
 > 
