@@ -2,126 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C714C43219
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Apr 2022 21:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FCF5C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Apr 2022 00:37:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbiD2VRt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Apr 2022 17:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S239999AbiD3AlP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Apr 2022 20:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234963AbiD2VRs (ORCPT
+        with ESMTP id S235155AbiD3AlO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:17:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6767ED3D97
-        for <linux-hwmon@vger.kernel.org>; Fri, 29 Apr 2022 14:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651266868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vRdwdJR3OoR56yf6TqIrpiS+NzNySH2VSMNhpjHFJH4=;
-        b=ebsBpLAU7gUxxaX+4eAneVpD71f0zLNyL7dm5wNNsOewlQ+biZdqBsWG/YLDHy6wpxR4Wh
-        kbvzEPdsIcfYY6vzlTsCN4lZE/jom64HFMdD/FaZ+u5GpZfyyRaCiStWXh+jMD9O8X/2Fp
-        5sTydSaNBwQGpkKsxPUMziYwe0jGEuQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-XVnx60pGMza8UVmti2IyWw-1; Fri, 29 Apr 2022 17:14:24 -0400
-X-MC-Unique: XVnx60pGMza8UVmti2IyWw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A5C9E811E75;
-        Fri, 29 Apr 2022 21:14:23 +0000 (UTC)
-Received: from emerald.lyude.net (unknown [10.22.8.66])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 52771111CD36;
-        Fri, 29 Apr 2022 21:14:23 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Mark Gross <markgross@kernel.org>
-Subject: [PATCH 2/2] platform/x86: thinkpad_acpi: Don't probe 2nd fan if enabled by quirk
-Date:   Fri, 29 Apr 2022 17:14:18 -0400
-Message-Id: <20220429211418.4546-3-lyude@redhat.com>
-In-Reply-To: <20220429211418.4546-1-lyude@redhat.com>
-References: <20220429211418.4546-1-lyude@redhat.com>
+        Fri, 29 Apr 2022 20:41:14 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2305222B2;
+        Fri, 29 Apr 2022 17:37:53 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id q8so9750636oif.13;
+        Fri, 29 Apr 2022 17:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SsTYFsW9i1zHPnNrYw8lfj7SDD5us1gW4k/mcBilZjs=;
+        b=NJDFUY0Mj5T1UVU3nWD9kknn52XSQL1mQkufyWb7q7fF3FrwaJbN5nEyLyy8X/Sko8
+         hKFUC+VCOU1hOlRm8oSVbK6+CP9xRBn2v4wrzHOv3qyOtsCxOAtYydnhKANE9mtPjVNs
+         0NYV4nEiEia/1g1n52UNVi32zvWZZ+xwUPV9yuHgRRlo/nrwT1QbzmS+JCzwAS1rKcXJ
+         J4w5/eeZiyJdjeu71Fqum9U7hgsVL6EeyGiUA8a67Ls7CsndpllF7gRnWfomee53cOIk
+         VfYJwl4zlCFB8PDTcRbXjQDa70UXlPWj2qCPftxccLb7Xt/WSRKkVqSyZp2ekHIK/wIm
+         eiCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=SsTYFsW9i1zHPnNrYw8lfj7SDD5us1gW4k/mcBilZjs=;
+        b=Q7Nq4/XRXidZAcDcHxD0HiDriBRttZLH17aClQ4xkNd52X22BY/FXCumOQcQ0BpjM2
+         vHNZVZxcvcEHoXXUmAGL+Lt6LbpWgQS1/t0TzAHr8vSsr2VNNk5v8v/ifuc3n40G9IDV
+         s6KYGBx5Y4xdPNo8N3zN9CMoC7ta5QkrM3rHOEohAX2Iz0VjdB7KDyF2BsWV7ONsNGm2
+         JE1C0lCqTMZDWSnwTgd99AzeOYpSwSLHZ2XsrNTBICIPEjAauyqE0gGAGGzrCS4Vol4f
+         PHNoFA0KhRoS/ncXU/bTRkVcUZuz0NMcjWn3cM+zrYrJjlBJfMygXeL/yccHgJV54Gwq
+         eUyw==
+X-Gm-Message-State: AOAM5301BPZqDnlZc1UhLWrN4GQkEpW5VzVkiacaMQMvLSsRp08HVYEb
+        yitDDwy+eZyOG1i+G1Lm3KU=
+X-Google-Smtp-Source: ABdhPJxgeBPy5mQFpWx/O7B53dhbN0ypl4LfJ4Fw9t0SQxmhLJedMbi72uZgmMjdIZd+YPv/Dga3Pg==
+X-Received: by 2002:a05:6808:3a8:b0:325:b138:bd62 with SMTP id n8-20020a05680803a800b00325b138bd62mr2545223oie.270.1651279073366;
+        Fri, 29 Apr 2022 17:37:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 8-20020a056870124800b000e686d13888sm3810854oao.34.2022.04.29.17.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 17:37:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 29 Apr 2022 17:37:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>
+Subject: Re: [RFC v2 11/39] hwmon: add HAS_IOPORT dependencies
+Message-ID: <20220430003751.GA2446353@roeck-us.net>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-20-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429135108.2781579-20-schnelle@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If we already know that the system in question has a quirk telling us that
-the system has a second fan, there's no purpose in probing the second fan -
-especially when probing the second fan may not work properly with systems
-relying on quirks.
+On Fri, Apr 29, 2022 at 03:50:17PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Also, convert all of the conditionals here into a single group of if/else
-statements. This is because there's no situations where there's more then
-one quirk on a device.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Fixes: bf779aaf56ea ("platform/x86: thinkpad_acpi: Add dual fan probe")
-Cc: Mark Pearson <markpearson@lenovo.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Henrique de Moraes Holschuh <hmh@hmh.eng.br>
-Cc: Mark Gross <markgross@kernel.org>
-Cc: ibm-acpi-devel@lists.sourceforge.net
-Cc: platform-driver-x86@vger.kernel.org
----
- drivers/platform/x86/thinkpad_acpi.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+... assuming that the plan is to push those together. If not let me know.
 
-diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-index 9067fd0a945c..677822b5d4b4 100644
---- a/drivers/platform/x86/thinkpad_acpi.c
-+++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -8747,26 +8747,25 @@ static int __init fan_init(struct ibm_init_struct *iibm)
- 			unsigned int speed;
- 
- 			fan_status_access_mode = TPACPI_FAN_RD_TPEC;
--			if (quirks & TPACPI_FAN_Q1)
-+			if (quirks & TPACPI_FAN_Q1) {
- 				fan_quirk1_setup();
--			if (quirks & TPACPI_FAN_2FAN) {
-+			} else if (quirks & TPACPI_FAN_2FAN) {
- 				tp_features.second_fan = 1;
- 				pr_info("secondary fan support enabled\n");
--			}
--			if (quirks & TPACPI_FAN_2CTL) {
-+			} else if (quirks & TPACPI_FAN_2CTL) {
- 				tp_features.second_fan = 1;
- 				tp_features.second_fan_ctl = 1;
- 				pr_info("secondary fan control enabled\n");
-+			} else {
-+				/* Try and probe the 2nd fan */
-+				res = fan2_get_speed(&speed);
-+				if (res >= 0) {
-+					/* It responded - so let's assume it's there */
-+					tp_features.second_fan = 1;
-+					tp_features.second_fan_ctl = 1;
-+					pr_info("secondary fan control detected & enabled\n");
-+				}
- 			}
--			/* Try and probe the 2nd fan */
--			res = fan2_get_speed(&speed);
--			if (res >= 0) {
--				/* It responded - so let's assume it's there */
--				tp_features.second_fan = 1;
--				tp_features.second_fan_ctl = 1;
--				pr_info("secondary fan control detected & enabled\n");
--			}
--
- 		} else {
- 			pr_err("ThinkPad ACPI EC access misbehaving, fan status and control unavailable\n");
- 			return -ENODEV;
--- 
-2.35.1
-
+Guenter
