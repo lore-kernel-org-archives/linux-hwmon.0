@@ -2,100 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7A2FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 18:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78796C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 18:59:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245015AbiEBSp4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 14:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S1386996AbiEBTDH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 15:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237367AbiEBSpv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 14:45:51 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714345FA6;
-        Mon,  2 May 2022 11:42:21 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so7741791ote.8;
-        Mon, 02 May 2022 11:42:21 -0700 (PDT)
+        with ESMTP id S1386995AbiEBTDF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 15:03:05 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10731654C
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 11:59:35 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso123324wma.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 May 2022 11:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Cqi4vVQXIGfU3Kpez4pWPIJIfa1e4al0TZHE0imlKf0=;
-        b=fXR8EUyboyQqVeqFyOtKKt+k0Z1M2EeOUFZaBAD/57OxHi8cEI+gMuO0SrKXdp84LG
-         Yc2bJdlCuFA7k2HCZtNzujh3KQi+EH9UHmbpobhpHQgGoFCxO/G6XTWlSJ03cOLfv6Mn
-         qxKP+9rjp2Yx4G/g5esHSy6f48ngZ6eaeq0uqHmRtemLmdM2g8JA8TWsVSXyaL1NxnEE
-         a278nr9geQBDlX7F3rEo4HAWinKUs/McYgv+NBID5bFAJNldS933Ctvo25Fc/l+yco+p
-         P1YHmmWFoO3FOVP7fh+Ly82QHan/ACgsTLJURXUavc+DkD+VFiUqVHjHkjP0m1iQKnjt
-         C0Uw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kw3f9KINiTdwTbt/+DaeVDEWIMOIamgUP2eEKwHR5N4=;
+        b=pengUl1W4caLgN0nR8g2V3IGDf5pF1lFNpM1u0PHT5U2Td+eIGaE5Sen9sYQ41Wd1U
+         xD6vQUdoHIwmAnFWyLf+8P5IbkKnTzp8BFns86e3UL/9sm3p58W7Q+IGRHa1aMWiBejZ
+         Kv6xYMwdKQN56XoGZCCvF295rtXA0Y1IQSQVjyoFtBSJ+XttLPo+R7Gc80l5XT90Qjlq
+         +oi1l/hkuTGIZZarjokL4J/FYQ58qU822UMti3u2AkFmXfHOMnqGPwFUi5QTjXV7TFu6
+         OUaXy89ndWjTb8vhTsoazLnas/ltBvY7EZL8skhpVBuS1INz7d1pk3uQg98311gwgMNa
+         2pFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Cqi4vVQXIGfU3Kpez4pWPIJIfa1e4al0TZHE0imlKf0=;
-        b=vzHk4RY5+5YNg/ZWYji9Ma/lQSzEQDGGZk2ADqCiwXdvPNQzUcScFWC8fqRno5nqdK
-         kMPhtmwmab9bOLQfxCiH7Wl509BaFFAMSHo/+hdTocbgQsTuk/23rrckudVi94uYz9ug
-         tfKnDkSKjJmCwrWqC41RfJembzliKnFJ7l12KrMDfWI6UnYQxM9SDA5L+vVRBusmvxVh
-         i9zb2j7/7gCe+2TFtye/1j3JQOAlynKQ/q9PkfC9heVwc2yXGNTczbQ1jpvBUCbL7ciL
-         4iZYG0H0pIetSeBIZe7rsRMKc+NhciWqP+f7uOTHgl6oi2m5glcZ9YHB/ts8ETZQgJjc
-         jCYw==
-X-Gm-Message-State: AOAM531jK6BsmcrpgpG3LqVdaT6agxjZRR6A2z8WTEkHa8DA1nqc0VPi
-        E/aghLjDbvR9IR+1DwKhPnw=
-X-Google-Smtp-Source: ABdhPJxjR+hx+ESAS7kWYZHR2d0osRzxNkYTNtkyGqWIs5cgjajxU7wwYJ1tMCfgyXUbXnovfCl2Mw==
-X-Received: by 2002:a05:6830:1af2:b0:606:22ca:9681 with SMTP id c18-20020a0568301af200b0060622ca9681mr1494683otd.43.1651516940697;
-        Mon, 02 May 2022 11:42:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h22-20020a056808015600b00325cda1ff95sm2576607oie.20.2022.05.02.11.42.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 11:42:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <781e52a4-bb2c-514e-38b9-58086a4333d9@roeck-us.net>
-Date:   Mon, 2 May 2022 11:42:16 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=kw3f9KINiTdwTbt/+DaeVDEWIMOIamgUP2eEKwHR5N4=;
+        b=yuvSoqDxqtRw4N22JBo6T15IHvG+H/WMUWNIBsnSP+OTdDkJiFod+1DeKuwo/y6a9x
+         AU4BYqp17SBi0RuK06fXZec0UaV/HyMG3gYg9Cl4quWIot/46dJDl/3Y8MSjc80n3z5C
+         6jz0DiZVvXaezFgcZlSDHIlnGSkMSyWr4/dKcpTdP+dszN02yLklD7e5J9bV4GkxkhOr
+         qK/jqkVB5U21PkCBPrCIZRGrgvKZM0fIaog5bPTJORgVqszCyhjaJNWN4q2hVfIbHnH3
+         DjfO8zpw/1tTJswj+xOZlVtefZu84PKAE9OUjEq3v/I9J6s2lajnYU1eDu8efRH0hPTA
+         IQPA==
+X-Gm-Message-State: AOAM532YveFC70xc3T52k3hAI5D1QOMtikCl8IfRTNJtw30CevoxaA4w
+        ab5c+/3/k/mjB+35vqv4hQWeQA==
+X-Google-Smtp-Source: ABdhPJwIeLgYMEwUxrmCp/aC/3AN4cpDx01maV+9LVll+JoEtq9Ti7ElrqO73oW279Eb4NXFDCjRzA==
+X-Received: by 2002:a05:600c:4f56:b0:394:3fa3:97bb with SMTP id m22-20020a05600c4f5600b003943fa397bbmr391224wmq.83.1651517973538;
+        Mon, 02 May 2022 11:59:33 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id p6-20020a05600c1d8600b003942a244f34sm80137wms.13.2022.05.02.11.59.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 11:59:32 -0700 (PDT)
+Date:   Mon, 2 May 2022 20:59:27 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+Message-ID: <YnAqDxfTU27USQI+@Red>
+References: <20220502124249.682058-1-clabbe@baylibre.com>
+ <20220502124249.682058-2-clabbe@baylibre.com>
+ <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 0/7] hwmon: (nct6775) Convert to regmap, add i2c
- support
-Content-Language: en-US
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Renze Nicolai <renze@rnplus.nl>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org
-References: <20220427010154.29749-1-zev@bewilderbeest.net>
- <bc46d60e-7c89-ad05-780c-9e9fd19f788e@roeck-us.net>
- <2591481.aCYgfPdpt1@natalenko.name>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <2591481.aCYgfPdpt1@natalenko.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/1/22 23:06, Oleksandr Natalenko wrote:
-> On stÅ™eda 27. dubna 2022 15:37:07 CEST Guenter Roeck wrote:
->> Hi Zev,
->>
->> On 4/26/22 18:01, Zev Weiss wrote:
->>> Hello,
->>>
->>> This is v4 of my effort to add i2c support to the nct6775 hwmon
->>> driver.
->>>
->>
->> Thanks a lot for your effort.
->>
->> I applied patches 2..6 to hwmon-next. The first and the last
->> patch of the series will have to wait for DT maintainer approval.
+Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a écrit :
+> On 5/2/22 05:42, Corentin Labbe wrote:
+> > Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
+> > So let's convert the driver to use hwmon_device_register_with_info().
+> > 
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> >   drivers/hwmon/acpi_power_meter.c | 5 ++++-
+> >   1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+> > index d2545a1be9fc..98293727f980 100644
+> > --- a/drivers/hwmon/acpi_power_meter.c
+> > +++ b/drivers/hwmon/acpi_power_meter.c
+> > @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct acpi_device *device)
+> >   	if (res)
+> >   		goto exit_free_capability;
+> >   
+> > -	resource->hwmon_dev = hwmon_device_register(&device->dev);
+> > +	resource->hwmon_dev = hwmon_device_register_with_info(&device->dev,
+> > +							      ACPI_POWER_METER_DEVICE_NAME,
+> > +							      NULL, NULL,
+> > +							      NULL);
 > 
-> For patches 2..6:
+> NACK. That isn't a conversion to the new API, it just abuses the fact
+> that the new API has to accept a NULL info pointer for historic reasons.
 > 
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> 
-Thanks, added.
 
-Guenter
+Hello
+
+I am sorry, I found a driver doing it, so I believed it was okay.
+Converting seems not to hard but, by using the new API, how can I convert power1_model_number/power1_is_battery attribute ?
+There are the remaining attributes I dont find how to convert.
+
+Regards
