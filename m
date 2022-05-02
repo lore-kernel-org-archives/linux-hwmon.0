@@ -2,149 +2,164 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFC90C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 16:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6641DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 16:48:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242089AbiEBQZj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 12:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        id S238923AbiEBQv6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 12:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243133AbiEBQYp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 12:24:45 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848F260FE;
-        Mon,  2 May 2022 09:21:16 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e2fa360f6dso14756736fac.2;
-        Mon, 02 May 2022 09:21:16 -0700 (PDT)
+        with ESMTP id S234379AbiEBQv5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 12:51:57 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEAB267
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 09:48:28 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-d39f741ba0so14787839fac.13
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 May 2022 09:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=07ttqxmw9Tgzs/otLu70fpu68lese2xZKpYJru056xw=;
-        b=jy9E7l+rL1TgCHIvbD0ta0+BUYEXDLF/i3F63YbUk1XnWLjC+IN6NhmtHLVZZlpzL6
-         52U6ec1A9U5D9SrMGM19cx2KWfUoX+G4I7Gfi70EEpS+h0WNighyncCVXYaHKbEaCj7c
-         vWq241+pTE5DqFqE1SGO76ZUiR7cGPbWcZAwt0DREesxMyST15CjZzRBi39BOCfimxKf
-         C6nNPadQE5ogr81i57RL15m/CFm4dI0NDm4c5b00NTy9+tljZTSDuQrBNU3mPv93mL5v
-         16CgMCWZ7qA/vf47NCzs1TNL0phomiI77BJb8BmnHjKNArlLpABOtp7CE/lQKd7wm2wh
-         Rcvg==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=M3Dn+HCmKZVuINI/pTwN6516LW8LicoUgjPdV/+5QTs=;
+        b=BG29C5odYorxPdpmtuMLNPWqGrCq10CNovTOYf1Hp/PKtRZ+/Y6OXV1n9frObm0hPN
+         TYCfLCldOGn9hTAuQ/OdLUqCPCo3vDQGFa5xm0a25TsREPw5ufDBiHysBOBAHxYL1Skb
+         1mJsJhqGdd1wuovdAGz7WAfE4JurXzXnJk9tzVNI8IuzJI1EdTW8NJOGwxwqOPBfwkpf
+         QmSQoarJG6gHqMA/D1v2WmuA6g5uKeXiyI+yOEIcb7aS2KO6SyzimTYfHxpLzN4Zp82Y
+         Mz8sCnhWiXf/fQp9rElyg8EiNEEalQ8DA1s1Px1pR5D/zi5Xs/afcX9K2jpWscZQ4UOF
+         To6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=07ttqxmw9Tgzs/otLu70fpu68lese2xZKpYJru056xw=;
-        b=8Jvnx68R/ehTpUA2QaQ+MiE3xnCmqEX5BDb2ZiXxi0KPKj2W95lK81OXKSM9jlogy7
-         7+Yi/1xPC0VOciVpg+vQ2cf2FhXndZYfePXVBYxnKrpw/HjBgbXvZcRw701triJhB74Q
-         Tym40KkUO2Yrz3eyfpLtmmHBCqv22qf4Gjxto59VekC43s5wh4Md71tDGKcQxrlvAT5J
-         c7+H7BHLtZczXMcCSvDEq1zZ0p/XfCskYlPsuv8f5KZbLR9/QUW3vu8bZpwtBlDTQODT
-         N+Ltb4BJfKDW5SE4fjf32YRCCwSPDwKvd17IsrljB++ygALb732xo9wIUsPfPp+5Cxcz
-         pqgQ==
-X-Gm-Message-State: AOAM533Lds87IsBjaPYIdT5VzD54QbBIPTUGFEEKrKasC53i50YC8qKF
-        7Jml8kwOhYFO4Zpu/fRtHE/VEIsIU6E2Bw==
-X-Google-Smtp-Source: ABdhPJzACJWLWcXwtSQ+DACm4Sy5HVUiUoRxy4xKvja2xujgNRuIzQlLNku8Uwc9UKAzK9KLvs2VLQ==
-X-Received: by 2002:a05:6870:15c3:b0:ed:9980:db99 with SMTP id k3-20020a05687015c300b000ed9980db99mr3672873oad.154.1651508475920;
-        Mon, 02 May 2022 09:21:15 -0700 (PDT)
+        bh=M3Dn+HCmKZVuINI/pTwN6516LW8LicoUgjPdV/+5QTs=;
+        b=WdACyHuHmNv6uyo+YADID/QgmbNt1cQBas0rZOJX6nrd+3hlwzJvBcj2BK0lCGZPLi
+         +sFg/T3ocJaABaftLD3xhlbnSrjO5TaLEnWhWDgXkYrFYku/HutzKa1tcgdlwGzRl0Sq
+         bdxk5q5mWvLv4pfb7kZpzCEG36BkjBUeAJdzymNkFGsMf9YKpz25hDYSK9qGjkwTae7x
+         c6OPywlklSk1kUtG5i4bKnJotTDpnsMyzetTrJpmGptrJWM0d6BaneQfgqsZvRFF605H
+         nTVMFtojP90RzTbq29jKu7y8F/SnvUusEId6g6p9cypBt2oldIZQ7r1PRQaQ9vod3IXi
+         afJQ==
+X-Gm-Message-State: AOAM530tFyZRR4gw+Q4MH3V8MKUkSCItPfvKBh5UZhKbXYdlIZtTSj8C
+        Dmg8Fg9+2PFiDx72SwSyPIs=
+X-Google-Smtp-Source: ABdhPJwtFPqk61l7c6GG2RTuQQWaXkhLAudBm1sxDORFhDEyMKZU2NMAenH/Hz6AdHBOADGBJTL/4A==
+X-Received: by 2002:a05:6870:c393:b0:e2:ae03:70ff with SMTP id g19-20020a056870c39300b000e2ae0370ffmr4772053oao.231.1651510107868;
+        Mon, 02 May 2022 09:48:27 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t13-20020a05683014cd00b0060603221245sm3008226otq.21.2022.05.02.09.21.14
+        by smtp.gmail.com with ESMTPSA id r7-20020a056870878700b000e686d1386csm6046985oam.6.2022.05.02.09.48.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 09:21:15 -0700 (PDT)
+        Mon, 02 May 2022 09:48:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3a58097d-5c18-cee5-133b-18c61e94c62c@roeck-us.net>
-Date:   Mon, 2 May 2022 09:21:13 -0700
+Message-ID: <0edfd625-8e73-b739-16be-7818f2918fa6@roeck-us.net>
+Date:   Mon, 2 May 2022 09:48:25 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <20220502110010.q7vvdkdpaiz5acjl@houat>
- <21a89ae0-7152-49eb-7500-7d46dfb259f6@roeck-us.net>
- <20220502133927.4wqhru4es32gws2b@houat>
+To:     =?UTF-8?Q?M=c3=a5rten_Lindahl?= <marten.lindahl@axis.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org, kernel@axis.com
+References: <20220502111345.3100970-1-marten.lindahl@axis.com>
+ <20220502111345.3100970-5-marten.lindahl@axis.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220502133927.4wqhru4es32gws2b@houat>
+Subject: Re: [PATCH v5 4/4] hwmon: (pmbus) Add get_voltage/set_voltage ops
+In-Reply-To: <20220502111345.3100970-5-marten.lindahl@axis.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/2/22 06:39, Maxime Ripard wrote:
-> On Mon, May 02, 2022 at 06:31:56AM -0700, Guenter Roeck wrote:
->> On 5/2/22 04:00, Maxime Ripard wrote:
->>> Hi,
->>>
->>> On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
->>>> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
->>>> low rate (6 bit) ADC that is often used for extra keys. There's a driver
->>>> for that already implementing standard input device, but it has these
->>>> limitations: 1) it cannot be used for general ADC data equisition, and
->>>> 2) it uses only one LRADC channel of two available.
->>>>
->>>> This driver provides basic hwmon interface to both channels of LRADC on
->>>> such Allwinner SoCs.
->>>>
->>>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
->>>> ---
->>>>    MAINTAINERS                       |   6 +
->>>>    drivers/hwmon/Kconfig             |  13 ++
->>>>    drivers/hwmon/Makefile            |   1 +
->>>>    drivers/hwmon/sun4i-lradc-hwmon.c | 280 ++++++++++++++++++++++++++++++
->>>>    4 files changed, 300 insertions(+)
->>>>    create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 5e8c2f61176..d9c71e94133 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -18861,6 +18861,12 @@ S:	Maintained
->>>>    F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
->>>>    F:	drivers/input/keyboard/sun4i-lradc-keys.c
->>>> +SUN4I LOW RES ADC HWMON DRIVER
->>>> +M:	Ruslan Zalata <rz@fabmicro.ru>
->>>> +L:	linux-hwmon@vger.kernel.org
->>>> +S:	Maintained
->>>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
->>>> +
->>>>    SUNDANCE NETWORK DRIVER
->>>>    M:	Denis Kirjanov <kda@linux-powerpc.org>
->>>>    L:	netdev@vger.kernel.org
->>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>> index 68a8a27ab3b..86776488a81 100644
->>>> --- a/drivers/hwmon/Kconfig
->>>> +++ b/drivers/hwmon/Kconfig
->>>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
->>>>    	  This driver can also be built as a module. If so, the module
->>>>    	  will be called sis5595.
->>>> +config SENSORS_SUN4I_LRADC
->>>> +	tristate "Allwinner A13/A20 LRADC hwmon"
->>>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
->>>> +	help
->>>> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
->>>> +	  Both channels are supported.
->>>> +
->>>> +	  This driver can also be built as module. If so, the module
->>>> +	  will be called sun4i-lradc-hwmon.
->>>> +
->>>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
->>>> +	  of these must be used at a time.
->>>
->>> How do you plan on enforcing that?
->>>
->> 	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+On 5/2/22 04:13, Mårten Lindahl wrote:
+> The pmbus core does not have operations for getting or setting voltage.
+> Add functions get/set voltage for the dynamic regulator framework.
 > 
-> Right, but that just doesn't fly for any generic distro / build-system.
+> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+> ---
+>   drivers/hwmon/pmbus/pmbus_core.c | 63 ++++++++++++++++++++++++++++++++
+>   1 file changed, 63 insertions(+)
 > 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index bd143ca0c320..455d06ba5fdf 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2563,11 +2563,74 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>   	return 0;
+>   }
+>   
+> +static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +	struct pmbus_sensor s = {
+> +		.page = rdev_get_id(rdev),
+> +		.class = PSC_VOLTAGE_OUT,
+> +		.convert = true,
+> +	};
+> +
+> +	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
+> +	if (s.data < 0)
+> +		return s.data;
+> +
+> +	return (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
+> +}
+> +
+> +static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uV,
+> +					 int max_uV, unsigned int *selector)
 
-That is correct. Alternative might be to use devicetree bindings, which
-presumably will be needed anyway to tell the driver(s) what to bind to.
+Just noticed: Please don't use camelCase.
 
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +	struct pmbus_sensor s = {
+> +		.page = rdev_get_id(rdev),
+> +		.class = PSC_VOLTAGE_OUT,
+> +		.convert = true,
+> +	};
+> +	s64 tmp = DIV_ROUND_CLOSEST_ULL(min_uV, 1000); /* convert to mV */
+
+min_uV is already an int, so converting it to s64 will never be
+necessary.
+
+> +	int low = -1, high = -1;
+> +	u16 val;
+> +	*selector = 0;
+> +
+> +	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MIN))
+> +		low = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MIN);
+> +	if (low < 0) {
+> +		low = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_LOW);
+> +		if (low < 0)
+> +			return low;
+> +	}
+> +
+> +	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MAX))
+> +		high = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MAX);
+> +	if (high < 0) {
+> +		high = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_HIGH);
+> +		if (high < 0)
+> +			return high;
+> +	}
+> +
+> +	val = pmbus_data2reg(data, &s, tmp);
+> +
+> +	/* Make sure we are within margins */
+> +	if (low > val)
+> +		val = low;
+> +	if (high < val)
+> +		val = high;
+> +
+
+The above assumes that register values are directly comparable.
+Unfortunately that isn't really the case. It happens to work
+for ULINEAR16 and DIRECT mode, but chips could also support
+IEEE-754 (maybe in the future) or VID mode.
+
+You need to read the limits from the registers, convert to voltages,
+compare and adjust the voltage, and as final step convert the adjusted
+voltage to a register value.
+
+Thanks,
 Guenter
