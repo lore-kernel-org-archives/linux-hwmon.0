@@ -2,188 +2,187 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2566AC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 15:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5873C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 16:16:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385801AbiEBPhC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 11:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
+        id S1386253AbiEBQT7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 12:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385776AbiEBPhB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 11:37:01 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEB1B853;
-        Mon,  2 May 2022 08:33:31 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-ed8a3962f8so4527319fac.4;
-        Mon, 02 May 2022 08:33:31 -0700 (PDT)
+        with ESMTP id S1386271AbiEBQT4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 12:19:56 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E5FE0E4;
+        Mon,  2 May 2022 09:16:26 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so14697875fac.7;
+        Mon, 02 May 2022 09:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CsoWEFYA6oWSiqhk0itUr0DgVsHArvM3fYs9hP+JNhQ=;
+        b=MGay0hqvR9zLVVhYvGtNNM+6DsAoscTtWads5Z9SsEZFDbN2OdCz7k2IxB8J5sC+MW
+         ioPITDPaH4vNVAWuLHXit712aDuG0Ld2SKtjgcoB6avXkZBg4QI3SgQ20I/iqVe/7HIN
+         El0cdCR5jy4AfodPZ3OrWO6/hdXKM97oc/IQFKqCmj6ddmZhG9Sgyc0e8Fn98bOdR3hN
+         FgHThMjcp144VxF6N3L4OA1hgcp1VEEOGko5hJ9jjQBL/X4ENl/0GiNgOnPC0WB5JahU
+         XTDyecExEBfHNGtcePcP0YuoyjJJdcuxNMbLnj/kpS/XgzmiI2j/rQUZvbgyWvtlHRGY
+         WcLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=Y6XB2Cr0TBco5WX98Ze46NuWq5sLmSH3T0SPQmcQyC8=;
-        b=7Av6iHT0mlyv9V9jumZFbUCB6rI8enUYvRNKbICZBd9UTSzEbSy8drwueQBX9o/WnR
-         jBzW/kRD9zACO7XixDiPsaN/ufaFoa+5/Xo6/yCWEh6d/R5xJPkMyPYJ3QOQ4pOBmFia
-         VvW87dhvt0Gv8X0bao4OaBSCMC9iJWN1FrvpfpH4WqMSDszA0YrbcXpqIGKwtIu5FTWL
-         fdrByH4ajcQZAsaU8Cuuqf0LKMpbjHJdUp0Egon4gDrk/pAMVT78L88vg7jyk6p5pabd
-         HJKctt/+uJ9x2/b5WsGr9HXPCjXoRKVj2uWDKNOzjv6/yaJNGQsoDPT+RtRypfjUgkpt
-         s7xg==
-X-Gm-Message-State: AOAM530GhTOpokWEzxMuDMLUKFrlwNHFDc4GJqpfEZ/TwmSwtEvOPMTW
-        wOUlKMSiOkuwT6nnGZ2JxZbNAFv/9Q==
-X-Google-Smtp-Source: ABdhPJwlQgJwwbkB6u3k/9PNaKLwUkrUeU1I+yXjAuvNMbaiSDuzVpd5HAs3vlI2j8keLTjoGFYQQA==
-X-Received: by 2002:a05:6870:6005:b0:e6:515c:da5a with SMTP id t5-20020a056870600500b000e6515cda5amr4998476oaa.183.1651505610564;
-        Mon, 02 May 2022 08:33:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s5-20020a05682003c500b0035eb4e5a6casm498626ooj.32.2022.05.02.08.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 08:33:30 -0700 (PDT)
-Received: (nullmailer pid 1161766 invoked by uid 1000);
-        Mon, 02 May 2022 15:33:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     michaelsh@nvidia.com
-Cc:     linux@roeck-us.net, robh+dt@kernel.org, vadimp@nvidia.com,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20220430114905.53448-3-michaelsh@nvidia.com>
-References: <20220430114905.53448-1-michaelsh@nvidia.com> <20220430114905.53448-3-michaelsh@nvidia.com>
-Subject: Re: [PATCH v1 2/3] dt-bindings: hwmon: add microchip,emc2306.yaml dt binding description.
-Date:   Mon, 02 May 2022 10:33:29 -0500
-Message-Id: <1651505609.441636.1161765.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CsoWEFYA6oWSiqhk0itUr0DgVsHArvM3fYs9hP+JNhQ=;
+        b=v/jBXetN00Eh739IwtUf4uDAVcoR5jDBL8ba/1S1CHGXczxpMVycwhu2aZ6wphrE5f
+         DtdNIWjoJ4zIw/GCbjaCsoWddQ8a3/vw3uXVnYIO5ZVinWvggfnaBw8BP1b0BGvRnHOo
+         eIa6QmH11Pjfv7b5oZPQ+Ig4YRlkX8sFFLmPhj9K3UxbGxxWeIfR5SNdTyKl0dQ0C/EE
+         mhg1NJw+JHy2gx+C7GkRX5EHMWu4kWDFsd/X6OKEMB8Q46q6cyoVUOLV3uuMIlc6GzMm
+         GGFMDZP9tGXvJ1TsjHHvMb4uLP9xbauq/CENdLiaHjMzLFzx8XmRNnyaOMhgk/xnx0g3
+         /d4g==
+X-Gm-Message-State: AOAM532l1OvX6SITWXypyVYHixaEErONd73qowXbK9rPBC2mxVTJTywQ
+        HRAVbEffQI2Dad4Jn8bRjxu4yayVUGDu4A==
+X-Google-Smtp-Source: ABdhPJz+SmowUxKGKeiGA3cKrv5xDgWPsQV7GkBX4C+ZZ+xdqowSKMw0vofdkoCzzmfXnnFT8qO9cA==
+X-Received: by 2002:a05:6870:3047:b0:ec:44c2:1718 with SMTP id u7-20020a056870304700b000ec44c21718mr6015845oau.214.1651508185628;
+        Mon, 02 May 2022 09:16:25 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f11-20020a4ae60b000000b0035eb4e5a6bdsm3723135oot.19.2022.05.02.09.16.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 09:16:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <25e2dc90-ab01-ab19-ffde-1b709dbebad4@roeck-us.net>
+Date:   Mon, 2 May 2022 09:16:23 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] hwmon: (tmp401) Add of_match_table
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Camel Guo <Camel.Guo@axis.com>, Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220502091942.1083067-1-camel.guo@axis.com>
+ <a2e81680-e62c-dddd-ee58-6f5aa3664d2f@roeck-us.net>
+ <20220502145800.GA21695@axis.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220502145800.GA21695@axis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, 30 Apr 2022 14:49:04 +0300, michaelsh@nvidia.com wrote:
-> From: Michael Shych <michaelsh@nvidia.com>
+On 5/2/22 07:58, Vincent Whitchurch wrote:
+> On Mon, May 02, 2022 at 03:57:50PM +0200, Guenter Roeck wrote:
+>> On 5/2/22 02:19, Camel Guo wrote:
+>>> When tmp401 is built as kernel module, it won't be automatically loaded
+>>> even through there is a device node in the devicetree. e.g:
+>>>       i2c {
+>>>         #address-cells = <1>;
+>>>         #size-cells = <0>;
+>>>
+>>>         sensor@4c {
+>>>           compatible = "ti,tmp401";
+>>>           reg = <0x4c>;
+>>>         };
+>>>       };
+>>> In order to make sure it is loaded automatically, this commit adds
+>>> of_match_table for tmp401.
+>>>
+>>
+>> As mentioned before, historically i2c devices would instantiate based
+>> on the i2c match table. You are claiming that this is no longer the case.
 > 
-> Add basic description of emc2305 driver device tree binding.
-> 
-> Signed-off-by: Michael Shych <michaelsh@nvidia.com>
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-> ---
->  .../bindings/hwmon/microchip,emc2305.yaml          | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> Note that while the commit message in the first version of the patch did
+> wrongly claim that probe would not work without the of_match_table, this
+> corrected description in v2 does mention the actual problem: that the
+> module will not be automatically loaded without the of_match_table.  (If
+> the module is loaded manually or the driver is built-in to the kernel,
+> there is no problem.)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+No, it doesn't. None of the information you provided below is mentioned
+in the description, but is essential to understand your patch and the
+reason for it.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml:28:17: [error] empty value in block mapping (empty-values)
+> See commit 72fc64c68decf119466 ("hwmon: (tmp103) Add OF device ID
+> table") or commit 98b16a09861aa85d6 ("hwmon: (max31785) Add OF device ID
+> table") for similar changes to other hwmon drivers.
+> 
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emcs205,max-state:description: None is not of type 'string'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: 'optional' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-channel: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-channel: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-channel: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emcs205,max-state: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emcs205,max-state: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emcs205,max-state: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,cooling-levels: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,cooling-levels: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,cooling-levels: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-max: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-max: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-max: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-min: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-min: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: properties:emc2305,pwm-min: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-./Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: ignoring, error in schema: properties: emcs205,max-state: description
-Error: Documentation/devicetree/bindings/hwmon/microchip,emc2305.example.dts:25.13-14 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/hwmon/microchip,emc2305.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
+Those commits provide a valid and acceptable explanation.
 
-doc reference errors (make refcheckdocs):
+> The potential future change mentioned in the commit messages of
+> 72fc64c68decf119466 and 98b16a09861aa85d6 happened in commit
+> af503716ac1444db61d80 ("i2c: core: report OF style module alias for
+> devices registered via OF").  The commit message of
+> af503716ac1444db61d80 has a lot of details about the change being made,
+> and while it says that all in-tree drivers had been converted, it looks
+> like some of them, like tmp401, were missed.
+> 
 
-See https://patchwork.ozlabs.org/patch/
+And this is the missing link. If you provide that information
+in the commit log I have no problems. Please also provide a Fixes:
+tag.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Fixes: af503716ac14 ("i2c: core: report OF style module alias for devices registered via OF")
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Thanks,
+Guenter
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+>> The above is no evidence; that would require a log output on an affected
+>> system showing that the sensors are not or no longer longer instantiated.
+> 
+> A log would simply show nothing happening so that's probably not going
+> to be that useful, but here is what the modaliases look like.  As you
+> can see, the modalias of the device in sysfs does not match any of the
+> alias patterns of the module without this patch:
+> 
+> $ cat /sys/bus/i2c/devices/4-004c/modalias
+> of:Ntemperature-sensorT<NULL>Cti,tmp431
+> 
+> modinfo without this patch:
+> 
+> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
+> filename:       /storage2/femfyra/linux-2.6/.roadtest/./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
+> license:        GPL
+> description:    Texas Instruments TMP401 temperature sensor driver
+> author:         Hans de Goede <hdegoede@redhat.com>
+> alias:          i2c:tmp435
+> alias:          i2c:tmp432
+> alias:          i2c:tmp431
+> alias:          i2c:tmp411
+> alias:          i2c:tmp401
+> depends:
+> intree:         Y
+> name:           tmp401
+> vermagic:       5.18.0-rc1 mod_unload
+> 
+> modinfo after this patch:
+> 
+> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
+> filename:       /storage2/femfyra/linux-2.6/./.roadtest/modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
+> license:        GPL
+> description:    Texas Instruments TMP401 temperature sensor driver
+> author:         Hans de Goede <hdegoede@redhat.com>
+> alias:          i2c:tmp435
+> alias:          i2c:tmp432
+> alias:          i2c:tmp431
+> alias:          i2c:tmp411
+> alias:          i2c:tmp401
+> alias:          of:N*T*Cti,tmp435C*
+> alias:          of:N*T*Cti,tmp435
+> alias:          of:N*T*Cti,tmp432C*
+> alias:          of:N*T*Cti,tmp432
+> alias:          of:N*T*Cti,tmp431C*
+> alias:          of:N*T*Cti,tmp431
+> alias:          of:N*T*Cti,tmp411C*
+> alias:          of:N*T*Cti,tmp411
+> alias:          of:N*T*Cti,tmp401C*
+> alias:          of:N*T*Cti,tmp401
+> depends:
+> intree:         Y
+> name:           tmp401
+> vermagic:       5.18.0-rc1 mod_unload
 
