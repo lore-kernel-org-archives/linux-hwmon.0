@@ -2,125 +2,148 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92863C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 20:42:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54BD7C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 21:00:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbiEBUqO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 16:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S229760AbiEBVEK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 17:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387312AbiEBUqJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 16:46:09 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B9C25EE;
-        Mon,  2 May 2022 13:42:36 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id r8so16380676oib.5;
-        Mon, 02 May 2022 13:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=NfTVVuJGK7HPWRO8re3dSdZJZsANWobn7xRaMZwdRgs=;
-        b=j4Kic+U993VMoJFYYnHWikYxgCDD1/RbjGd+6BXltS4jVaVOMOTp07dm3wIpYljzbO
-         MJDr9ozR7CEG1NwFguZSnXbfn+LXPXAvRjZQ+Cce+FuOMNH4MqYpZM1zuQS9clKbnLMz
-         gcSKS8hZln7I/UocoVz5OQTfQCafqM9Gq7bF1skD0Up0NijgIff66MIuiZu4uB8y6ych
-         LssrBXM0cEBIMt401dTlbQpPXTU4ayofxX1dHPANoJJw656dLzwwfbffutwtHhN2vtOK
-         ScHJ+yb3HOVlFlz2NW4z3u25RA9qq26hTrQiwrem9kIEryKfm+HSwgs2WR7aHxMvqFMH
-         iuLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=NfTVVuJGK7HPWRO8re3dSdZJZsANWobn7xRaMZwdRgs=;
-        b=LEBQKF9I0HVGvGUyD9O0gKPAk+8i5AH8gAegaIVdLlHP16mXye3JvfQrdYhv2Vad4w
-         pasoXscMqv1m3L7y/Dy6nr0DR2Byg3TAey2GwBtHuTdUXrzr1CSQUeurylfPNqeJNN12
-         9PTknIPI0rQ2PwtY82+0/0SZZ6/H/BdBjy6Q/VfnkKSQ9AJZthuPVoeAqcRnqALu2101
-         gt4xlSHwAV98hWUY0064nI54cD1GB9eAJnpknYWfh5Lrap1BA5AN5gleOVd+UfuIiMQ1
-         m09UAScRL0jMO7XuStu0Th4D1eDB3PCgY5riXHC2blmV0n4RskpbdrCqFs5rOlZgi3ta
-         JSDg==
-X-Gm-Message-State: AOAM532YgrwgoGQak1zFNV/3Or4y8VYWDhFX8DXap+h3xMejgSJsEBxw
-        6PfUYHaPpcF1UGPqAiwehwc=
-X-Google-Smtp-Source: ABdhPJxpA+X4fMZKCx608iLQsBUR4RCAPEU9xXqOBTVp+E1w4DKVZyFw0IDt9ETEfzjhPsoCi8PNig==
-X-Received: by 2002:a05:6808:1b0e:b0:325:c254:9aef with SMTP id bx14-20020a0568081b0e00b00325c2549aefmr469340oib.164.1651524155607;
-        Mon, 02 May 2022 13:42:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w2-20020a056830110200b006060322127esm3245360otq.78.2022.05.02.13.42.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 13:42:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dabc2be2-36ce-a9d4-8aa5-ae3f2a57f904@roeck-us.net>
-Date:   Mon, 2 May 2022 13:42:33 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, LABBE Corentin <clabbe@baylibre.com>
+        with ESMTP id S1387571AbiEBVD6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 17:03:58 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EC2E1B;
+        Mon,  2 May 2022 14:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651525212;
+        bh=t+hthDPvIlMi9NfBj+0zjxZtl8ZtreiL6WlpPmAvFKQ=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Doy2CmDUq/Kq2q/jd+Cv4azrWGDUJT3YJodM5yHStynRebV8lpRYAdOCLEHnxK2XU
+         Iac4viEMa+8XKPdA0xcFYkKF11Jf7uGtJBVQhEQwT9ZOlLm3hTRDsuXahAEtY+jF3o
+         enMA/s57S8Yik6zw6yra6qZkrFxZewQsJkXmNVBc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSt8W-1nP38E2iic-00UFSy; Mon, 02
+ May 2022 23:00:12 +0200
+Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+To:     Guenter Roeck <linux@roeck-us.net>,
+        LABBE Corentin <clabbe@baylibre.com>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220502124249.682058-1-clabbe@baylibre.com>
  <20220502124249.682058-2-clabbe@baylibre.com>
  <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net> <YnAqDxfTU27USQI+@Red>
  <1b2bf215-faa1-649d-5ab4-85fc0b907ec2@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-In-Reply-To: <1b2bf215-faa1-649d-5ab4-85fc0b907ec2@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <dabc2be2-36ce-a9d4-8aa5-ae3f2a57f904@roeck-us.net>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <72cce35f-a227-cd18-17f0-00eee350bcf4@gmx.de>
+Date:   Mon, 2 May 2022 23:00:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <dabc2be2-36ce-a9d4-8aa5-ae3f2a57f904@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:FqbPnGyKm8pJ5TzgnH7TmE5YcAX3wsNf1IDG/uGi6Mb26x8Yq7R
+ eLdRgM6AlT2tNshRq7tUJYIB6OGLYtX9ucH4uVRZEftkigQfgmUFu0MWbods+E4P1UGN6VC
+ oAXIpOyUj5Gjs9dy06Yr6pXsXSmw+DZgcMm7IPvAyiX9os9dMqUzytsSbFF93FICSSVj/yo
+ u4cPRUfVBtvVwqvXJ2+4w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:59vlulbQkmo=:/9DGdmxyWPAsq2g4yAUchr
+ Y+jU7R8Iu34xsI0rNSfvEYez2XOJjGpzv2pVA537FcqCHqbHQcqkjGhUIjovLTo8fzpLZhWMp
+ tVmTY09YnXlFUHe80NAwda8vRuKKwE/ndJzvsEctFXgXAcqfkn+mTXG6nD1xWXfVL6kYu4lqT
+ 8ainEnEH8gPtkfiwBpf6+20MK1mnoajJ3JhfU/QXDQU6vCGdiiEMIJFzssgoYh7hm/EAF/guP
+ rlruZJ4ikMzo4is5i4PfHiy8Cs5UX79eZ52zWUNAJqiE9uAAn4DoGQN5O/N60BYS4Fwz19DXw
+ RbNlXaGfs4btvjECrxU1FewGnZc4IKrAiNNXUqziyEr+X0h5Kt8k88kiem1id4bKo1xSpaOh8
+ scxUXpfhxw+yAwG2LLoWea1RCyGsVKSL1zBtR8IWPTmn2uhjxR4URDBRH6PNH8h71Yb8JZ0Fs
+ rTkXPkN9wCccAPMv6T7rBz83u/VgnAS0Yjql0x8tyS60hDdf3FwL4F/0o/ccFHNJ2Jfr5TnoT
+ ZIbSdaj8byfSmX4M30YfJ1fGBnIjS5plBnUGlHL7M0GWQiT0B5EnVxIiuqmu9C8e4v9i9MlrJ
+ Iyi8EnV2XY2t2asAWgESLaqKePxe+F4R86IeqY9xtJdLjILLrh/l9H+WvGXZeHDhhF5rsE8UU
+ ij44uoHiYbWkD/pyNCQV9t3i5yDfdI1ewhJWnAYK4SgnXtCnJr1Wxi+BP4IgamZA8UJ6rmkre
+ DbENW9GQNUmaBsG0nTaJxdvsBK5Nkw6yIW+vwjX2cFT3NTYBHrrG3pQrC4vH1XtZwDiZkxUXr
+ q08jtPaajwsnCi49UqljpgOk3sdkXrCb3fCaZqeiMH1j5FdgRpW66v6huR8Wmg6Kf6i9Q6KHz
+ zYQI1D9YC7KeDq3cyuZWxQXRTrbL8YtdSUvHurDGJM/ysJEMer6TAs6gDTXVgRT9kCgCi8vPs
+ mZm96CyEhGBiwUWyPcDM3diDEWUxr4308HQi4ntHagxFbo+RvnNCbVKqE+bZN3OnnBN12rs73
+ e08QlPaIdlvpBLmd2P6TKifo/4qmCuQugv0sahpBVUAWuCrPm4J4fZF+X1um8MTzzzzf09v1u
+ R0cU8MswG7o4wLmX8CuqqwX2l3/m0CW1mK4rl1OneVmRF1CTL7hKEU9Y0aZkeorGbvWa3FVUB
+ XXSfNFgnKTuRO3u7iZOYQ1BuiUSxd3kk38+3UpPT/HaktrAn/vORRdqwpNAr68JG0X14+h0bE
+ wDekQylOp3oc9ySvevcuAwK6kJKXL2sMC4lWUqA==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/2/22 13:31, Armin Wolf wrote:
-> Am 02.05.22 um 20:59 schrieb LABBE Corentin:
-> 
->> Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a écrit :
->>> On 5/2/22 05:42, Corentin Labbe wrote:
->>>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
->>>> So let's convert the driver to use hwmon_device_register_with_info().
+Am 02.05.22 um 22:42 schrieb Guenter Roeck:
+> On 5/2/22 13:31, Armin Wolf wrote:
+>> Am 02.05.22 um 20:59 schrieb LABBE Corentin:
+>>
+>>> Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a =C3=A9crit :
+>>>> On 5/2/22 05:42, Corentin Labbe wrote:
+>>>>> Booting lead to a hwmon_device_register() is deprecated. Please
+>>>>> convert the driver to use hwmon_device_register_with_info().
+>>>>> So let's convert the driver to use hwmon_device_register_with_info()=
+.
+>>>>>
+>>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+>>>>> ---
+>>>>> =C2=A0=C2=A0 drivers/hwmon/acpi_power_meter.c | 5 ++++-
+>>>>> =C2=A0=C2=A0 1 file changed, 4 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/hwmon/acpi_power_meter.c
+>>>>> b/drivers/hwmon/acpi_power_meter.c
+>>>>> index d2545a1be9fc..98293727f980 100644
+>>>>> --- a/drivers/hwmon/acpi_power_meter.c
+>>>>> +++ b/drivers/hwmon/acpi_power_meter.c
+>>>>> @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct
+>>>>> acpi_device *device)
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (res)
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto ex=
+it_free_capability;
+>>>>>
+>>>>> -=C2=A0=C2=A0=C2=A0 resource->hwmon_dev =3D hwmon_device_register(&d=
+evice->dev);
+>>>>> +=C2=A0=C2=A0=C2=A0 resource->hwmon_dev =3D
+>>>>> hwmon_device_register_with_info(&device->dev,
+>>>>> + ACPI_POWER_METER_DEVICE_NAME,
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL, NULL,
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL);
+>>>> NACK. That isn't a conversion to the new API, it just abuses the fact
+>>>> that the new API has to accept a NULL info pointer for historic
+>>>> reasons.
 >>>>
->>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>>> ---
->>>>    drivers/hwmon/acpi_power_meter.c | 5 ++++-
->>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
->>>> index d2545a1be9fc..98293727f980 100644
->>>> --- a/drivers/hwmon/acpi_power_meter.c
->>>> +++ b/drivers/hwmon/acpi_power_meter.c
->>>> @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct acpi_device *device)
->>>>        if (res)
->>>>            goto exit_free_capability;
->>>>
->>>> -    resource->hwmon_dev = hwmon_device_register(&device->dev);
->>>> +    resource->hwmon_dev = hwmon_device_register_with_info(&device->dev,
->>>> +                                  ACPI_POWER_METER_DEVICE_NAME,
->>>> +                                  NULL, NULL,
->>>> +                                  NULL);
->>> NACK. That isn't a conversion to the new API, it just abuses the fact
->>> that the new API has to accept a NULL info pointer for historic reasons.
+>>> Hello
 >>>
->> Hello
+>>> I am sorry, I found a driver doing it, so I believed it was okay.
+>>> Converting seems not to hard but, by using the new API, how can I
+>>> convert power1_model_number/power1_is_battery attribute ?
+>>> There are the remaining attributes I dont find how to convert.
+>>>
+>>> Regards
 >>
->> I am sorry, I found a driver doing it, so I believed it was okay.
->> Converting seems not to hard but, by using the new API, how can I convert power1_model_number/power1_is_battery attribute ?
->> There are the remaining attributes I dont find how to convert.
+>> Hi,
 >>
->> Regards
-> 
-> Hi,
-> 
-> for allowing the driver to provide nonstandard attributes, hwmon_device_register_with_info()
-> has the argument "extra_groups" which is an pointer to a list of sysfs attribute groups.
-> There are some drivers which are using this functionality, maybe you can use them as an
-> inspiration.
-> 
-> Just a question: what is the name of the driver you originally used as an inspiration?
-> 
+>> for allowing the driver to provide nonstandard attributes,
+>> hwmon_device_register_with_info()
+>> has the argument "extra_groups" which is an pointer to a list of
+>> sysfs attribute groups.
+>> There are some drivers which are using this functionality, maybe you
+>> can use them as an
+>> inspiration.
+>>
+>> Just a question: what is the name of the driver you originally used
+>> as an inspiration?
+>>
+>
+> Originally it was for drivers/thermal/thermal_hwmon.c. Now there is also
+> drivers/platform/mips/cpu_hwmon.c which is clearly an abuse. I may have
+> missed others.
+>
+> Guenter
+Should we notify the maintainers of cpu_hwmon.c about that?
+This could potentially prevent such incidents from happening again.
 
-Originally it was for drivers/thermal/thermal_hwmon.c. Now there is also
-drivers/platform/mips/cpu_hwmon.c which is clearly an abuse. I may have
-missed others.
-
-Guenter
+Armin Wolf
