@@ -2,148 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFF0FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 11:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B66DBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 12:43:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiEBL1R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 07:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
+        id S1385075AbiEBMq3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 08:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiEBL1Q (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 07:27:16 -0400
-X-Greylist: delayed 502 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 May 2022 04:23:47 PDT
-Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB4212AD1
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 04:23:47 -0700 (PDT)
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 81C202021B
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 11:15:24 +0000 (UTC)
-Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.154])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id A8E5D267CE;
-        Mon,  2 May 2022 11:15:17 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay4.mymailcheap.com (Postfix) with ESMTPS id A953F20017;
-        Mon,  2 May 2022 11:15:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id 032542A2AE;
-        Mon,  2 May 2022 11:15:14 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7omtSMs1A6sZ; Mon,  2 May 2022 11:15:13 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Mon,  2 May 2022 11:15:13 +0000 (UTC)
-Received: from [127.0.0.1] (unknown [64.225.114.122])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 22815405D8;
-        Mon,  2 May 2022 11:15:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1651490112; bh=rUT7KoKRnXsktcX5dLdRErqPLZQBY5ISASFS45PYPuA=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=lVYp40sOuy3Tl/aX6MU6s+mzMFA9W2Tmea013ogW60hxMjcRcxsOgbiQEVZemFUtj
-         iVulfzPiiJypRDVvvFEABrViGJodFpr2srOgzhCzKQ7+OWZzpCXY3t4ddxz2uSwv5p
-         88PHW6rI7Osufk7244uzAH31BVbtHTdG8DnEKDoY=
-Date:   Mon, 02 May 2022 19:15:01 +0800
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Maxime Ripard <maxime@cerno.tech>, Ruslan Zalata <rz@fabmicro.ru>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_hwmon=3A_=28sun4i-lradc=29_Add_dri?= =?US-ASCII?Q?ver_for_LRADC_found_on_Allwinner_A13/A20_SoC?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220502110010.q7vvdkdpaiz5acjl@houat>
-References: <20220428210906.29527-1-rz@fabmicro.ru> <20220502110010.q7vvdkdpaiz5acjl@houat>
-Message-ID: <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+        with ESMTP id S1385068AbiEBMq2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 08:46:28 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAAA13EA8
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 05:42:58 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso7646620wmq.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 May 2022 05:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YRohQUQY1r31dYmkznaNZNn9Fl2VO85KxdP3sYAcMUM=;
+        b=k9grHfbrrC3FM3EZ8uwO6c1lhprHP1M2ungmO+8k/CJj2KtYZSeJ8Lg1mMyyYAYxJj
+         dY9P2H1sTs03loGURWfIpkZ7CZFYb4xYofBngTa8OQYrGh2P2g1aZ+Muuju6kEdxur5J
+         ewoGAM3NtEPvfxaryq05U+PUVM4gebpKVCGA0uostgLf4hCCpPl81yLDlgk9dDu8AuAX
+         o2PPyeto0Ugr2/P/SL6PG5Y9YlkiE3VQHuDBFqCcxrX4xVlOx+TJ1SRbUKQvFDFfzjBB
+         It5y6XhzOBi7wIv/1hMWqdLvDsSPcNHi1Z7Hr+v5vhiLae1BebzWpM1DD+iAkbbvCyjY
+         LpaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YRohQUQY1r31dYmkznaNZNn9Fl2VO85KxdP3sYAcMUM=;
+        b=E6ioT4rZJdMOJdwQ8v6dIn1dsmQFFmiSTbxLyExA6hkkQTz1J4GCbc+FVR8+MzSeXg
+         7curWWsZ12FVJktl/64yn2HHSkf9QUEWt8aYmDohwY6fgBk4vEVxHNqwiDiH+Z44yfHg
+         rLXrI0eZchpVTy+8+JPVPRFDYB0Cg4TBxQ9BzRXa7FgMUCcEkmHodNVjXNqr1g5buzuN
+         zNCP6YtOZ08ErDiDMAR6clL8jZEFv/bZil3yolya2WO99MYXuxWOU0vLkwqPo/fZoBLU
+         xRLFpLQWOsOo+1iT+dHcpR57iTcTFRky4XXpcDagGpNuVjZiDS39Vu4lx/0kBw+V4doz
+         sXKQ==
+X-Gm-Message-State: AOAM530taYTtwdErV5zVDeE9Uk38ZBQLnp2VQSJSDGTcbNEtw64TSS4u
+        5N088Vbvw1qS4DjNDXVjeSNxk/N8eFLICw==
+X-Google-Smtp-Source: ABdhPJw/0Id57UK+1QzuBmq0NXZmplKf9bzx/9jA+FdfPUEAhchgkqFRMVKmr4Oh4lVZ9XOO0oCsIQ==
+X-Received: by 2002:a7b:c082:0:b0:394:3a45:bcc5 with SMTP id r2-20020a7bc082000000b003943a45bcc5mr4132421wmh.138.1651495376833;
+        Mon, 02 May 2022 05:42:56 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id n10-20020a05600c294a00b003942a244f30sm6254680wmd.9.2022.05.02.05.42.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 05:42:56 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH 2/2] hwmon: acpi_power_meter: convert to hwmon_device_register_with_info
+Date:   Mon,  2 May 2022 12:42:49 +0000
+Message-Id: <20220502124249.682058-2-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220502124249.682058-1-clabbe@baylibre.com>
+References: <20220502124249.682058-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
+So let's convert the driver to use hwmon_device_register_with_info().
 
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/hwmon/acpi_power_meter.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-=E4=BA=8E 2022=E5=B9=B45=E6=9C=882=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=887:=
-00:10, Maxime Ripard <maxime@cerno=2Etech> =E5=86=99=E5=88=B0:
->Hi,
->
->On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
->> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
->> low rate (6 bit) ADC that is often used for extra keys=2E There's a dri=
-ver
->> for that already implementing standard input device, but it has these
->> limitations: 1) it cannot be used for general ADC data equisition, and
->> 2) it uses only one LRADC channel of two available=2E
->>=20
->> This driver provides basic hwmon interface to both channels of LRADC on
->> such Allwinner SoCs=2E
->>=20
->> Signed-off-by: Ruslan Zalata <rz@fabmicro=2Eru>
->> ---
->>  MAINTAINERS                       |   6 +
->>  drivers/hwmon/Kconfig             |  13 ++
->>  drivers/hwmon/Makefile            |   1 +
->>  drivers/hwmon/sun4i-lradc-hwmon=2Ec | 280 ++++++++++++++++++++++++++++=
-++
->>  4 files changed, 300 insertions(+)
->>  create mode 100644 drivers/hwmon/sun4i-lradc-hwmon=2Ec
->>=20
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5e8c2f61176=2E=2Ed9c71e94133 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -18861,6 +18861,12 @@ S:	Maintained
->>  F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-k=
-eys=2Eyaml
->>  F:	drivers/input/keyboard/sun4i-lradc-keys=2Ec
->> =20
->> +SUN4I LOW RES ADC HWMON DRIVER
->> +M:	Ruslan Zalata <rz@fabmicro=2Eru>
->> +L:	linux-hwmon@vger=2Ekernel=2Eorg
->> +S:	Maintained
->> +F:	drivers/hwmon/sun4i-lradc-hwmon=2Ec
->> +
->>  SUNDANCE NETWORK DRIVER
->>  M:	Denis Kirjanov <kda@linux-powerpc=2Eorg>
->>  L:	netdev@vger=2Ekernel=2Eorg
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 68a8a27ab3b=2E=2E86776488a81 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
->>  	  This driver can also be built as a module=2E If so, the module
->>  	  will be called sis5595=2E
->> =20
->> +config SENSORS_SUN4I_LRADC
->> +	tristate "Allwinner A13/A20 LRADC hwmon"
->> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
->> +	help
->> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs=2E
->> +	  Both channels are supported=2E
->> +
->> +	  This driver can also be built as module=2E If so, the module
->> +	  will be called sun4i-lradc-hwmon=2E
->> +
->> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
->> +	  of these must be used at a time=2E
->
->How do you plan on enforcing that?
->
->I guess a better path forward would be to either register an hwmon
->device in the original driver, or convert that driver to iio and use
->iio-hwmon=2E
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index d2545a1be9fc..98293727f980 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct acpi_device *device)
+ 	if (res)
+ 		goto exit_free_capability;
+ 
+-	resource->hwmon_dev = hwmon_device_register(&device->dev);
++	resource->hwmon_dev = hwmon_device_register_with_info(&device->dev,
++							      ACPI_POWER_METER_DEVICE_NAME,
++							      NULL, NULL,
++							      NULL);
+ 	if (IS_ERR(resource->hwmon_dev)) {
+ 		res = PTR_ERR(resource->hwmon_dev);
+ 		goto exit_remove;
+-- 
+2.35.1
 
-I think this driver should be use IIO, and then try to probe an IIO input
-if possible=2E
-
->
->Maxime
