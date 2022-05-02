@@ -2,336 +2,272 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26329C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 04:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55DCDC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 04:32:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383192AbiEBEa6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 00:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
+        id S1383202AbiEBEgI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 00:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383190AbiEBEa4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 00:30:56 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC1523BE5
-        for <linux-hwmon@vger.kernel.org>; Sun,  1 May 2022 21:27:28 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so5993743oty.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 May 2022 21:27:28 -0700 (PDT)
+        with ESMTP id S239852AbiEBEgG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 00:36:06 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BF134B84;
+        Sun,  1 May 2022 21:32:38 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id r1so14063182oie.4;
+        Sun, 01 May 2022 21:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=bv5hStwaOtoFzgsdsPsrhjS8WUSiPzDj7EGSmFlXkeM=;
-        b=JR6cxcqKi8i2xdEg1VutXf6nQ2wNo56o05G1GfiYUW+/N1zQPDosoIkQdpGifeMA2w
-         coiwxC3q8gyxKXrNi/ipX7hjJlWMUxakgVMi65H3kpkHhh4+Qsogzw9tcmfY65cxxqAv
-         wERc1EKHiWPgcc/5vAkgsN1HV74Ymh+4VCsl/4MVnKbLGcasckobF9nhMXAsw+IscDe+
-         NdbJxDmwLbaowUBtsWYb0hPbUuoELHOlSbWH/vCDmnq9n8e7YegSMVyVmdZNLTYAgRzu
-         S+gJAzuuTWItHDp+IlbMpM6OM32oN3DM+t56Njzs+zS3SvR9pVzKpwQ6HUTZspjftNwN
-         5Xog==
+        bh=AW4eMMP+xh3LI9RUDK7+BuPWS9twmc/v2jOzuayztXg=;
+        b=G4v2c7qA5HwE5n1Z7Ta6+BHv0tLCxmjz2lMIEnFv4vgIHkVzSYQ6adjG1/htq34tHn
+         4qYJvmQFgH1bvq6oA+lJqZiEAc45euNBZpNnNsFgN+i6SmrHaHs++RyPxKO8gJGcpLZg
+         5PmbBYq/nIm58TBX88PfFachu9m5wLLUxc8UbN0jGcN7HxiRfF/RcU+zo1jDtoUkBVjC
+         /CglZ07lEeGBhYwtGaRhHItlgceZBiEHKk49eTs7fvvsEmgG77m+SimAK/cPq8qIFLSr
+         8BSm8H4HYfihSB0RPk59L9ntj3qK1nc9egsk9hmzkhf0tnvqvX6EpOi002p9msAHxNAa
+         PWbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=bv5hStwaOtoFzgsdsPsrhjS8WUSiPzDj7EGSmFlXkeM=;
-        b=dVWjQ9Ix2CCnRlgC/ut0+sYoUNXdNCW/USE9vRg2giCbxAOwab5urHw8wWoOa0EuhK
-         fhwdiCW1jaNdy2LxYt3vTGN9JKkWduwZLbq0R5KrTefRFHFPEffGSLDpEKhys4cS0vgv
-         UwuNffNCM7RsVtAhS8MgKgyhUvRh1y71sIZRtHyFQ8AbmWKlNPHoTFTsrLpOEOVnpmBX
-         fJeEjesIWl4MWC9YNC/M7Qpvwc/YcezU204dHxrgvNDu2VxCw8Ts0wgTVERum2P+J4Bt
-         Gd8OMy5OG8N8ZN47SAoHRE3+05cCDwPoPmLgH9mQxraD80C8L+UImhqSpDIiNVOsI6Zx
-         rFDw==
-X-Gm-Message-State: AOAM532mohDsWXuGXt+o0nUJ0EXB4tpnVLSuFxU8T005CQv2j34FJLlv
-        XZpIbGLzYsFET+72hFUyr9hUboMk4gRg4g==
-X-Google-Smtp-Source: ABdhPJw9626NQ1+rQZ78UgF1TNwzWUTRcA1Qy8JxW8RVqQw3lxIGZO7LXmrrCeWn7/of6KkYmXAtVg==
-X-Received: by 2002:a05:6830:410d:b0:606:1433:709c with SMTP id w13-20020a056830410d00b006061433709cmr1605027ott.165.1651465647815;
-        Sun, 01 May 2022 21:27:27 -0700 (PDT)
+        bh=AW4eMMP+xh3LI9RUDK7+BuPWS9twmc/v2jOzuayztXg=;
+        b=Z3CTaMNe+8AQOzH0tyPjucbmUzotzRQ32k/nkAHVWcKlumUGiwrr7XTC6fwDZg8sM2
+         sPW1aKp2kdJ2TS+/lvX6PzV06xFotAjYameKNDP04WSsg+p9uTCvhGTGJFEtU06qg+0Q
+         A3IrXDevMsK6Lwf1eRi/rpRZCTjGHujyMHChoNeNOVfhvqB/EauGIiG0wzorJPfPOCcr
+         Vt6WNEL59QDmENiE8iWoSFzEs00J7feZtgApYUIsLGZuqZx/6CFnGNTwDjgODDXT7Kar
+         WNj6LQjCx1u6WkBn45lvg07xaJemf2BOVOCN6jmulOYA/01NNPChGY1urdmB+cl4Z/9w
+         coRw==
+X-Gm-Message-State: AOAM532cD3ZdaDPyuljmyFxYnQVHNcEii70SH76KjLU2/uykK3PqTjN2
+        Ofht5qmX0L79d+E1FxMbQvw=
+X-Google-Smtp-Source: ABdhPJxVOwpFuR9EXZBL5a+hMNupLSf2PEIVaESz1yunHdZuge6PthyITRAnx7rabI0MC5Ut7t5/iw==
+X-Received: by 2002:a05:6808:10d3:b0:322:90dd:1e20 with SMTP id s19-20020a05680810d300b0032290dd1e20mr6730938ois.30.1651465958060;
+        Sun, 01 May 2022 21:32:38 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o13-20020a9d404d000000b0060603221271sm2454251oti.65.2022.05.01.21.27.27
+        by smtp.gmail.com with ESMTPSA id c19-20020a9d7853000000b006060322124csm2522096otm.28.2022.05.01.21.32.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 21:27:27 -0700 (PDT)
+        Sun, 01 May 2022 21:32:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 1 May 2022 21:27:26 -0700
+Date:   Sun, 1 May 2022 21:32:36 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg.Schwendimann@infineon.com
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] hwmon: (pmbus) Add support for Infineon Digital
- Multi-phase xdp152 faimly controllers
-Message-ID: <20220502042726.GA1718159@roeck-us.net>
-References: <5e6d50e9b28140158f339b0de343eea4@infineon.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] lib: add generic polynomial calculation
+Message-ID: <20220502043236.GA1718668@roeck-us.net>
+References: <20220401214032.3738095-1-michael@walle.cc>
+ <20220401214032.3738095-2-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5e6d50e9b28140158f339b0de343eea4@infineon.com>
+In-Reply-To: <20220401214032.3738095-2-michael@walle.cc>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 06:40:12PM +0000, Greg.Schwendimann@infineon.com wrote:
-> Add support for devices XDPE152C4, XDPE12584.
+On Fri, Apr 01, 2022 at 11:40:29PM +0200, Michael Walle wrote:
+> Some temperature and voltage sensors use a polynomial to convert between
+> raw data points and actual temperature or voltage. The polynomial is
+> usually the result of a curve fitting of the diode characteristic.
 > 
-> Signed-off-by: Greg Schwendimann <Greg.Schwendimann@infineon.com>
-> ---
+> The BT1 PVT hwmon driver already uses such a polynonmial calculation
+> which is rather generic. Move it to lib/ so other drivers can reuse it.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
 
-> Separated the device tree bindings documentation
-> Resending from same email as Signed-off-by header
+> ---
+>  include/linux/polynomial.h |  35 ++++++++++++
+>  lib/Kconfig                |   3 ++
+>  lib/Makefile               |   2 +
+>  lib/polynomial.c           | 108 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 148 insertions(+)
+>  create mode 100644 include/linux/polynomial.h
+>  create mode 100644 lib/polynomial.c
 > 
->  Documentation/hwmon/index.rst     |   1 +
->  Documentation/hwmon/xdpe152c4.rst | 118 ++++++++++++++++++++++++++++++
->  drivers/hwmon/pmbus/Kconfig       |   9 +++
->  drivers/hwmon/pmbus/Makefile      |   1 +
->  drivers/hwmon/pmbus/xdpe152c4.c   |  75 +++++++++++++++++++
->  5 files changed, 204 insertions(+)
->  create mode 100644 Documentation/hwmon/xdpe152c4.rst
->  create mode 100644 drivers/hwmon/pmbus/xdpe152c4.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 863b76289159..355c682f9ec4 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -223,6 +223,7 @@ Hardware Monitoring Kernel Drivers
->     wm8350
->     xgene-hwmon
->     xdpe12284
-> +   xdpe152c4
->     zl6100
->  
->  .. only::  subproject and html
-> diff --git a/Documentation/hwmon/xdpe152c4.rst b/Documentation/hwmon/xdpe152c4.rst
+> diff --git a/include/linux/polynomial.h b/include/linux/polynomial.h
 > new file mode 100644
-> index 000000000000..ab92c32d4d69
+> index 000000000000..9e074a0bb6fa
 > --- /dev/null
-> +++ b/Documentation/hwmon/xdpe152c4.rst
-> @@ -0,0 +1,118 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver xdpe152
-> +=====================
-> +
-> +Supported chips:
-> +
-> +  * Infineon XDPE152C4
-> +
-> +    Prefix: 'xdpe152c4'
-> +
-> +  * Infineon XDPE15284
-> +
-> +    Prefix: 'xdpe15284'
-> +
-> +Authors:
-> +
-> +    Greg Schwendimann <greg.schwendimann@infineon.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Infineon Digital Multi-phase Controller
-> +XDPE152C4 and XDPE15284 dual loop voltage regulators.
-> +The devices are compliant with:
-> +
-> +- Intel VR13, VR13HC and VR14 rev 1.86
-> +  converter specification.
-> +- Intel SVID rev 1.93. protocol.
-> +- PMBus rev 1.3.1 interface.
-> +
-> +Devices support linear format for reading input and output voltage, input
-> +and output current, input and output power and temperature.
-> +
-> +Devices support two pages for telemetry.
-> +
-> +The driver provides for current: input, maximum and critical thresholds
-> +and maximum and critical alarms. Low Critical thresholds and Low critical alarm are
-> +supported only for current output.
-> +The driver exports the following attributes for via the sysfs files, where
-> +indexes 1, 2 are for "iin" and 3, 4 for "iout":
-> +
-> +**curr[1-4]_crit**
-> +
-> +**curr[1-4]_crit_alarm**
-> +
-> +**curr[1-4]_input**
-> +
-> +**curr[1-4]_label**
-> +
-> +**curr[1-4]_max**
-> +
-> +**curr[1-4]_max_alarm**
-> +
-> +**curr[3-4]_lcrit**
-> +
-> +**curr[3-4]_lcrit_alarm**
-> +
-> +**curr[3-4]_rated_max**
-> +
-> +The driver provides for voltage: input, critical and low critical thresholds
-> +and critical and low critical alarms.
-> +The driver exports the following attributes for via the sysfs files, where
-> +indexes 1, 2 are for "vin" and 3, 4 for "vout":
-> +
-> +**in[1-4]_min**
-> +
-> +**in[1-4]_crit**
-> +
-> +**in[1-4_crit_alarm**
-> +
-> +**in[1-4]_input**
-> +
-> +**in[1-4]_label**
-> +
-> +**in[1-4]_max**
-> +
-> +**in[1-4]_max_alarm**
-> +
-> +**in[1-4]_min**
-> +
-> +**in[1-4]_min_alarm**
-> +
-> +**in[3-4]_lcrit**
-> +
-> +**in[3-4]_lcrit_alarm**
-> +
-> +**in[3-4]_rated_max**
-> +
-> +**in[3-4]_rated_min**
-> +
-> +The driver provides for power: input and alarms.
-> +The driver exports the following attributes for via the sysfs files, where
-> +indexes 1, 2 are for "pin" and 3, 4 for "pout":
-> +
-> +**power[1-2]_alarm**
-> +
-> +**power[1-4]_input**
-> +
-> +**power[1-4]_label**
-> +
-> +**power[1-4]_max**
-> +
-> +**power[1-4]_rated_max**
-> +
-> +The driver provides for temperature: input, maximum and critical thresholds
-> +and maximum and critical alarms.
-> +The driver exports the following attributes for via the sysfs files:
-> +
-> +**temp[1-2]_crit**
-> +
-> +**temp[1-2]_crit_alarm**
-> +
-> +**temp[1-2]_input**
-> +
-> +**temp[1-2]_max**
-> +
-> +**temp[1-2]_max_alarm**
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index a2ea1d5a8765..fe0d0e44da4f 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -408,6 +408,15 @@ config SENSORS_UCD9200
->  	  This driver can also be built as a module. If so, the module will
->  	  be called ucd9200.
->  
-> +config SENSORS_XDPE152
-> +	tristate "Infineon XDPE152 family"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Infineon
-> +	  XDPE15284, XDPE152C4, device.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called xdpe152c4.
-> +
->  config SENSORS_XDPE122
->  	tristate "Infineon XDPE122 family"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index a4a96ac71de7..4678fba5012c 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -43,5 +43,6 @@ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
->  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
->  obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
-> +obj-$(CONFIG_SENSORS_XDPE152)	+= xdpe152c4.o
->  obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
->  obj-$(CONFIG_SENSORS_PIM4328)	+= pim4328.o
-> diff --git a/drivers/hwmon/pmbus/xdpe152c4.c b/drivers/hwmon/pmbus/xdpe152c4.c
-> new file mode 100644
-> index 000000000000..b8a36ef73e45
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/xdpe152c4.c
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +++ b/include/linux/polynomial.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
 > +/*
-> + * Hardware monitoring driver for Infineon Multi-phase Digital VR Controllers
-> + *
-> + * Copyright (c) 2022 Infineon Technologies. All rights reserved.
+> + * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
 > + */
 > +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
+> +#ifndef _POLYNOMIAL_H
+> +#define _POLYNOMIAL_H
+> +
+> +/*
+> + * struct polynomial_term - one term descriptor of a polynomial
+> + * @deg: degree of the term.
+> + * @coef: multiplication factor of the term.
+> + * @divider: distributed divider per each degree.
+> + * @divider_leftover: divider leftover, which couldn't be redistributed.
+> + */
+> +struct polynomial_term {
+> +	unsigned int deg;
+> +	long coef;
+> +	long divider;
+> +	long divider_leftover;
+> +};
+> +
+> +/*
+> + * struct polynomial - a polynomial descriptor
+> + * @total_divider: total data divider.
+> + * @terms: polynomial terms, last term must have degree of 0
+> + */
+> +struct polynomial {
+> +	long total_divider;
+> +	struct polynomial_term terms[];
+> +};
+> +
+> +long polynomial_calc(const struct polynomial *poly, long data);
+> +
+> +#endif
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index 087e06b4cdfd..6a843639814f 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -737,3 +737,6 @@ config PLDMFW
+>  
+>  config ASN1_ENCODER
+>         tristate
+> +
+> +config POLYNOMIAL
+> +       tristate
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 6b9ffc1bd1ee..89fcae891361 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -263,6 +263,8 @@ obj-$(CONFIG_MEMREGION) += memregion.o
+>  obj-$(CONFIG_STMP_DEVICE) += stmp_device.o
+>  obj-$(CONFIG_IRQ_POLL) += irq_poll.o
+>  
+> +obj-$(CONFIG_POLYNOMIAL) += polynomial.o
+> +
+>  # stackdepot.c should not be instrumented or call instrumented functions.
+>  # Prevent the compiler from calling builtins like memcmp() or bcmp() from this
+>  # file.
+> diff --git a/lib/polynomial.c b/lib/polynomial.c
+> new file mode 100644
+> index 000000000000..66d383445fec
+> --- /dev/null
+> +++ b/lib/polynomial.c
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Generic polynomial calculation using integer coefficients.
+> + *
+> + * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+> + *
+> + * Authors:
+> + *   Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
+> + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> + *
+> + */
+> +
 > +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include "pmbus.h"
+> +#include <linux/polynomial.h>
 > +
-> +#define XDPE152_PAGE_NUM 2
+> +/*
+> + * Originally this was part of drivers/hwmon/bt1-pvt.c.
+> + * There the following conversion is used and should serve as an example here:
+> + *
+> + * The original translation formulae of the temperature (in degrees of Celsius)
+> + * to PVT data and vice-versa are following:
+> + *
+> + * N = 1.8322e-8*(T^4) + 2.343e-5*(T^3) + 8.7018e-3*(T^2) + 3.9269*(T^1) +
+> + *     1.7204e2
+> + * T = -1.6743e-11*(N^4) + 8.1542e-8*(N^3) + -1.8201e-4*(N^2) +
+> + *     3.1020e-1*(N^1) - 4.838e1
+> + *
+> + * where T = [-48.380, 147.438]C and N = [0, 1023].
+> + *
+> + * They must be accordingly altered to be suitable for the integer arithmetics.
+> + * The technique is called 'factor redistribution', which just makes sure the
+> + * multiplications and divisions are made so to have a result of the operations
+> + * within the integer numbers limit. In addition we need to translate the
+> + * formulae to accept millidegrees of Celsius. Here what they look like after
+> + * the alterations:
+> + *
+> + * N = (18322e-20*(T^4) + 2343e-13*(T^3) + 87018e-9*(T^2) + 39269e-3*T +
+> + *     17204e2) / 1e4
+> + * T = -16743e-12*(D^4) + 81542e-9*(D^3) - 182010e-6*(D^2) + 310200e-3*D -
+> + *     48380
+> + * where T = [-48380, 147438] mC and N = [0, 1023].
+> + *
+> + * static const struct polynomial poly_temp_to_N = {
+> + *         .total_divider = 10000,
+> + *         .terms = {
+> + *                 {4, 18322, 10000, 10000},
+> + *                 {3, 2343, 10000, 10},
+> + *                 {2, 87018, 10000, 10},
+> + *                 {1, 39269, 1000, 1},
+> + *                 {0, 1720400, 1, 1}
+> + *         }
+> + * };
+> + *
+> + * static const struct polynomial poly_N_to_temp = {
+> + *         .total_divider = 1,
+> + *         .terms = {
+> + *                 {4, -16743, 1000, 1},
+> + *                 {3, 81542, 1000, 1},
+> + *                 {2, -182010, 1000, 1},
+> + *                 {1, 310200, 1000, 1},
+> + *                 {0, -48380, 1, 1}
+> + *         }
+> + * };
+> + */
 > +
-> +static struct pmbus_driver_info xdpe152_info = {
-> +	.pages = XDPE152_PAGE_NUM,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP |
-> +		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
-> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
-> +};
-> +
-> +static int xdpe152_probe(struct i2c_client *client)
+> +/**
+> + * polynomial_calc - calculate a polynomial using integer arithmetic
+> + *
+> + * @poly: pointer to the descriptor of the polynomial
+> + * @data: input value of the polynimal
+> + *
+> + * Calculate the result of a polynomial using only integer arithmetic. For
+> + * this to work without too much loss of precision the coefficients has to
+> + * be altered. This is called factor redistribution.
+> + *
+> + * Returns the result of the polynomial calculation.
+> + */
+> +long polynomial_calc(const struct polynomial *poly, long data)
 > +{
-> +	struct pmbus_driver_info *info;
+> +	const struct polynomial_term *term = poly->terms;
+> +	long total_divider = poly->total_divider ?: 1;
+> +	long tmp, ret = 0;
+> +	int deg;
 > +
-> +	info = devm_kmemdup(&client->dev, &xdpe152_info, sizeof(*info),
-> +			    GFP_KERNEL);
-> +	if (!info)
-> +		return -ENOMEM;
+> +	/*
+> +	 * Here is the polynomial calculation function, which performs the
+> +	 * redistributed terms calculations. It's pretty straightforward.
+> +	 * We walk over each degree term up to the free one, and perform
+> +	 * the redistributed multiplication of the term coefficient, its
+> +	 * divider (as for the rationale fraction representation), data
+> +	 * power and the rational fraction divider leftover. Then all of
+> +	 * this is collected in a total sum variable, which value is
+> +	 * normalized by the total divider before being returned.
+> +	 */
+> +	do {
+> +		tmp = term->coef;
+> +		for (deg = 0; deg < term->deg; ++deg)
+> +			tmp = mult_frac(tmp, data, term->divider);
+> +		ret += tmp / term->divider_leftover;
+> +	} while ((term++)->deg);
 > +
-> +	return pmbus_do_probe(client, info);
+> +	return ret / total_divider;
 > +}
+> +EXPORT_SYMBOL_GPL(polynomial_calc);
 > +
-> +static const struct i2c_device_id xdpe152_id[] = {
-> +	{"xdpe152c4", 0},
-> +	{"xdpe15284", 0},
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, xdpe152_id);
-> +
-> +static const struct of_device_id __maybe_unused xdpe152_of_match[] = {
-> +	{.compatible = "infineon,xdpe152c4"},
-> +	{.compatible = "infineon,xdpe15284"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, xdpe152_of_match);
-> +
-> +static struct i2c_driver xdpe152_driver = {
-> +	.driver = {
-> +		.name = "xdpe152c4",
-> +		.of_match_table = of_match_ptr(xdpe152_of_match),
-> +	},
-> +	.probe_new = xdpe152_probe,
-> +	.id_table = xdpe152_id,
-> +};
-> +
-> +module_i2c_driver(xdpe152_driver);
-> +
-> +MODULE_AUTHOR("Greg Schwendimann <greg.schwendimann@infineon.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Infineon XDPE152 family");
+> +MODULE_DESCRIPTION("Generic polynomial calculations");
 > +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
