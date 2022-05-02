@@ -2,168 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6FFDC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 11:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54B15C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 11:13:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiEBLDs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 07:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
+        id S229523AbiEBLRU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 07:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiEBLDr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 07:03:47 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B64822A;
-        Mon,  2 May 2022 04:00:16 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7E4465C00D3;
-        Mon,  2 May 2022 07:00:14 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 02 May 2022 07:00:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651489214; x=1651575614; bh=ItYICrTgTo
-        hpwpBDhrRzrv8Mk71TJQUctJQK+kNCaEg=; b=LYscJNJ6Guke04cT64YEDVdjPk
-        ZMKEn58Y41ffSfK8puh+bLL8Il/6dVJCwe4qSMJUNXWfMqBNmftpGAynZlUzbSQr
-        aED+fki4Eq7DLKNWXZb6F0qa3RwbxEn+/eO11NZQglhXj14J7eDz+6lPWx5wEx2P
-        No6/xGxh2vzIYk5eOlF4t8FWICQwJ3oyaYmqRy2a4745Ef3XdRUcRfe8UAOaHnht
-        gKajLcDMaCbFe8bopUKxsWkB+QTdov7Ym4McXAZLAS13P13UMbwQOyJUY0wsVvs4
-        p0yVsFzj9negvdfW9yMcI2XEt2VNY+w09LXuCxDTlTvIE58pF1tMxu+tFg2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651489214; x=
-        1651575614; bh=ItYICrTgTohpwpBDhrRzrv8Mk71TJQUctJQK+kNCaEg=; b=f
-        NJxWMgo52DAUSvr5ppVD+jC98ovCq/y/mMenmbrdp1EDOWqHv4+xjHNd9jMw+aoA
-        7vDzbEfF0CJMBMc398il+QjxgJFmtskl12ypCYCMldCTPlTExBPk/uQGCs29N61N
-        CRC9XF90FvFRnHCLN5uqoIqsPEZ8hf/PQf7XkFuolTHaVksroukqiM4O6NbEWBXH
-        r7u+9Ujfwui2a/QraPDLfb5wuXQyLACkhhWvdVkWXBrLscWzhObwOeHPRw0hBT+x
-        b6+56x+V39044xAn9XmHlEOivbXdjY0qSg35eN1DrKzTgUEOZZTHhehertKdRkKP
-        ftdQgGe+2vQWGjy7JQlHg==
-X-ME-Sender: <xms:vLlvYjR4YVGLpJu6ZquLlIf-XQi967msLSX4px2vi9WFcvV4L0qbFw>
-    <xme:vLlvYkwCZWhz55WPjTh2TH0oX6gARsWO8YljXKjUhIPZ5faiD4cl4dc5WlcY-GAB4
-    yJ82HJHpuzM41R_5Nc>
-X-ME-Received: <xmr:vLlvYo2agjDSHTbynvHVJWXHrMG4QpDLvI2mCLCVnqfJrazd8TdCK_DoiM9OeIERiU1EarzL-4UJqwoqVSYFCQsCoz1j_-hBECBxhME>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdeffecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:vLlvYjDoVQPSrU9DIM4GPu6EZp8Su4e_o5YCQvDZYIk5IbG89SV_3w>
-    <xmx:vLlvYsjAsoL1FPfpWcxksuDQ_nbt-7XVgR4cjSCe0Lk7KzFoHP-WYA>
-    <xmx:vLlvYnphluj0VrpjS-ZULyjgnx7wOwCnYRFqORRRVDj7j1lAdWeDAg>
-    <xmx:vrlvYlVA8XUyTDMdzKQLvVQxzRNDBJ9b2eK4lsOf65Eg0WVZsT9pVQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 May 2022 07:00:12 -0400 (EDT)
-Date:   Mon, 2 May 2022 13:00:10 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Ruslan Zalata <rz@fabmicro.ru>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
-Message-ID: <20220502110010.q7vvdkdpaiz5acjl@houat>
-References: <20220428210906.29527-1-rz@fabmicro.ru>
+        with ESMTP id S1384694AbiEBLRT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 07:17:19 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA862ADA
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 04:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651490031;
+  x=1683026031;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sA+iNk1Y9BcKz5uT0ZJTo7SyuA7pU8Ktr+staJUmEN4=;
+  b=le7/SqaQceGbr49iKc7F3zc4+6e0MW+ohjUr936Vvqs1OPyw8IOzP5FM
+   AzhXXwcn5K6++rpIIfBvxxDvud94t0qpLJLpXAOMEW9eACDqvCIMintL1
+   yUf5Hi2XmRGvGZOecLvBJOE4YzqcFgaT5VuXV1WyIIQnw8lRHEvqbfgxY
+   +stisfZb2ZhHWOINSs1wqL+QPiyzZjYh1yaHz1ZjkN7uGKJfpd7oTlltb
+   DL7FImETCs6LMRiJjiNsC+x86zqAobtEhvEIIV0beGAklB90BjPuFDYKj
+   qSRyQUBUa56ieDSfFjYXqoMtEOJM/uruUruIfEu7TfWiiSfk7MNPeKbzN
+   g==;
+From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
+        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+Subject: [PATCH v5 0/4] hwmon: (pmbus/ltc2978) Add regulator ops
+Date:   Mon, 2 May 2022 13:13:41 +0200
+Message-ID: <20220502111345.3100970-1-marten.lindahl@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jlw5hd26lnyezkda"
-Content-Disposition: inline
-In-Reply-To: <20220428210906.29527-1-rz@fabmicro.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi!
 
---jlw5hd26lnyezkda
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The LTC2978 driver supports a wide range of power regulator chips, but it
+has limited functionality for using it in a dynamic regulator framework.
+Since standard functions for setting and getting voltage are missing as
+pmbus core operations this patchset adds it.
 
-Hi,
+These patches have been tested on an ARTPEC-8 developer board with a group
+of LTC2977 power regulators.
 
-On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
-> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
-> low rate (6 bit) ADC that is often used for extra keys. There's a driver
-> for that already implementing standard input device, but it has these
-> limitations: 1) it cannot be used for general ADC data equisition, and
-> 2) it uses only one LRADC channel of two available.
->=20
-> This driver provides basic hwmon interface to both channels of LRADC on
-> such Allwinner SoCs.
->=20
-> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
-> ---
->  MAINTAINERS                       |   6 +
->  drivers/hwmon/Kconfig             |  13 ++
->  drivers/hwmon/Makefile            |   1 +
->  drivers/hwmon/sun4i-lradc-hwmon.c | 280 ++++++++++++++++++++++++++++++
->  4 files changed, 300 insertions(+)
->  create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5e8c2f61176..d9c71e94133 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18861,6 +18861,12 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-key=
-s.yaml
->  F:	drivers/input/keyboard/sun4i-lradc-keys.c
-> =20
-> +SUN4I LOW RES ADC HWMON DRIVER
-> +M:	Ruslan Zalata <rz@fabmicro.ru>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
-> +
->  SUNDANCE NETWORK DRIVER
->  M:	Denis Kirjanov <kda@linux-powerpc.org>
->  L:	netdev@vger.kernel.org
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 68a8a27ab3b..86776488a81 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
->  	  This driver can also be built as a module. If so, the module
->  	  will be called sis5595.
-> =20
-> +config SENSORS_SUN4I_LRADC
-> +	tristate "Allwinner A13/A20 LRADC hwmon"
-> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
-> +	help
-> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
-> +	  Both channels are supported.
-> +
-> +	  This driver can also be built as module. If so, the module
-> +	  will be called sun4i-lradc-hwmon.
-> +
-> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
-> +	  of these must be used at a time.
+Kind regards
+Mårten Lindahl
 
-How do you plan on enforcing that?
+Changes in v2:
+ - Add pmbus core _pmbus_write_byte_data to check for driver specific callback
+ - Change pmbus_update_byte_data to use _pmbus_read/write_byte_data
+ - Change pmbus_regulator_is_enabled to use _pmbus_read_byte_data
+ - Export pmbus core functions enable/disable/is_enabled
 
-I guess a better path forward would be to either register an hwmon
-device in the original driver, or convert that driver to iio and use
-iio-hwmon.
+Changes in v3:
+ - Split patch "hwmon: (pmbus/ltc2978) Use driver specific ops if they exist"
+   into two patches: (1) pmbus core, (2) ltc2978.
+ - Move ltc2978_regulator_get/set_voltage functions to pmbus core.
 
-Maxime
+Changes in v4:
+ - Split (and rename) patch "hwmon: (pmbus) Use driver specific ops if they exist"
+   into two patches where the first handle _pmbus_write_byte_data, and the
+   second handle _pmbus_read_byte_data.
+ - Use voltage conversion functions in pmbus_regulator_get/set_voltage.
 
---jlw5hd26lnyezkda
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in v5:
+ - Remove PMBUS_VOUT_COMMAND voltage attribute added in v4 and use local
+   sensor object for conversion.
+ - Try to read MFR_VOUT_MIN and MFR_VOUT_MAX first, or else VOUT_MARGIN_LOW and
+   VOUT_MARGIN_HIGH, to get voltage window.
 
------BEGIN PGP SIGNATURE-----
+Mårten Lindahl (4):
+  hwmon: (pmbus) Introduce and use write_byte_data callback
+  hwmon: (pmbus) Use _pmbus_read_byte_data with callback
+  hwmon: (pmbus/ltc2978) Add chip specific write_byte_data
+  hwmon: (pmbus) Add get_voltage/set_voltage ops
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYm+5ugAKCRDj7w1vZxhR
-xWLTAQCboX/1BSKFvZS12C8iuG73rMmjtoEPp7an4m1k3cxlmQEA1j3nBoQoAViK
-ntBC9sXc867rFYwx0NGyOqdWhao8Ywk=
-=5vhh
------END PGP SIGNATURE-----
+ drivers/hwmon/pmbus/ltc2978.c    |  12 +++
+ drivers/hwmon/pmbus/pmbus.h      |   2 +
+ drivers/hwmon/pmbus/pmbus_core.c | 133 +++++++++++++++++++++++++------
+ 3 files changed, 121 insertions(+), 26 deletions(-)
 
---jlw5hd26lnyezkda--
+-- 
+2.30.2
+
