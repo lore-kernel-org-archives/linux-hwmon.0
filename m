@@ -2,50 +2,50 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAA9EC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 18:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F646C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 18:19:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237051AbiEBSUl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 14:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S1355147AbiEBSWj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 14:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiEBSUl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 14:20:41 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B021EE1F;
-        Mon,  2 May 2022 11:17:11 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-deb9295679so15037660fac.6;
-        Mon, 02 May 2022 11:17:11 -0700 (PDT)
+        with ESMTP id S238642AbiEBSWi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 14:22:38 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE1421B3;
+        Mon,  2 May 2022 11:19:08 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id q8so15574061oif.13;
+        Mon, 02 May 2022 11:19:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YwwIk+jeAaCtKOZfDXfW8hJEALg69ntNpW8zDKAvctA=;
-        b=cDGJv8Pg8U8BZohBIRLBY+DPelubVnUCJXzY6Qv/RLXRSGeA6VA0tSOcYYh2iK3Ag8
-         HZsq0aI2o+9JvI+p9+y1J/M4Jp+YBRoUWkl/NAotkrkEF4dnB5DWTfP10Uus/awleA93
-         nc5kDKUEYriNiNdkitxN3sBlnROYg+z1VMBwWNqS0CtppNWte/pIC20XJvnT1j5WZBwD
-         J5TljidoHWXtG2B6K1KWXl4pRMYuyodizgKnIAW0jJlkSyrAH88Mkrf1EaFqDutusuKW
-         Gv989wvaTfZK7qN7+gTQC0LgSmcsfrno5HvztMzz85gv2M1oVpFYoivouJ5fMn+wAgcm
-         TO1w==
-X-Gm-Message-State: AOAM531Mtr3gv4EXT9iH4c4oq9suDpXr21V6hMp97CfaSGn8vWCT4YSf
-        3s6Ff/G0PwAXI+EpSUSe7fBWVzoOGA==
-X-Google-Smtp-Source: ABdhPJzI3Z0eKgKtF2mg1GayMWBA7mY2NRPcUJpkfHS7aZLGR4hOV1rBUWLmkvR0bVE4IY6K2UY2ng==
-X-Received: by 2002:a05:6870:3105:b0:da:c099:7942 with SMTP id v5-20020a056870310500b000dac0997942mr181531oaa.199.1651515430984;
-        Mon, 02 May 2022 11:17:10 -0700 (PDT)
+        bh=sCS8AdoJhLm6rltPCRkjueSbUN6CmYrKvYL7nJFeMvs=;
+        b=aXxk3N8+/8QZUbg5hS9VfotLfiYVJD56+DzssFyoeQkeFVNW2PzLSrsjge2ckfTZcA
+         y5L0iG7rb90gnWsH7FP9ERx2PtzQ/pFtqDjO9zOJYfmBLwiRN6k1BNqGA8PkTQupe9HU
+         Z6mtOTnlR6jw73AcLzuA9ZpWdDyVmTsAeB+BOHAmE8SBNFrP/1a0a7IJW0uopZevHhNJ
+         TntLpja8dJioKPsptEkNvsBF+Lq7LYWJdZQjls+wRo2mUtvWp3L+RLZSxnejsWa6WJlG
+         +OQSnx32ug6H0JW5fR/4/Ol+GMpFZrIiQC1AGCIxWugbSTWvGmp6hGwT9J3zxlYHq4pY
+         M9Pg==
+X-Gm-Message-State: AOAM531AlYaTAu4xtxWGpheGy67iYJHTTQ4vHAPgTBjnc5YSGkVKcxxa
+        A2EQVMlghdDB9dkJTRjqmVoT8+VSJQ==
+X-Google-Smtp-Source: ABdhPJxE5pVVevyygfIrw3FW8svlbrFKlAEVKUg6hXpJ1By2eG2ZPN5o7ADHGS1hOvUc29e2vuEqtg==
+X-Received: by 2002:a05:6808:1413:b0:322:ac62:f01b with SMTP id w19-20020a056808141300b00322ac62f01bmr201259oiv.85.1651515548092;
+        Mon, 02 May 2022 11:19:08 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 1-20020a9d0c01000000b006060322127fsm3089835otr.79.2022.05.02.11.17.10
+        by smtp.gmail.com with ESMTPSA id v4-20020a9d4e84000000b006060322124bsm3156314otk.27.2022.05.02.11.19.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 11:17:10 -0700 (PDT)
-Received: (nullmailer pid 1457143 invoked by uid 1000);
-        Mon, 02 May 2022 18:17:09 -0000
-Date:   Mon, 2 May 2022 13:17:09 -0500
+        Mon, 02 May 2022 11:19:07 -0700 (PDT)
+Received: (nullmailer pid 1460304 invoked by uid 1000);
+        Mon, 02 May 2022 18:19:07 -0000
+Date:   Mon, 2 May 2022 13:19:07 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     michaelsh@nvidia.com
 Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, vadimp@nvidia.com
 Subject: Re: [PATCH v1 2/3] dt-bindings: hwmon: add microchip,emc2306.yaml dt
  binding description.
-Message-ID: <YnAgJVxh5fxijKQj@robh.at.kernel.org>
+Message-ID: <YnAgmywao0qSNZQ9@robh.at.kernel.org>
 References: <20220430114905.53448-1-michaelsh@nvidia.com>
  <20220430114905.53448-3-michaelsh@nvidia.com>
 MIME-Version: 1.0
@@ -58,6 +58,12 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On Sat, Apr 30, 2022 at 02:49:04PM +0300, michaelsh@nvidia.com wrote:
 > From: Michael Shych <michaelsh@nvidia.com>
+
+Also, for the subject no need for 'dt binding description.', you 
+already said that with 'dt-bindings'. So:
+
+dt-bindings: hwmon: Add Microchip EMC2305 fan controller
+
 > 
 > Add basic description of emc2305 driver device tree binding.
 > 
@@ -123,19 +129,13 @@ On Sat, Apr 30, 2022 at 02:49:04PM +0300, michaelsh@nvidia.com wrote:
 > +  - |
 > +    fan {
 > +        emc2305,compatible = "microchip,emc2305";
-
-Err, what?
-
 > +        emc2305,pwm-min = <0>;
 > +        emc2305,pwm-max = <255>;
 > +        emc2305,pwm-channel = <5>
 > +        emc2305,cooling-levels = <10>;
-
-All possible fans attached to this controller are the same and don't 
-have anything that needs to be described? Based on other fan 
-controllers, I don't think so. As I've said multiple times, there's a 
-need for a common fan and fan-controller binding. Until that happens, 
-I'm not inclined to accept fan controller bindings with custom 
-properties.
-
-Rob
+> +    };
+> +
+> -- 
+> 2.14.1
+> 
+> 
