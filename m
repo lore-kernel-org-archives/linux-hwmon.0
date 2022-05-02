@@ -2,164 +2,168 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6641DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 16:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3328C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 17:42:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238923AbiEBQv6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 12:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S1351646AbiEBRqE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 13:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234379AbiEBQv5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 12:51:57 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEAB267
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 09:48:28 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-d39f741ba0so14787839fac.13
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 May 2022 09:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=M3Dn+HCmKZVuINI/pTwN6516LW8LicoUgjPdV/+5QTs=;
-        b=BG29C5odYorxPdpmtuMLNPWqGrCq10CNovTOYf1Hp/PKtRZ+/Y6OXV1n9frObm0hPN
-         TYCfLCldOGn9hTAuQ/OdLUqCPCo3vDQGFa5xm0a25TsREPw5ufDBiHysBOBAHxYL1Skb
-         1mJsJhqGdd1wuovdAGz7WAfE4JurXzXnJk9tzVNI8IuzJI1EdTW8NJOGwxwqOPBfwkpf
-         QmSQoarJG6gHqMA/D1v2WmuA6g5uKeXiyI+yOEIcb7aS2KO6SyzimTYfHxpLzN4Zp82Y
-         Mz8sCnhWiXf/fQp9rElyg8EiNEEalQ8DA1s1Px1pR5D/zi5Xs/afcX9K2jpWscZQ4UOF
-         To6A==
+        with ESMTP id S239075AbiEBRqD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 13:46:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 523502DC8
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 10:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651513352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oX2QCt8rCc+oF9sCgtcKZ1Q9e7gcbTc5DzDbSOW56p0=;
+        b=H94h5zunRvh1G35cMT4aeOykk6mVSZadh3EmhNXAod364t5toQxl5bnxUcsLbDHIYq4C1P
+        /e3e4bR8xJB6/1MFFAD6RUx1Mum013QcgH3waW5bZWfzdwlW6q9ARHgOw/Gu5SWIWz8T/J
+        qWfE3DBucDO3BFE71Fq7DXJOoIN33Pw=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-fIlAgilfO7iYcx2_Rxu4Lw-1; Mon, 02 May 2022 13:42:31 -0400
+X-MC-Unique: fIlAgilfO7iYcx2_Rxu4Lw-1
+Received: by mail-qt1-f198.google.com with SMTP id s10-20020a05622a018a00b002f381134e2bso11474544qtw.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 May 2022 10:42:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
          :content-transfer-encoding;
-        bh=M3Dn+HCmKZVuINI/pTwN6516LW8LicoUgjPdV/+5QTs=;
-        b=WdACyHuHmNv6uyo+YADID/QgmbNt1cQBas0rZOJX6nrd+3hlwzJvBcj2BK0lCGZPLi
-         +sFg/T3ocJaABaftLD3xhlbnSrjO5TaLEnWhWDgXkYrFYku/HutzKa1tcgdlwGzRl0Sq
-         bdxk5q5mWvLv4pfb7kZpzCEG36BkjBUeAJdzymNkFGsMf9YKpz25hDYSK9qGjkwTae7x
-         c6OPywlklSk1kUtG5i4bKnJotTDpnsMyzetTrJpmGptrJWM0d6BaneQfgqsZvRFF605H
-         nTVMFtojP90RzTbq29jKu7y8F/SnvUusEId6g6p9cypBt2oldIZQ7r1PRQaQ9vod3IXi
-         afJQ==
-X-Gm-Message-State: AOAM530tFyZRR4gw+Q4MH3V8MKUkSCItPfvKBh5UZhKbXYdlIZtTSj8C
-        Dmg8Fg9+2PFiDx72SwSyPIs=
-X-Google-Smtp-Source: ABdhPJwtFPqk61l7c6GG2RTuQQWaXkhLAudBm1sxDORFhDEyMKZU2NMAenH/Hz6AdHBOADGBJTL/4A==
-X-Received: by 2002:a05:6870:c393:b0:e2:ae03:70ff with SMTP id g19-20020a056870c39300b000e2ae0370ffmr4772053oao.231.1651510107868;
-        Mon, 02 May 2022 09:48:27 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r7-20020a056870878700b000e686d1386csm6046985oam.6.2022.05.02.09.48.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 09:48:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0edfd625-8e73-b739-16be-7818f2918fa6@roeck-us.net>
-Date:   Mon, 2 May 2022 09:48:25 -0700
+        bh=oX2QCt8rCc+oF9sCgtcKZ1Q9e7gcbTc5DzDbSOW56p0=;
+        b=XcIF5KI14USpO8F9XnEnyCrXucnxBuF8t7iccxLwIxSMmSJHdVSdLSFaPBlPXIVQ0b
+         0FJoQHVWmmimgm0RMBvpNd4PW5omDQTSGEFBwf4AnRIhX2EN8vlXqlgxqY8NNfzbThV8
+         ONGdYhxOkW7P3p/SPkW6SGfMoQnAGEwSTT0FVmfu28eyeSd6PVvfaFVfqc3xKCYcnnEk
+         ttwIye7kVqNsQ9euo0RMpZzkPRZOyYViTjEcWELFnRvF9C6OEZvbgeRcPTPQiGPSHXBG
+         bAUzN1taDRmLCYNRn+kD4CLNRStNg+1FFn5WNiL28RRVs/5q5qwkVFybnRMitappznRX
+         sHiQ==
+X-Gm-Message-State: AOAM531Vag4a8h2tvHEz0xe/Ex6zY1ZU9UEz7mbYoLVqLx53Wg72F+rC
+        J/6vygV5iLYMzJAGx5pNHl/ZLBhFYigNCsml6p7L3xCkNsYBxUt080+hPVYlIolyhfRbQ1CjeDQ
+        8junvd2KydcHu4f3LabMGex8=
+X-Received: by 2002:a05:622a:1456:b0:2f2:4ff:39a1 with SMTP id v22-20020a05622a145600b002f204ff39a1mr11395128qtx.164.1651513350892;
+        Mon, 02 May 2022 10:42:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyVlI+WvWSeI1gCt0yxhCHNFIeT/+R26JugPN+2OgpT4RSLl4o9vy34Ma1ONh6I84/8Qm9tqg==
+X-Received: by 2002:a05:622a:1456:b0:2f2:4ff:39a1 with SMTP id v22-20020a05622a145600b002f204ff39a1mr11395121qtx.164.1651513350693;
+        Mon, 02 May 2022 10:42:30 -0700 (PDT)
+Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
+        by smtp.gmail.com with ESMTPSA id i2-20020ac871c2000000b002f39b99f66asm4474637qtp.4.2022.05.02.10.42.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 10:42:29 -0700 (PDT)
+Message-ID: <2769588a352e9c3b43a4e09afff100d52a9ba524.camel@redhat.com>
+Subject: Re: [External] [PATCH 1/2] platform/x86: thinkpad_acpi: Restore X1
+ Carbon 9th Gen dual fan quirk
+From:   Lyude Paul <lyude@redhat.com>
+To:     Mark Pearson <markpearson@lenovo.com>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>
+Date:   Mon, 02 May 2022 13:42:28 -0400
+In-Reply-To: <d3461670-a905-4956-4f4d-d847adf4289b@lenovo.com>
+References: <20220429211418.4546-1-lyude@redhat.com>
+         <20220429211418.4546-2-lyude@redhat.com>
+         <d3461670-a905-4956-4f4d-d847adf4289b@lenovo.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     =?UTF-8?Q?M=c3=a5rten_Lindahl?= <marten.lindahl@axis.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, kernel@axis.com
-References: <20220502111345.3100970-1-marten.lindahl@axis.com>
- <20220502111345.3100970-5-marten.lindahl@axis.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v5 4/4] hwmon: (pmbus) Add get_voltage/set_voltage ops
-In-Reply-To: <20220502111345.3100970-5-marten.lindahl@axis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/2/22 04:13, Mårten Lindahl wrote:
-> The pmbus core does not have operations for getting or setting voltage.
-> Add functions get/set voltage for the dynamic regulator framework.
+Some answers/comments down below
+
+On Fri, 2022-04-29 at 21:25 -0400, Mark Pearson wrote:
+> Hi Lyude
 > 
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 63 ++++++++++++++++++++++++++++++++
->   1 file changed, 63 insertions(+)
+> On 4/29/22 17:14, Lyude Paul wrote:
+> > The new method of probing dual fan support introduced in:
+> > 
+> > bf779aaf56ea ("platform/x86: thinkpad_acpi: Add dual fan probe")
+> > 
+> > While this commit says this works on the X1 Carbon 9th Gen, it actually
+> > just results in hiding the second fan on my local machine. Additionally,
+> > I'm fairly sure this machine powers on quite often without either of the
+> > two fans spinning.
+> > 
+> > So let's fix this by adding back the dual fan quirk for the X1 Carbon 9th
+> > Gen.
+> > 
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+> > Fixes: bf779aaf56ea ("platform/x86: thinkpad_acpi: Add dual fan probe")
+> > Cc: Mark Pearson <markpearson@lenovo.com>
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+> > Cc: Mark Gross <markgross@kernel.org>
+> > Cc: ibm-acpi-devel@lists.sourceforge.net
+> > Cc: platform-driver-x86@vger.kernel.org
+> > ---
+> >  drivers/platform/x86/thinkpad_acpi.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/platform/x86/thinkpad_acpi.c
+> > b/drivers/platform/x86/thinkpad_acpi.c
+> > index c568fae56db2..9067fd0a945c 100644
+> > --- a/drivers/platform/x86/thinkpad_acpi.c
+> > +++ b/drivers/platform/x86/thinkpad_acpi.c
+> > @@ -8699,6 +8699,7 @@ static const struct tpacpi_quirk fan_quirk_table[]
+> > __initconst = {
+> >         TPACPI_Q_LNV3('N', '2', 'E', TPACPI_FAN_2CTL),  /* P1 / X1 Extreme
+> > (1st gen) */
+> >         TPACPI_Q_LNV3('N', '2', 'O', TPACPI_FAN_2CTL),  /* P1 / X1 Extreme
+> > (2nd gen) */
+> >         TPACPI_Q_LNV3('N', '3', '0', TPACPI_FAN_2CTL),  /* P15 (1st gen) /
+> > P15v (1st gen) */
+> > +       TPACPI_Q_LNV3('N', '3', '2', TPACPI_FAN_2CTL),  /* X1 Carbon (9th
+> > gen) */
+> >         TPACPI_Q_LNV3('N', '3', '7', TPACPI_FAN_2CTL),  /* T15g (2nd gen)
+> > */
+> >         TPACPI_Q_LNV3('N', '1', 'O', TPACPI_FAN_NOFAN), /* X1 Tablet (2nd
+> > gen) */
+> >  };
+> I just double checked this on my X1C9 - and it's working correctly. 2nd
+> fan is detected correctly.
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index bd143ca0c320..455d06ba5fdf 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2563,11 +2563,74 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->   	return 0;
->   }
->   
-> +static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	struct pmbus_sensor s = {
-> +		.page = rdev_get_id(rdev),
-> +		.class = PSC_VOLTAGE_OUT,
-> +		.convert = true,
-> +	};
-> +
-> +	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
-> +	if (s.data < 0)
-> +		return s.data;
-> +
-> +	return (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
-> +}
-> +
-> +static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uV,
-> +					 int max_uV, unsigned int *selector)
+> I'd rather understand why it's not working on your setup then just
+> re-introduce the quirk.
 
-Just noticed: Please don't use camelCase.
+Of course! I figured as much, it's just easy to start conversations with a
+revert :P
 
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	struct pmbus_sensor s = {
-> +		.page = rdev_get_id(rdev),
-> +		.class = PSC_VOLTAGE_OUT,
-> +		.convert = true,
-> +	};
-> +	s64 tmp = DIV_ROUND_CLOSEST_ULL(min_uV, 1000); /* convert to mV */
+> 
+> What happens on your system when the
+>   res = fan2_get_speed(&speed);
+> is called? If that is failing it means your 2nd fan isn't responding and
+> that's not supposed to happen. Could you let me know if you get an error
+> code, if it happens every boot, etc
+> I assume when the function is called later it works successfully?
 
-min_uV is already an int, so converting it to s64 will never be
-necessary.
+It definitely seems to happen every boot, not sure about the error code it
+returns. I will check and get you this info asap
 
-> +	int low = -1, high = -1;
-> +	u16 val;
-> +	*selector = 0;
-> +
-> +	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MIN))
-> +		low = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MIN);
-> +	if (low < 0) {
-> +		low = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_LOW);
-> +		if (low < 0)
-> +			return low;
-> +	}
-> +
-> +	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MAX))
-> +		high = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MAX);
-> +	if (high < 0) {
-> +		high = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_HIGH);
-> +		if (high < 0)
-> +			return high;
-> +	}
-> +
-> +	val = pmbus_data2reg(data, &s, tmp);
-> +
-> +	/* Make sure we are within margins */
-> +	if (low > val)
-> +		val = low;
-> +	if (high < val)
-> +		val = high;
-> +
+> 
+> Also please confirm which BIOS and EC version you have.
 
-The above assumes that register values are directly comparable.
-Unfortunately that isn't really the case. It happens to work
-for ULINEAR16 and DIRECT mode, but chips could also support
-IEEE-754 (maybe in the future) or VID mode.
+BIOS version N32ET75W (1.51) release date 12/02/2021, embedded controller is
+0.1.32
 
-You need to read the limits from the registers, convert to voltages,
-compare and adjust the voltage, and as final step convert the adjusted
-voltage to a register value.
 
-Thanks,
-Guenter
+> 
+> Thanks
+> Mark
+> 
+
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
+
