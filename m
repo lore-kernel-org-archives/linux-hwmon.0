@@ -2,104 +2,243 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78796C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 18:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EBBBC4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 19:14:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386996AbiEBTDH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 15:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S1387066AbiEBTRx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 15:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386995AbiEBTDF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 15:03:05 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10731654C
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 11:59:35 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso123324wma.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 May 2022 11:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=kw3f9KINiTdwTbt/+DaeVDEWIMOIamgUP2eEKwHR5N4=;
-        b=pengUl1W4caLgN0nR8g2V3IGDf5pF1lFNpM1u0PHT5U2Td+eIGaE5Sen9sYQ41Wd1U
-         xD6vQUdoHIwmAnFWyLf+8P5IbkKnTzp8BFns86e3UL/9sm3p58W7Q+IGRHa1aMWiBejZ
-         Kv6xYMwdKQN56XoGZCCvF295rtXA0Y1IQSQVjyoFtBSJ+XttLPo+R7Gc80l5XT90Qjlq
-         +oi1l/hkuTGIZZarjokL4J/FYQ58qU822UMti3u2AkFmXfHOMnqGPwFUi5QTjXV7TFu6
-         OUaXy89ndWjTb8vhTsoazLnas/ltBvY7EZL8skhpVBuS1INz7d1pk3uQg98311gwgMNa
-         2pFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=kw3f9KINiTdwTbt/+DaeVDEWIMOIamgUP2eEKwHR5N4=;
-        b=yuvSoqDxqtRw4N22JBo6T15IHvG+H/WMUWNIBsnSP+OTdDkJiFod+1DeKuwo/y6a9x
-         AU4BYqp17SBi0RuK06fXZec0UaV/HyMG3gYg9Cl4quWIot/46dJDl/3Y8MSjc80n3z5C
-         6jz0DiZVvXaezFgcZlSDHIlnGSkMSyWr4/dKcpTdP+dszN02yLklD7e5J9bV4GkxkhOr
-         qK/jqkVB5U21PkCBPrCIZRGrgvKZM0fIaog5bPTJORgVqszCyhjaJNWN4q2hVfIbHnH3
-         DjfO8zpw/1tTJswj+xOZlVtefZu84PKAE9OUjEq3v/I9J6s2lajnYU1eDu8efRH0hPTA
-         IQPA==
-X-Gm-Message-State: AOAM532YveFC70xc3T52k3hAI5D1QOMtikCl8IfRTNJtw30CevoxaA4w
-        ab5c+/3/k/mjB+35vqv4hQWeQA==
-X-Google-Smtp-Source: ABdhPJwIeLgYMEwUxrmCp/aC/3AN4cpDx01maV+9LVll+JoEtq9Ti7ElrqO73oW279Eb4NXFDCjRzA==
-X-Received: by 2002:a05:600c:4f56:b0:394:3fa3:97bb with SMTP id m22-20020a05600c4f5600b003943fa397bbmr391224wmq.83.1651517973538;
-        Mon, 02 May 2022 11:59:33 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id p6-20020a05600c1d8600b003942a244f34sm80137wms.13.2022.05.02.11.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 11:59:32 -0700 (PDT)
-Date:   Mon, 2 May 2022 20:59:27 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-Message-ID: <YnAqDxfTU27USQI+@Red>
-References: <20220502124249.682058-1-clabbe@baylibre.com>
- <20220502124249.682058-2-clabbe@baylibre.com>
- <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net>
+        with ESMTP id S1387078AbiEBTRv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 15:17:51 -0400
+Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D539DDECF;
+        Mon,  2 May 2022 12:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenovo.com;
+        s=Selector; t=1651518860; i=@lenovo.com;
+        bh=Zh7IkU9khBQUNiI+Yavix2ggPTmaSrJrJiecXjwo6RU=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=N+buZ8M4oBhQYdZzYsLlCi1zUHxYrBJq/71rVAon36OMVhxnUo+4wYzXNSQIeLWQf
+         lJ98Rl9Jyo/xYAK5QxFrpfl/Ll9AAAGeV+jNirm7CkiHyHCVUP94tlj1XqvYD5seNv
+         wHruHbZ71g+BJYf4/e4eW8CjChP1do7r1VsPzQm/kFARhsnZl7ojTbJ2iSQJGjopiP
+         UTWFrKzTfLnAfA1thVmZ91XTXY1p0suiI7MCHlpuKx0Cqdfah2AQksa+Zk+etkcGit
+         JjXXYuTddSB5RNyFOgKdMDdRZ/b//5tWB/U1DlJwX7Jhwoj91MbHx1JTsw+sR+oIxY
+         4IwvzteSiIIhA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNJsWRWlGSWpSXmKPExsWSoS+Vp9utW5B
+  k8Pwvj8Wb49OZLNb/XsliMfuwjUX7662MFpd3zWGzmLq7n9XiwNRpzBar97xgduDw+H2A0WPT
+  qk42j90LPjN5vN93lc3j8ya5ANYo1sy8pPyKBNaMPcvaWAr2y1a8mBjQwPhRoouRi4NRYCmzx
+  LHvSxghnEWsEi1LD0E5nUwSk+fdYwdxhARmMkksOvWHFcLZzyTx5PtGMEdC4DijRPehdUwQmU
+  5GiR+vTrFAOP1MEs0rrjFCOI8ZJR4+24jgtF3cwNbFyMnBK2Ar8brrBhOIzSKgIvGm9xcjRFx
+  Q4uTMJywgtqhAuET3/v2sILawQJbExJ6jYL3MAuISt57MB+tlE9CW2LLlF1hcRKBQYtaKyWBn
+  MAvsZpTYvuY61OmNTBJdJ1vANnAK2ElMX3ScBWKSpkTr9t/sELa8RPPW2cwgtpCAssSv/vNgt
+  oSAosSnU8dYIewEieYpRxkhbEmJazcvsEPYshJHz85hgbB9JXYvBanhALJ1JWZPFYQI50icev
+  sZqlxO4lTvOaYJjLqzkPw8C8lvs5BcNwvJdQsYWVYxWiYVZaZnlOQmZuboGhoY6Boamuia6hp
+  b6CVW6SbqlRbrpiYWl+ga6iWWF+ulFhfrFVfmJuek6OWllmxiBKa0lCJWtR2Mk3p+6h1ilORg
+  UhLlrVMrSBLiS8pPqcxILM6ILyrNSS0+xKjBwSFw5eCR2YxSLHn5ealKErzmmkB1gkWp6akVa
+  Zk5wLQLUyrBwaMkwssjCJTmLS5IzC3OTIdInWK057iybe9eZo4HJ04CyUuHrgDJa+sX7GMWAp
+  sqJc5rrQjUJgDSllGaBzcUlicuMcpKCfMyMjAwCPEUpBblZpagyr9iFOdgVBLm7dAGmsKTmVc
+  Ct/sV0FlMQGc1peeCnFWSiJCSamCqYF+3fPXxR0xbq1qmvTz6aZla7taCH++f7zi048vyp35f
+  e1iEuPWclFjOr48/fsThS9+7zL8Lrm/9mlj+aMLX0+UqaiwGquFZUQHTr35zdm52n/zic3nNR
+  H3pVRr3Xws5/amf3hqtyrG/afp2tR+vtxyNi60876/xbVXLuifPZY9s0HrwjF9U4K2t28HG0s
+  Kl/nPrPx+wn6hx/m92SX1zx8LLC2KWXV11x1q7zpSlYP6FtvXiKRvFP65UfeniWM9i6qR8w7/
+  IqqH+XktqVnxUfoWe99epYalv7fqiG/1YfyQwJWj5fBd58Nb88KcbfakLVnJ2nDm54ceCLsvZ
+  3ZOcBZt3aHG9TPBkvFe4/rm1EktxRqKhFnNRcSIAnjnbtY4EAAA=
+X-Env-Sender: markpearson@lenovo.com
+X-Msg-Ref: server-6.tower-706.messagelabs.com!1651518857!35151!1
+X-Originating-IP: [104.47.26.110]
+X-SYMC-ESS-Client-Auth: mailfrom-relay-check=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.4; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 17032 invoked from network); 2 May 2022 19:14:18 -0000
+Received: from mail-sgaapc01lp2110.outbound.protection.outlook.com (HELO APC01-SG2-obe.outbound.protection.outlook.com) (104.47.26.110)
+  by server-6.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 2 May 2022 19:14:18 -0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X9sDdZ25FvrwIcPoVY7MO3r0P6SPYEP636BsAjrBzugvL+RiptjgipLARlJ5DAWNTdw9NWAt/kr26pVe0z2VSpwWnfmxU7H6DO+S4+e91Hxbjjc6aidxUBMCX+AmFb8u/DOYsFgSp5ZhQkfU6CWdHkQYAiDicZ2tUkLOTvDffs7MIHAW5rlHS0uWMvplcs9yAyW7ooBDqZ41POZyqA17OtGkyv1/52KHp+qQzqkpmJ4Ko28eHY4sL1JhuZypwGxRErut4u9NPfTnh8qo0BPjF3Z29xnavbNYV9hkUqSWGcJjnREyICPRj9BGU2LF3bR9jL1m2B/DSABkKURRY0ahZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zh7IkU9khBQUNiI+Yavix2ggPTmaSrJrJiecXjwo6RU=;
+ b=Ob7YPujUQJY0BwFWGyRriXpxLMQbu7KYIQClqJxhLmE9avbT5AXE5SQPe22QLy3UMNY6Um0f26eONbMrI3ldUBpykLibZWFlgu+Qnq6tZm4tflODJ4fmlL/mD5J9+WxMb/K3nvjv3svutWVBeaVgJ7nt7ynM8Sdf4VZZ4V1gnIijRQNqarCQKICE1G4d6j6BlgeihTGfOUiihdJH4F1/gUCBreCwkh0lOx7ZbIFIipxQpcKdLSi07CAsQ9Dd1WVsDrj8k28mBE3HK7BBcp4sFMm0uf6gADb0sYqUvdS0a/naGdJSS9uC04rkf99jMigSbk4oi+XdKqddAx7sQTsZBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 104.232.225.7) smtp.rcpttodomain=redhat.com smtp.mailfrom=lenovo.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=lenovo.com;
+ dkim=none (message not signed); arc=none
+Received: from SG2PR06CA0227.apcprd06.prod.outlook.com (2603:1096:4:68::35) by
+ SG2PR03MB4568.apcprd03.prod.outlook.com (2603:1096:4:85::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.13; Mon, 2 May 2022 19:14:16 +0000
+Received: from SG2APC01FT0030.eop-APC01.prod.protection.outlook.com
+ (2603:1096:4:68:cafe::e2) by SG2PR06CA0227.outlook.office365.com
+ (2603:1096:4:68::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24 via Frontend
+ Transport; Mon, 2 May 2022 19:14:16 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 104.232.225.7) smtp.mailfrom=lenovo.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=lenovo.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ lenovo.com discourages use of 104.232.225.7 as permitted sender)
+Received: from mail.lenovo.com (104.232.225.7) by
+ SG2APC01FT0030.mail.protection.outlook.com (10.13.37.86) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.12 via Frontend Transport; Mon, 2 May 2022 19:14:15 +0000
+Received: from reswpmail01.lenovo.com (10.62.32.20) by mail.lenovo.com
+ (10.62.123.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Mon, 2 May
+ 2022 15:13:58 -0400
+Received: from [10.38.104.132] (10.38.104.132) by reswpmail01.lenovo.com
+ (10.62.32.20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Mon, 2 May
+ 2022 15:15:03 -0400
+Message-ID: <24fdaa0c-5f63-5e81-5f7c-cd439d301f8c@lenovo.com>
+Date:   Mon, 2 May 2022 15:13:56 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [External] [PATCH 1/2] platform/x86: thinkpad_acpi: Restore X1
+ Carbon 9th Gen dual fan quirk
+Content-Language: en-US
+From:   Mark Pearson <markpearson@lenovo.com>
+To:     Lyude Paul <lyude@redhat.com>,
+        <ibm-acpi-devel@lists.sourceforge.net>,
+        <platform-driver-x86@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>
+References: <20220429211418.4546-1-lyude@redhat.com>
+ <20220429211418.4546-2-lyude@redhat.com>
+ <d3461670-a905-4956-4f4d-d847adf4289b@lenovo.com>
+ <2769588a352e9c3b43a4e09afff100d52a9ba524.camel@redhat.com>
+ <d7a35afb-6b3a-7d76-0dc1-975842407fea@lenovo.com>
+In-Reply-To: <d7a35afb-6b3a-7d76-0dc1-975842407fea@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net>
+X-Originating-IP: [10.38.104.132]
+X-ClientProxiedBy: reswpmail01.lenovo.com (10.62.32.20) To
+ reswpmail01.lenovo.com (10.62.32.20)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2faf0db6-8738-4ba9-7819-08da2c6ff362
+X-MS-TrafficTypeDiagnostic: SG2PR03MB4568:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR03MB4568A02B846765978DA1D0E5C5C19@SG2PR03MB4568.apcprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r7mIcKZNtuXBh/abq/tTpkJnGVLjVn5QWJb4THS/Avqm1OTK2xSdbJCbknEWq0p2xyNAhONsXr674IZu6Wz+KdS6i5R6ziu0zDIuHEkzfLK0tdyeY9RPD03URDRzN2N9LBSSyixzVwjcbhUfNMby3P0gourGjIv7sBxW2xt1G2pRm86AaS0LlIlLqGZjwB/OnzbDhQqTNNU7SifzfQPpb6n2ysg/6nGcIbZWwsKZRBWpmzN3Ba3ehaKHn91Gb29MZqMkrtrUgRbGZfrCAGT8FQ8uO7Lk40MBnlsPmNyeAGhnISVLzaMwsruvEb6YCJfFGAtXEsLt87dirSNqHnw05a0E4xlrreXQNy4gyGIGJ2BqbVHh6BSVeBFE8Gier0orbPgperWwER9+hzIzet3lfgv4agyj974C1YoSabkDqZZ/baI5860WMMad69vE2UIwGXqMyJ0BszIXV7ymcx5YJBdo7ABY66qCAshnnhVgLhQpdwEQiY+9yqp4MjiZRrG+v53ixUlM6XQ5xUGbbhBxrbIEZsB7DfzmB2DqwWcmW1Gr1YhQ7d6f7zTB72x7Gi/rREKJHE/nimstYk8Iie9t/6twTE+J0qauIw+61QbNNE2HkPeHaC67L1cTC7TQrSOEzrVorHaFaYNpj7Hxk31LJClx558vMWIsulEZQ1rDyQqx/7GxXvah/G8AvO2jTGyL+IM1vhtenm8bftVG5VBs4V3O4YUsQjxw/55Na7iapHPHA5oOHxbgRKwF+qrOs5GjenSXY7kuFliAshG/Kx6SNg9WLYlvUbXbSIjzJjxxQ0KwB/doyvd9PGbdfTRUMvpR
+X-Forefront-Antispam-Report: CIP:104.232.225.7;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.lenovo.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(356005)(70586007)(70206006)(81166007)(8936002)(36906005)(16576012)(54906003)(86362001)(31696002)(40460700003)(110136005)(5660300002)(36860700001)(53546011)(426003)(2906002)(316002)(47076005)(508600001)(2616005)(6666004)(16526019)(336012)(186003)(83380400001)(82960400001)(31686004)(8676002)(82310400005)(36756003)(26005)(4326008)(3940600001)(43740500002)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: lenovo.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2022 19:14:15.7499
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2faf0db6-8738-4ba9-7819-08da2c6ff362
+X-MS-Exchange-CrossTenant-Id: 5c7d0b28-bdf8-410c-aa93-4df372b16203
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5c7d0b28-bdf8-410c-aa93-4df372b16203;Ip=[104.232.225.7];Helo=[mail.lenovo.com]
+X-MS-Exchange-CrossTenant-AuthSource: SG2APC01FT0030.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR03MB4568
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a �crit :
-> On 5/2/22 05:42, Corentin Labbe wrote:
-> > Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
-> > So let's convert the driver to use hwmon_device_register_with_info().
-> > 
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> >   drivers/hwmon/acpi_power_meter.c | 5 ++++-
-> >   1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-> > index d2545a1be9fc..98293727f980 100644
-> > --- a/drivers/hwmon/acpi_power_meter.c
-> > +++ b/drivers/hwmon/acpi_power_meter.c
-> > @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct acpi_device *device)
-> >   	if (res)
-> >   		goto exit_free_capability;
-> >   
-> > -	resource->hwmon_dev = hwmon_device_register(&device->dev);
-> > +	resource->hwmon_dev = hwmon_device_register_with_info(&device->dev,
-> > +							      ACPI_POWER_METER_DEVICE_NAME,
-> > +							      NULL, NULL,
-> > +							      NULL);
+
+
+On 5/2/22 13:44, Mark Pearson wrote:
 > 
-> NACK. That isn't a conversion to the new API, it just abuses the fact
-> that the new API has to accept a NULL info pointer for historic reasons.
 > 
+> On 5/2/22 13:42, Lyude Paul wrote:
+>> Some answers/comments down below
+>>
+>> On Fri, 2022-04-29 at 21:25 -0400, Mark Pearson wrote:
+>>> Hi Lyude
+>>>
+>>> On 4/29/22 17:14, Lyude Paul wrote:
+>>>> The new method of probing dual fan support introduced in:
+>>>>
+>>>> bf779aaf56ea ("platform/x86: thinkpad_acpi: Add dual fan probe")
+>>>>
+>>>> While this commit says this works on the X1 Carbon 9th Gen, it actually
+>>>> just results in hiding the second fan on my local machine. Additionally,
+>>>> I'm fairly sure this machine powers on quite often without either of the
+>>>> two fans spinning.
+>>>>
+>>>> So let's fix this by adding back the dual fan quirk for the X1 Carbon 9th
+>>>> Gen.
+>>>>
+>>>> Signed-off-by: Lyude Paul <lyude@redhat.com>
+>>>> Fixes: bf779aaf56ea ("platform/x86: thinkpad_acpi: Add dual fan probe")
+>>>> Cc: Mark Pearson <markpearson@lenovo.com>
+>>>> Cc: Hans de Goede <hdegoede@redhat.com>
+>>>> Cc: Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+>>>> Cc: Mark Gross <markgross@kernel.org>
+>>>> Cc: ibm-acpi-devel@lists.sourceforge.net
+>>>> Cc: platform-driver-x86@vger.kernel.org
+>>>> ---
+>>>>  drivers/platform/x86/thinkpad_acpi.c | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/drivers/platform/x86/thinkpad_acpi.c
+>>>> b/drivers/platform/x86/thinkpad_acpi.c
+>>>> index c568fae56db2..9067fd0a945c 100644
+>>>> --- a/drivers/platform/x86/thinkpad_acpi.c
+>>>> +++ b/drivers/platform/x86/thinkpad_acpi.c
+>>>> @@ -8699,6 +8699,7 @@ static const struct tpacpi_quirk fan_quirk_table[]
+>>>> __initconst = {
+>>>>         TPACPI_Q_LNV3('N', '2', 'E', TPACPI_FAN_2CTL),  /* P1 / X1 Extreme
+>>>> (1st gen) */
+>>>>         TPACPI_Q_LNV3('N', '2', 'O', TPACPI_FAN_2CTL),  /* P1 / X1 Extreme
+>>>> (2nd gen) */
+>>>>         TPACPI_Q_LNV3('N', '3', '0', TPACPI_FAN_2CTL),  /* P15 (1st gen) /
+>>>> P15v (1st gen) */
+>>>> +       TPACPI_Q_LNV3('N', '3', '2', TPACPI_FAN_2CTL),  /* X1 Carbon (9th
+>>>> gen) */
+>>>>         TPACPI_Q_LNV3('N', '3', '7', TPACPI_FAN_2CTL),  /* T15g (2nd gen)
+>>>> */
+>>>>         TPACPI_Q_LNV3('N', '1', 'O', TPACPI_FAN_NOFAN), /* X1 Tablet (2nd
+>>>> gen) */
+>>>>  };
+>>> I just double checked this on my X1C9 - and it's working correctly. 2nd
+>>> fan is detected correctly.
+>>>
+>>> I'd rather understand why it's not working on your setup then just
+>>> re-introduce the quirk.
+>>
+>> Of course! I figured as much, it's just easy to start conversations with a
+>> revert :P
+>>
+>>>
+>>> What happens on your system when the
+>>>   res = fan2_get_speed(&speed);
+>>> is called? If that is failing it means your 2nd fan isn't responding and
+>>> that's not supposed to happen. Could you let me know if you get an error
+>>> code, if it happens every boot, etc
+>>> I assume when the function is called later it works successfully?
+>>
+>> It definitely seems to happen every boot, not sure about the error code it
+>> returns. I will check and get you this info asap
+>>
+>>>
+>>> Also please confirm which BIOS and EC version you have.
+>>
+>> BIOS version N32ET75W (1.51) release date 12/02/2021, embedded controller is
+>> 0.1.32
+>>
+>>
+> Thanks!
+> 
+> Along with Thomas' notes I think I've found the problem (though still
+> bemused why I don't see the problem on my X1C9 and I tested on multiple
+> platforms previously...so it is somewhat weird).
+> 
+> Working on a fix - will try and have that out for review later today or
+> tomorrow.
+> 
+Not sure exactly what the etiquette here is for the mailing list but I
+just posted an updated patch "platform/x86: thinkpad_acpi: Correct dual
+fan probe" that I think addresses all the issues raised in this patch
+sequence.
 
-Hello
+Please let me know any feedback or concerns. And thanks for raising this!
 
-I am sorry, I found a driver doing it, so I believed it was okay.
-Converting seems not to hard but, by using the new API, how can I convert power1_model_number/power1_is_battery attribute ?
-There are the remaining attributes I dont find how to convert.
-
-Regards
+Mark
