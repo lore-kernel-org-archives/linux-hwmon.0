@@ -2,173 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64EA8C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 13:39:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B725C433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 13:57:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354494AbiEBNnD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 09:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S236321AbiEBOBW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 10:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385346AbiEBNnB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 09:43:01 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB90DED2;
-        Mon,  2 May 2022 06:39:31 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2B0B65C00E1;
-        Mon,  2 May 2022 09:39:31 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 02 May 2022 09:39:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651498771; x=1651585171; bh=b/HxRexqfg
-        Eb8+SHUnuabjiYGZLnMMek+P3/ue2RuKo=; b=kqHt5l9GKf/t74JrB2a/N3kLZv
-        0amV60x+HegodkRcYRpR0bwgE6HqVice9AkD5bn/AO+XAPVv6VsD18gECO6MIzBe
-        Ch4NxwghtZ19LHZLm4tN/NsIbTmLX0P3vTpPaoCNAoTK1BnuyMVaNx2XvO2QwnbW
-        JrOXSnGAmyBvpYEdmAQiFbaggGaRK5KQGjHmB4z3bGDNuqOX0jxzVVV2AiciYhUM
-        3YVzS6sHJiP/m7+JZSlVPl3XIyytLx+vEjmQc+wslUxVUly0vBDROBVz1kgduxXl
-        G59xKcwCZ1jZGuWl5V3NHgT4FEawobSfO4BHuEqlE2geGytd0QRp0vESAqEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651498771; x=
-        1651585171; bh=b/HxRexqfgEb8+SHUnuabjiYGZLnMMek+P3/ue2RuKo=; b=N
-        IRUbTsQaEhLeVEydXxCOFA8ChDyAivepcydJpPl6CArJV58na9ilEqft3/lWjUR1
-        M6vAsuLbRJ/oRGLrq3HZaRKmyfO3mDnqHNNidYkCJa/rAr6ElTkSfxpsaa4GQzPT
-        zuthGkbJgb+A2OuFB4vp7K4Voyq2061I0eCbz3jLYkPYNC35+Y12+emNo/xq+cNj
-        yDr2sgpcQvlNQERSZ/s7EWk74o9zUb+5Uo//QtXMmFAopwJJ4cpfuZiZXXv1Y7cv
-        QG3/nfDSqzPASWLls37MCkGmB0ivX4YFmybGZIfJ/Mv9Y/uf7w7B8dt3J8VpIV/R
-        dGOzKmA/Ox578Q3seSNPg==
-X-ME-Sender: <xms:Et9vYlrjslC-ETH5AGbvpaQhjJghfwDbDa7OHLx1eVTNemm0Xh6iSg>
-    <xme:Et9vYnrFW_9ezUl8rETO4ojr7EUTqkWuwFJvXi0pJcsXGUpFAsZg_mKBuFZ1kxM45
-    DZIoobe7BSSRCFXQ5o>
-X-ME-Received: <xmr:Et9vYiMJV_06NYgYMOeWBtuO5cijNKXbghu3bTnH1oo6PPm1jMEOzoJ9AVDjcI02QGoqPdlvjxSInHqbYTwM6FLwhCC1T9FwC_kIZpw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdeiiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:Et9vYg7CaxtWDU2eqb9e9kqqPZm9bxaJW_tGKYuHvoRcKfGifUUFQw>
-    <xmx:Et9vYk74ZcL7Qer8JM-aditq1vPt4bMcpIRn2hxCTiRt_nm1U5KJtg>
-    <xmx:Et9vYohpT28Gl5j9b3dNLYqAHqkjv4n4bggMTLkm71KFFC1rmn3hEg>
-    <xmx:E99vYmuAtnzedLswK4NAkLoRolYaZGRj7heks-VeQkHZf3OutTBzog>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 May 2022 09:39:29 -0400 (EDT)
-Date:   Mon, 2 May 2022 15:39:27 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
-Message-ID: <20220502133927.4wqhru4es32gws2b@houat>
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <20220502110010.q7vvdkdpaiz5acjl@houat>
- <21a89ae0-7152-49eb-7500-7d46dfb259f6@roeck-us.net>
+        with ESMTP id S236498AbiEBOBW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 10:01:22 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB61911C38;
+        Mon,  2 May 2022 06:57:53 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id y63so15270344oia.7;
+        Mon, 02 May 2022 06:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=bX/h5IsZDrnxmlUVa9F2X9NUwrp0LlnAzchdCe0mKX0=;
+        b=SOsC0KS/w47RPhQBd2bRxJ2bMnKiigwAu7L6xLSIxViPFcmz3ses0vdhxom2coTIY7
+         lNjtU5HYybmu0AR+m4kqYeixrGgC5CaN4exky6juY35po3lSWfxhfJXfErvwxIRYSIVU
+         Q6RQ9CETbMD4WBd2Joy1I8Ue9TF4j+lakqg4eNH858OvIaXOCOIt46qQfgbQxpv103FG
+         6n64vJ1f4dvjaMLNyY3ygcKsnxKu3i6PrzUydWkx2uAaH+svHmPkxSJAmQKk9KCQ+FQd
+         p2tpdw5uLMbZe16UYQ/NVfbuaYWAS0X490MQGKz/JKNgfNmW2ZmktMe2p1cxYZ6OVCrS
+         nzIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=bX/h5IsZDrnxmlUVa9F2X9NUwrp0LlnAzchdCe0mKX0=;
+        b=pq/4dC1BKyuFXuz1b60zvSVbBEIFeoxOppwT4ipNvPeUsQRBg3EJIjLm1To0a/T4os
+         u/6NMk5BM02JWat/s+U6Dqru/MEh8C4siEPMSxLR2IDxeRXaGXZ0eRPH/Y8FQbqJLJnq
+         hlrwFi+wHXWgQyHN8ke3nZaPEs2n6AFULMHRvGj4aftY6mVejBZN6fhcd0RRqNLk8cLj
+         u+1eQcGJM+Rebv4CiKdiDuBhk8Tqscza+GhbJgegOavNHRASh6iSty7WHq9lfr96eInb
+         km49mRt1AruEsk3DJigfORNobuFrNFfe+yQpLOZiOXlqSH5bRBgg3fwO+Hlp1clCsfaB
+         D7kg==
+X-Gm-Message-State: AOAM531A7IiGhZAC9VSbdec2NYNeApEoZ70TmF2yszOzIQVJn8M8K0rB
+        cy2EBHW/C15buBlFLA7YamI=
+X-Google-Smtp-Source: ABdhPJyoESxKSMbw5pBg3WkkOCV3lC5SH0+7QRC8sCi8/zegO5Og9ZnFAcmu8xbOM75WrWXhBrE4Ag==
+X-Received: by 2002:a05:6808:e8c:b0:322:4b82:d33d with SMTP id k12-20020a0568080e8c00b003224b82d33dmr7250278oil.21.1651499873009;
+        Mon, 02 May 2022 06:57:53 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c2-20020a056830000200b006060322126dsm2867394otp.61.2022.05.02.06.57.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 06:57:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a2e81680-e62c-dddd-ee58-6f5aa3664d2f@roeck-us.net>
+Date:   Mon, 2 May 2022 06:57:50 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tamuqpt5k5qosgyi"
-Content-Disposition: inline
-In-Reply-To: <21a89ae0-7152-49eb-7500-7d46dfb259f6@roeck-us.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Camel Guo <camel.guo@axis.com>, Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+References: <20220502091942.1083067-1-camel.guo@axis.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] hwmon: (tmp401) Add of_match_table
+In-Reply-To: <20220502091942.1083067-1-camel.guo@axis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 5/2/22 02:19, Camel Guo wrote:
+> When tmp401 is built as kernel module, it won't be automatically loaded
+> even through there is a device node in the devicetree. e.g:
+>      i2c {
+>        #address-cells = <1>;
+>        #size-cells = <0>;
+> 
+>        sensor@4c {
+>          compatible = "ti,tmp401";
+>          reg = <0x4c>;
+>        };
+>      };
+> In order to make sure it is loaded automatically, this commit adds
+> of_match_table for tmp401.
+> 
 
---tamuqpt5k5qosgyi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As mentioned before, historically i2c devices would instantiate based
+on the i2c match table. You are claiming that this is no longer the case.
+The above is no evidence; that would require a log output on an affected
+system showing that the sensors are not or no longer longer instantiated.
 
-On Mon, May 02, 2022 at 06:31:56AM -0700, Guenter Roeck wrote:
-> On 5/2/22 04:00, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
-> > > Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
-> > > low rate (6 bit) ADC that is often used for extra keys. There's a dri=
-ver
-> > > for that already implementing standard input device, but it has these
-> > > limitations: 1) it cannot be used for general ADC data equisition, and
-> > > 2) it uses only one LRADC channel of two available.
-> > >=20
-> > > This driver provides basic hwmon interface to both channels of LRADC =
-on
-> > > such Allwinner SoCs.
-> > >=20
-> > > Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
-> > > ---
-> > >   MAINTAINERS                       |   6 +
-> > >   drivers/hwmon/Kconfig             |  13 ++
-> > >   drivers/hwmon/Makefile            |   1 +
-> > >   drivers/hwmon/sun4i-lradc-hwmon.c | 280 +++++++++++++++++++++++++++=
-+++
-> > >   4 files changed, 300 insertions(+)
-> > >   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
-> > >=20
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 5e8c2f61176..d9c71e94133 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -18861,6 +18861,12 @@ S:	Maintained
-> > >   F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lrad=
-c-keys.yaml
-> > >   F:	drivers/input/keyboard/sun4i-lradc-keys.c
-> > > +SUN4I LOW RES ADC HWMON DRIVER
-> > > +M:	Ruslan Zalata <rz@fabmicro.ru>
-> > > +L:	linux-hwmon@vger.kernel.org
-> > > +S:	Maintained
-> > > +F:	drivers/hwmon/sun4i-lradc-hwmon.c
-> > > +
-> > >   SUNDANCE NETWORK DRIVER
-> > >   M:	Denis Kirjanov <kda@linux-powerpc.org>
-> > >   L:	netdev@vger.kernel.org
-> > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > > index 68a8a27ab3b..86776488a81 100644
-> > > --- a/drivers/hwmon/Kconfig
-> > > +++ b/drivers/hwmon/Kconfig
-> > > @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
-> > >   	  This driver can also be built as a module. If so, the module
-> > >   	  will be called sis5595.
-> > > +config SENSORS_SUN4I_LRADC
-> > > +	tristate "Allwinner A13/A20 LRADC hwmon"
-> > > +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
-> > > +	help
-> > > +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
-> > > +	  Both channels are supported.
-> > > +
-> > > +	  This driver can also be built as module. If so, the module
-> > > +	  will be called sun4i-lradc-hwmon.
-> > > +
-> > > +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
-> > > +	  of these must be used at a time.
-> >=20
-> > How do you plan on enforcing that?
-> >=20
-> 	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+I am not absolutely opposed to adding the nodes, but the explanation
+needs to match reality. If you can not provide evidence from an actual
+boot log, I'll have to implement a tmp401 device model in qemu and test
+myself. That will take a while.
 
-Right, but that just doesn't fly for any generic distro / build-system.
-
-Maxime
-
---tamuqpt5k5qosgyi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYm/fDwAKCRDj7w1vZxhR
-xSVHAQD142Lap5ZsMcemWljKEK+KsiCz85L2Rgh7n1gU1OLGQwD/UT/E/ugwkLyK
-p/8dvzoTP4avZO6kO1wOsHMzgQVfrwM=
-=ZSfL
------END PGP SIGNATURE-----
-
---tamuqpt5k5qosgyi--
+Guenter
