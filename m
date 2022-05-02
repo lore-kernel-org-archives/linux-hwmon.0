@@ -2,349 +2,210 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95AC2C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 09:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 551DCC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 10:43:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347794AbiEBJcB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 05:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S234189AbiEBKql (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 06:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380009AbiEBJcA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 05:32:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2EA33E19
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 02:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651483712; x=1683019712;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Y+UjMGyMsPoHC/7hbsKbb2FZ5X0IVRGfDmg+Fu0Jupk=;
-  b=RrWeqf315otznSc2LemUsHMNNER/IoMnoMeYAKsgCFKl6taXiSGMy6VR
-   GQlGhE7OKaRcT7pIwyLHHE25HPhZFxzWn4sUzNR90M2UGuN4PDmrs6MXQ
-   B3PczaEAjAjSXP1afnXEzc7wUqjzmx+VSVEAo9i8I2IadO+TPZuOPMjkN
-   jtibeOf64ru9tnzeDsHb+pWzuo4WyUKymcV9zpbqgzkaZNX/XruFbj0Ds
-   xTbQxFGmaKruF/2KTVAW4iSIUmZ5qgdHcbjVllezBCB+c4EShS4zPTpJX
-   hV3eliJkx7lRcTT+mDOCwx9vQKZ8YLBRy4Fq9oCpCkCcynejhB0y46YIg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="330150592"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="330150592"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 02:28:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="535770676"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 May 2022 02:28:30 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlSM1-0009S7-IR;
-        Mon, 02 May 2022 09:28:29 +0000
-Date:   Mon, 02 May 2022 17:27:43 +0800
-From:   kernel test robot <lkp@intel.com>
+        with ESMTP id S1384699AbiEBKqa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 06:46:30 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EC01D0CF
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 03:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651488158;
+  x=1683024158;
+  h=date:to:cc:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:from;
+  bh=Z8z+M0OJsJDCxKnOV6uPLU54BuppVVDIh2T+eUOJL4w=;
+  b=GKTuIewVCzs2XiPGcmpEG5d2a3CvA0xZXo6DIp+4WoXbCMuO0B92H1Fx
+   REhEzukrEZiVqtLA6Q7FyQ3UC14UuuQpSZPH4OseaftpomznEIqMft5Kt
+   WDElfSN8Nr+uwAyJhNrzkgYjWMRuuyf5RwrzcCJ+W5XuLG50zPY1x2ZQj
+   UzAnm11Sz7Lr7ihNX9cglzno6gmi84KauN/giYY0HvSKLhUMT6y/EqKBw
+   MNvk8ZxK6tZP0CpMLr19simowuWv/AEaePE73iXQzQdiEGhEu4yCIxzrj
+   EaQNSTTiGr10ltp1UwwJ9NyhumXDrjM4P1GD8Wm6ZXge/OOAhRZVkRiUk
+   w==;
+Date:   Mon, 2 May 2022 12:42:35 +0200
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 08da09f028043fed9653331ae75bc310411f72e6
-Message-ID: <626fa40f.FjZvXGPJeDHBL0In%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+CC:     =?iso-8859-1?Q?M=E5rten?= Lindahl <Marten.Lindahl@axis.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        kernel <kernel@axis.com>
+Subject: Re: [PATCH v4 4/4] hwmon: (pmbus) Add get_voltage/set_voltage ops
+Message-ID: <Ym+1mw7oFwjsQDJ8@axis.com>
+References: <20220428144039.2464667-1-marten.lindahl@axis.com>
+ <20220428144039.2464667-5-marten.lindahl@axis.com>
+ <6cc1561c-c4dc-076d-d9bf-1cc1cc60eac4@roeck-us.net>
+ <Ymu1T/kykl0FwL3j@axis.com>
+ <3ee1acad-2139-2a56-9844-1d562435a6e7@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3ee1acad-2139-2a56-9844-1d562435a6e7@roeck-us.net>
+From:   Marten Lindahl <martenli@axis.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 08da09f028043fed9653331ae75bc310411f72e6  hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk
+On Fri, Apr 29, 2022 at 07:00:27PM +0200, Guenter Roeck wrote:
+> On 4/29/22 02:52, Marten Lindahl wrote:
+> > On Thu, Apr 28, 2022 at 06:49:21PM +0200, Guenter Roeck wrote:
+> >> On 4/28/22 07:40, Mårten Lindahl wrote:
+> >>> The pmbus core does not have operations for getting or setting voltage.
+> >>> Add functions get/set voltage for the dynamic regulator framework.
+> >>>
+> >>> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+> >>> ---
+> >>>    drivers/hwmon/pmbus/pmbus_core.c | 63 ++++++++++++++++++++++++++++++++
+> >>>    1 file changed, 63 insertions(+)
+> >>>
+> >>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> >>> index bd143ca0c320..fe7dbb496e3b 100644
+> >>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> >>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> >>> @@ -1531,6 +1531,11 @@ static const struct pmbus_sensor_attr voltage_attributes[] = {
+> >>>    		.gbit = PB_STATUS_VOUT_OV,
+> >>>    		.limit = vout_limit_attrs,
+> >>>    		.nlimit = ARRAY_SIZE(vout_limit_attrs),
+> >>> +	}, {
+> >>> +		.reg = PMBUS_VOUT_COMMAND,
+> >>> +		.class = PSC_VOLTAGE_OUT,
+> >>> +		.paged = true,
+> >>> +		.func = PMBUS_HAVE_VOUT,
+> >>>    	}
+> >>
+> >> Ok, you lost me here. This adds an inX_input attribute. Why ? This is completely
+> >> unrelated to the intended scope of this patch. It also doesn't report a measured
+> >> voltage, but a configuration value. If anything, it would have to be a separate
+> >> patch, and you'd have to argue hard why it makes sense to report it as measured
+> >> voltage.
+> > 
+> > I see. The reason for adding this is as simple as I now understand it is wrong.
+> > Please remember, my first version of the set/get_voltage functions where hardcoded
+> > with L16 input/output. Then in order to use the already existing convertion functions
+> > pmbus_data2reg and pmbus_reg2data I added this only for the need of a sensor object,
+> > as those functions are tailored for a sensor object.
+> > 
+> > So now I have to ask you for advice. Should I use the existing convertion
+> > functions, or do you suggest new variants of them? If reusing them, I guess I have
+> > two options:
+> >   1: Modify them to take class, page, and data outside of a sensor object as input.
+> >   2: Use them as they are, but create a local 'dummy' sensor object with class, page,
+> >      and data to use when calling the convertion functions.
+> > 
+> 
+> I think 2) is the easier and less complex solution for now.
 
-elapsed time: 6969m
+Hi Guenter!
+This seems to work fine.
 
-configs tested: 265
-configs skipped: 6
+> 
+> > I hope I made it more clear for you now how I was thinking. There is
+> > absolutely no intention of having sensor inX_input attributes for
+> > reading the setpoint values. This was just an unwanted sideeffect, and I
+> > will glady remove it again.
+> 
+> No problem. Thanks for the explanation.
+> 
+> >>
+> >>>    };
+> >>>    
+> >>> @@ -2563,11 +2568,69 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+> >>>    	return 0;
+> >>>    }
+> >>>    
+> >>> +static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
+> >>> +{
+> >>> +	struct device *dev = rdev_get_dev(rdev);
+> >>> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> >>> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> >>> +	struct pmbus_sensor *sensor;
+> >>> +	u8 page = rdev_get_id(rdev);
+> >>> +	int ret;
+> >>> +
+> >>> +	sensor = pmbus_find_sensor(data, page, PMBUS_READ_VOUT);
+> >>> +	if (IS_ERR(sensor))
+> >>> +		return -ENODATA;
+> >>> +
+> >>> +	mutex_lock(&data->update_lock);
+> >>> +	pmbus_update_sensor_data(client, sensor);
+> >>> +	if (sensor->data < 0)
+> >>> +		ret = sensor->data;
+> >>> +	else
+> >>> +		ret = (int)pmbus_reg2data(data, sensor) * 1000; /* unit is uV */
+> >>> +	mutex_unlock(&data->update_lock);
+> >>> +
+> >>
+> >> Same question. Why ?
+> > 
+> > Same reason as above. Only to get the sensor object for pmbus_reg2data.
+> > 
+> >>
+> >>> +	return ret;
+> >>> +}
+> >>> +
+> >>> +static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uV,
+> >>> +					 int max_uV, unsigned int *selector)
+> >>> +{
+> >>> +	struct device *dev = rdev_get_dev(rdev);
+> >>> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> >>> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> >>> +	struct pmbus_sensor *sensor;
+> >>> +	u8 page = rdev_get_id(rdev);
+> >>> +	s64 tmp = DIV_ROUND_CLOSEST_ULL(min_uV, 1000); /* convert to mV */
+> >>> +	u16 val;
+> >>> +	int ret;
+> >>> +	*selector = 0;
+> >>> +
+> >>> +	sensor = pmbus_find_sensor(data, page, PMBUS_VOUT_COMMAND);
+> >>> +	if (IS_ERR(sensor))
+> >>> +		return -ENODATA;
+> >>> +
+> >>> +	ret = _pmbus_read_word_data(client, page, 0xff, PMBUS_VOUT_MARGIN_LOW);
+> >>> +	if (ret < 0)
+> >>> +		return ret;
+> >>> +
+> >> That actually makes me wonder: What about VOUT_MARGIN_HIGH ?
+> > 
+> > Ok, I will add a check for VOUT_MARGIN_HIGH also.
+> > 
+> >> Also, there are optional MFR_VOUT_MIN and MFR_VOUT_MAX registers.
+> >> Would it possibly make sense to determine the valid range once
+> >> during probe and then compare against it ?
+> > 
+> > Maybe this could be a good thing, so that we don't need to read both
+> > margins every time. But I guess that would need a new kind of page list
+> > with margins added to the pmbus_driver_info struct?
+> > I would prefer to make that change in a separate patch if it's ok with
+> > you?
+> > 
+> 
+> I think you need to check for four values right now:
+> 
+> - Try to read MFR_VOUT_MIN. If that does not work, read VOUT_MARGIN_LOW.
+> - Same for high values.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Ok, I think I first need to check the MFR_VOUT_MIN/MFR_VOUT_MAX
+registers to make sure they are supported. On LTC2977 they are not
+supported, so I need to write PMBUS_CLEAR_FAULTS after trying to access
+them.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-sh                           se7724_defconfig
-parisc                generic-32bit_defconfig
-powerpc                      pcm030_defconfig
-sh                           se7750_defconfig
-xtensa                          iss_defconfig
-m68k                         amcore_defconfig
-arc                        nsim_700_defconfig
-sh                           se7206_defconfig
-ia64                          tiger_defconfig
-mips                         cobalt_defconfig
-mips                  decstation_64_defconfig
-arm                            zeus_defconfig
-arm                         lubbock_defconfig
-m68k                                defconfig
-sh                          sdk7780_defconfig
-powerpc                     tqm8555_defconfig
-arc                        nsimosci_defconfig
-powerpc                      arches_defconfig
-powerpc                 linkstation_defconfig
-sh                     sh7710voipgw_defconfig
-sh                        edosk7705_defconfig
-powerpc                     ep8248e_defconfig
-s390                                defconfig
-mips                         tb0226_defconfig
-sh                        edosk7760_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                      ppc6xx_defconfig
-arm                       multi_v4t_defconfig
-arm                      jornada720_defconfig
-sh                           se7619_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-sh                          r7780mp_defconfig
-sh                     magicpanelr2_defconfig
-nios2                               defconfig
-powerpc                     taishan_defconfig
-sparc                       sparc64_defconfig
-powerpc                        cell_defconfig
-parisc                generic-64bit_defconfig
-arm                         cm_x300_defconfig
-ia64                         bigsur_defconfig
-m68k                          sun3x_defconfig
-arm                         nhk8815_defconfig
-powerpc                     tqm8541_defconfig
-powerpc                       holly_defconfig
-mips                            gpr_defconfig
-arm                            lart_defconfig
-powerpc                         ps3_defconfig
-sh                          r7785rp_defconfig
-powerpc                 mpc8540_ads_defconfig
-alpha                               defconfig
-m68k                           sun3_defconfig
-arc                     nsimosci_hs_defconfig
-sh                   sh7724_generic_defconfig
-m68k                       m5275evb_defconfig
-m68k                        m5272c3_defconfig
-sh                             shx3_defconfig
-sh                           se7780_defconfig
-mips                      maltasmvp_defconfig
-m68k                       m5249evb_defconfig
-xtensa                           alldefconfig
-arm                          gemini_defconfig
-sh                          landisk_defconfig
-arm                         lpc18xx_defconfig
-arc                         haps_hs_defconfig
-m68k                       m5208evb_defconfig
-xtensa                  cadence_csp_defconfig
-arm                         assabet_defconfig
-parisc                              defconfig
-powerpc                     tqm8548_defconfig
-sh                         ecovec24_defconfig
-xtensa                         virt_defconfig
-powerpc                      mgcoge_defconfig
-powerpc                   motionpro_defconfig
-m68k                       m5475evb_defconfig
-powerpc                 mpc837x_mds_defconfig
-m68k                       bvme6000_defconfig
-arc                            hsdk_defconfig
-arm                            qcom_defconfig
-arm                          exynos_defconfig
-m68k                          multi_defconfig
-mips                         db1xxx_defconfig
-mips                     loongson1b_defconfig
-m68k                        m5307c3_defconfig
-powerpc                    adder875_defconfig
-mips                            ar7_defconfig
-arm                          lpd270_defconfig
-openrisc                  or1klitex_defconfig
-ia64                            zx1_defconfig
-arm                          simpad_defconfig
-nios2                            allyesconfig
-arm                        cerfcube_defconfig
-arm                      integrator_defconfig
-um                               alldefconfig
-sh                          rsk7201_defconfig
-arm                        oxnas_v6_defconfig
-arm                        multi_v7_defconfig
-sh                ecovec24-romimage_defconfig
-microblaze                          defconfig
-powerpc                     pq2fads_defconfig
-ia64                             alldefconfig
-sh                          lboxre2_defconfig
-mips                       capcella_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                             sh03_defconfig
-sparc64                          alldefconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                       aspeed_g5_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                    amigaone_defconfig
-sh                           se7721_defconfig
-powerpc                           allnoconfig
-powerpc                   currituck_defconfig
-powerpc                      cm5200_defconfig
-arm                           u8500_defconfig
-arm                     eseries_pxa_defconfig
-arm                           imxrt_defconfig
-mips                    maltaup_xpa_defconfig
-openrisc                    or1ksim_defconfig
-i386                             alldefconfig
-m68k                        mvme16x_defconfig
-mips                           jazz_defconfig
-powerpc                      makalu_defconfig
-powerpc                      chrp32_defconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                         ap325rxa_defconfig
-sh                   rts7751r2dplus_defconfig
-parisc64                            defconfig
-arm                        keystone_defconfig
-powerpc                  storcenter_defconfig
-x86_64                           alldefconfig
-sh                          kfr2r09_defconfig
-powerpc                    sam440ep_defconfig
-arm                  randconfig-c002-20220427
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220428
-arm                  randconfig-c002-20220429
-arm                  randconfig-c002-20220501
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a016
-i386                          randconfig-a014
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20220428
-arc                  randconfig-r043-20220429
-s390                 randconfig-r044-20220429
-riscv                randconfig-r042-20220429
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+I'll send a new patch for this.
 
-clang tested configs:
-riscv                randconfig-c006-20220428
-mips                 randconfig-c004-20220428
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220428
-powerpc              randconfig-c003-20220428
-powerpc              randconfig-c003-20220501
-riscv                randconfig-c006-20220501
-mips                 randconfig-c004-20220501
-arm                  randconfig-c002-20220501
-riscv                randconfig-c006-20220429
-mips                 randconfig-c004-20220429
-arm                  randconfig-c002-20220429
-powerpc              randconfig-c003-20220429
-powerpc                      ppc44x_defconfig
-arm                         palmz72_defconfig
-arm                       spear13xx_defconfig
-mips                   sb1250_swarm_defconfig
-arm                         shannon_defconfig
-arm64                            allyesconfig
-powerpc                     tqm8540_defconfig
-arm                        vexpress_defconfig
-arm                       cns3420vb_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                    mvme5100_defconfig
-arm                         s3c2410_defconfig
-arm                            mmp2_defconfig
-powerpc                      katmai_defconfig
-arm                      pxa255-idp_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                      walnut_defconfig
-arm                              alldefconfig
-mips                            e55_defconfig
-arm                          moxart_defconfig
-mips                           mtx1_defconfig
-powerpc                    socrates_defconfig
-arm                         bcm2835_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                       netwinder_defconfig
-mips                          ath25_defconfig
-x86_64                           allyesconfig
-mips                           ip28_defconfig
-mips                      maltaaprp_defconfig
-mips                       rbtx49xx_defconfig
-powerpc                          allmodconfig
-riscv                          rv32_defconfig
-mips                     cu1000-neo_defconfig
-arm                             mxs_defconfig
-powerpc                 linkstation_defconfig
-powerpc                        fsp2_defconfig
-mips                      bmips_stb_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                      pmac32_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220428
-riscv                randconfig-r042-20220428
-hexagon              randconfig-r045-20220428
+Kind regards
+Mårten
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Ultimately, yes, I think we should add a list of limits. I think it
+> would make more sense though to add the limits to a new regulator
+> specific data structure. Maybe we should create a separate data structure
+> for regulators. Right now we pass struct pmbus_data. Maybe we need
+> struct pmbus_regulator_data which would contain a pointer to
+> struct pmbus_data as well as additional information needed for
+> regulators.
+> 
+> Thanks,
+> Guenter
