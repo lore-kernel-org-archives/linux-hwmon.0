@@ -2,148 +2,143 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54BD7C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 21:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B4EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 23:22:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiEBVEK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 17:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S230380AbiEBXZj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 19:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387571AbiEBVD6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 17:03:58 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EC2E1B;
-        Mon,  2 May 2022 14:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651525212;
-        bh=t+hthDPvIlMi9NfBj+0zjxZtl8ZtreiL6WlpPmAvFKQ=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Doy2CmDUq/Kq2q/jd+Cv4azrWGDUJT3YJodM5yHStynRebV8lpRYAdOCLEHnxK2XU
-         Iac4viEMa+8XKPdA0xcFYkKF11Jf7uGtJBVQhEQwT9ZOlLm3hTRDsuXahAEtY+jF3o
-         enMA/s57S8Yik6zw6yra6qZkrFxZewQsJkXmNVBc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSt8W-1nP38E2iic-00UFSy; Mon, 02
- May 2022 23:00:12 +0200
-Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-To:     Guenter Roeck <linux@roeck-us.net>,
-        LABBE Corentin <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220502124249.682058-1-clabbe@baylibre.com>
- <20220502124249.682058-2-clabbe@baylibre.com>
- <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net> <YnAqDxfTU27USQI+@Red>
- <1b2bf215-faa1-649d-5ab4-85fc0b907ec2@gmx.de>
- <dabc2be2-36ce-a9d4-8aa5-ae3f2a57f904@roeck-us.net>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <72cce35f-a227-cd18-17f0-00eee350bcf4@gmx.de>
-Date:   Mon, 2 May 2022 23:00:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S233609AbiEBXYG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 19:24:06 -0400
+Received: from skyrocket.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C76819C11
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 16:20:29 -0700 (PDT)
+Received: from mail.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by skyrocket.fabmicro.ru (8.14.9/8.14.9) with ESMTP id 242NK3ij032574;
+        Mon, 2 May 2022 23:20:03 GMT
+        (envelope-from rz@fabmicro.ru)
 MIME-Version: 1.0
-In-Reply-To: <dabc2be2-36ce-a9d4-8aa5-ae3f2a57f904@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:FqbPnGyKm8pJ5TzgnH7TmE5YcAX3wsNf1IDG/uGi6Mb26x8Yq7R
- eLdRgM6AlT2tNshRq7tUJYIB6OGLYtX9ucH4uVRZEftkigQfgmUFu0MWbods+E4P1UGN6VC
- oAXIpOyUj5Gjs9dy06Yr6pXsXSmw+DZgcMm7IPvAyiX9os9dMqUzytsSbFF93FICSSVj/yo
- u4cPRUfVBtvVwqvXJ2+4w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:59vlulbQkmo=:/9DGdmxyWPAsq2g4yAUchr
- Y+jU7R8Iu34xsI0rNSfvEYez2XOJjGpzv2pVA537FcqCHqbHQcqkjGhUIjovLTo8fzpLZhWMp
- tVmTY09YnXlFUHe80NAwda8vRuKKwE/ndJzvsEctFXgXAcqfkn+mTXG6nD1xWXfVL6kYu4lqT
- 8ainEnEH8gPtkfiwBpf6+20MK1mnoajJ3JhfU/QXDQU6vCGdiiEMIJFzssgoYh7hm/EAF/guP
- rlruZJ4ikMzo4is5i4PfHiy8Cs5UX79eZ52zWUNAJqiE9uAAn4DoGQN5O/N60BYS4Fwz19DXw
- RbNlXaGfs4btvjECrxU1FewGnZc4IKrAiNNXUqziyEr+X0h5Kt8k88kiem1id4bKo1xSpaOh8
- scxUXpfhxw+yAwG2LLoWea1RCyGsVKSL1zBtR8IWPTmn2uhjxR4URDBRH6PNH8h71Yb8JZ0Fs
- rTkXPkN9wCccAPMv6T7rBz83u/VgnAS0Yjql0x8tyS60hDdf3FwL4F/0o/ccFHNJ2Jfr5TnoT
- ZIbSdaj8byfSmX4M30YfJ1fGBnIjS5plBnUGlHL7M0GWQiT0B5EnVxIiuqmu9C8e4v9i9MlrJ
- Iyi8EnV2XY2t2asAWgESLaqKePxe+F4R86IeqY9xtJdLjILLrh/l9H+WvGXZeHDhhF5rsE8UU
- ij44uoHiYbWkD/pyNCQV9t3i5yDfdI1ewhJWnAYK4SgnXtCnJr1Wxi+BP4IgamZA8UJ6rmkre
- DbENW9GQNUmaBsG0nTaJxdvsBK5Nkw6yIW+vwjX2cFT3NTYBHrrG3pQrC4vH1XtZwDiZkxUXr
- q08jtPaajwsnCi49UqljpgOk3sdkXrCb3fCaZqeiMH1j5FdgRpW66v6huR8Wmg6Kf6i9Q6KHz
- zYQI1D9YC7KeDq3cyuZWxQXRTrbL8YtdSUvHurDGJM/ysJEMer6TAs6gDTXVgRT9kCgCi8vPs
- mZm96CyEhGBiwUWyPcDM3diDEWUxr4308HQi4ntHagxFbo+RvnNCbVKqE+bZN3OnnBN12rs73
- e08QlPaIdlvpBLmd2P6TKifo/4qmCuQugv0sahpBVUAWuCrPm4J4fZF+X1um8MTzzzzf09v1u
- R0cU8MswG7o4wLmX8CuqqwX2l3/m0CW1mK4rl1OneVmRF1CTL7hKEU9Y0aZkeorGbvWa3FVUB
- XXSfNFgnKTuRO3u7iZOYQ1BuiUSxd3kk38+3UpPT/HaktrAn/vORRdqwpNAr68JG0X14+h0bE
- wDekQylOp3oc9ySvevcuAwK6kJKXL2sMC4lWUqA==
+Date:   Tue, 03 May 2022 04:20:03 +0500
+From:   Ruslan Zalata <rz@fabmicro.ru>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+In-Reply-To: <20220429142412.00001e43@Huawei.com>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+ <20220429142412.00001e43@Huawei.com>
+User-Agent: Roundcube Webmail/1.4.3
+Message-ID: <d3d69373480f95ec7976055b7bb988a4@fabmicro.ru>
+X-Sender: rz@fabmicro.ru
+Organization: Fabmicro, LLC.
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 02.05.22 um 22:42 schrieb Guenter Roeck:
-> On 5/2/22 13:31, Armin Wolf wrote:
->> Am 02.05.22 um 20:59 schrieb LABBE Corentin:
->>
->>> Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a =C3=A9crit :
->>>> On 5/2/22 05:42, Corentin Labbe wrote:
->>>>> Booting lead to a hwmon_device_register() is deprecated. Please
->>>>> convert the driver to use hwmon_device_register_with_info().
->>>>> So let's convert the driver to use hwmon_device_register_with_info()=
-.
->>>>>
->>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>>>> ---
->>>>> =C2=A0=C2=A0 drivers/hwmon/acpi_power_meter.c | 5 ++++-
->>>>> =C2=A0=C2=A0 1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/hwmon/acpi_power_meter.c
->>>>> b/drivers/hwmon/acpi_power_meter.c
->>>>> index d2545a1be9fc..98293727f980 100644
->>>>> --- a/drivers/hwmon/acpi_power_meter.c
->>>>> +++ b/drivers/hwmon/acpi_power_meter.c
->>>>> @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct
->>>>> acpi_device *device)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (res)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto ex=
-it_free_capability;
->>>>>
->>>>> -=C2=A0=C2=A0=C2=A0 resource->hwmon_dev =3D hwmon_device_register(&d=
-evice->dev);
->>>>> +=C2=A0=C2=A0=C2=A0 resource->hwmon_dev =3D
->>>>> hwmon_device_register_with_info(&device->dev,
->>>>> + ACPI_POWER_METER_DEVICE_NAME,
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL, NULL,
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL);
->>>> NACK. That isn't a conversion to the new API, it just abuses the fact
->>>> that the new API has to accept a NULL info pointer for historic
->>>> reasons.
->>>>
->>> Hello
->>>
->>> I am sorry, I found a driver doing it, so I believed it was okay.
->>> Converting seems not to hard but, by using the new API, how can I
->>> convert power1_model_number/power1_is_battery attribute ?
->>> There are the remaining attributes I dont find how to convert.
->>>
->>> Regards
->>
->> Hi,
->>
->> for allowing the driver to provide nonstandard attributes,
->> hwmon_device_register_with_info()
->> has the argument "extra_groups" which is an pointer to a list of
->> sysfs attribute groups.
->> There are some drivers which are using this functionality, maybe you
->> can use them as an
->> inspiration.
->>
->> Just a question: what is the name of the driver you originally used
->> as an inspiration?
->>
->
-> Originally it was for drivers/thermal/thermal_hwmon.c. Now there is also
-> drivers/platform/mips/cpu_hwmon.c which is clearly an abuse. I may have
-> missed others.
->
-> Guenter
-Should we notify the maintainers of cpu_hwmon.c about that?
-This could potentially prevent such incidents from happening again.
+Hi Jonathan,
 
-Armin Wolf
+Thank you for pointing to DEFINE_SIMPLE_DEV_PM_OPS macros, will use it.
+
+---
+Regards,
+Ruslan.
+
+Fabmicro, LLC.
+
+On 2022-04-29 18:24, Jonathan Cameron wrote:
+> On Thu, 28 Apr 2022 14:30:06 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> On 4/28/22 14:09, Ruslan Zalata wrote:
+>> > Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+>> > low rate (6 bit) ADC that is often used for extra keys. There's a driver
+>> > for that already implementing standard input device, but it has these
+>> > limitations: 1) it cannot be used for general ADC data equisition, and
+>> 
+>> acquisition
+>> 
+>> > 2) it uses only one LRADC channel of two available.
+>> >
+>> > This driver provides basic hwmon interface to both channels of LRADC on
+>> > such Allwinner SoCs.
+>> >
+>> > Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
+>> 
+>> Ok, next phase of review.
+>> 
+> 
+> One thing noticed whilst randomly glancing at this patch.
+> 
+> 
+>> > +#ifdef CONFIG_PM
+>> > +static int sun4i_lradc_resume(struct device *dev)
+>> > +{
+>> > +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
+>> > +
+>> > +	return sun4i_lradc_start(lradc);
+>> > +}
+>> > +
+>> > +static int sun4i_lradc_suspend(struct device *dev)
+>> > +{
+>> > +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
+>> > +
+>> > +	sun4i_lradc_stop(lradc);
+>> > +	return 0;
+>> > +}
+>> > +
+>> > +#define SUN4I_LRADC_DEV_PM_OPS	(&sun4i_lradc_dev_pm_ops)
+>> > +#else
+>> > +#define SUN4I_LRADC_DEV_PM_OPS	NULL
+>> > +#endif /* CONFIG_PM */
+>> > +
+>> > +static const struct dev_pm_ops sun4i_lradc_dev_pm_ops = {
+> 
+> We have much better infrastructure for this these days.
+> 
+> Take a look at DEFINE_SIMPLE_DEV_PM_OPS()
+> and pm_sleep_ptr()
+> 
+> Those two in combination will let you get rid of all the ifdef stuff
+> here by letting the compiler remove the unused code automatically.
+> 
+>> > +	.suspend = sun4i_lradc_suspend,
+>> > +	.resume = sun4i_lradc_resume,
+>> > +};
+>> > +
+>> > +static const struct of_device_id sun4i_lradc_of_match[] = {
+>> > +	{ .compatible = "allwinner,sun4i-a10-lradc-keys", .data = &variant_sun4i_a10_lradc},
+>> > +	{ /* sentinel */ }
+>> > +};
+>> > +MODULE_DEVICE_TABLE(of, sun4i_lradc_of_match);
+>> > +
+>> > +static struct platform_driver sun4i_lradc_driver = {
+>> > +	.driver = {
+>> > +		.name	= "sun4i-lradc-hwmon",
+>> > +		.of_match_table = of_match_ptr(sun4i_lradc_of_match),
+>> > +		.pm = SUN4I_LRADC_DEV_PM_OPS,
+>> > +	},
+>> > +	.probe	= sun4i_lradc_probe,
+>> > +};
+>> > +
+>> > +module_platform_driver(sun4i_lradc_driver);
+>> > +
+>> > +MODULE_DESCRIPTION("Allwinner A13/A20 LRADC hwmon driver");
+>> > +MODULE_AUTHOR("Ruslan Zalata <rz@fabmicro.ru>");
+>> > +MODULE_LICENSE("GPL");
+>> > +No empty line at end, please
+>> 
+>> 
+>> _______________________________________________
+>> linux-arm-kernel mailing list
+>> linux-arm-kernel@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
