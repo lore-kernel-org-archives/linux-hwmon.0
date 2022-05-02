@@ -2,187 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5873C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 16:16:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFC90C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 16:22:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386253AbiEBQT7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 12:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S242089AbiEBQZj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 12:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386271AbiEBQT4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 12:19:56 -0400
+        with ESMTP id S243133AbiEBQYp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 12:24:45 -0400
 Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E5FE0E4;
-        Mon,  2 May 2022 09:16:26 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so14697875fac.7;
-        Mon, 02 May 2022 09:16:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848F260FE;
+        Mon,  2 May 2022 09:21:16 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e2fa360f6dso14756736fac.2;
+        Mon, 02 May 2022 09:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=CsoWEFYA6oWSiqhk0itUr0DgVsHArvM3fYs9hP+JNhQ=;
-        b=MGay0hqvR9zLVVhYvGtNNM+6DsAoscTtWads5Z9SsEZFDbN2OdCz7k2IxB8J5sC+MW
-         ioPITDPaH4vNVAWuLHXit712aDuG0Ld2SKtjgcoB6avXkZBg4QI3SgQ20I/iqVe/7HIN
-         El0cdCR5jy4AfodPZ3OrWO6/hdXKM97oc/IQFKqCmj6ddmZhG9Sgyc0e8Fn98bOdR3hN
-         FgHThMjcp144VxF6N3L4OA1hgcp1VEEOGko5hJ9jjQBL/X4ENl/0GiNgOnPC0WB5JahU
-         XTDyecExEBfHNGtcePcP0YuoyjJJdcuxNMbLnj/kpS/XgzmiI2j/rQUZvbgyWvtlHRGY
-         WcLA==
+        bh=07ttqxmw9Tgzs/otLu70fpu68lese2xZKpYJru056xw=;
+        b=jy9E7l+rL1TgCHIvbD0ta0+BUYEXDLF/i3F63YbUk1XnWLjC+IN6NhmtHLVZZlpzL6
+         52U6ec1A9U5D9SrMGM19cx2KWfUoX+G4I7Gfi70EEpS+h0WNighyncCVXYaHKbEaCj7c
+         vWq241+pTE5DqFqE1SGO76ZUiR7cGPbWcZAwt0DREesxMyST15CjZzRBi39BOCfimxKf
+         C6nNPadQE5ogr81i57RL15m/CFm4dI0NDm4c5b00NTy9+tljZTSDuQrBNU3mPv93mL5v
+         16CgMCWZ7qA/vf47NCzs1TNL0phomiI77BJb8BmnHjKNArlLpABOtp7CE/lQKd7wm2wh
+         Rcvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=CsoWEFYA6oWSiqhk0itUr0DgVsHArvM3fYs9hP+JNhQ=;
-        b=v/jBXetN00Eh739IwtUf4uDAVcoR5jDBL8ba/1S1CHGXczxpMVycwhu2aZ6wphrE5f
-         DtdNIWjoJ4zIw/GCbjaCsoWddQ8a3/vw3uXVnYIO5ZVinWvggfnaBw8BP1b0BGvRnHOo
-         eIa6QmH11Pjfv7b5oZPQ+Ig4YRlkX8sFFLmPhj9K3UxbGxxWeIfR5SNdTyKl0dQ0C/EE
-         mhg1NJw+JHy2gx+C7GkRX5EHMWu4kWDFsd/X6OKEMB8Q46q6cyoVUOLV3uuMIlc6GzMm
-         GGFMDZP9tGXvJ1TsjHHvMb4uLP9xbauq/CENdLiaHjMzLFzx8XmRNnyaOMhgk/xnx0g3
-         /d4g==
-X-Gm-Message-State: AOAM532l1OvX6SITWXypyVYHixaEErONd73qowXbK9rPBC2mxVTJTywQ
-        HRAVbEffQI2Dad4Jn8bRjxu4yayVUGDu4A==
-X-Google-Smtp-Source: ABdhPJz+SmowUxKGKeiGA3cKrv5xDgWPsQV7GkBX4C+ZZ+xdqowSKMw0vofdkoCzzmfXnnFT8qO9cA==
-X-Received: by 2002:a05:6870:3047:b0:ec:44c2:1718 with SMTP id u7-20020a056870304700b000ec44c21718mr6015845oau.214.1651508185628;
-        Mon, 02 May 2022 09:16:25 -0700 (PDT)
+        bh=07ttqxmw9Tgzs/otLu70fpu68lese2xZKpYJru056xw=;
+        b=8Jvnx68R/ehTpUA2QaQ+MiE3xnCmqEX5BDb2ZiXxi0KPKj2W95lK81OXKSM9jlogy7
+         7+Yi/1xPC0VOciVpg+vQ2cf2FhXndZYfePXVBYxnKrpw/HjBgbXvZcRw701triJhB74Q
+         Tym40KkUO2Yrz3eyfpLtmmHBCqv22qf4Gjxto59VekC43s5wh4Md71tDGKcQxrlvAT5J
+         c7+H7BHLtZczXMcCSvDEq1zZ0p/XfCskYlPsuv8f5KZbLR9/QUW3vu8bZpwtBlDTQODT
+         N+Ltb4BJfKDW5SE4fjf32YRCCwSPDwKvd17IsrljB++ygALb732xo9wIUsPfPp+5Cxcz
+         pqgQ==
+X-Gm-Message-State: AOAM533Lds87IsBjaPYIdT5VzD54QbBIPTUGFEEKrKasC53i50YC8qKF
+        7Jml8kwOhYFO4Zpu/fRtHE/VEIsIU6E2Bw==
+X-Google-Smtp-Source: ABdhPJzACJWLWcXwtSQ+DACm4Sy5HVUiUoRxy4xKvja2xujgNRuIzQlLNku8Uwc9UKAzK9KLvs2VLQ==
+X-Received: by 2002:a05:6870:15c3:b0:ed:9980:db99 with SMTP id k3-20020a05687015c300b000ed9980db99mr3672873oad.154.1651508475920;
+        Mon, 02 May 2022 09:21:15 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f11-20020a4ae60b000000b0035eb4e5a6bdsm3723135oot.19.2022.05.02.09.16.24
+        by smtp.gmail.com with ESMTPSA id t13-20020a05683014cd00b0060603221245sm3008226otq.21.2022.05.02.09.21.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 09:16:24 -0700 (PDT)
+        Mon, 02 May 2022 09:21:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <25e2dc90-ab01-ab19-ffde-1b709dbebad4@roeck-us.net>
-Date:   Mon, 2 May 2022 09:16:23 -0700
+Message-ID: <3a58097d-5c18-cee5-133b-18c61e94c62c@roeck-us.net>
+Date:   Mon, 2 May 2022 09:21:13 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v2] hwmon: (tmp401) Add of_match_table
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
 Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Camel Guo <Camel.Guo@axis.com>, Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220502091942.1083067-1-camel.guo@axis.com>
- <a2e81680-e62c-dddd-ee58-6f5aa3664d2f@roeck-us.net>
- <20220502145800.GA21695@axis.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <20220502110010.q7vvdkdpaiz5acjl@houat>
+ <21a89ae0-7152-49eb-7500-7d46dfb259f6@roeck-us.net>
+ <20220502133927.4wqhru4es32gws2b@houat>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220502145800.GA21695@axis.com>
+In-Reply-To: <20220502133927.4wqhru4es32gws2b@houat>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/2/22 07:58, Vincent Whitchurch wrote:
-> On Mon, May 02, 2022 at 03:57:50PM +0200, Guenter Roeck wrote:
->> On 5/2/22 02:19, Camel Guo wrote:
->>> When tmp401 is built as kernel module, it won't be automatically loaded
->>> even through there is a device node in the devicetree. e.g:
->>>       i2c {
->>>         #address-cells = <1>;
->>>         #size-cells = <0>;
+On 5/2/22 06:39, Maxime Ripard wrote:
+> On Mon, May 02, 2022 at 06:31:56AM -0700, Guenter Roeck wrote:
+>> On 5/2/22 04:00, Maxime Ripard wrote:
+>>> Hi,
 >>>
->>>         sensor@4c {
->>>           compatible = "ti,tmp401";
->>>           reg = <0x4c>;
->>>         };
->>>       };
->>> In order to make sure it is loaded automatically, this commit adds
->>> of_match_table for tmp401.
+>>> On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
+>>>> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+>>>> low rate (6 bit) ADC that is often used for extra keys. There's a driver
+>>>> for that already implementing standard input device, but it has these
+>>>> limitations: 1) it cannot be used for general ADC data equisition, and
+>>>> 2) it uses only one LRADC channel of two available.
+>>>>
+>>>> This driver provides basic hwmon interface to both channels of LRADC on
+>>>> such Allwinner SoCs.
+>>>>
+>>>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
+>>>> ---
+>>>>    MAINTAINERS                       |   6 +
+>>>>    drivers/hwmon/Kconfig             |  13 ++
+>>>>    drivers/hwmon/Makefile            |   1 +
+>>>>    drivers/hwmon/sun4i-lradc-hwmon.c | 280 ++++++++++++++++++++++++++++++
+>>>>    4 files changed, 300 insertions(+)
+>>>>    create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 5e8c2f61176..d9c71e94133 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -18861,6 +18861,12 @@ S:	Maintained
+>>>>    F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
+>>>>    F:	drivers/input/keyboard/sun4i-lradc-keys.c
+>>>> +SUN4I LOW RES ADC HWMON DRIVER
+>>>> +M:	Ruslan Zalata <rz@fabmicro.ru>
+>>>> +L:	linux-hwmon@vger.kernel.org
+>>>> +S:	Maintained
+>>>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
+>>>> +
+>>>>    SUNDANCE NETWORK DRIVER
+>>>>    M:	Denis Kirjanov <kda@linux-powerpc.org>
+>>>>    L:	netdev@vger.kernel.org
+>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>>> index 68a8a27ab3b..86776488a81 100644
+>>>> --- a/drivers/hwmon/Kconfig
+>>>> +++ b/drivers/hwmon/Kconfig
+>>>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
+>>>>    	  This driver can also be built as a module. If so, the module
+>>>>    	  will be called sis5595.
+>>>> +config SENSORS_SUN4I_LRADC
+>>>> +	tristate "Allwinner A13/A20 LRADC hwmon"
+>>>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+>>>> +	help
+>>>> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
+>>>> +	  Both channels are supported.
+>>>> +
+>>>> +	  This driver can also be built as module. If so, the module
+>>>> +	  will be called sun4i-lradc-hwmon.
+>>>> +
+>>>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
+>>>> +	  of these must be used at a time.
 >>>
->>
->> As mentioned before, historically i2c devices would instantiate based
->> on the i2c match table. You are claiming that this is no longer the case.
+>>> How do you plan on enforcing that?
+>>>
+>> 	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
 > 
-> Note that while the commit message in the first version of the patch did
-> wrongly claim that probe would not work without the of_match_table, this
-> corrected description in v2 does mention the actual problem: that the
-> module will not be automatically loaded without the of_match_table.  (If
-> the module is loaded manually or the driver is built-in to the kernel,
-> there is no problem.)
+> Right, but that just doesn't fly for any generic distro / build-system.
 > 
 
-No, it doesn't. None of the information you provided below is mentioned
-in the description, but is essential to understand your patch and the
-reason for it.
+That is correct. Alternative might be to use devicetree bindings, which
+presumably will be needed anyway to tell the driver(s) what to bind to.
 
-> See commit 72fc64c68decf119466 ("hwmon: (tmp103) Add OF device ID
-> table") or commit 98b16a09861aa85d6 ("hwmon: (max31785) Add OF device ID
-> table") for similar changes to other hwmon drivers.
-> 
-
-Those commits provide a valid and acceptable explanation.
-
-> The potential future change mentioned in the commit messages of
-> 72fc64c68decf119466 and 98b16a09861aa85d6 happened in commit
-> af503716ac1444db61d80 ("i2c: core: report OF style module alias for
-> devices registered via OF").  The commit message of
-> af503716ac1444db61d80 has a lot of details about the change being made,
-> and while it says that all in-tree drivers had been converted, it looks
-> like some of them, like tmp401, were missed.
-> 
-
-And this is the missing link. If you provide that information
-in the commit log I have no problems. Please also provide a Fixes:
-tag.
-
-Fixes: af503716ac14 ("i2c: core: report OF style module alias for devices registered via OF")
-
-Thanks,
 Guenter
-
->> The above is no evidence; that would require a log output on an affected
->> system showing that the sensors are not or no longer longer instantiated.
-> 
-> A log would simply show nothing happening so that's probably not going
-> to be that useful, but here is what the modaliases look like.  As you
-> can see, the modalias of the device in sysfs does not match any of the
-> alias patterns of the module without this patch:
-> 
-> $ cat /sys/bus/i2c/devices/4-004c/modalias
-> of:Ntemperature-sensorT<NULL>Cti,tmp431
-> 
-> modinfo without this patch:
-> 
-> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
-> filename:       /storage2/femfyra/linux-2.6/.roadtest/./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
-> license:        GPL
-> description:    Texas Instruments TMP401 temperature sensor driver
-> author:         Hans de Goede <hdegoede@redhat.com>
-> alias:          i2c:tmp435
-> alias:          i2c:tmp432
-> alias:          i2c:tmp431
-> alias:          i2c:tmp411
-> alias:          i2c:tmp401
-> depends:
-> intree:         Y
-> name:           tmp401
-> vermagic:       5.18.0-rc1 mod_unload
-> 
-> modinfo after this patch:
-> 
-> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
-> filename:       /storage2/femfyra/linux-2.6/./.roadtest/modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
-> license:        GPL
-> description:    Texas Instruments TMP401 temperature sensor driver
-> author:         Hans de Goede <hdegoede@redhat.com>
-> alias:          i2c:tmp435
-> alias:          i2c:tmp432
-> alias:          i2c:tmp431
-> alias:          i2c:tmp411
-> alias:          i2c:tmp401
-> alias:          of:N*T*Cti,tmp435C*
-> alias:          of:N*T*Cti,tmp435
-> alias:          of:N*T*Cti,tmp432C*
-> alias:          of:N*T*Cti,tmp432
-> alias:          of:N*T*Cti,tmp431C*
-> alias:          of:N*T*Cti,tmp431
-> alias:          of:N*T*Cti,tmp411C*
-> alias:          of:N*T*Cti,tmp411
-> alias:          of:N*T*Cti,tmp401C*
-> alias:          of:N*T*Cti,tmp401
-> depends:
-> intree:         Y
-> name:           tmp401
-> vermagic:       5.18.0-rc1 mod_unload
-
