@@ -2,99 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 534F5C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 09:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0FADC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 09:20:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384180AbiEBJXW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 05:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S1384225AbiEBJYM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 05:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384177AbiEBJXQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 05:23:16 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEEF3BBEA;
-        Mon,  2 May 2022 02:19:45 -0700 (PDT)
+        with ESMTP id S1384264AbiEBJYF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 05:24:05 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB40962E8;
+        Mon,  2 May 2022 02:20:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1651483186;
-  x=1683019186;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NeX9xgwCxAOelZqHBgSZs5bTcMxCCR6gaJ5rcDBAWXg=;
-  b=QeP5ts13DKn5wi0OeWrUKQBmQlEr0vUP93tUN2WaGoj2U+1hKCYqv9Id
-   wnY0yb6joxuxwHfidyKpEllAyfVPj2N+D4b7dcgqeszWW4XcUkyCVYLdP
-   8JFf5dV5SAfiZlVz4J1b79HfKeOvOu9Cg8+nZlQFOqa82AFrR4bRjX6NM
-   JWq15mx1y3GbS47jqnGwgI0D5pu3Q9hciLtAvHHykJ/FQ0Zzawf2TmGVJ
-   0lCKr2zKNLmUsf/x8WoIbbZDlH8EHALlBgenMenUu+1kuAKD+ecA9Uts6
-   cxL85EBZj2f7ilsaRfE8OFMs2yjljPy6PZIn1YIdPyUwofSLvpv4z8KTE
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651483237;
+  x=1683019237;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=c0FjZGzQe0yufhEltmjqpq5ZxO3Vn+OSuMkEHjTDSBU=;
+  b=mV7j4MZ/g+43NANO+L3M1SXVeC7hFI81TIynBpHOtRb+BOUgR700Jiq9
+   mLG3NkKXhvCqEbuWM8Sc1uPl73D5JVM13vXFZSACN/Id3nqKpGfnwWG2l
+   XyucLWBb5zKnp7CbfB1dfHr5nyClGkwJELFHx9uo66thyyOlxBIb8JjlL
+   qdfwkbCBYUCvmc9/4kIAc4Gnx6vfOqTLmryaZm8HTqrxYoTY/fOYu7vVJ
+   JCSzcxNJKJUzubCamdb50eLzcirSzy9wY1U1d45QyJMsqNjMzLgFI5Kv2
+   0bmmzgU7kG6LBIGtwDZLSS7b+DBYOxm+KQ+p2KxQzyAsoA3Jw3x7lTYEf
    Q==;
-From:   Camel Guo <camel.guo@axis.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-CC:     Camel Guo <camel.guo@axis.com>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
-Subject: [PATCH v2] hwmon: (tmp401) Add of_match_table
-Date:   Mon, 2 May 2022 11:19:42 +0200
-Message-ID: <20220502091942.1083067-1-camel.guo@axis.com>
-X-Mailer: git-send-email 2.30.2
+Message-ID: <053ac9d5-eb09-8477-ecc7-afa934426c74@axis.com>
+Date:   Mon, 2 May 2022 11:20:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] hwmon: (tmp401) Add of_match_table
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, Camel Guo <Camel.Guo@axis.com>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>
+References: <20220429095201.2932180-1-camel.guo@axis.com>
+ <737ea26d-2e25-b39b-af9b-190958008f8d@roeck-us.net>
+From:   Camel Guo <camelg@axis.com>
+In-Reply-To: <737ea26d-2e25-b39b-af9b-190958008f8d@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail03w.axis.com (10.20.40.9) To se-mail03w.axis.com
+ (10.20.40.9)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-When tmp401 is built as kernel module, it won't be automatically loaded
-even through there is a device node in the devicetree. e.g:
-    i2c {
-      #address-cells = <1>;
-      #size-cells = <0>;
+On 4/29/22 18:22, Guenter Roeck wrote:
+> On 4/29/22 02:52, Camel Guo wrote:
+>> Add the missing of_match_table to allow device tree probing
+>> 
+> 
+> I2C devices probe based on the I2C device table even on devicetree systems,
+> so this isn't a correct statement. Please provide evidence and explain
+> in detail the circumstances where this does not work.
 
-      sensor@4c {
-        compatible = "ti,tmp401";
-        reg = <0x4c>;
-      };
-    };
-In order to make sure it is loaded automatically, this commit adds
-of_match_table for tmp401.
+Commit message was updated in v2. Please check out v2 instead.
 
-Signed-off-by: Camel Guo <camel.guo@axis.com>
----
-
-Notes:
-    v2:
-     - Put evidence and circumstances in commit message
-
- drivers/hwmon/tmp401.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-index b86d9df7105d..52c9e7d3f2ae 100644
---- a/drivers/hwmon/tmp401.c
-+++ b/drivers/hwmon/tmp401.c
-@@ -708,10 +708,21 @@ static int tmp401_probe(struct i2c_client *client)
- 	return 0;
- }
- 
-+static const struct of_device_id __maybe_unused tmp4xx_of_match[] = {
-+	{ .compatible = "ti,tmp401", },
-+	{ .compatible = "ti,tmp411", },
-+	{ .compatible = "ti,tmp431", },
-+	{ .compatible = "ti,tmp432", },
-+	{ .compatible = "ti,tmp435", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, tmp4xx_of_match);
-+
- static struct i2c_driver tmp401_driver = {
- 	.class		= I2C_CLASS_HWMON,
- 	.driver = {
- 		.name	= "tmp401",
-+		.of_match_table = of_match_ptr(tmp4xx_of_match),
- 	},
- 	.probe_new	= tmp401_probe,
- 	.id_table	= tmp401_id,
-
-base-commit: 38d741cb70b30741c0e802cbed7bd9cf4fd15fa4
--- 
-2.30.2
+> 
+> Guenter
+> 
+>> Signed-off-by: Camel Guo <camel.guo@axis.com>
+>> ---
+>>   drivers/hwmon/tmp401.c | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>> 
+>> diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+>> index a58a2f31a07e..cc0a1c219b1f 100644
+>> --- a/drivers/hwmon/tmp401.c
+>> +++ b/drivers/hwmon/tmp401.c
+>> @@ -750,10 +750,21 @@ static int tmp401_probe(struct i2c_client *client)
+>>        return 0;
+>>   }
+>>   
+>> +static const struct of_device_id __maybe_unused tmp4xx_of_match[] = {
+>> +     { .compatible = "ti,tmp401", },
+>> +     { .compatible = "ti,tmp411", },
+>> +     { .compatible = "ti,tmp431", },
+>> +     { .compatible = "ti,tmp432", },
+>> +     { .compatible = "ti,tmp435", },
+>> +     { },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, tmp4xx_of_match);
+>> +
+>>   static struct i2c_driver tmp401_driver = {
+>>        .class          = I2C_CLASS_HWMON,
+>>        .driver = {
+>>                .name   = "tmp401",
+>> +             .of_match_table = of_match_ptr(tmp4xx_of_match),
+>>        },
+>>        .probe_new      = tmp401_probe,
+>>        .id_table       = tmp401_id,
+> 
 
