@@ -2,138 +2,167 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0D9CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 May 2022 23:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C762C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 02:02:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiEBXwk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 May 2022 19:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S229783AbiECCGN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 May 2022 22:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbiEBXuq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 19:50:46 -0400
-Received: from skyrocket.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE85329A5
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 May 2022 16:47:14 -0700 (PDT)
-Received: from mail.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
-        by skyrocket.fabmicro.ru (8.14.9/8.14.9) with ESMTP id 242Nl6QG033711;
-        Mon, 2 May 2022 23:47:06 GMT
-        (envelope-from rz@fabmicro.ru)
+        with ESMTP id S229489AbiECCGM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 May 2022 22:06:12 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BF03A737;
+        Mon,  2 May 2022 19:02:41 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id s11-20020a4ab54b000000b0035f0178dfcfso527814ooo.7;
+        Mon, 02 May 2022 19:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=GKaIcGp0RhRVxVeOdR17/W0HUq1CPb0cE7q5ZqqYxaM=;
+        b=hkKItu6aecIhk/NoClNIjIXfNHvcfpFH3nuqsFRGYrP3YdsirumZ2LzJ9PNh7NVIGZ
+         VOoIIumKjYVnqK4QXH2epsyXRaDaciIfoH3u/+6O/IkrjlvtLowF5cV8G+7az/aDjXBc
+         v2pXcxkJjDUBdgM9V6HSQRZPiBZK0damBwQTohOvHM1k0pKMATy5/B+bpT4NjnGcz8+i
+         BinW7941XVl1w9G+BMfWoWwrUWINPDYO5KfEn1IFsQMQaXGRyL4vl/PjunXgT7Dru+0L
+         KmBFKsdN5OJ+encck6pPFGutZuvGmDhxFmdVd3B/WpCDIjoQISSRJKmvRmxZ20GJ9Cx/
+         4Hsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=GKaIcGp0RhRVxVeOdR17/W0HUq1CPb0cE7q5ZqqYxaM=;
+        b=lTleMH45+l7ZPXVmVvH7FJlPJHkQqp5IUwLk/lo6G8hNus0nvM/6k+awA9leZ3E34T
+         bjp4dKuee61jK3PpdL0Ff4F0yQ+bLXedL4TOjrwj2K3oJ0EgAh8CFkyTO1GPX1bVITgB
+         u/1MkE+w5+7DLDzPgfOxnjgoGxRo0Tm8iysUIVkDwgosk46eS1d2ur+OXdIf7O97h8F3
+         2KOyIB+btZT9B1tYrB1OtP3yG7anQhH4ozraaDUgMb829P1QqO3NBXBXFkOFryd0nyPN
+         omgBtWgwWUIYTBuBNrVeYW0UVDCiqEVNXSP2aTvnzqyy+PnJVElnQuvb9sK8GrYaWqaD
+         b5mg==
+X-Gm-Message-State: AOAM531Sl6SvIqs18nW7Vr2bmI669rzTqcRPUfnoCvjiHdlyWvLF+WaH
+        L/+BTGgfR19U6nGsAbX5fRI=
+X-Google-Smtp-Source: ABdhPJxaK6/fEsYQoxwG2euqp3NppH7nBXY7mGfszjaFfrhxufHTKgE1HNVh1sbsvF4hLjdsisEEmA==
+X-Received: by 2002:a4a:2cd3:0:b0:35e:99e3:a497 with SMTP id o202-20020a4a2cd3000000b0035e99e3a497mr5071598ooo.86.1651543360153;
+        Mon, 02 May 2022 19:02:40 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 95-20020a9d0668000000b0060626a8e5a4sm1090211otn.74.2022.05.02.19.02.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 19:02:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
+Date:   Mon, 2 May 2022 19:02:36 -0700
 MIME-Version: 1.0
-Date:   Tue, 03 May 2022 04:47:06 +0500
-From:   Ruslan Zalata <rz@fabmicro.ru>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Icenowy Zheng <icenowy@aosc.io>
+Cc:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
+        Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <20220502110010.q7vvdkdpaiz5acjl@houat>
+ <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+ <20220502112112.3ne7zy4b6gggxzoo@houat>
+From:   Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
  Allwinner A13/A20 SoC
-In-Reply-To: <59e91f45-7263-eb41-4b47-db217af54910@roeck-us.net>
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
- <e0b57c7587dded38a92411994f353b3d@fabmicro.ru>
- <e4d1a6c8-1afd-671e-76bf-b5bde9dc282f@roeck-us.net>
- <59e91f45-7263-eb41-4b47-db217af54910@roeck-us.net>
-User-Agent: Roundcube Webmail/1.4.3
-Message-ID: <f315a4ddb51cdfd8596103836acbe7dd@fabmicro.ru>
-X-Sender: rz@fabmicro.ru
-Organization: Fabmicro, LLC.
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+In-Reply-To: <20220502112112.3ne7zy4b6gggxzoo@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
-
-I'm sorry to disappoint you, but continuous mode for LRADC works only 
-for key presses (significant voltage change), it does not work for raw 
-data. Here's an excerpt from the manual that supports my discovery 
-(punctuation and grammar preserved):
-
-> The LRADC have three mode, Normal Mode、Single Mode and Continue Mode. 
-> Normal mode is that the LRADC will
-> report the result data of each convert all the time when the key is 
-> down. Single Mode is that the LRADC
-> will only report the first convert result data when the key is down. 
-> Continue Mode is that the LRADC will
-> report one of 8*(N+1) (N is program can set) sample convert result data 
-> when key is down.
-
-In other words, all three modes require key down event (voltage change) 
-and IRQ is the only way to get continuous raw data updates from LRADC. 
-I've experimented quite a lot with this for past few days, there are no 
-changes to values in ADC data regs except in DATA IRQ mode.
-
-Regarding variant structure. Vref is not the only difference between 
-different implementations of LRADC in different Allwinner SoCs. For 
-example, A83T has only one channel LRADC instead of two channels in 
-A10/A13/A20. Some other SoCs may have even more differences. I 
-introduced hwmon_chip_info structure into variant to encapsulate such 
-differences in one place. Patch version 3 will follow. Thank you.
-
----
-Regards,
-Ruslan.
-
-Fabmicro, LLC.
-
-On 2022-04-29 11:03, Guenter Roeck wrote:
-> On 4/28/22 22:32, Guenter Roeck wrote:
->> On 4/28/22 17:28, Ruslan Zalata wrote:
->>> Thank you Guenter for your valuable time.
->>> 
->>> I have added update_interval option (it's in ms units, right?) and 
->>> fixed all other issues you pointed to. Will test it on real hardware 
->>> and send third version of the patch for review.
->>> 
->>> Regarding IRQ. Alternatively the driver would need to sit and poll 
->>> conversion ready bit in a loop which might cause a much worse load on 
->>> system, is not it ? Anyway, the real problem with this piece of 
->>> hardware is that there's no "conversion ready bit" provided, the only 
->>> way to know data ready status is to receive an interrupt.
->>> 
->> 
->> Not necessarily. The data does not have to be "current", after all,
->> if the hardware is able to continuously convert. If not, the question
->> is how long a conversion takes. If it doesn't take too long, it would
->> be better to initiate a conversion and then wait for the completion.
->> 
->>> I think it still needs a semaphore/seqlock to synchronize conversions 
->>> and reads. I.e. two consequent reads should not return same old 
->>> value. Although it's not an issue in my case, but could be a problem 
->>> for others.
->>> 
->> Why ? That happens for almost all hwmon devices. They will all report
->> the most recent conversion value. Some of them can take seconds
->> to complete a new conversion, so the reported value is always "old"
->> for a given defition of old (ie any time smaller than a conversion
->> interval).
->> 
->> Sigh. Looks like I'll have to dig up the documentation and read about
->> the ADC myself.
->> 
+On 5/2/22 04:21, Maxime Ripard wrote:
+> On Mon, May 02, 2022 at 07:15:01PM +0800, Icenowy Zheng wrote:
+>>
+>>
+>> 于 2022年5月2日 GMT+08:00 下午7:00:10, Maxime Ripard <maxime@cerno.tech> 写到:
+>>> Hi,
+>>>
+>>> On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
+>>>> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+>>>> low rate (6 bit) ADC that is often used for extra keys. There's a driver
+>>>> for that already implementing standard input device, but it has these
+>>>> limitations: 1) it cannot be used for general ADC data equisition, and
+>>>> 2) it uses only one LRADC channel of two available.
+>>>>
+>>>> This driver provides basic hwmon interface to both channels of LRADC on
+>>>> such Allwinner SoCs.
+>>>>
+>>>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
+>>>> ---
+>>>>   MAINTAINERS                       |   6 +
+>>>>   drivers/hwmon/Kconfig             |  13 ++
+>>>>   drivers/hwmon/Makefile            |   1 +
+>>>>   drivers/hwmon/sun4i-lradc-hwmon.c | 280 ++++++++++++++++++++++++++++++
+>>>>   4 files changed, 300 insertions(+)
+>>>>   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 5e8c2f61176..d9c71e94133 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -18861,6 +18861,12 @@ S:	Maintained
+>>>>   F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
+>>>>   F:	drivers/input/keyboard/sun4i-lradc-keys.c
+>>>>   
+>>>> +SUN4I LOW RES ADC HWMON DRIVER
+>>>> +M:	Ruslan Zalata <rz@fabmicro.ru>
+>>>> +L:	linux-hwmon@vger.kernel.org
+>>>> +S:	Maintained
+>>>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
+>>>> +
+>>>>   SUNDANCE NETWORK DRIVER
+>>>>   M:	Denis Kirjanov <kda@linux-powerpc.org>
+>>>>   L:	netdev@vger.kernel.org
+>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>>> index 68a8a27ab3b..86776488a81 100644
+>>>> --- a/drivers/hwmon/Kconfig
+>>>> +++ b/drivers/hwmon/Kconfig
+>>>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
+>>>>   	  This driver can also be built as a module. If so, the module
+>>>>   	  will be called sis5595.
+>>>>   
+>>>> +config SENSORS_SUN4I_LRADC
+>>>> +	tristate "Allwinner A13/A20 LRADC hwmon"
+>>>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+>>>> +	help
+>>>> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
+>>>> +	  Both channels are supported.
+>>>> +
+>>>> +	  This driver can also be built as module. If so, the module
+>>>> +	  will be called sun4i-lradc-hwmon.
+>>>> +
+>>>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
+>>>> +	  of these must be used at a time.
+>>>
+>>> How do you plan on enforcing that?
+>>>
+>>> I guess a better path forward would be to either register an hwmon
+>>> device in the original driver, or convert that driver to iio and use
+>>> iio-hwmon.
+>>
+>> I think this driver should be use IIO, and then try to probe an IIO input
+>> if possible.
 > 
-> I did, for both A13 and A20. The ADC supports continuous mode. That
-> means it can be configured accordingly, and reading the ADC value
-> just returns the most recent conversion value. There is absolutely
-> no need to keep reading the conversion values using interrupts.
+> It's been a while, but if I remember well we couldn't use IIO for that
+> driver because it's not generating interrupts all the time but only when
+> it goes over a given threshold:
 > 
-> Also,
+> https://lore.kernel.org/all/52C5E9F1.9010700@redhat.com/
 > 
-> +struct lradc_variant {
-> +	u32 bits;
-> +	u32 resolution;
-> +	u32 vref;
-> +};
+> I'm not sure if it's still relevant, so we might just need to add an
+> hwmon driver to the existing driver
 > 
-> is unnecessary because the values are the same for both supported 
-> chips.
-> That means that defines can and should be used. Yes, I can see that
-> A83T uses a different voltage, but even that doesn't need a structure -
-> the voltage can be set in struct sun4i_lradc_data if/when needed,
-> and the resolution and number of bits is still the same.
-> 
-> Guenter
+
+So now we have conflicting claims that the hwmon driver would need
+to implement continuous interrupts because the chip otherwise doesn't
+continuously measure ADC input, and that implementing an IIO driver
+isn't possible or doesn't make sense because the chip would not support
+generating continuous interrupts. Which one is it ? Am I missing something ?
+
+Guenter
