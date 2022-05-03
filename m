@@ -2,39 +2,39 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B24C8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 10:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94693C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 10:47:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbiECKvM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 May 2022 06:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
+        id S234337AbiECKvP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 May 2022 06:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbiECKuq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 06:50:46 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B402D1F1
+        with ESMTP id S233559AbiECKur (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 06:50:47 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EE32DA92
         for <linux-hwmon@vger.kernel.org>; Tue,  3 May 2022 03:46:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1651574803;
-  x=1683110803;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651574804;
+  x=1683110804;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oxG0nj7wBjLD5tte31Ndw3paxaz9vJ9tvCOhJGiH67k=;
-  b=mI7J2nZARFYyzlxBqpbDJDiaIEGtIWNH0S/pT51GkeaBpojjhXY53b4g
-   qoxVvOFhPExL/FfXBdhhLY3EASiBtsBexBgf0iMKXwWuzR864G0WgkR1A
-   dh9IcpErBcNz8FXoW1ighyScLCWGVKny36alNgVjilw80wzY23v1K02FC
-   2d1zlwciE/jefs6gENf8+UOZzjs8mERewl7rnMhE0ByeugUPSbWQlbmAh
-   63zLjkhrweco6EokEx3mSzt57qWSNEtH2POSZSqIkT1KUsBbdpaZHA5i9
-   LZ3udI1BwaHoS+FgSEHNLCr6El/nrmoMVevHRatWsL3/DKWbPn7uqr5Ux
-   g==;
+  bh=MGqSKsspLACjE5LANc6kRbTEa7R5JgCSRXeuNkwFVYA=;
+  b=eb9KOUaVQmDsIfQv4H9Rwz6IJxUPGYfAsMeeethHKaPmQRbGdlMPQ8v1
+   aotyO0lifE50LL887+wHy+yD3ptH1QPjWeGhD7INs8lD5Vj7iyp2vvBH8
+   k3I2XO3b7FUnBjfcBthNSCUkNM/XKFj26mMk3fl4oVyVP9nr6P0Gjs1JE
+   ltqqY6cwrA1yz1oIOobXD+ONmrZx3gRApAgvE3nqamhci4iOYoceiYlAL
+   9MNL/WZJqQeyry296xVN4UJme+aKrFkvg0VtqCzQZfNTsM86rV88BBCGK
+   z71XCGbfr294akY749idqFBv5rxrliXyVVP0BpXHLlXDvBWN47SVLUEDb
+   A==;
 From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
         =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-Subject: [PATCH v6 4/4] hwmon: (pmbus) Add get_voltage/set_voltage ops
-Date:   Tue, 3 May 2022 12:46:31 +0200
-Message-ID: <20220503104631.3515715-5-marten.lindahl@axis.com>
+Subject: [PATCH v6 2/4] hwmon: (pmbus) Use _pmbus_read_byte_data with callback
+Date:   Tue, 3 May 2022 12:46:29 +0200
+Message-ID: <20220503104631.3515715-3-marten.lindahl@axis.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220503104631.3515715-1-marten.lindahl@axis.com>
 References: <20220503104631.3515715-1-marten.lindahl@axis.com>
@@ -45,96 +45,117 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pmbus core does not have operations for getting or setting voltage.
-Add functions get/set voltage for the dynamic regulator framework.
+Some of the pmbus core functions uses pmbus_read_byte_data, which does
+not support driver callbacks for chip specific write operations. This
+could potentially influence some specific regulator chips that for
+example need a time delay before each data access.
+
+Lets use _pmbus_read_byte_data with callback check.
 
 Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 66 ++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ drivers/hwmon/pmbus/pmbus_core.c | 46 ++++++++++++++++----------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index bd143ca0c320..f2cf0439da37 100644
+index 98da2db3f831..bd143ca0c320 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2563,11 +2563,77 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
- 	return 0;
+@@ -294,6 +294,24 @@ static int _pmbus_write_byte_data(struct i2c_client *client, int page, int reg,
+ 	return pmbus_write_byte_data(client, page, reg, value);
  }
  
-+static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
++/*
++ * _pmbus_read_byte_data() is similar to pmbus_read_byte_data(), but checks if
++ * a device specific mapping function exists and calls it if necessary.
++ */
++static int _pmbus_read_byte_data(struct i2c_client *client, int page, int reg)
 +{
-+	struct device *dev = rdev_get_dev(rdev);
-+	struct i2c_client *client = to_i2c_client(dev->parent);
 +	struct pmbus_data *data = i2c_get_clientdata(client);
-+	struct pmbus_sensor s = {
-+		.page = rdev_get_id(rdev),
-+		.class = PSC_VOLTAGE_OUT,
-+		.convert = true,
-+	};
++	const struct pmbus_driver_info *info = data->info;
++	int status;
 +
-+	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
-+	if (s.data < 0)
-+		return s.data;
-+
-+	return (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
++	if (info->read_byte_data) {
++		status = info->read_byte_data(client, page, reg);
++		if (status != -ENODATA)
++			return status;
++	}
++	return pmbus_read_byte_data(client, page, reg);
 +}
 +
-+static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
-+					 int max_uv, unsigned int *selector)
-+{
-+	struct device *dev = rdev_get_dev(rdev);
-+	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	struct pmbus_sensor s = {
-+		.page = rdev_get_id(rdev),
-+		.class = PSC_VOLTAGE_OUT,
-+		.convert = true,
-+		.data = -1,
-+	};
-+	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
-+	int low, high;
-+	*selector = 0;
-+
-+	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MIN))
-+		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MIN);
-+	if (s.data < 0) {
-+		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_LOW);
-+		if (s.data < 0)
-+			return s.data;
-+	}
-+	low = pmbus_reg2data(data, &s);
-+	s.data = -1;
-+
-+	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MAX))
-+		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MAX);
-+	if (s.data < 0) {
-+		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_HIGH);
-+		if (s.data < 0)
-+			return s.data;
-+	}
-+	high = pmbus_reg2data(data, &s);
-+
-+	/* Make sure we are within margins */
-+	if (low > val)
-+		val = low;
-+	if (high < val)
-+		val = high;
-+
-+	val = pmbus_data2reg(data, &s, val);
-+
-+	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
-+}
-+
- const struct regulator_ops pmbus_regulator_ops = {
- 	.enable = pmbus_regulator_enable,
- 	.disable = pmbus_regulator_disable,
- 	.is_enabled = pmbus_regulator_is_enabled,
- 	.get_error_flags = pmbus_regulator_get_error_flags,
-+	.get_voltage = pmbus_regulator_get_voltage,
-+	.set_voltage = pmbus_regulator_set_voltage,
- };
- EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+ int pmbus_update_fan(struct i2c_client *client, int page, int id,
+ 		     u8 config, u8 mask, u16 command)
+ {
+@@ -301,7 +319,7 @@ int pmbus_update_fan(struct i2c_client *client, int page, int id,
+ 	int rv;
+ 	u8 to;
  
+-	from = pmbus_read_byte_data(client, page,
++	from = _pmbus_read_byte_data(client, page,
+ 				    pmbus_fan_config_registers[id]);
+ 	if (from < 0)
+ 		return from;
+@@ -408,7 +426,7 @@ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+ 	unsigned int tmp;
+ 	int rv;
+ 
+-	rv = pmbus_read_byte_data(client, page, reg);
++	rv = _pmbus_read_byte_data(client, page, reg);
+ 	if (rv < 0)
+ 		return rv;
+ 
+@@ -421,24 +439,6 @@ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
+ 
+-/*
+- * _pmbus_read_byte_data() is similar to pmbus_read_byte_data(), but checks if
+- * a device specific mapping function exists and calls it if necessary.
+- */
+-static int _pmbus_read_byte_data(struct i2c_client *client, int page, int reg)
+-{
+-	struct pmbus_data *data = i2c_get_clientdata(client);
+-	const struct pmbus_driver_info *info = data->info;
+-	int status;
+-
+-	if (info->read_byte_data) {
+-		status = info->read_byte_data(client, page, reg);
+-		if (status != -ENODATA)
+-			return status;
+-	}
+-	return pmbus_read_byte_data(client, page, reg);
+-}
+-
+ static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
+ 					      int reg)
+ {
+@@ -473,7 +473,7 @@ static int pmbus_get_fan_rate(struct i2c_client *client, int page, int id,
+ 		return s->data;
+ 	}
+ 
+-	config = pmbus_read_byte_data(client, page,
++	config = _pmbus_read_byte_data(client, page,
+ 				      pmbus_fan_config_registers[id]);
+ 	if (config < 0)
+ 		return config;
+@@ -2414,7 +2414,7 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+ 	int ret;
+ 
+ 	mutex_lock(&data->update_lock);
+-	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
++	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+ 	mutex_unlock(&data->update_lock);
+ 
+ 	if (ret < 0)
+@@ -2513,7 +2513,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 		if (!(func & cat->func))
+ 			continue;
+ 
+-		status = pmbus_read_byte_data(client, page, cat->reg);
++		status = _pmbus_read_byte_data(client, page, cat->reg);
+ 		if (status < 0) {
+ 			mutex_unlock(&data->update_lock);
+ 			return status;
 -- 
 2.30.2
 
