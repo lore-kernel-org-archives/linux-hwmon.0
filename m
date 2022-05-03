@@ -2,179 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BDBEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 05:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EF3FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 06:00:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiECFix (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 May 2022 01:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S229480AbiECGDe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 May 2022 02:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiECFiw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 01:38:52 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12616193EC;
-        Mon,  2 May 2022 22:35:18 -0700 (PDT)
+        with ESMTP id S229445AbiECGDe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 02:03:34 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CAF2B18C;
+        Mon,  2 May 2022 23:00:03 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id q8so16849420oif.13;
+        Mon, 02 May 2022 23:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1651556119;
-  x=1683092119;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FDNCOyDkPsbFfbn+trYTC4isEG90cns5AJa5K9K08yk=;
-  b=UXLHE8LxsEW3TuBKebqA/hNGJaxSRZxHpujgAypBryPAjW4CR8nTPIVP
-   SFKOH7rhZjiFiYqqjIcWA/KSC6GhuVU+rUjpC5Mz+xxT0z7Xh0S1AovcY
-   lAG/3LbkvIQHthYFCkXODcO8gssnA7B7laoRNkUFfBB8iV6zG3mnQRomy
-   fnv4yYe6gS3Nopmb5ucgZVymWOF3DM5MSmPzW6z9cYxsIpJfm7bnmhA7P
-   kO3z/+JwxZRSlCuAebV1qjlVd4Ew9/1wvkaUGxwiCSJyCuNFoO3aySyOC
-   P5nYXkMGlC/ClvkcsZS9lMjmoN4oM7cIwAb8Yqd8tE5sjLCezBI4Imrzt
-   Q==;
-Message-ID: <3dc9a0e3-124e-759e-8229-9088c079cecf@axis.com>
-Date:   Tue, 3 May 2022 07:35:15 +0200
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LN2uxqbXiWABcWmtrX9ldqSaetjnPOTD9o54K6GkkWM=;
+        b=Cc+lqV4jmh7tTRtusdgLPsU09Ao7mmzkBMVuiYbgQ3MOxpk19XYkXgFkxMcdFz951f
+         kaRREPZwPzDrh+/I7zG5sHlfWojOqPY9VXlTp323cttBztTmI3lfzNka9Axqw2q60M3f
+         gDftXePfhx7VZuDSznP6zBsVB8KTh9qAqDAV3QIL11DUYL/ZxxOBpY62z5c6+4PlYn5x
+         W38oqL6DYNNffDgHor3oDsZaX9WUkNiSwreJrlZcB3Uzy/TXT07faUs95Pu3zMxRnUev
+         Boj97htxHJKTaCzLlViuWgR3C7F6tfXEDmx7k+pBM9xxEigwm1LUzUTu/WsZu/jtVgKp
+         5lZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=LN2uxqbXiWABcWmtrX9ldqSaetjnPOTD9o54K6GkkWM=;
+        b=FcKYOi8KGM6ZBl9IqOK8ORbyDwktmUo72K4C4DAmnGWO+Yh6jsn9Hem7bY1TEKnjdS
+         f9wwucQ/ovaIeAfBlf8bkbZKR/FLUfEN1+DxIflfi/qU2SYz8KM/Y0CDq38ZEGHKbBTA
+         0ptzq9Lg8fBoX3E3Tm+CTv/MiK4vbG49NdgPCfE5DZdWWgTefI+W2JqIrqQa9jFGiTnc
+         3hSTg/mJbRjZyfApyJX5t/kthm4BQhNtXXDbD2WMKpxRUlJWcVUvaPp7OVS92VxqRZgC
+         SATGwF+W7bsbu+F8H45pqrNlu1n1etMV4XpLou0UXJlVro3vVid7L1HY336mIX3b520y
+         CpMQ==
+X-Gm-Message-State: AOAM530YsGckNZCz+bE2M7a7j4zPney+S3aJ+NzGcbR42aYRW4EAUw5E
+        QjfxRw/FOMN1YLNyGS+H2pSQsSwRm5TUkg==
+X-Google-Smtp-Source: ABdhPJyQWHpU9pVsTeRvFcyXROK12gKspnEqkpcXRart9RnRKX4DnErP4M0zYhehYUFL2dAnfcmTRw==
+X-Received: by 2002:aca:5d85:0:b0:325:bf2b:253c with SMTP id r127-20020aca5d85000000b00325bf2b253cmr1190107oib.85.1651557602655;
+        Mon, 02 May 2022 23:00:02 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y2-20020a056830208200b0060603221260sm3698698otq.48.2022.05.02.23.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 23:00:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.18-rc6
+Date:   Mon,  2 May 2022 23:00:00 -0700
+Message-Id: <20220503060000.2839547-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2] hwmon: (tmp401) Add of_match_table
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Vincent Whitchurch <Vincent.Whitchurch@axis.com>
-CC:     Camel Guo <Camel.Guo@axis.com>, Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220502091942.1083067-1-camel.guo@axis.com>
- <a2e81680-e62c-dddd-ee58-6f5aa3664d2f@roeck-us.net>
- <20220502145800.GA21695@axis.com>
- <25e2dc90-ab01-ab19-ffde-1b709dbebad4@roeck-us.net>
-From:   Camel Guo <camelg@axis.com>
-In-Reply-To: <25e2dc90-ab01-ab19-ffde-1b709dbebad4@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail07w.axis.com (10.20.40.13) To se-mail03w.axis.com
- (10.20.40.9)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/2/22 18:16, Guenter Roeck wrote:
-> On 5/2/22 07:58, Vincent Whitchurch wrote:
->> On Mon, May 02, 2022 at 03:57:50PM +0200, Guenter Roeck wrote:
->>> On 5/2/22 02:19, Camel Guo wrote:
->>>> When tmp401 is built as kernel module, it won't be automatically loaded
->>>> even through there is a device node in the devicetree. e.g:
->>>>       i2c {
->>>>         #address-cells = <1>;
->>>>         #size-cells = <0>;
->>>>
->>>>         sensor@4c {
->>>>           compatible = "ti,tmp401";
->>>>           reg = <0x4c>;
->>>>         };
->>>>       };
->>>> In order to make sure it is loaded automatically, this commit adds
->>>> of_match_table for tmp401.
->>>>
->>>
->>> As mentioned before, historically i2c devices would instantiate based
->>> on the i2c match table. You are claiming that this is no longer the case.
->> 
->> Note that while the commit message in the first version of the patch did
->> wrongly claim that probe would not work without the of_match_table, this
->> corrected description in v2 does mention the actual problem: that the
->> module will not be automatically loaded without the of_match_table.  (If
->> the module is loaded manually or the driver is built-in to the kernel,
->> there is no problem.)
->> 
-> 
-> No, it doesn't. None of the information you provided below is mentioned
-> in the description, but is essential to understand your patch and the
-> reason for it.
-> 
->> See commit 72fc64c68decf119466 ("hwmon: (tmp103) Add OF device ID
->> table") or commit 98b16a09861aa85d6 ("hwmon: (max31785) Add OF device ID
->> table") for similar changes to other hwmon drivers.
->> 
-> 
-> Those commits provide a valid and acceptable explanation.
+Hi Linus,
 
-Now, I just copied this commit message.
+Please pull hwmon fixes for Linux v5.18-rc6 from signed tag:
 
-> 
->> The potential future change mentioned in the commit messages of
->> 72fc64c68decf119466 and 98b16a09861aa85d6 happened in commit
->> af503716ac1444db61d80 ("i2c: core: report OF style module alias for
->> devices registered via OF").  The commit message of
->> af503716ac1444db61d80 has a lot of details about the change being made,
->> and while it says that all in-tree drivers had been converted, it looks
->> like some of them, like tmp401, were missed.
->> 
-> 
-> And this is the missing link. If you provide that information
-> in the commit log I have no problems. Please also provide a Fixes:
-> tag.
-> 
-> Fixes: af503716ac14 ("i2c: core: report OF style module alias for 
-> devices registered via OF")
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc6
 
-It is added in v3
+Thanks,
+Guenter
+------
 
-> 
-> Thanks,
-> Guenter
-> 
->>> The above is no evidence; that would require a log output on an affected
->>> system showing that the sensors are not or no longer longer instantiated.
->> 
->> A log would simply show nothing happening so that's probably not going
->> to be that useful, but here is what the modaliases look like.  As you
->> can see, the modalias of the device in sysfs does not match any of the
->> alias patterns of the module without this patch:
->> 
->> $ cat /sys/bus/i2c/devices/4-004c/modalias
->> of:Ntemperature-sensorT<NULL>Cti,tmp431
->> 
->> modinfo without this patch:
->> 
->> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> filename:       /storage2/femfyra/linux-2.6/.roadtest/./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> license:        GPL
->> description:    Texas Instruments TMP401 temperature sensor driver
->> author:         Hans de Goede <hdegoede@redhat.com>
->> alias:          i2c:tmp435
->> alias:          i2c:tmp432
->> alias:          i2c:tmp431
->> alias:          i2c:tmp411
->> alias:          i2c:tmp401
->> depends:
->> intree:         Y
->> name:           tmp401
->> vermagic:       5.18.0-rc1 mod_unload
->> 
->> modinfo after this patch:
->> 
->> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> filename:       /storage2/femfyra/linux-2.6/./.roadtest/modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> license:        GPL
->> description:    Texas Instruments TMP401 temperature sensor driver
->> author:         Hans de Goede <hdegoede@redhat.com>
->> alias:          i2c:tmp435
->> alias:          i2c:tmp432
->> alias:          i2c:tmp431
->> alias:          i2c:tmp411
->> alias:          i2c:tmp401
->> alias:          of:N*T*Cti,tmp435C*
->> alias:          of:N*T*Cti,tmp435
->> alias:          of:N*T*Cti,tmp432C*
->> alias:          of:N*T*Cti,tmp432
->> alias:          of:N*T*Cti,tmp431C*
->> alias:          of:N*T*Cti,tmp431
->> alias:          of:N*T*Cti,tmp411C*
->> alias:          of:N*T*Cti,tmp411
->> alias:          of:N*T*Cti,tmp401C*
->> alias:          of:N*T*Cti,tmp401
->> depends:
->> intree:         Y
->> name:           tmp401
->> vermagic:       5.18.0-rc1 mod_unload
-> 
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-All commits have been fixed in v3, please review that one instead.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.18-rc6
+
+for you to fetch changes up to 08da09f028043fed9653331ae75bc310411f72e6:
+
+  hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk (2022-04-27 04:52:18 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v5.18-rc6
+
+- Work around a hardware problem in the delta-ahe50dc-fan driver
+
+- Explicitly disable PEC in PMBus core if not enabled
+
+- Fix negative temperature values in f71882fg driver
+
+- Fix warning on removal of adt7470 driver
+
+- Fix CROSSHAIR VI HERO name in asus_wmi_sensors driver
+
+- Fix build warning seen in xdpe12284 driver if
+  CONFIG_SENSORS_XDPE122_REGULATOR is disabled
+
+- Fix type of 'ti,n-factor' in ti,tmp421 driver bindings
+
+----------------------------------------------------------------
+Adam Wujek (1):
+      hwmon: (pmbus) disable PEC if not enabled
+
+Armin Wolf (1):
+      hwmon: (adt7470) Fix warning on module removal
+
+Denis Pauk (1):
+      hwmon: (asus_wmi_sensors) Fix CROSSHAIR VI HERO name
+
+Guenter Roeck (1):
+      hwmon: (xdpe12284) Fix build warning seen if CONFIG_SENSORS_XDPE122_REGULATOR is disabled
+
+Ji-Ze Hong (Peter Hong) (1):
+      hwmon: (f71882fg) Fix negative temperature
+
+Rob Herring (1):
+      dt-bindings: hwmon: ti,tmp421: Fix type for 'ti,n-factor'
+
+Zev Weiss (1):
+      hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk
+
+ Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml |  7 +++----
+ drivers/hwmon/adt7470.c                                |  4 ++--
+ drivers/hwmon/asus_wmi_sensors.c                       |  2 +-
+ drivers/hwmon/f71882fg.c                               |  5 +++--
+ drivers/hwmon/pmbus/delta-ahe50dc-fan.c                | 16 ++++++++++++++++
+ drivers/hwmon/pmbus/pmbus_core.c                       |  3 +++
+ drivers/hwmon/pmbus/xdpe12284.c                        |  2 +-
+ 7 files changed, 29 insertions(+), 10 deletions(-)
