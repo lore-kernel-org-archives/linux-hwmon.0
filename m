@@ -2,27 +2,67 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4916EC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 15:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 304CDC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 16:07:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238433AbiECPaF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 May 2022 11:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S239127AbiECQK4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 May 2022 12:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238315AbiECPaE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 11:30:04 -0400
-Received: from skyrocket.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1262626557
-        for <linux-hwmon@vger.kernel.org>; Tue,  3 May 2022 08:26:29 -0700 (PDT)
-Received: from mail.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
-        by skyrocket.fabmicro.ru (8.14.9/8.14.9) with ESMTP id 243FQIbs075026;
-        Tue, 3 May 2022 15:26:18 GMT
-        (envelope-from rz@fabmicro.ru)
-MIME-Version: 1.0
-Date:   Tue, 03 May 2022 20:26:18 +0500
-From:   Ruslan Zalata <rz@fabmicro.ru>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Icenowy Zheng <icenowy@aosc.io>,
+        with ESMTP id S239116AbiECQKz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 12:10:55 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028AF245B5;
+        Tue,  3 May 2022 09:07:21 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C3F01320090F;
+        Tue,  3 May 2022 12:07:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 03 May 2022 12:07:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1651594038; x=1651680438; bh=S6jBLD8l+m
+        Ir0OzRt6qgeH2J1Vwk8FdNOOo2AvGlnGY=; b=JgC0htdr53/McvizUOUop1w8ra
+        AuLKzW+TMwSdIZ9dcpvFAveVzIoEQ1oyzQpV4UbEEcKkJZSgE0flClZhE6XUaO5c
+        JvXgr0JLR55CgDMEr7A0zRicW1gsyejasG75Yyu/cvmmlIy95gV9HLbVH2VROK8Y
+        sSs/r6uI/RhBWZ9Yh0rsCAazxV8gNd8GZbVNFaFAdAUN9Rt1jmuiX84OJiLs6E/1
+        hPUCB1FpT5NovLjp/jSzQFji2W42x9ItMMav9BC4rckpEp/I3W1m1ucYsj5J7ies
+        uAG871iwoViNQSg3ZWKVvSNA6WofWPdoCKwlvIQRX+YZoNE/jm2wdiI2zGRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651594038; x=
+        1651680438; bh=S6jBLD8l+mIr0OzRt6qgeH2J1Vwk8FdNOOo2AvGlnGY=; b=X
+        j5+twy5OwmxFkKSCwC9YvG0wzd1S04zkqRgBtdGTgO+UivtzlFLA+UD5X6ZTxyt/
+        fMxAEIR4DPtJld4z5IIvLxIHyuKtK/+rKIwwMYms/bMllDHl7yBJ+q0GLMUc0Cb3
+        KnswFDzG6wnfHevEruUdJlMO8NU1EzDa20PK3gHcq01YQzWeDbwjNvKjQat7mfOA
+        EW9pNy78y7KaTDddDBEz1AhsJcxj12LVwTynw4bGva9N6kxZAgmoJoPu9kqQvNZV
+        +MaiQ2U8xDW2PlZuT3jnG/JbRH4//5xwTNaQoZ78LSwsHaA4F3BWGrRYD94mPIF3
+        KFw2SwHQg+zUhy5Otf5fA==
+X-ME-Sender: <xms:NFNxYq7MW2e4oeOMm-bPtR-r-Zl8kkVZniv6jmT9FFPPXMNoB9KKsQ>
+    <xme:NFNxYj6WWFgYzr6rgVh5Xn8fVovESqHxHwJwHWheeNiJImFOp61WNWY_iEtD7NJjY
+    isX9aZpsUcOz8oCy-U>
+X-ME-Received: <xmr:NFNxYpcEPHGKBllVpD1iT97CFClOajIjwafjWikiw-9fdX8QHi3LsV8kD7Bia0bK8GW3JouqrGkqBARjKhDcUVq5wuyyHtMbicEjUfY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdeljecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:NFNxYnIKxZTY3cT3b-T0BC_i3UNejWx4x2rCHlbrcZXg-z8G-0SHwg>
+    <xmx:NFNxYuKioxjX8tJimduJWAQ47shg_gN3HbSsyIl_JV3S0stvrVfFTw>
+    <xmx:NFNxYowCQicvH7wAEGpXRxNBz9PHhfp1rq346ofnjwwq6Z87tzg53A>
+    <xmx:NlNxYt9AYSRBtZPogH7rtehgAW7qDSdkm-pxska8vyFZkXkkwnK-Nw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 May 2022 12:07:16 -0400 (EDT)
+Date:   Tue, 3 May 2022 18:07:13 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Ruslan Zalata <rz@fabmicro.ru>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
@@ -30,142 +70,57 @@ Cc:     Maxime Ripard <maxime@cerno.tech>, Icenowy Zheng <icenowy@aosc.io>,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
 Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
  Allwinner A13/A20 SoC
-In-Reply-To: <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
+Message-ID: <20220503160713.7kdikhd5kkgkotcp@houat>
 References: <20220428210906.29527-1-rz@fabmicro.ru>
  <20220502110010.q7vvdkdpaiz5acjl@houat>
- <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
- <20220502112112.3ne7zy4b6gggxzoo@houat>
- <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
-User-Agent: Roundcube Webmail/1.4.3
-Message-ID: <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
-X-Sender: rz@fabmicro.ru
-Organization: Fabmicro, LLC.
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+ <6009fbef45a8b77caa4fc137093a1e23@fabmicro.ru>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o7q6542x2x5bfqc5"
+Content-Disposition: inline
+In-Reply-To: <6009fbef45a8b77caa4fc137093a1e23@fabmicro.ru>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
 
-LRADC does generate continuous interrupts as long as input voltage is 
-below LevelB threshold. The max possible LevelB is 0x3C which in case of 
-A20 SoC is close to 1.90V and that's what my driver sets LevelB to. 
-Perhaps this needs to be documented more thoroughly.
+--o7q6542x2x5bfqc5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It is possible to implement this same driver for IIO subsystem, but I 
-would prefer to keep it in hwmon along with many other simple ADC 
-drivers used for temp and battery status monitoring.
+Hi,
 
-If we talk about IIO, it will be necessary to implement serialization of 
-reads and updates which brings up some complexity I would try to avoid 
-at the moment. :)
+On Tue, May 03, 2022 at 01:50:39PM +0500, Ruslan Zalata wrote:
+> > I guess a better path forward would be to either register an hwmon
+> > device in the original driver, or convert that driver to iio and use
+> > iio-hwmon.
+>=20
+> My first idea was to add hwmon to sun4i-lradc-keys.c driver. But soon as I
+> began hacking the driver I quickly realized that it would be a mess since
+> keyboard and hwmon belong to two different subsystems.
 
----
-Regards,
-Ruslan.
+That's not really an issue in itself. There's plenty of drivers in Linux
+that register into two frameworks.
 
-Fabmicro, LLC.
+> Besides we would need to invent a way to control which way the driver
+> works (new bindings?).
 
-On 2022-05-03 07:02, Guenter Roeck wrote:
-> On 5/2/22 04:21, Maxime Ripard wrote:
->> On Mon, May 02, 2022 at 07:15:01PM +0800, Icenowy Zheng wrote:
->>> 
->>> 
->>> 于 2022年5月2日 GMT+08:00 下午7:00:10, Maxime Ripard <maxime@cerno.tech> 
->>> 写到:
->>>> Hi,
->>>> 
->>>> On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
->>>>> Some Allwinner SoCs like A13, A20 or T2 are equipped with 
->>>>> two-channel
->>>>> low rate (6 bit) ADC that is often used for extra keys. There's a 
->>>>> driver
->>>>> for that already implementing standard input device, but it has 
->>>>> these
->>>>> limitations: 1) it cannot be used for general ADC data equisition, 
->>>>> and
->>>>> 2) it uses only one LRADC channel of two available.
->>>>> 
->>>>> This driver provides basic hwmon interface to both channels of 
->>>>> LRADC on
->>>>> such Allwinner SoCs.
->>>>> 
->>>>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
->>>>> ---
->>>>>   MAINTAINERS                       |   6 +
->>>>>   drivers/hwmon/Kconfig             |  13 ++
->>>>>   drivers/hwmon/Makefile            |   1 +
->>>>>   drivers/hwmon/sun4i-lradc-hwmon.c | 280 
->>>>> ++++++++++++++++++++++++++++++
->>>>>   4 files changed, 300 insertions(+)
->>>>>   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
->>>>> 
->>>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>>> index 5e8c2f61176..d9c71e94133 100644
->>>>> --- a/MAINTAINERS
->>>>> +++ b/MAINTAINERS
->>>>> @@ -18861,6 +18861,12 @@ S:	Maintained
->>>>>   
->>>>> F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
->>>>>   F:	drivers/input/keyboard/sun4i-lradc-keys.c
->>>>>   +SUN4I LOW RES ADC HWMON DRIVER
->>>>> +M:	Ruslan Zalata <rz@fabmicro.ru>
->>>>> +L:	linux-hwmon@vger.kernel.org
->>>>> +S:	Maintained
->>>>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
->>>>> +
->>>>>   SUNDANCE NETWORK DRIVER
->>>>>   M:	Denis Kirjanov <kda@linux-powerpc.org>
->>>>>   L:	netdev@vger.kernel.org
->>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>>> index 68a8a27ab3b..86776488a81 100644
->>>>> --- a/drivers/hwmon/Kconfig
->>>>> +++ b/drivers/hwmon/Kconfig
->>>>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
->>>>>   	  This driver can also be built as a module. If so, the module
->>>>>   	  will be called sis5595.
->>>>>   +config SENSORS_SUN4I_LRADC
->>>>> +	tristate "Allwinner A13/A20 LRADC hwmon"
->>>>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
->>>>> +	help
->>>>> +	  Say y here to support the LRADC found in Allwinner A13/A20 
->>>>> SoCs.
->>>>> +	  Both channels are supported.
->>>>> +
->>>>> +	  This driver can also be built as module. If so, the module
->>>>> +	  will be called sun4i-lradc-hwmon.
->>>>> +
->>>>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
->>>>> +	  of these must be used at a time.
->>>> 
->>>> How do you plan on enforcing that?
->>>> 
->>>> I guess a better path forward would be to either register an hwmon
->>>> device in the original driver, or convert that driver to iio and use
->>>> iio-hwmon.
->>> 
->>> I think this driver should be use IIO, and then try to probe an IIO 
->>> input
->>> if possible.
->> 
->> It's been a while, but if I remember well we couldn't use IIO for that
->> driver because it's not generating interrupts all the time but only 
->> when
->> it goes over a given threshold:
->> 
->> https://lore.kernel.org/all/52C5E9F1.9010700@redhat.com/
->> 
->> I'm not sure if it's still relevant, so we might just need to add an
->> hwmon driver to the existing driver
->> 
-> 
-> So now we have conflicting claims that the hwmon driver would need
-> to implement continuous interrupts because the chip otherwise doesn't
-> continuously measure ADC input, and that implementing an IIO driver
-> isn't possible or doesn't make sense because the chip would not support
-> generating continuous interrupts. Which one is it ? Am I missing 
-> something ?
-> 
-> Guenter
+I got confused there, and thought you were adding temperature reading
+that is in another ADC on those SoCs, sorry. Yeah, that doesn't make
+much sense to have both in the same drivers here.
+
+Maxime
+
+--o7q6542x2x5bfqc5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnFTMQAKCRDj7w1vZxhR
+xSoRAP9r204XnvG9FZ4a7NWbYj251o27k2mVVJqIz+t4Sa+vUAEA4W71CIx9ZBaA
+7muZe/5EDx4iJnaVyoBUgq/XK0A4wgQ=
+=tNMn
+-----END PGP SIGNATURE-----
+
+--o7q6542x2x5bfqc5--
