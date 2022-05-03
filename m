@@ -2,169 +2,143 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85414C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 13:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 669F6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 13:44:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236286AbiECNno (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 May 2022 09:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        id S234308AbiECNrm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 May 2022 09:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236281AbiECNnn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 09:43:43 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA382AE24
-        for <linux-hwmon@vger.kernel.org>; Tue,  3 May 2022 06:40:09 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d39f741ba0so17167145fac.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 May 2022 06:40:09 -0700 (PDT)
+        with ESMTP id S236414AbiECNrl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 09:47:41 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132591D30A;
+        Tue,  3 May 2022 06:44:08 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so11332075otk.1;
+        Tue, 03 May 2022 06:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hHgp7hXrPA2Bch2r3j0d3tAGBLNZP7DiGi5tx+OXIWg=;
-        b=qxNIvzodSXX/TdmKIlEf6vTZ09+3wUrvAu+KcfMAvH1ZymSyBBWB6MgS4h6XvOUWlv
-         lWsAKSk+LGRNSJ+8tHIvUdmuisNKv5zlfA2Js2GDapdLTv5bjF8o19NWojXQGvdoQ/Sf
-         hteM3tAGVsaGQNr8hnrFIb1phs0ZnwcvMF14NFjBFV2JCwuzsipCBPpPHI4PKe2pquvd
-         nqQMWW0mMKhA0RplKBSOyD2X2jfPs+WM2wMtU4JohkaXCoXIzZI2iM0OELdgXN3gQBkZ
-         7FoYkfRCKWUjMWbB61PA/xjzwHIyUWEM2xwNWehZrNgsW++E7L8ngVPcaCdRrcDBXHhp
-         bg2w==
+         :content-disposition:in-reply-to;
+        bh=ekpWvS+anWeQlrfaKFCOj8G7h2lMxD37gWeltGp8A3Y=;
+        b=B9CokLn1GX1NrOT++Z880iU//nFlWlXXo2tNl30LjEVcwWHziZUoAUVc94Lcg6+t+Y
+         Bxxa0s1V44+ZQdZjvgKe1IrEEr0bdT/2jLe/R8LLSvfg2OZFNNPhul5LaF3i7jlGyeso
+         Zv6v9le40JUjZIlPNdWHgtz4Jbl2KPrbOhGhvFBE4m5pCyWjEGhfR6N/iFEvZ0enz+Wu
+         QArbtal9F9MmErL4LtXcwv9nUDOB+rQKANBKz98tVfIpnCxaP4KpQ5LpeoRlitb34oLX
+         AU+pFdcPfN5wkUMAEnnAzqtZPnK6v9Fi6JglZvF6A6f1sruFEdLtVplJkpC2A8ZiT8wQ
+         bC0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=hHgp7hXrPA2Bch2r3j0d3tAGBLNZP7DiGi5tx+OXIWg=;
-        b=HriCQgaT1I1uqmETLNCYAUWWjmlTmCLyUCiaDYp9f5t+V5zQiL3QWfQsKPpxwnfCWX
-         ErfrdL8q8hOq7pRj2xRYFU6A+p1jZUVYxqpe4JGYw6luxdoEgDuRUHBygVJ/9Z8oVC2U
-         5alg40vP+xvRoyb59mZBRPlxSmZV7IqHf01Mn3g4NooQ9JudznuC7GZi8QMbf4BWLrLo
-         3OhwEWnDYANmxSZ/VW5yKzd+MoQ/2cERSSBjZ7AbeTkhbjl4lxCjhqQxybVyPQSmHBeq
-         EZS0XH+pmtPAjy89iPinguF7YexbTRVUXiKUXxEaNWFLqPlegzpL9VnrkFJ7fxjySdW/
-         bz1Q==
-X-Gm-Message-State: AOAM533VcngBBr9Ez/yco3IO5P/0eyqOJ/Zo0UHpd1l27eWZcMz6IeXY
-        GriHDIet51ZvlYPLkFfPty4=
-X-Google-Smtp-Source: ABdhPJyhJFS6CW3YVGwt1XrRyjFY0YMsgBQZ8pgTSl79bM4NQu7yLZlck3QTzjo1oClF1Gqo/UH6gw==
-X-Received: by 2002:a05:6870:c105:b0:e9:2cec:ae79 with SMTP id f5-20020a056870c10500b000e92cecae79mr1724793oad.35.1651585209168;
-        Tue, 03 May 2022 06:40:09 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ekpWvS+anWeQlrfaKFCOj8G7h2lMxD37gWeltGp8A3Y=;
+        b=sk6BU/XEta3Q7CCXjX47hXwrhJuUXRZFqYN9Wz8xFKXqdgOeyhH/AA/bFffsLveMNH
+         VHlVj+z9ZACXqUVIQArMY3ArBqiO5sYM43nPrUmR8k+B6/vqwsNEjbxLF9vAfkcmVA/2
+         7Yj5EF7NqrrlD/6sx9jJmXsSbx2ifo5VMs6OXH/pxp085kGcyP7W3C3rnlvqBDkRrisY
+         Ipf6yq/X8uSpylaqOjNhJW9wdT8rgQMDTqcRDIkBJG9QsKBSHMhdM3Sc7eiPVeV+f8NK
+         MUsXcGUzQgACK5P4ynf93+wMk0fD1qpsI/9P8jcskrbP6OY8XMny5ZFz9pdrbyY/PJVx
+         n1FA==
+X-Gm-Message-State: AOAM532q2Dnoxgt4kbXPpTuskSssSJ+MjPYg4Hr+Rk1KtAT7nESXqZLJ
+        X5qOc3vkIoqX4hejrSNl21M=
+X-Google-Smtp-Source: ABdhPJzaXApsk6xgltsIrs7WaOqrd8bF+onKCwGjUKGxWnOlJRJN4qz1KpS5vVV7UWo2NCYk7m/ubQ==
+X-Received: by 2002:a05:6830:25cd:b0:605:c92c:967a with SMTP id d13-20020a05683025cd00b00605c92c967amr5949673otu.306.1651585447382;
+        Tue, 03 May 2022 06:44:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e10-20020a05683013ca00b0060603221259sm4088323otq.41.2022.05.03.06.40.07
+        by smtp.gmail.com with ESMTPSA id 8-20020a056870124800b000e686d13888sm7213907oao.34.2022.05.03.06.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 06:40:08 -0700 (PDT)
+        Tue, 03 May 2022 06:44:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 May 2022 06:40:06 -0700
+Date:   Tue, 3 May 2022 06:44:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?M=E5rten?= Lindahl <marten.lindahl@axis.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+To:     Camel Guo <camel.guo@axis.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel@axis.com
-Subject: Re: [PATCH v6 4/4] hwmon: (pmbus) Add get_voltage/set_voltage ops
-Message-ID: <20220503134006.GA3078330@roeck-us.net>
-References: <20220503104631.3515715-1-marten.lindahl@axis.com>
- <20220503104631.3515715-5-marten.lindahl@axis.com>
+Subject: Re: [PATCH v4] hwmon: (tmp401) Add OF device ID table
+Message-ID: <20220503134405.GA3208573@roeck-us.net>
+References: <20220503114333.456476-1-camel.guo@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503104631.3515715-5-marten.lindahl@axis.com>
+In-Reply-To: <20220503114333.456476-1-camel.guo@axis.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 03, 2022 at 12:46:31PM +0200, Mårten Lindahl wrote:
-> The pmbus core does not have operations for getting or setting voltage.
-> Add functions get/set voltage for the dynamic regulator framework.
+On Tue, May 03, 2022 at 01:43:33PM +0200, Camel Guo wrote:
+> This driver doesn't have of_match_table. This makes the kernel module
+> tmp401.ko lack alias patterns (e.g: of:N*T*Cti,tmp411) to match DT node
+> of the supported devices hence this kernel module will not be
+> automatically loaded.
 > 
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 66 ++++++++++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
+> After adding of_match_table to this driver, the folllowing alias will be
+> added into tmp401.ko.
+> $ modinfo drivers/hwmon/tmp401.ko
+> filename: drivers/hwmon/tmp401.ko
+> ......
+> author:         Hans de Goede <hdegoede@redhat.com>
+> alias:          of:N*T*Cti,tmp435C*
+> alias:          of:N*T*Cti,tmp435
+> alias:          of:N*T*Cti,tmp432C*
+> alias:          of:N*T*Cti,tmp432
+> alias:          of:N*T*Cti,tmp431C*
+> alias:          of:N*T*Cti,tmp431
+> alias:          of:N*T*Cti,tmp411C*
+> alias:          of:N*T*Cti,tmp411
+> alias:          of:N*T*Cti,tmp401C*
+> alias:          of:N*T*Cti,tmp401
+> ......
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index bd143ca0c320..f2cf0439da37 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2563,11 +2563,77 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	return 0;
->  }
->  
-> +static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	struct pmbus_sensor s = {
-> +		.page = rdev_get_id(rdev),
-> +		.class = PSC_VOLTAGE_OUT,
-> +		.convert = true,
-> +	};
-> +
-> +	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
-> +	if (s.data < 0)
-> +		return s.data;
-> +
-> +	return (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
-> +}
-> +
-> +static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
-> +					 int max_uv, unsigned int *selector)
+> Fixes: af503716ac14 ("i2c: core: report OF style module alias for devices registered via OF")
+> Signed-off-by: Camel Guo <camel.guo@axis.com>
 
-Multi-line alignment is off.
-
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	struct pmbus_sensor s = {
-> +		.page = rdev_get_id(rdev),
-> +		.class = PSC_VOLTAGE_OUT,
-> +		.convert = true,
-> +		.data = -1,
-> +	};
-> +	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
-> +	int low, high;
-
-There should be an empty line here. Interesting, checkpatch doesn't complain.
-No need to resend, I'll apply and fix it up.
+Applied.
 
 Thanks,
 Guenter
 
-> +	*selector = 0;
-> +
-> +	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MIN))
-> +		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MIN);
-> +	if (s.data < 0) {
-> +		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_LOW);
-> +		if (s.data < 0)
-> +			return s.data;
-> +	}
-> +	low = pmbus_reg2data(data, &s);
-> +	s.data = -1;
-> +
-> +	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MAX))
-> +		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MAX);
-> +	if (s.data < 0) {
-> +		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_HIGH);
-> +		if (s.data < 0)
-> +			return s.data;
-> +	}
-> +	high = pmbus_reg2data(data, &s);
-> +
-> +	/* Make sure we are within margins */
-> +	if (low > val)
-> +		val = low;
-> +	if (high < val)
-> +		val = high;
-> +
-> +	val = pmbus_data2reg(data, &s, val);
-> +
-> +	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
-> +}
-> +
->  const struct regulator_ops pmbus_regulator_ops = {
->  	.enable = pmbus_regulator_enable,
->  	.disable = pmbus_regulator_disable,
->  	.is_enabled = pmbus_regulator_is_enabled,
->  	.get_error_flags = pmbus_regulator_get_error_flags,
-> +	.get_voltage = pmbus_regulator_get_voltage,
-> +	.set_voltage = pmbus_regulator_set_voltage,
->  };
->  EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+> ---
+> 
+> Notes:
+>     v4:
+>      - Rewrite commit message due to improper description in old one
+>     v3:
+>      - Copy commit message from commit 72fc64c68decf119466 ("hwmon: (tmp103)
+>        Add OF device ID table")
+>      - Add Fixes tag
+>     v2:
+>      - Put evidence and circumstances in commit message
+> 
+>  drivers/hwmon/tmp401.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> 
+> base-commit: 38d741cb70b30741c0e802cbed7bd9cf4fd15fa4
+> 
+> diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+> index b86d9df7105d..52c9e7d3f2ae 100644
+> --- a/drivers/hwmon/tmp401.c
+> +++ b/drivers/hwmon/tmp401.c
+> @@ -708,10 +708,21 @@ static int tmp401_probe(struct i2c_client *client)
+>  	return 0;
+>  }
 >  
+> +static const struct of_device_id __maybe_unused tmp4xx_of_match[] = {
+> +	{ .compatible = "ti,tmp401", },
+> +	{ .compatible = "ti,tmp411", },
+> +	{ .compatible = "ti,tmp431", },
+> +	{ .compatible = "ti,tmp432", },
+> +	{ .compatible = "ti,tmp435", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, tmp4xx_of_match);
+> +
+>  static struct i2c_driver tmp401_driver = {
+>  	.class		= I2C_CLASS_HWMON,
+>  	.driver = {
+>  		.name	= "tmp401",
+> +		.of_match_table = of_match_ptr(tmp4xx_of_match),
+>  	},
+>  	.probe_new	= tmp401_probe,
+>  	.id_table	= tmp401_id,
