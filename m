@@ -2,143 +2,67 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44A57C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 16:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CD66C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 May 2022 17:19:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239256AbiECQSY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 May 2022 12:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S240222AbiECRXP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 May 2022 13:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239268AbiECQSY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 12:18:24 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CCD3B29F;
-        Tue,  3 May 2022 09:14:51 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 7EB60320094C;
-        Tue,  3 May 2022 12:14:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 03 May 2022 12:14:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651594488; x=1651680888; bh=eE6eGyd0dl
-        PvEc94UVUT/f7gT2Hb5vI5mPIwodd+6xY=; b=MHJ7F2iS0dRh6TQQrhw80qfulK
-        aCyBP4HU+m3J5VECiyqYDVzjxopYt33olDf4huoqTjyotocx0DCV0xWL3wbXq16P
-        mUxelYPlq+FpxMW0k5FexTdSutoacfEqiShu13p8rK88gwhiNASlNbn/6wQZqJAQ
-        36ixkM0rxj1lnLcd9qSojHBQIXtOTFDWowLTaRRZ+mDaP086pouGSSVCJyipULJm
-        U/xW4IfF2jeP2aGfbS3s32uyom9j5MaQlfpgftM/v4FumFvqZLo5kv82RKJG0GGU
-        2xhIbcr7Ryd4tR+nBJUv58ma0dQau3Hgs6RMDdySpkHllfqj++OdcPYjNBgA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651594488; x=
-        1651680888; bh=eE6eGyd0dlPvEc94UVUT/f7gT2Hb5vI5mPIwodd+6xY=; b=o
-        RwkM7FSUhkbCGGCrwqSynOQJsGCqU5G51BiDRUD6uBoo53i0Bmzv2zCB5xEbdH/U
-        OZAH0akcjpp0tydSg0WLa9DfkxYBkeT7tkLYarxYO0VbPv4qdoTpLrBqO7Uoo+Az
-        1Pb664/UQF060KPTEjU66YI7Ilf4mewUi3hZGsyNIsqM3MLR64ZDxYFZfTnh4HKF
-        4kuv8ZuXhuPV+Wi1SOUkCSaY7Y5wC2VF9vsWukbBTJdiu7dUDAM0WkGvUPLIJJc1
-        HYKRLknmI2uLyICp/KRtMtlFT/PqmeyDBxz78alKEFQdJ4KipF6WuzkVGz0W2828
-        eKNu2u2QRRVjSxofedOIA==
-X-ME-Sender: <xms:-FRxYuyWVZehrcvrb9cR0hhjcLq3-bj_OlfH9jWMMwp_pzjJsdr_NQ>
-    <xme:-FRxYqRmj2aALivmWhsom-bDosv8ccQsnUaHbF9RJ9slYG7OK9kZkgd3hEO6DlGvx
-    VCLAULoMvURO3MYzqQ>
-X-ME-Received: <xmr:-FRxYgVk1k9Kn9fmhRmC__Sc3Clfn1BjrznXpYmRzdFUn2L2jm87uO1I9DzxSTFccpXFz_ATXS60giV2VEIVi7iEROaIVXG5QNIGzOw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdelkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:-FRxYkiApGu4RvKI6SvOMNYmv2WQC6KS-n5wv0rs_KI8kezSh72CkQ>
-    <xmx:-FRxYgAT7461MCUbdBcY4ByDQ2O5KpFteBv8BWnKqC6wQlI_LgjYjA>
-    <xmx:-FRxYlKzw6sjuQC53yBNWFGO_9iJqK1MM-trIk-ZK_j4JWaCFqjtwg>
-    <xmx:-FRxYgtDetsZCD8M60OmlUh-_NpvnzPHCOqVRzapvqMhkgFsjQuDsA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 May 2022 12:14:48 -0400 (EDT)
-Date:   Tue, 3 May 2022 18:14:46 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Ruslan Zalata <rz@fabmicro.ru>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
-Message-ID: <20220503161446.tl3qoqqnkzq2f3hn@houat>
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <20220502110010.q7vvdkdpaiz5acjl@houat>
- <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
- <20220502112112.3ne7zy4b6gggxzoo@houat>
- <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
- <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q53czbjv7t5deybk"
-Content-Disposition: inline
-In-Reply-To: <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
+        with ESMTP id S240212AbiECRXO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 May 2022 13:23:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756161EEC4;
+        Tue,  3 May 2022 10:19:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF22260BD6;
+        Tue,  3 May 2022 17:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E076C385B0;
+        Tue,  3 May 2022 17:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651598380;
+        bh=U0CBZeqndkqDdISAr6ltxVXuk5Deu1J5DRVMOf7h9yA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=uQNohu/V+tqFdVrHLdwZYyeoSvIn9Rt5idrtWvpASpNA7HU054Pmh+n+BeINUGbHj
+         mqeYp3HAbgnd4A7BT4nsiPbpOl/RjTqLXSoW2+4W00/Vq6uMQbVevsZVfOnJc7VhRD
+         0kzoROlY37j4eUmUIo7x/ju3lAgEaqNqxh2+10epA7ZujeFRgEoRvK9DhzMFCxDxzw
+         y/RMXjlEX5ibO6P+LSS92jFPuRaZ2WBi9T8O0yBBuMN7fGZvEYan3C29G9npJEUTTv
+         8ceZlfhUgP7X/nNCtpejgZh3obn2jQXwWb08hdOAZiBltmfI0gc9mETSfhq++0agia
+         drcO+3/SlBSEA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A8FDF03848;
+        Tue,  3 May 2022 17:19:40 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v5.18-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220503060000.2839547-1-linux@roeck-us.net>
+References: <20220503060000.2839547-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220503060000.2839547-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc6
+X-PR-Tracked-Commit-Id: 08da09f028043fed9653331ae75bc310411f72e6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ef8e4d3c2ab1f47f63b6c7e578266b7e5cc9cd1b
+Message-Id: <165159838023.8156.6094364623234823410.pr-tracker-bot@kernel.org>
+Date:   Tue, 03 May 2022 17:19:40 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+The pull request you sent on Mon,  2 May 2022 23:00:00 -0700:
 
---q53czbjv7t5deybk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc6
 
-On Tue, May 03, 2022 at 08:26:18PM +0500, Ruslan Zalata wrote:
-> LRADC does generate continuous interrupts as long as input voltage is bel=
-ow
-> LevelB threshold. The max possible LevelB is 0x3C which in case of A20 SoC
-> is close to 1.90V and that's what my driver sets LevelB to. Perhaps this
-> needs to be documented more thoroughly.
->=20
-> It is possible to implement this same driver for IIO subsystem, but I wou=
-ld
-> prefer to keep it in hwmon along with many other simple ADC drivers used =
-for
-> temp and battery status monitoring.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ef8e4d3c2ab1f47f63b6c7e578266b7e5cc9cd1b
 
-If you can get it work reliably enough, I think IIO+iio-hwmon is still
-the way to go
+Thank you!
 
-The main issue here is that drivers that are decided at compile time are
-kind of a pain as soon as you try to install a generic distro.
-
-At the hardware level, I'd assume you would either use the LRADC as an
-actual ADC, or use it to drive buttons, right?
-
-So, you would have to change the device tree accordingly anyway, to
-either list buttons and their associated voltages or use it to probe
-whatever signal to have there.
-
-So I don't think a new device tree binding is such a deal breaker since
-you have to describe it differently anyway.
-
-Since that would be a completely different use-case, the IIO driver
-doesn't have to support input right away, it can be done later if
-needed.
-
-And you could have the two drivers compiled at the same time.
-
-Maxime
-
---q53czbjv7t5deybk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnFU9gAKCRDj7w1vZxhR
-xWCtAP48uwYuvDG3xl2RWzF5C2D3hGwJp2/yzgWFxZrWWCibeAD/Wsgdx1c84HUJ
-tIvyginSC9xJNYtGNE897hcLT6NaGgg=
-=TR7u
------END PGP SIGNATURE-----
-
---q53czbjv7t5deybk--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
