@@ -2,830 +2,339 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E957C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 May 2022 10:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 673EFC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 May 2022 12:41:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348106AbiEDKeV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 May 2022 06:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
+        id S1349743AbiEDMpW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 May 2022 08:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348109AbiEDKeS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 May 2022 06:34:18 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A09E6262
-        for <linux-hwmon@vger.kernel.org>; Wed,  4 May 2022 03:30:42 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id c11so1386883wrn.8
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 May 2022 03:30:42 -0700 (PDT)
+        with ESMTP id S1349868AbiEDMpS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 May 2022 08:45:18 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EB534BBC;
+        Wed,  4 May 2022 05:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QRwF0dGsfdTHRlN/d1PJ9h1Zv3dHY26YISg3X11/2Y4=;
-        b=3pFNEsQYO7nwxiiZ5Mb0jj/wh11cUGNC8gBKQOvPlpd8O88BCKvUK47+J1isla5ODQ
-         xRySKPBmY2bRziXe6UB9zOMIhCf299RuMwgEU1zvUfa6DtgdZylgypqwSxbjfoqgeOfi
-         F2ux7j53w/aNVcGzUjuHypDR6oKJAmECeMJpznqrO5iyrlM3ZkHk8Hr4fVODTg7MOyC9
-         ugg3xM62oIk5Md6bsIQwcCdtjT1CAZe+MBnfbblwm2UXrRFaJU12alPG1BBblWOHqnVr
-         Tho1Xy7lTHFl7SKwEOGRtuxEAOWbfD53FzNYzmq/EZ7iOtWnHool2nLREkV9fiqSSDRB
-         vKgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QRwF0dGsfdTHRlN/d1PJ9h1Zv3dHY26YISg3X11/2Y4=;
-        b=VV5JX35yHhCu9DkTsnvgwGfGWTuDCNPc98rtPbha7hEP4Zmq1r7XeQOBW++eiBG12L
-         QWAel2YULSW+q2vC6dPCQnvn4DnXEu9BybeNsgDl90qJUaDADFZCoLd154lppU7YKU5g
-         E93jnwPGFIRS34xXkoUjAaGo2Ow9EJ4BFyd9ASTNzPakrv6VphykmpIwsfxyJaqz9UHl
-         GJFjsiYnsGQZfx6kzoP81DrlFz1Ubf7Chip8XEynD1EopNCg40czOVQhCayZTaCTEPaR
-         PuqNoGls5/JkS5tiY6Uu36GmHMJjF5kZpRWCKAnMIkucQgaTv6WsPEDcoLdcJvFTEdwW
-         f18A==
-X-Gm-Message-State: AOAM531g06lObCUg4FaCXKDr3CjDzZ+JVeyqZz11+9fLIlwT8kMmDJNL
-        cM62+giB8YhPfKsB6PhcRUoN7w==
-X-Google-Smtp-Source: ABdhPJxviVh0ZaERJTsydWaKnV4yo/EAWUS7IF9jWniuSgINgUFoJ7tfwAPb2wg+IlAT3wClYJwB4A==
-X-Received: by 2002:a05:6000:1acd:b0:20c:7201:9267 with SMTP id i13-20020a0560001acd00b0020c72019267mr6593519wry.41.1651660240359;
-        Wed, 04 May 2022 03:30:40 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id k6-20020a05600c1c8600b0039429bfebebsm7521395wms.3.2022.05.04.03.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 03:30:39 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 2/2] hwmon: acpi_power_meter: convert to hwmon_device_register_with_info
-Date:   Wed,  4 May 2022 10:30:28 +0000
-Message-Id: <20220504103028.493155-3-clabbe@baylibre.com>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1651668101; x=1683204101;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0xK/7xdITbF+pih04wYbwSxYYf1EHQDCIwAe7zWDkPA=;
+  b=A2lD7D3BapfCA+qfV9d4psB0U7dRN3T23whMunEY1bo6pFcrvZ5ltp7e
+   OPIqn7dvF4qsF8kOaEeYOkzWJWfKbZAt8D4VAkC2k+pVoGg0GbS+VkPM3
+   GHMJh5+ANnZnKa4hQ+rObWq8+XTsT2lHNfnY0uK5buJX0+3bZmanwGKhA
+   K4N3WvRkjCuB1MU293xE/sy9FknftrRm2WNrX87Khz9OBiT5HvWLzz39n
+   fFyyHbZ7AhCd0v1k+oGRsWjDfvads51x+XsyoWEcu4ODgHguNmxwuDuxK
+   3bZZ0K+v6oXCZ7Oms+bTQ7D4WdIqJ69GsE256sBqz+YVjHUeAzvyaqsZ5
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,198,1647298800"; 
+   d="scan'208";a="23668417"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 04 May 2022 14:41:38 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 04 May 2022 14:41:38 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 04 May 2022 14:41:38 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1651668098; x=1683204098;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0xK/7xdITbF+pih04wYbwSxYYf1EHQDCIwAe7zWDkPA=;
+  b=HY3Os376tccHPyp8/XcOzhMF5jywn/V1WdNl8Q06sWmz8qQCXzp/igMw
+   LaMIUHnlUbhpHS4bvV4grAI43Mv2BttK7Wc91k6beZEa1l8C0slaANSfU
+   uEB680EmddugVGVaishjTUySDGY77IwIcGU4sgFiwBSIfrCKynWVS5nSj
+   ov7EQIMmmKf6vax+ajCRQusHVX1aktkGoA0Fu/t4t6CAIFKgcjx+vNif+
+   VcukFNvgMySblge6Wnqu6OzaTe4CSTQC98Y1TcJ31RvpKXPEJ36DRnQjO
+   VuNfFzJ4zP9YU/Iy6gTLlONJujogYt6uaGIMsEVGJzMJKHLe1WeRlFcEJ
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,198,1647298800"; 
+   d="scan'208";a="23668416"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 04 May 2022 14:41:38 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id F18AE280070;
+        Wed,  4 May 2022 14:41:37 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>
+Cc:     Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: [PATCH 1/1] hwmon: pwm-fan: dynamically switch regulator
+Date:   Wed,  4 May 2022 14:41:31 +0200
+Message-Id: <20220504124131.1045003-1-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504103028.493155-1-clabbe@baylibre.com>
-References: <20220504103028.493155-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
-So let's convert the driver to use hwmon_device_register_with_info().
+From: Markus Niebel <Markus.Niebel@ew.tq-group.com>
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+A pwm value equal to zero is meant to switch off the pwm
+hence also switching off the fan. Currently the optional
+regulator is always on. When using this driver on boards
+with an inverted pwm signal polarity this can cause running
+the fan at maximum speed when setting pwm to zero.
+
+The proposed changes switch the regulator off, when PWM is
+currently enabled but pwm is requested to set to zero
+and switch der regulator on, when PWM is currently disabled
+but pwm shall be set to a no zero value.
+
+Add __set_pwm_and_regulator and rewrite __set_pwm to
+handle regulator switching for the following conditions:
+
+- probe: pwm duty -> max, pwm state is unkwown: use __set_pwm
+  and enable regulator separately to keep the devm action
+- off: new pwm duty is zero, pwm currently enabled: disable
+  regulator
+- on: new pwm duty is non zero, pwm currently disabled: enable
+  regulator
+
+Signed-off-by: Markus Niebel <Markus.Niebel@ew.tq-group.com>
 ---
- drivers/hwmon/acpi_power_meter.c | 509 +++++++++++++------------------
- 1 file changed, 219 insertions(+), 290 deletions(-)
+ drivers/hwmon/pwm-fan.c | 144 ++++++++++++++++++++++++++--------------
+ 1 file changed, 93 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index d2545a1be9fc..fa3417786356 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -23,7 +23,8 @@
- #define ACPI_POWER_METER_DEVICE_NAME	"Power Meter"
- #define ACPI_POWER_METER_CLASS		"pwr_meter_resource"
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index f12b9a28a232..b47d59fbe836 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -97,18 +97,50 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+ 	unsigned long period;
+ 	int ret = 0;
+ 	struct pwm_state *state = &ctx->pwm_state;
++	/* track changes of reg_en for error handling */
++	enum regulator_change {
++		untouched,
++		enabled,
++		disabled,
++	} reg_change = untouched;
  
--#define NUM_SENSORS			17
-+#define TRIP_MIN 0
-+#define TRIP_MAX 1
+ 	mutex_lock(&ctx->lock);
++
+ 	if (ctx->pwm_value == pwm)
+ 		goto exit_set_pwm_err;
  
- #define POWER_METER_CAN_MEASURE	(1 << 0)
- #define POWER_METER_CAN_TRIP	(1 << 1)
-@@ -38,11 +39,6 @@
- #define METER_NOTIFY_CAPPING	0x83
- #define METER_NOTIFY_INTERVAL	0x84
++	if (ctx->reg_en) {
++		if (pwm && !state->enabled) {
++			reg_change = enabled;
++			ret = regulator_enable(ctx->reg_en);
++		} else if (!pwm && state->enabled) {
++			reg_change = disabled;
++			ret = regulator_disable(ctx->reg_en);
++		}
++		if (ret)
++			goto exit_set_pwm_err;
++	}
++
+ 	period = state->period;
+ 	state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
+ 	state->enabled = pwm ? true : false;
  
--#define POWER_AVERAGE_NAME	"power1_average"
--#define POWER_CAP_NAME		"power1_cap"
--#define POWER_AVG_INTERVAL_NAME	"power1_average_interval"
--#define POWER_ALARM_NAME	"power1_alarm"
--
- static int cap_in_hardware;
- static bool force_cap_on;
- 
-@@ -85,8 +81,6 @@ struct acpi_power_meter_resource {
- 	u64		avg_interval;
- 	int			sensors_valid;
- 	unsigned long		sensors_last_updated;
--	struct sensor_device_attribute	sensors[NUM_SENSORS];
--	int			num_sensors;
- 	s64			trip[2];
- 	int			num_domain_devices;
- 	struct acpi_device	**domain_devices;
-@@ -122,47 +116,32 @@ static int update_avg_interval(struct acpi_power_meter_resource *resource)
+ 	ret = pwm_apply_state(ctx->pwm, state);
+-	if (!ret)
++	if (!ret) {
+ 		ctx->pwm_value = pwm;
++	} else if (reg_change != untouched) {
++		/*
++		 * revert regulator changes to keep consistency between
++		 * pwm and regulator
++		 */
++		int err;
++
++		if (reg_change == enabled)
++			err = regulator_disable(ctx->reg_en);
++		else if (reg_change == disabled)
++			err = regulator_enable(ctx->reg_en);
++	}
++
+ exit_set_pwm_err:
+ 	mutex_unlock(&ctx->lock);
+ 	return ret;
+@@ -280,18 +312,50 @@ static int pwm_fan_of_get_cooling_data(struct device *dev,
  	return 0;
  }
  
--static ssize_t show_avg_interval(struct device *dev,
--				 struct device_attribute *devattr,
--				 char *buf)
-+static int acpi_power_average_interval_read(struct acpi_power_meter_resource *resource)
+-static void pwm_fan_regulator_disable(void *data)
++/*
++ * disable fan and regulator
++ * if cleanup is true, disable pwm regardless of regulator disable result
++ * this makes the function dual use for unloading driver and suspend
++ */
++
++static int __pwm_fan_disable_or_cleanup(struct pwm_fan_ctx *ctx, bool cleanup)
  {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--
- 	mutex_lock(&resource->lock);
- 	update_avg_interval(resource);
- 	mutex_unlock(&resource->lock);
- 
--	return sprintf(buf, "%llu\n", resource->avg_interval);
-+	return resource->avg_interval;
+-	regulator_disable(data);
++	int ret;
++
++	if (ctx->pwm_value) {
++		/* keep ctx->pwm_state unmodified for pwm_fan_resume() */
++		struct pwm_state state = ctx->pwm_state;
++
++		/* regulator is only enabled if pwm_value is not zero */
++		if (ctx->pwm_value && ctx->reg_en) {
++			ret = regulator_disable(ctx->reg_en);
++			if (ret) {
++				pr_err("Failed to disable fan supply: %d\n", ret);
++				if (!cleanup)
++					return ret;
++			}
++		}
++
++		state.duty_cycle = 0;
++		state.enabled = false;
++		ret = pwm_apply_state(ctx->pwm, &state);
++	}
++
++	return ret;
  }
  
--static ssize_t set_avg_interval(struct device *dev,
--				struct device_attribute *devattr,
--				const char *buf, size_t count)
-+static int set_average_interval(struct acpi_power_meter_resource *resource, long val)
+-static void pwm_fan_pwm_disable(void *__ctx)
++static void pwm_fan_cleanup(void *__ctx)
  {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
- 	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
- 	struct acpi_object_list args = { 1, &arg0 };
--	int res;
--	unsigned long temp;
- 	unsigned long long data;
- 	acpi_status status;
- 
--	res = kstrtoul(buf, 10, &temp);
--	if (res)
--		return res;
+ 	struct pwm_fan_ctx *ctx = __ctx;
 -
--	if (temp > resource->caps.max_avg_interval ||
--	    temp < resource->caps.min_avg_interval)
-+	if (val > resource->caps.max_avg_interval ||
-+	    val < resource->caps.min_avg_interval)
- 		return -EINVAL;
--	arg0.integer.value = temp;
-+	arg0.integer.value = val;
- 
- 	mutex_lock(&resource->lock);
- 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PAI",
- 				       &args, &data);
- 	if (ACPI_SUCCESS(status))
--		resource->avg_interval = temp;
-+		resource->avg_interval = val;
- 	mutex_unlock(&resource->lock);
- 
- 	if (ACPI_FAILURE(status)) {
-@@ -175,7 +154,7 @@ static ssize_t set_avg_interval(struct device *dev,
- 	if (data)
- 		return -EINVAL;
- 
--	return count;
-+	return 0;
+-	ctx->pwm_state.enabled = false;
+-	pwm_apply_state(ctx->pwm, &ctx->pwm_state);
+ 	del_timer_sync(&ctx->rpm_timer);
++	__pwm_fan_disable_or_cleanup(ctx, true);
++}
++
++static int pwm_fan_disable(void *__ctx)
++{
++	struct pwm_fan_ctx *ctx = __ctx;
++
++	return __pwm_fan_disable_or_cleanup(ctx, false);
  }
  
- /* Cap functions */
-@@ -196,46 +175,33 @@ static int update_cap(struct acpi_power_meter_resource *resource)
+ static int pwm_fan_probe(struct platform_device *pdev)
+@@ -324,19 +388,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 			return PTR_ERR(ctx->reg_en);
+ 
+ 		ctx->reg_en = NULL;
+-	} else {
+-		ret = regulator_enable(ctx->reg_en);
+-		if (ret) {
+-			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
+-			return ret;
+-		}
+-		ret = devm_add_action_or_reset(dev, pwm_fan_regulator_disable,
+-					       ctx->reg_en);
+-		if (ret)
+-			return ret;
+ 	}
+ 
+ 	pwm_init_state(ctx->pwm, &ctx->pwm_state);
++	/*
++	 * Ensure the PWM is switched on (including the regulator),
++	 * independently from any previous PWM state
++	 */
++	ctx->pwm_state.enabled = false;
+ 
+ 	/*
+ 	 * __set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
+@@ -348,14 +407,17 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
+-	/* Set duty cycle to maximum allowed and enable PWM output */
++	/*
++	 * Set duty cycle to maximum allowed and enable PWM output as well as
++	 * the regulator. In case of error nothing is changed
++	 */
+ 	ret = __set_pwm(ctx, MAX_PWM);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to configure PWM: %d\n", ret);
+ 		return ret;
+ 	}
+ 	timer_setup(&ctx->rpm_timer, sample_timer, 0);
+-	ret = devm_add_action_or_reset(dev, pwm_fan_pwm_disable, ctx);
++	ret = devm_add_action_or_reset(dev, pwm_fan_cleanup, ctx);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -461,42 +523,22 @@ static int pwm_fan_probe(struct platform_device *pdev)
  	return 0;
  }
  
--static ssize_t show_cap(struct device *dev,
--			struct device_attribute *devattr,
--			char *buf)
-+static int acpi_power_cap_read(struct acpi_power_meter_resource *resource,
-+			       long *val)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-static int pwm_fan_disable(struct device *dev)
+-{
+-	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+-	int ret;
 -
- 	mutex_lock(&resource->lock);
- 	update_cap(resource);
- 	mutex_unlock(&resource->lock);
- 
--	return sprintf(buf, "%llu\n", resource->cap * 1000);
-+	return resource->cap * 1000;
- }
- 
--static ssize_t set_cap(struct device *dev, struct device_attribute *devattr,
--		       const char *buf, size_t count)
-+static int set_cap(struct acpi_power_meter_resource *resource, long val)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
- 	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
- 	struct acpi_object_list args = { 1, &arg0 };
--	int res;
--	unsigned long temp;
- 	unsigned long long data;
- 	acpi_status status;
- 
--	res = kstrtoul(buf, 10, &temp);
--	if (res)
--		return res;
+-	if (ctx->pwm_value) {
+-		/* keep ctx->pwm_state unmodified for pwm_fan_resume() */
+-		struct pwm_state state = ctx->pwm_state;
 -
--	temp = DIV_ROUND_CLOSEST(temp, 1000);
--	if (temp > resource->caps.max_cap || temp < resource->caps.min_cap)
-+	val = DIV_ROUND_CLOSEST(val, 1000);
-+	if (val > resource->caps.max_cap || val < resource->caps.min_cap)
- 		return -EINVAL;
--	arg0.integer.value = temp;
-+	arg0.integer.value = val;
- 
- 	mutex_lock(&resource->lock);
- 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_SHL",
- 				       &args, &data);
- 	if (ACPI_SUCCESS(status))
--		resource->cap = temp;
-+		resource->cap = val;
- 	mutex_unlock(&resource->lock);
- 
- 	if (ACPI_FAILURE(status)) {
-@@ -248,7 +214,7 @@ static ssize_t set_cap(struct device *dev, struct device_attribute *devattr,
- 	if (data)
- 		return -EINVAL;
- 
--	return count;
-+	return 0;
- }
- 
- /* Power meter trip points */
-@@ -263,12 +229,12 @@ static int set_acpi_trip(struct acpi_power_meter_resource *resource)
- 	acpi_status status;
- 
- 	/* Both trip levels must be set */
--	if (resource->trip[0] < 0 || resource->trip[1] < 0)
-+	if (resource->trip[TRIP_MIN] < 0 || resource->trip[TRIP_MAX] < 0)
- 		return 0;
- 
- 	/* This driver stores min, max; ACPI wants max, min. */
--	arg_objs[0].integer.value = resource->trip[1];
--	arg_objs[1].integer.value = resource->trip[0];
-+	arg_objs[0].integer.value = resource->trip[TRIP_MAX];
-+	arg_objs[1].integer.value = resource->trip[TRIP_MIN];
- 
- 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PTP",
- 				       &args, &data);
-@@ -285,30 +251,18 @@ static int set_acpi_trip(struct acpi_power_meter_resource *resource)
- 	return 0;
- }
- 
--static ssize_t set_trip(struct device *dev, struct device_attribute *devattr,
--			const char *buf, size_t count)
-+static int set_trip(struct acpi_power_meter_resource *resource, long val, int triptype)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
- 	int res;
--	unsigned long temp;
- 
--	res = kstrtoul(buf, 10, &temp);
--	if (res)
--		return res;
+-		state.duty_cycle = 0;
+-		state.enabled = false;
+-		ret = pwm_apply_state(ctx->pwm, &state);
+-		if (ret < 0)
+-			return ret;
+-	}
 -
--	temp = DIV_ROUND_CLOSEST(temp, 1000);
-+	val = DIV_ROUND_CLOSEST(val, 1000);
- 
- 	mutex_lock(&resource->lock);
--	resource->trip[attr->index - 7] = temp;
-+	resource->trip[triptype] = val;
- 	res = set_acpi_trip(resource);
- 	mutex_unlock(&resource->lock);
- 
--	if (res)
--		return res;
+-	if (ctx->reg_en) {
+-		ret = regulator_disable(ctx->reg_en);
+-		if (ret) {
+-			dev_err(dev, "Failed to disable fan supply: %d\n", ret);
+-			return ret;
+-		}
+-	}
 -
--	return count;
-+	return res;
- }
- 
- /* Power meter */
-@@ -337,33 +291,26 @@ static int update_meter(struct acpi_power_meter_resource *resource)
- 	return 0;
- }
- 
--static ssize_t show_power(struct device *dev,
--			  struct device_attribute *devattr,
--			  char *buf)
-+static int acpi_power_power_read(struct acpi_power_meter_resource *resource,
-+				 long *val)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-	return 0;
+-}
 -
- 	mutex_lock(&resource->lock);
- 	update_meter(resource);
- 	mutex_unlock(&resource->lock);
- 
--	return sprintf(buf, "%llu\n", resource->power * 1000);
-+	*val = resource->power * 1000;
-+	return 0;
+ static void pwm_fan_shutdown(struct platform_device *pdev)
+ {
+-	pwm_fan_disable(&pdev->dev);
++	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
++
++	pwm_fan_cleanup(ctx);
  }
  
- /* Miscellaneous */
--static ssize_t show_str(struct device *dev,
--			struct device_attribute *devattr,
--			char *buf)
-+static ssize_t show_str(struct device *dev, int index, char *buf)
+ #ifdef CONFIG_PM_SLEEP
+ static int pwm_fan_suspend(struct device *dev)
  {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
-+	struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
- 	acpi_string val;
+-	return pwm_fan_disable(dev);
++	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pwm_fan_disable(ctx);
++
++	return ret;
+ }
+ 
+ static int pwm_fan_resume(struct device *dev)
+@@ -504,6 +546,9 @@ static int pwm_fan_resume(struct device *dev)
+ 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
  	int ret;
  
- 	mutex_lock(&resource->lock);
--	switch (attr->index) {
-+	switch (index) {
- 	case 0:
- 		val = resource->model_number;
- 		break;
-@@ -375,7 +322,7 @@ static ssize_t show_str(struct device *dev,
- 		break;
- 	default:
- 		WARN(1, "Implementation error: unexpected attribute index %d\n",
--		     attr->index);
-+		     index);
- 		val = "";
- 		break;
- 	}
-@@ -384,141 +331,138 @@ static ssize_t show_str(struct device *dev,
- 	return ret;
- }
- 
--static ssize_t show_val(struct device *dev,
--			struct device_attribute *devattr,
--			char *buf)
-+static ssize_t power1_is_battery_show(struct device *dev,
-+				      struct device_attribute *attr,
-+				      char *buf)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct acpi_device *acpi_dev = to_acpi_device(dev);
- 	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--	u64 val = 0;
-+	int val;
- 
--	switch (attr->index) {
--	case 0:
--		val = resource->caps.min_avg_interval;
-+	if (resource->caps.flags & POWER_METER_IS_BATTERY)
-+		val = 1;
-+	else
-+		val = 0;
-+	return sprintf(buf, "%d\n", val);
-+}
++	if (ctx->pwm_value == 0)
++		return 0;
 +
-+static ssize_t power1_model_number_show(struct device *dev,
-+					struct device_attribute *attr,
-+					char *buf)
-+{
-+	return show_str(dev, 0, buf);
-+}
-+
-+static ssize_t power1_serial_number_show(struct device *dev,
-+					 struct device_attribute *attr,
-+					 char *buf)
-+{
-+	return show_str(dev, 1, buf);
-+}
-+
-+static ssize_t power1_oem_info_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
-+{
-+	return show_str(dev, 2, buf);
-+}
-+
-+static int acpi_power_read(struct device *dev, enum hwmon_sensor_types type,
-+			   u32 attr, int channel, long *val)
-+{
-+	struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_power_average:
-+		return acpi_power_power_read(resource, val);
-+	case hwmon_power_average_interval_min:
-+		*val = resource->caps.min_avg_interval;
- 		break;
--	case 1:
--		val = resource->caps.max_avg_interval;
-+	case hwmon_power_average_interval_max:
-+		*val = resource->caps.max_avg_interval;
- 		break;
--	case 2:
--		val = resource->caps.min_cap * 1000;
-+	case hwmon_power_cap_min:
-+		*val = resource->caps.min_cap * 1000;
- 		break;
--	case 3:
--		val = resource->caps.max_cap * 1000;
-+	case hwmon_power_cap_max:
-+		*val = resource->caps.max_cap * 1000;
- 		break;
--	case 4:
-+	case hwmon_power_cap:
-+		*val = acpi_power_cap_read(resource, val);
-+		break;
-+	case hwmon_power_cap_hyst:
- 		if (resource->caps.hysteresis == UNKNOWN_HYSTERESIS)
--			return sprintf(buf, "unknown\n");
-+			return -EINVAL;
- 
--		val = resource->caps.hysteresis * 1000;
-+		*val = resource->caps.hysteresis * 1000;
- 		break;
--	case 5:
--		if (resource->caps.flags & POWER_METER_IS_BATTERY)
--			val = 1;
--		else
--			val = 0;
--		break;
--	case 6:
-+	case hwmon_power_alarm:
- 		if (resource->power > resource->cap)
--			val = 1;
-+			*val = 1;
- 		else
--			val = 0;
-+			*val = 0;
- 		break;
--	case 7:
--	case 8:
--		if (resource->trip[attr->index - 7] < 0)
--			return sprintf(buf, "unknown\n");
--
--		val = resource->trip[attr->index - 7] * 1000;
-+	case hwmon_power_average_min:
-+		if (resource->trip[TRIP_MIN] < 0)
-+			return -EINVAL;
-+		*val = resource->trip[TRIP_MIN] * 1000;
-+		break;
-+	case hwmon_power_average_max:
-+		if (resource->trip[TRIP_MAX] < 0)
-+			return -EINVAL;
-+		*val = resource->trip[TRIP_MAX] * 1000;
-+		break;
-+	case hwmon_power_average_interval:
-+		*val = acpi_power_average_interval_read(resource);
-+		break;
-+	case hwmon_power_accuracy:
-+		*val = resource->caps.accuracy / 1000;
- 		break;
- 	default:
- 		WARN(1, "Implementation error: unexpected attribute index %d\n",
--		     attr->index);
--		break;
-+		     attr);
-+		return -EOPNOTSUPP;
- 	}
- 
--	return sprintf(buf, "%llu\n", val);
--}
--
--static ssize_t show_accuracy(struct device *dev,
--			     struct device_attribute *devattr,
--			     char *buf)
--{
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--	unsigned int acc = resource->caps.accuracy;
--
--	return sprintf(buf, "%u.%u%%\n", acc / 1000, acc % 1000);
-+	return 0;
- }
- 
--static ssize_t show_name(struct device *dev,
--			 struct device_attribute *devattr,
--			 char *buf)
-+static int acpi_power_write(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long val)
- {
--	return sprintf(buf, "%s\n", ACPI_POWER_METER_NAME);
--}
--
--#define RO_SENSOR_TEMPLATE(_label, _show, _index)	\
--	{						\
--		.label = _label,			\
--		.show  = _show,				\
--		.index = _index,			\
--	}
--
--#define RW_SENSOR_TEMPLATE(_label, _show, _set, _index)	\
--	{						\
--		.label = _label,			\
--		.show  = _show,				\
--		.set   = _set,				\
--		.index = _index,			\
-+	struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_power_average_min:
-+		return set_trip(resource, TRIP_MIN, val);
-+	case hwmon_power_average_max:
-+		return set_trip(resource, TRIP_MAX, val);
-+	case hwmon_power_cap:
-+		if (resource->caps.configurable_cap)
-+			return set_cap(resource, val);
-+		else
-+			return -EINVAL;
-+	case hwmon_power_average_interval:
-+		return set_average_interval(resource, val);
-+	default:
-+		return -EOPNOTSUPP;
- 	}
-+}
- 
--/* Sensor descriptions.  If you add a sensor, update NUM_SENSORS above! */
--static struct sensor_template meter_attrs[] = {
--	RO_SENSOR_TEMPLATE(POWER_AVERAGE_NAME, show_power, 0),
--	RO_SENSOR_TEMPLATE("power1_accuracy", show_accuracy, 0),
--	RO_SENSOR_TEMPLATE("power1_average_interval_min", show_val, 0),
--	RO_SENSOR_TEMPLATE("power1_average_interval_max", show_val, 1),
--	RO_SENSOR_TEMPLATE("power1_is_battery", show_val, 5),
--	RW_SENSOR_TEMPLATE(POWER_AVG_INTERVAL_NAME, show_avg_interval,
--			   set_avg_interval, 0),
--	{},
--};
--
--static struct sensor_template misc_cap_attrs[] = {
--	RO_SENSOR_TEMPLATE("power1_cap_min", show_val, 2),
--	RO_SENSOR_TEMPLATE("power1_cap_max", show_val, 3),
--	RO_SENSOR_TEMPLATE("power1_cap_hyst", show_val, 4),
--	RO_SENSOR_TEMPLATE(POWER_ALARM_NAME, show_val, 6),
--	{},
--};
--
--static struct sensor_template ro_cap_attrs[] = {
--	RO_SENSOR_TEMPLATE(POWER_CAP_NAME, show_cap, 0),
--	{},
--};
--
--static struct sensor_template rw_cap_attrs[] = {
--	RW_SENSOR_TEMPLATE(POWER_CAP_NAME, show_cap, set_cap, 0),
--	{},
--};
--
--static struct sensor_template trip_attrs[] = {
--	RW_SENSOR_TEMPLATE("power1_average_min", show_val, set_trip, 7),
--	RW_SENSOR_TEMPLATE("power1_average_max", show_val, set_trip, 8),
--	{},
--};
--
--static struct sensor_template misc_attrs[] = {
--	RO_SENSOR_TEMPLATE("name", show_name, 0),
--	RO_SENSOR_TEMPLATE("power1_model_number", show_str, 0),
--	RO_SENSOR_TEMPLATE("power1_oem_info", show_str, 2),
--	RO_SENSOR_TEMPLATE("power1_serial_number", show_str, 1),
--	{},
-+static DEVICE_ATTR_RO(power1_is_battery);
-+static DEVICE_ATTR_RO(power1_model_number);
-+static DEVICE_ATTR_RO(power1_oem_info);
-+static DEVICE_ATTR_RO(power1_serial_number);
-+
-+static struct attribute *acpi_power_attrs[] = {
-+	&dev_attr_power1_is_battery.attr,
-+	&dev_attr_power1_model_number.attr,
-+	&dev_attr_power1_oem_info.attr,
-+	&dev_attr_power1_serial_number.attr,
-+	NULL
- };
- 
--#undef RO_SENSOR_TEMPLATE
--#undef RW_SENSOR_TEMPLATE
-+ATTRIBUTE_GROUPS(acpi_power);
- 
- /* Read power domain data */
- static void remove_domain_devices(struct acpi_power_meter_resource *resource)
-@@ -621,55 +565,52 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
- 	return res;
- }
- 
--/* Registration and deregistration */
--static int register_attrs(struct acpi_power_meter_resource *resource,
--			  struct sensor_template *attrs)
--{
--	struct device *dev = &resource->acpi_dev->dev;
--	struct sensor_device_attribute *sensors =
--		&resource->sensors[resource->num_sensors];
--	int res = 0;
--
--	while (attrs->label) {
--		sensors->dev_attr.attr.name = attrs->label;
--		sensors->dev_attr.attr.mode = 0444;
--		sensors->dev_attr.show = attrs->show;
--		sensors->index = attrs->index;
--
--		if (attrs->set) {
--			sensors->dev_attr.attr.mode |= 0200;
--			sensors->dev_attr.store = attrs->set;
--		}
--
--		sysfs_attr_init(&sensors->dev_attr.attr);
--		res = device_create_file(dev, &sensors->dev_attr);
--		if (res) {
--			sensors->dev_attr.attr.name = NULL;
--			goto error;
--		}
--		sensors++;
--		resource->num_sensors++;
--		attrs++;
--	}
--
--error:
--	return res;
--}
--
--static void remove_attrs(struct acpi_power_meter_resource *resource)
-+static umode_t acpi_power_is_visible(const void *data,
-+				     enum hwmon_sensor_types type,
-+				     u32 attr, int channel)
- {
--	int i;
-+	const struct acpi_power_meter_resource *resource = data;
- 
--	for (i = 0; i < resource->num_sensors; i++) {
--		if (!resource->sensors[i].dev_attr.attr.name)
--			continue;
--		device_remove_file(&resource->acpi_dev->dev,
--				   &resource->sensors[i].dev_attr);
-+	switch (attr) {
-+	case hwmon_power_average_min:
-+	case hwmon_power_average_max:
-+		if (resource->caps.flags & POWER_METER_CAN_TRIP)
-+			return 0644;
-+		break;
-+	case hwmon_power_average:
-+	case hwmon_power_accuracy:
-+	case hwmon_power_average_interval_min:
-+	case hwmon_power_average_interval_max:
-+		if (resource->caps.flags & POWER_METER_CAN_MEASURE)
-+			return 0444;
-+		break;
-+	case hwmon_power_average_interval:
-+		if (resource->caps.flags & POWER_METER_CAN_MEASURE)
-+			return 0644;
-+		break;
-+	case hwmon_power_cap:
-+		if (!can_cap_in_hardware())
-+			return 0;
-+		if (!(resource->caps.flags & POWER_METER_CAN_CAP))
-+			return 0;
-+		if (resource->caps.configurable_cap)
-+			return 0644;
-+		return 0444;
-+		break;
-+	case hwmon_power_cap_min:
-+	case hwmon_power_cap_max:
-+	case hwmon_power_cap_hyst:
-+	case hwmon_power_cap_alarm:
-+		if (!can_cap_in_hardware())
-+			return 0;
-+		if (resource->caps.flags & POWER_METER_CAN_CAP)
-+			return 0444;
-+		break;
-+	default:
-+		break;
- 	}
- 
--	remove_domain_devices(resource);
--
--	resource->num_sensors = 0;
-+	return 0;
- }
- 
- static int setup_attrs(struct acpi_power_meter_resource *resource)
-@@ -680,47 +621,11 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
- 	if (res)
- 		return res;
- 
--	if (resource->caps.flags & POWER_METER_CAN_MEASURE) {
--		res = register_attrs(resource, meter_attrs);
--		if (res)
--			goto error;
-+	if (resource->caps.flags & POWER_METER_CAN_CAP && !can_cap_in_hardware()) {
-+		dev_warn(&resource->acpi_dev->dev,
-+			 "Ignoring unsafe software power cap!\n");
- 	}
--
--	if (resource->caps.flags & POWER_METER_CAN_CAP) {
--		if (!can_cap_in_hardware()) {
--			dev_warn(&resource->acpi_dev->dev,
--				 "Ignoring unsafe software power cap!\n");
--			goto skip_unsafe_cap;
--		}
--
--		if (resource->caps.configurable_cap)
--			res = register_attrs(resource, rw_cap_attrs);
--		else
--			res = register_attrs(resource, ro_cap_attrs);
--
--		if (res)
--			goto error;
--
--		res = register_attrs(resource, misc_cap_attrs);
--		if (res)
--			goto error;
--	}
--
--skip_unsafe_cap:
--	if (resource->caps.flags & POWER_METER_CAN_TRIP) {
--		res = register_attrs(resource, trip_attrs);
--		if (res)
--			goto error;
--	}
--
--	res = register_attrs(resource, misc_attrs);
--	if (res)
--		goto error;
--
--	return res;
--error:
--	remove_attrs(resource);
--	return res;
-+	return 0;
- }
- 
- static void free_capabilities(struct acpi_power_meter_resource *resource)
-@@ -795,7 +700,6 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
- 			res = -EINVAL;
- 			goto error;
+ 	if (ctx->reg_en) {
+ 		ret = regulator_enable(ctx->reg_en);
+ 		if (ret) {
+@@ -512,9 +557,6 @@ static int pwm_fan_resume(struct device *dev)
  		}
+ 	}
+ 
+-	if (ctx->pwm_value == 0)
+-		return 0;
 -
- 		*str = kcalloc(element->string.length + 1, sizeof(u8),
- 			       GFP_KERNEL);
- 		if (!*str) {
-@@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- 		if (res)
- 			break;
- 
--		remove_attrs(resource);
-+		remove_domain_devices(resource);
- 		setup_attrs(resource);
- 		break;
- 	case METER_NOTIFY_TRIP:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
- 		break;
- 	case METER_NOTIFY_CAP:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_CAP_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_cap, 0);
- 		break;
- 	case METER_NOTIFY_INTERVAL:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_AVG_INTERVAL_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average_interval, 0);
- 		break;
- 	case METER_NOTIFY_CAPPING:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_ALARM_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_alarm, 0);
- 		dev_info(&device->dev, "Capping in progress.\n");
- 		break;
- 	default:
-@@ -861,6 +765,28 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- 					dev_name(&device->dev), event, 0);
+ 	return pwm_apply_state(ctx->pwm, &ctx->pwm_state);
  }
- 
-+static const struct hwmon_channel_info *acpi_power_info[] = {
-+	HWMON_CHANNEL_INFO(power,
-+			   HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
-+			   HWMON_P_AVERAGE_MIN | HWMON_P_AVERAGE_MAX |
-+			   HWMON_P_CAP | HWMON_P_CAP_HYST |
-+			   HWMON_P_CAP_MIN | HWMON_P_CAP_MAX |
-+			   HWMON_P_ACCURACY
-+			   ),
-+	NULL,
-+};
-+
-+static const struct hwmon_ops acpi_power_hwmon_ops = {
-+	.is_visible = acpi_power_is_visible,
-+	.read = acpi_power_read,
-+	.write = acpi_power_write,
-+};
-+
-+static const struct hwmon_chip_info acpi_power_chip_info = {
-+	.ops = &acpi_power_hwmon_ops,
-+	.info = acpi_power_info,
-+};
-+
- static int acpi_power_meter_add(struct acpi_device *device)
- {
- 	int res;
-@@ -891,7 +817,10 @@ static int acpi_power_meter_add(struct acpi_device *device)
- 	if (res)
- 		goto exit_free_capability;
- 
--	resource->hwmon_dev = hwmon_device_register(&device->dev);
-+	resource->hwmon_dev = hwmon_device_register_with_info(&device->dev,
-+							      ACPI_POWER_METER_NAME,
-+							      resource, &acpi_power_chip_info,
-+							      acpi_power_groups);
- 	if (IS_ERR(resource->hwmon_dev)) {
- 		res = PTR_ERR(resource->hwmon_dev);
- 		goto exit_remove;
-@@ -901,7 +830,7 @@ static int acpi_power_meter_add(struct acpi_device *device)
- 	goto exit;
- 
- exit_remove:
--	remove_attrs(resource);
-+	remove_domain_devices(resource);
- exit_free_capability:
- 	free_capabilities(resource);
- exit_free:
-@@ -920,7 +849,7 @@ static int acpi_power_meter_remove(struct acpi_device *device)
- 	resource = acpi_driver_data(device);
- 	hwmon_device_unregister(resource->hwmon_dev);
- 
--	remove_attrs(resource);
-+	remove_domain_devices(resource);
- 	free_capabilities(resource);
- 
- 	kfree(resource);
+ #endif
 -- 
-2.35.1
+2.25.1
 
