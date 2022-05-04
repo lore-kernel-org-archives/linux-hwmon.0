@@ -2,344 +2,198 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58962C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 May 2022 12:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E0D1C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 May 2022 14:12:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349929AbiEDMtg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 May 2022 08:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S1351070AbiEDOPv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 May 2022 10:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344100AbiEDMtf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 May 2022 08:49:35 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47308220C4;
-        Wed,  4 May 2022 05:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1651668358; x=1683204358;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9F6pufJQLceNeFS61+KLsP5LSDTp6NKXvgvBUSkYwJg=;
-  b=KymhuHWF6vAa6CYtEHEPnToaFnTr9XtZlA1rfC/ZJQU+F6pthra1B+Ot
-   C0DD4NP7F3bmGxX8JoE8mWHw1WschxP6oqs0iMzgI4JTkXiPgortJ94Bl
-   Kn1s5ESS4LXIUHuEu5w/ZwYD9WBbjL6d/GRD93UJEcfm/5/qLnvmP27X0
-   Wqo/5/LOOkoBtCnJydj6Arc1YSgr3Mp53qylf1HApWs8YBLZdmtqgaZNU
-   v0b1BuRmlevs00Kcx92NWhbBVJB88AO88Waucd+yVjybDNzY5FsaeH4kX
-   elBdSdnU8Fr69FPar1xxaTCIxOaH6U+8G6kLKEoQxZK/gXjifjPFPt2i9
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,198,1647298800"; 
-   d="scan'208";a="23668591"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 04 May 2022 14:45:56 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 04 May 2022 14:45:56 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 04 May 2022 14:45:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1651668356; x=1683204356;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9F6pufJQLceNeFS61+KLsP5LSDTp6NKXvgvBUSkYwJg=;
-  b=UekONrdWjEWCSQZ6P/hvzfNfKdgGTDpJvBuMyK8BHCqxCmVy5Y1P31Wj
-   qdSvVxQSXRnYkbJz8ynl4Bnm27saKKfKyYqLR72TwZAisQMRW19fQYFxU
-   jGgTz+isIklxQHVrLGyuz8PUjpXNKJTLxoXhl6XHX1y+KMojue1tsIk1L
-   7zHb/vXJ0m4AN4w5tiG8BDZ8F1ubG40F/5IzOqqx8n5D0anX/ADW+M421
-   QtA2qvuc9OwPVxvtFvbAwwnSWmLKhnlDXv51udRlrdOdJHn7i43lwdLc6
-   PeV7fGpmEL/23HJ3fQiHxPjByg7Oegi+L95WLRO8fY+XWUk4NrKx5QgL+
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,198,1647298800"; 
-   d="scan'208";a="23668590"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 04 May 2022 14:45:56 +0200
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 57FD3280070;
-        Wed,  4 May 2022 14:45:56 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>
-Cc:     Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH v2 1/1] hwmon: pwm-fan: dynamically switch regulator
-Date:   Wed,  4 May 2022 14:45:51 +0200
-Message-Id: <20220504124551.1083383-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S239972AbiEDOPu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 May 2022 10:15:50 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142F5419AE;
+        Wed,  4 May 2022 07:12:13 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 75386320027A;
+        Wed,  4 May 2022 10:12:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 04 May 2022 10:12:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1651673529; x=1651759929; bh=xUUhuAdWl5
+        ztZDGXsYgh3f41yA2CkH+/W2wG9PAr7kU=; b=wiHx1q5liF64+jC1h+QiniPKBL
+        t2dX9X2+maVEUh+r7S37r7+EpzQ3ujUGzSre70LRHxqZ3Aw2KbBV7D0wB5qe3zmR
+        UOf3/8GRHvCjpvP1LpjtfAOnmqGSkPqTCBIdbkPQCRZ5paJ3EVwhV7zFfnFhdJ4Z
+        XG1hdve7+c+YHoB1IqJsSeOL59ce4fYQzIsYQurD9eXiGFTp7hgYT76QjZmVGNtJ
+        Jpermg9Be8ZZC1ZzCkCSC6PdPIs0JIaBHgdQi2hUrlhavkLb2UuRyM+JStqAy090
+        SSs1K8l576D+f7UxxX8Kj8XRLc9JMRS58RZgb+JwgjA7H/v84slLSAG+hSHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651673529; x=
+        1651759929; bh=xUUhuAdWl5ztZDGXsYgh3f41yA2CkH+/W2wG9PAr7kU=; b=b
+        4CD9mu/DX2GZhwPHXlDAlHSWDPiq6U3YCdxPREQzj+Ixonm9DnW2V0ACn9aRsX/X
+        XWtX2hxcwjKlbxlhpTduqH5ZXlUfC+MYdJUYkqXVg2XRPn6q+iGR7HqXb17lFH70
+        QyVdoAqIpD26RtMbGuRMehgjazoBPqNGwY05JcNikkfPbm5Y87JvnQdnJyPIfqRu
+        MgiD3TnWJm80yUopP1UNgiXiuneP7tvaGevSLreozrOz6HMZtPk9pLLYcz3peBqX
+        H8UM1Wc+NozWSh1tqbRwLkGjU5LqQFdiUDpkf1J4FtMnXwlSiJnQWXHhITNTei0a
+        whWCUxlxd/aAhRmfsfA2g==
+X-ME-Sender: <xms:uIlyYunEAHSjVfHJkOdq7LSA4pIQ7k0Sjjd95wq69EgYOK4wErA9ew>
+    <xme:uIlyYl1J__EqRGeJ7VddqJaBim9zcXGqszhSXOt2yYO-8Ci2pONhpfGX5ny8utHgJ
+    _4g89uHyoc48I2eiLM>
+X-ME-Received: <xmr:uIlyYsoiuKTxN47W4nAhz4bqlSG4hKBtEvV9vWrJEHQ3o8CihAtLjszjUjvpzgWIdXf2zwTiGigs8uuVyWmDT1Ex-DAN80XPHzDqHLw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelgdejvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepffekleevgeejieeigeeftddtgfejheekvedvudetgfduudfffeffueekfeeh
+    ueegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhinhhugihfohhunhgurdhorh
+    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgr
+    gihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:uIlyYim4wxT3MBp7xYXWU7dJt_ELeHilF_g8l1e7VpJPOyrc7D8P2A>
+    <xmx:uIlyYs0D2j4msU21Z9dqwLT8lyMLQjmHEAn1w4IPQoQSTDnrdXszIw>
+    <xmx:uIlyYptoIGoGVEAFQSMaUwVx-P7DaA8koWYxwBZsoGxdBRrRnX9UvQ>
+    <xmx:uYlyYiw1y7yGZeoAFBKDd1COur6orF-Ov15gxE9xDrcW4GqRgPWfNQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 4 May 2022 10:12:07 -0400 (EDT)
+Date:   Wed, 4 May 2022 16:12:04 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Ruslan Zalata <rz@fabmicro.ru>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+Message-ID: <20220504141204.iqjwa62ije2pedal@houat>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <20220502110010.q7vvdkdpaiz5acjl@houat>
+ <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+ <20220502112112.3ne7zy4b6gggxzoo@houat>
+ <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
+ <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
+ <20220503161446.tl3qoqqnkzq2f3hn@houat>
+ <18ded45dcd670edcc9eb9811e7c7c034@fabmicro.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="66mbevpbgads7k7l"
+Content-Disposition: inline
+In-Reply-To: <18ded45dcd670edcc9eb9811e7c7c034@fabmicro.ru>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Markus Niebel <Markus.Niebel@ew.tq-group.com>
 
-A pwm value equal to zero is meant to switch off the pwm
-hence also switching off the fan. Currently the optional
-regulator is always on. When using this driver on boards
-with an inverted pwm signal polarity this can cause running
-the fan at maximum speed when setting pwm to zero.
+--66mbevpbgads7k7l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The proposed changes switch the regulator off, when PWM is
-currently enabled but pwm is requested to set to zero
-and switch der regulator on, when PWM is currently disabled
-but pwm shall be set to a no zero value.
+On Wed, May 04, 2022 at 02:37:32AM +0500, Ruslan Zalata wrote:
+> Hi Maxime,
+>=20
+> > At the hardware level, I'd assume you would either use the LRADC as an
+> > actual ADC, or use it to drive buttons, right?
+>=20
+> Yes, exactly.
+>=20
+> > So I don't think a new device tree binding is such a deal breaker since
+> > you have to describe it differently anyway.
+>=20
+> ...
+>=20
+> > Since that would be a completely different use-case, the IIO driver
+> > doesn't have to support input right away, it can be done later if
+> > needed.
+> >=20
+> > And you could have the two drivers compiled at the same time.
+>=20
+> As I got you right, you propose do add new bindings, say
+> "allwinner,sun4i-a10-lradc-hwmon" and "allwinner,sun8i-a83t-lradc-hwmon" =
+for
+> new driver, which will allow two drivers (hwmon and keyboard) be compiled
+> and loaded at same time, only that one listed in DT will be instantiated.
 
-Add __set_pwm_and_regulator and rewrite __set_pwm to
-handle regulator switching for the following conditions:
+Compatibles are meant to describe the hardware and remain OS-agnostic,
+while hwmon is linux-specific so we should probably drop the hwmon from
+the compatible. But otherwise, yes.
 
-- probe: pwm duty -> max, pwm state is unkwown: use __set_pwm
-  and enable regulator separately to keep the devm action
-- off: new pwm duty is zero, pwm currently enabled: disable
-  regulator
-- on: new pwm duty is non zero, pwm currently disabled: enable
-  regulator
+> If two are listed at same time, one of the calls to devm_request_irq()
+> will return with an error preventing second driver to be probed (some
+> error message would be necessary to let user know what's going on). If
+> this is ok, I will implement it.
+>=20
+> I think moving this driver to IIO framework is overkill. We use LRADC to
+> monitor battery temp and state (voltage) and that's what HWMON was made f=
+or.
+> It's simple, easy and elegant.
 
-Signed-off-by: Markus Niebel <Markus.Niebel@ew.tq-group.com>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-Changes in v2:
-* Added my own missing S-o-b
+Yeah, that's that *you* use it for. If someone wants to use it for some
+other use, what's going to happen? Will we create a third driver for the
+exact same controller? That's not reasonable.
 
- drivers/hwmon/pwm-fan.c | 144 ++++++++++++++++++++++++++--------------
- 1 file changed, 93 insertions(+), 51 deletions(-)
+> IIO, on the other hand, is for data acquisition and is much more
+> complex beast. Can we stay with HWMON, please ? :)
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index f12b9a28a232..b47d59fbe836 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -97,18 +97,50 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
- 	unsigned long period;
- 	int ret = 0;
- 	struct pwm_state *state = &ctx->pwm_state;
-+	/* track changes of reg_en for error handling */
-+	enum regulator_change {
-+		untouched,
-+		enabled,
-+		disabled,
-+	} reg_change = untouched;
- 
- 	mutex_lock(&ctx->lock);
-+
- 	if (ctx->pwm_value == pwm)
- 		goto exit_set_pwm_err;
- 
-+	if (ctx->reg_en) {
-+		if (pwm && !state->enabled) {
-+			reg_change = enabled;
-+			ret = regulator_enable(ctx->reg_en);
-+		} else if (!pwm && state->enabled) {
-+			reg_change = disabled;
-+			ret = regulator_disable(ctx->reg_en);
-+		}
-+		if (ret)
-+			goto exit_set_pwm_err;
-+	}
-+
- 	period = state->period;
- 	state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
- 	state->enabled = pwm ? true : false;
- 
- 	ret = pwm_apply_state(ctx->pwm, state);
--	if (!ret)
-+	if (!ret) {
- 		ctx->pwm_value = pwm;
-+	} else if (reg_change != untouched) {
-+		/*
-+		 * revert regulator changes to keep consistency between
-+		 * pwm and regulator
-+		 */
-+		int err;
-+
-+		if (reg_change == enabled)
-+			err = regulator_disable(ctx->reg_en);
-+		else if (reg_change == disabled)
-+			err = regulator_enable(ctx->reg_en);
-+	}
-+
- exit_set_pwm_err:
- 	mutex_unlock(&ctx->lock);
- 	return ret;
-@@ -280,18 +312,50 @@ static int pwm_fan_of_get_cooling_data(struct device *dev,
- 	return 0;
- }
- 
--static void pwm_fan_regulator_disable(void *data)
-+/*
-+ * disable fan and regulator
-+ * if cleanup is true, disable pwm regardless of regulator disable result
-+ * this makes the function dual use for unloading driver and suspend
-+ */
-+
-+static int __pwm_fan_disable_or_cleanup(struct pwm_fan_ctx *ctx, bool cleanup)
- {
--	regulator_disable(data);
-+	int ret;
-+
-+	if (ctx->pwm_value) {
-+		/* keep ctx->pwm_state unmodified for pwm_fan_resume() */
-+		struct pwm_state state = ctx->pwm_state;
-+
-+		/* regulator is only enabled if pwm_value is not zero */
-+		if (ctx->pwm_value && ctx->reg_en) {
-+			ret = regulator_disable(ctx->reg_en);
-+			if (ret) {
-+				pr_err("Failed to disable fan supply: %d\n", ret);
-+				if (!cleanup)
-+					return ret;
-+			}
-+		}
-+
-+		state.duty_cycle = 0;
-+		state.enabled = false;
-+		ret = pwm_apply_state(ctx->pwm, &state);
-+	}
-+
-+	return ret;
- }
- 
--static void pwm_fan_pwm_disable(void *__ctx)
-+static void pwm_fan_cleanup(void *__ctx)
- {
- 	struct pwm_fan_ctx *ctx = __ctx;
--
--	ctx->pwm_state.enabled = false;
--	pwm_apply_state(ctx->pwm, &ctx->pwm_state);
- 	del_timer_sync(&ctx->rpm_timer);
-+	__pwm_fan_disable_or_cleanup(ctx, true);
-+}
-+
-+static int pwm_fan_disable(void *__ctx)
-+{
-+	struct pwm_fan_ctx *ctx = __ctx;
-+
-+	return __pwm_fan_disable_or_cleanup(ctx, false);
- }
- 
- static int pwm_fan_probe(struct platform_device *pdev)
-@@ -324,19 +388,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 			return PTR_ERR(ctx->reg_en);
- 
- 		ctx->reg_en = NULL;
--	} else {
--		ret = regulator_enable(ctx->reg_en);
--		if (ret) {
--			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
--			return ret;
--		}
--		ret = devm_add_action_or_reset(dev, pwm_fan_regulator_disable,
--					       ctx->reg_en);
--		if (ret)
--			return ret;
- 	}
- 
- 	pwm_init_state(ctx->pwm, &ctx->pwm_state);
-+	/*
-+	 * Ensure the PWM is switched on (including the regulator),
-+	 * independently from any previous PWM state
-+	 */
-+	ctx->pwm_state.enabled = false;
- 
- 	/*
- 	 * __set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
-@@ -348,14 +407,17 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	/* Set duty cycle to maximum allowed and enable PWM output */
-+	/*
-+	 * Set duty cycle to maximum allowed and enable PWM output as well as
-+	 * the regulator. In case of error nothing is changed
-+	 */
- 	ret = __set_pwm(ctx, MAX_PWM);
- 	if (ret) {
- 		dev_err(dev, "Failed to configure PWM: %d\n", ret);
- 		return ret;
- 	}
- 	timer_setup(&ctx->rpm_timer, sample_timer, 0);
--	ret = devm_add_action_or_reset(dev, pwm_fan_pwm_disable, ctx);
-+	ret = devm_add_action_or_reset(dev, pwm_fan_cleanup, ctx);
- 	if (ret)
- 		return ret;
- 
-@@ -461,42 +523,22 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int pwm_fan_disable(struct device *dev)
--{
--	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
--	int ret;
--
--	if (ctx->pwm_value) {
--		/* keep ctx->pwm_state unmodified for pwm_fan_resume() */
--		struct pwm_state state = ctx->pwm_state;
--
--		state.duty_cycle = 0;
--		state.enabled = false;
--		ret = pwm_apply_state(ctx->pwm, &state);
--		if (ret < 0)
--			return ret;
--	}
--
--	if (ctx->reg_en) {
--		ret = regulator_disable(ctx->reg_en);
--		if (ret) {
--			dev_err(dev, "Failed to disable fan supply: %d\n", ret);
--			return ret;
--		}
--	}
--
--	return 0;
--}
--
- static void pwm_fan_shutdown(struct platform_device *pdev)
- {
--	pwm_fan_disable(&pdev->dev);
-+	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
-+
-+	pwm_fan_cleanup(ctx);
- }
- 
- #ifdef CONFIG_PM_SLEEP
- static int pwm_fan_suspend(struct device *dev)
- {
--	return pwm_fan_disable(dev);
-+	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = pwm_fan_disable(ctx);
-+
-+	return ret;
- }
- 
- static int pwm_fan_resume(struct device *dev)
-@@ -504,6 +546,9 @@ static int pwm_fan_resume(struct device *dev)
- 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
- 	int ret;
- 
-+	if (ctx->pwm_value == 0)
-+		return 0;
-+
- 	if (ctx->reg_en) {
- 		ret = regulator_enable(ctx->reg_en);
- 		if (ret) {
-@@ -512,9 +557,6 @@ static int pwm_fan_resume(struct device *dev)
- 		}
- 	}
- 
--	if (ctx->pwm_value == 0)
--		return 0;
--
- 	return pwm_apply_state(ctx->pwm, &ctx->pwm_state);
- }
- #endif
--- 
-2.25.1
+But it's generic, and you can plug hwmon on top of it. So you don't lose
+any feature, but it also doesn't prevent any one else to use it for some
+slightly different usecase either.
 
+> I looked through the code for a number of iio/adc drivers and I could see
+> that all of them initiate ADC conversion inside read(), then wait for
+> completion and return single sample. For me this very flawed approach
+> because a) much more overhead/load on the system,
+
+To monitor a battery? What kind of polling interval do you expect on this?
+
+> b) initiating conversion may (and will) take more time than a single
+> consequent conversion,
+
+Ditto, I'd expect to have a request in the order of seconds for a
+battery, so the setup time will be negligible.
+
+> c) samples will be read in irregular periods of time, hence acquired
+> data will not be consistent for any further processing (like FFT). So,
+> this whole IIO framework is no way better than HWMON, yet more
+> complex. At least for ADCs. :-)
+>
+> A better approach for an IIO/ADC driver would be to implement some
+> serialization mechanism to let reads go in sync with updates (IRQs), with
+> buffering, guaranteeing no same sample is read twice and no sample is los=
+t.
+> The read() would return next available sample from buffer with nearly zero
+> overhead or sleep till data is available.
+
+Like this:
+https://www.kernel.org/doc/html/latest/driver-api/iio/buffers.html ?
+
+> And the best way is to extend IIO framework to support ring buffers
+> mechanism like the one proposed by Analog Devices, but that's a way
+> different story. Link: https://events.static.linuxfound.org/sites/events/=
+files/slides/iio_high_speed.pdf
+
+Those suggestions were to handle more than a ~100 kilosamples per
+seconds order of magnitude. How many samples per seconds do you expect
+to get out from this ADC?
+
+Maxime
+
+--66mbevpbgads7k7l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnKJtAAKCRDj7w1vZxhR
+xdtKAQD8ETOpp5uHBoLQ0BmZsA0blycwGb6XqOpbIuD8ExWyPgD/cak7iCKVEfxm
+6SJtMB+QLLQYe4LICLR1en4ssJd5nQQ=
+=RTTX
+-----END PGP SIGNATURE-----
+
+--66mbevpbgads7k7l--
