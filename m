@@ -2,59 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C63C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 May 2022 19:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED66C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 May 2022 20:00:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377512AbiEDTpr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 May 2022 15:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S1377858AbiEDUEC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 May 2022 16:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344026AbiEDTpp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 May 2022 15:45:45 -0400
-X-Greylist: delayed 528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 12:42:08 PDT
-Received: from mr85p00im-ztdg06011901.me.com (mr85p00im-ztdg06011901.me.com [17.58.23.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EB019C10
-        for <linux-hwmon@vger.kernel.org>; Wed,  4 May 2022 12:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1651692800;
-        bh=4ht9G50SlYlr7BPTCuy+KjNotHQlLEXbSKghIYlF3TI=;
-        h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:To;
-        b=mpWDTIXkVWICEbwP8lVucvUj2lXp7sgQANZDAy4SypLlwTlIvHxoCNneQvRa9H0IH
-         P7CY4MUJAtz/6KtrWpuwZU9f3KjM/u9IyxXM3f0nfSGim5MeZUAkNis7cMl8zFlhiB
-         7KSTjOif87OwMkrGMJrcDASZpBD4LuyGM3tESxFxmKlQLEWFu6bOEKNBqKrieYEGgV
-         U3hgPrhIwmv0bDeSoAhFSGLAPxm+5udruXrCFszANHgcQmeiKCB/MmpazN02tYXSEf
-         ylAuXE7qPZaViZ/n7p3FxWRwg+9vPSZxZNEWca9tsFjTf+xm+CF7YiNUgWrbfCX/1W
-         9Y4C1tekqmAiA==
-Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-ztdg06011901.me.com (Postfix) with ESMTPSA id C2A01900AD7;
-        Wed,  4 May 2022 19:33:19 +0000 (UTC)
+        with ESMTP id S1377637AbiEDUEC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 May 2022 16:04:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB111CFFB;
+        Wed,  4 May 2022 13:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651694425; x=1683230425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jC2aMWUJhX29obrPq1HQfTtD2kGq5tdC3PTfWHFzxR8=;
+  b=mEavUaXik74IqPdaDCPLCpDJdGv/FsCn/MjV7kGvYRelL1ojtbMWA0f7
+   P4g0mx3u+AcfPGIo8nfSELNFBOwpHvrDAyySRK/+qTXnDOAhEN8W2zZBz
+   CFMlC/RCuHmHYHawK4eiPvR4RTwEDMBKKgCfFd9IAkV53LW0uU33wmIQb
+   RXkviN6N/ORJ01P1Vc0jqbLzYUfGyl5RAJeLpHpGXCTkVdA6CfjiA/PXX
+   dRw7BDaE8hotWriJSdKK6uHwNQLYlKiHAb8xArqCXCjvqByo3PV+EVYjE
+   V3yn2Qg2of35W75j/+NWAvVODUmdAmCGZiFemkOi+ksF6cJW9QyoyMNKd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="354320501"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="354320501"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 13:00:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="599683635"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 May 2022 13:00:22 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmLAb-000Bk9-W3;
+        Wed, 04 May 2022 20:00:21 +0000
+Date:   Thu, 5 May 2022 04:00:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Corentin Labbe <clabbe@baylibre.com>, jdelvare@suse.com,
+        linux@roeck-us.net
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH v2 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+Message-ID: <202205050310.mXK9zxb3-lkp@intel.com>
+References: <20220504103028.493155-3-clabbe@baylibre.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-From:   Jamie Cuthbert <jamiecuthbert92@icloud.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on Allwinner A13/A20 SoC
-Date:   Wed, 4 May 2022 20:33:17 +0100
-Message-Id: <AC0C5D3A-9080-48D1-9478-340DB024F21A@icloud.com>
-Cc:     jdelvare@suse.com, jernej.skrabec@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux@roeck-us.net, samuel@sholland.org, wens@csie.org
-To:     rz@fabmicro.ru
-X-Mailer: iPhone Mail (19E258)
-X-Proofpoint-GUID: FQSkHrM5o5Ppy-zYGYBiJEvmRkzaD34A
-X-Proofpoint-ORIG-GUID: FQSkHrM5o5Ppy-zYGYBiJEvmRkzaD34A
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=382
- adultscore=0 spamscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205040114
+Content-Disposition: inline
+In-Reply-To: <20220504103028.493155-3-clabbe@baylibre.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Corentin,
 
+I love your patch! Yet something to improve:
 
-Sent from my iPhone
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on v5.18-rc5 next-20220504]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/hwmon-acpi_power_meter-convert-to-new-hwmon-API/20220504-183225
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: i386-randconfig-a014 (https://download.01.org/0day-ci/archive/20220505/202205050310.mXK9zxb3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/0287ed3436a71556d5fb79429e9ca041a0c5fe5b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Corentin-Labbe/hwmon-acpi_power_meter-convert-to-new-hwmon-API/20220504-183225
+        git checkout 0287ed3436a71556d5fb79429e9ca041a0c5fe5b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/hwmon/acpi_power_meter.o: in function `acpi_power_read':
+>> acpi_power_meter.c:(.text+0x83c): undefined reference to `__udivdi3'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
