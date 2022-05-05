@@ -2,94 +2,135 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED66C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 May 2022 20:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B87CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 May 2022 07:34:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377858AbiEDUEC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 May 2022 16:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
+        id S232037AbiEEHiA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 May 2022 03:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377637AbiEDUEC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 May 2022 16:04:02 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB111CFFB;
-        Wed,  4 May 2022 13:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651694425; x=1683230425;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jC2aMWUJhX29obrPq1HQfTtD2kGq5tdC3PTfWHFzxR8=;
-  b=mEavUaXik74IqPdaDCPLCpDJdGv/FsCn/MjV7kGvYRelL1ojtbMWA0f7
-   P4g0mx3u+AcfPGIo8nfSELNFBOwpHvrDAyySRK/+qTXnDOAhEN8W2zZBz
-   CFMlC/RCuHmHYHawK4eiPvR4RTwEDMBKKgCfFd9IAkV53LW0uU33wmIQb
-   RXkviN6N/ORJ01P1Vc0jqbLzYUfGyl5RAJeLpHpGXCTkVdA6CfjiA/PXX
-   dRw7BDaE8hotWriJSdKK6uHwNQLYlKiHAb8xArqCXCjvqByo3PV+EVYjE
-   V3yn2Qg2of35W75j/+NWAvVODUmdAmCGZiFemkOi+ksF6cJW9QyoyMNKd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="354320501"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="354320501"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 13:00:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="599683635"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 May 2022 13:00:22 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmLAb-000Bk9-W3;
-        Wed, 04 May 2022 20:00:21 +0000
-Date:   Thu, 5 May 2022 04:00:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Corentin Labbe <clabbe@baylibre.com>, jdelvare@suse.com,
-        linux@roeck-us.net
-Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: [PATCH v2 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-Message-ID: <202205050310.mXK9zxb3-lkp@intel.com>
-References: <20220504103028.493155-3-clabbe@baylibre.com>
+        with ESMTP id S235142AbiEEHh7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 May 2022 03:37:59 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87609488AA;
+        Thu,  5 May 2022 00:34:20 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id z2so5483456ejj.3;
+        Thu, 05 May 2022 00:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3J1208WPQ4jno3J/uykQTL89a7eLGDMeF5YveJlEzDs=;
+        b=S78SIfXfk2AKH1/DmhfhwODqbNeadxZX0FAVXnAnkEm6si5fxgcBYmwi4u0eOSalAu
+         3/BurbYRXdysgUV9NhwhO4OR+B6/u6w3kaetOVLGz0jDZOm6/p6tv8VCrd5y0dx+0D4O
+         qD2i6qkY1F14UHRMvTlAF8mpAx3q6gbCr7mNWPHF5MbYbIkt0by+93IEmz3f+AvH065R
+         hMPgvsSSbkpkcZ30GGY9mmyEO8kr5OlnZ720U6dMfxYQ7uZV3Pqu+LDdKwQfhUcrJHZ+
+         SyE/DH1xarFajb7IiT42GvtIbqtm6FSmn/5OD15oVKaE0aN3pecsdzMoL+iJgEB+lBqo
+         wFqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3J1208WPQ4jno3J/uykQTL89a7eLGDMeF5YveJlEzDs=;
+        b=k8LaBVfb0mCxdzMYxUPoOTENgOWpsaqu9B6pqqpzoN5EPK08FaDbjhKUsGuiBSFbxK
+         5oYCIaOtZMQjRcQJyEmW75V8gzGVBlA6SToI0GSRrHmthcBl/vlt5Q3t04kOkoMCBZT3
+         oD5himFFMOQo00DC1Q+Uhzd7yWdgsruhEt18dBrEMPKlIk+bj3m+dEKTtxSSPke4x+Lm
+         fZbtR9FrdxtMiovLzCKpaih4XJzFJTnehHvjpsMvvmaNc7Rysgte7Yjl7Y9WLKzInQs+
+         yD+xygOl8Wxvh5p9rKpd+SxrhFj0xJBkw5y6vBIXItf4n4aBUs6pMw99ul/qX3vhkkZQ
+         86kg==
+X-Gm-Message-State: AOAM532wJmFhKdfmuhkU5o9D8NIAV0plhlypTTns9MObNwAMZoZuOrsZ
+        FG4jHVYPO6TkhPGpdO+9qAI=
+X-Google-Smtp-Source: ABdhPJw025Btub/yVDtZYX9TuyPMCGQ444n5wDrt1oQXpxmbeOFzK9MviShruWUWDTtZ2kzd89eCqA==
+X-Received: by 2002:a17:906:eb82:b0:6f3:9044:5fba with SMTP id mh2-20020a170906eb8200b006f390445fbamr24240010ejb.715.1651736058913;
+        Thu, 05 May 2022 00:34:18 -0700 (PDT)
+Received: from tiger.museclub.art (p200300cf9f27690001ea8a0258c36e97.dip0.t-ipconnect.de. [2003:cf:9f27:6900:1ea:8a02:58c3:6e97])
+        by smtp.googlemail.com with ESMTPSA id og21-20020a1709071dd500b006f3ef214df8sm297592ejc.94.2022.05.05.00.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 00:34:18 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     Debabrata Banerjee <dbavatar@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX X570-E GAMING WIFI II
+Date:   Thu,  5 May 2022 09:33:51 +0200
+Message-Id: <20220505073351.123753-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504103028.493155-3-clabbe@baylibre.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Corentin,
+From: Debabrata Banerjee <dbavatar@gmail.com>
 
-I love your patch! Yet something to improve:
+Adds support for the ROG STRIX X570-E GAMING WIFI II board and
+simplifies formatting for the list of supported models.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on v5.18-rc5 next-20220504]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Debabrata Banerjee <dbavatar@gmail.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ Documentation/hwmon/asus_ec_sensors.rst | 23 ++++++++++++-----------
+ drivers/hwmon/asus-ec-sensors.c         |  8 ++++++++
+ 2 files changed, 20 insertions(+), 11 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/hwmon-acpi_power_meter-convert-to-new-hwmon-API/20220504-183225
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: i386-randconfig-a014 (https://download.01.org/0day-ci/archive/20220505/202205050310.mXK9zxb3-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/0287ed3436a71556d5fb79429e9ca041a0c5fe5b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Corentin-Labbe/hwmon-acpi_power_meter-convert-to-new-hwmon-API/20220504-183225
-        git checkout 0287ed3436a71556d5fb79429e9ca041a0c5fe5b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld: drivers/hwmon/acpi_power_meter.o: in function `acpi_power_read':
->> acpi_power_meter.c:(.text+0x83c): undefined reference to `__udivdi3'
-
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 1700fe619597..78ca69eda877 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -4,19 +4,20 @@ Kernel driver asus_ec_sensors
+ =================================
+ 
+ Supported boards:
+- * PRIME X470-PRO,
+- * PRIME X570-PRO,
+- * Pro WS X570-ACE,
++ * PRIME X470-PRO
++ * PRIME X570-PRO
++ * Pro WS X570-ACE
+  * ProArt X570-CREATOR WIFI
+- * ROG CROSSHAIR VIII DARK HERO,
++ * ROG CROSSHAIR VIII DARK HERO
+  * ROG CROSSHAIR VIII HERO (WI-FI)
+- * ROG CROSSHAIR VIII FORMULA,
+- * ROG CROSSHAIR VIII HERO,
+- * ROG CROSSHAIR VIII IMPACT,
+- * ROG STRIX B550-E GAMING,
+- * ROG STRIX B550-I GAMING,
+- * ROG STRIX X570-E GAMING,
+- * ROG STRIX X570-F GAMING,
++ * ROG CROSSHAIR VIII FORMULA
++ * ROG CROSSHAIR VIII HERO
++ * ROG CROSSHAIR VIII IMPACT
++ * ROG STRIX B550-E GAMING
++ * ROG STRIX B550-I GAMING
++ * ROG STRIX X570-E GAMING
++ * ROG STRIX X570-E GAMING WIFI II
++ * ROG STRIX X570-F GAMING
+  * ROG STRIX X570-I GAMING
+ 
+ Authors:
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 998d49d6b799..611e897429b1 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -315,6 +315,14 @@ static const struct ec_board_info board_info[] = {
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+ 		.family = family_amd_500_series,
+ 	},
++	{
++		.board_names = {"ROG STRIX X570-E GAMING WIFI II"},
++		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++			SENSOR_TEMP_T_SENSOR | SENSOR_CURR_CPU |
++			SENSOR_IN_CPU_CORE,
++		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_amd_500_series,
++	},
+ 	{
+ 		.board_names = {"ROG STRIX X570-F GAMING"},
+ 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
