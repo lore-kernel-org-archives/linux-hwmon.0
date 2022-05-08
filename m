@@ -2,117 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34218C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  7 May 2022 07:29:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E34FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 May 2022 14:46:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353287AbiEGHdg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 7 May 2022 03:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S234146AbiEHOuM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 8 May 2022 10:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238791AbiEGHdf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 May 2022 03:33:35 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3288464C5;
-        Sat,  7 May 2022 00:29:49 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id e24so12792471wrc.9;
-        Sat, 07 May 2022 00:29:49 -0700 (PDT)
+        with ESMTP id S229689AbiEHOuL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 8 May 2022 10:50:11 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B0AA1B4;
+        Sun,  8 May 2022 07:46:20 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z19so13586904edx.9;
+        Sun, 08 May 2022 07:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gkqa+Dh4VElJCoRa1LM889KNNJniYHnTZNydz4wChHE=;
-        b=TQUGZuWe7CS68jYCrPs7PT4WquNIn+uMO/HmZR1kJ+UDWtIJDVdbqTgXrdkYrPFAMS
-         VyGEE/HdkxyuIin+4j/ceunxInzBDGUJMGvzPJC6AX46IeSmS2MEkTeB88TUzFKm2fdS
-         VwrzBBUoOWTwulq+WzzI4ZgUy3DBMtuFVLGWzPah0J/9Q2AR3BGOFhMIFvNDPssiT4wW
-         k2rnm4Ft4QWUbZtWejuT3cCRc/PVEPUuT4Cn4R58u3YkW/7OfKIbtecXWP/t+s51sSzS
-         SHslOvYL43AOL/liNoMM5ucZY0+ItgFSjbu6j+BEJEMv8qFsQv5756boe/UdWJX+iiZN
-         ek8w==
+        bh=yVozbydKoqpL/1R/q8/zXiCSBF+WnkNpgE75DzzSMhE=;
+        b=f1uwoG0j7PprLpJsPc7sO0GeKbuiY/c+WAkisrhcJURHL95Kn4RELVGSzkZKE5PHVk
+         w7nqXkUFatTxfveUgprKveTEuJQon6fbEWiJWjqf2OIaj8XC3TI/IBOmGa48zID7h+2Q
+         ilAFcbiXIDAg4VnhoLPclZkx44ikUzRbskouwczdJtB0CF0iq7LovY5Sh5wXOG0lD1E6
+         Ztj61VeTpHG66+G37s5sTw2DM/DBGN7tZnxVSlT35ivZNyY46iNswhNQZZRMIOHf75z6
+         kNTNGWIyxWMdh14c2f5wSrJjrimTq4jYIVX2VVuTYeJBLuDCj03AavDeyMtQPpdSZ6fm
+         ZTbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gkqa+Dh4VElJCoRa1LM889KNNJniYHnTZNydz4wChHE=;
-        b=05MNfAZLfId5xWr86mkR3GtoMQtgg09X5SjVzWx1IQmGl+Iaci6PASm3Fh/sLlyKeJ
-         MTDcRqh6kAAaV4UtFc3xndDI34cMNpF4dgSpQ8B9ofVIqKN9dqCggBJ3xdZOwimC340m
-         xmhMYDbqYg+ZmnW7guvr8vQn8t3JTvwNU/4io2T2BydrRxfKCuUMI5TNPWKv+Y1Ht8X0
-         DuaNEeD9+1tsJjcn+0NGFjopHd7zUW+R5mWuowBOtEYN359tCRWy40Md3epSri1f4Snj
-         HfXsxrBBXlRTXexpAI5dE4jiW/PzH4ersRo/RkHVOq0uvOZMSVPyMauC1yOWY1lXHuvj
-         1muA==
-X-Gm-Message-State: AOAM530H4dGGQGjawEYHrC1gsk9o3oechADymWCJ05+xgM41MT5DeiL0
-        3+0xyuMEfllF+V9MMgyU610=
-X-Google-Smtp-Source: ABdhPJzclBf81AWFccMO1vtwEvrb7IynvUbbwvmVFnBdzAfrGK5FwwgDW4ehiLiZ6QuoOy77wuqVqA==
-X-Received: by 2002:a5d:5221:0:b0:20c:9a6f:50be with SMTP id i1-20020a5d5221000000b0020c9a6f50bemr5645609wra.494.1651908587525;
-        Sat, 07 May 2022 00:29:47 -0700 (PDT)
-Received: from localhost.localdomain ([46.211.169.51])
-        by smtp.googlemail.com with ESMTPSA id p6-20020a05600c358600b0039429bfebeasm9123616wmq.2.2022.05.07.00.29.43
+        bh=yVozbydKoqpL/1R/q8/zXiCSBF+WnkNpgE75DzzSMhE=;
+        b=eN+2xwJ5kfSsGD8dvW8qv/4WbwkPLi7PVJwP17hYQYOX5TnGJ5UUObCeiqdqxv7CA5
+         +UVk4FAHlq7+0T1LwVzHO4ZpuSIS2iZQeao+5hsyytDk1Xnh4zywUCTopAzbHPPKcdEJ
+         mpTgzzU80XlBJ1pFr8EhKICSTShbXP9yMreogJb2A2n8KW818WsqqSACicsdiKtToecB
+         2d2O1eSJCwI6T/fcldj8L+Ng5bz0MN3sDmqI9PU1fwFzaZ/jNe/pyn4Hct8iRCeB5EJy
+         YA0wL46OOcSvOOVBdM9re7YfkX32qw61LCMWgcUE/0R/hRoDvG4mDY6yhcnnEbOVyn90
+         t2Kg==
+X-Gm-Message-State: AOAM531iKJXdz1GKlKPjoJU58FW+e8EtyCgFodkHzazum1zR4BOfuqC/
+        0P0KADyhl8555tiBeuQ/gSgKuHf4cHdxKA==
+X-Google-Smtp-Source: ABdhPJxbAQMyAAXvrmdZ46Lt8wonE1TP7eCF2BLaBNu1iml/9eK5lcTlqBmR8JBgnAZvzE8/LLeI5A==
+X-Received: by 2002:a05:6402:1592:b0:425:edec:992d with SMTP id c18-20020a056402159200b00425edec992dmr12699630edv.283.1652021179258;
+        Sun, 08 May 2022 07:46:19 -0700 (PDT)
+Received: from debian-gnu-linux-10.localdomain (dynamic-095-115-108-204.95.115.pool.telefonica.de. [95.115.108.204])
+        by smtp.gmail.com with ESMTPSA id p9-20020a170906140900b006f3ef214dcdsm4109383ejc.51.2022.05.08.07.46.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 00:29:46 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pauk.denis@gmail.com,
-        renedis@hotmail.com, e_dimas@rambler.ru, hubert.banas@gmail.com
-Subject: [PATCH] hwmon: (nct6775) add ASUS PRO H410T / PRIME H410M-R / ROG X570-E GAMING WIFI II
-Date:   Sat,  7 May 2022 10:29:33 +0300
-Message-Id: <20220507072933.3013-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 08 May 2022 07:46:18 -0700 (PDT)
+From:   Karl Mehltretter <kmehltretter@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Karl Mehltretter <kmehltretter@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (lm83) Remove unused include directives
+Date:   Sun,  8 May 2022 16:46:01 +0200
+Message-Id: <20220508144601.22796-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Boards such as
-* PRO H410T
-* PRIME H410M-R
-* ROG STRIX X570-E GAMING WIFI II
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+Some include directives are no longer necessary due to previous driver
+changes. Remove them now to further improve driver code clarity.
 
-This commit adds such boards to the WMI monitoring list.
+Mutex usage has ceased since commit 719af4f1a40b ("hwmon: (lm83) Use
+regmap").
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Reported-by: renedis <renedis@hotmail.com>
-Reported-by: Dmitrii Levchenko <e_dimas@rambler.ru>
-Reported-by: Hubert Banas <hubert.banas@gmail.com>
+Ever since commit a0ac840d99fa ("hwmon: (lm83) Convert to use
+devm_hwmon_device_register_with_groups") functions sysfs_create_group
+and sysfs_remove_group are no longer used by the driver.
+
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
-I have checked code by DSDT dumps from ASUS support site. 
-Could someone please check that it works over current hwmon-next code? 
----
- drivers/hwmon/nct6775-platform.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwmon/lm83.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index c2f76af735a2..6d46c9401898 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1042,6 +1042,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- static struct platform_device *pdev[2];
+diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
+index 12370dcef..905f5689f 100644
+--- a/drivers/hwmon/lm83.c
++++ b/drivers/hwmon/lm83.c
+@@ -24,10 +24,8 @@
+ #include <linux/init.h>
+ #include <linux/hwmon.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+-#include <linux/sysfs.h>
  
- static const char * const asus_wmi_boards[] = {
-+	"PRO H410T",
- 	"ProArt X570-CREATOR WIFI",
- 	"Pro B550M-C",
- 	"Pro WS X570-ACE",
-@@ -1050,6 +1051,7 @@ static const char * const asus_wmi_boards[] = {
- 	"PRIME B550-PLUS",
- 	"PRIME B550M-A",
- 	"PRIME B550M-A (WI-FI)",
-+	"PRIME H410M-R",
- 	"PRIME X570-P",
- 	"PRIME X570-PRO",
- 	"ROG CROSSHAIR VIII DARK HERO",
-@@ -1064,6 +1066,7 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG STRIX B550-I GAMING",
- 	"ROG STRIX B550-XE GAMING (WI-FI)",
- 	"ROG STRIX X570-E GAMING",
-+	"ROG STRIX X570-E GAMING WIFI II",
- 	"ROG STRIX X570-F GAMING",
- 	"ROG STRIX X570-I GAMING",
- 	"ROG STRIX Z390-E GAMING",
-
-base-commit: e21a58f67b9bb6dde09d6ef3c585573ceaa56a47
+ /*
+  * Addresses to scan
 -- 
-2.36.0
+2.20.1
 
