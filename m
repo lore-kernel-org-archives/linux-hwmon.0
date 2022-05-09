@@ -2,69 +2,171 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D62E3C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 May 2022 20:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70FF1C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 May 2022 22:19:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiEIUoX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 May 2022 16:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S229510AbiEIWXP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 May 2022 18:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiEIUoU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 16:44:20 -0400
-Received: from inet10.abb.com (spf.hitachienergy.com [138.225.1.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C82285EC0
-        for <linux-hwmon@vger.kernel.org>; Mon,  9 May 2022 13:40:24 -0700 (PDT)
-Received: from gitsiv.ch.abb.com (gitsiv.keymile.net [10.41.156.251])
-        by inet10.abb.com (8.14.7/8.14.7) with SMTP id 249DAING010687;
-        Mon, 9 May 2022 15:10:18 +0200
-Received: from ch10641.keymile.net.net (ch10641.keymile.net [172.31.40.7])
-        by gitsiv.ch.abb.com (Postfix) with ESMTP id 7499265F9616;
-        Mon,  9 May 2022 15:10:18 +0200 (CEST)
-From:   Holger Brunck <holger.brunck@hitachienergy.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Holger Brunck <holger.brunck@hitachienergy.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH 1/2] dt-bindings: add extended-range-enable property to lm90.yaml
-Date:   Mon,  9 May 2022 15:10:15 +0200
-Message-Id: <20220509131016.29481-1-holger.brunck@hitachienergy.com>
-X-Mailer: git-send-email 2.35.1.871.gab1f276
+        with ESMTP id S231486AbiEIWXO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 18:23:14 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79F126C4C1;
+        Mon,  9 May 2022 15:19:18 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id v65so16722343oig.10;
+        Mon, 09 May 2022 15:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pQ+NFz48u/PVAao/3y8aTxUEtE0Q3CzofdOnqfSSLRM=;
+        b=SRHDpOMWwSStBa2So+3KgzgNUSgKuGz1Pv5JZzkRKaL1taQta/d0mlGTwL+wgEFVS9
+         XZsklJP5mA99lFz4N+XYC1YG9Gv61wSSeWgXHIAcYhirKFP0zEtf6bfWn5Vm8CxlfX80
+         0TonBjXQF3kKIR9YqV6RISEOzQxj7Ug1fP0O6TEDsNnUpRT536F3s5SF7Lbo/Vuj7ZXy
+         2o5bE6Q3K3dYGsAotX2RtLSgAZZy0TcmQt9ixRsVpT9o5I1FKNQ3ysCEVREGBrfe6eDB
+         OfKUpu5l86I2kJ+09dflDPjrtlw8SMvofpOl5aPnTrSobxk5tW9OgnmQGuIW/DVl9MRw
+         OTMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pQ+NFz48u/PVAao/3y8aTxUEtE0Q3CzofdOnqfSSLRM=;
+        b=oBixN26v+EwVKeyTZm9ebd/uqOfpgcCotHPZmIbg2HY7ZTHv7y5+g45PsE1/9ani0D
+         C0YFPZ3x1AZOn3Ai15NwV1sfeY+Kb/cHoaJ8TNV99yNa7G66T1lwBnlarnNcKQsJQyq+
+         GtmghqkiYz07YYje+qoMczyyrXVBP5dtvQxCBXhqTQFqwY1MNTwnFm1EoG0H3Dp7mqRw
+         by6vdUeWtqZe/0zkq4QjmJFzVwGx/jX2ytuxZR9UvwcplPY6p9dFK41rv92hTPaoyzLn
+         I3Jjd9mlykPKRO5EDAWlyYEDmhM0KsZq6BOTzyR1LcoEd0qDRxuQv3hC66Tls5VIJsog
+         KZwg==
+X-Gm-Message-State: AOAM5307ai/wonybnorkRl26lz7Aq5LGte5GrUWRq5nX8lhrGEyOWSTv
+        kDk+5eBfU317iwReEOAoKhEUAP9SOGYHIg==
+X-Google-Smtp-Source: ABdhPJwszSFM3fp5nHHTMxyVLySFOJj7h3zjbtkCLBA4VJjfy4go1mb0G/yoqB7qlfyMhBxXHIOK6g==
+X-Received: by 2002:a05:6808:645:b0:325:abf1:e7d0 with SMTP id z5-20020a056808064500b00325abf1e7d0mr8712229oih.123.1652134758073;
+        Mon, 09 May 2022 15:19:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f5-20020a9d5e85000000b0060603221262sm5106207otl.50.2022.05.09.15.19.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 15:19:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c2e5b342-bdc3-727f-25d0-843f4ae3d51a@roeck-us.net>
+Date:   Mon, 9 May 2022 15:19:14 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: (EXT) Re: (EXT) Re: (EXT) Re: [PATCH v2 1/1] hwmon: pwm-fan:
+ dynamically switch regulator
+Content-Language: en-US
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20220504124551.1083383-1-alexander.stein@ew.tq-group.com>
+ <20220506142913.vbddyvkmhuvfd5o5@pengutronix.de>
+ <20220506183124.GA2997799@roeck-us.net> <2184650.iZASKD2KPV@steina-w>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <2184650.iZASKD2KPV@steina-w>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add a boolean extended-range-enable to make the extented temperature
-feature for some lm90 devices configurable.
+On 5/9/22 00:39, Alexander Stein wrote:
+> Am Freitag, 6. Mai 2022, 20:31:24 CEST schrieb Guenter Roeck:
+>> On Fri, May 06, 2022 at 04:29:13PM +0200, Uwe Kleine-König wrote:
+>>> [Dropped Bartlomiej Zolnierkiewicz from Cc:; my mailer daemon claims the
+>>> email address doens't exist.]
+>>>
+>>> Hello Guenter,
+>>>
+>>> On Fri, May 06, 2022 at 07:12:44AM -0700, Guenter Roeck wrote:
+>>>> On Fri, May 06, 2022 at 02:23:11PM +0200, Alexander Stein wrote:
+>>>>> Am Freitag, 6. Mai 2022, 12:23:01 CEST schrieb Uwe Kleine-König:
+>>>>>> See
+>>>>>> https://lore.kernel.org/linux-pwm/20180806155129.cjcc7okmwtaujf43@pe
+>>>>>> ngutronix.de/ for one of the previous discussions.
+>>>>>
+>>>>> Thanks for the link. I took a look into it. I'm on your side here,
+>>>>> IMHO
+>>>>> pwm_disable() implies that the PWM perphery is disabled, including any
+>>>>> clocks or powerdomain. This is what pwm-imx27 actually does. This
+>>>>> might lead to a, probably platform dependent, (undefined?) state of
+>>>>> the PWM output pin. This implies it is not possible to disable the
+>>>>> PWM periphery for inverted signals, if the disabled state is not the
+>>>>> inactive level. You know all about it already.
+>>>>> Then again from pwm-fan side I want be able to disable the FAN,
+>>>>> turning of
+>>>>> regulator and PWM, so powersaving is possible. That's what this patch
+>>>>> is
+>>>>> about. This is similar also what pwm_bl is doing.
+>>>>> Independent of the exact semantics, it makes sense to disable the
+>>>>> regulator in pwm-fan as well when the fan shall be disabled.
+>>>>
+>>>> There are fans which never stop if pwm==0, such as some CPU fans. I
+>>>> don't
+>>>
+>>> I assume with pwm==0 you actually mean duty_cycle == 0?
+>>
+>> Correct. The "pwm" attribute sets the duty cycle.
+>>
+>>>> think it is a good idea to force those off by turning off their power.
+>>>> The
+>>>> problem in the driver is that it treats pwm==0 as "disable pwm", not as
+>>>> "set pwm output to 0", Part of the probem may be that the ABI doesn't
+>>>> have
+>>>> a good representation for "disable pwm output", which is what is really
+>>>> wanted/needed here.
+>>>
+>>> Disable pwm output == set pwm output to High-Z? Not all PWMs are able to
+>>> provide that.
+>>
+>> It is up to us to define whate it means exactly. If you are ok that "set
+>> duty cycle to 0" reflects "set duty cycle to 0, disable pwm, and turn off
+>> regulator", I would hope that you are ok with using the _enable attribute
+>> to do the same and leaving pwm==0 to do what it is supposed to do, ie to
+>> keep pwm control enabled and set the duty cycle to 0.
+> 
+> Just to make sure to be on the same side and summarize a bit. What you mean is
+> to add a new sysfs attribute to pwm-fan driver which controls what pwm_duty==0
+> implies. I would suggest to name is 'keep_pwm_enabled' (but I am open for
+> other suggestions) with the following meaning:
+> 1 - pwm_duty==0 just means that. Set PWM duty to 0 and keep PWM (and fan
+> regulator) enabled.
+> 
 
-Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
-cc: Jean Delvare <jdelvare@suse.com>
-cc: Guenter Roeck <linux@roeck-us.net>
-cc: Rob Herring <robh+dt@kernel.org>
-cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
----
- Documentation/devicetree/bindings/hwmon/national,lm90.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+No, I am not suggesting that. I am suggesting to add support for the existing
+standard attribute pwm1_enable, and define what its values mean in the driver
+documentation. There is no need to provide a non-standard attribute.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b=
-/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-index 30db92977937..98d01f6c9331 100644
---- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-@@ -52,6 +52,10 @@ properties:
-   vcc-supply:
-     description: phandle to the regulator that provides the +VCC supply
-=20
-+  extended-range-enable:
-+    description: Set to enable extended range temperature.
-+    type: boolean
-+
- required:
-   - compatible
-   - reg
---=20
-2.34.1
+Guenter
+
+> 0 - pwm_duty==0 means that the PWM duty is set to 0, PWM is disabled and any
+> PWM fan regulator is disabled as well.
+> 
+> For pwm_duty!=0 this setting is irrelevant. Having the default to be '1' seems
+> sensible in order to not brake boards as regulator will be kept enabled. PWM
+> duty and/or PWM disable is irrelevant as PWM inversion is not yet supported
+> properly anyway.
+> 
+> IMHO this should address all the mentioned issues. With 'keep_pwm_enabled=1'
+> only the duty is set and the regulators are not forced to be disabled. E.g.
+> the CPU fans mentioned by Guenter. This is also the case for hardware where
+> the regulator is shared or not switchable at all.
+> On hardware where it is safe to disable the regulator and PWM
+> keep_pwm_enabled=0' allows the system to poweroff PWM and powersupply for the
+> fan to improve powersavings.
+> 
+> With this it is up to the administrator to provide the correct setting for
+> this attribute as it highly depends on the actual hardware and/or usage.
+> 
+> Best regards,
+> Alexander
+> 
+> 
+> 
 
