@@ -2,107 +2,157 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA265C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 00:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D413EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 02:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbiEJApE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 May 2022 20:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
+        id S234381AbiEJCnC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 May 2022 22:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiEJApD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 20:45:03 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C18109C
-        for <linux-hwmon@vger.kernel.org>; Mon,  9 May 2022 17:41:07 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id h10-20020a056830400a00b00605e92cc450so11203786ots.11
-        for <linux-hwmon@vger.kernel.org>; Mon, 09 May 2022 17:41:07 -0700 (PDT)
+        with ESMTP id S231723AbiEJCnC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 22:43:02 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF5126FA75;
+        Mon,  9 May 2022 19:39:06 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id q10so2043490oia.9;
+        Mon, 09 May 2022 19:39:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+bvLg5pe14pnrlv8qNsizxHPMc8sTUjdCuLXchjVPW0=;
-        b=QRIaiF8MjwqXqy3piDnbP9v8ZfCD3lCDPRZ0zhe7LK7cwdTocFGG9w+OJqNGpzfjHB
-         7JJTrfdOQ/yWt1kfyzBGg2IK0srXbjaIPehNWfIXRjFR7Kk7oTOvC3t8HNtU/WrkXlbe
-         ta3f90k+THMXwdR6R1wDE/MN7Gj4HcXD5XXrdIajlTbSIztut66M4ZY5scNQv58jbMJq
-         vlTRabPVyqKa9e94rNhTlS3/PZh2yO/8XF/vJhxgtHPWsvCgtMc595WHHV+rUOQMqxC4
-         PoQCsbHRCByeC8cromBFbYbfgr//qT0u9nA20AkfmwEeiPxPYMjuKJ8pY6o5szhq7szr
-         zMHg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0TJE3soHGSdE4vXRalpTFyRINoVkfWSDyUf+84IPxcA=;
+        b=j1bjjKPyf9bI/7ZWrEwZGQ4/btT480+G1mnQIekw2/bTxIorN8YGN0f5TPFBmjYkIu
+         hghPkwH+WGhYd46jPY4O9nnItELx4MAPrFbf55A+m9SyHUZ85A0dJDeOWlX4t0Ey1QFM
+         cHWS5LqY+TW7jGW7Vws42a7yORMYQ5UN8JcaGdxVlr+WIizlwChcM1/EcjRZhEgS1gGD
+         UScOxG+g71aCD+suUf450a0p3zmVPiSKw19hxxrRWNojx0QrcCl8jQ9VKJ+ZxRPUjNF1
+         a2DhL6/LjGYq4PeRvFNxApx8lR9ZKb4s/aK3Pb/V+b3TrPXWksE0FM+ewWqr3hIMSBCY
+         iXuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+bvLg5pe14pnrlv8qNsizxHPMc8sTUjdCuLXchjVPW0=;
-        b=HJ6HhkgIN9pQ3IuMGRYeirE1OUgrg3jWrSGuAqZ47D8jRwby95M4x6u8gSh035eujn
-         sRBa9qbqs8wy/Gip+9vf+lmoXXMqlQ65eH4M8wMTGKq8YoGWjgmu6eIHr1vjMbWnWNGO
-         UXuCoYXzxIVKWYyB67PHbLpxPr24Idh7iDx9sSp3q9oBatshlCiW3oVx4A4TUSR04SeZ
-         c+6CYp9wDTJtaA2KSBFHGj3cSHHJWviIh+FTkjDd9Wn7wEOEA5a7sofXU4bzhgpZukmj
-         GVdQKaeRV6S2RNxGgbDZ0UVgMCYKXz+PQQct+u8fXR5L4ZOnSAMLCRvv+36X3qwazIsz
-         MB5Q==
-X-Gm-Message-State: AOAM531j6MTnIETVB9UjSmTAtWZFGh28OiNVQRO2XkQKlypXfW06/Wzp
-        /Oyq3VtzPIV75NUWMxyiwdCJO22wgTaveA==
-X-Google-Smtp-Source: ABdhPJywniTH7VWl3/1h7wC9IqqfHqTi2JDg1ep8I7SEGrStKUpJjPvuSghv/u57iwI4pwa1AcTvVg==
-X-Received: by 2002:a9d:740b:0:b0:606:21eb:8f93 with SMTP id n11-20020a9d740b000000b0060621eb8f93mr6963448otk.330.1652143266722;
-        Mon, 09 May 2022 17:41:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e89-20020a9d2ae2000000b006060322125bsm5325307otb.43.2022.05.09.17.41.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 17:41:05 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=0TJE3soHGSdE4vXRalpTFyRINoVkfWSDyUf+84IPxcA=;
+        b=rJ3GDENH3a5DY0F++C8fri/+aWq0SU7Ko0agontbdRHhPZd40raM73AXvmsK+U+PaA
+         ybxm2ssdpzqZ/rLWIscb3Xf+glmbl/gzU13Edaj8IKXPSNGfO0E9KgEqYiZNxmTwU53/
+         YCcmlnBX7SiLM3rMpNKhYWbYC2Xb+O5T7O2idmCXKoTxCOKYfMtrOwGBasfXtnCQrQt0
+         ZY8XwnIFDIMVowknV408oeXCm0i0hYyERCu95ChMh91He5l8zhZRqVbBccrNLWwC+6a6
+         OC9kvUMk27JnIqeWwAWvwPQlMjeefznhhjRx+nOcR11yWNbZrQ7usXgDiLAUMnA+Qg1/
+         AdXA==
+X-Gm-Message-State: AOAM5308KJX4Re5L8b1x4N4exFGsmNwRrMiY0mUGKFdCqNpQWIyzcmG7
+        oklq/Hb2Rlco9dZSWkAetAc=
+X-Google-Smtp-Source: ABdhPJxHyAfggEAnG6BCXmnjSIm/DK8GKp/ispG/khJMmxwwer6e5otQ8/MOGWAvi3w0y6aA1YmT/Q==
+X-Received: by 2002:a54:4198:0:b0:326:5a5f:8ff7 with SMTP id 24-20020a544198000000b003265a5f8ff7mr12454819oiy.268.1652150345941;
+        Mon, 09 May 2022 19:39:05 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t35-20020a05680815a300b0032617532120sm4907984oiw.48.2022.05.09.19.39.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 19:39:04 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <af58fc2a-9d72-82b5-2cd4-8376a99e9ef5@roeck-us.net>
-Date:   Mon, 9 May 2022 17:41:04 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] dt-bindings: add extended-range-enable property to
- lm90.yaml
-Content-Language: en-US
-To:     Holger Brunck <holger.brunck@hitachienergy.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220509131016.29481-1-holger.brunck@hitachienergy.com>
+Date:   Mon, 9 May 2022 19:39:03 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220509131016.29481-1-holger.brunck@hitachienergy.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] hwmon: acpi_power_meter: fix style issue
+Message-ID: <20220510023903.GA1567190@roeck-us.net>
+References: <20220509063010.3878134-1-clabbe@baylibre.com>
+ <20220509063010.3878134-2-clabbe@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509063010.3878134-2-clabbe@baylibre.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/9/22 06:10, Holger Brunck wrote:
-> Add a boolean extended-range-enable to make the extented temperature
-> feature for some lm90 devices configurable.
+On Mon, May 09, 2022 at 06:30:09AM +0000, Corentin Labbe wrote:
+> Fix style issues found by checkpatch.
 > 
-> Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
-> cc: Jean Delvare <jdelvare@suse.com>
-> cc: Guenter Roeck <linux@roeck-us.net>
-> cc: Rob Herring <robh+dt@kernel.org>
-> cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> ---
->   Documentation/devicetree/bindings/hwmon/national,lm90.yaml | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> index 30db92977937..98d01f6c9331 100644
-> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> @@ -52,6 +52,10 @@ properties:
->     vcc-supply:
->       description: phandle to the regulator that provides the +VCC supply
->   
-> +  extended-range-enable:
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 
-This should probably be either "onsemi,extended-range-enable" (for adt7461)
-or "ti,extended-range-enable" (for the supported TI chips).
+Applied to hwmon-next.
 
+Thanks,
 Guenter
 
-> +    description: Set to enable extended range temperature.
-> +    type: boolean
+> ---
+>  drivers/hwmon/acpi_power_meter.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+> index c405a5869581..d2545a1be9fc 100644
+> --- a/drivers/hwmon/acpi_power_meter.c
+> +++ b/drivers/hwmon/acpi_power_meter.c
+> @@ -481,7 +481,7 @@ static struct sensor_template meter_attrs[] = {
+>  	RO_SENSOR_TEMPLATE("power1_average_interval_max", show_val, 1),
+>  	RO_SENSOR_TEMPLATE("power1_is_battery", show_val, 5),
+>  	RW_SENSOR_TEMPLATE(POWER_AVG_INTERVAL_NAME, show_avg_interval,
+> -		set_avg_interval, 0),
+> +			   set_avg_interval, 0),
+>  	{},
+>  };
+>  
+> @@ -530,6 +530,7 @@ static void remove_domain_devices(struct acpi_power_meter_resource *resource)
+>  
+>  	for (i = 0; i < resource->num_domain_devices; i++) {
+>  		struct acpi_device *obj = resource->domain_devices[i];
 > +
->   required:
->     - compatible
->     - reg
-
+>  		if (!obj)
+>  			continue;
+>  
+> @@ -580,7 +581,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
+>  	}
+>  
+>  	resource->holders_dir = kobject_create_and_add("measures",
+> -					&resource->acpi_dev->dev.kobj);
+> +						       &resource->acpi_dev->dev.kobj);
+>  	if (!resource->holders_dir) {
+>  		res = -ENOMEM;
+>  		goto exit_free;
+> @@ -590,7 +591,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
+>  
+>  	for (i = 0; i < pss->package.count; i++) {
+>  		struct acpi_device *obj;
+> -		union acpi_object *element = &(pss->package.elements[i]);
+> +		union acpi_object *element = &pss->package.elements[i];
+>  
+>  		/* Refuse non-references */
+>  		if (element->type != ACPI_TYPE_LOCAL_REFERENCE)
+> @@ -603,7 +604,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
+>  			continue;
+>  
+>  		res = sysfs_create_link(resource->holders_dir, &obj->dev.kobj,
+> -				      kobject_name(&obj->dev.kobj));
+> +					kobject_name(&obj->dev.kobj));
+>  		if (res) {
+>  			acpi_dev_put(obj);
+>  			resource->domain_devices[i] = NULL;
+> @@ -788,7 +789,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
+>  	str = &resource->model_number;
+>  
+>  	for (i = 11; i < 14; i++) {
+> -		union acpi_object *element = &(pss->package.elements[i]);
+> +		union acpi_object *element = &pss->package.elements[i];
+>  
+>  		if (element->type != ACPI_TYPE_STRING) {
+>  			res = -EINVAL;
+> @@ -868,8 +869,7 @@ static int acpi_power_meter_add(struct acpi_device *device)
+>  	if (!device)
+>  		return -EINVAL;
+>  
+> -	resource = kzalloc(sizeof(struct acpi_power_meter_resource),
+> -			   GFP_KERNEL);
+> +	resource = kzalloc(sizeof(*resource), GFP_KERNEL);
+>  	if (!resource)
+>  		return -ENOMEM;
+>  
+> @@ -884,7 +884,8 @@ static int acpi_power_meter_add(struct acpi_device *device)
+>  	if (res)
+>  		goto exit_free;
+>  
+> -	resource->trip[0] = resource->trip[1] = -1;
+> +	resource->trip[0] = -1;
+> +	resource->trip[1] = -1;
+>  
+>  	res = setup_attrs(resource);
+>  	if (res)
