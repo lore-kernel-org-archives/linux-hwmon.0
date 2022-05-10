@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 412B8C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 15:47:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21AE5C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 15:48:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346345AbiEJPuy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 May 2022 11:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S1346446AbiEJPwZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 May 2022 11:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346351AbiEJPsu (ORCPT
+        with ESMTP id S1347184AbiEJPwD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 May 2022 11:48:50 -0400
+        Tue, 10 May 2022 11:52:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE052282475;
-        Tue, 10 May 2022 08:44:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D552289BFF;
+        Tue, 10 May 2022 08:47:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52C82B81DF7;
-        Tue, 10 May 2022 15:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F672C385C9;
-        Tue, 10 May 2022 15:44:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C879B81DF7;
+        Tue, 10 May 2022 15:47:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338AFC385A6;
+        Tue, 10 May 2022 15:47:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652197472;
-        bh=jJ8F2I33zEvYSjUKYSt6FyML3kRHaXmOLK3o8UC1Emg=;
+        s=k20201202; t=1652197628;
+        bh=Xb2iH1RD9rLYp/HcvNZ8NPrqSJ1SAA5g+w9cI06BPY0=;
         h=From:To:Cc:Subject:Date:From;
-        b=O97xID795sBZKN33oyOTedM0fWmpvIH8NNeChpE60gP/GeM3WYUH4OYo3VfGfNbJy
-         btAiEITna9Brg+ZQkzbNq2UZuWJJOqMJYswCBUMkxzT8zylAa9qgVzvOHjMM+Pt5qp
-         twSH/3rtrZXsyn1boizDxOgsE6IKJFVEZgJyunn//ZMQLeMe+QkuMTOxwaps9cueO1
-         eSQYOB/7lJ71mJe+9HPGQVa3qft/QHHlW8BqwFOUN/J4eh42l8JWdngaq4c00X15fL
-         owO0sls5gshSH6ohG3wRCgCrPGZAqgadrX4PyDM+kgx0qp1+VA0MN2X9CJNsYwvc2v
-         V453UON8RhN4w==
+        b=ukOl6X+c/SsN0hsstWhZKeDN8MHZ6nYlKiZzAvAsr1uNJO/cNJNX7o/zo5xSZVmcS
+         C6M64OO4Zgdjd2FC+YQ0p3Dg+n5YzqBrgd4kStmOcpquWF1Y51co4mP0asvQ272HeI
+         rOMUFzp13Jyrssyk96W5aLHX6kWaSVztN/V3Mni0TkOi+Y3nF+ywia9SVFrFu7BGPZ
+         dqrOav3XRQirXc4TYbfjDB7N55hAv+8rIDESv5CpVGmm435t6UeGJIhIvuqnJXMhzU
+         bDfim4ym4MSc9zCcf5dxxgCvG/VA3TSLP/pzSJ5NVU/W64aBBR7oua2OjvNMYj3Phe
+         Y9NZu+/qSi+xQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>,
@@ -39,9 +39,9 @@ Cc:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 01/19] hwmon: (f71882fg) Fix negative temperature
-Date:   Tue, 10 May 2022 11:44:11 -0400
-Message-Id: <20220510154429.153677-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 1/4] hwmon: (f71882fg) Fix negative temperature
+Date:   Tue, 10 May 2022 11:47:00 -0400
+Message-Id: <20220510154704.154362-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-stable: review
@@ -74,10 +74,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
-index 4dec793fd07d..94b35723ee7a 100644
+index cb28e4b4fb10..b87ca56fb774 100644
 --- a/drivers/hwmon/f71882fg.c
 +++ b/drivers/hwmon/f71882fg.c
-@@ -1577,8 +1577,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
+@@ -1590,8 +1590,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
  		temp *= 125;
  		if (sign)
  			temp -= 128000;
