@@ -2,111 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E246C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 00:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D37DFC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 00:29:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiEJAcB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 May 2022 20:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S229782AbiEJAdo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 May 2022 20:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiEJAb5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 20:31:57 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F3A33A15;
-        Mon,  9 May 2022 17:28:02 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id m25so16975892oih.2;
-        Mon, 09 May 2022 17:28:02 -0700 (PDT)
+        with ESMTP id S229507AbiEJAdn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 20:33:43 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67097293B5B;
+        Mon,  9 May 2022 17:29:48 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id c22-20020a4ad216000000b0035f13ae7646so2850932oos.9;
+        Mon, 09 May 2022 17:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=NSUcuQgRbbYsO5310TC1TyD9wvXR9MGQ8QWcKSAbP+o=;
-        b=iVuAUBXbRURTgVcpGygVVDbQ/oZyInhhAKqkizfPh/Dgzw5h40ZL7qGLlBqndx8qIo
-         yY0erBQLgCXce0VgMpqbtPYPDFnUMcMikIUGtiP/Ia7JYjGVjMcfAcVOZgwmggiYgbOn
-         MP9ohOR0T31YqI/6QXiJHE4mn9sWBVobBtbJzMAa9UC+vOG5Wvp65EHy89Sf1PXFcmTX
-         a5g1ZhxH8n5Uoad/AhkesQV9dmljFSI1M9UoYmtvpf5PszAiQxi4cAmCiQtC76QRMmWz
-         eW06XKSwYHVga1HD2cjTpd4Uck9gepaXoSDZSeeTFWtLiLghoJ0YsX7RbCOaJNlIEZyb
-         Eplw==
+        bh=4ddPp9Dw0rrReN3EdBdVfQvB4Og0pQB+7ad9oZ0jVbA=;
+        b=A+HBDOOz9txlLtPj92ABOIlK0v2/aXLWA4dGOmd+611VVgQxLq2J7VOmUosdkH2gwB
+         VIbDuzgRAZSlaF7Lo2bmD5oE0tojsORUUBvPv+AMqOe8MnVi2nZONPN37pBVJpMyfBI8
+         umDBLZjq7Ik1wKp2f3BTe2PKkzEqEr35OT7Ni6XFu1kspCpmMGz3XSShiUKXc+Y4sb0H
+         unTac6WToYGzGPbJT9hcuK/MaH9XkMzHqqo8cuwuTlzP/geAdN4W1dOHq6jR9M48Nh7A
+         Mdx7L21nBBzLtFMU2MRzMJZwmi/ADxGal6kFo7nw9rB65tipBt1kD4lQX33yeY5921jM
+         be8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=NSUcuQgRbbYsO5310TC1TyD9wvXR9MGQ8QWcKSAbP+o=;
-        b=FIm+UIhDyLw90dTMTamUkmzX8mXA26lT+0T66M2FIvY2ef1H4ZL+NcZWWNmL5r6+jC
-         2QrWpg0JxVYZKL9CPn37MobESa89ZUvdYpXeSpqKFxbrA8UZ9+wZcj2lvXJ3N/U3/Ad0
-         bLIaVcPFINDgEJ81uaKIex+1+aMBb1Ug8b7Q/yt6CYcOKnDnPbakvytupnhFvbSlRztn
-         NKUzRiG3FHK04L22BgB17oXofQoujA31kxz5B/a2TtHNZUZZ6XKYkmguBjigqzyoHjiU
-         ef6J+ikPdKEmgohNNiZMV934kGrh/IiuQeieaicVOhi7AmKbLc+Aw8J4sBdZzg0f5Nop
-         aGUA==
-X-Gm-Message-State: AOAM531Lgy+249ECDYSC4PPWnDGcU6DKkfatWyIm+fx86jy/SO/g/oTa
-        8SsxLn4s+goWYAnpbw0fLUpgt2nIYdC4Rg==
-X-Google-Smtp-Source: ABdhPJz9rlYxOqLehK3dGXFVKBx2FmvXm2KhS5Mtdl6rsKzZnYcTFAtzt5W3QX/CuzMw3inViXtwCQ==
-X-Received: by 2002:a05:6808:e83:b0:322:3344:13c with SMTP id k3-20020a0568080e8300b003223344013cmr11599612oil.233.1652142481996;
-        Mon, 09 May 2022 17:28:01 -0700 (PDT)
+        bh=4ddPp9Dw0rrReN3EdBdVfQvB4Og0pQB+7ad9oZ0jVbA=;
+        b=V26iakT5z6omehXw6vkQvBHbEWwHjMhi5GOcMvgoE7fxy728wpLfdwKKM69GJsOoR9
+         YC+rK55ZwX/D/4+Uoak9ju42b+Bu7AH2sjyyG7gKj6XpocKID/8E9U7ah4znFYtg0PLN
+         L5+PuQ1wsZ/voopMGH6Och1q6lICd3+ICf72UH9hZXEtKerinFM405PPitITSGEjKlhz
+         TqahfVV42TEEa77WCNjZa5GUXw4Kr/c0dpso7izwucNm1MYNPpu5+mVzoDIUE05c0OVY
+         GOrOE3SI1yIzlQfGNflVgQ4wdGNpDJj6S0pp5ARr/0tcCMKi15wT8PkQwpk5BHk/TGZY
+         CT6Q==
+X-Gm-Message-State: AOAM532noTly0S9xZjPyT2PHL6pEP8yFRU9BcOg23nl6PYiScH9cRqAq
+        NGinW7FjrpRzuvyatp2o1GxZgvPwbPqRRg==
+X-Google-Smtp-Source: ABdhPJz0kzg0BfFO6HMjs4vhI0dHOGiPjFjpsAhhoynSRPzQOSfqd2p8gX2o9wBEOHMB6d6eNmRdTw==
+X-Received: by 2002:a4a:645:0:b0:35f:82e0:beab with SMTP id 66-20020a4a0645000000b0035f82e0beabmr2094974ooj.73.1652142587735;
+        Mon, 09 May 2022 17:29:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t4-20020a4adbc4000000b0035e9f149b90sm5496184oou.3.2022.05.09.17.28.00
+        by smtp.gmail.com with ESMTPSA id a204-20020acab1d5000000b00325643bce40sm5009358oif.0.2022.05.09.17.29.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 17:28:01 -0700 (PDT)
+        Mon, 09 May 2022 17:29:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 9 May 2022 17:27:59 -0700
+Date:   Mon, 9 May 2022 17:29:45 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Florian Eckert <fe@dev.tdt.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: ltq-cputemp: restrict it to SOC_XWAY
-Message-ID: <20220510002759.GA1561062@roeck-us.net>
-References: <20220509234740.26841-1-rdunlap@infradead.org>
+To:     Karl Mehltretter <kmehltretter@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (lm83) Remove unused include directives
+Message-ID: <20220510002945.GA1561373@roeck-us.net>
+References: <20220508144601.22796-1-kmehltretter@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509234740.26841-1-rdunlap@infradead.org>
+In-Reply-To: <20220508144601.22796-1-kmehltretter@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, May 09, 2022 at 04:47:40PM -0700, Randy Dunlap wrote:
-> Building with SENSORS_LTQ_CPUTEMP=y with SOC_FALCON=y causes build
-> errors since FALCON does not support the same features as XWAY.
+On Sun, May 08, 2022 at 04:46:01PM +0200, Karl Mehltretter wrote:
+> Some include directives are no longer necessary due to previous driver
+> changes. Remove them now to further improve driver code clarity.
 > 
-> Change this symbol to depend on SOC_XWAY since that provides the
-> necessary interfaces.
+> Mutex usage has ceased since commit 719af4f1a40b ("hwmon: (lm83) Use
+> regmap").
 > 
-> Repairs these build errors:
+> Ever since commit a0ac840d99fa ("hwmon: (lm83) Convert to use
+> devm_hwmon_device_register_with_groups") functions sysfs_create_group
+> and sysfs_remove_group are no longer used by the driver.
 > 
-> ../drivers/hwmon/ltq-cputemp.c: In function 'ltq_cputemp_enable':
-> ../drivers/hwmon/ltq-cputemp.c:23:9: error: implicit declaration of function 'ltq_cgu_w32'; did you mean 'ltq_ebu_w32'? [-Werror=implicit-function-declaration]
->    23 |         ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
-> ../drivers/hwmon/ltq-cputemp.c:23:21: error: implicit declaration of function 'ltq_cgu_r32'; did you mean 'ltq_ebu_r32'? [-Werror=implicit-function-declaration]
->    23 |         ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
-> ../drivers/hwmon/ltq-cputemp.c: In function 'ltq_cputemp_probe':
-> ../drivers/hwmon/ltq-cputemp.c:92:31: error: 'SOC_TYPE_VR9_2' undeclared (first use in this function)
->    92 |         if (ltq_soc_type() != SOC_TYPE_VR9_2)
-> 
-> Fixes: 7074d0a92758 ("hwmon: (ltq-cputemp) add cpu temp sensor driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Florian Eckert <fe@dev.tdt.de>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 
-Applied, thanks!
+Applied. Thanks!
 
 Guenter
 
 > ---
->  drivers/hwmon/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/lm83.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -977,7 +977,7 @@ config SENSORS_LTC4261
+> diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
+> index 12370dcef..905f5689f 100644
+> --- a/drivers/hwmon/lm83.c
+> +++ b/drivers/hwmon/lm83.c
+> @@ -24,10 +24,8 @@
+>  #include <linux/init.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/module.h>
+> -#include <linux/mutex.h>
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+> -#include <linux/sysfs.h>
 >  
->  config SENSORS_LTQ_CPUTEMP
->  	bool "Lantiq cpu temperature sensor driver"
-> -	depends on LANTIQ
-> +	depends on SOC_XWAY
->  	help
->  	  If you say yes here you get support for the temperature
->  	  sensor inside your CPU.
+>  /*
+>   * Addresses to scan
