@@ -2,49 +2,46 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 279DFC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 15:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 607E8C43219
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 15:43:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346116AbiEJPrq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 May 2022 11:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
+        id S1346125AbiEJPrr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 May 2022 11:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346141AbiEJPrp (ORCPT
+        with ESMTP id S1346115AbiEJPrq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 May 2022 11:47:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E6227D01B;
-        Tue, 10 May 2022 08:43:45 -0700 (PDT)
+        Tue, 10 May 2022 11:47:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6A127E3D2;
+        Tue, 10 May 2022 08:43:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4104261446;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 152DFCE1F39;
         Tue, 10 May 2022 15:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0147C385C9;
-        Tue, 10 May 2022 15:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C338C385A6;
+        Tue, 10 May 2022 15:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652197424;
-        bh=DkSAN+USaVISzIjayqT0awv2aj71/kgubBKemCRn9mw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XvRzvE4sHIaBqKhlknULILFkog9hAsdY0sk/QTXQ0DNe53/B8/ZpybUY68Ur5qZbt
-         AJqdQB0ahggDGLQOj6Xp2MLne6lCNuGDW5Soy2UV9aPN/J1ciJjQT1goQG41wg+5QJ
-         IcbhktXw/W6rsobZ0xD99su0sBZLzeF3VM526NcLs2GwONY4UHt8pdOpOVofLtyLkt
-         LjQAbSiq2Xc7gUKL2twLc90BLD8RlSmrE3rjOMpHZYvLzi+B325DZNkt69LIozxOnu
-         c+mjfdl63y4pCxFG26Xi63bAs2R7UMUqfM+MjJWf0cBvXJQfNzewZR0JDPIGtGMY3O
-         MiXMS19i+NFmA==
+        s=k20201202; t=1652197423;
+        bh=LtglKuDIcoTD0hbZVEoanwLub+zngdfuc7BctvOC8uc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dlbt5G4mubpZ/cKsg57ouR63FWF4S0cqs1IekadNuTTDsFfJG0bXz+ekGEhQ9DZRH
+         TSkQaDa34n38MJoQm8IM9AR0ae9knc1llwCKauNw56aQWdbM3HI2Gi8GAM/0mWbDAI
+         EkTzUIDz8sguGZGB2dpKuOnRBln93cg5K3SRGr69UwA1hf6bFO36uPnfS4epPct2ha
+         zQHdFUuGrZ/CND/FKb4bF9ZbffCmuFsna4H+vMUBogH6AF5SXpDzGr3WgaFAlAg1eV
+         HFR2KxgiH9loqVbsFMI23tVCQEPh7Ul76GKnJQySqaTwaNtBY6W3F3hU75eUe1z4zS
+         uo8L0Ilo69V8w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>,
-        Ji-Ze Hong <hpeter+linux_kernel@gmail.com>,
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 02/21] hwmon: (f71882fg) Fix negative temperature
-Date:   Tue, 10 May 2022 11:43:21 -0400
-Message-Id: <20220510154340.153400-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, kernel@maidavale.org,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 01/21] hwmon: (asus_wmi_sensors) Fix CROSSHAIR VI HERO name
+Date:   Tue, 10 May 2022 11:43:20 -0400
+Message-Id: <20220510154340.153400-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220510154340.153400-1-sashal@kernel.org>
-References: <20220510154340.153400-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,44 +50,34 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+From: Denis Pauk <pauk.denis@gmail.com>
 
-[ Upstream commit 4aaaaf0f279836f06d3b9d0ffeec7a1e1a04ceef ]
+[ Upstream commit 4fd45cc8568e6086272d3036f2c29d61e9b776a1 ]
 
-All temperature of Fintek superio hwmonitor that using 1-byte reg will use
-2's complement.
+CROSSHAIR VI HERO motherboard is incorrectly named as
+ROG CROSSHAIR VI HERO.
 
-In show_temp()
-	temp = data->temp[nr] * 1000;
-
-When data->temp[nr] read as 255, it indicate -1C, but this code will report
-255C to userspace. It'll be ok when change to:
-	temp = ((s8)data->temp[nr]) * 1000;
-
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
-Link: https://lore.kernel.org/r/20220418090706.6339-1-hpeter+linux_kernel@gmail.com
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Link: https://lore.kernel.org/r/20220403193455.1363-1-pauk.denis@gmail.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/f71882fg.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/hwmon/asus_wmi_sensors.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
-index 938a8b9ec70d..6830e029995d 100644
---- a/drivers/hwmon/f71882fg.c
-+++ b/drivers/hwmon/f71882fg.c
-@@ -1578,8 +1578,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
- 		temp *= 125;
- 		if (sign)
- 			temp -= 128000;
--	} else
--		temp = data->temp[nr] * 1000;
-+	} else {
-+		temp = ((s8)data->temp[nr]) * 1000;
-+	}
- 
- 	return sprintf(buf, "%d\n", temp);
- }
+diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+index c80eee874b6c..49784a6ea23a 100644
+--- a/drivers/hwmon/asus_wmi_sensors.c
++++ b/drivers/hwmon/asus_wmi_sensors.c
+@@ -71,7 +71,7 @@ static const struct dmi_system_id asus_wmi_dmi_table[] = {
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
+-	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("CROSSHAIR VI HERO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
 -- 
 2.35.1
 
