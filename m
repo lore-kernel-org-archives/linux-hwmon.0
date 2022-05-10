@@ -2,101 +2,151 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D37DFC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 00:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EBC9C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 May 2022 00:32:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiEJAdo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 May 2022 20:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S233638AbiEJAf4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 May 2022 20:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiEJAdn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 20:33:43 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67097293B5B;
-        Mon,  9 May 2022 17:29:48 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id c22-20020a4ad216000000b0035f13ae7646so2850932oos.9;
-        Mon, 09 May 2022 17:29:48 -0700 (PDT)
+        with ESMTP id S233011AbiEJAfz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 May 2022 20:35:55 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6491339D7;
+        Mon,  9 May 2022 17:31:58 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-ed8a3962f8so16592872fac.4;
+        Mon, 09 May 2022 17:31:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=4ddPp9Dw0rrReN3EdBdVfQvB4Og0pQB+7ad9oZ0jVbA=;
-        b=A+HBDOOz9txlLtPj92ABOIlK0v2/aXLWA4dGOmd+611VVgQxLq2J7VOmUosdkH2gwB
-         VIbDuzgRAZSlaF7Lo2bmD5oE0tojsORUUBvPv+AMqOe8MnVi2nZONPN37pBVJpMyfBI8
-         umDBLZjq7Ik1wKp2f3BTe2PKkzEqEr35OT7Ni6XFu1kspCpmMGz3XSShiUKXc+Y4sb0H
-         unTac6WToYGzGPbJT9hcuK/MaH9XkMzHqqo8cuwuTlzP/geAdN4W1dOHq6jR9M48Nh7A
-         Mdx7L21nBBzLtFMU2MRzMJZwmi/ADxGal6kFo7nw9rB65tipBt1kD4lQX33yeY5921jM
-         be8Q==
+        bh=XtS/P9SmLyk3QKWLF6JMOAV4b0xIsdiYHPObF4LauGQ=;
+        b=BSrhzxAFg7vDoEAPdmxTC8b0yvX+6eIwJS56/qBvt4E/7YteelJ39f3uaU1h+irl8b
+         ESQGYmYixD9vuUqsyx/heCdeCpMFaUzpjkTMN5+rOI3+V741UInfr4UjTURRj+A8dbfZ
+         qnJdOX//nsKTILx+LQJNrepr0D1xnlZGZJN+s6fsqRhk1bmsnipSgnC75kYCs+GIlBY+
+         eYSybBLKHYBZMXWpIYNRxDsoTb8TWNZncYA2dUNcyLYHjQpSUqSavXO6HT1oKWNDgLdm
+         JxPWEMnvgdr4LFgx4ASFDtFGzeS2DZJqEl88jHtvm+S/myRHPG7428A+gmvvX0SjKpv9
+         xvpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=4ddPp9Dw0rrReN3EdBdVfQvB4Og0pQB+7ad9oZ0jVbA=;
-        b=V26iakT5z6omehXw6vkQvBHbEWwHjMhi5GOcMvgoE7fxy728wpLfdwKKM69GJsOoR9
-         YC+rK55ZwX/D/4+Uoak9ju42b+Bu7AH2sjyyG7gKj6XpocKID/8E9U7ah4znFYtg0PLN
-         L5+PuQ1wsZ/voopMGH6Och1q6lICd3+ICf72UH9hZXEtKerinFM405PPitITSGEjKlhz
-         TqahfVV42TEEa77WCNjZa5GUXw4Kr/c0dpso7izwucNm1MYNPpu5+mVzoDIUE05c0OVY
-         GOrOE3SI1yIzlQfGNflVgQ4wdGNpDJj6S0pp5ARr/0tcCMKi15wT8PkQwpk5BHk/TGZY
-         CT6Q==
-X-Gm-Message-State: AOAM532noTly0S9xZjPyT2PHL6pEP8yFRU9BcOg23nl6PYiScH9cRqAq
-        NGinW7FjrpRzuvyatp2o1GxZgvPwbPqRRg==
-X-Google-Smtp-Source: ABdhPJz0kzg0BfFO6HMjs4vhI0dHOGiPjFjpsAhhoynSRPzQOSfqd2p8gX2o9wBEOHMB6d6eNmRdTw==
-X-Received: by 2002:a4a:645:0:b0:35f:82e0:beab with SMTP id 66-20020a4a0645000000b0035f82e0beabmr2094974ooj.73.1652142587735;
-        Mon, 09 May 2022 17:29:47 -0700 (PDT)
+        bh=XtS/P9SmLyk3QKWLF6JMOAV4b0xIsdiYHPObF4LauGQ=;
+        b=l6GO3Z9LrLRAptxyrZnDAvTdIl+46z9voprg2GasIyARXEF1gudgjTd1YCfQ0NgrWj
+         vJfxwR2soEZQho5IJIydYcbrklpeJQBHa1jZnGFUuRZW2D4j4sUiEYVhRO0+PBTG/YW8
+         S6PodaKgKLJ0OB4PJF7dLR1DGagL1gRiqodiTvKWnySi+D7PWDn+HvYQYvEQ0D0R+jrV
+         3Okh4GfzH115B3valBKUJjZ+htSKqm1HZEfxMeTXKdev9F0jxxkx7pSJ5r6f1AjZuzXb
+         DtujnX92q+FFJEztJtCDMH97fKIWnc7HgAwWVy1fJToQbJkcUKVNpguwIe4MY3VNpmTl
+         R41Q==
+X-Gm-Message-State: AOAM533c50Hc2c11xFY6NLJbSUb9pFgS2EtZ3g05gTTrGJbBnQB4liGD
+        YG9V2DriUacOlKVJKWxVnSA=
+X-Google-Smtp-Source: ABdhPJxQubDMBuGGFGcBGtQ05uHQ5cLejrRVo9CQ00xyhkTOd/6FYn7yVWlRvW8lJ7+aTn/5BuMQ/A==
+X-Received: by 2002:a05:6870:15d0:b0:e9:8787:60c2 with SMTP id k16-20020a05687015d000b000e9878760c2mr11629759oad.294.1652142717960;
+        Mon, 09 May 2022 17:31:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a204-20020acab1d5000000b00325643bce40sm5009358oif.0.2022.05.09.17.29.46
+        by smtp.gmail.com with ESMTPSA id b14-20020a4aac8e000000b0035eb4e5a6bcsm5622339oon.18.2022.05.09.17.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 17:29:46 -0700 (PDT)
+        Mon, 09 May 2022 17:31:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 9 May 2022 17:29:45 -0700
+Date:   Mon, 9 May 2022 17:31:56 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Karl Mehltretter <kmehltretter@gmail.com>
+To:     Zev Weiss <zev@bewilderbeest.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (lm83) Remove unused include directives
-Message-ID: <20220510002945.GA1561373@roeck-us.net>
-References: <20220508144601.22796-1-kmehltretter@gmail.com>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add nuvoton,nct6775
+Message-ID: <20220510003156.GA1561729@roeck-us.net>
+References: <20220428012707.24921-1-zev@bewilderbeest.net>
+ <20220428012707.24921-2-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220508144601.22796-1-kmehltretter@gmail.com>
+In-Reply-To: <20220428012707.24921-2-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, May 08, 2022 at 04:46:01PM +0200, Karl Mehltretter wrote:
-> Some include directives are no longer necessary due to previous driver
-> changes. Remove them now to further improve driver code clarity.
+On Wed, Apr 27, 2022 at 06:27:06PM -0700, Zev Weiss wrote:
+> These Super I/O chips have an i2c interface that some systems expose
+> to a BMC; the BMC's device tree can now describe that via this
+> binding.
 > 
-> Mutex usage has ceased since commit 719af4f1a40b ("hwmon: (lm83) Use
-> regmap").
-> 
-> Ever since commit a0ac840d99fa ("hwmon: (lm83) Convert to use
-> devm_hwmon_device_register_with_groups") functions sysfs_create_group
-> and sysfs_remove_group are no longer used by the driver.
-> 
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Applied. Thanks!
+Applied.
 
+Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/lm83.c | 2 --
->  1 file changed, 2 deletions(-)
+>  .../bindings/hwmon/nuvoton,nct6775.yaml       | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
 > 
-> diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
-> index 12370dcef..905f5689f 100644
-> --- a/drivers/hwmon/lm83.c
-> +++ b/drivers/hwmon/lm83.c
-> @@ -24,10 +24,8 @@
->  #include <linux/init.h>
->  #include <linux/hwmon.h>
->  #include <linux/module.h>
-> -#include <linux/mutex.h>
->  #include <linux/regmap.h>
->  #include <linux/slab.h>
-> -#include <linux/sysfs.h>
->  
->  /*
->   * Addresses to scan
+> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> new file mode 100644
+> index 000000000000..358b262431fc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct6775.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NCT6775 and compatible Super I/O chips
+> +
+> +maintainers:
+> +  - Zev Weiss <zev@bewilderbeest.net>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,nct6106
+> +      - nuvoton,nct6116
+> +      - nuvoton,nct6775
+> +      - nuvoton,nct6776
+> +      - nuvoton,nct6779
+> +      - nuvoton,nct6791
+> +      - nuvoton,nct6792
+> +      - nuvoton,nct6793
+> +      - nuvoton,nct6795
+> +      - nuvoton,nct6796
+> +      - nuvoton,nct6797
+> +      - nuvoton,nct6798
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nuvoton,tsi-channel-mask:
+> +    description:
+> +      Bitmask indicating which TSI temperature sensor channels are
+> +      active.  LSB is TSI0, bit 1 is TSI1, etc.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maximum: 0xff
+> +    default: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        superio@4d {
+> +            compatible = "nuvoton,nct6779";
+> +            reg = <0x4d>;
+> +            nuvoton,tsi-channel-mask = <0x03>;
+> +        };
+> +    };
