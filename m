@@ -2,99 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF063C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 01:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC79C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 06:38:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240898AbiEKB5y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 May 2022 21:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
+        id S231802AbiEKGi0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 May 2022 02:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240897AbiEKB5w (ORCPT
+        with ESMTP id S234462AbiEKGiZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 May 2022 21:57:52 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DF849F15
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 May 2022 18:57:50 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id q8so1050165oif.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 May 2022 18:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BRzv3RY9Ga7H4cWjCS6g0LmFnAidN5ABvWdmTv/9bqI=;
-        b=Dm9lLzDJGoF17J2urWXb+YvjQzff0B3znzV8GyirjO8npYAsHQeTz5FuWcWNS/F+Ll
-         jdYAqgNpHRhYohME1uOTCMInROO7WvT5A9aXZBaWAuFykQ32mKhtAL0YoHmy6u6/G/Ru
-         0RAHXamBpqEZ+vLdMFjv20o0sri6HkLdsFszHSmp012c+ubPl8Y90ZuO9lf4oa2mExPn
-         22qmvLeqCMZlvXOZBGi+pejrBoypDkf5ic65tm4K0crN05U9m1u8B4bfwIXZWA5Q29j/
-         7D+6EFRam2qfREHQBGX2g5RR3SaLjmAocgRSwOfDW82EqG7qsOtJbY1tz3QkDelMFnOa
-         CjRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=BRzv3RY9Ga7H4cWjCS6g0LmFnAidN5ABvWdmTv/9bqI=;
-        b=OL3euwS9CuDNxuom8j5SvwUDio0R0ryTV4TlMZc+CWPmxaOYE+rIQNxFZzZp6ONXb0
-         ZXmYOtYNfraWYGfZIdxWvj35smC6ZJkjxw77tha9f0bbrhneDbcp4nldUoXkWuPW5fwG
-         ETaeoEnQuOsrLXEwYM6izjw7kfIRb/RDE3eO5KHC+6fmSgPO87UZ6LAfVM9A71gcvOwE
-         Rqt3qooqlqb04OAs0sEM8xKJb1zKXRohsGxu1rQbruOwd3NoYvEX2HU81/7Qct1GK3cL
-         Lguv0aDPXNs6W/6wQ/ZQcnQJufHjYhXLfJfoDfykEwkbw8NhAhzn/KY5+Y1q30FaPuFd
-         darQ==
-X-Gm-Message-State: AOAM531dPD+f2Hy5qpQ9RYuCNhjzHgHo6ErNI088P/Y8awwvsDY/YJpk
-        RIL/HuwrprMoDArMaNu0ABLXmrq1elDPFw==
-X-Google-Smtp-Source: ABdhPJwfh5pyzP6PPapQFIunzfhQmHUO22az9N5qS79/JetjvRPWoI8ekc7qnrMjOYXhxGsTqr0W6g==
-X-Received: by 2002:a05:6808:ed0:b0:2f9:c6f8:8b38 with SMTP id q16-20020a0568080ed000b002f9c6f88b38mr1420087oiv.215.1652234270337;
-        Tue, 10 May 2022 18:57:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z29-20020a056870461d00b000e686d13876sm231831oao.16.2022.05.10.18.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 18:57:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 10 May 2022 18:57:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg.Schwendimann@infineon.com
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] dt-bindings: trivial-devices: Add xdp152
-Message-ID: <20220511015748.GA2324005@roeck-us.net>
-References: <871b255e183e4468a9affce6defb0292@infineon.com>
+        Wed, 11 May 2022 02:38:25 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8141D23F384;
+        Tue, 10 May 2022 23:38:24 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KylZG3DJhz1JC19;
+        Wed, 11 May 2022 14:37:10 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 14:38:22 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
+ 2022 14:38:21 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+CC:     <zbr@ioremap.net>, <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] drivers: w1: use kfree_sensitive()
+Date:   Wed, 11 May 2022 14:49:54 +0800
+Message-ID: <20220511064954.3401381-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871b255e183e4468a9affce6defb0292@infineon.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 06:40:13PM +0000, Greg.Schwendimann@infineon.com wrote:
-> Add Infineon Digital Multi-phase xdp152 family controllers.
-> 
-> Signed-off-by: Greg Schwendimann <Greg.Schwendimann@infineon.com>
-> ---
+Use kfree_sensitive() instead of open-coding it.
 
-I just noticed that DT maintainers were not copied on this patch, so
-it is not entirely surprising that there was no feedback.
-Please resend and copy Rob Herring <robh+dt@kernel.org>,
-Krzysztof Kozlowski <krzk+dt@kernel.org>, and devicetree@vger.kernel.org.
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/w1/w1.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index f2ae2e563dc5..a0a6c3c739d9 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
+ 	struct w1_master *md = dev_to_w1_master(dev);
+ 
+ 	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
+-	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
+-	kfree(md);
++	kfree_sensitive(md);
+ }
+ 
+ static void w1_slave_release(struct device *dev)
+-- 
+2.25.1
 
-> Separated the device tree bindings documentation
-> 
->  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 550a2e5c9e05..fc2164c4d108 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -143,6 +143,10 @@ properties:
->            - infineon,xdpe12254
->              # Infineon Multi-phase Digital VR Controller xdpe12284
->            - infineon,xdpe12284
-> +            # Infineon Multi-phase Digital VR Controller xdpe152c4
-> +          - infineon,xdpe152c4
-> +            # Infineon Multi-phase Digital VR Controller xdpe15284
-> +          - infineon,xdpe15284
->              # Injoinic IP5108 2.0A Power Bank IC with I2C
->            - injoinic,ip5108
->              # Injoinic IP5109 2.1A Power Bank IC with I2C
