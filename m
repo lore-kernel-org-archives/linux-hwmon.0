@@ -2,97 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D42ABC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 17:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F686C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 18:21:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbiEKRzk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 May 2022 13:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S238919AbiEKSVP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 May 2022 14:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345925AbiEKRzi (ORCPT
+        with ESMTP id S237718AbiEKSVN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 May 2022 13:55:38 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FD66D865
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 10:55:38 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id l18so5578122ejc.7
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 10:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/FwjoTI9KKF/DHqOsUyINnabl/AdXqMd1Dk70LhDCQ8=;
-        b=h83lArFGhzEKwgBj5CCebA1wFLB0zadieWJEhNAOhebWmYnrh1Xr4utxDqWMBjhWDy
-         kHOkJoQB/2lI/bgtopI/FPTJmGP9Cym5dYa2luKxd5tHDd9H16mZ3+9dlnRS1MMKTCFK
-         LGyWezINVV4qJD/PdWkFtVhr6rH72DSI4IgqXQEkjO0Fgek+hRnvGqhJBhN7ybCZu9Nf
-         mT50IGL2cQuIrnJ0i15q1om6NYN6gt88Mgyaf7kcgyJrWU9Aw7h7XMajLNiMn5aObtKA
-         y0sEGeHubGLvEht37J5wieaNBLzjq8lYwWD0G8N398OOxhL1Qn7IB4fvZw2y7l++zTuK
-         Xalw==
+        Wed, 11 May 2022 14:21:13 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669D1880C2;
+        Wed, 11 May 2022 11:21:12 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2f16645872fso31065187b3.4;
+        Wed, 11 May 2022 11:21:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/FwjoTI9KKF/DHqOsUyINnabl/AdXqMd1Dk70LhDCQ8=;
-        b=evA7WuanhikSfZ7onGJZF0HB6YipOj+F+p45d75bwB5T6cXFXHbaUeu+ikX+ah4wMZ
-         num2CP4b0zKv/b03PtPTEpCqlAJnTqdZNrsTckcF1S9yZeGwQfNpS3dh763GugYK2eEL
-         zpNxwQ/ty5EOLcFJ0GRcrbNfq/IogS7llnIVFnqI+yywXMDmEhx2bDA17p4N0Ov31c4O
-         MnxmuLC35BV2vu7K/laYl9dpK3SpCQ+SZBbdDCZf9AlVDQVz/+PKWFe6tJjnYCjI2O22
-         s/loiUsw5x+uSStBmoynffNPFDsFaGA9KP1ivB7pR9ZM7iB72nibtdgC5xXtUCknLRLB
-         FufQ==
-X-Gm-Message-State: AOAM532EI3xakGLDKJgO/nZbNQxhpTJb56vyFxwYfwqxMTeCP8hUkqTc
-        ySgThnM7hUG0xEikkFCAi8WhgQ==
-X-Google-Smtp-Source: ABdhPJyl0/IxKkciw5u8JGwzExEC0k4giCZqpN20qHftxgmYSfk9ysL5FWDvzmKpWzqiew8UFOvvhA==
-X-Received: by 2002:a17:906:478c:b0:6f4:e6c6:526f with SMTP id cw12-20020a170906478c00b006f4e6c6526fmr26424014ejc.41.1652291736715;
-        Wed, 11 May 2022 10:55:36 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l19-20020a170906645300b006f3ef214e69sm1206288ejn.207.2022.05.11.10.55.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 10:55:36 -0700 (PDT)
-Message-ID: <15cb434a-7a64-58bb-083c-fa7aeacae672@linaro.org>
-Date:   Wed, 11 May 2022 19:55:35 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PEzE/fMbhkvTCsodGRCOYp8X3T4STTiJO+VQ1gmZOvI=;
+        b=69XoAQJt9HUPpv5YLVTxKqdeOIf7HqT5s8kdZS6tU8cAUuLHBhMUaQ7c/u4a65rKuX
+         Ot3olPDSESZUqrEtN4w7/amKiM/lBhdMsF752aEgzOQh3o79x+cAVfbGw4dF/Q9OGeLW
+         6g3H5sP0wknVAysa8kFHt2pA7VjJWtghz8LzBfoQymnmbz369ArfvgOBOWCJArvUKCHD
+         22hd+D0k2WwcNEx2t+ZaYdpU5PIGMa/8J1VWEzgi3O9XNCU2yPQHBdzSrDjJHY4bh/hu
+         DmAHM6Ot8YGjyzAL5Mgn+AuXTaDJ4hErsOvAvz/EOPvvY3Z5ncEzugy1Oes0ps3McJlC
+         s62w==
+X-Gm-Message-State: AOAM5309XwuEWyh0ZcsA2XJYS87v99V39f6fnlsbe12qriHrK9Jy7K7b
+        eJxRusGVrSjtqSoqu1ymm0ab8U4dJ8Z8QGpCk58=
+X-Google-Smtp-Source: ABdhPJwncJBUe1wfJI5lpUwPYq136NaNF02hOPCE3KR8Y4JdX25D5xhv7O0q5uOnp4UKFutJCLGixkwWj/8cqY/5RmM=
+X-Received: by 2002:a81:2f4e:0:b0:2fb:2c97:d66f with SMTP id
+ v75-20020a812f4e000000b002fb2c97d66fmr27202703ywv.196.1652293271699; Wed, 11
+ May 2022 11:21:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [v2 1/2] dt-bindings: add extended-range-enable property to
- lm90.yaml
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Holger Brunck <holger.brunck@hitachienergy.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220510080900.22758-1-holger.brunck@hitachienergy.com>
- <34d88cd9-2bcd-77e6-8cc9-93b8cbd63a8f@linaro.org>
- <037b551f-1781-321a-1984-117d098d980d@roeck-us.net>
- <b895f874-c8b8-3889-c7c9-0c0494e9bae0@linaro.org>
- <85d1ed0b-1e1f-bee7-9b0f-fbbf50921ad0@roeck-us.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <85d1ed0b-1e1f-bee7-9b0f-fbbf50921ad0@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220511151230.2983227-1-linux@roeck-us.net>
+In-Reply-To: <20220511151230.2983227-1-linux@roeck-us.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 20:21:00 +0200
+Message-ID: <CAJZ5v0gk19uQG-+_gm7J_Gk+H2mtH+SmEojnPcEDiFdPoyjCzw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] hwmon: Introduce and use hwmon_device_register_for_thermal
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/05/2022 19:40, Guenter Roeck wrote:
->> Me neither. Just pick one matching the device actually using this
->> property. If all of them are using it, how about keeping old "national"
->> or it's owner "ti"? If not all of them are using it, then this would
->> need "allOf:if:then" restricting where the property is (not) applicable.
->>
-> 
-> It is only applicable for tmp451, tmp461, and adt7461[a], so it looks
-> like "allOf:if:then" will be needed. 
+On Wed, May 11, 2022 at 5:12 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> The thermal subsystem registers a hwmon driver without providing
+> chip information or sysfs group information. This is for legacy reasons
+> and would be difficult to change.
+>
+> At the same time, several attempts have been made to convert hwmon
+> drivers using the deprecated hwmon_device_register() to use
+> hwmon_device_register_with_info() by just providing NULL parameters.
+> This is an abuse of the hwmon API. To prevent this abuse, we want to
+> enforce that a parent device pointer as well as chip information is
+> provided when registering a hwmon device using
+> hwmon_device_register_with_info().
+>
+> To be able to do this, introduce and use a special API for use only by
+> the thermal subsystem (patches 1 and 2). Patch 3 makes the 'dev' and 'chip'
+> parameters of hwmon_device_register_with_info() mandatory.
+>
+> ----------------------------------------------------------------
+> Guenter Roeck (3):
+>       hwmon: Introduce hwmon_device_register_for_thermal
+>       thermal/drivers/thermal_hwmon: Use hwmon_device_register_for_thermal()
+>       hwmon: Make chip parameter for with_info API mandatory
+>
+>  Documentation/hwmon/hwmon-kernel-api.rst |  2 +-
+>  drivers/hwmon/hwmon.c                    | 41 ++++++++++++++++++++++++++++++++---------
+>  drivers/thermal/thermal_hwmon.c          |  6 ++++--
+>  include/linux/hwmon.h                    |  3 +++
+>  4 files changed, 40 insertions(+), 12 deletions(-)
 
-Yes, please.
+This looks good to me from the thermal perspective, so please feel
+free to add my ACKs to the first two patches.
 
-> Note that none of those chips are
-> or have ever been owned by National. Given that, maybe ti would be most
-> appropriate ?
-
-Sure.
-
-
-Best regards,
-Krzysztof
+Thanks!
