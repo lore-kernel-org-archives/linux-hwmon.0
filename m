@@ -2,125 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81018C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 01:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF063C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 01:57:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbiEKBhj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 May 2022 21:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
+        id S240898AbiEKB5y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 May 2022 21:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbiEKBhh (ORCPT
+        with ESMTP id S240897AbiEKB5w (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 May 2022 21:37:37 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CEC56F83
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 May 2022 18:37:36 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id q8so1012358oif.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 May 2022 18:37:36 -0700 (PDT)
+        Tue, 10 May 2022 21:57:52 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DF849F15
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 May 2022 18:57:50 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id q8so1050165oif.13
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 May 2022 18:57:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=TagVN3PQe7GEKWsS80IsSXJr3bH8NP92efZPFMc4XHE=;
-        b=cL75SeSl8qY5P0fW313CJdJvxqKYjlqvlMx6kNFNlW6wKN1NvIk4zN8pK1fXdnMioK
-         XsxZHCjPfFAD6hoWS1ZdKweOLG4vNGBGe6atY/EjQA3Lcp2pIcmr7vDArPmsMvIHDrgQ
-         Bq0LFXmwv6GQaozOBQbQq2GNNJ34nB7kETwBvzcgGxVB3x5QCAlSAIZHKobY2s+H1YyM
-         b9Sj/qvaoNAFH19IkquFYI1YeCPnPNjVSSwt07/2VhPiSvpH98R5/lDDFkuh0nkopXhK
-         jyHYGtO9a9a04OlbWOtfyogKJxHphlK1b8eWgBNMsoO68plpBPUt3x+Jhn5vy3qdTOlI
-         EhQg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BRzv3RY9Ga7H4cWjCS6g0LmFnAidN5ABvWdmTv/9bqI=;
+        b=Dm9lLzDJGoF17J2urWXb+YvjQzff0B3znzV8GyirjO8npYAsHQeTz5FuWcWNS/F+Ll
+         jdYAqgNpHRhYohME1uOTCMInROO7WvT5A9aXZBaWAuFykQ32mKhtAL0YoHmy6u6/G/Ru
+         0RAHXamBpqEZ+vLdMFjv20o0sri6HkLdsFszHSmp012c+ubPl8Y90ZuO9lf4oa2mExPn
+         22qmvLeqCMZlvXOZBGi+pejrBoypDkf5ic65tm4K0crN05U9m1u8B4bfwIXZWA5Q29j/
+         7D+6EFRam2qfREHQBGX2g5RR3SaLjmAocgRSwOfDW82EqG7qsOtJbY1tz3QkDelMFnOa
+         CjRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=TagVN3PQe7GEKWsS80IsSXJr3bH8NP92efZPFMc4XHE=;
-        b=gUAnnePgYRUVhlgVHmU3qt6KX8Ks/gLO7XiltlpqsFhqLJfezYoxyR+h4jIko9w6XV
-         1tvdiXTKx3UK8F3mohPWa5BdJXtqTMeJqTR3KZlseUtR1iGcO+g25lox+znoYFNRHhzP
-         kyNDoRzLF2ISXn1WR9czSGHh/moqgKJav20vWL1mPdkL0WaWlMHTVrVSIOuIQViii4s/
-         5mk/2aHmTeSI3mBD8mwPXq+iK+LQhLQRfjCUlmQh7tAwL0HhO5oFMWbBKzV1dW4J2amn
-         vTktc8I3SVn1Mi9g6fkVzEr+soG5253JcrhpRujoe+Cxor+X+qWu+9S4+OGSCO2YLcvl
-         iRDA==
-X-Gm-Message-State: AOAM530BC4s0dBptINkiNjtjOYXHibxT+8wswkRcH4Fo/LIezQJFytI3
-        wHFYw/a6Ug7rCR0Grwbhh6E=
-X-Google-Smtp-Source: ABdhPJz/rFP9kgCvRWe5uvQzEmV8WKPwfSC5IoqFcswhX/d2uo/hp3NBAy08PxzbJ60N8om6a7jQGA==
-X-Received: by 2002:aca:a98e:0:b0:326:b029:33ef with SMTP id s136-20020acaa98e000000b00326b02933efmr1370378oie.123.1652233055490;
-        Tue, 10 May 2022 18:37:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e18-20020a056870d11200b000e92295f8acsm234868oac.2.2022.05.10.18.37.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 18:37:34 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=BRzv3RY9Ga7H4cWjCS6g0LmFnAidN5ABvWdmTv/9bqI=;
+        b=OL3euwS9CuDNxuom8j5SvwUDio0R0ryTV4TlMZc+CWPmxaOYE+rIQNxFZzZp6ONXb0
+         ZXmYOtYNfraWYGfZIdxWvj35smC6ZJkjxw77tha9f0bbrhneDbcp4nldUoXkWuPW5fwG
+         ETaeoEnQuOsrLXEwYM6izjw7kfIRb/RDE3eO5KHC+6fmSgPO87UZ6LAfVM9A71gcvOwE
+         Rqt3qooqlqb04OAs0sEM8xKJb1zKXRohsGxu1rQbruOwd3NoYvEX2HU81/7Qct1GK3cL
+         Lguv0aDPXNs6W/6wQ/ZQcnQJufHjYhXLfJfoDfykEwkbw8NhAhzn/KY5+Y1q30FaPuFd
+         darQ==
+X-Gm-Message-State: AOAM531dPD+f2Hy5qpQ9RYuCNhjzHgHo6ErNI088P/Y8awwvsDY/YJpk
+        RIL/HuwrprMoDArMaNu0ABLXmrq1elDPFw==
+X-Google-Smtp-Source: ABdhPJwfh5pyzP6PPapQFIunzfhQmHUO22az9N5qS79/JetjvRPWoI8ekc7qnrMjOYXhxGsTqr0W6g==
+X-Received: by 2002:a05:6808:ed0:b0:2f9:c6f8:8b38 with SMTP id q16-20020a0568080ed000b002f9c6f88b38mr1420087oiv.215.1652234270337;
+        Tue, 10 May 2022 18:57:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z29-20020a056870461d00b000e686d13876sm231831oao.16.2022.05.10.18.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 18:57:49 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <692d5ac7-840f-49da-c06a-c2b0e0e6cf8c@roeck-us.net>
-Date:   Tue, 10 May 2022 18:37:32 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Holger Brunck <holger.brunck@hitachienergy.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>
-References: <20220510080900.22758-1-holger.brunck@hitachienergy.com>
- <20220510080900.22758-2-holger.brunck@hitachienergy.com>
+Date:   Tue, 10 May 2022 18:57:48 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [v2 2/2] driver/hwmon/lm90: enable extended range according to
- DTS node
-In-Reply-To: <20220510080900.22758-2-holger.brunck@hitachienergy.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Greg.Schwendimann@infineon.com
+Cc:     linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] dt-bindings: trivial-devices: Add xdp152
+Message-ID: <20220511015748.GA2324005@roeck-us.net>
+References: <871b255e183e4468a9affce6defb0292@infineon.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871b255e183e4468a9affce6defb0292@infineon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
-
-On 5/10/22 01:09, Holger Brunck wrote:
-> Some lm90 devices can operate in a extended temperature mode, this feature
-
-lm90 compatible ... mode. This ...
-
-> is now eanbled if the property is set in the corresponding device tree
-
-enabled
-
-> node.
+On Wed, Apr 27, 2022 at 06:40:13PM +0000, Greg.Schwendimann@infineon.com wrote:
+> Add Infineon Digital Multi-phase xdp152 family controllers.
 > 
-> Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
-> cc: Jean Delvare <jdelvare@suse.com>
-> cc: Guenter Roeck <linux@roeck-us.net>
-
-Cc: isn't really necessary or useful to list maintainers; You might want to
-use the --cc option of git send-email instead. Also, if used, it should
-be "Cc:".
-
-For the subject, please use "hwmon: (lm90) ...".
-
+> Signed-off-by: Greg Schwendimann <Greg.Schwendimann@infineon.com>
 > ---
->   drivers/hwmon/lm90.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index 1c9493c70813..6cdbcfab9f20 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -1707,6 +1707,7 @@ static void lm90_restore_conf(void *_data)
->   
->   static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
->   {
-> +	struct device_node *np = client->dev.of_node;
->   	int config, convrate;
->   
->   	convrate = lm90_read_reg(client, LM90_REG_R_CONVRATE);
-> @@ -1727,7 +1728,8 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
->   
->   	/* Check Temperature Range Select */
->   	if (data->flags & LM90_HAVE_EXTENDED_TEMP) {
-> -		if (config & 0x04)
-> +		if (config & 0x04 ||
-> +		    of_property_read_bool(np, "onsemi,extended-range-enable"))
->   			data->flags |= LM90_FLAG_ADT7461_EXT;
 
-Maybe I am missing something, but I don't see the matching configuration
-change. Specifying the flag in devicetree only really makes sense if the
-chip configuration is changed accordingly.
+I just noticed that DT maintainers were not copied on this patch, so
+it is not entirely surprising that there was no feedback.
+Please resend and copy Rob Herring <robh+dt@kernel.org>,
+Krzysztof Kozlowski <krzk+dt@kernel.org>, and devicetree@vger.kernel.org.
 
+Thanks,
 Guenter
+
+> Separated the device tree bindings documentation
+> 
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 550a2e5c9e05..fc2164c4d108 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -143,6 +143,10 @@ properties:
+>            - infineon,xdpe12254
+>              # Infineon Multi-phase Digital VR Controller xdpe12284
+>            - infineon,xdpe12284
+> +            # Infineon Multi-phase Digital VR Controller xdpe152c4
+> +          - infineon,xdpe152c4
+> +            # Infineon Multi-phase Digital VR Controller xdpe15284
+> +          - infineon,xdpe15284
+>              # Injoinic IP5108 2.0A Power Bank IC with I2C
+>            - injoinic,ip5108
+>              # Injoinic IP5109 2.1A Power Bank IC with I2C
