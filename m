@@ -2,154 +2,268 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61C87C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 14:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7408CC433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 14:57:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244825AbiEKOiB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 May 2022 10:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S245203AbiEKO5L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 May 2022 10:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244794AbiEKOiA (ORCPT
+        with ESMTP id S235418AbiEKO5F (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 May 2022 10:38:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14334F46C
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 07:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652279878; x=1683815878;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yw1hPl7dtvyOC/4mofNhdqyQu1HSkgTlH3+a1XtHfbg=;
-  b=PM6bB4klFrI4gF0R+ZsR8X79Z1V3uxs+5EXFpsDCU9NKE5G1ZE8ORjIZ
-   GGaBbLtV/Vr/dLprApnwvOSKW5Ch+ot/I3svbFm55RSV0pNI9We73KG3T
-   bqE7qy6YA/SrgYzv2On9v89SRYThJvo30PfIkd9KtgahFrmyu5+VGGkMS
-   3lm7vKEXO+622QeqQuOCwEpzMhbgtaM/swuEVveoA+MNY1N5xYlUshAPA
-   FJOrtVQr2idNzir2F0G253h7ylB71YLpWXq+feaPxtJiLgeLftY6Hoy+h
-   uDYoOjmMOOlhuqUlLlNjWec701KZuJ6Hfhzs1fq2JxRIgsO6e4dr798JQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="356139872"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="356139872"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 07:37:58 -0700
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="594163254"
-Received: from zpan5-mobl1.ccr.corp.intel.com ([10.249.171.208])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 07:37:56 -0700
-Message-ID: <95a7beb8b4383b03799276e572298ff54a48bb2e.camel@intel.com>
-Subject: Re: [RFC PATCH] hwmon: (acpi_power_meter): Convert to
- hwmon_device_register_with_info
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, srinivas.pandruvada@intel.com,
-        Corentin Labbe <clabbe@baylibre.com>
-Date:   Wed, 11 May 2022 22:37:53 +0800
-In-Reply-To: <b72b9ec1-666c-e4b0-0b6f-8b745857af78@roeck-us.net>
-References: <20220511075444.3376950-1-rui.zhang@intel.com>
-         <b72b9ec1-666c-e4b0-0b6f-8b745857af78@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Wed, 11 May 2022 10:57:05 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA02A67D3D;
+        Wed, 11 May 2022 07:57:03 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-edf9ddb312so3096601fac.8;
+        Wed, 11 May 2022 07:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FXhU4C+XFzjEf7MapqS6QgArPbwtn+GG7z2RycgMf0k=;
+        b=UjzzQfUO58qjnFjN+MdwmL5YRrb+nD0gqEAn4zFAYvz21P+a4sGW+98mT7AZMgp/lM
+         zpdZi5GWLDTJyJf+QBDM5uvNkT2b3AB5pLRXMPungGgwizNHOpulia2UtmTxOr8goQ8E
+         p6/W9KZ1nT4dXdw8vw8Z8NBkn48Jq0khdTQuLLtNwb77aV+OJyDM2N2juzY5H2D7eoZr
+         5bVcsux9/kp6V9T4EfqrDvmR1+bb8oVQnMsYy8qXajLYPEp7iV4so5ATp5HxY06f62H/
+         TH7baXxeC+WXIJRknSUXU9L4xCAALjHKRufSjmRgIy+eAbKZaNy7vkGxydPO4nkHr7Vg
+         lk0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=FXhU4C+XFzjEf7MapqS6QgArPbwtn+GG7z2RycgMf0k=;
+        b=aPW1ZuKDKX3A2Gjv/HRfqeshbXNUZ05FzYueYd7NpBkdbpPdrceurk6QIfWwegvKOa
+         g/XffWceHbwsky3CcV0+HzPjz8BYLedQbxvlhboiFH73CwsShJkfWxJ5O3R3Q3LOVhKf
+         OL7db3MO16pLGavvOM7CXswii4movZXF5jiEUOK03+N4gidYsOOZ4oT8ho3AHrGWZWB8
+         hEtiZjJRrE4H39VF41PFhmFOF5W0mIGPi+1A6dsKIzw/rxErvsqwGqdVb+hJE5AY1BRC
+         T3j9eOdiaqNGYupm6vxdFSYaR7FjFh5+iwK/l76mhDvuZCEzgj94ZJFd+id8h3Xyma2n
+         ja0g==
+X-Gm-Message-State: AOAM531XwXh9abxUxZ7GNTgnbuPgytvw0eKS2PoVU3eXRi1FbQgZ8mzp
+        ZHNpvLoTn15ohFu5PzuAaJhPP/TzOQHC2g==
+X-Google-Smtp-Source: ABdhPJzUqipn5lG6D+WbLJ8OGfyF8kehzF1R6MRpEJUeoyqU60+Ufdlk0gA3xjOoQhMmWF0ieGuJ1A==
+X-Received: by 2002:a05:6871:80e:b0:ed:895a:ae92 with SMTP id q14-20020a056871080e00b000ed895aae92mr2745692oap.187.1652281022748;
+        Wed, 11 May 2022 07:57:02 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g10-20020a056870d20a00b000e9364288bfsm619083oac.45.2022.05.11.07.57.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 07:57:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Zhi Li <lizhi01@loongson.cn>
+Subject: [PATCH] MIPS: Loongson: Use hwmon_device_register_with_groups() to register hwmon
+Date:   Wed, 11 May 2022 07:56:59 -0700
+Message-Id: <20220511145659.2976950-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi, Guenter,
+Calling hwmon_device_register_with_info() with NULL dev and/or chip
+information parameters is an ABI abuse and not a real conversion to
+the new API. Also, the code creates sysfs attributes _after_ creating
+the hwmon device, which is racy and unsupported to start with. On top
+of that, the removal code tries to remove the name attribute which is
+owned by the hwmon core.
 
-On Wed, 2022-05-11 at 06:12 -0700, Guenter Roeck wrote:
-> On 5/11/22 00:54, Zhang Rui wrote:
-> > The acpi_power_meter driver doesn't create any standard hwmon sysfs
-> > attributes under its hwmon device node, but instead, the driver has
-> > its
-> > own code to create the hwmon style sysfs attributes in the ACPI
-> > device
-> > node of the ACPI Power Meter device.
-> > I'm not clear why it was designed in that way.
-> > 
-> > In order to elimite
-> > [   79.960333] power_meter ACPI000D:00: hwmon_device_register() is
-> > deprecated. Please convert the driver to use
-> > hwmon_device_register_with_info().
-> > convert the driver to use the new API, no chip_info or sysfs_groups
-> > parameter needed.
-> > 
-> > The only difference brought by this patch is that the "name"
-> > attribute
-> > will be created under the hwmon device node. Not sure if this
-> > matters or
-> > not.
-> > 
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> 
-> No, this is not a conversion and not acceptable. Corentin Labbe is
-> working on the real thing. See
-> 
-https://patchwork.kernel.org/project/linux-hwmon/patch/20220509063010.3878134-3-clabbe@baylibre.com/
-> 
-> 
-Thanks for the pointer. And this was my original intension about how to
-do the conversion.
+Use hwmon_device_register_with_groups() to register the hwmon device
+instead.
 
-But then I realized that, just like I described in the changelog,
-the original sysfs attributes in this driver, although they're hwmon
-style, but they are actually located under the ACPI device node.
-And the patch above will move them to the hwmon device node, right?
+In the future, the hwmon subsystem will reject calls to
+hwmon_device_register_with_info with NULL dev or chip/info parameters.
+Without this patch, the hwmon device will fail to register.
 
-With any patch, this is what I got under the hwmon device node
-# ls /sys/class/hwmon/hwmon0/        
-device  power  subsystem  uevent
+Fixes: f59dc5119192 ("MIPS: Loongson: Fix boot warning about hwmon_device_register()")
+Cc: Zhi Li <lizhi01@loongson.cn>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/platform/mips/cpu_hwmon.c | 127 ++++++++++--------------------
+ 1 file changed, 41 insertions(+), 86 deletions(-)
 
-and this is what I got under the ACPI device node
-# ls /sys/class/hwmon/hwmon0/device/
-driver  hid  hwmon  measures  modalias  name  path  physical_node  powe
-r  power1_model_number  power1_oem_info  power1_serial_number  status  
-subsystem  uevent  uid
-
-Plus, in that patch, I don't see how to handle the power meter
-capabilities change, i.e. METER_NOTIFY_CONFIG event, in
-acpi_power_meter_notify().
-According to the previous logic, we may need to remove/add different
-attributes based on the new capabilities.
-
-In section 10.4.1 of ACPI Spec 6.4, it says that the _PMC information
-"remains constant unless either the power meter's firmware or the BMC
-hardware changes, at which time the platform is required to send
-Notify(power_meter, 0x80) for the OSPM to re-evaluate _PMC"
-
-If this could happen in real life, we cannot rely on a fixed
-hwmon_chip_info and attribute_groups at driver registration phase.
-
-thanks,
-rui
-
-> Guenter
-
-
-> 
-> > ---
-> >   drivers/hwmon/acpi_power_meter.c | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hwmon/acpi_power_meter.c
-> > b/drivers/hwmon/acpi_power_meter.c
-> > index c405a5869581..81a982dda5af 100644
-> > --- a/drivers/hwmon/acpi_power_meter.c
-> > +++ b/drivers/hwmon/acpi_power_meter.c
-> > @@ -890,7 +890,8 @@ static int acpi_power_meter_add(struct
-> > acpi_device *device)
-> >   	if (res)
-> >   		goto exit_free_capability;
-> >   
-> > -	resource->hwmon_dev = hwmon_device_register(&device->dev);
-> > +	resource->hwmon_dev = hwmon_device_register_with_info(&device-
-> > >dev,
-> > +				ACPI_POWER_METER_NAME, NULL, NULL,
-> > NULL);
-> >   	if (IS_ERR(resource->hwmon_dev)) {
-> >   		res = PTR_ERR(resource->hwmon_dev);
-> >   		goto exit_remove;
-> 
-> 
+diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
+index 386389ffec41..d8c5f9195f85 100644
+--- a/drivers/platform/mips/cpu_hwmon.c
++++ b/drivers/platform/mips/cpu_hwmon.c
+@@ -55,55 +55,6 @@ int loongson3_cpu_temp(int cpu)
+ static int nr_packages;
+ static struct device *cpu_hwmon_dev;
+ 
+-static SENSOR_DEVICE_ATTR(name, 0444, NULL, NULL, 0);
+-
+-static struct attribute *cpu_hwmon_attributes[] = {
+-	&sensor_dev_attr_name.dev_attr.attr,
+-	NULL
+-};
+-
+-/* Hwmon device attribute group */
+-static struct attribute_group cpu_hwmon_attribute_group = {
+-	.attrs = cpu_hwmon_attributes,
+-};
+-
+-static ssize_t get_cpu_temp(struct device *dev,
+-			struct device_attribute *attr, char *buf);
+-static ssize_t cpu_temp_label(struct device *dev,
+-			struct device_attribute *attr, char *buf);
+-
+-static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
+-static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
+-static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
+-static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
+-static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
+-static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
+-static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
+-static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
+-
+-static const struct attribute *hwmon_cputemp[4][3] = {
+-	{
+-		&sensor_dev_attr_temp1_input.dev_attr.attr,
+-		&sensor_dev_attr_temp1_label.dev_attr.attr,
+-		NULL
+-	},
+-	{
+-		&sensor_dev_attr_temp2_input.dev_attr.attr,
+-		&sensor_dev_attr_temp2_label.dev_attr.attr,
+-		NULL
+-	},
+-	{
+-		&sensor_dev_attr_temp3_input.dev_attr.attr,
+-		&sensor_dev_attr_temp3_label.dev_attr.attr,
+-		NULL
+-	},
+-	{
+-		&sensor_dev_attr_temp4_input.dev_attr.attr,
+-		&sensor_dev_attr_temp4_label.dev_attr.attr,
+-		NULL
+-	}
+-};
+-
+ static ssize_t cpu_temp_label(struct device *dev,
+ 			struct device_attribute *attr, char *buf)
+ {
+@@ -121,24 +72,47 @@ static ssize_t get_cpu_temp(struct device *dev,
+ 	return sprintf(buf, "%d\n", value);
+ }
+ 
+-static int create_sysfs_cputemp_files(struct kobject *kobj)
+-{
+-	int i, ret = 0;
+-
+-	for (i = 0; i < nr_packages; i++)
+-		ret = sysfs_create_files(kobj, hwmon_cputemp[i]);
++static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
++static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
++static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
++static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
++static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
++static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
+ 
+-	return ret;
+-}
++static struct attribute *cpu_hwmon_attributes[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	&sensor_dev_attr_temp1_label.dev_attr.attr,
++	&sensor_dev_attr_temp2_input.dev_attr.attr,
++	&sensor_dev_attr_temp2_label.dev_attr.attr,
++	&sensor_dev_attr_temp3_input.dev_attr.attr,
++	&sensor_dev_attr_temp3_label.dev_attr.attr,
++	&sensor_dev_attr_temp4_input.dev_attr.attr,
++	&sensor_dev_attr_temp4_label.dev_attr.attr,
++	NULL
++};
+ 
+-static void remove_sysfs_cputemp_files(struct kobject *kobj)
++static umode_t cpu_hwmon_is_visible(struct kobject *kobj,
++				    struct attribute *attr, int i)
+ {
+-	int i;
++	int id = i / 2;
+ 
+-	for (i = 0; i < nr_packages; i++)
+-		sysfs_remove_files(kobj, hwmon_cputemp[i]);
++	if (id < nr_packages)
++		return attr->mode;
++	return 0;
+ }
+ 
++static struct attribute_group cpu_hwmon_group = {
++	.attrs = cpu_hwmon_attributes,
++	.is_visible = cpu_hwmon_is_visible,
++};
++
++static const struct attribute_group *cpu_hwmon_groups[] = {
++	&cpu_hwmon_group,
++	NULL
++};
++
+ #define CPU_THERMAL_THRESHOLD 90000
+ static struct delayed_work thermal_work;
+ 
+@@ -159,50 +133,31 @@ static void do_thermal_timer(struct work_struct *work)
+ 
+ static int __init loongson_hwmon_init(void)
+ {
+-	int ret;
+-
+ 	pr_info("Loongson Hwmon Enter...\n");
+ 
+ 	if (cpu_has_csr())
+ 		csr_temp_enable = csr_readl(LOONGSON_CSR_FEATURES) &
+ 				  LOONGSON_CSRF_TEMP;
+ 
+-	cpu_hwmon_dev = hwmon_device_register_with_info(NULL, "cpu_hwmon", NULL, NULL, NULL);
+-	if (IS_ERR(cpu_hwmon_dev)) {
+-		ret = PTR_ERR(cpu_hwmon_dev);
+-		pr_err("hwmon_device_register fail!\n");
+-		goto fail_hwmon_device_register;
+-	}
+-
+ 	nr_packages = loongson_sysconf.nr_cpus /
+ 		loongson_sysconf.cores_per_package;
+ 
+-	ret = create_sysfs_cputemp_files(&cpu_hwmon_dev->kobj);
+-	if (ret) {
+-		pr_err("fail to create cpu temperature interface!\n");
+-		goto fail_create_sysfs_cputemp_files;
++	cpu_hwmon_dev = hwmon_device_register_with_groups(NULL, "cpu_hwmon",
++							  NULL, cpu_hwmon_groups);
++	if (IS_ERR(cpu_hwmon_dev)) {
++		pr_err("hwmon_device_register fail!\n");
++		return PTR_ERR(cpu_hwmon_dev);
+ 	}
+ 
+ 	INIT_DEFERRABLE_WORK(&thermal_work, do_thermal_timer);
+ 	schedule_delayed_work(&thermal_work, msecs_to_jiffies(20000));
+ 
+-	return ret;
+-
+-fail_create_sysfs_cputemp_files:
+-	sysfs_remove_group(&cpu_hwmon_dev->kobj,
+-				&cpu_hwmon_attribute_group);
+-	hwmon_device_unregister(cpu_hwmon_dev);
+-
+-fail_hwmon_device_register:
+-	return ret;
++	return 0;
+ }
+ 
+ static void __exit loongson_hwmon_exit(void)
+ {
+ 	cancel_delayed_work_sync(&thermal_work);
+-	remove_sysfs_cputemp_files(&cpu_hwmon_dev->kobj);
+-	sysfs_remove_group(&cpu_hwmon_dev->kobj,
+-				&cpu_hwmon_attribute_group);
+ 	hwmon_device_unregister(cpu_hwmon_dev);
+ }
+ 
+-- 
+2.35.1
 
