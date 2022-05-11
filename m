@@ -2,152 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D7DEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 16:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94467C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 17:00:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbiEKQx0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 May 2022 12:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S1344528AbiEKRAK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 May 2022 13:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242144AbiEKQxW (ORCPT
+        with ESMTP id S245580AbiEKRAJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 May 2022 12:53:22 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C0218E0C
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 09:53:19 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-ed8a3962f8so3522114fac.4
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 09:53:19 -0700 (PDT)
+        Wed, 11 May 2022 13:00:09 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDED13C4DD
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 10:00:08 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso3560468fac.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 10:00:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=ax1xgBuGwJ+WttzItaXQixxFdnAtzv+qd0OBCGBRvhM=;
-        b=T8OGvApHGwvH45r+A7wLrx1RNIsVpJtfrDpublJx2QE0xTFPaJK85jNDbmQtDOu4o8
-         GLeNXNjDUtTtIjeT2THT2EmbKlZFBHnrb1p36Ar7LIKpSSLMyiqM/4ld2LmHGnuYrva3
-         JsFvKwqxOrrkHJw9R0sCDypP6zptQCa37fFHHDN2Qgpd0NqvLdJr0SrXK83zpqcL1FbA
-         CKXWqgCuO0mOfelRJVpQ8epg5ob0nVs+ZWcPaAaoBihPBxaAzncRbeeIlf0+YvBDAkuC
-         uES6Bsdt7Suq00FmNB7dWBvzN5xdYHJnNX7Lk08+6G22dfeIBVTRw7Bt2cwgRWBIqe+6
-         /h4Q==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uHtyS2hhWfzT4HbTy0LgAuKhQEDGtd8wRdT+g+PZk3w=;
+        b=nFeeRtRiXc9VlxV6LFvQpEArXXBspnR2CHxpzDsOUGEwTl9AZbjT6ZV8LUPioqcEhD
+         zwdFudPHTMKLL0HlbpgE2V/G3E/ZjptPxU1TwScYpzwYd61rzLJDMt9cPfw5QIBHC8bU
+         HjsOb3mm8LiKMhOl//xu2Xz6m7JgmHKMbI3zol3zFna+4NGFcenPUHCZn/UX9C4Xgn8R
+         blbA+MgjULYABlRdehSwyecfhZi4KnRFKGFFvql0gUeO11IvxpHTxmQU2E0mfFlxN8mn
+         XD4LF9TEbG5200lAPGiZkJZEGNG7G5T76tbzkvFhunvj/GPuqxeif5Wi+Td1yHXb/oIN
+         5DOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ax1xgBuGwJ+WttzItaXQixxFdnAtzv+qd0OBCGBRvhM=;
-        b=gKVuC1len95QfeQ11+e8eG6pioiU14HZlzjBujjVGTVkM5Nf4hw6OHvoOH1Eq/fVm/
-         TIHFVSXXsWENUtgjR2Avqo05a8MPKF+IE44y8vo15XZSsZlMxe5UBkU9J2R6tF94D+2J
-         sbXjy5FubTyuPzUjdDQdloVyNZmimwx4hmanfyX36IQ/wXyF67D22X/bgO4h8aSq4rXW
-         ona4JARctkHU2Pzm8JC0QYrUy7Qu4xpb8vg083lFSWnQGTXWWLZHffqelgrPiy7XzQv3
-         vErTGQ0bqZzg7cP87tWCHClUW0oaGcYP9R+cJ2U101VLwOKEluAAcRcC5Iv5RZO7085x
-         buIQ==
-X-Gm-Message-State: AOAM5331NF6rN9fxB4j+BYUvNI9kCh1ElvrWfTMCfpfKcaCFxBXo8S2C
-        8XGlRBDIV0DlzcyMjy02sQg=
-X-Google-Smtp-Source: ABdhPJxxqaomK9We744z8/qShpXW5oViD00F1zsLNw2FhRJ1csYtNrWNZqsm4sQh+bRRg1deTyLSGA==
-X-Received: by 2002:a05:6870:a10f:b0:ee:3cf3:63e8 with SMTP id m15-20020a056870a10f00b000ee3cf363e8mr3258810oae.293.1652287998858;
-        Wed, 11 May 2022 09:53:18 -0700 (PDT)
+        bh=uHtyS2hhWfzT4HbTy0LgAuKhQEDGtd8wRdT+g+PZk3w=;
+        b=nEizRyIaZ0DedhWLlV7dqNB4RFaXE7uaNrcHLxb0fEe8UxGtGcGV/HNRxt3Ssg7vmv
+         wfvdmT+famuSn4pMvAe2H1YwQ86xkLTiFFqam4fsRtQdFTE5vJgx4G0dsTBEPg9JRgCs
+         ar3mWpRdVwhhYBtyrF7nc2qLDEEbB37B/TLpoMlOZ0B271K8Ze4kyoY1c7d8avZdKTNe
+         bsJnz7KFPpe75vBa+0JJf9tQzk5IGz8tfu6QIwGhat5cXZkqrs0O4+28Zk2HZxCYXwcV
+         jdWbY5DtZOesWVudFZIr4IOKotMWWqYBwwzkCSFaBjEkgc3FWdQ3d32vhMJUeCB/bVbh
+         1igg==
+X-Gm-Message-State: AOAM532JgqB4b3S2dzx15p03IJrwb+cBHYJiZ9Ug8SwHjrqSAZvarSGD
+        Siq5HmlgQ4QWgEHs4beH2XMdA+LF6Ab3XQ==
+X-Google-Smtp-Source: ABdhPJyjRdwXBkBeOPA2zvhi55gqRZaNqVWF0iIEkTToeHRZfgnfDxV4pI4tArwmBjKWH7jRU4y8Wg==
+X-Received: by 2002:a05:6870:568a:b0:ee:1f95:4198 with SMTP id p10-20020a056870568a00b000ee1f954198mr3240301oao.14.1652288407699;
+        Wed, 11 May 2022 10:00:07 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i26-20020a54409a000000b003264a325ecdsm914641oii.5.2022.05.11.09.53.16
+        by smtp.gmail.com with ESMTPSA id e84-20020acab557000000b003263cf0f282sm929559oif.26.2022.05.11.10.00.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 09:53:17 -0700 (PDT)
+        Wed, 11 May 2022 10:00:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <490cfcf5-0134-bd36-1e1b-d50db8aa6d56@roeck-us.net>
-Date:   Wed, 11 May 2022 09:53:15 -0700
+Message-ID: <037b551f-1781-321a-1984-117d098d980d@roeck-us.net>
+Date:   Wed, 11 May 2022 10:00:04 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
+Subject: Re: [v2 1/2] dt-bindings: add extended-range-enable property to
+ lm90.yaml
 Content-Language: en-US
-To:     Zhang Rui <rui.zhang@intel.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, srinivas.pandruvada@intel.com,
-        Corentin Labbe <clabbe@baylibre.com>
-References: <20220511075444.3376950-1-rui.zhang@intel.com>
- <b72b9ec1-666c-e4b0-0b6f-8b745857af78@roeck-us.net>
- <95a7beb8b4383b03799276e572298ff54a48bb2e.camel@intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Holger Brunck <holger.brunck@hitachienergy.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220510080900.22758-1-holger.brunck@hitachienergy.com>
+ <34d88cd9-2bcd-77e6-8cc9-93b8cbd63a8f@linaro.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH] hwmon: (acpi_power_meter): Convert to
- hwmon_device_register_with_info
-In-Reply-To: <95a7beb8b4383b03799276e572298ff54a48bb2e.camel@intel.com>
+In-Reply-To: <34d88cd9-2bcd-77e6-8cc9-93b8cbd63a8f@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/11/22 07:37, Zhang Rui wrote:
-> Hi, Guenter,
-> 
-> On Wed, 2022-05-11 at 06:12 -0700, Guenter Roeck wrote:
->> On 5/11/22 00:54, Zhang Rui wrote:
->>> The acpi_power_meter driver doesn't create any standard hwmon sysfs
->>> attributes under its hwmon device node, but instead, the driver has
->>> its
->>> own code to create the hwmon style sysfs attributes in the ACPI
->>> device
->>> node of the ACPI Power Meter device.
->>> I'm not clear why it was designed in that way.
->>>
->>> In order to elimite
->>> [   79.960333] power_meter ACPI000D:00: hwmon_device_register() is
->>> deprecated. Please convert the driver to use
->>> hwmon_device_register_with_info().
->>> convert the driver to use the new API, no chip_info or sysfs_groups
->>> parameter needed.
->>>
->>> The only difference brought by this patch is that the "name"
->>> attribute
->>> will be created under the hwmon device node. Not sure if this
->>> matters or
->>> not.
->>>
->>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+On 5/11/22 08:32, Krzysztof Kozlowski wrote:
+> On 10/05/2022 10:08, Holger Brunck wrote:
+>> Some devices can operate in an extended temperature mode.
+>> Therefore add a boolean onsemi,extended-range-enable to be able to
+>> select this feature in the device tree node.
 >>
->> No, this is not a conversion and not acceptable. Corentin Labbe is
->> working on the real thing. See
+>> Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
+>> cc: Jean Delvare <jdelvare@suse.com>
+>> cc: Guenter Roeck <linux@roeck-us.net>
+>> cc: Rob Herring <robh+dt@kernel.org>
+>> cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>> ---
+>>   Documentation/devicetree/bindings/hwmon/national,lm90.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
 >>
-> https://patchwork.kernel.org/project/linux-hwmon/patch/20220509063010.3878134-3-clabbe@baylibre.com/
+>> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>> index 30db92977937..92afa01380eb 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>> @@ -52,6 +52,10 @@ properties:
+>>     vcc-supply:
+>>       description: phandle to the regulator that provides the +VCC supply
+>>   
+>> +  onsemi,extended-range-enable:
+>> +    description: Set to enable extended range temperature.
+>> +    type: boolean
 >>
->>
-> Thanks for the pointer. And this was my original intension about how to
-> do the conversion.
 > 
-> But then I realized that, just like I described in the changelog,
-> the original sysfs attributes in this driver, although they're hwmon
-> style, but they are actually located under the ACPI device node.
-> And the patch above will move them to the hwmon device node, right?
+> There is no such vendor and it does not match the existing vendor for
+> these bindings (nor the current owner of National). Was there some
+> change? What is onsemi?
 > 
-> With any patch, this is what I got under the hwmon device node
-> # ls /sys/class/hwmon/hwmon0/
-> device  power  subsystem  uevent
-> 
-> and this is what I got under the ACPI device node
-> # ls /sys/class/hwmon/hwmon0/device/
-> driver  hid  hwmon  measures  modalias  name  path  physical_node  powe
-> r  power1_model_number  power1_oem_info  power1_serial_number  status
-> subsystem  uevent  uid
-> 
+My bad, I should have looked up official prefixes before suggesting onsemi
+as an option. That should have been "onnn".
 
-That is part of the conversion to any of the new APIs, and intentional.
-If that is unacceptable for some reason, you'll have to stick with the old
-API and accept the warning. Abusing the new APIs is not acceptable.
+It should be either onnn (for adt7461/adt7461a) or ti for tmp451
+and tmp461. adi instead of onnn may make sense since that is already
+used in the driver. I personally don't have a preference.
 
-> Plus, in that patch, I don't see how to handle the power meter
-> capabilities change, i.e. METER_NOTIFY_CONFIG event, in
-> acpi_power_meter_notify().
-> According to the previous logic, we may need to remove/add different
-> attributes based on the new capabilities.
-> 
-> In section 10.4.1 of ACPI Spec 6.4, it says that the _PMC information
-> "remains constant unless either the power meter's firmware or the BMC
-> hardware changes, at which time the platform is required to send
-> Notify(power_meter, 0x80) for the OSPM to re-evaluate _PMC"
-> 
-> If this could happen in real life, we cannot rely on a fixed
-> hwmon_chip_info and attribute_groups at driver registration phase.
-> 
-
-You have a point. However, if anything, that means that we might have
-to improve/extend the hwmon API to make attributes visible or invisible
-dynamically (ie add an API call such as hwmon_update_visibility()
-and have it call sysfs_update_groups()).
-
-Thanks,
 Guenter
