@@ -2,86 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4D25C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 07:26:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3981EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 May 2022 07:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238903AbiEKH0b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 May 2022 03:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S238809AbiEKHym (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 May 2022 03:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242918AbiEKHZ6 (ORCPT
+        with ESMTP id S243203AbiEKHyk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 May 2022 03:25:58 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4182C13C;
-        Wed, 11 May 2022 00:25:55 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kymd52qMlzfbZr;
-        Wed, 11 May 2022 15:24:41 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 15:25:53 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 15:25:53 +0800
-Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <zbr@ioremap.net>, <jdelvare@suse.com>, <linux@roeck-us.net>
-References: <20220511064954.3401381-1-yangyingliang@huawei.com>
- <YntbdfHLjeHzAb9/@kroah.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
-Date:   Wed, 11 May 2022 15:25:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 11 May 2022 03:54:40 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2237966CB2
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 00:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652255679; x=1683791679;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Hdsg0VVYNTdscwOrmSNSiBs+hTH8nghKIfniNQ6uqaM=;
+  b=U1Uhk4v9Km6WQUQiOWBfooQvc+AouqLbKzLuQ5XLBskEBhApYmSx9/8j
+   zAE0zBP2zZNp/lj6zVk1Jr/TUKBl1hSlqtwy68v6l/nG3zvJ0P2dOC4kA
+   l7Z95AqFwm9eCfuQpnZy9Ub0/fCuvugYoBCd0UgIMpIIAXgRBJzIRJrqt
+   pU758GH3sBFUooviM+aNLmQDM2fs7j1vU/+D9JlZg4A6lN5vkZgU7VyLE
+   xoC4uH7EysqpMM2Ub4ianGXRbyBqfYbfDC4RNjX+Y/bpn7GiHX/bT1fRp
+   YD139XPdQRcKdEvzF8EU3upSqYT6FXQug1DPZmzXoxY+LkOEbRCgT2SDq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="251674409"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="251674409"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 00:54:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="739104947"
+Received: from rzhang1-dev.sh.intel.com ([10.239.48.43])
+  by orsmga005.jf.intel.com with ESMTP; 11 May 2022 00:54:37 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, srinivas.pandruvada@intel.com
+Subject: [RFC PATCH] hwmon: (acpi_power_meter): Convert to hwmon_device_register_with_info
+Date:   Wed, 11 May 2022 15:54:44 +0800
+Message-Id: <20220511075444.3376950-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <YntbdfHLjeHzAb9/@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+The acpi_power_meter driver doesn't create any standard hwmon sysfs
+attributes under its hwmon device node, but instead, the driver has its
+own code to create the hwmon style sysfs attributes in the ACPI device
+node of the ACPI Power Meter device.
+I'm not clear why it was designed in that way.
 
-On 2022/5/11 14:45, Greg KH wrote:
-> On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
->> Use kfree_sensitive() instead of open-coding it.
->>
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   drivers/w1/w1.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
->> index f2ae2e563dc5..a0a6c3c739d9 100644
->> --- a/drivers/w1/w1.c
->> +++ b/drivers/w1/w1.c
->> @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
->>   	struct w1_master *md = dev_to_w1_master(dev);
->>   
->>   	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
->> -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
->> -	kfree(md);
->> +	kfree_sensitive(md);
-> Does this actually change anything?  Why is the memset being called here
-> at all?
-It's no functional change and I got this by 
-scripts/coccinelle/api/kfree_sensitive.cocci.
-I'm not sure why using memset() here.
+In order to elimite
+[   79.960333] power_meter ACPI000D:00: hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
+convert the driver to use the new API, no chip_info or sysfs_groups
+parameter needed.
 
-Thanks,
-Yang
->
-> thanks,
->
-> greg k-h
-> .
+The only difference brought by this patch is that the "name" attribute
+will be created under the hwmon device node. Not sure if this matters or
+not.
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/hwmon/acpi_power_meter.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index c405a5869581..81a982dda5af 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -890,7 +890,8 @@ static int acpi_power_meter_add(struct acpi_device *device)
+ 	if (res)
+ 		goto exit_free_capability;
+ 
+-	resource->hwmon_dev = hwmon_device_register(&device->dev);
++	resource->hwmon_dev = hwmon_device_register_with_info(&device->dev,
++				ACPI_POWER_METER_NAME, NULL, NULL, NULL);
+ 	if (IS_ERR(resource->hwmon_dev)) {
+ 		res = PTR_ERR(resource->hwmon_dev);
+ 		goto exit_remove;
+-- 
+2.17.1
+
