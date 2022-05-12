@@ -2,60 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE281C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 May 2022 19:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 081D5C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 May 2022 19:56:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351922AbiELT4V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 May 2022 15:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        id S1358226AbiELT4W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 May 2022 15:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358241AbiELT4E (ORCPT
+        with ESMTP id S1358243AbiELT4G (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 May 2022 15:56:04 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546ADBE11
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:03 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-edf9ddb312so7973066fac.8
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:03 -0700 (PDT)
+        Thu, 12 May 2022 15:56:06 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9BF140BC
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:05 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id a23-20020a4ad5d7000000b0035ee70da7a9so2374576oot.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=76Mz/ejgcIn9Y1QSjLKixz/SQ6wftlnjP/a/JHUjETM=;
-        b=RPuD65k9qRbJd3jBNYpSp14OUZIf1JA3q+Av/zabEbM/ORAtIfT37Kz5TBXTxQgAqu
-         +7Y+T7BNrOs4nt2/BoVtKP4J6PIhIYQ9fpeJhuIgMEZPW1Wcr/5N8FL7Zd1oR1KwI2ff
-         3IMCn2Pl4K9OxzxvmrFgUbpEYyNPaLJJCduu4AX4HFBTaaETrSpa+oXAwzCBJ8ULqgfN
-         Lzj+ldLkuFBoJLOGl5v06n3qbmsuCVYaRB+YmqoKG9/ldDS9LUB5bfA0Tcz4ebqQQmc3
-         1t1u4S0n67f+TqqU7zt6Q488tc3f14qS8eb/wYpoo1Te0C2ysqyD212/D5dmbVLX0Epp
-         GYhg==
+        bh=jkkA68rw8RtU0yfUmCNXyoAoEbWNcmBb9A16ou7NvdE=;
+        b=KBUGmLPWGSr5yz9npIOM11DpBHTNrzvgIjM0Odi4gFiXhz1An9J8/OZTPfvd1+lh/u
+         vkI1t8g9LNew69nf4sDnlL6SYBQsMDvszDdWYVYjWAqoZeAo/TIKeodxsYvyxl0Ie9oA
+         jvwD8WE831ZKfzp2FDFsPCB9seki4gTXyw7ybiXkroqpfRDnvnIyicyOMBZSEqEV0dDc
+         9u6olgZ78DX4oKcUMi+IbuOVcgClY3oSZsj6FXwH68fzEKiSTVr2abtLO4553Nftsarp
+         rAJFPDmHX/7jOipt08uG2T4x92nEqnksKvJOyDNJ33w4h4f/5g/QMAUm6LS5SSCz5+EL
+         cfaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=76Mz/ejgcIn9Y1QSjLKixz/SQ6wftlnjP/a/JHUjETM=;
-        b=gT2QMQSy/4TnUoMHXCu8MkcRDnt8AzGWlYIRbnizSGjDLdmTsVXdMEuOvIi/qlK/qq
-         +gEf0C+aDaJ4O924CFrs5KMzOIRRFK457M9o6ta+Zafb863bA0PP3JIUNhMJBnS06oZn
-         hShpijrLbs+e5vt2QUgOH7EttdXq63EYjX8b8HCGOBftJiAqNR8ElFZYg6ZEwAC/fM6Z
-         e/OfOG8fkZcNYc/pdXRM3iKJxWMi5PscK22mlV3Gj+HEusNkwAZdB2t9LH4ODohcm2hO
-         wg/urzEFzKJdDaKMOHxwoRQ63LlXpE2HihtYT62yBApFyNokg0g+cNxWZz0PHgYQCESv
-         9iQg==
-X-Gm-Message-State: AOAM533v9ClJ26MJ7btOwicFYjR/tXo8Rq7wR5SHV6aV1u9waJ+8LnsV
-        1IICJgCk8vzpITGibuditRMIiTUc2BNq5A==
-X-Google-Smtp-Source: ABdhPJzyHMfhzDGwumu75K+tmgJNZRGhMihtrzoZ9ubwIt3L5WhkQgTEP+X3qrwimA1tC/WOQeHr1Q==
-X-Received: by 2002:a05:6871:7a1:b0:ee:4c48:bfff with SMTP id o33-20020a05687107a100b000ee4c48bfffmr838847oap.118.1652385362444;
-        Thu, 12 May 2022 12:56:02 -0700 (PDT)
+        bh=jkkA68rw8RtU0yfUmCNXyoAoEbWNcmBb9A16ou7NvdE=;
+        b=QKi3B/8eqKGeQCDtWNQ7DIeRXYvN5fGjU6AWjEIfN7qeQT+Eh5QjPK7zdVVH1basnt
+         1XHuo9cYK2+bcUGYIaEeqaDqtt3dS9vDNd7PMuHQ42unnMF2DojXZ9d98UwzmsgoQMuS
+         gygNax6JbtVW/91+D5en7ODBYwajEtTt5d4L3aS0PycLcuFAyV3KvFZkBilvxgGvZ11J
+         MFwzk+h73B4vYZ/uqL3CqUr9uG/goB1WBZBdc56ugtKJP2CrWkW1ZRY86zx9JhR9SPDd
+         O65gZyVhlL7hXMzw1l1JMUnEOzrbOZ3dUgd5mq0caFNoqFW5b+k/0bBl5iCSjV8PNvJs
+         7VWw==
+X-Gm-Message-State: AOAM5307JOoo8Pff+kXO8LzgI5E0I/3R/+4+a8hx8CQPB070Zww7jMof
+        Lu/QgGtYnUiNqFyIc0ld8QuVx9xA1uGWhg==
+X-Google-Smtp-Source: ABdhPJxXfnfj/88EwQw6uJX5oN5dYOCykc8odwnEDvvF6jFBSKZo8j8Ai2ocmCGEO1Y0TFcGAyT33A==
+X-Received: by 2002:a05:6820:1517:b0:35f:5a69:8cc0 with SMTP id ay23-20020a056820151700b0035f5a698cc0mr687038oob.72.1652385364275;
+        Thu, 12 May 2022 12:56:04 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h13-20020a4ab44d000000b0035eb4e5a6d1sm215795ooo.39.2022.05.12.12.56.01
+        by smtp.gmail.com with ESMTPSA id j26-20020a9d739a000000b006060322127bsm235685otk.75.2022.05.12.12.56.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 12:56:01 -0700 (PDT)
+        Thu, 12 May 2022 12:56:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/7] hwmon: (ltc2992) Use HWMON_CHANNEL_INFO macro
-Date:   Thu, 12 May 2022 12:55:51 -0700
-Message-Id: <20220512195556.137741-2-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH 3/7] hwmon: (mr75203) Use HWMON_CHANNEL_INFO macro
+Date:   Thu, 12 May 2022 12:55:52 -0700
+Message-Id: <20220512195556.137741-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220512195556.137741-1-linux@roeck-us.net>
 References: <20220512195556.137741-1-linux@roeck-us.net>
@@ -116,109 +117,42 @@ identifier t.elems;
 This patch does not introduce functional changes. Many thanks to
 Julia Lawall for providing the coccinelle script.
 
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ltc2992.c | 86 ++++++++++++-----------------------------
- 1 file changed, 25 insertions(+), 61 deletions(-)
+ drivers/hwmon/mr75203.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
-index 7352d2b3c756..72489d5d7eaf 100644
---- a/drivers/hwmon/ltc2992.c
-+++ b/drivers/hwmon/ltc2992.c
-@@ -811,68 +811,32 @@ static const struct hwmon_ops ltc2992_hwmon_ops = {
- 	.write = ltc2992_write,
- };
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 1ba1e3145969..26278b0f17a9 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -223,16 +223,6 @@ static int pvt_read(struct device *dev, enum hwmon_sensor_types type,
+ 	}
+ }
  
--static const u32 ltc2992_chip_config[] = {
--	HWMON_C_IN_RESET_HISTORY,
+-static const u32 pvt_chip_config[] = {
+-	HWMON_C_REGISTER_TZ,
 -	0
 -};
 -
--static const struct hwmon_channel_info ltc2992_chip = {
+-static const struct hwmon_channel_info pvt_chip = {
 -	.type = hwmon_chip,
--	.config = ltc2992_chip_config,
+-	.config = pvt_chip_config,
 -};
 -
--static const u32 ltc2992_in_config[] = {
--	HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN | HWMON_I_MAX |
--	HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
--	HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN | HWMON_I_MAX |
--	HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
--	HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN | HWMON_I_MAX |
--	HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
--	HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN | HWMON_I_MAX |
--	HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
--	HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN | HWMON_I_MAX |
--	HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
--	HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN | HWMON_I_MAX |
--	HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
--	0
--};
--
--static const struct hwmon_channel_info ltc2992_in = {
--	.type = hwmon_in,
--	.config = ltc2992_in_config,
--};
--
--static const u32 ltc2992_curr_config[] = {
--	HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST | HWMON_C_MIN | HWMON_C_MAX |
--	HWMON_C_MIN_ALARM | HWMON_C_MAX_ALARM,
--	HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST | HWMON_C_MIN | HWMON_C_MAX |
--	HWMON_C_MIN_ALARM | HWMON_C_MAX_ALARM,
--	0
--};
--
--static const struct hwmon_channel_info ltc2992_curr = {
--	.type = hwmon_curr,
--	.config = ltc2992_curr_config,
--};
--
--static const u32 ltc2992_power_config[] = {
--	HWMON_P_INPUT | HWMON_P_INPUT_LOWEST | HWMON_P_INPUT_HIGHEST | HWMON_P_MIN | HWMON_P_MAX |
--	HWMON_P_MIN_ALARM | HWMON_P_MAX_ALARM,
--	HWMON_P_INPUT | HWMON_P_INPUT_LOWEST | HWMON_P_INPUT_HIGHEST | HWMON_P_MIN | HWMON_P_MAX |
--	HWMON_P_MIN_ALARM | HWMON_P_MAX_ALARM,
--	0
--};
--
--static const struct hwmon_channel_info ltc2992_power = {
--	.type = hwmon_power,
--	.config = ltc2992_power_config,
--};
--
- static const struct hwmon_channel_info *ltc2992_info[] = {
--	&ltc2992_chip,
--	&ltc2992_in,
--	&ltc2992_curr,
--	&ltc2992_power,
-+	HWMON_CHANNEL_INFO(chip,
-+			   HWMON_C_IN_RESET_HISTORY),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN |
-+			   HWMON_I_MAX | HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN |
-+			   HWMON_I_MAX | HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN |
-+			   HWMON_I_MAX | HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN |
-+			   HWMON_I_MAX | HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN |
-+			   HWMON_I_MAX | HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST | HWMON_I_MIN |
-+			   HWMON_I_MAX | HWMON_I_MIN_ALARM | HWMON_I_MAX_ALARM),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST | HWMON_C_MIN |
-+			   HWMON_C_MAX | HWMON_C_MIN_ALARM | HWMON_C_MAX_ALARM,
-+			   HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST | HWMON_C_MIN |
-+			   HWMON_C_MAX | HWMON_C_MIN_ALARM | HWMON_C_MAX_ALARM),
-+	HWMON_CHANNEL_INFO(power,
-+			   HWMON_P_INPUT | HWMON_P_INPUT_LOWEST | HWMON_P_INPUT_HIGHEST |
-+			   HWMON_P_MIN | HWMON_P_MAX | HWMON_P_MIN_ALARM | HWMON_P_MAX_ALARM,
-+			   HWMON_P_INPUT | HWMON_P_INPUT_LOWEST | HWMON_P_INPUT_HIGHEST |
-+			   HWMON_P_MIN | HWMON_P_MAX | HWMON_P_MIN_ALARM | HWMON_P_MAX_ALARM),
- 	NULL
+ static struct hwmon_channel_info pvt_temp = {
+ 	.type = hwmon_temp,
  };
+@@ -555,7 +545,7 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	pvt_info = devm_kcalloc(dev, val + 2, sizeof(*pvt_info), GFP_KERNEL);
+ 	if (!pvt_info)
+ 		return -ENOMEM;
+-	pvt_info[0] = &pvt_chip;
++	pvt_info[0] = HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ);
+ 	index = 1;
  
+ 	if (ts_num) {
 -- 
 2.35.1
 
