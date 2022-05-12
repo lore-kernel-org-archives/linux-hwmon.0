@@ -2,96 +2,142 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E5ADC433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 May 2022 00:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1040C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 May 2022 01:04:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349563AbiELAKK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 May 2022 20:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S1349787AbiELBEh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 May 2022 21:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349554AbiELAKJ (ORCPT
+        with ESMTP id S229671AbiELBEg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 May 2022 20:10:09 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2914A880D1
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 17:10:08 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id q10so4586786oia.9
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 17:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language
-         :from:to:cc:references:subject:in-reply-to:content-transfer-encoding;
-        bh=Gd4q8xPotJnaqvX45sdf/PT8tVd4GN5lAZX9Dm5396o=;
-        b=Ovw8JGvAfHcD3spq7jzYYoy8hsXE9DNSKCOuZokyyfDlu1mPQwxKMwuZyhy0/x4H/J
-         lYPq0aZMTUrLZns/UMg9remh6tcDYx04AK1o/QpYLohbyzbUu9WXtELYlX/h+0P/sWMi
-         oiDxmoBdCOvl4BUnllua1gc1NrQ9Y4rT32nxRj2bwEAWtAmlBPhy4yO0LmStGGSYQ9YQ
-         M5feBcXEHWdgrcfkCNK63Z1Jc9Z3cXlqLWig7iByeRJ15c50iTcAS9mW17r4RqIg4jSr
-         slkD+kUkUZ9z71SMj3XPRfjn6zBocRoM9CuB7hpMcvUfZJJhMuFs4UCtXPF2aBYndpy7
-         Qgiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:references:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=Gd4q8xPotJnaqvX45sdf/PT8tVd4GN5lAZX9Dm5396o=;
-        b=r4b+FXv9nI9O/g2O7kiN5k9aGJCQXnwdBWX159w4WhCCWGSmyUCgt2a9nDdo1H9sgS
-         WPbVp9c37HfWiS5Y55jzQk/iZ+YrNrLguRct1wNwKV9VtC7RJSRyhqB+WmG11iDBxkKf
-         NX2rv3+QvUClg1o9EUN598QhtYncyuKid0sBI/mZwjjgNbkUCe0C2EGWdQR4tLVsxzkB
-         f0v4IWTJ5afBFw6LpS0NzdEs6TD6JyRbniJ6EFY5XYxlNvFAkaDA6qyQ5JiPTd/cjMIL
-         /hFxUXxbBduyObWBotpMKFKP/NfLvkkclmAziMmc1etISD8iUK6rGLtwkhDPwV4JoWQs
-         zWeg==
-X-Gm-Message-State: AOAM532Oie8/RtAabRtzoEKbOEgizerZajAUREVnbSdER6rooUpTr4i2
-        HI1GjZ0jM6ptdBxJjuupE3c=
-X-Google-Smtp-Source: ABdhPJyNmByHHPQGcLGsIEUAm+zcqKrqMDm5PwRsYeUj6bx8ReiM+B2sBv1om+2wugY6sK2EZHmn/w==
-X-Received: by 2002:aca:e155:0:b0:325:6d76:da4b with SMTP id y82-20020acae155000000b003256d76da4bmr3993452oig.125.1652314207510;
-        Wed, 11 May 2022 17:10:07 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g6-20020acab606000000b00325cda1ffbasm1235888oif.57.2022.05.11.17.10.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 17:10:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4b9b0b06-c5a9-df99-6b76-75e670513179@roeck-us.net>
-Date:   Wed, 11 May 2022 17:10:04 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zhang Rui <rui.zhang@intel.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, srinivas.pandruvada@intel.com,
-        Corentin Labbe <clabbe@baylibre.com>
-References: <20220511075444.3376950-1-rui.zhang@intel.com>
- <b72b9ec1-666c-e4b0-0b6f-8b745857af78@roeck-us.net>
- <95a7beb8b4383b03799276e572298ff54a48bb2e.camel@intel.com>
- <490cfcf5-0134-bd36-1e1b-d50db8aa6d56@roeck-us.net>
+        Wed, 11 May 2022 21:04:36 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300D86FD23
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 May 2022 18:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652317475; x=1683853475;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sKM0IYyaq0Z7PXfn4gtX16HbSgKvTSJH8rO9GQc4Hus=;
+  b=dhXtq9Fvya7/jZIU52rKfwTKe5c3BTGFPWpJ1cHOYOwVL503COO9yV2l
+   VSaUjVnMujn7T0L4i5xRpiQgyes04Zb7w8kQY4IS9qzDv/xzy39QeRo8V
+   RZLUsH99KdOD0VJIdym2VROwvDhjjClyM4tZTLJICwaWVlQXfzkfbHkwI
+   Itwc5rEE+UfJukynelAX+VYGS+i7UWUSd1FGUjucQxt011vQ9ml3hPavw
+   EBPUYVzWz4+Y99ycYSsTcBtY/k2w+4EpbhAC7o1KcPPI8x+bCA6yt1BDi
+   WDUhaAxZpC14Ixm7GXCPZRc9Cht3/QNCQiu0yT7Vvv+9Vu3PkMcfGxiL6
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269984598"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="269984598"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 18:04:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="739462625"
+Received: from hshen9-mobl1.ccr.corp.intel.com ([10.249.175.117])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 18:04:30 -0700
+Message-ID: <43abbaa52f116c30f93f51d1d9f86a958c64f3c8.camel@intel.com>
 Subject: Re: [RFC PATCH] hwmon: (acpi_power_meter): Convert to
  hwmon_device_register_with_info
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, srinivas.pandruvada@intel.com,
+        Corentin Labbe <clabbe@baylibre.com>
+Date:   Thu, 12 May 2022 09:04:27 +0800
 In-Reply-To: <490cfcf5-0134-bd36-1e1b-d50db8aa6d56@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20220511075444.3376950-1-rui.zhang@intel.com>
+         <b72b9ec1-666c-e4b0-0b6f-8b745857af78@roeck-us.net>
+         <95a7beb8b4383b03799276e572298ff54a48bb2e.camel@intel.com>
+         <490cfcf5-0134-bd36-1e1b-d50db8aa6d56@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/11/22 09:53, Guenter Roeck wrote:
-[ ... ]
-
->> If this could happen in real life, we cannot rely on a fixed
->> hwmon_chip_info and attribute_groups at driver registration phase.
->>
+On Wed, 2022-05-11 at 09:53 -0700, Guenter Roeck wrote:
+> On 5/11/22 07:37, Zhang Rui wrote:
+> > Hi, Guenter,
+> > 
+> > On Wed, 2022-05-11 at 06:12 -0700, Guenter Roeck wrote:
+> > > On 5/11/22 00:54, Zhang Rui wrote:
+> > > > The acpi_power_meter driver doesn't create any standard hwmon
+> > > > sysfs
+> > > > attributes under its hwmon device node, but instead, the driver
+> > > > has
+> > > > its
+> > > > own code to create the hwmon style sysfs attributes in the ACPI
+> > > > device
+> > > > node of the ACPI Power Meter device.
+> > > > I'm not clear why it was designed in that way.
+> > > > 
+> > > > In order to elimite
+> > > > [   79.960333] power_meter ACPI000D:00: hwmon_device_register()
+> > > > is
+> > > > deprecated. Please convert the driver to use
+> > > > hwmon_device_register_with_info().
+> > > > convert the driver to use the new API, no chip_info or
+> > > > sysfs_groups
+> > > > parameter needed.
+> > > > 
+> > > > The only difference brought by this patch is that the "name"
+> > > > attribute
+> > > > will be created under the hwmon device node. Not sure if this
+> > > > matters or
+> > > > not.
+> > > > 
+> > > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > > 
+> > > No, this is not a conversion and not acceptable. Corentin Labbe
+> > > is
+> > > working on the real thing. See
+> > > 
+> > 
+> > 
+https://patchwork.kernel.org/project/linux-hwmon/patch/20220509063010.3878134-3-clabbe@baylibre.com/
+> > > 
+> > > 
+> > 
+> > Thanks for the pointer. And this was my original intension about
+> > how to
+> > do the conversion.
+> > 
+> > But then I realized that, just like I described in the changelog,
+> > the original sysfs attributes in this driver, although they're
+> > hwmon
+> > style, but they are actually located under the ACPI device node.
+> > And the patch above will move them to the hwmon device node, right?
+> > 
+> > With any patch, this is what I got under the hwmon device node
+> > # ls /sys/class/hwmon/hwmon0/
+> > device  power  subsystem  uevent
+> > 
+> > and this is what I got under the ACPI device node
+> > # ls /sys/class/hwmon/hwmon0/device/
+> > driver  hid  hwmon  measures  modalias  name  path  physical_node  
+> > powe
+> > r  power1_model_number  power1_oem_info  power1_serial_number  stat
+> > us
+> > subsystem  uevent  uid
+> > 
 > 
-> You have a point. However, if anything, that means that we might have
-> to improve/extend the hwmon API to make attributes visible or invisible
-> dynamically (ie add an API call such as hwmon_update_visibility()
-> and have it call sysfs_update_groups()).
+> That is part of the conversion to any of the new APIs, and
+> intentional.
+> If that is unacceptable for some reason, you'll have to stick with
+> the old
+> API and accept the warning. Abusing the new APIs is not acceptable.
 > 
-Actually, adding a new API function isn't even necessary. A call to
-sysfs_update_groups(hwdev->groups) (where hwdev is the device pointer
-returned by the hwmon registration function) should do.
 
-We could still add an api function for clarity, but all it would do
-would be to execute that call. That would be cleaner, but it isn't
-technically necessary.
+I don't know why these attributes were put under the ACPI device node,
+and if it is okay to move the location. This is part of the reason that
+I'm sending this as RFC.
+But if moving them back to hwmon device node doesn't break anything,
+surely I'd vote for this.
 
-Thanks,
-Guenter
+thanks,
+rui
+
+
