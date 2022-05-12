@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 964EDC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 May 2022 19:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88910C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 May 2022 19:56:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358228AbiELT4W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 May 2022 15:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S1358229AbiELT4X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 May 2022 15:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358244AbiELT4I (ORCPT
+        with ESMTP id S1358245AbiELT4J (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 May 2022 15:56:08 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D6B165BC
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:07 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5e433d66dso7991017fac.5
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:06 -0700 (PDT)
+        Thu, 12 May 2022 15:56:09 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBA7140BC
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:08 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-ed8a3962f8so7990182fac.4
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 May 2022 12:56:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=m4jaZv1sZFD3YYDa2z5L2zXbgYH6xsnqLEaLXVHLkLY=;
-        b=PUANveeiWwP6vpWCaTpTMltkrl/hjsr7mbAgwmO6letZZYFCFYoxii+FTa3njhUQSL
-         HZSn15QNqfIfbE4uyonQY9HJRj5QmAgdSPZCNiYdr6nOKzVpgA86zS/SQB7AovoNtOyz
-         xiIe8iRVGRmW4Ow7raLnPDyq1T7SYpv8adzVSqdFa/HJNlpYcMreynu5DFcwo6iVt6tA
-         QhvsmqtM0H1hBKhLS58GGFo8lu1tozNcL2ohrhOlO1xS9wPvQIt2xUrxWLySOKhN7yql
-         dUqgzPa6XjXFYODKdjOc1h2Vhhk5YrpFAmoXkNeZJR/o6Ta7XJDqFWSjo/5DeUjomYSs
-         OxRw==
+        bh=cd+h87gX/veAFTDZHlQQNLwWHMU8bPEDP+4w2pLzdMY=;
+        b=RBKMQmeNrhQPIOWV/OfxJnKQRdqFcf8eABu0dwOy6Xi8o8EZLwyH4K/kUqrVTEJweY
+         mUOzYEqxdYvQncGKstpfWUZtdfUBuCbK4Q+6U/IA+OTtAXr0q1HsqJ3mvZdh6T6xc/58
+         K3cOVSURG+NPu1TPpKUsy8LclNB2JDVAq9OmCWvpIg0EuaMWW2KlgwSO9/czFIP+hxWj
+         LIimgdLZQqLOqwm4/O0+PAEiqWs7oULdnyCVZoVZSb49bg44q0ZCUZlQfaEhkE21kSMM
+         BZl9WGrx4eZe/XjzS2JrA6Gy8zvec6SASf3Is82QHU1rbbhhSaSb8lAe59fYJLLq5u60
+         ChSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=m4jaZv1sZFD3YYDa2z5L2zXbgYH6xsnqLEaLXVHLkLY=;
-        b=6Jicd8O0Mkz67OncF1JtUqLw2SSv8enHHRnthCc8T5rZgIT1sxl39CQiMguwWChxi7
-         lCY6NN1uSEy+C7GPvRHh7+UGenvJk4V+NoFKgaAZRcwbZjfYr4eR1rfTJ94MMmEy5CRQ
-         Gjk5i3ZbOLJvwdLrIaLbxb+0UyTOihafuex+iXileOK5p4Kk4uHWRuxOXiSQ33GgnyTT
-         cyAVoQgqR4iblNOl6/SOmjPUh8rF3wLkh7Js7JNK7d8v29Io+wyP68gvdGea2AcHsBAu
-         mb9b46QtZ50J5Q9ZtvmdPvNgeIQi1SdgomNb1Y48Qy41/+DcS5Wnx8Nzhui0kX9DSyUy
-         4Mvg==
-X-Gm-Message-State: AOAM5337BHyqnOUKa5Ciug4jutQ/z9HkCjhZih6dIS3Nt4phdQPIGhS4
-        EM9MFzYlmd84TtWYdLFfuZrcXzc6AIlhZA==
-X-Google-Smtp-Source: ABdhPJweM/6AGmxBJveyDP6H9HDZ+fTcG/FkyUHxPesSDiiLrAitYtPrqrho0WChNPF+JJkl5lbGsw==
-X-Received: by 2002:a05:6870:a70e:b0:da:31c6:1d20 with SMTP id g14-20020a056870a70e00b000da31c61d20mr827210oam.86.1652385366155;
-        Thu, 12 May 2022 12:56:06 -0700 (PDT)
+        bh=cd+h87gX/veAFTDZHlQQNLwWHMU8bPEDP+4w2pLzdMY=;
+        b=SaqVnZvJMHDklA3K77oac4XpYcNZISqkblDtBSgLrrI+COHtYy3pbJybnHevzfRWYK
+         ooE8shiVcAOTLWL30x0hPJVxL4hJ5poZkZH2o2J5w9fJiih+b/P5hb5LYem7LBPxKX3K
+         n1GWWqK7gYQEB2/uq3wCtAJpmmN3Es6lNjo+uMrynUTsKCov7RcqI0Gz14tBCczperLe
+         p+qGTXsZMVo/GuuS4Tw4+/hq1CnLxmZPXBehF81VLr4/LOYxTjciBnGaM8hcKZDs8Bfy
+         LSZm5fZfTUw2RZAbdkW6GTV1mZT4z6FMMjxa+cYwj5T2EfxfO2wCaVoXNnvK30Ronn70
+         bRhQ==
+X-Gm-Message-State: AOAM533c9tvCBRxA+N/WgY+SlpDpjnmddWc3Toj/IM7WAgRwzvG3xQqW
+        s5YFLGFf+LiXYqwEsMoF2SQXmRWnmvXmWg==
+X-Google-Smtp-Source: ABdhPJxi08YnPVMLvXr1ow0i6hz9Uvu80qsVfuzn5L15gMuMvSBYcH2xqdmBJwOjBbJRR+VMULCKsw==
+X-Received: by 2002:a05:6870:418a:b0:e9:75e:1d80 with SMTP id y10-20020a056870418a00b000e9075e1d80mr820263oac.66.1652385367921;
+        Thu, 12 May 2022 12:56:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b14-20020a056870160e00b000e686d13891sm146140oae.43.2022.05.12.12.56.05
+        by smtp.gmail.com with ESMTPSA id f137-20020a4a588f000000b0035eb4e5a6d3sm217223oob.41.2022.05.12.12.56.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 12:56:05 -0700 (PDT)
+        Thu, 12 May 2022 12:56:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH 4/7] hwmon: (peci/cputemp) Use HWMON_CHANNEL_INFO macro
-Date:   Thu, 12 May 2022 12:55:53 -0700
-Message-Id: <20220512195556.137741-4-linux@roeck-us.net>
+Subject: [PATCH 5/7] hwmon: (peci/dimmtemp) Use HWMON_CHANNEL_INFO macro
+Date:   Thu, 12 May 2022 12:55:54 -0700
+Message-Id: <20220512195556.137741-5-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220512195556.137741-1-linux@roeck-us.net>
 References: <20220512195556.137741-1-linux@roeck-us.net>
@@ -120,56 +120,32 @@ Julia Lawall for providing the coccinelle script.
 Cc: Iwona Winiarska <iwona.winiarska@intel.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/peci/cputemp.c | 38 +++++++++++++++---------------------
- 1 file changed, 16 insertions(+), 22 deletions(-)
+ drivers/hwmon/peci/dimmtemp.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-index 12156328f5cf..57470fda5f6c 100644
---- a/drivers/hwmon/peci/cputemp.c
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -447,29 +447,23 @@ static const struct hwmon_ops peci_cputemp_ops = {
- 	.read = cputemp_read,
- };
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index 96b9919db357..3c71b5546bcb 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -300,18 +300,10 @@ static int create_dimm_temp_label(struct peci_dimmtemp *priv, int chan)
+ 	return 0;
+ }
  
--static const u32 peci_cputemp_temp_channel_config[] = {
--	/* Die temperature */
--	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST,
--	/* DTS margin */
--	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST,
--	/* Tcontrol temperature */
--	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_CRIT,
--	/* Tthrottle temperature */
--	HWMON_T_LABEL | HWMON_T_INPUT,
--	/* Tjmax temperature */
--	HWMON_T_LABEL | HWMON_T_INPUT,
--	/* Core temperature - for all core channels */
--	[channel_core ... CPUTEMP_CHANNEL_NUMS - 1] = HWMON_T_LABEL | HWMON_T_INPUT,
+-static const u32 peci_dimmtemp_temp_channel_config[] = {
+-	[0 ... DIMM_NUMS_MAX - 1] = HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT,
 -	0
 -};
 -
--static const struct hwmon_channel_info peci_cputemp_temp_channel = {
+-static const struct hwmon_channel_info peci_dimmtemp_temp_channel = {
 -	.type = hwmon_temp,
--	.config = peci_cputemp_temp_channel_config,
+-	.config = peci_dimmtemp_temp_channel_config,
 -};
 -
- static const struct hwmon_channel_info *peci_cputemp_info[] = {
--	&peci_cputemp_temp_channel,
+ static const struct hwmon_channel_info *peci_dimmtemp_temp_info[] = {
+-	&peci_dimmtemp_temp_channel,
 +	HWMON_CHANNEL_INFO(temp,
-+			   /* Die temperature */
-+			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST,
-+			   /* DTS margin */
-+			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST,
-+			   /* Tcontrol temperature */
-+			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_CRIT,
-+			   /* Tthrottle temperature */
-+			   HWMON_T_LABEL | HWMON_T_INPUT,
-+			   /* Tjmax temperature */
-+			   HWMON_T_LABEL | HWMON_T_INPUT,
-+			   /* Core temperature - for all core channels */
-+			   [channel_core ... CPUTEMP_CHANNEL_NUMS - 1] =
-+						HWMON_T_LABEL | HWMON_T_INPUT),
++			   [0 ... DIMM_NUMS_MAX - 1] = HWMON_T_LABEL |
++				HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT),
  	NULL
  };
  
