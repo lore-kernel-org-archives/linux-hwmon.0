@@ -2,109 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBA3DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 11:33:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BB84C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 13:00:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379924AbiEMLdd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 May 2022 07:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
+        id S1380490AbiEMNAj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 13 May 2022 09:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243824AbiEMLdc (ORCPT
+        with ESMTP id S1350313AbiEMNAi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 May 2022 07:33:32 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DC02B824D;
-        Fri, 13 May 2022 04:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652441612; x=1683977612;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3EBr+y79geP5CztvBOF3MttVzuiXbWczHFziVH9D/uU=;
-  b=LD/Yq+BG1WPshxerKhLcS0pNRfOuX0Agtt4uUs3fU00u6SyX/GLG3JQ7
-   qO1KGAQiEMXMBylWZjblZvlxbTdZXCgFbHPkBANYQaiF/e5zXnxrjVnxi
-   YcKL0Cwn3SyyxF0z3pAj9OMzcnDSe11UnJcsTHAfEouBOZjBqEhc9s8Nk
-   eXI3VrZ7wEMNuEbzifhyHSWeU+syWq3/KKVmMHxmQHWpxm289GiCDFcs9
-   0TqvkPnLZv8xGhoHamRJiIkwTa+qmdu7ESrx8HA6W1Ne0ZdOzJsgBRTaV
-   1bD3hvlFtS6tJ8cWIEzLvVJ8JJDROj2HHZaXUVtvXGuO5qA31iDln4Ab9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="267878197"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="267878197"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 04:33:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="595179512"
-Received: from ychen23-mobl.ccr.corp.intel.com ([10.249.171.202])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 04:33:29 -0700
-Message-ID: <b9ee331670fd40e69796dd428a844562842cdff3.camel@intel.com>
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     LABBE Corentin <clabbe@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>
+        Fri, 13 May 2022 09:00:38 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1510F9B1A0;
+        Fri, 13 May 2022 06:00:38 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id j12so10048594oie.1;
+        Fri, 13 May 2022 06:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LlC3aCZiZ0EPde09Twew33remzitl9lLb/l+WCKCHVM=;
+        b=S+h29lSDZpBV9M6ecbR7fmi2PbqV7lIbOuC2N3dEbu/43j886nQAlCpzXDDfCkesFQ
+         PDmGBJv3iOzTCvb6UNK+ofYqR0jdk2vgATm3RNVWkDd0ib/PHnSlViyMUtlLva2zKjhU
+         lUlOBs4DADLlMaeu7v+Qy9wDb+J8uPkF9qckDw6eoexPqom2dcAyZuOF2dh36DWAy6Ad
+         wmcUzb+DnJ3779q0Dm23qzZ2/Ov3Q6/SkSbT4SH8z8ixNu2/ftXzBzcwCTwC+NI9CW0k
+         YoIODjo1+WXc6LQrCMrUL/+40yzTjGURmsdp/KCLmg0Y1XUnIzUCGO7HccVBQudNVp7T
+         U+ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LlC3aCZiZ0EPde09Twew33remzitl9lLb/l+WCKCHVM=;
+        b=zfYtOf1Qdr1V2tlNgA7Lvdx2s5SFg5rRz82WY1T9q9fxqSVnLs7Z5RGagHBt5bWcJw
+         zkFc6RF7QSNdoM7dJ6PATDPr8al+hk29VDeiPLacX9cxLYOMm/kB+MlWwwnAZeYnHzcH
+         LumxAPZ4s7Lu/HJ3TWedxdiZGP4SQETpNtEetG/8oGZ6sHnY0ZbctQF4wj5xHyNJLl1c
+         JkWTPuU58Splf4nzkxTYFdD3ggN+++40c08dFHYbBIHxf/jyMnuONlwE7JF7GbSX09OV
+         h0Mf4m7t142IK0UUxTEHcP32GlUefGSSKJGFvGsUO7KvTUBXtm3cVuYDe6Nm54Red2fC
+         Xxiw==
+X-Gm-Message-State: AOAM532SjoEBRX8yjML5dck5BNP342YGAlesCOreQ7RAZH/5+0wmfGB2
+        klgBJQqX83HooaxM3FGHEek=
+X-Google-Smtp-Source: ABdhPJwo+e/brtBBR3rQZyQmtiDw179fmOi+hU1nYGgGnPDiLqOHGYz+GXLRxMn9UVjmBpqK8FTCsA==
+X-Received: by 2002:a05:6808:198a:b0:326:9d3c:5078 with SMTP id bj10-20020a056808198a00b003269d3c5078mr7598668oib.112.1652446835205;
+        Fri, 13 May 2022 06:00:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d6-20020a05680805c600b00326e2284976sm952673oij.15.2022.05.13.06.00.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 06:00:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5efc656b-6913-eb8f-b43a-d046a10670e7@roeck-us.net>
+Date:   Fri, 13 May 2022 06:00:32 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] hwmon: (ltq-cputemp) restrict build to SOC_XWAY
+Content-Language: en-US
+To:     Florian Eckert <fe@dev.tdt.de>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 13 May 2022 19:33:27 +0800
-In-Reply-To: <Yn4QhhTI7t6Gi+fE@Red>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
-         <20220509063010.3878134-3-clabbe@baylibre.com>
-         <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <Yn4QhhTI7t6Gi+fE@Red>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-kernel@vger.kernel.org, Eckert.Florian@googlemail.com,
+        kernel testrobot <lkp@intel.com>
+References: <20220513073221.48744-1-fe@dev.tdt.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220513073221.48744-1-fe@dev.tdt.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 2022-05-13 at 10:02 +0200, LABBE Corentin wrote:
-> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
-> > Corentin,
-> > 
-> > On 5/8/22 23:30, Corentin Labbe wrote:
-> > > Booting lead to a hwmon_device_register() is deprecated. Please
-> > > convert the driver to use hwmon_device_register_with_info().
-> > > So let's convert the driver to use
-> > > hwmon_device_register_with_info().
-> > > 
-> > > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > > ---
-> > 
-> > [ ... ]
-> > 
-> > > @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct
-> > > acpi_device *device, u32 event)
-> > >   		if (res)
-> > >   			break;
-> > >   
-> > > -		remove_attrs(resource);
-> > > +		remove_domain_devices(resource);
-> > >   		setup_attrs(resource);
-> > 
-> > Zhang Rui found an interesting problem with this code:
-> > It needs a call to sysfs_update_groups(hwmon_dev->groups)
-> > to update sysfs attribute visibility, probably between
-> > remove_domain_devices() and setup_attrs().
-> > 
-> > >   		break;
-> > >   	case METER_NOTIFY_TRIP:
-> > > -		sysfs_notify(&device->dev.kobj, NULL,
-> > > POWER_AVERAGE_NAME);
-> > > +		hwmon_notify_event(&device->dev, hwmon_power,
-> > > hwmon_power_average, 0);
-> > 
-> > ... which makes realize: The notification device should be the
-> > hwmon device.
-> > That would be resource->hwmon_dev, not the acpi device.
-> > 
+On 5/13/22 00:32, Florian Eckert wrote:
+> This driver can only be built if the target is set to SOC_XWAY, because
+> only then the used macros 'ltq_cgu_*'  are available.
 > 
-> Hello
+> To clarify this, the Kconfig is adjusted so that the driver can only be
+> selected when the SOC_XWAY is also selected.
 > 
-> I will fix this, but do you have an example how to test thoses code
-> path easily ?
 
-No, I don't have one.
+Already queued.
 
--rui
+Thanks,
+Guenter
+
+> Reported-by: kernel testrobot <lkp@intel.com>
+> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+> ---
+> 
+> This is a fix for an issue, that was reported by the 'kernel testrobot'.
+> 
+>   drivers/hwmon/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 68a8a27ab3b7..1122c0519410 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -960,7 +960,7 @@ config SENSORS_LTC4261
+>   
+>   config SENSORS_LTQ_CPUTEMP
+>   	bool "Lantiq cpu temperature sensor driver"
+> -	depends on LANTIQ
+> +	depends on LANTIQ && SOC_XWAY
+>   	help
+>   	  If you say yes here you get support for the temperature
+>   	  sensor inside your CPU.
 
