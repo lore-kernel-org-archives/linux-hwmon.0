@@ -2,116 +2,102 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B09EC433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 13:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1C57C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 13:07:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379931AbiEMNDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 May 2022 09:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S1359218AbiEMNHK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 13 May 2022 09:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240402AbiEMNDi (ORCPT
+        with ESMTP id S1380550AbiEMNHJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 May 2022 09:03:38 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0664F46143;
-        Fri, 13 May 2022 06:03:38 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id y63so10022429oia.7;
-        Fri, 13 May 2022 06:03:37 -0700 (PDT)
+        Fri, 13 May 2022 09:07:09 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666112A726;
+        Fri, 13 May 2022 06:07:08 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so10433572fac.7;
+        Fri, 13 May 2022 06:07:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=sender:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kvr3Begq22WBEyGxs8maYiCPrh4so4dTPZyog74y3T0=;
-        b=YEwfmmlyZgqYrhuuDmRqATA6c7fMLLPBB8Q4BEMYK9Q6dPk4H60yVoLqKvQ3McY3LX
-         LlnqOlKnORu4h0Su6I99mUzvs2ZzOjbgFH1MIjRAH+bilFShhl3GQpSFIWcSWkaTobQy
-         I17wACj+3C+EPBxzi1oIVp4g1Qid9PZ/DjO0MH0yiIwDpC1sGDKVWeXqcbwIBszoQShc
-         hmH1K9r23wJNvnMbLzDCg4jC+nMP2OumCdld6ZYXg+Ps2JYsiC7LeVuJk1as+ymHuBbo
-         prGUjklpod1UeSBpDe+pYmZ+2lf0gpe7ikxTsKqRwytDeKenJTxGOSmHM+0PTb+Iq1R/
-         C3aA==
+        bh=OhMSg1GLkly/CCEU2JB+IenKQ93DJgHS6kPAjmLfY2M=;
+        b=qIQVTTe0byUcK60Fd66C5A21M+nOKGCZfaOdXSxVDvoQOHQ0sKWrvBBzSRFK43Mr5h
+         xMoSY82aACS8hv6h6iqiqKw2Z1M8WqVVUznBg8zUuFaj7gSOkZ7UOxc+z5FpSijIoB85
+         QbHIXce02acIgGXzpjYrmsoOVZlvr3ZtZq/FbVA4Bje0sZLW/KZpkPuo40E/aIH6DzcJ
+         0THRtqbA5nxzdpiRhibYxQqTX7u9OGy7/OMJ1sgOT1JX8mBNHfXTcyie0UoKAUqRL5Fk
+         w3Y0vIOq3C7cDEbAvkVU7s9nF0pPbUJM0XJJnNvpMStLQNp0U81Wc5NcrOl6cOzsBfaz
+         GHkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kvr3Begq22WBEyGxs8maYiCPrh4so4dTPZyog74y3T0=;
-        b=DtmyMAmWJ7cCo7NYZb0bYxeF53zJVVi8jzcjqemXzh7nnrN5NCfqO4bgwyHErHKjmJ
-         MNfdlQHf8n7D7cnjRsP4Pe7UXXcrnwwDH6MhcU5S6QJO6MtUQ/M+mGa1I/lwJR/tYens
-         C3vrbmwFUGD/RZJIT1V1UcDqBG+2t6xlVgA0ZbvtphSkWHSpc1+WAblTmvHpCKHAAuDq
-         mQlAMkxk4IAjXRBRclDMyIq2c7FHXcsLPn2HBHJKJSONOg/cYb4qf/n8jjFQiTmMdhJM
-         JkMgCiYfaRrfovdipY6X5D8j0Q+HrWLPJ/ZrFejj8weosWpOhxgJGmM1hxIgP9ltNkKG
-         E+HQ==
-X-Gm-Message-State: AOAM531ESnpn4xIgb0KWB7s4P9VUcQy7HUZeW54GOdG+rV27tHGzrlKy
-        LP+TjSk9U/HH/IWSBtlfAmI=
-X-Google-Smtp-Source: ABdhPJy9SpVg/HP+p2qRJ/JoVGVlKj308DrO7IZ5HYDFdxJU8QkkiAsBKN6uumQtGcsyF34bjicmWQ==
-X-Received: by 2002:a54:4505:0:b0:325:e50c:a71 with SMTP id l5-20020a544505000000b00325e50c0a71mr7274438oil.70.1652447015822;
-        Fri, 13 May 2022 06:03:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000e686d1387bsm999102oab.21.2022.05.13.06.03.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 06:03:35 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=OhMSg1GLkly/CCEU2JB+IenKQ93DJgHS6kPAjmLfY2M=;
+        b=MPoGbIY+COeKAFQzpfMRPzSrPe3T94wKiLL5Zl0yuvPYW81ii2B9KvcGRNvz3JJGzV
+         6oxkeFq484pqGi3bLRBysn8aY5wfwD26/JUbvIp4zM1POyWQzdWrdRBnN7qlXtfHcGb7
+         pvvezzJUcc2hOglxG/dEExZXhDiBRDWF2HYaQno9fTyQLTWY29DRf1bjhsgxOYUpLsxE
+         nFpRGqQROai974hCIr1DIdlGdp7sYCwUIwzKeVRHQyb0zHdXX5sFxVG7dlxROv1c/09d
+         cqKEByLoT6x7E+cfF3Th90b0QMtl8cqTHkoZRyDYXsTg1K9V8TNzmFJ6q3DCjQXvGKdJ
+         R0LQ==
+X-Gm-Message-State: AOAM533J52ATzohFH9Y+tKqZ/2RMiWgiI5flXC4pV50KeHMA8qYDvcrf
+        joWfv5JaKtMZ0WvlzvPu9O7AfnEZXE7FYQ==
+X-Google-Smtp-Source: ABdhPJyvh58yldSJBVc3NDjCcMsgCZn6INaCdMBB/N3N+McGxGKmHkcQhwO1AqZ+E4AG0Th1f7/rmg==
+X-Received: by 2002:a05:6870:a446:b0:ed:a968:645a with SMTP id n6-20020a056870a44600b000eda968645amr2482575oal.216.1652447227491;
+        Fri, 13 May 2022 06:07:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05683018ca00b0060603221274sm909091ote.68.2022.05.13.06.07.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 06:07:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <83c22b32-d3e0-eb85-02b5-0068dcf0412f@roeck-us.net>
-Date:   Fri, 13 May 2022 06:03:33 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-Content-Language: en-US
-To:     LABBE Corentin <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-3-clabbe@baylibre.com>
- <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <Yn4QhhTI7t6Gi+fE@Red>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yn4QhhTI7t6Gi+fE@Red>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.18-rc7
+Date:   Fri, 13 May 2022 06:07:05 -0700
+Message-Id: <20220513130705.2488340-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/13/22 01:02, LABBE Corentin wrote:
-> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
->> Corentin,
->>
->> On 5/8/22 23:30, Corentin Labbe wrote:
->>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
->>> So let's convert the driver to use hwmon_device_register_with_info().
->>>
->>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>> ---
->> [ ... ]
->>
->>> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->>>    		if (res)
->>>    			break;
->>>    
->>> -		remove_attrs(resource);
->>> +		remove_domain_devices(resource);
->>>    		setup_attrs(resource);
->>
->> Zhang Rui found an interesting problem with this code:
->> It needs a call to sysfs_update_groups(hwmon_dev->groups)
->> to update sysfs attribute visibility, probably between
->> remove_domain_devices() and setup_attrs().
->>
->>>    		break;
->>>    	case METER_NOTIFY_TRIP:
->>> -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
->>> +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
->>
->> ... which makes realize: The notification device should be the hwmon device.
->> That would be resource->hwmon_dev, not the acpi device.
->>
-> 
-> Hello
-> 
-> I will fix this, but do you have an example how to test thoses code path easily ?
-> 
+Hi Linus,
 
-No, sorry.
+Please pull hwmon fixes for Linux v5.18-rc7 from signed tag:
 
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc7
+
+Thanks,
 Guenter
+------
+
+The following changes since commit 08da09f028043fed9653331ae75bc310411f72e6:
+
+  hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk (2022-04-27 04:52:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.18-rc7
+
+for you to fetch changes up to 151d6dcbed836270c6c240932da66f147950cbdb:
+
+  hwmon: (ltq-cputemp) restrict it to SOC_XWAY (2022-05-09 17:27:24 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v5.18-rc7
+
+- Restrict ltq-cputemp to SOC_XWAY to fix build failure
+
+- Add OF device ID table to tmp401 driver to enable auto-load
+
+----------------------------------------------------------------
+Camel Guo (1):
+      hwmon: (tmp401) Add OF device ID table
+
+Randy Dunlap (1):
+      hwmon: (ltq-cputemp) restrict it to SOC_XWAY
+
+ drivers/hwmon/Kconfig  |  2 +-
+ drivers/hwmon/tmp401.c | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
