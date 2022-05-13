@@ -2,67 +2,109 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2183DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 08:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBA3DC433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 11:33:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378033AbiEMIGH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 May 2022 04:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S1379924AbiEMLdd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 13 May 2022 07:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378029AbiEMIGG (ORCPT
+        with ESMTP id S243824AbiEMLdc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 May 2022 04:06:06 -0400
-Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ED937A3C
-        for <linux-hwmon@vger.kernel.org>; Fri, 13 May 2022 01:06:04 -0700 (PDT)
-Received: by mail.coredeal.pl (Postfix, from userid 1002)
-        id 1BA20A4D8D; Fri, 13 May 2022 08:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
-        t=1652429163; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
-        h=Date:From:To:Subject:From;
-        b=R86jE/NmX5ewBWafGPdtR2SaPuylTzw+6QekMuENl09Vxfff6tEL/w/bIsnXK6ct2
-         nsdOkML1Y4/hTsKERYhdNk9a8A9brNffNqJb4y3Hsvy//63zJDTyz3NCilgce0kTO6
-         3bi6zWHu/JPuShD/DlLNXvAmShYl1L8Im2X3xxbzSc40MZeaqZSiXvM5W/KRdgtKSX
-         2Torw3tSgAaRMRZH+I03IuUPcIOyPTwclLaaETfySc/2YLdnyQd6mVc1BCUfRaK+J0
-         wPR+ezv14oy4zwOx8+VlRSKcb/tEuzfK4dtpbSEtPkou4A2alE7ozQEuXsaNwjrT45
-         5UnS6kMhTcWNg==
-Received: by mail.coredeal.pl for <linux-hwmon@vger.kernel.org>; Fri, 13 May 2022 08:05:55 GMT
-Message-ID: <20220513064500-0.1.33.nzow.0.ir6wchdi7a@coredeal.pl>
-Date:   Fri, 13 May 2022 08:05:55 GMT
-From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Biznesowy angielski
-X-Mailer: mail.coredeal.pl
-MIME-Version: 1.0
+        Fri, 13 May 2022 07:33:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DC02B824D;
+        Fri, 13 May 2022 04:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652441612; x=1683977612;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=3EBr+y79geP5CztvBOF3MttVzuiXbWczHFziVH9D/uU=;
+  b=LD/Yq+BG1WPshxerKhLcS0pNRfOuX0Agtt4uUs3fU00u6SyX/GLG3JQ7
+   qO1KGAQiEMXMBylWZjblZvlxbTdZXCgFbHPkBANYQaiF/e5zXnxrjVnxi
+   YcKL0Cwn3SyyxF0z3pAj9OMzcnDSe11UnJcsTHAfEouBOZjBqEhc9s8Nk
+   eXI3VrZ7wEMNuEbzifhyHSWeU+syWq3/KKVmMHxmQHWpxm289GiCDFcs9
+   0TqvkPnLZv8xGhoHamRJiIkwTa+qmdu7ESrx8HA6W1Ne0ZdOzJsgBRTaV
+   1bD3hvlFtS6tJ8cWIEzLvVJ8JJDROj2HHZaXUVtvXGuO5qA31iDln4Ab9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="267878197"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="267878197"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 04:33:31 -0700
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="595179512"
+Received: from ychen23-mobl.ccr.corp.intel.com ([10.249.171.202])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 04:33:29 -0700
+Message-ID: <b9ee331670fd40e69796dd428a844562842cdff3.camel@intel.com>
+Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     LABBE Corentin <clabbe@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 13 May 2022 19:33:27 +0800
+In-Reply-To: <Yn4QhhTI7t6Gi+fE@Red>
+References: <20220509063010.3878134-1-clabbe@baylibre.com>
+         <20220509063010.3878134-3-clabbe@baylibre.com>
+         <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <Yn4QhhTI7t6Gi+fE@Red>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+On Fri, 2022-05-13 at 10:02 +0200, LABBE Corentin wrote:
+> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
+> > Corentin,
+> > 
+> > On 5/8/22 23:30, Corentin Labbe wrote:
+> > > Booting lead to a hwmon_device_register() is deprecated. Please
+> > > convert the driver to use hwmon_device_register_with_info().
+> > > So let's convert the driver to use
+> > > hwmon_device_register_with_info().
+> > > 
+> > > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > > ---
+> > 
+> > [ ... ]
+> > 
+> > > @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct
+> > > acpi_device *device, u32 event)
+> > >   		if (res)
+> > >   			break;
+> > >   
+> > > -		remove_attrs(resource);
+> > > +		remove_domain_devices(resource);
+> > >   		setup_attrs(resource);
+> > 
+> > Zhang Rui found an interesting problem with this code:
+> > It needs a call to sysfs_update_groups(hwmon_dev->groups)
+> > to update sysfs attribute visibility, probably between
+> > remove_domain_devices() and setup_attrs().
+> > 
+> > >   		break;
+> > >   	case METER_NOTIFY_TRIP:
+> > > -		sysfs_notify(&device->dev.kobj, NULL,
+> > > POWER_AVERAGE_NAME);
+> > > +		hwmon_notify_event(&device->dev, hwmon_power,
+> > > hwmon_power_average, 0);
+> > 
+> > ... which makes realize: The notification device should be the
+> > hwmon device.
+> > That would be resource->hwmon_dev, not the acpi device.
+> > 
+> 
+> Hello
+> 
+> I will fix this, but do you have an example how to test thoses code
+> path easily ?
 
-czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
-swoich pracownik=C3=B3w?
+No, I don't have one.
 
-Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
-w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
-ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
-=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
+-rui
 
-Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
-=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
-re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
-o=C5=BCliwo=C5=9Bci biznesowe.=20
-
-Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
- kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
-za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
-=2E
-
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
-w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
-
-
-Pozdrawiam
-Krzysztof Maj
