@@ -2,102 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1C57C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 13:07:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D73ECC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 May 2022 17:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359218AbiEMNHK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 May 2022 09:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
+        id S1383011AbiEMRaD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 13 May 2022 13:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380550AbiEMNHJ (ORCPT
+        with ESMTP id S1383047AbiEMRaC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 May 2022 09:07:09 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666112A726;
-        Fri, 13 May 2022 06:07:08 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so10433572fac.7;
-        Fri, 13 May 2022 06:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OhMSg1GLkly/CCEU2JB+IenKQ93DJgHS6kPAjmLfY2M=;
-        b=qIQVTTe0byUcK60Fd66C5A21M+nOKGCZfaOdXSxVDvoQOHQ0sKWrvBBzSRFK43Mr5h
-         xMoSY82aACS8hv6h6iqiqKw2Z1M8WqVVUznBg8zUuFaj7gSOkZ7UOxc+z5FpSijIoB85
-         QbHIXce02acIgGXzpjYrmsoOVZlvr3ZtZq/FbVA4Bje0sZLW/KZpkPuo40E/aIH6DzcJ
-         0THRtqbA5nxzdpiRhibYxQqTX7u9OGy7/OMJ1sgOT1JX8mBNHfXTcyie0UoKAUqRL5Fk
-         w3Y0vIOq3C7cDEbAvkVU7s9nF0pPbUJM0XJJnNvpMStLQNp0U81Wc5NcrOl6cOzsBfaz
-         GHkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=OhMSg1GLkly/CCEU2JB+IenKQ93DJgHS6kPAjmLfY2M=;
-        b=MPoGbIY+COeKAFQzpfMRPzSrPe3T94wKiLL5Zl0yuvPYW81ii2B9KvcGRNvz3JJGzV
-         6oxkeFq484pqGi3bLRBysn8aY5wfwD26/JUbvIp4zM1POyWQzdWrdRBnN7qlXtfHcGb7
-         pvvezzJUcc2hOglxG/dEExZXhDiBRDWF2HYaQno9fTyQLTWY29DRf1bjhsgxOYUpLsxE
-         nFpRGqQROai974hCIr1DIdlGdp7sYCwUIwzKeVRHQyb0zHdXX5sFxVG7dlxROv1c/09d
-         cqKEByLoT6x7E+cfF3Th90b0QMtl8cqTHkoZRyDYXsTg1K9V8TNzmFJ6q3DCjQXvGKdJ
-         R0LQ==
-X-Gm-Message-State: AOAM533J52ATzohFH9Y+tKqZ/2RMiWgiI5flXC4pV50KeHMA8qYDvcrf
-        joWfv5JaKtMZ0WvlzvPu9O7AfnEZXE7FYQ==
-X-Google-Smtp-Source: ABdhPJyvh58yldSJBVc3NDjCcMsgCZn6INaCdMBB/N3N+McGxGKmHkcQhwO1AqZ+E4AG0Th1f7/rmg==
-X-Received: by 2002:a05:6870:a446:b0:ed:a968:645a with SMTP id n6-20020a056870a44600b000eda968645amr2482575oal.216.1652447227491;
-        Fri, 13 May 2022 06:07:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05683018ca00b0060603221274sm909091ote.68.2022.05.13.06.07.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 06:07:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.18-rc7
-Date:   Fri, 13 May 2022 06:07:05 -0700
-Message-Id: <20220513130705.2488340-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 13 May 2022 13:30:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB54712CA;
+        Fri, 13 May 2022 10:30:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED24E62111;
+        Fri, 13 May 2022 17:30:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D918C34100;
+        Fri, 13 May 2022 17:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652463000;
+        bh=UFsKT2fXtjt173F/jRTCA2mX/10dgGh8GJpWJt+HLCQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cUurPn3Lm1XAwWlFIhwlRJgKrpsH8wuaQF4Oxc5jtSpkEEp9VAw3SQzQ3UDEEAEph
+         zhonx0tfMExh3RMq2nv5od3ZftKhvwRyqv44E/OJtooTiUgEmkhsaprjomH+DEezG7
+         +t8VItI9d+An8jwQqgIuYa6i93Kw2rNFSg8wbaTh4qMNXE6FfGHAKDp6BT64pOLLhV
+         te18IneZ69dZ/l3LFPpTOrGp7wNtdgBzk3tldMKJqA2THuOzR/HgDLj7/W1Fly4DDu
+         QIZKyLCT056OS743uyQC4bh0c7Frgv5Y/lurFh9m37rdIjgcR+tg1NLCbcvZmoBveM
+         95StIrxWBDpqQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4A0DFE8DBDA;
+        Fri, 13 May 2022 17:30:00 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v5.18-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220513130705.2488340-1-linux@roeck-us.net>
+References: <20220513130705.2488340-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220513130705.2488340-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc7
+X-PR-Tracked-Commit-Id: 151d6dcbed836270c6c240932da66f147950cbdb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 359ee4f480c604a2e5896a73026184fa29d36c9f
+Message-Id: <165246300028.14811.6530928144615159622.pr-tracker-bot@kernel.org>
+Date:   Fri, 13 May 2022 17:30:00 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Fri, 13 May 2022 06:07:05 -0700:
 
-Please pull hwmon fixes for Linux v5.18-rc7 from signed tag:
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc7
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc7
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/359ee4f480c604a2e5896a73026184fa29d36c9f
 
-Thanks,
-Guenter
-------
+Thank you!
 
-The following changes since commit 08da09f028043fed9653331ae75bc310411f72e6:
-
-  hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk (2022-04-27 04:52:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.18-rc7
-
-for you to fetch changes up to 151d6dcbed836270c6c240932da66f147950cbdb:
-
-  hwmon: (ltq-cputemp) restrict it to SOC_XWAY (2022-05-09 17:27:24 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v5.18-rc7
-
-- Restrict ltq-cputemp to SOC_XWAY to fix build failure
-
-- Add OF device ID table to tmp401 driver to enable auto-load
-
-----------------------------------------------------------------
-Camel Guo (1):
-      hwmon: (tmp401) Add OF device ID table
-
-Randy Dunlap (1):
-      hwmon: (ltq-cputemp) restrict it to SOC_XWAY
-
- drivers/hwmon/Kconfig  |  2 +-
- drivers/hwmon/tmp401.c | 11 +++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
