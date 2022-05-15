@@ -2,143 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78541C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 15 May 2022 19:36:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35FA9C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 15 May 2022 20:32:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiEOTg3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 15 May 2022 15:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S234191AbiEOUcr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 15 May 2022 16:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbiEOTg3 (ORCPT
+        with ESMTP id S230463AbiEOUcq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 15 May 2022 15:36:29 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CA5E03B
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 May 2022 12:36:27 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id k30so5236145wrd.5
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 May 2022 12:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MS34JneIXe2cr4Zw4VSoJkkUB+splLBi5YgL0r5NFUE=;
-        b=1fVCx2XCO96HWGHmqMT+95KanFG/MaZFOk5g1B2M/olyqrfQhG9tu9sldvEU5xvUM8
-         ahDSybUlSbc0r/i0kTH1ewcB3/Zu/n5qUK5hxshIvF/5qXlQIeMCMV0zcrZ3iE+zG8tK
-         xOxouRhFxtCxk+iIH24gFXr19GbPG+DRWVaOO2Iqo4cwScoMd1FWaUc+7GNJZnbUWbk8
-         uh10A2jKl0jv7VYmXSYviPQq7lHSHmi27JwOxxkQ1jKIy5uRd8Gs5NAU4PhUMFfbEkUl
-         op6hZRubjkhbFUHP2RYhgzLi3FKn2rjmceNdJxv/g/x3yK61MbixjAX6kbQPdVmm3Lgf
-         1B+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MS34JneIXe2cr4Zw4VSoJkkUB+splLBi5YgL0r5NFUE=;
-        b=VOiVUY9gvLQbPTcaBeuHMagUHiW+VNOW8865EaJGQvNrGG9Chn/E9hwj3maV6XF8DK
-         Ps7Y3fzSrZxuJIU3wXObXWuJ+bRwKYAvZXnqi0BqGl4S7leaZfzBEjpRxF7O8DJcdL+Z
-         1+GfDeDPFa7IPH/FqxlyE+ChSjyLZNzCFK2hL9a2j3Qlp/auYw2Jgq+hr6bkAHQ943IL
-         sNGjHywgIylkAk95QRIpDxMPAKMBp5Zj8hLCzVYFdtMCKVNwXnYT7OFq/boZ2OBLwU41
-         eQ5ljAL8G6y3hWUVpUYKbaIude9BLSpDKJzrMvM6C3Su+p+jwF74JTXRRWoJlLcRYNEQ
-         ebzA==
-X-Gm-Message-State: AOAM530opn8T0Md/esukLweinzDCCrkIv8x9GzUZwDFRh+qfe0IzuAey
-        8X4BAEU1xCzelN37pzoJAIcbKg==
-X-Google-Smtp-Source: ABdhPJy5g2iblnEBSZTxvgjc3b5oSMRyyCmenrG289QeOSNqfVatufCv1wQZcIoYniIBy/y92lK2zA==
-X-Received: by 2002:a05:6000:381:b0:20c:6911:f85b with SMTP id u1-20020a056000038100b0020c6911f85bmr11479995wrf.406.1652643385471;
-        Sun, 15 May 2022 12:36:25 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id g23-20020adfa497000000b0020d0a070c80sm570044wrb.35.2022.05.15.12.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 12:36:24 -0700 (PDT)
-Date:   Sun, 15 May 2022 21:36:20 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
+        Sun, 15 May 2022 16:32:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D48C5FEC
+        for <linux-hwmon@vger.kernel.org>; Sun, 15 May 2022 13:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652646765; x=1684182765;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tdm7Hsvw5ycuKlslPyv9T+9SAU6C0GmJX6IlSyj8nKE=;
+  b=anVkCHFnoh6mGWn4oak15c5sKsfu1yUmNSbw2DbVSlo0yuYlM5+1l2sg
+   ntE1Se+tQNgZKmfRybWFG6jVNtCK4jLurnJIpjpmX8renxm52TkFug2ZH
+   Pjk16m5DEngBb3DKHXTRcWtFAHiGdMGpfzsj6wpLmooMhCnGRGm1TRYiu
+   vag8V3ufHQ9QdnQZuIwe0Ms+8AHvo9eXL8uQZOHxz1zcE+Dl+Zti7Nb3d
+   ApB+aP7QGcCTcZtWgpSlddLfzPuAaTI/hh+zHM52cV+yyRfo1eZL3cLhB
+   CyIbEaw1kMcgJV4YcN/m/3LPpq44tSeGijvyC2plNP5jXPL5exzEAP8YT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="333738486"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="333738486"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 13:32:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="659841695"
+Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 May 2022 13:32:41 -0700
+Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqKuv-0001xZ-3b;
+        Sun, 15 May 2022 20:32:41 +0000
+Date:   Mon, 16 May 2022 04:31:52 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-Message-ID: <YoFWNAhiDrzpeBU8@Red>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-3-clabbe@baylibre.com>
- <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ 7897b39ba6b4bc1a6f8250a090105e03873dcace
+Message-ID: <62816338.aDLsHZy1UECtzWB7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
-> Corentin,
-> 
-> On 5/8/22 23:30, Corentin Labbe wrote:
-> > Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
-> > So let's convert the driver to use hwmon_device_register_with_info().
-> > 
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> [ ... ]
-> 
-> > @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
-> >   		if (res)
-> >   			break;
-> >   
-> > -		remove_attrs(resource);
-> > +		remove_domain_devices(resource);
-> >   		setup_attrs(resource);
-> 
-> Zhang Rui found an interesting problem with this code:
-> It needs a call to sysfs_update_groups(hwmon_dev->groups)
-> to update sysfs attribute visibility, probably between
-> remove_domain_devices() and setup_attrs().
-> 
-> >   		break;
-> >   	case METER_NOTIFY_TRIP:
-> > -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
-> > +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
-> 
-> ... which makes realize: The notification device should be the hwmon device.
-> That would be resource->hwmon_dev, not the acpi device.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 7897b39ba6b4bc1a6f8250a090105e03873dcace  watchdog: ts4800_wdt: Fix refcount leak in ts4800_wdt_probe
 
-Hello
+elapsed time: 1753m
 
-Since my hardware lacks capabilities testing this, I have emulated it on qemu:
-https://github.com/montjoie/qemu/commit/320f2ddacb954ab308ef699f66fca6313f75bc2b
+configs tested: 55
+configs skipped: 3
 
-I have added a custom ACPI _DBX method for triggering some ACPI state change. (like config change, like enabling CAP).
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-For testing config change I have tried lot of way:
-                res = read_capabilities(resource);
-@@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- 
-                remove_domain_devices(resource);
-                setup_attrs(resource);
-+               res = sysfs_update_groups(&resource->hwmon_dev->kobj, acpi_power_groups);
-+               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, acpi_power_groups);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
-                break;
-        case METER_NOTIFY_TRIP:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
-                break;
-        case METER_NOTIFY_CAP:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_cap, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-                break;
-        case METER_NOTIFY_INTERVAL:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average_interval, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average_interval, 0);
-                break;
-        case METER_NOTIFY_CAPPING:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_alarm, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_alarm, 0);
-                dev_info(&device->dev, "Capping in progress.\n");
-                break;
-        default:
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+arc                              allyesconfig
+nios2                               defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                                 defconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-But nothing force visibility to be rerun.
-
-Any idea on how to force visibility to be re-run ?
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
