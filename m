@@ -2,98 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2700C43217
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 19:06:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D37DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 19:43:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345268AbiEPTGZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 May 2022 15:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        id S1345947AbiEPTn3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 May 2022 15:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345325AbiEPTGK (ORCPT
+        with ESMTP id S1345962AbiEPTnI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 May 2022 15:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F31920BD8;
-        Mon, 16 May 2022 12:06:08 -0700 (PDT)
+        Mon, 16 May 2022 15:43:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786B53EF38;
+        Mon, 16 May 2022 12:42:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBB50614CB;
-        Mon, 16 May 2022 19:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83024C385AA;
-        Mon, 16 May 2022 19:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652727967;
-        bh=2Resw6p+2SXUmxtcyRn6SOdYMRyAbxOVblDDKJZfhuk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BSfKI3ipMdkFD4rYZrdaySQegpDAWsCAylzId9ynBGOuOqecfeWt14fH5AoEc7BHS
-         V8gAZ8FUYAWZ7+5K/4PIDrD6pGIIdrV0O2Jn6D6ulUbwttrVFEhG/G9b0Md4pdqADY
-         53Xfp2wtiTvaziCmhPIFbYVTjPjsMkMemaBd4jPHGp7NQtU+tEhOGlW+KsaU0+Uy//
-         GqydFI+z4tPURPZqkSW3aoa95B2I32CoYGYQEgbbShn5S4SKud+VDFCFP1PSKk/hrU
-         wBLkQLJ+Vw6ANisqhMcgiJZpjptSCT72a9hpW4OU0IhEEp1d+2ZA0FAxOElhbv5Pqe
-         BtFm85iRWxmGA==
-Date:   Mon, 16 May 2022 12:06:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, netdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-sh@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        kunit-dev@googlegroups.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, bpf@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 1e1b28b936aed946122b4e0991e7144fdbbfd77e
-Message-ID: <20220516120605.7a6bb562@kernel.org>
-In-Reply-To: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
-References: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3531FB81609;
+        Mon, 16 May 2022 19:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7EAC385AA;
+        Mon, 16 May 2022 19:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652730134;
+        bh=hBFqL54OXt8iEhpIjULegfkhpzWOpPv4Vtg36WzXZVk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C9IZLnf558kkIP7JNFEnANqVa11Qfi2lJpOXj/0hxuqUiQZk3DGcIFaAIqUGKLnyY
+         B2HVcDvJNyyTcUTgZkbXnJVBPxfLhIo1O9Qegq7GIECnbBivHaRciufEpk3FbJHEDe
+         tVLbP01VgZudfZjZjTBDjwe0yfxgZSzkglfLXrH4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Florian Eckert <fe@dev.tdt.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 10/43] hwmon: (ltq-cputemp) restrict it to SOC_XWAY
+Date:   Mon, 16 May 2022 21:36:21 +0200
+Message-Id: <20220516193615.022181134@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
+References: <20220516193614.714657361@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 15 May 2022 21:00:21 +0800 kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> branch HEAD: 1e1b28b936aed946122b4e0991e7144fdbbfd77e  Add linux-next specific files for 20220513
-> 
-> Error/Warning reports:
-> 
-> https://lore.kernel.org/linux-mm/202204181931.klAC6fWo-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205031017.4TwMan3l-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205150051.3RzuooAG-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205150117.sd6HzBVm-lkp@intel.com
-> https://lore.kernel.org/lkml/202205100617.5UUm3Uet-lkp@intel.com
-> https://lore.kernel.org/llvm/202204210555.DNvfHvIb-lkp@intel.com
-> https://lore.kernel.org/llvm/202205060132.uhqyUx1l-lkp@intel.com
-> https://lore.kernel.org/llvm/202205120010.zWBednzM-lkp@intel.com
-> https://lore.kernel.org/llvm/202205141122.qihFGUem-lkp@intel.com
-> 
-> Error/Warning: (recently discovered and may have been fixed)
-> 
-> <command-line>: fatal error: ./include/generated/utsrelease.h: No such file or directory
-> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
-> arch/x86/kvm/pmu.h:20:32: warning: 'vmx_icl_pebs_cpu' defined but not used [-Wunused-const-variable=]
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5102:7: warning: variable 'allow_lttpr_non_transparent_mode' set but not used [-Wunused-but-set-variable]
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5147:6: warning: no previous prototype for function 'dp_parse_lttpr_mode' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1364:5: warning: no previous prototype for 'amdgpu_discovery_get_mall_info' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1983:6: warning: no previous prototype for function 'gfx_v11_0_rlc_stop' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/soc21.c:171:6: warning: no previous prototype for 'soc21_grbm_select' [-Wmissing-prototypes]
-> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: 'ssd130x_spi_table' defined but not used [-Wunused-const-variable=]
-> drivers/hwmon/nct6775-platform.c:199:9: sparse:    unsigned char
-> drivers/hwmon/nct6775-platform.c:199:9: sparse:    void
-> drivers/video/fbdev/omap/hwa742.c:492:5: warning: no previous prototype for 'hwa742_update_window_async' [-Wmissing-prototypes]
-> fs/buffer.c:2254:5: warning: stack frame size (2144) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
-> fs/ntfs/aops.c:378:12: warning: stack frame size (2224) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
-> kernel/trace/fgraph.c:37:12: warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
-> kernel/trace/fgraph.c:46:12: warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Is this report CCed everywhere or there's a reason why netdev@ is CCed?
-I'm trying to figure out we need to care and it's not obvious..
+[ Upstream commit 151d6dcbed836270c6c240932da66f147950cbdb ]
+
+Building with SENSORS_LTQ_CPUTEMP=y with SOC_FALCON=y causes build
+errors since FALCON does not support the same features as XWAY.
+
+Change this symbol to depend on SOC_XWAY since that provides the
+necessary interfaces.
+
+Repairs these build errors:
+
+../drivers/hwmon/ltq-cputemp.c: In function 'ltq_cputemp_enable':
+../drivers/hwmon/ltq-cputemp.c:23:9: error: implicit declaration of function 'ltq_cgu_w32'; did you mean 'ltq_ebu_w32'? [-Werror=implicit-function-declaration]
+   23 |         ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+../drivers/hwmon/ltq-cputemp.c:23:21: error: implicit declaration of function 'ltq_cgu_r32'; did you mean 'ltq_ebu_r32'? [-Werror=implicit-function-declaration]
+   23 |         ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+../drivers/hwmon/ltq-cputemp.c: In function 'ltq_cputemp_probe':
+../drivers/hwmon/ltq-cputemp.c:92:31: error: 'SOC_TYPE_VR9_2' undeclared (first use in this function)
+   92 |         if (ltq_soc_type() != SOC_TYPE_VR9_2)
+
+Fixes: 7074d0a92758 ("hwmon: (ltq-cputemp) add cpu temp sensor driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Florian Eckert <fe@dev.tdt.de>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org
+Link: https://lore.kernel.org/r/20220509234740.26841-1-rdunlap@infradead.org
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 049563d503b6..4ea742ada36d 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -802,7 +802,7 @@ config SENSORS_LTC4261
+ 
+ config SENSORS_LTQ_CPUTEMP
+ 	bool "Lantiq cpu temperature sensor driver"
+-	depends on LANTIQ
++	depends on SOC_XWAY
+ 	help
+ 	  If you say yes here you get support for the temperature
+ 	  sensor inside your CPU.
+-- 
+2.35.1
+
+
+
