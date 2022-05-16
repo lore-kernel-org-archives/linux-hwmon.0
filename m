@@ -2,156 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4915EC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 12:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6446AC4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 14:03:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243356AbiEPMVl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 May 2022 08:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
+        id S244143AbiEPODu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 May 2022 10:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243435AbiEPMVg (ORCPT
+        with ESMTP id S244069AbiEPODt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 May 2022 08:21:36 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4CBD131;
-        Mon, 16 May 2022 05:21:28 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id n24so18319801oie.12;
-        Mon, 16 May 2022 05:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=CcyMGAd9/1/nrpJriv7ncUhfzEf1ScHvMZQfYObpwvE=;
-        b=g2DUXy6qsD2CdHMeAsv1xhrChe7ErMle96kke/aIaRKpxIOquj2yfUB32FiKgTjM83
-         t5tOhazH/nx8St5nSD/7JRztPm5oW8ykK9M6mxznlilW68CbwNMSF0pcaCGfoRS55jGu
-         FsqQcbamE+ix9RsBHYWHS+gAzYe/fS1wBUGj/5JWxD+n7AMQDGqvtiea3XTZHwpe8qeT
-         MNd1hGqFIpog6mQ1qReY+ToG+1QdObEmdjsmaMjr1TZ88vZRvRbwgxlytcW+FGfxr6BO
-         9gOXxI+Vh4QcFLVlPge/BIeppXAw1j7qx2yVfR7oYoFU9XUCutTSnWiDbQBa+/BSRcxl
-         a1LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=CcyMGAd9/1/nrpJriv7ncUhfzEf1ScHvMZQfYObpwvE=;
-        b=YI2g0+m+8avtgOrAbvgUl1Ncqsace4B+/2EJFo4RuXYm2xBEoGZafutDZrw1TSliBp
-         SA2ra1dwas4I/mP6ELiWKrLv03UYIwmospKufraDk8eWvMOnw9NeSb5XRSi9GikIpf1B
-         YzJkS41rhL9KfgnxfPJSsFVppTBPUkOO5DYxs9jhYnDLJGyXMG0opmDzJButun3coDzm
-         V/LMaEl5WJ1eICzugnXVPGtSQnzCcVEv+j+BfU7yZnhdJ2bIuoWkdBijQKge0ew6Q3mm
-         /MyN0CI2y31ZcLR9ZO5quX97pATuZ3laW0q7Yz+1sEZ7tVHFoWW+TOp2+QYUOl+UNPrq
-         i2TA==
-X-Gm-Message-State: AOAM531rJS2G66ixQtFWByvQ1UncQBeNx/3lZAAxN/5CLG+G4t/FdWzk
-        MJIkHIIBEcZ9UDeN20q0CQE=
-X-Google-Smtp-Source: ABdhPJzQqa16ntoHnCKJlJaUs1Rg68hKbVxoyrBt+QCmSGoiEOx4hAcxAMzCMrbCeI//MqWfVxmLGw==
-X-Received: by 2002:a05:6808:308c:b0:326:77f8:8cb4 with SMTP id bl12-20020a056808308c00b0032677f88cb4mr13187236oib.292.1652703688114;
-        Mon, 16 May 2022 05:21:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000e686d1387bsm5560247oab.21.2022.05.16.05.21.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 05:21:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1747d709-6640-193d-8290-893b1541fae8@roeck-us.net>
-Date:   Mon, 16 May 2022 05:21:25 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
+        Mon, 16 May 2022 10:03:49 -0400
+Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8935A3A70E;
+        Mon, 16 May 2022 07:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1652709827; x=1684245827;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=636FGaXaQXwgfi1XFO/H9eecxAz+PzvmLT0pqxtsHVg=;
+  b=e/9VMzk5VmaVJziSA0cH430BN/eltZkhVsmB2IUqt1U+qxCHTNWq0YOu
+   EFbCNIVfkNOmeMs+mW+Jw7hkI+MfBymv+PrnFGC8dgCNbsG2bz4SRRTq3
+   gVXpgGsmHGqzesmaIKuTNVmVzdJtcVaP0TnGnoLmZ0xJIQoLPKQIXXMKG
+   M=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="295016285"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647298800"; 
+   d="scan'208";a="295016285"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 16:03:44 +0200
+Received: from MUCSE812.infineon.com (MUCSE812.infineon.com [172.23.29.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Mon, 16 May 2022 16:03:44 +0200 (CEST)
+Received: from MUCSE816.infineon.com (172.23.29.42) by MUCSE812.infineon.com
+ (172.23.29.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 16 May
+ 2022 16:03:44 +0200
+Received: from MUCSE820.infineon.com (172.23.29.46) by MUCSE816.infineon.com
+ (172.23.29.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 16 May
+ 2022 16:03:43 +0200
+Received: from MUCSE820.infineon.com ([172.23.29.46]) by MUCSE820.infineon.com
+ ([172.23.29.46]) with mapi id 15.02.0986.022; Mon, 16 May 2022 16:03:43 +0200
+From:   <Greg.Schwendimann@infineon.com>
+To:     <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH v5 2/2] dt-bindings: trivial-devices: Add xdp152
+Thread-Topic: [PATCH v5 2/2] dt-bindings: trivial-devices: Add xdp152
+Thread-Index: AdhpLYgADYGwpyOnQaWeHDYnP9drqg==
+Date:   Mon, 16 May 2022 14:03:43 +0000
+Message-ID: <1a600fd51db942389a5078a72c3bf411@infineon.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     LABBE Corentin <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-3-clabbe@baylibre.com>
- <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <YoFWNAhiDrzpeBU8@Red>
- <9f7d7281-0434-df59-40fa-1f5d8f53356d@roeck-us.net> <YoHtg30ZrhxjVedA@Red>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-In-Reply-To: <YoHtg30ZrhxjVedA@Red>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.23.8.247]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/15/22 23:21, LABBE Corentin wrote:
-> Le Sun, May 15, 2022 at 05:29:54PM -0700, Guenter Roeck a écrit :
->> On 5/15/22 12:36, LABBE Corentin wrote:
->>> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
->>>> Corentin,
->>>>
->>>> On 5/8/22 23:30, Corentin Labbe wrote:
->>>>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
->>>>> So let's convert the driver to use hwmon_device_register_with_info().
->>>>>
->>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>>>> ---
->>>> [ ... ]
->>>>
->>>>> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->>>>>     		if (res)
->>>>>     			break;
->>>>>     
->>>>> -		remove_attrs(resource);
->>>>> +		remove_domain_devices(resource);
->>>>>     		setup_attrs(resource);
->>>>
->>>> Zhang Rui found an interesting problem with this code:
->>>> It needs a call to sysfs_update_groups(hwmon_dev->groups)
->>>> to update sysfs attribute visibility, probably between
->>>> remove_domain_devices() and setup_attrs().
->>>>
->>>>>     		break;
->>>>>     	case METER_NOTIFY_TRIP:
->>>>> -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
->>>>> +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
->>>>
->>>> ... which makes realize: The notification device should be the hwmon device.
->>>> That would be resource->hwmon_dev, not the acpi device.
->>>>
->>>
->>> Hello
->>>
->>> Since my hardware lacks capabilities testing this, I have emulated it on qemu:
->>> https://github.com/montjoie/qemu/commit/320f2ddacb954ab308ef699f66fca6313f75bc2b
->>>
->>> I have added a custom ACPI _DBX method for triggering some ACPI state change. (like config change, like enabling CAP).
->>>
->>> For testing config change I have tried lot of way:
->>>                   res = read_capabilities(resource);
->>> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->>>    
->>>                   remove_domain_devices(resource);
->>>                   setup_attrs(resource);
->>> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, acpi_power_groups);
->>> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, acpi_power_groups);
->>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
->>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
->>
->> Did you add a debug log here ?
-> 
-> Yes I added debug log to check what is called.
-> 
->>
->> acpi_power_groups would be the wrong parameter for sysfs_update_groups().
->> It would have to be resource->hwmon_dev->groups.
->>
-> 
-> Even with that, no call to is_visible:
-> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->   
->                  remove_domain_devices(resource);
->                  setup_attrs(resource);
-> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, resource->hwmon_dev->groups);
-> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, resource->hwmon_dev->groups);
-> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
->                  break;
-> 
-> I checked drivers/hwmon/hwmon.c is seems that is_visible is only called by gen_attr/gen_attrs which is only called by __hwmon_create_attrs and then by registers functions.
-> So perhaps it explain why it is never called.
 
-Ah yes, you are correct. Sorry, it has been too long ago that I wrote that code.
-Effectively that means we'll have to rework the hwmon core to generate attributes
-anyway and leave it up to the driver core to call the is_visible function.
+Add Infineon Digital Multi-phase xdp152 family controllers.
 
-Guenter
+Signed-off-by: Greg Schwendimann <Greg.Schwendimann@infineon.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Docum=
+entation/devicetree/bindings/trivial-devices.yaml
+index 550a2e5c9e05..c11520347a9d 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -143,6 +143,10 @@ properties:
+           - infineon,xdpe12254
+             # Infineon Multi-phase Digital VR Controller xdpe12284
+           - infineon,xdpe12284
++            # Infineon Multi-phase Digital VR Controller xdpe15284
++          - infineon,xdpe15284
++            # Infineon Multi-phase Digital VR Controller xdpe152c4
++          - infineon,xdpe152c4
+             # Injoinic IP5108 2.0A Power Bank IC with I2C
+           - injoinic,ip5108
+             # Injoinic IP5109 2.1A Power Bank IC with I2C
+--=20
+2.25.1
+
