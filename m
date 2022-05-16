@@ -2,103 +2,156 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B119BC433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 09:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4915EC433F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 12:21:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236453AbiEPJXc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 May 2022 05:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S243356AbiEPMVl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 May 2022 08:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242139AbiEPJXb (ORCPT
+        with ESMTP id S243435AbiEPMVg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 May 2022 05:23:31 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB892611E
-        for <linux-hwmon@vger.kernel.org>; Mon, 16 May 2022 02:23:23 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s27so17360839ljd.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 16 May 2022 02:23:23 -0700 (PDT)
+        Mon, 16 May 2022 08:21:36 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4CBD131;
+        Mon, 16 May 2022 05:21:28 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id n24so18319801oie.12;
+        Mon, 16 May 2022 05:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NvydcHlnhdK9kc4OfVqFwwIvpGjIQUnM+1HuEKYA8RM=;
-        b=Q8iuflZ5AZJhoe8B5r30/nWl6OxiJJ3YM6kuLmwCi43LhMwNJtxzA8V5jl5r1sSUYU
-         r3ioZ5kmI4VPe3Hw1kx8VGlTNUGEvgH0qtL8UED5yzH36uBdV4JNRkQipThbRxjB+DKl
-         odUH6KBd9wGWC1d0UlA94JCDrAf/fJBTKwMkM2BYbXIuNYE6q7aIRl1nCGspUK52qwZc
-         ErRXrRqOznIqnl231VhYKhNw2/xGgYQ/xkr8X4whwIe5l6zC0TodYLOx45AlLZU7FOYD
-         xLwOkKD2Jk5i8zMhAuacPXky1t7YbXt5Af6LN5HpuBWQggOUQGQF8vk1ZAb/XL5tAeGV
-         k2SA==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=CcyMGAd9/1/nrpJriv7ncUhfzEf1ScHvMZQfYObpwvE=;
+        b=g2DUXy6qsD2CdHMeAsv1xhrChe7ErMle96kke/aIaRKpxIOquj2yfUB32FiKgTjM83
+         t5tOhazH/nx8St5nSD/7JRztPm5oW8ykK9M6mxznlilW68CbwNMSF0pcaCGfoRS55jGu
+         FsqQcbamE+ix9RsBHYWHS+gAzYe/fS1wBUGj/5JWxD+n7AMQDGqvtiea3XTZHwpe8qeT
+         MNd1hGqFIpog6mQ1qReY+ToG+1QdObEmdjsmaMjr1TZ88vZRvRbwgxlytcW+FGfxr6BO
+         9gOXxI+Vh4QcFLVlPge/BIeppXAw1j7qx2yVfR7oYoFU9XUCutTSnWiDbQBa+/BSRcxl
+         a1LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=NvydcHlnhdK9kc4OfVqFwwIvpGjIQUnM+1HuEKYA8RM=;
-        b=PrHSQ8BJPoNN4G6yPbyqHNxxu3igniMQI+0RgvUsZFS+9PqgSHDcH1tQ8IudVoUnMl
-         nBzKFqZuJLvB5LlS1zSkZAAJ3mkDWX2E1QVO/aLlE289ejAaL8qARDtQDvBBZkkg8w7f
-         ovtkOqrVJfGJI/gk/fUw16qt78N6/8mnA5KHTzSzM14qHtVugkTM1NVIfIX2TWE0dH+X
-         J0gOENKscc2JxqRd1HjNWXoposl9JcQlLYe2jand38YVKNYYtbHayO+8UwQgUyrfVghy
-         5VxXw9PxO8JTsEZog7h3UWuBdu20Js26Ku7m/KNucqmONynByg2dz/W/KY1WYXBpYF2S
-         gL/w==
-X-Gm-Message-State: AOAM532PKBADZNZLx90lidTyZdFBt2s0VJbF1T381MzFEYHdzxeQVMcn
-        sdD5Nd6E5+9oxUEKgshLHeaO3m8hZ1DGKrlo
-X-Google-Smtp-Source: ABdhPJyrVikHvibMc5X5b0rdYgB3XLL1YjeMbVTCRJh7+3ZVBcwUMxH0dvLhK8QFngvSbMyPEXhhiQ==
-X-Received: by 2002:a2e:a4ce:0:b0:24f:3a5f:1205 with SMTP id p14-20020a2ea4ce000000b0024f3a5f1205mr2500518ljm.485.1652693001803;
-        Mon, 16 May 2022 02:23:21 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h19-20020a2e9013000000b00250a09889a1sm1501878ljg.16.2022.05.16.02.23.20
+        bh=CcyMGAd9/1/nrpJriv7ncUhfzEf1ScHvMZQfYObpwvE=;
+        b=YI2g0+m+8avtgOrAbvgUl1Ncqsace4B+/2EJFo4RuXYm2xBEoGZafutDZrw1TSliBp
+         SA2ra1dwas4I/mP6ELiWKrLv03UYIwmospKufraDk8eWvMOnw9NeSb5XRSi9GikIpf1B
+         YzJkS41rhL9KfgnxfPJSsFVppTBPUkOO5DYxs9jhYnDLJGyXMG0opmDzJButun3coDzm
+         V/LMaEl5WJ1eICzugnXVPGtSQnzCcVEv+j+BfU7yZnhdJ2bIuoWkdBijQKge0ew6Q3mm
+         /MyN0CI2y31ZcLR9ZO5quX97pATuZ3laW0q7Yz+1sEZ7tVHFoWW+TOp2+QYUOl+UNPrq
+         i2TA==
+X-Gm-Message-State: AOAM531rJS2G66ixQtFWByvQ1UncQBeNx/3lZAAxN/5CLG+G4t/FdWzk
+        MJIkHIIBEcZ9UDeN20q0CQE=
+X-Google-Smtp-Source: ABdhPJzQqa16ntoHnCKJlJaUs1Rg68hKbVxoyrBt+QCmSGoiEOx4hAcxAMzCMrbCeI//MqWfVxmLGw==
+X-Received: by 2002:a05:6808:308c:b0:326:77f8:8cb4 with SMTP id bl12-20020a056808308c00b0032677f88cb4mr13187236oib.292.1652703688114;
+        Mon, 16 May 2022 05:21:28 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000e686d1387bsm5560247oab.21.2022.05.16.05.21.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 02:23:21 -0700 (PDT)
-Message-ID: <73e198d3-41ed-a462-d60a-8f5445a69395@linaro.org>
-Date:   Mon, 16 May 2022 11:23:20 +0200
+        Mon, 16 May 2022 05:21:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1747d709-6640-193d-8290-893b1541fae8@roeck-us.net>
+Date:   Mon, 16 May 2022 05:21:25 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [v2 1/2] dt-bindings: add extended-range-enable property to
- lm90.yaml
 Content-Language: en-US
-To:     Holger Brunck <holger.brunck@hitachienergy.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220510080900.22758-1-holger.brunck@hitachienergy.com>
- <34d88cd9-2bcd-77e6-8cc9-93b8cbd63a8f@linaro.org>
- <037b551f-1781-321a-1984-117d098d980d@roeck-us.net>
- <b895f874-c8b8-3889-c7c9-0c0494e9bae0@linaro.org>
- <85d1ed0b-1e1f-bee7-9b0f-fbbf50921ad0@roeck-us.net>
- <15cb434a-7a64-58bb-083c-fa7aeacae672@linaro.org>
- <DB9PR06MB7289FE0306B5E021321B6FFFF7CF9@DB9PR06MB7289.eurprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DB9PR06MB7289FE0306B5E021321B6FFFF7CF9@DB9PR06MB7289.eurprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     LABBE Corentin <clabbe@baylibre.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
+References: <20220509063010.3878134-1-clabbe@baylibre.com>
+ <20220509063010.3878134-3-clabbe@baylibre.com>
+ <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <YoFWNAhiDrzpeBU8@Red>
+ <9f7d7281-0434-df59-40fa-1f5d8f53356d@roeck-us.net> <YoHtg30ZrhxjVedA@Red>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+In-Reply-To: <YoHtg30ZrhxjVedA@Red>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 16/05/2022 11:15, Holger Brunck wrote:
->> On 11/05/2022 19:40, Guenter Roeck wrote:
->>>> Me neither. Just pick one matching the device actually using this
->>>> property. If all of them are using it, how about keeping old "national"
->>>> or it's owner "ti"? If not all of them are using it, then this would
->>>> need "allOf:if:then" restricting where the property is (not) applicable.
+On 5/15/22 23:21, LABBE Corentin wrote:
+> Le Sun, May 15, 2022 at 05:29:54PM -0700, Guenter Roeck a écrit :
+>> On 5/15/22 12:36, LABBE Corentin wrote:
+>>> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
+>>>> Corentin,
+>>>>
+>>>> On 5/8/22 23:30, Corentin Labbe wrote:
+>>>>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
+>>>>> So let's convert the driver to use hwmon_device_register_with_info().
+>>>>>
+>>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+>>>>> ---
+>>>> [ ... ]
+>>>>
+>>>>> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
+>>>>>     		if (res)
+>>>>>     			break;
+>>>>>     
+>>>>> -		remove_attrs(resource);
+>>>>> +		remove_domain_devices(resource);
+>>>>>     		setup_attrs(resource);
+>>>>
+>>>> Zhang Rui found an interesting problem with this code:
+>>>> It needs a call to sysfs_update_groups(hwmon_dev->groups)
+>>>> to update sysfs attribute visibility, probably between
+>>>> remove_domain_devices() and setup_attrs().
+>>>>
+>>>>>     		break;
+>>>>>     	case METER_NOTIFY_TRIP:
+>>>>> -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
+>>>>> +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
+>>>>
+>>>> ... which makes realize: The notification device should be the hwmon device.
+>>>> That would be resource->hwmon_dev, not the acpi device.
 >>>>
 >>>
->>> It is only applicable for tmp451, tmp461, and adt7461[a], so it looks
->>> like "allOf:if:then" will be needed.
+>>> Hello
+>>>
+>>> Since my hardware lacks capabilities testing this, I have emulated it on qemu:
+>>> https://github.com/montjoie/qemu/commit/320f2ddacb954ab308ef699f66fca6313f75bc2b
+>>>
+>>> I have added a custom ACPI _DBX method for triggering some ACPI state change. (like config change, like enabling CAP).
+>>>
+>>> For testing config change I have tried lot of way:
+>>>                   res = read_capabilities(resource);
+>>> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
+>>>    
+>>>                   remove_domain_devices(resource);
+>>>                   setup_attrs(resource);
+>>> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, acpi_power_groups);
+>>> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, acpi_power_groups);
+>>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
+>>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
 >>
->> Yes, please.
+>> Did you add a debug log here ?
+> 
+> Yes I added debug log to check what is called.
+> 
+>>
+>> acpi_power_groups would be the wrong parameter for sysfs_update_groups().
+>> It would have to be resource->hwmon_dev->groups.
 >>
 > 
-> ok I will have a look.
+> Even with that, no call to is_visible:
+> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
+>   
+>                  remove_domain_devices(resource);
+>                  setup_attrs(resource);
+> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, resource->hwmon_dev->groups);
+> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, resource->hwmon_dev->groups);
+> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
+> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
+>                  break;
 > 
-> I noticed that tmp461 is missing at all in the yaml file, so this needs to be
-> added too. Should this go into a separate patch?
+> I checked drivers/hwmon/hwmon.c is seems that is_visible is only called by gen_attr/gen_attrs which is only called by __hwmon_create_attrs and then by registers functions.
+> So perhaps it explain why it is never called.
 
-That one was about adding extended range, so yes - adding more
-compatibles or other features should be in separate patches.
+Ah yes, you are correct. Sorry, it has been too long ago that I wrote that code.
+Effectively that means we'll have to rework the hwmon core to generate attributes
+anyway and leave it up to the driver core to call the is_visible function.
 
-
-Best regards,
-Krzysztof
+Guenter
