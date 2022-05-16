@@ -2,33 +2,33 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56B80C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 19:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 232DCC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 19:53:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346236AbiEPTtz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 May 2022 15:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S237813AbiEPTxT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 May 2022 15:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346252AbiEPTs7 (ORCPT
+        with ESMTP id S1348648AbiEPTw7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 May 2022 15:48:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97374338D;
-        Mon, 16 May 2022 12:44:57 -0700 (PDT)
+        Mon, 16 May 2022 15:52:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6403746B0A;
+        Mon, 16 May 2022 12:48:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE8A7B815F6;
-        Mon, 16 May 2022 19:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA4AC34100;
-        Mon, 16 May 2022 19:44:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E52BDB8160E;
+        Mon, 16 May 2022 19:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F958C385AA;
+        Mon, 16 May 2022 19:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730294;
-        bh=1fNWbJzb8Fe9bzhkf103dP9flRlVH/VsXpTudEKpUIA=;
+        s=korg; t=1652730525;
+        bh=4PtoM0jH0dr6HRuo2pxKWiy7vyVcTkZ9j6fBBFFi8o4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UeDYfYDEhGF2TmjTcnPTF3gJ3WS5zyLA1gQ9wfO+ca5CnAoTFy/0JveNKWXWvQ4Mt
-         xroxqBuwcsaSNF5JX/YYsUnVx42XCqZJg1Z9Js0pqh84z+VyRRftVcriJxyOnhqZsS
-         fkis/B6Yc4RzumASIwE6RLR667McJ+BWfKUY2e8c=
+        b=Sike3JFFRIrya1ta/FlZbbtAYCX29o6OKTByvIlcN0Vsu8iuiyftHo6zs1lye0YSH
+         46nLkLk5C8OfK0jFMyXHS8V1NjlaKtVsRqCz8zUfZddDE+4TtcF+4sPgEeKK+CkZaw
+         DM+B6dd4kjXq/erd6LXv+FIyvABSNQwRRbXKC+B4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,12 +38,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 19/66] hwmon: (ltq-cputemp) restrict it to SOC_XWAY
-Date:   Mon, 16 May 2022 21:36:19 +0200
-Message-Id: <20220516193619.972669059@linuxfoundation.org>
+Subject: [PATCH 5.15 027/102] hwmon: (ltq-cputemp) restrict it to SOC_XWAY
+Date:   Mon, 16 May 2022 21:36:01 +0200
+Message-Id: <20220516193624.779668928@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 0c2b032ee617..f741c7492ee4 100644
+index ccdaeafed0bb..51f1caa10d11 100644
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -922,7 +922,7 @@ config SENSORS_LTC4261
+@@ -944,7 +944,7 @@ config SENSORS_LTC4261
  
  config SENSORS_LTQ_CPUTEMP
  	bool "Lantiq cpu temperature sensor driver"
