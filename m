@@ -2,111 +2,164 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6241AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 16:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A8F3C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 16:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351162AbiEQQr2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 12:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S1350068AbiEQQ5m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 12:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351192AbiEQQrU (ORCPT
+        with ESMTP id S241919AbiEQQ5k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 12:47:20 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B365A4F451
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 09:47:02 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-f189b07f57so11399457fac.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 09:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WowNLDXZqE/84MU9LLWpLODuwh7PTrPOB3KBaNS+pKk=;
-        b=NEXlCLqi5jFZtblZO/BbYL/0qsJFvEkvOnv1wecZKvG9FPmkon1yh7XgcA1Fgfb9lw
-         SOJJqpVG2pd6sCG+RsC54YO+//DMe6DPywUMrz1W3/6raU+iQSqhi2Z0eE4fitniXBHj
-         n4WFSM7eg4r5E8HVxgOsqlapQByeZ9dAp904xbpeziGGkrN4EbzMMyBEcCYHe18sbZ4l
-         PAvhIAAu8lctR6dOur4FrsGd37SdZqEFKHv2Imv5B9iKD8m4tdtLX4CB2BOBYe8tf/b/
-         EcugQB9chZA/be2YWf1BlQ+LkBkWlJES59wdPJXAzIIU4rqt10BVItQ1KD38YtXZQ+ZP
-         TZBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WowNLDXZqE/84MU9LLWpLODuwh7PTrPOB3KBaNS+pKk=;
-        b=JvxMFZwEFR1OxELYtfWcqUYOPelVragcw6P65d/9JipRnc9axCRh9jae12a5jBKpzw
-         LzekZUX2daucDncVWYgsNronNvK7tsnDYwfYQLTD3W7ezqEUKNHLxg5iuB+D5U9gqGVj
-         THXMChSmD5uOWdth5gCE5pRA9P00/wPUglh7M3tYEs+mFSzJUI8LHiGnPFKnI5AuM3dg
-         uD0hXIDf1Rn2dQ+x2N+TQ38+lLdlQPXMArE0GxDGRQElbzd2Kv4UI/p6a7Jrg9rGX3Vf
-         Iru/uz72B78pb9OV1FUsDPETV34JnnnPWApXD0eHyH266iBznCTQ9vHQJgVeMu/FhKLJ
-         n5LQ==
-X-Gm-Message-State: AOAM531Y9uRU8Gc3MUHWGIpGC4nRgiRbB5Q6+3yveHUnysm9Aqr1K+aj
-        t5qGbvyUE5lJGs49qIbTrLw=
-X-Google-Smtp-Source: ABdhPJyvCE+JC4tF0zP8ZMu81VRboAJn+stFiOBhS/o2hQDyKvSDo6k/ir81SV3msJFX499aFz6/4Q==
-X-Received: by 2002:a05:6870:58a9:b0:f1:6256:ed78 with SMTP id be41-20020a05687058a900b000f16256ed78mr11259708oab.265.1652806022060;
-        Tue, 17 May 2022 09:47:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i1-20020a4a2b01000000b0035eb4e5a6c3sm22838ooa.25.2022.05.17.09.47.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 09:47:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 17 May 2022 09:47:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Holger Brunck <holger.brunck@hitachienergy.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v4 2/2] hwmon: (lm90) enable extended range according to
- DTS node
-Message-ID: <20220517164700.GA458051@roeck-us.net>
-References: <20220517135614.8185-1-holger.brunck@hitachienergy.com>
- <20220517135614.8185-2-holger.brunck@hitachienergy.com>
+        Tue, 17 May 2022 12:57:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE934FC64
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 09:57:39 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nr0Vn-00033S-OV; Tue, 17 May 2022 18:57:31 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nr0Vn-002uaB-Kk; Tue, 17 May 2022 18:57:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nr0Vl-00ALgK-Jq; Tue, 17 May 2022 18:57:29 +0200
+Date:   Tue, 17 May 2022 18:57:26 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>
+Subject: Re: [PATCH v3 6/6] hwmon: pwm-fan: Add hwmon_pwm_enable attribute
+Message-ID: <20220517165726.trxa7lpz6kluvrg3@pengutronix.de>
+References: <20220517142620.1523143-1-alexander.stein@ew.tq-group.com>
+ <20220517142620.1523143-7-alexander.stein@ew.tq-group.com>
+ <20220517145331.7ffab4pyjwrh5lkg@pengutronix.de>
+ <194f33ea-18fa-4cb3-56b4-5d423463fa82@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rnxr75prxwl3d74k"
 Content-Disposition: inline
-In-Reply-To: <20220517135614.8185-2-holger.brunck@hitachienergy.com>
+In-Reply-To: <194f33ea-18fa-4cb3-56b4-5d423463fa82@roeck-us.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 17, 2022 at 03:56:14PM +0200, Holger Brunck wrote:
-> Some lm90 compatible devices can operate in an extended temperature mode.
-> This feature is now enabled if the property is set in the corresponding
-> device tree node.
-> 
-> Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Applied.
+--rnxr75prxwl3d74k
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Guenter
+Hello,
 
-> ---
-> changes ofr v4: 
->   - add reviewd-by tag
-> 
->  drivers/hwmon/lm90.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index 1c9493c70813..3820f0e61510 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -1707,6 +1707,7 @@ static void lm90_restore_conf(void *_data)
->  
->  static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
->  {
-> +	struct device_node *np = client->dev.of_node;
->  	int config, convrate;
->  
->  	convrate = lm90_read_reg(client, LM90_REG_R_CONVRATE);
-> @@ -1727,6 +1728,9 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
->  
->  	/* Check Temperature Range Select */
->  	if (data->flags & LM90_HAVE_EXTENDED_TEMP) {
-> +		if (of_property_read_bool(np, "ti,extended-range-enable"))
-> +			config |= 0x04;
-> +
->  		if (config & 0x04)
->  			data->flags |= LM90_FLAG_ADT7461_EXT;
->  	}
+[dropping Bartlomiej Zolnierkiewicz from Cc as the address bounces]
+
+On Tue, May 17, 2022 at 09:32:24AM -0700, Guenter Roeck wrote:
+> On 5/17/22 07:53, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >=20
+> > On Tue, May 17, 2022 at 04:26:20PM +0200, Alexander Stein wrote:
+> > > This adds the enable attribute which is used to differentiate if PWM =
+duty
+> > > means to switch off regulator and PWM or to keep them enabled but
+> > > at inactive PWM output level.
+> > >=20
+> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > ---
+> > >   Documentation/hwmon/pwm-fan.rst | 10 ++++
+> > >   drivers/hwmon/pwm-fan.c         | 95 +++++++++++++++++++++++++++++-=
+---
+> > >   2 files changed, 95 insertions(+), 10 deletions(-)
+> > >=20
+> > > diff --git a/Documentation/hwmon/pwm-fan.rst b/Documentation/hwmon/pw=
+m-fan.rst
+> > > index 82fe96742fee..0083480068d1 100644
+> > > --- a/Documentation/hwmon/pwm-fan.rst
+> > > +++ b/Documentation/hwmon/pwm-fan.rst
+> > > @@ -18,3 +18,13 @@ the hwmon's sysfs interface.
+> > >   The fan rotation speed returned via the optional 'fan1_input' is ex=
+trapolated
+> > >   from the sampled interrupts from the tachometer signal within 1 sec=
+ond.
+> > > +
+> > > +The driver provides the following sensor accesses in sysfs:
+> > > +
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> > > +fan1_input	ro	fan tachometer speed in RPM
+> > > +pwm1_enable	rw	keep enable mode, defines behaviour when pwm1=3D0
+> > > +			0=3Dswitch off regulator and disable PWM
+> > > +			1=3Dkeep regulator enabled and set PWM to inactive level
+> >=20
+> > Is the pwm1_enable supposed to be set to 0 if that only does the right
+> > thing if the PWM emits low after pwm_disable()? The question I raised in
+> > v2 about "what is the meaning of disable?" hasn't evolved, has it?
+> >=20
+> > I still think it's unfortunate, that "pwm1_enable" has an effect on the
+> > regulator.
+> >=20
+>=20
+> Trying to understand. Are you saying that you are ok with affecting the
+> regulator when setting pwm :=3D 0 (even though that doesn't really mean
+> "disable pwm output"), but not with making the behavior explicit by
+> using pwm1_enable ?
+
+Not sure about being ok with affecting the regulator when setting
+pwm :=3D 0. I don't know enough about pwm-fans to have a strong opinion
+for that.
+
+Some questions to refine the semantics and my opinion:
+
+There are fans without a regulator? (I think: yes)
+
+A fan with a regulator always stops if the regulator is off?
+(Hmm, there might be problems with shared regulators that only go off
+when all consumers are off? What about always-on regulators, these don't
+go off on the last consumer calling disable, right?)
+
+Having said that I think the sane behaviour is:
+
+The intention of pwm :=3D 0 is to stop the fan. So disabling the regulator
+(if available) sounds right.
+
+I'm unsure what to reasonably expect from a disabled PWM. I think "stops
+to oscillate" can be assumed. So I'd say: If a fan continues to rotate
+when the PWM input is constantly active, don't call pwm_disable().
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--rnxr75prxwl3d74k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKD0/MACgkQwfwUeK3K
+7AmSqAgAjxHzLry1LXcFyUBa+fBZ+n2gG6qWKODoa2r3dPnLWiiV0MR33pF+51Pv
+ZZ82uOlUU/kFqo4muwHrVbLZqtfR9gzHuOX7P5tUoU3OxENXJbR/gv1t9nhBhKc/
+bfVb3anxALEeVgqoOMEyTKXkMyK7HkYro8Bji86YghVdsybHkAf8FCg0i1QNkuxP
++RlD+4FNM08VaET5hCsHzOZbWOCqIG49ncrrEjcoZ/kSOenOGffEh+vpR/8CwEfa
+NK/pxro2+b1SILEEgN7WDBlszO+Cg4hBJ6NxVrbvaUzBnbHnei6LrTvfBtNAUVDi
+lnEpCLu+CSGhm6KF6uGcsaMlK7TbsA==
+=DZHc
+-----END PGP SIGNATURE-----
+
+--rnxr75prxwl3d74k--
