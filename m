@@ -2,90 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FFAEC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 14:28:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F702C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 14:54:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348891AbiEQO2O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 10:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S1344593AbiEQOyF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 10:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235130AbiEQO2N (ORCPT
+        with ESMTP id S1349479AbiEQOx5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 10:28:13 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679DB42A27
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 07:28:11 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bu29so31746629lfb.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 07:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=82rVaSSwGzZ2dC5Dnw4nt7/FT2LLEK1ZFDX66RCczp0=;
-        b=AD9EMI4E0d4pYcH2vq6m4jqsUNjH7EYNrIBe1UD6q6GaXECD3UJ4Arp+7dVrNqmXA3
-         CzB6vbs2CUhaUbQp/xLnLA+NZUpyfGnTrPKrZmnhdw8b1xIFMdet6O7tOmX0K902dHaG
-         JojQ8ae73km0fZuL2DGky5qUCp3dTCByXeegXk2zvJ2RKjK0UOoleGlJbpQCB01r4ngi
-         ja8tOYbTM/435wV0oF/J161ZcjE9m7+yFWySb3pTDLAKYF8bmeK6hThUSuSJ9js26ZSi
-         hHo/C7bsSysqkhaxWQ8DdyeSN21J2K8bUg87mRvrb4MQsPfr5kT49Ekv8cIx9k39GyMs
-         GMrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=82rVaSSwGzZ2dC5Dnw4nt7/FT2LLEK1ZFDX66RCczp0=;
-        b=Hal7nPy1wQOKxTaCrAMh6W0XLnI2UFebzU1oRKCTa1BBltqQ1HEdB5YPSj7EPEYz16
-         /VK3tD2pMwfTOQfT+zEk0KdkXEl3pGUqWwVhVncCSWOBAUfDtAyJnPXYMvmJeR5R+mQM
-         dQOYbkKnl/tPON3GUtW5lnAcXti3xNMyTmd1U2VxTbJTs3DNVyWwJNTJYayV996B1TNs
-         GxSXsZQ6OZYxx6aZ1Q1Wfbwz5K0LaS7ZRhxVmHUACzNyCd+QOesrfKAtMl7rqPFgC/Fm
-         O3YF3Xz8XsVnqPuoSdw9Dgye/jHlC3lbNx0pHyzgyFfxERie0ZTXUiyl9eLL0rNa0sgV
-         HMxw==
-X-Gm-Message-State: AOAM530H0g/APqkExTsFmHwUmNNA52EiL0z5sks+1s6ZTPLtsfeQL1hd
-        ZwZC+Wlqv59sutpwg9EZC7HGiQ==
-X-Google-Smtp-Source: ABdhPJxuOZhoZLnAIt+q7KxzCSHUI5aNKXZkeMpg8/VteGHiVo7v7yNaoCB09YjkZYDp6MY4lWx7Uw==
-X-Received: by 2002:a05:6512:398c:b0:473:ab45:1f7c with SMTP id j12-20020a056512398c00b00473ab451f7cmr16892699lfu.341.1652797689816;
-        Tue, 17 May 2022 07:28:09 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v16-20020ac25610000000b0047255d211c4sm204894lfd.243.2022.05.17.07.28.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 07:28:09 -0700 (PDT)
-Message-ID: <ddf24a21-fb71-6fc1-d641-68a824f4da2f@linaro.org>
-Date:   Tue, 17 May 2022 16:28:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: lm90: add
- ti,extended-range-enable property
-Content-Language: en-US
-To:     Holger Brunck <holger.brunck@hitachienergy.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        Tue, 17 May 2022 10:53:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282BA48313
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 07:53:52 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nqyZt-0003hT-Iv; Tue, 17 May 2022 16:53:37 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nqyZs-002tOA-IM; Tue, 17 May 2022 16:53:35 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nqyZq-00AK4E-AN; Tue, 17 May 2022 16:53:34 +0200
+Date:   Tue, 17 May 2022 16:53:31 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220517135614.8185-1-holger.brunck@hitachienergy.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220517135614.8185-1-holger.brunck@hitachienergy.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>
+Subject: Re: [PATCH v3 6/6] hwmon: pwm-fan: Add hwmon_pwm_enable attribute
+Message-ID: <20220517145331.7ffab4pyjwrh5lkg@pengutronix.de>
+References: <20220517142620.1523143-1-alexander.stein@ew.tq-group.com>
+ <20220517142620.1523143-7-alexander.stein@ew.tq-group.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lzgyb2mlekugipiz"
+Content-Disposition: inline
+In-Reply-To: <20220517142620.1523143-7-alexander.stein@ew.tq-group.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 17/05/2022 15:56, Holger Brunck wrote:
-> Some devices can operate in an extended temperature mode.
-> Therefore add a boolean ti,extended-range-enable to be able to
-> select this feature in the device tree node. Also make sure that this
-> feature can only be enabled for the devices supporting this feature.
-> 
-> Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
+
+--lzgyb2mlekugipiz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Tue, May 17, 2022 at 04:26:20PM +0200, Alexander Stein wrote:
+> This adds the enable attribute which is used to differentiate if PWM duty
+> means to switch off regulator and PWM or to keep them enabled but
+> at inactive PWM output level.
+>=20
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 > ---
-> changes for v4: 
->    - use "if:not:then" instead of "if:else"
+>  Documentation/hwmon/pwm-fan.rst | 10 ++++
+>  drivers/hwmon/pwm-fan.c         | 95 +++++++++++++++++++++++++++++----
+>  2 files changed, 95 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/Documentation/hwmon/pwm-fan.rst b/Documentation/hwmon/pwm-fa=
+n.rst
+> index 82fe96742fee..0083480068d1 100644
+> --- a/Documentation/hwmon/pwm-fan.rst
+> +++ b/Documentation/hwmon/pwm-fan.rst
+> @@ -18,3 +18,13 @@ the hwmon's sysfs interface.
+> =20
+>  The fan rotation speed returned via the optional 'fan1_input' is extrapo=
+lated
+>  from the sampled interrupts from the tachometer signal within 1 second.
+> +
+> +The driver provides the following sensor accesses in sysfs:
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> +fan1_input	ro	fan tachometer speed in RPM
+> +pwm1_enable	rw	keep enable mode, defines behaviour when pwm1=3D0
+> +			0=3Dswitch off regulator and disable PWM
+> +			1=3Dkeep regulator enabled and set PWM to inactive level
 
+Is the pwm1_enable supposed to be set to 0 if that only does the right
+thing if the PWM emits low after pwm_disable()? The question I raised in
+v2 about "what is the meaning of disable?" hasn't evolved, has it?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I still think it's unfortunate, that "pwm1_enable" has an effect on the
+regulator.
 
+Best regards
+Uwe
 
-Best regards,
-Krzysztof
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--lzgyb2mlekugipiz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKDtugACgkQwfwUeK3K
+7AmkAAf+Jg/NaHTE6D0cI+VGke8kConLhaiJOsAMqb3AXb4VV0yf/CA2gfogVhP9
+d1RXpe/g5iy70RWHoDnmLmIB7dHZgek/KglAiJBBYK+6CvNFC6NhvL3roX+itqg/
+Nq0LLZwyJsbpcHVyMnfVq1xckPDwv1NLGsffPQWRJO8ume2VaHkCvcZQ/ujr7ODA
+Uqw6s4N3D73vGIQm7WICurWuV+ITu9I7uLtCFK22REET614NEkFxKZgG2n01ogbF
+q7QdWe4Y1l+IjDtxf5Jf21pWM3VXsyzk+LNU40h+gzOjMxkwmQGJXmP/tsMH0Rbi
+aiT7lAub/OJwffO8MFX32QC3mXWx/A==
+=MXzg
+-----END PGP SIGNATURE-----
+
+--lzgyb2mlekugipiz--
