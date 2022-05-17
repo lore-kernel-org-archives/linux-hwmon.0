@@ -2,82 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 695EBC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 10:20:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D43C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 12:46:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242273AbiEQKUX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 06:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        id S239863AbiEQMqQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 08:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344071AbiEQKUN (ORCPT
+        with ESMTP id S245280AbiEQMqA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 06:20:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8468E4BFE1;
-        Tue, 17 May 2022 03:18:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E462615E8;
-        Tue, 17 May 2022 10:18:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46240C34117;
-        Tue, 17 May 2022 10:18:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652782725;
-        bh=v2apwGjWbFjt3W1NYCU1hTCmO/tsOL6niZc398NrbFo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sFjsCyG6q/I/b5u7wJ4bTjJVBE8nbiSwnbqKZ4rAqBtAuk40QuOLsD+neuNpefXTO
-         kNQdD4ZcWSircc26ULALAo3KLkiN1U+oPX+4VUssma0Z845mgrPaj3VKaaEr+BfA7B
-         sijcOfMIDg6khvpRjhbTJlpFAJJ7nGOPmv1FadsQ=
-Date:   Tue, 17 May 2022 12:18:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
-Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
-Message-ID: <YoN2fn5zRyNEnaUT@kroah.com>
-References: <20220511064954.3401381-1-yangyingliang@huawei.com>
- <YntbdfHLjeHzAb9/@kroah.com>
- <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
+        Tue, 17 May 2022 08:46:00 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEB7F72;
+        Tue, 17 May 2022 05:45:59 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-f17f1acffeso11450232fac.4;
+        Tue, 17 May 2022 05:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XcLXYo1D2oh0OQQdvqkUVmOkXVkO7QLZc7UJl3/1xMQ=;
+        b=XeMjoagCNmriIitDAJbxzBl6GCsOqTAJ4QoT4yjUv3VI7nJIm7dMFyrKc1sB4yLX6k
+         gLFC1WvSNFRo8y0d0Xxovr8HzJz/bPF4uHXL5Zl4y0ULiKQ2lTBEnPA8ooSu+qBmxc1N
+         HykAyjOcayKY2LOT4W3ZmYNRws3ZvALqMcVGImvgjx120Sz8lq8Eq7KHtfPcyFxBpMqH
+         K920a2YLFV2yFdxGBdKGbWydB2nf1qwySa9KaNVEU9oSi5BfK7qx9nrCapRl3viXdIcP
+         MiU3ky2SU2mf0Sa4UBPFqqPv7pQkEtNbJygjPXKjwBIJtwYM0PCPUhjNsphhTJcDJljw
+         EmHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=XcLXYo1D2oh0OQQdvqkUVmOkXVkO7QLZc7UJl3/1xMQ=;
+        b=58j0sn67VPexaySW77XmBEEGK446egj17Ik52nxwe50cFEo0gNw90ZbL9GoZANampY
+         XHFkj4wURuSx5fzz3iF0Q4oCJ6RPyLPEoCnwNqs9ov5SnqDmjefqNsmFjkIY9QCSP2ZL
+         dOEElWFIi5vNDrrYHrDkw6pRf6DyDhz4x2LPjCwSDX/dljFV3qcMWScDDgoFoGYkpHj3
+         tjkXpItaGRcYM1oVkNO4u5WKjtKxQOouHyTqFaAVNkfNp6/eSXJZEb4y5DjHbMAqszEm
+         xm77WKCKlDXG+mlbfIR23XqDNBJ3T+6/0/v7JY88ou7sNiO1SUgL6ogWIe/iaDGQ3JC6
+         56ig==
+X-Gm-Message-State: AOAM530pLNb1e8x3X8y/z27MHvy4JbNHWrc8PV5Y+US0BKM7a4Nkv5Vp
+        4dfUsPfUAPA/L+jZ+20/dvw=
+X-Google-Smtp-Source: ABdhPJyLt7KmqZotuvIH195cG5zCBNURvlGgA3m4CPB6GtHXqmXGPUTc4eFr6QOh02iZ5K1nktxk9g==
+X-Received: by 2002:a05:6870:6097:b0:e1:a94d:9a38 with SMTP id t23-20020a056870609700b000e1a94d9a38mr12969476oae.191.1652791558646;
+        Tue, 17 May 2022 05:45:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e22-20020a4ad256000000b0035eb4e5a6cbsm5076220oos.33.2022.05.17.05.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 05:45:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 17 May 2022 05:45:55 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg.Schwendimann@infineon.com
+Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] dt-bindings: trivial-devices: Add xdp152
+Message-ID: <20220517124555.GA3395300@roeck-us.net>
+References: <1a600fd51db942389a5078a72c3bf411@infineon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
+In-Reply-To: <1a600fd51db942389a5078a72c3bf411@infineon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, May 11, 2022 at 03:25:52PM +0800, Yang Yingliang wrote:
-> Hi,
+On Mon, May 16, 2022 at 02:03:43PM +0000, Greg.Schwendimann@infineon.com wrote:
+> Add Infineon Digital Multi-phase xdp152 family controllers.
 > 
-> On 2022/5/11 14:45, Greg KH wrote:
-> > On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
-> > > Use kfree_sensitive() instead of open-coding it.
-> > > 
-> > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> > > ---
-> > >   drivers/w1/w1.c | 3 +--
-> > >   1 file changed, 1 insertion(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-> > > index f2ae2e563dc5..a0a6c3c739d9 100644
-> > > --- a/drivers/w1/w1.c
-> > > +++ b/drivers/w1/w1.c
-> > > @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
-> > >   	struct w1_master *md = dev_to_w1_master(dev);
-> > >   	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
-> > > -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
-> > > -	kfree(md);
-> > > +	kfree_sensitive(md);
-> > Does this actually change anything?  Why is the memset being called here
-> > at all?
-> It's no functional change and I got this by
-> scripts/coccinelle/api/kfree_sensitive.cocci.
-> I'm not sure why using memset() here.
+> Signed-off-by: Greg Schwendimann <Greg.Schwendimann@infineon.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I think the memset() can just be dropped.  Can you make that change and
-test it to verify it still works properly with that change?
+Applied.
 
-thanks,
+Thanks,
+Guenter
 
-greg k-h
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 550a2e5c9e05..c11520347a9d 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -143,6 +143,10 @@ properties:
+>            - infineon,xdpe12254
+>              # Infineon Multi-phase Digital VR Controller xdpe12284
+>            - infineon,xdpe12284
+> +            # Infineon Multi-phase Digital VR Controller xdpe15284
+> +          - infineon,xdpe15284
+> +            # Infineon Multi-phase Digital VR Controller xdpe152c4
+> +          - infineon,xdpe152c4
+>              # Injoinic IP5108 2.0A Power Bank IC with I2C
+>            - injoinic,ip5108
+>              # Injoinic IP5109 2.1A Power Bank IC with I2C
