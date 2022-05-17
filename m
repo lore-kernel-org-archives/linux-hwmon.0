@@ -2,108 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40099C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 12:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4020C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 13:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346491AbiEQMyw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 08:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S1346828AbiEQNFZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 09:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346611AbiEQMyo (ORCPT
+        with ESMTP id S1347346AbiEQNE6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 08:54:44 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85944D9D4
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 05:54:42 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id z15-20020a9d65cf000000b00605f064482cso12096986oth.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 05:54:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gA9rZo6PdD24XHU33WPWzeBcvcuYbVgXgFQzpdX4hto=;
-        b=OaT78H20385aZ8DQ6PEB6i4522PFwuSO3pWuJqRb0ydOC5/Imoev0lbGzjPzcGHkUl
-         E/DUpmAneHOjhStIa8EpRJM3WyonqUdw4sSSJkLC8QqFkSsU762axL8TvymWddfpw7O2
-         WwINlQXwB59DZ7geTCurF4Bfo2e5PEgydlhPqiyTkoWOqH8dNt2UZWXEHM8AeKUf0F9B
-         KATspORUToseP7uHCl6Tbrc5Ywe+A4ZJ1DTT15VpMl/kvcBJyIhFsFOg6MYXnwT+IdxJ
-         eOC+AEdX/PpF1Jpkyq4g027nDgAKC4EJan+vqkq5lLkkkM3UyS+Lkh33DOaITpIwelqC
-         WJJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=gA9rZo6PdD24XHU33WPWzeBcvcuYbVgXgFQzpdX4hto=;
-        b=XLjyi/Rl4U1ws26ClViOCmH+SgmRYPKDBOuFkmjSORqAVCdppS66fckSGisSDAHAxj
-         jgfbfWBNjngwHcOim2833RHIsy2RhQ9QG6Z/7Wsvw8dhcH+oHpXhfGXziredNCrEHC+O
-         xwTTo07c9M0nggs2O6ZjFhuLLyyggBTTidxf4UjfIrfe2HQGcbnZQh9jIRuiPJzo67Cp
-         kJ34Y9G4Aacz1o1sBDsY592kzFuUQ+rkHu7EN+NDEsMcN/rmqCb+a8cbmLQmKwjJmgJh
-         bkqh1KTInDpinfhEtVuuzxE1R6M6BtvDx0Zba/Ff9WpKbekmCbgpKPmrpkzi7XJYztfG
-         GhNw==
-X-Gm-Message-State: AOAM530FYu71/x4/V3PSDTL/rQ+q/+0odCdIVPcDXRi0Q/PB4SPGe+85
-        YeP7zN3bU6VD88Y0dfrl+1k=
-X-Google-Smtp-Source: ABdhPJz/IEljDJu+ZVXN+hlrsaVzXGeU4TrAXgGsnXmM0iXDLjH8bCv9nRLhhRzZ/eWJU29+3C7K2A==
-X-Received: by 2002:a05:6830:1645:b0:606:fe3:fa21 with SMTP id h5-20020a056830164500b006060fe3fa21mr8142496otr.268.1652792082005;
-        Tue, 17 May 2022 05:54:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e45-20020a9d01b0000000b0060603221281sm4835594ote.81.2022.05.17.05.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 05:54:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 17 May 2022 05:54:40 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Holger Brunck <holger.brunck@hitachienergy.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [v3 3/3] hwmon: (lm90) enable extended range according to DTS
- node
-Message-ID: <20220517125440.GA3575490@roeck-us.net>
-References: <20220517075738.16885-1-holger.brunck@hitachienergy.com>
+        Tue, 17 May 2022 09:04:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75FC4EA01;
+        Tue, 17 May 2022 06:03:46 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L2br036l8zgYFS;
+        Tue, 17 May 2022 21:02:24 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 21:03:44 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 21:03:44 +0800
+Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <zbr@ioremap.net>, <jdelvare@suse.com>, <linux@roeck-us.net>
+References: <20220511064954.3401381-1-yangyingliang@huawei.com>
+ <YntbdfHLjeHzAb9/@kroah.com>
+ <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
+ <YoN2fn5zRyNEnaUT@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <16959408-3e91-774d-484f-508caff1f8f7@huawei.com>
+Date:   Tue, 17 May 2022 21:03:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517075738.16885-1-holger.brunck@hitachienergy.com>
+In-Reply-To: <YoN2fn5zRyNEnaUT@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:57:38AM +0200, Holger Brunck wrote:
-> Some lm90 compatible devices can operate in a extended temperature mode.
-> This feature is now enabled if the property is set in the corresponding
-> device tree node.
-> 
-> Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
 
-For my reference:
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> changes for v3:
->   - set config bit is property is set in DTS
->   - rephrase commit msg
->   - rename property
-> 
->  drivers/hwmon/lm90.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index 1c9493c70813..3820f0e61510 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -1707,6 +1707,7 @@ static void lm90_restore_conf(void *_data)
->  
->  static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
->  {
-> +	struct device_node *np = client->dev.of_node;
->  	int config, convrate;
->  
->  	convrate = lm90_read_reg(client, LM90_REG_R_CONVRATE);
-> @@ -1727,6 +1728,9 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
->  
->  	/* Check Temperature Range Select */
->  	if (data->flags & LM90_HAVE_EXTENDED_TEMP) {
-> +		if (of_property_read_bool(np, "ti,extended-range-enable"))
-> +			config |= 0x04;
-> +
->  		if (config & 0x04)
->  			data->flags |= LM90_FLAG_ADT7461_EXT;
->  	}
+On 2022/5/17 18:18, Greg KH wrote:
+> On Wed, May 11, 2022 at 03:25:52PM +0800, Yang Yingliang wrote:
+>> Hi,
+>>
+>> On 2022/5/11 14:45, Greg KH wrote:
+>>> On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
+>>>> Use kfree_sensitive() instead of open-coding it.
+>>>>
+>>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>>>> ---
+>>>>    drivers/w1/w1.c | 3 +--
+>>>>    1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+>>>> index f2ae2e563dc5..a0a6c3c739d9 100644
+>>>> --- a/drivers/w1/w1.c
+>>>> +++ b/drivers/w1/w1.c
+>>>> @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
+>>>>    	struct w1_master *md = dev_to_w1_master(dev);
+>>>>    	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
+>>>> -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
+>>>> -	kfree(md);
+>>>> +	kfree_sensitive(md);
+>>> Does this actually change anything?  Why is the memset being called here
+>>> at all?
+>> It's no functional change and I got this by
+>> scripts/coccinelle/api/kfree_sensitive.cocci.
+>> I'm not sure why using memset() here.
+> I think the memset() can just be dropped.  Can you make that change and
+> test it to verify it still works properly with that change?
+I can make change and send a patch for this, but I don't have device to 
+test it.
+>
+> thanks,
+>
+> greg k-h
+> .
