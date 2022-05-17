@@ -2,110 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9437C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 08:05:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCC77C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 08:19:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbiEQIFU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 04:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S241483AbiEQITl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 04:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbiEQIFT (ORCPT
+        with ESMTP id S242283AbiEQITe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 04:05:19 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7AF3EB83;
-        Tue, 17 May 2022 01:05:18 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id tk15so9594956ejc.6;
-        Tue, 17 May 2022 01:05:18 -0700 (PDT)
+        Tue, 17 May 2022 04:19:34 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA29B3CFD2
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 01:19:33 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id i9so2275515edr.8
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 01:19:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g2wIEkKAYlLfnMCLScX38TBed0imkFSk5PiJ4mF7M7o=;
-        b=XjUMaNeNzpjq8DGAKoTxcsxLvLebR52j5/UrFr1fTm14UTuFI3vWzbAR3mWREbJrUF
-         ZGbxRFQiQMr6X/eo8TtfkrQsTVsdmjWljyblQ9GG2B0QLn6IaAgrbpb/KjilGGuaWtWt
-         0DoRAyhIe4lW5Ny01IH6/E/EG6Y/r8/S6NFftsO4DFAPfGlobpLHiDYhxk4hZKvx5bEQ
-         PUgZ+m/XTvLtv0CC55yEQz7Mu8dLZ/Lfcf8zaproBUbm7zQJr56Lja5CCVkYLDxJyXol
-         y9mAsz4laAxacTX5wgq6wz6THqYNNcAsoXLAv2tcbhdlW7tkF4eGK8ig9oZn/pwNInx7
-         jzDQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+9WF+jfeaKBEzOX+lERO2uJekUjyE02OyMlke8wHLlc=;
+        b=w7ZYp1hJWWVevtdBw9odgfO6RWJ3gt+GvZj+X2Y4cJ4t23jBJaLFOM6QHJJJDeSpUN
+         UGA6H3BJdsP1SdYAOa1/bgpfJ5Sp2aMKpo/7bako9L5oMgQUxv6Qx6lPJeoDWj8sxODQ
+         W+s3COys7XSkgsPse3s8ZC3z8F6dx7qfZAvMW63o9LrXA2XybTpIJRzyI/Fwzk5LC/nh
+         vSC5IvbPDJMjrG+yPi1+02F9MJv1GLUKzCfU+Wj1QZsr7BM3Vz6hdv7K4R21Ua9/98zy
+         mmw+IVrIbFZ3iTdQmadGpPkHUbvXV8Y884Z6v/+2ibDS0a0DBl8x+PSj4oc5sKeCvCnt
+         8ECg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=g2wIEkKAYlLfnMCLScX38TBed0imkFSk5PiJ4mF7M7o=;
-        b=byJaFHv3Z3jTM72i0kVnXH7njJUQk3rcxb7ovp3Q8oITUqpMolOGzbmnqBEUDhejPi
-         UAB5FYBwtG1VbjKrRY9As8UjyeUpwTe7Cx3t2ZmUKYn7F17vwlenNYVQaOcdlfqgGZyV
-         8zm9iqglnJfmyBrrDqpj/RAPjpKuY8icpWbh6Qqe2ViM7xSSilxXRYXUrfPbOwgcCQjl
-         a0cJInN+5iimT3a8ItXwQSxZqfi74LjQNXCj5YpO3inwW4Wk3ycvoK26Hx0a/pc046hH
-         Ws1jNo80HngQ2q66Rjtctl/jEMQRssFtMcvbelu37aeYw3Bukg78F2GxykzcGKClZO7r
-         BHHw==
-X-Gm-Message-State: AOAM531k+UYSFRQmPgV/VochiJUxDxwaYTFCJ3BMB0xKEuvSQlu4dPUk
-        kRlkZt7REzit17J3m8JJWbg=
-X-Google-Smtp-Source: ABdhPJxgF/tHnSq60sCri5mmqNhkR2Ul32Ist6TJ34IoQ3vHZ0wZ4dD8QavmgsQBhklbg2npiIkRJQ==
-X-Received: by 2002:a17:906:a5b:b0:6f4:55f6:78af with SMTP id x27-20020a1709060a5b00b006f455f678afmr18785426ejf.238.1652774717367;
-        Tue, 17 May 2022 01:05:17 -0700 (PDT)
-Received: from caracal.goemobile.intern (erm103.goemobile.de. [134.76.0.103])
-        by smtp.googlemail.com with ESMTPSA id n1-20020a05640204c100b0042617ba63basm6396052edw.68.2022.05.17.01.05.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 01:05:16 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
+        bh=+9WF+jfeaKBEzOX+lERO2uJekUjyE02OyMlke8wHLlc=;
+        b=xtG9SjdDcAqNNcf4TaEY5C6csst0G8Q504jKfFX5Kk0tu9Pn/K0+AaUZkH5QfHcOQ0
+         t531Bk/EijVQfUX1G5AO7HBCSxVXPkho7P6fzmGc/wjhE78GgA0tMF+W1G++EPtBtd6K
+         dRdtfnVSpQtX8+6Gx6mfLSGm8B2NonxqjgflYeJLQSnV4zt3E7wpiWX3YzVuJxjJ1WJu
+         ABX3LQiC6e9Q0HFZgSbLK7yj0uHubRcC3NsjI+xBsdU70Q/ZVEmcGgj+ZLIThMvGZpBb
+         5kbnvBof05XDoU1VoKCJDEnleFkAPBE1QgQvQKvEgt+uh0aKUoJNOqP4ETeR2kypxn+v
+         fJXA==
+X-Gm-Message-State: AOAM533dA9C2BnrmXG3fOvv5LQLT64pdSTmo6mo0hlz9ACcyB5Y1pSGY
+        CzuozPoS5YbuBYe3ftVzU7/DDmasSp8EB5Z+
+X-Google-Smtp-Source: ABdhPJwwJZootVi74+Jw2XNywzpf+6h2f1MeBtPOr+hTjfC/SVQLKVnnQuwEHLSYBTSpkF1KIr5X7w==
+X-Received: by 2002:aa7:cb99:0:b0:42a:ba14:fb6c with SMTP id r25-20020aa7cb99000000b0042aba14fb6cmr6831193edt.78.1652775572426;
+        Tue, 17 May 2022 01:19:32 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id t15-20020a170906178f00b006f3ef214daesm751578eje.20.2022.05.17.01.19.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 01:19:32 -0700 (PDT)
+Message-ID: <fd978527-5edf-22c2-52bd-1891f25251f4@linaro.org>
+Date:   Tue, 17 May 2022 10:19:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [v3 1/3] dt-bindings: hwmon: lm90: add missing ti,tmp461
+Content-Language: en-US
+To:     Holger Brunck <holger.brunck@hitachienergy.com>,
+        linux-hwmon@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) fix Formula VIII definition
-Date:   Tue, 17 May 2022 10:05:08 +0200
-Message-Id: <20220517080508.1910953-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220517075626.16809-1-holger.brunck@hitachienergy.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517075626.16809-1-holger.brunck@hitachienergy.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The ROG CROSSHAIR VIII FORMULA board has the same sensors as the
-CROSSHAIR VIII HERO [1] thus let's join their definitions which adds
-missing sensors for Formula.
+On 17/05/2022 09:56, Holger Brunck wrote:
+> This sensor is already supported from the driver, but is missing in the
+> list of compatible devices in the yaml file.
+> 
+> Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
 
-[1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/740
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 611e897429b1..57e11b2bab74 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -54,7 +54,7 @@ static char *mutex_path_override;
- /* ACPI mutex for locking access to the EC for the firmware */
- #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
- 
--#define MAX_IDENTICAL_BOARD_VARIATIONS	2
-+#define MAX_IDENTICAL_BOARD_VARIATIONS	3
- 
- /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
- #define ACPI_GLOBAL_LOCK_PSEUDO_PATH	":GLOBAL_LOCK"
-@@ -257,17 +257,9 @@ static const struct ec_board_info board_info[] = {
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
- 		.family = family_amd_500_series,
- 	},
--	{
--		.board_names = {"ROG CROSSHAIR VIII FORMULA"},
--		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
--			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
--			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
--		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--		.family = family_amd_500_series,
--	},
- 	{
- 		.board_names = {
-+			"ROG CROSSHAIR VIII FORMULA"
- 			"ROG CROSSHAIR VIII HERO",
- 			"ROG CROSSHAIR VIII HERO (WI-FI)",
- 		},
--- 
-2.35.1
 
+Best regards,
+Krzysztof
