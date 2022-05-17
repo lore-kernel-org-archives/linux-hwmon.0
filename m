@@ -2,81 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40EE0C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 09:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 695EBC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 10:20:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240247AbiEQJPE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 05:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S242273AbiEQKUX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 06:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243864AbiEQJOq (ORCPT
+        with ESMTP id S1344071AbiEQKUN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 05:14:46 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2B935843
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 02:14:13 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id z2so33423929ejj.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 02:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uzbrvO21UceULT+n5MFskyGm8lwNsVBJgpQqNCNVgr8=;
-        b=d/5fBGDl4VD9kmenjR3XuiSq4Y8Bi5tdMfEPsa+RDxu+1VrpGrE1H2/JuqoFoJbmCp
-         gYLoy63urmNNcgKBWIvr/hc2lf0Xu14Ypjklisn2i3cU2Ou0iiERq4uB5LMCppb/MXuN
-         eM8MfPmthjzXgvOWMdkPacjH5z5jM0GCs0fWeERxTgO2xo4uaYN0Ebdc5Ty/RvI/4WTw
-         UGy4asyOs6vukPSU1wjAqsx0jwQeRYqsJeyHqjDrpJnHICil9C4xYtjNay2hYvjzQOOl
-         mvxzGdpmYHA3T2c09q1kOXRiK4TvIGsdlyiL2jSftLKWmieGpoWPU2jYwgVaVWzK8bKg
-         6e4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uzbrvO21UceULT+n5MFskyGm8lwNsVBJgpQqNCNVgr8=;
-        b=2ZoEtGuxtZwn2mNEQtMT54NjZbNypP2VF3N+fmoKGhCfuYW5Ix4SpW0ZB+nWCDIshP
-         pEzxnUlknE7HhaI9FCmStuMosIRHP11IV/KBaX7XKP4Cu5JJTz6MWiG48bJ7mPYa93j5
-         s1znvB75puhCsKd/woz9SW1h5KvIDvOYeJbfIdsNW3efv329i/ZgGcBMU0MYZVl/Wd8H
-         6adSy9bcDgzlnqEQ0zkekDWhJq+2jPNBd8fdXoPj+gN6MzZBKvn7YU/SSTFuKPw/IdeQ
-         nqU2WQ6u2oRWSrrE9MrlHmuMAHIR9t14MQMo6U+R9XFV3cO/H8ZkO+fTYGcZAAi+mybH
-         HEYw==
-X-Gm-Message-State: AOAM5312hCENuMqj3rbHPWlSVZJesEr6qiNdJ42YAM7laQqO3KLnL7Pi
-        N46EjoitpumtFNSBYITQRPcD5g==
-X-Google-Smtp-Source: ABdhPJxCBKEyJKDU1ubbqhVVSdcfKG3t3Vlgdl5iGFF1Ybar3ybuDxiwsbQ2BStu2vvBLnHlUBaEAg==
-X-Received: by 2002:a17:906:9c82:b0:6df:baa2:9f75 with SMTP id fj2-20020a1709069c8200b006dfbaa29f75mr18383958ejc.762.1652778851749;
-        Tue, 17 May 2022 02:14:11 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o23-20020aa7dd57000000b0042abfe32ac8sm1439288edw.30.2022.05.17.02.14.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 02:14:11 -0700 (PDT)
-Message-ID: <2668e283-42ae-d786-4dca-63526d549f54@linaro.org>
-Date:   Tue, 17 May 2022 11:14:10 +0200
+        Tue, 17 May 2022 06:20:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8468E4BFE1;
+        Tue, 17 May 2022 03:18:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E462615E8;
+        Tue, 17 May 2022 10:18:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46240C34117;
+        Tue, 17 May 2022 10:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652782725;
+        bh=v2apwGjWbFjt3W1NYCU1hTCmO/tsOL6niZc398NrbFo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sFjsCyG6q/I/b5u7wJ4bTjJVBE8nbiSwnbqKZ4rAqBtAuk40QuOLsD+neuNpefXTO
+         kNQdD4ZcWSircc26ULALAo3KLkiN1U+oPX+4VUssma0Z845mgrPaj3VKaaEr+BfA7B
+         sijcOfMIDg6khvpRjhbTJlpFAJJ7nGOPmv1FadsQ=
+Date:   Tue, 17 May 2022 12:18:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
+Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
+Message-ID: <YoN2fn5zRyNEnaUT@kroah.com>
+References: <20220511064954.3401381-1-yangyingliang@huawei.com>
+ <YntbdfHLjeHzAb9/@kroah.com>
+ <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 2/2] dt-bindings: trivial-devices: Add xdp152
-Content-Language: en-US
-To:     Greg.Schwendimann@infineon.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org
-References: <1a600fd51db942389a5078a72c3bf411@infineon.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1a600fd51db942389a5078a72c3bf411@infineon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 16/05/2022 16:03, Greg.Schwendimann@infineon.com wrote:
+On Wed, May 11, 2022 at 03:25:52PM +0800, Yang Yingliang wrote:
+> Hi,
 > 
-> Add Infineon Digital Multi-phase xdp152 family controllers.
-> 
-> Signed-off-by: Greg Schwendimann <Greg.Schwendimann@infineon.com>
+> On 2022/5/11 14:45, Greg KH wrote:
+> > On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
+> > > Use kfree_sensitive() instead of open-coding it.
+> > > 
+> > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> > > ---
+> > >   drivers/w1/w1.c | 3 +--
+> > >   1 file changed, 1 insertion(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+> > > index f2ae2e563dc5..a0a6c3c739d9 100644
+> > > --- a/drivers/w1/w1.c
+> > > +++ b/drivers/w1/w1.c
+> > > @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
+> > >   	struct w1_master *md = dev_to_w1_master(dev);
+> > >   	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
+> > > -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
+> > > -	kfree(md);
+> > > +	kfree_sensitive(md);
+> > Does this actually change anything?  Why is the memset being called here
+> > at all?
+> It's no functional change and I got this by
+> scripts/coccinelle/api/kfree_sensitive.cocci.
+> I'm not sure why using memset() here.
 
+I think the memset() can just be dropped.  Can you make that change and
+test it to verify it still works properly with that change?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+thanks,
 
-
-Best regards,
-Krzysztof
+greg k-h
