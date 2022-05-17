@@ -2,161 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7144C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 17:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB4FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 17:59:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351300AbiEQRcU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 13:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S240180AbiEQR7i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 13:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiEQRcT (ORCPT
+        with ESMTP id S231189AbiEQR7h (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 13:32:19 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC18839BB5;
-        Tue, 17 May 2022 10:32:18 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id l16so23137358oil.6;
-        Tue, 17 May 2022 10:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BJElMM5glBuikAlneHtVK8Xyaeh/Q6HpqJfojQYBOpY=;
-        b=THs9ZoSuwm1t8oeajABxV5sJnjaYI3vICw1E+k2fjpgH6rTc9J4wMere5w3WHkxB7s
-         GmMYjnumNA4ffTIfc/T7S3iEMRwQRgRWJiEcvz1FP2vCKohgc4L+wxW7mJBRWW8qVLgG
-         H36uUVzzyasQ3ruq8AyJHPVJ6Gc/EHyd/PWeyPjvPaMRTOpjUChJ4YTeXZ1muDawj8KN
-         FTgmiVrgfkWISpSeyyiAzXarfL5qk4yXyhAy1cPe5zqHIte5Iy8poMHup752Fjy7MK/S
-         kKnX9FwlU9LLju+gLoshZ3imXeMPX5kez6BRGumWFGGBD2IgIWc5jT2uyQ31UgKhdxiA
-         RPww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BJElMM5glBuikAlneHtVK8Xyaeh/Q6HpqJfojQYBOpY=;
-        b=wHoaXc657zXOJhfcM6YVvwj0Kajuf+ivIriPQJa70Td1TNcn8dIW8gcT82qIobwE3g
-         jqwnifP/bZTBqA5SJjYOLJvMc29myOz8d7PIKTJDLhnjkrQVvo7uRK0nYXG1mMk5BM0e
-         gn09CVxayh2fES0Rl5J0cVJuzG7wV63+GSA6+r4j/7x7anCDzVhl7a6TFoJM1sod8AIU
-         waq3D8v71wmdLvnizyDWWm8BudPig9LUvgDdISpookWw/eiZJ/KPESn3oiKpHTJ9RN/P
-         yMJ5k2Q3EDeHBboIR2A1oCYOgAvz4T5+RsySpSloMMrbh48oaGmbFSbGEHX5OZEe1a/T
-         dsJg==
-X-Gm-Message-State: AOAM530cY6o8ugth7QYxnkhtIF4jIr0aNOxRTxndPO3ifL4ekWqwtiuc
-        Sty1ivFpy5uWFNCa+LLFISjuMwXmFpxfNg==
-X-Google-Smtp-Source: ABdhPJytQGHxVYUPBBCqbrYVfWYGdfVG5jHpZKaFfFhDgKmIFvg/Hklre3Urgxe0XYKjO1EXGOlEOQ==
-X-Received: by 2002:a05:6808:118f:b0:2d9:a01a:48be with SMTP id j15-20020a056808118f00b002d9a01a48bemr16047571oil.265.1652808738009;
-        Tue, 17 May 2022 10:32:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a9-20020a056870618900b000edda81f868sm15201oah.10.2022.05.17.10.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 10:32:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c8f3e1b3-23e4-1dcb-7da3-e21a01062e9d@roeck-us.net>
-Date:   Tue, 17 May 2022 10:32:11 -0700
+        Tue, 17 May 2022 13:59:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778C54A3F1;
+        Tue, 17 May 2022 10:59:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1069D614B3;
+        Tue, 17 May 2022 17:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9EADC385B8;
+        Tue, 17 May 2022 17:59:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652810375;
+        bh=XZdrlI4v+ZvAe+NF3BwYsni+wVoFODseYbMtOFnMRpM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fflH5VkNmt9j0yusExsnCvthLSaOh3KJunUZcGpUK9Mbi5eSW81PdH4f0aSFF2A5I
+         aH/5G0XHNdCl13iSQeNmhotvggmBxVRkeIIHdtEmVguS+D3E+dzYboZrIH0HZ419gz
+         AOKvIdLJ+MVWP3zR9aOcxURNQPVKrL7lBzBbRhAM=
+Date:   Tue, 17 May 2022 15:48:30 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
+Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
+Message-ID: <YoOnrsEAFOclLbG2@kroah.com>
+References: <20220511064954.3401381-1-yangyingliang@huawei.com>
+ <YntbdfHLjeHzAb9/@kroah.com>
+ <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
+ <YoN2fn5zRyNEnaUT@kroah.com>
+ <16959408-3e91-774d-484f-508caff1f8f7@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 6/6] hwmon: pwm-fan: Add hwmon_pwm_enable attribute
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>
-References: <20220517142620.1523143-1-alexander.stein@ew.tq-group.com>
- <20220517142620.1523143-7-alexander.stein@ew.tq-group.com>
- <20220517145331.7ffab4pyjwrh5lkg@pengutronix.de>
- <194f33ea-18fa-4cb3-56b4-5d423463fa82@roeck-us.net>
- <20220517165726.trxa7lpz6kluvrg3@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220517165726.trxa7lpz6kluvrg3@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16959408-3e91-774d-484f-508caff1f8f7@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/17/22 09:57, Uwe Kleine-König wrote:
-> Hello,
+On Tue, May 17, 2022 at 09:03:43PM +0800, Yang Yingliang wrote:
 > 
-> [dropping Bartlomiej Zolnierkiewicz from Cc as the address bounces]
-> 
-> On Tue, May 17, 2022 at 09:32:24AM -0700, Guenter Roeck wrote:
->> On 5/17/22 07:53, Uwe Kleine-König wrote:
->>> Hello,
->>>
->>> On Tue, May 17, 2022 at 04:26:20PM +0200, Alexander Stein wrote:
->>>> This adds the enable attribute which is used to differentiate if PWM duty
->>>> means to switch off regulator and PWM or to keep them enabled but
->>>> at inactive PWM output level.
->>>>
->>>> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
->>>> ---
->>>>    Documentation/hwmon/pwm-fan.rst | 10 ++++
->>>>    drivers/hwmon/pwm-fan.c         | 95 +++++++++++++++++++++++++++++----
->>>>    2 files changed, 95 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/Documentation/hwmon/pwm-fan.rst b/Documentation/hwmon/pwm-fan.rst
->>>> index 82fe96742fee..0083480068d1 100644
->>>> --- a/Documentation/hwmon/pwm-fan.rst
->>>> +++ b/Documentation/hwmon/pwm-fan.rst
->>>> @@ -18,3 +18,13 @@ the hwmon's sysfs interface.
->>>>    The fan rotation speed returned via the optional 'fan1_input' is extrapolated
->>>>    from the sampled interrupts from the tachometer signal within 1 second.
->>>> +
->>>> +The driver provides the following sensor accesses in sysfs:
->>>> +
->>>> +=============== ======= =======================================================
->>>> +fan1_input	ro	fan tachometer speed in RPM
->>>> +pwm1_enable	rw	keep enable mode, defines behaviour when pwm1=0
->>>> +			0=switch off regulator and disable PWM
->>>> +			1=keep regulator enabled and set PWM to inactive level
->>>
->>> Is the pwm1_enable supposed to be set to 0 if that only does the right
->>> thing if the PWM emits low after pwm_disable()? The question I raised in
->>> v2 about "what is the meaning of disable?" hasn't evolved, has it?
->>>
->>> I still think it's unfortunate, that "pwm1_enable" has an effect on the
->>> regulator.
->>>
->>
->> Trying to understand. Are you saying that you are ok with affecting the
->> regulator when setting pwm := 0 (even though that doesn't really mean
->> "disable pwm output"), but not with making the behavior explicit by
->> using pwm1_enable ?
-> 
-> Not sure about being ok with affecting the regulator when setting
-> pwm := 0. I don't know enough about pwm-fans to have a strong opinion
-> for that.
-> 
-> Some questions to refine the semantics and my opinion:
-> 
-> There are fans without a regulator? (I think: yes)
-> 
-> A fan with a regulator always stops if the regulator is off?
-> (Hmm, there might be problems with shared regulators that only go off
-> when all consumers are off? What about always-on regulators, these don't
-> go off on the last consumer calling disable, right?)
-> 
-> Having said that I think the sane behaviour is:
-> 
-> The intention of pwm := 0 is to stop the fan. So disabling the regulator
-> (if available) sounds right.
-> 
+> On 2022/5/17 18:18, Greg KH wrote:
+> > On Wed, May 11, 2022 at 03:25:52PM +0800, Yang Yingliang wrote:
+> > > Hi,
+> > > 
+> > > On 2022/5/11 14:45, Greg KH wrote:
+> > > > On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
+> > > > > Use kfree_sensitive() instead of open-coding it.
+> > > > > 
+> > > > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> > > > > ---
+> > > > >    drivers/w1/w1.c | 3 +--
+> > > > >    1 file changed, 1 insertion(+), 2 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+> > > > > index f2ae2e563dc5..a0a6c3c739d9 100644
+> > > > > --- a/drivers/w1/w1.c
+> > > > > +++ b/drivers/w1/w1.c
+> > > > > @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
+> > > > >    	struct w1_master *md = dev_to_w1_master(dev);
+> > > > >    	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
+> > > > > -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
+> > > > > -	kfree(md);
+> > > > > +	kfree_sensitive(md);
+> > > > Does this actually change anything?  Why is the memset being called here
+> > > > at all?
+> > > It's no functional change and I got this by
+> > > scripts/coccinelle/api/kfree_sensitive.cocci.
+> > > I'm not sure why using memset() here.
+> > I think the memset() can just be dropped.  Can you make that change and
+> > test it to verify it still works properly with that change?
+> I can make change and send a patch for this, but I don't have device to test
+> it.
 
-There are fans (eg at least some CPU fans) which never stop, even with
-pwm=0. How do you suggest to handle those ?
+For something like this, it would be great to test.
 
-Guenter
+thanks,
 
-> I'm unsure what to reasonably expect from a disabled PWM. I think "stops
-> to oscillate" can be assumed. So I'd say: If a fan continues to rotate
-> when the PWM input is constantly active, don't call pwm_disable().
-> 
-> Best regards
-> Uwe
-> 
-
+greg k-h
