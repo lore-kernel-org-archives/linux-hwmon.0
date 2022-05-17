@@ -2,90 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB4FC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 17:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F927C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 20:17:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240180AbiEQR7i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 13:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S241786AbiEQURp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 16:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiEQR7h (ORCPT
+        with ESMTP id S1347953AbiEQURp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 13:59:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778C54A3F1;
-        Tue, 17 May 2022 10:59:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1069D614B3;
-        Tue, 17 May 2022 17:59:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9EADC385B8;
-        Tue, 17 May 2022 17:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652810375;
-        bh=XZdrlI4v+ZvAe+NF3BwYsni+wVoFODseYbMtOFnMRpM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fflH5VkNmt9j0yusExsnCvthLSaOh3KJunUZcGpUK9Mbi5eSW81PdH4f0aSFF2A5I
-         aH/5G0XHNdCl13iSQeNmhotvggmBxVRkeIIHdtEmVguS+D3E+dzYboZrIH0HZ419gz
-         AOKvIdLJ+MVWP3zR9aOcxURNQPVKrL7lBzBbRhAM=
-Date:   Tue, 17 May 2022 15:48:30 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
-Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
-Message-ID: <YoOnrsEAFOclLbG2@kroah.com>
-References: <20220511064954.3401381-1-yangyingliang@huawei.com>
- <YntbdfHLjeHzAb9/@kroah.com>
- <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
- <YoN2fn5zRyNEnaUT@kroah.com>
- <16959408-3e91-774d-484f-508caff1f8f7@huawei.com>
+        Tue, 17 May 2022 16:17:45 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCEA51E63
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 13:17:44 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5e433d66dso46649fac.5
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 13:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FxHA764ru6JwjO+ukw6Ys4prusKtB4QFPAsSxPUHX60=;
+        b=d/cJMaGfYXIu0WtgKY9VXqLgqXLkyFQsHTbXBF8j6ZGuY+M7gDfUx7T7KGoinExmxJ
+         KGpdI6SiVae27z72PjaPeUTfLKCXolXB7uWr5ytI4RXqXWN1heU/O9itSk7KwLVqcjTT
+         JlRYIE8KJ4V4nlgeN+gk4c1+WGHZOjyk87mU0M3dPfETC5jGePOiIw1fojkhk2kQiOZG
+         4eRjhH/ICb9NbWWLZVXxIEuY2baueBtpm8jCI7nW23iTo4teQ5MMwXmEj54k61o2D3Eb
+         wxatUmKW7iY35XjFnIK2ECuyN4IqX+5yj6taCl4tDqwP5Pf7Ntk0QNTyXpxAp5cHoA+F
+         6Cug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=FxHA764ru6JwjO+ukw6Ys4prusKtB4QFPAsSxPUHX60=;
+        b=qiGmkaQaPsbLMQHZAPBay70cp5w0a1iMT2LdSFLG3eHYIaoRTle3kz08ECK4crHPee
+         soEsUR5MhWjRwLd0qZpz/GggqQihUVnBzaps5wltx5V1svH/uX7b48r5RCvx9Cn/S8La
+         uclGdQgC2QvB++1tYyI5TRlgDafFEc2R6QhSBCe4kBpkA4aNubG8m79Y7sErKJ9b84JY
+         Np28Le4bA7H/QsaFBY4lw9qsU3dYumbfZzLHIK1M54E1O7T/WukkvN8dZG9lMSaBrNoQ
+         6k9UGOLcbEAHz4Ez81GOEfLtw03X3AKIMgw9pidtXXD12gkeTVqS5zLPECAm0FRlWxmQ
+         NJQw==
+X-Gm-Message-State: AOAM532oL7DmayPoqJzFMC/A2ttazEm7u8S3vu/nKQ25mzcs8gsrQ4M0
+        eLC1iIfrOrmeihPvWKNiRwAyG/esN8jTyA==
+X-Google-Smtp-Source: ABdhPJxoSlpeE30nHRZWO7MT6zPikvxKBF3ruC1GKACu/tejsoYB4oancBEf80J02HPxFdvR+vg1MA==
+X-Received: by 2002:a05:6870:434d:b0:ed:5822:c104 with SMTP id x13-20020a056870434d00b000ed5822c104mr13965375oah.236.1652818663226;
+        Tue, 17 May 2022 13:17:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x17-20020a056820105100b0035ed382fb5asm177133oot.15.2022.05.17.13.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 13:17:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH] hwmon: (dimmtemp) Fix bitmap handling
+Date:   Tue, 17 May 2022 13:17:40 -0700
+Message-Id: <20220517201740.1020831-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16959408-3e91-774d-484f-508caff1f8f7@huawei.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:03:43PM +0800, Yang Yingliang wrote:
-> 
-> On 2022/5/17 18:18, Greg KH wrote:
-> > On Wed, May 11, 2022 at 03:25:52PM +0800, Yang Yingliang wrote:
-> > > Hi,
-> > > 
-> > > On 2022/5/11 14:45, Greg KH wrote:
-> > > > On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
-> > > > > Use kfree_sensitive() instead of open-coding it.
-> > > > > 
-> > > > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> > > > > ---
-> > > > >    drivers/w1/w1.c | 3 +--
-> > > > >    1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-> > > > > index f2ae2e563dc5..a0a6c3c739d9 100644
-> > > > > --- a/drivers/w1/w1.c
-> > > > > +++ b/drivers/w1/w1.c
-> > > > > @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
-> > > > >    	struct w1_master *md = dev_to_w1_master(dev);
-> > > > >    	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
-> > > > > -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
-> > > > > -	kfree(md);
-> > > > > +	kfree_sensitive(md);
-> > > > Does this actually change anything?  Why is the memset being called here
-> > > > at all?
-> > > It's no functional change and I got this by
-> > > scripts/coccinelle/api/kfree_sensitive.cocci.
-> > > I'm not sure why using memset() here.
-> > I think the memset() can just be dropped.  Can you make that change and
-> > test it to verify it still works properly with that change?
-> I can make change and send a patch for this, but I don't have device to test
-> it.
+Building arm:allmodconfig may fail with the following error.
 
-For something like this, it would be great to test.
+In function 'fortify_memcpy_chk',
+    inlined from 'bitmap_copy' at include/linux/bitmap.h:261:2,
+    inlined from 'bitmap_copy_clear_tail' at include/linux/bitmap.h:270:2,
+    inlined from 'bitmap_from_u64' at include/linux/bitmap.h:622:2,
+    inlined from 'check_populated_dimms' at
+	drivers/hwmon/peci/dimmtemp.c:284:2:
+include/linux/fortify-string.h:344:25: error:
+	call to '__write_overflow_field' declared with attribute warning:
+	detected write beyond size of field (1st parameter)
 
-thanks,
+The problematic code is
+	bitmap_from_u64(priv->dimm_mask, dimm_mask);
 
-greg k-h
+dimm_mask is declared as u64, but the bitmap in priv->dimm_mask is only
+24 bit wide. On 32-bit systems, this results in writes over the end of
+the bitmap.
+
+Fix the problem by using u32 instead of u64 for dimm_mask. This is
+currently sufficient, and a compile time check to ensure that the number
+of dimms does not exceed the bit map size is already in place.
+
+Fixes: 73bc1b885dae ("hwmon: peci: Add dimmtemp driver")
+Cc: Iwona Winiarska <iwona.winiarska@intel.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/peci/dimmtemp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index 3c71b5546bcb..0a633bda3668 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -220,7 +220,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 	int chan_rank_max = priv->gen_info->chan_rank_max;
+ 	int dimm_idx_max = priv->gen_info->dimm_idx_max;
+ 	u32 chan_rank_empty = 0;
+-	u64 dimm_mask = 0;
++	u32 dimm_mask = 0;
+ 	int chan_rank, dimm_idx, ret;
+ 	u32 pcs;
+ 
+@@ -279,9 +279,9 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 		return -EAGAIN;
+ 	}
+ 
+-	dev_dbg(priv->dev, "Scanned populated DIMMs: %#llx\n", dimm_mask);
++	dev_dbg(priv->dev, "Scanned populated DIMMs: %#x\n", dimm_mask);
+ 
+-	bitmap_from_u64(priv->dimm_mask, dimm_mask);
++	bitmap_from_arr32(priv->dimm_mask, &dimm_mask, DIMM_NUMS_MAX);
+ 
+ 	return 0;
+ }
+-- 
+2.35.1
+
