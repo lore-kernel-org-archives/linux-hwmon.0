@@ -2,127 +2,138 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77731C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 May 2022 20:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C3EFC433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 02:22:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348856AbiEPU5Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 May 2022 16:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S230108AbiEQCW2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 May 2022 22:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349394AbiEPU4n (ORCPT
+        with ESMTP id S229553AbiEQCW0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 May 2022 16:56:43 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA971277A
-        for <linux-hwmon@vger.kernel.org>; Mon, 16 May 2022 13:31:19 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-f16a3e0529so11387382fac.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 16 May 2022 13:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WHlVOreJLN8zSzh0VqwYCLU1FX2dhpuOlqQlctUt3Zk=;
-        b=cZp6fgxwbqLJ532mmytzh4M67JFhv689SomjJO7drQu7VJI40WPALuqTUxv/d8OT1R
-         aa4ws8cJvYg3QGN3ct/3gFldcmGWfC/URVZKNHukvgWsdV6jfAHAoTKWD0QGlWSiZVaE
-         Rni2CQsg4yIqC8BPlgRckXMTbC6xnHe55tcYGC08z/5LJ9T/w2FYOcN3FdMx9N8BFxsy
-         VETkF9EEWy+tPFjjNrifJNvHx/Aiw7vH7bWDLdyoykqtSqN/+xIbPnJkfMM4ONv+BMDS
-         du1GamokdcvId7f1i9UysB9dacYLdzqnY9X17fwbYt46C5/3mrCOZTThojtUr+p9BDbl
-         4ZTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WHlVOreJLN8zSzh0VqwYCLU1FX2dhpuOlqQlctUt3Zk=;
-        b=2JKyMvrV1mhGOZ/I8fWQGjeSdDWCR4hKYLYnhBg6O3+xyyyDfKhLZ3yB3vIyNMtzFT
-         biisiPK58Ht8Y9dE4qKED9F2mCni6W6vrmMLvBSJnPr7PfYAI8UHzpoNDpe0iu786vHd
-         aFNm/T38ik4DTNMf6zT69gpv4AI9WkuLb2QDc6DBRQ0EFy0Ru7DwcmiMC9pJzYQ9XyEC
-         1tAmTYmm7peDySsWflDt0U4tdhmyiEaovreaC3TRovhsAgAutZ17uFFHam7O2E92avsg
-         YTxo/YVZFvtWiDlJmpdyfRxl38G0XHDWmPll5RrvHEu5rBSQ2EEi78T0Izi5TUqztyuD
-         7ySw==
-X-Gm-Message-State: AOAM530l0455DUyDnUvZ8xvDrd9mq/YH40n8dGSKy8cKdRSdwZbGvttG
-        hfH6nvmDvCAXzi1U2KIjYfX5WbyMTqAmnA==
-X-Google-Smtp-Source: ABdhPJyj9ThtrqeZOXuzc/dnEQ6v9rzB1hH1ShdZidqbiwQE9y0TJrm4t0XO+eV+S0EgsU8oiZ6a6A==
-X-Received: by 2002:a05:6870:798a:b0:ee:35da:33da with SMTP id he10-20020a056870798a00b000ee35da33damr16155604oab.83.1652733077191;
-        Mon, 16 May 2022 13:31:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b206-20020aca34d7000000b003266a9846c0sm4153427oia.17.2022.05.16.13.31.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 13:31:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 16 May 2022 13:31:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Holger Brunck <holger.brunck@hitachienergy.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [v2 2/2] driver/hwmon/lm90: enable extended range according to
- DTS node
-Message-ID: <20220516203114.GA4080547@roeck-us.net>
-References: <20220510080900.22758-1-holger.brunck@hitachienergy.com>
- <20220510080900.22758-2-holger.brunck@hitachienergy.com>
- <692d5ac7-840f-49da-c06a-c2b0e0e6cf8c@roeck-us.net>
- <DB9PR06MB7289A0505D42DC7151BD8517F7CF9@DB9PR06MB7289.eurprd06.prod.outlook.com>
+        Mon, 16 May 2022 22:22:26 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9626A1835C;
+        Mon, 16 May 2022 19:22:24 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2Kcb08VLzhZDH;
+        Tue, 17 May 2022 10:21:35 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 10:21:57 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 10:21:56 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] hwmon: Directly use ida_alloc()/free()
+Date:   Tue, 17 May 2022 02:40:22 +0000
+Message-ID: <20220517024022.1980274-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB9PR06MB7289A0505D42DC7151BD8517F7CF9@DB9PR06MB7289.eurprd06.prod.outlook.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:01:34PM +0000, Holger Brunck wrote:
-> > > diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c index
-> > > 1c9493c70813..6cdbcfab9f20 100644
-> > > --- a/drivers/hwmon/lm90.c
-> > > +++ b/drivers/hwmon/lm90.c
-> > > @@ -1707,6 +1707,7 @@ static void lm90_restore_conf(void *_data)
-> > >
-> > >   static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
-> > >   {
-> > > +     struct device_node *np = client->dev.of_node;
-> > >       int config, convrate;
-> > >
-> > >       convrate = lm90_read_reg(client, LM90_REG_R_CONVRATE); @@
-> > > -1727,7 +1728,8 @@ static int lm90_init_client(struct i2c_client
-> > > *client, struct lm90_data *data)
-> > >
-> > >       /* Check Temperature Range Select */
-> > >       if (data->flags & LM90_HAVE_EXTENDED_TEMP) {
-> > > -             if (config & 0x04)
-> > > +             if (config & 0x04 ||
-> > > +                 of_property_read_bool(np,
-> > > + "onsemi,extended-range-enable"))
-> > >                       data->flags |= LM90_FLAG_ADT7461_EXT;
-> > 
-> > Maybe I am missing something, but I don't see the matching configuration
-> > change. Specifying the flag in devicetree only really makes sense if the chip
-> > configuration is changed accordingly.
-> > 
-> 
-> what is confusing here for me is that in the current code we have
-> "if (config & 0x4)" and if this is true we configure the flags accordingly. But
-> the bit 0x4 in config is nowhere set in current code. Therefore also the flag is
-> never set. Or do I miss something? 
-> 
-The idea is to pick up the configuration set by the BIOS/ROMMON.
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-> I am asking because if my assumption is correct I would replace the current
-> (never matching) check to the new property:
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/hwmon/hwmon.c  |  6 +++---
+ drivers/hwmon/ibmaem.c | 10 +++++-----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-It does match, if set by the BIOS.
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 22de7a9e7ba7..2e2cd79d89eb 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -764,7 +764,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 			 "hwmon: '%s' is not a valid name attribute, please fix\n",
+ 			 name);
+ 
+-	id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
++	id = ida_alloc(&hwmon_ida, GFP_KERNEL);
+ 	if (id < 0)
+ 		return ERR_PTR(id);
+ 
+@@ -856,7 +856,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ free_hwmon:
+ 	hwmon_dev_release(hdev);
+ ida_remove:
+-	ida_simple_remove(&hwmon_ida, id);
++	ida_free(&hwmon_ida, id);
+ 	return ERR_PTR(err);
+ }
+ 
+@@ -968,7 +968,7 @@ void hwmon_device_unregister(struct device *dev)
+ 
+ 	if (likely(sscanf(dev_name(dev), HWMON_ID_FORMAT, &id) == 1)) {
+ 		device_unregister(dev);
+-		ida_simple_remove(&hwmon_ida, id);
++		ida_free(&hwmon_ida, id);
+ 	} else
+ 		dev_dbg(dev->parent,
+ 			"hwmon_device_unregister() failed: bad class ID!\n");
+diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
+index de6baf6ca3d1..5c4cf742f5ae 100644
+--- a/drivers/hwmon/ibmaem.c
++++ b/drivers/hwmon/ibmaem.c
+@@ -482,7 +482,7 @@ static void aem_delete(struct aem_data *data)
+ 	ipmi_destroy_user(data->ipmi.user);
+ 	platform_set_drvdata(data->pdev, NULL);
+ 	platform_device_unregister(data->pdev);
+-	ida_simple_remove(&aem_ida, data->id);
++	ida_free(&aem_ida, data->id);
+ 	kfree(data);
+ }
+ 
+@@ -539,7 +539,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+ 		data->power_period[i] = AEM_DEFAULT_POWER_INTERVAL;
+ 
+ 	/* Create sub-device for this fw instance */
+-	data->id = ida_simple_get(&aem_ida, 0, 0, GFP_KERNEL);
++	data->id = ida_alloc(&aem_ida, GFP_KERNEL);
+ 	if (data->id < 0)
+ 		goto id_err;
+ 
+@@ -600,7 +600,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+ 	platform_set_drvdata(data->pdev, NULL);
+ 	platform_device_unregister(data->pdev);
+ dev_err:
+-	ida_simple_remove(&aem_ida, data->id);
++	ida_free(&aem_ida, data->id);
+ id_err:
+ 	kfree(data);
+ 
+@@ -679,7 +679,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+ 		data->power_period[i] = AEM_DEFAULT_POWER_INTERVAL;
+ 
+ 	/* Create sub-device for this fw instance */
+-	data->id = ida_simple_get(&aem_ida, 0, 0, GFP_KERNEL);
++	data->id = ida_alloc(&aem_ida, GFP_KERNEL);
+ 	if (data->id < 0)
+ 		goto id_err;
+ 
+@@ -740,7 +740,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+ 	platform_set_drvdata(data->pdev, NULL);
+ 	platform_device_unregister(data->pdev);
+ dev_err:
+-	ida_simple_remove(&aem_ida, data->id);
++	ida_free(&aem_ida, data->id);
+ id_err:
+ 	kfree(data);
+ 
+-- 
+2.25.1
 
-> if (of_property_read_bool(np, "ti,extended-range-enable")) {
->   config |= 0x4;
->   data->flags |= LM90_FLAG_ADT7461_EXT;
-> }
-> 
-> Is this ok for you?
-> 
-Looks ok at first glance, though of course I'll have to see the entire
-patch.
-
-Thanks,
-Guenter
-
-> Best regards
-> Holger
-> 
