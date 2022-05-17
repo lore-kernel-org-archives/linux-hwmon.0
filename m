@@ -2,78 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4992BC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 07:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9437C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 May 2022 08:05:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbiEQH6D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 May 2022 03:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S235232AbiEQIFU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 May 2022 04:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238272AbiEQH6C (ORCPT
+        with ESMTP id S237290AbiEQIFT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 May 2022 03:58:02 -0400
-Received: from inet10.abb.com (inet10.abb.com [138.225.1.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ABD48E53
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 May 2022 00:58:00 -0700 (PDT)
-Received: from gitsiv.ch.abb.com (gitsiv.keymile.net [10.41.156.251])
-        by inet10.abb.com (8.14.7/8.14.7) with SMTP id 24H7veIR011307;
-        Tue, 17 May 2022 09:57:40 +0200
-Received: from ch10641.keymile.net.net (ch10641.keymile.net [172.31.40.7])
-        by gitsiv.ch.abb.com (Postfix) with ESMTP id E082765FAB27;
-        Tue, 17 May 2022 09:57:39 +0200 (CEST)
-From:   Holger Brunck <holger.brunck@hitachienergy.com>
-To:     linux-hwmon@vger.kernel.org
+        Tue, 17 May 2022 04:05:19 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7AF3EB83;
+        Tue, 17 May 2022 01:05:18 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id tk15so9594956ejc.6;
+        Tue, 17 May 2022 01:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g2wIEkKAYlLfnMCLScX38TBed0imkFSk5PiJ4mF7M7o=;
+        b=XjUMaNeNzpjq8DGAKoTxcsxLvLebR52j5/UrFr1fTm14UTuFI3vWzbAR3mWREbJrUF
+         ZGbxRFQiQMr6X/eo8TtfkrQsTVsdmjWljyblQ9GG2B0QLn6IaAgrbpb/KjilGGuaWtWt
+         0DoRAyhIe4lW5Ny01IH6/E/EG6Y/r8/S6NFftsO4DFAPfGlobpLHiDYhxk4hZKvx5bEQ
+         PUgZ+m/XTvLtv0CC55yEQz7Mu8dLZ/Lfcf8zaproBUbm7zQJr56Lja5CCVkYLDxJyXol
+         y9mAsz4laAxacTX5wgq6wz6THqYNNcAsoXLAv2tcbhdlW7tkF4eGK8ig9oZn/pwNInx7
+         jzDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g2wIEkKAYlLfnMCLScX38TBed0imkFSk5PiJ4mF7M7o=;
+        b=byJaFHv3Z3jTM72i0kVnXH7njJUQk3rcxb7ovp3Q8oITUqpMolOGzbmnqBEUDhejPi
+         UAB5FYBwtG1VbjKrRY9As8UjyeUpwTe7Cx3t2ZmUKYn7F17vwlenNYVQaOcdlfqgGZyV
+         8zm9iqglnJfmyBrrDqpj/RAPjpKuY8icpWbh6Qqe2ViM7xSSilxXRYXUrfPbOwgcCQjl
+         a0cJInN+5iimT3a8ItXwQSxZqfi74LjQNXCj5YpO3inwW4Wk3ycvoK26Hx0a/pc046hH
+         Ws1jNo80HngQ2q66Rjtctl/jEMQRssFtMcvbelu37aeYw3Bukg78F2GxykzcGKClZO7r
+         BHHw==
+X-Gm-Message-State: AOAM531k+UYSFRQmPgV/VochiJUxDxwaYTFCJ3BMB0xKEuvSQlu4dPUk
+        kRlkZt7REzit17J3m8JJWbg=
+X-Google-Smtp-Source: ABdhPJxgF/tHnSq60sCri5mmqNhkR2Ul32Ist6TJ34IoQ3vHZ0wZ4dD8QavmgsQBhklbg2npiIkRJQ==
+X-Received: by 2002:a17:906:a5b:b0:6f4:55f6:78af with SMTP id x27-20020a1709060a5b00b006f455f678afmr18785426ejf.238.1652774717367;
+        Tue, 17 May 2022 01:05:17 -0700 (PDT)
+Received: from caracal.goemobile.intern (erm103.goemobile.de. [134.76.0.103])
+        by smtp.googlemail.com with ESMTPSA id n1-20020a05640204c100b0042617ba63basm6396052edw.68.2022.05.17.01.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 01:05:16 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Holger Brunck <holger.brunck@hitachienergy.com>
-Subject: [v3 3/3] hwmon: (lm90) enable extended range according to DTS node
-Date:   Tue, 17 May 2022 09:57:38 +0200
-Message-Id: <20220517075738.16885-1-holger.brunck@hitachienergy.com>
-X-Mailer: git-send-email 2.35.1.871.gab1f276
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) fix Formula VIII definition
+Date:   Tue, 17 May 2022 10:05:08 +0200
+Message-Id: <20220517080508.1910953-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Some lm90 compatible devices can operate in a extended temperature mode.
-This feature is now enabled if the property is set in the corresponding
-device tree node.
+The ROG CROSSHAIR VIII FORMULA board has the same sensors as the
+CROSSHAIR VIII HERO [1] thus let's join their definitions which adds
+missing sensors for Formula.
 
-Signed-off-by: Holger Brunck <holger.brunck@hitachienergy.com>
+[1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/740
+
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
-changes for v3:
-  - set config bit is property is set in DTS
-  - rephrase commit msg
-  - rename property
+ drivers/hwmon/asus-ec-sensors.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
- drivers/hwmon/lm90.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 1c9493c70813..3820f0e61510 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -1707,6 +1707,7 @@ static void lm90_restore_conf(void *_data)
-=20
- static int lm90_init_client(struct i2c_client *client, struct lm90_data =
-*data)
- {
-+	struct device_node *np =3D client->dev.of_node;
- 	int config, convrate;
-=20
- 	convrate =3D lm90_read_reg(client, LM90_REG_R_CONVRATE);
-@@ -1727,6 +1728,9 @@ static int lm90_init_client(struct i2c_client *clie=
-nt, struct lm90_data *data)
-=20
- 	/* Check Temperature Range Select */
- 	if (data->flags & LM90_HAVE_EXTENDED_TEMP) {
-+		if (of_property_read_bool(np, "ti,extended-range-enable"))
-+			config |=3D 0x04;
-+
- 		if (config & 0x04)
- 			data->flags |=3D LM90_FLAG_ADT7461_EXT;
- 	}
---=20
-2.35.1.871.gab1f276
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 611e897429b1..57e11b2bab74 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -54,7 +54,7 @@ static char *mutex_path_override;
+ /* ACPI mutex for locking access to the EC for the firmware */
+ #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
+ 
+-#define MAX_IDENTICAL_BOARD_VARIATIONS	2
++#define MAX_IDENTICAL_BOARD_VARIATIONS	3
+ 
+ /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
+ #define ACPI_GLOBAL_LOCK_PSEUDO_PATH	":GLOBAL_LOCK"
+@@ -257,17 +257,9 @@ static const struct ec_board_info board_info[] = {
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+ 		.family = family_amd_500_series,
+ 	},
+-	{
+-		.board_names = {"ROG CROSSHAIR VIII FORMULA"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+-			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
+-			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+ 	{
+ 		.board_names = {
++			"ROG CROSSHAIR VIII FORMULA"
+ 			"ROG CROSSHAIR VIII HERO",
+ 			"ROG CROSSHAIR VIII HERO (WI-FI)",
+ 		},
+-- 
+2.35.1
 
