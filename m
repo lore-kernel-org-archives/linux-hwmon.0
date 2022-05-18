@@ -2,177 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A187CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 May 2022 07:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57808C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 May 2022 07:50:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbiERHHB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 May 2022 03:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
+        id S232529AbiERHu1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 May 2022 03:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbiERHHA (ORCPT
+        with ESMTP id S232528AbiERHu0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 May 2022 03:07:00 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519FFA889C;
-        Wed, 18 May 2022 00:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1652857618; x=1684393618;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=H+hzJvrKetPVEZoJzbpuCq9zdMggKUCx3wXO6f4SVrg=;
-  b=Ftwh81G/s/9grp18E7jFR3D3MH7wQgkWvlbAb5vT7fQRzx2J/gM5Jabd
-   mmaMpZpsFUolVG4AJp5SDOWjlJcAAt+x+Z3x+vxbYr2ORHAwZObTWSkYh
-   f9C36BKlS6qIZ2OI+K6kl8taERvqp76Q/FjWlaqMdv8ErNpSyJmvzP2mB
-   92XreQRyrTI6+dTOstn+0JfFieY+WASCFYfk6vSayhmlwplT1F6BV6Y9G
-   h72WWY3xbmnqVRrrT6VkbzTbY/w+qY7+BDdiiFDdh36k9NIHoNq+MDrg3
-   4Jp4P/5ySc0jgSqdqH6b/obdqgwOb1Em3rluM5YUXVWVCSFNUoO5MVtoD
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,234,1647298800"; 
-   d="scan'208";a="23937991"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 18 May 2022 09:06:56 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 18 May 2022 09:06:56 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 18 May 2022 09:06:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1652857616; x=1684393616;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=H+hzJvrKetPVEZoJzbpuCq9zdMggKUCx3wXO6f4SVrg=;
-  b=oadaEUfslRSjpArOAs5I4nBQOKACFLieZD5hIAbtzTiIwa5mN2Z6G0bn
-   ppvBPEYex610xm9BkFsaMEYTe1oaXMpv3e6qHYQgUTG3zED2v/tZXkLu7
-   zJgfEK0qbW7llr4B+3vORwCMr7XFZFGEzuTCax/jh+ci75j3OnQdLPuhd
-   rUULnf8atm6bOYcZ501MP+6yuO/ynqvsChB+KzLUZGpfYTdD37Ge1ENQ9
-   wZIsFapTmXz2UNTPOBxrXhzNUyfsz3LWCPA7P8s1AgU4H58/s2Zxw7+fn
-   CBwthuGHb/wD7PtwhoFpsrJKu0CeXaA2bftSH/HHWqJRBq9GpWsEo6BQF
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,234,1647298800"; 
-   d="scan'208";a="23937990"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 18 May 2022 09:06:56 +0200
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7DB24280070;
-        Wed, 18 May 2022 09:06:56 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>
-Subject: Re: (EXT) Re: [PATCH v3 6/6] hwmon: pwm-fan: Add hwmon_pwm_enable attribute
-Date:   Wed, 18 May 2022 09:06:54 +0200
-Message-ID: <3435664.iIbC2pHGDl@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220517170658.u3dpe6gglsihh6n6@pengutronix.de>
-References: <20220517142620.1523143-1-alexander.stein@ew.tq-group.com> <355e6efa-dc65-771e-fcc0-2ca774d382de@roeck-us.net> <20220517170658.u3dpe6gglsihh6n6@pengutronix.de>
+        Wed, 18 May 2022 03:50:26 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E2F11E4B6;
+        Wed, 18 May 2022 00:50:22 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L34qv5fLzz1JCB4;
+        Wed, 18 May 2022 15:48:59 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 15:50:19 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 15:50:19 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+CC:     <zbr@ioremap.net>, <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] drivers: w1: drop unnecessary memset() in w1_master_release()
+Date:   Wed, 18 May 2022 16:01:36 +0800
+Message-ID: <20220518080136.2686030-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am Dienstag, 17. Mai 2022, 19:06:58 CEST schrieb Uwe Kleine-K=F6nig:
-> * PGP Signed by an unknown key
->=20
-> Hello,
->=20
-> [dropped Bartlomiej Zolnierkiewicz from Cc:]
->=20
-> On Tue, May 17, 2022 at 09:38:56AM -0700, Guenter Roeck wrote:
-> > On 5/17/22 07:26, Alexander Stein wrote:
-> > > This adds the enable attribute which is used to differentiate if PWM
-> > > duty
-> > > means to switch off regulator and PWM or to keep them enabled but
-> > > at inactive PWM output level.
-> > >=20
-> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > ---
-> > >=20
-> > >   Documentation/hwmon/pwm-fan.rst | 10 ++++
-> > >   drivers/hwmon/pwm-fan.c         | 95 +++++++++++++++++++++++++++++-=
-=2D--
-> > >   2 files changed, 95 insertions(+), 10 deletions(-)
-> > >=20
-> > > diff --git a/Documentation/hwmon/pwm-fan.rst
-> > > b/Documentation/hwmon/pwm-fan.rst index 82fe96742fee..0083480068d1
-> > > 100644
-> > > --- a/Documentation/hwmon/pwm-fan.rst
-> > > +++ b/Documentation/hwmon/pwm-fan.rst
-> > > @@ -18,3 +18,13 @@ the hwmon's sysfs interface.
-> > >=20
-> > >   The fan rotation speed returned via the optional 'fan1_input' is
-> > >   extrapolated from the sampled interrupts from the tachometer signal
-> > >   within 1 second.> >=20
-> > > +
-> > > +The driver provides the following sensor accesses in sysfs:
-> > > +
-> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
-> > > +fan1_input	ro	fan tachometer speed in RPM
-> > > +pwm1_enable	rw	keep enable mode, defines behaviour when=20
-pwm1=3D0
-> > > +			0=3Dswitch off regulator and disable PWM
-> > > +			1=3Dkeep regulator enabled and set PWM to=20
-inactive level
-> >=20
-> > Unless I am missing something, I think we have (at least) three
-> > conditions to handle:
-> >=20
-> > - regulator disabled (independent of pwm value)
-> > - regulator enabled, pwm output disabled if pwm=3D0
-> > - regulator enabled, pwm output enabled and set to 0 (or, if inverted,
-> >=20
-> >   to maximum) if pwm=3D0
->=20
-> What is your expectation for a disabled PWM?
-> https://lore.kernel.org/linux-pwm/20220517150555.404363-1-u.kleine-koenig=
-@pe
-> ngutronix.de might be relevant. If you assume that a pwm might output the
-> active level after disabling, the case "regulator enabled, pwm output
-> disabled if pwm=3D0" sounds wrong.
->=20
-> Would "pwm1_disable_on_zero" be a better name than "pwm1_enable"? The
-> latter is completely unintuitive to me.
+It's unnecessary to use memset() in w1_master_release() before
+the memory is freed, so remove it.
 
-I guess Guenter suggested 'pwm1_enable' as it already exists as a predefine=
-d,=20
-optional attribute, avoiding adding a new custom attribute.
-Reading Documentation/hwmon/w83627ehf.rst or Documentation/hwmon/nzxt-
-smart2.rst I get the impression their meaning is pretty unrestricted.
-If you are concerned by using 'pwm1_enable', what about 'pwm1_mode'?
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/w1/w1.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> Maybe go for
->=20
->  0 -> keep pwm and regulator on
->  1 -> disable pwm, keep regulator on
->  2 -> keep pwm on, disable regulator
->  3 -> disable pwm and regulator
->=20
-> (so one bit for pwm and one for regulator), even if 1 is
-> wrong/unusual/dangerous?
-
-I tend to like this approach, as it can handle all combinations. You can=20
-decide whether you want to actually shutdown the PWM fan, or keep it enable=
-d=20
-but without providing any PWM. This can mean the fan still runs at the lowe=
-st=20
-speed. It also addresses the scenarios where regulator cannot be disabled a=
-t=20
-all.
-
-Best regards,
-Alexander
-
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index f2ae2e563dc5..f4d1499bb853 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -73,7 +73,6 @@ static void w1_master_release(struct device *dev)
+ 	struct w1_master *md = dev_to_w1_master(dev);
+ 
+ 	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
+-	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
+ 	kfree(md);
+ }
+ 
+-- 
+2.25.1
 
