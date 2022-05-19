@@ -2,39 +2,39 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC320C433F5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 May 2022 23:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DF59C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 May 2022 23:44:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239720AbiESXeN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 May 2022 19:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
+        id S1343666AbiESXoI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 May 2022 19:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbiESXeL (ORCPT
+        with ESMTP id S236058AbiESXoH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 May 2022 19:34:11 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878D7111BAA;
-        Thu, 19 May 2022 16:34:10 -0700 (PDT)
-Date:   Thu, 19 May 2022 23:34:01 +0000
+        Thu, 19 May 2022 19:44:07 -0400
+Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD4DB042E
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 May 2022 16:44:05 -0700 (PDT)
+Date:   Thu, 19 May 2022 23:43:57 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1653003248; x=1653262448;
-        bh=LyRrYUAfnrOlxEV8oP2sHMBTRL2yGmI3LgV/g5hKsu8=;
+        s=protonmail2; t=1653003843; x=1653263043;
+        bh=lPrxtgyGbqzHKGsEAjyQEVN37SrtZOBlF6GrEMqQqa4=;
         h=Date:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:Cc:
          Date:Subject:Reply-To:Feedback-ID:Message-ID;
-        b=BQFniW+okpJQpTrAkOEd0e0zhN2cK2O27PSxKOCRKV+q2e3MKReFAcsgHJkGDB97h
-         nXB+dYoaeRnc6WBq6XJp3FeEZjqEyTIMdQJIr/V0kzee/FsfOSHbddYXWAABS1UmGO
-         lALsYbL5JATJSrfkkr3o+skIRaVFFrTpoYzjhnpjSVA+TiKekSp76nHHuPHZtHSvSI
-         emq+2bP/Ho/9RPEVuDZiferPRf1rSc6bCe7yMZvmQi3QwODFU+AnLEvXfPd/HDV8pN
-         gB9QLL3b+et/IfQ5ocfTi0YelTDnhrhKYSIsbN3SzUMDHrqq6J6vKi0PtQoN+X0Q8F
-         n6IWXvKx2XOhQ==
+        b=xKJykPBBx/L5Vr1t7xUnI5x9TGXgE8IgXjj4CPVLrIdChu1VQn3ZH82SI2oW0PGSZ
+         0oYhG5ZxgtbNwK0EhUoDwMGqxdizlMseFdG/PSHw+duBPymJIBbbSBJI7A4vBAIBEV
+         iovnmzSL/nrfMGQLhd73LoECz/qmmqiNYzPiOmPeUv44l/B/NuOmxHh/Co6c94N519
+         fr9JYm8hFWS1iI2ROz8D/BnuSHjswIx9CAjSV6npxOSkS+QsHy+MpqTYueTM14+ShH
+         mIAdN1jFBaM+QSMh3nVSzbGAv/Utwu3pw8916kbMp5bc5Bjs4xR1pftuhMspj0ztmp
+         zIeBuSsCDUynA==
 From:   Adam Wujek <dev_public@wujek.eu>
 Cc:     Adam Wujek <dev_public@wujek.eu>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [PATCH] hwmon: (pmbus) Check PEC support before reading other registers
-Message-ID: <20220519233334.438621-1-dev_public@wujek.eu>
+Subject: [PATCH 1/3] hwmon: (pmbus) add a function to check the presence of a block register
+Message-ID: <20220519234346.440398-1-dev_public@wujek.eu>
 Feedback-ID: 23425257:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -44,84 +44,66 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Make sure that the support of PEC is determined before the read of other
-registers. Otherwise the validation of PEC can trigger an error on the read
-of STATUS_BYTE or STATUS_WORD registers.
-
-The problematic scenario is the following. A device with enabled PEC
-support is up and running and a kernel driver is loaded.
-Then the driver is unloaded (or device unbound), the HW device
-is reconfigured externally (e.g. by i2cset) to advertise itself as not
-supporting PEC. Without the move of the code, at the second load of
-the driver (or bind) the STATUS_BYTE or STATUS_WORD register is always
-read with PEC enabled, which is likely to cause a read error resulting
-with fail of a driver load (or bind).
+Other functions (like pmbus_check_byte_register) cannot be used to check
+the presence of a block register, because it will generate error when PEC
+is used.
 
 Signed-off-by: Adam Wujek <dev_public@wujek.eu>
 ---
-Notes:
-- This commit extends the fix implemented in the commit:
-  75d2b2b06bd8 hwmon: (pmbus) disable PEC if not enabled
-- The move of the only line:
-  client->flags &=3D ~I2C_CLIENT_PEC;
-  would make the read of STATUS_BYTE and STATUS_WORD registers that follow
-  always without PEC
-
- drivers/hwmon/pmbus/pmbus_core.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_c=
 ore.c
-index e82af82fe4ca..55153a71c170 100644
+index 55153a71c170..2634ac1fa3d5 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2308,6 +2308,23 @@ static int pmbus_init_common(struct i2c_client *clie=
-nt, struct pmbus_data *data,
- =09struct device *dev =3D &client->dev;
- =09int page, ret;
+@@ -421,6 +421,18 @@ static int _pmbus_read_byte_data(struct i2c_client *cl=
+ient, int page, int reg)
+ =09return pmbus_read_byte_data(client, page, reg);
+ }
 
-+=09/*
-+=09 * Figure out if PEC is enabled before accessing any other register.
-+=09 * Make sure PEC is disabled, will be enabled later if needed.
-+=09 */
-+=09client->flags &=3D ~I2C_CLIENT_PEC;
++static int pmbus_read_block_data(struct i2c_client *client, int page, u8 r=
+eg,
++=09=09=09=09 char *data_buf)
++{
++=09int rv;
 +
-+=09/* Enable PEC if the controller and bus supports it */
-+=09if (!(data->flags & PMBUS_NO_CAPABILITY)) {
-+=09=09ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
-+=09=09if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
-+=09=09=09if (i2c_check_functionality(client->adapter,
-+=09=09=09=09=09=09    I2C_FUNC_SMBUS_PEC)) {
-+=09=09=09=09client->flags |=3D I2C_CLIENT_PEC;
-+=09=09=09}
-+=09=09}
-+=09}
++=09rv =3D pmbus_set_page(client, page);
++=09if (rv < 0)
++=09=09return rv;
 +
- =09/*
- =09 * Some PMBus chips don't support PMBUS_STATUS_WORD, so try
- =09 * to use PMBUS_STATUS_BYTE instead if that is the case.
-@@ -2326,19 +2343,6 @@ static int pmbus_init_common(struct i2c_client *clie=
-nt, struct pmbus_data *data,
- =09=09data->has_status_word =3D true;
- =09}
-
--=09/* Make sure PEC is disabled, will be enabled later if needed */
--=09client->flags &=3D ~I2C_CLIENT_PEC;
--
--=09/* Enable PEC if the controller and bus supports it */
--=09if (!(data->flags & PMBUS_NO_CAPABILITY)) {
--=09=09ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
--=09=09if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
--=09=09=09if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))=
++=09return i2c_smbus_read_block_data(client, reg, data_buf);
++}
++
+ static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int=
+ page,
+ =09=09=09=09=09      int reg)
  {
--=09=09=09=09client->flags |=3D I2C_CLIENT_PEC;
--=09=09=09}
--=09=09}
--=09}
--
- =09/*
- =09 * Check if the chip is write protected. If it is, we can not clear
- =09 * faults, and we should not try it. Also, in that case, writes into
+@@ -558,6 +570,20 @@ bool pmbus_check_word_register(struct i2c_client *clie=
+nt, int page, int reg)
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_check_word_register, PMBUS);
+
++static bool pmbus_check_block_register(struct i2c_client *client, int page=
+,
++=09=09=09=09       int reg)
++{
++=09int rv;
++=09struct pmbus_data *data =3D i2c_get_clientdata(client);
++=09char data_buf[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
++
++=09rv =3D pmbus_read_block_data(client, page, reg, data_buf);
++=09if (rv >=3D 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
++=09=09rv =3D pmbus_check_status_cml(client);
++=09pmbus_clear_fault_page(client, -1);
++=09return rv >=3D 0;
++}
++
+ const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client *c=
+lient)
+ {
+ =09struct pmbus_data *data =3D i2c_get_clientdata(client);
 --
 2.17.1
 
