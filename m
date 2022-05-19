@@ -2,85 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA0BBC43217
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 May 2022 18:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC320C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 May 2022 23:34:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241184AbiESSoR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 May 2022 14:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S239720AbiESXeN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 May 2022 19:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237790AbiESSoP (ORCPT
+        with ESMTP id S236252AbiESXeL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 May 2022 14:44:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3955C856;
-        Thu, 19 May 2022 11:44:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 63690CE2747;
-        Thu, 19 May 2022 18:44:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20673C34100;
-        Thu, 19 May 2022 18:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652985851;
-        bh=LV7LTnAH/p1rCGESk6oys94gfkqXoBT21ZKPBvHkVag=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PJntBITtl+Ix70J0sB1XcPAphJMOsg4aFBWMHvc0SY2z73uU+bdYPDEbFBi+d1k76
-         ysN5otvLvJDv0wXhWJUhkShJ6y0IswWrsq/4D0zNAN/gjfwPvXK6nuH5Fo5/HvjFsM
-         DcteBtGl6sEhkNPBAN1XO2L3TUlpiYC03t69XjLY=
-Date:   Thu, 19 May 2022 11:44:10 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     kernel test robot <lkp@intel.com>, linux-staging@lists.linux.dev,
-        linux-omap@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        kvm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 736ee37e2e8eed7fe48d0a37ee5a709514d478b3
-Message-Id: <20220519114410.638baa38ab2067884600cb72@linux-foundation.org>
-In-Reply-To: <0530d502-1291-23f3-64ac-97bd38a26bd4@roeck-us.net>
-References: <6285958d.+Z2aDZ4O1Y9eiazd%lkp@intel.com>
-        <0530d502-1291-23f3-64ac-97bd38a26bd4@roeck-us.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Thu, 19 May 2022 19:34:11 -0400
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878D7111BAA;
+        Thu, 19 May 2022 16:34:10 -0700 (PDT)
+Date:   Thu, 19 May 2022 23:34:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
+        s=protonmail2; t=1653003248; x=1653262448;
+        bh=LyRrYUAfnrOlxEV8oP2sHMBTRL2yGmI3LgV/g5hKsu8=;
+        h=Date:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:Cc:
+         Date:Subject:Reply-To:Feedback-ID:Message-ID;
+        b=BQFniW+okpJQpTrAkOEd0e0zhN2cK2O27PSxKOCRKV+q2e3MKReFAcsgHJkGDB97h
+         nXB+dYoaeRnc6WBq6XJp3FeEZjqEyTIMdQJIr/V0kzee/FsfOSHbddYXWAABS1UmGO
+         lALsYbL5JATJSrfkkr3o+skIRaVFFrTpoYzjhnpjSVA+TiKekSp76nHHuPHZtHSvSI
+         emq+2bP/Ho/9RPEVuDZiferPRf1rSc6bCe7yMZvmQi3QwODFU+AnLEvXfPd/HDV8pN
+         gB9QLL3b+et/IfQ5ocfTi0YelTDnhrhKYSIsbN3SzUMDHrqq6J6vKi0PtQoN+X0Q8F
+         n6IWXvKx2XOhQ==
+From:   Adam Wujek <dev_public@wujek.eu>
+Cc:     Adam Wujek <dev_public@wujek.eu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Adam Wujek <dev_public@wujek.eu>
+Subject: [PATCH] hwmon: (pmbus) Check PEC support before reading other registers
+Message-ID: <20220519233334.438621-1-dev_public@wujek.eu>
+Feedback-ID: 23425257:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 18 May 2022 20:41:27 -0700 Guenter Roeck <linux@roeck-us.net> wrote:
+Make sure that the support of PEC is determined before the read of other
+registers. Otherwise the validation of PEC can trigger an error on the read
+of STATUS_BYTE or STATUS_WORD registers.
 
-> On 5/18/22 17:55, kernel test robot wrote:
-> > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > branch HEAD: 736ee37e2e8eed7fe48d0a37ee5a709514d478b3  Add linux-next specific files for 20220518
-> > 
-> > Error/Warning reports:
-> > 
-> > https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
-> > https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
-> > https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
-> > https://lore.kernel.org/linux-mm/202205172344.3GFeaum1-lkp@intel.com
-> > https://lore.kernel.org/linux-mm/202205190527.o9wVEvHI-lkp@intel.com
-> > 
-> > Error/Warning: (recently discovered and may have been fixed)
-> > 
-> [ .. ]
-> > drivers/hwmon/nct6775-platform.c:199:9: sparse:    unsigned char
-> > drivers/hwmon/nct6775-platform.c:199:9: sparse:    void
-> 
-> This is getting tiresome. Every driver using outb() on m68k will
-> experience that "problem". As far as I can see, it is caused by
-> 
-> #define out_8(addr,b) (void)((*(__force volatile u8 *) (unsigned long)(addr)) = (b))
-> 
-> in arch/m68k/include/asm/raw_io.h. I have no idea what the
-> "(void)" is for, but removing it "fixes" the problem.
-> Either case, this is not a problem with the nct6775 driver,
-> nor is it a new problem.
+The problematic scenario is the following. A device with enabled PEC
+support is up and running and a kernel driver is loaded.
+Then the driver is unloaded (or device unbound), the HW device
+is reconfigured externally (e.g. by i2cset) to advertise itself as not
+supporting PEC. Without the move of the code, at the second load of
+the driver (or bind) the STATUS_BYTE or STATUS_WORD register is always
+read with PEC enabled, which is likely to cause a read error resulting
+with fail of a driver load (or bind).
 
-(cc Geert)
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+---
+Notes:
+- This commit extends the fix implemented in the commit:
+  75d2b2b06bd8 hwmon: (pmbus) disable PEC if not enabled
+- The move of the only line:
+  client->flags &=3D ~I2C_CLIENT_PEC;
+  would make the read of STATUS_BYTE and STATUS_WORD registers that follow
+  always without PEC
+
+ drivers/hwmon/pmbus/pmbus_core.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_c=
+ore.c
+index e82af82fe4ca..55153a71c170 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2308,6 +2308,23 @@ static int pmbus_init_common(struct i2c_client *clie=
+nt, struct pmbus_data *data,
+ =09struct device *dev =3D &client->dev;
+ =09int page, ret;
+
++=09/*
++=09 * Figure out if PEC is enabled before accessing any other register.
++=09 * Make sure PEC is disabled, will be enabled later if needed.
++=09 */
++=09client->flags &=3D ~I2C_CLIENT_PEC;
++
++=09/* Enable PEC if the controller and bus supports it */
++=09if (!(data->flags & PMBUS_NO_CAPABILITY)) {
++=09=09ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
++=09=09if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
++=09=09=09if (i2c_check_functionality(client->adapter,
++=09=09=09=09=09=09    I2C_FUNC_SMBUS_PEC)) {
++=09=09=09=09client->flags |=3D I2C_CLIENT_PEC;
++=09=09=09}
++=09=09}
++=09}
++
+ =09/*
+ =09 * Some PMBus chips don't support PMBUS_STATUS_WORD, so try
+ =09 * to use PMBUS_STATUS_BYTE instead if that is the case.
+@@ -2326,19 +2343,6 @@ static int pmbus_init_common(struct i2c_client *clie=
+nt, struct pmbus_data *data,
+ =09=09data->has_status_word =3D true;
+ =09}
+
+-=09/* Make sure PEC is disabled, will be enabled later if needed */
+-=09client->flags &=3D ~I2C_CLIENT_PEC;
+-
+-=09/* Enable PEC if the controller and bus supports it */
+-=09if (!(data->flags & PMBUS_NO_CAPABILITY)) {
+-=09=09ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+-=09=09if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
+-=09=09=09if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))=
+ {
+-=09=09=09=09client->flags |=3D I2C_CLIENT_PEC;
+-=09=09=09}
+-=09=09}
+-=09}
+-
+ =09/*
+ =09 * Check if the chip is write protected. If it is, we can not clear
+ =09 * faults, and we should not try it. Also, in that case, writes into
+--
+2.17.1
+
+
