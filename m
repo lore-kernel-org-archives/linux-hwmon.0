@@ -2,118 +2,212 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65AE9C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 May 2022 12:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07DB6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 May 2022 12:47:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349477AbiETMqj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 May 2022 08:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S1348591AbiETMrN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 May 2022 08:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348109AbiETMqg (ORCPT
+        with ESMTP id S239160AbiETMrM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 May 2022 08:46:36 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462E75C84F;
-        Fri, 20 May 2022 05:46:35 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id g207so3970013qke.7;
-        Fri, 20 May 2022 05:46:35 -0700 (PDT)
+        Fri, 20 May 2022 08:47:12 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD05679398
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 May 2022 05:47:10 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id e4so8997390ljb.13
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 May 2022 05:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6XjZCY756KPit2Ss8z2BIiQdnfZ6Pvc8gtf2ue1/+6k=;
+        b=vDO+00dTVaD5pXExs+VhEQBJsjL9ZgRmUN2i8NroXb/Lc1Ck0ZJ/xPUBzXkwSp0Biq
+         0z995sBqPSAGxFvKILSw8MX4jhDQI2OVuHtU9Jy7aS0ales7e5WqynDTuLdlqSqvl04C
+         7DNswUskS/DRAHkzCpFE7rb6H9lXP2SKw+9Ktcus3I90x/2okqGhtoCjoKsh2egk4Bnz
+         pza4W7dkEZnZprqZ7KzxB8TLsQgTP64gc9evLU1r53LNp1qyDw5Y8dPdEMLfb5rMqH5a
+         eqd1Rx7lmMReZN26uiVE9Uqoy6Kf2nkKor+lJG2G831hNtKpD/5yCRU2FpJPyPZZ9MAU
+         HWKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UhZYflED6/DiNr1feOC9OhkU49iweDam4jS4WznrIsk=;
-        b=P3H251hbfEKCS0STYhh+ttBN6k4JmCVqAIgJw2sY6OCa/0DUJ8nnJvDHC0OMbW5njm
-         X32Why/FWk49NtmkhlOE/5/vqT3kuE6mcXD7QY9xafdbxyWvySw8uD3zS3v2olp7uAS6
-         j0IarfLosYyy803yAOymeMM5cblvWe8InrjXH7ugU2lEDXkhASGKcg78A6DGHkPcXgzj
-         D/N8WUK9EkOsRFwQivqRztuGL7H75e4wpRL3WIVeyV5HvpXG5cz2ss7hsEHLbPMNc25a
-         dtLfDYEYyrc64d/zMzldBS1QQ8j4b2F27w/Xbs9iLo4aPlDUZCu6wqafCCSDD0j6AMjW
-         tOrQ==
-X-Gm-Message-State: AOAM531N30c3giO9I5iF4yRTinkq8xX4RxQtR39Uev507e8OssJLZL9n
-        Ucz0Zrl6t0T1ejPS+ksdhrai4BRKeGs0mw==
-X-Google-Smtp-Source: ABdhPJzQr1I56C3kTXejdctJYTvYMH8Xf51D+8crHXB+jVEBShmCHRyrvEprSSKn1QJ+AoaLhmGh7g==
-X-Received: by 2002:a05:620a:454f:b0:6a0:5212:96d2 with SMTP id u15-20020a05620a454f00b006a0521296d2mr6187861qkp.603.1653050793932;
-        Fri, 20 May 2022 05:46:33 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id 202-20020a3703d3000000b0069fc13ce213sm3111969qkd.68.2022.05.20.05.46.32
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6XjZCY756KPit2Ss8z2BIiQdnfZ6Pvc8gtf2ue1/+6k=;
+        b=CS8qNGXe2VvVi2MXEp1uL3NsAqu7uNEB6OBLT9qy1pkYJIL4Q6FTiRbG2PM/0e5eiK
+         dV1zIV44NUTv41JSH113GMUET4vF3bXJgP2LdmZbCdYty0OxxKOMSV/Q3Y5V5QxBg9s0
+         r4Nik8CbUkQwSzUDgclEaEn0SoLKOyb5siO+11Ll71G7fisrI44fINwzU12XtYj9kHF5
+         xDpXf5cPP/2JQMy2iRTf09cGQ2CaqMhrVFkLZBE915V0R+kmLvXGLrPJ6i+wB3pxpziU
+         tsDexd/lkFqfOTJuWPXi3OicnhBcVTjrA5CEAtiBC+OlGE4LqEMzlcGvkcTe/mosNF6k
+         /KyA==
+X-Gm-Message-State: AOAM5304wBWQ15ZRW6NLWKtWWt7TkLE2IEVwnObREvULN9sz5bdv/aBk
+        Ek2VxZar9RkshXpykbxJkLddvg==
+X-Google-Smtp-Source: ABdhPJzSMwcLqnffUq2TA8e/v4JG+J7i+J339pLj5B4YgUwzCEaHgMJU1oxdENxuhmlLzt2dzVc8Cw==
+X-Received: by 2002:a2e:9941:0:b0:247:dce8:b0ec with SMTP id r1-20020a2e9941000000b00247dce8b0ecmr5588141ljj.404.1653050829034;
+        Fri, 20 May 2022 05:47:09 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q7-20020ac25287000000b0047255d211f4sm646717lfm.291.2022.05.20.05.47.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:46:33 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id j2so14097403ybu.0;
-        Fri, 20 May 2022 05:46:32 -0700 (PDT)
-X-Received: by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP id
- f9-20020a056902038900b0063331c1d0f7mr9068692ybs.543.1653050792549; Fri, 20
- May 2022 05:46:32 -0700 (PDT)
+        Fri, 20 May 2022 05:47:08 -0700 (PDT)
+Message-ID: <0e0dd0a1-0312-46f0-40b3-d3d2576ef08f@linaro.org>
+Date:   Fri, 20 May 2022 14:47:07 +0200
 MIME-Version: 1.0
-References: <6285958d.+Z2aDZ4O1Y9eiazd%lkp@intel.com> <0530d502-1291-23f3-64ac-97bd38a26bd4@roeck-us.net>
- <CAMuHMdU3SYOwE5ftDwymQpVwWmpbC=1Ytyp0Y9GaeUS2i1cP+A@mail.gmail.com>
-In-Reply-To: <CAMuHMdU3SYOwE5ftDwymQpVwWmpbC=1Ytyp0Y9GaeUS2i1cP+A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 20 May 2022 14:46:20 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVx7r-4TVV9uVJppT-7ZAriov01BUNk4ghU9Bs4uY28vQ@mail.gmail.com>
-Message-ID: <CAMuHMdVx7r-4TVV9uVJppT-7ZAriov01BUNk4ghU9Bs4uY28vQ@mail.gmail.com>
-Subject: Re: [linux-next:master] BUILD REGRESSION 736ee37e2e8eed7fe48d0a37ee5a709514d478b3
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     kernel test robot <lkp@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-staging@lists.linux.dev,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>, linux-nvme@lists.infradead.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        linux-sparse@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/8] dt-bindings: hwmon: Allow specifying channels for
+ lm90
+Content-Language: en-US
+To:     Slawomir Stepien <sst@poczta.fm>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, przemyslaw.cencner@nokia.com,
+        krzysztof.adamski@nokia.com, alexander.sverdlin@nokia.com,
+        Slawomir Stepien <slawomir.stepien@nokia.com>
+References: <20220520093243.2523749-1-sst@poczta.fm>
+ <20220520093243.2523749-4-sst@poczta.fm>
+ <3ea92486-0cf9-ce3d-d1b6-7a76f1d5a129@linaro.org>
+ <YoeLuffNoUoNx2Bc@t480s.localdomain>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YoeLuffNoUoNx2Bc@t480s.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 20, 2022 at 2:40 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Thu, May 19, 2022 at 8:48 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 5/18/22 17:55, kernel test robot wrote:
-> > > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > > branch HEAD: 736ee37e2e8eed7fe48d0a37ee5a709514d478b3  Add linux-next specific files for 20220518
-> > >
-> > > Error/Warning reports:
-> > >
-> > > https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
-> > > https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
-> > > https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
-> > > https://lore.kernel.org/linux-mm/202205172344.3GFeaum1-lkp@intel.com
-> > > https://lore.kernel.org/linux-mm/202205190527.o9wVEvHI-lkp@intel.com
-> > >
-> > > Error/Warning: (recently discovered and may have been fixed)
-> > >
-> > [ .. ]
-> > > drivers/hwmon/nct6775-platform.c:199:9: sparse:    unsigned char
-> > > drivers/hwmon/nct6775-platform.c:199:9: sparse:    void
-> >
-> > This is getting tiresome. Every driver using outb() on m68k will
-> > experience that "problem". As far as I can see, it is caused by
-> >
-> > #define out_8(addr,b) (void)((*(__force volatile u8 *) (unsigned long)(addr)) = (b))
-> >
-> > in arch/m68k/include/asm/raw_io.h. I have no idea what the
-> > "(void)" is for,
->
-> The "(void)" makes sure there is no return value.
-> Which matters if the result of a function returning void is propagated
-> to another function returning void.
+On 20/05/2022 14:38, Slawomir Stepien wrote:
+> On maj 20, 2022 12:13, Krzysztof Kozlowski wrote:
+>> On 20/05/2022 11:32, Slawomir Stepien wrote:
+>>> From: Slawomir Stepien <slawomir.stepien@nokia.com>
+>>>
+>>> Add binding description for temperature channels. Currently, support for
+>>> label and offset is implemented.
+>>>
+>>> Signed-off-by: Slawomir Stepien <slawomir.stepien@nokia.com>
+>>> ---
+>>>  .../bindings/hwmon/national,lm90.yaml         | 39 +++++++++++++++++++
+>>>  1 file changed, 39 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>>> index 066c02541fcf..9a5aa78d4db1 100644
+>>> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>>> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>>> @@ -62,6 +62,37 @@ required:
+>>>  
+>>>  additionalProperties: false
+>>>  
+>>> +patternProperties:
+>>
+>> Which models use this?
+> 
+> This is used in tmp421 model.
 
-Which, FTR, sparse also doesn't like:
+Then please add allOf:if:then disallowing the property for other models.
 
-    error: return expression in void function
+> 
+>>> +  "^channel@([0-2])$":
+>>> +    type: object
+>>> +    description: |
+>>
+>> No need for |
+> 
+> Will fix in v2.
+> 
+>>> +      Represents channels of the device and their specific configuration.
+>>> +
+>>> +    properties:
+>>> +      reg:
+>>> +        description: |
+>>
+>> The same.
+> 
+> Will fix in v2.
+> 
+>>> +          The channel number. 0 is local channel, 1-2 are remote channels.
+>>> +        items:
+>>> +          minimum: 0
+>>> +          maximum: 2
+>>> +
+>>> +      label:
+>>> +        description: |
+>>
+>> The same.
+> 
+> Will fix in v2.
+> 
+>>> +          A descriptive name for this channel, like "ambient" or "psu".
+>>> +
+>>> +      offset:
+>>> +        description: |
+>>
+>> This does not look like standard property, so you need vendor and unit
+>> suffix.
+> 
+> Currently in lm90 we have support for devices that have different width (including sign) for offset
+> register. We have 10 bits, 11 bits and 12 bits. Do I understand correctly that I can use the same
+> vendor prefix if the width is the same? Just like "ti" was used for adi and ti in
+> "ti,extended-range-enable"?
+> 
+> For example:
+> 
+> adi,10-bit-offset-millicelsius # (only for adt7481)
+> adi,11-bit-offset-millicelsius # (for adt7461 but also for lm90 and others)
+> ti,12-bit-offset-millicelsius  # (ti - since only tmp451 and tmp461 supports 12 bit)
 
-Gr{oetje,eeting}s,
+Wait, these are then strictly per-compatible, so there is no sense in DT
+property at all.
 
-                        Geert
+> 
+>>> +          The value (millidegree Celsius) to be programmed in the channel specific offset register
+>>> +          (if supported by device).
+>>
+>> You described programming model which should not be put in the bindings.
+>> Please describe the hardware.
+> 
+> I am also not sure about the "-millicelsius" in example above. From device point-of-view, this
+> offset is just two's complement, so is it more desirable to have the values here as just bytes
+> rather than millicelsius?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+No, the programming model of a device can change and should be
+abstracted to hardware property.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+>>> +          For remote channels only.
+>>> +        $ref: /schemas/types.yaml#/definitions/int32
+>>> +        default: 0
+>>> +
+>>> +    required:
+>>> +      - reg
+>>> +
+>>> +    additionalProperties: false
+>>> +
+>>>  examples:
+>>>    - |
+>>>      #include <dt-bindings/interrupt-controller/irq.h>
+>>> @@ -76,5 +107,13 @@ examples:
+>>>              vcc-supply = <&palmas_ldo6_reg>;
+>>>              interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
+>>>              #thermal-sensor-cells = <1>;
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>> I assume you tested the bindings with dt_bindings_check?
+>>
+>> I have some doubts, as this should fail.
+> 
+> I did. All was fine. What should fail here?
+
+This:
+
+linux/out/Documentation/devicetree/bindings/hwmon/national,lm90.example.dtb:
+sensor@4c: '#address-cells', '#size-cells' do not match any of the
+regexes: '^channel@([0-2])$', 'pinctrl-[0-9]+'
+
+	From schema:
+linux/linux/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+
+
+So no, you did not test it. Asking reviewer to perform a test which you
+can do by yourself is a huge waste of reviewers time.
+
+Best regards,
+Krzysztof
