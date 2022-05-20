@@ -2,171 +2,186 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0393C433F5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 May 2022 12:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B956C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 May 2022 12:40:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245270AbiETMi1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 May 2022 08:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        id S1349233AbiETMkg convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 May 2022 08:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241184AbiETMi1 (ORCPT
+        with ESMTP id S1349254AbiETMkf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 May 2022 08:38:27 -0400
-Received: from smtpo62.interia.pl (smtpo62.interia.pl [217.74.67.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0BCEC3FD
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 May 2022 05:38:23 -0700 (PDT)
-Received: from t480s.localdomain (unknown [80.68.225.159])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-        Fri, 20 May 2022 14:38:20 +0200 (CEST)
-Date:   Fri, 20 May 2022 14:38:17 +0200
-From:   Slawomir Stepien <sst@poczta.fm>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, przemyslaw.cencner@nokia.com,
-        krzysztof.adamski@nokia.com, alexander.sverdlin@nokia.com,
-        Slawomir Stepien <slawomir.stepien@nokia.com>
-Subject: Re: [PATCH 3/8] dt-bindings: hwmon: Allow specifying channels for
- lm90
-Message-ID: <YoeLuffNoUoNx2Bc@t480s.localdomain>
-References: <20220520093243.2523749-1-sst@poczta.fm>
- <20220520093243.2523749-4-sst@poczta.fm>
- <3ea92486-0cf9-ce3d-d1b6-7a76f1d5a129@linaro.org>
+        Fri, 20 May 2022 08:40:35 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193871649AF;
+        Fri, 20 May 2022 05:40:34 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id y15so2511169qtx.4;
+        Fri, 20 May 2022 05:40:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AW3WbgwLSP0WZKYPK3Y6DQ8WAhPkJkHKkMhSdaktb4M=;
+        b=ci526RxuduDAZtSAK1B75bBv5EU8oW/UM99VYulFLoW0SXbQKgheOVlkKITJCSIzWo
+         KCVz8Vbz8LaRCqZmvBTadqD+PqharqnlSlidLU6xr6EOm9vs5pKDcTLMUkT2wXlf4f7i
+         qqIzhB1wg3g1HIZYq3ruMU4yVVHRsFvGKUkz/N2X61c3RLAmNF21M+sqaaXD3FhwywJU
+         HvrRlvPft9vzFShBS37mBjfVMrN9Opl+rT57FeeAjjiPWxqMsCI9LOuH+BVg3DSXekJ5
+         rdXI41P0lEYLKmucAsODcq8p1ryDd8kAhmngpcoPYk8kr/+gNMcniyrGrb+pTdkVk1yc
+         exMQ==
+X-Gm-Message-State: AOAM531GwRBYfXAHVFdPGs/6F76fA6xx6W9WD+dbC/e2iDHZXot+Yx6y
+        iz3Hcl1LWgbGk4vj9t3tbqhNNOfDbDMAAQ==
+X-Google-Smtp-Source: ABdhPJwlffsHGkLQuTm/hpnqLikeezIRbe5GuMm2uJSZ35XfJGXdhcJxKEOaW3CdGTte+VCjB79OLQ==
+X-Received: by 2002:a05:622a:1654:b0:2f3:deaa:4d53 with SMTP id y20-20020a05622a165400b002f3deaa4d53mr7354433qtj.232.1653050432999;
+        Fri, 20 May 2022 05:40:32 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id i18-20020ac84f52000000b002f9114d2ebcsm2627854qtw.17.2022.05.20.05.40.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 05:40:32 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ff90e0937aso11101967b3.4;
+        Fri, 20 May 2022 05:40:32 -0700 (PDT)
+X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
+ s12-20020a819b0c000000b002f4c5227d3cmr9969695ywg.316.1653050431948; Fri, 20
+ May 2022 05:40:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ea92486-0cf9-ce3d-d1b6-7a76f1d5a129@linaro.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interia.pl;
-        s=biztos; t=1653050301;
-        bh=BjRkYe2tg4eQ5swNA/y9eBX2Yd2IZts2CN/YrcdPJ+M=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=J6Q1xa/ilCmNkZ8OMDj0ft9pqXpoIs/lkKJZ8JRV9Xk0TR6ViFyb9SX69ezDTpfy1
-         3+KHBsA13e+TpxKCNuyNFZBYUVKHThz/6qDA5+gzE0XpYjvnBDaEiqyY3VQ0Ld3rr2
-         7c3hZVTCmRR1IOqjSKzu/h2VQTCACO6xZV+VvxJE=
+References: <6285958d.+Z2aDZ4O1Y9eiazd%lkp@intel.com> <0530d502-1291-23f3-64ac-97bd38a26bd4@roeck-us.net>
+In-Reply-To: <0530d502-1291-23f3-64ac-97bd38a26bd4@roeck-us.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 20 May 2022 14:40:20 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU3SYOwE5ftDwymQpVwWmpbC=1Ytyp0Y9GaeUS2i1cP+A@mail.gmail.com>
+Message-ID: <CAMuHMdU3SYOwE5ftDwymQpVwWmpbC=1Ytyp0Y9GaeUS2i1cP+A@mail.gmail.com>
+Subject: Re: [linux-next:master] BUILD REGRESSION 736ee37e2e8eed7fe48d0a37ee5a709514d478b3
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-staging@lists.linux.dev,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>, linux-nvme@lists.infradead.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        linux-sparse@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On maj 20, 2022 12:13, Krzysztof Kozlowski wrote:
-> On 20/05/2022 11:32, Slawomir Stepien wrote:
-> > From: Slawomir Stepien <slawomir.stepien@nokia.com>
-> > 
-> > Add binding description for temperature channels. Currently, support for
-> > label and offset is implemented.
-> > 
-> > Signed-off-by: Slawomir Stepien <slawomir.stepien@nokia.com>
-> > ---
-> >  .../bindings/hwmon/national,lm90.yaml         | 39 +++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> > index 066c02541fcf..9a5aa78d4db1 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> > @@ -62,6 +62,37 @@ required:
-> >  
-> >  additionalProperties: false
-> >  
-> > +patternProperties:
-> 
-> Which models use this?
+Hi Günter
 
-This is used in tmp421 model.
+On Thu, May 19, 2022 at 8:48 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 5/18/22 17:55, kernel test robot wrote:
+> > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > branch HEAD: 736ee37e2e8eed7fe48d0a37ee5a709514d478b3  Add linux-next specific files for 20220518
+> >
+> > Error/Warning reports:
+> >
+> > https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
+> > https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
+> > https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
+> > https://lore.kernel.org/linux-mm/202205172344.3GFeaum1-lkp@intel.com
+> > https://lore.kernel.org/linux-mm/202205190527.o9wVEvHI-lkp@intel.com
+> >
+> > Error/Warning: (recently discovered and may have been fixed)
+> >
+> [ .. ]
+> > drivers/hwmon/nct6775-platform.c:199:9: sparse:    unsigned char
+> > drivers/hwmon/nct6775-platform.c:199:9: sparse:    void
+>
+> This is getting tiresome. Every driver using outb() on m68k will
+> experience that "problem". As far as I can see, it is caused by
+>
+> #define out_8(addr,b) (void)((*(__force volatile u8 *) (unsigned long)(addr)) = (b))
+>
+> in arch/m68k/include/asm/raw_io.h. I have no idea what the
+> "(void)" is for,
 
-> > +  "^channel@([0-2])$":
-> > +    type: object
-> > +    description: |
-> 
-> No need for |
+The "(void)" makes sure there is no return value.
+Which matters if the result of a function returning void is propagated
+to another function returning void.
 
-Will fix in v2.
+> but removing it "fixes" the problem.
 
-> > +      Represents channels of the device and their specific configuration.
-> > +
-> > +    properties:
-> > +      reg:
-> > +        description: |
-> 
-> The same.
+This introduces new problems (m68k all{mod,yes}config):
 
-Will fix in v2.
+    In file included from arch/m68k/include/asm/io_mm.h:25,
+                     from arch/m68k/include/asm/io.h:8,
+                     from include/linux/io.h:13,
+                     from include/linux/of_address.h:7,
+                     from drivers/gpu/drm/msm/adreno/adreno_gpu.c:13:
+    drivers/gpu/drm/msm/adreno/a6xx_gmu.h: In function ‘gmu_write_rscc’:
+    arch/m68k/include/asm/raw_io.h:34:80: error: ‘return’ with a
+value, in function returning void [-Werror=return-type]
+       34 | #define out_le32(addr,l) ((*(__force volatile __le32 *)
+(unsigned long)(addr)) = cpu_to_le32(l))
+          |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+    arch/m68k/include/asm/io_mm.h:397:26: note: in expansion of macro ‘out_le32’
+      397 | #define writel(val,addr) out_le32((addr),(val))
+          |                          ^~~~~~~~
+    drivers/gpu/drm/msm/msm_drv.h:468:32: note: in expansion of macro ‘writel’
+      468 | #define msm_writel(data, addr) writel((data), (addr))
+          |                                ^~~~~~
+    /drivers/gpu/drm/msm/adreno/a6xx_gmu.h:141:9: note: in expansion
+of macro ‘msm_writel’
+      141 |  return msm_writel(value, gmu->rscc + (offset << 2));
+          |         ^~~~~~~~~~
+    In file included from drivers/gpu/drm/msm/adreno/a6xx_gpu.h:11,
+                     from drivers/gpu/drm/msm/adreno/adreno_gpu.c:20:
+    drivers/gpu/drm/msm/adreno/a6xx_gmu.h:139:20: note: declared here
+      139 | static inline void gmu_write_rscc(struct a6xx_gmu *gmu,
+u32 offset, u32 value)
+          |                    ^~~~~~~~~~~~~~
 
-> > +          The channel number. 0 is local channel, 1-2 are remote channels.
-> > +        items:
-> > +          minimum: 0
-> > +          maximum: 2
-> > +
-> > +      label:
-> > +        description: |
-> 
-> The same.
+These can be fixed using e.g. (there are more in the Adreno driver):
 
-Will fix in v2.
+     static inline void gmu_write(struct a6xx_gmu *gmu, u32 offset, u32 value)
+     {
+    -       return msm_writel(value, gmu->mmio + (offset << 2));
+    +       msm_writel(value, gmu->mmio + (offset << 2));
+     }
 
-> > +          A descriptive name for this channel, like "ambient" or "psu".
-> > +
-> > +      offset:
-> > +        description: |
-> 
-> This does not look like standard property, so you need vendor and unit
-> suffix.
+> Either case, this is not a problem with the nct6775 driver,
+> nor is it a new problem.
 
-Currently in lm90 we have support for devices that have different width (including sign) for offset
-register. We have 10 bits, 11 bits and 12 bits. Do I understand correctly that I can use the same
-vendor prefix if the width is the same? Just like "ti" was used for adi and ti in
-"ti,extended-range-enable"?
+Indeed.
 
-For example:
+For the sparse people:
 
-adi,10-bit-offset-millicelsius # (only for adt7481)
-adi,11-bit-offset-millicelsius # (for adt7461 but also for lm90 and others)
-ti,12-bit-offset-millicelsius  # (ti - since only tmp451 and tmp461 supports 12 bit)
+The full error is:
 
-> > +          The value (millidegree Celsius) to be programmed in the channel specific offset register
-> > +          (if supported by device).
-> 
-> You described programming model which should not be put in the bindings.
-> Please describe the hardware.
+        drivers/net/appletalk/cops.c:382:17: error: incompatible types
+in conditional expression (different base types):
+        drivers/net/appletalk/cops.c:382:17:    unsigned char
+        drivers/net/appletalk/cops.c:382:17:    void
 
-I am also not sure about the "-millicelsius" in example above. From device point-of-view, this
-offset is just two's complement, so is it more desirable to have the values here as just bytes
-rather than millicelsius?
+Basically, sparse doesn't like "a ? b : c", if the return types of
+b and c don't match, even if the resulting value is not used.
 
-> > +          For remote channels only.
-> > +        $ref: /schemas/types.yaml#/definitions/int32
-> > +        default: 0
-> > +
-> > +    required:
-> > +      - reg
-> > +
-> > +    additionalProperties: false
-> > +
-> >  examples:
-> >    - |
-> >      #include <dt-bindings/interrupt-controller/irq.h>
-> > @@ -76,5 +107,13 @@ examples:
-> >              vcc-supply = <&palmas_ldo6_reg>;
-> >              interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
-> >              #thermal-sensor-cells = <1>;
-> > +            #address-cells = <1>;
-> > +            #size-cells = <0>;
-> I assume you tested the bindings with dt_bindings_check?
-> 
-> I have some doubts, as this should fail.
+E.g. outb() on m68k:
 
-I did. All was fine. What should fail here?
+    #define outb(val, port) (((port) < 1024 && ISA_TYPE ==
+ISA_TYPE_ENEC) ? isa_rom_outb((val), (port)) : isa_outb((val),
+(port)))
 
-> > +
-> > +            channel@0 {
-> > +                reg = <0x0>;
-> > +                label = "internal";
-> > +                offset = <1000>;
-> > +            };
-> >          };
-> >      };
+where isa_rom_outb() leads to rom_out_8() returning u8, while
+isa_outb() leads to the out_8() that includes the cast to void.
 
--- 
-Slawomir Stepien
+So the best solution seems to be to add more "(void)" casts, to e.g.
+rom_out_8() and friends?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
