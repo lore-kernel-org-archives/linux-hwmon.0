@@ -2,162 +2,192 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B42C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 May 2022 13:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97123C433F5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 May 2022 13:42:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348752AbiETNfE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 May 2022 09:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S1349910AbiETNm5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 May 2022 09:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349821AbiETNfD (ORCPT
+        with ESMTP id S1343596AbiETNm4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 May 2022 09:35:03 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8F616A252
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 May 2022 06:35:01 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y32so14356260lfa.6
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 May 2022 06:35:01 -0700 (PDT)
+        Fri, 20 May 2022 09:42:56 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1120AFACD;
+        Fri, 20 May 2022 06:42:55 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-f18e6ff0f6so10299782fac.11;
+        Fri, 20 May 2022 06:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=69D+YW++MHNclxhmoeey4e8MxuVXH7gjgrPLCg8Fvps=;
-        b=laP3lG1AW3H2ExBxVrqD7NrSHCAmKTYoc7xvAoAj4sZss+bPSlBg+s7373ROM/d7+n
-         DFcK4qOJrMimpDkohZUpUizODbeuDNNwUd8onvJh+REDGjkXaVEkKzKxsYW7kqo2Qfb+
-         PTYZuJLqclzTaoE2DJ3zyQrp+aEsoBLSV/wF04jphjQz0NSoj11oJMIqVoRmfeJ60XLN
-         /jamq1q8JFSC4jV5VdHQUWBjx7n0Uqcpm2bsnCko+L8RteE4UpvZbvHlncCi7TacPRUU
-         N18ayBUEZw2CqyPHwhiiLfcGlE2s9fPUqfbMGSJqATDqQXc5I64c8NdyQZqAP8v92C+f
-         1HNA==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=4sjnV/DDCWmm3iG72Xau4YVUbPuvXBST7UIstJ3zKyA=;
+        b=RmQVVuk1z/crRTK+8bBhne4wsV9v6WxV6hoD/iWd3BBBrwWL8BlsEnNcGelF9w/gTm
+         YBq+rMks5nekVULzkzf37PLerXBVr0gsXHIMprywWjv6EO6s7K1qMB8nIimcaOGSfIay
+         teaP3IQ4M6Jmgtr5tRJGKu3UZy5bBly8zzxm3A/8N7OYykVe1g+QUpJg6+NjH5z4hjXL
+         EyyJqGMiET6p3i9L67tLLe6/oPFTgSOiT2XTkXGMzWztTeapbbpgpTZmoLotn8JvInjr
+         T1ZWHIf09nRpEpDVbFPzeqi7s+5FtGRW1WCyhI0RKMUPpFq3oeJX6Yl3penVX5jXSmRv
+         eqxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=69D+YW++MHNclxhmoeey4e8MxuVXH7gjgrPLCg8Fvps=;
-        b=5dzgS/ql5FYt55T58qgJTH0QdCwhHllAA+G/v7V8ktuveW953fE6dnLMQ0qKA3CDEN
-         MPj640xK8QiOYR5KqHQClxQ3kU3GkTvz0QKYYFkCLqu+I1y5WEFYjv+l2L5YiHZRdFV7
-         GDkeBFvuExx4/GgZChG2RKdOp9pdEBeXOJA7UEVQdslif1ekoGISBwooUSBeYRw7m1A8
-         8WYu3jt05kl0HfbrAk9H13hJknl4hHSB6isWZOkkTsnfaoXJt1HQWPpEimhtUmk04zSz
-         LXB99s+VLZGZSL2XDvlxvoywL3F6NCpoKFEctpIgrNRvckkVFRhFB5ZnX6Pxvzq3IBuV
-         x9tQ==
-X-Gm-Message-State: AOAM532rQCayKpiAGS54zMEqbf3shPqc+efRlCYAUdyW/sx1AanXtnw/
-        y5qut4NFJTdIYErZZbWxlNDaQA==
-X-Google-Smtp-Source: ABdhPJzqmPszJcZRXvOjBAV566VdlFtzlV4R3Bn7VkNgsJcs0BfFN+2qr/4VUbR5RI1DRihyTUGpgQ==
-X-Received: by 2002:ac2:42d1:0:b0:474:68f:2e48 with SMTP id n17-20020ac242d1000000b00474068f2e48mr6815458lfl.215.1653053700025;
-        Fri, 20 May 2022 06:35:00 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id d25-20020ac244d9000000b0047255d21165sm664300lfm.148.2022.05.20.06.34.58
+        bh=4sjnV/DDCWmm3iG72Xau4YVUbPuvXBST7UIstJ3zKyA=;
+        b=RA+f0k/U+EDmk7AHRybE9EjcZJ+V0bB6+ZBq4RTY/0giR0/lwXJ7oGw8S/WqXkMSJ7
+         6WtSVbTVxdvBOHZ7CmsX0PyzfovDtcne5V3M/0FK7yr8KSDSjoDJ+rym96m5T9Hsk2al
+         ilKe2QqeZejqHnrigJ70QYevgNBtDlzh6Pby8sOYDZaDeQkSbM72RQDQryV69soVw2dh
+         Ji6rjD1Ywgdx07Z7rVeElTcfS2N/HpEp15ab+i+8Sbb3pT0zTq0jH068ZYZ5VfXBSeu1
+         SEAzKLL/99VTholb4X41BHYggt+qgtW5NV5ihAXGB71/1Ap7H+TLeTRm7BOjYsuuPZ2W
+         GsqQ==
+X-Gm-Message-State: AOAM5310DqqWxGeOYDAXtt4zR2o5Wj66RaHYyP/FnKt2KR7cNxX9w/zH
+        RAVjsOo8g+aOXcvNp+G3Zi0=
+X-Google-Smtp-Source: ABdhPJyK4r8T/x4abpb56C3DNWPOFu/dlI7orXYwBBiiVXZ8Ef9Dh0kqk91Zx24yBVsQq89ztSnBDg==
+X-Received: by 2002:a05:6870:6011:b0:e6:5604:d757 with SMTP id t17-20020a056870601100b000e65604d757mr5816104oaa.204.1653054174188;
+        Fri, 20 May 2022 06:42:54 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o83-20020acabe56000000b0032603df9d24sm959574oif.47.2022.05.20.06.42.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 06:34:59 -0700 (PDT)
-Message-ID: <a3e0fb6b-064a-c0a5-2189-488c6f19cb96@linaro.org>
-Date:   Fri, 20 May 2022 15:34:58 +0200
+        Fri, 20 May 2022 06:42:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0b84d109-d6be-dfba-99bb-0b7136af875e@roeck-us.net>
+Date:   Fri, 20 May 2022 06:42:48 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 3/8] dt-bindings: hwmon: Allow specifying channels for
- lm90
 Content-Language: en-US
-To:     Slawomir Stepien <sst@poczta.fm>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Slawomir Stepien <sst@poczta.fm>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     jdelvare@suse.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, przemyslaw.cencner@nokia.com,
         krzysztof.adamski@nokia.com, alexander.sverdlin@nokia.com,
         Slawomir Stepien <slawomir.stepien@nokia.com>
 References: <20220520093243.2523749-1-sst@poczta.fm>
  <20220520093243.2523749-4-sst@poczta.fm>
  <3ea92486-0cf9-ce3d-d1b6-7a76f1d5a129@linaro.org>
- <YoeLuffNoUoNx2Bc@t480s.localdomain>
- <0e0dd0a1-0312-46f0-40b3-d3d2576ef08f@linaro.org>
- <YoeWXEb+iNIpFZVR@t480s.localdomain>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YoeWXEb+iNIpFZVR@t480s.localdomain>
-Content-Type: text/plain; charset=UTF-8
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 3/8] dt-bindings: hwmon: Allow specifying channels for
+ lm90
+In-Reply-To: <3ea92486-0cf9-ce3d-d1b6-7a76f1d5a129@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 20/05/2022 15:23, Slawomir Stepien wrote:
->>>>>  
->>>>> +patternProperties:
->>>>
->>>> Which models use this?
->>>
->>> This is used in tmp421 model.
+On 5/20/22 03:13, Krzysztof Kozlowski wrote:
+> On 20/05/2022 11:32, Slawomir Stepien wrote:
+>> From: Slawomir Stepien <slawomir.stepien@nokia.com>
 >>
->> Then please add allOf:if:then disallowing the property for other models.
-> 
-> A misunderstanding. The channel node can be used by every device supported by lm90. At least each
-> channel of each device can have label.
-
-OK
-
-> 
->>>>> +  "^channel@([0-2])$":
->>>>> +    type: object
->>>>> +    description: |
->>>>
->>>> No need for |
->>>
->>> Will fix in v2.
->>>
->>>>> +      Represents channels of the device and their specific configuration.
->>>>> +
->>>>> +    properties:
->>>>> +      reg:
->>>>> +        description: |
->>>>
->>>> The same.
->>>
->>> Will fix in v2.
->>>
->>>>> +          The channel number. 0 is local channel, 1-2 are remote channels.
->>>>> +        items:
->>>>> +          minimum: 0
->>>>> +          maximum: 2
->>>>> +
->>>>> +      label:
->>>>> +        description: |
->>>>
->>>> The same.
->>>
->>> Will fix in v2.
->>>
->>>>> +          A descriptive name for this channel, like "ambient" or "psu".
->>>>> +
->>>>> +      offset:
->>>>> +        description: |
->>>>
->>>> This does not look like standard property, so you need vendor and unit
->>>> suffix.
->>>
->>> Currently in lm90 we have support for devices that have different width (including sign) for offset
->>> register. We have 10 bits, 11 bits and 12 bits. Do I understand correctly that I can use the same
->>> vendor prefix if the width is the same? Just like "ti" was used for adi and ti in
->>> "ti,extended-range-enable"?
->>>
->>> For example:
->>>
->>> adi,10-bit-offset-millicelsius # (only for adt7481)
->>> adi,11-bit-offset-millicelsius # (for adt7461 but also for lm90 and others)
->>> ti,12-bit-offset-millicelsius  # (ti - since only tmp451 and tmp461 supports 12 bit)
+>> Add binding description for temperature channels. Currently, support for
+>> label and offset is implemented.
 >>
->> Wait, these are then strictly per-compatible, so there is no sense in DT
->> property at all.
+>> Signed-off-by: Slawomir Stepien <slawomir.stepien@nokia.com>
+>> ---
+>>   .../bindings/hwmon/national,lm90.yaml         | 39 +++++++++++++++++++
+>>   1 file changed, 39 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>> index 066c02541fcf..9a5aa78d4db1 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+>> @@ -62,6 +62,37 @@ required:
+>>   
+>>   additionalProperties: false
+>>   
+>> +patternProperties:
 > 
-> But isn't the value of offset a hardware-design-time calculation? So if I have a piece of
-> hardware that describes itself using device-tree, then offset information should be stored on the
-> device-tree rather then be "calculated" by the software running on that piece of hardware?
+> Which models use this?
 > 
-> And what if such piece of hardware has been changed (e.g. new PCB version) and now the offset are
-> different? Then if device-tree is on hardware (e.g. on EEPROM) with new offsets, then software would
-> not require a change to support this new hardware version.
+>> +  "^channel@([0-2])$":
+>> +    type: object
+>> +    description: |
+> 
+> No need for |
+> 
+>> +      Represents channels of the device and their specific configuration.
+>> +
+>> +    properties:
+>> +      reg:
+>> +        description: |
+> 
+> The same.
+> 
+>> +          The channel number. 0 is local channel, 1-2 are remote channels.
+>> +        items:
+>> +          minimum: 0
+>> +          maximum: 2
+>> +
+>> +      label:
+>> +        description: |
+> 
+> The same.
+> 
+>> +          A descriptive name for this channel, like "ambient" or "psu".
+>> +
+>> +      offset:
+>> +        description: |
+> 
+> This does not look like standard property, so you need vendor and unit
+> suffix.
+> 
 
-OK, I misunderstood.
+Temperature offset is a standard property for temperature sensor
+chips with external channels, implemented by a diode or transistor.
+Making it non-standard will mean that we'll have lots of
+"vendor,offset" properties, one each for each vendor selling
+temperature sensor chips with external channels. This gets
+more complicated here because the lm90 driver does support chips
+from several different vendors. Almost all of them support
+this functionality. Which vendor do you select in this case ?
 
-This should be only one property then, choose some reasonable vendor,
-and in allOf:if:then you can put constraints about minimum/maximum
-values per model.
+I would suggest to use temperature-offset-milliseconds, though.
 
-Best regards,
-Krzysztof
+>> +          The value (millidegree Celsius) to be programmed in the channel specific offset register
+>> +          (if supported by device).
+> 
+> You described programming model which should not be put in the bindings.
+> Please describe the hardware.
+> 
+
+It is a configuration value, which is hardware dependent because
+it depends on the temperature diode or transistor connected to the chip.
+
+Guenter
+
+>> +          For remote channels only.
+>> +        $ref: /schemas/types.yaml#/definitions/int32
+>> +        default: 0
+>> +
+>> +    required:
+>> +      - reg
+>> +
+>> +    additionalProperties: false
+>> +
+>>   examples:
+>>     - |
+>>       #include <dt-bindings/interrupt-controller/irq.h>
+>> @@ -76,5 +107,13 @@ examples:
+>>               vcc-supply = <&palmas_ldo6_reg>;
+>>               interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
+>>               #thermal-sensor-cells = <1>;
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+> I assume you tested the bindings with dt_bindings_check?
+> 
+> I have some doubts, as this should fail.
+> 
+>> +
+>> +            channel@0 {
+>> +                reg = <0x0>;
+>> +                label = "internal";
+>> +                offset = <1000>;
+>> +            };
+>>           };
+>>       };
+> 
+> 
+> Best regards,
+> Krzysztof
+
