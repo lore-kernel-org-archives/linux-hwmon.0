@@ -2,299 +2,172 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B76F1C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 06:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D73FC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 11:44:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240677AbiEVGnQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 May 2022 02:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S245202AbiEVLoY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 May 2022 07:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239914AbiEVGnO (ORCPT
+        with ESMTP id S236361AbiEVLoX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 May 2022 02:43:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2C920BDC
-        for <linux-hwmon@vger.kernel.org>; Sat, 21 May 2022 23:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653201793; x=1684737793;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mJ5ZfJEaj2RmN+GyzLEj5Q+xCZ5K9VnFRwTN+lnZdgU=;
-  b=AQHlJGDKU8s+UVNYOcqKYjttcB+3lI9T7ntLh8qsG7dCCUhRPB4jNvVA
-   t7kfBUYkUe9Vfbe5WdZxF5t/iuZLp/50oEEcZWsywvEgAi67TduTGxYbN
-   xFj/CoFCt7hs08plJ4jnqsVTcM7caFx3ZiG5p1dzmgtbTDATwu0PzFK95
-   dNl+nCfG7mm6tVGAfF/UdX5/A7Iua6sWW9LJPUKQ4uNWEv/7AUY4Ohz24
-   6Q4QViqq+lc2j2NvnkvGXJ1HuDgOx2lc5IPch+rrZpkj+wgQDoc9ZeQpS
-   Kja2z7uvwzFyXkgZEQ2snlGoPmmY9vUtA9MrITe304tY3xl2hR+8Obrxa
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="271777019"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="271777019"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 23:43:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="702445695"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 May 2022 23:43:11 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsfJ1-000069-6I;
-        Sun, 22 May 2022 06:43:11 +0000
-Date:   Sun, 22 May 2022 14:42:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-lm90] BUILD SUCCESS
- 748141ef8e8a948c557df8109100cf4f7e99bcfb
-Message-ID: <6289db70.QRs0DFCNd88/lnAO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 22 May 2022 07:44:23 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45ED25589;
+        Sun, 22 May 2022 04:44:21 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id f9so23498373ejc.0;
+        Sun, 22 May 2022 04:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=BOcP7c+b/aIig+wDwK1ySXDPQYBqPco/XJdaO5tL43M=;
+        b=HbiWaat1vy9fqglT1AQ5mQ5JjCpkhO+E8jnEtRhzPiif0qrvDKKdx8B95OMkJtx62f
+         50z5Sn4S5OQoHLNAGBGDcg/pM3dJVc3FeOKAJ33h9DBUzBryUmLfBVNeEMKJeo3lBUaX
+         xorGA9zq+QsM0EimtbURXWG1azBOZqa655UGvWWFRHq2vv0bEgZ9hUSxdC7AyrZSM0K1
+         gmpjbX5Ksc66SeqRZbC++YgqZxATC9x3cgK6OQg6EKrLFj22uin13ycLwqXmbpFKdEyk
+         gTfnlwyzGuksJcevZj0OkBT28KA9vQfDd/xROApkgmO1+q7Yd8+18f+ljXPwZEs2QkaW
+         cj4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=BOcP7c+b/aIig+wDwK1ySXDPQYBqPco/XJdaO5tL43M=;
+        b=Mbr1HnHarS9l5++2hhDIgBg/XNMUmX4ejPAlIZIHmjCY7mgU1gk5mKGQiaXLzYaOux
+         X9dE8aGaVEW9ygFcXMn0WkKVwom7Ju6RbVouTldCPS/V90ebTtXT+Y4ceh+UnjvW1Rik
+         U+fXiAkU+27v8I1zbyf7aCcjBYbog8Xr8lpJlQRVPh9SF4m9Z9jnw+zGFHSoHga/ASes
+         qIFi3ZpLsnzbg3/96PkukOgpWBxKdIY+0aNJV53eg3S3h6fE84V/V59yKIZDC7JgxoL9
+         LDWp+YzSAB6qLrgtQDK6TI9Y8LYisZ7JdCUjNCLKctn7qaH7Polrpg1GVWrcKxNO/YKa
+         tCGA==
+X-Gm-Message-State: AOAM5325CIaYEQliI1+3Fmz+L9Eo8iKkgOqjf+CDefw2GKNrPkA3LxBi
+        Gm2WWEmjy2gLNbAw2GPHwrY=
+X-Google-Smtp-Source: ABdhPJzRfCqhzI7QwnogN+fhYc0fh38naDmT7SQjDe2PeOI83f57DAXoKHZfwtI5G/K8ujCSqBK8Kw==
+X-Received: by 2002:a17:907:6d98:b0:6fe:b83f:802d with SMTP id sb24-20020a1709076d9800b006feb83f802dmr6984772ejc.182.1653219860369;
+        Sun, 22 May 2022 04:44:20 -0700 (PDT)
+Received: from mail (239.125-180-91.adsl-dyn.isp.belgacom.be. [91.180.125.239])
+        by smtp.gmail.com with ESMTPSA id 5-20020a170906024500b006fe8bf56f53sm4766942ejl.43.2022.05.22.04.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 04:44:19 -0700 (PDT)
+Date:   Sun, 22 May 2022 13:44:18 +0200
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-staging@lists.linux.dev,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>, linux-nvme@lists.infradead.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-sparse@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 736ee37e2e8eed7fe48d0a37ee5a709514d478b3
+Message-ID: <20220522114418.vcirenoehfx4efas@mail>
+References: <6285958d.+Z2aDZ4O1Y9eiazd%lkp@intel.com>
+ <0530d502-1291-23f3-64ac-97bd38a26bd4@roeck-us.net>
+ <CAMuHMdU3SYOwE5ftDwymQpVwWmpbC=1Ytyp0Y9GaeUS2i1cP+A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdU3SYOwE5ftDwymQpVwWmpbC=1Ytyp0Y9GaeUS2i1cP+A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-lm90
-branch HEAD: 748141ef8e8a948c557df8109100cf4f7e99bcfb  hwmon: (lm90) Support temp_samples attribute
+On Fri, May 20, 2022 at 02:40:20PM +0200, Geert Uytterhoeven wrote:
+> Hi Günter
+> 
+> On Thu, May 19, 2022 at 8:48 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > This is getting tiresome. Every driver using outb() on m68k will
+> > experience that "problem". As far as I can see, it is caused by
+> >
+> > #define out_8(addr,b) (void)((*(__force volatile u8 *) (unsigned long)(addr)) = (b))
 
-elapsed time: 1572m
+Not directly related to the root cause but the cast on the LHS is over-complex.
+*) If the types are correct, 'addr' should always be a 'u8 __iomem *'. Casting
+   it to an unsigned long will throw away all type checking: pointers of
+   any size, of any address space, any kind of integer, any scalar value will
+   be silently be accepted.
+*) Then, when casting an integer to a pointer '__force' is unneeded because
+   it's meaningless (because the integer has no type info about the pointee).
 
-configs tested: 218
-configs skipped: 3
+The most correct way to write the above would be:
+	static inline void out_8(u8 __iomem *addr, ... b)
+	{
+		*((__force volatile u8 *)addr) = b;
+	}
+this way, you can typecheck 'addr' (but maybe it's the idea/the argument is
+not always type clean?).
+Otherwise, if the cast to unsigned long is kept, '__force' can be removed.
+ 
+> 
+> Indeed.
+> 
+> For the sparse people:
+> 
+> The full error is:
+> 
+>         drivers/net/appletalk/cops.c:382:17: error: incompatible types
+> in conditional expression (different base types):
+>         drivers/net/appletalk/cops.c:382:17:    unsigned char
+>         drivers/net/appletalk/cops.c:382:17:    void
+> 
+> Basically, sparse doesn't like "a ? b : c", if the return types of
+> b and c don't match, even if the resulting value is not used.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Well, you know that the motivation for sparse was to be stricter than GCC.
+In this case it's simply what is required by the standard:
+	    
+    n1570 (C11) 6.5.15
+	One of the following shall hold for the second and third operands:
+	— both operands have arithmetic type;
+	— both operands have the same structure or union type;
+	— both operands have void type;
+	— both operands are pointers to qualified or unqualified versions
+          of compatible types;
+	— one operand is a pointer and the other is a null pointer constant; or
+	— one operand is a pointer to an object type and the other is a
+          pointer to a qualified or unqualified version of void.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc64                           defconfig
-powerpc                     asp8347_defconfig
-m68k                            mac_defconfig
-ia64                            zx1_defconfig
-arm                       imx_v6_v7_defconfig
-arm                           imxrt_defconfig
-parisc                           alldefconfig
-mips                     loongson1b_defconfig
-sh                            titan_defconfig
-sh                            migor_defconfig
-sh                               j2_defconfig
-um                                  defconfig
-um                               alldefconfig
-arm                        shmobile_defconfig
-mips                      maltasmvp_defconfig
-powerpc                    sam440ep_defconfig
-powerpc                      cm5200_defconfig
-arm                        cerfcube_defconfig
-mips                         db1xxx_defconfig
-sh                          rsk7269_defconfig
-powerpc                     pq2fads_defconfig
-parisc                           allyesconfig
-ia64                        generic_defconfig
-powerpc                      chrp32_defconfig
-s390                          debug_defconfig
-mips                  maltasmvp_eva_defconfig
-riscv                            allyesconfig
-arm                        mini2440_defconfig
-xtensa                           allyesconfig
-m68k                            q40_defconfig
-sh                           se7721_defconfig
-arm                           tegra_defconfig
-ia64                          tiger_defconfig
-sh                           se7750_defconfig
-mips                  decstation_64_defconfig
-arm                            zeus_defconfig
-arm                           corgi_defconfig
-xtensa                          iss_defconfig
-xtensa                  audio_kc705_defconfig
-arm                            lart_defconfig
-arc                                 defconfig
-sh                          r7785rp_defconfig
-powerpc                        cell_defconfig
-sh                                  defconfig
-powerpc                    klondike_defconfig
-sh                           se7206_defconfig
-arm                           h3600_defconfig
-parisc                generic-64bit_defconfig
-sh                           se7619_defconfig
-arm                           h5000_defconfig
-arm                        multi_v7_defconfig
-ia64                         bigsur_defconfig
-sh                          landisk_defconfig
-alpha                            allyesconfig
-arm                        realview_defconfig
-powerpc                     sequoia_defconfig
-arm                            qcom_defconfig
-sh                          urquell_defconfig
-x86_64                           alldefconfig
-powerpc                 canyonlands_defconfig
-powerpc                       eiger_defconfig
-sh                   rts7751r2dplus_defconfig
-powerpc                   motionpro_defconfig
-arc                          axs103_defconfig
-arm                      jornada720_defconfig
-s390                       zfcpdump_defconfig
-arm                           sama5_defconfig
-powerpc                        warp_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                           viper_defconfig
-sh                          sdk7786_defconfig
-powerpc                 mpc837x_rdb_defconfig
-h8300                     edosk2674_defconfig
-arc                           tb10x_defconfig
-m68k                          multi_defconfig
-nios2                            alldefconfig
-arm                        keystone_defconfig
-h8300                       h8s-sim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                       holly_defconfig
-arc                          axs101_defconfig
-alpha                               defconfig
-m68k                       m5208evb_defconfig
-powerpc                      mgcoge_defconfig
-arc                         haps_hs_defconfig
-m68k                           sun3_defconfig
-ia64                      gensparse_defconfig
-powerpc                     rainier_defconfig
-sparc64                             defconfig
-arm                            xcep_defconfig
-m68k                       bvme6000_defconfig
-mips                           ci20_defconfig
-arc                 nsimosci_hs_smp_defconfig
-powerpc                mpc7448_hpc2_defconfig
-nios2                         3c120_defconfig
-powerpc                      ppc6xx_defconfig
-m68k                          amiga_defconfig
-sh                         microdev_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220519
-arm                  randconfig-c002-20220522
-ia64                                defconfig
-ia64                             allmodconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220522
-s390                 randconfig-r044-20220522
-riscv                randconfig-r042-20220522
-arc                  randconfig-r043-20220519
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
+Also, yes, the type checking is independent from the fact of being used
+or not (because the type of an expression must be know before any kind
+of processing can be done on its value).
 
-clang tested configs:
-s390                 randconfig-c005-20220519
-powerpc              randconfig-c003-20220519
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220519
-mips                 randconfig-c004-20220519
-i386                          randconfig-c001
-arm                  randconfig-c002-20220519
-arm                  randconfig-c002-20220522
-s390                 randconfig-c005-20220522
-powerpc              randconfig-c003-20220522
-riscv                randconfig-c006-20220522
-mips                 randconfig-c004-20220522
-mips                      pic32mzda_defconfig
-arm                          ep93xx_defconfig
-mips                      malta_kvm_defconfig
-arm                          ixp4xx_defconfig
-arm                              alldefconfig
-powerpc                     tqm5200_defconfig
-i386                             allyesconfig
-powerpc                          g5_defconfig
-powerpc                    socrates_defconfig
-arm                     davinci_all_defconfig
-arm                         mv78xx0_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                       spear13xx_defconfig
-mips                           rs90_defconfig
-powerpc                          allmodconfig
-arm                      tct_hammer_defconfig
-arm                         s5pv210_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                    gamecube_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220522
-hexagon              randconfig-r041-20220522
-s390                 randconfig-r044-20220519
-hexagon              randconfig-r045-20220519
-riscv                randconfig-r042-20220519
-hexagon              randconfig-r045-20220521
-hexagon              randconfig-r041-20220519
-hexagon              randconfig-r041-20220521
-s390                 randconfig-r044-20220521
-riscv                randconfig-r042-20220521
+> E.g. outb() on m68k:
+> 
+>     #define outb(val, port) (((port) < 1024 && ISA_TYPE ==
+> ISA_TYPE_ENEC) ? isa_rom_outb((val), (port)) : isa_outb((val),
+> (port)))
+> 
+> where isa_rom_outb() leads to rom_out_8() returning u8, while
+> isa_outb() leads to the out_8() that includes the cast to void.
+> 
+> So the best solution seems to be to add more "(void)" casts, to e.g.
+> rom_out_8() and friends?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I kinda think so, yes (I suppose that rom_out_8() is never used as
+returning a non-void value). But in truth, I think it's the excessive use
+of relatively complex macros that is the real problem (an using a conditional
+expression not for its value but for its side-effects). Can't outb() be
+written as something like:
+	static inline void outb(....) {
+		if (port < 1024 && ISA_TYPE == ISA_TYPE_ENEC)
+			isa_rom_outb(val, port);
+		else
+			isa_outb(val, port);
+	}
+
+With this you have better type checking, no trickery, no need for extra
+casts, no problems with double evaluation, it's more readable (to me), ...
+But yes, I suppose it's not really simple to convert all this. Sorry for
+no being more helpful.
+
+Best regards,
+-- Luc
