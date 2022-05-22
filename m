@@ -2,86 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73F82C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 14:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49B9CC433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 14:59:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347371AbiEVOw4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 May 2022 10:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S1347589AbiEVO7J (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 May 2022 10:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiEVOwy (ORCPT
+        with ESMTP id S245431AbiEVO7H (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 May 2022 10:52:54 -0400
+        Sun, 22 May 2022 10:59:07 -0400
 Received: from smtpo62.interia.pl (smtpo62.interia.pl [217.74.67.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0D117A9B
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 May 2022 07:52:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4748E2CE3C
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 May 2022 07:59:06 -0700 (PDT)
 Received: from t480s.localdomain (unknown [80.68.225.159])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-        Sun, 22 May 2022 16:52:46 +0200 (CEST)
-Date:   Sun, 22 May 2022 16:52:45 +0200
+        Sun, 22 May 2022 16:59:03 +0200 (CEST)
+Date:   Sun, 22 May 2022 16:59:00 +0200
 From:   Slawomir Stepien <sst@poczta.fm>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         jdelvare@suse.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, przemyslaw.cencner@nokia.com,
-        krzysztof.adamski@nokia.com, alexander.sverdlin@nokia.com
-Subject: Re: [PATCH 0/8] Add support for ADT7481 in lm90
-Message-ID: <YopOPSnafQi4n9Y+@t480s.localdomain>
+        krzysztof.adamski@nokia.com, alexander.sverdlin@nokia.com,
+        Slawomir Stepien <slawomir.stepien@nokia.com>
+Subject: Re: [PATCH 5/8] hwmon: (lm90) define maximum number of channels that
+ are supported
+Message-ID: <YopPtA631mX1UgpP@t480s.localdomain>
 References: <20220520093243.2523749-1-sst@poczta.fm>
- <c1b1f02a-42c2-bc67-ab92-c0bf9dabbe94@roeck-us.net>
- <62a519ee-c909-bdb8-e686-084ffe8a8bcf@roeck-us.net>
+ <20220520093243.2523749-6-sst@poczta.fm>
+ <20220521023642.GA2890194@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <62a519ee-c909-bdb8-e686-084ffe8a8bcf@roeck-us.net>
+In-Reply-To: <20220521023642.GA2890194@roeck-us.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interia.pl;
-        s=biztos; t=1653231168;
-        bh=Sz3m3vre36p1cqH46TvtV+zIlbOozY8sTtr3eQQQT1E=;
+        s=biztos; t=1653231544;
+        bh=lkEAOqHn49tSQFJ8mmuuwONyCBOh2vB/tAcuMusICyo=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=E2IK7/t+ZxUAupcn3mlCaNJ8yLY/yUpSSF1GsuNZwH28df17Vt2ZLboWDhwePLccj
-         BHx5EdcV3EzUCX5PkpsGFhSKvs5eo5hu2/afM7OWln+pDPFTdU7bQlROSQYPW5wKqm
-         aigqT5y3pFueptkzfLGflBZ0KJ9/av92qRS5ns1o=
+        b=J5LgdXpRrofCIEPMILsub4QMYPOkn7l1QLCoA9e5fME034jt2biO+lsEZ80pIBgjW
+         hi5T7dIhcGddwBR29lmuBqq3N51N5YpmJOogslFP9PvWeE7XcnmxjGGFHXobJ3dghr
+         Fm08hOEVxWnPGT34rbCxIf5+UGwNCSVNHMzJg+/Y=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On maj 20, 2022 09:01, Guenter Roeck wrote:
-> On 5/20/22 06:45, Guenter Roeck wrote:
-> > On 5/20/22 02:32, Slawomir Stepien wrote:
-> > > From: Slawomir Stepien <slawomir.stepien@nokia.com>
-> > > 
-> > > This patch series adds support for ADT7481 in lm90.c driver and extends the
-> > > device-tree options for it.
-> > > 
-> > > The ADT7481 is quite similar to MAX6696 (already supported in lm90) so a lot of
-> > > code is reused.
-> > > 
-> > > One major problem in fitting the ADT7481 in lm90.c is the chip detection.
-> > > However it seems that the chip has been designed and produced with correct
-> > > values at locations: 0xfe (manufactured id) and 0xff (chip id), but this is not
-> > > documented in the datasheet.
-> > > 
+On maj 20, 2022 19:36, Guenter Roeck wrote:
+> On Fri, May 20, 2022 at 11:32:41AM +0200, Slawomir Stepien wrote:
+> > From: Slawomir Stepien <slawomir.stepien@nokia.com>
 > > 
-> > Before we go too far along this route, would you mind using my own patch series
-> > as base to implement the devicetree changes ? I had prepared an extensive
-> > patch series a while ago, adding not only support for ADT7481 but for
-> > several other chips as well, I just never got around to sending it out.
+> > Use this define in all the places where literal '3' was used in this
+> > context.
+> 
+> The literal '3' does not always reflect the number of channels.
+
+You caught me.
+But besides this problem with struct hwmon_chip_info the '3' was used in context of
+max number of channels.
+
 > > 
+> > Signed-off-by: Slawomir Stepien <slawomir.stepien@nokia.com>
+> > ---
+> >  drivers/hwmon/lm90.c | 29 ++++++++++++++++-------------
+> >  1 file changed, 16 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> > index 00fd5734f217..f642c6fd1641 100644
+> > --- a/drivers/hwmon/lm90.c
+> > +++ b/drivers/hwmon/lm90.c
+> > @@ -93,6 +93,9 @@
+> >  #include <linux/interrupt.h>
+> >  #include <linux/regulator/consumer.h>
+> >  
+> > +/* The maximum number of channels currently supported */
+> > +#define MAX_CHANNELS 3
 > 
-> I made my lm90 patch series available in branch hwmon-lm90 of
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+> #define<space>NAME<tab>value
+
+OK
+
+> > +
+> >  /*
+> >   * Addresses to scan
+> >   * Address is fully defined internally and cannot be changed except for
+> > @@ -521,9 +524,9 @@ enum lm90_temp11_reg_index {
+> >  struct lm90_data {
+> >  	struct i2c_client *client;
+> >  	struct device *hwmon_dev;
+> > -	u32 channel_config[4];
+> > +	u32 channel_config[MAX_CHANNELS + 1];
+> >  	struct hwmon_channel_info temp_info;
+> > -	const struct hwmon_channel_info *info[3];
+> > +	const struct hwmon_channel_info *info[MAX_CHANNELS];
 > 
-> The patches in this series were module tested and tested on real hardware
-> with the test scripts at git@github.com:groeck/module-tests.git;
-> look for scripts/lm90-real.sh and scripts/lm90.sh.
+> This is wrong.
 
-I will test that out.
-
-If I would be happy with that branch, should I rebase all my changes based on that branch and send
-the patches to the lists?
+Yes, sorry for that. I have not checked struct hwmon_chip_info description.
 
 -- 
 Slawomir Stepien
