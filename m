@@ -2,120 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99163C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 11:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFA58C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 13:14:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243810AbiEVL5G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 May 2022 07:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
+        id S241648AbiEVNOe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 May 2022 09:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238067AbiEVL5F (ORCPT
+        with ESMTP id S229937AbiEVNOc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 May 2022 07:57:05 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E723616E;
-        Sun, 22 May 2022 04:57:03 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id wh22so23306228ejb.7;
-        Sun, 22 May 2022 04:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DQtGOV8ehr9B0byuPgB/R0qAJIaG0/ZyE72cxpjHldY=;
-        b=qG3Kocdsq2oYYGDEOFNTT93XeYI9iYcUWVQ/xcuqMlQWR+ZjOVjzShfb129BRCBeZA
-         IbjnscCqLlyomggb5cyR9GpqqOBdpUuUo3+FbJYLbl0iiv4HCdnE6oUZAjMcMn8rI7k4
-         0hiscQzwOz5MmXbxTMw0aR1wARxwwUQ1FuY3GMHNU3MYRkf2+RKVREPc8am7/wzdyl9t
-         oIyX9zl9X57zupPpZORXrjsSN9N5PSh3n0Y67eW7PS38UKVmdPQe7ua4dEOBiXOcWWqU
-         BGUgHNpBaUTmrppJ4h/Xnpqc8TBObkcgTfQfATGh0SAgYKROqWnr/m2p+Lv8tSSupBQG
-         Eqog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DQtGOV8ehr9B0byuPgB/R0qAJIaG0/ZyE72cxpjHldY=;
-        b=nMGss4TQkRd7iwP621prHlcCMgN0H1xlWliiSUCNU6tovItVFm31XeJT6l3HAmMrVL
-         /FWLlipyGgKBwo5pxK6J6zrWPEbhjKwCgWXxKi2QgbYb1I6+wotgU9sIV9DLEDqnCEQV
-         pRO1HwGS/8rv253wV/MuXwFI5W3TpaCaMOLXEowIDZPcnSxJok2lOqCf4J9vR+VBA00P
-         9emmlRKMRU4aR/lP/n9dZooGQc1i/j+wseIAJWSBf2fkRN1r9ScuNYRX8MxiOQZ0xJTD
-         BJ9qSJuFMW4Xb8AWJ1GEExpTAx7ZpMG/XTdKLSFuxxfQeKwwft3OXfUW/Nym+marSfHa
-         zmeA==
-X-Gm-Message-State: AOAM532klAYEXOMBO2ASQuhTeuIEBBTJXFYWhkYJf5zLpb8FOjy6Hr/2
-        0mQfVMHr63g4NSDslb5ZlJg=
-X-Google-Smtp-Source: ABdhPJyUp97Woq4Tojt0R/LZFMRQbE+AliJIsobK1w7h8qb86kKoEvaA54Id06XPIzhUaW1XPVm0Cw==
-X-Received: by 2002:a17:907:7282:b0:6fa:9365:f922 with SMTP id dt2-20020a170907728200b006fa9365f922mr15297634ejc.262.1653220621612;
-        Sun, 22 May 2022 04:57:01 -0700 (PDT)
-Received: from mail (239.125-180-91.adsl-dyn.isp.belgacom.be. [91.180.125.239])
-        by smtp.gmail.com with ESMTPSA id jo14-20020a170906f6ce00b006feb5cae5f0sm2338997ejb.132.2022.05.22.04.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 04:57:01 -0700 (PDT)
-Date:   Sun, 22 May 2022 13:57:00 +0200
-From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        kernel test robot <lkp@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-staging@lists.linux.dev,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>, linux-nvme@lists.infradead.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-sparse@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 736ee37e2e8eed7fe48d0a37ee5a709514d478b3
-Message-ID: <20220522115700.vg4hsytav74sy3x6@mail>
-References: <6285958d.+Z2aDZ4O1Y9eiazd%lkp@intel.com>
- <0530d502-1291-23f3-64ac-97bd38a26bd4@roeck-us.net>
- <CAMuHMdU3SYOwE5ftDwymQpVwWmpbC=1Ytyp0Y9GaeUS2i1cP+A@mail.gmail.com>
- <CAMuHMdVx7r-4TVV9uVJppT-7ZAriov01BUNk4ghU9Bs4uY28vQ@mail.gmail.com>
+        Sun, 22 May 2022 09:14:32 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73B539B8A
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 May 2022 06:14:29 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id slPcnkcVJZDzUslPcn67gX; Sun, 22 May 2022 15:14:28 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 22 May 2022 15:14:28 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     dan.carpenter@oracle.com, Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (aquacomputer_d5next) Fix an error handling path in aqc_probe()
+Date:   Sun, 22 May 2022 15:14:23 +0200
+Message-Id: <be6b955d50de140fcc96bd116150b435021bf567.1653225250.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVx7r-4TVV9uVJppT-7ZAriov01BUNk4ghU9Bs4uY28vQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 20, 2022 at 02:46:20PM +0200, Geert Uytterhoeven wrote:
-> > The "(void)" makes sure there is no return value.
-> > Which matters if the result of a function returning void is propagated
-> > to another function returning void.
-> 
-> Which, FTR, sparse also doesn't like:
-> 
->     error: return expression in void function
+If no memory can be allocated, some resources still need to be released as
+already done in the other error handling paths.
 
+Fixes: 752b927951ea ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/hwmon/aquacomputer_d5next.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-You should get this message only if the expression is itself not void.
-For example:
-	$ cat test.c
-	extern void fun(void);
-	
-	static void ko(int *ptr)
-	{
-		return *ptr;
-	}
-	
-	static void ok1(int *ptr)
-	{
-		return (void) *ptr;
-	}
-	
-	static void ok2(int *ptr)
-	{
-		return fun();
-	}
-	$ sparse test.c
-	test.c:5:16: error: return expression in void function
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 7d2e7279abfb..a0e69f7ece36 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -783,8 +783,10 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	priv->name = aqc_device_names[priv->kind];
+ 
+ 	priv->buffer = devm_kzalloc(&hdev->dev, priv->buffer_size, GFP_KERNEL);
+-	if (!priv->buffer)
+-		return -ENOMEM;
++	if (!priv->buffer) {
++		ret = -ENOMEM;
++		goto fail_and_close;
++	}
+ 
+ 	mutex_init(&priv->mutex);
+ 
+-- 
+2.34.1
 
-IOW, sparse warn only for the ko() but not for ok1() or ok2().
-
-If you have a case whee it s not the case, please send me the
-pre-processed file and I'll be glad to investigate.
-
-Best regards,
--- Luc
