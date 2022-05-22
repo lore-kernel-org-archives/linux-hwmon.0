@@ -2,262 +2,299 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59921C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 21 May 2022 19:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E3E5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 05:47:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344530AbiEUTQf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 21 May 2022 15:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        id S237647AbiEVFrP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 May 2022 01:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbiEUTQe (ORCPT
+        with ESMTP id S230091AbiEVFrO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 21 May 2022 15:16:34 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCDB5250A
-        for <linux-hwmon@vger.kernel.org>; Sat, 21 May 2022 12:16:31 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id t6so15543478wra.4
-        for <linux-hwmon@vger.kernel.org>; Sat, 21 May 2022 12:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=2uC/3RyXqWOkH/0zlLOXjt5Wvw0qvh3OxTW3crUSw00=;
-        b=gcFXVhQJZ9/m7nbyz+zYDubXBPq4LCEchM7SrfzkKTKOvhjhuixvmD+KWtuzql4TpE
-         AX9/OnR5XAs3hSSZsKC/Tmk6fS6zAGGRE4/7MTiBcgcPE5elbbJ9QLkoRz0QQEAxDMHe
-         ciYUqjWY+dktD3Y+EHHAhqXw/Kst6BhQv3E8AQnejM8snBk5jCtYhSgvYFriRx6yDI6d
-         I19P6fzdRcFhJWypa72lYNHkNNGFB2VsrXBi+ZulZZrnMjmznVJe89cv2nZnXFOqMYVx
-         KukRfVBz6vxfuhRcz/3PPNt/yFDM0ny/xm8b4qxAWDwzmxB1Ppg2Mcwm6A+sj37dYci7
-         FXqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2uC/3RyXqWOkH/0zlLOXjt5Wvw0qvh3OxTW3crUSw00=;
-        b=XqfTTqKY/SRMlAA4me1VosOVEItGzsrd1mUFM2ZNCNM7jC9UR6AgMP6AE65wanLtmZ
-         cfnochWYhmNprTa7Yy7lwlbvln3FUpR8iZNzDc7G/zrxDJV2vAMGO3QP+CFG/uUzmfJn
-         PPGDptg2qpkS6v28Nil/C6rOWL095tYMaglE7pIPdjjXXNRixB8ehpW4kyZGQKih8K4z
-         yeaxqtqRVHkPLqyb327GLYdtb34nEa3L9B8yNWTs5vKU7eBUT1qnmJFtnGOc71EuYLQt
-         8SOMvY+4ppq4I4VFgpzoKLkH1Ewe1tT9KjSc43rnFYW2654mdeAb6dO4uWCDgfFe1etY
-         +IVQ==
-X-Gm-Message-State: AOAM532QyPRYPjxV7m6E2ZegeFlskNUXHrisjsyFluV14uYPKNeRDBYf
-        sDkwsd6z6gXQ7w8/ZW43OE4big==
-X-Google-Smtp-Source: ABdhPJzKD1foyF38YEmBuxxo7uUx5Gk0i/Lv6O6YfNNWKpScwkJVu6S07OdvNaMP2UaCK0c5Rfs2gg==
-X-Received: by 2002:a5d:4a10:0:b0:20d:5f7:253 with SMTP id m16-20020a5d4a10000000b0020d05f70253mr13087415wrq.681.1653160590324;
-        Sat, 21 May 2022 12:16:30 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id l8-20020a7bc448000000b003942a244f2esm4992901wmi.7.2022.05.21.12.16.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 12:16:29 -0700 (PDT)
-Date:   Sat, 21 May 2022 21:16:26 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
+        Sun, 22 May 2022 01:47:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB283AA77
+        for <linux-hwmon@vger.kernel.org>; Sat, 21 May 2022 22:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653198432; x=1684734432;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UaSzkmpik8bASROBIQw38id3chhdrwOLGWk5jijva7k=;
+  b=n9WvcnDfBwmSVGyLHkY0MD/iMAPyAL+4axYKUJHQfJIqx95ZY7SUgEfK
+   kleFesqUSgZmu8LGoQ/0735u0oyQOuT7PrKLcO5Jurb6sLZ9WYnyEAO2G
+   DkjzNktuAGMzAaoTKKKB1erYpY78RY2r7EA5i+0W1IyyNijAj7b8A0g1D
+   YjarJYFH0FrFWny76zT92FWcrNX34ufhnvMHRLdHMyrSpKMwM0zOmA9qs
+   qqhTK6TieshYZmz6gbILoxO8gVWw+81ibuGXCT/2lAMaT4B0I5ME1LgA+
+   ft81uKRVhT7yK1hXGuW/BZklDH9e/CUXcK/6ZQNHLXjsIoubT9obwbyHn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="359351717"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="359351717"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 22:47:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="525339466"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 May 2022 22:47:10 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nseQn-00003d-EB;
+        Sun, 22 May 2022 05:47:09 +0000
+Date:   Sun, 22 May 2022 13:46:14 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-Message-ID: <Yok6iuNUGerryFkO@Red>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-3-clabbe@baylibre.com>
- <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net>
- <YoFWNAhiDrzpeBU8@Red>
- <9f7d7281-0434-df59-40fa-1f5d8f53356d@roeck-us.net>
- <YoHtg30ZrhxjVedA@Red>
- <1747d709-6640-193d-8290-893b1541fae8@roeck-us.net>
- <b038aa19-9cba-d16a-15c5-e02fc749ab96@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 8527fe88b6ffdec30b40ca3c0554e9f21b570281
+Message-ID: <6289ce26.YYIHnYHr/ktrwrYY%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b038aa19-9cba-d16a-15c5-e02fc749ab96@roeck-us.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Le Sat, May 21, 2022 at 06:52:15AM -0700, Guenter Roeck a écrit :
-> On 5/16/22 05:21, Guenter Roeck wrote:
-> > On 5/15/22 23:21, LABBE Corentin wrote:
-> >> Le Sun, May 15, 2022 at 05:29:54PM -0700, Guenter Roeck a écrit :
-> >>> On 5/15/22 12:36, LABBE Corentin wrote:
-> >>>> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
-> >>>>> Corentin,
-> >>>>>
-> >>>>> On 5/8/22 23:30, Corentin Labbe wrote:
-> >>>>>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
-> >>>>>> So let's convert the driver to use hwmon_device_register_with_info().
-> >>>>>>
-> >>>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> >>>>>> ---
-> >>>>> [ ... ]
-> >>>>>
-> >>>>>> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
-> >>>>>>             if (res)
-> >>>>>>                 break;
-> >>>>>> -        remove_attrs(resource);
-> >>>>>> +        remove_domain_devices(resource);
-> >>>>>>             setup_attrs(resource);
-> >>>>>
-> >>>>> Zhang Rui found an interesting problem with this code:
-> >>>>> It needs a call to sysfs_update_groups(hwmon_dev->groups)
-> >>>>> to update sysfs attribute visibility, probably between
-> >>>>> remove_domain_devices() and setup_attrs().
-> >>>>>
-> >>>>>>             break;
-> >>>>>>         case METER_NOTIFY_TRIP:
-> >>>>>> -        sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
-> >>>>>> +        hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
-> >>>>>
-> >>>>> ... which makes realize: The notification device should be the hwmon device.
-> >>>>> That would be resource->hwmon_dev, not the acpi device.
-> >>>>>
-> >>>>
-> >>>> Hello
-> >>>>
-> >>>> Since my hardware lacks capabilities testing this, I have emulated it on qemu:
-> >>>> https://github.com/montjoie/qemu/commit/320f2ddacb954ab308ef699f66fca6313f75bc2b
-> >>>>
-> >>>> I have added a custom ACPI _DBX method for triggering some ACPI state change. (like config change, like enabling CAP).
-> >>>>
-> >>>> For testing config change I have tried lot of way:
-> >>>>                   res = read_capabilities(resource);
-> >>>> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
-> >>>>                   remove_domain_devices(resource);
-> >>>>                   setup_attrs(resource);
-> >>>> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, acpi_power_groups);
-> >>>> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, acpi_power_groups);
-> >>>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-> >>>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
-> >>>
-> >>> Did you add a debug log here ?
-> >>
-> >> Yes I added debug log to check what is called.
-> >>
-> >>>
-> >>> acpi_power_groups would be the wrong parameter for sysfs_update_groups().
-> >>> It would have to be resource->hwmon_dev->groups.
-> >>>
-> >>
-> >> Even with that, no call to is_visible:
-> >> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
-> >>                  remove_domain_devices(resource);
-> >>                  setup_attrs(resource);
-> >> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, resource->hwmon_dev->groups);
-> >> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, resource->hwmon_dev->groups);
-> >> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-> >> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
-> >>                  break;
-> >>
-> >> I checked drivers/hwmon/hwmon.c is seems that is_visible is only called by gen_attr/gen_attrs which is only called by __hwmon_create_attrs and then by registers functions.
-> >> So perhaps it explain why it is never called.
-> > 
-> > Ah yes, you are correct. Sorry, it has been too long ago that I wrote that code.
-> > Effectively that means we'll have to rework the hwmon core to generate attributes
-> > anyway and leave it up to the driver core to call the is_visible function.
-> > 
-> 
-> Attached is an outline of what would be needed in the hwmon core.
-> Completely untested. I wonder if it may be easier to always
-> create all attributes and have them return -ENODATA if not
-> supported.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 8527fe88b6ffdec30b40ca3c0554e9f21b570281  hwmon: (pmbus) Check PEC support before reading other registers
 
-With your patch, the notify config change lead to new attributes to be displayed.
+elapsed time: 2113m
 
-Your patch just needs:
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -315,7 +315,7 @@ static void hwmon_thermal_notify(struct device *dev, int index)
- }
- 
- #else
--static int hwmon_thermal_register_sensors(struct device *dev)
-+static int hwmon_thermal_register_sensors(struct device *dev, bool update)
- {
-        return 0;
- }
+configs tested: 218
+configs skipped: 3
 
-Tested with:
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -40,7 +40,7 @@
- #define METER_NOTIFY_INTERVAL  0x84
- 
- static int cap_in_hardware;
--static bool force_cap_on;
-+static bool force_cap_on = 1;
- 
- static int can_cap_in_hardware(void)
- {
-@@ -337,6 +337,16 @@ static ssize_t power1_is_battery_show(struct device *dev,
- {
-        struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
-        int val;
-+       unsigned long long data;
-+       acpi_status status;
-+
-+       status = acpi_evaluate_integer(resource->acpi_dev->handle, "_DBX",
-+                                      NULL, &data);
-+       if (ACPI_FAILURE(status)) {
-+               acpi_evaluation_failure_warn(resource->acpi_dev->handle, "_DBX",
-+                                            status);
-+       }
-+       pr_info("DBX give %llu\n", data);
- 
-        if (resource->caps.flags & POWER_METER_IS_BATTERY)
-                val = 1;
-@@ -570,6 +580,8 @@ static umode_t acpi_power_is_visible(const void *data,
- {
-        const struct acpi_power_meter_resource *resource = data;
- 
-+       pr_info("%s\n", __func__);
-+
-        switch (attr) {
-        case hwmon_power_average_min:
-        case hwmon_power_average_max:
-@@ -741,7 +753,7 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- 
-                remove_domain_devices(resource);
-                setup_attrs(resource);
--               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, resource->hwmon_dev->groups);
-+               res = hwmon_update_groups(resource->hwmon_dev);
-                break;
-        case METER_NOTIFY_TRIP:
-On a microvm qemu with my ACPI power meter emulation:
-/ # ls /sys/class/hwmon/hwmon0/
-device		 power1_average		  power1_is_battery	subsystem
-name		 power1_average_interval  power1_model_number	uevent
-power		 power1_interval_max	  power1_oem_info
-power1_accuracy  power1_interval_min	  power1_serial_number
-/ # cat /sys/class/hwmon/hwmon0/
-device/                  power1_average_interval  power1_oem_info
-name                     power1_interval_max      power1_serial_number
-power/                   power1_interval_min      subsystem/
-power1_accuracy          power1_is_battery        uevent
-power1_average           power1_model_number
-/ # cat /sys/class/hwmon/hwmon0/power1_is_battery 
-[   14.969697] power_meter ACPI000D:00: Found ACPI power meter.
-[   14.970114] acpi_power_is_visible
-[   14.970133] acpi_power_is_visible
-[   14.970141] acpi_power_is_visible
-[   14.970147] acpi_power_is_visible
-[   14.970153] acpi_power_is_visible
-[   14.970158] acpi_power_is_visible
-[   14.970164] acpi_power_is_visible
-[   14.970169] acpi_power_is_visible
-[   14.970187] acpi_power_is_visible
-[   14.970193] acpi_power_is_visible
-[   14.970202] acpi_power_is_visible
-[   14.970346] DBX give 40
-[   14.975185] power_meter ACPI000D:00: Capping in progress.
-0
-cat: /sys/class/hwmon/hwmon0/power1_is_battery: No such device
-/ # ls /sys/class/hwmon/hwmon0/
-device			 power1_average_min   power1_is_battery
-name			 power1_cap	      power1_model_number
-power			 power1_cap_hyst      power1_oem_info
-power1_accuracy		 power1_cap_max       power1_serial_number
-power1_average		 power1_cap_min       subsystem
-power1_average_interval  power1_interval_max  uevent
-power1_average_max	 power1_interval_min
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc64                           defconfig
+powerpc                     asp8347_defconfig
+m68k                            mac_defconfig
+ia64                            zx1_defconfig
+arm                       imx_v6_v7_defconfig
+arm                           imxrt_defconfig
+parisc                           alldefconfig
+mips                     loongson1b_defconfig
+sh                            titan_defconfig
+sh                            migor_defconfig
+sh                               j2_defconfig
+um                                  defconfig
+um                               alldefconfig
+arm                        shmobile_defconfig
+mips                      maltasmvp_defconfig
+powerpc                    sam440ep_defconfig
+powerpc                      cm5200_defconfig
+arm                        cerfcube_defconfig
+mips                         db1xxx_defconfig
+sh                          rsk7269_defconfig
+powerpc                     pq2fads_defconfig
+parisc                           allyesconfig
+ia64                        generic_defconfig
+powerpc                      chrp32_defconfig
+s390                          debug_defconfig
+mips                  maltasmvp_eva_defconfig
+riscv                            allyesconfig
+arm                        mini2440_defconfig
+xtensa                           allyesconfig
+m68k                            q40_defconfig
+sh                           se7721_defconfig
+arm                           tegra_defconfig
+ia64                          tiger_defconfig
+sh                           se7750_defconfig
+mips                  decstation_64_defconfig
+arm                            zeus_defconfig
+arm                           corgi_defconfig
+xtensa                          iss_defconfig
+xtensa                  audio_kc705_defconfig
+arm                            lart_defconfig
+arc                                 defconfig
+sh                          r7785rp_defconfig
+powerpc                        cell_defconfig
+sh                                  defconfig
+powerpc                    klondike_defconfig
+sh                           se7206_defconfig
+arm                           h3600_defconfig
+parisc                generic-64bit_defconfig
+sh                           se7619_defconfig
+s390                       zfcpdump_defconfig
+arm                       omap2plus_defconfig
+mips                 decstation_r4k_defconfig
+arm                           h5000_defconfig
+arm                        multi_v7_defconfig
+ia64                         bigsur_defconfig
+sh                          landisk_defconfig
+alpha                            allyesconfig
+arm                        realview_defconfig
+powerpc                     sequoia_defconfig
+arm                            qcom_defconfig
+sh                          urquell_defconfig
+x86_64                           alldefconfig
+powerpc                 canyonlands_defconfig
+powerpc                       eiger_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                   motionpro_defconfig
+arc                          axs103_defconfig
+arm                      jornada720_defconfig
+arm                           sama5_defconfig
+powerpc                        warp_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                           viper_defconfig
+sh                          sdk7786_defconfig
+powerpc                 mpc837x_rdb_defconfig
+h8300                     edosk2674_defconfig
+arc                           tb10x_defconfig
+m68k                          multi_defconfig
+nios2                            alldefconfig
+arm                        keystone_defconfig
+h8300                       h8s-sim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                       holly_defconfig
+arc                          axs101_defconfig
+alpha                               defconfig
+m68k                       m5208evb_defconfig
+powerpc                      mgcoge_defconfig
+arc                         haps_hs_defconfig
+m68k                           sun3_defconfig
+ia64                      gensparse_defconfig
+powerpc                     rainier_defconfig
+m68k                             allmodconfig
+sparc64                             defconfig
+arm                            xcep_defconfig
+m68k                       bvme6000_defconfig
+mips                           ci20_defconfig
+arc                 nsimosci_hs_smp_defconfig
+powerpc                mpc7448_hpc2_defconfig
+nios2                         3c120_defconfig
+powerpc                      ppc6xx_defconfig
+m68k                          amiga_defconfig
+sh                         microdev_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220519
+arm                  randconfig-c002-20220522
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220522
+s390                 randconfig-r044-20220522
+riscv                randconfig-r042-20220522
+arc                  randconfig-r043-20220519
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+s390                 randconfig-c005-20220519
+powerpc              randconfig-c003-20220519
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220519
+mips                 randconfig-c004-20220519
+i386                          randconfig-c001
+arm                  randconfig-c002-20220519
+arm                  randconfig-c002-20220522
+s390                 randconfig-c005-20220522
+powerpc              randconfig-c003-20220522
+riscv                randconfig-c006-20220522
+mips                 randconfig-c004-20220522
+mips                      pic32mzda_defconfig
+arm                          ep93xx_defconfig
+mips                      malta_kvm_defconfig
+arm                          ixp4xx_defconfig
+arm                              alldefconfig
+powerpc                     tqm5200_defconfig
+i386                             allyesconfig
+powerpc                          g5_defconfig
+powerpc                    socrates_defconfig
+arm                     davinci_all_defconfig
+arm                         mv78xx0_defconfig
+powerpc                    ge_imp3a_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                       spear13xx_defconfig
+mips                           rs90_defconfig
+powerpc                          allmodconfig
+arm                        mvebu_v5_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    gamecube_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220519
+hexagon              randconfig-r041-20220519
+hexagon              randconfig-r045-20220522
+hexagon              randconfig-r041-20220522
+s390                 randconfig-r044-20220519
+riscv                randconfig-r042-20220519
+hexagon              randconfig-r045-20220521
+hexagon              randconfig-r041-20220521
+s390                 randconfig-r044-20220521
+riscv                randconfig-r042-20220521
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
