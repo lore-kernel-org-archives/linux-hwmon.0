@@ -2,84 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8E70C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 18:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 224A6C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 May 2022 18:53:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiEVSh4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 May 2022 14:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S239551AbiEVSxO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 May 2022 14:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiEVSh4 (ORCPT
+        with ESMTP id S229913AbiEVSxO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 May 2022 14:37:56 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E7938D9F;
-        Sun, 22 May 2022 11:37:55 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id i66so15562557oia.11;
-        Sun, 22 May 2022 11:37:55 -0700 (PDT)
+        Sun, 22 May 2022 14:53:14 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C1C289B7;
+        Sun, 22 May 2022 11:53:13 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gi33so16108408ejc.3;
+        Sun, 22 May 2022 11:53:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HgD4/UV0T4CMdJdyNWhiVY1tdpZnMQ26PVn3Eujh3Yc=;
-        b=WvehMKF8LnI95IfxYZ3GUOdQRX5ypxSVD5hkUqgbmXIFNBWFP/viptKfu6hDaxaHvP
-         ixG+aK2pOylKSsacX4PUSPQcVe6aNVmFNTDTPg+uH5VBsHLhXvcLMVm/SFlPBaWUc1NF
-         vGtw8fm+Wyt5a2xeEneYdi3N0E4AcTVFCmmVYznxN4dx0Vkuqzj3mllAUaFlCaLvnih8
-         xKHTb9d8Dex4JryrA4EXUSb4nwAJMlQ8dPPkoVR4VPjKERGCHbP94TTVcBzZI4MjaWCk
-         Yz91uOaOnvnsVXodugamnNWQdoqy5XkwSBs6QxgNKGblJgfMiFx6+MuX3YBEY9xvCF1Z
-         t17Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AXF5cjgLABmGiDD3jbseFHxdx24aXW4ewbn3+cYg/Bs=;
+        b=YEkQ15WgaS8kX2AYmYZ1sb1eK1vG3/cGLKdonSEOdkCLMSMTEjfTtUAiZIDE2aRepV
+         FnnAkvYPTzEdFXoBLnhd4eARXFfna798yKUl4H4UXuu5N11eKjO6Hxpcf1bDRhSAB99O
+         TGaHu/J+hfNlxHkUc0f2N95lIyiyUGrsN0J4eKnQF6sFE13P2yLW6Fzesi36o5Zt1W1G
+         21TAx2f2ihMhVsna2OFgjGcGX63kYB5/WVBBa35kLsuWOH0b/XKLG+eLNy1F6hoyUfGM
+         /OvfoSXw77+aYeQn9tka3wtT1pFa8qs94JIy/qOffZ0WpoXHooeb/Z54tYEGfb4kJvdX
+         lxuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HgD4/UV0T4CMdJdyNWhiVY1tdpZnMQ26PVn3Eujh3Yc=;
-        b=VerQskb1RzOGpTmMxWQuPtugZkOtopqYfVjZBxK6WsBOvEu8qCaTgyyhKHQuzQBJcm
-         fxHQGA0iFBgWDYBEVMn6r7nBbOLMg8pne9Vt/tbwlXAuG5hkXo20iidC/Cq5vcwuNhpS
-         ARMEoWT8+XsxWBOOQ3P/eM610zr1BWecam1FeUxcVJtXRMzYcWltYczCiEe4o9LBTDEv
-         O0kV5iuJwrvLUt2uzjS+3yzjz9sxGLqVkUrYrsbofdEFV0d6cEMYn11lZ8SzuCeRREFR
-         9jGz1cNi1YELSgtwx7MyX1yeoYhpObcn2iO7tOd7ZX2nOH/Gk4I7AKMNXcnNmkXJu6o3
-         tq6Q==
-X-Gm-Message-State: AOAM531s/AFKZ55VfOq2nxrZAvSg/t+6EUL2oY95E9qg5eBZFxOjYFOo
-        84XxVpULVOqojFbY4CCHod0=
-X-Google-Smtp-Source: ABdhPJxO3FfL9cUMqhzrHkeyOF9WvfIKh2UANKhgd3xSmIY9DYKejRkV3FdAm6ee7Cqf50OhiFkJfA==
-X-Received: by 2002:a05:6808:1189:b0:322:3293:4b30 with SMTP id j9-20020a056808118900b0032232934b30mr9512923oil.277.1653244675086;
-        Sun, 22 May 2022 11:37:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056870920200b000f2776dd2acsm82709oaf.27.2022.05.22.11.37.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 11:37:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e2a64cca-add2-7fcd-0327-5d217f1d3762@roeck-us.net>
-Date:   Sun, 22 May 2022 11:37:52 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix an error handling path
- in aqc_probe()
-Content-Language: en-US
-To:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     dan.carpenter@oracle.com, Jack Doan <me@jackdoan.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AXF5cjgLABmGiDD3jbseFHxdx24aXW4ewbn3+cYg/Bs=;
+        b=cXkVHAz+hWYL5mJVCt1TilEpPM0t6i0e2ndBuBbk93/PNa1eumQXSkuf4vbUAX9nOn
+         CL63gBM6iEPy749EhBrfSCZO3V+My1t2J+IFZyRHnnlgG0Jy3msFikvfyoXP0Sz7Q3Xc
+         VPD8Xz6aYQTBeHs+zd8za4Kr5kIt0GoQKqTbRh1m0pzc067+rfEHFVdIR3SSlvPQDYGH
+         nz6FT2GZxkQwnzhxykPHlSrQwWjrnm5sYI5El+F9Jk4VnkdadhiAttiQHCnIFW9Y0Odk
+         xXeh2wlFRgB7UbrWH06TjCMbn7S7VP+Myjy/hI2Ml6yiYrJ94QlPlysEL0Igf5XNjLKx
+         NtcQ==
+X-Gm-Message-State: AOAM5319aj7A9eXpj06oVuZGguKDtdrYQITxFJkWyvSGf56jhk3N9bpD
+        2RZi0+o84cteeIqpb2gloxA=
+X-Google-Smtp-Source: ABdhPJz7KfUzOw11j4aYWCASH49EDChI8fGECAhn4Mm+/sq8xGo0/4cxkmCNLVWVm+yxtEshipeCXQ==
+X-Received: by 2002:a17:907:3e04:b0:6f5:1132:59de with SMTP id hp4-20020a1709073e0400b006f5113259demr17563112ejc.755.1653245591527;
+        Sun, 22 May 2022 11:53:11 -0700 (PDT)
+Received: from DESKTOP-A98GP49 (cable-178-148-254-8.dynamic.sbb.rs. [178.148.254.8])
+        by smtp.gmail.com with ESMTPSA id k16-20020a1709067ad000b006fed8dfcf78sm695815ejo.225.2022.05.22.11.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 11:53:11 -0700 (PDT)
+Date:   Sun, 22 May 2022 20:53:08 +0200
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        dan.carpenter@oracle.com, Jack Doan <me@jackdoan.com>,
         Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix an error handling path
+ in aqc_probe()
+Message-ID: <YoqGlLIORBqsrAqW@DESKTOP-A98GP49>
 References: <be6b955d50de140fcc96bd116150b435021bf567.1653225250.git.christophe.jaillet@wanadoo.fr>
  <YoqCKdfYQKyrFtxN@DESKTOP-A98GP49>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YoqCKdfYQKyrFtxN@DESKTOP-A98GP49>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <e2a64cca-add2-7fcd-0327-5d217f1d3762@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2a64cca-add2-7fcd-0327-5d217f1d3762@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/22/22 11:34, Aleksa Savic wrote:
-> Thank you Christophe!
+On Sun, May 22, 2022 at 11:37:52AM -0700, Guenter Roeck wrote:
+> On 5/22/22 11:34, Aleksa Savic wrote:
+> > Thank you Christophe!
+> > 
+> > Aleksa
 > 
-> Aleksa
+> A Reviewed-by: tag would be useful.
+>
+> Thanks,
+> Guenter
 
-A Reviewed-by: tag would be useful.
+Right - that slipped my mind, sorry. For the patch:
+
+Reviewed-by: Aleksa Savic <savicaleksa83@gmail.com>
 
 Thanks,
-Guenter
+Aleksa
