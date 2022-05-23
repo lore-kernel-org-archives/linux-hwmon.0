@@ -2,61 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E963C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 May 2022 08:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AEC2C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 May 2022 11:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbiEWIvx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 May 2022 04:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S234279AbiEWLF0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 May 2022 07:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiEWIvC (ORCPT
+        with ESMTP id S234264AbiEWLFZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 May 2022 04:51:02 -0400
-X-Greylist: delayed 1261 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 01:50:59 PDT
-Received: from mail.tireplot.pl (mail.tireplot.pl [46.183.184.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2547E264
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 May 2022 01:50:59 -0700 (PDT)
-Received: by mail.tireplot.pl (Postfix, from userid 1001)
-        id D74A24A811; Mon, 23 May 2022 10:06:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tireplot.pl; s=mail;
-        t=1653293349; bh=Rfzvu4C+yJ1wyuJ4V+t/udh6cgYEQVnY6S5ltO4wdNg=;
-        h=Date:From:To:Subject:From;
-        b=VNKBVVTBt02e2CGZkvOiVetsXCzdafuHmXq7e6dGRtFA4j0GO6WS8Zqnu1y4oDXSC
-         WzDHZc948PKJCn69v4gW3mm7w66howEi5ICs0voQohivwl59JMXnJZrOxFIbWhJY3C
-         jU8Fqsx+lJ0YLmNlGXD/xcXv0lBTC2IuXM0K75PBHyBcHFTyIoZct2I4kbRcngyPWX
-         MXJZ+A+GPd+Yn2vsnCEgIKxi7lOnYf6ymdaa8rBCKZ4hd9IXWT214sPN/6knNOUQEg
-         L2l65T3Jlti8xpa5dfZvzmbG4dc4pyQ+40uXd1zhFvYevOABZZqUs0nftInapq8mj+
-         iE2hNI4Ohzwbg==
-Received: by mail.tireplot.pl for <linux-hwmon@vger.kernel.org>; Mon, 23 May 2022 08:05:32 GMT
-Message-ID: <20220523084501-0.1.2k.fysd.0.ctvqk01nkj@tireplot.pl>
-Date:   Mon, 23 May 2022 08:05:32 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@tireplot.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.tireplot.pl
+        Mon, 23 May 2022 07:05:25 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623E917E33;
+        Mon, 23 May 2022 04:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1653303924; x=1684839924;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Sk/80/Sl50K9hqjUsn7T7l2+JB5Ia4zwoTorhGI3IzQ=;
+  b=apmiIeDSZv6p99ahHBq/1sE2QqFMJI9HHIBpa/M2Yw9gxovDpHkD5OvE
+   jEyudfl537Qs0C25ve/6I2YF7/jWA8vlC34Bkm2j5FHG0ARVDD9H4Hd+z
+   7vmLaVbW2bMthp77rnrRRjj65yUPkDVEbqwQaPl3vQDcn0nxzhDP7i3dO
+   d413bOEEArLOjkXrvG8ap4l+UZ6hQTdGENqsnnOf663oJpVAii1rC6Imc
+   cYj6FwiCuMbJagZIl2aaclB8XlTcPT96trViiUUVxq7nu/FkbRM5mpXBK
+   S1dH8kvnZc5ZriuY+MSvn8LZFL/6A6HgARW4CQ2iV262yL8GS9GucGQ5G
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,246,1647298800"; 
+   d="scan'208";a="24031364"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 23 May 2022 13:05:18 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 23 May 2022 13:05:18 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 23 May 2022 13:05:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1653303918; x=1684839918;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Sk/80/Sl50K9hqjUsn7T7l2+JB5Ia4zwoTorhGI3IzQ=;
+  b=ctc9sPIbDC590oP/qimInVX5vrBvVwQc8e//tOYD/KSoNN2+YNcIkJIA
+   q62yAO3py8Vgkzw3gch/yDSggenfKC5ByfPKme/w2ey6EKUzR1/WhiTPn
+   SxXFEt7YEJXHD7SDI2pxGVvVv10WgWjO1TKtwu5z5dS5C+eqzbbdLTYP2
+   LEj/5RvJgvrvom+QknZ2krBEfx8CN39Sry92kWCw432QE9iUDHi3nz0Dv
+   L+6PLS6PBFAAAZKtBJxbbv4p+87hQ1BFE4+iXDULMkyWwiDDPi3C3keb6
+   a6/KG986qyd1yxeVoPGibU2FG3QTlA9ZkPX8HsheGI88fGCKckE4BEhZt
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,246,1647298800"; 
+   d="scan'208";a="24031363"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 23 May 2022 13:05:18 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 015B5280070;
+        Mon, 23 May 2022 13:05:17 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>
+Subject: [PATCH v4 0/6] hwmon: pwm-fan: switch regulator dynamically
+Date:   Mon, 23 May 2022 13:05:07 +0200
+Message-Id: <20220523110513.407516-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hello everyone,
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+this is a new version for supporting switching off the pwm-fan regulator.
+pwm1_enable was reworked to supported the modes Guneter suggested, while
+keeping the previous behavior. This also resulted in reordering and refactoring
+the commits even more.
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+Changes in v4:
+* Reordered commits so current behavior is the default all the time
+* Fixed pwm state bug in Patch 1, this affects the patch context in Patch 2
+* Refactor even more code in Patch 3 & 4 for smaller further patches
+* Squashed the dynamic regulator switch patch and the sysfs attribute patch
+  into one, keeping default behavior.
+  Overhaul the patch to support different modes altogether
+* Fixed bugs in module removal in pwm1_enable=1
+* Moved internal PWM state removal to the end to keep the patch smaller
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
+Best regards,
+Alexander
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
+Alexander Stein (6):
+  hwmon: pwm-fan: Refactor fan power on/off
+  hwmon: pwm-fan: Simplify enable/disable check
+  hwmon: pwm-fan: Add dedicated power switch function
+  hwmon: pwm-fan: split __set_pwm into locked/unlocked functions
+  hwmon: pwm-fan: Switch regulator dynamically
+  hwmon: pwm-fan: Remove internal duplicated pwm_state
 
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+ Documentation/hwmon/pwm-fan.rst |  12 ++
+ drivers/hwmon/pwm-fan.c         | 330 +++++++++++++++++++++++---------
+ 2 files changed, 255 insertions(+), 87 deletions(-)
+
+-- 
+2.25.1
+
