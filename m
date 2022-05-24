@@ -2,203 +2,124 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04EC9C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 May 2022 10:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7176CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 May 2022 11:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236045AbiEXKoO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 May 2022 06:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S236714AbiEXLxr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 May 2022 07:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbiEXKoN (ORCPT
+        with ESMTP id S236633AbiEXLxq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 May 2022 06:44:13 -0400
-Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830184F9C6;
-        Tue, 24 May 2022 03:44:11 -0700 (PDT)
-Date:   Tue, 24 May 2022 10:44:05 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1653389049; x=1653648249;
-        bh=TM6OZzaFDIBZ7AfxBRZG/Z6TtzL2ULL0ZxBRpcxXoPo=;
-        h=Date:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=Z5JqZzTR+F11OSHNI8B+1Mf+YJ3zA0EJcAsI0cauQXXSU53W2g+OgEPv1ulnFXFta
-         qg0ZE8E410nWQiI3UP0ciW2Kb62J074FiJcuU71mP2lA6413vxT80QzsIZCfWsoCLF
-         iGsxKN/XIFmxGvxuebfmzwXy2Oa4w/NqBSz0Iv+h6npPjHbMivYoCof0+jfL/w/KdT
-         4fXHxWxrlDyay8l7hzT27PwyIf79bxiYRnBzVE+EmIWpAx095OEvjNcr5G6xp7MhGm
-         89rI8skfd5E9BisZf1B2bdwwg8SmAFla9w12VvT1WD8DDm00OJLgpN6R6z1KSOwDuk
-         MfyH7/Qxj8G4g==
-From:   Adam Wujek <dev_public@wujek.eu>
-Cc:     Adam Wujek <dev_public@wujek.eu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [PATCH v2 2/2] hwmon: (pmbus) add MFR_* registers to debugfs
-Message-ID: <20220524104307.272806-2-dev_public@wujek.eu>
-In-Reply-To: <20220524104307.272806-1-dev_public@wujek.eu>
-References: <20220524104307.272806-1-dev_public@wujek.eu>
-Feedback-ID: 23425257:user:proton
+        Tue, 24 May 2022 07:53:46 -0400
+Received: from smtpo68.interia.pl (smtpo68.interia.pl [217.74.67.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406A75C857
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 May 2022 04:53:42 -0700 (PDT)
+Received: from t480s.localdomain (unknown [80.68.225.159])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
+        Tue, 24 May 2022 13:53:31 +0200 (CEST)
+Date:   Tue, 24 May 2022 13:53:30 +0200
+From:   Slawomir Stepien <sst@poczta.fm>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        jdelvare@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, przemyslaw.cencner@nokia.com,
+        krzysztof.adamski@nokia.com, alexander.sverdlin@nokia.com,
+        Slawomir Stepien <slawomir.stepien@nokia.com>
+Subject: Re: [PATCH 3/8] dt-bindings: hwmon: Allow specifying channels for
+ lm90
+Message-ID: <YozHOsSdpWBRNLYt@t480s.localdomain>
+References: <20220520093243.2523749-1-sst@poczta.fm>
+ <20220520093243.2523749-4-sst@poczta.fm>
+ <3ea92486-0cf9-ce3d-d1b6-7a76f1d5a129@linaro.org>
+ <0b84d109-d6be-dfba-99bb-0b7136af875e@roeck-us.net>
+ <b5ff0f2c-d741-6dec-c306-b54cb5075ccf@linaro.org>
+ <f124cbcb-3fca-3f1c-f47e-730f15c1f074@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f124cbcb-3fca-3f1c-f47e-730f15c1f074@roeck-us.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interia.pl;
+        s=biztos; t=1653393219;
+        bh=C+pwYwF7ugkhsSL6kKuY8lVCVBSN/b/W4iJt21bRSRc=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=VGGc6/ONXNY+iTWIT7yYzLaj3ovJbpUYFFxN+mmpGT3wCQavddwi898QU46kvaFW/
+         JvgXvtzYBa3o/Q9m/hEg2Et718of7MS/nds2TqmlItWo2ZOA6/H6Zo6zWzg4ctcizb
+         ZS3SYZqE/fulzy9K8GfUGcopF0wKyjm5xaYy/W8M=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add registers to debugfs:
-PMBUS_MFR_ID
-PMBUS_MFR_MODEL
-PMBUS_MFR_REVISION
-PMBUS_MFR_LOCATION
-PMBUS_MFR_DATE
-PMBUS_MFR_SERIAL
+On maj 20, 2022 07:22, Guenter Roeck wrote:
+> On 5/20/22 07:09, Krzysztof Kozlowski wrote:
+> > On 20/05/2022 15:42, Guenter Roeck wrote:
+> > > > 
+> > > > > +          A descriptive name for this channel, like "ambient" or "psu".
+> > > > > +
+> > > > > +      offset:
+> > > > > +        description: |
+> > > > 
+> > > > This does not look like standard property, so you need vendor and unit
+> > > > suffix.
+> > > > 
+> > > 
+> > > Temperature offset is a standard property for temperature sensor
+> > 
+> > The original description was strictly connected to registers, so that
+> > one as not a standard. It seems it was just a wording...
+> > 
+> > > chips with external channels, implemented by a diode or transistor.
+> > > Making it non-standard will mean that we'll have lots of
+> > > "vendor,offset" properties, one each for each vendor selling
+> > > temperature sensor chips with external channels. This gets
+> > > more complicated here because the lm90 driver does support chips
+> > > from several different vendors. Almost all of them support
+> > > this functionality. Which vendor do you select in this case ?
+> > > 
+> > > I would suggest to use temperature-offset-milliseconds, though.
+> > 
+> > Yes, this sounds good. Just not seconds but millicelsius, I guess?
+> > 
+> 
+> Uuh, yes. Sorry, must be too early in the morning here.
 
-Please note that it is assumed that values of these registers are the same
-for all pages. To reduce the number of debugfs entries, only values from
-page 0 are reported.
+Hello
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
----
-Notes:
-- This is a reworked patch to report the registers only once
+I see that: *-millicelsius is defined as uint32-array:
+  "-millicelsius$":
+    $ref: "types.yaml#/definitions/uint32-array"
+    description: Degreee milli-Celsius
 
- drivers/hwmon/pmbus/pmbus_core.c | 100 ++++++++++++++++++++++++++++++-
- 1 file changed, 98 insertions(+), 2 deletions(-)
+But it would be nice to have negative values as the prop value, for example <(-1000)>.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_c=
-ore.c
-index 2ff66f133d95..72411d30dd78 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2657,6 +2657,34 @@ static int pmbus_debugfs_get_status(void *data, u64 =
-*val)
- DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_statu=
-s,
- =09=09=09 NULL, "0x%04llx\n");
+How should I approach that? Is change to this definition possible? If yes, how should it be
+conducted? On github or via device-tree mailing list?
 
-+static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
-+=09=09=09=09       size_t count, loff_t *ppos)
-+{
-+=09int rc;
-+=09struct pmbus_debugfs_entry *entry =3D file->private_data;
-+=09char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
-+
-+=09rc =3D pmbus_read_block_data(entry->client, entry->page, entry->reg,
-+=09=09=09=09   data);
-+=09if (rc < 0)
-+=09=09return rc;
-+
-+=09/* Add newline at the end of a read data */
-+=09data[rc] =3D '\n';
-+
-+=09/* Include newline into the length */
-+=09rc +=3D 1;
-+
-+=09return simple_read_from_buffer(buf, count, ppos, data, rc);
-+}
-+
-+static const struct file_operations pmbus_debugfs_ops_mfr =3D {
-+=09.llseek =3D noop_llseek,
-+=09.read =3D pmbus_debugfs_mfr_read,
-+=09.write =3D NULL,
-+=09.open =3D simple_open,
-+};
-+
- static int pmbus_debugfs_get_pec(void *data, u64 *val)
- {
- =09struct i2c_client *client =3D data;
-@@ -2721,9 +2749,13 @@ static int pmbus_init_debugfs(struct i2c_client *cli=
-ent,
- =09=09return -ENODEV;
- =09}
+Or maybe there is a way to overwrite this (using $defs?) for this particular binding? I haven't
+found any solution that will pass dt_binding_check.
 
--=09/* Allocate the max possible entries we need. */
-+=09/*
-+=09 * Allocate the max possible entries we need.
-+=09 * 6 entries device-specific
-+=09 * 10 entries page-specific
-+=09 */
- =09entries =3D devm_kcalloc(data->dev,
--=09=09=09       data->info->pages * 10, sizeof(*entries),
-+=09=09=09       6 + data->info->pages * 10, sizeof(*entries),
- =09=09=09       GFP_KERNEL);
- =09if (!entries)
- =09=09return -ENOMEM;
-@@ -2731,6 +2763,70 @@ static int pmbus_init_debugfs(struct i2c_client *cli=
-ent,
- =09debugfs_create_file("pec", 0664, data->debugfs, client,
- =09=09=09    &pmbus_debugfs_ops_pec);
+> > > > > +          The value (millidegree Celsius) to be programmed in the channel specific offset register
+> > > > > +          (if supported by device).
+> > > > 
+> > > > You described programming model which should not be put in the bindings.
+> > > > Please describe the hardware.
+> > > > 
+> > > 
+> > > It is a configuration value, which is hardware dependent because
+> > > it depends on the temperature diode or transistor connected to the chip.
+> > 
+> > Sure, so this could be reworded "Offset against some base value for each
+> > channel temperature", or something similar (you know better than me).
+> > Referring to registers and where exactly this should be programmed in
+> > the device is related to device programming model, not to bindings.
+> > 
+> 
+> Maybe something like "Temperature offset to be added to or
+> subtracted from remote temperature measurements".
 
-+=09/*
-+=09 * Add device-specific entries.
-+=09 * Please note that the PMBUS standard allows all registers to be
-+=09 * page-specific.
-+=09 * To reduce the number of debugfs entries for
-+=09 * devices with many pages assume that values of the following
-+=09 * registers are the same for all pages and report values only
-+=09 * for page 0.
-+=09 */
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_ID)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_ID;
-+=09=09debugfs_create_file("mfr_id", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_MODEL)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_MODEL;
-+=09=09debugfs_create_file("mfr_model", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_REVISION)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_REVISION;
-+=09=09debugfs_create_file("mfr_revision", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_LOCATION)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_LOCATION;
-+=09=09debugfs_create_file("mfr_location", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_DATE)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_DATE;
-+=09=09debugfs_create_file("mfr_date", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09if (pmbus_check_block_register(client, 0, PMBUS_MFR_SERIAL)) {
-+=09=09entries[idx].client =3D client;
-+=09=09entries[idx].page =3D 0;
-+=09=09entries[idx].reg =3D PMBUS_MFR_SERIAL;
-+=09=09debugfs_create_file("mfr_serial", 0444, data->debugfs,
-+=09=09=09=09    &entries[idx++],
-+=09=09=09=09    &pmbus_debugfs_ops_mfr);
-+=09}
-+
-+=09/* Add page specific entries */
- =09for (i =3D 0; i < data->info->pages; ++i) {
- =09=09/* Check accessibility of status register if it's not page 0 */
- =09=09if (!i || pmbus_check_status_register(client, i)) {
---
-2.17.1
-
-
+-- 
+Slawomir Stepien
