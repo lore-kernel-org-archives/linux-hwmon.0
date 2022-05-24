@@ -2,143 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57A65C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 May 2022 12:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B229C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 May 2022 12:42:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbiEXMRi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 May 2022 08:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S234726AbiEXMmc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 May 2022 08:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237276AbiEXMR2 (ORCPT
+        with ESMTP id S230250AbiEXMmc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 May 2022 08:17:28 -0400
-Received: from smtpo52.interia.pl (smtpo52.interia.pl [217.74.67.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5966690CD7
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 May 2022 05:17:25 -0700 (PDT)
-X-Interia-R: Interia
-X-Interia-R-IP: 80.68.225.159
-X-Interia-R-Helo: <t480s.localdomain>
-Received: from t480s.localdomain (unknown [80.68.225.159])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 24 May 2022 08:42:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA02C87A3F;
+        Tue, 24 May 2022 05:42:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-        Tue, 24 May 2022 14:17:22 +0200 (CEST)
-Date:   Tue, 24 May 2022 14:17:20 +0200
-From:   Slawomir Stepien <sst@poczta.fm>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, przemyslaw.cencner@nokia.com,
-        krzysztof.adamski@nokia.com, alexander.sverdlin@nokia.com,
-        Slawomir Stepien <slawomir.stepien@nokia.com>
-Subject: Re: [PATCH 3/8] dt-bindings: hwmon: Allow specifying channels for
- lm90
-Message-ID: <YozM0L5uftHOgkjL@t480s.localdomain>
-References: <20220520093243.2523749-1-sst@poczta.fm>
- <20220520093243.2523749-4-sst@poczta.fm>
- <3ea92486-0cf9-ce3d-d1b6-7a76f1d5a129@linaro.org>
- <0b84d109-d6be-dfba-99bb-0b7136af875e@roeck-us.net>
- <b5ff0f2c-d741-6dec-c306-b54cb5075ccf@linaro.org>
- <f124cbcb-3fca-3f1c-f47e-730f15c1f074@roeck-us.net>
- <YozHOsSdpWBRNLYt@t480s.localdomain>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 786E461525;
+        Tue, 24 May 2022 12:42:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2101FC385AA;
+        Tue, 24 May 2022 12:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653396149;
+        bh=uluCb6ToQhx8UjfMpB8qBxFTdkdzFTm5HZvSWwomJJQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pkozsteKGaDG/TmaQcuF6Blhx7cPiAYgUOHStDiyw4jczuTYZDyNI1WPwIcMJacs5
+         udsSEPy2aentDFzq2c7gPZ6YlgiMnuIsFzSIr1scBsMvYwngMOlPaQjWNDuy2ofRok
+         LBFoaH71+d2077xvKYFQZyYqwXXi7ac/LybTAkKwBXH7z9nYsrdmVOZJ3jDpz2TjhX
+         258USGQ5dtN3gC2C9jBI1r6mwob1Fk/2jXDp3tmuAi6oXOFaQAKffA0wSqLTTIuR/u
+         gOWxO8kOTtT/kR0rvoRYoIFp9ca+1VbUmRXAPjcOslzvSF5GdABbagNhcaaBJnCzC2
+         K/ikwKiLPNztw==
+Date:   Tue, 24 May 2022 13:42:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Alistair Francis <alistair23@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alistair Francis <alistair@alistair23.me>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        linux-hwmon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Zhang Rui <rui.zhang@intel.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Amit Kucheria <amitk@kernel.org>
+Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
+Message-ID: <YozSrmW2N15KxOlc@sirena.org.uk>
+References: <20220330094126.30252-1-alistair@alistair23.me>
+ <20220330094126.30252-2-alistair@alistair23.me>
+ <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
+ <CAKmqyKOqjperoku_uOy4sCa6LmCUtfB7SCvhLEKxLtcwDkzRyA@mail.gmail.com>
+ <YmEQ1/Gs15gUxYdh@google.com>
+ <CAKmqyKPqUuwguio07Jr99DV-3paEkmU-qJp6tERxPoU79BCAgw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y3DUZVf2sywO4L1W"
 Content-Disposition: inline
-In-Reply-To: <YozHOsSdpWBRNLYt@t480s.localdomain>
-X-Interia-Antivirus: OK
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interia.pl;
-        s=biztos; t=1653394643;
-        bh=z47lcyJDjkjh8QdvySCc49BXZ3J/cwsBjY0ziF8Fl5c=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=YOPdZ49BOacLO8aXKQUBCH7ahaeCxcsnphw5GG6Uk5keSt34so7S5KuxeygpTEeWh
-         ulxRoZHxmndLctGBSfrNM8SsLm2YGv3dByfDoR3aDlMlIt63YXd45FRGhYAizBmyrR
-         7mv75BzZRDgH+eBx+OnwEM4NlVCajot3IVvWZ5Rk=
+In-Reply-To: <CAKmqyKPqUuwguio07Jr99DV-3paEkmU-qJp6tERxPoU79BCAgw@mail.gmail.com>
+X-Cookie: A man's best friend is his dogma.
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On maj 24, 2022 13:53, Slawomir Stepien wrote:
-> On maj 20, 2022 07:22, Guenter Roeck wrote:
-> > On 5/20/22 07:09, Krzysztof Kozlowski wrote:
-> > > On 20/05/2022 15:42, Guenter Roeck wrote:
-> > > > > 
-> > > > > > +          A descriptive name for this channel, like "ambient" or "psu".
-> > > > > > +
-> > > > > > +      offset:
-> > > > > > +        description: |
-> > > > > 
-> > > > > This does not look like standard property, so you need vendor and unit
-> > > > > suffix.
-> > > > > 
-> > > > 
-> > > > Temperature offset is a standard property for temperature sensor
-> > > 
-> > > The original description was strictly connected to registers, so that
-> > > one as not a standard. It seems it was just a wording...
-> > > 
-> > > > chips with external channels, implemented by a diode or transistor.
-> > > > Making it non-standard will mean that we'll have lots of
-> > > > "vendor,offset" properties, one each for each vendor selling
-> > > > temperature sensor chips with external channels. This gets
-> > > > more complicated here because the lm90 driver does support chips
-> > > > from several different vendors. Almost all of them support
-> > > > this functionality. Which vendor do you select in this case ?
-> > > > 
-> > > > I would suggest to use temperature-offset-milliseconds, though.
-> > > 
-> > > Yes, this sounds good. Just not seconds but millicelsius, I guess?
-> > > 
-> > 
-> > Uuh, yes. Sorry, must be too early in the morning here.
-> 
-> Hello
-> 
-> I see that: *-millicelsius is defined as uint32-array:
->   "-millicelsius$":
->     $ref: "types.yaml#/definitions/uint32-array"
->     description: Degreee milli-Celsius
-> 
-> But it would be nice to have negative values as the prop value, for example <(-1000)>.
-> 
-> How should I approach that? Is change to this definition possible? If yes, how should it be
-> conducted? On github or via device-tree mailing list?
-> 
-> Or maybe there is a way to overwrite this (using $defs?) for this particular binding? I haven't
-> found any solution that will pass dt_binding_check.
 
-Well ok, looks like this:
+--y3DUZVf2sywO4L1W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-      temperature-offset-millicelsius:
-        description: Temperature offset to be added to or subtracted from remote temperature measurements.
-        items:
-          items:
-            type: integer
-            minimum: -128000
-            maximum: 127000
+On Tue, May 24, 2022 at 09:55:37PM +1000, Alistair Francis wrote:
+> On Thu, Apr 21, 2022 at 6:07 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > On Wed, 20 Apr 2022, Alistair Francis wrote:
 
-Will overwrite the definition...most likely just minimum: -128000 in 2nd items will be enough.
+> > > Any chance of getting this in for 5.18? It would be nice to have the
+> > > configs all sorted before the release
 
-> > > > > > +          The value (millidegree Celsius) to be programmed in the channel specific offset register
-> > > > > > +          (if supported by device).
-> > > > > 
-> > > > > You described programming model which should not be put in the bindings.
-> > > > > Please describe the hardware.
-> > > > > 
-> > > > 
-> > > > It is a configuration value, which is hardware dependent because
-> > > > it depends on the temperature diode or transistor connected to the chip.
-> > > 
-> > > Sure, so this could be reworded "Offset against some base value for each
-> > > channel temperature", or something similar (you know better than me).
-> > > Referring to registers and where exactly this should be programmed in
-> > > the device is related to device programming model, not to bindings.
-> > > 
-> > 
-> > Maybe something like "Temperature offset to be added to or
-> > subtracted from remote temperature measurements".
-> 
+> > Can't do anything without Mark's Ack.
 
--- 
-Slawomir Stepien
+> Can this be included in 5.19? I can re-send the series if required
+
+Please don't send content free pings, please resubmit patches if you
+think they've been dropped on the floor (which is probably what happened
+here, but I don't have context any more for what it is).  Content free
+pings require people to go digging through mail archives to find out
+what you're asking about, if they're even online and able to do so at
+the time they look at your mail.
+
+--y3DUZVf2sywO4L1W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKM0q0ACgkQJNaLcl1U
+h9AFxAf/aZV+MyOwF+RYJ45h8Mv2F3f2u0hsR7avAitcpycD1h4D1xmW66JDlLug
+SNc7PnthshYzyeHKJeb0T5H0YuBxb2WaIWHDNwhvcVCI1CEyQRf2I4xNf1j06mhB
+2kYEqefpfkQpDd2JIpQTyreZkJzddOw0yzoEBOLaJzESHO5v78mHqDYRFqvHeb7V
+n1OhA7dGgZGSx/C989GSe1eF1x7z9dmCqk4s3lwmtGd1QpWZuwS0NWgdIDiDhvHt
+Wivc2SeQz56ydFip8rmCT0i5eT7PFc+e14Xy1TJvopGQHbOSkoqEP3XIl2N/Y/BY
+cAdWRnmwK96wudMjpdFBuuErofxy/g==
+=boSv
+-----END PGP SIGNATURE-----
+
+--y3DUZVf2sywO4L1W--
