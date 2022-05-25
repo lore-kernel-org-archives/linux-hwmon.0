@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F57AC4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 14:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CBC3C433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 14:00:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239830AbiEYOAV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 May 2022 10:00:21 -0400
+        id S244572AbiEYOAW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 May 2022 10:00:22 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244603AbiEYN7C (ORCPT
+        with ESMTP id S244711AbiEYN7s (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 May 2022 09:59:02 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B2AAE26E;
-        Wed, 25 May 2022 06:58:46 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id q7-20020a4adc47000000b0035f4d798376so3805282oov.6;
-        Wed, 25 May 2022 06:58:46 -0700 (PDT)
+        Wed, 25 May 2022 09:59:48 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43093AEE2A;
+        Wed, 25 May 2022 06:59:10 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-f2bb84f9edso2959826fac.10;
+        Wed, 25 May 2022 06:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b/ZGCgIBEp8AMD68mP9NkD6nfR4ulY45JIBNTsS2fQI=;
-        b=RTcC9btHA5Q7OChjAGQ0KWnGdtZKwq8kJ2taVeIPpe+stiQfQqWDne+0LqBsPIGedO
-         eilTjCNY7kstMkumyTIxkSDwj5BwEWSwU2cQokkV43WZQ1ia3CJThzGuPyantcYXSkvM
-         faDXWDFbQPwtz7j6whxmrvBShmA8aA7rPf9Fty5na4GJ8vx/jK011dl8Qy9emwsqci0Z
-         fEvqgFBTRjDRAhNGwfVDlu6dQNMAwuUHjazmyD5A8EKRfCWWrsYASINxM93kiiz6jQW5
-         i96a16+y9HBXqTB73gkkYmeT8Nyx5IT4gRQXHhliBqAvoc0aYnfwa98dA0tTYMNstx6w
-         DgmA==
+        bh=uYe0yvkByZQIIt5odyFTdywSrjjAR0396YtmitTljn8=;
+        b=JNawQPe1RB4s/LBXNObS/6el1VRZG2UdZVusm1dtW4Mdf5ALOcxl/Ya3q7IqXDZAuO
+         0UGo7agS+DqV9QeQpfvD7SeqAib/C1gtFPtK3jkPFRDSv9jaz4heFgOudhMg1AK+8Y0x
+         33cYzIA+lbFmWcFAwDN3NSSOF+3pT3AliOOq4t6cwnWMA3lVrfkQffscA9AyyZBthTjE
+         da+bcE8seS7ceOBFuc1Ok/oJtkIfeUCxiS47jp3QDrhI7VyI6lM65hAwekCk/aUPcMqT
+         ozPkhM5i6wbkQPGLMWSOmR4j8nK8M1d0/y88c7m2P9wVwvHdBhCSFm5W387gYIhjWCiy
+         a9Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=b/ZGCgIBEp8AMD68mP9NkD6nfR4ulY45JIBNTsS2fQI=;
-        b=8AT8YMCR2YF/U4dm66tYSg9R094J915w0iDBp2EtzQF/APBXI68dgUArO2AfSMfrHw
-         lvsuJ5ddp1lbIbuDrwrTJkeSfK8nQJh61dd7ejAcBfvQcDcILk9qPHMxbBIJol/E0GEA
-         CGC7x9NNy4EfrJDe8JLuEDA6wBmqvz4n8lyrShrcHUpOTyWqTptorh1Mphy9kgUKVBZa
-         2NJXItHxHdAVQIYYuiGhrBo3bs4VHVxGKYgi0KJV1cvv8QzPPyGPqtmH9fHXhRnIhjYh
-         yZ3RCSpEN+eZacpPx3DPR0JecZ3RMNF55VHO101/1d+ySSfNv2EYpN3AYZy3BJl1wF70
-         vhaQ==
-X-Gm-Message-State: AOAM530PzjjcTbTQzzd3cILCwD42eW5A/Cc/JuwIxcCsfK/D/tgr6Oej
-        cECORuD76uwrMeoM/V/AQz5SX71abkhZDw==
-X-Google-Smtp-Source: ABdhPJy40x/hvUevpeVAXmRRXh00G0P8KdYomjxZo82BR6ZpfTUjylGWP2A9H9L+YVaDgQkwYfzjsA==
-X-Received: by 2002:a4a:2819:0:b0:40e:6f37:1ae8 with SMTP id h25-20020a4a2819000000b0040e6f371ae8mr8879821ooa.44.1653487125233;
-        Wed, 25 May 2022 06:58:45 -0700 (PDT)
+        bh=uYe0yvkByZQIIt5odyFTdywSrjjAR0396YtmitTljn8=;
+        b=8Kub321LL/4Q6aKKHZ9o3RFtU244MTBNNI5Pyiw5k35jb9+jxgHdwpLM040DMmosBL
+         WgsEYHGYXFWEhirhdxI+ZPQrdpN9sSgYV5Ux5pGASk0tRuqVzWLNWoAek8y8GBG1w26W
+         UUKxrBKinOycjbesVI7e4S6IHYMewLdrVvE9cN2CgU+u6nzJXIvQYohQEpudLC+nF2tL
+         lhmN3dkFmTZD/WpqwbVasIZrE2tdDyQEC9EybZ2iJxzG5csTn/vwtiJfnT7cnHnbiYZi
+         tCzLRNJUbMD5MWNcxIpgDU2CCMU1ygZdIJPTJa/mQBlXIUPj49F0qeUeIX/M9YoBaPWe
+         f3Lg==
+X-Gm-Message-State: AOAM531CEQsBm7Xzd8YG+LQyov4El88Db7wk0ddhmUtXrWfCuG69bDEV
+        CODq+ZhoszvDAjzxP+bEOBgygeJCBbTrJQ==
+X-Google-Smtp-Source: ABdhPJznc+mDZ4gfyfh1E2k3WontHUJDfZhc1bdosL9V6VV4TUNeCCcMzNRsPufIsJtghmq1JQdRMg==
+X-Received: by 2002:a05:6870:e307:b0:de:e168:c43f with SMTP id z7-20020a056870e30700b000dee168c43fmr5922298oad.140.1653487149341;
+        Wed, 25 May 2022 06:59:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w9-20020a9d6389000000b0060ae12c51a5sm6122092otk.59.2022.05.25.06.58.44
+        by smtp.gmail.com with ESMTPSA id k17-20020a9d1991000000b0060b0b638583sm4009761otk.13.2022.05.25.06.59.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:58:44 -0700 (PDT)
+        Wed, 25 May 2022 06:59:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Slawomir Stepien <sst@poczta.fm>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 23/40] hwmon: (lm90) Add flag to indicate support for minimum temperature limits
-Date:   Wed, 25 May 2022 06:57:41 -0700
-Message-Id: <20220525135758.2944744-24-linux@roeck-us.net>
+Subject: [PATCH 36/40] hwmon: (lm90) Only disable alerts if not already disabled
+Date:   Wed, 25 May 2022 06:57:54 -0700
+Message-Id: <20220525135758.2944744-37-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220525135758.2944744-1-linux@roeck-us.net>
 References: <20220525135758.2944744-1-linux@roeck-us.net>
@@ -66,205 +66,32 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-A flag indicating support for minimum temperature limits doesn't cost much
-and will enable us to add support for MAX6642 to the lm90 driver.
+It was observed that the alert handler may be called from the i2c core
+even after alerts have already been disabled. Only disable alerts if
+they have not already been disabled.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm90.c | 54 +++++++++++++++++++++++++-------------------
- 1 file changed, 31 insertions(+), 23 deletions(-)
+ drivers/hwmon/lm90.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 22ea75535ab4..abf1451c5652 100644
+index d1435f55e31d..6d1e7052e3ed 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -192,6 +192,7 @@ enum chips { adm1032, adt7461, adt7461a, adt7481, g781, lm86, lm90, lm99,
- #define LM90_HAVE_PARTIAL_PEC	BIT(12)	/* Partial PEC support (adm1032)*/
- #define LM90_HAVE_ALARMS	BIT(13)	/* Create 'alarms' attribute	*/
- #define LM90_HAVE_EXT_UNSIGNED	BIT(14)	/* extended unsigned temperature*/
-+#define LM90_HAVE_LOW		BIT(15)	/* low limits			*/
+@@ -2658,8 +2658,10 @@ static void lm90_alert(struct i2c_client *client, enum i2c_alert_protocol type,
  
- /* LM90 status */
- #define LM90_STATUS_LTHRM	BIT(0)	/* local THERM limit tripped */
-@@ -369,7 +370,8 @@ static const struct lm90_params lm90_params[] = {
- 	[adm1032] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT
--		  | LM90_HAVE_PARTIAL_PEC | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_PARTIAL_PEC | LM90_HAVE_ALARMS
-+		  | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 10,
- 	},
-@@ -382,7 +384,7 @@ static const struct lm90_params lm90_params[] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP
- 		  | LM90_HAVE_CRIT | LM90_HAVE_PARTIAL_PEC
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 10,
- 		.resolution = 10,
-@@ -390,7 +392,8 @@ static const struct lm90_params lm90_params[] = {
- 	[adt7461a] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP
--		  | LM90_HAVE_CRIT | LM90_HAVE_PEC | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_PEC | LM90_HAVE_ALARMS
-+		  | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 10,
- 	},
-@@ -398,7 +401,7 @@ static const struct lm90_params lm90_params[] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP
- 		  | LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_PEC
--		  | LM90_HAVE_TEMP3 | LM90_HAVE_CRIT,
-+		  | LM90_HAVE_TEMP3 | LM90_HAVE_CRIT | LM90_HAVE_LOW,
- 		.alert_alarms = 0x1c7c,
- 		.max_convrate = 11,
- 		.resolution = 10,
-@@ -407,58 +410,58 @@ static const struct lm90_params lm90_params[] = {
- 	[g781] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 7,
- 	},
- 	[lm86] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
- 	},
- 	[lm90] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
- 	},
- 	[lm99] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
- 	},
- 	[max6646] = {
- 		.flags = LM90_HAVE_CRIT | LM90_HAVE_BROKEN_ALERT
--		  | LM90_HAVE_EXT_UNSIGNED | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_EXT_UNSIGNED | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 6,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[max6648] = {
- 		.flags = LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_CRIT
--		  | LM90_HAVE_BROKEN_ALERT,
-+		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 6,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[max6654] = {
--		.flags = LM90_HAVE_BROKEN_ALERT | LM90_HAVE_ALARMS,
-+		.flags = LM90_HAVE_BROKEN_ALERT | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 7,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[max6657] = {
- 		.flags = LM90_PAUSE_FOR_CONFIG | LM90_HAVE_CRIT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 8,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[max6659] = {
- 		.flags = LM90_HAVE_EMERGENCY | LM90_HAVE_CRIT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 8,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
-@@ -471,14 +474,14 @@ static const struct lm90_params lm90_params[] = {
- 		 */
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_CRIT
- 		  | LM90_HAVE_CRIT_ALRM_SWP | LM90_HAVE_BROKEN_ALERT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 7,
- 	},
- 	[max6696] = {
- 		.flags = LM90_HAVE_EMERGENCY
- 		  | LM90_HAVE_EMERGENCY_ALARM | LM90_HAVE_TEMP3 | LM90_HAVE_CRIT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x1c7c,
- 		.max_convrate = 6,
- 		.reg_status2 = MAX6696_REG_STATUS2,
-@@ -486,7 +489,7 @@ static const struct lm90_params lm90_params[] = {
- 	},
- 	[w83l771] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 8,
- 	},
-@@ -497,7 +500,7 @@ static const struct lm90_params lm90_params[] = {
- 		 * be set).
- 		 */
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
- 		.reg_local_ext = SA56004_REG_LOCAL_TEMPL,
-@@ -505,7 +508,7 @@ static const struct lm90_params lm90_params[] = {
- 	[tmp451] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP | LM90_HAVE_CRIT
--		  | LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 9,
- 		.resolution = 12,
-@@ -514,7 +517,7 @@ static const struct lm90_params lm90_params[] = {
- 	[tmp461] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP | LM90_HAVE_CRIT
--		  | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_ALARMS | LM90_HAVE_LOW,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 9,
- 		.resolution = 12,
-@@ -2161,10 +2164,15 @@ static int lm90_probe(struct i2c_client *client)
- 	info->type = hwmon_temp;
- 	info->config = data->channel_config;
- 
--	data->channel_config[0] = HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
--		HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM;
--	data->channel_config[1] = HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
--		HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM | HWMON_T_FAULT;
-+	data->channel_config[0] = HWMON_T_INPUT | HWMON_T_MAX |
-+		HWMON_T_MAX_ALARM;
-+	data->channel_config[1] = HWMON_T_INPUT | HWMON_T_MAX |
-+		HWMON_T_MAX_ALARM | HWMON_T_FAULT;
-+
-+	if (data->flags & LM90_HAVE_LOW) {
-+		data->channel_config[0] |= HWMON_T_MIN | HWMON_T_MIN_ALARM;
-+		data->channel_config[1] |= HWMON_T_MIN | HWMON_T_MIN_ALARM;
-+	}
- 
- 	if (data->flags & LM90_HAVE_CRIT) {
- 		data->channel_config[0] |= HWMON_T_CRIT | HWMON_T_CRIT_ALARM | HWMON_T_CRIT_HYST;
+ 		if ((data->flags & LM90_HAVE_BROKEN_ALERT) &&
+ 		    (data->current_alarms & data->alert_alarms)) {
+-			dev_dbg(&client->dev, "Disabling ALERT#\n");
+-			lm90_update_confreg(data, data->config | 0x80);
++			if (!(data->config & 0x80)) {
++				dev_dbg(&client->dev, "Disabling ALERT#\n");
++				lm90_update_confreg(data, data->config | 0x80);
++			}
+ 			schedule_delayed_work(&data->alert_work,
+ 				max_t(int, HZ, msecs_to_jiffies(data->update_interval)));
+ 		}
 -- 
 2.35.1
 
