@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1BE9C43217
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 14:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61CCEC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 14:00:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbiEYOAT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 May 2022 10:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
+        id S240154AbiEYOAU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 May 2022 10:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244642AbiEYN6r (ORCPT
+        with ESMTP id S244666AbiEYN6s (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 May 2022 09:58:47 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC32DABF5C;
-        Wed, 25 May 2022 06:58:38 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-f2bb84f9edso2957858fac.10;
-        Wed, 25 May 2022 06:58:38 -0700 (PDT)
+        Wed, 25 May 2022 09:58:48 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62199AE249;
+        Wed, 25 May 2022 06:58:42 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id v9so20438509oie.5;
+        Wed, 25 May 2022 06:58:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LzGrQA521f4znRunTBtTAMSfpI//uWmIAfNJSo5sNZA=;
-        b=XkgIGJzq6ZsqjOoEOrFai7RDdw8V1TQ1e1GR0XxLJFvITV2bslKd7xaCeZhbda9WSq
-         BOnxqzxs91F12+lUGNvcnD25CW25mRDZbxqhnqz9l+sDcUEPqTMuKRjDzKISLquvbLMk
-         fRdRg8YQNW/lKj5rsW8QLUL6cT419ej0t0nVh1UW7663+5JCwD89Wh4uMFrDYRX0+rhW
-         RMCRNjC0thjBqfzRW9yZ9F3OL/8ELyB8n5pRgeiYlEFiYQYBo9sH38SqLvluXLjrtlD4
-         IlK7KE36p8J6jUrqqmYe9qZoLv0Krg8HQlUoApoLPTah07b/RQF8WNovPyaVHzyLiXA0
-         wOHw==
+        bh=wkrhdTzZFBdfaObCK8hoJNGTchl6SYk4T1R8k1k68pg=;
+        b=mOSz+quuCtrbsVf6zg810ztE02+IeItpyZUTHbLjaSUWofYwkyy4wdcRG5Lgwwkxe7
+         aovshnhqTMu3qQLVvbwLjCR1mUdWNwIPch0ft5Ma0hJkCE5Vp6iFdeLDaB0qL3IM+Pzi
+         eBTZ0CA1psAUgPED1BLlRoaFOR1up6Icghjtw5u7LNff6ulRddAZSOQDTs6kqJXGdID8
+         HlQTh0d3+v/7pvMlVVHwCxFbBdFaHEb9k488aGJ3XdW5VniufhdoGs0UsSrNAC78oZpc
+         aXYBhG6ZFsI/FiT3vESBKYLGVwkgR8300KWGcO2sMhwnCuNMkmCiN2tJOd6vDoQ+tCEj
+         V2Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=LzGrQA521f4znRunTBtTAMSfpI//uWmIAfNJSo5sNZA=;
-        b=djVbsty7v5JBgZa9OcyXICkpjapJLS0pXpPi74hVe625+y4x9nHgdfCWUzWqMrTnwE
-         5iHOB0sew7VwiLVUSySIW7Vi5xB3i22aYAHidda+X0v7931hHmlVAE0/9ZMWMgCQ1BlI
-         XJtgjqduhU7+iBi7SU3N7+TNaA8U5Iodgv30YJcwlLZfpxx4mz1VUnmIQqBwDWCMUDyX
-         miWZn3m9qFDJj4WHJc6HL6j/4P990LpGVKWjsKsBOZUoAxwdKysvcj7EjpVmK/YTPtPb
-         uMkEubJZCMP5sF8jREYHlSxxvK4WS16J1WgLFoCtET+oLrLElMLZsbC8X5Q/g9wJdilq
-         thtg==
-X-Gm-Message-State: AOAM531r3MGzAYJh2KZO1KB2fhqktTLNakT4HfE+Mc8XeEjV8TASuNfS
-        bgnQz10AVOuz0dDYNrywBT+bTuKVU9f5IA==
-X-Google-Smtp-Source: ABdhPJw0PX9ox0gioOGRmo3RLhLmQmrs6oy3tl0SO9PrS4QgapbHzFazuXdSSSGKmXp9D+11NopwYQ==
-X-Received: by 2002:a05:6870:d1cd:b0:e1:e7ee:faa0 with SMTP id b13-20020a056870d1cd00b000e1e7eefaa0mr5769865oac.5.1653487117817;
-        Wed, 25 May 2022 06:58:37 -0700 (PDT)
+        bh=wkrhdTzZFBdfaObCK8hoJNGTchl6SYk4T1R8k1k68pg=;
+        b=snkMeBDIEmXqhcSpYImdq+zp06Sivyca8D7EZ7ImpADDpMpvUmgntmR6mn/fXMWUY3
+         berqW1p34CPa2wl6WcevtriV8swKGbkvHaCRQn9J1DAFRhcQuiXCe0C+Baf8pBy75YZg
+         l/OyyQ58YUzuNzNAvr1i2cf/t++nxOou7Zlmhf9BwYTLVLBs3wmkQ5O06dyzb5qV5tiQ
+         +iT5GQVcsxulPsaks+RyPRGGgofTV9AKMGzMfG5VtLe6w0u2VbpwbxnwsIkcBKQ6D19x
+         YBFBr06eT5v/KG9Hx95gtCWXDR5ggAHkPof2uPHr4WYexh8RnlanF9te8uvyndzSqeRE
+         lsYw==
+X-Gm-Message-State: AOAM532jvpIe1ZLORMqnrURFp+8msnS3z9XiJzvxlfYy5jmjtdZnGdJc
+        w4qFQ+tTrWaAYHrJ2YEk2nEwsGH1PnDdhg==
+X-Google-Smtp-Source: ABdhPJxzKW2WPmq5KSKUH6apX+birMySZgkUgy30ByrWuvu/M9uSQPajhNJsOOz1+gAaAj7pqbZpkA==
+X-Received: by 2002:a05:6808:11c3:b0:2f9:62e0:ebe with SMTP id p3-20020a05680811c300b002f962e00ebemr5197311oiv.22.1653487121365;
+        Wed, 25 May 2022 06:58:41 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q203-20020acac0d4000000b00325cda1ff94sm6215926oif.19.2022.05.25.06.58.36
+        by smtp.gmail.com with ESMTPSA id m2-20020a4aab82000000b0035eb4e5a6bbsm6703745oon.17.2022.05.25.06.58.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:58:37 -0700 (PDT)
+        Wed, 25 May 2022 06:58:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Slawomir Stepien <sst@poczta.fm>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 19/40] hwmon: (lm90) Add explicit support for MAX6648/MAX6692
-Date:   Wed, 25 May 2022 06:57:37 -0700
-Message-Id: <20220525135758.2944744-20-linux@roeck-us.net>
+Subject: [PATCH 21/40] hwmon: (lm90) Strengthen chip detection for ADM1032, ADT7461(A), and NCT1008
+Date:   Wed, 25 May 2022 06:57:39 -0700
+Message-Id: <20220525135758.2944744-22-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220525135758.2944744-1-linux@roeck-us.net>
 References: <20220525135758.2944744-1-linux@roeck-us.net>
@@ -66,169 +66,51 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Unlike MAX6646/MAX6647/MAX6649, MAX6648 and MAX6692 only support
-a temperature range of 0..127 degrees C. Separate support for the
-two sets of chips to be able to support maximum temperature ranges
-correctly for all chips. Introduce new feature flag to indicate
-temperature support up to 255 degrees C.
-
-Since the chips are almost identical except for the supported temperature
-range, automatic chip detection is limited. Effectively this means that
-MAX6648 may be mis-detected as MAX6649 when auto-detected, but there is
-nothing we can do about that.
-
-Devicetree nodes are not added for the added chips since it is quite
-unlikely that such old chips will ever be used in a devicetree based
-system. They can be added later if needed.
+ADT7461A and NCT1008 support the undocumented manufacturer and chip ID
+registers at 0x3e and 0x3f, and return 0x61 as chip ID. ADM1032 and
+ADT7461 do not support those registers but return 0 when reading them.
+Use this information to improve the accuracy of the chip detection code.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/lm90.rst | 12 +++++++++--
- drivers/hwmon/lm90.c         | 41 ++++++++++++++++++++++++++++++++----
- 2 files changed, 47 insertions(+), 6 deletions(-)
+ drivers/hwmon/lm90.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/hwmon/lm90.rst b/Documentation/hwmon/lm90.rst
-index 9886a298797f..e947e609990b 100644
---- a/Documentation/hwmon/lm90.rst
-+++ b/Documentation/hwmon/lm90.rst
-@@ -105,7 +105,7 @@ Supported chips:
- 
-   * Maxim MAX6648
- 
--    Prefix: 'max6646'
-+    Prefix: 'max6648'
- 
-     Addresses scanned: I2C 0x4c
- 
-@@ -191,7 +191,7 @@ Supported chips:
- 
-   * Maxim MAX6692
- 
--    Prefix: 'max6646'
-+    Prefix: 'max6648'
- 
-     Addresses scanned: I2C 0x4c
- 
-@@ -324,6 +324,14 @@ ADT7461, ADT7461A, NCT1008:
-   * Lower resolution for remote temperature
-   * SMBus PEC support for Write Byte and Receive Byte transactions.
- 
-+MAX6646, MAX6647, MAX6649:
-+  * Better local resolution
-+  * Extended range unsigned external temperature
-+
-+MAX6648, MAX6692:
-+  * Better local resolution
-+  * Unsigned temperature
-+
- MAX6654:
-   * Better local resolution
-   * Selectable address
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index e23dcf299b03..df4b861024e3 100644
+index d2477e0c1e1e..abc64738e892 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -115,7 +115,7 @@ static const unsigned short normal_i2c[] = {
- 	0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
+@@ -1603,22 +1603,26 @@ static const char *lm90_detect_analog(struct i2c_client *client, int chip_id,
  
- enum chips { adm1032, adt7461, adt7461a, g781, lm86, lm90, lm99,
--	max6646, max6654, max6657, max6659, max6680, max6696,
-+	max6646, max6648, max6654, max6657, max6659, max6680, max6696,
- 	sa56004, tmp451, tmp461, w83l771,
- };
- 
-@@ -179,6 +179,7 @@ enum chips { adm1032, adt7461, adt7461a, g781, lm86, lm90, lm99,
- #define LM90_HAVE_PEC		BIT(11)	/* Chip supports PEC		*/
- #define LM90_HAVE_PARTIAL_PEC	BIT(12)	/* Partial PEC support (adm1032)*/
- #define LM90_HAVE_ALARMS	BIT(13)	/* Create 'alarms' attribute	*/
-+#define LM90_HAVE_EXT_UNSIGNED	BIT(14)	/* extended unsigned temperature*/
- 
- /* LM90 status */
- #define LM90_STATUS_LTHRM	BIT(0)	/* local THERM limit tripped */
-@@ -213,6 +214,7 @@ static const struct i2c_device_id lm90_id[] = {
- 	{ "lm99", lm99 },
- 	{ "max6646", max6646 },
- 	{ "max6647", max6646 },
-+	{ "max6648", max6648 },
- 	{ "max6649", max6646 },
- 	{ "max6654", max6654 },
- 	{ "max6657", max6657 },
-@@ -220,6 +222,7 @@ static const struct i2c_device_id lm90_id[] = {
- 	{ "max6659", max6659 },
- 	{ "max6680", max6680 },
- 	{ "max6681", max6680 },
-+	{ "max6692", max6648 },
- 	{ "max6695", max6696 },
- 	{ "max6696", max6696 },
- 	{ "nct1008", adt7461a },
-@@ -400,7 +403,14 @@ static const struct lm90_params lm90_params[] = {
- 	},
- 	[max6646] = {
- 		.flags = LM90_HAVE_CRIT | LM90_HAVE_BROKEN_ALERT
--		  | LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_ALARMS,
-+		  | LM90_HAVE_EXT_UNSIGNED | LM90_HAVE_ALARMS,
-+		.alert_alarms = 0x7c,
-+		.max_convrate = 6,
-+		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
-+	},
-+	[max6648] = {
-+		.flags = LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_CRIT
-+		  | LM90_HAVE_BROKEN_ALERT,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 6,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
-@@ -1119,7 +1129,7 @@ static int lm90_temp_from_reg(u32 flags, u16 regval, u8 resolution)
- 
- 	if (flags & LM90_HAVE_EXTENDED_TEMP)
- 		val = regval - 0x4000;
--	else if (flags & LM90_HAVE_UNSIGNED_TEMP)
-+	else if (flags & (LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_EXT_UNSIGNED))
- 		val = regval;
- 	else
- 		val = (s16)regval;
-@@ -1147,6 +1157,8 @@ static u16 lm90_temp_to_reg(u32 flags, long val, u8 resolution)
- 	if (flags & LM90_HAVE_EXTENDED_TEMP) {
- 		val = clamp_val(val, -64000, 191000 + fraction);
- 		val += 64000;
-+	} else if (flags & LM90_HAVE_EXT_UNSIGNED) {
-+		val = clamp_val(val, 0, 255000 + fraction);
- 	} else if (flags & LM90_HAVE_UNSIGNED_TEMP) {
- 		val = clamp_val(val, 0, 127000 + fraction);
- 	} else {
-@@ -1673,11 +1685,32 @@ static const char *lm90_detect_maxim(struct i2c_client *client, int chip_id,
- 		 * The chip_id register of the MAX6646/6647/6649 holds the
- 		 * revision of the chip. The lowest 6 bits of the config1
- 		 * register are unused and should return zero when read.
-+		 * The I2C address of MAX6648/6692 is fixed at 0x4c.
-+		 * MAX6646 is at address 0x4d, MAX6647 is at address 0x4e,
-+		 * and MAX6649 is at address 0x4c. A slight difference between
-+		 * the two sets of chips is that the remote temperature register
-+		 * reports different values if the DXP pin is open or shorted.
-+		 * We can use that information to help distinguish between the
-+		 * chips. MAX6648 will be mis-detected as MAX6649 if the remote
-+		 * diode is connected, but there isn't really anything we can
-+		 * do about that.
- 		 */
- 		if (!(config1 & 0x3f) && convrate <= 0x07) {
-+			int temp;
-+
- 			switch (address) {
- 			case 0x4c:
--				name = "max6649";
-+				/*
-+				 * MAX6649 reports an external temperature
-+				 * value of 0xff if DXP is open or shorted.
-+				 * MAX6648 reports 0x80 in that case.
-+				 */
-+				temp = i2c_smbus_read_byte_data(client,
-+								LM90_REG_REMOTE_TEMPH);
-+				if (temp == 0x80)
-+					name = "max6648";
-+				else
-+					name = "max6649";
- 				break;
- 			case 0x4d:
- 				name = "max6646";
+ 	switch (chip_id) {
+ 	case 0x40 ... 0x4f:	/* ADM1032 */
+-		if ((address == 0x4c || address == 0x4d) && !(config1 & 0x3f) &&
++		if (man_id2 == 0x00 && chip_id2 == 0x00 &&
++		    (address == 0x4c || address == 0x4d) && !(config1 & 0x3f) &&
+ 		    convrate <= 0x0a)
+ 			name = "adm1032";
+ 		break;
+ 	case 0x51:	/* ADT7461 */
+-		if ((address == 0x4c || address == 0x4d) && !(config1 & 0x1b) &&
++		if (man_id2 == 0x00 && chip_id2 == 0x00 &&
++		    (address == 0x4c || address == 0x4d) && !(config1 & 0x1b) &&
+ 		    convrate <= 0x0a)
+ 			name = "adt7461";
+ 		break;
+ 	case 0x54:	/* NCT1008 */
+-		if ((address == 0x4c || address == 0x4d) && !(config1 & 0x1b) &&
++		if (man_id2 == 0x41 && chip_id2 == 0x61 &&
++		    (address == 0x4c || address == 0x4d) && !(config1 & 0x1b) &&
+ 		    convrate <= 0x0a)
+ 			name = "nct1008";
+ 		break;
+ 	case 0x57:	/* ADT7461A, NCT1008 (datasheet rev. 3) */
+-		if ((address == 0x4c || address == 0x4d) && !(config1 & 0x1b) &&
++		if (man_id2 == 0x41 && chip_id2 == 0x61 &&
++		    (address == 0x4c || address == 0x4d) && !(config1 & 0x1b) &&
+ 		    convrate <= 0x0a)
+ 			name = "adt7461a";
+ 		break;
 -- 
 2.35.1
 
