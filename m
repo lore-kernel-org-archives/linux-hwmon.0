@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1323CC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 13:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D61C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 13:58:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240104AbiEYN6k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 May 2022 09:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S231317AbiEYN6l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 May 2022 09:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244593AbiEYN6Z (ORCPT
+        with ESMTP id S244560AbiEYN6R (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 May 2022 09:58:25 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1845A5AAA;
-        Wed, 25 May 2022 06:58:20 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id s188so21303700oie.4;
-        Wed, 25 May 2022 06:58:20 -0700 (PDT)
+        Wed, 25 May 2022 09:58:17 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A7FA502F;
+        Wed, 25 May 2022 06:58:11 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id f5-20020a4aa685000000b0040e7e819183so1904070oom.3;
+        Wed, 25 May 2022 06:58:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jigbfHjeWyfJMFDadivDFBM9ghLPytg75FdeUbqDCFM=;
-        b=haPiKRgAPRV2kPqf36uQ41Cf/CSFZgrvVIocRjfnxXFj9i4Ub9ndrmXuxZjKyb6Lsu
-         1efUQtFDkAXL3n6ExhCeDNqxTwbDZOQz8mJO+gHsVtDudp1TRkmo5cqfcB41Qapyo7SW
-         bn8gC5yZEgX2RaL/SGQ+7O1EYlAFq2Bmzqf8lZI6NDwggTYPzrDjYAk3TyGziEXWppDR
-         NrrlTkBkhSZhiO/vZ5+z3tie6H/QeLNZk2pr5o8uNTeio1reGGP3rB5bl+BgL/TBmkM3
-         g/47V21840YxNm4wd4ZH6u8H1Qc4qYfu81HHahKyUyjc91IepVQmWnkVYg8r82fiUmOO
-         4Bdg==
+        bh=jkeP4GwJvBOCaJylAO1wG73yjst6A2ktNXJqi4BU/pY=;
+        b=cqVCQJfe04xaW1cxQT3cqw2mvzt6bVpHDpDLoPAejS6TsgOgCkhVJJtvMT2C0R5i9N
+         bWjQewzqLmPORz/dR47FdtcI9CcnMyvBMXLlXFa+JFH2+olAH4W3SosE7KCV7wXcL2Z0
+         k9lxfhY5UNxOyxTzQ+86My3jSzhlKmtbhSnfgy9Cs/nqIS9/4vNQZQrD/71a7QSUEYqi
+         hduVVMgKksChs+b69Fhm7Ndp/XE9YO121QeDjyQc6jrDlsWj0RkXY1iJyRkisnDMAEk5
+         XhQN+mcCZcLcLvjFdZfCcZ1/W3pCy6vNEJxMYHxH/EgtQ98n9CSLfGzFN2ZEPJ8fwLsN
+         cKGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=jigbfHjeWyfJMFDadivDFBM9ghLPytg75FdeUbqDCFM=;
-        b=WU48DWAMsZ6Y61rgqw2dBTvG9QOzTD+eWtTDQH83RVSZiOVLXnusELjmrryirOtUsG
-         kxbkHSlQ8DlTpmxgRRr8T3TZwBkQNPoOe3PHa6KxXR/9RIXZO31rNvSgjQabQKJ7gCzU
-         Y2K5dNUR8YjCh0PRipqr0h+5oWNvqWbaAJuAarBYq7BmPqEfu7HcpIUQqirGygZxyZZp
-         N9oqXOvPV2wgoqeKX1/LNOvF34sUO6MlV1t6TYhAg9Q2S2IsPvjN4LOJwfeER1omrNCT
-         5vbGN5FQLz7nD0kWBvo0UoWoe4uKs5aRO1SpRZDA01fM+M9tcKtofV3A1+0VrGYKdM8l
-         sPfw==
-X-Gm-Message-State: AOAM533u9dMl0T5Wjp4TPeKrx1uwzjxb4KZdsVJ6XzBbYt48Oz22otsn
-        yrSALsXi1lxpCTTPhH/lem2MfAAKQ1Qo6w==
-X-Google-Smtp-Source: ABdhPJzolhQsMlfgb+N6N2oEz/uyT8sIiBibp/lNR4DcI7IL/glhO6W4c8fk9ddkreOwK0+K0YB5wQ==
-X-Received: by 2002:a05:6808:1285:b0:32b:91f2:248a with SMTP id a5-20020a056808128500b0032b91f2248amr2961019oiw.155.1653487100187;
-        Wed, 25 May 2022 06:58:20 -0700 (PDT)
+        bh=jkeP4GwJvBOCaJylAO1wG73yjst6A2ktNXJqi4BU/pY=;
+        b=Ri5LKHtqbXhE/77VR8+akNaaI06EZR2M4tuVNktmN13N12In7o6FKdCfxkrr/REUJO
+         uTFoGiqVoRxs3cClpkhFfrYY0v+rWzzbvjKtbdltKuOmdrZRc6vr4QXIbal8umKFWGxq
+         dtYOCX3tm+q25FFRQt4KYIttQIHtTpm05/t/LvaMWPSXsk7GP3Xs42QEnqSA6AolF95h
+         3isU1GuFpm5ib5LSCcoDHvWWuPBj2BJiTa50PB7p6kJVjlGAo6DMmA2rZjDG9f/adQOC
+         2vgE+dYUkm1jXA61T4lyH5ocxqaaHbObC5N/B9wkrSfH3Pjhl9w2f52a1d0+gTb8aRdc
+         cpnA==
+X-Gm-Message-State: AOAM531ywWnQD3T1xMZetnkvyEgplIlCIo3J56EbGa2hzViL80Iv2JIW
+        nwI0LdvwX87LLB9IRiAZZv9dlz52vN7TwA==
+X-Google-Smtp-Source: ABdhPJwkUSNuTTyyMbgqfJ52uV0l2q3NL/HtZPF7Yj90++bjom9RuOkDk1ke4NYdRG/6zcA4qXS05Q==
+X-Received: by 2002:a4a:b307:0:b0:324:c7f2:386 with SMTP id m7-20020a4ab307000000b00324c7f20386mr12921515ooo.18.1653487090927;
+        Wed, 25 May 2022 06:58:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y2-20020a056870e50200b000e686d13890sm5918445oag.42.2022.05.25.06.58.19
+        by smtp.gmail.com with ESMTPSA id w184-20020aca62c1000000b0032b99637366sm832463oib.25.2022.05.25.06.58.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:58:19 -0700 (PDT)
+        Wed, 25 May 2022 06:58:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Slawomir Stepien <sst@poczta.fm>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 10/40] hwmon: (lm90) Enable full PEC support for ADT7461A
-Date:   Wed, 25 May 2022 06:57:28 -0700
-Message-Id: <20220525135758.2944744-11-linux@roeck-us.net>
+Subject: [PATCH 05/40] hwmon: (lm90) Use BIT macro
+Date:   Wed, 25 May 2022 06:57:23 -0700
+Message-Id: <20220525135758.2944744-6-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220525135758.2944744-1-linux@roeck-us.net>
 References: <20220525135758.2944744-1-linux@roeck-us.net>
@@ -66,79 +66,90 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Experiments show that ADT7461A and NCT1008 support PEC, even though it is
-not documented. Enable support for it in the driver. Since ADT7461 only
-supports partial PEC, this means that the configuration for ADT7461A
-needs to be separated from ADT7461.
+Use BIT macro instead of shift operation to improve readability.
+No functional change.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm90.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/hwmon/lm90.c | 55 ++++++++++++++++++++++----------------------
+ 1 file changed, 28 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 6c79422da420..42e72702b9a9 100644
+index 6728520a21ca..0f3fadc1631c 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -114,7 +114,7 @@ static const unsigned short normal_i2c[] = {
- 	0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b, 0x48, 0x49, 0x4a, 0x4b, 0x4c,
- 	0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
+@@ -80,6 +80,7 @@
+  * concern all supported chipsets, unless mentioned otherwise.
+  */
  
--enum chips { adm1032, adt7461, g781, lm86, lm90, lm99,
-+enum chips { adm1032, adt7461, adt7461a, g781, lm86, lm90, lm99,
- 	max6646, max6654, max6657, max6659, max6680, max6696,
- 	sa56004, tmp451, tmp461, w83l771,
- };
-@@ -207,7 +207,7 @@ enum chips { adm1032, adt7461, g781, lm86, lm90, lm99,
- static const struct i2c_device_id lm90_id[] = {
- 	{ "adm1032", adm1032 },
- 	{ "adt7461", adt7461 },
--	{ "adt7461a", adt7461 },
-+	{ "adt7461a", adt7461a },
- 	{ "g781", g781 },
- 	{ "lm90", lm90 },
- 	{ "lm86", lm86 },
-@@ -224,7 +224,7 @@ static const struct i2c_device_id lm90_id[] = {
- 	{ "max6681", max6680 },
- 	{ "max6695", max6696 },
- 	{ "max6696", max6696 },
--	{ "nct1008", adt7461 },
-+	{ "nct1008", adt7461a },
- 	{ "w83l771", w83l771 },
- 	{ "sa56004", sa56004 },
- 	{ "tmp451", tmp451 },
-@@ -244,7 +244,7 @@ static const struct of_device_id __maybe_unused lm90_of_match[] = {
- 	},
- 	{
- 		.compatible = "adi,adt7461a",
--		.data = (void *)adt7461
-+		.data = (void *)adt7461a
- 	},
- 	{
- 		.compatible = "gmt,g781",
-@@ -312,7 +312,7 @@ static const struct of_device_id __maybe_unused lm90_of_match[] = {
- 	},
- 	{
- 		.compatible = "onnn,nct1008",
--		.data = (void *)adt7461
-+		.data = (void *)adt7461a
- 	},
- 	{
- 		.compatible = "winbond,w83l771",
-@@ -360,6 +360,13 @@ static const struct lm90_params lm90_params[] = {
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 10,
- 	},
-+	[adt7461a] = {
-+		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
-+		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP
-+		  | LM90_HAVE_CRIT | LM90_HAVE_PEC,
-+		.alert_alarms = 0x7c,
-+		.max_convrate = 10,
-+	},
- 	[g781] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT,
++#include <linux/bits.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/i2c.h>
+@@ -182,36 +183,36 @@ enum chips { adm1032, adt7461, g781, lm86, lm90, lm99,
+ /*
+  * Device flags
+  */
+-#define LM90_FLAG_ADT7461_EXT	(1 << 0) /* ADT7461 extended mode	*/
++#define LM90_FLAG_ADT7461_EXT	BIT(0)	/* ADT7461 extended mode	*/
+ /* Device features */
+-#define LM90_HAVE_OFFSET	(1 << 1) /* temperature offset register	*/
+-#define LM90_HAVE_REM_LIMIT_EXT	(1 << 3) /* extended remote limit	*/
+-#define LM90_HAVE_EMERGENCY	(1 << 4) /* 3rd upper (emergency) limit	*/
+-#define LM90_HAVE_EMERGENCY_ALARM (1 << 5)/* emergency alarm		*/
+-#define LM90_HAVE_TEMP3		(1 << 6) /* 3rd temperature sensor	*/
+-#define LM90_HAVE_BROKEN_ALERT	(1 << 7) /* Broken alert		*/
+-#define LM90_HAVE_EXTENDED_TEMP	(1 << 8) /* extended temperature support*/
+-#define LM90_PAUSE_FOR_CONFIG	(1 << 9) /* Pause conversion for config	*/
+-#define LM90_HAVE_CRIT		(1 << 10)/* Chip supports CRIT/OVERT register	*/
+-#define LM90_HAVE_CRIT_ALRM_SWP	(1 << 11)/* critical alarm bits swapped	*/
++#define LM90_HAVE_OFFSET	BIT(1)	/* temperature offset register	*/
++#define LM90_HAVE_REM_LIMIT_EXT	BIT(3)	/* extended remote limit	*/
++#define LM90_HAVE_EMERGENCY	BIT(4)	/* 3rd upper (emergency) limit	*/
++#define LM90_HAVE_EMERGENCY_ALARM BIT(5)/* emergency alarm		*/
++#define LM90_HAVE_TEMP3		BIT(6)	/* 3rd temperature sensor	*/
++#define LM90_HAVE_BROKEN_ALERT	BIT(7)	/* Broken alert			*/
++#define LM90_HAVE_EXTENDED_TEMP	BIT(8)	/* extended temperature support	*/
++#define LM90_PAUSE_FOR_CONFIG	BIT(9)	/* Pause conversion for config	*/
++#define LM90_HAVE_CRIT		BIT(10)	/* Chip supports CRIT/OVERT register	*/
++#define LM90_HAVE_CRIT_ALRM_SWP	BIT(11)	/* critical alarm bits swapped	*/
+ 
+ /* LM90 status */
+-#define LM90_STATUS_LTHRM	(1 << 0) /* local THERM limit tripped */
+-#define LM90_STATUS_RTHRM	(1 << 1) /* remote THERM limit tripped */
+-#define LM90_STATUS_ROPEN	(1 << 2) /* remote is an open circuit */
+-#define LM90_STATUS_RLOW	(1 << 3) /* remote low temp limit tripped */
+-#define LM90_STATUS_RHIGH	(1 << 4) /* remote high temp limit tripped */
+-#define LM90_STATUS_LLOW	(1 << 5) /* local low temp limit tripped */
+-#define LM90_STATUS_LHIGH	(1 << 6) /* local high temp limit tripped */
+-#define LM90_STATUS_BUSY	(1 << 7) /* conversion is ongoing */
+-
+-#define MAX6696_STATUS2_R2THRM	(1 << 1) /* remote2 THERM limit tripped */
+-#define MAX6696_STATUS2_R2OPEN	(1 << 2) /* remote2 is an open circuit */
+-#define MAX6696_STATUS2_R2LOW	(1 << 3) /* remote2 low temp limit tripped */
+-#define MAX6696_STATUS2_R2HIGH	(1 << 4) /* remote2 high temp limit tripped */
+-#define MAX6696_STATUS2_ROT2	(1 << 5) /* remote emergency limit tripped */
+-#define MAX6696_STATUS2_R2OT2	(1 << 6) /* remote2 emergency limit tripped */
+-#define MAX6696_STATUS2_LOT2	(1 << 7) /* local emergency limit tripped */
++#define LM90_STATUS_LTHRM	BIT(0)	/* local THERM limit tripped */
++#define LM90_STATUS_RTHRM	BIT(1)	/* remote THERM limit tripped */
++#define LM90_STATUS_ROPEN	BIT(2)	/* remote is an open circuit */
++#define LM90_STATUS_RLOW	BIT(3)	/* remote low temp limit tripped */
++#define LM90_STATUS_RHIGH	BIT(4)	/* remote high temp limit tripped */
++#define LM90_STATUS_LLOW	BIT(5)	/* local low temp limit tripped */
++#define LM90_STATUS_LHIGH	BIT(6)	/* local high temp limit tripped */
++#define LM90_STATUS_BUSY	BIT(7)	/* conversion is ongoing */
++
++#define MAX6696_STATUS2_R2THRM	BIT(1)	/* remote2 THERM limit tripped */
++#define MAX6696_STATUS2_R2OPEN	BIT(2)	/* remote2 is an open circuit */
++#define MAX6696_STATUS2_R2LOW	BIT(3)	/* remote2 low temp limit tripped */
++#define MAX6696_STATUS2_R2HIGH	BIT(4)	/* remote2 high temp limit tripped */
++#define MAX6696_STATUS2_ROT2	BIT(5)	/* remote emergency limit tripped */
++#define MAX6696_STATUS2_R2OT2	BIT(6)	/* remote2 emergency limit tripped */
++#define MAX6696_STATUS2_LOT2	BIT(7)	/* local emergency limit tripped */
+ 
+ /*
+  * Driver data (common to all clients)
 -- 
 2.35.1
 
