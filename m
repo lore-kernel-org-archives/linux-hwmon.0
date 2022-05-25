@@ -2,201 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA49DC433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 11:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C467C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 12:44:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242087AbiEYL4c (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 May 2022 07:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S236085AbiEYMoI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 May 2022 08:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243069AbiEYL4a (ORCPT
+        with ESMTP id S233719AbiEYMoH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 May 2022 07:56:30 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B942BFB;
-        Wed, 25 May 2022 04:56:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 043A05C028C;
-        Wed, 25 May 2022 07:56:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 25 May 2022 07:56:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1653479788; x=
-        1653566188; bh=cW2sCjuMvHwM85PAI9i/8xp1DdjWZBXPTjHUxHrK29Y=; b=f
-        U/RliwE14zvu/UWIU8ZdAeDQ+PE0EbSeNRFGwxtBSY2R63HyI0gCBvjZnGFkBTg2
-        m5s9cfl8vOiBzGjH1BO+R7PTOejgsbpaU/XOuzaDaoBdVxT2843nzhPwolUBEfR3
-        hzLiW5MzRuo7ZLf0WhQbwA7ioW26C9yil9uEg16i6Kvtngg8+2P146NVfasuRSLJ
-        nmf8qTl5HuOAlXrUl+OVgrkXVdju/DcQWp6OlQ8efERuS5dZIgik4x2RBjG+He/2
-        SweI6fbwFCBzkck3h2kVW4J1YnlkhwkYBtct2hZX4NTC5IgX7sfMJiS+xXPlKH/r
-        bb8q6Cd5wHt0N9gm2vL/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1653479788; x=1653566188; bh=cW2sCjuMvHwM8
-        5PAI9i/8xp1DdjWZBXPTjHUxHrK29Y=; b=DwpT4cDZVlgXouJNw7WGSE3CPrsvP
-        F9a3ABSTjk5l6pjJ+VaJeH3tc7Q9Wac56551IHa4cA3swjLEoQquhEiFHLOwVg/r
-        fFRAEraqkh2fBCvWop+lX2dNzF8tDR32Gfk0zlE7ZSv2RihRMlpWlu5dfAS3u/lJ
-        oI35apWAjuBq/wJD2l5vB9Zmkn/BMwWwp7N2duReXE5LYRKQbk9WWAP7AvQoPKyy
-        xJ4SXpKuTmcgITRqdzmf9nJBMQOdarWfKfnuVQw2rgfK2D9K8700w2r9A9UQevrr
-        iM2jW4/kt6CYYlhFjMyPv0VcvU+kgN/nJcNtC/N/oRO8JdCOekpwHoKvQ==
-X-ME-Sender: <xms:bBmOYqSMh1DyCW3-DxXXsu-RzfKk8zJXqXKItaG-Tj_7jIhe2bStOg>
-    <xme:bBmOYvxVODklx5CV9d-ZOiAvzgBZj7LGfploZsQeKs3oiwsJi3c1DjErovT_ETO_D
-    LRKirJhhbOND7Tp-A8>
-X-ME-Received: <xmr:bBmOYn1c7b2xkk-J1vBGofd6yY22lyxaSnEjDZvHCAmqe2Ym-acAHQK4QGdckr0912cUI4GEyLhr>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeehgdeghecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
-    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeitdefkeetle
-    dvleevveeuueejffeugfeuvdetkeevjeejueetudeftefhgfehheenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
-    hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:bBmOYmAbSA3mZ9A2ZFgEp6W0m84IJEW3O4GqAD0Gsxki5Bk_aJS5Cg>
-    <xmx:bBmOYjisDynF2o2BKsaD53T0fESm5LkLbgwILqLLX1PXLGzDNMZ7mQ>
-    <xmx:bBmOYipA7WTWNmi_T2HZIjyQA1NcXdYVF73sLQZtaKtL_U7FtMofpw>
-    <xmx:bBmOYsZ4i78qRlS0_DFT-tGDY9u2_P5fW9qatg90kaMlVgqBYnp9Ig>
-Feedback-ID: ifd214418:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 May 2022 07:56:22 -0400 (EDT)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     lgirdwood@gmail.com, lee.jones@linaro.org, broonie@kernel.org,
-        robh+dt@kernel.org, kernel@pengutronix.de
-Cc:     s.hauer@pengutronix.de, alistair23@gmail.com,
-        linux-arm-kernel@lists.infradead.org, andreas@kemnade.info,
-        amitk@kernel.org, shawnguo@kernel.org,
-        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
-        linux-hwmon@vger.kernel.org, linux-imx@nxp.com, linux@roeck-us.net,
-        rui.zhang@intel.com, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v21 4/4] ARM: dts: imx7d-remarkable2: Enable lcdif
-Date:   Wed, 25 May 2022 21:55:54 +1000
-Message-Id: <20220525115554.430971-5-alistair@alistair23.me>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220525115554.430971-1-alistair@alistair23.me>
-References: <20220525115554.430971-1-alistair@alistair23.me>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 25 May 2022 08:44:07 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDB31057F;
+        Wed, 25 May 2022 05:44:05 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-f2c296d320so1652668fac.8;
+        Wed, 25 May 2022 05:44:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=p5CYTgAX8K8u4bnsP29ZIWvZEA8+eTTLk6hO/pi9fro=;
+        b=731cJuKa3rE71gdNlesv4tsAnz/E3QYlVkLA067a6lKQdHY715Lh+xQJXh1Q0uWESr
+         P+9Be7/dxb1AQE4MpafNVLbyIwo0Nft0mpjvQ7nKGLdHiHY+4ytBfowSvchd8VZ7JPhd
+         3OeniONGeOAJHbDDi0YuJXmorM5n3QqzN4+FpriU0izikk6nkoFuh7VwcIk8ZGBYZJIY
+         ZKC1G4FBRiWjOXBixVTSLTN/4ABO4ER/WA1V+krL0vMowTgGBveY8cQQK29pQmHoW+qk
+         xbqrafI8YjcUNnI2qAYLcakoLuCAb4PuPZN51TCR94ydMP7Lo64hiukhj7tVxS/8mDKJ
+         72WQ==
+X-Gm-Message-State: AOAM531plWfRVBfvkp9xF04AGyEuOQ2tli9laAz/2cHS04RaJQEteufh
+        qrbyfYRMwGlDVGKy8oBzLQ==
+X-Google-Smtp-Source: ABdhPJwN33KKYR9Abvw94TG0zy2LwgIN6td85neRCKNuiTaWClSTdJBS75XpFC147g/Wt3rrf6FZRw==
+X-Received: by 2002:a05:6870:f708:b0:f2:8a04:25e5 with SMTP id ej8-20020a056870f70800b000f28a0425e5mr5537659oab.280.1653482645114;
+        Wed, 25 May 2022 05:44:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s16-20020a4aa550000000b0035eb4e5a6c8sm6482022oom.30.2022.05.25.05.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 05:44:04 -0700 (PDT)
+Received: (nullmailer pid 1760898 invoked by uid 1000);
+        Wed, 25 May 2022 12:44:01 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     michaelsh@nvidia.com
+Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org, vadimp@nvidia.com,
+        linux@roeck-us.net, devicetree@vger.kernel.org
+In-Reply-To: <20220524161755.43833-3-michaelsh@nvidia.com>
+References: <20220524161755.43833-1-michaelsh@nvidia.com> <20220524161755.43833-3-michaelsh@nvidia.com>
+Subject: Re: [PATCH hwmon-next v2 2/3] dt-bindings: hwmon: add Microchip EMC2305 fan controller.
+Date:   Wed, 25 May 2022 07:44:01 -0500
+Message-Id: <1653482641.598528.1760897.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
+On Tue, 24 May 2022 19:17:54 +0300, michaelsh@nvidia.com wrote:
+> From: Michael Shych <michaelsh@nvidia.com>
+> 
+> Add basic description of emc2305 driver device tree binding.
+> 
+> Signed-off-by: Michael Shych <michaelsh@nvidia.com>
+> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+> ---
+> v1->v2
+> - Fix dt binding check errors;
+> - Add descriptions;
+> - Add missing fields;
+> - Change the patch subject name;
+> - Separate pwm-min, pwm-max per PWM channel.
+> ---
+>  .../bindings/hwmon/microchip,emc2305.yaml          | 87 ++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> 
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 99ac0d242936..03a4029e1e57 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
- 		startup-delay-us = <100000>; /* 100 ms */
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -132,6 +152,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.35.3
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/hwmon/microchip,emc2305.example.dts:23.23-26.19: Warning (unit_address_vs_reg): /example-0/fan/microchip,pwms/pwm@0: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/hwmon/microchip,emc2305.example.dts:27.23-30.19: Warning (unit_address_vs_reg): /example-0/fan/microchip,pwms/pwm@1: node has a unit name, but no reg or ranges property
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
