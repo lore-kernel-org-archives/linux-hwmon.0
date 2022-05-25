@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26AE4C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 14:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EDFCC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 May 2022 14:00:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbiEYOAR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 May 2022 10:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S232426AbiEYOAT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 May 2022 10:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244681AbiEYN6s (ORCPT
+        with ESMTP id S244651AbiEYN7d (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 May 2022 09:58:48 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B876AE261;
-        Wed, 25 May 2022 06:58:44 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id s11-20020a4ab54b000000b0035f0178dfcfso3800920ooo.7;
-        Wed, 25 May 2022 06:58:44 -0700 (PDT)
+        Wed, 25 May 2022 09:59:33 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FAAAEE3D;
+        Wed, 25 May 2022 06:59:00 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-f2c296d320so1897598fac.8;
+        Wed, 25 May 2022 06:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=U+UXxY05M5TJmi4jLyRXXMaHNAZH++lXKcrFl1VFWV8=;
-        b=BgZZyZtQ7wCoyINfVpNxMetNS6uzBVZ1RvSn/eaxmGYy0bo7kSL0E2kh2x/XmHPaFf
-         V8VO1D0RIJcG3/xyL/kQwmy+dR1mhem+3N7gia1ldfy9zHQDcSgl79GtnDzkC5VgSq8N
-         cnEKwnLf7MVvq0zM3W5yP/v/2nIzckxNtGzbNOgDlxu9euPoRFYr1//PrnHUoPVeJP74
-         b6gMK9SRXkmbELMqRB4FdemvugVfyDNfYJ5HDBwX/4qaEEd1CxJ9IheJpEj6mlOAyvc3
-         XdF2wtTIwpTIrj71IysYo4IN5mNGrJOCscvQrl6kFHa8xN8XFqKLxjcnaUuAF+ma6E7H
-         3/5w==
+        bh=XUqJGLuP/c7Bm/TAQRQJphmcdhLgiPPwGVlgWtslK8E=;
+        b=Jle2CO9DBrH3quxzKlYFFFWVWkxYAVm5wDBC7rMy/1nMWjdcYxRuzxIWyiqM+fD+bd
+         QS40jJABtqXEx8xWSsPORNTPZnLA1WXGyXJb9Q1KaPXc1T+wK+b92cmfMXzdLXKr+DeA
+         vuituOqNokc6raPS0FRUiNzpkV6DNmOg9Kp56aAkWol6vShSlaXAsWQEnJbD8ZdHnyNu
+         Jl0AaVrSlXSmO/+tT1d6z7eS3xTSHI4JXaf8zyjyXw9ji47vB1BrFR0a2xq5Ju1GpFUi
+         petw0VBD7M/u7u7uc8QVg9optpv0jWdDcoc5hIBVXyt3SSdiGG/VtcnwdhZFj55YYK7l
+         Y9Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=U+UXxY05M5TJmi4jLyRXXMaHNAZH++lXKcrFl1VFWV8=;
-        b=UGGlJ0OWqa434e9j1qMgnOyEXfpQyDbwJjPmAzahcYDIfX8QXPUi+Fwxg5PfVTLC1j
-         9QWA0PfYZp16Kczw6kHcmsdWbR3H7P6RfQi0fFq/1a6koXVXRLN2RJx7C+puo6ZYHNcX
-         U+nn7+QvUsupj7CUM5i6FaeN/HgfEflL1/Vz6CtYKSOB1N3UyCfscC2S/gmC/HagMEe9
-         CgUfuXeP383urR3bRwIWo3LrgReTzf8jCaGvzShi+2pdMa9HtsoLmRHzM1ETgk4zIFoa
-         wYLZEGQfM76cCidCoM3dhBcF2FzA2TNJvsqb3QkcSO7cLkDW/6bzgexrEvf/7NK+ig4r
-         9XNA==
-X-Gm-Message-State: AOAM5327errbrhiy6zbz2tzzlql6QiFmE2r2wwUiK0KaCPe4Lwkay5dW
-        bFttQBlR3h8ewTFt/bKYPPv9dlsrn+TgMw==
-X-Google-Smtp-Source: ABdhPJyjYoF6zvRQEWSpyLYIBh5bFJvBZaW5Yqc3bd41NmnICeJmFZ6eB0xjMiAxgSTKn0XqtwcJwA==
-X-Received: by 2002:a4a:968e:0:b0:324:22c6:1a31 with SMTP id s14-20020a4a968e000000b0032422c61a31mr12891226ooi.93.1653487123176;
-        Wed, 25 May 2022 06:58:43 -0700 (PDT)
+        bh=XUqJGLuP/c7Bm/TAQRQJphmcdhLgiPPwGVlgWtslK8E=;
+        b=2nlJ2FbScl5YmEwrRmJ60LGYCRRc5Q3ORAS7OqW6b8Ak3UvJzOC90WqlKY+7l5w3v0
+         +yKcE0K9Sr+850ToUftx2UzfP0M2w3tIKVy4ZJardksghzg3AgECrdpSoIaAtR0tQ8v+
+         TNL9b/w3EpBkgdzsYVzke+eEk8+yzDwWtQVVOK1cIl7OIdlrtSNLa1BlzE6CAATDz4JX
+         srAKMSQz4YYW/a1PE5P2rLAlq+slcbv3b1DzDz5njpwFkv9Rk3MwwW5cIwOEIannQ3v8
+         oQEb2OY9XNYevSjDmqBuKBPcJKcye4DkLojWp/6FqFrV4kcAexmYkqOwJSEZYMf4iMqU
+         wXrg==
+X-Gm-Message-State: AOAM530rd1AUDW8IN5jIsVz4SuYiSAOK3jSuxq89VFNHxZislt5nuJgI
+        iNaeypEO4V8b4mBUxAH4vpxbnt2AeLtNOQ==
+X-Google-Smtp-Source: ABdhPJwb/6EK4UvnLeRp3uMGQ2Xlq5DwSRlsPo+Px8mYXvLtSM0/0RWrpXtv3G87HnGHQiTeXabuAw==
+X-Received: by 2002:a05:6870:538d:b0:de:aa91:898e with SMTP id h13-20020a056870538d00b000deaa91898emr5581582oan.54.1653487139995;
+        Wed, 25 May 2022 06:58:59 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o7-20020a4abe87000000b0035eb4e5a6c0sm6515750oop.22.2022.05.25.06.58.42
+        by smtp.gmail.com with ESMTPSA id n186-20020a4a53c3000000b0035f627ac898sm4113784oob.10.2022.05.25.06.58.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:58:42 -0700 (PDT)
+        Wed, 25 May 2022 06:58:59 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Slawomir Stepien <sst@poczta.fm>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 22/40] hwmon: (lm90) Add support for MAX6690
-Date:   Wed, 25 May 2022 06:57:40 -0700
-Message-Id: <20220525135758.2944744-23-linux@roeck-us.net>
+Subject: [PATCH 31/40] hwmon: (lm90) Combine lm86 and lm90 configuration
+Date:   Wed, 25 May 2022 06:57:49 -0700
+Message-Id: <20220525135758.2944744-32-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220525135758.2944744-1-linux@roeck-us.net>
 References: <20220525135758.2944744-1-linux@roeck-us.net>
@@ -66,76 +66,67 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-MAX6690 is all but identical to MAX6654. Revision 1 of its
-datasheet lists the same chip ID as MAX6654, and a chip labeled
-MAX6654 was found to have the chip ID listed as MAX6690 chip ID
-in Revision 2 of its datasheet.
-
-A devicetree node is not added for this chip since it is quite unlikely
-that such an old chip will ever be used in a devicetree based system.
-It can be added later if needed.
+LM86 and LM90 support exactly the same features, so there is no need
+to keep their configuration options separate. Combine to reduce data
+size.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/lm90.rst |  2 +-
- drivers/hwmon/lm90.c         | 17 ++++++++++++++++-
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ drivers/hwmon/lm90.c | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/hwmon/lm90.rst b/Documentation/hwmon/lm90.rst
-index 53429f79b819..45bc333a1219 100644
---- a/Documentation/hwmon/lm90.rst
-+++ b/Documentation/hwmon/lm90.rst
-@@ -370,7 +370,7 @@ MAX6648, MAX6692:
-   * Better local resolution
-   * Unsigned temperature
- 
--MAX6654:
-+MAX6654, MAX6690:
-   * Better local resolution
-   * Selectable address
-   * Remote sensor type selection
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index abc64738e892..22ea75535ab4 100644
+index 97453a7de1fa..16481051a530 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -42,7 +42,8 @@
-  * accordingly, and is done during initialization. Extended precision is only
-  * available at conversion rates of 1 Hz and slower. Note that extended
-  * precision is not enabled by default, as this driver initializes all chips
-- * to 2 Hz by design.
-+ * to 2 Hz by design. The driver also supports MAX6690, which is practically
-+ * identical to MAX6654.
-  *
-  * This driver also supports the MAX6646, MAX6647, MAX6648, MAX6649 and
-  * MAX6692 chips made by Maxim.  These are again similar to the LM86,
-@@ -237,6 +238,7 @@ static const struct i2c_device_id lm90_id[] = {
- 	{ "max6659", max6659 },
- 	{ "max6680", max6680 },
- 	{ "max6681", max6680 },
-+	{ "max6690", max6654 },
- 	{ "max6692", max6648 },
- 	{ "max6695", max6696 },
- 	{ "max6696", max6696 },
-@@ -1716,6 +1718,19 @@ static const char *lm90_detect_maxim(struct i2c_client *client, int chip_id,
- 		if (!(config1 & 0x07) && convrate <= 0x07)
- 			name = "max6654";
- 		break;
-+	case 0x09:
-+		/*
-+		 * The chip_id of the MAX6690 holds the revision of the chip.
-+		 * The lowest 3 bits of the config1 register are unused and
-+		 * should return zero when read.
-+		 * Note that MAX6654 and MAX6690 are practically the same chips.
-+		 * The only diference is the rated accuracy. Rev. 1 of the
-+		 * MAX6690 datasheet lists a chip ID of 0x08, and a chip labeled
-+		 * MAX6654 was observed to have a chip ID of 0x09.
-+		 */
-+		if (!(config1 & 0x07) && convrate <= 0x07)
-+			name = "max6690";
-+		break;
- 	case 0x4d:
- 		/*
- 		 * The MAX6657, MAX6658 and MAX6659 do NOT have a chip_id
+@@ -123,7 +123,7 @@ static const unsigned short normal_i2c[] = {
+ 	0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
+ 
+ enum chips { adm1023, adm1032, adt7461, adt7461a, adt7481,
+-	g781, lm84, lm86, lm90, lm99,
++	g781, lm84, lm90, lm99,
+ 	max1617, max6642, max6646, max6648, max6654, max6657, max6659, max6680, max6696,
+ 	sa56004, tmp451, tmp461, w83l771,
+ };
+@@ -235,8 +235,8 @@ static const struct i2c_device_id lm90_id[] = {
+ 	{ "g781", g781 },
+ 	{ "gl523sm", max1617 },
+ 	{ "lm84", lm84 },
+-	{ "lm86", lm86 },
+-	{ "lm89", lm86 },
++	{ "lm86", lm90 },
++	{ "lm89", lm90 },
+ 	{ "lm90", lm90 },
+ 	{ "lm99", lm99 },
+ 	{ "max1617", max1617 },
+@@ -289,11 +289,11 @@ static const struct of_device_id __maybe_unused lm90_of_match[] = {
+ 	},
+ 	{
+ 		.compatible = "national,lm86",
+-		.data = (void *)lm86
++		.data = (void *)lm90
+ 	},
+ 	{
+ 		.compatible = "national,lm89",
+-		.data = (void *)lm86
++		.data = (void *)lm90
+ 	},
+ 	{
+ 		.compatible = "national,lm99",
+@@ -443,13 +443,6 @@ static const struct lm90_params lm90_params[] = {
+ 		.flags = LM90_HAVE_ALARMS,
+ 		.resolution = 8,
+ 	},
+-	[lm86] = {
+-		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+-		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS | LM90_HAVE_LOW
+-		  | LM90_HAVE_CONVRATE | LM90_HAVE_REMOTE_EXT,
+-		.alert_alarms = 0x7b,
+-		.max_convrate = 9,
+-	},
+ 	[lm90] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+ 		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS | LM90_HAVE_LOW
 -- 
 2.35.1
 
