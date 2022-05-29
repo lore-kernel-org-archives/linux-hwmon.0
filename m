@@ -2,228 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFD97C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 May 2022 18:20:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00FFCC433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 29 May 2022 17:05:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiE1SUw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 May 2022 14:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S230079AbiE2RFs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 May 2022 13:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiE1SUq (ORCPT
+        with ESMTP id S229533AbiE2RFr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 May 2022 14:20:46 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1AF14D32;
-        Sat, 28 May 2022 11:20:45 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id B53455C00EE;
-        Sat, 28 May 2022 14:20:41 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 28 May 2022 14:20:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1653762041; x=
-        1653848441; bh=luRhvMmkAZ3heLTKp44XjFRoRWvALbzVkpsaVWW0WBc=; b=E
-        5iDtypbKtVDe5r3eWckch83M57aK+Y0XRWBzdLcsP2ZiCxy/X9w3Ps2rZndODFDN
-        KUbTYbHU1L0ZRy3D3hwXwxwz10eNuG8gc7u7qKI7EgWef71YwtZePgihLfzcUvWK
-        9kkTqsM9sopM5uMY/YSQdcF40i/esBc/OEyW72PoQKpyEqvJQe7QWboUV/2L6mcp
-        8ILa8wrQIdHX0jIz4HTN35GsFGfHBxEebCyizCjPRiB2vQbvY+wBugRgwzwmlVrJ
-        fiBVPSAKRvG3C+1dFbc5eNDxw9WYXokDfdCBgS7vPYNpg+p72ZX0/YmPciLbQKHH
-        Na5mVZUPHmZIiPocLC06A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653762041; x=
-        1653848441; bh=luRhvMmkAZ3heLTKp44XjFRoRWvALbzVkpsaVWW0WBc=; b=m
-        0gce0H/6QsFcIrVi+wcXSbQJaZlN25jZmnfConeEKvrOYMpHv182lvI0UVjJLiyr
-        IV6oO5cqB208z8e2VW8rmCf5XZkQGrgSqnHTY72HtyvLdch6iKlAM6z47l9pzLzv
-        wteSRmD7E5N5dapoEzIrrtVnO0rqSnsdgfAqzvBxg5DYNQmLT/xCRKxopCswKFW1
-        i3mycFDTmhDc23v0PfduPJkjM/ol2vIOm9EO5S+IbqorfFgUlxTprQ2cSaPYYPYa
-        In2q4G/FsQ8fPk3kmozxPVT/HjRG1chtYPjPDXxT6CCZV4GeWP/TEV5rG0y4sZve
-        SsMv+fRCi/TYy/TmPTkOA==
-X-ME-Sender: <xms:-WeSYudHxMpB-OWYfo4m7pzjTjSGkzm7ZYqHQCHJWOFJXf5TmYrN-w>
-    <xme:-WeSYoNDFpGeETBn-EMrYeOKPF6bd90ZiNfzTrA-981wajDBx0oDpexkI_j8LSJ6x
-    J0YNpYMFqPsjBzAUA>
-X-ME-Received: <xmr:-WeSYvjIRpX6wzNDD9gyPpuHwaGSFAQxsjJvUewbRXI9ghCklPVNHc5DuNYfbzjFlThkMDJx8A7hk2V88CS3e2CZeCdn-kF1NF1CD9NkufVIK1A3NSe7mRcZNg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkedugdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeelteejffdvgeehkedtkeevueeuteffteffhedufeeujedvudef
-    udetieeijeevleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
-    rghnugdrohhrgh
-X-ME-Proxy: <xmx:-WeSYr_NNcF-Ouyk19IQgaGr-4r_7ZhRPLnldMbxSQig8LKtHGFNyQ>
-    <xmx:-WeSYqv4GSXQs4zMODgTX12YYAH4JPPRW3ffmt22DPWgoHZEJLi2gQ>
-    <xmx:-WeSYiEfAyo4abKr3Jwa3hw1Vl3efBLZ_wj0TNFLM2VU9ucgDs5QeQ>
-    <xmx:-WeSYllbt7-Ty2lckJi7VgEHsQlre8vxsEC20_KEUjITkR2t9LesUA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 28 May 2022 14:20:40 -0400 (EDT)
-Subject: Re: [PATCH v21 4/4] ARM: dts: imx7d-remarkable2: Enable lcdif
-To:     Alistair Francis <alistair@alistair23.me>, lgirdwood@gmail.com,
-        lee.jones@linaro.org, broonie@kernel.org, robh+dt@kernel.org,
-        kernel@pengutronix.de
-Cc:     s.hauer@pengutronix.de, alistair23@gmail.com,
-        linux-arm-kernel@lists.infradead.org, andreas@kemnade.info,
-        amitk@kernel.org, shawnguo@kernel.org,
-        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
-        linux-hwmon@vger.kernel.org, linux-imx@nxp.com, linux@roeck-us.net,
-        rui.zhang@intel.com, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220525115554.430971-1-alistair@alistair23.me>
- <20220525115554.430971-5-alistair@alistair23.me>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
-Date:   Sat, 28 May 2022 13:20:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sun, 29 May 2022 13:05:47 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A444587A1D;
+        Sun, 29 May 2022 10:05:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jrcXrrFrzhMQDzWv4e564har8sl47RZbWPWqbiYYjgSTVgmTmTV1mnIR92gjTUVa6fwtXOS5GeHeJbEO5SyJTnyJESEgEqEekIuCAUmWk7Ld8uDmAxEaRow7pmD3LabjKOyWkyGsPagaA4Y/j8I0WrQSZDTcSx7QPAp/M/a1edapFyCQ5PWbIutdFw1mZ6Wh+FvYtiNOJuqFUE44B1y8rpWdr/RLfm6KrC2Lja6rjyfNYHmbV46I1fmqby+CQUmpT0yrRy9xh8hfWfmsPpph1sZ7Q2CXVzjZqenxs9tMA0LrVpO0TyZQmAi9tEejv+lL42QRAb9HbLSAoEVNYorvJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oSjKMO0SiV81XSRaX5sqA9oWJBZwnvM5GwFmiKlFFV0=;
+ b=j/r4LP3hAx6Pxf+XsRL8p94wCGDLCt3L3IRmL2ZT6T162NzsjdAIlT8ySv7nDl+WVYj48IL9uLU2jhVGEWnzPFCdM2lzhVI7SmO2+r4CDyb9mznh0KqG3Z4djd43NzRJzI2OW65kdE+9epbJsaan7zUcgUAfczdZvJYmxo3OpadPj+XhTWeuma4fJNs9V3DG21KcjzBfNOlxKURgRaXK+ysbJljSbBbGJxAYDupivj1yBuiiQ9UEcb9CQE31xud8y2drTckBfG9tiwZ06ih6zIyXbaPbTSwf3Ln4sznnO+nV0UkS2IvYmycggav3RSqqWC/W+4K2lpM2oyY1/gNHBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oSjKMO0SiV81XSRaX5sqA9oWJBZwnvM5GwFmiKlFFV0=;
+ b=a1nyFAZAl7Xx5mzmCw4Bf7EfSERI3o4sLQsRD/4MiSXsZgEA0I9bm0wUoNYbtFcE1W8EGJ2o4Wi3qVrx30u8d4mD5LfHBTKCXKUVGUxf9Q3GmNUWp2kjl1eg2sBpBkwvjeFm2bX+e+4Yo4ZfX1cc024vMPec0wcdmq7z356fnmMjoiSPm9aHjauDI5yxuCDPS9zMcFc9rRHTNnuc+CuQ+T3HiTw0dp59ToMhFG4VsOxtQ88NbMmVQRi4ONXdMQRq5a4g2lh7ML3FBDPLxIdWUCRawzp3B/JbUR2YBAVkYlkAMmiEITmoDS/bouJq7CvZ0vstijE0FLtI05IqSQhKrw==
+Received: from DM5PR10CA0013.namprd10.prod.outlook.com (2603:10b6:4:2::23) by
+ DM5PR12MB1835.namprd12.prod.outlook.com (2603:10b6:3:10c::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5293.13; Sun, 29 May 2022 17:05:43 +0000
+Received: from DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:2:cafe::7d) by DM5PR10CA0013.outlook.office365.com
+ (2603:10b6:4:2::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
+ Transport; Sun, 29 May 2022 17:05:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT011.mail.protection.outlook.com (10.13.172.108) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5293.13 via Frontend Transport; Sun, 29 May 2022 17:05:42 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Sun, 29 May
+ 2022 17:05:42 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 29 May
+ 2022 10:05:41 -0700
+Received: from r-build-bsp-02.mtr.labs.mlnx (10.127.8.9) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Sun, 29 May 2022 10:05:40 -0700
+From:   <michaelsh@nvidia.com>
+To:     <linux@roeck-us.net>, <robh+dt@kernel.org>
+CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <vadimp@nvidia.com>, Michael Shych <michaelsh@nvidia.com>
+Subject: [PATCH hwmon-next v3 0/3] Add support for EMC2305 Fan Speed Controller.
+Date:   Sun, 29 May 2022 20:05:33 +0300
+Message-ID: <20220529170536.10043-1-michaelsh@nvidia.com>
+X-Mailer: git-send-email 2.14.1
 MIME-Version: 1.0
-In-Reply-To: <20220525115554.430971-5-alistair@alistair23.me>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d8ec97ed-18ee-4710-acdf-08da41957711
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1835:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB183559A6F08F9A69DBE708D7D4DA9@DM5PR12MB1835.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QBC885A+DMWxbR4Smz9v70mmK09bbArT+/UYOebp5vgOrOc9QhlblqXB6+ZrlVSCRJ1MO5nK6rGh8YZMdflhmxhU5Gkeywl1CwQGjXQMejcc0KRM9hTxUQ8L9sq4YZbjw/E/uZojrpMP10RUxVbXDB64LGD/oMvCGeZazT1IE16PtRnppX6REXerk7H5pH8e+d0iT6AF/BsN/QLQ/72rOrChRPlgySeyg3SqT+rSqGw55xgg6xEhEu7J3jCf48Mz2+quDKTb2LkEr0qTLRqdS+toaq7Nak4btWUUFcaRYt9SylEJcewhEXgk2k9skMT2uz6t7KwR67dLTLKfnurJGZQY7Xq6L5JzE8WLB5kLGM8qEUiQwWUVgTLgSOlLltGwockznaFukQcyx7Ki+yNstsqPoHo+Bu/OEdPXLkO1rg87kvsD7Bid8cGqIq1R62XH6P/U0YcwGrOXeTCxLmRz3u80QWRDuR5ZLhVrfH7LmtYL+IUYW0MhFd0zvaUUJMXgkQh/Lfppfd/magOZ4A6t24WAw0OwHXpNKpkT7P26sTyEuIwoX5vFxFzFW7PMBVdkHRhv6KX08Bbq9NXo+g+L+wyO0V8nbEXh4AKf3cke6QK2DHuvOhkV0QyYMGdDHyXXkRF4ikJTSlS7PUHjJZ1QXu607awzJu/piGgXpTpdz39eWaSX7K7YFDAHaC2m4wQIgmAXmp+E+/cDHGWKHZahcg==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(36860700001)(83380400001)(2906002)(2876002)(6666004)(508600001)(81166007)(82310400005)(26005)(47076005)(356005)(40460700003)(86362001)(316002)(110136005)(54906003)(70586007)(70206006)(36756003)(5660300002)(107886003)(2616005)(8936002)(1076003)(336012)(186003)(426003)(4326008)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2022 17:05:42.8832
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8ec97ed-18ee-4710-acdf-08da41957711
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1835
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Alistair,
+From: Michael Shych <michaelsh@nvidia.com>
 
-On 5/25/22 6:55 AM, Alistair Francis wrote:
-> Connect the dispaly on the reMarkable2.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> index 99ac0d242936..03a4029e1e57 100644
-> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> @@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
->  		startup-delay-us = <100000>; /* 100 ms */
->  	};
->  
-> +	reg_sdoe: regulator-sdoe {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "SDOE";
-> +		pinctrl-names = "default", "sleep";
-> +		pinctrl-0 = <&pinctrl_sdoe_reg>;
-> +		pinctrl-1 = <&pinctrl_sdoe_reg>;
-> +		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
->  	wifi_pwrseq: wifi_pwrseq {
->  		compatible = "mmc-pwrseq-simple";
->  		pinctrl-names = "default";
-> @@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
->  		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
->  		clock-names = "ext_clock";
->  	};
-> +
-> +	panel {
-> +		compatible = "eink,vb3300-kca";
-> +
-> +		port {
-> +			panel_in: endpoint {
-> +				remote-endpoint = <&display_out>;
-> +			};
-> +		};
-> +	};
+Introduce EMC2305 RPM-based PWM Fan Speed Controller
+The EMC2305 is an SMBus compliant fan controller with up to five
+controlled PWM fan drivers. All fan drivers are
+controlled by a programmable frequency PWM driver and Fan Speed
+Control algorithm that operates as a directly PWM-controlled device.
 
-From the discussion at [1], this is not safe to merge. It exposes an
-electrophoretic display to fbcon/userspace as if it was an LCD, which it very
-much is not. Trying to write RGB pixel data to the panel could damage it.
+The closed-loop Fan Speed Control algorithm (FSC) has the capability to
+detect aging fans and alert the system. It will likewise detect stalled
+or locked fans and trigger an interrupt.
 
-So at the very least before hooking this up, the LCD controller has to know that
-the EPD needs special handling and that it cannot accept RGB.
+EMC2305 offers a clock output so that multiple devices may be chained
+and slaved to the same clock source for optimal performance in large
+distributed systems.
 
-That doesn't necessarily mean there is a problem with the content of this patch
--- the special handling may all be taken care of based on the compatible string
--- but I think it's a really bad idea to merge this with how "eink,vb3300-kca"
-is currently represented in panel-simple.
+Patch set includes:
+Patch#1 - add support for EMC2301/2/3/5 RPM-based PWM Fan Speed Controller.
+Patch#2 - add microchip,emc2306.yaml
+Patch#3 - add emc2305.rst into docs.
 
-Regards,
-Samuel
+Michael Shych (3):
+  hwmon: (emc2305) add support for EMC2301/2/3/5 RPM-based PWM Fan Speed
+    Controller.
+  dt-bindings: hwmon: add Microchip EMC2305 fan controller.
+  docs: hwmon: add emc2305.rst to docs
 
-[1]: https://lore.kernel.org/lkml/Yo5kz%2F9cSd6ewC5f@phenom.ffwll.local/
+ .../bindings/hwmon/microchip,emc2305.yaml          | 106 ++++
+ Documentation/hwmon/emc2305.rst                    |  40 ++
+ Documentation/hwmon/index.rst                      |   1 +
+ drivers/hwmon/Kconfig                              |  13 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/emc2305.c                            | 654 +++++++++++++++++++++
+ 6 files changed, 815 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+ create mode 100644 Documentation/hwmon/emc2305.rst
+ create mode 100644 drivers/hwmon/emc2305.c
 
->  };
->  
->  &clks {
-> @@ -132,6 +152,20 @@ reg_epdpmic: vcom {
->  	};
->  };
->  
-> +&lcdif {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_lcdif>;
-> +	lcd-supply = <&reg_epdpmic>;
-> +	lcd2-supply = <&reg_sdoe>;
-> +	status = "okay";
-> +
-> +	port {
-> +		display_out: endpoint {
-> +			remote-endpoint = <&panel_in>;
-> +		};
-> +	};
-> +};
-> +
->  &snvs_pwrkey {
->  	status = "okay";
->  };
-> @@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
->  		>;
->  	};
->  
-> +	pinctrl_lcdif: lcdifgrp {
-> +		fsl,pins = <
-> +			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-> +			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-> +			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-> +			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-> +			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-> +			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-> +			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-> +			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-> +			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-> +			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-> +			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-> +			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-> +			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-> +			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-> +			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-> +			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-> +
-> +			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-> +			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-> +			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-> +			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-> +			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-> +
-> +			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-> +			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-> +			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-> +			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-> +			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-> +			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-> +		>;
-> +	};
-> +
-> +	pinctrl_sdoe_reg: sdoereggrp {
-> +		fsl,pins = <
-> +			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-> +		>;
-> +	};
-> +
->  	pinctrl_uart1: uart1grp {
->  		fsl,pins = <
->  			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
-> 
+-- 
+2.14.1
 
