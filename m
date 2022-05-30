@@ -2,78 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B4EEC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC41DC433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:31:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238499AbiE3P16 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 May 2022 11:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S236304AbiE3PbQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 May 2022 11:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiE3P1I (ORCPT
+        with ESMTP id S240922AbiE3P0k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 May 2022 11:27:08 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BB61DAE58;
-        Mon, 30 May 2022 07:29:53 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-f2cd424b9cso14529191fac.7;
-        Mon, 30 May 2022 07:29:53 -0700 (PDT)
+        Mon, 30 May 2022 11:26:40 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDB71D870C;
+        Mon, 30 May 2022 07:29:20 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id h9-20020a056830400900b0060b03bfe792so7752182ots.12;
+        Mon, 30 May 2022 07:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iwvW/HUlxK27ANHP+B5t/wvOGVQFTrLuINyXeF8Fnsc=;
-        b=SbsEyMSC+Zc2RYMEL3E5M3A2HZZwF18iQH7DN4e1yTpOz82C9lW1G5ka9g8aIxWulU
-         lLgyodZaJmoAB7TjoXNJR8XidkP3pdn1pXBLvTwEEcNmlLu1e32M2yOCguFqG80Rmz2k
-         XxI4VWdmklZQv6wDzFJ1LWoO1vXr3QTH/ul2dg0NzPW2RCfrur9R9iUAHS1NDbhKFAqI
-         NQTo5zSLsZj2VsNSX/v2bnVDcy9FItEMeny4xMa0RA02L9OG6yKusd9zFH4Kmh6WlqdE
-         JVTCBknfXFErlK7s+ZXTNulP7x+rRVRA+0t4H0BvzWqGhhhtls9mCx/A1t1VPstBF5Ui
-         5qzQ==
+        bh=6SRs6BADyrsPSpT6/zp75/O1zXuT6qo/GVIivSdlPrk=;
+        b=HC1pdH4T3wmwccr0NaLhryGOq2t3yr0Prb7zlh5qycWi1XrAJ/DzMOuHYkwKtjjzS1
+         PnGf65umOlfcYq9KxHdTEnplYc4VWf36xXgKLFYLQNQyv++3eRRbfzGhxtqzqgD+2Fll
+         aNvmtDrFh5YAsaJ0m9gbpSiCTZCTVR2/GBbGNBOoViNitHgDpstNF77/YWwjRckgbosg
+         r6aSuzgCRd+djVxzWbr6b1B2wLIhLouHXzjIH5Zs9D8LZBbgkpkFh7HYBOdDXHkwoYWc
+         GD3DioaBfuOb1SaiEnuNtQv/27SYVvp1hiwvQ/I1xf3WsouQFJys14Nd/M9egUUfAhVW
+         IppA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iwvW/HUlxK27ANHP+B5t/wvOGVQFTrLuINyXeF8Fnsc=;
-        b=eguQAgVzdB2eS7Wamb+O9t+xJDJJt32RyvNExhiTq93AjrIudiXp6RGw+f/0IifD8i
-         76IkaIoyMj86cRyJ2Km50/fpsKsKTaBbzmjT91/daBghtaMefElPRgaaJrcAYxOM12+p
-         KXNDqp04S84ROsNAxWvgKZBkq1jwmyS7jqAXCHLiwo4L5blR+1dFju47JLu1bj80JASY
-         Cbrw1SqRs0JKdRzTliepzsI0bDzi2r9t+W7flKshmvw3TP3hUhnv7bAW5TsAsAOHK3cO
-         Rxiwg0ASFqoLeGiqChjsGzs0fWbIxJ1UxnxKBKAdoPvwdsHuJEZUYEI68nDRDhiVWGJP
-         CBGQ==
-X-Gm-Message-State: AOAM530fQtIzH0/qyLM5u0uroWkvTrHo1hA3n928OosjS7ekCOAgxDK4
-        2KZ8HRuEmPPowvUu0cObUjM=
-X-Google-Smtp-Source: ABdhPJzgwljlXzcHj2r8yeRw/yi+GoCSaZiBQTBAwY0m1H36Kn1ELRD5lms3iszOshTrdd8YP9JUhw==
-X-Received: by 2002:a05:6870:c8a9:b0:f2:87f0:6707 with SMTP id er41-20020a056870c8a900b000f287f06707mr10512381oab.97.1653920990559;
-        Mon, 30 May 2022 07:29:50 -0700 (PDT)
+        bh=6SRs6BADyrsPSpT6/zp75/O1zXuT6qo/GVIivSdlPrk=;
+        b=HgaHC6SpPvNvv0TPvHCimfFldS45icXkidEbt9kotPCnTc7PQ2iX+cd1dR6psf2Fbk
+         9JpRbF+LjVLz/5ksnSF5gXPT9OXEOe75Hevtxt8Lm+NUmmi016OR/tKMg6/Y7hFqYBeb
+         XIDWtolhu7YFqH6ZdNQK2JZcNAi024dNZnTWNDKxHZ8hHnMrxa2zPplgJr4flsFzN9nt
+         WIJxMZEiZtBnGmup5sQClurqhHTe2D6gD+HxVxIAT6romYxDmlbrqV4kDntuX5a71Dkr
+         zylgQ9jLTXf1InAkSNFE7wrAxyFnJ0m1ljU/OXq8cc3sk3dlzuBbGEHJDDmEUY3UNlZE
+         oZMg==
+X-Gm-Message-State: AOAM531ltvTLrKAeMDw8SMgBi2t5NoA8k1gX5sNeydH44xdcjOGqpp5N
+        e3447yMXQycueJCu3huwXSCdwpHenpw=
+X-Google-Smtp-Source: ABdhPJzNQW57aCQ9vm4kBdmiJZM6Jwr8g61/hPF9I2F5N4DPTRB3ZZy5swfMxF0tVMVbs9+Sr/rm9A==
+X-Received: by 2002:a9d:410e:0:b0:60b:875:7ec3 with SMTP id o14-20020a9d410e000000b0060b08757ec3mr16528218ote.181.1653920957825;
+        Mon, 30 May 2022 07:29:17 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d22-20020a05683025d600b0060603221236sm5105666otu.6.2022.05.30.07.29.48
+        by smtp.gmail.com with ESMTPSA id lx6-20020a0568704b8600b000f3347daaa6sm1240868oab.9.2022.05.30.07.29.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 07:29:49 -0700 (PDT)
+        Mon, 30 May 2022 07:29:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <612c066d-6bc6-2b9b-5211-6dbfd88a7899@roeck-us.net>
-Date:   Mon, 30 May 2022 07:29:47 -0700
+Message-ID: <c162e89e-5c1a-af11-c98b-205f57adac51@roeck-us.net>
+Date:   Mon, 30 May 2022 07:29:15 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH AUTOSEL 5.15 102/109] hwmon: Make chip parameter for
+Subject: Re: [PATCH AUTOSEL 5.4 52/55] hwmon: Make chip parameter for
  with_info API mandatory
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
 Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
-References: <20220530133825.1933431-1-sashal@kernel.org>
- <20220530133825.1933431-102-sashal@kernel.org>
+References: <20220530134701.1935933-1-sashal@kernel.org>
+ <20220530134701.1935933-52-sashal@kernel.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220530133825.1933431-102-sashal@kernel.org>
+In-Reply-To: <20220530134701.1935933-52-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/30/22 06:38, Sasha Levin wrote:
+On 5/30/22 06:46, Sasha Levin wrote:
 > From: Guenter Roeck <linux@roeck-us.net>
 > 
 > [ Upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ]
@@ -108,10 +108,10 @@ Please drop.
 >   
 >   devm_hwmon_device_register_with_info is similar to
 > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 3ae961986fc3..55237a5fc49a 100644
+> index a2175394cd25..c73b93b9bb87 100644
 > --- a/drivers/hwmon/hwmon.c
 > +++ b/drivers/hwmon/hwmon.c
-> @@ -854,11 +854,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
+> @@ -715,11 +715,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
 >   
 >   /**
 >    * hwmon_device_register_with_info - register w/ hwmon
@@ -128,7 +128,7 @@ Please drop.
 >    *
 >    * hwmon_device_unregister() must be called when the device is no
 >    * longer needed.
-> @@ -871,13 +872,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
+> @@ -732,13 +733,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
 >   				const struct hwmon_chip_info *chip,
 >   				const struct attribute_group **extra_groups)
 >   {
