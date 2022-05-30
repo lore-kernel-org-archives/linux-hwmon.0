@@ -2,78 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74A33C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F907C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:27:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240435AbiE3P1X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 May 2022 11:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S240332AbiE3P1i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 May 2022 11:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241543AbiE3P1A (ORCPT
+        with ESMTP id S238904AbiE3P10 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 May 2022 11:27:00 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606601DA08F;
-        Mon, 30 May 2022 07:29:39 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e93bbb54f9so14489713fac.12;
-        Mon, 30 May 2022 07:29:39 -0700 (PDT)
+        Mon, 30 May 2022 11:27:26 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B514E113B7D;
+        Mon, 30 May 2022 07:30:08 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f2cbceefb8so14506633fac.11;
+        Mon, 30 May 2022 07:30:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Ek1zhecwOf7J3Spdw9zlYjdJXq9BwxbOrVFP+eor5pw=;
-        b=QKxobhHKedlsvzz4b6NO450+GC/pVOjg0raSYbvShshZ/7yJlud0RVH3sk5dBP6R20
-         KbAvFj5lL42vZoP3B9RU1MehIaADneJeVvcJ3Tyrs4uLbab0UXC+GbLfdWmAuo68p+iB
-         i8EcLcdFwuMh1KliSMT4aSIDjjDwczmArj/tILL7ZMuxdIPTSRFphnwpVQxKVF0KQ4Bx
-         4niSKF+91xwMBv3IBsh87ZodCBCE0Yv9M2Bvy/QfAY4QjP8nBvgiWv+eGg1HqpGL0IOi
-         Cet1Zurlb/5pB80qbbRqGIoohk0/NSRFdedt5+ezVVDyg+6OZxbKBl6k8hNwWpGACWJm
-         AlSQ==
+        bh=d7xW7gHOA/Y7RTTX4uM7hk1m15c3AIRNklX4XQ0oC4U=;
+        b=OT4+PeUEJve3QGWc9WPtczXM4nxLHQsyR4uwKvRvvseWwxDhDJGxq9WEzb/G9LRVIQ
+         pejIatrMU64IqrP2nC9sTOLLPIuxDUrOSKa+9mRa9SUK1kV72Av5TQ9Xfx0yw4+PaTLj
+         /9/Gc2NpZIhW0aPJoAibqogyJNXne+7BTRNz7Haot9RCUPXOzrY+X6BrziO7bATBPJwX
+         kPr2MWrWla/O4Fo2ltaKdq0IPRcnjd3usIGtzs6hApyF9euAJnkcXCu+5CeiQBEgFwBl
+         LFX/d2ZRWMSaUzaXHmDJIzF22t76kU1g2IjgeFfKs44eSqsF1oAl8BEAFFb86S3WwnYa
+         yQvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Ek1zhecwOf7J3Spdw9zlYjdJXq9BwxbOrVFP+eor5pw=;
-        b=PqVUgQMSWWvBWqdLzVJ+H3OJ18ftKxPX8kYtNyEJPNIA54G6mjWmzs1Se4Kfb049lR
-         S665EoHV31h8VJvjmviWfnulSpuaS02ElKgeFiLJSR+/mNfXe4mljPyDwhPGF3RwF9u3
-         +aoPRXalTjhRVG9KCcus3RlvKWtZ+U4ELpwnQ/M84jgR3zi4SzN112AF9pg3nSwWZSRo
-         B/odxTGy7TxBYPiwn1ziOFhn79EhS7FTmxKgvyIYV8oSMabOGJFYjv4WGQGVJzmttJvx
-         tSgwvkPqzMfR4fm/5I+pcBh8iCdJptt5B43JI7KRVJrjaW6OnE8W1rXHxC+4LPTrLK9M
-         Vqig==
-X-Gm-Message-State: AOAM5304MMXtTy2Sq89aZxXpGChL1OSslGZqtyq/DrTrFe8V08JR0fHU
-        02K/lu0P9KniLVP/rz9sQ+qSx939cuI=
-X-Google-Smtp-Source: ABdhPJzIGdzFTGto01heed5GuCFbm8+gYav3h0YyyJ1hks+MIg/VHui6z+Bkntx1ZrPBZL1emu/i+Q==
-X-Received: by 2002:a05:6870:33a9:b0:f2:c44c:d054 with SMTP id w41-20020a05687033a900b000f2c44cd054mr10722530oae.70.1653920977093;
-        Mon, 30 May 2022 07:29:37 -0700 (PDT)
+        bh=d7xW7gHOA/Y7RTTX4uM7hk1m15c3AIRNklX4XQ0oC4U=;
+        b=t4gaTmsjZfRuQ38YOUhHXlHq1si3GjJx4UaxS3JgzmM/PyOFFq0k9HxvPZv5NXDNd9
+         nD/I/zUrA+5s5j8dQi8d9apZ6WEAFJM0EhIG1pQYaSWJzeigz8xruTTEC+KNEOe/4NPf
+         KexPifLoQmn2Bh5MT4u3YIaIj6WrLjtAJuB/kZgzMXlaIHmLILK3G7iwF67QmFPfl9b0
+         zJs+FkQy3dBBqjgWsLP75nbLfqFanbY1cPbH1VQOa05DlaaGHsDqqe+wA7mpD4brOM/k
+         a1OH94lUgdlW0Z26PfTfiVZphyPDMV76FnL/yil4xK4pyM88YxK2ETwNZFHjwEQJHn4R
+         xXhw==
+X-Gm-Message-State: AOAM532DzcvsHfeQtMbCoCn51uJ1M08i5JBvIIOoLuzNaq/V1xPmMRv/
+        Jw10ee1OGwfYtdOJwPrhd3E=
+X-Google-Smtp-Source: ABdhPJxqgg/hLCoWMSbiN8n6CeKDRA9RCRTXUiZTobg7fQPkuq8MKFzwPVOQMsuIR6NT3y94lrsmGQ==
+X-Received: by 2002:a05:6870:5b8e:b0:f2:33ed:7bf2 with SMTP id em14-20020a0568705b8e00b000f233ed7bf2mr10281502oab.15.1653921006557;
+        Mon, 30 May 2022 07:30:06 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q30-20020a056830441e00b0060b6a3a5eefsm3129315otv.36.2022.05.30.07.29.35
+        by smtp.gmail.com with ESMTPSA id y26-20020a9d461a000000b0060603221255sm5089194ote.37.2022.05.30.07.30.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 07:29:36 -0700 (PDT)
+        Mon, 30 May 2022 07:30:05 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <333a76e6-6be6-a885-d0c0-2e6f06a10d66@roeck-us.net>
-Date:   Mon, 30 May 2022 07:29:35 -0700
+Message-ID: <4be7c74e-e54a-c284-adef-7a0f1f8d21bb@roeck-us.net>
+Date:   Mon, 30 May 2022 07:30:04 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH AUTOSEL 5.10 71/76] hwmon: Make chip parameter for
+Subject: Re: [PATCH AUTOSEL 5.18 151/159] hwmon: Make chip parameter for
  with_info API mandatory
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
 Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
-References: <20220530134406.1934928-1-sashal@kernel.org>
- <20220530134406.1934928-71-sashal@kernel.org>
+References: <20220530132425.1929512-1-sashal@kernel.org>
+ <20220530132425.1929512-151-sashal@kernel.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220530134406.1934928-71-sashal@kernel.org>
+In-Reply-To: <20220530132425.1929512-151-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/30/22 06:44, Sasha Levin wrote:
+On 5/30/22 06:24, Sasha Levin wrote:
 > From: Guenter Roeck <linux@roeck-us.net>
 > 
 > [ Upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ]
@@ -108,10 +108,10 @@ Please drop.
 >   
 >   devm_hwmon_device_register_with_info is similar to
 > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index d649fea82999..2c17407aadb7 100644
+> index 989e2c8496dd..187212988b6c 100644
 > --- a/drivers/hwmon/hwmon.c
 > +++ b/drivers/hwmon/hwmon.c
-> @@ -818,11 +818,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
+> @@ -886,11 +886,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
 >   
 >   /**
 >    * hwmon_device_register_with_info - register w/ hwmon
@@ -128,7 +128,7 @@ Please drop.
 >    *
 >    * hwmon_device_unregister() must be called when the device is no
 >    * longer needed.
-> @@ -835,13 +836,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
+> @@ -903,13 +904,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
 >   				const struct hwmon_chip_info *chip,
 >   				const struct attribute_group **extra_groups)
 >   {
