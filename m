@@ -2,123 +2,150 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB985C4321E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 14:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 655E3C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:25:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240576AbiE3O3d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 May 2022 10:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
+        id S240159AbiE3PZV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 May 2022 11:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240228AbiE3OZK (ORCPT
+        with ESMTP id S241878AbiE3PZC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 May 2022 10:25:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93469A888B;
-        Mon, 30 May 2022 06:50:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C74860FE7;
-        Mon, 30 May 2022 13:50:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0955EC3411E;
-        Mon, 30 May 2022 13:50:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918651;
-        bh=+UxC2I6cB/bAVSQFDihDHHxSOIrE2QoFweh2yYezpEY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pPmnQfT1b16DdIkdRK2r2KH7GapxCZyh/sePuFAFK47lOj0TaKsNcuwwE4zxPm0De
-         NG9RaGxIQakdoQtAUvLHdlUIW6qR0RQCMSFO/1P/prLsfjA/wZMcsGX5IPyqOCoPcp
-         0cQ/NKGF4g3ErsW8xGi+uYCsC4N68oF7lxJUs+tt4HvAa2d4cVBU0qWVbPkOvmrTIN
-         J6vKwlipxpBF6szeFR52vBtR6PhCui+n64r/gXBQD8BlM3Z9g7uX8viUruSmhOHa19
-         Waahlk+BATtHXUwioujzmmVRIuL528bRVLhI0xXDA77j+G3HuCXP2LcD7j9wgXdl4E
-         wtg+PI9dEC+HQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
-        corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 36/38] hwmon: Make chip parameter for with_info API mandatory
-Date:   Mon, 30 May 2022 09:49:22 -0400
-Message-Id: <20220530134924.1936816-36-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134924.1936816-1-sashal@kernel.org>
-References: <20220530134924.1936816-1-sashal@kernel.org>
+        Mon, 30 May 2022 11:25:02 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E7C55225;
+        Mon, 30 May 2022 07:27:52 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id h188so7683953oia.2;
+        Mon, 30 May 2022 07:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9wvQDhybWLUOMxPFqDNFSEGeFfgr3pZojJ9yak42Waw=;
+        b=JEv/WBkuHQHN8pa452dG/n3IRLZ7lWUGeodl1TW/UZRVETlgjd8rBqttAmvlu9d+XL
+         A9Mng09/s9drgJd5LeZKos1WLcbOU6q0R25fXZgd7kWDHW0bNk0wixj2Ub6vFixxG22C
+         mpI9sGO842zwlX9bVFvrzjyJE9j9JONw6Ay7VecyZFZitXh7u2MAj/eNKVXhoXMSEwcy
+         yFvbltkXGhw8DfzxvDoPg+L8hy3Q/3lrOAVWKzr0CrPcJ1qFIeSOLN+e0xEe0pKvKWuG
+         8zjHaVSjBBNkMu0cHq2EVi56nauUA1B3BCdH4YcebZcSOfT+o3LHYiQOpETszpf9Es7X
+         3Ybw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9wvQDhybWLUOMxPFqDNFSEGeFfgr3pZojJ9yak42Waw=;
+        b=olPP1Oh76clxsbFSXM+lJ/mCy0MJuZpUy+Yjh4SpgEV+fpAfCnqss6IOOrZZgvMOSW
+         wjC2k0V+SOOVxZRFEXVoWUT216xvxw1VjUfbjPQUGAZCgKqeBCKS0exTO9VQPoj4v2Zv
+         yKlm/feVZF3J0cLviawRinfd7iin85FRZHhzXE0s/8FlafI2kt0O3wK1GaTy9vo4Cc6d
+         e1zTZ+U/er2w1FTAK3cGJxUU2osJmZKM1+kT9DRD7AHUxUJprvaR2+ZmInY3PnJTi3fP
+         n/CS/I5tkjMamdKVU4CZWi1pdQ+JsyECe2ljn4NRFztrUjmLRCHldMJD9WruA3KwVJUt
+         8COw==
+X-Gm-Message-State: AOAM533P93n/3yB+wL6FAYe5DPLbJ4pm1hO3difVQZRMYzSR4Ub3NIoG
+        yS/PiKScZLTRz3P9+Tj8YM17XmD22PE=
+X-Google-Smtp-Source: ABdhPJxwIaS5FV+0qb01fejjuAKFjdN+l1GnG20Xy47Q95h4Jz9FE5cv1glYL6dnurGYWw2Tf5ma3Q==
+X-Received: by 2002:a05:6808:d47:b0:32b:8579:8568 with SMTP id w7-20020a0568080d4700b0032b85798568mr9875413oik.7.1653920872166;
+        Mon, 30 May 2022 07:27:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a11-20020a9d724b000000b0060603221260sm5110728otk.48.2022.05.30.07.27.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 07:27:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dddc2b53-62eb-fda7-4425-afdd179a7037@roeck-us.net>
+Date:   Mon, 30 May 2022 07:27:49 -0700
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH AUTOSEL 5.17 128/135] hwmon: Make chip parameter for
+ with_info API mandatory
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220530133133.1931716-1-sashal@kernel.org>
+ <20220530133133.1931716-128-sashal@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220530133133.1931716-128-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+On 5/30/22 06:31, Sasha Levin wrote:
+> From: Guenter Roeck <linux@roeck-us.net>
+> 
+> [ Upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ]
+> 
+> Various attempts were made recently to "convert" the old
+> hwmon_device_register() API to devm_hwmon_device_register_with_info()
+> by just changing the function name without actually converting the
+> driver. Prevent this from happening by making the 'chip' parameter of
+> devm_hwmon_device_register_with_info() mandatory.
+> 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-[ Upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ]
+This patch should not be backported. It is only relevant for new
+kernel releases, and may have adverse affect if applied to older
+kernels.
 
-Various attempts were made recently to "convert" the old
-hwmon_device_register() API to devm_hwmon_device_register_with_info()
-by just changing the function name without actually converting the
-driver. Prevent this from happening by making the 'chip' parameter of
-devm_hwmon_device_register_with_info() mandatory.
+Guenter
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/hwmon/hwmon-kernel-api.txt |  2 +-
- drivers/hwmon/hwmon.c                    | 16 +++++++---------
- 2 files changed, 8 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/hwmon/hwmon-kernel-api.txt b/Documentation/hwmon/hwmon-kernel-api.txt
-index eb7a78aebb38..4981df157b04 100644
---- a/Documentation/hwmon/hwmon-kernel-api.txt
-+++ b/Documentation/hwmon/hwmon-kernel-api.txt
-@@ -71,7 +71,7 @@ hwmon_device_register_with_info is the most comprehensive and preferred means
- to register a hardware monitoring device. It creates the standard sysfs
- attributes in the hardware monitoring core, letting the driver focus on reading
- from and writing to the chip instead of having to bother with sysfs attributes.
--The parent device parameter cannot be NULL with non-NULL chip info. Its
-+The parent device parameter as well as the chip parameter must not be NULL. Its
- parameters are described in more detail below.
- 
- devm_hwmon_device_register_with_info is similar to
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index c4051a3e63c2..fb82d8ee0dd6 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -695,11 +695,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
- 
- /**
-  * hwmon_device_register_with_info - register w/ hwmon
-- * @dev: the parent device
-- * @name: hwmon name attribute
-- * @drvdata: driver data to attach to created device
-- * @chip: pointer to hwmon chip information
-+ * @dev: the parent device (mandatory)
-+ * @name: hwmon name attribute (mandatory)
-+ * @drvdata: driver data to attach to created device (optional)
-+ * @chip: pointer to hwmon chip information (mandatory)
-  * @extra_groups: pointer to list of additional non-standard attribute groups
-+ *	(optional)
-  *
-  * hwmon_device_unregister() must be called when the device is no
-  * longer needed.
-@@ -712,13 +713,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
- 				const struct hwmon_chip_info *chip,
- 				const struct attribute_group **extra_groups)
- {
--	if (!name)
--		return ERR_PTR(-EINVAL);
--
--	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
-+	if (!dev || !name || !chip)
- 		return ERR_PTR(-EINVAL);
- 
--	if (chip && !dev)
-+	if (!chip->ops || !chip->ops->is_visible || !chip->info)
- 		return ERR_PTR(-EINVAL);
- 
- 	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
--- 
-2.35.1
+> ---
+>   Documentation/hwmon/hwmon-kernel-api.rst |  2 +-
+>   drivers/hwmon/hwmon.c                    | 16 +++++++---------
+>   2 files changed, 8 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+> index c41eb6108103..23f27fe78e37 100644
+> --- a/Documentation/hwmon/hwmon-kernel-api.rst
+> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
+> @@ -72,7 +72,7 @@ hwmon_device_register_with_info is the most comprehensive and preferred means
+>   to register a hardware monitoring device. It creates the standard sysfs
+>   attributes in the hardware monitoring core, letting the driver focus on reading
+>   from and writing to the chip instead of having to bother with sysfs attributes.
+> -The parent device parameter cannot be NULL with non-NULL chip info. Its
+> +The parent device parameter as well as the chip parameter must not be NULL. Its
+>   parameters are described in more detail below.
+>   
+>   devm_hwmon_device_register_with_info is similar to
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 3ae961986fc3..55237a5fc49a 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -854,11 +854,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
+>   
+>   /**
+>    * hwmon_device_register_with_info - register w/ hwmon
+> - * @dev: the parent device
+> - * @name: hwmon name attribute
+> - * @drvdata: driver data to attach to created device
+> - * @chip: pointer to hwmon chip information
+> + * @dev: the parent device (mandatory)
+> + * @name: hwmon name attribute (mandatory)
+> + * @drvdata: driver data to attach to created device (optional)
+> + * @chip: pointer to hwmon chip information (mandatory)
+>    * @extra_groups: pointer to list of additional non-standard attribute groups
+> + *	(optional)
+>    *
+>    * hwmon_device_unregister() must be called when the device is no
+>    * longer needed.
+> @@ -871,13 +872,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
+>   				const struct hwmon_chip_info *chip,
+>   				const struct attribute_group **extra_groups)
+>   {
+> -	if (!name)
+> -		return ERR_PTR(-EINVAL);
+> -
+> -	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
+> +	if (!dev || !name || !chip)
+>   		return ERR_PTR(-EINVAL);
+>   
+> -	if (chip && !dev)
+> +	if (!chip->ops || !chip->ops->is_visible || !chip->info)
+>   		return ERR_PTR(-EINVAL);
+>   
+>   	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
 
