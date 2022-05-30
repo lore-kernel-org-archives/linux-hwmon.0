@@ -2,48 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7381AC47081
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 14:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01DE1C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 14:24:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241284AbiE3OV3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 May 2022 10:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S239600AbiE3OYp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 May 2022 10:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241422AbiE3ORf (ORCPT
+        with ESMTP id S242184AbiE3OS3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:35 -0400
+        Mon, 30 May 2022 10:18:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B96B38BD0;
-        Mon, 30 May 2022 06:46:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EE111CA0D;
+        Mon, 30 May 2022 06:49:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA0F9B80DA8;
-        Mon, 30 May 2022 13:46:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA665C36AE5;
-        Mon, 30 May 2022 13:46:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E54D4B80DA8;
+        Mon, 30 May 2022 13:49:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D62C36AE3;
+        Mon, 30 May 2022 13:49:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918407;
-        bh=oLpiVD5QlXHpBCy8GQH5FsSZ0I9H0WtcjClYoRAN5OE=;
+        s=k20201202; t=1653918554;
+        bh=a+nto0WPeTFaOBkATJKClQmpfGywYTjO3j8Tv34EtKM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EhTOmedOpHqR6RwEYZCFk7ZSxM1XHFDn8ir+KXzEUVoG2xTBZ5VH+SWYNd1cjqSy+
-         XSe1NGlposCtrdTQeyF641984Gnkx0U6+Surkncxpph6WeFAUmhTaVoDB1VbVR1e1/
-         SVFb7Vbae9jyOM3KSwuDEO75QKTrxZMeQOwNUS7OPk3a06dvMbK/deAnk2dk0+ZhCu
-         1HIJtUuBydCmbKq1EvW5fPT8laXwcoJnWdt3ahDVDXp9kbwzthxzQM87dKLCekR6z1
-         +xEFcmnVI6a9LXCIgjpbyEH7xBz6lsDI0cyggJgWFen8ZUZU7MsvUB43dia0V0RlaB
-         7fG5cJtZMrzrQ==
+        b=fNcBAc4mr76AzYFmI4oRhJREQNw0Anz+zRzwKoTde2mPUICdeMCe4kP8SXdT0WC6M
+         dN3gDP+Bi0FJM+6X/Sl8a6JkL5AP1wDYZT3WLZsr00nxO4ZNZ/n+eOUiEOrjhEHVIl
+         AVfb0dWhH075BSz8fhR41QXmxtoLyBoMzCgJCKVtP/sQaLrG6C09Boaa5qjzD56Diu
+         P5WVJ8+1klQYiyqfcrr1xvilWr7QCMcdYURmDtgYMuReKmqg22tSDk4kEKPF6McKOV
+         3gpd1yJ5gGeDhWrV+zqWqsFyLOU2UGzHrUT2E62BJ7LHbynGCDGl3bvS2EmA7pZDVC
+         sAkVcbxgq0xfA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         corbet@lwn.net, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 71/76] hwmon: Make chip parameter for with_info API mandatory
-Date:   Mon, 30 May 2022 09:44:01 -0400
-Message-Id: <20220530134406.1934928-71-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 52/55] hwmon: Make chip parameter for with_info API mandatory
+Date:   Mon, 30 May 2022 09:46:58 -0400
+Message-Id: <20220530134701.1935933-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
-References: <20220530134406.1934928-1-sashal@kernel.org>
+In-Reply-To: <20220530134701.1935933-1-sashal@kernel.org>
+References: <20220530134701.1935933-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -83,10 +83,10 @@ index c41eb6108103..23f27fe78e37 100644
  
  devm_hwmon_device_register_with_info is similar to
 diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index d649fea82999..2c17407aadb7 100644
+index a2175394cd25..c73b93b9bb87 100644
 --- a/drivers/hwmon/hwmon.c
 +++ b/drivers/hwmon/hwmon.c
-@@ -818,11 +818,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
+@@ -715,11 +715,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
  
  /**
   * hwmon_device_register_with_info - register w/ hwmon
@@ -103,7 +103,7 @@ index d649fea82999..2c17407aadb7 100644
   *
   * hwmon_device_unregister() must be called when the device is no
   * longer needed.
-@@ -835,13 +836,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
+@@ -732,13 +733,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
  				const struct hwmon_chip_info *chip,
  				const struct attribute_group **extra_groups)
  {
