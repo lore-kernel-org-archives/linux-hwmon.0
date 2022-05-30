@@ -2,146 +2,156 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC41DC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:31:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A37C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:32:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236304AbiE3PbQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 May 2022 11:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S240264AbiE3Pcd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 May 2022 11:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240922AbiE3P0k (ORCPT
+        with ESMTP id S240384AbiE3PcZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 May 2022 11:26:40 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDB71D870C;
-        Mon, 30 May 2022 07:29:20 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id h9-20020a056830400900b0060b03bfe792so7752182ots.12;
-        Mon, 30 May 2022 07:29:20 -0700 (PDT)
+        Mon, 30 May 2022 11:32:25 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1463713AF1E
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 May 2022 07:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6SRs6BADyrsPSpT6/zp75/O1zXuT6qo/GVIivSdlPrk=;
-        b=HC1pdH4T3wmwccr0NaLhryGOq2t3yr0Prb7zlh5qycWi1XrAJ/DzMOuHYkwKtjjzS1
-         PnGf65umOlfcYq9KxHdTEnplYc4VWf36xXgKLFYLQNQyv++3eRRbfzGhxtqzqgD+2Fll
-         aNvmtDrFh5YAsaJ0m9gbpSiCTZCTVR2/GBbGNBOoViNitHgDpstNF77/YWwjRckgbosg
-         r6aSuzgCRd+djVxzWbr6b1B2wLIhLouHXzjIH5Zs9D8LZBbgkpkFh7HYBOdDXHkwoYWc
-         GD3DioaBfuOb1SaiEnuNtQv/27SYVvp1hiwvQ/I1xf3WsouQFJys14Nd/M9egUUfAhVW
-         IppA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6SRs6BADyrsPSpT6/zp75/O1zXuT6qo/GVIivSdlPrk=;
-        b=HgaHC6SpPvNvv0TPvHCimfFldS45icXkidEbt9kotPCnTc7PQ2iX+cd1dR6psf2Fbk
-         9JpRbF+LjVLz/5ksnSF5gXPT9OXEOe75Hevtxt8Lm+NUmmi016OR/tKMg6/Y7hFqYBeb
-         XIDWtolhu7YFqH6ZdNQK2JZcNAi024dNZnTWNDKxHZ8hHnMrxa2zPplgJr4flsFzN9nt
-         WIJxMZEiZtBnGmup5sQClurqhHTe2D6gD+HxVxIAT6romYxDmlbrqV4kDntuX5a71Dkr
-         zylgQ9jLTXf1InAkSNFE7wrAxyFnJ0m1ljU/OXq8cc3sk3dlzuBbGEHJDDmEUY3UNlZE
-         oZMg==
-X-Gm-Message-State: AOAM531ltvTLrKAeMDw8SMgBi2t5NoA8k1gX5sNeydH44xdcjOGqpp5N
-        e3447yMXQycueJCu3huwXSCdwpHenpw=
-X-Google-Smtp-Source: ABdhPJzNQW57aCQ9vm4kBdmiJZM6Jwr8g61/hPF9I2F5N4DPTRB3ZZy5swfMxF0tVMVbs9+Sr/rm9A==
-X-Received: by 2002:a9d:410e:0:b0:60b:875:7ec3 with SMTP id o14-20020a9d410e000000b0060b08757ec3mr16528218ote.181.1653920957825;
-        Mon, 30 May 2022 07:29:17 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id lx6-20020a0568704b8600b000f3347daaa6sm1240868oab.9.2022.05.30.07.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 07:29:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c162e89e-5c1a-af11-c98b-205f57adac51@roeck-us.net>
-Date:   Mon, 30 May 2022 07:29:15 -0700
+  d=axis.com; q=dns/txt; s=axis-central1; t=1653921313;
+  x=1685457313;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uVWVlUmZIp4aJDQV8Z2zFsWU0lT1H4YMnA3xlOlcyOE=;
+  b=h3kdhy8C+upzy2M4JDZxYEq86z0sBpAOoU4Lu10QiSPanyQZorjtAf8o
+   0MajlcIJiPDlVU5hhCCKh1kVBLfQ08++9bo6xSTHQ8+lQayT0uz4QpATn
+   Ymaf7MoAdP7gtVzZ0A2kWW90cy9PFB3bJSNkCRswT3V6smr+eh++6+CI9
+   z9Zj8+KzzwrpAV1zzbbcG57Ow37HabTWZcuC98caWaAwulkD0IX2ZYOBV
+   uf6iwY/28KFkj2HSepbw7CZJ7OtLbSbWxaEz2LVikFaJlscH2wUh3+0+J
+   nu6x/lPxWBAVnjnrocf62KZ2CIR8AhJSGVJAsZppOaNMP4KCX+decpRWg
+   g==;
+From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
+        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+Subject: [PATCH v1] hwmon: (pmbus/ltc2978) Set voltage resolution
+Date:   Mon, 30 May 2022 16:34:46 +0200
+Message-ID: <20220530143446.2649282-1-marten.lindahl@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH AUTOSEL 5.4 52/55] hwmon: Make chip parameter for
- with_info API mandatory
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220530134701.1935933-1-sashal@kernel.org>
- <20220530134701.1935933-52-sashal@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220530134701.1935933-52-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/30/22 06:46, Sasha Levin wrote:
-> From: Guenter Roeck <linux@roeck-us.net>
-> 
-> [ Upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ]
-> 
-> Various attempts were made recently to "convert" the old
-> hwmon_device_register() API to devm_hwmon_device_register_with_info()
-> by just changing the function name without actually converting the
-> driver. Prevent this from happening by making the 'chip' parameter of
-> devm_hwmon_device_register_with_info() mandatory.
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+When checking if a regulator supports a voltage range, the regulator
+needs to have support for listing the range or else -EINVAL will be
+returned.
 
-Please drop.
+This support does not exist for the LTC2977 regulator, so this patch
+adds support for list voltage to the pmbus regulators by adding
+regulator_list_voltage_linear to the pmbus_regulator_ops. It also
+defines the voltage resolution for regulators ltc2972/LTC2974/LTC2975/
+LTC2977/LTC2978/LTC2979/LTC2980/LTM2987 based on that they all have the
+same stepwise 122.07uV resolution.
 
-> ---
->   Documentation/hwmon/hwmon-kernel-api.rst |  2 +-
->   drivers/hwmon/hwmon.c                    | 16 +++++++---------
->   2 files changed, 8 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> index c41eb6108103..23f27fe78e37 100644
-> --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> @@ -72,7 +72,7 @@ hwmon_device_register_with_info is the most comprehensive and preferred means
->   to register a hardware monitoring device. It creates the standard sysfs
->   attributes in the hardware monitoring core, letting the driver focus on reading
->   from and writing to the chip instead of having to bother with sysfs attributes.
-> -The parent device parameter cannot be NULL with non-NULL chip info. Its
-> +The parent device parameter as well as the chip parameter must not be NULL. Its
->   parameters are described in more detail below.
->   
->   devm_hwmon_device_register_with_info is similar to
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index a2175394cd25..c73b93b9bb87 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -715,11 +715,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
->   
->   /**
->    * hwmon_device_register_with_info - register w/ hwmon
-> - * @dev: the parent device
-> - * @name: hwmon name attribute
-> - * @drvdata: driver data to attach to created device
-> - * @chip: pointer to hwmon chip information
-> + * @dev: the parent device (mandatory)
-> + * @name: hwmon name attribute (mandatory)
-> + * @drvdata: driver data to attach to created device (optional)
-> + * @chip: pointer to hwmon chip information (mandatory)
->    * @extra_groups: pointer to list of additional non-standard attribute groups
-> + *	(optional)
->    *
->    * hwmon_device_unregister() must be called when the device is no
->    * longer needed.
-> @@ -732,13 +733,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
->   				const struct hwmon_chip_info *chip,
->   				const struct attribute_group **extra_groups)
->   {
-> -	if (!name)
-> -		return ERR_PTR(-EINVAL);
-> -
-> -	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
-> +	if (!dev || !name || !chip)
->   		return ERR_PTR(-EINVAL);
->   
-> -	if (chip && !dev)
-> +	if (!chip->ops || !chip->ops->is_visible || !chip->info)
->   		return ERR_PTR(-EINVAL);
->   
->   	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
+Since 122.07uV resolution is very small the resolution is set to a 1mV
+resolution to be easier to handle.
+
+Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+---
+ drivers/hwmon/pmbus/ltc2978.c    | 57 +++++++++++++++++++++++++++++---
+ drivers/hwmon/pmbus/pmbus_core.c |  1 +
+ 2 files changed, 54 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
+index 531aa674a928..cfb568c6c155 100644
+--- a/drivers/hwmon/pmbus/ltc2978.c
++++ b/drivers/hwmon/pmbus/ltc2978.c
+@@ -562,7 +562,37 @@ static const struct i2c_device_id ltc2978_id[] = {
+ MODULE_DEVICE_TABLE(i2c, ltc2978_id);
+ 
+ #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
++#define LTC2978_ADC_RES 0xFFFF
++#define LTC2978_N_ADC 122
++#define LTC2978_MAX_UV (LTC2978_ADC_RES * LTC2978_N_ADC)
++#define LTC2978_UV_STEP (1000)
++
++#define PMBUS_LTC2978_REGULATOR(_name, _id)               \
++	[_id] = {                                               \
++		.name = (_name # _id),                                \
++		.supply_name = "vin",                                 \
++		.id = (_id),                                          \
++		.of_match = of_match_ptr(_name # _id),                \
++		.regulators_node = of_match_ptr("regulators"),        \
++		.ops = &pmbus_regulator_ops,                          \
++		.type = REGULATOR_VOLTAGE,                            \
++		.owner = THIS_MODULE,                                 \
++		.n_voltages = (LTC2978_MAX_UV / LTC2978_UV_STEP) + 1, \
++		.uV_step = LTC2978_UV_STEP,                           \
++	}
++
+ static const struct regulator_desc ltc2978_reg_desc[] = {
++	PMBUS_LTC2978_REGULATOR("vout", 0),
++	PMBUS_LTC2978_REGULATOR("vout", 1),
++	PMBUS_LTC2978_REGULATOR("vout", 2),
++	PMBUS_LTC2978_REGULATOR("vout", 3),
++	PMBUS_LTC2978_REGULATOR("vout", 4),
++	PMBUS_LTC2978_REGULATOR("vout", 5),
++	PMBUS_LTC2978_REGULATOR("vout", 6),
++	PMBUS_LTC2978_REGULATOR("vout", 7),
++};
++
++static const struct regulator_desc ltc2978_reg_desc_default[] = {
+ 	PMBUS_REGULATOR("vout", 0),
+ 	PMBUS_REGULATOR("vout", 1),
+ 	PMBUS_REGULATOR("vout", 2),
+@@ -839,10 +869,29 @@ static int ltc2978_probe(struct i2c_client *client)
+ 
+ #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
+ 	info->num_regulators = info->pages;
+-	info->reg_desc = ltc2978_reg_desc;
+-	if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
+-		dev_err(&client->dev, "num_regulators too large!");
+-		info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
++	switch (data->id) {
++	case ltc2972:
++	case ltc2974:
++	case ltc2975:
++	case ltc2977:
++	case ltc2978:
++	case ltc2979:
++	case ltc2980:
++	case ltm2987:
++		info->reg_desc = ltc2978_reg_desc;
++		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
++			dev_err(&client->dev, "num_regulators too large!");
++			info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
++		}
++		break;
++	default:
++		info->reg_desc = ltc2978_reg_desc_default;
++		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc_default)) {
++			dev_err(&client->dev, "num_regulators too large!");
++			info->num_regulators =
++			    ARRAY_SIZE(ltc2978_reg_desc_default);
++		}
++		break;
+ 	}
+ #endif
+ 
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index f2cf0439da37..7d642b57c8b2 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2634,6 +2634,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+ 	.get_error_flags = pmbus_regulator_get_error_flags,
+ 	.get_voltage = pmbus_regulator_get_voltage,
+ 	.set_voltage = pmbus_regulator_set_voltage,
++	.list_voltage = regulator_list_voltage_linear,
+ };
+ EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+ 
+-- 
+2.30.2
 
