@@ -2,156 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A37C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 May 2022 15:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C97A9C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 May 2022 02:38:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240264AbiE3Pcd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 May 2022 11:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S243035AbiEaCiN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 May 2022 22:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240384AbiE3PcZ (ORCPT
+        with ESMTP id S237072AbiEaCiM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 May 2022 11:32:25 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1463713AF1E
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 May 2022 07:35:12 -0700 (PDT)
+        Mon, 30 May 2022 22:38:12 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F37350052;
+        Mon, 30 May 2022 19:38:09 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id bo5so11972196pfb.4;
+        Mon, 30 May 2022 19:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1653921313;
-  x=1685457313;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uVWVlUmZIp4aJDQV8Z2zFsWU0lT1H4YMnA3xlOlcyOE=;
-  b=h3kdhy8C+upzy2M4JDZxYEq86z0sBpAOoU4Lu10QiSPanyQZorjtAf8o
-   0MajlcIJiPDlVU5hhCCKh1kVBLfQ08++9bo6xSTHQ8+lQayT0uz4QpATn
-   Ymaf7MoAdP7gtVzZ0A2kWW90cy9PFB3bJSNkCRswT3V6smr+eh++6+CI9
-   z9Zj8+KzzwrpAV1zzbbcG57Ow37HabTWZcuC98caWaAwulkD0IX2ZYOBV
-   uf6iwY/28KFkj2HSepbw7CZJ7OtLbSbWxaEz2LVikFaJlscH2wUh3+0+J
-   nu6x/lPxWBAVnjnrocf62KZ2CIR8AhJSGVJAsZppOaNMP4KCX+decpRWg
-   g==;
-From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
-        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-Subject: [PATCH v1] hwmon: (pmbus/ltc2978) Set voltage resolution
-Date:   Mon, 30 May 2022 16:34:46 +0200
-Message-ID: <20220530143446.2649282-1-marten.lindahl@axis.com>
-X-Mailer: git-send-email 2.30.2
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5L9D0CPZoOn6iRer1/Iis9Os7Lr0syhKXln0w+FamQg=;
+        b=JKLzhF1usQmkIBdH2Vxsk7pDBv1OyOocxBwl+GQaJlEQlp8y2UKmKsfLyJEhM2N/gl
+         iBpTqmHvcKayfwyif2yByQnVOdgUmbJMknASvbSKnevTqd+cWvgfp6C8JFvzJqMOC33t
+         6d3zn/BOMUCv4CLqOrvzG+XHdi2FkE+Kt+b5geEh67iTW5l+v3dBZcbAlmcZwtnXE49A
+         BGLmJvekNBrYyDQdsMrI4ajZKNbTCI+GeoO7dZPXQ/69DR59l+NI/vSXXlfGySI/wQmy
+         ssciwG49ZPJBJWcqlayW1szsi/HnLTjWnE7O/zd56W1zaFYDtyzl1+8bZPobCDdswIvC
+         ZbPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5L9D0CPZoOn6iRer1/Iis9Os7Lr0syhKXln0w+FamQg=;
+        b=HYAZp0lGXeLg8FMuyPclrIN+uYFPHn2OV127p03wbOgBU1LBpVRgkeHj/+GUdJrHYT
+         AEHbI5oDaBldA5tqjaBcAaqX8HmBzIGJZzsoDly2PJsesdIoLF/wdw5leVGMb1/iNTix
+         Y+9FTSitjeN3CLqLn1fwohHOEtIWctGY6q7c56hZ5Y5LtW697uRTgdciOtgMYf/7S2Qh
+         cst0pzANUjqt2g+h+HYuMjGn7TZrQ9kln5M4qEfzU6eDwN8GqeedHc89mEeUqFZ1A8bN
+         0IzeNrQd3nNHfBXNn9iyJvnpbLQp47gBWVopX3uQcovujGfmVk6W9or2zvOCUzy9Qq3E
+         eOPA==
+X-Gm-Message-State: AOAM531hKRVjfRF3hb7reRKIypJSasBrZP7XhqM3DOB88NBYIfklx5Fh
+        53Aav2sRzAIVOdhe2o0lXcjYu1GeWDpwWA==
+X-Google-Smtp-Source: ABdhPJxO664InV+6aWDDRju8azkE7SdS5F2TwFncm+G+qhlV5ky/ruidv8wc6jADxF5vlYvOx26s1Q==
+X-Received: by 2002:a05:6a00:a03:b0:51b:5131:704e with SMTP id p3-20020a056a000a0300b0051b5131704emr7294679pfh.53.1653964688792;
+        Mon, 30 May 2022 19:38:08 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-77.three.co.id. [180.214.232.77])
+        by smtp.gmail.com with ESMTPSA id y139-20020a626491000000b0051844a64d3dsm9484454pfb.25.2022.05.30.19.38.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 19:38:08 -0700 (PDT)
+Message-ID: <1344ac58-f019-03ef-fab8-6e1d910514e2@gmail.com>
+Date:   Tue, 31 May 2022 09:38:03 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH AUTOSEL 5.17 128/135] hwmon: Make chip parameter for
+ with_info API mandatory
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220530133133.1931716-1-sashal@kernel.org>
+ <20220530133133.1931716-128-sashal@kernel.org>
+ <dddc2b53-62eb-fda7-4425-afdd179a7037@roeck-us.net>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <dddc2b53-62eb-fda7-4425-afdd179a7037@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-When checking if a regulator supports a voltage range, the regulator
-needs to have support for listing the range or else -EINVAL will be
-returned.
+On 5/30/22 21:27, Guenter Roeck wrote:
+> On 5/30/22 06:31, Sasha Levin wrote:
+>> From: Guenter Roeck <linux@roeck-us.net>
+>>
+>> [ Upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ]
+>>
+>> Various attempts were made recently to "convert" the old
+>> hwmon_device_register() API to devm_hwmon_device_register_with_info()
+>> by just changing the function name without actually converting the
+>> driver. Prevent this from happening by making the 'chip' parameter of
+>> devm_hwmon_device_register_with_info() mandatory.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> 
+> This patch should not be backported. It is only relevant for new
+> kernel releases, and may have adverse affect if applied to older
+> kernels.
 
-This support does not exist for the LTC2977 regulator, so this patch
-adds support for list voltage to the pmbus regulators by adding
-regulator_list_voltage_linear to the pmbus_regulator_ops. It also
-defines the voltage resolution for regulators ltc2972/LTC2974/LTC2975/
-LTC2977/LTC2978/LTC2979/LTC2980/LTM2987 based on that they all have the
-same stepwise 122.07uV resolution.
+So this patch is meant to be backported to 5.18 only, right?
 
-Since 122.07uV resolution is very small the resolution is set to a 1mV
-resolution to be easier to handle.
-
-Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
----
- drivers/hwmon/pmbus/ltc2978.c    | 57 +++++++++++++++++++++++++++++---
- drivers/hwmon/pmbus/pmbus_core.c |  1 +
- 2 files changed, 54 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-index 531aa674a928..cfb568c6c155 100644
---- a/drivers/hwmon/pmbus/ltc2978.c
-+++ b/drivers/hwmon/pmbus/ltc2978.c
-@@ -562,7 +562,37 @@ static const struct i2c_device_id ltc2978_id[] = {
- MODULE_DEVICE_TABLE(i2c, ltc2978_id);
- 
- #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
-+#define LTC2978_ADC_RES 0xFFFF
-+#define LTC2978_N_ADC 122
-+#define LTC2978_MAX_UV (LTC2978_ADC_RES * LTC2978_N_ADC)
-+#define LTC2978_UV_STEP (1000)
-+
-+#define PMBUS_LTC2978_REGULATOR(_name, _id)               \
-+	[_id] = {                                               \
-+		.name = (_name # _id),                                \
-+		.supply_name = "vin",                                 \
-+		.id = (_id),                                          \
-+		.of_match = of_match_ptr(_name # _id),                \
-+		.regulators_node = of_match_ptr("regulators"),        \
-+		.ops = &pmbus_regulator_ops,                          \
-+		.type = REGULATOR_VOLTAGE,                            \
-+		.owner = THIS_MODULE,                                 \
-+		.n_voltages = (LTC2978_MAX_UV / LTC2978_UV_STEP) + 1, \
-+		.uV_step = LTC2978_UV_STEP,                           \
-+	}
-+
- static const struct regulator_desc ltc2978_reg_desc[] = {
-+	PMBUS_LTC2978_REGULATOR("vout", 0),
-+	PMBUS_LTC2978_REGULATOR("vout", 1),
-+	PMBUS_LTC2978_REGULATOR("vout", 2),
-+	PMBUS_LTC2978_REGULATOR("vout", 3),
-+	PMBUS_LTC2978_REGULATOR("vout", 4),
-+	PMBUS_LTC2978_REGULATOR("vout", 5),
-+	PMBUS_LTC2978_REGULATOR("vout", 6),
-+	PMBUS_LTC2978_REGULATOR("vout", 7),
-+};
-+
-+static const struct regulator_desc ltc2978_reg_desc_default[] = {
- 	PMBUS_REGULATOR("vout", 0),
- 	PMBUS_REGULATOR("vout", 1),
- 	PMBUS_REGULATOR("vout", 2),
-@@ -839,10 +869,29 @@ static int ltc2978_probe(struct i2c_client *client)
- 
- #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
- 	info->num_regulators = info->pages;
--	info->reg_desc = ltc2978_reg_desc;
--	if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
--		dev_err(&client->dev, "num_regulators too large!");
--		info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
-+	switch (data->id) {
-+	case ltc2972:
-+	case ltc2974:
-+	case ltc2975:
-+	case ltc2977:
-+	case ltc2978:
-+	case ltc2979:
-+	case ltc2980:
-+	case ltm2987:
-+		info->reg_desc = ltc2978_reg_desc;
-+		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
-+			dev_err(&client->dev, "num_regulators too large!");
-+			info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
-+		}
-+		break;
-+	default:
-+		info->reg_desc = ltc2978_reg_desc_default;
-+		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc_default)) {
-+			dev_err(&client->dev, "num_regulators too large!");
-+			info->num_regulators =
-+			    ARRAY_SIZE(ltc2978_reg_desc_default);
-+		}
-+		break;
- 	}
- #endif
- 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index f2cf0439da37..7d642b57c8b2 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2634,6 +2634,7 @@ const struct regulator_ops pmbus_regulator_ops = {
- 	.get_error_flags = pmbus_regulator_get_error_flags,
- 	.get_voltage = pmbus_regulator_get_voltage,
- 	.set_voltage = pmbus_regulator_set_voltage,
-+	.list_voltage = regulator_list_voltage_linear,
- };
- EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
- 
 -- 
-2.30.2
-
+An old man doll... just what I always wanted! - Clara
