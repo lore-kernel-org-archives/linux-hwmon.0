@@ -2,199 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 560FEC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Jun 2022 20:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81E98C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Jun 2022 22:31:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiFAUms (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Jun 2022 16:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        id S232303AbiFAWbB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 1 Jun 2022 18:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiFAUml (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2022 16:42:41 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA8D1CC5D9
-        for <linux-hwmon@vger.kernel.org>; Wed,  1 Jun 2022 13:24:20 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id r65so4085978oia.9
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jun 2022 13:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=OXfHegdPq5IrLefShGdi2p674HrEShnTmPuWPQzcl5Y=;
-        b=edHSjHeHyhiO9GQwFZK8SQypuVsupFRb4IRMv+o/4kZp1secIlurFMESvGKagkWMP3
-         tqqXB+KlfixTMw/LYxKSwxEqxB67sxhWsofprFpVDbjRk4uYRnvE8ph1DVffFcRzO8AE
-         u0AHvAx+QfzGbnurSn3tqXybPy2bXhDc7OFFtnUNfdcCzFkItx2hRWNtZp9pF/UOnNFD
-         7owzCtgzU8ZH0A8vfmjB4kWJ7BRmQwnE/BoQC9KBYH6x6ndpsDqjAwuMZ7hcpLXfBm/c
-         eKSpjcwYu5K0UXvHgqGL65LxHktebQFqlrWSjWTuw/JXSNtAuxN9uBM5lYKKWNE8ahar
-         4TpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=OXfHegdPq5IrLefShGdi2p674HrEShnTmPuWPQzcl5Y=;
-        b=HuD+5c7OnWpAoKAfhj1KzkeGFl3a1O0WVPm3H290FxcBPW/wimc9TkkdP348+q4HiQ
-         OAMRqdC1Aer0Tm86GfPsFQBpB21qpe74pD+unS2yZJyQcinqIvZgg+UfUhagYk2mYZum
-         s3cagMnneqNUqCR/RM8QLaXLK1qj5ua624xyV3tTTdiBb8uwd+dBwHekLgd6+G2vwJUV
-         8ta13DOQp6tpYhVl05OF62RWWqCH3D4LR6+Y8pLc0ELrUneK2pPkOCR60vBxNBBzZl/9
-         ZOjAmHZ9tmL9dNbMSg/R/blXtRjARqroh3M5RaOZy7TJ32IlEXT5dmEMR0+kw8Pc3PFD
-         d2jA==
-X-Gm-Message-State: AOAM532QRWYki2O6FoUineWaJ9svJnY9jlU/PblwjI2ow1fRwjXdk6V0
-        EW0hgc3ulrTolnOvpOopN5GvO7WlJ7E=
-X-Google-Smtp-Source: ABdhPJzUj+kGbaMEQ30LucRoxrI18SMt9Sp76YWb/CbCFBby/92E93GCOs6u5P6QI9B3LbI5E/HCiQ==
-X-Received: by 2002:aca:32d7:0:b0:32b:4437:baf0 with SMTP id y206-20020aca32d7000000b0032b4437baf0mr604564oiy.204.1654110778002;
-        Wed, 01 Jun 2022 12:12:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056870469100b000e686d13883sm1030662oap.29.2022.06.01.12.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 12:12:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 1 Jun 2022 12:12:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?M=E5rten?= Lindahl <marten.lindahl@axis.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH v1] hwmon: (pmbus/ltc2978) Set voltage resolution
-Message-ID: <20220601191256.GA1416021@roeck-us.net>
-References: <20220530143446.2649282-1-marten.lindahl@axis.com>
+        with ESMTP id S232301AbiFAWbB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2022 18:31:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7ED101CB;
+        Wed,  1 Jun 2022 15:30:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12B9660C98;
+        Wed,  1 Jun 2022 22:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1C1C385A5;
+        Wed,  1 Jun 2022 22:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654122658;
+        bh=Is0lHUzMG8//soZVMgz0ruaa6kON13kwXAtlgdtJw6s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=nGsYQX3k61YJkwTPy7HflD3pb9VyTIcNuEwF6KgKAgIfAXRZWcDtnrSLg994KU1mc
+         Wew5o1hEVzoOUJjWmMmTW6AbA6NK364G4371JXHvAOVC5kPYnQW9ZLE2z4hQAmBUio
+         H0zbgpAAcL5GUlmjy8vcAc1iVGNANcpIFFT7rMkny31SGA02nBZefeW4YTw/cpJW/Z
+         Hfdx58KX+G0MGoKv5vGWpEXfjhBFshZDQ4pSd9JPl545mjFgH/Pg0F2xNe/dN9Cx+n
+         FjtijbkCrnHOkD7qWqzI0zieHUo6bmmpXfZpH9wvlAI0EWi7EALMHUWpaM6dkIUCrg
+         9hZ0e247MZ4fQ==
+Date:   Wed, 1 Jun 2022 17:30:56 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Clemens Ladisch <clemens@ladisch.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Gabriel Craciunescu <nix.or.die@googlemail.com>,
+        babu.moger@amd.com
+Subject: Re: [PATCH 1/2] x86/amd_nb: Add AMD Family 19h A0-AF IDs
+Message-ID: <20220601223056.GA10215@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220530143446.2649282-1-marten.lindahl@axis.com>
+In-Reply-To: <20220601172121.18612-1-mario.limonciello@amd.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, May 30, 2022 at 04:34:46PM +0200, Mårten Lindahl wrote:
-> When checking if a regulator supports a voltage range, the regulator
-> needs to have support for listing the range or else -EINVAL will be
-> returned.
+On Wed, Jun 01, 2022 at 12:21:18PM -0500, Mario Limonciello wrote:
+> commit 4fb0abfee424 ("x86/amd_nb: Add AMD Family 19h Models (10h-1Fh)
+> and (A0h-AFh) PCI IDs") had claimed to add the IDs for models A0h-AFh,
+> but it appears to only have added the models 10h-1Fh.
 > 
-> This support does not exist for the LTC2977 regulator, so this patch
-> adds support for list voltage to the pmbus regulators by adding
-> regulator_list_voltage_linear to the pmbus_regulator_ops. It also
-> defines the voltage resolution for regulators ltc2972/LTC2974/LTC2975/
-> LTC2977/LTC2978/LTC2979/LTC2980/LTM2987 based on that they all have the
-> same stepwise 122.07uV resolution.
+> Add the actual IDs for A0-AF which are needed for SMN communication to
+> work properly in amd_nb.
 > 
-> Since 122.07uV resolution is very small the resolution is set to a 1mV
-> resolution to be easier to handle.
-> 
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+> Fixes: 4fb0abfee424 ("x86/amd_nb: Add AMD Family 19h Models (10h-1Fh) and (A0h-AFh) PCI IDs")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/hwmon/pmbus/ltc2978.c    | 57 +++++++++++++++++++++++++++++---
->  drivers/hwmon/pmbus/pmbus_core.c |  1 +
->  2 files changed, 54 insertions(+), 4 deletions(-)
+>  arch/x86/kernel/amd_nb.c | 5 +++++
+>  include/linux/pci_ids.h  | 1 +
+>  2 files changed, 6 insertions(+)
 > 
-> diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-> index 531aa674a928..cfb568c6c155 100644
-> --- a/drivers/hwmon/pmbus/ltc2978.c
-> +++ b/drivers/hwmon/pmbus/ltc2978.c
-> @@ -562,7 +562,37 @@ static const struct i2c_device_id ltc2978_id[] = {
->  MODULE_DEVICE_TABLE(i2c, ltc2978_id);
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index 190e0f763375..cc8c7cfa9068 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -25,11 +25,13 @@
+>  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
+>  #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
+>  #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
+> +#define PCI_DEVICE_ID_AMD_19H_MA0H_ROOT	0x14b5
+>  #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
+>  #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F4 0x14b1
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
+>  #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
+> +#define PCI_DEVICE_ID_AMD_19H_MA0H_DF_F4 0x1728
 >  
->  #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
-> +#define LTC2978_ADC_RES 0xFFFF
-> +#define LTC2978_N_ADC 122
-> +#define LTC2978_MAX_UV (LTC2978_ADC_RES * LTC2978_N_ADC)
-> +#define LTC2978_UV_STEP (1000)
-
-#define<space>DEFINE<tab>VALUE, please, and the () around 1000
-is unnecessary.
-
-Also, is the range really correct ? The valid / acceptable
-voltages are in the range detected in pmbus_regulator_set_voltage(),
-based on PMBUS_MFR_VOUT_MIN/PMBUS_VOUT_MARGIN_LOW and
-PMBUS_MFR_VOUT_MAX/PMBUS_VOUT_MARGIN_HIGH, and that will likely differ
-from the fixed number of voltages provided here.
-
-That makes me wonder if it would make more sense to move this
-functionality into the PMBus core code. Any thoughts on that ?
-
-Thanks,
-Guenter
-
-> +
-> +#define PMBUS_LTC2978_REGULATOR(_name, _id)               \
-> +	[_id] = {                                               \
-> +		.name = (_name # _id),                                \
-> +		.supply_name = "vin",                                 \
-> +		.id = (_id),                                          \
-> +		.of_match = of_match_ptr(_name # _id),                \
-> +		.regulators_node = of_match_ptr("regulators"),        \
-> +		.ops = &pmbus_regulator_ops,                          \
-> +		.type = REGULATOR_VOLTAGE,                            \
-> +		.owner = THIS_MODULE,                                 \
-> +		.n_voltages = (LTC2978_MAX_UV / LTC2978_UV_STEP) + 1, \
-> +		.uV_step = LTC2978_UV_STEP,                           \
-> +	}
-> +
->  static const struct regulator_desc ltc2978_reg_desc[] = {
-> +	PMBUS_LTC2978_REGULATOR("vout", 0),
-> +	PMBUS_LTC2978_REGULATOR("vout", 1),
-> +	PMBUS_LTC2978_REGULATOR("vout", 2),
-> +	PMBUS_LTC2978_REGULATOR("vout", 3),
-> +	PMBUS_LTC2978_REGULATOR("vout", 4),
-> +	PMBUS_LTC2978_REGULATOR("vout", 5),
-> +	PMBUS_LTC2978_REGULATOR("vout", 6),
-> +	PMBUS_LTC2978_REGULATOR("vout", 7),
-> +};
-> +
-> +static const struct regulator_desc ltc2978_reg_desc_default[] = {
->  	PMBUS_REGULATOR("vout", 0),
->  	PMBUS_REGULATOR("vout", 1),
->  	PMBUS_REGULATOR("vout", 2),
-> @@ -839,10 +869,29 @@ static int ltc2978_probe(struct i2c_client *client)
->  
->  #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
->  	info->num_regulators = info->pages;
-> -	info->reg_desc = ltc2978_reg_desc;
-> -	if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
-> -		dev_err(&client->dev, "num_regulators too large!");
-> -		info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
-> +	switch (data->id) {
-> +	case ltc2972:
-> +	case ltc2974:
-> +	case ltc2975:
-> +	case ltc2977:
-> +	case ltc2978:
-> +	case ltc2979:
-> +	case ltc2980:
-> +	case ltm2987:
-> +		info->reg_desc = ltc2978_reg_desc;
-> +		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
-> +			dev_err(&client->dev, "num_regulators too large!");
-
-Let's make this a dev_warn(); it does not result in an error abort,
-after all.
-
-> +			info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
-> +		}
-> +		break;
-> +	default:
-> +		info->reg_desc = ltc2978_reg_desc_default;
-> +		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc_default)) {
-> +			dev_err(&client->dev, "num_regulators too large!");
-
-Same here.
-
-> +			info->num_regulators =
-> +			    ARRAY_SIZE(ltc2978_reg_desc_default);
-> +		}
-> +		break;
->  	}
->  #endif
->  
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index f2cf0439da37..7d642b57c8b2 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2634,6 +2634,7 @@ const struct regulator_ops pmbus_regulator_ops = {
->  	.get_error_flags = pmbus_regulator_get_error_flags,
->  	.get_voltage = pmbus_regulator_get_voltage,
->  	.set_voltage = pmbus_regulator_set_voltage,
-> +	.list_voltage = regulator_list_voltage_linear,
+>  /* Protect the PCI config register pairs used for SMN. */
+>  static DEFINE_MUTEX(smn_mutex);
+> @@ -43,6 +45,7 @@ static const struct pci_device_id amd_root_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_ROOT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_MA0H_ROOT) },
+>  	{}
 >  };
->  EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
 >  
+> @@ -67,6 +70,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_MA0H_DF_F3) },
+>  	{}
+>  };
+>  
+> @@ -85,6 +89,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F4) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_MA0H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+>  	{}
+>  };
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 0178823ce8c2..05b4c67a8a2a 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -560,6 +560,7 @@
+>  #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3 0x14b0
+>  #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3 0x167c
+>  #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3 0x166d
+> +#define PCI_DEVICE_ID_AMD_19H_MA0H_DF_F3 0x1727
+
+This file is nominally sorted by numeric device ID inside the vendor
+section, but that has really deteriorated over time.
+
+I can't quite figure out the rationale for deciding whether to put
+things in amd_nb.c vs pci_ids.h.  The IDs in amd_nb.c look basically
+the same as this one.
+
+Normally we put things in pci_ids.h if they are used more than one
+place.  PCI_DEVICE_ID_AMD_19H_MA0H_DF_F3 looks like it's only used in
+one place.
+
+>  #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
+>  #define PCI_DEVICE_ID_AMD_LANCE		0x2000
+>  #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
+> -- 
+> 2.34.1
+> 
