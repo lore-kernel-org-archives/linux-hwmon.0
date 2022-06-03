@@ -2,148 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5268CCA473
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jun 2022 12:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 664C9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jun 2022 15:21:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244326AbiFCM2e (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Jun 2022 08:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S230520AbiFCPV0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Jun 2022 11:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiFCM2d (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Jun 2022 08:28:33 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC55B3A5DC;
-        Fri,  3 Jun 2022 05:28:28 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id fu3so14133640ejc.7;
-        Fri, 03 Jun 2022 05:28:28 -0700 (PDT)
+        with ESMTP id S230514AbiFCPVZ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Jun 2022 11:21:25 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2127.outbound.protection.outlook.com [40.107.223.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5D506C3;
+        Fri,  3 Jun 2022 08:21:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D4+cCNlC8kOYK8F/xHBQK9J5zVNRGjmZ8ShnWwjX6csRXTF89TNyFm3Pkx4qMBVsAhbMHK1kbMAqt55tnWiUXp82SNx9Ta+gqpuGvb97B5rcAXm7ELxP1Xj3LOj4b00BgnqhRSr8ilAMYvs9caRjTTTV/HIj4JQQQD1WBCntj4lXRTqn0gATY91jm9siAgD0BX/tonZvPRYZOlCXaVU5SSM+W3ZPt5XpVMMqIR1vL57RlbSf5qdEtsOjXOeYEkaBtM+cXbd2WuwUgwshUZ0wImqhSqoI1ED4s8OgqNDmr/sjdWQH/jgJOQ4pEhhH6YdbfFstKskHLBQ1to0DFZqciw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uvgcHcbTSl/MmZx3FmCNReIJMktR9MoYW0K+Y4RCw7I=;
+ b=ZMK+/Pii+kCCIYs4mL6EPnxUUSFK6IABJVVby9r+rEIqWEBvgLdBTNlvMExrR8jqppygM+nGTqjHmwVtnUpEynwDFPB4Gea0QqYeLbvwVT07E1rDPHKsil2wx7qnawfxcqwfeGb5KvSsEygLXZKR6XMX29AxnMdp9mqokQeLuoNy8FVQ5bkkLwv/sapCaUZnmZYBUmMHCX7g4n+w+Ho2y0UB6jDv9JmPIgjR9Z5Xq3v+xYt0kI4HXznk9gQOPvUYOGkYd07aJoqbIOPiI69WNu4mYRK21b+iIv3ru3hrrvBFkkFfmDAQO2rzuM3/uXp0Xg02UM/jzW5ORXJj+AjyLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hYSeRFJf+M9aNqS1LqyGbAOqdo1Ua1JvigqLt2idPAQ=;
-        b=cApS9/KdM+AKtD0BQHIShPWRYK9yv+z1A51dOi0JcW8tho065IFK4pMyHHOnL9CodW
-         7mgl+/rGHpwa8CM4iBjJo7oXSCJX7fQns+AjQrNT7OjQfDiY/y9BL4msoibUpFPDb/tq
-         JHkjA5X3vUo0j29wl0mfviqteThl+I8JI2vgE4E+FPthWNbXdF+ouU5xGrkB1CPG5Yvw
-         oBxhxZ6QVbdgm8nfcD7i4zXvsC30bofVbE7XHanAOSSaIuC8OUtJHq0GV6AAguiDcgkz
-         CrLWaN9Xn2mqMXYZ6kAKy2GS1rbicNaOIOQcw0HBCWoJpqQ3u+emF2ArJmhhhm4G9O7R
-         AleQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hYSeRFJf+M9aNqS1LqyGbAOqdo1Ua1JvigqLt2idPAQ=;
-        b=Z8TccpXYw2qnigLXhdNZ4F0OBxnNxioFUqLmMzbzlqakMrLISLG1PTVoXUEul1r72T
-         gXy5fPPsRvbOmnsJ1wDOF5B39KR3i+H576y8P73wH1PSHU6lPP1DJIgoEk2IfLAPyvwh
-         KBxWOR6PvNENS09yUyZlPc5rZPnHT7hVKRNjFgQomJXkYRYMZ2jtadelfXE5wePCVxUQ
-         DR1SHzUSXmY37vUbw6eca7A/MuRdqEQuwpOqPxpPbmi2SOROE/E0sD0ijNnweXk7PYfx
-         GmVsqlPdyW+vxpKPxw+xbSMM5kujZQOhbr2e94zmCYbSMepXm1Zc3ttD0EODgYA4Y0d1
-         /Fnw==
-X-Gm-Message-State: AOAM532SLwfGuoIhZVHnTM9EYNsssA82y/FI3F71MTxHjx4gF1wOqYBH
-        VpCqD2YCEfMTLSid2bjIpQJFrtYZV3JWs4or
-X-Google-Smtp-Source: ABdhPJwGyY6+XKUXe3U/N1bT/Su6zfWYWGUd3DiPengdRwJcKEBMLabu7csFrNmFeRjmfGmhW67HNA==
-X-Received: by 2002:a17:907:9619:b0:6ff:5c3c:bcae with SMTP id gb25-20020a170907961900b006ff5c3cbcaemr8663841ejc.585.1654259307262;
-        Fri, 03 Jun 2022 05:28:27 -0700 (PDT)
-Received: from caracal.goemobile.intern (erm103.goemobile.de. [134.76.0.103])
-        by smtp.googlemail.com with ESMTPSA id o13-20020a17090608cd00b006fedcb78854sm2785521eje.164.2022.06.03.05.28.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 05:28:26 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Shady Nawara <shady.nawara@outlook.com>,
-        Jean Delvare <jdelvare@suse.com>,
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uvgcHcbTSl/MmZx3FmCNReIJMktR9MoYW0K+Y4RCw7I=;
+ b=qkHmZw5sJrERCrpG9zm0wtzEmQ+rh8vc6RInanIB3ce06JenqQxFC7LuoXbiDrvSmMosJ/kFuCiGB5OAvjBVy7r4imTvJu/lXdE0Lmj9FO7Qley28nnyDgTqgVwR+XCBJJV6OFmGBEVbO0YE6pOjUWYE6kswTfbTZHdcBH5Ureg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from MWHPR0101MB2893.prod.exchangelabs.com (2603:10b6:301:33::25) by
+ CY4PR01MB2566.prod.exchangelabs.com (2603:10b6:903:6e::9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5293.18; Fri, 3 Jun 2022 15:21:22 +0000
+Received: from MWHPR0101MB2893.prod.exchangelabs.com
+ ([fe80::b8d8:b445:2b14:bed3]) by MWHPR0101MB2893.prod.exchangelabs.com
+ ([fe80::b8d8:b445:2b14:bed3%3]) with mapi id 15.20.5293.019; Fri, 3 Jun 2022
+ 15:21:22 +0000
+From:   D Scott Phillips <scott@os.amperecomputing.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add support for Strix Z690-a D4
-Date:   Fri,  3 Jun 2022 14:27:58 +0200
-Message-Id: <20220603122758.1561064-1-eugene.shalygin@gmail.com>
+        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
+        Darren Hart <darren@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Subject: [PATCH] hwmon: (xgene) restrict power measurements to admin by default
+Date:   Fri,  3 Jun 2022 08:21:16 -0700
+Message-Id: <20220603152116.2269912-1-scott@os.amperecomputing.com>
 X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH2PR18CA0047.namprd18.prod.outlook.com
+ (2603:10b6:610:55::27) To MWHPR0101MB2893.prod.exchangelabs.com
+ (2603:10b6:301:33::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e8de71d1-28f8-46a1-7373-08da4574b6a7
+X-MS-TrafficTypeDiagnostic: CY4PR01MB2566:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR01MB256676B337411D5C903E81AB86A19@CY4PR01MB2566.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WZvEN63MVwzWRVEfjMkLIUHQDeHQOBk9gdf8UbqvE2OGr5wHF+QXC8fI9MfX0/B8WB2QZZDamOHigeSYhcxaKAQnQSONVujbN3gfysxSyj8DiwEItzAcQImDo+sdkn28EqSt10g2jfWWxBc2NqCx2grphJ/T3zR8fxjO+3XYKxlFmjSLBtny6m1aesWczRZIsL7qIpnmLjPx8j5yspsEFMgUMx3O/+diKPLjXoZyLakyXI6gPVSOD+hwjTfqZPUQXuYGyDdN/hiRCYCQvcU7fGeDmHzVshCFrmWSoOnzuOMF4f2N+dinEwRrvJomEbc6qEgNgPGOPJzvqGb8vmoxg4A/tnXrzVqsTg0unn39w8xNOL8gZJ/HDH7mGawERTJ8dmYHnJjAh8b1SQ4dxpKUZjclS9pFazSxU/eHA1MxzrN0HMYZ1ZMMDyqVQnRQ/HM9eqHbqFGDR/xDjlQX+G6QJFO7+1gLIXdT4m3m8uG2XyC2nKeHNkJlC5lhxxZWJSGCKwtNKgAf6aTkVx0wq0TbHlwrBTOWryjrpQOYjvh9uh/15Z6N6x+IYY9CLvpwbppQ6HqK32hN5VeH4SOHijBYCv42Wg9jBHDsOUduTQy5+OLG7tAaPa3SYlXu+lvsF6u/khL+Rop0Z1IHLDMYPxOJPY4UJL14CB1r3HDt9qcX2BZe0WaNzaW/FFD20K47FdXZawFa06xJ2HdqgwW0IZXCtg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR0101MB2893.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(86362001)(66476007)(66946007)(6916009)(54906003)(66556008)(186003)(6506007)(8936002)(52116002)(5660300002)(6666004)(38350700002)(6486002)(38100700002)(8676002)(107886003)(6512007)(2616005)(1076003)(4326008)(2906002)(316002)(508600001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RqdWT2qs3uy5ZQza9WoYi/Z+h7KyCu3nLNrIqBAopBZyXBT+kCP/pmcoJJjo?=
+ =?us-ascii?Q?FlEc2Q2gr9/SZCKOtl8zK29hW4QG5144hStO2Mw9kor2zhk20YE6LpXky/Ej?=
+ =?us-ascii?Q?KHnJ5GBkyDBYdITOukG/eA+QANTz9waqwtEGb4Hc25M12RvjvfYB3jUJ0HRV?=
+ =?us-ascii?Q?HXsFf5zZMDvH+8Kxn/Rpgi3Wz7rrTpWoL4vTanttg6zC3ZnrxynlA/2o2jnk?=
+ =?us-ascii?Q?uV2Ak1Tp9wlM0FIvK1Mi94K7tOgqDjVG3//RxJTIik9S1oMgdlrATujWKHyw?=
+ =?us-ascii?Q?5PAMnBzqHEuhzD1H7FVtgereCSQxjXUP8rWenap9od7jUPTVGGQ1DtTAuITi?=
+ =?us-ascii?Q?e7w0p6oyYhaZVP0XB21CTD5n0igKLhU3HHBbhxpwHWQ9yfJJtfi8elmkyLyR?=
+ =?us-ascii?Q?1N4jcifYwgRkcaN1WOU5NPu/KUtRseFNsIe0NuKyy67cSR5emILBcKT1OYiv?=
+ =?us-ascii?Q?i42tbrqiRvEhE7TpjntwTvRSawl+CkPVkXbwckwo1nwdhwNW2nTn91N0YvPc?=
+ =?us-ascii?Q?U/4WvUtOaCCBZCtadGFkH2sTOt/xoKCNYdB0KgHEPD3YUU8vrQg+wJGsQCdI?=
+ =?us-ascii?Q?1Jy6z4lR1BeIEOkhiY9CueIq1UVKmnzgLd6DdRsBlhyCLghACnAY1TZYbGrd?=
+ =?us-ascii?Q?HexN2wwqrVtZ8D+fAD+O6mRLRN0Xq6+1EDZYIfSpGzy0XHWKFgLfvZ0cFAxI?=
+ =?us-ascii?Q?2bLCeLabUUNz814dlTbpkeVwmU7khq7QipqehclafDR+w04lakzsBZDMrZZC?=
+ =?us-ascii?Q?mEZmaUjd2zLdSosOjNHG6UnBfQttVjJEDMzkZhP6cZMm4FWYQEO6q90Dre64?=
+ =?us-ascii?Q?mrDgvi0ZKyWMfdLSOAvllp1tGIhwIt5tFvydzBy5+4bgjtGKASl3WH1ekbho?=
+ =?us-ascii?Q?9aF7bWjKKmhmbtlunIQ4+j9QhMvbwmml/VPyGb38NZLhu2Itprwqy17KgVNA?=
+ =?us-ascii?Q?zmkslIeqNXARMuIkJtWy+sxJYsoJSydzQssnSJ7PvughAEgFaNdZVUV0z2la?=
+ =?us-ascii?Q?kvmu7hH6NN0kQQjeMZlaVODB/Is04LJ+5VbZplQ4jzEvf0UTmxC70pjF1/Wj?=
+ =?us-ascii?Q?B7dx75vnF04tLbTrXeRGj8r+zsyb7N9kilCJ4pIUybdUjoRIW7bK+xoDnXtX?=
+ =?us-ascii?Q?BwVxZtoWqP6//1pYEGfrF1y90QQpzKqaWuyNZKaZBrk6ZnDWaunmD02RlITo?=
+ =?us-ascii?Q?RWL3bLV4gLaxHxrRm/dvxkisYqQzAcgX1x8hR1xY2URsx/51fb/rZfO9iTYC?=
+ =?us-ascii?Q?6OKtfU9ALTK9gxh+yEktHqWZg/lgrsGcLASoHlp34JHnFQ5r17KYdKOCTFKC?=
+ =?us-ascii?Q?ci3BjPXQC2Y6ooXVyNVfGz/pbJ3Br6vt4yZJA9OfcyAa29XXoN4BzWfAWG8b?=
+ =?us-ascii?Q?sFLGJcADrJYB/oPstHrqwh9BFqi+XEXGWLlMRfO5tAZyMWlxa6501KITWe1e?=
+ =?us-ascii?Q?ScaDYK+XNvNXYjZXSAOL5zkg77k5SlS8qy4PU4PaEe/rp9N852gvNk+Q50H0?=
+ =?us-ascii?Q?pAG8PEuh2fhKck2rwFu0u6N/27AxuyMrkYR1eibFIdxSK6jupMZ2SRexNYjA?=
+ =?us-ascii?Q?s7+VU6Hh2eyycLtH0waEMUfusT25b2KBfjLWQ9Qcjtf4vHcnT8ztTqFYSY5n?=
+ =?us-ascii?Q?3wiLOVo1Trf3HXZaFdL6bfzk20knuSnoktOnKgLod0Uhhje4yUotWGEF6N+W?=
+ =?us-ascii?Q?OuV9ZJ7WNRH7ZUrcmjGQ+MUxQDdAUar+qbKCzGGdkQSaxnsKxSNdsLsFMEUY?=
+ =?us-ascii?Q?Wp/grTLAVLa6HjwBjSrkhlnISzKcJZwPI2L2IKG8eTwsZOXS5jJj?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8de71d1-28f8-46a1-7373-08da4574b6a7
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR0101MB2893.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2022 15:21:22.1327
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ianfho7KpNUrSJ0Uhfj3dKkYxAte1IceHo+4u/wghuCpwHPpBcYyNjPI4dY0dhi3VZQ/uQJR3GpMAwh/6usjTDZayZc0HpGck5tLlQH5j35mFUl2T5Vd5zXIlopaSrJm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR01MB2566
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Shady Nawara <shady.nawara@outlook.com>
+Access to power information can be used to infer the instructions being run
+and possibly even data being processed on a cpu[1]. Restrict access to
+power information to administrator users by default. (Cf. a similar
+powercap change[2].)
 
-adds T_Sensor and VRM Temp sensors for the Asus Strix z690-a D4 motherboard
+[1]: Lipp, Moritz, et al. "PLATYPUS: software-based power side-channel
+     attacks on x86." 2021 IEEE Symposium on Security and Privacy (SP).
+     IEEE, 2021.
+[2]: commit 949dd0104c49 ("powercap: restrict energy meter to root access")
 
-Signed-off-by: Shady Nawara <shady.nawara@outlook.com>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Fixes: ed42cfa881e1 ("hwmon: Add xgene hwmon driver")
+Signed-off-by: D Scott Phillips <scott@os.amperecomputing.com>
+Cc: stable@vger.kernel.org
 ---
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 18 ++++++++++++++++++
- 2 files changed, 19 insertions(+)
+ drivers/hwmon/xgene-hwmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 78ca69eda877..00d8c46ef9e0 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -19,6 +19,7 @@ Supported boards:
-  * ROG STRIX X570-E GAMING WIFI II
-  * ROG STRIX X570-F GAMING
-  * ROG STRIX X570-I GAMING
-+ * ROG STRIX Z690-A GAMING WIFI D4
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 5cde837bfd09..6ad1daf2d354 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -397,9 +397,9 @@ static DEVICE_ATTR_RO(temp1_label);
+ static DEVICE_ATTR_RO(temp1_input);
+ static DEVICE_ATTR_RO(temp1_critical_alarm);
+ static DEVICE_ATTR_RO(power1_label);
+-static DEVICE_ATTR_RO(power1_input);
++static DEVICE_ATTR_ADMIN_RO(power1_input);
+ static DEVICE_ATTR_RO(power2_label);
+-static DEVICE_ATTR_RO(power2_input);
++static DEVICE_ATTR_ADMIN_RO(power2_input);
  
- Authors:
-     - Eugene Shalygin <eugene.shalygin@gmail.com>
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 57e11b2bab74..886a71b4c64e 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -54,6 +54,8 @@ static char *mutex_path_override;
- /* ACPI mutex for locking access to the EC for the firmware */
- #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
- 
-+#define ASUS_HW_ACCESS_MUTEX_RMTW_ASMX	"\\RMTW.ASMX"
-+
- #define MAX_IDENTICAL_BOARD_VARIATIONS	3
- 
- /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
-@@ -139,6 +141,7 @@ enum board_family {
- 	family_unknown,
- 	family_amd_400_series,
- 	family_amd_500_series,
-+	family_intel_600_series
- };
- 
- /* All the known sensors for ASUS EC controllers */
-@@ -197,6 +200,12 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
- 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
- };
- 
-+static const struct ec_sensor_info sensors_family_intel_600[] = {
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-+};
-+
- /* Shortcuts for common combinations */
- #define SENSOR_SET_TEMP_CHIPSET_CPU_MB                                         \
- 	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
-@@ -330,6 +339,12 @@ static const struct ec_board_info board_info[] = {
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
- 		.family = family_amd_500_series,
- 	},
-+	{
-+		.board_names = {"ROG STRIX Z690-A GAMING WIFI D4"},
-+		.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
-+		.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-+		.family = family_intel_600_series,
-+	},
- 	{}
- };
- 
-@@ -799,6 +814,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	case family_amd_500_series:
- 		ec_data->sensors_info = sensors_family_amd_500;
- 		break;
-+	case family_intel_600_series:
-+		ec_data->sensors_info = sensors_family_intel_600;
-+		break;
- 	default:
- 		dev_err(dev, "Unknown board family: %d",
- 			ec_data->board_info->family);
+ static struct attribute *xgene_hwmon_attrs[] = {
+ 	&dev_attr_temp1_label.attr,
 -- 
 2.35.1
 
