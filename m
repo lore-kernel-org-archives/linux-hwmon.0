@@ -2,171 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0B0AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jun 2022 13:49:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00612C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jun 2022 17:39:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343673AbiFENtI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Jun 2022 09:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
+        id S243533AbiFERju (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 5 Jun 2022 13:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiFENtH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Jun 2022 09:49:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A01E19007
-        for <linux-hwmon@vger.kernel.org>; Sun,  5 Jun 2022 06:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654436945;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BRPkzB0Obt6oYcl++dMZO0Ti3gSuzY9Z9516AYxuh28=;
-        b=iYbcbovqefE7uqcmV4Fa18RWImfewPAI8pDD3LTUKyX8N4gm+Ws17UdC2lDvAgKbEANYh2
-        +Ubc6SGdh6J9x+CJo2qKLpAhLDprlJjlvHnRBVlZpTJvUFBcGXcqLeongizS47NzOM01op
-        SKW/Jq3Qat4cvbujS082h4opLtKX2r8=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-6yCaz8fkOomgNOusFEJ-8g-1; Sun, 05 Jun 2022 09:49:04 -0400
-X-MC-Unique: 6yCaz8fkOomgNOusFEJ-8g-1
-Received: by mail-ed1-f72.google.com with SMTP id z20-20020a05640235d400b0042dfc1c0e80so8307976edc.21
-        for <linux-hwmon@vger.kernel.org>; Sun, 05 Jun 2022 06:49:03 -0700 (PDT)
+        with ESMTP id S236198AbiFERjt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Jun 2022 13:39:49 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E47255BE;
+        Sun,  5 Jun 2022 10:39:48 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-f33f0f5b1dso16685367fac.8;
+        Sun, 05 Jun 2022 10:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0t2KBpV3bOi+Pz+YViAua3xYzzkQCGaNJlHLI0Dc4FU=;
+        b=LIIMREu2fe9sT7Qe2DdOwRrA1/sdTGhwfgusaDjTBiSMNDtVFjIrnbFvSqOBXORKNi
+         Z478K7rP2FXF2zrBFhGdAIQiuQC1wSwxzQ3P3BUGV1JLyzQrJqwV9sMzSaJ4vWKH/oIJ
+         +ilLnhu5yrc6JQXc6K6Ywa4aedEJr94ZyhXg3SPEDuhnVGtho/D2LObxEJtk2/R4EL7V
+         NPDx+Gv4c3o0lNIAlT9Dv5ExLcyCBjR4XsixMKn/Gwahu0h59eF5ZtSqtQ0Oao+LkbIg
+         1njxm2JtMeqX+nvLKdEFtsz9tkN5BnyHK59CQBpsAbPYZZKErIAaKIQfQe0B/39L1FTS
+         LeUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BRPkzB0Obt6oYcl++dMZO0Ti3gSuzY9Z9516AYxuh28=;
-        b=pLeoTv1DjwDqoDC+n+TGX3NQPtedfGT++ZG5L44/GJJxwFznukaB2niwwFe0noeDVI
-         b8WxBq/mZkH+CDYeaaA/PQQlzHFtpDUu5A7Yh2nFZeHZtCBIZSeikH5FUlY4K+Z5y8/n
-         HKU/FjFU1b+QGgnxXcO/Ud7pmFfAA7Fxp5iuFTtWfPZ8PHqJtc7kkMOYtqHd2mhvVyjI
-         BzLmR9rIiK/RgWvJ7Swi1YH71tGExYq11Bc9qTQCZ7ib3U7Rb+POzzmIsdTAc8FidJ1J
-         7TPRnBpzhMon1+aTKYHFvLdJUxx6iXiftk+LwnuLOdMlpFrQB1YlFTLTJwLPWERZAwM4
-         iz0Q==
-X-Gm-Message-State: AOAM532SQ0Mjdh8skauixhcFy/Snf+3CCvUPesFRnxfSJiRBYBu9Fmbv
-        X9bdYH1PsNQJLZ2thk50QzUDcUvuGEg6whlhfRCWVBqk7lAUKvf+39F7FFIk99NnuWJlATNIZI9
-        S9MIR0ezWUcyFr0JQS2/rpDI=
-X-Received: by 2002:a17:907:3fa4:b0:6fe:b83b:d667 with SMTP id hr36-20020a1709073fa400b006feb83bd667mr17092617ejc.481.1654436942636;
-        Sun, 05 Jun 2022 06:49:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwWFfGXlzscREcCMsyioSn2fmCXwK2n/wGKr/8cR3r52Gskf6dMa5m3+foLX/QTDCr1pd//kQ==
-X-Received: by 2002:a17:907:3fa4:b0:6fe:b83b:d667 with SMTP id hr36-20020a1709073fa400b006feb83bd667mr17092601ejc.481.1654436942399;
-        Sun, 05 Jun 2022 06:49:02 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id h14-20020aa7c94e000000b0042e03eed448sm5734417edt.20.2022.06.05.06.49.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 06:49:01 -0700 (PDT)
-Message-ID: <f50994ad-0682-960a-a566-6e143f81e258@redhat.com>
-Date:   Sun, 5 Jun 2022 15:49:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] hwmon: (sch56xx-common) Add DMI override table
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=0t2KBpV3bOi+Pz+YViAua3xYzzkQCGaNJlHLI0Dc4FU=;
+        b=2gNTa3O1jFxADTumFHhVzj0eIwWiIHebhIJ5sMdbPWY/TC8CFUd4K16UtY9GDfKf/Y
+         VFWJm7I5xqaUrclz1Vdfj1wlSmP3Hg0kDHPu/MfXPhOGWwUz0m6bS8pOSrmFw3KEHtoF
+         PNQGvMCv0UcwwbRPlMzHRdY6dV7WjPTb6YJ0v8NSc7wL/Ep+dMtW2mHkrZI4srGm8Ltc
+         AZNpnEtcDBVMP7BhN0ga+8aXtzPa7dLzK69OLGC+Tj3Yd+ILHm40SpwaEk6cZVwHieFA
+         DOfzVpRn2zX4am3GVnI09T+R7Rqf5nbeVxXJTiV45F+xcbKQ5TvgE+po9cd36++Axbzn
+         qwFg==
+X-Gm-Message-State: AOAM532tpsl9j9Hcx8uU9bGZIPdENnFSpHAHWRrzeh+nay+8XtuZ84s+
+        LWJWTgow9HDTfdo2iyaB9/bTbYMwZLw=
+X-Google-Smtp-Source: ABdhPJzOLk65QYmXKuRayVk8/GezoeOHMXhhEXmgopuFVhqSSKyhF3oYsg/Nr2F50OO82g6MX+Itcw==
+X-Received: by 2002:a05:6870:5818:b0:ee:e90:46cc with SMTP id r24-20020a056870581800b000ee0e9046ccmr11332049oap.37.1654450788297;
+        Sun, 05 Jun 2022 10:39:48 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x25-20020a9d4599000000b0060603221258sm6857407ote.40.2022.06.05.10.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 10:39:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 5 Jun 2022 10:39:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Aleksander Mazur <deweloper@wp.pl>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220604220200.2567-1-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220604220200.2567-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] hwmon: (f71882fg) Add support for F71858AD (0x0903)
+Message-ID: <20220605173946.GA3144440@roeck-us.net>
+References: <20220605012114.3d85a75a@mocarz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220605012114.3d85a75a@mocarz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
-
-On 6/5/22 00:02, Armin Wolf wrote:
-> Some devices like the Fujitsu Celsius W380 do contain
-> a working sch56xx hardware monitoring device, but do
-> not contain the necessary DMI onboard device.
+On Sun, Jun 05, 2022 at 01:21:14AM +0200, Aleksander Mazur wrote:
+> Treat F71858AD like F71858FG.
 > 
-> Do not check for the presence of an suitable onboard device
-> on these machines. The list of affected machines was created
-> using data collected by the Linux Hardware Project.
+> Tested on Igel D220.
 > 
-> Tested on a Fujitsu Esprimo P720, but sadly not on a affected
-> machine.
-> 
-> Fixes: 393935baa45e (hwmon: (sch56xx-common) Add automatic module loading on supported devices)
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Signed-off-by: Aleksander Mazur <deweloper@wp.pl>
 
-Thanks, patch looks good to me:
+Applied to hwmon-next.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
+Thanks,
+Guenter
 
 > ---
->  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++--------
->  1 file changed, 34 insertions(+), 10 deletions(-)
+>  drivers/hwmon/f71882fg.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
-> index 3ece53adabd6..de3a0886c2f7 100644
-> --- a/drivers/hwmon/sch56xx-common.c
-> +++ b/drivers/hwmon/sch56xx-common.c
-> @@ -523,6 +523,28 @@ static int __init sch56xx_device_add(int address, const char *name)
->  	return PTR_ERR_OR_ZERO(sch56xx_pdev);
->  }
-> 
-> +static const struct dmi_system_id sch56xx_dmi_override_table[] __initconst = {
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "CELSIUS W380"),
-> +		},
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO P710"),
-> +		},
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO E9900"),
-> +		},
-> +	},
-> +	{ }
-> +};
-> +
->  /* For autoloading only */
->  static const struct dmi_system_id sch56xx_dmi_table[] __initconst = {
->  	{
-> @@ -543,16 +565,18 @@ static int __init sch56xx_init(void)
->  		if (!dmi_check_system(sch56xx_dmi_table))
->  			return -ENODEV;
-> 
-> -		/*
-> -		 * Some machines like the Esprimo P720 and Esprimo C700 have
-> -		 * onboard devices named " Antiope"/" Theseus" instead of
-> -		 * "Antiope"/"Theseus", so we need to check for both.
-> -		 */
-> -		if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-> -			return -ENODEV;
-> +		if (!dmi_check_system(sch56xx_dmi_override_table)) {
-> +			/*
-> +			 * Some machines like the Esprimo P720 and Esprimo C700 have
-> +			 * onboard devices named " Antiope"/" Theseus" instead of
-> +			 * "Antiope"/"Theseus", so we need to check for both.
-> +			 */
-> +			if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-> +				return -ENODEV;
-> +		}
->  	}
-> 
->  	/*
-> --
-> 2.30.2
-> 
-
+> diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
+> index 6830e029995d..19b6c643059a 100644
+> --- a/drivers/hwmon/f71882fg.c
+> +++ b/drivers/hwmon/f71882fg.c
+> @@ -49,6 +49,7 @@
+>  #define SIO_F81768D_ID		0x1210	/* Chipset ID */
+>  #define SIO_F81865_ID		0x0704	/* Chipset ID */
+>  #define SIO_F81866_ID		0x1010	/* Chipset ID */
+> +#define SIO_F71858AD_ID		0x0903	/* Chipset ID */
+>  #define SIO_F81966_ID		0x1502	/* Chipset ID */
+>  
+>  #define REGION_LENGTH		8
+> @@ -2638,6 +2639,7 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
+>  		sio_data->type = f71808a;
+>  		break;
+>  	case SIO_F71858_ID:
+> +	case SIO_F71858AD_ID:
+>  		sio_data->type = f71858fg;
+>  		break;
+>  	case SIO_F71862_ID:
