@@ -2,109 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 504D6C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 14:19:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 926F3CCA487
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 15:25:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239656AbiFFOT1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jun 2022 10:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S240606AbiFFPZx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jun 2022 11:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239672AbiFFOTW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 10:19:22 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934B369CEC;
-        Mon,  6 Jun 2022 07:19:21 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id y69so6050400oia.7;
-        Mon, 06 Jun 2022 07:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=yxqyZ8yixmu1+DZ929D04d1QQALsRCYwyUVuVfKay8c=;
-        b=g96pMmdBLJ92I1YvWrCJUUzDj/TLj3jIshQjRbceVvTxzSE4T16TMe7lRXAdqIFPxB
-         dsHy9kXX7CKGsO7wBAaWiORozC/g7oCm1Q5p512vWZQ8sgXxkcBBRq/bo3qbLU8zHl8Z
-         DBXOgLUqNyswY644L94LqxlGXjdrI6q5FYLuQ/k3WdwRhBavpbKy3c1kXSjCyTZSbD8b
-         RVw8D2hy6zzWnByYruW3qUoEfrxYcL8tSTeI3Ya6DcW0xr0wY3meP80UD8b1oOa7sm5A
-         SX/jMibC2DLQbNLJkKHdbp8NolbDh4gLBUZKRKnY/9juZ60d8t6nQ32o1HUBTc3exyv6
-         sgKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=yxqyZ8yixmu1+DZ929D04d1QQALsRCYwyUVuVfKay8c=;
-        b=ZSucAk2gE7O/YRBeHK6eIY2tvW5vHCCfkAttgRXUHu9bBc7AB10uueNPyJufOOlk6D
-         9bVPF1oJOPHKuGAB6V61SYcj6ilLSk9lCLSdAtDFrs5ZBL/dJou3xAoalpwKypMlLpWs
-         /SnTKnPR/zem9Iq9DpsjFPa+Ai22VV39THT1hYvo82nCNZ72W7eAOBiDb7IBAyvK+qU8
-         oJrcC1b0xT3yPtzC09nI11J1phkL2XCzxlxZS93QPX8QeBa45YD72hguXMYD69w2cxOW
-         pRpiFMAK5vv/U/BZA3C9rOl9xUKIiIiEsrGr++z5aNnv35gDNWLRPxgpUUCEMZYgJvCr
-         Va6g==
-X-Gm-Message-State: AOAM530eYJ8m+kKOOh0EZlgDPrCYYInvt4i3dinJbt/lMBQLlgmKBXfm
-        lPem1b80BIBBTSkdZy0iljWUh7tzhgc=
-X-Google-Smtp-Source: ABdhPJzZ7NP5aaCxbfTMHn0rWYPbFnDJzmUAaoaw4M2ZgD5NhCtc+5SBzMo6Cyu19yask3Y+I/iNKA==
-X-Received: by 2002:a05:6808:18a5:b0:32e:9741:15b with SMTP id bi37-20020a05680818a500b0032e9741015bmr2655071oib.113.1654525160774;
-        Mon, 06 Jun 2022 07:19:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id lx15-20020a0568704b8f00b000f5e89a9c60sm6631471oab.3.2022.06.06.07.19.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 07:19:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 6 Jun 2022 07:19:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     jdelvare@suse.com, eajames@linux.ibm.com, joel@jms.id.au,
-        penberg@kernel.org, akpm@linux-foundation.org,
+        with ESMTP id S240582AbiFFPZw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 11:25:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2885D1CD345;
+        Mon,  6 Jun 2022 08:25:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 451B561523;
+        Mon,  6 Jun 2022 15:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2201C341C7;
+        Mon,  6 Jun 2022 15:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654529149;
+        bh=o+mpM2DqLl7+5AG4aDqsNIzMwG1Drnb+xb/xV663Jwg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Oo+QdLL062Z3Ig+jleiOkwAl46SqyJl3PUJor7X7NWpN8UumT5uuOHTUALJs5oNPb
+         PWsj1FBEoB1AFwK2dTa826vwlTxibvOyxe/jhrh7Pg/jwuN/nzMH51zbLzDbnT9V/D
+         26RM4REyqcUCRw9PYJr2nqWUvJXOv0BGPBYwbeGBTJMxOYBjgqSGvkHItNFy/XxLbH
+         NPpWPtjWp76zFiNNVUta4qe5WpFT8zTHmywIf9liwWRrg14RdBK7LK0xYfUmbcMgsV
+         4OMxqnd6RlPZDZuGG34jt0uHQhBB0av9cQ0+XqdhV31d/VOWVHq1GPdBYtcHRx2JCB
+         R+8a0uDxIyjNw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nyEby-0012Ow-30;
+        Mon, 06 Jun 2022 16:25:46 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (occ) Delete unnecessary NULL check
-Message-ID: <20220606141918.GA3747239@roeck-us.net>
+Subject: [PATCH 03/23] dt-bindings: arm: update vexpress-config.yaml references
+Date:   Mon,  6 Jun 2022 16:25:25 +0100
+Message-Id: <7020edd9e183652249fc95bf61a1055cc342a4dc.1654529011.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
+References: <cover.1654529011.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 09:14:01PM +0800, Ziyang Xuan wrote:
-> kvfree(NULL) is safe. NULL check before kvfree() is not needed.
-> Delete them to simplify the code.
-> 
-> Generated by coccinelle script:
-> 	scripts/coccinelle/free/ifnullfree.cocci
-> 
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Changeset 7e8339b5162f ("dt-bindings: arm: convert vexpress-config to DT schema")
+renamed: Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
+to: Documentation/devicetree/bindings/arm/vexpress-config.yaml.
 
-Applied to hwmon-next.
+Update the cross-references accordingly.
 
-Thanks,
-Guenter
+Fixes: 7e8339b5162f ("dt-bindings: arm: convert vexpress-config to DT schema")
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-> ---
->  drivers/hwmon/occ/p9_sbe.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index 42fc7b97bb34..01405ae2f9bd 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
->  	mutex_lock(&ctx->sbe_error_lock);
->  	if (!ctx->sbe_error) {
->  		if (resp_len > ctx->ffdc_size) {
-> -			if (ctx->ffdc)
-> -				kvfree(ctx->ffdc);
-> +			kvfree(ctx->ffdc);
->  			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
->  			if (!ctx->ffdc) {
->  				ctx->ffdc_len = 0;
-> @@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
->  	ctx->sbe = NULL;
->  	occ_shutdown(occ);
->  
-> -	if (ctx->ffdc)
-> -		kvfree(ctx->ffdc);
-> +	kvfree(ctx->ffdc);
->  
->  	return 0;
->  }
-> -- 
-> 2.25.1
-> 
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
+
+ Documentation/devicetree/bindings/hwmon/vexpress.txt     | 2 +-
+ Documentation/devicetree/bindings/regulator/vexpress.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/vexpress.txt b/Documentation/devicetree/bindings/hwmon/vexpress.txt
+index 9c27ed694bbb..4a4df4ffc460 100644
+--- a/Documentation/devicetree/bindings/hwmon/vexpress.txt
++++ b/Documentation/devicetree/bindings/hwmon/vexpress.txt
+@@ -9,7 +9,7 @@ Requires node properties:
+ 	"arm,vexpress-power"
+ 	"arm,vexpress-energy"
+ - "arm,vexpress-sysreg,func" when controlled via vexpress-sysreg
+-  (see Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
++  (see Documentation/devicetree/bindings/arm/vexpress-config.yaml
+   for more details)
+ 
+ Optional node properties:
+diff --git a/Documentation/devicetree/bindings/regulator/vexpress.txt b/Documentation/devicetree/bindings/regulator/vexpress.txt
+index d775f72487aa..1c2e92c7831e 100644
+--- a/Documentation/devicetree/bindings/regulator/vexpress.txt
++++ b/Documentation/devicetree/bindings/regulator/vexpress.txt
+@@ -4,7 +4,7 @@ Versatile Express voltage regulators
+ Requires node properties:
+ - "compatible" value: "arm,vexpress-volt"
+ - "arm,vexpress-sysreg,func" when controlled via vexpress-sysreg
+-  (see Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
++  (see Documentation/devicetree/bindings/arm/vexpress-config.yaml
+   for more details)
+ 
+ Required regulator properties:
+-- 
+2.36.1
+
