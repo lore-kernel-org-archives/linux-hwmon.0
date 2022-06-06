@@ -2,107 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BECBC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 18:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86573C43334
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 21:22:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiFFSzP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jun 2022 14:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S233735AbiFFVWg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jun 2022 17:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiFFSzO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 14:55:14 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6A32E4CB1
-        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jun 2022 11:55:13 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256ILRFa026462;
-        Mon, 6 Jun 2022 18:55:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=m10ox5ajJMnNFo36NZzIOGYMMsBrRrpTZ2oTsWEuCOg=;
- b=YttzTHcSAIkVbWWge7K6AMvCdhBCYl3SRYgTTrXiTF/hjDh4PImVZ/fD7EMktL26jQMv
- jzFYL6TS1UjO/wKAyrHueYGDiQ16BalpMAxRxcwyAM7IgF+HKSyiAGQLmsxEeAznd+n8
- juVn8bkCx9i2m5GiZ0XOR+liKARaBkvVdLayYWsn8WQW3c/q7/guu+lYUWFjwWeM6B8c
- znPP9ghaXwvaZZEOK5ynW4HSgcgswV4usBlsyCFYbhLrUhik31GaBwFa0qpY6SZ46tMB
- sEmRbErV9eIWT/4FqN9BKUv2SHW9Dt9F20gTwzPLNdRERuYw1JNwqG4bKVDniZ+9NcZ+ SA== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ghpserk2j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 18:55:01 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 256IoZ3F016732;
-        Mon, 6 Jun 2022 18:55:00 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma01dal.us.ibm.com with ESMTP id 3gfy19u8rr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 18:55:00 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 256IsxS632964944
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Jun 2022 18:54:59 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C72EAC05B;
-        Mon,  6 Jun 2022 18:54:59 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1EEF2AC059;
-        Mon,  6 Jun 2022 18:54:59 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.160.184.8])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Jun 2022 18:54:59 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux@roeck-us.net, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: (occ) Lock mutex in shutdown to prevent race with occ_active
-Date:   Mon,  6 Jun 2022 13:54:55 -0500
-Message-Id: <20220606185455.21126-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S234646AbiFFVW3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 17:22:29 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8829754F97;
+        Mon,  6 Jun 2022 14:22:28 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id r200so7640344iod.5;
+        Mon, 06 Jun 2022 14:22:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YkAlRuBkBGM9ewDuANrv7mVUzs/EQo+uPQZmHGb9L1U=;
+        b=jcI2PdpXJdU7rQgG9hcNZFEiCOvDOSPUfmh8fSdkzGbqei4W0/DWm8yPuXU+8II3tc
+         AA+cOkLuZpNZEKGs9EV6qQbxPfWXIyQRo+ScbVXwmvZ2vsjSlTb/Mvb3M9ynJnPFupnZ
+         y4MRDeO6wUxEnoOh334x8jx/1DS3S6jrBuUfaGI3sfcOeFnVLu0v6WWWUwyW/BSqGbw3
+         t/rMYMIVG6jm4hij072coAF8eWdeGhg97hBLzE+9HuLPzjFWTwStP4XWxRcBr2dgvj24
+         TABPBIvyeu29IMWGYcx2g5i0cSV5Kx3afBydiiErVZNcxbC5TixgoyPufTg28stfbjtt
+         aWgQ==
+X-Gm-Message-State: AOAM5335aukQ1D+B8PJiXgXkIBQZitIYEzvkOfYwxqG6NIL42yunsct/
+        AXS7I9XC6zFXbUAUQvzNmA==
+X-Google-Smtp-Source: ABdhPJyOc0o0nk7Fh+wdRulfaZVXXTMVU1fBO4y6e4MK18h6d9S4GG8DJ7J9dUGiKCjNmjc5h04QHA==
+X-Received: by 2002:a02:aa04:0:b0:32e:c9f8:87ba with SMTP id r4-20020a02aa04000000b0032ec9f887bamr14299595jam.254.1654550547772;
+        Mon, 06 Jun 2022 14:22:27 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.251])
+        by smtp.googlemail.com with ESMTPSA id k2-20020a5d97c2000000b006656f9eefa3sm6000924ios.18.2022.06.06.14.22.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 14:22:27 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Camel Guo <camel.guo@axis.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: hwmon: ti,tmp401: Drop 'items' from 'ti,n-factor' property
+Date:   Mon,  6 Jun 2022 16:22:22 -0500
+Message-Id: <20220606212223.1360395-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fIKW0z0nPcE9u-SRvjMbFOzgbjqgLDQv
-X-Proofpoint-ORIG-GUID: fIKW0z0nPcE9u-SRvjMbFOzgbjqgLDQv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-06_05,2022-06-03_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- mlxscore=0 malwarescore=0 phishscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206060076
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Unbinding the driver or removing the parent device at the same time
-as using the OCC active sysfs file can cause the driver to unregister
-the hwmon device twice. Prevent this by locking the occ mutex in the
-shutdown function.
+'ti,n-factor' is a scalar type, so 'items' should not be used as that is
+for arrays/matrix.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+A pending meta-schema change will catch future cases.
+
+Fixes: bd90c5b93950 ("dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x")
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/hwmon/occ/common.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index d78f4bebc718..ea070b91e5b9 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -1228,10 +1228,15 @@ EXPORT_SYMBOL_GPL(occ_setup);
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+index fe0ac08faa1a..0e8ddf0ad789 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+@@ -40,9 +40,8 @@ properties:
+       value to be used for converting remote channel measurements to
+       temperature.
+     $ref: /schemas/types.yaml#/definitions/int32
+-    items:
+-      minimum: -128
+-      maximum: 127
++    minimum: -128
++    maximum: 127
  
- void occ_shutdown(struct occ *occ)
- {
-+	mutex_lock(&occ->lock);
-+
- 	occ_shutdown_sysfs(occ);
- 
- 	if (occ->hwmon)
- 		hwmon_device_unregister(occ->hwmon);
-+	occ->hwmon = NULL;
-+
-+	mutex_unlock(&occ->lock);
- }
- EXPORT_SYMBOL_GPL(occ_shutdown);
- 
+   ti,beta-compensation:
+     description:
 -- 
-2.31.1
+2.34.1
 
