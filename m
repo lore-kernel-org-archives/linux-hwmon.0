@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DBE8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 06:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 570E4C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 12:14:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiFFG4Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jun 2022 02:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S236341AbiFFMOp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jun 2022 08:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiFFG4Y (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 02:56:24 -0400
+        with ESMTP id S236318AbiFFMOj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 08:14:39 -0400
 Received: from smtpo49.interia.pl (smtpo49.interia.pl [217.74.67.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2000220EB
-        for <linux-hwmon@vger.kernel.org>; Sun,  5 Jun 2022 23:56:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597CB19D62E
+        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jun 2022 05:14:35 -0700 (PDT)
 Received: from t480s.localdomain (unknown [80.68.225.159])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-        Mon,  6 Jun 2022 08:56:20 +0200 (CEST)
-Date:   Mon, 6 Jun 2022 08:56:18 +0200
+        Mon,  6 Jun 2022 14:14:31 +0200 (CEST)
+Date:   Mon, 6 Jun 2022 14:14:30 +0200
 From:   Slawomir Stepien <sst@poczta.fm>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
@@ -30,7 +30,7 @@ Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         slawomir.stepien@nokia.com
 Subject: Re: [PATCH 4/7] hwmon: (lm90) Add support for 2nd remote channel's
  offset register
-Message-ID: <Yp2lEmvD+5JiGejX@t480s.localdomain>
+Message-ID: <Yp3vpgR8jbyzWmiq@t480s.localdomain>
 References: <20220525073657.573327-1-sst@poczta.fm>
  <20220525073657.573327-5-sst@poczta.fm>
  <20220605180310.GA3151289@roeck-us.net>
@@ -41,12 +41,12 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <5f471f82-83b1-aea4-ea25-e51c0672c8ff@roeck-us.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interia.pl;
-        s=biztos; t=1654498582;
-        bh=bfQRRY+S6j5ps09OSWSQ5yO6cgGebDFoRVda7QF2vA8=;
+        s=biztos; t=1654517673;
+        bh=mrgbYlk5KS7ieHoSGKHLbA7+5FJ0D1A0yCZ1jF3B6HY=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Q1D/6GjRv4NNNcJHO6vN0LQK4KJQs/MEpH2pp2mNq7twQdJthgUVeWz2syjpvtO9N
-         uZ2W5XbJKpDqsV89EDKuB2HAKR4sQTZyoOzNTd3cdwua6y1p54J5hx3FUDgmMD7P34
-         FkT3r6cIBnCfL48snKstDMhAMhbkoK5fw4ncUH7Y=
+        b=ZbwOxX4iON38BNT6oGRXoeSaoRVzEJsph7ooY+r75wJuKS3cCd5Ii1Z0wM9BHtdb3
+         s6b7UFPUJs53UTUDE/vGkEzkgXLy9RlwKFlmellRS2u8y08Cg1UiXbFhIgxa+A+R9n
+         B8zqthavDyD9aFJrkHaOzXXVr3plyoDkabtCnp4k=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -91,15 +91,65 @@ On cze 05, 2022 23:50, Guenter Roeck wrote:
 > 
 > ... unless lm90_set_temp() is used to write the values. If I recall correctly
 > I didn't do that because selecting the remote channel seemed unnecessary.
-> 
-> > setting it (the remote channel) in lm90_temp_write() a waste of xfers, if we can address the
-> > registers directly. But if you prefer to have just one set of register and setting the remote
-> > channel bit, then sure I can do it like that.
-> > 
-> It isn't as if setting the offset happens all the time, so I'd prefer
-> to use lm90_set_temp() if that is possible.
 
-Good point! So I will use just one set of the registers.
+I think that modifying lm90_set_temp() to support offsets is a bit messy:
+
+1. The offset on all supported devices is always on two bytes. Unlike the temperature, where
+sometimes it is just on one (but if more than one byte, then we set reg_remote_ext). With this also
+'regs' in lm90_set_temp() will be back as 2 dimensional array OR additional high and low indexes for
+REMOTE_OFFSET and REMOTE2_OFFSET should be added (that will also caused bits glueing on write/read).
+
+2. For offset the calls lm90_temp_from/to_reg should have 0 as flags (1st argument) - that would be
+an additional if in lm90_set_temp() OR clear&restore of the flags before&after the call..
+
+Maybe, Guenter you will be happy with something like this (new functions):
+
+static int lm90_get_temp_offset(struct lm90_data *data, int index)
+{
+	int res = lm90_temp_get_resolution(data, index);
+
+	return lm90_temp_from_reg(0, data->temp[index], res);
+}
+
+static int lm90_set_temp_offset(struct lm90_data *data, int index, int channel, long val)
+{
+	int err;
+	static const u8 regs[][2] = {
+		[REMOTE_OFFSET] = {LM90_REG_REMOTE_OFFSH, LM90_REG_REMOTE_OFFSL},
+		[REMOTE2_OFFSET] = {LM90_REG_REMOTE_OFFSH, LM90_REG_REMOTE_OFFSL},
+	};
+	u8 regh = regs[index][0];
+	u8 regl = regs[index][1];
+
+	val = lm90_temp_to_reg(0, val, lm90_temp_get_resolution(data, index));
+
+	if (channel > 1)
+		lm90_select_remote_channel(data, true);
+
+	err = lm90_write16(data->client, regh, regl, val);
+
+	if (channel > 1)
+		lm90_select_remote_channel(data, false);
+
+	if (err)
+		return err;
+
+	data->temp[index] = val;
+
+	return 0;
+}
+
+And new channel->index translator:
+
+static const s8 lm90_temp_offset_index[MAX_CHANNELS] = {
+	-1, REMOTE_OFFSET, REMOTE2_OFFSET
+};
+
+Having that, we can use that functions in hwmon's read/write attrs but also while paring the
+device-tree channel nodes.
+
+Maybe I missed something and using lm90_set_temp() will not be messy?
+What do you think?
 
 -- 
 Slawomir Stepien
