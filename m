@@ -2,120 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD98C43334
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 17:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BECBC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 18:55:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiFFRTW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jun 2022 13:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
+        id S229963AbiFFSzP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jun 2022 14:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiFFRSy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 13:18:54 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9672A5130C;
-        Mon,  6 Jun 2022 10:17:53 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id d6so1584259ilm.4;
-        Mon, 06 Jun 2022 10:17:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HOgnxEn2ntmtyghL8kOb8yKeTcYGElnyCDEZZ25iRQw=;
-        b=4Rh+2Oy1eY+bYftHCMJntZLu8WUck5porKU754FT8zR6Zrc1ge8btPSGostMVvL3OV
-         SnatfcmfJPoHw7VIetGqvBuSKTKPotPkorQG4RXog3r5KyneQybFCNA9fqODyOKRq3cu
-         JkaTE/OFn4WPIjCWenuUfzjbasK2sDP1uqtUW/40cuMglBuofp7f/Oia3KkhOuYBhBs1
-         zDb4DZfYV+MsuQ3edePHr3aP1Esoi6MOLB2QkKXTxM7QsCyoF5MMBvITQaP0EV0aXodl
-         RetlcCfUZYhfHhYAog1vp4KXM6Gzb+sf29gK7B1QzTvRWwHn+wWbjU7x264uiR/Kwrn1
-         9X9A==
-X-Gm-Message-State: AOAM530qDiQ4MgwcvCqSG0y8EZVSl3dzi7fzsuYTm8MTuU14l6VTbLCZ
-        6jqA5yTXnzCXGGmZPA2C0A==
-X-Google-Smtp-Source: ABdhPJxXRz8rpxHVMQETrBoM9cb8XJJozkw5PJACTm4qK/vhBn8tviwY3PyY58j2eoaPB/u3qpK33w==
-X-Received: by 2002:a05:6e02:184f:b0:2d3:d0c2:d56a with SMTP id b15-20020a056e02184f00b002d3d0c2d56amr13953839ilv.174.1654535872910;
-        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id t17-20020a92c0d1000000b002d3da8e4af5sm6121750ilf.23.2022.06.06.10.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
-Received: (nullmailer pid 911134 invoked by uid 1000);
-        Mon, 06 Jun 2022 17:17:47 -0000
-Date:   Mon, 6 Jun 2022 12:17:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        keyrings@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-cachefs@redhat.com,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 00/23] Update Documentation/ cross-references
-Message-ID: <20220606171747.GB899329-robh@kernel.org>
-References: <cover.1654529011.git.mchehab@kernel.org>
+        with ESMTP id S231546AbiFFSzO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 14:55:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6A32E4CB1
+        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jun 2022 11:55:13 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256ILRFa026462;
+        Mon, 6 Jun 2022 18:55:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=m10ox5ajJMnNFo36NZzIOGYMMsBrRrpTZ2oTsWEuCOg=;
+ b=YttzTHcSAIkVbWWge7K6AMvCdhBCYl3SRYgTTrXiTF/hjDh4PImVZ/fD7EMktL26jQMv
+ jzFYL6TS1UjO/wKAyrHueYGDiQ16BalpMAxRxcwyAM7IgF+HKSyiAGQLmsxEeAznd+n8
+ juVn8bkCx9i2m5GiZ0XOR+liKARaBkvVdLayYWsn8WQW3c/q7/guu+lYUWFjwWeM6B8c
+ znPP9ghaXwvaZZEOK5ynW4HSgcgswV4usBlsyCFYbhLrUhik31GaBwFa0qpY6SZ46tMB
+ sEmRbErV9eIWT/4FqN9BKUv2SHW9Dt9F20gTwzPLNdRERuYw1JNwqG4bKVDniZ+9NcZ+ SA== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ghpserk2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 18:55:01 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 256IoZ3F016732;
+        Mon, 6 Jun 2022 18:55:00 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma01dal.us.ibm.com with ESMTP id 3gfy19u8rr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 18:55:00 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 256IsxS632964944
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 18:54:59 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C72EAC05B;
+        Mon,  6 Jun 2022 18:54:59 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1EEF2AC059;
+        Mon,  6 Jun 2022 18:54:59 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.160.184.8])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jun 2022 18:54:59 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux@roeck-us.net, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] hwmon: (occ) Lock mutex in shutdown to prevent race with occ_active
+Date:   Mon,  6 Jun 2022 13:54:55 -0500
+Message-Id: <20220606185455.21126-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fIKW0z0nPcE9u-SRvjMbFOzgbjqgLDQv
+X-Proofpoint-ORIG-GUID: fIKW0z0nPcE9u-SRvjMbFOzgbjqgLDQv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_05,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxscore=0 malwarescore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206060076
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 04:25:22PM +0100, Mauro Carvalho Chehab wrote:
-> Hi John,
-> 
-> There were a number of DT binding conversions and other docs change that
-> were not updated. Address them, in order to keep the cross-references on
-> a sane state.
-> 
-> Patch series is against v5.19-rc1 (and applies cleanly on the top of
-> today's -next).
-> 
-> Mauro Carvalho Chehab (23):
->   dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
->   dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
->   dt-bindings: arm: update vexpress-config.yaml references
->   dt-bindings: reset: update st,stih407-powerdown.yaml references
->   dt-bindings: mfd: rk808: update rockchip,rk808.yaml reference
->   dt-bindings: mmc: exynos-dw-mshc: update samsung,pinctrl.yaml
->     reference
->   docs: netdev: update maintainer-netdev.rst reference
->   docs: filesystems: update netfs-api.rst reference
->   Documentation: update watch_queue.rst references
->   Documentation: KVM: update s390-pv.rst reference
->   Documentation: KVM: update amd-memory-encryption.rst references
->   Documentation: KVM: update msr.rst reference
->   Documentation: KVM: update s390-diag.rst reference
->   MAINTAINERS: update arm,hdlcd.yaml reference
->   MAINTAINERS: update arm,komeda.yaml reference
->   MAINTAINERS: update arm,malidp.yaml reference
->   MAINTAINERS: update cortina,gemini-ethernet.yaml reference
->   MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
->   MAINTAINERS: update maxim,max77693.yaml reference
->   MAINTAINERS: update snps,axs10x-reset.yaml reference
->   objtool: update objtool.txt references
->   ASoC: wm8731: update wlf,wm8731.yaml reference
->   arch: m68k: q40: README: drop references to IDE driver
+Unbinding the driver or removing the parent device at the same time
+as using the OCC active sysfs file can cause the driver to unregister
+the hwmon device twice. Prevent this by locking the occ mutex in the
+shutdown function.
 
-Applied patches 1-5,17,18,20
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/hwmon/occ/common.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index d78f4bebc718..ea070b91e5b9 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -1228,10 +1228,15 @@ EXPORT_SYMBOL_GPL(occ_setup);
+ 
+ void occ_shutdown(struct occ *occ)
+ {
++	mutex_lock(&occ->lock);
++
+ 	occ_shutdown_sysfs(occ);
+ 
+ 	if (occ->hwmon)
+ 		hwmon_device_unregister(occ->hwmon);
++	occ->hwmon = NULL;
++
++	mutex_unlock(&occ->lock);
+ }
+ EXPORT_SYMBOL_GPL(occ_shutdown);
+ 
+-- 
+2.31.1
+
