@@ -2,128 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20D7DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 15:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD98C43334
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jun 2022 17:19:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241057AbiFFPoR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jun 2022 11:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S229722AbiFFRTW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jun 2022 13:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241059AbiFFPoQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 11:44:16 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6FECC15D;
-        Mon,  6 Jun 2022 08:44:15 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id ay16-20020a056820151000b0041b71517844so958763oob.4;
-        Mon, 06 Jun 2022 08:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1Dyxrxglk8UzaHWlu8Ip8w2vSs7l7OGlq6jwwOsQ960=;
-        b=BwrNGtzgFqc5GBs+deBOcDtRAxLlmSKd/PBfifxCqtEON0K0Xetx9idzSHIQMwV5SA
-         9f2Lh+l8E89eWdqBoG0wndpJIL4MrXW9B2Z0988Ek2KK4sF5EGuuyAq7HZD0Ne+AbimE
-         TGNYT2BK0SktuwFMDQip7/3ArorHNXsQ8yuWySv1otJ8/qyNvpJFPgCcDTeyh864sVq2
-         pezAVQqrB9W5SXgH36eWHugxjPI8TZTv1DBDpYyrqYQtjH202Y//b+rcc6ABMSaFiOMf
-         ndiybo/ZM8ybLw47HKBm7WsJk1HwxEB1xnxOEWc3TAD7Aao8nS5QOyvldisyxMopaGZ1
-         0IUQ==
+        with ESMTP id S229737AbiFFRSy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jun 2022 13:18:54 -0400
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9672A5130C;
+        Mon,  6 Jun 2022 10:17:53 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id d6so1584259ilm.4;
+        Mon, 06 Jun 2022 10:17:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1Dyxrxglk8UzaHWlu8Ip8w2vSs7l7OGlq6jwwOsQ960=;
-        b=YbO5WgRttcIfuy2Bv8noKDYE6981tpEhEjrKjiFhsJMKHfhp5bq+gq/JtbzdRZjiZw
-         HRGxiD/J1MciCb3OqnRNWXFyy04cdKUOTt7H4Br7pEOVkQ730ojiqVkUWYyhlZ7ryqpj
-         jjh2+TgS+5kw6Bje0jP0Tv3afsP4PMJGQuepYkXuqEtOVIkbUqGV5ZL2cNZLrBVdNwUf
-         PcYWgXPhjSRzufdoLfSbp3oBtnMwXXMfcWUQANR4sfrTWdaGcjIw7HR6IWGDr6ES4Xkq
-         jyeIzyrf8XRrC3A2+REaANYf//VZQncdlhtlOWmjXS9FeKdsdFpOWYxDadEBtSz7QrLk
-         4ItQ==
-X-Gm-Message-State: AOAM532u87Q1gIsH0w2ZUHS8uzpWABiAKMQ/vX/uMT9KbWN1GXcPsu5L
-        58kY5pJ/3aAqyJwlsPJNXaE=
-X-Google-Smtp-Source: ABdhPJy1zCj2ZN6ndVK4A6V4NXnjLvRe27BQH9UEBJSslBjosstbd4cuAI508h2hMmqaKojcUerFng==
-X-Received: by 2002:a4a:4f16:0:b0:41b:6f0e:4acc with SMTP id c22-20020a4a4f16000000b0041b6f0e4accmr4734194oob.33.1654530254919;
-        Mon, 06 Jun 2022 08:44:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m4-20020a9d6084000000b0060b1f3924c3sm8318726otj.44.2022.06.06.08.44.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 08:44:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <451ad3f1-e365-e136-fa1b-c7bb0b05a15f@roeck-us.net>
-Date:   Mon, 6 Jun 2022 08:44:11 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 03/23] dt-bindings: arm: update vexpress-config.yaml
- references
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HOgnxEn2ntmtyghL8kOb8yKeTcYGElnyCDEZZ25iRQw=;
+        b=4Rh+2Oy1eY+bYftHCMJntZLu8WUck5porKU754FT8zR6Zrc1ge8btPSGostMVvL3OV
+         SnatfcmfJPoHw7VIetGqvBuSKTKPotPkorQG4RXog3r5KyneQybFCNA9fqODyOKRq3cu
+         JkaTE/OFn4WPIjCWenuUfzjbasK2sDP1uqtUW/40cuMglBuofp7f/Oia3KkhOuYBhBs1
+         zDb4DZfYV+MsuQ3edePHr3aP1Esoi6MOLB2QkKXTxM7QsCyoF5MMBvITQaP0EV0aXodl
+         RetlcCfUZYhfHhYAog1vp4KXM6Gzb+sf29gK7B1QzTvRWwHn+wWbjU7x264uiR/Kwrn1
+         9X9A==
+X-Gm-Message-State: AOAM530qDiQ4MgwcvCqSG0y8EZVSl3dzi7fzsuYTm8MTuU14l6VTbLCZ
+        6jqA5yTXnzCXGGmZPA2C0A==
+X-Google-Smtp-Source: ABdhPJxXRz8rpxHVMQETrBoM9cb8XJJozkw5PJACTm4qK/vhBn8tviwY3PyY58j2eoaPB/u3qpK33w==
+X-Received: by 2002:a05:6e02:184f:b0:2d3:d0c2:d56a with SMTP id b15-20020a056e02184f00b002d3d0c2d56amr13953839ilv.174.1654535872910;
+        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id t17-20020a92c0d1000000b002d3da8e4af5sm6121750ilf.23.2022.06.06.10.17.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
+Received: (nullmailer pid 911134 invoked by uid 1000);
+        Mon, 06 Jun 2022 17:17:47 -0000
+Date:   Mon, 6 Jun 2022 12:17:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        Linus Walleij <linus.walleij@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        keyrings@vger.kernel.org, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-cachefs@redhat.com,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mmc@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 00/23] Update Documentation/ cross-references
+Message-ID: <20220606171747.GB899329-robh@kernel.org>
 References: <cover.1654529011.git.mchehab@kernel.org>
- <7020edd9e183652249fc95bf61a1055cc342a4dc.1654529011.git.mchehab@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <7020edd9e183652249fc95bf61a1055cc342a4dc.1654529011.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/6/22 08:25, Mauro Carvalho Chehab wrote:
-> Changeset 7e8339b5162f ("dt-bindings: arm: convert vexpress-config to DT schema")
-> renamed: Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
-> to: Documentation/devicetree/bindings/arm/vexpress-config.yaml.
+On Mon, Jun 06, 2022 at 04:25:22PM +0100, Mauro Carvalho Chehab wrote:
+> Hi John,
 > 
-> Update the cross-references accordingly.
+> There were a number of DT binding conversions and other docs change that
+> were not updated. Address them, in order to keep the cross-references on
+> a sane state.
 > 
-> Fixes: 7e8339b5162f ("dt-bindings: arm: convert vexpress-config to DT schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Patch series is against v5.19-rc1 (and applies cleanly on the top of
+> today's -next).
+> 
+> Mauro Carvalho Chehab (23):
+>   dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
+>   dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
+>   dt-bindings: arm: update vexpress-config.yaml references
+>   dt-bindings: reset: update st,stih407-powerdown.yaml references
+>   dt-bindings: mfd: rk808: update rockchip,rk808.yaml reference
+>   dt-bindings: mmc: exynos-dw-mshc: update samsung,pinctrl.yaml
+>     reference
+>   docs: netdev: update maintainer-netdev.rst reference
+>   docs: filesystems: update netfs-api.rst reference
+>   Documentation: update watch_queue.rst references
+>   Documentation: KVM: update s390-pv.rst reference
+>   Documentation: KVM: update amd-memory-encryption.rst references
+>   Documentation: KVM: update msr.rst reference
+>   Documentation: KVM: update s390-diag.rst reference
+>   MAINTAINERS: update arm,hdlcd.yaml reference
+>   MAINTAINERS: update arm,komeda.yaml reference
+>   MAINTAINERS: update arm,malidp.yaml reference
+>   MAINTAINERS: update cortina,gemini-ethernet.yaml reference
+>   MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
+>   MAINTAINERS: update maxim,max77693.yaml reference
+>   MAINTAINERS: update snps,axs10x-reset.yaml reference
+>   objtool: update objtool.txt references
+>   ASoC: wm8731: update wlf,wm8731.yaml reference
+>   arch: m68k: q40: README: drop references to IDE driver
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
-> 
->   Documentation/devicetree/bindings/hwmon/vexpress.txt     | 2 +-
->   Documentation/devicetree/bindings/regulator/vexpress.txt | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/vexpress.txt b/Documentation/devicetree/bindings/hwmon/vexpress.txt
-> index 9c27ed694bbb..4a4df4ffc460 100644
-> --- a/Documentation/devicetree/bindings/hwmon/vexpress.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/vexpress.txt
-> @@ -9,7 +9,7 @@ Requires node properties:
->   	"arm,vexpress-power"
->   	"arm,vexpress-energy"
->   - "arm,vexpress-sysreg,func" when controlled via vexpress-sysreg
-> -  (see Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
-> +  (see Documentation/devicetree/bindings/arm/vexpress-config.yaml
->     for more details)
->   
->   Optional node properties:
-> diff --git a/Documentation/devicetree/bindings/regulator/vexpress.txt b/Documentation/devicetree/bindings/regulator/vexpress.txt
-> index d775f72487aa..1c2e92c7831e 100644
-> --- a/Documentation/devicetree/bindings/regulator/vexpress.txt
-> +++ b/Documentation/devicetree/bindings/regulator/vexpress.txt
-> @@ -4,7 +4,7 @@ Versatile Express voltage regulators
->   Requires node properties:
->   - "compatible" value: "arm,vexpress-volt"
->   - "arm,vexpress-sysreg,func" when controlled via vexpress-sysreg
-> -  (see Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
-> +  (see Documentation/devicetree/bindings/arm/vexpress-config.yaml
->     for more details)
->   
->   Required regulator properties:
-
+Applied patches 1-5,17,18,20
