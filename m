@@ -2,82 +2,75 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 011FDC43334
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jun 2022 12:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F69EC43334
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jun 2022 12:46:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241029AbiFGMmm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jun 2022 08:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S244141AbiFGMqW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jun 2022 08:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237899AbiFGMml (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jun 2022 08:42:41 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F077B1C12E;
-        Tue,  7 Jun 2022 05:42:38 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id y69so9902168oia.7;
-        Tue, 07 Jun 2022 05:42:38 -0700 (PDT)
+        with ESMTP id S244214AbiFGMqU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jun 2022 08:46:20 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049DCF8E4C
+        for <linux-hwmon@vger.kernel.org>; Tue,  7 Jun 2022 05:46:17 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id s8so18456125oib.6
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jun 2022 05:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=wGvCXSf2boVHG+SEDmAeJar4xtU6VDDoEHp+oz+UrKY=;
-        b=MD/oW6+ucoiKHpSVEyT14TPkSJozC33M7hmnsLn72ym3u6xreo+iVBPGBn1FCoiCf8
-         73FNykdBW953El5hU/NYefe2C/NtZuMo3sXu+5Z7l6P7Cr8h68dYQyJQAV6lSRUhAicb
-         HrWPtaAJRKa4u1Pzox/WvZCMJ94PgYuZjX7poAM9Vv9dDdxtayArqiHNF6gmrGpEEBjh
-         ZdI3mqk4fF8WOmOiH709OyibQTJuWzVHU1QL4RconJg+Dl9oJfHLK4iqbZW5WQtUIUzQ
-         yQh4ttFxQBk5Bz+OLZU+56Dbu8OuVndadjmPwjYX8R08IRmDUoKBnCMnf0DzX0Pk4SIc
-         5Enw==
+        bh=43D7ndpRJigLwWDfIvtgGls/i5fH1zUAmyzDYX/W9T4=;
+        b=FhOyZ8qkS34Pw7QTd/1L9y2BxVtGhwZ3QqHCRtzNJOl4yDjiapR3kvawi6ER8l2l9Q
+         FU27qvyAfheoebe1GEBXO4VF34Uf9Fd6RdYGIfeY4q5dkZloUUCOKqjXlqAqD+0zsI+M
+         WiU6ucUSqYVzzTxmFzmnU05Eo6t7l8kqfKWxsZacXAV+DuY2aKhjceTLhKoG2nncOonP
+         vtBVmO1dG475wedXY1RUscK/Ig7II6/gZKzw75WXm7YBeLVBZ/xQeCEo4y6isvw8gNWz
+         kzlk9iM4eGsOqbGFUsK7R7ur48u/9Gg1GK6QmfdFEDrkRHhP5bAF+EaF4m/GfV2zs3Ll
+         GhNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=wGvCXSf2boVHG+SEDmAeJar4xtU6VDDoEHp+oz+UrKY=;
-        b=qqnEb+1gwox8OuatJsTThPtPw7y15UZ8VT649f7RU2wxdPGrMAKfLgiMvgIkoER4ff
-         I62zSePp50jDVbeLPjgkYvg+8GmPs/ulfNp753spu5byoE7YoqaHL3zVmnmlJk6sQfv6
-         BaPu2NeXVBe8nFVCebWpObgzPJ5/1LM4pQN9blb2CSQtkHV+vrO06Cz2v7uBQk5EtPvf
-         eOC6MKGlCmc81Lk+DSlfkOkxTNdRGOZPU46OoK70ga2GPHhGpgMLvl2ZOiLuX/L3cVTt
-         efhr89HqeyduxtcNj4065VG+7VVBXuhZzzwaBKW4rcLd9gh//XRUODqPvWfoW6ZzTFDk
-         2NJw==
-X-Gm-Message-State: AOAM5302IIiihshn/sp6v1bC71T1xQqTrMQpti8xw0mJg1llfPOg8waF
-        +m8TEICPF5m1vLt2xvBdpZI=
-X-Google-Smtp-Source: ABdhPJzxYfj1j+c7qg6iUV3UNtndtgMcW7lNLS4xxHJSTNY2BsFxiVnfrsba/LEb7KD4ncZJJAmBrw==
-X-Received: by 2002:a05:6808:1453:b0:32b:84a4:5a49 with SMTP id x19-20020a056808145300b0032b84a45a49mr34004235oiv.105.1654605757894;
-        Tue, 07 Jun 2022 05:42:37 -0700 (PDT)
+        bh=43D7ndpRJigLwWDfIvtgGls/i5fH1zUAmyzDYX/W9T4=;
+        b=23On25fYYWAPY0om9rrqS3zmmTGVX5WLDO4ziS54oPmBaDl25prTPcYRtKozquUf+2
+         4DYFi7UNwgQPLtkhiMMy9WFHLkfx8kFOC+Yw8n0ZkWlvs+yLNRCQ0xVXo8iQXJ7qAGr+
+         hcjZLt+A5tVAjxe+pijNkGXhBD3qBuWdEN74UXwtRmNhSnTuyOKN3Rv87pB+xKn0WK4Y
+         XVVaC2pqKINAbJvoGCxpHIsM38WY3MtGSSZLa1KnLRL45MooXLlM21CheYB3Qa4Cu4X6
+         wtTO7Y4ARsRtgfbtHRI1yDykao8qMslw52/tfmMKnH2T6ypBrKO68wTyc/R7gcA3alaJ
+         O2JQ==
+X-Gm-Message-State: AOAM533htW00KvI2rXXpZxl3jkUWxdxK772ndA6tYzXOzGPXkfu+mG/e
+        9TAbZiP3MzV0jGY5GhtDyDCaidlM0gQ=
+X-Google-Smtp-Source: ABdhPJxf6yfCnkwYrZ5ruG6TyR13f0cqFRLUhHeqZEhq5LNPgKDbBIQPEEwK0kFJz6wl9LN8zLOGHw==
+X-Received: by 2002:a05:6808:2182:b0:32b:cf65:ee50 with SMTP id be2-20020a056808218200b0032bcf65ee50mr16686999oib.273.1654605976132;
+        Tue, 07 Jun 2022 05:46:16 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n13-20020aca240d000000b00326d2cba5d3sm9592935oic.8.2022.06.07.05.42.36
+        by smtp.gmail.com with ESMTPSA id j1-20020a056830240100b0060b0c4704fasm9328856ots.4.2022.06.07.05.46.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 05:42:37 -0700 (PDT)
+        Tue, 07 Jun 2022 05:46:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 7 Jun 2022 05:42:36 -0700
+Date:   Tue, 7 Jun 2022 05:46:14 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Camel Guo <camel.guo@axis.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp401: Drop 'items' from
- 'ti,n-factor' property
-Message-ID: <20220607124236.GA1786135@roeck-us.net>
-References: <20220606212223.1360395-1-robh@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (occ) Lock mutex in shutdown to prevent race with
+ occ_active
+Message-ID: <20220607124614.GA1786476@roeck-us.net>
+References: <20220606185455.21126-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220606212223.1360395-1-robh@kernel.org>
+In-Reply-To: <20220606185455.21126-1-eajames@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 04:22:22PM -0500, Rob Herring wrote:
-> 'ti,n-factor' is a scalar type, so 'items' should not be used as that is
-> for arrays/matrix.
+On Mon, Jun 06, 2022 at 01:54:55PM -0500, Eddie James wrote:
+> Unbinding the driver or removing the parent device at the same time
+> as using the OCC active sysfs file can cause the driver to unregister
+> the hwmon device twice. Prevent this by locking the occ mutex in the
+> shutdown function.
 > 
-> A pending meta-schema change will catch future cases.
-> 
-> Fixes: bd90c5b93950 ("dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x")
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
 Applied.
 
@@ -85,22 +78,26 @@ Thanks,
 Guenter
 
 > ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  drivers/hwmon/occ/common.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> index fe0ac08faa1a..0e8ddf0ad789 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> @@ -40,9 +40,8 @@ properties:
->        value to be used for converting remote channel measurements to
->        temperature.
->      $ref: /schemas/types.yaml#/definitions/int32
-> -    items:
-> -      minimum: -128
-> -      maximum: 127
-> +    minimum: -128
-> +    maximum: 127
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index d78f4bebc718..ea070b91e5b9 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -1228,10 +1228,15 @@ EXPORT_SYMBOL_GPL(occ_setup);
 >  
->    ti,beta-compensation:
->      description:
+>  void occ_shutdown(struct occ *occ)
+>  {
+> +	mutex_lock(&occ->lock);
+> +
+>  	occ_shutdown_sysfs(occ);
+>  
+>  	if (occ->hwmon)
+>  		hwmon_device_unregister(occ->hwmon);
+> +	occ->hwmon = NULL;
+> +
+> +	mutex_unlock(&occ->lock);
+>  }
+>  EXPORT_SYMBOL_GPL(occ_shutdown);
+>  
