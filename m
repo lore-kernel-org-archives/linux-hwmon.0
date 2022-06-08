@@ -2,133 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40077C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 20:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E726EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 20:35:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiFHUN5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Jun 2022 16:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S229720AbiFHUfU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jun 2022 16:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236116AbiFHUNx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2022 16:13:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A5138BE7;
-        Wed,  8 Jun 2022 13:13:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 494AB61C5D;
-        Wed,  8 Jun 2022 20:13:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B37FC34116;
-        Wed,  8 Jun 2022 20:13:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654719230;
-        bh=aHbJvLTAEf+/7/LFJuiWzns2/o0UaL+AXHjd4hTV9QU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=lKrfa2ISi0opyVqfcsNP1Mie+TBDBsXxcl6dzw04KUZzFd5CQNf17qR7Ju85E49/P
-         Ev5AfsylLCvVnvJ5ax/Wvih3+2DVdRkvY4yXLwwqbksKlQw765cHdwcDC1Cin5Q8jH
-         dQ4MduN9F4MGyNreFN505y41POqwCWkPjk9+eqeBFk6236e4avPpOU7mT0D7XYOipj
-         G8e7tMGWEv2/fDwahLfb/MNiMH9rVA22OJNUx26dHxYL/wnBfSLlMnRoFxbjLnnvom
-         29PlEwpz9xBCJ57M7/LtWTf2FmW5tn7HJ4rhqy0tuYKA3VifldFNDiDCUtyJRlo5fr
-         S5+RmyH2Uz/ug==
-Date:   Wed, 8 Jun 2022 15:13:47 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Clemens Ladisch <clemens@ladisch.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, babu.moger@amd.com
-Subject: Re: [PATCH v2 1/6] x86/amd_nb: Add AMD Family 17h A0-AF IDs
-Message-ID: <20220608201347.GA417504@bhelgaas>
+        with ESMTP id S232274AbiFHUfU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2022 16:35:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1607F5A091
+        for <linux-hwmon@vger.kernel.org>; Wed,  8 Jun 2022 13:35:18 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258Ig5wI032709;
+        Wed, 8 Jun 2022 20:34:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=J0aVri+cNbjQ0E9ixx2jgKJngPTCK7IYxBcL3VFucWM=;
+ b=SM4nlJJUcami5mGVksZqw4jwiA+bzgFthfowmkI8mq6gQQN/nHlWBZ1xAzx2J7GlZT0o
+ 2MyYqbIJZ1syhL3IcOTYMW29kSdOdyQYZEqeXTTXt0TEg9WkGtI4IzOGvUdKg0lgygG7
+ iRBzi5VmVYSxXuJ0iU5OtFNoSH18waBAeQ6FGfxDvB/25ziuqtKfesGMtJMswT3iyK+D
+ 9YMsS+33oObGB8CMhECfEQoHtkj9QgGcEASVqZbiGK9HEPt4ZY9/nUZZ0zmHkITS3B2X
+ BhjGKrb+BuDTfeQSyM3PgA1k5+rd6SZIcZk1QgfwxjcvvPuoivRJEdv4KiyiF6o198oV gQ== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gk198a30w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 20:34:57 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 258K5Evc017742;
+        Wed, 8 Jun 2022 20:34:56 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma04dal.us.ibm.com with ESMTP id 3gfy1ad092-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jun 2022 20:34:56 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 258KYtC732965076
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Jun 2022 20:34:55 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C841B112062;
+        Wed,  8 Jun 2022 20:34:55 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3959B112061;
+        Wed,  8 Jun 2022 20:34:55 +0000 (GMT)
+Received: from [9.211.120.23] (unknown [9.211.120.23])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Jun 2022 20:34:55 +0000 (GMT)
+Message-ID: <b175efd2-e985-c35b-3baf-c2a217979f4c@linux.ibm.com>
+Date:   Wed, 8 Jun 2022 15:34:53 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602201137.1415-2-mario.limonciello@amd.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] hwmon: (ucd9000) Add voltage monitor types
+Content-Language: en-US
+From:   Jim Wright <wrightj@linux.ibm.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        joel@jms.id.au, openbmc@lists.ozlabs.org
+References: <20220607205306.145636-1-wrightj@linux.ibm.com>
+ <cf1a2ff9-59b3-fb2d-62fd-bdeac57bb9c0@roeck-us.net>
+ <d50e6018-7b1b-6369-1ed2-1548841f7524@linux.ibm.com>
+In-Reply-To: <d50e6018-7b1b-6369-1ed2-1548841f7524@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DfYtctDHPYXKjCqIGvHiHt16amVkGQ-s
+X-Proofpoint-ORIG-GUID: DfYtctDHPYXKjCqIGvHiHt16amVkGQ-s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-08_05,2022-06-07_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501
+ bulkscore=0 impostorscore=0 clxscore=1015 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206080078
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 03:11:32PM -0500, Mario Limonciello wrote:
-> Add support for SMN communication on Family 17h Model A0h.
+On 6/7/2022 8:26 PM, Jim Wright wrote:
+> On 6/7/2022 8:13 PM, Guenter Roeck wrote:
+>>
+>> I don't think it makes sense to claim VOUT support if the chip is
+>> configured to monitor input voltages. This should probably be something
+>> like
+>>
+>> ...
+>>  > +        case UCD9000_MON_VOLTAGE_AVS:
+>>  >               info->func[page] |= PMBUS_HAVE_VOUT
+>>  >                 | PMBUS_HAVE_STATUS_VOUT;
+>>  >               break;
+>>          case UCD9000_MON_INPUT_VOLTAGE:
+>>          case UCD9000_MON_INPUT_VOLTAGE_AVS:
+>>              info->func[page] |= PMBUS_HAVE_VIN;
+>>               break;
+>>
+>> with appropriate mapping code to map the READ_VIN command for the
+>> affected pages to READ_VOUT. Question is if the limit registers on
+>> those pages are also reporting the limits using the vout limit
+>> commands; if so, those should be mapped as well.
+>>
+>> Guenter
 > 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Hi Guenter,
+> 
+> Thank you for the review. I'll drop adding the input voltage types and 
+> resend the patch.
+> 
+> Jim Wright
+After a second look, it's the input voltage type that I need. Will 
+revise as suggested and resubmit.
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>	# pci_ids.h
-
-> ---
-> v1->v2:
->  * Drop fixes tag
->  * Fix commit message and definitions for s/17/19/
-> ---
->  arch/x86/kernel/amd_nb.c | 5 +++++
->  include/linux/pci_ids.h  | 1 +
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-> index 190e0f763375..60c7bd525237 100644
-> --- a/arch/x86/kernel/amd_nb.c
-> +++ b/arch/x86/kernel/amd_nb.c
-> @@ -19,12 +19,14 @@
->  #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
->  #define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
->  #define PCI_DEVICE_ID_AMD_17H_M60H_ROOT	0x1630
-> +#define PCI_DEVICE_ID_AMD_17H_MA0H_ROOT	0x14b5
->  #define PCI_DEVICE_ID_AMD_19H_M10H_ROOT	0x14a4
->  #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
->  #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
->  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
->  #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
->  #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
-> +#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F4 0x1728
->  #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
->  #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F4 0x14b1
->  #define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
-> @@ -41,6 +43,7 @@ static const struct pci_device_id amd_root_ids[] = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_ROOT) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_ROOT) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
->  	{}
-> @@ -61,6 +64,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
-> @@ -81,6 +85,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F4) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F4) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F4) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F4) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F4) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F4) },
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 0178823ce8c2..ec1c226d13e6 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -556,6 +556,7 @@
->  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
->  #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
->  #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
-> +#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3 0x1727
->  #define PCI_DEVICE_ID_AMD_19H_DF_F3	0x1653
->  #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3 0x14b0
->  #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3 0x167c
-> -- 
-> 2.34.1
-> 
+Thanks,
+Jim Wright
