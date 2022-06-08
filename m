@@ -2,113 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 803D6C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 01:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86813C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 04:19:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381883AbiFHBSY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jun 2022 21:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S229721AbiFHETy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jun 2022 00:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1840680AbiFHAFr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jun 2022 20:05:47 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C977328ED5
-        for <linux-hwmon@vger.kernel.org>; Tue,  7 Jun 2022 13:54:52 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257KT1E5023323;
-        Tue, 7 Jun 2022 20:54:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=qKvA+8XBhKmvodGb3aR75OBmpzgBoKaY8E+X5Bt7rmo=;
- b=L/3xtujBtcBVMIGYAbCsrOyOptBq8cSwKZveqOoI5UpGJJ+ey1iZGzLHCDnaXv1LBzEf
- N6XmmAoww0ifsKKThr+o+D7Q0gHbucLu6KNa9I/TnSRdVjlhCek/uoodpXjMs2645a/l
- fXpyl7ph+xKZlajxGBShTIqKbPTuyPsLz7+EySi4Oxz/eLJME/BKAfd09GFOBcbIDsVH
- VyRAl0Xh0lwPvmYjDe+xC5AWpLxKJbhmdrsfjmHDUnvy0MEXUSoLA5kUccTZr2xvWYoB
- zEl/F3bPIt4yGuSAfpaFfXyQB1w8VHDml5gMSGCmjRRRse0EGNzhkVKoVPS8OFGgaCb0 lA== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gjdrhrc4v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jun 2022 20:54:09 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 257KqI85016221;
-        Tue, 7 Jun 2022 20:54:08 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03wdc.us.ibm.com with ESMTP id 3gfy19ps74-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jun 2022 20:54:08 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 257Ks71h20251020
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Jun 2022 20:54:07 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B654CC6059;
-        Tue,  7 Jun 2022 20:54:07 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AA9C7C6063;
-        Tue,  7 Jun 2022 20:54:07 +0000 (GMT)
-Received: from gfwr529.rchland.ibm.com (unknown [9.10.239.129])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Jun 2022 20:54:07 +0000 (GMT)
-Received: by gfwr529.rchland.ibm.com (Postfix, from userid 527496)
-        id 7324812021E; Tue,  7 Jun 2022 15:54:07 -0500 (CDT)
-From:   Jim Wright <wrightj@linux.ibm.com>
-To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org, joel@jms.id.au,
-        openbmc@lists.ozlabs.org
-Cc:     Jim Wright <wrightj@linux.ibm.com>
-Subject: [PATCH] hwmon: (ucd9000) Add voltage monitor types
-Date:   Tue,  7 Jun 2022 15:53:06 -0500
-Message-Id: <20220607205306.145636-1-wrightj@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S232754AbiFHETb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2022 00:19:31 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5485C2FDBE1;
+        Tue,  7 Jun 2022 18:41:33 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e5e433d66dso25449231fac.5;
+        Tue, 07 Jun 2022 18:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0ouh168Efujq50ZkwUeyvKvmPIKYBEgMwS6iqFnHPOo=;
+        b=OUEONxD7ri2U9Ybh50bsIdP8XdebA8KMNQi2Ov2WJ4/pfunTJ6lnJVdlRrloNIuw65
+         98oS7vutzV1t4GsJAGt7nF2ILmE3+cj5annOU+KwX+C6t3qTf7sYmB6xFt1vtde7RQOT
+         Gm5YKARgJWi9s0Si8N+UO0k0TIgH+TfWhLLNzmSoECNNv8pa4FJ4XyBrdG9K6Zsz12Yo
+         aH4zgEamuDU8egBe5fZd0QfO7TGywpkN7hztYvdbcwLhS06uqibwJg0nmHp/RMZoMybq
+         fzL6LTIQPH6p0aTkRniNLGhmhEJFAOI47wYEz5CBxTH8i5yJk2n6qVStA+4gUX4jURh3
+         mP5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0ouh168Efujq50ZkwUeyvKvmPIKYBEgMwS6iqFnHPOo=;
+        b=H0KA0HtvMSaOEO9X+1zSyqaypWolg3+Pl84O372+53VfB8/IX7TyFLNE3HQp1TDnMq
+         TDrvQIq8H+GcjlJIqxkn0gIsITdpXQmHL8p45FbW7ujmOkKNkaYNZijsQUpBM3y750FX
+         +Lt+ymvNQ2VRRRG2No2u9ZSXTNYA3fW9IbyXtAfMlqvqccyezASGLDu/64JtXJtwl7cI
+         qrXwEhIWbVr/GSrQobqVW3otFfuP5xVjbrATt6k4rVvguTqT4bOaC9VEMp0avan+UMNT
+         ddKo0wiX4rV355feXxk9QWPMySED41WaD95k/NEAjLrVULEBmr1bMPVBcFOM2if/BH3p
+         7zdA==
+X-Gm-Message-State: AOAM531g8KzfzJzOEGcbDsAQZ9CG/OQiDQYHCCpeeK9H0DouojelZvzx
+        ebaZlUxyCrogbXwk0Ao7aIE=
+X-Google-Smtp-Source: ABdhPJx5Sw3k/c5BjHYKSJHnKPHs7ncwHuxaACWn5BpLfWWiiad0396Y/mFmS4Ro+1NA0gnkNn4nmg==
+X-Received: by 2002:a05:6870:c59b:b0:f1:231c:c82c with SMTP id ba27-20020a056870c59b00b000f1231cc82cmr1026289oab.217.1654652492374;
+        Tue, 07 Jun 2022 18:41:32 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w15-20020a056830144f00b0060b0bf08ef8sm9704313otp.7.2022.06.07.18.41.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 18:41:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4ebf3fb3-47c8-b4b4-e9b2-630e3f540316@roeck-us.net>
+Date:   Tue, 7 Jun 2022 18:41:29 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/1] MIPS: Loongson-3: fix compile mips cpu_hwmon as
+ module build error.
+Content-Language: en-US
+To:     Yupeng Li <liyupeng@zbhlos.com>, chenhuacai@kernel.org,
+        jiaxun.yang@flygoat.com, tsbogend@alpha.franken.de,
+        jdelvare@suse.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, caizp2008@163.com
+References: <20220608011229.2056016-1-liyupeng@zbhlos.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220608011229.2056016-1-liyupeng@zbhlos.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aqVZXY6k2ChB7uBtk8mlQLdrUMTZmYOx
-X-Proofpoint-ORIG-GUID: aqVZXY6k2ChB7uBtk8mlQLdrUMTZmYOx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-07_09,2022-06-07_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0
- impostorscore=0 clxscore=1011 malwarescore=0 spamscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206070085
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The UCD90240 and UCD90320 devices support monitor types "Input Voltage",
-"Voltage With AVS", and "Input Voltage With AVS", add support to driver
-to recognize these types as voltage monitors.
+On 6/7/22 18:12, Yupeng Li wrote:
+>    set cpu_hwmon as a module build with loongson_sysconf, loongson_chiptemp
+>    undefined error,fix cpu_hwmon compile options to be bool.Some kernel
+>    compilation error information is as follows:
+> 
+>    Checking missing-syscalls for N32
+>    CALL    scripts/checksyscalls.sh
+>    Checking missing-syscalls for O32
+>    CALL    scripts/checksyscalls.sh
+>    CALL    scripts/checksyscalls.sh
+>    CHK     include/generated/compile.h
+>    CC [M]  drivers/platform/mips/cpu_hwmon.o
+>    Building modules, stage 2.
+>    MODPOST 200 modules
+> ERROR: "loongson_sysconf" [drivers/platform/mips/cpu_hwmon.ko] undefined!
+> ERROR: "loongson_chiptemp" [drivers/platform/mips/cpu_hwmon.ko] undefined!
+> make[1]: *** [scripts/Makefile.modpost:92：__modpost] 错误 1
+> make: *** [Makefile:1261：modules] 错误 2
+> 
+> Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
 
-Signed-off-by: Jim Wright <wrightj@linux.ibm.com>
----
- drivers/hwmon/pmbus/ucd9000.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-index 75fc770c9e40..28cc214d4d6b 100644
---- a/drivers/hwmon/pmbus/ucd9000.c
-+++ b/drivers/hwmon/pmbus/ucd9000.c
-@@ -45,6 +45,9 @@ enum chips { ucd9000, ucd90120, ucd90124, ucd90160, ucd90320, ucd9090,
- #define UCD9000_MON_TEMPERATURE	2
- #define UCD9000_MON_CURRENT	3
- #define UCD9000_MON_VOLTAGE_HW	4
-+#define UCD9000_MON_INPUT_VOLTAGE	5
-+#define UCD9000_MON_VOLTAGE_AVS	6
-+#define UCD9000_MON_INPUT_VOLTAGE_AVS	7
- 
- #define UCD9000_NUM_FAN		4
- 
-@@ -566,6 +569,9 @@ static int ucd9000_probe(struct i2c_client *client)
- 		switch (UCD9000_MON_TYPE(block_buffer[i])) {
- 		case UCD9000_MON_VOLTAGE:
- 		case UCD9000_MON_VOLTAGE_HW:
-+		case UCD9000_MON_INPUT_VOLTAGE:
-+		case UCD9000_MON_VOLTAGE_AVS:
-+		case UCD9000_MON_INPUT_VOLTAGE_AVS:
- 			info->func[page] |= PMBUS_HAVE_VOUT
- 			  | PMBUS_HAVE_STATUS_VOUT;
- 			break;
--- 
-2.32.0
+> ---
+>   drivers/platform/mips/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kconfig
+> index d421e1482395..6b51ad01f791 100644
+> --- a/drivers/platform/mips/Kconfig
+> +++ b/drivers/platform/mips/Kconfig
+> @@ -17,7 +17,7 @@ menuconfig MIPS_PLATFORM_DEVICES
+>   if MIPS_PLATFORM_DEVICES
+>   
+>   config CPU_HWMON
+> -	tristate "Loongson-3 CPU HWMon Driver"
+> +	bool "Loongson-3 CPU HWMon Driver"
+>   	depends on MACH_LOONGSON64
+>   	select HWMON
+>   	default y
 
