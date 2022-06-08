@@ -2,114 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86813C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 04:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B62C43334
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 04:51:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiFHETy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Jun 2022 00:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S229780AbiFHEvY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jun 2022 00:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbiFHETb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2022 00:19:31 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5485C2FDBE1;
-        Tue,  7 Jun 2022 18:41:33 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e5e433d66dso25449231fac.5;
-        Tue, 07 Jun 2022 18:41:33 -0700 (PDT)
+        with ESMTP id S232732AbiFHEuB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2022 00:50:01 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1AC2509EC
+        for <linux-hwmon@vger.kernel.org>; Tue,  7 Jun 2022 18:14:35 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-fe023ab520so2189624fac.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jun 2022 18:14:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0ouh168Efujq50ZkwUeyvKvmPIKYBEgMwS6iqFnHPOo=;
-        b=OUEONxD7ri2U9Ybh50bsIdP8XdebA8KMNQi2Ov2WJ4/pfunTJ6lnJVdlRrloNIuw65
-         98oS7vutzV1t4GsJAGt7nF2ILmE3+cj5annOU+KwX+C6t3qTf7sYmB6xFt1vtde7RQOT
-         Gm5YKARgJWi9s0Si8N+UO0k0TIgH+TfWhLLNzmSoECNNv8pa4FJ4XyBrdG9K6Zsz12Yo
-         aH4zgEamuDU8egBe5fZd0QfO7TGywpkN7hztYvdbcwLhS06uqibwJg0nmHp/RMZoMybq
-         fzL6LTIQPH6p0aTkRniNLGhmhEJFAOI47wYEz5CBxTH8i5yJk2n6qVStA+4gUX4jURh3
-         mP5Q==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=kBIySTAJjbizEz0lOsKHr+uK6tOPrCBwD+VayVTxzQ4=;
+        b=MCDZPQAJ1bc7E7TWI/TddSwSc40DI04iu6X924AaRYf5W/F3LaTHb1YGDUMVwF6jLB
+         ZKf7oqSVm2WMQF7YCqd4Tmnr8/v/LpJCj+LwdLJJlNlDBGf/lJC7lawn8zW+zza1/tts
+         W4tY98XaiC6q/vJVCmP8Qu/a7kW9qWM5kPgTUdlsdXIvKtkSzDFJmf/+wvBS3NNCsIZn
+         YYkjG27Bl3tXJM9E/ZzFX9oTppKe6efxyqGhPEUod94Z/ySYv4MWzA57ttEcscvjMwin
+         cOsDCijtZo+aW1NE1ZF6DDFO31qv5M7LQZwMAg3kjWj84R1xyLHfLJr+IvVphiVIt12f
+         Kj2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=0ouh168Efujq50ZkwUeyvKvmPIKYBEgMwS6iqFnHPOo=;
-        b=H0KA0HtvMSaOEO9X+1zSyqaypWolg3+Pl84O372+53VfB8/IX7TyFLNE3HQp1TDnMq
-         TDrvQIq8H+GcjlJIqxkn0gIsITdpXQmHL8p45FbW7ujmOkKNkaYNZijsQUpBM3y750FX
-         +Lt+ymvNQ2VRRRG2No2u9ZSXTNYA3fW9IbyXtAfMlqvqccyezASGLDu/64JtXJtwl7cI
-         qrXwEhIWbVr/GSrQobqVW3otFfuP5xVjbrATt6k4rVvguTqT4bOaC9VEMp0avan+UMNT
-         ddKo0wiX4rV355feXxk9QWPMySED41WaD95k/NEAjLrVULEBmr1bMPVBcFOM2if/BH3p
-         7zdA==
-X-Gm-Message-State: AOAM531g8KzfzJzOEGcbDsAQZ9CG/OQiDQYHCCpeeK9H0DouojelZvzx
-        ebaZlUxyCrogbXwk0Ao7aIE=
-X-Google-Smtp-Source: ABdhPJx5Sw3k/c5BjHYKSJHnKPHs7ncwHuxaACWn5BpLfWWiiad0396Y/mFmS4Ro+1NA0gnkNn4nmg==
-X-Received: by 2002:a05:6870:c59b:b0:f1:231c:c82c with SMTP id ba27-20020a056870c59b00b000f1231cc82cmr1026289oab.217.1654652492374;
-        Tue, 07 Jun 2022 18:41:32 -0700 (PDT)
+        bh=kBIySTAJjbizEz0lOsKHr+uK6tOPrCBwD+VayVTxzQ4=;
+        b=TXHYGQcBfSVHHTciEKb+yEy6RDVY/Y+hBs4YfUtY2lvgZD0uMV0vYHAO2BLGGtS9o0
+         +1lZX5orCPaQB5ei18GFNdbLCM76/mlXVBD12gYdlp4VrHFhQy0pS/SoNP91U1JYXy3i
+         5OJeO+ywIWiZgqzakTjWMqJr/2DN5dakpu4+lcfhxDPmd9x6TNIzoHY6tlE3EXrxJLdQ
+         1qOAnVmgEfykds0WFIdlkPKEV0IFkexB8tsJdB1nrJEVby9hZUUK4LLoxyY6gqKIJrYr
+         aBN3TfECu22EacglWvCjfH5LMD49Vuf5BzftGnGCjtMoZjp/hOUfyP6Ekp9RjdGxIrBp
+         hUfA==
+X-Gm-Message-State: AOAM530VBCZveDUlu7OhwOKjRn+kPVyyDIpA3cAKxAD7idALlJVmBen/
+        LNgEQnPWUtleiIkeKOG0KuLzZJ7gF4c=
+X-Google-Smtp-Source: ABdhPJxdWG4xXsD6AUUk8HYb3a1sp2KVyaroExaee8tgvUl2jx/z7X5ur0NHy3KnHqe+lWN8b8BGAw==
+X-Received: by 2002:a05:6870:f2a9:b0:f2:c0bc:411d with SMTP id u41-20020a056870f2a900b000f2c0bc411dmr990648oap.239.1654650814848;
+        Tue, 07 Jun 2022 18:13:34 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w15-20020a056830144f00b0060b0bf08ef8sm9704313otp.7.2022.06.07.18.41.30
+        by smtp.gmail.com with ESMTPSA id m8-20020a0568080f0800b00325cda1ff94sm11165785oiw.19.2022.06.07.18.13.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 18:41:31 -0700 (PDT)
+        Tue, 07 Jun 2022 18:13:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4ebf3fb3-47c8-b4b4-e9b2-630e3f540316@roeck-us.net>
-Date:   Tue, 7 Jun 2022 18:41:29 -0700
+Message-ID: <cf1a2ff9-59b3-fb2d-62fd-bdeac57bb9c0@roeck-us.net>
+Date:   Tue, 7 Jun 2022 18:13:31 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 1/1] MIPS: Loongson-3: fix compile mips cpu_hwmon as
- module build error.
 Content-Language: en-US
-To:     Yupeng Li <liyupeng@zbhlos.com>, chenhuacai@kernel.org,
-        jiaxun.yang@flygoat.com, tsbogend@alpha.franken.de,
-        jdelvare@suse.com
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, caizp2008@163.com
-References: <20220608011229.2056016-1-liyupeng@zbhlos.com>
+To:     Jim Wright <wrightj@linux.ibm.com>, linux-hwmon@vger.kernel.org,
+        joel@jms.id.au, openbmc@lists.ozlabs.org
+References: <20220607205306.145636-1-wrightj@linux.ibm.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220608011229.2056016-1-liyupeng@zbhlos.com>
+Subject: Re: [PATCH] hwmon: (ucd9000) Add voltage monitor types
+In-Reply-To: <20220607205306.145636-1-wrightj@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/7/22 18:12, Yupeng Li wrote:
->    set cpu_hwmon as a module build with loongson_sysconf, loongson_chiptemp
->    undefined error,fix cpu_hwmon compile options to be bool.Some kernel
->    compilation error information is as follows:
+On 6/7/22 13:53, Jim Wright wrote:
+> The UCD90240 and UCD90320 devices support monitor types "Input Voltage",
+> "Voltage With AVS", and "Input Voltage With AVS", add support to driver
+> to recognize these types as voltage monitors.
 > 
->    Checking missing-syscalls for N32
->    CALL    scripts/checksyscalls.sh
->    Checking missing-syscalls for O32
->    CALL    scripts/checksyscalls.sh
->    CALL    scripts/checksyscalls.sh
->    CHK     include/generated/compile.h
->    CC [M]  drivers/platform/mips/cpu_hwmon.o
->    Building modules, stage 2.
->    MODPOST 200 modules
-> ERROR: "loongson_sysconf" [drivers/platform/mips/cpu_hwmon.ko] undefined!
-> ERROR: "loongson_chiptemp" [drivers/platform/mips/cpu_hwmon.ko] undefined!
-> make[1]: *** [scripts/Makefile.modpost:92：__modpost] 错误 1
-> make: *** [Makefile:1261：modules] 错误 2
-> 
-> Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Jim Wright <wrightj@linux.ibm.com>
 > ---
->   drivers/platform/mips/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/hwmon/pmbus/ucd9000.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kconfig
-> index d421e1482395..6b51ad01f791 100644
-> --- a/drivers/platform/mips/Kconfig
-> +++ b/drivers/platform/mips/Kconfig
-> @@ -17,7 +17,7 @@ menuconfig MIPS_PLATFORM_DEVICES
->   if MIPS_PLATFORM_DEVICES
+> diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+> index 75fc770c9e40..28cc214d4d6b 100644
+> --- a/drivers/hwmon/pmbus/ucd9000.c
+> +++ b/drivers/hwmon/pmbus/ucd9000.c
+> @@ -45,6 +45,9 @@ enum chips { ucd9000, ucd90120, ucd90124, ucd90160, ucd90320, ucd9090,
+>   #define UCD9000_MON_TEMPERATURE	2
+>   #define UCD9000_MON_CURRENT	3
+>   #define UCD9000_MON_VOLTAGE_HW	4
+> +#define UCD9000_MON_INPUT_VOLTAGE	5
+> +#define UCD9000_MON_VOLTAGE_AVS	6
+> +#define UCD9000_MON_INPUT_VOLTAGE_AVS	7
 >   
->   config CPU_HWMON
-> -	tristate "Loongson-3 CPU HWMon Driver"
-> +	bool "Loongson-3 CPU HWMon Driver"
->   	depends on MACH_LOONGSON64
->   	select HWMON
->   	default y
+>   #define UCD9000_NUM_FAN		4
+>   
+> @@ -566,6 +569,9 @@ static int ucd9000_probe(struct i2c_client *client)
+>   		switch (UCD9000_MON_TYPE(block_buffer[i])) {
+>   		case UCD9000_MON_VOLTAGE:
+>   		case UCD9000_MON_VOLTAGE_HW:
+> +		case UCD9000_MON_INPUT_VOLTAGE:
+> +		case UCD9000_MON_VOLTAGE_AVS:
+> +		case UCD9000_MON_INPUT_VOLTAGE_AVS:
+>   			info->func[page] |= PMBUS_HAVE_VOUT
+>   			  | PMBUS_HAVE_STATUS_VOUT;
+>   			break;
 
+I don't think it makes sense to claim VOUT support if the chip is
+configured to monitor input voltages. This should probably be something
+like
+
+...
+ > +		case UCD9000_MON_VOLTAGE_AVS:
+ >   			info->func[page] |= PMBUS_HAVE_VOUT
+ >   			  | PMBUS_HAVE_STATUS_VOUT;
+ >   			break;
+		case UCD9000_MON_INPUT_VOLTAGE:
+		case UCD9000_MON_INPUT_VOLTAGE_AVS:
+			info->func[page] |= PMBUS_HAVE_VIN;
+  			break;
+
+with appropriate mapping code to map the READ_VIN command for the
+affected pages to READ_VOUT. Question is if the limit registers on
+those pages are also reporting the limits using the vout limit
+commands; if so, those should be mapped as well.
+
+Guenter
