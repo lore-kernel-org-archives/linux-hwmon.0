@@ -2,113 +2,152 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B370CCA48C
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 06:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C486C43334
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jun 2022 09:26:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234679AbiFHG2U (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Jun 2022 02:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S235130AbiFHJ02 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jun 2022 05:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345570AbiFHF4x (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2022 01:56:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ACA2945D7;
-        Tue,  7 Jun 2022 21:12:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B7C461902;
-        Wed,  8 Jun 2022 04:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9220C341C6;
-        Wed,  8 Jun 2022 04:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654661521;
-        bh=H+1MmtTtvQLsNZTrmQNlzsqkx+xHxGbkSkRUBtO1cMQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KRmb41fbyr182sJHzxcwjxdxcL3B8RTZPEz7yItlT2aYivO23ePNfRY2ECLKyop+y
-         gkoq0NvgN6nDP5ACdXjOe9osa2Lpgep3fs17rMK6M/xa03zYmg503ay4yYFxX8PaSr
-         Ph9x1kYgG+SYvqrIQ44X0JreCP6Wh8r+5MemBTaN5zF3S7TWTcCAEOAxw7YGm0IoPY
-         FTAdyvAYhh6mJzdyDbwuq4i1/X0kyA+pJiVtLv+L71SOH03TgjFsLlOwYoMOr7HzpT
-         uS6XvU/QM2rf3Zw25GK/O8EMGcXnXJviBU0BIncFfktr9hFr3vg1E5bV9NhUWkg4fw
-         Y9hCR6G3LeS6Q==
-Received: by mail-lf1-f42.google.com with SMTP id a2so25178895lfg.5;
-        Tue, 07 Jun 2022 21:12:01 -0700 (PDT)
-X-Gm-Message-State: AOAM531yaWPeXuly/LlWqxO00zC1zt/6dt+eFWZS1o1AHOi+VA5Surec
-        dc0v057WwdGDf8hjFHQn4tl98QPZkaE2Ky8FxLI=
-X-Google-Smtp-Source: ABdhPJzJe/7j12uZOrVpl6r/1eUa9+dVSPDjLIDkUtz6kk9LZs9Ey/RjEjyXG6U7s6oL7B63aQjHbZ0lAKTa0QMZH8g=
-X-Received: by 2002:a05:6512:4019:b0:479:2d65:dd9f with SMTP id
- br25-20020a056512401900b004792d65dd9fmr11811475lfb.275.1654661519839; Tue, 07
- Jun 2022 21:11:59 -0700 (PDT)
+        with ESMTP id S235193AbiFHJZs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2022 05:25:48 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EC6A1BC;
+        Wed,  8 Jun 2022 01:51:16 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LJ18L2DV9zRj2b;
+        Wed,  8 Jun 2022 16:48:02 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 16:51:14 +0800
+Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
+ 2022 16:51:14 +0800
+From:   Ren Zhijie <renzhijie2@huawei.com>
+To:     <linux@roeck-us.net>, <jdelvare@suse.com>, <dev_public@wujek.eu>
+CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ren Zhijie <renzhijie2@huawei.com>
+Subject: [PATCH -next] hwmon: (pmbus) fix build error unused-function
+Date:   Wed, 8 Jun 2022 16:49:38 +0800
+Message-ID: <20220608084938.173071-1-renzhijie2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220608011229.2056016-1-liyupeng@zbhlos.com> <4ebf3fb3-47c8-b4b4-e9b2-630e3f540316@roeck-us.net>
-In-Reply-To: <4ebf3fb3-47c8-b4b4-e9b2-630e3f540316@roeck-us.net>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 8 Jun 2022 12:11:48 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H69N+ECH-V1VktcD2=EO-i+q1MMm0hB4FdQGyEpRoDKiw@mail.gmail.com>
-Message-ID: <CAAhV-H69N+ECH-V1VktcD2=EO-i+q1MMm0hB4FdQGyEpRoDKiw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] MIPS: Loongson-3: fix compile mips cpu_hwmon as
- module build error.
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Yupeng Li <liyupeng@zbhlos.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        caizp2008@163.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.175.34]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
+If CONFIG_PMBUS is y and CONFIG_DEBUG_FS is not set.
 
-On Wed, Jun 8, 2022 at 9:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 6/7/22 18:12, Yupeng Li wrote:
-> >    set cpu_hwmon as a module build with loongson_sysconf, loongson_chip=
-temp
-> >    undefined error,fix cpu_hwmon compile options to be bool.Some kernel
-> >    compilation error information is as follows:
-> >
-> >    Checking missing-syscalls for N32
-> >    CALL    scripts/checksyscalls.sh
-> >    Checking missing-syscalls for O32
-> >    CALL    scripts/checksyscalls.sh
-> >    CALL    scripts/checksyscalls.sh
-> >    CHK     include/generated/compile.h
-> >    CC [M]  drivers/platform/mips/cpu_hwmon.o
-> >    Building modules, stage 2.
-> >    MODPOST 200 modules
-> > ERROR: "loongson_sysconf" [drivers/platform/mips/cpu_hwmon.ko] undefine=
-d!
-> > ERROR: "loongson_chiptemp" [drivers/platform/mips/cpu_hwmon.ko] undefin=
-ed!
-> > make[1]: *** [scripts/Makefile.modpost:92=EF=BC=9A__modpost] =E9=94=99=
-=E8=AF=AF 1
-> > make: *** [Makefile:1261=EF=BC=9Amodules] =E9=94=99=E8=AF=AF 2
-> >
-> > Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->
-> > ---
-> >   drivers/platform/mips/Kconfig | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kcon=
-fig
-> > index d421e1482395..6b51ad01f791 100644
-> > --- a/drivers/platform/mips/Kconfig
-> > +++ b/drivers/platform/mips/Kconfig
-> > @@ -17,7 +17,7 @@ menuconfig MIPS_PLATFORM_DEVICES
-> >   if MIPS_PLATFORM_DEVICES
-> >
-> >   config CPU_HWMON
-> > -     tristate "Loongson-3 CPU HWMon Driver"
-> > +     bool "Loongson-3 CPU HWMon Driver"
-> >       depends on MACH_LOONGSON64
-> >       select HWMON
-> >       default y
->
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will be failed, like this:
+drivers/hwmon/pmbus/pmbus_core.c:593:13: error: ‘pmbus_check_block_register’ defined but not used [-Werror=unused-function]
+ static bool pmbus_check_block_register(struct i2c_client *client, int page,
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[3]: *** [drivers/hwmon/pmbus/pmbus_core.o] Error 1
+make[2]: *** [drivers/hwmon/pmbus] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [drivers/hwmon] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [drivers] Error 2
+
+To fix building warning, wrap all related code with CONFIG_DEBUG_F.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: c3ffc3a1ff83("hwmon: (pmbus) add a function to check the presence of a block register")
+Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 56 ++++++++++++++++----------------
+ 1 file changed, 28 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 809e666cb52b..2c68ab1fe697 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -441,18 +441,6 @@ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
+ 
+-static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
+-				 char *data_buf)
+-{
+-	int rv;
+-
+-	rv = pmbus_set_page(client, page, 0xff);
+-	if (rv < 0)
+-		return rv;
+-
+-	return i2c_smbus_read_block_data(client, reg, data_buf);
+-}
+-
+ static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
+ 					      int reg)
+ {
+@@ -590,22 +578,6 @@ bool pmbus_check_word_register(struct i2c_client *client, int page, int reg)
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_check_word_register, PMBUS);
+ 
+-static bool pmbus_check_block_register(struct i2c_client *client, int page,
+-				       int reg)
+-{
+-	int rv;
+-	struct pmbus_data *data = i2c_get_clientdata(client);
+-	char data_buf[I2C_SMBUS_BLOCK_MAX + 2];
+-
+-	rv = pmbus_read_block_data(client, page, reg, data_buf);
+-	if (rv >= 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
+-		rv = pmbus_check_status_cml(client);
+-	if (rv < 0 && (data->flags & PMBUS_READ_STATUS_AFTER_FAILED_CHECK))
+-		data->read_status(client, -1);
+-	pmbus_clear_fault_page(client, -1);
+-	return rv >= 0;
+-}
+-
+ const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -2961,6 +2933,34 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
+ 
+ #if IS_ENABLED(CONFIG_DEBUG_FS)
++static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
++				 char *data_buf)
++{
++	int rv;
++
++	rv = pmbus_set_page(client, page, 0xff);
++	if (rv < 0)
++		return rv;
++
++	return i2c_smbus_read_block_data(client, reg, data_buf);
++}
++
++static bool pmbus_check_block_register(struct i2c_client *client, int page,
++				       int reg)
++{
++	int rv;
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	char data_buf[I2C_SMBUS_BLOCK_MAX + 2];
++
++	rv = pmbus_read_block_data(client, page, reg, data_buf);
++	if (rv >= 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
++		rv = pmbus_check_status_cml(client);
++	if (rv < 0 && (data->flags & PMBUS_READ_STATUS_AFTER_FAILED_CHECK))
++		data->read_status(client, -1);
++	pmbus_clear_fault_page(client, -1);
++	return rv >= 0;
++}
++
+ static int pmbus_debugfs_get(void *data, u64 *val)
+ {
+ 	int rc;
+-- 
+2.17.1
+
