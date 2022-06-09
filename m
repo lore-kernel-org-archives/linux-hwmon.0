@@ -2,87 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1671DC43334
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jun 2022 19:36:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69242C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jun 2022 20:26:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbiFITg6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Jun 2022 15:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S234287AbiFIU05 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Jun 2022 16:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbiFITg4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jun 2022 15:36:56 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94F31D8;
-        Thu,  9 Jun 2022 12:36:54 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id n10so49480242ejk.5;
-        Thu, 09 Jun 2022 12:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WmtueT3ufRRv1jgkM4LImOdDwQ5tPGE6m6fXDK9beFU=;
-        b=fl/n3USbN3m8QqF4I2DkH9aeKJmQlVrqiuJ4kGZdS+1ZBNms8wWqvHLSn+9D9hn4EV
-         EcSpSch8B6AYIDM27uhSrBP7n9Ym0n+B8ckGjQuknoG8T82W4iG+v8wLilOVj2et13lV
-         m5sWKzLnH8fmEFMQQYbzVIRjAJeV2jwfVM0LgtCuUdSVSYVZ93SA2aRQ073vvSxo8Fck
-         g686qK5ukGANV9lrRw9q3gFpxQQLUqLqVjx1zH3rfzMnagrGJxiXsoN9IoGsLfiKTucM
-         pbbxIc9DLPoONSpNqd/T6RoxY3BVTTa8JEHg+KlUYuJ+BXhOjnO30RxFV82Q5XOeFALr
-         JUPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WmtueT3ufRRv1jgkM4LImOdDwQ5tPGE6m6fXDK9beFU=;
-        b=yVq3KIHakUGhRWibU1VBQQ0RDEqJslwMA4HXCVsDfxVuibUwA3Fg61I5Z2hQCQaLOF
-         qD6hmFez14FVVixOFuRAsM5otBx7LUBH/woY6TNQRRTt273QZ+KMUN3FY/Aw7YpiNqT+
-         N8eS2qhW3AZKFJovxRF1pYkDhcNVV4yMIAIhRnuJzYHtB7VATXbHaHax+WJOPDxiampS
-         h3mAY3d+QwbNIeVJ9YkRV5jnIIS9l/68EPW6C1aRpz1Yao2LbKe45Aw8zsiYC9ySNyA8
-         nguIG70uVwhfHyrKIIzGpoxqR1SZV0YWA5J8BI/RK15y/Oa3c8kaay95c3pF0lb6i4aB
-         Eulg==
-X-Gm-Message-State: AOAM532MVd3Gs1Trr5F76y9LPkfdtgvYpGwbJC1TbSeti9hgNCyEEotg
-        EHCTlGe4K8ccmpAwlFgP/HY=
-X-Google-Smtp-Source: ABdhPJzN+Y5oXVq1Jqxbl5cm2ADEYd5ybCUxmmChrZ0KG+m+PVF+sXe+wWivwW/hOeouXwoDWHQKoQ==
-X-Received: by 2002:a17:907:e92:b0:711:9fe4:b226 with SMTP id ho18-20020a1709070e9200b007119fe4b226mr23940944ejc.88.1654803413210;
-        Thu, 09 Jun 2022 12:36:53 -0700 (PDT)
-Received: from DESKTOP-A98GP49 (cable-178-148-254-8.dynamic.sbb.rs. [178.148.254.8])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170906580900b006feb7b1379dsm10997704ejq.181.2022.06.09.12.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 12:36:52 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 21:36:50 +0200
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Move device-specific data
- into struct aqc_data
-Message-ID: <YqJL0lc0/u55woBQ@DESKTOP-A98GP49>
-References: <20220609192827.GA2167717@roeck-us.net>
+        with ESMTP id S1343803AbiFIU05 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jun 2022 16:26:57 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F2FF419A3;
+        Thu,  9 Jun 2022 13:26:54 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nzOjz-0005nZ-00; Thu, 09 Jun 2022 22:26:51 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id C10CAC032C; Thu,  9 Jun 2022 22:25:18 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 22:25:18 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Yupeng Li <liyupeng@zbhlos.com>
+Cc:     chenhuacai@kernel.org, jiaxun.yang@flygoat.com, jdelvare@suse.com,
+        linux@roeck-us.net, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        caizp2008@163.com
+Subject: Re: [PATCH 1/1] MIPS: Loongson-3: fix compile mips cpu_hwmon as
+ module build error.
+Message-ID: <20220609202518.GA4320@alpha.franken.de>
+References: <20220608011229.2056016-1-liyupeng@zbhlos.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220609192827.GA2167717@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220608011229.2056016-1-liyupeng@zbhlos.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 12:28:27PM -0700, Guenter Roeck wrote:
-> On Thu, Jun 09, 2022 at 08:59:35PM +0200, Aleksa Savic wrote:
-> > As preparation for adding support for more devices in upcoming patches,
-> > move device-specific data, such as number of fans, temperature sensors,
-> > register offsets etc. to struct aqc_data. This is made possible by
-> > the fact that the supported Aquacomputer devices share the same layouts
-> > of sensor substructures. This allows aqc_raw_event() and others to stay
-> > general and not be cluttered with similar loops for each device.
-> > 
+On Wed, Jun 08, 2022 at 09:12:29AM +0800, Yupeng Li wrote:
+>   set cpu_hwmon as a module build with loongson_sysconf, loongson_chiptemp
+>   undefined error,fix cpu_hwmon compile options to be bool.Some kernel
+>   compilation error information is as follows:
 > 
-> This is doing way more than that; it removes a lot of defines and
-> replaces them with constants, making it all but impossible to reliably
-> review the patch. That alone makes it unacceptable. On top of that,
-> I am not going to participate in a "thou shall use defines" vs.
-> "thou shall use raw constants" editing war. The driver uses defines
-> for constants. Keep using them.
+>   Checking missing-syscalls for N32
+>   CALL    scripts/checksyscalls.sh
+>   Checking missing-syscalls for O32
+>   CALL    scripts/checksyscalls.sh
+>   CALL    scripts/checksyscalls.sh
+>   CHK     include/generated/compile.h
+>   CC [M]  drivers/platform/mips/cpu_hwmon.o
+>   Building modules, stage 2.
+>   MODPOST 200 modules
+> ERROR: "loongson_sysconf" [drivers/platform/mips/cpu_hwmon.ko] undefined!
+> ERROR: "loongson_chiptemp" [drivers/platform/mips/cpu_hwmon.ko] undefined!
+> make[1]: *** [scripts/Makefile.modpost:92：__modpost] 错误 1
+> make: *** [Makefile:1261：modules] 错误 2
 > 
-> Guenter
+> Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
+> ---
+>  drivers/platform/mips/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kconfig
+> index d421e1482395..6b51ad01f791 100644
+> --- a/drivers/platform/mips/Kconfig
+> +++ b/drivers/platform/mips/Kconfig
+> @@ -17,7 +17,7 @@ menuconfig MIPS_PLATFORM_DEVICES
+>  if MIPS_PLATFORM_DEVICES
+>  
+>  config CPU_HWMON
+> -	tristate "Loongson-3 CPU HWMon Driver"
+> +	bool "Loongson-3 CPU HWMon Driver"
+>  	depends on MACH_LOONGSON64
+>  	select HWMON
+>  	default y
+> -- 
+> 2.34.1
 
-Understood, thanks :). Will rework it in v2.
+applied to mips-fixes.
 
-Aleksa
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
