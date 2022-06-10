@@ -2,98 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 459B2C43334
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jun 2022 10:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E454C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jun 2022 11:47:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347791AbiFJKhP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Jun 2022 06:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S1345387AbiFJLrx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Jun 2022 07:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348034AbiFJKgZ (ORCPT
+        with ESMTP id S240337AbiFJLru (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Jun 2022 06:36:25 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B8749F19;
-        Fri, 10 Jun 2022 03:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654857206; x=1686393206;
+        Fri, 10 Jun 2022 07:47:50 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605C992D08
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jun 2022 04:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1654861668;
+  x=1686397668;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=GPbto6kWLD4KwhM5VBSRgAyWo2PjSu6DlokZQj9/3i4=;
-  b=m54mMxqC87gYi6IGgLS6bY8FwWE1HJOqkbvg6e7Y/+LXleQT5M/fmqDR
-   eoNtoXi1rXYq4EWTbkhEAQMDF963kVHpmBCkIDBhNWxNDF4XyBI5xTpBn
-   CGVRlophvuyLw9ejpxZKt/lyZ8AchCIWtjaqFocFqtrHRN/QlZuW3iZKF
-   ANK4I0uha1JA1+ke3dUMLfQGnTg56naa2FTmqawppXfMq1cB9X2rwmD0r
-   X1vV0znJcAtWEn5A4I8BYaieJUo/XADaVvKrr7MzmIoemgWBXydjxz+HN
-   B/JaLquye2UYO+Gk0ahFiJQMwDNahTskADPAnI6bGrTsT5/2WJR+AqxIa
+  bh=2b+PNY9KL+5E7zhVYPSIIW36uN9jJMCpzgCkhLvJGhM=;
+  b=E3+r2XtEqPh8iVgkzVM7v/F1ncFz8yP2PVQp103kaiaMKprCsS5FTDiA
+   kx93SFAoIqPcz18Zm00OhTPy/wN8QnZQju3cQy57mam3NnRkSduZW/V7T
+   P30Qrzl/a0FmwDZre5Zmgl57tJ/sIuzV4fTr+g2YogfgeYK6JvY/rjD8I
+   NTAK0pRYlFXG1BrCytfXtjfTtBYRK/pn6fUWZIlv5T8y0+fZvdLjOI1F/
+   STj/6G2Pn6ycBVzbcXCSoaUiUCcwhI24xLneheBM5zvsX9Gro8pP4R4Qa
+   QvQepsr/OJNgUBA9noddhYBc8WR3PC0bCScFTrMeZt+jq0S0P2uq4UACJ
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="339342507"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="339342507"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 03:33:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="710884395"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jun 2022 03:33:22 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0DAC0F8; Fri, 10 Jun 2022 13:33:25 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
-Subject: [PATCH v1 1/1] hwmon: (nct6775) Drop duplicate NULL check in ->init() and ->exit()
-Date:   Fri, 10 Jun 2022 13:33:24 +0300
-Message-Id: <20220610103324.87483-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
+        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+Subject: [PATCH v2 0/3]  hwmon: (pmbus/ltc2978) Set voltage resolution
+Date:   Fri, 10 Jun 2022 13:47:29 +0200
+Message-ID: <20220610114732.2370242-1-marten.lindahl@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Since platform_device_unregister() is NULL-aware, we don't need to duplicate
-this check. Remove it and fold the rest of the code.
+Hi!
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/hwmon/nct6775-platform.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+When checking if a regulator supports a voltage range, the regulator
+needs to have support for listing the range or else -EINVAL will be
+returned.
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 6d46c9401898..3a48627419ba 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1200,10 +1200,8 @@ static int __init sensors_nct6775_platform_init(void)
- exit_device_put:
- 	platform_device_put(pdev[i]);
- exit_device_unregister:
--	while (--i >= 0) {
--		if (pdev[i])
--			platform_device_unregister(pdev[i]);
--	}
-+	while (i--)
-+		platform_device_unregister(pdev[i]);
- exit_unregister:
- 	platform_driver_unregister(&nct6775_driver);
- 	return err;
-@@ -1213,10 +1211,8 @@ static void __exit sensors_nct6775_platform_exit(void)
- {
- 	int i;
- 
--	for (i = 0; i < ARRAY_SIZE(pdev); i++) {
--		if (pdev[i])
--			platform_device_unregister(pdev[i]);
--	}
-+	for (i = 0; i < ARRAY_SIZE(pdev); i++)
-+		platform_device_unregister(pdev[i]);
- 	platform_driver_unregister(&nct6775_driver);
- }
- 
+This support does not exist for the LTC2977 regulator, so this change
+adds support for list voltage to the pmbus regulators by adding
+regulator_list_voltage_linear to the pmbus_regulator_ops. It also
+defines the voltage resolution for regulators LTC2972/LTC2974/LTC2975/
+LTC2977/LTC2978/LTC2979/LTC2980/LTM2987 based on that they all have the
+same stepwise 122.07uV resolution, and scales the resolution to a 1mV
+resolution which is easier to handle.
+
+These patches have been tested on an ARTPEC-8 developer board with a group
+of LTC2977 power regulators.
+
+Kind regards
+Mårten Lindahl
+
+Mårten Lindahl (3):
+  hwmon: (pmbus) Introduce and use cached vout margins
+  hwmon: (pmbus) Add list_voltage to pmbus ops
+  hwmon: (pmbus/ltc2978) Set voltage resolution
+
+ drivers/hwmon/pmbus/ltc2978.c    |  56 +++++++++++++++--
+ drivers/hwmon/pmbus/pmbus_core.c | 104 ++++++++++++++++++++++++-------
+ 2 files changed, 134 insertions(+), 26 deletions(-)
+
 -- 
-2.35.1
+2.30.2
 
