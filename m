@@ -2,200 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C49C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jun 2022 06:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE528C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jun 2022 14:06:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiFKGtO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Jun 2022 02:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S231653AbiFKOGd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Jun 2022 10:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiFKGtM (ORCPT
+        with ESMTP id S230056AbiFKOGc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Jun 2022 02:49:12 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF46031904
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jun 2022 23:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654930149; x=1686466149;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1Hx/8e2B1zFBKULsxOvc/xcjU+aylDkmW+8GrBY4uJI=;
-  b=FEXp5jUkmRfbX5dqYL5cejSdNoR0Mb317T+qj1E/Nr4cvmqscgDKe5PC
-   wYHLHKdV9FXa9dlK3rJzC+L8o+uRWnL5EK5XWMshGyTnYnOSrL4QiUVJn
-   dVwH7kpKrMmr6/2wvwYN3I04t99tWRJ45UiKSbZosZB/tVL7nhBhOIMu8
-   WTUCXWb6j8vpvfJ4vbIUZbjWYTpEsxsEzKPy7pEnVYst+ySP/BsgTZ0jO
-   tHJ953HpsC4azdetimeWHpDcZJ9pBhRow91lcVVKPvRyMOjPfloXIThrX
-   y7lJJ4eKQyHOpWpk8rTapj35M3wODIw+GTMn+r+4zhIay0GlWqW/kp2Pt
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="266602172"
-X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="266602172"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 23:49:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
-   d="scan'208";a="611044281"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 10 Jun 2022 23:49:05 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzuvg-000Icr-Fn;
-        Sat, 11 Jun 2022 06:49:04 +0000
-Date:   Sat, 11 Jun 2022 14:48:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 92b620bee45d583dbede6605c634f8545af6d0c3
-Message-ID: <62a43aab.2V76noIrl3Gkw+c2%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 11 Jun 2022 10:06:32 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62A52BF9;
+        Sat, 11 Jun 2022 07:06:31 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id z17so1858831pff.7;
+        Sat, 11 Jun 2022 07:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=m1nMFyyZYmGMBRRzY6Mchg0mSOon02lwUR8mirsqJzk=;
+        b=pxgFf81gGsGawTSJEg2OmiI502GW6bZ4fOm278VqA+mcf2lcg4BWNq2eIbmZW0RXO0
+         1MkWN+yP7N8If2KwdLJbPEvqBlwxv2kpr9qlwGnonHPkOiwp3Xd4ksvGDwBf/pRYiHlq
+         Sj32DQWvK1J9J7/3FmTrSc/8YEhTT/irw52cUMNCUOiiAjM4X09wxryXIIfzBuv9YiTj
+         NlHvbDL9NgTY0IU4ofS3XlgBG+ZpbXb+lPi+iqUTEWAZ9fGKUCkDWaBZwOXnVGcOpm3i
+         FY9JJ+D3zVdAcsY2L1j51K9zDNcguot4riL/KoORLDp7EhXlf8QLxtTJS2Zqw/oIiBa8
+         ctSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=m1nMFyyZYmGMBRRzY6Mchg0mSOon02lwUR8mirsqJzk=;
+        b=Tb2OsKMwgek90rK1JVJ+XG+ojz55PRsH8FA3nZF766fm/zhOukDGm5QeKQ43E1o66Z
+         d2euP3YwBIAI7OwaR+FgUxl74HzYDaTJhmIU/kXXD/+Bgkhtr1hGLBi4hcwupQRYl6fS
+         0c1K+otqPAnFo4TGaGiGuQMWnfh1IY9FK7oNLc9KWUJtLDtUAaj08u3G9eCWKhY1Qd8o
+         /kva3m/bcQvztxpsY0eG2u8pF+EsXct2xMum0oBHasE5ax5glFO50jxHPn1zkbE8o5hl
+         O1KYC6EYYPdDoiAJdcBxs2EEK6rfEEKX1CEpmORD4uJrbkiPsESG+xE2sMWJYvKDHCQg
+         MQqg==
+X-Gm-Message-State: AOAM530e1N/CHvFqadcrdrpUpmI3iaRMvnb7CMIm1OLEHQj7AVK46ywY
+        kBHekT7WUUjLcmJVvZg2y1I=
+X-Google-Smtp-Source: ABdhPJzkHo8bKp71V7Uba9Xeig94RmbX9Jr8edlwTnZbMFIYrAIzy0t78X7b7jiWLpUVrYy3n1IFhw==
+X-Received: by 2002:a05:6a00:17a0:b0:51b:c7a9:bf0c with SMTP id s32-20020a056a0017a000b0051bc7a9bf0cmr48664605pfg.71.1654956391085;
+        Sat, 11 Jun 2022 07:06:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n6-20020a17090a928600b001df239bab14sm1476256pjo.46.2022.06.11.07.06.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jun 2022 07:06:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 11 Jun 2022 07:06:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Zev Weiss <zev@bewilderbeest.net>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v1 1/1] hwmon: (nct6775) Drop duplicate NULL check in
+ ->init() and ->exit()
+Message-ID: <20220611140629.GA289033@roeck-us.net>
+References: <20220610103324.87483-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220610103324.87483-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 92b620bee45d583dbede6605c634f8545af6d0c3  hwmon: (pmbus) fix build error unused-function
+On Fri, Jun 10, 2022 at 01:33:24PM +0300, Andy Shevchenko wrote:
+> Since platform_device_unregister() is NULL-aware, we don't need to duplicate
+> this check. Remove it and fold the rest of the code.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Zev Weiss <zev@bewilderbeest.net>
 
-elapsed time: 2448m
+Applied to hwmon-next.
 
-configs tested: 124
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arc                         haps_hs_defconfig
-mips                          rb532_defconfig
-riscv                               defconfig
-ia64                         bigsur_defconfig
-m68k                        m5272c3_defconfig
-sh                            titan_defconfig
-powerpc                 mpc837x_mds_defconfig
-mips                         tb0226_defconfig
-sh                           se7750_defconfig
-powerpc                 linkstation_defconfig
-powerpc64                           defconfig
-sh                          rsk7201_defconfig
-powerpc                 canyonlands_defconfig
-sh                          lboxre2_defconfig
-arm                       aspeed_g5_defconfig
-powerpc                   currituck_defconfig
-parisc64                         alldefconfig
-arm                        multi_v7_defconfig
-powerpc                       ppc64_defconfig
-sh                      rts7751r2d1_defconfig
-sh                   secureedge5410_defconfig
-m68k                            q40_defconfig
-microblaze                      mmu_defconfig
-powerpc                     tqm8541_defconfig
-powerpc                   motionpro_defconfig
-arm                          pxa3xx_defconfig
-sh                              ul2_defconfig
-xtensa                  cadence_csp_defconfig
-sh                               alldefconfig
-powerpc                      ep88xc_defconfig
-sh                   sh7770_generic_defconfig
-arc                    vdk_hs38_smp_defconfig
-um                           x86_64_defconfig
-ia64                             alldefconfig
-arc                              allyesconfig
-sh                            migor_defconfig
-ia64                                defconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220608
-s390                 randconfig-r044-20220608
-riscv                randconfig-r042-20220608
-arc                  randconfig-r043-20220609
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-powerpc                   bluestone_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                 mpc8313_rdb_defconfig
-mips                           rs90_defconfig
-powerpc                    socrates_defconfig
-powerpc                     ppa8548_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                             mxs_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220609
-hexagon              randconfig-r045-20220609
-riscv                randconfig-r042-20220609
-s390                 randconfig-r044-20220609
-hexagon              randconfig-r045-20220608
-hexagon              randconfig-r041-20220608
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Guenter
