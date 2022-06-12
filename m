@@ -2,78 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE528C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jun 2022 14:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B494C43334
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Jun 2022 04:18:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiFKOGd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Jun 2022 10:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
+        id S233136AbiFLESh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Jun 2022 00:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiFKOGc (ORCPT
+        with ESMTP id S229528AbiFLESg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Jun 2022 10:06:32 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62A52BF9;
-        Sat, 11 Jun 2022 07:06:31 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id z17so1858831pff.7;
-        Sat, 11 Jun 2022 07:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m1nMFyyZYmGMBRRzY6Mchg0mSOon02lwUR8mirsqJzk=;
-        b=pxgFf81gGsGawTSJEg2OmiI502GW6bZ4fOm278VqA+mcf2lcg4BWNq2eIbmZW0RXO0
-         1MkWN+yP7N8If2KwdLJbPEvqBlwxv2kpr9qlwGnonHPkOiwp3Xd4ksvGDwBf/pRYiHlq
-         Sj32DQWvK1J9J7/3FmTrSc/8YEhTT/irw52cUMNCUOiiAjM4X09wxryXIIfzBuv9YiTj
-         NlHvbDL9NgTY0IU4ofS3XlgBG+ZpbXb+lPi+iqUTEWAZ9fGKUCkDWaBZwOXnVGcOpm3i
-         FY9JJ+D3zVdAcsY2L1j51K9zDNcguot4riL/KoORLDp7EhXlf8QLxtTJS2Zqw/oIiBa8
-         ctSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=m1nMFyyZYmGMBRRzY6Mchg0mSOon02lwUR8mirsqJzk=;
-        b=Tb2OsKMwgek90rK1JVJ+XG+ojz55PRsH8FA3nZF766fm/zhOukDGm5QeKQ43E1o66Z
-         d2euP3YwBIAI7OwaR+FgUxl74HzYDaTJhmIU/kXXD/+Bgkhtr1hGLBi4hcwupQRYl6fS
-         0c1K+otqPAnFo4TGaGiGuQMWnfh1IY9FK7oNLc9KWUJtLDtUAaj08u3G9eCWKhY1Qd8o
-         /kva3m/bcQvztxpsY0eG2u8pF+EsXct2xMum0oBHasE5ax5glFO50jxHPn1zkbE8o5hl
-         O1KYC6EYYPdDoiAJdcBxs2EEK6rfEEKX1CEpmORD4uJrbkiPsESG+xE2sMWJYvKDHCQg
-         MQqg==
-X-Gm-Message-State: AOAM530e1N/CHvFqadcrdrpUpmI3iaRMvnb7CMIm1OLEHQj7AVK46ywY
-        kBHekT7WUUjLcmJVvZg2y1I=
-X-Google-Smtp-Source: ABdhPJzkHo8bKp71V7Uba9Xeig94RmbX9Jr8edlwTnZbMFIYrAIzy0t78X7b7jiWLpUVrYy3n1IFhw==
-X-Received: by 2002:a05:6a00:17a0:b0:51b:c7a9:bf0c with SMTP id s32-20020a056a0017a000b0051bc7a9bf0cmr48664605pfg.71.1654956391085;
-        Sat, 11 Jun 2022 07:06:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n6-20020a17090a928600b001df239bab14sm1476256pjo.46.2022.06.11.07.06.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 07:06:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 11 Jun 2022 07:06:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Zev Weiss <zev@bewilderbeest.net>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v1 1/1] hwmon: (nct6775) Drop duplicate NULL check in
- ->init() and ->exit()
-Message-ID: <20220611140629.GA289033@roeck-us.net>
-References: <20220610103324.87483-1-andriy.shevchenko@linux.intel.com>
+        Sun, 12 Jun 2022 00:18:36 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6D354034;
+        Sat, 11 Jun 2022 21:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655007491;
+        bh=skbtjaGDK31d2tbbZZs0gIrNpUjqJPlvvjCkvRwoR1U=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=f+rVrp85dAFxbqMzCpoUU3ouBj2vZdB16dl2B4M2Mnqf3XR5WNfRDpMA2b2T1mZ//
+         LT01w3KXtQEVJN0VCEZyHUx+Pz9iiNRTeP8CNgh22vYqFxSglawQV6MxEwxV5LLqyb
+         BFli6nygvHmbZ875ri3gpC2vWNwtPPb+hl0VgNmU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1Ma20k-1oCGAh0tRE-00VvrH; Sun, 12 Jun 2022 06:18:11 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add Dell XPS 13 7390 to fan control whitelist
+Date:   Sun, 12 Jun 2022 06:18:06 +0200
+Message-Id: <20220612041806.11367-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610103324.87483-1-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tIQ+jBRsOqGXzOfoKNqR9BWepS73Ni1NYp++ahwD2S/nJIdD9AY
+ FN/K4Xin+aB3ZrqOUahnvXm+2RB3jYayZPwf6Mkfs0NzsZYGMGY+7Lb2OoCM/5EtlocPqJq
+ xUBoNLHDlzF1/HjKNVEwujc+wJtdQLYDbvklpr500c7RSRdVgjdriD/zClD9UIov4eBRYzy
+ JfhHWX5VRWlqSc0r07fXQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1jXk27D4EXY=:dD5KUasEpSaSrMN4FWTmu8
+ 6SHzYJOuU7UPlD8n034/Tnur3tmTgk2kVf1Fh3b0ipT2ENFAHLM+Mqo0ZrrpYCo7tTjO+3Gky
+ VqkDrCWWxNl00EsTY96BWCCQk8qC3gQQWOpZYCUWfk5G+6nSJoBBd/dvUytOQUBrNLog37usj
+ 9Pn0M7i64EL4+oSD7p3hljtlL9Z0HDMxtsbRz2s5nAGdllfCj3XK5w3nKjBnPGSMw4PY8rW4W
+ 2YCLCvTBmOVJU68qF6qUTUGLwHOplNryboe/Xr9ji46oFwe3m0nCG52sPqNXT8ST0ANHQSOfn
+ OLQW1B4EcOyoAwHo+6trewIEXIMUWeqlK6Rl8GV0sHrLAgfxh1Kor2E2d2h8WCdHQtXofcBiR
+ aFQllFJ1V4CcrOeoo3ogIUS1jHfTjE3vdJVuJ+2nKFFOe9nnjEM+XaL3AQt3ry/yerI0F94/S
+ RqC5CYsqISqQk9MvohAAs5DDcQwm4V/m59e5gnU51xjwO40990XGLMC5G/GeiZkvjjZr8sUJs
+ R5+iNfmfCMJkyrB8wJ1/V7Y1zU5aLjJ1/292n5rRqJiAlh9GqgpnQi2eiE/eCRFc3Z+mxGV05
+ OIsOQXlN/islY+o6NNSuRUa1IsyH6wvGA2qmGjItt6JEYgao5WznQTpFD9jpbbY7muMz4jbpe
+ 00ie3NlGc8x04+e3ljPlUzU8YpudXGYUi0EqAV+U0kQhNx78QomaE8NjrjdbWBH7BAMywLJVO
+ sW4rXK/GCLZEEme6khysNIDM9rIXA/xvaZgW023IGv2FkweFX0dM6m3eOQlASiSrekiFq4VM8
+ YXYi6XNye2RQz27q2zAnDq+MhelTwdn4TEdALu6YevskkflhseJo5aM+cV+HlDkESCVZ0DPVl
+ b6DLXG8inmL+qpvlP3fcPiulX086DSKXdDwDA9H4kSjMzEclZ44RzhoqJOOmsDQj5h+L1K44t
+ DnUwvgXGGub2o9AXVWefVc5cG0KZv8lD+Odantwa7uDsKb++HN1QwMgvR3uSoUAtzxoZIccyq
+ EApn//3RZSlJPv5LCrgE1t70r/zzVZX8NyECoWkYA5hmvE2rw1SNOC8xYhk8qy1IqgP8kZTi8
+ nWFX8IHl1NyvCqWHtPrJtC4PvVV9vnQxOYWVUvDd6rFtDZKRJeBcRK0Jw==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:33:24PM +0300, Andy Shevchenko wrote:
-> Since platform_device_unregister() is NULL-aware, we don't need to duplicate
-> this check. Remove it and fold the rest of the code.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Zev Weiss <zev@bewilderbeest.net>
+A user reported that the program dell-bios-fan-control
+worked on his Dell XPS 13 7390 to switch off automatic
+fan control.
+Since it uses the same mechanism as the dell_smm_hwmon
+module, add this model to the fan control whitelist.
 
-Applied to hwmon-next.
+Compile-tested only.
 
-Thanks,
-Guenter
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 071aa6f4e109..16c10ac84a91 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1365,6 +1365,14 @@ static const struct dmi_system_id i8k_whitelist_fan=
+_control[] __initconst =3D {
+ 		},
+ 		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+ 	},
++	{
++		.ident =3D "Dell XPS 13 7390",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS 13 7390"),
++		},
++		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
++	},
+ 	{ }
+ };
+
+=2D-
+2.30.2
+
