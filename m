@@ -2,111 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96D53C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Jun 2022 13:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BA15C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Jun 2022 23:22:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiFLNIg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Jun 2022 09:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S237158AbiFLXWh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Jun 2022 19:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237020AbiFLNI3 (ORCPT
+        with ESMTP id S235972AbiFLXWg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Jun 2022 09:08:29 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07E662C1;
-        Sun, 12 Jun 2022 06:08:27 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id e9so3341120pju.5;
-        Sun, 12 Jun 2022 06:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AXjEz0ZJVP6RCJfwrLWHDoBIgeQ4dlHx7CyRl+zYPvk=;
-        b=ReG7pBXLCgZg56XhjnEJOOhygmDATEs1X5XKmJOxTs7Rw4Wz7DJemFRikqI6KAOeL1
-         pqtFdTnd7spZLjIJXXkWrTkqL0M3JKwu2i7iJewiBFPZee+2Kgy4p9Ni3vm+csZOcoFF
-         NEzJNwujS1dxbe34HQoQnb32XElfemGKqTOjD03vA6saVW8JOjiAxbKgsqAm9oSS6K2I
-         wDoiwJ13ILobSjDGhpxKig5Jqtb+CXTBLEIv2l6pWmkBN6nMSL4tPLyHC2IRakeeee47
-         9Fw/RaMS7WHiadrcKXthHYQtz2Vvx0uVREiWlmGQJGu46rktTLETy6jKVaBzDYiMNdal
-         eIEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=AXjEz0ZJVP6RCJfwrLWHDoBIgeQ4dlHx7CyRl+zYPvk=;
-        b=b4iOy3srS9ujUUV+MjwtpooagMybG1Apw+XzkxfeyUoTc8j2tuxGYBWrv3ye/T61vD
-         gvarkPO5KaYFKnwiRdfJeO4TkuK3Ca/CxFA4k6WXtEiZq82tngx0sSzFF8o8RHUNRLck
-         TXWKJDMPAI+HhdGdrjXTJ7ovvufrGYSKpCCgiqPXM16WljJbcw9AoAiWanQait1r5w9/
-         tu/dp93FWO+c+HEm/NpjLJlG1gHRth63W+W2weeW1O1V2i+7zgtCk89ncMO6/SXMWeKZ
-         X8Bq2p2I38a7QkNbRei3GR5iiWucG1s4QqXN5JPgYosXrigEBLIZ/s735iXlzSrhyacY
-         SOQA==
-X-Gm-Message-State: AOAM530bJW7S4JiY4GAevsIfgxkUDg3ZrrLVSUT/wYZfje+qbc1Mwx9k
-        VYRc4dBGoI8+CmohFXa6KvU=
-X-Google-Smtp-Source: ABdhPJxpR3XPXtwZX7CQg7M18tvgIDMCR7/pVE8gt2Hz/rE3Xm3aAiGlT8N2Ux1fxKmN8TLJXZm2dQ==
-X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr53435456plg.111.1655039307230;
-        Sun, 12 Jun 2022 06:08:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z28-20020a62d11c000000b0051bc44f26d9sm3234879pfg.23.2022.06.12.06.08.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 06:08:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Jun 2022 06:08:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        Sun, 12 Jun 2022 19:22:36 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D154707E;
+        Sun, 12 Jun 2022 16:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655076132;
+        bh=NCg0owc1+e7i6CzrGr7pXzriqT7EIvm5beku5O6o7jk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=T1j5k1bilErWHYt0TUu0m2fA0QEyXeQL98uDRj3DK3wfVrQlF8XEfPK6GY4W/ACRE
+         H4QX3W8YX/IDz69Fvqyf/W4m3OApnk1/at++k89USPSUDKzU3p2supyY0r7i67fQK6
+         Olboxh4IyU7KnWKLZRKgUxDin2Zf1vdpAg0ihvr4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N5VHM-1ngD4I1Ha6-016vNA; Mon, 13 Jun 2022 01:22:12 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell XPS 13 7390 to fan control
- whitelist
-Message-ID: <20220612130823.GA515166@roeck-us.net>
-References: <20220612041806.11367-1-W_Armin@gmx.de>
+Subject: [PATCH] hwmon: (dell-smm) Add Dell G5 5590 to DMI table
+Date:   Mon, 13 Jun 2022 01:22:08 +0200
+Message-Id: <20220612232208.27901-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220612041806.11367-1-W_Armin@gmx.de>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lvN5PFNqrRdbqRUoWptpSHnZLEW7j/SnKX98ucjMjFjepgOIIpn
+ KjgN4A70Qoj9p0ShD/1x2qNBen8anP97cA4vEpFQYBO6KUnPH7p6mAYL947ewuoS5OZj6zS
+ 0+wuRc09CNNdHSkx428ktWU48dZ6AT8u9g1yDeW0TUHYHFHWtYeorZU59JtnMaOzN+dRK23
+ QeTmAfYmu1ZC7UiNddwdw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3FRBnyiUyfE=:/vWwwmEXW8/6oyCdbOtMAX
+ E/JvRNNJu2ZMVZmHh4G4Z8q+agwNFQsqE/c63y9+guRUtQPfmjL2nnX+o7wkQXLMVF189+Vam
+ ZaevL88thSXFXOBwIL2OTOaogagDbzVUUQ/PfJe90y4f9z+lqMYu1i9fjzth+6UGRU6Ye0vGY
+ x/oYOMhw7riXdcVy1xj+OX3WXuvU6pyElPdHDBcVn1B8ZUb+5sUOi6rvYrtmnMM1D0MGxMP3O
+ s8DKb98AY5twRqtssL2i+ZHWrTFWTBYLm+OUoiLsN/Hbxe1cQPAHg68KCtc+l5Yf5Qo7OScr6
+ TTnEXo7+5WqnH35UCqaT1QlBxJFOaJlP4iNA9oZsmxSLGKgrei/pPLnW7JA6LtlcoQvwItqxg
+ Jo4F5fXrFUHvJEeNf91pR19yL5sfWO/cmP/lVHcc0ghPhyPBET64cmHp1QKsO2ST3mXvh4yvP
+ nfxKigNeUB89YFRoKfnZrSBpfDMf3siBJbZBSi1UY2jk/G7c9nvc9Wt8V80Gs5QZVow38GHr5
+ YPK3MsSHd3B6MYtbrvkS3VP2+ds7PUef9Da8xk6x1RALFjWWJZMhPHEaEFUpH0ytE+kBAPffm
+ /i90N10j5Sx5N68yXB2aXgnYPXhGzGWwUZJHdhYfjPTwzxLt9QXxA/v3MGr2qBHVS8upVcT0P
+ laXMSX9YL32vjaxyJiWyiv8MEmiRCc4LFxaQpc+ddNXQaKndmxoRbhF1OhlxD38oEUVw95Yun
+ 7nb7G1gr7MHMVrvofo3zxv3F5dLsWnwUTKoy50qyGqqAP6j1iwqJAUNCLoTdUjw9OAhFK0Uvb
+ a0nHTXRfeloG6NdhZ+sNE6PJvepL5xImD+ez0QOs+tkJGyWI9teIdqWYFGqNELqrEHFAzbCXH
+ 5ezX4V0OK+WBlKL5R4ioOd0helzsiPyYhCqbncnU/fVNavYqSnziF5MWhTr7XPvmwCL/yJa7L
+ WMLZt/gKFG0oC7ZIy6Z7ZRQ0AaZXf1C6QrIHSH2dLuKJzSHEwII2KdGzR7q+iURaXd8x2C7TP
+ 0hBiWR1rh69Q2FureFdBdPg8TD5nVGHHgP3Ddvsa0YKumSQj5QAf07T01+WDw8jo2IMWMdBeJ
+ WvawnBGPo212lk5qIrQ5CQeD9YPUbZj4sp6fFg808NQRa6yeRcQs+tphg==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 06:18:06AM +0200, Armin Wolf wrote:
-> A user reported that the program dell-bios-fan-control
-> worked on his Dell XPS 13 7390 to switch off automatic
-> fan control.
-> Since it uses the same mechanism as the dell_smm_hwmon
-> module, add this model to the fan control whitelist.
-> 
-> Compile-tested only.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> Acked-by: Pali Rohár <pali@kernel.org>
+According to Bug 215983 at bugzilla.kernel.org,
+the Dell G5 5590 supports the SMM interface and
+can thus be loaded with ignore_dmi being set.
+Add the model the DMI table to allow for
+automatic loadig on this model.
 
-Applied to hwmon-next.
+Compile-tested only.
 
-Thanks,
-Guenter
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 071aa6f4e109..16c10ac84a91 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1365,6 +1365,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
->  		},
->  		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
->  	},
-> +	{
-> +		.ident = "Dell XPS 13 7390",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS 13 7390"),
-> +		},
-> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> +	},
->  	{ }
->  };
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 16c10ac84a91..d419885dd771 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1131,6 +1131,13 @@ static const struct i8k_config_data i8k_config_data=
+[] __initconst =3D {
+ };
+
+ static const struct dmi_system_id i8k_dmi_table[] __initconst =3D {
++	{
++		.ident =3D "Dell G5 5590",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "G5 5590"),
++		},
++	},
+ 	{
+ 		.ident =3D "Dell Inspiron",
+ 		.matches =3D {
+=2D-
+2.30.2
+
