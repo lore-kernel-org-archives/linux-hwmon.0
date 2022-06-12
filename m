@@ -2,58 +2,73 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3655C43334
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Jun 2022 08:26:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96D53C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Jun 2022 13:08:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234846AbiFLI0X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Jun 2022 04:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S231208AbiFLNIg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Jun 2022 09:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiFLI0V (ORCPT
+        with ESMTP id S237020AbiFLNI3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Jun 2022 04:26:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEB3193CD;
-        Sun, 12 Jun 2022 01:26:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F44FB80B9D;
-        Sun, 12 Jun 2022 08:26:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC4A2C34115;
-        Sun, 12 Jun 2022 08:26:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655022377;
-        bh=14mzqdFI7iJLi1HTR4d5kl7ygjqohZQNeOJ6BSWdimw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VyH73/008+5LxB9Ogx25+1icpnsDGptkrbn2wN1IgxFeB18V8kkbnLsoNXfQ7t0N/
-         om3Njs14Jdispru2ljdbS8I0ZvbQ1mpHdyN4yJqFjVXPVRZruAYIvU/2QG8oLHqBRp
-         G0lJ4Uv4sQqu1ZGUnhJKfhOyxWQSnSQGZRdh2ZxmLgRFAZG7HVkHaWo/NsWSBhdtdi
-         kEdvwtzC0dZhe4b0eius39heRY5Y5AoAc0HvyHx1Dy76zdi9bm0RYIi3t0tzDaQs+I
-         sNnoCJ1o+sCBqRQNktEWnWpXoOq5w4Jdun4IDlXzWZaZjj0aj91dtBKaDCFaHPMA8i
-         +89xFu5KOQ9rQ==
-Received: by pali.im (Postfix)
-        id 7355A93F; Sun, 12 Jun 2022 10:26:14 +0200 (CEST)
-Date:   Sun, 12 Jun 2022 10:26:14 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+        Sun, 12 Jun 2022 09:08:29 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07E662C1;
+        Sun, 12 Jun 2022 06:08:27 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id e9so3341120pju.5;
+        Sun, 12 Jun 2022 06:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=AXjEz0ZJVP6RCJfwrLWHDoBIgeQ4dlHx7CyRl+zYPvk=;
+        b=ReG7pBXLCgZg56XhjnEJOOhygmDATEs1X5XKmJOxTs7Rw4Wz7DJemFRikqI6KAOeL1
+         pqtFdTnd7spZLjIJXXkWrTkqL0M3JKwu2i7iJewiBFPZee+2Kgy4p9Ni3vm+csZOcoFF
+         NEzJNwujS1dxbe34HQoQnb32XElfemGKqTOjD03vA6saVW8JOjiAxbKgsqAm9oSS6K2I
+         wDoiwJ13ILobSjDGhpxKig5Jqtb+CXTBLEIv2l6pWmkBN6nMSL4tPLyHC2IRakeeee47
+         9Fw/RaMS7WHiadrcKXthHYQtz2Vvx0uVREiWlmGQJGu46rktTLETy6jKVaBzDYiMNdal
+         eIEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=AXjEz0ZJVP6RCJfwrLWHDoBIgeQ4dlHx7CyRl+zYPvk=;
+        b=b4iOy3srS9ujUUV+MjwtpooagMybG1Apw+XzkxfeyUoTc8j2tuxGYBWrv3ye/T61vD
+         gvarkPO5KaYFKnwiRdfJeO4TkuK3Ca/CxFA4k6WXtEiZq82tngx0sSzFF8o8RHUNRLck
+         TXWKJDMPAI+HhdGdrjXTJ7ovvufrGYSKpCCgiqPXM16WljJbcw9AoAiWanQait1r5w9/
+         tu/dp93FWO+c+HEm/NpjLJlG1gHRth63W+W2weeW1O1V2i+7zgtCk89ncMO6/SXMWeKZ
+         X8Bq2p2I38a7QkNbRei3GR5iiWucG1s4QqXN5JPgYosXrigEBLIZ/s735iXlzSrhyacY
+         SOQA==
+X-Gm-Message-State: AOAM530bJW7S4JiY4GAevsIfgxkUDg3ZrrLVSUT/wYZfje+qbc1Mwx9k
+        VYRc4dBGoI8+CmohFXa6KvU=
+X-Google-Smtp-Source: ABdhPJxpR3XPXtwZX7CQg7M18tvgIDMCR7/pVE8gt2Hz/rE3Xm3aAiGlT8N2Ux1fxKmN8TLJXZm2dQ==
+X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr53435456plg.111.1655039307230;
+        Sun, 12 Jun 2022 06:08:27 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z28-20020a62d11c000000b0051bc44f26d9sm3234879pfg.23.2022.06.12.06.08.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 06:08:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 12 Jun 2022 06:08:23 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell XPS 13 7390 to fan control
  whitelist
-Message-ID: <20220612082614.ha47sydl5jj2k5rp@pali>
+Message-ID: <20220612130823.GA515166@roeck-us.net>
 References: <20220612041806.11367-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20220612041806.11367-1-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sunday 12 June 2022 06:18:06 Armin Wolf wrote:
+On Sun, Jun 12, 2022 at 06:18:06AM +0200, Armin Wolf wrote:
 > A user reported that the program dell-bios-fan-control
 > worked on his Dell XPS 13 7390 to switch off automatic
 > fan control.
@@ -63,12 +78,19 @@ On Sunday 12 June 2022 06:18:06 Armin Wolf wrote:
 > Compile-tested only.
 > 
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Acked-by: Pali Roh�r <pali@kernel.org>
 
-Acked-by: Pali Rohár <pali@kernel.org>
+Applied to hwmon-next.
+
+Thanks,
+Guenter
 
 > ---
 >  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
 >  1 file changed, 8 insertions(+)
+> 
+> --
+> 2.30.2
 > 
 > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
 > index 071aa6f4e109..16c10ac84a91 100644
@@ -88,7 +110,3 @@ Acked-by: Pali Rohár <pali@kernel.org>
 > +	},
 >  	{ }
 >  };
-> 
-> --
-> 2.30.2
-> 
