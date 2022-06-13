@@ -2,57 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48752C43334
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jun 2022 08:24:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5EC1C433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jun 2022 15:47:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239934AbiFMIYc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Jun 2022 04:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S240506AbiFMPr2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 13 Jun 2022 11:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239933AbiFMIY2 (ORCPT
+        with ESMTP id S240157AbiFMPrS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:24:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695031A391;
-        Mon, 13 Jun 2022 01:24:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F7336119E;
-        Mon, 13 Jun 2022 08:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A91C3411F;
-        Mon, 13 Jun 2022 08:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655108666;
-        bh=IZZImem7yP8mew285Mm9kWxGAoTV5+jeTPIc7Odvr44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DICSzJqenxSiiW540Lw5yHKekG3GuL386/sspERbKPvfIBMWnsKiOXKZAF2YDbSxt
-         e0MjNmvVPNII0JLTlh+wnocWEcSDow9fTRQO3MjmGGUKi57YefRsBFkx6GZOxyXylC
-         sWQav6po5GtidTN8kbUytP1wKTir94kbLcls54lcZLdhGTJ8Pc/CX9tNpIHIxeCTSP
-         eVatICn5ktd0mA1/TAOESOM0ih5M05em+K3gUZ3XzhyNcPYC5t4bZPgn8xPcMTpsOS
-         TZQE5ihbtd8B7lKm6ikGO6duHuVWYDJV0EapQFfLaugsrYvQ+dc1eSR+RUgLd1YNhP
-         ijezXfcCQ8C0w==
-Received: by pali.im (Postfix)
-        id 99B5CB57; Mon, 13 Jun 2022 10:24:23 +0200 (CEST)
-Date:   Mon, 13 Jun 2022 10:24:23 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+        Mon, 13 Jun 2022 11:47:18 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316896B0B1;
+        Mon, 13 Jun 2022 06:24:24 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id u2so5760588pfc.2;
+        Mon, 13 Jun 2022 06:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1V6C8NyTzHg/Om906gtppGn2lvsjTetCEF70z2En2t4=;
+        b=aGSgX4MUnUkGcnR+MN+tj4yKBOqTcPiw0EG8TvDp2yozH0hiNa36XXmRY4rC/7NwJO
+         w1FNvG0XjeVAMSKpk/zAj0fKXQdL85WOOmd2yQGPClm3Eb83QtXtVhbtDYjas7FFXKTg
+         Wt7CzZvwM+ILwsG+MBzE0Z6R8pD5nAMKjBhj2ubeeQwGYvG/fL5oPwiCcEiWuGjlxqqM
+         jda2PLslabSaLCuycTs3Io9F/rvugmpO+kICxq9irqiu9DM7FRZEIHB4oTji8W9Q4HRl
+         Gi8Ye4ptsFF7g8gVjq8jNhXK8y1LctgC3dO94p4V7Vf193gAKwsFhM6nuS42sdUO8RcE
+         7Ang==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=1V6C8NyTzHg/Om906gtppGn2lvsjTetCEF70z2En2t4=;
+        b=yOEWoZSK6E9lZgvHICxIlaMWCmzNEre9sClBve1VIqkhgJVzwW4KJ540ZSLR8I2UjX
+         hnHuvAKTd7aFcHQsT3CZr9YBd1+27f4U5N+pHkFve6AwmBK2Nbq15wyiIlW7HP7ea/Rb
+         BdBP2aGT0XsDFyazndTpLS/jiQs5z09hvf19Aw2T+4dYvXgDteSepv3h7P2b04BlUENT
+         Lmmcajpf5KxPwjpS6E8xhYXMZ7I3tz1pWsGU3z+Kz4zFHyksKP2szSH2i2KvtFWWUSWb
+         ugFpNLk7YrOSqG+zcVpyY5AzqULA9TS1LPUpOQjNXbpeyqRKorg37q4vKIqy/erC4ZQw
+         hShA==
+X-Gm-Message-State: AOAM531RQ+qzvrP92YB2CP85PK261uBHZ7Amfqq+cIvne3SZMsqYvv+q
+        7KJ2vioxeDQUgyFdgUYStUY=
+X-Google-Smtp-Source: ABdhPJxBnf2CeWe+21KSDh0KTQcm1R/GP2/VmC9WQYLr27twxW3i4YwuWRqFxbCfC5AHsRzRGiHlYQ==
+X-Received: by 2002:a63:80c8:0:b0:405:186f:fa39 with SMTP id j191-20020a6380c8000000b00405186ffa39mr10245958pgd.84.1655126663619;
+        Mon, 13 Jun 2022 06:24:23 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f20-20020a17090a639400b001ea75a02805sm7389065pjj.52.2022.06.13.06.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 06:24:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 13 Jun 2022 06:24:22 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell G5 5590 to DMI table
-Message-ID: <20220613082423.bs7r2iz7rjklxcnb@pali>
+Message-ID: <20220613132422.GA3805541@roeck-us.net>
 References: <20220612232208.27901-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20220612232208.27901-1-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Monday 13 June 2022 01:22:08 Armin Wolf wrote:
+On Mon, Jun 13, 2022 at 01:22:08AM +0200, Armin Wolf wrote:
 > According to Bug 215983 at bugzilla.kernel.org,
 > the Dell G5 5590 supports the SMM interface and
 > can thus be loaded with ignore_dmi being set.
@@ -62,12 +77,19 @@ On Monday 13 June 2022 01:22:08 Armin Wolf wrote:
 > Compile-tested only.
 > 
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Acked-by: Pali Roh�r <pali@kernel.org>
 
-Acked-by: Pali Rohár <pali@kernel.org>
+Applied to hwmon-next.
+
+Thanks,
+Guenter
 
 > ---
 >  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
 >  1 file changed, 7 insertions(+)
+> 
+> --
+> 2.30.2
 > 
 > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
 > index 16c10ac84a91..d419885dd771 100644
@@ -87,6 +109,3 @@ Acked-by: Pali Rohár <pali@kernel.org>
 >  	{
 >  		.ident = "Dell Inspiron",
 >  		.matches = {
-> --
-> 2.30.2
-> 
