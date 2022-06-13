@@ -2,135 +2,168 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 444D9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jun 2022 20:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB6BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jun 2022 20:56:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237560AbiFMUjI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S1343522AbiFMU4j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242614AbiFMUi0 (ORCPT
+        with ESMTP id S1351369AbiFMUzQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:38:26 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2044.outbound.protection.outlook.com [40.107.94.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BAB5BD3B;
-        Mon, 13 Jun 2022 12:30:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M0ZHzzv6HO2OpaCSJOHqIokKrBeOI7ZBnF65ttQ+rqdTReM9sh2rlDVZCn2Y6i3DmBzGx83OvdAVhdDkKAFnOotVLn527oBTASQymk5LaNnt4tM2aalJa3C0Y6mXe+I7pb0YQI3kct3rbOQkB1OSOlNY87CiLhJSxExxKxBzaWnfLJBYDGcmsjhgKJhTlw8gnGQxGQvS9jqporJBgKtUpGjzuLQTkXVnGxBUWwyzpQB4V8i5Q683WTqzfUjYEcyPXtYhLahiI0qA5c8KXY2Yh4qtGLE8g4iN2TaGxyJ4a8kac5jStIOaTdbBg17kg63FD4PjiyV8PhynTrGdJWWSwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ap86ihgi4sFANbME5DoVTwCMJLnETl9X8GDDgDSVo9M=;
- b=GlGUUYv7dE2FwO96OaIetHPdhLaG2+OONzX8kD61HJDKg0xPjUAjXtow/36EbzoK9pxTcWBReIW9hJVs75Ywz3LuHl+GN4Hxo4XqWpEFaAtmaEbPiSLEODDRbNtSDj6Exzjxfs7MS2vrWSpKeyVv9YXq8ECjPw9FXhPK8C38HFZh0K/xauQvhyu063QLY1Bh3QCgoUxlwJjZbvEdmMeVZ+FX4SbYvDB+JRvoGsiWR/eynqDBRPrOfEXQgeetzRWB8qOFmreI8LMkc9A98Y0oxRBosrIjyAj1XI0YtU+mrLPCNpA2O0OdPZD/P7yJylzksXzT347/Z8wngrj+dyTkUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=ladisch.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ap86ihgi4sFANbME5DoVTwCMJLnETl9X8GDDgDSVo9M=;
- b=yuswMt6j1j+n+IsZc4P912ucz6xzPGVtdsDFfuyU9Dy1Xs6JfK2zKwNU/DDb5WBwXwkoXlnRVzzlsxcq6vb4Da3sffXrS2WFhAhG/RMFKwzD53L/Xc2bFMH4ONs/3Us8Z2f4P0xEG244p8Ko2nC5UKg+EnzpuqqH7CudmxZK/tc=
-Received: from MW4PR02CA0013.namprd02.prod.outlook.com (2603:10b6:303:16d::13)
- by BYAPR12MB3384.namprd12.prod.outlook.com (2603:10b6:a03:d8::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.17; Mon, 13 Jun
- 2022 19:30:18 +0000
-Received: from CO1NAM11FT067.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:16d:cafe::d3) by MW4PR02CA0013.outlook.office365.com
- (2603:10b6:303:16d::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17 via Frontend
- Transport; Mon, 13 Jun 2022 19:30:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT067.mail.protection.outlook.com (10.13.174.212) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5332.12 via Frontend Transport; Mon, 13 Jun 2022 19:30:18 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 13 Jun
- 2022 14:30:14 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Clemens Ladisch <clemens@ladisch.de>,
+        Mon, 13 Jun 2022 16:55:16 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1336F2DEB
+        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jun 2022 13:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1655152075;
+  x=1686688075;
+  h=date:to:cc:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:from;
+  bh=W8Vli6V0YaPpcnxAfXgk1UR+rUnDxRaPikomO6VxFrw=;
+  b=Wrt7KOW4n6jwOt2pFwuF9jPamVBi7CLZci0TUTKNtDCEYMqNb9YwrRr9
+   b88QUpc/27soSIVoE1GSCAtobOpQYtQYRk0SgEvHLPHikdTuABY0yfmkp
+   IxlXrPwlX3fQfMJWjpTbSH5wU/llHgSPbqspwPwyDl6oXjiFJNoIs23EP
+   KnFFvVGTXvdaYX6vBpF7zOrq40qJD1D0FJmQnFjuDzB5SsNe8/8swAw2L
+   q1xvP0iTSut9OxxoeG+xijO0LHf97O2nEoGTmiyaeVkn4AkI4bmHHelIz
+   p0uhzlYom1wTIgC4iSZU1R1OZIqtRzepdnJ+Hy58K2J2ozkUts7/BkFMG
+   A==;
+Date:   Mon, 13 Jun 2022 22:27:52 +0200
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     =?iso-8859-1?Q?M=E5rten?= Lindahl <Marten.Lindahl@axis.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:K10TEMP HARDWARE MONITORING DRIVER" 
-        <linux-hwmon@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     <linux-hwmon@vger.kernel.org>, <babu.moger@amd.com>,
-        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v3 4/6] hwmon: (k10temp): Add support for family 17h models A0h-AFh
-Date:   Mon, 13 Jun 2022 14:29:54 -0500
-Message-ID: <20220613192956.4911-5-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220613192956.4911-1-mario.limonciello@amd.com>
-References: <20220613192956.4911-1-mario.limonciello@amd.com>
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        kernel <kernel@axis.com>
+Subject: Re: [PATCH v2 2/3] hwmon: (pmbus) Add list_voltage to pmbus ops
+Message-ID: <YqedyHS+O+1Dc5ZZ@axis.com>
+References: <20220610114732.2370242-1-marten.lindahl@axis.com>
+ <20220610114732.2370242-3-marten.lindahl@axis.com>
+ <a9c983f9-9aa8-caa2-b970-46fd2ae1c96f@roeck-us.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 889f70b3-a915-44e8-dfa4-08da4d732670
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3384:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB3384CA2B94040C88DA53B3B7E2AB9@BYAPR12MB3384.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cz3iI4Iyvh0NQDA4hWwTq0q5V1mb5KM/zZBV9I1XNPZMo/sJhprtBr+GYRC2iDBjsEuogNAJHqZvFA/S9qrEi92mQtF3houIAlhllHnlHDEIpfIDWFMvi9kkU+sxdhtH9VuwVeMwTWg6Kxp0HBtgdbRoXuXJkKJ9jAzh5Szxn5oxiMG3P+QiADhicv+ciqjnP69bfhWlSZTdHP/5XlZrUvT326nMVa8xRDT/QZLUJFR6TvHgWIxveBidsjsp2h3JP4Limu4Fk03MHNGKBS99Bm16jjZw0FaDLxo8ZB3oglLX+fojs7nM6wUm9xTWDfncsu8ClYjMc6dXtt2kVnHHBxbfi8ujzCiy/PcFs+by7yDZ39GVQzahQIcOnv7EdyizUc5hu8LP1IyCMqFinlWm9190VtJLoZnB2oKGjt50HSn2AtL0N/tJkeY7ti2Fy1P3RL1hwvg4JNmemYrUwEjCD/Gl0fh9wfiYmoajoZqKeVQCQ1CIp36Z+0SForKwPI/SWIwoXHCSh3W+rn8INXzmlTdW+ABYDVjkYCt7NvqesLAlmQxNBEwt9GqEYDGqf8mUGo16uZDprTy4QyqQQGl78cSb3rHCU8NBlg7Su7uNqB0xL9ajCNWBYKH2GEc+eXBKxP6xD3DkE/xoqgq662UjoEQOLLWeaveBA5tVx6T2/3V3SCulkh9RR46vz1KBegSmAlWiiFu5k9/zc+LVL5HNrQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(46966006)(36840700001)(81166007)(426003)(186003)(86362001)(16526019)(26005)(336012)(6666004)(47076005)(110136005)(54906003)(356005)(36860700001)(82310400005)(7696005)(8676002)(316002)(70586007)(36756003)(4326008)(70206006)(508600001)(44832011)(5660300002)(40460700003)(2616005)(1076003)(8936002)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 19:30:18.5980
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 889f70b3-a915-44e8-dfa4-08da4d732670
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT067.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3384
+In-Reply-To: <a9c983f9-9aa8-caa2-b970-46fd2ae1c96f@roeck-us.net>
+From:   Marten Lindahl <martenli@axis.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add the support for CCD offsets used on family 17h models A0h-AFh.
+On Fri, Jun 10, 2022 at 04:16:46PM +0200, Guenter Roeck wrote:
+> On 6/10/22 04:47, Mårten Lindahl wrote:
+> > When checking if a regulator supports a voltage range, the regulator
+> > needs to have a list_voltage callback set to the regulator_ops or else
+> > -EINVAL will be returned. This support does not exist for the pmbus
+> > regulators, so this patch adds pmbus_regulator_list_voltage to the
+> > pmbus_regulator_ops.
+> > 
+> > Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+> > ---
+> >   drivers/hwmon/pmbus/pmbus_core.c | 50 ++++++++++++++++++++++++++++++++
+> >   1 file changed, 50 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > index 478dda49a45f..24ba4b2b03d4 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -2711,6 +2711,55 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+> >   	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
+> >   }
+> >   
+> > +static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+> > +					 unsigned int selector)
+> > +{
+> > +	struct device *dev = rdev_get_dev(rdev);
+> > +	struct i2c_client *client = to_i2c_client(dev->parent);
+> > +	struct pmbus_data *data = i2c_get_clientdata(client);
+> > +	struct pmbus_sensor s = {
+> > +		.page = rdev_get_id(rdev),
+> > +		.class = PSC_VOLTAGE_OUT,
+> > +		.convert = true,
+> > +		.data = -1,
+> > +	};
+> > +	int val = DIV_ROUND_CLOSEST(rdev->desc->min_uV +
+> > +				    (rdev->desc->uV_step * selector),
+> > +				    1000); /* convert to mV */
+> > +
+> > +	if (!data->vout_low[s.page]) {
+> > +		if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MIN))
+> > +			s.data = _pmbus_read_word_data(client, s.page, 0xff,
+> > +						       PMBUS_MFR_VOUT_MIN);
+> > +		if (s.data < 0) {
+> > +			s.data = _pmbus_read_word_data(client, s.page, 0xff,
+> > +						       PMBUS_VOUT_MARGIN_LOW);
+> > +			if (s.data < 0)
+> > +				return s.data;
+> > +		}
+> > +		data->vout_low[s.page] = pmbus_reg2data(data, &s);
+> > +	}
+> > +
+> > +	if (!data->vout_high[s.page]) {
+> > +		s.data = -1;
+> > +		if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MAX))
+> > +			s.data = _pmbus_read_word_data(client, s.page, 0xff,
+> > +						       PMBUS_MFR_VOUT_MAX);
+> > +		if (s.data < 0) {
+> > +			s.data = _pmbus_read_word_data(client, s.page, 0xff,
+> > +						       PMBUS_VOUT_MARGIN_HIGH);
+> > +			if (s.data < 0)
+> > +				return s.data;
+> > +		}
+> > +		data->vout_high[s.page] = pmbus_reg2data(data, &s);
+> > +	}
+> > +
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/k10temp.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Hi Guenter!
+> 
+> The code above is similar to the same code in the first patch. Please
+> move it into a function (in the first patch).
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 4e239bd75b1d..5f831e74bc51 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -428,6 +428,10 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 			data->ccd_offset = 0x154;
- 			k10temp_get_ccd_support(pdev, data, 8);
- 			break;
-+		case 0xa0 ... 0xaf:
-+			data->ccd_offset = 0x300;
-+			k10temp_get_ccd_support(pdev, data, 8);
-+			break;
- 		}
- 	} else if (boot_cpu_data.x86 == 0x19) {
- 		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
-@@ -489,6 +493,7 @@ static const struct pci_device_id k10temp_id_table[] = {
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
-+	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
--- 
-2.25.1
+Ok, I will do that. I think it will be one function for low_margin and
+one for high_margin.
 
+> 
+> > +	if (val >= data->vout_low[s.page] && val <= data->vout_high[s.page])
+> > +		return val * 1000; /* unit is uV */
+> > +
+> > +	return 0;
+> 
+> Other drivers return -EINVAL here. Should this be returned as well
+> if rdev->desc->min_uV or rdev->desc->uV_step is 0, if selector
+> is out of range, or if data->vout_low[s.page] / data->vout_high[s.page]
+> is 0 ?
+
+I will add some more checks. I will try to follow what the description
+of list_voltages says in include/linux/regulator/driver.h, but it's a
+bit free for interpretation, thinking of what counts as unusable
+voltages :)
+
+* @list_voltage: Return one of the supported voltages, in microvolts; zero
+*	if the selector indicates a voltage that is unusable on this system;
+*	or negative errno.  Selectors range from zero to one less than
+*	regulator_desc.n_voltages.  Voltages may be reported in any order.
+
+I guess, as long as a voltage is inside of the low/high margins it is a
+valid voltage (even though high and/or low is 0).
+
+Kind regards
+Mårten
+
+> 
+> Thanks,
+> Guenter
+> 
+> > +}
+> > +
+> >   const struct regulator_ops pmbus_regulator_ops = {
+> >   	.enable = pmbus_regulator_enable,
+> >   	.disable = pmbus_regulator_disable,
+> > @@ -2718,6 +2767,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+> >   	.get_error_flags = pmbus_regulator_get_error_flags,
+> >   	.get_voltage = pmbus_regulator_get_voltage,
+> >   	.set_voltage = pmbus_regulator_set_voltage,
+> > +	.list_voltage = pmbus_regulator_list_voltage,
+> >   };
+> >   EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+> >   
+> 
