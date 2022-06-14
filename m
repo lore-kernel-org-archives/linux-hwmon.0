@@ -2,40 +2,40 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C51C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D492C433EF
 	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jun 2022 09:39:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiFNJjO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S229477AbiFNJjO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 14 Jun 2022 05:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiFNJjM (ORCPT
+        with ESMTP id S232782AbiFNJjN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:39:12 -0400
+        Tue, 14 Jun 2022 05:39:13 -0400
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320033D49D
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jun 2022 02:39:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DB03C712
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jun 2022 02:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1655199547;
-  x=1686735547;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1655199553;
+  x=1686735553;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8Ff7YyDHwSja239jInjAs1eHxqa/GuTYh33jIolSlN4=;
-  b=hfRtoOk6Uxgwe8karzBeFHi9pEWFsC+jvFvCOc4wUMyNQLOZmm0DmyDy
-   dtwOTyzK710LSbpDCoer4BlmT0oveJ+glkb/OQw923u1fa3PBsTflXUNz
-   RggYO2m9munR2dsYCa/SFOJ48beZkaykeewphel/M9Jy6m52Py7EBiazy
-   3vMUvz7VmqfECHjGKyuhsjXvIUFTKndMHzcFU2k9H5H8xEMlRwpvpTQIK
-   ed+7c/HQNS+N+ClRYUMr1FAxsHMp2ROWSPqHrp8Liy/Fu/HAJU8UeOzRI
-   K8l88OdIQwr7dheF6ZMybPa1toYrHqv2YifiKYdQww+S0y8qQiEOZXn0m
+  bh=lFfOKNF9aiUwLcRwcEIW4/C9vBgTZM1XbFWA0iDByIs=;
+  b=YW3dUqwhAlbZM4mmw+qW3BZdbZkjpqdS6RN3u3KOwPCOVTqzyufVg/gv
+   IzGlsR0pA9JfOOzQxPGJru2FX1+DdfQ6BUQx9wDKe2kLMYwA5n85rsb/2
+   jRmuifmUHq2aF4KFkwXex8mdeDbrQJLcnYJgCT2/KKS32EFvoa1cSWLFj
+   gtYZAJh5Po2gtdE9Ok20iT0h6xbqLjtKDF9CyjcMkPOzilK9O1ydTLGOs
+   hiHMQQK/YSyAcFxBCXdKqlGXJ6w/qVG/gRFaGOxA/GTbHvk1xiIqFWDRk
+   wHHhHAZw06gSH1af10H+3igB1shKVgjhf8/9KAQAlj+LFfe/AhI3Q/NEz
    A==;
 From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
         =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-Subject: [PATCH v3 1/3] hwmon: (pmbus) Introduce and use cached vout margins
-Date:   Tue, 14 Jun 2022 11:38:54 +0200
-Message-ID: <20220614093856.3470672-2-marten.lindahl@axis.com>
+Subject: [PATCH v3 2/3] hwmon: (pmbus) Add list_voltage to pmbus ops
+Date:   Tue, 14 Jun 2022 11:38:55 +0200
+Message-ID: <20220614093856.3470672-3-marten.lindahl@axis.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220614093856.3470672-1-marten.lindahl@axis.com>
 References: <20220614093856.3470672-1-marten.lindahl@axis.com>
@@ -46,125 +46,65 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-When setting a new voltage the voltage boundaries are read every time to
-check that the new voltage is within the proper range. Checking these
-voltage boundaries consists of reading one of PMBUS_MFR_VOUT_MIN/
-PMBUS_VOUT_MARGIN_LOW registers and then PMBUS_MFR_VOUT_MAX/
-PMBUS_VOUT_MARGIN_HIGH together with writing the PMBUS_CLEAR_FAULTS
-register.
-
-Since these boundaries are never being changed, it can be cached and
-thus saving unnecessary smbus transmissions.
+When checking if a regulator supports a voltage range, the regulator
+needs to have a list_voltage callback set to the regulator_ops or else
+-EINVAL will be returned. This support does not exist for the pmbus
+regulators, so this patch adds pmbus_regulator_list_voltage to the
+pmbus_regulator_ops.
 
 Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 78 +++++++++++++++++++++++++-------
- 1 file changed, 61 insertions(+), 17 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 02912022853d..5e0d16512fa6 100644
+index 5e0d16512fa6..f303c2598fb5 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -104,6 +104,9 @@ struct pmbus_data {
- 
- 	s16 currpage;	/* current page, -1 for unknown/unset */
- 	s16 currphase;	/* current phase, 0xff for all, -1 for unknown/unset */
-+
-+	int vout_low[PMBUS_PAGES];	/* voltage low margin */
-+	int vout_high[PMBUS_PAGES];	/* voltage high margin */
- };
- 
- struct pmbus_debugfs_entry {
-@@ -2636,6 +2639,58 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
- 	return 0;
+@@ -2745,6 +2745,35 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+ 	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
  }
  
-+static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
++static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
++					 unsigned int selector)
 +{
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	struct pmbus_sensor s = {
-+		.page = page,
-+		.class = PSC_VOLTAGE_OUT,
-+		.convert = true,
-+		.data = -1,
-+	};
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	int val, low, high;
 +
-+	if (!data->vout_low[page]) {
-+		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MIN))
-+			s.data = _pmbus_read_word_data(client, page, 0xff,
-+						       PMBUS_MFR_VOUT_MIN);
-+		if (s.data < 0) {
-+			s.data = _pmbus_read_word_data(client, page, 0xff,
-+						       PMBUS_VOUT_MARGIN_LOW);
-+			if (s.data < 0)
-+				return s.data;
-+		}
-+		data->vout_low[page] = pmbus_reg2data(data, &s);
-+	}
++	if (selector >= rdev->desc->n_voltages ||
++	    selector < rdev->desc->linear_min_sel)
++		return -EINVAL;
 +
-+	return data->vout_low[page];
-+}
++	selector -= rdev->desc->linear_min_sel;
++	val = DIV_ROUND_CLOSEST(rdev->desc->min_uV +
++				(rdev->desc->uV_step * selector), 1000); /* convert to mV */
 +
-+static int pmbus_regulator_get_high_margin(struct i2c_client *client, int page)
-+{
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	struct pmbus_sensor s = {
-+		.page = page,
-+		.class = PSC_VOLTAGE_OUT,
-+		.convert = true,
-+		.data = -1,
-+	};
-+
-+	if (!data->vout_high[page]) {
-+		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MAX))
-+			s.data = _pmbus_read_word_data(client, page, 0xff,
-+						       PMBUS_MFR_VOUT_MAX);
-+		if (s.data < 0) {
-+			s.data = _pmbus_read_word_data(client, page, 0xff,
-+						       PMBUS_VOUT_MARGIN_HIGH);
-+			if (s.data < 0)
-+				return s.data;
-+		}
-+		data->vout_high[page] = pmbus_reg2data(data, &s);
-+	}
-+
-+	return data->vout_high[page];
-+}
-+
- static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
- {
- 	struct device *dev = rdev_get_dev(rdev);
-@@ -2671,24 +2726,13 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
- 
- 	*selector = 0;
- 
--	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MIN))
--		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MIN);
--	if (s.data < 0) {
--		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_LOW);
--		if (s.data < 0)
--			return s.data;
--	}
--	low = pmbus_reg2data(data, &s);
-+	low = pmbus_regulator_get_low_margin(client, s.page);
++	low = pmbus_regulator_get_low_margin(client, rdev_get_id(rdev));
 +	if (low < 0)
 +		return low;
- 
--	s.data = -1;
--	if (pmbus_check_word_register(client, s.page, PMBUS_MFR_VOUT_MAX))
--		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_MFR_VOUT_MAX);
--	if (s.data < 0) {
--		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_VOUT_MARGIN_HIGH);
--		if (s.data < 0)
--			return s.data;
--	}
--	high = pmbus_reg2data(data, &s);
-+	high = pmbus_regulator_get_high_margin(client, s.page);
++
++	high = pmbus_regulator_get_high_margin(client, rdev_get_id(rdev));
 +	if (high < 0)
 +		return high;
++
++	if (val >= low && val <= high)
++		return val * 1000; /* unit is uV */
++
++	return 0;
++}
++
+ const struct regulator_ops pmbus_regulator_ops = {
+ 	.enable = pmbus_regulator_enable,
+ 	.disable = pmbus_regulator_disable,
+@@ -2752,6 +2781,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+ 	.get_error_flags = pmbus_regulator_get_error_flags,
+ 	.get_voltage = pmbus_regulator_get_voltage,
+ 	.set_voltage = pmbus_regulator_set_voltage,
++	.list_voltage = pmbus_regulator_list_voltage,
+ };
+ EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
  
- 	/* Make sure we are within margins */
- 	if (low > val)
 -- 
 2.30.2
 
