@@ -2,157 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F53AC433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jun 2022 10:18:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C60A9C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jun 2022 13:19:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353186AbiFNKSp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jun 2022 06:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
+        id S233763AbiFNNTT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jun 2022 09:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353036AbiFNKSo (ORCPT
+        with ESMTP id S235038AbiFNNTS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:18:44 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347934198C
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jun 2022 03:18:43 -0700 (PDT)
+        Tue, 14 Jun 2022 09:19:18 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055A93B2BA;
+        Tue, 14 Jun 2022 06:19:18 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso6158259pja.2;
+        Tue, 14 Jun 2022 06:19:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1655201923;
-  x=1686737923;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OQeZ7dROFN7mVX6ZstoLq0E0XmOkhQAcNUc6iU4t0y0=;
-  b=FmYmKw7hsOCqeOZ9JnqzSh2sdulfrGkuMOe/X+KeCfRcbp79+O8XF3gK
-   NvPtKnLqMIbTlQZCRobqzWpzMIsUOKM3vCBmCaD4ukQKS6WzCMYmVpPUc
-   mx35q4JdTaeY/TzDNbxcm2FIxwHUn+sTsdR9wh/ElIgZteyDKqi6VkIjz
-   RWuUKXYqQHnR7MrwRPg7kwO79hFguwziDHqBmlVWzqbK5a6AvdhTLw8Cw
-   A+tKq4m6J5vdjgYr5XrGyoT8pwRQ/o3oBxRXtjxnYTkdkJk8lq0x0WxZK
-   fu0uJP3lCS3MTsq+mdEakGrPGnlarhoqGGGkzrbB38TXSLfPN+MHPGV3g
-   A==;
-From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
-        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-Subject: [PATCH v3 3/3] hwmon: (pmbus/ltc2978) Set voltage resolution
-Date:   Tue, 14 Jun 2022 11:38:56 +0200
-Message-ID: <20220614093856.3470672-4-marten.lindahl@axis.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220614093856.3470672-1-marten.lindahl@axis.com>
-References: <20220614093856.3470672-1-marten.lindahl@axis.com>
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T9cxMNNp1BtJt3TGma82UM2bScNKre105K9dVdZaAX8=;
+        b=lrsjyBBCntMBTFq4cT+9G3pQ2IYJr9rJ0xWzgJw76PsubdbuND/4zWlmmLGx9CxfiM
+         jJotFUrYpecpFXXTzVw/9wmklMaXTCxP8+lrTNC1OD/WXfwUPlW1SJoeI22o+/q1anzh
+         XAy+WFU8ksOYNVKICdCzAemv67PWOCXroX6bfWqhx/VcZwynJnY45LOF6g5v9FKXw+5G
+         PkjhATZVspguDZblsPynDRgw4DpTVo+ciIShf+m5iMY/cJkGqzGY5TxdXxEf4j2+OzdR
+         jIF75omnQMhheWmRx6HmAD/6UAByMKKp3yw+Et3R1R3uWSgVhDaMiHivwAXD7H1vFOJd
+         rcGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T9cxMNNp1BtJt3TGma82UM2bScNKre105K9dVdZaAX8=;
+        b=jRjvKcE2MD7N1RJq7zYWNku6mWs1YS90ON67tNwTl9/iTT8UqJHR7mFC1xoT/K+AhH
+         14GX7Fi3KfEsblHf0f6XLN3VGp5KqulTxiLB2skLdF8/PrIIT2ziCQW2XPbDORQYnpdw
+         FmaZxdScwsDuiDZfEEBodFtcdUOYtzJOdTW5beFT76BLnspYdreXXWKn8xP06s8UE7Gk
+         jelm+KYpeScpJX6Dl/XzHwynkJxng+fBm79w/5FDI+rChHUFSt4OuuKZFIIUz5wc+Se+
+         C85suk4V4tyn9WN8WVooB3Ynpce3srnFMIdFYVqoBcRVpL0Ffa2cFERZtETKK7IFwFJI
+         AVdg==
+X-Gm-Message-State: AJIora+Q9kVmk1pVsLnEolDITAoUxDjdkVJ67aonKX2OmJycrj1WvT4G
+        WLaiGM3Fq3XfQDxMqX2fPhI=
+X-Google-Smtp-Source: AGRyM1soISn/1msPSTPyqUSDK43sljLYAA5mruRM3ByYJHSqzyIpfs9KXjXNCE0JaNd4uGjDBqsDcw==
+X-Received: by 2002:a17:90b:3802:b0:1e3:3f3a:3621 with SMTP id mq2-20020a17090b380200b001e33f3a3621mr4560581pjb.65.1655212757362;
+        Tue, 14 Jun 2022 06:19:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y9-20020a170902864900b00168c1668a49sm7191387plt.85.2022.06.14.06.19.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 06:19:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e44c0dfa-927d-7c08-66f0-6c79be1595b1@roeck-us.net>
+Date:   Tue, 14 Jun 2022 06:19:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] driver: hwmon: remove NULL check before kvfree
+Content-Language: en-US
+To:     Dongliang Mu <dzm91@hust.edu.cn>, Jean Delvare <jdelvare@suse.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        mudongliang <mudongliangabcd@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220614085634.123101-1-dzm91@hust.edu.cn>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220614085634.123101-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The LTC2977 regulator does not set the regulator_desc .n_voltages value
-which is needed in order to let the regulator core list the regulator
-voltage range.
+On 6/14/22 01:56, Dongliang Mu wrote:
+> From: mudongliang <mudongliangabcd@gmail.com>
+> 
+> kvfree can handle NULL pointer as its argument.
+> According to coccinelle isnullfree check, remove NULL check
+> before kvfree operation.
+> 
 
-This patch defines a regulator_desc with a voltage range, and uses it
-for defining voltage resolution for regulators LTC2972/LTC2974/LTC2975/
-LTC2977/LTC2978/LTC2979/LTC2980/LTM2987 based on that they all have a 16
-bit ADC with the same stepwise 122.07uV resolution. It also scales the
-resolution to a 1mV resolution which is easier to handle.
+Please add driver information to your subject lines, and drop
+"driver:". It should be
 
-Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
----
- drivers/hwmon/pmbus/ltc2978.c | 44 +++++++++++++++++++++++++++++++----
- drivers/hwmon/pmbus/pmbus.h   |  8 +++++--
- 2 files changed, 46 insertions(+), 6 deletions(-)
+  [PATCH] hwmon: (occ) remove NULL check before kvfree
 
-diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-index 531aa674a928..6d2592731ba3 100644
---- a/drivers/hwmon/pmbus/ltc2978.c
-+++ b/drivers/hwmon/pmbus/ltc2978.c
-@@ -562,7 +562,24 @@ static const struct i2c_device_id ltc2978_id[] = {
- MODULE_DEVICE_TABLE(i2c, ltc2978_id);
- 
- #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
-+#define LTC2978_ADC_RES	0xFFFF
-+#define LTC2978_N_ADC	122
-+#define LTC2978_MAX_UV	(LTC2978_ADC_RES * LTC2978_N_ADC)
-+#define LTC2978_UV_STEP	1000
-+#define LTC2978_N_VOLTAGES	((LTC2978_MAX_UV / LTC2978_UV_STEP) + 1)
-+
- static const struct regulator_desc ltc2978_reg_desc[] = {
-+	PMBUS_REGULATOR_STEP("vout", 0, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 1, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 2, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 3, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 4, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 5, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 6, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 7, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+};
-+
-+static const struct regulator_desc ltc2978_reg_desc_default[] = {
- 	PMBUS_REGULATOR("vout", 0),
- 	PMBUS_REGULATOR("vout", 1),
- 	PMBUS_REGULATOR("vout", 2),
-@@ -839,10 +856,29 @@ static int ltc2978_probe(struct i2c_client *client)
- 
- #if IS_ENABLED(CONFIG_SENSORS_LTC2978_REGULATOR)
- 	info->num_regulators = info->pages;
--	info->reg_desc = ltc2978_reg_desc;
--	if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
--		dev_err(&client->dev, "num_regulators too large!");
--		info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
-+	switch (data->id) {
-+	case ltc2972:
-+	case ltc2974:
-+	case ltc2975:
-+	case ltc2977:
-+	case ltc2978:
-+	case ltc2979:
-+	case ltc2980:
-+	case ltm2987:
-+		info->reg_desc = ltc2978_reg_desc;
-+		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc)) {
-+			dev_warn(&client->dev, "num_regulators too large!");
-+			info->num_regulators = ARRAY_SIZE(ltc2978_reg_desc);
-+		}
-+		break;
-+	default:
-+		info->reg_desc = ltc2978_reg_desc_default;
-+		if (info->num_regulators > ARRAY_SIZE(ltc2978_reg_desc_default)) {
-+			dev_warn(&client->dev, "num_regulators too large!");
-+			info->num_regulators =
-+			    ARRAY_SIZE(ltc2978_reg_desc_default);
-+		}
-+		break;
- 	}
- #endif
- 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index c031a9700ace..4a4689c4ab7f 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -463,8 +463,8 @@ struct pmbus_driver_info {
- 
- extern const struct regulator_ops pmbus_regulator_ops;
- 
--/* Macro for filling in array of struct regulator_desc */
--#define PMBUS_REGULATOR(_name, _id)				\
-+/* Macros for filling in array of struct regulator_desc */
-+#define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step)  \
- 	[_id] = {						\
- 		.name = (_name # _id),				\
- 		.supply_name = "vin",				\
-@@ -474,8 +474,12 @@ extern const struct regulator_ops pmbus_regulator_ops;
- 		.ops = &pmbus_regulator_ops,			\
- 		.type = REGULATOR_VOLTAGE,			\
- 		.owner = THIS_MODULE,				\
-+		.n_voltages = _voltages,			\
-+		.uV_step = _step,				\
- 	}
- 
-+#define PMBUS_REGULATOR(_name, _id)	PMBUS_REGULATOR_STEP(_name, _id, 0, 0)
-+
- /* Function declarations */
- 
- void pmbus_clear_cache(struct i2c_client *client);
--- 
-2.30.2
+> Signed-off-by: mudongliang <mudongliangabcd@gmail.com>
+
+Please provide your full name here. This should be
+
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+
+Thanks,
+Guenter
+
+> ---
+>   drivers/hwmon/occ/p9_sbe.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 42fc7b97bb34..01405ae2f9bd 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+>   	mutex_lock(&ctx->sbe_error_lock);
+>   	if (!ctx->sbe_error) {
+>   		if (resp_len > ctx->ffdc_size) {
+> -			if (ctx->ffdc)
+> -				kvfree(ctx->ffdc);
+> +			kvfree(ctx->ffdc);
+>   			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+>   			if (!ctx->ffdc) {
+>   				ctx->ffdc_len = 0;
+> @@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>   	ctx->sbe = NULL;
+>   	occ_shutdown(occ);
+>   
+> -	if (ctx->ffdc)
+> -		kvfree(ctx->ffdc);
+> +	kvfree(ctx->ffdc);
+>   
+>   	return 0;
+>   }
 
