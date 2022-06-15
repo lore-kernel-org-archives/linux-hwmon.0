@@ -2,70 +2,121 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22C0FC433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 12:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF26C43334
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 15:14:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237898AbiFOMwD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jun 2022 08:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S1348685AbiFOPOQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jun 2022 11:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240337AbiFOMwC (ORCPT
+        with ESMTP id S1348048AbiFOPOL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:52:02 -0400
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 484E62AE28;
-        Wed, 15 Jun 2022 05:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=o/uSO
-        7xwMw4EWmWjL/U5fM0M1YDyMNo/GHzEpChY0v4=; b=OxNZxuwS/5jG1kcovY291
-        2ywGSvMe9cD9cbA1fhpCjv0zXOfZHSp7lCwyNbqBUgfoZZpnYuNND6WDZXwwIcqj
-        1e7rGvCxQ6wlI03EPxqXm4OeGvcbS6B0rVHP2SIK0VIcmQ1pFpmpsltL9onvSPDS
-        IfPPVTV5uCGI7XBAkCTex4=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp3 (Coremail) with SMTP id DcmowABH5pe51aliopuKDQ--.43463S2;
-        Wed, 15 Jun 2022 20:51:06 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH] drivers: w1: Add missing of_node_put() in w1.c
-Date:   Wed, 15 Jun 2022 20:51:05 +0800
-Message-Id: <20220615125105.3966317-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Jun 2022 11:14:11 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52183D49F;
+        Wed, 15 Jun 2022 08:14:06 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso2412115pjl.3;
+        Wed, 15 Jun 2022 08:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=229k0H7+DqhsAhRk93hVZYEBRmmZnz3+/5RyN+IPbPI=;
+        b=kmh3vcPZCWY8TTdiC61fExQWPZo7Q4Y0TqDlpco5tywtiA37asijIIDV4gANod8InT
+         +GHK2ydF3fByguGcKSXjjGP0GWPCKdFwsLxfhP/YgBNFZQtfiS8itMAbYptOs1nfhmIe
+         zAiTQu/TcwMunzLlK4TxKYz1SdF3QWKdOn6QL9KCZZbK3UVlUPcD9yEy+tdePHyG6kQx
+         fcBKXJ3Vjf/V5XgLFus51f5Oh0LGQcf5U/2sMOz/x+Mf35apf+EIaNwOT63PYBJgMTbl
+         l3y+mLfHQF+o4oGoFpNq6SNXJYv6vgy2oLuYA/tv0TaZDwhn918SWMSvfwrfLMYzCI4x
+         dp7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=229k0H7+DqhsAhRk93hVZYEBRmmZnz3+/5RyN+IPbPI=;
+        b=V+Igt54BGm+YSwYvkJ8baADavgi1sPV0KJ7h82RYy7whJNGBfBjEx3MdeY06yYRobt
+         4Q38/kaJ3NLZsMAUjeH8g56LXn2IiAIqbfGWuQub/ZxIIh7dGn7BJCwtMngPrqVqgfba
+         jh0v6j3HBlXvQVY6VTeEv5g0kxarwopZc4VqPcfw9pvrdgUBKmqgZUtHVjWORMaet2qP
+         g0xZtciU2UpRMjzZx/SxXi59vntA04i9NCaeA97tcnXj1yefK7BxOIqTi8xOY9EXgm4z
+         mvMJ4e5J/PkOobvHByGdsgpSjTjzxKMSlMUzgzGaH6PnKI9TdDoXDWKSwgR4i5mllBkM
+         /SBw==
+X-Gm-Message-State: AJIora/t80jjNtFDCPkT26CNZ92X2WQet/qjm28pmZ+MejkiAjSEKQUm
+        XV5Xza6QEMsEhmbYPORjdWM=
+X-Google-Smtp-Source: AGRyM1vJ3naFZfmk3ClOpBcHOahyw6FRg6E8vkK6CgrdHq9iXf/i5LYT6rfJs8zXg1qCcSAouBQ9BQ==
+X-Received: by 2002:a17:90b:4a4e:b0:1e6:6757:d085 with SMTP id lb14-20020a17090b4a4e00b001e66757d085mr10820894pjb.207.1655306045645;
+        Wed, 15 Jun 2022 08:14:05 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z14-20020a1709027e8e00b001676dac529asm9382635pla.146.2022.06.15.08.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 08:14:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <81aafa3b-5ec9-38d8-acdd-6449a4746622@roeck-us.net>
+Date:   Wed, 15 Jun 2022 08:14:01 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowABH5pe51aliopuKDQ--.43463S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Jw17KFyUWF43tF15trW8WFg_yoWxuFg_Cr
-        yruFnrXFsYkr4kJF9xWF13ZryrurnFgr4xuF10qa93C34Yqr1fW34DZr1Uta47urZ2kFZI
-        yF9xWrZ0yr4F9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_5l1JUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgYhF1-HZTacMgABsO
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] hwmon: (occ) remove NULL check before kvfree
+Content-Language: en-US
+To:     Dongliang Mu <dzm91@hust.edu.cn>, Jean Delvare <jdelvare@suse.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Pekka Enberg <penberg@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220614133025.146745-1-dzm91@hust.edu.cn>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220614133025.146745-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In __w1_attach_slave_device, we really need not to use of_node_put
-in normal path as the reference is escaped by sl. However, we need
-of_node_put in the fail path before put_device.
+On 6/14/22 06:30, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> 
+> kvfree can handle NULL pointer as its argument.
+> According to coccinelle isnullfree check, remove NULL check
+> before kvfree operation.
+> 
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/w1/w1.c | 1 +
- 1 file changed, 1 insertion(+)
+Actually, it turns out that I already got the same patch
+and that it is already applied.
 
-diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-index f2ae2e563dc5..44a0587105a8 100644
---- a/drivers/w1/w1.c
-+++ b/drivers/w1/w1.c
-@@ -702,6 +702,7 @@ static int __w1_attach_slave_device(struct w1_slave *sl)
- 		dev_err(&sl->dev,
- 			"Device registration [%s] failed. err=%d\n",
- 			dev_name(&sl->dev), err);
-+		of_node_put(sl->dev.of_node);			
- 		put_device(&sl->dev);
- 		return err;
- 	}
--- 
-2.25.1
+Thanks,
+Guenter
+
+> ---
+> v1->v2: modify the commit title and signature
+>   drivers/hwmon/occ/p9_sbe.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 42fc7b97bb34..01405ae2f9bd 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+>   	mutex_lock(&ctx->sbe_error_lock);
+>   	if (!ctx->sbe_error) {
+>   		if (resp_len > ctx->ffdc_size) {
+> -			if (ctx->ffdc)
+> -				kvfree(ctx->ffdc);
+> +			kvfree(ctx->ffdc);
+>   			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+>   			if (!ctx->ffdc) {
+>   				ctx->ffdc_len = 0;
+> @@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>   	ctx->sbe = NULL;
+>   	occ_shutdown(occ);
+>   
+> -	if (ctx->ffdc)
+> -		kvfree(ctx->ffdc);
+> +	kvfree(ctx->ffdc);
+>   
+>   	return 0;
+>   }
 
