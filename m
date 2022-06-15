@@ -2,106 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D79B7C43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 11:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9C82C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 12:25:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348386AbiFOL6L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jun 2022 07:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S243457AbiFOMZ5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jun 2022 08:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347359AbiFOL6H (ORCPT
+        with ESMTP id S238446AbiFOMZ5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:58:07 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CDC43EFD;
-        Wed, 15 Jun 2022 04:57:53 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id gd1so11050294pjb.2;
-        Wed, 15 Jun 2022 04:57:53 -0700 (PDT)
+        Wed, 15 Jun 2022 08:25:57 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2D73E0DB;
+        Wed, 15 Jun 2022 05:25:56 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so1035707wma.4;
+        Wed, 15 Jun 2022 05:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=i636qZX1XUJL64KaFSEZhJIdXHSV4bN2JFKGrjkd9cw=;
-        b=g0SKckdrJXJipUchvC6EH5Zqlze9ZyoA55jeu32NxP8oWaMzrN0OrPI2TZj/A+uPQh
-         b+XuQzuRKFyzGLbdIUc2aAElCsUgNf4VirTSGGTUSjXL66RrG9QedelLoeb0ziHW6Cga
-         EPry8muruUpAymHvukYyERRn5wRWBcjheHkq3UZ3ZcmIEEvY9s3ApXDxVd7L64NiI0SL
-         HDo/mC5NIr4WpUwCiBCINPBPE+0glvgRZtydXk7P0UqXU1ZPrDKOJpLW53fUcz5Mh9HV
-         R9ZfurUXR3Yq3CC/isP1KZlShgzogYeseZR4RAWsu8UELmLpZrgK0lQ7oauhofnvAyCo
-         Ne8g==
+        bh=smvQt7PY9yq5rEGHSy6OokNYxpvxD37Zb/ZGxe4Zl44=;
+        b=p81sq2syYQOfuAlA4rRSnmBOAytXrM/hdYfg9zbL4agok0Qt1imI7fkiejhn5GNPoQ
+         1EJh3ZEEZ1Yg5f0l82uME/+cKNlTccOdr7McmrvmGKDbHzFKAgVtSmMQfQa+UCqXPEyJ
+         wxoINM2y+JNqq//fH1dTE4KHM3qhomof8mXZ/qc3D+dAVXoe/0r2sdK/HrhhkbH6nZLh
+         aCyUxO9r/N58y1EDRHX1oehfRXdc3LCaySh5Z40XtCJfvLiRn/OAzmAV5ZgD8HkkR/7s
+         gFrYYT1j9go+naZVE0NcDV3Bvsd9wAKU9pYr17bt2fNbgSNsm73PgEYig7kkxOwaj3Rj
+         kBjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=i636qZX1XUJL64KaFSEZhJIdXHSV4bN2JFKGrjkd9cw=;
-        b=F8JZfFpGtF5JGUG6unFyK76h2byQhQY75XZ9Pf8Dfk7TmveTwPqx15DGkKD6Bqps9R
-         ycFOxBPAusTIO+Q1ypXhphaXthpT7Gc7f/nf/5dHveyxaafufd8lm8/8Df0bDPaWCEX3
-         1KgFym0dLlcU32qsz1mo5VE2vXaxA5+FDSjn2OQBuBsLbLRdk1UmF0Vm1CQAtErtzue6
-         MWEMhKYJazQjPyXhGN79Fw/TAhKSynB56porylVhHhCY1ypGLBiYPs3OfsWmkycvxEP3
-         ZpczwtU/qxNHql6k8JkkUvXKxcfOJNbdf/Nkgevxc4fRoltIA++opuRlYjmKgBZEyFmv
-         g+9Q==
-X-Gm-Message-State: AJIora/KVMbu08SXeBjcdY4FGmbPHNSxgwLgrBoi/KerL6m4tO3iPcAN
-        Xr8chkqpExj7NJF2rGU5V6s=
-X-Google-Smtp-Source: AGRyM1umPHRM4uAZYg6+aQw1SXCjLeOnysP4L7Vv7YUu8PTQ3tt9953k/BflC6xS1kZT+q0CvrwoMA==
-X-Received: by 2002:a17:90a:6941:b0:1e2:f37a:f889 with SMTP id j1-20020a17090a694100b001e2f37af889mr10017682pjm.160.1655294272665;
-        Wed, 15 Jun 2022 04:57:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170902edd700b00168bffd39a1sm9152915plk.143.2022.06.15.04.57.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 04:57:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4a6e1547-cdcb-81ae-79fd-b0e56fca2f76@roeck-us.net>
-Date:   Wed, 15 Jun 2022 04:57:49 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add missing comma in board name
- list.
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+        bh=smvQt7PY9yq5rEGHSy6OokNYxpvxD37Zb/ZGxe4Zl44=;
+        b=tMPclQeCYRyUvK4lGJKGFyb8q6Tx5jHK7jeEaxyUd2jta242gUozXf5MB8FHSjDx2q
+         Dwm+TnC8M+A+zuXa7G3DR+CkZZuqnUi4Ra9LJSF6tRHS+M7AXCF1i+f9ztb5q70Q8oA6
+         S7/C9LD60Ychxrl5NLGLl2v5T/hkQz0dVz9WeFHLEsbGEb67GsDNjUUex1AiIzMaCtWe
+         kn3BWkOMZbIe31UEM6wa7OJGDxtpG4R3ML+TxlNZUgIjk4RzK6q2exC1E5LpnYvJkcPM
+         ez84Q+rUV2Pfa656OXASumgmpPQNEIp2jldThfH4DTG5ag5yrfBKk445mhWq8iuxQzfi
+         mFzQ==
+X-Gm-Message-State: AOAM532B9ScnTHD/skeSPyJ3iAx162kN6/l6fWG6FjudShgpF6qlv/q5
+        OQExUngZT6Yk1BRYwyTf8LgZylhSmAbmww==
+X-Google-Smtp-Source: ABdhPJxA+WKRE3Ayaxo2n6q/t3kjbcC0p6dj2WCbqZTdysZ6o6cZwTDlhY/xXfWPhjpmMOH6ozc4fw==
+X-Received: by 2002:a7b:cd1a:0:b0:39c:4133:ade7 with SMTP id f26-20020a7bcd1a000000b0039c4133ade7mr9719696wmj.111.1655295954928;
+        Wed, 15 Jun 2022 05:25:54 -0700 (PDT)
+Received: from caracal.museclub.art (p200300cf9f1a9e008d6dafec091202b8.dip0.t-ipconnect.de. [2003:cf:9f1a:9e00:8d6d:afec:912:2b8])
+        by smtp.googlemail.com with ESMTPSA id f13-20020adff58d000000b0021a23e06bb0sm3725880wro.92.2022.06.15.05.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 05:25:54 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
 Cc:     Michael Carns <mike@carns.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615104520.35687-1-eugene.shalygin@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220615104520.35687-1-eugene.shalygin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v2] hwmon: (asus-ec-sensors) add missing comma in board name list.
+Date:   Wed, 15 Jun 2022 14:25:44 +0200
+Message-Id: <20220615122544.140340-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/15/22 03:45, Eugene Shalygin wrote:
-> From: Michael Carns <mike@carns.com>
-> 
-> This fixes a regression introduced by commit 5b4285c57b6f
-> ("hwmon: (asus-ec-sensors) fix Formula VIII definition")
-> where coma lead to concatenating board names and broke module
-> loading for C8H.
-> 
-> Signed-off-by: Michael Carns <mike@carns.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+From: Michael Carns <mike@carns.com>
 
-We have a Fixes: tag for such purposes. Please use it.
+This fixes a regression where coma lead to concatenating board names
+and broke module loading for C8H.
 
-Thanks,
-Guenter
+Fixes: 5b4285c57b6f ("hwmon: (asus-ec-sensors) fix Formula VIII definition")
 
-> ---
->   drivers/hwmon/asus-ec-sensors.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 886a71b4c64e..19d3ca71b360 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -268,7 +268,7 @@ static const struct ec_board_info board_info[] = {
->   	},
->   	{
->   		.board_names = {
-> -			"ROG CROSSHAIR VIII FORMULA"
-> +			"ROG CROSSHAIR VIII FORMULA",
->   			"ROG CROSSHAIR VIII HERO",
->   			"ROG CROSSHAIR VIII HERO (WI-FI)",
->   		},
+Signed-off-by: Michael Carns <mike@carns.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ drivers/hwmon/asus-ec-sensors.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 886a71b4c64e..19d3ca71b360 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -268,7 +268,7 @@ static const struct ec_board_info board_info[] = {
+ 	},
+ 	{
+ 		.board_names = {
+-			"ROG CROSSHAIR VIII FORMULA"
++			"ROG CROSSHAIR VIII FORMULA",
+ 			"ROG CROSSHAIR VIII HERO",
+ 			"ROG CROSSHAIR VIII HERO (WI-FI)",
+ 		},
+-- 
+2.35.1
 
