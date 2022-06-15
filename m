@@ -2,66 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98985C43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 12:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22C0FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 12:52:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347644AbiFOM12 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jun 2022 08:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
+        id S237898AbiFOMwD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jun 2022 08:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245388AbiFOM11 (ORCPT
+        with ESMTP id S240337AbiFOMwC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:27:27 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DF2200;
-        Wed, 15 Jun 2022 05:27:24 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id z11so8628916ilq.6;
-        Wed, 15 Jun 2022 05:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K5eqBdV0Z+YmLvaQSqb//FwnqjPlSldCQkZw39MaNsg=;
-        b=WBQ3mVeIzMY0L1cC3DSnS9VWbvVSh7YZmPpQ0wwcvd+PqIWG+GLdIM4+sfOwlEhiLS
-         ifLpTSNVXEwDcI/IGID6V/HBwWSro25/GYs6hLpwgifmTvgFS1HIZUs9STIf7g3/T3XZ
-         W1+QPVvLLZ62HrVCzvG+GZoyea4z0AIxnsDNNFM/l9T3LsOquTUzKbg4MxIYaguZnF3p
-         OVLBvWi4lf1gIf51+sgCYTwVtAnk6ctGKc622wyKJeMwpicNWbjYX3unx07KGMZkB25u
-         4SW/gTbVJcb/4e5lKT0RW9eOK3MucrjqFMitp/w9DOkySvPG6g5V1cLLIVIu0K9xxVIK
-         s9Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K5eqBdV0Z+YmLvaQSqb//FwnqjPlSldCQkZw39MaNsg=;
-        b=6gDGbp4mJ9JTQ6GdgDCmIm4wACavj5XcixZVlNDkb9coQigtRDjOncAo/rqrMwLxkw
-         kbFkEmK4FRmYOoNVJRXbnwLsZ6lxlyqMTCkiiyKL4j845aXWDvkZcQdweZhJtwAoQx/k
-         ckLdGciZl9xFvHKIGjUPvyqFztTz3buAi0LHBdCEvgNBSBAnD5F05xMuXwAXcmK+IQq1
-         GVycJ96x6RFDVYIXo1XvBCAnpIIqOgrO+i8+E2Pc3Z3ld3oha5dCrUJYiNrhieq2G+rp
-         orvclo9GPPCaC0dnYctQtSmpx0P6J2FRom9r/CMOrAMEmKUW3SxWSCXDghzqDPZ1PsNg
-         m/SQ==
-X-Gm-Message-State: AJIora90cUVWtrhVXNi8pRCQfJf4cUdiCVm2w3WcBeMXsmkYmOOtpQwt
-        3t3GjPqkU1LA8+LPxpeNORRFTsoMfz4k5MeNSzXqPDnw9u00iw==
-X-Google-Smtp-Source: AGRyM1uFnJz7Rzs2KA9L2GhMGG+d3X/wPa8cy0NczGMixws8p3aVieOU+oEPSmQ+joq2houFVm1F3XOrdMN1IQM32sA=
-X-Received: by 2002:a05:6e02:1a6b:b0:2d3:ae9f:112f with SMTP id
- w11-20020a056e021a6b00b002d3ae9f112fmr5732134ilv.187.1655296043891; Wed, 15
- Jun 2022 05:27:23 -0700 (PDT)
+        Wed, 15 Jun 2022 08:52:02 -0400
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 484E62AE28;
+        Wed, 15 Jun 2022 05:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=o/uSO
+        7xwMw4EWmWjL/U5fM0M1YDyMNo/GHzEpChY0v4=; b=OxNZxuwS/5jG1kcovY291
+        2ywGSvMe9cD9cbA1fhpCjv0zXOfZHSp7lCwyNbqBUgfoZZpnYuNND6WDZXwwIcqj
+        1e7rGvCxQ6wlI03EPxqXm4OeGvcbS6B0rVHP2SIK0VIcmQ1pFpmpsltL9onvSPDS
+        IfPPVTV5uCGI7XBAkCTex4=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp3 (Coremail) with SMTP id DcmowABH5pe51aliopuKDQ--.43463S2;
+        Wed, 15 Jun 2022 20:51:06 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] drivers: w1: Add missing of_node_put() in w1.c
+Date:   Wed, 15 Jun 2022 20:51:05 +0800
+Message-Id: <20220615125105.3966317-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220615104520.35687-1-eugene.shalygin@gmail.com> <4a6e1547-cdcb-81ae-79fd-b0e56fca2f76@roeck-us.net>
-In-Reply-To: <4a6e1547-cdcb-81ae-79fd-b0e56fca2f76@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 15 Jun 2022 14:27:13 +0200
-Message-ID: <CAB95QAQTJZbmJN_ey51LiEzo12L8Sbn3pBHE-zNarneT5S2GJw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add missing comma in board name list.
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Michael Carns <mike@carns.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowABH5pe51aliopuKDQ--.43463S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jw17KFyUWF43tF15trW8WFg_yoWxuFg_Cr
+        yruFnrXFsYkr4kJF9xWF13ZryrurnFgr4xuF10qa93C34Yqr1fW34DZr1Uta47urZ2kFZI
+        yF9xWrZ0yr4F9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_5l1JUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgYhF1-HZTacMgABsO
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> We have a Fixes: tag for such purposes. Please use it.
-Thanks, done in v2.
+In __w1_attach_slave_device, we really need not to use of_node_put
+in normal path as the reference is escaped by sl. However, we need
+of_node_put in the fail path before put_device.
 
-Eugene
+Signed-off-by: Liang He <windhl@126.com>
+---
+ drivers/w1/w1.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index f2ae2e563dc5..44a0587105a8 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -702,6 +702,7 @@ static int __w1_attach_slave_device(struct w1_slave *sl)
+ 		dev_err(&sl->dev,
+ 			"Device registration [%s] failed. err=%d\n",
+ 			dev_name(&sl->dev), err);
++		of_node_put(sl->dev.of_node);			
+ 		put_device(&sl->dev);
+ 		return err;
+ 	}
+-- 
+2.25.1
+
