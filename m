@@ -2,121 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF26C43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 15:14:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8CADC43334
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 15:19:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348685AbiFOPOQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jun 2022 11:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S1349327AbiFOPT3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jun 2022 11:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348048AbiFOPOL (ORCPT
+        with ESMTP id S1349368AbiFOPT2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:14:11 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52183D49F;
-        Wed, 15 Jun 2022 08:14:06 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso2412115pjl.3;
-        Wed, 15 Jun 2022 08:14:06 -0700 (PDT)
+        Wed, 15 Jun 2022 11:19:28 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965A13FBE2;
+        Wed, 15 Jun 2022 08:19:26 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id d129so11656934pgc.9;
+        Wed, 15 Jun 2022 08:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=229k0H7+DqhsAhRk93hVZYEBRmmZnz3+/5RyN+IPbPI=;
-        b=kmh3vcPZCWY8TTdiC61fExQWPZo7Q4Y0TqDlpco5tywtiA37asijIIDV4gANod8InT
-         +GHK2ydF3fByguGcKSXjjGP0GWPCKdFwsLxfhP/YgBNFZQtfiS8itMAbYptOs1nfhmIe
-         zAiTQu/TcwMunzLlK4TxKYz1SdF3QWKdOn6QL9KCZZbK3UVlUPcD9yEy+tdePHyG6kQx
-         fcBKXJ3Vjf/V5XgLFus51f5Oh0LGQcf5U/2sMOz/x+Mf35apf+EIaNwOT63PYBJgMTbl
-         l3y+mLfHQF+o4oGoFpNq6SNXJYv6vgy2oLuYA/tv0TaZDwhn918SWMSvfwrfLMYzCI4x
-         dp7A==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Dohva7PorvnI7E7DeyPN96L7EkJ7Yhh9+jaMImkrHmo=;
+        b=MOyWaJhbJODvnd5BwdZEz+3fHzkpKWmX6730tstRY3pzObGb225GFsPkwRu3LVGfYD
+         Ki+7Y8i+9b1vYNyDy7OvlJvaRvgyFdLVG9NlZyUzMANXqBnoJZ1Qi1GTuR0GGiGJVT1M
+         BOpdPnAs3wOVzRW6bL0bmEgBlyKMf58ULJbzc/tZsNN0IrhWj7S2WunQtOaHVxP2ihnb
+         xxE2qmf58aDnI10yZSq81SiH3G4lzD/8mPQsThsp40SVHMmC32TMzhkDwZkRRRSO7978
+         9NWfvYJvwImYUDEsfrJANRyc+jS1kHKl2lOgdW928YArljXRoYIgQRVA/SK9eQbbm/5t
+         tbsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=229k0H7+DqhsAhRk93hVZYEBRmmZnz3+/5RyN+IPbPI=;
-        b=V+Igt54BGm+YSwYvkJ8baADavgi1sPV0KJ7h82RYy7whJNGBfBjEx3MdeY06yYRobt
-         4Q38/kaJ3NLZsMAUjeH8g56LXn2IiAIqbfGWuQub/ZxIIh7dGn7BJCwtMngPrqVqgfba
-         jh0v6j3HBlXvQVY6VTeEv5g0kxarwopZc4VqPcfw9pvrdgUBKmqgZUtHVjWORMaet2qP
-         g0xZtciU2UpRMjzZx/SxXi59vntA04i9NCaeA97tcnXj1yefK7BxOIqTi8xOY9EXgm4z
-         mvMJ4e5J/PkOobvHByGdsgpSjTjzxKMSlMUzgzGaH6PnKI9TdDoXDWKSwgR4i5mllBkM
-         /SBw==
-X-Gm-Message-State: AJIora/t80jjNtFDCPkT26CNZ92X2WQet/qjm28pmZ+MejkiAjSEKQUm
-        XV5Xza6QEMsEhmbYPORjdWM=
-X-Google-Smtp-Source: AGRyM1vJ3naFZfmk3ClOpBcHOahyw6FRg6E8vkK6CgrdHq9iXf/i5LYT6rfJs8zXg1qCcSAouBQ9BQ==
-X-Received: by 2002:a17:90b:4a4e:b0:1e6:6757:d085 with SMTP id lb14-20020a17090b4a4e00b001e66757d085mr10820894pjb.207.1655306045645;
-        Wed, 15 Jun 2022 08:14:05 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z14-20020a1709027e8e00b001676dac529asm9382635pla.146.2022.06.15.08.14.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 08:14:03 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Dohva7PorvnI7E7DeyPN96L7EkJ7Yhh9+jaMImkrHmo=;
+        b=xQ7/x7TaL0tGpOBVxEPcbIQZeNQaNQnCUGW52goaIlYcz4sxJpyYQE5W9lnBIFUDAH
+         liCjnbft9PwhP8Qg81PGd2bSEhH5R31X0WNTOt0kdk1uCyZNuIxXBWk+rGesm/Z3vLOB
+         OjU4o+uVDmpToZ8YOKZkXXXBw9oaj7yKv8C+XZ1MUYsT+qtwJEB0Q4DYgWh74gVJaqJh
+         tzNLUDnV6lNHTZKUjnfFpjQlW8fiHy7vXEgL7zGLKBsJJXkL1H2LVWfeM+56MfQdyaha
+         sKu78AcPPQRYADsh6juy17sF3amkvNIHYBPamcccZAxfYiciN2MtUwU7NLVFZgk5S48p
+         7MPw==
+X-Gm-Message-State: AJIora9KUH7xsoRC6ruDhnqp7Zn9kn1EpoI7c6Um4bOXKXG7hPjqBznh
+        6YtM2OQQBawRZaIIHCYTop+Uiii5Ow0=
+X-Google-Smtp-Source: AGRyM1uEvL8+wHYpdUUxctUgmvtYTfPNqGaeVWKqOxb+9UDRsiTTExLwelFgNSNWY2qG38AmCF6Pjw==
+X-Received: by 2002:a05:6a00:2918:b0:512:e4b5:60fb with SMTP id cg24-20020a056a00291800b00512e4b560fbmr135924pfb.50.1655306366092;
+        Wed, 15 Jun 2022 08:19:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 199-20020a6300d0000000b003f24d67d226sm9957420pga.92.2022.06.15.08.19.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 08:19:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <81aafa3b-5ec9-38d8-acdd-6449a4746622@roeck-us.net>
-Date:   Wed, 15 Jun 2022 08:14:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] hwmon: (occ) remove NULL check before kvfree
-Content-Language: en-US
-To:     Dongliang Mu <dzm91@hust.edu.cn>, Jean Delvare <jdelvare@suse.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Pekka Enberg <penberg@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220614133025.146745-1-dzm91@hust.edu.cn>
+Date:   Wed, 15 Jun 2022 08:19:24 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220614133025.146745-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Michael Carns <mike@carns.com>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add missing comma in board
+ name list.
+Message-ID: <20220615151924.GA3230585@roeck-us.net>
+References: <20220615122544.140340-1-eugene.shalygin@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615122544.140340-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/14/22 06:30, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
+On Wed, Jun 15, 2022 at 02:25:44PM +0200, Eugene Shalygin wrote:
+> From: Michael Carns <mike@carns.com>
 > 
-> kvfree can handle NULL pointer as its argument.
-> According to coccinelle isnullfree check, remove NULL check
-> before kvfree operation.
+> This fixes a regression where coma lead to concatenating board names
+> and broke module loading for C8H.
 > 
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> Fixes: 5b4285c57b6f ("hwmon: (asus-ec-sensors) fix Formula VIII definition")
+> 
+> Signed-off-by: Michael Carns <mike@carns.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Actually, it turns out that I already got the same patch
-and that it is already applied.
+Applied.
 
 Thanks,
 Guenter
 
 > ---
-> v1->v2: modify the commit title and signature
->   drivers/hwmon/occ/p9_sbe.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
+>  drivers/hwmon/asus-ec-sensors.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index 42fc7b97bb34..01405ae2f9bd 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
->   	mutex_lock(&ctx->sbe_error_lock);
->   	if (!ctx->sbe_error) {
->   		if (resp_len > ctx->ffdc_size) {
-> -			if (ctx->ffdc)
-> -				kvfree(ctx->ffdc);
-> +			kvfree(ctx->ffdc);
->   			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
->   			if (!ctx->ffdc) {
->   				ctx->ffdc_len = 0;
-> @@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
->   	ctx->sbe = NULL;
->   	occ_shutdown(occ);
->   
-> -	if (ctx->ffdc)
-> -		kvfree(ctx->ffdc);
-> +	kvfree(ctx->ffdc);
->   
->   	return 0;
->   }
-
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 886a71b4c64e..19d3ca71b360 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -268,7 +268,7 @@ static const struct ec_board_info board_info[] = {
+>  	},
+>  	{
+>  		.board_names = {
+> -			"ROG CROSSHAIR VIII FORMULA"
+> +			"ROG CROSSHAIR VIII FORMULA",
+>  			"ROG CROSSHAIR VIII HERO",
+>  			"ROG CROSSHAIR VIII HERO (WI-FI)",
+>  		},
