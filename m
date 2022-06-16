@@ -2,338 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F9E9C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jun 2022 22:14:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F241DC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jun 2022 02:38:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242770AbiFOWOW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jun 2022 18:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S1347671AbiFPCiF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jun 2022 22:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346327AbiFOWOV (ORCPT
+        with ESMTP id S233633AbiFPCiE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:14:21 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28429562E3
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jun 2022 15:14:19 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id x138so12623349pfc.12
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jun 2022 15:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AXCSdNdOG+CgFIG88ib23kuKIvvzOLK+/Co0bGDcI+o=;
-        b=jPYVmTsdWKg5NMY9ngNRlfmDud5TflXzM52JfxGV2TzRmtX3BaGyrV+3Zp6PGXAn7g
-         bFSxv5YacUC9fVhbTWNjBxQjSbTnwDkg4Xio76T342UB4EF0dSadUJ4ru22B7jm3CvMN
-         pTRjrEQvJ/BBx9409aavxHLlnIyLU/bYuchwcMd2Q7fx6KZT1xmAma38NO1a918vV37w
-         MqoRZDVShJIU1vKMbq+zpjaXm1nQXFmk5MoT+f5MXlgP5yVjPnCAeJ5uXU4a2fZCfhQd
-         JYbHhh18xk7XKzlyzCqslZMqpcIImgG/1j0ib6ixl5DRXEp9Ht4IPYBkARfGsD05I1P/
-         zeWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=AXCSdNdOG+CgFIG88ib23kuKIvvzOLK+/Co0bGDcI+o=;
-        b=KbVl+JwwDiPUO03NR65WfotkG5zuCQJQASS75JKJN9xd6kaGlTV80kc9o9hBA/lnOQ
-         rsH3xAUn4EtJgfASUIdQe1HLt8A9sltHpm2hToBLlm7cV4IT4wqdp2mGs4xFJqnAnAOs
-         C4a83jBYDYQxJWkaVuZ33tSns5OAcDplXegTD4MNjERf4opYCuObwvnA6agOclk+Q5R2
-         zze3ZUN8N8A13A+eI5Xx6umkLv8FZ2dNWu+VaJqbiTz19KARadXkkQcmd0RVdG7jzhLs
-         juQN2v+13Rd/r9/W2EtNfK46dNOUMluyTBlwCYvzxrvDCkBn6LUKaNvSDulxffi1UNOO
-         c6nQ==
-X-Gm-Message-State: AJIora8Ogz44zMXz3bL4uPqfWaEeyK080vyNE3I1aXGfNJQE20yGp4HC
-        kO16BpV9saTfbpManvb3NTw8nQ==
-X-Google-Smtp-Source: AGRyM1t0vDXZjnqNVhNR6NaKiKCfvtB9Iyx0wWfiRtvikmjxCnNrvxUyS8KyW4itRr/yrTlpPBLrbg==
-X-Received: by 2002:a63:5250:0:b0:3fd:b280:2020 with SMTP id s16-20020a635250000000b003fdb2802020mr1683560pgl.184.1655331258592;
-        Wed, 15 Jun 2022 15:14:18 -0700 (PDT)
-Received: from google.com ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id p2-20020a62b802000000b00522af870b5dsm138335pfe.56.2022.06.15.15.14.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 15:14:18 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 23:14:16 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v8 8/9] mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD
- driver
-Message-ID: <YqpZuBjRJhe/Pje7@google.com>
-References: <20220422024653.2199489-1-quan@os.amperecomputing.com>
- <20220422024653.2199489-9-quan@os.amperecomputing.com>
+        Wed, 15 Jun 2022 22:38:04 -0400
+Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A15627155;
+        Wed, 15 Jun 2022 19:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=DJRHY
+        5TULW6YiMhALFXgMhXjdupTtOS2pWbWnjCFRk4=; b=nq82c4fbSA//9e13HQNJe
+        aXu/VpPsIElmf2Dzz6fR5PthpQZKYZZX0756uVqmB5IaZwvGw18/BYq0mafYpaCH
+        9Gk/+oNu9cLmSDsfpnrmcbgy/l6cV/Na0koHmq6yKshuvdrBKM8yDDln2EI6zFy2
+        ZrUzanRxaPOswqYPnRwb1s=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
+ (Coremail) ; Thu, 16 Jun 2022 10:37:41 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Thu, 16 Jun 2022 10:37:41 +0800 (CST)
+From:   =?GBK?B?us3BwQ==?= <windhl@126.com>
+To:     "Guenter Roeck" <linux@roeck-us.net>
+Cc:     tharvey@gateworks.com, rjones@gateworks.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] drivers: hwmon: Add missing of_node_put() in
+ gsc-hwmon.c
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <01243e3e-f4d2-c1ba-98f5-db7bc0c62adc@roeck-us.net>
+References: <20220615151856.3970186-1-windhl@126.com>
+ <01243e3e-f4d2-c1ba-98f5-db7bc0c62adc@roeck-us.net>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220422024653.2199489-9-quan@os.amperecomputing.com>
+Message-ID: <2da49756.221e.1816a5fa3d3.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: GMqowADX3yd2l6piYtg2AA--.9223W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuBMiF2JVj40ZHAACss
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 22 Apr 2022, Quan Nguyen wrote:
-
-> Adds Multi-function devices driver for SMpro co-processor found on the
-
-Please drop the term MFD and describe the device instead.
-
-> Mt.Jade hardware reference platform with Ampere's Altra processor family.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> Changes in v8:
->   + None
-> 
-> Changes in v7:
->   + Smpro-mfd now significant changes in compare with simple-mfd-i2c
->     driver, remove the copyright note about simple-mfd-i2c    [Quan]
->   + Install bus->read/write()  to handle multiple types of bus
->     access.                                                   [Quan]
->   + Update license to MODULE_LICENSE("GPL")                   [Quan]
->   + Add others minor refactor the code                        [Quan]
-> 
-> Changes in v6:
->   + Update license part to reflect that this driver is clone from
->   simple-mfd-i2c driver [Quan]
-> 
-> Changes in v5:
->   + Dropped the use of simple-mfd-i2c driver [Quan]
->   + Introduced drivers/mfd/smpro-mfd.c driver to instantiate
->   sub-devices. This is to avoid DT nodes without resource issue [Quan]
->   + Revised commit message [Quan]
-> 
-> Changes in v4:
->   + Add "depends on I2C" to fix build issue found by kernel test
->   robot [Guenter]
-> 
-> Changes in v3:
->   + None
-> 
-> Changes in v2:
->   + Used 'struct of_device_id's .data attribute [Lee Jones]
-> 
->  drivers/mfd/Kconfig     |  12 ++++
->  drivers/mfd/Makefile    |   1 +
->  drivers/mfd/smpro-mfd.c | 134 ++++++++++++++++++++++++++++++++++++++++
-
-Please drop the 'mfd' part.  Does 'core' work instead?
-
->  3 files changed, 147 insertions(+)
->  create mode 100644 drivers/mfd/smpro-mfd.c
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456f5545..383d0e6cfb91 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -77,6 +77,18 @@ config MFD_AS3711
->  	help
->  	  Support for the AS3711 PMIC from AMS
->  
-> +config MFD_SMPRO
-> +	tristate "Ampere Computing MFD SMpro core driver"
-
-Drop 'MFD'.
-
-> +	depends on I2C
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  Say yes here to enable SMpro driver support for Ampere's Altra
-> +	  processor family.
-> +
-> +	  Ampere's Altra SMpro exposes an I2C regmap interface that can
-> +	  be accessed by child devices.
-> +
->  config MFD_AS3722
->  	tristate "ams AS3722 Power Management IC"
->  	select MFD_CORE
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 858cacf659d6..36f8981cc4fd 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -266,6 +266,7 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
->  
->  obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
->  obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
-> +obj-$(CONFIG_MFD_SMPRO)		+= smpro-mfd.o
->  obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
->  
->  obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
-> diff --git a/drivers/mfd/smpro-mfd.c b/drivers/mfd/smpro-mfd.c
-> new file mode 100644
-> index 000000000000..485c4f89ebd9
-> --- /dev/null
-> +++ b/drivers/mfd/smpro-mfd.c
-> @@ -0,0 +1,134 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Ampere Altra Family SMPro MFD - I2C
-
-Drop 'MFD' throughout.
-
-> + * Copyright (c) 2022, Ampere Computing LLC
-> + * Author: Quan Nguyen <quan@os.amperecomputing..com>
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/regmap.h>
-
-Alphabetical.
-
-> +/* Identification Registers */
-> +#define MANUFACTURER_ID_REG     0x02
-> +#define AMPERE_MANUFACTURER_ID  0xCD3A
-> +
-> +static int smpro_mfd_write(void *context, const void *data, size_t count)
-> +{
-> +	struct device *dev = context;
-> +	struct i2c_client *i2c = to_i2c_client(dev);
-> +	int ret;
-> +
-> +	ret = i2c_master_send(i2c, data, count);
-> +	if (ret == count)
-> +		return 0;
-> +	else if (ret < 0)
-> +		return ret;
-> +	else
-> +		return -EIO;
-> +}
-> +
-> +static int smpro_mfd_read(void *context, const void *reg, size_t reg_size,
-> +			  void *val, size_t val_size)
-> +{
-> +	struct device *dev = context;
-> +	struct i2c_client *i2c = to_i2c_client(dev);
-> +	struct i2c_msg xfer[2];
-> +	unsigned char buf[2];
-> +	int ret;
-> +
-> +	xfer[0].addr = i2c->addr;
-> +	xfer[0].flags = 0;
-> +
-> +	buf[0] = *(u8 *)reg;
-> +	buf[1] = val_size;
-> +	xfer[0].len = 2;
-> +	xfer[0].buf = buf;
-> +
-> +	xfer[1].addr = i2c->addr;
-> +	xfer[1].flags = I2C_M_RD;
-> +	xfer[1].len = val_size;
-> +	xfer[1].buf = val;
-> +
-> +	ret = i2c_transfer(i2c->adapter, xfer, 2);
-> +	if (ret == 2)
-> +		return 0;
-> +	else if (ret < 0)
-> +		return ret;
-> +	else
-> +		return -EIO;
-> +}
-
-This looks all too familiar.
-
-I wonder how generic these i2c call-backs actually are.
-
-> +static const struct regmap_bus smpro_regmap_bus = {
-> +	.read = smpro_mfd_read,
-> +	.write = smpro_mfd_write,
-> +	.val_format_endian_default = REGMAP_ENDIAN_BIG,
-> +};
-> +
-> +static bool smpro_mfd_readable_noinc_reg(struct device *dev, unsigned int reg)
-> +{
-> +	return  (reg == 0x82 || reg == 0x85 || reg == 0x92 || reg == 0x95 ||
-> +		 reg == 0xC2 || reg == 0xC5 || reg == 0xD2 || reg == 0xDA);
-
-No magic numbers.  Please define these registers.
-
-> +}
-> +
-> +static const struct regmap_config smpro_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +	.readable_noinc_reg = smpro_mfd_readable_noinc_reg,
-> +};
-> +
-> +static const struct mfd_cell smpro_devs[] = {
-> +	MFD_CELL_NAME("smpro-hwmon"),
-> +	MFD_CELL_NAME("smpro-errmon"),
-> +	MFD_CELL_NAME("smpro-misc"),
-> +};
-> +
-> +static int smpro_mfd_probe(struct i2c_client *i2c)
-> +{
-> +	const struct regmap_config *config;
-> +	struct regmap *regmap;
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	config = device_get_match_data(&i2c->dev);
-> +	if (!config)
-> +		config = &smpro_regmap_config;
-
-This use-case is not currently supported.
-
-Please return an error instead.
-
-> +	regmap = devm_regmap_init(&i2c->dev, &smpro_regmap_bus, &i2c->dev, config);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	/* Check for valid ID */
-
-Decent #define nomenclature should render this comment superfluous.
-
-> +	ret = regmap_read(regmap, MANUFACTURER_ID_REG, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val != AMPERE_MANUFACTURER_ID)
-> +		return -ENODEV;
-> +
-> +	return devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
-> +				    smpro_devs, ARRAY_SIZE(smpro_devs), NULL, 0, NULL);
-> +}
-> +
-> +static const struct of_device_id smpro_mfd_of_match[] = {
-> +	{ .compatible = "ampere,smpro", .data = &smpro_regmap_config },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, smpro_mfd_of_match);
-> +
-> +static struct i2c_driver smpro_mfd_driver = {
-> +	.probe_new = smpro_mfd_probe,
-> +	.driver = {
-> +		.name = "smpro-mfd-i2c",
-
-"smpro-core"
-
-> +		.of_match_table = smpro_mfd_of_match,
-> +	},
-> +};
-> +module_i2c_driver(smpro_mfd_driver);
-> +
-> +MODULE_AUTHOR("Quan Nguyen <quan@os.amperecomputing.com>");
-> +MODULE_DESCRIPTION("SMPRO MFD - I2C driver");
-> +MODULE_LICENSE("GPL");
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+CgoKQXQgMjAyMi0wNi0xNiAwMTo1Nzo0OSwgIkd1ZW50ZXIgUm9lY2siIDxsaW51eEByb2Vjay11
+cy5uZXQ+IHdyb3RlOgo+Cj5QbGVhc2UgdXNlIHByb3BlciBzdWJqZWN0IGxpbmVzLiBIZXJlIGl0
+IHNob3VsZCBoYXZlIGJlZW4KPgo+aHdtb246IChnc2MtaHdtb24pIEFkZCBtaXNzaW5nIG9mX25v
+ZGVfcHV0KCkKCgoKVGhhbmtzLCBJIHdpbGwgY2hhbmdlIGl0IGluIG15IG5ldyBwYXRjaC4KCgo+
+Pj4gICBkcml2ZXJzL2h3bW9uL2dzYy1od21vbi5jIHwgNiArKysrKy0KPj4gICAxIGZpbGUgY2hh
+bmdlZCwgNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9od21vbi9nc2MtaHdtb24uYyBiL2RyaXZlcnMvaHdtb24vZ3NjLWh3bW9uLmMKPj4g
+aW5kZXggMWZlMzc0MThmZjQ2Li4zNGMyMGQxMzYyN2EgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMv
+aHdtb24vZ3NjLWh3bW9uLmMKPj4gKysrIGIvZHJpdmVycy9od21vbi9nc2MtaHdtb24uYwo+PiBA
+QCAtMjY4LDEwICsyNjgsMTQgQEAgZ3NjX2h3bW9uX2dldF9kZXZ0cmVlX3BkYXRhKHN0cnVjdCBk
+ZXZpY2UgKmRldikKPj4gICAKPj4gICAJLyogZmFuIGNvbnRyb2xsZXIgYmFzZSBhZGRyZXNzICov
+Cj4+ICAgCWZhbiA9IG9mX2ZpbmRfY29tcGF0aWJsZV9ub2RlKGRldi0+cGFyZW50LT5vZl9ub2Rl
+LCBOVUxMLCAiZ3csZ3NjLWZhbiIpOwo+Cj5BIHNpbmdsZSBvZl9ub2RlX3B1dChmYW4pIGhlcmUg
+d291bGQgaGF2ZSBiZWVuIGJlIHN1ZmZpY2llbnQuCgoKCkkgdGhpbmsgb2Zfbm9kZV9wdXQgYWZ0
+ZXIgc2hvdWxkIGNvbWUgYWZ0ZXIgaXRzIHVzYWdlLCByaWdodD8KCgo+Pj4gLQlpZiAoZmFuICYm
+IG9mX3Byb3BlcnR5X3JlYWRfdTMyKGZhbiwgInJlZyIsICZwZGF0YS0+ZmFuX2Jhc2UpKSB7Cj4+
+ICsJaWYgKGZhbiAmJiBvZl9wcm9wZXJ0eV9yZWFkX3UzMihmYW4sICJyZWciLCAmcGRhdGEtPmZh
+bl9iYXNlKSkgewkJCj4+ICsJCW9mX25vZGVfcHV0KGZhbik7Cj4+ICAgCQlkZXZfZXJyKGRldiwg
+ImZhbiBub2RlIHdpdGhvdXQgYmFzZVxuIik7Cj4+ICAgCQlyZXR1cm4gRVJSX1BUUigtRUlOVkFM
+KTsKPj4gICAJfQo+PiArCQo+PiArCS8qIGlmIGZhbiYmIW9mX3Byb3BlcnR5X3JlYWRfdTMyIGZh
+aWwgKi8KPgoKPlRoaXMgY29tbWVudCBvbmx5IGFkZHMgY29uZnVzaW9uIGFuZCBkb2VzIG5vdCBh
+ZGQgYW55IHZhbHVlLgoKClNvcnJ5LCBJIGp1c3Qgd2FudCB0byBzYXksIGlmICpmYW4qIGlzIG5v
+dCBOVUxMLCBidXQgb2ZfcHJvcGVydHlfcmVhZF91MzIoKSByZXR1cm5zIDAuCkluIHRoYXQgY2Fz
+ZSwgd2Ugc3RpbGwgbmVlZCBhIG9mX25vZGVfcHV0KCkgdG8gcmVsZWFzZSBmYW4sIHJpZ2h0PwoK
+Pgo+R3VlbnRlcgo+Cj4+ICsJb2Zfbm9kZV9wdXQoZmFuKTsKPj4gICAKPj4gICAJLyogYWxsb2Nh
+dGUgc3RydWN0dXJlcyBmb3IgY2hhbm5lbHMgYW5kIGNvdW50IGluc3RhbmNlcyBvZiBlYWNoIHR5
+cGUgKi8KCj4+ICAgCWRldmljZV9mb3JfZWFjaF9jaGlsZF9ub2RlKGRldiwgY2hpbGQpIHsKCgpI
+aSwgR3VlbnRlciwgSSBhbSBwcmVwYXJpbmcgbXkgbmV3IHBhdGNoIGFuZCBJIHdhbnQgdG8gZGlz
+Y3VzcyB5b3VyIHN1Z2dlc3Rpb25zIGFzIGFib3ZlLgoK
