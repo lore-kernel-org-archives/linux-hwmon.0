@@ -2,77 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 490FBC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jun 2022 11:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13136C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jun 2022 14:53:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376550AbiFPLky (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jun 2022 07:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        id S1377111AbiFPOxj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jun 2022 10:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376544AbiFPLkw (ORCPT
+        with ESMTP id S233993AbiFPOxj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:40:52 -0400
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DB475EBDE;
-        Thu, 16 Jun 2022 04:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hWoOt
-        Psu1gQScWL2O61ZqNnjFafUe4MdGUNnAujDm6s=; b=ReOb/rrN8X12mibvhUOXp
-        hBEXrsYnbkzDAaiuUikz1lS76cXXlaKOCy4s5a22d9z9NFxJ2fu2wUmfrxLfT+oH
-        7KGeR1xzJnn8C3IRD2zScz4O4bwJapcnTeB7k04cZxu5VXcrSFkPVCml39xHEQX6
-        R0cfbGU7lrCiuEUw3kEvFw=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp3 (Coremail) with SMTP id DcmowADXb5GoFqtiT23jDQ--.9871S2;
-        Thu, 16 Jun 2022 19:40:25 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     tharvey@gateworks.com, rjones@gateworks.com, jdelvare@suse.com,
-        linux@roeck-us.net
-Cc:     windhl@126.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (gsc-hwmon) Add missing of_node_put()
-Date:   Thu, 16 Jun 2022 19:40:24 +0800
-Message-Id: <20220616114024.3985770-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Jun 2022 10:53:39 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C825220BF0;
+        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id p69so1759394iod.0;
+        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=noJzuG2EgYsSXIT61u1YIsPaCEjRt5ye3SQVTsSN4U8=;
+        b=CIZ8a77SDwweUBOGNgII2b8y5/WfszC4zHsGvXE+zftomD+nN0gq1qFR2HzWFRYN5K
+         hpEhbGBopNmx3GlEh+glZLRXJhwIx2SwESaYp/7c+H2+x3MzsIKty7bImMbRMF0YGCVU
+         1z2PqX5O9AXmPnmNjgtHV+aWq+wFLluDGmmhi1+Jz3ENEavDVQ0CtNTzm0FJHR4i4kmd
+         atBUlGU2CMspcvvacCVvdsGjTNV8klc5bzSEOKuZPXH65L3o11x3SvSYMjXpebTbL4fH
+         0CIFIjl4J8623xiCo87jPzcp2eMQvYi42rfVp3Iotoy4uj0kVgKAcnFkkVXFnFJdJUfM
+         TyYg==
+X-Gm-Message-State: AJIora+9uXk2JQmNy0lexMmXsK1v/xndKTvgaXHL0rYRA5gKZ9I8QfbP
+        OlBqmRynoRuRZ6sPt8yzckIoCfYc7g==
+X-Google-Smtp-Source: AGRyM1u4nGZS+8jkLQspL8OqMilFtD1URp8KZikaKmVKIUBkw4uX4MYV01kHev1qyBWkrdJm6b53vw==
+X-Received: by 2002:a05:6602:2f0d:b0:669:e058:9a18 with SMTP id q13-20020a0566022f0d00b00669e0589a18mr2721297iow.26.1655391216014;
+        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y8-20020a056e020f4800b002d658a34081sm1052037ilj.86.2022.06.16.07.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 07:53:35 -0700 (PDT)
+Received: (nullmailer pid 3459426 invoked by uid 1000);
+        Thu, 16 Jun 2022 14:53:34 -0000
+Date:   Thu, 16 Jun 2022 08:53:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: move ibm,p8-occ bindings to proper
+ folder
+Message-ID: <20220616145334.GA3458950-robh@kernel.org>
+References: <20220615211619.6742-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowADXb5GoFqtiT23jDQ--.9871S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XFyfGF15Jry8Cr17GrWrGrg_yoWDKFg_Zr
-        1xWr9xXryDKF1fAr4DAF4S9ryqkr48Wrn7Xan3ta95CF1DZrnxWrnFvrn7W343urWagF98
-        Xw1qyryIvr4fujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRWq2tUUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AoiF1pEDu4YEwAAsW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615211619.6742-1-wsa@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In gsc_hwmon_get_devtree_pdata(), of_find_compatible_node() will return
-a node pointer with refcount incremented. We should use of_node_put() in
-fail path or when it is not used anymore.
+On Wed, 15 Jun 2022 23:16:19 +0200, Wolfram Sang wrote:
+> It accidently ended up in i2c, but it should be in the hwmon folder.
+> 
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> ---
+>  .../devicetree/bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt       | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename Documentation/devicetree/bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt (100%)
+> 
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/hwmon/gsc-hwmon.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
-index 1fe37418ff46..d64be48f1ef6 100644
---- a/drivers/hwmon/gsc-hwmon.c
-+++ b/drivers/hwmon/gsc-hwmon.c
-@@ -269,10 +269,13 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
- 	/* fan controller base address */
- 	fan = of_find_compatible_node(dev->parent->of_node, NULL, "gw,gsc-fan");
- 	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {
-+		of_node_put(fan);
- 		dev_err(dev, "fan node without base\n");
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-+	of_node_put(fan);
-+
- 	/* allocate structures for channels and count instances of each type */
- 	device_for_each_child_node(dev, child) {
- 		if (fwnode_property_read_string(child, "label", &ch->name)) {
--- 
-2.25.1
-
+Applied, thanks!
