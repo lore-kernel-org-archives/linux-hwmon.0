@@ -2,145 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E96C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jun 2022 03:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFD97C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jun 2022 04:34:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357829AbiFPDGJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jun 2022 23:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S237248AbiFPEet (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jun 2022 00:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355839AbiFPDGG (ORCPT
+        with ESMTP id S229485AbiFPEet (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jun 2022 23:06:06 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7FC5A093;
-        Wed, 15 Jun 2022 20:06:01 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id w21so349256pfc.0;
-        Wed, 15 Jun 2022 20:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LukzTDUwt66wcsoLaoexNQpPVZgj0xpUTeZfbRgw5Qs=;
-        b=qu1tYXYRUJWS6pzyxmYabH95T0nXzYA4PPbr+118VERbjuTHZh4EWnRfXPKa8rmoZr
-         GtMujE8F70cHqrCJhu+Y3Jb0RkPPoB0zaMQ0leZEOzxVWQ9NzU6e1Ryhl9Lz6YACAVWB
-         0g6vcqUalviuaY+kvyTQ7H5OlBzQor4tAbqVEQO1R+jSMWdZwU/MdI2j95p7lkk0ixgP
-         jmQJmMKZtv2SbLqqCwVqimoM/kg5ixsPPfTJpoTk32K/RWdIvIOD6R9eB1nIAtk+M+5N
-         qAej49Ek5nbYqJAaM5USJ4wzqzx/1x3GQd/re4XKeUndrYLXXWzAsSBvjJOl0dhHx8aa
-         I9Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LukzTDUwt66wcsoLaoexNQpPVZgj0xpUTeZfbRgw5Qs=;
-        b=ylvjNzugD5TxpPewPCpCkOl8AGnVqbS0Ktkoln7rwOedEEjx1SraXU0J0//kIil71K
-         9wY4zNIhyOIW0GzDZ9/1nIF/sZ1bafYePXuw26fsXMJkGfnvPypuZagaGa0dOttbMdQv
-         gkWIJ6c0mPeRwmA2fA6p6C7X1cPATRRyfAWMUtt7UJKhjkYUI2O/maAreSLcm1MNGY7q
-         NQ0juqM9ZT2Xf2Uf3N43UZ7MZ8ayVkdhPMme57ksXnFbMlgFGuh88L5VbrxRlrYbyISE
-         99JRujdpism6Nwy3gR3IT/du92Trfinq6HE+8YE+c6oDKqCMDkoO8UxiyXk9mETZTVV2
-         R4CQ==
-X-Gm-Message-State: AJIora+JL0+E3P9heHOTSUeOtqrH5X32AoE7dS5AxZfBKH1SM2C0DB94
-        C3w31kCzDOwrsgPhprSHg83W4srkvck=
-X-Google-Smtp-Source: AGRyM1ueTzUMMb7VkWIorwIGo5UVkEtt4/zUBAL5uI3Xy01yJAmhw9i8x3v47rLGaHh21KqDpe9CwA==
-X-Received: by 2002:a63:3183:0:b0:3fd:6797:70a8 with SMTP id x125-20020a633183000000b003fd679770a8mr2594360pgx.206.1655348761209;
-        Wed, 15 Jun 2022 20:06:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 9-20020a621909000000b005184c9c46dbsm382366pfz.81.2022.06.15.20.05.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 20:06:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0d57d565-fa50-a970-4bf2-fff95f48e5ac@roeck-us.net>
-Date:   Wed, 15 Jun 2022 20:05:58 -0700
+        Thu, 16 Jun 2022 00:34:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7003A5AA40
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jun 2022 21:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655354088; x=1686890088;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aauzzgaT6/TCUN+zr2BOmeGuOK7EuVgHB5nmqo3VpFY=;
+  b=guSXJ+Jd9kJqkCdtExFS034jjVwtbvWmMu7Dyx6IZRsd0ya7OXeTm7XK
+   Hdf54ZUNNEISRSdqX1pv+iiQpWtaySY+VStTnFxNP1t7u+0k1E2tiy7Ni
+   V/ez2RFFju+wl7wC1dRDsLddps3xP34w3m/Iu2uiy0jhQfinZu888UQ2H
+   1uRRwf8HOQb2JVAIPMl65XT13K97mFkummjaml7rg3jJxUsKRg9uqN9WE
+   eBAPVvPgwd3gRZFBk1lP+mF2Yy831N41meP36coVDsh2t2nzaQwC+zV5M
+   9CYIHGx/j7UP1hfd1nNN50ZpKyhTi/2DNoiaFKvWi/9jrGIGAoPgY+fHn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="279879347"
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="279879347"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 21:34:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="589469965"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Jun 2022 21:34:46 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1hDS-000O2P-1i;
+        Thu, 16 Jun 2022 04:34:46 +0000
+Date:   Thu, 16 Jun 2022 12:34:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:master] BUILD SUCCESS
+ 31c6caf381923e4e8ec4c7e8f6f1df82fa690134
+Message-ID: <62aab2d9.bolKgcr7i6uQnPGW%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] drivers: hwmon: Add missing of_node_put() in gsc-hwmon.c
-Content-Language: en-US
-To:     =?UTF-8?B?5ZKM5Lqu?= <windhl@126.com>
-Cc:     tharvey@gateworks.com, rjones@gateworks.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615151856.3970186-1-windhl@126.com>
- <01243e3e-f4d2-c1ba-98f5-db7bc0c62adc@roeck-us.net>
- <2da49756.221e.1816a5fa3d3.Coremail.windhl@126.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <2da49756.221e.1816a5fa3d3.Coremail.windhl@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/15/22 19:37, 和亮 wrote:
-> 
-> 
-> 
-> At 2022-06-16 01:57:49, "Guenter Roeck" <linux@roeck-us.net> wrote:
->>
->> Please use proper subject lines. Here it should have been
->>
->> hwmon: (gsc-hwmon) Add missing of_node_put()
-> 
-> 
-> 
-> Thanks, I will change it in my new patch.
-> 
-> 
->>>>    drivers/hwmon/gsc-hwmon.c | 6 +++++-
->>>    1 file changed, 5 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
->>> index 1fe37418ff46..34c20d13627a 100644
->>> --- a/drivers/hwmon/gsc-hwmon.c
->>> +++ b/drivers/hwmon/gsc-hwmon.c
->>> @@ -268,10 +268,14 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
->>>    
->>>    	/* fan controller base address */
->>>    	fan = of_find_compatible_node(dev->parent->of_node, NULL, "gw,gsc-fan");
->>
->> A single of_node_put(fan) here would have been be sufficient.
-> 
-> 
-> 
-> I think of_node_put after should come after its usage, right?
-> 
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git master
+branch HEAD: 31c6caf381923e4e8ec4c7e8f6f1df82fa690134  ARM: 9207/1: amba: fix refcount underflow if amba_device_add() fails
 
-Yes, you are correct. Sorry for the noise.
+elapsed time: 726m
 
->>>> -	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {
->>> +	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {		
->>> +		of_node_put(fan);
->>>    		dev_err(dev, "fan node without base\n");
->>>    		return ERR_PTR(-EINVAL);
->>>    	}
->>> +	
->>> +	/* if fan&&!of_property_read_u32 fail */
->>
-> 
->> This comment only adds confusion and does not add any value.
-> 
-> 
-> Sorry, I just want to say, if *fan* is not NULL, but of_property_read_u32() returns 0.
-> In that case, we still need a of_node_put() to release fan, right?
-> 
+configs tested: 53
+configs skipped: 3
 
-Yes, but that is obvious, and the comment is not needed.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
-Guenter
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
 
->>
->> Guenter
->>
->>> +	of_node_put(fan);
->>>    
->>>    	/* allocate structures for channels and count instances of each type */
-> 
->>>    	device_for_each_child_node(dev, child) {
-> 
-> 
-> Hi, Guenter, I am preparing my new patch and I want to discuss your suggestions as above.
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
