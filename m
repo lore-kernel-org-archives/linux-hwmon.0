@@ -2,79 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F241DC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jun 2022 02:38:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E96C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jun 2022 03:06:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347671AbiFPCiF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jun 2022 22:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
+        id S1357829AbiFPDGJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jun 2022 23:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbiFPCiE (ORCPT
+        with ESMTP id S1355839AbiFPDGG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jun 2022 22:38:04 -0400
-Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A15627155;
-        Wed, 15 Jun 2022 19:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=DJRHY
-        5TULW6YiMhALFXgMhXjdupTtOS2pWbWnjCFRk4=; b=nq82c4fbSA//9e13HQNJe
-        aXu/VpPsIElmf2Dzz6fR5PthpQZKYZZX0756uVqmB5IaZwvGw18/BYq0mafYpaCH
-        9Gk/+oNu9cLmSDsfpnrmcbgy/l6cV/Na0koHmq6yKshuvdrBKM8yDDln2EI6zFy2
-        ZrUzanRxaPOswqYPnRwb1s=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
- (Coremail) ; Thu, 16 Jun 2022 10:37:41 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Thu, 16 Jun 2022 10:37:41 +0800 (CST)
-From:   =?GBK?B?us3BwQ==?= <windhl@126.com>
-To:     "Guenter Roeck" <linux@roeck-us.net>
+        Wed, 15 Jun 2022 23:06:06 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7FC5A093;
+        Wed, 15 Jun 2022 20:06:01 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id w21so349256pfc.0;
+        Wed, 15 Jun 2022 20:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LukzTDUwt66wcsoLaoexNQpPVZgj0xpUTeZfbRgw5Qs=;
+        b=qu1tYXYRUJWS6pzyxmYabH95T0nXzYA4PPbr+118VERbjuTHZh4EWnRfXPKa8rmoZr
+         GtMujE8F70cHqrCJhu+Y3Jb0RkPPoB0zaMQ0leZEOzxVWQ9NzU6e1Ryhl9Lz6YACAVWB
+         0g6vcqUalviuaY+kvyTQ7H5OlBzQor4tAbqVEQO1R+jSMWdZwU/MdI2j95p7lkk0ixgP
+         jmQJmMKZtv2SbLqqCwVqimoM/kg5ixsPPfTJpoTk32K/RWdIvIOD6R9eB1nIAtk+M+5N
+         qAej49Ek5nbYqJAaM5USJ4wzqzx/1x3GQd/re4XKeUndrYLXXWzAsSBvjJOl0dhHx8aa
+         I9Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LukzTDUwt66wcsoLaoexNQpPVZgj0xpUTeZfbRgw5Qs=;
+        b=ylvjNzugD5TxpPewPCpCkOl8AGnVqbS0Ktkoln7rwOedEEjx1SraXU0J0//kIil71K
+         9wY4zNIhyOIW0GzDZ9/1nIF/sZ1bafYePXuw26fsXMJkGfnvPypuZagaGa0dOttbMdQv
+         gkWIJ6c0mPeRwmA2fA6p6C7X1cPATRRyfAWMUtt7UJKhjkYUI2O/maAreSLcm1MNGY7q
+         NQ0juqM9ZT2Xf2Uf3N43UZ7MZ8ayVkdhPMme57ksXnFbMlgFGuh88L5VbrxRlrYbyISE
+         99JRujdpism6Nwy3gR3IT/du92Trfinq6HE+8YE+c6oDKqCMDkoO8UxiyXk9mETZTVV2
+         R4CQ==
+X-Gm-Message-State: AJIora+JL0+E3P9heHOTSUeOtqrH5X32AoE7dS5AxZfBKH1SM2C0DB94
+        C3w31kCzDOwrsgPhprSHg83W4srkvck=
+X-Google-Smtp-Source: AGRyM1ueTzUMMb7VkWIorwIGo5UVkEtt4/zUBAL5uI3Xy01yJAmhw9i8x3v47rLGaHh21KqDpe9CwA==
+X-Received: by 2002:a63:3183:0:b0:3fd:6797:70a8 with SMTP id x125-20020a633183000000b003fd679770a8mr2594360pgx.206.1655348761209;
+        Wed, 15 Jun 2022 20:06:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 9-20020a621909000000b005184c9c46dbsm382366pfz.81.2022.06.15.20.05.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 20:06:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0d57d565-fa50-a970-4bf2-fff95f48e5ac@roeck-us.net>
+Date:   Wed, 15 Jun 2022 20:05:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] drivers: hwmon: Add missing of_node_put() in gsc-hwmon.c
+Content-Language: en-US
+To:     =?UTF-8?B?5ZKM5Lqu?= <windhl@126.com>
 Cc:     tharvey@gateworks.com, rjones@gateworks.com, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] drivers: hwmon: Add missing of_node_put() in
- gsc-hwmon.c
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <01243e3e-f4d2-c1ba-98f5-db7bc0c62adc@roeck-us.net>
 References: <20220615151856.3970186-1-windhl@126.com>
  <01243e3e-f4d2-c1ba-98f5-db7bc0c62adc@roeck-us.net>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
-MIME-Version: 1.0
-Message-ID: <2da49756.221e.1816a5fa3d3.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GMqowADX3yd2l6piYtg2AA--.9223W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuBMiF2JVj40ZHAACss
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+ <2da49756.221e.1816a5fa3d3.Coremail.windhl@126.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <2da49756.221e.1816a5fa3d3.Coremail.windhl@126.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-CgoKQXQgMjAyMi0wNi0xNiAwMTo1Nzo0OSwgIkd1ZW50ZXIgUm9lY2siIDxsaW51eEByb2Vjay11
-cy5uZXQ+IHdyb3RlOgo+Cj5QbGVhc2UgdXNlIHByb3BlciBzdWJqZWN0IGxpbmVzLiBIZXJlIGl0
-IHNob3VsZCBoYXZlIGJlZW4KPgo+aHdtb246IChnc2MtaHdtb24pIEFkZCBtaXNzaW5nIG9mX25v
-ZGVfcHV0KCkKCgoKVGhhbmtzLCBJIHdpbGwgY2hhbmdlIGl0IGluIG15IG5ldyBwYXRjaC4KCgo+
-Pj4gICBkcml2ZXJzL2h3bW9uL2dzYy1od21vbi5jIHwgNiArKysrKy0KPj4gICAxIGZpbGUgY2hh
-bmdlZCwgNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9od21vbi9nc2MtaHdtb24uYyBiL2RyaXZlcnMvaHdtb24vZ3NjLWh3bW9uLmMKPj4g
-aW5kZXggMWZlMzc0MThmZjQ2Li4zNGMyMGQxMzYyN2EgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMv
-aHdtb24vZ3NjLWh3bW9uLmMKPj4gKysrIGIvZHJpdmVycy9od21vbi9nc2MtaHdtb24uYwo+PiBA
-QCAtMjY4LDEwICsyNjgsMTQgQEAgZ3NjX2h3bW9uX2dldF9kZXZ0cmVlX3BkYXRhKHN0cnVjdCBk
-ZXZpY2UgKmRldikKPj4gICAKPj4gICAJLyogZmFuIGNvbnRyb2xsZXIgYmFzZSBhZGRyZXNzICov
-Cj4+ICAgCWZhbiA9IG9mX2ZpbmRfY29tcGF0aWJsZV9ub2RlKGRldi0+cGFyZW50LT5vZl9ub2Rl
-LCBOVUxMLCAiZ3csZ3NjLWZhbiIpOwo+Cj5BIHNpbmdsZSBvZl9ub2RlX3B1dChmYW4pIGhlcmUg
-d291bGQgaGF2ZSBiZWVuIGJlIHN1ZmZpY2llbnQuCgoKCkkgdGhpbmsgb2Zfbm9kZV9wdXQgYWZ0
-ZXIgc2hvdWxkIGNvbWUgYWZ0ZXIgaXRzIHVzYWdlLCByaWdodD8KCgo+Pj4gLQlpZiAoZmFuICYm
-IG9mX3Byb3BlcnR5X3JlYWRfdTMyKGZhbiwgInJlZyIsICZwZGF0YS0+ZmFuX2Jhc2UpKSB7Cj4+
-ICsJaWYgKGZhbiAmJiBvZl9wcm9wZXJ0eV9yZWFkX3UzMihmYW4sICJyZWciLCAmcGRhdGEtPmZh
-bl9iYXNlKSkgewkJCj4+ICsJCW9mX25vZGVfcHV0KGZhbik7Cj4+ICAgCQlkZXZfZXJyKGRldiwg
-ImZhbiBub2RlIHdpdGhvdXQgYmFzZVxuIik7Cj4+ICAgCQlyZXR1cm4gRVJSX1BUUigtRUlOVkFM
-KTsKPj4gICAJfQo+PiArCQo+PiArCS8qIGlmIGZhbiYmIW9mX3Byb3BlcnR5X3JlYWRfdTMyIGZh
-aWwgKi8KPgoKPlRoaXMgY29tbWVudCBvbmx5IGFkZHMgY29uZnVzaW9uIGFuZCBkb2VzIG5vdCBh
-ZGQgYW55IHZhbHVlLgoKClNvcnJ5LCBJIGp1c3Qgd2FudCB0byBzYXksIGlmICpmYW4qIGlzIG5v
-dCBOVUxMLCBidXQgb2ZfcHJvcGVydHlfcmVhZF91MzIoKSByZXR1cm5zIDAuCkluIHRoYXQgY2Fz
-ZSwgd2Ugc3RpbGwgbmVlZCBhIG9mX25vZGVfcHV0KCkgdG8gcmVsZWFzZSBmYW4sIHJpZ2h0PwoK
-Pgo+R3VlbnRlcgo+Cj4+ICsJb2Zfbm9kZV9wdXQoZmFuKTsKPj4gICAKPj4gICAJLyogYWxsb2Nh
-dGUgc3RydWN0dXJlcyBmb3IgY2hhbm5lbHMgYW5kIGNvdW50IGluc3RhbmNlcyBvZiBlYWNoIHR5
-cGUgKi8KCj4+ICAgCWRldmljZV9mb3JfZWFjaF9jaGlsZF9ub2RlKGRldiwgY2hpbGQpIHsKCgpI
-aSwgR3VlbnRlciwgSSBhbSBwcmVwYXJpbmcgbXkgbmV3IHBhdGNoIGFuZCBJIHdhbnQgdG8gZGlz
-Y3VzcyB5b3VyIHN1Z2dlc3Rpb25zIGFzIGFib3ZlLgoK
+On 6/15/22 19:37, 和亮 wrote:
+> 
+> 
+> 
+> At 2022-06-16 01:57:49, "Guenter Roeck" <linux@roeck-us.net> wrote:
+>>
+>> Please use proper subject lines. Here it should have been
+>>
+>> hwmon: (gsc-hwmon) Add missing of_node_put()
+> 
+> 
+> 
+> Thanks, I will change it in my new patch.
+> 
+> 
+>>>>    drivers/hwmon/gsc-hwmon.c | 6 +++++-
+>>>    1 file changed, 5 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
+>>> index 1fe37418ff46..34c20d13627a 100644
+>>> --- a/drivers/hwmon/gsc-hwmon.c
+>>> +++ b/drivers/hwmon/gsc-hwmon.c
+>>> @@ -268,10 +268,14 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
+>>>    
+>>>    	/* fan controller base address */
+>>>    	fan = of_find_compatible_node(dev->parent->of_node, NULL, "gw,gsc-fan");
+>>
+>> A single of_node_put(fan) here would have been be sufficient.
+> 
+> 
+> 
+> I think of_node_put after should come after its usage, right?
+> 
+> 
+
+Yes, you are correct. Sorry for the noise.
+
+>>>> -	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {
+>>> +	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {		
+>>> +		of_node_put(fan);
+>>>    		dev_err(dev, "fan node without base\n");
+>>>    		return ERR_PTR(-EINVAL);
+>>>    	}
+>>> +	
+>>> +	/* if fan&&!of_property_read_u32 fail */
+>>
+> 
+>> This comment only adds confusion and does not add any value.
+> 
+> 
+> Sorry, I just want to say, if *fan* is not NULL, but of_property_read_u32() returns 0.
+> In that case, we still need a of_node_put() to release fan, right?
+> 
+
+Yes, but that is obvious, and the comment is not needed.
+
+Thanks,
+Guenter
+
+>>
+>> Guenter
+>>
+>>> +	of_node_put(fan);
+>>>    
+>>>    	/* allocate structures for channels and count instances of each type */
+> 
+>>>    	device_for_each_child_node(dev, child) {
+> 
+> 
+> Hi, Guenter, I am preparing my new patch and I want to discuss your suggestions as above.
+> 
+
