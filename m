@@ -2,73 +2,56 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19962C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jun 2022 06:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22212C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jun 2022 07:56:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349999AbiFVGc4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Jun 2022 02:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
+        id S1353476AbiFVH4P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Jun 2022 03:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiFVGcz (ORCPT
+        with ESMTP id S1353919AbiFVH4K (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:32:55 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7C62F64A;
-        Tue, 21 Jun 2022 23:32:47 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1655879559t7m5rgxa
-Received: from ubuntu.localdomain ( [106.117.99.132])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 14:32:33 +0800 (CST)
-X-QQ-SSF: 01000000008000B0B000D00A0000000
-X-QQ-FEAT: JCzhYPHCTbgEymvzOAeyowkIqeCwWz3/9D1jSz6HQpWUKME/jX5/lbLKRuxSt
-        rfjqNEylMh3p94Rn9dFtEGqoDtyQY8RFNBBRYoErtZneew8lGVeQ3GLZEgQwK33BhFxFgvL
-        P/V503VZhrSiwWKA1EHsGjhGI9Kon/b41BywadfBbYtITqi/qPuSfzfpzkodi5aJQt5xZt/
-        isn9E8vmwpPVLXyS9D4GlMIzYm+LeTTZTsCVGsBPU1YCCEPUEgCtX7/bvccVC3fZFkTxyNi
-        UOWMI9gIVHrIDLhcksYf+9dO6j7vBg1RePxrBzVmutCj+mTUX0cIve/h2KUbrxu/UKfnWzU
-        b1b0xh6/VbKMW1cchM=
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     linux@roeck-us.net, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] hwmon: (pmbus/ucd9200): fix typos in comments
-Date:   Wed, 22 Jun 2022 14:32:31 +0800
-Message-Id: <20220622063231.20612-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
+        Wed, 22 Jun 2022 03:56:10 -0400
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58927377F1
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Jun 2022 00:56:09 -0700 (PDT)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id DE59027B97; Wed, 22 Jun 2022 09:51:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1655884404; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=Jy1dXxemttzQuR2IshPBb2hzIRNuUyhjJowB1l7N40mfAjrDD9JhMgBWMWOKiF+JY
+         Q+ZQUpaA8FgbI5UGv4rFqwr8lUsFPZaIyh3ui69eImDq3BMr1WkEJD5phC4WpexgMh
+         SAzeU98x59lj+3VcUBS024AgrIEB95FcqaeBV57no+UIOVloKOnreN3iF7oCQQG0BI
+         4I/5T/OeA5XXMcsLAR4F0wPfDIUa4kv6nNPOl6rGskqR8pc2C6vRf2YiIXSMaqS0/s
+         3/0Yh2AkJqifE+BLaI1RuKT4aCfzsEeqcB3yG2sBDWUe8ZoON2Tqxjmw+aL7e0ABYw
+         O+IZia76EOqsA==
+Received: by mail.olerise.pl for <linux-hwmon@vger.kernel.org>; Wed, 22 Jun 2022 07:50:21 GMT
+Message-ID: <20220622084500-0.1.j.bbwb.0.qr7kb7s5n4@olerise.pl>
+Date:   Wed, 22 Jun 2022 07:50:21 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@olerise.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.olerise.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Drop the redundant word 'the' in the comments following
-    /*
-     * Set PHASE registers on all pages to 0xff to ensure that phase
-     * specific commands will apply to all phases of a given page (rail).
-     * This only affects the READ_IOUT and READ_TEMPERATURE2 registers.
-     * READ_IOUT will return the sum of currents of all phases of a rail,
-     * and READ_TEMPERATURE2 will return the maximum temperature detected
-     * for the [the - DROP] phases of the rail.
-     */
+Dzie=C5=84 dobry,
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/hwmon/pmbus/ucd9200.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-diff --git a/drivers/hwmon/pmbus/ucd9200.c b/drivers/hwmon/pmbus/ucd9200.c
-index 6bc3273e31e7..3ad375a76f3e 100644
---- a/drivers/hwmon/pmbus/ucd9200.c
-+++ b/drivers/hwmon/pmbus/ucd9200.c
-@@ -148,7 +148,7 @@ static int ucd9200_probe(struct i2c_client *client)
- 	 * This only affects the READ_IOUT and READ_TEMPERATURE2 registers.
- 	 * READ_IOUT will return the sum of currents of all phases of a rail,
- 	 * and READ_TEMPERATURE2 will return the maximum temperature detected
--	 * for the the phases of the rail.
-+	 * for the phases of the rail.
- 	 */
- 	for (i = 0; i < info->pages; i++) {
- 		/*
--- 
-2.17.1
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
