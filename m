@@ -2,173 +2,189 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 461BFCCA47C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Jun 2022 16:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92870C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Jun 2022 19:33:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbiFWQxV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Jun 2022 12:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S230518AbiFWTdK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Jun 2022 15:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbiFWQwh (ORCPT
+        with ESMTP id S232093AbiFWTcm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:52:37 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2066.outbound.protection.outlook.com [40.107.101.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01AE5FDD;
-        Thu, 23 Jun 2022 09:52:33 -0700 (PDT)
+        Thu, 23 Jun 2022 15:32:42 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498C0993C6;
+        Thu, 23 Jun 2022 12:10:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GWXnp8Dwwybp2GrEPI4bF98fJOdpiIAeyz1/3+el1lytomTsA++DhMxe1RMU37417+FgbkW5T8STAmzDbiMvXK9nmFb45IUmHRO52QkkAeE+mbyZ4YJgqa3yyVnkAyffPbm4lLbXyHyYp5FtKZTI9qq3Jz3/qF2VzX0oWi+aHRAYDeAHQB2IsbLtfMzU3IciZxAx/gQIC5MnMgK1XTDCu6UmbaOUaj/sfdOhKSr/b/ExI0szg9qErSkc7EM/oDNwTXtMrwdPYIPICUsPXlOuzkWq9HHR5Tqxx/oqon+2nDuHThn8eKxqIgZhrIgD8qAxqz0p5FEOQm3iuhQa4p4a4Q==
+ b=X0fmuNDPii/+LS4hwpOLpiz2Z7URUMwBh4cP6JO0adqeV45oQ5r24OG3PFrLdQv0qp1UCa4Ptj91ABIfzQ92K8jjuJdy6y+/rgy6LHIIYyCMjyDMZsf5FMhdZvbO3BP5ghNgXFmpztENYMYKAkqc1u6wkYh6A8+S3hEXZfZNUFIMiKle7LLGCqsrHtMwa7c3pjAHL+nWigUWtAIQEXAtdBggI/I2rVdJ/8a15XhzXGNFAdcYTkAsPSK/SGFhF3qgJX4S9Uzhlawk32T1XZoCQRC7vHSgpP8GPZftYmJgDW6MtrbVJCBdU6e8oADX6Pz7erbYOsOP/ATB4w2OhT219w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZkXvzgpj9E7kz/YhpR0nhPtHcC4y60tSoMNu3L4uW00=;
- b=hMpDPEWvZPM1ip7UuLnh7rJLjPBLm5wmtw0hBOaQp01zamLIv6gLKDmg7aazcRNUfFKk8H0El9V4xfj0nqteMFfinWOdU/KDtQuqK0fhO864NUUDowKWjr7OBKUTWzoewcHew+rgjKdmZi/GElRrpd3BZ8zR5aVg3kiz8Qmq4JPRCKOeJXaASYa4mHsY90xYguo2mM8W/gqAH3syJ1MMyU8puRTWyEFzAM8yALxNbRrA9eOje29qA9bnhuqEr/kzvI2dVoYFFCZNnLnxWU79DYsSjreG67W3XsiZ7WW8BU7ItCdoXiG6OaRnknt/d10rR5PiFCNY53M/gAqdlaFjjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=4QGYFR0Z+SWnA5UWHtXjgI1eYnIxmi22/7wqNSh5bqU=;
+ b=DmffyBXTkFxOFRaip4N3h3iIE85K178GCmk6ruioBjdwqpw7WEbLWsAJxBziGK92QfRGKS0jGdsnbIc8gycyEIWTrQpCKhEtd+pvsnZ+GAabaZ6p/x91XVprJTw7sCG2wf+/WzS+r+NBdMovRBhB/IH5znO/ZuM6OxXeKsZ6pplQ//fPU0s8ymd5xd/LDUbOFE/ZXGRQdALBjmJOGA0PaOQM5qhzW3itOMFjKz7c60Lg76R4b5Y7cvkzoUa52eoZDPLWLMiSe4Yt15nyaJKvDeesFAiAkzwppk+Ltt/jeiVo0erQX1DoIRcGUvq4t60NZJMkTPPLMyfYuMPwh2C6IQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZkXvzgpj9E7kz/YhpR0nhPtHcC4y60tSoMNu3L4uW00=;
- b=J5ZL5Omf/DuqrWR57d3WMIIOraG9xeci0fEoCT3j+a2JRyeTX4UapPDRigA9VUEBJQQJjx4lGadXu0FyApsaDR/B+HMXQNGMZFh4eP0uJaKAUN96hCm9t9uNPVDwRqb/cxn9g2hLdQiGCtmcrJooezQKEJHwH60BV3gm7XOf286f1gpgC+P1J7M7nbiSomYSno9G99hBSNIAcXVeazkAM6uKHlaXt97GjbMIsSzWsQYNK/dx5U8StSVFzBXMQIInV/x3/RZvIUtM/WeIits6IVZJKFx3bciqg8LP9HgkrlcN/TMUM/V4sGLrX9fTQY1+9t5qWJcrrCTnfpzt3mkgxw==
-Received: from MWHPR12CA0048.namprd12.prod.outlook.com (2603:10b6:301:2::34)
- by MN2PR12MB3741.namprd12.prod.outlook.com (2603:10b6:208:162::30) with
+ bh=4QGYFR0Z+SWnA5UWHtXjgI1eYnIxmi22/7wqNSh5bqU=;
+ b=5Jf2B3ZdPt0WrQ9aJ6CGK2/p33AqOamDhDV8AECeOreUnS0tzR4Y3u5oWYjZ1Sip9OkpT/mMAs4XEoFCBuqT9qOdtDpeVcnu24BaL+0k03fU7lIhg++8xItu4S7uTcjys/hTlXtD/y1fOHVD57OifS2b1DjvQJjrz/RB3BIktxE=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by PH0PR12MB5417.namprd12.prod.outlook.com (2603:10b6:510:e1::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16; Thu, 23 Jun
- 2022 16:52:31 +0000
-Received: from CO1NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:301:2:cafe::b2) by MWHPR12CA0048.outlook.office365.com
- (2603:10b6:301:2::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15 via Frontend
- Transport; Thu, 23 Jun 2022 16:52:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT013.mail.protection.outlook.com (10.13.174.227) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5373.15 via Frontend Transport; Thu, 23 Jun 2022 16:52:30 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Thu, 23 Jun 2022 16:52:30 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Thu, 23 Jun 2022 09:52:29 -0700
-Received: from r-build-bsp-02.mtr.labs.mlnx (10.127.8.9) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server id 15.2.986.26 via Frontend
- Transport; Thu, 23 Jun 2022 09:52:28 -0700
-From:   <michaelsh@nvidia.com>
-To:     <linux@roeck-us.net>, <robh+dt@kernel.org>
-CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <vadimp@nvidia.com>, Michael Shych <michaelsh@nvidia.com>
-Subject: [PATCH hwmon-next v4 3/3] docs: hwmon: add emc2305.rst to docs
-Date:   Thu, 23 Jun 2022 19:52:17 +0300
-Message-ID: <20220623165217.59252-4-michaelsh@nvidia.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20220623165217.59252-1-michaelsh@nvidia.com>
-References: <20220623165217.59252-1-michaelsh@nvidia.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Thu, 23 Jun
+ 2022 19:10:13 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::1143:10a5:987a:7598]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::1143:10a5:987a:7598%5]) with mapi id 15.20.5353.016; Thu, 23 Jun 2022
+ 19:10:13 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Moger, Babu" <Babu.Moger@amd.com>,
+        "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Clemens Ladisch <clemens@ladisch.de>
+Subject: RE: [PATCH v3 0/6] Add support for upcoming chips to k10temp and
+ amd_nb
+Thread-Topic: [PATCH v3 0/6] Add support for upcoming chips to k10temp and
+ amd_nb
+Thread-Index: AQHYf1wFHl6WqwCUtkm2Hz2zk959Jq1dajRA
+Date:   Thu, 23 Jun 2022 19:10:12 +0000
+Message-ID: <MN0PR12MB6101336EA32DB8A391DE4605E2B59@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20220613192956.4911-1-mario.limonciello@amd.com>
+In-Reply-To: <20220613192956.4911-1-mario.limonciello@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-06-23T19:09:35Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=eae91805-a738-45c7-ad3a-3d6c8c965de9;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-06-23T19:10:11Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 1d8ca488-9ee4-4e26-aca6-de727297a2c0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f2118019-260f-4d1d-845d-08da554bffe4
+x-ms-traffictypediagnostic: PH0PR12MB5417:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: oLR7UboxxDT+QKywRgKRCcGwkYecT4ttynTy03bxYUpV/ipUdyDF68KlobtmzlWx/PbitiWa3sV8hzSMOJB6IE/jesEvoTNogh9vhSLV7SggQIzSzk/KuXtv1I4ZmJRDcHZKvs5aXYgFbWNMsFjrU6XwEQ6wXxn6olKXSQ7ZGADIOruu0PLGYhY/8R96dtIcf/kJsv7sgH1srX4XtbiY5EE4pYU9TV3A1sZHev13vHqRPxwD8eptSpxnU5qr5Jl4hyP3HBd6wjleLuXHZETXsbuggvyz72l2pDWNl4sK2vy4gCBp+vLavy6+XB21fkA5Uz4aAedDrhIRbsb6u6n+LoNzK/OReVGk69xRn7r18fTnYLt/I6FEw87IpickvoyldUSf4J+BZDTwfJvyRLDZmHtalOpsVX5NbHiPaiW+/VNKALHdtm1N8nl3kAJE8ZpavMikF1pzpMYauhESurk4Zhy1HOYxs4KYa67U0gZQQhc7UvSodhUfsxobtt+VIW0BD8skWaoEAW4NWcy08gLP5maxD3iFPCn/DK2YT7TkU6NfQRr9oMnn4y1Z90CBNwv36QgXfky76lFY0NfhpL6DMgv7eGXREV3wPkT7R2Pi4boG1rSRxp+WVlJEJZPHxFraIexqJ+IC4oOU9nu97MrMy8YUz+PVywx3cKiqMcL6eRxpWqyZa8i6X4MFuKtoVvIraXrEI9zIemYVTx3G1qtFpEQw+g0Lf+Rj3vO80VXwGjmRgs4Wd0KEkQRe/xAd8fPXGsM3bBfGJks/Qc/9GHF0d4dYDt2lfj+sUACCpHEEjI0sLHmZRdtwJvf2bg56zRGtLIU2ipjR4ibXp+a2RmgT4Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(346002)(376002)(366004)(8676002)(4326008)(110136005)(8936002)(52536014)(5660300002)(38100700002)(7696005)(122000001)(6506007)(53546011)(71200400001)(478600001)(66446008)(66556008)(76116006)(64756008)(86362001)(83380400001)(316002)(54906003)(966005)(66946007)(66476007)(186003)(33656002)(41300700001)(55016003)(9686003)(38070700005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IQlVAV6ovzvgC9hiIpUog4LgDNC3rMqZkwqRIKN1IX6h0w22QBIifiUCTPt5?=
+ =?us-ascii?Q?pHK6USdHRnS80YeFF+Cy8lK1uN+VvLJVeI8I5FKLAfGJa5MZmpWZ2lC8CgGO?=
+ =?us-ascii?Q?90AAoItAUXfE7xrzqvIy7pJE8+3yOmfkJnicPgomw0FI1pHRHsku9weRDrQ8?=
+ =?us-ascii?Q?nmejopDb+lxivDlGFK0emQbJ1ZOGs1LN57o3SXvl5hC6bpS8UG7+ti/pnKeg?=
+ =?us-ascii?Q?9gdW6lpvxchgg8biAkDyK+Vn4U8dpBOtA7ctgvpkJPuO5y5nz16VQkh26j75?=
+ =?us-ascii?Q?da1HGdeTHCxoPh16uuZ1jEf5te6SC+H5jtTFHJDIfeWWqPSGvgN8B9y303ze?=
+ =?us-ascii?Q?kSHY2FhL7gsDj7E8atUrm0+ib5dBpLFP4K0QirMovza9vTBICInIDrCMapLG?=
+ =?us-ascii?Q?RtGmDfQcUn/ECNg6tEQs/6BK/7EGA9JOGjyDF6UO8nUZd0eoXhv69T+7cDHc?=
+ =?us-ascii?Q?fvGiZC/pHCGKHO43FhTj3JCfgxb1H1r/shJlhO3pwR6xeUeW5mABrm7lNdUb?=
+ =?us-ascii?Q?ZDJqyfmLZnTZIxBKVWjIX68rJKmSovivGq78+UV/UvzCN8EXrmbqxCwDmhVT?=
+ =?us-ascii?Q?mA0syBgZeCRnav5vqbNPEb6eEWp4W4N9D87f6xUTu0IE7GyZcHt2smOkR9/2?=
+ =?us-ascii?Q?S6FUyIlbiJ8fCpkZjhVzfzY/XFBnAdqz8mRamfP6wvhr3ZrYveN3aoKAcG7l?=
+ =?us-ascii?Q?v6DmqtNhVRYvLE8ess5FuP0uYy1MJrSGXeNqEj+M8cZLAMTwCO7rzSV0G5yE?=
+ =?us-ascii?Q?zQcnag9TJB0ZYjNgoBOXy8Rbw0aBGBENv81HjI1i3A8TfEiOsA6Dkv+A/sey?=
+ =?us-ascii?Q?r+7iGytlZ4WvcIHXwPaOnZQie1wqNCQKUIF4jyhv8J4ellwGkxVu1wW+GxqD?=
+ =?us-ascii?Q?niEmHb+HiojKXKDu3MbCHyIAS7/WI2Qsc6CaiCiaNwdlRmC8JFBWavNfg7fj?=
+ =?us-ascii?Q?pFN5E56juyUGq0v7chcbQF6WDU75lxHHHApE2mQjxBfofItWSsB2v16MHbBM?=
+ =?us-ascii?Q?FHK7VOWe24IGdZ+ROnW3bII/9ID4sDuu+ZyB5K6TPhcV7pXxYX1sT9Rh+8In?=
+ =?us-ascii?Q?RDs76H5o3P/fc9Qr9hGoGtfKpe7VcoUouuvuAU5Bln/kQVjVsKwaySctfTie?=
+ =?us-ascii?Q?n5DwASkgNK/mxy9DG5qLdgr8bhL+sOSCjr4+nyiWmPcdWlBrn3oKQ735cMxf?=
+ =?us-ascii?Q?T/cm452MHRrM/yQta5oIh4xEyc26A6e45moP5q+eCcXvIKDB86aXZHN+VgxQ?=
+ =?us-ascii?Q?xfOjmQi0rqPQIGrIB1NYSAySUZ2KI5LKTEX4OvKf2TjJrTcfn+YRk0+56zUy?=
+ =?us-ascii?Q?PPqtN85hyZx+cKR0qXP+L3QB0G5K7RUBJWnPu90lkD/U/dc4EUQO05DdKADU?=
+ =?us-ascii?Q?i6zrcWCd/HqPCL7MsQ3tbaQDKR/y7tVMOBnqB/V5D9OA/hG78PUybhQ6fkZd?=
+ =?us-ascii?Q?YyDHk73G8OcvpSVCgLX7oXCrFmIBVYT8Dhtkhrl90AXDN++ygZfygE+I/wsj?=
+ =?us-ascii?Q?JZXBxQT3nBxwUrMMCxSQ6fpEGTEx0WxuVqP/m1rBVBoKDueK/UH7xW4zoDNG?=
+ =?us-ascii?Q?OM9Zlx0SZPTRN3EQDDIgPUub3NCPeVGscbfKx8gfdo2xFBXliMvHd9VdnMBQ?=
+ =?us-ascii?Q?Qsfg8+B2Qs4DGaXPki3mASk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e462d1a1-ee16-49d8-96a6-08da5538c355
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3741:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 90+9hsVLHzQ0D00AFRiFKQn1EGslgJPt7JFdGM81Ud9tEelysY06Do+9cqvxEoYXuB20kWJEkSU+oNC0D/5soA0G3HGldlsK3l6B7bfcn/+OMTfcb8UJ/Ow4QRbOfH41hLn9WZO7HTM6cxbnN558srNKGaCDg75+xBCYcpi63shix0eiqvCfLGOnfDZ1E+toob+pu8bTsLkMdZIHym9EukpmsfykIcsKRfCRAFtvvTWora32NlXD3ywlqZVrPSxOT84KjBuT0LG2OMaBBY9fhzc9SXaQ2j4uIQz6f47RjGuNSruPMHwDpshudM5QJx0IxuhUQg5kfIRnf5ybkdXh9WhF8Pdrrm3QpJiewCy28KepTdpnsAYLJGWGD/k5lhUMUSk9rHlOOd3XRd9zT2h0/2ErSOiKFuqaD7IhYG1Z6h/OWeu9oeefPRZhYW9j/K4uzuH8xGqd6rIsQnNbXiQVcxBFZbB5YzsaSybMoh3chjXSuCd/XNPOFE0GeVkQlfyIcsCmDCfYZCq8sOgODePJoi9r7dD6zwXmOUdUUtsLIn6gUlKc4TS1jOPrMy1jypgD5So2YVxs5YwVdDdaF10beOIXTHTdNJx0iVcbKnVZXkm32Y9ew2NiUFpWf2tL+dHW1yCtMN2fuZuvT1N39WMhdqUqfoplORKj+S+10rB3cN/y9TvKpnPDBuiGJi7mq+SNxhF+y2zAIDMbsBIhw3SN1IIkEzMRMCk9HldBFDZhSwO9BPx5RgmHO6YGWwE2EeJNGLYqgD8hVpmilF6Dv7D6moMBjWRG9MjQEiFwpf+6BiJUr3t7t0tyhEOq7TpGbZSVWO0sKRqc4n5eue/h4fqvjQIyc/7fwCp9UfcyZTpq6wIDwccZcd17KN4NG+A3HZbJapEBxnd0UWz5Kf2/t3xC5l5aIBODmIOyfdkRTLmN/YE=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(346002)(136003)(39860400002)(40470700004)(46966006)(36840700001)(186003)(6666004)(8936002)(36860700001)(356005)(478600001)(70206006)(54906003)(8676002)(4326008)(41300700001)(966005)(36756003)(2876002)(82310400005)(81166007)(110136005)(70586007)(82740400003)(26005)(40480700001)(5660300002)(426003)(47076005)(40460700003)(336012)(2616005)(86362001)(107886003)(2906002)(316002)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 16:52:30.8792
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2118019-260f-4d1d-845d-08da554bffe4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2022 19:10:13.0108
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e462d1a1-ee16-49d8-96a6-08da5538c355
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT013.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3741
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: T6AbRFOOkrhBU7/Po9NqbGR9E2uUE4EVsQ/HmjzraFAaUqhe3d2KzPVMGROnCybbQ8O7Z01QI9oLwZ1pVsmAxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5417
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Michael Shych <michaelsh@nvidia.com>
+[Public]
 
-Add description of emc2305 driver.
+> -----Original Message-----
+> From: Limonciello, Mario <Mario.Limonciello@amd.com>
+> Sent: Monday, June 13, 2022 14:30
+> To: Clemens Ladisch <clemens@ladisch.de>
+> Cc: linux-hwmon@vger.kernel.org; Guenter Roeck <linux@roeck-us.net>;
+> Moger, Babu <Babu.Moger@amd.com>; Ghannam, Yazen
+> <Yazen.Ghannam@amd.com>; linux-kernel@vger.kernel.org;
+> x86@kernel.org; Limonciello, Mario <Mario.Limonciello@amd.com>
+> Subject: [PATCH v3 0/6] Add support for upcoming chips to k10temp and
+> amd_nb
+>=20
+> This series started as what looked like a correction to previous
+> commits, but I missed that the previous commits were for a different
+> family with the same chip models.  So while fixing up the series I also
+> noticed that a few upcoming chips have new PCIe IDs and CCD offsets not
+> yet supported, so add them to amd_nb/k10temp.
+>=20
+> v2->v3
+>  * Pick up tags
+>  * Group "ROOT" PCI IDs with others in patches 2 and 3.
+> v1->v2:
+>  * Correct commit messages
+>  * Add more missing chips and offsets
+>  * since so much changed, do not include Bjorn's Ack.
+>=20
+> Mario Limonciello (6):
+>   x86/amd_nb: Add AMD Family 17h A0-AF IDs
+>   x86/amd_nb: Add Family 19h model 70h-7Fh IDs
+>   x86/amd_nb: Add Family 19h model 60h-6Fh IDs
+>   hwmon: (k10temp): Add support for family 17h models A0h-AFh
+>   hwmon: (k10temp): Add support for family 19h models 70h-7Fh
+>   hwmon: (k10temp): Add support for family 19h models 60h-6Fh
+>=20
+>  arch/x86/kernel/amd_nb.c | 13 +++++++++++++
+>  drivers/hwmon/k10temp.c  | 12 ++++++++++++
+>  include/linux/pci_ids.h  |  3 +++
+>  3 files changed, 28 insertions(+)
+>=20
+> --
+> 2.25.1
 
-Signed-off-by: Michael Shych <michaelsh@nvidia.com>
-Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
----
-v1->v2
-- Add document to index.rst
----
- Documentation/hwmon/emc2305.rst | 40 ++++++++++++++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst   |  1 +
- 2 files changed, 41 insertions(+)
- create mode 100644 Documentation/hwmon/emc2305.rst
++ x86 maintainers.  I believe, you weren't on the series to line, only CC.
+This series crosses both x86 and hwmon so it needs to go one way or the oth=
+er.
 
-diff --git a/Documentation/hwmon/emc2305.rst b/Documentation/hwmon/emc2305.rst
-new file mode 100644
-index 000000000000..258da49d18f9
---- /dev/null
-+++ b/Documentation/hwmon/emc2305.rst
-@@ -0,0 +1,40 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver emc2305
-+=====================
-+
-+Supported chips:
-+   Microchip EMC2305, EMC2303, EMC2302, EMC2301
-+
-+   Addresses scanned: I2C 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d
-+   Prefixes: 'emc2305'
-+
-+   Datasheet: Publicly available at the Microchip website :
-+      https://www.microchip.com/en-us/product/EMC2305
-+
-+Description:
-+-----------
-+This driver implements support for Microchip EMC2301/2/3/5 RPM-based PWM Fan Controller.
-+The EMC2305 Fan Controller supports up to 5 independently controlled PWM fan drives.
-+Fan rotation speeds are reported in RPM.
-+The driver supports the RPM-based PWM control to keep a fan at the desired speed.
-+The driver provides the possibility to have one common PWM interface for all FANs
-+or up to the maximum available or configured independent PWMs.
-+
-+The driver provides the following sysfs interfaces in hwmon subsystem:
-+
-+================= == ===================================================
-+fan[1-5]_fault    RO files for tachometers TACH1-TACH5 fault indication
-+fan[1-5]_input    RO files for tachometers TACH1-TACH5 input (in RPM)
-+pwm[1-5]          RW file for fan[1-5] target duty cycle (0..255)
-+================= == ===================================================
-+
-+sysfs interfaces in thermal subsystem:
-+
-+================= == ========================================================================
-+cur_state         RW file for the current cooling state of the cooling device (0..max_state)
-+max_state         RO file for the maximum cooling state of the cooling device
-+================= == ========================================================================
-+
-+Configuration is possible via device tree:
-+Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index f7113b0f8b2a..83b082d222af 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -63,6 +63,7 @@ Hardware Monitoring Kernel Drivers
-    ds620
-    emc1403
-    emc2103
-+   emc2305
-    emc6w201
-    f71805f
-    f71882fg
--- 
-2.14.1
+Can you please review and comment if you will take it or want hwmon to take=
+ it?
+Here's the rest of the patches:
+https://patchwork.kernel.org/project/linux-hwmon/list/?series=3D649968
 
+If you'd like a RESEND, happy to do that too.
+
+Thanks,
