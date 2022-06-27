@@ -2,51 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D0E1C43334
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jun 2022 15:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E518BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jun 2022 15:19:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbiF0PT3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Jun 2022 11:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S237920AbiF0PTk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Jun 2022 11:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237807AbiF0PTW (ORCPT
+        with ESMTP id S237854AbiF0PTZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:19:22 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA7911450;
-        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id o10so13568738edi.1;
-        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
+        Mon, 27 Jun 2022 11:19:25 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B640615FD7;
+        Mon, 27 Jun 2022 08:19:24 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id cf14so13530052edb.8;
+        Mon, 27 Jun 2022 08:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=hFmbK8M11XjJzoVFfZwjfb4w2B8a5R3YTDT8W3rNvcQ=;
-        b=EqM+us6vfLvad4kXXDn1AjcivBngldlek+jWxMpAm2Vc5HI676j2YS3QWCgrYGSLPc
-         nRsdJCfinQfKudnDj9eJBV49m05r2C4B9nlJf+hA4FoLosukjqDb0yTd44foaslGZdDt
-         KKBeTRTh6E1mSiP5NqCAWJpr0N6+mg+LA3TZuRcITUVJ4fW6nUPmCHo1qFiMsVicE6gE
-         5s4Uqxx+XFgdULrm3sH/eUGT3PVAKuFQ6O/huxcr+cWL4ws8cDtN3AYviMN5XimUd6Z6
-         abxOfzEEd5JmNAWlPyql1ecRqjgsGyFJZx4Mnejy95REwj4QYRxA6XuC/AvUZphGgaLl
-         7pKg==
+        bh=iUi8PRt1C1hxriDLpqIJwYgJ7+Ti+qx1RIsoZc3JWOw=;
+        b=bfzJZMSrLClLHbt1G5H03y4ulCRznQDgHU77oL1p5y+rwFWsnrknNBj6PuVqNX8lQg
+         b87b76r1ryfwhAM12BB6huxCzsSmx1lsNvI9qlC4qWuuxyAomhpErXHXeuP++MNpADL2
+         ukgcOjokHVkjqYoHnWjBEaeSK07tNIBNPcZq/o2cbqmRLaF835o7Ye/CIo7HmW4igtWl
+         KfTANRZA2xfXOqUnknz1lffuDipWm7wySS6Ub/TW/DdpiRmP2zEH02d4qxiHWWXmSELO
+         B9nEwzC1K00J3XpqbbKL9ov4XDLd5Mv0oZn7487IvvdbR219B7MvljhSXXIVMocEvaPq
+         y0JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=hFmbK8M11XjJzoVFfZwjfb4w2B8a5R3YTDT8W3rNvcQ=;
-        b=i9XAvM6rQzS0PjluBDQRmJGk6lIjmK+/bwjnNLcMD/AqJ+9d97ZsAjUD2H53t6wGhe
-         3UVqBFqt/654hAFYtwwqQNQC0FO2EnwkV7JZFpHZVy8WBWX7ixLa0wG5tVvOzbFIiSxg
-         43tps2EioOxVYeRFbfAq8FxW6z8KOsCd/OZf7jVhOFOr5g4Uolf1rN1YT19WhXvT15vE
-         LTLIULGjuIecfaSDjldrampeY2rQOmqDMFT/yPsfQ1EjYBljalQMxEY6MwqdYmotjn9s
-         CvaEH+lSNVswB2AN3+C7QEiXpbrGC38dSeKvkqAIDVxKhlO8Oox4GQmnBcH118qc8FQr
-         EiJg==
-X-Gm-Message-State: AJIora8QoqlO5PkuEAWrAn3BVzhggjd6XBCwM8thzVmePxEYPnn+fyXF
-        oSlhQaLI2zpRXwx4hqO2xSjuSQDrPfU=
-X-Google-Smtp-Source: AGRyM1tRBnxf9cJdr2BSxJoHKIVNW+/xKayrwlNzxMc/10JnS47CN4eTCmWwkLRx0xYneB7u0fUPvA==
-X-Received: by 2002:a05:6402:3299:b0:435:787f:8058 with SMTP id f25-20020a056402329900b00435787f8058mr17029183eda.79.1656343159850;
-        Mon, 27 Jun 2022 08:19:19 -0700 (PDT)
+        bh=iUi8PRt1C1hxriDLpqIJwYgJ7+Ti+qx1RIsoZc3JWOw=;
+        b=sIVMGLLLRzaq0DMcaZVXEPHCSLjbE/hAnhCffenqQzfnpzUBdevZtCAWF6amk+tkoM
+         8woFUJ/TILdUWobzXaAP1uXK2AzHAuFfFUJJ8eNvb06AMb6/uQx8EzqblLuQQBFlbiJH
+         My+g0O10wUvR1rhMtOsDsKluoF8FUh0cz2Jl1ROY7xTWceo2sitlOMCfJxFuabWj4Nha
+         zlV2wA89WiTJ56lPYdLtDGZO427X/XNIyZ18qR+PskzuWfy9q4661/ZMO8+awULWB8TS
+         ZFKu2rD/zDanz5Scw2V3PIciWAQaObUfz6ycNOS6v7Db24dKiSzWdCwdK1MFJYcmGR9B
+         K0Kg==
+X-Gm-Message-State: AJIora8qnDaltO102qJ0DX/zCUwwyl3kmyG8+gO6AjBZr891HI8SLV9T
+        Bx2TpZo24gvKgIOmfE2CNtw=
+X-Google-Smtp-Source: AGRyM1slJBMDBsuNHpBj4n7MqHsIZaDLMAhmKyrXOce9iFdlI007tFK5W5uPJ8jNdY9haIjz73z1yA==
+X-Received: by 2002:aa7:c45a:0:b0:435:d7a4:99bc with SMTP id n26-20020aa7c45a000000b00435d7a499bcmr17000932edr.158.1656343163248;
+        Mon, 27 Jun 2022 08:19:23 -0700 (PDT)
 Received: from felia.fritz.box (200116b826511b0021a0c74157938809.dip.versatel-1u1.de. [2001:16b8:2651:1b00:21a0:c741:5793:8809])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm5076901ejm.107.2022.06.27.08.19.18
+        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm5076901ejm.107.2022.06.27.08.19.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:19:19 -0700 (PDT)
+        Mon, 27 Jun 2022 08:19:22 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
@@ -59,9 +59,9 @@ Cc:     Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [RFC PATCH 03/11] docs: kernel-docs: reflect that it is community-maintained
-Date:   Mon, 27 Jun 2022 17:18:11 +0200
-Message-Id: <20220627151819.22694-4-lukas.bulwahn@gmail.com>
+Subject: [RFC PATCH 05/11] docs: admin: devices:  drop confusing outdated statement on Latex
+Date:   Mon, 27 Jun 2022 17:18:13 +0200
+Message-Id: <20220627151819.22694-6-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
 References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
@@ -69,62 +69,41 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Remove and rephrase statements that only make sense if a single author
-exclusively would maintain this document, but we would really want to
-consider this being a page maintained by the kernel community, as it is
-placed in the kernel repository,  and let us hope that more contributors
-suggest some more documents.
+The statement that the Latex version of Linux Device List is unmaintained,
+must go back to some historic time where there were actually two separate
+document sources, one in a txt format and another in a tex format (maybe
+even just on lanana.org).
 
-Further, do some minor word-smithing.
+Nowadays, html and tex are generated from the ReST document file and the
+statement might be confused, believing the actual generated LaTeX document
+from the maintained ReST document could be an unmaintained one.
+
+Remove this statement on the LaTeX version and only keep pointing out that
+the version on lanana.org is no longer maintained.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/process/kernel-docs.rst | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+ Documentation/admin-guide/devices.rst | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/process/kernel-docs.rst b/Documentation/process/kernel-docs.rst
-index 5d6fa71895cc..b2523267ffc7 100644
---- a/Documentation/process/kernel-docs.rst
-+++ b/Documentation/process/kernel-docs.rst
-@@ -3,7 +3,8 @@
- Index of Further Kernel Documentation
- =====================================
+diff --git a/Documentation/admin-guide/devices.rst b/Documentation/admin-guide/devices.rst
+index 035275fedbdd..e3776d77374b 100644
+--- a/Documentation/admin-guide/devices.rst
++++ b/Documentation/admin-guide/devices.rst
+@@ -7,10 +7,9 @@ This list is the Linux Device List, the official registry of allocated
+ device numbers and ``/dev`` directory nodes for the Linux operating
+ system.
  
--          Juan-Mariano de Goyeneche <jmseyas@dit.upm.es>
-+Initial Author: Juan-Mariano de Goyeneche (<jmseyas@dit.upm.es>;
-+email address is defunct now.)
- 
- The need for a document like this one became apparent in the
- linux-kernel mailing list as the same questions, asking for pointers
-@@ -16,21 +17,16 @@ philosophy and design decisions behind this code.
- 
- Unfortunately, not many documents are available for beginners to
- start. And, even if they exist, there was no "well-known" place which
--kept track of them. These lines try to cover this lack. All documents
--available on line known by the author are listed, while some reference
--books are also mentioned.
-+kept track of them. These lines try to cover this lack.
- 
- PLEASE, if you know any paper not listed here or write a new document,
--send me an e-mail, and I'll include a reference to it here. Any
--corrections, ideas or comments are also welcomed.
-+include a reference to it here, following the kernel's patch submission
-+process. Any corrections, ideas or comments are also welcome.
- 
--The papers that follow are listed in no particular order. All are
--cataloged with the following fields: the document's "Title", the
--"Author"/s, the "URL" where they can be found, some "Keywords" helpful
--when searching for specific topics, and a brief "Description" of the
--Document.
--
--Enjoy!
-+All documents are cataloged with the following fields: the document's
-+"Title", the "Author"/s, the "URL" where they can be found, some
-+"Keywords" helpful when searching for specific topics, and a brief
-+"Description" of the Document.
- 
- .. note::
- 
+-The LaTeX version of this document is no longer maintained, nor is
+-the document that used to reside at lanana.org.  This version in the
+-mainline Linux kernel is the master document.  Updates shall be sent
+-as patches to the kernel maintainers (see the
++The version of this document at lanana.org is no longer maintained.  This
++version in the mainline Linux kernel is the master document.  Updates
++shall be sent as patches to the kernel maintainers (see the
+ :ref:`Documentation/process/submitting-patches.rst <submittingpatches>` document).
+ Specifically explore the sections titled "CHAR and MISC DRIVERS", and
+ "BLOCK LAYER" in the MAINTAINERS file to find the right maintainers
 -- 
 2.17.1
 
