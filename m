@@ -2,138 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECA2BC43334
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 05:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 874B9C43334
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 05:25:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiF1FBG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jun 2022 01:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S244729AbiF1FZe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jun 2022 01:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiF1FBF (ORCPT
+        with ESMTP id S244711AbiF1FZd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:01:05 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6602654A;
-        Mon, 27 Jun 2022 22:01:03 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id i7so20244514ybe.11;
-        Mon, 27 Jun 2022 22:01:03 -0700 (PDT)
+        Tue, 28 Jun 2022 01:25:33 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E133B1F;
+        Mon, 27 Jun 2022 22:25:32 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id z14so11173461pgh.0;
+        Mon, 27 Jun 2022 22:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rkzgZWeh0D6TjHr5N2qUjBjE8rUNExMUZg23IPB3kwY=;
-        b=PxxHVSPFNpl+BQjxsXBQB05qfkO5aGBP9M/kJSHHOqXRcN8r3O1Df2h6iUwb5PC2Bt
-         cTeXZswe0PgvW4thfx4oxgVcSt0r/PqxH1EB8VpW3TuocTfBH4Rhl32GFhvcYjyTF2VD
-         xIksN75GE0w2ssAmzOOTp/hyujk49IDUsQUhrNMfvFS++YXRl9vsrBsG8a776MLE8NGy
-         ai/bs1eAJjZ9PUWJ6wzzQYePFtJmwUEGdUqvL0rhjUMR8J2XNBoMt06fULJcuH9Zn2mR
-         7zE1CwP4GR2MDt64eY1orjhDUi9dLLGX013PnpmjJelbXp9Z9Ms4n8K3KfYCZ2nOAJB6
-         R5ZA==
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=pgonluzyL1h+kykYHqoeMzba6ZA6ttg4BlJry44nex8=;
+        b=Y8M8fifZYgvmkexdtyaLShnQcaD3jHHKHf7dssYushX0hW0f8wBgxiV++I1pxCx4lV
+         83c9fOw5M6Xwmyorz6eoee18QdevPjxGcEjsA81ltXTIYV5ZaRxV4kSIMOSE3qRtnRM8
+         YRMV3TVLvFVDtYimxf9s++pcAwdGKDXoo7jnKVPbc5pztyUdmR5Hy9OyxZtsz0SYQroK
+         5zLo2z2ueUVg7xbY2+ocmiCx7VdiljWbk/f7dUwT3ubL585I/Ca1I+OAeIR7FE7M1C8W
+         94Q5S1K9+0D02ZqUnuipaYFlz4bIeO/uYFoXmHkZvh62f0R5WCRDjar4X49mAjFZgr3R
+         ZkeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rkzgZWeh0D6TjHr5N2qUjBjE8rUNExMUZg23IPB3kwY=;
-        b=tGixsE+XmEbVej2hMsMpSBhFDMljMCxHoB3cSSYXn/CLudQsDyiT7JkBYDmoafOvqW
-         1qaRylywrKs34v+LXoF9ui+0Xu83e0+7Ni4tHPQUW2BFc6zmcTFEnCg/AxmCQcLjHblg
-         LLRSx9SInK7/8bJQRSRUTlShrWbe3IYu2nqteRAsDpbWOW9EIzT9aFpY3Lkso1GsXdf6
-         t+dvNpsdrqFUmkWGMIcn7y8CRdNupMMT9vigZHiCetzMQxH4myLdMjES5Qzi9Tlnj2f6
-         1nKnjWKk3Irz0WvQxfDx5fRP410jXTRcB2JNOwSE6JeOC5QR3yelMJyhKD2EDsQG98ob
-         sfSw==
-X-Gm-Message-State: AJIora9+WepM1nsAauKtkWqt1jvGrv2O0vnVCHpGG6UqgDHXgn9Gpvqe
-        BrXndlAapNxKCJGlkflYdMVdXeA0FCj970Yhqe3u+4fB
-X-Google-Smtp-Source: AGRyM1uVWY/GnX0gegO/2S+3H6diz7nn7VGhC9qnYEcHfiGC1SWQ25UBl6R9cSegldH2sqbp6uoqBZ6q9BYUp2X6dGg=
-X-Received: by 2002:a05:6902:1544:b0:66d:3948:da54 with SMTP id
- r4-20020a056902154400b0066d3948da54mr206114ybu.27.1656392463023; Mon, 27 Jun
- 2022 22:01:03 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pgonluzyL1h+kykYHqoeMzba6ZA6ttg4BlJry44nex8=;
+        b=JoG6YGu/E4SdP2IvBUiBS7UiHx3rlcsCLr/ZOKBo8QatsMvFEA4OmTz5n4/Y850x43
+         IvPSvIETku70YoO0+FAozDEGO+cQe3wT1ho6baKEmsoH2+Xx5isBWXb4nPl4vhjFf+KY
+         ePy7DppXncG61Tniqw0rPwa2V1yB80OSCzUrBxu/q0D19B4WdcgzLxGJFwLDAMVoxpfp
+         qCKF8UdH925TpW5Dyh6xrl69D5kK0xqdZMV5JLxAQL8nbBtb4DmChebJfa5NJxwtAwLa
+         IgVpKHs/1NNZX6wX2o3NT/F9+tyGKlbX/zGncvuYQtTvpEkwCD2NZIEDH6Pk2JpJz3jq
+         Q/Sg==
+X-Gm-Message-State: AJIora92hBD4HIil8jsSzDgd3ve2aMYbkSbTZAC2OdNJhERzYSJ42Rcc
+        /qzTxjAdsaJBxdSWAuHQT2k=
+X-Google-Smtp-Source: AGRyM1saugDpzmQnPjMdIM+x5hsbK7gOzY4bjoUJU98ivxmGXPnWENN/xbgWqWBrUPP3CiYfXqo0yA==
+X-Received: by 2002:aa7:9258:0:b0:525:4214:e937 with SMTP id 24-20020aa79258000000b005254214e937mr1680782pfp.15.1656393931921;
+        Mon, 27 Jun 2022 22:25:31 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id q2-20020a170902f34200b0016a2a8c7e8fsm8174595ple.143.2022.06.27.22.25.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 22:25:31 -0700 (PDT)
+Message-ID: <a2be48e5-e559-17d7-5ae7-d1205a737ea4@gmail.com>
+Date:   Tue, 28 Jun 2022 14:25:26 +0900
 MIME-Version: 1.0
-References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
- <20220627151819.22694-7-lukas.bulwahn@gmail.com> <bd2957f4-3793-d876-8b1f-1dbb9cf160d1@gmail.com>
-In-Reply-To: <bd2957f4-3793-d876-8b1f-1dbb9cf160d1@gmail.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 28 Jun 2022 07:00:41 +0200
-Message-ID: <CAKXUXMz58KV5m2HzYTwG7eq=2n4TMOT_F4Q8fL0Tn-7VAgtHAg@mail.gmail.com>
-Subject: Re: [RFC PATCH 06/11] docs: process: remove outdated submitting-drivers.rst
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     alexs@kernel.org, corbet@lwn.net, federico.vaga@vaga.pv.it,
+        jdelvare@suse.com, kernel-janitors@vger.kernel.org,
         linux-doc-tw-discuss@lists.sourceforge.net,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        siyanteng@loongson.cn, src.res@email.cn,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20220627151819.22694-9-lukas.bulwahn@gmail.com>
+Subject: Re: [RFC PATCH 08/11] docs: ja_JP: howto: remove reference to removed
+ submitting-drivers
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20220627151819.22694-9-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 3:21 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On 6/27/22 22:18, Lukas Bulwahn wrote:
-> >  There are numerous sources of information on Linux kernel development and
-> >  related topics.  First among those will always be the Documentation
-> > -directory found in the kernel source distribution.  The top-level :ref:`process/howto.rst <process_howto>`
-> > -file is an important starting point; :ref:`process/submitting-patches.rst <submittingpatches>`
-> > -and :ref:`process/submitting-drivers.rst  <submittingdrivers>`
-> > -are also something which all kernel developers should
-> > -read.  Many internal kernel APIs are documented using the kerneldoc
-> > -mechanism; "make htmldocs" or "make pdfdocs" can be used to generate those
-> > -documents in HTML or PDF format (though the version of TeX shipped by some
-> > -distributions runs into internal limits and fails to process the documents
-> > -properly).
-> > +directory found in the kernel source distribution.  Start with the
-> > +top-level :ref:`process/howto.rst <process_howto>`; also read
-> > +:ref:`process/submitting-patches.rst <submittingpatches>`. Many internal
-> > +kernel APIs are documented using the kerneldoc mechanism; "make htmldocs"
-> > +or "make pdfdocs" can be used to generate those documents in HTML or PDF
-> > +format (though the version of TeX shipped by some distributions runs into
-> > +internal limits and fails to process the documents properly).
-> >
->
-> Did you mean "beware that TeX distribution version as shipped by distributions
-> may fail to properly generate the documents"? I have never tried pdfdocs,
-> since the dependency requirement can be huge (hundreds of MB needed to
-> download packages), so I can't tell whether the phrase is relevant.
->
-
-I only touched this sentence with 'make pdfdocs' above to reformat the
-paragraph after deleting the reference to submitting-drivers. Maybe
-the statement on make pdfdocs is outdated already or we should refer
-to the documentation build page instead?
-
-> > -  :ref:`Documentation/process/submitting-patches.rst <submittingpatches>` and :ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
-> > -    These files describe in explicit detail how to successfully create
-> > +  :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
-> > +    This file describes in explicit detail how to successfully create
-> >      and send a patch, including (but not limited to):
-> >
->
-> Maybe "This document" instead of file?
->
-
-Either 'this file' or 'this document' fits for me. I have just been
-conservative here: It was 'These files' (written by the original
-author) and after deleting the second reference, it is just 'this
-file'.
-
-If there is no strong opinion, I would leave this as-is.
-
-> > @@ -12,9 +12,8 @@ This document contains a large number of suggestions in a relatively terse
-> >  format.  For detailed information on how the kernel development process
-> >  works, see Documentation/process/development-process.rst. Also, read
-> >  Documentation/process/submit-checklist.rst
-> > -for a list of items to check before submitting code.  If you are submitting
-> > -a driver, also read Documentation/process/submitting-drivers.rst; for device
-> > -tree binding patches, read
-> > +for a list of items to check before submitting code.
-> > +For device tree binding patches, read
-> >  Documentation/devicetree/bindings/submitting-patches.rst.
->
-> The hunk above is OK.
->
-> --
-> An old man doll... just what I always wanted! - Clara
+SGkgTHVrYXMsDQoNCk9uIE1vbiwgMjcgSnVuIDIwMjIgMTc6MTg6MTYgKzAyMDAsIEx1a2Fz
+IEJ1bHdhaG4gd3JvdGU6DQo+IFRoZSBkb2N1bWVudCBzdWJtaXR0aW5nLWRyaXZlcnMucnN0
+IHdhcyBkZWxldGVkLiBUaGlzIHJlbW92ZXMgdGhlDQo+IGNvcnJlc3BvbmRpbmcgcmVmZXJl
+bmNlIGluIHRoZSBKYXBhbmVzZSB0cmFuc2xhdGlvbiBvZiB0aGUgaG93dG8uDQo+IA0KPiBT
+aWduZWQtb2ZmLWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3YWhuQGdtYWlsLmNvbT4N
+Cg0KU2VlIGJlbG93IGZvciBzdWdnZXN0aW9uIG9mIHBsdXJhbCB0byBzaW5ndWxhciBjaGFu
+Z2UuDQoNCj4gLS0tDQo+ICBEb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0
+by5yc3QgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVs
+ZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9u
+cy9qYV9KUC9ob3d0by5yc3QgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9o
+b3d0by5yc3QNCj4gaW5kZXggMzhmZWQ2ZmU2MmZlLi4wM2IyMDc5ZTRkNWQgMTAwNjQ0DQo+
+IC0tLSBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdA0KPiAr
+KysgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gQEAg
+LTEyOSw3ICsxMjksNyBAQCBsaW51eC1hcGlAdmdlci5rZXJuZWwub3JnIOOBq+mAgeOCi+OB
+k+OBqOOCkuWLp+OCgeOBvuOBmeOAgg0KPiAgICAgIOODq+OBq+W+k+OBo+OBpuOBhOOCi+OC
+guOBruOBoOOBkeOCkuWPl+OBkeS7mOOBkeOAgeWkmuOBj+OBruS6uuOBr+ato+OBl+OBhOOC
+ueOCv+OCpOODq+OBruOCs+ODvOODiQ0KPiAgICAgIOOBoOOBkeOCkuODrOODk+ODpeODvOOB
+l+OBvuOBmeOAgg0KPiAgDQo+IC0gIDpyZWY6YERvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJt
+aXR0aW5nLXBhdGNoZXMucnN0IDxjb2RpbmdzdHlsZT5gIOOBqCA6cmVmOmBEb2N1bWVudGF0
+aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1kcml2ZXJzLnJzdCA8c3VibWl0dGluZ2RyaXZlcnM+
+YA0KPiArICA6cmVmOmBEb2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVz
+LnJzdCA8Y29kaW5nc3R5bGU+YA0KPiAgICAgIOOBk+OCjOOCieOBruODleOCoeOCpOODq+OB
+q+OBr+OAgeOBqeOBhuOChOOBo+OBpuOBhuOBvuOBj+ODkeODg+ODgeOCkuS9nOOBo+OBpuaK
+leeov+OBmeOCi+OBi+OBq+OBpA0KDQogICAgICAg44GT44Gu44OV44Kh44Kk44Or44Gr44Gv
+44CB44Gp44GG44KE44Gj44Gm44GG44G+44GP44OR44OD44OB44KS5L2c44Gj44Gm5oqV56i/
+44GZ44KL44GL44Gr44GkDQoNCj4gICAgICDjgYTjgabpnZ7luLjjgavoqbPjgZfjgY/mm7jj
+gYvjgozjgabjgYrjgorjgIHku6XkuIvjgpLlkKvjgb/jgb7jgZkgKOOBk+OCjOOBoOOBkeOB
+q+mZkOOCieOBquOBhA0KPiAgICAgIOOBkeOCjOOBqeOCgikNCj4gLS0gDQo+IDIuMTcuMQ0K
+DQogICAgICAgIFRoYW5rcywgQWtpcmENCg0K
