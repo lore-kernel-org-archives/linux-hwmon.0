@@ -2,161 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A951C43334
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jun 2022 22:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4473C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 01:21:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240806AbiF0WzM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Jun 2022 18:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
+        id S243034AbiF1BVG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Jun 2022 21:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236092AbiF0WzM (ORCPT
+        with ESMTP id S240999AbiF1BVF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:55:12 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286BBC7;
-        Mon, 27 Jun 2022 15:55:11 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id i67-20020a1c3b46000000b003a03567d5e9so6714592wma.1;
-        Mon, 27 Jun 2022 15:55:11 -0700 (PDT)
+        Mon, 27 Jun 2022 21:21:05 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809BB1CFE0;
+        Mon, 27 Jun 2022 18:21:04 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id x20so4097661plx.6;
+        Mon, 27 Jun 2022 18:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9lOPeA9vvaiwrc8RGmW70icF1DKGIzZjDJ8+Ucf9WO4=;
-        b=VJ4YBLCw3078xk+8dyLf3gwBU8Cd14dymqoyGFBawCGZ4DiG+T+7vqp1+ifKk6RWDa
-         wY5WoCGzReh6CVns+YdYrBhmGLi/3LHvyfDJdPXR73tE9tIj/8UHYtCFxUzSQ+Nmho26
-         drGVqmEzBP/85LgtqvK0OGNiTzZAsYhyqrx+Yc+Yba5l7K2fFkz5lW841wAC9tEQChMp
-         yCU3CVivhw6cbYOVcWMWTmEvaAzoEi3pYHiwwqG/kvya5NLHNLIHy54bzRFKJp8VU7jr
-         +JAjP1a622aw2D2MzMwyceCKS5jzgweedT3lsHQM5CQLE4HMQpR246iJFE4q8sNZhTaN
-         ZyQA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/OM7p2xmgcLKvrCC4aR5bM7KnQIk44Oxh3ZTj61eUw0=;
+        b=hb270D/YuXBN9rdMINPybXWvsxPWW54PdpujAxfPoZTib4Dc4NiJwZAEKXtbSkyNcq
+         uEK5RgTrKHhASICLGIuE2Nxs+PFwlcKOKe2YJWfwoIQhAaUfmU2NLaTVnSvKYg3ESioo
+         mO0Ri4+NYsV6jDkgsUNJa36AdmUVvHZxzaaPuJFL/yMeCW8n1DrC+iR/l1/atePvzqJM
+         Ct/xfrNfbOL3ZWiLnXAtfj4iIvTukb9WsZWC86NAEFnnIr/JtmZDaWzhs54f6eLCXsZf
+         3J9dWwYwxvocO6cN3BOgFuVzR4LSn0S2bhWSV25QUaWRrEtbotWgwObsrbejhQdhjTY1
+         DmsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=9lOPeA9vvaiwrc8RGmW70icF1DKGIzZjDJ8+Ucf9WO4=;
-        b=B6TWpTGSWfRKpkyhy9Ij73xWvGLqTLk9MrYGcHHVJ/JfRFeTOFRsmQhytisceqhwe7
-         bmGDKTSMb82lLTDGiLs1pXOykTsgEzOV8mDhdCZP5U4IAz6axdNhjm47C+M9TJslukKj
-         m5s6bMO56m3t62DnI3j0Q8n/DT9o6Yeavy9as8uX4yV1mnR9m/Y2J+zTWiDJUekNiurS
-         4OFZYyBTH4IHJx3jfqrSJIbBjjPiuvYV+6+gRFyRelWPy1XaRoacy9sTQYg2FykXYZtF
-         FFvIjFJJqK98oQoaVSQndmcWdvpKSKLmaNDESD1gPMSVexIwdWB2CE9lTz6YTJFC9oqv
-         oGQw==
-X-Gm-Message-State: AJIora/QNdQYnW4NPrZ2llW0S+2+2KKMp9o2Oklf5eb+pPgaGUiWlIrl
-        X5rBGFoskst1pyGY9ctIeOc=
-X-Google-Smtp-Source: AGRyM1s05tbhpIkS7r5444R7Er2lvhy/C6+ddfXV+91UnOAS071/QdcOboJQXguFNaiuQC/j3mEXIw==
-X-Received: by 2002:a05:600c:886:b0:3a0:49d7:d8b9 with SMTP id l6-20020a05600c088600b003a049d7d8b9mr9804184wmp.115.1656370509478;
-        Mon, 27 Jun 2022 15:55:09 -0700 (PDT)
-Received: from caracal.museclub.art (p200300cf9f1a9e008d6dafec091202b8.dip0.t-ipconnect.de. [2003:cf:9f1a:9e00:8d6d:afec:912:2b8])
-        by smtp.googlemail.com with ESMTPSA id n8-20020a05600c304800b003a04b248896sm4163502wmh.35.2022.06.27.15.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 15:55:08 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Michael Carns <mike@carns.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add support for Maximus XI Hero
-Date:   Tue, 28 Jun 2022 00:54:36 +0200
-Message-Id: <20220627225437.87462-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=/OM7p2xmgcLKvrCC4aR5bM7KnQIk44Oxh3ZTj61eUw0=;
+        b=fP8Qm3wSyJNX14KdmMCGgrDuJaTi3kt9OXQ+w4XQFLXoOVAVW1hbIlPfCRXKzfc9Y+
+         6np1iQUzoRl5kRuR5h5/H5VKNsYCFdyJNkDwvXGuq/AqIErboUERMykri2+qLYbnGPJ1
+         9Sw+xZmWcVCyAxjwt7eY3Ja/8Jyfxp8jSiGTk5SLeuSxQCmkttjEB5Kklm8DiVDOEy4K
+         g9hojLKiALDO8nxd+Q4tTwQvliZGFSbMBzrmxbY/k7ZXkG7g7aeY5opKMC25FXEAonbm
+         TTyULqyJNZBa1EMWrtF6zVJ/8vy21QtRrVqYcS0tk0sMxPbdsvBk/V5z6LH9X3oFihyR
+         CorQ==
+X-Gm-Message-State: AJIora9JHGXJ8CDb61xBXPmeicFW7Cm4wvTxYZxbhqbpvtEyGfG7ocfy
+        syGkd5yN+M3kd5zkKLuBEepO5ZJjrro=
+X-Google-Smtp-Source: AGRyM1vtFKI769HEoE3iMPmPbjYiqTEoKyKL1RWA//bv2hGcT8xrkpnuRlfL7sT7pu6CN8L7XwHjJQ==
+X-Received: by 2002:a17:90b:4b0e:b0:1ec:dd93:5113 with SMTP id lx14-20020a17090b4b0e00b001ecdd935113mr23734613pjb.12.1656379263107;
+        Mon, 27 Jun 2022 18:21:03 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-39.three.co.id. [116.206.12.39])
+        by smtp.gmail.com with ESMTPSA id 21-20020aa79115000000b0050dc7628171sm7884690pfh.75.2022.06.27.18.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 18:21:02 -0700 (PDT)
+Message-ID: <bd2957f4-3793-d876-8b1f-1dbb9cf160d1@gmail.com>
+Date:   Tue, 28 Jun 2022 08:20:56 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH 06/11] docs: process: remove outdated
+ submitting-drivers.rst
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
+ <20220627151819.22694-7-lukas.bulwahn@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220627151819.22694-7-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Michael Carns <mike@carns.com>
+On 6/27/22 22:18, Lukas Bulwahn wrote:
+>  There are numerous sources of information on Linux kernel development and
+>  related topics.  First among those will always be the Documentation
+> -directory found in the kernel source distribution.  The top-level :ref:`process/howto.rst <process_howto>`
+> -file is an important starting point; :ref:`process/submitting-patches.rst <submittingpatches>`
+> -and :ref:`process/submitting-drivers.rst  <submittingdrivers>`
+> -are also something which all kernel developers should
+> -read.  Many internal kernel APIs are documented using the kerneldoc
+> -mechanism; "make htmldocs" or "make pdfdocs" can be used to generate those
+> -documents in HTML or PDF format (though the version of TeX shipped by some
+> -distributions runs into internal limits and fails to process the documents
+> -properly).
+> +directory found in the kernel source distribution.  Start with the
+> +top-level :ref:`process/howto.rst <process_howto>`; also read
+> +:ref:`process/submitting-patches.rst <submittingpatches>`. Many internal
+> +kernel APIs are documented using the kerneldoc mechanism; "make htmldocs"
+> +or "make pdfdocs" can be used to generate those documents in HTML or PDF
+> +format (though the version of TeX shipped by some distributions runs into
+> +internal limits and fails to process the documents properly).
+>
 
-Add definitions for ROG MAXIMUS XI HERO and ROG MAXIMUS XI HERO (WI-FI)
-boards.
-
-Signed-off-by: Michael Carns <mike@carns.com>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst |  2 ++
- drivers/hwmon/asus-ec-sensors.c         | 36 +++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
-
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 00d8c46ef9e0..1e40c123db77 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -13,6 +13,8 @@ Supported boards:
-  * ROG CROSSHAIR VIII FORMULA
-  * ROG CROSSHAIR VIII HERO
-  * ROG CROSSHAIR VIII IMPACT
-+ * ROG MAXIMUS XI HERO
-+ * ROG MAXIMUS XI HERO (WI-FI)
-  * ROG STRIX B550-E GAMING
-  * ROG STRIX B550-I GAMING
-  * ROG STRIX X570-E GAMING
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 19d3ca71b360..625c2baa35ec 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -141,6 +141,7 @@ enum board_family {
- 	family_unknown,
- 	family_amd_400_series,
- 	family_amd_500_series,
-+	family_intel_300_series,
- 	family_intel_600_series
- };
+Did you mean "beware that TeX distribution version as shipped by distributions
+may fail to properly generate the documents"? I have never tried pdfdocs,
+since the dependency requirement can be huge (hundreds of MB needed to
+download packages), so I can't tell whether the phrase is relevant.
  
-@@ -200,6 +201,26 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
- 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
- };
- 
-+static const struct ec_sensor_info sensors_family_intel_300[] = {
-+	[ec_sensor_temp_chipset] =
-+		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-+	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-+	[ec_sensor_temp_mb] =
-+		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-+	[ec_sensor_fan_cpu_opt] =
-+		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-+	[ec_sensor_fan_vrm_hs] = EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-+	[ec_sensor_fan_water_flow] =
-+		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc),
-+	[ec_sensor_temp_water_in] =
-+		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
-+	[ec_sensor_temp_water_out] =
-+		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-+};
-+
- static const struct ec_sensor_info sensors_family_intel_600[] = {
- 	[ec_sensor_temp_t_sensor] =
- 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-@@ -281,6 +302,18 @@ static const struct ec_board_info board_info[] = {
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
- 		.family = family_amd_500_series,
- 	},
-+	{
-+		.board_names = {
-+			"ROG MAXIMUS XI HERO",
-+			"ROG MAXIMUS XI HERO (WI-FI)",
-+		},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR |
-+			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-+			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
-+		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+		.family = family_intel_300_series,
-+	},
- 	{
- 		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
- 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-@@ -814,6 +847,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	case family_amd_500_series:
- 		ec_data->sensors_info = sensors_family_amd_500;
- 		break;
-+	case family_intel_300_series:
-+		ec_data->sensors_info = sensors_family_intel_300;
-+		break;
- 	case family_intel_600_series:
- 		ec_data->sensors_info = sensors_family_intel_600;
- 		break;
+> -  :ref:`Documentation/process/submitting-patches.rst <submittingpatches>` and :ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
+> -    These files describe in explicit detail how to successfully create
+> +  :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
+> +    This file describes in explicit detail how to successfully create
+>      and send a patch, including (but not limited to):
+>  
+
+Maybe "This document" instead of file?
+
+> @@ -12,9 +12,8 @@ This document contains a large number of suggestions in a relatively terse
+>  format.  For detailed information on how the kernel development process
+>  works, see Documentation/process/development-process.rst. Also, read
+>  Documentation/process/submit-checklist.rst
+> -for a list of items to check before submitting code.  If you are submitting
+> -a driver, also read Documentation/process/submitting-drivers.rst; for device
+> -tree binding patches, read
+> +for a list of items to check before submitting code.
+> +For device tree binding patches, read
+>  Documentation/devicetree/bindings/submitting-patches.rst.
+
+The hunk above is OK.
+
 -- 
-2.35.1
-
+An old man doll... just what I always wanted! - Clara
