@@ -2,227 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7769C433EF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 09:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B72BC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 10:24:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343716AbiF1J0Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jun 2022 05:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S243702AbiF1KYo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jun 2022 06:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiF1J0Q (ORCPT
+        with ESMTP id S239377AbiF1KYo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:26:16 -0400
-X-Greylist: delayed 551 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Jun 2022 02:26:12 PDT
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB064F1C;
-        Tue, 28 Jun 2022 02:26:12 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 234401578;
-        Tue, 28 Jun 2022 11:16:58 +0200 (CEST)
-Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        in-reply-to:content-transfer-encoding:content-disposition
-        :content-type:content-type:mime-version:references:message-id
-        :subject:subject:from:from:date:date:received:received:received;
-         s=dkim20160331; t=1656407817; x=1658222218; bh=RIkRffI1aOt9aTQA
-        qThSaSDKmYghWKPv5goHGRh30Mw=; b=sXswAtnrY7wi579FJ2ayqkwU0/9WjKSX
-        2STY25wdeFJ9Hofx3++gzDNbV6Wi9EbLKp5dQp0g+K78F7kVwKr3gk6QgDvcJD1X
-        aBL9beDLypQRqQoXbcVC03mJQ749qcHPt8S6BDVglsN/9EX+jYs3s0ZR+Os484VC
-        QjRYY6D9BdDOc59XxbY+88gmylbHmL7sbtBEgZbJnEcifeZyhP/xOwN78N9l13iU
-        D/bprQPWIruuPjIm2HmHvxRdEfWhLS/wF2ImZ0+uX6KjiaDkX1rYhbTOq2nECCG9
-        X/5RoAD+Aour8Q2MW724UbKlzcaqk16Bn0JLbJwb/+ON3n0KvGyrGWSFFLDz91nA
-        q2KIC8mTvysUylyeSTfpa1Ben//PtdEz+ag7LFf5/CPICQ6tQ/87C6WdoB1JdI4e
-        hpE9czf5iBwkXsWUsxHYLYO9RKXajlrOy+L2Wbwz9MkjuCRK8aiFZz2Bz7rOPyQX
-        FAy1S4DKD/8jPtNRkxpyeeJ+4wnQOP8fLuF+jQHYiCDIUqXznMfcUVc/vKF416fV
-        mW7rG4ZGLtFs4GxSWU0pX8DvtvJ4hulvwiFwstCNL+vmx7QJCYzEgg+aT9QVO6Q4
-        xno+sp2112kRUC33YzrDwNblrbBEyyHEatWa0F0S0QR/WfQLDaIFKL88zVkbF5jU
-        vwP8PQfwG5o=
-X-Virus-Scanned: amavisd-new at mykolab.com
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WJ3Rig7sth7S; Tue, 28 Jun 2022 11:16:57 +0200 (CEST)
-Received: from int-mx003.mykolab.com (unknown [10.9.13.3])
-        by mx.kolabnow.com (Postfix) with ESMTPS id CA5921575;
-        Tue, 28 Jun 2022 11:16:55 +0200 (CEST)
-Received: from ext-subm002.mykolab.com (unknown [10.9.6.2])
-        by int-mx003.mykolab.com (Postfix) with ESMTPS id 2477D2E4E;
-        Tue, 28 Jun 2022 11:16:52 +0200 (CEST)
-Date:   Tue, 28 Jun 2022 11:16:47 +0200
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 07/11] docs: it_IT: align to submitting-drivers
- removal
-Message-ID: <20220628091647.xf5cygybqemwprgb@numero86.vaga.pv.it>
-References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
- <20220627151819.22694-8-lukas.bulwahn@gmail.com>
+        Tue, 28 Jun 2022 06:24:44 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AD730F6C;
+        Tue, 28 Jun 2022 03:24:43 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id q132so21387296ybg.10;
+        Tue, 28 Jun 2022 03:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dk3qCncJZhuJL7oIz+/IJyOkd8/HlsDLi3zlYk8e4WM=;
+        b=oU7q6TpB5dCpRCh4m7N6CKCcPE3pV/9korBsXlXRimcU9S0tA6EwEE0ZI/yU2CWfji
+         TNwtymdgIJtdph7OftkXCnGzRWDHlg7d2kaTZv+3dvGNApQPskMLtdyc1xukdt6PMlFt
+         jaNhWdocWW0lSAWpZSRSKGYr/pp+ftjRlPizrqjqlHJntGhvjiZiVJYABzuDH//GOEgf
+         X1oqMbU/vZETDmwJGmserZywaDRF5t/L6kigxbxb2AXrejG7YfNH7UeY7vNMZar3vJRJ
+         nNyV2TyDhvAcwIlrsLvCZlSsWc3wB3wn1c614C44g18dmdYkkQa63AljcDPkXe09d4HA
+         EUMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dk3qCncJZhuJL7oIz+/IJyOkd8/HlsDLi3zlYk8e4WM=;
+        b=lDGVr2Co/x0cBnUCFF6vvqysHurNN3U4DtFX3OGgF/w2f+yAJzqo598V1LsRz6Dm+k
+         vhTHXscKUCjnaxdQppChF01slz7ZrBzJKlmdHc3/GBm0l3Hdzek/LngeVBn4zxZef+xl
+         ust+xRKZqmGn3XJgmNbg/XRED0U1uc563jO5zCTpjnJAje5Ab90oeXB/EtXsW9hQZstM
+         wuxPBhjw8RbT0F+J2tfTIE/t2b4Ns7lct8D5gJSTANPJl22E1DrW8VuXw5qhSmDNq021
+         MvWSR46X3E3p0ok9YKPukt+ZYuTc8kCRr7oUT3BLKuhChnuldXWAOlvW49Jp0dGBei+q
+         aY0g==
+X-Gm-Message-State: AJIora9+r48zh9ywv/2YRpR6Bu6zf23CHMBBQUNJPdefeRd2n2IW/BtW
+        aOuSOM7vGJSK4KEEoWqCXhmStxoNDY73c+QxX2Y=
+X-Google-Smtp-Source: AGRyM1vmOvgu7oijx9AstcWTEZa+a3X5YHhRA1OL2Gu/Fv/D3ynLy6H1a6HwX3LtDWi7cyQmeOl779bVlwIEy5tg278=
+X-Received: by 2002:a25:5809:0:b0:66c:8709:3611 with SMTP id
+ m9-20020a255809000000b0066c87093611mr17054115ybb.608.1656411882606; Tue, 28
+ Jun 2022 03:24:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220627151819.22694-8-lukas.bulwahn@gmail.com>
+References: <20220627151819.22694-9-lukas.bulwahn@gmail.com> <a2be48e5-e559-17d7-5ae7-d1205a737ea4@gmail.com>
+In-Reply-To: <a2be48e5-e559-17d7-5ae7-d1205a737ea4@gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Tue, 28 Jun 2022 12:24:31 +0200
+Message-ID: <CAKXUXMwvF=DKZGvECMcfkHv959W-HSZ62Xi3CsjKN_xWGJuUKg@mail.gmail.com>
+Subject: Re: [RFC PATCH 08/11] docs: ja_JP: howto: remove reference to removed submitting-drivers
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Jean Delvare <jdelvare@suse.com>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 05:18:15PM +0200, Lukas Bulwahn wrote:
->Adjust the Italian translation to the removal of submitting-drivers in the
->English kernel documentation.
->
->Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
->---
-> .../it_IT/kernel-hacking/hacking.rst             |  3 +--
-> .../translations/it_IT/process/5.Posting.rst     |  5 ++---
-> .../translations/it_IT/process/8.Conclusion.rst  |  3 +--
-> .../translations/it_IT/process/howto.rst         |  3 +--
-> .../translations/it_IT/process/index.rst         |  1 -
-> .../it_IT/process/submitting-drivers.rst         | 16 ----------------
-> .../it_IT/process/submitting-patches.rst         |  6 ++----
-> 7 files changed, 7 insertions(+), 30 deletions(-)
-> delete mode 100644 Documentation/translations/it_IT/process/submitting-drivers.rst
->
->diff --git a/Documentation/translations/it_IT/kernel-hacking/hacking.rst b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
->index d5c521327f6a..4bec4669cf48 100644
->--- a/Documentation/translations/it_IT/kernel-hacking/hacking.rst
->+++ b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
->@@ -795,8 +795,7 @@ anche per avere patch pulite, c'è del lavoro amministrativo da fare:
->    di un semplice impegno su una parte del codice.
->
-> -  Infine, non dimenticatevi di leggere
->-   ``Documentation/process/submitting-patches.rst`` e possibilmente anche
->-   ``Documentation/process/submitting-drivers.rst``.
->+   ``Documentation/process/submitting-patches.rst``.
->
-> Trucchetti del kernel
-> =====================
->diff --git a/Documentation/translations/it_IT/process/5.Posting.rst b/Documentation/translations/it_IT/process/5.Posting.rst
->index 1476d51eb5e5..a036f38fc82e 100644
->--- a/Documentation/translations/it_IT/process/5.Posting.rst
->+++ b/Documentation/translations/it_IT/process/5.Posting.rst
->@@ -16,9 +16,8 @@ e di procedure per la pubblicazione delle patch; seguirle renderà la vita
-> più facile a tutti quanti.  Questo documento cercherà di coprire questi
-> argomenti con un ragionevole livello di dettaglio; più informazioni possono
-> essere trovare nella cartella 'Documentation', nei file
->-:ref:`translations/it_IT/process/submitting-patches.rst <it_submittingpatches>`,
->-:ref:`translations/it_IT/process/submitting-drivers.rst <it_submittingdrivers>`, e
->-:ref:`translations/it_IT/process/submit-checklist.rst <it_submitchecklist>`.
->+:ref:`translations/it_IT/process/submitting-patches.rst <it_submittingpatches>`
->+e :ref:`translations/it_IT/process/submit-checklist.rst <it_submitchecklist>`.
-
-Fixing plural. The final correct statement must be:
-
-nel file :ref:`translations/it_IT/process/submitting-patches.rst <it_submittingpatches>`.
-
-Notice 'nei file' -> 'nel file'
-
-
->
->
-> Quando pubblicarle
->diff --git a/Documentation/translations/it_IT/process/8.Conclusion.rst b/Documentation/translations/it_IT/process/8.Conclusion.rst
->index 039bfc5a4108..efaad6c7702c 100644
->--- a/Documentation/translations/it_IT/process/8.Conclusion.rst
->+++ b/Documentation/translations/it_IT/process/8.Conclusion.rst
->@@ -13,8 +13,7 @@ e argomenti correlati. Primo tra questi sarà sempre la cartella Documentation
-> che si trova nei sorgenti kernel.
->
-> Il file :ref:`process/howto.rst <it_process_howto>` è un punto di partenza
->-importante; :ref:`process/submitting-patches.rst <it_submittingpatches>` e
->-:ref:`process/submitting-drivers.rst <it_submittingdrivers>` sono
->+importante; :ref:`process/submitting-patches.rst <it_submittingpatches>` sono
-> anch'essi qualcosa che tutti gli sviluppatori del kernel dovrebbero leggere.
-
-Fixing plural. the final correct statement must be:
-
-:ref:`process/submitting-patches.rst <it_submittingpatches>` è anch'esso
-qualcosa che tutti gli sviluppatori del kernel dovrebbero leggere.
-
-Notice "sono anch'essi" -> "è anch'esso"
-
-
-> Molte API interne al kernel sono documentate utilizzando il meccanismo
-> kerneldoc; "make htmldocs" o "make pdfdocs" possono essere usati per generare
->diff --git a/Documentation/translations/it_IT/process/howto.rst b/Documentation/translations/it_IT/process/howto.rst
->index 9554368a2ae2..16ad5622d549 100644
->--- a/Documentation/translations/it_IT/process/howto.rst
->+++ b/Documentation/translations/it_IT/process/howto.rst
->@@ -109,8 +109,7 @@ Di seguito una lista di file che sono presenti nei sorgente del kernel e che
->     accetteranno patch solo se queste osserveranno tali regole, e molte
->     persone revisioneranno il codice solo se scritto nello stile appropriato.
->
->-  :ref:`Documentation/translations/it_IT/process/submitting-patches.rst <it_submittingpatches>` e
->-  :ref:`Documentation/translations/it_IT/process/submitting-drivers.rst <it_submittingdrivers>`
->+  :ref:`Documentation/translations/it_IT/process/submitting-patches.rst <it_submittingpatches>`
->
->     Questo file descrive dettagliatamente come creare ed inviare una patch
->     con successo, includendo (ma non solo questo):
->diff --git a/Documentation/translations/it_IT/process/index.rst b/Documentation/translations/it_IT/process/index.rst
->index c4c867132c88..b223b70a4a95 100644
->--- a/Documentation/translations/it_IT/process/index.rst
->+++ b/Documentation/translations/it_IT/process/index.rst
->@@ -41,7 +41,6 @@ degli sviluppatori:
->    :maxdepth: 1
->
->    changes
->-   submitting-drivers
->    stable-api-nonsense
->    management-style
->    stable-kernel-rules
->diff --git a/Documentation/translations/it_IT/process/submitting-drivers.rst b/Documentation/translations/it_IT/process/submitting-drivers.rst
->deleted file mode 100644
->index dadd77e47613..000000000000
->--- a/Documentation/translations/it_IT/process/submitting-drivers.rst
->+++ /dev/null
->@@ -1,16 +0,0 @@
->-.. include:: ../disclaimer-ita.rst
->-
->-:Original: :ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
->-:Translator: Federico Vaga <federico.vaga@vaga.pv.it>
->-
->-.. _it_submittingdrivers:
->-
->-Sottomettere driver per il kernel Linux
->-=======================================
->-
->-.. note::
->-
->-   Questo documento è vecchio e negli ultimi anni non è stato più aggiornato;
->-   dovrebbe essere aggiornato, o forse meglio, rimosso.  La maggior parte di
->-   quello che viene detto qui può essere trovato anche negli altri documenti
->-   dedicati allo sviluppo.  Per questo motivo il documento non verrà tradotto.
->diff --git a/Documentation/translations/it_IT/process/submitting-patches.rst b/Documentation/translations/it_IT/process/submitting-patches.rst
->index 4fb5b3aa306d..f117ee0a36e2 100644
->--- a/Documentation/translations/it_IT/process/submitting-patches.rst
->+++ b/Documentation/translations/it_IT/process/submitting-patches.rst
->@@ -18,10 +18,8 @@ Questo documento contiene un vasto numero di suggerimenti concisi. Per maggiori
-> dettagli su come funziona il processo di sviluppo del kernel leggete
-> Documentation/translations/it_IT/process/development-process.rst. Leggete anche
-> Documentation/translations/it_IT/process/submit-checklist.rst per una lista di
->-punti da verificare prima di inviare del codice. Se state inviando un driver,
->-allora leggete anche
->-Documentation/translations/it_IT/process/submitting-drivers.rst; per delle patch
->-relative alle associazioni per Device Tree leggete
->+punti da verificare prima di inviare del codice.
->+Per delle patch relative alle associazioni per Device Tree leggete
-> Documentation/translations/it_IT/process/submitting-patches.rst.
-
-I see here what you mentioned in the cover. Yes the path should point elsewhere.
-I will send a patch for it.
-
-> Questa documentazione assume che sappiate usare ``git`` per preparare le patch.
->-- 
->2.17.1
->
-
--- 
-~ - ~ - ~ - ~
-Federico Vaga
+T24gVHVlLCBKdW4gMjgsIDIwMjIgYXQgNzoyNSBBTSBBa2lyYSBZb2tvc2F3YSA8YWtpeWtzQGdt
+YWlsLmNvbT4gd3JvdGU6DQo+DQo+IEhpIEx1a2FzLA0KPg0KPiBPbiBNb24sIDI3IEp1biAyMDIy
+IDE3OjE4OjE2ICswMjAwLCBMdWthcyBCdWx3YWhuIHdyb3RlOg0KPiA+IFRoZSBkb2N1bWVudCBz
+dWJtaXR0aW5nLWRyaXZlcnMucnN0IHdhcyBkZWxldGVkLiBUaGlzIHJlbW92ZXMgdGhlDQo+ID4g
+Y29ycmVzcG9uZGluZyByZWZlcmVuY2UgaW4gdGhlIEphcGFuZXNlIHRyYW5zbGF0aW9uIG9mIHRo
+ZSBob3d0by4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEx1a2FzIEJ1bHdhaG4gPGx1a2FzLmJ1
+bHdhaG5AZ21haWwuY29tPg0KPg0KPiBTZWUgYmVsb3cgZm9yIHN1Z2dlc3Rpb24gb2YgcGx1cmFs
+IHRvIHNpbmd1bGFyIGNoYW5nZS4NCj4NCg0KVGhhbmtzIGZvciB5b3VyIGhlbHAuDQoNCk9uY2Ug
+Sm9uYXRoYW4gaGFzIHJldmlld2VkIGFuZCBwcmluY2lwYWxseSBhY2tub3dsZWRnZWQgdGhpcyBz
+ZXJpZXMsIEkNCndpbGwgY29weSBpdCBkaXJlY3RseSBmcm9tIHRoaXMgZW1haWwgaW4gcmF3IGZv
+cm0gaW50byB0aGUgLnJzdCBmaWxlLA0KYW1lbmQgdGhlIGNvbW1pdCBhbmQgc2VuZCBvdXQgdGhl
+IG5ldyBwYXRjaCBzZXJpZXMuDQoNCkx1a2FzDQoNCj4gPiAtLS0NCj4gPiAgRG9jdW1lbnRhdGlv
+bi90cmFuc2xhdGlvbnMvamFfSlAvaG93dG8ucnN0IHwgMiArLQ0KPiA+ICAxIGZpbGUgY2hhbmdl
+ZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9E
+b2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QgYi9Eb2N1bWVudGF0aW9u
+L3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gPiBpbmRleCAzOGZlZDZmZTYyZmUuLjAz
+YjIwNzllNGQ1ZCAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9q
+YV9KUC9ob3d0by5yc3QNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9K
+UC9ob3d0by5yc3QNCj4gPiBAQCAtMTI5LDcgKzEyOSw3IEBAIGxpbnV4LWFwaUB2Z2VyLmtlcm5l
+bC5vcmcg44Gr6YCB44KL44GT44Go44KS5Yun44KB44G+44GZ44CCDQo+ID4gICAgICDjg6vjgavl
+vpPjgaPjgabjgYTjgovjgoLjga7jgaDjgZHjgpLlj5fjgZHku5jjgZHjgIHlpJrjgY/jga7kurrj
+ga/mraPjgZfjgYTjgrnjgr/jgqTjg6vjga7jgrPjg7zjg4kNCj4gPiAgICAgIOOBoOOBkeOCkuOD
+rOODk+ODpeODvOOBl+OBvuOBmeOAgg0KPiA+DQo+ID4gLSAgOnJlZjpgRG9jdW1lbnRhdGlvbi9w
+cm9jZXNzL3N1Ym1pdHRpbmctcGF0Y2hlcy5yc3QgPGNvZGluZ3N0eWxlPmAg44GoIDpyZWY6YERv
+Y3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLWRyaXZlcnMucnN0IDxzdWJtaXR0aW5nZHJp
+dmVycz5gDQo+ID4gKyAgOnJlZjpgRG9jdW1lbnRhdGlvbi9wcm9jZXNzL3N1Ym1pdHRpbmctcGF0
+Y2hlcy5yc3QgPGNvZGluZ3N0eWxlPmANCj4gPiAgICAgIOOBk+OCjOOCieOBruODleOCoeOCpOOD
+q+OBq+OBr+OAgeOBqeOBhuOChOOBo+OBpuOBhuOBvuOBj+ODkeODg+ODgeOCkuS9nOOBo+OBpuaK
+leeov+OBmeOCi+OBi+OBq+OBpA0KPg0KPiAgICAgICAg44GT44Gu44OV44Kh44Kk44Or44Gr44Gv
+44CB44Gp44GG44KE44Gj44Gm44GG44G+44GP44OR44OD44OB44KS5L2c44Gj44Gm5oqV56i/44GZ
+44KL44GL44Gr44GkDQo+DQo+ID4gICAgICDjgYTjgabpnZ7luLjjgavoqbPjgZfjgY/mm7jjgYvj
+gozjgabjgYrjgorjgIHku6XkuIvjgpLlkKvjgb/jgb7jgZkgKOOBk+OCjOOBoOOBkeOBq+mZkOOC
+ieOBquOBhA0KPiA+ICAgICAg44GR44KM44Gp44KCKQ0KPiA+IC0tDQo+ID4gMi4xNy4xDQo+DQo+
+ICAgICAgICAgVGhhbmtzLCBBa2lyYQ0KPg0K
