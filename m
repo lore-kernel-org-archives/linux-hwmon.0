@@ -2,178 +2,178 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7713CC43334
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 10:28:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEB87C43334
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 11:46:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244200AbiF1K2F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jun 2022 06:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S241790AbiF1LqV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jun 2022 07:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344829AbiF1K2B (ORCPT
+        with ESMTP id S1344512AbiF1LqH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:28:01 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D96131DF5;
-        Tue, 28 Jun 2022 03:28:00 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ef5380669cso111838177b3.9;
-        Tue, 28 Jun 2022 03:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uq+xZHigTTpCAmtgN4D47Lm53BumUoy2eBX57KhGVyI=;
-        b=bEZMdY0AsnmHQSDuNs3ALNxY3jOH4b1yJ1Sh2S126UqBzMb61Q8wXRVmXzjGPnDue0
-         NY529BPwVMBQXrJOcO4/xaPoIwRnQ7hyXa9OvpatdsGZToG8GL69pDOYNuOWgSjmQYSU
-         Dfadg8sT9wOXF5gMwf9T3JZ+v9qOW/NhrbDOOAV9MsvkRT3bXN/WjpxfAyhB9bt4mo/r
-         AYb2pdABHJZ7Pumu7lLpVR5rHsqyE8l4G4COwxRZVNps+q3d5YrtmqEwP4I4tH2koitC
-         At1YU1uDKp2P/xrUTQ0S2vslp97DT/xro8y8JSQMnk9mjw+RY7zUzCKisSSOPg2iq8sY
-         I4HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uq+xZHigTTpCAmtgN4D47Lm53BumUoy2eBX57KhGVyI=;
-        b=on7dd8yjoXQcyo6QX0Ey6cw21zzhaVsFtMs/eV538qaTaidQcE0n99clWiCIFXfI6B
-         Gi19uwfuos1SNkTIJ7zDOwlJM3tf4RUkKJ9d6qu1ubwHnAZKE9gEVeuQxCrzQPySgHiT
-         08EJ8GpXsF5QUkSGx4GeDATjRWhjTmN2SkLVbuNlNIcE3u0w9vLCZzQOgcke2/rab4eO
-         WzZcpyjVBPCjbiaaAIx6sjeFw8Gx41Dur6sCwclUn59oUQOru2euUluh5EIcZ8z1I4eP
-         mvDgc4ABT1fTlnfhaKipXKiUNwUnbXJul9XT/2SeQJYW+gkLwo93z1yZL6a3nHfh0cD5
-         V6jQ==
-X-Gm-Message-State: AJIora8CvhwLY6v5aKSSNdV4I2/63Wqf+qInQ8MFEYr5lj2sIdjwTZWh
-        8mTYc8yghAmv5iVArNTOw0e/A98iDNUEgqCm6Bw=
-X-Google-Smtp-Source: AGRyM1ucCVzXMr/NhcszjDc2qRDm27m/aeve12MQnZ2GKwbnpTPR8B9RxhcXTBtMuPPEBbhPocAc9bS5jzIx26CFi6k=
-X-Received: by 2002:a81:9201:0:b0:31b:a963:c7e1 with SMTP id
- j1-20020a819201000000b0031ba963c7e1mr13320294ywg.335.1656412079367; Tue, 28
- Jun 2022 03:27:59 -0700 (PDT)
+        Tue, 28 Jun 2022 07:46:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657CF340D3;
+        Tue, 28 Jun 2022 04:44:36 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFC37660184F;
+        Tue, 28 Jun 2022 12:44:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656416674;
+        bh=Vq5C4bT0TiadIpd2tEqU0JzUXydBEhR40E+ZcKSOCUo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RKEY5opDUA/HZSdk6HwnKhzBmq6nRVCS3v/NWKqMu1PMIeBdeXeSWbRS4Xn5uUMk1
+         k/xdYJxpKVUEGLs5pqjQwwATIdGwwAZYKzKrmACKz1LePsPHNyftCwaSj1tZBGF6uq
+         0eS3Zp8Ck+LQx5u+5fPlF8RoBwLxpl3/z4+POjHgUIJ8GABDDGrOuwCHXtXMcb/axL
+         IdvCkh81M1oPN4HTUGDdeXZuVBNxs33s4pLAE3b7x8TmO2CJRVOsqvgVm1LucQwFCj
+         JqDFHKPaE7R7E9tJRvZamO3oo4wU5QH+0yUjttlJX1njblanMhjZBrrhgqBbYovpx7
+         LJq1Ml1P1vqyg==
+Message-ID: <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
+Date:   Tue, 28 Jun 2022 14:44:31 +0300
 MIME-Version: 1.0
-References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
- <20220627151819.22694-8-lukas.bulwahn@gmail.com> <20220628091647.xf5cygybqemwprgb@numero86.vaga.pv.it>
-In-Reply-To: <20220628091647.xf5cygybqemwprgb@numero86.vaga.pv.it>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 28 Jun 2022 12:27:48 +0200
-Message-ID: <CAKXUXMwY1L0MczFRkr0HDcHRgp1mNRx5hEAck4Z9nyorUV1TOg@mail.gmail.com>
-Subject: Re: [RFC PATCH 07/11] docs: it_IT: align to submitting-drivers removal
-To:     Federico Vaga <federico.vaga@vaga.pv.it>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        rafael@kernel.org
+References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+ <20220616202537.303655-2-daniel.lezcano@linaro.org>
+ <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 11:16 AM Federico Vaga <federico.vaga@vaga.pv.it> w=
-rote:
->
-> On Mon, Jun 27, 2022 at 05:18:15PM +0200, Lukas Bulwahn wrote:
-> >Adjust the Italian translation to the removal of submitting-drivers in t=
-he
-> >English kernel documentation.
-> >
-> >Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> >---
-> > .../it_IT/kernel-hacking/hacking.rst             |  3 +--
-> > .../translations/it_IT/process/5.Posting.rst     |  5 ++---
-> > .../translations/it_IT/process/8.Conclusion.rst  |  3 +--
-> > .../translations/it_IT/process/howto.rst         |  3 +--
-> > .../translations/it_IT/process/index.rst         |  1 -
-> > .../it_IT/process/submitting-drivers.rst         | 16 ----------------
-> > .../it_IT/process/submitting-patches.rst         |  6 ++----
-> > 7 files changed, 7 insertions(+), 30 deletions(-)
-> > delete mode 100644 Documentation/translations/it_IT/process/submitting-=
-drivers.rst
-> >
-> >diff --git a/Documentation/translations/it_IT/kernel-hacking/hacking.rst=
- b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
-> >index d5c521327f6a..4bec4669cf48 100644
-> >--- a/Documentation/translations/it_IT/kernel-hacking/hacking.rst
-> >+++ b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
-> >@@ -795,8 +795,7 @@ anche per avere patch pulite, c'=C3=A8 del lavoro am=
-ministrativo da fare:
-> >    di un semplice impegno su una parte del codice.
-> >
-> > -  Infine, non dimenticatevi di leggere
-> >-   ``Documentation/process/submitting-patches.rst`` e possibilmente anc=
-he
-> >-   ``Documentation/process/submitting-drivers.rst``.
-> >+   ``Documentation/process/submitting-patches.rst``.
-> >
-> > Trucchetti del kernel
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >diff --git a/Documentation/translations/it_IT/process/5.Posting.rst b/Do=
-cumentation/translations/it_IT/process/5.Posting.rst
-> >index 1476d51eb5e5..a036f38fc82e 100644
-> >--- a/Documentation/translations/it_IT/process/5.Posting.rst
-> >+++ b/Documentation/translations/it_IT/process/5.Posting.rst
-> >@@ -16,9 +16,8 @@ e di procedure per la pubblicazione delle patch; segui=
-rle render=C3=A0 la vita
-> > pi=C3=B9 facile a tutti quanti.  Questo documento cercher=C3=A0 di copr=
-ire questi
-> > argomenti con un ragionevole livello di dettaglio; pi=C3=B9 informazion=
-i possono
-> > essere trovare nella cartella 'Documentation', nei file
-> >-:ref:`translations/it_IT/process/submitting-patches.rst <it_submittingp=
-atches>`,
-> >-:ref:`translations/it_IT/process/submitting-drivers.rst <it_submittingd=
-rivers>`, e
-> >-:ref:`translations/it_IT/process/submit-checklist.rst <it_submitcheckli=
-st>`.
-> >+:ref:`translations/it_IT/process/submitting-patches.rst <it_submittingp=
-atches>`
-> >+e :ref:`translations/it_IT/process/submit-checklist.rst <it_submitcheck=
-list>`.
->
-> Fixing plural. The final correct statement must be:
->
-> nel file :ref:`translations/it_IT/process/submitting-patches.rst <it_subm=
-ittingpatches>`.
->
-> Notice 'nei file' -> 'nel file'
->
->
-> >
-> >
-> > Quando pubblicarle
-> >diff --git a/Documentation/translations/it_IT/process/8.Conclusion.rst b=
-/Documentation/translations/it_IT/process/8.Conclusion.rst
-> >index 039bfc5a4108..efaad6c7702c 100644
-> >--- a/Documentation/translations/it_IT/process/8.Conclusion.rst
-> >+++ b/Documentation/translations/it_IT/process/8.Conclusion.rst
-> >@@ -13,8 +13,7 @@ e argomenti correlati. Primo tra questi sar=C3=A0 semp=
-re la cartella Documentation
-> > che si trova nei sorgenti kernel.
-> >
-> > Il file :ref:`process/howto.rst <it_process_howto>` =C3=A8 un punto di =
-partenza
-> >-importante; :ref:`process/submitting-patches.rst <it_submittingpatches>=
-` e
-> >-:ref:`process/submitting-drivers.rst <it_submittingdrivers>` sono
-> >+importante; :ref:`process/submitting-patches.rst <it_submittingpatches>=
-` sono
-> > anch'essi qualcosa che tutti gli sviluppatori del kernel dovrebbero leg=
-gere.
->
-> Fixing plural. the final correct statement must be:
->
-> :ref:`process/submitting-patches.rst <it_submittingpatches>` =C3=A8 anch'=
-esso
-> qualcosa che tutti gli sviluppatori del kernel dovrebbero leggere.
->
-> Notice "sono anch'essi" -> "=C3=A8 anch'esso"
->
+On 6/28/22 11:41, Daniel Lezcano wrote:
+> 
+> Thierry, Dmitry,
+> 
+> are fine with this patch?
 
-Thanks for your help.
+Seems should be good. I couldn't test it using recent the linux-next
+because of a lockup in LM90 driver. There were quite a lot of changes in
+LM90 recently, adding Guenter.
 
-Once Jonathan has reviewed and principally acknowledged this series, I
-will adjust the Italian documentation, amend the commit and send out
-the new patch series.
+INFO: task kworker/3:1:44 blocked for more than 61 seconds.
+      Not tainted 5.19.0-rc4-next-20220627-00012-g08b697b94b8a #2
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/3:1     state:D stack:    0 pid:   44 ppid:     2
+flags:0x00000000
+Workqueue: events_freezable_power_ thermal_zone_device_check
+Backtrace:
+ __schedule from schedule+0x60/0xcc
+ r10:c0fead70 r9:c2854c94 r8:df9a1dac r7:c2814b40 r6:00000002 r5:c1883020
+ r4:c2814b40
+ schedule from schedule_preempt_disabled+0x28/0x38
+ r5:c1883020 r4:c2814b40
+ schedule_preempt_disabled from __mutex_lock.constprop.0+0x1e0/0x9ac
+ r5:c1883020 r4:c2854c90
+ __mutex_lock.constprop.0 from __mutex_lock_slowpath+0x1c/0x20
+ r10:00000000 r9:c1882ae0 r8:c2854c90 r7:c2854c40 r6:00000001 r5:00000001
+ r4:c2854c90
+ __mutex_lock_slowpath from mutex_lock+0x60/0x64
+ mutex_lock from lm90_read+0x40/0x3d4
+ r5:00000001 r4:c2854e08
+ lm90_read from hwmon_thermal_get_temp+0x58/0x8c
+ r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1660 r5:c0af7940 r4:df9a1eb8
+ hwmon_thermal_get_temp from of_thermal_get_temp+0x38/0x44
+ r5:df9a1eb8 r4:c1db1400
+ of_thermal_get_temp from thermal_zone_get_temp+0x58/0x78
+ thermal_zone_get_temp from thermal_zone_device_update.part.0+0x4c/0x450
+ r7:de6aee00 r6:c1db1400 r5:00000000 r4:c1db1400
+ thermal_zone_device_update.part.0 from thermal_zone_device_check+0x58/0x5c
+ r10:00000000 r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1400 r5:c1db1660
+ r4:00000001
+ thermal_zone_device_check from process_one_work+0x21c/0x530
+ r7:de6aee00 r6:de6ab600 r5:c2802c00 r4:c1db167c
+ process_one_work from worker_thread+0x19c/0x5cc
+ r10:00000008 r9:c2814b40 r8:c1703d40 r7:de6ab61c r6:c2802c18 r5:de6ab600
+ r4:c2802c00
+ worker_thread from kthread+0x100/0x120
+ r10:00000000 r9:df895e80 r8:c285e3c0 r7:c2802c00 r6:c014cf84 r5:c285e300
+ r4:c2814b40
+ kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xdf9a1fb0 to 0xdf9a1ff8)
 
-Lukas
+> On 16/06/2022 22:25, Daniel Lezcano wrote:
+>> The get_trend function does already what the generic framework does.
+>>
+>> Remove it.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   drivers/thermal/tegra/soctherm.c | 32 --------------------------------
+>>   1 file changed, 32 deletions(-)
+>>
+>> diff --git a/drivers/thermal/tegra/soctherm.c
+>> b/drivers/thermal/tegra/soctherm.c
+>> index 210325f92559..825eab526619 100644
+>> --- a/drivers/thermal/tegra/soctherm.c
+>> +++ b/drivers/thermal/tegra/soctherm.c
+>> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void
+>> *data, int trip, int temp)
+>>       return 0;
+>>   }
+>>   -static int tegra_thermctl_get_trend(void *data, int trip,
+>> -                    enum thermal_trend *trend)
+>> -{
+>> -    struct tegra_thermctl_zone *zone = data;
+>> -    struct thermal_zone_device *tz = zone->tz;
+>> -    int trip_temp, temp, last_temp, ret;
+>> -
+>> -    if (!tz)
+>> -        return -EINVAL;
+>> -
+>> -    ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
+>> -    if (ret)
+>> -        return ret;
+>> -
+>> -    temp = READ_ONCE(tz->temperature);
+>> -    last_temp = READ_ONCE(tz->last_temperature);
+>> -
+>> -    if (temp > trip_temp) {
+>> -        if (temp >= last_temp)
+>> -            *trend = THERMAL_TREND_RAISING;
+>> -        else
+>> -            *trend = THERMAL_TREND_STABLE;
+>> -    } else if (temp < trip_temp) {
+>> -        *trend = THERMAL_TREND_DROPPING;
+>> -    } else {
+>> -        *trend = THERMAL_TREND_STABLE;
+>> -    }
+>> -
+>> -    return 0;
+>> -}
+>> -
+>>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
+>>   {
+>>       u32 r;
+>> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data,
+>> int lo, int hi)
+>>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
+>>       .get_temp = tegra_thermctl_get_temp,
+>>       .set_trip_temp = tegra_thermctl_set_trip_temp,
+>> -    .get_trend = tegra_thermctl_get_trend,
+>>       .set_trips = tegra_thermctl_set_trips,
+>>   };
+>>   
+> 
+> 
+
