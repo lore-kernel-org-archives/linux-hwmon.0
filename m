@@ -2,217 +2,218 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B87C43334
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 18:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED5EC433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jun 2022 20:30:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbiF1Sng (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jun 2022 14:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
+        id S229682AbiF1Uas (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jun 2022 16:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiF1Sng (ORCPT
+        with ESMTP id S229634AbiF1Uas (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:43:36 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A6C1D0C6;
-        Tue, 28 Jun 2022 11:43:35 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o18so11885149plg.2;
-        Tue, 28 Jun 2022 11:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Nf+OblUWFZy1JS2yrD639AItKuL1KQKNpAKw7anuvjY=;
-        b=HZc4YoW+bX2VEtQNtd28uVZZ74iNTEVxswYwXGIaNYz83F/gr+edoSYQ6d7nBUDrR4
-         gK61Um71/RZY9IqytdLIrByDeFiNTsgfHUooOkA3UXhi359fdpaNXtdR2qFasgUMoco/
-         Sxb4DpKF7FeGc9FV8AKqKjR0XO71DDWsGw6aZr2J3VaQL93tq+/cTRAqMy+KOOOE++uG
-         hiCdyFsY2Ow5xHT3TyFriFKi8M3a7UuJzfzef29WjCJLWBjl5duAZsppK50h89b6GvI6
-         bouNW4K8W33mADzbJ3y1nGZZJpxY4tgag++HWOjMhvXe3kbKDLtDmfddV0dhWZ5ooWnc
-         TDhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Nf+OblUWFZy1JS2yrD639AItKuL1KQKNpAKw7anuvjY=;
-        b=R/FAemTzmdoaz6m1zbObm7gcfKw6jfnYNqxPGGaxyYvc0n2UgF6Q5aX++BMxfKEb5A
-         f2BaC6xnbNlU+fzJCxPRDr4/5tZGasri3rIp2KrQ/4lEPBP5ayatjAa0Lt2Q7MtqOXLu
-         yikERfka6U97HyO+EYx1Gk08SJ4todwgaJez3h11OlpxIXX6qlGvpokMXRvAzvLdFPrP
-         fmZYgPEiA6mmKpyPKm/zBJa5V/VwsIKTYpeyG/3v38WDGeMMIBRA3pZZ9+xFacfOGjW6
-         zoZWANnwQbXEWXIUWXNv6z40TfAASFvVk2CqYkEj/ZiMn1R0JR2sL7uc9VvAeOCSkLap
-         mbdA==
-X-Gm-Message-State: AJIora+ADffEOT/JSL7g3QwW7LtNEYIdwDIIcG72ATTZANYX/3gpftr/
-        6iRbB2fGVUlFXRKoKjAaA65EzOsIa9c=
-X-Google-Smtp-Source: AGRyM1uNLIskFHfRQr6mWvFmFqeRAY+FqrXG1HMf9YtxM4eqGdjvdNEoZDUa9fVW3zn6oaVigsD8BA==
-X-Received: by 2002:a17:903:1cf:b0:16a:605a:d58a with SMTP id e15-20020a17090301cf00b0016a605ad58amr4995298plh.37.1656441814741;
-        Tue, 28 Jun 2022 11:43:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bt11-20020a17090af00b00b001d95c09f877sm172288pjb.35.2022.06.28.11.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:43:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 28 Jun 2022 11:43:32 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        rafael@kernel.org
-Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
-Message-ID: <20220628184332.GA3624671@roeck-us.net>
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
- <20220616202537.303655-2-daniel.lezcano@linaro.org>
- <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
- <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
- <20220628151030.GA3361452@roeck-us.net>
+        Tue, 28 Jun 2022 16:30:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE00564FB;
+        Tue, 28 Jun 2022 13:30:46 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SKRU1P021107;
+        Tue, 28 Jun 2022 20:30:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=B7ZsdCmzeX1AEGJ4+n9A1QiMbSEWdy0D1odXDHOtNDw=;
+ b=YvYq7/pk6SYlCUiCCAhmJ9bNBUYt3KdSffmZBZ/IL603kpj5zdkA7em3m+daE1s9qtvp
+ goauyOCqyKmy4jNXB/CaILIcS1HN+nN3gOLLl3BrIuf2sRjYXbVMwP+LUHqL4IgrAV5U
+ RxOIYlElzH4UkLwZIHR6dpLdDr5xcBTZ0Yu36QQYiFYI5eVGgAnOp0Cefm+mnyKA7pNi
+ f+12LLWZd+JT29beFTj8fSFJPcvtivrjDHazEavAZK0qY3aj6436SIlz2wW7s6x1V2LK
+ zqUQ/B8jvxfozOB/F6kRi7R0j3IyILruWLROBU7Uf/czMxonYY/9iURLPajjRbftw9+g Jw== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h08pv01fa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 20:30:32 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SKKiXc030459;
+        Tue, 28 Jun 2022 20:30:31 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma02wdc.us.ibm.com with ESMTP id 3gwt09rvc8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 20:30:31 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SKUVT428705192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 20:30:31 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5AFA5AC059;
+        Tue, 28 Jun 2022 20:30:31 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E0EE1AC05B;
+        Tue, 28 Jun 2022 20:30:30 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.160.43.21])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jun 2022 20:30:30 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] hwmon: (occ) Prevent power cap command overwriting poll response
+Date:   Tue, 28 Jun 2022 15:30:29 -0500
+Message-Id: <20220628203029.51747-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628151030.GA3361452@roeck-us.net>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RelTZ5-5zkQYxJC3a6jTVhEC1etL7LA7
+X-Proofpoint-ORIG-GUID: RelTZ5-5zkQYxJC3a6jTVhEC1etL7LA7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_11,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 mlxscore=0 malwarescore=0 clxscore=1011
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280080
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 08:10:30AM -0700, Guenter Roeck wrote:
-> On Tue, Jun 28, 2022 at 02:44:31PM +0300, Dmitry Osipenko wrote:
-> > On 6/28/22 11:41, Daniel Lezcano wrote:
-> > > 
-> > > Thierry, Dmitry,
-> > > 
-> > > are fine with this patch?
-> > 
-> > Seems should be good. I couldn't test it using recent the linux-next
-> > because of a lockup in LM90 driver. There were quite a lot of changes in
-> > LM90 recently, adding Guenter.
-> > 
-> 
-> Weird, I tested those changes to death with real hardware, and I don't
-> see a code path where the mutex can be left in blocked state unless the
-> underlying i2c driver locks up for some reason. What is the platform,
-> and can you point me to the devicetree file ? Also, is there anything
-> else lm90 or i2c related in the kernel log ?
-> 
+Currently, the response to the power cap command overwrites the
+first eight bytes of the poll response, since the commands use
+the same buffer. This means that user's get the wrong data between
+the time of sending the power cap and the next poll response update.
+Fix this by specifying a different buffer for the power cap command
+response.
 
-Follow-up question: I see that various Tegra systems use lm90 compatible
-chips, and the interrupt line is in general wired up. Can you check if
-you get lots of interrupts on that interrupt line ? Also, can you check
-what happens if you read hwmon attributes directly ?
+Fixes: 5b5513b88002 ("hwmon: Add On-Chip Controller (OCC) hwmon driver")
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/hwmon/occ/common.c |  5 +++--
+ drivers/hwmon/occ/common.h |  3 ++-
+ drivers/hwmon/occ/p8_i2c.c | 13 +++++++------
+ drivers/hwmon/occ/p9_sbe.c |  7 +++----
+ 4 files changed, 15 insertions(+), 13 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index ea070b91e5b9..157b73a3da29 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -145,7 +145,7 @@ static int occ_poll(struct occ *occ)
+ 	cmd[6] = 0;			/* checksum lsb */
+ 
+ 	/* mutex should already be locked if necessary */
+-	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
++	rc = occ->send_cmd(occ, cmd, sizeof(cmd), &occ->resp, sizeof(occ->resp));
+ 	if (rc) {
+ 		occ->last_error = rc;
+ 		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
+@@ -182,6 +182,7 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+ {
+ 	int rc;
+ 	u8 cmd[8];
++	u8 resp[8];
+ 	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
+ 
+ 	cmd[0] = 0;	/* sequence number */
+@@ -198,7 +199,7 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
++	rc = occ->send_cmd(occ, cmd, sizeof(cmd), resp, sizeof(resp));
+ 
+ 	mutex_unlock(&occ->lock);
+ 
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index 64d5ec7e169b..7ac4b2febce6 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -96,7 +96,8 @@ struct occ {
+ 
+ 	int powr_sample_time_us;	/* average power sample time */
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+-	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len);
++	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len, void *resp,
++			size_t resp_len);
+ 
+ 	unsigned long next_update;
+ 	struct mutex lock;		/* lock OCC access */
+diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+index da39ea28df31..b221be1f35f3 100644
+--- a/drivers/hwmon/occ/p8_i2c.c
++++ b/drivers/hwmon/occ/p8_i2c.c
+@@ -111,7 +111,8 @@ static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
+ 				      be32_to_cpu(data1));
+ }
+ 
+-static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
++static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
++			       void *resp, size_t resp_len)
+ {
+ 	int i, rc;
+ 	unsigned long start;
+@@ -120,7 +121,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ 	const long wait_time = msecs_to_jiffies(OCC_CMD_IN_PRG_WAIT_MS);
+ 	struct p8_i2c_occ *ctx = to_p8_i2c_occ(occ);
+ 	struct i2c_client *client = ctx->client;
+-	struct occ_response *resp = &occ->resp;
++	struct occ_response *or = (struct occ_response *)resp;
+ 
+ 	start = jiffies;
+ 
+@@ -151,7 +152,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ 			return rc;
+ 
+ 		/* wait for OCC */
+-		if (resp->return_status == OCC_RESP_CMD_IN_PRG) {
++		if (or->return_status == OCC_RESP_CMD_IN_PRG) {
+ 			rc = -EALREADY;
+ 
+ 			if (time_after(jiffies, start + timeout))
+@@ -163,7 +164,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ 	} while (rc);
+ 
+ 	/* check the OCC response */
+-	switch (resp->return_status) {
++	switch (or->return_status) {
+ 	case OCC_RESP_CMD_IN_PRG:
+ 		rc = -ETIMEDOUT;
+ 		break;
+@@ -192,8 +193,8 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ 	if (rc < 0)
+ 		return rc;
+ 
+-	data_length = get_unaligned_be16(&resp->data_length);
+-	if (data_length > OCC_RESP_DATA_BYTES)
++	data_length = get_unaligned_be16(&or->data_length);
++	if ((data_length + 7) > resp_len)
+ 		return -EMSGSIZE;
+ 
+ 	/* fetch the rest of the response data */
+diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+index 01405ae2f9bd..c1e0a1d96cd4 100644
+--- a/drivers/hwmon/occ/p9_sbe.c
++++ b/drivers/hwmon/occ/p9_sbe.c
+@@ -77,11 +77,10 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+ 	return notify;
+ }
+ 
+-static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
++static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
++			       void *resp, size_t resp_len)
+ {
+-	struct occ_response *resp = &occ->resp;
+ 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+-	size_t resp_len = sizeof(*resp);
+ 	int rc;
+ 
+ 	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+@@ -95,7 +94,7 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+ 		return rc;
+ 	}
+ 
+-	switch (resp->return_status) {
++	switch (((struct occ_response *)resp)->return_status) {
+ 	case OCC_RESP_CMD_IN_PRG:
+ 		rc = -ETIMEDOUT;
+ 		break;
+-- 
+2.31.1
 
-> Thanks,
-> Guenter
-> 
-> > INFO: task kworker/3:1:44 blocked for more than 61 seconds.
-> >       Not tainted 5.19.0-rc4-next-20220627-00012-g08b697b94b8a #2
-> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > task:kworker/3:1     state:D stack:    0 pid:   44 ppid:     2
-> > flags:0x00000000
-> > Workqueue: events_freezable_power_ thermal_zone_device_check
-> > Backtrace:
-> >  __schedule from schedule+0x60/0xcc
-> >  r10:c0fead70 r9:c2854c94 r8:df9a1dac r7:c2814b40 r6:00000002 r5:c1883020
-> >  r4:c2814b40
-> >  schedule from schedule_preempt_disabled+0x28/0x38
-> >  r5:c1883020 r4:c2814b40
-> >  schedule_preempt_disabled from __mutex_lock.constprop.0+0x1e0/0x9ac
-> >  r5:c1883020 r4:c2854c90
-> >  __mutex_lock.constprop.0 from __mutex_lock_slowpath+0x1c/0x20
-> >  r10:00000000 r9:c1882ae0 r8:c2854c90 r7:c2854c40 r6:00000001 r5:00000001
-> >  r4:c2854c90
-> >  __mutex_lock_slowpath from mutex_lock+0x60/0x64
-> >  mutex_lock from lm90_read+0x40/0x3d4
-> >  r5:00000001 r4:c2854e08
-> >  lm90_read from hwmon_thermal_get_temp+0x58/0x8c
-> >  r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1660 r5:c0af7940 r4:df9a1eb8
-> >  hwmon_thermal_get_temp from of_thermal_get_temp+0x38/0x44
-> >  r5:df9a1eb8 r4:c1db1400
-> >  of_thermal_get_temp from thermal_zone_get_temp+0x58/0x78
-> >  thermal_zone_get_temp from thermal_zone_device_update.part.0+0x4c/0x450
-> >  r7:de6aee00 r6:c1db1400 r5:00000000 r4:c1db1400
-> >  thermal_zone_device_update.part.0 from thermal_zone_device_check+0x58/0x5c
-> >  r10:00000000 r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1400 r5:c1db1660
-> >  r4:00000001
-> >  thermal_zone_device_check from process_one_work+0x21c/0x530
-> >  r7:de6aee00 r6:de6ab600 r5:c2802c00 r4:c1db167c
-> >  process_one_work from worker_thread+0x19c/0x5cc
-> >  r10:00000008 r9:c2814b40 r8:c1703d40 r7:de6ab61c r6:c2802c18 r5:de6ab600
-> >  r4:c2802c00
-> >  worker_thread from kthread+0x100/0x120
-> >  r10:00000000 r9:df895e80 r8:c285e3c0 r7:c2802c00 r6:c014cf84 r5:c285e300
-> >  r4:c2814b40
-> >  kthread from ret_from_fork+0x14/0x2c
-> > Exception stack(0xdf9a1fb0 to 0xdf9a1ff8)
-> > 
-> > > On 16/06/2022 22:25, Daniel Lezcano wrote:
-> > >> The get_trend function does already what the generic framework does.
-> > >>
-> > >> Remove it.
-> > >>
-> > >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > >> ---
-> > >>   drivers/thermal/tegra/soctherm.c | 32 --------------------------------
-> > >>   1 file changed, 32 deletions(-)
-> > >>
-> > >> diff --git a/drivers/thermal/tegra/soctherm.c
-> > >> b/drivers/thermal/tegra/soctherm.c
-> > >> index 210325f92559..825eab526619 100644
-> > >> --- a/drivers/thermal/tegra/soctherm.c
-> > >> +++ b/drivers/thermal/tegra/soctherm.c
-> > >> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void
-> > >> *data, int trip, int temp)
-> > >>       return 0;
-> > >>   }
-> > >>   -static int tegra_thermctl_get_trend(void *data, int trip,
-> > >> -                    enum thermal_trend *trend)
-> > >> -{
-> > >> -    struct tegra_thermctl_zone *zone = data;
-> > >> -    struct thermal_zone_device *tz = zone->tz;
-> > >> -    int trip_temp, temp, last_temp, ret;
-> > >> -
-> > >> -    if (!tz)
-> > >> -        return -EINVAL;
-> > >> -
-> > >> -    ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
-> > >> -    if (ret)
-> > >> -        return ret;
-> > >> -
-> > >> -    temp = READ_ONCE(tz->temperature);
-> > >> -    last_temp = READ_ONCE(tz->last_temperature);
-> > >> -
-> > >> -    if (temp > trip_temp) {
-> > >> -        if (temp >= last_temp)
-> > >> -            *trend = THERMAL_TREND_RAISING;
-> > >> -        else
-> > >> -            *trend = THERMAL_TREND_STABLE;
-> > >> -    } else if (temp < trip_temp) {
-> > >> -        *trend = THERMAL_TREND_DROPPING;
-> > >> -    } else {
-> > >> -        *trend = THERMAL_TREND_STABLE;
-> > >> -    }
-> > >> -
-> > >> -    return 0;
-> > >> -}
-> > >> -
-> > >>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
-> > >>   {
-> > >>       u32 r;
-> > >> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data,
-> > >> int lo, int hi)
-> > >>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
-> > >>       .get_temp = tegra_thermctl_get_temp,
-> > >>       .set_trip_temp = tegra_thermctl_set_trip_temp,
-> > >> -    .get_trend = tegra_thermctl_get_trend,
-> > >>       .set_trips = tegra_thermctl_set_trips,
-> > >>   };
-> > >>   
-> > > 
-> > > 
-> > 
