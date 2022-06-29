@@ -2,121 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53900CCA482
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 21:20:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF8F9C43334
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 23:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiF2VUb convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 17:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S230358AbiF2XAB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 19:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiF2VU3 (ORCPT
+        with ESMTP id S231334AbiF2W7p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:20:29 -0400
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99113F79;
-        Wed, 29 Jun 2022 14:20:28 -0700 (PDT)
-Received: from [37.161.29.0] (port=43545 helo=[192.168.131.30])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1o6f6m-000BzC-Qd;
-        Wed, 29 Jun 2022 23:20:25 +0200
-Message-ID: <d682fb60-c254-f89e-5d6d-cdf7aa752939@lucaceresoli.net>
-Date:   Wed, 29 Jun 2022 23:20:04 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mediatek@lists.infradead.org
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-Content-Language: en-US
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        Wed, 29 Jun 2022 18:59:45 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD76640E43
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 15:58:48 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id a10-20020a170902ecca00b0016a50049af0so9329039plh.10
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 15:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=8z7eHNzBfwIuJwCaqp0hLyBEJakQJmDKDOySk1lfElA=;
+        b=eUbZyr9mx264NFAW9qP8q5MAEgRHqfK3anwe0Dc6IZP2ewEvLqCfm5XeD3SqBPuHRs
+         Z3DFo/8B71PWjvM7Sjd7EV6J4Ri36PXB8WjTA36Ijc2QEkc7patrc5xTB/g8L0UBAFqT
+         eJU2mtgFdwsWAiV/MeqVvTFqX2q/ZiC+XX0ynNKA11nahSlv7rgGITwOL6spBMbdKbsZ
+         h8v7EbauDRv+lffCvbNiJLm0YluRrrCyxahEIw5qTil54hs193V3pJTWXEkLWBdUSHW+
+         w66B6USScOGYDqWNzX1qVAX3OZFPTNJ5XZFxCOUZ2sNQJVugTYXrtAbACF5c70mnpmP0
+         kBmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=8z7eHNzBfwIuJwCaqp0hLyBEJakQJmDKDOySk1lfElA=;
+        b=5kBztpLKj2fnMha9xPUtlhMABHNM/buFF5PfKtviwJWn2NbtzgpobrF+UNNCpA4p7w
+         Uhb6d250HiUDXpJw9okRsGGcHRJ/Nu6gglqVW0mLFVQCgxFVYZ5rCWDFYmyqq+662JIX
+         ytnBkBKwt1XX031+GUcUc802MUiyRVXz/Gf7L7jUspQK1KplafVGchQ4O74AYcoDq/3T
+         6aXSneON99rhjDXT68RHsjcXauTROWymDN0HjIIftQ3b/rM69d9NV3uQcNrkGufRwCvY
+         dYGSZuj1c2qMJ0hQIu9F2kTStb+B+c9qQNlULIIXCmCAyedEP5MWcz2nHNPYJRfAGCuL
+         E4LQ==
+X-Gm-Message-State: AJIora88ucaJmFlsh4uNfUZS6HA8pAZkbUQeECe85B7IZLo/G+qkhzr5
+        USXRKHQE4L/iUVGVw9kr4Tce85NVCG1Xu2Oja5k=
+X-Google-Smtp-Source: AGRyM1sxAWgSTfU8h6zzPTVjW8sbDkhdxhC4OHr5/BcukTSsR5JtIFMQdh0mUZ7VmE/cPm/SDJkgsIXcnorKQHBuIuY=
+X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
+ (user=willmcvicker job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with
+ SMTP id t9-20020a17090a024900b001e0a8a33c6cmr315pje.0.1656543528054; Wed, 29
+ Jun 2022 15:58:48 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 22:58:40 +0000
+Message-Id: <20220629225843.332453-1-willmcvicker@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH 4.19 v1 0/2] Fixes for thermal hwmon registration
+From:   Will McVicker <willmcvicker@google.com>
+To:     stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kernel-team@android.com, Will McVicker <willmcvicker@google.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Hi All,
 
-[keeping only individuals and lists in Cc to avoid bounces]
+These two patches fix issues with thermal hwmon registration on 4.19.
+The upstream commit ddaefa209c4a ("hwmon: Make chip parameter for
+with_info API mandatory") forces the chip parameter to be mandatory
+which breaks thermal subsystem devices from probing. These fixes were
+pulled into 5.4, but missed from 4.19. I have verified them on Pixel
+5 with the 4.19 kernel.
 
-On 28/06/22 16:03, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
-> 
-> The value returned by an i2c driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Thanks,
+Will
 
-For versaclock:
+Guenter Roeck (2):
+  hwmon: Introduce hwmon_device_register_for_thermal
+  thermal/drivers/thermal_hwmon: Use hwmon_device_register_for_thermal()
 
-> diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
-> index e7be3e54b9be..657493ecce4c 100644
-> --- a/drivers/clk/clk-versaclock5.c
-> +++ b/drivers/clk/clk-versaclock5.c
-> @@ -1138,7 +1138,7 @@ static int vc5_probe(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int vc5_remove(struct i2c_client *client)
-> +static void vc5_remove(struct i2c_client *client)
->  {
->  	struct vc5_driver_data *vc5 = i2c_get_clientdata(client);
->  
-> @@ -1146,8 +1146,6 @@ static int vc5_remove(struct i2c_client *client)
->  
->  	if (vc5->chip_info->flags & VC5_HAS_INTERNAL_XTAL)
->  		clk_unregister_fixed_rate(vc5->pin_xin);
-> -
-> -	return 0;
->  }
->  
->  static int __maybe_unused vc5_suspend(struct device *dev)
-
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+ drivers/hwmon/hwmon.c           | 25 +++++++++++++++++++++++++
+ drivers/thermal/thermal_hwmon.c |  4 ++--
+ include/linux/hwmon.h           |  3 +++
+ 3 files changed, 30 insertions(+), 2 deletions(-)
 
 -- 
-Luca
+2.37.0.rc0.161.g10f37bed90-goog
+
