@@ -2,57 +2,57 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F302ECCA47C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 23:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33B2FC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 23:00:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiF2XAC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 19:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S231181AbiF2XAD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 19:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiF2W7p (ORCPT
+        with ESMTP id S231249AbiF2W7p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 29 Jun 2022 18:59:45 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5C840E47
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 15:58:51 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 196-20020a6300cd000000b0040c9c64e7e4so8723993pga.9
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 15:58:51 -0700 (PDT)
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D710403EC
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 15:58:55 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id o1-20020a17090ab88100b001ef01610843so380081pjr.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 15:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dWtWzcF9EWPJff15LpScH15OiRkVx8LFLsKeZfF4Vw0=;
-        b=UWnG7cUEsRngB6+FpQTUwPtY9Fa3M+ATomWL5dGrpOXykhGGRzSBaCXjDQaUY4BrYW
-         h/H4Br3KmDKglsXZPzpUEXfhjZTa7FiRY8piqh4zhPp/oou/IUKk3mx5UAnH26IjAKdd
-         c+Xa8s6M1FROWeLXLlIM/slorgk9aROq6KqLnb9Z496zQA1DvS6wDYN2rFSwXOFo3B/D
-         4ob/c3m4KBJRAYYw47dExamOQUG6hyOpe8Sj+iyGLx2EyURd31oVQYuTRkvl24brbvG7
-         d82GerEUcdkV3m77tkk560ty73+vqzYk++v+i/529GVvtViEuHnULbvHKoiEKrwDP10B
-         qYEg==
+        bh=bg9ioyZvi3pggVC6pmrxVE3PJI7RkTo447asQNSDMCo=;
+        b=XOgKAp54Uomy/MmM0rVyzKaifQUFQpoD1t30MT8UmSk4KOHvi9VYQBtLOKeJ3qoCT6
+         wKGwjYZo3g/dGbJKaFBT0jIkbA+P95nNjL2xa4BsbkANz7tvu+bPqV5M8zspj86R+6Pi
+         MDg5CsnBjFcma+9cvcJBzeQsANG9udxS/lKWSY08OdTFEmDpkxrpjs5t3nG/ldOT7AGM
+         7hzpNc6DEU9m08IurlitD8wgQ25ff1MNozL2+BK/fRrn3NUTBMXMlKIb3EbzbNi+qb06
+         MXSZ/NUMCzRQbU0iubhU+b7vDdg89J0/lN9T+uF2q0aPOpHKL4BzM0lhzoXcqTuaIp3O
+         yiJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dWtWzcF9EWPJff15LpScH15OiRkVx8LFLsKeZfF4Vw0=;
-        b=JaOVNLBV/ilg0K37+/JQvdeCRvpknRbqdKMtMZSsQjK4Lopl3GA04z3LzoZvMVhYIA
-         a0Twhho+f/WZEmFrz8rX+TyfeP93bFkp3p5kKjb/gzAvaeAWf95XKAqqZ6HDcXZ0u4OL
-         EWBjV6q+IK6Fq//GL3v9LMSSlGTMEE7EkgJhXn0MAazpI9uBRC/xNozY7glB8pLiGWyS
-         xf1dUNG+WRbg9ei1LeC0gUSU5CE9Q9WimPmlcegUV6+JGPyhAYsSD+fFGQUIsWUnFyS5
-         uKUz4RD8LgJyOL/0fSJNJTjy86qG30T2XMpWe2XSEn1n7OSTgxyaUeA5ZQo8Re2GRUPP
-         L1gw==
-X-Gm-Message-State: AJIora8aCxXwk69C/nC/KVKwBZEEs4x74u16YF3CT+pYVSmwZhIwEzFb
-        OMMapKHpXmKHVxmMpq4+llFmb+f33m27hvw0Huc=
-X-Google-Smtp-Source: AGRyM1uLiis59SVfbCrONv+Ja9MRsl2c1ovETkCcknpE61KRbyIRoDv1ilv1BDthOXjvyc8q8yGx/OzrECY12zFh354=
+        bh=bg9ioyZvi3pggVC6pmrxVE3PJI7RkTo447asQNSDMCo=;
+        b=u7k64d9oEN308Q16f+rNJInSvyTelrnBLp0rOcI48D7T127FR2hfMkiKcWjSRNFvhK
+         1PYIjhblnJdJoE0ikgZhqsGnFaE6nUD8K+mPhU6g7f4bS2s18gP1XJ5nWtOEw4pms1y7
+         /BvKkN8/a4hjKfTKB3CW0B1nAmmw9Iou7z+ZnXSiCiytGQO+p9aTh84C8tVgO/nzpmcu
+         cVoEQQujRurStUGA5TYGyg165vmZhmP1QmbdMUcDQHjSjvItCYztHT3Zn68K7lGhbMzG
+         hVDxx6vfJycnua3xKErdJp3s5qLu7VkifiVWANzcw8PHR4+4lrad0cnHnwQa619SEXAW
+         BsQw==
+X-Gm-Message-State: AJIora/TaRQvap9sD+s4L3R9L/NJJHQdPa7ZpUZwVhB4C3RofzWuQVY/
+        f8NefUAlkqVkf/UE3RypFcE4QhKFH6kJOGz5Zds=
+X-Google-Smtp-Source: AGRyM1uFrWDjwr0dMIMwLT0wv42PT1NVpnfJp0c1gw3lcilw2C0s09prA0+AV6JbWt+Dgn5xul4w0FlFmXjKuEaI700=
 X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a17:902:d2c9:b0:16a:578f:c356 with
- SMTP id n9-20020a170902d2c900b0016a578fc356mr11245986plc.4.1656543531426;
- Wed, 29 Jun 2022 15:58:51 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 22:58:41 +0000
+ (user=willmcvicker job=sendgmr) by 2002:a17:90a:3e04:b0:1ee:e899:4eb6 with
+ SMTP id j4-20020a17090a3e0400b001eee8994eb6mr8179267pjc.187.1656543534620;
+ Wed, 29 Jun 2022 15:58:54 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 22:58:42 +0000
 In-Reply-To: <20220629225843.332453-1-willmcvicker@google.com>
-Message-Id: <20220629225843.332453-2-willmcvicker@google.com>
+Message-Id: <20220629225843.332453-3-willmcvicker@google.com>
 Mime-Version: 1.0
 References: <20220629225843.332453-1-willmcvicker@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH 4.19 v1 1/2] hwmon: Introduce hwmon_device_register_for_thermal
+Subject: [PATCH 4.19 v1 2/2] thermal/drivers/thermal_hwmon: Use hwmon_device_register_for_thermal()
 From:   Will McVicker <willmcvicker@google.com>
 To:     stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -69,72 +69,37 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Guenter Roeck <linux@roeck-us.net>
 
-[ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
+[ upstream commit 87743bcf08072b3e1952a0bf5524b2833e667b4c ]
 
-The thermal subsystem registers a hwmon driver without providing
-chip or sysfs group information. This is for legacy reasons and
-would be difficult to change. At the same time, we want to enforce
-that chip information is provided when registering a hwmon device
-using hwmon_device_register_with_info(). To enable this, introduce
-a special API for use only by the thermal subsystem.
+The thermal subsystem registers a hwmon device without providing chip
+information or sysfs attribute groups. While undesirable, it would be
+difficult to change. On the other side, it abuses the
+hwmon_device_register_with_info API by not providing that information.
+Use new API specifically created for the thermal subsystem instead to
+let us enforce the 'chip' parameter for other callers of
+hwmon_device_register_with_info().
 
 Acked-by: Rafael J . Wysocki <rafael@kernel.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/hwmon.c | 25 +++++++++++++++++++++++++
- include/linux/hwmon.h |  3 +++
- 2 files changed, 28 insertions(+)
+ drivers/thermal/thermal_hwmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index c4051a3e63c2..412a5e39fc14 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -725,6 +725,31 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
- }
- EXPORT_SYMBOL_GPL(hwmon_device_register_with_info);
- 
-+/**
-+ * hwmon_device_register_for_thermal - register hwmon device for thermal subsystem
-+ * @dev: the parent device
-+ * @name: hwmon name attribute
-+ * @drvdata: driver data to attach to created device
-+ *
-+ * The use of this function is restricted. It is provided for legacy reasons
-+ * and must only be called from the thermal subsystem.
-+ *
-+ * hwmon_device_unregister() must be called when the device is no
-+ * longer needed.
-+ *
-+ * Returns the pointer to the new device.
-+ */
-+struct device *
-+hwmon_device_register_for_thermal(struct device *dev, const char *name,
-+				  void *drvdata)
-+{
-+	if (!name || !dev)
-+		return ERR_PTR(-EINVAL);
-+
-+	return __hwmon_device_register(dev, name, drvdata, NULL, NULL);
-+}
-+EXPORT_SYMBOL_GPL(hwmon_device_register_for_thermal);
-+
- /**
-  * hwmon_device_register - register w/ hwmon
-  * @dev: the device to register
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 8fde789f2eff..5ff3db6eb9f1 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -390,6 +390,9 @@ hwmon_device_register_with_info(struct device *dev,
- 				const struct hwmon_chip_info *info,
- 				const struct attribute_group **extra_groups);
- struct device *
-+hwmon_device_register_for_thermal(struct device *dev, const char *name,
-+				  void *drvdata);
-+struct device *
- devm_hwmon_device_register_with_info(struct device *dev,
- 				const char *name, void *drvdata,
- 				const struct hwmon_chip_info *info,
+diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+index dd5d8ee37928..b3b229421936 100644
+--- a/drivers/thermal/thermal_hwmon.c
++++ b/drivers/thermal/thermal_hwmon.c
+@@ -147,8 +147,8 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
+ 	INIT_LIST_HEAD(&hwmon->tz_list);
+ 	strlcpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
+ 	strreplace(hwmon->type, '-', '_');
+-	hwmon->device = hwmon_device_register_with_info(&tz->device, hwmon->type,
+-							hwmon, NULL, NULL);
++	hwmon->device = hwmon_device_register_for_thermal(&tz->device,
++							  hwmon->type, hwmon);
+ 	if (IS_ERR(hwmon->device)) {
+ 		result = PTR_ERR(hwmon->device);
+ 		goto free_mem;
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
