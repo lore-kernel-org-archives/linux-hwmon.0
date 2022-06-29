@@ -2,72 +2,213 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92DCAC43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 20:02:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97B54C433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 20:59:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiF2UCd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 16:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        id S229572AbiF2U7q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 16:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiF2UCb (ORCPT
+        with ESMTP id S229558AbiF2U7p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jun 2022 16:02:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AAD3ED11;
-        Wed, 29 Jun 2022 13:02:31 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40BE7660194C;
-        Wed, 29 Jun 2022 21:02:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656532949;
-        bh=XZKTlLtT5IwYyJZvyMZi3Fm4hVnGjrmKXiDIiDRogfw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eqG4tpPX332aqBNR+tZzQwfABs4LYwFRTZb620NZoy6ztChHNeK88ZlYDRnpY3rCC
-         t8PGjaWO3qC5XFDWeEdXMqJX4xGSJkBvGMF6dVZr0CmP+3j/fBh6elX+E5Q50fkVoJ
-         dQ79vsb5eiS9SbTNBPwZpqJaALJeHEEPnp8NLcHlGkQ3dfUN7XPJUlRk+biLh0AGws
-         qP6DNiyPwVwaOOKnrZvRZs1IMJpUWvKYPMVtWSt5T+yA08EvEyrXpQSoDtSGwolpCh
-         reTsHexO4xB9PratqDcj5LKPhn4XbAp5FVm97Oiz0oOTHJC+i2fGu+nwv2ogYZlPrE
-         e1nYqT/ioND+Q==
-Message-ID: <ba43ed2c-0290-ca5b-ab4b-1f25dad9d882@collabora.com>
-Date:   Wed, 29 Jun 2022 23:02:25 +0300
+        Wed, 29 Jun 2022 16:59:45 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBB23E0FB;
+        Wed, 29 Jun 2022 13:59:43 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id n16-20020a17090ade9000b001ed15b37424so673706pjv.3;
+        Wed, 29 Jun 2022 13:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eUOSisXEX4azAU3P2OlTAghCWdgobOTU7QEXEJTTGYU=;
+        b=gI5uLl/vensRtycqrZOMejg2JD1oVcPGklLyJmewMi5280Y8SMwkuHfLWY6swRW5Mq
+         P8UpMxx58lFTlrkJQEfSb8HPylRAbZgAoNhiGCOv2JzirWYMsgUKhts2ZAArDs/oOJP0
+         T5pucacjiaCVUCC8vyBpCHrRsctxRpE4EVh27fxNunbztKuVkbYoC9OFEwe7GIxlhnbe
+         x59wellAJq7dRB0Wx8uZCJRSH74BL0YWRsCaHo09Iiv+E5U3hSgdWl475OqkJm7cW0AV
+         XRq6otMoCjyK7Lk83VkKtqiibhkDRGfxwom6ShPFnz+kFGwH3T0bUE0DeAXLd+X+bfjT
+         Y7uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=eUOSisXEX4azAU3P2OlTAghCWdgobOTU7QEXEJTTGYU=;
+        b=eQT+g46T952YTvuDGk3D8EwJf+zHwc5KYQz/36bR+LDToAOAiZsQZMyxBo6lAr7/KM
+         Xs+gWfLhbqYS8YWBd1ptK97EmmhyXg7h/kAxWmbxoNzz+Rh/uq95nbMyVVpe4CjW+o4Q
+         gjO7H8htvveCgRhiXbbPICLpnM3SYamu3EOimvzy7phvdQ34pCF/ep9bg+nrtvFOKNyX
+         gLnU0HcyfMeZIQ8y1nIKq/tbnOvBk87sWiWBv0XVt14/KoxLPdZnNj+iLtz/iMPnXbyv
+         0DHHdJ1oaTnvjqavvgx54xN1BXXN3bsjLYswtQdV+YgmcnBqSYt5j8Hb08luekat/gQJ
+         6GAA==
+X-Gm-Message-State: AJIora/R+uI3keNY+VNlMaBqdl2LVL23z0/iNX+O/4rBIJsNOK1Iz2BL
+        6uDae5Jq8xY5TkaIO/AzgBM=
+X-Google-Smtp-Source: AGRyM1taAozmHEZ5UkA1VhhEkfFP6/3/A6yUc2hJSYkOhgIyBcVf8sRgE8bxkWNAl/dIXZKtmKwMuQ==
+X-Received: by 2002:a17:90a:ea0f:b0:1ec:989d:1013 with SMTP id w15-20020a17090aea0f00b001ec989d1013mr7788562pjy.140.1656536382871;
+        Wed, 29 Jun 2022 13:59:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709027c0a00b0016a6caacaefsm11372727pll.103.2022.06.29.13.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 13:59:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 29 Jun 2022 13:59:39 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com
+Subject: Re: [PATCH] hwmon: (occ) Prevent power cap command overwriting poll
+ response
+Message-ID: <20220629205939.GA3936194@roeck-us.net>
+References: <20220628203029.51747-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] hwmon: (lm90) Use worker for alarm notifications
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-References: <20220629154210.2389765-1-linux@roeck-us.net>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220629154210.2389765-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628203029.51747-1-eajames@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/29/22 18:42, Guenter Roeck wrote:
-> Reporting alarms using hwmon_notify_event() may result in a callback
-> from the thermal subsystem. This means that such notifications must
-> not hold the update lock to avoid a deadlock. To avoid this situation,
-> use a worker to handle notifications.
+On Tue, Jun 28, 2022 at 03:30:29PM -0500, Eddie James wrote:
+> Currently, the response to the power cap command overwrites the
+> first eight bytes of the poll response, since the commands use
+> the same buffer. This means that user's get the wrong data between
+> the time of sending the power cap and the next poll response update.
+> Fix this by specifying a different buffer for the power cap command
+> response.
 > 
-> Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> Fixes: e182cf579f0f ("hwmon: (lm90) Rework alarm/status handling")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Fixes: 5b5513b88002 ("hwmon: Add On-Chip Controller (OCC) hwmon driver")
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+
+Applied.
+
+Thanks,
+Guenter
+
 > ---
-> Dmitry,
+>  drivers/hwmon/occ/common.c |  5 +++--
+>  drivers/hwmon/occ/common.h |  3 ++-
+>  drivers/hwmon/occ/p8_i2c.c | 13 +++++++------
+>  drivers/hwmon/occ/p9_sbe.c |  7 +++----
+>  4 files changed, 15 insertions(+), 13 deletions(-)
 > 
-> can you give this patch a try in your system ?
-
-It works, thanks!
-
-Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-
--- 
-Best regards,
-Dmitry
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index ea070b91e5b9..157b73a3da29 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -145,7 +145,7 @@ static int occ_poll(struct occ *occ)
+>  	cmd[6] = 0;			/* checksum lsb */
+>  
+>  	/* mutex should already be locked if necessary */
+> -	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
+> +	rc = occ->send_cmd(occ, cmd, sizeof(cmd), &occ->resp, sizeof(occ->resp));
+>  	if (rc) {
+>  		occ->last_error = rc;
+>  		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
+> @@ -182,6 +182,7 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+>  {
+>  	int rc;
+>  	u8 cmd[8];
+> +	u8 resp[8];
+>  	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
+>  
+>  	cmd[0] = 0;	/* sequence number */
+> @@ -198,7 +199,7 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+>  	if (rc)
+>  		return rc;
+>  
+> -	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
+> +	rc = occ->send_cmd(occ, cmd, sizeof(cmd), resp, sizeof(resp));
+>  
+>  	mutex_unlock(&occ->lock);
+>  
+> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+> index 64d5ec7e169b..7ac4b2febce6 100644
+> --- a/drivers/hwmon/occ/common.h
+> +++ b/drivers/hwmon/occ/common.h
+> @@ -96,7 +96,8 @@ struct occ {
+>  
+>  	int powr_sample_time_us;	/* average power sample time */
+>  	u8 poll_cmd_data;		/* to perform OCC poll command */
+> -	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len);
+> +	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len, void *resp,
+> +			size_t resp_len);
+>  
+>  	unsigned long next_update;
+>  	struct mutex lock;		/* lock OCC access */
+> diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+> index da39ea28df31..b221be1f35f3 100644
+> --- a/drivers/hwmon/occ/p8_i2c.c
+> +++ b/drivers/hwmon/occ/p8_i2c.c
+> @@ -111,7 +111,8 @@ static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
+>  				      be32_to_cpu(data1));
+>  }
+>  
+> -static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+> +static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
+> +			       void *resp, size_t resp_len)
+>  {
+>  	int i, rc;
+>  	unsigned long start;
+> @@ -120,7 +121,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>  	const long wait_time = msecs_to_jiffies(OCC_CMD_IN_PRG_WAIT_MS);
+>  	struct p8_i2c_occ *ctx = to_p8_i2c_occ(occ);
+>  	struct i2c_client *client = ctx->client;
+> -	struct occ_response *resp = &occ->resp;
+> +	struct occ_response *or = (struct occ_response *)resp;
+>  
+>  	start = jiffies;
+>  
+> @@ -151,7 +152,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>  			return rc;
+>  
+>  		/* wait for OCC */
+> -		if (resp->return_status == OCC_RESP_CMD_IN_PRG) {
+> +		if (or->return_status == OCC_RESP_CMD_IN_PRG) {
+>  			rc = -EALREADY;
+>  
+>  			if (time_after(jiffies, start + timeout))
+> @@ -163,7 +164,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>  	} while (rc);
+>  
+>  	/* check the OCC response */
+> -	switch (resp->return_status) {
+> +	switch (or->return_status) {
+>  	case OCC_RESP_CMD_IN_PRG:
+>  		rc = -ETIMEDOUT;
+>  		break;
+> @@ -192,8 +193,8 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>  	if (rc < 0)
+>  		return rc;
+>  
+> -	data_length = get_unaligned_be16(&resp->data_length);
+> -	if (data_length > OCC_RESP_DATA_BYTES)
+> +	data_length = get_unaligned_be16(&or->data_length);
+> +	if ((data_length + 7) > resp_len)
+>  		return -EMSGSIZE;
+>  
+>  	/* fetch the rest of the response data */
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 01405ae2f9bd..c1e0a1d96cd4 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -77,11 +77,10 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+>  	return notify;
+>  }
+>  
+> -static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+> +static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
+> +			       void *resp, size_t resp_len)
+>  {
+> -	struct occ_response *resp = &occ->resp;
+>  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+> -	size_t resp_len = sizeof(*resp);
+>  	int rc;
+>  
+>  	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> @@ -95,7 +94,7 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>  		return rc;
+>  	}
+>  
+> -	switch (resp->return_status) {
+> +	switch (((struct occ_response *)resp)->return_status) {
+>  	case OCC_RESP_CMD_IN_PRG:
+>  		rc = -ETIMEDOUT;
+>  		break;
