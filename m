@@ -2,155 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E28C7C43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 15:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92DCAC43334
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 20:02:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbiF2PmQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 11:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S230022AbiF2UCd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 16:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiF2PmP (ORCPT
+        with ESMTP id S231441AbiF2UCb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:42:15 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C562CCB3;
-        Wed, 29 Jun 2022 08:42:14 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id l6so14464319plg.11;
-        Wed, 29 Jun 2022 08:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PRCJMAl9ZNLoVnPNV8HMGzRaHKIYDVWSPhvooPOy6DI=;
-        b=NiILxxt7TAQ04yKYdK7wM6rBnIDUIrrEdPVYf7ZipeLpkR8p+HLYNR+xEWrtOadrYZ
-         GC6o1Ze7NXZJY0pYEeUqMXOcHtob1WD3y4Jz6t34NPNlQsXIjGj/llIE0EAHGaeEXUFp
-         0ROHyPsRXJFOWLg9sO/lK9IUprsFX5m9dGD33EG9OmF+yVghkg8NfVmX8iOKcS5H7YQ+
-         XY27LlMtTivEowTZhhRskXTWWAcDpFViqip33C/4bAxYR3O5N0i7AqPy7fGYfcb5uvfA
-         i7Epjkd8B4uNFyaXS9mSNs7/OyURAfjZmTAZlp+27+uM1ct3hFr6pucxD8ojuYq7N/hF
-         EqDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=PRCJMAl9ZNLoVnPNV8HMGzRaHKIYDVWSPhvooPOy6DI=;
-        b=kF3+Ru+qiKjaWNmIvGm8s4k5Zq1cVX2F7xBobQg3BlvltFvTZzkRfRHr92hrejz7Gp
-         Qii9BkmfzCxtlLNlLobLbqpNkBTTd3MGkZMIF6mAiitUBb8UMsq+OJCiniy5SCn6ddD3
-         A8qcXrx2j8qsvN1RfbpZhkPxp/dyHkKvk6JM+pr3BKnGyFehmsOjjC9jWGWU/a4X6ZKF
-         p2tV3nHcWq48sPZ8D3/rzYeI4o1WvrK/NQTwpb2gt5oE+WJ9q9tq9mL19CUKN14WgxNo
-         tctLmHxAds0Xo3jJVUBZ24QCA7vH0CMiedrojB0ygFR0fL/zoE4YTs6lsYufF2Tt2kFb
-         qXPg==
-X-Gm-Message-State: AJIora9oZpA/fwZMgfy9zwakP/FNur84gclSlh7SJFenZD2m7468sCfT
-        HMdrv53w8MHZtYRxzAoXmjRofpIClNE=
-X-Google-Smtp-Source: AGRyM1sJMLTeRpcboSggEajkrdbV/zFqV4my8lideOrK0J2JBEs6b/rg3y1gjMEagKzBQ5ZKNCg89Q==
-X-Received: by 2002:a17:90b:4b42:b0:1ed:f6f:ff2 with SMTP id mi2-20020a17090b4b4200b001ed0f6f0ff2mr6672395pjb.131.1656517333711;
-        Wed, 29 Jun 2022 08:42:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 1-20020a620501000000b00527d84dfa42sm2653412pff.167.2022.06.29.08.42.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 08:42:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH] hwmon: (lm90) Use worker for alarm notifications
-Date:   Wed, 29 Jun 2022 08:42:10 -0700
-Message-Id: <20220629154210.2389765-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
+        Wed, 29 Jun 2022 16:02:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AAD3ED11;
+        Wed, 29 Jun 2022 13:02:31 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40BE7660194C;
+        Wed, 29 Jun 2022 21:02:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656532949;
+        bh=XZKTlLtT5IwYyJZvyMZi3Fm4hVnGjrmKXiDIiDRogfw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eqG4tpPX332aqBNR+tZzQwfABs4LYwFRTZb620NZoy6ztChHNeK88ZlYDRnpY3rCC
+         t8PGjaWO3qC5XFDWeEdXMqJX4xGSJkBvGMF6dVZr0CmP+3j/fBh6elX+E5Q50fkVoJ
+         dQ79vsb5eiS9SbTNBPwZpqJaALJeHEEPnp8NLcHlGkQ3dfUN7XPJUlRk+biLh0AGws
+         qP6DNiyPwVwaOOKnrZvRZs1IMJpUWvKYPMVtWSt5T+yA08EvEyrXpQSoDtSGwolpCh
+         reTsHexO4xB9PratqDcj5LKPhn4XbAp5FVm97Oiz0oOTHJC+i2fGu+nwv2ogYZlPrE
+         e1nYqT/ioND+Q==
+Message-ID: <ba43ed2c-0290-ca5b-ab4b-1f25dad9d882@collabora.com>
+Date:   Wed, 29 Jun 2022 23:02:25 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] hwmon: (lm90) Use worker for alarm notifications
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+References: <20220629154210.2389765-1-linux@roeck-us.net>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220629154210.2389765-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Reporting alarms using hwmon_notify_event() may result in a callback
-from the thermal subsystem. This means that such notifications must
-not hold the update lock to avoid a deadlock. To avoid this situation,
-use a worker to handle notifications.
+On 6/29/22 18:42, Guenter Roeck wrote:
+> Reporting alarms using hwmon_notify_event() may result in a callback
+> from the thermal subsystem. This means that such notifications must
+> not hold the update lock to avoid a deadlock. To avoid this situation,
+> use a worker to handle notifications.
+> 
+> Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Fixes: e182cf579f0f ("hwmon: (lm90) Rework alarm/status handling")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> Dmitry,
+> 
+> can you give this patch a try in your system ?
 
-Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Fixes: e182cf579f0f ("hwmon: (lm90) Rework alarm/status handling")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-Dmitry,
+It works, thanks!
 
-can you give this patch a try in your system ?
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-Thanks,
-Guenter
-
- drivers/hwmon/lm90.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 9d878163a1f2..03d07da8c2dc 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -693,6 +693,7 @@ struct lm90_data {
- 	struct hwmon_chip_info chip;
- 	struct mutex update_lock;
- 	struct delayed_work alert_work;
-+	struct work_struct report_work;
- 	bool valid;		/* true if register values are valid */
- 	bool alarms_valid;	/* true if status register values are valid */
- 	unsigned long last_updated; /* in jiffies */
-@@ -1043,13 +1044,18 @@ static int lm90_update_limits(struct device *dev)
- 	return 0;
- }
- 
--static void lm90_report_alarms(struct device *dev, struct lm90_data *data)
-+static void lm90_report_alarms(struct work_struct *work)
- {
--	u16 cleared_alarms = data->reported_alarms & ~data->current_alarms;
--	u16 new_alarms = data->current_alarms & ~data->reported_alarms;
-+	struct lm90_data *data = container_of(work, struct lm90_data, report_work);
-+	u16 cleared_alarms, new_alarms, current_alarms;
- 	struct device *hwmon_dev = data->hwmon_dev;
-+	struct device *dev = &data->client->dev;
- 	int st, st2;
- 
-+	current_alarms = data->current_alarms;
-+	cleared_alarms = data->reported_alarms & ~current_alarms;
-+	new_alarms = current_alarms & ~data->reported_alarms;
-+
- 	if (!cleared_alarms && !new_alarms)
- 		return;
- 
-@@ -1101,7 +1107,7 @@ static void lm90_report_alarms(struct device *dev, struct lm90_data *data)
- 	if (st2 & MAX6696_STATUS2_R2OT2)
- 		hwmon_notify_event(hwmon_dev, hwmon_temp, hwmon_temp_emergency_alarm, 2);
- 
--	data->reported_alarms = data->current_alarms;
-+	data->reported_alarms = current_alarms;
- }
- 
- static int lm90_update_alarms_locked(struct lm90_data *data, bool force)
-@@ -1143,7 +1149,7 @@ static int lm90_update_alarms_locked(struct lm90_data *data, bool force)
- 			(data->config & 0x80);
- 
- 		if (force || check_enable)
--			lm90_report_alarms(&client->dev, data);
-+			schedule_work(&data->report_work);
- 
- 		/*
- 		 * Re-enable ALERT# output if it was originally enabled, relevant
-@@ -2552,6 +2558,7 @@ static void lm90_restore_conf(void *_data)
- 	struct i2c_client *client = data->client;
- 
- 	cancel_delayed_work_sync(&data->alert_work);
-+	cancel_work_sync(&data->report_work);
- 
- 	/* Restore initial configuration */
- 	if (data->flags & LM90_HAVE_CONVRATE)
-@@ -2769,6 +2776,7 @@ static int lm90_probe(struct i2c_client *client)
- 	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
- 	INIT_DELAYED_WORK(&data->alert_work, lm90_alert_work);
-+	INIT_WORK(&data->report_work, lm90_report_alarms);
- 
- 	/* Set the device type */
- 	if (client->dev.of_node)
 -- 
-2.35.1
-
+Best regards,
+Dmitry
