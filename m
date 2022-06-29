@@ -2,161 +2,155 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5018CCA482
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 14:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E28C7C43334
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 15:42:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbiF2O0C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 10:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S233949AbiF2PmQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 11:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiF2O0A (ORCPT
+        with ESMTP id S233941AbiF2PmP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:26:00 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A93190A;
-        Wed, 29 Jun 2022 07:25:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id mf9so33053848ejb.0;
-        Wed, 29 Jun 2022 07:25:59 -0700 (PDT)
+        Wed, 29 Jun 2022 11:42:15 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C562CCB3;
+        Wed, 29 Jun 2022 08:42:14 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id l6so14464319plg.11;
+        Wed, 29 Jun 2022 08:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nzVAkjUIXnSmifmZO/KNuTW33GCGTCzsi9aX026XXeg=;
-        b=S2dVib/eYmAFl827WdIoCLllzfbxALRjIjzfRRwuBWpdbVEMsjXdf1fQZ0QK1n2n0J
-         7Rc0uKmDUlj06sv7gme85B+3fLmze+mOouy0tIsuBDVpy1nD4eEh9k2i1LyAyfo/z7Zj
-         KDlk5RBwfb1T/0o1rVzuZORFiKZsCvSsNfve9fNt60vuT8XdzQWLTwkS/9FAhK69nmEs
-         mEzSIHBFyIvznhb3ZYEmWznM5HxrpFTwi8PXn2kSF7LDJWEQQU2316sTZ03OvudAaN+G
-         thYeRK11RnXT7zItby/QP43/O2E1Z4EfVZv3Nyn7dRrR7zoEuvKZKKrx+f9P5pfvx3Rg
-         uLHw==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PRCJMAl9ZNLoVnPNV8HMGzRaHKIYDVWSPhvooPOy6DI=;
+        b=NiILxxt7TAQ04yKYdK7wM6rBnIDUIrrEdPVYf7ZipeLpkR8p+HLYNR+xEWrtOadrYZ
+         GC6o1Ze7NXZJY0pYEeUqMXOcHtob1WD3y4Jz6t34NPNlQsXIjGj/llIE0EAHGaeEXUFp
+         0ROHyPsRXJFOWLg9sO/lK9IUprsFX5m9dGD33EG9OmF+yVghkg8NfVmX8iOKcS5H7YQ+
+         XY27LlMtTivEowTZhhRskXTWWAcDpFViqip33C/4bAxYR3O5N0i7AqPy7fGYfcb5uvfA
+         i7Epjkd8B4uNFyaXS9mSNs7/OyURAfjZmTAZlp+27+uM1ct3hFr6pucxD8ojuYq7N/hF
+         EqDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nzVAkjUIXnSmifmZO/KNuTW33GCGTCzsi9aX026XXeg=;
-        b=K+/sP/hRrNW2dKVpBtInRhRcLgevV8ty+8mr5yrNwVTd2440sDwaFo+X70nnHqBZAM
-         O1e8Mt2RDyCnrbwIY3Vfho714AOnWqqXNMH6wDFomSZQxVP/5hLg590W2SFDcCNq7n0j
-         dUBbh1mohPAsDDqfwTtDNwtKCgpxtJ7iwkDUt4rOj9rlVZxBDAQBZ70wGo35FmuOBC3u
-         xejORvqK4II7TIRohQmMq2TK+l0mlnshiOzW+PTHdSVBC+QokePfjOGSPUlKUtHUWTqi
-         1dbdYVekSRxf7honXKELQjw3s2sJFpAo6ohp0sneZck+CTstgY3IOQrAz3PYuH8xBCno
-         LsNA==
-X-Gm-Message-State: AJIora9fPn0c14bXzp6tnc7I4qM66JCoAiTwWqMctW6cwVtnVYc7d4n8
-        MWmqpEuyoC12RWdG8cu+TcE=
-X-Google-Smtp-Source: AGRyM1vLxTFMIxeh0MQDJmw094z51hmalDIKhKM+71jelG0gY6NpuuzQXDALY4ZT1iSuYjMs9++euw==
-X-Received: by 2002:a17:906:58cf:b0:722:e4e1:c174 with SMTP id e15-20020a17090658cf00b00722e4e1c174mr3593366ejs.85.1656512758310;
-        Wed, 29 Jun 2022 07:25:58 -0700 (PDT)
-Received: from [10.29.0.16] ([37.120.217.82])
-        by smtp.gmail.com with ESMTPSA id jy19-20020a170907763300b007263713cfe9sm7220580ejc.169.2022.06.29.07.25.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 07:25:57 -0700 (PDT)
-Message-ID: <80117936-6869-19b2-45a6-96a4562c6cd2@gmail.com>
-Date:   Wed, 29 Jun 2022 16:25:54 +0200
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=PRCJMAl9ZNLoVnPNV8HMGzRaHKIYDVWSPhvooPOy6DI=;
+        b=kF3+Ru+qiKjaWNmIvGm8s4k5Zq1cVX2F7xBobQg3BlvltFvTZzkRfRHr92hrejz7Gp
+         Qii9BkmfzCxtlLNlLobLbqpNkBTTd3MGkZMIF6mAiitUBb8UMsq+OJCiniy5SCn6ddD3
+         A8qcXrx2j8qsvN1RfbpZhkPxp/dyHkKvk6JM+pr3BKnGyFehmsOjjC9jWGWU/a4X6ZKF
+         p2tV3nHcWq48sPZ8D3/rzYeI4o1WvrK/NQTwpb2gt5oE+WJ9q9tq9mL19CUKN14WgxNo
+         tctLmHxAds0Xo3jJVUBZ24QCA7vH0CMiedrojB0ygFR0fL/zoE4YTs6lsYufF2Tt2kFb
+         qXPg==
+X-Gm-Message-State: AJIora9oZpA/fwZMgfy9zwakP/FNur84gclSlh7SJFenZD2m7468sCfT
+        HMdrv53w8MHZtYRxzAoXmjRofpIClNE=
+X-Google-Smtp-Source: AGRyM1sJMLTeRpcboSggEajkrdbV/zFqV4my8lideOrK0J2JBEs6b/rg3y1gjMEagKzBQ5ZKNCg89Q==
+X-Received: by 2002:a17:90b:4b42:b0:1ed:f6f:ff2 with SMTP id mi2-20020a17090b4b4200b001ed0f6f0ff2mr6672395pjb.131.1656517333711;
+        Wed, 29 Jun 2022 08:42:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 1-20020a620501000000b00527d84dfa42sm2653412pff.167.2022.06.29.08.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 08:42:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: [PATCH] hwmon: (lm90) Use worker for alarm notifications
+Date:   Wed, 29 Jun 2022 08:42:10 -0700
+Message-Id: <20220629154210.2389765-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mediatek@lists.infradead.org
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/28/22 16:03, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
-> 
-> The value returned by an i2c driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reporting alarms using hwmon_notify_event() may result in a callback
+from the thermal subsystem. This means that such notifications must
+not hold the update lock to avoid a deadlock. To avoid this situation,
+use a worker to handle notifications.
 
-[...]
->   drivers/platform/surface/surface3_power.c                 | 4 +---
+Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Fixes: e182cf579f0f ("hwmon: (lm90) Rework alarm/status handling")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+Dmitry,
 
-[...]
+can you give this patch a try in your system ?
 
-> diff --git a/drivers/platform/surface/surface3_power.c b/drivers/platform/surface/surface3_power.c
-> index 444ec81ba02d..3b20dddeb815 100644
-> --- a/drivers/platform/surface/surface3_power.c
-> +++ b/drivers/platform/surface/surface3_power.c
-> @@ -554,7 +554,7 @@ static int mshw0011_probe(struct i2c_client *client)
->   	return error;
->   }
->   
-> -static int mshw0011_remove(struct i2c_client *client)
-> +static void mshw0011_remove(struct i2c_client *client)
->   {
->   	struct mshw0011_data *cdata = i2c_get_clientdata(client);
->   
-> @@ -564,8 +564,6 @@ static int mshw0011_remove(struct i2c_client *client)
->   		kthread_stop(cdata->poll_task);
->   
->   	i2c_unregister_device(cdata->bat0);
-> -
-> -	return 0;
->   }
->   
->   static const struct acpi_device_id mshw0011_acpi_match[] = {
+Thanks,
+Guenter
 
-For the quoted above:
+ drivers/hwmon/lm90.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 9d878163a1f2..03d07da8c2dc 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -693,6 +693,7 @@ struct lm90_data {
+ 	struct hwmon_chip_info chip;
+ 	struct mutex update_lock;
+ 	struct delayed_work alert_work;
++	struct work_struct report_work;
+ 	bool valid;		/* true if register values are valid */
+ 	bool alarms_valid;	/* true if status register values are valid */
+ 	unsigned long last_updated; /* in jiffies */
+@@ -1043,13 +1044,18 @@ static int lm90_update_limits(struct device *dev)
+ 	return 0;
+ }
+ 
+-static void lm90_report_alarms(struct device *dev, struct lm90_data *data)
++static void lm90_report_alarms(struct work_struct *work)
+ {
+-	u16 cleared_alarms = data->reported_alarms & ~data->current_alarms;
+-	u16 new_alarms = data->current_alarms & ~data->reported_alarms;
++	struct lm90_data *data = container_of(work, struct lm90_data, report_work);
++	u16 cleared_alarms, new_alarms, current_alarms;
+ 	struct device *hwmon_dev = data->hwmon_dev;
++	struct device *dev = &data->client->dev;
+ 	int st, st2;
+ 
++	current_alarms = data->current_alarms;
++	cleared_alarms = data->reported_alarms & ~current_alarms;
++	new_alarms = current_alarms & ~data->reported_alarms;
++
+ 	if (!cleared_alarms && !new_alarms)
+ 		return;
+ 
+@@ -1101,7 +1107,7 @@ static void lm90_report_alarms(struct device *dev, struct lm90_data *data)
+ 	if (st2 & MAX6696_STATUS2_R2OT2)
+ 		hwmon_notify_event(hwmon_dev, hwmon_temp, hwmon_temp_emergency_alarm, 2);
+ 
+-	data->reported_alarms = data->current_alarms;
++	data->reported_alarms = current_alarms;
+ }
+ 
+ static int lm90_update_alarms_locked(struct lm90_data *data, bool force)
+@@ -1143,7 +1149,7 @@ static int lm90_update_alarms_locked(struct lm90_data *data, bool force)
+ 			(data->config & 0x80);
+ 
+ 		if (force || check_enable)
+-			lm90_report_alarms(&client->dev, data);
++			schedule_work(&data->report_work);
+ 
+ 		/*
+ 		 * Re-enable ALERT# output if it was originally enabled, relevant
+@@ -2552,6 +2558,7 @@ static void lm90_restore_conf(void *_data)
+ 	struct i2c_client *client = data->client;
+ 
+ 	cancel_delayed_work_sync(&data->alert_work);
++	cancel_work_sync(&data->report_work);
+ 
+ 	/* Restore initial configuration */
+ 	if (data->flags & LM90_HAVE_CONVRATE)
+@@ -2769,6 +2776,7 @@ static int lm90_probe(struct i2c_client *client)
+ 	i2c_set_clientdata(client, data);
+ 	mutex_init(&data->update_lock);
+ 	INIT_DELAYED_WORK(&data->alert_work, lm90_alert_work);
++	INIT_WORK(&data->report_work, lm90_report_alarms);
+ 
+ 	/* Set the device type */
+ 	if (client->dev.of_node)
+-- 
+2.35.1
+
