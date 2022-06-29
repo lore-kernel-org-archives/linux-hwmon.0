@@ -2,167 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D07AC43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 21:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB809C43334
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 21:18:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiF2VGy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 17:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S229509AbiF2VST (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 17:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiF2VGx (ORCPT
+        with ESMTP id S229570AbiF2VSP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:06:53 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF0E3FBF0;
-        Wed, 29 Jun 2022 14:06:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so700682pjb.2;
-        Wed, 29 Jun 2022 14:06:51 -0700 (PDT)
+        Wed, 29 Jun 2022 17:18:15 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD765B7F2;
+        Wed, 29 Jun 2022 14:18:14 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso1961398pjz.0;
+        Wed, 29 Jun 2022 14:18:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8p+JOQ19xWokrdD2iUophisiJ9mD6MuQuzslw5aPPt8=;
-        b=pBDhbsa65pfboiBYSIPpuk5KeIXyy0CQwKFEJmWAxZi2DC419WqJc0EL/OQYVNSaQl
-         yKjLEf/pFzk45D9E7KNeB4dnQXjiBvD8UxBN31ZoFpf9/lH/Jgq1r4YxOoN6tncKFzYI
-         NzxYHA0UCTUAIW2ULluh+3s2lqPBpt8hB84OacsdqUXwz8XphTIzOeCUYrR4fiqXEbUA
-         zfTtNFhGVEy3TXntUEu6Xrfab9eP65FLmP15nS6c8uNuioDmDv3AtIyHz8Zs4KWrmdC2
-         M0CwsJh2UfSEOs7LBhI1eOYvFiAhwHnF2UQWktnMsjKgDpOc2Folx0VSewBYKJHOFcvD
-         MnOg==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=i7eaMBVB7yUnTpudl4qdcwzP++vYZc8Pq3HUMlacEVQ=;
+        b=ITiV0rXMXIjJoVjJRJvV/mxBOzcJCHSlCNG8ScPXIbpaE1GPpDtZgqnkQecgrQhvcg
+         kPouE6lpWixq8ZIl0gf0U6VU4EJzFpSXsuV1VtcGC3CwedeLDDIDzUPh7ePqLSYTVCnw
+         1YbS6MImVhSMtfyyJlAjfkGx840UGeciSjZQh6LR5VHZ1i25JnMhnTrBJ9CX3q4uBJ9h
+         /VugsDeOAVs2lkA4sZGyl8JA6QPU8RAXprqHFN/z3fgCHXvyKDLvRWITTpXUUhZHXFA0
+         RVFd8zGOH1UhsXk9rnxyPuhCew3vk8pHK0wDzQYV/POJb7AuIqGXrKyxCHrS91nfGjf+
+         cImg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8p+JOQ19xWokrdD2iUophisiJ9mD6MuQuzslw5aPPt8=;
-        b=Gro5dPtQZuwVI0VmD2xbxN663JhcEjnfBPmXTzrBRxSsZ+aYUA8cjzeXIahufbDt4P
-         OELqP8pBPvuoWvRex+e8PeA6JVrqlGwpIMaNrNldGWP/DO2Emg4m9wdQSkoaNoMTFy8R
-         nSNXC9rhMXE43msXCNqVkOMqdJq/OegrQ2Kyqk1vEZmzDcJaqmLeVPNabrgCsdK6uZN0
-         3YyRbl3vPHwrZ46Peqv5I31mO+ajtnLYAwQMsTErU94STXXSDyO6upgo31cQpUxYlJg/
-         Mh+dVuhMrHxM6g4iM9UTLWbQLOWgF33SOQ3yw3UwsdcwL4wBky8F6C25QI1nMj4RZ1XV
-         OXtA==
-X-Gm-Message-State: AJIora/e73RwLM4As/lhqzkpoYGcOrz/T3l5I+YHifcIAxa/IlAaufLG
-        ocZJ3FcS4TxL+tnFr0yL6VG5YvvJ0R0=
-X-Google-Smtp-Source: AGRyM1s+IVwYUeIRlFUjDSpO5yq9/VlA/lFPZa6AvW0otsJCgzZyLyBPKOeccAiaY/j4LdhIZUmESQ==
-X-Received: by 2002:a17:90a:31c1:b0:1ec:729f:36b7 with SMTP id j1-20020a17090a31c100b001ec729f36b7mr7669431pjf.123.1656536811190;
-        Wed, 29 Jun 2022 14:06:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s37-20020a056a0017a500b0052513b5d078sm11984154pfg.31.2022.06.29.14.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 14:06:50 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=i7eaMBVB7yUnTpudl4qdcwzP++vYZc8Pq3HUMlacEVQ=;
+        b=SMx2VDJbtOmdXL8d7U7Dpwqcm5Qsbieku6RQ0nl5qWrvx+dQY659HSzvCD0TBZ/DSK
+         mSLWMzgSoUhQP6hHe5ayX/hz2kGWMIGk/6T64C2ZUSLy4NP3ozdX73j1KhAEyzKegzJx
+         7Onun1EfReSrF9L6HpaUCnAGDnDe6mlkdKxX18v5iFX9mDMcddB1iTpvrHgV0YQpDw7T
+         Py+a7b1yjVIaYuGsPtksHVUdQn/Rbz8/3I6q/iqHU9iIlg4VoujkTXlPM/W2NpYfCmUF
+         xr0Ra0YryvBN8b5nooQWuno7jQaE+SgZyCMy09IU2hpwE2Gss2VTT0YWRieod0DiU+LL
+         s2dA==
+X-Gm-Message-State: AJIora+lxKBiM0SaDjmBUy9227xFiIt5sjKtmf3zO8ru2DHs8cdaRmSv
+        m5seYpYjJ0O2MVp25u+Dt6gs/DejNDs=
+X-Google-Smtp-Source: AGRyM1tPobdvnh0ZkpuTCg79dx/XZ6u3r3wUqOtBNbfnAMNCpGvyhPAI+2xLNc0UKC2T1MUb5MhHnA==
+X-Received: by 2002:a17:90a:760e:b0:1ec:83e0:3ae1 with SMTP id s14-20020a17090a760e00b001ec83e03ae1mr7624976pjk.25.1656537494241;
+        Wed, 29 Jun 2022 14:18:14 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id iz19-20020a170902ef9300b0016378bfeb90sm11915322plb.227.2022.06.29.14.18.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 14:18:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 29 Jun 2022 14:06:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Michael Carns <mike@carns.com>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add support for Maximus XI Hero
-Message-ID: <20220629210649.GA3936933@roeck-us.net>
-References: <20220627225437.87462-1-eugene.shalygin@gmail.com>
+Message-ID: <14b0ee4f-a12f-ccf2-633a-470be3cdfa38@roeck-us.net>
+Date:   Wed, 29 Jun 2022 14:18:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627225437.87462-1-eugene.shalygin@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] hwmon: (lm90) Use worker for alarm notifications
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+References: <20220629154210.2389765-1-linux@roeck-us.net>
+ <ba43ed2c-0290-ca5b-ab4b-1f25dad9d882@collabora.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ba43ed2c-0290-ca5b-ab4b-1f25dad9d882@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:54:36AM +0200, Eugene Shalygin wrote:
-> From: Michael Carns <mike@carns.com>
+On 6/29/22 13:02, Dmitry Osipenko wrote:
+> On 6/29/22 18:42, Guenter Roeck wrote:
+>> Reporting alarms using hwmon_notify_event() may result in a callback
+>> from the thermal subsystem. This means that such notifications must
+>> not hold the update lock to avoid a deadlock. To avoid this situation,
+>> use a worker to handle notifications.
+>>
+>> Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> Fixes: e182cf579f0f ("hwmon: (lm90) Rework alarm/status handling")
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> Dmitry,
+>>
+>> can you give this patch a try in your system ?
 > 
-> Add definitions for ROG MAXIMUS XI HERO and ROG MAXIMUS XI HERO (WI-FI)
-> boards.
+> It works, thanks!
 > 
-> Signed-off-by: Michael Carns <mike@carns.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> 
+Thanks a lot for testing!
 
-Applied to hwmon-next.
-
-Thanks,
 Guenter
-
-> ---
->  Documentation/hwmon/asus_ec_sensors.rst |  2 ++
->  drivers/hwmon/asus-ec-sensors.c         | 36 +++++++++++++++++++++++++
->  2 files changed, 38 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-> index 00d8c46ef9e0..1e40c123db77 100644
-> --- a/Documentation/hwmon/asus_ec_sensors.rst
-> +++ b/Documentation/hwmon/asus_ec_sensors.rst
-> @@ -13,6 +13,8 @@ Supported boards:
->   * ROG CROSSHAIR VIII FORMULA
->   * ROG CROSSHAIR VIII HERO
->   * ROG CROSSHAIR VIII IMPACT
-> + * ROG MAXIMUS XI HERO
-> + * ROG MAXIMUS XI HERO (WI-FI)
->   * ROG STRIX B550-E GAMING
->   * ROG STRIX B550-I GAMING
->   * ROG STRIX X570-E GAMING
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 19d3ca71b360..625c2baa35ec 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -141,6 +141,7 @@ enum board_family {
->  	family_unknown,
->  	family_amd_400_series,
->  	family_amd_500_series,
-> +	family_intel_300_series,
->  	family_intel_600_series
->  };
->  
-> @@ -200,6 +201,26 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
->  		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
->  };
->  
-> +static const struct ec_sensor_info sensors_family_intel_300[] = {
-> +	[ec_sensor_temp_chipset] =
-> +		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-> +	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-> +	[ec_sensor_temp_mb] =
-> +		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-> +	[ec_sensor_temp_t_sensor] =
-> +		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> +	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-> +	[ec_sensor_fan_cpu_opt] =
-> +		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-> +	[ec_sensor_fan_vrm_hs] = EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-> +	[ec_sensor_fan_water_flow] =
-> +		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc),
-> +	[ec_sensor_temp_water_in] =
-> +		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
-> +	[ec_sensor_temp_water_out] =
-> +		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> +};
-> +
->  static const struct ec_sensor_info sensors_family_intel_600[] = {
->  	[ec_sensor_temp_t_sensor] =
->  		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> @@ -281,6 +302,18 @@ static const struct ec_board_info board_info[] = {
->  		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
->  		.family = family_amd_500_series,
->  	},
-> +	{
-> +		.board_names = {
-> +			"ROG MAXIMUS XI HERO",
-> +			"ROG MAXIMUS XI HERO (WI-FI)",
-> +		},
-> +		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> +			SENSOR_TEMP_T_SENSOR |
-> +			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> +			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
-> +		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-> +		.family = family_intel_300_series,
-> +	},
->  	{
->  		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
->  		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> @@ -814,6 +847,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
->  	case family_amd_500_series:
->  		ec_data->sensors_info = sensors_family_amd_500;
->  		break;
-> +	case family_intel_300_series:
-> +		ec_data->sensors_info = sensors_family_intel_300;
-> +		break;
->  	case family_intel_600_series:
->  		ec_data->sensors_info = sensors_family_intel_600;
->  		break;
