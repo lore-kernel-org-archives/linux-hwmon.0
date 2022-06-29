@@ -2,94 +2,121 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB809C43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 21:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53900CCA482
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 21:20:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiF2VST (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 17:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S230041AbiF2VUb convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 17:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiF2VSP (ORCPT
+        with ESMTP id S229741AbiF2VU3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:18:15 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD765B7F2;
-        Wed, 29 Jun 2022 14:18:14 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso1961398pjz.0;
-        Wed, 29 Jun 2022 14:18:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i7eaMBVB7yUnTpudl4qdcwzP++vYZc8Pq3HUMlacEVQ=;
-        b=ITiV0rXMXIjJoVjJRJvV/mxBOzcJCHSlCNG8ScPXIbpaE1GPpDtZgqnkQecgrQhvcg
-         kPouE6lpWixq8ZIl0gf0U6VU4EJzFpSXsuV1VtcGC3CwedeLDDIDzUPh7ePqLSYTVCnw
-         1YbS6MImVhSMtfyyJlAjfkGx840UGeciSjZQh6LR5VHZ1i25JnMhnTrBJ9CX3q4uBJ9h
-         /VugsDeOAVs2lkA4sZGyl8JA6QPU8RAXprqHFN/z3fgCHXvyKDLvRWITTpXUUhZHXFA0
-         RVFd8zGOH1UhsXk9rnxyPuhCew3vk8pHK0wDzQYV/POJb7AuIqGXrKyxCHrS91nfGjf+
-         cImg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i7eaMBVB7yUnTpudl4qdcwzP++vYZc8Pq3HUMlacEVQ=;
-        b=SMx2VDJbtOmdXL8d7U7Dpwqcm5Qsbieku6RQ0nl5qWrvx+dQY659HSzvCD0TBZ/DSK
-         mSLWMzgSoUhQP6hHe5ayX/hz2kGWMIGk/6T64C2ZUSLy4NP3ozdX73j1KhAEyzKegzJx
-         7Onun1EfReSrF9L6HpaUCnAGDnDe6mlkdKxX18v5iFX9mDMcddB1iTpvrHgV0YQpDw7T
-         Py+a7b1yjVIaYuGsPtksHVUdQn/Rbz8/3I6q/iqHU9iIlg4VoujkTXlPM/W2NpYfCmUF
-         xr0Ra0YryvBN8b5nooQWuno7jQaE+SgZyCMy09IU2hpwE2Gss2VTT0YWRieod0DiU+LL
-         s2dA==
-X-Gm-Message-State: AJIora+lxKBiM0SaDjmBUy9227xFiIt5sjKtmf3zO8ru2DHs8cdaRmSv
-        m5seYpYjJ0O2MVp25u+Dt6gs/DejNDs=
-X-Google-Smtp-Source: AGRyM1tPobdvnh0ZkpuTCg79dx/XZ6u3r3wUqOtBNbfnAMNCpGvyhPAI+2xLNc0UKC2T1MUb5MhHnA==
-X-Received: by 2002:a17:90a:760e:b0:1ec:83e0:3ae1 with SMTP id s14-20020a17090a760e00b001ec83e03ae1mr7624976pjk.25.1656537494241;
-        Wed, 29 Jun 2022 14:18:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id iz19-20020a170902ef9300b0016378bfeb90sm11915322plb.227.2022.06.29.14.18.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 14:18:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <14b0ee4f-a12f-ccf2-633a-470be3cdfa38@roeck-us.net>
-Date:   Wed, 29 Jun 2022 14:18:11 -0700
+        Wed, 29 Jun 2022 17:20:29 -0400
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99113F79;
+        Wed, 29 Jun 2022 14:20:28 -0700 (PDT)
+Received: from [37.161.29.0] (port=43545 helo=[192.168.131.30])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1o6f6m-000BzC-Qd;
+        Wed, 29 Jun 2022 23:20:25 +0200
+Message-ID: <d682fb60-c254-f89e-5d6d-cdf7aa752939@lucaceresoli.net>
+Date:   Wed, 29 Jun 2022 23:20:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] hwmon: (lm90) Use worker for alarm notifications
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mediatek@lists.infradead.org
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+ <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-References: <20220629154210.2389765-1-linux@roeck-us.net>
- <ba43ed2c-0290-ca5b-ab4b-1f25dad9d882@collabora.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ba43ed2c-0290-ca5b-ab4b-1f25dad9d882@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/29/22 13:02, Dmitry Osipenko wrote:
-> On 6/29/22 18:42, Guenter Roeck wrote:
->> Reporting alarms using hwmon_notify_event() may result in a callback
->> from the thermal subsystem. This means that such notifications must
->> not hold the update lock to avoid a deadlock. To avoid this situation,
->> use a worker to handle notifications.
->>
->> Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->> Fixes: e182cf579f0f ("hwmon: (lm90) Rework alarm/status handling")
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> Dmitry,
->>
->> can you give this patch a try in your system ?
-> 
-> It works, thanks!
-> 
-> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> 
-Thanks a lot for testing!
+Hi,
 
-Guenter
+[keeping only individuals and lists in Cc to avoid bounces]
+
+On 28/06/22 16:03, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <uwe@kleine-koenig.org>
+> 
+> The value returned by an i2c driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+> 
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+For versaclock:
+
+> diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+> index e7be3e54b9be..657493ecce4c 100644
+> --- a/drivers/clk/clk-versaclock5.c
+> +++ b/drivers/clk/clk-versaclock5.c
+> @@ -1138,7 +1138,7 @@ static int vc5_probe(struct i2c_client *client)
+>  	return ret;
+>  }
+>  
+> -static int vc5_remove(struct i2c_client *client)
+> +static void vc5_remove(struct i2c_client *client)
+>  {
+>  	struct vc5_driver_data *vc5 = i2c_get_clientdata(client);
+>  
+> @@ -1146,8 +1146,6 @@ static int vc5_remove(struct i2c_client *client)
+>  
+>  	if (vc5->chip_info->flags & VC5_HAS_INTERNAL_XTAL)
+>  		clk_unregister_fixed_rate(vc5->pin_xin);
+> -
+> -	return 0;
+>  }
+>  
+>  static int __maybe_unused vc5_suspend(struct device *dev)
+
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
+-- 
+Luca
