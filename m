@@ -2,55 +2,64 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDAA4C43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jun 2022 23:18:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28152C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Jun 2022 02:31:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiF2XSn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jun 2022 19:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S231653AbiF3CbQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jun 2022 22:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiF2XSk (ORCPT
+        with ESMTP id S231650AbiF3CbP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jun 2022 19:18:40 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A694B220E4
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id cv13so17045299pjb.4
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
+        Wed, 29 Jun 2022 22:31:15 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54DE2CDDE;
+        Wed, 29 Jun 2022 19:31:14 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id x138so14117458pfc.3;
+        Wed, 29 Jun 2022 19:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WCZ9XmbAa/JAaxeY8vzw1f1J/PDv98SAx+RwG4qaGQk=;
-        b=C1KyJQUYnz02b4RXDHNAvvaFDVfmkjh0FZyapJ//Hk32EKNpWSoI4dsCbp7qtx/HjF
-         fGtYM34+ke+USyOn/O4kr7ePGw/Glq/xc89kSuVYmAq63cNR3Vn4PXOKbwUAvn4JONuI
-         ANuXFQp1YAvtghzJEQO/Dawt3234kthqcqYGcDAETkcjDUlo5sEIgqK5D7JG8Qpb7ITq
-         wX28a0JIk34aRJnrulRoqMNR4ASTf4mdFG4Vm7PO/SV8+IZwHCnvMc9lMEEXjJuiFMeA
-         YEmDFNaPZpAoLmLagn16yb8qoR0rseYVni/T4dNThyT0l4vdf+51+B9pC1PpXBwVmiG7
-         vy/g==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=u3R4IHZ6VBq/kuSImjbbeAhpWYp+1DcaA+WpCIvs64s=;
+        b=CwgNoSx6IgQ5ODpGlvbpdXRCFZh94rMWGzZu9W2Vcy/u3UXazNuEmg7H0JWKCXBTl3
+         7t5k2QfOO+Z+ex+TQRIit1z1tNrPaEhWceaUBxl2g1MaiVDsTmJB+xhAyrGQrHfXSN5e
+         hV5hZPKrNxBQSdUyi0hTh7H6zYjtBYJ2JTQVhNOdTvTHr31HnHi9S8wdxzG7wFwBYnT1
+         eBcPna1MXIoLi/G/WMGR4KIkQBVnl70jTNsdiOF5n+OCI3kBBVP4BWu2Nz0K/iCnxkTx
+         ex+rtO2TNUarl54Oae9M+R8Fil4GTQ0mwJkGrsjkFc1g6coBIIqWGL4pCpwOqWnRrXI9
+         ibQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WCZ9XmbAa/JAaxeY8vzw1f1J/PDv98SAx+RwG4qaGQk=;
-        b=xyafSd91EAH4M3Iy44aUxLWWZPbYAM1MniHwljakFCu0JJN3EUgNVY76q8cbEMNuGz
-         VuoI3B+PXqL90wt14kQ4UyLx6pxaF4Q2r8fNSV1qyjKPKyebmBCsJT3DFcmZQgdlwrf3
-         4fHytFrLwVHplO+rADhAdLFko3Hf7Zzt0NPX+Ot7om5sC2mIE1nBUOqoButn1gY55Z+X
-         FD70JeczjnyYete3UvJTFp7NfTqpDG308FIPeIK7qfy4cFJm97wJhtKF4mggHraTi8KO
-         khFAy1stQzYgPnHn4SiYr5YZtUTmqS+oxZen63OuKIoPi4f0fz1voX6l5vJQ7jmf1M4S
-         5INw==
-X-Gm-Message-State: AJIora+GNY+w3NTTwt20ScK1uObkK1pSxagjxw2uU/eqhRaqIYe6fvLn
-        qRN0bFbx45U8G1INE6G9kc6MhQ==
-X-Google-Smtp-Source: AGRyM1sSEsY/MmnYvfXLmBXPUMl+8nOa0/dAqS9qoVWFguDNOEdCu3wU0KNwoxXIKifvIu3ekKqGIg==
-X-Received: by 2002:a17:90a:5509:b0:1ec:caf4:b327 with SMTP id b9-20020a17090a550900b001eccaf4b327mr8333381pji.129.1656544717040;
-        Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
-Received: from google.com (249.189.233.35.bc.googleusercontent.com. [35.233.189.249])
-        by smtp.gmail.com with ESMTPSA id p26-20020a634f5a000000b0040dfb0857a0sm6688974pgl.78.2022.06.29.16.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 16:18:36 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 23:18:33 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=u3R4IHZ6VBq/kuSImjbbeAhpWYp+1DcaA+WpCIvs64s=;
+        b=L24KQXm8H3fPYwK+kilZh1crGeMwtNqd2ZCS7r+lkli3aRNIi0P73XWyOmAbp/xTFy
+         TE73WHyQg/lZW59w+kCpRc6mP3yfu5B6yNtEm4+wZpxts6b6dsStDGIUYI2LygoHKB0Z
+         04LHf6cwLnuhbzMWaihzZYTSF7rHeWiYfUdqtzHv9mRls/nwGQeCCUTRqY2JxfKD0sp5
+         +NHu/7mE67aHWQfKIwCfLhdqG5rNEtOXccfNYyhqw9AXmdSc6hmzX79JgBt5q3Eo1Dc6
+         d9TVT5AdrVptcg5qYgI/KZALZtSxh0ySnIc459pLV/+q+SpAvVyeiJUvjlL6hd/4L4NB
+         AyMg==
+X-Gm-Message-State: AJIora+EDIk0t1DgwBEiQCZ8Jx+OqFmApw4pi0Q7aY50w0/BEBQvAZuW
+        Gd0dI74/rMPPdqK4H9FwbBeQEavSNwE=
+X-Google-Smtp-Source: AGRyM1vclCAYocqHc2zY+JXqM+Oz0jj1IzHqOVYYCaUeXcbIW96r+F7HszcB/332U4Qnd75+TXSK1w==
+X-Received: by 2002:a65:5688:0:b0:3c2:1015:988e with SMTP id v8-20020a655688000000b003c21015988emr5502600pgs.280.1656556274266;
+        Wed, 29 Jun 2022 19:31:14 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 84-20020a621757000000b00524e8e48156sm12604707pfx.142.2022.06.29.19.31.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 19:31:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4bafbfe7-1a9e-651e-41c1-76a131c1a477@roeck-us.net>
+Date:   Wed, 29 Jun 2022 19:31:10 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4.19 v1 1/2] hwmon: Introduce
+ hwmon_device_register_for_thermal
+Content-Language: en-US
+To:     William McVicker <willmcvicker@google.com>
 Cc:     stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
@@ -58,99 +67,41 @@ Cc:     stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         kernel-team@android.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 4.19 v1 1/2] hwmon: Introduce
- hwmon_device_register_for_thermal
-Message-ID: <YrzdyUm/xlJPldwP@google.com>
 References: <20220629225843.332453-1-willmcvicker@google.com>
  <20220629225843.332453-2-willmcvicker@google.com>
  <d4a85598-af50-541a-9632-8d0343e8082d@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4a85598-af50-541a-9632-8d0343e8082d@roeck-us.net>
+ <YrzdyUm/xlJPldwP@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YrzdyUm/xlJPldwP@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 06/29/2022, Guenter Roeck wrote:
-> On 6/29/22 15:58, Will McVicker wrote:
-> > From: Guenter Roeck <linux@roeck-us.net>
-> > 
-> > [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
-> > 
-> > The thermal subsystem registers a hwmon driver without providing
-> > chip or sysfs group information. This is for legacy reasons and
-> > would be difficult to change. At the same time, we want to enforce
-> > that chip information is provided when registering a hwmon device
-> > using hwmon_device_register_with_info(). To enable this, introduce
-> > a special API for use only by the thermal subsystem.
-> > 
-> > Acked-by: Rafael J . Wysocki <rafael@kernel.org>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+On 6/29/22 16:18, William McVicker wrote:
+> On 06/29/2022, Guenter Roeck wrote:
+>> On 6/29/22 15:58, Will McVicker wrote:
+>>> From: Guenter Roeck <linux@roeck-us.net>
+>>>
+>>> [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
+>>>
+>>> The thermal subsystem registers a hwmon driver without providing
+>>> chip or sysfs group information. This is for legacy reasons and
+>>> would be difficult to change. At the same time, we want to enforce
+>>> that chip information is provided when registering a hwmon device
+>>> using hwmon_device_register_with_info(). To enable this, introduce
+>>> a special API for use only by the thermal subsystem.
+>>>
+>>> Acked-by: Rafael J . Wysocki <rafael@kernel.org>
+>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> NACK. The patch introducing the problem needs to be reverted.
 > 
-> NACK. The patch introducing the problem needs to be reverted.
+> I'm fine with that as well. I've already verified that fixes the issue. I'll go
+> ahead and send the revert.
+> 
 
-I'm fine with that as well. I've already verified that fixes the issue. I'll go
-ahead and send the revert.
+My understanding is that it is already queued up.
 
-Thanks,
-Will
-
-> 
-> Guenter
-> 
-> > ---
-> >   drivers/hwmon/hwmon.c | 25 +++++++++++++++++++++++++
-> >   include/linux/hwmon.h |  3 +++
-> >   2 files changed, 28 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> > index c4051a3e63c2..412a5e39fc14 100644
-> > --- a/drivers/hwmon/hwmon.c
-> > +++ b/drivers/hwmon/hwmon.c
-> > @@ -725,6 +725,31 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
-> >   }
-> >   EXPORT_SYMBOL_GPL(hwmon_device_register_with_info);
-> > +/**
-> > + * hwmon_device_register_for_thermal - register hwmon device for thermal subsystem
-> > + * @dev: the parent device
-> > + * @name: hwmon name attribute
-> > + * @drvdata: driver data to attach to created device
-> > + *
-> > + * The use of this function is restricted. It is provided for legacy reasons
-> > + * and must only be called from the thermal subsystem.
-> > + *
-> > + * hwmon_device_unregister() must be called when the device is no
-> > + * longer needed.
-> > + *
-> > + * Returns the pointer to the new device.
-> > + */
-> > +struct device *
-> > +hwmon_device_register_for_thermal(struct device *dev, const char *name,
-> > +				  void *drvdata)
-> > +{
-> > +	if (!name || !dev)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	return __hwmon_device_register(dev, name, drvdata, NULL, NULL);
-> > +}
-> > +EXPORT_SYMBOL_GPL(hwmon_device_register_for_thermal);
-> > +
-> >   /**
-> >    * hwmon_device_register - register w/ hwmon
-> >    * @dev: the device to register
-> > diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> > index 8fde789f2eff..5ff3db6eb9f1 100644
-> > --- a/include/linux/hwmon.h
-> > +++ b/include/linux/hwmon.h
-> > @@ -390,6 +390,9 @@ hwmon_device_register_with_info(struct device *dev,
-> >   				const struct hwmon_chip_info *info,
-> >   				const struct attribute_group **extra_groups);
-> >   struct device *
-> > +hwmon_device_register_for_thermal(struct device *dev, const char *name,
-> > +				  void *drvdata);
-> > +struct device *
-> >   devm_hwmon_device_register_with_info(struct device *dev,
-> >   				const char *name, void *drvdata,
-> >   				const struct hwmon_chip_info *info,
-> 
+Guenter
