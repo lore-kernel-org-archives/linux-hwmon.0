@@ -2,87 +2,56 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72272C43334
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Jun 2022 06:34:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96DF9C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Jun 2022 07:52:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiF3Gei (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 30 Jun 2022 02:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S233113AbiF3Hwj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 30 Jun 2022 03:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbiF3Geh (ORCPT
+        with ESMTP id S232039AbiF3HwU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 Jun 2022 02:34:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691D42CDE8;
-        Wed, 29 Jun 2022 23:34:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 050CF621FA;
-        Thu, 30 Jun 2022 06:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D96E3C341C8;
-        Thu, 30 Jun 2022 06:34:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656570875;
-        bh=CVsB0I1jCfXqz/B/gLEyz+jbRI188O9nR4J+pt/8oTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TzM5T7KgikPskMNBTrOcT7Vy4tIb2ppX3qkSeCvt09Ssp07yUTBrqpYLLRsBvgRDN
-         3dXTqjTIqRWZeJU+S2Y8U8XggZj209EABqRHAHM5TW5Z3rAB72PT7nbnvK7+Upu5Vp
-         PbwuHlrRC53W9b/GV7CSq+CCqQfPG8F5wQxhvZsQ=
-Date:   Thu, 30 Jun 2022 08:34:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     William McVicker <willmcvicker@google.com>, stable@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        kernel-team@android.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 4.19 v1 1/2] hwmon: Introduce
- hwmon_device_register_for_thermal
-Message-ID: <Yr1D+BGiv3MXgpm/@kroah.com>
-References: <20220629225843.332453-1-willmcvicker@google.com>
- <20220629225843.332453-2-willmcvicker@google.com>
- <d4a85598-af50-541a-9632-8d0343e8082d@roeck-us.net>
- <YrzdyUm/xlJPldwP@google.com>
- <4bafbfe7-1a9e-651e-41c1-76a131c1a477@roeck-us.net>
+        Thu, 30 Jun 2022 03:52:20 -0400
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C0A3ED35
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jun 2022 00:52:19 -0700 (PDT)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id EAB1321408; Thu, 30 Jun 2022 09:51:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1656575516; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=Rrq+VhrdZT48urG9vEPXnIpS/Qfmy3f5BpKRaxIuzFtS98rlkaC3KXu0Qn39D2WIi
+         2dn2GvP+RAYE+BfEfgTPH/BQpSXYmspsIDkWSdLsIayswHUI5aj2kw2PqncOxVLx6D
+         ukW6ZNLDuMsgzaI9sxjJ64I65VvoTWVJnwVjVgcSPZpc54LVhRAx8Lnt2A3TqXnGhy
+         6kzsuVRn+hT0hrCpuCB6O5FjV0/gu/MjBG/sRbzIT7n5sl+opvvQpt8RvHgeeGN6MM
+         ARhkA26WGmg8k10Xbbc/LQbbC6fjcS3NTMv8j5uq6RP2ys21kEsv8N8/gX1vuNGOO0
+         swGNOdOJftz0A==
+Received: by mail.olerise.pl for <linux-hwmon@vger.kernel.org>; Thu, 30 Jun 2022 07:51:21 GMT
+Message-ID: <20220630084500-0.1.p.bbwb.0.v2daogf439@olerise.pl>
+Date:   Thu, 30 Jun 2022 07:51:21 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@olerise.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4bafbfe7-1a9e-651e-41c1-76a131c1a477@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 07:31:10PM -0700, Guenter Roeck wrote:
-> On 6/29/22 16:18, William McVicker wrote:
-> > On 06/29/2022, Guenter Roeck wrote:
-> > > On 6/29/22 15:58, Will McVicker wrote:
-> > > > From: Guenter Roeck <linux@roeck-us.net>
-> > > > 
-> > > > [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
-> > > > 
-> > > > The thermal subsystem registers a hwmon driver without providing
-> > > > chip or sysfs group information. This is for legacy reasons and
-> > > > would be difficult to change. At the same time, we want to enforce
-> > > > that chip information is provided when registering a hwmon device
-> > > > using hwmon_device_register_with_info(). To enable this, introduce
-> > > > a special API for use only by the thermal subsystem.
-> > > > 
-> > > > Acked-by: Rafael J . Wysocki <rafael@kernel.org>
-> > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > > 
-> > > NACK. The patch introducing the problem needs to be reverted.
-> > 
-> > I'm fine with that as well. I've already verified that fixes the issue. I'll go
-> > ahead and send the revert.
-> > 
-> 
-> My understanding is that it is already queued up.
+Dzie=C5=84 dobry,
 
-Yes it is, sorry for the delay, will try to push out -rc releases later
-today...
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-greg k-h
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
