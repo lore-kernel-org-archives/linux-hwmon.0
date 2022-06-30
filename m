@@ -2,97 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE7BC43334
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Jun 2022 17:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC4FBC43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Jun 2022 22:12:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235738AbiF3R0p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 30 Jun 2022 13:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S230138AbiF3WMv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 30 Jun 2022 18:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235280AbiF3R0p (ORCPT
+        with ESMTP id S230267AbiF3WMk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:26:45 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D4D3EA9A;
-        Thu, 30 Jun 2022 10:26:44 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3DF194B7;
-        Thu, 30 Jun 2022 17:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3DF194B7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1656610003; bh=ei+caOvlg/2HIJ6D0lCC+JmQefKHErSrMXRIWXCQdbE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=jHNm3o3pk7EiO4OrBrWRB7786IghQ2dk2tbsU9B16XhyTn3vTWOnzzmV1vavgpN2f
-         9ntM0ufTApzemzX5rObg2X9VE685rLMXuMcfIzUpGt9PLiwSJlEskA9Ak/fQI+v9Aa
-         sJgrXl68rvlWlr+ox157+ZpKRVRgc2XFRm0KgJmaaAPf8O81O/Gui8VYOwJSWikHbi
-         nDDs9MqCgs0oM5T7c+fr47d/oxeWcS2igAHoQu/pwjYa+VevP5RExMt3+bDLgHsaL0
-         cALqRXPij2k3HkVEri+xJivdHATF7a5Ft9CRXU9eP/GP2UkkyoWrcc03AsCq+UIF55
-         5wCSxrfwtpI8g==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [RFC PATCH 00/11] docs: remove submitting-drivers.rst
-In-Reply-To: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
-References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
-Date:   Thu, 30 Jun 2022 11:26:42 -0600
-Message-ID: <87y1xenju5.fsf@meer.lwn.net>
+        Thu, 30 Jun 2022 18:12:40 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D611E58FD9;
+        Thu, 30 Jun 2022 15:12:37 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id p9so283535ilj.7;
+        Thu, 30 Jun 2022 15:12:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uEYiALVVqC9pNT2EOGV6KbYNg7mGQno5eraMM95U0FI=;
+        b=kbETdLcuC7+9IJAuWotKmrqwsvDITyjk18F+VRlNfWbvO5hDIv9JePYlY8LLOztPE8
+         MdczSkFm2WBmPFOKfsQnRffD4LjqiYRVZT6PShPuBzriVqR/ftbiqnvVqHKyQuuxUk4k
+         uwuvb3+qEYs5GxRkmPBfLqX7Gr2bz49cjx5gHm/8DvTB7XQK451wvcYcORGQZwAZmj5n
+         ixs+THVbacHc04D4Jtpirly/N6OLYPRX3qYRaOobs4TbLdPJYLZ+oyLDSvuvhPhEF5k7
+         vTVjEF6cZs6mp7BxKFbci7yD8Rr1ef5y4GiX/sPxWvIDY3+XNrdsWnlf7RhW9QYXQ30t
+         dQmQ==
+X-Gm-Message-State: AJIora+429FSsBOYsRaMDaeyoC5tKGhUUTgZOik94ppTviV74tnqZlsu
+        ha3C5gAOW/I7HEJyArLLDdl02mOdbA==
+X-Google-Smtp-Source: AGRyM1vDkToWbOoz2ljzZuj2fVl5AP8zEWgeQwQYd85sxaQlj7ewiUDOGUK4ons2Pcz/r4M4ZeDetA==
+X-Received: by 2002:a05:6e02:1c01:b0:2d9:a3ae:16be with SMTP id l1-20020a056e021c0100b002d9a3ae16bemr6624007ilh.68.1656627156993;
+        Thu, 30 Jun 2022 15:12:36 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r19-20020a02c853000000b00339dfb793aesm9153635jao.86.2022.06.30.15.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 15:12:06 -0700 (PDT)
+Received: (nullmailer pid 3411989 invoked by uid 1000);
+        Thu, 30 Jun 2022 22:11:57 -0000
+Date:   Thu, 30 Jun 2022 16:11:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     michaelsh@nvidia.com
+Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, vadimp@nvidia.com
+Subject: Re: [PATCH hwmon-next v4 2/3] dt-bindings: hwmon: add Microchip
+ EMC2305 fan controller.
+Message-ID: <20220630221157.GA3402568-robh@kernel.org>
+References: <20220623165217.59252-1-michaelsh@nvidia.com>
+ <20220623165217.59252-3-michaelsh@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623165217.59252-3-michaelsh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
+On Thu, Jun 23, 2022 at 07:52:16PM +0300, michaelsh@nvidia.com wrote:
+> From: Michael Shych <michaelsh@nvidia.com>
+> 
+> Add basic description of emc2305 driver device tree binding.
+> 
+> Signed-off-by: Michael Shych <michaelsh@nvidia.com>
+> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+> ---
+> v2->v3
+> Changes pointed out by Rob Herring and Guenter Roeck:
+> - Describe separate channels of fan-controller;
+> - Remove pwm_max property;
+> - Fix compatible property.
+> Changes added by Michael Shych:
+> - Fix dt binding check warnings.
+> v1->v2
+> - Fix dt binding check errors;
+> - Add descriptions;
+> - Add missing fields;
+> - Change the patch subject name;
+> - Separate pwm-min, pwm-max per PWM channel.
+> ---
+>  .../bindings/hwmon/microchip,emc2305.yaml          | 106 +++++++++++++++++++++
+>  1 file changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> new file mode 100644
+> index 000000000000..d054ba46ae23
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> @@ -0,0 +1,106 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip EMC2305 RPM-based PWM Fan Speed Controller
 
-> Dear Jonathan, dear Federico, dear Alex, dear Yanteng, dear Hu,
->
-> Here is an attempt to delete submitting-drivers with some improvements
-> and clean-up in other documentation places to convince ourselves that
-> nothing valuable is lost when deleting this checklist.
+RPM-based? So there is a tach signal too? Don't those need the number of 
+pulses per revolution that the fan provides.
 
-I am totally in favor of doing this; that document has not served any
-real purpose for a long time.  Resend with the translation tweaks and
-such, and I'll happily apply it.
+To repeat what I say for every fan controller binding now, until there's 
+a common binding to describe fan controllers, fans and their 
+relationship to each other, I'm not signing off on any fan binding 
+doing its own thing.
 
-> As future work---with this one submitting checklist gone---I see the harder
-> follow-up task to synchronize and clean up the various submission hints/
-> guidelines/checklists in the remaining kernel documentation that partly
-> overlap and differ in detail, their structure (unstructured, unordered
-> lists vs. sections and subsections) and their state of being outdated:
->
->   Documentation/process/submit-checklist.rst
->   Documentation/process/submitting-patches.rst
->   MAINTAINERS#Tips for patch submitters
->
-> My next task at hand is to read through all three documents, figure out
-> what still applies and what is outdated, determine a good common structure
-> for all three documents, include cross-links and make them to some extent
-> follow a clear consistent policy. E.g., one document is a more detailed
-> description of everything mentioned in the short list of another document.
-> I will try to work through that in the next months or motivate and guide
-> some colleague or mentee to work together with me on that.
-
-This seems like a good exercise as well.  I think the MAINTAINERS text
-should go away entirely, that's not really an appropriate place for it.
-submit-checklist.rst hasn't seen any real attention for some time; I'm
-not sure how useful it really is.
-
-What I would *really* like is a version of submitting-patches.rst that
-is not a "War and Peace" sort of reading experience.  That is a lot for
-somebody to get through before they can send their first patch...but
-it's not easy to make it shorter without losing important stuff.
-
-Thanks,
-
-jon
+Rob
