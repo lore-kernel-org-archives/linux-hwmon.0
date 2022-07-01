@@ -2,127 +2,128 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BE0C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 17:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A6BC43334
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 18:53:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbiGARxC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Jul 2022 13:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        id S229553AbiGASxu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Jul 2022 14:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiGARxB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 13:53:01 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA843B021;
-        Fri,  1 Jul 2022 10:53:00 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so7152288pjr.0;
-        Fri, 01 Jul 2022 10:53:00 -0700 (PDT)
+        with ESMTP id S229529AbiGASxt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 14:53:49 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7460412AED;
+        Fri,  1 Jul 2022 11:53:46 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id m2so3170145plx.3;
+        Fri, 01 Jul 2022 11:53:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CdjIksMvQ8vjEyyZl126eWwtU5AuyGkL65ydHpG8/4c=;
-        b=lVHImcRkqZ6MMxqLfXp/uGCJumuRUfjTFVnw+mcZM88q8I7waVpN0xPs7IBM/RWhcp
-         6OsD3zp8+vsD+Yew5VxXtbo9yKaRyoPyya4bfLUMxGpQydc3vDjumIu/Kl4V/IVobPs+
-         /AK2G3zFrKLtBXqEor4t1nsAu/S0Au+U+NuBu6Bz2WD0MHIaMGlTBtmFS229D3jIm2MU
-         AvfRIoVYXzesCogmd2TgNrr6RkklJ8rusa305mdsNlRQEpVh0yXQvF920ATAw9yrBpFP
-         OV7sYQNyGRsjeSjcM162hqVt+Fo9GXmQX1oBa+gkWhNk47TLc/veMIwI6627f4854VEY
-         m14w==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ALIXnT5ACOz0FPfyJRx1dS7PXpKa9vFRkd+lw6KGeVg=;
+        b=nVeyzp2zvKASw7rCldxvQDx34Bg0xlYf39xQkc4Q9QTOobfCr7QT7AaWB2s6RhM30v
+         LnyU/CaIlUOwM2hT3Qw55Bn0c3zJKPjRtlpc/XtEHz7UbFRQgxii3pp+ND0B48MLR6Wr
+         va8+BpmLzHv02tzoktFRKak/LFqvn/WfiKlyolfCMysd4WD2G8AiYTsrZXS+fVKRwdzX
+         SKhtim1Sm6XdYBA+9ycEqbBl10mPQ8nj0/5cn+OXWWjwJdkWcvB5UIhC+GJ1W51R/vaQ
+         iSUPYaxFFs5L4kYbZkPiUmjvrB52+i1bIwr1HaMqRRwpTa2R2v8up1iEcJaQK3DlPy5A
+         5WEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CdjIksMvQ8vjEyyZl126eWwtU5AuyGkL65ydHpG8/4c=;
-        b=zxSxIoZI2+l2Jpuj1+s6xhVg2YMYPLTZLiLhrXhROCvO03QxLN7d+GWjFQkvmjk6W7
-         LGPztKkxev4cMivcw9o9kJ93jpps/etGR6Ilov9f9Xxs912NxSHZ9rwHMtUdwosXjCA9
-         OvM8zxBcBDITtGEfLxZRO9wsEVu02dmbrGCj40rDMasFzTXLcBYEjggGIEW5iSinva0k
-         p5F79jSxFPR6+tp3zt73pyAas6cNhoGOFLHQc2xsLX7h1yoDEeIQOv0yZU1rzOOOHzuw
-         ZTh5VKrcamRJJy7ym86QgvTGwD3QMu4ZAfcFLmKkx+IxlhGdp9xYrjqTAjMocUxwGpYX
-         1qSQ==
-X-Gm-Message-State: AJIora/q5RK7lPrFMx/8F975FL3HQT0JCVEMVCx9FB/BQ/qb8jnlxLJ9
-        zQ/xgXuoXwMbSb3hBxBLtJI=
-X-Google-Smtp-Source: AGRyM1tII1AI4PiDuWJWfp0phkZx9yM+kZzM2zzrG4vkbrQV2zXwG/K8Mn7qF7C/8gvqp66Ej70Kwg==
-X-Received: by 2002:a17:903:249:b0:16b:9cf3:596e with SMTP id j9-20020a170903024900b0016b9cf3596emr15861929plh.60.1656697980031;
-        Fri, 01 Jul 2022 10:53:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s24-20020a17090aa11800b001eca28b8581sm6985312pjp.7.2022.07.01.10.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 10:52:59 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ALIXnT5ACOz0FPfyJRx1dS7PXpKa9vFRkd+lw6KGeVg=;
+        b=qErDd+Y457n+BVVrYmSpPmKLTt/tr5/f+yPe6KvTHz9wcvooG1ojLilcscAtf8frMa
+         pXyZtTu3IdS62tXscEaXgvcmQBtcy/uDYvwP62iao9aVVFyo7gnSUqNSVH2g/qEc/Bkl
+         oap+6Sit2ZK08hF9rNMnrDNxAtbnqhgnhKE24v3JSA2EIz7Cc3MX+Rm97KX0ovGF9TVm
+         exghWCOMWexPtQ9bFv4f4ScgUVAineZhDIkKMPJYgsKWGEdY0r1b9tuo0LN+WBlN6xcK
+         T/j1pZiIn/cljeGYtgozcrRxDJQB0GlP1sGSrQIiuyNlFengiIbqh9s0Ia/qp6bEQhmh
+         0cUQ==
+X-Gm-Message-State: AJIora/xGoHcealcfvwn2lcZohKaamjCeEwsddwoL0kh2lMDPhwFYt4H
+        BePAWTwuaxc6lJWTsX4bQi8=
+X-Google-Smtp-Source: AGRyM1sHIHJ7C1oo7K5ZfTr6dk0bsuhDqW3WQyFWuDql7yoTwBfA6BNW59rfnLgdtxtESQk3Qs5spQ==
+X-Received: by 2002:a17:90a:7c05:b0:1ee:e40c:589b with SMTP id v5-20020a17090a7c0500b001eee40c589bmr18405296pjf.78.1656701625920;
+        Fri, 01 Jul 2022 11:53:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cp9-20020a056a00348900b005184d1e838dsm16244011pfb.12.2022.07.01.11.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 11:53:45 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8cc11dd5-f599-cdf0-da05-404bb5a6922a@roeck-us.net>
-Date:   Fri, 1 Jul 2022 10:52:57 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] hwmon: (asus_wmi_sensors) Save a few bytes of memory
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ed Brindley <kernel@maidavale.org>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <3a494f7049f4f9a169477d872bab0c8a7c7ec48c.1656697596.git.christophe.jaillet@wanadoo.fr>
+Date:   Fri, 1 Jul 2022 11:53:43 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <3a494f7049f4f9a169477d872bab0c8a7c7ec48c.1656697596.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com
+Subject: Re: [PATCH] hwmon: (ibmaem) don't call platform_device_del() if
+ platform_device_add() fails
+Message-ID: <20220701185343.GA2981066@roeck-us.net>
+References: <20220701074153.4021556-1-yangyingliang@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701074153.4021556-1-yangyingliang@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/1/22 10:47, Christophe JAILLET wrote:
-> The first 'for' loop of asus_wmi_configure_sensor_setup() only computes
-> the number and type of sensors that exist in the system.
+On Fri, Jul 01, 2022 at 03:41:53PM +0800, Yang Yingliang wrote:
+> If platform_device_add() fails, it no need to call platform_device_del(), split
+> platform_device_unregister() into platform_device_del/put(), so platform_device_put()
+> can be called separately.
 > 
-> Here, the 'temp_sensor' structure is only used to store the data collected
-> by asus_wmi_sensor_info(). There is no point in using a devm_ variant for
-> this first allocation and it can be freed just after this initial loop.
-> 
-> So use kzalloc()/kfree() to save a few bytes of memory that would be kept
-> allocated for no good reason otherwise.
+> Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Then why isn't this just allocated on the stack ? The structure isn't _that_
-large.
+Applied.
 
+Thanks,
 Guenter
 
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->   drivers/hwmon/asus_wmi_sensors.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
+>  drivers/hwmon/ibmaem.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-> index 9e935e34c998..4873edad4996 100644
-> --- a/drivers/hwmon/asus_wmi_sensors.c
-> +++ b/drivers/hwmon/asus_wmi_sensors.c
-> @@ -514,14 +514,16 @@ static int asus_wmi_configure_sensor_setup(struct device *dev,
->   	int i, idx;
->   	int err;
->   
-> -	temp_sensor = devm_kcalloc(dev, 1, sizeof(*temp_sensor), GFP_KERNEL);
-> +	temp_sensor = kzalloc(sizeof(*temp_sensor), GFP_KERNEL);
->   	if (!temp_sensor)
->   		return -ENOMEM;
->   
->   	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
->   		err = asus_wmi_sensor_info(i, temp_sensor);
-> -		if (err)
-> +		if (err) {
-> +			kfree(temp_sensor);
->   			return err;
-> +		}
->   
->   		switch (temp_sensor->data_type) {
->   		case TEMPERATURE_C:
-> @@ -536,6 +538,7 @@ static int asus_wmi_configure_sensor_setup(struct device *dev,
->   			break;
->   		}
->   	}
-> +	kfree(temp_sensor);
->   
->   	if (nr_count[hwmon_temp])
->   		nr_count[hwmon_chip]++, nr_types++;
-
+> diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
+> index 5c4cf742f5ae..157e232aace0 100644
+> --- a/drivers/hwmon/ibmaem.c
+> +++ b/drivers/hwmon/ibmaem.c
+> @@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+>  
+>  	res = platform_device_add(data->pdev);
+>  	if (res)
+> -		goto ipmi_err;
+> +		goto dev_add_err;
+>  
+>  	platform_set_drvdata(data->pdev, data);
+>  
+> @@ -598,7 +598,9 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+>  	ipmi_destroy_user(data->ipmi.user);
+>  ipmi_err:
+>  	platform_set_drvdata(data->pdev, NULL);
+> -	platform_device_unregister(data->pdev);
+> +	platform_device_del(data->pdev);
+> +dev_add_err:
+> +	platform_device_put(data->pdev);
+>  dev_err:
+>  	ida_free(&aem_ida, data->id);
+>  id_err:
+> @@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+>  
+>  	res = platform_device_add(data->pdev);
+>  	if (res)
+> -		goto ipmi_err;
+> +		goto dev_add_err;
+>  
+>  	platform_set_drvdata(data->pdev, data);
+>  
+> @@ -738,7 +740,9 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+>  	ipmi_destroy_user(data->ipmi.user);
+>  ipmi_err:
+>  	platform_set_drvdata(data->pdev, NULL);
+> -	platform_device_unregister(data->pdev);
+> +	platform_device_del(data->pdev);
+> +dev_add_err:
+> +	platform_device_put(data->pdev);
+>  dev_err:
+>  	ida_free(&aem_ida, data->id);
+>  id_err:
