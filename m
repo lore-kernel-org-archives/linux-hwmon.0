@@ -2,128 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A6BC43334
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 18:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CBD6C43334
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 19:01:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiGASxu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Jul 2022 14:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
+        id S231754AbiGATBF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Jul 2022 15:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiGASxt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 14:53:49 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7460412AED;
-        Fri,  1 Jul 2022 11:53:46 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id m2so3170145plx.3;
-        Fri, 01 Jul 2022 11:53:46 -0700 (PDT)
+        with ESMTP id S229869AbiGATBE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 15:01:04 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246F535AAA;
+        Fri,  1 Jul 2022 12:01:04 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id p14so3246865pfh.6;
+        Fri, 01 Jul 2022 12:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ALIXnT5ACOz0FPfyJRx1dS7PXpKa9vFRkd+lw6KGeVg=;
-        b=nVeyzp2zvKASw7rCldxvQDx34Bg0xlYf39xQkc4Q9QTOobfCr7QT7AaWB2s6RhM30v
-         LnyU/CaIlUOwM2hT3Qw55Bn0c3zJKPjRtlpc/XtEHz7UbFRQgxii3pp+ND0B48MLR6Wr
-         va8+BpmLzHv02tzoktFRKak/LFqvn/WfiKlyolfCMysd4WD2G8AiYTsrZXS+fVKRwdzX
-         SKhtim1Sm6XdYBA+9ycEqbBl10mPQ8nj0/5cn+OXWWjwJdkWcvB5UIhC+GJ1W51R/vaQ
-         iSUPYaxFFs5L4kYbZkPiUmjvrB52+i1bIwr1HaMqRRwpTa2R2v8up1iEcJaQK3DlPy5A
-         5WEw==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FePtkGIG3fPNyP8jCDhz+QF1tyoCMzLu4NvPzC+Cgsc=;
+        b=kG/0RvoCKA82xdIhVNShBpu7m8sIAp3jasFr3HH96k+lbHyRNZ7kn7gRXo8fm1jITv
+         1ss7Ul9D4FPLulIgiUJbV2e3wnTAqNiyhS1MK7aV1cofUnsWITr+oSQWHz5xAXM7W13t
+         wzH1YW8Tkgm9gTkKL1dqmtAQfcL5ex65i+CwCoPNrJgZurqykbesNru6yj0Ij0BCnlhU
+         vWwcJP/KoBTUtyimLo1AmOo47DLN8YzOCTbFy/iC0HWdO5oiashidOyGvWW+mslCeNRd
+         AMwXfjl9RbLROpFvzGkVzU9NwGAKDSmb3/nKa1cdU91F+aUx8GhYdIvgFtdu0O3UbQZv
+         MjEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ALIXnT5ACOz0FPfyJRx1dS7PXpKa9vFRkd+lw6KGeVg=;
-        b=qErDd+Y457n+BVVrYmSpPmKLTt/tr5/f+yPe6KvTHz9wcvooG1ojLilcscAtf8frMa
-         pXyZtTu3IdS62tXscEaXgvcmQBtcy/uDYvwP62iao9aVVFyo7gnSUqNSVH2g/qEc/Bkl
-         oap+6Sit2ZK08hF9rNMnrDNxAtbnqhgnhKE24v3JSA2EIz7Cc3MX+Rm97KX0ovGF9TVm
-         exghWCOMWexPtQ9bFv4f4ScgUVAineZhDIkKMPJYgsKWGEdY0r1b9tuo0LN+WBlN6xcK
-         T/j1pZiIn/cljeGYtgozcrRxDJQB0GlP1sGSrQIiuyNlFengiIbqh9s0Ia/qp6bEQhmh
-         0cUQ==
-X-Gm-Message-State: AJIora/xGoHcealcfvwn2lcZohKaamjCeEwsddwoL0kh2lMDPhwFYt4H
-        BePAWTwuaxc6lJWTsX4bQi8=
-X-Google-Smtp-Source: AGRyM1sHIHJ7C1oo7K5ZfTr6dk0bsuhDqW3WQyFWuDql7yoTwBfA6BNW59rfnLgdtxtESQk3Qs5spQ==
-X-Received: by 2002:a17:90a:7c05:b0:1ee:e40c:589b with SMTP id v5-20020a17090a7c0500b001eee40c589bmr18405296pjf.78.1656701625920;
-        Fri, 01 Jul 2022 11:53:45 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=FePtkGIG3fPNyP8jCDhz+QF1tyoCMzLu4NvPzC+Cgsc=;
+        b=j4LlRgdnBkslIY4Tq4N7ybawquJEHqqVjsthTaJo/DkjnQ4HQQhaRrU5XCFg+yT+0X
+         JN5FADaGvcjBMNSCukgY5u8Hj5AXSw/mxPlDxP+8Yrd0gtpKLnnSWtHioBpWw5RvE+iJ
+         /CAcd50Bbea7RxaCcn+w08mwdFIwpN3h3fO7aGVRofbPmiFC7Qblyrq/C+qHwaPLDFS7
+         Y/X6rXD1WzWDueJ/YXhHjRQfKHIuuKi7A2RE/Gxxuc95/cK990KjSMJE4wYPO0enS37E
+         7D3bVXTd4DhbNmXnQy7G0dTybe1y7AKvZVGsNRbjoE3JB7p8fGcz1BCYczttuU0AF6e9
+         x19w==
+X-Gm-Message-State: AJIora8c4RQmqoJMQUi+zmJ6sAtMYCnFb8ShCx6f1f7j/OwAbFiPFN86
+        ROAMK8OxULypQgo8t4+7Twi2sfftKCk=
+X-Google-Smtp-Source: AGRyM1sXJ8Ik4r3/OgDVYHQgFL0Yj+3wLI+M3e6lIgqONfDd1b2/0Y/PeEoC7RRocYqlU52oyz6VTw==
+X-Received: by 2002:a63:87c6:0:b0:411:75e3:31e0 with SMTP id i189-20020a6387c6000000b0041175e331e0mr13298424pge.408.1656702063518;
+        Fri, 01 Jul 2022 12:01:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cp9-20020a056a00348900b005184d1e838dsm16244011pfb.12.2022.07.01.11.53.44
+        by smtp.gmail.com with ESMTPSA id u3-20020a170903108300b0016a613012a0sm15793300pld.210.2022.07.01.12.01.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 11:53:45 -0700 (PDT)
+        Fri, 01 Jul 2022 12:01:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 1 Jul 2022 11:53:43 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com
-Subject: Re: [PATCH] hwmon: (ibmaem) don't call platform_device_del() if
- platform_device_add() fails
-Message-ID: <20220701185343.GA2981066@roeck-us.net>
-References: <20220701074153.4021556-1-yangyingliang@huawei.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.19-rc5
+Date:   Fri,  1 Jul 2022 12:01:01 -0700
+Message-Id: <20220701190101.2982333-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701074153.4021556-1-yangyingliang@huawei.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 03:41:53PM +0800, Yang Yingliang wrote:
-> If platform_device_add() fails, it no need to call platform_device_del(), split
-> platform_device_unregister() into platform_device_del/put(), so platform_device_put()
-> can be called separately.
-> 
-> Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Hi Linus,
 
-Applied.
+Please pull hwmon fixes for Linux v5.19-rc5 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.19-rc5
 
 Thanks,
 Guenter
+------
 
-> ---
->  drivers/hwmon/ibmaem.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
-> index 5c4cf742f5ae..157e232aace0 100644
-> --- a/drivers/hwmon/ibmaem.c
-> +++ b/drivers/hwmon/ibmaem.c
-> @@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
->  
->  	res = platform_device_add(data->pdev);
->  	if (res)
-> -		goto ipmi_err;
-> +		goto dev_add_err;
->  
->  	platform_set_drvdata(data->pdev, data);
->  
-> @@ -598,7 +598,9 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
->  	ipmi_destroy_user(data->ipmi.user);
->  ipmi_err:
->  	platform_set_drvdata(data->pdev, NULL);
-> -	platform_device_unregister(data->pdev);
-> +	platform_device_del(data->pdev);
-> +dev_add_err:
-> +	platform_device_put(data->pdev);
->  dev_err:
->  	ida_free(&aem_ida, data->id);
->  id_err:
-> @@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
->  
->  	res = platform_device_add(data->pdev);
->  	if (res)
-> -		goto ipmi_err;
-> +		goto dev_add_err;
->  
->  	platform_set_drvdata(data->pdev, data);
->  
-> @@ -738,7 +740,9 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
->  	ipmi_destroy_user(data->ipmi.user);
->  ipmi_err:
->  	platform_set_drvdata(data->pdev, NULL);
-> -	platform_device_unregister(data->pdev);
-> +	platform_device_del(data->pdev);
-> +dev_add_err:
-> +	platform_device_put(data->pdev);
->  dev_err:
->  	ida_free(&aem_ida, data->id);
->  id_err:
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.19-rc5
+
+for you to fetch changes up to d0e51022a025ca5350fafb8e413a6fe5d4baf833:
+
+  hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails (2022-07-01 11:53:29 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v5.19-rc5
+
+* Fix error handling in ibmaem driver initialization
+
+* Fix bad data reported by occ driver after setting power cap
+
+* Fix typos in pmbus/ucd9200 driver comments
+
+----------------------------------------------------------------
+Eddie James (1):
+      hwmon: (occ) Prevent power cap command overwriting poll response
+
+Jiang Jian (1):
+      hwmon: (pmbus/ucd9200) fix typos in comments
+
+Yang Yingliang (1):
+      hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
+
+ drivers/hwmon/ibmaem.c        | 12 ++++++++----
+ drivers/hwmon/occ/common.c    |  5 +++--
+ drivers/hwmon/occ/common.h    |  3 ++-
+ drivers/hwmon/occ/p8_i2c.c    | 13 +++++++------
+ drivers/hwmon/occ/p9_sbe.c    |  7 +++----
+ drivers/hwmon/pmbus/ucd9200.c |  2 +-
+ 6 files changed, 24 insertions(+), 18 deletions(-)
