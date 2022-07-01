@@ -2,108 +2,102 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC4FBC43334
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 Jun 2022 22:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67862C433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 07:32:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiF3WMv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 30 Jun 2022 18:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S234913AbiGAHc3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Jul 2022 03:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiF3WMk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 Jun 2022 18:12:40 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D611E58FD9;
-        Thu, 30 Jun 2022 15:12:37 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id p9so283535ilj.7;
-        Thu, 30 Jun 2022 15:12:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uEYiALVVqC9pNT2EOGV6KbYNg7mGQno5eraMM95U0FI=;
-        b=kbETdLcuC7+9IJAuWotKmrqwsvDITyjk18F+VRlNfWbvO5hDIv9JePYlY8LLOztPE8
-         MdczSkFm2WBmPFOKfsQnRffD4LjqiYRVZT6PShPuBzriVqR/ftbiqnvVqHKyQuuxUk4k
-         uwuvb3+qEYs5GxRkmPBfLqX7Gr2bz49cjx5gHm/8DvTB7XQK451wvcYcORGQZwAZmj5n
-         ixs+THVbacHc04D4Jtpirly/N6OLYPRX3qYRaOobs4TbLdPJYLZ+oyLDSvuvhPhEF5k7
-         vTVjEF6cZs6mp7BxKFbci7yD8Rr1ef5y4GiX/sPxWvIDY3+XNrdsWnlf7RhW9QYXQ30t
-         dQmQ==
-X-Gm-Message-State: AJIora+429FSsBOYsRaMDaeyoC5tKGhUUTgZOik94ppTviV74tnqZlsu
-        ha3C5gAOW/I7HEJyArLLDdl02mOdbA==
-X-Google-Smtp-Source: AGRyM1vDkToWbOoz2ljzZuj2fVl5AP8zEWgeQwQYd85sxaQlj7ewiUDOGUK4ons2Pcz/r4M4ZeDetA==
-X-Received: by 2002:a05:6e02:1c01:b0:2d9:a3ae:16be with SMTP id l1-20020a056e021c0100b002d9a3ae16bemr6624007ilh.68.1656627156993;
-        Thu, 30 Jun 2022 15:12:36 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id r19-20020a02c853000000b00339dfb793aesm9153635jao.86.2022.06.30.15.11.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 15:12:06 -0700 (PDT)
-Received: (nullmailer pid 3411989 invoked by uid 1000);
-        Thu, 30 Jun 2022 22:11:57 -0000
-Date:   Thu, 30 Jun 2022 16:11:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     michaelsh@nvidia.com
-Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, vadimp@nvidia.com
-Subject: Re: [PATCH hwmon-next v4 2/3] dt-bindings: hwmon: add Microchip
- EMC2305 fan controller.
-Message-ID: <20220630221157.GA3402568-robh@kernel.org>
-References: <20220623165217.59252-1-michaelsh@nvidia.com>
- <20220623165217.59252-3-michaelsh@nvidia.com>
+        with ESMTP id S235255AbiGAHc2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 03:32:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B746D558;
+        Fri,  1 Jul 2022 00:32:27 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ6Lv1411zkWYH;
+        Fri,  1 Jul 2022 15:31:03 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 1 Jul 2022 15:32:25 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
+ 2022 15:32:24 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+CC:     <linux@roeck-us.net>, <jdelvare@suse.com>
+Subject: [PATCH] hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
+Date:   Fri, 1 Jul 2022 15:41:53 +0800
+Message-ID: <20220701074153.4021556-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623165217.59252-3-michaelsh@nvidia.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 07:52:16PM +0300, michaelsh@nvidia.com wrote:
-> From: Michael Shych <michaelsh@nvidia.com>
-> 
-> Add basic description of emc2305 driver device tree binding.
-> 
-> Signed-off-by: Michael Shych <michaelsh@nvidia.com>
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-> ---
-> v2->v3
-> Changes pointed out by Rob Herring and Guenter Roeck:
-> - Describe separate channels of fan-controller;
-> - Remove pwm_max property;
-> - Fix compatible property.
-> Changes added by Michael Shych:
-> - Fix dt binding check warnings.
-> v1->v2
-> - Fix dt binding check errors;
-> - Add descriptions;
-> - Add missing fields;
-> - Change the patch subject name;
-> - Separate pwm-min, pwm-max per PWM channel.
-> ---
->  .../bindings/hwmon/microchip,emc2305.yaml          | 106 +++++++++++++++++++++
->  1 file changed, 106 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> new file mode 100644
-> index 000000000000..d054ba46ae23
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> @@ -0,0 +1,106 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip EMC2305 RPM-based PWM Fan Speed Controller
+If platform_device_add() fails, it no need to call platform_device_del(), split
+platform_device_unregister() into platform_device_del/put(), so platform_device_put()
+can be called separately.
 
-RPM-based? So there is a tach signal too? Don't those need the number of 
-pulses per revolution that the fan provides.
+Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/hwmon/ibmaem.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-To repeat what I say for every fan controller binding now, until there's 
-a common binding to describe fan controllers, fans and their 
-relationship to each other, I'm not signing off on any fan binding 
-doing its own thing.
+diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
+index 5c4cf742f5ae..157e232aace0 100644
+--- a/drivers/hwmon/ibmaem.c
++++ b/drivers/hwmon/ibmaem.c
+@@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+ 
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
+ 
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -598,7 +598,9 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_free(&aem_ida, data->id);
+ id_err:
+@@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+ 
+ 	res = platform_device_add(data->pdev);
+ 	if (res)
+-		goto ipmi_err;
++		goto dev_add_err;
+ 
+ 	platform_set_drvdata(data->pdev, data);
+ 
+@@ -738,7 +740,9 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+ 	ipmi_destroy_user(data->ipmi.user);
+ ipmi_err:
+ 	platform_set_drvdata(data->pdev, NULL);
+-	platform_device_unregister(data->pdev);
++	platform_device_del(data->pdev);
++dev_add_err:
++	platform_device_put(data->pdev);
+ dev_err:
+ 	ida_free(&aem_ida, data->id);
+ id_err:
+-- 
+2.25.1
 
-Rob
