@@ -2,102 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67862C433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 07:32:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B982C43334
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 17:47:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbiGAHc3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Jul 2022 03:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S229559AbiGARrK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Jul 2022 13:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235255AbiGAHc2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 03:32:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B746D558;
-        Fri,  1 Jul 2022 00:32:27 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LZ6Lv1411zkWYH;
-        Fri,  1 Jul 2022 15:31:03 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 15:32:25 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Jul
- 2022 15:32:24 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-CC:     <linux@roeck-us.net>, <jdelvare@suse.com>
-Subject: [PATCH] hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
-Date:   Fri, 1 Jul 2022 15:41:53 +0800
-Message-ID: <20220701074153.4021556-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229541AbiGARrJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 13:47:09 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550E036B5C
+        for <linux-hwmon@vger.kernel.org>; Fri,  1 Jul 2022 10:47:07 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 7KjPoZtgDQKua7KjPo0b6V; Fri, 01 Jul 2022 19:47:05 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 01 Jul 2022 19:47:05 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Ed Brindley <kernel@maidavale.org>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (asus_wmi_sensors) Save a few bytes of memory
+Date:   Fri,  1 Jul 2022 19:47:02 +0200
+Message-Id: <3a494f7049f4f9a169477d872bab0c8a7c7ec48c.1656697596.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If platform_device_add() fails, it no need to call platform_device_del(), split
-platform_device_unregister() into platform_device_del/put(), so platform_device_put()
-can be called separately.
+The first 'for' loop of asus_wmi_configure_sensor_setup() only computes
+the number and type of sensors that exist in the system.
 
-Fixes: 8808a793f052 ("ibmaem: new driver for power/energy/temp meters in IBM System X hardware")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Here, the 'temp_sensor' structure is only used to store the data collected
+by asus_wmi_sensor_info(). There is no point in using a devm_ variant for
+this first allocation and it can be freed just after this initial loop.
+
+So use kzalloc()/kfree() to save a few bytes of memory that would be kept
+allocated for no good reason otherwise.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/hwmon/ibmaem.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/hwmon/asus_wmi_sensors.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
-index 5c4cf742f5ae..157e232aace0 100644
---- a/drivers/hwmon/ibmaem.c
-+++ b/drivers/hwmon/ibmaem.c
-@@ -550,7 +550,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
+diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+index 9e935e34c998..4873edad4996 100644
+--- a/drivers/hwmon/asus_wmi_sensors.c
++++ b/drivers/hwmon/asus_wmi_sensors.c
+@@ -514,14 +514,16 @@ static int asus_wmi_configure_sensor_setup(struct device *dev,
+ 	int i, idx;
+ 	int err;
  
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
+-	temp_sensor = devm_kcalloc(dev, 1, sizeof(*temp_sensor), GFP_KERNEL);
++	temp_sensor = kzalloc(sizeof(*temp_sensor), GFP_KERNEL);
+ 	if (!temp_sensor)
+ 		return -ENOMEM;
  
- 	platform_set_drvdata(data->pdev, data);
+ 	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
+ 		err = asus_wmi_sensor_info(i, temp_sensor);
+-		if (err)
++		if (err) {
++			kfree(temp_sensor);
+ 			return err;
++		}
  
-@@ -598,7 +598,9 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_free(&aem_ida, data->id);
- id_err:
-@@ -690,7 +692,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
+ 		switch (temp_sensor->data_type) {
+ 		case TEMPERATURE_C:
+@@ -536,6 +538,7 @@ static int asus_wmi_configure_sensor_setup(struct device *dev,
+ 			break;
+ 		}
+ 	}
++	kfree(temp_sensor);
  
- 	res = platform_device_add(data->pdev);
- 	if (res)
--		goto ipmi_err;
-+		goto dev_add_err;
- 
- 	platform_set_drvdata(data->pdev, data);
- 
-@@ -738,7 +740,9 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
- 	ipmi_destroy_user(data->ipmi.user);
- ipmi_err:
- 	platform_set_drvdata(data->pdev, NULL);
--	platform_device_unregister(data->pdev);
-+	platform_device_del(data->pdev);
-+dev_add_err:
-+	platform_device_put(data->pdev);
- dev_err:
- 	ida_free(&aem_ida, data->id);
- id_err:
+ 	if (nr_count[hwmon_temp])
+ 		nr_count[hwmon_chip]++, nr_types++;
 -- 
-2.25.1
+2.34.1
 
