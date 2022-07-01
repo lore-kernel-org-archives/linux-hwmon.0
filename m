@@ -2,110 +2,67 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CBD6C43334
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 19:01:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11F60C43334
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jul 2022 19:19:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiGATBF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Jul 2022 15:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S231715AbiGATTm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Jul 2022 15:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiGATBE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 15:01:04 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246F535AAA;
-        Fri,  1 Jul 2022 12:01:04 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id p14so3246865pfh.6;
-        Fri, 01 Jul 2022 12:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FePtkGIG3fPNyP8jCDhz+QF1tyoCMzLu4NvPzC+Cgsc=;
-        b=kG/0RvoCKA82xdIhVNShBpu7m8sIAp3jasFr3HH96k+lbHyRNZ7kn7gRXo8fm1jITv
-         1ss7Ul9D4FPLulIgiUJbV2e3wnTAqNiyhS1MK7aV1cofUnsWITr+oSQWHz5xAXM7W13t
-         wzH1YW8Tkgm9gTkKL1dqmtAQfcL5ex65i+CwCoPNrJgZurqykbesNru6yj0Ij0BCnlhU
-         vWwcJP/KoBTUtyimLo1AmOo47DLN8YzOCTbFy/iC0HWdO5oiashidOyGvWW+mslCeNRd
-         AMwXfjl9RbLROpFvzGkVzU9NwGAKDSmb3/nKa1cdU91F+aUx8GhYdIvgFtdu0O3UbQZv
-         MjEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=FePtkGIG3fPNyP8jCDhz+QF1tyoCMzLu4NvPzC+Cgsc=;
-        b=j4LlRgdnBkslIY4Tq4N7ybawquJEHqqVjsthTaJo/DkjnQ4HQQhaRrU5XCFg+yT+0X
-         JN5FADaGvcjBMNSCukgY5u8Hj5AXSw/mxPlDxP+8Yrd0gtpKLnnSWtHioBpWw5RvE+iJ
-         /CAcd50Bbea7RxaCcn+w08mwdFIwpN3h3fO7aGVRofbPmiFC7Qblyrq/C+qHwaPLDFS7
-         Y/X6rXD1WzWDueJ/YXhHjRQfKHIuuKi7A2RE/Gxxuc95/cK990KjSMJE4wYPO0enS37E
-         7D3bVXTd4DhbNmXnQy7G0dTybe1y7AKvZVGsNRbjoE3JB7p8fGcz1BCYczttuU0AF6e9
-         x19w==
-X-Gm-Message-State: AJIora8c4RQmqoJMQUi+zmJ6sAtMYCnFb8ShCx6f1f7j/OwAbFiPFN86
-        ROAMK8OxULypQgo8t4+7Twi2sfftKCk=
-X-Google-Smtp-Source: AGRyM1sXJ8Ik4r3/OgDVYHQgFL0Yj+3wLI+M3e6lIgqONfDd1b2/0Y/PeEoC7RRocYqlU52oyz6VTw==
-X-Received: by 2002:a63:87c6:0:b0:411:75e3:31e0 with SMTP id i189-20020a6387c6000000b0041175e331e0mr13298424pge.408.1656702063518;
-        Fri, 01 Jul 2022 12:01:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u3-20020a170903108300b0016a613012a0sm15793300pld.210.2022.07.01.12.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 12:01:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.19-rc5
-Date:   Fri,  1 Jul 2022 12:01:01 -0700
-Message-Id: <20220701190101.2982333-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229971AbiGATTj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2022 15:19:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645F71115A;
+        Fri,  1 Jul 2022 12:19:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0113B61F20;
+        Fri,  1 Jul 2022 19:19:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 62F75C3411E;
+        Fri,  1 Jul 2022 19:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656703177;
+        bh=pS6RUqqw9tQ8Spx0pzMbzlHYYFkraT7sr6DZKG+RgAg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=pAqyZaIeS/y+lNE5nxjmYR3uAahGy0Id6/SSsqGRR/L6eo4MBOmr00tZpFekv84As
+         Su9waIeKpynmIxdiPGPjak20y2I+pc+e8oyP1bYXCkgf9ZFtMuDtc6USh/1374Z2qt
+         5GfEzvA28BlhLoNnIb53I3/ZtaSL6cBkDXuhGB+fWe5p4Xlu7Va/OmmN2WuAOoLb1k
+         /JggGtzhN9IBCE58zfT8rx9M7UBK9NgoYyco0SCnmEoBocxsXhcnA52fUnshWxeILp
+         PAWihHPSwYM6ljXd/2MSnZNarZKFeomcCuMI7fr2dJcyrdcp7fNA70p23ma28Uzl9Z
+         n9IMGaQXXl+3w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C479E49BBC;
+        Fri,  1 Jul 2022 19:19:37 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v5.19-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220701190101.2982333-1-linux@roeck-us.net>
+References: <20220701190101.2982333-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220701190101.2982333-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.19-rc5
+X-PR-Tracked-Commit-Id: d0e51022a025ca5350fafb8e413a6fe5d4baf833
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b336ad598a3bbeddfdb71d86349b9d4024bddefe
+Message-Id: <165670317729.18967.8392888459752129636.pr-tracker-bot@kernel.org>
+Date:   Fri, 01 Jul 2022 19:19:37 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Fri,  1 Jul 2022 12:01:01 -0700:
 
-Please pull hwmon fixes for Linux v5.19-rc5 from signed tag:
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.19-rc5
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.19-rc5
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b336ad598a3bbeddfdb71d86349b9d4024bddefe
 
-Thanks,
-Guenter
-------
+Thank you!
 
-The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
-
-  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.19-rc5
-
-for you to fetch changes up to d0e51022a025ca5350fafb8e413a6fe5d4baf833:
-
-  hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails (2022-07-01 11:53:29 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v5.19-rc5
-
-* Fix error handling in ibmaem driver initialization
-
-* Fix bad data reported by occ driver after setting power cap
-
-* Fix typos in pmbus/ucd9200 driver comments
-
-----------------------------------------------------------------
-Eddie James (1):
-      hwmon: (occ) Prevent power cap command overwriting poll response
-
-Jiang Jian (1):
-      hwmon: (pmbus/ucd9200) fix typos in comments
-
-Yang Yingliang (1):
-      hwmon: (ibmaem) don't call platform_device_del() if platform_device_add() fails
-
- drivers/hwmon/ibmaem.c        | 12 ++++++++----
- drivers/hwmon/occ/common.c    |  5 +++--
- drivers/hwmon/occ/common.h    |  3 ++-
- drivers/hwmon/occ/p8_i2c.c    | 13 +++++++------
- drivers/hwmon/occ/p9_sbe.c    |  7 +++----
- drivers/hwmon/pmbus/ucd9200.c |  2 +-
- 6 files changed, 24 insertions(+), 18 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
