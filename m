@@ -2,123 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57499C43334
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Jul 2022 19:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AEBEC43334
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Jul 2022 09:07:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiGBTN0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Jul 2022 15:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S230156AbiGCJHo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Jul 2022 05:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGBTNZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Jul 2022 15:13:25 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9099E2701;
-        Sat,  2 Jul 2022 12:13:20 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id t21so5463126pfq.1;
-        Sat, 02 Jul 2022 12:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bNbs1WSuB65484dd7qrhb9iZC6Pp1XxllCs2PT2eL2g=;
-        b=JEVH5slh/Ly8dUngVAk/c9UdoOlwYEayDEzUpCLCi3nxr6mGsGFkH6OkeyMosyf4EA
-         AlFhWXI/M1jwPflkMkD1B26J794H6y1Z4piTdLaMDNsrKs3b8WnS+1N1+bsiwk+JfgYT
-         n7bhqTUjrprQhXwRnIjw4LJa25rQLIFeuiOemELrqsnmDGX7dhNmAoOKjiQgokbOtR9K
-         MnfLb8EJkMaI9UcrPifQRIk+cXqyxth8xYf/JGTunkheJPLzicYL9PJd4VReVTHSQA1v
-         ym6r6kX/Ax+3cqrmau5myiDGwfDm2UF1RxJRgHSvq8WDLLg+a3HvCPXTZ1Gq3E8X8FMn
-         pHBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bNbs1WSuB65484dd7qrhb9iZC6Pp1XxllCs2PT2eL2g=;
-        b=dI/31xeqI4VCklbfBI5o2uZxcjF+4CZyL+Q2IJ7QgBM1JRRUIb0YrT3EGZKkBkRX99
-         gHZDERN6b0BUZT5Cf2QqSk4/iyJJzJzcbPn3g+VAvJJIReJSNWYWD/CKQPQJlrbtsCnk
-         RkKJdl8vZuV+vjyhdtTKbHBdnIn1ncsCk9cZSo09/ZRq15dwIHhSb0e66c5HX83i9EUB
-         AAFBg/VNgA9PODzOD9xTBdpBYw+UWMQ3wNK49/vz1kLsW4MEoRagInl1wZeEtmwA9fhU
-         sciJ0rkG15hCHk0OOAawqZx/5/5q0LqFLktbzgRyD50pQkfbUkoRez64pypSPjsb2BbT
-         vZkw==
-X-Gm-Message-State: AJIora9H3yHutWUpkAHv9h+jFYsGRLn0t2jmatLdmRdF2ftISKAPBDOi
-        onX8lVczppMYqRmIbHvc6kAjHlBMkNU=
-X-Google-Smtp-Source: AGRyM1vGBunOmWhcC4HG4ED/gjzh8urYHFdeNqUa4ITfA7z5h+7yfkSLAzfFEQoh/9K1q1FiAz64Ow==
-X-Received: by 2002:a62:7b95:0:b0:525:8304:2f16 with SMTP id w143-20020a627b95000000b0052583042f16mr25998748pfc.33.1656789200025;
-        Sat, 02 Jul 2022 12:13:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h18-20020a170902f7d200b001624cd63bbbsm17765796plw.133.2022.07.02.12.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 12:13:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 2 Jul 2022 12:13:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Ed Brindley <kernel@maidavale.org>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (asus_wmi_sensors) Save a few bytes of memory
-Message-ID: <20220702191316.GA3131040@roeck-us.net>
-References: <e23cea6c489fabb109a61e8a33d146a6b74c0529.1656741926.git.christophe.jaillet@wanadoo.fr>
+        with ESMTP id S230154AbiGCJHm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jul 2022 05:07:42 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8960C6170
+        for <linux-hwmon@vger.kernel.org>; Sun,  3 Jul 2022 02:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656839261; x=1688375261;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XHyBzImbdt6glvEsQ0bKjEE6FwcHP68qj3rpGWSM4qs=;
+  b=TyENts6wsphwBton2eUuHOfJZOhKh79yWNXVqvUwd2LOCw01VcOgZoLK
+   kYUdUYGpQ0d8Bbb8Oc0PUd/YQFV0nX3kvAEMd2l/zlhgIj/tLEU361Hru
+   4GZUsIrCON8i1lN7u0pmx8QKMItJm0P3PSwumshwYXDO3B0y47pGNo8Nr
+   TgbVxJqPVhMAJVE7fSDpUN82/SkrDEmfEA+lz/roe1R0P5z1qum7o/Ojq
+   Kdyo7nR1x5mBLvSk5YaSB+h+TcvUpLIvCXkxiamr3SUklnlMRHER8QUT6
+   Ls0Q9Kvk+ysKAW4cH8KEeOVxfiDSCDiDohaw5yfTkDUAgXy7ujycLeUac
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="283655560"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="283655560"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 02:07:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="542171129"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 03 Jul 2022 02:07:39 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7vZr-000GHb-5d;
+        Sun, 03 Jul 2022 09:07:39 +0000
+Date:   Sun, 03 Jul 2022 17:07:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 9f6ca00b5be47e471e9703e6b017e1e2cfa7f604
+Message-ID: <62c15c3b.tQo145M46aURvMOD%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e23cea6c489fabb109a61e8a33d146a6b74c0529.1656741926.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 08:05:54AM +0200, Christophe JAILLET wrote:
-> The first 'for' loop of asus_wmi_configure_sensor_setup() only computes
-> the number and type of sensors that exist in the system.
-> 
-> Here, the 'temp_sensor' structure is only used to store the data collected
-> by asus_wmi_sensor_info(). There is no point in using a devm_ variant for
-> this allocation. This wastes some memory for no good reason.
-> 
-> Use the stack instead.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 9f6ca00b5be47e471e9703e6b017e1e2cfa7f604  hwmon: (asus_wmi_sensors) Save a few bytes of memory
 
-Applied to hwmon-next.
+elapsed time: 721m
 
-Thanks,
-Guenter
+configs tested: 52
+configs skipped: 2
 
-> ---
-> v1 -> v2: Use the stack instead of kmalloc/kfree to simplify even more the
->           code (Guenter Roeck)
-> ---
->  drivers/hwmon/asus_wmi_sensors.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-> index 9e935e34c998..6e8a908171f0 100644
-> --- a/drivers/hwmon/asus_wmi_sensors.c
-> +++ b/drivers/hwmon/asus_wmi_sensors.c
-> @@ -514,22 +514,20 @@ static int asus_wmi_configure_sensor_setup(struct device *dev,
->  	int i, idx;
->  	int err;
->  
-> -	temp_sensor = devm_kcalloc(dev, 1, sizeof(*temp_sensor), GFP_KERNEL);
-> -	if (!temp_sensor)
-> -		return -ENOMEM;
-> -
->  	for (i = 0; i < sensor_data->wmi.sensor_count; i++) {
-> -		err = asus_wmi_sensor_info(i, temp_sensor);
-> +		struct asus_wmi_sensor_info sensor;
-> +
-> +		err = asus_wmi_sensor_info(i, &sensor);
->  		if (err)
->  			return err;
->  
-> -		switch (temp_sensor->data_type) {
-> +		switch (sensor.data_type) {
->  		case TEMPERATURE_C:
->  		case VOLTAGE:
->  		case CURRENT:
->  		case FAN_RPM:
->  		case WATER_FLOW:
-> -			type = asus_data_types[temp_sensor->data_type];
-> +			type = asus_data_types[sensor.data_type];
->  			if (!nr_count[type])
->  				nr_types++;
->  			nr_count[type]++;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220703
+riscv                randconfig-r042-20220703
+s390                 randconfig-r044-20220703
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220703
+hexagon              randconfig-r045-20220703
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
