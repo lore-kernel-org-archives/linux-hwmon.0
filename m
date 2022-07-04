@@ -2,146 +2,196 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AFD2C43334
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Jul 2022 11:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17B7BC43334
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Jul 2022 12:26:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbiGDLAD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 4 Jul 2022 07:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S231339AbiGDM0S (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 4 Jul 2022 08:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiGDLAC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Jul 2022 07:00:02 -0400
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B342710D0;
-        Mon,  4 Jul 2022 03:59:58 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 1FA7AD0E;
-        Mon,  4 Jul 2022 12:59:52 +0200 (CEST)
-Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        in-reply-to:content-transfer-encoding:content-disposition
-        :content-type:content-type:mime-version:references:message-id
-        :subject:subject:from:from:date:date:received:received:received;
-         s=dkim20160331; t=1656932391; x=1658746792; bh=OsIWiXUEYCo45MHB
-        NAtw8T1MH1g0PqlfjghU8IT8d48=; b=ULUH0B6ZkkNL+dBXV1R6+mlD4wAbsP/P
-        BKvPA/cwH2SLOz3OUs+Ha2NnFeqKSuPVbypW0qURXIcCTd852CMPd5xrZQIYF1+I
-        qjVnEfCtmFrwmq9BU5Pq0o8sRoHB2PysXeHklHKi+H/wxcFiJRlR1tgpm0zZqXd7
-        uBPMwnG3xSVGIbhA38z0UiW92+N0GlOlajEWuX/dsNnauqmDzby1EiEaGaf61QrD
-        dSVfy0KgXdbwJvLNIja7Z/MmX3AyUEX0+KYM6gg8hG5jacM+qWZlUX45yuqLA4hq
-        ky7lHdsrMSgqh5Yc/NX1sEBoiOb0VjT6poGH7189/4SS5uFxvMelFd+1fl4EsMrX
-        8uRPtsjxv4+tytASa5PspViIxqisvJoDYiTs43Ak+QBTbZxxqDOl4ywXtZvhNPSz
-        21tD0ZA141FHbOAJOzwpFVfa9M8pfOYDxSniihF9ffEkr2J4SCRoeitLu6Obus9V
-        Cotb8UDszIs/jbDNFYXDNS/lH5ht8ZgYvuCJGPgVzmfJ/TYgti4e7eflNU3m5hqx
-        VzxDyvMeK/NWKf36MynUwjCLTFqjQBg1k5yzOvQvj4kwX+LBMKrE1ttwx0X88dA6
-        RU/17D+dVnYlbwS97XyvU2FEkA7RkmgazEKRXHwFyBn7nlgt1VmLnIb1Ka/whBqi
-        pdetF1c2KFY=
-X-Virus-Scanned: amavisd-new at mykolab.com
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PmZtLwz8Ykbd; Mon,  4 Jul 2022 12:59:51 +0200 (CEST)
-Received: from int-mx003.mykolab.com (unknown [10.9.13.3])
-        by mx.kolabnow.com (Postfix) with ESMTPS id F07CE1448;
-        Mon,  4 Jul 2022 12:59:44 +0200 (CEST)
-Received: from ext-subm001.mykolab.com (unknown [10.9.6.1])
-        by int-mx003.mykolab.com (Postfix) with ESMTPS id 9C2E938EB;
-        Mon,  4 Jul 2022 12:59:39 +0200 (CEST)
-Date:   Mon, 4 Jul 2022 12:59:33 +0200
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        with ESMTP id S230383AbiGDM0R (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Jul 2022 08:26:17 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FBAB869;
+        Mon,  4 Jul 2022 05:26:16 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id fw3so16435603ejc.10;
+        Mon, 04 Jul 2022 05:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MbhbPxsG29azwppMDENZITEFjKUEpPy4AjqCqp4MLu4=;
+        b=oeD3/UVr5xQaEcf3Tj8CUpsuiGvAi7oUBD91tzFOE39PRoLJs/9mPWRmEUIjgiNzgX
+         A5Onf8H6AzuzybT7bT71sVy264nCnoKP9ZNLspc9NDsmLFfG/UJh7XLi6KignhTB716F
+         PUizcCVyReb7RrExl+I+XAd58xCvNB4RktdMOe96vsoxI4YvO5dmdAwg5FL920db77et
+         hI6kmea/PHWkZo4VTyXsNHG0V3fDdo6aeSbMuKosAxKSjTVzNzM8flvnKhVXMghZFuHO
+         06yvuF63XavIaWV0QZk8dyYct4vkSHS9uWIYchVf0ZAl9xuCpfa7y90epDDpDTA+HWPH
+         zwQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MbhbPxsG29azwppMDENZITEFjKUEpPy4AjqCqp4MLu4=;
+        b=MpXWEPI7iHHlNCASgkWOJAT4AFLWac4J25UhodJ6EJiPIez96w3Epjk7xjV61St9AW
+         Jic7Y77Qbevza6N3v6WKH3JpCuDG2LPcRLalgGQ8VqC1VJtZShKFLdgKRZ19+SLvzilL
+         QV9/uHivnLI0DebnH4DjdVeRWiWLzABL3FM8w/VNo0hjsqGhUkf42hsNj/2TPPm0zdcG
+         UeiaaW74dnYQ9B0e5BIobymBhleGj5D9B1B8/JvPAyD8RyVhrVGbnbNpnS40xpCSnwvK
+         8tqBsD4GHfgha+TW/gEaVPDiglMNpBlBx4G4LPlZYr5kOORnoVPOZ32U9fVyht+RFPti
+         +GwA==
+X-Gm-Message-State: AJIora9iYDc7FNGhVwYk7X35TZDqD1mGFjLNEAEA6DzaafaEN3jpKod7
+        z2D0PFQbf3eE1NUhyfNbGVnwIJfQmCw=
+X-Google-Smtp-Source: AGRyM1uSCoxC8lVSBMTD0dyWp6+Roen8DDq4kLf2LyJ3Ed39NMyI8C8KkgFTomQ88AgVJ9fa+YY6jw==
+X-Received: by 2002:a17:907:3f29:b0:722:e5b0:ebe7 with SMTP id hq41-20020a1709073f2900b00722e5b0ebe7mr27892826ejc.335.1656937575167;
+        Mon, 04 Jul 2022 05:26:15 -0700 (PDT)
+Received: from felia.fritz.box (200116b826716b008998943ac77556e4.dip.versatel-1u1.de. [2001:16b8:2671:6b00:8998:943a:c775:56e4])
+        by smtp.gmail.com with ESMTPSA id k20-20020a1709063fd400b00722f66fb36csm13974467ejj.112.2022.07.04.05.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 05:26:14 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Jean Delvare <jdelvare@suse.com>,
+        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 07/11] docs: it_IT: align to submitting-drivers
- removal
-Message-ID: <20220704105933.c26zmkzyvdjmxb5a@numero86.vaga.pv.it>
-References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
- <20220627151819.22694-8-lukas.bulwahn@gmail.com>
- <20220628091647.xf5cygybqemwprgb@numero86.vaga.pv.it>
- <CAKXUXMzAzT6c=Atwbnif0MQg50B9UpG6_rV65_OvkaJPTzaPcw@mail.gmail.com>
+        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH 00/11] docs: remove submitting-drivers.rst
+Date:   Mon,  4 Jul 2022 14:25:26 +0200
+Message-Id: <20220704122537.3407-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKXUXMzAzT6c=Atwbnif0MQg50B9UpG6_rV65_OvkaJPTzaPcw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 11:49:23AM +0200, Lukas Bulwahn wrote:
->On Tue, Jun 28, 2022 at 11:16 AM Federico Vaga <federico.vaga@vaga.pv.it> wrote:
->>
->> On Mon, Jun 27, 2022 at 05:18:15PM +0200, Lukas Bulwahn wrote:
->> >Adjust the Italian translation to the removal of submitting-drivers in the
->> >English kernel documentation.
->> >
->> >Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
->> >---
->> > .../it_IT/kernel-hacking/hacking.rst             |  3 +--
->> > .../translations/it_IT/process/5.Posting.rst     |  5 ++---
->> > .../translations/it_IT/process/8.Conclusion.rst  |  3 +--
->> > .../translations/it_IT/process/howto.rst         |  3 +--
->> > .../translations/it_IT/process/index.rst         |  1 -
->> > .../it_IT/process/submitting-drivers.rst         | 16 ----------------
->> > .../it_IT/process/submitting-patches.rst         |  6 ++----
->> > 7 files changed, 7 insertions(+), 30 deletions(-)
->> > delete mode 100644 Documentation/translations/it_IT/process/submitting-drivers.rst
->> >
->> >diff --git a/Documentation/translations/it_IT/kernel-hacking/hacking.rst b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
->> >index d5c521327f6a..4bec4669cf48 100644
->> >--- a/Documentation/translations/it_IT/kernel-hacking/hacking.rst
->> >+++ b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
->> >@@ -795,8 +795,7 @@ anche per avere patch pulite, c'è del lavoro amministrativo da fare:
->> >    di un semplice impegno su una parte del codice.
->> >
->> > -  Infine, non dimenticatevi di leggere
->> >-   ``Documentation/process/submitting-patches.rst`` e possibilmente anche
->> >-   ``Documentation/process/submitting-drivers.rst``.
->> >+   ``Documentation/process/submitting-patches.rst``.
->> >
->> > Trucchetti del kernel
->> > =====================
->> >diff --git a/Documentation/translations/it_IT/process/5.Posting.rst b/Documentation/translations/it_IT/process/5.Posting.rst
->> >index 1476d51eb5e5..a036f38fc82e 100644
->> >--- a/Documentation/translations/it_IT/process/5.Posting.rst
->> >+++ b/Documentation/translations/it_IT/process/5.Posting.rst
->> >@@ -16,9 +16,8 @@ e di procedure per la pubblicazione delle patch; seguirle renderà la vita
->> > più facile a tutti quanti.  Questo documento cercherà di coprire questi
->> > argomenti con un ragionevole livello di dettaglio; più informazioni possono
->> > essere trovare nella cartella 'Documentation', nei file
->> >-:ref:`translations/it_IT/process/submitting-patches.rst <it_submittingpatches>`,
->> >-:ref:`translations/it_IT/process/submitting-drivers.rst <it_submittingdrivers>`, e
->> >-:ref:`translations/it_IT/process/submit-checklist.rst <it_submitchecklist>`.
->> >+:ref:`translations/it_IT/process/submitting-patches.rst <it_submittingpatches>`
->> >+e :ref:`translations/it_IT/process/submit-checklist.rst <it_submitchecklist>`.
->>
->> Fixing plural. The final correct statement must be:
->>
->> nel file :ref:`translations/it_IT/process/submitting-patches.rst <it_submittingpatches>`.
->>
->> Notice 'nei file' -> 'nel file'
->>
->>
->
->Are you sure about this proposed change here? In my patch, I just
->changed the enumeration from three objects (submittingpatches,
->submittingdrivers, submitchecklist) to two objects (submittingpatches,
->submitchecklist).
->
->So, it should stay plural, right?
+Dear Jonathan, dear Federico, dear Alex, dear Yanteng, dear Hu,
 
-You are right. My mistake, I miscounted '-' and '+' in the patch.
 
->Lukas
+Here is an attempt to delete submitting-drivers with some improvements
+and clean-up in other documentation places to convince ourselves that
+nothing valuable is lost when deleting this checklist.
+
+Patch 1, 2 and 3 is just basic clean-up before adding a new reference (see
+Patch 4). Patch 4 adds the one reference from submitting-drivers, not
+already mentioned elsewhere in the repository. Patch 5 updates a confusing
+statement in devices.rst from earlier .txt/.tex distinction times to the
+new state now with Sphinx & .rst.
+
+Patch 6 finally deletes the outdated document, with a cross-check what is
+covered elsewhere and few open questions (see below).
+
+Patch 7 and 8 have been reworked with the native-speaking doc maintainers;
+they cause no new warnings and are ready to pick,
+
+Patch 9 to 11 are weak attempts to adjust the translation, but they need
+to be taken further by others due to my lack of knowledge on the other
+languages.  They would currently also cause new warnings in the doc-build
+right now. They should not be picked if there is no one to continue
+to adjust the text and fix the warnings on broken references.
+
+I hope that patches 1 to 8 can be picked into doc-next, and then we see
+how to fix up the translations as well.
+
+
+Further open considerations:
+
+  - Should we add some subsection/paragraph on Testing to "A guide on
+    kernel development process", which then further refers to
+    power/drivers-testing.rst for testing the power management of the
+    driver?
+
+    (I am bit surprised that code-checking tools are mentioned, but not
+    much more on actual kernel testing is mentioned there.)
+
+  - Should we be a bit more explicit on how and when to add a MAINTAINERS
+    entry, besides the short note in 6.Followthrough.rst?
+
+  - Translations of submitting-patches.rst and 8.Conclusion.rst in Asian
+    languages include a reference to submitting-drivers, I cannot adjust
+    the text due to my lack of understanding of the surrounding text.
+ 
+    zh_CN/process/8.Conclusion.rst:和 :ref:`Documentation/translations/zh_CN/process/submitting-drivers.rst <cn_submittingdrivers>`
+    zh_CN/process/submitting-patches.rst::ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
+    zh_TW/process/8.Conclusion.rst:和 :ref:`Documentation/translations/zh_TW/process/submitting-drivers.rst <tw_submittingdrivers>`
+    zh_TW/process/submitting-patches.rst::ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
+
+    This currently lead to some new warnings in this patch series. I hope
+    some native speakers of those languages can help out here. The other
+    references were adjusted on a best guess of the text, which should be
+    confirmed by native-speaking reviewers.
+
+Generally, I hope we are now all well-convinced to delete submitting-drivers.
+
+Anything else needed to be convinced? I put already some thought into it,
+and I am willing to add more content in other documents to properly get rid
+of this outdated one here, or just starting writing a good new checklist
+for driver submission that reflect what the majority of maintainers want
+to see submitters do.
+
+Link to RFC patch series: 
+  https://lore.kernel.org/linux-doc/20220627151819.22694-1-lukas.bulwahn@gmail.com/
+
+rfc -> v1: improved Italian and Japanese translation
+
+
+Best regards,
+
+Lukas
+
+
+Lukas Bulwahn (11):
+  docs: kernel-docs: order reference from newest to oldest
+  docs: kernel-docs: shorten the lengthy doc title
+  docs: kernel-docs: reflect that it is community-maintained
+  docs: kernel-docs: add a reference mentioned in submitting-drivers.rst
+  docs: admin: devices:  drop confusing outdated statement on Latex
+  docs: process: remove outdated submitting-drivers.rst
+  docs: it_IT: align to submitting-drivers removal
+  docs: ja_JP: howto: remove reference to removed submitting-drivers
+  docs: ko_KR: howto: remove reference to removed submitting-drivers
+  docs: zh_CN: align to submitting-drivers removal
+  docs: zh_TW: align to submitting-drivers removal
+
+ Documentation/admin-guide/devices.rst         |   7 +-
+ Documentation/hwmon/submitting-patches.rst    |   1 -
+ Documentation/kernel-hacking/hacking.rst      |   3 +-
+ Documentation/process/5.Posting.rst           |   3 +-
+ Documentation/process/8.Conclusion.rst        |  16 +-
+ Documentation/process/howto.rst               |   4 +-
+ Documentation/process/index.rst               |   1 -
+ Documentation/process/kernel-docs.rst         |  62 +++---
+ Documentation/process/submitting-drivers.rst  | 194 ------------------
+ Documentation/process/submitting-patches.rst  |   5 +-
+ .../it_IT/kernel-hacking/hacking.rst          |   3 +-
+ .../translations/it_IT/process/5.Posting.rst  |   5 +-
+ .../it_IT/process/8.Conclusion.rst            |   5 +-
+ .../translations/it_IT/process/howto.rst      |   3 +-
+ .../translations/it_IT/process/index.rst      |   1 -
+ .../it_IT/process/submitting-drivers.rst      |  16 --
+ .../it_IT/process/submitting-patches.rst      |   6 +-
+ Documentation/translations/ja_JP/howto.rst    |   4 +-
+ Documentation/translations/ko_KR/howto.rst    |   2 +-
+ .../zh_CN/kernel-hacking/hacking.rst          |   3 +-
+ .../translations/zh_CN/process/5.Posting.rst  |   3 +-
+ .../translations/zh_CN/process/howto.rst      |   1 -
+ .../translations/zh_CN/process/index.rst      |   1 -
+ .../zh_CN/process/submitting-drivers.rst      | 160 ---------------
+ .../translations/zh_TW/process/5.Posting.rst  |   3 +-
+ .../translations/zh_TW/process/howto.rst      |   1 -
+ .../translations/zh_TW/process/index.rst      |   1 -
+ .../zh_TW/process/submitting-drivers.rst      | 164 ---------------
+ 28 files changed, 66 insertions(+), 612 deletions(-)
+ delete mode 100644 Documentation/process/submitting-drivers.rst
+ delete mode 100644 Documentation/translations/it_IT/process/submitting-drivers.rst
+ delete mode 100644 Documentation/translations/zh_CN/process/submitting-drivers.rst
+ delete mode 100644 Documentation/translations/zh_TW/process/submitting-drivers.rst
 
 -- 
-~ - ~ - ~ - ~
-Federico Vaga
+2.17.1
+
