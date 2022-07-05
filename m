@@ -2,105 +2,142 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2861CCA47B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Jul 2022 07:04:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAFB3CCA47F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 Jul 2022 10:09:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiGEHEA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 5 Jul 2022 03:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S231152AbiGEKI7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 Jul 2022 06:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiGEHD7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Jul 2022 03:03:59 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9892512D07;
-        Tue,  5 Jul 2022 00:03:57 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id y18so2241279plb.2;
-        Tue, 05 Jul 2022 00:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=2ufLS6mmfGLjwF9pxsw1TQp1kLjrOVbI80R+vNoRSvk=;
-        b=PX8gc5mIejixPJCgPu0KBUXlOXb+wzKfs6yxAOjWuKajPAVu/Uo8igsaQ4uYjFaAoE
-         2OhpLmyfX7k7gQH2/vPnqc2KB0DVcSUqan3DGUMpiJjvrs84XVLn/XN42fMcrtMZqTIB
-         3MrsFxvUcpskmMJdOVZmdYavsFRvchrpwk1ENUuorkOlwk2/FwKrOXZeoXkEO9t1xShE
-         qvX148aymfVztwC65QfoPFkSsK4vDLU1nlJpgYn8DuU2SbU2pRItVhCKmGPmQuhtDrFU
-         A7luZn0sxeWf262qZiu9Ywb0zmRaBZYpEVjF5Q9W+jSDg2hIQ2ybgvDNH24lpvX3rIdG
-         2R9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2ufLS6mmfGLjwF9pxsw1TQp1kLjrOVbI80R+vNoRSvk=;
-        b=50RRAnnDyIuD4u8UGfkrNUiRNYAvsYbL8eWItpy/Q88FwsFFkJXKt6TtWVLR5XEP19
-         XDflcRhWSCvZ1S19Tbgx3Sogf8pvQps4m8iyO6rd+w2Y1x2fMP0FuMTEi6tRp4cpc7Dr
-         V7eNEL+ecLtjoL0nRUm6TGeXE0idz5uXkk+xhuzciLaos5sVklaIxsaqhH4fLRTNdBq2
-         6hB1oDYsfNP8WXKxJkbY4UqfvBWqlDvDuoskQxaRvoRB+P+6lbcxaSDhrtVdw9SEUqKh
-         /3OZIQ7jpMF+GDj+xmMlqv3Z6kK6XS9JXuxNFFMS0RfdReT1+D+x4i83o/j3WyZ2K5RD
-         fszw==
-X-Gm-Message-State: AJIora+qVVv7JzyD5S1Q/lnERj/Soi+340NPtQPX7rBHRKBEq4s340RE
-        eNzgijAoUFDXlQqTTHMGm+k=
-X-Google-Smtp-Source: AGRyM1vmviWyx2o7pqRKS6HpNTGuLHcvSoMidTGwEgDcYRIXJPxrH9DF8ootL62hBguKuP8VvRxifw==
-X-Received: by 2002:a17:902:7616:b0:16b:b48d:1ae7 with SMTP id k22-20020a170902761600b0016bb48d1ae7mr26067064pll.73.1657004637129;
-        Tue, 05 Jul 2022 00:03:57 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id t13-20020a6549cd000000b0040ced958e8fsm21786055pgs.80.2022.07.05.00.03.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 00:03:56 -0700 (PDT)
-Message-ID: <3b1c6414-276a-0b4a-91b3-607cfae1ec60@gmail.com>
-Date:   Tue, 5 Jul 2022 16:03:51 +0900
+        with ESMTP id S229885AbiGEKI6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Jul 2022 06:08:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9546613F56;
+        Tue,  5 Jul 2022 03:08:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4BB4A1F91F;
+        Tue,  5 Jul 2022 10:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657015735; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qvMJ4J1/LuqJ2bm7BlZIoOLJOYmWh+4Rpvkk33SZGOA=;
+        b=eByb4sSPqg6rRuVWR7Uyol2qkXUh2FlAJZJl6kQB2+c8EEhcdaxtq/jkX0dVzdvL/5s6D3
+        /efNTsY/bdasP3pVQxu6qP4nvHO+zcS4O9fblGgs1NR89rSYgTvYETM292rGHy3CrhOSj+
+        qGcOFU+GGl+mKHAF54mbZA9ZrTUJOaY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657015735;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qvMJ4J1/LuqJ2bm7BlZIoOLJOYmWh+4Rpvkk33SZGOA=;
+        b=jKWTp5GMggeoLloojImrUvPvKkYL+8GQzQSR8Qi8VzqCYEK46zUKh7GMjl/cO3qvfPDiP7
+        DHXFfHIde+vxx5CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E2AF1339A;
+        Tue,  5 Jul 2022 10:08:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VBGsCbYNxGK1BQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 05 Jul 2022 10:08:54 +0000
+Date:   Tue, 5 Jul 2022 12:08:52 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <groeck@chromium.org>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+Message-ID: <20220705120852.049dc235@endymion.delvare>
+In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+        <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     alexs@kernel.org, corbet@lwn.net, federico.vaga@vaga.pv.it,
-        jdelvare@suse.com, kernel-janitors@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        siyanteng@loongson.cn, src.res@email.cn,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20220704122537.3407-9-lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH 08/11] docs: ja_JP: howto: remove reference to removed
- submitting-drivers
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220704122537.3407-9-lukas.bulwahn@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-T24gTW9uLCAgNCBKdWwgMjAyMiAxNDoyNTozNCArMDIwMCwgTHVrYXMgQnVsd2FobiB3cm90
-ZToNCj4gVGhlIGRvY3VtZW50IHN1Ym1pdHRpbmctZHJpdmVycy5yc3Qgd2FzIGRlbGV0ZWQu
-IFRoaXMgcmVtb3ZlcyB0aGUNCj4gY29ycmVzcG9uZGluZyByZWZlcmVuY2UgaW4gdGhlIEph
-cGFuZXNlIHRyYW5zbGF0aW9uIG9mIHRoZSBob3d0bywNCj4gd2l0aCBzb21lIGFzc2lzdGFu
-Y2UgZnJvbSBBa2lyYSBZb2thc2F3YS4NCj4gDQo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2xpbnV4LWRvYy9hMmJlNDhlNS1lNTU5LTE3ZDctNWFlNy1kMTIwNWE3MzdlYTRA
-Z21haWwuY29tLw0KPiBTaWduZWQtb2ZmLWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3
-YWhuQGdtYWlsLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEFraXJhIFlva29zYXdhIDxha2l5a3NA
-Z21haWwuY29tPg0KDQogICAgICAgIFRoYW5rcywgQWtpcmENCg0KPiAtLS0NCj4gIERvY3Vt
-ZW50YXRpb24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdCB8IDQgKystLQ0KPiAgMSBm
-aWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRp
-ZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3Qg
-Yi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gaW5kZXgg
-MzhmZWQ2ZmU2MmZlLi42NDllMmZmMmE0MDcgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRp
-b24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdA0KPiArKysgYi9Eb2N1bWVudGF0aW9u
-L3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gQEAgLTEyOSw4ICsxMjksOCBAQCBs
-aW51eC1hcGlAdmdlci5rZXJuZWwub3JnIOOBq+mAgeOCi+OBk+OBqOOCkuWLp+OCgeOBvuOB
-meOAgg0KPiAgICAgIOODq+OBq+W+k+OBo+OBpuOBhOOCi+OCguOBruOBoOOBkeOCkuWPl+OB
-keS7mOOBkeOAgeWkmuOBj+OBruS6uuOBr+ato+OBl+OBhOOCueOCv+OCpOODq+OBruOCs+OD
-vOODiQ0KPiAgICAgIOOBoOOBkeOCkuODrOODk+ODpeODvOOBl+OBvuOBmeOAgg0KPiAgDQo+
-IC0gIDpyZWY6YERvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMucnN0
-IDxjb2RpbmdzdHlsZT5gIOOBqCA6cmVmOmBEb2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0
-dGluZy1kcml2ZXJzLnJzdCA8c3VibWl0dGluZ2RyaXZlcnM+YA0KPiAtICAgIOOBk+OCjOOC
-ieOBruODleOCoeOCpOODq+OBq+OBr+OAgeOBqeOBhuOChOOBo+OBpuOBhuOBvuOBj+ODkeOD
-g+ODgeOCkuS9nOOBo+OBpuaKleeov+OBmeOCi+OBi+OBq+OBpA0KPiArICA6cmVmOmBEb2N1
-bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVzLnJzdCA8Y29kaW5nc3R5bGU+
-YA0KPiArICAgIOOBk+OBruODleOCoeOCpOODq+OBq+OBr+OAgeOBqeOBhuOChOOBo+OBpuOB
-huOBvuOBj+ODkeODg+ODgeOCkuS9nOOBo+OBpuaKleeov+OBmeOCi+OBi+OBq+OBpA0KPiAg
-ICAgIOOBhOOBpumdnuW4uOOBq+ips+OBl+OBj+abuOOBi+OCjOOBpuOBiuOCiuOAgeS7peS4
-i+OCkuWQq+OBv+OBvuOBmSAo44GT44KM44Gg44GR44Gr6ZmQ44KJ44Gq44GEDQo+ICAgICAg
-44GR44KM44Gp44KCKQ0KPiAgDQo+IC0tIA0KPiAyLjE3LjENCg==
+On Tue, 28 Jun 2022 16:03:12 +0200, Uwe Kleine-K=C3=B6nig wrote:
+> From: Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org>
+>=20
+> The value returned by an i2c driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+>=20
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+
+That's a huge change for a relatively small benefit, but if this is
+approved by the I2C core maintainer then fine with me. For:
+
+>  drivers/hwmon/adc128d818.c                                | 4 +---
+>  drivers/hwmon/adt7470.c                                   | 3 +--
+>  drivers/hwmon/asb100.c                                    | 6 ++----
+>  drivers/hwmon/asc7621.c                                   | 4 +---
+>  drivers/hwmon/dme1737.c                                   | 4 +---
+>  drivers/hwmon/f75375s.c                                   | 5 ++---
+>  drivers/hwmon/fschmd.c                                    | 6 ++----
+>  drivers/hwmon/ftsteutates.c                               | 3 +--
+>  drivers/hwmon/ina209.c                                    | 4 +---
+>  drivers/hwmon/ina3221.c                                   | 4 +---
+>  drivers/hwmon/jc42.c                                      | 3 +--
+>  drivers/hwmon/mcp3021.c                                   | 4 +---
+>  drivers/hwmon/occ/p8_i2c.c                                | 4 +---
+>  drivers/hwmon/pcf8591.c                                   | 3 +--
+>  drivers/hwmon/smm665.c                                    | 3 +--
+>  drivers/hwmon/tps23861.c                                  | 4 +---
+>  drivers/hwmon/w83781d.c                                   | 4 +---
+>  drivers/hwmon/w83791d.c                                   | 6 ++----
+>  drivers/hwmon/w83792d.c                                   | 6 ++----
+>  drivers/hwmon/w83793.c                                    | 6 ++----
+>  drivers/hwmon/w83795.c                                    | 4 +---
+>  drivers/hwmon/w83l785ts.c                                 | 6 ++----
+>  drivers/i2c/i2c-core-base.c                               | 6 +-----
+>  drivers/i2c/i2c-slave-eeprom.c                            | 4 +---
+>  drivers/i2c/i2c-slave-testunit.c                          | 3 +--
+>  drivers/i2c/i2c-smbus.c                                   | 3 +--
+>  drivers/i2c/muxes/i2c-mux-ltc4306.c                       | 4 +---
+>  drivers/i2c/muxes/i2c-mux-pca9541.c                       | 3 +--
+>  drivers/i2c/muxes/i2c-mux-pca954x.c                       | 3 +--
+
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+
+--=20
+Jean Delvare
+SUSE L3 Support
