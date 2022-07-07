@@ -2,511 +2,227 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AFD3CCA479
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jul 2022 15:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78658C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jul 2022 16:01:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236210AbiGGPbG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Jul 2022 11:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
+        id S235240AbiGGQBG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Jul 2022 12:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236036AbiGGPbD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2022 11:31:03 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305B931DC4;
-        Thu,  7 Jul 2022 08:31:01 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EHRZ2012226;
-        Thu, 7 Jul 2022 11:30:45 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3h5u9s2qtg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 11:30:45 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 267FUiwk010663
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Jul 2022 11:30:44 -0400
-Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+        with ESMTP id S234968AbiGGQBF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2022 12:01:05 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2372248F2;
+        Thu,  7 Jul 2022 09:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657209663; x=1688745663;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=uJluMG3eVNtJQpJhCv4fVbgI8/6x6B1YQ945tWo8iHw=;
+  b=UP74j+FgAN5HabPzEuAASzeTJvdDdasOknG8NvjuYhlDJWidrn7c1TLG
+   Uo14tfMuQ5KCpB9/mVg1ollWRNrtSbsOObtZHxSDB3ZRKu6DiBfSaPRyH
+   UYPpiCIbpl6FQUVEgBdqFjEykLzDYUevOoqgiNpfZgtDo+sklQ8xg8kYK
+   iNgsQzgsrP/a6qTcEtKNqAsxkC3A8EIIaHscd4AlYdDdwaeXGm23oNukl
+   HXPplMw61lZriaSbvbS4jgTV9oEBCGYzJ0k1dQhabiIpFpbj6u1tK6K1W
+   sujvzBNJtuNYpuQ9WePe5uvHMyMuTrbPwtf0pYr5DRzLg2Sdnkhp364QL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="309618673"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="309618673"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 09:01:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="568573170"
+Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
+  by orsmga006.jf.intel.com with ESMTP; 07 Jul 2022 09:00:58 -0700
+Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
+ ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 7 Jul 2022 09:00:58 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 7 Jul 2022 09:00:58 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.41) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 7 Jul 2022 11:30:43 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 7 Jul 2022 11:30:43 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 7 Jul 2022 11:30:43 -0400
-Received: from euswvd-wpr-621.reddog.microsoft.com ([10.140.226.135])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 267FTmbJ008137;
-        Thu, 7 Jul 2022 11:30:33 -0400
-From:   Atif Ofluoglu <Atif.Ofluoglu@analog.com>
-To:     <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Atif Ofluoglu <atif.ofluoglu@analog.com>,
-        Atif Ofluoglu <Atif.Ofluoglu@analog.com>
-Subject: [PATCH 1/2] hwmon: (pmbus/max20754) Add support for MAX20754
-Date:   Thu, 7 Jul 2022 15:29:17 +0000
-Message-ID: <3659043f92b0ca9e538679e00f7dcc214525ff2e.1657204859.git.atif.ofluoglu@analog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1657204859.git.atif.ofluoglu@analog.com>
-References: <cover.1657204859.git.atif.ofluoglu@analog.com>
+ 15.1.2308.27; Thu, 7 Jul 2022 09:00:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T2VfA3keQKYUzNgRTX287nei//1U30zrovMAl6RVfrjtY/+GCZKr/QccfhnLi1ZPcxiWKNtoJWEy/seRzU+OM0E1ffMmMUKSI9jAWnm/ze4rnXDlTJnA5gW+TL4RQVBtas4tQK1ZTTJhPIyCDaMEUnR5o5DUcwikGpKyUGm/9YdfYsZplcsl1ygPIVWK+3JSCBgVOKsRr4j3ZnngSEo8awu1LoJUrPsajCl5qjtLtMgzXKJDIbMbItibccPpySoQdWzCkIQOOFLQJ8UWKileyj/osn3OONRNXssFqJhIq4X08Xg3fdyyijPhJTsRVXwcSzQHTn2AXCv1o6XuUML2Mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=riCxf0tlJCfa6qKf7kdC+aJAAkNQqZtnYJPwquQmm2U=;
+ b=gwpEsOpZmpiQqP+tZiXG3kmaBCbPaF55QQ96OQZmmZ5maR+BpBpXEtxqDqktmClURcpOcjf9ZPjgEVp2F3PS6aL1+tso3rXERnJNhgPmcXvfih3VVca5BAfdO6/oXjp/4dKEe7gNitlHHJbrXYh81+F5Nd4LCUztUS7+6kzdpvxzHHoiIE0H8//58JxY+MW0ao24IFhq6gx3tq4KWVaKk8ZNSgFEoSlxXz3H9eHCqQef/dkYQtqy9R3JkP8PDO1qWNz8Ld7kpUhxmcz9qZPI2NvUozM+/g5/2NvibSKDQXORgjtK3OP3PBEPgS+aD+gefzCkcAPQgbsEOPDG9Js6Qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN6PR11MB1570.namprd11.prod.outlook.com (2603:10b6:405:a::21)
+ by BYAPR11MB3445.namprd11.prod.outlook.com (2603:10b6:a03:77::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 16:00:51 +0000
+Received: from BN6PR11MB1570.namprd11.prod.outlook.com
+ ([fe80::8df4:fec8:4db5:8bde]) by BN6PR11MB1570.namprd11.prod.outlook.com
+ ([fe80::8df4:fec8:4db5:8bde%5]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
+ 16:00:50 +0000
+Message-ID: <0b776040-c3bd-034f-bbcd-b929f1a4d19a@intel.com>
+Date:   Thu, 7 Jul 2022 18:00:45 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.0
+Subject: Re: [PATCH 0/3] hwmon: (pmbus) add power from energy readings
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <iwona.winiarska@intel.com>
+References: <20220706104024.3118590-1-pawel.kallas@intel.com>
+ <20220706131758.GA652205@roeck-us.net>
+ <dc8771ad-b48b-317d-b132-47208ef58710@intel.com>
+ <20220707140952.GB3492673@roeck-us.net>
+Content-Language: en-US
+From:   "Kallas, Pawel" <pawel.kallas@intel.com>
+In-Reply-To: <20220707140952.GB3492673@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS8PR04CA0085.eurprd04.prod.outlook.com
+ (2603:10a6:20b:313::30) To BN6PR11MB1570.namprd11.prod.outlook.com
+ (2603:10b6:405:a::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: 05orWxmTXXV64X_Viz6w8lSbS_noqW9b
-X-Proofpoint-ORIG-GUID: 05orWxmTXXV64X_Viz6w8lSbS_noqW9b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-07_12,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 adultscore=0 priorityscore=1501 mlxscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 suspectscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207070061
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b152d26b-127d-418a-8c8b-08da6031dcc7
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3445:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kT0PAi6bEckoM+vEz47vJur67lZ738lcQlQOA51nNjrSWBGJYB+gPVLsNtXpazh7zZ/50NcGpj2D1xN6j/s+rJ+djq21/Jt7OYWFldIWWJ1v6+oQmastG4dlebt9xcbJGKKa5y4haMCCTJ274LAhKUD+tWp/BQQi+r5yo9QL/CeldNanXKGa9lvhkSk7bc/zefVYVIInJ0IzdLKMM2zOnTQ9qGkMjWMPgMNni9sFpM+J0Z3GeIm00Qq34rlg9b6Ty78Rsz0H0PsScodupAzw1J8aL4shuAo3Bstqk6H8aJPHzMtsOlc2WHec1+qc/vqalIYrV6j7nv1JTslhUMathlz3zhbOAUcvy32YwOyBtswm1sRKCDguwdOyH+acWNqweuWpzuGzj7pVx+uIvT+Q7vKG1qD4dZ/u4ACPtQYNu9AYCqiQVLwBslWxdagTJbUvtraVdU1d1Q1REJSP4q5snx8EiIgO5YSwFKzg4mYd1WpzbZWNbMtHc6vDjvFqs8Xheh2/FSRcYqAGyuK3jFFF75XisME6PKJvForhbRtfN0VFuuKoedyfLqVvtYEL04kz7WiKyAMrwz+7CaR0yAzqkxo4wgbWysuewl/ioUYuwjjMMR4MBzsGegkm5Un+yDK3wUruJKnMvjQwBZKWym2RBzqiy5631VFS6A+Ncub3H76Et9KmLv3FZTbK3gi0HrNksofqMpipjojmRz97eZJl2XfTeqERyVYji8kR/AwM8HQs09ZVhppLdi9gJKEy4bsYJqFhz9O1ygloeE1kGNPr0Bt0G8qpMAcusSCS/t/o/pgbBfTEmvlcvZAXRGQz81ZMJGZYTdnpP6PhJWGH8AEBiA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1570.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(366004)(136003)(39860400002)(376002)(8936002)(478600001)(86362001)(82960400001)(66946007)(66556008)(8676002)(4326008)(66476007)(6486002)(41300700001)(6916009)(6666004)(31696002)(53546011)(2906002)(6506007)(5660300002)(107886003)(38100700002)(83380400001)(6512007)(2616005)(186003)(316002)(26005)(19627235002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WTl3TUk4clhxbnJFWVkwQ2diRkZsMnlweGg0VDc0ZE1od0UzS3Y1dGR5V2pV?=
+ =?utf-8?B?TTR5czcvQXdxaHdxbHpQTlFJNU9tUmgvZkI4Y0UxckZSVUlxSys0WnhnbVB4?=
+ =?utf-8?B?OTJ2T1loMUF3WXlqWUNiOGphYS9VeFlrNG5LY3ltbk9ES3NnZjREWVhtMEsy?=
+ =?utf-8?B?aC9vczJhcFlzRS9LUHNOc2lDYzFvSWd2QzdUNUM2WkRyMXEvRWdTdXJOUitu?=
+ =?utf-8?B?VDFrUlJUZDg2QTMyUk96RHdnTXdrWDhaUHExRnNMT1VmZWhmK2VjdE1tUU1a?=
+ =?utf-8?B?ZnAwVXBxWmdsdTlVV2M0YXdEWGx2a2VMK2I4ZTBaRFArRGNjUHpLNUViWTVo?=
+ =?utf-8?B?SlA0S3kvSHJsWUpiczArZTFZUDVTYmZCTUF5RXo5WWFTRXFSZHZRM3RIeHVN?=
+ =?utf-8?B?WGNSclhVOXlQSXR2MkpRalRlTjBZZUhzZkJJQkxjWGhrVW4zNDEyVStWMXNz?=
+ =?utf-8?B?bFRWYUhOdHI2Z3MwUnNOR202ZlkxS2I0K00rZ1Iray9rQU8xWkhCZTJIdzZV?=
+ =?utf-8?B?a0NXY1Y1dWZzdjRhOHcrN0JBdlhQVGJGZ3JUZTM4eWJ2ZGxucmlOV3pyRkFs?=
+ =?utf-8?B?b0taUEpvaVF2bU9rMGxFeHBLTHlnM2RkeXR6bUM2a2VMdU1OemFORjA3enll?=
+ =?utf-8?B?K0dOR1lJZ1JJYlRKY2xZdU1FZzNCYXNHa1MzWVVtU1BwaDNrMDZNc2VSc21L?=
+ =?utf-8?B?MzJzaVUyaXJQbmRnRlhSNC9raEtQY2Iza21OOXVGOXE1Y3VVZENIRk5pVVlr?=
+ =?utf-8?B?YnhSamMrNExudlQrTzZiRmFFeFd5bk5NRUNHV1E0WjBlTHBMbWZyRGs4NVBJ?=
+ =?utf-8?B?SXlwRzlUNWl3VVdmT2ttUXRxQXpKcGo5V0JXNTY4akVXKzJ6RHBuY21BWW40?=
+ =?utf-8?B?WXdzYVVVVHhKTklpNGhTL2s5SVdWZWM5RDdkMS9jdWJ1cERLWGpnMS9kd2FV?=
+ =?utf-8?B?SG1JZHA5MmdqUGpwL09mVUxHQlRTMWx6aTZKZmp6a0x3T0ViZlZ5Vk5lVzMy?=
+ =?utf-8?B?eUl3T01QYkdUc0lkWTBHRFkrYXlUdncxTm5UOUZHSU1Bb01xT09pL0M3VDFB?=
+ =?utf-8?B?ZzI3MzVHdG5iWW5nQ25DcjBmSmh5alQ4N1NtT0NQZE9UYmtDVmgxY3VrQnoy?=
+ =?utf-8?B?dTJwbG1aQ1BPOEJHbWVrUFZqVUUrd2VWZkswQ0g2ZGVLM2QwcXBjemFFOG9j?=
+ =?utf-8?B?bzloLzhMZzFZeFZUK2hhS3FKOUZPa09udlpNdngwRElYRnVsbkoxd29kWk9L?=
+ =?utf-8?B?Q3l0dWFzR21SandGNVp1VlBSdXZkQmhkcCtxQWcvN2ZNYmlHZDN3NkF2UEhF?=
+ =?utf-8?B?ZFRXTjNuenpHbUppQkJ2S1FuNTc3azhOaFZ3eUJGNlV4Njl6QUF6aXRnRmNK?=
+ =?utf-8?B?cWlWK2FaU2prVTFlUHpVNUdybXJOTnUrSmQzb0dMRllVZFZJc1FoMnB2Tk1n?=
+ =?utf-8?B?Tjl5SWgzQVRjTGlUMlJuK2dZRzY1WGdMaWZNbW9Bd09ZOG1YVXdjMTkrQ1p1?=
+ =?utf-8?B?TllORkFZK1FFeENLa3h4S29yY2tPZi9KR0s2UUsrQTdwSThYMG5mWDd5NTlP?=
+ =?utf-8?B?SE5vdUt4SFE5L0N2Z1pOWTdJSkJ1bVh5VkVFNVpHdndEZnZYSWIrR2pjckhN?=
+ =?utf-8?B?czh2dlRWaVFKaW5XWWU5SXN2T1duRFNLYzFkak5FQURvLzc2Zms2V1hnMW0r?=
+ =?utf-8?B?Z3RHa2U1aFdXRUU4dmM3Z0RKSHBEYzJYTnVXbW5DSjZjT3hsTkRha3U5Z1BY?=
+ =?utf-8?B?VHo1enZ2TGpjMDFLWHdoTVh4QjJGSDIySHIrQ3BUV2pHSnNnWlZqTkJyUlg4?=
+ =?utf-8?B?RzlxT1hDenlFZ29SWHFEaDlSYXVUU1BxbGtvWWg5QTdpenFoVG1MNkJNZlNJ?=
+ =?utf-8?B?Z2RDMHYyc1ArYjdMcStuYWp4TmowQmJhUFViQmpzNjhDVFlyeHBFT3VjVEpk?=
+ =?utf-8?B?ZjE5MWxORWZic2FmU2ZqZmNPMnV2VkN5bC9Nc2xzdEMycTJna08rS2VGbHhu?=
+ =?utf-8?B?aUVhNkUycnErMHQyYzdwbitWWk5PVzJBM1FxMDdFYXUxclZsTDIzRzZyZFBl?=
+ =?utf-8?B?Umcyd0RKdmFqaDB4dTdmMFFhT2hxOXVWZXUvQytDTXFpNGVOM3BhSm9NRWhR?=
+ =?utf-8?Q?9R1d6y2euIUl4kaMTbI6b9jAW?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b152d26b-127d-418a-8c8b-08da6031dcc7
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1570.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 16:00:50.2575
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7uYUFNh9FnjwXKCRZjv+A3YBHdGSk8S1SmG1BqrjCu2Dv0/f9eWLqOk/VBMoYOptHD1QV51o3TrOAsRtAT3QDA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3445
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Atif Ofluoglu <atif.ofluoglu@analog.com>
 
-Signed-off-by: Atif Ofluoglu <Atif.Ofluoglu@analog.com>
----
- drivers/hwmon/pmbus/Kconfig    |   9 +
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/max20754.c | 390 +++++++++++++++++++++++++++++++++
- 3 files changed, 400 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/max20754.c
-
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index dfae76db65ae..f259b8739766 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -254,6 +254,15 @@ config SENSORS_MAX20751
- 	  This driver can also be built as a module. If so, the module will
- 	  be called max20751.
- 
-+config SENSORS_MAX20754
-+	tristate "Maxim MAX20754"
-+	help
-+	  If you say yes here you get hardware monitoring support for Maxim
-+	  MAX20754.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called max20754.
-+
- config SENSORS_MAX31785
- 	tristate "Maxim MAX31785 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 4678fba5012c..b8b1d8a84b3b 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -27,6 +27,7 @@ obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
- obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
- obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
- obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
-+obj-$(CONFIG_SENSORS_MAX20751)	+= max20754.o
- obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
- obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
- obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
-diff --git a/drivers/hwmon/pmbus/max20754.c b/drivers/hwmon/pmbus/max20754.c
-new file mode 100644
-index 000000000000..5e29e8f8009b
---- /dev/null
-+++ b/drivers/hwmon/pmbus/max20754.c
-@@ -0,0 +1,390 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Maxim MAX20754 Dual-Output, Configurable Multiphase
-+ * Power-Supply Controller with PMBus Interface
-+ * and Internal Buck Converter Driver
-+ *
-+ * Author: Atif Emre Ofluoglu <atif.ofluoglu@analog.com>
-+ * Copyright (C) 2022 Analog Devices
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under  the terms of  the GNU General  Public License as published
-+ * by the Free Software Foundation;  either version 2 of the  License,
-+ * or (at your option) any later version.
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include "pmbus.h"
-+
-+enum chips { max20754 };
-+
-+#define MAX20754_NUM_PHASES 6
-+#define MAX20754_LINEAR_EXPONENT -10
-+
-+struct max20754_data {
-+	enum chips id;
-+	struct pmbus_driver_info info;
-+	struct i2c_client *rail2;
-+	bool smbus_i2c_block_read;
-+};
-+
-+#define to_max20754_data(x) container_of(x, struct max20754_data, info)
-+
-+enum max20754_reg_index {
-+	operation_index,
-+	on_off_config_index,
-+	vout_command_index,
-+	num_regs,
-+};
-+
-+static const u8 max20754_regs[num_regs][2] = {
-+	[operation_index] = {PMBUS_OPERATION, 1},
-+	[on_off_config_index] = {PMBUS_ON_OFF_CONFIG, 1},
-+	[vout_command_index] = {PMBUS_VOUT_COMMAND, 2},
-+};
-+
-+static u16 val_to_linear16(int val)
-+{
-+	return ((u16)val * 1000LL) >> -MAX20754_LINEAR_EXPONENT;
-+}
-+
-+static long linear16_to_val(s64 val)
-+{
-+	if (val == 0)
-+		return 0;
-+
-+	val <<= -MAX20754_LINEAR_EXPONENT;
-+	val = DIV_ROUND_CLOSEST_ULL(val, 1000);
-+	val = clamp_val(val, 0, 0xffff);
-+	return val;
-+}
-+
-+static int max20754_read_block_data(struct i2c_client *client, int reg,
-+				    u8 length, u8 *values)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max20754_data *data = to_max20754_data(info);
-+	int ret;
-+
-+	if (data->smbus_i2c_block_read) {
-+		ret = i2c_smbus_read_i2c_block_data(client, reg, length, values);
-+		if (ret < 1)
-+			return ret;
-+		ret = ret - 1;
-+		memcpy(values, &values[1], ret);
-+	} else {
-+		ret = i2c_smbus_read_block_data(client, reg, values);
-+	}
-+
-+	return ret;
-+}
-+
-+static int max20754_read_word(struct i2c_client *client, int page, int phase,
-+			      int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max20754_data *data = to_max20754_data(info);
-+
-+	if (reg > 0xFF)
-+		return -ENXIO;
-+
-+	if (reg == PMBUS_MFR_VOUT_MAX)
-+		reg = PMBUS_VOUT_MAX;
-+
-+	switch (page) {
-+	case 0:		/* RAIL1 */
-+		return i2c_smbus_read_word_data(client, reg);
-+	case 1:		/* RAIL2 */
-+		return i2c_smbus_read_word_data(data->rail2, reg);
-+	default:
-+		return -ENODATA;
-+	}
-+
-+	return -ENODATA;
-+}
-+
-+static int max20754_write_word(struct i2c_client *client, int page, int reg, u16 value)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max20754_data *data = to_max20754_data(info);
-+
-+	switch (reg) {
-+	case PMBUS_OPERATION:
-+		if (value >= 0x90 && value <= 0x93)
-+			return -EOPNOTSUPP;
-+		break;
-+	case PMBUS_MFR_VOUT_MAX:
-+		reg = PMBUS_VOUT_MAX;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	switch (page) {
-+	case 0:		/* RAIL1 */
-+		return i2c_smbus_write_word_data(client, reg, value);
-+	case 1:		/* RAIL2 */
-+		return i2c_smbus_write_word_data(data->rail2, reg, value);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+	return -ENODATA;
-+}
-+
-+static int max20754_read_byte(struct i2c_client *client, int page, int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max20754_data *data = to_max20754_data(info);
-+	int vout_mode;
-+
-+	if (reg == PMBUS_VOUT_MODE) {
-+		vout_mode = i2c_smbus_read_byte_data(client, reg);
-+		if (vout_mode != 0x2C)
-+			vout_mode = 0x16;
-+		return vout_mode;
-+	}
-+
-+	switch (page) {
-+	case 0:		/* RAIL1 */
-+		return i2c_smbus_read_byte_data(client, reg);
-+	case 1:		/* RAIL2 */
-+		return i2c_smbus_read_byte_data(data->rail2, reg);
-+	default:
-+		return -ENODATA;
-+	}
-+	return -ENODATA;
-+}
-+
-+static int max20754_write_byte(struct i2c_client *client, int page, u8 reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max20754_data *data = to_max20754_data(info);
-+
-+	if (reg == PMBUS_CLEAR_FAULTS) {
-+		switch (page) {
-+		case 0:
-+			return i2c_smbus_write_byte(client, reg);
-+		case 1:
-+			return i2c_smbus_write_byte(data->rail2, reg);
-+		default:
-+			return -ENODATA;
-+		}
-+	}
-+	return -ENODATA;
-+}
-+
-+static int max20754_identify(struct i2c_client *client,
-+			     struct pmbus_driver_info *info)
-+{
-+	struct device *dev = &client->dev;
-+	u8 buf[9] = {0};
-+	int ret;
-+
-+	ret = max20754_read_block_data(client,
-+				       PMBUS_IC_DEVICE_ID, 9,
-+				       buf);
-+
-+	if (ret < 0 || ret < 8)
-+		return -ENODEV;
-+
-+	/*
-+	 * PMBUS_IC_DEVICE_ID is expected to return "MAX20754"
-+	 */
-+
-+	if (strncmp(buf, "MAX20754", 8)) {
-+		buf[ret] = '\0';
-+		dev_err(dev, "Unsupported chip '%s'\n", buf);
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+static ssize_t max20754_register_store(struct device *dev,
-+				       struct device_attribute *attr, const char *buf,
-+				       size_t count)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct i2c_client *client = to_i2c_client(dev->parent);
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max20754_data *data = to_max20754_data(info);
-+
-+	u8 cmd = max20754_regs[sattr->index][0];
-+	u8 reg_size = max20754_regs[sattr->index][1];
-+	u8 rail_number = sattr->nr;
-+	long val = 0;
-+	int ret;
-+
-+	ret = kstrtol(buf, 10, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (rail_number == 1)
-+		client = data->rail2;
-+
-+	if (cmd == PMBUS_VOUT_COMMAND)
-+		val = linear16_to_val(val);
-+
-+	switch (reg_size) {
-+	case 1:
-+		ret = i2c_smbus_write_byte_data(client, cmd, val);
-+		break;
-+	case 2:
-+		ret = i2c_smbus_write_word_data(client, cmd, val);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static ssize_t max20754_register_show(struct device *dev,
-+				      struct device_attribute *attr, char *buf)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct i2c_client *client = to_i2c_client(dev->parent);
-+
-+	int ret_val = 0;
-+	u8 cmd = max20754_regs[sattr->index][0];
-+	u8 reg_size = max20754_regs[sattr->index][1];
-+	u8 rail_number = sattr->nr;
-+
-+	switch (reg_size) {
-+	case 1:
-+		ret_val = max20754_read_byte(client, rail_number, cmd);
-+		break;
-+	case 2:
-+		ret_val = max20754_read_word(client, rail_number, 0, cmd);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	if (ret_val < 0)
-+		return -ENODATA;
-+
-+	if (cmd == PMBUS_VOUT_COMMAND)
-+		ret_val = val_to_linear16(ret_val);
-+
-+	return sprintf(buf, "%d\n", ret_val);
-+}
-+
-+#define MAX20754_REGISTER_ATTR_RW(__name, __reg_index, __size) \
-+	SENSOR_DEVICE_ATTR_2_RW(__name, max20754_register, __size, __reg_index)
-+
-+static MAX20754_REGISTER_ATTR_RW(operation, operation_index, 0);
-+static MAX20754_REGISTER_ATTR_RW(on_off_config, on_off_config_index, 0);
-+
-+static MAX20754_REGISTER_ATTR_RW(vout1_command, vout_command_index, 0);
-+static MAX20754_REGISTER_ATTR_RW(vout2_command, vout_command_index, 1);
-+
-+static struct attribute *max20754_attrs[] = {
-+	&sensor_dev_attr_operation.dev_attr.attr,
-+	&sensor_dev_attr_on_off_config.dev_attr.attr,
-+	&sensor_dev_attr_vout1_command.dev_attr.attr,
-+	&sensor_dev_attr_vout2_command.dev_attr.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(max20754);
-+
-+static struct pmbus_driver_info max20754_info = {
-+	.pages = 2,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.vrm_version[0] = vr12,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_POWER] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP,
-+	.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_INPUT |
-+		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP,
-+	.identify = max20754_identify,
-+	.read_byte_data = max20754_read_byte,
-+	.read_word_data = max20754_read_word,
-+	.write_byte = max20754_write_byte,
-+	.write_word_data = max20754_write_word,
-+};
-+
-+static void max20754_remove(void *_data)
-+{
-+	struct max20754_data *data = _data;
-+
-+	i2c_unregister_device(data->rail2);
-+}
-+
-+static int max20754_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct max20754_data *data;
-+	bool i2c_block_data_ok = false;
-+	int ret = 0;
-+
-+	ret = i2c_check_functionality(client->adapter,
-+				      I2C_FUNC_SMBUS_READ_BYTE_DATA |
-+				      I2C_FUNC_SMBUS_READ_BLOCK_DATA);
-+
-+	if (!ret) {
-+		ret = i2c_check_functionality(client->adapter,
-+					      I2C_FUNC_SMBUS_READ_BYTE_DATA |
-+					      I2C_FUNC_SMBUS_I2C_BLOCK);
-+		if (!ret)
-+			return -ENODEV;
-+
-+		i2c_block_data_ok = true;
-+	}
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->rail2 = i2c_new_dummy_device(client->adapter, client->addr + 1);
-+	if (IS_ERR(data->rail2)) {
-+		dev_err(dev, "Failed to register rail2 client\n");
-+		return PTR_ERR(data->rail2);
-+	}
-+	ret = devm_add_action_or_reset(dev, max20754_remove, data);
-+	if (ret)
-+		return ret;
-+
-+	data->info = max20754_info;
-+	data->info.groups = max20754_groups;
-+	data->smbus_i2c_block_read = i2c_block_data_ok;
-+
-+	return pmbus_do_probe(client, &data->info);
-+}
-+
-+static const struct i2c_device_id max20754_id[] = {
-+	{"max20754", max20754},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, max20754_id);
-+
-+static struct i2c_driver max20754_driver = {
-+	.driver = {
-+		   .name = "max20754",
-+		   },
-+	.probe_new = max20754_probe,
-+	.remove = pmbus_do_remove,
-+	.id_table = max20754_id,
-+};
-+
-+module_i2c_driver(max20754_driver);
-+
-+MODULE_AUTHOR("Atif Emre Ofluoglu <atif.ofluoglu@analog.com>");
-+MODULE_DESCRIPTION("PMBus driver for Maxim MAX20754");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
--- 
-2.25.1
-
+On 07-Jul-22 4:09 PM, Guenter Roeck wrote:
+> On Thu, Jul 07, 2022 at 04:01:54PM +0200, Kallas, Pawel wrote:
+>> On 06-Jul-22 3:17 PM, Guenter Roeck wrote:
+>>> On Wed, Jul 06, 2022 at 12:40:21PM +0200, Kallas, Pawel wrote:
+>>>> Add support for reading EIN or EOUT registers and expose power calculated
+>>>> from energy. This is more accurate than PIN and POUT power readings.
+>>>> Readings are exposed in new hwmon files power1_average and power2_average.
+>>>> Also add support for QUERY command that is needed to check availability
+>>>> of EIN and EOUT reads and its data format. Only direct data format is
+>>>> supported due to lack of test devices supporting other formats.
+>>>>
+>>> I don't think this is a good idea. EIN/EOUT report energy consumption,
+>>> not power.
+>> According to PMBus-Specification-Rev-1-3-1-Part-II-20150313 "READ_EIN and
+>> READ_EOUT commands provide information that can be used to calculate power
+>> consumption". That is accumulator summing instantaneous input power
+>> expressed in "watt-samples" and counter indicating number of samples.
+>> The only reasonable thing that can be done with those values is calculating
+>> power.
+> Yes, but that is not the responsibility of the kernel. Just like we don't add
+> up power measurements to calculate energy, we don't take energy measurements
+> and calculate power consumption. Similar, we don't take voltage and current
+> measurements and report power consumption from it either.
+>
+>>> The "average" attributes as implemented don't really report
+>>> a reliable number since the averaging period is not defined.
+>> Agree, it is calculating average power since last read, which could be
+>> incorrect with multiple consumers. However, this is the only possibility
+>> without adding some timer logic.
+> Another reason for doing it in userspace. Read energy every N seconds, and use
+> the difference to calculate average power consumption average over that time
+> period.
+We cannot "read energy". Raw value from READ_EIN and READ_EOUT is not 
+energy.
+>>> Also, kernel
+>>> drivers should not make up such numbers. I don't mind adding energy
+>>> attribute support, but that should be reported as what it is, energy.
+>>> What userspace does with it would then be a userspace concern; it can
+>>> calculate all kinds of averages from it as much as it wants.
+>> Returning direct value of read registers would also work for our use case,
+>> but it is not in line with sysfs interface.
+> I did not suggest that. Just use the "energyX_in" attributes.
+Expressing raw value from READ_EIN or READ_EOUT is not in line with
+sysfs interface, because "energyX_in" should have microJoules as unit.
+Those commands have very specific format that is not actually energy.
+Since the only sensible use case for those raw values is calculating power
+we figured it would be better (and more accurate) to do it in kernel.
+Also, if we just express raw value, the user would have to know data format
+of the values for the device and know register format to decode the data.
+>
+> Thanks,
+> Guenter
+>
+>>> Also, new attributes should not depend on query command support.
+>>> I don't mind adding support for that, but it would have to be independent
+>>> of energy attribute support.
+>>>
+>>> Thanks,
+>>> Guenter
+>>>
+>>>> Kallas, Pawel (3):
+>>>>     hwmon: (pmbus) add support for QUERY command
+>>>>     hwmon: (pmbus) refactor sensor initialization
+>>>>     hwmon: (pmbus) add EIN and EOUT readings
+>>>>
+>>>>    Documentation/hwmon/pmbus-core.rst |   7 +
+>>>>    drivers/hwmon/pmbus/pmbus.c        |  20 +++
+>>>>    drivers/hwmon/pmbus/pmbus.h        |  19 +++
+>>>>    drivers/hwmon/pmbus/pmbus_core.c   | 261 +++++++++++++++++++++++++++--
+>>>>    4 files changed, 291 insertions(+), 16 deletions(-)
+>>>>
+>>>>
+>>>> base-commit: 7c1de25c06f31b04744beae891baf147af9ba0cb
