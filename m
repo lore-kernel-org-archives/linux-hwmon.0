@@ -2,469 +2,210 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B072CC433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jul 2022 11:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E0EAC43334
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jul 2022 14:02:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbiGGLvO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Jul 2022 07:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S234797AbiGGOCG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Jul 2022 10:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiGGLvL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2022 07:51:11 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA47A33374;
-        Thu,  7 Jul 2022 04:51:09 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id x10so15457820edd.13;
-        Thu, 07 Jul 2022 04:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bU2zQFkRZ2FwrZP004tARnOTDvaLoDCbqwtC2I5choc=;
-        b=ksYDnSxq3vF7KQVz5MUwjcHhPCMNLafbeghfsXnXwa+R0DX8lTEEcnMig03NcFgpEI
-         uEZpbrbDy5Duf5xwAFcMahDlDHCHjWkhCZcC3iFMDrl8yVPJBd795y1oS+DzmKjtiEtT
-         0+lOBSp6AdblkctJsjQszrNF7lHK/HUeswvn4LBh3VfBHrzLQ6a3bN3LB7XOBvQyLJHJ
-         4lwVWFcT0iYNwrx24Y9lz5i9dQN312lz/Tj9K9Fh5vBxX21ntf9pTczJDrpDF3FEUbrQ
-         7sHVL+8rNtxwMJd36MirWoVrnvQjqjSUV4VZt3cpGHifMpK+WZILEVOs1SyldIOgmPFz
-         G9LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bU2zQFkRZ2FwrZP004tARnOTDvaLoDCbqwtC2I5choc=;
-        b=Niv5OPeSWtmYlYuf99Ka60ehiZAAynX8AsF2zTWyTt9Vg2bBDIsuILRmZcODa6PU0Q
-         AgfklaDsVDkyikyADKdFCC5vzqAWylgHnwRfMGdaK1gw0HgmiQidftNkOmKi/cl88e31
-         R5/OE3tp+WYvhraFmxQPUJse1+B0KbBfh1euouwY94qpRzA7+AE5OeQsCV3exHiB3abc
-         euFsL63928zZCk2LTiee/Vh0FuFLVFcLTv2E3sLSvm2xWwPL4K48HDH79HVs8LXyfBYS
-         ivwy3k/y52t3ozYq1wu8lKCQhaat9QpL0REu9BmUo6/0aQGf97gB1wVCS1t0c1FsNyD6
-         DgFQ==
-X-Gm-Message-State: AJIora+mzfIkF7DeZUpjzZNIepBamdLZox4NTXlnUDHY7VyJQIT14rHL
-        mVQYBWOV1uywKwH3+txz9cfZ6cxuxdc=
-X-Google-Smtp-Source: AGRyM1s+vH02J06SN5ts752+F8Luu9WDi3vVXKIckVEulxgjHabPx1mdD/bPuzetpkyoL08xF/RPjg==
-X-Received: by 2002:aa7:d60a:0:b0:43a:5795:b729 with SMTP id c10-20020aa7d60a000000b0043a5795b729mr28750559edr.230.1657194667922;
-        Thu, 07 Jul 2022 04:51:07 -0700 (PDT)
-Received: from DESKTOP-A98GP49.. (cable-178-148-254-8.dynamic.sbb.rs. [178.148.254.8])
-        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b007262a5e2204sm18759227ejk.153.2022.07.07.04.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 04:51:07 -0700 (PDT)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (aquacomputer_d5next) Move device-specific data into struct aqc_data
-Date:   Thu,  7 Jul 2022 13:50:50 +0200
-Message-Id: <20220707115050.90021-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S232177AbiGGOCF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2022 10:02:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57145FE3;
+        Thu,  7 Jul 2022 07:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657202523; x=1688738523;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ko/TXVUVELcxr6BhmvrO/jeTabGS83G1B3/1W0uJfcA=;
+  b=JsOQ/+Iyw+JNEQ6ZUIYc/gEQymSeKy5ypcDPSmCrnOStD0w5rFqqtpsW
+   RJSl7rtoQPdaPIxaA9BxjCkS8Dy1g6qQ9I9q09Kqk1DIf2Bbv9KpSWNmF
+   q4eDFJ8OAqkULuL0CUQtABgw5/L0R9OVQZOBUcYDYd222p6OKso2VQhLL
+   4mDnthZz0K8KL0he/yOVGnGcmwNwKQiRXzyPlQvNyLnKi6YHw5+75Es9u
+   dpNnk3xjzAeoW8J28udL635rvQtIHbwthUMB7Dlz7N4tuo2Z6J+Gt6pFG
+   h48OIUIV0sOhO/Rm7QL/2uOf6vDhxFqctSO4nlN6/YtVxUmZb5b4TfRGv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="285158176"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="285158176"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 07:02:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="720524903"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga004.jf.intel.com with ESMTP; 07 Jul 2022 07:02:03 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 7 Jul 2022 07:02:02 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 7 Jul 2022 07:02:02 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 7 Jul 2022 07:02:02 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 7 Jul 2022 07:02:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DjNUFbOpQzDojOiOxNKLvZEVdxNfiYvz1i0qkLej4izcule6c3Fq46mTce4FqkpSdwkVGnetYcH6h9RjA5VEPKHf/7JmYFAlNbg2gHz5UqOW9zN5U9eRFulN2PDp317e8r3yEwGGFha/I3QEn1GkLBtV1nfOXoGXPzO9VfRA6I76KaSvc+VrybIWDxJE+B74WfrAUTFPBXSxdu3wXvZZmC0Fhs5E2I6dSmA+DVQYvfkKi12oy5qZ189dgczjE/WjTl4SDgI24fJ+SoUC4/NO+STAS5ls8wwq22WR0tRuTCl8V6oDOhf5I9P67E+q1Wtu4Y6o0MqQgRZDjfVEA7SMNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UbySkNz9P1bp7QNLCiI8mofUBcbHnJMA+WTZ1VcgEfQ=;
+ b=EbFd3vtoit2f7lo8lg2kvnFK+vu86dA/wEOSkvJolCnodt3a0j1tFKa62QlP85hYU+AaPBEZHDpvZWojjLYbuCoKxoe1kGCCUnN8FRaob9iDuGX6mYQb1iyS+dD214ftr+pe6F3jggvkHworTMYuRDGKbtuEvJ2Z/mWKWpRXiXR8ah1eGUzOY3ZDwzX2rrnPBPDsp4dUxSTbtNzMKhAjy2/9W4j3Q2WdvEIE+lGRFVhhb51cUywr/tB0FIyvt+KWbtDnGqRO/S/Vvmot6XwQrUTKOFIaOyBZ3xL4//cd5ou0hR/6302EnzkL+n9CfyxLAdM8kIk3Ax5Zcs/A+DIA6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN6PR11MB1570.namprd11.prod.outlook.com (2603:10b6:405:a::21)
+ by MWHPR11MB2014.namprd11.prod.outlook.com (2603:10b6:300:25::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 7 Jul
+ 2022 14:02:00 +0000
+Received: from BN6PR11MB1570.namprd11.prod.outlook.com
+ ([fe80::8df4:fec8:4db5:8bde]) by BN6PR11MB1570.namprd11.prod.outlook.com
+ ([fe80::8df4:fec8:4db5:8bde%5]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
+ 14:02:00 +0000
+Message-ID: <dc8771ad-b48b-317d-b132-47208ef58710@intel.com>
+Date:   Thu, 7 Jul 2022 16:01:54 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.0
+Subject: Re: [PATCH 0/3] hwmon: (pmbus) add power from energy readings
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <iwona.winiarska@intel.com>
+References: <20220706104024.3118590-1-pawel.kallas@intel.com>
+ <20220706131758.GA652205@roeck-us.net>
+From:   "Kallas, Pawel" <pawel.kallas@intel.com>
+In-Reply-To: <20220706131758.GA652205@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0102.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a9::18) To BN6PR11MB1570.namprd11.prod.outlook.com
+ (2603:10b6:405:a::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 72d0372e-100d-4bb1-d7f1-08da602142ed
+X-MS-TrafficTypeDiagnostic: MWHPR11MB2014:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zxsq61BooCmo92Ju9f4EljrG8LUd7MI/E5NE4BOjBwySiZ5zi8P+BYZY4HP2z9aMxWQBT0/YYKRCIb+0fKw1VeYxi7MET8Bv6qzQRPgoYoHJNxbbkeSKMnjqJa3Z3sNX/XQq95OYyQOPOT9ywa9Y5dz+/qs9rzbPIiHugz1jgPv6O5Jf9o92hUDHJxM87pfl2WY9a2vy0nk/MgG96k1uYGmiBnXEugiWtYITPgtWTpbDX+Qgbwb303tj5IWyWGbFF5vEmn2qy5Njh8eKNnSMu8vRl3T3u7qQJ+58ALt/3TJQswKPKWIkS19R8VkXbAbvGUBnrpYbvHN28Rm4ryxV/bwEfmq3QpR/2zCP4dibYI9puuxeYJ0vgveep+UDc3c74zasD7EgLEzvxlsEX6YJWDXLtiPCf8EMlCcho9jHtssctY2CkrV2p8DhqCnX2ZXymFKxtMe9/urGzXvIJOJt1clscJrQIdBjwI3ab3Gqqd3EvrIB1sqbMcEb3h0ZYEX+XDvaq/Qo3wFMERvX/W/NldO0XWyfWtJcMqHgyl4OzsVEolm3DfixaqolxjCLBOQsb7W2UMQQg4OxjKQjMvBPoUCXxfFT0Fr/1Bkb0dZyjilX2R6X/vS1+MNYWcG8ahc1DcniXlL/Y63MV4ZJjm2vzH/EuyoWn/CSbVJN5qgiD/Yl2emoATCK7Iu4zuIL4nI/tnjAFzxBnYy+GzqRwS6OHsmlTnTXVEhCJOea1govQ8y/TzCf551GcPWf7qwMYSFQ3x5Lu1yknsYdzkgYameDH+JXSVL213JEgN6bUwyvY32utLmAfMwCD8ZNAOCBjZI90L1/5ZM3JOCElv0lUL+T4A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1570.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(376002)(366004)(39860400002)(396003)(8676002)(66556008)(66476007)(31696002)(19627235002)(2906002)(86362001)(4326008)(31686004)(36756003)(83380400001)(66946007)(6916009)(6666004)(5660300002)(38100700002)(6486002)(6506007)(8936002)(2616005)(41300700001)(186003)(478600001)(107886003)(6512007)(316002)(82960400001)(26005)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MmRuVGdwZ2pRK2pqYU1aT1A2UlJOVEhTWEpaWDhyMHA5NVNQai83cVIrRjJy?=
+ =?utf-8?B?RVZoNFd3M3ZkL3FON1FoTFVSS3VTNzdZRUxpMHZVMDRHdGo5ZWFQK0JKWlF5?=
+ =?utf-8?B?cWdIQVZuVDNxWllJTENjQXdEVUNOS3ovVUNaZjYwRjNQRWJyN0xlZlI2b3hB?=
+ =?utf-8?B?VFFqZWgzKzF0YUx2cTNTZUVRM1YxTEtQa3hkVzVFR1I2TzhlRjYrbHdOSzVJ?=
+ =?utf-8?B?VHhsYnMyTFNCazBuVTlvWmpQWm9pMkc5Z28wQTBvdjZYVkhlemNreHNTVVlF?=
+ =?utf-8?B?ZjA4MnBnR1JrT0k4TExtNWVUdlEyVmFYYkpKQzEzWGpGQ2VoVDdLSWdSdlhF?=
+ =?utf-8?B?MmhpVWRUK3htT0ppQzdNOWs0MDB2R0ZuMFBiNjA0bng1L0VwY3VoQ0o4c0VS?=
+ =?utf-8?B?TXlrWnM0U3c1S0pIWkhZR0hTN00ydUwvckQ0bTdKb3hSMUpYV3BjeGZYdDg0?=
+ =?utf-8?B?MXgzUHVoclF6RUFlVCtSeUNOcjlZTWVKOExVT1UyQTBJUy96OVNzUzE0TUww?=
+ =?utf-8?B?aW1aVjBJS0VvMnlqalVqOVRkNUlxaVdCTm1qNGVDelJEM0p1VU45QnNnQzNw?=
+ =?utf-8?B?RWZ2T0MzWE5qTEtjUjRoMnAyZTBpdjNibTlHVDJ0WnJETTgzcU0zU0daS3pk?=
+ =?utf-8?B?VTVBalFLYmVmNk1rdU81UHNCYWppZkx4cmVJcnNQdzRma0xJVHl5ajUwNnJS?=
+ =?utf-8?B?TTlUU3VMUDBBVlJVVVR6QkpZbHVQTEkvRkNiTDR2MldhbjgwQ1UyUXlTOUxL?=
+ =?utf-8?B?TFUxVzY0Z2ZSMG1FaHFWckgxeFMwdk9uUkl3ZGRBUzE4SlNJYlZFblVucjZh?=
+ =?utf-8?B?T3dHZG1VMk1DK3ZuRFBvRXdkK3FBdFNXZ0ROZzdJeENTdkdWWnFCcXVESmZy?=
+ =?utf-8?B?K04wNXJ4KzVFdVhmcUE3S2pMbytjaXV3K3QwMVl2MERsMk1PTGNyaXJCMEJW?=
+ =?utf-8?B?ZVpqUnM5cURqeUtXOHNHQTdaMVVqQ3FxazE0S21QQy9NMWxuSEUwWFVMOEZk?=
+ =?utf-8?B?M3FTSG9kSldtTmsxZjJ5a0dJQytjWlU4cUJvcnpINzRZQy80VWF3WG1PVE9F?=
+ =?utf-8?B?a0JxbEhmRkdsWlA5REtZRmE5RGpBZnd2YmQ0MmFSTXpJRGhXeEw4QndxUDYy?=
+ =?utf-8?B?UG9pR1RvTzYvaUVFTU9vamdvYzhacnYvdVQxSm0rRFhLVUV1aDdxSFgvYUVZ?=
+ =?utf-8?B?QWgzQ3JTdGk5aGhrRkNwSWVsN0VOaVBRSXFRaVYrN0V1ZndSdGgxVy95RTdE?=
+ =?utf-8?B?UVVMVXErb2RCdVlQODk2QmN0R1pIcm1CN0tsNnJvRzVhVnhCZERWYkVmVndl?=
+ =?utf-8?B?SHBRMHBmU0tjWTRuK1lNaHphcXUrd21GbXIrRmlQdnp2QkFFNDFkWWd0VzFs?=
+ =?utf-8?B?RGw2bHV4T1ZFVXozT3VwWXN4ejZ6MjBTcjkyZE13NDBzVTZrdG1yeUYvb3Vp?=
+ =?utf-8?B?Smt5NkVtOWp3aFl5aDdOdjhIYzVISkF5dzUzSnExaFczUUlSc2pZMWNkMjly?=
+ =?utf-8?B?TGdSV0VpUnBLNTRrYXdpV0luRDV0Ynl1WVZQL2ZYSnN1emN3ZGlNTEJHTXdk?=
+ =?utf-8?B?WGY4VGpGYXp1TTdmTWtaNlkrK1NnNDJyeDVvbTdqNjhrVU55MFhNZzB4MWhW?=
+ =?utf-8?B?L2FNb0QrZnVlMFhNMXBBeUtIWSsxRytkeWhXQ3JtTzhpY3JlZWYrRXRwbGc3?=
+ =?utf-8?B?OTdJYXFENkMvcnUxT2lKU3oxcTFnQmhOMWtFUi9RbHU0UDB5R29xNXpKSGZC?=
+ =?utf-8?B?eWZBa25NNUJKWW93UUY0UzlrS3JIQnRiQkN4QzEvcFNTUDM0bDZmUVVHRkda?=
+ =?utf-8?B?QTV3SmFuZ1U5dnI4NGNHTHYydnVIMXcrS0RtdE1mRGRqSzlHQ0lIT1JpZVZK?=
+ =?utf-8?B?Z1FxWkw3ek5aK0lWc256UkRrcVFyQjcwUG1BOURhUWoyUzN5RlhPK0RvNm5M?=
+ =?utf-8?B?a29vd2pIODI2K1BUK0RwTzRERUdpWjhWTlZJUlhCOXpoZXFCQ0YyKzdRNk9q?=
+ =?utf-8?B?MllLVEE4SWJOZ2RKS3F2RnhTRG54TncyQ0VjZXYwRXVWOGRPS2V6cCtIeEd3?=
+ =?utf-8?B?dWU4SXNMMHFoaXJWdm9iOG9WOUdUeEhlMmlzVlFVemc2Q2x0VzhPOVluVXRX?=
+ =?utf-8?Q?Krjw1LVM2bxh1uYdwm7YnZtt2?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72d0372e-100d-4bb1-d7f1-08da602142ed
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1570.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 14:02:00.2698
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eJbaNO4PbwjSdREuUV2jYHSPCirc/tlBoaSAhEpP+7zVAIQT4btbY34TLxqTt4RCeNNpgjQtUfs+A10gwNDShQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB2014
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-As preparation for adding support for more devices in upcoming patches,
-move device-specific data, such as number of fans, temperature sensors,
-register offsets etc. to struct aqc_data. This is made possible by
-the fact that the supported Aquacomputer devices share the same layouts
-of sensor substructures. This allows aqc_raw_event() and others to stay
-general and not be cluttered with similar loops for each device.
+On 06-Jul-22 3:17 PM, Guenter Roeck wrote:
+> On Wed, Jul 06, 2022 at 12:40:21PM +0200, Kallas, Pawel wrote:
+>> Add support for reading EIN or EOUT registers and expose power calculated
+>> from energy. This is more accurate than PIN and POUT power readings.
+>> Readings are exposed in new hwmon files power1_average and power2_average.
+>> Also add support for QUERY command that is needed to check availability
+>> of EIN and EOUT reads and its data format. Only direct data format is
+>> supported due to lack of test devices supporting other formats.
+>>
+> I don't think this is a good idea. EIN/EOUT report energy consumption,
+> not power.
 
-Signed-off-by: Jack Doan <me@jackdoan.com>
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
-Changes in v2:
-- Moved constants back to defines
-- Converted register offsets to hex
----
- drivers/hwmon/aquacomputer_d5next.c | 244 +++++++++++-----------------
- 1 file changed, 92 insertions(+), 152 deletions(-)
+According to PMBus-Specification-Rev-1-3-1-Part-II-20150313 "READ_EIN and
+READ_EOUT commands provide information that can be used to calculate power
+consumption". That is accumulator summing instantaneous input power
+expressed in "watt-samples" and counter indicating number of samples.
+The only reasonable thing that can be done with those values is 
+calculating power.
 
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index a0e69f7ece36..0e56cc711a26 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -54,56 +54,40 @@ static u8 secondary_ctrl_report[] = {
- 	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
- };
- 
--/* Register offsets for the D5 Next pump */
--#define D5NEXT_POWER_CYCLES		24
--
--#define D5NEXT_COOLANT_TEMP		87
--
--#define D5NEXT_PUMP_SPEED		116
--#define D5NEXT_FAN_SPEED		103
--
--#define D5NEXT_PUMP_POWER		114
--#define D5NEXT_FAN_POWER		101
--
--#define D5NEXT_PUMP_VOLTAGE		110
--#define D5NEXT_FAN_VOLTAGE		97
--#define D5NEXT_5V_VOLTAGE		57
-+/* Register offsets for all Aquacomputer devices */
-+#define AQC_TEMP_SENSOR_SIZE		0x02
-+#define AQC_TEMP_SENSOR_DISCONNECTED	0x7FFF
-+#define AQC_FAN_PERCENT_OFFSET		0x00
-+#define AQC_FAN_VOLTAGE_OFFSET		0x02
-+#define AQC_FAN_CURRENT_OFFSET		0x04
-+#define AQC_FAN_POWER_OFFSET		0x06
-+#define AQC_FAN_SPEED_OFFSET		0x08
- 
--#define D5NEXT_PUMP_CURRENT		112
--#define D5NEXT_FAN_CURRENT		99
-+/* Register offsets for the D5 Next pump */
-+#define D5NEXT_POWER_CYCLES		0x18
-+#define D5NEXT_COOLANT_TEMP		0x57
-+#define D5NEXT_NUM_FANS			2
-+#define D5NEXT_NUM_SENSORS		1
-+#define D5NEXT_PUMP_OFFSET		0x6c
-+#define D5NEXT_FAN_OFFSET		0x5f
-+#define D5NEXT_5V_VOLTAGE		0x39
-+static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
- 
- /* Register offsets for the Farbwerk RGB controller */
- #define FARBWERK_NUM_SENSORS		4
- #define FARBWERK_SENSOR_START		0x2f
--#define FARBWERK_SENSOR_SIZE		0x02
--#define FARBWERK_SENSOR_DISCONNECTED	0x7FFF
- 
- /* Register offsets for the Farbwerk 360 RGB controller */
- #define FARBWERK360_NUM_SENSORS		4
- #define FARBWERK360_SENSOR_START	0x32
--#define FARBWERK360_SENSOR_SIZE		0x02
--#define FARBWERK360_SENSOR_DISCONNECTED	0x7FFF
- 
- /* Register offsets for the Octo fan controller */
- #define OCTO_POWER_CYCLES		0x18
- #define OCTO_NUM_FANS			8
--#define OCTO_FAN_PERCENT_OFFSET		0x00
--#define OCTO_FAN_VOLTAGE_OFFSET		0x02
--#define OCTO_FAN_CURRENT_OFFSET		0x04
--#define OCTO_FAN_POWER_OFFSET		0x06
--#define OCTO_FAN_SPEED_OFFSET		0x08
--
--static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
--
- #define OCTO_NUM_SENSORS		4
- #define OCTO_SENSOR_START		0x3D
--#define OCTO_SENSOR_SIZE		0x02
--#define OCTO_SENSOR_DISCONNECTED	0x7FFF
--
--#define OCTO_CTRL_REPORT_SIZE			0x65F
--#define OCTO_CTRL_REPORT_CHECKSUM_OFFSET	0x65D
--#define OCTO_CTRL_REPORT_CHECKSUM_START		0x01
--#define OCTO_CTRL_REPORT_CHECKSUM_LENGTH	0x65C
-+#define OCTO_CTRL_REPORT_SIZE		0x65F
-+static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
- 
- /* Fan speed registers in Octo control report (from 0-100%) */
- static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0x259, 0x2AE };
-@@ -201,11 +185,18 @@ struct aqc_data {
- 	int checksum_length;
- 	int checksum_offset;
- 
-+	int num_fans;
-+	u8 *fan_sensor_offsets;
-+	u16 *fan_ctrl_offsets;
-+	int num_temp_sensors;
-+	int temp_sensor_start_offset;
-+	u16 power_cycle_count_offset;
-+
- 	/* General info, same across all devices */
- 	u32 serial_number[2];
- 	u16 firmware_version;
- 
--	/* How many times the device was powered on */
-+	/* How many times the device was powered on, if available */
- 	u32 power_cycles;
- 
- 	/* Sensor values */
-@@ -323,56 +314,35 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
- 
- 	switch (type) {
- 	case hwmon_temp:
--		switch (priv->kind) {
--		case d5next:
--			if (channel == 0)
--				return 0444;
--			break;
--		case farbwerk:
--		case farbwerk360:
--		case octo:
-+		if (channel < priv->num_temp_sensors)
- 			return 0444;
--		default:
--			break;
--		}
- 		break;
- 	case hwmon_pwm:
--		switch (priv->kind) {
--		case octo:
-+		if (priv->fan_ctrl_offsets && channel < priv->num_fans) {
- 			switch (attr) {
- 			case hwmon_pwm_input:
- 				return 0644;
- 			default:
- 				break;
- 			}
--			break;
--		default:
--			break;
- 		}
- 		break;
- 	case hwmon_fan:
- 	case hwmon_power:
- 	case hwmon_curr:
--		switch (priv->kind) {
--		case d5next:
--			if (channel < 2)
--				return 0444;
--			break;
--		case octo:
-+		if (channel < priv->num_fans)
- 			return 0444;
--		default:
--			break;
--		}
- 		break;
- 	case hwmon_in:
- 		switch (priv->kind) {
- 		case d5next:
--			if (channel < 3)
-+			/* Special case to support voltage sensor */
-+			if (channel < priv->num_fans + 1)
- 				return 0444;
- 			break;
--		case octo:
--			return 0444;
- 		default:
-+			if (channel < priv->num_fans)
-+				return 0444;
- 			break;
- 		}
- 		break;
-@@ -406,16 +376,12 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		*val = priv->power_input[channel];
- 		break;
- 	case hwmon_pwm:
--		switch (priv->kind) {
--		case octo:
--			ret = aqc_get_ctrl_val(priv, octo_ctrl_fan_offsets[channel]);
-+		if (priv->fan_ctrl_offsets) {
-+			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel]);
- 			if (ret < 0)
- 				return ret;
- 
- 			*val = aqc_percent_to_pwm(ret);
--			break;
--		default:
--			break;
- 		}
- 		break;
- 	case hwmon_in:
-@@ -469,19 +435,15 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 	case hwmon_pwm:
- 		switch (attr) {
- 		case hwmon_pwm_input:
--			switch (priv->kind) {
--			case octo:
-+			if (priv->fan_ctrl_offsets) {
- 				pwm_value = aqc_pwm_to_percent(val);
- 				if (pwm_value < 0)
- 					return pwm_value;
- 
--				ret = aqc_set_ctrl_val(priv, octo_ctrl_fan_offsets[channel],
-+				ret = aqc_set_ctrl_val(priv, priv->fan_ctrl_offsets[channel],
- 						       pwm_value);
- 				if (ret < 0)
- 					return ret;
--				break;
--			default:
--				break;
- 			}
- 			break;
- 		default:
-@@ -576,76 +538,38 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
- 	priv->serial_number[1] = get_unaligned_be16(data + SERIAL_SECOND_PART);
- 	priv->firmware_version = get_unaligned_be16(data + FIRMWARE_VERSION);
- 
--	/* Sensor readings */
--	switch (priv->kind) {
--	case d5next:
--		priv->power_cycles = get_unaligned_be32(data + D5NEXT_POWER_CYCLES);
--
--		priv->temp_input[0] = get_unaligned_be16(data + D5NEXT_COOLANT_TEMP) * 10;
-+	/* Temperature sensor readings */
-+	for (i = 0; i < priv->num_temp_sensors; i++) {
-+		sensor_value = get_unaligned_be16(data +
-+						  priv->temp_sensor_start_offset +
-+						  i * AQC_TEMP_SENSOR_SIZE);
-+		if (sensor_value == AQC_TEMP_SENSOR_DISCONNECTED)
-+			priv->temp_input[i] = -ENODATA;
-+		else
-+			priv->temp_input[i] = sensor_value * 10;
-+	}
- 
--		priv->speed_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_SPEED);
--		priv->speed_input[1] = get_unaligned_be16(data + D5NEXT_FAN_SPEED);
-+	/* Fan speed and related readings */
-+	for (i = 0; i < priv->num_fans; i++) {
-+		priv->speed_input[i] =
-+		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] + AQC_FAN_SPEED_OFFSET);
-+		priv->power_input[i] =
-+		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] +
-+				       AQC_FAN_POWER_OFFSET) * 10000;
-+		priv->voltage_input[i] =
-+		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] +
-+				       AQC_FAN_VOLTAGE_OFFSET) * 10;
-+		priv->current_input[i] =
-+		    get_unaligned_be16(data + priv->fan_sensor_offsets[i] + AQC_FAN_CURRENT_OFFSET);
-+	}
- 
--		priv->power_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_POWER) * 10000;
--		priv->power_input[1] = get_unaligned_be16(data + D5NEXT_FAN_POWER) * 10000;
-+	if (priv->power_cycle_count_offset != 0)
-+		priv->power_cycles = get_unaligned_be32(data + priv->power_cycle_count_offset);
- 
--		priv->voltage_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_VOLTAGE) * 10;
--		priv->voltage_input[1] = get_unaligned_be16(data + D5NEXT_FAN_VOLTAGE) * 10;
-+	/* Special-case sensor readings */
-+	switch (priv->kind) {
-+	case d5next:
- 		priv->voltage_input[2] = get_unaligned_be16(data + D5NEXT_5V_VOLTAGE) * 10;
--
--		priv->current_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_CURRENT);
--		priv->current_input[1] = get_unaligned_be16(data + D5NEXT_FAN_CURRENT);
--		break;
--	case farbwerk:
--		/* Temperature sensor readings */
--		for (i = 0; i < FARBWERK_NUM_SENSORS; i++) {
--			sensor_value = get_unaligned_be16(data + FARBWERK_SENSOR_START +
--							  i * FARBWERK_SENSOR_SIZE);
--			if (sensor_value == FARBWERK_SENSOR_DISCONNECTED)
--				priv->temp_input[i] = -ENODATA;
--			else
--				priv->temp_input[i] = sensor_value * 10;
--		}
--		break;
--	case farbwerk360:
--		/* Temperature sensor readings */
--		for (i = 0; i < FARBWERK360_NUM_SENSORS; i++) {
--			sensor_value = get_unaligned_be16(data + FARBWERK360_SENSOR_START +
--							  i * FARBWERK360_SENSOR_SIZE);
--			if (sensor_value == FARBWERK360_SENSOR_DISCONNECTED)
--				priv->temp_input[i] = -ENODATA;
--			else
--				priv->temp_input[i] = sensor_value * 10;
--		}
--		break;
--	case octo:
--		priv->power_cycles = get_unaligned_be32(data + OCTO_POWER_CYCLES);
--
--		/* Fan speed and related readings */
--		for (i = 0; i < OCTO_NUM_FANS; i++) {
--			priv->speed_input[i] =
--			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
--					       OCTO_FAN_SPEED_OFFSET);
--			priv->power_input[i] =
--			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
--					       OCTO_FAN_POWER_OFFSET) * 10000;
--			priv->voltage_input[i] =
--			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
--					       OCTO_FAN_VOLTAGE_OFFSET) * 10;
--			priv->current_input[i] =
--			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
--					       OCTO_FAN_CURRENT_OFFSET);
--		}
--
--		/* Temperature sensor readings */
--		for (i = 0; i < OCTO_NUM_SENSORS; i++) {
--			sensor_value = get_unaligned_be16(data + OCTO_SENSOR_START +
--							  i * OCTO_SENSOR_SIZE);
--			if (sensor_value == OCTO_SENSOR_DISCONNECTED)
--				priv->temp_input[i] = -ENODATA;
--			else
--				priv->temp_input[i] = sensor_value * 10;
--		}
- 		break;
- 	default:
- 		break;
-@@ -699,14 +623,8 @@ static void aqc_debugfs_init(struct aqc_data *priv)
- 	debugfs_create_file("serial_number", 0444, priv->debugfs, priv, &serial_number_fops);
- 	debugfs_create_file("firmware_version", 0444, priv->debugfs, priv, &firmware_version_fops);
- 
--	switch (priv->kind) {
--	case d5next:
--	case octo:
-+	if (priv->power_cycle_count_offset != 0)
- 		debugfs_create_file("power_cycles", 0444, priv->debugfs, priv, &power_cycles_fops);
--		break;
--	default:
--		break;
--	}
- }
- 
- #else
-@@ -747,6 +665,12 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	case USB_PRODUCT_ID_D5NEXT:
- 		priv->kind = d5next;
- 
-+		priv->num_fans = D5NEXT_NUM_FANS;
-+		priv->fan_sensor_offsets = d5next_sensor_fan_offsets;
-+		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
-+		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
-+		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
-+
- 		priv->temp_label = label_d5next_temp;
- 		priv->speed_label = label_d5next_speeds;
- 		priv->power_label = label_d5next_power;
-@@ -756,19 +680,29 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	case USB_PRODUCT_ID_FARBWERK:
- 		priv->kind = farbwerk;
- 
-+		priv->num_fans = 0;
-+		priv->num_temp_sensors = FARBWERK_NUM_SENSORS;
-+		priv->temp_sensor_start_offset = FARBWERK_SENSOR_START;
- 		priv->temp_label = label_temp_sensors;
- 		break;
- 	case USB_PRODUCT_ID_FARBWERK360:
- 		priv->kind = farbwerk360;
- 
-+		priv->num_fans = 0;
-+		priv->num_temp_sensors = FARBWERK360_NUM_SENSORS;
-+		priv->temp_sensor_start_offset = FARBWERK360_SENSOR_START;
- 		priv->temp_label = label_temp_sensors;
- 		break;
- 	case USB_PRODUCT_ID_OCTO:
- 		priv->kind = octo;
-+
-+		priv->num_fans = OCTO_NUM_FANS;
-+		priv->fan_sensor_offsets = octo_sensor_fan_offsets;
-+		priv->fan_ctrl_offsets = octo_ctrl_fan_offsets;
-+		priv->num_temp_sensors = OCTO_NUM_SENSORS;
-+		priv->temp_sensor_start_offset = OCTO_SENSOR_START;
-+		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
- 		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
--		priv->checksum_start = OCTO_CTRL_REPORT_CHECKSUM_START;
--		priv->checksum_length = OCTO_CTRL_REPORT_CHECKSUM_LENGTH;
--		priv->checksum_offset = OCTO_CTRL_REPORT_CHECKSUM_OFFSET;
- 
- 		priv->temp_label = label_temp_sensors;
- 		priv->speed_label = label_fan_speed;
-@@ -780,6 +714,12 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		break;
- 	}
- 
-+	if (priv->buffer_size != 0) {
-+		priv->checksum_start = 0x01;
-+		priv->checksum_length = priv->buffer_size - 3;
-+		priv->checksum_offset = priv->buffer_size - 2;
-+	}
-+
- 	priv->name = aqc_device_names[priv->kind];
- 
- 	priv->buffer = devm_kzalloc(&hdev->dev, priv->buffer_size, GFP_KERNEL);
--- 
-2.36.1
+> The "average" attributes as implemented don't really report
+> a reliable number since the averaging period is not defined.
 
+Agree, it is calculating average power since last read, which could be
+incorrect with multiple consumers. However, this is the only possibility
+without adding some timer logic.
+
+> Also, kernel
+> drivers should not make up such numbers. I don't mind adding energy
+> attribute support, but that should be reported as what it is, energy.
+> What userspace does with it would then be a userspace concern; it can
+> calculate all kinds of averages from it as much as it wants.
+
+Returning direct value of read registers would also work for our use case,
+but it is not in line with sysfs interface.
+
+> Also, new attributes should not depend on query command support.
+> I don't mind adding support for that, but it would have to be independent
+> of energy attribute support.
+>
+> Thanks,
+> Guenter
+>
+>> Kallas, Pawel (3):
+>>    hwmon: (pmbus) add support for QUERY command
+>>    hwmon: (pmbus) refactor sensor initialization
+>>    hwmon: (pmbus) add EIN and EOUT readings
+>>
+>>   Documentation/hwmon/pmbus-core.rst |   7 +
+>>   drivers/hwmon/pmbus/pmbus.c        |  20 +++
+>>   drivers/hwmon/pmbus/pmbus.h        |  19 +++
+>>   drivers/hwmon/pmbus/pmbus_core.c   | 261 +++++++++++++++++++++++++++--
+>>   4 files changed, 291 insertions(+), 16 deletions(-)
+>>
+>>
+>> base-commit: 7c1de25c06f31b04744beae891baf147af9ba0cb
