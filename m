@@ -2,382 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F6A6C43334
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jul 2022 16:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 342F5C433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jul 2022 18:57:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235994AbiGGQNu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Jul 2022 12:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        id S233606AbiGGS5B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Jul 2022 14:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236137AbiGGQN3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2022 12:13:29 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3ED57234
-        for <linux-hwmon@vger.kernel.org>; Thu,  7 Jul 2022 09:13:04 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id n4so13997016ejz.10
-        for <linux-hwmon@vger.kernel.org>; Thu, 07 Jul 2022 09:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Uk09BlwOpNIFnr0TLlj84WdNCQ/gGDBSTpndzRxAxsg=;
-        b=L7j7JzFfJItXTVX0KZ1SZx7ZsGJ3QX4nT7QKfOwD7r7e1vMCM8Z5UHx68QiJdVqml/
-         aOobi0PD+u04zzjCh+I8h0gViMEUzaijaowSW7hTv5At99PHShLEftNAK1D2sWOfQk0V
-         z25Bqp6V14HSXZKdpSFePyA6qR5Rg9HrMqhi8QwY0lLxBqKaGxFdtQxOR7tB16r8Ic07
-         XC+v7IqDUuhVIMqsV2kQVqnCLUuRf0wTu4/qk7hiBJzaKS0OZ/ITDgRteCurA7LwWv01
-         a828DiJUnzMpzIa1HPY5+5SMYCRkosPVNh9tRXj1ffSSU0cAWFv0O1yvxiYEHqzbe/rW
-         g8hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Uk09BlwOpNIFnr0TLlj84WdNCQ/gGDBSTpndzRxAxsg=;
-        b=wTUx0ds+fkIZRxmd7BKlu5cPi5dZzlDFDdq1FgOF2RIfTW1Lt8QWeRsx6hIVgxcUCA
-         EYskyFnOsYdt7fdGqEL+OLgnfkjCmCAnAly0HLSmA0z6JUHPKbZeTY77k/BOm9wk31Fj
-         60pb/zofuJNi63hH1jXz+UMiwnQnNuC5L95sTp7fPj4nTGhYonisZ2zTaIwyNJVEQWTK
-         obZzljbjt9t5AqEj/1aDwGqGwU47L/90Dx4TAZ5R2mwrfulO6sJk2/55tfsEGaBlUvg8
-         zFWfBCiV8khf3O0TFQ8NcLAEoMgPj10btKCS9WnpkuoPUUX3FJTXKX4CtdzSAE9il675
-         cndw==
-X-Gm-Message-State: AJIora9W7P/DSeVXhX/mipJQhhqSkuN+hAIrtEHeTtnjaYNHworekZA2
-        Krhjyz7cIcxEdctMvT61Exhp9yB6y7Vo357x
-X-Google-Smtp-Source: AGRyM1sEwswyh1YeD+DiKT1A/34d95KV/kMMtpxn/agxo1OwwsjeUBR6iROutoOjlkRaIVv/nxXRIQ==
-X-Received: by 2002:a17:907:7d8b:b0:726:aad6:f421 with SMTP id oz11-20020a1709077d8b00b00726aad6f421mr44450191ejc.80.1657210382617;
-        Thu, 07 Jul 2022 09:13:02 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id ia10-20020a170907a06a00b0070b7875aa6asm18916727ejc.166.2022.07.07.09.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 09:13:02 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH 2/2] hwmon: (max6639) Change from pdata to dt configuration
-Date:   Thu,  7 Jul 2022 18:12:44 +0200
-Message-Id: <20220707161245.1229280-3-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220707161245.1229280-2-Naresh.Solanki@9elements.com>
-References: <20220707161245.1229280-2-Naresh.Solanki@9elements.com>
+        with ESMTP id S236357AbiGGS5A (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2022 14:57:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE442B630;
+        Thu,  7 Jul 2022 11:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657220220; x=1688756220;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kHqtFBMY6Tn6eM/gP2+igQSJe/Rgt1sUEEGEuK+ZNpA=;
+  b=OlIg0/mil2xVN2WaFZqS9tdfb8J5cnJxObWupARAsrm7v39mz9YSeHCn
+   BHxT7I8bk7jgqfXzj39F5R8qLFVm9uDbciB6clkQyV/C+iqLkhCrHMZN3
+   kNhcXnBbLT/PRTXzv+zRGNyjM+UmxDS9ib2V0Vr5gEsYJZLprkrALyRsA
+   eMCUkVMTmFyoRBLq6NP2627UQ+amOmadRSRIdnShzPBCk7UiY+lBtkEKY
+   miJkxXonu0m6Xd6CYvQyggbKLv1VisXWeKh9GhB+88H/irSwgkGJhXjRk
+   +pLoDprxOUloA/9Quj6zXouRz9L/wWB1j+Orn/Zg0Hy9L4SHHmoJy/Tns
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370415396"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="370415396"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 11:56:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="736072664"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 11:56:57 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9WgL-000MKq-8P;
+        Thu, 07 Jul 2022 18:56:57 +0000
+Date:   Fri, 8 Jul 2022 02:56:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atif Ofluoglu <Atif.Ofluoglu@analog.com>, linux@roeck-us.net
+Cc:     kbuild-all@lists.01.org, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Atif Ofluoglu <atif.ofluoglu@analog.com>
+Subject: Re: [PATCH 1/2] hwmon: (pmbus/max20754) Add support for MAX20754
+Message-ID: <202207080255.fBmFH9Ry-lkp@intel.com>
+References: <3659043f92b0ca9e538679e00f7dcc214525ff2e.1657204859.git.atif.ofluoglu@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3659043f92b0ca9e538679e00f7dcc214525ff2e.1657204859.git.atif.ofluoglu@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Marcello Sylvester Bauer <sylv@sylv.io>
+Hi Atif,
 
-max6639_platform_data is not used by any in-kernel driver and does not
-address the MAX6639 channels separately. Move to device tree
-configuration with explicit properties to configure each channel.
+Thank you for the patch! Yet something to improve:
 
-Non-DT platform can still use this module with its default
-configuration.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/max6639.c               | 162 +++++++++++++++++++-------
- include/linux/platform_data/max6639.h |  15 ---
- 2 files changed, 119 insertions(+), 58 deletions(-)
- delete mode 100644 include/linux/platform_data/max6639.h
+url:    https://github.com/intel-lab-lkp/linux/commits/Atif-Ofluoglu/Adding-MAX20754-support/20220707-233249
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: arc-randconfig-r043-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080255.fBmFH9Ry-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/52ef0855bc74f95cd6c170b5475a3e957d7e1028
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Atif-Ofluoglu/Adding-MAX20754-support/20220707-233249
+        git checkout 52ef0855bc74f95cd6c170b5475a3e957d7e1028
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/hwmon/pmbus/
 
-diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-index 14bb7726f8d7..4e8c3d3ec4fd 100644
---- a/drivers/hwmon/max6639.c
-+++ b/drivers/hwmon/max6639.c
-@@ -19,7 +19,6 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/mutex.h>
--#include <linux/platform_data/max6639.h>
- 
- /* Addresses to scan */
- static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
-@@ -85,8 +84,9 @@ struct max6639_data {
- 	u8 temp_ot[2];		/* OT Temperature, 0..255 C (->_emergency) */
- 
- 	/* Register values initialized only once */
--	u8 ppr;			/* Pulses per rotation 0..3 for 1..4 ppr */
--	u8 rpm_range;		/* Index in above rpm_ranges table */
-+	u8 ppr[2];		/* Pulses per rotation 0..3 for 1..4 ppr */
-+	u8 rpm_range[2];	/* Index in above rpm_ranges table */
-+	u8 pwm_polarity[2];	/* Fans PWM polarity, 0..1 */
- 
- 	/* Optional regulator for FAN supply */
- 	struct regulator *reg;
-@@ -319,7 +319,7 @@ static ssize_t fan_input_show(struct device *dev,
- 		return PTR_ERR(data);
- 
- 	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[attr->index],
--		       data->rpm_range));
-+		       data->rpm_range[attr->index]));
- }
- 
- static ssize_t alarm_show(struct device *dev,
-@@ -386,28 +386,26 @@ static struct attribute *max6639_attrs[] = {
- ATTRIBUTE_GROUPS(max6639);
- 
- /*
-- *  returns respective index in rpm_ranges table
-- *  1 by default on invalid range
-+ *  Get respective index in rpm_ranges table
-  */
--static int rpm_range_to_reg(int range)
-+static int rpm_range_to_index(u8 *index, int range)
- {
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(rpm_ranges); i++) {
--		if (rpm_ranges[i] == range)
--			return i;
-+		if (rpm_ranges[i] == range) {
-+			*index = i;
-+			return 0;
-+		}
- 	}
- 
--	return 1; /* default: 4000 RPM */
-+	return -EINVAL;
- }
- 
- static int max6639_init_client(struct i2c_client *client,
- 			       struct max6639_data *data)
- {
--	struct max6639_platform_data *max6639_info =
--		dev_get_platdata(&client->dev);
- 	int i;
--	int rpm_range = 1; /* default: 4000 RPM */
- 	int err;
- 
- 	/* Reset chip to default values, see below for GCONFIG setup */
-@@ -416,43 +414,25 @@ static int max6639_init_client(struct i2c_client *client,
- 	if (err)
- 		goto exit;
- 
--	/* Fans pulse per revolution is 2 by default */
--	if (max6639_info && max6639_info->ppr > 0 &&
--			max6639_info->ppr < 5)
--		data->ppr = max6639_info->ppr;
--	else
--		data->ppr = 2;
--	data->ppr -= 1;
--
--	if (max6639_info)
--		rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
--	data->rpm_range = rpm_range;
--
- 	for (i = 0; i < 2; i++) {
- 
- 		/* Set Fan pulse per revolution */
- 		err = i2c_smbus_write_byte_data(client,
- 				MAX6639_REG_FAN_PPR(i),
--				data->ppr << 6);
-+				data->ppr[i] << 6);
- 		if (err)
- 			goto exit;
- 
- 		/* Fans config PWM, RPM */
- 		err = i2c_smbus_write_byte_data(client,
- 			MAX6639_REG_FAN_CONFIG1(i),
--			MAX6639_FAN_CONFIG1_PWM | rpm_range);
-+			MAX6639_FAN_CONFIG1_PWM | data->rpm_range[i]);
- 		if (err)
- 			goto exit;
- 
--		/* Fans PWM polarity high by default */
--		if (max6639_info && max6639_info->pwm_polarity == 0)
--			err = i2c_smbus_write_byte_data(client,
--				MAX6639_REG_FAN_CONFIG2a(i), 0x00);
--		else
--			err = i2c_smbus_write_byte_data(client,
--				MAX6639_REG_FAN_CONFIG2a(i), 0x02);
--		if (err)
--			goto exit;
-+		/* Fans PWM polarity */
-+		err = i2c_smbus_write_byte_data(client,
-+			MAX6639_REG_FAN_CONFIG2a(i), data->pwm_polarity[i] ? 0x00 : 0x02);
- 
- 		/*
- 		 * /THERM full speed enable,
-@@ -464,10 +444,6 @@ static int max6639_init_client(struct i2c_client *client,
- 		if (err)
- 			goto exit;
- 
--		/* Max. temp. 80C/90C/100C */
--		data->temp_therm[i] = 80;
--		data->temp_alert[i] = 90;
--		data->temp_ot[i] = 100;
- 		err = i2c_smbus_write_byte_data(client,
- 				MAX6639_REG_THERM_LIMIT(i),
- 				data->temp_therm[i]);
-@@ -483,8 +459,6 @@ static int max6639_init_client(struct i2c_client *client,
- 		if (err)
- 			goto exit;
- 
--		/* PWM 120/120 (i.e. 100%) */
--		data->pwm[i] = 120;
- 		err = i2c_smbus_write_byte_data(client,
- 				MAX6639_REG_TARGTDUTY(i), data->pwm[i]);
- 		if (err)
-@@ -524,12 +498,87 @@ static void max6639_regulator_disable(void *data)
- 	regulator_disable(data);
- }
- 
-+static int max6639_probe_child_from_dt(struct i2c_client *client,
-+				      struct device_node *child,
-+				      struct max6639_data *data)
-+
-+{
-+	struct device *dev = &client->dev;
-+	u32 i, val;
-+	int err;
-+
-+	err = of_property_read_u32(child, "reg", &i);
-+	if (err) {
-+		dev_err(dev, "missing reg property of %pOFn\n", child);
-+		return err;
-+	}
-+
-+	if (i >= 2) {
-+		dev_err(dev, "invalid reg %d of %pOFn\n", i, child);
-+		return -EINVAL;
-+	}
-+
-+	err = of_property_read_u32(child, "pulses-per-revolution", &val);
-+	if (!err) {
-+		if (val < 0 || val > 5) {
-+			dev_err(dev, "invalid pulses-per-revolution %d of %pOFn\n", val, child);
-+			return -EINVAL;
-+		}
-+		data->ppr[i] = val;
-+	}
-+
-+	err = of_property_read_u32(child, "maxim,rpm-range", &val);
-+	if (!err) {
-+		err = rpm_range_to_index(&data->rpm_range[i], val);
-+		if (err) {
-+			dev_err(dev, "invalid maxim,rpm-range %d of %pOFn\n", val, child);
-+			return err;
-+		}
-+	}
-+
-+	err = of_property_read_u32(child, "pwm-polarity", &val);
-+	if (!err) {
-+		if (val > 1) {
-+			dev_err(dev, "invalid pwm-polarity %d of %pOFn\n", val, child);
-+			return -EINVAL;
-+		}
-+		data->pwm_polarity[i] = val;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max6639_probe_from_dt(struct i2c_client *client, struct max6639_data *data)
-+{
-+	struct device *dev = &client->dev;
-+	const struct device_node *np = dev->of_node;
-+	struct device_node *child;
-+	int err;
-+
-+	/* Compatible with non-DT platforms */
-+	if (!np)
-+		return 0;
-+
-+	for_each_child_of_node(np, child) {
-+		if (strcmp(child->name, "channel"))
-+			continue;
-+
-+		err = max6639_probe_child_from_dt(client, child, data);
-+		if (err) {
-+			of_node_put(child);
-+			return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int max6639_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct max6639_data *data;
- 	struct device *hwmon_dev;
--	int err;
-+	int err, i;
- 
- 	data = devm_kzalloc(dev, sizeof(struct max6639_data), GFP_KERNEL);
- 	if (!data)
-@@ -560,6 +609,24 @@ static int max6639_probe(struct i2c_client *client)
- 
- 	mutex_init(&data->update_lock);
- 
-+	/* default values */
-+	for (i = 0; i < 2; i++) {
-+		/* 4000 RPM */
-+		data->rpm_range[i] = 1;
-+		data->ppr[i] = 2;
-+		data->pwm_polarity[i] = 1;
-+		/* Max. temp. 80C/90C/100C */
-+		data->temp_therm[i] = 80;
-+		data->temp_alert[i] = 90;
-+		data->temp_ot[i] = 100;
-+		/* PWM 120/120 (i.e. 100%) */
-+		data->pwm[i] = 120;
-+	}
-+
-+	err = max6639_probe_from_dt(client, data);
-+	if (err)
-+		return err;
-+
- 	/* Initialize the max6639 chip */
- 	err = max6639_init_client(client, data);
- 	if (err < 0)
-@@ -618,6 +685,14 @@ static const struct i2c_device_id max6639_id[] = {
- 
- MODULE_DEVICE_TABLE(i2c, max6639_id);
- 
-+#ifdef CONFIG_OF
-+static const struct of_device_id maxim_of_platform_match[] = {
-+	{.compatible = "maxim,max6639"},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, maxim_of_platform_match);
-+#endif
-+
- static SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
- 
- static struct i2c_driver max6639_driver = {
-@@ -625,6 +700,7 @@ static struct i2c_driver max6639_driver = {
- 	.driver = {
- 		   .name = "max6639",
- 		   .pm = &max6639_pm_ops,
-+		   .of_match_table = of_match_ptr(maxim_of_platform_match),
- 		   },
- 	.probe_new = max6639_probe,
- 	.id_table = max6639_id,
-diff --git a/include/linux/platform_data/max6639.h b/include/linux/platform_data/max6639.h
-deleted file mode 100644
-index 65bfdb4fdc15..000000000000
---- a/include/linux/platform_data/max6639.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_MAX6639_H
--#define _LINUX_MAX6639_H
--
--#include <linux/types.h>
--
--/* platform data for the MAX6639 temperature sensor and fan control */
--
--struct max6639_platform_data {
--	bool pwm_polarity;	/* Polarity low (0) or high (1, default) */
--	int ppr;		/* Pulses per rotation 1..4 (default == 2) */
--	int rpm_range;		/* 2000, 4000 (default), 8000 or 16000 */
--};
--
--#endif /* _LINUX_MAX6639_H */
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/max20754.c:381:19: error: 'pmbus_do_remove' undeclared here (not in a function); did you mean 'pmbus_do_probe'?
+     381 |         .remove = pmbus_do_remove,
+         |                   ^~~~~~~~~~~~~~~
+         |                   pmbus_do_probe
+
+
+vim +381 drivers/hwmon/pmbus/max20754.c
+
+   375	
+   376	static struct i2c_driver max20754_driver = {
+   377		.driver = {
+   378			   .name = "max20754",
+   379			   },
+   380		.probe_new = max20754_probe,
+ > 381		.remove = pmbus_do_remove,
+   382		.id_table = max20754_id,
+   383	};
+   384	
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
