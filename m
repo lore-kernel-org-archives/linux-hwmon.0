@@ -2,110 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 342F5C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jul 2022 18:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCA8AC433EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jul 2022 06:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbiGGS5B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Jul 2022 14:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S237168AbiGHGmd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Jul 2022 02:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236357AbiGGS5A (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2022 14:57:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE442B630;
-        Thu,  7 Jul 2022 11:57:00 -0700 (PDT)
+        with ESMTP id S237316AbiGHGmc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Jul 2022 02:42:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150632F39F;
+        Thu,  7 Jul 2022 23:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657220220; x=1688756220;
+  t=1657262553; x=1688798553;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kHqtFBMY6Tn6eM/gP2+igQSJe/Rgt1sUEEGEuK+ZNpA=;
-  b=OlIg0/mil2xVN2WaFZqS9tdfb8J5cnJxObWupARAsrm7v39mz9YSeHCn
-   BHxT7I8bk7jgqfXzj39F5R8qLFVm9uDbciB6clkQyV/C+iqLkhCrHMZN3
-   kNhcXnBbLT/PRTXzv+zRGNyjM+UmxDS9ib2V0Vr5gEsYJZLprkrALyRsA
-   eMCUkVMTmFyoRBLq6NP2627UQ+amOmadRSRIdnShzPBCk7UiY+lBtkEKY
-   miJkxXonu0m6Xd6CYvQyggbKLv1VisXWeKh9GhB+88H/irSwgkGJhXjRk
-   +pLoDprxOUloA/9Quj6zXouRz9L/wWB1j+Orn/Zg0Hy9L4SHHmoJy/Tns
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370415396"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="370415396"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 11:56:59 -0700
+  bh=o2koQnFr51eUN7ewniZDTy/mrRdv+JNwkyO1OQJmSPM=;
+  b=blQt7iZz6IiDJKtkoc3r214qv07iY/3B6xGzLTsAO+fwITxy6x4ABkil
+   2O1/+MW8EPx/vUxf3IDSImhGb1aOunKYvQToPz9yC8/fycyGOZbWhkTr8
+   T/+0oHP6ZDKKjLeRsY3V+G9nEWRe3b3ActfkKmdJzk+yi3O2gECBtGFcU
+   iBJ9j6qs1mDkroMbrS+hcRys/u6j5UpRC//98cgmW0hEtAJODyD7q27tA
+   rJZc02gY6kba+m8ia3LtLUsBwEc4es+vF5kdz4gyWMQqXxuuG7FWFKd24
+   Te3qlIgxzeCBdym2rExPGz0iDBFvn5vLlaZYD6fm2+4UnnZMLkazEV/7b
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="345894344"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="345894344"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 23:42:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="736072664"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="621099895"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 11:56:57 -0700
+  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 23:42:30 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o9WgL-000MKq-8P;
-        Thu, 07 Jul 2022 18:56:57 +0000
-Date:   Fri, 8 Jul 2022 02:56:46 +0800
+        id 1o9hh7-000N3K-C9;
+        Fri, 08 Jul 2022 06:42:29 +0000
+Date:   Fri, 8 Jul 2022 14:41:38 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Atif Ofluoglu <Atif.Ofluoglu@analog.com>, linux@roeck-us.net
 Cc:     kbuild-all@lists.01.org, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         Atif Ofluoglu <atif.ofluoglu@analog.com>
-Subject: Re: [PATCH 1/2] hwmon: (pmbus/max20754) Add support for MAX20754
-Message-ID: <202207080255.fBmFH9Ry-lkp@intel.com>
-References: <3659043f92b0ca9e538679e00f7dcc214525ff2e.1657204859.git.atif.ofluoglu@analog.com>
+Subject: Re: [PATCH 2/2] Added documentation for Maxim Integrated max20754
+ hwmon userspace sysfs.
+Message-ID: <202207081439.A6GFlbPu-lkp@intel.com>
+References: <a8d037609be3e6f81bc15e2a6c24cb7809e3226b.1657204859.git.atif.ofluoglu@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3659043f92b0ca9e538679e00f7dcc214525ff2e.1657204859.git.atif.ofluoglu@analog.com>
+In-Reply-To: <a8d037609be3e6f81bc15e2a6c24cb7809e3226b.1657204859.git.atif.ofluoglu@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Hi Atif,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v5.19-rc5 next-20220707]
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v5.19-rc5 next-20220707]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Atif-Ofluoglu/Adding-MAX20754-support/20220707-233249
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: arc-randconfig-r043-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080255.fBmFH9Ry-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/52ef0855bc74f95cd6c170b5475a3e957d7e1028
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Atif-Ofluoglu/Adding-MAX20754-support/20220707-233249
-        git checkout 52ef0855bc74f95cd6c170b5475a3e957d7e1028
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/hwmon/pmbus/
+reproduce: make htmldocs
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/hwmon/pmbus/max20754.c:381:19: error: 'pmbus_do_remove' undeclared here (not in a function); did you mean 'pmbus_do_probe'?
-     381 |         .remove = pmbus_do_remove,
-         |                   ^~~~~~~~~~~~~~~
-         |                   pmbus_do_probe
-
-
-vim +381 drivers/hwmon/pmbus/max20754.c
-
-   375	
-   376	static struct i2c_driver max20754_driver = {
-   377		.driver = {
-   378			   .name = "max20754",
-   379			   },
-   380		.probe_new = max20754_probe,
- > 381		.remove = pmbus_do_remove,
-   382		.id_table = max20754_id,
-   383	};
-   384	
+>> Documentation/hwmon/max20754.rst: WARNING: document isn't included in any toctree
+>> Documentation/hwmon/max20754.rst:49: WARNING: Malformed table.
 
 -- 
 0-DAY CI Kernel Test Service
