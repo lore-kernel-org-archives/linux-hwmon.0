@@ -2,193 +2,170 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66860C43334
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Jul 2022 20:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E3CC43334
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Jul 2022 21:26:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiGJU2D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 Jul 2022 16:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S229654AbiGJV0y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 Jul 2022 17:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGJU2C (ORCPT
+        with ESMTP id S229757AbiGJV0Q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 Jul 2022 16:28:02 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7391409A;
-        Sun, 10 Jul 2022 13:27:58 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id q9so4651413wrd.8;
-        Sun, 10 Jul 2022 13:27:58 -0700 (PDT)
+        Sun, 10 Jul 2022 17:26:16 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B94167FC
+        for <linux-hwmon@vger.kernel.org>; Sun, 10 Jul 2022 14:25:32 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id z12so4758863wrq.7
+        for <linux-hwmon@vger.kernel.org>; Sun, 10 Jul 2022 14:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=D0k2zF0O8Dezyoaka8gcKnbwBTdSGFZmQ+t8biXBBv8=;
-        b=drWRp0KmleqSTXBVY3rpEf/Mak2Ti9MFnmWzqd898GkytxKKZuO6Bjw7RuaSSRgMRd
-         aPE6uURcD8YFB6pEfOVXUrCSVwV5irXt3A4hGyr4FyB6kYSUgeb4EJdNHqzB56Ov52CJ
-         gpZKCKg18VNOVxHQG0DMVCCnfxo+VbOO8+BaxAhjENOasNi7LdBrbF0BNaeq9LuT0pzd
-         ggmnWlJidojOQ+Z8rEiRVTpzkbp4kdxwkNT0Gfq1ok9IwxapIuAUqfkf+U8bl5dLdSWO
-         geK+NrwLWPmWSW2HgAoo8H0cGil3Sbye35hxH7UWe5XUQxZFsj3i2FI2JFnn32Tzph4p
-         9omQ==
+        bh=S9mNF5y6hvbSSl4tvgsF8Kv2RwpFYIr8c+Kq7IgCFys=;
+        b=3sVLc/Zx5AnBXFBVcki0r+XQWrRbNr9YCtqlE7/2AIs8jkvPMqD4lVuuEuqp2ZxTYQ
+         wIjB2uIl9wZz9ni2iFJYKnXyAqb0LwQPT8sqlyV4FWIksYWkFe5AROsQbCjgaFnrf0Fp
+         qAjWUI5Nf2doAN6M5MOFX2O3VhHmnAThxRds7y32hMldcABdPPjtCs7ZamgfP0SRwssJ
+         jHh/MNnrEQBnfcbublg2qCPnW7VPmtGs8wi1MJMuVcFNH17CXGRo1EjHYw453lVTyFV4
+         /QFVR+fVkE0O6kE795qD1o03VPzlwykftJLWjuitXjWeZ3q+M0zSEO+6qOS9q1wOUpj7
+         ZBuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=D0k2zF0O8Dezyoaka8gcKnbwBTdSGFZmQ+t8biXBBv8=;
-        b=CdGKEttiLlSCKupWDf2O/v1PRGUM6a2ju4CQKHUoS5j/RraB7OuDr40n4wRnH1G3FZ
-         eXAVyDcvIktTbbIA0odpQuRYaaxE8iD/5IJ2LP4Pj7m0VsZaG6Jr27TenKf1EjjK+4b9
-         UONIjUffcUMtBXiHtwWN3KertFYgxhAfnooLvKzilDNcETUD+D1O3KjYMiZrh0/bq82n
-         6zrtHIbmUPC3Y5OndhxqSZWNOWLSiCXkgjrH+AMFH1atUf49F4j4iV++M4GOjrZtTao+
-         vtizgEwY+3ENBRh5RmOsc57RgZZyihHHPtT3ee8unEE9YmPf4qkaOt0LVtS2kwtLtCi/
-         kOlg==
-X-Gm-Message-State: AJIora9xiUFyXDbTW6uaTxmhKeTBmoxUE65/JSkYaOyUbFkuuD+NXClb
-        XD7uKN6R8c7tE9XNEEUcFbQzqOoLPGXu6Q==
-X-Google-Smtp-Source: AGRyM1sIbpzlmiS9zsskabWHGbfryL4HVDQDigEE04LOQyCLAEE7/1SrUZyDebD8oIhYu2Vn52Vb1w==
-X-Received: by 2002:a05:6000:1841:b0:21b:bf66:62b7 with SMTP id c1-20020a056000184100b0021bbf6662b7mr13661264wri.111.1657484877208;
-        Sun, 10 Jul 2022 13:27:57 -0700 (PDT)
-Received: from caracal.museclub.art (p200300cf9f2e4000d7544521133919bb.dip0.t-ipconnect.de. [2003:cf:9f2e:4000:d754:4521:1339:19bb])
-        by smtp.googlemail.com with ESMTPSA id o9-20020a05600c4fc900b003a2e51bbbb8sm2566021wmq.30.2022.07.10.13.27.56
+        bh=S9mNF5y6hvbSSl4tvgsF8Kv2RwpFYIr8c+Kq7IgCFys=;
+        b=4Nik+uCEzNqGldlLB9MU/+E50UzlBOaJp2zV0PsqkbxOBKnPD8tW4ojMKJUkh3lCPJ
+         vZdWfrLeD9puXkf5Qo1zegUtl0BUxcD9oY6+wSebHD2TJJratoah2oWjUxVSwGtsD/T7
+         eBb/MJfYBrUtK/clsPu33bXOt/BMqnAcUIlm+V7twS/8c941j4MYeVRGr8XXt5xFJDrU
+         QY9Rs6Dr5nhwo/xHF//9QZ/g08Eb1zL4MjPBjXDEOTl+gXF1iMaAqUdesTUMXMBu354S
+         CdKSAET55mMoPmwEF6iMLYMv1ExOf7HOCXRSzEa4UIGNnIUzT6R/d4vbuzZnyjfPJRzQ
+         VaFw==
+X-Gm-Message-State: AJIora9LXcoGHf+vg1rcst2U2HB9WNc9z4FTUbXeX63kMkyQjpHo5bUv
+        whzonDauJF86LkVspVqsjBVd1g==
+X-Google-Smtp-Source: AGRyM1uyUPnikVLSWpibuGwqhmWE7zhM23GgVORCpj5IlAD6nOWU0REwHevqrsVReAOv+YqdqT90JA==
+X-Received: by 2002:a5d:4283:0:b0:21d:7ae3:71a3 with SMTP id k3-20020a5d4283000000b0021d7ae371a3mr13967643wrq.233.1657488316965;
+        Sun, 10 Jul 2022 14:25:16 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c7c0:6823:f3ce:2447])
+        by smtp.gmail.com with ESMTPSA id m19-20020a05600c3b1300b003a2dd0d21f0sm7142759wms.13.2022.07.10.14.25.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 13:27:56 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Urs Schroffenegger <nabajour@lampshade.ch>,
-        Jean Delvare <jdelvare@suse.com>,
+        Sun, 10 Jul 2022 14:25:16 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
+        amitk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] hwmon: (asus-ec-sensors) add definitions for ROG ZENITH II EXTREME
-Date:   Sun, 10 Jul 2022 22:26:39 +0200
-Message-Id: <20220710202639.1812058-2-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220710202639.1812058-1-eugene.shalygin@gmail.com>
-References: <20220710202639.1812058-1-eugene.shalygin@gmail.com>
+        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
+Subject: [PATCH v1 26/33] hwmon/drivers: Switch to new of thermal API
+Date:   Sun, 10 Jul 2022 23:24:16 +0200
+Message-Id: <20220710212423.681301-27-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Urs Schroffenegger <nabajour@lampshade.ch>
+The thermal OF code has a new API allowing to migrate the OF
+initialization to a simpler approach.
 
-Add definitions for ROG ZENITH II EXTREME and some unknown yet
-temperature sensors in the second EC bank. Details are available at
-[1, 2].
+Use this new API.
 
-[1] https://github.com/zeule/asus-ec-sensors/pull/26
-[2] https://github.com/zeule/asus-ec-sensors/issues/16
-
-Signed-off-by: Urs Schroffenegger <nabajour@lampshade.ch>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 ---
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 47 +++++++++++++++++++++++++
- 2 files changed, 48 insertions(+)
+ drivers/hwmon/hwmon.c      | 14 +++++++-------
+ drivers/hwmon/scpi-hwmon.c | 14 +++++++-------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 1e40c123db77..02f4ad314a1e 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -22,6 +22,7 @@ Supported boards:
-  * ROG STRIX X570-F GAMING
-  * ROG STRIX X570-I GAMING
-  * ROG STRIX Z690-A GAMING WIFI D4
-+ * ROG ZENITH II EXTREME
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 2e2cd79d89eb..a98c35fbce87 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -151,9 +151,9 @@ static DEFINE_IDA(hwmon_ida);
+  * between hwmon and thermal_sys modules.
+  */
+ #ifdef CONFIG_THERMAL_OF
+-static int hwmon_thermal_get_temp(void *data, int *temp)
++static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+-	struct hwmon_thermal_data *tdata = data;
++	struct hwmon_thermal_data *tdata = tz->devdata;
+ 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+ 	int ret;
+ 	long t;
+@@ -168,9 +168,9 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
+ 	return 0;
+ }
  
- Authors:
-     - Eugene Shalygin <eugene.shalygin@gmail.com>
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 625c2baa35ec..3049537130be 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -56,6 +56,8 @@ static char *mutex_path_override;
+-static int hwmon_thermal_set_trips(void *data, int low, int high)
++static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+ {
+-	struct hwmon_thermal_data *tdata = data;
++	struct hwmon_thermal_data *tdata = tz->devdata;
+ 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+ 	const struct hwmon_chip_info *chip = hwdev->chip;
+ 	const struct hwmon_channel_info **info = chip->info;
+@@ -203,7 +203,7 @@ static int hwmon_thermal_set_trips(void *data, int low, int high)
+ 	return 0;
+ }
  
- #define ASUS_HW_ACCESS_MUTEX_RMTW_ASMX	"\\RMTW.ASMX"
+-static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
++static struct thermal_zone_device_ops hwmon_thermal_ops = {
+ 	.get_temp = hwmon_thermal_get_temp,
+ 	.set_trips = hwmon_thermal_set_trips,
+ };
+@@ -227,8 +227,8 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
+ 	tdata->dev = dev;
+ 	tdata->index = index;
  
-+#define ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0 "\\_SB_.PCI0.SBRG.SIO1.MUT0"
-+
- #define MAX_IDENTICAL_BOARD_VARIATIONS	3
+-	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
+-						   &hwmon_thermal_ops);
++	tzd = devm_thermal_of_zone_register(dev, index, tdata,
++					    &hwmon_thermal_ops);
+ 	if (IS_ERR(tzd)) {
+ 		if (PTR_ERR(tzd) != -ENODEV)
+ 			return PTR_ERR(tzd);
+diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+index 5187c6dd5a4f..9c89db8e56a7 100644
+--- a/drivers/hwmon/scpi-hwmon.c
++++ b/drivers/hwmon/scpi-hwmon.c
+@@ -62,9 +62,9 @@ static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
+ 	}
+ }
  
- /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
-@@ -121,6 +123,18 @@ enum ec_sensors {
- 	ec_sensor_temp_water_in,
- 	/* "Water_Out" temperature sensor reading [℃] */
- 	ec_sensor_temp_water_out,
-+	/* "Water_Block_In" temperature sensor reading [℃] */
-+	ec_sensor_temp_water_block_in,
-+	/* "Water_Block_Out" temperature sensor reading [℃] */
-+	ec_sensor_temp_water_block_out,
-+	/* "T_sensor_2" temperature sensor reading [℃] */
-+	ec_sensor_temp_t_sensor_2,
-+	/* "Extra_1" temperature sensor reading [℃] */
-+	ec_sensor_temp_sensor_extra_1,
-+	/* "Extra_2" temperature sensor reading [℃] */
-+	ec_sensor_temp_sensor_extra_2,
-+	/* "Extra_3" temperature sensor reading [℃] */
-+	ec_sensor_temp_sensor_extra_3,
+-static int scpi_read_temp(void *dev, int *temp)
++static int scpi_read_temp(struct thermal_zone_device *tz, int *temp)
+ {
+-	struct scpi_thermal_zone *zone = dev;
++	struct scpi_thermal_zone *zone = tz->devdata;
+ 	struct scpi_sensors *scpi_sensors = zone->scpi_sensors;
+ 	struct scpi_ops *scpi_ops = scpi_sensors->scpi_ops;
+ 	struct sensor_data *sensor = &scpi_sensors->data[zone->sensor_id];
+@@ -121,7 +121,7 @@ scpi_show_label(struct device *dev, struct device_attribute *attr, char *buf)
+ 	return sprintf(buf, "%s\n", sensor->info.name);
+ }
+ 
+-static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
++static struct thermal_zone_device_ops scpi_sensor_ops = {
+ 	.get_temp = scpi_read_temp,
  };
  
- #define SENSOR_TEMP_CHIPSET BIT(ec_sensor_temp_chipset)
-@@ -136,6 +150,12 @@ enum ec_sensors {
- #define SENSOR_CURR_CPU BIT(ec_sensor_curr_cpu)
- #define SENSOR_TEMP_WATER_IN BIT(ec_sensor_temp_water_in)
- #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
-+#define SENSOR_TEMP_WATER_BLOCK_IN BIT(ec_sensor_temp_water_block_in)
-+#define SENSOR_TEMP_WATER_BLOCK_OUT BIT(ec_sensor_temp_water_block_out)
-+#define SENSOR_TEMP_T_SENSOR_2 BIT(ec_sensor_temp_t_sensor_2)
-+#define SENSOR_TEMP_SENSOR_EXTRA_1 BIT(ec_sensor_temp_sensor_extra_1)
-+#define SENSOR_TEMP_SENSOR_EXTRA_2 BIT(ec_sensor_temp_sensor_extra_2)
-+#define SENSOR_TEMP_SENSOR_EXTRA_3 BIT(ec_sensor_temp_sensor_extra_3)
+@@ -275,10 +275,10 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
  
- enum board_family {
- 	family_unknown,
-@@ -199,6 +219,18 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
- 		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
- 	[ec_sensor_temp_water_out] =
- 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-+	[ec_sensor_temp_water_block_in] =
-+		EC_SENSOR("Water_Block_In", hwmon_temp, 1, 0x01, 0x02),
-+	[ec_sensor_temp_water_block_out] =
-+		EC_SENSOR("Water_Block_Out", hwmon_temp, 1, 0x01, 0x03),
-+	[ec_sensor_temp_sensor_extra_1] =
-+		EC_SENSOR("Extra_1", hwmon_temp, 1, 0x01, 0x09),
-+	[ec_sensor_temp_t_sensor_2] =
-+		EC_SENSOR("T_sensor_2", hwmon_temp, 1, 0x01, 0x0a),
-+	[ec_sensor_temp_sensor_extra_2] =
-+		EC_SENSOR("Extra_2", hwmon_temp, 1, 0x01, 0x0b),
-+	[ec_sensor_temp_sensor_extra_3] =
-+		EC_SENSOR("Extra_3", hwmon_temp, 1, 0x01, 0x0c),
- };
- 
- static const struct ec_sensor_info sensors_family_intel_300[] = {
-@@ -231,6 +263,9 @@ static const struct ec_sensor_info sensors_family_intel_600[] = {
- #define SENSOR_SET_TEMP_CHIPSET_CPU_MB                                         \
- 	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
- #define SENSOR_SET_TEMP_WATER (SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT)
-+#define SENSOR_SET_WATER_BLOCK                                                 \
-+	(SENSOR_TEMP_WATER_BLOCK_IN | SENSOR_TEMP_WATER_BLOCK_OUT)
-+
- 
- struct ec_board_info {
- 	const char *board_names[MAX_IDENTICAL_BOARD_VARIATIONS];
-@@ -378,6 +413,18 @@ static const struct ec_board_info board_info[] = {
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
- 		.family = family_intel_600_series,
- 	},
-+	{
-+		.board_names = {"ROG ZENITH II EXTREME"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
-+			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-+			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET | SENSOR_FAN_VRM_HS |
-+			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE |
-+			SENSOR_SET_WATER_BLOCK |
-+			SENSOR_TEMP_T_SENSOR_2 | SENSOR_TEMP_SENSOR_EXTRA_1 |
-+			SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3,
-+		.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
-+		.family = family_amd_500_series,
-+	},
- 	{}
- };
- 
+ 		zone->sensor_id = i;
+ 		zone->scpi_sensors = scpi_sensors;
+-		z = devm_thermal_zone_of_sensor_register(dev,
+-							 sensor->info.sensor_id,
+-							 zone,
+-							 &scpi_sensor_ops);
++		z = devm_thermal_of_zone_register(dev,
++						  sensor->info.sensor_id,
++						  zone,
++						  &scpi_sensor_ops);
+ 		/*
+ 		 * The call to thermal_zone_of_sensor_register returns
+ 		 * an error for sensors that are not associated with
 -- 
-2.35.1
+2.25.1
 
