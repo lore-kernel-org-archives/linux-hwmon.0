@@ -2,170 +2,236 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E3CC43334
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 Jul 2022 21:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4430CC43334
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Jul 2022 19:46:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbiGJV0y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 Jul 2022 17:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S231199AbiGLTqa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Jul 2022 15:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiGJV0Q (ORCPT
+        with ESMTP id S235112AbiGLTqG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 Jul 2022 17:26:16 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B94167FC
-        for <linux-hwmon@vger.kernel.org>; Sun, 10 Jul 2022 14:25:32 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id z12so4758863wrq.7
-        for <linux-hwmon@vger.kernel.org>; Sun, 10 Jul 2022 14:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=S9mNF5y6hvbSSl4tvgsF8Kv2RwpFYIr8c+Kq7IgCFys=;
-        b=3sVLc/Zx5AnBXFBVcki0r+XQWrRbNr9YCtqlE7/2AIs8jkvPMqD4lVuuEuqp2ZxTYQ
-         wIjB2uIl9wZz9ni2iFJYKnXyAqb0LwQPT8sqlyV4FWIksYWkFe5AROsQbCjgaFnrf0Fp
-         qAjWUI5Nf2doAN6M5MOFX2O3VhHmnAThxRds7y32hMldcABdPPjtCs7ZamgfP0SRwssJ
-         jHh/MNnrEQBnfcbublg2qCPnW7VPmtGs8wi1MJMuVcFNH17CXGRo1EjHYw453lVTyFV4
-         /QFVR+fVkE0O6kE795qD1o03VPzlwykftJLWjuitXjWeZ3q+M0zSEO+6qOS9q1wOUpj7
-         ZBuA==
+        Tue, 12 Jul 2022 15:46:06 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB4CB41BF;
+        Tue, 12 Jul 2022 12:36:01 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id z11so5634768qkz.13;
+        Tue, 12 Jul 2022 12:36:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=S9mNF5y6hvbSSl4tvgsF8Kv2RwpFYIr8c+Kq7IgCFys=;
-        b=4Nik+uCEzNqGldlLB9MU/+E50UzlBOaJp2zV0PsqkbxOBKnPD8tW4ojMKJUkh3lCPJ
-         vZdWfrLeD9puXkf5Qo1zegUtl0BUxcD9oY6+wSebHD2TJJratoah2oWjUxVSwGtsD/T7
-         eBb/MJfYBrUtK/clsPu33bXOt/BMqnAcUIlm+V7twS/8c941j4MYeVRGr8XXt5xFJDrU
-         QY9Rs6Dr5nhwo/xHF//9QZ/g08Eb1zL4MjPBjXDEOTl+gXF1iMaAqUdesTUMXMBu354S
-         CdKSAET55mMoPmwEF6iMLYMv1ExOf7HOCXRSzEa4UIGNnIUzT6R/d4vbuzZnyjfPJRzQ
-         VaFw==
-X-Gm-Message-State: AJIora9LXcoGHf+vg1rcst2U2HB9WNc9z4FTUbXeX63kMkyQjpHo5bUv
-        whzonDauJF86LkVspVqsjBVd1g==
-X-Google-Smtp-Source: AGRyM1uyUPnikVLSWpibuGwqhmWE7zhM23GgVORCpj5IlAD6nOWU0REwHevqrsVReAOv+YqdqT90JA==
-X-Received: by 2002:a5d:4283:0:b0:21d:7ae3:71a3 with SMTP id k3-20020a5d4283000000b0021d7ae371a3mr13967643wrq.233.1657488316965;
-        Sun, 10 Jul 2022 14:25:16 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c7c0:6823:f3ce:2447])
-        by smtp.gmail.com with ESMTPSA id m19-20020a05600c3b1300b003a2dd0d21f0sm7142759wms.13.2022.07.10.14.25.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j0miCz7yO1Y2I8pvw032h1mnhQYjkHXsC5R5mX24dTg=;
+        b=ssNxXzvV0G0LziJ8TgeFUSF1A2+yjhNpUXULxujFk/DGYAzb3gwgHqBQRj2mlV4BoI
+         wgiUOKZYrd1BuHI1qq6hSzmyLsryQlWGr6IfWKqH9XNVLE2vSqqh9NBHG8+jco9GGEcF
+         gvP7VRKUWk7JOsUcG1dBr3tF0zulaRvrEKPXv3gejCg25W2cc/0IGIWo/dJ/kKGXFZT+
+         tH/zJYMck5VkogfVeyBP2iDrDFYWcbPWs5sSN0b2vYabVlGqW/XqJeTyNYs31/m5WE+6
+         3ZCNYRkzo/3aQSx+eoS4G7w8NRjAkMs/bDWAZF0pQgyL3phxh+HoeGVXUs3gMcTvmj2z
+         ECeg==
+X-Gm-Message-State: AJIora+JtLPgSqZAReko+4G5ZXVIlD/JdYIDDEz1Yh8ZPDg/UJaLjjaX
+        NsXU0QVM05XbI9jPBLwadWviBGoEB44=
+X-Google-Smtp-Source: AGRyM1tmda6zGMVpOlj2P77rNbtj6+6NL5E1S8G9DyprdGvF0ZWAY8KoTARaJmN7LzkUuyxmFuXTDw==
+X-Received: by 2002:a05:620a:2624:b0:6b5:965d:e043 with SMTP id z36-20020a05620a262400b006b5965de043mr6402036qko.236.1657654560623;
+        Tue, 12 Jul 2022 12:36:00 -0700 (PDT)
+Received: from mfe-desktop.dimonoffinc.intra (ipagstaticip-ad9375f2-382c-b511-8ac1-9541f69fe50f.sdsl.bell.ca. [142.116.33.166])
+        by smtp.googlemail.com with ESMTPSA id u4-20020a37ab04000000b006b56a4400f6sm9395769qke.16.2022.07.12.12.35.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 14:25:16 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
-        amitk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
-Subject: [PATCH v1 26/33] hwmon/drivers: Switch to new of thermal API
-Date:   Sun, 10 Jul 2022 23:24:16 +0200
-Message-Id: <20220710212423.681301-27-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220710212423.681301-1-daniel.lezcano@linexp.org>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+        Tue, 12 Jul 2022 12:36:00 -0700 (PDT)
+From:   ferlandm@amotus.ca
+To:     jdelvare@suse.com
+Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Ferland <ferlandm@amotus.ca>
+Subject: [PATCH] hwmon: (mcp3021) improve driver support for newer hwmon interface
+Date:   Tue, 12 Jul 2022 15:35:04 -0400
+Message-Id: <20220712193504.1374656-1-ferlandm@amotus.ca>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The thermal OF code has a new API allowing to migrate the OF
-initialization to a simpler approach.
+From: Marc Ferland <ferlandm@amotus.ca>
 
-Use this new API.
+This driver is currently broken, it does not show the in0_input sysfs
+file and also returns the following message on startup:
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+hwmon_device_register() is deprecated. Please convert the driver to
+use hwmon_device_register_with_info().
+
+This patch converts the driver and also cleans up the 'read' function.
+
+Signed-off-by: Marc Ferland <ferlandm@amotus.ca>
 ---
- drivers/hwmon/hwmon.c      | 14 +++++++-------
- drivers/hwmon/scpi-hwmon.c | 14 +++++++-------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ drivers/hwmon/mcp3021.c | 99 ++++++++++++++++++++---------------------
+ 1 file changed, 49 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 2e2cd79d89eb..a98c35fbce87 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -151,9 +151,9 @@ static DEFINE_IDA(hwmon_ida);
-  * between hwmon and thermal_sys modules.
+diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
+index ce2780768074..e093b1998296 100644
+--- a/drivers/hwmon/mcp3021.c
++++ b/drivers/hwmon/mcp3021.c
+@@ -7,7 +7,7 @@
+  * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
+  * DT support added by Clemens Gruber <clemens.gruber@pqgruber.com>
+  *
+- * This driver export the value of analog input voltage to sysfs, the
++ * This driver exports the value of analog input voltage to sysfs, the
+  * voltage unit is mV. Through the sysfs interface, lm-sensors tool
+  * can also display the input voltage.
   */
- #ifdef CONFIG_THERMAL_OF
--static int hwmon_thermal_get_temp(void *data, int *temp)
-+static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct hwmon_thermal_data *tdata = data;
-+	struct hwmon_thermal_data *tdata = tz->devdata;
- 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
- 	int ret;
- 	long t;
-@@ -168,9 +168,9 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
- 	return 0;
- }
- 
--static int hwmon_thermal_set_trips(void *data, int low, int high)
-+static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
- {
--	struct hwmon_thermal_data *tdata = data;
-+	struct hwmon_thermal_data *tdata = tz->devdata;
- 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
- 	const struct hwmon_chip_info *chip = hwdev->chip;
- 	const struct hwmon_channel_info **info = chip->info;
-@@ -203,7 +203,7 @@ static int hwmon_thermal_set_trips(void *data, int low, int high)
- 	return 0;
- }
- 
--static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
-+static struct thermal_zone_device_ops hwmon_thermal_ops = {
- 	.get_temp = hwmon_thermal_get_temp,
- 	.set_trips = hwmon_thermal_set_trips,
+@@ -45,19 +45,29 @@ enum chips {
+  * Client data (each client gets its own)
+  */
+ struct mcp3021_data {
+-	struct device *hwmon_dev;
++	struct i2c_client *client;
+ 	u32 vdd;        /* supply and reference voltage in millivolt */
+ 	u16 sar_shift;
+ 	u16 sar_mask;
+ 	u8 output_res;
  };
-@@ -227,8 +227,8 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
- 	tdata->dev = dev;
- 	tdata->index = index;
  
--	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
--						   &hwmon_thermal_ops);
-+	tzd = devm_thermal_of_zone_register(dev, index, tdata,
-+					    &hwmon_thermal_ops);
- 	if (IS_ERR(tzd)) {
- 		if (PTR_ERR(tzd) != -ENODEV)
- 			return PTR_ERR(tzd);
-diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 5187c6dd5a4f..9c89db8e56a7 100644
---- a/drivers/hwmon/scpi-hwmon.c
-+++ b/drivers/hwmon/scpi-hwmon.c
-@@ -62,9 +62,9 @@ static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
+-static int mcp3021_read16(struct i2c_client *client)
++static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+ {
+-	struct mcp3021_data *data = i2c_get_clientdata(client);
+-	int ret;
+-	u16 reg;
++	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
++}
++
++static int mcp3021_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct mcp3021_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
+ 	__be16 buf;
++	u16 reg;
++	int ret;
++
++	if (type != hwmon_in)
++		return -EOPNOTSUPP;
+ 
+ 	ret = i2c_master_recv(client, (char *)&buf, 2);
+ 	if (ret < 0)
+@@ -74,39 +84,46 @@ static int mcp3021_read16(struct i2c_client *client)
+ 	 */
+ 	reg = (reg >> data->sar_shift) & data->sar_mask;
+ 
+-	return reg;
+-}
++	*val = volts_from_reg(data, reg);
+ 
+-static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+-{
+-	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
++	return 0;
+ }
+ 
+-static ssize_t in0_input_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
++static umode_t mcp3021_is_visible(const void *_data,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
+-	struct mcp3021_data *data = i2c_get_clientdata(client);
+-	int reg, in_input;
++	if (type != hwmon_in)
++		return 0;
+ 
+-	reg = mcp3021_read16(client);
+-	if (reg < 0)
+-		return reg;
++	if (attr != hwmon_in_input)
++		return 0;
+ 
+-	in_input = volts_from_reg(data, reg);
+-
+-	return sprintf(buf, "%d\n", in_input);
++	return 0444;
+ }
+ 
+-static DEVICE_ATTR_RO(in0_input);
++static const struct hwmon_channel_info *mcp3021_info[] = {
++	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
++	NULL
++};
++
++static const struct hwmon_ops mcp3021_hwmon_ops = {
++	.is_visible = mcp3021_is_visible,
++	.read = mcp3021_read,
++};
++
++static const struct hwmon_chip_info mcp3021_chip_info = {
++	.ops = &mcp3021_hwmon_ops,
++	.info = mcp3021_info,
++};
+ 
+ static const struct i2c_device_id mcp3021_id[];
+ 
+ static int mcp3021_probe(struct i2c_client *client)
+ {
+-	int err;
+ 	struct mcp3021_data *data = NULL;
+ 	struct device_node *np = client->dev.of_node;
++	struct device *hwmon_dev;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
+@@ -147,34 +164,17 @@ static int mcp3021_probe(struct i2c_client *client)
+ 		break;
  	}
+ 
++	data->client = client;
++
+ 	if (data->vdd > MCP3021_VDD_REF_MAX || data->vdd < MCP3021_VDD_REF_MIN)
+ 		return -EINVAL;
+ 
+-	err = sysfs_create_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+-	if (err)
+-		return err;
+-
+-	data->hwmon_dev = hwmon_device_register(&client->dev);
+-	if (IS_ERR(data->hwmon_dev)) {
+-		err = PTR_ERR(data->hwmon_dev);
+-		goto exit_remove;
+-	}
+-
+-	return 0;
+-
+-exit_remove:
+-	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+-	return err;
+-}
+-
+-static int mcp3021_remove(struct i2c_client *client)
+-{
+-	struct mcp3021_data *data = i2c_get_clientdata(client);
+-
+-	hwmon_device_unregister(data->hwmon_dev);
+-	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+-
+-	return 0;
++	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
++							 client->name,
++							 data,
++							 &mcp3021_chip_info,
++							 NULL);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
  }
  
--static int scpi_read_temp(void *dev, int *temp)
-+static int scpi_read_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct scpi_thermal_zone *zone = dev;
-+	struct scpi_thermal_zone *zone = tz->devdata;
- 	struct scpi_sensors *scpi_sensors = zone->scpi_sensors;
- 	struct scpi_ops *scpi_ops = scpi_sensors->scpi_ops;
- 	struct sensor_data *sensor = &scpi_sensors->data[zone->sensor_id];
-@@ -121,7 +121,7 @@ scpi_show_label(struct device *dev, struct device_attribute *attr, char *buf)
- 	return sprintf(buf, "%s\n", sensor->info.name);
- }
- 
--static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
-+static struct thermal_zone_device_ops scpi_sensor_ops = {
- 	.get_temp = scpi_read_temp,
+ static const struct i2c_device_id mcp3021_id[] = {
+@@ -199,7 +199,6 @@ static struct i2c_driver mcp3021_driver = {
+ 		.of_match_table = of_match_ptr(of_mcp3021_match),
+ 	},
+ 	.probe_new = mcp3021_probe,
+-	.remove = mcp3021_remove,
+ 	.id_table = mcp3021_id,
  };
  
-@@ -275,10 +275,10 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 
- 		zone->sensor_id = i;
- 		zone->scpi_sensors = scpi_sensors;
--		z = devm_thermal_zone_of_sensor_register(dev,
--							 sensor->info.sensor_id,
--							 zone,
--							 &scpi_sensor_ops);
-+		z = devm_thermal_of_zone_register(dev,
-+						  sensor->info.sensor_id,
-+						  zone,
-+						  &scpi_sensor_ops);
- 		/*
- 		 * The call to thermal_zone_of_sensor_register returns
- 		 * an error for sensors that are not associated with
+
+base-commit: 9f6ca00b5be47e471e9703e6b017e1e2cfa7f604
 -- 
-2.25.1
+2.30.2
 
