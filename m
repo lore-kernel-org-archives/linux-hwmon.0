@@ -2,236 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4430CC43334
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Jul 2022 19:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91AA1C433EF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Jul 2022 21:48:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiGLTqa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Jul 2022 15:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S229918AbiGLVsk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Jul 2022 17:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235112AbiGLTqG (ORCPT
+        with ESMTP id S231610AbiGLVsi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:46:06 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB4CB41BF;
-        Tue, 12 Jul 2022 12:36:01 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id z11so5634768qkz.13;
-        Tue, 12 Jul 2022 12:36:01 -0700 (PDT)
+        Tue, 12 Jul 2022 17:48:38 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902C6E5C
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Jul 2022 14:48:33 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bp17so8282052lfb.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Jul 2022 14:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T+gXQgD4K9MNbkySaTJpNx4ZNqwXAsV+5ltHETmwyZI=;
+        b=Hw4TMVXVj05IVlldJaak7OcR1un7HzFQRvcOgrxfTNdKvb7e0jF9OZoYFe9KYNWbQx
+         4kerIrUw7tPWvXFYjwSfpmOY7D25TzUK5kEQtbpGFn24Gkh6ufGfNiziXXyx+kybmDq4
+         aDUYAOf60bc5KyfakdBH+l01rVX+8M/gTu2EXgqu2BHBmkEW6b+UZglNVXmr+wkSWPeS
+         TSyF8tNSAnml1M259843E2UB/ZlXUwBlPMFT+EBfWQekAPFGi1SUgkSQln9Q1o2B5xCd
+         XtQ2sieoRcMNiC5hu4KHWj+y0KMHEY6DLo3xX61eJMM9Ev32mStfg726q7cFz9rDpqm7
+         8KMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=j0miCz7yO1Y2I8pvw032h1mnhQYjkHXsC5R5mX24dTg=;
-        b=ssNxXzvV0G0LziJ8TgeFUSF1A2+yjhNpUXULxujFk/DGYAzb3gwgHqBQRj2mlV4BoI
-         wgiUOKZYrd1BuHI1qq6hSzmyLsryQlWGr6IfWKqH9XNVLE2vSqqh9NBHG8+jco9GGEcF
-         gvP7VRKUWk7JOsUcG1dBr3tF0zulaRvrEKPXv3gejCg25W2cc/0IGIWo/dJ/kKGXFZT+
-         tH/zJYMck5VkogfVeyBP2iDrDFYWcbPWs5sSN0b2vYabVlGqW/XqJeTyNYs31/m5WE+6
-         3ZCNYRkzo/3aQSx+eoS4G7w8NRjAkMs/bDWAZF0pQgyL3phxh+HoeGVXUs3gMcTvmj2z
-         ECeg==
-X-Gm-Message-State: AJIora+JtLPgSqZAReko+4G5ZXVIlD/JdYIDDEz1Yh8ZPDg/UJaLjjaX
-        NsXU0QVM05XbI9jPBLwadWviBGoEB44=
-X-Google-Smtp-Source: AGRyM1tmda6zGMVpOlj2P77rNbtj6+6NL5E1S8G9DyprdGvF0ZWAY8KoTARaJmN7LzkUuyxmFuXTDw==
-X-Received: by 2002:a05:620a:2624:b0:6b5:965d:e043 with SMTP id z36-20020a05620a262400b006b5965de043mr6402036qko.236.1657654560623;
-        Tue, 12 Jul 2022 12:36:00 -0700 (PDT)
-Received: from mfe-desktop.dimonoffinc.intra (ipagstaticip-ad9375f2-382c-b511-8ac1-9541f69fe50f.sdsl.bell.ca. [142.116.33.166])
-        by smtp.googlemail.com with ESMTPSA id u4-20020a37ab04000000b006b56a4400f6sm9395769qke.16.2022.07.12.12.35.59
+        bh=T+gXQgD4K9MNbkySaTJpNx4ZNqwXAsV+5ltHETmwyZI=;
+        b=t7oqNIRuI5EBRmxorizoJS4uPurQJsVZRF6wz6Vm4pTrfU13jHF0zPSZU+WJ8Hae7l
+         /oTSZsTON9T5ISMGWHcN7G+SweT5fVCjrvyv781eZFijstUuHFVrZooiUKNdj9HxPnia
+         cmf2NsGw/7lgUquFwEyzM8Fz9edL9b3MVIoTbLTCFgPC3l3zUThJsrukS/3C4Y6RxfGY
+         +tsyWZXQCSIqf0Fdw6rC/8FL4dJVjXmLfeBC9jStPLK9Xv2lIFWLoVD/EIq5wdI4bTR/
+         /sBOW7dd38MC4d96ljR/mZSI3ZVRGm2XOe7QU6ygLNg6j5xx/tASXwENlinkluNsIDWR
+         SAxA==
+X-Gm-Message-State: AJIora+SCIXSpDzNsLaJNIVeuLpnyCwDhMYVr7U3IQhFEENoZYasCcKV
+        YVk4uC2hkP18o4HM8aNRKzyV8w==
+X-Google-Smtp-Source: AGRyM1sBnAZfo6kFsUpKlve9iipPQc4R2saonYE3k+HO8Ynn+CTdZ9Bj3QTU4xl7+SVXNYTyyocRGg==
+X-Received: by 2002:a05:6512:234b:b0:489:d0ae:3c1d with SMTP id p11-20020a056512234b00b00489d0ae3c1dmr59779lfu.282.1657662511941;
+        Tue, 12 Jul 2022 14:48:31 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id v18-20020a2e9f52000000b0025a72db0cf1sm2697974ljk.118.2022.07.12.14.48.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 12:36:00 -0700 (PDT)
-From:   ferlandm@amotus.ca
-To:     jdelvare@suse.com
-Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Ferland <ferlandm@amotus.ca>
-Subject: [PATCH] hwmon: (mcp3021) improve driver support for newer hwmon interface
-Date:   Tue, 12 Jul 2022 15:35:04 -0400
-Message-Id: <20220712193504.1374656-1-ferlandm@amotus.ca>
-X-Mailer: git-send-email 2.30.2
+        Tue, 12 Jul 2022 14:48:31 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] hwmon: drivetemp: Add module alias
+Date:   Tue, 12 Jul 2022 23:46:24 +0200
+Message-Id: <20220712214624.1845158-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Marc Ferland <ferlandm@amotus.ca>
+Adding a MODULE_ALIAS() to drivetemp will make the driver easier
+for modprobe to autoprobe.
 
-This driver is currently broken, it does not show the in0_input sysfs
-file and also returns the following message on startup:
-
-hwmon_device_register() is deprecated. Please convert the driver to
-use hwmon_device_register_with_info().
-
-This patch converts the driver and also cleans up the 'read' function.
-
-Signed-off-by: Marc Ferland <ferlandm@amotus.ca>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/hwmon/mcp3021.c | 99 ++++++++++++++++++++---------------------
- 1 file changed, 49 insertions(+), 50 deletions(-)
+ drivers/hwmon/drivetemp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
-index ce2780768074..e093b1998296 100644
---- a/drivers/hwmon/mcp3021.c
-+++ b/drivers/hwmon/mcp3021.c
-@@ -7,7 +7,7 @@
-  * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
-  * DT support added by Clemens Gruber <clemens.gruber@pqgruber.com>
-  *
-- * This driver export the value of analog input voltage to sysfs, the
-+ * This driver exports the value of analog input voltage to sysfs, the
-  * voltage unit is mV. Through the sysfs interface, lm-sensors tool
-  * can also display the input voltage.
-  */
-@@ -45,19 +45,29 @@ enum chips {
-  * Client data (each client gets its own)
-  */
- struct mcp3021_data {
--	struct device *hwmon_dev;
-+	struct i2c_client *client;
- 	u32 vdd;        /* supply and reference voltage in millivolt */
- 	u16 sar_shift;
- 	u16 sar_mask;
- 	u8 output_res;
- };
- 
--static int mcp3021_read16(struct i2c_client *client)
-+static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
- {
--	struct mcp3021_data *data = i2c_get_clientdata(client);
--	int ret;
--	u16 reg;
-+	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
-+}
-+
-+static int mcp3021_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	struct mcp3021_data *data = dev_get_drvdata(dev);
-+	struct i2c_client *client = data->client;
- 	__be16 buf;
-+	u16 reg;
-+	int ret;
-+
-+	if (type != hwmon_in)
-+		return -EOPNOTSUPP;
- 
- 	ret = i2c_master_recv(client, (char *)&buf, 2);
- 	if (ret < 0)
-@@ -74,39 +84,46 @@ static int mcp3021_read16(struct i2c_client *client)
- 	 */
- 	reg = (reg >> data->sar_shift) & data->sar_mask;
- 
--	return reg;
--}
-+	*val = volts_from_reg(data, reg);
- 
--static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
--{
--	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
-+	return 0;
- }
- 
--static ssize_t in0_input_show(struct device *dev,
--			      struct device_attribute *attr, char *buf)
-+static umode_t mcp3021_is_visible(const void *_data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct mcp3021_data *data = i2c_get_clientdata(client);
--	int reg, in_input;
-+	if (type != hwmon_in)
-+		return 0;
- 
--	reg = mcp3021_read16(client);
--	if (reg < 0)
--		return reg;
-+	if (attr != hwmon_in_input)
-+		return 0;
- 
--	in_input = volts_from_reg(data, reg);
--
--	return sprintf(buf, "%d\n", in_input);
-+	return 0444;
- }
- 
--static DEVICE_ATTR_RO(in0_input);
-+static const struct hwmon_channel_info *mcp3021_info[] = {
-+	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops mcp3021_hwmon_ops = {
-+	.is_visible = mcp3021_is_visible,
-+	.read = mcp3021_read,
-+};
-+
-+static const struct hwmon_chip_info mcp3021_chip_info = {
-+	.ops = &mcp3021_hwmon_ops,
-+	.info = mcp3021_info,
-+};
- 
- static const struct i2c_device_id mcp3021_id[];
- 
- static int mcp3021_probe(struct i2c_client *client)
- {
--	int err;
- 	struct mcp3021_data *data = NULL;
- 	struct device_node *np = client->dev.of_node;
-+	struct device *hwmon_dev;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
-@@ -147,34 +164,17 @@ static int mcp3021_probe(struct i2c_client *client)
- 		break;
- 	}
- 
-+	data->client = client;
-+
- 	if (data->vdd > MCP3021_VDD_REF_MAX || data->vdd < MCP3021_VDD_REF_MIN)
- 		return -EINVAL;
- 
--	err = sysfs_create_file(&client->dev.kobj, &dev_attr_in0_input.attr);
--	if (err)
--		return err;
--
--	data->hwmon_dev = hwmon_device_register(&client->dev);
--	if (IS_ERR(data->hwmon_dev)) {
--		err = PTR_ERR(data->hwmon_dev);
--		goto exit_remove;
--	}
--
--	return 0;
--
--exit_remove:
--	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
--	return err;
--}
--
--static int mcp3021_remove(struct i2c_client *client)
--{
--	struct mcp3021_data *data = i2c_get_clientdata(client);
--
--	hwmon_device_unregister(data->hwmon_dev);
--	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
--
--	return 0;
-+	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
-+							 client->name,
-+							 data,
-+							 &mcp3021_chip_info,
-+							 NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
- static const struct i2c_device_id mcp3021_id[] = {
-@@ -199,7 +199,6 @@ static struct i2c_driver mcp3021_driver = {
- 		.of_match_table = of_match_ptr(of_mcp3021_match),
- 	},
- 	.probe_new = mcp3021_probe,
--	.remove = mcp3021_remove,
- 	.id_table = mcp3021_id,
- };
- 
-
-base-commit: 9f6ca00b5be47e471e9703e6b017e1e2cfa7f604
+diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
+index 1eb37106a220..5bac2b0fc7bb 100644
+--- a/drivers/hwmon/drivetemp.c
++++ b/drivers/hwmon/drivetemp.c
+@@ -621,3 +621,4 @@ module_exit(drivetemp_exit);
+ MODULE_AUTHOR("Guenter Roeck <linus@roeck-us.net>");
+ MODULE_DESCRIPTION("Hard drive temperature monitor");
+ MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:drivetemp");
 -- 
-2.30.2
+2.36.1
 
