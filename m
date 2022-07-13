@@ -2,199 +2,572 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A93C43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jul 2022 13:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1171CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jul 2022 14:16:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234407AbiGMNrI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Jul 2022 09:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
+        id S235627AbiGMOQV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Jul 2022 10:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiGMNrH (ORCPT
+        with ESMTP id S229978AbiGMOQU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:47:07 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A5010BE;
-        Wed, 13 Jul 2022 06:47:06 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so3716724pjf.2;
-        Wed, 13 Jul 2022 06:47:06 -0700 (PDT)
+        Wed, 13 Jul 2022 10:16:20 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C222F255B5;
+        Wed, 13 Jul 2022 07:16:19 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so3858646pjr.4;
+        Wed, 13 Jul 2022 07:16:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=E8QifYFp/lwvfFzsp4TOKlqipcqLOhcpZBS/KtNX/OI=;
-        b=YlJyOu2QRsl7m3bd5cIDXtw46d/GAajRopQjQ6XtV0d1SHK8UzrD60XhTw7SQbMFe1
-         gVbbQ05p1X1lFbtnPlkJGbiHW/YGAsYZq48F76SAAvEqQlezVOUy1uXlCm9djS0E12d4
-         0QqbGIOC6sTyMPrOnQJOHieC47LH2tELObQmUEAGV/2k9YfvOpy5lmxWh6gRu1ZzUzmT
-         UxKkCqWfCojQs+kPGKpNczq1pVpOHYwCUbTZ9lzEOI/+80maehBcw6cjH/CkrA2fxNd4
-         kI66VOaUDpsnTPo8CMIg7K54hVEDUwNASEKwmbexON19ClSoRKylwdOhYpCTCyLLAPGG
-         mj7g==
+         :content-disposition:in-reply-to;
+        bh=rQncS2p3wVKtOjrW4i07RKhqwuoViitZNvlS0Y4jzLc=;
+        b=j2hRrJ9MyKlTj5RkDSuR7tuhnFy8qC33r2jaCE6VA66SIE+LIT6iLUXf8g08U7PCar
+         k2DRPgEsVQVvjr3YKPrptd0YcQhLjzn8oRrbO2QOJritjWiKqvVNwPUR1HHZBxMM2pza
+         PyRwRHThq41tpukMw5yKbheKsVl6wum6aSIIw7EgXig6Ugr+HNL0OwIhPCalXF/eI8sp
+         whHNgNaGlRb1N3DTpna+Bbx7YWPbcSFZ2ZJy97MVn4hxgHtW60FA2QgrOm2+YakG9BNK
+         PNJZ9xEoLBLjUs3V7oVb95zBu4oij2TUBaHt2N1sV5ZYuUWk7KCzweCMP1f+3/fqPKui
+         fp+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=E8QifYFp/lwvfFzsp4TOKlqipcqLOhcpZBS/KtNX/OI=;
-        b=KvOQmBFZrPXIxcTkcCnKgUNt+Mkc2G8C5w52/YrGgO4oopAXoLMf1ahUQBH2n3qyZY
-         f0WP5eOF2GxHBKlH/Ap62gJE+endI7o8AZcgVS80KcfP7wsDy6iF5RMoeqvT0jXSs1ki
-         Bk/ChiVnSurjVlYptXU2kDSIeF2Z6LrOVlTLCdl68/4+38Jj9EEtoo9wiFK9NxJslc17
-         1+ZjVA57IKeYWvQEm/JVJm7n56xG7epn6RzoYF2DruxwAbWFXmqfR4gWIK50qq15OAm2
-         2W8NAhYdLblhgrPhIc5Jmam34pfE0/I523wvqCbbW6QyEw6fEPBnZ2a/Dqmel6CCMJm8
-         TImg==
-X-Gm-Message-State: AJIora/3XqhBglrJaxLlbUIt4amOQ6OUHW5F7zHCgYa4aNfiYk5JuVFf
-        F4EKwOYYwKdnPnqzD/8jRl5fhvQeE0Rrlw==
-X-Google-Smtp-Source: AGRyM1tz+UvkD3ZH6hSSZJrft9mTXRXEtOVy7QebAZGY+GZZWMAcmCXDgroD4uzU5TCTQIkRGTHWOA==
-X-Received: by 2002:a17:90b:1807:b0:1f0:5875:9751 with SMTP id lw7-20020a17090b180700b001f058759751mr4044679pjb.25.1657720026209;
-        Wed, 13 Jul 2022 06:47:06 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=rQncS2p3wVKtOjrW4i07RKhqwuoViitZNvlS0Y4jzLc=;
+        b=QYtsFTioZJLfgCyVhRd/uTvTyqLh9ZVKm4AM5xvttMLXY7IleeENa5X3Uu4Qwy0nDu
+         GgJRb4GVzygq4bYuJda/70+45jxbDQvLWJ1Fkip0ua9G7Z8UCd3PdgKhIQc6KHIK8gEC
+         NHYUuxp9Wk0G8makGAb0c/DW7xeSZ51ojT6Gr1txXd7FcttpyYZsdv2hYHy8iJrXiyW+
+         zYHjFT3LQzzwXidgOqpcXzMM41LO8KYQiY/hhe5Oyxt7jyGsKLihD+C+ipm2EKUZeMLe
+         X1KdAs81RGp/wmWX9ZZJOVsFcrKPYqA3u8zxj68hKvJM+2PsDAQd9LQrhDtYRn9mdhAU
+         I2fQ==
+X-Gm-Message-State: AJIora+DEXhj7kJ+Fi/vEhAF003EEJ03YFWdP5xuuLWl8UbUNN/j90FT
+        GCJxA/y3K/NymAfkNTMAROk=
+X-Google-Smtp-Source: AGRyM1v+nME38Ex7+AIFMd8GLL5z9F+LWfZaFGnZESpqOcMyYzgfxVm/PTkCuOsI0ZKBunsx7IWOqQ==
+X-Received: by 2002:a17:90a:ca12:b0:1ef:7c87:70ac with SMTP id x18-20020a17090aca1200b001ef7c8770acmr10552201pjt.153.1657721779148;
+        Wed, 13 Jul 2022 07:16:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k10-20020a170902d58a00b0015e8d4eb1d5sm8826990plh.31.2022.07.13.06.46.59
+        by smtp.gmail.com with ESMTPSA id v3-20020aa799c3000000b0052ab9f1fe45sm8930791pfi.120.2022.07.13.07.16.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 06:47:01 -0700 (PDT)
+        Wed, 13 Jul 2022 07:16:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 06:46:57 -0700
+Date:   Wed, 13 Jul 2022 07:16:16 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Urs Schroffenegger <nabajour@lampshade.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) add definitions for ROG
- ZENITH II EXTREME
-Message-ID: <20220713134657.GA3799892@roeck-us.net>
-References: <20220710202639.1812058-1-eugene.shalygin@gmail.com>
- <20220710202639.1812058-2-eugene.shalygin@gmail.com>
+To:     Atif Ofluoglu <Atif.Ofluoglu@analog.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (pmbus/max20754) Add support for MAX20754
+Message-ID: <20220713141616.GA3823727@roeck-us.net>
+References: <cover.1657204859.git.atif.ofluoglu@analog.com>
+ <3659043f92b0ca9e538679e00f7dcc214525ff2e.1657204859.git.atif.ofluoglu@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220710202639.1812058-2-eugene.shalygin@gmail.com>
+In-Reply-To: <3659043f92b0ca9e538679e00f7dcc214525ff2e.1657204859.git.atif.ofluoglu@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 10:26:39PM +0200, Eugene Shalygin wrote:
-> From: Urs Schroffenegger <nabajour@lampshade.ch>
+On Thu, Jul 07, 2022 at 03:29:17PM +0000, Atif Ofluoglu wrote:
+> From: Atif Ofluoglu <atif.ofluoglu@analog.com>
 > 
-> Add definitions for ROG ZENITH II EXTREME and some unknown yet
-> temperature sensors in the second EC bank. Details are available at
-> [1, 2].
-> 
-> [1] https://github.com/zeule/asus-ec-sensors/pull/26
-> [2] https://github.com/zeule/asus-ec-sensors/issues/16
-> 
-> Signed-off-by: Urs Schroffenegger <nabajour@lampshade.ch>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Signed-off-by: Atif Ofluoglu <Atif.Ofluoglu@analog.com>
 
-Applied.
+Please use lowercase for the e-mail address to avoid confusing
+checkpatch.
 
-Thanks,
-Guenter
 > ---
->  Documentation/hwmon/asus_ec_sensors.rst |  1 +
->  drivers/hwmon/asus-ec-sensors.c         | 47 +++++++++++++++++++++++++
->  2 files changed, 48 insertions(+)
+>  drivers/hwmon/pmbus/Kconfig    |   9 +
+>  drivers/hwmon/pmbus/Makefile   |   1 +
+>  drivers/hwmon/pmbus/max20754.c | 390 +++++++++++++++++++++++++++++++++
+>  3 files changed, 400 insertions(+)
+>  create mode 100644 drivers/hwmon/pmbus/max20754.c
 > 
-> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-> index 1e40c123db77..02f4ad314a1e 100644
-> --- a/Documentation/hwmon/asus_ec_sensors.rst
-> +++ b/Documentation/hwmon/asus_ec_sensors.rst
-> @@ -22,6 +22,7 @@ Supported boards:
->   * ROG STRIX X570-F GAMING
->   * ROG STRIX X570-I GAMING
->   * ROG STRIX Z690-A GAMING WIFI D4
-> + * ROG ZENITH II EXTREME
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index dfae76db65ae..f259b8739766 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -254,6 +254,15 @@ config SENSORS_MAX20751
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called max20751.
 >  
->  Authors:
->      - Eugene Shalygin <eugene.shalygin@gmail.com>
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 625c2baa35ec..3049537130be 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -56,6 +56,8 @@ static char *mutex_path_override;
->  
->  #define ASUS_HW_ACCESS_MUTEX_RMTW_ASMX	"\\RMTW.ASMX"
->  
-> +#define ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0 "\\_SB_.PCI0.SBRG.SIO1.MUT0"
+> +config SENSORS_MAX20754
+> +	tristate "Maxim MAX20754"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Maxim
+> +	  MAX20754.
 > +
->  #define MAX_IDENTICAL_BOARD_VARIATIONS	3
->  
->  /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
-> @@ -121,6 +123,18 @@ enum ec_sensors {
->  	ec_sensor_temp_water_in,
->  	/* "Water_Out" temperature sensor reading [℃] */
->  	ec_sensor_temp_water_out,
-> +	/* "Water_Block_In" temperature sensor reading [℃] */
-> +	ec_sensor_temp_water_block_in,
-> +	/* "Water_Block_Out" temperature sensor reading [℃] */
-> +	ec_sensor_temp_water_block_out,
-> +	/* "T_sensor_2" temperature sensor reading [℃] */
-> +	ec_sensor_temp_t_sensor_2,
-> +	/* "Extra_1" temperature sensor reading [℃] */
-> +	ec_sensor_temp_sensor_extra_1,
-> +	/* "Extra_2" temperature sensor reading [℃] */
-> +	ec_sensor_temp_sensor_extra_2,
-> +	/* "Extra_3" temperature sensor reading [℃] */
-> +	ec_sensor_temp_sensor_extra_3,
->  };
->  
->  #define SENSOR_TEMP_CHIPSET BIT(ec_sensor_temp_chipset)
-> @@ -136,6 +150,12 @@ enum ec_sensors {
->  #define SENSOR_CURR_CPU BIT(ec_sensor_curr_cpu)
->  #define SENSOR_TEMP_WATER_IN BIT(ec_sensor_temp_water_in)
->  #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
-> +#define SENSOR_TEMP_WATER_BLOCK_IN BIT(ec_sensor_temp_water_block_in)
-> +#define SENSOR_TEMP_WATER_BLOCK_OUT BIT(ec_sensor_temp_water_block_out)
-> +#define SENSOR_TEMP_T_SENSOR_2 BIT(ec_sensor_temp_t_sensor_2)
-> +#define SENSOR_TEMP_SENSOR_EXTRA_1 BIT(ec_sensor_temp_sensor_extra_1)
-> +#define SENSOR_TEMP_SENSOR_EXTRA_2 BIT(ec_sensor_temp_sensor_extra_2)
-> +#define SENSOR_TEMP_SENSOR_EXTRA_3 BIT(ec_sensor_temp_sensor_extra_3)
->  
->  enum board_family {
->  	family_unknown,
-> @@ -199,6 +219,18 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
->  		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
->  	[ec_sensor_temp_water_out] =
->  		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> +	[ec_sensor_temp_water_block_in] =
-> +		EC_SENSOR("Water_Block_In", hwmon_temp, 1, 0x01, 0x02),
-> +	[ec_sensor_temp_water_block_out] =
-> +		EC_SENSOR("Water_Block_Out", hwmon_temp, 1, 0x01, 0x03),
-> +	[ec_sensor_temp_sensor_extra_1] =
-> +		EC_SENSOR("Extra_1", hwmon_temp, 1, 0x01, 0x09),
-> +	[ec_sensor_temp_t_sensor_2] =
-> +		EC_SENSOR("T_sensor_2", hwmon_temp, 1, 0x01, 0x0a),
-> +	[ec_sensor_temp_sensor_extra_2] =
-> +		EC_SENSOR("Extra_2", hwmon_temp, 1, 0x01, 0x0b),
-> +	[ec_sensor_temp_sensor_extra_3] =
-> +		EC_SENSOR("Extra_3", hwmon_temp, 1, 0x01, 0x0c),
->  };
->  
->  static const struct ec_sensor_info sensors_family_intel_300[] = {
-> @@ -231,6 +263,9 @@ static const struct ec_sensor_info sensors_family_intel_600[] = {
->  #define SENSOR_SET_TEMP_CHIPSET_CPU_MB                                         \
->  	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
->  #define SENSOR_SET_TEMP_WATER (SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT)
-> +#define SENSOR_SET_WATER_BLOCK                                                 \
-> +	(SENSOR_TEMP_WATER_BLOCK_IN | SENSOR_TEMP_WATER_BLOCK_OUT)
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called max20754.
 > +
->  
->  struct ec_board_info {
->  	const char *board_names[MAX_IDENTICAL_BOARD_VARIATIONS];
-> @@ -378,6 +413,18 @@ static const struct ec_board_info board_info[] = {
->  		.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
->  		.family = family_intel_600_series,
->  	},
-> +	{
-> +		.board_names = {"ROG ZENITH II EXTREME"},
-> +		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
-> +			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> +			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET | SENSOR_FAN_VRM_HS |
-> +			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE |
-> +			SENSOR_SET_WATER_BLOCK |
-> +			SENSOR_TEMP_T_SENSOR_2 | SENSOR_TEMP_SENSOR_EXTRA_1 |
-> +			SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3,
-> +		.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
-> +		.family = family_amd_500_series,
-> +	},
->  	{}
->  };
->  
+>  config SENSORS_MAX31785
+>  	tristate "Maxim MAX31785 and compatibles"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 4678fba5012c..b8b1d8a84b3b 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -27,6 +27,7 @@ obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
+>  obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
+>  obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
+>  obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
+> +obj-$(CONFIG_SENSORS_MAX20751)	+= max20754.o
+>  obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+> diff --git a/drivers/hwmon/pmbus/max20754.c b/drivers/hwmon/pmbus/max20754.c
+> new file mode 100644
+> index 000000000000..5e29e8f8009b
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/max20754.c
+> @@ -0,0 +1,390 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Maxim MAX20754 Dual-Output, Configurable Multiphase
+> + * Power-Supply Controller with PMBus Interface
+> + * and Internal Buck Converter Driver
+> + *
+> + * Author: Atif Emre Ofluoglu <atif.ofluoglu@analog.com>
+> + * Copyright (C) 2022 Analog Devices
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under  the terms of  the GNU General  Public License as published
+> + * by the Free Software Foundation;  either version 2 of the  License,
+> + * or (at your option) any later version.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/hwmon.h>
+
+Alphabetic include file order, please.
+
+> +#include <linux/hwmon-sysfs.h>
+
+Not needed.
+
+> +#include "pmbus.h"
+> +
+> +enum chips { max20754 };
+
+Not needed unless you plan to add another chip to the driver later on,
+and then it should be added with the patch introducing that chip.
+
+> +
+> +#define MAX20754_NUM_PHASES 6
+> +#define MAX20754_LINEAR_EXPONENT -10
+
+#define<space>NAME<tab>value, please. Also, (-10)
+
+> +
+> +struct max20754_data {
+> +	enum chips id;
+> +	struct pmbus_driver_info info;
+> +	struct i2c_client *rail2;
+> +	bool smbus_i2c_block_read;
+> +};
+> +
+> +#define to_max20754_data(x) container_of(x, struct max20754_data, info)
+> +
+> +enum max20754_reg_index {
+> +	operation_index,
+> +	on_off_config_index,
+> +	vout_command_index,
+> +	num_regs,
+> +};
+> +
+> +static const u8 max20754_regs[num_regs][2] = {
+> +	[operation_index] = {PMBUS_OPERATION, 1},
+> +	[on_off_config_index] = {PMBUS_ON_OFF_CONFIG, 1},
+> +	[vout_command_index] = {PMBUS_VOUT_COMMAND, 2},
+> +};
+> +
+> +static u16 val_to_linear16(int val)
+> +{
+> +	return ((u16)val * 1000LL) >> -MAX20754_LINEAR_EXPONENT;
+
+Double negation whenever MAX20754_LINEAR_EXPONENT ? What is the point
+of that ?
+
+> +}
+> +
+> +static long linear16_to_val(s64 val)
+> +{
+> +	if (val == 0)
+> +		return 0;
+
+Why is that needed ?
+
+> +
+> +	val <<= -MAX20754_LINEAR_EXPONENT;
+> +	val = DIV_ROUND_CLOSEST_ULL(val, 1000);
+> +	val = clamp_val(val, 0, 0xffff);
+> +	return val;
+> +}
+> +
+> +static int max20754_read_block_data(struct i2c_client *client, int reg,
+> +				    u8 length, u8 *values)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct max20754_data *data = to_max20754_data(info);
+> +	int ret;
+> +
+> +	if (data->smbus_i2c_block_read) {
+> +		ret = i2c_smbus_read_i2c_block_data(client, reg, length, values);
+> +		if (ret < 1)
+> +			return ret;
+> +		ret = ret - 1;
+> +		memcpy(values, &values[1], ret);
+> +	} else {
+> +		ret = i2c_smbus_read_block_data(client, reg, values);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int max20754_read_word(struct i2c_client *client, int page, int phase,
+> +			      int reg)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct max20754_data *data = to_max20754_data(info);
+> +
+> +	if (reg > 0xFF)
+> +		return -ENXIO;
+> +
+> +	if (reg == PMBUS_MFR_VOUT_MAX)
+> +		reg = PMBUS_VOUT_MAX;
+> +
+
+I don't think this makes sense. MFR_VOUT_MAX is the _rated_
+maximum output voltage, while VOUT_MAX is the _configured_ maximum
+output voltage. Those are distinctly diffferent.
+
+> +	switch (page) {
+> +	case 0:		/* RAIL1 */
+> +		return i2c_smbus_read_word_data(client, reg);
+> +	case 1:		/* RAIL2 */
+> +		return i2c_smbus_read_word_data(data->rail2, reg);
+> +	default:
+> +		return -ENODATA;
+> +	}
+> +
+> +	return -ENODATA;
+> +}
+> +
+> +static int max20754_write_word(struct i2c_client *client, int page, int reg, u16 value)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct max20754_data *data = to_max20754_data(info);
+> +
+> +	switch (reg) {
+> +	case PMBUS_OPERATION:
+> +		if (value >= 0x90 && value <= 0x93)
+> +			return -EOPNOTSUPP;
+> +		break;
+> +	case PMBUS_MFR_VOUT_MAX:
+> +		reg = PMBUS_VOUT_MAX;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	switch (page) {
+> +	case 0:		/* RAIL1 */
+> +		return i2c_smbus_write_word_data(client, reg, value);
+> +	case 1:		/* RAIL2 */
+> +		return i2c_smbus_write_word_data(data->rail2, reg, value);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +	return -ENODATA;
+> +}
+> +
+> +static int max20754_read_byte(struct i2c_client *client, int page, int reg)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct max20754_data *data = to_max20754_data(info);
+> +	int vout_mode;
+> +
+> +	if (reg == PMBUS_VOUT_MODE) {
+> +		vout_mode = i2c_smbus_read_byte_data(client, reg);
+> +		if (vout_mode != 0x2C)
+> +			vout_mode = 0x16;
+
+This ignores errors.
+
+> +		return vout_mode;
+
+Needs explanation.
+
+> +	}
+> +
+> +	switch (page) {
+> +	case 0:		/* RAIL1 */
+> +		return i2c_smbus_read_byte_data(client, reg);
+> +	case 1:		/* RAIL2 */
+> +		return i2c_smbus_read_byte_data(data->rail2, reg);
+> +	default:
+> +		return -ENODATA;
+> +	}
+> +	return -ENODATA;
+> +}
+> +
+> +static int max20754_write_byte(struct i2c_client *client, int page, u8 reg)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct max20754_data *data = to_max20754_data(info);
+> +
+> +	if (reg == PMBUS_CLEAR_FAULTS) {
+> +		switch (page) {
+> +		case 0:
+> +			return i2c_smbus_write_byte(client, reg);
+> +		case 1:
+> +			return i2c_smbus_write_byte(data->rail2, reg);
+> +		default:
+> +			return -ENODATA;
+> +		}
+> +	}
+> +	return -ENODATA;
+> +}
+> +
+> +static int max20754_identify(struct i2c_client *client,
+> +			     struct pmbus_driver_info *info)
+> +{
+> +	struct device *dev = &client->dev;
+> +	u8 buf[9] = {0};
+> +	int ret;
+> +
+> +	ret = max20754_read_block_data(client,
+> +				       PMBUS_IC_DEVICE_ID, 9,
+> +				       buf);
+> +
+> +	if (ret < 0 || ret < 8)
+> +		return -ENODEV;
+> +
+> +	/*
+> +	 * PMBUS_IC_DEVICE_ID is expected to return "MAX20754"
+> +	 */
+> +
+> +	if (strncmp(buf, "MAX20754", 8)) {
+> +		buf[ret] = '\0';
+> +		dev_err(dev, "Unsupported chip '%s'\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+> +	return 0;
+> +}
+
+The above can and should be handled in the probe function.
+With this, the smbus_i2c_block_read boolean in struct max20754_data
+is no longer necessary. 
+
+> +
+> +static ssize_t max20754_register_store(struct device *dev,
+> +				       struct device_attribute *attr, const char *buf,
+> +				       size_t count)
+> +{
+> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct max20754_data *data = to_max20754_data(info);
+> +
+> +	u8 cmd = max20754_regs[sattr->index][0];
+> +	u8 reg_size = max20754_regs[sattr->index][1];
+> +	u8 rail_number = sattr->nr;
+> +	long val = 0;
+
+Unnecessary initialization.
+
+> +	int ret;
+> +
+> +	ret = kstrtol(buf, 10, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rail_number == 1)
+> +		client = data->rail2;
+> +
+> +	if (cmd == PMBUS_VOUT_COMMAND)
+> +		val = linear16_to_val(val);
+> +
+> +	switch (reg_size) {
+> +	case 1:
+> +		ret = i2c_smbus_write_byte_data(client, cmd, val);
+> +		break;
+> +	case 2:
+> +		ret = i2c_smbus_write_word_data(client, cmd, val);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +static ssize_t max20754_register_show(struct device *dev,
+> +				      struct device_attribute *attr, char *buf)
+> +{
+> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +
+> +	int ret_val = 0;
+
+Why ret_val instead of ret like everywhere else ?
+
+> +	u8 cmd = max20754_regs[sattr->index][0];
+> +	u8 reg_size = max20754_regs[sattr->index][1];
+> +	u8 rail_number = sattr->nr;
+> +
+> +	switch (reg_size) {
+> +	case 1:
+> +		ret_val = max20754_read_byte(client, rail_number, cmd);
+> +		break;
+> +	case 2:
+> +		ret_val = max20754_read_word(client, rail_number, 0, cmd);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	if (ret_val < 0)
+> +		return -ENODATA;
+> +
+> +	if (cmd == PMBUS_VOUT_COMMAND)
+> +		ret_val = val_to_linear16(ret_val);
+> +
+> +	return sprintf(buf, "%d\n", ret_val);
+> +}
+> +
+> +#define MAX20754_REGISTER_ATTR_RW(__name, __reg_index, __size) \
+> +	SENSOR_DEVICE_ATTR_2_RW(__name, max20754_register, __size, __reg_index)
+> +
+> +static MAX20754_REGISTER_ATTR_RW(operation, operation_index, 0);
+> +static MAX20754_REGISTER_ATTR_RW(on_off_config, on_off_config_index, 0);
+> +
+> +static MAX20754_REGISTER_ATTR_RW(vout1_command, vout_command_index, 0);
+> +static MAX20754_REGISTER_ATTR_RW(vout2_command, vout_command_index, 1);
+> +
+
+The above attributes are not acceptable. Register as regulator(s) if you
+want to control output voltage and operation.
+
+> +static struct attribute *max20754_attrs[] = {
+> +	&sensor_dev_attr_operation.dev_attr.attr,
+> +	&sensor_dev_attr_on_off_config.dev_attr.attr,
+> +	&sensor_dev_attr_vout1_command.dev_attr.attr,
+> +	&sensor_dev_attr_vout2_command.dev_attr.attr,
+> +	NULL
+> +};
+> +ATTRIBUTE_GROUPS(max20754);
+> +
+> +static struct pmbus_driver_info max20754_info = {
+> +	.pages = 2,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = linear,
+> +	.vrm_version[0] = vr12,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP,
+> +	.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_INPUT |
+> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP,
+> +	.identify = max20754_identify,
+> +	.read_byte_data = max20754_read_byte,
+> +	.read_word_data = max20754_read_word,
+> +	.write_byte = max20754_write_byte,
+> +	.write_word_data = max20754_write_word,
+> +};
+> +
+> +static void max20754_remove(void *_data)
+> +{
+> +	struct max20754_data *data = _data;
+> +
+> +	i2c_unregister_device(data->rail2);
+> +}
+> +
+> +static int max20754_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct max20754_data *data;
+> +	bool i2c_block_data_ok = false;
+> +	int ret = 0;
+
+Unnecessary assignment.
+
+> +
+> +	ret = i2c_check_functionality(client->adapter,
+> +				      I2C_FUNC_SMBUS_READ_BYTE_DATA |
+> +				      I2C_FUNC_SMBUS_READ_BLOCK_DATA);
+> +
+Unnecessary empty line. Also, assigning the return value to a variable
+isn't really necessary.
+
+	if (!i2c_check_functionality(...)) {
+		...
+
+
+> +	if (!ret) 
+> +		ret = i2c_check_functionality(client->adapter,
+> +					      I2C_FUNC_SMBUS_READ_BYTE_DATA |
+> +					      I2C_FUNC_SMBUS_I2C_BLOCK);
+> +		if (!ret)
+> +			return -ENODEV;
+
+		if (!i2c_check_functionality(...))
+			return -ENODEV;
+> +
+> +		i2c_block_data_ok = true;
+> +	}
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->rail2 = i2c_new_dummy_device(client->adapter, client->addr + 1);
+> +	if (IS_ERR(data->rail2)) {
+> +		dev_err(dev, "Failed to register rail2 client\n");
+> +		return PTR_ERR(data->rail2);
+> +	}
+> +	ret = devm_add_action_or_reset(dev, max20754_remove, data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	data->info = max20754_info;
+> +	data->info.groups = max20754_groups;
+> +	data->smbus_i2c_block_read = i2c_block_data_ok;
+> +
+> +	return pmbus_do_probe(client, &data->info);
+> +}
+> +
+> +static const struct i2c_device_id max20754_id[] = {
+> +	{"max20754", max20754},
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, max20754_id);
+> +
+> +static struct i2c_driver max20754_driver = {
+> +	.driver = {
+> +		   .name = "max20754",
+> +		   },
+> +	.probe_new = max20754_probe,
+> +	.remove = pmbus_do_remove,
+
+Please rebase to latest kernel. pmbus_do_remove() no longer exists.
+
+> +	.id_table = max20754_id,
+> +};
+> +
+> +module_i2c_driver(max20754_driver);
+> +
+> +MODULE_AUTHOR("Atif Emre Ofluoglu <atif.ofluoglu@analog.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Maxim MAX20754");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
