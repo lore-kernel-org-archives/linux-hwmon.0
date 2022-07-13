@@ -2,73 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0476C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jul 2022 13:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5DA1C43334
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jul 2022 13:37:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235637AbiGMNfb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Jul 2022 09:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S229966AbiGMNhy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Jul 2022 09:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235134AbiGMNf1 (ORCPT
+        with ESMTP id S229769AbiGMNhw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:35:27 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9FA26121
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 Jul 2022 06:35:26 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 23so10444985pgc.8
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 Jul 2022 06:35:26 -0700 (PDT)
+        Wed, 13 Jul 2022 09:37:52 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C9BAF;
+        Wed, 13 Jul 2022 06:37:51 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so3672631pjf.2;
+        Wed, 13 Jul 2022 06:37:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+iHC9tPXj5dYX0soiuuuM3jTCpfXKYFvlMNnQBLYWVs=;
-        b=kE41HeKfnBtVLukUpwAvpX8lr6ebiVPzL7Pa8loXfI31T/yIRi2M6fzwJvTmoW/LJD
-         dF4n/vAI3Zs0apt4/IhgJcPisKDeahxPB3N5aejgw6HBXcYpxsCHhmnt0ssO9y0PDYkW
-         PdVhtHWO+APrvOphd6dqbbRYj8V7HHjybzyQUeuJX1lpAgngxe4wEElM+7QRHOQcgFeb
-         sxJb5nCwXVdczgTJlpRYsZOeWM91Zt5nun/fRup71CYx2xetjL+hgcTFXEZuv2nxZCPZ
-         bk4ONZQKJ2oVm8Ih4wNK/hyCs5eu1qxKwkOeduBDA8zKP09gPFrylrwaTF6Hm3jhM2Uj
-         TdEg==
+        bh=9VPeTM+RMxSJafERix3xHnha+cDSW/2ONKNAdzCPHC4=;
+        b=n33sN1bwpUY+Gktgn67zK6cBJoSZuH1H9e3cexnKl0ZkgVzro+wS7jB75auXt6AYaZ
+         2k2Pj+08wHqjR4hw/cbWtDPB8tYx+hFLNpv5wRV4XHoSsY/2xIKiKN02LTIqv6o3XmfC
+         /ma0yy9LlOxBj8RO0rsbRBEQF0xoTip/UsQnYkCf+5yptc+62Eu32KMPAg0/GqlXndyo
+         VWdowAPjappLAe/S7bpdxCKvBNplwVc917kKXSFodJ/SSI0rFf9Wm7d3bvIYIE9mBAoC
+         gO5kaB1wj8+LBtLz9I9J16tMlQNw/MV0tLCYfhnskS+6AZl5+DHfwFBtD5HtOwq9prRv
+         s2dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=+iHC9tPXj5dYX0soiuuuM3jTCpfXKYFvlMNnQBLYWVs=;
-        b=6EUse5aDJ8TMj0AdlFOFtWnYzSTRJzYjyYFDCquJZXisO5zUWgr/TDyib3/DR0WBDk
-         5FOlA2FUyOV3dMz+Pbrye1HnGeNtzB5BKhpcLQ1Nl1/eaHIIhr/wP7+fNS/zFcjuGBPE
-         8aDL5EtMwBAqTjX6PquH6U9LCunI0xmGc1M7BnAVdDzHtQv6WctMMhEBk44gQQxesnw+
-         YfyN1eo0psGcyDqmc9f6DAm8N/Xb6CkeD63YhCBqNHVB4MMfRnv1EX9TkIkp2SadDWCH
-         LpdPwE72XQVsHqSgseKBynBvC2PkW510M7j1YQuS8TYccjVhNGTLjlWOZXa22xx29/kx
-         uyYw==
-X-Gm-Message-State: AJIora/o5Hv0peaN0WKypA3fHuIFsOz//65oma+SQfOMCTOhsXBMjJHm
-        qJu4980+3diQ8bJ+Mezp/SFElwkqNC1s0A==
-X-Google-Smtp-Source: AGRyM1tHNlUs7Bf9G3sEx6emyjB/HJA5EUIbMjrohOvFdh6UT9hJ0DKhiv3YYsqfSGFTk4dtWPjFqw==
-X-Received: by 2002:a05:6a00:10c1:b0:52a:d621:138a with SMTP id d1-20020a056a0010c100b0052ad621138amr3441387pfu.67.1657719326190;
-        Wed, 13 Jul 2022 06:35:26 -0700 (PDT)
+        bh=9VPeTM+RMxSJafERix3xHnha+cDSW/2ONKNAdzCPHC4=;
+        b=I4RY/EEUe+DESlzXc0dvoAyS0Xcd7Y6pczR1zYof7nnFyK+uIHLerB6jD9Jl31Am+N
+         K06Ux7Pwq2Mo3qlLJBH09y15M0Eesa/w3D+fsuPAN+ocUZ4a2g4fk4NqoFc3nIK4CScw
+         M03D6vMwKT28fQlGFGtjQPXdpuJMRFBIFakhV12p+BpzWWfeNqxAx5452luiJLS8KW5v
+         OBLB+D4srURwFrayrvkgS+u3VJC4dhIfRYxibgBwL3QaQOQQAmVjW8hY4keyw81HJErM
+         V0qwJDKBoBSThZdN8z1bHchurb1wY95v4Z2PPJzllj8t85GHniUUZ0hTcVvoAk733dtX
+         uOYg==
+X-Gm-Message-State: AJIora8hf85Snyz9N5hztyYcUZQnmpBVoe8mLSgHGI086puNzohfuoSN
+        6fOHo7O0PpFrEKYoqXpoDVo=
+X-Google-Smtp-Source: AGRyM1vA10ewwFsWCbXH3EKKgCXDKVAbkS3vZaFRHSOdLBfGedIfAkY8GOFMXXPqyMJjoefhp+8HCA==
+X-Received: by 2002:a17:902:e54e:b0:16c:56e:7a1e with SMTP id n14-20020a170902e54e00b0016c056e7a1emr3210051plf.30.1657719471237;
+        Wed, 13 Jul 2022 06:37:51 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t6-20020a632246000000b0041296135280sm3509805pgm.88.2022.07.13.06.35.25
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902d19100b00161e50e2245sm8739709plb.178.2022.07.13.06.37.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 06:35:25 -0700 (PDT)
+        Wed, 13 Jul 2022 06:37:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 06:35:24 -0700
+Date:   Wed, 13 Jul 2022 06:37:49 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: drivetemp: Add module alias
-Message-ID: <20220713133524.GA3662638@roeck-us.net>
-References: <20220712214624.1845158-1-linus.walleij@linaro.org>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add missing sensors for X570-I
+ GAMING
+Message-ID: <20220713133749.GA3732583@roeck-us.net>
+References: <20220710085539.1682869-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712214624.1845158-1-linus.walleij@linaro.org>
+In-Reply-To: <20220710085539.1682869-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 11:46:24PM +0200, Linus Walleij wrote:
-> Adding a MODULE_ALIAS() to drivetemp will make the driver easier
-> for modprobe to autoprobe.
+On Sun, Jul 10, 2022 at 10:55:38AM +0200, Eugene Shalygin wrote:
+> VRM and chipset temperature for ROG STRIX X570-I GAMING were missing
+> according to a user contribution to the LHM project [1].
 > 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> [1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/767
+> 
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
 Applied.
 
@@ -76,15 +80,24 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/drivetemp.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/hwmon/asus-ec-sensors.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-> index 1eb37106a220..5bac2b0fc7bb 100644
-> --- a/drivers/hwmon/drivetemp.c
-> +++ b/drivers/hwmon/drivetemp.c
-> @@ -621,3 +621,4 @@ module_exit(drivetemp_exit);
->  MODULE_AUTHOR("Guenter Roeck <linus@roeck-us.net>");
->  MODULE_DESCRIPTION("Hard drive temperature monitor");
->  MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:drivetemp");
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 625c2baa35ec..0749cd023a32 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -366,9 +366,10 @@ static const struct ec_board_info board_info[] = {
+>  	},
+>  	{
+>  		.board_names = {"ROG STRIX X570-I GAMING"},
+> -		.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
+> -			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+> -			SENSOR_IN_CPU_CORE,
+> +		.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
+> +			SENSOR_TEMP_T_SENSOR |
+> +			SENSOR_FAN_VRM_HS | SENSOR_FAN_CHIPSET |
+> +			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+>  		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+>  		.family = family_amd_500_series,
+>  	},
