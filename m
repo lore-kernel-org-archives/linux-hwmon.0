@@ -2,172 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94613C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Jul 2022 13:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33326C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Jul 2022 14:26:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239335AbiGNNiJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Jul 2022 09:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S232331AbiGNO0h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Jul 2022 10:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239240AbiGNNiI (ORCPT
+        with ESMTP id S231987AbiGNO0g (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:38:08 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9640054CAE;
-        Thu, 14 Jul 2022 06:38:07 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y9so1849148pff.12;
-        Thu, 14 Jul 2022 06:38:07 -0700 (PDT)
+        Thu, 14 Jul 2022 10:26:36 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0926D5142D;
+        Thu, 14 Jul 2022 07:26:36 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id c15so2418126ljr.0;
+        Thu, 14 Jul 2022 07:26:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OpmfwN/J8ZTICSzccrhBIpc9ZkfZKVmS0yTPE9OckSU=;
-        b=P8JDkffPEQJ+0PZuxarOGUq/HuVCJaA++tVCBZCJfVuhM8VTaal2y1cnCnHMW4FqPN
-         IDdiIJwCf2/IOvb8PAKpL4Cv1H/hWcMU84KYyFSj8TL8wBeSYxIov1xyLjuIx5cY1r75
-         2m6MO5Z+H6sN5VqelhgzaGIsKPkbkiwkRnX3ULDmhUo40oKKPy7XqGDCu0ux1uGUJSQR
-         aZXfZT8kv2TxP8rzFXKld5bpREnpphvTQBns6gBXF4C515nnfR1IJ5KEeIXv1BptB925
-         N2bHYmilJTyYuH8qSwkmrRaRFbQ3Py6JMtRMFI8MjU0BOROgkj5MGOOBk4WHJA0ewLcI
-         USPA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xhAdDwR7fkHmP5A2mwh6VjI19vPe0VaNlf9urUpx8Og=;
+        b=hINe2A+4rDsO5qx9r85RBNBCkuJYvM+3sJiN3lY76d+aFcYM1FL4AzzIIMEQ9bBstP
+         x2a+hNbdWpX2UFWFTcI/JqwAlb2WDj93S/d4pvcbo5HcL1XgKIDXRTmQ3EOJqlp7zmdy
+         3f3KsIkym9rNdc6a8ECB66yrOVz1mU473DSP+hIvYFH9+G8MM9Jz7IcY6g81EIt/a4DY
+         UwT/Gk78TtX5CsazY8xdZt6M1GwQEdRXMnbR0k2jtlaA0eBQ3kXpZSv67jhIls9uG7gV
+         9wGeVkTCuKK3eSr7OpKj60z7aq9iweHaArBIqGtC7AJv405Hs7TDziT573dBeevw3aOh
+         VHhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=OpmfwN/J8ZTICSzccrhBIpc9ZkfZKVmS0yTPE9OckSU=;
-        b=hL9Vk7Wt3p1Hh9mWNj0or0/TGrncS6O3kcIPpzw7ouGdnVXPbFXn+41HLab1K4p/o0
-         9l2/VC/yjOQ103MTl72Fc3fkvU9ItDoj65KQgJUyw8tLsYjmT4SrwB1Gw8IMRxhLq5Z1
-         PqEPndQYo7F0BZ/4BVBhW8zHV1+fTAC1v2NW/6lAqgFUODWJbt00OoYdk5OcZ/AxY3f8
-         41mYUOg1uL5mxZihS/kQVg+gvuqis4sDM/B11xvsMMSe/22Fqd4QoMGCobSZGtgduB1y
-         9eYOG4XeZRlh/AjSSVI/LQOQtuJGrPGtg/r4pJ7LJE+pUy3dtRg34GJ3Vjcn6TltBsHi
-         0DUA==
-X-Gm-Message-State: AJIora8CBiaT1F9fONeY3c0BRrS9SYBS9hdu+KWMdLT8BQka3g41TE6t
-        VAV0lbyhXrmbk6ejFPz2ONA=
-X-Google-Smtp-Source: AGRyM1vCtckFmC3nc6mMaAk1y5t2v7Ybn8SDjp47SI6V+JOzOavjkwqLvW+ropO8RiT8WLqz/VLpgg==
-X-Received: by 2002:a63:3181:0:b0:417:b4b5:df09 with SMTP id x123-20020a633181000000b00417b4b5df09mr7803649pgx.398.1657805887022;
-        Thu, 14 Jul 2022 06:38:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7-20020a63ff47000000b0041981461f5dsm1286244pgk.90.2022.07.14.06.38.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xhAdDwR7fkHmP5A2mwh6VjI19vPe0VaNlf9urUpx8Og=;
+        b=xGKiD4XZleCAcS2ZMU/fUOteFcsyM7LFLqiZWmYh690rVAwA+5QzRVEunT8V8U9xTl
+         kbKBH1MCvQ4r3sr5N2299B81Ec1Bsq2QT0qJnWRCzW5FCP+slbskg8Mq8vaIzZfnvEv7
+         9HBkGTJOU0MqreV70vi+bK54TlouDEZ8lN4BRfKxhHloAtpAdxn6CxrUlEsQFcqI94YR
+         ycjnb0ZCzuCCumF9lVbCU/L6OEjTQrimF1q0JYGSISi++HG16EPG7Fnt2zrIU1Qx8gqE
+         d/9W5WgUchryVsmYJ7X30WCNKKrJnmclP6pYnisuxKmWX825y4kEC8+2FBGR7R6/ncEa
+         UCig==
+X-Gm-Message-State: AJIora/cwcmM7ratXatPzKzdxJEdDHyZsaldQN5rWNfU0Y27c7BWKVx4
+        /Ir2U7CAW0Fo72N31y937XAu8tKWfaWpMQ==
+X-Google-Smtp-Source: AGRyM1sI1Dl9Qmbe2UutdGzOYC6VzFsKnNHLtcRH+6OjgCWBc6AqXqI2QGNzP6O3eNnhay2PqUfk1g==
+X-Received: by 2002:a2e:944a:0:b0:24f:10bd:b7e8 with SMTP id o10-20020a2e944a000000b0024f10bdb7e8mr4980778ljh.238.1657808794231;
+        Thu, 14 Jul 2022 07:26:34 -0700 (PDT)
+Received: from home.paul.comp (paulfertser.info. [2001:470:26:54b:226:9eff:fe70:80c2])
+        by smtp.gmail.com with ESMTPSA id q17-20020a056512211100b00489c665af61sm382594lfr.274.2022.07.14.07.26.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 06:38:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 14 Jul 2022 06:38:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Kallas, Pawel" <pawel.kallas@intel.com>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        iwona.winiarska@intel.com
-Subject: Re: [PATCH 0/3] hwmon: (pmbus) add power from energy readings
-Message-ID: <20220714133800.GA3916254@roeck-us.net>
-References: <20220706104024.3118590-1-pawel.kallas@intel.com>
- <20220706131758.GA652205@roeck-us.net>
- <dc8771ad-b48b-317d-b132-47208ef58710@intel.com>
- <20220707140952.GB3492673@roeck-us.net>
- <0b776040-c3bd-034f-bbcd-b929f1a4d19a@intel.com>
+        Thu, 14 Jul 2022 07:26:33 -0700 (PDT)
+Received: from home.paul.comp (home.paul.comp [IPv6:0:0:0:0:0:0:0:1])
+        by home.paul.comp (8.15.2/8.15.2/Debian-22) with ESMTP id 26EEQT1u027118;
+        Thu, 14 Jul 2022 17:26:31 +0300
+Received: (from paul@localhost)
+        by home.paul.comp (8.15.2/8.15.2/Submit) id 26EEQPC1027117;
+        Thu, 14 Jul 2022 17:26:25 +0300
+From:   Paul Fertser <fercerpav@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>
+Cc:     Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Paul Fertser <fercerpav@gmail.com>
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho) increase fan tach period (again)
+Date:   Thu, 14 Jul 2022 17:23:44 +0300
+Message-Id: <20220714142344.27071-1-fercerpav@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b776040-c3bd-034f-bbcd-b929f1a4d19a@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 06:00:45PM +0200, Kallas, Pawel wrote:
-> 
-> On 07-Jul-22 4:09 PM, Guenter Roeck wrote:
-> > On Thu, Jul 07, 2022 at 04:01:54PM +0200, Kallas, Pawel wrote:
-> > > On 06-Jul-22 3:17 PM, Guenter Roeck wrote:
-> > > > On Wed, Jul 06, 2022 at 12:40:21PM +0200, Kallas, Pawel wrote:
-> > > > > Add support for reading EIN or EOUT registers and expose power calculated
-> > > > > from energy. This is more accurate than PIN and POUT power readings.
-> > > > > Readings are exposed in new hwmon files power1_average and power2_average.
-> > > > > Also add support for QUERY command that is needed to check availability
-> > > > > of EIN and EOUT reads and its data format. Only direct data format is
-> > > > > supported due to lack of test devices supporting other formats.
-> > > > > 
-> > > > I don't think this is a good idea. EIN/EOUT report energy consumption,
-> > > > not power.
-> > > According to PMBus-Specification-Rev-1-3-1-Part-II-20150313 "READ_EIN and
-> > > READ_EOUT commands provide information that can be used to calculate power
-> > > consumption". That is accumulator summing instantaneous input power
-> > > expressed in "watt-samples" and counter indicating number of samples.
-> > > The only reasonable thing that can be done with those values is calculating
-> > > power.
-> > Yes, but that is not the responsibility of the kernel. Just like we don't add
-> > up power measurements to calculate energy, we don't take energy measurements
-> > and calculate power consumption. Similar, we don't take voltage and current
-> > measurements and report power consumption from it either.
-> > 
-> > > > The "average" attributes as implemented don't really report
-> > > > a reliable number since the averaging period is not defined.
-> > > Agree, it is calculating average power since last read, which could be
-> > > incorrect with multiple consumers. However, this is the only possibility
-> > > without adding some timer logic.
-> > Another reason for doing it in userspace. Read energy every N seconds, and use
-> > the difference to calculate average power consumption average over that time
-> > period.
-> We cannot "read energy". Raw value from READ_EIN and READ_EOUT is not
-> energy.
+The old value allows measuring fan speeds down to about 970 RPM and
+gives timeout for anything less than that. It is problematic because it
+can also be used as an indicator for fan failure or absence.
 
-Sure, it is an accumulation of power reading samples over time. as such,
-it doesn't really even report a power average. Either case, any value
-derived from it is all but worthless unless a well defined time interval
-is available.  Unfortunately, such a time interval would require a kernel
-timer, which would, at least in low power situations, have impact on the
-power readings and is thus unacceptable. Maybe that is why later PMBus
-specification introduced explicit READ_KWH_IN and READ_KWH_OUT commands.
+Despite having read the relevant section of "ASPEED AST2500/AST2520 A2
+Datasheet – V1.7" multiple times I wasn't able to figure out what
+exactly "fan tach period" and "fan tach falling point of period" mean
+(both are set by the driver from the constant this patch is amending).
 
-> > > > Also, kernel
-> > > > drivers should not make up such numbers. I don't mind adding energy
-> > > > attribute support, but that should be reported as what it is, energy.
-> > > > What userspace does with it would then be a userspace concern; it can
-> > > > calculate all kinds of averages from it as much as it wants.
-> > > Returning direct value of read registers would also work for our use case,
-> > > but it is not in line with sysfs interface.
-> > I did not suggest that. Just use the "energyX_in" attributes.
-> Expressing raw value from READ_EIN or READ_EOUT is not in line with
-> sysfs interface, because "energyX_in" should have microJoules as unit.
-> Those commands have very specific format that is not actually energy.
-> Since the only sensible use case for those raw values is calculating power
-> we figured it would be better (and more accurate) to do it in kernel.
-> Also, if we just express raw value, the user would have to know data format
-> of the values for the device and know register format to decode the data.
+Experimentation with a Tioga Pass OCP board (AST2500 BMC) showed that
+value of 0x0108 gives time outs for speeds below 1500 RPM and the value
+offered by the patch is good for at least 750 RPM (the fans can't spin
+any slower so the lower bound is unknown). Measuring with the fans
+spinning takes about 30 ms, sometimes down to 18 ms, so about the same
+as with the previous value.
 
-A joule is one watt-second, and the registers accumulate power samples over
-a period of time. Sure, dividing the reported values by the time interval
-results in the average power consumption over that time interval. Just like
-multiplying the average power consumption with the time interval results in
-the energy consumption over that timer interval. If we say we can't
-determine the energy because the accumulated values are just snapshots in
-time, we just as well can't trust the average power calculated from it.
+This constant was last changed in
+762b1e88801357770889d013c5d20fe110d1f456.
 
-Anyway, I don't really see an acceptable solution. Reporting the average
-power would require a periodic function running every second or so which
-would at least potentially falsify the reported values, and if you say that
-reporting the energy (which might still require a timer function, but less
-frequently) isn't feasible I take you by your word.
+Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Guenter
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 3cb88d6fbec0..d11f674e3dc3 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -159,7 +159,7 @@
+  * 11: reserved.
+  */
+ #define M_TACH_MODE 0x02 /* 10b */
+-#define M_TACH_UNIT 0x0210
++#define M_TACH_UNIT 0x0420
+ #define INIT_FAN_CTRL 0xFF
+ 
+ /* How long we sleep in us while waiting for an RPM result. */
+-- 
+2.32.0
 
-> > 
-> > Thanks,
-> > Guenter
-> > 
-> > > > Also, new attributes should not depend on query command support.
-> > > > I don't mind adding support for that, but it would have to be independent
-> > > > of energy attribute support.
-> > > > 
-> > > > Thanks,
-> > > > Guenter
-> > > > 
-> > > > > Kallas, Pawel (3):
-> > > > >     hwmon: (pmbus) add support for QUERY command
-> > > > >     hwmon: (pmbus) refactor sensor initialization
-> > > > >     hwmon: (pmbus) add EIN and EOUT readings
-> > > > > 
-> > > > >    Documentation/hwmon/pmbus-core.rst |   7 +
-> > > > >    drivers/hwmon/pmbus/pmbus.c        |  20 +++
-> > > > >    drivers/hwmon/pmbus/pmbus.h        |  19 +++
-> > > > >    drivers/hwmon/pmbus/pmbus_core.c   | 261 +++++++++++++++++++++++++++--
-> > > > >    4 files changed, 291 insertions(+), 16 deletions(-)
-> > > > > 
-> > > > > 
-> > > > > base-commit: 7c1de25c06f31b04744beae891baf147af9ba0cb
