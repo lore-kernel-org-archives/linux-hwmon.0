@@ -2,106 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 558B8C433EF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jul 2022 19:55:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF59EC43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Jul 2022 05:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236883AbiGMTz0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Jul 2022 15:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S231331AbiGNFqF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Jul 2022 01:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236481AbiGMTzZ (ORCPT
+        with ESMTP id S230024AbiGNFqF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:55:25 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A514E2C10B;
-        Wed, 13 Jul 2022 12:55:24 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id E53A42DC;
-        Wed, 13 Jul 2022 19:55:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E53A42DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1657742124; bh=kWuy+rhA64DMuaeB8TXkfZuZB3wkP5La509m4dy0efY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mArs6LEWNaAk+iHmyQSAl69AaESH+41g2IDJbSWgJgpuSYtYxyBoaYvKDtFGGUixl
-         Dzuf22cFyz32w9jrysA4i+iVXRq9WDjxAp7ScW2+y648C0HyVF6JAp+kUzfPcwZcGx
-         l+Sib19W+wht/f8KWBKxML2qiXsCLa3eBX02W5RPaYNxn51t+qhrn+RII7U3v5V+gj
-         cGmoaW1IaeeF0ppkXWWfJKei7/BHfSjFfeCE9b94gqahyr8mtpV7KQSnD5C4YFgaol
-         Sh8q5KIRJH5HSKZWtap5yAZy7C78fte2CsGh3cDt6Sz4GHHvmySC+EK11ob/VCN1aU
-         vrXsmdV1nsLsA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thu, 14 Jul 2022 01:46:05 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5C02AC73;
+        Wed, 13 Jul 2022 22:46:03 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bf9so1039226lfb.13;
+        Wed, 13 Jul 2022 22:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vafiOnArmMbdFkw12ZkX8srj9GjEXyE3zEfZk0yyph8=;
+        b=iscXerRkiLLlWMBAYhA8TXE3h5olodsXQDUzlHDh96YOfEf9JHeUR+yq2hn7Jw8R+o
+         +x0HBvlToMU1Z0tcb5vFSAq+GeNVPnsQ3bLdfsHvHjbd63WfPatdE9fqKOUh6PuS6vzI
+         GphVb+HXRxyzKuR9NQiE50Maoti75bkQJ5hT2pI/rC38aOZJxveWEmorzhD2HgznRnwz
+         1PbKIfBtF1dB3yv15M04ZNafaJLYTYip2kwpyq+HoUPTLZjjLv52Dy0taETre4Trom62
+         Mjt++h/NXMnQu/osLBh5kJ3XyfzTYO75O8bnDtRVMJzE14lSkPN17Bq8t9wY11r2uZkL
+         ABrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vafiOnArmMbdFkw12ZkX8srj9GjEXyE3zEfZk0yyph8=;
+        b=1fWE8NC9CVrMImU2SJ/RNAvgJW2SY4vPqtPNQClx2NaIyqJ1VPlRImETzza5vsWHn/
+         erhrJHUQcYANUFRnkJ2JeJ34scQwnsUuww4qc188/IOElnH9uut6AU7sTF8p0eK6kTRN
+         olGDVk56xgVRSyhM0+V07vWVqHO7b2jZuiXDEPgYeHLgtbUNAzsZCeSQc4X8iWqF/lyN
+         p/AIXW0HBhX5s/PXlt7IWiCvrB1fyUzB9Snp1wHl5I85FHe3FRk1dtgDrR9kT12xzOdj
+         zmQu5ukFT4hDjKrclgV6rF4k9wIr88kfehobL8J/xMAtsFFyX72IPD9YTxzuxSdxTvUa
+         l5pQ==
+X-Gm-Message-State: AJIora+hec+euTJmG6AxsnM1tbCk9Nrh4jrOVpQ14cdJ4P7iCWwbaTlv
+        wp95nDVx0C6nmOfInXf1J9yWWeiGFU7hkx0JU4fpbVZKG5fblw==
+X-Google-Smtp-Source: AGRyM1vuz7AcEk7yBbzuHjGT3m6seyH+2XU8NoxGTDIkTqbgJg+QqUcC/DHrl4m2eAzwLfUoHy7fWhQUUwenxJxrSa8=
+X-Received: by 2002:a05:6512:3c98:b0:489:dee3:51d0 with SMTP id
+ h24-20020a0565123c9800b00489dee351d0mr4038695lfv.606.1657777562004; Wed, 13
+ Jul 2022 22:46:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220704122537.3407-1-lukas.bulwahn@gmail.com> <87sfn44wk4.fsf@meer.lwn.net>
+In-Reply-To: <87sfn44wk4.fsf@meer.lwn.net>
+From:   Alex Shi <seakeel@gmail.com>
+Date:   Thu, 14 Jul 2022 13:45:25 +0800
+Message-ID: <CAJy-AmnkRRqC25N1imgqRCHymh8J4ZE=LYx=-3tG4bhAggViSA@mail.gmail.com>
+Subject: Re: [PATCH 00/11] docs: remove submitting-drivers.rst
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
         Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        Hu Haowen <src.res@email.cn>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH 00/11] docs: remove submitting-drivers.rst
-In-Reply-To: <20220704122537.3407-1-lukas.bulwahn@gmail.com>
-References: <20220704122537.3407-1-lukas.bulwahn@gmail.com>
-Date:   Wed, 13 Jul 2022 13:55:23 -0600
-Message-ID: <87sfn44wk4.fsf@meer.lwn.net>
-MIME-Version: 1.0
-Content-Type: text/plain
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
-
-> Dear Jonathan, dear Federico, dear Alex, dear Yanteng, dear Hu,
+> Alex, can you fix the remaining references in zh_CN?
 >
-> Here is an attempt to delete submitting-drivers with some improvements
-> and clean-up in other documentation places to convince ourselves that
-> nothing valuable is lost when deleting this checklist.
+> For zh_TW I'm wondering ... that is increasingly looking like an
+> unmaintained drive-by submission.  I suppose we can just brute-force
+> remove the references, but I once again find myself wondering about the
+> value of this translation.  Is there anybody out there who cares about
+> it who could fix this up properly?
 
-So my purpose today was to go ahead and apply these patches, but ...
+Hi Jon,
 
-> Patch 1, 2 and 3 is just basic clean-up before adding a new reference (see
-> Patch 4). Patch 4 adds the one reference from submitting-drivers, not
-> already mentioned elsewhere in the repository. Patch 5 updates a confusing
-> statement in devices.rst from earlier .txt/.tex distinction times to the
-> new state now with Sphinx & .rst.
->
-> Patch 6 finally deletes the outdated document, with a cross-check what is
-> covered elsewhere and few open questions (see below).
->
-> Patch 7 and 8 have been reworked with the native-speaking doc maintainers;
-> they cause no new warnings and are ready to pick,
->
-> Patch 9 to 11 are weak attempts to adjust the translation, but they need
-> to be taken further by others due to my lack of knowledge on the other
-> languages.  They would currently also cause new warnings in the doc-build
-> right now. They should not be picked if there is no one to continue
-> to adjust the text and fix the warnings on broken references.
->
-> I hope that patches 1 to 8 can be picked into doc-next, and then we see
-> how to fix up the translations as well.
+Both zh_CN and zh_TW were fixed on
+https://lore.kernel.org/linux-doc/20220714054013.214031-1-alexs@kernel.org/T/#u
 
-...even if I do that I get warnings:
+Sorry for the issue
 
-  Documentation/translations/zh_CN/process/howto.rst:98: WARNING:
-  undefined label: submittingdrivers (if the link has no caption the
-  label must precede a section header)
-
-it's actually better if I apply the full series, but there's still a few
-of them.  I *really* don't want to add more warnings to the docs build,
-so I've backed off for now.
-
-Alex, can you fix the remaining references in zh_CN?
-
-For zh_TW I'm wondering ... that is increasingly looking like an
-unmaintained drive-by submission.  I suppose we can just brute-force
-remove the references, but I once again find myself wondering about the
-value of this translation.  Is there anybody out there who cares about
-it who could fix this up properly?
-
-Thanks,
-
-jon
+Thanks
+Alex
