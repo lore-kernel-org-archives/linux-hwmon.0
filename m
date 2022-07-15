@@ -2,179 +2,256 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18B60C43334
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Jul 2022 07:29:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EABFC43334
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Jul 2022 17:57:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiGOH3O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Jul 2022 03:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S229455AbiGOR5z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Jul 2022 13:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbiGOH3K (ORCPT
+        with ESMTP id S229450AbiGOR5y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:29:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627BC11A36
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 Jul 2022 00:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657870149; x=1689406149;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AN0anLhfxmcIdyc2BeCFgXnF3u5kJYrxlEbgog2Oa/c=;
-  b=hbeni7FisgPnB8IzTQ5AnAht1TD+zC0EvQVTOy8JuBrN8lxUBxcQBE5L
-   yazAYIOW5yoi3BUalEwgDj9l9IjRtRWZD5nd0pbEQCo8U296B4ahrdvAj
-   JdjuSofB8obxI/oS6yI+LO00SE7yXLeDD5Pvear+Fq+zRU7P0OqAGlv8x
-   C000a4iKljqz4RwwcbVEGAMptmF/ZUPlNaIr+kP55Tu/2ihT55/YZYmhD
-   oGYu0dFC7d4nQ4x9AoAE55Zipk1Hq8YQ2LSXKn4r3biK9GNaRfaEtVu/l
-   T9UlRj9Loml+q3UBo/2OQUi5OBtvvt4/+cp140WeW5A2f2caREmPfCQyd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="347400604"
-X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
-   d="scan'208";a="347400604"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 00:29:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
-   d="scan'208";a="623752976"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 15 Jul 2022 00:29:07 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCFl5-0001fp-AE;
-        Fri, 15 Jul 2022 07:29:07 +0000
-Date:   Fri, 15 Jul 2022 15:28:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 9992b19d756ab8f0889fcaf3e71ff93852e74694
-Message-ID: <62d11730.VoHaUywdP4bk7U/6%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 15 Jul 2022 13:57:54 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B5A3AE65;
+        Fri, 15 Jul 2022 10:57:53 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id g126so5275384pfb.3;
+        Fri, 15 Jul 2022 10:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EoKJEUoROG+pGaJZ2cUV5lHsnkjMrfqT2r9Oqb+YBgQ=;
+        b=f0tsJ84xVkhlVrpywKZtWete0WL/donUw+wU1NThdo4voAh3W9HFfs39gT9uhnAwe6
+         PARsYRrv/Kp6s0hYUYYrBhwZflkqZBb7eX7jsrJNBgyXIUON0IqeBb0GJ+nH5dwdkkS1
+         8PPuKeK6CR59Yb3yceMGBQNITa+rQTJ0usz/5t898v89KftpdCZndJ4rU0LOPocLEmsV
+         ykHJ7qmcz2gCLj9uNkb4OITjO41IWORnmEHyWE7fpqvwxOJ2dui2mA3o1CZXK09txoeW
+         J0e/FIOUqj3W0NjZdU6c8IF0ZVR8+bdLlz3GNxFe4O+Aa2sVlkqHIxuMeMxYiQZJ9A2i
+         LgpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=EoKJEUoROG+pGaJZ2cUV5lHsnkjMrfqT2r9Oqb+YBgQ=;
+        b=CGBIsfNVbiIqkguGPJncmJ/21Mc3x6QfWo6uH10dv2q7GMu+zeizLlYet5O9rati62
+         XEiEYnMlDU24CZDEx+iGonMRAsurLSLf1QRRhAPVl4VUP4100p1LiiUn8TePNShusr2J
+         1gLZLbyPg7XheuaEMTLwMl/cJf9gAs446bSLP5+JPe3d0rjKDjG5K4a+OKnE5g5ZodpW
+         so7I4YRbIWJpa4bmFFMdBU3I9bilkzQ8krEqUQU4O3Z9K6sbGcr16UgY6BXqmr9YlKgv
+         3KjzLHFrI/wSh9Zxb3JrV4g4oyCR6dlJe2kwpQvSD5up2eRqAfjgXxBm23Sm6BJCMpIE
+         h6fA==
+X-Gm-Message-State: AJIora/7Tb1+jWfTMr7CFtx4vJlxL4yW/ejY2csIx0LhdNWRHQV67He5
+        /Hdr2OZhhSWr6eQGRoLwoLkO7qa3OVafjA==
+X-Google-Smtp-Source: AGRyM1sno8Sx4Cyj8bTE2Gqjil9rsi8kLnLqpX1yZCxokEvx2HlWvtiZL/a9bDeyRsk0agZe6+f71g==
+X-Received: by 2002:a63:e044:0:b0:419:be58:463b with SMTP id n4-20020a63e044000000b00419be58463bmr7119519pgj.504.1657907873043;
+        Fri, 15 Jul 2022 10:57:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902900b00b0016bf1e8f1besm3832601plp.28.2022.07.15.10.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 10:57:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 15 Jul 2022 10:57:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     ferlandm@amotus.ca
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (mcp3021) improve driver support for newer hwmon
+ interface
+Message-ID: <20220715175750.GA3733098@roeck-us.net>
+References: <20220712193504.1374656-1-ferlandm@amotus.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220712193504.1374656-1-ferlandm@amotus.ca>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 9992b19d756ab8f0889fcaf3e71ff93852e74694  hwmon: (asus-ec-sensors) add definitions for ROG ZENITH II EXTREME
+On Tue, Jul 12, 2022 at 03:35:04PM -0400, ferlandm@amotus.ca wrote:
+> From: Marc Ferland <ferlandm@amotus.ca>
+> 
+> This driver is currently broken, it does not show the in0_input sysfs
+> file and also returns the following message on startup:
+> 
+> hwmon_device_register() is deprecated. Please convert the driver to
+> use hwmon_device_register_with_info().
+> 
+> This patch converts the driver and also cleans up the 'read' function.
+> 
+> Signed-off-by: Marc Ferland <ferlandm@amotus.ca>
 
-elapsed time: 2361m
+Applied to hwmon-next.
 
-configs tested: 103
-configs skipped: 4
+Thanks,
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-sparc                             allnoconfig
-arm                           h3600_defconfig
-mips                         cobalt_defconfig
-sh                        sh7785lcr_defconfig
-m68k                       m5275evb_defconfig
-arm                        oxnas_v6_defconfig
-x86_64                                  kexec
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-x86_64                        randconfig-c001
-ia64                             allmodconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220713
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-mips                          ath79_defconfig
-arm                            dove_defconfig
-arm                           spitz_defconfig
-powerpc                 mpc836x_rdk_defconfig
-powerpc                     tqm8560_defconfig
-arm                      pxa255-idp_defconfig
-mips                        workpad_defconfig
-powerpc                          g5_defconfig
-powerpc                    gamecube_defconfig
-arm                        vexpress_defconfig
-arm                   milbeaut_m10v_defconfig
-s390                             alldefconfig
-powerpc                   lite5200b_defconfig
-arm                          pcm027_defconfig
-arm                       cns3420vb_defconfig
-mips                      malta_kvm_defconfig
-powerpc                        fsp2_defconfig
-hexagon                             defconfig
-powerpc                    mvme5100_defconfig
-powerpc                      ppc44x_defconfig
-mips                           ip28_defconfig
-powerpc                     ppa8548_defconfig
-powerpc                     kilauea_defconfig
-powerpc                          allyesconfig
-mips                       rbtx49xx_defconfig
-mips                        omega2p_defconfig
-arm                          moxart_defconfig
-powerpc                     mpc512x_defconfig
-mips                     cu1000-neo_defconfig
-arm                         orion5x_defconfig
-powerpc                      pmac32_defconfig
-arm                         socfpga_defconfig
-riscv                            alldefconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r045-20220714
-hexagon              randconfig-r041-20220714
-hexagon              randconfig-r041-20220713
-s390                 randconfig-r044-20220713
-hexagon              randconfig-r045-20220713
-riscv                randconfig-r042-20220713
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/hwmon/mcp3021.c | 99 ++++++++++++++++++++---------------------
+>  1 file changed, 49 insertions(+), 50 deletions(-)
+> 
+> 
+> base-commit: 9f6ca00b5be47e471e9703e6b017e1e2cfa7f604
+> 
+> diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
+> index ce2780768074..e093b1998296 100644
+> --- a/drivers/hwmon/mcp3021.c
+> +++ b/drivers/hwmon/mcp3021.c
+> @@ -7,7 +7,7 @@
+>   * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
+>   * DT support added by Clemens Gruber <clemens.gruber@pqgruber.com>
+>   *
+> - * This driver export the value of analog input voltage to sysfs, the
+> + * This driver exports the value of analog input voltage to sysfs, the
+>   * voltage unit is mV. Through the sysfs interface, lm-sensors tool
+>   * can also display the input voltage.
+>   */
+> @@ -45,19 +45,29 @@ enum chips {
+>   * Client data (each client gets its own)
+>   */
+>  struct mcp3021_data {
+> -	struct device *hwmon_dev;
+> +	struct i2c_client *client;
+>  	u32 vdd;        /* supply and reference voltage in millivolt */
+>  	u16 sar_shift;
+>  	u16 sar_mask;
+>  	u8 output_res;
+>  };
+>  
+> -static int mcp3021_read16(struct i2c_client *client)
+> +static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+>  {
+> -	struct mcp3021_data *data = i2c_get_clientdata(client);
+> -	int ret;
+> -	u16 reg;
+> +	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
+> +}
+> +
+> +static int mcp3021_read(struct device *dev, enum hwmon_sensor_types type,
+> +			u32 attr, int channel, long *val)
+> +{
+> +	struct mcp3021_data *data = dev_get_drvdata(dev);
+> +	struct i2c_client *client = data->client;
+>  	__be16 buf;
+> +	u16 reg;
+> +	int ret;
+> +
+> +	if (type != hwmon_in)
+> +		return -EOPNOTSUPP;
+>  
+>  	ret = i2c_master_recv(client, (char *)&buf, 2);
+>  	if (ret < 0)
+> @@ -74,39 +84,46 @@ static int mcp3021_read16(struct i2c_client *client)
+>  	 */
+>  	reg = (reg >> data->sar_shift) & data->sar_mask;
+>  
+> -	return reg;
+> -}
+> +	*val = volts_from_reg(data, reg);
+>  
+> -static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+> -{
+> -	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
+> +	return 0;
+>  }
+>  
+> -static ssize_t in0_input_show(struct device *dev,
+> -			      struct device_attribute *attr, char *buf)
+> +static umode_t mcp3021_is_visible(const void *_data,
+> +				  enum hwmon_sensor_types type,
+> +				  u32 attr, int channel)
+>  {
+> -	struct i2c_client *client = to_i2c_client(dev);
+> -	struct mcp3021_data *data = i2c_get_clientdata(client);
+> -	int reg, in_input;
+> +	if (type != hwmon_in)
+> +		return 0;
+>  
+> -	reg = mcp3021_read16(client);
+> -	if (reg < 0)
+> -		return reg;
+> +	if (attr != hwmon_in_input)
+> +		return 0;
+>  
+> -	in_input = volts_from_reg(data, reg);
+> -
+> -	return sprintf(buf, "%d\n", in_input);
+> +	return 0444;
+>  }
+>  
+> -static DEVICE_ATTR_RO(in0_input);
+> +static const struct hwmon_channel_info *mcp3021_info[] = {
+> +	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops mcp3021_hwmon_ops = {
+> +	.is_visible = mcp3021_is_visible,
+> +	.read = mcp3021_read,
+> +};
+> +
+> +static const struct hwmon_chip_info mcp3021_chip_info = {
+> +	.ops = &mcp3021_hwmon_ops,
+> +	.info = mcp3021_info,
+> +};
+>  
+>  static const struct i2c_device_id mcp3021_id[];
+>  
+>  static int mcp3021_probe(struct i2c_client *client)
+>  {
+> -	int err;
+>  	struct mcp3021_data *data = NULL;
+>  	struct device_node *np = client->dev.of_node;
+> +	struct device *hwmon_dev;
+>  
+>  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+>  		return -ENODEV;
+> @@ -147,34 +164,17 @@ static int mcp3021_probe(struct i2c_client *client)
+>  		break;
+>  	}
+>  
+> +	data->client = client;
+> +
+>  	if (data->vdd > MCP3021_VDD_REF_MAX || data->vdd < MCP3021_VDD_REF_MIN)
+>  		return -EINVAL;
+>  
+> -	err = sysfs_create_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+> -	if (err)
+> -		return err;
+> -
+> -	data->hwmon_dev = hwmon_device_register(&client->dev);
+> -	if (IS_ERR(data->hwmon_dev)) {
+> -		err = PTR_ERR(data->hwmon_dev);
+> -		goto exit_remove;
+> -	}
+> -
+> -	return 0;
+> -
+> -exit_remove:
+> -	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+> -	return err;
+> -}
+> -
+> -static int mcp3021_remove(struct i2c_client *client)
+> -{
+> -	struct mcp3021_data *data = i2c_get_clientdata(client);
+> -
+> -	hwmon_device_unregister(data->hwmon_dev);
+> -	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+> -
+> -	return 0;
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
+> +							 client->name,
+> +							 data,
+> +							 &mcp3021_chip_info,
+> +							 NULL);
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+>  }
+>  
+>  static const struct i2c_device_id mcp3021_id[] = {
+> @@ -199,7 +199,6 @@ static struct i2c_driver mcp3021_driver = {
+>  		.of_match_table = of_match_ptr(of_mcp3021_match),
+>  	},
+>  	.probe_new = mcp3021_probe,
+> -	.remove = mcp3021_remove,
+>  	.id_table = mcp3021_id,
+>  };
+>  
