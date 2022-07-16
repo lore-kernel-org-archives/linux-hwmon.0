@@ -2,117 +2,189 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23E19C43334
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Jul 2022 23:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06D13C433EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 16 Jul 2022 06:32:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiGOXeT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 Jul 2022 19:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S231801AbiGPGb4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 16 Jul 2022 02:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbiGOXeL (ORCPT
+        with ESMTP id S231814AbiGPGbf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:34:11 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A153913E1C;
-        Fri, 15 Jul 2022 16:34:10 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso7487532pjk.3;
-        Fri, 15 Jul 2022 16:34:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=HVuLWaX/51pe6iPKpZjM/AG01K4knnM/A3m3uAhbAQs=;
-        b=Y8DVxR6sOawVEjaHLCXc1dJoDIL28pl/tbsDsHTC7h8M9ZMK/Qunzt1Po92GRQnLFD
-         6ojEkwkeczjtyYJaRbl8xWrbftge7ceHpByaXgFxCAxk6Sjx3upElB7cJR/rUrxf9hxX
-         ciMkiXbjnNhK2zMD21wKE+x3C5yqFcvY4UR8CLlzfeHCt7qV427MbwY07hEUr31H31P1
-         6s4Z96mQme4sH+7IywQ87UHRW44iZFAfEFakEmCFayGok9AfaFIQw3qoJYJfO3nWhufc
-         JUWcqoJqTR/7wsz89CIAMJR49+XZ6FihlU31Z7jsH931f1cgeHt8M2Su1/xGuCLXrgZF
-         c1ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=HVuLWaX/51pe6iPKpZjM/AG01K4knnM/A3m3uAhbAQs=;
-        b=3pbCwChevjPxVRqB3+HNOE6HCOfQQHWuZSSf/NkHb1FJHo0E+4feOsLrMIBttzXCRR
-         WyNiZAaZUgfRtAe3SuaVazkGSouMo2QcMT7xcaLplGvioW79Z6xMTuSTKaVGOr6hYhPL
-         MGxhneWcsuIG7dSH4y2El5nCBiKeb7e1cvmzbr+qbj0lj/2d9BGeZ/ZvmtyptMmKwBUQ
-         2b4QjUyIQNWZX8uYqaxU5HkSGQskgNBmS+LQ0GkChV4ndd+cT1g6Jh1nKZ2OaQT9O8JW
-         xVPoERsiok5uI8KbUd4Fc6D9YZImqT4Sx3H07YtkJ6ERcRH0QPwFAqd6n0w+rLreoLe2
-         amLA==
-X-Gm-Message-State: AJIora8qFF4bLhsHTEJpQlBqVjjHFSN9VVJnizR2cMj435P39DCB6kbe
-        Jxj/mmWnpUMhSXGJF03GWcQ=
-X-Google-Smtp-Source: AGRyM1uM81+cKbKT3WGocUxAy5d1sDgAAMq6j/VwKs19GHZuTtzSuJ2OhHXu8WyZAUMGVKKTwS1R+w==
-X-Received: by 2002:a17:902:d543:b0:16c:3150:9ba1 with SMTP id z3-20020a170902d54300b0016c31509ba1mr16469556plf.13.1657928050099;
-        Fri, 15 Jul 2022 16:34:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b0016c2da4e73fsm4170878plg.106.2022.07.15.16.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 16:34:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 15 Jul 2022 16:34:08 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Fertser <fercerpav@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho) increase fan tach period
- (again)
-Message-ID: <20220715233408.GA2181024@roeck-us.net>
-References: <20220714142344.27071-1-fercerpav@gmail.com>
+        Sat, 16 Jul 2022 02:31:35 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F4988CFF
+        for <linux-hwmon@vger.kernel.org>; Fri, 15 Jul 2022 23:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657953067; x=1689489067;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=o5Y7FxzR5OY2dKXveOZhbEs9YR5IkQE3J0B3L5ecKJk=;
+  b=hEra+dn7o77QCmJrdkJ/5XKKTcuIl2vNOfmWazsRQ0V4sagdqim5fHUJ
+   uc+U/41HjcbPJHblPrqPvaDFCdJNAPMStrLJGs62AARBbU+eQ0+1R6jga
+   ovFlstX3ebzA72/Wvh7U7DJWoc7z/LbC8Ok4b4YvTVkGY8kMyccuta5Yc
+   1iakpN1V7eVpP7HKGlLi6UUAKmeiIRtAfjAdqBZdujZL3xRuvF+MiS+uz
+   voDjOgZlBzb6iDzRSAj0UogMWpuF+LnIlvhy1GmsItH49KWNbQUmzu4D+
+   HdXK6+1kYxo8mynHTYj2cZX+OSYIlU7iaE/JygfbPERqK/2QWlG+RTw+X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286688731"
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="286688731"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 23:31:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="686205682"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jul 2022 23:31:00 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCbKO-0001E2-9G;
+        Sat, 16 Jul 2022 06:31:00 +0000
+Date:   Sat, 16 Jul 2022 14:30:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 03508eea538557b4f61bf1df2e842d252cb9a6e6
+Message-ID: <62d25afc.UTglI+9sLSFOyRef%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220714142344.27071-1-fercerpav@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 05:23:44PM +0300, Paul Fertser wrote:
-> The old value allows measuring fan speeds down to about 970 RPM and
-> gives timeout for anything less than that. It is problematic because it
-> can also be used as an indicator for fan failure or absence.
-> 
-> Despite having read the relevant section of "ASPEED AST2500/AST2520 A2
-> Datasheet – V1.7" multiple times I wasn't able to figure out what
-> exactly "fan tach period" and "fan tach falling point of period" mean
-> (both are set by the driver from the constant this patch is amending).
-> 
-> Experimentation with a Tioga Pass OCP board (AST2500 BMC) showed that
-> value of 0x0108 gives time outs for speeds below 1500 RPM and the value
-> offered by the patch is good for at least 750 RPM (the fans can't spin
-> any slower so the lower bound is unknown). Measuring with the fans
-> spinning takes about 30 ms, sometimes down to 18 ms, so about the same
-> as with the previous value.
-> 
-> This constant was last changed in
-> 762b1e88801357770889d013c5d20fe110d1f456.
-> 
-> Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 03508eea538557b4f61bf1df2e842d252cb9a6e6  hwmon: (mcp3021) improve driver support for newer hwmon interface
 
-Patrick - any feedback ? Would it be possible to test this change with
-Quanta-q71l ? Or do you envision no problems ?
+elapsed time: 721m
 
-Thanks,
-Guenter
+configs tested: 112
+configs skipped: 3
 
-> ---
->  drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
-> index 3cb88d6fbec0..d11f674e3dc3 100644
-> --- a/drivers/hwmon/aspeed-pwm-tacho.c
-> +++ b/drivers/hwmon/aspeed-pwm-tacho.c
-> @@ -159,7 +159,7 @@
->   * 11: reserved.
->   */
->  #define M_TACH_MODE 0x02 /* 10b */
-> -#define M_TACH_UNIT 0x0210
-> +#define M_TACH_UNIT 0x0420
->  #define INIT_FAN_CTRL 0xFF
->  
->  /* How long we sleep in us while waiting for an RPM result. */
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arm                      footbridge_defconfig
+xtensa                              defconfig
+openrisc                    or1ksim_defconfig
+arm                        mvebu_v7_defconfig
+powerpc                 mpc85xx_cds_defconfig
+parisc                generic-32bit_defconfig
+arm                           u8500_defconfig
+sh                          urquell_defconfig
+s390                       zfcpdump_defconfig
+m68k                             alldefconfig
+mips                           jazz_defconfig
+arm                          simpad_defconfig
+arm                       multi_v4t_defconfig
+powerpc                     ep8248e_defconfig
+sh                        sh7763rdp_defconfig
+mips                    maltaup_xpa_defconfig
+mips                      loongson3_defconfig
+arm                        keystone_defconfig
+powerpc                      tqm8xx_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                     tqm8555_defconfig
+sh                        sh7785lcr_defconfig
+mips                            ar7_defconfig
+sh                         ecovec24_defconfig
+m68k                        m5307c3_defconfig
+ia64                             alldefconfig
+openrisc                 simple_smp_defconfig
+sh                           se7721_defconfig
+m68k                        mvme147_defconfig
+sh                          polaris_defconfig
+powerpc                  storcenter_defconfig
+arc                            hsdk_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+i386                             allyesconfig
+arm                    vt8500_v6_v7_defconfig
+mips                      pic32mzda_defconfig
+mips                           mtx1_defconfig
+powerpc                      ppc64e_defconfig
+arm                       aspeed_g4_defconfig
+arm                          moxart_defconfig
+powerpc                     ppa8548_defconfig
+mips                      maltaaprp_defconfig
+arm                        mvebu_v5_defconfig
+arm                         bcm2835_defconfig
+powerpc                    socrates_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                       netwinder_defconfig
+mips                       lemote2f_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                          collie_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                      obs600_defconfig
+arm                            dove_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220715
+s390                 randconfig-r044-20220715
+hexagon              randconfig-r041-20220715
+riscv                randconfig-r042-20220715
+hexagon              randconfig-r045-20220716
+hexagon              randconfig-r041-20220716
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
