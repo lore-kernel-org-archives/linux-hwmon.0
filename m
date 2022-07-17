@@ -2,189 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06D13C433EF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 16 Jul 2022 06:32:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6802DC43334
+	for <linux-hwmon@archiver.kernel.org>; Sun, 17 Jul 2022 15:41:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiGPGb4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 16 Jul 2022 02:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S230181AbiGQPlm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 17 Jul 2022 11:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiGPGbf (ORCPT
+        with ESMTP id S229629AbiGQPll (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 16 Jul 2022 02:31:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F4988CFF
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 Jul 2022 23:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657953067; x=1689489067;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=o5Y7FxzR5OY2dKXveOZhbEs9YR5IkQE3J0B3L5ecKJk=;
-  b=hEra+dn7o77QCmJrdkJ/5XKKTcuIl2vNOfmWazsRQ0V4sagdqim5fHUJ
-   uc+U/41HjcbPJHblPrqPvaDFCdJNAPMStrLJGs62AARBbU+eQ0+1R6jga
-   ovFlstX3ebzA72/Wvh7U7DJWoc7z/LbC8Ok4b4YvTVkGY8kMyccuta5Yc
-   1iakpN1V7eVpP7HKGlLi6UUAKmeiIRtAfjAdqBZdujZL3xRuvF+MiS+uz
-   voDjOgZlBzb6iDzRSAj0UogMWpuF+LnIlvhy1GmsItH49KWNbQUmzu4D+
-   HdXK6+1kYxo8mynHTYj2cZX+OSYIlU7iaE/JygfbPERqK/2QWlG+RTw+X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286688731"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="286688731"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 23:31:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="686205682"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jul 2022 23:31:00 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCbKO-0001E2-9G;
-        Sat, 16 Jul 2022 06:31:00 +0000
-Date:   Sat, 16 Jul 2022 14:30:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 03508eea538557b4f61bf1df2e842d252cb9a6e6
-Message-ID: <62d25afc.UTglI+9sLSFOyRef%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 17 Jul 2022 11:41:41 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879D1BC9;
+        Sun, 17 Jul 2022 08:41:40 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k30so12290216edk.8;
+        Sun, 17 Jul 2022 08:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KVf7sB0l4zH/Rxpvh7W7/gvxcfaj5Mn8NQrlNnPne74=;
+        b=L8HlfeOnmQDe9wm4ZoNIAPSFWX7DVXaLkCY6zna+tOeC2pje4VGsnHanqViN4TC9/u
+         ZCTpL2iPwSYlbFecyEnd43kRy26lswwe37bpN+8d/2GqVANKu8t+fUyuo2DiZlG9sZxo
+         03igbGK/AnJH9uCdT4qKd0VCSfDJxnr1zRqA66B235IDOhpkWjmuEJlrB8+UAJ802ZAP
+         8nvVr/KyYTOTaJoSyav3Zj8X6sRjIieRi69EjMx12mbwTBr41yqxsXkkZrbpTBSZ2KIv
+         bTnaAB7S0VzJwpu75uVRWJNxCFsVGiubh+bo+NYxpAyMwmvO2g7Hf+PU9z6t57vdPUVL
+         MStw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KVf7sB0l4zH/Rxpvh7W7/gvxcfaj5Mn8NQrlNnPne74=;
+        b=DzAPRzggD5HL7bErT36F4pcM5q6Jbq976ofRietijBc7nZfJI/ytX6X+fMzf1vq9bL
+         /gYplsKE4HY7wrp29S66HJwVbeDcOlO0pitMI/pKlOQmbjQoe/YE+KSU+m3/t4Xh2vSw
+         Mo2b6oMgOejMM7mH0IiWsu+cObM0EOZESTQU/7ZF4TXt6bo4IYAmkDQ1Jy32R1dOudHz
+         zyTUx6gYwJOEP+xS0n9dwBYpJw8TIUYowRzlSn0Q5C2iVzoIu56wQjhr1sgVZLETHmCu
+         2ixAByYSJOkHRskX6XceZezBV8Tn9jlSVHno8XW3rNQtmtE/lXOktG5KKykN9GGPShHM
+         JOZQ==
+X-Gm-Message-State: AJIora/UUrEPtbe56rkfn7krk+5Ct1XEtStBy+RW/GuXsSauZIUPrgYB
+        RfgsxflUlmqGPLkGTOn8T3RmRFcj4UJ4pQ==
+X-Google-Smtp-Source: AGRyM1ta/dXiqsjEBSHiRWRBwI40AUDaODJxfn1wN5mnUQlCE/N8V3b6RDEWViWM/0EkeMfRft9M5A==
+X-Received: by 2002:a05:6402:2b93:b0:43a:5aad:73c2 with SMTP id fj19-20020a0564022b9300b0043a5aad73c2mr31983335edb.300.1658072498706;
+        Sun, 17 Jul 2022 08:41:38 -0700 (PDT)
+Received: from DESKTOP-A98GP49.. (cable-178-148-254-8.dynamic.sbb.rs. [178.148.254.8])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170906388700b0072aac7446easm4403880ejd.47.2022.07.17.08.41.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 08:41:38 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (aquacomputer_d5next) Add D5 Next fan control support
+Date:   Sun, 17 Jul 2022 17:41:14 +0200
+Message-Id: <20220717154114.7545-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 03508eea538557b4f61bf1df2e842d252cb9a6e6  hwmon: (mcp3021) improve driver support for newer hwmon interface
+Define pump and fan speed register offsets in
+D5 Next control report, as well as its size, to expose PWM fan control.
 
-elapsed time: 721m
+Signed-off-by: Jack Doan <me@jackdoan.com>
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+ drivers/hwmon/aquacomputer_d5next.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-configs tested: 112
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arm                      footbridge_defconfig
-xtensa                              defconfig
-openrisc                    or1ksim_defconfig
-arm                        mvebu_v7_defconfig
-powerpc                 mpc85xx_cds_defconfig
-parisc                generic-32bit_defconfig
-arm                           u8500_defconfig
-sh                          urquell_defconfig
-s390                       zfcpdump_defconfig
-m68k                             alldefconfig
-mips                           jazz_defconfig
-arm                          simpad_defconfig
-arm                       multi_v4t_defconfig
-powerpc                     ep8248e_defconfig
-sh                        sh7763rdp_defconfig
-mips                    maltaup_xpa_defconfig
-mips                      loongson3_defconfig
-arm                        keystone_defconfig
-powerpc                      tqm8xx_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                     tqm8555_defconfig
-sh                        sh7785lcr_defconfig
-mips                            ar7_defconfig
-sh                         ecovec24_defconfig
-m68k                        m5307c3_defconfig
-ia64                             alldefconfig
-openrisc                 simple_smp_defconfig
-sh                           se7721_defconfig
-m68k                        mvme147_defconfig
-sh                          polaris_defconfig
-powerpc                  storcenter_defconfig
-arc                            hsdk_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-i386                             allyesconfig
-arm                    vt8500_v6_v7_defconfig
-mips                      pic32mzda_defconfig
-mips                           mtx1_defconfig
-powerpc                      ppc64e_defconfig
-arm                       aspeed_g4_defconfig
-arm                          moxart_defconfig
-powerpc                     ppa8548_defconfig
-mips                      maltaaprp_defconfig
-arm                        mvebu_v5_defconfig
-arm                         bcm2835_defconfig
-powerpc                    socrates_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                       netwinder_defconfig
-mips                       lemote2f_defconfig
-powerpc                    ge_imp3a_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                          collie_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                      obs600_defconfig
-arm                            dove_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220715
-s390                 randconfig-r044-20220715
-hexagon              randconfig-r041-20220715
-riscv                randconfig-r042-20220715
-hexagon              randconfig-r045-20220716
-hexagon              randconfig-r041-20220716
-
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 0e56cc711a26..997d72ea6182 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -71,8 +71,12 @@ static u8 secondary_ctrl_report[] = {
+ #define D5NEXT_PUMP_OFFSET		0x6c
+ #define D5NEXT_FAN_OFFSET		0x5f
+ #define D5NEXT_5V_VOLTAGE		0x39
++#define D5NEXT_CTRL_REPORT_SIZE		0x329
+ static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
+ 
++/* Pump and fan speed registers in D5 Next control report (from 0-100%) */
++static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
++
+ /* Register offsets for the Farbwerk RGB controller */
+ #define FARBWERK_NUM_SENSORS		4
+ #define FARBWERK_SENSOR_START		0x2f
+@@ -667,9 +671,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 
+ 		priv->num_fans = D5NEXT_NUM_FANS;
+ 		priv->fan_sensor_offsets = d5next_sensor_fan_offsets;
++		priv->fan_ctrl_offsets = d5next_ctrl_fan_offsets;
+ 		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
+ 		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
+ 		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
++		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
+ 
+ 		priv->temp_label = label_d5next_temp;
+ 		priv->speed_label = label_d5next_speeds;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
