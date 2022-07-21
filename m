@@ -2,109 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F5DC43334
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Jul 2022 19:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94CB3C43334
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Jul 2022 03:23:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234679AbiGTTa7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Jul 2022 15:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S229441AbiGUDXB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Jul 2022 23:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiGTTa6 (ORCPT
+        with ESMTP id S229507AbiGUDXB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:30:58 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEBF4C60F;
-        Wed, 20 Jul 2022 12:30:57 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KJMOSF012466;
-        Wed, 20 Jul 2022 19:30:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=8I1liYipnBm8X00TE8ZtPGJuIps367Zc6U3dn39s7xI=;
- b=D0F/IfIaM0fZ9yWW4N7ZbuQYm1oXEnYChuiNlmGgdpkCpC33JgN6M3ocGxj5ztWcHO+Q
- HXWRswlKl49KdCtweOcaUsG8iGk9mIxiXDTB3KwrgpXE0id4fmpC2Y7BHhBP0KyhUVG4
- AuaGaJahlSWbb5Ou+/SQg+r8TKHleI/m5fOwhzRb+yymlgPoJP7U+iIy1xCQVQtUVnZi
- rW6W5Q88+8kvD/NyfXP00Qkk7ym36sDUZjutfPShm7xT7P/gVA4BTbEwN50YcSG4eNen
- qUS/g7ofhlm69QoVobbJbjMAGUTwZAj9Gnj6ZDNsLc0pJFOA+OeROam3ST2NYoo4BoEb 7g== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3heqt405u6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 19:30:42 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26KJLUCt002505;
-        Wed, 20 Jul 2022 19:30:41 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03dal.us.ibm.com with ESMTP id 3hbmy9j9k3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 19:30:41 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26KJUe0D37486988
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Jul 2022 19:30:40 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AD1CBC6055;
-        Wed, 20 Jul 2022 19:30:40 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC7B9C605F;
-        Wed, 20 Jul 2022 19:30:39 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.160.104.49])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 20 Jul 2022 19:30:39 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon (occ): Fix response length in checksum retry
-Date:   Wed, 20 Jul 2022 14:30:36 -0500
-Message-Id: <20220720193036.8743-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 20 Jul 2022 23:23:01 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E264A81F
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 Jul 2022 20:23:00 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id mh14so295246qvb.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 Jul 2022 20:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ax/v8cme1O4DafV0vwTxEPOIyKReGvDbMUJ9Fhd4M2I=;
+        b=Y5S/ol1G+gpyWAId3iUokKm+6cHP9QrEuvLQKfsX6cZfFF+LFlp5/o+KBHjoblhbBo
+         9nn6uvl1kMHRH5HqWBraKJRkBOY5ex6RpTFYCWJVSh7fgE7C6jbOshI002B0dvV4ykM9
+         caKeUIyq+l+Hne1kkhoJNMT83vUDUQ/ST3xF78RpGFW2V1l8Ifhe0cXwzQ4fM6zc5wgb
+         Q+W/s3ItInBUZ6yFpnPt3dPbwsCEYrAhlw7djGLQXZ8943unSq1loHOwqMUF651PIgJY
+         b29oG6UAgTiVXF9vnLJyWRZZgcomi364sS7Tv7Knku/41zuYZNzLFoIdpwn/3rX8ImXs
+         dCyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ax/v8cme1O4DafV0vwTxEPOIyKReGvDbMUJ9Fhd4M2I=;
+        b=eyQ3FoSevXgOB/4eco8fg2HCFD5euj6BiDarP8coDRbcm8cgZO1yY1zNG1CN26f8UB
+         xIldkk6ohyfPlX5iQTUuvm95QtyFfYDVfp0P4ye4RUBaSKE75bMfAu4L+taOuMjiEXLM
+         60VIMhvGk74Mqn86luAwXqq1d6l3MCPAfEjQCLuXBmVzcM6mbKvPD8T7Dy/Eci4APuI6
+         quKkDXpM+dU66OhSsXi0YPergpDom7+vqI7HnDO7sfX2RMzQ5jUUBPYW+3xPeVJYj54N
+         dx7liqkGVJRUNKIB82yWwX7ZyYW5ZlkqsXO0NZnFbdQkCwIKKFtjPJDQosTjGN7uLxA0
+         N/GA==
+X-Gm-Message-State: AJIora8+yiLHNmdlfmSvRT83n+nJG1AaEIYvLKwT+RnF/AkEHe7A5BHn
+        ESaU8HVZt/Vl7qzW0N2BQeQ=
+X-Google-Smtp-Source: AGRyM1tzy9Eblv9TTpusllfxGkSF3nD/7/YBN5MzRBYVGGIks0YHfnckhBe+sD5KwdizZmWSWzwb0w==
+X-Received: by 2002:a0c:9101:0:b0:473:9b:d92a with SMTP id q1-20020a0c9101000000b00473009bd92amr32178105qvq.17.1658373779377;
+        Wed, 20 Jul 2022 20:22:59 -0700 (PDT)
+Received: from nuclearis3.lan (c-98-197-59-62.hsd1.tx.comcast.net. [98.197.59.62])
+        by smtp.gmail.com with ESMTPSA id f8-20020a05620a280800b006a6ce613c7csm715448qkp.89.2022.07.20.20.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 20:22:59 -0700 (PDT)
+From:   Alexandru Gagniuc <mr.nuke.me@gmail.com>
+To:     robert.marko@sartura.hr, linux-hwmon@vger.kernel.org
+Cc:     luka.perkov@sartura.hr, jdelvare@suse.com, linux@roeck-us.net,
+        Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Subject: [PATCH] hwmon: (tps23861) fix byte order in current and voltage registers
+Date:   Wed, 20 Jul 2022 22:22:55 -0500
+Message-Id: <20220721032255.2850647-1-mr.nuke.me@gmail.com>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: AbXYQKAn4289Q6xPTDqnFl9qp8Uf5kVt
-X-Proofpoint-ORIG-GUID: AbXYQKAn4289Q6xPTDqnFl9qp8Uf5kVt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_12,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 impostorscore=0 mlxscore=0 malwarescore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 clxscore=1011 priorityscore=1501
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207200077
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Retrying for checksum failure doesn't work since the response length
-gets zeroed out in the submit function. Fix this by resetting the
-response length to its original value before the retry.
+Trying to use this driver on a big-endian machine results in garbage
+values for voltage and current. The tps23861 registers are little-
+endian, and regmap_read_bulk() does not do byte order conversion. Thus
+on BE machines, the most significant bytes got modified, and were
+trimmed by the VOLTAGE_CURRENT_MASK.
 
-Fixes: c27b98ca0edb ("hwmon (occ): Retry for checksum failure")
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+To resolve this use uint16_t values, and convert them to host byte
+order using le16_to_cpu(). This results in correct readings on MIPS.
+
+Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
 ---
- drivers/hwmon/occ/p9_sbe.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwmon/tps23861.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 4a1fe4ee8e2c..f3791a589b01 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -82,6 +82,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
- static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
- 			       void *resp, size_t resp_len)
+diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+index 8bd6435c13e8..e07f6b8a1898 100644
+--- a/drivers/hwmon/tps23861.c
++++ b/drivers/hwmon/tps23861.c
+@@ -140,7 +140,8 @@ static int tps23861_read_temp(struct tps23861_data *data, long *val)
+ static int tps23861_read_voltage(struct tps23861_data *data, int channel,
+ 				 long *val)
  {
-+	size_t original_resp_len = resp_len;
- 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
- 	int rc, i;
+-	unsigned int regval;
++	uint16_t regval;
++	long raw_val;
+ 	int err;
  
-@@ -97,6 +98,7 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
- 		}
- 		if (rc != -EBADE)
- 			return rc;
-+		resp_len = original_resp_len;
- 	}
+ 	if (channel < TPS23861_NUM_PORTS) {
+@@ -155,7 +156,8 @@ static int tps23861_read_voltage(struct tps23861_data *data, int channel,
+ 	if (err < 0)
+ 		return err;
  
- 	switch (((struct occ_response *)resp)->return_status) {
+-	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, regval) * VOLTAGE_LSB) / 1000;
++	raw_val = le16_to_cpu(regval);
++	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, raw_val) * VOLTAGE_LSB) / 1000;
+ 
+ 	return 0;
+ }
+@@ -163,8 +165,9 @@ static int tps23861_read_voltage(struct tps23861_data *data, int channel,
+ static int tps23861_read_current(struct tps23861_data *data, int channel,
+ 				 long *val)
+ {
+-	unsigned int current_lsb;
+-	unsigned int regval;
++	long raw_val, current_lsb;
++	uint16_t regval;
++
+ 	int err;
+ 
+ 	if (data->shunt_resistor == SHUNT_RESISTOR_DEFAULT)
+@@ -178,7 +181,8 @@ static int tps23861_read_current(struct tps23861_data *data, int channel,
+ 	if (err < 0)
+ 		return err;
+ 
+-	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, regval) * current_lsb) / 1000000;
++	raw_val = le16_to_cpu(regval);
++	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, raw_val) * current_lsb) / 1000000;
+ 
+ 	return 0;
+ }
 -- 
-2.31.1
+2.34.3
 
