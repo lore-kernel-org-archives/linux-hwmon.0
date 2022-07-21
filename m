@@ -2,134 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB53C433EF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Jul 2022 03:40:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A234CC433EF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Jul 2022 03:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiGUDkh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Jul 2022 23:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        id S229548AbiGUDqG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Jul 2022 23:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiGUDkf (ORCPT
+        with ESMTP id S229566AbiGUDqE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Jul 2022 23:40:35 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5687442AE6
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 Jul 2022 20:40:34 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id w7so632451plp.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 Jul 2022 20:40:34 -0700 (PDT)
+        Wed, 20 Jul 2022 23:46:04 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8811CE089;
+        Wed, 20 Jul 2022 20:46:03 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id w7so612166ply.12;
+        Wed, 20 Jul 2022 20:46:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=S0qr9SymR+KbwhOQpdo/sy7c/OPbBigCD20C7M24V9M=;
-        b=qa0fJ8gn1cpmWheqWqC16EuWTDeX3Sn2yRJeLTvFwVQF6grXwo4bd/qB88BqXpMmcv
-         SNUqp3jtqPFvNc2CXwVVU4qFL3nO8aMR2unFsLNdSi0eSE29KEr10oyy/4sbqqSobagL
-         qAg7+XJC9dVQywP1BKc8AH5h+LRVNH82kr8wVMjCjeJluVYW6CtWazTqgz+KJNkURzfE
-         tPpO6JxFFUnJni1pImFg1o0JiPp1fMRiqiuvEHCDKFzrsN9x2BpByhZYLZpTRND5ewu2
-         6D8UYmDZWii+nAkZGdccH1bQjRUo0wdfpgktSxQqWdUqe6WMStKjm3YfcPgcygKtZV7B
-         HH0g==
+        bh=PK3ox6a2SQfZxjp5w6QUUVlDtnG7KstXWQ/yrz9Y12o=;
+        b=I+jJtG4t6ilX1lif5EfjWFMSucSEGogByMVLR8H5t20FNKitQz7Dwbtkd+0cj1UDia
+         Yr8hShCE70DpnKh/sAwt+mX1U7Xau/zu6KEHcxxwiTCrv8amVnrVd6/yVWciNLo8ebap
+         dlclF8BU5/lLJ81qcn0q5R6gdzaPUrmDDphIUdIMw7PXQKZoycnTNuybDHxaxgWAWHs4
+         moobKX0sNxnsM39O9b57u8eKFnBPmQB02MQ2nf8RWfVX6eSXSSKVM5LTBIgcEiAP3/Jd
+         WYEuGRz6dHLjvqdOcV8vDqB+tOo8sCnpbKBPoj4XJR/bPUNv+FLGKZqoOywGVpUAHhLS
+         20uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=S0qr9SymR+KbwhOQpdo/sy7c/OPbBigCD20C7M24V9M=;
-        b=DRclpOXE8Gwxr5korXIjLU41eD4NIsHkgWMfdspFvt9jk8F/HSwwr4u9XbnzpX1hEJ
-         Y2KvZ8+6Zf7jGyZ/fDjkYXH1zz0Tqur/fDhRK90mpulJ+WHOvXolssOBTEeBL/Dgjxui
-         o7zDzctrHuIZQWaMabItWM/nFRShjgNf4wcGxj4g5uxoCQRHOU98ZkNOout7Ugt8IUeu
-         zupEKi6IDybOME0hsP8e+h8+oxYnU/bpuAKzKehWUDrogKpm6Sqd1S2KSSZj2fqUYvYp
-         HfXpIeFiDK+1Fjs80ItkUwESfzo2yk4EKi4iUb7S7pUDuWW/iPoAbIKX+7QvFv/WiKu9
-         vhSQ==
-X-Gm-Message-State: AJIora/EDSVmAFfeXAzqmw+1DVivTTsw5cnYArkfOIb8vPXbnS9okovq
-        tHTIPchQ5PIpKoONGZ6fPd/IFoyTMmU2ZQ==
-X-Google-Smtp-Source: AGRyM1vJJD0gUl5PnlZU1LbI7umfjauMMs/L0MEBw5olPSFBe63qD+l+UjqUcRd1pics/jotr6r27g==
-X-Received: by 2002:a17:90b:2252:b0:1f2:2e7:fb45 with SMTP id hk18-20020a17090b225200b001f202e7fb45mr8959518pjb.17.1658374833749;
-        Wed, 20 Jul 2022 20:40:33 -0700 (PDT)
+        bh=PK3ox6a2SQfZxjp5w6QUUVlDtnG7KstXWQ/yrz9Y12o=;
+        b=qaZeu07/U0vUvHwUxtVI0nXxQzWYx03+DtmSIuggsovOV6/sXvBnFmwtZiwIx0vRUI
+         8u2Sh2F4xrEhXMxUtHdKC7aBDfVfsj1mytJJSPc7mMb5Vj1UdLGSz/MsEgjYtcc8hzlQ
+         zir6IpF2jfL8uErxEtDtZZIEXfWMZTOEjmlFp8ZDvcvxgKO42USOYQd8GJzaRdub332b
+         0fOyjNKzH0bjHNKK779MMlzqZ9FWkTIprPTUN8jEJI6xpwu2+Eb6vW96aeEaSYXybR07
+         4SslWNG6zHOvVUh2YMQ5hFPJfpIOR7bKxYp6gd2ULi+RVT+SnfWdmvQbt9GhOw6S++pH
+         SobA==
+X-Gm-Message-State: AJIora99sDPxXIGFoZq/Lzl/N0yrRTj4/UO+A7e+BsJv39o6SbElP63M
+        +OlBE7tm2qFSLFU3N+1VQRfebFSrkF0KAA==
+X-Google-Smtp-Source: AGRyM1uids/sNn17x2CBlHiW5m1SWpRc+251pmsiTzxzmMi9z+jLht3qaVJh9L/1rFAQrGvKO4U3dA==
+X-Received: by 2002:a17:902:a3cc:b0:16d:1af4:6359 with SMTP id q12-20020a170902a3cc00b0016d1af46359mr8691696plb.56.1658375163053;
+        Wed, 20 Jul 2022 20:46:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i8-20020a170902c94800b0016d2dc52eb1sm362890pla.18.2022.07.20.20.40.33
+        by smtp.gmail.com with ESMTPSA id c14-20020a170903234e00b0016be5f24aaesm352874plh.163.2022.07.20.20.46.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 20:40:33 -0700 (PDT)
+        Wed, 20 Jul 2022 20:46:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 20 Jul 2022 20:40:32 -0700
+Date:   Wed, 20 Jul 2022 20:46:01 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Cc:     robert.marko@sartura.hr, linux-hwmon@vger.kernel.org,
-        luka.perkov@sartura.hr, jdelvare@suse.com
-Subject: Re: [PATCH] hwmon: (tps23861) fix byte order in current and voltage
- registers
-Message-ID: <20220721034032.GA1642353@roeck-us.net>
-References: <20220721032255.2850647-1-mr.nuke.me@gmail.com>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com
+Subject: Re: [PATCH] hwmon (occ): Fix response length in checksum retry
+Message-ID: <20220721034601.GA1643258@roeck-us.net>
+References: <20220720193036.8743-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721032255.2850647-1-mr.nuke.me@gmail.com>
+In-Reply-To: <20220720193036.8743-1-eajames@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:22:55PM -0500, Alexandru Gagniuc wrote:
-> Trying to use this driver on a big-endian machine results in garbage
-> values for voltage and current. The tps23861 registers are little-
-> endian, and regmap_read_bulk() does not do byte order conversion. Thus
-> on BE machines, the most significant bytes got modified, and were
-> trimmed by the VOLTAGE_CURRENT_MASK.
+On Wed, Jul 20, 2022 at 02:30:36PM -0500, Eddie James wrote:
+> Retrying for checksum failure doesn't work since the response length
+> gets zeroed out in the submit function. Fix this by resetting the
+> response length to its original value before the retry.
 > 
-> To resolve this use uint16_t values, and convert them to host byte
-> order using le16_to_cpu(). This results in correct readings on MIPS.
-> 
-> Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+> Fixes: c27b98ca0edb ("hwmon (occ): Retry for checksum failure")
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-Applied.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+I assume this patch will be applied with the patch introducing the problem.
+If not, I'll apply it after the next commit window closes.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/tps23861.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
+>  drivers/hwmon/occ/p9_sbe.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-> index 8bd6435c13e8..e07f6b8a1898 100644
-> --- a/drivers/hwmon/tps23861.c
-> +++ b/drivers/hwmon/tps23861.c
-> @@ -140,7 +140,8 @@ static int tps23861_read_temp(struct tps23861_data *data, long *val)
->  static int tps23861_read_voltage(struct tps23861_data *data, int channel,
->  				 long *val)
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 4a1fe4ee8e2c..f3791a589b01 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -82,6 +82,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+>  static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
+>  			       void *resp, size_t resp_len)
 >  {
-> -	unsigned int regval;
-> +	uint16_t regval;
-> +	long raw_val;
->  	int err;
+> +	size_t original_resp_len = resp_len;
+>  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+>  	int rc, i;
 >  
->  	if (channel < TPS23861_NUM_PORTS) {
-> @@ -155,7 +156,8 @@ static int tps23861_read_voltage(struct tps23861_data *data, int channel,
->  	if (err < 0)
->  		return err;
+> @@ -97,6 +98,7 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
+>  		}
+>  		if (rc != -EBADE)
+>  			return rc;
+> +		resp_len = original_resp_len;
+>  	}
 >  
-> -	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, regval) * VOLTAGE_LSB) / 1000;
-> +	raw_val = le16_to_cpu(regval);
-> +	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, raw_val) * VOLTAGE_LSB) / 1000;
->  
->  	return 0;
->  }
-> @@ -163,8 +165,9 @@ static int tps23861_read_voltage(struct tps23861_data *data, int channel,
->  static int tps23861_read_current(struct tps23861_data *data, int channel,
->  				 long *val)
->  {
-> -	unsigned int current_lsb;
-> -	unsigned int regval;
-> +	long raw_val, current_lsb;
-> +	uint16_t regval;
-> +
->  	int err;
->  
->  	if (data->shunt_resistor == SHUNT_RESISTOR_DEFAULT)
-> @@ -178,7 +181,8 @@ static int tps23861_read_current(struct tps23861_data *data, int channel,
->  	if (err < 0)
->  		return err;
->  
-> -	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, regval) * current_lsb) / 1000000;
-> +	raw_val = le16_to_cpu(regval);
-> +	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, raw_val) * current_lsb) / 1000000;
->  
->  	return 0;
->  }
+>  	switch (((struct occ_response *)resp)->return_status) {
