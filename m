@@ -2,159 +2,210 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E78ACC433EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Jul 2022 03:09:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5293BC43334
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Jul 2022 15:13:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiGVDJQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Jul 2022 23:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S235611AbiGVPN0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Jul 2022 11:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiGVDJP (ORCPT
+        with ESMTP id S235681AbiGVPNU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Jul 2022 23:09:15 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FECD8C588
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Jul 2022 20:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658459354; x=1689995354;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UGYRl0/XCq18IqVJaxMFEeWOrxQiosNNpx80pwLlYmw=;
-  b=CMXIxGX+eGD9kvxCVm8hSPytBcja33qPhK684kMqugMSr5mvBxlA8T5g
-   0ljQVvQjHFtrK51Q4nNu0Qbxt07kVDNDY4DVqJop0fhFZrlIeKAuxW+r3
-   C90HUR4KgpXkpJHxSBs9b2PjMmOk0EbVzRvwDXk6LD9Lnxg4MRUZJ22WR
-   vzem2+6odYtGwqQpl276B47W8Wg0cAWH40qXjRnRrta0h3BaKQ3YLtbyy
-   JbbQbDuA/dAB9tRPmS3KbACqIC2jNthWjX7KGEWrCUS1fBydjsgHZypzL
-   tCFxS2G9LzlSdBQy8WOMNV8OnsyLZsC13xZvgjQHsPBV9rYuVoMMB5191
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="312946959"
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="312946959"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 20:09:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="626391094"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2022 20:09:11 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oEj2N-0000ts-04;
-        Fri, 22 Jul 2022 03:09:11 +0000
-Date:   Fri, 22 Jul 2022 11:08:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 0eabb1396656f215a5333a9444158b17b0fd3247
-Message-ID: <62da14a3.laem1INP2+1Kpm6O%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 22 Jul 2022 11:13:20 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E919A5C0
+        for <linux-hwmon@vger.kernel.org>; Fri, 22 Jul 2022 08:13:19 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d10so4689775pfd.9
+        for <linux-hwmon@vger.kernel.org>; Fri, 22 Jul 2022 08:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xPGyI3xzEHeoa7HA2eZbRsUxmhx3KSCJL3UzAyG2PAE=;
+        b=PXxz5ORXrcoMB8LZGj3nvG7fMWCawQLBmMPLgONh5owPMuqTkHjnFCuzWOeeGvAKlj
+         2gQ0LHgeao0bfPIEB44RZUFwNgG8fdecLozcNdlXGIFIY822DBMy6ER9sLsP7zrokp59
+         cfINtly9q+k+N1uOZa1KvT/imN0wN4jlz0vIyxNv6Mpl3CWTNcSYqEauW7LiVQrCioiO
+         WUximXLiMDS82jD/EFuWYXiZoehUta+7OIHdGA6vuQvBE/Y4qDeOls8WdrXan3xxi4/H
+         n12hQ1Rc+xBSKu3zds0hSvCUl/ok1AiKjlqhebMjRos2j/Jc537P5QdzFcxygtgAC0Va
+         Admg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xPGyI3xzEHeoa7HA2eZbRsUxmhx3KSCJL3UzAyG2PAE=;
+        b=BrY1pphMj3qfynW7+YpKAZPcN8FLZThag0XJoimYO1FGI22/o3pSwrxbrEDcDynhM3
+         MxCt8x+JQ3Ivxft8TniE2RXX6rLHf+Yz63jRM73RVetEgxnauLjjQgofaiLwZvjuTLWq
+         /49a3aFNVHP2FMhAOA4xYujnD00UL9AWWND6vxcc9AkSM1J+6LTtajy2td42gzOjey5t
+         nAOzqiFwLEokkKUWvs5bzDgBbWQieKqBoaaCEH4uYv1WXGvlnuN/GkioYbnjO8qVMT2C
+         1475aZGUgQSqBqWrefpTFCPsu/wNaB6/KiIErfbVJcekr9IMGy2zrFXs2GkbSfmjUy74
+         oeQQ==
+X-Gm-Message-State: AJIora8dxUUKpdMSR55AZ0aYIbDyQvftajx4ziQrdJvBT8L8kwoh24wA
+        jZoRs+BbMIObmMXNTJdzsF/+nUWTdApwgA==
+X-Google-Smtp-Source: AGRyM1thTfnhLsaWMn1iB+gt2BvOE/FTDazOgnGEQkFNeCT4akHTcqNXtMLvyZSTDzm6wL2et/lyKg==
+X-Received: by 2002:a63:65c2:0:b0:419:8146:b1a7 with SMTP id z185-20020a6365c2000000b004198146b1a7mr267605pgb.210.1658502798662;
+        Fri, 22 Jul 2022 08:13:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q13-20020a65684d000000b00419cde333eesm3498202pgt.64.2022.07.22.08.13.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 08:13:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9608658b-5110-5035-8c73-825b6b531d28@roeck-us.net>
+Date:   Fri, 22 Jul 2022 08:13:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Roland Stigge <stigge@antcom.de>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20220707161245.1229280-2-Naresh.Solanki@9elements.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220707161245.1229280-2-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 0eabb1396656f215a5333a9444158b17b0fd3247  hwmon: (tps23861) fix byte order in current and voltage registers
+On 7/7/22 09:12, Naresh Solanki wrote:
+> From: Marcello Sylvester Bauer <sylv@sylv.io>
+> 
+> Add Devicetree binding documentation for Maxim MAX6639 temperature
+> monitor with PWM fan-speed controller.
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-elapsed time: 722m
+You didn't copy devicetree maintainers, so you won't get the necessary
+Reviewed-by: tags.
 
-configs tested: 82
-configs skipped: 2
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> ---
+>   .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
+>   1 file changed, 112 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> new file mode 100644
+> index 000000000000..c845fb989af2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim max6639
+> +
+> +maintainers:
+> +  - Roland Stigge <stigge@antcom.de>
+> +
+> +description: |
+> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+> +  fan-speed controller.  It monitors its own temperature and one external
+> +  diode-connected transistor or the temperatures of two external diode-connected
+> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> +
+> +  Datasheets:
+> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - maxim,max6639
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "fan@0"
+> +  - "fan@1"
+> +
+> +additionalProperties: false
+> +
+> +patternProperties:
+> +  "^fan@[0-1]$":
+> +    type: object
+> +    description: |
+> +      Represents the two fans and their specific configuration.
+> +
+> +    properties:
+> +      reg:
+> +        description: |
+> +          The fan number.
+> +        items:
+> +          minimum: 0
+> +          maximum: 1
+> +
+> +      pwm-polarity:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [0, 1]
+> +        default: 1
+> +        description:
+> +          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
+> +          output is high at 100% duty cycle when this bit is set to 1.
+> +
+> +      pulses-per-revolution:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [1, 2, 3, 4]
+> +        default: 2
+> +        description:
+> +          Value specifying the number of pulses per revolution of the controlled
+> +          FAN.
+> +
+> +      maxim,rpm-range:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [2000, 4000, 8000, 16000]
+> +        default: 4000
+> +        description:
+> +          Scales the tachometer counter by setting the maximum (full-scale) value
+> +          of the RPM range for max6639.
+> +
+> +    required:
+> +      - reg
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      max6639@10 {
+> +        compatible = "maxim,max6639";
+> +        reg = <0x10>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        fan@0 {
+> +          reg = <0x0>;
+> +          pwm-polarity = <1>;
+> +          pulses-per-revolution = <2>;
+> +          maxim,rpm-range = <4000>;
+> +        };
+> +
+> +        fan@1 {
+> +          reg = <0x1>;
+> +          pwm-polarity = <1>;
+> +          pulses-per-revolution = <2>;
+> +          maxim,rpm-range = <4000>;
+> +        };
+> +      };
+> +    };
+> +...
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-sh                               j2_defconfig
-arc                          axs101_defconfig
-alpha                               defconfig
-mips                         cobalt_defconfig
-arm                      jornada720_defconfig
-sh                              ul2_defconfig
-powerpc                        cell_defconfig
-riscv             nommu_k210_sdcard_defconfig
-mips                           xway_defconfig
-mips                          rb532_defconfig
-powerpc                 mpc834x_mds_defconfig
-m68k                        mvme147_defconfig
-mips                     loongson1b_defconfig
-arm                         at91_dt_defconfig
-nios2                         10m50_defconfig
-sh                               alldefconfig
-powerpc                     tqm8555_defconfig
-arm                             pxa_defconfig
-powerpc                      tqm8xx_defconfig
-mips                           gcw0_defconfig
-arm                        oxnas_v6_defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220721
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-
-clang tested configs:
-arm                          ixp4xx_defconfig
-powerpc                  mpc866_ads_defconfig
-mips                      malta_kvm_defconfig
-arm                                 defconfig
-arm                           spitz_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220721
-hexagon              randconfig-r045-20220721
-riscv                randconfig-r042-20220721
-s390                 randconfig-r044-20220721
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
