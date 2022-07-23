@@ -2,210 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5293BC43334
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Jul 2022 15:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F48C43334
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Jul 2022 03:38:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235611AbiGVPN0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 22 Jul 2022 11:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S230072AbiGWDix (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Jul 2022 23:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbiGVPNU (ORCPT
+        with ESMTP id S229611AbiGWDix (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:13:20 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E919A5C0
-        for <linux-hwmon@vger.kernel.org>; Fri, 22 Jul 2022 08:13:19 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d10so4689775pfd.9
-        for <linux-hwmon@vger.kernel.org>; Fri, 22 Jul 2022 08:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xPGyI3xzEHeoa7HA2eZbRsUxmhx3KSCJL3UzAyG2PAE=;
-        b=PXxz5ORXrcoMB8LZGj3nvG7fMWCawQLBmMPLgONh5owPMuqTkHjnFCuzWOeeGvAKlj
-         2gQ0LHgeao0bfPIEB44RZUFwNgG8fdecLozcNdlXGIFIY822DBMy6ER9sLsP7zrokp59
-         cfINtly9q+k+N1uOZa1KvT/imN0wN4jlz0vIyxNv6Mpl3CWTNcSYqEauW7LiVQrCioiO
-         WUximXLiMDS82jD/EFuWYXiZoehUta+7OIHdGA6vuQvBE/Y4qDeOls8WdrXan3xxi4/H
-         n12hQ1Rc+xBSKu3zds0hSvCUl/ok1AiKjlqhebMjRos2j/Jc537P5QdzFcxygtgAC0Va
-         Admg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xPGyI3xzEHeoa7HA2eZbRsUxmhx3KSCJL3UzAyG2PAE=;
-        b=BrY1pphMj3qfynW7+YpKAZPcN8FLZThag0XJoimYO1FGI22/o3pSwrxbrEDcDynhM3
-         MxCt8x+JQ3Ivxft8TniE2RXX6rLHf+Yz63jRM73RVetEgxnauLjjQgofaiLwZvjuTLWq
-         /49a3aFNVHP2FMhAOA4xYujnD00UL9AWWND6vxcc9AkSM1J+6LTtajy2td42gzOjey5t
-         nAOzqiFwLEokkKUWvs5bzDgBbWQieKqBoaaCEH4uYv1WXGvlnuN/GkioYbnjO8qVMT2C
-         1475aZGUgQSqBqWrefpTFCPsu/wNaB6/KiIErfbVJcekr9IMGy2zrFXs2GkbSfmjUy74
-         oeQQ==
-X-Gm-Message-State: AJIora8dxUUKpdMSR55AZ0aYIbDyQvftajx4ziQrdJvBT8L8kwoh24wA
-        jZoRs+BbMIObmMXNTJdzsF/+nUWTdApwgA==
-X-Google-Smtp-Source: AGRyM1thTfnhLsaWMn1iB+gt2BvOE/FTDazOgnGEQkFNeCT4akHTcqNXtMLvyZSTDzm6wL2et/lyKg==
-X-Received: by 2002:a63:65c2:0:b0:419:8146:b1a7 with SMTP id z185-20020a6365c2000000b004198146b1a7mr267605pgb.210.1658502798662;
-        Fri, 22 Jul 2022 08:13:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q13-20020a65684d000000b00419cde333eesm3498202pgt.64.2022.07.22.08.13.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 08:13:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9608658b-5110-5035-8c73-825b6b531d28@roeck-us.net>
-Date:   Fri, 22 Jul 2022 08:13:16 -0700
+        Fri, 22 Jul 2022 23:38:53 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DA010FFD;
+        Fri, 22 Jul 2022 20:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1658547515;
+        bh=ieQTvQtVnZ7mPM09J0g6Wzs4pdOsOVS51LcLDarFaec=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=SoGdlj9nO9knroNvYNNFtaf9C/5AZ0hmXGOpGaya+9P4dtMqGPXQ/yUOVylAlfq++
+         O4Yme6xG2cy0QeLepy8M8yvMhHClLzUlaHQn+eO61cBBZHYOp0boZSN0GYEcrjo2TF
+         ruce2Vh1jIdP3qOu5Qgzu6BmY9AAFtmHTmui98k0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MGhuK-1oIviD0rUQ-00DpHU; Sat, 23 Jul 2022 05:38:35 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: Add new pwmX_fan_channel attribute
+Date:   Sat, 23 Jul 2022 05:38:18 +0200
+Message-Id: <20220723033820.22612-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Roland Stigge <stigge@antcom.de>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
-References: <20220707161245.1229280-2-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220707161245.1229280-2-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:giKxwIsn3HIZTNYLES6JzHd4dk1//7X5fnFLMwwGtMTyvSpcAx7
+ Ubum6MGnCavKfKjbdhYlggxFV65lPqWKwgDQmPS6ms+vUgpFfGCcWbg9ryrKYOBy6ICAbpr
+ hhPXmd0kA8cCd3sRKYhbTo1vaLVBdhhiw/sT32y0GzRxTTTzZBR88qm22qhsVrn0B63Qacw
+ 0tRLKolDZnRR1Et/mH3jw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/y1Vg6VsGPg=:756bx/CbxIaN5R4yvO748H
+ Eg7OcuzpWi8bJOnygOYcs8TlYf5DlNCu6opAWAjgGBHa36rwTpdWcbC66M198u8HjRWiNFmS6
+ ZjUAcG+QnFlXi1XYUbLMY6e3LL/RI5SrtTxc8BTScLxZRLRAEpAQfeVwhTlgTFVPz/p01H8Up
+ 1lM9dwycmf5q8lMg3QorDHGAc6yWH2GmlqEjcM4nj440rXFADj3poWHz7pTOW0nCmYHXzjAc4
+ RNAKRlJJm/vmGJ1jKx3otbM9O00PdSZ2hQorxZQf27nkFseXTb/cK3g469xZONsUM79YPiWTi
+ M4QlvB0FGyFI+bEF9p9IokY+vGKmP8sRyKPXQ1UzyvTJX/pURY8D48ar1Tab51EwI9bPYbExv
+ qbiEsmS93/aHsAzxZioJ5FaPIO7ZBa8qmYW0K+jsi192Sp0i4eDC7yw4QGJBFUCLdWIDnkVRO
+ woCFYyU5oyvyMi+F80Bx+t2UJfjQQl+iAr5j4+w8FSKblfSm99Rd+PvSegXcGOI3bSyM2+1mW
+ 68Iy5bbNfaUMxvL1T6y7iaYAT7E4tQGS9/fy9WmH0Rxb7D3baPxlCv9VaJ15FVDR/aGzNRES0
+ +ubNdh1FH8UwEIUO/UI81hKKhWtOM9tnZv1VdYK5sLBQocsk7viiRb6UNOxJ6s7vrNhaQZexF
+ cyhXshQ+JQhiAdjUULnlTv9FgCNn1g0WY3tyZ3OW7VPPem4DQ4mhFa65GSyIBCSZHB1L2uh7j
+ R3BF5SzmFtpLim2cev2PzT98yiLi/kKfOPz4Y2KuondKwG/G3+uKJDhJb4ABRDqpF7D0sPkKV
+ DGTkIYTV//l4f50FG6OGgNN04fzUzjrTTFKVy0p9DCg1o18jHAK5pDyH1AZtyeK5YcU4fkZJv
+ 2LnPoZOns6Mx/IKx4cmMqrgbDC1kvKOnnZJRG2RGVwQcJd5QAfQYFKGMw20VEP9CvFPg/R763
+ 5dEnRt5X2mJAYJ3QgIJWlt4aay1mXcw+IlRoSIGPQMQciQd75Ih89JMDQMN1/11W1rKnQsyne
+ bwzUU9YwBxISukN7UBLiLvqydcrUVlwGRq86IGqHxC4x5uUZqajh2jq/utDQ7Pb2c7EyH6J51
+ 2txcqUor03GUiUYtYte2X1wXOznYRyI92pvtIKQOwOZ8UCPgW9ojHKkRw==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/7/22 09:12, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
-> 
-> Add Devicetree binding documentation for Maxim MAX6639 temperature
-> monitor with PWM fan-speed controller.
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Userspace software which needs to know which PWM channel is
+associated with which fan channel (like fancontrol/pwmconfig)
+currently has to probe each PWM channel and watch for fan speed
+changes.
 
-You didn't copy devicetree maintainers, so you won't get the necessary
-Reviewed-by: tags.
+This process has multiple issues:
+1. Hardware might overhead during probing of PWM channels.
+2. Not all fans react the same to PWM changes, making
+detection unreliable.
 
-Guenter
+However some hwmon chips, especially firmware-based ones, already
+know which PWM channels are associated to which fan channel,
+making probing of them unnecessary.
 
-> ---
->   .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
->   1 file changed, 112 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> new file mode 100644
-> index 000000000000..c845fb989af2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim max6639
-> +
-> +maintainers:
-> +  - Roland Stigge <stigge@antcom.de>
-> +
-> +description: |
-> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
-> +  fan-speed controller.  It monitors its own temperature and one external
-> +  diode-connected transistor or the temperatures of two external diode-connected
-> +  transistors, typically available in CPUs, FPGAs, or GPUs.
-> +
-> +  Datasheets:
-> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - maxim,max6639
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "fan@0"
-> +  - "fan@1"
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
-> +  "^fan@[0-1]$":
-> +    type: object
-> +    description: |
-> +      Represents the two fans and their specific configuration.
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          The fan number.
-> +        items:
-> +          minimum: 0
-> +          maximum: 1
-> +
-> +      pwm-polarity:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1]
-> +        default: 1
-> +        description:
-> +          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
-> +          output is high at 100% duty cycle when this bit is set to 1.
-> +
-> +      pulses-per-revolution:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [1, 2, 3, 4]
-> +        default: 2
-> +        description:
-> +          Value specifying the number of pulses per revolution of the controlled
-> +          FAN.
-> +
-> +      maxim,rpm-range:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [2000, 4000, 8000, 16000]
-> +        default: 4000
-> +        description:
-> +          Scales the tachometer counter by setting the maximum (full-scale) value
-> +          of the RPM range for max6639.
-> +
-> +    required:
-> +      - reg
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      max6639@10 {
-> +        compatible = "maxim,max6639";
-> +        reg = <0x10>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        fan@0 {
-> +          reg = <0x0>;
-> +          pwm-polarity = <1>;
-> +          pulses-per-revolution = <2>;
-> +          maxim,rpm-range = <4000>;
-> +        };
-> +
-> +        fan@1 {
-> +          reg = <0x1>;
-> +          pwm-polarity = <1>;
-> +          pulses-per-revolution = <2>;
-> +          maxim,rpm-range = <4000>;
-> +        };
-> +      };
-> +    };
-> +...
+Add a new sysfs attribute to allow such chips to export
+this knowlege to userspace in a standardized manner.
+
+The first patch adds support for the new attribute to the hwmon core,
+while the second patch adds support for this new attribute to the
+dell-smm-hwmon driver.
+
+All changes have been tested on a Dell Inspiron 3505.
+
+Armin Wolf (2):
+  hwmon: Add pwmX_fan_channel attribute
+  hwmon: (dell-smm) Add support for pwmX_fan_channel attribute
+
+ Documentation/ABI/testing/sysfs-class-hwmon |  8 ++++++++
+ Documentation/hwmon/dell-smm-hwmon.rst      |  1 +
+ Documentation/hwmon/sysfs-interface.rst     |  3 +++
+ drivers/hwmon/dell-smm-hwmon.c              | 15 ++++++++++++---
+ drivers/hwmon/hwmon.c                       |  1 +
+ include/linux/hwmon.h                       |  2 ++
+ 6 files changed, 27 insertions(+), 3 deletions(-)
+
+=2D-
+2.30.2
 
