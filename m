@@ -2,32 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1270DC43334
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Jul 2022 16:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42B33C43334
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Jul 2022 16:30:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiGXQGf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Jul 2022 12:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S229716AbiGXQab (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Jul 2022 12:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGXQGe (ORCPT
+        with ESMTP id S229649AbiGXQab (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Jul 2022 12:06:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61FD11143;
-        Sun, 24 Jul 2022 09:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1658678776;
-        bh=oT6hchnlo/0bvfwaB06/7qgbhgzoMuSOaPA2WA0Y/ro=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=KnBBws9td3qEi/hL71GWWxzXlpOvFTfdcPiMumU2XDVf1HQdTn9lJfZG6QCa35Tkf
-         VyNhJ/vN+BVBfdP+CtHBongcuMDTI3hYAgrDWsc2Cf9mliMqj7SFAjc138Syahv6ap
-         Z0VLq2nKEr9EYpEHj5D4shFCsUPA3eCnOeE7tPSg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M1HZi-1oDzQb3f6A-002pfX; Sun, 24
- Jul 2022 18:06:15 +0200
-Subject: Re: [PATCH 1/2] hwmon: Add pwmX_fan_channel attribute
-To:     Guenter Roeck <linux@roeck-us.net>
+        Sun, 24 Jul 2022 12:30:31 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E211117F;
+        Sun, 24 Jul 2022 09:30:30 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h132so8328797pgc.10;
+        Sun, 24 Jul 2022 09:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=PQJ0FjQXDR/Sgw7KF5CLi/PBTOkjGRDxr2OlSvwVCgs=;
+        b=dJq6c9Chb97lR3PsMmJiDNB1A3Os+7nE2/mIIVFyohygMEhnqdBBP92irGn2lgMTjO
+         qIgi0qdYDIz+YyejDe2TCqVzEaZ2rp6M7EwzXmfkwgpcCbCsB4MCaT7yzRVWbN4+b5gB
+         3kEhwiNJBNjCalJfyiXkIkMNyuJ6S/YifKY6Noy4Bu7Pe736uxx7AVXWaS74696ZhdVa
+         f8ynOrfHy3SmyhzR8nrumjNlGRkiInenemmX2b+F/vTthkctNjdAxDXwQ0A1H/SNM4vu
+         j3gVI7lKOwZkKQwQaoStD8Ej9PCSB+2UGANHbetoFdADp69ZFrGTa/HLntOwosn1thur
+         /r0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=PQJ0FjQXDR/Sgw7KF5CLi/PBTOkjGRDxr2OlSvwVCgs=;
+        b=qKmnCKTsWKXpzupcQwqNSqOlQRx1blL/kToy31Wo1qg43JJjJ00x+S239S0z4uXXGr
+         SMF88KvZnRa0TFHcJDLfMhlCHqaqss7WK+otKGkGAaQAGcyY+JJTuBk2Ct0qCYK4L0VI
+         xOkIFpWS8Ziefi/bU3b+r8pjKmA8pRaW/KGwAtCDz6aOhblvIHpD0Nocg/SWAs1Zy+L4
+         Egwoz56F4coG3vZ73v+nRkSybLn+C0wWO+nJ0YI04VQVnCyqRx3guXHDggJ911vxXl/c
+         NgmcOLjDFZAYjeEGYRqv6qexmUEjfe4eaCqkKYnFnuAKkB6fafdLEN9NxZAX7Q8iPtjU
+         GMLQ==
+X-Gm-Message-State: AJIora9ooUcG33mfI/JH7baihMNyjz0DrOjEdwLCikbOFe2QKaaRKJ3F
+        Na2deAV9Tfa88zp3X06+/Xs=
+X-Google-Smtp-Source: AGRyM1v3Bep1LzW8UiA21lihgQvk/dJHCVnGKEOYzLt8xWNPrd/bkwPhBik3gMDfNSYWGnNhEB9W9g==
+X-Received: by 2002:a65:524a:0:b0:41a:996c:a2c6 with SMTP id q10-20020a65524a000000b0041a996ca2c6mr7703761pgp.528.1658680229196;
+        Sun, 24 Jul 2022 09:30:29 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x22-20020aa79416000000b005289fad1bbesm7967695pfo.94.2022.07.24.09.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 09:30:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e948e1e7-88d4-954f-64c8-f0e5a83a3ee8@roeck-us.net>
+Date:   Sun, 24 Jul 2022 09:30:26 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220723033820.22612-1-W_Armin@gmx.de>
@@ -35,208 +64,140 @@ References: <20220723033820.22612-1-W_Armin@gmx.de>
  <20220723141734.GC2979894@roeck-us.net>
  <7f5c4c26-aa4d-eb97-2188-690c9e11f9a4@gmx.de>
  <4005c025-4722-53ab-116c-6bd1b37f4d41@roeck-us.net>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <9d621e8c-6e62-b0e3-9a6a-c2e904b00971@gmx.de>
-Date:   Sun, 24 Jul 2022 18:06:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <4005c025-4722-53ab-116c-6bd1b37f4d41@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:SVULd6KKoRF5R9RbzKDuSn0ypdItBLq1GQFELMt4USTAAYl92LX
- Qpz0O39DUbsm0CUEuoDdKaSJK7kUog3OHHHzzGMXjo0vsIw6bjFigiwAXOFmiTl4j9PPznu
- CfxHP4B10vmcPn1oDVd0LdjaFFwCUDoNJ/LULAyX8SFS1NVZpRypoI/zZQWBBPxuuABiDjz
- BW3AO8XDUY1qN0N9Zt5vg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CFLApJdwSBM=:2RJAwL8Iv5WtJG//Xczk1V
- IgPAi17QEwHKYu8/afBFkaw04j1420PO4eU4XPpGGrpEdJ0cXREbY90ohVilZJlyn8zchNLK6
- 7I1phTk9zMbQJlnukQiUhLgBHqLwWDFfkuHBn2lJUbigGK394rL4vI7g02//yjm49IX8UQZBd
- ZBvKnNoTeieG8SeMpRL/abv2RCX4aqr3Gc7KkLKATjPLeOryhPZ9TqddoJ5YPpJNnN0JQXTMP
- vi15JGPfjRKdBwthcFKqrY/fvTfWg4F+5gj1PsBuPfaK1vlFckqVqKn6PmoGLVg6Mx1wPDheN
- X9pRTToIDyF1ogEG8NKRmfpu82bLbqPJ6Y9RRrlMPnBhxnge1R1rmSf06hmGdncPgB70BsU+c
- +akO85VDjeWMvo3fRmMNU+0wIzrVB38wFn49DSzSJGOZIxSIjxhZpzfySV7Rm4SWGDd4yChdx
- OQlOS/o30ax/jIwvz4vFGZ2efEtNwWu3eH8vYCm0EUxG+TbdRFMSOtfh45XiCuOYRxwoyf3Dg
- HBilDZhW1A0FXWUCScni3tQDf2dyBViU3Cc8oNZEBbj9XcYP9m3pePnq1Um2hTV+cK9KI85qN
- OnYcPEAgbhtVOZ0FtsnA/YTh/R7FGdFlc2SQqdVKJlrgUOGZ7U+/xI+87s+86fbUgo9QNNuxc
- sqyNah20EI3Ed1RYfLWyNiY6tUgpxugIAbYkr10/UpIuHdRiAtqwL1HnR4axmwkQS2ditgCgf
- qPr61nZWB0LFBfWHjerDWOb1Mb8K0rRAayVZ662ZvYJ0aPb2IHx5mpyckLXO4wOv1Re9Ixmne
- xJKOM4cO7YZTs0uquw3U2bQJoI/MNE7MEBygW2RtQcW0Z/Smj6rqrVYUtsqXxeoceZhntO91S
- MBOlEfttXqA7KE0QmI1FaPLTtiK6cAJTlzqwmKyylPwoD8Gjw3YGOZg1ucFCQA+1m5ES9t6dF
- EGY1zkH9m7a43zzcXlnT8ThrHK1dyOZrsKn7ptvdkSafedEkvPuF35YzTMTYosTi8d5uTl+cJ
- B4daFb0rg5c9qN2V93tFJJxAmYM561WwPx+UaAwEmtXrjDx96vja1zfOeNDpnnopuCYMMMIj4
- k2WeS0V2rYZcCEFOBys/O0UerScWtgsEFPVVllqgTna0dbUqaJbue9OJQ==
+ <9d621e8c-6e62-b0e3-9a6a-c2e904b00971@gmx.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] hwmon: Add pwmX_fan_channel attribute
+In-Reply-To: <9d621e8c-6e62-b0e3-9a6a-c2e904b00971@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 24.07.22 um 16:44 schrieb Guenter Roeck:
+On 7/24/22 09:06, Armin Wolf wrote:
+[ ... ]
+> It would be indeed better if userspace software like pwmconfig would
+> use an internal list containing the names of all hwmon chips for which
+> the pwm to fan mappings are known.
+> I will add a note to the documentation of dell-smm-hwmon about the
+> pwm to fan mapping so userspace software knows about this.
 
-> On 7/23/22 18:20, Armin Wolf wrote:
->> Am 23.07.22 um 16:17 schrieb Guenter Roeck:
->>
->>> On Sat, Jul 23, 2022 at 05:38:19AM +0200, Armin Wolf wrote:
->>>> Until now, userspace software needs to guess which
->>>> PWM channel is associated with which fan channel by
->>>> probing each PWM output and watch for fan speed changes.
->>>> This proccess is error-prone and unreliable.
->>>>
->>>> Some hwmon chips, especially firmware-based ones, already
->>>> know which PWM output is associated with which fan channel.
->>>>
->>>> Allow such chips to export this knowledge to userspace.
->>>>
->>>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->>> All of the chips I am aware of have a fixed association from pwm
->>> channel
->>> output to fan input. None I am aware of make this association
->>> configurable.
->>> I do not see the value of this attribute.
+That is effectively the fancontrol configuration file. pwmconfig is
+supposed to assist in determining how that configuration file should
+look like. Having some file added to pwmcontrol to determine how the
+fancontrol configuration file should look like seems a bit off-track.
+
+What you are talking about is really the idea of providing a number of
+sample configuration files with the fancontrol (or lm-sensors) package,
+similar to the various sensors.conf files. That doesn't belong into
+the hwmon kernel documentation. It should be part of the lm-sensors
+package.
+
+Guenter
+
+> Sorry for bothering you.
+> 
+> Armin Wolf
+> 
+>>> In contrast, many firmware-based chips do know which pwm channel
+>>> output controls which
+>>> fan channel. One example might be the dell-smm-hwmon driver and the
+>>> gpio-fan driver.
 >>>
->>> Guenter
+>>> In this case, making the attribute RO would indeed make sense.
+>>>
 >>
->> That is true, the association from pwm channel output to fan input is
->> usually fixed.
->> However not all chips are able to discover which pwm channel output
->> is associated with
->> which fan channel. For example most superio-based chips cannot know
->> how the motherboard
->> manufacturer wired the fans, and thus userspace relies on pwmconfig
->> for manually probing
->> each pwm channel.
->
-> Alternatively, the user can figure it out based on board documentation
-> and configure it directly. That is how it is. That doesn't mean that
-> it makes
-> sense to 'store' that information in a sysfs attribute. That is not
-> what hwmon
-> sysfs attributes are supposed to be used for.
->
-Good point.
-It would be indeed better if userspace software like pwmconfig would
-use an internal list containing the names of all hwmon chips for which
-the pwm to fan mappings are known.
-I will add a note to the documentation of dell-smm-hwmon about the
-pwm to fan mapping so userspace software knows about this.
-Sorry for bothering you.
+>> Unless the attribute is used to configure the chip, it does not make
+>> sense
+>> in the first place. Also note that gpio-fan is usually configured using
+>> devicetree properties, _and_ it only has a single set of fan/pwm
+>> properties,
+>> so a sysfs attribute would always return 1 and make make even less
+>> sense there.
+>>
+>> Guenter
+>>
+>>> Armin Wolf
+>>>
+>>>>> ---
+>>>>>   Documentation/ABI/testing/sysfs-class-hwmon | 8 ++++++++
+>>>>>   Documentation/hwmon/sysfs-interface.rst     | 3 +++
+>>>>>   drivers/hwmon/hwmon.c                       | 1 +
+>>>>>   include/linux/hwmon.h                       | 2 ++
+>>>>>   4 files changed, 14 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> b/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> index 7271781a23b2..f3d653bcf736 100644
+>>>>> --- a/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> +++ b/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> @@ -315,6 +315,14 @@ Description:
+>>>>>
+>>>>>           RW
+>>>>>
+>>>>> +What:        /sys/class/hwmon/hwmonX/pwmY_fan_channel
+>>>>> +Description:
+>>>>> +        Select which fan channel is controlled by this PWM output.
+>>>>> +
+>>>>> +        Valid fan channel/PWM output combinations are chip-dependent.
+>>>>> +
+>>>>> +        RW
+>>>>> +
+>>>>>   What: /sys/class/hwmon/hwmonX/pwmY_auto_channels_temp
+>>>>>   Description:
+>>>>>           Select which temperature channels affect this PWM output in
+>>>>> diff --git a/Documentation/hwmon/sysfs-interface.rst
+>>>>> b/Documentation/hwmon/sysfs-interface.rst
+>>>>> index 209626fb2405..17fcec03d3c5 100644
+>>>>> --- a/Documentation/hwmon/sysfs-interface.rst
+>>>>> +++ b/Documentation/hwmon/sysfs-interface.rst
+>>>>> @@ -209,6 +209,9 @@ PWM
+>>>>>   `pwm[1-*]_freq`
+>>>>>           Base PWM frequency in Hz.
+>>>>>
+>>>>> +`pwm[1-*]_fan_channel`
+>>>>> +                Select which fan channel is controlled by this PWM
+>>>>> output.
+>>>>> +
+>>>>>   `pwm[1-*]_auto_channels_temp`
+>>>>>           Select which temperature channels affect this PWM output in
+>>>>>           auto mode.
+>>>>> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+>>>>> index 2e2cd79d89eb..8c2d7574c461 100644
+>>>>> --- a/drivers/hwmon/hwmon.c
+>>>>> +++ b/drivers/hwmon/hwmon.c
+>>>>> @@ -604,6 +604,7 @@ static const char * const
+>>>>> hwmon_pwm_attr_templates[] = {
+>>>>>       [hwmon_pwm_enable] = "pwm%d_enable",
+>>>>>       [hwmon_pwm_mode] = "pwm%d_mode",
+>>>>>       [hwmon_pwm_freq] = "pwm%d_freq",
+>>>>> +    [hwmon_pwm_fan_channel] = "pwm%d_fan_channel",
+>>>>>       [hwmon_pwm_auto_channels_temp] = "pwm%d_auto_channels_temp",
+>>>>>   };
+>>>>>
+>>>>> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+>>>>> index 14325f93c6b2..9d40cc1e520f 100644
+>>>>> --- a/include/linux/hwmon.h
+>>>>> +++ b/include/linux/hwmon.h
+>>>>> @@ -332,6 +332,7 @@ enum hwmon_pwm_attributes {
+>>>>>       hwmon_pwm_enable,
+>>>>>       hwmon_pwm_mode,
+>>>>>       hwmon_pwm_freq,
+>>>>> +    hwmon_pwm_fan_channel,
+>>>>>       hwmon_pwm_auto_channels_temp,
+>>>>>   };
+>>>>>
+>>>>> @@ -339,6 +340,7 @@ enum hwmon_pwm_attributes {
+>>>>>   #define HWMON_PWM_ENABLE        BIT(hwmon_pwm_enable)
+>>>>>   #define HWMON_PWM_MODE            BIT(hwmon_pwm_mode)
+>>>>>   #define HWMON_PWM_FREQ            BIT(hwmon_pwm_freq)
+>>>>> +#define HWMON_PWM_FAN_CHANNEL BIT(hwmon_pwm_fan_channel)
+>>>>>   #define HWMON_PWM_AUTO_CHANNELS_TEMP
+>>>>> BIT(hwmon_pwm_auto_channels_temp)
+>>>>>
+>>>>>   enum hwmon_intrusion_attributes {
+>>>>> -- 
+>>>>> 2.30.2
+>>>>>
+>>
 
-Armin Wolf
-
->> In contrast, many firmware-based chips do know which pwm channel
->> output controls which
->> fan channel. One example might be the dell-smm-hwmon driver and the
->> gpio-fan driver.
->>
->> In this case, making the attribute RO would indeed make sense.
->>
->
-> Unless the attribute is used to configure the chip, it does not make
-> sense
-> in the first place. Also note that gpio-fan is usually configured using
-> devicetree properties, _and_ it only has a single set of fan/pwm
-> properties,
-> so a sysfs attribute would always return 1 and make make even less
-> sense there.
->
-> Guenter
->
->> Armin Wolf
->>
->>>> ---
->>>> =C2=A0 Documentation/ABI/testing/sysfs-class-hwmon | 8 ++++++++
->>>> =C2=A0 Documentation/hwmon/sysfs-interface.rst=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 3 +++
->>>> =C2=A0 drivers/hwmon/hwmon.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 1 +
->>>> =C2=A0 include/linux/hwmon.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 2 ++
->>>> =C2=A0 4 files changed, 14 insertions(+)
->>>>
->>>> diff --git a/Documentation/ABI/testing/sysfs-class-hwmon
->>>> b/Documentation/ABI/testing/sysfs-class-hwmon
->>>> index 7271781a23b2..f3d653bcf736 100644
->>>> --- a/Documentation/ABI/testing/sysfs-class-hwmon
->>>> +++ b/Documentation/ABI/testing/sysfs-class-hwmon
->>>> @@ -315,6 +315,14 @@ Description:
->>>>
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 RW
->>>>
->>>> +What:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /sys/class/hwmon/hwm=
-onX/pwmY_fan_channel
->>>> +Description:
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Select which fan channel =
-is controlled by this PWM output.
->>>> +
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Valid fan channel/PWM out=
-put combinations are chip-dependent.
->>>> +
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 RW
->>>> +
->>>> =C2=A0 What: /sys/class/hwmon/hwmonX/pwmY_auto_channels_temp
->>>> =C2=A0 Description:
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Select which t=
-emperature channels affect this PWM output in
->>>> diff --git a/Documentation/hwmon/sysfs-interface.rst
->>>> b/Documentation/hwmon/sysfs-interface.rst
->>>> index 209626fb2405..17fcec03d3c5 100644
->>>> --- a/Documentation/hwmon/sysfs-interface.rst
->>>> +++ b/Documentation/hwmon/sysfs-interface.rst
->>>> @@ -209,6 +209,9 @@ PWM
->>>> =C2=A0 `pwm[1-*]_freq`
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Base PWM frequ=
-ency in Hz.
->>>>
->>>> +`pwm[1-*]_fan_channel`
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 Select which fan channel is controlled by this PW=
-M
->>>> output.
->>>> +
->>>> =C2=A0 `pwm[1-*]_auto_channels_temp`
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Select which t=
-emperature channels affect this PWM output in
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 auto mode.
->>>> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
->>>> index 2e2cd79d89eb..8c2d7574c461 100644
->>>> --- a/drivers/hwmon/hwmon.c
->>>> +++ b/drivers/hwmon/hwmon.c
->>>> @@ -604,6 +604,7 @@ static const char * const
->>>> hwmon_pwm_attr_templates[] =3D {
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [hwmon_pwm_enable] =3D "pwm%d_enable",
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [hwmon_pwm_mode] =3D "pwm%d_mode",
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [hwmon_pwm_freq] =3D "pwm%d_freq",
->>>> +=C2=A0=C2=A0=C2=A0 [hwmon_pwm_fan_channel] =3D "pwm%d_fan_channel",
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [hwmon_pwm_auto_channels_temp] =3D "pw=
-m%d_auto_channels_temp",
->>>> =C2=A0 };
->>>>
->>>> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
->>>> index 14325f93c6b2..9d40cc1e520f 100644
->>>> --- a/include/linux/hwmon.h
->>>> +++ b/include/linux/hwmon.h
->>>> @@ -332,6 +332,7 @@ enum hwmon_pwm_attributes {
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hwmon_pwm_enable,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hwmon_pwm_mode,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hwmon_pwm_freq,
->>>> +=C2=A0=C2=A0=C2=A0 hwmon_pwm_fan_channel,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hwmon_pwm_auto_channels_temp,
->>>> =C2=A0 };
->>>>
->>>> @@ -339,6 +340,7 @@ enum hwmon_pwm_attributes {
->>>> =C2=A0 #define HWMON_PWM_ENABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 BIT(hwmon_pwm_enable)
->>>> =C2=A0 #define HWMON_PWM_MODE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT(hwmon_pwm_mode)
->>>> =C2=A0 #define HWMON_PWM_FREQ=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT(hwmon_pwm_freq)
->>>> +#define HWMON_PWM_FAN_CHANNEL BIT(hwmon_pwm_fan_channel)
->>>> =C2=A0 #define HWMON_PWM_AUTO_CHANNELS_TEMP
->>>> BIT(hwmon_pwm_auto_channels_temp)
->>>>
->>>> =C2=A0 enum hwmon_intrusion_attributes {
->>>> --
->>>> 2.30.2
->>>>
->
